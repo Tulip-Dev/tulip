@@ -99,7 +99,6 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int free
     forEach(it, sg->getInOutNodes(n)) sum += embedding->getNodeValue(it);
     embedding->setNodeValue(n, sum / (double(sg->deg(n)) + 1.0));
   }
-
 }
 //================================================================================
 // Set initial position using a DFS

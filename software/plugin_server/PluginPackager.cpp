@@ -97,8 +97,9 @@ int main(int argc, char **argv) {
     QDir pluginDir(component.absoluteFilePath());
     QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));
 
-    if (!QuaZIPFacade::zipDir(pluginDir.absolutePath(), outputDir.absoluteFilePath(component.fileName() + QDir::separator() + "data-" + OS_PLATFORM +
-                                                                                   OS_ARCHITECTURE + ".zip"))) {
+    if (!QuaZIPFacade::zipDir(
+            pluginDir.absolutePath(),
+            outputDir.absoluteFilePath(component.fileName() + QDir::separator() + "data-" + OS_PLATFORM + OS_ARCHITECTURE + ".zip"))) {
       qFatal("Failed to zip archive");
     }
 

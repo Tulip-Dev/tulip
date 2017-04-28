@@ -187,7 +187,14 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     0,                                              /* tp_alloc */
     consoleutils_ConsoleOutput_new,                 /* tp_new */
     0,
-    0, 0, 0, 0, 0, 0, 0, 0
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
     ,
     0
@@ -277,7 +284,14 @@ static PyTypeObject consoleutils_ConsoleInputType = {
     0,                                             /* tp_alloc */
     consoleutils_ConsoleInput_new,                 /* tp_new */
     0,
-    0, 0, 0, 0, 0, 0, 0, 0
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
     ,
     0

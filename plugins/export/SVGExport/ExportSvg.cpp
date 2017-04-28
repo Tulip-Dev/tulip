@@ -102,10 +102,11 @@ bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background) {
 bool ExportSvg::writeMetaGraph(const int transform_X, const int transform_Y, float scale) {
   _res.writeStartElement("g");
   _res.writeAttribute("desc", "Meta-Graph");
-  _res.writeAttribute("transform", "translate(" + QString::number(transform_X) + "," + QString::number(transform_Y) + ") scale(" +
-                                       QString::number(scale) + "," + QString::number(-scale) + ")"); // Translation for having a
-                                                                                                      // cartesian landmark in the middle
-                                                                                                      // of the graph
+  _res.writeAttribute("transform",
+                      "translate(" + QString::number(transform_X) + "," + QString::number(transform_Y) + ") scale(" + QString::number(scale) + "," +
+                          QString::number(-scale) + ")"); // Translation for having a
+                                                          // cartesian landmark in the middle
+                                                          // of the graph
   return checkError();
 }
 
@@ -416,9 +417,10 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
   case NodeShape::Hexagon:
     _res.writeStartElement("polygon");
-    _res.writeAttribute("points", xestr + "," + yestr + " " + QString::number(xi) + "," + QString::number(yi) + " " + QString::number(xk) + "," +
-                                      QString::number(yk) + " " + xfstr + "," + yfstr + " " + QString::number(xj) + "," + QString::number(yj) + " " +
-                                      QString::number(xg) + "," + QString::number(yg));
+    _res.writeAttribute("points",
+                        xestr + "," + yestr + " " + QString::number(xi) + "," + QString::number(yi) + " " + QString::number(xk) + "," +
+                            QString::number(yk) + " " + xfstr + "," + yfstr + " " + QString::number(xj) + "," + QString::number(yj) + " " +
+                            QString::number(xg) + "," + QString::number(yg));
     addColor(color);
 
     if (borderwidth > 0)
@@ -428,9 +430,10 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
   case NodeShape::Pentagon:
     _res.writeStartElement("polygon");
-    _res.writeAttribute("points", xestr + "," + yestr + " " + QString::number(xo) + "," + QString::number(yo) + " " + QString::number(xm) + "," +
-                                      QString::number(ym) + " " + QString::number(xl) + "," + QString::number(yl) + " " + QString::number(xn) + "," +
-                                      QString::number(yn));
+    _res.writeAttribute("points",
+                        xestr + "," + yestr + " " + QString::number(xo) + "," + QString::number(yo) + " " + QString::number(xm) + "," +
+                            QString::number(ym) + " " + QString::number(xl) + "," + QString::number(yl) + " " + QString::number(xn) + "," +
+                            QString::number(yn));
     addColor(color);
 
     if (borderwidth > 0)
@@ -440,8 +443,9 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
   case NodeShape::Diamond:
     _res.writeStartElement("polygon");
-    _res.writeAttribute("points", xestr + "," + yestr + " " + QString::number(xq) + "," + QString::number(y) + " " + xfstr + "," + yfstr + " " +
-                                      QString::number(xp) + "," + QString::number(y));
+    _res.writeAttribute("points",
+                        xestr + "," + yestr + " " + QString::number(xq) + "," + QString::number(y) + " " + xfstr + "," + yfstr + " " +
+                            QString::number(xp) + "," + QString::number(y));
     addColor(color);
 
     if (borderwidth > 0)
@@ -529,13 +533,15 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     float yj = y - (h * 0.25);
 
     _res.writeStartElement("polygon");
-    _res.writeAttribute("points", QString::number(xr) + "," + QString::number(yr) + " " + QString::number(xs) + "," + QString::number(ys) + " " +
-                                      QString::number(xm) + "," + QString::number(ym) + " " + QString::number(xl) + "," + QString::number(yl));
+    _res.writeAttribute("points",
+                        QString::number(xr) + "," + QString::number(yr) + " " + QString::number(xs) + "," + QString::number(ys) + " " +
+                            QString::number(xm) + "," + QString::number(ym) + " " + QString::number(xl) + "," + QString::number(yl));
     _res.writeEndElement();
 
     _res.writeStartElement("polygon");
-    _res.writeAttribute("points", QString::number(xg) + "," + QString::number(yg) + " " + QString::number(xi) + "," + QString::number(yi) + " " +
-                                      QString::number(xk) + "," + QString::number(yk) + " " + QString::number(xj) + "," + QString::number(yj));
+    _res.writeAttribute("points",
+                        QString::number(xg) + "," + QString::number(yg) + " " + QString::number(xi) + "," + QString::number(yi) + " " +
+                            QString::number(xk) + "," + QString::number(yk) + " " + QString::number(xj) + "," + QString::number(yj));
     addColor(color);
 
     if (borderwidth > 0)

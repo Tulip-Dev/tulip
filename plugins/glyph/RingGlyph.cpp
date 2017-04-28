@@ -45,8 +45,9 @@ public:
     _vertices.insert(_vertices.end(), innerContour.begin(), innerContour.end());
     _vertices.insert(_vertices.end(), outerContour.begin(), outerContour.end());
     for (unsigned short i = 0; i < nbContourPoints - 1; ++i) {
-      _indices.insert(_indices.end(), {i, ushort_cast(i + 1), ushort_cast(i + nbContourPoints), ushort_cast(i + 1),
-                                       ushort_cast(i + nbContourPoints + 1), ushort_cast(i + nbContourPoints)});
+      _indices.insert(_indices.end(),
+                      {i, ushort_cast(i + 1), ushort_cast(i + nbContourPoints), ushort_cast(i + 1), ushort_cast(i + nbContourPoints + 1),
+                       ushort_cast(i + nbContourPoints)});
     }
     _indices.insert(_indices.end(), {nbContourPoints - 1, 0, 2 * nbContourPoints - 1, 0, nbContourPoints, 2 * nbContourPoints - 1});
 

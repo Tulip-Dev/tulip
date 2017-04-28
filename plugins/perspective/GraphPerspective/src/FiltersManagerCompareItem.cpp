@@ -86,9 +86,9 @@ QVector<int> FiltersManagerCompareItem::NUMERIC_OPERATOR_INDEXES = QVector<int>(
 QVector<int> FiltersManagerCompareItem::STRING_OPERATOR_INDEXES = QVector<int>() << 6 << 7;
 
 QVector<FiltersManagerCompareItem::Comparer *> FiltersManagerCompareItem::COMPARERS =
-    QVector<FiltersManagerCompareItem::Comparer *>() << new EqualComparer() << new DifferentComparer() << new LesserComparer()
-                                                     << new LesserEqualComparer() << new GreaterComparer() << new GreaterEqualComparer()
-                                                     << new ContainsComparer() << new MatchesComparer();
+    QVector<FiltersManagerCompareItem::Comparer *>()
+    << new EqualComparer() << new DifferentComparer() << new LesserComparer() << new LesserEqualComparer() << new GreaterComparer()
+    << new GreaterEqualComparer() << new ContainsComparer() << new MatchesComparer();
 
 void FiltersManagerCompareItem::fillCombo(QComboBox *combo) {
   disconnect(_ui->elem1, SIGNAL(currentIndexChanged(int)), this, SLOT(elementChanged()));

@@ -36,7 +36,7 @@ class PluginInformationListItem : public QWidget {
 public:
   explicit PluginInformationListItem(tlp::PluginInformation, QWidget *parent = NULL);
   virtual ~PluginInformationListItem();
-  QWidget* description();
+  QWidget *description();
 
 public slots:
   void focusOut();

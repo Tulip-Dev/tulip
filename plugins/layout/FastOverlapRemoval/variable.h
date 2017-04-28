@@ -43,7 +43,7 @@ public:
   }
 
   size_t id() const {
-    return (size_t) this;
+    return (size_t)this;
   }
 };
 }

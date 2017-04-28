@@ -1267,8 +1267,9 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View *firstPanel = nullptr;
   View *secondPanel = nullptr;
 
-  foreach (const QString &panelName, QStringList() << "Spreadsheet view"
-                                                   << "Node Link Diagram view") {
+  foreach (const QString &panelName,
+           QStringList() << "Spreadsheet view"
+                         << "Node Link Diagram view") {
     View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
 
     if (firstPanel == nullptr)

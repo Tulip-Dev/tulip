@@ -72,7 +72,7 @@ private:
   tlp::Graph *tulipGraph;
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
-  tlp::NodeStaticProperty<ogdf::node>* ogdfNodes;
+  tlp::NodeStaticProperty<ogdf::node> *ogdfNodes;
   std::vector<ogdf::edge> ogdfEdges;
 };
 

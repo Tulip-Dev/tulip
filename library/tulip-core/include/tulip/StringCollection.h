@@ -132,7 +132,7 @@ public:
    * @brief clear the content of the collection.
    */
   void clear() {
-      _data.clear();
+    _data.clear();
   }
 
   /**

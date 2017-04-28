@@ -49,7 +49,8 @@ using namespace tlp;
 
 FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile, unsigned int iconCodePoint) : Glyph(context) {
 
-  if (fontFile.empty()) return;
+  if (fontFile.empty())
+    return;
 
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
 

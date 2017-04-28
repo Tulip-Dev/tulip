@@ -335,7 +335,7 @@ bool TulipSettings::isFirstTulipMMRun() const {
 }
 
 void TulipSettings::setFirstTulipMMRun(bool f) {
-  setValue(TS_FirstRunMMEntry,f);
+  setValue(TS_FirstRunMMEntry, f);
 }
 
 bool TulipSettings::displayDefaultViews() const {

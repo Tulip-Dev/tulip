@@ -45,7 +45,7 @@ class GraphPerspectiveMainWindowData;
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 class PythonPanel;
 namespace tlp {
-  class PythonIDE;
+class PythonIDE;
 }
 #endif
 

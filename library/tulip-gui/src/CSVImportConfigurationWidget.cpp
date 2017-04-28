@@ -269,11 +269,12 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
       if (row == getFirstLineIndex())
         headerColumnCount = columnCount();
       else if (lineTokens.size() > headerColumnCount) {
-        if (QMessageBox::warning(this, "Invalid number of row fields", QString("row %1: the number of fields (%2) is greater than the "
-                                                                               "number of columns (%3)")
-                                                                           .arg(row + 1)
-                                                                           .arg(columnCount())
-                                                                           .arg(headerColumnCount),
+        if (QMessageBox::warning(this, "Invalid number of row fields",
+                                 QString("row %1: the number of fields (%2) is greater than the "
+                                         "number of columns (%3)")
+                                     .arg(row + 1)
+                                     .arg(columnCount())
+                                     .arg(headerColumnCount),
                                  QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel)
           return false;
       }

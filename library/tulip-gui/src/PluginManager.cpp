@@ -101,8 +101,8 @@ public:
   PluginManager::PluginInformationList list(const QString &nameFilter, const QString &categoryFilter) {
     _result.clear();
     QNetworkAccessManager mgr;
-    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" +
-                                 nameFilter + "&category=" + categoryFilter));
+    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION +
+                                 "&name=" + nameFilter + "&category=" + categoryFilter));
     QNetworkReply *reply = mgr.get(request);
 
     while (!reply->isFinished()) {

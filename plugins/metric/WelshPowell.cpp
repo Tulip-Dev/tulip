@@ -79,9 +79,8 @@ class WelshPowell : public DoubleAlgorithm {
   };
 
 public:
-  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005",
-                    "Nodes coloring measure,<br/>values assigned to adjacent "
-                    "nodes are always different.",
+  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005", "Nodes coloring measure,<br/>values assigned to adjacent "
+                                                                   "nodes are always different.",
                     "1.0", "Graph")
 
   WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {

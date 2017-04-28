@@ -55,8 +55,11 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getEdgeValue(const tlp::edge e) cons
 }
 //=================================================================================
 template <class Tnode, class Tedge, class Tprop>
-tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodesEqualTo(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue val, const Graph *sg) const {
-  if (sg == NULL) sg = this->graph;
+tlp::Iterator<tlp::node> *
+tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNodesEqualTo(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue val,
+                                                            const Graph *sg) const {
+  if (sg == NULL)
+    sg = this->graph;
 
   tlp::Iterator<unsigned int> *it = NULL;
 
@@ -70,8 +73,11 @@ tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodesEqua
 }
 //=================================================================================
 template <class Tnode, class Tedge, class Tprop>
-tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgesEqualTo(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue val, const Graph *sg) const {
-  if (sg == NULL) sg = this->graph;
+tlp::Iterator<tlp::edge> *
+tlp::AbstractProperty<Tnode, Tedge, Tprop>::getEdgesEqualTo(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue val,
+                                                            const Graph *sg) const {
+  if (sg == NULL)
+    sg = this->graph;
 
   tlp::Iterator<unsigned int> *it = NULL;
 

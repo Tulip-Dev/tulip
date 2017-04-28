@@ -61,9 +61,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
       "This open source software is powered by:"
       "<ul>"
       "  <li> <b> Qt </b> " +
-      tlpStringToQString(qVersion()) +
-      ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
-      "  <li> <b> OpenGL </b> " +
+      tlpStringToQString(qVersion()) + ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
+                                       "  <li> <b> OpenGL </b> " +
       QString::number(OpenGlConfigManager::instance().getOpenGLVersion()) + " (from vendor " +
       tlpStringToQString(OpenGlConfigManager::instance().getOpenGLVendor()) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
@@ -71,14 +70,12 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
       "  <li> <b> Python </b> " +
-      PythonVersionChecker::compiledVersion() +
-      ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
-      "  <li> <b> SIP </b> " +
-      getSipVersion() +
-      ": <a href=\"https://www.riverbankcomputing.com/software/sip/\">https://www.riverbankcomputing.com/software/sip</a> </li>"
+      PythonVersionChecker::compiledVersion() + ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
+                                                "  <li> <b> SIP </b> " +
+      getSipVersion() + ": <a href=\"https://www.riverbankcomputing.com/software/sip/\">https://www.riverbankcomputing.com/software/sip</a> </li>"
 #endif
-      "</ul>"
-      "</p>";
+                        "</ul>"
+                        "</p>";
   GlMainWidget::getFirstQGLWidget()->doneCurrent();
 
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);

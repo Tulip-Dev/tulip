@@ -170,8 +170,9 @@ void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool
 
   res.writeStartElement("stop");
   res.writeAttribute("offset", "0%");
-  res.writeAttribute("stop-color", QString("rgb(") + QString::number(static_cast<int>(color.getR())) + "," +
-                                       QString::number(static_cast<int>(color.getG())) + "," + QString::number(static_cast<int>(color.getB())) + ")");
+  res.writeAttribute("stop-color",
+                     QString("rgb(") + QString::number(static_cast<int>(color.getR())) + "," + QString::number(static_cast<int>(color.getG())) + "," +
+                         QString::number(static_cast<int>(color.getB())) + ")");
   res.writeEndElement();
 
   unsigned colorR = static_cast<unsigned>(color.getR());
@@ -257,8 +258,9 @@ void ExtremityShape::GlowSphere(QXmlStreamWriter &res, const tlp::Color &color, 
 
   res.writeStartElement("stop");
   res.writeAttribute("offset", "0%");
-  res.writeAttribute("stop-color", QString("rgb(") + QString::number(static_cast<int>(color.getR())) + "," +
-                                       QString::number(static_cast<int>(color.getG())) + "," + QString::number(static_cast<int>(color.getB())) + ")");
+  res.writeAttribute("stop-color",
+                     QString("rgb(") + QString::number(static_cast<int>(color.getR())) + "," + QString::number(static_cast<int>(color.getG())) + "," +
+                         QString::number(static_cast<int>(color.getB())) + ")");
   res.writeEndElement();
 
   unsigned colorR = static_cast<unsigned>(color.getR());

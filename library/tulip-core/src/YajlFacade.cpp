@@ -117,11 +117,12 @@ void YajlParseFacade::parse(std::string filename) {
   }
 
   // open a stream
-  std::istream *ifs = tlp::getInputFileStream(filename.c_str(), std::ifstream::in |
-                                                                    // consider file is binary
-                                                                    // to avoid pb using tellg
-                                                                    // on the input stream
-                                                                    std::ifstream::binary);
+  std::istream *ifs = tlp::getInputFileStream(filename.c_str(),
+                                              std::ifstream::in |
+                                                  // consider file is binary
+                                                  // to avoid pb using tellg
+                                                  // on the input stream
+                                                  std::ifstream::binary);
 
   // get length of file:
   ifs->seekg(0, std::ios::end);

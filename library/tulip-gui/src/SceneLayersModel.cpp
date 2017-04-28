@@ -35,8 +35,8 @@ const quint32 META_NODES_ID = 3;
 const quint32 META_NODE_LABELS_ID = 4;
 const quint32 NODE_LABELS_ID = 5;
 const quint32 EDGE_LABELS_ID = 6;
-const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << EDGES_ID << META_NODES_ID << META_NODE_LABELS_ID << NODE_LABELS_ID
-                                                                << EDGE_LABELS_ID;
+const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>()
+                                             << NODES_ID << EDGES_ID << META_NODES_ID << META_NODE_LABELS_ID << NODE_LABELS_ID << EDGE_LABELS_ID;
 const int NO_STENCIL = 0xFF;
 const int FULL_STENCIL = 0x02;
 

@@ -36,9 +36,7 @@ namespace tlp {
 class TLP_GLES_SCOPE FontIconGlyph : public Glyph {
 
 public:
-
-  GLYPHINFORMATION("2D - Icon", "2D - Icon extremity", "Antoine Lambert", "26/02/2015", "Icon", "1.0",
-                   NodeShape::Icon)
+  GLYPHINFORMATION("2D - Icon", "2D - Icon extremity", "Antoine Lambert", "26/02/2015", "Icon", "1.0", NodeShape::Icon)
 
   FontIconGlyph(PluginContext *context, const std::string &fontFile = "", unsigned int iconCodePoint = 0);
 
@@ -50,7 +48,6 @@ public:
 private:
   tlp::BoundingBox _boundingBox;
 };
-
 }
 
 #endif // FONTAWESOMEGLYPH_H

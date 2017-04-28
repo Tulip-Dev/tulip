@@ -71,8 +71,9 @@ static void genCylinderGlyph(const float zBottom, const float zTop, vector<Coord
                     ushort_cast(startIdx + i + 1), ushort_cast(startIdx + i + nbContourPoints + 1), ushort_cast(startIdx + i + nbContourPoints)});
   }
 
-  indices.insert(indices.end(), {ushort_cast(startIdx + nbContourPoints - 1), startIdx, ushort_cast(startIdx + 2 * nbContourPoints - 1), startIdx,
-                                 ushort_cast(startIdx + nbContourPoints), ushort_cast(startIdx + 2 * nbContourPoints - 1)});
+  indices.insert(indices.end(),
+                 {ushort_cast(startIdx + nbContourPoints - 1), startIdx, ushort_cast(startIdx + 2 * nbContourPoints - 1), startIdx,
+                  ushort_cast(startIdx + nbContourPoints), ushort_cast(startIdx + 2 * nbContourPoints - 1)});
 
   for (size_t i = startIdx; i < vertices.size(); ++i) {
     tlp::Vec2f st;

@@ -2024,7 +2024,6 @@ public:
   static const char *YinYang;
   static const char *YoutubePlay;
   static const char *ZipBox;
-
 };
 
 class md {
@@ -3965,9 +3964,7 @@ public:
     zipbox = 0xf5C4
 
   };
-
 };
-
 }
 
 #endif // TULIPMATERIALDESIGNICONS_H

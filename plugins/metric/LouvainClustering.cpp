@@ -57,14 +57,13 @@ using namespace tlp;
  **/
 class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Louvain", "Patrick Mary", "09/06/15",
-                    "Nodes partitioning measure used for community detection."
-                    "This is an implementation of the Louvain clustering "
-                    "algorithm first published as:<br/>"
-                    "<b>Fast unfolding of communities in large networks</b>, "
-                    "Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and "
-                    "Lefebvre, E., Journal of Statistical Mechanics: Theory "
-                    "and Experiment, P10008 (2008).",
+  PLUGININFORMATION("Louvain", "Patrick Mary", "09/06/15", "Nodes partitioning measure used for community detection."
+                                                           "This is an implementation of the Louvain clustering "
+                                                           "algorithm first published as:<br/>"
+                                                           "<b>Fast unfolding of communities in large networks</b>, "
+                                                           "Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and "
+                                                           "Lefebvre, E., Journal of Statistical Mechanics: Theory "
+                                                           "and Experiment, P10008 (2008).",
                     "2.1", "Clustering")
   LouvainClustering(const tlp::PluginContext *);
   bool run();

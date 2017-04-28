@@ -53,8 +53,8 @@ static const char *paramHelp[] = {
     "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows."};
 
 static const char *commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json", "tex", "txt", "wpd", "wps", "srt", "nfo"};
-static const std::vector<std::string> commonTextFilesExt(commonTextFilesExtArray, commonTextFilesExtArray + sizeof(commonTextFilesExtArray) /
-                                                                                                                sizeof(commonTextFilesExtArray[0]));
+static const std::vector<std::string>
+    commonTextFilesExt(commonTextFilesExtArray, commonTextFilesExtArray + sizeof(commonTextFilesExtArray) / sizeof(commonTextFilesExtArray[0]));
 
 static const char *commonAudioFilesExtArray[] = {"aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ogg", "ra", "wav", "wma", "flac"};
 static const std::vector<std::string>

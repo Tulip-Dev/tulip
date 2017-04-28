@@ -51,28 +51,28 @@ public:
    * GlGraphInputData available properties
    */
   enum ViewPropertyType {
-    VIEW_COLOR = 0,          /**< color of nodes/edges */
-    VIEW_LABELCOLOR,         /**< color of labels */
-    VIEW_SIZE,               /**< size of nodes/edges */
-    VIEW_LABELPOSITION,      /**< position of labels */
-    VIEW_SHAPE,              /**< shape of nodes/edges */
-    VIEW_ROTATION,           /**< rotation apply on nodes */
-    VIEW_SELECTION,          /**< nodes/edges selected */
-    VIEW_FONT,               /**< font name of labels */
-    VIEW_FONTSIZE,           /**< font size of labels */
-    VIEW_LABEL,              /**< text of labels */
-    VIEW_LAYOUT,             /**< position of nodes */
-    VIEW_TEXTURE,            /**< texture of nodes/edges */
-    VIEW_BORDERCOLOR,        /**< border color of nodes/edges */
-    VIEW_BORDERWIDTH,        /**< border width of nodes/edges */
-    VIEW_SRCANCHORSHAPE,     /**< shape of source arrow edge extremity */
-    VIEW_SRCANCHORSIZE,      /**< size of source arrow edge extremity */
-    VIEW_TGTANCHORSHAPE,     /**< shape of target arrow edge extremity */
-    VIEW_TGTANCHORSIZE,      /**< size of target arrow edge extremity */
-    VIEW_ICON,    /**< font awesome icon name for the font awesome icon glyph*/
-    VIEW_GLOW,               /**< draw a glow around graph elements ?*/
-    VIEW_GLOWCOLOR,          /**< color of glow effect */
-    NB_PROPS                 /** must be the last, give the number of enum props */
+    VIEW_COLOR = 0,      /**< color of nodes/edges */
+    VIEW_LABELCOLOR,     /**< color of labels */
+    VIEW_SIZE,           /**< size of nodes/edges */
+    VIEW_LABELPOSITION,  /**< position of labels */
+    VIEW_SHAPE,          /**< shape of nodes/edges */
+    VIEW_ROTATION,       /**< rotation apply on nodes */
+    VIEW_SELECTION,      /**< nodes/edges selected */
+    VIEW_FONT,           /**< font name of labels */
+    VIEW_FONTSIZE,       /**< font size of labels */
+    VIEW_LABEL,          /**< text of labels */
+    VIEW_LAYOUT,         /**< position of nodes */
+    VIEW_TEXTURE,        /**< texture of nodes/edges */
+    VIEW_BORDERCOLOR,    /**< border color of nodes/edges */
+    VIEW_BORDERWIDTH,    /**< border width of nodes/edges */
+    VIEW_SRCANCHORSHAPE, /**< shape of source arrow edge extremity */
+    VIEW_SRCANCHORSIZE,  /**< size of source arrow edge extremity */
+    VIEW_TGTANCHORSHAPE, /**< shape of target arrow edge extremity */
+    VIEW_TGTANCHORSIZE,  /**< size of target arrow edge extremity */
+    VIEW_ICON,           /**< font awesome icon name for the font awesome icon glyph*/
+    VIEW_GLOW,           /**< draw a glow around graph elements ?*/
+    VIEW_GLOWCOLOR,      /**< color of glow effect */
+    NB_PROPS             /** must be the last, give the number of enum props */
   };
 
   /**
