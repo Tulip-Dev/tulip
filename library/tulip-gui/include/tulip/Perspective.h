@@ -22,6 +22,7 @@
 
 #include <tulip/PluginContext.h>
 #include <tulip/Plugin.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <QString>
 #include <QVariantMap>
@@ -130,7 +131,7 @@ public:
     return PERSPECTIVE_CATEGORY;
   }
   std::string icon() const {
-    return "television-guide";
+    return tlp::TulipMaterialDesignIcons::TelevisionGuide;
   }
 
   /**

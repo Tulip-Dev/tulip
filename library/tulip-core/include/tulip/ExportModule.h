@@ -24,6 +24,7 @@
 #include <iostream>
 #include <tulip/Plugin.h>
 #include <tulip/Algorithm.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 namespace tlp {
 
@@ -57,7 +58,7 @@ public:
     return EXPORT_CATEGORY;
   }
   std::string icon() const {
-    return "export";
+    return tlp::TulipMaterialDesignIcons::Export;
   }
 
   /**

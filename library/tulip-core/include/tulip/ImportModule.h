@@ -22,6 +22,7 @@
 #define _IMPORTMODULE_H
 
 #include <tulip/Plugin.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <list>
 #include <string>
@@ -68,7 +69,7 @@ public:
   }
 
   std::string icon() const {
-    return "import";
+    return tlp::TulipMaterialDesignIcons::Import;
   }
 
   /**

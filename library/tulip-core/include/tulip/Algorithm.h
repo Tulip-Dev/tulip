@@ -24,6 +24,7 @@
 #include <string>
 #include <tulip/Plugin.h>
 #include <tulip/PluginContext.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 namespace tlp {
 
@@ -64,7 +65,7 @@ public:
   }
 
   std::string icon() const {
-    return "chart-bar";
+    return tlp::TulipMaterialDesignIcons::ChartBar;
   }
   /**
    * @brief Runs the algorithm.

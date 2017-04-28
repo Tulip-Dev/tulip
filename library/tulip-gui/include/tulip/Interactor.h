@@ -21,6 +21,7 @@
 #define _INTERACTOR_H
 
 #include <tulip/Plugin.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <QObject>
 #include <QCursor>
@@ -67,7 +68,7 @@ public:
     return INTERACTOR_CATEGORY;
   }
   std::string icon() const {
-    return "wrench";
+    return tlp::TulipMaterialDesignIcons::Wrench;
   }
   /**
     @brief Checks the compatibility between the interactor and the given view (identified by its name).

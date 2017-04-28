@@ -32,6 +32,7 @@
 #include <tulip/Coord.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/Plugin.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <vector>
 
@@ -53,7 +54,7 @@ public:
   }
 
   std::string icon() const {
-    return "shape-plus";
+    return tlp::TulipMaterialDesignIcons::ShapePlus;
   }
 
   virtual void getIncludeBoundingBox(tlp::BoundingBox &boundingBox);

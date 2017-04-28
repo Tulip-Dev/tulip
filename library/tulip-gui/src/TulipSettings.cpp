@@ -45,7 +45,8 @@ static const QString TS_DefaultShapeConfigEntry = "graph/defaults/shape/";
 static const QString TS_DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
 static const QString TS_FavoriteAlgorithmsEntry = "app/algorithms/favorites";
 
-static const QString TS_FirstRunEntry = QString("app/") + TULIP_MM_VERSION + "/firstRun";
+static const QString TS_FirstRunEntry = "app/firstRun";
+static const QString TS_FirstRunMMEntry = QString("app/") + TULIP_MM_VERSION + "/firstRun";
 
 static const QString TS_ProxyEnabledEntry = "app/proxy/enabled";
 static const QString TS_ProxyTypeEntry = "app/proxy/type";
@@ -327,6 +328,14 @@ bool TulipSettings::isFirstRun() const {
 
 void TulipSettings::setFirstRun(bool f) {
   setValue(TS_FirstRunEntry, f);
+}
+
+bool TulipSettings::isFirstTulipMMRun() const {
+  return contains(TS_FirstRunMMEntry) == false;
+}
+
+void TulipSettings::setFirstTulipMMRun(bool f) {
+  setValue(TS_FirstRunMMEntry,f);
 }
 
 bool TulipSettings::displayDefaultViews() const {

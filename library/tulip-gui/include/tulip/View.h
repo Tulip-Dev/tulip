@@ -27,6 +27,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
 #include <tulip/Plugin.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 class QGraphicsView;
 class QGraphicsItem;
@@ -105,7 +106,7 @@ public:
     return VIEW_CATEGORY;
   }
   std::string icon() const {
-    return "application";
+    return tlp::TulipMaterialDesignIcons::Application;
   }
 
   /**
