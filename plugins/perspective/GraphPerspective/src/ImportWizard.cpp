@@ -55,14 +55,15 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   setButtonText(QWizard::FinishButton, "OK");
 
   _ui->parametersFrame->hide();
-  QString importLabel("<html><head/><body><p align=\"justify\">Import a graph hierarchy into your project. First, select an import method, then adjust its parameters if needed.<br/>Click <b>Ok</b> to import your graph, then visualize it using the ");
+  QString importLabel("<html><head/><body><p align=\"justify\">Import a graph hierarchy into your project. First, select an import method, then "
+                      "adjust its parameters if needed.<br/>Click <b>Ok</b> to import your graph, then visualize it using the ");
   if (TulipSettings::instance().displayDefaultViews())
     importLabel += "<b>Node Link Diagram</b> and <b>Spreadsheet</b> (automatically opened) views.";
   else
     importLabel += "<img src=\":/tulip/graphperspective/icons/16/view-add.png\"/>&nbsp;<b>Add panel</b> button to open specific views on it.";
   importLabel += "<br/><br/>See <b>Edit</b> menu, then <b>Preferences</b> for more options when importing a graph.</p></body></html>";
   _ui->label->setText(importLabel);
-  
+
   updateFinishButton();
 }
 
@@ -75,9 +76,10 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel *oldModel = _ui->parametersList->model();
-  QAbstractItemModel *newModel = nullptr;
+  QAbstractItemModel *newModel = NULL;
+  bool isGroup = index.child(0, index.column()).isValid();
 
-  if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
+  if (!isGroup && PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)));
   }
 
