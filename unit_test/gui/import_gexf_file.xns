@@ -186,6 +186,10 @@ NEW-WINDOW:461,197:62914603,62914603,16800625,0,0,0:0x0+879+458:0,0:Import
 6,2,0,0,0,116,0,2026968,3,Virtual core keyboard
 7,3,0,0,0,116,0,2027081,9,AT Translated Set 2 keyboard
 6,3,0,0,0,116,0,2027081,3,Virtual core keyboard
+7,2,0,0,0,116,0,2027100,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,2027100,3,Virtual core keyboard
+7,3,0,0,0,116,0,2027120,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,2027120,3,Virtual core keyboard
 7,6,322,747,0,0,0,2028144,11,'SynPS/2 Synaptics TouchPad'
 7,6,328,747,0,0,0,2028159,11,'SynPS/2 Synaptics TouchPad'
 7,6,363,732,0,0,0,2028177,11,'SynPS/2 Synaptics TouchPad'
