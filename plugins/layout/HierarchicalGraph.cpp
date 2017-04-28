@@ -100,15 +100,7 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int free
     embedding->setNodeValue(n, sum / (double(sg->deg(n)) + 1.0));
   }
 
-  /*
-  stable_sort(grid[freeLayer].begin(), grid[freeLayer].end(), lessNode);
-  unsigned int j = 0;
-  for (it=grid[freeLayer].begin();it!=grid[freeLayer].end();++it) {
-    embedding->setNodeValue(*it,j);
-    j++;
-  }
 }
-
 //================================================================================
 // Set initial position using a DFS
 void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableContainer<bool> &visited, int id) {
