@@ -59,7 +59,7 @@ using namespace std;
 
 namespace tlp {
 
-GlEdge::GlEdge(unsigned int id):id(id) {
+GlEdge::GlEdge(unsigned int id):id(id), selectionDraw(false) {
   if(!label)
     label=new GlLabel();
 }
@@ -154,10 +154,14 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
   const Color& strokeColor = data->getElementBorderColor()->getEdgeValue(e);
+  double borderWidth = data->getElementBorderWidth()->getEdgeValue(e);
 
-  // edge is fully transparent, no need to continue the rendering process
-  if (srcCol.getA() == 0 && tgtCol.getA() == 0 && strokeColor.getA() == 0) {
-    return;
+  if (!selectionDraw) {
+    // edge is fully transparent, no need to continue the rendering process
+    if (srcCol.getA() == 0 && tgtCol.getA() == 0 &&
+        (borderWidth == 0 || strokeColor.getA() == 0)) {
+      return;
+    }
   }
 
   const Size &srcSize = data->getElementSize()->getNodeValue(source);
