@@ -105,10 +105,15 @@ public:
    */
   void getEdgeAnchor(const GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
 
+  void setSelectionDraw(bool selectDraw) {
+    selectionDraw = selectDraw;
+  }
+
   unsigned int id;
 
 private :
 
+  bool selectionDraw;
   static GlLabel *label;
 
   /**

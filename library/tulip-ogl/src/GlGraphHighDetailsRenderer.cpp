@@ -260,6 +260,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   GlNode glNode(0);
   GlEdge glEdge(0);
+  glEdge.setSelectionDraw(selectionDrawActivate);
 
   bool renderOnlyOneNode=false;
 
