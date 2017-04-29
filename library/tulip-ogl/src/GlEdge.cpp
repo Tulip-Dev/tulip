@@ -148,6 +148,17 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   const node source = eEnds.first;
   const node target = eEnds.second;
 
+  bool selected = data->getElementSelected()->getEdgeValue(e);
+
+  Color srcCol, tgtCol;
+  getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
+
+  const Color& strokeColor = data->getElementBorderColor()->getEdgeValue(e);
+
+  // edge is fully transparent, no need to continue the rendering process
+  if (srcCol.getA() == 0 && tgtCol.getA() == 0 && strokeColor.getA() == 0) {
+    return;
+  }
 
   const Size &srcSize = data->getElementSize()->getNodeValue(source);
   const Size &tgtSize = data->getElementSize()->getNodeValue(target);
@@ -171,15 +182,11 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   float lodSize = getEdgeWidthLod(srcCoord,edgeSize,camera);
 
-  bool selected = data->getElementSelected()->getEdgeValue(e);
-
   if (lod < 5) {
     if(data->getGlVertexArrayManager()->renderingIsBegin()) {
       data->getGlVertexArrayManager()->activatePointEdgeDisplay(this,selected);
     }
     else {
-      Color srcCol, tgtCol;
-      getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
       setColor(srcCol);
       glPointSize(1);
@@ -223,7 +230,6 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   glEnable(GL_COLOR_MATERIAL);
 
   const Color& fillColor = data->getElementColor()->getEdgeValue(e);
-  const Color& strokeColor = data->getElementBorderColor()->getEdgeValue(e);
   const Color& textColor = data->getElementLabelColor()->getEdgeValue(e);
 
   if (data->parameters->getFeedbackRender()) {
@@ -245,8 +251,6 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
     glPassThrough(static_cast<float>(id)); //id of the node for the feed back mode
   }
 
-  Color srcCol, tgtCol;
-  getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
   bool hasBends(!bends.empty());
 
   if (!hasBends && (source == target)) { //a loop without bends
