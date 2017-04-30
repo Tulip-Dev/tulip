@@ -9,10 +9,18 @@ SET(GMLExport_SRCS
   GMLExport.cpp
 )
 
+SET(CSVExport_SRCS
+  CSVExport.cpp
+)
+
 ADD_LIBRARY(GMLExport-${TulipVersion} SHARED ${GMLExport_SRCS})
 TARGET_LINK_LIBRARIES(GMLExport-${TulipVersion} ${LibTulipCoreName})
+
+ADD_LIBRARY(CSVExport-${TulipVersion} SHARED ${CSVExport_SRCS})
+TARGET_LINK_LIBRARIES(CSVExport-${TulipVersion} ${LibTulipCoreName})
 
 ADD_CORE_FILES(CMakeLists.txt GMLExport.cpp)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL_TULIP_PLUGIN(GMLExport-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(CSVExport-${TulipVersion} ${TulipPluginsInstallDir})
