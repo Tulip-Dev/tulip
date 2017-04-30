@@ -30,21 +30,21 @@ using namespace std;
 
 static const char * paramHelp[] = {
   // the type of element to export
-    "This parameter enables to choose the type of graph elements to export",
+  "This parameter enables to choose the type of graph elements to export",
   // export selection
   "This parameter indicates if only selected elements have to be exported",
   // export id of graph elements
   "This parameter indicates if the id of graph elements has to be exported",
   // the field separator
-    "This parameter enables to choose the field separator",
+  "This parameter enables to choose the field separator",
   // the field separator custom value
-    "This parameter allows to use a custom field separator. The field separator parameter must set to 'Custom'",
+  "This parameter allows to use a custom field separator. The field separator parameter must set to 'Custom'",
   // the string delimiter
-    "This parameter enables to choose the string delimiter",
+  "This parameter enables to choose the string delimiter",
   // export visual properties selection
-    "This parameter indicates if the visual properties of Tulip will be exported",
+  "This parameter indicates if the visual properties of Tulip will be exported",
   // export selection property
-    "This parameters enables to choose the property used for the selection"
+  "This parameters enables to choose the property used for the selection"
 };
 
 #define ELT_TYPE "Type of elements"
@@ -113,28 +113,35 @@ bool CsvExport::exportGraph(std::ostream &os) {
   if (dataSet != NULL) {
     if (dataSet->get(ELT_TYPE, eltTypes))
       eltType = eltTypes.getCurrent();
+
     dataSet->get(EXPORT_SELECTION, exportSelection);
     dataSet->get(EXPORT_ID, exportId);
     dataSet->get(EXPORT_VISUAL_PROPERTIES, exportVisualProperties);
     dataSet->get(FIELD_SEPARATOR_CUSTOM, fieldSeparatorCustom);
+
     if (dataSet->get(FIELD_SEPARATOR, fieldSeparators)) {
       switch (fieldSeparators.getCurrent()) {
-        case COMMA_SEPARATOR:
-          fieldSeparator = ',';
+      case COMMA_SEPARATOR:
+        fieldSeparator = ',';
         break;
-        case TAB_SEPARATOR:
-          fieldSeparator = '\t';
+
+      case TAB_SEPARATOR:
+        fieldSeparator = '\t';
         break;
+
       case SPACE_SEPARATOR:
-          fieldSeparator = ' ';
+        fieldSeparator = ' ';
         break;
+
       case SEMICOLON_SEPARATOR:
-          fieldSeparator = ';';
+        fieldSeparator = ';';
+
       default:
-          fieldSeparator = fieldSeparatorCustom;
+        fieldSeparator = fieldSeparatorCustom;
       }
 
     }
+
     if (dataSet->get(STRING_DELIMITER, stringDelimiters))
       stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
   }
@@ -145,99 +152,131 @@ bool CsvExport::exportGraph(std::ostream &os) {
     if (eltType != EDGE_TYPE) {
       exportString(os, string("node id"));
     }
+
     if (eltType == BOTH_TYPES) {
       os << fieldSeparator;
     }
+
     if (eltType != NODE_TYPE) {
       exportString(os, string("src id"));
       os << fieldSeparator;
       exportString(os, string("tgt id"));
     }
+
     first = false;
   }
+
   // export non tulip defined properties
   Iterator<PropertyInterface *> *it(graph->getObjectProperties());
   // use vectors for further access to exported properties
   vector<PropertyInterface *> props;
   vector<bool> propIsString;
   unsigned int nbProps = 0;
+
   while(it->hasNext()) {
     PropertyInterface* prop = it->next();
     const string& propName = prop->getName();
+
     if (propName.compare(0, 4, "view") != 0 || exportVisualProperties) {
       ++nbProps;
       props.push_back(prop);
       propIsString.push_back(dynamic_cast<tlp::StringProperty*>(prop));
+
       if (!first)
         os << fieldSeparator;
       else
         first = false;
+
       exportString(os, propName);
     }
-  } delete it;
+  }
+
+  delete it;
   os << endl;
 
   // export nodes
   BooleanProperty* prop = graph->getProperty<BooleanProperty>("viewSelection");
+
   if(exportSelection && dataSet != NULL) {
-        dataSet->get("Export selection property", prop);
+    dataSet->get("Export selection property", prop);
   }
 
   if (eltType != EDGE_TYPE) {
     Iterator<node>* it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
+
     while(it->hasNext()) {
       node n = it->next();
+
       if (exportId) {
         os << n ;
+
         if (eltType == BOTH_TYPES)
           os << fieldSeparator << fieldSeparator;
+
         if (nbProps>0)
           os << fieldSeparator;
       }
+
       for (unsigned int i = 0; i < nbProps; ++i) {
         PropertyInterface *prop = props[i];
         string value = prop->getNodeStringValue(n);
+
         if (!value.empty()) {
           if (propIsString[i])
             exportString(os, value);
           else
             os << value;
         }
+
         if (i != nbProps - 1)
           os << fieldSeparator;
       }
+
       os << endl;
-    } delete it;
+    }
+
+    delete it;
   }
 
   // export edges
   if (eltType != NODE_TYPE) {
     Iterator<edge>* it =
       exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
+
     while(it->hasNext()) {
       edge e = it->next();
+
       if (exportId) {
         if (eltType == BOTH_TYPES)
           os << fieldSeparator;
+
         const std::pair<node, node>& ends = graph->ends(e);
         os << ends.first << fieldSeparator << ends.second.id;
+
         if (nbProps>0)
           os << fieldSeparator;
       }
+
       for (unsigned int i = 0; i < nbProps; ++i) {
         PropertyInterface *prop = props[i];
         string value = prop->getEdgeStringValue(e);
+
         if (!value.empty()) {
           if (propIsString[i])
             exportString(os, value);
           else
             os << value;
         }
+
         if (i != nbProps - 1)
           os << fieldSeparator;
       }
+
       os << endl;
-    } delete it;
+    }
+
+    delete it;
   }
+
   return true;
 }

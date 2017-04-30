@@ -30,7 +30,7 @@
  * \
  * \brief This plugin enables to save the values of tulip graph properties
  *  associated to graph elements in a CSV formatted file.
- * 
+ *
  * The plugin saves one row by graph element exported
  * and have the following parameters:
  *
@@ -48,7 +48,7 @@
  * If edges are exported, two fields named 'src id' and 'tgt id'
  * corresponding to the id of the source and target nodes of an edge
  * are exported at the beginning of each row (immediately after the node id
- * field if it is present). 
+ * field if it is present).
  * The 'node id' field is left blank when exporting a row corresponding to
  * an edge; while the 'src id' and 'tgt id' are left blank when exporting
  * a row for a node.
@@ -69,7 +69,7 @@ public:
   std::string fileExtension() const {
     return "csv";
   }
-  
+
   CsvExport(const tlp::PluginContext *context);
   bool exportGraph(std::ostream &);
 
