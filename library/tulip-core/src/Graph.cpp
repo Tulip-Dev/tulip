@@ -1364,8 +1364,6 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   TLP_HASH_MAP<node, edge> metaEdges;
   TLP_HASH_MAP<edge, set<edge> > subEdges;
 
-  node n;
-
   for(unsigned int i = 0; i < nbNodes; ++i) {
     node n = sgNodes[i];
     edge e;

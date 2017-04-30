@@ -6,6 +6,11 @@ ADD_CORE_FILES(CMakeLists.txt *Tree*.cpp *Graph.cpp AdjacencyMatrixImport.cpp do
 INCLUDE_DIRECTORIES(./ ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclude} ${UTF8CppInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(ERImport_SRCS ERRandomGraph.cpp)
+ADD_LIBRARY(ERImport-${TulipVersion} SHARED ${ERImport_SRCS})
+TARGET_LINK_LIBRARIES(ERImport-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 SET(PlanarGraph_SRCS PlanarGraph.cpp)
 ADD_LIBRARY(PlanarGraph-${TulipVersion} SHARED ${PlanarGraph_SRCS})
 TARGET_LINK_LIBRARIES(PlanarGraph-${TulipVersion} ${LibTulipCoreName})
@@ -117,3 +122,4 @@ ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 INSTALL_TULIP_PLUGIN(ImportPajek-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(ImportUCINET-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(EmptyGraph-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(ERImport-${TulipVersion} ${TulipPluginsInstallDir})
