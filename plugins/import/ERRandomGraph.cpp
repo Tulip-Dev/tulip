@@ -74,7 +74,7 @@ public:
 
     if ((proba < 0)||(proba>1)) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: the probability has to between 0 and 1."));
+        pluginProgress->setError(string("Error: the probability must be between ]0, 1[."));
 
       return false;
     }
