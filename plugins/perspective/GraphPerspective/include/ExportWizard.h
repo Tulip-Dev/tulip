@@ -51,6 +51,7 @@ protected slots:
 
   void pathChanged(QString s);
   void browseButtonClicked();
+  bool validateCurrentPage();
 };
 
 #endif // EXPORTWIZARD_H
