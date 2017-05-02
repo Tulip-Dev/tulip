@@ -33,18 +33,20 @@ static const char * paramHelp[] = {
   "This parameter enables to choose the type of graph elements to export",
   // export selection
   "This parameter indicates if only selected elements have to be exported",
+  // export selection property
+  "This parameters enables to choose the property used for the selection",
   // export id of graph elements
   "This parameter indicates if the id of graph elements has to be exported",
-  // the field separator
-  "This parameter enables to choose the field separator",
-  // the field separator custom value
-  "This parameter allows to use a custom field separator. The field separator parameter must set to 'Custom'",
-  // the string delimiter
-  "This parameter enables to choose the string delimiter",
   // export visual properties selection
   "This parameter indicates if the visual properties of Tulip will be exported",
-  // export selection property
-  "This parameters enables to choose the property used for the selection"
+  // the field separator
+  "This parameter indicates the field separator (sequence of one or more characters used to specify the boundary between two consecutive fields).",
+  // the field separator custom value
+  "This parameter allows to indicate a custom field separator. The 'Field separator' parameter must be set to 'Custom'",
+  // the text delimiter
+  "This parameter indicates the text delimiter (sequence of one or more characters used to specify the boundary of value of type text).",
+  // the decimal mark
+  "This parameter indicates the character used to separate the integer part from the fractional part of a number written in decimal form.",
 };
 
 #define ELT_TYPE "Type of elements"
@@ -73,20 +75,29 @@ static const char * paramHelp[] = {
 #define STRING_DELIMITERS " \" ; ' "
 #define DBL_QUOTE_DELIMITER 0
 #define QUOTE_DELIMITER 1
+#define DECIMAL_MARK "Decimal mark"
+#define DECIMAL_MARKS " . ; , "
 
 //================================================================================
 CsvExport::CsvExport(const PluginContext *context):ExportModule(context) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
   addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
-  addInParameter<BooleanProperty>("Export selection property", paramHelp[7], "viewSelection");
-  addInParameter<bool>(EXPORT_ID, paramHelp[2], "false");
-  addInParameter<bool>(EXPORT_VISUAL_PROPERTIES, paramHelp[6], "false");
-  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[3], FIELD_SEPARATORS);
-  addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[4], CUSTOM_MARK);
-  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[5], STRING_DELIMITERS);
+  addInParameter<BooleanProperty>("Export selection property", paramHelp[2], "viewSelection");
+  addInParameter<bool>(EXPORT_ID, paramHelp[3], "false");
+  addInParameter<bool>(EXPORT_VISUAL_PROPERTIES, paramHelp[4], "false");
+  addInParameter<StringCollection>(FIELD_SEPARATOR, paramHelp[5], FIELD_SEPARATORS);
+  addInParameter<string>(FIELD_SEPARATOR_CUSTOM, paramHelp[6], CUSTOM_MARK);
+  addInParameter<StringCollection>(STRING_DELIMITER, paramHelp[7], STRING_DELIMITERS);
+  addInParameter<StringCollection>(DECIMAL_MARK, paramHelp[8], DECIMAL_MARKS);
 }
 
 //================================================================================
+// define a special facet to force the output
+// of a comma as decimal mark
+struct decimal_comma : std::numpunct<char>{
+    char do_decimal_point()   const { return ','; }
+};
+  
 bool CsvExport::exportGraph(std::ostream &os) {
   // initialize parameters with default values
   // only nodes are exported
@@ -108,6 +119,9 @@ bool CsvExport::exportGraph(std::ostream &os) {
   // string delimiter is "
   StringCollection stringDelimiters(STRING_DELIMITERS);
   stringDelimiters.setCurrent(0);
+  // decimal mark is .
+  StringCollection decimalMarks(DECIMAL_MARKS);
+  decimalMarks.setCurrent(0);
 
   // get choosen values of plugin parameters
   if (dataSet != NULL) {
@@ -144,6 +158,9 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
     if (dataSet->get(STRING_DELIMITER, stringDelimiters))
       stringDelimiter = stringDelimiters.getCurrent() == DBL_QUOTE_DELIMITER ? '"' : '\'';
+
+    if (dataSet->get(DECIMAL_MARK, decimalMarks))
+      decimalMark = decimalMarks.getCurrent() ? ',' : '.';
   }
 
   // export names of fields
@@ -201,6 +218,13 @@ bool CsvExport::exportGraph(std::ostream &os) {
     dataSet->get("Export selection property", prop);
   }
 
+  // get global locale
+  std::locale prevLocale;
+
+  // change decimal point of global locale if needed
+  if (decimalMark == ',')
+    std::locale::global(std::locale(prevLocale, new decimal_comma));
+  
   if (eltType != EDGE_TYPE) {
     Iterator<node>* it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
@@ -277,6 +301,8 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
     delete it;
   }
+  // restore global locale
+  std::locale::global(prevLocale);
 
   return true;
 }
