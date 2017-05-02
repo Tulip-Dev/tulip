@@ -187,14 +187,14 @@ void ExportWizard::browseButtonClicked() {
 
 bool ExportWizard::validateCurrentPage() {
   QString exportFile = outputFile();
-  
+
   // if file exists, check if user wants to overwrite it
   return (!exportFile.isEmpty() &&
-	  (!QFile::exists(exportFile) ||
-	   (QMessageBox::question(parentWidget(), "Overwrite an existing file",
-				  "The export file already exists.<br/>Do you really want to overwrite it?",
-				  QMessageBox::Ok,
-				  QMessageBox::Cancel) == QMessageBox::Ok)));
-} 
+          (!QFile::exists(exportFile) ||
+           (QMessageBox::question(parentWidget(), "Overwrite an existing file",
+                                  "The export file already exists.<br/>Do you really want to overwrite it?",
+                                  QMessageBox::Ok,
+                                  QMessageBox::Cancel) == QMessageBox::Ok)));
+}
 
-  
+
