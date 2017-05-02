@@ -187,10 +187,10 @@
           <item>
            <widget class="QLabel" name="label_3">
             <property name="toolTip">
-             <string>Choose the field separator (semi-colon, comma, tab, space or other)</string>
+             <string>&lt;p&gt;Choose the field separator (semi-colon, comma, tab, space or other) used to specify the boundary between two consecutive fields.&lt;/p&gt;</string>
             </property>
             <property name="text">
-             <string>Separator</string>
+             <string>Field separator</string>
             </property>
            </widget>
           </item>
@@ -203,7 +203,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Choose the field separator (semi-colon, comma, tab, space or other)</string>
+             <string>&lt;p&gt;Choose the field separator (semi-colon, comma, tab, space or other) used to specify the boundary between two consecutive fields.&lt;/p&gt;</string>
             </property>
             <property name="editable">
              <bool>false</bool>
@@ -248,7 +248,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type your customized field separator&lt;br/&gt;after selecting 'Other' in the &lt;b&gt;Separator&lt;/b&gt; combo box&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;p&gt;Type your customized field separator after selecting 'Other' in the &lt;b&gt;Field separator&lt;/b&gt; combo box.&lt;/p&gt;</string>
             </property>
             <property name="text">
              <string>Other</string>
@@ -273,7 +273,7 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type your customized field separator&lt;br/&gt;after selecting 'Other' in the &lt;b&gt;Separator&lt;/b&gt; combo box&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;p&gt;Type your customized field separator after selecting 'Other' in the &lt;b&gt;Field separator&lt;/b&gt; combo box.&lt;/p&gt;</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -298,7 +298,7 @@
         <item>
          <widget class="QCheckBox" name="mergesep">
           <property name="toolTip">
-           <string>Check the box to ensure the merge of consecutive field separators</string>
+           <string>&lt;p&gt;Check the box to ensure the merge of consecutive field separators.&lt;/p&gt;</string>
           </property>
           <property name="text">
            <string>merge consecutive separators</string>
@@ -328,7 +328,7 @@
         <item>
          <widget class="QLabel" name="label_6">
           <property name="toolTip">
-           <string>Choose the text delimiter (&quot; or ') used for text fields </string>
+           <string>&lt;p&gt;Choose the text delimiter (&quot; or ') used to specify the boundaries of a text field.&lt;/p&gt;</string>
           </property>
           <property name="text">
            <string>Text delimiter</string>
@@ -344,7 +344,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>Choose the text delimiter (&quot; or ') for text field </string>
+           <string>&lt;p&gt;Choose the text delimiter (&quot; or ') used to specify the boundaries of a text field.&lt;/p&gt;</string>
           </property>
           <property name="editable">
            <bool>false</bool>
@@ -364,7 +364,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the decimal mark (. or ,) used to separate the integer part&lt;br/&gt;from the fractional part in decimal number fields&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;p&gt;Choose the decimal mark (. or ,) used to separate the integer part from the fractional part in decimal number fields.&lt;/p&gt;</string>
           </property>
           <property name="text">
            <string>Decimal mark</string>
@@ -380,7 +380,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the decimal mark (. or ,) used to separate the integer part&lt;br/&gt;from the fractional part in decimal number fields&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;p&gt;Choose the decimal mark (. or ,) used to separate the integer part from the fractional part in decimal number fields.&lt;/p&gt;</string>
           </property>
           <property name="editable">
            <bool>false</bool>
