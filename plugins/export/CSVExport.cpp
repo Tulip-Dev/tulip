@@ -94,10 +94,12 @@ CsvExport::CsvExport(const PluginContext *context):ExportModule(context) {
 //================================================================================
 // define a special facet to force the output
 // of a comma as decimal mark
-struct decimal_comma : std::numpunct<char>{
-    char do_decimal_point()   const { return ','; }
+struct decimal_comma : std::numpunct<char> {
+  char do_decimal_point()   const {
+    return ',';
+  }
 };
-  
+
 bool CsvExport::exportGraph(std::ostream &os) {
   // initialize parameters with default values
   // only nodes are exported
@@ -224,7 +226,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   // change decimal point of global locale if needed
   if (decimalMark == ',')
     std::locale::global(std::locale(prevLocale, new decimal_comma));
-  
+
   if (eltType != EDGE_TYPE) {
     Iterator<node>* it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
@@ -301,6 +303,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
     delete it;
   }
+
   // restore global locale
   std::locale::global(prevLocale);
 
