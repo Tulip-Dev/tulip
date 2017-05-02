@@ -21,6 +21,7 @@
 
 #include <QAbstractButton>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
@@ -183,3 +184,17 @@ void ExportWizard::browseButtonClicked() {
   if (!exportFile.isEmpty())
     _ui->pathEdit->setText(exportFile);
 }
+
+bool ExportWizard::validateCurrentPage() {
+  QString exportFile = outputFile();
+  
+  // if file exists, check if user wants to overwrite it
+  return (!exportFile.isEmpty() &&
+	  (!QFile::exists(exportFile) ||
+	   (QMessageBox::question(parentWidget(), "Overwrite an existing file",
+				  "The export file already exists.<br/>Do you really want to overwrite it?",
+				  QMessageBox::Ok,
+				  QMessageBox::Cancel) == QMessageBox::Ok)));
+} 
+
+  
