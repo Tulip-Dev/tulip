@@ -74,7 +74,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
   GlMainWidget::getFirstQGLWidget()->doneCurrent();
 
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);
-
+  connect(_ui->aboutQt, SIGNAL(clicked()), qApp, SLOT(aboutQt()));
   connect(_ui->dependenciesInfo, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
