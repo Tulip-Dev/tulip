@@ -53,6 +53,7 @@ and sets the "account" icon (:mdicon:`account`)::
   viewShape.setAllNodeValue(tlp.NodeShape.Icon)
   # sets the "account" glyph for all nodes
   viewIcon.setAllNodeValue(tlp.TulipMaterialDesignIcons.Account);
+
 %End
 
 %If (NO_LIMIT_DOC)
@@ -1991,6 +1992,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.YinYang` (:mdicon:`yin-yang`)
   * :const:`tlp.TulipMaterialDesignIcons.YoutubePlay` (:mdicon:`youtube-play`)
   * :const:`tlp.TulipMaterialDesignIcons.ZipBox` (:mdicon:`zip-box`)
+
 %End
 %End
 
