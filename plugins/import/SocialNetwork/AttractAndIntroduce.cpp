@@ -124,10 +124,10 @@ public :
     unsigned int tmpE = 0;
 
     while (tmpE < e) {
-      i = randomInteger(n);
+      i = randomInteger(n - 1);
 
       do {
-        j = randomInteger(n);
+        j = randomInteger(n - 1);
       }
       while (i==j);
 

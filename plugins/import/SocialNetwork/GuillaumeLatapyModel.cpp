@@ -110,8 +110,7 @@ struct GuillaumeLatapyModel:public ImportModule {
       vec_bottom_nodes[i].n = graph->addNode();
     }
 
-    unsigned int degreeTop =
-      (unsigned int) ceil(((double)numberOfEdges)/nbNodes);
+    unsigned int degreeTop = numberOfEdges/nbNodes;
     unsigned int dixieme =
       ((unsigned int) ceil((10.0 * numberOfEdges)/nbNodes))%10;
 
@@ -133,7 +132,7 @@ struct GuillaumeLatapyModel:public ImportModule {
       }
 
       for (j=0; j<vec_top_nodes[i].degree; ++j) {
-        int bottom_id = tlp::randomInteger(vec_bottom_nodes.size());
+        int bottom_id = tlp::randomInteger(vec_bottom_nodes.size() - 1);
 
         if(isNotNodeInVector(vec_top_nodes[i].bottom_nodes,vec_bottom_nodes[bottom_id].n))
           vec_top_nodes[i].bottom_nodes.push_back(vec_bottom_nodes[bottom_id].n);
