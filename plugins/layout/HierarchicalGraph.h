@@ -60,7 +60,7 @@ private:
   void DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty* embedding);
   std::vector< std::vector<tlp::node> > grid;
   tlp::DoubleProperty *embedding;
-  void twoLayerCrossReduction(tlp::Graph* sg, unsigned int freeLayer, bool);
+  void twoLayerCrossReduction(tlp::Graph* sg, unsigned int freeLayer);
   void crossReduction(tlp::Graph* sg);
   void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
                         const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges);
