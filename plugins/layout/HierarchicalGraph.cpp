@@ -80,7 +80,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
 }
 //================================================================================
 inline unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n,
-					      bool directed) {
+    bool directed) {
   return directed ? sg->outdeg(n): sg->indeg(n);
 }
 //================================================================================
@@ -135,6 +135,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   for (unsigned int i=0; i < maxDepth; ++i) {
     vector<node>& igrid = grid[i];
     stable_sort(igrid.begin(), igrid.end(), lessNode);
+
     for (unsigned int j =0; j < igrid.size(); ++j)
       embedding->setNodeValue(igrid[j], j);
   }
@@ -155,6 +156,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   for (unsigned int i=0; i < maxDepth; ++i) {
     vector<node>& igrid = grid[i];
     stable_sort(igrid.begin(), igrid.end(), lessNode);
+
     for (unsigned int j =0; j < igrid.size(); ++j)
       embedding->setNodeValue(igrid[j], j);
   }
@@ -217,6 +219,7 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
     node firstN = graph->target(start);
     node endN = graph->source(end);
     Coord p1,p2;
+
     if (isReversed.get(toUpdate.id)) {
       p1 = tmpLayout.getNodeValue(endN);
       p2 = tmpLayout.getNodeValue(firstN);
@@ -227,6 +230,7 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
     }
 
     LineType::RealType edgeLine;
+
     if (p1==p2)
       edgeLine.push_back(p1);
     else {
@@ -338,7 +342,7 @@ bool HierarchicalGraph::run() {
       vector<edge> order;
       edge e;
       forEach(e, new SortTargetEdgeIterator(mySGraph->getOutEdges(n),
-					    mySGraph, embedding)) {
+                                            mySGraph, embedding)) {
         order.push_back(e);
       }
       mySGraph->setEdgeOrder(n, order);
@@ -402,7 +406,7 @@ bool HierarchicalGraph::run() {
     float levelMax = levelMaxSize[i] = 0;
     std::vector<node>& igrid = grid[i];
     unsigned int nbNodes = igrid.size();
-    
+
     for (unsigned int j= 0; j < nbNodes; ++ j) {
       node n = igrid[j];
 
@@ -430,6 +434,7 @@ bool HierarchicalGraph::run() {
     Coord srcPos = result->getNodeValue(src);
     Coord tgtPos = result->getNodeValue(tgt);
     float curSpacing;
+
     if (srcLevel>tgtLevel) {
       srcPos[1] += (levelMaxSize[srcLevel]/2.f + spacing_4);
       tgtPos[1] -= (levelMaxSize[tgtLevel]/2.f + spacing_4);
