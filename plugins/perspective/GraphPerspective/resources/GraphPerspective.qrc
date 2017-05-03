@@ -45,6 +45,7 @@
         <file>icons/32/favorite.png</file>
         <file>icons/32/favorite-empty.png</file>
         <file>icons/32/import_adj_mat.png</file>
+        <file>icons/32/import_bibtex.png</file>
         <file>icons/32/import_gephi.png</file>
         <file>icons/32/import_graphviz.png</file>
         <file>icons/32/import_pajek.png</file>
