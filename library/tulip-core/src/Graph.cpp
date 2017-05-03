@@ -537,10 +537,38 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 
   MutableContainer<node> nodeTrl;
   nodeTrl.setAll(node());
-  // loop on selected nodes
-  Iterator<node> * nodeIt =
-    inSel ? inSel->getNonDefaultValuatedNodes(inG) : inG->getNodes();
+  // get selected nodes
+  Iterator<node> * nodeIt = NULL;
+  if (inSel) {
+    nodeIt = inSel->getNonDefaultValuatedNodes(inG);
+    outG->reserveNodes(outG->numberOfNodes() + 
+		       inSel->numberOfNonDefaultValuatedNodes(inG));
+  }
+  else {
+    nodeIt = inG->getNodes();
+    outG->reserveNodes(outG->numberOfNodes() + inG->numberOfNodes());
+  }
 
+  if (!nodeIt->hasNext()) {
+    delete nodeIt;
+    return;
+  }
+
+  // get properties
+  std::vector<std::pair<PropertyInterface*, PropertyInterface*> > properties;
+  PropertyInterface *src = NULL;
+  forEach(src, inG->getObjectProperties()) {
+    if (dynamic_cast<GraphProperty *>(src) == NULL) {
+      const std::string& pName = src->getName();
+      PropertyInterface *dst =
+	outG->existProperty(pName) ? outG->getProperty(pName)
+	: src->clonePrototype(outG, pName);
+      properties.push_back(std::make_pair(src, dst));
+    }
+  }
+  unsigned int nbProperties = properties.size();
+  
+  // loop on nodes
   node nIn;
   forEach(nIn, nodeIt) {
     // add outG corresponding node
@@ -554,22 +582,25 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     nodeTrl.set(nIn.id, nOut);
 
     // copy node properties
-    PropertyInterface *src = NULL;
-    forEach(src, inG->getObjectProperties()) {
-      if (dynamic_cast<GraphProperty *>(src) == NULL) {
-        const std::string& pName = src->getName();
-        PropertyInterface *dst =
-          outG->existProperty(pName) ? outG->getProperty(pName)
-          : src->clonePrototype(outG, pName);
-        dst->copy( nOut, nIn, src );
-      }
+    for(unsigned int i = 0; i < nbProperties; ++i) {
+      std::pair<PropertyInterface*, PropertyInterface*>& props = properties[i];
+      props.second->copy(nOut, nIn, props.first);
     }
   }
 
-  // loop on selected edges
-  Iterator<edge> * edgeIt =
-    inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
-
+  // get selected edges
+  Iterator<edge> * edgeIt = NULL;
+  if (inSel) {
+    edgeIt = inSel->getNonDefaultValuatedEdges(inG);
+    outG->reserveEdges(outG->numberOfEdges() + 
+		       inSel->numberOfNonDefaultValuatedEdges(inG));
+  }
+  else {
+    edgeIt = inG->getEdges();
+    outG->reserveEdges(outG->numberOfEdges() + inG->numberOfEdges());
+  }
+  
+  // loop on edges
   edge eIn;
   forEach(eIn, edgeIt) {
     const pair<node, node> eEnds = inG->ends(eIn);
@@ -582,15 +613,9 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
       outSel->setEdgeValue( eOut, true );
 
     // copy edge properties
-    PropertyInterface *src = NULL;
-    forEach(src, inG->getObjectProperties()) {
-      if (dynamic_cast<GraphProperty *>(src) == NULL) {
-        const std::string& pName = src->getName();
-        PropertyInterface *dst =
-          outG->existProperty(pName) ? outG->getProperty(pName)
-          : src->clonePrototype(outG, pName);
-        dst->copy( eOut, eIn, src );
-      }
+    for(unsigned int i = 0; i < nbProperties; ++i) {
+      std::pair<PropertyInterface*, PropertyInterface*>& props = properties[i];
+      props.second->copy(eOut, eIn, props.first);
     }
   }
 }
