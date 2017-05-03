@@ -42,46 +42,47 @@ void ScatterPlot2DViewNavigator::viewChanged(View *view) {
 
 bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
-  if (glWidget == NULL) {
-    glWidget = dynamic_cast<GlMainWidget *>(widget);
-  }
-
-  if (!glWidget->hasMouseTracking()) {
-    glWidget->setMouseTracking(true);
-  }
-
-  if (!scatterPlot2dView->matrixViewSet() && !scatterPlot2dView->interactorsEnabled()) {
-    scatterPlot2dView->toggleInteractors(true);
-  }
-
-  if (e->type() == QEvent::MouseMove && scatterPlot2dView->matrixViewSet()) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    int x = glWidget->width() - me->x();
-    int y = me->y();
-    Coord screenCoords(x, y, 0.0f);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
-    selectedScatterPlotOverview = getOverviewUnderPointer(sceneCoords);
-    return true;
-  }
-  else if (e->type() == QEvent::MouseButtonDblClick) {
-    if (selectedScatterPlotOverview != NULL && !selectedScatterPlotOverview->overviewGenerated()) {
-      scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview, glWidget);
-      glWidget->draw();
+    if (glWidget == NULL) {
+        glWidget = dynamic_cast<GlMainWidget *>(widget);
     }
-    else if (selectedScatterPlotOverview != NULL && scatterPlot2dView->matrixViewSet()) {
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedScatterPlotOverview->getBoundingBox());
-      zoomAndPanAnimator.animateZoomAndPan();
-      scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
-      selectedScatterPlotOverview = NULL;
-    }
-    else if (!scatterPlot2dView->matrixViewSet()) {
-      scatterPlot2dView->switchFromDetailViewToMatrixView();
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, scatterPlot2dView->getMatrixBoundingBox());
-      zoomAndPanAnimator.animateZoomAndPan();
-    }
+    if(glWidget!=NULL) {
+        if (!glWidget->hasMouseTracking()) {
+            glWidget->setMouseTracking(true);
+        }
 
-    return true;
-  }
+        if (!scatterPlot2dView->matrixViewSet() && !scatterPlot2dView->interactorsEnabled()) {
+            scatterPlot2dView->toggleInteractors(true);
+        }
+
+        if (e->type() == QEvent::MouseMove && scatterPlot2dView->matrixViewSet()) {
+            QMouseEvent *me = (QMouseEvent *) e;
+            int x = glWidget->width() - me->x();
+            int y = me->y();
+            Coord screenCoords(x, y, 0.0f);
+            Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+            selectedScatterPlotOverview = getOverviewUnderPointer(sceneCoords);
+            return true;
+        }
+        else if (e->type() == QEvent::MouseButtonDblClick) {
+            if (selectedScatterPlotOverview != NULL && !selectedScatterPlotOverview->overviewGenerated()) {
+                scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview, glWidget);
+                glWidget->draw();
+            }
+            else if (selectedScatterPlotOverview != NULL && scatterPlot2dView->matrixViewSet()) {
+                QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedScatterPlotOverview->getBoundingBox());
+                zoomAndPanAnimator.animateZoomAndPan();
+                scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
+                selectedScatterPlotOverview = NULL;
+            }
+            else if (!scatterPlot2dView->matrixViewSet()) {
+                scatterPlot2dView->switchFromDetailViewToMatrixView();
+                QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, scatterPlot2dView->getMatrixBoundingBox());
+                zoomAndPanAnimator.animateZoomAndPan();
+            }
+
+            return true;
+        }
+    }
 
   return false;
 }
