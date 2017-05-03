@@ -72,8 +72,10 @@ struct LessThanEdgeExtremitiesMetric {
     metric(metric), sg(sg) {
   }
   bool operator() (const edge &e1, const edge &e2) const {
-    Vec2d v1(metric->getNodeDoubleValue(sg->source(e1)), metric->getNodeDoubleValue(sg->target(e1)));
-    Vec2d v2(metric->getNodeDoubleValue(sg->source(e2)), metric->getNodeDoubleValue(sg->target(e2)));
+    std::pair<node, node> ends = sg->ends(e1);
+    Vec2d v1(metric->getNodeDoubleValue(ends.first), metric->getNodeDoubleValue(ends.second));
+    ends = sg->ends(e2);
+    Vec2d v2(metric->getNodeDoubleValue(ends.first), metric->getNodeDoubleValue(ends.second));
     return v1 < v2;
   }
 private:
