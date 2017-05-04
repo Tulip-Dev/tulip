@@ -503,6 +503,41 @@ color: white;
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="exportButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Export</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+           <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="csvImportButton">
          <property name="minimumSize">
           <size>
