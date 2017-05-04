@@ -441,6 +441,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
   connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
   connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this, SLOT(displayColorScalesDialog()));
+  connect(_ui->exportButton, SIGNAL(clicked()), this, SLOT(exportGraph()));
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
@@ -1152,6 +1153,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->exposeModeButton->setEnabled(enabled);
   _ui->searchButton->setEnabled(enabled);
   _ui->pythonButton->setEnabled(enabled);
+  _ui->exportButton->setEnabled(enabled);
   _ui->previousPageButton->setVisible(enabled);
   _ui->pageCountLabel->setVisible(enabled);
   _ui->nextPageButton->setVisible(enabled);
