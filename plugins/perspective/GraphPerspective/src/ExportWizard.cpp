@@ -193,7 +193,7 @@ bool ExportWizard::validateCurrentPage() {
           (!QFile::exists(exportFile) ||
            (QMessageBox::question(parentWidget(), "Overwrite an existing file",
                                   "The export file already exists.<br/>Do you really want to overwrite it?",
-                                  QMessageBox::Ok,
+                                  QMessageBox::Ok|
                                   QMessageBox::Cancel) == QMessageBox::Ok)));
 }
 
