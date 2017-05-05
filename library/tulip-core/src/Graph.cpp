@@ -278,7 +278,7 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   return graph;
 }
 //=========================================================
-bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *progress) {
+bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *progress, DataSet *data) {
   ostream *os;
 
   string filenameCp = filename;
@@ -310,24 +310,22 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   }
 
   if (exportPluginName.empty()) {
-    std::stringstream str;
-    str << "No export plugin found for file extension '" << ext.c_str() << "', export in TLP format will be used.";
+    string str("No export plugin found for file extension '" + ext + "', export in TLP format will be used.");
 
     if (progress)
-      progress->setError(str.str());
+      progress->setError(str);
 
-    tlp::warning() << str.str() << std::endl;
+    tlp::warning() << str << std::endl;
     exportPluginName = "TLP Export";
   }
 
   if (gzip && exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
-    std::stringstream str;
-    str << "GZip compression is only supported for TLP and TLPB formats.";
+    string str("GZip compression is only supported for TLP and TLPB formats.");
 
     if (progress)
-      progress->setError(str.str());
+      progress->setError(str);
 
-    tlp::error() << str.str() << endl;
+    tlp::error() << str << endl;
     return false;
   }
 
@@ -345,9 +343,12 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   }
 
   bool result;
-  DataSet data;
-  data.set("file", filename);
-  result=tlp::exportGraph(graph, *os, exportPluginName, data, progress);
+  DataSet ds;
+  if(data!=NULL)
+      ds = *data;
+
+  ds.set("file", filename);
+  result=tlp::exportGraph(graph, *os, exportPluginName, ds, progress);
   delete os;
   return result;
 }

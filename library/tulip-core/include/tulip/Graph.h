@@ -79,8 +79,6 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
  * through the available Tulip export plugins.
  * Since Tulip 4.8, the selection of the export plugin is based on the provided filename extension.
  * The export will fail if the selected export plugin is not loaded.
- * The file formats the graph can be exported to are : TLP (*.tlp, *.tlp.gz), TLP Binary (*.tlpb, *.tlpb.gz),
- * TLP JSON (*.json) and GML (*.gml)
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if supported (TLP and TLP Binary only).
  *
@@ -89,9 +87,11 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
  *
  * @param graph the graph to save.
  * @param filename the file to save the graph to.
+ * @param progress  PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @param data Parameters to pass to the export plugin (e.g. additional data, options for the format)
  * @return bool whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL);
+TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL, tlp::DataSet *data = NULL);
 
 /**
  * @ingroup Graph
@@ -102,7 +102,7 @@ TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginP
  * @param graph The graph to export.
  * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a gzipped ostream.
  * @param format The format to use to export the Graph.
- * @param dataSet The parameters to pass to the export plugin (e.g. additional data, options for the format)
+ * @param dataSet Parameters to pass to the export plugin (e.g. additional data, options for the format)
  * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
  * @return bool Whether the export was successfull or not.
  **/

@@ -132,7 +132,7 @@ void ExportWizard::pathChanged(QString s) {
     // add special case to allow export *.gz
     extension += ".gz";
 
-    if (s.endsWith((extension).c_str())) {
+    if (s.endsWith(extension.c_str())) {
       // look for a corresponding import module supporting the gz extension
       for(std::list<std::string>::const_iterator it = imports.begin();
           it != imports.end(); ++it) {
