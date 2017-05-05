@@ -344,8 +344,9 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
 
   bool result;
   DataSet ds;
+
   if(data!=NULL)
-      ds = *data;
+    ds = *data;
 
   ds.set("file", filename);
   result=tlp::exportGraph(graph, *os, exportPluginName, ds, progress);
