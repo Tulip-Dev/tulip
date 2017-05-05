@@ -577,7 +577,7 @@ void GraphPerspective::exportGraph(Graph* g) {
 
   static QString exportFile;
   ExportWizard wizard(g, exportFile, _mainWindow);
-  wizard.setWindowTitle(QString("Export of graph \"") + g->getName().c_str() + '"');
+  wizard.setWindowTitle(QString("Exporting graph \"") + tlpStringToQString(g->getName()) + '"');
 
   if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;
