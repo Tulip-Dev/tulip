@@ -579,42 +579,18 @@ void GraphPerspective::exportGraph(Graph* g) {
   ExportWizard wizard(g, exportFile, _mainWindow);
   wizard.setWindowTitle(QString("Exporting graph \"") + tlpStringToQString(g->getName()) + '"');
 
-  if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
+  if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isEmpty() || wizard.outputFile().isEmpty())
     return;
 
-  std::ostream *os;
   std::string filename = QStringToTlpString(exportFile = wizard.outputFile());
   std::string exportPluginName = QStringToTlpString(wizard.algorithm());
-
-  if (exportFile.endsWith(".gz")) {
-    if (exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
-      QMessageBox::critical(_mainWindow,trUtf8("Format error"),trUtf8("GZip compression is only supported for TLP and TLPB formats."));
-      return;
-    }
-
-    os = tlp::getOgzstream(filename);
-  }
-  else {
-    if (exportPluginName == "TLPB Export")
-      os = tlp::getOutputFileStream(filename,
-                                    std::ios::out | std::ios::binary);
-    else
-      os = tlp::getOutputFileStream(filename);
-  }
-
-  if (os->fail()) {
-    QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
-    delete os;
-    return;
-  }
 
   DataSet data = wizard.parameters();
   PluginProgress* prg = progress(NoProgressOption);
   prg->setTitle(exportPluginName);
   // take time before run
   QTime start = QTime::currentTime();
-  bool result = tlp::exportGraph(g,*os,exportPluginName,data,prg);
-  delete os;
+  bool result = tlp::saveGraph(g, filename,prg,&data);
 
   if (!result) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
