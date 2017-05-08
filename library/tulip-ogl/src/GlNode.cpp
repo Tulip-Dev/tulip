@@ -47,6 +47,8 @@
 tlp::GlLabel* tlp::GlNode::label=NULL;
 tlp::GlBox* tlp::GlNode::selectionBox=NULL;
 
+#define LOD_MIN_TRESHOLD 10.0
+
 using namespace std;
 
 namespace tlp {
@@ -114,9 +116,10 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   glEnable(GL_CULL_FACE);
 
-  node n=node(id);
+  node n(id);
 
-  if(data->getGraph()->isMetaNode(n)) {
+  //do not render metanode is lod is too low
+  if(data->getGraph()->isMetaNode(n)&&lod>=LOD_MIN_TRESHOLD) {
     data->getMetaNodeRenderer()->render(n,lod,camera);
   }
 
@@ -147,7 +150,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     glPassThrough(id); //id of the node for the feed back mode
   }
 
-  if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
+  if (lod < LOD_MIN_TRESHOLD) { //less than four pixel on screen, we use points instead of glyphs
     if (lod < 1) lod = 1;
 
     if(data->getGlVertexArrayManager()->renderingIsBegin()) {
