@@ -616,7 +616,7 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     return;
 
   static QString savedFile;
-  QString filter("TLP format (*.tlp *.tlp.gz);;TLPB format (*.tlpb *.tlpb.gz)");
+  QString filter("TLP format (*.tlp *.tlp.gz *.tlpz);;TLPB format (*.tlpb *.tlpb.gz *.tlpbz)");
   QString filename =
     QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp/tlpb file"),savedFile, filter);
 

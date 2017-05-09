@@ -79,6 +79,13 @@ public:
     return "tlpb";
   }
 
+  std::list<std::string> gzipFileExtensions() const {
+      std::list<std::string> ext;
+      ext.push_back("tlpb.gz");
+      ext.push_back("tlpbz");
+      return ext;
+  }
+
   TLPBExport(const tlp::PluginContext *context) :ExportModule(context) {}
   ~TLPBExport() {}
 
@@ -124,8 +131,14 @@ public:
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("tlpb");
-    l.push_back("tlpb.gz");
     return l;
+  }
+
+  std::list<std::string> gzipFileExtensions() const {
+      std::list<std::string> ext;
+      ext.push_back("tlpb.gz");
+      ext.push_back("tlpbz");
+      return ext;
   }
 
   bool importGraph();

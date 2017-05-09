@@ -36,6 +36,7 @@ class ExportWizard: public QWizard {
 
   Ui::ExportWizard* _ui;
   tlp::Graph* _graph;
+
 public:
   explicit ExportWizard(tlp::Graph* g, const QString& exportFile,
                         QWidget *parent = NULL);

@@ -75,6 +75,13 @@ public:
     return "svg";
   }
 
+  list<string> gzipFileExtensions() const {
+      list<string> ext;
+      ext.push_back("svgz");
+      return ext;
+  }
+
+
   SvgExport(tlp::PluginContext* context) : tlp::ExportModule(context) {
     addInParameter<bool>("Edge color interpolation", paramHelp[0], "false");
     addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");

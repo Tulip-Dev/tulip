@@ -79,10 +79,16 @@ bool TLPBImport::importGraph() {
       return errorTrap();
     }
 
-    if (filename.rfind(".gz") == (filename.length() - 3)) {
-      is = tlp::getIgzstream(filename);
+    bool gzip(false);
+    std::list<std::string> gext(gzipFileExtensions());
+    for(std::list<std::string>::const_iterator it = gext.begin();it!=gext.end();++it) {
+        if (filename.rfind(*it) == (filename.length() - (*it).length())) {
+            is = tlp::getIgzstream(filename);
+            gzip = true;
+            break;
+        }
     }
-    else
+    if(!gzip)
       is = tlp::getInputFileStream(filename, std::ifstream::in |
                                    std::ifstream::binary);
   }

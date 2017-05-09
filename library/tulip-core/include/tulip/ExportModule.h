@@ -69,6 +69,20 @@ public:
   virtual std::string fileExtension() const = 0;
 
   /**
+   * @brief Gets a list of the extensions file format when compressed with gzip this export plugin saves to.
+   * @return :string the extension that this export module saves to.
+   **/
+  virtual std::list<std::string> gzipFileExtensions() const {
+    return std::list<std::string>();
+  }
+
+  std::list<std::string>  allFileExtensions() const {
+      std::list<std::string> ext(gzipFileExtensions());
+      ext.push_back(fileExtension());
+      return ext;
+  }
+
+  /**
    * @brief The export operations should take place here.
    * @param the output stream
    * @return bool Whether the export was successful or not.

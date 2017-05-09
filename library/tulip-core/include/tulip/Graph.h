@@ -58,7 +58,7 @@ enum ElementType {
  * This function loads a graph serialized in a file trough the available Tulip import plugins.
  * Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
  * The import will fail if the selected import plugin is not loaded.
- * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz), TLP Binary (*.tlpb, *.tlpb.gz), TLP JSON (*.json),
+ * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz, *.tlpz), TLP Binary (*.tlpb, *.tlpb.gz, *.tlpbz), TLP JSON (*.json),
  * Gephi (*.gexf), Pajek (*.net, *.paj), GML (*.gml), Graphviz (*.dot) and UCINET (*.txt)
  *
  * Before Tulip 4.8 and as a fallback, the function uses the "TLP Import" import plugin
@@ -79,8 +79,6 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
  * through the available Tulip export plugins.
  * Since Tulip 4.8, the selection of the export plugin is based on the provided filename extension.
  * The export will fail if the selected export plugin is not loaded.
- *
- * This function checks the file name for the '.gz' extension and uses a compressed output if supported (TLP and TLP Binary only).
  *
  * Before Tulip 4.8 and as a fallback, this function uses the "TLP Export" export plugin
  * (always loaded as it is linked into the tulip-core library).

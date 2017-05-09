@@ -4236,7 +4236,7 @@ tlp::Graph *loadGraph(const std::string &filename, tlp::Graph *newGraph);
 %Docstring
 tlp.loadGraph(filename[, graph = None])
 
-Loads a graph in the TLP format from a file (extension can be .tlp or .tlp.gz).
+Loads a graph in the TLP format from a file (extension can be .tlp, .tlp.gz, or .tlpz).
 Returns the graph (a new graph if none is provided) or :const:`None` if the import fails.
 
 :param filename: the path to the tlp file
@@ -4257,14 +4257,14 @@ tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
 %Docstring
 tlp.loadGraph(fileName)
 
-Loads a graph serialized in a file trough the available Tulip import plugins.
+Loads a graph serialized in a file trough one the available Tulip import plugins based on its extension.
 
 Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
 The import will fail if the selected import plugin is not loaded.
-The graph file formats that can currently be imported are : TLP (.tlp or .tlp.gz), TLP Binary (.tlpb or .tlpb.gz), TLP JSON (.json),
+The graph file formats that can currently be imported are : TLP (.tlp, .tlp.gz, .tlpz), TLP Binary (.tlpb, .tlpb.gz, .tlpbz), TLP JSON (.json),
 Gephi (.gexf), Pajek (.net, .paj), GML (.gml), Graphviz (.dot) and UCINET (.txt).
 
-Before Tulip 4.8 and as a fallback, the function uses the "TLP Import" import plugin
+Before Tulip 4.8 and as a fallback, this function uses the "TLP Import" import plugin
 (always loaded as it is linked into the tulip-core library).
 
 Returns a new graph or :const:`None` if the import fails.
@@ -4285,10 +4285,8 @@ through the available Tulip export plugins.
 
 Since Tulip 4.8, the selection of the export plugin is based on the provided filename extension.
 The export will fail if the selected export plugin is not loaded.
-The file formats the graph can be exported to are : TLP (.tlp or .tlp.gz), TLP Binary (.tlpb or .tlpb.gz),
-TLP JSON (.json) and GML (.gml).
-
-This function checks the file name for the '.gz' extension and uses a compressed output if supported (TLP and TLP Binary only).
+The file formats the graph can be exported to are: TLP (.tlp, .tlp.gz, .tlpz), TLP Binary (.tlpb, .tlpb.gz, .tlpbz),
+TLP JSON (.json), GML (.gml), CSV (.csv), SVG (.svg, .svgz)
 
 Before Tulip 4.8 and as a fallback, this function uses the "TLP Export" export plugin
 (always loaded as it is linked into the tulip-core library).
