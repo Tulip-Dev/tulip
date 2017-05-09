@@ -676,10 +676,10 @@ QWidget* NodeShapeEditorCreator::createWidget(QWidget* parent) const {
       GlyphRenderer::getInst().render(GlyphManager::getInst().glyphId(*it));
     shapes.push_back(std::make_pair(shapeName, pixmap));
   }
-  
+
   return new ShapeDialog(shapes, Perspective::instance() ?
-			 Perspective::instance()->mainWindow()
-			 : parent);
+                         Perspective::instance()->mainWindow()
+                         : parent);
 }
 
 void NodeShapeEditorCreator::setEditorData(QWidget* w, const QVariant& data, bool, tlp::Graph*) {
@@ -735,7 +735,7 @@ QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
   // dialog with a QListWidget inside
   std::list<std::pair<QString , QPixmap> > shapes;
   shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
-		   
+
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
 
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
@@ -744,10 +744,10 @@ QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
       EdgeExtremityGlyphRenderer::getInst().render(EdgeExtremityGlyphManager::getInst().glyphId(*it));
     shapes.push_back(std::make_pair(shapeName, pixmap));
   }
-  
+
   return new ShapeDialog(shapes, Perspective::instance() ?
-			 Perspective::instance()->mainWindow()
-			 : parent);
+                         Perspective::instance()->mainWindow()
+                         : parent);
 }
 
 void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* w, const QVariant& data, bool, tlp::Graph*) {
