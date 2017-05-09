@@ -1490,7 +1490,7 @@ public :
 
     // rendering properties
     ColorProperty* color = graph->getProperty<ColorProperty>("viewColor");
-    StringProperty* icon = graph->getProperty<StringProperty>("viewFontAwesomeIcon");
+    StringProperty* icon = graph->getProperty<StringProperty>("viewIcon");
     StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
 
     graph->getProperty<IntegerProperty>("viewLabelPosition")->setAllNodeValue(LabelPosition::Bottom);

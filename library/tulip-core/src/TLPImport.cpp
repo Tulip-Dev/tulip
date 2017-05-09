@@ -944,8 +944,14 @@ public:
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("tlp");
-    l.push_back("tlp.gz");
     return l;
+  }
+
+  std::list<std::string> gzipFileExtensions() const {
+      std::list<std::string> ext;
+      ext.push_back("tlp.gz");
+      ext.push_back("tlpz");
+      return ext;
   }
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
@@ -972,26 +978,33 @@ public:
       result = (statPath(filename, &infoEntry) == 0);
 
       if (!result) {
-        std::stringstream ess;
-        ess << filename.c_str() << ": " << strerror(errno);
-        pluginProgress->setError(ess.str());
-        tlp::warning() << pluginProgress->getError() << std::endl;
-        return false;
+          std::stringstream ess;
+          ess << filename.c_str() << ": " << strerror(errno);
+          pluginProgress->setError(ess.str());
+          tlp::warning() << pluginProgress->getError() << std::endl;
+          return false;
       }
 
       size=infoEntry.st_size;
 
-      if (filename.rfind(".gz") == (filename.length() - 3)) {
-        size = getUncompressedSizeOfGzipFile(filename);
-        input = tlp::getIgzstream(filename);
+      std::list<std::string> gext(gzipFileExtensions());
+      bool gzip(false);
+      for(std::list<std::string>::const_iterator it = gext.begin();it!=gext.end();++it) {
+          if (filename.rfind(*it) == (filename.length() - (*it).length())) {
+              size = getUncompressedSizeOfGzipFile(filename);
+              input = tlp::getIgzstream(filename);
+              gzip=true;
+              break;
+          }
       }
-      else
-        input = tlp::getInputFileStream(filename,
-                                        std::ifstream::in |
-                                        // consider file has binary
-                                        // to avoid pb using tellg
-                                        // on the input stream
-                                        std::ifstream::binary );
+          if(!gzip)
+              input = tlp::getInputFileStream(filename,
+                                              std::ifstream::in |
+                                              // consider file has binary
+                                              // to avoid pb using tellg
+                                              // on the input stream
+                                              std::ifstream::binary );
+
     }
     else {
       dataSet->get<std::string>("file::data", data);
