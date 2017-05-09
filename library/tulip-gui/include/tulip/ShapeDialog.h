@@ -25,6 +25,7 @@ public:
 
   ShapeDialog(std::list<std::pair<QString, QPixmap> >& nodeShapes,
               QWidget *parent = NULL);
+  ~ShapeDialog();
 
   QString getSelectedShapeName() const;
 
