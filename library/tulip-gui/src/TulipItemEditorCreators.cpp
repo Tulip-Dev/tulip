@@ -44,6 +44,7 @@
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TulipFontIconDialog.h>
+#include <tulip/ShapeDialog.h>
 
 using namespace tlp;
 
@@ -660,28 +661,35 @@ QSize TulipFontIconCreator::sizeHint(const QStyleOptionViewItem &option, const Q
   return QSize(iconSize.width()+fontMetrics.boundingRect(displayText(data)).width()+20, iconSize.height());
 }
 
-QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
-  CustomComboBox* combobox = new CustomComboBox(parent);
+///NodeShapeEditorCreator
+QWidget* NodeShapeEditorCreator::createWidget(QWidget* parent) const {
+  // Due to a Qt issue when embedding a combo box with a large amount
+  // of items in a QGraphicsScene (popup has a too large height,
+  // making the scrollbars unreachable ...), we use a native
+  // dialog with a QListWidget inside
+  std::list<std::pair<QString , QPixmap> > shapes;
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
 
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
-    std::string glyphName(*it);
-    int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
-    //Create the glyph entry
-    combobox->addItem(GlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+    QString shapeName = tlpStringToQString(*it);
+    QPixmap pixmap =
+      GlyphRenderer::getInst().render(GlyphManager::getInst().glyphId(*it));
+    shapes.push_back(std::make_pair(shapeName, pixmap));
   }
-
-  return combobox;
+  
+  return new ShapeDialog(shapes, Perspective::instance() ?
+			 Perspective::instance()->mainWindow()
+			 : parent);
 }
 
-void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data , bool, Graph*) {
-  QComboBox* combobox = static_cast<QComboBox*>(editor);
-  combobox->setCurrentIndex(combobox->findData(data.value<NodeShape::NodeShapes>()));
+void NodeShapeEditorCreator::setEditorData(QWidget* w, const QVariant& data, bool, tlp::Graph*) {
+  ShapeDialog* nsd = static_cast<ShapeDialog*>(w);
+  nsd->setSelectedShapeName(tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape::NodeShapes>())));
 }
 
-QVariant NodeShapeEditorCreator::editorData(QWidget*editor,Graph*) {
-  QComboBox* combobox = static_cast<QComboBox*>(editor);
-  return QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(combobox->itemData(combobox->currentIndex()).toInt()));
+QVariant NodeShapeEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  ShapeDialog* nsd = static_cast<ShapeDialog*>(w);
+  return QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(GlyphManager::getInst().glyphId(QStringToTlpString(nsd->getSelectedShapeName()))));
 }
 
 QString NodeShapeEditorCreator::displayText(const QVariant & data) const {
@@ -721,28 +729,35 @@ bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
 
 ///EdgeExtremityShapeEditorCreator
 QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
-  CustomComboBox* combobox = new CustomComboBox(parent);
-  combobox->addItem(QString("NONE"),EdgeExtremityShape::None);
+  // Due to a Qt issue when embedding a combo box with a large amount
+  // of items in a QGraphicsScene (popup has a too large height,
+  // making the scrollbars unreachable ...), we use a native
+  // dialog with a QListWidget inside
+  std::list<std::pair<QString , QPixmap> > shapes;
+  shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
+		   
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
 
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
-    std::string glyphName(*it);
-    const tlp::Plugin& info = PluginLister::pluginInformation(glyphName);
-    int glyphIndex = info.id();
-    //Create the glyph entry
-    combobox->addItem(EdgeExtremityGlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+    QString shapeName = tlpStringToQString(*it);
+    QPixmap pixmap =
+      EdgeExtremityGlyphRenderer::getInst().render(EdgeExtremityGlyphManager::getInst().glyphId(*it));
+    shapes.push_back(std::make_pair(shapeName, pixmap));
   }
-
-  return combobox;
-}
-void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,bool,Graph*) {
-  QComboBox* combobox = static_cast<QComboBox*>(editor);
-  combobox->setCurrentIndex(combobox->findData(data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
+  
+  return new ShapeDialog(shapes, Perspective::instance() ?
+			 Perspective::instance()->mainWindow()
+			 : parent);
 }
 
-QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget* editor,Graph*) {
-  QComboBox* combobox = static_cast<QComboBox*>(editor);
-  return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<EdgeExtremityShape::EdgeExtremityShapes>(combobox->itemData(combobox->currentIndex()).toInt()));
+void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* w, const QVariant& data, bool, tlp::Graph*) {
+  ShapeDialog* nsd = static_cast<ShapeDialog*>(w);
+  nsd->setSelectedShapeName(tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>())));
+}
+
+QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  ShapeDialog* nsd = static_cast<ShapeDialog*>(w);
+  return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<EdgeExtremityShape::EdgeExtremityShapes>(EdgeExtremityGlyphManager::getInst().glyphId(QStringToTlpString(nsd->getSelectedShapeName()))));
 }
 
 QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
