@@ -29,6 +29,7 @@ SET(SRCS
   MouseShowElementInfo.cpp
   NodeLinkDiagramComponent.cpp
   NodeLinkDiagramComponentInteractor.cpp
+  ShapeDialog.cpp
   Perspective.cpp
   PluginManager.cpp
   PropertyCreationDialog.cpp
@@ -135,31 +136,32 @@ ENDIF(UNIX)
 QTX_WRAP_UI(UI_HEADERS
   ../designer/AboutTulipPage.ui
   ../designer/ColorScaleConfigDialog.ui
+  ../designer/CoordEditor.ui
   ../designer/CopyPropertyDialog.ui
   ../designer/CSVGraphMappingConfigurationWidget.ui
   ../designer/CSVImportConfigurationWidget.ui
   ../designer/CSVImportWizard.ui
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
+  ../designer/ElementInformationWidget.ui
+  ../designer/GridOptionsWidget.ui
+  ../designer/ShapeDialog.ui
   ../designer/PropertyCreationDialog.ui
+  ../designer/QuickAccessBar.ui
   ../designer/RenamePropertyDialog.ui
+  ../designer/SceneConfigWidget.ui
+  ../designer/SceneLayersConfigWidget.ui
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
+  ../designer/SnapshotDialog.ui
   ../designer/StringsListSelectionDialog.ui
-  ../designer/WorkspacePanel.ui
-  ../designer/Workspace.ui
-  ../designer/CoordEditor.ui
-  ../designer/SceneConfigWidget.ui
-  ../designer/QuickAccessBar.ui
   ../designer/TextureFileDialog.ui
   ../designer/TulipFontDialog.ui
-  ../designer/VectorEditor.ui
-  ../designer/TulipFontWidget.ui
-  ../designer/GridOptionsWidget.ui
-  ../designer/ElementInformationWidget.ui
-  ../designer/SnapshotDialog.ui
-  ../designer/SceneLayersConfigWidget.ui
   ../designer/TulipFontIconDialog.ui
+  ../designer/TulipFontWidget.ui
+  ../designer/VectorEditor.ui
+  ../designer/Workspace.ui
+  ../designer/WorkspacePanel.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
@@ -226,6 +228,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/Workspace.h
   ../include/tulip/WorkspaceExposeWidget.h
   ../include/tulip/TulipFontIconDialog.h
+  ../include/tulip/ShapeDialog.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
