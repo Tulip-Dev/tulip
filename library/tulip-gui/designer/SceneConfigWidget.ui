@@ -608,10 +608,10 @@ background-color: rgb(160, 160, 160);</string>
             <item>
              <widget class="QCheckBox" name="edgesArrowCheck">
               <property name="toolTip">
-               <string>enable/disable the display of the edges arrows</string>
+               <string>enable/disable the display of the edges extremities (usually an arrow)</string>
               </property>
               <property name="text">
-               <string>Show arrows</string>
+               <string>Show extremities</string>
               </property>
              </widget>
             </item>
