@@ -14,6 +14,11 @@ PROJECT(tulip)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+#convert CMAKE_INSTALL_PREFIX path into a cmake style path with unix /
+#this is to avoid a path with a '\' as the last character which may be seen as
+#an escape character (e.g. \")
+FILE(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
+
 # Force build type to release with debug info if none has been provided
 IF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
   SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "" FORCE)
