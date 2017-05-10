@@ -289,19 +289,19 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
           delete exportPlugin;
           break;
       }
-
-      list<string> gext(exportPlugin->gzipFileExtensions());
-      for(list<string>::const_iterator zit=gext.begin();zit!=gext.end();++zit) {
+      else {
+	list<string> gext(exportPlugin->gzipFileExtensions());
+	for(list<string>::const_iterator zit=gext.begin();zit!=gext.end();++zit) {
           string zext(*zit);
           if (filename.rfind(zext) == filename.length() - zext.length()) {
-              exportPluginName = exportPlugin->name();
-              gzip=true;
-              delete exportPlugin;
-              break;
+	    exportPluginName = exportPlugin->name();
+	    gzip=true;
+	    break;
           }
-      }
+	}
 
-  delete exportPlugin;
+	delete exportPlugin;
+      }
   }
 
   if (exportPluginName.empty()) {
