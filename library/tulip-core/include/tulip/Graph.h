@@ -527,6 +527,15 @@ public:
   virtual node addNode()=0;
 
   /**
+   * @brief Adds new nodes in the graph.
+   * The new nodes are also added in all the ancestor graphs.
+   *
+   * @param nbNodes The number of nodes to add.
+   * @see addNode() to add a single node.
+   */
+  virtual void addNodes(unsigned int nbNodes)=0;
+
+  /**
    * @brief Adds new nodes in the graph and returns them in the addedNodes vector.
    * The new nodes are also added in all the ancestor graphs.
    *
@@ -609,6 +618,18 @@ public:
    */
   virtual edge addEdge(const node source, const node target)=0;
 
+  /**
+   * @brief Adds new edges in the graph.
+   * The new edges are also added in all graph ancestors.
+   *
+   * @warning If the edges vector contains a node that does not belong to this graph,
+   * undefined behavior will ensue.
+   * @param edges A vector describing between which nodes to add edges.
+   * The first element of the pair is the source, the second is the destination.
+   *
+   */
+  virtual void addEdges(const std::vector<std::pair<node, node> >& edges)=0;
+  
   /**
    * @brief Adds new edges in the graph and returns them in the addedEdges vector.
    * The new edges are also added in all graph ancestors.
@@ -1695,25 +1716,14 @@ public:
     TLP_BEFORE_ADD_INHERITED_PROPERTY = 29
   };
 
-  // constructor for node/edge events
+  // constructor for node/edge/nodes/edges events
   GraphEvent(const Graph& g, GraphEventType graphEvtType, unsigned int id,
              Event::EventType evtType = Event::TLP_MODIFICATION)
     : Event(g, evtType), evtType(graphEvtType) {
-    info.eltId = id;
-  }
-  // constructor for nodes events
-  GraphEvent(const Graph& g, GraphEventType graphEvtType,
-             const std::vector<node>& nodes,
-             Event::EventType evtType = Event::TLP_MODIFICATION)
-    : Event(g, evtType), evtType(graphEvtType) {
-    info.nodes = &nodes;
-  }
-  // constructor for edges events
-  GraphEvent(const Graph& g, GraphEventType graphEvtType,
-             const std::vector<edge>& edges,
-             Event::EventType evtType = Event::TLP_MODIFICATION)
-    : Event(g, evtType), evtType(graphEvtType) {
-    info.edges = &edges;
+    if (graphEvtType == TLP_ADD_NODES || graphEvtType == TLP_ADD_EDGES)
+      info.nbElts = id;
+    else
+      info.eltId = id;
   }
   // constructor for subgraph events
   GraphEvent(const Graph& g, GraphEventType graphEvtType,
@@ -1764,16 +1774,20 @@ public:
     return edge(info.eltId);
   }
 
-  const std::vector<node>& getNodes() const {
+  std::vector<node> getNodes() const;
+
+  unsigned int getNumberOfNodes() const {
     assert(evtType == TLP_ADD_NODES);
-    return *(info.nodes);
+    return info.nbElts;
   }
 
-  const std::vector<edge>& getEdges() const {
+  std::vector<edge> getEdges() const;
+
+  unsigned int getNumberOfEdges() const {
     assert(evtType == TLP_ADD_EDGES);
-    return *(info.edges);
+    return info.nbElts;
   }
-
+  
   const Graph* getSubGraph() const {
     assert(evtType > TLP_ADD_EDGES && evtType < TLP_ADD_LOCAL_PROPERTY);
     return info.subGraph;
@@ -1812,8 +1826,7 @@ protected:
     unsigned int eltId;
     const Graph* subGraph;
     std::string* name;
-    const std::vector<node>* nodes;
-    const std::vector<edge>* edges;
+    unsigned int nbElts;
     std::pair<PropertyInterface*, std::string>* renamedProp;
   } info;
 };

@@ -23,7 +23,6 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/GraphImpl.h>
 
 PLUGIN(TLPBImport)
 
@@ -115,7 +114,7 @@ bool TLPBImport::importGraph() {
   }
 
   // add nodes
-  ((GraphImpl *)graph)->addNodes(header.numNodes);
+  graph->addNodes(header.numNodes);
 
   // loop to read edges
   {
@@ -139,7 +138,7 @@ bool TLPBImport::importGraph() {
         return pluginProgress->state()!=TLP_CANCEL;
 
       // add edges in the graph
-      ((GraphImpl *)graph)->addEdges(vEdges);
+      graph->addEdges(vEdges);
       // decrement nbEdges
       nbEdges -= edgesToRead;
     }

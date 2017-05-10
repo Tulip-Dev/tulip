@@ -96,10 +96,12 @@ public:
   virtual bool isElement(const edge e) const;
   virtual bool isMetaEdge(const edge e) const;
   virtual node addNode();
+  virtual void addNodes(unsigned int nb);
   virtual void addNodes(unsigned int nb, std::vector<node>& addedNodes);
   virtual void addNode(const node);
   virtual void addNodes(Iterator<node>* nodes);
   virtual edge addEdge(const node n1, const node n2);
+  virtual void addEdges(const std::vector<std::pair<node, node> >& edges);
   virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
                         std::vector<edge>& addedEdges);
   virtual void addEdge(const edge);

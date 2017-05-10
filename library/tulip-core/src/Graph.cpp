@@ -1939,3 +1939,28 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
 Iterator<Graph*>* Graph::getDescendantGraphs() const {
   return new DescendantGraphsIterator(this);
 }
+
+std::vector<node> GraphEvent::getNodes() const {
+  assert(evtType == TLP_ADD_NODES);
+  unsigned int nbElts = info.nbElts;
+  std::vector<node> addedNodes(nbElts);
+  const std::vector<node>& nodes = getGraph()->nodes();
+  memcpy(addedNodes.data(), &nodes[nodes.size() - nbElts],
+	 nbElts * sizeof(node));
+  // set addedNodes size
+  ((node **) &addedNodes)[1] = ((node **) &addedNodes)[0] + nbElts;
+  return addedNodes;
+}
+
+std::vector<edge> GraphEvent::getEdges() const {
+  assert(evtType == TLP_ADD_EDGES);
+  unsigned int nbElts = info.nbElts;
+  std::vector<edge> addedEdges(nbElts);
+  const std::vector<edge>& edges = getGraph()->edges();
+  memcpy(addedEdges.data(), &edges[edges.size() - nbElts],
+	 nbElts * sizeof(edge));
+  // set addedEdges size
+  ((edge **) &addedEdges)[1] = ((edge **) &addedEdges)[0] + nbElts;
+  return addedEdges;
+}
+
