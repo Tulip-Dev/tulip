@@ -629,7 +629,7 @@ public:
    *
    */
   virtual void addEdges(const std::vector<std::pair<node, node> >& edges)=0;
-  
+
   /**
    * @brief Adds new edges in the graph and returns them in the addedEdges vector.
    * The new edges are also added in all graph ancestors.
@@ -1787,7 +1787,7 @@ public:
     assert(evtType == TLP_ADD_EDGES);
     return info.nbElts;
   }
-  
+
   const Graph* getSubGraph() const {
     assert(evtType > TLP_ADD_EDGES && evtType < TLP_ADD_LOCAL_PROPERTY);
     return info.subGraph;

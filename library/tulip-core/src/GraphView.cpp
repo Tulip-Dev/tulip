@@ -225,17 +225,19 @@ void GraphView::restoreNode(node n) {
   notifyAddNode(n);
 }
 //----------------------------------------------------------------
-  void GraphView::addNodesInternal(unsigned int nbAdded,
-				   const std::vector<node>* nodes) {
+void GraphView::addNodesInternal(unsigned int nbAdded,
+                                 const std::vector<node>* nodes) {
   _nodes.reserve(_nodes.size() + nbAdded);
-  
+
   std::vector<node>::const_iterator it;
+
   if (nodes)
     it = nodes->begin();
   else {
     nodes = &getSuperGraph()->nodes();
     it = nodes->begin() + nodes->size() - nbAdded;
   }
+
   std::vector<node>::const_iterator ite = nodes->end();
 
   for (; it != ite; ++it) {
@@ -301,21 +303,23 @@ void GraphView::restoreEdge(edge e, const node, const node) {
   addEdgeInternal(e);
 }
 //----------------------------------------------------------------
-  void GraphView::addEdgesInternal(unsigned int nbAdded,
-				   const std::vector<edge>* ee,
-				   const std::vector<std::pair<node, node> >&ends) {
+void GraphView::addEdgesInternal(unsigned int nbAdded,
+                                 const std::vector<edge>* ee,
+                                 const std::vector<std::pair<node, node> >&ends) {
   _edges.reserve(_edges.size() + nbAdded);
 
   bool hasEnds = !ends.empty();
 
   unsigned int i = 0;
   std::vector<edge>::const_iterator it;
+
   if (ee)
     it = ee->begin();
   else {
     ee = &getSuperGraph()->edges();
     it = ee->begin() + ee->size() - nbAdded;
   }
+
   std::vector<edge>::const_iterator ite = ee->end();
 
   for (; it != ite; ++it, ++i) {

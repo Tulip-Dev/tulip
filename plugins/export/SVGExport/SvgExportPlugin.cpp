@@ -76,9 +76,9 @@ public:
   }
 
   list<string> gzipFileExtensions() const {
-      list<string> ext;
-      ext.push_back("svgz");
-      return ext;
+    list<string> ext;
+    ext.push_back("svgz");
+    return ext;
   }
 
 

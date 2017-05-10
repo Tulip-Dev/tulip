@@ -77,9 +77,9 @@ public:
   }
 
   std::list<std::string>  allFileExtensions() const {
-      std::list<std::string> ext(gzipFileExtensions());
-      ext.push_back(fileExtension());
-      return ext;
+    std::list<std::string> ext(gzipFileExtensions());
+    ext.push_back(fileExtension());
+    return ext;
   }
 
   /**
