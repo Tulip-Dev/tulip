@@ -10,7 +10,7 @@
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 
-IF(WIN32) #Windows
+IF(WIN32) # Windows
   SET(CppUnit_INCLUDE_SEARCH_DIRS
         ${CppUnit_LIBRARY_SEARCH_DIRS}
         ${CMAKE_INCLUDE_PATH}
@@ -32,18 +32,13 @@ IF(WIN32) #Windows
   ELSE(MSVC)
     FIND_LIBRARY(CppUnit_LIBRARIES cppunit PATHS ${CppUnit_LIBRARY_SEARCH_DIRS})
   ENDIF(MSVC)
-ELSE(WIN32) #Unix
-  CMAKE_MINIMUM_REQUIRED(VERSION 2.4.7 FATAL_ERROR)
+ELSE(WIN32) # Unix
   FIND_PACKAGE(PkgConfig)
   PKG_SEARCH_MODULE(CppUnit cppunit)
   SET(CppUnit_INCLUDE_DIRS ${CppUnit_INCLUDE_DIRS})
   SET(CppUnit_LIBRARY_DIRS ${CppUnit_LIBDIR})
   SET(CppUnit_LIBRARIES ${CppUnit_LIBRARIES} CACHE STRING "")
 ENDIF(WIN32)
-
-#Do some preparation
-SEPARATE_ARGUMENTS(CppUnit_INCLUDE_DIRS)
-SEPARATE_ARGUMENTS(CppUnit_LIBRARIES)
 
 SET(CppUnit_INCLUDE_DIRS ${CppUnit_INCLUDE_DIRS})
 SET(CppUnit_LIBRARIES ${CppUnit_LIBRARIES})
