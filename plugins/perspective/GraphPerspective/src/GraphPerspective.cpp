@@ -38,6 +38,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QDialog>
+#include <QByteArray>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -296,29 +297,24 @@ void GraphPerspective::redrawPanels(bool center) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 class PythonIDEDialog : public QDialog {
 
-  bool _firstShow;
-  QSize _size;
-  QPoint _pos;
+  QByteArray _windowGeometry;
 
 public:
-  PythonIDEDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags), _firstShow(true) {}
+
+  PythonIDEDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags) {}
 
 protected:
 
   virtual void showEvent(QShowEvent *e) {
     QDialog::showEvent(e);
 
-    if (!_firstShow) {
-      move(_pos);
-      resize(_size);
+    if (!_windowGeometry.isEmpty()) {
+      restoreGeometry(_windowGeometry);
     }
-
-    _firstShow = false;
   }
 
   virtual void closeEvent(QCloseEvent *e) {
-    _size = size();
-    _pos = pos();
+    _windowGeometry = saveGeometry();
     QDialog::closeEvent(e);
   }
 };
