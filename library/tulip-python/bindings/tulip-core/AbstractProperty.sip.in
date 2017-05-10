@@ -297,7 +297,10 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterator[tlp.node]"/;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNonDefaultValuatedNodes(a0));
+%End
 
 //===========================================================================================
 
@@ -326,7 +329,10 @@ whose associated value is equal to the one given in parameter.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterator[tlp.edge]"/;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getNonDefaultValuatedEdges(a0));
+%End
 
 //===========================================================================================
 
@@ -996,11 +1002,17 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const /TypeHint="Iterator[tlp.node]"/;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNonDefaultValuatedNodes(a0));
+%End
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const /TypeHint="Iterator[tlp.edge]"/;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getNonDefaultValuatedEdges(a0));
+%End
 
 //===========================================================================================
 
