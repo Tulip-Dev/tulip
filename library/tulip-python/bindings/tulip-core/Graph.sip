@@ -45,8 +45,26 @@ typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
 }
 typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
-extern void releaseGraphWrapper(tlp::Graph *graph);
-extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
+inline void releasePropertyWrapper(tlp::PropertyInterface *prop) {
+  releaseSIPWrapper(prop, sipFindType("tlp::PropertyInterface"));
+}
+
+inline void releaseGraphWrapper(tlp::Graph *graph) {
+  releaseSIPWrapper(graph, sipFindType("tlp::Graph"));
+  tlp::PropertyInterface *prop = NULL;
+  forEach(prop, graph->getLocalObjectProperties()) {
+    releasePropertyWrapper(prop);
+  }
+}
+
+inline void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
+  tlp::Graph *sg = NULL;
+  forEach(sg, graph->getSubGraphs()) {
+    releaseGraphHierarchyWrappers(sg);
+  }
+  releaseGraphWrapper(graph);
+}
+
 extern tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph=NULL, tlp::DataSet *inputParams=NULL, PyObject *inputParamsWrapper=NULL);
 extern void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, PyObject *inputDataSetWrapper);
 
@@ -110,17 +128,6 @@ bool tryToSetPropertyValue(const tlp::DataSet *dataSet, const std::pair<std::str
 %End
 
 %ModuleCode
-void releaseGraphWrapper(tlp::Graph *graph) {
-  releaseSIPWrapper(graph, sipFindType("tlp::Graph"));
-}
-
-void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
-  tlp::Graph *sg = NULL;
-  forEach(sg, graph->getSubGraphs()) {
-    releaseGraphHierarchyWrappers(sg);
-  }
-  releaseGraphWrapper(graph);
-}
 
 tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph, tlp::DataSet *inputParams, PyObject *inputParamsWrapper) {
   tlp::DataSet algoParams = ::getDefaultPluginParameters(algoName, graph);
@@ -3116,7 +3123,7 @@ Removes and deletes the property associated to name in the graph properties pool
 %MethodCode
   if (sipCpp->existLocalProperty(*a0)) {
     tlp::PropertyInterface *prop = sipCpp->getProperty(*a0);
-    releaseSIPWrapper(prop, sipFindType("tlp::PropertyInterface"));
+    releasePropertyWrapper(prop);
     sipCpp->delLocalProperty(*a0);
   } else {
     sipIsErr = -1;
