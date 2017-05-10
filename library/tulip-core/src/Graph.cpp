@@ -261,6 +261,7 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
         importPluginName = importPlugin.name();
         break;
       }
+
     for (list<string>::iterator itE = gzipextensions.begin() ; itE != gzipextensions.end() ; ++itE)
       if (filename.rfind(*itE) == (filename.size() - (*itE).size())) {
         importPluginName = importPlugin.name();
@@ -282,26 +283,29 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
 
   for (list<string>::iterator it = exportPlugins.begin() ; it != exportPlugins.end() ; ++it) {
-      ExportModule* exportPlugin = PluginLister::instance()->getPluginObject<ExportModule>(*it,NULL);
-      string ext(exportPlugin->fileExtension());
-      if (filename.rfind(ext) == filename.length() - ext.length()) {
-          exportPluginName = exportPlugin->name();
-          delete exportPlugin;
-          break;
-      }
-      else {
-	list<string> gext(exportPlugin->gzipFileExtensions());
-	for(list<string>::const_iterator zit=gext.begin();zit!=gext.end();++zit) {
-          string zext(*zit);
-          if (filename.rfind(zext) == filename.length() - zext.length()) {
-	    exportPluginName = exportPlugin->name();
-	    gzip=true;
-	    break;
-          }
-	}
+    ExportModule* exportPlugin = PluginLister::instance()->getPluginObject<ExportModule>(*it,NULL);
+    string ext(exportPlugin->fileExtension());
 
-	delete exportPlugin;
+    if (filename.rfind(ext) == filename.length() - ext.length()) {
+      exportPluginName = exportPlugin->name();
+      delete exportPlugin;
+      break;
+    }
+    else {
+      list<string> gext(exportPlugin->gzipFileExtensions());
+
+      for(list<string>::const_iterator zit=gext.begin(); zit!=gext.end(); ++zit) {
+        string zext(*zit);
+
+        if (filename.rfind(zext) == filename.length() - zext.length()) {
+          exportPluginName = exportPlugin->name();
+          gzip=true;
+          break;
+        }
       }
+
+      delete exportPlugin;
+    }
   }
 
   if (exportPluginName.empty()) {
@@ -1946,7 +1950,7 @@ std::vector<node> GraphEvent::getNodes() const {
   std::vector<node> addedNodes(nbElts);
   const std::vector<node>& nodes = getGraph()->nodes();
   memcpy(addedNodes.data(), &nodes[nodes.size() - nbElts],
-	 nbElts * sizeof(node));
+         nbElts * sizeof(node));
   // set addedNodes size
   ((node **) &addedNodes)[1] = ((node **) &addedNodes)[0] + nbElts;
   return addedNodes;
@@ -1958,7 +1962,7 @@ std::vector<edge> GraphEvent::getEdges() const {
   std::vector<edge> addedEdges(nbElts);
   const std::vector<edge>& edges = getGraph()->edges();
   memcpy(addedEdges.data(), &edges[edges.size() - nbElts],
-	 nbElts * sizeof(edge));
+         nbElts * sizeof(edge));
   // set addedEdges size
   ((edge **) &addedEdges)[1] = ((edge **) &addedEdges)[0] + nbElts;
   return addedEdges;

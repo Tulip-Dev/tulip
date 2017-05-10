@@ -66,10 +66,10 @@ public:
   }
 
   std::list<std::string>  allFileExtensions() const {
-      std::list<std::string> zext(gzipFileExtensions());
-      std::list<std::string> ext(fileExtensions());
-      ext.splice(ext.end(), zext);
-      return ext;
+    std::list<std::string> zext(gzipFileExtensions());
+    std::list<std::string> ext(fileExtensions());
+    ext.splice(ext.end(), zext);
+    return ext;
   }
 
   virtual std::string getGroup() const {

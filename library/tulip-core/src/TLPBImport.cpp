@@ -80,13 +80,15 @@ bool TLPBImport::importGraph() {
 
     bool gzip(false);
     std::list<std::string> gext(gzipFileExtensions());
-    for(std::list<std::string>::const_iterator it = gext.begin();it!=gext.end();++it) {
-        if (filename.rfind(*it) == (filename.length() - (*it).length())) {
-            is = tlp::getIgzstream(filename);
-            gzip = true;
-            break;
-        }
+
+    for(std::list<std::string>::const_iterator it = gext.begin(); it!=gext.end(); ++it) {
+      if (filename.rfind(*it) == (filename.length() - (*it).length())) {
+        is = tlp::getIgzstream(filename);
+        gzip = true;
+        break;
+      }
     }
+
     if(!gzip)
       is = tlp::getInputFileStream(filename, std::ifstream::in |
                                    std::ifstream::binary);

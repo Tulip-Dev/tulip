@@ -89,7 +89,7 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       const std::vector<node>& nodes = graph->nodes();
 
       for (unsigned int i = nodes.size() - gEvt->getNumberOfNodes();
-	   i < nodes.size(); ++i)
+           i < nodes.size(); ++i)
         addNode(graph, nodes[i]);
 
       break;
@@ -99,7 +99,7 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       const std::vector<edge>& edges = graph->edges();
 
       for (unsigned int i = edges.size() - gEvt->getNumberOfEdges();
-	   i < edges.size(); ++i)
+           i < edges.size(); ++i)
         addEdge(graph, edges[i]);
 
       break;

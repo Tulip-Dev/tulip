@@ -14,7 +14,7 @@ ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap> >& nodeShapes, QW
 }
 
 ShapeDialog::~ShapeDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 void ShapeDialog::updateShapeList() {
