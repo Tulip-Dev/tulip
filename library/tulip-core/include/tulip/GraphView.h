@@ -60,12 +60,14 @@ public:
   ~GraphView();
   //========================================================================
   node addNode();
+  void addNodes(unsigned int nb);
   void addNodes(unsigned int nb, std::vector<node>& addedNodes);
   void addNode(const node);
   void addNodes(Iterator<node>* nodes);
   edge addEdge(const node n1,const node n2);
   void addEdges(const std::vector<std::pair<node, node> >& edges,
                 std::vector<edge>& addedEdges);
+  void addEdges(const std::vector<std::pair<node, node> >& edges);
   void addEdge(const edge);
   void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
@@ -200,8 +202,8 @@ private:
   void reverseInternal(const edge, const node src, const node tgt);
   void setEndsInternal(const edge, node src, node tgt,
                        const node newSrc, const node newTgt);
-  void addNodesInternal(const std::vector<node>&);
-  void addEdgesInternal(const std::vector<edge>& edges,
+  void addNodesInternal(unsigned int nbAdded, const std::vector<node>* nodes);
+  void addEdgesInternal(unsigned int nbAdded, const std::vector<edge>* edges,
                         const std::vector<std::pair<node, node> >& ends);
 };
 

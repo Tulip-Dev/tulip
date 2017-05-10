@@ -160,7 +160,12 @@ node GraphImpl::addNode() {
 }
 //----------------------------------------------------------------
 void GraphImpl::addNodes(unsigned int nb) {
-  storage.addNodes(nb);
+  if (nb) {
+    storage.addNodes(nb);
+
+    if (hasOnlookers())
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, nb));
+  }
 }
 //----------------------------------------------------------------
 void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
@@ -168,7 +173,7 @@ void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
     storage.addNodes(nb, &addedNodes);
 
     if (hasOnlookers())
-      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, addedNodes));
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, nb));
   }
 }
 //----------------------------------------------------------------
@@ -202,17 +207,17 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges,
     storage.addEdges(edges, &addedEdges);
 
     if (hasOnlookers())
-      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, addedEdges));
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, edges.size()));
   }
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges) {
-  if (hasOnlookers()) {
-    std::vector<edge> addedEdges;
-    addEdges(edges, addedEdges);
-  }
-  else
+  if (!edges.empty()) {
     storage.addEdges(edges);
+
+    if (hasOnlookers())
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, edges.size()));
+  }
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {

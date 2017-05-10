@@ -86,18 +86,20 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       break;
 
     case GraphEvent::TLP_ADD_NODES: {
-      const std::vector<node>& nodes = gEvt->getNodes();
+      const std::vector<node>& nodes = graph->nodes();
 
-      for (unsigned int i = 0; i < nodes.size(); ++i)
+      for (unsigned int i = nodes.size() - gEvt->getNumberOfNodes();
+	   i < nodes.size(); ++i)
         addNode(graph, nodes[i]);
 
       break;
     }
 
     case GraphEvent::TLP_ADD_EDGES: {
-      const std::vector<edge>& edges = gEvt->getEdges();
+      const std::vector<edge>& edges = graph->edges();
 
-      for (unsigned int i = 0; i < edges.size(); ++i)
+      for (unsigned int i = edges.size() - gEvt->getNumberOfEdges();
+	   i < edges.size(); ++i)
         addEdge(graph, edges[i]);
 
       break;
