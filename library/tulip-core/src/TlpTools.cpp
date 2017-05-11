@@ -56,14 +56,6 @@
 using namespace std;
 using namespace tlp;
 
-#ifndef _TULIP_LIB_DIR
-#ifdef _WIN32
-#define _TULIP_LIB_DIR "c:\\Tulip\\lib\\"
-#else
-#define _TULIP_LIB_DIR "/usr/local/lib/"
-#endif
-#endif
-
 #ifndef __EMSCRIPTEN__
 static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
 #endif
@@ -187,10 +179,6 @@ void tlp::initTulipLib(const char* appDirPath) {
       char buf[1024];
       // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
       TulipLibDir = getTulipLibDir(buf);
-
-      // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
-      if (TulipLibDir.empty())
-        TulipLibDir = string(_TULIP_LIB_DIR);
     }
   }
   else
