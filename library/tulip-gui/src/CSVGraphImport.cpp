@@ -581,13 +581,45 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
       //if the token is empty no need to import the value
       if (property != NULL && !token.empty()) {
         bool isVectorProperty = (property->getTypename().find("vector") == 0);
-        bool openParen = false;
+	string tokenCopy;
 
         if (isVectorProperty) {
-          size_t first = token.find_last_not_of(" \t\f\v");
+	  tokenCopy = token;
+	  // check if the list of values is enclosed
+	  // between an openChar and a closeChar
+          size_t first = token.find_first_not_of(" \t\f\v");
+	  char closeChar = '\0';
 
-          if (first != string::npos)
-            openParen = (token[first] == '(');
+          if (first != string::npos) {
+	    // get the openChar and
+	    // the possible closeChar
+	    switch (token[first]) {
+	    case '(':
+	      closeChar = ')';
+	      break;
+	    case '[':
+	      closeChar = ']';
+	      break;
+	    case '{':
+	      closeChar = '}';
+	      break;
+	    case '<':
+	      closeChar = '>';
+	      break;
+	    default:
+	      break;
+	    }
+	    if (closeChar) {
+	      // check if we find the closeChar at the end of token
+	      size_t last = token.find_last_not_of(" \t\f\v");
+	      if (token[last] == closeChar) {
+		// remove closeChar
+		tokenCopy.resize(last);
+		// and openChar
+		tokenCopy.erase(0, first + 1);
+	      }
+	    }
+	  }
         }
 
         if(elements.first == NODE) {
@@ -596,7 +628,7 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
               continue;
 
             if (!(isVectorProperty ?
-                  ((VectorPropertyInterface *)property)->setNodeStringValueAsVector(node(elements.second[i]), token, openParen ? '(' : '\0', ',', openParen ? ')' : '\0') :
+                  ((VectorPropertyInterface *)property)->setNodeStringValueAsVector(node(elements.second[i]), tokenCopy, '\0', ',', '\0') :
                   property->setNodeStringValue(node(elements.second[i]), token))) {
               //We add one to the row number as in the configuration widget we start from row 1 not row 0
               qWarning()<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<< token <<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1;
@@ -606,7 +638,7 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
         else {
           for (size_t i = 0; i < elements.second.size(); ++i) {
             if(!(isVectorProperty ?
-                 ((VectorPropertyInterface *)property)->setEdgeStringValueAsVector(edge(elements.second[i]), token, openParen ? '(' : '\0', ',', openParen ? ')' : '\0') :
+                 ((VectorPropertyInterface *)property)->setEdgeStringValueAsVector(edge(elements.second[i]), tokenCopy, '\0', ',', '\0') :
                  property->setEdgeStringValue(edge(elements.second[i]), token))) {
               //We add one to the row number as in the configuration widget we start from row 1 not row 0
               qWarning()<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<token<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1;
