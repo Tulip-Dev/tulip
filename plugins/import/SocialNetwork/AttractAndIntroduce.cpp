@@ -91,8 +91,7 @@ public :
 
     unsigned int iterations = e+n;
 
-    std::vector<node> vec_nodes(n);
-    graph->addNodes(n, vec_nodes);
+    graph->addNodes(n);
     graph->reserveEdges(e);
 
     NodeStaticProperty<double> pAttractProperty(graph);
@@ -122,6 +121,7 @@ public :
     }
 
     unsigned int tmpE = 0;
+    const vector<node>& nodes = graph->nodes();
 
     while (tmpE < e) {
       i = randomInteger(n - 1);
@@ -131,10 +131,10 @@ public :
       }
       while (i==j);
 
-      node nj = vec_nodes[j];
+      node nj = nodes[j];
 
       if (pAttractProperty[j] > randomDouble(1.0)) {
-        node ni = vec_nodes[i];
+        node ni = nodes[i];
 
         if (pIntroduceProperty[i] > randomDouble(1.0)) {
           node fd;

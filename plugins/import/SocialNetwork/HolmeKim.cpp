@@ -83,14 +83,14 @@ struct HolmeKim:public ImportModule {
      * Initial ring construction
      */
     unsigned int m0 = 3;
-    vector<node> sg(n);
-    graph->addNodes(n, sg);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
 
     for (unsigned int i=1; i<m0 ; ++i) {
-      graph->addEdge(sg[i-1],sg[i]);
+      graph->addEdge(nodes[i-1],nodes[i]);
     }
 
-    graph->addEdge(sg[m0-1],sg[0]);
+    graph->addEdge(nodes[m0-1],nodes[0]);
 
     /*
      * Main loop
@@ -99,7 +99,7 @@ struct HolmeKim:public ImportModule {
       double k_sum = 0; // degree of present nodes
 
       for(unsigned int j=0; j<i ; ++j)
-        k_sum += (double)graph->deg(sg[j]);
+        k_sum += (double)graph->deg(nodes[j]);
 
       double proba = tlp::randomDouble();
 
@@ -110,22 +110,22 @@ struct HolmeKim:public ImportModule {
         double firstNeighbour = 0;
 
         while (pr_sum < pr && firstNeighbour <= i) {
-          pr_sum += (double)graph->deg(sg[firstNeighbour])/(k_sum);
+          pr_sum += (double)graph->deg(nodes[firstNeighbour])/(k_sum);
           ++firstNeighbour;
         }
 
-        graph->addEdge(sg[i],sg[--firstNeighbour]);
+        graph->addEdge(nodes[i],nodes[--firstNeighbour]);
 
         if (proba < mu) { // Triad formation
           // collect all neighbours of firstNeighbour
-          // which are not already connected to sg[i]
+          // which are not already connected to nodes[i]
           vector<node> freeNeighbours;
-          Iterator<node>* it = graph->getInOutNodes(sg[firstNeighbour]);
+          Iterator<node>* it = graph->getInOutNodes(nodes[firstNeighbour]);
 
           while (it->hasNext()) {
             node neighbour = it->next();
 
-            if (!graph->hasEdge(sg[i], neighbour))
+            if (!graph->hasEdge(nodes[i], neighbour))
               freeNeighbours.push_back(neighbour);
           }
 
@@ -134,7 +134,7 @@ struct HolmeKim:public ImportModule {
           if (!freeNeighbours.empty()) {
             // randomly choose one of the free neighbours to connect with
             unsigned int randomNeighbour = tlp::randomUnsignedInteger(freeNeighbours.size()-1);
-            graph->addEdge(sg[i], freeNeighbours[randomNeighbour]);
+            graph->addEdge(nodes[i], freeNeighbours[randomNeighbour]);
             continue;
           }
         }
@@ -145,11 +145,11 @@ struct HolmeKim:public ImportModule {
         unsigned int rn = 0;
 
         while (pr_sum<pr && rn<(i-1)) {
-          pr_sum += (double)graph->deg(sg[rn])/(k_sum);
+          pr_sum += (double)graph->deg(nodes[rn])/(k_sum);
           ++rn;
         }
 
-        graph->addEdge(sg[i],sg[--rn]);
+        graph->addEdge(nodes[i],nodes[--rn]);
       }
     }
 

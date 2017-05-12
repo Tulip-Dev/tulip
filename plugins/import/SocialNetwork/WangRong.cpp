@@ -86,14 +86,14 @@ struct WangRong:public ImportModule {
     /*
      * Initial ring construction
      */
-    vector<node> sg(n);
-    graph->addNodes(n, sg);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
 
     for (i=1; i<m0 ; ++i) {
-      graph->addEdge(sg[i-1],sg[i]);
+      graph->addEdge(nodes[i-1],nodes[i]);
     }
 
-    graph->addEdge(sg[m0-1],sg[0]);
+    graph->addEdge(nodes[m0-1],nodes[0]);
 
     /*
      * Main loop
@@ -111,7 +111,7 @@ struct WangRong:public ImportModule {
        */
       for (i=nbNodes; i<(nbNodes+m) ; ++i) {
         for (j=nbNodes; j<i ; ++j) {
-          graph->addEdge(sg[j],sg[i]);
+          graph->addEdge(nodes[j],nodes[i]);
         }
       }
 
@@ -126,11 +126,11 @@ struct WangRong:public ImportModule {
         unsigned int rn = 0;
 
         while (pr_sum<pr && rn<(nbNodes-1)) {
-          pr_sum += (double)graph->deg(sg[rn])/k_sum;
+          pr_sum += (double)graph->deg(nodes[rn])/k_sum;
           ++rn;
         }
 
-        graph->addEdge(sg[i],sg[rn]);
+        graph->addEdge(nodes[i],nodes[rn]);
       }
 
       nbNodes+=m;

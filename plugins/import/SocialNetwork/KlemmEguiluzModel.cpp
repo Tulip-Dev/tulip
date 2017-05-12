@@ -82,17 +82,17 @@ struct KlemmEguiluzModel:public ImportModule {
 
     double a, pr, pr_sum, proba;
 
-    vector<node> sg(n);
     vector<bool> activated(n, false);
 
-    graph->addNodes(n, sg);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
 
     // fully connect and activate the m first nodes
     for (unsigned int i = 0; i < m; ++i) {
       activated[i] = true;
 
       for(unsigned int j = i + 1; j < m; ++j)
-        graph->addEdge(sg[i],sg[j]);
+        graph->addEdge(nodes[i],nodes[j]);
     }
 
     for (unsigned i=m; i<n; ++i) {
@@ -104,7 +104,7 @@ struct KlemmEguiluzModel:public ImportModule {
       a = 0;
 
       for(unsigned int j=0; j<i; ++j)
-        a += 1/double(graph->deg(sg[j]));
+        a += 1/double(graph->deg(nodes[j]));
 
       // the new node is connected to m nodes
       for (unsigned int j=0; j<i; ++j) {
@@ -117,14 +117,14 @@ struct KlemmEguiluzModel:public ImportModule {
             unsigned int sn = 0;
 
             while (pr_sum < pr && sn <= i) {
-              pr_sum += (1/double(graph->deg(sg[sn])))*a;
+              pr_sum += (1/double(graph->deg(nodes[sn])))*a;
               ++sn;
             }
 
-            graph->addEdge(sg[i],sg[--sn]);
+            graph->addEdge(nodes[i],nodes[--sn]);
           }
           else { // keep the edge
-            graph->addEdge(sg[i],sg[j]);
+            graph->addEdge(nodes[i],nodes[j]);
           }
         }
       }
@@ -137,7 +137,7 @@ struct KlemmEguiluzModel:public ImportModule {
 
       for(unsigned int j=0; j<i; ++j)
         if (activated[j])
-          a += 1/double(graph->deg(sg[j]));
+          a += 1/double(graph->deg(nodes[j]));
 
       pr = tlp::randomDouble();
       pr_sum = 0;
@@ -145,7 +145,7 @@ struct KlemmEguiluzModel:public ImportModule {
 
       while (pr_sum < pr && sn < i) {
         if (activated[sn])
-          pr_sum += a*(1/double(graph->deg(sg[sn])));
+          pr_sum += a*(1/double(graph->deg(nodes[sn])));
 
         ++sn;
       }

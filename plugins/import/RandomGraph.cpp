@@ -102,13 +102,13 @@ public:
       ++ite;
     }
 
-    vector<node> tmpVect(nbNodes);
-    graph->addNodes(nbNodes, tmpVect);
+    graph->addNodes(nbNodes);
 
     graph->reserveEdges(myGraph.size());
 
+    const vector<node>& nodes = graph->nodes();
     for (set<edgeS>::const_iterator it=myGraph.begin(); it!=myGraph.end(); ++it)   {
-      graph->addEdge(tmpVect[it->source],tmpVect[it->target]);
+      graph->addEdge(nodes[it->source], nodes[it->target]);
     }
 
     return true;

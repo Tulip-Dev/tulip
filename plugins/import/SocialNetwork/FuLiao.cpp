@@ -78,8 +78,8 @@ struct FuLiao:public ImportModule {
      * Initial ring construction
      */
     unsigned int m0 = 3;
-    vector<node> nodes(n);
-    graph->addNodes(n, nodes);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
 
     for (i=1; i<m0 ; ++i) {
       graph->addEdge(nodes[i-1],nodes[i]);

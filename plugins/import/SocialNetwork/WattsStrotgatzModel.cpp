@@ -95,8 +95,8 @@ struct WattsStrotgatzModel:public ImportModule {
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    vector<node> sg(nbNodes);
-    graph->addNodes(nbNodes, sg);
+    graph->addNodes(nbNodes);
+    const vector<node>& nodes = graph->nodes();
 
     if (original_model) {
       graph->reserveEdges(nbNodes * k/2);
@@ -106,20 +106,20 @@ struct WattsStrotgatzModel:public ImportModule {
     }
 
     for (unsigned int i=1; i<nbNodes ; ++i) {
-      graph->addEdge(sg[i-1],sg[i]);
+      graph->addEdge(nodes[i-1],nodes[i]);
     }
 
-    graph->addEdge(sg[nbNodes-1],sg[0]);
+    graph->addEdge(nodes[nbNodes-1],nodes[0]);
 
     for (unsigned int i=0; i<nbNodes ; ++i) {
       for (unsigned int j=0; j<k ; ++j) {
         int d = i - j - 2;
 
         if (d < 0) {
-          graph->addEdge(sg[nbNodes+ d],sg[i]);
+          graph->addEdge(nodes[nbNodes+ d],nodes[i]);
         }
         else {
-          graph->addEdge(sg[d],sg[i]);
+          graph->addEdge(nodes[d],nodes[i]);
         }
       }
     }
@@ -133,7 +133,7 @@ struct WattsStrotgatzModel:public ImportModule {
           n1 = graph->source(e);
 
           do {
-            n2 = sg[tlp::randomInteger(nbNodes-1)];
+            n2 = nodes[tlp::randomInteger(nbNodes-1)];
           }
           while(graph->hasEdge(n1, n2, false));
 
@@ -146,13 +146,12 @@ struct WattsStrotgatzModel:public ImportModule {
       forEach(e, graph->getEdges()) {
         if(tlp::randomDouble() < p) {
           do {
-            n1 = sg[tlp::randomInteger(nbNodes-1)];
-            n2 = sg[tlp::randomInteger(nbNodes-1)];
+            n1 = nodes[tlp::randomInteger(nbNodes-1)];
+            n2 = nodes[tlp::randomInteger(nbNodes-1)];
           }
           while(graph->hasEdge(n1, n2, false));
 
-          graph->setSource(e, n1);
-          graph->setTarget(e, n2);
+          graph->setEnds(e, n1, n2);
         }
       }
     }

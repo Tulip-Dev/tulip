@@ -66,15 +66,16 @@ struct LiuEtAl:public ImportModule {
      * Initial ring construction
      */
     unsigned int m0 = 3;
-    vector<node> sg(n);
-    graph->addNodes(n, sg);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
+
     graph->reserveEdges(m0 + (2 * (n - m0) * m/2));
 
     for (i=1; i<m0 ; ++i) {
-      graph->addEdge(sg[i-1],sg[i]);
+      graph->addEdge(nodes[i-1],nodes[i]);
     }
 
-    graph->addEdge(sg[m0-1],sg[0]);
+    graph->addEdge(nodes[m0-1],nodes[0]);
 
     /*
      * Main loop
@@ -88,7 +89,7 @@ struct LiuEtAl:public ImportModule {
       double k_sum = 0;
 
       for(j=0; j<i ; ++j) {
-        k_sum += (double)graph->deg(sg[j]);
+        k_sum += (double)graph->deg(nodes[j]);
       }
 
       /*
@@ -100,7 +101,7 @@ struct LiuEtAl:public ImportModule {
         unsigned int rn = 0;
 
         while (pr_sum<pr && rn<(i-1)) {
-          pr_sum += (double)graph->deg(sg[rn])/(k_sum+j);
+          pr_sum += (double)graph->deg(nodes[rn])/(k_sum+j);
           ++rn;
         }
 
@@ -112,13 +113,13 @@ struct LiuEtAl:public ImportModule {
          */
         double k2_sum = 0;
         node n;
-        forEach(n, graph->getInOutNodes(sg[rn])) {
+        forEach(n, graph->getInOutNodes(nodes[rn])) {
           k2_sum += (double)graph->deg(n);
         }
         pr = tlp::randomDouble();
         pr_sum = 0;
         node v;
-        Iterator<node>* it = graph->getInOutNodes(sg[rn]);
+        Iterator<node>* it = graph->getInOutNodes(nodes[rn]);
 
         while(it->hasNext() && pr_sum<pr) {
           v = it->next();
@@ -127,8 +128,8 @@ struct LiuEtAl:public ImportModule {
 
         delete it;
 
-        graph->addEdge(sg[i],sg[rn]);
-        graph->addEdge(sg[i],v);
+        graph->addEdge(nodes[i],nodes[rn]);
+        graph->addEdge(nodes[i],v);
       }
     }
 

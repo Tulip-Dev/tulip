@@ -83,8 +83,8 @@ struct Catanzaro:public ImportModule {
     /*
      * Initial ring construction
      */
-    vector<node> nodes(n);
-    graph->addNodes(n, nodes);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
 
     for (i=1; i<3 ; ++i) {
       graph->addEdge(nodes[i-1],nodes[i]);

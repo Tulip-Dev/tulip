@@ -57,12 +57,13 @@ struct WangEtAl:public ImportModule {
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    vector<node> v(n);
-    graph->addNodes(n, v);
+    graph->addNodes(n);
+    const vector<node>& nodes = graph->nodes();
+
     graph->reserveEdges(2*n-3);
 
     vector<edge> e(2*n-3);
-    e[0]=graph->addEdge(v[0],v[1]);
+    e[0]=graph->addEdge(nodes[0],nodes[1]);
     unsigned int nbe = 1;
 
     for (unsigned i=2; i<n ; ++i) {
@@ -73,8 +74,8 @@ struct WangEtAl:public ImportModule {
 
       int id = tlp::randomInteger(nbe-1);
       const pair<node, node> ends = graph->ends(e[id]);
-      e[nbe] = graph->addEdge(ends.first,v[i]);
-      e[nbe+1] = graph->addEdge(ends.second,v[i]);
+      e[nbe] = graph->addEdge(ends.first,nodes[i]);
+      e[nbe+1] = graph->addEdge(ends.second,nodes[i]);
       nbe += 2;
     }
 

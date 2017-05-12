@@ -80,20 +80,20 @@ public:
     }
 
     //add nodes
-    vector<node> tmpVect(nbNodes);
-    graph->addNodes(nbNodes, tmpVect);
+    graph->addNodes(nbNodes);
+    const vector<node>& nodes = graph->nodes();
 
     unsigned i=0;
 
-    while(!tmpVect.empty()) {
+    while(i != nbNodes) {
       ++i;
-      node u = tmpVect.back();
+      node u = nodes[nbNodes - i];
 
       if (pluginProgress&&pluginProgress->progress(i, nbNodes) != TLP_CONTINUE)
         return pluginProgress->state()!=TLP_CANCEL;
 
-      for(vector<node>::const_iterator it2=tmpVect.begin(); it2!=tmpVect.end(); ++it2) {
-        node v=*it2;
+      for (unsigned int j = 0; j < nbNodes - i + 1; ++j) {
+        node v = nodes[j];
 
         if((u==v)&&(!self_loop))
           continue;
@@ -102,8 +102,6 @@ public:
           graph->addEdge(u,v);
         }
       }
-
-      tmpVect.pop_back();
     }
 
     return true;
