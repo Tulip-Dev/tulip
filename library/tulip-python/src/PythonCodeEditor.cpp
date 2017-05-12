@@ -1044,14 +1044,18 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
 
     if (!textBeforeCursor.contains('#'))
       showAutoCompletionList(e->text() == ".");
-  } else if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) {
+  }
+  else if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) {
     bool pressKey = true;
+
     if (textBeforeCursor.trimmed().isEmpty()) {
       int line = 0, col = 0;
       getCursorPosition(line, col);
+
       if (e->key() == Qt::Key_Left) {
         if (col >= _indentPattern.length()) {
           setSelection(line, col - _indentPattern.length(), line, col);
+
           if (selectedText() == _indentPattern && textBeforeCursor.length() % _indentPattern.length() == 0) {
             setCursorPosition(line, col - _indentPattern.length());
             resetExtraSelections();
@@ -1059,16 +1063,20 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
             pressKey = false;
           }
         }
-      } else {
+      }
+      else {
         setSelection(line, col, line, col + _indentPattern.length());
+
         if (selectedText() == _indentPattern) {
           setCursorPosition(line, col + _indentPattern.length());
           pressKey = false;
-        } else {
+        }
+        else {
           setCursorPosition(line, col);
         }
       }
     }
+
     if (pressKey) {
       QPlainTextEdit::keyPressEvent(e);
     }
@@ -1584,10 +1592,12 @@ void PythonCodeEditor::indentSelectedCode() {
     int line =0, col = 0;
     getCursorPosition(line, col);
     setSelection(line, col, line, col + _indentPattern.length());
+
     if (selectedText() != _indentPattern) {
       insertAt(_indentPattern, currentCursor.blockNumber(), 0);
       setTextCursor(currentCursor);
-    } else {
+    }
+    else {
       setCursorPosition(line, col + _indentPattern.length());
     }
 
@@ -1607,8 +1617,10 @@ void PythonCodeEditor::unindentSelectedCode() {
 
       if (selectedText() == _indentPattern) {
         removeSelectedText();
-      } else {
+      }
+      else {
         setSelection(i, 0, i, 1);
+
         if (selectedText() == " ") {
           removeSelectedText();
         }
@@ -1625,8 +1637,10 @@ void PythonCodeEditor::unindentSelectedCode() {
 
     if (selectedText() == _indentPattern) {
       removeSelectedText();
-    } else {
+    }
+    else {
       setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
+
       if (selectedText() == " ") {
         removeSelectedText();
       }

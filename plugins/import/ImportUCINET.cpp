@@ -671,7 +671,7 @@ public :
   bool readLabels(const string& str, stringstream& error,
                   TLP_HASH_MAP<std::string, node>& labelsHMap,
                   unsigned int nbLabels, unsigned int offset,
-		  const vector<node>& nodes) {
+                  const vector<node>& nodes) {
     vector<std::string> labels;
     StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
 
@@ -702,7 +702,7 @@ public :
 
   void checkColumnLabels(vector<std::string>& tokens, unsigned int &ir,
                          unsigned int &ic, unsigned int &i,
-			 const vector<node>& nodes) {
+                         const vector<node>& nodes) {
     if (ir == 0 && embedding & (unsigned int) DL_COLS) {
       StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
 
@@ -720,7 +720,7 @@ public :
   }
 
   node getNodeFromInfo(string& token, unsigned int& i, bool findCol,
-		       const vector<node>& nodes) {
+                       const vector<node>& nodes) {
     if (embedding == DL_NONE ||
         (embedding != DL_ALL && !(embedding & (findCol ? DL_COLS : DL_ROWS)))) {
       // token is row index (first is 1)
@@ -788,7 +788,7 @@ public :
                 stringstream& error,
                 unsigned int &ir, unsigned int &ic,
                 DoubleProperty* metric,
-		const vector<node>& nodes) {
+                const vector<node>& nodes) {
     // index of current token
     unsigned int i = 0;
 
@@ -1016,7 +1016,7 @@ public :
 
       case DL_COL_LABELS:
         result = readLabels(line, errors, colLabelToNode, nc ? nc : n,
-			    0, nodes);
+                            0, nodes);
         break;
 
       case DL_LABELS:

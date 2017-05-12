@@ -92,6 +92,7 @@ struct BollobasModel:public ImportModule {
     graph->reserveEdges(n*d);
 
     const vector<node>& nodes = graph->nodes();
+
     for (unsigned int i=0; i<(n*d) ; ++i) {
       graph->addEdge(nodes[M[2*i]],nodes[M[2*i+1]]);
 

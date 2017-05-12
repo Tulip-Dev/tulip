@@ -97,6 +97,7 @@ public:
     graph->reserveEdges(nbNodes * avgDegree);
 
     const vector<node>& nodes = graph->nodes();
+
     for (unsigned int i=0; i<nbNodes; ++i) {
       newLayout->setNodeValue(nodes[i],Coord(static_cast<float>(randomInteger(WIDTH)), static_cast<float>(randomInteger(HEIGHT)), 0));
     }
