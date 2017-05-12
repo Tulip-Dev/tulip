@@ -1045,6 +1045,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
     if (!textBeforeCursor.contains('#'))
       showAutoCompletionList(e->text() == ".");
   } else if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) {
+    bool pressKey = true;
     if (textBeforeCursor.trimmed().isEmpty()) {
       int line = 0, col = 0;
       getCursorPosition(line, col);
@@ -1055,21 +1056,20 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
             setCursorPosition(line, col - _indentPattern.length());
             resetExtraSelections();
             highlightCurrentLine();
-          } else {
-            setCursorPosition(line, col);
-            QPlainTextEdit::keyPressEvent(e);
+            pressKey = false;
           }
         }
       } else {
         setSelection(line, col, line, col + _indentPattern.length());
         if (selectedText() == _indentPattern) {
           setCursorPosition(line, col + _indentPattern.length());
+          pressKey = false;
         } else {
           setCursorPosition(line, col);
-          QPlainTextEdit::keyPressEvent(e);
         }
       }
-    } else {
+    }
+    if (pressKey) {
       QPlainTextEdit::keyPressEvent(e);
     }
   }
@@ -1633,6 +1633,8 @@ void PythonCodeEditor::unindentSelectedCode() {
     }
 
     setTextCursor(currentCursor);
+    resetExtraSelections();
+    highlightCurrentLine();
   }
 }
 
