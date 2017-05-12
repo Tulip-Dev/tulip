@@ -122,7 +122,8 @@ public :
   }
 
   ImportPajek(const tlp::PluginContext* context):
-    ImportModule(context), nbNodes(0), weights(NULL), labels(NULL),
+    ImportModule(context), nbNodes(0),
+    weights(NULL), labels(NULL),
     layout(NULL), sizes(NULL), expectedLine(NET_UNKNOWN), partition(NULL),
     curNodeId(0), vectorProp(NULL) {
     addInParameter<string>("file::filename", paramHelp[0],"");
@@ -134,7 +135,6 @@ public :
     return ":/tulip/graphperspective/icons/32/import_pajek.png";
   }
 
-  vector<node>    nodes;
   unsigned int nbNodes;
   DoubleProperty *weights;
   StringProperty *labels;
@@ -171,9 +171,6 @@ public :
   }
 
   bool treatLine(string& str) {
-
-
-
     // empty line or comment line found
     if (str.empty() || str[0] == '%')
       return true;
@@ -223,7 +220,7 @@ public :
           return false;
 
         // add nodes
-        graph->addNodes(nbNodes, nodes);
+        graph->addNodes(nbNodes);
         // next lines should be for node
         expectedLine = NET_NODE;
         // other remaining tokens are ignored
@@ -282,6 +279,8 @@ public :
 
     if (expectedLine == NET_UNKNOWN)
       return false;
+
+    const vector<node>& nodes = graph->nodes();
 
     if (expectedLine == NET_MATRIX) {
 

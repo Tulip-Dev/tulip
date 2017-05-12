@@ -216,9 +216,9 @@ public :
     l.push_back("txt");
     return l;
   }
-  ImportUCINET(const tlp::PluginContext* context):ImportModule(context),
-    nbNodes(0), defaultMetric("weight"),
-    n(0), nr(0), nc(0), nm(0), current(0),
+  ImportUCINET(const tlp::PluginContext* context):
+    ImportModule(context), nbNodes(0),
+    defaultMetric("weight"), n(0), nr(0), nc(0), nm(0), current(0),
     dl_found(false), diagonal(true),
     diagonal_found(false),
     labels_known(false), title_found(false),
@@ -234,7 +234,6 @@ public :
     return ":/tulip/graphperspective/icons/32/import_ucinet.png";
   }
 
-  vector<node> nodes;
   unsigned int nbNodes;
   string defaultMetric;
   vector<DoubleProperty*> metrics;
@@ -317,7 +316,7 @@ public :
         }
 
         // add nodes
-        graph->addNodes(nbNodes = n, nodes);
+        graph->addNodes(nbNodes = n);
         continue;
       }
 
@@ -336,7 +335,7 @@ public :
 
         if (nc)
           // add nodes
-          graph->addNodes(nbNodes = nc + nr, nodes);
+          graph->addNodes(nbNodes = nc + nr);
 
         continue;
       }
@@ -356,7 +355,7 @@ public :
 
         if (nr)
           // add nodes
-          graph->addNodes(nbNodes = nc + nr, nodes);
+          graph->addNodes(nbNodes = nc + nr);
 
         continue;
       }
@@ -671,7 +670,8 @@ public :
 
   bool readLabels(const string& str, stringstream& error,
                   TLP_HASH_MAP<std::string, node>& labelsHMap,
-                  unsigned int nbLabels, unsigned int offset) {
+                  unsigned int nbLabels, unsigned int offset,
+		  const vector<node>& nodes) {
     vector<std::string> labels;
     StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
 
@@ -701,7 +701,8 @@ public :
   }
 
   void checkColumnLabels(vector<std::string>& tokens, unsigned int &ir,
-                         unsigned int &ic, unsigned int &i) {
+                         unsigned int &ic, unsigned int &i,
+			 const vector<node>& nodes) {
     if (ir == 0 && embedding & (unsigned int) DL_COLS) {
       StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
 
@@ -718,7 +719,8 @@ public :
     }
   }
 
-  node getNodeFromInfo(string& token, unsigned int& i, bool findCol) {
+  node getNodeFromInfo(string& token, unsigned int& i, bool findCol,
+		       const vector<node>& nodes) {
     if (embedding == DL_NONE ||
         (embedding != DL_ALL && !(embedding & (findCol ? DL_COLS : DL_ROWS)))) {
       // token is row index (first is 1)
@@ -785,7 +787,8 @@ public :
   bool readData(vector<std::string>& tokens,
                 stringstream& error,
                 unsigned int &ir, unsigned int &ic,
-                DoubleProperty* metric) {
+                DoubleProperty* metric,
+		const vector<node>& nodes) {
     // index of current token
     unsigned int i = 0;
 
@@ -794,7 +797,7 @@ public :
     case DL_LH:
     case DL_UH: {
       // check if column labels are in first line
-      checkColumnLabels(tokens, ir, ic, i);
+      checkColumnLabels(tokens, ir, ic, i, nodes);
 
       // read row data
       for (; i < tokens.size(); ++i) {
@@ -875,7 +878,7 @@ public :
     case DL_NL2: {
       // first token indicates the source
       node src = getNodeFromInfo(tokens[0],
-                                 dataFormat == DL_NL1 ? ic : ir, false);
+                                 dataFormat == DL_NL1 ? ic : ir, false, nodes);
 
       if (!src.isValid()) {
         error << "invalid row";
@@ -884,7 +887,7 @@ public :
 
       // read row data
       for (i = 1; i < tokens.size(); ++i) {
-        node tgt = getNodeFromInfo(tokens[i], ic, true);
+        node tgt = getNodeFromInfo(tokens[i], ic, true, nodes);
 
         if (!tgt.isValid()) {
           error << "invalid column";
@@ -940,14 +943,14 @@ public :
 
       // first two token indicates the source and target of the edge
       node src = getNodeFromInfo(tokens[0],
-                                 (dataFormat == DL_EL1) ? ic : ir, false);
+                                 (dataFormat == DL_EL1) ? ic : ir, false, nodes);
 
       if (!src.isValid()) {
         error << "invalid row";
         return false;
       }
 
-      node tgt = getNodeFromInfo(tokens[1], ic, true);
+      node tgt = getNodeFromInfo(tokens[1], ic, true, nodes);
       edge e = graph->addEdge(src, tgt);
       double value = 1.0;
 
@@ -993,6 +996,7 @@ public :
     unsigned int ic, ir, im;
     ic = ir = im = 0;
 
+    const std::vector<node>& nodes = graph->nodes();
     std::string line;
 
     while (!in->eof() && std::getline(*in, line)) {
@@ -1007,16 +1011,17 @@ public :
 
       case DL_ROW_LABELS:
         result = readLabels(line, errors, rowLabelToNode,
-                            nr ? nr : n, nc);
+                            nr ? nr : n, nc, nodes);
         break;
 
       case DL_COL_LABELS:
-        result = readLabels(line, errors, colLabelToNode, nc ? nc : n, 0);
+        result = readLabels(line, errors, colLabelToNode, nc ? nc : n,
+			    0, nodes);
         break;
 
       case DL_LABELS:
         labels_known = true;
-        result = readLabels(line, errors, labelToNode, nbNodes, 0);
+        result = readLabels(line, errors, labelToNode, nbNodes, 0, nodes);
         break;
 
       case DL_MATRIX_LABELS: {
@@ -1073,7 +1078,7 @@ public :
           break;
         }
 
-        result = readData(tokens, errors, ir, ic, metric);
+        result = readData(tokens, errors, ir, ic, metric, nodes);
 
         // check for new matrix
         if (result && (nm > 1) && (ir == (nr ? nr : nbNodes))) {

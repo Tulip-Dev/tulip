@@ -73,8 +73,7 @@ struct BollobasModel:public ImportModule {
     tlp::initRandomSequence();
 
     vector<unsigned int> M(2*n*d);
-    vector<node> sg(n);
-    graph->addNodes(n, sg);
+    graph->addNodes(n);
 
     for (unsigned int v=0; v<n ; ++v) {
       for (unsigned int i=0; i<d ; ++i) {
@@ -92,8 +91,9 @@ struct BollobasModel:public ImportModule {
 
     graph->reserveEdges(n*d);
 
+    const vector<node>& nodes = graph->nodes();
     for (unsigned int i=0; i<(n*d) ; ++i) {
-      graph->addEdge(sg[M[2*i]],sg[M[2*i+1]]);
+      graph->addEdge(nodes[M[2*i]],nodes[M[2*i+1]]);
 
       if (i % 100 == 0) {
         if (pluginProgress->progress(i, n * (d + 1))

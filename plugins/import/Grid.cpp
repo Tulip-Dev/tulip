@@ -215,9 +215,7 @@ public:
       conn = 8;
 
     // graph is predimensioned according the parameters
-    vector<node> nodes;
-    nodes.reserve(height * width);
-    graph->addNodes(height * width, nodes);
+    graph->addNodes(height * width);
 
     // compute nb edges
     unsigned int nbEdges = height * (width - 1);
@@ -248,6 +246,7 @@ public:
     ends.reserve(nbEdges);
     graph->reserveEdges(nbEdges);
 
+    const vector<node>& nodes = graph->nodes();
     buildRow(nodes, ends, 0, width, conn, isTore, spacing);
 
     for (unsigned int i = 1; i < height; ++i) {
