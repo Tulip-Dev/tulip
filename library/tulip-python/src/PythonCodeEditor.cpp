@@ -993,6 +993,9 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #endif
 
+  QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
+  QString textAfterCursor = textCursor().block().text().mid(textCursor().position() - textCursor().block().position());
+
   if (commentShortcutsActivated() && e->modifiers() == modifier && e->key() == Qt::Key_D) {
     commentSelectedCode();
   }
@@ -1039,10 +1042,36 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
     if (e->text() == ".")
       QPlainTextEdit::keyPressEvent(e);
 
-    QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
-
     if (!textBeforeCursor.contains('#'))
       showAutoCompletionList(e->text() == ".");
+  } else if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) {
+    if (textBeforeCursor.trimmed().isEmpty()) {
+      int line = 0, col = 0;
+      getCursorPosition(line, col);
+      if (e->key() == Qt::Key_Left) {
+        if (col >= _indentPattern.length()) {
+          setSelection(line, col - _indentPattern.length(), line, col);
+          if (selectedText() == _indentPattern && textBeforeCursor.length() % _indentPattern.length() == 0) {
+            setCursorPosition(line, col - _indentPattern.length());
+            resetExtraSelections();
+            highlightCurrentLine();
+          } else {
+            setCursorPosition(line, col);
+            QPlainTextEdit::keyPressEvent(e);
+          }
+        }
+      } else {
+        setSelection(line, col, line, col + _indentPattern.length());
+        if (selectedText() == _indentPattern) {
+          setCursorPosition(line, col + _indentPattern.length());
+        } else {
+          setCursorPosition(line, col);
+          QPlainTextEdit::keyPressEvent(e);
+        }
+      }
+    } else {
+      QPlainTextEdit::keyPressEvent(e);
+    }
   }
   else {
     QPlainTextEdit::keyPressEvent(e);
@@ -1076,9 +1105,6 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
           textCursor().insertText(_indentPattern);
       }
     }
-
-    QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
-    QString textAfterCursor = textCursor().block().text().mid(textCursor().position() - textCursor().block().position());
 
     if (isTooltipActive()) {
       if (textBeforeCursor.indexOf(_toolTipFunc + "(") == -1) {
@@ -1555,10 +1581,19 @@ void PythonCodeEditor::indentSelectedCode() {
   }
   else {
     QTextCursor currentCursor = textCursor();
-    insertAt(_indentPattern, currentCursor.blockNumber(), 0);
-    setTextCursor(currentCursor);
+    int line =0, col = 0;
+    getCursorPosition(line, col);
+    setSelection(line, col, line, col + _indentPattern.length());
+    if (selectedText() != _indentPattern) {
+      insertAt(_indentPattern, currentCursor.blockNumber(), 0);
+      setTextCursor(currentCursor);
+    } else {
+      setCursorPosition(line, col + _indentPattern.length());
+    }
+
   }
 }
+
 void PythonCodeEditor::unindentSelectedCode() {
   if (hasSelectedText()) {
     int lineFrom = 0;
@@ -1568,10 +1603,15 @@ void PythonCodeEditor::unindentSelectedCode() {
     getSelection(lineFrom, indexFrom, lineTo, indexTo);
 
     for (int i = lineFrom ; i <= lineTo ; ++i) {
-      setSelection(i, 0, i, 1);
+      setSelection(i, 0, i, _indentPattern.length());
 
-      if (selectedText() == "\t" || selectedText() == " ") {
+      if (selectedText() == _indentPattern) {
         removeSelectedText();
+      } else {
+        setSelection(i, 0, i, 1);
+        if (selectedText() == " ") {
+          removeSelectedText();
+        }
       }
 
     }
@@ -1581,10 +1621,15 @@ void PythonCodeEditor::unindentSelectedCode() {
   else {
     QTextCursor currentCursor = textCursor();
 
-    setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
+    setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), _indentPattern.length());
 
-    if (selectedText() == "\t" || selectedText() == " ") {
+    if (selectedText() == _indentPattern) {
       removeSelectedText();
+    } else {
+      setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
+      if (selectedText() == " ") {
+        removeSelectedText();
+      }
     }
 
     setTextCursor(currentCursor);
