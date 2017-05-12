@@ -581,45 +581,51 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
       //if the token is empty no need to import the value
       if (property != NULL && !token.empty()) {
         bool isVectorProperty = (property->getTypename().find("vector") == 0);
-	string tokenCopy;
+        string tokenCopy;
 
         if (isVectorProperty) {
-	  tokenCopy = token;
-	  // check if the list of values is enclosed
-	  // between an openChar and a closeChar
+          tokenCopy = token;
+          // check if the list of values is enclosed
+          // between an openChar and a closeChar
           size_t first = token.find_first_not_of(" \t\f\v");
-	  char closeChar = '\0';
+          char closeChar = '\0';
 
           if (first != string::npos) {
-	    // get the openChar and
-	    // the possible closeChar
-	    switch (token[first]) {
-	    case '(':
-	      closeChar = ')';
-	      break;
-	    case '[':
-	      closeChar = ']';
-	      break;
-	    case '{':
-	      closeChar = '}';
-	      break;
-	    case '<':
-	      closeChar = '>';
-	      break;
-	    default:
-	      break;
-	    }
-	    if (closeChar) {
-	      // check if we find the closeChar at the end of token
-	      size_t last = token.find_last_not_of(" \t\f\v");
-	      if (token[last] == closeChar) {
-		// remove closeChar
-		tokenCopy.resize(last);
-		// and openChar
-		tokenCopy.erase(0, first + 1);
-	      }
-	    }
-	  }
+            // get the openChar and
+            // the possible closeChar
+            switch (token[first]) {
+            case '(':
+              closeChar = ')';
+              break;
+
+            case '[':
+              closeChar = ']';
+              break;
+
+            case '{':
+              closeChar = '}';
+              break;
+
+            case '<':
+              closeChar = '>';
+              break;
+
+            default:
+              break;
+            }
+
+            if (closeChar) {
+              // check if we find the closeChar at the end of token
+              size_t last = token.find_last_not_of(" \t\f\v");
+
+              if (token[last] == closeChar) {
+                // remove closeChar
+                tokenCopy.resize(last);
+                // and openChar
+                tokenCopy.erase(0, first + 1);
+              }
+            }
+          }
         }
 
         if(elements.first == NODE) {

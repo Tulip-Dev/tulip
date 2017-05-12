@@ -32,12 +32,13 @@ bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface* prop,
   }
 
   bool valid = false;
+
   while (!valid) {
     QString errorMsg;
     QString pName = QInputDialog::getText(parent, "Renaming property '" + tlp::tlpStringToQString(prop->getName()) + "'", "New name: ", QLineEdit::Normal,  tlpStringToQString(prop->getName()),&valid);
 
     if(!valid)
-        return false;
+      return false;
 
     //Check if parameters are valid.
     std::string propertyName = tlp::QStringToTlpString(pName);
