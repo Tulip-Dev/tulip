@@ -1,7 +1,5 @@
 #include <tulip/ShapeDialog.h>
 
-#include <QRegExp>
-
 #include "ui_ShapeDialog.h"
 
 using namespace tlp;

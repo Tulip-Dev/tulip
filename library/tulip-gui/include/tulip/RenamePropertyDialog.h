@@ -23,14 +23,9 @@
 
 #include <tulip/tulipconf.h>
 
-#include <QDialog>
-
-namespace Ui {
-class RenamePropertyDialogData;
-}
+class QWidget;
 
 namespace tlp {
-class Graph;
 class PropertyInterface;
 
 /**
@@ -40,10 +35,8 @@ class PropertyInterface;
   *
   **/
 
-class TLP_QT_SCOPE RenamePropertyDialog : public QDialog {
+class TLP_QT_SCOPE RenamePropertyDialog {
 public:
-  RenamePropertyDialog(QWidget *parent = NULL);
-  ~RenamePropertyDialog();
 
   /**
     * @brief This is a convenience static function to rename a property using a dialog. If the user presses Cancel or an error occurs, it returns false.
@@ -55,8 +48,6 @@ public:
   static bool renameProperty(tlp::PropertyInterface* toRenameProp,
                              QWidget* parent=NULL);
 
-private:
-  Ui::RenamePropertyDialogData *ui;
 };
 }
 #endif // RENAMEPROPERTYDIALOG_H

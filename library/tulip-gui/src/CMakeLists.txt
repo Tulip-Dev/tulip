@@ -148,7 +148,6 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/ShapeDialog.ui
   ../designer/PropertyCreationDialog.ui
   ../designer/QuickAccessBar.ui
-  ../designer/RenamePropertyDialog.ui
   ../designer/SceneConfigWidget.ui
   ../designer/SceneLayersConfigWidget.ui
   ../designer/SimplePluginProgressWidget.ui
