@@ -67,21 +67,11 @@ def removePlugin(pluginName):
   if tulipUtilsOk:
     tuliputils.removePlugin(pluginName)
 
-def setProcessQtEvents(processEvents):
-  tulipUtilsOk = True
-  try:
-    import tuliputils
-  except ImportError:
-    tulipUtilsOk = False
-  if tulipUtilsOk:
-    tuliputils.setProcessQtEvents(processEvents)
-
 def initFactory(self):
   tlp.FactoryInterface.__init__(self)
   self.registerPlugin()
 
 def runPlugin(plugin):
-  setProcessQtEvents(True)
   ret = False
   try:
     ret = plugin.real_run()
@@ -92,12 +82,10 @@ def runPlugin(plugin):
     if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
       sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
       traceback.print_exc()
-  setProcessQtEvents(False)
   return ret
 
 def importGraph(plugin):
   ret = False
-  setProcessQtEvents(True)
   try:
     ret = plugin.real_importGraph()
   except:
@@ -107,12 +95,10 @@ def importGraph(plugin):
     if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
       sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
       traceback.print_exc()
-  setProcessQtEvents(False)
   return ret
 
 def exportGraph(plugin, os):
   ret = False
-  setProcessQtEvents(True)
   try:
     ret = plugin.real_exportGraph(os)
   except:
@@ -122,7 +108,6 @@ def exportGraph(plugin, os):
     if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
       sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
       traceback.print_exc()
-  setProcessQtEvents(False)
   return ret
 
 def createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group):
