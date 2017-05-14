@@ -35,7 +35,6 @@ class PropertyInterface;
 class BooleanProperty;
 
 class TLP_QT_SCOPE GraphModel : public tlp::TulipModel, public Observable {
-  tlp::Graph* _graph;
 
 public:
   static QVariant nodeValue(unsigned int, tlp::PropertyInterface*);
@@ -73,6 +72,7 @@ public:
   virtual bool isNode() const = 0;
 
 protected:
+  tlp::Graph* _graph;
   QVector<unsigned int> _elements;
   QVector<QPair<unsigned int,bool> > _elementsToModify;
   QVector<PropertyInterface*> _properties;
@@ -111,6 +111,8 @@ public:
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
   bool isNode() const {
     return true;
   }
@@ -131,6 +133,7 @@ public:
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
   bool isNode() const {
     return false;
