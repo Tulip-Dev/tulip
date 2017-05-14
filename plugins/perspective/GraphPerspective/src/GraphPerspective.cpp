@@ -78,6 +78,28 @@
 using namespace tlp;
 using namespace std;
 
+// checks if it exists a Tulip import plugin that can load the provided file based on its extension
+static bool tulipCanOpenFile(const QString &path) {
+  // Tulip project file does not use import / export plugin
+  if (path.endsWith(".tlpx")) {
+    return true;
+  }
+  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
+
+  for(std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
+    ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+    std::list<std::string> fileExtensions(m->allFileExtensions());
+    for(std::list<std::string>::const_iterator itExt = fileExtensions.begin(); itExt != fileExtensions.end(); ++itExt) {
+      if (path.endsWith(tlpStringToQString(*itExt))) {
+        delete m;
+        return true;
+      }
+    }
+    delete m;
+  }
+  return false;
+}
+
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
   Q_INIT_RESOURCE(GraphPerspective);
 
@@ -125,7 +147,7 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->clear();
 
   foreach(const QString& s, TulipSettings::instance().recentDocuments()) {
-    if (!QFileInfo(s).exists())
+    if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
     QAction* action = _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s,this,SLOT(openRecentFile()));
@@ -135,7 +157,7 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->addSeparator();
 
   foreach(const QString& s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
-    if (!QFileInfo(s).exists())
+    if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
     QAction* action = _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
@@ -146,8 +168,9 @@ void GraphPerspective::buildRecentDocumentsMenu() {
 void GraphPerspective::addRecentDocument(const QString& path) {
   QStringList recents = TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList();
 
-  if (recents.contains(path))
+  if (recents.contains(path) || !tulipCanOpenFile(path)) {
     return;
+  }
 
   recents += path;
 
