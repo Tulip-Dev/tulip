@@ -778,7 +778,7 @@ void GraphPerspective::open(QString fileName) {
 
   for(std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
-    std::list<std::string> fileExtension(m->fileExtensions());
+    std::list<std::string> fileExtension(m->allFileExtensions());
 
     std::string currentFilter;
 
