@@ -126,23 +126,10 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj,QEvent *event) {
     GlMainWidget *gl = getGlMainWidget();
 
     if (gl->pickNodesEdges(he->x(), he->y(), type)) {
-      // try to show the viewLabel if any
-      StringProperty *labels = graph()->getProperty<StringProperty>("viewLabel");
-      std::string label;
       QString ttip;
       node tmpNode=type.getNode();
-
       if(tmpNode.isValid()) {
-        label = labels->getNodeValue(tmpNode);
-
-        if (!label.empty())
-          ttip = tlpStringToQString(label) + " (";
-
-        ttip += QString("node #")+ QString::number(tmpNode.id);
-
-        if (!label.empty())
-          ttip += ")";
-
+        ttip = NodesGraphModel::getNodeTooltip(graph(), tmpNode);
         QToolTip::showText(he->globalPos(), ttip, gl);
         return true;
       }
@@ -150,16 +137,7 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj,QEvent *event) {
         edge tmpEdge=type.getEdge();
 
         if(tmpEdge.isValid()) {
-          label = labels->getEdgeValue(tmpEdge);
-
-          if (!label.empty())
-            ttip = tlpStringToQString(label) + "(";
-
-          ttip += QString("edge #")+QString::number(tmpEdge.id);
-
-          if (!label.empty())
-            ttip += ")";
-
+          ttip = EdgesGraphModel::getEdgeTooltip(graph(), tmpEdge);
           QToolTip::showText(he->globalPos(), ttip, gl);
           return true;
         }

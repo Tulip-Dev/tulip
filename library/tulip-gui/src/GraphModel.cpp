@@ -880,13 +880,17 @@ void NodesGraphModel::treatEvents(const std::vector<tlp::Event> &events) {
 QVariant NodesGraphModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Vertical) {
     if (role == Qt::ToolTipRole && (section >= 0 && section < _elements.size())) {
-      node n = node(_elements[section]);
-      return QString("node #").append(QString::number(n.id))
-                              .append("\ninput degree: ").append(QString::number(_graph->indeg(n)))
-                              .append("\noutput degree: ").append(QString::number(_graph->outdeg(n)));
+      return getNodeTooltip(_graph, node(_elements[section]));
     }
   }
   return GraphModel::headerData(section, orientation, role);
+}
+
+QString NodesGraphModel::getNodeTooltip(Graph *graph, node n) {
+  const std::string &label = graph->getProperty("viewLabel")->getNodeStringValue(n);
+  return QString("node #").append(QString::number(n.id)).append(label.empty() ? "" : " (" + tlpStringToQString(label) + ")")
+                          .append("\ninput degree: ").append(QString::number(graph->indeg(n)))
+                          .append("\noutput degree: ").append(QString::number(graph->outdeg(n)));
 }
 
 void EdgesGraphModel::treatEvent(const Event& ev) {
@@ -958,11 +962,20 @@ QVariant EdgesGraphModel::headerData(int section, Qt::Orientation orientation, i
   if (orientation == Qt::Vertical) {
     if (role == Qt::ToolTipRole && (section >= 0 && section < _elements.size())) {
       edge e = edge(_elements[section]);
-      const std::pair<node, node> &extremities = _graph->ends(e);
-      return QString("edge #").append(QString::number(e.id))
-                              .append("\nsource: node #").append(QString::number(extremities.first.id))
-                              .append("\ntarget: node #").append(QString::number(extremities.second.id));
+      return getEdgeTooltip(_graph, e);
     }
   }
   return GraphModel::headerData(section, orientation, role);
+}
+
+QString EdgesGraphModel::getEdgeTooltip(Graph *graph, edge e) {
+  const std::string &label = graph->getProperty("viewLabel")->getEdgeStringValue(e);
+  const std::pair<node, node> &extremities = graph->ends(e);
+  const std::string &sourceLabel = graph->getProperty("viewLabel")->getNodeStringValue(extremities.first);
+  const std::string &targetLabel = graph->getProperty("viewLabel")->getNodeStringValue(extremities.second);
+  return QString("edge #").append(QString::number(e.id)).append(label.empty() ? "" : " (" + tlpStringToQString(label) + ")")
+                          .append("\nsource: node #").append(QString::number(extremities.first.id))
+                          .append(sourceLabel.empty() ? "" : " (" + tlpStringToQString(sourceLabel) + ")")
+                          .append("\ntarget: node #").append(QString::number(extremities.second.id))
+                          .append(targetLabel.empty() ? "" : " (" + tlpStringToQString(targetLabel) + ")");
 }
