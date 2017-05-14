@@ -117,6 +117,8 @@ public:
     return true;
   }
 
+  static QString getNodeTooltip(Graph *graph, node n);
+
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
 private:
@@ -138,6 +140,9 @@ public:
   bool isNode() const {
     return false;
   }
+
+  static QString getEdgeTooltip(Graph *graph, edge e);
+
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
 private:
