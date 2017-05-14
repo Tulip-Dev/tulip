@@ -1045,7 +1045,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
     if (!textBeforeCursor.contains('#'))
       showAutoCompletionList(e->text() == ".");
   }
-  else if (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) {
+  else if ((e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) && e->modifiers() == Qt::NoModifier) {
     bool pressKey = true;
 
     if (textBeforeCursor.trimmed().isEmpty()) {
