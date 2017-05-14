@@ -42,11 +42,7 @@ class DataSet;
 **/
 class ImportModule : public tlp::Plugin {
 public:
-  /**
-  * @brief Initializes the DataSet to the one passed in the context.
-  *
-  * @param context The context this import plug-in runs into.
-  **/
+
   ImportModule (const tlp::PluginContext* context) {
     if(context != NULL) {
       const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
@@ -57,14 +53,35 @@ public:
     }
   }
 
+  /**
+   * @brief Gets the extensions of the file formats the plugin can import.
+   * e.g. a TLP import would return 'tlp'.
+   *
+   * @return the list of file extensions the plugin can import.
+   **/
   virtual std::list<std::string> fileExtensions() const {
     return std::list<std::string>();
   }
 
+  /**
+   * @brief Gets the extensions of the gzipped file formats this plugin can import.
+   * e.g. a TLP import would return 'tlp.gz and tlpz'.
+   *
+   * @since Tulip 4.11
+   *
+   * @return the list of gzipped file extensions the plugin can import.
+   **/
   virtual std::list<std::string> gzipFileExtensions() const {
     return std::list<std::string>();
   }
 
+  /**
+   * @brief Gets all the extensions (normal and gzipped) of the file formats this plugin can import.
+   *
+   * @since Tulip 4.11
+   *
+   * @return the list of file extensions the plugin can import.
+   **/
   std::list<std::string>  allFileExtensions() const {
     std::list<std::string> zext(gzipFileExtensions());
     std::list<std::string> ext(fileExtensions());
@@ -72,13 +89,10 @@ public:
     return ext;
   }
 
-  virtual std::string getGroup() const {
-    return "Import";
-  }
-
   virtual std::string category() const {
     return IMPORT_CATEGORY;
   }
+
   std::string icon() const {
     return ":/tulip/gui/icons/64/document-import.png";
   }

@@ -64,7 +64,43 @@ This abstract class describes an export plugin.
   virtual ~ExportModule();
 
   virtual std::string fileExtension() const = 0;
-  
+%Docstring
+tlp.ExportModule.fileExtension()
+
+.. versionadded:: 4.11
+
+This method returns the extension of the file format this export plugin saves to.
+Derived class can implement it in order for the plugin to be automatically called
+by the :func:`tlp.saveGraph` function.
+
+:rtype: string
+%End
+
+  virtual std::list<std::string> gzipFileExtensions() const;
+%Docstring
+tlp.ExportModule.gzipFileExtensions()
+
+.. versionadded:: 4.11
+
+This method returns a list of the extensions file format when compressed with gzip
+this export plugin saves to.
+Derived class can implement it in order for the plugin to be automatically called
+by the :func:`tlp.saveGraph` function.
+
+:rtype: list of string
+%End
+
+  std::list<std::string> allFileExtensions() const;
+%Docstring
+tlp.ExportModule.allFileExtensions()
+
+.. versionadded:: 4.11
+
+This method returns a list of all extensions file format (normal and gzipped) this export plugin saves to.
+
+:rtype: list of string
+%End
+
   virtual std::string category() const;
 
   virtual bool exportGraph(std::ostream &os) = 0;

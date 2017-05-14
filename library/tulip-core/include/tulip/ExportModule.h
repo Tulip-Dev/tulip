@@ -40,7 +40,7 @@ class PluginProgress;
  */
 class ExportModule: public tlp::Plugin {
 public:
-  ///
+
   ExportModule(const tlp::PluginContext* context) {
     if(context != NULL) {
       const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
@@ -50,19 +50,20 @@ public:
       dataSet = algoritmContext->dataSet;
     }
   }
-  ///
+
   virtual ~ExportModule() {}
 
   virtual std::string category() const {
     return EXPORT_CATEGORY;
   }
+
   std::string icon() const {
     return ":/tulip/gui/icons/64/document-export.png";
   }
 
   /**
    * @brief Gets the extension of the file format this export plugin saves to.
-   * e.g. a GraphML export would return 'xml'.
+   * e.g. a GML export would return 'gml'.
    *
    * @return :string the extension that this export module saves to.
    **/
@@ -70,12 +71,22 @@ public:
 
   /**
    * @brief Gets a list of the extensions file format when compressed with gzip this export plugin saves to.
+   *
+   * @since Tulip 4.11
+   *
    * @return :string the extension that this export module saves to.
    **/
   virtual std::list<std::string> gzipFileExtensions() const {
     return std::list<std::string>();
   }
 
+  /**
+   * @brief Gets a list of all extensions file format (normal and gzipped) this export plugin saves to.
+   *
+   * @since Tulip 4.11
+   *
+   * @return the list of file extensions this export plugin saves to.
+   */
   std::list<std::string>  allFileExtensions() const {
     std::list<std::string> ext(gzipFileExtensions());
     ext.push_back(fileExtension());
@@ -88,9 +99,10 @@ public:
    * @return bool Whether the export was successful or not.
    **/
   virtual bool exportGraph(std::ostream &os)=0;
+
   /** It is the root graph*/
   Graph *graph;
-  ///
+
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };

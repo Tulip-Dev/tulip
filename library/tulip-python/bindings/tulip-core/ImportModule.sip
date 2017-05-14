@@ -64,9 +64,44 @@ This abstract class describes an import plugin.
   ImportModule (const tlp::PluginContext* context);
   virtual ~ImportModule();
 
-  virtual std::string getGroup() const;
-
   virtual std::string category() const;
+
+  virtual std::list<std::string> fileExtensions() const;
+%Docstring
+tlp.ImportModule.fileExtensions()
+
+.. versionadded:: 4.11
+
+This method returns the extensions of file formats this plugin can import.
+Derived classes can implement it in order for the plugin to be automatically called
+by the :func:`tlp.loadGraph` function.
+
+:rtype: list of string
+%End
+
+  virtual std::list<std::string> gzipFileExtensions() const;
+%Docstring
+tlp.ImportModule.gzipFileExtensions()
+
+.. versionadded:: 4.11
+
+This method returns the extensions of gzipped file formats this plugin can import.
+Derived classes can implement it in order for the plugin to be automatically called
+by the :func:`tlp.loadGraph` function.
+
+:rtype: list of string
+%End
+
+  std::list<std::string> allFileExtensions() const;
+%Docstring
+tlp.ImportModule.allFileExtensions()
+
+.. versionadded:: 4.11
+
+This method returns all the extensions (normal and gzipped) of file formats this plugin can import.
+
+:rtype: list of string
+%End
 
   virtual bool importGraph() = 0;
 %Docstring
