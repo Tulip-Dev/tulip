@@ -125,6 +125,11 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
       return QIcon(":/tulip/gui/ui/inherited_properties.png");
     else if (role == TulipModel::PropertyRole)
       return QVariant::fromValue<PropertyInterface*>(prop);
+    else if (role == Qt::ToolTipRole) {
+      return QString(_graph->existLocalProperty(prop->getName()) ? "local " : "inherited ")
+              .append("property \"").append(tlpStringToQString(prop->getName()))
+              .append("\" of type ").append(tlpStringToQString(prop->getTypename()));
+    }
   }
 
   return TulipModel::headerData(section,orientation,role);
@@ -872,6 +877,18 @@ void NodesGraphModel::treatEvents(const std::vector<tlp::Event> &events) {
   _nodesRemoved = false;
 }
 
+QVariant NodesGraphModel::headerData(int section, Qt::Orientation orientation, int role) const {
+  if (orientation == Qt::Vertical) {
+    if (role == Qt::ToolTipRole && (section >= 0 && section < _elements.size())) {
+      node n = node(_elements[section]);
+      return QString("node #").append(QString::number(n.id))
+                              .append("\ninput degree: ").append(QString::number(_graph->indeg(n)))
+                              .append("\noutput degree: ").append(QString::number(_graph->outdeg(n)));
+    }
+  }
+  return GraphModel::headerData(section, orientation, role);
+}
+
 void EdgesGraphModel::treatEvent(const Event& ev) {
   GraphModel::treatEvent(ev);
 
@@ -935,4 +952,17 @@ void EdgesGraphModel::treatEvents(const std::vector<tlp::Event> &events) {
   GraphModel::treatEvents(events);
   _edgesAdded = false;
   _edgesRemoved = false;
+}
+
+QVariant EdgesGraphModel::headerData(int section, Qt::Orientation orientation, int role) const {
+  if (orientation == Qt::Vertical) {
+    if (role == Qt::ToolTipRole && (section >= 0 && section < _elements.size())) {
+      edge e = edge(_elements[section]);
+      const std::pair<node, node> &extremities = _graph->ends(e);
+      return QString("edge #").append(QString::number(e.id))
+                              .append("\nsource: node #").append(QString::number(extremities.first.id))
+                              .append("\ntarget: node #").append(QString::number(extremities.second.id));
+    }
+  }
+  return GraphModel::headerData(section, orientation, role);
 }
