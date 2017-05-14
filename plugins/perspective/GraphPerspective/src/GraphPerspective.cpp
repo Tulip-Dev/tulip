@@ -84,19 +84,23 @@ static bool tulipCanOpenFile(const QString &path) {
   if (path.endsWith(".tlpx")) {
     return true;
   }
+
   std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
 
   for(std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
     std::list<std::string> fileExtensions(m->allFileExtensions());
+
     for(std::list<std::string>::const_iterator itExt = fileExtensions.begin(); itExt != fileExtensions.end(); ++itExt) {
       if (path.endsWith(tlpStringToQString(*itExt))) {
         delete m;
         return true;
       }
     }
+
     delete m;
   }
+
   return false;
 }
 

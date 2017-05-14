@@ -128,6 +128,7 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj,QEvent *event) {
     if (gl->pickNodesEdges(he->x(), he->y(), type)) {
       QString ttip;
       node tmpNode=type.getNode();
+
       if(tmpNode.isValid()) {
         ttip = NodesGraphModel::getNodeTooltip(graph(), tmpNode);
         QToolTip::showText(he->globalPos(), ttip, gl);
