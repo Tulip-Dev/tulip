@@ -38,6 +38,7 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
     self.currentNode = None
     self.currentEdge = None
     self.currentAttrId = None
+    self.parsingDefault = False
   
   # try to create a Tulip property based on GraphML attribute type
   def getGraphProperty(self, attrId, attrName, attrType):
@@ -56,11 +57,17 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
     # attribute definition
     if name == 'key':
       # only parse standarly defined attributes
-      if 'attr.name' in attrs and 'attr.type' in attrs:
+      if 'attr.name' in attrs and 'attr.type' in attrs and 'for' in attrs:
         # save attributes info for later use
         self.attributes[attrs['id']] = {'name': attrs['attr.name'], 
-                                        'typename': attrs['attr.type']} 
-    
+                                        'typename': attrs['attr.type'],
+                                        'for': attrs['for']}
+        self.currentAttrId = attrs['id']
+
+    # attribute default value
+    elif name == 'default':
+      self.parsingDefault = True
+
     # node definition  
     elif name == 'node':
       # get node id
@@ -95,8 +102,10 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
       self.currentNode = None
     elif name == 'edge':
       self.currentEdge = None
-    elif name == 'data':
+    elif name == 'data' or name =='key':
       self.currentAttrId = None
+    elif name == 'default':
+      self.parsingDefault = False
   
   # parse attributes values
   def characters(self, content):
@@ -104,57 +113,69 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
     if content == '\n':
       return
 
-    # if currently parsing attribute
+    # parsing attribute default value
     if self.currentAttrId:
       # get the name and the typename of the attribute
       attrName = self.attributes[self.currentAttrId]['name']
       attrType = self.attributes[self.currentAttrId]['typename']
-      
-      # parse node attribute
-      if self.currentNode:
-        # try to parse some standard node visual attributes (label, layout, size, color)
-        if attrName == 'label':
-          self.viewLabel[self.currentNode] = content
-        elif attrName == 'x' or attrName == 'y':
-          nodeCoord = self.viewLayout[self.currentNode]
-          if attrName == 'x':
-            nodeCoord[0] = float(content)
-          else:
-            nodeCoord[1] = float(content)
-          self.viewLayout[self.currentNode] = nodeCoord
-        elif attrName == 'width' or attrName == 'height' or attrName == 'size':
-          nodeSize = self.viewSize[self.currentNode]
-          size = float(content)
-          if attrName == 'width' or attrName == 'size':
-            nodeSize[0] = size
-          if attrName == 'height' or attrName == 'size':
-            nodeSize[1] = size
-          self.viewSize[self.currentNode] = nodeSize
-        elif attrName == 'r' or attrName == 'g' or attrName == 'b':
-          nodeColor = self.viewColor[self.currentNode]
-          if attrName == 'r':
-            nodeColor[0] = int(content)
-          elif attrName == 'g':
-            nodeColor[1] = int(content)
-          else:
-            nodeColor[2] = int(content)
-          self.viewColor[self.currentNode] = nodeColor
+      attrFor = self.attributes[self.currentAttrId]['for']
 
+      if self.parsingDefault and (attrFor == 'node' or attrFor == 'edge'):
         # try to create a Tulip property compatible with the attribute type
         graphProperty = self.getGraphProperty(self.currentAttrId, attrName, attrType)
         if graphProperty:
-          # set the property value from its string representation
-          graphProperty.setNodeStringValue(self.currentNode, content)
-      
-      # same process for parsing edges attributes
-      elif self.currentEdge:
-        graphProperty = self.getGraphProperty(self.currentAttrId, attrName, attrType)
-        if graphProperty:
-          graphProperty.setEdgeStringValue(self.currentEdge, content)
-      
-      # graph attribute case    
+          if attrFor == 'node':
+            graphProperty.setAllNodeStringValue(content)
+          else:
+            graphProperty.setAllEdgeStringValue(content)
+
+      # parsing attribute
       else:
-        self.graph.setAttribute(attrName, content)
+        # parse node attribute
+        if self.currentNode:
+          # try to parse some standard node visual attributes (label, layout, size, color)
+          if attrName == 'label':
+            self.viewLabel[self.currentNode] = content
+          elif attrName == 'x' or attrName == 'y':
+            nodeCoord = self.viewLayout[self.currentNode]
+            if attrName == 'x':
+              nodeCoord[0] = float(content)
+            else:
+              nodeCoord[1] = float(content)
+            self.viewLayout[self.currentNode] = nodeCoord
+          elif attrName == 'width' or attrName == 'height' or attrName == 'size':
+            nodeSize = self.viewSize[self.currentNode]
+            size = float(content)
+            if attrName == 'width' or attrName == 'size':
+              nodeSize[0] = size
+            if attrName == 'height' or attrName == 'size':
+              nodeSize[1] = size
+            self.viewSize[self.currentNode] = nodeSize
+          elif attrName == 'r' or attrName == 'g' or attrName == 'b':
+            nodeColor = self.viewColor[self.currentNode]
+            if attrName == 'r':
+              nodeColor[0] = int(content)
+            elif attrName == 'g':
+              nodeColor[1] = int(content)
+            else:
+              nodeColor[2] = int(content)
+            self.viewColor[self.currentNode] = nodeColor
+
+          # try to create a Tulip property compatible with the attribute type
+          graphProperty = self.getGraphProperty(self.currentAttrId, attrName, attrType)
+          if graphProperty:
+            # set the property value from its string representation
+            graphProperty.setNodeStringValue(self.currentNode, content)
+
+        # same process for parsing edges attributes
+        elif self.currentEdge:
+          graphProperty = self.getGraphProperty(self.currentAttrId, attrName, attrType)
+          if graphProperty:
+            graphProperty.setEdgeStringValue(self.currentEdge, content)
+
+        # graph attribute case
+        else:
+          self.graph.setAttribute(attrName, content)
 
 class GraphMLImport(tlp.ImportModule):
   def __init__(self, context):
@@ -177,7 +198,7 @@ class GraphMLImport(tlp.ImportModule):
 
 # The line below does the magic to register the plugin to the plugin database
 # and updates the GUI to make it accessible through the menus.
-tulipplugins.registerPluginOfGroup("GraphMLImport", "GraphML", "", "14/05/2017", 
+tulipplugins.registerPluginOfGroup("GraphMLImport", "GraphML", "Antoine Lambert", "14/05/2017",
 """
 Imports a graph from a file in the GraphML format (http://graphml.graphdrawing.org/).
 GraphML is a comprehensive and easy-to-use file format for graphs.
