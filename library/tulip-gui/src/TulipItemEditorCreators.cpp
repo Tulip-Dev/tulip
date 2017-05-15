@@ -399,11 +399,8 @@ QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   if (result == QDialog::Rejected)
     return QVariant::fromValue<TulipFileDescriptor>(dlg->previousFileDescriptor);
 
-  if (dlg->fileMode() == QFileDialog::Directory) {
-    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->directory().absolutePath(),TulipFileDescriptor::Directory));
-  }
-  else if (!dlg->selectedFiles().empty()) {
-    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->selectedFiles()[0],TulipFileDescriptor::File));
+  if (!dlg->selectedFiles().empty()) {
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->selectedFiles()[0], (dlg->fileMode() == QFileDialog::Directory) ? TulipFileDescriptor::Directory : TulipFileDescriptor::File));
   }
 
   return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
