@@ -208,32 +208,41 @@ static void setViewPropertiesDefaults(Graph *g) {
   }
 
   // for backward compatibility with Tulip < 4.11
-  if (g->existProperty(fontAwesomeIcon)) {
-
-    Iterator<node> *itIcons = g->getProperty<StringProperty>(icon)->getNonDefaultValuatedNodes();
+  if (g->existLocalProperty(fontAwesomeIcon)) {
+    StringProperty* faiProp = g->getProperty<StringProperty>(fontAwesomeIcon);
+    StringProperty* iProp = g->getProperty<StringProperty>(icon);
+    Iterator<node> *itIcons = iProp->getNonDefaultValuatedNodes();
 
     // transform old font awesome icon names to new ones and store them in the viewIcon
     // property only if the content of that property is default valuated
     if (!itIcons->hasNext()) {
+      iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
       node n;
-      forEach(n, g->getNodes()) {
-        const string &faIconName = g->getProperty<StringProperty>(fontAwesomeIcon)->getNodeValue(n);
+      forEach(n, faiProp->getNonDefaultValuatedNodes()) {
+        const string &faIconName = faiProp->getNodeValue(n);
 
         if (!faIconName.empty()) {
-          g->getProperty<StringProperty>(icon)->setNodeValue(n, "fa-" + faIconName);
+          iProp->setNodeValue(n, "fa-" + faIconName);
         }
       }
+      iProp->setAllEdgeValue("fa-" + faiProp->getEdgeDefaultValue());
       edge e;
-      forEach(e, g->getEdges()) {
-        const string &faIconName = g->getProperty<StringProperty>(fontAwesomeIcon)->getEdgeValue(e);
+      forEach(e, faiProp->getNonDefaultValuatedEdges()) {
+        const string &faIconName = faiProp->getEdgeValue(e);
 
         if (!faIconName.empty()) {
-          g->getProperty<StringProperty>(icon)->setEdgeValue(e, "fa-" + faIconName);
+          iProp->setEdgeValue(e, "fa-" + faIconName);
         }
       }
     }
 
     delete itIcons;
+
+    // finally delete the old property
+    // to avoid any further overwriting of the "viewIcon" property
+    // when re-executing this piece of code after
+    // a further save/load step of this graph.
+    g->delLocalProperty(fontAwesomeIcon);
   }
 
 }
