@@ -8,58 +8,92 @@ Getting started
 Using the bindings from the Tulip Software GUI
 -----------------------------------------------
 
-Tulip Python IDE
-^^^^^^^^^^^^^^^^^
+Tulip Python bindings were primiraly designed to add a scripting feature to the main Tulip software and thus
+interactively manipulate the graphs loaded into it through a couple lines of Python code.
+In that purpose, several GUI components have been developed with the Qt framework and are available
+through the main Tulip interface:
 
-A lightweight Python IDE can be accessed through the graphical interface of Tulip.
-Three components are available :
+  * a **Python REPL** (Read Eval Print Loop) panel
+  * a **Python IDE** (Integrated Development Environment) window
 
-    * A **Python console**, accessible through the "Python" button at the bottom of the Tulip GUI (see :ref:`Figure 1<fig1>`). It contains a "REPL" tab (read eval print loop) which enables to
-      execute Python statements in an interactive manner. A combo box allows to select a graph from those
-      currently loaded in the software. The selected graph is then bound to a Python variable named "graph".
-      That component also contains an "Output" tab, that displays standard and error output of Python plugins (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`).
+Python REPL
+^^^^^^^^^^^
+
+The **Python REPL** (Read Eval Print Loop) panel is accessible through the "Python REPL" button
+at the bottom of the Tulip GUI (see :ref:`Figure 1<fig1>`). It enables to execute Python statements
+in an interactive manner. A combo box allows to select a graph from those currently loaded in the
+Tulip software. The selected graph is then bound to a global Python variable named "graph".
 
 .. warning:: All modifications that have been performed on a graph through the Python REPL cannot be undone.
 
 .. _fig1:
 .. figure:: tulipPythonREPL.png
-   :align: center
+  :align: center
 
-   Figure 1: Screenshot of the "Python console" component in the Tulip GUI.
+Figure 1: Screenshot of the "Python REPL" panel in the Tulip GUI.
 
-    * A **Python Script Editor**, integrated as a view plugin named "Python Script view",
-      accessible through the "Add panel" button at the bottom left corner of the Tulip GUI (see :ref:`Figure 2<fig2>`).
-      It allows to write scripts that can be applied to the
+Tulip Python IDE
+^^^^^^^^^^^^^^^^^
+
+A lightweight Python IDE can be accessed through the graphical interface of Tulip. Some GUI reorganisation
+has been made in Tulip 4.11 and all Python development features (except the REPL) are now centralized in a
+separated window. It can be displayed by clicking on the "Python IDE" button located in the left part of
+the Tulip interface.
+
+.. image:: tulipPythonIDEButton.png
+  :align: center
+
+Its interface is composed of three tabs:
+
+    * A **Scripts editor** tab (see :ref:`Figure 2<fig2>`): it allows to write scripts that can be applied to the
       graphs currently loaded in Tulip. To do so, the "main(graph)" function has to be defined in the script code
-      and is used as the script entry point. The graph currently selected in the view is wrapped
-      as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
-      The currently edited script can be launched through the control panel located
-      in the lower part of the view interface. Once started, the script execution can be
-      stopped at any time. All modifications performed by a script on a graph can be undone.
-      The view also enables to develop Python modules that can be immediately imported
-      in the current Python session.
+      and is used as the script entry point. The graph currently selected through the combobox located in the upper
+      part of the tab is wrapped as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
+      The currently edited script can be launched through the control panel located in the lower part of the tab interface.
+      Once started, the script execution can be stopped or paused (trigerring update of Tulip visualizations) at any time.
+      All modifications performed by a script on a graph can be cancelled / replayed through the Tulip undo / redo feature.
 
 .. _fig2:
 .. figure:: tulipPythonScript.png
    :align: center
 
-   Figure 2: Screenshot of the "Python Script view" in the Tulip GUI.
+   Figure 2: Screenshot of the "Scripts editor" tab in the Python IDE.
 
-    * A **Python Plugin Editor**, accessible through the "Develop" button at the left of the Tulip GUI (see :ref:`Figure 3<fig3>`).
-      It enables to develop Tulip plugins in pure Python (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`).
-      These plugins are then immediately integrated in the Tulip GUI when requesting their registration (if their source code is valid of course).
-      Different kinds of plugins can be develop : General Algorithms, Property Algorithms, Import plugins and Export plugins.
-      When executing these plugins, standard and error output will be displayed in the "Output" tab of the Python console component.
-      That component also enables to develop Python modules that can be immediately imported in the current Python session.
-      If there is a Tulip project associated to the current Tulip session, the source code of the plugins and modules are automatically saved in it.
-      When reopening the project, the previously edited plugins will still be available
-      in the editor and they will also be automatically loaded.
+    * A **Plugins editor** tab (see :ref:`Figure 3<fig3>`): it enables to develop Tulip plugins in pure Python
+      (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`).
+      These plugins are then immediately integrated in the Tulip GUI when requesting their registration
+      (if their source code is valid of course). Different kinds of plugins can be developed : General Algorithms,
+      Property Algorithms, Import plugins and Export plugins. When executing these plugins, standard and error output
+      will be displayed in the "Message Log" panel of the Tulip GUI.
 
 .. _fig3:
 .. figure:: tulipPythonPlugin.png
    :align: center
 
-   Figure 3: Screenshot of the "Python Plugin Editor" in the Tulip GUI.
+   Figure 3: Screenshot of the "Plugins editor" tab in the Python IDE.
+
+    * A **Modules editor** tab (see :ref:`Figure 4<fig4>`): it enables to develop Python modules that
+      can be immediately imported in the current Python session. The purpose is to have a library of utility
+      Python modules that can be easily imported in the developed scripts and plugins.
+
+.. _fig4:
+.. figure:: tulipPythonModule.png
+   :align: center
+
+   Figure 4: Screenshot of the "Modules editor" tab in the Python IDE.
+
+Backup and restore your Python code with Tulip projects
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Tulip software uses a zipped project file format named TLPX to save and restore the state of a Tulip
+work session in a portable way. Notably it contains the graphs that was loaded in the software serialized to
+files but also the configuration of the views and components that was opened in the software.
+
+When working with the Python IDE, the source code of the scripts, plugins and modules currently edited
+are automatically saved to the current Tulip project. When reopening the project file, the previously
+edited scripts, plugins and modules will still be available in the Python IDE even if you open the file
+on a computer different from the one you write your code. Python plugins will also be
+automatically loaded when reopening the project.
 
 Using the autocompletion to code faster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -78,14 +112,14 @@ That database is also updated dynamically by performing a static analysis on the
 that analysis tries to associate a typename to each variable in the source code).
 The autocompletion will also popup immediatly when hitting a dot character. If the variable before the dot
 has an associated typename in the database, only the contents of its dictionary will be inserted in the list.
-:ref:`Figure 4<fig4>` shows an
+:ref:`Figure 5<fig5>` shows an
 example of the contents of the autocompletion list when requesting it on the "graph" variable (of type :class:`tlp.Graph`)
 
-.. _fig4:
+.. _fig5:
 .. figure:: autocompletion_global.png
    :align: center
 
-   Figure 4: Using the autocompletion list to get the dictionary contents of a Python object.
+   Figure 5: Using the autocompletion list to get the dictionary contents of a Python object.
 
 Tulip special autocompletion features
 """"""""""""""""""""""""""""""""""""""
@@ -99,60 +133,60 @@ features have been included to ease the use of the Tulip Python API:
       :meth:`tlp.Graph.applySizeAlgorithm`, :meth:`tlp.Graph.applyStringAlgorithm`, :func:`tlp.importGraph`, :func:`tlp.exportGraph`.
       The first parameter of those method is a string containing the name of the algorithm (plugin)
       to call. When requesting the autocompletion list with the following context : *graph.apply\*Algorithm(*, it will be filled with the names of the corresponding
-      algorithms (plugins). :ref:`Figure 5<fig5>` shows an example of the contents of the autocompletion list when requesting it with the following context : *graph.applyLayoutAlgorithm(*.
+      algorithms (plugins). :ref:`Figure 6<fig6>` shows an example of the contents of the autocompletion list when requesting it with the following context : *graph.applyLayoutAlgorithm(*.
 
-.. _fig5:
+.. _fig6:
 .. figure:: autocompletion_algos.png
    :align: center
 
-   Figure 5: Using the autocompletion list to get the algorithm names.
+   Figure 6: Using the autocompletion list to get the algorithm names.
 
     * **Autocompletion for algorithm parameters** Parameters can be passed to Tulip algorithms through a dictionnary. The parameters are
       identified by their names. The autocompletion list can be used to get the names of these parameters.
-      :ref:`Figure 6<fig6>` shows an example of the autocompletion list contents when requesting the parameters
+      :ref:`Figure 7<fig7>` shows an example of the autocompletion list contents when requesting the parameters
       of the layout algorithm : "FM^3 (OGDF)".
 
-.. _fig6:
+.. _fig7:
 .. figure:: autocompletion_algosparams.png
    :align: center
 
-   Figure 6: Using the autocompletion list to get the algorithm parameters names.
+   Figure 7: Using the autocompletion list to get the algorithm parameters names.
 
     * **Autocompletion for string collection parameters** Some algorithms parameters are internally
       based on a :class:`tlp.StringCollection` instance. It allows to select a string from a defined set.
       The direct use of that class is now deprecated but the autocompletion list can be helpfull to get the names of the
       available values that can be transmitted to the algorithm.
-      :ref:`Figure 7<fig7>` shows an example of the autocompletion list contents when requesting the string collection values
+      :ref:`Figure 8<fig8>` shows an example of the autocompletion list contents when requesting the string collection values
       for the "Allowed Positions" parameter of the layout algorithm : "FM^3 (OGDF)".
 
-.. _fig7:
+.. _fig8:
 .. figure:: autocompletion_stringcollection.png
    :align: center
 
-   Figure 7: Using the autocompletion list to get the algorithm parameters names.
+   Figure 8: Using the autocompletion list to get the algorithm parameters names.
 
     * **Autocompletion for graph properties** Tulip stores the data associated to graph elements in objects called properties. To get a reference
       on those type of objects, you can either use specific methods (for instance : :meth:`tlp.Graph.getLayoutProperty`, :meth:`tlp.Graph.getSizeProperty`)
       that take the name of the property to retrieve as parameter or the following syntax : *graph["property name"]*. When requesting the autocompletion list
       for the following context : *graph.get*Property(* or *graph[*, the list will be filled with the names of the corresponding and existing properties.
-      :ref:`Figure 8<fig8>` show an example of the contents of the autocompletion list for the following context : *graph[*.
+      :ref:`Figure 9<fig9>` show an example of the contents of the autocompletion list for the following context : *graph[*.
 
-.. _fig8:
+.. _fig9:
 .. figure:: autocompletion_properties.png
    :align: center
 
-   Figure 8: Using the autocompletion list to get the graph properties names.
+   Figure 9: Using the autocompletion list to get the graph properties names.
 
     * **Autocompletion list for sub-graphs** Tulip allows to manipulate a large hierarchy of sub-graphs. References to those sub-graphs can be retrieved
       with their names through the use of the dedicated method :meth:`tlp.Graph.getSubGraph`. When requesting the autocompletion list for the
-      following context : *graph.getSubGraph(*, the list will be filled with all the names of the graphs present in the hierarchy. :ref:`Figure 9<fig9>` shows
+      following context : *graph.getSubGraph(*, the list will be filled with all the names of the graphs present in the hierarchy. :ref:`Figure 10<fig10>` shows
       an example of that use case.
 
-.. _fig9:
+.. _fig10:
 .. figure:: autocompletion_subgraphs.png
    :align: center
 
-   Figure 9: Using the autocompletion list to get the sub-graphs names.
+   Figure 10: Using the autocompletion list to get the sub-graphs names.
 
 .. _usingBindingsInShell:
 
