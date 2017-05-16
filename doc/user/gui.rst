@@ -56,9 +56,9 @@ Toolbar
 .. |icon_workspace| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/desktop.png
 .. |icon_develop| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/python.png
     :width: 32
+.. |icon_export| image:: ../../library/tulip-gui/resources/icons/32/plugin_export.png
 .. |icon_csv| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/spreadsheet.png
-.. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
-    :width: 32
+.. |icon_import| image:: ../../library/tulip-gui/resources/icons/32/plugin_import.png
 .. |icon_plugin| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/system-software-install.png
 
 The vertical toolbar, on the left of the main window, contains 6 buttons: 
@@ -68,12 +68,10 @@ The vertical toolbar, on the left of the main window, contains 6 buttons:
 * |icon_workspace| **Workspace**: displays the workspace view (more information in :ref:`workspace_view`).
 
 .. image:: _images/i_workspace.png
-    :width: 600
 
-* |icon_develop| **Develop**: displays the Tulip plugins editor (find more in :ref:`developer_view`).
+* |icon_develop| **Python IDE**: displays the Tulip python IDE (find more in :ref:`developer_view`).
 
-.. image:: _images/i_develop.png
-    :width: 600
+* |icon_export| **Export**: open the graph exporting wizard (more in :ref:`first_save`).
 
 * |icon_csv| **CSV**: open the CSV data importing wizard (more information in :ref:`csv`).
 
@@ -98,7 +96,6 @@ Algorithms panel
 Tulip proposes several ready-to-use algorithms, offering - among others - colorization, labeling and presentation solutions.
 
 .. image:: _images/i_algorithm.png
-    :width: 300
 
 In the right corner of the title bar of this panel, you will find two buttons.
 
@@ -142,7 +139,6 @@ Graphs panel
 This panel gives information about the currently opened graphs.
 
 .. image:: _images/i_graphs.png
-    :width: 300
 
 |
 
@@ -178,27 +174,24 @@ Workspace view
 The workspace is where the visualization takes place. In this space, the user can create different panels to represent data and information.
 
 .. image:: _images/i_workspace.png
-    :width: 600
 
 To create a new panel at least one graph must exist. Then click on the icon |icon_addpanel| at the bottom-right of the graph list or right-click on its name and select *Add panel* (both of them mentioned in :ref:`graph_list`). Otherwise, when no panel is open, you can click on the icon |icon_add| in the middle of the workspace. Each of those steps open the following window :
 
 .. image:: _images/i_graphs_panel.png
-    :width: 600
 
 About ten panel types are available in Tulip, each of those is presented in this documentation. More information on the workspace can be found in :ref:`the appropriate section<workspace>`.
 
 
 .. _developer_view:
 
-Python plugin editor
-====================
+Tulip Python IDE
+================
 
-Even with more than a hundred algorithms at your disposition, you may have special needs and/or want to implement your own solutions. The Python plugin editor allows you to create your own plugins and modules in Python.
+Even with more than a hundred algorithms at your disposition, you may have special needs and/or want to implement your own solutions. If you are willing to implement graph manipulation algorithms, directly heading to program a C/C++ module or plug-in can be rather tricky. Instead, Tulip proposes to use the dynamic programming language `Python <http://www.python.org>`_ to easily and interactively try and implement your solutions. The Tulip Python IDE allows you to create your own scripts, plugins and modules in Python.
 
-.. image:: _images/i_develop.png
-    :width: 600
+.. image:: ../python/tulipPythonScript.png
 
-Though the component is not entirely identical to the Python script view, they both are quite similar. Thus, you may find more information in the :ref:`section presenting it <workspace_python>`.
+You may find more information in the `Tulip Python IDE <../../tulip-python/html/gettingstarted.html#tulip-python-ide>`_ section of the Tulip Python documentation.
 
 
 .. _preferences:

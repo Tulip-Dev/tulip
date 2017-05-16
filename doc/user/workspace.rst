@@ -897,35 +897,6 @@ The nodes disposition will be arranged to match the chosen representation.
     :width: 200
 
 
-.. _workspace_python:
-
-Python script view
-==================
-
-.. _workspace_python_script:
-
-Script editor
--------------
-
-If you are willing to implement graph manipulation algorithms, directly heading to program a C/C++ module or plug-in can be rather tricky. Instead, Tulip proposes to use the dynamic programming language `Python <http://www.python.org>`_ to easily and interactively try and implement your solutions. The Python Script editor allows to write scripts that can be applied to the graphs currently loaded in Tulip.
-
-.. image:: _images/i_python_script_main.png
-    :width: 600
-
-
-.. _workspace_python_doc:
-
-Documentation
--------------
-
-*Python* is a whole, complete programming language and must be considered as such. A proper initiation is required if you want to fully exploit its possibilities. No such help will be provided here; however, for those who are already familiar with this language, a Tulip Python integration documentation exists and can be found under the tab *Documentation*.
-
-.. image:: _images/i_python_doc_main.png
-    :width: 600
-
-It references and contains help about every existing function translated from the Tulip core library. Do not hesitate to consult it if you need additional information.
-
-
 .. _workspace_scatterplot:
 
 Scatter plot 2D view
