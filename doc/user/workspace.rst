@@ -859,7 +859,7 @@ The pixel oriented view gives you four different solutions to sort your nodes de
 Properties
 ----------
 
-The first steps to follow in order to use this view is to choose the properties you want to analyze. To do so, open the *Properties* panel and select the appropriate data:
+In order to use this view, you have to choose first the properties you want to analyze. To do so, open the *Properties* panel and select the appropriate data:
 
 .. image:: _images/i_pixel_properties.png
 

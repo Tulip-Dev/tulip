@@ -85,7 +85,7 @@ void PropertyCreationDialog::accept() {
   bool error = false;
 
   if(_graph == NULL) {
-    QMessageBox::warning(this, "Fail to create property", "The parent graph is invalid",
+    QMessageBox::warning(this, "Failed to create property", "The parent graph is invalid",
                          QMessageBox::Ok, QMessageBox::Ok);
     error = true;
   }
@@ -93,13 +93,13 @@ void PropertyCreationDialog::accept() {
   QString propertyName = ui->propertyNameLineEdit->text();
 
   if(propertyName.isEmpty()) {
-    QMessageBox::warning(this, "Fail to create property", "You can't create a property with an empty name",
+    QMessageBox::warning(this, "Failed to create property", "You cannot create a property with an empty name",
                          QMessageBox::Ok, QMessageBox::Ok);
     error = true;
   }
 
   if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
-    QMessageBox::warning(this, "Fail to create property", "A property with the same name already exist", QMessageBox::Ok,
+    QMessageBox::warning(this, "Failed to create property", "A property with the same name already exists", QMessageBox::Ok,
                          QMessageBox::Ok);
     error = true;
   }
@@ -134,13 +134,13 @@ void PropertyCreationDialog::checkValidity() {
     return;
   }
   else if(propertyName.isEmpty()) {
-    ui->errorLabel->setText(tr("You can't create a property with an empty name"));
+    ui->errorLabel->setText(tr("You cannot create a property with an empty name"));
     _createPropertyButton->setEnabled(false);
     ui->errorNotificationWidget->setVisible(true);
     return;
   }
   else if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
-    ui->errorLabel->setText(tr("A property with the same name already exist"));
+    ui->errorLabel->setText(tr("A property with the same name already exists"));
     _createPropertyButton->setEnabled(false);
     ui->errorNotificationWidget->setVisible(true);
     return;
