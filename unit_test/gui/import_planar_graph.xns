@@ -554,18 +554,10 @@ NEW-WINDOW:461,197:41943079,41943079,17035849,0,0,0:0x0+879+458:0,0:Import
 6,2,0,0,0,116,0,77411364,3,Virtual core keyboard
 7,3,0,0,0,116,0,77411374,8,Logitech Logitech USB Keyboard
 6,3,0,0,0,116,0,77411374,3,Virtual core keyboard
-7,2,0,0,0,23,0,77411386,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411396,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411406,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411436,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411467,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411497,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411527,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411557,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411587,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411617,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411647,5,Virtual core XTEST keyboard
-7,2,0,0,0,23,0,77411677,5,Virtual core XTEST keyboard
+7,2,0,0,0,116,0,77411464,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,77411464,3,Virtual core keyboard
+7,3,0,0,0,116,0,77411474,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,77411474,3,Virtual core keyboard
 7,2,0,0,0,23,0,77411708,5,Virtual core XTEST keyboard
 7,2,0,0,0,23,0,77411738,5,Virtual core XTEST keyboard
 7,2,0,0,0,23,0,77411768,5,Virtual core XTEST keyboard
