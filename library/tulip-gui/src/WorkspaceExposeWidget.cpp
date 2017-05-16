@@ -29,6 +29,8 @@
 
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/Graph.h>
+#include <tulip/TlpQtTools.h>
 
 #include <cmath>
 
@@ -54,7 +56,7 @@ int PreviewItem::textHeight() const {
   QFont f;
   f.setBold(true);
   text.setFont(f);
-  text.setPlainText(_panel->windowTitle());
+  text.setPlainText(_panel->windowTitle()+" ("+ tlpStringToQString(_panel->view()->graph()->getName())+")");
   text.setTextWidth(WorkspaceExposeWidget::previewSize().width());
   return text.boundingRect().height();
 }
@@ -75,7 +77,7 @@ void PreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
   QFont f;
   f.setBold(true);
   painter->setFont(f);
-  painter->drawText(0,WorkspaceExposeWidget::previewSize().height()+5,WorkspaceExposeWidget::previewSize().width(),textHeight(),Qt::AlignHCenter | Qt::TextWordWrap,_panel->windowTitle());
+  painter->drawText(0,WorkspaceExposeWidget::previewSize().height()+5,WorkspaceExposeWidget::previewSize().width(),textHeight(),Qt::AlignHCenter | Qt::TextWordWrap,_panel->windowTitle()+" ("+ tlpStringToQString(_panel->view()->graph()->getName())+")");
 
   if (_hovered) {
     painter->setOpacity(_closeButtonHovered ? 1 : 0.5);
