@@ -145,7 +145,7 @@ int main(int argc,char **argv) {
     title += TULIP_VERSION;
   else
     title += TULIP_MM_VERSION;
-  
+
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in
