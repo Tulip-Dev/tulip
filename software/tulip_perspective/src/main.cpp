@@ -137,9 +137,15 @@ int main(int argc,char **argv) {
 
   CrashHandling::installCrashHandler();
 
-  QString title("Tulip");
+  QString title("Tulip ");
   QString iconPath;
 
+  // show patch number only if needed
+  if (TULIP_INT_VERSION % 10)
+    title += TULIP_VERSION;
+  else
+    title += TULIP_MM_VERSION;
+  
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in
