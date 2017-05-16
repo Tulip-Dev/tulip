@@ -1,7 +1,7 @@
 .. _first_steps:
 
 ************************
-The First Steps in Tulip
+First Steps in Tulip
 ************************
 
 The goal of this part is to follow a small tutorial by creating a graph, saving it, and apply on it the most common analysis operations.
