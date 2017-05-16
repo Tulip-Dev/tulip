@@ -79,16 +79,7 @@ QTabBar::tab:selected {
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -138,16 +129,7 @@ QTabWidget::pane { /* The tab widget frame */
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
@@ -229,16 +211,7 @@ QToolButton:pressed {
            <property name="spacing">
             <number>3</number>
            </property>
-           <property name="leftMargin">
-            <number>3</number>
-           </property>
-           <property name="topMargin">
-            <number>3</number>
-           </property>
-           <property name="rightMargin">
-            <number>3</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>3</number>
            </property>
            <item>
@@ -475,16 +448,7 @@ QTabWidget::pane { /* The tab widget frame */
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
@@ -561,16 +525,7 @@ QToolButton:pressed {
            <property name="spacing">
             <number>6</number>
            </property>
-           <property name="leftMargin">
-            <number>3</number>
-           </property>
-           <property name="topMargin">
-            <number>3</number>
-           </property>
-           <property name="rightMargin">
-            <number>3</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>3</number>
            </property>
            <item>
@@ -752,16 +707,7 @@ QTabWidget::pane { /* The tab widget frame */
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
@@ -892,16 +838,7 @@ QToolButton:pressed {
            <property name="spacing">
             <number>6</number>
            </property>
-           <property name="leftMargin">
-            <number>3</number>
-           </property>
-           <property name="topMargin">
-            <number>3</number>
-           </property>
-           <property name="rightMargin">
-            <number>3</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>3</number>
            </property>
            <item>
@@ -1170,16 +1107,7 @@ background-color:#838383;
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -1205,9 +1133,16 @@ background-color:#838383;
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75),stop:1 rgb(60, 60, 60));
 }
 
+/* needed to ensure color: white
+   in a QCheckBox */
+QCheckBox {
+	border: none;
+}
+
 QWidget {
 	color: white;
 	font: bold;
+	font-size: 10px;
 }</string>
          </property>
          <property name="frameShape">
@@ -1326,9 +1261,6 @@ If unchecked, every modification performed by the script on the graph
 can not be undone but performance of the script execution will be better
 (in particular when dealing with a large graph).</string>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font-size: 10px;</string>
-            </property>
             <property name="text">
              <string>Use undo feature</string>
             </property>
@@ -1358,8 +1290,8 @@ can not be undone but performance of the script execution will be better
           </item>
           <item>
            <widget class="QLabel" name="label_4">
-            <property name="styleSheet">
-             <string notr="true">font-size: 10px;</string>
+            <property name="toolTip">
+             <string>Decrease/Increase the size of the font of the python code editors</string>
             </property>
             <property name="text">
              <string>Font size :</string>
@@ -1373,6 +1305,9 @@ can not be undone but performance of the script execution will be better
               <width>19</width>
               <height>19</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Decrease the size of the font of the python code editors</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1396,6 +1331,9 @@ can not be undone but performance of the script execution will be better
               <width>19</width>
               <height>19</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Increase the size of the font of the python code editors</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1422,16 +1360,7 @@ can not be undone but performance of the script execution will be better
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
