@@ -440,11 +440,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
   connect(_ui->actionDelete,SIGNAL(triggered()),this,SLOT(deleteSelectedElements()));
   connect(_ui->actionDelete_from_the_root_graph,SIGNAL(triggered()),this,SLOT(deleteSelectedElementsFromRootGraph()));
+  connect(_ui->actionDelete_all, SIGNAL(triggered()), this, SLOT(clearGraph()));
   connect(_ui->actionInvert_selection,SIGNAL(triggered()),this,SLOT(invertSelection()));
   connect(_ui->actionCancel_selection,SIGNAL(triggered()),this,SLOT(cancelSelection()));
   connect(_ui->actionReverse_selected_edges, SIGNAL(triggered()), this, SLOT(reverseSelectedEdges()));
   connect(_ui->actionMake_selection_a_graph, SIGNAL(triggered()), this, SLOT(make_graph()));
   connect(_ui->actionSelect_All,SIGNAL(triggered()),this,SLOT(selectAll()));
+  connect(_ui->actionSelect_All_Nodes,SIGNAL(triggered()),this,SLOT(selectAllNodes()));
+  connect(_ui->actionSelect_All_Edges,SIGNAL(triggered()),this,SLOT(selectAllEdges()));
   connect(_ui->actionUndo,SIGNAL(triggered()),this,SLOT(undo()));
   connect(_ui->actionRedo,SIGNAL(triggered()),this,SLOT(redo()));
   connect(_ui->actionCut,SIGNAL(triggered()),this,SLOT(cut()));
@@ -880,6 +883,11 @@ void GraphPerspective::deleteSelectedElementsFromRootGraph() {
   deleteSelectedElements(true);
 }
 
+void GraphPerspective::clearGraph() {
+    if(QMessageBox::question(_mainWindow, "Clear graph content", "Do you really want to remove all nodes and edges from the current graph. This action cannot be undone", QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+        _graphs->currentGraph()->clear();
+}
+
 void GraphPerspective::deleteSelectedElements(bool fromRoot) {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
@@ -934,21 +942,30 @@ void GraphPerspective::cancelSelection() {
   Observable::unholdObservers();
 }
 
-void GraphPerspective::selectAll() {
+void GraphPerspective::selectAll(bool nodes, bool edges) {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  node n;
-  forEach(n, graph->getNodes()) {
-    selection->setNodeValue(n,true);
+  if(nodes) {
+      const vector<node>& nodes = graph->nodes();
+      for(unsigned i=0;i<nodes.size();++i)
+          selection->setNodeValue(nodes[i],true);
   }
-  edge e;
-  forEach(e, graph->getEdges()) {
-    selection->setEdgeValue(e,true);
+  if(edges) {
+      const vector<edge>& edges = graph->edges();
+      for(unsigned i=0;i<edges.size();++i)
+          selection->setEdgeValue(edges[i],true);
   }
-
   Observable::unholdObservers();
+}
+
+void GraphPerspective::selectAllEdges() {
+    selectAll(false, true);
+}
+
+void GraphPerspective::selectAllNodes() {
+    selectAll(true, false);
 }
 
 void GraphPerspective::undo() {
@@ -1131,9 +1148,12 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionPaste->setEnabled(enabled);
   _ui->actionDelete->setEnabled(enabled);
   _ui->actionDelete_from_the_root_graph->setEnabled(enabled&&(graph!=graph->getRoot()));
+  _ui->actionDelete_all->setEnabled(enabled);
   _ui->actionInvert_selection->setEnabled(enabled);
   _ui->actionReverse_selected_edges->setEnabled(enabled);
   _ui->actionSelect_All->setEnabled(enabled);
+  _ui->actionSelect_All_Nodes->setEnabled(enabled);
+  _ui->actionSelect_All_Edges->setEnabled(enabled);
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionMake_selection_a_graph->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);

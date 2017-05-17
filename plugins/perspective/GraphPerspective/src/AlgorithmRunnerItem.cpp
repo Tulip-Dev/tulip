@@ -68,7 +68,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
     tooltip +=  " with current settings";
   }
 
-  if (plugin.getParameters().size() > 0) {
+  if (!plugin.getParameters().empty()) {
     _ui->parameters->setItemDelegate(new TulipItemDelegate);
   }
   else {
