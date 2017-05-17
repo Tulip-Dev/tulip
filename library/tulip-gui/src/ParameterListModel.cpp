@@ -28,7 +28,7 @@
 namespace tlp {
 
 bool cmp (ParameterDescription& i, ParameterDescription& j) {
-    return (i.getDirection() <j.getDirection());
+  return (i.getDirection() <j.getDirection());
 }
 
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
@@ -37,7 +37,7 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
 
   //sort params: IN_PARAM first, then OUT_PARAM, INOUT_PARAM last
   forEach(param,params.getParameters()) {
-      _params.push_back(param);
+    _params.push_back(param);
   }
 
   std::sort(_params.begin(),_params.end(),cmp);
