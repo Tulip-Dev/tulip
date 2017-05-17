@@ -262,9 +262,12 @@ inline void FTSimpleLayoutImpl::WrapTextI(const T *buf, const int len,
                 ++breakChar; --charCount;
             }
 
-            OutputWrapped(lineStart.getBufferFromHere(), breakCharCount,
-                          //breakItr.getBufferFromHere() - lineStart.getBufferFromHere(),
-                          position, renderMode, remainingWidth, bounds);
+            if (breakCharCount >= 0)
+            {
+                OutputWrapped(lineStart.getBufferFromHere(), breakCharCount,
+                              //breakItr.getBufferFromHere() - lineStart.getBufferFromHere(),
+                              position, renderMode, remainingWidth, bounds);
+            }
 
             // Store the start of the next line
             lineStart = breakChar;
