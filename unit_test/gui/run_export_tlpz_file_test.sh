@@ -1,0 +1,1 @@
+sh tulip_run_test.sh export_tlpz_file grid_approximation.tlp grid_approximation.tlp
