@@ -289,7 +289,9 @@ void ImportExportTest::importExportGraph(tlp::Graph* original) {
 void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename) {
   std::ostream *os = NULL;
 
-  if (filename.rfind(".gz") == (filename.length() - 3))
+  if ((filename.rfind(".gz") == (filename.length() - 3)) ||
+      (filename.rfind(".tlpz") == (filename.length() - 5)) ||
+      (filename.rfind(".tlpbz") == (filename.length() - 6)))
     os = tlp::getOgzstream(filename);
   else if (exportPluginName != "TLPB Export")
     os = tlp::getOutputFileStream(filename);
@@ -475,31 +477,6 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
 
   delete firstEdgeIt;
   delete secondEdgeIt;
-  /*firstEdgeIt = new StlIterator<edge, std::set<edge>::iterator>(fEdges.begin(), fEdges.end());
-  secondEdgeIt = new StlIterator<edge, std::set<edge>::iterator>(sEdges.begin(), sEdges.end());
-  while(firstEdgeIt->hasNext() && secondEdgeIt->hasNext()) {
-    edge firstEdge = firstEdgeIt->next();
-    edge secondEdge = secondEdgeIt->next();
-
-    unsigned int firstEdgeId = firstIdProperty->getEdgeValue(firstEdge);
-    unsigned int secondEdgeId = secondIdProperty->getEdgeValue(secondEdge);
-    assert(firstEdgeId == secondEdgeId);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("edges are not in the same order", firstEdgeId, secondEdgeId);
-
-    node firstEdgeSrc = first->source(firstEdge);
-    node firstEdgeTgt = first->target(firstEdge);
-    node secondEdgeSrc = second->source(secondEdge);
-    node secondEdgeTgt = second->target(secondEdge);
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("an edge from the second graph does not have the same source node as in the first graph", firstIdProperty->getNodeValue(firstEdgeSrc), secondIdProperty->getNodeValue(secondEdgeSrc));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("an edge from the second graph does not have the same target node as in the first graph", firstIdProperty->getNodeValue(firstEdgeTgt), secondIdProperty->getNodeValue(secondEdgeTgt));
-  }
-
-  CPPUNIT_ASSERT_MESSAGE("all edges of the first graph have not been iterated upon", !firstEdgeIt->hasNext());
-  CPPUNIT_ASSERT_MESSAGE("all edges of the second graph have not been iterated upon", !secondEdgeIt->hasNext());
-
-  delete firstEdgeIt;
-  delete secondEdgeIt;*/
   assert(fEdges == sEdges);
 
   // subgraphs test
@@ -542,6 +519,16 @@ void TulipSaveLoadGraphFunctionsTest::testTulipSaveLoadGraphFunctions() {
   testGraphsAreEqual(graph, loadedGraph);
   delete loadedGraph;
 
+  exportFilename = "test_tlp_gz_export_import.tlpz";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("TLP Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "TLP Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
   exportFilename = "test_tlpb_export_import.tlpb";
   tlp::saveGraph(graph, exportFilename);
   loadedGraph = importGraph("TLPB Import", exportFilename);
@@ -553,6 +540,16 @@ void TulipSaveLoadGraphFunctionsTest::testTulipSaveLoadGraphFunctions() {
   delete loadedGraph;
 
   exportFilename = "test_tlpb_gz_export_import.tlpb.gz";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("TLPB Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "TLPB Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
+  exportFilename = "test_tlpb_gz_export_import.tlpbz";
   tlp::saveGraph(graph, exportFilename);
   loadedGraph = importGraph("TLPB Import", exportFilename);
   testGraphsAreEqual(graph, loadedGraph);
