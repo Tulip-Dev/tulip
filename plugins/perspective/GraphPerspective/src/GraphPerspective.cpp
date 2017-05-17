@@ -884,8 +884,8 @@ void GraphPerspective::deleteSelectedElementsFromRootGraph() {
 }
 
 void GraphPerspective::clearGraph() {
-    if(QMessageBox::question(_mainWindow, "Clear graph content", "Do you really want to remove all nodes and edges from the current graph. This action cannot be undone", QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
-        _graphs->currentGraph()->clear();
+  if(QMessageBox::question(_mainWindow, "Clear graph content", "Do you really want to remove all nodes and edges from the current graph. This action cannot be undone", QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+    _graphs->currentGraph()->clear();
 }
 
 void GraphPerspective::deleteSelectedElements(bool fromRoot) {
@@ -947,25 +947,30 @@ void GraphPerspective::selectAll(bool nodes, bool edges) {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
+
   if(nodes) {
-      const vector<node>& nodes = graph->nodes();
-      for(unsigned i=0;i<nodes.size();++i)
-          selection->setNodeValue(nodes[i],true);
+    const vector<node>& nodes = graph->nodes();
+
+    for(unsigned i=0; i<nodes.size(); ++i)
+      selection->setNodeValue(nodes[i],true);
   }
+
   if(edges) {
-      const vector<edge>& edges = graph->edges();
-      for(unsigned i=0;i<edges.size();++i)
-          selection->setEdgeValue(edges[i],true);
+    const vector<edge>& edges = graph->edges();
+
+    for(unsigned i=0; i<edges.size(); ++i)
+      selection->setEdgeValue(edges[i],true);
   }
+
   Observable::unholdObservers();
 }
 
 void GraphPerspective::selectAllEdges() {
-    selectAll(false, true);
+  selectAll(false, true);
 }
 
 void GraphPerspective::selectAllNodes() {
-    selectAll(true, false);
+  selectAll(true, false);
 }
 
 void GraphPerspective::undo() {
