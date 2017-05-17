@@ -131,7 +131,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
       if (info.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
       }
-      else if (info.getDirection() == OUT_PARAM || info.getName() == "result") {
+      else if (info.getDirection() == OUT_PARAM) {
         return QIcon(":/tulip/gui/icons/32/output.png");
       }
       else {
