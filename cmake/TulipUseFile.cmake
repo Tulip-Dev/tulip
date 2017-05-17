@@ -136,6 +136,13 @@ MACRO(SET_COMPILER_OPTIONS)
       ENDIF(X64)
 
     ENDIF(MSVC)
+	
+    # Need to use response files with MSYS Makefiles and recent CMake version (>= 3.7) bundled by MSYS2
+    # otherwise OGDF library in thirdparty fails to link
+    IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
+      SET(CMAKE_NEED_RESPONSE TRUE CACHE BOOL "" FORCE)
+    ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
+	
   ENDIF(WIN32)
 
   # Use debug mode with GLIBC
