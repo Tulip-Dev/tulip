@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-bool cmp (ParameterDescription& i, ParameterDescription& j) {
+bool cmp (const ParameterDescription& i, const ParameterDescription& j) {
   return (i.getDirection() <j.getDirection());
 }
 
