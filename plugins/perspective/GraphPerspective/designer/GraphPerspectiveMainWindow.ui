@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>695</height>
+    <height>743</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -1234,23 +1234,47 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>19</height>
+     <height>35</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <widget class="QMenu" name="menuDelete">
+     <property name="title">
+      <string>&amp;Delete</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
+     </property>
+     <addaction name="actionDelete"/>
+     <addaction name="actionDelete_from_the_root_graph"/>
+     <addaction name="actionDelete_all"/>
+    </widget>
+    <widget class="QMenu" name="menuSelect">
+     <property name="title">
+      <string>Select</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/GraphPerspective.qrc">
+       <normaloff>:/tulip/graphperspective/icons/16/select-all.png</normaloff>:/tulip/graphperspective/icons/16/select-all.png</iconset>
+     </property>
+     <addaction name="actionSelect_All"/>
+     <addaction name="actionSelect_All_Nodes"/>
+     <addaction name="actionSelect_All_Edges"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
-    <addaction name="actionDelete"/>
-    <addaction name="actionDelete_from_the_root_graph"/>
     <addaction name="separator"/>
-    <addaction name="actionSelect_All"/>
+    <addaction name="menuDelete"/>
+    <addaction name="separator"/>
+    <addaction name="menuSelect"/>
     <addaction name="actionInvert_selection"/>
     <addaction name="actionCancel_selection"/>
     <addaction name="actionMake_selection_a_graph"/>
@@ -1467,7 +1491,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Delete</string>
+    <string>&amp;Delete Selection</string>
    </property>
    <property name="toolTip">
     <string>Delete selected elements from the current graph only</string>
@@ -1779,7 +1803,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>Delete from t&amp;he root graph</string>
+    <string>Delete Selection from t&amp;he root graph</string>
    </property>
    <property name="toolTip">
     <string>Delete selected elements from the whole graph hierarchy (not only from the current graph)</string>
@@ -1793,7 +1817,22 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Reverse selected edges</string>
+    <string>Re&amp;verse selected edges</string>
+   </property>
+  </action>
+  <action name="actionDelete_all">
+   <property name="text">
+    <string>D&amp;elete all</string>
+   </property>
+  </action>
+  <action name="actionSelect_All_Nodes">
+   <property name="text">
+    <string>Select All Nodes</string>
+   </property>
+  </action>
+  <action name="actionSelect_All_Edges">
+   <property name="text">
+    <string>Select All Edges</string>
    </property>
   </action>
  </widget>

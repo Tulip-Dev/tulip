@@ -132,13 +132,16 @@ protected slots:
   void panelFocused(tlp::View*);
   void focusedPanelGraphSet(tlp::Graph*);
   void focusedPanelSynchronized();
+  void clearGraph();
   void deleteSelectedElements(bool fromRoot=false);
   void deleteSelectedElementsFromRootGraph();
   void invertSelection();
   void reverseSelectedEdges();
   void cancelSelection();
   void make_graph();
-  void selectAll();
+  void selectAll(bool nodes=true, bool edges=true);
+  void selectAllNodes();
+  void selectAllEdges();
   void undo();
   void redo();
   void cut();
