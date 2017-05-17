@@ -25,13 +25,10 @@
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
 
-
-#include <QVector>
-
 namespace tlp {
 
 class TLP_QT_SCOPE ParameterListModel : public TulipModel {
-  QVector<ParameterDescription> _params;
+  std::vector<ParameterDescription> _params;
   tlp::DataSet _data;
   tlp::Graph* _graph;
 

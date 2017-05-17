@@ -27,22 +27,20 @@
 
 namespace tlp {
 
+bool cmp (ParameterDescription& i, ParameterDescription& j) {
+    return (i.getDirection() <j.getDirection());
+}
+
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
   ParameterDescription param;
-  QVector<ParameterDescription> outParams;
-  // first add in parameters
+
+  //sort params: IN_PARAM first, then OUT_PARAM, INOUT_PARAM last
   forEach(param,params.getParameters()) {
-    if (param.getDirection() != OUT_PARAM)
       _params.push_back(param);
-    else
-      outParams.push_back(param);
   }
 
-  // then add out parameters
-  for(int i = 0; i < outParams.size(); ++i) {
-    _params.push_back(outParams[i]);
-  }
+  std::sort(_params.begin(),_params.end(),cmp);
 
   // no sort, keep the predefined ordering
   params.buildDefaultDataSet(_data,graph);
