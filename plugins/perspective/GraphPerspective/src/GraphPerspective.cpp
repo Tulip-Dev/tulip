@@ -947,13 +947,21 @@ void GraphPerspective::selectAll(bool nodes, bool edges) {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
+  selection->setAllNodeValue(false);
+  selection->setAllEdgeValue(false);
 
   if(nodes) {
-    selection->setAllNodeValue(true, graph);
+    const vector<node>& nodes = graph->nodes();
+    const unsigned int nbNodes = nodes.size();
+    for (unsigned int i = 0 ; i < nbNodes; ++i)
+      selection->setNodeValue(nodes[i],true);
   }
 
   if(edges) {
-    selection->setAllEdgeValue(true, graph);
+    const vector<edge>& edges = graph->edges();
+    const unsigned int nbEdges = edges.size();
+    for (unsigned int i = 0; i < nbEdges; ++i)
+      selection->setEdgeValue(edges[i],true);
   }
 
   Observable::unholdObservers();
