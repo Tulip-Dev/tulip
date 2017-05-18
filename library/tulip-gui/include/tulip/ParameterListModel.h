@@ -21,6 +21,8 @@
 #ifndef PARAMETERLISTMODEL_H
 #define PARAMETERLISTMODEL_H
 
+#include <vector>
+
 #include <tulip/TulipModel.h>
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
