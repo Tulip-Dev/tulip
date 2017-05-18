@@ -951,19 +951,11 @@ void GraphPerspective::selectAll(bool nodes, bool edges) {
   selection->setAllEdgeValue(false);
 
   if(nodes) {
-    const vector<node>& nodes = graph->nodes();
-    const unsigned int nbNodes = nodes.size();
-
-    for (unsigned int i = 0 ; i < nbNodes; ++i)
-      selection->setNodeValue(nodes[i],true);
+    selection->setValueToGraphNodes(true, graph);
   }
 
   if(edges) {
-    const vector<edge>& edges = graph->edges();
-    const unsigned int nbEdges = edges.size();
-
-    for (unsigned int i = 0; i < nbEdges; ++i)
-      selection->setEdgeValue(edges[i],true);
+    selection->setValueToGraphEdges(true, graph);
   }
 
   Observable::unholdObservers();

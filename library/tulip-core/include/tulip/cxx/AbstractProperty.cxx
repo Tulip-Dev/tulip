@@ -99,8 +99,21 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setEdgeValue(const tlp::edge e, t
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v) {
+  Tprop::notifyBeforeSetAllNodeValue();
+  nodeDefaultValue = v;
+  nodeProperties.setAll(v);
+  Tprop::notifyAfterSetAllNodeValue();
+}
+//=============================================================
+template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
-  if (graph && this->getGraph()->isDescendantGraph(graph)) {
+  setValueToGraphNodes(v, graph);
+}
+//=============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setValueToGraphNodes(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
+  if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
     const std::vector<node>& nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
 
@@ -108,17 +121,24 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(typename tlp::Sto
       setNodeValue(nodes[i], v);
     }
   }
-  else if (!graph || this->getGraph() == graph) {
-    Tprop::notifyBeforeSetAllNodeValue();
-    nodeDefaultValue = v;
-    nodeProperties.setAll(v);
-    Tprop::notifyAfterSetAllNodeValue();
-  }
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v) {
+  Tprop::notifyBeforeSetAllEdgeValue();
+  edgeDefaultValue = v;
+  edgeProperties.setAll(v);
+  Tprop::notifyAfterSetAllEdgeValue();
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph) {
-  if (graph && this->getGraph()->isDescendantGraph(graph)) {
+  setValueToGraphEdges(v, graph);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setValueToGraphEdges(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph) {
+  if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
     const std::vector<edge>& edges = graph->edges();
     unsigned int nbEdges = edges.size();
 
@@ -126,14 +146,8 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(typename tlp::Sto
       setEdgeValue(edges[i], v);
     }
   }
-  else if (!graph || this->getGraph() == graph) {
-    Tprop::notifyBeforeSetAllEdgeValue();
-    edgeDefaultValue = v;
-    edgeProperties.setAll(v);
-    Tprop::notifyAfterSetAllEdgeValue();
-  }
 }
-
+//============================================================
 template <class Tnode, class Tedge, class Tprop>
 int tlp::AbstractProperty<Tnode,Tedge,Tprop>::compare(const node n1,const node n2)const {
   const typename Tnode::RealType& n1Value = getNodeValue(n1);

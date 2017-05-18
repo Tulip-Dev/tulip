@@ -370,8 +370,8 @@ void QuickAccessBarImpl::setLabelColor(const QColor& c) {
   }
 
   if (hasSelected == false) {
-    labelColors->setAllNodeValue(color, _mainView->graph());
-    labelBorderColors->setAllNodeValue(color, _mainView->graph());
+    labelColors->setValueToGraphNodes(color, _mainView->graph());
+    labelBorderColors->setValueToGraphNodes(color, _mainView->graph());
   }
 
   edge e;
@@ -382,8 +382,8 @@ void QuickAccessBarImpl::setLabelColor(const QColor& c) {
   }
 
   if (hasSelected == false) {
-    labelColors->setAllEdgeValue(color, _mainView->graph());
-    labelBorderColors->setAllEdgeValue(color, _mainView->graph());
+    labelColors->setValueToGraphEdges(color, _mainView->graph());
+    labelBorderColors->setValueToGraphEdges(color, _mainView->graph());
   }
 
   Observable::unholdObservers();
@@ -407,7 +407,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
     }
 
     if (hasSelected == false)
-      prop->setAllNodeValue(color, _mainView->graph());
+      prop->setValueToGraphNodes(color, _mainView->graph());
   }
   else {
     edge e;
@@ -417,7 +417,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
     }
 
     if (hasSelected == false)
-      prop->setAllEdgeValue(color, _mainView->graph());
+      prop->setValueToGraphEdges(color, _mainView->graph());
   }
 
   Observable::unholdObservers();
@@ -554,9 +554,9 @@ void QuickAccessBarImpl::selectFont() {
 
   Observable::holdObservers();
 
-  inputData()->getElementFont()->setAllNodeValue(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
+  inputData()->getElementFont()->setValueToGraphNodes(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
 
-  inputData()->getElementFont()->setAllEdgeValue(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
+  inputData()->getElementFont()->setValueToGraphEdges(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
 
   Observable::unholdObservers();
   updateFontButtonStyle();

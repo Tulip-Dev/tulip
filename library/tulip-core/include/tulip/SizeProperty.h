@@ -55,9 +55,12 @@ public :
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v, const Graph *graph = NULL);
+  virtual void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v);
+  virtual void setValueToGraphNodes(tlp::StoredType<Size>::ReturnedConstValue v, const Graph *graph );
 
   int compare(const node n1, const node n2)const;
+
+  _DEPRECATED virtual void setAllNodeValue( tlp::StoredType<Size>::ReturnedConstValue v, const Graph *graph );
 
 protected:
   void resetMinMax();

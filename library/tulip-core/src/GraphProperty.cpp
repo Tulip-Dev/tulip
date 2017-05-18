@@ -53,7 +53,30 @@ GraphProperty::~GraphProperty() {
   }
 }
 //==============================
-void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g, const Graph *graph) {
+void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) {
+  //remove all observed graphs if any
+  Iterator<node> *it = getNonDefaultValuatedNodes();
+
+  while(it->hasNext()) {
+    node n = it->next();
+    getNodeValue(n)->removeListener(this);
+  }
+
+  delete it;
+  set<node> emptySet;
+  referencedGraph.setAll(emptySet);
+
+  if (getNodeDefaultValue() != NULL) {
+    getNodeDefaultValue()->removeListener(this);
+  }
+
+  AbstractGraphProperty::setAllNodeValue(g);
+
+  if (g != NULL)
+    g->addListener(this);
+}
+//==============================
+void GraphProperty::setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g, const Graph *graph) {
   //remove all observed graphs if any
   Iterator<node> *it = getNonDefaultValuatedNodes(graph);
 
@@ -70,7 +93,7 @@ void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::Return
     getNodeDefaultValue()->removeListener(this);
   }
 
-  AbstractGraphProperty::setAllNodeValue(g, graph);
+  AbstractGraphProperty::setValueToGraphNodes(g, graph);
 
   if (g != NULL)
     g->addListener(this);
@@ -140,7 +163,10 @@ bool GraphProperty::setNodeStringValue(const node, const std::string &) {
 }
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &, const tlp::Graph*) {
+bool GraphProperty::setAllNodeStringValue(const std::string &) {
+  return false;
+}
+bool GraphProperty::setStringValueToGraphNodes(const std::string &, const tlp::Graph*) {
   return false;
 }
 //=============================================================
@@ -150,7 +176,10 @@ bool GraphProperty::setEdgeStringValue(const edge, const std::string&) {
 }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string&, const tlp::Graph*) {
+bool GraphProperty::setAllEdgeStringValue(const std::string&) {
+  return false;
+}
+bool GraphProperty::setStringValueToGraphEdges(const std::string&, const tlp::Graph*) {
   return false;
 }
 //=============================================================

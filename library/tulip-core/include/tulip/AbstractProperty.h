@@ -123,26 +123,90 @@ public:
    * All previous values are lost and the given value is assigned as the default one to the future added nodes.
    *
    * @param v The value to set to all nodes.
-   * @param graph (since Tulip 4.10) An optional descendant graph from the one associated to that property (itself included).
-   * If provided, only the nodes from that descendant graph will have their value modified.
-   * In the case of the descendant graph is different from the one associated to that property, the default node value will not be modified.
-   * @warning If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
    *
    **/
-  virtual void setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph = NULL);
+  virtual void setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v);
+
+  /**
+   * @brief Sets the value of all nodes in a graph and notify the observers.
+   * Only the nodes from that graph will have their value modified in the property
+   * and the default node value will not be modified.
+   *
+   * @since Tulip 4.10
+   *
+   * @deprecated Since Tulip 4.11 this method signature is deprecated, use method setValueToGraphNodes instead
+   *
+   * @param v The value to set to all nodes.
+   * @param graph A graph that defines the set of nodes
+   *
+   *
+   * @warning If the provided graph is not a descendant of the one associated to that property (including itself),
+   * no node value will be modified.
+   *
+   **/
+  _DEPRECATED virtual void setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph);
+
+  /**
+   * @brief Sets the value of all nodes in a graph and notify the observers.
+   * Only the nodes from that graph will have their value modified in the property
+   * and the default node value will not be modified.
+   *
+   * @since Tulip 4.11
+   *
+   * @param v The value to set to all nodes.
+   * @param graph A graph that defines the set of nodes
+   *
+   *
+   * @warning If the provided graph is not a descendant of the one associated to that property (including itself),
+   * no node value will be modified.
+   *
+   **/
+  virtual void setValueToGraphNodes(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph);
 
   /**
    * @brief Sets the value of all edges and notify the observers.
    * All previous values are lost and the given value is assigned as the default one to the future added edges.
-   * @param graph (since Tulip 4.10) An optional descendant graph from the one associated to that property (itself included).
-   * If provided, only the edges from that descendant graph will have their value modified.
-   * In the case of the descendant graph is different from the one associated to that property, the default edge value will not be modified.
-   * @warning If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
    *
    * @param v The value to set to all edges.
    *
    **/
-  virtual void setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph = NULL);
+  virtual void setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v);
+
+  /**
+   * @brief Sets the value of all edges in a graph and notify the observers.
+   * Only the edges from that graph will have their value modified in the property
+   * and the default edge value will not be modified.
+   *
+   * @since Tulip 4.10
+   *
+   * @deprecated Since Tulip 4.11 this method signature is deprecated, use method setValueToGraphEdges instead
+   *
+   * @param v The value to set to all edges.
+   * @param graph A graph that defines the set of edges
+   *
+   *
+   * @warning If the provided graph is not a descendant of the one associated to that property (including itself),
+   * no edge value will be modified.
+   *
+   **/
+  _DEPRECATED virtual void setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph);
+
+  /**
+   * @brief Sets the value of all edges in a graph and notify the observers.
+   * Only the edges from that graph will have their value modified in the property
+   * and the default edge value will not be modified.
+   *
+   * @since Tulip 4.11
+   *
+   * @param v The value to set to all edges.
+   * @param graph A graph on which to modify
+   *
+   *
+   * @warning If the provided graph is not a descendant of the one associated to that property (including itself),
+   * no edge value will be modified.
+   *
+   **/
+  virtual void setValueToGraphEdges(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph);
   //=================================================================================
 
   /**
@@ -250,7 +314,7 @@ public:
   virtual bool setNodeStringValue( const node inN, const std::string & inV ) {
     typename Tnode::RealType v;
 
-    if( !Tnode::fromString(v,inV) )
+    if( !Tnode::fromString( v, inV ) )
       return false;
 
     setNodeValue( inN, v );
@@ -259,28 +323,52 @@ public:
   virtual bool setEdgeStringValue( const edge inE, const std::string & inV ) {
     typename Tedge::RealType v;
 
-    if( !Tedge::fromString(v,inV) )
+    if( !Tedge::fromString( v, inV ) )
       return false;
 
     setEdgeValue( inE, v );
     return true;
   }
-  virtual bool setAllNodeStringValue( const std::string & inV , const Graph *graph = NULL ) {
+  virtual bool setAllNodeStringValue( const std::string & inV ) {
     typename Tnode::RealType v;
 
-    if( !Tnode::fromString(v,inV) )
+    if( !Tnode::fromString( v, inV ) )
       return false;
 
-    setAllNodeValue( v , graph );
+    setAllNodeValue( v );
     return true;
   }
-  virtual bool setAllEdgeStringValue( const std::string & inV , const Graph *graph = NULL ) {
+  _DEPRECATED virtual bool setAllNodeStringValue( const std::string & inV , const Graph *graph ) {
+    return setStringValueToGraphNodes(inV, graph);
+  }
+  virtual bool setStringValueToGraphNodes( const std::string & inV , const Graph *graph ) {
+    typename Tnode::RealType v;
+
+    if( !Tnode::fromString( v, inV ) )
+      return false;
+
+    setValueToGraphNodes( v , graph );
+    return true;
+  }
+  virtual bool setAllEdgeStringValue( const std::string & inV ) {
+    typename Tedge::RealType v;
+
+    if( !Tedge::fromString(v ,inV ) )
+      return false;
+
+    setAllEdgeValue( v );
+    return true;
+  }
+  _DEPRECATED virtual bool setAllEdgeStringValue( const std::string & inV , const Graph *graph ) {
+    return setStringValueToGraphEdges(inV, graph);
+  }
+  virtual bool setStringValueToGraphEdges( const std::string & inV , const Graph *graph ) {
     typename Tedge::RealType v;
 
     if( !Tedge::fromString(v,inV) )
       return false;
 
-    setAllEdgeValue( v , graph );
+    setValueToGraphEdges( v , graph );
     return true;
   }
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;

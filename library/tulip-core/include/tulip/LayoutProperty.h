@@ -285,12 +285,15 @@ public:
   //unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node,
-                            tlp::StoredType<Coord>::ReturnedConstValue v);
+  virtual void setNodeValue(const node, tlp::StoredType<Coord>::ReturnedConstValue v);
   virtual void setEdgeValue(const edge, tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
-                               const Graph *graph = NULL);
-  virtual void setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph = NULL);
+  virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v);
+  virtual void setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph );
+  virtual void setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v);
+  virtual void setValueToGraphEdges(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph );
+
+  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph );
+  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph );
 
 protected:
   virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);
