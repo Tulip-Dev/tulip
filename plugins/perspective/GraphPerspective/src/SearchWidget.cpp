@@ -346,6 +346,7 @@ void SearchWidget::search() {
 
   QString searchOpDescription;
   unsigned int resultsCountNodes = 0, resultsCountEdges=0;
+
   if (_ui->selectionModeCombo->currentIndex() == 0) {// replace current selection
     output->copy(result);
     searchOpDescription = "found";
@@ -376,19 +377,19 @@ void SearchWidget::search() {
   else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
       forEach(n,output->getNodesEqualTo(true)) {
-          if(result->getNodeValue(n)) {
-              output->setNodeValue(n,false);
-              resultsCountNodes++;
-          }
+        if(result->getNodeValue(n)) {
+          output->setNodeValue(n,false);
+          resultsCountNodes++;
+        }
       }
     }
 
     if (onEdges) {
       forEach(e,output->getEdgesEqualTo(true)) {
-          if(result->getEdgeValue(e)) {
-              output->setEdgeValue(e,false);
-              resultsCountEdges++;
-          }
+        if(result->getEdgeValue(e)) {
+          output->setEdgeValue(e,false);
+          resultsCountEdges++;
+        }
       }
     }
 
