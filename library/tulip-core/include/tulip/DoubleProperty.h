@@ -53,10 +53,11 @@ public :
                             tlp::StoredType<double>::ReturnedConstValue v);
   virtual void setEdgeValue(const edge e,
                             tlp::StoredType<double>::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                               const Graph* graph = NULL);
-  virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                               const Graph *graph = NULL);
+  virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v);
+
+  virtual void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v, const Graph* graph);
+  virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v);
+  virtual void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph);
 
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
                                       MAX_CALC = 3, MIN_CALC = 4
@@ -103,6 +104,9 @@ public :
 
     return newProp;
   }
+
+  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph);
+  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v, const Graph* graph);
 
 private:
   // override Observable::treatEvent

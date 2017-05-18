@@ -64,14 +64,32 @@ void IntegerProperty::setEdgeValue(const edge e,
   IntegerMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void IntegerProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
+void IntegerProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v) {
   IntegerMinMaxProperty::updateAllNodesValues(v);
-  IntegerMinMaxProperty::setAllNodeValue(v, graph);
+  IntegerMinMaxProperty::setAllNodeValue(v);
+}
+//=================================================================================
+void IntegerProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
+  setValueToGraphNodes(v, graph);
+}
+//=================================================================================
+void IntegerProperty::setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
+  IntegerMinMaxProperty::updateAllNodesValues(v);
+  IntegerMinMaxProperty::setValueToGraphNodes(v, graph);
+}
+//=================================================================================
+void IntegerProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v) {
+  IntegerMinMaxProperty::updateAllEdgesValues(v);
+  IntegerMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
 void IntegerProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
+  setValueToGraphEdges(v, graph);
+}
+//=================================================================================
+void IntegerProperty::setValueToGraphEdges(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
   IntegerMinMaxProperty::updateAllEdgesValues(v);
-  IntegerMinMaxProperty::setAllEdgeValue(v, graph);
+  IntegerMinMaxProperty::setValueToGraphEdges(v, graph);
 }
 //=============================================================
 void IntegerProperty::treatEvent(const Event& evt) {

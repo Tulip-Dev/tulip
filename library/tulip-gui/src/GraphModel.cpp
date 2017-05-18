@@ -339,28 +339,40 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
   return QVariant();
 }
 
-#define SET_ALL_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllNodeValue(v.value< TYPE >(), graph)
+// call when one wants to set value on a set of nodes
+template<typename PROP, typename TYPE>
+inline void setValueToGraphNodes(PropertyInterface* prop, const TYPE &value, const Graph *graph) {
+  // if a graph is provided, it means that we want to modify the property value for its nodes but without setting the default property value
+  if (graph) {
+    static_cast<PROP*>(prop)->setValueToGraphNodes(value, graph);
+  // otherwise it means that we want to set the same value to the nodes of the graph whose property is local and change the default property value
+  } else {
+    static_cast<PROP*>(prop)->setAllNodeValue(value);
+  }
+}
+
+#define SET_ALL_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) setValueToGraphNodes<PROP>(prop, v.value<TYPE>(), graph)
 bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v, Graph *graph) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
     if (prop->getName() == "viewShape")
-      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<NodeShape::NodeShapes>(), graph);
+      setValueToGraphNodes<IntegerProperty>(prop, v.value<NodeShape::NodeShapes>(), graph);
     else if (prop->getName() == "viewLabelPosition")
-      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<LabelPosition::LabelPositions>(), graph);
+      setValueToGraphNodes<IntegerProperty>(prop, v.value<LabelPosition::LabelPositions>(), graph);
     else
-      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<int>(), graph);
+      setValueToGraphNodes<IntegerProperty>(prop, v.value<int>(), graph);
   }
   else if (dynamic_cast<StringProperty*>(prop) != NULL) {
     if (prop->getName() == "viewFont")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(QStringToTlpString(v.value<TulipFont>().fontFile()), graph);
+      setValueToGraphNodes<StringProperty>(prop, QStringToTlpString(v.value<TulipFont>().fontFile()), graph);
     else if (prop->getName() == "viewIcon")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(QStringToTlpString(v.value<TulipFontIcon>().iconName), graph);
+      setValueToGraphNodes<StringProperty>(prop, QStringToTlpString(v.value<TulipFontIcon>().iconName), graph);
     else if (prop->getName() == "viewTexture")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(QStringToTlpString(v.value<TextureFile>().texturePath), graph);
+      setValueToGraphNodes<StringProperty>(prop, QStringToTlpString(v.value<TextureFile>().texturePath), graph);
     else
-      static_cast<StringProperty*>(prop)->setAllNodeValue(QStringToTlpString(v.value<QString>()), graph);
+      setValueToGraphNodes<StringProperty>(prop, QStringToTlpString(v.value<QString>()), graph);
   }
   else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
-    static_cast<BooleanVectorProperty*>(prop)->setAllNodeValue(v.value<QVector<bool> >().toStdVector(), graph);
+    setValueToGraphNodes<BooleanVectorProperty>(prop, v.value<QVector<bool> >().toStdVector(), graph);
 
   STANDARD_NODE_CHECKS(SET_ALL_NODE_VALUE)
   else
@@ -514,39 +526,49 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
 
   return true;
 }
-#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllEdgeValue(v.value< TYPE >(), graph)
+
+// call when one wants to set value on a set of edges
+template<typename PROP, typename TYPE>
+inline void setValueToGraphEdges(PropertyInterface* prop, const TYPE &value, const Graph *graph) {
+  // if a graph is provided, it means that we want to modify the property value for its nodes but without setting the default property value
+  if (graph) {
+    static_cast<PROP*>(prop)->setValueToGraphEdges(value, graph);
+  // otherwise it means that we want to set the same value to the nodes of the graph whose property is local and change the default property value
+  } else {
+    static_cast<PROP*>(prop)->setAllEdgeValue(value);
+  }
+}
+
+#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) setValueToGraphEdges<PROP>(prop, v.value<TYPE>(), graph)
 bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v, Graph *graph) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
     if (prop->getName() == "viewShape")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>(), graph);
+      setValueToGraphEdges<IntegerProperty>(prop, v.value<EdgeShape::EdgeShapes>(), graph);
 
-    else if (prop->getName() == "viewTgtAnchorShape")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
-
-    else if (prop->getName() == "viewSrcAnchorShape")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
+    else if (prop->getName() == "viewSrcAnchorShape" || prop->getName() == "viewTgtAnchorShape")
+      setValueToGraphEdges<IntegerProperty>(prop, v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
 
     else if (prop->getName() == "viewLabelPosition")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<LabelPosition::LabelPositions>(), graph);
+      setValueToGraphEdges<IntegerProperty>(prop, v.value<LabelPosition::LabelPositions>(), graph);
 
     else
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<int>(), graph);
+      setValueToGraphEdges<IntegerProperty>(prop, v.value<int>(), graph);
   }
   else if (dynamic_cast<StringProperty*>(prop) != NULL) {
     if (prop->getName() == "viewFont")
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(QStringToTlpString(v.value<TulipFont>().fontFile()), graph);
+      setValueToGraphEdges<StringProperty>(prop, QStringToTlpString(v.value<TulipFont>().fontFile()), graph);
 
     else if (prop->getName() == "viewIcon")
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(QStringToTlpString(v.value<TulipFontIcon>().iconName), graph);
+      setValueToGraphEdges<StringProperty>(prop, QStringToTlpString(v.value<TulipFontIcon>().iconName), graph);
 
     else if (prop->getName() == "viewTexture")
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(QStringToTlpString(v.value<TextureFile>().texturePath), graph);
+      setValueToGraphEdges<StringProperty>(prop, QStringToTlpString(v.value<TextureFile>().texturePath), graph);
 
     else
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(QStringToTlpString(v.value<QString>()), graph);
+      setValueToGraphEdges<StringProperty>(prop, QStringToTlpString(v.value<QString>()), graph);
   }
   else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
-    static_cast<BooleanVectorProperty*>(prop)->setAllEdgeValue(v.value<QVector<bool> >().toStdVector(), graph);
+    setValueToGraphEdges<BooleanVectorProperty>(prop, v.value<QVector<bool> >().toStdVector(), graph);
 
   STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
   else

@@ -555,14 +555,32 @@ void LayoutProperty::setEdgeValue(const edge e, tlp::StoredType<std::vector<Coor
   LayoutMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph) {
+void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v) {
   resetBoundingBox();
-  LayoutMinMaxProperty::setAllNodeValue(v, graph);
+  LayoutMinMaxProperty::setAllNodeValue(v);
+}
+//=================================================================================
+void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph) {
+  setValueToGraphNodes(v, graph);
+}
+//=================================================================================
+void LayoutProperty::setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph) {
+  resetBoundingBox();
+  LayoutMinMaxProperty::setValueToGraphNodes(v, graph);
+}
+//=================================================================================
+void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v) {
+  resetBoundingBox();
+  LayoutMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
 void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph) {
+  setValueToGraphEdges(v, graph);
+}
+//=================================================================================
+void LayoutProperty::setValueToGraphEdges(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph) {
   resetBoundingBox();
-  LayoutMinMaxProperty::setAllEdgeValue(v, graph);
+  LayoutMinMaxProperty::setValueToGraphEdges(v, graph);
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(const Graph *sg) const {

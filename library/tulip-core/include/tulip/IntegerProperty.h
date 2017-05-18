@@ -53,10 +53,11 @@ public :
                             tlp::StoredType<int>::ReturnedConstValue v);
   virtual void setEdgeValue(const edge e,
                             tlp::StoredType<int>::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v,
-                               const Graph *graph = NULL);
-  virtual void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v,
-                               const Graph *graph = NULL);
+  virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v);
+
+  virtual void setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
+  virtual void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v);
+  virtual void setValueToGraphEdges(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
 
   int compare(const node n1, const node n2) const;
   int compare(const edge e1, const edge e2) const;
@@ -97,6 +98,9 @@ public :
 
     return newProp;
   }
+
+  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
+  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
 
 protected:
   virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &);
