@@ -27,20 +27,22 @@
 
 namespace tlp {
 
-bool cmp (const ParameterDescription& i, const ParameterDescription& j) {
-  return (i.getDirection() <j.getDirection());
-}
-
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
   ParameterDescription param;
-
-  //sort params: IN_PARAM first, then OUT_PARAM, INOUT_PARAM last
+  std::vector<ParameterDescription> outParams;
+  // first add in parameters
   forEach(param,params.getParameters()) {
-    _params.push_back(param);
+    if (param.getDirection() != OUT_PARAM)
+      _params.push_back(param);
+    else
+      outParams.push_back(param);
   }
 
-  std::sort(_params.begin(),_params.end(),cmp);
+  // then add out parameters
+  for(unsigned int i = 0; i < outParams.size(); ++i) {
+    _params.push_back(outParams[i]);
+  }
 
   // no sort, keep the predefined ordering
   params.buildDefaultDataSet(_data,graph);
@@ -129,7 +131,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
       if (info.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
       }
-      else if (info.getDirection() == OUT_PARAM) {
+      else if (info.getDirection() == OUT_PARAM || info.getName() == "result") {
         return QIcon(":/tulip/gui/icons/32/output.png");
       }
       else {
