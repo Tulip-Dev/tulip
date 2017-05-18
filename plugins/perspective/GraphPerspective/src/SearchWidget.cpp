@@ -345,21 +345,29 @@ void SearchWidget::search() {
   edge e;
 
   QString searchOpDescription;
-
+  unsigned int resultsCountNodes = 0, resultsCountEdges=0;
   if (_ui->selectionModeCombo->currentIndex() == 0) {// replace current selection
     output->copy(result);
     searchOpDescription = "found";
+    forEach(n, result->getNodesEqualTo(true)) {
+      resultsCountNodes++;
+    }
+    forEach(e, result->getEdgesEqualTo(true)) {
+      resultsCountEdges++;
+    }
   }
   else if (_ui->selectionModeCombo->currentIndex() == 1) {   // add to current selection
     if (onNodes) {
       forEach(n,result->getNodesEqualTo(true)) {
         output->setNodeValue(n,true);
+        resultsCountNodes++;
       }
     }
 
     if (onEdges) {
       forEach(e,result->getEdgesEqualTo(true)) {
         output->setEdgeValue(e,true);
+        resultsCountEdges++;
       }
     }
 
@@ -367,14 +375,20 @@ void SearchWidget::search() {
   }
   else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      forEach(n,result->getNodesEqualTo(true)) {
-        output->setNodeValue(n,false);
+      forEach(n,output->getNodesEqualTo(true)) {
+          if(result->getNodeValue(n)) {
+              output->setNodeValue(n,false);
+              resultsCountNodes++;
+          }
       }
     }
 
     if (onEdges) {
-      forEach(e,result->getEdgesEqualTo(true)) {
-        output->setEdgeValue(e,false);
+      forEach(e,output->getEdgesEqualTo(true)) {
+          if(result->getEdgeValue(e)) {
+              output->setEdgeValue(e,false);
+              resultsCountEdges++;
+          }
       }
     }
 
@@ -383,18 +397,19 @@ void SearchWidget::search() {
   else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
     output = result;
     searchOpDescription = "found but not added to selection";
+    forEach(n, result->getNodesEqualTo(true)) {
+      resultsCountNodes++;
+    }
+    forEach(e, result->getEdgesEqualTo(true)) {
+      resultsCountEdges++;
+    }
   }
 
   if (deleteTermB)
     delete b;
 
-  unsigned int resultsCountNodes = 0, resultsCountEdges=0;
-  forEach(n, result->getNodesEqualTo(true)) {
-    resultsCountNodes++;
-  }
-  forEach(e, result->getEdgesEqualTo(true)) {
-    resultsCountEdges++;
-  }
+
+
   delete result;
 
   if(onNodes&&!onEdges)
