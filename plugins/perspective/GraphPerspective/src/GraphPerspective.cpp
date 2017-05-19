@@ -1237,9 +1237,9 @@ void GraphPerspective::CSVImport() {
 
   // get the number of line displayed in the logger
   unsigned int nbLogsBefore = _logger->count();
-  
+
   wizard.setGraph(g);
-  
+
   g->push();
   Observable::holdObservers();
   int result = wizard.exec();
@@ -1269,7 +1269,7 @@ void GraphPerspective::CSVImport() {
       showStartPanels(g);
 
     if ((nbLogsAfter != nbLogsBefore) &&
-	(QMessageBox::question(_mainWindow, "CSV Parse errors found", QString("When parsing your CSV file,<br/> %1 error(s) has been encountered.<br/>Do you want to see them?").arg(nbLogsAfter - nbLogsBefore), QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes))
+        (QMessageBox::question(_mainWindow, "CSV Parse errors found", QString("When parsing your CSV file,<br/> %1 error(s) has been encountered.<br/>Do you want to see them?").arg(nbLogsAfter - nbLogsBefore), QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes))
       showLogger();
   }
 

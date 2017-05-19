@@ -345,8 +345,9 @@ inline void setValueToGraphNodes(PropertyInterface* prop, const TYPE &value, con
   // if a graph is provided, it means that we want to modify the property value for its nodes but without setting the default property value
   if (graph) {
     static_cast<PROP*>(prop)->setValueToGraphNodes(value, graph);
-  // otherwise it means that we want to set the same value to the nodes of the graph whose property is local and change the default property value
-  } else {
+    // otherwise it means that we want to set the same value to the nodes of the graph whose property is local and change the default property value
+  }
+  else {
     static_cast<PROP*>(prop)->setAllNodeValue(value);
   }
 }
@@ -533,8 +534,9 @@ inline void setValueToGraphEdges(PropertyInterface* prop, const TYPE &value, con
   // if a graph is provided, it means that we want to modify the property value for its nodes but without setting the default property value
   if (graph) {
     static_cast<PROP*>(prop)->setValueToGraphEdges(value, graph);
-  // otherwise it means that we want to set the same value to the nodes of the graph whose property is local and change the default property value
-  } else {
+    // otherwise it means that we want to set the same value to the nodes of the graph whose property is local and change the default property value
+  }
+  else {
     static_cast<PROP*>(prop)->setAllEdgeValue(value);
   }
 }
