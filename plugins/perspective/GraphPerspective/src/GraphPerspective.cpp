@@ -1235,7 +1235,11 @@ void GraphPerspective::CSVImport() {
     wizard.setButtonText(QWizard::FinishButton, QString("Import into current graph"));
   }
 
+  // get the number of line displayed in the logger
+  unsigned int nbLogsBefore = _logger->count();
+  
   wizard.setGraph(g);
+  
   g->push();
   Observable::holdObservers();
   int result = wizard.exec();
@@ -1250,6 +1254,7 @@ void GraphPerspective::CSVImport() {
     }
   }
   else {
+    unsigned int nbLogsAfter = _logger->count();
     applyRandomLayout(g);
     bool openPanels = true;
 
@@ -1262,6 +1267,10 @@ void GraphPerspective::CSVImport() {
 
     if (openPanels)
       showStartPanels(g);
+
+    if ((nbLogsAfter != nbLogsBefore) &&
+	(QMessageBox::question(_mainWindow, "CSV Parse errors found", QString("When parsing your CSV file,<br/> %1 error(s) has been encountered.<br/>Do you want to see them?").arg(nbLogsAfter - nbLogsBefore), QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes))
+      showLogger();
   }
 
   Observable::unholdObservers();
