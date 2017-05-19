@@ -62,12 +62,18 @@ inline void setDefaultNodeValueInProperty(const std::string &propertyName, const
   Graph *root = NULL;
   forEach(root, getRootGraphs()) {
     if (root->existLocalProperty(propertyName)) {
-      root->getProperty<PROP>(propertyName)->setNodeDefaultValue(value);
+      PROP *prop = dynamic_cast<PROP*>(root->getProperty(propertyName));
+      if (prop) {
+        prop->setNodeDefaultValue(value);
+      }
     }
     Graph *sg = NULL;
     forEach(sg, root->getDescendantGraphs()) {
       if (sg->existLocalProperty(propertyName)) {
-        sg->getProperty<PROP>(propertyName)->setNodeDefaultValue(value);
+        PROP *prop = dynamic_cast<PROP*>(sg->getProperty(propertyName));
+        if (prop) {
+          prop->setNodeDefaultValue(value);
+        }
       }
     }
   }
@@ -78,12 +84,18 @@ inline void setDefaultEdgeValueInProperty(const std::string &propertyName, const
   Graph *root = NULL;
   forEach(root, getRootGraphs()) {
     if (root->existLocalProperty(propertyName)) {
-      root->getProperty<PROP>(propertyName)->setEdgeDefaultValue(value);
+      PROP *prop = dynamic_cast<PROP*>(root->getProperty(propertyName));
+      if (prop) {
+        prop->setEdgeDefaultValue(value);
+      }
     }
     Graph *sg = NULL;
     forEach(sg, root->getDescendantGraphs()) {
       if (sg->existLocalProperty(propertyName)) {
-        sg->getProperty<PROP>(propertyName)->setEdgeDefaultValue(value);
+        PROP *prop = dynamic_cast<PROP*>(sg->getProperty(propertyName));
+        if (prop) {
+          prop->setEdgeDefaultValue(value);
+        }
       }
     }
   }
