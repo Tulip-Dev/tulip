@@ -123,6 +123,7 @@ def createPlugin(context, pluginModule, pluginClassName, pluginName, author, dat
     plugin.exportGraph = lambda os : exportGraph(plugin, os)
   plugin.name = lambda : pluginName
   plugin.group = lambda : group
+  plugin.author = lambda : author
   plugin.date = lambda : date
   plugin.info = lambda : info
   plugin.release = lambda : release
