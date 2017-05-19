@@ -23,6 +23,8 @@
 #include <cppunit/TestCaller.h>
 #include "DoublePropertyTest.h"
 
+#include <tulip/TlpTools.h>
+
 using namespace tlp;
 using namespace std;
 
@@ -194,8 +196,8 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   sg->addNode(graph->target(e1));
   sg->addEdge(e1);
 
-  const double v1 = 9.66878788;
-  const double v2 = 100.06586685;
+  const double v1 = tlp::randomDouble();
+  const double v2 = tlp::randomDouble();
 
   // create a double property and set all values for nodes and edges
   DoubleProperty* prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
@@ -251,5 +253,54 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   }
   // check that the default edge value has not been modified
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
+
+}
+
+void DoublePropertyTest::testDoublePropertySetDefaultValue() {
+
+  const double v1 = tlp::randomDouble();
+  const double v2 = tlp::randomDouble();
+
+  // create a double property and set all values for nodes and edges
+  DoubleProperty* prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  prop->setAllNodeValue(v1);
+  prop->setAllEdgeValue(v2);
+
+  // check that the default property value has been correctly modified
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
+
+  // change the default node value for future added nodes
+  prop->setNodeDefaultValue(v2);
+  // change the default edge value for future added edges
+  prop->setEdgeDefaultValue(v1);
+
+  // check that the default property value has been correctly modified
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v2, 1e-6);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v1, 1e-6);
+
+  // add a new node
+  node nNew = graph->addNode();
+  // add a new edge
+  edge eNew = graph->addEdge(graph->getRandomNode(), graph->getRandomNode());
+
+  // check that the new default property value has been correctly set
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(nNew), v2, 1e-6);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(eNew), v1, 1e-6);
+
+  // check that original nodes and edges still have the same value
+  // as before modifying the default property value
+  node n;
+  forEach(n, graph->getNodes()) {
+    if (n != nNew) {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
+    }
+  }
+  edge e;
+  forEach(e, graph->getEdges()) {
+    if (e != eNew) {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
+    }
+  }
 
 }

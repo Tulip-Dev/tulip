@@ -40,9 +40,23 @@ public :
 
   @PROPERTY_TYPE@Property(tlp::Graph *graph, std::string name="");
 
-  //===========================================================================================
+//===========================================================================================
 
-    void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/);
+  void setNodeDefaultValue(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.setNodeDefaultValue(val)
+
+.. versionadded:: 4.11
+
+Sets the value assigned as the default one to the future added nodes.
+
+:param val: the new value to set on future added nodes.
+:type val: @PYTHON_NODE_TYPE@
+%End
+
+//===========================================================================================
+
+  void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val)
 
@@ -98,6 +112,20 @@ and the default node value will not be modified.
 :type val: @PYTHON_NODE_TYPE@
 :param graph: a graph that defines a set of nodes
 :type graph: :class:`tlp.Graph`
+%End
+
+//===========================================================================================
+
+  void setEdgeDefaultValue(const @PROPERTY_EDGE_TYPE@ &val /TypeHint="@PYTHON_EDGE_TYPEHINT@"/);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.setEdgeDefaultValue(val)
+
+.. versionadded:: 4.11
+
+Sets the value assigned as the default one to the future added edges.
+
+:param val: the new value to set on future added edges.
+:type val: @PYTHON_EDGE_TYPE@
 %End
 
 //===========================================================================================
@@ -367,6 +395,10 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
+  virtual bool setNodeDefaultStringValue(const std::string & strVal);
+
+//===========================================================================================
+
   virtual bool setAllNodeStringValue(const std::string & strVal);
 
   virtual bool setAllNodeStringValue(const std::string & strVal, const tlp::Graph *);
@@ -374,6 +406,10 @@ Sets the value of a particular edge.
 //===========================================================================================
 
   virtual bool setStringValueToGraphNodes(const std::string & strVal, const tlp::Graph *);
+
+//===========================================================================================
+
+  virtual bool setEdgeDefaultStringValue(const std::string & strVal);
 
 //===========================================================================================
 
@@ -653,7 +689,18 @@ All previous values are lost and the given value is assigned as the default one 
 :param val: the list of values to set on the nodes
 :type val: list of @PYTHON_TYPE@
 %End
+//==========================================================================================
+  void setNodeDefaultValue(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeDefaultValue(val)
 
+.. versionadded:: 4.11
+
+Sets the value assigned as the default one to the future added nodes.
+
+:param val: the new value to set on future added nodes.
+:type val: list of @PYTHON_TYPE@
+%End
 //==========================================================================================
   void setAllNodeValue(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph *graph );
 %Docstring
@@ -697,6 +744,20 @@ and the default node value will not be modified.
 :type val: list of @PYTHON_TYPE@
 :param graph: a graph that defines a set of nodes
 :type graph: :class:`tlp.Graph`
+%End
+
+//==========================================================================================
+
+  void setEdgeDefaultValue(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeDefaultValue(val)
+
+.. versionadded:: 4.11
+
+Sets the value assigned as the default one to the future added edges.
+
+:param val: the new value to set on future added edges.
+:type val: list of @PYTHON_TYPE@
 %End
 
 //===========================================================================================

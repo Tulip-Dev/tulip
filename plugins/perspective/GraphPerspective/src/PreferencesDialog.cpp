@@ -57,6 +57,38 @@ void PreferencesDialog::usetlpbformat(int state) {
   }
 }
 
+template<typename PROP, typename TYPE>
+inline void setDefaultNodeValueInProperty(const std::string &propertyName, const TYPE &value) {
+  Graph *root = NULL;
+  forEach(root, getRootGraphs()) {
+    if (root->existLocalProperty(propertyName)) {
+      root->getProperty<PROP>(propertyName)->setNodeDefaultValue(value);
+    }
+    Graph *sg = NULL;
+    forEach(sg, root->getDescendantGraphs()) {
+      if (sg->existLocalProperty(propertyName)) {
+        sg->getProperty<PROP>(propertyName)->setNodeDefaultValue(value);
+      }
+    }
+  }
+}
+
+template<typename PROP, typename TYPE>
+inline void setDefaultEdgeValueInProperty(const std::string &propertyName, const TYPE &value) {
+  Graph *root = NULL;
+  forEach(root, getRootGraphs()) {
+    if (root->existLocalProperty(propertyName)) {
+      root->getProperty<PROP>(propertyName)->setEdgeDefaultValue(value);
+    }
+    Graph *sg = NULL;
+    forEach(sg, root->getDescendantGraphs()) {
+      if (sg->existLocalProperty(propertyName)) {
+        sg->getProperty<PROP>(propertyName)->setEdgeDefaultValue(value);
+      }
+    }
+  }
+}
+
 void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setProxyEnabled(_ui->proxyCheck->isChecked());
 
@@ -97,6 +129,13 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setDefaultShape(tlp::EDGE,(int)(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>()));
   TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,1)).value<tlp::Color>());
   TulipSettings::instance().setDefaultLabelColor(model->data(model->index(4,1)).value<tlp::Color>());
+
+  setDefaultNodeValueInProperty<ColorProperty>("viewColor", TulipSettings::instance().defaultColor(tlp::NODE));
+  setDefaultNodeValueInProperty<SizeProperty>("viewSize", TulipSettings::instance().defaultSize(tlp::NODE));
+  setDefaultNodeValueInProperty<IntegerProperty>("viewShape", TulipSettings::instance().defaultShape(tlp::NODE));
+  setDefaultEdgeValueInProperty<ColorProperty>("viewColor", TulipSettings::instance().defaultColor(tlp::EDGE));
+  setDefaultEdgeValueInProperty<SizeProperty>("viewSize", TulipSettings::instance().defaultSize(tlp::EDGE));
+  setDefaultEdgeValueInProperty<IntegerProperty>("viewShape", TulipSettings::instance().defaultShape(tlp::EDGE));
 
   TulipSettings::instance().applyProxySettings();
 

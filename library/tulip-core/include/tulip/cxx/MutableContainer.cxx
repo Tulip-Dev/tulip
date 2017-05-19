@@ -72,6 +72,12 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 }
 //===================================================================
 template <typename TYPE>
+void tlp::MutableContainer<TYPE>::setDefault(typename StoredType<TYPE>::ReturnedConstValue value) {
+  StoredType<TYPE>::destroy(defaultValue);
+  defaultValue = StoredType<TYPE>::clone(value);
+}
+//===================================================================
+template <typename TYPE>
 void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedConstValue value) {
   switch (state) {
   case VECT:

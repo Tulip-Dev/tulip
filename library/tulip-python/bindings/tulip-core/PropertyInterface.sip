@@ -209,6 +209,23 @@ Returns a newly created property of the same type in the graph g.
 
 //===========================================================================================
 
+virtual bool setNodeDefaultStringValue( const std::string & strVal ) = 0;
+%Docstring
+tlp.PropertyInterface.setNodeDefaultStringValue(str)
+
+.. versionadded:: 4.11
+
+Sets the value assigned as the default one to the future added nodes from a string representation.
+
+Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
+
+:param str: a string representing the new value to set on future added nodes.
+:type str: string
+:rtype: boolean
+%End
+
+//===========================================================================================
+
  virtual bool setAllNodeStringValue( const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllNodeStringValue(str)
@@ -273,6 +290,23 @@ Returns :const:`True` if the given string representation has been successfully c
 :type str: string
 :param graph: a graph that defines a set of nodes
 :type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End
+
+//===========================================================================================
+
+virtual bool setEdgeDefaultStringValue( const std::string & strVal ) = 0;
+%Docstring
+tlp.PropertyInterface.setEdgeDefaultStringValue(str)
+
+.. versionadded:: 4.11
+
+Sets the value assigned as the default one to the future added edges from a string representation.
+
+Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
+
+:param str: a string representing the new value to set on future added edges.
+:type str: string
 :rtype: boolean
 %End
 

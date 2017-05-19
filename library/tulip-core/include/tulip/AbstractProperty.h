@@ -128,6 +128,17 @@ public:
   virtual void setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v);
 
   /**
+   * @brief Sets the value assigned as the default one to the future added nodes.
+   *
+   * @since Tulip 4.11
+   *
+   * @param v the new value to set on future added nodes.
+   *
+   * @return Whether the given string was a correct representation for this property's type. If not, the default value is not set.
+   */
+  virtual void setNodeDefaultValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v);
+
+  /**
    * @brief Sets the value of all nodes in a graph and notify the observers.
    * Only the nodes from that graph will have their value modified in the property
    * and the default node value will not be modified.
@@ -162,6 +173,17 @@ public:
    *
    **/
   virtual void setValueToGraphNodes(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph);
+
+  /**
+   * @brief Sets the value assigned as the default one to the future added edges.
+   *
+   * @since Tulip 4.11
+   *
+   * @param value the new value to set on future added edges.
+   *
+   * @return Whether the given string was a correct representation for this property's type. If not, the default value is not set.
+   */
+  virtual void setEdgeDefaultValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v);
 
   /**
    * @brief Sets the value of all edges and notify the observers.
@@ -329,6 +351,15 @@ public:
     setEdgeValue( inE, v );
     return true;
   }
+  virtual bool setNodeDefaultStringValue( const std::string & inV ) {
+    typename Tnode::RealType v;
+
+    if( !Tnode::fromString( v, inV ) )
+      return false;
+
+    setNodeDefaultValue( v );
+    return true;
+  }
   virtual bool setAllNodeStringValue( const std::string & inV ) {
     typename Tnode::RealType v;
 
@@ -348,6 +379,15 @@ public:
       return false;
 
     setValueToGraphNodes( v , graph );
+    return true;
+  }
+  virtual bool setEdgeDefaultStringValue( const std::string & inV ) {
+    typename Tedge::RealType v;
+
+    if( !Tedge::fromString(v ,inV ) )
+      return false;
+
+    setEdgeDefaultValue( v );
     return true;
   }
   virtual bool setAllEdgeStringValue( const std::string & inV ) {

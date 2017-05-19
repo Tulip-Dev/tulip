@@ -54,8 +54,13 @@ class MutableContainer {
 public:
   MutableContainer();
   ~MutableContainer();
+
   /**
-   * set the default value
+   * Set the default value
+   */
+  void setDefault(typename StoredType<TYPE>::ReturnedConstValue value);
+  /**
+   * set the same value to all elements and modify the default value
    */
   void setAll(typename StoredType<TYPE>::ReturnedConstValue value);
   /**
