@@ -36,6 +36,7 @@ class DoublePropertyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testDoublePropertySubGraphMin);
   CPPUNIT_TEST(testDoublePropertyInfValue);
   CPPUNIT_TEST(testDoublePropertySetAllValue);
+  CPPUNIT_TEST(testDoublePropertySetDefaultValue);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -50,6 +51,7 @@ public:
   void testDoublePropertySubGraphMax();
   void testDoublePropertyInfValue();
   void testDoublePropertySetAllValue();
+  void testDoublePropertySetDefaultValue();
 
 private :
   tlp::Graph *graph;

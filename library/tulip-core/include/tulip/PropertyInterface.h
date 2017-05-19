@@ -204,6 +204,17 @@ public:
   virtual std::string getEdgeDefaultStringValue() const = 0;
 
   /**
+   * @brief Sets the value assigned as the default one to the future added nodes from a string representation.
+   *
+   * @since Tulip 4.11
+   *
+   * @param value A string representing the new value to set on future added nodes.
+   *
+   * @return Whether the given string was a correct representation for this property's type. If not, the default value is not set.
+   */
+  virtual bool setNodeDefaultStringValue( const std::string & value ) = 0;
+
+  /**
    * @brief Sets all the nodes value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutProperty).
    * All previous values are lost and the represented value is assigned as the default one to the future added nodes.
    *
@@ -246,6 +257,17 @@ public:
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
   virtual bool setStringValueToGraphNodes( const std::string & value, const Graph *graph ) = 0;
+
+  /**
+   * @brief Sets the value assigned as the default one to the future added edges from a string representation.
+   *
+   * @since Tulip 4.11
+   *
+   * @param value A string representing the new value to set on future added edges.
+   *
+   * @return Whether the given string was a correct representation for this property's type. If not, the default value is not set.
+   */
+  virtual bool setEdgeDefaultStringValue( const std::string & value ) = 0;
 
   /**
    * @brief Sets all the edges value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutProperty).
