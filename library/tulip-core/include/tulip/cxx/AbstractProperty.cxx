@@ -111,27 +111,32 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setNodeDefaultValue(typename tlp:
   if (nodeDefaultValue == v) {
     return;
   }
-
   // backup old default value
   typename Tnode::RealType oldDefaultValue = nodeDefaultValue;
   // we need to get the list of nodes whose value equals the current default one first
-  std::vector<tlp::node> nodesToUpdate;
+  std::vector<tlp::node> nodesOldDefaultToUpdate;
+  std::vector<tlp::node> nodesDefaultToUpdate;
   const std::vector<tlp::node> &nodes = this->getGraph()->nodes();
-
   for (size_t i = 0 ; i < nodes.size() ; ++i) {
-    if (this->getNodeValue(nodes[i]) == oldDefaultValue) {
-      nodesToUpdate.push_back(nodes[i]);
+    const typename Tnode::RealType &val = this->getNodeValue(nodes[i]);
+    if (val == oldDefaultValue) {
+      nodesOldDefaultToUpdate.push_back(nodes[i]);
+    } else if (val == v) {
+      nodesDefaultToUpdate.push_back(nodes[i]);
     }
   }
-
   // set new default value that will be associated to future added nodes
   nodeDefaultValue = v;
   nodeProperties.setDefault(v);
-
   // reset the backup nodes to the old default value as there is a new one in the
   // underlying MutableContainer
-  for (size_t i = 0 ; i < nodesToUpdate.size() ; ++i) {
-    nodeProperties.set(nodesToUpdate[i].id, oldDefaultValue);
+  for (size_t i = 0 ; i < nodesOldDefaultToUpdate.size() ; ++i) {
+    nodeProperties.set(nodesOldDefaultToUpdate[i].id, oldDefaultValue);
+  }
+  // reset the backup nodes to their current value in order
+  // to synchronize the underlying MutableContainer state
+  for (size_t i = 0 ; i < nodesDefaultToUpdate.size() ; ++i) {
+    nodeProperties.set(nodesDefaultToUpdate[i].id, v);
   }
 }
 //=============================================================
@@ -157,27 +162,33 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setEdgeDefaultValue(typename tlp:
   if (edgeDefaultValue == v) {
     return;
   }
-
   // backup old default value
   typename Tedge::RealType oldDefaultValue = edgeDefaultValue;
-  // we need to get the list of edges whose value equals the current default one first
-  std::vector<tlp::edge> edgesToUpdate;
+  // backup list of edges whose value equals the current default one
+  std::vector<tlp::edge> edgesOldDefaultToUpdate;
+  // backup list of edges whose value equals the new default one
+  std::vector<tlp::edge> edgesDefaultToUpdate;
   const std::vector<tlp::edge> &edges = this->getGraph()->edges();
-
   for (size_t i = 0 ; i < edges.size() ; ++i) {
-    if (this->getEdgeValue(edges[i]) == oldDefaultValue) {
-      edgesToUpdate.push_back(edges[i]);
+    const typename Tedge::RealType &val = this->getEdgeValue(edges[i]);
+    if (val == oldDefaultValue) {
+      edgesOldDefaultToUpdate.push_back(edges[i]);
+    } else if (val == v) {
+      edgesDefaultToUpdate.push_back(edges[i]);
     }
   }
-
   // set new default value that will be associated to future added edges
   edgeDefaultValue = v;
   edgeProperties.setDefault(v);
-
   // reset the backup edges to the old default value as there is a new one in the
   // underlying MutableContainer
-  for (size_t i = 0 ; i < edgesToUpdate.size() ; ++i) {
-    edgeProperties.set(edgesToUpdate[i].id, oldDefaultValue);
+  for (size_t i = 0 ; i < edgesOldDefaultToUpdate.size() ; ++i) {
+    edgeProperties.set(edgesOldDefaultToUpdate[i].id, oldDefaultValue);
+  }
+  // reset the backup edges to their current value in order
+  // to synchronize the underlying MutableContainer state
+  for (size_t i = 0 ; i < edgesDefaultToUpdate.size() ; ++i) {
+    edgeProperties.set(edgesDefaultToUpdate[i].id, v);
   }
 }
 //============================================================
