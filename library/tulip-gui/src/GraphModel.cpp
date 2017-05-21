@@ -128,7 +128,10 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
     else if (role == Qt::ToolTipRole) {
       return QString(_graph->existLocalProperty(prop->getName()) ? "local " : "inherited ")
              .append("property \"").append(tlpStringToQString(prop->getName()))
-             .append("\" of type ").append(tlpStringToQString(prop->getTypename()));
+             .append("\" of type ").append(tlpStringToQString(prop->getTypename()))
+             .append("\ndefault ").append(isNode() ? "node value: " : "edge value: ")
+             .append(isNode() ? tlpStringToQString(_graph->getProperty(prop->getName())->getNodeDefaultStringValue()) :
+                                tlpStringToQString(_graph->getProperty(prop->getName())->getEdgeDefaultStringValue()));
     }
   }
 
