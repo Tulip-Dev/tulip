@@ -349,8 +349,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       while(itn != itne) {
         node n(*itn);
 
-        // record value only if it is not the default one
-        if (nv->copy(n, n, p, true)) {
+        if (nv->copy(n, n, p)) {
           rn->set(n, true);
           hasNewValues = true;
         }
@@ -424,8 +423,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       while(ite != itee) {
         edge e(*ite);
 
-        // record value only if it is not the default one
-        if (nv->copy(e, e, p, true)) {
+        if (nv->copy(e, e, p)) {
           re->set(e, true);
           hasNewValues = true;
         }
@@ -506,8 +504,7 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface* p) {
       while(itov->hasNext()) {
         node n(itov->next());
 
-        // record value only if it is not the default one
-        if (nv->copy(n, n, p, true)) {
+        if (nv->copy(n, n, p)) {
           rn->set(n, true);
           hasNewValues = true;
         }
@@ -571,8 +568,7 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
       while(itov->hasNext()) {
         edge e(itov->next());
 
-        // record value only if it is not the default one
-        if (nv->copy(e, e, p, true)) {
+        if (nv->copy(e, e, p)) {
           re->set(e, true);
           hasNewValues = true;
         }
@@ -1116,6 +1112,15 @@ void GraphUpdatesRecorder::addNode(Graph* g, node n) {
   if (g->getRoot() == g) {
     addedNodes.set(n, true);
   }
+
+  // we need to backup properties values of the newly added node
+  // in order to restore them when readding the node through the tlp::Graph::unpop() method
+  // as the default properties values might change
+  PropertyInterface *prop = NULL;
+  forEach(prop, g->getLocalObjectProperties()) {
+    beforeSetNodeValue(prop, n);
+  }
+
 }
 
 void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
@@ -1130,6 +1135,14 @@ void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
 
   if (g->getRoot() == g) {
     addedEdgesEnds.set(e, new std::pair<node, node>(g->ends(e)));
+  }
+
+  // we need to backup properties values of the newly added edge
+  // in order to restore them when readding the node through the tlp::Graph::unpop() method
+  // as the default properties values can change
+  PropertyInterface *prop = NULL;
+  forEach(prop, g->getLocalObjectProperties()) {
+    beforeSetEdgeValue(prop, e);
   }
 }
 
@@ -1464,6 +1477,9 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
 
     if (itr != renamedProperties.end())
       renamedProperties.erase(itr);
+
+    updatedPropsAddedNodes.erase(prop);
+    updatedPropsAddedEdges.erase(prop);
 
     return;
   }

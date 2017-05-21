@@ -266,6 +266,10 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   prop->setAllNodeValue(v1);
   prop->setAllEdgeValue(v2);
 
+  // check number of non default valuated edges
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), 0u);
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), 0u);
+
   // check that the default property value has been correctly modified
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
@@ -274,6 +278,10 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   prop->setNodeDefaultValue(v2);
   // change the default edge value for future added edges
   prop->setEdgeDefaultValue(v1);
+
+  // check number of non default valuated edges (not 0 anymore)
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), graph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), graph->numberOfEdges());
 
   // check that the default property value has been correctly modified
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v2, 1e-6);
@@ -303,4 +311,31 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
     }
   }
 
+  // check if there is no graph push/pop side effect when setting the new default value
+  // on a node that already has it
+  graph->push();
+  prop->setNodeValue(n1, v2);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n1), v2, 1e-6);
+  graph->pop();
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n1), v1, 1e-6);
+  graph->unpop();
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n1), v2, 1e-6);
+
+  // check that after pushing a graph, adding a new node and changing the default property value
+  // the node property value gets restored to the default value of the property the time the node
+  // was created
+  double v3 = tlp::randomDouble();
+  // push graph state
+  graph->push();
+  // add a node, its property value should be v2
+  node newNode = graph->addNode();
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(newNode), v2, 1e-6);
+  // change the default property value to v3
+  prop->setNodeDefaultValue(v3);
+  // pop graph state
+  graph->pop();
+  // unpop graph state
+  graph->unpop();
+  // node value should be v2
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(newNode), v2, 1e-6);
 }
