@@ -70,9 +70,7 @@ public slots:
   const Camera& goInsideItem(node meta);
 
 protected slots:
-  void addRemoveItemToSelection(bool pushGraph = true, bool forceSelect = false);
-  void addItemToSelection();
-  void selectItem();
+
   void deleteItem();
   void editColor();
   void editLabel();
@@ -84,20 +82,42 @@ protected slots:
   void showGridControl();
   void fillContextMenu(QMenu *menu,const QPointF &point);
   void displayToolTips(bool display);
-  void addRemoveInNodesToSelection(bool pushGraph = true, bool forceSelect = false);
-  void addRemoveOutNodesToSelection(bool pushGraph = true, bool forceSelect = false);
-  void addRemoveInEdgesToSelection(bool pushGraph = true, bool forceSelect = false);
-  void addRemoveOutEdgesToSelection(bool pushGraph = true, bool forceSelect = false);
-  void addRemoveNodeAndAllNeighbourNodesAndEdges(bool forceSelect = false);
-  void addRemoveExtremitiesToSelection(bool pushGraph = true, bool forceSelect = false);
-  void addRemoveEdgeAndExtremitiesToSelection(bool forceSelect = false);
+
+  void addRemoveItemToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveInNodesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveOutNodesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveInEdgesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveOutEdgesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveNodeAndAllNeighbourNodesAndEdges(bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveExtremitiesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveEdgeAndExtremitiesToSelection(bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+
+  void selectItem();
+  void selectInNodes(bool pushGraph = true);
+  void selectOutNodes(bool pushGraph = true);
+  void selectInEdges(bool pushGraph = true);
+  void selectOutEdges(bool pushGraph = true);
+  void selectNodeAndAllNeighbourNodesAndEdges();
+  void selectExtremities(bool pushGraph = true);
+  void selectEdgeAndExtremities();
+
+  void addItemToSelection();
   void addInNodesToSelection(bool pushGraph = true);
   void addOutNodesToSelection(bool pushGraph = true);
   void addInEdgesToSelection(bool pushGraph = true);
   void addOutEdgesToSelection(bool pushGraph = true);
-  void addNodeAndAllNeighbourNodesAndEdges();
+  void addNodeAndAllNeighbourNodesAndEdgesToSelection();
   void addExtremitiesToSelection(bool pushGraph = true);
   void addEdgeAndExtremitiesToSelection();
+
+  void removeItemFromSelection();
+  void removeInNodesFromSelection(bool pushGraph = true);
+  void removeOutNodesFromSelection(bool pushGraph = true);
+  void removeInEdgesFromSelection(bool pushGraph = true);
+  void removeOutEdgesFromSelection(bool pushGraph = true);
+  void removeNodeAndAllNeighbourNodesAndEdgesFromSelection();
+  void removeExtremitiesFromSelection(bool pushGraph = true);
+  void removeEdgeAndExtremitiesFromSelection();
 
 protected:
   bool isNode;
