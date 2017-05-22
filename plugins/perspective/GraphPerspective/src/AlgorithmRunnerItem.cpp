@@ -160,7 +160,16 @@ tlp::Graph *AlgorithmRunnerItem::graph() const {
 template<typename PROP>
 void asLocal(QVariant var, DataSet& data, Graph* g) {
   if (var.userType() == qMetaTypeId<PROP*>()) {
-    PROP* local = g->getLocalProperty<PROP>(var.value<PROP*>()->getName());
+    PROP* prop = var.value<PROP*>();
+    const std::string& propName = prop->getName();
+    bool hasProp = g->existLocalProperty(propName);
+    PROP* local = g->getLocalProperty<PROP>(propName);
+    if (!hasProp) {
+      // copy default property values to ensure
+      // the inheritance of user defined property settings
+      local->setAllNodeValue(prop->getNodeDefaultValue());
+      local->setAllEdgeValue(prop->getEdgeDefaultValue());
+    }
     data.set("result",local);
   }
 }
