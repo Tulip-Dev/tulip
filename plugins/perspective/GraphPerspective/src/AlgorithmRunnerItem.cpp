@@ -102,8 +102,6 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
   delete _ui;
 }
 
-#define ISPROP(T) t->getTypeName().compare(typeid(T).name()) == 0
-
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
 
@@ -112,25 +110,7 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
     DataSet dataSet = model->parametersValues();
     std::pair<std::string,tlp::DataType*> it;
     stableForEach(it,dataSet.getValues()) {
-      DataType* t = it.second;
-
-      if (ISPROP(tlp::BooleanProperty*) ||
-          ISPROP(tlp::BooleanVectorProperty*) ||
-          ISPROP(tlp::DoubleProperty*) ||
-          ISPROP(tlp::DoubleVectorProperty*) ||
-          ISPROP(tlp::LayoutProperty*) ||
-          ISPROP(tlp::CoordVectorProperty*) ||
-          ISPROP(tlp::StringProperty*) ||
-          ISPROP(tlp::StringVectorProperty*) ||
-          ISPROP(tlp::IntegerProperty*) ||
-          ISPROP(tlp::IntegerVectorProperty*) ||
-          ISPROP(tlp::SizeProperty*) ||
-          ISPROP(tlp::SizeVectorProperty*) ||
-          ISPROP(tlp::ColorProperty*) ||
-          ISPROP(tlp::ColorVectorProperty*) ||
-          ISPROP(tlp::NumericProperty*) ||
-          ISPROP(tlp::PropertyInterface*) ||
-          ISPROP(tlp::GraphProperty*)) {
+      if (it.second->isTulipProperty()) {
         dataSet.remove(it.first);
       }
     }
@@ -281,24 +261,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
   ParameterDescription desc;
   forEach(desc, paramList.getParameters()) {
     if (desc.getDirection() == IN_PARAM) {
+      
       std::string typeName(desc.getTypeName());
 
-      if (typeName == TN(PropertyInterface*)
-          || typeName == TN(NumericProperty*)
-          || typeName == TN(BooleanProperty)
-          || typeName == TN(DoubleProperty)
-          || typeName == TN(LayoutProperty)
-          || typeName == TN(StringProperty)
-          || typeName == TN(IntegerProperty)
-          || typeName == TN(SizeProperty)
-          || typeName == TN(ColorProperty)
-          || typeName == TN(BooleanVectorProperty)
-          || typeName == TN(DoubleVectorProperty)
-          || typeName == TN(CoordVectorProperty)
-          || typeName == TN(StringVectorProperty)
-          || typeName == TN(IntegerVectorProperty)
-          || typeName == TN(SizeVectorProperty)
-          || typeName == TN(ColorVectorProperty)) {
+      if (DataType::isTulipProperty(typeName)) {
         PropertyInterface* prop = NULL;
         dataSet.get(desc.getName(), prop);
 
@@ -317,7 +283,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (_storeResultAsLocal)
     copyToLocal(dataSet, g);
 
-  std::string algoAndParams = algorithm + " - " + dataSet.toString();
+  std::string algoAndParams = algorithm + " - " + originalDataSet.toString();
   std::vector<std::string> outNonPropertyParams;
   // use temporary output properties
   // to ease the undo in case of failure
@@ -326,22 +292,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     std::string typeName(desc.getTypeName());
 
     // forget non property out param
-    if (typeName != TN(PropertyInterface*)
-        && typeName != TN(NumericProperty*)
-        && typeName != TN(BooleanProperty)
-        && typeName != TN(DoubleProperty)
-        && typeName != TN(LayoutProperty)
-        && typeName != TN(StringProperty)
-        && typeName != TN(IntegerProperty)
-        && typeName != TN(SizeProperty)
-        && typeName != TN(ColorProperty)
-        && typeName != TN(BooleanVectorProperty)
-        && typeName != TN(DoubleVectorProperty)
-        && typeName != TN(CoordVectorProperty)
-        && typeName != TN(StringVectorProperty)
-        && typeName != TN(IntegerVectorProperty)
-        && typeName != TN(SizeVectorProperty)
-        && typeName != TN(ColorVectorProperty)) {
+    if (!DataType::isTulipProperty(typeName)) {
       if (desc.getDirection() != IN_PARAM)
         outNonPropertyParams.push_back(desc.getName());
 
@@ -409,14 +360,14 @@ void AlgorithmRunnerItem::run(Graph *g) {
   QTime start = QTime::currentTime();
   bool result = g->applyAlgorithm(algorithm,errorMessage,&dataSet,progress);
 
+  // get spent time
+  int spentTime = start.msecsTo(QTime::currentTime());
+  // display it if needed
+  if (TulipSettings::instance().isRunningTimeComputed())
+    qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << spentTime << "ms";
+
   if (!outPropertyParams.empty())
     progress->setPreviewHandler(NULL);
-
-  // display spent time
-  if (TulipSettings::instance().isRunningTimeComputed())
-    qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << start.msecsTo(QTime::currentTime()) << "ms";
-
-  //Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
   if (!result) {
     g->pop();
