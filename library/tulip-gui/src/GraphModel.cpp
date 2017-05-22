@@ -131,7 +131,7 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
              .append("\" of type ").append(tlpStringToQString(prop->getTypename()))
              .append("\ndefault ").append(isNode() ? "node value: " : "edge value: ")
              .append(isNode() ? tlpStringToQString(_graph->getProperty(prop->getName())->getNodeDefaultStringValue()) :
-                                tlpStringToQString(_graph->getProperty(prop->getName())->getEdgeDefaultStringValue()));
+                     tlpStringToQString(_graph->getProperty(prop->getName())->getEdgeDefaultStringValue()));
     }
   }
 
