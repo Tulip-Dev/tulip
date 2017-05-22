@@ -21,6 +21,7 @@
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/Color.h>
@@ -34,6 +35,27 @@
 
 using namespace std;
 using namespace tlp;
+
+bool DataType::isTulipProperty(const std::string& typeName) {
+#define ISPROP(T) typeName.compare(typeid(T).name()) == 0
+  return (ISPROP(tlp::BooleanProperty*) ||
+          ISPROP(tlp::BooleanVectorProperty*) ||
+          ISPROP(tlp::DoubleProperty*) ||
+          ISPROP(tlp::DoubleVectorProperty*) ||
+          ISPROP(tlp::LayoutProperty*) ||
+          ISPROP(tlp::CoordVectorProperty*) ||
+          ISPROP(tlp::StringProperty*) ||
+          ISPROP(tlp::StringVectorProperty*) ||
+          ISPROP(tlp::IntegerProperty*) ||
+          ISPROP(tlp::IntegerVectorProperty*) ||
+          ISPROP(tlp::SizeProperty*) ||
+          ISPROP(tlp::SizeVectorProperty*) ||
+          ISPROP(tlp::ColorProperty*) ||
+          ISPROP(tlp::ColorVectorProperty*) ||
+          ISPROP(tlp::NumericProperty*) ||
+          ISPROP(tlp::PropertyInterface*) ||
+	  ISPROP(tlp::GraphProperty*));
+}
 
 DataSet::DataSet(const DataSet &set) {
   *this = set;
@@ -322,6 +344,13 @@ string DataSet::toString() const {
       ss << "'" << p.first << "'=";
       ss << serializer->toString(p.second).c_str();
       ss << " ";
+    } else {
+      if (p.second->isTulipProperty()) {
+	PropertyInterface* prop = *((PropertyInterface **) p.second->value);
+	ss << "'" << p.first << "'=";
+	ss << (prop ? prop->getName().c_str() : "None");
+	ss << " ";
+      }
     }
   }
   return ss.str();

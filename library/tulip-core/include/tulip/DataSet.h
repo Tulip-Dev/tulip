@@ -69,9 +69,23 @@ struct DataType :public DataMem {
   virtual std::string getTypeName() const = 0;
 
   /**
+   * @brief indicates if it is a Tulip property
+   */
+  static bool isTulipProperty(const std::string& typeName);
+
+  /**
+   * @brief indicates if it is a Tulip property
+   */
+  bool isTulipProperty() const {
+    return isTulipProperty(getTypeName());
+  }
+
+  /**
    * @brief The actual pointer to the element's data
    */
   void *value;
+
+  
 };
 
 ///@cond DOXYGEN_HIDDEN
@@ -88,6 +102,10 @@ struct TypedData :public DataType {
 
   std::string getTypeName() const {
     return std::string(typeid(T).name());
+  }
+
+  const T& getValue() {
+    return (T&) this->value;
   }
 };
 
