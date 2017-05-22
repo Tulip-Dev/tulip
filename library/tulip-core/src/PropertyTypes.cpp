@@ -1127,7 +1127,8 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
   }
 
   std::string toString(const DataType *data) {
-    return ((StringCollection *) data->value)->getCurrentString();
+    return std::string("\"") +
+      ((StringCollection *) data->value)->getCurrentString() + '"';;
   }
 
   bool setData(tlp::DataSet& dts, const string& prop, const string& val) {

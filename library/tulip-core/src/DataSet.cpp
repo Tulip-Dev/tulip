@@ -348,7 +348,10 @@ string DataSet::toString() const {
       if (p.second->isTulipProperty()) {
 	PropertyInterface* prop = *((PropertyInterface **) p.second->value);
 	ss << "'" << p.first << "'=";
-	ss << (prop ? prop->getName().c_str() : "None");
+	if (prop)
+	  ss << '"' << prop->getName().c_str() << '"';
+	else
+	  ss << "None";
 	ss << " ";
       }
     }
