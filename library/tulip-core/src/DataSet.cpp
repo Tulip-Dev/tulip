@@ -54,7 +54,7 @@ bool DataType::isTulipProperty(const std::string& typeName) {
           ISPROP(tlp::ColorVectorProperty*) ||
           ISPROP(tlp::NumericProperty*) ||
           ISPROP(tlp::PropertyInterface*) ||
-	  ISPROP(tlp::GraphProperty*));
+          ISPROP(tlp::GraphProperty*));
 }
 
 DataSet::DataSet(const DataSet &set) {
@@ -344,15 +344,18 @@ string DataSet::toString() const {
       ss << "'" << p.first << "'=";
       ss << serializer->toString(p.second).c_str();
       ss << " ";
-    } else {
+    }
+    else {
       if (p.second->isTulipProperty()) {
-	PropertyInterface* prop = *((PropertyInterface **) p.second->value);
-	ss << "'" << p.first << "'=";
-	if (prop)
-	  ss << '"' << prop->getName().c_str() << '"';
-	else
-	  ss << "None";
-	ss << " ";
+        PropertyInterface* prop = *((PropertyInterface **) p.second->value);
+        ss << "'" << p.first << "'=";
+
+        if (prop)
+          ss << '"' << prop->getName().c_str() << '"';
+        else
+          ss << "None";
+
+        ss << " ";
       }
     }
   }

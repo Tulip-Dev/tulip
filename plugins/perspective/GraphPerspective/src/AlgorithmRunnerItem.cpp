@@ -144,12 +144,14 @@ void asLocal(QVariant var, DataSet& data, Graph* g) {
     const std::string& propName = prop->getName();
     bool hasProp = g->existLocalProperty(propName);
     PROP* local = g->getLocalProperty<PROP>(propName);
+
     if (!hasProp) {
       // copy default property values to ensure
       // the inheritance of user defined property settings
       local->setAllNodeValue(prop->getNodeDefaultValue());
       local->setAllEdgeValue(prop->getEdgeDefaultValue());
     }
+
     data.set("result",local);
   }
 }
@@ -261,7 +263,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   ParameterDescription desc;
   forEach(desc, paramList.getParameters()) {
     if (desc.getDirection() == IN_PARAM) {
-      
+
       std::string typeName(desc.getTypeName());
 
       if (DataType::isTulipProperty(typeName)) {
@@ -362,6 +364,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   // get spent time
   int spentTime = start.msecsTo(QTime::currentTime());
+
   // display it if needed
   if (TulipSettings::instance().isRunningTimeComputed())
     qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << spentTime << "ms";

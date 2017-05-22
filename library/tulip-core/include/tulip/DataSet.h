@@ -85,7 +85,7 @@ struct DataType :public DataMem {
    */
   void *value;
 
-  
+
 };
 
 ///@cond DOXYGEN_HIDDEN
