@@ -68,9 +68,18 @@ TulipProject *TulipProject::newProject() {
 
 bool TulipProject::openProjectFile(const QString &file,
                                    tlp::PluginProgress *progress) {
-  if(!QFileInfo(file).exists()) {
+
+  QFileInfo fileInfo = QFileInfo(file);
+
+  if(!fileInfo.exists()) {
     _isValid = false;
     _lastError = "File "+file+" not found";
+    return false;
+  }
+
+  if (fileInfo.isDir()) {
+    _isValid = false;
+    _lastError = file+" is a directory, not a file";
     return false;
   }
 

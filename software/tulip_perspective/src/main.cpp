@@ -264,8 +264,9 @@ int main(int argc,char **argv) {
 
   delete loader;
 
-  if(!projectFilePath.isEmpty() && !QFileInfo(projectFilePath).exists()) {
-    usage("File "+projectFilePath+" not found");
+  QFileInfo fileInfo(projectFilePath);
+  if(!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
+    usage("File "+projectFilePath+" not found or is a directory");
   }
 
   if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
