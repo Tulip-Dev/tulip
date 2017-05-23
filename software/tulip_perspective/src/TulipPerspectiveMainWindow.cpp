@@ -53,8 +53,10 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projec
     wTitle += QString(" - ") + _project->name();
   else if (!projectFile.isEmpty())
     wTitle += QString(" - ") + projectFile;
-  else
+  else { //all graphs are deleted. Clear project. Useful?
+      _project->clearProject();
     wTitle += QString(" - unsaved project");
+  }
 
   wTitle += "[*]"; //placeholder for window modification
 #ifndef NDEBUG

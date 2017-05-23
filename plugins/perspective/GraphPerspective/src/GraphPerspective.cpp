@@ -1193,9 +1193,6 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->workspace->setGraphForFocusedPanel(graph);
   }
 
-  if (_graphs->empty()) {
-    _project->clearProject();
-  }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
