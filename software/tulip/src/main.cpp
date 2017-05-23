@@ -88,7 +88,7 @@ bool sendAgentMessage(int port, const QString& message) {
   return result;
 }
 
-void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
+void checkTulipRunning(const QString& perspName, const QString& fileToOpen, bool showAgent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile lockFile(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip.lck"));
 #else
@@ -100,7 +100,7 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
     bool ok;
     int n_agentPort = agentPort.toInt(&ok);
 
-    if (ok && sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS")) {
+    if (ok && (!showAgent || sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS"))) {
 
       // if a file was passed as argument, forward it to the running instance
       if (!fileToOpen.isNull()) { // open the file passed as argument
@@ -144,6 +144,7 @@ int main(int argc, char **argv) {
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
   QString perspName;
   QString fileToOpen;
+  bool showAgent = true;
 
   for(int i=1; i<QApplication::arguments().size(); ++i) {
     QString s = QApplication::arguments()[i];
@@ -151,12 +152,15 @@ int main(int argc, char **argv) {
     if (perspectiveRegexp.exactMatch(s)) {
       perspName = perspectiveRegexp.cap(1);
     }
+    else if (s == "--no-show-agent") {
+      showAgent = false;
+    }
     else {
       fileToOpen = s;
     }
   }
 
-  checkTulipRunning(perspName,fileToOpen);
+  checkTulipRunning(perspName,fileToOpen,showAgent);
   sendUsageStatistics();
 
   PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();
