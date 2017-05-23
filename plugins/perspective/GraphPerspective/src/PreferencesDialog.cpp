@@ -151,9 +151,11 @@ void PreferencesDialog::writeSettings() {
   setDefaultNodeValueInProperty<ColorProperty>("viewColor", TulipSettings::instance().defaultColor(tlp::NODE));
   setDefaultNodeValueInProperty<SizeProperty>("viewSize", TulipSettings::instance().defaultSize(tlp::NODE));
   setDefaultNodeValueInProperty<IntegerProperty>("viewShape", TulipSettings::instance().defaultShape(tlp::NODE));
+  setDefaultNodeValueInProperty<ColorProperty>("viewLabelColor", TulipSettings::instance().defaultLabelColor());
   setDefaultEdgeValueInProperty<ColorProperty>("viewColor", TulipSettings::instance().defaultColor(tlp::EDGE));
   setDefaultEdgeValueInProperty<SizeProperty>("viewSize", TulipSettings::instance().defaultSize(tlp::EDGE));
   setDefaultEdgeValueInProperty<IntegerProperty>("viewShape", TulipSettings::instance().defaultShape(tlp::EDGE));
+  setDefaultEdgeValueInProperty<ColorProperty>("viewLabelColor", TulipSettings::instance().defaultLabelColor());
 
   TulipSettings::instance().applyProxySettings();
 
