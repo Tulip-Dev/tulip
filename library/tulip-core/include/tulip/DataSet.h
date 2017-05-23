@@ -54,7 +54,7 @@ template<typename TYPE> struct TypedValueContainer: public DataMem {
  * @ingroup Structures
  * @brief Describes a value of any type
  */
-struct DataType :public DataMem {
+struct TLP_SCOPE DataType :public DataMem {
   DataType() {}
   DataType(void *value):value(value) {}
 
