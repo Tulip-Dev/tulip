@@ -82,3 +82,14 @@ INSTALL(TARGETS tulip
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
   LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app)
+
+IF(LINUX)
+
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/register_tulip_application_and_file_associations.sh.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/register_tulip_application_and_file_associations.sh)
+
+  INSTALL(CODE
+    "EXECUTE_PROCESS(COMMAND sh ${CMAKE_CURRENT_BINARY_DIR}/register_tulip_application_and_file_associations.sh OUTPUT_QUIET ERROR_QUIET)"
+  )
+
+ENDIF(LINUX)
