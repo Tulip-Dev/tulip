@@ -265,6 +265,7 @@ int main(int argc,char **argv) {
   delete loader;
 
   QFileInfo fileInfo(projectFilePath);
+
   if(!projectFilePath.isEmpty() && (!fileInfo.exists() || fileInfo.isDir())) {
     usage("File "+projectFilePath+" not found or is a directory");
   }

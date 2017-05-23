@@ -1306,7 +1306,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
 
 void GraphPerspective::applyRandomLayout(Graph* g) {
   Observable::holdObservers();
-  LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout"); 
+  LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
 
   if (viewLayout->numberOfNonDefaultValuatedNodes(g)==0) {
     std::string str;

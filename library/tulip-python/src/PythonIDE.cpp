@@ -1138,6 +1138,7 @@ void PythonIDE::increaseFontSize() {
 
 QString PythonIDE::readProjectFile(const QString &filePath) {
   QString content;
+
   if (_project) {
     QIODevice *fs = _project->fileStream(filePath, QIODevice::ReadOnly | QIODevice::Text);
 
@@ -1151,6 +1152,7 @@ QString PythonIDE::readProjectFile(const QString &filePath) {
     fs->close();
     delete fs;
   }
+
   return content;
 }
 
@@ -1324,6 +1326,7 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
 
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     QString fileName = getMainScriptEditor(i)->getFileName();
+
     if (deleted == -1 || i != deleted) {
 
       if (fileName.isEmpty()) {
@@ -1538,6 +1541,7 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog) {
 
       fileName = fileInfo.fileName();
     }
+
     writeScriptsFilesList();
     writeScriptFileToProject(tabIdx, fileName, getMainScriptEditor(tabIdx)->getCleanCode());
   }
@@ -1798,6 +1802,7 @@ void PythonIDE::closeModuleTabRequested(int idx) {
     if (!_project) {
       return;
     }
+
     QString moduleFile = getModuleEditor(idx)->getFileName();
     QFileInfo fileInfo(moduleFile);
     QString projectFile = PYTHON_MODULES_PATH+"/"+fileInfo.fileName();
@@ -1816,6 +1821,7 @@ void PythonIDE::closeModuleTabRequested(int idx) {
 
 void PythonIDE::closeScriptTabRequested(int idx) {
   closeEditorTabRequested(_ui->mainScriptsTabWidget, idx);
+
   if (_project) {
 
     QString scriptFile = getMainScriptEditor(idx)->getFileName();
@@ -1955,6 +1961,7 @@ void PythonIDE::clearPythonCodeEditors() {
   // as we don't want to save files to project as a side effect here
   TulipProject *project = _project;
   _project = NULL;
+
   for (int i = _ui->mainScriptsTabWidget->count() - 1 ; i >=0  ; --i) {
     closeScriptTabRequested(i);
     _ui->mainScriptsTabWidget->removeTab(i);

@@ -180,7 +180,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   if (action == nodesSetDefault || action == edgesSetDefault) {
     setDefaultValue(_contextProperty, action == nodesSetDefault);
-  } else if (action != NULL) {
+  }
+  else if (action != NULL) {
     bool result = false;
 
     _graph->push();
@@ -345,7 +346,8 @@ void PropertiesEditor::setDefaultValue(tlp::PropertyInterface* prop, bool nodes)
 
   if (nodes) {
     GraphModel::setNodeDefaultValue(prop, val);
-  } else {
+  }
+  else {
     GraphModel::setEdgeDefaultValue(prop, val);
   }
 }
