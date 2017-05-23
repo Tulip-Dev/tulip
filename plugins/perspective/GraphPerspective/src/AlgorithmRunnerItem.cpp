@@ -285,7 +285,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (_storeResultAsLocal)
     copyToLocal(dataSet, g);
 
-  std::string algoAndParams = algorithm + " - " + originalDataSet.toString();
   std::vector<std::string> outNonPropertyParams;
   // use temporary output properties
   // to ease the undo in case of failure
@@ -365,10 +364,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
   // get spent time
   int spentTime = start.msecsTo(QTime::currentTime());
 
-  // display it if needed
-  if (TulipSettings::instance().isRunningTimeComputed())
-    qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << spentTime << "ms";
-
   if (!outPropertyParams.empty())
     progress->setPreviewHandler(NULL);
 
@@ -408,8 +403,9 @@ void AlgorithmRunnerItem::run(Graph *g) {
       if (it->name == "result" &&
           TulipSettings::instance().isResultPropertyStored()) {
         // store the result property values in an automatically named property
-        std::string storedResultName = algoAndParams
-                                       + "(" + it->dest->getName() + ")";
+        std::string storedResultName = 
+	  algorithm + " - " + originalDataSet.toString()
+	  + "(" + it->dest->getName() + ")";
         PropertyInterface* storedResultProp =
           it->dest->clonePrototype(it->dest->getGraph(),
                                    storedResultName);
@@ -417,6 +413,11 @@ void AlgorithmRunnerItem::run(Graph *g) {
       }
 
       delete it->tmp;
+    }
+      // display it if needed
+    if (TulipSettings::instance().isRunningTimeComputed()) {
+      std::string algoAndParams = algorithm + " - " + dataSet.toString();
+      qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << spentTime << "ms";
     }
   }
 
