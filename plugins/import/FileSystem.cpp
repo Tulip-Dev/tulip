@@ -117,8 +117,8 @@ public:
     addInParameter<bool>("follow symlinks", paramHelp[6], "true");
     addInParameter<bool>("icons", paramHelp[1], "true");
     addInParameter<bool>("tree layout", paramHelp[2], "true");
-    addInParameter<tlp::Color>("directory color",paramHelp[3], "(255, 255, 127, 128)");
-    addInParameter<tlp::Color>("other color",paramHelp[4], "(85, 170, 255,128)");
+    addInParameter<tlp::Color>("directory color",paramHelp[3], "(255, 255, 127)");
+    addInParameter<tlp::Color>("other color",paramHelp[4], "(85, 170, 255)");
   }
 
   bool importGraph() {
@@ -199,6 +199,10 @@ public:
 
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
         QFileInfo fileInfo(*it);
+        // consider files starting with a dot as hidden (for windows platform)
+        if (!hiddenFiles && fileInfo.fileName().startsWith(".")) {
+          continue;
+        }
         tlp::node fileNode=addFileNode(fileInfo, graph);
         graph->addEdge(parentNode,fileNode);
 
