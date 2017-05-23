@@ -146,9 +146,13 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   menu.addSeparator();
 
-  QMenu* subMenu = menu.addMenu(trUtf8("Set values of"));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY);
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY);
+  QMenu* subMenu = menu.addMenu(trUtf8("Set default value for"));
+  QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
+  QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));
+
+  subMenu = menu.addMenu(trUtf8("Set values of"));
+  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" and set default node value"));
+  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" and set default edge value"));
   QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
   QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
   QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
@@ -174,7 +178,9 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   QAction* action = menu.exec(QCursor::pos());
 
-  if (action != NULL) {
+  if (action == nodesSetDefault || action == edgesSetDefault) {
+    setDefaultValue(_contextProperty, action == nodesSetDefault);
+  } else if (action != NULL) {
     bool result = false;
 
     _graph->push();
@@ -324,6 +330,24 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
   }
 
   return true;
+}
+
+void PropertiesEditor::setDefaultValue(tlp::PropertyInterface* prop, bool nodes) {
+  QVariant val =
+    TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
+                                        prop, _graph,
+                                        static_cast<TulipItemDelegate*>(_delegate),
+                                        editorParent);
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return;
+
+  if (nodes) {
+    GraphModel::setNodeDefaultValue(prop, val);
+  } else {
+    GraphModel::setEdgeDefaultValue(prop, val);
+  }
 }
 
 void PropertiesEditor::copyProperty() {

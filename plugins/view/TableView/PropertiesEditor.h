@@ -68,6 +68,8 @@ public:
   void toLabels(tlp::PropertyInterface* prop,
                 bool nodes, bool edges, bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface* prop, bool nodes, bool selectedOnly, bool graphOnly = false);
+  void setDefaultValue(tlp::PropertyInterface* prop, bool nodes);
+
   bool renameProperty(tlp::PropertyInterface* prop);
 
   tlp::PropertyInterface* contextProperty() const;
