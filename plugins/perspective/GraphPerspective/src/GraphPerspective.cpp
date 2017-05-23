@@ -1264,6 +1264,8 @@ void GraphPerspective::CSVImport() {
 
     if (openPanels)
       showStartPanels(g);
+    else
+      centerPanelsForGraph(g);
 
     if ((nbLogsAfter != nbLogsBefore) &&
         (QMessageBox::question(_mainWindow, "CSV Parse errors found", QString("When parsing your CSV file,<br/> %1 error(s) has been encountered.<br/>Do you want to see them?").arg(nbLogsAfter - nbLogsBefore), QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes))
