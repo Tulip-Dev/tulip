@@ -117,8 +117,8 @@ public:
     addInParameter<bool>("follow symlinks", paramHelp[6], "true");
     addInParameter<bool>("icons", paramHelp[1], "true");
     addInParameter<bool>("tree layout", paramHelp[2], "true");
-    addInParameter<tlp::Color>("directory color",paramHelp[3], "(255, 255, 127)");
-    addInParameter<tlp::Color>("other color",paramHelp[4], "(85, 170, 255)");
+    addInParameter<tlp::Color>("directory color",paramHelp[3], "(255, 255, 127, 255)");
+    addInParameter<tlp::Color>("other color",paramHelp[4], "(85, 170, 255, 255)");
   }
 
   bool importGraph() {
