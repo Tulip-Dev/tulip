@@ -417,6 +417,37 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface * prop, QVarian
   return true;
 }
 
+#define SET_NODE_DEFAULT_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setNodeDefaultValue(v.value< TYPE >())
+bool GraphModel::setNodeDefaultValue(PropertyInterface * prop, QVariant v) {
+
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
+    if (prop->getName() == "viewShape")
+      static_cast<IntegerProperty*>(prop)->setNodeDefaultValue(v.value<NodeShape::NodeShapes>());
+    else if (prop->getName() == "viewLabelPosition")
+      static_cast<IntegerProperty*>(prop)->setNodeDefaultValue(v.value<LabelPosition::LabelPositions>());
+    else
+      static_cast<IntegerProperty*>(prop)->setNodeDefaultValue(v.value<int>());
+  }
+  else if (dynamic_cast<StringProperty*>(prop) != NULL) {
+    if (prop->getName() == "viewFont")
+      static_cast<StringProperty*>(prop)->setNodeDefaultValue(QStringToTlpString(v.value<TulipFont>().fontFile()));
+    else if (prop->getName() == "viewIcon")
+      static_cast<StringProperty*>(prop)->setNodeDefaultValue(QStringToTlpString(v.value<TulipFontIcon>().iconName));
+    else if (prop->getName() == "viewTexture")
+      static_cast<StringProperty*>(prop)->setNodeDefaultValue(QStringToTlpString(v.value<TextureFile>().texturePath));
+    else
+      static_cast<StringProperty*>(prop)->setNodeDefaultValue(QStringToTlpString(v.value<QString>()));
+  }
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    static_cast<BooleanVectorProperty*>(prop)->setNodeDefaultValue(v.value<QVector<bool> >().toStdVector());
+
+  STANDARD_NODE_CHECKS(SET_NODE_DEFAULT_VALUE)
+  else
+    return false;
+
+  return true;
+}
+
 #define GET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getEdgeValue(e))
 QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
   edge e(id);
@@ -525,6 +556,45 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
     static_cast<BooleanVectorProperty*>(prop)->setEdgeValue(e, v.value<QVector<bool> >().toStdVector());
 
   STANDARD_EDGE_CHECKS(SET_EDGE_VALUE)
+  else
+    return false;
+
+  return true;
+}
+
+#define SET_EDGE_DEFAULT_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setEdgeDefaultValue(v.value< TYPE >())
+bool GraphModel::setEdgeDefaultValue(PropertyInterface* prop, QVariant v) {
+
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
+    if (prop->getName() == "viewShape")
+      static_cast<IntegerProperty*>(prop)->setEdgeDefaultValue(v.value<EdgeShape::EdgeShapes>());
+
+    else if (prop->getName() == "viewTgtAnchorShape")
+      static_cast<IntegerProperty*>(prop)->setEdgeDefaultValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>());
+
+    else if (prop->getName() == "viewSrcAnchorShape")
+      static_cast<IntegerProperty*>(prop)->setEdgeDefaultValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>());
+
+    else if (prop->getName() == "viewLabelPosition")
+      static_cast<IntegerProperty*>(prop)->setEdgeDefaultValue(v.value<LabelPosition::LabelPositions>());
+
+    else
+      static_cast<IntegerProperty*>(prop)->setEdgeDefaultValue(v.value<int>());
+  }
+  else if (dynamic_cast<StringProperty*>(prop) != NULL) {
+    if (prop->getName() == "viewFont")
+      static_cast<StringProperty*>(prop)->setEdgeDefaultValue(QStringToTlpString(v.value<TulipFont>().fontFile()));
+    else if (prop->getName() == "viewIcon")
+      static_cast<StringProperty*>(prop)->setEdgeDefaultValue(QStringToTlpString(v.value<TulipFontIcon>().iconName));
+    else if (prop->getName() == "viewTexture")
+      static_cast<StringProperty*>(prop)->setEdgeDefaultValue(QStringToTlpString(v.value<TextureFile>().texturePath));
+    else
+      static_cast<StringProperty*>(prop)->setEdgeDefaultValue(QStringToTlpString(v.value<QString>()));
+  }
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    static_cast<BooleanVectorProperty*>(prop)->setEdgeDefaultValue(v.value<QVector<bool> >().toStdVector());
+
+  STANDARD_EDGE_CHECKS(SET_EDGE_DEFAULT_VALUE)
   else
     return false;
 

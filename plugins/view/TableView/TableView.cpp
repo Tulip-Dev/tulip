@@ -517,6 +517,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
 
   QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
+  QString eltName(NODES_DISPLAYED ? trUtf8("node") : trUtf8("edge"));
   std::string propName = QStringToTlpString(_model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString());
 
   if (propName.empty())
@@ -537,8 +538,10 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   action->setEnabled(false);
   contextMenu.addSeparator();
 
+  QAction* setDefault = contextMenu.addAction(trUtf8("Set default") + ' ' + eltName + " value");
+
   QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction* setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_PROPERTY);
+  QAction* setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_PROPERTY  + trUtf8(" and set default ") + eltName + trUtf8(" value"));
   QAction* setAllGraph = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_GRAPH);
   QAction* selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + OF_GRAPH);
 
@@ -566,6 +569,11 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 
   if (!action)
     return;
+
+  if (action == setDefault) {
+    propertiesEditor->setDefaultValue(prop, NODES_DISPLAYED);
+    return;
+  }
 
   // hold/unhold observers
   tlp::ObserverHolder oh;
@@ -686,9 +694,13 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str()))
     renameProp = contextMenu.addAction("Rename");
 
-  QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY);
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY);
+  QMenu* subMenu = contextMenu.addMenu(trUtf8("Set default value for"));
+  QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
+  QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));
+
+  subMenu = contextMenu.addMenu(trUtf8("Set values of "));
+  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" and set default node value"));
+  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" and set default edge value"));
   QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
   QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
   QAction* nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
@@ -750,6 +762,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
       }
     }
 
+    return;
+  }
+
+  if (action == nodesSetDefault || action == edgesSetDefault) {
+    propertiesEditor->setDefaultValue(prop, action == nodesSetDefault);
     return;
   }
 
