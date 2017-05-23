@@ -100,7 +100,11 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen, bool
     bool ok;
     int n_agentPort = agentPort.toInt(&ok);
 
-    if (ok && (!showAgent || sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS"))) {
+    if (ok && sendAgentMessage(n_agentPort,"HELLO\tHELLO")) {
+
+      if (showAgent) {
+        sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS");
+      }
 
       // if a file was passed as argument, forward it to the running instance
       if (!fileToOpen.isNull()) { // open the file passed as argument
@@ -159,6 +163,8 @@ int main(int argc, char **argv) {
       fileToOpen = s;
     }
   }
+
+  showAgent = showAgent || fileToOpen.isEmpty();
 
   checkTulipRunning(perspName,fileToOpen,showAgent);
   sendUsageStatistics();
