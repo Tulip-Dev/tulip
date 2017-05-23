@@ -763,11 +763,10 @@ INSTALL(FILES AUTHORS
         DESTINATION ${TulipShareInstallDir})
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
-  INSTALL(FILES AUTHORS
-                cmake/FindGLEW.cmake
-		cmake/FindQtX.cmake
-		cmake/FindSphinx.cmake
-	  DESTINATION ${TulipShareInstallDir})
+  INSTALL(FILES cmake/FindGLEW.cmake
+                cmake/FindQtX.cmake
+                cmake/FindSphinx.cmake
+          DESTINATION ${TulipShareInstallDir})
 	
   ADD_SUBDIRECTORY(bundlers)
 
