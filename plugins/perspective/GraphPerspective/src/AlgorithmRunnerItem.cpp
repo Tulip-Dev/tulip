@@ -403,9 +403,9 @@ void AlgorithmRunnerItem::run(Graph *g) {
       if (it->name == "result" &&
           TulipSettings::instance().isResultPropertyStored()) {
         // store the result property values in an automatically named property
-        std::string storedResultName = 
-	  algorithm + " - " + originalDataSet.toString()
-	  + "(" + it->dest->getName() + ")";
+        std::string storedResultName =
+          algorithm + " - " + originalDataSet.toString()
+          + "(" + it->dest->getName() + ")";
         PropertyInterface* storedResultProp =
           it->dest->clonePrototype(it->dest->getGraph(),
                                    storedResultName);
@@ -414,7 +414,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
       delete it->tmp;
     }
-      // display it if needed
+
+    // display it if needed
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string algoAndParams = algorithm + " - " + dataSet.toString();
       qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << spentTime << "ms";
