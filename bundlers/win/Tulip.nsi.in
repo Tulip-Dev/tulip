@@ -176,6 +176,8 @@ File /r files\*.*
 
  ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlp" "Tulip.File" "Tulip Graph File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
  ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpb" "Tulip.BinaryFile" "Tulip Graph Binary File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpz" "Tulip.File.Gzip" "Tulip Graph File (gzipped)" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpbz" "Tulip.BinaryFile.Gzip" "Tulip Graph Binary File (gzipped)" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
  ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpx" "Tulip.ProjectFile" "Tulip Project File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
 
  Call RefreshShellIcons
@@ -200,6 +202,8 @@ Section "Uninstall"
 
  ${unregisterExtension} ".tlp" "Tulip.File"
  ${unregisterExtension} ".tlpb" "Tulip.BinaryFile"
+ ${unregisterExtension} ".tlpz" "Tulip.File.Gzip"
+ ${unregisterExtension} ".tlpbz" "Tulip.BinaryFile.Gzip"
  ${unregisterExtension} ".tlpx" "Tulip.ProjectFile"
 
  Call un.RefreshShellIcons
