@@ -272,7 +272,7 @@ void TulipMainWindow::showTrayMessage(const QString &message) {
 }
 
 void TulipMainWindow::openProject(const QString &file) {
-  raise();
+
   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
 
   if (project->isValid()) {
