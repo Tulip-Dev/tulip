@@ -105,8 +105,10 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   QMenu menu;
   menu.setProperty("mainMenu", true);
+
   if (_contextPropertyList.size() > 1) {
     bool enabled = true;
+
     foreach(PropertyInterface* pi, _contextPropertyList) {
       if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())
           && (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
@@ -119,8 +121,10 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
       connect(menu.addAction(trUtf8("Delete highlighted properties")),SIGNAL(triggered()),this,SLOT(delProperties()));
       connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
     }
+
     menu.exec(QCursor::pos());
-  } else {
+  }
+  else {
     menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
     menu.addAction(pname)->setEnabled(false);
     menu.addSeparator();
@@ -135,7 +139,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     if (Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str())) {
       // Enable deletion of reserved properties when on a subgraph and that properties are local
       if (_graph == _graph->getRoot() || !_graph->existLocalProperty(_contextProperty->getName()))
-	enabled = false;
+        enabled = false;
     }
 
     if (enabled) {
@@ -190,29 +194,29 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
       _graph->push();
 
       if (action == nodesSetAll)
-	result = setAllValues(_contextProperty, true, false);
+        result = setAllValues(_contextProperty, true, false);
 
       if (action == nodesSetAllGraph)
-	result = setAllValues(_contextProperty, true, false, true);
+        result = setAllValues(_contextProperty, true, false, true);
 
       if (action == edgesSetAll)
-	result = setAllValues(_contextProperty, false, false);
+        result = setAllValues(_contextProperty, false, false);
 
       if (action == edgesSetAllGraph)
-	result = setAllValues(_contextProperty, false, false, true);
+        result = setAllValues(_contextProperty, false, false, true);
 
       if (action == selectedNodesSetAll)
-	result = setAllValues(_contextProperty, true, true);
+        result = setAllValues(_contextProperty, true, true);
 
       if (action == selectedEdgesSetAll)
-	result = setAllValues(_contextProperty, false, true);
+        result = setAllValues(_contextProperty, false, true);
 
       if (action == rename)
-	result = renameProperty(_contextProperty);
+        result = renameProperty(_contextProperty);
 
       if (!result)
-	// edition cancelled
-	_graph->pop();
+        // edition cancelled
+        _graph->pop();
     }
   }
 
@@ -245,6 +249,7 @@ void PropertiesEditor::setPropsVisibility(int state) {
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
   std::set<std::string> ctxPropNames;
+
   foreach(PropertyInterface* pi, _contextPropertyList)
     ctxPropNames.insert(pi->getName());
 

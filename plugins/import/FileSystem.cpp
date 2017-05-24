@@ -199,10 +199,12 @@ public:
 
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
         QFileInfo fileInfo(*it);
+
         // consider files starting with a dot as hidden (for windows platform)
         if (!hiddenFiles && fileInfo.fileName().startsWith(".")) {
           continue;
         }
+
         tlp::node fileNode=addFileNode(fileInfo, graph);
         graph->addEdge(parentNode,fileNode);
 
