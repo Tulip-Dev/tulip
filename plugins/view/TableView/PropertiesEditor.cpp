@@ -105,30 +105,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   QMenu menu;
   menu.setProperty("mainMenu", true);
-  connect(menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),trUtf8("Add a new property")),SIGNAL(triggered()),this,SLOT(newProperty()));
-  QAction* deletehighlighted = menu.addAction(trUtf8("Delete highlighted properties"));
-  deletehighlighted->setVisible(false);
-  menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
-  menu.addAction(pname)->setEnabled(false);
-  menu.addSeparator();
-  connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
-  menu.addSeparator();
-
-  connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
-
-  bool enabled = true;
-
-  if (Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str())) {
-    // Enable deletion of reserved properties when on a subgraph and that properties are local
-    if (_graph == _graph->getRoot() || !_graph->existLocalProperty(_contextProperty->getName()))
-      enabled = false;
-  }
-
-  if (enabled) {
-    connect(menu.addAction(trUtf8("Delete")),SIGNAL(triggered()),this,SLOT(delProperty()));
-  }
-
-  if (enabled && _contextPropertyList.size() > 1) {
+  if (_contextPropertyList.size() > 1) {
+    bool enabled = true;
     foreach(PropertyInterface* pi, _contextPropertyList) {
       if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())
           && (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
@@ -138,82 +116,104 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     }
 
     if (enabled) {
-        deletehighlighted->setVisible(true);
-        connect(deletehighlighted,SIGNAL(triggered()),this,SLOT(delProperties()));
+      connect(menu.addAction(trUtf8("Delete highlighted properties")),SIGNAL(triggered()),this,SLOT(delProperties()));
+      connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
     }
-  }
+    menu.exec(QCursor::pos());
+  } else {
+    menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+    menu.addAction(pname)->setEnabled(false);
+    menu.addSeparator();
+    connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
+    menu.addSeparator();
 
-  QAction* rename = NULL;
+    connect(menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),trUtf8("Add property of the same type")),SIGNAL(triggered()),this,SLOT(newProperty()));
+    connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
 
-  if (!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()))
-    rename = menu.addAction("Rename");
+    bool enabled = true;
 
-  menu.addSeparator();
+    if (Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str())) {
+      // Enable deletion of reserved properties when on a subgraph and that properties are local
+      if (_graph == _graph->getRoot() || !_graph->existLocalProperty(_contextProperty->getName()))
+	enabled = false;
+    }
 
-  QMenu* subMenu = menu.addMenu(trUtf8("Set default value for"));
-  QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
-  QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));
+    if (enabled) {
+      connect(menu.addAction(trUtf8("Delete")),SIGNAL(triggered()),this,SLOT(delProperty()));
+    }
 
-  subMenu = menu.addMenu(trUtf8("Set values of"));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" and set default node value"));
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" and set default edge value"));
-  QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
-  QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
-  QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
-  QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
+    QAction* rename = NULL;
 
-  enabled = (pname != "viewLabel");
+    if (!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()))
+      rename = menu.addAction("Rename");
 
-  if (enabled) {
-    subMenu = menu.addMenu(trUtf8("To labels of"));
-    QAction* action = subMenu->addAction(trUtf8("All elements") + OF_GRAPH);
-    connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
-    action = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
-    connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
-    action = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
-    connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
-    action = subMenu->addAction(trUtf8("All selected elements") + OF_GRAPH);
-    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
-    action = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
-    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
-    action = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
-    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
-  }
+    menu.addSeparator();
 
-  QAction* action = menu.exec(QCursor::pos());
+    QMenu* subMenu = menu.addMenu(trUtf8("Set default value for"));
+    QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
+    QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));
 
-  if (action == nodesSetDefault || action == edgesSetDefault) {
-    setDefaultValue(_contextProperty, action == nodesSetDefault);
-  }
-  else if (action != NULL) {
-    bool result = false;
+    subMenu = menu.addMenu(trUtf8("Set values of"));
+    QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" and set default node value"));
+    QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" and set default edge value"));
+    QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+    QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+    QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+    QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
 
-    _graph->push();
+    enabled = (pname != "viewLabel");
 
-    if (action == nodesSetAll)
-      result = setAllValues(_contextProperty, true, false);
+    if (enabled) {
+      subMenu = menu.addMenu(trUtf8("To labels of"));
+      QAction* action = subMenu->addAction(trUtf8("All elements") + OF_GRAPH);
+      connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
+      action = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+      connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
+      action = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+      connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
+      action = subMenu->addAction(trUtf8("All selected elements") + OF_GRAPH);
+      connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
+      action = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+      connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
+      action = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
+      connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
+    }
 
-    if (action == nodesSetAllGraph)
-      result = setAllValues(_contextProperty, true, false, true);
+    QAction* action = menu.exec(QCursor::pos());
 
-    if (action == edgesSetAll)
-      result = setAllValues(_contextProperty, false, false);
+    if (action == nodesSetDefault || action == edgesSetDefault) {
+      setDefaultValue(_contextProperty, action == nodesSetDefault);
+    }
+    else if (action != NULL) {
+      bool result = false;
 
-    if (action == edgesSetAllGraph)
-      result = setAllValues(_contextProperty, false, false, true);
+      _graph->push();
 
-    if (action == selectedNodesSetAll)
-      result = setAllValues(_contextProperty, true, true);
+      if (action == nodesSetAll)
+	result = setAllValues(_contextProperty, true, false);
 
-    if (action == selectedEdgesSetAll)
-      result = setAllValues(_contextProperty, false, true);
+      if (action == nodesSetAllGraph)
+	result = setAllValues(_contextProperty, true, false, true);
 
-    if (action == rename)
-      result = renameProperty(_contextProperty);
+      if (action == edgesSetAll)
+	result = setAllValues(_contextProperty, false, false);
 
-    if (!result)
-      // edition cancelled
-      _graph->pop();
+      if (action == edgesSetAllGraph)
+	result = setAllValues(_contextProperty, false, false, true);
+
+      if (action == selectedNodesSetAll)
+	result = setAllValues(_contextProperty, true, true);
+
+      if (action == selectedEdgesSetAll)
+	result = setAllValues(_contextProperty, false, true);
+
+      if (action == rename)
+	result = renameProperty(_contextProperty);
+
+      if (!result)
+	// edition cancelled
+	_graph->pop();
+    }
   }
 
   _contextProperty = NULL;
@@ -244,8 +244,12 @@ void PropertiesEditor::setPropsVisibility(int state) {
 }
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
+  std::set<std::string> ctxPropNames;
+  foreach(PropertyInterface* pi, _contextPropertyList)
+    ctxPropNames.insert(pi->getName());
+
   for(int i=0; i<_sourceModel->rowCount(); ++i) {
-    setPropertyChecked(i,_sourceModel->index(i,0).data().toString() == _contextProperty->getName().c_str());
+    setPropertyChecked(i, ctxPropNames.count(QStringToTlpString(_sourceModel->index(i,0).data().toString())) == 1);
   }
 
   _ui->propsVisibilityCheck->setTristate(true);
@@ -386,7 +390,7 @@ void PropertiesEditor::delProperties() {
 }
 
 bool PropertiesEditor::renameProperty(PropertyInterface* prop) {
-  return RenamePropertyDialog::renameProperty(prop, editorParent);
+  return RenamePropertyDialog::renameProperty(prop, Perspective::instance()->mainWindow());
 }
 
 void PropertiesEditor::toLabels() {
