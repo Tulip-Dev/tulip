@@ -266,10 +266,10 @@ struct TLPGraphBuilder:public TLPTrue {
                     bool isGraphProperty, bool isPathViewProperty) {
     node n(nodeId);
 
-    assert(prop->getGraph()->isElement(n));
-
     if (version < 2.1)
       n = nodeIndex[nodeId];
+
+    assert(prop->getGraph()->isElement(n));
 
     if (isPathViewProperty) {
       // if needed replace symbolic path by real path
@@ -302,10 +302,10 @@ struct TLPGraphBuilder:public TLPTrue {
                     bool isGraphProperty, bool isPathViewProperty) {
     edge e(edgeId);
 
-    assert(prop->getGraph()->isElement(e));
-
     if (version < 2.1)
       e = edgeIndex[edgeId];
+
+    assert(prop->getGraph()->isElement(e));
 
     const std::string& propertyName = prop->getName();
 
