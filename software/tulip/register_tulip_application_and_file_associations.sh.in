@@ -5,6 +5,7 @@ installationPrefix=~/.local
 mkdir -p $installationPrefix/share/mime/packages
 mkdir -p $installationPrefix/share/applications
 mkdir -p $installationPrefix/share/pixmaps
+mkdir -p $installationPrefix/share/icons
 
 # Create mime xml for each Tulip file extension
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -80,13 +81,13 @@ Terminal=false
 Type=Application
 Categories=Science
 Comment=Large graphs analysis and visualization
-"> $installationPrefix/share/applications/Tulip.desktop
+"> $installationPrefix/share/applications/Tulip-@TulipVersion@.desktop
 
 # update databases for both application and mime
 update-desktop-database $installationPrefix/share/applications
 update-mime-database    $installationPrefix/share/mime
 
-# copy associated icons to pixmaps
+# copy associated icons to pixmaps and icons
 cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-icon.png $installationPrefix/share/pixmaps/tulip.png
 cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-file-icon.png $installationPrefix/share/pixmaps/application-x-tulip.png
 cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-icon.png $installationPrefix/share/icons/tulip.png
