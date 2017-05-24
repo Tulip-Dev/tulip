@@ -105,12 +105,15 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   QMenu menu;
   menu.setProperty("mainMenu", true);
+  connect(menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),trUtf8("Add a new property")),SIGNAL(triggered()),this,SLOT(newProperty()));
+  QAction* deletehighlighted = menu.addAction(trUtf8("Delete highlighted properties"));
+  deletehighlighted->setVisible(false);
   menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
   menu.addAction(pname)->setEnabled(false);
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Add new")),SIGNAL(triggered()),this,SLOT(newProperty()));
+
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
 
   bool enabled = true;
@@ -135,7 +138,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     }
 
     if (enabled) {
-      connect(menu.addAction(trUtf8("Delete highlighted properties")),SIGNAL(triggered()),this,SLOT(delProperties()));
+        deletehighlighted->setVisible(true);
+        connect(deletehighlighted,SIGNAL(triggered()),this,SLOT(delProperties()));
     }
   }
 
