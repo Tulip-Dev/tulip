@@ -676,7 +676,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   // as "title" items
   contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
 
-  QAction* addProp = contextMenu.addAction("Add a new property");
+  QAction* addProp = contextMenu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),"Add a new property");
   QAction* action = contextMenu.addAction(tlpStringToQString(propName));
   action->setEnabled(false);
   contextMenu.addSeparator();
