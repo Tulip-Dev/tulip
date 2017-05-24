@@ -89,3 +89,5 @@ update-mime-database    $installationPrefix/share/mime
 # copy associated icons to pixmaps
 cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-icon.png $installationPrefix/share/pixmaps/tulip.png
 cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-file-icon.png $installationPrefix/share/pixmaps/application-x-tulip.png
+cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-icon.png $installationPrefix/share/icons/tulip.png
+cp @CMAKE_CURRENT_SOURCE_DIR@/resources/icons/tulip-file-icon.png $installationPrefix/share/icons/application-x-tulip.png
