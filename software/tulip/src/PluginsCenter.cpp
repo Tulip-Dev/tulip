@@ -61,6 +61,10 @@ PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::Plug
   }
 }
 
+PluginsCenter::~PluginsCenter() {
+    delete _ui;
+}
+
 void PluginsCenter::reportPluginErrors(const QMap<QString, QString>& errors) {
   if (!errors.empty())
     _ui->pluginsSideList->item(ERRORS_ROW)->setFlags(Qt::ItemIsEnabled | _ui->pluginsSideList->item(ERRORS_ROW)->flags());

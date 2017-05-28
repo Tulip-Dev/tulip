@@ -48,6 +48,10 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString& perspectiveName,QWid
   _ui->icon->setPixmap(px);
 }
 
+PerspectiveItemWidget::~PerspectiveItemWidget() {
+    delete _ui;
+}
+
 void PerspectiveItemWidget::run() {
   TulipMainWindow::instance()->createPerspective(_perspectiveName);
   emit selected();

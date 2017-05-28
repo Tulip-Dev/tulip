@@ -50,6 +50,10 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
 
 }
 
+TulipPerspectiveCrashHandler::~TulipPerspectiveCrashHandler() {
+    delete _ui;
+}
+
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {
   _isDetailedView = f;
   _ui->detailsLink->setText(f ? "<a href=\"Hide details\">Hide details</a>" :

@@ -38,6 +38,7 @@ class PluginErrorReport: public QWidget {
   Q_OBJECT
 public:
   explicit PluginErrorReport(const QString &fileName, const QString &errorMsg, QWidget *parent=NULL);
+    ~PluginErrorReport();
 
 protected:
   virtual void focusInEvent(QFocusEvent *);

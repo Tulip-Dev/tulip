@@ -51,10 +51,9 @@ using namespace tlp;
 
 TulipMainWindow* TulipMainWindow::_instance = NULL;
 
-TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
+TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _errorMessage(new QLabel()), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
 
-  _errorMessage = new QLabel();
   QLabel* errorIcon = new QLabel();
   errorIcon->setMaximumSize(16,16);
   errorIcon->setMinimumSize(16,16);
@@ -129,6 +128,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
 }
 
 TulipMainWindow::~TulipMainWindow() {
+    delete _ui;
 }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
