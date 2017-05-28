@@ -37,6 +37,10 @@ PluginErrorReport::PluginErrorReport(const QString &fileName, const QString &err
 
 }
 
+PluginErrorReport::~PluginErrorReport() {
+    delete _ui;
+}
+
 void PluginErrorReport::focusInEvent(QFocusEvent *) {
   setStyleSheet("#PluginErrorReportData { background-color: rgb(232, 238, 244); border: 1px solid #C9C9C9; }");
   repaint();

@@ -34,6 +34,7 @@ class PerspectiveSelectionDialog : public QDialog {
   QString _perspective;
 public:
   explicit PerspectiveSelectionDialog(QWidget *parent = 0);
+  ~PerspectiveSelectionDialog();
   QString perspectiveName() const;
 
 protected slots:

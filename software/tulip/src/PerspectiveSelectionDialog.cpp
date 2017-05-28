@@ -31,6 +31,10 @@ PerspectiveSelectionDialog::PerspectiveSelectionDialog(QWidget *parent): QDialog
   connect(_ui->perspectiveList->selectionModel(),SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),this,SLOT(selectionChanged(QModelIndex,QModelIndex)));
 }
 
+PerspectiveSelectionDialog::~PerspectiveSelectionDialog(){
+    delete _ui;
+}
+
 QString PerspectiveSelectionDialog::perspectiveName() const {
   return _perspective;
 }

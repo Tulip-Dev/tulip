@@ -38,6 +38,7 @@ class TulipPerspectiveCrashHandler : public QDialog {
 
 public:
   explicit TulipPerspectiveCrashHandler(QWidget *parent = 0);
+  ~TulipPerspectiveCrashHandler();
 
 protected slots:
   void reportPosted();
