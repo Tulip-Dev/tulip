@@ -49,7 +49,7 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString& perspectiveName,QWid
 }
 
 PerspectiveItemWidget::~PerspectiveItemWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void PerspectiveItemWidget::run() {

@@ -51,7 +51,7 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
 }
 
 TulipPerspectiveCrashHandler::~TulipPerspectiveCrashHandler() {
-    delete _ui;
+  delete _ui;
 }
 
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {

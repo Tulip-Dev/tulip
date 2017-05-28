@@ -128,7 +128,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _errorMe
 }
 
 TulipMainWindow::~TulipMainWindow() {
-    delete _ui;
+  delete _ui;
 }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
