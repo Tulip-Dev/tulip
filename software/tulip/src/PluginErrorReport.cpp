@@ -38,7 +38,7 @@ PluginErrorReport::PluginErrorReport(const QString &fileName, const QString &err
 }
 
 PluginErrorReport::~PluginErrorReport() {
-    delete _ui;
+  delete _ui;
 }
 
 void PluginErrorReport::focusInEvent(QFocusEvent *) {
