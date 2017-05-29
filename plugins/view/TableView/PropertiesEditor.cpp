@@ -188,6 +188,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     /*if (action == nodesSetDefault || action == edgesSetDefault) {
       setDefaultValue(_contextProperty, action == nodesSetDefault);
     }
+
     else*/ if (action != NULL) {
       bool result = false;
 
