@@ -404,6 +404,16 @@ font: 12px;
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QCheckBox" name="applyDrawingDefaultsCheck">
+         <property name="toolTip">
+          <string>Check this, if you want to apply your changes to the graphs currenty loaded</string>
+         </property>
+         <property name="text">
+          <string>Apply drawing defaults changes to loaded graphs</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_3">
