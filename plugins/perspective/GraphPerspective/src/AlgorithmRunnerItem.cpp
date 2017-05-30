@@ -416,9 +416,13 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
 
     // display it if needed
-    if (TulipSettings::instance().isRunningTimeComputed()) {
-      std::string algoAndParams = algorithm + " - " + dataSet.toString();
-      qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << spentTime << "ms";
+    if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
+      std::stringstream log;
+      log << algorithm.c_str() << " - "  << dataSet.toString().c_str();
+      if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
+	log << ": " << spentTime << "ms";
+      
+      qDebug() << tlpStringToQString(log.str());
     }
   }
 
