@@ -73,7 +73,7 @@ namespace tlp {
 class TLPExport:public ExportModule {
 public:
   PLUGININFORMATION("TLP Export","Auber David","31/07/2001",
-                    "Exports a graph in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for description.",
+                    "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed)</p><p>Exports a graph in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for more details.</p>",
                     "1.1", "File")
 
   string fileExtension() const {

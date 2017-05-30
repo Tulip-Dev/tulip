@@ -97,7 +97,7 @@ struct FuLiao:public ImportModule {
         k_sum += (double)graph->deg(nodes[j]);
       }
 
-      // Ajout de la première arête :
+      // add first edge
       double pr_sum = 0;
       unsigned int rn = 0;
       double pr = tlp::randomDouble();
@@ -112,7 +112,7 @@ struct FuLiao:public ImportModule {
 
       graph->addEdge(nodes[i],nodes[rn]);
 
-      // Ajout des autres arêtes :
+      // add other edges
       for(j=1; j<m ; ++j) {
         rn = 0;
         double h_sum = 0;

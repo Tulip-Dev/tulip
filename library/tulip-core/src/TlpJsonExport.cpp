@@ -52,7 +52,7 @@ using namespace tlp;
  **/
 class TlpJsonExport : public ExportModule {
 public:
-  PLUGININFORMATION("JSON Export","Charles Huet","18/05/2011","Exports a graph in a file using the Tulip JSON format","1.0","File")
+  PLUGININFORMATION("JSON Export","Charles Huet","18/05/2011","<p>Supported extensions: json</p><p>Exports a graph in a file using the Tulip JSON format.</p>","1.0","File")
 
   std::string fileExtension() const {
     return "json";
