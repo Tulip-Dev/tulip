@@ -57,9 +57,13 @@ _tulipGuiNativePluginsPath = _tulipGuiNativeLibsPath + 'plugins'
 
 # fix loading of Tulip plugins when the tulipgui module has been installed through pip
 if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
-  import DLFCN
   dlOpenFlagsBackup = sys.getdlopenflags()
-  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
+  if sys.version_info < (3, 6):
+    import DLFCN
+    dlOpenFlags = DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL
+  else:
+    dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
+  sys.setdlopenflags(dlOpenFlags)
 
 tlp.loadTulipPluginsFromDir(_tulipGuiNativePluginsPath)
 
