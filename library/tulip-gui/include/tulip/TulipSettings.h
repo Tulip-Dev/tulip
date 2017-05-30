@@ -160,8 +160,16 @@ public:
   bool isResultPropertyStored() const;
   void setResultPropertyStored(bool);
 
-  bool isRunningTimeComputed() const;
-  void setRunningTimeComputed(bool);
+  _DEPRECATED bool isRunningTimeComputed() const;
+  _DEPRECATED void setRunningTimeComputed(bool);
+
+  enum LogPluginCall {
+    NoLog = 0,
+    LogCall = 1,
+    LogCallWithExecutionTime = 2
+  };
+  unsigned int logPluginCall() const;
+  void setLogPluginCall(unsigned int);
 
   bool isUseTlpbFileFormat() const;
   void setUseTlpFileFormat(bool);
