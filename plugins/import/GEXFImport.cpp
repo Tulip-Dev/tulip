@@ -61,7 +61,7 @@ class GEXFImport : public ImportModule {
 public :
 
   PLUGININFORMATION("GEXF","Antoine LAMBERT","05/05/2010",
-                    "Imports a new graph from a file in the GEXF input format<br/>as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet supported.",
+                    "<p>Supported extensions: gexf</p><p>Imports a new graph from a file in the GEXF input format<br/>as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet supported.</p>",
                     "1.0","File")
   GEXFImport(const PluginContext*  context):ImportModule(context),
     viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),

@@ -1415,24 +1415,12 @@ class ImportBibTeX : public ImportModule {
 
 public :
 
-  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014", "Import a new graph from BibTeX(.bib) formatted file", "1.1", "File")
+  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014", "<p>Supported extensions: bib</p><p>Import a new graph from a BibTeX formatted file.</p>", "1.1", "File")
 
   ImportBibTeX(const tlp::PluginContext *context):ImportModule(context) {
-    addInParameter<string>("file::filename",
-                           HTML_HELP_OPEN()     \
-                           HTML_HELP_DEF( "type", "pathname" )        \
-                           HTML_HELP_BODY()       \
-                           "This parameter indicates the pathname of the file(.bib) to import." \
-                           HTML_HELP_CLOSE(),
-                           "");
+    addInParameter<string>("file::filename","This parameter indicates the pathname of the file(.bib) to import.","");
     addInParameter<StringCollection>("Nodes to import",
-                                     HTML_HELP_OPEN()     \
-                                     HTML_HELP_DEF( "type", "String Collection" ) \
-                                     HTML_HELP_DEF("values", "Authors <i>(Create nodes for authors only, publications are represented as edges between authors)</i><br/>Authors and Publications <i>(Create nodes for both authors and publications)</i><br/>Publications <i>(Create nodes for publications only)</i>") \
-                                     HTML_HELP_DEF( "default", "Authors") \
-                                     HTML_HELP_BODY()     \
-                                     "The type of nodes to create"  \
-                                     HTML_HELP_CLOSE(),
+                                     "The type of nodes to create: Authors <i>(Create nodes for authors only, publications are represented as edges between authors)</i><br/>Authors and Publications <i>(Create nodes for both authors and publications)</i><br/>Publications <i>(Create nodes for publications only)</i>",
                                      NODES_TO_IMPORT);
   }
 
@@ -1445,9 +1433,6 @@ public :
     l.push_back("bib");
     return l;
   }
-
-  ~ImportBibTeX() {}
-
 
   bool importGraph() {
     string filename;

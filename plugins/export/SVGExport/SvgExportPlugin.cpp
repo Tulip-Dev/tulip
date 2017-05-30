@@ -65,7 +65,7 @@ static const char *paramHelp[] = {
 class SvgExport:public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.9", "File")
+  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","<p>Supported extensions: svg, svgz (compressed svg)</p><p>Exports a graph visualization in a SVG formatted file</svg>.","1.9", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";

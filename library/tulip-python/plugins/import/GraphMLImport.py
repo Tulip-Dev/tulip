@@ -200,8 +200,8 @@ class GraphMLImport(tlp.ImportModule):
 # and updates the GUI to make it accessible through the menus.
 tulipplugins.registerPluginOfGroup("GraphMLImport", "GraphML", "Antoine Lambert", "14/05/2017",
 """
-Imports a graph from a file in the GraphML format (http://graphml.graphdrawing.org/).
+<p>Supported extension: graphml</p><p>Imports a graph from a file in the GraphML format (http://graphml.graphdrawing.org/).
 GraphML is a comprehensive and easy-to-use file format for graphs.
 It consists of a language core to describe the structural properties 
-of a graph and a flexible extension mechanism to add application-specific data.
+of a graph and a flexible extension mechanism to add application-specific data.</p>
 """, "1.0", "File")

@@ -65,7 +65,7 @@
 class CsvExport: public tlp::ExportModule {
 public:
 
-  PLUGININFORMATION("CSV Export", "David Auber, Patrick Mary","18/01/2011","Exports the values of tulip graph properties associated to graph elements in a CSV file.","1.0","File")
+  PLUGININFORMATION("CSV Export", "David Auber, Patrick Mary","18/01/2011","<p>Supported extensions: csv</p><p>Exports the values of tulip graph properties associated to graph elements in a CSV file.</p>","1.0","File")
   std::string fileExtension() const {
     return "csv";
   }
