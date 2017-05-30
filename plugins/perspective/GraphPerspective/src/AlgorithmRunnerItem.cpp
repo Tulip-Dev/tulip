@@ -70,6 +70,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
 
   if (!plugin.getParameters().empty()) {
     _ui->parameters->setItemDelegate(new TulipItemDelegate);
+    connect(_ui->parameters, SIGNAL(destroyed()), _ui->parameters->itemDelegate(), SLOT(deleteLater()));
   }
   else {
     _ui->settingsButton->setVisible(false);
