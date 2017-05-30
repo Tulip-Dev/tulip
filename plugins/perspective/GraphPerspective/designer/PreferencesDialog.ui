@@ -186,16 +186,6 @@ background-color: #F4F4F4;
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="runningTimeComputedCheck">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;The time spent in an algorithm computation will be displayed in the message box.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Compute time spent when running an algorithm</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QCheckBox" name="usetlpbformat">
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will lose compatibility with older verstion of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -210,7 +200,7 @@ background-color: #F4F4F4;
            <item>
             <widget class="QCheckBox" name="randomSeedCheck">
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;When checked,  each random sequence will be initialized with the given value.
+              <string>&lt;html&gt;&lt;body&gt;&lt;p&gt;When checked, each random sequence will be initialized with the given value.
 If not, a new random seed will be set to initialize each new random sequence.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
@@ -230,6 +220,58 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
            </item>
            <item>
             <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QLabel" name="logLabel">
+             <property name="toolTip">
+              <string>Choose whether you want to log every  interactive call to an algorithm, an export or import plugin.&lt;br/&gt; The execution time can be logged too.</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel  {font-style: normal }</string>
+             </property>
+             <property name="text">
+              <string>Log every interactive call to a plugin:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="logCombo">
+             <property name="toolTip">
+              <string>Choose whether you want to log every  interactive call to an algorithm, an export or import plugin.&lt;br/&gt; The execution time can be logged too.</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>No</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Yes</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Yes, with the execution time</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>

@@ -622,10 +622,14 @@ void GraphPerspective::exportGraph(Graph* g) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
   }
   else {
-    // display spent time
-    if (TulipSettings::instance().isRunningTimeComputed()) {
-      std::string moduleAndParams = exportPluginName + " - " + data.toString();
-      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QTime::currentTime()) << "ms";
+    // log export plugin call
+    if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
+      std::stringstream log;
+      log << exportPluginName.c_str() << " - " << data.toString().c_str();
+      if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
+	log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
+      
+      qDebug() << tlpStringToQString(log.str());
     }
 
     addRecentDocument(wizard.outputFile());
@@ -678,10 +682,14 @@ void GraphPerspective::importGraph(const std::string& module,
 
     delete prg;
 
-    // display spent time
-    if (TulipSettings::instance().isRunningTimeComputed()) {
-      std::string moduleAndParams = module + " import - " + data.toString();
-      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QTime::currentTime()) << "ms";
+    // log import plugin call
+    if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
+      std::stringstream log;
+      log << module.c_str() << " import - " << data.toString().c_str();
+      if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
+	log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
+      
+      qDebug() << tlpStringToQString(log.str());
     }
 
     if (g->getName().empty()) {
