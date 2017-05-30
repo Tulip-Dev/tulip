@@ -420,9 +420,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
     if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << algorithm.c_str() << " - "  << dataSet.toString().c_str();
+
       if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
-	log << ": " << spentTime << "ms";
-      
+        log << ": " << spentTime << "ms";
+
       qDebug() << tlpStringToQString(log.str());
     }
   }

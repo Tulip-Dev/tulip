@@ -410,13 +410,16 @@ void TulipSettings::setRunningTimeComputed(bool f) {
 unsigned int TulipSettings::logPluginCall() const {
   if (contains(TS_RunningTimeComputed)) {
     bool val = value(TS_RunningTimeComputed,false).toBool();
+
     // ensure compatibility
     if (val)
       ((TulipSettings *)this)->setValue(TS_LogPluginCall,
-					LogCallWithExecutionTime);
+                                        LogCallWithExecutionTime);
+
     // no longer used
     ((TulipSettings *)this)->remove(TS_RunningTimeComputed);
   }
+
   return value(TS_LogPluginCall, NoLog).toUInt();
 }
 

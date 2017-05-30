@@ -626,9 +626,10 @@ void GraphPerspective::exportGraph(Graph* g) {
     if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << exportPluginName.c_str() << " - " << data.toString().c_str();
+
       if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
-	log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
-      
+        log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
+
       qDebug() << tlpStringToQString(log.str());
     }
 
@@ -686,9 +687,10 @@ void GraphPerspective::importGraph(const std::string& module,
     if (TulipSettings::instance().logPluginCall() != TulipSettings::NoLog) {
       std::stringstream log;
       log << module.c_str() << " import - " << data.toString().c_str();
+
       if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
-	log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
-      
+        log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
+
       qDebug() << tlpStringToQString(log.str());
     }
 
