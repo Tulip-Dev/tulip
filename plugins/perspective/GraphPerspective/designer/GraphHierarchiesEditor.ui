@@ -167,7 +167,7 @@
     <string>Create empty sub-graph</string>
    </property>
    <property name="toolTip">
-    <string>Create an empty sub-graph</string>
+    <string>Create an empty sub-graph of the highlighted graph</string>
    </property>
   </action>
   <action name="actionClone_subgraph">
@@ -179,7 +179,7 @@
     <string>Create clone sub-graph</string>
    </property>
    <property name="toolTip">
-    <string>Clone the selected graph into a sub-graph</string>
+    <string>Clone the highlighted graph into a sub-graph</string>
    </property>
   </action>
   <action name="actionClone_sibling">
@@ -191,7 +191,7 @@
     <string>Create clone sibling</string>
    </property>
    <property name="toolTip">
-    <string>Clone the selected graph into a sibling of that graph </string>
+    <string>Clone the highlighted graph into a sibling of its parent graph</string>
    </property>
   </action>
   <action name="actionClone_sibling_with_properties">
@@ -203,7 +203,7 @@
     <string>Create clone sibling (with properties)</string>
    </property>
    <property name="toolTip">
-    <string>Clone the selected graph and its local properties into a sibling of that graph </string>
+    <string>Clone the highlighted graph and its local properties into a sibling of its parent graph</string>
    </property>
   </action>
   <action name="actionDelete_graph">
@@ -215,7 +215,7 @@
     <string>Delete</string>
    </property>
    <property name="toolTip">
-    <string>Delete the selected graph</string>
+    <string>Delete the highlighed graph, reparenting its subgraphs hierarchy to its parent</string>
    </property>
   </action>
   <action name="actionDelete_All">
@@ -227,7 +227,7 @@
     <string>Delete All</string>
    </property>
    <property name="toolTip">
-    <string>Delete the selected graph and all its subgraphs</string>
+    <string>Delete the highlighted graph and all its subgraphs [Shift+Del]</string>
    </property>
    <property name="shortcut">
     <string>Shift+Del</string>
@@ -242,7 +242,7 @@
     <string>Add panel</string>
    </property>
    <property name="toolTip">
-    <string>Open a new visualization panel</string>
+    <string>Open a new visualization panel on the highlighted graph</string>
    </property>
   </action>
   <action name="actionExport">
@@ -254,7 +254,7 @@
     <string>Export</string>
    </property>
    <property name="toolTip">
-    <string>Export the graph</string>
+    <string>Export the highlighted graph</string>
    </property>
   </action>
   <action name="actionRename">
@@ -264,6 +264,9 @@
    </property>
    <property name="text">
     <string>Rename</string>
+   </property>
+   <property name="toolTip">
+    <string>Rename the highlighted graph</string>
    </property>
   </action>
   <action name="actionSave_to_file">
@@ -275,7 +278,7 @@
     <string>Save</string>
    </property>
    <property name="toolTip">
-    <string>Export the whole hierarchy (from the root graph) into a file using the tlp/tlpb file format</string>
+    <string>Export the highlighted graph into a file using the tlp/tlpb file format</string>
    </property>
   </action>
   <action name="actionCreate_induced_sub_graph">
@@ -287,7 +290,7 @@
     <string>Create sub-graph from selection</string>
    </property>
    <property name="toolTip">
-    <string>Create a subgraph from the selected elements</string>
+    <string>Create a subgraph from the selected elements of the highlighted graph [Ctrl+Shift+G]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
