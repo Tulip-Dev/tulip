@@ -55,25 +55,25 @@
 class CliqueEnumeration:public tlp::Algorithm {
 public:
 
-    PLUGININFORMATION("Maximal Cliques", "Francois Queyroi", "24/10/2013", "Alpha", "0.1", "Clustering")
+  PLUGININFORMATION("Maximal Cliques", "Francois Queyroi", "24/10/2013", "Alpha", "0.1", "Clustering")
 
-    CliqueEnumeration(tlp::PluginContext*);
-    bool run();
-    bool check(std::string &);
+  CliqueEnumeration(tlp::PluginContext*);
+  bool run();
+  bool check(std::string &);
 
 private:
 
-    void addClique(std::vector<tlp::node> &);
+  void addClique(std::vector<tlp::node> &);
 
-    void getDegenerateOrdering(std::vector<tlp::node> &);
-    void getNeighborhood(tlp::node,std::set<tlp::node> &);
-    tlp::node choosePivot(std::set<tlp::node> &);
-    void maxCliquePivot(std::set<tlp::node>&,std::vector<tlp::node>&,std::set<tlp::node>&);
+  void getDegenerateOrdering(std::vector<tlp::node> &);
+  void getNeighborhood(tlp::node,std::set<tlp::node> &);
+  tlp::node choosePivot(std::set<tlp::node> &);
+  void maxCliquePivot(std::set<tlp::node>&,std::vector<tlp::node>&,std::set<tlp::node>&);
 
-    void intersectSet(std::set<tlp::node>&,std::set<tlp::node>&,std::set<tlp::node>&);
-    void unionSet(std::set<tlp::node>&,std::set<tlp::node>&,std::set<tlp::node>&);
+  void intersectSet(std::set<tlp::node>&,std::set<tlp::node>&,std::set<tlp::node>&);
+  void unionSet(std::set<tlp::node>&,std::set<tlp::node>&,std::set<tlp::node>&);
 
-    unsigned int minsize;
+  unsigned int minsize;
 };
 /*@}*/
 #endif // CLIQUEENUMERATION_H

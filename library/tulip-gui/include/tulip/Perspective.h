@@ -205,7 +205,7 @@ public:
     emit resetWindowTitle();
   }
 
-  
+
   /**
    * @brief a static function to ease the display of messages
    * on mainWindow()->statusBar()
