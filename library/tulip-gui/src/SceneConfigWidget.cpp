@@ -51,6 +51,7 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
 }
 
 SceneConfigWidget::~SceneConfigWidget() {
+  delete _ui->labelsOrderingCombo->model();
   delete _ui;
 }
 
