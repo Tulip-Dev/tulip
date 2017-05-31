@@ -28,7 +28,7 @@
 #include <tulip/TlpQtTools.h>
 
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QFrame(parent), _logSeverity(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
+  QFrame(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
   // we want to be able to select multiple rows in the logger list for copy/paste operations
   _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -41,27 +41,98 @@ GraphPerspectiveLogger::~GraphPerspectiveLogger() {
   delete _ui;
 }
 
-static QString iconForType(QtMsgType type) {
-  QString pxUrl(":/tulip/graphperspective/icons/16/logger-");
-
-  switch (type) {
+GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
+  if (_pythonOutput) {
+    return Python;
+  }
+  switch (_logType) {
   case QtDebugMsg:
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
   case QtInfoMsg:
 #endif
-    pxUrl+="info";
-    break;
+    return Info;
 
   case QtWarningMsg:
-    pxUrl+="danger";
-    break;
+    return Warning;
 
   case QtCriticalMsg:
   case QtFatalMsg:
-    pxUrl+="error";
+    return Error;
+
+  }
+
+  return Info;
+}
+
+int GraphPerspectiveLogger::count() const {
+  return _ui->listWidget->count();
+}
+
+int GraphPerspectiveLogger::countByType(LogType logType) const {
+  return _logCounts[logType];
+}
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg) {
+  logImpl(type, msg);
+}
+#else
+void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
+  logImpl(type, QString::fromUtf8(msg));
+}
+#endif
+
+void GraphPerspectiveLogger::logImpl(QtMsgType type, const QString &msg) {
+
+  // on some windows systems
+  // "No errors." messages may be logged coming from QGLShader::link
+  // we try to avoid them
+  if (msg.indexOf("No errors.") != -1)
+    return;
+
+  if (type == QtFatalMsg) {
+    std::cerr << tlp::QStringToTlpString(msg) << std::endl;
+    abort();
+  }
+
+  _logType = type;
+  QString msgClean = msg;
+
+
+  if (msg.startsWith("[Python")) {
+    // remove quotes around message added by Qt
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    msgClean = msg.mid(14).mid(2, msg.length()-17);
+#else
+    msgClean = msg.mid(14).mid(2, msg.length()-18);
+#endif
+    _pythonOutput = true;
+  }
+  else {
+    _pythonOutput = false;
+  }
+  LogType lastLogType = getLastLogType();
+  _ui->listWidget->addItem(new QListWidgetItem(QIcon(icon(lastLogType)), msgClean));
+  _logCounts[lastLogType] += 1;
+}
+
+QPixmap GraphPerspectiveLogger::icon(LogType logType) const {
+  QString pxUrl(":/tulip/graphperspective/icons/16/logger-");
+
+  switch (logType) {
+  case Python:
+    return QPixmap(":/tulip/graphperspective/icons/16/python.png");
+  case Info:
+    pxUrl+="info";
     break;
 
+  case Warning:
+    pxUrl+="danger";
+    break;
 
+  case Error:
+    pxUrl+="error";
+    break;
   }
 
   pxUrl += ".png";
@@ -69,72 +140,15 @@ static QString iconForType(QtMsgType type) {
   return pxUrl;
 }
 
-int GraphPerspectiveLogger::count() const {
-  return _ui->listWidget->count();
-}
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg) {
-  if (type == QtFatalMsg) {
-    std::cerr << tlp::QStringToTlpString(msg) << std::endl;
-    abort();
-  }
-
-  if (type > _logSeverity)
-    _logSeverity = type;
-
-  if (msg.startsWith("[Python")) {
-    // remove quotes around message added by Qt
-    QString msgClean = msg.mid(14).mid(2, msg.length()-17);
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
-    _pythonOutput = true;
-  }
-  else {
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
-    _pythonOutput = false;
-  }
-}
-#else
-void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
-
-  QString qmsg(QString::fromUtf8(msg));
-
-  // on some windows systems
-  // "No errors." messages may be logged coming from QGLShader::link
-  // we try to avoid them
-  if (qmsg.indexOf("No errors.") != -1)
-    return;
-
-  if (type == QtFatalMsg) {
-    std::cerr << tlp::QStringToTlpString(qmsg) << std::endl;
-    abort();
-  }
-
-  if (type > _logSeverity)
-    _logSeverity = type;
-
-  if (qmsg.startsWith("[Python")) {
-    // remove quotes around message added by Qt
-    QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
-    _pythonOutput = true;
-  }
-  else {
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), qmsg));
-    _pythonOutput = false;
-  }
-}
-#endif
-
-QPixmap GraphPerspectiveLogger::icon() const {
-  return QPixmap(_pythonOutput?":/tulip/graphperspective/icons/16/python.png":iconForType(_logSeverity));
-}
-
 void GraphPerspectiveLogger::clear() {
   _ui->listWidget->clear();
-  _logSeverity = QtDebugMsg;
+  _logType = QtDebugMsg;
   emit cleared();
   close();
+  _logCounts[Info] = 0;
+  _logCounts[Warning] = 0;
+  _logCounts[Error] = 0;
+  _logCounts[Python] = 0;
 }
 
 // catch the copy to cliboard event of the QListWidget and reimplement

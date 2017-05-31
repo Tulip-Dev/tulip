@@ -166,6 +166,7 @@ protected slots:
 protected:
   bool eventFilter(QObject *, QEvent *);
   void importGraph(const std::string& module, tlp::DataSet& data);
+  void updateLogIconsAndCounters();
 
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS

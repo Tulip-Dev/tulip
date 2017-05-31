@@ -187,12 +187,14 @@ void GraphPerspective::addRecentDocument(const QString& path) {
   buildRecentDocumentsMenu();
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-
-void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+static void logMsgToStdErr(const QString &msg) {
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
+#else
+    QString msgClean = msg.mid(14).mid(2, msg.length()-18);
+#endif
 
     if (msg.startsWith("[PythonStdOut]")) {
       std::cout << QStringToTlpString(msgClean) << std::endl;
@@ -204,43 +206,57 @@ void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, c
   else {
     std::cerr << QStringToTlpString(msg) << std::endl;
   }
+}
 
+void GraphPerspective::updateLogIconsAndCounters() {
+  GraphPerspectiveLogger::LogType logType = _logger->getLastLogType();
+  QFrame *logIconCounterFrame = NULL;
+  QLabel *logIconLabel = NULL;
+  QLabel *logCounterLabel = NULL;
+  if (logType == GraphPerspectiveLogger::Info) {
+    logIconCounterFrame = _ui->loggerFrameInfo;
+    logIconLabel = _ui->loggerIconInfo;
+    logCounterLabel = _ui->loggerMessageInfo;
+  } else if (logType == GraphPerspectiveLogger::Warning) {
+    logIconCounterFrame = _ui->loggerFrameWarning;
+    logIconLabel = _ui->loggerIconWarning;
+    logCounterLabel = _ui->loggerMessageWarning;
+  } else if (logType == GraphPerspectiveLogger::Error) {
+    logIconCounterFrame = _ui->loggerFrameError;
+    logIconLabel = _ui->loggerIconError;
+    logCounterLabel = _ui->loggerMessageError;
+  } else {
+    logIconCounterFrame = _ui->loggerFramePython;
+    logIconLabel = _ui->loggerIconPython;
+    logCounterLabel = _ui->loggerMessagePython;
+  }
+  logIconCounterFrame->setVisible(true);
+  logIconLabel->setPixmap(_logger->icon(logType));
+  logCounterLabel->setText(QString::number(_logger->countByType(logType)));
+}
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
+void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+  logMsgToStdErr(msg);
   static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
 }
 
 void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
   _logger->log(type, context, msg);
-  _ui->loggerIcon->setPixmap(_logger->icon());
-  _ui->loggerMessage->setText(QString::number(_logger->count()));
+  updateLogIconsAndCounters();
 }
 
 #else
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
-  QString qmsg = msg;
-
-  if (qmsg.startsWith("[Python")) {
-    // remove quotes around message added by Qt
-    QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
-
-    if (qmsg.startsWith("[PythonStdOut]")) {
-      std::cout << QStringToTlpString(msgClean) << std::endl;
-    }
-    else {
-      std::cerr << QStringToTlpString(msgClean) << std::endl;
-    }
-  }
-  else {
-    std::cerr << QStringToTlpString(qmsg) << std::endl;
-  }
-
+  logMsgToStdErr(msg);
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 
 void GraphPerspective::log(QtMsgType type, const char* msg) {
   _logger->log(type,msg);
-  _ui->loggerIcon->setPixmap(_logger->icon());
-  _ui->loggerMessage->setText(QString::number(_logger->count()));
+  updateLogIconsAndCounters();
 }
 
 #endif
@@ -274,8 +290,12 @@ bool GraphPerspective::terminated() {
 }
 
 void GraphPerspective::logCleared() {
-  _ui->loggerMessage->clear();
-  _ui->loggerIcon->clear();
+  _ui->loggerMessageInfo->clear();
+  _ui->loggerIconInfo->clear();
+  _ui->loggerFrameInfo->setVisible(false);
+  _ui->loggerFrameWarning->setVisible(false);
+  _ui->loggerFrameError->setVisible(false);
+  _ui->loggerFramePython->setVisible(false);
 }
 
 void GraphPerspective::findPlugins() {
@@ -314,7 +334,8 @@ void GraphPerspective::showLogger() {
   pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height()-_logger->height(),pos.y()));
   _logger->move(pos);
   // extend the logger frame width until reaching the right side of the main window
-  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x()+mainWindow()->width()-_mainWindow->mapToGlobal(_logger->pos()).x(), _logger->height());
+  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x()+mainWindow()->width()-_mainWindow->mapToGlobal(_logger->pos()).x(),
+                  _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
   _logger->show();
 }
 
@@ -576,6 +597,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
 #endif
+  logCleared();
 }
 
 void GraphPerspective::showStartMessage() {
