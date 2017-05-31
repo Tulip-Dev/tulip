@@ -23,6 +23,7 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QFrame>
+#include <QMap>
 
 namespace Ui {
 class GraphPerspectiveLogger;
@@ -31,15 +32,26 @@ class GraphPerspectiveLogger;
 class GraphPerspectiveLogger: public QFrame {
   Q_OBJECT
 
-  QtMsgType _logSeverity;
+  QtMsgType _logType;
   Ui::GraphPerspectiveLogger* _ui;
   bool _pythonOutput;
+  QMap<int, int> _logCounts;
 
 public:
+
+  enum LogType {
+    Info,
+    Warning,
+    Error,
+    Python
+  };
+
   GraphPerspectiveLogger(QWidget* parent = NULL);
   ~GraphPerspectiveLogger();
-  QPixmap icon() const;
+  QPixmap icon(LogType logType) const;
   int count() const;
+  int countByType(LogType logType) const;
+  GraphPerspectiveLogger::LogType getLastLogType() const;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
 #else
@@ -50,6 +62,9 @@ public:
 
 public slots:
   void clear();
+
+private:
+  void logImpl(QtMsgType, const QString &);
 
 signals:
   void cleared();
