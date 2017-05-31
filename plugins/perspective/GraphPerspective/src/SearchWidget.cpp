@@ -30,6 +30,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include <QDebug>
 #include <QStandardItemModel>
@@ -405,11 +406,10 @@ void SearchWidget::search() {
       resultsCountEdges++;
     }
   }
+  Observable::unholdObservers();
 
   if (deleteTermB)
     delete b;
-
-
 
   delete result;
 
@@ -419,8 +419,8 @@ void SearchWidget::search() {
     _ui->resultsCountLabel->setText(QString::number(resultsCountEdges) +" edge(s) " + searchOpDescription);
   else
     _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " + QString::number(resultsCountEdges) +" edge(s) " + searchOpDescription);
-
-  Observable::unholdObservers();
+  // display in the status bar too
+  Perspective::showStatusMessage(_ui->resultsCountLabel->text());
 }
 
 void SearchWidget::graphIndexChanged() {

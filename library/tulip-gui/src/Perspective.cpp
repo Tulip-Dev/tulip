@@ -24,6 +24,8 @@
 #include <QProcess>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QAction>
+#include <QStatusBar>
 
 #include <tulip/SimplePluginProgressWidget.h>
 
@@ -173,4 +175,20 @@ void Perspective::createPerspective(const QString &name) {
 
 void Perspective::notifyProjectLocation(const QString &path) {
   sendAgentMessage("PROJECT_LOCATION\t" + QString::number(_perspectiveId) + " " + path);
+}
+
+void Perspective::showStatusMessage(const QString& msg) {
+  instance()->mainWindow()->statusBar()->showMessage(msg);
+}
+
+void Perspective::redirectStatusTipOfMenu(QMenu* menu) {
+  connect(menu, SIGNAL(hovered(QAction*)), instance(), SLOT(showStatusTipOf(QAction*)));
+}
+
+void Perspective::showStatusTipOf(QAction* action) {
+  QString tip = action->statusTip();
+  if (tip.isEmpty())
+    tip = action->toolTip();
+  action->setStatusTip(tip);
+  showStatusMessage(tip);
 }

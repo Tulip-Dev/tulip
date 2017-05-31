@@ -26,6 +26,7 @@
 #include <QString>
 #include <QVariantMap>
 #include <QSet>
+#include <QMenu>
 
 class QMainWindow;
 class QTcpSocket;
@@ -96,7 +97,7 @@ protected:
   /**
    * @brief The main window on which the perspective should build the GUI.
    *
-   * It is note the Perspective's reponsibility to destroy the main window when the application gets closed. Generally speaking, destorying the _mainWindow pointer could lead to undefined behavior.
+   * It is not the Perspective's responsibility to destroy the main window when the application gets closed. Generally speaking, destorying the _mainWindow pointer could lead to undefined behavior.
    */
   QMainWindow *_mainWindow;
 
@@ -204,6 +205,18 @@ public:
     emit resetWindowTitle();
   }
 
+  
+  /**
+   * @brief a static function to ease the display of messages
+   * on mainWindow()->statusBar()
+   */
+  static void showStatusMessage(const QString&);
+
+  /**
+   * @brief a static function to enable the redirection of the statusTip or toolTip of menu actions on mainWindow->statusBar()
+   */
+  static void redirectStatusTipOfMenu(QMenu* menu);
+
 public slots:
   /**
    * @brief Called when the user wants to close the application.
@@ -262,6 +275,12 @@ protected slots:
    * @param name The name of the PErspective to create.
    */
   void createPerspective(const QString& name);
+
+  /**
+   * @brief Show the statusTip (or the toolTip) of an action on mainWindow()->statusBar()
+   * @param action a QAction
+   */
+  void showStatusTipOf(QAction* action);
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 
