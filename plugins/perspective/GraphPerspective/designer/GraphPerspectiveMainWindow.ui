@@ -554,7 +554,7 @@ color: white;
           </size>
          </property>
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Import data in the current graph  using a csv formatted file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Import data in the current graph using a csv formatted file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="statusTip">
           <string>Import data in the current graph  using a csv formatted file</string>
@@ -841,10 +841,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                <item>
                 <widget class="QPushButton" name="addPanelButton">
                  <property name="toolTip">
-                  <string>Add a new panel view for current graph displaying</string>
+                  <string>Open a new visualization panel on the current graph</string>
                  </property>
                  <property name="statusTip">
-                  <string>Add a new panel view for current graph displaying</string>
+                  <string>Open a new visualization panel on the current graph</string>
                  </property>
                  <property name="text">
                   <string>Add panel</string>
@@ -864,10 +864,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Toggle expose mode (Ctrl+E)</string>
+                  <string>Toggle the Expose mode [Ctrl+E]</string>
                  </property>
                  <property name="statusTip">
-                  <string>Toggle expose mode (Ctrl+E)</string>
+                  <string>Toggle the Expose mode [Ctrl+E]</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+E</string>
@@ -895,10 +895,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Show/hide graph's elements search panel (Crtl+F)</string>
+                  <string>Show/hide the graph's elements search panel [Crtl+F]</string>
                  </property>
                  <property name="statusTip">
-                  <string>Show/hide graph's elements search panel (Crtl+F)</string>
+                  <string>Show/hide the graph's elements search panel [Crtl+F]</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+F</string>
@@ -926,10 +926,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Show/hide Python REPL panel (Ctrl+P)</string>
+                  <string>Show/hide the Python interpreter (Read Eval Print Loop) panel [Ctrl+P]</string>
                  </property>
                  <property name="statusTip">
-                  <string>Show/hide Python REPL panel (Ctrl+P)</string>
+                  <string>Show/hide the Python interpreter (Read Eval Print Loop) panel [Ctrl+P]</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+P</string>
@@ -1382,7 +1382,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;New project</string>
    </property>
    <property name="toolTip">
-    <string>Open a new  empty Tulip perspective</string>
+    <string>Open a new  empty Tulip perspective [Ctrl+N]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+N</string>
@@ -1397,7 +1397,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Save</string>
    </property>
    <property name="toolTip">
-    <string>Save the current project (current graphs with current views) in the attached file</string>
+    <string>Save the current project (current graphs with current views) in the attached file [Ctrl+S]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -1412,7 +1412,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Sa&amp;ve as</string>
    </property>
    <property name="toolTip">
-    <string>Save Project as a new file name</string>
+    <string>Save Project as a new file name [Ctrl+Shift+S]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -1427,7 +1427,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>I&amp;mport</string>
    </property>
    <property name="toolTip">
-    <string>Display the Graph importing wizard</string>
+    <string>Display the Graph importing wizard [Ctrl+Shift+O]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+O</string>
@@ -1442,7 +1442,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Exit</string>
    </property>
    <property name="toolTip">
-    <string>Exit from Tulip perspective</string>
+    <string>Exit from Tulip perspective [Ctrl+Q]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -1460,7 +1460,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Undo</string>
    </property>
    <property name="toolTip">
-    <string>Undo the last update of the current graph</string>
+    <string>Undo the last update of the current graph [Ctrl+Z]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -1478,7 +1478,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Redo</string>
    </property>
    <property name="toolTip">
-    <string>Redo the last undone update of the current graph</string>
+    <string>Redo the last undone update of the current graph [Ctrl+Y]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
@@ -1496,7 +1496,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Cut</string>
    </property>
    <property name="toolTip">
-    <string>Move the selected elements of the current graph into the clipboard</string>
+    <string>Move the selected elements of the current graph into the clipboard [Ctrl+X]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
@@ -1514,7 +1514,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>C&amp;opy</string>
    </property>
    <property name="toolTip">
-    <string>Copy the selected elements of the current graph into the clipboard</string>
+    <string>Copy the selected elements of the current graph into the clipboard [Ctrl+C]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -1532,7 +1532,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Paste</string>
    </property>
    <property name="toolTip">
-    <string>Paste the clipboard elements into the current graph</string>
+    <string>Paste the clipboard elements into the current graph [Ctrl+V]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
@@ -1550,7 +1550,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Delete Selection</string>
    </property>
    <property name="toolTip">
-    <string>Delete the selected elements from the current graph</string>
+    <string>Delete the selected elements from the current graph [Del]</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -1568,7 +1568,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Select all</string>
    </property>
    <property name="toolTip">
-    <string>Select all the elements of the current graph</string>
+    <string>Select all the elements of the current graph [Ctrl+A]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
@@ -1586,7 +1586,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Invert selection</string>
    </property>
    <property name="toolTip">
-    <string>Invert the selection of the current graph elements, deselect if selected and select if not selected</string>
+    <string>Invert the selection of the current graph elements, deselect if selected and select if not selected [Ctrl+I]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -1604,7 +1604,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Ca&amp;ncel selection</string>
    </property>
    <property name="toolTip">
-    <string>Deselect all the selected elements</string>
+    <string>Deselect all the selected elements [Ctrl+Shift+A]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+A</string>
@@ -1622,7 +1622,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Group elements</string>
    </property>
    <property name="toolTip">
-    <string>Create a meta-node representing a newly created sub-graph containing all the selected elements</string>
+    <string>Create a meta-node representing a newly created sub-graph containing all the selected elements [Ctrl+G]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
@@ -1640,7 +1640,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Create sub-graph &amp;from selection</string>
    </property>
    <property name="toolTip">
-    <string>Create a sub-graph containing all the selected elements</string>
+    <string>Create a sub-graph containing all the selected elements [Ctrl+Shift+G]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
@@ -1655,7 +1655,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Preferences...</string>
    </property>
    <property name="toolTip">
-    <string>Show Tulip preferences dialog</string>
+    <string>Show Tulip preferences dialog [Ctrl+,]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+,</string>
@@ -1673,7 +1673,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Full screen</string>
    </property>
    <property name="toolTip">
-    <string>Display the Tulip perspective in full screen</string>
+    <string>Display the Tulip perspective in full screen [F11]</string>
    </property>
    <property name="shortcut">
     <string>F11</string>
@@ -1688,7 +1688,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;User HandBook</string>
    </property>
    <property name="toolTip">
-    <string>Display the User handbook in a navigator</string>
+    <string>Display the User handbook in a navigator [Ctrl+?]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+?</string>
@@ -1703,7 +1703,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Developer HandBook</string>
    </property>
    <property name="toolTip">
-    <string>Display the Developer handbook in a navigator</string>
+    <string>Display the Developer handbook in a navigator [Ctrl+D]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
@@ -1718,7 +1718,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Python Documentation</string>
    </property>
    <property name="toolTip">
-    <string>Display the Tulip python documentation in a navigator</string>
+    <string>Display the Tulip python documentation in a navigator [Ctrl+P]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
@@ -1733,7 +1733,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;About Tulip</string>
    </property>
    <property name="toolTip">
-    <string>Display the &quot;About Tulip&quot;  information dialog</string>
+    <string>Display the &quot;About Tulip&quot;  information dialog [F1]</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -1768,7 +1768,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Message log</string>
    </property>
    <property name="toolTip">
-    <string>Show the message log</string>
+    <string>Show the message log [Ctrl+Alt+L]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+L</string>
@@ -1783,7 +1783,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Export</string>
    </property>
    <property name="toolTip">
-    <string>Export current graph</string>
+    <string>Export current graph [Ctrl+E]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
@@ -1798,7 +1798,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Open</string>
    </property>
    <property name="toolTip">
-    <string>Open a graph file</string>
+    <string>Open a graph file [Ctrl+O]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -1813,7 +1813,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Find &amp;Plugins</string>
    </property>
    <property name="toolTip">
-    <string>Search in installed plugins</string>
+    <string>Search in installed plugins [Ctrl+Alt+H]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+H</string>
@@ -1860,7 +1860,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>New &amp;graph</string>
    </property>
    <property name="toolTip">
-    <string>Create a new empty graph</string>
+    <string>Create a new empty graph [Ctrl+N]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -1910,7 +1910,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Delete selection from t&amp;he root graph</string>
    </property>
    <property name="toolTip">
-    <string>Delete the selected elements from the whole graph hierarchy (not only from the current graph)</string>
+    <string>Delete the selected elements from the whole graph hierarchy (not only from the current graph) [Shift+Del]</string>
    </property>
    <property name="shortcut">
     <string>Shift+Del</string>
