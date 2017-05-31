@@ -406,8 +406,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _mainWindow->installEventFilter(this);
   _mainWindow->setAcceptDrops(true);
   _mainWindow->statusBar();
+
   if (tlp::inGuiTestingMode())
     _mainWindow->statusBar()->hide();
+
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
   _colorScalesDialog = new ColorScaleConfigDialog(ColorScalesManager::getLatestColorScale(), mainWindow());

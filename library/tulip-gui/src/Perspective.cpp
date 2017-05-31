@@ -187,8 +187,10 @@ void Perspective::redirectStatusTipOfMenu(QMenu* menu) {
 
 void Perspective::showStatusTipOf(QAction* action) {
   QString tip = action->statusTip();
+
   if (tip.isEmpty())
     tip = action->toolTip();
+
   action->setStatusTip(tip);
   showStatusMessage(tip);
 }
