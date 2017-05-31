@@ -21,6 +21,14 @@ ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClusteri
 TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(CliqueEnumeration_SRCS
+  CliqueEnumeration.cpp
+  CliqueEnumeration.h)
+
+ADD_LIBRARY(CliqueEnumeration-${TulipVersion} SHARED ${CliqueEnumeration_SRCS})
+TARGET_LINK_LIBRARIES(CliqueEnumeration-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 IF(NOT TULIP_BUILD_CORE_ONLY)
 QTX_WRAP_UI(ConvolutionClustering_UI_SRCS
   ConvolutionClusteringSetup.ui)
