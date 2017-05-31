@@ -58,7 +58,6 @@ public:
     PLUGININFORMATION("Maximal Cliques", "Francois Queyroi", "24/10/2013", "Alpha", "0.1", "Clustering")
 
     CliqueEnumeration(tlp::PluginContext*);
-    ~CliqueEnumeration();
     bool run();
     bool check(std::string &);
 
