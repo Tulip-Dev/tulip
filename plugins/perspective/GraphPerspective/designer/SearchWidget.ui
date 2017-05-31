@@ -54,8 +54,8 @@ background-color: white;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>968</width>
-        <height>233</height>
+        <width>969</width>
+        <height>254</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -110,6 +110,12 @@ font: bold;
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="graphLabel">
+              <property name="toolTip">
+               <string>Choose the graph on which the search will be performed</string>
+              </property>
+              <property name="statusTip">
+               <string>Choose the graph on which the search will be performed</string>
+              </property>
               <property name="text">
                <string>Graph:</string>
               </property>
@@ -122,6 +128,12 @@ font: bold;
                 <width>350</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Choose the graph on which the search will be performed</string>
+              </property>
+              <property name="statusTip">
+               <string>Choose the graph on which the search will be performed</string>
               </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
@@ -136,6 +148,12 @@ font: bold;
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>Choose the element type on which the search will be performed</string>
+              </property>
+              <property name="statusTip">
+               <string>Choose the element type on which the search will be performed</string>
+              </property>
               <property name="text">
                <string>Scope:</string>
               </property>
@@ -148,6 +166,12 @@ font: bold;
                 <width>350</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Choose the element type on which the search will be performed</string>
+              </property>
+              <property name="statusTip">
+               <string>Choose the element type on which the search will be performed</string>
               </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
@@ -177,6 +201,12 @@ font: bold;
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>Choose graph property into which the found elements will be added</string>
+              </property>
+              <property name="statusTip">
+               <string>Choose graph property into which the found elements will be added</string>
+              </property>
               <property name="text">
                <string>Store results in:</string>
               </property>
@@ -189,6 +219,12 @@ font: bold;
                 <width>350</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Choose the graph property into which the found elements will be added</string>
+              </property>
+              <property name="statusTip">
+               <string>Choose the graph property into which the found elements will be added</string>
               </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
@@ -224,6 +260,12 @@ font: bold;
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Choose the property for which the search will performed</string>
+                </property>
+                <property name="statusTip">
+                 <string>Choose the property for which the search will performed</string>
+                </property>
                </widget>
               </item>
               <item>
@@ -239,6 +281,12 @@ font: bold;
                   <width>350</width>
                   <height>16777215</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Choose the comparion operator of the search</string>
+                </property>
+                <property name="statusTip">
+                 <string>Choose the comparion operator of the search</string>
                 </property>
                 <item>
                  <property name="text">
@@ -305,6 +353,12 @@ font: bold;
                   <width>350</width>
                   <height>16777215</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Choose the value involved in the search comparison</string>
+                </property>
+                <property name="statusTip">
+                 <string>Choose the value involved in the search comparison</string>
                 </property>
                </widget>
               </item>
@@ -431,6 +485,12 @@ font: 12px;
                 <height>0</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Execute the search</string>
+              </property>
+              <property name="statusTip">
+               <string>Execute the search</string>
+              </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
 font: bold;
@@ -450,6 +510,12 @@ font: bold;
             </item>
             <item>
              <widget class="QCheckBox" name="caseSensitivityCheck">
+              <property name="toolTip">
+               <string>Indicate if strings comparison will be case sensitive</string>
+              </property>
+              <property name="statusTip">
+               <string>Indicate if strings comparison will be case sensitive</string>
+              </property>
               <property name="text">
                <string>Case sensitive</string>
               </property>

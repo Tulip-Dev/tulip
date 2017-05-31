@@ -39,6 +39,7 @@
 #include <QVBoxLayout>
 #include <QDialog>
 #include <QByteArray>
+#include <QStatusBar>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -404,6 +405,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
   _mainWindow->setAcceptDrops(true);
+  _mainWindow->statusBar();
+  if (tlp::inGuiTestingMode())
+    _mainWindow->statusBar()->hide();
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
   _colorScalesDialog = new ColorScaleConfigDialog(ColorScalesManager::getLatestColorScale(), mainWindow());
@@ -412,6 +416,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   redirectDebugOutputToQDebug();
   redirectWarningOutputToQWarning();
   redirectErrorOutputToQCritical();
+
+  // redirect statusTip or toolTip of menu actions in status bar
+  Perspective::redirectStatusTipOfMenu(_ui->menuFile);
+  Perspective::redirectStatusTipOfMenu(_ui->menuEdit);
+  Perspective::redirectStatusTipOfMenu(_ui->menuHelp);
+  Perspective::redirectStatusTipOfMenu(_ui->menuWindow);
 
   TulipSettings::instance().synchronizeViewSettings();
 
