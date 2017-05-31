@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>741</height>
+    <height>693</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -232,7 +232,7 @@ QToolButton:pressed {
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
-        <number>6</number>
+        <number>2</number>
        </property>
        <property name="leftMargin">
         <number>0</number>
