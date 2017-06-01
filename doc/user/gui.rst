@@ -56,9 +56,11 @@ Toolbar
 .. |icon_workspace| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/desktop.png
 .. |icon_develop| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/python.png
     :width: 32
-.. |icon_export| image:: ../../library/tulip-gui/resources/icons/32/plugin_export.png
+.. |icon_export| image:: ../../library/tulip-gui/resources/icons/64/document-export.png
+    :width: 32
 .. |icon_csv| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/spreadsheet.png
-.. |icon_import| image:: ../../library/tulip-gui/resources/icons/32/plugin_import.png
+.. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
+    :width: 32
 .. |icon_plugin| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/system-software-install.png
 
 The vertical toolbar, on the left of the main window, contains 6 buttons: 
