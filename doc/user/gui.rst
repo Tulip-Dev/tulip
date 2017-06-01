@@ -71,13 +71,13 @@ The vertical toolbar, on the left of the main window, contains 6 buttons:
 
 * |icon_develop| **Python IDE**: displays the Tulip python IDE (find more in :ref:`developer_view`).
 
-* |icon_export| **Export**: open the graph exporting wizard (more in :ref:`first_save`).
+* |icon_export| **Export**: opens the graph exporting wizard (more in :ref:`first_save`).
 
-* |icon_csv| **CSV**: open the CSV data importing wizard (more information in :ref:`csv`).
+* |icon_csv| **CSV**: opens the CSV data importing wizard (more information in :ref:`csv`).
 
-* |icon_import| **Import**: open the graph importing wizard (learn more about it in :ref:`first_create`).
+* |icon_import| **Import**: opens the graph importing wizard (learn more about it in :ref:`first_create`).
 
-* |icon_plugin| **Plugins**: only available on Mac and Windows OS, open the plugins center (see in :ref:`plugin` for more information).
+* |icon_plugin| **Plugins**: only available on Mac and Windows OS, opens the plugins center (see in :ref:`plugin` for more information).
 
 
 .. _algo_window:
