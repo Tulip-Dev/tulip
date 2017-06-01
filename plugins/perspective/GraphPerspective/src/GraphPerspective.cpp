@@ -878,7 +878,7 @@ void GraphPerspective::open(QString fileName) {
   filters += "All files (*)";
   filters.insert(0, filterAny);
 
-  if (fileName.isNull()) // If open() was called without a parameter, open the file dialog
+  if (fileName.isEmpty()) // If open() was called without a parameter, open the file dialog
     fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"), _lastOpenLocation, filters.c_str());
 
   if(!fileName.isEmpty()) {

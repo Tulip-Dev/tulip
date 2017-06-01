@@ -32,7 +32,7 @@ using namespace tlp;
 using namespace std;
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent)
-  : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(NULL), _currentItem(QString::null) {
+  : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(NULL) {
   _ui->setupUi(this);
   connect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
   _ui->graphCombo->setModel(_model);

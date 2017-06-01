@@ -208,7 +208,7 @@ void SearchWidget::currentGraphChanged(tlp::Graph *g) {
 void searchForIndex(QComboBox* combo, const QString& s) {
   combo->setCurrentIndex(0);
 
-  if (!s.isNull()) {
+  if (!s.isEmpty()) {
     QAbstractItemModel* model = combo->model();
 
     for(int i = 0; i < model->rowCount(); ++i) {
@@ -232,9 +232,9 @@ void SearchWidget::setGraph(Graph *g) {
 
   _graph = g;
 
-  QString oldStorageName = QString::null;
-  QString oldTermAName = QString::null;
-  QString oldTermBName = QString::null;
+  QString oldStorageName;
+  QString oldTermAName;
+  QString oldTermBName;
 
   if (_ui->resultsStorageCombo->model() != NULL) {
     oldStorageName = _ui->resultsStorageCombo->currentText();
@@ -252,17 +252,17 @@ void SearchWidget::setGraph(Graph *g) {
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(g,false,_ui->searchTermACombo));
   _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),g,false,_ui->searchTermBCombo));
 
-  if (!oldStorageName.isNull())
+  if (!oldStorageName.isEmpty())
     searchForIndex(_ui->resultsStorageCombo,oldStorageName);
   else
     searchForIndex(_ui->resultsStorageCombo,"viewSelection");
 
-  if (!oldTermAName.isNull())
+  if (!oldTermAName.isEmpty())
     searchForIndex(_ui->searchTermACombo,oldTermAName);
   else
     searchForIndex(_ui->searchTermACombo,"viewMetric");
 
-  if (!oldTermBName.isNull())
+  if (!oldTermBName.isEmpty())
     searchForIndex(_ui->searchTermBCombo,oldTermBName);
   else
     searchForIndex(_ui->searchTermBCombo,trUtf8("Custom value"));
