@@ -279,7 +279,7 @@ void TulipMainWindow::openProject(const QString &file) {
     openProjectWith(file, project->perspective(),QVariantMap());
   }
   else {
-    QString perspectiveName = QString::null;
+    QString perspectiveName;
 
     if (PluginLister::instance()->availablePlugins<tlp::Perspective>().size() > 1) {
       PerspectiveSelectionDialog dlg;
@@ -293,7 +293,7 @@ void TulipMainWindow::openProject(const QString &file) {
       perspectiveName = stdName.c_str();
     }
 
-    if (!perspectiveName.isNull())
+    if (!perspectiveName.isEmpty())
       TulipPerspectiveProcessHandler::instance()->createPerspective(perspectiveName,file,QVariantMap());
   }
 

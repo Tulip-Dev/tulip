@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     pluginList << pluginName;
   }
 
-  if(!remoteDescription.isNull()) {
+  if(!remoteDescription.isEmpty()) {
     QDomDocument remoteDocument;
     remoteDocument.setContent(remoteDescription);
     std::cout << tlp::QStringToTlpString(remoteDescription) << std::endl;

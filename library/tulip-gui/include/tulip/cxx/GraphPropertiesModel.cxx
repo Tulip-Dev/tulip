@@ -59,7 +59,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable), _removingRows(false), forcingRedraw(false) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _checkable(checkable), _removingRows(false), forcingRedraw(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
@@ -81,7 +81,7 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
 
   int vectorIndex = row;
 
-  if (!_placeholder.isNull()) {
+  if (!_placeholder.isEmpty()) {
     if (row == 0)
       return createIndex(row,column);
 
@@ -103,7 +103,7 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
 
   int result = _properties.size();
 
-  if (!_placeholder.isNull())
+  if (!_placeholder.isEmpty())
     result++;
 
   return result;
@@ -122,7 +122,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   PropertyInterface* pi = (PropertyInterface*)(index.internalPointer());
 
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
-    if (!_placeholder.isNull() && index.row() == 0)
+    if (!_placeholder.isEmpty() && index.row() == 0)
       return _placeholder;
 
     if (pi == NULL)
@@ -142,7 +142,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   else if (role == Qt::FontRole) {
     QFont f;
 
-    if (!_placeholder.isNull() && index.row() == 0)
+    if (!_placeholder.isEmpty() && index.row() == 0)
       f.setItalic(true);
 
     return f;
@@ -161,7 +161,7 @@ template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
   int result = _properties.indexOf(pi);
 
-  if (!_placeholder.isNull())
+  if (!_placeholder.isEmpty())
     ++result;
 
   return result;

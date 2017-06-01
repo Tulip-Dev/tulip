@@ -66,7 +66,7 @@ TulipFont TulipFont::fromFile(const QString &path) {
   return result;
 }
 
-TulipFont& TulipFont::operator =(const TulipFont& other) {
+TulipFont& TulipFont::operator=(const TulipFont& other) {
   _bold = other._bold;
   _italic = other._italic;
   _fontName = other._fontName;
@@ -74,15 +74,15 @@ TulipFont& TulipFont::operator =(const TulipFont& other) {
   return *this;
 }
 
-TulipFont::TulipFont(const TulipFont& other): QObject(other.parent()) {
-  *this = other;
+TulipFont::TulipFont(const TulipFont& other): QObject(other.parent()),_bold(other._bold), _italic(other._italic), _fontName(other._fontName), _fontFile(other._fontFile){
+
 }
 
 TulipFont::TulipFont(const QString fontName, QObject *parent): QObject(parent), _bold(false), _italic(false), _fontName(fontName) {
   refreshFontFile();
 }
 
-TulipFont::TulipFont(QObject *parent): QObject(parent), _bold(false), _italic(false), _fontName(QString::null) {
+TulipFont::TulipFont(QObject *parent): QObject(parent), _bold(false), _italic(false) {
   refreshFontFile();
 }
 
@@ -146,7 +146,7 @@ void TulipFont::setFontName(const QString& n) {
 }
 
 bool TulipFont::exists() const {
-  return !_fontFile.isNull() && QFileInfo(fontFile()).exists();
+  return !_fontFile.isEmpty() && QFileInfo(fontFile()).exists();
 }
 
 void TulipFont::refreshFontFile() {

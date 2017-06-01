@@ -107,15 +107,15 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen, bool
       }
 
       // if a file was passed as argument, forward it to the running instance
-      if (!fileToOpen.isNull()) { // open the file passed as argument
-        if (!perspName.isNull()) {
+      if (!fileToOpen.isEmpty()) { // open the file passed as argument
+        if (!perspName.isEmpty()) {
           sendAgentMessage(n_agentPort,"OPEN_PROJECT_WITH\t" + perspName + "\t" + fileToOpen);
         }
         else {
           sendAgentMessage(n_agentPort,"OPEN_PROJECT\t" + fileToOpen);
         }
       }
-      else if (!perspName.isNull()) { // open the perspective passed as argument
+      else if (!perspName.isEmpty()) { // open the perspective passed as argument
         sendAgentMessage(n_agentPort,"CREATE_PERSPECTIVE\t" + perspName);
       }
 
@@ -192,13 +192,13 @@ int main(int argc, char **argv) {
   mainWindow->show();
 
   // Treat arguments
-  if (!fileToOpen.isNull()) { // open the file passed as argument
-    if (!perspName.isNull())
+  if (!fileToOpen.isEmpty()) { // open the file passed as argument
+    if (!perspName.isEmpty())
       mainWindow->openProjectWith(fileToOpen,perspName);
     else
       mainWindow->openProject(fileToOpen);
   }
-  else if (!perspName.isNull()) { // open the perspective passed as argument
+  else if (!perspName.isEmpty()) { // open the perspective passed as argument
     mainWindow->createPerspective(perspName);
   }
 

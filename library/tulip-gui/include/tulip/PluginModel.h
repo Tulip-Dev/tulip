@@ -54,13 +54,12 @@ public:
 template<typename PLUGIN>
 class PluginModel : public tlp::TulipModel {
   struct TreeItem {
-    TreeItem(QString name, QString info = QString::null,
+    TreeItem(QString name, QString info = "",
              TreeItem* parent = NULL): name(name), info(info), parent(parent) {}
     virtual ~TreeItem() {
-      foreach(TreeItem* c, children)
-        delete c;
+        qDeleteAll(children);
     }
-    TreeItem* addChild(QString name, QString info = QString::null) {
+    TreeItem* addChild(QString name, QString info = "") {
       TreeItem* result = new TreeItem(name, info, this);
       children.push_back(result);
       return result;
@@ -92,7 +91,7 @@ class PluginModel : public tlp::TulipModel {
       foreach(const QString& group, pluginTree[cat].keys()) {
         TreeItem* groupItem = catItem;
 
-        if ((group != "") && (pluginTree[cat].keys().size() > 1))
+        if ((!group.isEmpty()) && (pluginTree[cat].keys().size() > 1))
           groupItem = catItem->addChild(group);
 
         // sort in case insensitive alphabetic order
@@ -182,7 +181,7 @@ public:
     if (role == Qt::DisplayRole)
       return item->name;
     else if (role == Qt::ToolTipRole) {
-      if (item->info.isNull())
+      if (item->info.isEmpty())
         return item->name;
       else
         return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>").arg(item->name + ":").arg(item->info);
