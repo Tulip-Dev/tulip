@@ -223,7 +223,7 @@ void CSVImportConfigurationWidget::setFirstLineIndex(int fl) {
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser) {
   delete parser;
   parser = newParser;
-  updateWidget("Parsing file to guess the column types");
+  updateWidget("Parsing file to guess column types...");
   //Reset import range
   updateLineNumbers(true);
 }

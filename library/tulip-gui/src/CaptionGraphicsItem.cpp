@@ -81,15 +81,15 @@ void CaptionGraphicsItem::constructConfigWidget() {
   }
 
   QString oldName = _confPropertySelectionWidget->text();
-  QString selectedProp = QString::null;
+  QString selectedProp;
   std::string piName;
   bool findViewMetric = false;
-  QString firstDoubleMetricName = QString::null;
+  QString firstDoubleMetricName;
   forEach(piName, _view->graph()->getProperties()) {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 
-    if(firstDoubleMetricName.isNull())
+    if(firstDoubleMetricName.isEmpty())
       firstDoubleMetricName=piName.c_str();
 
     if (oldName == piName.c_str())
@@ -99,7 +99,7 @@ void CaptionGraphicsItem::constructConfigWidget() {
       findViewMetric = true;
   }
 
-  if(selectedProp.isNull()) {
+  if(selectedProp.isEmpty()) {
     if(findViewMetric)
       selectedProp = "viewMetric";
     else

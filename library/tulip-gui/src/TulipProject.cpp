@@ -41,6 +41,7 @@ namespace tlp {
 
 TulipProject::TulipProject(): _isValid(false) {
   // This private constructor should never been called. It has been privately declared to prevent use of default constructor
+    assert(false);
 }
 
 TulipProject::TulipProject(const QString &path)
@@ -69,7 +70,7 @@ TulipProject *TulipProject::newProject() {
 bool TulipProject::openProjectFile(const QString &file,
                                    tlp::PluginProgress *progress) {
 
-  QFileInfo fileInfo = QFileInfo(file);
+  QFileInfo fileInfo(file);
 
   if(!fileInfo.exists()) {
     _isValid = false;
@@ -79,7 +80,7 @@ bool TulipProject::openProjectFile(const QString &file,
 
   if (fileInfo.isDir()) {
     _isValid = false;
-    _lastError = file+" is a directory, not a file";
+    _lastError = file+" is a directory, not a regular file";
     return false;
   }
 
@@ -350,7 +351,7 @@ QString TulipProject::toAbsolutePath(const QString &relativePath) {
   return _dataDir.absoluteFilePath(path);
 }
 
-// Some hack: Qt does not provide method to create temporary DIRS.
+// Some hack: Qt4 does not provide method to create temporary DIRS.
 QString TulipProject::temporaryPath() {
   QString basePath(QDir::tempPath() + QDir::separator() + QCoreApplication::applicationName() + "-" + QString::number(QCoreApplication::applicationPid()) + "-");
   int prefix=0;

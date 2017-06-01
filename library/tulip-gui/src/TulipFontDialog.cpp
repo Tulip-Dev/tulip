@@ -26,7 +26,7 @@
 
 using namespace tlp;
 
-TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::TulipFontDialog), previousFont(), ok(QDialog::Rejected) {
+TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::TulipFontDialog), ok(QDialog::Rejected) {
   _ui->setupUi(this);
 
   foreach(const QString& font, TulipFont::installedFontNames())
