@@ -181,6 +181,9 @@ public:
   bool warnUserAboutGraphicsCard() const;
   void setWarnUserAboutGraphicsCard(bool);
 
+  bool showStatusBar() const;
+  void setShowStatusBar(bool);
+
   void treatEvent(const Event &message);
 
 private:

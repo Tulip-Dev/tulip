@@ -1953,33 +1953,58 @@ Iterator<Graph*>* Graph::getDescendantGraphs() const {
   return new DescendantGraphsIterator(this);
 }
 
-std::vector<node> GraphEvent::getNodes() const {
+// destructor
+GraphEvent::~GraphEvent() {
+  if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
+    // need to cleanup name if any
+    if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
+	evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+      delete info.renamedProp;
+    else
+      delete info.name;
+  } else {
+    //  need to cleanup vectInfos if not null
+    if (evtType == TLP_ADD_NODES && vectInfos.addedNodes)
+      delete vectInfos.addedNodes;
+    else if (evtType == TLP_ADD_EDGES && vectInfos.addedEdges)
+    delete vectInfos.addedEdges;
+  }
+}
+
+const std::vector<node>& GraphEvent::getNodes() const {
   assert(evtType == TLP_ADD_NODES);
-  unsigned int nbElts = info.nbElts;
-  std::vector<node> addedNodes;
-  addedNodes.reserve(nbElts);
-  const std::vector<node>& nodes = getGraph()->nodes();
-  // copy new graph nodes in addedNodes reserved memory
-  memcpy(addedNodes.data(), &nodes[nodes.size() - nbElts],
-         nbElts * sizeof(node));
-  // set addedNodes size using underlying vector pointers
-  // to avoid unnecessary multiple constructeur calls
-  ((node **) &addedNodes)[1] = ((node **) &addedNodes)[0] + nbElts;
-  return addedNodes;
+  if (vectInfos.addedNodes == NULL) {
+    unsigned int nbElts = info.nbElts;
+    std::vector<node>* addedNodes = new std::vector<node>();
+    addedNodes->reserve(nbElts);
+    const std::vector<node>& nodes = getGraph()->nodes();
+    // copy new graph nodes in addedNodes reserved memory
+    memcpy(addedNodes->data(), &nodes[nodes.size() - nbElts],
+	   nbElts * sizeof(node));
+    // set addedNodes size using underlying vector pointers
+    // to avoid unnecessary multiple constructeur calls
+    ((node **) addedNodes)[1] = ((node **) addedNodes)[0] + nbElts;
+    // record allocated vector in vectInfos
+    ((GraphEvent *) this)->vectInfos.addedNodes = addedNodes;
+  }
+  return *vectInfos.addedNodes;
 }
 
-std::vector<edge> GraphEvent::getEdges() const {
+const std::vector<edge>& GraphEvent::getEdges() const {
   assert(evtType == TLP_ADD_EDGES);
-  unsigned int nbElts = info.nbElts;
-  std::vector<edge> addedEdges;
-  addedEdges.reserve(nbElts);
-  const std::vector<edge>& edges = getGraph()->edges();
-  // copy new graph edges in addedEdges reserved memory
-  memcpy(addedEdges.data(), &edges[edges.size() - nbElts],
-         nbElts * sizeof(edge));
-  // set addedEdges size using underlying vector pointers
-  // to avoid unnecessary multiple constructeur calls
-  ((edge **) &addedEdges)[1] = ((edge **) &addedEdges)[0] + nbElts;
-  return addedEdges;
+  if (vectInfos.addedEdges == NULL) {
+    unsigned int nbElts = info.nbElts;
+    std::vector<edge>* addedEdges = new std::vector<edge>();
+    addedEdges->reserve(nbElts);
+    const std::vector<edge>& edges = getGraph()->edges();
+    // copy new graph edges in addedEdges reserved memory
+    memcpy(addedEdges->data(), &edges[edges.size() - nbElts],
+	   nbElts * sizeof(edge));
+    // set addedEdges size using underlying vector pointers
+    // to avoid unnecessary multiple constructeur calls
+    ((edge **) addedEdges)[1] = ((edge **) addedEdges)[0] + nbElts;
+    // record allocated vector in vectInfos
+    ((GraphEvent *) this)->vectInfos.addedEdges = addedEdges;
+  }
+  return *vectInfos.addedEdges;
 }
-
