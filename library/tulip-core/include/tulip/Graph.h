@@ -1724,12 +1724,14 @@ public:
       info.nbElts = id;
     else
       info.eltId = id;
+    vectInfos.addedNodes = NULL;
   }
   // constructor for subgraph events
   GraphEvent(const Graph& g, GraphEventType graphEvtType,
              const Graph* sg)
     : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
     info.subGraph = sg;
+    vectInfos.addedNodes = NULL;
   }
 
   // constructor for attribute/property events
@@ -1738,6 +1740,7 @@ public:
              Event::EventType evtType = Event::TLP_MODIFICATION)
     : Event(g, evtType), evtType(graphEvtType) {
     info.name = new std::string(str);
+    vectInfos.addedNodes = NULL;
   }
 
   // constructor for rename property events
@@ -1747,19 +1750,11 @@ public:
     : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
     info.renamedProp =
       new std::pair<PropertyInterface*,std::string>(prop, newName);
+    vectInfos.addedNodes = NULL;
   }
 
-  // destructor needed to cleanup name if any
-  ~GraphEvent() {
-    if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
-      if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-          evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
-        delete info.renamedProp;
-      else
-        delete info.name;
-    }
-  }
-
+  ~GraphEvent();
+  
   Graph* getGraph() const {
     return static_cast<Graph *>(sender());
   }
@@ -1774,14 +1769,14 @@ public:
     return edge(info.eltId);
   }
 
-  std::vector<node> getNodes() const;
+  const std::vector<node>& getNodes() const;
 
   unsigned int getNumberOfNodes() const {
     assert(evtType == TLP_ADD_NODES);
     return info.nbElts;
   }
 
-  std::vector<edge> getEdges() const;
+  const std::vector<edge>& getEdges() const;
 
   unsigned int getNumberOfEdges() const {
     assert(evtType == TLP_ADD_EDGES);
@@ -1829,6 +1824,10 @@ protected:
     unsigned int nbElts;
     std::pair<PropertyInterface*, std::string>* renamedProp;
   } info;
+  union {
+    std::vector<node>* addedNodes;
+    std::vector<edge>* addedEdges;
+  } vectInfos;
 };
 
 }
