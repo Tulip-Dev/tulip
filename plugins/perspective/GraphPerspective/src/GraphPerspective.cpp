@@ -213,23 +213,28 @@ void GraphPerspective::updateLogIconsAndCounters() {
   QFrame *logIconCounterFrame = NULL;
   QLabel *logIconLabel = NULL;
   QLabel *logCounterLabel = NULL;
+
   if (logType == GraphPerspectiveLogger::Info) {
     logIconCounterFrame = _ui->loggerFrameInfo;
     logIconLabel = _ui->loggerIconInfo;
     logCounterLabel = _ui->loggerMessageInfo;
-  } else if (logType == GraphPerspectiveLogger::Warning) {
+  }
+  else if (logType == GraphPerspectiveLogger::Warning) {
     logIconCounterFrame = _ui->loggerFrameWarning;
     logIconLabel = _ui->loggerIconWarning;
     logCounterLabel = _ui->loggerMessageWarning;
-  } else if (logType == GraphPerspectiveLogger::Error) {
+  }
+  else if (logType == GraphPerspectiveLogger::Error) {
     logIconCounterFrame = _ui->loggerFrameError;
     logIconLabel = _ui->loggerIconError;
     logCounterLabel = _ui->loggerMessageError;
-  } else {
+  }
+  else {
     logIconCounterFrame = _ui->loggerFramePython;
     logIconLabel = _ui->loggerIconPython;
     logCounterLabel = _ui->loggerMessagePython;
   }
+
   logIconCounterFrame->setVisible(true);
   logIconLabel->setPixmap(_logger->icon(logType));
   logCounterLabel->setText(QString::number(_logger->countByType(logType)));

@@ -31,25 +31,26 @@ using namespace tlp;
 SpanningDagSelection::SpanningDagSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {}
 //=================================================================
 bool SpanningDagSelection::run() {
-    const vector<node> &nodes = graph->nodes();
-    for(unsigned i=0;i<nodes.size();++i)
-        result->setNodeValue(nodes[i],true);
+  const vector<node> &nodes = graph->nodes();
 
-    EdgeStaticProperty<bool> edgeprop(graph);
-    edgeprop.setAll(true);
+  for(unsigned i=0; i<nodes.size(); ++i)
+    result->setNodeValue(nodes[i],true);
+
+  EdgeStaticProperty<bool> edgeprop(graph);
+  edgeprop.setAll(true);
 
   vector<edge> obstructions;
   AcyclicTest::acyclicTest(graph, &obstructions);
 
   for (vector<edge>::const_iterator it = obstructions.begin(); it != obstructions.end(); ++it) {
-      edgeprop[graph->edgePos(*it)]=false;
+    edgeprop[graph->edgePos(*it)]=false;
   }
 
   edgeprop.copyToProperty(result);
 
   //output some useful information
   if (dataSet!=NULL) {
-      dataSet->set<unsigned>("#Edges selected", graph->numberOfEdges()-obstructions.size());
+    dataSet->set<unsigned>("#Edges selected", graph->numberOfEdges()-obstructions.size());
   }
 
   return true;

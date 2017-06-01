@@ -1724,6 +1724,7 @@ public:
       info.nbElts = id;
     else
       info.eltId = id;
+
     vectInfos.addedNodes = NULL;
   }
   // constructor for subgraph events
@@ -1754,7 +1755,7 @@ public:
   }
 
   ~GraphEvent();
-  
+
   Graph* getGraph() const {
     return static_cast<Graph *>(sender());
   }

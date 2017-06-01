@@ -57,7 +57,7 @@ class PluginModel : public tlp::TulipModel {
     TreeItem(QString name, QString info = "",
              TreeItem* parent = NULL): name(name), info(info), parent(parent) {}
     virtual ~TreeItem() {
-        qDeleteAll(children);
+      qDeleteAll(children);
     }
     TreeItem* addChild(QString name, QString info = "") {
       TreeItem* result = new TreeItem(name, info, this);

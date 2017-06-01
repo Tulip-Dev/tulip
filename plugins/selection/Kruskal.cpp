@@ -40,10 +40,11 @@ Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
 
 bool Kruskal::check(std::string &erreurMsg) {
   if (!ConnectedTest::isConnected(graph)) {
-      erreurMsg = "The graph must be connected.";
-      return false;
+    erreurMsg = "The graph must be connected.";
+    return false;
   }
- return true;
+
+  return true;
 }
 //======================================================
 /// Compute the Minimum Spanning Tree
@@ -62,7 +63,7 @@ bool Kruskal::run() {
 
   //output some useful information
   if (dataSet!=NULL) {
-      dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
+    dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
   }
 
   return true;

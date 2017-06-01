@@ -1958,21 +1958,23 @@ GraphEvent::~GraphEvent() {
   if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
     // need to cleanup name if any
     if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-	evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+        evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
       delete info.renamedProp;
     else
       delete info.name;
-  } else {
+  }
+  else {
     //  need to cleanup vectInfos if not null
     if (evtType == TLP_ADD_NODES && vectInfos.addedNodes)
       delete vectInfos.addedNodes;
     else if (evtType == TLP_ADD_EDGES && vectInfos.addedEdges)
-    delete vectInfos.addedEdges;
+      delete vectInfos.addedEdges;
   }
 }
 
 const std::vector<node>& GraphEvent::getNodes() const {
   assert(evtType == TLP_ADD_NODES);
+
   if (vectInfos.addedNodes == NULL) {
     unsigned int nbElts = info.nbElts;
     std::vector<node>* addedNodes = new std::vector<node>();
@@ -1980,18 +1982,20 @@ const std::vector<node>& GraphEvent::getNodes() const {
     const std::vector<node>& nodes = getGraph()->nodes();
     // copy new graph nodes in addedNodes reserved memory
     memcpy(addedNodes->data(), &nodes[nodes.size() - nbElts],
-	   nbElts * sizeof(node));
+           nbElts * sizeof(node));
     // set addedNodes size using underlying vector pointers
     // to avoid unnecessary multiple constructeur calls
     ((node **) addedNodes)[1] = ((node **) addedNodes)[0] + nbElts;
     // record allocated vector in vectInfos
     ((GraphEvent *) this)->vectInfos.addedNodes = addedNodes;
   }
+
   return *vectInfos.addedNodes;
 }
 
 const std::vector<edge>& GraphEvent::getEdges() const {
   assert(evtType == TLP_ADD_EDGES);
+
   if (vectInfos.addedEdges == NULL) {
     unsigned int nbElts = info.nbElts;
     std::vector<edge>* addedEdges = new std::vector<edge>();
@@ -1999,12 +2003,13 @@ const std::vector<edge>& GraphEvent::getEdges() const {
     const std::vector<edge>& edges = getGraph()->edges();
     // copy new graph edges in addedEdges reserved memory
     memcpy(addedEdges->data(), &edges[edges.size() - nbElts],
-	   nbElts * sizeof(edge));
+           nbElts * sizeof(edge));
     // set addedEdges size using underlying vector pointers
     // to avoid unnecessary multiple constructeur calls
     ((edge **) addedEdges)[1] = ((edge **) addedEdges)[0] + nbElts;
     // record allocated vector in vectInfos
     ((GraphEvent *) this)->vectInfos.addedEdges = addedEdges;
   }
+
   return *vectInfos.addedEdges;
 }

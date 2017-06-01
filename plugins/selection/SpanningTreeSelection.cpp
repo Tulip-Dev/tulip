@@ -55,7 +55,7 @@ bool SpanningTreeSelection::run() {
 
   //output some useful information
   if (dataSet!=NULL)
-      dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
+    dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
 
   return true;
 }

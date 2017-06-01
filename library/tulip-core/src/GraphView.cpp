@@ -549,7 +549,7 @@ std::vector<edge> GraphView::getEdges(const node src, const node tgt,
 //----------------------------------------------------------------
 void GraphView::reserveNodes(unsigned int) {
 #ifndef NDEBUG
-    tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a subgraph" << std::endl;
+  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a subgraph" << std::endl;
 #endif
 }
 //----------------------------------------------------------------

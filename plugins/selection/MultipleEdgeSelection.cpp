@@ -41,7 +41,8 @@ bool MultipleEdgeSelection::run() {
   }
 
   //output some useful information
-   if (dataSet!=NULL)
-       dataSet->set("#Edges selected", cpt);
+  if (dataSet!=NULL)
+    dataSet->set("#Edges selected", cpt);
+
   return true;
 }

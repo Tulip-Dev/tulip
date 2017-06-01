@@ -40,6 +40,7 @@ bool ConnectedComponent::run() {
 
   // propagate nodes computed value to edges
   Iterator<edge> *itE=graph->getEdges();
+
   while (itE->hasNext()) {
     edge ite=itE->next();
     node source= graph->source(ite);
@@ -47,8 +48,9 @@ bool ConnectedComponent::run() {
   }
 
   delete itE;
+
   if (dataSet!=NULL)
-      dataSet->set("#connected components", components.size());
+    dataSet->set("#connected components", components.size());
 
   return true;
 }

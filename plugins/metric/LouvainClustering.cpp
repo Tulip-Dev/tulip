@@ -471,10 +471,12 @@ bool LouvainClustering::run() {
       delete clusters;
     }
   }
+
   if (dataSet!=NULL) {
-      dataSet->set("Modularity", new_mod);
-      dataSet->set("#Communities", result->getNodeMax()+1);
+    dataSet->set("Modularity", new_mod);
+    dataSet->set("#Communities", result->getNodeMax()+1);
   }
+
   return true;
 }
 //========================================================================================

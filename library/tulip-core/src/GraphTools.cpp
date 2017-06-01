@@ -277,8 +277,8 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
   edgeSel.setAll(true);
 
   //select all nodes
-  for(unsigned i=0;i<nodes.size();++i)
-      selectionProperty->setNodeValue(nodes[i],true);
+  for(unsigned i=0; i<nodes.size(); ++i)
+    selectionProperty->setNodeValue(nodes[i],true);
 
   bool ok=true;
   unsigned int edgeCount = 0;
@@ -299,8 +299,8 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
           ++nbSelectedNodes;
           fifo.push_back(tgt);
         }
-        else            
-            edgeSel[graph->edgePos(adjit)] = false;
+        else
+          edgeSel[graph->edgePos(adjit)] = false;
 
 
         if (pluginProgress) {
@@ -360,6 +360,7 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
       ++nbSelectedNodes;
     }
   }
+
   edgeSel.copyToProperty(selectionProperty);
 }
 //======================================================================
@@ -436,8 +437,9 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
 
   const vector<node>& nodes = graph->nodes();
 
-  for(unsigned i=0;i<nodes.size();++i)
-      selection->setNodeValue(nodes[i], true);
+  for(unsigned i=0; i<nodes.size(); ++i)
+    selection->setNodeValue(nodes[i], true);
+
   selection->setAllEdgeValue(false);
 
   NodeStaticProperty<unsigned int> classes(graph);
