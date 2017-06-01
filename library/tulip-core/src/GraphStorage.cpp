@@ -93,7 +93,7 @@ struct IdsMemento :public GraphStorageIdsMemento {
  * @brief Return the current state of the ids management
  * must be deleted by the caller
  */
-const GraphStorageIdsMemento* GraphStorage::getIdsMemento() {
+const GraphStorageIdsMemento* GraphStorage::getIdsMemento() const {
   IdsMemento* memento = new IdsMemento();
   nodeIds.copyTo(memento->nodeIds);
   edgeIds.copyTo(memento->edgeIds);
