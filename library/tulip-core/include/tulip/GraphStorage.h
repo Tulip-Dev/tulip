@@ -144,7 +144,7 @@ public:
    * must be deleted by the caller
    * this can be used for push/pop
    */
-  const GraphStorageIdsMemento* getIdsMemento();
+  const GraphStorageIdsMemento* getIdsMemento() const;
   //=======================================================
   /**
    * @brief  restore a state of the ids management
