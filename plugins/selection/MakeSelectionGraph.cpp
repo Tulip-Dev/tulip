@@ -39,7 +39,10 @@ bool MakeSelectionGraph::run() {
 
   result->copy(sel);
   unsigned added = makeSelectionGraph(graph,result);
-  tlp::debug() << tlp::SelectionAlgorithm::MakeSelectionGraph << ": " << added << " elements added to the selection." << std::endl;
+  //output some useful information
+   if (dataSet!=NULL)
+       dataSet->set("#elements added to the selection", added);
+
   return true;
 }
 

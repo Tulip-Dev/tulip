@@ -19,7 +19,7 @@
 #ifndef Tulip_SPANNINGTREESELECTION_H
 #define Tulip_SPANNINGTREESELECTION_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/BooleanProperty.h>
 
 /** \addtogroup selection */
 

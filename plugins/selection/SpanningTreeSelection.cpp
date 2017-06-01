@@ -31,7 +31,6 @@ SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext* context):
 SpanningTreeSelection::~SpanningTreeSelection() {}
 
 ///===========================================================
-///Calcul l'arbre couvrant
 bool SpanningTreeSelection::run() {
   // first initialize result
   result->setAllNodeValue(false);
@@ -53,5 +52,10 @@ bool SpanningTreeSelection::run() {
   }
 
   selectSpanningForest(graph, result, pluginProgress);
+
+  //output some useful information
+  if (dataSet!=NULL)
+      dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
+
   return true;
 }

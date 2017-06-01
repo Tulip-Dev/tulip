@@ -19,7 +19,7 @@
 #ifndef Tulip_LoopSelection_H
 #define Tulip_LoopSelection_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/BooleanProperty.h>
 #include "../utils/PluginNames.h"
 
 /** \addtogroup selection */

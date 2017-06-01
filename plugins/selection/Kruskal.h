@@ -44,7 +44,6 @@ public:
                     "Only works on undirected graphs, (ie. the orientation of edges is omitted).",
                     "1.0", "Selection")
   Kruskal(const tlp::PluginContext* context);
-  ~Kruskal();
   bool run();
   bool check(std::string &);
 };

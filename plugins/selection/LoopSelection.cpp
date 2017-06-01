@@ -37,8 +37,10 @@ bool LoopSelection::run() {
       ++cpt;
     }
   }
-  //output some useful information (will be displayed in the log window in the graph perspective)
-  tlp::debug() << tlp::SelectionAlgorithm::LoopSelection << ": " << cpt << " edges selected." << endl;
+  //output some useful information
+   if (dataSet!=NULL) {
+       dataSet->set("#Edges selected", cpt);
+   }
   return true;
 }
 //============================================
