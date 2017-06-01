@@ -111,7 +111,7 @@ QString ImportWizard::algorithm() const {
   if (_ui->importModules->selectionModel()->hasSelection())
     return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
 
-  return QString::null;
+  return "";
 }
 
 tlp::DataSet ImportWizard::parameters() const {

@@ -1,17 +1,11 @@
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(LIB_SRCS
-src/AbstractFiltersManagerItem.cpp
 src/AlgorithmRunner.cpp
 src/AlgorithmRunnerItem.cpp
 src/ExpandableGroupBox.cpp
 src/ExportWizard.cpp
 src/GraphPerspectiveLogger.cpp
-src/FiltersManager.cpp
-src/FiltersManagerItem.cpp
-src/FiltersManagerCompareItem.cpp
-src/FiltersManagerInvertItem.cpp
-src/FiltersManagerAlgorithmItem.cpp
 src/GraphHierarchiesEditor.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
@@ -30,11 +24,6 @@ QTX_WRAP_UI(UI_SRCS
 designer/GraphPerspectiveLogger.ui
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
-designer/FiltersManager.ui
-designer/FiltersManagerItem.ui
-designer/FiltersManagerCompareItem.ui
-designer/FiltersManagerAlgorithmItem.ui
-designer/FiltersManagerInvertItem.ui
 designer/GraphHierarchiesEditor.ui
 designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui
@@ -50,12 +39,6 @@ include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
 include/ExpandableGroupBox.h
 include/ExportWizard.h
-include/FiltersManager.h
-include/FiltersManagerItem.h
-include/AbstractFiltersManagerItem.h
-include/FiltersManagerCompareItem.h
-include/FiltersManagerInvertItem.h
-include/FiltersManagerAlgorithmItem.h
 include/GraphHierarchiesEditor.h
 include/GraphPerspective.h
 include/GraphPerspectiveLogger.h

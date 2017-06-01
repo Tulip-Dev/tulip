@@ -96,8 +96,8 @@ public slots:
   void saveGraphHierarchyInTlpFile(tlp::Graph*g = NULL);
   void createPanel(tlp::Graph* g = NULL);
   bool save();
-  bool saveAs(const QString& path=QString::null);
-  void open(QString fileName = QString::null);
+  bool saveAs(const QString& path="");
+  void open(QString fileName = "");
   virtual void openProjectFile(const QString &path);
 
   void showLogger();
