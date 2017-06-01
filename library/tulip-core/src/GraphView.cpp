@@ -548,11 +548,15 @@ std::vector<edge> GraphView::getEdges(const node src, const node tgt,
 }
 //----------------------------------------------------------------
 void GraphView::reserveNodes(unsigned int) {
-  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph" << std::endl;
+#ifndef NDEBUG
+    tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a subgraph" << std::endl;
+#endif
 }
 //----------------------------------------------------------------
 void GraphView::reserveEdges(unsigned int) {
-  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph" << std::endl;
+#ifndef NDEBUG
+  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a subgraph" << std::endl;
+#endif
 }
 //----------------------------------------------------------------
 bool GraphView::canPop() {

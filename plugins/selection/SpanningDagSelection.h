@@ -22,9 +22,6 @@
 #include <tulip/BooleanProperty.h>
 #include "../utils/PluginNames.h"
 
-template<typename T>
-class MutableConatainer;
-
 /** \addtogroup selection */
 
 

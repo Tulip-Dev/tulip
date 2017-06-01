@@ -249,8 +249,8 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
   list<node> fifo;
 
   NodeStaticProperty<bool> nodeFlag(graph);
-
   const std::vector<node>& nodes = graph->nodes();
+
   unsigned int nbNodes = nodes.size();
   unsigned int nbSelectedNodes =
     selectionProperty->numberOfNonDefaultValuatedNodes();
@@ -273,8 +273,12 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
     nbSelectedNodes = 1;
   }
 
-  selectionProperty->setAllEdgeValue(true);
-  selectionProperty->setAllNodeValue(true);
+  EdgeStaticProperty<bool> edgeSel(graph);
+  edgeSel.setAll(true);
+
+  //select all nodes
+  for(unsigned i=0;i<nodes.size();++i)
+      selectionProperty->setNodeValue(nodes[i],true);
 
   bool ok=true;
   unsigned int edgeCount = 0;
@@ -295,8 +299,9 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
           ++nbSelectedNodes;
           fifo.push_back(tgt);
         }
-        else
-          selectionProperty->setEdgeValue(adjit,false);
+        else            
+            edgeSel[graph->edgePos(adjit)] = false;
+
 
         if (pluginProgress) {
           pluginProgress->setComment("Computing a spanning forest...");
@@ -355,6 +360,7 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
       ++nbSelectedNodes;
     }
   }
+  edgeSel.copyToProperty(selectionProperty);
 }
 //======================================================================
 void selectSpanningTree(Graph* graph, BooleanProperty *selection,
@@ -428,11 +434,14 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
     // no weight return a spanning tree
     return selectSpanningTree(graph, selection, pluginProgress);
 
-  selection->setAllNodeValue(true);
+  const vector<node>& nodes = graph->nodes();
+
+  for(unsigned i=0;i<nodes.size();++i)
+      selection->setNodeValue(nodes[i], true);
   selection->setAllEdgeValue(false);
 
   NodeStaticProperty<unsigned int> classes(graph);
-  const std::vector<node>& nodes = graph->nodes();
+
   unsigned int nbNodes = nodes.size();
   unsigned int numClasses = nbNodes;
 

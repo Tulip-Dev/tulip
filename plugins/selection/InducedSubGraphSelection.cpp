@@ -92,7 +92,11 @@ bool InducedSubGraphSelection::run() {
     }
   }
 
-  tlp::debug() << tlp::SelectionAlgorithm::InducedSubGraphSelection << ": " << sel << " edges selected." << std::endl;
+  //output some useful information
+   if (dataSet!=NULL) {
+       dataSet->set("#Edges selected", sel);
+   }
+
   return true;
 }
 //=================================================================================

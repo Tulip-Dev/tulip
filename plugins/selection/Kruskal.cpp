@@ -35,20 +35,15 @@ static const char *paramHelp[] = {
 Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
   addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "viewMetric");
 }
-//======================================================
-Kruskal::~Kruskal() {
-}
+
 //======================================================
 
 bool Kruskal::check(std::string &erreurMsg) {
-  if (ConnectedTest::isConnected(graph)) {
-    erreurMsg = "";
-    return true;
+  if (!ConnectedTest::isConnected(graph)) {
+      erreurMsg = "The graph must be connected.";
+      return false;
   }
-  else {
-    erreurMsg = "The graph must be connected.";
-    return false;
-  }
+ return true;
 }
 //======================================================
 /// Compute the Minimum Spanning Tree
@@ -64,6 +59,11 @@ bool Kruskal::run() {
     edgeWeight = graph->getProperty<DoubleProperty>("viewMetric");
 
   selectMinimumSpanningTree(graph, result, edgeWeight, pluginProgress);
+
+  //output some useful information
+  if (dataSet!=NULL) {
+      dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
+  }
 
   return true;
 }

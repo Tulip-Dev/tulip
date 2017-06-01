@@ -18,6 +18,7 @@
  */
 
 #include <tulip/AcyclicTest.h>
+#include <tulip/StaticProperty.h>
 
 #include "SpanningDagSelection.h"
 
@@ -30,20 +31,27 @@ using namespace tlp;
 SpanningDagSelection::SpanningDagSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {}
 //=================================================================
 bool SpanningDagSelection::run() {
-  result->setAllNodeValue(true);
-  result->setAllEdgeValue(true);
+    const vector<node> &nodes = graph->nodes();
+    for(unsigned i=0;i<nodes.size();++i)
+        result->setNodeValue(nodes[i],true);
+
+    EdgeStaticProperty<bool> edgeprop(graph);
+    edgeprop.setAll(true);
+
   vector<edge> obstructions;
   AcyclicTest::acyclicTest(graph, &obstructions);
 
-  unsigned num=0;
-
   for (vector<edge>::const_iterator it = obstructions.begin(); it != obstructions.end(); ++it) {
-    result->setEdgeValue(*it, false);
-    ++num;
+      edgeprop[graph->edgePos(*it)]=false;
   }
 
-  unsigned num_selected = graph->numberOfEdges()-num;
-  tlp::debug() << tlp::SelectionAlgorithm::SpanningDagSelection << ": " << num_selected << " edges selected." << endl;
+  edgeprop.copyToProperty(result);
+
+  //output some useful information
+  if (dataSet!=NULL) {
+      dataSet->set<unsigned>("#Edges selected", graph->numberOfEdges()-obstructions.size());
+  }
+
   return true;
 }
 //=================================================================

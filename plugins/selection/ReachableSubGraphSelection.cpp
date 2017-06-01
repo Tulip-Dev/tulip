@@ -158,7 +158,11 @@ bool ReachableSubGraphSelection::run() {
     result->setAllNodeValue(false);
   }
 
-  tlp::debug() << tlp::SelectionAlgorithm::ReachableSubGraphSelection << ": " << num_nodes << " nodes and " << num_edges << " edges selected." << std::endl;
+  //output some useful information
+  if (dataSet!=NULL) {
+      dataSet->set("#Edges selected", num_edges);
+      dataSet->set("#Nodes selected", num_nodes);
+  }
   return true;
 }
 

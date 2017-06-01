@@ -94,6 +94,7 @@ private:
   // greater than min_modularity
   // if 0. even a minor increase is enough to go for one more pass
   double min_modularity;
+  double new_mod;
 
   // return the weighted degree and selfloops of a node
   // of the current quotient graph
@@ -255,7 +256,7 @@ private:
   // return true if some nodes have been moved
   bool one_level() {
     bool improvement=false ;
-    double new_mod   = modularity();
+    new_mod   = modularity();
     double cur_mod   = new_mod;
 
     quotient->shuffleNodes();
@@ -361,7 +362,7 @@ static const char *paramHelp[] = {
 // same precision as the original code
 #define DEFAULT_PRECISION 0.000001
 
-LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context) {
+LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context),new_mod(0.) {
   addInParameter<NumericProperty*>("metric", paramHelp[0], "",false);
   addInParameter<double>("precision", paramHelp[1], "0.000001",false);
 }
@@ -420,22 +421,11 @@ bool LouvainClustering::run() {
   // init other vectors
   init_level();
   bool improvement = true;
-//  double mod = modularity(),
-//  double new_mod;
   int level = 0;
-//  bool verbose = false;
 
   while(improvement) {
-//    if (verbose) {
-//      std::cout << "level " << level << ':' << std::endl;
-//      std::cout << "  network size: "
-//                << nb_qnodes << " nodes, "
-//                << quotient->numberOfEdges() << " links, "
-//                << total_weight << " weight." << endl << std::flush;
-//    }
 
     improvement = one_level();
-    // new_mod = modularity();
 
     if (improvement) {
       ++level;
@@ -450,18 +440,9 @@ bool LouvainClustering::run() {
       quotient = new_quotient;
       weights = new_weights;
 
-//      if (verbose)
-//        std::cout << " modularity increased from " << mod
-//                  << " to " << new_mod << endl << std::flush;
-
-//      mod=new_mod;
       init_level();
     }
     else {
-//      if (verbose)
-//        std::cout << " modularity increased from " << mod
-//                  << " to " << new_mod << endl << std::flush;
-
       // update measure
       // Renumber communities
       vector<int> renumber(nb_qnodes, -1);
@@ -490,7 +471,10 @@ bool LouvainClustering::run() {
       delete clusters;
     }
   }
-
+  if (dataSet!=NULL) {
+      dataSet->set("Modularity", new_mod);
+      dataSet->set("#Communities", result->getNodeMax()+1);
+  }
   return true;
 }
 //========================================================================================

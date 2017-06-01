@@ -25,15 +25,12 @@ using namespace tlp;
 
 ConnectedComponent::ConnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
 //======================================================
-ConnectedComponent::~ConnectedComponent() {}
-//======================================================
 bool ConnectedComponent::run() {
   std::vector<std::vector<node> > components;
   ConnectedTest::computeConnectedComponents(graph, components);
 
   // assign the index of each component as value for its nodes
-  //unsigned int curComponent = 0;
-  for (unsigned int curComponent=0; curComponent < components.size(); ++curComponent) {
+  for (unsigned curComponent = 0; curComponent < components.size(); ++curComponent) {
     std::vector<node>& component = components[curComponent];
 
     for(std::vector<node>::const_iterator itNode = component.begin(); itNode!=component.end(); ++itNode) {
@@ -43,18 +40,15 @@ bool ConnectedComponent::run() {
 
   // propagate nodes computed value to edges
   Iterator<edge> *itE=graph->getEdges();
-
   while (itE->hasNext()) {
     edge ite=itE->next();
     node source= graph->source(ite);
-    //    node target= graph->target(ite);
-    //    if (result->getNodeValue(source) == result->getNodeValue(target))
     result->setEdgeValue(ite, result->getNodeValue(source));
-    //    else
-    //  result->setEdgeValue(ite,curComponent);
   }
 
   delete itE;
+  if (dataSet!=NULL)
+      dataSet->set("#connected components", components.size());
 
   return true;
 }
