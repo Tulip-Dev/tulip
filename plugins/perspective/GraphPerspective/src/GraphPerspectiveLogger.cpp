@@ -45,6 +45,7 @@ GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
   if (_pythonOutput) {
     return Python;
   }
+
   switch (_logType) {
   case QtDebugMsg:
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
@@ -111,6 +112,7 @@ void GraphPerspectiveLogger::logImpl(QtMsgType type, const QString &msg) {
   else {
     _pythonOutput = false;
   }
+
   LogType lastLogType = getLastLogType();
   _ui->listWidget->addItem(new QListWidgetItem(QIcon(icon(lastLogType)), msgClean));
   _logCounts[lastLogType] += 1;
@@ -122,6 +124,7 @@ QPixmap GraphPerspectiveLogger::icon(LogType logType) const {
   switch (logType) {
   case Python:
     return QPixmap(":/tulip/graphperspective/icons/16/python.png");
+
   case Info:
     pxUrl+="info";
     break;

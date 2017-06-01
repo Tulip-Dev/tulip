@@ -74,7 +74,7 @@ TulipFont& TulipFont::operator=(const TulipFont& other) {
   return *this;
 }
 
-TulipFont::TulipFont(const TulipFont& other): QObject(other.parent()),_bold(other._bold), _italic(other._italic), _fontName(other._fontName), _fontFile(other._fontFile){
+TulipFont::TulipFont(const TulipFont& other): QObject(other.parent()),_bold(other._bold), _italic(other._italic), _fontName(other._fontName), _fontFile(other._fontFile) {
 
 }
 

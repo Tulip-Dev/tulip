@@ -39,9 +39,10 @@ bool MakeSelectionGraph::run() {
 
   result->copy(sel);
   unsigned added = makeSelectionGraph(graph,result);
+
   //output some useful information
-   if (dataSet!=NULL)
-       dataSet->set("#elements added to the selection", added);
+  if (dataSet!=NULL)
+    dataSet->set("#elements added to the selection", added);
 
   return true;
 }

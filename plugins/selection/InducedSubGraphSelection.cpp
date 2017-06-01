@@ -93,9 +93,9 @@ bool InducedSubGraphSelection::run() {
   }
 
   //output some useful information
-   if (dataSet!=NULL) {
-       dataSet->set("#Edges selected", sel);
-   }
+  if (dataSet!=NULL) {
+    dataSet->set("#Edges selected", sel);
+  }
 
   return true;
 }

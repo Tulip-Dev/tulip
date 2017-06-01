@@ -160,9 +160,10 @@ bool ReachableSubGraphSelection::run() {
 
   //output some useful information
   if (dataSet!=NULL) {
-      dataSet->set("#Edges selected", num_edges);
-      dataSet->set("#Nodes selected", num_nodes);
+    dataSet->set("#Edges selected", num_edges);
+    dataSet->set("#Nodes selected", num_nodes);
   }
+
   return true;
 }
 

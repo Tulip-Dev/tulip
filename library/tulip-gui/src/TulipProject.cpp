@@ -41,7 +41,7 @@ namespace tlp {
 
 TulipProject::TulipProject(): _isValid(false) {
   // This private constructor should never been called. It has been privately declared to prevent use of default constructor
-    assert(false);
+  assert(false);
 }
 
 TulipProject::TulipProject(const QString &path)
