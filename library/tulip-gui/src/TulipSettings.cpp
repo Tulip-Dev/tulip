@@ -71,7 +71,6 @@ static const QString TS_UseTlpbFileFormat = "graph/auto/usetlpb";
 static const QString TS_SeedForRandomSequence = "graph/auto/seed";
 
 static const QString TS_WarnUserAboutGraphicsCard = "app/warn_about_graphics_card";
-static const QString TS_ShowStatusBar = "app/gui/show_status_bar";
 
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
@@ -455,14 +454,6 @@ bool TulipSettings::warnUserAboutGraphicsCard() const {
 
 void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
   setValue(TS_WarnUserAboutGraphicsCard, f);
-}
-
-bool TulipSettings::showStatusBar() const {
-  return value(TS_ShowStatusBar,true).toBool();
-}
-
-void TulipSettings::setShowStatusBar(bool f) {
-  setValue(TS_ShowStatusBar, f);
 }
 
 void TulipSettings::treatEvent(const Event &message) {
