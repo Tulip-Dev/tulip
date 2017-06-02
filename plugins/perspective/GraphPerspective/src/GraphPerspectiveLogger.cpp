@@ -24,6 +24,7 @@
 
 #include <QKeyEvent>
 #include <QClipboard>
+#include <QMenu>
 
 #include <tulip/TlpQtTools.h>
 
@@ -33,6 +34,8 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
   // we want to be able to select multiple rows in the logger list for copy/paste operations
   _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
   _ui->listWidget->installEventFilter(this);
+  _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
   setWindowFlags(Qt::Popup);
   connect(_ui->clearButton,SIGNAL(clicked()),this,SLOT(clear()));
 }
@@ -154,19 +157,28 @@ void GraphPerspectiveLogger::clear() {
   _logCounts[Python] = 0;
 }
 
-// catch the copy to cliboard event of the QListWidget and reimplement
+void GraphPerspectiveLogger::copy() {
+    QStringList strings;
+    foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
+      strings << item->text();
+    QApplication::clipboard()->setText(strings.join("\n"));
+}
+
+void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
+    QMenu m;
+    m.addAction("Clear content and close", this, SLOT(clear()));
+    m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
+    m.exec(_ui->listWidget->mapToGlobal(pos));
+}
+
+// catch the copy to clipboard event of the QListWidget and reimplement
 // its behaviour in order to be able to copy the text of all the selected rows
 // (only the text of the current item is copied otherwise)
 bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
   QKeyEvent *ke = dynamic_cast<QKeyEvent*>(event);
 
   if (ke && ke->matches(QKeySequence::Copy)) {
-    QStringList strings;
-
-    foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
-      strings << item->text();
-
-    QApplication::clipboard()->setText(strings.join("\n"));
+    copy();
     return true;
   }
 

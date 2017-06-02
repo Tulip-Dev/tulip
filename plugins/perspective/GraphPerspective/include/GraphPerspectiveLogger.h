@@ -63,6 +63,10 @@ public:
 public slots:
   void clear();
 
+private slots:
+  void copy();
+  void showContextMenu(const QPoint&pos);
+
 private:
   void logImpl(QtMsgType, const QString &);
 
