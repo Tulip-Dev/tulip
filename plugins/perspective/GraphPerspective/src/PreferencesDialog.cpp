@@ -53,7 +53,7 @@ PreferencesDialog::~PreferencesDialog() {
 
 void PreferencesDialog::usetlpbformat(int state) {
   if(state==Qt::Checked) {
-    QMessageBox::warning(this, "Use tlpb file format", "Be careful: using the tlpb file format means faster Tulip project loading/saving but you will lose compatibility with previous versions of Tulip.");
+    QMessageBox::warning(this, "Use tlpb file format", "Be careful: using the tlpb file format means faster Tulip project loading/saving but you will lose compatibility with previous versions of Tulip (<4.10).");
   }
 }
 
