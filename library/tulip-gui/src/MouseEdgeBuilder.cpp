@@ -33,11 +33,13 @@
 using namespace std;
 using namespace tlp;
 
-MouseEdgeBuilder::MouseEdgeBuilder():_source(node()),_started(false),_graph(NULL),_layoutProperty(NULL) {}
+MouseEdgeBuilder::MouseEdgeBuilder():_source(node()),_started(false),_graph(NULL),_layoutProperty(NULL), glMainWidget(NULL) {}
 
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+  if (glMainWidget == NULL)
+    glMainWidget = dynamic_cast<GlMainWidget *>(widget);
+    assert(glMainWidget);
 
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
@@ -70,7 +72,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           clearObserver();
           // allow to undo
           _graph->push();
-          addLink(widget,_source,node(selectedEntity.getComplexEntityId()));
+          addLink(_source,node(selectedEntity.getComplexEntityId()));
           //edge finished. clear _source and _started
           _source=node();
           _started=false;
@@ -189,12 +191,12 @@ void MouseEdgeBuilder::treatEvent(const Event& evt) {
 }
 
 void MouseEdgeBuilder::clear() {
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
-  glMainView->getGlMainWidget()->setCursor(QCursor());
+  if (glMainWidget)
+    glMainWidget->setCursor(QCursor());
 }
 
-void MouseEdgeBuilder::addLink(QObject *widget, const node &source, const node &target) {
-  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+void MouseEdgeBuilder::addLink(const node &source, const node &target) {
+  assert(glMainWidget);
   Graph * g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
   LayoutProperty* mLayout = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();

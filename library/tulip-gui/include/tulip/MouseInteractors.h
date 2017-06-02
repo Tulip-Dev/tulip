@@ -26,7 +26,7 @@
 #include <tulip/GlScene.h>
 
 namespace tlp {
-
+class GlMainWidget;
 class NodeLinkDiagramComponent;
 
 /** An interactor class allowing to zoom and pan using the mouse wheel.
@@ -45,11 +45,13 @@ protected:
  */
 class TLP_QT_SCOPE MouseElementDeleter:public InteractorComponent {
 public:
-  MouseElementDeleter() {}
+ MouseElementDeleter() :glMainWidget(NULL) {}
   ~MouseElementDeleter() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();
   virtual void delElement(tlp::Graph* graph, tlp::SelectedEntity& selectedEntity);
+ private:
+  GlMainWidget* glMainWidget;
 };
 
 /** An interactor class to translate/rotate using keys or mouse movements,

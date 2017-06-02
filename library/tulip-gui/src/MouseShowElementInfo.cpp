@@ -35,7 +35,7 @@
 using namespace std;
 using namespace tlp;
 
-MouseShowElementInfo::MouseShowElementInfo():_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()) {
+MouseShowElementInfo::MouseShowElementInfo():_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL) {
   _informationWidget->installEventFilter(this);
   _ui->setupUi(_informationWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
@@ -49,8 +49,8 @@ MouseShowElementInfo::~MouseShowElementInfo() {
 
 void MouseShowElementInfo::clear() {
   _informationWidgetItem->setVisible(false);
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
-  glMainView->getGlMainWidget()->setCursor(QCursor());
+  if (glMainWidget)
+    glMainWidget->setCursor(QCursor());
 }
 
 QTableView* MouseShowElementInfo::tableView() const {
@@ -69,16 +69,18 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if(qMouseEv != NULL) {
-    GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
-    assert(glMainView);
+    if (glMainWidget == NULL)
+      glMainWidget=dynamic_cast<GlMainWidget*>(widget);
+    assert(glMainWidget);
+    
     SelectedEntity selectedEntity;
 
     if(e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
-        glMainView->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
+        glMainWidget->setCursor(Qt::WhatsThisCursor);
       }
       else {
-        glMainView->getGlMainWidget()->setCursor(QCursor());
+        glMainWidget->setCursor(QCursor());
       }
 
       return false;
@@ -133,9 +135,8 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 }
 
 bool MouseShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
-  assert(glMainView);
-  return glMainView->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity);
+  assert(glMainWidget);
+  return glMainWidget->pickNodesEdges(x,y,selectedEntity);
 }
 
 void MouseShowElementInfo::viewChanged(View * view) {
