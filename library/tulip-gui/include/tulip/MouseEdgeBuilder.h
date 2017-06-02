@@ -29,6 +29,7 @@
 namespace tlp {
 class Graph;
 class LayoutProperty;
+class GlMainWidget;
 
 class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, public Observable {
 private:
@@ -38,6 +39,7 @@ private:
   std::vector<Coord> _bends;
   Graph *_graph;
   LayoutProperty *_layoutProperty;
+  GlMainWidget* glMainWidget;
 
 protected:
   /**
@@ -45,7 +47,7 @@ protected:
    * @param source
    * @param dest
    */
-  virtual void addLink(QObject *, const node& source, const node& dest);
+  virtual void addLink(const node& source, const node& dest);
   /**
    * @brief source gets the source node.
    * @return

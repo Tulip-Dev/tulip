@@ -38,6 +38,7 @@ namespace tlp {
 
 class View;
 class ViewWidget;
+class GlMainWidget;
 struct SelectedEntity;
 
 /**
@@ -62,6 +63,7 @@ protected:
   ViewWidget *_view;
   QWidget *_informationWidget;
   QGraphicsProxyWidget *_informationWidgetItem;
+  GlMainWidget* glMainWidget;
 
   QTableView* tableView() const;
 

@@ -149,7 +149,8 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 
   if(qMouseEv != NULL) {
     SelectedEntity selectedEntity;
-    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+    if (glMainWidget == NULL)
+      glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if(e->type() == QEvent::MouseMove) {
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
@@ -179,8 +180,8 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseElementDeleter::clear() {
-  GlMainView *glMainView=static_cast<GlMainView*>(view());
-  glMainView->getGlMainWidget()->setCursor(QCursor());
+  if (glMainWidget)
+    glMainWidget->setCursor(QCursor());
 }
 //===============================================================
 class MouseRotXRotY:public InteractorComponent {
