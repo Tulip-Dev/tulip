@@ -10,14 +10,70 @@
     <x>0</x>
     <y>0</y>
     <width>574</width>
-    <height>582</height>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Tulip Python plugin creation</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:white;</string>
+   <string notr="true">QPushButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+QPushButton::flat {
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+QPushButton, QComboBox, QLabel {
+color: black;
+}
+QPushButton:hover, QComboBox:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+QPushButton:disabled, QComboBox::disabled {
+color:gray;
+}
+QPushButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+QPushButton {
+outline: none;
+margin: 2
+}
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+#PreferencesDialog {
+background-color: white;
+border: 0px;
+}
+QFrame[ section=&quot;true&quot; ] {
+border-top: 1px solid #D9D9D9;
+padding-top: 20px;
+}
+QFrame[ subsection = &quot;true&quot; ] {
+border-top: 1px solid #D9D9D9;
+padding-top: 5px;
+background-color: #F4F4F4;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -25,7 +81,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>40</height>
+       <height>50</height>
       </size>
      </property>
      <property name="text">
@@ -69,7 +125,7 @@ background-color: white;
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources/GraphPerspective.qrc">
+           <iconset resource="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc">
             <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
           </property>
          </widget>
@@ -247,7 +303,7 @@ background-color: white;
   </layout>
  </widget>
  <resources>
-  <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc"/>
  </resources>
  <connections>
   <connection>
