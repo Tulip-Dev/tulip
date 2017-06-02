@@ -18,6 +18,10 @@
  */
 
 #include <QApplication>
+#include <tulip/MouseNodeBuilder.h>
+#include <tulip/MouseEdgeBuilder.h>
+#include <tulip/MouseSelector.h>
+#include <tulip/MouseEdgeBendEditor.h>
 
 #include "GeographicViewInteractors.h"
 
@@ -205,3 +209,55 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 PLUGIN(GeographicViewInteractorNavigation)
+
+GeographicViewInteractorAddEdges::GeographicViewInteractorAddEdges(const PluginContext *) : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png","Add nodes/edges") {
+    setPriority(StandardInteractorPriority::AddNodesOrEdges);
+    setConfigurationWidgetText("<h3>Add nodes/edges</h3>To add a node: <b>Mouse left</b> click outside any node.<br/>To add an edge: <b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node before the click on the target node will add an edge bend,<br/><b>Mouse middle</b> click will cancel the current edge construction.");
+}
+
+void GeographicViewInteractorAddEdges::construct() {
+  push_back(new GeographicViewNavigator);
+  push_back(new MouseNodeBuilder);
+  push_back(new MouseEdgeBuilder);
+}
+
+QCursor GeographicViewInteractorAddEdges::cursor() const {
+  return QCursor(Qt::PointingHandCursor);
+}
+
+bool GeographicViewInteractorAddEdges::isCompatible(const std::string &viewName) const {
+  return (viewName == ViewName::GeographicViewName);
+}
+
+PLUGIN(GeographicViewInteractorAddEdges)
+
+GeographicViewInteractorEditEdgeBends::GeographicViewInteractorEditEdgeBends(const PluginContext *) : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends","Edit edge bends") {
+    setPriority(StandardInteractorPriority::EditEdgeBends);
+    setConfigurationWidgetText(QString("<h3>Edit edge bends</h3>")+
+                               "Modify edge bends<br/><br/>"+
+                               "Select edge: <ul><li>use rectangle selection</li></ul>" +
+                               "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
+                               "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>"+
+                               "Change target node: <ul><li><b>Drag and drop triangle on target node</li></ul>"+
+                               "Add bend: <ul><li><b>Double click with mouse left</b> click on the selected edge</li></ul>"+
+#if !defined(__APPLE__)
+                               "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
+#else
+                               "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
+#endif
+                              );
+}
+
+void GeographicViewInteractorEditEdgeBends::construct() {
+  push_back(new GeographicViewNavigator);
+  push_back(new MouseSelector);
+  push_back(new MouseEdgeBendEditor);
+}
+
+bool GeographicViewInteractorEditEdgeBends::isCompatible(const std::string &viewName) const {
+  return (viewName == ViewName::GeographicViewName);
+}
+
+PLUGIN(GeographicViewInteractorEditEdgeBends)
+
+

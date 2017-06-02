@@ -23,6 +23,7 @@
 #include <tulip/GLInteractor.h>
 #include <tulip/MouseInteractors.h>
 #include "GeographicView.h"
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 using namespace tlp;
 
@@ -64,7 +65,7 @@ class GeographicViewInteractorNavigation : public GeographicViewInteractor {
 
 public :
 
-  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009", " Geographic View Navigation Interactor", "1.0","Navigation")
+  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009", "Geographic View Navigation Interactor", "1.0","Navigation")
 
   GeographicViewInteractorNavigation(const PluginContext *);
 
@@ -72,6 +73,34 @@ public :
 
   QWidget *configurationWidget() const;
   virtual unsigned int priority() const;
+};
+
+class GeographicViewInteractorAddEdges : public NodeLinkDiagramComponentInteractor {
+
+public :
+
+  PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team", "02/06/2017", "Geographic View Add Edges Interactor", "1.0","Modification")
+
+  GeographicViewInteractorAddEdges(const PluginContext *);
+
+  void construct();
+
+  QCursor cursor() const;
+
+  bool isCompatible(const std::string &viewName) const;
+};
+
+class GeographicViewInteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
+
+public :
+
+  PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team", "02/06/2017", "Geographic View Edit Edge Bends Interactor", "1.0","Modification")
+
+  GeographicViewInteractorEditEdgeBends(const PluginContext *);
+
+  void construct();
+
+  bool isCompatible(const std::string &viewName) const;
 };
 
 #endif /* GOOGLEMAPSVIEWINTERACTORS_H_ */
