@@ -49,6 +49,7 @@ MouseShowElementInfo::~MouseShowElementInfo() {
 
 void MouseShowElementInfo::clear() {
   _informationWidgetItem->setVisible(false);
+
   if (glMainWidget)
     glMainWidget->setCursor(QCursor());
 }
@@ -71,8 +72,9 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   if(qMouseEv != NULL) {
     if (glMainWidget == NULL)
       glMainWidget=dynamic_cast<GlMainWidget*>(widget);
+
     assert(glMainWidget);
-    
+
     SelectedEntity selectedEntity;
 
     if(e->type() == QEvent::MouseMove) {

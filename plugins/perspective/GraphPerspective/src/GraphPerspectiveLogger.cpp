@@ -158,17 +158,19 @@ void GraphPerspectiveLogger::clear() {
 }
 
 void GraphPerspectiveLogger::copy() {
-    QStringList strings;
-    foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
-      strings << item->text();
-    QApplication::clipboard()->setText(strings.join("\n"));
+  QStringList strings;
+
+  foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
+    strings << item->text();
+
+  QApplication::clipboard()->setText(strings.join("\n"));
 }
 
 void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
-    QMenu m;
-    m.addAction("Clear content and close", this, SLOT(clear()));
-    m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
-    m.exec(_ui->listWidget->mapToGlobal(pos));
+  QMenu m;
+  m.addAction("Clear content and close", this, SLOT(clear()));
+  m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
+  m.exec(_ui->listWidget->mapToGlobal(pos));
 }
 
 // catch the copy to clipboard event of the QListWidget and reimplement

@@ -186,8 +186,10 @@ bool CliqueEnumeration ::run() {
 
     maxCliquePivot(P,R,X);
   }
+
   if(dataSet!=NULL)
-      dataSet->set("#cliques created", cliqueid+1);
+    dataSet->set("#cliques created", cliqueid+1);
+
   return true;
 }
 //================================================================================

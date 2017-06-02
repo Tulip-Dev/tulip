@@ -1508,6 +1508,7 @@ void GraphPerspective::showHideSideBar() {
 
 void GraphPerspective::showHideStatusBar() {
   QStatusBar* stsBar = _mainWindow->statusBar();
+
   if (stsBar->isVisible()) {
     stsBar->setVisible(false);
     _ui->statusbarButton->setToolTip("Show Status bar");
@@ -1516,6 +1517,7 @@ void GraphPerspective::showHideStatusBar() {
     stsBar->setVisible(true);
     _ui->statusbarButton->setToolTip("Hide Status bar");
   }
+
   TulipSettings::instance().setShowStatusBar(stsBar->isVisible());
 }
 

@@ -37,10 +37,12 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
   if(qMouseEv != NULL) {
     SelectedEntity selectedEntity;
+
     if (glMainWidget == NULL)
       glMainWidget = dynamic_cast<GlMainWidget *>(widget);
+
     assert(glMainWidget);
-    
+
     if(e->type() == QEvent::MouseMove) {
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(Qt::ForbiddenCursor);
