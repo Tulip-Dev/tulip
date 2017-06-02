@@ -41,7 +41,9 @@
  *
  *  <b>HISTORY</b>
  *
- *  - 2013 Version 1.0: Initial release
+ *
+ * - 2017 Version 1.0 (Bruno Pinaud): moved to Tulip trunk and clean the code a bit.
+ * - 2013 Version 0.1: Initial release
  *  by François Queyroi, LaBRI, University Bordeaux I, France
  *
  *  <b>LICENCE</b>
@@ -53,27 +55,29 @@
  *
  */
 class CliqueEnumeration:public tlp::Algorithm {
-public:
 
-  PLUGININFORMATION("Maximal Cliques", "Francois Queyroi", "24/10/2013", "Alpha", "0.1", "Clustering")
+
+  void addClique(const std::vector<tlp::node> &);
+
+  void getDegenerateOrdering(std::vector<tlp::node> &);
+  void getNeighborhood(const tlp::node, std::set<tlp::node> &);
+  tlp::node choosePivot(const std::set<tlp::node> &);
+  void maxCliquePivot(std::set<tlp::node>&, const std::vector<tlp::node> &, std::set<tlp::node>&);
+
+  unsigned int minsize;
+  unsigned cliqueid;
+
+public:
+  PLUGININFORMATION("Maximal Cliques Enumeration", "Francois Queyroi", "24/10/2013", "Compute all maximal cliques (or maximal cliques whose size is above a given threshold)"
+                    " according to the Eppstein algorithm. See"
+                     " Eppstein, Loffler and Strash, "
+                     "Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time, "
+                     "Experimental Algorithms, Springer, "
+                     "2011", "1.0", "Clustering")
 
   CliqueEnumeration(tlp::PluginContext*);
   bool run();
   bool check(std::string &);
-
-private:
-
-  void addClique(std::vector<tlp::node> &);
-
-  void getDegenerateOrdering(std::vector<tlp::node> &);
-  void getNeighborhood(tlp::node,std::set<tlp::node> &);
-  tlp::node choosePivot(std::set<tlp::node> &);
-  void maxCliquePivot(std::set<tlp::node>&,std::vector<tlp::node>&,std::set<tlp::node>&);
-
-  void intersectSet(std::set<tlp::node>&,std::set<tlp::node>&,std::set<tlp::node>&);
-  void unionSet(std::set<tlp::node>&,std::set<tlp::node>&,std::set<tlp::node>&);
-
-  unsigned int minsize;
 };
 /*@}*/
 #endif // CLIQUEENUMERATION_H

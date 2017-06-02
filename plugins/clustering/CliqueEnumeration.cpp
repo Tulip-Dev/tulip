@@ -22,6 +22,7 @@
 #include <tulip/SimpleTest.h>
 
 #include <sstream>
+#include <algorithm>
 
 PLUGIN(CliqueEnumeration)
 
@@ -30,32 +31,26 @@ using namespace tlp;
 using namespace std;
 
 //================================================================================
-static const char * paramHelp[] = {
-  //Min Size
-  "Minimum size for cliques"
-};
-//================================================================================
-CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context):Algorithm(context) {
-  addInParameter<unsigned int>("minimum size", paramHelp[0],"0");
+CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context):Algorithm(context),minsize(0),cliqueid(0) {
+  addInParameter<unsigned int>("minimum size", "Clique minimum size","0");
 }
 
 //================================================================================
-void CliqueEnumeration::addClique(vector<node> & clique) {
-  unsigned int num = graph->numberOfSubGraphs()+1;
+void CliqueEnumeration::addClique(const vector<node> & clique) {
   stringstream ss;
-  ss << "clique_" << num;
-  graph->inducedSubGraph(clique, NULL, ss.str());
+  ss << "clique_" << cliqueid++;
+  graph->inducedSubGraph(clique, graph, ss.str());
 }
 //================================================================================
-void CliqueEnumeration::getNeighborhood(node u, set<node> &neigh) {
+void CliqueEnumeration::getNeighborhood(const node u, set<node> &neigh) {
   neigh.clear();
   node v;
   forEach(v,graph->getInOutNodes(u))
   neigh.insert(v);
 }
 //================================================================================
-tlp::node CliqueEnumeration::choosePivot(set<node> & C) {
-  node pivot=tlp::node();
+tlp::node CliqueEnumeration::choosePivot(const set<node> & C) {
+  node pivot;
   unsigned int maxinter=0;
 
   for(set<node>::const_iterator its=C.begin(); its!=C.end(); ++its) {
@@ -72,29 +67,12 @@ tlp::node CliqueEnumeration::choosePivot(set<node> & C) {
 
   return pivot;
 }
-//================================================================================
-void CliqueEnumeration::intersectSet(set<node> &s1, set<node> &s2, set<node> &res) {
-  for(set<node>::iterator it=s1.begin(); it!=s1.end(); ++it) {
-    if(s2.find(*it)!=s2.end())
-      res.insert(*it);
-  }
-}
-//================================================================================
-void CliqueEnumeration::unionSet(set<node> &s1, set<node> &s2, set<node> &res) {
-  for(set<node>::iterator it=s1.begin(); it!=s1.end(); ++it) {
-    res.insert(*it);
-  }
-
-  for(set<node>::iterator it=s2.begin(); it!=s2.end(); ++it) {
-    res.insert(*it);
-  }
-}
 
 //================================================================================
-void CliqueEnumeration::maxCliquePivot(set<node>& P, vector<node>& R, set<node>& X) {
+void CliqueEnumeration::maxCliquePivot(set<node>& P, const vector<node>& R, set<node>& X) {
 
-  set<node> C;
-  unionSet(P,X,C);
+  set<node> C(P);
+  C.insert(X.begin(),X.end());
 
   if(C.empty()) {
     if(R.size()>=minsize)
@@ -111,15 +89,15 @@ void CliqueEnumeration::maxCliquePivot(set<node>& P, vector<node>& R, set<node>&
         tovisit.insert(*its);
     }
 
-    for(set<node>::iterator its=tovisit.begin(); its!=tovisit.end(); ++its) {
+    for(set<node>::const_iterator its=tovisit.begin(); its!=tovisit.end(); ++its) {
       set<node> neighx;
       getNeighborhood(*its,neighx);
       set<node> newP;
-      intersectSet(P,neighx,newP);
+      set_intersection(P.begin(),P.end(),neighx.begin(),neighx.end(),inserter(newP,newP.begin()));
       vector<node> newR(R);
       newR.push_back(*its);
       set<node> newX;
-      intersectSet(X,neighx,newX);
+      set_intersection(X.begin(),X.end(),neighx.begin(),neighx.end(),inserter(newX,newX.begin()));
       maxCliquePivot(newP,newR,newX);
       P.erase(*its);
       X.insert(*its);
@@ -185,8 +163,6 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
 
 //================================================================================
 bool CliqueEnumeration ::run() {
-  minsize=0;
-
   if(dataSet!=NULL)
     dataSet->get("minimum size",minsize);
 
@@ -195,7 +171,6 @@ bool CliqueEnumeration ::run() {
 
   for(unsigned int i=0; i<ordering.size(); ++i) {
     set<node> neighu;
-    //        cout << ordering[i].id << endl;
     getNeighborhood(ordering[i],neighu);
     set<node> P,X;
     vector<node> R;
@@ -211,13 +186,12 @@ bool CliqueEnumeration ::run() {
 
     maxCliquePivot(P,R,X);
   }
-
+  if(dataSet!=NULL)
+      dataSet->set("#cliques created", cliqueid+1);
   return true;
 }
 //================================================================================
 bool CliqueEnumeration::check(string &erreurMsg) {
-  erreurMsg="";
-
   if(!tlp::SimpleTest::isSimple(graph)) {
     erreurMsg="The graph should be simple.";
     return false;

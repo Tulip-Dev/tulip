@@ -69,3 +69,4 @@ INSTALL_TULIP_PLUGIN(ConvolutionClustering-${TulipVersion} ${TulipPluginsInstall
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 INSTALL_TULIP_PLUGIN(EqualValueClustering-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(QuotientClustering-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(CliqueEnumeration-${TulipVersion} ${TulipPluginsInstallDir})
