@@ -45,12 +45,12 @@ protected:
  */
 class TLP_QT_SCOPE MouseElementDeleter:public InteractorComponent {
 public:
- MouseElementDeleter() :glMainWidget(NULL) {}
+  MouseElementDeleter() :glMainWidget(NULL) {}
   ~MouseElementDeleter() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();
   virtual void delElement(tlp::Graph* graph, tlp::SelectedEntity& selectedEntity);
- private:
+private:
   GlMainWidget* glMainWidget;
 };
 

@@ -39,7 +39,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
   if (glMainWidget == NULL)
     glMainWidget = dynamic_cast<GlMainWidget *>(widget);
-    assert(glMainWidget);
+
+  assert(glMainWidget);
 
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);

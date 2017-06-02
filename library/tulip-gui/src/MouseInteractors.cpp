@@ -149,6 +149,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 
   if(qMouseEv != NULL) {
     SelectedEntity selectedEntity;
+
     if (glMainWidget == NULL)
       glMainWidget = static_cast<GlMainWidget *>(widget);
 

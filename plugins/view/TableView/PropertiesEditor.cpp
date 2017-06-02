@@ -158,7 +158,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
     if (enabled) {
       action = menu.addAction(trUtf8("Delete"));
-      action->setToolTip(QString("Delete the property \"") + propName.c_str() + '"'); 
+      action->setToolTip(QString("Delete the property \"") + propName.c_str() + '"');
       connect(action,SIGNAL(triggered()),this,SLOT(delProperty()));
     }
 
