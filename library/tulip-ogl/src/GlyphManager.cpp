@@ -39,8 +39,9 @@ string GlyphManager::glyphName(int id) {
     return glyphIdToName[id];
   }
   else {
+    assert(false);
     tlp::warning() << __PRETTY_FUNCTION__ << endl;
-    tlp::warning() << "Invalid glyph id" << endl;
+    tlp::warning() << "Invalid glyph id: " << id << endl;
     return string("invalid");
   }
 }
@@ -50,8 +51,9 @@ int GlyphManager::glyphId(const string& name) {
     return nameToGlyphId[name];
   }
   else {
+    assert(false);
     tlp::warning() << __PRETTY_FUNCTION__ << endl;
-    tlp::warning() << "Invalid glyph name" << endl;
+    tlp::warning() << "Invalid glyph name: \"" << name.c_str() << '"' << endl;
     return 0;
   }
 }
