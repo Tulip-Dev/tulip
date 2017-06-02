@@ -160,6 +160,7 @@ protected slots:
   void changeSynchronization(bool);
   void openExternalFile();
   void showHideSideBar();
+  void showHideStatusBar();
   void workspaceButtonClicked();
   void showStartMessage();
 

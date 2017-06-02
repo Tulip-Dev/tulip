@@ -433,7 +433,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _mainWindow->setAcceptDrops(true);
   _mainWindow->statusBar();
 
-  if (tlp::inGuiTestingMode())
+  if (tlp::inGuiTestingMode() || !TulipSettings::instance().showStatusBar())
     _mainWindow->statusBar()->hide();
 
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
@@ -572,6 +572,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
+  connect(_ui->statusbarButton, SIGNAL(clicked()), this, SLOT(showHideStatusBar()));
 
 #if !defined(__APPLE__) && !defined(_WIN32)
   // Hide plugins center when not on MacOS or Windows
@@ -1503,6 +1504,19 @@ void GraphPerspective::showHideSideBar() {
     _ui->docksWidget->setVisible(true);
     _ui->sidebarButton->setToolTip("Hide Sidebar");
   }
+}
+
+void GraphPerspective::showHideStatusBar() {
+  QStatusBar* stsBar = _mainWindow->statusBar();
+  if (stsBar->isVisible()) {
+    stsBar->setVisible(false);
+    _ui->statusbarButton->setToolTip("Show Status bar");
+  }
+  else {
+    stsBar->setVisible(true);
+    _ui->statusbarButton->setToolTip("Hide Status bar");
+  }
+  TulipSettings::instance().setShowStatusBar(stsBar->isVisible());
 }
 
 void GraphPerspective::displayColorScalesDialog() {
