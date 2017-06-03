@@ -23,6 +23,7 @@
 
 #include <sstream>
 #include <algorithm>
+#include <iterator>
 
 PLUGIN(CliqueEnumeration)
 
