@@ -16,11 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-
+#include <QMenu>
 #include "PreferencesDialog.h"
 
 #include "ui_PreferencesDialog.h"
 
+#include <tulip/Perspective.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipItemDelegate.h>
@@ -34,11 +35,17 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
   _ui->setupUi(this);
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
   connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this, SLOT(cellChanged(int, int)));
+  _ui->graphDefaultsTable->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(_ui->graphDefaultsTable, SIGNAL(customContextMenuRequested (const QPoint &)), this, SLOT(showGraphDefaultsContextMenu(const QPoint&)));
   connect(_ui->randomSeedCheck, SIGNAL(stateChanged(int)), this, SLOT(randomSeedCheckChanged(int)));
+  connect(_ui->resetAllDrawingDefaultsButton, SIGNAL(released()), this, SLOT(resetToTulipDefaults()));
 
   // disable edition for title items (in column 0)
-  for (int i = 0; i < _ui->graphDefaultsTable->rowCount() ; ++i)
+  for (int i = 0; i < _ui->graphDefaultsTable->rowCount() ; ++i) {
     _ui->graphDefaultsTable->item(i, 0)->setFlags(Qt::ItemIsEnabled);
+    QTableWidgetItem *item = _ui->graphDefaultsTable->item(i, 0);
+    item->setToolTip(QString("Click mouse right button to display a contextual menu allowing to reset the default values of <b>") + item->text() + "</b>.");
+  }
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
   _ui->graphDefaultsTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
@@ -316,4 +323,97 @@ void PreferencesDialog::cellChanged(int row, int column) {
 void PreferencesDialog::randomSeedCheckChanged(int state) {
   if (state == Qt::Checked && _ui->randomSeedEdit->text().isEmpty())
     _ui->randomSeedEdit->setText("1");
+}
+
+#define RESET_NODE 0
+#define RESET_EDGE 1
+#define RESET_BOTH 2
+void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
+  if (updateMode == RESET_BOTH) {
+    resetToTulipDefaults(row, RESET_NODE);
+    resetToTulipDefaults(row, RESET_EDGE);
+    return;
+  }
+  if (row == -1) {
+    for (row = 0; row < _ui->graphDefaultsTable->rowCount(); ++row)
+      resetToTulipDefaults(row, RESET_BOTH);
+    return;
+  }
+
+  QAbstractItemModel* model = _ui->graphDefaultsTable->model();
+  model->setData(model->index(4,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor()));
+  model->setData(model->index(4,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor()));
+
+  switch(row) {
+  case 0: // default color
+    if (updateMode == RESET_NODE)
+      model->setData(model->index(0,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultColor(tlp::NODE, true)));
+    else
+      model->setData(model->index(0,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultColor(tlp::EDGE, true)));
+    break;
+  case 1: // default size
+    if (updateMode == RESET_NODE)
+      model->setData(model->index(1,1),QVariant::fromValue<tlp::Size>(TulipSettings::instance().defaultSize(tlp::NODE, true)));
+    else
+      model->setData(model->index(1,2),QVariant::fromValue<tlp::Size>(TulipSettings::instance().defaultSize(tlp::EDGE, true)));
+
+  case 2: // default shape
+    if (updateMode == RESET_NODE)
+    model->setData(model->index(2,1),QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(TulipSettings::instance().defaultShape(tlp::NODE, true))));
+    else
+      model->setData(model->index(2,2),QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(TulipSettings::instance().defaultShape(tlp::EDGE, true))));
+  case 3: // default selection color
+    if (updateMode == RESET_NODE)
+      model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor(true)));
+    else
+      model->setData(model->index(3,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor(true)));
+  case 4: // default label color
+    if (updateMode == RESET_NODE)
+      model->setData(model->index(4,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor(true)));
+    else
+    model->setData(model->index(4,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor(true)));
+  default:
+    break;
+  }
+}
+
+void PreferencesDialog::showGraphDefaultsContextMenu(const QPoint& p) {
+  QModelIndex idx = _ui->graphDefaultsTable->indexAt(p);
+  if (idx.column() == 0) {
+    QMenu contextMenu;
+    // the style sheet below allows to display disabled items
+    // as "title" items in the "mainMenu"
+    contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+    // so it is the "mainMenu"
+    contextMenu.setProperty("mainMenu", true);
+    Perspective::redirectStatusTipOfMenu(&contextMenu);
+
+    int row = idx.row();
+    QString defaultProp = _ui->graphDefaultsTable->item(row, idx.column())->text();
+    QAction* action = contextMenu.addAction(defaultProp);
+    action->setEnabled(false);
+    contextMenu.addSeparator();
+
+    if (row < 3) {
+      QMenu* subMenu = contextMenu.addMenu(QString("Reset to Tulip predefined"));
+      subMenu->setToolTip(QString("Choose the type of elements for which the default value will be reset"));
+      action = subMenu->addAction(QString("Node default value"));
+      action->setToolTip(QString("Reset the node ") + defaultProp + " to the Tulip predefined value");
+      action->setData(QVariant((int) RESET_NODE));
+      action = subMenu->addAction(QString("Edge default value"));
+      action->setToolTip(QString("Reset the edge ") + defaultProp + " to the Tulip predefined value");
+      action->setData(QVariant((int) RESET_EDGE));
+      action = subMenu->addAction(QString("Node/Edge default values"));
+      action->setToolTip(QString("Reset the node/edge ") + defaultProp + " to the Tulip predefined value");
+      action->setData(QVariant((int) RESET_BOTH));
+    }
+    else {
+      action = contextMenu.addAction(QString("Reset to Tulip predefined value"));
+      action->setData(QVariant((int) RESET_BOTH));
+      action->setToolTip(QString("Reset ") + defaultProp + " to the Tulip predefined value");
+    }
+    action = contextMenu.exec(QCursor::pos() - QPoint(5,5));
+    if (action)
+      resetToTulipDefaults(row, action->data().toInt());
+  }
 }
