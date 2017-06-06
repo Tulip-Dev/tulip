@@ -547,7 +547,7 @@ class TLP_GL_SCOPE GlDefaultSelectionColorManager {
 public:
   static void setManager(GlDefaultSelectionColorManager *);
   static tlp::Color getDefaultSelectionColor();
-  virtual tlp::Color defaultSelectionColor()=0;
+  virtual tlp::Color defaultSelectionColor(bool tulipDefault = false)=0;
 
 private:
   static GlDefaultSelectionColorManager* manager;
