@@ -334,9 +334,11 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
     resetToTulipDefaults(row, RESET_EDGE);
     return;
   }
+
   if (row == -1) {
     for (row = 0; row < _ui->graphDefaultsTable->rowCount(); ++row)
       resetToTulipDefaults(row, RESET_BOTH);
+
     return;
   }
 
@@ -350,7 +352,9 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
       model->setData(model->index(0,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultColor(tlp::NODE, true)));
     else
       model->setData(model->index(0,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultColor(tlp::EDGE, true)));
+
     break;
+
   case 1: // default size
     if (updateMode == RESET_NODE)
       model->setData(model->index(1,1),QVariant::fromValue<tlp::Size>(TulipSettings::instance().defaultSize(tlp::NODE, true)));
@@ -359,19 +363,22 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
 
   case 2: // default shape
     if (updateMode == RESET_NODE)
-    model->setData(model->index(2,1),QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(TulipSettings::instance().defaultShape(tlp::NODE, true))));
+      model->setData(model->index(2,1),QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(TulipSettings::instance().defaultShape(tlp::NODE, true))));
     else
       model->setData(model->index(2,2),QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(TulipSettings::instance().defaultShape(tlp::EDGE, true))));
+
   case 3: // default selection color
     if (updateMode == RESET_NODE)
       model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor(true)));
     else
       model->setData(model->index(3,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor(true)));
+
   case 4: // default label color
     if (updateMode == RESET_NODE)
       model->setData(model->index(4,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor(true)));
     else
-    model->setData(model->index(4,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor(true)));
+      model->setData(model->index(4,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor(true)));
+
   default:
     break;
   }
@@ -379,6 +386,7 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
 
 void PreferencesDialog::showGraphDefaultsContextMenu(const QPoint& p) {
   QModelIndex idx = _ui->graphDefaultsTable->indexAt(p);
+
   if (idx.column() == 0) {
     QMenu contextMenu;
     // the style sheet below allows to display disabled items
@@ -412,7 +420,9 @@ void PreferencesDialog::showGraphDefaultsContextMenu(const QPoint& p) {
       action->setData(QVariant((int) RESET_BOTH));
       action->setToolTip(QString("Reset ") + defaultProp + " to the Tulip predefined value");
     }
+
     action = contextMenu.exec(QCursor::pos() - QPoint(5,5));
+
     if (action)
       resetToTulipDefaults(row, action->data().toInt());
   }

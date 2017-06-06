@@ -180,7 +180,7 @@ QString TulipSettings::elementKey(const QString& configEntry, tlp::ElementType e
 }
 
 tlp::Color TulipSettings::defaultColor(tlp::ElementType elem,
-				       bool tulipDefault) {
+                                       bool tulipDefault) {
   QString val = value(elementKey(tulipDefault ? TS_DefaultOfDefault : TS_DefaultColor,elem),(elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)")).toString();
   Color result;
   ColorType::fromString(result, QStringToTlpString(val));
