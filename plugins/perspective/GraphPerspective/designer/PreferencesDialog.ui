@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>347</height>
+    <height>375</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -188,7 +188,7 @@ background-color: #F4F4F4;
          <item>
           <widget class="QCheckBox" name="usetlpbformat">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will lose compatibility with older verstion of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will lose compatibility with older version of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Use Tulip binary graph file format when saving a Tulip project</string>
@@ -447,14 +447,44 @@ font: 12px;
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="applyDrawingDefaultsCheck">
-         <property name="toolTip">
-          <string>Check this, if you want to apply your changes to the graphs currenty loaded</string>
+        <layout class="QHBoxLayout" name="drawingHorizontalLayout">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <property name="text">
-          <string>Apply drawing defaults changes to loaded graphs</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="QCheckBox" name="applyDrawingDefaultsCheck">
+           <property name="toolTip">
+            <string>If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currenty loaded.</string>
+           </property>
+           <property name="text">
+            <string>Apply drawing defaults changes to loaded graphs</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="resetAllDrawingDefaultsButton">
+           <property name="toolTip">
+            <string>Reset all drawing defaults to their Tulip predefined values.&lt;br/&gt;You can also reset row specific default values in using a contextual menu displayed by a left click on the title of the corresponding row.</string>
+           </property>
+           <property name="text">
+            <string>Reset all defaults</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

@@ -39,9 +39,11 @@ public slots:
   void readSettings();
   void cellChanged(int row, int column);
   void randomSeedCheckChanged(int);
+  void showGraphDefaultsContextMenu(const QPoint&);
 
 private slots:
   void usetlpbformat(int state);
+  void resetToTulipDefaults(int row = -1, int updateMode = 0);
 };
 
 #endif // PREFERENCESDIALOG_H
