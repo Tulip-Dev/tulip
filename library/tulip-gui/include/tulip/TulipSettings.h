@@ -91,20 +91,20 @@ public:
   void markPluginForRemoval(const QString& pluginLibrary);
   void unmarkPluginForRemoval(const QString& pluginLibrary);
 
-  tlp::Color defaultColor(tlp::ElementType elem);
+  tlp::Color defaultColor(tlp::ElementType elem, bool tulipDefault = false);
   void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
 
-  tlp::Color defaultLabelColor();
+  tlp::Color defaultLabelColor(bool tulipDefault = false);
   void setDefaultLabelColor(const tlp::Color& color);
 
-  tlp::Size defaultSize(tlp::ElementType elem);
+  tlp::Size defaultSize(tlp::ElementType elem, bool tulipDefault = false);
   void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
 
-  int defaultShape(tlp::ElementType elem);
+  int defaultShape(tlp::ElementType elem, bool tulipDefault = false);
   void setDefaultShape(tlp::ElementType elem, int shape);
 
   // in GlDefaultSelectionColorManager interface
-  tlp::Color defaultSelectionColor();
+  tlp::Color defaultSelectionColor(bool tulipDefault = false);
 
   void setDefaultSelectionColor(const tlp::Color& color);
 
