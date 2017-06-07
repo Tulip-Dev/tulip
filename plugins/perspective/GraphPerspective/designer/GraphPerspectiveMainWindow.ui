@@ -255,12 +255,6 @@ QToolButton:pressed {
            <height>75</height>
           </size>
          </property>
-         <property name="toolTip">
-          <string>Undo the last update of the current graph</string>
-         </property>
-         <property name="statusTip">
-          <string>Undo the last update of the current graph</string>
-         </property>
          <property name="text">
           <string>Undo</string>
          </property>
@@ -292,12 +286,6 @@ QToolButton:pressed {
            <width>75</width>
            <height>75</height>
           </size>
-         </property>
-         <property name="toolTip">
-          <string>Redo the last undone update of the current graph</string>
-         </property>
-         <property name="statusTip">
-          <string>Redo the last undone update of the current graph</string>
          </property>
          <property name="text">
           <string>Redo</string>
@@ -351,9 +339,6 @@ QToolButton:pressed {
            <height>75</height>
           </size>
          </property>
-         <property name="toolTip">
-          <string>Display the existing graph views</string>
-         </property>
          <property name="text">
           <string>Workspace</string>
          </property>
@@ -394,12 +379,6 @@ QToolButton:pressed {
            <width>75</width>
            <height>75</height>
           </size>
-         </property>
-         <property name="toolTip">
-          <string>Display the Tulip-Python IDE for developing scripts and plugins to execute on the imported graphs</string>
-         </property>
-         <property name="statusTip">
-          <string>Display the Tulip-Python IDE for developing scripts and plugins to execute on the imported graphs</string>
          </property>
          <property name="text">
           <string>Python IDE</string>
@@ -509,9 +488,6 @@ color: white;
                    <height>16777215</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Show/Hide the Messages log panel</string>
-                 </property>
                 </widget>
                </item>
               </layout>
@@ -561,9 +537,6 @@ color: white;
                    <width>75</width>
                    <height>16777215</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Show/Hide the Messages log panel</string>
                  </property>
                 </widget>
                </item>
@@ -619,9 +592,6 @@ color: white;
                    <height>16777215</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Show/Hide the Messages log panel</string>
-                 </property>
                 </widget>
                </item>
               </layout>
@@ -672,9 +642,6 @@ color: white;
                    <height>16777215</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Show/Hide the Messages log panel</string>
-                 </property>
                 </widget>
                </item>
               </layout>
@@ -709,13 +676,7 @@ color: white;
            <height>75</height>
           </size>
          </property>
-         <property name="toolTip">
-          <string>Display the Graph exporting wizard</string>
-         </property>
-         <property name="statusTip">
-          <string>Display the Graph exporting wizard</string>
-         </property>
-         <property name="text">
+        <property name="text">
           <string>Export</string>
          </property>
          <property name="icon">
@@ -746,12 +707,6 @@ color: white;
            <width>75</width>
            <height>75</height>
           </size>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Import data in the current graph using a csv formatted file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="statusTip">
-          <string>Import data in the current graph  using a csv formatted file</string>
          </property>
          <property name="text">
           <string>CSV</string>
@@ -785,12 +740,6 @@ color: white;
            <height>75</height>
           </size>
          </property>
-         <property name="toolTip">
-          <string>Display the Graph importing wizard</string>
-         </property>
-         <property name="statusTip">
-          <string>Display the Graph importing wizard</string>
-         </property>
          <property name="text">
           <string>Import</string>
          </property>
@@ -822,12 +771,6 @@ color: white;
            <width>75</width>
            <height>75</height>
           </size>
-         </property>
-         <property name="toolTip">
-          <string>Display the Plugin center</string>
-         </property>
-         <property name="statusTip">
-          <string>Display the Plugin center</string>
          </property>
          <property name="text">
           <string>Plugins</string>
@@ -1025,9 +968,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                      <height>21</height>
                     </size>
                    </property>
-                   <property name="toolTip">
-                    <string>Hide Sidebar</string>
-                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -1054,9 +994,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                      <height>21</height>
                     </size>
                    </property>
-                   <property name="toolTip">
-                    <string>Hide Status bar</string>
-                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -1073,12 +1010,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                </item>
                <item>
                 <widget class="QPushButton" name="addPanelButton">
-                 <property name="toolTip">
-                  <string>Open a new visualization panel on the current graph</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Open a new visualization panel on the current graph</string>
-                 </property>
                  <property name="text">
                   <string>Add panel</string>
                  </property>
@@ -1095,12 +1026,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>85</width>
                    <height>20</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Toggle the Expose mode [Ctrl+E]</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Toggle the Expose mode [Ctrl+E]</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+E</string>
@@ -1127,12 +1052,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>20</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Show/hide the graph's elements search panel [Crtl+F]</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Show/hide the graph's elements search panel [Crtl+F]</string>
-                 </property>
                  <property name="shortcut">
                   <string>Ctrl+F</string>
                  </property>
@@ -1157,12 +1076,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>105</width>
                    <height>20</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Show/hide the Python interpreter (Read Eval Print Loop) panel [Ctrl+P]</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Show/hide the Python interpreter (Read Eval Print Loop) panel [Ctrl+P]</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+P</string>
@@ -1208,12 +1121,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>24</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Show previous panel</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Show previous panel</string>
-                 </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
@@ -1239,12 +1146,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>20</width>
                    <height>24</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Show next panel</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Show next panel</string>
                  </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -1282,12 +1183,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>24</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Switch to 1-panel mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 1-panel mode</string>
-                 </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
@@ -1307,12 +1202,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>24</width>
                    <height>24</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Switch to 2-panels mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 2-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -1334,9 +1223,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>24</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Switch to 2-panels mode</string>
-                 </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/split_screen_horizontal.png</normaloff>:/tulip/gui/ui/split_screen_horizontal.png</iconset>
@@ -1356,12 +1242,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>24</width>
                    <height>24</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Switch to 2top-1bottom-panels mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 2top-1bottom-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -1383,12 +1263,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>24</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Switch to 1left-2right-panels mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 1left-2right-panels mode</string>
-                 </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
@@ -1408,12 +1282,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>24</width>
                    <height>24</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Switch to 2left-1right-panels mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 2left-1right-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -1435,12 +1303,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>24</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Switch to 4-panels mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 4-panels mode</string>
-                 </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
@@ -1460,12 +1322,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>24</width>
                    <height>24</height>
                   </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Switch to 6-panels mode</string>
-                 </property>
-                 <property name="statusTip">
-                  <string>Switch to 4-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -1501,12 +1357,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <string>&amp;Edit</string>
     </property>
     <widget class="QMenu" name="menuDelete">
-     <property name="toolTip">
-      <string>Delete elements of the current graph</string>
-     </property>
-     <property name="statusTip">
-      <string>Delete elements of the current graph</string>
-     </property>
      <property name="title">
       <string>&amp;Delete</string>
      </property>
@@ -1578,9 +1428,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <string>Fi&amp;le</string>
     </property>
     <widget class="QMenu" name="menuOpen_recent_file">
-     <property name="toolTip">
-      <string>Choose a file to open among the recently opened/saved graphs or projects</string>
-     </property>
      <property name="title">
       <string>Open &amp;recent</string>
      </property>
@@ -1614,9 +1461,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;New project</string>
    </property>
-   <property name="toolTip">
-    <string>Open a new  empty Tulip perspective [Ctrl+N]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Shift+N</string>
    </property>
@@ -1628,9 +1472,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Save</string>
-   </property>
-   <property name="toolTip">
-    <string>Save the current project (current graphs with current views) in the attached file [Ctrl+S]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -1644,9 +1485,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Sa&amp;ve as</string>
    </property>
-   <property name="toolTip">
-    <string>Save Project as a new file name [Ctrl+Shift+S]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
    </property>
@@ -1659,9 +1497,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>I&amp;mport</string>
    </property>
-   <property name="toolTip">
-    <string>Display the Graph importing wizard [Ctrl+Shift+O]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Shift+O</string>
    </property>
@@ -1673,9 +1508,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Exit</string>
-   </property>
-   <property name="toolTip">
-    <string>Exit from Tulip perspective [Ctrl+Q]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -1692,9 +1524,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Undo</string>
    </property>
-   <property name="toolTip">
-    <string>Undo the last update of the current graph [Ctrl+Z]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
    </property>
@@ -1709,9 +1538,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Redo</string>
-   </property>
-   <property name="toolTip">
-    <string>Redo the last undone update of the current graph [Ctrl+Y]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
@@ -1728,9 +1554,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Cut</string>
    </property>
-   <property name="toolTip">
-    <string>Move the selected elements of the current graph into the clipboard [Ctrl+X]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
    </property>
@@ -1745,9 +1568,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>C&amp;opy</string>
-   </property>
-   <property name="toolTip">
-    <string>Copy the selected elements of the current graph into the clipboard [Ctrl+C]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -1764,9 +1584,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Paste</string>
    </property>
-   <property name="toolTip">
-    <string>Paste the clipboard elements into the current graph [Ctrl+V]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
    </property>
@@ -1781,9 +1598,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Delete Selection</string>
-   </property>
-   <property name="toolTip">
-    <string>Delete the selected elements from the current graph [Del]</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -1800,9 +1614,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Select all</string>
    </property>
-   <property name="toolTip">
-    <string>Select all the elements of the current graph [Ctrl+A]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
@@ -1817,9 +1628,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Invert selection</string>
-   </property>
-   <property name="toolTip">
-    <string>Invert the selection of the current graph elements, deselect if selected and select if not selected [Ctrl+I]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -1836,9 +1644,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Ca&amp;ncel selection</string>
    </property>
-   <property name="toolTip">
-    <string>Deselect all the selected elements [Ctrl+Shift+A]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Shift+A</string>
    </property>
@@ -1853,9 +1658,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Group elements</string>
-   </property>
-   <property name="toolTip">
-    <string>Create a meta-node representing a newly created sub-graph containing all the selected elements [Ctrl+G]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
@@ -1872,9 +1674,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Create sub-graph &amp;from selection</string>
    </property>
-   <property name="toolTip">
-    <string>Create a sub-graph containing all the selected elements [Ctrl+Shift+G]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
    </property>
@@ -1886,9 +1685,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>Preferences...</string>
-   </property>
-   <property name="toolTip">
-    <string>Show Tulip preferences dialog [Ctrl+,]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+,</string>
@@ -1905,9 +1701,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Full screen</string>
    </property>
-   <property name="toolTip">
-    <string>Display the Tulip perspective in full screen [F11]</string>
-   </property>
    <property name="shortcut">
     <string>F11</string>
    </property>
@@ -1919,9 +1712,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;User HandBook</string>
-   </property>
-   <property name="toolTip">
-    <string>Display the User handbook in a navigator [Ctrl+?]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+?</string>
@@ -1935,9 +1725,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Developer HandBook</string>
    </property>
-   <property name="toolTip">
-    <string>Display the Developer handbook in a navigator [Ctrl+D]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
    </property>
@@ -1949,9 +1736,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Python Documentation</string>
-   </property>
-   <property name="toolTip">
-    <string>Display the Tulip python documentation in a navigator [Ctrl+P]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
@@ -1965,9 +1749,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;About Tulip</string>
    </property>
-   <property name="toolTip">
-    <string>Display the &quot;About Tulip&quot;  information dialog [F1]</string>
-   </property>
    <property name="shortcut">
     <string>F1</string>
    </property>
@@ -1975,9 +1756,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionPlugins_Center">
    <property name="text">
     <string>Plugin &amp;Center</string>
-   </property>
-   <property name="toolTip">
-    <string>Show the Plugin center</string>
    </property>
   </action>
   <action name="actionImport_CSV">
@@ -1988,9 +1766,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Import CSV</string>
    </property>
-   <property name="toolTip">
-    <string>Import data in the current graph  using a csv formatted file</string>
-   </property>
   </action>
   <action name="actionMessages_log">
    <property name="icon">
@@ -1999,9 +1774,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Message log</string>
-   </property>
-   <property name="toolTip">
-    <string>Show the message log [Ctrl+Alt+L]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+L</string>
@@ -2015,9 +1787,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Export</string>
    </property>
-   <property name="toolTip">
-    <string>Export current graph [Ctrl+E]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
    </property>
@@ -2029,9 +1798,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Open</string>
-   </property>
-   <property name="toolTip">
-    <string>Open a graph file [Ctrl+O]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -2045,9 +1811,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Find &amp;Plugins</string>
    </property>
-   <property name="toolTip">
-    <string>Search in installed plugins [Ctrl+Alt+H]</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+Alt+H</string>
    </property>
@@ -2060,16 +1823,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Save graph to file</string>
    </property>
-   <property name="toolTip">
-    <string>Write the graph into a file</string>
-   </property>
   </action>
   <action name="actionCreate_empty_sub_graph">
    <property name="text">
     <string>Create &amp;empty sub-graph</string>
-   </property>
-   <property name="toolTip">
-    <string>Create an empty sub-graph</string>
    </property>
   </action>
   <action name="actionClone_sub_graph">
@@ -2080,9 +1837,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Create c&amp;lone sub-graph</string>
    </property>
-   <property name="toolTip">
-    <string>Create a sub-graph containing the same elements as the current graph</string>
-   </property>
   </action>
   <action name="actionNew_graph">
    <property name="icon">
@@ -2091,9 +1845,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>New &amp;graph</string>
-   </property>
-   <property name="toolTip">
-    <string>Create a new empty graph [Ctrl+N]</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -2107,9 +1858,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Close all views</string>
    </property>
-   <property name="toolTip">
-    <string>Close all opened workspace views</string>
-   </property>
   </action>
   <action name="actionColor_scales_management">
    <property name="icon">
@@ -2119,9 +1867,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Color scales &amp;management</string>
    </property>
-   <property name="toolTip">
-    <string>Manage Tulip color scales</string>
-   </property>
   </action>
   <action name="actionMake_selection_a_graph">
    <property name="enabled">
@@ -2129,9 +1874,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>Ma&amp;ke selection a graph</string>
-   </property>
-   <property name="toolTip">
-    <string>Add the non selected ends of the selected edges to the selection</string>
    </property>
   </action>
   <action name="actionDelete_from_the_root_graph">
@@ -2141,9 +1883,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>Delete selection from t&amp;he root graph</string>
-   </property>
-   <property name="toolTip">
-    <string>Delete the selected elements from the whole graph hierarchy (not only from the current graph) [Shift+Del]</string>
    </property>
    <property name="shortcut">
     <string>Shift+Del</string>
@@ -2156,24 +1895,15 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Re&amp;verse selected edges</string>
    </property>
-   <property name="toolTip">
-    <string>Reverse the source and target nodes of the selected edges.</string>
-   </property>
   </action>
   <action name="actionDelete_all">
    <property name="text">
     <string>D&amp;elete all</string>
    </property>
-   <property name="toolTip">
-    <string>Clear all the elements of the current graph</string>
-   </property>
   </action>
   <action name="actionSelect_All_Nodes">
    <property name="text">
     <string>Select all nodes</string>
-   </property>
-   <property name="toolTip">
-    <string>Select all the nodes of the current graph</string>
    </property>
   </action>
   <action name="actionSelect_All_Edges">
