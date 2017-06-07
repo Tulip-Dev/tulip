@@ -153,13 +153,13 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getScene()->getGlGraphComposite()->getGraph()->setEnds(mEdge,glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
-	glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
-	glMainWidget->redraw();
+        glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+        glMainWidget->redraw();
       }
       else {
-	Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(end));
-	targetTriangle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - tmp[0]), glMainWidget->screenToViewport(editPosition[1] - tmp[1]),0));
-	glMainWidget->draw(false);
+        Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(end));
+        targetTriangle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - tmp[0]), glMainWidget->screenToViewport(editPosition[1] - tmp[1]),0));
+        glMainWidget->draw(false);
       }
     }
     else if(selectedEntity=="sourceCircle") {
@@ -167,13 +167,13 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getScene()->getGlGraphComposite()->getGraph()->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).second);
-	glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
-	glMainWidget->redraw();
+        glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+        glMainWidget->redraw();
       }
       else {
-	Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(start));
-	sourceCircle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - tmp[0]), glMainWidget->screenToViewport(editPosition[1] - tmp[1]),0));
-	glMainWidget->draw(false);
+        Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(start));
+        sourceCircle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - tmp[0]), glMainWidget->screenToViewport(editPosition[1] - tmp[1]),0));
+        glMainWidget->draw(false);
       }
     }
 

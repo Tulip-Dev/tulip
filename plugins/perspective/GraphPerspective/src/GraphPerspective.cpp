@@ -482,8 +482,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP(_ui->actionReverse_selected_edges, "Reverse the source and target nodes of the selected edges");
   SET_TOOLTIP(_ui->actionDelete_all, "Clear all the elements of the current graph");
   SET_TOOLTIP(_ui->actionSelect_All_Nodes, "Select all the nodes of the current graph");
-  
-  
+
+
   _ui->singleModeButton->setEnabled(false);
   _ui->singleModeButton->hide();
   _ui->workspace->setSingleModeSwitch(_ui->singleModeButton);
