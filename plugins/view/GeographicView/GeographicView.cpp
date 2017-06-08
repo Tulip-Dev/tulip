@@ -117,15 +117,16 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(centerViewAction);
-  QAction* action = new QAction("Zoom +", this);
+  centerViewAction->setToolTip(QString("Make the view to fully display and center its contents"));
+  QAction* action = menu->addAction("Zoom +");
+  action->setToolTip(QString("Increase zoom level"));
   connect(action,SIGNAL(triggered()), this, SLOT(zoomIn()));
-  menu->addAction(action);
-  action = new QAction("Zoom -", this);
+  action = menu->addAction("Zoom -");
+  action->setToolTip(QString("Increase zoom level"));
   connect(action,SIGNAL(triggered()), this, SLOT(zoomOut()));
-  menu->addAction(action);
-  action = new QAction("Take snapshot", this);
+  action = menu->addAction("Take a snapshot");
+  action->setToolTip(QString("Show a dialog to save a snapshot of the current view display"));
   connect(action,SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
-  menu->addAction(action);
 }
 
 void GeographicView::setState(const DataSet &dataSet) {

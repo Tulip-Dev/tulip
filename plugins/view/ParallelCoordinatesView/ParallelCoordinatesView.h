@@ -163,7 +163,6 @@ private :
   void removeTriggers();
 
   QMenu *viewSetupMenu;
-  QMenu *optionsMenu;
   QAction *classicLayout;
   QAction *circularLayout;
   QAction *straightLinesType;
