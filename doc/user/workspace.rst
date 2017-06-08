@@ -1050,9 +1050,8 @@ Search
 ------
 
 .. image:: _images/i_workspace_search.png
-    :width: 600
 
-The tool Search can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
+The tool **Search** can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
 
 First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
 
@@ -1061,12 +1060,11 @@ If the *viewSelection* has been selected as the result property, the selected el
 
 .. _workspace_complements_python:
 
-Python
-------
+Python REPL
+-----------
 			
 .. image:: _images/i_workspace_python.png
-    :width: 600
 
-The Python console provides an interactive mean to inspect/manage your data. Consult the Python documentation for more information.
+The **Python REPL** console provides an interactive mean to inspect/manage your data. Consult the Python documentation for more information.
 
 
