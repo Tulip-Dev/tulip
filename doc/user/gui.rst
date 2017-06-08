@@ -7,7 +7,7 @@ A Quick Presentation of the Tulip Perspective
 Here are the components of Tulip Perspective's main window:
 
 .. image:: _images/i_interface.png
-    :width: 600
+    :width: 900
 
 .. |l_red| image:: _images/legend_red.png
     :width: 32
@@ -16,6 +16,8 @@ Here are the components of Tulip Perspective's main window:
 .. |l_pur| image:: _images/legend_purple.png
     :width: 32
 .. |l_blu| image:: _images/legend_blue.png
+    :width: 32
+.. |l_gre| image:: _images/legend_dark_grey.png
     :width: 32
 
 
@@ -27,7 +29,9 @@ Here are the components of Tulip Perspective's main window:
 
 |l_blu| Workspace view
 
-From this point and even if it is partially incorrect, we will refer to the Tulip perspective by simply using the term Tulip. Differenciating one from the other should not be too complex as the perspective window proposes the visualization actions and the Tulip framework window only offers you to manage your plugins and to choose your project.
+|l_gre| Status bar
+
+From this point and even if it is no fully correct, we will refer to the Tulip perspective by simply using the term Tulip. Differenciating one (Tulip perspective) from the other (Tulip agent) should not be too complex as the perspective window proposes the visualization actions and the Tulip agent window only offers you to manage your plugins and to choose your project.
 
 
 .. _menu:
@@ -39,11 +43,11 @@ The Tulip User Interface exploits the standard *File, Edit, Window, Help* menu o
 
 .. image:: _images/mainmenu.png
 
-The *File* submenu contains operations for file management. One can find in it the basic *Create, Open* and *Save Project*, and the *Import* and *New graph* creation tools.
+The *File* menu contains operations for file management. One can find in it the basic *Create, Open* and *Save Project*, and the *Import* and *New graph* creation tools.
 
-The *Edit* submenu gives access to the standard tools *Undo, Redo, Cut, Copy, Paste* and *Delete*. Several other options concerning selection operations or subgraph creations can also be found there.
+The *Edit* menu gives access to the standard tools *Undo, Redo, Cut, Copy, Paste* and *Delete*. Several other options concerning selection operations or sub-graph creations can also be found there.
 
-The last two submenus, *Window* and *Help*, give a few various options e.g., enabling full screen mode, closing all panels, opening documentation.
+The last two menus, *Window* and *Help*, give a few various options e.g., enabling full screen mode, closing all panels, opening documentation.
 
 
 .. _toolbar:
@@ -63,7 +67,7 @@ Toolbar
     :width: 32
 .. |icon_plugin| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/system-software-install.png
 
-The vertical toolbar, on the left of the main window, contains 6 buttons: 
+The vertical toolbar, on the left of the main window, contains 8 buttons: 
 
 * |icon_undo| **Undo** and |icon_redo| **Redo**: allows the user to navigate through the operations performed on the graph.
 
@@ -79,7 +83,7 @@ The vertical toolbar, on the left of the main window, contains 6 buttons:
 
 * |icon_import| **Import**: opens the graph importing wizard (learn more about it in :ref:`first_create`).
 
-* |icon_plugin| **Plugins**: only available on Mac and Windows OS, opens the plugins center (see in :ref:`plugin` for more information).
+* |icon_plugin| **Plugins**: only available on Mac and Windows platform, opens the plugins center of the Tulip agent (see in :ref:`plugin` for more information).
 
 
 .. _algo_window:
