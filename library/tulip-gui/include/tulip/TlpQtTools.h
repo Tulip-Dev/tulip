@@ -138,4 +138,13 @@ inline QDebug operator<<(QDebug dbg, const std::string& s) {
   return dbg.space();
 }
 
+// useful macros needed for menu actions building
+#ifdef __APPLE__
+#define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc) a->setToolTip(QString(tt) + " [⌘+" + sc + "]")
+#else
+#define SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc) a->setToolTip(QString(tt) + " [Ctrl+" + sc + "]")
+#endif
+
+#define SET_TIPS_WITH_CTRL_SHORTCUT(a, tt, sc) SET_TOOLTIP_WITH_CTRL_SHORTCUT(a, tt, sc);a->setStatusTip(a->toolTip())
+
 #endif

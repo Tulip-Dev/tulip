@@ -374,15 +374,7 @@ protected:
 };
 #endif
 
-#ifdef __APPLE__
-#define SET_TOOLTIP_WITH_CTRL_SHORCUT(a, tt, sc) a->setToolTip(QString(tt) + " [⌘+" + sc + "]")
-#else
-#define SET_TOOLTIP_WITH_CTRL_SHORCUT(a, tt, sc) a->setToolTip(QString(tt) + " [Ctrl+" + sc + "]")
-#endif
-
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
-
-#define SET_TIPS_WITH_CTRL_SHORCUT(a, tt, sc) SET_TOOLTIP_WITH_CTRL_SHORCUT(a, tt, sc);a->setStatusTip(a->toolTip())
 
 #define SET_TIPS(a, tt) a->setToolTip(QString(tt));a->setStatusTip(a->toolTip())
 
@@ -412,35 +404,35 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #endif
   currentGraphChanged(NULL);
   // set win/Mac dependent tooltips with ctrl shortcut
-  SET_TIPS_WITH_CTRL_SHORCUT(_ui->exposeModeButton, "Toggle the Expose mode", "E");
-  SET_TIPS_WITH_CTRL_SHORCUT(_ui->searchButton, "Show/hide the graph's elements search panel", "F");
-  SET_TIPS_WITH_CTRL_SHORCUT(_ui->pythonButton, "Show/hide the Python interpreter (Read Eval Print Loop) panel", "P");
-  SET_TIPS_WITH_CTRL_SHORCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
-  SET_TIPS_WITH_CTRL_SHORCUT(_ui->nextPageButton, "Show next panel", "Shift+Right");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionNewProject, "Open a new  empty Tulip perspective", "Shift+N");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionSave_Project, "Save the current project (current graphs with current views) in the attached file", "S");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionSave_Project_as, "Save Project as a new file name", "Shift+S");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionImport, "Display the Graph importing wizard", "Shift+O");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionExit, "Exit from Tulip perspective", "Q");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionUndo, "Undo the latest update of the current graph", "Z");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionRedo, "Redo the latest update of the current graph", "Y");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionCut, "Move the selected elements of the current graph into the clipboard", "X");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionCopy, "Copy the selected elements of the current graph into the clipboard", "C");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionPaste, "Paste the clipboard elements into the current graph", "V");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionSelect_All, "Select all the elements of the current graph", "A");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionInvert_selection, "Invert the selection of the current graph elements, deselect if selected and select if not selected", "I");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionCancel_selection, "Deselect all the selected elements of the current grap", "Shift+A");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionGroup_elements, "Create a meta-node representing a newly created sub-graph containing all the selected elements of the current graph", "G");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionCreate_sub_graph, "Create a sub-graph containing all the selected elements of the curent graph", "Shift+G");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionPreferences, "Show Tulip preferences dialog", ",");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionShowUserDocumentation, "Display the User handbook in a navigator", "?");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionShowDevelDocumentation, "Display the Developer handbook in a navigator", "D");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionShowPythonDocumentation, "Display the Tulip python documentation in a navigator", "P");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionMessages_log, "Show the message log", "Alt+L");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionExport, "Show the Grph exporting wizard", "E");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionOpen_Project, "Open a graph file", "O");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionFind_plugins, "Search in installed plugins", "Alt+H");
-  SET_TOOLTIP_WITH_CTRL_SHORCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->exposeModeButton, "Toggle the Expose mode", "E");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->searchButton, "Show/hide the graph's elements search panel", "F");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton, "Show/hide the Python interpreter (Read Eval Print Loop) panel", "P");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->nextPageButton, "Show next panel", "Shift+Right");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new  empty Tulip perspective", "Shift+N");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSave_Project, "Save the current project (current graphs with current views) in the attached file", "S");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSave_Project_as, "Save Project as a new file name", "Shift+S");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionImport, "Display the Graph importing wizard", "Shift+O");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExit, "Exit from Tulip perspective", "Q");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionUndo, "Undo the latest update of the current graph", "Z");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionRedo, "Redo the latest update of the current graph", "Y");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCut, "Move the selected elements of the current graph into the clipboard", "X");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCopy, "Copy the selected elements of the current graph into the clipboard", "C");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPaste, "Paste the clipboard elements into the current graph", "V");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSelect_All, "Select all the elements of the current graph", "A");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionInvert_selection, "Invert the selection of the current graph elements, deselect if selected and select if not selected", "I");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection, "Deselect all the selected elements of the current grap", "Shift+A");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_elements, "Create a meta-node representing a newly created sub-graph containing all the selected elements of the current graph", "G");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCreate_sub_graph, "Create a sub-graph containing all the selected elements of the curent graph", "Shift+G");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPreferences, "Show Tulip preferences dialog", ",");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowUserDocumentation, "Display the User handbook in a navigator", "?");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowDevelDocumentation, "Display the Developer handbook in a navigator", "D");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowPythonDocumentation, "Display the Tulip python documentation in a navigator", "P");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "Alt+L");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Grph exporting wizard", "E");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins, "Search in installed plugins", "Alt+H");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
   // set portable tooltips
   SET_TIPS(_ui->undoButton, "Undo the latest update of the current graph");
   SET_TIPS(_ui->redoButton, "Redo the latest undone update of the current graph");
