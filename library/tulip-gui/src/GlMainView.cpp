@@ -160,7 +160,7 @@ void GlMainView::setupWidget() {
   _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
   _snapshotAction=new QAction(trUtf8("Take a snapshot"),this);
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_snapshotAction, "Show a dialog to save a snapshot of the current view display", "Shift+P"); 
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_snapshotAction, "Show a dialog to save a snapshot of the current view display", "Shift+P");
   connect(_snapshotAction,SIGNAL(triggered()),this,SLOT(openSnapshotDialog()));
   _snapshotAction->setShortcut(tr("Ctrl+Shift+P"));
   _snapshotAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
