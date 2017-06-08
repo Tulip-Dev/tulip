@@ -36,6 +36,7 @@
 #include <tulip/SnapshotDialog.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/TlpQtTools.h>
 
 
 using namespace tlp;
@@ -147,21 +148,25 @@ void GlMainView::setupWidget() {
   assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
 
   _forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_forceRedrawAction, "Redraw the current view", "Shift+R");
   connect(_forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
   _forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
   _forceRedrawAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
   _centerViewAction=new QAction(trUtf8("Center view"),this);
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_centerViewAction, "Make the view to fully display and center its contents", "Shif+C");
   connect(_centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
   _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
   _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
   _snapshotAction=new QAction(trUtf8("Take a snapshot"),this);
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_snapshotAction, "Show a dialog to save a snapshot of the current view display", "Shift+P"); 
   connect(_snapshotAction,SIGNAL(triggered()),this,SLOT(openSnapshotDialog()));
   _snapshotAction->setShortcut(tr("Ctrl+Shift+P"));
   _snapshotAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
   _advAntiAliasingAction = new QAction(trUtf8("Advanced anti-aliasing"), this);
+  _advAntiAliasingAction->setToolTip(QString("Enable to use a better but more expensive technique of anti-aliasing (needs off screen rendering)"));
   _advAntiAliasingAction->setCheckable(true);
   _advAntiAliasingAction->setChecked(_glMainWidget->advancedAntiAliasingActivated());
   connect(_advAntiAliasingAction,SIGNAL(triggered(bool)),this,SLOT(setAdvancedAntiAliasing(bool)));
@@ -396,11 +401,13 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(_centerViewAction);
 
   QAction* viewOrtho = menu->addAction(trUtf8("Use orthogonal projection"));
+  viewOrtho->setToolTip(QString("Enable to switch between true perspective and orthogonal"));
   viewOrtho->setCheckable(true);
   viewOrtho->setChecked(_glMainWidget->getScene()->isViewOrtho());
   connect(viewOrtho,SIGNAL(triggered(bool)),this,SLOT(setViewOrtho(bool)));
 
   QAction* antiAliasing = menu->addAction(trUtf8("Anti-aliasing"));
+  antiAliasing->setToolTip(QString("Improve line rendering quality"));
   antiAliasing->setCheckable(true);
   antiAliasing->setChecked(OpenGlConfigManager::getInst().antiAliasing());
   connect(antiAliasing,SIGNAL(triggered(bool)),this,SLOT(setAntiAliasing(bool)));
@@ -412,11 +419,13 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addSeparator();
 
   QAction* a = menu->addAction(trUtf8("Show overview"),this,SLOT(setOverviewVisible(bool)));
+  a->setToolTip(QString("Show/hide the overview in a corner of the view"));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
 
   if (needQuickAccessBar) {
     QAction* quickbarAction = menu->addAction(trUtf8("Show quick access bar"),this,SLOT(setQuickAccessBarVisible(bool)));
+    quickbarAction->setToolTip(QString("Show/hide the quick access bar"));
     quickbarAction->setCheckable(true);
     quickbarAction->setChecked(quickAccessBarVisible());
   }
