@@ -68,7 +68,7 @@ PLUGIN(ParallelCoordinatesView)
 //GRAPHICSVIEWEXTENSION(ParallelCoordinatesGraphicsView, "Parallel Cooordinates graphics view",ParallelCoordinatesView::viewName, "Tulip Team", "16/04/2008", "Parallel GV", "1.0");
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *) :
-showToolTips(NULL), mainLayer(NULL),axisSelectionLayer(NULL), glGraphComposite(NULL), axisPointsGraph(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , dataConfigWidget(NULL), drawConfigWidget(NULL),
+  showToolTips(NULL), mainLayer(NULL),axisSelectionLayer(NULL), glGraphComposite(NULL), axisPointsGraph(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , dataConfigWidget(NULL), drawConfigWidget(NULL),
   firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),isConstruct(false),dontCenterViewAfterConfLoaded(false),needDraw(false) {
   ++parallelViewInstancesCount;
 }
