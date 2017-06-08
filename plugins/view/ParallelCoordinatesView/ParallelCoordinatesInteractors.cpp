@@ -85,7 +85,7 @@ InteractorHighLighter::InteractorHighLighter(const tlp::PluginContext *):Paralle
                              +"<p>It is also possible to <b>define a rectangular area by doing a left click and holding it</b> while moving the mouse. By releasing the mouse left button, all the elements located in the defined area will be highlighted. </p>"
                              +"<p>To <b>add elements</b> to the current set of highlighted ones, hold the <b>control key</b> while clicking on the new elements to highlight.</p>"
                              +"<p>To <b>remove elements</b> from the current set of highlighted ones, hold the <b>shift key</b> while clicking on the elements to remove.</p>"
-                             +"<p>To reset the set of highlighted elements, position the mouse cursor so that there is no elements under it and do a left click. This operation can also be done by right clicking in the drawing and select the \"Reset highlighted elements\" entry in the popup menu which appears.</p>"
+                             +"<p>To reset the set of highlighted elements, position the mouse cursor so that there is no elements under it and do a left click. This operation can also be done by right clicking in the drawing and select the \"Reset highlighting of elements\" entry in the popup menu which appears.</p>"
                              +"<p>To select the highlighted elements, do a right click in the drawing and choose the \"Select highlighted elements\" entry in the popup menu which appears.</p>"
                              +"</body>"
                              +"</html>");

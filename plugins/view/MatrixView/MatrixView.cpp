@@ -182,6 +182,7 @@ void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
     menu->addSeparator();
     isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
     itemId = entity.getComplexEntityId();
+    QString sId = QString::number(itemId);
 
     if (isNode) {
       if (!_displayedNodesAreNodes->getNodeValue(node(itemId)))
@@ -193,13 +194,19 @@ void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
       itemId = _displayedEdgesToGraphEdges->getEdgeValue(edge(itemId));
 
     menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #"))
-                    + QString::number(itemId))->setEnabled(false);
+                    + sId)->setEnabled(false);
 
     menu->addSeparator();
 
-    menu->addAction(tr("Toggle selection"),this,SLOT(addRemoveItemToSelection()));
-    menu->addAction(tr("Select"),this,SLOT(selectItem()));
-    menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
+    QAction* action = menu->addAction(tr("Toggle selection"),this,SLOT(addRemoveItemToSelection()));
+    action->setToolTip(QString("Invert the selection of the ") +
+		       (isNode ? "node #" : "edge #") + sId);
+    action = menu->addAction(tr("Select"),this,SLOT(selectItem()));
+    action->setToolTip(QString("Select the ") +
+		       (isNode ? "node #" : "edge #") + sId);
+    action = menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
+    action->setToolTip(QString("Delete the ") +
+		       (isNode ? "node #" : "edge #") + sId);
   }
 }
 

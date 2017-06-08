@@ -68,7 +68,7 @@ PLUGIN(ParallelCoordinatesView)
 //GRAPHICSVIEWEXTENSION(ParallelCoordinatesGraphicsView, "Parallel Cooordinates graphics view",ParallelCoordinatesView::viewName, "Tulip Team", "16/04/2008", "Parallel GV", "1.0");
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *) :
-  mainLayer(NULL),axisSelectionLayer(NULL), glGraphComposite(NULL), axisPointsGraph(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , dataConfigWidget(NULL), drawConfigWidget(NULL),
+showToolTips(NULL), mainLayer(NULL),axisSelectionLayer(NULL), glGraphComposite(NULL), axisPointsGraph(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , dataConfigWidget(NULL), drawConfigWidget(NULL),
   firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),isConstruct(false),dontCenterViewAfterConfLoaded(false),needDraw(false) {
   ++parallelViewInstancesCount;
 }
@@ -540,24 +540,29 @@ void ParallelCoordinatesView::buildContextMenu() {
   viewSetupMenu->addAction(tr("Layout type"))->setEnabled(false);
   QActionGroup *layoutActionGroup = new QActionGroup(this);
   classicLayout = viewSetupMenu->addAction(tr("Classic layout"),this, SLOT(centerSetupAndDrawView()));
+  classicLayout->setToolTip(QString("Use parallel axis layout"));
   classicLayout->setCheckable(true);
   classicLayout->setChecked(true);
   layoutActionGroup->addAction(classicLayout);
   circularLayout = viewSetupMenu->addAction(tr("Circular layout"),this, SLOT(centerSetupAndDrawView()));
+  circularLayout->setToolTip(QString("In the circular layout, the axis are laid regularly as the radius of a circle"));
   circularLayout->setCheckable(true);
   layoutActionGroup->addAction(circularLayout);
   viewSetupMenu->addSeparator();
 
   viewSetupMenu->addAction(tr("Lines type"))->setEnabled(false);
   QActionGroup *lineTypeActionGroup = new QActionGroup(this);
-  straightLinesType = viewSetupMenu->addAction(tr("Straight"),this, SLOT(setupAndDrawView()));
+  straightLinesType = viewSetupMenu->addAction(tr("Polyline"),this, SLOT(setupAndDrawView()));
+  straightLinesType->setToolTip(QString("Draw a polyline joining the consecutive coordinates belonging to the same graph element"));
   straightLinesType->setCheckable(true);
   straightLinesType->setChecked(true);
   lineTypeActionGroup->addAction(straightLinesType);
   catmullRomSplineLinesType = viewSetupMenu->addAction(tr("Catmull-Rom spline"),this, SLOT(setupAndDrawView()));
+  catmullRomSplineLinesType->setToolTip(QString("Draw a Catmull-Rom spline joining the consecutive coordinates belonging to the same graph element"));
   catmullRomSplineLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   cubicBSplineInterpolationLinesType = viewSetupMenu->addAction(tr("Cubic B-spline interpolation"),this, SLOT(setupAndDrawView()));
+  cubicBSplineInterpolationLinesType->setToolTip(QString("Draw a cubic B-spline joining the consecutive coordinates belonging to the same graph element"));
   cubicBSplineInterpolationLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   viewSetupMenu->addSeparator();
@@ -565,17 +570,20 @@ void ParallelCoordinatesView::buildContextMenu() {
   viewSetupMenu->addAction(tr("Lines thickness"))->setEnabled(false);
   QActionGroup *lineActionGroup = new QActionGroup(this);
   thickLines = viewSetupMenu->addAction(tr("Map to viewSize"),this, SLOT(setupAndDrawView()));
+  thickLines->setToolTip(QString("The lines thickness is computed according the viewSize property values"));
   thickLines->setCheckable(true);
   thickLines->setChecked(true);
   lineActionGroup->addAction(thickLines);
   thinLines = viewSetupMenu->addAction(tr("Thin lines"),this, SLOT(setupAndDrawView()));
+  thinLines->setToolTip(QString("The thickness is thin and the same for all the  curves representing the graph elements"));
   thinLines->setCheckable(true);
   lineActionGroup->addAction(thinLines);
 
-  optionsMenu = new QMenu(tr("Options"));
-  showToolTips = optionsMenu->addAction(tr("Tooltips"));
+  showToolTips = new QAction(QString("Tooltips"), NULL);
+  showToolTips->setToolTip(QString("Enable to display a tooltip indicating the graph element located under the mouse pointer"));
   showToolTips->setCheckable(true);
   showToolTips->setChecked(false);
+
 
   axisMenuSeparator=new QAction(NULL);
   axisMenuSeparator->setSeparator(true);
@@ -586,8 +594,10 @@ void ParallelCoordinatesView::buildContextMenu() {
   highlightMenuSeparator=new QAction(NULL);
   highlightMenuSeparator->setSeparator(true);
   selectHighlightedElements=new QAction(tr("Select highlighted elements"),NULL);
+  selectHighlightedElements->setToolTip(QString("Select the graph elements corresponding to the currently highlighted elements"));
   connect(selectHighlightedElements,SIGNAL(triggered()),this,SLOT(selectHighlightedElementsSlot()));
-  resetHightlightedElements=new QAction(tr("Reset highlighted elements"),NULL);
+  resetHightlightedElements=new QAction(tr("Reset highlighting of elements"),NULL);
+  resetHightlightedElements->setToolTip(QString("Unhighlight all the elements"));
   connect(resetHightlightedElements,SIGNAL(triggered()),this,SLOT(resetHightlightedElementsSlot()));
 }
 
@@ -595,15 +605,16 @@ void ParallelCoordinatesView::fillContextMenu(QMenu *menu, const QPointF &point)
   GlMainView::fillContextMenu(menu,point);
   menu->addAction(viewSetupMenu->menuAction());
   viewSetupMenu->setStyleSheet(menu->styleSheet());
-  menu->addAction(optionsMenu->menuAction());
-  optionsMenu->setStyleSheet(menu->styleSheet());
+  menu->addAction(showToolTips);
 
   axisUnderPointer = getAxisUnderPointer(point.x(), point.y());
 
   if (axisUnderPointer != NULL) {
     menu->addAction(axisMenuSeparator);
     menu->addAction(axisConfiguration);
+    axisConfiguration->setToolTip(QString("Configure the axis '") + axisUnderPointer->getAxisName().c_str() + "'");
     menu->addAction(removeAxisAction);
+    removeAxisAction->setToolTip(QString("Remove the axis '") + axisUnderPointer->getAxisName().c_str() + "': the property is then deselected in the Properties configuration panel");
   }
 
   if (graphProxy->highlightedEltsSet()) {
