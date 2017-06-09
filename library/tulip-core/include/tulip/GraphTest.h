@@ -28,7 +28,7 @@ namespace tlp {
 class GraphTest : public tlp::Algorithm {
 public:
   GraphTest(const tlp::PluginContext* context) : Algorithm(context) {
-    addOutParameter<bool>("result", "Whether the test succeed or not.");
+    addOutParameter<bool>("result", "Whether the test succeeded or not.");
   }
 
   virtual bool run() {

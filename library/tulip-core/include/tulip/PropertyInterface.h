@@ -129,7 +129,7 @@ public:
   /**
    * @brief Rename a property
    * @param the new name
-   * @return returns true if the renaming succeed.
+   * @return returns true if the renaming succeeded.
    * It may fails if a property with the given name already exists
    */
   bool rename(const std::string& newName);

@@ -204,7 +204,7 @@ tlpgui.View.saveSnapshot(picturePath, width, height)
 
 Takes a snapshot of the view and saves it to an image file on disk.
 The view is not required to be visible for that feature to work.
-Returns :const:`True` if the operation succeeds.
+Returns :const:`True` if the operation succeeded.
 
 :param picturePath: the absolute path of the image file with extension (used to infer image type)
 :type picturePath: string
