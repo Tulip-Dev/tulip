@@ -141,7 +141,7 @@ struct TypedDataSerializer :public DataTypeSerializer {
   TypedDataSerializer(const std::string& otn):DataTypeSerializer(otn) {}
   // declare new serialization virtual functions
   virtual void write(std::ostream& os, const T& value)=0;
-  // return true if the read of value succeed, false if not
+  // return true if the read of value succeeded, false if not
   virtual bool read(std::istream& is, T& value)=0;
   // define virtually inherited functions using the previous ones
   void writeData(std::ostream& os, const DataType* data) {
