@@ -748,7 +748,7 @@ void GraphPerspective::exportGraph(Graph* g) {
       if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
 
-      qDebug() << tlpStringToQString(log.str());
+      qDebug() << log.str().c_str();
     }
 
     addRecentDocument(wizard.outputFile());
@@ -809,7 +809,7 @@ void GraphPerspective::importGraph(const std::string& module,
       if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << start.msecsTo(QTime::currentTime()) << "ms";
 
-      qDebug() << tlpStringToQString(log.str());
+      qDebug() << log.str().c_str();
     }
 
     if (g->getName().empty()) {
@@ -1196,7 +1196,7 @@ void GraphPerspective::group() {
 
   if (groupedNodes.empty()) {
     Observable::unholdObservers();
-    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
+    qCritical() << "[Group] Cannot create meta-nodes from empty selection";
     return;
   }
 
@@ -1205,7 +1205,7 @@ void GraphPerspective::group() {
   bool changeGraph=false;
 
   if (graph == graph->getRoot()) {
-    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
+    qWarning() << "[Group] Grouping can not be done on the root graph. A subgraph has automatically been created";
     graph = graph->addCloneSubGraph("groups");
     changeGraph = true;
   }
@@ -1228,8 +1228,10 @@ void GraphPerspective::group() {
 
 void GraphPerspective::make_graph() {
   Graph* graph = _graphs->currentGraph();
-  unsigned added = makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
-  tlp::debug() << "Make selection a graph: " << added << " elements added to the selection.";
+  unsigned int added = makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+  stringstream msg;
+  msg << "Make selection a graph: " << added << " elements added to the selection.";
+  Perspective::showStatusMessage(msg.str());
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {

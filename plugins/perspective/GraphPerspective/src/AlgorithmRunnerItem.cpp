@@ -426,7 +426,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       if (TulipSettings::instance().logPluginCall() == TulipSettings::LogCallWithExecutionTime)
         log << ": " << spentTime << "ms";
 
-      qDebug() << tlpStringToQString(log.str());
+      qDebug() << log.str().c_str();
     }
   }
 
