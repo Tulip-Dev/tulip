@@ -25,19 +25,21 @@
 #include <QKeyEvent>
 #include <QClipboard>
 #include <QMenu>
+#include <QPushButton>
 
 #include <tulip/TlpQtTools.h>
 
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QFrame(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
+  QDialog(parent,Qt::Tool), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
-  // we want to be able to select multiple rows in the logger list for copy/paste operations
-  _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+  QPushButton *copybutton = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "&Copy selection", this);
+  _ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
   connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
-  setWindowFlags(Qt::Popup);
-  connect(_ui->clearButton,SIGNAL(clicked()),this,SLOT(clear()));
+  connect(copybutton, SIGNAL(clicked()), this, SLOT(copy()));
+  QPushButton* resetb = _ui->buttonBox->button(QDialogButtonBox::Reset);
+  connect(resetb,SIGNAL(clicked()),this,SLOT(clear()));
 }
 
 GraphPerspectiveLogger::~GraphPerspectiveLogger() {
@@ -150,7 +152,6 @@ void GraphPerspectiveLogger::clear() {
   _ui->listWidget->clear();
   _logType = QtDebugMsg;
   emit cleared();
-  close();
   _logCounts[Info] = 0;
   _logCounts[Warning] = 0;
   _logCounts[Error] = 0;
@@ -163,13 +164,17 @@ void GraphPerspectiveLogger::copy() {
   foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
     strings << item->text();
 
-  QApplication::clipboard()->setText(strings.join("\n"));
+  if(!strings.isEmpty())
+      QApplication::clipboard()->setText(strings.join("\n"));
 }
 
 void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
   QMenu m;
-  m.addAction("Clear content and close", this, SLOT(clear()));
-  m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
+  QAction* clear = m.addAction("Clear content", this, SLOT(clear()));
+  QAction* copy = m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
+  m.addAction("Close", this, SLOT(close()), QKeySequence::Close);
+  copy->setEnabled(_ui->listWidget->count()!=0);
+  clear->setEnabled(_ui->listWidget->count()!=0);
   m.exec(_ui->listWidget->mapToGlobal(pos));
 }
 

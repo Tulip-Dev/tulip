@@ -22,14 +22,14 @@
 
 #include <QPixmap>
 #include <QDebug>
-#include <QFrame>
+#include <QDialog>
 #include <QMap>
 
 namespace Ui {
 class GraphPerspectiveLogger;
 }
 
-class GraphPerspectiveLogger: public QFrame {
+class GraphPerspectiveLogger: public QDialog {
   Q_OBJECT
 
   QtMsgType _logType;
