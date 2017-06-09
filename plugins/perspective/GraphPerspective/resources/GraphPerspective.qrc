@@ -63,6 +63,5 @@
         <file>ui/panel_button_hover.png</file>
         <file>ui/panel_button_pressed.png</file>
         <file>icons/32/desktop.png</file>
-        <file>icons/32/edit-clear.png</file>
     </qresource>
 </RCC>

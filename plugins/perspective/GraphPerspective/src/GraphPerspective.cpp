@@ -331,7 +331,7 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
 }
 
 void GraphPerspective::showLogger() {
-  if (_logger->count()==0)
+  if (_logger->count() == 0||_logger->isVisible())
     return;
 
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
@@ -339,8 +339,8 @@ void GraphPerspective::showLogger() {
   pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height()-_logger->height(),pos.y()));
   _logger->move(pos);
   // extend the logger frame width until reaching the right side of the main window
-  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x()+mainWindow()->width()-_mainWindow->mapToGlobal(_logger->pos()).x(),
-                  _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
+  //_logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x()+mainWindow()->width()-_mainWindow->mapToGlobal(_logger->pos()).x(),
+  //                _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
   _logger->show();
 }
 
