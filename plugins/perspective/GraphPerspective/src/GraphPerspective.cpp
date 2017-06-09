@@ -419,11 +419,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCut, "Move the selected elements of the current graph into the clipboard", "X");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCopy, "Copy the selected elements of the current graph into the clipboard", "C");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPaste, "Paste the clipboard elements into the current graph", "V");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSelect_All, "Select all the elements of the current graph", "A");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSelect_All, "Select all elements of the current graph", "A");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionInvert_selection, "Invert the selection of the current graph elements, deselect if selected and select if not selected", "I");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection, "Deselect all the selected elements of the current grap", "Shift+A");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_elements, "Create a meta-node representing a newly created sub-graph containing all the selected elements of the current graph", "G");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCreate_sub_graph, "Create a sub-graph containing all the selected elements of the curent graph", "Shift+G");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection, "Deselect all selected elements of the current grap", "Shift+A");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_elements, "Create a meta-node representing a newly created sub-graph containing all selected elements of the current graph", "G");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCreate_sub_graph, "Create a sub-graph containing all selected elements of the current graph", "Shift+G");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPreferences, "Show Tulip preferences dialog", ",");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowUserDocumentation, "Display the User handbook in a navigator", "?");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowDevelDocumentation, "Display the Developer handbook in a navigator", "D");
@@ -464,16 +464,17 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP(_ui->actionAbout_us, "Display the &quot;About Tulip&quot; information dialog [F1]");
   SET_TOOLTIP(_ui->actionPlugins_Center, _ui->pluginsButton->toolTip());
   SET_TOOLTIP(_ui->actionImport_CSV, _ui->csvImportButton->toolTip());
-  SET_TOOLTIP(_ui->actionSave_graph_to_file, "Write the graph into a file");
-  SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty sub-graph");
+  SET_TOOLTIP(_ui->actionSave_graph_to_file, "Write the current graph into a file");
+  SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty sub-graph of the current graph");
   SET_TOOLTIP(_ui->actionClone_sub_graph, "Create a sub-graph containing the same elements as the current graph");
   SET_TOOLTIP(_ui->action_Close_All, "Close all opened workspace views");
   SET_TOOLTIP(_ui->actionColor_scales_management, "Manage Tulip color scales");
-  SET_TOOLTIP(_ui->actionMake_selection_a_graph, "Add the non selected ends of the selected edges to the selection");
+  SET_TOOLTIP(_ui->actionMake_selection_a_graph, "Add the non selected ends of the selected edges to the current graph selection");
   SET_TOOLTIP(_ui->actionDelete_from_the_root_graph, "Delete the selected elements from the whole graph hierarchy (not only from the current graph) [Shift+Del]");
   SET_TOOLTIP(_ui->actionReverse_selected_edges, "Reverse the source and target nodes of the selected edges");
-  SET_TOOLTIP(_ui->actionDelete_all, "Clear all the elements of the current graph");
-  SET_TOOLTIP(_ui->actionSelect_All_Nodes, "Select all the nodes of the current graph");
+  SET_TOOLTIP(_ui->actionDelete_all, "Delete all elements of the current graph");
+  SET_TOOLTIP(_ui->actionSelect_All_Nodes, "Select all nodes of the current graph");
+  SET_TOOLTIP(_ui->actionSelect_All_Edges, "Select all edges of the current graph");
 
 
   _ui->singleModeButton->setEnabled(false);
