@@ -48,6 +48,8 @@ do
     else
       echo " failed"
     fi
+    # avoid remaining X events
+    sleep 3
 done
 
 # check results
