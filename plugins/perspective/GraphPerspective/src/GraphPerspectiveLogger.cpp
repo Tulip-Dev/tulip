@@ -165,7 +165,7 @@ void GraphPerspectiveLogger::copy() {
     strings << item->text();
 
   if(!strings.isEmpty())
-      QApplication::clipboard()->setText(strings.join("\n"));
+    QApplication::clipboard()->setText(strings.join("\n"));
 }
 
 void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {

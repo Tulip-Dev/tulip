@@ -219,12 +219,13 @@ bool ParallelCoordinatesGraphProxy::highlightedEltsSet() const {
 
 void ParallelCoordinatesGraphProxy::selectHighlightedElements() {
   // initialize selection
-  BooleanProperty* selectionProp = 
+  BooleanProperty* selectionProp =
     getProperty<BooleanProperty>("viewSelection");
   selectionProp->setAllNodeValue(false);
   selectionProp->setAllEdgeValue(false);
-  
+
   set<unsigned int>::iterator it;
+
   for (it = highlightedElts.begin() ; it != highlightedElts.end() ; ++it) {
     setDataSelected(*it, true);
   }
@@ -233,6 +234,7 @@ void ParallelCoordinatesGraphProxy::selectHighlightedElements() {
 void ParallelCoordinatesGraphProxy::setSelectHighlightedElements(bool val) {
   // add/remove elements to/from selection
   set<unsigned int>::iterator it;
+
   for (it = highlightedElts.begin() ; it != highlightedElts.end() ; ++it) {
     setDataSelected(*it, val);
   }
