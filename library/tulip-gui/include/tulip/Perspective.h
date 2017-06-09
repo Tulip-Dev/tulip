@@ -22,6 +22,7 @@
 
 #include <tulip/PluginContext.h>
 #include <tulip/Plugin.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QString>
 #include <QVariantMap>
@@ -211,6 +212,14 @@ public:
    * on mainWindow()->statusBar()
    */
   static void showStatusMessage(const QString&);
+
+  /**
+   * @brief a static function to ease the display of messages
+   * on mainWindow()->statusBar()
+   */
+  static void showStatusMessage(const std::string& msg) {
+    showStatusMessage(tlp::tlpStringToQString(msg));
+  }
 
   /**
    * @brief a static function to enable the redirection of the statusTip or toolTip of menu actions on mainWindow->statusBar()
