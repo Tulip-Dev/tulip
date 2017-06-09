@@ -97,6 +97,8 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
     _ui->languageLabel->setPixmap(cppPix);
     _ui->languageLabel->setToolTip("Plugin written in C++");
   }
+
+  connect(_ui->favoriteCheck, SIGNAL(stateChanged(int)), this, SLOT(favoriteChanged(int)));
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -566,6 +568,12 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
 
 void AlgorithmRunnerItem::setFavorite(bool f) {
   _ui->favoriteCheck->setChecked(f);
+}
+
+void AlgorithmRunnerItem::favoriteChanged(int state) {
+  _ui->favoriteCheck->setToolTip((state == Qt::Unchecked) ?
+				 QString("Add to Favorites") :
+				 QString("Remove from Favorites"));
 }
 
 tlp::DataSet AlgorithmRunnerItem::data() const {

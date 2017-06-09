@@ -60,6 +60,7 @@ public slots:
   void setGraph(tlp::Graph*);
   void setData(const tlp::DataSet& data);
   void setStoreResultAsLocal(bool);
+  void favoriteChanged(int state);
 
   void run(tlp::Graph* g = NULL);
 
