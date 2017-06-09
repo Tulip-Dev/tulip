@@ -594,8 +594,14 @@ void ParallelCoordinatesView::buildContextMenu() {
   highlightMenuSeparator=new QAction(NULL);
   highlightMenuSeparator->setSeparator(true);
   selectHighlightedElements=new QAction(tr("Select highlighted elements"),NULL);
-  selectHighlightedElements->setToolTip(QString("Select the graph elements corresponding to the currently highlighted elements"));
+  selectHighlightedElements->setToolTip(QString("Select the graph elements corresponding to the currently highlighted curves"));
   connect(selectHighlightedElements,SIGNAL(triggered()),this,SLOT(selectHighlightedElementsSlot()));
+  addSelectHighlightedElements=new QAction(tr("Add highlighted elements to selection"),NULL);
+  addSelectHighlightedElements->setToolTip(QString("Add the graph elements corresponding to the currently highlighted curves to the current selection"));
+  connect(addSelectHighlightedElements,SIGNAL(triggered()),this,SLOT(addSelectHighlightedElementsSlot()));
+  removeSelectHighlightedElements=new QAction(tr("Remove highlighted elements to selection"),NULL);
+  removeSelectHighlightedElements->setToolTip(QString("Remove the graph elements corresponding to the currently highlighted curves from the current selection"));
+  connect(removeSelectHighlightedElements,SIGNAL(triggered()),this,SLOT(removeSelectHighlightedElementsSlot()));
   resetHightlightedElements=new QAction(tr("Reset highlighting of elements"),NULL);
   resetHightlightedElements->setToolTip(QString("Unhighlight all the elements"));
   connect(resetHightlightedElements,SIGNAL(triggered()),this,SLOT(resetHightlightedElementsSlot()));
@@ -620,6 +626,8 @@ void ParallelCoordinatesView::fillContextMenu(QMenu *menu, const QPointF &point)
   if (graphProxy->highlightedEltsSet()) {
     menu->addAction(highlightMenuSeparator);
     menu->addAction(selectHighlightedElements);
+    menu->addAction(addSelectHighlightedElements);
+    menu->addAction(removeSelectHighlightedElements);
     menu->addAction(resetHightlightedElements);
   }
 }
@@ -638,6 +646,18 @@ void ParallelCoordinatesView::removeAxisSlot() {
 void ParallelCoordinatesView::selectHighlightedElementsSlot() {
   Observable::holdObservers();
   graphProxy->selectHighlightedElements();
+  Observable::unholdObservers();
+}
+
+void ParallelCoordinatesView::addSelectHighlightedElementsSlot() {
+  Observable::holdObservers();
+  graphProxy->setSelectHighlightedElements(true);
+  Observable::unholdObservers();
+}
+
+void ParallelCoordinatesView::removeSelectHighlightedElementsSlot() {
+  Observable::holdObservers();
+  graphProxy->setSelectHighlightedElements(false);
   Observable::unholdObservers();
 }
 

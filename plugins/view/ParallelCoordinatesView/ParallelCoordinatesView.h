@@ -71,7 +71,7 @@ public :
                     "<p>The Parallel Coordinates view allows to create a parallel coordinates visualization from graph elements. "
                     "Parallel coordinates are a common way of visualizing high-dimensional geometry and analyzing multivariate data.\n"
                     "The basic idea is to visualize a set of points in an n-dimensional space. To do so, the n dimensions are represented by n parallel axis, typically vertical and equally spaced. A point in n-dimensional space is represented as a polyline with vertices on the parallel axis. The position of the vertex on the i-th axis corresponds to the i-th coordinate of the point.</p>"
-                    "<p>By selecting a set of graph properties (supported types are Metric, Integer and String), nodes and edges of a graph can be visualized as parallel coordinates. Each axis corresponds to a graph property and nodes (or edges) of the graph are represented as polylines or curves.</p>"
+                    "<p>By selecting a set of graph properties (supported types are Double, Integer and String), nodes and edges of a graph can be visualized as parallel coordinates. Each axis corresponds to a graph property and nodes (or edges) of the graph are represented as polylines or curves.</p>"
                     "<p>A set of interactors are bundled with the view to perform brushing, elements selection, data filtering, ...</p>", "1.2", "View")
 
   ParallelCoordinatesView(const tlp::PluginContext *);
@@ -144,6 +144,8 @@ protected slots:
   void axisConfigurationSlot();
   void removeAxisSlot();
   void selectHighlightedElementsSlot();
+  void addSelectHighlightedElementsSlot();
+  void removeSelectHighlightedElementsSlot();
   void resetHightlightedElementsSlot();
 
 private :
@@ -180,6 +182,8 @@ private :
   QAction *removeAxisAction;
   QAction *highlightMenuSeparator;
   QAction *selectHighlightedElements;
+  QAction *addSelectHighlightedElements;
+  QAction *removeSelectHighlightedElements;
   QAction *resetHightlightedElements;
 
   unsigned int dataUnderMousePointer;

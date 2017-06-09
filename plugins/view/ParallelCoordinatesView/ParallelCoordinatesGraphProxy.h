@@ -85,6 +85,7 @@ public :
   bool highlightedEltsSet() const;
   bool isDataHighlighted(const unsigned int dataId);
   void selectHighlightedElements();
+  void setSelectHighlightedElements(bool val);
   const std::set<unsigned int> &getHighlightedElts() const {
     return highlightedElts;
   }
