@@ -572,8 +572,8 @@ void AlgorithmRunnerItem::setFavorite(bool f) {
 
 void AlgorithmRunnerItem::favoriteChanged(int state) {
   _ui->favoriteCheck->setToolTip((state == Qt::Unchecked) ?
-				 QString("Add to Favorites") :
-				 QString("Remove from Favorites"));
+                                 QString("Add to Favorites") :
+                                 QString("Remove from Favorites"));
 }
 
 tlp::DataSet AlgorithmRunnerItem::data() const {
