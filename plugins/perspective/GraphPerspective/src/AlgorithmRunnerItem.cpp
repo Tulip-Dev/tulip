@@ -551,7 +551,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
   else if (pluginLister->pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result",result);
-    std::string str = "\"" + stdName + "\" test " + (result?"succeed":"failed") + " on:\n" +  g->getName()+".";
+    std::string str = "\"" + stdName + "\" test " + (result?"succeeded":"failed") + " on:\n" +  g->getName()+".";
 
     if (result) {
       tlp::debug() << str << std::endl;
