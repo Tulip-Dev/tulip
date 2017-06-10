@@ -40,9 +40,6 @@
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-        </property>
         <property name="editTriggers">
          <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked</set>
         </property>
