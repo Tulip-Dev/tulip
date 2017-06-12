@@ -90,7 +90,7 @@
 (edge 81 29 0)
 (edge 82 29 8)
 (edge 83 29 23)
-(property  0 string "\"Planar\" test succeed"
+(property  0 string "\"Planar\" test succeeded"
 (default "" "")
 )
 (property  0 color "viewBorderColor"

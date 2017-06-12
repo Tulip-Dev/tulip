@@ -568,10 +568,10 @@ NEW-WINDOW:782,318:67109133,67109133,19225126,0,0,0:0x0+237+94:0,0:Tulip test re
 7,6,842,332,0,0,0,45460598,11,'SynPS/2 Synaptics TouchPad'
 7,6,842,332,0,0,0,45460615,11,'SynPS/2 Synaptics TouchPad'
 7,6,843,332,0,0,0,45460630,11,'SynPS/2 Synaptics TouchPad'
-7,6,843,332,0,0,0,45460665,11,'SynPS/2 Synaptics TouchPad'
-7,6,843,332,0,0,0,45460822,11,'SynPS/2 Synaptics TouchPad'
-7,6,844,332,0,0,0,45460909,11,'SynPS/2 Synaptics TouchPad'
-7,6,844,332,0,0,0,45460926,11,'SynPS/2 Synaptics TouchPad'
+7,6,833,332,0,0,0,45460665,11,'SynPS/2 Synaptics TouchPad'
+7,6,833,332,0,0,0,45460822,11,'SynPS/2 Synaptics TouchPad'
+7,6,834,332,0,0,0,45460909,11,'SynPS/2 Synaptics TouchPad'
+7,6,834,332,0,0,0,45460926,11,'SynPS/2 Synaptics TouchPad'
 7,4,0,0,1,0,0,45460948,11,SynPS/2 Synaptics TouchPad
 6,4,0,0,1,0,0,45460948,2,Virtual core pointer
 7,6,844,332,0,0,0,45460978,11,'SynPS/2 Synaptics TouchPad'
@@ -661,10 +661,10 @@ NEW-WINDOW:782,318:67109133,67109133,19225126,0,0,0:0x0+237+94:0,0:Tulip test re
 7,6,968,339,0,0,0,45462771,11,'SynPS/2 Synaptics TouchPad'
 7,6,968,339,0,0,0,45462788,11,'SynPS/2 Synaptics TouchPad'
 7,6,968,339,0,0,0,45462806,11,'SynPS/2 Synaptics TouchPad'
-7,6,969,339,0,0,0,45462922,11,'SynPS/2 Synaptics TouchPad'
-7,6,969,339,0,0,0,45462957,11,'SynPS/2 Synaptics TouchPad'
-7,6,969,339,0,0,0,45462972,11,'SynPS/2 Synaptics TouchPad'
-7,6,970,339,0,0,0,45463073,11,'SynPS/2 Synaptics TouchPad'
+7,6,984,339,0,0,0,45462922,11,'SynPS/2 Synaptics TouchPad'
+7,6,984,339,0,0,0,45462957,11,'SynPS/2 Synaptics TouchPad'
+7,6,984,339,0,0,0,45462972,11,'SynPS/2 Synaptics TouchPad'
+7,6,985,339,0,0,0,45463073,11,'SynPS/2 Synaptics TouchPad'
 7,5,0,0,1,0,0,45463400,11,SynPS/2 Synaptics TouchPad
 6,5,0,0,1,0,0,45463400,2,Virtual core pointer
 7,2,0,0,0,37,0,45464112,9,AT Translated Set 2 keyboard

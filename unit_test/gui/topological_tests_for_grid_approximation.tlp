@@ -887,13 +887,13 @@
 (edge 878 185 189)
 (edge 879 187 194)
 (edge 880 195 198)
-(property  0 bool "\"Acyclic\" test succeed on:\n"
+(property  0 bool "\"Acyclic\" test succeeded on:\n"
 (default "false" "false")
 )
 (property  0 bool "\"Biconnected\" test failed on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Connected\" test succeed on:\n"
+(property  0 bool "\"Connected\" test succeeded on:\n"
 (default "false" "false")
 )
 (property  0 bool "\"Directed Tree\" test failed on:\n"
@@ -911,7 +911,7 @@
 (property  0 bool "\"Planar\" test failed on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Simple\" test succeed on:\n"
+(property  0 bool "\"Simple\" test succeeded on:\n"
 (default "false" "false")
 )
 (property  0 bool "\"Triconnected\" test failed on:\n"

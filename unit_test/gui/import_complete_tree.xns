@@ -777,10 +777,10 @@ NEW-WINDOW:689,318:67109141,67109141,19214501,0,0,0:0x0+422+94:0,0:Tulip test re
 7,6,920,338,0,0,0,44526008,11,'SynPS/2 Synaptics TouchPad'
 7,6,920,338,0,0,0,44526434,11,'SynPS/2 Synaptics TouchPad'
 7,6,920,338,0,0,0,44527203,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,338,0,0,0,44527270,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,338,0,0,0,44527287,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,338,0,0,0,44527321,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,337,0,0,0,44527338,11,'SynPS/2 Synaptics TouchPad'
+7,6,935,338,0,0,0,44527270,11,'SynPS/2 Synaptics TouchPad'
+7,6,935,338,0,0,0,44527287,11,'SynPS/2 Synaptics TouchPad'
+7,6,935,338,0,0,0,44527321,11,'SynPS/2 Synaptics TouchPad'
+7,6,935,337,0,0,0,44527338,11,'SynPS/2 Synaptics TouchPad'
 7,4,0,0,1,0,0,44527396,11,SynPS/2 Synaptics TouchPad
 6,4,0,0,1,0,0,44527396,2,Virtual core pointer
 7,6,920,337,0,0,0,44527444,11,'SynPS/2 Synaptics TouchPad'
