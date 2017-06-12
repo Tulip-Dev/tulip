@@ -101,4 +101,8 @@ class NpmPackageDependenciesGraphImport(tlp.ImportModule):
 # The line below does the magic to register the plugin to the plugin database
 # and updates the GUI to make it accessible through the menus.
 tulipplugins.registerPluginOfGroup("NpmPackageDependenciesGraphImport", "Npm package dependencies graph", "Antoine Lambert", "26/11/2015",\
- "Import the packages dependencies graph from a npm package", "1.0", "Software")
+ """
+ Import the packages dependencies graph from a npm package.
+ Be sure to have called 'npm install' in the package directory first
+ in order to get the complete dependencies graph.
+ """, "1.0", "Software")
