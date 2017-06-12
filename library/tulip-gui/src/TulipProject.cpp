@@ -391,6 +391,7 @@ bool TulipProject::removeAllDirPrivate(const QString &path, bool removeRootDir) 
   if (removeRootDir) {
     dir.rmdir(pathInfo.absoluteFilePath());
   }
+
   return true;
 }
 
