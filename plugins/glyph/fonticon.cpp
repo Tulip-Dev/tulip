@@ -331,7 +331,7 @@ class EEFontIconGlyph : public EdgeExtremityGlyph {
 
 public:
 
-  GLYPHINFORMATION("2D - Font Awesome Icon extremity", "David Auber", "02/03/2015", "Font Awesome Icon for edge extremities", "1.1", EdgeExtremityShape::Icon)
+  GLYPHINFORMATION("2D - Icon extremity", "Antoine Lambert", "02/03/2015", "Icon for edge extremities", "2.0", EdgeExtremityShape::Icon)
 
   EEFontIconGlyph(const tlp::PluginContext* context) : EdgeExtremityGlyph(context) {}
 
