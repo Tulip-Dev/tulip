@@ -368,7 +368,7 @@ private:
   bool writeMetaInfo();
   bool readMetaInfo();
 
-  bool removeAllDirPrivate(const QString &path);
+  bool removeAllDirPrivate(const QString &path, bool removeRootDir = true);
 
   // Core fileset
   QDir _rootDir;

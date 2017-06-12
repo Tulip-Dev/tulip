@@ -365,7 +365,7 @@ QString TulipProject::temporaryPath() {
   return result;
 }
 
-bool TulipProject::removeAllDirPrivate(const QString &path) {
+bool TulipProject::removeAllDirPrivate(const QString &path, bool removeRootDir) {
   QFileInfo pathInfo(path);
 
   if (!pathInfo.isDir() || !pathInfo.exists())
@@ -388,12 +388,14 @@ bool TulipProject::removeAllDirPrivate(const QString &path) {
       return false;
   }
 
-  dir.rmdir(pathInfo.absoluteFilePath());
+  if (removeRootDir) {
+    dir.rmdir(pathInfo.absoluteFilePath());
+  }
   return true;
 }
 
 void TulipProject::clearProject() {
-  removeAllDirPrivate(_rootDir.absolutePath());
+  removeAllDirPrivate(_rootDir.absolutePath(), false);
   _projectFile = "";
 }
 
