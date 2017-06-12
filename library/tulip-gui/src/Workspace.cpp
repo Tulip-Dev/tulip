@@ -103,6 +103,8 @@ tlp::GraphHierarchiesModel* Workspace::graphModel() const {
 }
 
 void Workspace::closeAll() {
+    //if expose mode activated, close it before closing views to prevent a crash
+    hideExposeMode();
   foreach(WorkspacePanel* p, _panels) {
     delete p; //beware: the destroyed signal is connected to panelDestroyed
   }
