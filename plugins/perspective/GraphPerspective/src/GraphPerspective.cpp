@@ -335,6 +335,7 @@ void GraphPerspective::showLogger() {
     return;
 
   static bool firstTime = true;
+
   if (firstTime) {
     QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
     pos.setX(pos.x()+_ui->loggerFrame->width());
@@ -342,9 +343,10 @@ void GraphPerspective::showLogger() {
     _logger->move(pos);
     // extend the logger frame width until reaching the right side of the main window
     _logger->resize(_mainWindow->width() - _ui->loggerFrame->width(),
-		    _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
+                    _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
     firstTime = false;
   }
+
   _logger->show();
 }
 
