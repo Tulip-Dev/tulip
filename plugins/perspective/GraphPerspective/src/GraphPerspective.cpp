@@ -334,13 +334,17 @@ void GraphPerspective::showLogger() {
   if (_logger->count() == 0||_logger->isVisible())
     return;
 
-  QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
-  pos.setX(pos.x()+_ui->loggerFrame->width());
-  pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height()-_logger->height(),pos.y()));
-  _logger->move(pos);
-  // extend the logger frame width until reaching the right side of the main window
-  //_logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x()+mainWindow()->width()-_mainWindow->mapToGlobal(_logger->pos()).x(),
-  //                _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
+  static bool firstTime = true;
+  if (firstTime) {
+    QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
+    pos.setX(pos.x()+_ui->loggerFrame->width());
+    pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height()-_logger->height(),pos.y()));
+    _logger->move(pos);
+    // extend the logger frame width until reaching the right side of the main window
+    _logger->resize(_mainWindow->width() - _ui->loggerFrame->width(),
+		    _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
+    firstTime = false;
+  }
   _logger->show();
 }
 
