@@ -370,8 +370,8 @@ void QuickAccessBarImpl::setLabelColor(const QColor& c) {
   }
 
   if (hasSelected == false) {
-    labelColors->setValueToGraphNodes(color, _mainView->graph());
-    labelBorderColors->setValueToGraphNodes(color, _mainView->graph());
+    labelColors->setAllNodeValue(color);
+    labelBorderColors->setAllNodeValue(color);
   }
 
   edge e;
@@ -382,8 +382,8 @@ void QuickAccessBarImpl::setLabelColor(const QColor& c) {
   }
 
   if (hasSelected == false) {
-    labelColors->setValueToGraphEdges(color, _mainView->graph());
-    labelBorderColors->setValueToGraphEdges(color, _mainView->graph());
+    labelColors->setAllEdgeValue(color);
+    labelBorderColors->setAllEdgeValue(color);
   }
 
   Observable::unholdObservers();
@@ -407,7 +407,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
     }
 
     if (hasSelected == false)
-      prop->setValueToGraphNodes(color, _mainView->graph());
+      prop->setAllNodeValue(color);
   }
   else {
     edge e;
@@ -417,7 +417,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
     }
 
     if (hasSelected == false)
-      prop->setValueToGraphEdges(color, _mainView->graph());
+      prop->setAllEdgeValue(color);
   }
 
   Observable::unholdObservers();
@@ -467,7 +467,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType,
     }
 
     if (hasSelected == false)
-      GraphModel::setAllNodeValue(prop, val, _mainView->graph());
+      GraphModel::setAllNodeValue(prop, val);
   }
   else {
     edge e;
@@ -477,7 +477,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType,
     }
 
     if (hasSelected == false)
-      GraphModel::setAllEdgeValue(prop, val, _mainView->graph());
+      GraphModel::setAllEdgeValue(prop, val);
   }
 
   Observable::unholdObservers();
@@ -554,9 +554,9 @@ void QuickAccessBarImpl::selectFont() {
 
   Observable::holdObservers();
 
-  inputData()->getElementFont()->setValueToGraphNodes(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
+  inputData()->getElementFont()->setAllNodeValue(QStringToTlpString(dlg.font().fontFile()));
 
-  inputData()->getElementFont()->setValueToGraphEdges(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
+  inputData()->getElementFont()->setAllEdgeValue(QStringToTlpString(dlg.font().fontFile()));
 
   Observable::unholdObservers();
   updateFontButtonStyle();
