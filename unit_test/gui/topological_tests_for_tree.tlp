@@ -68,34 +68,34 @@
 (edge 59 29 60)
 (edge 60 30 61)
 (edge 61 30 62)
-(property  0 bool "\"Acyclic\" test succeed on:\n"
+(property  0 bool "\"Acyclic\" test succeeded on:\n"
 (default "false" "false")
 )
 (property  0 bool "\"Biconnected\" test failed on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Connected\" test succeed on:\n"
+(property  0 bool "\"Connected\" test succeeded on:\n"
 (default "false" "false")
 )
-(property  0 string "\"Directed Tree\" test succeed"
+(property  0 string "\"Directed Tree\" test succeeded"
 (default "" "")
 )
-(property  0 bool "\"Directed Tree\" test succeed on:\n"
+(property  0 bool "\"Directed Tree\" test succeeded on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Free Tree\" test succeed on:\n"
+(property  0 bool "\"Free Tree\" test succeeded on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Outer Planar\" test succeed on:\n"
+(property  0 bool "\"Outer Planar\" test succeeded on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Planar Embedding\" test succeed on:\n"
+(property  0 bool "\"Planar Embedding\" test succeeded on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Planar\" test succeed on:\n"
+(property  0 bool "\"Planar\" test succeeded on:\n"
 (default "false" "false")
 )
-(property  0 bool "\"Simple\" test succeed on:\n"
+(property  0 bool "\"Simple\" test succeeded on:\n"
 (default "false" "false")
 )
 (property  0 bool "\"Triconnected\" test failed on:\n"

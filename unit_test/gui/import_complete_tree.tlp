@@ -68,7 +68,7 @@
 (edge 59 29 60)
 (edge 60 30 61)
 (edge 61 30 62)
-(property  0 string "\"Directed Tree\" test succeed"
+(property  0 string "\"Directed Tree\" test succeeded"
 (default "" "")
 )
 (property  0 color "viewBorderColor"
