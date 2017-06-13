@@ -170,7 +170,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
         // allow to undo
         graph->push();
         delElement(graph, selectedEntity);
-	graph->popIfNoUpdates();
+        graph->popIfNoUpdates();
         glMainWidget->redraw();
         Observable::unholdObservers();
         return true;
