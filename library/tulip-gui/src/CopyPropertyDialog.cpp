@@ -43,12 +43,6 @@
 using namespace std;
 using namespace tlp;
 
-#define COPY_PROPERTY(TYPE,GRAPH,SOURCE,NAME,SCOPE) if (typeid((*SOURCE)) == typeid(TYPE)) { \
-TYPE* newProperty = SCOPE==INHERITED?GRAPH->getSuperGraph()->getProperty<TYPE>(NAME):GRAPH->getLocalProperty<TYPE>(NAME); \
-*newProperty = *(static_cast<TYPE*>(SOURCE)); \
-property = newProperty; \
-}
-
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
   : QDialog(parent),ui(new Ui::CopyPropertyDialogData()),_graph(NULL),_source(NULL) {
@@ -163,6 +157,12 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg) {
     string tulipPropertyName = QStringToTlpString(propertyName);
     CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
     _graph->push();
+
+#define COPY_PROPERTY(TYPE,GRAPH,SOURCE,NAME,SCOPE) if (typeid((*SOURCE)) == typeid(TYPE)) { \
+TYPE* newProperty = SCOPE==INHERITED?GRAPH->getSuperGraph()->getProperty<TYPE>(NAME):GRAPH->getLocalProperty<TYPE>(NAME); \
+*newProperty = *(static_cast<TYPE*>(SOURCE)); \
+return newProperty; \
+}
 
     COPY_PROPERTY(DoubleProperty,_graph,_source,tulipPropertyName,destinationScope);
     COPY_PROPERTY(LayoutProperty,_graph,_source,tulipPropertyName,destinationScope);
