@@ -150,6 +150,10 @@ if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
 
 tlp.loadTulipPluginsFromDir(_tulipNativePluginsPath)
 
+# load bundled Tulip Python plugins when the tulip module has been installed with pip
+if not sys.argv[0] == 'tulip':
+  tlp.loadTulipPluginsFromDir(os.path.dirname(__file__) + '/plugins/')
+
 if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
   sys.setdlopenflags(dlOpenFlagsBackup)
 
