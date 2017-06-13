@@ -499,7 +499,7 @@ void GraphImpl::push(bool unpopAllowed,
   delPreviousRecorders();
 
   bool hasRecorders = !recorders.empty();
-  
+
   // if we have a current recorder with no updates
   // there is no need to push a new one
   // so go on with the same
@@ -526,14 +526,16 @@ void GraphImpl::push(bool unpopAllowed,
   if (unpopAllowed) {
     // delete first pushed recorders (those at the end of the list) if needed
     unsigned int nb = recorders.size();
+
     if (nb > NB_MAX_RECORDERS) {
       std::list<GraphUpdatesRecorder*>::reverse_iterator it =
-	recorders.rbegin();
+        recorders.rbegin();
+
       while (nb > NB_MAX_RECORDERS) {
-	delete (*it);
-	--nb;
-	++it;
-	recorders.pop_back();
+        delete (*it);
+        --nb;
+        ++it;
+        recorders.pop_back();
       }
     }
   }

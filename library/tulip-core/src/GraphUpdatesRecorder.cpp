@@ -1072,6 +1072,7 @@ bool GraphUpdatesRecorder::hasUpdates() {
   IteratorValue* itv = graphAddedEdges.findAllValues(NULL,false);
   bool updated = itv->hasNext();
   delete itv;
+
   if (updated)
     return true;
 
@@ -1086,11 +1087,13 @@ bool GraphUpdatesRecorder::hasUpdates() {
     Iterator<unsigned int>* itn = gnr.value->elts.findAll(true, true);
     updated = itn->hasNext();
     delete itn;
+
     if (updated)
       break;
   }
+
   delete itv;
-  
+
   if (updated)
     return true;
 
@@ -1102,6 +1105,7 @@ bool GraphUpdatesRecorder::hasUpdates() {
   itv = graphDeletedNodes.findAllValues(NULL, false);
   updated = itv->hasNext();
   delete itv;
+
   if (updated)
     return true;
 
@@ -1117,6 +1121,7 @@ bool GraphUpdatesRecorder::hasUpdates() {
   itv = oldContainers.findAllValues(NULL, false);
   updated = itv->hasNext();
   delete itv;
+
   if (updated)
     return true;
 
@@ -1124,6 +1129,7 @@ bool GraphUpdatesRecorder::hasUpdates() {
   itv = graphDeletedEdges.findAllValues(NULL,false);
   updated = itv->hasNext();
   delete itv;
+
   if (updated)
     return true;
 

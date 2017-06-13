@@ -55,7 +55,7 @@ bool DataType::isTulipProperty(const std::string& typeName) {
           ISPROP(tlp::NumericProperty*) ||
           ISPROP(tlp::PropertyInterface*) ||
           ISPROP(tlp::GraphProperty*) ||
-	  ISPROP(tlp::BooleanProperty) ||
+          ISPROP(tlp::BooleanProperty) ||
           ISPROP(tlp::BooleanVectorProperty) ||
           ISPROP(tlp::DoubleProperty) ||
           ISPROP(tlp::DoubleVectorProperty) ||

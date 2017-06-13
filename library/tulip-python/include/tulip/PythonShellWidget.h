@@ -42,7 +42,7 @@ public :
 
   explicit PythonShellWidget(QWidget *parent = 0);
 
- signals:
+signals:
 
   void beginCurrentLinesExecution();
   void endCurrentLinesExecution();

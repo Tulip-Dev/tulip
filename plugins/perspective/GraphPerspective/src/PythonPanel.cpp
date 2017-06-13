@@ -80,6 +80,7 @@ void PythonPanel::dropEvent(QDropEvent* dropEv) {
 
 void PythonPanel::beginCurrentLinesExecution() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+
   // undo/redo management
   if (g)
     g->push();

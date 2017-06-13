@@ -238,7 +238,7 @@ void PythonShellWidget::executeCurrentLines() {
   if (_currentCodeLines.isEmpty()) return;
 
   emit beginCurrentLinesExecution();
-  
+
   tlp::Observable::holdObservers();
   PythonInterpreter::getInstance()->setConsoleWidget(this);
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(true);
@@ -253,7 +253,7 @@ void PythonShellWidget::executeCurrentLines() {
   tlp::Observable::unholdObservers();
 
   emit endCurrentLinesExecution();
-  
+
   insert("", true);
 }
 

@@ -1035,15 +1035,19 @@ void GraphPerspective::deleteSelectedElements(bool fromRoot) {
     graph->push();
     graph->delEdges(itEdges, fromRoot);
   }
+
   delete itEdges;
 
   tlp::Iterator<node>* itNodes =
     new StableIterator<node>(selection->getNodesEqualTo(true,graph));
+
   if (itNodes->hasNext()) {
     if (!hasPush)
       graph->push();
+
     graph->delNodes(itNodes, fromRoot);
   }
+
   delete itNodes;
 
   Observable::unholdObservers();
@@ -1192,8 +1196,9 @@ void GraphPerspective::copy(Graph* g, bool deleteAfter) {
   if (deleteAfter) {
     tlp::node n;
     stableForEach(n, selection->getNodesEqualTo(true))
-      g->delNode(n);
+    g->delNode(n);
   }
+
   g->popIfNoUpdates();
 
   delete copyGraph;

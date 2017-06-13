@@ -176,6 +176,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         glMainWidget->draw(false);
       }
     }
+
     _graph->popIfNoUpdates();
     selectedEntity="";
 
