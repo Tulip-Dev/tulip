@@ -408,6 +408,7 @@ void SearchWidget::search() {
   }
 
   Observable::unholdObservers();
+  _graph->popIfNoUpdates();
 
   if (deleteTermB)
     delete b;

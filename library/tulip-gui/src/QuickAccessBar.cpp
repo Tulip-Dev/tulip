@@ -387,6 +387,7 @@ void QuickAccessBarImpl::setLabelColor(const QColor& c) {
   }
 
   Observable::unholdObservers();
+  _mainView->graph()->popIfNoUpdates();
   emit settingsChanged();
 }
 
@@ -421,6 +422,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
   }
 
   Observable::unholdObservers();
+  _mainView->graph()->popIfNoUpdates();
   emit settingsChanged();
 }
 
@@ -481,6 +483,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType,
   }
 
   Observable::unholdObservers();
+  _mainView->graph()->popIfNoUpdates();
   emit settingsChanged();
 }
 
@@ -559,6 +562,7 @@ void QuickAccessBarImpl::selectFont() {
   inputData()->getElementFont()->setAllEdgeValue(QStringToTlpString(dlg.font().fontFile()));
 
   Observable::unholdObservers();
+  _mainView->graph()->popIfNoUpdates();
   updateFontButtonStyle();
   emit settingsChanged();
 }

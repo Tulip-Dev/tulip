@@ -1057,6 +1057,103 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   Observable::unholdObservers();
 }
 
+bool GraphUpdatesRecorder::hasUpdates() {
+  assert(updatesReverted == false);
+
+  // check addedProperties
+  if (addedProperties.begin() != addedProperties.end())
+    return true;
+
+  // check addedSubGraphs
+  if (addedSubGraphs.begin() != addedSubGraphs.end())
+    return true;
+
+  // check graphAddedEdges
+  IteratorValue* itv = graphAddedEdges.findAllValues(NULL,false);
+  bool updated = itv->hasNext();
+  delete itv;
+  if (updated)
+    return true;
+
+  // check graphAddedNodes
+  itv = graphAddedNodes.findAllValues(NULL, false);
+
+  while(itv->hasNext()) {
+    TypedValueContainer<GraphEltsRecord*> gnr;
+    itv->nextValue(gnr);
+
+    // loop on graph's recorded nodes
+    Iterator<unsigned int>* itn = gnr.value->elts.findAll(true, true);
+    updated = itn->hasNext();
+    delete itn;
+    if (updated)
+      break;
+  }
+  delete itv;
+  
+  if (updated)
+    return true;
+
+  // check deletedSubGraphs
+  if (deletedSubGraphs.begin() != deletedSubGraphs.end())
+    return true;
+
+  // check graphDeletedNodes
+  itv = graphDeletedNodes.findAllValues(NULL, false);
+  updated = itv->hasNext();
+  delete itv;
+  if (updated)
+    return true;
+
+  // check revertedEdges
+  if (revertedEdges.begin() != revertedEdges.end())
+    return true;
+
+  // check oldEdgesEnds
+  if (oldEdgesEnds.begin() != oldEdgesEnds.end())
+    return true;
+
+  // check oldcontainers
+  itv = oldContainers.findAllValues(NULL, false);
+  updated = itv->hasNext();
+  delete itv;
+  if (updated)
+    return true;
+
+  // check graphDeletedEdges
+  itv = graphDeletedEdges.findAllValues(NULL,false);
+  updated = itv->hasNext();
+  delete itv;
+  if (updated)
+    return true;
+
+  // check deletedProperties
+  if (deletedProperties.begin() != deletedProperties.end())
+    return true;
+
+  // check renamedProperties
+  if (!renamedProperties.empty())
+    return true;
+
+  // check oldNodeDefaultValues
+  if (oldNodeDefaultValues.begin() != oldNodeDefaultValues.end())
+    return true;
+
+  // check oldEdgeDefaultValues
+  if (oldEdgeDefaultValues.begin() != oldEdgeDefaultValues.end())
+    return true;
+
+  // check oldValues
+  if (oldValues.begin() != oldValues.end())
+    return true;
+
+  // check oldAttributeValues
+  if (oldAttributeValues.begin() != oldAttributeValues.end())
+    return true;
+
+  return false;
+}
+
 bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
   if (!restartAllowed) {
     // check if nothing is yet recorded for prop

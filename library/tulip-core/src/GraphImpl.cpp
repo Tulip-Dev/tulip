@@ -497,10 +497,17 @@ void GraphImpl::push(bool unpopAllowed,
   // they cannot be unpop
   // so delete them
   delPreviousRecorders();
-  // end any previous updates observation
-  unobserveUpdates();
 
   bool hasRecorders = !recorders.empty();
+  
+  // if we have a current recorder with no updates
+  // there is no need to push a new one
+  // so go on with the same
+  if (hasRecorders && !recorders.front()->hasUpdates())
+    return;
+
+  // end any previous updates observation
+  unobserveUpdates();
 
   if (hasRecorders)
     // stop recording for current recorder
@@ -570,6 +577,12 @@ void GraphImpl::pop(bool unpopAllowed) {
     if (!recorders.empty())
       recorders.front()->restartRecording(this);
   }
+}
+//----------------------------------------------------------------
+void GraphImpl::popIfNoUpdates() {
+  if(!recorders.empty() && !recorders.front()->hasUpdates())
+    // no need of a "no updates" recorder
+    this->pop(false);
 }
 //----------------------------------------------------------------
 void GraphImpl::unpop() {

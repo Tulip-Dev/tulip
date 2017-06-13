@@ -209,6 +209,8 @@ class GraphUpdatesRecorder :public Observable {
   void restartRecording(Graph*);
   // perform undo/redo updates
   void doUpdates(GraphImpl*, bool undo);
+  // check for recorded updates
+  bool hasUpdates();
   // remove a property from the observed ones
   // only if nothing is yet recorded for that property
   bool dontObserveProperty(PropertyInterface *);

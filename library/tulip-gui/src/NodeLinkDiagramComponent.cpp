@@ -841,6 +841,8 @@ void NodeLinkDiagramComponent::editValue(PropertyInterface* pi) {
     GraphModel::setNodeValue(itemId, pi, val);
   else
     GraphModel::setEdgeValue(itemId, pi, val);
+
+  graph()->popIfNoUpdates();
 }
 
 void NodeLinkDiagramComponent::editColor() {
