@@ -514,19 +514,21 @@ void GraphImpl::push(bool unpopAllowed,
   recorder->startRecording(this);
   recorders.push_front(recorder);
 
-  // delete first pushed recorder if needed
-  int nb = 0;
-  std::list<GraphUpdatesRecorder*>::iterator it = recorders.begin();
-
-  while(it != recorders.end()) {
-    if (nb == NB_MAX_RECORDERS) {
-      delete (*it);
-      recorders.erase(it);
-      break;
+  // if this is not a temporary state used for computation purpose
+  // as in BubbleTree for example
+  if (unpopAllowed) {
+    // delete first pushed recorders (those at the end of the list) if needed
+    unsigned int nb = recorders.size();
+    if (nb > NB_MAX_RECORDERS) {
+      std::list<GraphUpdatesRecorder*>::reverse_iterator it =
+	recorders.rbegin();
+      while (nb > NB_MAX_RECORDERS) {
+	delete (*it);
+	--nb;
+	++it;
+	recorders.pop_back();
+      }
     }
-
-    ++nb;
-    ++it;
   }
 
   if (propsToPreserve) {
