@@ -575,6 +575,10 @@ void GraphDecorator::pop(bool unpopAllowed) {
   return graph_component->pop(unpopAllowed);
 }
 //----------------------------------------------------------------
+void GraphDecorator::popIfNoUpdates() {
+  return graph_component->popIfNoUpdates();
+}
+//----------------------------------------------------------------
 void GraphDecorator::unpop() {
   return graph_component->unpop();
 }

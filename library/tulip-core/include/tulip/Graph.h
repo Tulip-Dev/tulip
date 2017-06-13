@@ -1438,6 +1438,7 @@ public:
    * @param unpopAllowed Whether or not to allow to re-do the modifications once they are undone.
    * @param propertiesToPreserveOnPop A collection of properties whose state to preserve when using pop().
    * @see pop()
+   * @see popIfNoUpdates()
    * @see unpop()
    * @see canPop()
    * @see canUnPop()
@@ -1452,6 +1453,12 @@ public:
    * @param unpopAllowed Whether or not it is possible to redo what will be undoe by this call.
    */
   virtual void pop(bool unpopAllowed = true)=0;
+
+  /**
+   * @brief abort last push if no updates have been recorded
+   */
+  virtual void popIfNoUpdates()=0;
+
 
   /**
    * @brief Re-perform actions that were undone using pop().

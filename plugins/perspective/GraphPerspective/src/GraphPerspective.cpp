@@ -1027,15 +1027,23 @@ void GraphPerspective::deleteSelectedElements(bool fromRoot) {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  graph->push();
   tlp::Iterator<edge>* itEdges =
     new StableIterator<edge>(selection->getEdgesEqualTo(true, graph));
-  graph->delEdges(itEdges, fromRoot);
+  bool hasPush = itEdges->hasNext();
+
+  if (hasPush) {
+    graph->push();
+    graph->delEdges(itEdges, fromRoot);
+  }
   delete itEdges;
 
   tlp::Iterator<node>* itNodes =
     new StableIterator<node>(selection->getNodesEqualTo(true,graph));
-  graph->delNodes(itNodes, fromRoot);
+  if (itNodes->hasNext()) {
+    if (!hasPush)
+      graph->push();
+    graph->delNodes(itNodes, fromRoot);
+  }
   delete itNodes;
 
   Observable::unholdObservers();
@@ -1056,6 +1064,7 @@ void GraphPerspective::reverseSelectedEdges() {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
   selection->reverseEdgeDirection(graph);
+  graph->popIfNoUpdates();
   Observable::unholdObservers();
 }
 
@@ -1073,6 +1082,7 @@ void GraphPerspective::cancelSelection() {
   forEach(e, selection->getEdgesEqualTo(true,graph)) {
     selection->setEdgeValue(e, false);
   }
+  graph->popIfNoUpdates();
   Observable::unholdObservers();
 }
 
@@ -1151,6 +1161,7 @@ void GraphPerspective::paste() {
   data.set("file::data", ss.str());
   Graph* inGraph = tlp::importGraph("TLP Import",data);
   tlp::copyToGraph(outGraph,inGraph);
+  outGraph->popIfNoUpdates();
   delete inGraph;
   Observable::unholdObservers();
   centerPanelsForGraph(outGraph);
@@ -1181,8 +1192,9 @@ void GraphPerspective::copy(Graph* g, bool deleteAfter) {
   if (deleteAfter) {
     tlp::node n;
     stableForEach(n, selection->getNodesEqualTo(true))
-    g->delNode(n);
+      g->delNode(n);
   }
+  g->popIfNoUpdates();
 
   delete copyGraph;
 
@@ -1409,6 +1421,7 @@ void GraphPerspective::CSVImport() {
   }
 
   Observable::unholdObservers();
+  g->popIfNoUpdates();
 }
 
 void GraphPerspective::showStartPanels(Graph *g) {

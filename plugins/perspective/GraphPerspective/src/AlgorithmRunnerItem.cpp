@@ -449,6 +449,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   while (Observable::observersHoldCounter() > 0)
     Observable::unholdObservers();
+
+  g->popIfNoUpdates();
 }
 
 void AlgorithmRunnerItem::setStoreResultAsLocal(bool m) {

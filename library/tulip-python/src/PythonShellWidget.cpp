@@ -237,6 +237,8 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
 void PythonShellWidget::executeCurrentLines() {
   if (_currentCodeLines.isEmpty()) return;
 
+  emit beginCurrentLinesExecution();
+  
   tlp::Observable::holdObservers();
   PythonInterpreter::getInstance()->setConsoleWidget(this);
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(true);
@@ -249,6 +251,9 @@ void PythonShellWidget::executeCurrentLines() {
   PythonInterpreter::getInstance()->resetConsoleWidget();
   PythonInterpreter::getInstance()->setDefaultSIGINTHandler();
   tlp::Observable::unholdObservers();
+
+  emit endCurrentLinesExecution();
+  
   insert("", true);
 }
 

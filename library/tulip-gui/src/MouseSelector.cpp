@@ -270,6 +270,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       }
 
       started = false;
+      graph->popIfNoUpdates();
       Observable::unholdObservers();
       glMainWidget->redraw();
       return true;

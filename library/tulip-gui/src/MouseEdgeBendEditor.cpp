@@ -152,7 +152,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       SelectedEntity selectedEntity;
 
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-        glMainWidget->getScene()->getGlGraphComposite()->getGraph()->setEnds(mEdge,glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
+        _graph->setEnds(mEdge,glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
         glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
         glMainWidget->redraw();
       }
@@ -166,7 +166,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       SelectedEntity selectedEntity;
 
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-        glMainWidget->getScene()->getGlGraphComposite()->getGraph()->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).second);
+        _graph->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).second);
         glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
         glMainWidget->redraw();
       }
@@ -176,7 +176,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         glMainWidget->draw(false);
       }
     }
-
+    _graph->popIfNoUpdates();
     selectedEntity="";
 
     _operation = NONE_OP;

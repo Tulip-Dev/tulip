@@ -580,6 +580,10 @@ void GraphView::pop(bool unpopAllowed) {
   getRootImpl()->pop(unpopAllowed);
 }
 //----------------------------------------------------------------
+void GraphView::popIfNoUpdates() {
+  getRootImpl()->popIfNoUpdates();
+}
+//----------------------------------------------------------------
 void GraphView::unpop() {
   getRootImpl()->unpop();
 }

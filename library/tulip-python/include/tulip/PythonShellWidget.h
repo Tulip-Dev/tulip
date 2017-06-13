@@ -42,6 +42,11 @@ public :
 
   explicit PythonShellWidget(QWidget *parent = 0);
 
+ signals:
+
+  void beginCurrentLinesExecution();
+  void endCurrentLinesExecution();
+
 protected:
 
   void keyPressEvent(QKeyEvent * e);

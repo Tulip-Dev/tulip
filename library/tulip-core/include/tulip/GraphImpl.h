@@ -158,6 +158,7 @@ public:
   virtual void push(bool unpopAllowed = true,
                     std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL);
   virtual void pop(bool unpopAllowed = true);
+  virtual void popIfNoUpdates();
   virtual void unpop();
   virtual bool canPop();
   virtual bool canUnpop();

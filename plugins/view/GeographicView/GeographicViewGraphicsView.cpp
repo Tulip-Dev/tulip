@@ -1336,7 +1336,7 @@ void GeographicViewGraphicsView::switchViewType() {
       camera.setSceneRadius(globeCameraBackup.getSceneRadius());
     }
   }
-
+  
   if (planisphereEntity)
     planisphereEntity->setVisible(enablePlanisphere);
 
@@ -1344,8 +1344,9 @@ void GeographicViewGraphicsView::switchViewType() {
 
   Observable::unholdObservers();
 
-  draw();
+  graph->popIfNoUpdates();
 
+  draw();
 }
 
 void GeographicViewGraphicsView::setGeoLayoutComputed() {

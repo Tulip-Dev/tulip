@@ -31,8 +31,6 @@ namespace tlp {
 class GraphHierarchiesModel;
 }
 
-class QPlainTextEdit;
-
 class PythonPanel : public QWidget {
 
 
@@ -53,6 +51,8 @@ protected:
 private slots:
 
   void graphComboIndexChanged();
+  void beginCurrentLinesExecution();
+  void endCurrentLinesExecution();
 };
 
 #endif // PYTHONPANEL_H

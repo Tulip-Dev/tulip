@@ -37,6 +37,8 @@ PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonP
   _ui->setupUi(this);
   connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphComboIndexChanged()));
   tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
+  connect(_ui->pythonShellWidget,SIGNAL(beginCurrentLinesExecution()),this,SLOT(beginCurrentLinesExecution()));
+  connect(_ui->pythonShellWidget,SIGNAL(endCurrentLinesExecution()),this,SLOT(endCurrentLinesExecution()));
 }
 
 PythonPanel::~PythonPanel() {
@@ -74,4 +76,17 @@ void PythonPanel::dropEvent(QDropEvent* dropEv) {
     _ui->graphCombo->selectIndex(graphIndex);
     dropEv->accept();
   }
+}
+
+void PythonPanel::beginCurrentLinesExecution() {
+  tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  // undo/redo management
+  if (g)
+    g->push();
+}
+
+void PythonPanel::endCurrentLinesExecution() {
+  tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  // undo/redo management
+  g->popIfNoUpdates();
 }
