@@ -54,7 +54,24 @@ bool DataType::isTulipProperty(const std::string& typeName) {
           ISPROP(tlp::ColorVectorProperty*) ||
           ISPROP(tlp::NumericProperty*) ||
           ISPROP(tlp::PropertyInterface*) ||
-          ISPROP(tlp::GraphProperty*));
+          ISPROP(tlp::GraphProperty*) ||
+	  ISPROP(tlp::BooleanProperty) ||
+          ISPROP(tlp::BooleanVectorProperty) ||
+          ISPROP(tlp::DoubleProperty) ||
+          ISPROP(tlp::DoubleVectorProperty) ||
+          ISPROP(tlp::LayoutProperty) ||
+          ISPROP(tlp::CoordVectorProperty) ||
+          ISPROP(tlp::StringProperty) ||
+          ISPROP(tlp::StringVectorProperty) ||
+          ISPROP(tlp::IntegerProperty) ||
+          ISPROP(tlp::IntegerVectorProperty) ||
+          ISPROP(tlp::SizeProperty) ||
+          ISPROP(tlp::SizeVectorProperty) ||
+          ISPROP(tlp::ColorProperty) ||
+          ISPROP(tlp::ColorVectorProperty) ||
+          ISPROP(tlp::NumericProperty) ||
+          ISPROP(tlp::PropertyInterface) ||
+          ISPROP(tlp::GraphProperty));
 }
 
 DataSet::DataSet(const DataSet &set) {
