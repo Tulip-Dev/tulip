@@ -164,6 +164,11 @@ using std::min;				// from <algorithm>
 using std::max;				// from <algorithm>
 using std::numeric_limits;	// from <limits>
 
+#if defined(__GNUC__) && __GNUC__ >= 7
+#include <cstring>
+using std::memcpy;
+#endif
+
 #ifdef OGDF_SYSTEM_UNIX
 #include <stdint.h>
 #endif
