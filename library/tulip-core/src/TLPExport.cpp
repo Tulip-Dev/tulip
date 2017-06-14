@@ -272,24 +272,8 @@ public:
 
     while (itP->hasNext()) {
       PropertyInterface *prop = itP->next();
-
-      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(g);
-
-      while (itN->hasNext()) {
-        ++nonDefaultvaluatedElementCount;
-        itN->next();
-      }
-
-      delete itN;
-
-      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
-
-      while (itE->hasNext()) {
-        ++nonDefaultvaluatedElementCount;
-        itE->next();
-      }
-
-      delete itE;
+      nonDefaultvaluatedElementCount += prop->numberOfNonDefaultValuatedNodes();
+      nonDefaultvaluatedElementCount += prop->numberOfNonDefaultValuatedEdges();
     }
 
     delete itP;
@@ -338,7 +322,11 @@ public:
       }
 
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
+      
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(g);
+      if (inGuiTestingMode())
+	// sort nodes to ensure a predictable ordering of the ouput
+	itN = new StableIterator<node>(itN, 0, true, true);
 
       while (itN->hasNext()) {
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
@@ -371,6 +359,9 @@ public:
       delete itN;
 
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
+      if (inGuiTestingMode())
+	// sort edges to ensure a predictable ordering of the ouput
+	itE = new StableIterator<edge>(itE, 0, true, true);
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
         while (itE->hasNext()) {
