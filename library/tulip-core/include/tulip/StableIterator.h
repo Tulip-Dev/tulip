@@ -75,7 +75,7 @@ struct StableIterator : public Iterator<itType> {
 
     if (sortCopy)
       std::sort(sequenceCopy.begin(), sequenceCopy.end());
-    
+
     copyIterator = sequenceCopy.begin();
   }
   //=============================
