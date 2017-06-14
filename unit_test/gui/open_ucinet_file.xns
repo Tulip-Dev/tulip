@@ -819,42 +819,30 @@ NEW-WINDOW:1117,103:56623261,56623261,56623360,0,0,0:0x0+960+432:0,0:
 7,5,0,0,1,0,0,31824021,12,AlpsPS/2 ALPS DualPoint TouchPad
 0,5,0,0,1,0,0,31824022
 6,5,0,0,1,0,0,31824021,2,Virtual core pointer
-7,2,0,0,0,40,0,31824760,10,AT Translated Set 2 keyboard
-0,2,0,0,0,40,0,31824761
-6,2,0,0,0,40,0,31824761,3,Virtual core keyboard
-7,3,0,0,0,40,0,31824820,10,AT Translated Set 2 keyboard
-0,3,0,0,0,40,0,31824820
-6,3,0,0,0,40,0,31824820,3,Virtual core keyboard
-7,2,0,0,0,26,0,31825329,10,AT Translated Set 2 keyboard
-0,2,0,0,0,26,0,31825329
-6,2,0,0,0,26,0,31825329,3,Virtual core keyboard
-7,3,0,0,0,26,0,31825388,10,AT Translated Set 2 keyboard
-0,3,0,0,0,26,0,31825388
-6,3,0,0,0,26,0,31825388,3,Virtual core keyboard
-7,2,0,0,0,57,0,31825438,10,AT Translated Set 2 keyboard
-0,2,0,0,0,57,0,31825439
-6,2,0,0,0,57,0,31825439,3,Virtual core keyboard
-7,3,0,0,0,57,0,31825508,10,AT Translated Set 2 keyboard
-0,3,0,0,0,57,0,31825508
-6,3,0,0,0,57,0,31825508,3,Virtual core keyboard
-7,2,0,0,0,40,0,31825678,10,AT Translated Set 2 keyboard
-0,2,0,0,0,40,0,31825678
-6,2,0,0,0,40,0,31825678,3,Virtual core keyboard
-7,3,0,0,0,40,0,31825747,10,AT Translated Set 2 keyboard
-0,3,0,0,0,40,0,31825747
-6,3,0,0,0,40,0,31825747,3,Virtual core keyboard
-7,2,0,0,0,27,0,31825917,10,AT Translated Set 2 keyboard
-0,2,0,0,0,27,0,31825917
-6,2,0,0,0,27,0,31825917,3,Virtual core keyboard
-7,3,0,0,0,27,0,31825987,10,AT Translated Set 2 keyboard
-0,3,0,0,0,27,0,31825987
-6,3,0,0,0,27,0,31825987,3,Virtual core keyboard
-7,2,0,0,0,32,0,31826156,10,AT Translated Set 2 keyboard
-0,2,0,0,0,32,0,31826156
-6,2,0,0,0,32,0,31826156,3,Virtual core keyboard
-7,3,0,0,0,32,0,31826236,10,AT Translated Set 2 keyboard
-0,3,0,0,0,32,0,31826236
-6,3,0,0,0,32,0,31826236,3,Virtual core keyboard
+7,2,0,0,0,42,0,31824760,10,AT Translated Set 2 keyboard
+0,2,0,0,0,42,0,31824761
+6,2,0,0,0,42,0,31824761,3,Virtual core keyboard
+7,3,0,0,0,42,0,31824820,10,AT Translated Set 2 keyboard
+0,3,0,0,0,42,0,31824820
+6,3,0,0,0,42,0,31824820,3,Virtual core keyboard
+7,2,0,0,0,27,0,31825329,10,AT Translated Set 2 keyboard
+0,2,0,0,0,27,0,31825329
+6,2,0,0,0,27,0,31825329,3,Virtual core keyboard
+7,3,0,0,0,27,0,31825388,10,AT Translated Set 2 keyboard
+0,3,0,0,0,27,0,31825388
+6,3,0,0,0,27,0,31825388,3,Virtual core keyboard
+7,2,0,0,0,31,0,31825438,10,AT Translated Set 2 keyboard
+0,2,0,0,0,31,0,31825439
+6,2,0,0,0,31,0,31825439,3,Virtual core keyboard
+7,3,0,0,0,31,0,31825508,10,AT Translated Set 2 keyboard
+0,3,0,0,0,31,0,31825508
+6,3,0,0,0,31,0,31825508,3,Virtual core keyboard
+7,2,0,0,0,33,0,31825678,10,AT Translated Set 2 keyboard
+0,2,0,0,0,33,0,31825678
+6,2,0,0,0,33,0,31825678,3,Virtual core keyboard
+7,3,0,0,0,33,0,31825747,10,AT Translated Set 2 keyboard
+0,3,0,0,0,33,0,31825747
+6,3,0,0,0,33,0,31825747,3,Virtual core keyboard
 7,6,301,144,0,0,0,31831057,12,'AlpsPS/2 ALPS DualPoint TouchPad'
 0,6,302,145,0,0,0,31831057
 6,6,302,145,0,0,0,31831057,2,'Virtual core pointer'
@@ -1072,11 +1060,11 @@ NEW-WINDOW:1117,103:56623261,56623261,56623360,0,0,0:0x0+960+432:0,0:
 0,6,307,235,0,0,0,31832231
 6,6,307,235,0,0,0,31832231,2,'Virtual core pointer'
 7,6,307,235,0,0,0,31832240,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,235,0,0,0,31832240
-6,6,307,235,0,0,0,31832240,2,'Virtual core pointer'
-7,6,307,235,0,0,0,31832250,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-0,6,307,234,0,0,0,31832250
-6,6,307,234,0,0,0,31832250,2,'Virtual core pointer'
+0,6,307,230,0,0,0,31832240
+6,6,307,230,0,0,0,31832240,2,'Virtual core pointer'
+7,6,307,230,0,0,0,31832250,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,307,230,0,0,0,31832250
+6,6,307,230,0,0,0,31832250,2,'Virtual core pointer'
 7,4,0,0,1,0,0,31832521,12,AlpsPS/2 ALPS DualPoint TouchPad
 0,4,0,0,1,0,0,31832521
 6,4,0,0,1,0,0,31832521,2,Virtual core pointer
