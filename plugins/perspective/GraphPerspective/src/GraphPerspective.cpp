@@ -435,7 +435,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowDevelDocumentation, "Display the Developer handbook in a navigator", "D");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowPythonDocumentation, "Display the Tulip python documentation in a navigator", "P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "Alt+L");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Grph exporting wizard", "E");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins, "Search in installed plugins", "Alt+H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
@@ -443,7 +443,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TIPS(_ui->undoButton, "Undo the latest update of the current graph");
   SET_TIPS(_ui->redoButton, "Redo the latest undone update of the current graph");
   _ui->workspaceButton->setToolTip(QString("Display the existing graph views"));
-  SET_TIPS(_ui->developButton, "Display the Tulip-Python IDE for developing scripts and plugins to execute on the imported graphs");
+  SET_TIPS(_ui->developButton, "Display the Tulip Python IDE for developing scripts and plugins to execute on the loaded graphs");
   _ui->loggerMessageInfo->setToolTip(QString("Show/Hide the Messages log panel"));
   _ui->loggerMessagePython->setToolTip(_ui->loggerMessageInfo->toolTip());
   _ui->loggerMessageWarning->setToolTip(_ui->loggerMessageInfo->toolTip());
@@ -677,11 +677,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   showTrayMessage("GraphPerspective started");
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  // for 4.11 show message to indicate that
+  // for 5.0 show message to indicate that
   // Python Script view no longer exist
   unsigned int mm_version = TULIP_INT_MM_VERSION;
 
-  if ((mm_version == 411) &&
+  if ((mm_version == 50) &&
       TulipSettings::instance().isFirstTulipMMRun()) {
     QTimer::singleShot(100, this, SLOT(showStartMessage()));
   }
@@ -691,7 +691,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 }
 
 void GraphPerspective::showStartMessage() {
-  QMessageBox::information(_mainWindow, QString("About Tulip Python IDE"), QString("<html><body><p>Be aware that the <b>Python Script View</b> no longer exists. The coding of python scripts is now available in using the <b>Tulip Python IDE</b>.<br/>Click on the <img src=\":/tulip/graphperspective/icons/16/python.png\">&nbsp;<b>Python IDE</b> button to launch it.</p></body></html>"));
+  QMessageBox::information(_mainWindow, QString("About Tulip Python IDE"), QString("<html><body><p>Be aware that the <b>Python Script View</b> no longer exists. The coding of python scripts is now available in using the <b>Tulip Python IDE</b>.<br/>Click on the <img src=\":/tulip/graphperspective/icons/16/python.png\">&nbsp;<b>Python IDE</b> button (enabled when a graph is loaded) to launch it.</p></body></html>"));
 }
 
 void GraphPerspective::openExternalFile() {
