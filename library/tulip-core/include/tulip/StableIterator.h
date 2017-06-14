@@ -24,6 +24,7 @@
 #include <tulip/tulipconf.h>
 #include <vector>
 #include <cstdlib>
+#include <algorithm>
 
 namespace tlp {
 /**
@@ -62,7 +63,7 @@ struct StableIterator : public Iterator<itType> {
   * @param nbElements The number of elements the iteration will take place on. Defaults to 0.
   * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults to true.
   **/
-  StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true) {
+  StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true, bool sortCopy = false) {
     sequenceCopy.reserve(nbElements);
 
     for (; inputIterator->hasNext();) {
@@ -72,6 +73,9 @@ struct StableIterator : public Iterator<itType> {
     if (deleteIterator)
       delete inputIterator;
 
+    if (sortCopy)
+      std::sort(sequenceCopy.begin(), sequenceCopy.end());
+    
     copyIterator = sequenceCopy.begin();
   }
   //=============================
