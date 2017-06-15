@@ -40,7 +40,7 @@ using namespace std;
 PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName,
     bool propertyNameIsEditable, const std::string& PropertyType, QWidget* parent) :
   QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox(new QComboBox(this)), usedCheckBox(
-    new QCheckBox("", this)), nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
+														      new QCheckBox("", this)), nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
   setLayout(new QVBoxLayout());
   layout()->setContentsMargins(0, 0, 0, 0);
   layout()->setSpacing(0);
@@ -183,7 +183,7 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
   QWidget(parent),
-  ui(new Ui::CSVImportConfigurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL), firstLine(0) {
+  ui(new Ui::CSVImportConfigurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL), firstLine(0), guessFirstLineIsHeader(true) {
   ui->setupUi(this);
 
   //Import line number change
@@ -223,7 +223,9 @@ void CSVImportConfigurationWidget::setFirstLineIndex(int fl) {
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser) {
   delete parser;
   parser = newParser;
+  guessFirstLineIsHeader = true;
   updateWidget("Parsing file to guess column types...");
+  guessFirstLineIsHeader = false;
   //Reset import range
   updateLineNumbers(true);
 }
@@ -235,6 +237,20 @@ void CSVImportConfigurationWidget::updateWidget(const std::string& title) {
     progress.showPreview(false);
     progress.setWindowTitle(QString(title.c_str()));
     progress.show();
+    // if neede try to guess if the first line is used as header.
+    if (guessFirstLineIsHeader) {
+      setUseFirstLineAsPropertyName(true);
+      // parse the first line only
+      parser->parse(this,&progress, true);
+      for(unsigned int i = 0 ; i< columnHeaderType.size() ; ++i) {
+	// If there is at least one column with a header type different
+	// from StringProperty, then the first line is not the header
+	if (columnHeaderType[i] != StringProperty::propertyTypename) {
+	  setUseFirstLineAsPropertyName(false);
+	  break;
+	}
+      }
+    }
     parser->parse(this,&progress);
   }
   else {
@@ -297,18 +313,6 @@ bool CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
 
 bool CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
   maxLineNumber = rowNumber;
-
-  /*bool firstLineIsHeader = false;
-
-  //Try to guess if the first line is used as header.
-  for(unsigned int i = 0 ; i< columnHeaderType.size() ; ++i) {
-    //If there is at least one column with a header type different from the rest of the data treat the first line as header
-    if(columnHeaderType[i] != columnType[i]) {
-      firstLineIsHeader = true;
-    }
-    }*/
-
-  setUseFirstLineAsPropertyName(/*firstLineIsHeader*/ true);
 
   //Force the table to correctly update.
   useFirstLineAsHeaderUpdated();
@@ -539,7 +543,7 @@ QValidator::State PropertyNameValidator::validate(QString & input, int&) const {
   return count<=1?QValidator::Acceptable:QValidator::Invalid;
 }
 
-string CSVImportConfigurationWidget::guessPropertyDataType(const string& data,const string& previousType) const {
+const string& CSVImportConfigurationWidget::guessPropertyDataType(const string& data,const string& previousType) const {
   //If there is no data skip the token
   if(data.empty()) {
     return previousType;
@@ -549,7 +553,7 @@ string CSVImportConfigurationWidget::guessPropertyDataType(const string& data,co
   return combinePropertyDataType(previousType,dataType);
 }
 
-string CSVImportConfigurationWidget::combinePropertyDataType(const string& previousType, const string& newType) const {
+const string& CSVImportConfigurationWidget::combinePropertyDataType(const string& previousType, const string& newType) const {
   if(previousType.empty()) {
     return newType;
   }
@@ -578,14 +582,17 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string& previ
   return StringProperty::propertyTypename;
 }
 
-string CSVImportConfigurationWidget::guessDataType(const string& data) const {
+// need a constant
+static const std::string emptyString;
+
+const string& CSVImportConfigurationWidget::guessDataType(const string& data) const {
   char *ptr = (char *) data.c_str();
 
   while(isspace(*ptr))
     ++ptr;
 
   if (!*ptr)
-    return "";
+    return emptyString;
 
   bool b;
 
