@@ -1386,7 +1386,9 @@ void GraphPerspective::CSVImport() {
   }
 
   // get the number of line displayed in the logger
-  unsigned int nbLogsBefore = _logger->count();
+  unsigned int nbLogsBefore = 
+    _logger->countByType(GraphPerspectiveLogger::Error);
+  nbLogsBefore += _logger->countByType(GraphPerspectiveLogger::Warning);
 
   wizard.setGraph(g);
 
@@ -1404,7 +1406,8 @@ void GraphPerspective::CSVImport() {
     }
   }
   else {
-    unsigned int nbLogsAfter = _logger->count();
+    unsigned int nbLogsAfter = _logger->countByType(GraphPerspectiveLogger::Error);
+    nbLogsAfter += _logger->countByType(GraphPerspectiveLogger::Warning);
     applyRandomLayout(g);
     bool openPanels = true;
 
