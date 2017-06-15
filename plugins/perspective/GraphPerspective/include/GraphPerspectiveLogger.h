@@ -72,6 +72,7 @@ private:
 
 signals:
   void cleared();
+  void resetLoggerPosition();
 };
 
 #endif // GRAPHPERSPECTIVELOGGER_H

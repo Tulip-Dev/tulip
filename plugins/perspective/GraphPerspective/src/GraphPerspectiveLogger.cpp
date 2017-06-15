@@ -39,7 +39,11 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
   connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
   connect(copybutton, SIGNAL(clicked()), this, SLOT(copy()));
   QPushButton* resetb = _ui->buttonBox->button(QDialogButtonBox::Reset);
-  connect(resetb,SIGNAL(clicked()),this,SLOT(clear()));
+  connect(resetb, SIGNAL(clicked()), this, SLOT(clear()));
+  connect(resetb, SIGNAL(clicked()), this, SLOT(hide()));
+  QPushButton *resetPosButton = new QPushButton("Reset position", this);
+  _ui->buttonBox->addButton(resetPosButton, QDialogButtonBox::ActionRole);
+  connect(resetPosButton, SIGNAL(clicked()), this, SIGNAL(resetLoggerPosition()));
 }
 
 GraphPerspectiveLogger::~GraphPerspectiveLogger() {

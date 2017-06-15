@@ -163,6 +163,7 @@ protected slots:
   void showHideStatusBar();
   void workspaceButtonClicked();
   void showStartMessage();
+  void resetLoggerDialogPosition();
 
 protected:
   bool eventFilter(QObject *, QEvent *);

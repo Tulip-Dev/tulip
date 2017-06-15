@@ -337,24 +337,20 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
 }
 
 void GraphPerspective::showLogger() {
-  if (_logger->count() == 0||_logger->isVisible())
+  if (_logger->count() == 0)
     return;
 
-  static bool firstTime = true;
+  if (!_logger->isVisible()) {
+    _logger->show();
+    static bool firstTime = true;
 
-  if (firstTime) {
-    QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
-    pos.setX(pos.x()+_ui->loggerFrame->width());
-    pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height()-_logger->height(),pos.y()));
-    _logger->move(pos);
-    // extend the logger frame width until reaching the right side of the main window
-    _logger->resize(_mainWindow->width() - _ui->loggerFrame->width(),
-                    _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
-    firstTime = false;
+    if (firstTime) {
+      resetLoggerDialogPosition();
+      firstTime = false;
+    }
+  } else {
+    _logger->hide();
   }
-
-  _logger->show();
-
 }
 
 void GraphPerspective::redrawPanels(bool center) {
@@ -527,7 +523,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   if (tlp::inGuiTestingMode() || !TulipSettings::instance().showStatusBar())
     _mainWindow->statusBar()->hide();
 
-  connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
+  connect(_logger, SIGNAL(cleared()), this, SLOT(logCleared()));
+  connect(_logger, SIGNAL(resetLoggerPosition()), this, SLOT(resetLoggerDialogPosition()));
 
   _colorScalesDialog = new ColorScaleConfigDialog(ColorScalesManager::getLatestColorScale(), mainWindow());
 
@@ -1655,6 +1652,16 @@ void GraphPerspective::showAboutTulipPage() {
 
 void GraphPerspective::workspaceButtonClicked() {
   _ui->workspaceButton->setChecked(true);
+}
+
+void GraphPerspective::resetLoggerDialogPosition() {
+  QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
+  pos.setX(pos.x()+_ui->loggerFrame->width());
+  _logger->showNormal();
+  // extend the logger frame width until reaching the right side of the main window
+  _logger->move(pos);
+  _logger->resize(_mainWindow->width() - _ui->loggerFrame->width(),
+                  _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
 }
 
 PLUGIN(GraphPerspective)
