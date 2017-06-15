@@ -50,7 +50,7 @@ bool ConnectedComponent::run() {
   delete itE;
 
   if (dataSet!=NULL)
-    dataSet->set("#connected components", components.size());
+    dataSet->set<unsigned>("#connected components", components.size());
 
   return true;
 }
