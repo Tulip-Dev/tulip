@@ -210,6 +210,7 @@ void TableView::graphDeleted(Graph* ancestor) {
   // just inform the WorkspacePanel
   // that we can display its ancestor instead
   assert(ancestor == NULL || graph()->getSuperGraph() == ancestor);
+
   if (ancestor)
     emit graphSet(ancestor);
   else {

@@ -32,9 +32,11 @@ int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
 
   QFileInfo fileInfo(fileName);
+
   if (fileInfo.exists()) {
     codeEditor->loadCodeFromFile(fileName);
   }
+
   codeEditor->analyseScriptCode(true);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   codeEditor->installEventFilter(this);

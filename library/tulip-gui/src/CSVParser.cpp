@@ -130,8 +130,9 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
       }
 
       ++row;
+
       if (firstLineOnly && row > _firstLine)
-	break;
+        break;
     }
 
     delete csvFile;
