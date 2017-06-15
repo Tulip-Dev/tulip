@@ -205,11 +205,17 @@ void TableView::graphChanged(tlp::Graph* g) {
   isNewGraph = false;
 }
 
-void TableView::graphDeleted(Graph*) {
+void TableView::graphDeleted(Graph* ancestor) {
   // if the current graph is deleted
   // just inform the WorkspacePanel
   // that we can display its ancestor instead
-  emit graphSet(graph()->getSuperGraph());
+  assert(ancestor == NULL || graph()->getSuperGraph() == ancestor);
+  if (ancestor)
+    emit graphSet(ancestor);
+  else {
+    setGraph(NULL);
+    readSettings();
+  }
 }
 
 void TableView::readSettings() {
@@ -223,8 +229,6 @@ void TableView::readSettings() {
       _model = new NodesGraphModel(_ui->table);
     else
       _model = new EdgesGraphModel(_ui->table);
-
-
 
     _model->setGraph(graph());
     GraphSortFilterProxyModel* sortModel = new GraphSortFilterProxyModel(_ui->table);
