@@ -90,10 +90,11 @@ work session in a portable way. Notably it contains the graphs that was loaded i
 files but also the configuration of the views and components that was opened in the software.
 
 When working with the Python IDE, the source code of the scripts, plugins and modules currently edited
-are automatically saved to the current Tulip project. When reopening the project file, the previously
-edited scripts, plugins and modules will still be available in the Python IDE even if you open the file
-on a computer different from the one you write your code. Python plugins will also be
-automatically loaded when reopening the project.
+are automatically saved to the current Tulip project. Nevertheless, the Tulip project must be explicitely
+saved to a .tlpx file in order for the Python files to be included in the resulting archive.
+When reopening the project file, the previously edited scripts, plugins and modules will still be available
+in the Python IDE even if you open the file on a computer different from the one you write your code.
+Python plugins will also be automatically loaded when reopening the project.
 
 Using the autocompletion to code faster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -40,6 +40,7 @@
 #include <QDialog>
 #include <QByteArray>
 #include <QStatusBar>
+#include <QMainWindow>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -277,7 +278,12 @@ GraphPerspective::~GraphPerspective() {
 }
 
 bool GraphPerspective::terminated() {
-  if(_graphs->needsSaving()) {
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  _pythonIDE->savePythonFilesAndWriteToProject(true);
+#endif
+
+  if(_graphs->needsSaving() || mainWindow()->isWindowModified()) {
     QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you want to save your changes?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
     if ((answer == QMessageBox::Yes && !save()) ||
@@ -348,6 +354,7 @@ void GraphPerspective::showLogger() {
   }
 
   _logger->show();
+
 }
 
 void GraphPerspective::redrawPanels(bool center) {

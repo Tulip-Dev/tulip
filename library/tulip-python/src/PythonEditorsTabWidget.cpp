@@ -32,13 +32,15 @@ int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
 
   QFileInfo fileInfo(fileName);
-  codeEditor->loadCodeFromFile(fileName);
+  if (fileInfo.exists()) {
+    codeEditor->loadCodeFromFile(fileName);
+  }
   codeEditor->analyseScriptCode(true);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   codeEditor->installEventFilter(this);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(scriptTextChanged()));
   int idx = addTab(codeEditor, fileInfo.fileName());
-  setTabToolTip(idx, fileInfo.absoluteFilePath());
+  setTabToolTip(idx, fileInfo.exists() ? fileInfo.absoluteFilePath() : fileInfo.fileName());
   setCurrentIndex(idx);
 
   if (_fontZoom < 0) {
@@ -137,6 +139,7 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
             moduleFile = moduleFile.mid(0, moduleFile.size() - 1);
 
           setTabText(currentIndex(), moduleFile);
+          emit fileSaved(currentIndex());
           return false;
         }
       }
@@ -235,4 +238,8 @@ void PythonEditorsTabWidget::increaseFontSize() {
   }
 
   ++_fontZoom;
+}
+
+QTabBar *PythonEditorsTabWidget::tabBar() const {
+  return QTabWidget::tabBar();
 }
