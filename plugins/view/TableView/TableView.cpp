@@ -206,7 +206,10 @@ void TableView::graphChanged(tlp::Graph* g) {
 }
 
 void TableView::graphDeleted(Graph*) {
-  setGraph(NULL);
+  // if the current graph is deleted
+  // just inform the WorkspacePanel
+  // that we can display its ancestor instead
+  emit graphSet(graph()->getSuperGraph());
 }
 
 void TableView::readSettings() {
