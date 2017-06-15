@@ -1392,8 +1392,9 @@ void GraphPerspective::CSVImport() {
 
   wizard.setGraph(g);
 
+  tlp::ObserverHolder oh;
+  
   g->push();
-  Observable::holdObservers();
   int result = wizard.exec();
 
   if (result == QDialog::Rejected) {
@@ -1404,6 +1405,7 @@ void GraphPerspective::CSVImport() {
     else {
       g->pop();
     }
+    return;
   }
   else {
     unsigned int nbLogsAfter = _logger->countByType(GraphPerspectiveLogger::Error);
@@ -1426,10 +1428,8 @@ void GraphPerspective::CSVImport() {
     if ((nbLogsAfter != nbLogsBefore) &&
         (QMessageBox::question(_mainWindow, "CSV Parse errors found", QString("When parsing your CSV file,<br/> %1 error(s) has been encountered.<br/>Do you want to see them?").arg(nbLogsAfter - nbLogsBefore), QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes))
       showLogger();
+    g->popIfNoUpdates();
   }
-
-  Observable::unholdObservers();
-  g->popIfNoUpdates();
 }
 
 void GraphPerspective::showStartPanels(Graph *g) {
