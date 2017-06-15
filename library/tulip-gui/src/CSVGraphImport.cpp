@@ -158,7 +158,8 @@ CSVToNewNodeIdMapping::CSVToNewNodeIdMapping(Graph* graph):graph(graph) {
 }
 
 void CSVToNewNodeIdMapping::init(unsigned int rowNumber) {
-  graph->reserveNodes(rowNumber);
+  Graph* root = graph->getRoot();
+  root->reserveNodes(root->numberOfNodes() + rowNumber);
 }
 
 pair<ElementType, vector<unsigned int> > CSVToNewNodeIdMapping::getElementsForRow(const vector<string>&, const vector<PropertyInterface*>) {
@@ -173,8 +174,9 @@ CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph* graph, const vector<unsi
 void CSVToGraphNodeIdMapping::init(unsigned int rowNumber) {
   AbstractCSVToGraphDataMapping::init(rowNumber);
 
-  if(createMissingNodes) {
-    graph->reserveNodes(rowNumber);
+  if (createMissingNodes) {
+    Graph* root = graph->getRoot();
+    root->reserveNodes(root->numberOfNodes() + rowNumber);
   }
 }
 
@@ -240,12 +242,13 @@ void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
     }
   }
 
-  //Reserve memory
-  graph->reserveEdges(rowNumber);
+  //Reserve elements
+  Graph* root = graph->getRoot();
+  root->reserveEdges(root->numberOfEdges() + rowNumber);
 
   if(buildMissingElements) {
     //Need to reserve for source and target nodes.
-    graph->reserveNodes(2*rowNumber);
+    root->reserveNodes(2*rowNumber + root->numberOfNodes());
   }
 }
 
