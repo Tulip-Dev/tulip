@@ -52,7 +52,9 @@ public:
     *
     * Notify the progression of the parsing with the progress object.
     **/
-  virtual bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL) = 0;
+  virtual bool parse(CSVContentHandler * handler,
+		     tlp::PluginProgress* progress=NULL,
+		     bool firstLineOnly = false) = 0;
 };
 
 /**
@@ -108,7 +110,8 @@ public:
     _fileEncoding = fileEncoding;
   }
 
-  bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
+  bool parse(CSVContentHandler * handler, tlp::PluginProgress* progress=NULL,
+	     bool firstLineOnly = false);
 
 protected:
   virtual std::string treatToken(const std::string& token, int row, int column);
@@ -147,7 +150,8 @@ public:
     return parser->decimalMark();
   }
 
-  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL);
+  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL,
+	     bool firstLineOnly = false);
 
   bool begin();
   bool line(unsigned int row,const std::vector<std::string>& lineTokens);

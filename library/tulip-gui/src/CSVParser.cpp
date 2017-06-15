@@ -42,7 +42,7 @@ string CSVSimpleParser::convertStringEncoding(const std::string& toConvert,QText
   return QStringToTlpString(encoder->toUnicode(toConvert.c_str()));
 }
 
-bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress) {
+bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress, bool firstLineOnly) {
   if(!handler) {
     return false;
   }
@@ -130,6 +130,8 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
       }
 
       ++row;
+      if (firstLineOnly && row > _firstLine)
+	break;
     }
 
     delete csvFile;
@@ -313,7 +315,7 @@ CSVInvertMatrixParser::~CSVInvertMatrixParser() {
   delete parser;
 }
 
-bool CSVInvertMatrixParser::parse(CSVContentHandler *handler, PluginProgress *progress) {
+bool CSVInvertMatrixParser::parse(CSVContentHandler *handler, PluginProgress *progress, bool) {
   this->handler = handler;
   return parser->parse(this,progress);
 }
