@@ -53,8 +53,8 @@ public:
     * Notify the progression of the parsing with the progress object.
     **/
   virtual bool parse(CSVContentHandler * handler,
-		     tlp::PluginProgress* progress=NULL,
-		     bool firstLineOnly = false) = 0;
+                     tlp::PluginProgress* progress=NULL,
+                     bool firstLineOnly = false) = 0;
 };
 
 /**
@@ -111,7 +111,7 @@ public:
   }
 
   bool parse(CSVContentHandler * handler, tlp::PluginProgress* progress=NULL,
-	     bool firstLineOnly = false);
+             bool firstLineOnly = false);
 
 protected:
   virtual std::string treatToken(const std::string& token, int row, int column);
@@ -151,7 +151,7 @@ public:
   }
 
   bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL,
-	     bool firstLineOnly = false);
+             bool firstLineOnly = false);
 
   bool begin();
   bool line(unsigned int row,const std::vector<std::string>& lineTokens);

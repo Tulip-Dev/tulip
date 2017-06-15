@@ -40,7 +40,7 @@ using namespace std;
 PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName,
     bool propertyNameIsEditable, const std::string& PropertyType, QWidget* parent) :
   QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox(new QComboBox(this)), usedCheckBox(
-														      new QCheckBox("", this)), nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
+    new QCheckBox("", this)), nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
   setLayout(new QVBoxLayout());
   layout()->setContentsMargins(0, 0, 0, 0);
   layout()->setSpacing(0);
@@ -237,20 +237,23 @@ void CSVImportConfigurationWidget::updateWidget(const std::string& title) {
     progress.showPreview(false);
     progress.setWindowTitle(QString(title.c_str()));
     progress.show();
+
     // if neede try to guess if the first line is used as header.
     if (guessFirstLineIsHeader) {
       setUseFirstLineAsPropertyName(true);
       // parse the first line only
       parser->parse(this,&progress, true);
+
       for(unsigned int i = 0 ; i< columnHeaderType.size() ; ++i) {
-	// If there is at least one column with a header type different
-	// from StringProperty, then the first line is not the header
-	if (columnHeaderType[i] != StringProperty::propertyTypename) {
-	  setUseFirstLineAsPropertyName(false);
-	  break;
-	}
+        // If there is at least one column with a header type different
+        // from StringProperty, then the first line is not the header
+        if (columnHeaderType[i] != StringProperty::propertyTypename) {
+          setUseFirstLineAsPropertyName(false);
+          break;
+        }
       }
     }
+
     parser->parse(this,&progress);
   }
   else {

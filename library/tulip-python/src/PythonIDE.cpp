@@ -572,16 +572,19 @@ void PythonIDE::saveModule(int tabIdx) {
     _pythonInterpreter->deleteModule(moduleName);
     _ui->modulesTabWidget->setTabText(tabIdx, moduleName+".py");
     QString fileName = getModuleEditor(tabIdx)->getFileName();
+
     // string module special case
     if (fileName.isEmpty()) {
       QString tabText = _ui->modulesTabWidget->tabText(tabIdx);
       fileName = tabText.replace("&", "");
     }
+
     QFileInfo fileInfo(fileName);
 
     if (getModuleEditor(tabIdx)->saveCodeToFile()) {
       _ui->modulesTabWidget->setTabToolTip(tabIdx, fileInfo.absoluteFilePath());
     }
+
     writeModulesFilesList();
     writeFileToProject(PYTHON_MODULES_PATH+"/"+fileInfo.fileName(), getModuleEditor(tabIdx)->getCleanCode());
 
@@ -1297,7 +1300,7 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
     fs->close();
     delete fs;
 
-  // for backward compatibility with Tulip < 5.0, load scripts and modules saved in old Python Script view configurations
+    // for backward compatibility with Tulip < 5.0, load scripts and modules saved in old Python Script view configurations
   }
   else {
     QStringList entries = project->entryList("views", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
@@ -1357,6 +1360,7 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
   QIODevice *fs = _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::WriteOnly | QIODevice::Text);
 
   QStringList existingScriptFilenames;
+
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     QString fileName = getMainScriptEditor(i)->getFileName();
 
@@ -1365,16 +1369,20 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
       if (fileName.isEmpty()) {
         QString tabText = _ui->mainScriptsTabWidget->tabText(i);
         tabText = tabText.replace("&", "");
+
         if (tabText.endsWith(".py")) {
           fileName = tabText;
-        } else {
+        }
+        else {
           fileName = "[no file]" + QString::number(i);
         }
-      } else if (!_project->projectFile().isEmpty()) {
+      }
+      else if (!_project->projectFile().isEmpty()) {
         // if the Python file is relatively located to the project file
         // only save a relative path for reloading the code from the file even on a different computer
         // this is usefull for instance when Tulip project and Python files are stored on a git repository
         QFileInfo projectFileInfo(_project->projectFile());
+
         if (fileName.startsWith(projectFileInfo.absolutePath())) {
           fileName = fileName.mid(projectFileInfo.absolutePath().length()+1);
         }
@@ -1452,12 +1460,14 @@ void PythonIDE::writeModulesFilesList(int deleted) {
 
   for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
     QString fileName = getModuleEditor(i)->getFileName();
+
     if (deleted == -1 || i != deleted) {
       // string module special case
       if (fileName.isEmpty()) {
         QString tabText = _ui->modulesTabWidget->tabText(i);
         fileName = tabText.replace("&", "");
       }
+
       fs->write((fileName+"\n").toUtf8());
       existingModuleFilenames.append(QFileInfo(fileName).fileName());
     }
@@ -1493,13 +1503,15 @@ void PythonIDE::writeScriptFileToProject(int idx, const QString &scriptFileName,
 }
 
 void PythonIDE::deleteFilesFromProjectIfRemoved(const QString &projectDir, const QStringList &existingFilenames) {
-    QStringList filesInProject = _project->entryList(projectDir);
-    foreach(const QString &filename, filesInProject) {
-      if (filename == "files") continue;
-      if (!existingFilenames.contains(filename)) {
-        _project->removeFile(projectDir + "/" + filename);
-      }
+  QStringList filesInProject = _project->entryList(projectDir);
+
+  foreach(const QString &filename, filesInProject) {
+    if (filename == "files") continue;
+
+    if (!existingFilenames.contains(filename)) {
+      _project->removeFile(projectDir + "/" + filename);
     }
+  }
 }
 
 void PythonIDE::pluginSaved(int idx) {
@@ -1639,7 +1651,8 @@ void PythonIDE::saveScript(int tabIdx, bool clear, bool showFileDialog) {
       _pythonInterpreter->resetConsoleWidget();
 
       fileName = fileInfo.fileName();
-    } else {
+    }
+    else {
 
       if (tabText.contains(".py")) {
         fileName = tabText;

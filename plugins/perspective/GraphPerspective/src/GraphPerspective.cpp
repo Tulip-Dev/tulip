@@ -348,7 +348,8 @@ void GraphPerspective::showLogger() {
       resetLoggerDialogPosition();
       firstTime = false;
     }
-  } else {
+  }
+  else {
     _logger->hide();
   }
 }
@@ -1390,14 +1391,14 @@ void GraphPerspective::CSVImport() {
   }
 
   // get the number of line displayed in the logger
-  unsigned int nbLogsBefore = 
+  unsigned int nbLogsBefore =
     _logger->countByType(GraphPerspectiveLogger::Error);
   nbLogsBefore += _logger->countByType(GraphPerspectiveLogger::Warning);
 
   wizard.setGraph(g);
 
   tlp::ObserverHolder oh;
-  
+
   g->push();
   int result = wizard.exec();
 
@@ -1409,6 +1410,7 @@ void GraphPerspective::CSVImport() {
     else {
       g->pop();
     }
+
     return;
   }
   else {
@@ -1432,6 +1434,7 @@ void GraphPerspective::CSVImport() {
     if ((nbLogsAfter != nbLogsBefore) &&
         (QMessageBox::question(_mainWindow, "CSV Parse errors found", QString("When parsing your CSV file,<br/> %1 error(s) has been encountered.<br/>Do you want to see them?").arg(nbLogsAfter - nbLogsBefore), QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes))
       showLogger();
+
     g->popIfNoUpdates();
   }
 }
