@@ -22,6 +22,7 @@
 
 #include <QMap>
 #include <QTabWidget>
+#include <QTabBar>
 
 #include <tulip/tulipconf.h>
 
@@ -60,6 +61,8 @@ public:
   void increaseFontSize();
 
   void decreaseFontSize();
+
+  QTabBar *tabBar() const;
 
 signals:
 

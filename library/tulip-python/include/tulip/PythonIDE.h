@@ -52,6 +52,8 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
   tlp::TulipProject *_project;
   tlp::GraphHierarchiesModel *_graphsModel;
   bool _scriptStopped;
+  bool _saveFilesToProject;
+  bool _notifyProjectModified;
 
   QMap<QString, QString> _editedPluginsClassName;
   QMap<QString, QString> _editedPluginsType;
@@ -69,14 +71,16 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
   void clearErrorIndicators() const;
   bool loadModule(const QString &fileName);
   void saveModule(int tabIdx);
-  void saveAllModules();
+
   bool reloadAllModules() const;
+  void createTulipProjectPythonPaths();
   void writeScriptsFilesList(int deleted=-1);
   void writePluginsFilesList(int deleted=-1);
   void writeModulesFilesList(int deleted=-1);
   QString readProjectFile(const QString &filePath);
   void writeScriptFileToProject(int idx, const QString &scriptFileName, const QString &scriptContent);
   void writeFileToProject(const QString &projectFile, const QString &fileContent);
+  void deleteFilesFromProjectIfRemoved(const QString &projectDir, const QStringList &existingFilenames);
 
 public :
 
@@ -84,7 +88,7 @@ public :
   ~PythonIDE();
 
   void setProject(tlp::TulipProject *project);
-  void savePythonFilesAndWriteToProject();
+  void savePythonFilesAndWriteToProject(bool notifyProjectModified = false);
   void setGraphsModel(tlp::GraphHierarchiesModel* model);
   void clearPythonCodeEditors();
 
@@ -125,12 +129,14 @@ private slots:
   void currentTabChanged(int index);
   void loadPythonPlugin();
   void savePythonPlugin();
+  void saveAllPlugins();
   void registerPythonPlugin(bool clear=true);
   void removePythonPlugin();
   void newFileModule();
   void newStringModule();
   void loadModule();
   void saveModule();
+  void saveAllModules();
   void scrollToEditorLine(const QUrl &);
   void increaseFontSize();
   void decreaseFontSize();
@@ -142,7 +148,7 @@ private slots:
   void newScript();
   void loadScript();
   void saveScript();
-  void saveImportAllScripts();
+  void saveAllScripts();
   void executeCurrentScript();
   void stopCurrentScript();
   void pauseCurrentScript();
