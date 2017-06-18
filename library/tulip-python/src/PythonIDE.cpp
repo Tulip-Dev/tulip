@@ -1768,6 +1768,13 @@ void PythonIDE::executeCurrentScript() {
 
   if (scriptExecOk) {
     _pythonInterpreter->runString("del main");
+
+    // no need to keep new graph state in memory as the script
+    // only performed read only operations on the graph
+    if (_ui->useUndoCB->isChecked()) {
+      graph->popIfNoUpdates();
+    }
+
   }
   else {
 
