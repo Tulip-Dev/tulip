@@ -184,6 +184,9 @@ public:
   bool showStatusBar() const;
   void setShowStatusBar(bool);
 
+  bool loggerAnchored() const;
+  void setLoggerAnchored(bool);
+
   void treatEvent(const Event &message);
 
 private:

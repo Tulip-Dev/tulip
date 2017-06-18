@@ -26,24 +26,30 @@
 #include <QClipboard>
 #include <QMenu>
 #include <QPushButton>
+#include <QShowEvent>
+#include <QHideEvent>
 
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipSettings.h>
 
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QDialog(parent,Qt::Tool), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
+  QDialog(parent, Qt::Tool), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
+  _pythonOutput(false) {
   _ui->setupUi(this);
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
   QPushButton *copybutton = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "&Copy selection", this);
   _ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
+  QPushButton *clearbutton = new QPushButton("Clear", this);
+  _ui->buttonBox->addButton(clearbutton, QDialogButtonBox::ActionRole);
   connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
   connect(copybutton, SIGNAL(clicked()), this, SLOT(copy()));
+  connect(clearbutton, SIGNAL(clicked()), this, SLOT(clear()));
   QPushButton* resetb = _ui->buttonBox->button(QDialogButtonBox::Reset);
   connect(resetb, SIGNAL(clicked()), this, SLOT(clear()));
   connect(resetb, SIGNAL(clicked()), this, SLOT(hide()));
-  QPushButton *resetPosButton = new QPushButton("Reset position", this);
-  _ui->buttonBox->addButton(resetPosButton, QDialogButtonBox::ActionRole);
-  connect(resetPosButton, SIGNAL(clicked()), this, SIGNAL(resetLoggerPosition()));
+  connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(setAnchored(bool)));
+  _ui->anchoredCB->setChecked(tlp::TulipSettings::instance().loggerAnchored());
 }
 
 GraphPerspectiveLogger::~GraphPerspectiveLogger() {
@@ -194,4 +200,52 @@ bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
   }
 
   return false;
+}
+
+void GraphPerspectiveLogger::showEvent(QShowEvent *evt) {
+  QDialog::showEvent(evt);
+  if (!_windowGeometry.isNull()) {
+    restoreGeometry(_windowGeometry);
+  }
+}
+
+void GraphPerspectiveLogger::hideEvent(QHideEvent *evt) {
+
+  _windowGeometry = saveGeometry();
+  QDialog::hideEvent(evt);
+}
+
+void GraphPerspectiveLogger::setGeometry(int x, int y, int w, int h) {
+  setMinimumSize(QSize(0,0));
+  setMaximumSize(QSize(16777215, 16777215));
+  QDialog::setGeometry(x, y, w, h);
+  _windowGeometry = saveGeometry();
+  if (_anchored) {
+    setMinimumSize(size());
+    setMaximumSize(size());
+  }
+}
+
+void GraphPerspectiveLogger::setAnchored(bool anchored) {
+  _anchored = anchored;
+  if (_anchored) {
+    setWindowFlags(windowFlags() & ~Qt::Tool);
+    setWindowFlags(windowFlags() | Qt::Popup);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_X11NetWmWindowTypeUtility, false);
+    setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, true);
+    setMinimumSize(size());
+    setMaximumSize(size());
+    emit resetLoggerPosition();
+  } else {
+    setWindowFlags(windowFlags() & ~Qt::Popup);
+    setWindowFlags(windowFlags() | Qt::Tool);
+    setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_X11NetWmWindowTypeUtility, true);
+    setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, false);
+    setMinimumSize(QSize(0,0));
+    setMaximumSize(QSize(16777215, 16777215));
+  }
+  tlp::TulipSettings::instance().setLoggerAnchored(anchored);
+  show();
 }

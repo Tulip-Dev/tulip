@@ -24,10 +24,14 @@
 #include <QDebug>
 #include <QDialog>
 #include <QMap>
+#include <QByteArray>
 
 namespace Ui {
 class GraphPerspectiveLogger;
 }
+
+class QShowEvent;
+class QHideEvent;
 
 class GraphPerspectiveLogger: public QDialog {
   Q_OBJECT
@@ -36,6 +40,8 @@ class GraphPerspectiveLogger: public QDialog {
   Ui::GraphPerspectiveLogger* _ui;
   bool _pythonOutput;
   QMap<int, int> _logCounts;
+  QByteArray _windowGeometry;
+  bool _anchored;
 
 public:
 
@@ -60,7 +66,18 @@ public:
 
   bool eventFilter(QObject *, QEvent *);
 
+  void showEvent(QShowEvent *);
+  void hideEvent(QHideEvent *);
+
+  bool anchored() const {
+    return _anchored;
+  }
+
+  void setGeometry(int x, int y, int w, int h);
+
 public slots:
+  void setAnchored(bool anchored);
+
   void clear();
 
 private slots:
