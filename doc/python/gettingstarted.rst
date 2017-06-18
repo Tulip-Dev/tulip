@@ -23,8 +23,8 @@ The **Python REPL** (Read Eval Print Loop) panel is accessible through the "Pyth
 at the bottom of the Tulip GUI (see :ref:`Figure 1<fig1>`). It enables to execute Python statements
 in an interactive manner. A combo box allows to select a graph from those currently loaded in the
 Tulip software. The selected graph is then bound to a global Python variable named "graph".
-
-.. warning:: All modifications that have been performed on a graph through the Python REPL cannot be undone.
+Since Tulip 5.0, the undo / redo features on graph state is now handled in that component, meaning
+every graph modification performed by the executed Python statements can be reverted.
 
 .. _fig1:
 .. figure:: tulipPythonREPL.png
