@@ -139,42 +139,24 @@ On the following example, we declare a character buffer that will contain the pa
 
   static const char * paramHelp[] = {
     // type
-    HTML_HELP_OPEN()         \
-    HTML_HELP_DEF("type", "String Collection") \
-    HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
-    HTML_HELP_DEF("default", "linear")   \
-    HTML_HELP_BODY() \
-    "If linear, the input property must be a Double or Integer property." \
-    "The minimum value is mapped to one end of the color scale," \
-    "the maximum value is mapped to the other end, and a linear interpolation " \
-    "is used between both.<BR>" \
-    "If uniform, this is the same except for the interpolation: the value are sorted, " \
-    "numbered, and a linear interpolation is used on those numbers" \
-    "(in other words, only the order is taken into account, not the actual values).<BR>" \
-    "Finally, if enumerated, the input property can be of any type. Each possible " \
-    "value is mapped to a distinct color in no specific order." \
-    HTML_HELP_CLOSE(),
+    "If linear, the input property must be a Double or Integer property."
+    "The minimum value is mapped to one end of the color scale,"
+    "the maximum value is mapped to the other end, and a linear interpolation "
+    "is used between both.<br>"
+    "If uniform, this is the same except for the interpolation: the value are sorted, "
+    "numbered, and a linear interpolation is used on those numbers"
+    "(in other words, only the order is taken into account, not the actual values).<br>"
+    "Finally, if enumerated, the input property can be of any type. Each possible "
+    "value is mapped to a distinct color in no specific order.",
+
     // property
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF("type", "PropertyInterface") \
-    HTML_HELP_BODY() \
-    "This property is used to get the values affected to graph items." \
-    HTML_HELP_CLOSE(),
+    "This property is used to get the values affected to graph items.",
+
     // target
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN()         \
-    HTML_HELP_DEF("type", "String Collection") \
-    HTML_HELP_DEF("values", "nodes <BR> edges") \
-    HTML_HELP_DEF("default", "nodes")  \
-    HTML_HELP_BODY() \
-    "Whether colors are computed for nodes or for edges."  \
-    HTML_HELP_CLOSE(),
+    "Whether colors are computed for nodes or for edges.",
+
     // color
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF("type", "ColorScale") \
-    HTML_HELP_BODY() \
-    "Color scale used to transform a scalar into a color." \
-    HTML_HELP_CLOSE(),
+    "Color scale used to transform a scalar into a color."
   };
 
 Then, we can add the parameters in the constructor by writing the following lines::

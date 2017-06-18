@@ -47,6 +47,14 @@ print("""
 
    </ul>
 
+.. |pstart| raw:: html
+
+   <p>
+
+.. |pend| raw:: html
+
+   </p>
+
 """, file=f)
 
 print('.. py:currentmodule:: tulip\n', file=f)
@@ -67,6 +75,7 @@ def formatSphinxDoc(doc):
   doc = doc.replace('<i>', ' |istart| ').replace('</i>', ' |iend| ')
   doc = doc.replace('<li>', ' |listart| ').replace('</li>', ' |liend| ')
   doc = doc.replace('<ul>', ' |ulstart| ').replace('</ul>', ' |ulend| ')
+  doc = doc.replace('<p>', ' |pstart| ').replace('</p>', ' |pend| ')
   return doc
 
 
@@ -212,7 +221,7 @@ for cat in sorted(plugins.keys()):
         paramType = paramType.decode('utf-8')
         paramDefValue = paramDefValue.decode('utf-8')
         paramDir = paramDir.decode('utf-8')
-        paramHelp = paramHelp.decode('utf-8')
+        paramHelp = paramHelp.decode('utf-8').replace('\n', ' |br| ')
       paramsTable.append([paramName, paramType, paramDefValue, paramDir, paramHelp])
     if len(paramsTable) > 0:
       writeSection('Parameters', '"')
