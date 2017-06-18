@@ -284,7 +284,7 @@ public:
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a vector of nodes.
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    * Every node contained in the given vector is added to the subgraph.
    * Every edge connecting any two nodes in the set of given nodes is also added.
    * @param nodes The nodes to add to the subgraph. All the edges between these nodes are added too.

@@ -800,7 +800,7 @@ Since Tulip 4.10, the following icons (based on Font Awesome 4.6) are also defin
   * :const:`tlp.TulipFontAwesome.Wpforms` (:faicon:`wpforms`)
   * :const:`tlp.TulipFontAwesome.Yoast` (:faicon:`yoast`)
 
-Since Tulip 4.11, the following icons (based on Font Awesome 4.7) are also defined:
+Since Tulip 5.0, the following icons (based on Font Awesome 4.7) are also defined:
 
   * :const:`tlp.TulipFontAwesome.AddressBook` (:faicon:`address-book`)
   * :const:`tlp.TulipFontAwesome.AddressBookO` (:faicon:`address-book-o`)

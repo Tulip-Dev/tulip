@@ -72,7 +72,7 @@ public:
   /**
    * @brief Gets a list of the extensions file format when compressed with gzip this export plugin saves to.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @return :string the extension that this export module saves to.
    **/
@@ -83,7 +83,7 @@ public:
   /**
    * @brief Gets a list of all extensions file format (normal and gzipped) this export plugin saves to.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @return the list of file extensions this export plugin saves to.
    */

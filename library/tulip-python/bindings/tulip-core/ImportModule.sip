@@ -70,7 +70,7 @@ This abstract class describes an import plugin.
 %Docstring
 tlp.ImportModule.fileExtensions()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 This method returns the extensions of file formats this plugin can import.
 Derived classes can implement it in order for the plugin to be automatically called
@@ -83,7 +83,7 @@ by the :func:`tlp.loadGraph` function.
 %Docstring
 tlp.ImportModule.gzipFileExtensions()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 This method returns the extensions of gzipped file formats this plugin can import.
 Derived classes can implement it in order for the plugin to be automatically called
@@ -96,7 +96,7 @@ by the :func:`tlp.loadGraph` function.
 %Docstring
 tlp.ImportModule.allFileExtensions()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 This method returns all the extensions (normal and gzipped) of file formats this plugin can import.
 

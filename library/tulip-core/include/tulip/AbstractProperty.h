@@ -130,7 +130,7 @@ public:
   /**
    * @brief Sets the value assigned as the default one to the future added nodes.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param v the new value to set on future added nodes.
    *
@@ -145,7 +145,7 @@ public:
    *
    * @since Tulip 4.10
    *
-   * @deprecated Since Tulip 4.11 this method signature is deprecated, use method setValueToGraphNodes instead
+   * @deprecated Since Tulip 5.0 this method signature is deprecated, use method setValueToGraphNodes instead
    *
    * @param v The value to set to all nodes.
    * @param graph A graph that defines the set of nodes
@@ -162,7 +162,7 @@ public:
    * Only the nodes from that graph will have their value modified in the property
    * and the default node value will not be modified.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param v The value to set to all nodes.
    * @param graph A graph that defines the set of nodes
@@ -177,7 +177,7 @@ public:
   /**
    * @brief Sets the value assigned as the default one to the future added edges.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param value the new value to set on future added edges.
    *
@@ -201,7 +201,7 @@ public:
    *
    * @since Tulip 4.10
    *
-   * @deprecated Since Tulip 4.11 this method signature is deprecated, use method setValueToGraphEdges instead
+   * @deprecated Since Tulip 5.0 this method signature is deprecated, use method setValueToGraphEdges instead
    *
    * @param v The value to set to all edges.
    * @param graph A graph that defines the set of edges
@@ -218,7 +218,7 @@ public:
    * Only the edges from that graph will have their value modified in the property
    * and the default edge value will not be modified.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param v The value to set to all edges.
    * @param graph A graph on which to modify

@@ -442,7 +442,7 @@ public:
   /**
    * Return a pointer on the property used to elementIcon
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    */
   StringProperty *getElementIcon() const {
     return getProperty<StringProperty>(VIEW_ICON);
@@ -451,7 +451,7 @@ public:
   /**
    * Set the pointer on the property used to elementIcon
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    */
   void setElementIcon(StringProperty *property) {
     setProperty(VIEW_ICON,property);

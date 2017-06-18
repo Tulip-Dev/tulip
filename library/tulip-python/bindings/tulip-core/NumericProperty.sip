@@ -303,7 +303,7 @@ Vectors of two numbers (first element being the source node value, second one th
 %Docstring
 tlp.NumericProperty.copyProperty(graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Creates a property of the same numeric type of that property (integer or float).
 The new property will be a copy of this property's values for all

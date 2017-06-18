@@ -36,7 +36,7 @@ Tulip Python IDE
 ^^^^^^^^^^^^^^^^^
 
 A lightweight Python IDE can be accessed through the graphical interface of Tulip. Some GUI reorganisation
-has been made in Tulip 4.11 and all Python development features (except the REPL) are now centralized in a
+has been made in Tulip 5.0 and all Python development features (except the REPL) are now centralized in a
 separated window. It can be displayed by clicking on the "Python IDE" button located in the left part of
 the Tulip interface.
 

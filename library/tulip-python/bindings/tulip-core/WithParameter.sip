@@ -215,7 +215,7 @@ Adds an integer parameter to the plug-in.
 %Docstring
 tlp.WithParameter.addUnsignedIntegerParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Adds an unsigned integer parameter to the plug-in.
 

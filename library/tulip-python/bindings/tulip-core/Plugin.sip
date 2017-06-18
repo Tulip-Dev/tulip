@@ -115,7 +115,7 @@ Returns the Tulip release number.
 %Docstring
 tlp.Plugin.icon()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns the icon file path associated to the plugin.
 

@@ -120,7 +120,7 @@ public:
   /**
    * @brief Removes all files in the project and unset project file if any
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    */
   void clearProject();
 
@@ -128,7 +128,7 @@ public:
    * @brief Sets the file where to save the project
    * @param projectFile absolute path to a .tlpx file
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    */
   void setProjectFile(const QString &projectFile);
 

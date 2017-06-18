@@ -207,7 +207,7 @@ static void setViewPropertiesDefaults(Graph *g) {
     g->getProperty<StringProperty>(icon)->setAllEdgeValue(TulipFontAwesome::QuestionCircle);
   }
 
-  // for backward compatibility with Tulip < 4.11
+  // for backward compatibility with Tulip < 5.0
   if (g->existLocalProperty(fontAwesomeIcon)) {
     StringProperty* faiProp = g->getProperty<StringProperty>(fontAwesomeIcon);
     StringProperty* iProp = g->getProperty<StringProperty>(icon);
