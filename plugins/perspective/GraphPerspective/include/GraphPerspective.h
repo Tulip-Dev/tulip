@@ -165,6 +165,7 @@ protected slots:
   void showStartMessage();
   void resetLoggerDialogPosition();
   void showHideLogger();
+  void initPythonIDE();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
