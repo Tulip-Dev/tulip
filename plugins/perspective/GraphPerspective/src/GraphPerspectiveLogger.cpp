@@ -228,6 +228,7 @@ void GraphPerspectiveLogger::setGeometry(int x, int y, int w, int h) {
 
 void GraphPerspectiveLogger::setAnchored(bool anchored) {
   _anchored = anchored;
+  bool visible = isVisible();
   if (_anchored) {
     setWindowFlags(windowFlags() & ~Qt::Tool);
     setWindowFlags(windowFlags() | Qt::Popup);
@@ -247,5 +248,8 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
     setMaximumSize(QSize(16777215, 16777215));
   }
   tlp::TulipSettings::instance().setLoggerAnchored(anchored);
-  show();
+  // force the update of the window after modifying its flags
+  if (visible) {
+    show();
+  }
 }
