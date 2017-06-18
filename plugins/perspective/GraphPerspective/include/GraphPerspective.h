@@ -164,6 +164,7 @@ protected slots:
   void workspaceButtonClicked();
   void showStartMessage();
   void resetLoggerDialogPosition();
+  void showHideLogger();
 
 protected:
   bool eventFilter(QObject *, QEvent *);

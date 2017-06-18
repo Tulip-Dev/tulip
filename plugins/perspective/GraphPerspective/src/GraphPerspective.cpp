@@ -41,6 +41,8 @@
 #include <QByteArray>
 #include <QStatusBar>
 #include <QMainWindow>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -331,23 +333,34 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   }
 
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
-    showLogger();
+    showHideLogger();
+
+  if (obj == _mainWindow && _logger &&
+      (ev->type() == QEvent::Resize || ev->type() == QEvent::Move || ev->type() == QEvent::WindowStateChange)) {
+
+    if (_logger->anchored()) {
+      resetLoggerDialogPosition();
+    }
+  }
 
   return false;
 }
 
 void GraphPerspective::showLogger() {
-  if (_logger->count() == 0)
-    return;
+  _logger->show();
+
+  static bool firstTime = true;
+
+  if (firstTime) {
+    resetLoggerDialogPosition();
+    firstTime = false;
+  }
+}
+
+void GraphPerspective::showHideLogger() {
 
   if (!_logger->isVisible()) {
-    _logger->show();
-    static bool firstTime = true;
-
-    if (firstTime) {
-      resetLoggerDialogPosition();
-      firstTime = false;
-    }
+    showLogger();
   }
   else {
     _logger->hide();
@@ -1658,13 +1671,17 @@ void GraphPerspective::workspaceButtonClicked() {
 }
 
 void GraphPerspective::resetLoggerDialogPosition() {
-  QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
+  QPoint pos = _mainWindow->mapToGlobal(_ui->exportButton->pos());
   pos.setX(pos.x()+_ui->loggerFrame->width());
-  _logger->showNormal();
+
+  if (_logger->isVisible()) {
+    _logger->showNormal();
+  }
+
   // extend the logger frame width until reaching the right side of the main window
-  _logger->move(pos);
-  _logger->resize(_mainWindow->width() - _ui->loggerFrame->width(),
-                  _mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height() - pos.y() - 2);
+  _logger->setGeometry(pos.x(), pos.y(),
+                       _mainWindow->width() - _ui->loggerFrame->width(),
+                       _mainWindow->mapToGlobal(QPoint(0,0)).y() + _mainWindow->height() - pos.y() - 2);
 }
 
 PLUGIN(GraphPerspective)
