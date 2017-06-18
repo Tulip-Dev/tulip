@@ -662,7 +662,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _pythonPanel->setModel(_graphs);
   _pythonIDE->setGraphsModel(_graphs);
   tlp::PluginLister::instance()->addListener(this);
-  _pythonIDE->setProject(_project);
+  QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
@@ -1022,13 +1022,17 @@ void GraphPerspective::openProjectFile(const QString &path) {
     QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
     _ui->workspace->readProject(_project,rootIds,prg);
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    _pythonIDE->setProject(_project);
+    QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
     delete prg;
   }
   else {
     Perspective::openProjectFile(path);
   }
+}
+
+void GraphPerspective::initPythonIDE() {
+  _pythonIDE->setProject(_project);
 }
 
 void GraphPerspective::deleteSelectedElementsFromRootGraph() {
