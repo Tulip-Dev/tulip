@@ -31,7 +31,7 @@ namespace tlp {
 /**
  * @brief Helper class for the configuration of a Material Design Icon glyph.
  *
- * @since Tulip 4.11
+ * @since Tulip 5.0
  *
  * Material Design Icons (https://materialdesignicons.com/) : a growing icon collection allows designers and developers
  * targeting various platforms to download icons in the format, color and size they need for any project.

@@ -501,7 +501,7 @@ Creates and returns a sub-graph of this graph (or the parent of this graph) that
 %Docstring
 tlp.Graph.inducedSubGraph(nodeSet[, parentSubGraph, name])
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Creates and returns a new sub-graph of the graph induced by a set of nodes.
 The sub-graph contains all the nodes from the set and all the existing edges
@@ -522,7 +522,7 @@ between two nodes in the set including self-loops.
 %Docstring
 tlp.Graph.inducedSubGraph(nodes[, parentSubGraph, name])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Creates and returns a new sub-graph of the graph induced by a set of nodes.
 The sub-graph contains all the nodes from the set and all the existing edges
@@ -1554,7 +1554,7 @@ tlp::node getSink() const;
 %Docstring
 tlp.Graph.getSink()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Finds the first node whose output degree equals 0.
 Returns the found node or an invalid one if there is no sink.
@@ -1569,7 +1569,7 @@ Returns the found node or an invalid one if there is no sink.
 %Docstring
 tlp.Graph.nodes()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns the list of nodes belonging to the graph.
 
@@ -1581,7 +1581,7 @@ Returns the list of nodes belonging to the graph.
 %Docstring
 tlp.Graph.nodePos(node)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns the position of a node in the list of nodes belonging to the graph
 that can be accessed through the :meth:`tlp.Graph.nodes` method.
@@ -1832,7 +1832,7 @@ Returns the underlying graph of a meta node.
 %Docstring
 tlp.Graph.edges()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns the list of edges belonging to the graph.
 
@@ -1845,7 +1845,7 @@ Returns the list of edges belonging to the graph.
 %Docstring
 tlp.Graph.edgePos(edge)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns the position of an edge in the list of edges belonging to the graph
 that can be accessed through the :meth:`tlp.Graph.edges` method.
@@ -1996,7 +1996,7 @@ Returns an iterator on the underlying edges of a meta edge.
 %Docstring
 tlp.Graph.allEdges(node)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns the list of all edges adjacent to a given node.
 
@@ -3762,7 +3762,7 @@ Returns :const:`True` if the current state updates can be undone then replayed.
 %Docstring
 tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Closes a set of existing nodes into a metanode and returns it.
 Edges from nodes in the set to other nodes are replaced with
@@ -3800,7 +3800,7 @@ edges from the metanode to the other nodes.
 %Docstring
 tlp.Graph.createMetaNode(nodes[, multiEdges=True, delAllEdge=True])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Closes a set of existing nodes into a metanode and returns it.
 Edges from nodes in the set to other nodes are replaced with

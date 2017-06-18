@@ -34,7 +34,7 @@ namespace tlp {
  * @brief Utility class used to validate that a QString contains a valid representation of a floating point number
  * including scientific notation
  *
- * @since Tulip 4.11
+ * @since Tulip 5.0
  */
 class TLP_QT_SCOPE FloatValidator : public QValidator {
 
@@ -49,7 +49,7 @@ public:
 /**
  * @brief Utility class implementing a QDoubleSpinBox supporting scientific notation
  *
- * @since Tulip 4.11
+ * @since Tulip 5.0
  */
 class TLP_QT_SCOPE ScientificDoubleSpinBox : public QDoubleSpinBox {
 

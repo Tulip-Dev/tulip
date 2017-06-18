@@ -67,7 +67,7 @@ public:
    * @brief Gets the extensions of the gzipped file formats this plugin can import.
    * e.g. a TLP import would return 'tlp.gz and tlpz'.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @return the list of gzipped file extensions the plugin can import.
    **/
@@ -78,7 +78,7 @@ public:
   /**
    * @brief Gets all the extensions (normal and gzipped) of the file formats this plugin can import.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @return the list of file extensions the plugin can import.
    **/

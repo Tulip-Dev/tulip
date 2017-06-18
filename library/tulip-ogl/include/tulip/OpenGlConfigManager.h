@@ -47,7 +47,7 @@ public:
   /**
    * Returns the OpenGL version number supported by the host system as a string.
    *
-   * \since Tulip 4.11
+   * \since Tulip 5.0
    */
   std::string getOpenGLVersionString() const;
 

@@ -33,7 +33,7 @@ void bfs(tlp::Graph *graph, std::vector<tlp::node> &nodes /Out/);
 %Docstring
 tlp.bfs(graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Performs a breadth-first search on a graph and returns a list
 containing the nodes of the graph in the order they have been visited.
@@ -76,7 +76,7 @@ containing the nodes of the graph in the order they have been visited.
 %Docstring
 tlp.dfs(graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Performs a depth-first search on a graph and returns a list
 containing the nodes of the graph in the order they have been visited.

@@ -213,7 +213,7 @@ virtual bool setNodeDefaultStringValue( const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setNodeDefaultStringValue(str)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the value assigned as the default one to the future added nodes from a string representation.
 
@@ -248,7 +248,7 @@ tlp.PropertyInterface.setAllNodeStringValue(str, graph)
 
 .. versionadded:: 4.10
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Sets the same value for all nodes in a graph in converting the given string representation of a value.
 Only the nodes from that graph will have their value modified in the property
@@ -276,7 +276,7 @@ Returns :const:`True` if the given string representation has been successfully c
 %Docstring
 tlp.PropertyInterface.setStringValueToGraphNodes(str, graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the same value for all nodes in a graph in converting the given string representation of a value.
 Only the nodes from that graph will have their value modified in the property
@@ -299,7 +299,7 @@ virtual bool setEdgeDefaultStringValue( const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setEdgeDefaultStringValue(str)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the value assigned as the default one to the future added edges from a string representation.
 
@@ -334,7 +334,7 @@ tlp.PropertyInterface.setAllEdgeStringValue(str, graph)
 
 .. versionadded:: 4.10
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Sets the same value for all edges in a graph in converting the given string representation of a value.
 Only the edges from that graph will have their value modified in the property
@@ -362,7 +362,7 @@ virtual bool setStringValueToGraphEdges( const std::string & strVal , tlp::Graph
 %Docstring
 tlp.PropertyInterface.setStringValueToGraphEdges(str, graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the same value for all edges in a graph in converting the given string representation of a value.
 Only the edges from that descendant graph will have their value modified in the property

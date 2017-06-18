@@ -27,7 +27,7 @@ class TulipMaterialDesignIcons {
 
 %Docstring
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Helper class for the configuration of a Material Design Icon glyph.
 

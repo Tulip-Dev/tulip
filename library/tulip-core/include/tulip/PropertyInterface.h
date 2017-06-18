@@ -206,7 +206,7 @@ public:
   /**
    * @brief Sets the value assigned as the default one to the future added nodes from a string representation.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on future added nodes.
    *
@@ -231,7 +231,7 @@ public:
    *
    * @since Tulip 4.10
    *
-   * @deprecated Since Tulip 4.11 this method signature is deprecated use method setStringValueToGraphNodes instead
+   * @deprecated Since Tulip 5.0 this method signature is deprecated use method setStringValueToGraphNodes instead
    *
    * @param value A string representing the new value to set on all the nodes.
    * @param graph A graph that defines the set of nodes.
@@ -247,7 +247,7 @@ public:
    * Only the nodes from that graph will have their value modified in the property
    * and the default node value will not be modified.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on all the nodes.
    * @param graph A graph that defines the set of nodes.
@@ -261,7 +261,7 @@ public:
   /**
    * @brief Sets the value assigned as the default one to the future added edges from a string representation.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on future added edges.
    *
@@ -286,7 +286,7 @@ public:
    *
    * @since Tulip 4.10
    *
-   * @deprecated Since Tulip 4.11 this method signature is deprecated use method setStringValueToGraphEdges instead
+   * @deprecated Since Tulip 5.0 this method signature is deprecated use method setStringValueToGraphEdges instead
    *
    * @param value A string representing the new value to set on all the edges.
    * @param graph A graph that defines the set of edges.
@@ -302,7 +302,7 @@ public:
    * Only the edges from that graph will have their value modified in the property
    * and the default edge value will not be modified.
    *
-   * @since Tulip 4.11
+   * @since Tulip 5.0
    *
    * @param value A string representing the new value to set on all the edges.
    * @param graph A graph that defines the set of edges.

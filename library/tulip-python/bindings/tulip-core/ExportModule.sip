@@ -67,7 +67,7 @@ This abstract class describes an export plugin.
 %Docstring
 tlp.ExportModule.fileExtension()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 This method returns the extension of the file format this export plugin saves to.
 Derived class can implement it in order for the plugin to be automatically called
@@ -80,7 +80,7 @@ by the :func:`tlp.saveGraph` function.
 %Docstring
 tlp.ExportModule.gzipFileExtensions()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 This method returns a list of the extensions file format when compressed with gzip
 this export plugin saves to.
@@ -94,7 +94,7 @@ by the :func:`tlp.saveGraph` function.
 %Docstring
 tlp.ExportModule.allFileExtensions()
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 This method returns a list of all extensions file format (normal and gzipped) this export plugin saves to.
 

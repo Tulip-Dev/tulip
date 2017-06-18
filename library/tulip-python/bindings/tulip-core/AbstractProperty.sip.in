@@ -46,7 +46,7 @@ public :
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setNodeDefaultValue(val)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the value assigned as the default one to the future added nodes.
 
@@ -75,7 +75,7 @@ tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val, graph)
 
 .. versionadded:: 4.10
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Sets the same value for all nodes in a graph.
 Only the nodes from that graph will have their value modified in the property
@@ -100,7 +100,7 @@ The signature of that method is now deprecated, use :meth:`tlp.@PROPERTY_TYPE@Pr
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setValueToGraphNodes(val, graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the same value for all nodes in a graph.
 Only the nodes from that graph will have their value modified in the property
@@ -120,7 +120,7 @@ and the default node value will not be modified.
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setEdgeDefaultValue(val)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the value assigned as the default one to the future added edges.
 
@@ -149,7 +149,7 @@ tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val, graph)
 
 .. versionadded:: 4.10
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Sets the same value for all edges in a graph.
 Only the edges from that graph will have their value modified in the property
@@ -174,7 +174,7 @@ The signature of that method is now deprecated, use :meth:`tlp.@PROPERTY_TYPE@Pr
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setValueToGraphEdges(val, graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the same value for all edges in a graph.
 Only the edges from that graph will have their value modified in the property
@@ -438,7 +438,7 @@ Sets the value of a particular edge.
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getNodesEqualTo(val[, graph = None])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns an iterator through all nodes belonging to the attached graph
 whose associated value is equal to the one given in parameter.
@@ -470,7 +470,7 @@ whose associated value is equal to the one given in parameter.
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getEdgesEqualTo(val[, graph = None])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns an iterator through all edges belonging to the attached graph
 whose associated value is equal to the one given in parameter.
@@ -694,7 +694,7 @@ All previous values are lost and the given value is assigned as the default one 
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeDefaultValue(val)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the value assigned as the default one to the future added nodes.
 
@@ -708,7 +708,7 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val, graph)
 
 .. versionadded:: 4.10
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Sets the same list of values for all nodes in a graph.
 Only the nodes from that graph will have their value modified in the property
@@ -732,7 +732,7 @@ The signature of that method is now deprecated, use :meth:`tlp.@VEC_PROPERTY_TYP
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setValueToGraphNodes(val, graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the same list of values for all nodes in a graph.
 Only the nodes from that graph will have their value modified in the property
@@ -752,7 +752,7 @@ and the default node value will not be modified.
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeDefaultValue(val)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the value assigned as the default one to the future added edges.
 
@@ -780,7 +780,7 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val, graph)
 
 .. versionadded:: 4.10
 
-.. deprecated:: 4.11
+.. deprecated:: 5.0
 
 Sets the same list of values for all edges in a graph.
 Only the edges from that graph will have their value modified in the property
@@ -804,7 +804,7 @@ The signature of that method is now deprecated, use :meth:`tlp.@VEC_PROPERTY_TYP
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setValueToGraphEdges(val, graph)
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Sets the same list of values for all edges in a graph.
 Only the edges from that graph will have their value modified in the property
@@ -1312,7 +1312,7 @@ Copies the values hold by a property in this property.
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodesEqualTo(val[, graph = None])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns an iterator through all nodes belonging to the attached graph
 whose associated value is equal to the one given in parameter.
@@ -1334,7 +1334,7 @@ tlp::Iterator<tlp::edge>* getEdgesEqualTo(const std::vector<@CPP_TYPE@> &val /Ty
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgesEqualTo(val[, graph = None])
 
-.. versionadded:: 4.11
+.. versionadded:: 5.0
 
 Returns an iterator through all edges belonging to the attached graph
 whose associated value is equal to the one given in parameter.
