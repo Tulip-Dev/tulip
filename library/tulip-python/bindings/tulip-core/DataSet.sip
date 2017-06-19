@@ -56,6 +56,7 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
   if (refDataSet) {
     *ret = *refDataSet;
   }
+  enableErrorMessages(false);
   while (PyDict_Next(dict, &pos, &key, &val)) {
     std::string *keyStr = reinterpret_cast<std::string*>(sipConvertToType(key, sipFindType("std::string"), Py_None, SIP_NOT_NONE, &state, &err));
     tlp::DataType *dataType = NULL;
@@ -68,6 +69,7 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
       break;
     }
   }
+  enableErrorMessages(true);
   return ret;
 }
 

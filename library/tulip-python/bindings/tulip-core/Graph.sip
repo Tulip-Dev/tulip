@@ -99,32 +99,6 @@ tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned i
 
 bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataSet, unsigned int eltId, bool nodeValues);
 
-template <class Tnode, class Tedge, class Tprop>
-bool tryToSetPropertyValue(const tlp::DataSet *dataSet, const std::pair<std::string, tlp::DataType*> &entry,
-                           tlp::AbstractProperty<Tnode, Tedge, Tprop> *prop, unsigned int eltId,
-                           bool nodeValue, std::string &errMsg, const std::string &nodeTypename, const std::string &edgeTypename) {
-  if (nodeValue) {
-    if (entry.second->getTypeName() == std::string(typeid(typename Tnode::RealType).name())) {
-      typename Tnode::RealType val;
-      dataSet->get(entry.first, val);
-      prop->setNodeValue(tlp::node(eltId), val);
-    } else {
-      errMsg = "Type error when trying to setting node value for the " + prop->getTypename() + " property named \"" + entry.first + "\"\n" +
-               "Value must strictly be of type : " + nodeTypename;
-    }
-  } else {
-    if (entry.second->getTypeName() == std::string(typeid(typename Tedge::RealType).name())) {
-      typename Tedge::RealType val;
-      dataSet->get(entry.first, val);
-      prop->setEdgeValue(tlp::edge(eltId), val);
-    } else {
-      errMsg = "Type error when trying to setting edge value for the " + prop->getTypename() + " property named \"" + entry.first + "\"\n" +
-               "Value must strictly be of type : " + edgeTypename;
-    }
-  }
-  return errMsg.empty();
-}
-
 %End
 
 %ModuleCode
@@ -239,94 +213,54 @@ tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned i
 }
 
 bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataSet, unsigned int eltId, bool nodeValues) {
+  PyObject *graphWrapper = sipGetPyObject(graph, sipFindType("tlp::Graph"));
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pSetItem = PyUnicode_FromString("__setitem__");
+  PyObject *pGetItem = PyUnicode_FromString("__getitem__");
+#else
+  PyObject *pSetItem = PyString_FromString("__setitem__");
+  PyObject *pGetItem = PyString_FromString("__getitem__");
+#endif
+
+  bool ok = true;
+
   tlp::Observable::holdObservers();
-  std::string errMsg;
   std::pair<std::string, tlp::DataType*> entry;
   forEach(entry, dataSet->getValues()) {
-    tlp::PropertyInterface *prop = graph->getProperty(entry.first);
-    if (prop) {
-      tlp::BooleanProperty *booleanProp = dynamic_cast<tlp::BooleanProperty*>(prop);
-      tlp::ColorProperty *colorProp = dynamic_cast<tlp::ColorProperty*>(prop);
-      tlp::DoubleProperty *doubleProp = dynamic_cast<tlp::DoubleProperty*>(prop);
-      tlp::IntegerProperty *integerProp = dynamic_cast<tlp::IntegerProperty*>(prop);
-      tlp::LayoutProperty *layoutProp = dynamic_cast<tlp::LayoutProperty*>(prop);
-      tlp::SizeProperty *sizeProp = dynamic_cast<tlp::SizeProperty*>(prop);
-      tlp::StringProperty *stringProp = dynamic_cast<tlp::StringProperty*>(prop);
-      tlp::BooleanVectorProperty *booleanVecProp = dynamic_cast<tlp::BooleanVectorProperty*>(prop);
-      tlp::ColorVectorProperty *colorVecProp = dynamic_cast<tlp::ColorVectorProperty*>(prop);
-      tlp::DoubleVectorProperty *doubleVecProp = dynamic_cast<tlp::DoubleVectorProperty*>(prop);
-      tlp::IntegerVectorProperty *integerVecProp = dynamic_cast<tlp::IntegerVectorProperty*>(prop);
-      tlp::CoordVectorProperty *coordVecProp = dynamic_cast<tlp::CoordVectorProperty*>(prop);
-      tlp::SizeVectorProperty *sizeVecProp = dynamic_cast<tlp::SizeVectorProperty*>(prop);
-      tlp::StringVectorProperty *stringVecProp = dynamic_cast<tlp::StringVectorProperty*>(prop);
 
-      if (booleanProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, booleanProp, eltId, nodeValues, errMsg, "bool", "bool")) {
-          break;
-        }
-      } else if (colorProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, colorProp, eltId, nodeValues, errMsg, "tlp.Color", "tlp.Color")) {
-          break;
-        }
-      } else if (doubleProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, doubleProp, eltId, nodeValues, errMsg, "float", "float")) {
-          break;
-        }
-      } else if (integerProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, integerProp, eltId, nodeValues, errMsg, "int", "int")) {
-          break;
-        }
-      } else if (layoutProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, layoutProp, eltId, nodeValues, errMsg, "tlp.Coord", "list of tlp.Coord")) {
-          break;
-        }
-      } else if (sizeProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, sizeProp, eltId, nodeValues, errMsg, "tlp.Size", "tlp.Size")) {
-          break;
-        }
-      } else if (stringProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, stringProp, eltId, nodeValues, errMsg, "str", "str")) {
-          break;
-        }
-      } else if (booleanVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, booleanVecProp, eltId, nodeValues, errMsg, "list of bool", "list of bool")) {
-          break;
-        }
-      } else if (colorVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, colorVecProp, eltId, nodeValues, errMsg, "list of tlp.Color", "list of tlp.Color")) {
-          break;
-        }
-      } else if (doubleVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, doubleVecProp, eltId, nodeValues, errMsg, "list of float", "list of float")) {
-          break;
-        }
-      } else if (integerVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, integerVecProp, eltId, nodeValues, errMsg, "list of int", "list of int")) {
-          break;
-        }
-      } else if (coordVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, coordVecProp, eltId, nodeValues, errMsg, "list of tlp.Coord", "list of tlp.Coord")) {
-          break;
-        }
-      } else if (sizeVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, sizeVecProp, eltId, nodeValues, errMsg, "list of tlp.Size", "list of tlp.Size")) {
-          break;
-        }
-      } else if (stringVecProp) {
-        if (!tryToSetPropertyValue(dataSet, entry, stringVecProp, eltId, nodeValues, errMsg, "list of str", "list of str")) {
-          break;
-        }
-      }
+#if PY_MAJOR_VERSION >= 3
+    PyObject *pPropName = PyUnicode_FromString(entry.first.c_str());
+#else
+    PyObject *pPropName = PyString_FromString(entry.first.c_str());
+#endif
+    PyObject *pElement = NULL;
+    if (nodeValues) {
+      pElement = sipConvertFromNewType(new tlp::node(eltId), sipFindType("tlp::node"), Py_None);
     } else {
-      errMsg = "Error : no graph property named \"" + entry.first + "\".";
+      pElement = sipConvertFromNewType(new tlp::edge(eltId), sipFindType("tlp::edge"), Py_None);
+    }
+
+    PyObject *propProxy = PyObject_CallMethodObjArgs(graphWrapper, pGetItem, pPropName, NULL);
+
+    PyObject *ret = PyObject_CallMethodObjArgs(propProxy, pSetItem, pElement, getPyObjectFromDataType(entry.second), NULL);
+
+    if (!ret) {
+      ok = false;
+    }
+
+    Py_XDECREF(pPropName);
+    Py_XDECREF(pElement);
+    Py_XDECREF(propProxy);
+    Py_XDECREF(ret);
+
+    if (!ok) {
       break;
     }
   }
-  if (!errMsg.empty()) {
-    PyErr_SetString(PyExc_Exception, errMsg.c_str());
-  }
   tlp::Observable::unholdObservers();
-  return errMsg.empty();
+  Py_XDECREF(pGetItem);
+  Py_XDECREF(pSetItem);
+  return ok;
 }
 
 %End
@@ -821,14 +755,28 @@ Returns an iterator over all the descendant graphs of the graph.
 
 //===========================================================================================
 
-  tlp::node addNode();
+  tlp::node addNode(tlp::DataSet *propertiesValues = NULL);
 %Docstring
-tlp.Graph.addNode()
+tlp.Graph.addNode([propertiesValues])
 
 Adds a new node in the graph and returns it. This node is also added in all 
 the graph's ancestors to maintain the sub-graph relation between graphs.
+Since Tulip 5.0, it is also possible to set graph properties values for the newly added node
+through the use of a dictionnary (see :meth:`tlp.Graph.setNodePropertiesValues` for more details).
 
+:param propertiesValues: an optionnal dictionnary containing graph properties values for the newly added node
+:type propertiesValues: a dictionnary
 :rtype: :class:`tlp.node`
+%End
+
+%MethodCode
+  sipRes = new tlp::node(sipCpp->addNode());
+  if (a0) {
+    sipIsErr = setPropertiesValuesFromDataSet(sipCpp, a0, sipRes->id, true) ? 0 : 1;
+    if (sipIsErr) {
+      sipCpp->delNode(*sipRes);
+    }
+  }
 %End
 
 //===========================================================================================
@@ -1042,17 +990,21 @@ the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  tlp::edge addEdge(const tlp::node src, const tlp::node tgt);
+  tlp::edge addEdge(const tlp::node src, const tlp::node tgt, tlp::DataSet *propertiesValues = NULL);
 %Docstring
-tlp.Graph.addEdge(src, tgt)
+tlp.Graph.addEdge(src, tgt[, propertiesValues])
 
 Adds a new edge in the graph and returns it. This edge is also added in all 
 the graph's ancestors to maintain the sub-graph relation between graphs.
+Since Tulip 5.0, it is also possible to set graph properties values for the newly added edge
+through the use of a dictionnary (see :meth:`tlp.Graph.setEdgePropertiesValues` for more details).
 
 :param src: the source node of the new edge
 :param tgt: the target node of the new edge
 :type src: :class:`tlp.node`
 :type tgt: :class:`tlp.node`
+:param propertiesValues: an optionnal dictionnary containing graph properties values for the newly added edge
+:type propertiesValues: a dictionnary
 :rtype: :class:`tlp.edge`
 :throws: an exception if the provided source or target node does not belong to the graph
 %End
@@ -1061,6 +1013,12 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
   if (sipCpp->isElement(*a0)) {
     if (sipCpp->isElement(*a1)) {
       sipRes = new tlp::edge(sipCpp->addEdge(*a0, *a1));
+      if (a2) {
+        sipIsErr = setPropertiesValuesFromDataSet(sipCpp, a2, sipRes->id, false) ? 0 : 1;
+        if (sipIsErr) {
+          sipCpp->delEdge(*sipRes);
+        }
+      }
     } else {
       sipIsErr = throwInvalidNodeException(sipCpp, *a1);
     }
@@ -3758,6 +3716,19 @@ Returns :const:`True` if the current state updates can be undone then replayed.
 
 //===========================================================================================
 
+  void popIfNoUpdates();
+%Docstring
+tlp.Graph.popIfNoUpdates()
+
+.. versionadded:: 5.0
+
+Remove last pushed state if no updates have been recorded.
+
+:rtype: boolean
+%End
+
+//===========================================================================================
+
   tlp::node createMetaNode(const std::set<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
 tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
@@ -4155,8 +4126,8 @@ tlp.Graph.setNodePropertiesValues(node, propertiesValues)
 .. versionadded:: 4.8.1
 
 Sets the values of multiple graph properties for a given node through the use of a dictionnary.
-The keys of that dictionnary must be of string type and must correspond to existing graph properties names
-while the values must be typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
+The keys of that dictionnary must be of string type and correspond to graph properties names (possibly not created yet)
+while the values must be typed according to those of the available Tulip properties (bool, int, float, str, :class:`tlp.Color`,
 :class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
 
 :param node: a node of the graph
@@ -4183,8 +4154,8 @@ tlp.Graph.setEdgePropertiesValues(edge, propertiesValues)
 .. versionadded:: 4.8.1
 
 Sets the values of multiple graph properties for a given edge through the use of a dictionnary.
-The keys of that dictionnary must be of string type and must correspond to existing graph properties names
-while the values must be typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
+The keys of that dictionnary must be of string type and correspond to graph properties names (possibly not created yet)
+while the values must be typed according to those of the available Tulip properties (bool, int, float, str, :class:`tlp.Color`,
 :class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
 
 :param edge: an edge of the graph
