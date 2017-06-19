@@ -23,6 +23,11 @@ IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_CUSTOM_TARGET(copyTulipOglBitmaps ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fontb.ttf ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/fontb.ttf
                                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/font.ttf ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/font.ttf
                                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fontawesome-webfont.ttf ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/fontawesome-webfont.ttf
+                                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fontawesome-webfont.woff ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/fontawesome-webfont.woff
+                                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fontawesome-webfont.woff2 ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/fontawesome-webfont.woff2
+                                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/materialdesignicons-webfont.ttf ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/materialdesignicons-webfont.ttf
+                                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/materialdesignicons-webfont.woff ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/materialdesignicons-webfont.woff
+                                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/materialdesignicons-webfont.woff2 ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/materialdesignicons-webfont.woff2
                                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/halfCylinderTexture.png ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/halfCylinderTexture.png
                                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/cylinderTexture.png ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/cylinderTexture.png
                                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/roundTexture.png ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/roundTexture.png)
