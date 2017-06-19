@@ -1,7 +1,6 @@
 
 SET(SRCS
   ColorScaleConfigDialog.cpp
-  ColorScaleWidget.cpp
   CopyPropertyDialog.cpp
   CSVGraphImport.cpp
   CSVGraphMappingConfigurationWidget.cpp

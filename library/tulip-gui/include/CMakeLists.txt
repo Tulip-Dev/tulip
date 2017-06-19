@@ -1,7 +1,6 @@
 INSTALL(FILES
   tulip/AboutTulipPage.h
   tulip/ColorScaleConfigDialog.h
-  tulip/ColorScaleWidget.h
   tulip/CopyPropertyDialog.h
   tulip/CSVContentHandler.h
   tulip/CSVGraphImport.h
