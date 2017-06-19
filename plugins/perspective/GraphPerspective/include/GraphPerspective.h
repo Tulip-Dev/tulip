@@ -165,7 +165,9 @@ protected slots:
   void showStartMessage();
   void resetLoggerDialogPosition();
   void showHideLogger();
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void initPythonIDE();
+#endif
 
 protected:
   bool eventFilter(QObject *, QEvent *);
