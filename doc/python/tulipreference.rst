@@ -493,7 +493,9 @@ Update management
 
 .. automethod:: tulip::tlp.Graph.canUnpop
 
-.. automethod:: tulip::tlp.Graph.canPopThenUnpop()
+.. automethod:: tulip::tlp.Graph.canPopThenUnpop
+
+.. automethod:: tulip::tlp.Graph.popIfNoUpdates
 
 Meta-nodes management
 ^^^^^^^^^^^^^^^^^^^^^

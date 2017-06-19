@@ -168,6 +168,8 @@ extern int throwPropertyNameExistsException(const tlp::Graph *graph, const std::
 
 extern void printErrorMessage(const std::string &errMsg);
 
+extern void enableErrorMessages(bool enable);
+
 extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
 extern void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat);
@@ -214,12 +216,20 @@ int throwPropertyNameExistsException(const tlp::Graph *graph, const std::string 
   return -1;
 }
 
+static bool errorMessagesEnabled = true;
+
+void enableErrorMessages(bool enable) {
+  errorMessagesEnabled = enable;
+}
+
 void printErrorMessage(const std::string &errMsg) {
-  std::string pythonCode = "import sys\n"
-                           "sys.stderr.write(\"";
-  pythonCode += errMsg;
-  pythonCode += "\\n\")";
-  PyRun_SimpleString(pythonCode.c_str());
+  if (errorMessagesEnabled) {
+    std::string pythonCode = "import sys\n"
+                             "sys.stderr.write(\"";
+    pythonCode += errMsg;
+    pythonCode += "\\n\")";
+    PyRun_SimpleString(pythonCode.c_str());
+  }
 }
 
 void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
