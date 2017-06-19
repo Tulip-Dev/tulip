@@ -81,7 +81,6 @@ SET(SRCS
   StringEditor.cpp
   VectorEditor.cpp
   GlyphRenderer.cpp
-  TulipFontWidget.cpp
   ClearableLineEdit.cpp
   CaptionItem.cpp
   CaptionGraphicsItem.cpp
@@ -157,7 +156,6 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/TextureFileDialog.ui
   ../designer/TulipFontDialog.ui
   ../designer/TulipFontIconDialog.ui
-  ../designer/TulipFontWidget.ui
   ../designer/VectorEditor.ui
   ../designer/Workspace.ui
   ../designer/WorkspacePanel.ui
@@ -214,7 +212,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/TreeViewComboBox.h
   ../include/tulip/TulipFont.h
   ../include/tulip/TulipFontDialog.h
-  ../include/tulip/TulipFontWidget.h
   ../include/tulip/TulipItemDelegate.h
   ../include/tulip/TulipMimes.h
   ../include/tulip/TulipModel.h
