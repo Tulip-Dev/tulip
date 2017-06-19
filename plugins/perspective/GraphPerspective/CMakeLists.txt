@@ -34,6 +34,10 @@ designer/PreferencesDialog.ui
 designer/SearchWidget.ui
 )
 
+IF(TULIP_BUILD_PYTHON_COMPONENTS)
+  ADD_DEFINITIONS("-DTULIP_BUILD_PYTHON_COMPONENTS")
+ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
+  
 QTX_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
@@ -51,8 +55,6 @@ include/SearchWidget.h
 )
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTULIP_BUILD_PYTHON_COMPONENTS")
 
 INCLUDE_DIRECTORIES(${TulipPythonInclude})
 

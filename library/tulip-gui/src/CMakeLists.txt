@@ -106,7 +106,7 @@ ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
   SET(PYTHON_PART_SRCS PythonVersionChecker.cpp)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTULIP_BUILD_PYTHON_COMPONENTS")
+  ADD_DEFINITIONS("-DTULIP_BUILD_PYTHON_COMPONENTS")
   SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS TLP_PYTHON="${PYTHON_VERSION}" SIP_VERSION="${SIP_VERSION_STR}")
   IF(MSYS2_PYTHON)
     SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS ${TLPGUI_PYTHON_COMPILE_DEFINITIONS} MSYS2_PYTHON=1 PYTHON_HOME_PATH="${PYTHON_HOME_PATH}/../")
@@ -140,6 +140,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/CSVImportConfigurationWidget.ui
   ../designer/CSVImportWizard.ui
   ../designer/CSVParserConfigurationWidget.ui
+  ../designer/CSVPropertyDialog.ui
   ../designer/DoubleStringsListSelectionWidget.ui
   ../designer/ElementInformationWidget.ui
   ../designer/GridOptionsWidget.ui
