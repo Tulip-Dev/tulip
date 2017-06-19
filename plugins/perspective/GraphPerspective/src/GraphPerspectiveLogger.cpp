@@ -204,6 +204,7 @@ bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
 
 void GraphPerspectiveLogger::showEvent(QShowEvent *evt) {
   QDialog::showEvent(evt);
+
   if (!_windowGeometry.isNull()) {
     restoreGeometry(_windowGeometry);
   }
@@ -220,6 +221,7 @@ void GraphPerspectiveLogger::setGeometry(int x, int y, int w, int h) {
   setMaximumSize(QSize(16777215, 16777215));
   QDialog::setGeometry(x, y, w, h);
   _windowGeometry = saveGeometry();
+
   if (_anchored) {
     setMinimumSize(size());
     setMaximumSize(size());
@@ -229,6 +231,7 @@ void GraphPerspectiveLogger::setGeometry(int x, int y, int w, int h) {
 void GraphPerspectiveLogger::setAnchored(bool anchored) {
   _anchored = anchored;
   bool visible = isVisible();
+
   if (_anchored) {
     setWindowFlags(windowFlags() & ~Qt::Tool);
     setWindowFlags(windowFlags() | Qt::Popup);
@@ -238,7 +241,8 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
     setMinimumSize(size());
     setMaximumSize(size());
     emit resetLoggerPosition();
-  } else {
+  }
+  else {
     setWindowFlags(windowFlags() & ~Qt::Popup);
     setWindowFlags(windowFlags() | Qt::Tool);
     setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
@@ -247,7 +251,9 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
     setMinimumSize(QSize(0,0));
     setMaximumSize(QSize(16777215, 16777215));
   }
+
   tlp::TulipSettings::instance().setLoggerAnchored(anchored);
+
   // force the update of the window after modifying its flags
   if (visible) {
     show();
