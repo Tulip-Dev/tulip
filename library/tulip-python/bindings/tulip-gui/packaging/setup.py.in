@@ -16,7 +16,7 @@ import subprocess
 # On MacOS, we need to relink dylibs and set correct rpaths in
 # order for the modules to be imported in a portable way when
 # distributed through pip
-if platform.system() == 'Darwin':
+if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist_wheel':
 
     def getDyLibDependencies(dylib):
         otool = subprocess.check_output('otool -L %s' % dylib, shell=True)
@@ -33,13 +33,8 @@ if platform.system() == 'Darwin':
     def relinkDyLibAndSetRpaths(dylib, rpaths=[]):
         libs = getDyLibDependencies(dylib)
         for L in libs:
-            # prefer system libs for libz and libbz
-            if 'libz.1.dylib' in L:
-                subprocess.call(
-                   'install_name_tool -change %s /usr/lib/libz.1.dylib %s 2>/dev/null' %
-                    (L, dylib),
-                    shell=True)
-            elif 'libbz2.1.0.dylib' in L:
+            # prefer system libs for libbz
+            if 'libbz2.1.0.dylib' in L:
                 subprocess.call(
                     'install_name_tool -change %s /usr/lib/libbz2.1.0.dylib %s 2>/dev/null' %
                     (L, dylib),
@@ -69,7 +64,7 @@ if platform.system() == 'Darwin':
     tulipGuiNativeLibsPath = os.getcwd() + '/tulipgui/native/'
     tulipGuiNativePluginsLibsPath = os.getcwd() + '/tulipgui/native/plugins/'
 
-    print("Relinking dylibs and setting rpaths ...")
+    print("Relinking dylibs and setting rpaths in tulip-gui wheel ...")
     relinkDyLibsInDirAndSetRpaths(tulipOglNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/'])
     relinkDyLibsInDirAndSetRpaths(tulipOglNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/'])
     relinkDyLibsInDirAndSetRpaths(tulipGuiNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/', '@loader_path/../../tulipogl/native/'])

@@ -437,11 +437,6 @@ MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
   ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDMACRO(INSTALL_TULIP_PLUGIN)
 
-MACRO(COPY_REAL_LIB symlink destination)
-  GET_FILENAME_COMPONENT(REAL_LIB ${symlink} REALPATH)
-  FILE(COPY ${REAL_LIB} DESTINATION ${destination})
-ENDMACRO(COPY_REAL_LIB)
-
 # Convert a Windows path (C:/folder) to a Msys path (/C/folder)
 MACRO(WINDOWS_TO_MSYS_PATH WindowsPath ResultingPath)
   STRING(REGEX REPLACE "([a-zA-Z]):" "/\\1" ${ResultingPath} "${WindowsPath}")
