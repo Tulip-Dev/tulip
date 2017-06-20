@@ -1641,6 +1641,10 @@ void GraphPerspective::showHideSideBar() {
     _ui->docksWidget->setVisible(true);
     _ui->sidebarButton->setToolTip("Hide Sidebar");
   }
+
+  if (_logger->anchored()) {
+    resetLoggerDialogPosition();
+  }
 }
 
 void GraphPerspective::showHideStatusBar() {
@@ -1691,7 +1695,8 @@ void GraphPerspective::resetLoggerDialogPosition() {
   // extend the logger frame width until reaching the right side of the main window
   _logger->setGeometry(pos.x(), pos.y(),
                        _mainWindow->width() - _ui->loggerFrame->width(),
-                       _mainWindow->mapToGlobal(QPoint(0,0)).y() + _mainWindow->height() - pos.y() - 2 - _mainWindow->statusBar()->height());
+                       _mainWindow->mapToGlobal(QPoint(0,0)).y() + _mainWindow->height() - pos.y() - 2 -
+                       (_mainWindow->statusBar()->isVisible() ? _mainWindow->statusBar()->height() : 0));
 }
 
 PLUGIN(GraphPerspective)
