@@ -1,18 +1,56 @@
 {% extends "!layout.html" %}
 
-{%- block extrahead %} 
+{%- block extrahead %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/1.9.32/css/materialdesignicons.min.css">
     <script>
         // from the sphinx-trap theme (https://github.com/jfardello/Sphinxtrap)
         $(document).ready(function(){
-            // The faicon role produces <em> elements, <i> are strictly graphical. 
-            $("em.icon-holder").each(function(){ 
-                var newtag = $("<i></i>")
-                newtag.attr('class', $(this).attr('class'))
-                $(this).replaceWith(newtag)
-            })
+            // The faicon role produces <em> elements, <i> are strictly graphical.
+            $("em.icon-holder").each(function(){
+                var newtag = $("<i></i>");
+                newtag.attr('class', $(this).attr('class'));
+                $(this).replaceWith(newtag);
+            });
+
+            // hack to get a better rendering of Tulip plugin parameters tables
+            $("table.docutils colgroup").remove();
+
         })
     </script>
 {% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+          {%- block document %}
+            {{ super() }}
+          {%- endblock %}
+        </div>
+        <div class="sidebarwrapper">
+          <div class="sidebar">
+            {%- block sidebartoc %}
+            <h3>{{ _('Table Of Contents') }}</h3>
+            {{ toctree() }}
+            {%- endblock %}
+            {%- block sidebarsearch %}
+            <div role="search">
+              <h3 style="margin-top: 1.5em;">{{ _('Search') }}</h3>
+              <form class="search" action="{{ pathto('search') }}" method="get">
+                  <input type="text" name="q" />
+                  <input type="submit" value="{{ _('Go') }}" />
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+              </form>
+            </div>
+            {%- endblock %}
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+{% endblock %}
+
+{% set script_files = script_files + ["_static/sidebar.js"] %}
 
