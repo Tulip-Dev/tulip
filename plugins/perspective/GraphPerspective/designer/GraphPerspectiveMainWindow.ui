@@ -676,7 +676,7 @@ color: white;
            <height>75</height>
           </size>
          </property>
-        <property name="text">
+         <property name="text">
           <string>Export</string>
          </property>
          <property name="icon">
@@ -1078,7 +1078,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="shortcut">
-                  <string>Ctrl+P</string>
+                  <string>Ctrl+Shift+P</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -1406,11 +1406,12 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
-     <string>Window</string>
+     <string>&amp;Window</string>
     </property>
     <addaction name="actionFull_screen"/>
     <addaction name="action_Close_All"/>
     <addaction name="actionMessages_log"/>
+    <addaction name="actionPython_IDE"/>
     <addaction name="actionFind_plugins"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1699,7 +1700,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/full-screen.png</normaloff>:/tulip/graphperspective/icons/16/full-screen.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Full screen</string>
+    <string>Full &amp;Screen</string>
    </property>
    <property name="shortcut">
     <string>F11</string>
@@ -1809,7 +1810,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</iconset>
    </property>
    <property name="text">
-    <string>Find &amp;Plugins</string>
+    <string>&amp;Find Plugins</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+H</string>
@@ -1909,6 +1910,14 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionSelect_All_Edges">
    <property name="text">
     <string>Select all edges</string>
+   </property>
+  </action>
+  <action name="actionPython_IDE">
+   <property name="text">
+    <string>&amp;Python IDE</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+P</string>
    </property>
   </action>
  </widget>

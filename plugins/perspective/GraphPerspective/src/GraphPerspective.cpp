@@ -429,7 +429,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // set win/Mac dependent tooltips with ctrl shortcut
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->exposeModeButton, "Toggle the Expose mode", "E");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->searchButton, "Show/hide the graph's elements search panel", "F");
-  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton, "Show/hide the Python interpreter (Read Eval Print Loop) panel", "P");
+  SET_TIPS_WITH_CTRL_SHORTCUT(_ui->pythonButton, "Show/hide the Python interpreter (Read Eval Print Loop) panel", "Shift+P");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->previousPageButton, "Show previous panel", "Shift+Left");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->nextPageButton, "Show next panel", "Shift+Right");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNewProject, "Open a new  empty Tulip perspective", "Shift+N");
@@ -451,7 +451,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowUserDocumentation, "Display the User handbook in a navigator", "?");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowDevelDocumentation, "Display the Developer handbook in a navigator", "D");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowPythonDocumentation, "Display the Tulip python documentation in a navigator", "P");
-    SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "M");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "M");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPython_IDE, "Show the Python IDE", "Alt+P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins, "Search in installed plugins", "Alt+H");
@@ -570,6 +571,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   // Connect actions
   connect(_ui->actionMessages_log,SIGNAL(triggered()),this,SLOT(showLogger()));
+  connect(_ui->actionPython_IDE,SIGNAL(triggered()),this,SLOT(showPythonIDE()));
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
   connect(_ui->actionExport,SIGNAL(triggered()),this,SLOT(exportGraph()));
@@ -1377,9 +1379,11 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _pythonIDE->clearPythonCodeEditors();
     _pythonIDEDialog->hide();
     _ui->developButton->setEnabled(false);
+    _ui->actionPython_IDE->setEnabled(false);
   }
   else {
     _ui->developButton->setEnabled(true);
+    _ui->actionPython_IDE->setEnabled(true);
   }
 
 #endif
