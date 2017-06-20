@@ -451,7 +451,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowUserDocumentation, "Display the User handbook in a navigator", "?");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowDevelDocumentation, "Display the Developer handbook in a navigator", "D");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowPythonDocumentation, "Display the Tulip python documentation in a navigator", "P");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "Alt+L");
+    SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionMessages_log, "Show the message log", "M");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins, "Search in installed plugins", "Alt+H");
@@ -1687,7 +1687,7 @@ void GraphPerspective::resetLoggerDialogPosition() {
   // extend the logger frame width until reaching the right side of the main window
   _logger->setGeometry(pos.x(), pos.y(),
                        _mainWindow->width() - _ui->loggerFrame->width(),
-                       _mainWindow->mapToGlobal(QPoint(0,0)).y() + _mainWindow->height() - pos.y() - 2);
+                       _mainWindow->mapToGlobal(QPoint(0,0)).y() + _mainWindow->height() - pos.y() - 2 - _mainWindow->statusBar()->height());
 }
 
 PLUGIN(GraphPerspective)

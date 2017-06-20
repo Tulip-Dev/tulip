@@ -1776,7 +1776,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Message log</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+L</string>
+    <string>Ctrl+M</string>
    </property>
   </action>
   <action name="actionExport">
