@@ -17,13 +17,14 @@ body {
   line-height: 1.4em;
   color: black;
   background-color: #ffffff;
+  overflow-x: hidden;
 }
 
 
 /* Page layout */
 
 div.header, div.content, div.footer {
-  width: 70em;
+  width: 85em;
   margin-left: auto;
   margin-right: auto;
 }
@@ -168,13 +169,12 @@ div.content-wrapper {
 }
 
 div.document {
-  width: 50em;
+  width: 64em;
   float: right;
 }
 
 div.body {
   padding-right: 2em;
-  text-align: justify;
 }
 
 div.document h1 {
