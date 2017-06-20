@@ -1,3 +1,6 @@
+# automatically generates the file tulippluginsdocumentation.rst
+# by dynamically introspecting the Tulip plugins metadata
+
 from __future__ import print_function
 import sys
 if sys.version_info[0] == 2:
@@ -7,6 +10,7 @@ from tulip import tlp
 import tulipgui
 # pip install tabulate
 import tabulate
+import re
 
 f = open('tulippluginsdocumentation.rst','w')
 
@@ -68,14 +72,30 @@ def writeSection(title, sectionChar):
     underline += sectionChar
   print(underline+'\n', file=f)
 
+def replaceHtmlTags(doc, htmlTag, htmlTagStartReplacement, htmlTagEndReplacement):
+  tmp = re.sub('^<'+htmlTag+'>', '|' + htmlTagStartReplacement + '| ', doc)
+  tmp = re.sub('^</'+htmlTag+'>', '|' + htmlTagEndReplacement + '| ', tmp)
+  tmp = re.sub('^<'+htmlTag.upper()+'>', '|' + htmlTagStartReplacement + '| ', tmp)
+  tmp = re.sub('^</'+htmlTag.upper()+'>', '|' + htmlTagEndReplacement + '| ', tmp)
+  tmp = tmp.replace('<'+htmlTag+'>', ' |' + htmlTagStartReplacement + '| ')
+  tmp = tmp.replace('</'+htmlTag+'>', ' |' + htmlTagEndReplacement + '| ')
+  tmp = tmp.replace('<'+htmlTag.upper()+'>', ' |' + htmlTagStartReplacement + '| ')
+  tmp = tmp.replace('</'+htmlTag.upper()+'>', ' |' + htmlTagEndReplacement + '| ')
+  return tmp
+
 def formatSphinxDoc(doc):
-  doc = doc.replace('<br/>', ' |br| ').replace('<br>', ' |br| ')
-  doc = doc.replace('<BR>' , ' |br| ').replace('</BR>' , ' |br| ')
-  doc = doc.replace('<b>', ' |bstart| ').replace('</b>', ' |bend| ')
-  doc = doc.replace('<i>', ' |istart| ').replace('</i>', ' |iend| ')
-  doc = doc.replace('<li>', ' |listart| ').replace('</li>', ' |liend| ')
-  doc = doc.replace('<ul>', ' |ulstart| ').replace('</ul>', ' |ulend| ')
-  doc = doc.replace('<p>', ' |pstart| ').replace('</p>', ' |pend| ')
+  doc = re.sub('^\n', '', doc)
+  doc = re.sub('\n$', '', doc)
+  doc = replaceHtmlTags(doc, 'br', 'br', 'br')
+  doc = replaceHtmlTags(doc, 'br/', 'br', 'br')
+  doc = replaceHtmlTags(doc, 'b', 'bstart', 'bend')
+  doc = replaceHtmlTags(doc, 'i', 'istart', 'iend')
+  doc = replaceHtmlTags(doc, 'li', 'listart', 'liend')
+  doc = replaceHtmlTags(doc, 'ul', 'ulstart', 'ulend')
+  doc = replaceHtmlTags(doc, 'p', 'pstart', 'pend')
+
+
+
   return doc
 
 
