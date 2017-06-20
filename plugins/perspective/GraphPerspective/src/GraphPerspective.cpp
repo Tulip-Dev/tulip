@@ -632,6 +632,13 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     _ui->actionShowPythonDocumentation->setVisible(false);
   }
 
+  if (QFile(tlpStringToQString(tlp::TulipShareDir) +
+            "doc/doxygen/html/index.html").exists()) {
+    connect(_ui->actionShowAPIDocumentation,SIGNAL(triggered()),this,SLOT(showAPIDocumentation()));
+  } else {
+    _ui->actionShowAPIDocumentation->setVisible(false);
+  }
+
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
   _ui->mainSplitter->setStretchFactor(0,0);
@@ -1630,6 +1637,10 @@ void GraphPerspective::showDevelDocumentation() {
 
 void GraphPerspective::showPythonDocumentation() {
   QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-python/html/index.html"));
+}
+
+void GraphPerspective::showAPIDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/doxygen/html/index.html"));
 }
 
 void GraphPerspective::showHideSideBar() {

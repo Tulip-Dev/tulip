@@ -101,6 +101,7 @@ public slots:
   virtual void openProjectFile(const QString &path);
 
   void showLogger();
+  void showAPIDocumentation();
   void showUserDocumentation();
   void showDevelDocumentation();
   void showPythonDocumentation();
