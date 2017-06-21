@@ -211,6 +211,7 @@ static void logMsgToStdErr(const QString &msg) {
   }
 }
 
+#define SET_TIPS(a, tt) a->setToolTip(QString(tt));a->setStatusTip(a->toolTip())
 void GraphPerspective::updateLogIconsAndCounters() {
   GraphPerspectiveLogger::LogType logType = _logger->getLastLogType();
   QFrame *logIconCounterFrame = NULL;
@@ -240,7 +241,9 @@ void GraphPerspective::updateLogIconsAndCounters() {
 
   logIconCounterFrame->setVisible(true);
   logIconLabel->setPixmap(_logger->icon(logType));
+  SET_TIPS(logIconLabel, "Click here to show/hide the message log window");
   logCounterLabel->setText(QString::number(_logger->countByType(logType)));
+  SET_TIPS(logCounterLabel, "Click here to show/hide the message log window");
 }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -399,8 +402,6 @@ protected:
 
 #define SET_TOOLTIP(a, tt) a->setToolTip(QString(tt))
 
-#define SET_TIPS(a, tt) a->setToolTip(QString(tt));a->setStatusTip(a->toolTip())
-
 void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
@@ -470,8 +471,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TIPS(_ui->csvImportButton, "Import data in the current graph using a csv formatted file");
   SET_TIPS(_ui->importButton, "Display the Graph importing wizard");
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
-  _ui->sidebarButton->setToolTip("Hide Sidebar");
-  _ui->statusbarButton->setToolTip("Hide Status bar");
+  SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
+  SET_TIPS(_ui->statusbarButton, "Hide Status bar");
   SET_TIPS(_ui->addPanelButton, "Open a new visualization panel on the current graph");
   SET_TIPS(_ui->singleModeButton, "Switch to 1-panel mode");
   SET_TIPS(_ui->splitModeButton, "Switch to 2-panels mode");
@@ -485,7 +486,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->menuOpen_recent_file->setToolTip(QString("Choose a file to open among the recently opened/saved graphs or projects"));
   SET_TOOLTIP(_ui->actionDelete, "Delete the selected elements from the current graph [Del]");
   SET_TOOLTIP(_ui->actionFull_screen, "Display the Tulip perspective in full screen [F11]");
-  SET_TOOLTIP(_ui->actionAbout_us, "Display the &quot;About Tulip&quot; information dialog [F1]");
+  SET_TOOLTIP(_ui->actionAbout_us, "Display the 'About Tulip' information dialog [F1]");
   SET_TOOLTIP(_ui->actionPlugins_Center, _ui->pluginsButton->toolTip());
   SET_TOOLTIP(_ui->actionImport_CSV, _ui->csvImportButton->toolTip());
   SET_TOOLTIP(_ui->actionSave_graph_to_file, "Write the current graph into a file");
@@ -1646,11 +1647,11 @@ void GraphPerspective::showAPIDocumentation() {
 void GraphPerspective::showHideSideBar() {
   if (_ui->docksWidget->isVisible()) {
     _ui->docksWidget->setVisible(false);
-    _ui->sidebarButton->setToolTip("Show Sidebar");
+    SET_TIPS(_ui->sidebarButton, "Show Sidebar");
   }
   else {
     _ui->docksWidget->setVisible(true);
-    _ui->sidebarButton->setToolTip("Hide Sidebar");
+    SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
   }
 
   if (_logger->anchored()) {
@@ -1663,11 +1664,11 @@ void GraphPerspective::showHideStatusBar() {
 
   if (stsBar->isVisible()) {
     stsBar->setVisible(false);
-    _ui->statusbarButton->setToolTip("Show Status bar");
+    SET_TIPS(_ui->statusbarButton, "Show Status bar");
   }
   else {
     stsBar->setVisible(true);
-    _ui->statusbarButton->setToolTip("Hide Status bar");
+    SET_TIPS(_ui->statusbarButton, "Hide Status bar");
   }
 
   TulipSettings::instance().setShowStatusBar(stsBar->isVisible());
