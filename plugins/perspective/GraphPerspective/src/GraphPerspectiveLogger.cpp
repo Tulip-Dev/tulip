@@ -39,13 +39,17 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
   QPushButton *copybutton = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "&Copy selection", this);
+  copybutton->setToolTip("Copy the selected lines into the clipboard");
   _ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
   QPushButton *clearbutton = new QPushButton("Clear", this);
+  clearbutton->setToolTip("Remove all messages");
   _ui->buttonBox->addButton(clearbutton, QDialogButtonBox::ActionRole);
   connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
   connect(copybutton, SIGNAL(clicked()), this, SLOT(copy()));
   connect(clearbutton, SIGNAL(clicked()), this, SLOT(clear()));
+  _ui->buttonBox->button(QDialogButtonBox::Close)->setToolTip("Close this window");
   QPushButton* resetb = _ui->buttonBox->button(QDialogButtonBox::Reset);
+  resetb->setToolTip("Remove all messages and close this window");
   connect(resetb, SIGNAL(clicked()), this, SLOT(clear()));
   connect(resetb, SIGNAL(clicked()), this, SLOT(hide()));
   connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(setAnchored(bool)));
