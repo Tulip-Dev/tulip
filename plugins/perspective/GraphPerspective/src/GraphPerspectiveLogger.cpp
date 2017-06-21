@@ -237,7 +237,7 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
   bool visible = isVisible();
 
   if (_anchored) {
-    setAttribute(Qt::WA_X11NetWmWindowTypeDialog, false);    
+    setAttribute(Qt::WA_X11NetWmWindowTypeDialog, false);
     setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
     setMinimumSize(size());
     setMaximumSize(size());
