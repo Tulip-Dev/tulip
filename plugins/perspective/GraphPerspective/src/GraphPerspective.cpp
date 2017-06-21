@@ -636,7 +636,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   if (QFile(tlpStringToQString(tlp::TulipShareDir) +
             "doc/doxygen/html/index.html").exists()) {
     connect(_ui->actionShowAPIDocumentation,SIGNAL(triggered()),this,SLOT(showAPIDocumentation()));
-  } else {
+  }
+  else {
     _ui->actionShowAPIDocumentation->setVisible(false);
   }
 
