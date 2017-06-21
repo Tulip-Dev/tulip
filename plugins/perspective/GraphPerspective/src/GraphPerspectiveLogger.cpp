@@ -33,7 +33,7 @@
 #include <tulip/TulipSettings.h>
 
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QDialog(parent, Qt::Tool), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
+  QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
   _pythonOutput(false) {
   _ui->setupUi(this);
   _ui->listWidget->installEventFilter(this);
@@ -237,21 +237,15 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
   bool visible = isVisible();
 
   if (_anchored) {
-    setWindowFlags(windowFlags() & ~Qt::Tool);
-    setWindowFlags(windowFlags() | Qt::Popup);
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_X11NetWmWindowTypeUtility, false);
-    setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, true);
+    setAttribute(Qt::WA_X11NetWmWindowTypeDialog, false);    
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
     setMinimumSize(size());
     setMaximumSize(size());
     emit resetLoggerPosition();
   }
   else {
-    setWindowFlags(windowFlags() & ~Qt::Popup);
-    setWindowFlags(windowFlags() | Qt::Tool);
-    setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_X11NetWmWindowTypeUtility, true);
-    setAttribute(Qt::WA_X11NetWmWindowTypeToolTip, false);
+    setAttribute(Qt::WA_X11NetWmWindowTypeDialog, true);
+    setWindowFlags(Qt::Dialog);
     setMinimumSize(QSize(0,0));
     setMaximumSize(QSize(16777215, 16777215));
   }
