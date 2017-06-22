@@ -101,8 +101,8 @@ ldd $BUNDLE_BIN_DIR/tulip_perspective | grep "=> /" | awk '{print $3}' | grep -v
 popd > /dev/null 2>&1
 
 # add Python environment
-PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/tulip/view/libPython*) | grep libpython | awk '{print $3}')
-# we need to create a symlink as the Tulip Python Script View plugin
+PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/libtulip-python*) | grep libpython | awk '{print $3}')
+# we need to create a symlink as the libtulip-python*.so
 # performs a dlopen on libpythonX.Y.so when it is loaded
 if [ "$PYTHON_LIB" != "" ]; then
     cp -v --preserve=mode $PYTHON_LIB $BUNDLE_LIB_DIR	
