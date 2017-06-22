@@ -379,27 +379,19 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 
     PyEval_SetTrace(tracefunc, NULL);
 
-    // remove exit and quit functions
+    // disable exit and quit functions
 #if PY_MAJOR_VERSION >= 3
-    PyObject *builtinModule = PyImport_ImportModule("builtins");
+    runString("import builtins;"
+              "builtins.exit = lambda *args: None;"
+              "builtins.quit= lambda *args: None;");
 #else
-    PyObject *builtinModule = PyImport_ImportModule("__builtin__");
+    runString("import __builtin__;"
+              "__builtin__.exit = lambda *args: None;"
+              "__builtin__.quit = lambda *args: None;");
 #endif
 
-    if (PyObject_HasAttrString(builtinModule, "exit"))
-      PyObject_DelAttrString(builtinModule, "exit");
-
-    if (PyObject_HasAttrString(builtinModule, "quit"))
-      PyObject_DelAttrString(builtinModule, "quit");
-
-    Py_DECREF(builtinModule);
-
-    PyObject *sysModule = PyImport_ImportModule("sys");
-
-    if (PyObject_HasAttrString(sysModule, "exit"))
-      PyObject_DelAttrString(sysModule, "exit");
-
-    Py_DECREF(sysModule);
+    runString("import sys;"
+              "sys.exit = lambda *args: None");
 
   }
 
