@@ -20,37 +20,3 @@
     </script>
 {% endblock %}
 
-{% block content %}
-    <div class="content-wrapper">
-      <div class="content">
-        <div class="document">
-          {%- block document %}
-            {{ super() }}
-          {%- endblock %}
-        </div>
-        <div class="sidebarwrapper">
-          <div class="sidebar">
-            {%- block sidebartoc %}
-            <h3>{{ _('Table Of Contents') }}</h3>
-            {{ toctree() }}
-            {%- endblock %}
-            {%- block sidebarsearch %}
-            <div role="search">
-              <h3 style="margin-top: 1.5em;">{{ _('Search') }}</h3>
-              <form class="search" action="{{ pathto('search') }}" method="get">
-                  <input type="text" name="q" />
-                  <input type="submit" value="{{ _('Go') }}" />
-                  <input type="hidden" name="check_keywords" value="yes" />
-                  <input type="hidden" name="area" value="default" />
-              </form>
-            </div>
-            {%- endblock %}
-          </div>
-        </div>
-        <div class="clearer"></div>
-      </div>
-    </div>
-{% endblock %}
-
-{% set script_files = script_files + ["_static/sidebar.js"] %}
-
