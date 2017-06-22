@@ -2,14 +2,14 @@ Module description
 ==================
 
 Graphs play an important role in many research areas, such as biology, microelectronics, social
-sciences, data mining, and computer science. Tulip (http://tulip.labri.fr) [1]_ is an
+sciences, data mining, and computer science. Tulip (http://tulip.labri.fr) [1, 2]_ is an
 Information Visualization framework dedicated to the analysis and visualization of such relational
 data. Written in C++ the framework enables the development of algorithms, visual encodings,
 interaction techniques, data models, and domain-specific visualizations.
 
 The Tulip core library is available to the Python community through the Tulip-Python
-bindings [2]_. The bindings have been developed using the `SIP <https://pypi.python.org/pypi/SIP>`_ 
-tool [3]_ from Riverbank Computed Limited, allowing to easily create quality Python bindings for any C/C++ library.  
+bindings [3]_. The bindings have been developed using the `SIP <https://pypi.python.org/pypi/SIP>`_
+tool [4]_ from Riverbank Computed Limited, allowing to easily create quality Python bindings for any C/C++ library.
 The main features provided by the bindings are the following ones:
 
 	- **Creation and manipulation of graphs** :
@@ -26,12 +26,23 @@ The main features provided by the bindings are the following ones:
 	  Tulip has been designed to be easily extensible and provides a variety of graph algorithms (layout, metric, clustering, ...)
 	  implemented as C++ plugins. All these algorithms can be called from Python.
 	  As Tulip is dedicated to graph visualization, it is provided with numerous state of the art
-	  graph layout algorithms but also a bridge to the Open Graph Drawing Framework (http://www.ogdf.net) [4]_
+    graph layout algorithms but also a bridge to the Open Graph Drawing Framework (http://www.ogdf.net) [5]_
 
 Release notes
 ==============
 
 Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
+
+    * **5.0.0**: based on Tulip 5.0.0 released on ??/??/2017
+
+      * mainly a bugs and memory leaks fix release for the Python bindings that now benefits from
+        the performance improvements recently integrated in the tulip-core C++ library
+
+      * some new methods added added in the API and some deprecated (see updated documentation)
+
+      * new Tulip plugins have been added, notably import ones like BibTex, GraphML, npm, ...
+        (see updated plugins list in the documentation)
+
 
     * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
 
@@ -124,17 +135,22 @@ enabling to create the OpenGL visualizations available in Tulip from Python.
 References
 ==========
 	  
-.. [1] David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut,
+.. [1] David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert,
+       Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet.
+       TULIP 4. Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016.
+       https://hal.archives-ouvertes.fr/hal-01359308/
+
+.. [2] David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut,
        Patrick Mary, Maylis Delest, Jonathan Dubois, and Guy Mélançon. The Tulip 3 Framework:
        A Scalable Software Library for Information Visualization Applications Based on Relational
        Data. Technical report RR-7860, INRIA, January 2012
 	   
-.. [2] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python. 
+.. [3] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python.
        EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
 	   
-.. [3] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
+.. [4] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
        C and C++ libraries. http://www.riverbankcomputing.co.uk/software/sip
 	   
-.. [4] M. Chimani, C. Gutwenger, M. Jünger, G. W. Klau, K. Klein, P. Mutzel.
+.. [5] M. Chimani, C. Gutwenger, M. Jünger, G. W. Klau, K. Klein, P. Mutzel.
        The Open Graph Drawing Framework (OGDF).
        Chapter 17 in: R. Tamassia (ed.), Handbook of Graph Drawing and Visualization, CRC Press, 2014.

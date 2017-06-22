@@ -534,7 +534,7 @@ tlp.Coord
 ^^^^^^^^^
 
 .. autoclass:: tulip::tlp.Coord
-	:members:
+  :members:
 
 
 tlp.BoundingBox
@@ -566,7 +566,8 @@ tlp.Size
 ^^^^^^^^
 
 .. autoclass:: tulip::tlp.Size
-	:members:
+
+  alias of :class:`tlp.Vec3f`
 
 
 tlp.Color

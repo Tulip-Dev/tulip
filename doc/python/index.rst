@@ -42,7 +42,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`search`
 
-.. _Tulip: http://www.tulip-software.org/
+.. _Tulip: https://tulip.labri.fr
 
 .. _SIP: http://www.riverbankcomputing.co.uk/software/sip/intro
 
