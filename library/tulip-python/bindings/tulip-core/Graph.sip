@@ -1950,7 +1950,7 @@ Returns an iterator on the underlying edges of a meta edge.
 
 //===========================================================================================
 
-  const std::vector<tlp::edge>& allEdges(const tlp::node node) const /NoCopy/;
+  const std::vector<tlp::edge>& allEdges(const tlp::node node) const;
 %Docstring
 tlp.Graph.allEdges(node)
 
@@ -1966,7 +1966,14 @@ Returns the list of all edges adjacent to a given node.
 
 %MethodCode
   if (sipCpp->isElement(*a0)) {
-    sipRes = new std::vector<tlp::edge>(sipCpp->allEdges(*a0));
+    sipRes = new std::vector<tlp::edge>();
+    const std::vector<tlp::edge> &edges = sipCpp->allEdges(*a0);
+    sipRes->reserve(edges.size());
+    for (size_t i = 0 ; i < edges.size() ; ++i) {
+      if (sipCpp->isElement(edges[i])) {
+        sipRes->push_back(edges[i]);
+      }
+    }
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp, *a0);
   }
