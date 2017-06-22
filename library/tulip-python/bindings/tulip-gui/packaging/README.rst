@@ -2,15 +2,17 @@ Module description
 ==================
 
 Graphs play an important role in many research areas, such as biology, microelectronics, social
-sciences, data mining, and computer science. Tulip (http://tulip.labri.fr) [1]_ is an
+sciences, data mining, and computer science. Tulip (http://tulip.labri.fr) [1, 2]_ is an
 Information Visualization framework dedicated to the analysis and visualization of such relational
 data. Written in C++ the framework enables the development of algorithms, visual encodings,
 interaction techniques, data models, and domain-specific visualizations.
 
 The Tulip GUI library is available to the Python community through the Tulip-Python
-bindings [2]_ allowing to create and manipulate Tulip views (typically Node Link diagrams)
+bindings [3]_ allowing to create and manipulate Tulip views (typically Node Link diagrams)
 trough the tulipgui module. It has to be used with the `tulip <https://pypi.python.org/pypi/tulip-python>`_ module
 dedicated to the creation, storage and manipulation of the graphs to visualize.
+The bindings have been developed using the `SIP <https://pypi.python.org/pypi/SIP>`_
+tool [4]_ from Riverbank Computed Limited, allowing to easily create quality Python bindings for any C/C++ library.
 
 The main features provided by the bindings are the following ones:
 
@@ -25,16 +27,13 @@ Release notes
 
 Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **5.0.0**: based on Tulip 5.0.0 released on 08/12/2016
+
     * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
 
     * **4.9.0** : based on Tulip 4.9.0 released on 08/07/2016
 
     * **4.8.1** : based on Tulip 4.8.1 released on 16/02/2016
-
-    * **4.8.0.post1** :
-
-      * Fix crash on MacOS when calling OGDF layout algorithms
-      * minor fixes
 
     * **4.8.0** : Initial release based on Tulip 4.8
 
@@ -104,14 +103,19 @@ A window containing an OpenGL visualization of the graph will be created and dis
 References
 ==========
 
-.. [1] David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut,
+.. [1] David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert,
+       Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet.
+       TULIP 4. Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016.
+       https://hal.archives-ouvertes.fr/hal-01359308/
+
+.. [2] David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut,
        Patrick Mary, Maylis Delest, Jonathan Dubois, and Guy Mélançon. The Tulip 3 Framework:
        A Scalable Software Library for Information Visualization Applications Based on Relational
        Data. Technical report RR-7860, INRIA, January 2012
 
-.. [2] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python.
+.. [3] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python.
        EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
 
-.. [3] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
+.. [4] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
        C and C++ libraries. http://www.riverbankcomputing.co.uk/software/sip
 

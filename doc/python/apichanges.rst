@@ -3,6 +3,89 @@
 Release notes and API changes
 =============================
 
+Tulip-Python 5.0
+-----------------
+
+The main efforts on that release have been done in a better integration of the Python development
+features in the main Tulip software GUI. A revamped Python IDE window is now available centralizing Python
+script and Python plugin development instead of having those spread all around in the interface
+(see :ref:`Using the bindings from the Tulip Software GUI <usingBindingsInTulipGUI>`).
+
+Regarding the bindings, this is mainly a bugs and memory leaks fix release with few API changes that benefits
+from the great performance improvements recently integrated in the tulip-core C++ library.
+
+New Tulip plugins have also been added (see :ref:`updated list <tulippluginsdoc>`), notably
+a bunch of import ones : social network models, Bibtex files, GraphML files, npm package dependencies graph, ...
+
+Bugs fixes
+^^^^^^^^^^
+
+The following bugs have been corrected since the 4.10 release:
+
+  * fix a regression that prevented to use :class:`tlp.Vec3f` class as an alias for :class:`tlp.Size`
+
+  * fix the impossibility to import the :mod:`tulip` module when using Python 3.6 on Linux
+
+  * string constants defined in class :class:`tlp.TulipFontAwesome` were not valid when using Python 3.x
+    due to a conversion issue
+
+  * fix crash when not passing parameters to Tulip export plugins in function :func:`tlp.exportGraph`
+
+  * fix the use of the :ref:`file parameters improvement feature <fileParametersImprovement>` introduced
+    in Tulip-Python 4.9 for import and export plugins
+
+  * fix a regression in the :ref:`string collection plugin parameter improvement <deprecatedStringCollection>`
+    when writing Tulip Python plugins
+
+  * fix possible crashs that coud occur when a :class:`tlp.Graph` instance owned by Python and not C++
+    (for instance when using :func:`tlp.newGraph()`) is garbage collected
+
+  * on windows platform when using the Python IDE from the main Tulip GUI:
+
+    * the 'Pause script' feature is now correctly handled
+
+    * fix initialisation of tulip modules when multiple Python distributions are installed on the
+      host system (for instance those from Anaconda and Python.org)
+
+New methods and API changes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following methods have been added:
+
+  * :meth:`tlp.Graph.nodes`
+  * :meth:`tlp.Graph.nodePos`
+  * :meth:`tlp.Graph.getSink`
+  * :meth:`tlp.Graph.edges`
+  * :meth:`tlp.Graph.edgePos`
+  * :meth:`tlp.Graph.allEdges`
+  * :meth:`tlp.Graph.popIfNoUpdates`
+  * :meth:`tlp.WithParameter.addUnsignedIntegerParameter`
+  * :meth:`tlp.Plugin.icon`
+  * :meth:`tlp.ImportModule.fileExtensions`
+  * :meth:`tlp.ImportModule.gzipFileExtensions`
+  * :meth:`tlp.ImportModule.allFileExtensions`
+  * :meth:`tlp.NumericProperty.copyProperty`
+
+The signature of the method :meth:`tlp.Graph.inducedSubGraph` and :meth:`tlp.Graph.createMetaNode` have been updated,
+they should now take a list of :class:`tlp.node` instead of a set of :class:`tlp.node` as parameter.
+
+The signatures update from the last release of the methods for setting all nodes / edges values in a graph property,
+for instance :meth:`tlp.BooleanProperty.setAllNodeValue`, :meth:`tlp.DoubleProperty.setAllEdgeValue`,
+have been deprecated and will be removed in the next release. You should now use dedicated methods instead, for
+instance :meth:`tlp.BooleanProperty.setValueToGraphNodes`, :meth:`tlp.DoubleProperty.setValueToGraphEdges`.
+
+The methods :meth:`tlp.Graph.setNodePropertiesValues` and :meth:`tlp.Graph.setEdgePropertiesValues`
+now benefits from the type inference feature introduced in Tulip-Python 4.9, meaning you can now create
+properties and set their values in one call. The signatures of the methods :meth:`tlp.Graph.addNode`
+and :meth:`tlp.Graph.addEdge` have also been updated in order to set properties values while adding elements
+to a graph.
+
+All graph properties classes now have methods to return iterators on graph elements who have a
+specific value: :meth:`tlp.DoubleProperty.getNodesEqualTo`, :meth:`tlp.StringProperty.getEdgesEqualTo`, ...
+
+Last but not least, a new helper class :class:`tlp.TulipMaterialDesignIcons` has been added to ease the configuration
+of the rendering of graph nodes as icons in the main Tulip software.
+
 Tulip-Python 4.10
 -----------------
 
@@ -171,6 +254,8 @@ Before Tulip 4.9, it was necessary to create the graph properties first by calli
   graph.getDoubleProperty('mpg')
   graph.getStringProperty('origin')
   graph.getDoubleProperty('weight')
+
+.. _fileParametersImprovement:
 
 Improvements regarding the declaration and transmission of file / directory parameters for plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
