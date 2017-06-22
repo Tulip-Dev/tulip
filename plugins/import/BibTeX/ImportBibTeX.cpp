@@ -1415,7 +1415,7 @@ class ImportBibTeX : public ImportModule {
 
 public :
 
-  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014", "<p>Supported extensions: bib</p><p>Import a new graph from a BibTeX formatted file.</p>", "1.1", "File")
+  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014", "<p>Supported extensions: bib</p><p>Import a co-authorship graph from a BibTeX formatted file.</p>", "1.1", "File")
 
   ImportBibTeX(const tlp::PluginContext *context):ImportModule(context) {
     addInParameter<string>("file::filename","This parameter indicates the pathname of the file(.bib) to import.","");
