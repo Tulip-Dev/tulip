@@ -23,7 +23,7 @@ body {
 /* Page layout */
 
 div.header, div.content, div.footer {
-  width: 85em;
+  width: 70em;
   margin-left: auto;
   margin-right: auto;
 }
@@ -168,7 +168,7 @@ div.content-wrapper {
 }
 
 div.document {
-  width: 64em;
+  width: 50em;
   float: right;
 }
 
