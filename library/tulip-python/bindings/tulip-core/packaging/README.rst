@@ -35,10 +35,10 @@ Some information regarding the Tulip-Python releases pushed on the Python Packag
 
     * **5.0.0**: based on Tulip 5.0.0 released on ??/??/2017
 
-      * mainly a bugs and memory leaks fix release for the Python bindings that now benefits from
+      * mainly a bugs and memory leaks fix release for the Python bindings that now benefit from
         the performance improvements recently integrated in the tulip-core C++ library
 
-      * some new methods added added in the API and some deprecated (see updated documentation)
+      * some new methods added in the API and some deprecated (see updated documentation)
 
       * new Tulip plugins have been added, notably import ones like BibTex, GraphML, npm, ...
         (see updated plugins list in the documentation)
