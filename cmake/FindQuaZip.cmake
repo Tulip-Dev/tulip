@@ -25,7 +25,7 @@ ELSE(WIN32)
 
   # special case when using Qt5 on Linux
   IF(USE_QT5)
-    SET(QUAZIP_LIBRARY_NAME quazip5)
+    SET(QUAZIP_LIBRARY_NAME quazip5 quazip-qt5)
   ELSE(USE_QT5)
     SET(QUAZIP_LIBRARY_NAME quazip)
   ENDIF(USE_QT5)
