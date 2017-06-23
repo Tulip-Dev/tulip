@@ -674,7 +674,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
   endInsertRows();
   initIndexCache(g);
-  
+
   // listen events on the whole hierarchy
   // in order to keep track of subgraphs names, number of nodes and edges
   // must be done after the row is inserted
