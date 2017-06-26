@@ -33,7 +33,7 @@ Release notes
 
 Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
-    * **5.0.0**: based on Tulip 5.0.0 released on ??/??/2017
+    * **5.0.0**: based on Tulip 5.0.0 released on 27/06/2017
 
       * mainly a bugs and memory leaks fix release for the Python bindings that now benefit from
         the performance improvements recently integrated in the tulip-core C++ library
