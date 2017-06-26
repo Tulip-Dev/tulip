@@ -114,9 +114,6 @@ protected:
   QVariantMap _parameters;
   bool checkSocketConnected();
 
-  // used to redirect tip on _mainWindow->statusBar()
-  bool eventFilter(QObject *obj, QEvent *event);
-
 public:
   enum ProgressOption {
     NoProgressOption = 0x0,
@@ -209,6 +206,7 @@ public:
     emit resetWindowTitle();
   }
 
+
   /**
    * @brief a static function to ease the display of messages
    * on mainWindow()->statusBar()
@@ -224,14 +222,9 @@ public:
   }
 
   /**
-   * @brief a static function to enable the redirection of the statusTip or toolTip of menu actions to mainWindow->statusBar()
+   * @brief a static function to enable the redirection of the statusTip or toolTip of menu actions on mainWindow->statusBar()
    */
   static void redirectStatusTipOfMenu(QMenu* menu);
-
-  /**
-   * @brief a static function to enable the redirection of the statusTip or toolTip of QWidget Hierarchy to mainWindow->statusBar()
-   */
-  static void redirectStatusTipOfWidgetHierarchy(QWidget* qw);
 
 public slots:
   /**
