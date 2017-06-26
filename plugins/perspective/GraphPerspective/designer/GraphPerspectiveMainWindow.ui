@@ -1910,7 +1910,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Find Plugins</string>
+    <string>&amp;Find algorithms</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+H</string>
