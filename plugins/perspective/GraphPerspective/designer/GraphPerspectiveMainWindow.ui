@@ -1907,7 +1907,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionFind_plugins">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/32/magnifying-glass.png</normaloff>:/tulip/graphperspective/icons/32/magnifying-glass.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Find algorithms</string>
