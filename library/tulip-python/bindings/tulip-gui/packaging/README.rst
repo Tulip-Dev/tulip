@@ -27,7 +27,7 @@ Release notes
 
 Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
-    * **5.0.0**: based on Tulip 5.0.0 released on 08/12/2016
+    * **5.0.0**: based on Tulip 5.0.0 released on 27/06/2017
 
     * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
 
