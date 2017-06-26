@@ -457,7 +457,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPython_IDE, "Show the Python IDE", "Alt+P");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionExport, "Show the Graph exporting wizard", "E");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionOpen_Project, "Open a graph file", "O");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins, "Search in installed plugins", "Alt+H");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionFind_plugins, "Allow to find algorithms in typing text in a search field", "Alt+H");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionNew_graph, "Create a new empty graph", "N");
   // set portable tooltips
   SET_TIPS(_ui->undoButton, "Undo the latest update of the current graph");
@@ -697,9 +697,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->pluginsButton->setVisible(checkSocketConnected());
   _ui->actionPlugins_Center->setVisible(checkSocketConnected());
 #endif
-
-  // show the 'Find plugins' menu entry only if connected to the Tulip agent
-  _ui->actionFind_plugins->setVisible(checkSocketConnected());
 
   // fill menu with recent documents
   buildRecentDocumentsMenu();
