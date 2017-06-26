@@ -425,6 +425,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #else
   _ui->pythonButton->setVisible(false);
   _ui->developButton->setVisible(false);
+  _ui->actionPython_IDE->setVisible(false);
 #endif
   currentGraphChanged(NULL);
   // set win/Mac dependent tooltips with ctrl shortcut
