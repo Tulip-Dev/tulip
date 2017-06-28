@@ -805,7 +805,7 @@ background-color: rgb(160, 160, 160);</string>
             <item>
              <widget class="QRadioButton" name="centralRadioButton">
               <property name="toolTip">
-               <string>As in the human view perception,&lt;br/&gt;parallel lines are not necessarily represented as parallel&lt;br/&gt;and closer the nodes are, the bigger they are represented.</string>
+               <string>&lt;p&gt;As in the human view perception,&lt;br/&gt;parallel lines are not necessarily represented as parallel&lt;br/&gt;and closer the nodes are, the bigger they are represented.&lt;/p&gt;</string>
               </property>
               <property name="text">
                <string>Central perspecti&amp;ve (shape distorsion)</string>
