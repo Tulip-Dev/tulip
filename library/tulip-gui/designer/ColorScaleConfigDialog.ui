@@ -14,16 +14,7 @@
    <string>Color Scale Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
-   <property name="leftMargin">
-    <number>3</number>
-   </property>
-   <property name="topMargin">
-    <number>3</number>
-   </property>
-   <property name="rightMargin">
-    <number>3</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>3</number>
    </property>
    <item>
@@ -405,7 +396,10 @@ color scale</string>
             </font>
            </property>
            <property name="text">
-            <string>Most color scales are based on color schemes&lt;br/&gt;from www.ColorBrewer.org by Cynthia A. Brewer, Penn State.</string>
+            <string>&lt;p&gt;Most color scales are based on color schemes from&lt;br/&gt;&lt;a href=&quot;http://colorbrewer2.org&quot;&gt;colorbrewer2.org&lt;/a&gt; by Cynthia A. Brewer, Penn State.&lt;/p&gt;</string>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
