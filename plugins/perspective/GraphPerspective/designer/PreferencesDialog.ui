@@ -238,7 +238,7 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
            <item>
             <widget class="QLabel" name="logLabel">
              <property name="toolTip">
-              <string>Choose whether you want to log every  interactive call to an algorithm, an export or import plugin.&lt;br/&gt; The execution time can be logged too.</string>
+              <string>&lt;p&gt;Choose whether you want to log every interactive call to an algorithm, an export or import plugin.&lt;br/&gt;The execution time can be logged too.&lt;/p&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">QLabel  {font-style: normal }</string>
@@ -251,7 +251,7 @@ If not, a new random seed will be set to initialize each new random sequence.&lt
            <item>
             <widget class="QComboBox" name="logCombo">
              <property name="toolTip">
-              <string>Choose whether you want to log every  interactive call to an algorithm, an export or import plugin.&lt;br/&gt; The execution time can be logged too.</string>
+              <string>&lt;p&gt;Choose whether you want to log every interactive call to an algorithm, an export or import plugin.&lt;br/&gt;The execution time can be logged too.&lt;/p&gt;</string>
              </property>
              <item>
               <property name="text">
@@ -454,7 +454,7 @@ font: 12px;
          <item>
           <widget class="QCheckBox" name="applyDrawingDefaultsCheck">
            <property name="toolTip">
-            <string>If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currenty loaded.</string>
+            <string>&lt;p&gt;If checked, when clicking &quot;OK&quot;, &lt;br/&gt;the drawing defaults changes will be applied to the graphs currenty loaded.&lt;/p&gt;</string>
            </property>
            <property name="text">
             <string>Apply drawing defaults changes to loaded graphs</string>
@@ -477,7 +477,7 @@ font: 12px;
          <item>
           <widget class="QPushButton" name="resetAllDrawingDefaultsButton">
            <property name="toolTip">
-            <string>Reset all drawing defaults to their Tulip predefined values.&lt;br/&gt;You can also reset row specific default values in using a contextual menu displayed by a left click on the title of the corresponding row.</string>
+            <string>&lt;p&gt;Reset all drawing defaults to their Tulip predefined values.&lt;br/&gt;You can also reset row specific default values in using a contextual menu displayed by a left click on the title of the corresponding row.&lt;/p&gt;</string>
            </property>
            <property name="text">
             <string>Reset all defaults</string>
