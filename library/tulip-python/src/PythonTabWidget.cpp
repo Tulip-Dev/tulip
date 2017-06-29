@@ -46,18 +46,15 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
 
   painter.setPen(_textColor);
 #ifndef __APPLE__
-  painter.setFont(QFont("Arial", static_cast<int>(12 * tabBar()->height() / 27.0)));
+  painter.setFont(QFont("Arial", static_cast<int>(10 * tabBar()->height() / 27.0)));
 #else
-  painter.setFont(QFont("Arial", static_cast<int>(18 * tabBar()->height() / 27.0)));
+  painter.setFont(QFont("Arial", static_cast<int>(12 * tabBar()->height() / 27.0)));
 #endif
-  int firstLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(25 * tabBar()->height() / 27.0);
-  int secondLabelWidth = static_cast<int>(80 * tabBar()->height() / 27.0);
+  int labelWidth = static_cast<int>(80 * tabBar()->height() / 27.0);
   int offset = tabBar()->height() - imageWidth;
-  QRectF rect(width()-(firstLabelWidth+imageWidth+secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
-  QRectF rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y()+offset/2, imageWidth, imageWidth);
-  QRectF rect3(width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
-  painter.drawText(rect,  Qt::AlignCenter, "Powered by ");
-  painter.drawImage(rect2, pythonLogoImg);
-  painter.drawText(rect3,  Qt::AlignCenter, QString("Python ") + pythonVersion);
+  QRectF rect(width()-(imageWidth+labelWidth), tabBar()->pos().y()+offset/2, imageWidth, imageWidth);
+  QRectF rect2(width()-labelWidth, tabBar()->pos().y() + 2, labelWidth, tabBar()->height() - 2);
+  painter.drawImage(rect, pythonLogoImg);
+  painter.drawText(rect2,  Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QString("Powered by Python ") + pythonVersion) ;
 }

@@ -418,7 +418,7 @@ font: bold;</string>
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>300</height>
+            <height>100</height>
            </size>
           </property>
           <property name="styleSheet">
@@ -699,7 +699,7 @@ QToolButton:pressed {
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>300</height>
+            <height>100</height>
            </size>
           </property>
           <property name="styleSheet">
@@ -1065,7 +1065,7 @@ QToolButton:pressed {
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>300</height>
+            <height>100</height>
            </size>
           </property>
           <property name="styleSheet">
@@ -1136,7 +1136,7 @@ background-color:#838383;
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>100</height>
+           <height>50</height>
           </size>
          </property>
          <property name="openLinks">
