@@ -64,50 +64,53 @@ bool ReachableSubGraphSelection::run() {
   BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
 
   if ( dataSet!=NULL) {
-      dataSet->get("distance", maxDistance);
+    dataSet->get("distance", maxDistance);
 
-      //Get the edge orientation
-      bool found(false);
-      if(dataSet->get("edge direction",edgeDirectionCollecion))
-          found=true;
-      else
-          found = dataSet->get("edges direction",edgeDirectionCollecion); //former buggy parameter name
-      if(found) {
-          if(edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
-              edgeDirection = DIRECTED;
-          }
-          else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[1]) {
-              edgeDirection = INV_DIRECTED;
-          }
-          else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[2]) {
-              edgeDirection = UNDIRECTED;
-          }
+    //Get the edge orientation
+    bool found(false);
+
+    if(dataSet->get("edge direction",edgeDirectionCollecion))
+      found=true;
+    else
+      found = dataSet->get("edges direction",edgeDirectionCollecion); //former buggy parameter name
+
+    if(found) {
+      if(edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
+        edgeDirection = DIRECTED;
       }
-      else {
-          //If the new parameter is not defined search for the old one.
-          int direction=0;
-
-          if(dataSet->get("direction",direction)) {
-              switch(direction) {
-              case 0:
-                  edgeDirection = DIRECTED;
-                  break;
-
-              case 1:
-                  edgeDirection = INV_DIRECTED;
-                  break;
-
-              case 2:
-                  edgeDirection = UNDIRECTED;
-              }
-          }
+      else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[1]) {
+        edgeDirection = INV_DIRECTED;
       }
+      else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[2]) {
+        edgeDirection = UNDIRECTED;
+      }
+    }
+    else {
+      //If the new parameter is not defined search for the old one.
+      int direction=0;
+
+      if(dataSet->get("direction",direction)) {
+        switch(direction) {
+        case 0:
+          edgeDirection = DIRECTED;
+          break;
+
+        case 1:
+          edgeDirection = INV_DIRECTED;
+          break;
+
+        case 2:
+          edgeDirection = UNDIRECTED;
+        }
+      }
+    }
 
     //keep startingnodes for compatibility
     if(!dataSet->get("starting nodes", startNodes))
-        dataSet->get("startingnodes", startNodes);
+      dataSet->get("startingnodes", startNodes);
 
-}
+  }
+
   unsigned num_nodes=0, num_edges=0;
 
   if (startNodes) {
