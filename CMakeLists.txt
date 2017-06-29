@@ -10,6 +10,15 @@ IF(POLICY CMP0042)
   CMAKE_POLICY(SET CMP0042 NEW)
 ENDIF(POLICY CMP0042)
 
+# enable the use of ccache for Tulip developers to speed up the build process
+SET(TULIP_USE_CCACHE OFF CACHE BOOL "Do you want to use ccache to speed up the build process during Tulip development ? [OFF|ON]")
+IF(TULIP_USE_CCACHE)
+  FIND_PROGRAM(CCACHE_PROGRAM ccache)
+  IF(CCACHE_PROGRAM)
+    SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+  ENDIF(CCACHE_PROGRAM)
+ENDIF(TULIP_USE_CCACHE)
+
 PROJECT(tulip)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
