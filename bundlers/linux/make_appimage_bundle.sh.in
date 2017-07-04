@@ -106,19 +106,20 @@ PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/libtulip-python*) | grep libpython | awk '
 # performs a dlopen on libpythonX.Y.so when it is loaded
 if [ "$PYTHON_LIB" != "" ]; then
     cp -v --preserve=mode $PYTHON_LIB $BUNDLE_LIB_DIR	
-#    PYTHON_LIB_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\)$/libpython\1/')
     PYTHON_LIB_NAME=$(basename $PYTHON_LIB)
     PYTHON_LIB_SYMLINK_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\.so\).*$/libpython\1/')
     ln -s $BUNDLE_LIB_DIR/$PYTHON_LIB_NAME $BUNDLE_LIB_DIR/$PYTHON_LIB_SYMLINK_NAME 	
     PYTHON_PACKAGE_DIR=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
+    PYTHON_PACKAGE_DIR=${PYTHON_PACKAGE_DIR:0:9}
     PYTHON_PACKAGE_BUNDLE_DIR=$BUNDLE_USR_DIR/$(dirname $PYTHON_LIB | sed 's/^.*\(lib64\|lib\).*$/\1/')/$PYTHON_PACKAGE_DIR/
+    mkdir $PYTHON_PACKAGE_BUNDLE_DIR
     pushd $(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR > /dev/null 2>&1
-    PYTHON_PACKAGE_LIST=$(find . \( -type f \) \( ! -name "*.pyc" \) \( ! -name "*.pyo" \) -print)
+    if [ "$?" != "0" ]; then
+	echo "$(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR does not exist"
+	exit
+    fi
     echo "copying $(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR files into $PYTHON_PACKAGE_BUNDLE_DIR"
-    for file in $PYTHON_PACKAGE_LIST ;do
-	mkdir -p $PYTHON_PACKAGE_BUNDLE_DIR/$(dirname $file)
-	cp --preserve=mode $file $PYTHON_PACKAGE_BUNDLE_DIR/$file
-    done 		
+    find . \( -type f \) \( ! -name "*.pyc" \) \( ! -name "*.pyo" \) -exec cp --parents --preserve=mode {} $PYTHON_PACKAGE_BUNDLE_DIR \;
     popd > /dev/null 2>&1
 fi	 
 
