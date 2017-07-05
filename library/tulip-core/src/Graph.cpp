@@ -295,7 +295,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
     ExportModule* exportPlugin = PluginLister::instance()->getPluginObject<ExportModule>(*it,NULL);
     string ext(exportPlugin->fileExtension());
 
-    if (filename.rfind(ext) == filename.length() - ext.length()) {
+    if (filename.rfind(ext) != string::npos && filename.rfind(ext) == (filename.length() - ext.length())) {
       exportPluginName = exportPlugin->name();
       delete exportPlugin;
       break;
