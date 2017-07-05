@@ -112,7 +112,7 @@ if [ "$PYTHON_LIB" != "" ]; then
     PYTHON_PACKAGE_DIR=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
     PYTHON_PACKAGE_DIR=${PYTHON_PACKAGE_DIR:0:9}
     PYTHON_PACKAGE_BUNDLE_DIR=$BUNDLE_USR_DIR/$(dirname $PYTHON_LIB | sed 's/^.*\(lib64\|lib\).*$/\1/')/$PYTHON_PACKAGE_DIR/
-    mkdir $PYTHON_PACKAGE_BUNDLE_DIR
+    mkdir -p $PYTHON_PACKAGE_BUNDLE_DIR
     pushd $(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR > /dev/null 2>&1
     if [ "$?" != "0" ]; then
 	echo "$(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR does not exist"
