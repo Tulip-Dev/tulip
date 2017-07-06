@@ -42,7 +42,7 @@ done
 
 BUNDLE_DIR=$OUTPUT_DIR/$PERSPECTIVE.AppDir
 
-# if BUNDLE_DIR already exist
+# if BUNDLE_DIR already exists
 # remove it
 if [ -d $BUNDLE_DIR ]; then
   rm -rf $BUNDLE_DIR
@@ -99,6 +99,10 @@ cp -v -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR/plugins
 pushd $BUNDLE_DIR > /dev/null 2>&1
 ldd $BUNDLE_BIN_DIR/tulip_perspective | grep "=> /" | awk '{print $3}' | grep -v tulip | xargs -I '{}' cp -v '{}' ./usr/lib || true
 popd > /dev/null 2>&1
+
+# extend LD_LIBRARY_PATH to ensure PYTHON_LIBRARY can be found
+# even if a non standard installation is in use
+export LD_LIBRARY_PATH=$(dirname @PYTHON_LIBRARY@):$LD_LIBRARY_PATH
 
 # add Python environment
 PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/libtulip-python*) | grep libpython | awk '{print $3}')
