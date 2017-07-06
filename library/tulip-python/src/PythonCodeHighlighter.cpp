@@ -28,6 +28,9 @@ using namespace tlp;
 PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   : QSyntaxHighlighter(parent), _shellMode(false) {
 
+  QTextCharFormat builtinFormat;
+  builtinFormat.setForeground(QColor(0,87,187));
+
   HighlightingRule rule;
 
   _commentFormat.setForeground(Qt::darkGreen);
@@ -48,6 +51,10 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
 
   rule.pattern = QRegExp("tlp.*\\.[A-Za-z0-9_.]+");
   rule.format = _tlpApiFormat;
+  _highlightingRules.append(rule);
+
+  rule.pattern = QRegExp("^[ \t]*@.*$");
+  rule.format = builtinFormat;
   _highlightingRules.append(rule);
 
   _keywordFormat.setForeground(Qt::darkBlue);
@@ -80,9 +87,6 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
     }
 
     builtinPatterns << "\\bself\\b";
-
-    QTextCharFormat builtinFormat;
-    builtinFormat.setForeground(QColor(0,87,187));
 
     foreach (const QString &pattern, builtinPatterns) {
       rule.pattern = QRegExp(pattern);
