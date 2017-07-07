@@ -62,8 +62,11 @@ BUNDLE_USR_DIR=$BUNDLE_DIR/usr
 APPRUN_FILE=$BUNDLE_DIR/AppRun
 echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
-echo "export LD_LIBRARY_PATH=\${BUNDLE_DIR}/usr/lib:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
-echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
+echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
+# do not set LD_LIBRARY_PATH to ensure a successful launch
+# of the default web browser to show the Tuip documentation
+#echo "export LD_LIBRARY_PATH=\${TLP_DIR}:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
+echo "export PYTHONHOME=\${BUNDLE_USR_DIR}" >> $APPRUN_FILE
 echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
@@ -82,14 +85,14 @@ cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
 # copy tulip_perspective exe
 cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR
 # copy all lib and share installed files (no include)
-echo "copying $TULIP_INSTALL_DIR/lib files into $BUNDLE_USR_DIR/lib"
+echo "copying $TULIP_INSTALL_DIR/lib files into $BUNDLE_LIB_DIR"
 cp -Rp $TULIP_INSTALL_DIR/lib $BUNDLE_USR_DIR
-echo "copying $TULIP_INSTALL_DIR/share files into $BUNDLE_USR_DIR/share"
+echo "copying $TULIP_INSTALL_DIR/share files into $BUNDLE_SHARE_DIR"
 cp -Rp $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
 
 # remove not needed files
-rm $BUNDLE_USR_DIR/share/tulip/*.cmake
-rm -rf $BUNDLE_USR_DIR/share/tulip/doc/doxygen
+rm $BUNDLE_SHARE_DIR/tulip/*.cmake
+rm -rf $BUNDLE_SHARE_DIR/tulip/doc/doxygen
 
 # add qt plugins directory
 mkdir $BUNDLE_BIN_DIR/plugins
