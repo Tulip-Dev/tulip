@@ -72,17 +72,7 @@ ELSE(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   ENDIF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-IF(NOT PYTHON_DIST_PACKAGE)
-INSTALL(TARGETS ${LibStlPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/python/tulip/native COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python)
-ELSE(NOT PYTHON_DIST_PACKAGE)
-INSTALL(TARGETS ${LibStlPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python)
-ENDIF(NOT PYTHON_DIST_PACKAGE)
+INSTALL_TULIP_PYTHON_FILES(tulip/native ${LibStlPythonBindingsName})
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "sipAPI_stl.h")
 

@@ -192,23 +192,8 @@ ELSE(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   ENDIF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-IF(NOT PYTHON_DIST_PACKAGE)
-INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/python/tulip/native COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python)
-IF(WIN32)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipBinInstallDir}/python/tulip COMPONENT tulip_python)
-ELSE(WIN32)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python/tulip COMPONENT tulip_python)
-ENDIF(WIN32)
-ELSE(NOT PYTHON_DIST_PACKAGE)
-INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip COMPONENT tulip_python)
-ENDIF(NOT PYTHON_DIST_PACKAGE)
+INSTALL_TULIP_PYTHON_FILES(tulip ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py)
+INSTALL_TULIP_PYTHON_FILES(tulip/native ${LibTulipCorePythonBindingsName})
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
   ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
