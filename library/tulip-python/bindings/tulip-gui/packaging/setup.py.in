@@ -80,9 +80,10 @@ class BinaryDistribution(Distribution):
 tulip_native_libs = []
 if platform.system() == 'Windows':
     tulip_native_libs = ['native/*.pyd', 'native/*.dll', 'native/plugins/*.dll']
-    # on Windows, call a CMake script that will gather all the required DLLs to import the module and copy them to the wheel native folder
-    command='"${CMAKE_COMMAND}" -DTulipVersion=${TulipVersion} -DCWD=' + os.getcwd() + ' -DLIBRARY_PATHS="${CMAKE_LIBRARY_PATH};${QT_BINARY_DIR}" -P copyTulipGuiDllDependencies.cmake'
-    p = subprocess.call(command, shell=True)
+    if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wheel':
+        # on Windows, call a CMake script that will gather all the required DLLs to import the module and copy them to the wheel native folder
+        command='"${CMAKE_COMMAND}" -DTulipVersion=${TulipVersion} -DCWD=' + os.getcwd() + ' -DLIBRARY_PATHS="${CMAKE_LIBRARY_PATH};${QT_BINARY_DIR}" -P copyTulipGuiDllDependencies.cmake'
+        p = subprocess.call(command, shell=True)
 elif platform.system() == 'Darwin':
     tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/Qt*', 'native/phonon', 'native/plugins/*.dylib']
 elif platform.system() == 'Linux':
