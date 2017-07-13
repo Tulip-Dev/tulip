@@ -237,7 +237,7 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
   if (pyObj) {
     sipTransferTo(pyObj, pyObj);
     sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
-    sipCommonDtor(wrapper);
+    sipInstanceDestroyed(wrapper);
   }
 }
 
