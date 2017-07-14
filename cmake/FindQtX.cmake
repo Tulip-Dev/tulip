@@ -218,12 +218,6 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
 
   SET(QT_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
 
-  IF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
-    MESSAGE(SEND_ERROR "When building Tulip python wheels on MacOS, Qt version must be lesser than 4.8."
-                       "Indeed we need universal binaries (i386;x86_64) to build a binary wheel and Qt 4.7 "
-                       "is the last Qt version to provide bundles with universal binaries.")
-  ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
-
    # define aliases for Qt macros
   MACRO(QTX_WRAP_CPP outfiles)
     QT4_WRAP_CPP(${outfiles} ${ARGN})

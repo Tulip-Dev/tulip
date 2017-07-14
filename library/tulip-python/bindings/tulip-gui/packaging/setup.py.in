@@ -12,6 +12,7 @@ import os
 import subprocess
 import sys
 import subprocess
+import shutil
 
 # On MacOS, we need to relink dylibs and set correct rpaths in
 # order for the modules to be imported in a portable way when
@@ -33,18 +34,10 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
     def relinkDyLibAndSetRpaths(dylib, rpaths=[]):
         libs = getDyLibDependencies(dylib)
         for L in libs:
-            # prefer system libs for libbz
-            if 'libbz2.1.0.dylib' in L:
-                subprocess.call(
-                    'install_name_tool -change %s /usr/lib/libbz2.1.0.dylib %s 2>/dev/null' %
-                    (L, dylib),
-                    shell=True)
-            # change not system libraries path to @rpath/libname
-            else:
-                subprocess.call(
-                    'install_name_tool -change %s @rpath/%s %s 2>/dev/null' %
-                    (L, os.path.basename(L), dylib),
-                    shell=True)
+            subprocess.call(
+                'install_name_tool -change %s @rpath/%s %s 2>/dev/null' %
+                (L, os.path.basename(L), dylib),
+                shell=True)
         # add rpaths in dylib
         for rpath in rpaths:
             subprocess.call(
@@ -56,15 +49,40 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
         for lib in os.listdir(dirPath):
             libPath = dirPath + lib
             if not os.path.isdir(libPath):
-                deps = getDyLibDependencies(libPath)
                 relinkDyLibAndSetRpaths(libPath, rpaths)
 
+    def copyDyLibsDependencies(dirPath, relativeCopyPath = './'):
+        lastNbProcessed = 0
+        toProcess = os.listdir(dirPath)
+        while lastNbProcessed == 0 or len(toProcess) > lastNbProcessed:
+            for lib in toProcess:
+                libPath = dirPath + lib
+                if not os.path.isdir(libPath):
+                    libs = getDyLibDependencies(libPath)
+                    for L in libs:
+                        filename = os.path.basename(L)
+                        dylibCopy = dirPath + relativeCopyPath + filename
+                        if not os.path.isfile(dylibCopy) and not os.path.isfile(tulipNativeLibsPath + filename) and not os.path.isfile(tulipOglNativeLibsPath + filename):
+                            shutil.copyfile(L, dylibCopy)
+                            subprocess.call(
+                                'install_name_tool -id @rpath/%s %s 2>/dev/null' %
+                                 (filename, dylibCopy),
+                                 shell=True)
+            lastNbProcessed = len(toProcess)
+            toProcess = os.listdir(dirPath)
+
+    tulipNativeLibsPath = os.getcwd() + '/../../tulip-core/tulip_module/tulip/native/'
     tulipOglNativeLibsPath = os.getcwd() + '/tulipogl/native/'
     tulipOglNativePluginsLibsPath = os.getcwd() + '/tulipogl/native/plugins/'
     tulipGuiNativeLibsPath = os.getcwd() + '/tulipgui/native/'
     tulipGuiNativePluginsLibsPath = os.getcwd() + '/tulipgui/native/plugins/'
 
-    print("Relinking dylibs and setting rpaths in tulip-gui wheel ...")
+    print("Copying dylibs dependencies in tulipgui-python wheel ...")
+    copyDyLibsDependencies(tulipOglNativeLibsPath)
+    copyDyLibsDependencies(tulipOglNativePluginsLibsPath, '../')
+    copyDyLibsDependencies(tulipGuiNativeLibsPath)
+    copyDyLibsDependencies(tulipGuiNativePluginsLibsPath, '../')
+    print("Relinking dylibs and setting rpaths in tulipgui-python wheel ...")
     relinkDyLibsInDirAndSetRpaths(tulipOglNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/'])
     relinkDyLibsInDirAndSetRpaths(tulipOglNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/'])
     relinkDyLibsInDirAndSetRpaths(tulipGuiNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/', '@loader_path/../../tulipogl/native/'])
