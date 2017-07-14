@@ -536,12 +536,12 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
         #     pypitest
         #
         # [pypitest]
-        # repository = https://testpypi.python.org/pypi
+        # repository = https://test.pypi.org/legacy/
         # username = <your user name goes here>
         # password = <your password goes here>
         #
         # [pypi]
-        # repository = https://pypi.python.org/pypi
+        # repository = https://upload.pypi.org/legacy/
         # username = <your user name goes here>
         # password = <your password goes here>
         ###############################################################
@@ -559,19 +559,15 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
           SET(WHEEL_FILES_REGEXP "*manylinux*")
         ENDIF(LINUX)
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
-          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
           COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
-          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
           COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload
-          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
-          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
 
