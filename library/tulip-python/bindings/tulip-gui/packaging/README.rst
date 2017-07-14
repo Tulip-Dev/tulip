@@ -2,7 +2,7 @@ Module description
 ==================
 
 Graphs play an important role in many research areas, such as biology, microelectronics, social
-sciences, data mining, and computer science. Tulip (http://tulip.labri.fr) [1, 2]_ is an
+sciences, data mining, and computer science. Tulip (http://tulip.labri.fr) [1]_ [2]_ is an
 Information Visualization framework dedicated to the analysis and visualization of such relational
 data. Written in C++ the framework enables the development of algorithms, visual encodings,
 interaction techniques, data models, and domain-specific visualizations.
