@@ -35,16 +35,23 @@
 using namespace std;
 using namespace tlp;
 
-MouseShowElementInfo::MouseShowElementInfo():_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL) {
+MouseShowElementInfo::MouseShowElementInfo():_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL),_show(true) {
   _informationWidget->installEventFilter(this);
   _ui->setupUi(_informationWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem->setWidget(_informationWidget);
   _informationWidgetItem->setVisible(false);
+  connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
 }
 
 MouseShowElementInfo::~MouseShowElementInfo() {
   delete _ui;
+}
+
+void MouseShowElementInfo::showVisualProp(int show) {
+        _show = show == Qt::Checked;
+    static_cast<GraphElementModel*>(tableView()->model())->setShowVisualProp(_show);
+
 }
 
 void MouseShowElementInfo::clear() {
@@ -156,10 +163,10 @@ void MouseShowElementInfo::viewChanged(View * view) {
 
 QAbstractItemModel* MouseShowElementInfo::buildModel(ElementType elementType,unsigned int elementId,QObject* parent)const {
   if(elementType == NODE) {
-    return new GraphNodeElementModel(view()->graph(),elementId,parent);
+    return new GraphNodeElementModel(view()->graph(),elementId,parent,_show);
   }
   else {
-    return new GraphEdgeElementModel(view()->graph(),elementId,parent);
+    return new GraphEdgeElementModel(view()->graph(),elementId,parent,_show);
   }
 }
 

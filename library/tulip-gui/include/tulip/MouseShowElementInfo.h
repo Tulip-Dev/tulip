@@ -47,6 +47,8 @@ struct SelectedEntity;
 class TLP_QT_SCOPE MouseShowElementInfo : public InteractorComponent {
 
   Ui::ElementInformationWidget* _ui;
+  Q_OBJECT
+
 public:
   MouseShowElementInfo();
   ~MouseShowElementInfo();
@@ -64,6 +66,7 @@ protected:
   QWidget *_informationWidget;
   QGraphicsProxyWidget *_informationWidgetItem;
   GlMainWidget* glMainWidget;
+  bool _show;
 
   QTableView* tableView() const;
 
@@ -82,6 +85,8 @@ protected:
    * @return
    */
   virtual QString elementName(ElementType elementType, unsigned int elementId)const;
+private slots:
+  void showVisualProp(int show);
 };
 
 }

@@ -206,6 +206,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/SimpleStringsListSelectionWidget.h
   ../include/tulip/SnapshotDialog.h
   ../include/tulip/RangeSlider.h
+  ../include/tulip/MouseShowElementInfo.h
   ../include/tulip/StringsListSelectionDialog.h
   ../include/tulip/TextureFileDialog.h
   ../include/tulip/TreeViewComboBox.h

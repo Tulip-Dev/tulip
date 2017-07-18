@@ -27,8 +27,14 @@
 using namespace tlp;
 using namespace std;
 
-GraphElementModel::GraphElementModel(Graph *graph,unsigned int id,QObject *parent):TulipModel(parent),_graph(graph),_id(id) {
+GraphElementModel::GraphElementModel(Graph *graph,unsigned int id,QObject *parent, bool displayvisual):TulipModel(parent),_graph(graph),_id(id),_displayvisualprop(displayvisual) {
 
+}
+
+void GraphElementModel::setShowVisualProp(bool show) {
+    beginResetModel();
+    _displayvisualprop = show;
+    endResetModel();
 }
 
 int GraphElementModel::rowCount(const QModelIndex &parent) const {
@@ -44,6 +50,10 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
       continue;
 
 #endif
+
+    if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
+        continue;
+
     ++result;
   }
   return result;
@@ -78,6 +88,9 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
 
 #endif
 
+      if(!_displayvisualprop && propertyName.compare(0, 4, "view")==0)
+          continue;
+
       if(section==result)
         return propertyName.c_str();
 
@@ -101,6 +114,9 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
       continue;
 
 #endif
+
+    if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
+        continue;
 
     if(result==row)
       break;
@@ -144,6 +160,9 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 
 #endif
 
+      if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
+          continue;
+
       if(result==index.row())
         break;
 
@@ -169,6 +188,8 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
         continue;
 
 #endif
+      if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
+          continue;
 
       if(result==index.row())
         break;

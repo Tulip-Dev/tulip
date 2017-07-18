@@ -30,7 +30,9 @@ class TLP_QT_SCOPE GraphElementModel: public TulipModel {
 
 public:
 
-  GraphElementModel(Graph *graph, unsigned int id, QObject *parent=NULL);
+  GraphElementModel(Graph *graph, unsigned int id, QObject *parent=NULL, bool displayvisual=true);
+
+    void setShowVisualProp(bool show);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -49,13 +51,16 @@ protected :
 
   Graph *_graph;
   unsigned int _id;
+  bool _displayvisualprop;
+
 
 };
 
 class TLP_QT_SCOPE GraphNodeElementModel : public GraphElementModel {
+
 public :
 
-  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent=NULL):GraphElementModel(graph,id,parent) {}
+  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent=NULL,bool displayvisual=true):GraphElementModel(graph,id,parent,displayvisual) {}
 
   QString headerText(unsigned int id) const {
     return QString("node: ") + QString::number(id);
@@ -70,9 +75,10 @@ public :
 };
 
 class TLP_QT_SCOPE GraphEdgeElementModel : public GraphElementModel {
+
 public :
 
-  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent=NULL):GraphElementModel(graph,id,parent) {}
+  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent=NULL,bool displayvisual=true):GraphElementModel(graph,id,parent,displayvisual) {}
 
   QString headerText(unsigned int id) const {
     return QString("edge: ") + QString::number(id);
