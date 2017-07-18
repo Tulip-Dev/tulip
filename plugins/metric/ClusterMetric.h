@@ -19,7 +19,7 @@
 #ifndef _CLUSTERMETRIC_H
 #define _CLUSTERMETRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 /** \addtogroup metric */
 

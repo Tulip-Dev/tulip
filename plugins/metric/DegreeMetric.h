@@ -19,7 +19,7 @@
 #ifndef _DEGREEMETRIC_H
 #define _DEGREEMETRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 /** \addtogroup metric */
 

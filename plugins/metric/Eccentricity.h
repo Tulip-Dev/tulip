@@ -19,7 +19,7 @@
 #ifndef _ECCENTRICITYMETRIC_H
 #define _ECCENTRICITYMETRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 /** \addtogroup metric */
 

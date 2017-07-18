@@ -20,7 +20,7 @@
 #include <stack>
 #include <queue>
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;

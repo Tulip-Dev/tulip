@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
+
 #include <stack>
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -204,14 +204,18 @@ public:
     compo.setAll(-1);
     biconnectedComponents(*graph, compo);
     result->setAllEdgeValue(-1);
-    Iterator<edge> *it = graph->getEdges();
 
-    while(it->hasNext()) {
-      edge e = it->next();
+    const std::vector<edge>& edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+
+    for (unsigned int i = 0; i < nbEdges; ++i) {
+      edge e = edges[i];
       result->setEdgeValue(e, compo.get(e.id));
     }
 
-    delete it;
+    if (dataSet!=NULL)
+      dataSet->set("#biconnected components", result->getEdgeDoubleMax()+1);
+
     return true;
   }
 };

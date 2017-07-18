@@ -39,15 +39,13 @@ bool ConnectedComponent::run() {
   }
 
   // propagate nodes computed value to edges
-  Iterator<edge> *itE=graph->getEdges();
+   const std::vector<edge>& edges = graph->edges();
+   unsigned int nbEdges = edges.size();
 
-  while (itE->hasNext()) {
-    edge ite=itE->next();
-    node source= graph->source(ite);
-    result->setEdgeValue(ite, result->getNodeValue(source));
+   for (unsigned int i = 0; i < nbEdges; ++i) {
+     edge e = edges[i];
+     result->setEdgeValue(e, result->getNodeValue(graph->source(e)));
   }
-
-  delete itE;
 
   if (dataSet!=NULL)
     dataSet->set<unsigned>("#connected components", components.size());

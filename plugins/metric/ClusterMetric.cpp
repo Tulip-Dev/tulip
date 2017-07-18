@@ -18,6 +18,9 @@
  */
 #include "ClusterMetric.h"
 
+#include <tulip/StaticProperty.h>
+#include <tulip/GraphMeasure.h>
+
 PLUGIN(ClusterMetric)
 
 using namespace std;
@@ -48,10 +51,10 @@ static double clusterGetEdgeValue(Graph *graph,
 }
 //=================================================
 bool ClusterMetric::run() {
-  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   unsigned int maxDepth = 1;
 
-  if (dataSet!=NULL) dataSet->get("depth", maxDepth);
+  if (dataSet!=NULL)
+      dataSet->get("depth", maxDepth);
 
   tlp::NodeStaticProperty<double> clusters(graph);
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);

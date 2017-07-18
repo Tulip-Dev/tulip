@@ -19,7 +19,7 @@
 #ifndef _DEPTHMETRIC_H
 #define _DEPTHMETRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 
 /** \addtogroup metric */

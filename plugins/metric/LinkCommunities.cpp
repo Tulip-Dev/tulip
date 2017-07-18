@@ -20,7 +20,7 @@
 #include <omp.h>
 #endif
 #include <set>
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/vectorgraph.h>
 #include <tulip/vectorgraphproperty.h>
 #include <tulip/ForEach.h>

@@ -19,6 +19,8 @@
 #include <stack>
 #include "DepthMetric.h"
 
+#include <tulip/AcyclicTest.h>
+
 PLUGIN(DepthMetric)
 
 using namespace std;
@@ -135,19 +137,18 @@ bool DepthMetric::run() {
 
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
-  node _n;
-  forEach(_n, graph->getNodes()) {
-    result->setNodeValue(_n, getNodeValue(_n));
+  node n;
+  forEach(n, graph->getNodes()) {
+    result->setNodeValue(n, getNodeValue(n));
   }
   return true;
 }
 //=================================================
 bool DepthMetric::check(std::string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(graph))
+    if (!AcyclicTest::isAcyclic(graph)) {
+        erreurMsg="The graph must be acyclic.";
+        return false;
+    }
     return true;
-  else {
-    erreurMsg="The graph must be acyclic.";
-    return false;
-  }
 }
 //=================================================

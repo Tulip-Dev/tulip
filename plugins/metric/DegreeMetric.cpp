@@ -19,6 +19,8 @@
 #include "DegreeMetric.h"
 
 #include <tulip/StringCollection.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/GraphMeasure.h>
 
 PLUGIN(DegreeMetric)
 

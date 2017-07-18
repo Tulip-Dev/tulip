@@ -19,7 +19,11 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+
 #include <tulip/ConnectedTest.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/GraphMeasure.h>
+
 #include "Eccentricity.h"
 
 using namespace std;
@@ -151,6 +155,8 @@ bool EccentricityMetric::run() {
     else
       result->setNodeValue(nodes[ni], res[ni]);
   }
+  if(!allPaths && norm)
+      dataSet->set<double>("Graph Diameter", diameter);
 
   return pluginProgress->state()!=TLP_CANCEL;
 }

@@ -20,7 +20,9 @@
 #include <omp.h>
 #endif
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
