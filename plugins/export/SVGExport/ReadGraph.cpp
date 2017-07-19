@@ -205,6 +205,14 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
   return true;
 }
 
+struct sortNodes {
+    LayoutProperty* layout;
+    sortNodes(LayoutProperty* ly):layout(ly){}
+    bool operator()(const node i, const node j) {
+        return layout->getNodeValue(i)[2]<layout->getNodeValue(j)[2];
+    }
+};
+
 static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& exportint, unsigned &i, const int nb_elements,
                        tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape,
                        tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,
@@ -220,11 +228,24 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
     return false;
   }
 
-  node n;
+  /*z-ordering is handled in SVG.
+  from the SVG 1.1 spec:
+    3.3 Rendering Order
+   Elements in an SVG document fragment have an implicit drawing order, with the first elements in the SVG document
+  fragment getting "painted" first. Subsequent elements are painted on top of previously painted elements.
 
-  forEach(n, graph->getNodes()) {
-    if(graph->isMetaNode(n))
-      metanodeVertices.push_back(n);
+So order nodes following their z coordinates before exporting them
+*/
+
+  vector<node> nodes = graph->nodes();
+  sortNodes srt(layout);
+  std::sort(nodes.begin(),nodes.end(),srt);
+  unsigned nb_nodes = nodes.size();
+
+  for(unsigned nb=0;nb<nb_nodes;++nb) {
+      node n(nodes[nb]);
+      if(graph->isMetaNode(n))
+          metanodeVertices.push_back(n);
 
     Coord c = layout->getNodeValue(n);
     Size s = sizes->getNodeValue(n);
@@ -312,9 +333,7 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
   if(!ret) {
     if(pp->getError().empty()) {
-      stringstream str;
-      str << "Error when exporting node "<<n;
-      pp->setError(str.str());
+       pp->setError("Error when finishing to export nodes");
     }
 
     return false;
