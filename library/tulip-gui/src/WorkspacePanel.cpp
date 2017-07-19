@@ -246,7 +246,7 @@ void WorkspacePanel::setView(tlp::View* view) {
 void WorkspacePanel::showEvent(QShowEvent *event) {
   QFrame::showEvent(event);
 
-  if (_view->graphicsView()->scene()) {
+  if (_view&&_view->graphicsView()&&_view->graphicsView()->scene()) {
     // first remove central item of the scene and its children
     _view->graphicsView()->scene()->removeItem(_view->centralItem());
     // get remaining items (if any) that were not descendant of the central item
@@ -580,7 +580,7 @@ QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
     return QPointF(width()-_viewConfigurationWidgets->size().width(),10);
   else {
     QTabWidget* tabWidget = static_cast<QTabWidget*>(_viewConfigurationWidgets->widget());
-    int tabWidth = _viewConfigurationWidgets->size().width() - tabWidget->widget(0)->width();
+    int tabWidth = (tabWidget!=NULL)?(_viewConfigurationWidgets->size().width() - tabWidget->widget(0)->width()):0;
     return QPointF(width() - tabWidth,10);
   }
 }
