@@ -19,15 +19,21 @@
 #include "importexporttest.h"
 
 #include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>
+
+#include <sstream>
 
 using namespace tlp;
 using namespace std;
@@ -212,6 +218,25 @@ void ImportExportTest::testSubGraphsImportExport() {
   importExportGraph(subsub);
 }
 
+static Color genRandomColor() {
+  return Color(static_cast<unsigned char>(tlp::randomUnsignedInteger(255)),
+               static_cast<unsigned char>(tlp::randomUnsignedInteger(255)),
+               static_cast<unsigned char>(tlp::randomUnsignedInteger(255)),
+               static_cast<unsigned char>(tlp::randomUnsignedInteger(255)));
+}
+
+static Coord genRandomCoord() {
+  return tlp::Coord(static_cast<float>(tlp::randomDouble(1000)),
+                    static_cast<float>(tlp::randomDouble(1000)),
+                    static_cast<float>(tlp::randomDouble(1000)));
+}
+
+static Size genRandomSize() {
+  return tlp::Size(static_cast<float>(tlp::randomDouble(10)),
+                    static_cast<float>(tlp::randomDouble(10)),
+                    static_cast<float>(tlp::randomDouble(10)));
+}
+
 Graph* ImportExportTest::createSimpleGraph() const {
   Graph* original = tlp::newGraph();
   LayoutProperty* layout = original->getProperty<LayoutProperty>("viewLayout");
@@ -244,6 +269,109 @@ Graph* ImportExportTest::createSimpleGraph() const {
   edge e;
   forEach(e, original->getEdges()) {
     id->setEdgeValue(e, e.id);
+  }
+
+  // create and populate any supported graph properties types in Tulip
+  // to check that their serialization/deserialization is correct
+
+  BooleanProperty *booleanProp = original->getProperty<BooleanProperty>("booleanProp");
+  ColorProperty *colorProp = original->getProperty<ColorProperty>("colorProp");
+  DoubleProperty *doubleProp = original->getProperty<DoubleProperty>("doubleProp");
+  IntegerProperty *integerProp = original->getProperty<IntegerProperty>("intProp");
+  LayoutProperty *layoutProp = original->getProperty<LayoutProperty>("layoutProp");
+  SizeProperty *sizeProp = original->getProperty<SizeProperty>("sizeProp");
+  StringProperty *stringProp = original->getProperty<StringProperty>("stringProp");
+
+  BooleanVectorProperty *booleanVecProp = original->getProperty<BooleanVectorProperty>("booleanVecProp");
+  ColorVectorProperty *colorVecProp = original->getProperty<ColorVectorProperty>("colorVecProp");
+  DoubleVectorProperty *doubleVecProp = original->getProperty<DoubleVectorProperty>("doubleVecProp");
+  IntegerVectorProperty *integerVecProp = original->getProperty<IntegerVectorProperty>("intVecProp");
+  LayoutVectorProperty *coordVecProp = original->getProperty<CoordVectorProperty>("coordVecProp");
+  SizeVectorProperty *sizeVecProp = original->getProperty<SizeVectorProperty>("sizeVecProp");
+  StringVectorProperty *stringVecProp = original->getProperty<StringVectorProperty>("stringVecProp");
+
+  std::ostringstream oss;
+  forEach(n, original->getNodes()) {
+
+    unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
+    vector<bool> boolVec;
+    vector<Color> colorVec;
+    vector<Coord> coordVec;
+    vector<double> doubleVec;
+    vector<int> intVec;
+    vector<Size> sizeVec;
+    vector<string> stringVec;
+    for (unsigned int i = 0 ; i < vecSize ; ++i) {
+      boolVec.push_back((n.id+i)%2 == 0);
+      coordVec.push_back(genRandomCoord());
+      colorVec.push_back(genRandomColor());
+      doubleVec.push_back(tlp::randomDouble(DBL_MAX));
+      intVec.push_back(tlp::randomInteger(INT_MAX));
+      sizeVec.push_back(genRandomSize());
+      oss << tlp::randomDouble();
+      stringVec.push_back(oss.str());
+      oss.str("");
+    }
+
+    booleanProp->setNodeValue(n, n.id % 2 == 0);
+    colorProp->setNodeValue(n, genRandomColor());
+    doubleProp->setNodeValue(n, tlp::randomDouble(DBL_MAX));
+    integerProp->setNodeValue(n, tlp::randomInteger(INT_MAX));
+    layoutProp->setNodeValue(n, genRandomCoord());
+    sizeProp->setNodeValue(n, genRandomSize());
+    oss << "node " << n.id;
+    stringProp->setNodeValue(n, oss.str());
+    oss.str("");
+
+    booleanVecProp->setNodeValue(n, boolVec);
+    colorVecProp->setNodeValue(n, colorVec);
+    doubleVecProp->setNodeValue(n, doubleVec);
+    integerVecProp->setNodeValue(n, intVec);
+    coordVecProp->setNodeValue(n, coordVec);
+    sizeVecProp->setNodeValue(n, sizeVec);
+    stringVecProp->setNodeValue(n, stringVec);
+  }
+
+  forEach(e, original->getEdges()) {
+
+    unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
+    vector<bool> boolVec;
+    vector<Color> colorVec;
+    vector<Coord> coordVec;
+    vector<double> doubleVec;
+    vector<int> intVec;
+    vector<Size> sizeVec;
+    vector<string> stringVec;
+
+    for (unsigned int i = 0 ; i < vecSize ; ++i) {
+      boolVec.push_back((n.id+i)%2 == 0);
+      coordVec.push_back(genRandomCoord());
+      colorVec.push_back(genRandomColor());
+      doubleVec.push_back(tlp::randomDouble(DBL_MAX));
+      intVec.push_back(tlp::randomInteger(INT_MAX));
+      sizeVec.push_back(genRandomSize());
+      oss << tlp::randomDouble();
+      stringVec.push_back(oss.str());
+      oss.str("");
+    }
+
+    booleanProp->setEdgeValue(e, e.id % 2 == 0);
+    colorProp->setEdgeValue(e, genRandomColor());
+    doubleProp->setEdgeValue(e, tlp::randomDouble(DBL_MAX));
+    integerProp->setEdgeValue(e, tlp::randomInteger(INT_MAX));
+    layoutProp->setEdgeValue(e, coordVec);
+    sizeProp->setEdgeValue(e, genRandomSize());
+    oss << "edge " << e.id;
+    stringProp->setEdgeValue(e, oss.str());
+    oss.str("");
+
+    booleanVecProp->setEdgeValue(e, boolVec);
+    colorVecProp->setEdgeValue(e, colorVec);
+    doubleVecProp->setEdgeValue(e, doubleVec);
+    integerVecProp->setEdgeValue(e, intVec);
+    coordVecProp->setEdgeValue(e, coordVec);
+    sizeVecProp->setEdgeValue(e, sizeVec);
+    stringVecProp->setEdgeValue(e, stringVec);
   }
 
   return original;
