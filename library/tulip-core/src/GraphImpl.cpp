@@ -501,10 +501,11 @@ void GraphImpl::push(bool unpopAllowed,
   bool hasRecorders = !recorders.empty();
 
   // if we have a current recorder with no updates
-  // there is no need to push a new one
-  // so go on with the same
-  if (hasRecorders && !recorders.front()->hasUpdates())
+  // there is no need to push a new one, so go on with the same
+  // (except if a temporary non redoable state is explicitely requested)
+  if (unpopAllowed && hasRecorders && !recorders.front()->hasUpdates()) {
     return;
+  }
 
   // end any previous updates observation
   unobserveUpdates();
