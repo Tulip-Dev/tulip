@@ -82,40 +82,65 @@ public:
 #endif
     assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
     TYPE * t;
-    t = getObject(THREAD_NUMBER);
+    t = _memoryChunkManager.getObject(THREAD_NUMBER);
     return t;
   }
 
   inline void operator delete( void *p ) {
-    _freeObject[THREAD_NUMBER].push_back(p);
+    _memoryChunkManager.releaseObject(THREAD_NUMBER, p);
   }
 private:
-  static std::vector<void * > _freeObject[MAXNBTHREADS];
 
-  static TYPE* getObject(size_t threadId) {
-    TYPE *result;
+  class MemoryChunkManager {
+    public:
 
-    if (_freeObject[threadId].empty()) {
-      TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
+    ~MemoryChunkManager() {
+      for (unsigned int i = 0 ; i < MAXNBTHREADS ; ++i) {
+        for (size_t j = 0 ; j < _allocatedChunks[i].size() ; ++j) {
+          free(_allocatedChunks[i][j]);
+        }
+      }
+    }
 
-      for (size_t j=0; j< BUFFOBJ - 1; ++j) {
-        _freeObject[threadId].push_back((void *)p);
-        p += 1;
+    TYPE* getObject(size_t threadId) {
+      TYPE *result;
+
+      if (_freeObject[threadId].empty()) {
+        void *chunk = malloc(BUFFOBJ * sizeof(TYPE));
+        TYPE * p = reinterpret_cast<TYPE *>(chunk);
+        _allocatedChunks[threadId].push_back(chunk);
+
+        for (size_t j=0; j< BUFFOBJ - 1; ++j) {
+          _freeObject[threadId].push_back(reinterpret_cast<void *>(p));
+          p += 1;
+        }
+
+        result = p;
+      }
+      else {
+        result = reinterpret_cast<TYPE *>(_freeObject[threadId].back());
+        _freeObject[threadId].pop_back();
       }
 
-      result = p;
-    }
-    else {
-      result = (TYPE *)_freeObject[threadId].back();
-      _freeObject[threadId].pop_back();
+      return result;
     }
 
-    return result;
-  }
+    void releaseObject(size_t threadId, void *p) {
+      _freeObject[threadId].push_back(p);
+    }
+
+    private:
+      std::vector<void * > _allocatedChunks[MAXNBTHREADS];
+      std::vector<void * > _freeObject[MAXNBTHREADS];
+
+  };
+
+  static MemoryChunkManager _memoryChunkManager;
+
 };
 
 template <typename  TYPE >
-std::vector<void * > MemoryPool<TYPE>::_freeObject[MAXNBTHREADS];
+typename MemoryPool<TYPE>::MemoryChunkManager MemoryPool<TYPE>::_memoryChunkManager;
 
 }
 #endif // MEMORYPOOL_H

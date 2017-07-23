@@ -120,6 +120,10 @@ WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent): QGraphicsView(par
   setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
+WorkspaceExposeWidget::~WorkspaceExposeWidget() {
+  delete scene();
+}
+
 int WorkspaceExposeWidget::currentPanelIndex() const {
   return _currentPanelIndex;
 }

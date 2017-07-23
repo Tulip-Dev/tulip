@@ -42,10 +42,7 @@ public:
    * Return the singleton (if the singleton doesn't exist this function create it)
    */
   static EdgeExtremityGlyphManager &getInst() {
-    if (!eeinst)
-      eeinst = new EdgeExtremityGlyphManager();
-
-    return *eeinst;
+    return eeinst;
   }
 
   /**
@@ -75,7 +72,8 @@ private:
 
   EdgeExtremityGlyphManager();
 
-  static EdgeExtremityGlyphManager* eeinst;
+  static std::list<std::string> plugins;
+  static EdgeExtremityGlyphManager eeinst;
 
 
 };

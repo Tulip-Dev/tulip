@@ -366,6 +366,8 @@ public:
       delete[] images;
     }
 
+    delete [] textureNum;
+
     glDisable(GL_TEXTURE_2D);
 
 

@@ -216,6 +216,7 @@ bool ConeTreeExtended::run() {
   tree = TreeTest::computeTree(graph, pluginProgress);
 
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+    TreeTest::cleanComputedTree(graph, tree);
     graph->pop();
     return false;
   }
@@ -245,6 +246,8 @@ bool ConeTreeExtended::run() {
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
+
+  TreeTest::cleanComputedTree(graph, tree);
 
   // forget last temporary graph state
   graph->pop();

@@ -404,6 +404,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   delete newImportModule;
   dataSet = *tmp->dataSet;
+  delete tmp;
 
   return graph;
 }
@@ -440,6 +441,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
   if (deletePluginProgress) delete tmpProgress;
 
   delete newExportModule;
+  delete context;
   return result;
 }
 //=========================================================

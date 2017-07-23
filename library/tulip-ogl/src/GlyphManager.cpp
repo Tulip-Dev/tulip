@@ -23,7 +23,8 @@
 #include <tulip/Glyph.h>
 
 //====================================================
-tlp::GlyphManager* tlp::GlyphManager::inst=NULL;
+std::list<std::string> tlp::GlyphManager::glyphList;
+tlp::GlyphManager tlp::GlyphManager::inst;
 
 using namespace std;
 
@@ -59,9 +60,9 @@ int GlyphManager::glyphId(const string& name) {
 }
 //====================================================
 void GlyphManager::loadGlyphPlugins() {
-  static std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+  glyphList = PluginLister::instance()->availablePlugins<Glyph>();
 
-  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+  for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string pluginName(*it);
     int pluginId=PluginLister::pluginInformation(pluginName).id();
     glyphIdToName[pluginId]=pluginName;
@@ -80,8 +81,6 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
   GlyphContext gc = GlyphContext(graph,glGraphInputData);
   glyphs.setAll(PluginLister::instance()->getPluginObject<Glyph>("3D - Cube OutLined", &gc));
 
-  static std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
-
   for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     Glyph *newGlyph = PluginLister::instance()->getPluginObject<Glyph>(glyphName, &gc);
@@ -91,11 +90,10 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
 
 void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
 
-  static std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
-
   for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     delete glyphs.get(PluginLister::pluginInformation(glyphName).id());
   }
+  delete glyphs.getDefault();
 }
 }

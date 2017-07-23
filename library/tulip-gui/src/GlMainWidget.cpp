@@ -89,7 +89,11 @@ static QGLFormat GlInit() {
 
 QGLWidget* GlMainWidget::getFirstQGLWidget() {
   if(!GlMainWidget::firstQGLWidget) {
-    GlMainWidget::firstQGLWidget=new QGLWidget(GlInit());
+    QGLWidget *glWidget = new QGLWidget(GlInit());
+    // a first QGLWidget will be created as a side effect of calling GlInit() in order to query
+    // the maximum number of samples available, so we must delete it to avoid a memory leak
+    delete GlMainWidget::firstQGLWidget;
+    GlMainWidget::firstQGLWidget=glWidget;
     assert(GlMainWidget::firstQGLWidget->isValid());
   }
 
@@ -97,8 +101,9 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 }
 
 void GlMainWidget::clearFirstQGLWidget() {
-  if(GlMainWidget::firstQGLWidget)
+  if(GlMainWidget::firstQGLWidget) {
     delete GlMainWidget::firstQGLWidget;
+  }
 }
 
 bool GlMainWidget::doSelect(const int x, const int y,

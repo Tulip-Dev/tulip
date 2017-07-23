@@ -366,6 +366,7 @@ public:
     tree = TreeTest::computeTree(graph, pluginProgress);
 
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+      TreeTest::cleanComputedTree(graph, tree);
       graph->pop();
       return false;
     }
@@ -401,6 +402,8 @@ public:
     delete sizes;
     //clear all bends in the Layout
     result->setAllEdgeValue(vector<Coord>());
+
+    TreeTest::cleanComputedTree(graph, tree);
     // forget last temporary graph state
     graph->pop();
 

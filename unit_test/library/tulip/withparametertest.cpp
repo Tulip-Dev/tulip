@@ -75,6 +75,8 @@ void WithParameterTest::testBuildDefaultDataSet() {
   EXPECTED_VALUE(Coord, Coord(4.4, 2, 1.1));
   EXPECTED_VALUE(Size, Size(2.2, 1.1, 4));
   EXPECTED_VALUE(Color, Color(1, 4, 255, 9));
+
+  delete parametrizedStuff;
 }
 
 ParameteredClass::ParameteredClass() {

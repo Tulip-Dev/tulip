@@ -156,6 +156,7 @@ void PluginsTest::pluginInformation() {
 #else
   CPPUNIT_ASSERT_EQUAL(string("int"), param.getTypeName());
 #endif
+  delete it;
 
   const Plugin& factory(PluginLister::instance()->pluginInformation("Test"));
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());

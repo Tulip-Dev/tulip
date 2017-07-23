@@ -80,6 +80,7 @@ public:
   static QSize previewSize();
 
   explicit WorkspaceExposeWidget(QWidget *parent = NULL);
+  ~WorkspaceExposeWidget();
   int currentPanelIndex() const;
   QVector<WorkspacePanel*> panels() const;
 

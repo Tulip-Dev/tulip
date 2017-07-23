@@ -23,7 +23,8 @@
 #include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
-tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = NULL;
+std::list<std::string> tlp::EdgeExtremityGlyphManager::plugins;
+tlp::EdgeExtremityGlyphManager tlp::EdgeExtremityGlyphManager::eeinst;
 
 using namespace std;
 
@@ -65,7 +66,7 @@ int EdgeExtremityGlyphManager::glyphId(const string& name) {
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-  static std::list<std::string> plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
+  plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
 
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string pluginName = *it;
@@ -82,9 +83,6 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
                                  glGraphInputData);
   glyphs.setAll(0);
 
-
-  static std::list<std::string> plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
-
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;
     EdgeExtremityGlyph *newGlyph = PluginLister::instance()->getPluginObject<EdgeExtremityGlyph>(glyphName, &gc);
@@ -93,7 +91,6 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
 }
 
 void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData*, MutableContainer<EdgeExtremityGlyph *>& glyphs) {
-  static std::list<std::string> plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
 
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;

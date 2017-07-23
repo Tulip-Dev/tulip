@@ -38,9 +38,9 @@ class PropertyInterface;
 class SearchWidget : public QWidget {
   Q_OBJECT
 
-  static QVector<SearchOperator*> NUMERIC_OPERATORS;
-  static QVector<SearchOperator*> STRING_OPERATORS;
-  static QVector<SearchOperator*> NOCASE_STRING_OPERATORS;
+  QVector<SearchOperator*> NUMERIC_OPERATORS;
+  QVector<SearchOperator*> STRING_OPERATORS;
+  QVector<SearchOperator*> NOCASE_STRING_OPERATORS;
 
   Ui::SearchWidget* _ui;
   tlp::Graph* _graph;

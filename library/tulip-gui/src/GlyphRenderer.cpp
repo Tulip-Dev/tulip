@@ -84,6 +84,7 @@ QPixmap GlyphRenderer::render(unsigned int pluginId) {
       renderer->renderScene(false, true);
       QImage preview = renderer->getImage();
       _previews[pluginId] = QPixmap::fromImage(preview);
+      renderer->clearScene(true);
     }
     else
       return QPixmap(":/tulip/gui/icons/i_invalid.png");

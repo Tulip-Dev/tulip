@@ -414,10 +414,6 @@ void BasicPluginsTest::testEqualValueClustering() {
   bool result;
   const std::string algorithmName = "Equal Value";
 
-  // check minimum call to computeEqualValueClustering
-  // with an empty graph
-  graph = tlp::newGraph();
-
   DoubleProperty* metric = graph->getProperty<DoubleProperty>("metric");
   ds.set("Property", metric);
 
@@ -452,6 +448,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
   result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
+  delete progress;
 }
 //==========================================================
 void BasicPluginsTest::testHierarchicalClustering() {

@@ -87,6 +87,8 @@ static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
           builder.addPoint(*itCoord);
       }
     }
+  } else {
+    delete itE;
   }
 }
 

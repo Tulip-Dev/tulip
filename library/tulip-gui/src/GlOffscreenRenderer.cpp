@@ -38,14 +38,10 @@ using namespace std;
 
 namespace tlp {
 
-GlOffscreenRenderer *GlOffscreenRenderer::instance(NULL);
+GlOffscreenRenderer GlOffscreenRenderer::instance;
 
 GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
-  if (instance == NULL) {
-    instance = new GlOffscreenRenderer();
-  }
-
-  return instance;
+  return &instance;
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
@@ -66,8 +62,6 @@ GlOffscreenRenderer::GlOffscreenRenderer()
 GlOffscreenRenderer::~GlOffscreenRenderer() {
   delete glFrameBuf;
   delete glFrameBuf2;
-  clearScene();
-  delete mainLayer;
 }
 
 void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight) {
@@ -110,8 +104,8 @@ void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphCompos
   mainLayer->addGlEntity(graphComposite, "graph");
 }
 
-void GlOffscreenRenderer::clearScene() {
-  mainLayer->getComposite()->reset(false);
+void GlOffscreenRenderer::clearScene(bool deleteGlEntities) {
+  mainLayer->getComposite()->reset(deleteGlEntities);
   const vector<pair<string, GlLayer *> > &layersList = scene.getLayersList();
 
   for (unsigned int i = 0 ; i < layersList.size() ; ++i) {

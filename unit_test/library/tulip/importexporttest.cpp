@@ -52,6 +52,8 @@ void ImportExportTest::testgridImportExport() {
   Graph* original = createSimpleGraph();
 
   importExportGraph(original);
+
+  delete original;
 }
 
 void ImportExportTest::testAttributes() {
@@ -148,6 +150,8 @@ void ImportExportTest::testAttributes() {
   original->setAttribute("tlp::DataSet", dataSet);
 
   importExportGraph(original);
+
+  delete original;
 }
 
 void ImportExportTest::testSubGraphsImportExport() {
@@ -216,6 +220,8 @@ void ImportExportTest::testSubGraphsImportExport() {
   importExportGraph(sub1);
   importExportGraph(sub2);
   importExportGraph(subsub);
+
+  delete original;
 }
 
 static Color genRandomColor() {
@@ -399,6 +405,7 @@ void ImportExportTest::testNanInfValuesImportExport() {
   doubleVecProp->setAllNodeValue(value);
 
   importExportGraph(original);
+  delete original;
 }
 
 void ImportExportTest::importExportGraph(tlp::Graph* original) {
@@ -470,7 +477,8 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
 
     stringstream attributeTypeMessage;
     attributeTypeMessage << "attribute \"" << attribute.first << "\" has different type on imported graph";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeTypeMessage.str(), attribute.second->getTypeName(), second->getAttribute(attribute.first)->getTypeName());
+    tlp::DataType *secondAttr = second->getAttribute(attribute.first);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeTypeMessage.str(), attribute.second->getTypeName(), secondAttr->getTypeName());
 
     stringstream attributeValueMessage;
     attributeValueMessage << "attribute \"" << attribute.first << "\" has different value on imported graph";
@@ -478,8 +486,8 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
     stringstream firstValue;
     stringstream secondValue;
     serializer->writeData(firstValue, attribute.second);
-    serializer->writeData(secondValue, second->getAttribute(attribute.first));
-
+    serializer->writeData(secondValue, secondAttr);
+    delete secondAttr;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeValueMessage.str(), firstValue.str(), secondValue.str());
   }
 }

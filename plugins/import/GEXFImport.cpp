@@ -491,6 +491,7 @@ public :
         }
       }
     }
+    delete itg;
   }
 
   void computeMetaNodes(Graph* quotientGraph) {
@@ -557,6 +558,7 @@ public :
         }
       }
     }
+    delete itg;
   }
 
   // Methods which compute Cubic Bézier control points for each edge

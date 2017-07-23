@@ -52,6 +52,7 @@ PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui
 PropertiesEditor::~PropertiesEditor() {
   delete _ui;
   delete _delegate;
+  delete _sourceModel;
 }
 
 void PropertiesEditor::setGraph(tlp::Graph *g) {

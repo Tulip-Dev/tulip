@@ -300,8 +300,13 @@ bool GraphPerspective::terminated() {
     }
   }
 
+  // ensure all loaded graphs are deleted
+  tlp::Graph *graph = NULL;
+  forEach(graph, tlp::getRootGraphs()) {
+    delete graph;
+  }
+
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  _pythonIDE->clearPythonCodeEditors();
   delete _pythonIDEDialog;
 #endif
 

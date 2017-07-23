@@ -167,9 +167,15 @@ public:
   string pName;
   string spName;
   bool deleteBug747;
+  GraphObserverTest *obs;
 
   GraphObserverTest() {
     deleteBug747 = false;
+    obs = NULL;
+  }
+
+  ~GraphObserverTest() {
+    delete obs;
   }
 
   Graph* getObservedGraph() {
@@ -381,7 +387,7 @@ public:
       if (graph && evt.type() == Event::TLP_DELETE) {
         if (deleteBug747) {
           delete observer;
-          GraphObserverTest* obs = new GraphObserverTest();
+          obs = new GraphObserverTest();
           addListener(obs);
           observer = NULL;
           ObservableGraphTest::setGraph(NULL);
@@ -924,6 +930,7 @@ void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyI
   graph->delLocalProperty("test");
   CPPUNIT_ASSERT(observer->initialized);
   CPPUNIT_ASSERT(observer->inheritedPropertyExist);
+  delete observer;
 }
 
 void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted() {
@@ -1057,5 +1064,6 @@ void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
   importGraph("TLPB Import", params, NULL, graph);
   // check that the graph event TLP_ADD_EDGES has been correctly received
   CPPUNIT_ASSERT(!gObserver->edges.empty());
+  delete testGraph;
 }
 

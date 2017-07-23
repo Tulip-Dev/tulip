@@ -509,6 +509,7 @@ public:
   YajlProxy(tlp::PluginProgress* progress = NULL) : YajlParseFacade(progress), _proxy(NULL) {
   }
   virtual ~YajlProxy() {
+    delete _proxy;
   }
   virtual void parseBoolean(bool boolVal) {
     _proxy->parseBoolean(boolVal);

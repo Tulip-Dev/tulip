@@ -455,7 +455,9 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 
       while(itv->hasNext()) {
         pair<string, DataType*> pval = itv->next();
-        nAttValues.setData(pval.first, gAttValues.getData(pval.first));
+        DataType *data = gAttValues.getData(pval.first);
+        nAttValues.setData(pval.first, data);
+        delete data;
       }
 
       delete itv;
@@ -1744,6 +1746,7 @@ void GraphUpdatesRecorder::beforeSetAttribute(Graph* g,
   // save the previously existing value
   DataType* valType = g->getAttributes().getData(name);
   oldAttributeValues[g].setData(name, valType);
+  delete valType;
 }
 
 void GraphUpdatesRecorder::removeAttribute(Graph* g,

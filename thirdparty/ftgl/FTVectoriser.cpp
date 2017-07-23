@@ -304,5 +304,6 @@ void FTVectoriser::MakeMesh(FTGL_DOUBLE zNormal, int outsetType, float outsetSiz
         }
       mesh->End();
     }
+  tessDeleteTess(tess);
 }
 

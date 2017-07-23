@@ -379,6 +379,7 @@ bool BubbleTree::run() {
   tree = TreeTest::computeTree(graph, pluginProgress);
 
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+    TreeTest::cleanComputedTree(graph, tree);
     graph->pop();
     return false;
   }
@@ -388,6 +389,8 @@ bool BubbleTree::run() {
   TLP_HASH_MAP<node,Vector<double,5> > relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);
+
+  TreeTest::cleanComputedTree(graph, tree);
 
   // forget last temporary graph state
   graph->pop();

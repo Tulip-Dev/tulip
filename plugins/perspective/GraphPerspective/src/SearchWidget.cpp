@@ -45,6 +45,7 @@ protected:
   tlp::PropertyInterface* _a;
   tlp::PropertyInterface* _b;
 public:
+  virtual ~SearchOperator() {}
   virtual void setProperties(tlp::PropertyInterface* a, tlp::PropertyInterface* b) {
     _a = a;
     _b = b;
@@ -141,46 +142,46 @@ NUM_CMP(GreaterEqualOperator,>=)
 NUM_CMP(LesserOperator,<)
 NUM_CMP(LesserEqualOperator,<=)
 
-QVector<SearchOperator*> SearchWidget::NUMERIC_OPERATORS = QVector<SearchOperator*>()
-    << new DoubleEqualsOperator
-    << new DoubleDifferentOperator
-    << new GreaterOperator
-    << new GreaterEqualOperator
-    << new LesserOperator
-    << new LesserEqualOperator
-    << new StartsWithOperator
-    << new EndsWithOperator
-    << new ContainsOperator
-    << new MatchesOperator;
-
-QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator*>()
-    << new StringEqualsOperator
-    << new StringDifferentOperator
-    << NULL
-    << NULL
-    << NULL
-    << NULL
-    << new StartsWithOperator
-    << new EndsWithOperator
-    << new ContainsOperator
-    << new MatchesOperator;
-
-QVector<SearchOperator*> SearchWidget::NOCASE_STRING_OPERATORS = QVector<SearchOperator*>()
-    << new NoCaseStringEqualsOperator
-    << new NoCaseStringDifferentOperator
-    << NULL
-    << NULL
-    << NULL
-    << NULL
-    << new NoCaseStartsWithOperator
-    << new NoCaseEndsWithOperator
-    << new NoCaseContainsOperator
-    << new NoCaseMatchesOperator;
-
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget), _graph(NULL) {
   _ui->setupUi(this);
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
+
+  NUMERIC_OPERATORS
+      << new DoubleEqualsOperator
+      << new DoubleDifferentOperator
+      << new GreaterOperator
+      << new GreaterEqualOperator
+      << new LesserOperator
+      << new LesserEqualOperator
+      << new StartsWithOperator
+      << new EndsWithOperator
+      << new ContainsOperator
+      << new MatchesOperator;
+
+  STRING_OPERATORS
+      << new StringEqualsOperator
+      << new StringDifferentOperator
+      << NULL
+      << NULL
+      << NULL
+      << NULL
+      << new StartsWithOperator
+      << new EndsWithOperator
+      << new ContainsOperator
+      << new MatchesOperator;
+
+  NOCASE_STRING_OPERATORS
+      << new NoCaseStringEqualsOperator
+      << new NoCaseStringDifferentOperator
+      << NULL
+      << NULL
+      << NULL
+      << NULL
+      << new NoCaseStartsWithOperator
+      << new NoCaseEndsWithOperator
+      << new NoCaseContainsOperator
+      << new NoCaseMatchesOperator;
 
   _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
@@ -191,6 +192,15 @@ SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::Search
 
 SearchWidget::~SearchWidget() {
   delete _ui;
+  foreach(SearchOperator *op, NUMERIC_OPERATORS) {
+    delete op;
+  }
+  foreach(SearchOperator *op, STRING_OPERATORS) {
+    delete op;
+  }
+  foreach (SearchOperator *op, NOCASE_STRING_OPERATORS) {
+    delete op;
+  }
 }
 
 void SearchWidget::setModel(tlp::GraphHierarchiesModel *model) {

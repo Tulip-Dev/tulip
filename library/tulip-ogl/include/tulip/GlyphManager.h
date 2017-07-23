@@ -45,10 +45,7 @@ public:
    * Return the singleton (if the singleton doesn't exist this function create it)
    */
   static GlyphManager &getInst() {
-    if(!inst)
-      inst=new GlyphManager();
-
-    return *inst;
+    return inst;
   }
 
   /**
@@ -77,7 +74,9 @@ private:
 
   GlyphManager();
 
-  static GlyphManager* inst;
+  static std::list<std::string> glyphList;
+
+  static GlyphManager inst;
 
 };
 

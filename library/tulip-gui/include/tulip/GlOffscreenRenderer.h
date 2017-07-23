@@ -109,7 +109,7 @@ public :
   /**
    * @brief Delete all the elements of the scene and clear it.
    **/
-  void clearScene();
+  void clearScene(bool deleteGlEntities = false);
 
   /**
    * @brief Render the scene in a buffer. You need to call this function before getting the result with getImage or getGlTexture.
@@ -133,7 +133,7 @@ private :
 
   void initFrameBuffers(const bool antialiased);
 
-  static GlOffscreenRenderer *instance;
+  static GlOffscreenRenderer instance;
 
   unsigned int vPWidth, vPHeight;
   QGLFramebufferObject *glFrameBuf, *glFrameBuf2;

@@ -443,7 +443,6 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
-            free(vBuf);
           }
           else {
             std::string sbuf = vs.str();
@@ -451,6 +450,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             // write buffer
             os.write(sbuf.c_str(), size);
           }
+        }
+
+        if (vBuf) {
+          free(vBuf);
         }
       }
       // write edges values
@@ -541,7 +544,6 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
-            free(vBuf);
           }
           else {
             std::string sbuf = vs.str();
@@ -549,6 +551,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             // write buffer
             os.write(sbuf.c_str(), size);
           }
+        }
+
+        if (vBuf) {
+          free(vBuf);
         }
       }
 

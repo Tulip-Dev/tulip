@@ -47,7 +47,6 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<QStringList>(new QStringListEditorCreator);
   registerCreator<tlp::Color>(new ColorEditorCreator);
   registerCreator<tlp::Coord>(new CoordEditorCreator);
-  registerCreator<tlp::Size>(new CoordEditorCreator);
   registerCreator<tlp::BooleanProperty*>(new PropertyEditorCreator<tlp::BooleanProperty>);
   registerCreator<tlp::DoubleProperty*>(new PropertyEditorCreator<tlp::DoubleProperty>);
   registerCreator<tlp::LayoutProperty*>(new PropertyEditorCreator<tlp::LayoutProperty>);
@@ -77,7 +76,6 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<std::vector<Coord> >(new VectorEditorCreator<Coord>);
   registerCreator<std::vector<double> >(new VectorEditorCreator<double>);
   registerCreator<std::vector<int> >(new VectorEditorCreator<int>);
-  registerCreator<std::vector<Size> >(new VectorEditorCreator<Size>);
   registerCreator<std::vector<std::string> >(new VectorEditorCreator<std::string>);
   registerCreator<TulipFont>(new TulipFontEditorCreator);
   registerCreator<LabelPosition::LabelPositions>(new TulipLabelPositionEditorCreator);
