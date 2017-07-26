@@ -26,6 +26,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/QuickAccessBar.h>
 
 #include <QToolTip>
 #include <QHelpEvent>
@@ -61,7 +62,7 @@ GLuint HistogramView::binTextureId(0);
 unsigned int HistogramView::histoViewInstancesCount(0);
 
 
-HistogramView::HistogramView(const PluginContext *) :
+HistogramView::HistogramView(const PluginContext *) : _bar(NULL),
   propertiesSelectionWidget(NULL), histoOptionsWidget(NULL), xAxisDetail(NULL), yAxisDetail(NULL), _histoGraph(NULL), emptyGraph(NULL),
   emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), mainLayer(NULL), detailedHistogram(NULL),
   sceneRadiusBak(0), zoomFactorBak(0),
@@ -88,9 +89,7 @@ HistogramView::~HistogramView() {
     delete labelsComposite;
     delete emptyGraph;
     delete axisComposite;
-
-    if (edgeAsNodeGraph)
-      delete edgeAsNodeGraph;
+    delete edgeAsNodeGraph;
   }
 }
 
@@ -149,6 +148,15 @@ void HistogramView::cleanupGlScene() {
     histogramsComposite->reset(true);
     histogramsMap.clear();
   }
+}
+
+QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
+    _bar = new QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|QuickAccessBarImpl::BACKGROUNDCOLOR|QuickAccessBarImpl::SHOWLABELS
+                                                                               |QuickAccessBarImpl::LABELSSCALED|QuickAccessBarImpl::SHOWEDGES
+                                                                              |QuickAccessBarImpl::NODECOLOR|QuickAccessBarImpl::EDGECOLOR|QuickAccessBarImpl::NODEBORDERCOLOR
+                                                                              |QuickAccessBarImpl::LABELCOLOR
+                                                                              ));
+    return _bar;
 }
 
 void HistogramView::setState(const DataSet &dataSet) {
@@ -349,6 +357,14 @@ void HistogramView::setState(const DataSet &dataSet) {
     histo->update();
     switchFromSmallMultiplesToDetailedView(histo);
   }
+
+  bool quickAccessBarVisible=false;
+  if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
+    needQuickAccessBar = true;
+    setQuickAccessBarVisible(quickAccessBarVisible);
+  }
+  else
+      setQuickAccessBarVisible(true);
 }
 
 DataSet HistogramView::state() const {
@@ -399,6 +415,10 @@ DataSet HistogramView::state() const {
   }
 
   dataSet.set("histo detailed name", histoDetailedNamed);
+
+  if (needQuickAccessBar)
+    dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
+
   return dataSet;
 }
 
@@ -527,8 +547,12 @@ void HistogramView::draw() {
     removeEmptyViewLabel();
     addEmptyViewLabel();
     gl->centerScene();
+    if(_bar)
+        _bar->setEnabled(false);
     return;
   }
+  if(_bar)
+      _bar->setEnabled(true);
 
   if (detailedHistogram != NULL) {
     needUpdateHistogram=true;

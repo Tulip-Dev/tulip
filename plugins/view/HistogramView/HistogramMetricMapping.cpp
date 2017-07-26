@@ -630,30 +630,12 @@ HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &his
 }
 
 HistogramMetricMapping::~HistogramMetricMapping() {
-  if (glColorScale != NULL) {
-    delete glColorScale;
-  }
-
-  if (glSizeScale != NULL) {
-    delete glSizeScale;
-  }
-
-  if (glGlyphScale != NULL) {
-    delete glGlyphScale;
-  }
-
-  if (colorScale != NULL) {
-    delete colorScale;
-  }
-
-  if (mappinqPolyQuad != NULL) {
-    delete mappinqPolyQuad;
-  }
-
-  if (popupMenu != NULL) {
-    delete popupMenu;
-  }
-
+  delete glColorScale;
+  delete glSizeScale;
+  delete glGlyphScale;
+  delete colorScale;
+  delete mappinqPolyQuad;
+  delete popupMenu;
   delete glyphMappingGraph;
   delete glyphMappingGraphInputData;
 }

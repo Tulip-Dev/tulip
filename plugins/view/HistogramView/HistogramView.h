@@ -49,6 +49,7 @@ class Interactor;
 class GlRect;
 class ViewGraphPropertiesSelectionWidget;
 class HistoOptionsWidget;
+class QuickAccessBarImpl;
 
 /*@{*/
 /** \file
@@ -67,6 +68,8 @@ class HistoOptionsWidget;
 class HistogramView : public GlMainView {
 
   Q_OBJECT
+
+    QuickAccessBarImpl* _bar;
 
 public :
 
@@ -96,6 +99,8 @@ public :
   bool smallMultiplesViewSet() const {
     return smallMultiplesView;
   }
+
+  QuickAccessBar* getQuickAccessBarImpl();
 
   void switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail);
   void switchFromDetailedViewToSmallMultiples();
