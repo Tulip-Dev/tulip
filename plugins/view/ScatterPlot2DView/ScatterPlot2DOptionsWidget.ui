@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>404</width>
+    <width>448</width>
     <height>688</height>
    </rect>
   </property>
@@ -367,6 +367,26 @@
      </property>
      <property name="text">
       <string>Show graph edges above scatterplot</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="showLabelCB">
+     <property name="text">
+      <string>Show node labels</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="scaleLabels">
+     <property name="text">
+      <string>Scale node labels to fit to node's size</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

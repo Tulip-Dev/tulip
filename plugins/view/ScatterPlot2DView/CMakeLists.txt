@@ -10,6 +10,7 @@ SET(LIB_SRCS
     ScatterPlot2DInteractors.cpp
     ScatterPlotCorrelCoeffSelector.cpp
     ScatterPlotCorrelCoeffSelectorOptionsWidget.cpp
+    ScatterPlotQuickAccessBar.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
@@ -22,6 +23,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
     ScatterPlot2DView.h
     ScatterPlot2DOptionsWidget.h
     ScatterPlotCorrelCoeffSelectorOptionsWidget.h
+      ScatterPlotQuickAccessBar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 

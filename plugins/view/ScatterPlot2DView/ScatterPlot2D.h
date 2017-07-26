@@ -128,6 +128,15 @@ public :
   void setDisplayGraphEdges(const bool displayGraphEdges) {
     displayEdges = displayGraphEdges;
   }
+
+  void setDisplayNodeLabels(const bool displayNodelabels) {
+      displaylabels = displayNodelabels;
+  }
+
+  void setLabelsScaled(const bool scalelabel) {
+      scale = scalelabel;
+  }
+
   void setDataLocation(const ElementType &dataLocation);
 
 private :
@@ -173,6 +182,8 @@ private :
   double correlationCoeff;
 
   bool displayEdges;
+  bool displaylabels;
+  bool scale;
 
   int overviewId;
   static int overviewCpt;

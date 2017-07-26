@@ -63,13 +63,14 @@ class SizeProperty;
 class GlGraphComposite;
 class ScatterPlot2DOptionsWidget;
 class ViewGraphPropertiesSelectionWidget;
+class ScatterPlotQuickAccessBar;
 
 class ScatterPlot2DView : public GlMainView {
 
   Q_OBJECT
 
   void registerTriggers();
-
+  ScatterPlotQuickAccessBar* _bar;
 public :
 
   PLUGININFORMATION(ViewName::ScatterPlot2DViewName, "Antoine Lambert", "03/2009",
@@ -83,6 +84,9 @@ public :
   std::string icon() const {
     return ":/scatter_plot2d_view.png";
   }
+
+
+  QuickAccessBar* getQuickAccessBarImpl();
 
   void setState(const DataSet &dataSet);
   DataSet state() const;

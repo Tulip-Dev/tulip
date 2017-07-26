@@ -191,6 +191,22 @@ void ScatterPlot2DOptionsWidget::showEvent(QShowEvent*) {
   updateColorScale();
 }
 
+bool ScatterPlot2DOptionsWidget::displayNodeLabels() const {
+    return _ui->showLabelCB->isChecked();
+}
+
+void ScatterPlot2DOptionsWidget::setDisplayNodeLabels(const bool showLabels) {
+    _ui->showLabelCB->setChecked(showLabels);
+}
+
+bool ScatterPlot2DOptionsWidget::displayScaleLabels() const {
+    return _ui->scaleLabels->isChecked();
+}
+
+void ScatterPlot2DOptionsWidget::setDisplayScaleLabels(const bool scaleLabels) {
+    _ui->scaleLabels->setChecked(scaleLabels);
+}
+
 bool ScatterPlot2DOptionsWidget::displayGraphEdges() const {
   return _ui->showEdgesCB->isChecked();
 }
@@ -233,6 +249,8 @@ bool ScatterPlot2DOptionsWidget::configurationChanged() {
         oldMinSizeMapping!=getMinSizeMapping() ||
         oldMaxSizeMapping!=getMaxSizeMapping() ||
         oldDisplayGraphEdges!=displayGraphEdges() ||
+        oldDisplayNodeLabels!=displayNodeLabels() ||
+        oldlabelscaled!=displayScaleLabels()||
         oldUseCustomXAxisScale!=useCustomXAxisScale() ||
         oldUseCustomYAxisScale!=useCustomYAxisScale()) {
       confChanged=true;
@@ -252,6 +270,8 @@ bool ScatterPlot2DOptionsWidget::configurationChanged() {
     oldMinSizeMapping=getMinSizeMapping();
     oldMaxSizeMapping=getMaxSizeMapping();
     oldDisplayGraphEdges=displayGraphEdges();
+    oldDisplayNodeLabels=displayNodeLabels();
+    oldlabelscaled=displayScaleLabels();
     oldUseCustomXAxisScale=useCustomXAxisScale();
     oldUseCustomYAxisScale=useCustomYAxisScale();
     oldXAxisScale=getXAxisScale();

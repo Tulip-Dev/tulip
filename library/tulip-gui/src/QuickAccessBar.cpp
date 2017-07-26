@@ -99,6 +99,22 @@ QuickAccessBar::QuickAccessBar(QWidget *parent):QWidget(parent),_mainView(NULL) 
 
 #include "ui_QuickAccessBar.h"
 
+QPushButton* QuickAccessBarImpl::showEdgesButton() {
+    return _ui->showEdgesToggle;
+}
+
+QPushButton* QuickAccessBarImpl::showLabelsButton() {
+    return _ui->showLabelsToggle;
+}
+
+QPushButton* QuickAccessBarImpl::showLabelScaled() {
+    return _ui->labelsScaledToggle;
+}
+
+ColorButton* QuickAccessBarImpl::backgroundColorButton() {
+    return _ui->backgroundColorButton;
+}
+
 QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickAccessButtons buttons, QWidget *parent)
   : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
   _ui->setupUi(this);

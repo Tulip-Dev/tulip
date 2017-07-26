@@ -49,10 +49,10 @@ namespace tlp {
 
 int ScatterPlot2D::overviewCpt(0);
 
-static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
+static void setGraphView (GlGraphComposite *glGraph, bool displayEdges, bool nodelabel, bool scale) {
   GlGraphRenderingParameters param = glGraph->getRenderingParameters ();
   param.setAntialiasing (true);
-  param.setViewNodeLabel (true);
+  param.setViewNodeLabel (nodelabel);
   param.setFontsType (2);
   param.setSelectedNodesStencil(1);
   param.setNodesStencil(0xFFFF);
@@ -62,6 +62,7 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
   param.setSelectedEdgesStencil(1);
   param.setDisplayNodes(true);
   param.setDisplayMetaNodes(true);
+  param.setLabelScaled(scale);
   glGraph->setRenderingParameters (param);
 }
 
@@ -70,8 +71,7 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph* edgeGraph,
                              const string& xDim, const string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
   : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), scatterLayout(new LayoutProperty(graph)), scatterEdgeLayout(new LayoutProperty(graph)), xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
     foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(edgeGraph), nodeToEdge(nodeMap), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
-    xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
-  edge e;
+    xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false), displaylabels(true), scale(true) {
 
   if (dataLocation == NODE) {
     glGraphComposite = new GlGraphComposite(graph);
@@ -86,7 +86,7 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph* edgeGraph,
     glGraphInputData->setElementSize(edgeAsNodeGraph->getProperty<SizeProperty>("viewSize"));
   }
 
-  setGraphView(glGraphComposite, (dataLocation == NODE) ? displayEdges : false);
+  setGraphView(glGraphComposite, (dataLocation == NODE) ? displayEdges : false, displaylabels, scale);
   backgroundRect = new GlRect(Coord(blCorner.getX(), blCorner.getY() + size), Coord(blCorner.getX() + size, blCorner.getY()), backgroundColor, backgroundColor, true, false);
   addGlEntity(backgroundRect, "background rect");
   clickLabel = new GlLabel(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), Size(size, size / 4.0f), foregroundColor);
@@ -180,7 +180,7 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
     backgroundLayer->addGlEntity(background,"background");
   }
 
-  setGraphView(glGraphComposite, displayEdges);
+  setGraphView(glGraphComposite, displayEdges, displaylabels,scale);
 
   glOffscreenRenderer->setSceneBackgroundColor(backgroundColor);
   glOffscreenRenderer->addGraphCompositeToScene(glGraphComposite);

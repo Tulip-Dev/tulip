@@ -29,6 +29,7 @@
 
 class QGraphicsItem;
 class QAbstractButton;
+class QPushButton;
 
 namespace Ui {
 class QuickAccessBar;
@@ -43,6 +44,7 @@ class TulipItemDelegate;
 class ColorProperty;
 class Color;
 class PropertyInterface;
+class ColorButton;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
@@ -67,7 +69,7 @@ signals:
 
 class TLP_QT_SCOPE QuickAccessBarImpl : public QuickAccessBar {
   Q_OBJECT
-  Ui::QuickAccessBar* _ui;
+    Ui::QuickAccessBar* _ui;
   QGraphicsItem *_quickAccessBarItem;
 
   TulipItemDelegate* delegate;
@@ -93,6 +95,11 @@ public:
   explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem=NULL,QuickAccessButtons button=ALLBUTTONS,QWidget *parent = 0);
   virtual ~QuickAccessBarImpl();
 
+  QPushButton* showEdgesButton();
+  ColorButton* backgroundColorButton();
+  QPushButton* showLabelsButton();
+  QPushButton* showLabelScaled();
+
 protected:
   void addButtonAtEnd(QAbstractButton* button);
   void addButtonsAtEnd(const QVector<QAbstractButton*>& buttonvect);
@@ -106,7 +113,7 @@ protected:
 public slots:
   void reset();
 
-  void setBackgroundColor(const QColor&);
+  virtual void setBackgroundColor(const QColor&);
   void setColorInterpolation(bool);
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
@@ -123,9 +130,9 @@ public slots:
   void showHideEdgesColorCaption();
   void showHideEdgesSizeCaption();
   void takeSnapshot();
-  void setEdgesVisible(bool);
-  void setLabelsVisible(bool);
-  void setLabelsScaled(bool);
+  virtual void setEdgesVisible(bool);
+  virtual void setLabelsVisible(bool);
+  virtual void setLabelsScaled(bool);
   void selectFont();
   void setNodeLabelPosition();
 };

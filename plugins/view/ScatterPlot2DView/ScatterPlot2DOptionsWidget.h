@@ -76,6 +76,12 @@ public :
   bool displayGraphEdges() const;
   void setDisplayGraphEdges(const bool showEdges);
 
+  bool displayNodeLabels() const;
+  void setDisplayNodeLabels(const bool showLabels);
+
+  bool displayScaleLabels() const;
+  void setDisplayScaleLabels(const bool scaleLabels);
+
   bool configurationChanged();
 
 protected :
@@ -99,6 +105,8 @@ private :
   Size oldMinSizeMapping;
   Size oldMaxSizeMapping;
   bool oldDisplayGraphEdges;
+  bool oldDisplayNodeLabels;
+  bool oldlabelscaled;
   bool oldUseCustomXAxisScale;
   bool oldUseCustomYAxisScale;
   std::pair <double, double> oldXAxisScale, oldYAxisScale; //<min, max>
