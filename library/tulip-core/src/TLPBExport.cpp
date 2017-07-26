@@ -367,11 +367,13 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // prepare ouput stream
         stringstream vs;
 
-        // seems there is a bug in emscripten that prevents to use the stringstream buffer optimization,
-        // so fallback  writing directly to the output stream in that case
-        bool emscripten = false;
-#ifdef __EMSCRIPTEN__
-        emscripten = true;
+        // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
+        // see https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L150
+        // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
+        // so fallback writing directly to the output stream in that case
+        bool canUsePubSetBuf = true;
+#ifdef _LIBCPP_VERSION
+        canUsePubSetBuf = false;
         std::ostream &s = os;
 #else
         std::ostream &s = vs;
@@ -379,7 +381,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         char* vBuf = NULL;
         unsigned int valueSize = prop->nodeValueSize();
 
-        if (valueSize && !emscripten) {
+        if (valueSize && canUsePubSetBuf) {
           // allocate a special buffer for values
           // this will ease the write of a bunch of values
           vBuf = (char *) malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -422,7 +424,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
           ++nbValues;
 
-          if (nbValues == MAX_VALUES_TO_WRITE && !emscripten) {
+          if (nbValues == MAX_VALUES_TO_WRITE && canUsePubSetBuf) {
             // write already buffered values
             if (vBuf)
               os.write(vBuf, MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -439,7 +441,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           }
         }
 
-        if (nbValues && !emscripten) {
+        if (nbValues && canUsePubSetBuf) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
@@ -464,11 +466,13 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // prepare ouput stream
         stringstream vs;
 
-        // seems there is a bug in emscripten that prevents to use the stringstream buffer optimization,
-        // so fallback  writing directly to the output stream in that case
-        bool emscripten = false;
-#ifdef __EMSCRIPTEN__
-        emscripten = true;
+        // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
+        // see https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L150
+        // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
+        // so fallback writing directly to the output stream in that case
+        bool canUsePubSetBuf = true;
+#ifdef _LIBCPP_VERSION
+        canUsePubSetBuf = false;
         ostream &s = os;
 #else
         ostream &s = vs;
@@ -477,7 +481,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         unsigned int valueSize = prop->edgeValueSize();
         bool isGraphProperty = false;
 
-        if (valueSize && !emscripten) {
+        if (valueSize && canUsePubSetBuf) {
           // allocate a special buffer for values
           // this will ease the write of a bunch of values
           vBuf = (char *) malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -523,7 +527,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
           ++nbValues;
 
-          if (nbValues == MAX_VALUES_TO_WRITE && !emscripten) {
+          if (nbValues == MAX_VALUES_TO_WRITE && canUsePubSetBuf) {
             // write already buffered values
             if (vBuf)
               os.write(vBuf, MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -540,7 +544,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           }
         }
 
-        if (nbValues && !emscripten) {
+        if (nbValues && canUsePubSetBuf) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));

@@ -368,11 +368,13 @@ bool TLPBImport::importGraph() {
         if (!bool(is->read((char *) &numValues, sizeof(numValues))))
           return (delete is, errorTrap());
 
-        // seems there is a bug in emscripten that prevents to use the stringstream buffer optimization,
-        // so fallback  reading directly from the input stream in that case
-        bool emscripten = false;
-#ifdef __EMSCRIPTEN__
-        emscripten = true;
+        // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
+        // see https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L150
+        // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
+        // so fallback reading directly from the input stream in that case
+        bool canUsePubSetBuf = true;
+#ifdef _LIBCPP_VERSION
+        canUsePubSetBuf = false;
 #endif
 
         // loop on nodes values
@@ -383,7 +385,7 @@ bool TLPBImport::importGraph() {
           size = sizeof(tlp::Graph*);
         }
 
-        if (size && !emscripten) {
+        if (size && canUsePubSetBuf) {
           // as the size of any value is fixed
           // we can use a buffer to limit the number of disk reads
           char *vBuf;
@@ -471,7 +473,7 @@ bool TLPBImport::importGraph() {
         // loop on edges values
         size = prop->edgeValueSize();
 
-        if (size && !emscripten) {
+        if (size && canUsePubSetBuf) {
           // as the size of any value is fixed
           // we can use a buffer to limit the number of disk reads
           char *vBuf;
