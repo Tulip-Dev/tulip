@@ -302,7 +302,7 @@ bool GraphPerspective::terminated() {
 
   // ensure all loaded graphs are deleted
   tlp::Graph *graph = NULL;
-  forEach(graph, tlp::getRootGraphs()) {
+  foreach(graph, _graphs->graphs()) {
     delete graph;
   }
 
