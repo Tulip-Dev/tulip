@@ -115,6 +115,10 @@ ColorButton* QuickAccessBarImpl::backgroundColorButton() {
     return _ui->backgroundColorButton;
 }
 
+QPushButton* QuickAccessBarImpl::showColorInterpolation() {
+    return _ui->colorInterpolationToggle;
+}
+
 QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickAccessButtons buttons, QWidget *parent)
   : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
   _ui->setupUi(this);

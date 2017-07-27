@@ -99,6 +99,7 @@ public:
   ColorButton* backgroundColorButton();
   QPushButton* showLabelsButton();
   QPushButton* showLabelScaled();
+  QPushButton* showColorInterpolation();
 
 protected:
   void addButtonAtEnd(QAbstractButton* button);
@@ -114,7 +115,7 @@ public slots:
   void reset();
 
   virtual void setBackgroundColor(const QColor&);
-  void setColorInterpolation(bool);
+  virtual void setColorInterpolation(bool);
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
   void setNodeBorderColor(const QColor&);
