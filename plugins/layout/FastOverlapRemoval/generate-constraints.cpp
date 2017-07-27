@@ -114,6 +114,10 @@ NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
   NodeSet *leftv = new NodeSet;
   NodeSet::iterator i=scanline.find(v);
 
+  if (i == scanline.begin()) {
+    return leftv;
+  }
+
   while(i--!=scanline.begin()) {
     Node *u=*(i);
 
@@ -124,6 +128,9 @@ NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
 
     if(u->r->overlapX(v->r)<=u->r->overlapY(v->r)) {
       leftv->insert(u);
+    }
+    if (i == scanline.begin()) {
+      break;
     }
   }
 
@@ -212,7 +219,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle** rs, Variable** vars, 
       else {
         NodeSet::iterator it=scanline.find(v);
 
-        if(it--!=scanline.begin()) {
+        if (it != scanline.begin() && it--!=scanline.begin()) {
           Node *u=*it;
           v->firstAbove=u;
           u->firstBelow=v;
@@ -303,7 +310,7 @@ int ConstraintsGenerator::generateYConstraints(Rectangle** rs, Variable** vars, 
       scanline.insert(v);
       NodeSet::iterator i=scanline.find(v);
 
-      if(i--!=scanline.begin()) {
+      if (i!=scanline.begin() && i--!=scanline.begin()) {
         Node *u=*i;
         v->firstAbove=u;
         u->firstBelow=v;

@@ -825,7 +825,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
 
               if(n_tmp == nl) {
                 OutPoints[e_tmp] = out_points[n_tmp][t - 1];
-                out_points[n_tmp].erase(out_points[n_tmp].end());
+                out_points[n_tmp].pop_back();
               }
 
               else {
