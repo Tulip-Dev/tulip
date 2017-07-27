@@ -591,8 +591,8 @@ void MatrixView::registerTriggers() {
     removeRedrawTrigger(obs);
   }
 
-  if(_matrixGraph) {
-    addRedrawTrigger(_matrixGraph);
+  if(graph()) {
+    addRedrawTrigger(graph());
     Iterator<string> *it = _matrixGraph->getProperties();
 
     while(it->hasNext()) {
