@@ -905,6 +905,7 @@ void HistogramView::registerTriggers() {
       PropertyInterface *property=graph()->getProperty(it->next());
       addRedrawTrigger(property);
     }
+    delete it;
   }
 }
 

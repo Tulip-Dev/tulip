@@ -186,9 +186,9 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
   }
 
   bool sameSelectedProperties=true;
-  vector<string>::iterator itLast=lastSelectedProperties.begin();
+  vector<string>::const_iterator itLast=lastSelectedProperties.begin();
 
-  for(vector<string>::iterator it=selectedProperties.begin(); it!=selectedProperties.end(); ++it) {
+  for(vector<string>::const_iterator it=selectedProperties.begin(); it!=selectedProperties.end(); ++it) {
     if((*it)!=(*itLast)) {
       sameSelectedProperties=false;
       break;
