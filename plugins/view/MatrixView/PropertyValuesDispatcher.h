@@ -21,6 +21,10 @@
 #define PROPERTYVALUESDISPATCHER_H
 
 #include <QHash>
+
+#include <set>
+#include <string>
+
 #include <tulip/Observable.h>
 #include <tulip/Graph.h>
 
@@ -28,12 +32,8 @@ namespace tlp {
 class IntegerVectorProperty;
 class BooleanProperty;
 class IntegerProperty;
-}
 
-#include <set>
-#include <string>
-
-class PropertyValuesDispatcher: public tlp::Observable {
+class PropertyValuesDispatcher: public Observable {
 public:
   PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
                            const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
@@ -59,5 +59,5 @@ private:
   std::set<std::string> _targetToSourceProperties;
   bool _modifying;
 };
-
+}
 #endif // PROPERTYVALUESDISPATCHER_H

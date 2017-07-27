@@ -24,8 +24,9 @@
 
 #include "MatrixView.h"
 
-using namespace tlp;
 using namespace std;
+
+namespace tlp {
 
 GlMatrixBackgroundGrid::GlMatrixBackgroundGrid(MatrixView *view): _view(view) {
 }
@@ -73,4 +74,5 @@ void GlMatrixBackgroundGrid::draw(float lod,tlp::Camera* camera) {
     GlLine line(points, colors);
     line.draw(lod, camera);
   }
+}
 }

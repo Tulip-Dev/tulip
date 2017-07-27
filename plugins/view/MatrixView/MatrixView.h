@@ -31,7 +31,8 @@ class IntegerVectorProperty;
 class IntegerProperty;
 class BooleanProperty;
 class DoubleProperty;
-}
+
+class MatrixViewQuickAccessBar;
 
 class PropertyValuesDispatcher;
 
@@ -45,8 +46,11 @@ class PropertyValuesDispatcher;
  * There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its diagonal.
  * If the graph is undirected, the adjacency matrix is symmetric.
  */
-class MatrixView: public tlp::NodeLinkDiagramComponent {
+class MatrixView: public NodeLinkDiagramComponent {
   Q_OBJECT
+
+    MatrixViewQuickAccessBar* _bar;
+
 public:
 
   PLUGININFORMATION(tlp::ViewName::MatrixViewName, "Ludwig Fiolka", "07/01/2011",
@@ -57,10 +61,11 @@ public:
                     "If the graph is undirected, the adjacency matrix is symmetric.</p>", "2.0","View")
 
   MatrixView(const tlp::PluginContext *);
-  virtual ~MatrixView();
+  ~MatrixView();
   std::string icon() const {
     return ":/adjacency_matrix_view.png";
   }
+  QuickAccessBar* getQuickAccessBarImpl();
   virtual void setState(const tlp::DataSet &dataSet);
   virtual void graphChanged(tlp::Graph *graph);
 
@@ -112,7 +117,7 @@ private:
 
   std::set<std::string> _sourceToTargetProperties;
   std::string _orderingMetricName;
-  std::vector<tlp::node> _orderedNodes;
+  std::vector<node> _orderedNodes;
 
 
   void deleteDisplayedGraph();
@@ -123,5 +128,5 @@ private:
   void updateNodesOrder();
   void updateLayout();
 };
-
+}
 #endif // MATRIXVIEW_H

@@ -23,13 +23,13 @@
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
 #include <tulip/Perspective.h>
+#include <tulip/ColorButton.h>
 #include <tulip/TlpQtTools.h>
 
 #include <QMainWindow>
 
-using namespace tlp;
 using namespace std;
-
+namespace tlp {
 MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
   _ui->setupUi(this);
   connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(orderingMetricComboIndexChanged(int)));
@@ -52,12 +52,26 @@ void MatrixViewConfigurationWidget::setBackgroundColor(const QColor &c) {
   _ui->backgroundColorBtn->setColor(c);
 }
 
+Color MatrixViewConfigurationWidget::getBackgroundColor() const {
+    return _ui->backgroundColorBtn->tulipColor();
+}
+
 void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
   _ui->showedgesbox->setChecked(state);
+  emit showEdges(state);
+}
+
+bool MatrixViewConfigurationWidget::displayGraphEdges() const {
+  return _ui->showedgesbox->isChecked();
 }
 
 void MatrixViewConfigurationWidget::setEdgeColorInterpolation(const bool state) {
   _ui->enableColorInterpolationCBox->setChecked(state);
+  emit enableEdgeColorInterpolation(state);
+}
+
+bool MatrixViewConfigurationWidget::isEdgeColorInterpolation() const {
+    return _ui->enableColorInterpolationCBox->isChecked();
 }
 
 void MatrixViewConfigurationWidget::setAscendingOrder(const bool state) {
@@ -73,6 +87,8 @@ void MatrixViewConfigurationWidget::setOriented(const bool state) {
 }
 
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
+    if(g==NULL)
+        return;
   QString firstString = _ui->orderingMetricCombo->itemText(0);
   QString currentString = _ui->orderingMetricCombo->currentText();
   _modifyingMetricList = true;
@@ -84,7 +100,7 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   forEach (s, g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
-    if (type != "double" && type != "int" && type != "string")
+    if (type != DoubleProperty::propertyTypename && type != IntegerProperty::propertyTypename && type != StringProperty::propertyTypename)
       continue;
 
     _ui->orderingMetricCombo->addItem(tlpStringToQString(s));
@@ -102,7 +118,7 @@ void MatrixViewConfigurationWidget::orderingMetricComboIndexChanged(int i) {
   if (_modifyingMetricList)
     return;
 
-  string name("");
+  string name;
 
   if (i > 0)
     name = QStringToTlpString(_ui->orderingMetricCombo->itemText(i));
@@ -128,4 +144,5 @@ void MatrixViewConfigurationWidget::setOrderingProperty(int index) {
 
 void MatrixViewConfigurationWidget::setgridmode(int index) {
   _ui->gridDisplayCombo->setCurrentIndex(index);
+}
 }

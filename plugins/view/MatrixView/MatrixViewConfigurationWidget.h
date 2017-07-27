@@ -22,13 +22,14 @@
 
 #include <QWidget>
 
-namespace tlp {
-class Graph;
-}
+#include <tulip/Color.h>
 
 namespace Ui {
 class MatrixViewConfigurationWidget;
 }
+
+namespace tlp {
+class Graph;
 
 enum GridDisplayMode {
   SHOW_ALWAYS = 0,
@@ -49,8 +50,11 @@ public:
   GridDisplayMode gridDisplayMode() const;
   void setgridmode(int index);
   void setBackgroundColor(const QColor &);
+  Color getBackgroundColor() const;
   void setDisplayEdges(const bool state);
+  bool displayGraphEdges() const;
   void setEdgeColorInterpolation(const bool state);
+  bool isEdgeColorInterpolation() const;
   int orderingProperty() const;
   void setOrderingProperty(int index);
   void setAscendingOrder(const bool state);
@@ -72,5 +76,5 @@ signals:
 private:
   bool _modifyingMetricList;
 };
-
+}
 #endif // MATRIXVIEWCONFIGURATIONWIDGET_H

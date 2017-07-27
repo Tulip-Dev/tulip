@@ -21,7 +21,7 @@
 #define GLMATRIXBACKGROUNDGRID_H
 
 #include <tulip/GlSimpleEntity.h>
-
+namespace tlp {
 class MatrixView;
 
 class GlMatrixBackgroundGrid: public tlp::GlSimpleEntity {
@@ -36,5 +36,5 @@ public:
 private:
   MatrixView *_view;
 };
-
+}
 #endif // GLMATRIXBACKGROUNDGRID_H

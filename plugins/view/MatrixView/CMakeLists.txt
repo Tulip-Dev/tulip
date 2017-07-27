@@ -5,6 +5,7 @@ SET(LIB_SRCS
     PropertyValuesDispatcher.cpp
     MatrixViewConfigurationWidget.cpp
     GlMatrixBackgroundGrid.cpp
+    MatrixViewQuickAccessBar.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
@@ -14,6 +15,7 @@ QTX_WRAP_UI(LIB_UI_HEADERS
 QTX_WRAP_CPP(LIB_MOC_SRCS
     MatrixView.h
     MatrixViewConfigurationWidget.h
+    MatrixViewQuickAccessBar.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS MatrixView.qrc)

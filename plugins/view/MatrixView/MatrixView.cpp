@@ -23,6 +23,7 @@
 #include "MatrixView.h"
 #include "PropertyValuesDispatcher.h"
 #include "GlMatrixBackgroundGrid.h"
+#include "MatrixViewQuickAccessBar.h"
 
 #include <tulip/Graph.h>
 #include <tulip/IntegerProperty.h>
@@ -35,17 +36,24 @@
 #include <tulip/ParametricCurves.h>
 #include <tulip/TulipViewSettings.h>
 
-using namespace tlp;
 using namespace std;
 
+namespace tlp {
+
 MatrixView::MatrixView(const PluginContext *):
-  NodeLinkDiagramComponent(),
+  NodeLinkDiagramComponent(),_bar(NULL),
   _matrixGraph(NULL), _graphEntitiesToDisplayedNodes(NULL), _displayedNodesToGraphEntities(NULL), _displayedEdgesToGraphEdges(NULL), _displayedNodesAreNodes(NULL), _dispatcher(NULL),
   _configurationWidget(NULL), _mustUpdateSizes(false), _mustUpdateLayout(false), _isOriented(false), _orderingMetricName("") {
 }
 
 MatrixView::~MatrixView() {
   deleteDisplayedGraph();
+}
+
+QuickAccessBar* MatrixView::getQuickAccessBarImpl() {
+    _bar = new MatrixViewQuickAccessBar(_configurationWidget);
+    connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+    return _bar;
 }
 
 void MatrixView::setState(const DataSet &ds) {
@@ -62,11 +70,6 @@ void MatrixView::setState(const DataSet &ds) {
     connect(_configurationWidget, SIGNAL(showEdges(bool)), this, SLOT(showEdges(bool)));
     connect(_configurationWidget, SIGNAL(enableEdgeColorInterpolation(bool)), this, SLOT(enableEdgeColorInterpolation(bool)));
     connect(_configurationWidget, SIGNAL(updateOriented(bool)), this, SLOT(setOriented(bool)));
-
-    QAction* centerAction = new QAction(trUtf8("Center"),this);
-    centerAction->setShortcut(trUtf8("Ctrl+Shift+C"));
-    connect(centerAction,SIGNAL(triggered()),getGlMainWidget(),SLOT(centerScene()));
-    graphicsView()->addAction(centerAction);
   }
 
   _configurationWidget->setGraph(graph());
@@ -103,6 +106,14 @@ void MatrixView::setState(const DataSet &ds) {
   ds.get("edge color interpolation", status);
   enableEdgeColorInterpolation(status);
   _configurationWidget->setEdgeColorInterpolation(status);
+
+  bool quickAccessBarVisible=false;
+  if (ds.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
+    needQuickAccessBar = true;
+    setQuickAccessBarVisible(quickAccessBarVisible);
+  }
+  else //display quickaccessbar
+      setQuickAccessBarVisible(true);
 }
 
 void MatrixView::showEdges(bool show) {
@@ -166,6 +177,9 @@ DataSet MatrixView::state() const {
   ds.set("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
   ds.set("ordering", _configurationWidget->orderingProperty());
   ds.set("oriented", _isOriented);
+  if (needQuickAccessBar)
+    ds.set("quickAccessBarVisible", quickAccessBarVisible());
+
   return ds;
 }
 
@@ -253,7 +267,7 @@ void MatrixView::initDisplayedGraph() {
 
   deleteDisplayedGraph();
 
-  if(!graph()) {
+  if(graph()==NULL) {
     return;
   }
 
@@ -314,6 +328,8 @@ void MatrixView::initDisplayedGraph() {
 }
 
 void MatrixView::normalizeSizes(double maxVal) {
+    if(graph()==NULL)
+        return;
   float maxWidth=FLT_MIN, maxHeight=FLT_MIN;
   SizeProperty *originalSizes = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize();
   SizeProperty *matrixSizes = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize();
@@ -479,6 +495,8 @@ void MatrixView::updateNodesOrder() {
 }
 
 void MatrixView::updateLayout() {
+    if(graph()==NULL)
+        return;
   holdObservers();
   updateNodesOrder();
 
@@ -528,7 +546,6 @@ void MatrixView::updateLayout() {
     float xMax = max(srcPos[0],tgtPos[0]);
     float xMin = min(srcPos[0],tgtPos[0]);
     float dist = (xMax - xMin);
-    Coord b(xMin+dist,srcPos[1]+dist/2.,0);
     std::vector<Coord> bends(4);
     bends[0] = srcPos;
     bends[1] = srcPos;
@@ -550,7 +567,7 @@ void MatrixView::setBackgroundColor(QColor c) {
 }
 
 void MatrixView::setOrderingMetric(const std::string& name) {
-  if (name != "" && !graph()->existProperty(name))
+  if (!name.empty() && !graph()->existProperty(name))
     return;
 
   if (graph()->existProperty(_orderingMetricName))
@@ -582,6 +599,7 @@ void MatrixView::registerTriggers() {
       PropertyInterface *property=_matrixGraph->getProperty(it->next());
       addRedrawTrigger(property);
     }
+    delete it;
   }
 }
 
@@ -611,3 +629,4 @@ void MatrixView::applySettings() {
 }
 
 PLUGIN(MatrixView)
+}

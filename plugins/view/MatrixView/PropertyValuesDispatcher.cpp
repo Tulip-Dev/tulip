@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
-
 #include "PropertyValuesDispatcher.h"
 
 #include <tulip/ForEach.h>
@@ -25,11 +23,11 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/BooleanProperty.h>
 
-#include <cassert>
 #include <typeinfo>
 
-using namespace tlp;
 using namespace std;
+
+namespace tlp {
 
 PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
     const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
@@ -230,4 +228,5 @@ void PropertyValuesDispatcher::treatEvent(const tlp::Event& evt) {
       }
     }
   }
+}
 }
