@@ -1026,6 +1026,7 @@ void ScatterPlot2DView::registerTriggers() {
       PropertyInterface *property=getScatterPlotGraph()->getProperty(it->next());
       addRedrawTrigger(property);
     }
+    delete it;
   }
 }
 
