@@ -66,23 +66,24 @@ public:
     return ":/adjacency_matrix_view.png";
   }
   QuickAccessBar* getQuickAccessBarImpl();
-  virtual void setState(const tlp::DataSet &dataSet);
-  virtual void graphChanged(tlp::Graph *graph);
+  void setState(const tlp::DataSet &dataSet);
+  void graphChanged(tlp::Graph *graph);
 
-  virtual tlp::DataSet state() const;
-  virtual QList<QWidget *> configurationWidgets() const;
+  tlp::DataSet state() const;
+  QList<QWidget *> configurationWidgets() const;
 
-  virtual void draw();
-  virtual void refresh();
+  void draw();
+  void refresh();
 
   GridDisplayMode gridDisplayMode() const {
     return _configurationWidget->gridDisplayMode();
   }
 
-  virtual void addNode(tlp::Graph *, const tlp::node);
-  virtual void addEdge(tlp::Graph *, const tlp::edge );
-  virtual void delNode(tlp::Graph *,const tlp::node );
-  virtual void delEdge(tlp::Graph *,const tlp::edge );
+  void addNode(tlp::Graph *, const tlp::node);
+  void addEdge(tlp::Graph *, const tlp::edge );
+  void delNode(tlp::Graph *,const tlp::node );
+  void delEdge(tlp::Graph *,const tlp::edge );
+  void treatEvent(const Event &message);
 
   void fillContextMenu(QMenu *menu,const QPointF &point);
 

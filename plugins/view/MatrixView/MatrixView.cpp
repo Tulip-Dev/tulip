@@ -403,6 +403,20 @@ void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
   colors->setEdgeValue(dispEdge,originalColors->getEdgeValue(e));
 }
 
+void MatrixView::treatEvent(const Event &message) {
+    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
+    if(graphEvent) {
+      if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
+        addEdge(graphEvent->getGraph(),graphEvent->getEdge());
+
+      if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
+        delNode(graphEvent->getGraph(),graphEvent->getNode());
+
+      if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
+        delEdge(graphEvent->getGraph(),graphEvent->getEdge());
+    }
+}
+
 void MatrixView::delNode(tlp::Graph *,const tlp::node n) {
   _mustUpdateLayout = true;
   _mustUpdateSizes=true;
