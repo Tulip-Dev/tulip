@@ -44,7 +44,7 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   if(e->type() != QEvent::MouseButtonDblClick && e->type() != QEvent::MouseMove)
     return false;
 
-  GlMainWidget *glWidget = (GlMainWidget *) widget;
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
 
   if (!glWidget->hasMouseTracking()) {
     glWidget->setMouseTracking(true);
@@ -54,12 +54,12 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     pixelView->toggleInteractors(true);
   }
 
-  if (pixelView->getOverviews().size() == 0) {
+  if (pixelView->getOverviews().empty()) {
     return false;
   }
 
   if (e->type() == QEvent::MouseMove && pixelView->smallMultiplesViewSet()) {
-    QMouseEvent *me = (QMouseEvent *) e;
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
@@ -99,9 +99,8 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord &sceneCoords) {
   PixelOrientedOverview *ret = NULL;
   vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
-  vector<PixelOrientedOverview *>::iterator it;
 
-  for (it = overviews.begin() ; it != overviews.end() ; ++it) {
+  for (vector<PixelOrientedOverview *>::const_iterator it = overviews.begin() ; it != overviews.end() ; ++it) {
     BoundingBox overviewBB = (*it)->getBoundingBox();
 
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&

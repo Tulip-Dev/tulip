@@ -7,6 +7,7 @@ SET(LIB_SRCS
     PixelOrientedInteractors.cpp
     PixelOrientedOptionsWidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
+    PixelOrientedViewQuickAccessBar.cpp
     POLIB/FishEyesScreen.cpp
     POLIB/FishEyesScreenFurnas.cpp
     POLIB/HilbertLayout.cpp
@@ -33,6 +34,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
     PixelOrientedView.h
     PixelOrientedOptionsWidget.h
+    PixelOrientedViewQuickAccessBar.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS PixelOrientedView.qrc)

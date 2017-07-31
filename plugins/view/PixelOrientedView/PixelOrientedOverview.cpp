@@ -28,7 +28,6 @@
 
 #include "PixelOrientedOverview.h"
 
-
 using namespace pocore;
 using namespace std;
 
