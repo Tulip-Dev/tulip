@@ -46,7 +46,6 @@ Color PixelOrientedOptionsWidget::getBackgroundColor() const {
 
 void PixelOrientedOptionsWidget::setBackgroundColor(const Color &color) {
   _ui->backColorButton->setTulipColor(color);
-  emit
 }
 
 string PixelOrientedOptionsWidget::getLayoutType() const {
