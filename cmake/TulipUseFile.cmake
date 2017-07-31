@@ -1,6 +1,13 @@
 ## -----------------------------------------------------------------------------------------------
 ## Toolchains options
 ## -----------------------------------------------------------------------------------------------
+MACRO(SET_COMPILER_FLAG flag)
+  STRING(FIND "${CMAKE_CXX_FLAGS}" "${flag}" FLAG_POS)
+  IF (${FLAG_POS} EQUAL -1)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
+  ENDIF()
+ENDMACRO(SET_COMPILER_FLAG)
+
 MACRO(SET_COMPILER_OPTIONS)
 
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
@@ -45,7 +52,7 @@ MACRO(SET_COMPILER_OPTIONS)
     # set -stdlib=libstdc++ only if -stdlib flag is not already bound
     STRING(FIND "${CMAKE_CXX_FLAGS}" "-stdlib=lib" STDLIB_POS)
     IF (${STDLIB_POS} EQUAL -1)
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+      SET_COMPILER_FLAG("-stdlib=libstdc++")
     ENDIF()
   ENDIF(APPLE AND CLANG)
 

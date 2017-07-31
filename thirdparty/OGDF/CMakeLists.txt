@@ -15,9 +15,9 @@ IF(APPLE)
 # as indicated in makeMakefile.config, use -stdlib=libstdc++ for a Macbuild except if C++11 is used
     STRING(FIND "${CMAKE_CXX_FLAGS}" "-std=c++11" STD_POS)
     IF (${STD_POS} EQUAL -1)
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+      SET_COMPILER_FLAG("-stdlib=libstdc++")
     ELSE()
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+      SET_COMPILER_FLAG("-stdlib=libc++")
     ENDIF()
 ENDIF(APPLE)
 
