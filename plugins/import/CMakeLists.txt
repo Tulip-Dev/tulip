@@ -86,6 +86,7 @@ TARGET_LINK_LIBRARIES(EmptyGraph-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 IF(NOT TULIP_BUILD_CORE_ONLY)
+QTX_SET_INCLUDES_AND_DEFINITIONS()
 SET(FileSystem_SRCS FileSystem.cpp)
 ADD_LIBRARY(FileSystem-${TulipVersion} SHARED ${FileSystem_SRCS})
 TARGET_LINK_LIBRARIES(FileSystem-${TulipVersion} ${LibTulipCoreName} ${QT_LIBRARIES})

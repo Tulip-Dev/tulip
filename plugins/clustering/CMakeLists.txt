@@ -30,6 +30,8 @@ TARGET_LINK_LIBRARIES(CliqueEnumeration-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 IF(NOT TULIP_BUILD_CORE_ONLY)
+QTX_SET_INCLUDES_AND_DEFINITIONS()
+
 QTX_WRAP_UI(ConvolutionClustering_UI_SRCS
   ConvolutionClusteringSetup.ui)
 

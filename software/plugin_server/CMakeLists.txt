@@ -1,5 +1,7 @@
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${QuazipInclude})
 
+QTX_SET_INCLUDES_AND_DEFINITIONS()
+
 IF(USE_QT5)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 ENDIF(USE_QT5)

@@ -6,6 +6,8 @@ INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclu
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
 
+QTX_SET_INCLUDES_AND_DEFINITIONS()
+
 SET(ColorMapping_SRCS
   ColorMapping.cpp
   DoubleStringsListRelationDialog.cpp

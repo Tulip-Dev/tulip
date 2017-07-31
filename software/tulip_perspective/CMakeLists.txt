@@ -3,6 +3,8 @@ SET(SRCS
   src/TulipPerspectiveMainWindow.cpp
 )
 
+QTX_SET_INCLUDES_AND_DEFINITIONS()
+
 QTX_WRAP_CPP(MOC_SRCS
   include/TulipPerspectiveMainWindow.h
 )

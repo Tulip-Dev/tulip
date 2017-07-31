@@ -1,3 +1,4 @@
+QTX_SET_INCLUDES_AND_DEFINITIONS()
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_SOURCE_DIR})
 FILE(GLOB LIB_SRCS "*.cpp")
 

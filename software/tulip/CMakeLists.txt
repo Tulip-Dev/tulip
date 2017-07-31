@@ -15,6 +15,8 @@ SET(SRCS
   src/PerspectiveSelectionDialog.cpp
 )
 
+QTX_SET_INCLUDES_AND_DEFINITIONS()
+
 QTX_WRAP_UI(UI_HEADERS
   designer/PerspectiveItem.ui
   designer/PluginErrorReport.ui
