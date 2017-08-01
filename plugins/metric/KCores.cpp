@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 #include <tulip/DoubleProperty.h>
 #include <tulip/StringCollection.h>
 #include <tulip/GraphMeasure.h>

@@ -207,7 +207,7 @@ void LinkCommunities::computeSimilarities(const std::vector<edge>& edges) {
     #pragma omp parallel for
 #endif
 
-    for(int i=0; i<(int)dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
+    for(OMP_ITER_TYPE i=0; i<dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
       edge e = dual(i);
       similarity[e]=getSimilarity(e, edges);
     }
@@ -216,7 +216,7 @@ void LinkCommunities::computeSimilarities(const std::vector<edge>& edges) {
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-    for(int i=0; i<(int)dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
+    for(OMP_ITER_TYPE i=0; i<dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
       edge e = dual(i);
       similarity[e]=getWeightedSimilarity(e, edges);
     }
@@ -498,7 +498,7 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps,
   #pragma omp parallel for
 #endif
 
-  for (unsigned int i=0; i< numberOfSteps; i++) {
+  for (OMP_ITER_TYPE i=0; i< numberOfSteps; i++) {
     double step = min + i * deltaThreshold;
     double d = computeAverageDensity(step, edges);
 #ifdef _OPENMP

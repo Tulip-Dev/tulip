@@ -153,6 +153,21 @@ inline double log1p(double x) {
 #  endif
 #endif
 
+#ifdef _OPENMP
+#include <omp.h>
+// _OPENMP is supposed to be defined as an integer
+//  representing the year/month of the supported version
+#if _OPENMP < 200805
+// only signed integer types are supported
+// for OpenMP < 3.0
+#define OMP_ITER_TYPE long long
+#else
+#define OMP_ITER_TYPE size_t
+#endif
+#else
+#define OMP_ITER_TYPE size_t
+#endif
+
 //WIN32 specific defines: dllimport and dllexport stuff
 #ifdef _WIN32
 #  ifdef DLL_TULIP

@@ -92,12 +92,12 @@ public:
     unsigned int nbNodes = nodes.size();
     NodeStaticProperty<nodeInfo> nodesInfo(graph);
     node n;
-    unsigned int i = 0;
+    OMP_ITER_TYPE i = 0;
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
 
-    for(unsigned int i = 0; i < nbNodes; ++i) {
+    for(i = 0; i < nbNodes; ++i) {
       node n = nodes[i];
       nodeInfo& nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
@@ -111,7 +111,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < nbNodes; ++i) {
+    for (i = 0; i < nbNodes; ++i) {
       nodeInfo& nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;

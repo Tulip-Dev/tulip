@@ -10,7 +10,7 @@ ENDIF(WIN32)
 # Visual Studio has a limit for string constants length
 # so we define the sip feature NO_LIMIT_DOC in Module.sip
 # to avoid the compiler error (fatal error C1091)
-IF(MSVC AND MSVC_VERSION LESS 1900)
+IF(MSVC)
   SET(SIP_FLAGS -x NO_LIMIT_DOC)
 ENDIF()
 

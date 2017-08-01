@@ -91,7 +91,7 @@ struct PageRank : public DoubleAlgorithm {
     #pragma omp parallel for
 #endif
 
-    for(unsigned int i = 0; i < nbNodes; ++i)
+    for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
       pr[i] = oon;
 
     const double one_minus_d = (1-d)/nbNodes;
@@ -103,7 +103,7 @@ struct PageRank : public DoubleAlgorithm {
         #pragma omp parallel for
 #endif
 
-        for(unsigned int i = 0; i < nbNodes; ++i) {
+        for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
           forEach(n, graph->getInNodes(nodes[i]))
@@ -116,7 +116,7 @@ struct PageRank : public DoubleAlgorithm {
         #pragma omp parallel for
 #endif
 
-        for(unsigned int i = 0; i < nbNodes; ++i) {
+        for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
           forEach(n, graph->getInOutNodes(nodes[i]))

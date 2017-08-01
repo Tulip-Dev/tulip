@@ -188,7 +188,7 @@ private:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int n=0 ; n<nb_qnodes ; n++) {
+    for (OMP_ITER_TYPE n=0 ; n<nb_qnodes ; n++) {
       renumber[n2c[n]]=0;
     }
 
@@ -203,7 +203,7 @@ private:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < nb_nodes; ++i)
+    for (OMP_ITER_TYPE i = 0; i < nb_nodes; ++i)
       (*clusters)[i] = renumber[n2c[(*clusters)[i]]];
 
     // Compute weighted graph
@@ -340,7 +340,7 @@ private:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i=0 ; i < nb_qnodes ; i++) {
+    for (OMP_ITER_TYPE i=0 ; i < nb_qnodes ; i++) {
       n2c[i] = i;
       double wdg, nsl;
       get_weighted_degree_and_selfloops(i, wdg, nsl);
@@ -392,7 +392,7 @@ bool LouvainClustering::run() {
   #pragma omp parallel for
 #endif
 
-  for(unsigned i = 0; i < nb_nodes; ++i) {
+  for(OMP_ITER_TYPE i = 0; i < nb_nodes; ++i) {
     (*clusters)[i] = i;
   }
 
@@ -453,7 +453,7 @@ bool LouvainClustering::run() {
       #pragma omp parallel for
 #endif
 
-      for (unsigned int n=0 ; n<nb_qnodes ; n++) {
+      for (OMP_ITER_TYPE n=0 ; n<nb_qnodes ; n++) {
         renumber[n2c[n]]=0;
       }
 

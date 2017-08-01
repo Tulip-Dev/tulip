@@ -19,22 +19,6 @@
 #include <tulip/GlCPULODCalculator.h>
 
 #include <tulip/Matrix.h>
-
-#ifdef _OPENMP
-#include <omp.h>
-// _OPENMP is supposed to be defined as an integer
-//  representing the year/month of the supported version
-#if _OPENMP < 200805
-// only signed integer types are supported
-// for OpenMP < 3.0
-#define OMP_ITER_TYPE int
-#else
-#define OMP_ITER_TYPE size_t
-#endif
-#else
-#define OMP_ITER_TYPE size_t
-#endif
-
 #include <tulip/Camera.h>
 #include <tulip/GlTools.h>
 

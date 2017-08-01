@@ -110,13 +110,13 @@ double tlp::averagePathLength(const Graph *graph,
   if (nbNodes < 2) return result;
 
   node n;
-  int i, steps = 0;
+  OMP_ITER_TYPE i, steps = 0;
   bool stopfor = false;
 #ifdef _OPENMP
   #pragma omp parallel for private(i) schedule(dynamic, 1)
 #endif
 
-  for (i = 0; i < static_cast<int>(nbNodes); ++i) {
+  for (i = 0 ; i < nbNodes ; ++i) {
     if (stopfor) continue;
 
     // check if we are in the main thread.
@@ -372,7 +372,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i)
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = graph->deg(nodes[i]);
 
         break;
@@ -381,7 +381,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i)
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = graph->indeg(nodes[i]);
 
         break;
@@ -390,7 +390,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i)
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = graph->outdeg(nodes[i]);
 
         break;
@@ -407,7 +407,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i)
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = normalization * graph->deg(nodes[i]);
 
         break;
@@ -416,7 +416,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i)
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = normalization * graph->indeg(nodes[i]);
 
         break;
@@ -425,7 +425,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i)
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = normalization * graph->outdeg(nodes[i]);
 
         break;
@@ -439,7 +439,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
           forEach(e, graph->getInOutEdges(nodes[i])) {
@@ -454,7 +454,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
           forEach(e, graph->getInEdges(nodes[i])) {
@@ -469,7 +469,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
           forEach(e, graph->getInEdges(nodes[i])) {
@@ -505,7 +505,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
           forEach(e, graph->getInOutEdges(nodes[i])) {
@@ -520,7 +520,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
           forEach(e, graph->getInEdges(nodes[i])) {
@@ -535,7 +535,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
-        for (unsigned int i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
           forEach(e, graph->getInEdges(nodes[i])) {

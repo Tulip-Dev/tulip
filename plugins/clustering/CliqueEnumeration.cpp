@@ -123,7 +123,7 @@ struct DegreeOrderingElem {
 
 //================================================================================
 struct LessDegreeOrdering {
-  bool operator() (const DegreeOrderingElem* u,const DegreeOrderingElem*  v) {
+  bool operator() (const DegreeOrderingElem* u,const DegreeOrderingElem*  v) const {
     if(u->deg==v->deg)
       return u->n.id<v->n.id;
 

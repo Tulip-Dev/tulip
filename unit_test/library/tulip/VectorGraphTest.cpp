@@ -1,5 +1,4 @@
 #include <cassert>
-#include <unistd.h>
 #include <iomanip>
 #include <fstream>
 #include <cppunit/TestCase.h>
@@ -91,7 +90,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
   CPPUNIT_ASSERT(graph.numberOfNodes() == NB_NODES);
 
   Iterator<node> *itn = graph.getNodes();
-  unsigned int i = 0;
+  OMP_ITER_TYPE i = 0;
   while(itn->hasNext()) {
     CPPUNIT_ASSERT(itn->next() == nodes[i]);
     ++i;
@@ -148,7 +147,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(unsigned int i = 0; i < NB_NODES; ++i) {
+  for(OMP_ITER_TYPE i = 0; i < NB_NODES; ++i) {
     CPPUNIT_ASSERT(gNodes[i] == nodes[i]);
     // check degree
     CPPUNIT_ASSERT(graph.deg(nodes[i]) == 2);
@@ -179,7 +178,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
 #pragma omp parallel for
 #endif
   // check neighbours per node
-  for(unsigned int i = 0; i < NB_NODES; ++i) {
+  for(OMP_ITER_TYPE i = 0; i < NB_NODES; ++i) {
     // check out neighbours
     Iterator<node>* itn = graph.getOutNodes(nodes[i]);
     CPPUNIT_ASSERT(itn->hasNext());
@@ -250,7 +249,7 @@ static void checkGraphAfterDelEdge() {
   CPPUNIT_ASSERT(graph.numberOfNodes() == NB_NODES);
 
   // check nodes
-  unsigned int i = 0;
+  OMP_ITER_TYPE i = 0;
   node n;
   forEach(n, graph.getNodes()) {
     CPPUNIT_ASSERT(n == nodes[i]);
@@ -317,7 +316,7 @@ void VectorGraphTest::testDelEdge() {
 static void checkGraphAfterDelNode() {
   // check number of nodes
   CPPUNIT_ASSERT(graph.numberOfNodes() == 3 * NB_NODES/4);
-  unsigned int i = 0;
+  OMP_ITER_TYPE i = 0;
   node n;
   forEach(n, graph.getNodes())
     ++i;
@@ -396,7 +395,7 @@ void checkGraphAfterDelEdges() {
 
   // check number of edges
   CPPUNIT_ASSERT(graph.numberOfEdges() == 0);
-  unsigned int i = 0;
+  OMP_ITER_TYPE i = 0;
   edge e;
   forEach(e, graph.getEdges())
     ++i;
@@ -479,7 +478,7 @@ void VectorGraphTest::testAddDelEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (unsigned int i = 0; i < NB_NODES - 1; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < NB_NODES - 1; ++i) {
     edge e = nEdges[i];
     CPPUNIT_ASSERT(e == edges[i]);
     // check ends
@@ -510,7 +509,7 @@ void VectorGraphTest::testAddDelEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(unsigned int i = 0; i < NB_NODES - 1; ++i) {
+  for(OMP_ITER_TYPE i = 0; i < NB_NODES - 1; ++i) {
     node n = nNodes[i];
     CPPUNIT_ASSERT(n == nodes[i + 1]);
     // check degree
@@ -540,7 +539,7 @@ void VectorGraphTest::testAddDelEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (unsigned int i = 0; i < NB_NODES - 2; ++i)
+  for (OMP_ITER_TYPE i = 0; i < NB_NODES - 2; ++i)
     CPPUNIT_ASSERT(edges[i] > edges[i + 1]);
 
   // swap edges of nodes[0]
@@ -552,7 +551,7 @@ void VectorGraphTest::testAddDelEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (unsigned int i = 0; i < NB_NODES - 1; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < NB_NODES - 1; ++i) {
     edge e = n0Edges[i];
     CPPUNIT_ASSERT(e == edges[i]);
     // check ends
@@ -584,7 +583,7 @@ void VectorGraphTest::testAddDelEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(unsigned int i = 0; i < NB_NODES - 1; ++i) {
+  for(OMP_ITER_TYPE i = 0; i < NB_NODES - 1; ++i) {
     node n = nNodes[i];
     CPPUNIT_ASSERT(n == nodes[NB_NODES - i - 1]);
     // check degree
@@ -626,7 +625,7 @@ void VectorGraphTest::testAddDelEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(unsigned int i = 1; i < NB_NODES; ++i) {
+  for(OMP_ITER_TYPE i = 1; i < NB_NODES; ++i) {
     node n = nodes[i];
     // check degree
     CPPUNIT_ASSERT(graph.deg(n) == 0);
@@ -662,7 +661,7 @@ void checkGraphAfterReverseEdges() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (unsigned int i = 0; i < NB_NODES; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < NB_NODES; ++i) {
     edge e = nEdges[i];
     CPPUNIT_ASSERT(e == edges[i]);
 

@@ -338,8 +338,7 @@ public:
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
-    for(unsigned int i = 0; i < nbElts; ++i)
+    for(OMP_ITER_TYPE i = 0; i < nbElts; ++i)
       pos[(unsigned int) (*this)[i]] = i;
   }
 

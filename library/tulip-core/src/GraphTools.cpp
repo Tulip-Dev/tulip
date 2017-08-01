@@ -148,7 +148,7 @@ std::vector<node> computeGraphCenters(Graph* graph) {
   #pragma omp parallel for
 #endif
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
     unsigned int maxD = maxDistance(graph, i, tmp, UNDIRECTED);
     dist[i] = maxD;
@@ -451,7 +451,7 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
   #pragma omp parallel for
 #endif
 
-  for(unsigned int i = 0; i < nbNodes; ++i) {
+  for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
     classes[i] = i;
   }
 
@@ -494,7 +494,7 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < nbNodes; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
       if (classes[i] == tgtClass)
         classes[i] = srcClass;
     }

@@ -54,7 +54,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < this->size(); ++i)
+    for (OMP_ITER_TYPE i = 0; i < this->size(); ++i)
       (*this)[i] = val;
   }
 
@@ -77,7 +77,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < nbNodes; ++i)
+    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
       (*this)[i] = prop->getNodeValue(nodes[i]);
   }
 
@@ -131,7 +131,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < this->size(); ++i)
+    for (OMP_ITER_TYPE i = 0; i < this->size(); ++i)
       (*this)[i] = val;
   }
 
@@ -154,7 +154,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0; i < nbEdges; ++i)
+    for (OMP_ITER_TYPE i = 0; i < nbEdges; ++i)
       (*this)[i] = prop->getEdgeValue(edges[i]);
   }
 
