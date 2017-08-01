@@ -371,9 +371,10 @@ bool TLPBImport::importGraph() {
         // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
         // see https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L150
         // and https://github.com/llvm-mirror/libcxx/blob/master/include/streambuf#L360
-        // so fallback reading directly from the input stream in that case
+        // and also in STL implementation of Microsoft Visual C++
+        // so fallback writing directly to the output stream in these cases
         bool canUsePubSetBuf = true;
-#ifdef _LIBCPP_VERSION
+#if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
         canUsePubSetBuf = false;
 #endif
 
