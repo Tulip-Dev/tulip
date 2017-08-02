@@ -1,3 +1,9 @@
+# inclusion header guard
+IF(TulipUseFile_included)
+  RETURN()
+ENDIF(TulipUseFile_included)
+SET(TulipUseFile_included TRUE)
+
 ## -----------------------------------------------------------------------------------------------
 ## Toolchains options
 ## -----------------------------------------------------------------------------------------------
