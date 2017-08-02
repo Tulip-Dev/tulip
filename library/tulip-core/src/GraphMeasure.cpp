@@ -109,7 +109,6 @@ double tlp::averagePathLength(const Graph *graph,
 
   if (nbNodes < 2) return result;
 
-  node n;
   OMP_ITER_TYPE i, steps = 0;
   bool stopfor = false;
 #ifdef _OPENMP
@@ -144,7 +143,7 @@ double tlp::averagePathLength(const Graph *graph,
     tlp::NodeStaticProperty<unsigned int> distance(graph);
     maxDistance(graph, i, distance, UNDIRECTED);
 
-    for (int j = 0; j < (int) nbNodes; ++j) {
+    for (size_t j = 0; j < nbNodes; ++j) {
       if (j == i)
         continue;
 
