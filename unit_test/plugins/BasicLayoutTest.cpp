@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "basiclayouttest.h"
+#include "BasicLayoutTest.h"
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>

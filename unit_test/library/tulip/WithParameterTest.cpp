@@ -17,7 +17,7 @@
  *
  */
 
-#include "withparametertest.h"
+#include "WithParameterTest.h"
 
 #include <tulip/ForEach.h>
 #include <tulip/WithParameter.h>

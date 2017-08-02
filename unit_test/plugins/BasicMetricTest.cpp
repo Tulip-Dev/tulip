@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "basicmetrictest.h"
+#include "BasicMetricTest.h"
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
 

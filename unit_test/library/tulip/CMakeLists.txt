@@ -1,10 +1,10 @@
-ADD_LIBRARY(testPlugin SHARED testPlugin.cpp)
+ADD_LIBRARY(testPlugin SHARED TestPlugin.cpp)
 SET_TARGET_PROPERTIES(testPlugin 
    PROPERTIES
    PREFIX "")
 TARGET_LINK_LIBRARIES(testPlugin ${LibTulipCoreName})
 
-ADD_LIBRARY(testPlugin2 SHARED testPlugin2.cpp)
+ADD_LIBRARY(testPlugin2 SHARED TestPlugin2.cpp)
 SET_TARGET_PROPERTIES(testPlugin2
    PROPERTIES
    PREFIX "")
@@ -13,7 +13,7 @@ TARGET_LINK_LIBRARIES(testPlugin2 ${LibTulipCoreName})
 ADD_CUSTOM_TARGET(copyTestData ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/DATA ${CMAKE_CURRENT_BINARY_DIR}/DATA VERBATIM)
 ADD_CUSTOM_TARGET(copyScript ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tulip_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip_tests.sh VERBATIM)
 
-UNIT_TEST(ImportExportTest importexporttest.cpp tuliplibtest.cpp)
+UNIT_TEST(ImportExportTest ImportExportTest.cpp tuliplibtest.cpp)
 UNIT_TEST(ExistEdgeTest ExistEdgeTest.cpp tuliplibtest.cpp)
 UNIT_TEST(ExtendedClusterOperationTest ExtendedClusterOperationTest.cpp tuliplibtest.cpp)
 UNIT_TEST(VectorTest VectorTest.cpp tuliplibtest.cpp)
@@ -33,11 +33,11 @@ UNIT_TEST(IntegerPropertyMinMaxSubgraphTest IntegerPropertyMinMaxSubgraphTest.cp
 UNIT_TEST(IntegerPropertyMinMaxUptodateTest IntegerPropertyMinMaxUptodateTest.cpp tuliplibtest.cpp)
 UNIT_TEST(TestPropertiesMinMaxAfterAddNode TestPropertiesMinMaxAfterAddNode.cpp tuliplibtest.cpp)
 UNIT_TEST(IsMetaEdgeTest IsMetaEdgeTest.cpp tuliplibtest.cpp)
-UNIT_TEST(StringPropertyTest stringpropertytest.cpp tuliplibtest.cpp)
+UNIT_TEST(StringPropertyTest StringPropertyTest.cpp tuliplibtest.cpp)
 UNIT_TEST(DoublePropertyTest DoublePropertyTest.cpp tuliplibtest.cpp)
 UNIT_TEST(PlanarityTestTest PlanarityTestTest.cpp tuliplibtest.cpp)
 UNIT_TEST(VectorGraphTest VectorGraphTest.cpp tuliplibtest.cpp)
-UNIT_TEST(WithParameterTest withparametertest.cpp tuliplibtest.cpp)
+UNIT_TEST(WithParameterTest WithParameterTest.cpp tuliplibtest.cpp)
 # UNIT_TEST(FaceIteratorTest.cpp)
 UNIT_TEST(PluginsTest PluginsTest.cpp tuliplibtest.cpp)
 SET_TESTS_PROPERTIES(PluginsTest PROPERTIES DEPENDS copyTestData)

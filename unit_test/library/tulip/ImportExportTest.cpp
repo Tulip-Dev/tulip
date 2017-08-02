@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "importexporttest.h"
+#include "ImportExportTest.h"
 
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>

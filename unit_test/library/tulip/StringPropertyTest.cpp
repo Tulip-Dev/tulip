@@ -17,7 +17,7 @@
  *
  */
 
-#include "stringpropertytest.h"
+#include "StringPropertyTest.h"
 
 #include <tulip/Graph.h>
 #include <tulip/StringProperty.h>

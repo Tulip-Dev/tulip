@@ -1,7 +1,7 @@
 SET(TULIP_PLUGINS_TESTS_SRCS
   BasicPluginsTest.cpp
-  basicmetrictest.cpp
-  basiclayouttest.cpp
+  BasicMetricTest.cpp
+  BasicLayoutTest.cpp
   pluginstest.cpp)
 
 SET_SOURCE_FILES_PROPERTIES(pluginstest.cpp
