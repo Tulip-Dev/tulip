@@ -100,23 +100,23 @@ QuickAccessBar::QuickAccessBar(QWidget *parent):QWidget(parent),_mainView(NULL) 
 #include "ui_QuickAccessBar.h"
 
 QPushButton* QuickAccessBarImpl::showEdgesButton() {
-    return _ui->showEdgesToggle;
+  return _ui->showEdgesToggle;
 }
 
 QPushButton* QuickAccessBarImpl::showLabelsButton() {
-    return _ui->showLabelsToggle;
+  return _ui->showLabelsToggle;
 }
 
 QPushButton* QuickAccessBarImpl::showLabelScaled() {
-    return _ui->labelsScaledToggle;
+  return _ui->labelsScaledToggle;
 }
 
 ColorButton* QuickAccessBarImpl::backgroundColorButton() {
-    return _ui->backgroundColorButton;
+  return _ui->backgroundColorButton;
 }
 
 QPushButton* QuickAccessBarImpl::showColorInterpolation() {
-    return _ui->colorInterpolationToggle;
+  return _ui->colorInterpolationToggle;
 }
 
 QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickAccessButtons buttons, QWidget *parent)

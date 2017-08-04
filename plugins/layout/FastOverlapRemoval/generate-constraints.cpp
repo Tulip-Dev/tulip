@@ -129,6 +129,7 @@ NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
     if(u->r->overlapX(v->r)<=u->r->overlapY(v->r)) {
       leftv->insert(u);
     }
+
     if (i == scanline.begin()) {
       break;
     }

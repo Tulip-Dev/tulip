@@ -49,7 +49,7 @@ class PropertyValuesDispatcher;
 class MatrixView: public NodeLinkDiagramComponent {
   Q_OBJECT
 
-    MatrixViewQuickAccessBar* _bar;
+  MatrixViewQuickAccessBar* _bar;
 
 public:
 

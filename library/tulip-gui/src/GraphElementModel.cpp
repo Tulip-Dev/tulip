@@ -32,9 +32,9 @@ GraphElementModel::GraphElementModel(Graph *graph,unsigned int id,QObject *paren
 }
 
 void GraphElementModel::setShowVisualProp(bool show) {
-    beginResetModel();
-    _displayvisualprop = show;
-    endResetModel();
+  beginResetModel();
+  _displayvisualprop = show;
+  endResetModel();
 }
 
 int GraphElementModel::rowCount(const QModelIndex &parent) const {
@@ -52,7 +52,7 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
 #endif
 
     if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
-        continue;
+      continue;
 
     ++result;
   }
@@ -89,7 +89,7 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
 #endif
 
       if(!_displayvisualprop && propertyName.compare(0, 4, "view")==0)
-          continue;
+        continue;
 
       if(section==result)
         return propertyName.c_str();
@@ -116,7 +116,7 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
 #endif
 
     if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
-        continue;
+      continue;
 
     if(result==row)
       break;
@@ -161,7 +161,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 #endif
 
       if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
-          continue;
+        continue;
 
       if(result==index.row())
         break;
@@ -188,8 +188,9 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
         continue;
 
 #endif
+
       if(!_displayvisualprop && prop->getName().compare(0, 4, "view")==0)
-          continue;
+        continue;
 
       if(result==index.row())
         break;

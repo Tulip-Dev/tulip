@@ -464,6 +464,7 @@ bool BooleanVectorType::readb(istream& iss, RealType & v) {
     return false;
 
   v.resize(vSize);
+
   for(unsigned int i = 0; i < vSize; ++i, ++data) {
     v[i] = *data ? true : false;
   }

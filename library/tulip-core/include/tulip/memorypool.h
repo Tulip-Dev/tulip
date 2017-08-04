@@ -92,7 +92,7 @@ public:
 private:
 
   class MemoryChunkManager {
-    public:
+  public:
 
     ~MemoryChunkManager() {
       for (unsigned int i = 0 ; i < MAXNBTHREADS ; ++i) {
@@ -129,9 +129,9 @@ private:
       _freeObject[threadId].push_back(p);
     }
 
-    private:
-      std::vector<void * > _allocatedChunks[MAXNBTHREADS];
-      std::vector<void * > _freeObject[MAXNBTHREADS];
+  private:
+    std::vector<void * > _allocatedChunks[MAXNBTHREADS];
+    std::vector<void * > _freeObject[MAXNBTHREADS];
 
   };
 

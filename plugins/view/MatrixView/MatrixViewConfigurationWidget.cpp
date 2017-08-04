@@ -53,7 +53,7 @@ void MatrixViewConfigurationWidget::setBackgroundColor(const QColor &c) {
 }
 
 Color MatrixViewConfigurationWidget::getBackgroundColor() const {
-    return _ui->backgroundColorBtn->tulipColor();
+  return _ui->backgroundColorBtn->tulipColor();
 }
 
 void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
@@ -71,7 +71,7 @@ void MatrixViewConfigurationWidget::setEdgeColorInterpolation(const bool state) 
 }
 
 bool MatrixViewConfigurationWidget::isEdgeColorInterpolation() const {
-    return _ui->enableColorInterpolationCBox->isChecked();
+  return _ui->enableColorInterpolationCBox->isChecked();
 }
 
 void MatrixViewConfigurationWidget::setAscendingOrder(const bool state) {
@@ -87,8 +87,9 @@ void MatrixViewConfigurationWidget::setOriented(const bool state) {
 }
 
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
-    if(g==NULL)
-        return;
+  if(g==NULL)
+    return;
+
   QString firstString = _ui->orderingMetricCombo->itemText(0);
   QString currentString = _ui->orderingMetricCombo->currentText();
   _modifyingMetricList = true;

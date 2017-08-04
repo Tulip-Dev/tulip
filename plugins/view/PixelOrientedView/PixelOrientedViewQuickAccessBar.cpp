@@ -26,24 +26,24 @@
 namespace tlp {
 
 PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget* opt, QWidget *parent):
-    QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|
-                                                                   QuickAccessBarImpl::BACKGROUNDCOLOR|
-                                                                   QuickAccessBarImpl::SHOWLABELS|
-                                                                   QuickAccessBarImpl::NODEBORDERCOLOR|
-                                                                   QuickAccessBarImpl::NODECOLOR
-                                                                    | QuickAccessBarImpl::LABELSSCALED
-                                                                   |QuickAccessBarImpl::LABELCOLOR), parent),_optionsWidget(opt){
+  QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|
+                     QuickAccessBarImpl::BACKGROUNDCOLOR|
+                     QuickAccessBarImpl::SHOWLABELS|
+                     QuickAccessBarImpl::NODEBORDERCOLOR|
+                     QuickAccessBarImpl::NODECOLOR
+                     | QuickAccessBarImpl::LABELSSCALED
+                     |QuickAccessBarImpl::LABELCOLOR), parent),_optionsWidget(opt) {
 
-                                                                                         }
+}
 
 void PixelOrientedViewQuickAccessBar::reset() {
-    QuickAccessBarImpl::reset();
-    backgroundColorButton()->setTulipColor(_optionsWidget->getBackgroundColor());
+  QuickAccessBarImpl::reset();
+  backgroundColorButton()->setTulipColor(_optionsWidget->getBackgroundColor());
 }
 
 void PixelOrientedViewQuickAccessBar::setBackgroundColor(const QColor &col) {
-    _optionsWidget->setBackgroundColor(tlp::QColorToColor(col));
-    emit settingsChanged();
+  _optionsWidget->setBackgroundColor(tlp::QColorToColor(col));
+  emit settingsChanged();
 }
 
 }

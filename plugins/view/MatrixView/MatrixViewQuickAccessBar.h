@@ -24,19 +24,18 @@ namespace tlp {
 
 class MatrixViewConfigurationWidget;
 
-class MatrixViewQuickAccessBar : public tlp::QuickAccessBarImpl
-{
-    Q_OBJECT
+class MatrixViewQuickAccessBar : public tlp::QuickAccessBarImpl {
+  Q_OBJECT
 
- MatrixViewConfigurationWidget *_optionsWidget;
+  MatrixViewConfigurationWidget *_optionsWidget;
 public:
-    MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget* parent=NULL);
+  MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget* parent=NULL);
 
 public slots:
-    void reset();
-    virtual void setEdgesVisible(bool);
-    virtual void setBackgroundColor(const QColor&);
-    virtual void setColorInterpolation(bool);
+  void reset();
+  virtual void setEdgesVisible(bool);
+  virtual void setBackgroundColor(const QColor&);
+  virtual void setColorInterpolation(bool);
 
 };
 }

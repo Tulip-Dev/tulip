@@ -94,6 +94,7 @@ void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Gly
     string glyphName(*it);
     delete glyphs.get(PluginLister::pluginInformation(glyphName).id());
   }
+
   delete glyphs.getDefault();
 }
 }

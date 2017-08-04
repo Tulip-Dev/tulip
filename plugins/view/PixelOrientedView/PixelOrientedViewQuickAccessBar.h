@@ -24,18 +24,17 @@ namespace tlp {
 
 class PixelOrientedOptionsWidget;
 
-class PixelOrientedViewQuickAccessBar : public tlp::QuickAccessBarImpl
-{
-    Q_OBJECT
+class PixelOrientedViewQuickAccessBar : public tlp::QuickAccessBarImpl {
+  Q_OBJECT
 
- PixelOrientedOptionsWidget *_optionsWidget;
+  PixelOrientedOptionsWidget *_optionsWidget;
 public:
-    PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget* parent=NULL);
+  PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget* parent=NULL);
 
 public slots:
-    void reset();
+  void reset();
 //    virtual void setEdgesVisible(bool);
-    virtual void setBackgroundColor(const QColor&);
+  virtual void setBackgroundColor(const QColor&);
 //    virtual void setColorInterpolation(bool);
 
 };

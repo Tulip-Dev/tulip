@@ -206,11 +206,11 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 }
 
 struct sortNodes {
-    LayoutProperty* layout;
-    sortNodes(LayoutProperty* ly):layout(ly){}
-    bool operator()(const node i, const node j) {
-        return layout->getNodeValue(i)[2]<layout->getNodeValue(j)[2];
-    }
+  LayoutProperty* layout;
+  sortNodes(LayoutProperty* ly):layout(ly) {}
+  bool operator()(const node i, const node j) {
+    return layout->getNodeValue(i)[2]<layout->getNodeValue(j)[2];
+  }
 };
 
 static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& exportint, unsigned &i, const int nb_elements,
@@ -234,18 +234,19 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
    Elements in an SVG document fragment have an implicit drawing order, with the first elements in the SVG document
   fragment getting "painted" first. Subsequent elements are painted on top of previously painted elements.
 
-So order nodes following their z coordinates before exporting them
-*/
+  So order nodes following their z coordinates before exporting them
+  */
 
   vector<node> nodes = graph->nodes();
   sortNodes srt(layout);
   std::sort(nodes.begin(),nodes.end(),srt);
   unsigned nb_nodes = nodes.size();
 
-  for(unsigned nb=0;nb<nb_nodes;++nb) {
-      node n(nodes[nb]);
-      if(graph->isMetaNode(n))
-          metanodeVertices.push_back(n);
+  for(unsigned nb=0; nb<nb_nodes; ++nb) {
+    node n(nodes[nb]);
+
+    if(graph->isMetaNode(n))
+      metanodeVertices.push_back(n);
 
     Coord c = layout->getNodeValue(n);
     Size s = sizes->getNodeValue(n);
@@ -333,7 +334,7 @@ So order nodes following their z coordinates before exporting them
 
   if(!ret) {
     if(pp->getError().empty()) {
-       pp->setError("Error when finishing to export nodes");
+      pp->setError("Error when finishing to export nodes");
     }
 
     return false;

@@ -192,12 +192,15 @@ SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::Search
 
 SearchWidget::~SearchWidget() {
   delete _ui;
+
   foreach(SearchOperator *op, NUMERIC_OPERATORS) {
     delete op;
   }
+
   foreach(SearchOperator *op, STRING_OPERATORS) {
     delete op;
   }
+
   foreach (SearchOperator *op, NOCASE_STRING_OPERATORS) {
     delete op;
   }

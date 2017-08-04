@@ -86,6 +86,7 @@ PixelOrientedView::~PixelOrientedView() {
   if(isConstruct) {
     destroyData();
   }
+
   delete spiralLayout;
   delete hilbertLayout;
   delete squareLayout;
@@ -267,12 +268,13 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   }
 
   bool quickAccessBarVisible=false;
+
   if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
   }
   else //display quickaccessbar
-      setQuickAccessBarVisible(true);
+    setQuickAccessBarVisible(true);
 
 
   draw();
@@ -309,8 +311,10 @@ DataSet PixelOrientedView::state() const {
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
   dataSet.set("detail overview  name", detailOverviewPropertyName);
   dataSet.set("background color", optionsWidget->getBackgroundColor());
+
   if (needQuickAccessBar)
     dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
+
   return dataSet;
 }
 
@@ -319,9 +323,9 @@ void PixelOrientedView::graphChanged(Graph *) {
 }
 
 void PixelOrientedView::initLayoutFunctions() {
-    delete hilbertLayout;
-    delete squareLayout;
-    delete zorderLayout;
+  delete hilbertLayout;
+  delete squareLayout;
+  delete zorderLayout;
 
   hilbertLayout = new HilbertLayout((int) ceil(log(pixelOrientedGraph->numberOfNodes())/ log(4)));
   squareLayout = new SquareLayout((int) ceil(sqrt(pixelOrientedGraph->numberOfNodes())));
@@ -363,7 +367,7 @@ void PixelOrientedView::initPixelView() {
   selectedGraphProperties = propertiesSelectionWidget->getSelectedGraphProperties();
 
   if (selectedGraphProperties.empty())
-      return;
+    return;
 
   float squareRoot = sqrt(double(selectedGraphProperties.size()));
   const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedGraphProperties.size(), squareRoot) == 0. ? 0 : 1);
@@ -444,8 +448,8 @@ void PixelOrientedView::addEmptyViewLabel() {
   // we have to center the scene
   // before computing the position and size of empty labels
   // but the call below causes a crash on some Linux computers
-    GlScene* scene = getGlMainWidget()->getScene();
-    Camera & cam = scene->getGraphCamera();
+  GlScene* scene = getGlMainWidget()->getScene();
+  Camera & cam = scene->getGraphCamera();
 #ifndef _LINUX
   scene->centerScene();
 #endif
@@ -504,8 +508,9 @@ void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOvervi
 }
 
 void PixelOrientedView::draw() {
-    GlMainWidget* glw = getGlMainWidget();
-    GlScene* scene = glw->getScene();
+  GlMainWidget* glw = getGlMainWidget();
+  GlScene* scene = glw->getScene();
+
   if (pixelOrientedGraph != NULL) {
     scene->setBackgroundColor(optionsWidget->getBackgroundColor());
     unsigned int lastNbDimensionsSelected = selectedGraphProperties.size();
@@ -637,7 +642,7 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
 
   unsigned int nbOverviews = selectedGraphProperties.size();
   unsigned currentStep = 0;
-    Camera& cam = getGlMainWidget()->getScene()->getGraphCamera();
+  Camera& cam = getGlMainWidget()->getScene()->getGraphCamera();
   double sceneRadiusBak = cam.getSceneRadius();
   double zoomFactorBak = cam.getZoomFactor();
   Coord eyesBak = cam.getEyes();
@@ -713,10 +718,10 @@ vector<PixelOrientedOverview *> PixelOrientedView::getOverviews() {
 }
 
 QuickAccessBar* PixelOrientedView::getQuickAccessBarImpl() {
-    _bar = new PixelOrientedViewQuickAccessBar(optionsWidget);
+  _bar = new PixelOrientedViewQuickAccessBar(optionsWidget);
 
-    connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
-    return _bar;
+  connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+  return _bar;
 }
 
 void PixelOrientedView::switchFromSmallMultiplesToDetailView(PixelOrientedOverview *pixelOverview) {

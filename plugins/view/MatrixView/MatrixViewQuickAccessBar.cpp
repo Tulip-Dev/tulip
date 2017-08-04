@@ -26,40 +26,40 @@
 namespace tlp {
 
 MatrixViewQuickAccessBar::MatrixViewQuickAccessBar(MatrixViewConfigurationWidget* opt, QWidget *parent):
-    QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|
-                                                                   QuickAccessBarImpl::BACKGROUNDCOLOR|
-                                                                   QuickAccessBarImpl::SHOWLABELS|QuickAccessBarImpl::COLORINTERPOLATION
-                                                                   |QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED
-                                                                   |QuickAccessBarImpl::LABELCOLOR), parent),_optionsWidget(opt){
+  QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|
+                     QuickAccessBarImpl::BACKGROUNDCOLOR|
+                     QuickAccessBarImpl::SHOWLABELS|QuickAccessBarImpl::COLORINTERPOLATION
+                     |QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED
+                     |QuickAccessBarImpl::LABELCOLOR), parent),_optionsWidget(opt) {
 
-                                                                                         }
+}
 
 void MatrixViewQuickAccessBar::setEdgesVisible(bool visible) {
-    _optionsWidget->setDisplayEdges(visible);
-    showEdgesButton()->setIcon((visible ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-    emit settingsChanged();
+  _optionsWidget->setDisplayEdges(visible);
+  showEdgesButton()->setIcon((visible ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+  emit settingsChanged();
 }
 
 void MatrixViewQuickAccessBar::reset() {
-    QuickAccessBarImpl::reset();
-    showEdgesButton()->setChecked(_optionsWidget->displayGraphEdges());
-    showEdgesButton()->setIcon((_optionsWidget->displayGraphEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-    backgroundColorButton()->setTulipColor(_optionsWidget->getBackgroundColor());
-    showColorInterpolation()->setChecked(_optionsWidget->isEdgeColorInterpolation());
-    showColorInterpolation()->setIcon((_optionsWidget->isEdgeColorInterpolation() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
+  QuickAccessBarImpl::reset();
+  showEdgesButton()->setChecked(_optionsWidget->displayGraphEdges());
+  showEdgesButton()->setIcon((_optionsWidget->displayGraphEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+  backgroundColorButton()->setTulipColor(_optionsWidget->getBackgroundColor());
+  showColorInterpolation()->setChecked(_optionsWidget->isEdgeColorInterpolation());
+  showColorInterpolation()->setIcon((_optionsWidget->isEdgeColorInterpolation() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
 
 
 }
 
 void MatrixViewQuickAccessBar::setBackgroundColor(const QColor &col) {
-    _optionsWidget->setBackgroundColor(col);
-    emit settingsChanged();
+  _optionsWidget->setBackgroundColor(col);
+  emit settingsChanged();
 }
 
 void MatrixViewQuickAccessBar::setColorInterpolation(bool state) {
-    _optionsWidget->setEdgeColorInterpolation(state);
-    showColorInterpolation()->setIcon((state ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
-     emit settingsChanged();
+  _optionsWidget->setEdgeColorInterpolation(state);
+  showColorInterpolation()->setIcon((state ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
+  emit settingsChanged();
 }
 
 }

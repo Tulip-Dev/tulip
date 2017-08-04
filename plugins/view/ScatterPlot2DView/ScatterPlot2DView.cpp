@@ -75,7 +75,7 @@ const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
 const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
 
 ScatterPlot2DView::ScatterPlot2DView(const PluginContext *) :
- _bar(NULL),propertiesSelectionWidget(NULL), optionsWidget(NULL),
+  _bar(NULL),propertiesSelectionWidget(NULL), optionsWidget(NULL),
   scatterPlotGraph(NULL), emptyGraph(NULL), mainLayer(NULL), glGraphComposite(NULL), scatterPlotSize(NULL),
   matrixComposite(NULL), axisComposite(NULL), labelsComposite(NULL), detailedScatterPlot(NULL), detailedScatterPlotPropertyName(make_pair("","")), center(false),
   matrixView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
@@ -259,7 +259,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     optionsWidget->setDisplayNodeLabels(showlabels);
 
   if(dataSet.get("scale labels", scalelabels))
-      optionsWidget->setDisplayScaleLabels(scalelabels);
+    optionsWidget->setDisplayScaleLabels(scalelabels);
 
   Color backgroundColor;
 
@@ -337,12 +337,13 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   registerTriggers();
 
   bool quickAccessBarVisible=false;
+
   if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
   }
   else //display quickaccessbar
-      setQuickAccessBarVisible(true);
+    setQuickAccessBarVisible(true);
 
   GlMainView::setState(dataSet);
 }
@@ -451,9 +452,9 @@ void ScatterPlot2DView::computeNodeSizes() {
 }
 
 QuickAccessBar *ScatterPlot2DView::getQuickAccessBarImpl() {
-    _bar =  new ScatterPlotQuickAccessBar(optionsWidget);
-    connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
-    return _bar;
+  _bar =  new ScatterPlotQuickAccessBar(optionsWidget);
+  connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+  return _bar;
 }
 
 void ScatterPlot2DView::buildScatterPlotsMatrix() {
@@ -663,8 +664,10 @@ void ScatterPlot2DView::draw() {
     addEmptyViewLabel();
     getGlMainWidget()->getScene()->centerScene();
     getGlMainWidget()->draw();
+
     if(_bar)
-        _bar->setEnabled(false);
+      _bar->setEnabled(false);
+
     return;
   }
   else {
@@ -672,7 +675,8 @@ void ScatterPlot2DView::draw() {
   }
 
   if(_bar)
-      _bar->setEnabled(true);
+    _bar->setEnabled(true);
+
   computeNodeSizes();
   buildScatterPlotsMatrix();
 
@@ -1026,6 +1030,7 @@ void ScatterPlot2DView::registerTriggers() {
       PropertyInterface *property=getScatterPlotGraph()->getProperty(it->next());
       addRedrawTrigger(property);
     }
+
     delete it;
   }
 }

@@ -69,7 +69,7 @@ signals:
 
 class TLP_QT_SCOPE QuickAccessBarImpl : public QuickAccessBar {
   Q_OBJECT
-    Ui::QuickAccessBar* _ui;
+  Ui::QuickAccessBar* _ui;
   QGraphicsItem *_quickAccessBarItem;
 
   TulipItemDelegate* delegate;

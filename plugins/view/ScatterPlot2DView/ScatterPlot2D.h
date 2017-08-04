@@ -130,11 +130,11 @@ public :
   }
 
   void setDisplayNodeLabels(const bool displayNodelabels) {
-      displaylabels = displayNodelabels;
+    displaylabels = displayNodelabels;
   }
 
   void setLabelsScaled(const bool scalelabel) {
-      scale = scalelabel;
+    scale = scalelabel;
   }
 
   void setDataLocation(const ElementType &dataLocation);

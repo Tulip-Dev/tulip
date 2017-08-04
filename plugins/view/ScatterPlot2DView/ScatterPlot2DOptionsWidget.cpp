@@ -192,19 +192,19 @@ void ScatterPlot2DOptionsWidget::showEvent(QShowEvent*) {
 }
 
 bool ScatterPlot2DOptionsWidget::displayNodeLabels() const {
-    return _ui->showLabelCB->isChecked();
+  return _ui->showLabelCB->isChecked();
 }
 
 void ScatterPlot2DOptionsWidget::setDisplayNodeLabels(const bool showLabels) {
-    _ui->showLabelCB->setChecked(showLabels);
+  _ui->showLabelCB->setChecked(showLabels);
 }
 
 bool ScatterPlot2DOptionsWidget::displayScaleLabels() const {
-    return _ui->scaleLabels->isChecked();
+  return _ui->scaleLabels->isChecked();
 }
 
 void ScatterPlot2DOptionsWidget::setDisplayScaleLabels(const bool scaleLabels) {
-    _ui->scaleLabels->setChecked(scaleLabels);
+  _ui->scaleLabels->setChecked(scaleLabels);
 }
 
 bool ScatterPlot2DOptionsWidget::displayGraphEdges() const {

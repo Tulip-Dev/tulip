@@ -32,7 +32,7 @@ public:
 
   GraphElementModel(Graph *graph, unsigned int id, QObject *parent=NULL, bool displayvisual=true);
 
-    void setShowVisualProp(bool show);
+  void setShowVisualProp(bool show);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;

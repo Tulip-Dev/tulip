@@ -51,9 +51,9 @@ MatrixView::~MatrixView() {
 }
 
 QuickAccessBar* MatrixView::getQuickAccessBarImpl() {
-    _bar = new MatrixViewQuickAccessBar(_configurationWidget);
-    connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
-    return _bar;
+  _bar = new MatrixViewQuickAccessBar(_configurationWidget);
+  connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+  return _bar;
 }
 
 void MatrixView::setState(const DataSet &ds) {
@@ -108,12 +108,13 @@ void MatrixView::setState(const DataSet &ds) {
   _configurationWidget->setEdgeColorInterpolation(status);
 
   bool quickAccessBarVisible=false;
+
   if (ds.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
   }
   else //display quickaccessbar
-      setQuickAccessBarVisible(true);
+    setQuickAccessBarVisible(true);
 }
 
 void MatrixView::showEdges(bool show) {
@@ -177,6 +178,7 @@ DataSet MatrixView::state() const {
   ds.set("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
   ds.set("ordering", _configurationWidget->orderingProperty());
   ds.set("oriented", _isOriented);
+
   if (needQuickAccessBar)
     ds.set("quickAccessBarVisible", quickAccessBarVisible());
 
@@ -328,8 +330,9 @@ void MatrixView::initDisplayedGraph() {
 }
 
 void MatrixView::normalizeSizes(double maxVal) {
-    if(graph()==NULL)
-        return;
+  if(graph()==NULL)
+    return;
+
   float maxWidth=FLT_MIN, maxHeight=FLT_MIN;
   SizeProperty *originalSizes = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize();
   SizeProperty *matrixSizes = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize();
@@ -404,17 +407,18 @@ void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
 }
 
 void MatrixView::treatEvent(const Event &message) {
-    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
-    if(graphEvent) {
-      if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
-        addEdge(graphEvent->getGraph(),graphEvent->getEdge());
+  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
 
-      if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
-        delNode(graphEvent->getGraph(),graphEvent->getNode());
+  if(graphEvent) {
+    if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
+      addEdge(graphEvent->getGraph(),graphEvent->getEdge());
 
-      if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
-        delEdge(graphEvent->getGraph(),graphEvent->getEdge());
-    }
+    if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
+      delNode(graphEvent->getGraph(),graphEvent->getNode());
+
+    if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
+      delEdge(graphEvent->getGraph(),graphEvent->getEdge());
+  }
 }
 
 void MatrixView::delNode(tlp::Graph *,const tlp::node n) {
@@ -509,8 +513,9 @@ void MatrixView::updateNodesOrder() {
 }
 
 void MatrixView::updateLayout() {
-    if(graph()==NULL)
-        return;
+  if(graph()==NULL)
+    return;
+
   holdObservers();
   updateNodesOrder();
 
@@ -613,6 +618,7 @@ void MatrixView::registerTriggers() {
       PropertyInterface *property=_matrixGraph->getProperty(it->next());
       addRedrawTrigger(property);
     }
+
     delete it;
   }
 }

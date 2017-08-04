@@ -50,8 +50,8 @@ MouseShowElementInfo::~MouseShowElementInfo() {
 }
 
 void MouseShowElementInfo::showVisualProp(int show) {
-        _show = show == Qt::Checked;
-    static_cast<GraphElementModel*>(tableView()->model())->setShowVisualProp(_show);
+  _show = show == Qt::Checked;
+  static_cast<GraphElementModel*>(tableView()->model())->setShowVisualProp(_show);
 
 }
 
@@ -73,10 +73,12 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   // ensure the info window stays visible while using the wheel or clicking in it
   if(_informationWidget->isVisible() && (e->type()==QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
     QRect widgetRect = _informationWidget->geometry();
+
     if (!widgetRect.contains(QCursor::pos())) {
       _informationWidgetItem->setVisible(false);
       return false;
-    } else {
+    }
+    else {
       return true;
     }
   }

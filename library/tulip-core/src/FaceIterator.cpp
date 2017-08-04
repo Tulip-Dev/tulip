@@ -67,6 +67,7 @@ FaceAdjIterator::FaceAdjIterator(PlanarConMap* m, const node n) {
 
   while(ite->hasNext()) {
     e = ite->next();
+
     if (m->edgesFaces.find(e) != m->edgesFaces.end()) {
       f_tmp = (m->edgesFaces[e])[0];
       f_tmp2 = (m->edgesFaces[e])[1];
@@ -99,6 +100,7 @@ FaceAdjIterator::FaceAdjIterator(PlanarConMap* m, const node n) {
           f_tmp = (m->edgesFaces[e])[0];
           facesAdj.push_back(f_tmp);
         }
+
         break;
       }
     }
@@ -111,6 +113,7 @@ FaceAdjIterator::FaceAdjIterator(PlanarConMap* m, const node n) {
 
   while(ite->hasNext()) {
     e = ite->next();
+
     if (m->edgesFaces.find(e) != m->edgesFaces.end()) {
       if(f_tmp == (m->edgesFaces[e])[0]) {
         f_tmp = (m->edgesFaces[e])[1];

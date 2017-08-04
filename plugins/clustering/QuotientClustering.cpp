@@ -246,6 +246,7 @@ public:
       if (dynamic_cast<DoubleProperty *>((*itC).first)) {
         delete ((*itC).first)->getMetaValueCalculator();
       }
+
       ((*itC).first)->setMetaValueCalculator((*itC).second);
       ++itC;
     }

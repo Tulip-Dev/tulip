@@ -54,7 +54,7 @@ bool ClusterMetric::run() {
   unsigned int maxDepth = 1;
 
   if (dataSet!=NULL)
-      dataSet->get("depth", maxDepth);
+    dataSet->get("depth", maxDepth);
 
   tlp::NodeStaticProperty<double> clusters(graph);
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);

@@ -69,7 +69,7 @@ class HistogramView : public GlMainView {
 
   Q_OBJECT
 
-    QuickAccessBarImpl* _bar;
+  QuickAccessBarImpl* _bar;
 
 public :
 

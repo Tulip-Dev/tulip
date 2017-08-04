@@ -125,10 +125,11 @@ bool LeafMetric::run() {
 }
 //=======================================================================
 bool LeafMetric::check(std::string &erreurMsg) {
-    if (!AcyclicTest::isAcyclic(graph)) {
-        erreurMsg="The graph must be a acyclic.";
-        return false;
-    }
+  if (!AcyclicTest::isAcyclic(graph)) {
+    erreurMsg="The graph must be a acyclic.";
+    return false;
+  }
+
   return true;
 }
 //=======================================================================

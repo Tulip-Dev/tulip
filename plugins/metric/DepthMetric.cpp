@@ -145,10 +145,11 @@ bool DepthMetric::run() {
 }
 //=================================================
 bool DepthMetric::check(std::string &erreurMsg) {
-    if (!AcyclicTest::isAcyclic(graph)) {
-        erreurMsg="The graph must be acyclic.";
-        return false;
-    }
-    return true;
+  if (!AcyclicTest::isAcyclic(graph)) {
+    erreurMsg="The graph must be acyclic.";
+    return false;
+  }
+
+  return true;
 }
 //=================================================

@@ -151,12 +151,12 @@ void HistogramView::cleanupGlScene() {
 }
 
 QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
-    _bar = new QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|QuickAccessBarImpl::BACKGROUNDCOLOR|QuickAccessBarImpl::SHOWLABELS
-                                                                               |QuickAccessBarImpl::LABELSSCALED|QuickAccessBarImpl::SHOWEDGES
-                                                                              |QuickAccessBarImpl::NODECOLOR|QuickAccessBarImpl::EDGECOLOR|QuickAccessBarImpl::NODEBORDERCOLOR
-                                                                              |QuickAccessBarImpl::LABELCOLOR
-                                                                              ));
-    return _bar;
+  _bar = new QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|QuickAccessBarImpl::BACKGROUNDCOLOR|QuickAccessBarImpl::SHOWLABELS
+                                |QuickAccessBarImpl::LABELSSCALED|QuickAccessBarImpl::SHOWEDGES
+                                |QuickAccessBarImpl::NODECOLOR|QuickAccessBarImpl::EDGECOLOR|QuickAccessBarImpl::NODEBORDERCOLOR
+                                |QuickAccessBarImpl::LABELCOLOR
+                                                                           ));
+  return _bar;
 }
 
 void HistogramView::setState(const DataSet &dataSet) {
@@ -359,12 +359,13 @@ void HistogramView::setState(const DataSet &dataSet) {
   }
 
   bool quickAccessBarVisible=false;
+
   if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
   }
   else
-      setQuickAccessBarVisible(true);
+    setQuickAccessBarVisible(true);
 }
 
 DataSet HistogramView::state() const {
@@ -547,12 +548,15 @@ void HistogramView::draw() {
     removeEmptyViewLabel();
     addEmptyViewLabel();
     gl->centerScene();
+
     if(_bar)
-        _bar->setEnabled(false);
+      _bar->setEnabled(false);
+
     return;
   }
+
   if(_bar)
-      _bar->setEnabled(true);
+    _bar->setEnabled(true);
 
   if (detailedHistogram != NULL) {
     needUpdateHistogram=true;
@@ -905,6 +909,7 @@ void HistogramView::registerTriggers() {
       PropertyInterface *property=graph()->getProperty(it->next());
       addRedrawTrigger(property);
     }
+
     delete it;
   }
 }
