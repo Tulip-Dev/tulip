@@ -19,7 +19,10 @@
 
 #include "NominalParallelAxis.h"
 #include "AxisConfigDialogs.h"
+#include "ParallelCoordinatesGraphProxy.h"
+#include "ParallelTools.h"
 
+#include <tulip/GlNominativeAxis.h>
 #include <tulip/StringProperty.h>
 #include <tulip/Iterator.h>
 

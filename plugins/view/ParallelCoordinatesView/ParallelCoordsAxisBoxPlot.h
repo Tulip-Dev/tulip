@@ -20,19 +20,16 @@
 #ifndef PARALLELCOORDSAXISBOXPLOT_H_
 #define PARALLELCOORDSAXISBOXPLOT_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
 #include <string>
-#include <map>
 
-#include <tulip/GlPolygon.h>
-#include <tulip/GlQuad.h>
-#include <tulip/GlLines.h>
-#include <tulip/GlLabel.h>
+#include <tulip/GlSimpleEntity.h>
 #include <tulip/GLInteractor.h>
+#include <tulip/Color.h>
+
 
 namespace tlp {
+
+class QuantitativeParallelAxis;
 
 class GlAxisBoxPlot : public GlSimpleEntity {
 
@@ -66,6 +63,9 @@ private :
   Coord *highlightRangeHighBound;
 
 };
+
+class ParallelAxis;
+class ParallelCoordinatesView;
 
 class ParallelCoordsAxisBoxPlot : public GLInteractorComponent {
 

@@ -44,6 +44,7 @@
 #include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
 #include "ParallelTools.h"
+#include "ParallelCoordinatesGraphProxy.h"
 
 #include <sstream>
 

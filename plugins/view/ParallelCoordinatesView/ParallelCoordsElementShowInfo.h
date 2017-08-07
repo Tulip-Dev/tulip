@@ -20,11 +20,7 @@
 #ifndef PARALLELCOORDSELEMENTSHOWINFO_H_
 #define PARALLELCOORDSELEMENTSHOWINFO_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
 #include <tulip/MouseShowElementInfo.h>
-#include <tulip/GlScene.h>
 
 namespace tlp {
 

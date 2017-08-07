@@ -27,6 +27,9 @@
 #include "ParallelCoordinatesView.h"
 #include "ParallelTools.h"
 #include "ParallelCoordsAxisSliders.h"
+#include "ParallelAxis.h"
+
+#include <QMouseEvent>
 
 using namespace std;
 

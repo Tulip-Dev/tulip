@@ -20,20 +20,17 @@
 #ifndef PARALLELCOORDSAXISSLIDERS_H_
 #define PARALLELCOORDSAXISSLIDERS_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
-#include <string>
-
-#include <tulip/GlRect.h>
-#include <tulip/GlQuad.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GLInteractor.h>
 #include <tulip/GlLabel.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlPolygon.h>
 
 #include "ParallelCoordinatesDrawing.h"
-#include "ParallelCoordsGlEntitiesSelector.h"
 
 namespace tlp {
+
+class GlQuad;
+class ParallelCoordinatesView;
 
 enum sliderType {TOP_SLIDER = 0, BOTTOM_SLIDER = 1};
 

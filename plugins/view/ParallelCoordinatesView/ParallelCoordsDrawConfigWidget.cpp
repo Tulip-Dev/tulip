@@ -83,7 +83,7 @@ string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
 }
 
 void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(const std::string &linesTextureFileName) {
-  if (linesTextureFileName != "") {
+  if (!linesTextureFileName.empty()) {
     _ui->gBoxLineTexture->setChecked(true);
 
     if (linesTextureFileName == string(TulipBitmapDir + DEFAULT_TEXTURE_FILE)) {
@@ -117,28 +117,26 @@ void ParallelCoordsDrawConfigWidget::setAxisPointMaxSize(const unsigned int axis
   _ui->maxAxisPointSize->setValue(axisPointMaxSize);
 }
 
-bool ParallelCoordsDrawConfigWidget::displayNodesLabels() const {
+bool ParallelCoordsDrawConfigWidget::displayNodeLabels() const {
   return _ui->displayLabelsCB->isChecked();
 }
 
-void ParallelCoordsDrawConfigWidget::userTextureRbToggled(bool checked) {
-  if (checked) {
-    _ui->userTextureFile->setEnabled(true);
-    _ui->browseButton->setEnabled(true);
-  }
-  else {
-    _ui->userTextureFile->setEnabled(false);
-    _ui->browseButton->setEnabled(false);
-  }
+void ParallelCoordsDrawConfigWidget::setDisplayNodeLabels(const bool set) {
+  return _ui->displayLabelsCB->setChecked(set);
 }
 
-void ParallelCoordsDrawConfigWidget::minAxisPointSizeValueChanged(int newValue) {
+void ParallelCoordsDrawConfigWidget::userTextureRbToggled(const bool checked) {
+    _ui->userTextureFile->setEnabled(checked);
+    _ui->browseButton->setEnabled(checked);
+}
+
+void ParallelCoordsDrawConfigWidget::minAxisPointSizeValueChanged(const int newValue) {
   if (_ui->maxAxisPointSize->value() < newValue) {
     _ui->maxAxisPointSize->setValue(newValue + 1);
   }
 }
 
-void ParallelCoordsDrawConfigWidget::maxAxisPointSizeValueChanged(int newValue) {
+void ParallelCoordsDrawConfigWidget::maxAxisPointSizeValueChanged(const int newValue) {
   if (_ui->minAxisPointSize->value() > newValue) {
     _ui->minAxisPointSize->setValue(newValue - 1);
   }
@@ -193,7 +191,7 @@ bool ParallelCoordsDrawConfigWidget::configurationChanged() {
         oldDrawPointOnAxis!=drawPointOnAxis() ||
         oldAxisPointMinSize!=getAxisPointMinSize() ||
         oldAxisPointMaxSize!=getAxisPointMaxSize() ||
-        oldDisplayNodesLabels!=displayNodesLabels() ||
+        oldDisplayNodesLabels!=displayNodeLabels() ||
         oldLinesColorAlphaValue!=getLinesColorAlphaValue() ||
         oldBackgroundColor!=getBackgroundColor() ||
         oldUnhighlightedEltsColorsAlphaValue!=getUnhighlightedEltsColorsAlphaValue() ||
@@ -211,7 +209,7 @@ bool ParallelCoordsDrawConfigWidget::configurationChanged() {
     oldDrawPointOnAxis=drawPointOnAxis();
     oldAxisPointMinSize=getAxisPointMinSize();
     oldAxisPointMaxSize=getAxisPointMaxSize();
-    oldDisplayNodesLabels=displayNodesLabels();
+    oldDisplayNodesLabels=displayNodeLabels();
     oldLinesColorAlphaValue=getLinesColorAlphaValue();
     oldBackgroundColor=getBackgroundColor();
     oldUnhighlightedEltsColorsAlphaValue=getUnhighlightedEltsColorsAlphaValue();

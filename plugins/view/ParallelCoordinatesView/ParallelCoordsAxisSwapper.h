@@ -20,15 +20,13 @@
 #ifndef PARALLELCOORDSAXISSWAPPER_H_
 #define PARALLELCOORDSAXISSWAPPER_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
-#include <string>
-
-#include <tulip/GlRect.h>
 #include <tulip/GLInteractor.h>
+#include <tulip/Coord.h>
 
 namespace tlp {
+
+class ParallelAxis;
+class ParallelCoordinatesView;
 
 class ParallelCoordsAxisSwapper : public GLInteractorComponent {
 

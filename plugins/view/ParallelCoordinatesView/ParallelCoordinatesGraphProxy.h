@@ -22,19 +22,12 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <list>
-#include <string>
-#include <set>
-
 #include <tulip/GraphDecorator.h>
-#include <tulip/Color.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/Size.h>
-#include <tulip/StableIterator.h>
-#include <tulip/PropertyTypes.h>
-
 
 namespace tlp {
+
+class ColorProperty;
 
 class ParallelCoordinatesGraphProxy : public GraphDecorator {
 
@@ -44,6 +37,7 @@ public :
   ~ParallelCoordinatesGraphProxy();
 
   unsigned int getNumberOfSelectedProperties() const;
+  bool selectedPropertiesisEmpty() const;
   std::vector<std::string> getAllProperties();
   std::vector<std::string> getSelectedProperties();
   void setSelectedProperties(const std::vector<std::string>& properties);

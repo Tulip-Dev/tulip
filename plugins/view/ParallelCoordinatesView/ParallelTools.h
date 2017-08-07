@@ -21,14 +21,10 @@
 #define     PARALLELTOOLS_H_
 
 #include <tulip/Coord.h>
-#include <tulip/Color.h>
-#include <tulip/GlLine.h>
-#include <tulip/TlpTools.h>
 
 #include <string>
 #include <sstream>
 #include <iostream>
-
 
 namespace tlp {
 

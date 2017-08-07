@@ -20,14 +20,13 @@
 #ifndef PARALLELCOORDSGLENTITIESSELECTOR_H_
 #define PARALLELCOORDSGLENTITIESSELECTOR_H_
 
-#include <QCursor>
 #include <QMouseEvent>
 
 #include <tulip/MouseSelector.h>
 
-#include "ParallelCoordinatesView.h"
-
 namespace tlp {
+
+class ParallelCoordinatesView;
 
 class ParallelCoordsGlEntitiesSelector : public MouseSelector {
 public :

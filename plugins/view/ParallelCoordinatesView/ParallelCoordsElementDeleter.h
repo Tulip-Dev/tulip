@@ -20,9 +20,6 @@
 #ifndef PARALLELCOORDSELEMENTDELETER_H_
 #define PARALLELCOORDSELEMENTDELETER_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
 #include <tulip/GLInteractor.h>
 
 namespace tlp {

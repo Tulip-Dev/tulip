@@ -19,7 +19,8 @@ SET(LIB_SRCS
       ParallelCoordsAxisSpacer.cpp
       ParallelCoordinatesInteractors.cpp
       ParallelTools.cpp
-      ParallelCoordsDrawConfigWidget.cpp      
+      ParallelCoordsDrawConfigWidget.cpp
+      ParallelCoordinatesViewQuickAccessbar.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
 )
 
@@ -32,6 +33,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
       ParallelCoordinatesView.h
       AxisConfigDialogs.h
       ParallelCoordsDrawConfigWidget.h 
+      ParallelCoordinatesViewQuickAccessbar.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 

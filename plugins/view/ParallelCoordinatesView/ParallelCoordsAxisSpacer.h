@@ -21,9 +21,12 @@
 #define PARALLELCOORDSAXISSPACER_H_
 
 #include <tulip/GLInteractor.h>
-#include "ParallelCoordinatesView.h"
+
 
 namespace tlp {
+
+class ParallelCoordinatesView;
+class ParallelAxis;
 
 class ParallelCoordsAxisSpacer : public GLInteractorComponent {
 

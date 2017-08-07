@@ -20,6 +20,9 @@
 #include "ParallelCoordinatesView.h"
 #include "ParallelCoordsElementDeleter.h"
 
+#include <QEvent>
+#include <QMouseEvent>
+
 using namespace std;
 
 namespace tlp {

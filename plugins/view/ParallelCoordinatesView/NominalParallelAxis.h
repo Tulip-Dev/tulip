@@ -22,13 +22,12 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/GlNominativeAxis.h>
-
 #include "ParallelAxis.h"
-#include "ParallelCoordinatesGraphProxy.h"
-
 
 namespace tlp {
+
+class ParallelCoordinatesGraphProxy;
+class GlNominativeAxis;
 
 // Class which allow to render a nominal axis (labels are string)
 class NominalParallelAxis : public ParallelAxis {

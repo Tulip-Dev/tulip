@@ -19,8 +19,10 @@
 
 #include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
+#include <tulip/GlRect.h>
 
 #include "ParallelAxis.h"
+#include "ParallelTools.h"
 
 using namespace std;
 
@@ -28,9 +30,8 @@ namespace tlp {
 
 void drawComposite(GlComposite *composite, float lod, Camera *camera) {
   map<string, GlSimpleEntity*> glEntities(composite->getGlEntities());
-  map<string, GlSimpleEntity*>::iterator it2;
 
-  for (it2 = glEntities.begin(); it2 != glEntities.end() ; ++it2) {
+  for (map<string, GlSimpleEntity*>::const_iterator it2 = glEntities.begin(); it2 != glEntities.end() ; ++it2) {
     GlSimpleEntity *entity = it2->second;
     GlComposite *compositeEntity = dynamic_cast<GlComposite *>(entity);
 

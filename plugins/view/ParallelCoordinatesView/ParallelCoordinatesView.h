@@ -22,15 +22,15 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#include <GL/gl.h>
+
 #include "ParallelCoordinatesDrawing.h"
-#include "QuantitativeParallelAxis.h"
-#include "ParallelCoordsDrawConfigWidget.h"
+#include "ParallelCoordinatesGraphProxy.h"
 
 #include "../../utils/PluginNames.h"
 
 #include <tulip/GlMainView.h>
 
-#include <set>
 
 class QMenu;
 
@@ -39,6 +39,9 @@ namespace tlp {
 struct SelectedEntity;
 class GlGraphComposite;
 class ViewGraphPropertiesSelectionWidget;
+class ParallelCoordinatesViewQuickAccessBar;
+class ParallelCoordsDrawConfigWidget;
+class QuantitativeParallelAxis;
 
 /*@{*/
 /** \file
@@ -65,6 +68,8 @@ class ParallelCoordinatesView : public GlMainView {
 
   Q_OBJECT
 
+    ParallelCoordinatesViewQuickAccessBar* _bar;
+
 public :
 
   PLUGININFORMATION(ViewName::ParallelCoordinatesViewName, "Antoine Lambert", "16/04/2008",
@@ -79,6 +84,8 @@ public :
   std::string icon() const {
     return ":/parallel_coordinates_view.png";
   }
+
+  QuickAccessBar* getQuickAccessBarImpl();
 
   // View methods
   void setState(const DataSet &dataSet);

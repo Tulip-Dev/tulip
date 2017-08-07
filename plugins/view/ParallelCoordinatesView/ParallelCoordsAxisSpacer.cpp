@@ -23,7 +23,8 @@
 
 #include "ParallelCoordsAxisSpacer.h"
 #include "ParallelTools.h"
-#include "ParallelTools.h"
+#include "ParallelAxis.h"
+#include "ParallelCoordinatesView.h"
 
 #include <QCursor>
 #include <QMouseEvent>

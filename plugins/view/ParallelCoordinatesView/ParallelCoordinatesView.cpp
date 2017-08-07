@@ -20,6 +20,11 @@
 #include "ParallelCoordinatesView.h"
 #include "AxisConfigDialogs.h"
 #include "NominalParallelAxis.h"
+#include "ParallelCoordinatesViewQuickAccessbar.h"
+#include "ParallelTools.h"
+#include "ParallelCoordinatesDrawing.h"
+#include "ParallelCoordsDrawConfigWidget.h"
+#include "QuantitativeParallelAxis.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -28,6 +33,7 @@
 #include <QThread>
 #include <QDir>
 #include <QGraphicsView>
+#include <QKeyEvent>
 
 #include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
@@ -65,9 +71,8 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 }
 
 PLUGIN(ParallelCoordinatesView)
-//GRAPHICSVIEWEXTENSION(ParallelCoordinatesGraphicsView, "Parallel Cooordinates graphics view",ParallelCoordinatesView::viewName, "Tulip Team", "16/04/2008", "Parallel GV", "1.0");
 
-ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *) :
+ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *) : _bar(NULL),
   showToolTips(NULL), mainLayer(NULL),axisSelectionLayer(NULL), glGraphComposite(NULL), axisPointsGraph(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , dataConfigWidget(NULL), drawConfigWidget(NULL),
   firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),isConstruct(false),dontCenterViewAfterConfLoaded(false),needDraw(false) {
   ++parallelViewInstancesCount;
@@ -87,37 +92,31 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
     slidersTextureId = 0;
   }
 
-  if (axisPointsGraph) {
-    axisPointsGraph->removeListener(glGraphComposite);
-    delete axisPointsGraph;
-  }
+  delete axisPointsGraph;
+  delete graphProxy;
+  graphProxy = NULL;
+  delete dataConfigWidget;
+  delete drawConfigWidget;
+}
 
-  if (graphProxy) {
-    graphProxy->removeListener(parallelCoordsDrawing);
-    delete graphProxy;
-    graphProxy = NULL;
-  }
-
-  if (dataConfigWidget) {
-    delete dataConfigWidget;
-  }
-
-  if (drawConfigWidget) {
-    delete drawConfigWidget;
-  }
+QuickAccessBar* ParallelCoordinatesView::getQuickAccessBarImpl() {
+    _bar = new ParallelCoordinatesViewQuickAccessBar(drawConfigWidget);
+    connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+    return _bar;
 }
 
 void ParallelCoordinatesView::initGlWidget() {
-  if(!mainLayer) {
+  GlScene* scene = getGlMainWidget()->getScene();
+    if(!mainLayer) {
     mainLayer = new GlLayer("Main");
-    getGlMainWidget()->getScene()->addExistingLayer(mainLayer);
+    scene->addExistingLayer(mainLayer);
   }
 
   axisPointsGraph = tlp::newGraph();
   glGraphComposite = new GlGraphComposite(axisPointsGraph);
   mainLayer->addGlEntity(glGraphComposite, "graph");
   axisSelectionLayer = new GlLayer("Axis selection layer");
-  GlGraphRenderingParameters param = getGlMainWidget()->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
+  GlGraphRenderingParameters param = scene->getGlGraphComposite ()->getRenderingParameters ();
   param.setAntialiasing (true);
   param.setNodesStencil(2);
   param.setNodesLabelStencil(1);
@@ -126,7 +125,7 @@ void ParallelCoordinatesView::initGlWidget() {
   param.setDisplayNodes(true);
   param.setViewNodeLabel(false);
   param.setFontsType(2);
-  getGlMainWidget()->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
+  scene->getGlGraphComposite ()->setRenderingParameters (param);
   getGlMainWidget()->setMouseTracking(true);
 }
 
@@ -139,11 +138,9 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
   GlMainWidget *mainWidget=getGlMainWidget();
 
   if(!isConstruct) {
-
     initGlWidget();
     buildContextMenu();
     setOverviewVisible(true);
-
     getGlMainWidget()->installEventFilter(this);
 
     dataConfigWidget = new ViewGraphPropertiesSelectionWidget();
@@ -334,6 +331,13 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     dataConfigWidget->setWidgetParameters(NULL, propertiesTypesFilter);
   }
 
+  bool quickAccessBarVisible=false;
+  if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
+    needQuickAccessBar = true;
+    setQuickAccessBarVisible(quickAccessBarVisible);
+  }
+  else
+      setQuickAccessBarVisible(true);
   setupAndDrawView();
 }
 
@@ -349,7 +353,7 @@ DataSet ParallelCoordinatesView::state() const {
   DataSet selectedPropertiesData;
   int i=0;
 
-  for (vector<string>::iterator it=selectedProperties.begin(); it != selectedProperties.end(); ++it) {
+  for (vector<string>::const_iterator it=selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     std::stringstream s;
     s << i;
     selectedPropertiesData.set(s.str(), *it);
@@ -372,6 +376,9 @@ DataSet ParallelCoordinatesView::state() const {
   dataSet.set("linesType", (int) getLinesType());
   dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
+  if (needQuickAccessBar)
+    dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
+
 
   return dataSet;
 }
@@ -379,6 +386,9 @@ DataSet ParallelCoordinatesView::state() const {
 void ParallelCoordinatesView::graphChanged(tlp::Graph*) {
   if(isConstruct)
     setState(DataSet());
+  else if(_bar!=NULL) {
+      _bar->setEnabled(false);
+  }
 }
 
 void ParallelCoordinatesView::updateWithoutProgressBar() {
@@ -449,16 +459,17 @@ void ParallelCoordinatesView::removeEmptyViewLabel() {
 
 void ParallelCoordinatesView::draw() {
   if(graph()) {
-    if (graphProxy->getNumberOfSelectedProperties() == 0) {
+    if (graphProxy->selectedPropertiesisEmpty()) {
       removeEmptyViewLabel();
       addEmptyViewLabel();
+      _bar->setEnabled(false);
       getGlMainWidget()->getScene()->centerScene();
       getGlMainWidget()->draw();
       return;
     }
     else {
       removeEmptyViewLabel();
-
+       _bar->setEnabled(true);
       if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
         updateWithProgressBar();
       }
@@ -677,9 +688,10 @@ void ParallelCoordinatesView::centerSetupAndDrawView() {
 
 void ParallelCoordinatesView::setupAndDrawView() {
   if(graph()) {
+      GlScene* scene = getGlMainWidget()->getScene();
     graphProxy->setSelectedProperties(dataConfigWidget->getSelectedGraphProperties());
     graphProxy->setDataLocation(dataConfigWidget->getDataLocation());
-    getGlMainWidget()->getScene()->setBackgroundColor(drawConfigWidget->getBackgroundColor());
+    scene->setBackgroundColor(drawConfigWidget->getBackgroundColor());
     parallelCoordsDrawing->setAxisHeight(drawConfigWidget->getAxisHeight());
     parallelCoordsDrawing->setAxisPointMinSize(drawConfigWidget->getAxisPointMinSize());
     parallelCoordsDrawing->setAxisPointMaxSize(drawConfigWidget->getAxisPointMaxSize());
@@ -690,9 +702,7 @@ void ParallelCoordinatesView::setupAndDrawView() {
     parallelCoordsDrawing->setLayoutType(getLayoutType());
     parallelCoordsDrawing->setLinesType(getLinesType());
     parallelCoordsDrawing->setLinesThickness(getLinesThickness());
-    GlGraphRenderingParameters param = getGlMainWidget()->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
-    param.setViewNodeLabel(drawConfigWidget->displayNodesLabels());
-    getGlMainWidget()->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
+    scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(drawConfigWidget->displayNodeLabels());
 
     if (graphProxy->getUnhighlightedEltsColorAlphaValue() != drawConfigWidget->getUnhighlightedEltsColorsAlphaValue()) {
       graphProxy->setUnhighlightedEltsColorAlphaValue(drawConfigWidget->getUnhighlightedEltsColorsAlphaValue());
@@ -709,12 +719,7 @@ void ParallelCoordinatesView::setupAndDrawView() {
 }
 
 ParallelCoordinatesDrawing::LayoutType ParallelCoordinatesView::getLayoutType() const {
-  if (classicLayout->isChecked()) {
-    return ParallelCoordinatesDrawing::PARALLEL;
-  }
-  else {
-    return ParallelCoordinatesDrawing::CIRCULAR;
-  }
+ return (classicLayout->isChecked())?ParallelCoordinatesDrawing::PARALLEL:ParallelCoordinatesDrawing::CIRCULAR;
 }
 
 ParallelCoordinatesDrawing::LinesType ParallelCoordinatesView::getLinesType() const {
@@ -730,12 +735,7 @@ ParallelCoordinatesDrawing::LinesType ParallelCoordinatesView::getLinesType() co
 }
 
 ParallelCoordinatesDrawing::LinesThickness ParallelCoordinatesView::getLinesThickness() const {
-  if (thickLines->isChecked()) {
-    return ParallelCoordinatesDrawing::THICK;
-  }
-  else {
-    return ParallelCoordinatesDrawing::THIN;
-  }
+  return (thickLines->isChecked())?ParallelCoordinatesDrawing::THICK:ParallelCoordinatesDrawing::THIN;
 }
 
 const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(const int x, const int y, const unsigned int width, const unsigned int height) {
@@ -749,9 +749,7 @@ const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(co
   bool result = getGlMainWidget()->pickGlEntities(x, y, width, height, selectedEntities, mainLayer);
 
   if (result) {
-    vector<SelectedEntity>::iterator it;
-
-    for (it = selectedEntities.begin(); it != selectedEntities.end(); ++it) {
+    for (vector<SelectedEntity>::const_iterator it = selectedEntities.begin(); it != selectedEntities.end(); ++it) {
       GlEntity *entity = (*it).getSimpleEntity();
       unsigned int selectedEltId;
 
@@ -762,9 +760,8 @@ const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(co
   }
 
   getGlMainWidget()->pickNodesEdges(x, y, width , height, selectedAxisPoints, dummy, mainLayer);
-  vector<SelectedEntity>::iterator it;
 
-  for (it = selectedAxisPoints.begin(); it != selectedAxisPoints.end(); ++it) {
+  for (vector<SelectedEntity>::const_iterator it = selectedAxisPoints.begin(); it != selectedAxisPoints.end(); ++it) {
     node n((*it).getComplexEntityId());
     unsigned int selectedEltId;
 
@@ -778,9 +775,8 @@ const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(co
 
 void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const int y, const bool selectFlag) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
-  set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
     if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
       graphProxy->setDataSelected(*it, selectFlag);
   }
@@ -788,9 +784,8 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
 
 void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y, const unsigned int width, const unsigned int height, const bool selectFlag) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, width, height));
-  set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
     if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
       graphProxy->setDataSelected(*it, selectFlag);
   }
@@ -802,9 +797,8 @@ void ParallelCoordinatesView::resetSelection() {
 
 void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
-  set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
     if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
       graphProxy->deleteData(*it);
   }
@@ -820,7 +814,7 @@ bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const i
       dataId = *(dataUnderPointer.begin());
     }
     else {
-      set<unsigned int>::iterator it = dataUnderPointer.begin();
+      set<unsigned int>::const_iterator it = dataUnderPointer.begin();
 
       while (it != dataUnderPointer.end() && !graphProxy->isDataHighlighted(*it)) {
         ++it;
@@ -855,9 +849,7 @@ void ParallelCoordinatesView::highlightDataUnderPointer(const int x, const int y
 
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
 
-  set<unsigned int>::iterator it;
-
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
     graphProxy->addOrRemoveEltToHighlight(*it);
   }
 
@@ -869,11 +861,9 @@ void ParallelCoordinatesView::highlightDataInRegion(const int x, const int y, co
     graphProxy->unsetHighlightedElts();
   }
 
-  const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, width, height));
+  const set<unsigned int> &dataUnderPointer = mapGlEntitiesInRegionToData(x, y, width, height);
 
-  set<unsigned int>::iterator it;
-
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (set<unsigned int>::const_iterator it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
     graphProxy->addOrRemoveEltToHighlight(*it);
   }
 

@@ -24,19 +24,18 @@
 
 #include <QDialog>
 
-#include <QSpinBox>
-#include <QPushButton>
-#include <QLabel>
-#include <QCloseEvent>
-#include <QComboBox>
-#include <QCheckBox>
-
 #include <tulip/ItemsListWidget.h>
 
-#include "QuantitativeParallelAxis.h"
-#include "NominalParallelAxis.h"
+class QSpinBox;
+class QDoubleSpinBox;
+class QComboBox;
+class QCheckBox;
+class QCloseEvent;
 
 namespace tlp {
+
+    class QuantitativeParallelAxis;
+    class NominalParallelAxis;
 
 // A really simple dialog which allows user to set number of graduations
 // and data ordering (ascendent or not) for a particular quantitative axis

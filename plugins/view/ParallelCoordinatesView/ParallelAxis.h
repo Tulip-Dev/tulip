@@ -22,15 +22,14 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlAxis.h>
-#include <tulip/GlRect.h>
 
-#include <vector>
 #include <set>
 
-#include "ParallelTools.h"
-
 namespace tlp {
+
+class GlRect;
 
 class ParallelAxis : public GlSimpleEntity {
 

@@ -24,18 +24,21 @@
 
 #include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
-
-#include <QWidget>
-
-#include <vector>
-
-#include "ParallelAxis.h"
-#include "ParallelCoordinatesGraphProxy.h"
+#include <tulip/Size.h>
+#include <tulip/Color.h>
 
 namespace tlp {
 
 class GlMainWidget;
 class GlProgressBar;
+class ParallelCoordinatesGraphProxy;
+class ParallelAxis;
+class LayoutProperty;
+class SizeProperty;
+class IntegerProperty;
+class StringProperty;
+class BooleanProperty;
+class ColorProperty;
 
 class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 

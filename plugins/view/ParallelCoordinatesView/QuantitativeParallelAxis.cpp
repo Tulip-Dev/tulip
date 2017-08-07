@@ -19,6 +19,8 @@
 
 #include "QuantitativeParallelAxis.h"
 #include "AxisConfigDialogs.h"
+#include "ParallelCoordinatesGraphProxy.h"
+#include "ParallelTools.h"
 
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -154,9 +156,8 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
 
     double lowBorder = (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
     double bottomOutlier = 0.0;
-    vector<double>::iterator it;
 
-    for (it = propertyValuesVector.begin() ; it != propertyValuesVector.end() ; ++it) {
+    for (vector<double>::const_iterator it = propertyValuesVector.begin() ; it != propertyValuesVector.end() ; ++it) {
       if (*it > lowBorder) {
         bottomOutlier = *it;
         break;

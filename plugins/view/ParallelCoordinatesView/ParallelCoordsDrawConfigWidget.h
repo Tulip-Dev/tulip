@@ -48,7 +48,7 @@ public :
   void setAxisPointMinSize(const unsigned int axisPointMinSize);
   Size getAxisPointMaxSize() const;
   void setAxisPointMaxSize(const unsigned int axisPointMaxSize);
-  bool displayNodesLabels() const;
+  bool displayNodeLabels() const;
   void setLinesColorAlphaValue(unsigned int value);
   unsigned int getLinesColorAlphaValue() const;
   Color getBackgroundColor() const;
@@ -57,15 +57,15 @@ public :
   void setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue);
   std::string getLinesTextureFilename() const;
   void setLinesTextureFilename(const std::string &linesTextureFileName);
-
+  void setDisplayNodeLabels(const bool set);
   bool configurationChanged();
 
 private slots :
 
   void pressButtonBrowse();
-  void userTextureRbToggled(bool checked);
-  void minAxisPointSizeValueChanged(int newValue);
-  void maxAxisPointSizeValueChanged(int newValue);
+  void userTextureRbToggled(const bool checked);
+  void minAxisPointSizeValueChanged(const int newValue);
+  void maxAxisPointSizeValueChanged(const int newValue);
 
 private:
 

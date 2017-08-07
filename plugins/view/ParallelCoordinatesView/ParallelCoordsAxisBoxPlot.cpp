@@ -30,6 +30,8 @@
 #include "QuantitativeParallelAxis.h"
 #include "ParallelCoordsAxisBoxPlot.h"
 
+#include <QMouseEvent>
+
 using namespace std;
 
 namespace tlp {

@@ -21,7 +21,7 @@
 #include <tulip/GlGraphComposite.h>
 
 #include "ParallelCoordsGlEntitiesSelector.h"
-
+#include "ParallelCoordinatesView.h"
 
 using namespace std;
 

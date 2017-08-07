@@ -18,6 +18,7 @@
  */
 
 #include "ParallelCoordsElementsSelector.h"
+#include "ParallelCoordinatesView.h"
 
 using namespace std;
 

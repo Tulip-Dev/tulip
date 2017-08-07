@@ -28,6 +28,9 @@
 #include "ParallelTools.h"
 #include "ParallelCoordinatesView.h"
 #include "ParallelCoordsAxisSwapper.h"
+#include "ParallelAxis.h"
+
+#include <QMouseEvent>
 
 using namespace std;
 
