@@ -388,14 +388,12 @@ int tlp::randomInteger(int max) {
   }
 
 #else
-  assert(max >= 0 && max <= RAND_MAX);
-
   if (max == 0)
     return 0;
 
   int x = rand();
 
-  if (max == RAND_MAX)
+  if (max >= RAND_MAX)
     return x;
 
   // keep searching for an x in a range divisible by n
