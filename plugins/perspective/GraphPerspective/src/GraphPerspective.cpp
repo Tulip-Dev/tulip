@@ -1529,21 +1529,18 @@ void GraphPerspective::centerPanelsForGraph(tlp::Graph* g, bool graphChanged,
 }
 
 void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
-  QVector<View*> viewsToDelete;
+  list<View*> viewsToDelete;
 
   foreach(View* v, _ui->workspace->panels()) {
     if (v->graph() == g || g->isDescendantGraph(v->graph()))
-      viewsToDelete+=v;
+      viewsToDelete.push_back(v);
   }
 
   if (!viewsToDelete.empty()) {
-    // expose mode is not safe to add a delete a panel
-    // so hide it if needed
+    // expose mode is not safe when deleting a panel
+    // so hide it first
     _ui->workspace->hideExposeMode();
-
-    foreach(View* v, viewsToDelete) {
-      _ui->workspace->delView(v);
-    }
+    qDeleteAll(viewsToDelete);
   }
 }
 

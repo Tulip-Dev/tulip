@@ -109,7 +109,7 @@ void CliqueEnumeration::maxCliquePivot(set<node>& P, const vector<node>& R, set<
 
 //================================================================================
 struct DegreeOrderingElem {
-  DegreeOrderingElem() : n(tlp::node()),deg(0) {}
+  DegreeOrderingElem() : deg(0) {}
   DegreeOrderingElem(tlp::node n,unsigned int deg) : n(n),deg(deg) {}
   bool operator ==(const DegreeOrderingElem &b) const {
     return n==b.n;

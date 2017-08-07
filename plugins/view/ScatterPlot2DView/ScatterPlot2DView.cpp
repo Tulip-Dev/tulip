@@ -1036,9 +1036,7 @@ void ScatterPlot2DView::registerTriggers() {
 }
 
 void ScatterPlot2DView::treatEvent(const Event &message) {
-  if (typeid(message) == typeid(GraphEvent)) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
-
     if(graphEvent) {
       if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
         addEdge(graphEvent->getGraph(),graphEvent->getEdge());
@@ -1049,11 +1047,8 @@ void ScatterPlot2DView::treatEvent(const Event &message) {
       if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
         delEdge(graphEvent->getGraph(),graphEvent->getEdge());
     }
-  }
 
-  if(typeid(message) == typeid(PropertyEvent)) {
     const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&message);
-
     if(propertyEvent) {
       if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_NODE_VALUE)
         afterSetNodeValue(propertyEvent->getProperty(),propertyEvent->getNode());
@@ -1067,7 +1062,6 @@ void ScatterPlot2DView::treatEvent(const Event &message) {
       if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
         afterSetAllEdgeValue(propertyEvent->getProperty());
     }
-  }
 }
 
 void ScatterPlot2DView::afterSetNodeValue(PropertyInterface *p, const node n) {

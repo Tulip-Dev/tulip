@@ -33,9 +33,7 @@ public:
 
 public slots:
   void reset();
-//    virtual void setEdgesVisible(bool);
   virtual void setBackgroundColor(const QColor&);
-//    virtual void setColorInterpolation(bool);
 
 };
 }

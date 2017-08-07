@@ -136,7 +136,7 @@ void Window::draw(node n, float lod) {
   ColorProperty* colorBorder = glGraphInputData->getElementBorderColor();
   string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   _border.setColor(colorBorder->getNodeValue(n));

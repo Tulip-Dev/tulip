@@ -27,7 +27,7 @@ using namespace tlp;
 PLUGIN(ReachableSubGraphSelection)
 
 static const char *paramHelp[] = {
-  // edges direction
+  // edge direction
   "This parameter defines the navigation direction.",
 
   // starting nodes

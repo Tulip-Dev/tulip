@@ -26,7 +26,6 @@
 #include <tulip/TreeTest.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/StableIterator.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/ForEach.h>
