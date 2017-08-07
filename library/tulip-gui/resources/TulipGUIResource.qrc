@@ -104,5 +104,7 @@
         <file>icons/32/input-output.png</file>
         <file>icons/32/input.png</file>
         <file>icons/32/output.png</file>
+        <file>icons/20/nodes_disabled.png</file>
+        <file>icons/20/nodes_enabled.png</file>
     </qresource>
 </RCC>

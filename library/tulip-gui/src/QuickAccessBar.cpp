@@ -99,6 +99,10 @@ QuickAccessBar::QuickAccessBar(QWidget *parent):QWidget(parent),_mainView(NULL) 
 
 #include "ui_QuickAccessBar.h"
 
+QPushButton* QuickAccessBarImpl::showNodesButton() {
+    return _ui->showNodesToggle;
+}
+
 QPushButton* QuickAccessBarImpl::showEdgesButton() {
   return _ui->showEdgesToggle;
 }
@@ -197,6 +201,9 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickA
 
   if(!buttons.testFlag(SELECTFONT))
     _ui->fontButton->hide();
+
+  if(!buttons.testFlag(SHOWNODES))
+      _ui->showNodesToggle->hide();
 }
 
 void QuickAccessBarImpl::addButtonAtEnd(QAbstractButton *button) {
@@ -260,6 +267,8 @@ void QuickAccessBarImpl::reset() {
   _ui->sizeInterpolationToggle->setIcon((renderingParameters()->isEdgeSizeInterpolate() ? QIcon(":/tulip/gui/icons/20/size_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/size_interpolation_disabled.png")));
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+  _ui->showNodesToggle->setChecked(renderingParameters()->isDisplayNodes());
+  _ui->showNodesToggle->setIcon((renderingParameters()->isDisplayNodes() ? QIcon(":/tulip/gui/icons/20/nodes_enabled.png") : QIcon(":/tulip/gui/icons/20/nodes_disabled.png")));
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->showLabelsToggle->setIcon((renderingParameters()->isViewNodeLabel() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
   _ui->labelsScaledToggle->setChecked(renderingParameters()->isLabelScaled());
@@ -531,6 +540,15 @@ void QuickAccessBarImpl::setEdgesVisible(bool v) {
   if(renderingParameters()->isDisplayEdges() != v) {
     renderingParameters()->setDisplayEdges(v);
     _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+    _mainView->emitDrawNeededSignal();
+    emit settingsChanged();
+  }
+}
+
+void QuickAccessBarImpl::setNodesVisible(bool v) {
+  if(renderingParameters()->isDisplayNodes() != v) {
+    renderingParameters()->setDisplayNodes(v);
+    _ui->showNodesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/nodes_enabled.png") : QIcon(":/tulip/gui/icons/20/nodes_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
   }

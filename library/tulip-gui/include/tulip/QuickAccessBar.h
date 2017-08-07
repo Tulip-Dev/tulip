@@ -87,7 +87,7 @@ public:
                           EDGEBORDERCOLOR=0x200,LABELCOLOR=0x400,COLORINTERPOLATION=0x800,SIZEINTERPOLATION=0x1000,
                           SHOWEDGES=0x2000,SHOWLABELS=0x4000,LABELSSCALED=0x8000,
                           NODESHAPE=0x10000,EDGESHAPE=0x20000,NODESIZE=0x40000,EDGESIZE=0x80000,
-                          NODELABELPOSITION=0x100000,SELECTFONT=0x200000,
+                          NODELABELPOSITION=0x100000,SELECTFONT=0x200000, SHOWNODES=0x400000,
                           ALLBUTTONS=0xFFFFFF
                          };
   Q_DECLARE_FLAGS(QuickAccessButtons,QuickAccessButton)
@@ -96,6 +96,7 @@ public:
   virtual ~QuickAccessBarImpl();
 
   QPushButton* showEdgesButton();
+  QPushButton* showNodesButton();
   ColorButton* backgroundColorButton();
   QPushButton* showLabelsButton();
   QPushButton* showLabelScaled();
@@ -132,6 +133,7 @@ public slots:
   void showHideEdgesSizeCaption();
   void takeSnapshot();
   virtual void setEdgesVisible(bool);
+  virtual void setNodesVisible(bool);
   virtual void setLabelsVisible(bool);
   virtual void setLabelsScaled(bool);
   void selectFont();
