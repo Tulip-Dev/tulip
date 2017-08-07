@@ -100,7 +100,7 @@ QuickAccessBar::QuickAccessBar(QWidget *parent):QWidget(parent),_mainView(NULL) 
 #include "ui_QuickAccessBar.h"
 
 QPushButton* QuickAccessBarImpl::showNodesButton() {
-    return _ui->showNodesToggle;
+  return _ui->showNodesToggle;
 }
 
 QPushButton* QuickAccessBarImpl::showEdgesButton() {
@@ -203,7 +203,7 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickA
     _ui->fontButton->hide();
 
   if(!buttons.testFlag(SHOWNODES))
-      _ui->showNodesToggle->hide();
+    _ui->showNodesToggle->hide();
 }
 
 void QuickAccessBarImpl::addButtonAtEnd(QAbstractButton *button) {

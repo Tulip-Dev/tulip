@@ -388,6 +388,7 @@ int tlp::randomInteger(int max) {
   }
 
 #else
+
   if (max == 0)
     return 0;
 

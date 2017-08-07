@@ -100,14 +100,15 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
 }
 
 QuickAccessBar* ParallelCoordinatesView::getQuickAccessBarImpl() {
-    _bar = new ParallelCoordinatesViewQuickAccessBar(drawConfigWidget);
-    connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
-    return _bar;
+  _bar = new ParallelCoordinatesViewQuickAccessBar(drawConfigWidget);
+  connect(_bar, SIGNAL(settingsChanged()), this, SLOT(applySettings()));
+  return _bar;
 }
 
 void ParallelCoordinatesView::initGlWidget() {
   GlScene* scene = getGlMainWidget()->getScene();
-    if(!mainLayer) {
+
+  if(!mainLayer) {
     mainLayer = new GlLayer("Main");
     scene->addExistingLayer(mainLayer);
   }
@@ -332,12 +333,14 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
   }
 
   bool quickAccessBarVisible=false;
+
   if (dataSet.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);
   }
   else
-      setQuickAccessBarVisible(true);
+    setQuickAccessBarVisible(true);
+
   setupAndDrawView();
 }
 
@@ -376,6 +379,7 @@ DataSet ParallelCoordinatesView::state() const {
   dataSet.set("linesType", (int) getLinesType());
   dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
+
   if (needQuickAccessBar)
     dataSet.set("quickAccessBarVisible", quickAccessBarVisible());
 
@@ -387,7 +391,7 @@ void ParallelCoordinatesView::graphChanged(tlp::Graph*) {
   if(isConstruct)
     setState(DataSet());
   else if(_bar!=NULL) {
-      _bar->setEnabled(false);
+    _bar->setEnabled(false);
   }
 }
 
@@ -469,7 +473,8 @@ void ParallelCoordinatesView::draw() {
     }
     else {
       removeEmptyViewLabel();
-       _bar->setEnabled(true);
+      _bar->setEnabled(true);
+
       if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
         updateWithProgressBar();
       }
@@ -688,7 +693,7 @@ void ParallelCoordinatesView::centerSetupAndDrawView() {
 
 void ParallelCoordinatesView::setupAndDrawView() {
   if(graph()) {
-      GlScene* scene = getGlMainWidget()->getScene();
+    GlScene* scene = getGlMainWidget()->getScene();
     graphProxy->setSelectedProperties(dataConfigWidget->getSelectedGraphProperties());
     graphProxy->setDataLocation(dataConfigWidget->getDataLocation());
     scene->setBackgroundColor(drawConfigWidget->getBackgroundColor());
@@ -719,7 +724,7 @@ void ParallelCoordinatesView::setupAndDrawView() {
 }
 
 ParallelCoordinatesDrawing::LayoutType ParallelCoordinatesView::getLayoutType() const {
- return (classicLayout->isChecked())?ParallelCoordinatesDrawing::PARALLEL:ParallelCoordinatesDrawing::CIRCULAR;
+  return (classicLayout->isChecked())?ParallelCoordinatesDrawing::PARALLEL:ParallelCoordinatesDrawing::CIRCULAR;
 }
 
 ParallelCoordinatesDrawing::LinesType ParallelCoordinatesView::getLinesType() const {

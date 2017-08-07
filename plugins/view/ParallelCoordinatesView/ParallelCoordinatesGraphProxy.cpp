@@ -55,7 +55,7 @@ unsigned int ParallelCoordinatesGraphProxy::getNumberOfSelectedProperties() cons
 }
 
 bool ParallelCoordinatesGraphProxy::selectedPropertiesisEmpty() const {
-    return selectedProperties.empty();
+  return selectedProperties.empty();
 }
 
 vector<string> ParallelCoordinatesGraphProxy::getSelectedProperties() {

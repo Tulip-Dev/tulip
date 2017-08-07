@@ -34,8 +34,8 @@ class QCloseEvent;
 
 namespace tlp {
 
-    class QuantitativeParallelAxis;
-    class NominalParallelAxis;
+class QuantitativeParallelAxis;
+class NominalParallelAxis;
 
 // A really simple dialog which allows user to set number of graduations
 // and data ordering (ascendent or not) for a particular quantitative axis

@@ -1036,32 +1036,34 @@ void ScatterPlot2DView::registerTriggers() {
 }
 
 void ScatterPlot2DView::treatEvent(const Event &message) {
-    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
-    if(graphEvent) {
-      if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
-        addEdge(graphEvent->getGraph(),graphEvent->getEdge());
+  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
 
-      if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
-        delNode(graphEvent->getGraph(),graphEvent->getNode());
+  if(graphEvent) {
+    if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
+      addEdge(graphEvent->getGraph(),graphEvent->getEdge());
 
-      if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
-        delEdge(graphEvent->getGraph(),graphEvent->getEdge());
-    }
+    if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
+      delNode(graphEvent->getGraph(),graphEvent->getNode());
 
-    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&message);
-    if(propertyEvent) {
-      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_NODE_VALUE)
-        afterSetNodeValue(propertyEvent->getProperty(),propertyEvent->getNode());
+    if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
+      delEdge(graphEvent->getGraph(),graphEvent->getEdge());
+  }
 
-      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_EDGE_VALUE)
-        afterSetEdgeValue(propertyEvent->getProperty(),propertyEvent->getEdge());
+  const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&message);
 
-      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE)
-        afterSetAllNodeValue(propertyEvent->getProperty());
+  if(propertyEvent) {
+    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_NODE_VALUE)
+      afterSetNodeValue(propertyEvent->getProperty(),propertyEvent->getNode());
 
-      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
-        afterSetAllEdgeValue(propertyEvent->getProperty());
-    }
+    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_EDGE_VALUE)
+      afterSetEdgeValue(propertyEvent->getProperty(),propertyEvent->getEdge());
+
+    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE)
+      afterSetAllNodeValue(propertyEvent->getProperty());
+
+    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
+      afterSetAllEdgeValue(propertyEvent->getProperty());
+  }
 }
 
 void ScatterPlot2DView::afterSetNodeValue(PropertyInterface *p, const node n) {

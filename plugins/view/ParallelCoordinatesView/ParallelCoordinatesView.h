@@ -68,7 +68,7 @@ class ParallelCoordinatesView : public GlMainView {
 
   Q_OBJECT
 
-    ParallelCoordinatesViewQuickAccessBar* _bar;
+  ParallelCoordinatesViewQuickAccessBar* _bar;
 
 public :
 

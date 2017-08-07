@@ -126,8 +126,8 @@ void ParallelCoordsDrawConfigWidget::setDisplayNodeLabels(const bool set) {
 }
 
 void ParallelCoordsDrawConfigWidget::userTextureRbToggled(const bool checked) {
-    _ui->userTextureFile->setEnabled(checked);
-    _ui->browseButton->setEnabled(checked);
+  _ui->userTextureFile->setEnabled(checked);
+  _ui->browseButton->setEnabled(checked);
 }
 
 void ParallelCoordsDrawConfigWidget::minAxisPointSizeValueChanged(const int newValue) {
