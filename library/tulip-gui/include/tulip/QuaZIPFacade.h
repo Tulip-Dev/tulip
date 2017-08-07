@@ -31,8 +31,8 @@ class QString;
 
 /**
   @brief This class is a facade to the QuaZIP libraries features.
-  It provides with convenience methods allowing to manipulate the QuaZIP library on a higher level.
-  QuaZIPFacade contains only static methods, as it should only works as a toolbox.
+  It provides convenience methods allowing to manipulate the QuaZIP library on a higher level.
+  QuaZIPFacade contains only static methods, as it should only be used as a toolbox.
   */
 class TLP_QT_SCOPE QuaZIPFacade {
 //  QuaZIPFacade();

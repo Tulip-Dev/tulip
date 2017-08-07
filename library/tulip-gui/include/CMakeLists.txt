@@ -59,7 +59,6 @@ INSTALL(FILES
   tulip/PropertyAnimation.h
   tulip/SizePropertyAnimation.h
   tulip/VectorPropertyAnimation.h
-  tulip/TulipParallelAnimationGroup.h
   tulip/ColorButton.h
   tulip/TulipModel.h
   tulip/ColorScaleButton.h

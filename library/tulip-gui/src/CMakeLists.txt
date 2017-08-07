@@ -53,7 +53,6 @@ SET(SRCS
   DoublePropertyAnimation.cpp
   LayoutPropertyAnimation.cpp
   PropertyAnimation.cpp
-  TulipParallelAnimationGroup.cpp
   ColorButton.cpp
   TulipModel.cpp
   ColorScaleButton.cpp
