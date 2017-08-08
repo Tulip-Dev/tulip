@@ -443,15 +443,15 @@ void CaptionItem::treatEvents(const vector<Event> &ev) {
   for(vector<Event>::const_iterator it=ev.begin(); it!=ev.end(); ++it) {
 
     PropertyInterface *prop=dynamic_cast<PropertyInterface*>((*it).sender());
+    Graph *graph=dynamic_cast<Graph*>((*it).sender());
 
-    if(typeid(*it)==typeid(Event))
-      if((*it).type()==Event::TLP_DELETE)
-        deleteEvent=true;
+    if((*it).type()==Event::TLP_DELETE)
+      deleteEvent=true;
 
     if(prop)
       propertyEvent=true;
 
-    if(typeid(*it)==typeid(GraphEvent))
+    if(graph)
       graphEvent=true;
   }
 
