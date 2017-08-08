@@ -68,7 +68,7 @@ void EnclosingCircleConfigurationWidget::solidColorRadioCheck(const bool checked
 }
 
 Color EnclosingCircleConfigurationWidget::getCircleColor() const {
-    return _ui->circleColorBtn->tulipColor();
+  return _ui->circleColorBtn->tulipColor();
 }
 
 Color getInverseColor(const Color &c) {
@@ -129,8 +129,8 @@ bool EnclosingCircleHighlighter::isConfigurable() const {
 }
 
 EnclosingCircleHighlighter::~EnclosingCircleHighlighter() {
- //no need to delete the configurationWidget. Qt will do it well.
-    // delete configurationWidget;
+//no need to delete the configurationWidget. Qt will do it well.
+  // delete configurationWidget;
 }
 
 QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {

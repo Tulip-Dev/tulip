@@ -214,15 +214,15 @@ void PathFinder::configureHighlighterButtonPressed() {
   PathHighlighter *hler=NULL;
 
   foreach(PathHighlighter *h, highlighters) {
-      if (h->getName() == text) {
-          hler = h;
-          break;
-      }
+    if (h->getName() == text) {
+      hler = h;
+      break;
+    }
   }
 
   if(hler==NULL) {
-      QMessageBox::warning(0, "Nothing selected", "No highlighter selected");
-      return;
+    QMessageBox::warning(0, "Nothing selected", "No highlighter selected");
+    return;
   }
 
   if (hler->isConfigurable()) {
