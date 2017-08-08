@@ -20,17 +20,8 @@
 #ifndef THRESHOLDINTERACTOR_H_
 #define THRESHOLDINTERACTOR_H_
 
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
+#include <tulip/OpenGlIncludes.h>
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
-//#include <tulip/GLInteractor.h>
 #include "EditColorScaleInteractor.h"
 
 #include <tulip/GlComposite.h>
@@ -38,12 +29,6 @@
 #include <tulip/Size.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-//#include <tulip/GlQuad.h>
-//#include <tulip/GlPolygon.h>
-//#include <tulip/GlLabel.h>
-//#include <tulip/GlRect.h>
-//#include <tulip/DoubleProperty.h>
-//#include "SOMView.h"
 
 #include <QMutex>
 

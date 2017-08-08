@@ -75,6 +75,7 @@ INSTALL(FILES
   tulip/GlyphManager.h
   tulip/OcclusionTest.h
   tulip/OpenGlConfigManager.h
+  tulip/OpenGlIncludes.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_ogl_dev
 )

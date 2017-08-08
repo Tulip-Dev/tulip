@@ -21,15 +21,7 @@
 #ifndef Tulip_GLFEEDBACKBUILDER_H
 #define Tulip_GLFEEDBACKBUILDER_H
 
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include <tulip/OpenGlIncludes.h>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Vector.h>

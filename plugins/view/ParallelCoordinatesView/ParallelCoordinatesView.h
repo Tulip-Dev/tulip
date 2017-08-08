@@ -22,15 +22,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#if defined(_MSC_VER)
-#include <windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include <tulip/OpenGlIncludes.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "ParallelCoordinatesGraphProxy.h"

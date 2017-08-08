@@ -22,15 +22,7 @@
 #define CURVES_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include <tulip/OpenGlIncludes.h>
 
 #include <tulip/Coord.h>
 #include <tulip/Color.h>

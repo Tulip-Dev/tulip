@@ -29,15 +29,7 @@
 #include <tulip/Camera.h>
 #include <tulip/MouseBoxZoomer.h>
 
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include <tulip/OpenGlIncludes.h>
 
 using namespace std;
 using namespace tlp;
