@@ -174,7 +174,7 @@ int compare_events(const void *a, const void *b) {
   else if(ea->pos < eb->pos) {
     return -1;
   }
-  else if(isNaN(ea->pos) != isNaN(ea->pos)) {
+  else if(isNaN(ea->pos) != isNaN(eb->pos)) {
     /* See comment in CmpNodePos. */
     return ( isNaN(ea->pos)
              ? -1
