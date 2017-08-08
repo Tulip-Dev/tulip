@@ -21,7 +21,7 @@
 #define PATHALGORITHM_H_
 
 #include <tulip/Node.h>
-#include <float.h>
+#include <cfloat>
 
 namespace tlp {
 class BooleanProperty;

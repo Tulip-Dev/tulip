@@ -24,9 +24,10 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/ColorButton.h>
 
 #include <QWidget>
-#include <QColorDialog>
+
 
 #include "EnclosingCircleHighlighter.h"
 #include "../PathFinderTools.h"
@@ -35,12 +36,15 @@
 using namespace tlp;
 using namespace std;
 
-EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(QWidget *parent): QWidget(parent),_ui(new Ui::EnclosingCircleConfigurationData) {
+EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(Color& circleColor,QWidget *parent): QWidget(parent),_ui(new Ui::EnclosingCircleConfigurationData) {
   _ui->setupUi(this);
   connect(_ui->solidColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(solidColorRadioChecked(bool)));
   connect(_ui->inverseColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(inverseColorRadioChecked(bool)));
-  connect(_ui->circleColorBtn, SIGNAL(clicked(bool)), this, SIGNAL(colorButtonClicked()));
+  connect(_ui->circleColorBtn, SIGNAL(clicked()), this, SIGNAL(colorButtonClicked()));
   connect(_ui->alphaSlider, SIGNAL(valueChanged(int)), this, SIGNAL(alphaChanged(int)));
+  _ui->circleColorBtn->setDialogParent(parent);
+  _ui->circleColorBtn->setDialogTitle("Choose the enclosing circle color");
+  _ui->circleColorBtn->setTulipColor(circleColor);
 }
 
 EnclosingCircleConfigurationWidget::~EnclosingCircleConfigurationWidget() {
@@ -61,6 +65,10 @@ void EnclosingCircleConfigurationWidget::alphaSliderSetValue(const int val) {
 
 void EnclosingCircleConfigurationWidget::solidColorRadioCheck(const bool checked) {
   _ui->solidColorRadio->setChecked(checked);
+}
+
+Color EnclosingCircleConfigurationWidget::getCircleColor() const {
+    return _ui->circleColorBtn->tulipColor();
 }
 
 Color getInverseColor(const Color &c) {
@@ -121,11 +129,12 @@ bool EnclosingCircleHighlighter::isConfigurable() const {
 }
 
 EnclosingCircleHighlighter::~EnclosingCircleHighlighter() {
-  delete configurationWidget;
+ //no need to delete the configurationWidget. Qt will do it well.
+    // delete configurationWidget;
 }
 
 QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
-  configurationWidget = new EnclosingCircleConfigurationWidget;
+  configurationWidget = new EnclosingCircleConfigurationWidget(circleColor);
 
   if (inversedColor) {
     configurationWidget->inverseColorRadioCheck(true);
@@ -137,7 +146,7 @@ QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
   configurationWidget->alphaSliderSetValue(alpha);
   connect(configurationWidget, SIGNAL(solidColorRadioChecked(bool)), this, SLOT(solidColorRadioChecked(bool)));
   connect(configurationWidget, SIGNAL(inverseColorRadioChecked(bool)), this, SLOT(inverseColorRadioChecked(bool)));
-  connect(configurationWidget, SIGNAL(colorButtonClicked(bool)), this, SLOT(colorButtonClicked()));
+  connect(configurationWidget, SIGNAL(colorButtonClicked()), this, SLOT(colorButtonClicked()));
   connect(configurationWidget, SIGNAL(alphaChanged(int)), this, SLOT(alphaChanged(int)));
   return configurationWidget;
 }
@@ -153,10 +162,8 @@ void EnclosingCircleHighlighter::inverseColorRadioChecked(bool) {
 }
 
 void EnclosingCircleHighlighter::colorButtonClicked() {
-  QColor initial(circleColor.getR(), circleColor.getG(), circleColor.getB(), circleColor.getA());
-  QColor c(QColorDialog::getColor(initial, configurationWidget));
   outlineColor = Color(0,0,0);
-  circleColor = Color(c.red(), c.green(), c.blue(), c.alpha());
+  circleColor = configurationWidget->getCircleColor();
 }
 
 void EnclosingCircleHighlighter::alphaChanged(int a) {

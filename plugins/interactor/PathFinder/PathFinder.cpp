@@ -211,14 +211,21 @@ void PathFinder::configureHighlighterButtonPressed() {
     text = QStringToTlpString((*it)->text());
 
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
-  PathHighlighter *hler(0);
+  PathHighlighter *hler=NULL;
 
   foreach(PathHighlighter *h, highlighters) {
-    if (h->getName() == text)
-      hler = h;
+      if (h->getName() == text) {
+          hler = h;
+          break;
+      }
   }
 
-  if (hler && hler->isConfigurable()) {
+  if(hler==NULL) {
+      QMessageBox::warning(0, "Nothing selected", "No highlighter selected");
+      return;
+  }
+
+  if (hler->isConfigurable()) {
     QDialog *dialog = new QDialog;
     QVBoxLayout *verticalLayout = new QVBoxLayout(dialog);
     verticalLayout->setObjectName("verticalLayout");
@@ -238,11 +245,12 @@ void PathFinder::configureHighlighterButtonPressed() {
     connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
 
     mainLayout->addWidget(hler->getConfigurationWidget());
+    dialog->setWindowTitle(tlpStringToQString(hler->getName()));
     dialog->exec();
     delete dialog;
   }
   else
-    QMessageBox::warning(0, "No configuration", "No configuration available for this highlighter");
+    QMessageBox::warning(0, tlpStringToQString(hler->getName()), "No configuration available for this highlighter");
 }
 
 PathFinderComponent *PathFinder::getPathFinderComponent() {

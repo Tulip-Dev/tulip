@@ -51,5 +51,5 @@ bool ZoomAndPanHighlighter::isConfigurable() const {
 }
 
 QWidget *ZoomAndPanHighlighter::getConfigurationWidget() {
-  return 0;
+  return NULL;
 }

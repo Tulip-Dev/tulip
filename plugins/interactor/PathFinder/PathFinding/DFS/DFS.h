@@ -20,7 +20,7 @@
 #ifndef DFS_H_
 #define DFS_H_
 
-#include <float.h>
+#include <cfloat>
 #include <vector>
 
 #include <tulip/Node.h>

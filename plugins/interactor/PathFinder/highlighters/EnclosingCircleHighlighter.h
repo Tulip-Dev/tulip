@@ -39,13 +39,14 @@ class EnclosingCircleConfigurationWidget: public QWidget {
 
   Ui::EnclosingCircleConfigurationData* _ui;
 public:
-  EnclosingCircleConfigurationWidget(QWidget *parent=0);
+  EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent=0);
   ~EnclosingCircleConfigurationWidget();
 
   void circleColorBtnDisabled(const bool disabled);
   void inverseColorRadioCheck(const bool checked);
   void solidColorRadioCheck(const bool checked);
   void alphaSliderSetValue(const int val);
+  Color getCircleColor() const;
 
 signals:
   void solidColorRadioChecked(bool);
