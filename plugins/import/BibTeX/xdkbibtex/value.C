@@ -149,7 +149,10 @@ Text::Text(const Text& t)
   }
 }
 void
-Text::readFrom(const string& t,const string& split) throw (parsing_error)
+Text::readFrom(const string& t,const string& split)
+#if __cplusplus < 201103L
+throw (parsing_error)
+#endif
 {
   clear();
   if (t.empty()) return;

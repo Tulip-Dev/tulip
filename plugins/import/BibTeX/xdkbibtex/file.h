@@ -59,14 +59,20 @@ public:
   ~File();
   void readFromFile(const std::string& fileName,
                     int options=StrictQuote)
-  throw(xdkbib::parsing_error);
+#if __cplusplus < 201103L
+  throw(xdkbib::parsing_error)
+#endif
+  ;
 
   const std::vector<std::vector<ValuePart> >& preambleComponents() const;
   const std::vector<FileEntry>& entries() const;
   const std::map<std::string,std::vector<ValuePart> >& strings() const;
   std::string preamble() const;
   std::string  stringText(const std::string& s,bool nothrow=true) const
-  throw(std::range_error);
+#if __cplusplus < 201103L
+  throw(std::range_error)
+#endif
+  ;
   const std::string& comment() const;
   void setComment(const std::string&);
 

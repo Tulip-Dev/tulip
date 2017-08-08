@@ -58,7 +58,10 @@ public:
   ~Text();
 
   void readFrom(const std::string& t,const std::string& split="")
-  throw (xdkbib::parsing_error);
+#if __cplusplus < 201103L
+  throw (xdkbib::parsing_error)
+#endif
+  ;
 
   std::string content(ContentOptions options=Raw) const;
   bool hasContent(const std::string& s,ContentOptions options=Raw) const;

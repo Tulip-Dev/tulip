@@ -156,12 +156,12 @@ struct IOEdgeContainerIterator :public Iterator<edge>,
       // note that io_type value may only be IO_IN which is null
       // or IO_OUT which is define to 1
       node curNode =
-        io_type ? edges[curEdge.id].first : edges[curEdge.id].second;
+        io_type != IO_IN ? edges[curEdge.id].first : edges[curEdge.id].second;
 
       if (curNode != n)
         continue;
 
-      curNode = io_type ? edges[curEdge.id].second : edges[curEdge.id].first;
+      curNode = io_type != IO_IN ? edges[curEdge.id].second : edges[curEdge.id].first;
 
       if (curNode == n) {
         if (!loops.get(curEdge.id)) {

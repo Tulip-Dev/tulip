@@ -59,7 +59,11 @@ private:
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 class AuthorList : public std::vector<Author> {
 public:
-  void readFrom(const char* nameList) throw(xdkbib::parsing_error);
+  void readFrom(const char* nameList)
+#if __cplusplus < 201103L
+  throw(xdkbib::parsing_error)
+#endif
+  ;
 };
 }
 

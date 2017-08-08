@@ -149,7 +149,10 @@ Author::pushLast(const string& v)
 // Implementation of AuthorList
 //************************************************************
 void
-AuthorList::readFrom(const char* nameList) throw(parsing_error)
+AuthorList::readFrom(const char* nameList)
+#if __cplusplus < 201103L
+throw(parsing_error)
+#endif
 {
   clear();
   Text t;

@@ -58,7 +58,10 @@ File::~File()
 {
 }
 void
-File::readFromFile(const string& fileName,int o) throw (parsing_error)
+File::readFromFile(const string& fileName,int o)
+#if __cplusplus < 201103L
+throw (parsing_error)
+#endif
 {
   TokenStreamSelector selector;
   ParsedBibFile pbf(this,
@@ -136,7 +139,10 @@ File::preamble() const
   return r;
 }
 string
-File::stringText(const string& s,bool nothrow) const throw(range_error)
+File::stringText(const string& s,bool nothrow) const
+#if __cplusplus < 201103L
+throw(range_error)
+#endif
 {
   map<string,vector<ValuePart> >::const_iterator fter = strings_.find(s);
   if (fter == strings_.end())
