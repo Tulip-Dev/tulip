@@ -1370,11 +1370,6 @@ YYSTYPE *yyvaluep;
 
 # endif
 
-  switch (yytype) {
-  default:
-    break;
-  }
-
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -1402,11 +1397,6 @@ YYSTYPE *yyvaluep;
 
   YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
-  switch (yytype) {
-
-  default:
-    break;
-  }
 }
 
 
@@ -2236,6 +2226,7 @@ yyerrlab:
   goto yyerrlab1;
 
 
+#ifndef _MSC_VER
   /*---------------------------------------------------.
   | yyerrorlab -- error raised explicitly by YYERROR.  |
   `---------------------------------------------------*/
@@ -2255,6 +2246,7 @@ yyerrorlab:
   yystate = *yyssp;
   goto yyerrlab1;
 
+#endif
 
   /*-------------------------------------------------------------.
   | yyerrlab1 -- common code for both syntax error and YYERROR.  |

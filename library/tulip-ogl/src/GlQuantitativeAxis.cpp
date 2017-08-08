@@ -272,7 +272,7 @@ void GlQuantitativeAxis::addArrowDrawing() {
   arrowLine->setLineWidth(2.0);
   float axisExtensionLength = captionOffset;
   float arrowOrientation;
-  float pi = 3.141592654;
+  float pi = 3.141592654f;
   Coord arrowEndCoord;
   Size arrowSize = Size(axisLength/50, axisLength/50, 0);
 

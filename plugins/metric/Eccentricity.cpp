@@ -118,7 +118,7 @@ bool EccentricityMetric::run() {
   #pragma omp parallel for
 #endif
 
-  for (OMP_ITER_TYPE ni = 0; ni < nbNodes ; ++ni) {
+  for (OMP_ITER_TYPE ni = 0; ni < static_cast<OMP_ITER_TYPE>(nbNodes) ; ++ni) {
     if (stopfor) continue;
 
 #ifdef _OPENMP

@@ -57,7 +57,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
         #pragma omp parallel for
 #endif
 
-        for (OMP_ITER_TYPE j = 0 ; j < simplices[i].size() ; ++j) {
+        for (OMP_ITER_TYPE j = 0 ; j < static_cast<OMP_ITER_TYPE>(simplices[i].size()) ; ++j) {
           sNodes[j] = nodes[simplices[i][j]];
         }
 

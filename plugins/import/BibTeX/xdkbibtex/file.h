@@ -59,7 +59,7 @@ public:
   ~File();
   void readFromFile(const std::string& fileName,
                     int options=StrictQuote)
-#if __cplusplus < 201103L
+#if (!defined(_MSC_VER) && __cplusplus < 201103L) || (defined(_MSC_VER) && _MSC_VER < 1800)
   throw(xdkbib::parsing_error)
 #endif
   ;
@@ -69,7 +69,7 @@ public:
   const std::map<std::string,std::vector<ValuePart> >& strings() const;
   std::string preamble() const;
   std::string  stringText(const std::string& s,bool nothrow=true) const
-#if __cplusplus < 201103L
+#if (!defined(_MSC_VER) && __cplusplus < 201103L) || (defined(_MSC_VER) && _MSC_VER < 1800)
   throw(std::range_error)
 #endif
   ;

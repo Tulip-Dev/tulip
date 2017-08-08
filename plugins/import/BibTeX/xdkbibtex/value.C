@@ -150,7 +150,7 @@ Text::Text(const Text& t)
 }
 void
 Text::readFrom(const string& t,const string& split)
-#if __cplusplus < 201103L
+#if (!defined(_MSC_VER) && __cplusplus < 201103L) || (defined(_MSC_VER) && _MSC_VER < 1800)
 throw (parsing_error)
 #endif
 {

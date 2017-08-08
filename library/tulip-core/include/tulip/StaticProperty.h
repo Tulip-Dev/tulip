@@ -54,7 +54,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (OMP_ITER_TYPE i = 0; i < this->size(); ++i)
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(this->size()); ++i)
       (*this)[i] = val;
   }
 
@@ -131,7 +131,7 @@ public:
     #pragma omp parallel for
 #endif
 
-    for (OMP_ITER_TYPE i = 0; i < this->size(); ++i)
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(this->size()); ++i)
       (*this)[i] = val;
   }
 
