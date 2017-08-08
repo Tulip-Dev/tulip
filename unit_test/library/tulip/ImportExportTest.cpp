@@ -441,7 +441,7 @@ void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportP
 
 tlp::Graph *ImportExportTest::importGraph(const std::string &importPluginName, const std::string &filename) {
   DataSet input;
-  input.set<string>("file::filename", filename);
+  input.set("file::filename", filename);
   return tlp::importGraph(importPluginName, input);
 }
 

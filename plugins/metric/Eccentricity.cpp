@@ -157,7 +157,7 @@ bool EccentricityMetric::run() {
   }
 
   if(!allPaths && norm)
-    dataSet->set<double>("Graph Diameter", diameter);
+    dataSet->set("Graph Diameter", diameter);
 
   return pluginProgress->state()!=TLP_CANCEL;
 }

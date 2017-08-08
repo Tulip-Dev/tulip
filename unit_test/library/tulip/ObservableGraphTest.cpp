@@ -1060,7 +1060,7 @@ void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
 
   // import the previously saved graph by populating the already created empty graph
   DataSet params;
-  params.set<string>("file::filename", tlpbFile);
+  params.set("file::filename", tlpbFile);
   importGraph("TLPB Import", params, NULL, graph);
   // check that the graph event TLP_ADD_EDGES has been correctly received
   CPPUNIT_ASSERT(!gObserver->edges.empty());
