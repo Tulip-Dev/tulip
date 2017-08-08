@@ -22,6 +22,10 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#if defined(_MSC_VER)
+#include <windows.h>
+#endif
+
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else
