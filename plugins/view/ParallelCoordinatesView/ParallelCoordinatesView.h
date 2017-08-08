@@ -22,7 +22,11 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #include "ParallelCoordinatesDrawing.h"
 #include "ParallelCoordinatesGraphProxy.h"
