@@ -1391,6 +1391,7 @@ YYSTYPE *yyvaluep;
 {
   /* Pacify ``unused variable'' warnings.  */
   (void) yyvaluep;
+  (void) yytype;
 
   if (!yymsg)
     yymsg = "Deleting";
