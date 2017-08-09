@@ -694,6 +694,7 @@ void ParallelCoordinatesView::centerSetupAndDrawView() {
 void ParallelCoordinatesView::setupAndDrawView() {
   if (!graphProxy)
     return;
+
   if(graph()) {
     GlScene* scene = getGlMainWidget()->getScene();
     graphProxy->setSelectedProperties(dataConfigWidget->getSelectedGraphProperties());
