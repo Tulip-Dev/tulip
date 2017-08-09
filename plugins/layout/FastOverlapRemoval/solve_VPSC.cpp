@@ -333,7 +333,7 @@ Constraint* IncSolver::mostViolated(ConstraintList &l) {
   // vector because of search.
   if(deletePoint != end && (minSlack<ZERO_UPPERBOUND||v->equality)) {
     *deletePoint = l[l.size()-1];
-    l.resize(l.size()-1);
+    l.pop_back();
   }
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
