@@ -41,7 +41,7 @@ class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
   virtual ~TulipItemEditorCreator() {}
   virtual QWidget* createWidget(QWidget*) const=0;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&, const QModelIndex &) const;
   virtual QString displayText(const QVariant &) const {
     return "";
   }
@@ -64,7 +64,7 @@ public:
 class TLP_QT_SCOPE ColorEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&,const QModelIndex &) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
@@ -92,7 +92,7 @@ public:
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
-  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&,const QModelIndex &) const;
 };
 
 class TLP_QT_SCOPE BooleanEditorCreator: public TulipItemEditorCreator {
@@ -141,7 +141,7 @@ public:
 class TLP_QT_SCOPE ColorScaleEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&, const QModelIndex &) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
@@ -159,7 +159,7 @@ public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
-  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
+  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &, const QModelIndex &) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
@@ -168,7 +168,7 @@ public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
-  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
+  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &, const QModelIndex &index) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
@@ -177,7 +177,7 @@ public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
-  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
+  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &, const QModelIndex &) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
   virtual QString displayText(const QVariant &) const;
 };
@@ -188,7 +188,7 @@ public:
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&, const QModelIndex &index) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
@@ -198,7 +198,7 @@ public:
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&, const QModelIndex &index) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 

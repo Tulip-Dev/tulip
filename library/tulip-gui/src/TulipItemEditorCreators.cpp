@@ -79,7 +79,7 @@ private:
 /*
  * Base class
  */
-bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant &) const {
+bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant &,const QModelIndex &) const {
   if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
     painter->setBrush(option.palette.highlight());
     painter->setPen(Qt::transparent);
@@ -125,8 +125,8 @@ QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
   return colorDialog;
 }
 
-bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
-  TulipItemEditorCreator::paint(painter,option,v);
+bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,v,index);
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
   painter->setPen(Qt::black);
   painter->drawRect(option.rect.x()+6,option.rect.y()+6,option.rect.width()-12,option.rect.height()-12);
@@ -284,8 +284,8 @@ QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {
   return new ColorScaleButton(ColorScale(), parent);
 }
 
-bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var) const {
-  TulipItemEditorCreator::paint(painter,option,var);
+bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var,const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,var,index);
   ColorScaleButton::paintScale(painter,option.rect,var.value<ColorScale>());
   return true;
 }
@@ -445,8 +445,8 @@ void tlp::addIconToPool(const QString &iconName, const QIcon &icon) {
   imageIconPool.iconPool[iconName] = icon;
 }
 
-bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
-  TulipItemEditorCreator::paint(painter,option,v);
+bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,v,index);
   QRect rect = option.rect;
   TulipFileDescriptor fileDesc = v.value<TulipFileDescriptor>();
   QFileInfo fileInfo(fileDesc.absolutePath);
@@ -534,8 +534,8 @@ QVariant TextureFileEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<TextureFile>(dlg->data());
 }
 
-bool TextureFileEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
-  TulipItemEditorCreator::paint(painter,option,v);
+bool TextureFileEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,v,index);
   QRect rect = option.rect;
   TextureFile tf = v.value<TextureFile>();
   QFileInfo fileInfo(tf.texturePath);
@@ -616,8 +616,8 @@ QString TulipFontIconCreator::displayText(const QVariant & data) const {
   return data.value<TulipFontIcon>().iconName;
 }
 
-bool TulipFontIconCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
-  TulipItemEditorCreator::paint(painter,option,v);
+bool TulipFontIconCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,v,index);
 
   QString iconName = v.value<TulipFontIcon>().iconName;
 
@@ -700,8 +700,8 @@ QSize NodeShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option, const
   return QSize(pixmap.width()+fontMetrics.boundingRect(displayText(data)).width()+20, pixmap.height());
 }
 
-bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
-  TulipItemEditorCreator::paint(painter,option,data);
+bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,data,index);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;
@@ -761,8 +761,8 @@ QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const
   return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
 }
 
-bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
-  TulipItemEditorCreator::paint(painter,option,data);
+bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,data,index);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItem opt = option;

@@ -164,8 +164,8 @@ QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & opti
 }
 
 template<typename T>
-bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOptionViewItem &option, const QVariant &data) const {
-  TulipItemEditorCreator::paint(painter,option,data);
+bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOptionViewItem &option, const QVariant &data, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter,option,data,index);
   QRect rect = option.rect;
   typename T::RealType val = data.value<typename T::RealType>();
   QString valS = tlpStringToQString(T::toString(val));

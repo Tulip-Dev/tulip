@@ -181,7 +181,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   if (c == NULL)
     return;
 
-  if (c->paint(painter,option,v) == false)
+  if (c->paint(painter,option,v,index) == false)
     QStyledItemDelegate::paint(painter,option,index);
 }
 
