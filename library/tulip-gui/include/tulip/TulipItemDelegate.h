@@ -21,7 +21,6 @@
 #ifndef TULIPITEMDELEGATE_H
 #define TULIPITEMDELEGATE_H
 
-#include <climits>
 #include <QStyledItemDelegate>
 
 #include <tulip/TulipItemEditorCreators.h>

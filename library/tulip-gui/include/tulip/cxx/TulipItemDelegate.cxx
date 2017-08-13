@@ -32,8 +32,10 @@ template<typename T>
 void TulipItemDelegate::unregisterCreator() {
   int id = qMetaTypeId<T>();
 
-  if (_creators.contains(id))
+  if (_creators.contains(id)) {
+      delete _creators[id];
     _creators.remove(id);
+  }
 }
 
 template<typename T>
