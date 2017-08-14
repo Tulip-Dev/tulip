@@ -46,7 +46,8 @@ MouseShowElementInfo::MouseShowElementInfo():_ui(new Ui::ElementInformationWidge
 }
 
 MouseShowElementInfo::~MouseShowElementInfo() {
-  delete _ui;
+    delete _informationWidget;
+    delete _ui;
 }
 
 void MouseShowElementInfo::showVisualProp(int show) {
