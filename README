@@ -4,7 +4,7 @@ from LaBRI, University of Bordeaux.
 
 Requirements:
 
-- cmake >= 2.8.3 on Linux, cmake>=2.8.11 on Windows, cmake>=2.8.12 on MacOS.
+- cmake >= 2.8.12
 - freetype2
 - zlib
 - libjpeg
@@ -23,5 +23,5 @@ INSTALL.linux, INSTALL.mac, INSTALL.win
 If you want to support our project, all new plug-ins and bug fixes are
 welcome.
 
-For bug reports, use http://www.tulip-software.org (Support => Bug Report)
+For bug reports, use http://tulip.labri.fr (Support => Bug Report)
 
