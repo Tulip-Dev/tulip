@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,7 +28,7 @@ using namespace tlp;
  * This plugin compute the size of nodes and edges such that node-node overlapping does not exist (if it is possible).
  * and edge sizes are proportional to node sizes.
  *
- *  \author David Auber Bordeaux University France: Email:auber@tulip-software.org
+ *  \author David Auber Bordeaux University France: Email:auber@labri.fr
  */
 class AutoSize:public SizeAlgorithm {
 public:

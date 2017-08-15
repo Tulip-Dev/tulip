@@ -4,7 +4,7 @@
 
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux

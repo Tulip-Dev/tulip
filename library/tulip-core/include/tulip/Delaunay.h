@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -31,7 +31,7 @@ namespace tlp {
  * @ingroup Graph
  * \brief functions for Delaunay Triangulations
  *
- * \author : David Auber/Daniel Archambault/Antoine Lambert : auber@tulip-software.org
+ * \author : David Auber/Daniel Archambault/Antoine Lambert : auber@labri.fr
  *
  * Computes the delaunay triangulation and returns the set of delaunay edges in the
  * vector edges and delaunay simplices (triangles in 2d, tetrahedra in 3d) of the triangulation in the vector simplices.

@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -32,7 +32,7 @@ namespace tlp {
  *
  * Enables to both create and manipulate a 2D Axis Aligned Rectangle
  *
- * Author : <a href="www.tulip-software.org>Tulip team</a>
+ * Author : <a href="http://tulip.labri.fr>Tulip team</a>
  */
 template<typename Obj, typename OTYPE = double>
 struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {

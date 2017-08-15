@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -939,7 +939,7 @@ namespace tlp {
 class TLPImport:public ImportModule {
 public:
   PLUGININFORMATION("TLP Import","Auber","16/02/2001",
-                    "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed)</p><p>Imports a graph recorded in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for description.<br/>Note: When using the Tulip graphical user interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as using <b>File->Open</b> menu item.</p>",
+                    "<p>Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed)</p><p>Imports a graph recorded in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>http://tulip.labri.fr->Framework->TLP File Format</b> for description.<br/>Note: When using the Tulip graphical user interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as using <b>File->Open</b> menu item.</p>",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;

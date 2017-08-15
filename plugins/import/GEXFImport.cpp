@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -43,7 +43,7 @@ using namespace std;
  *
  *  - 04/06/2012 Version 1.0: Initial release
  *
- *  \author Antoine Lambert & Patrick Mary of Tulip Team http://tulip-software.org/
+ *  \author Antoine Lambert & Patrick Mary of Tulip Team http://tulip.labri.fr/
  *
  *
  */

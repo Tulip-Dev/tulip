@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -45,7 +45,7 @@
  *  \note This algorithm only works on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *  \author David Auber University Bordeaux I France: Email:auber@labri.fr
  */
 class ConeTreeExtended:public tlp::LayoutAlgorithm {
 public:

@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -33,7 +33,7 @@
  * (those whose associated value is true) will be used as starting nodes.
  *
  *  \author David Auber, LaBRI University Bordeaux I France:
- *   auber@tulip-software.org
+ *   auber@labri.fr
  */
 class ReachableSubGraphSelection:public tlp::BooleanAlgorithm {
 public:

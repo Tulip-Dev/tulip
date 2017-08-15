@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -41,7 +41,7 @@
  * executing this edge bundling plugin.
  *
  *  \author David Auber, Romain Bourqui, Antoine Lambert, LaBRI University Bordeaux I France:
- *   auber@tulip-software.org
+ *   auber@labri.fr
  */
 class EdgeBundling:public tlp::Algorithm {
 public:

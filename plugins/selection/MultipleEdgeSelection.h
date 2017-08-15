@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -33,7 +33,7 @@
  * If it exists n edges between two nodes, only n-1 edges will be selected.
  *
  *  \author David Auber, LaBRI University Bordeaux I France:
- *   auber@tulip-software.org
+ *   auber@labri.fr
  */
 class MultipleEdgeSelection:public tlp::BooleanAlgorithm {
 public:

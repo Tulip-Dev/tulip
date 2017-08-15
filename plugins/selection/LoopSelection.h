@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -30,7 +30,7 @@
  * A loop is an edge that has the same source and target.
  *
  *  \author David Auber, LaBRI University Bordeaux I France:
- *   auber@tulip-software.org
+ *   auber@labri.fr
  */
 class LoopSelection:public tlp::BooleanAlgorithm {
 public:

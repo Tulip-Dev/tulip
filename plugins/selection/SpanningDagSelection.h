@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -29,7 +29,7 @@
  * This selection plugin enables to find a subgraph of G that is acyclic.
  *
  *  \author David Auber, LaBRI University of Bordeaux, France:
- *   auber@tulip-software.org
+ *   auber@labri.fr
  */
 class SpanningDagSelection:public tlp::BooleanAlgorithm {
 

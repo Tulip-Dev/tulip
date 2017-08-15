@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -58,7 +58,7 @@ namespace tlp {
   @endverbatim
  *
  *
- * Author : <a href="www.tulip-software.org">Tulip team</a>
+ * Author : <a href="http://tulip.labri.fr">Tulip team</a>
  */
 struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 

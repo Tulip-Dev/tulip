@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -43,7 +43,7 @@ namespace tlp {
  * operators must be defined for Obj. Out of bound accesses
  * are only checked in debug mode.
  *
- * \author : David Auber auber@tulip-software.org
+ * \author : David Auber auber@labri.fr
  *
  * \author Contributor : Maxime Delorme
  * \version 0.0.2 27/04/2005

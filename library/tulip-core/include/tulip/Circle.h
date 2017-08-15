@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -30,7 +30,7 @@ namespace tlp {
  *
  * Enables to both create and manipulate a circle
  *
- * \author David Auber auber@tulip-software.org
+ * \author David Auber auber@labri.fr
  * \version 0.0.1 24/01/2003
  */
 template<typename Obj, typename OTYPE>

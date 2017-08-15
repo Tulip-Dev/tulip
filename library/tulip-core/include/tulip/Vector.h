@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -61,7 +61,7 @@ inline double tlpsqrt<double, long double>(long double a) {
  * in debug mode. The OTYPE is used for temporary computation to prevent overflow,
  * by default OTYPE is a double.
  *
- * \author : David Auber auber@tulip-software.org
+ * \author : David Auber auber@labri.fr
  * \version 0.0.1 24/01/2003
  */
 template <typename TYPE, unsigned int SIZE, typename OTYPE = double, typename DTYPE = TYPE>

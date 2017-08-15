@@ -1255,7 +1255,7 @@ TLP Export
 Description
 """""""""""
 
-|pstart| Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed) |pend|  |pstart| Exports a graph in a file using the TLP format (Tulip Software Graph Format). |br| See  |bstart| tulip-software.org->Framework->TLP File Format |bend|  for more details. |pend| 
+|pstart| Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed) |pend|  |pstart| Exports a graph in a file using the TLP format (Tulip Software Graph Format). |br| See  |bstart| http://tulip.labri.fr->Framework->TLP File Format |bend|  for more details. |pend| 
 
 Parameters
 """"""""""
@@ -2335,7 +2335,7 @@ TLP Import
 Description
 """""""""""
 
-|pstart| Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed) |pend|  |pstart| Imports a graph recorded in a file using the TLP format (Tulip Software Graph Format). |br| See  |bstart| tulip-software.org->Framework->TLP File Format |bend|  for description. |br| Note: When using the Tulip graphical user interface, |br| choosing  |bstart| File->Import->TLP |bend|  menu item is the same as using  |bstart| File->Open |bend|  menu item. |pend| 
+|pstart| Supported extensions: tlp, tlpz (compressed), tlp.gz (compressed) |pend|  |pstart| Imports a graph recorded in a file using the TLP format (Tulip Software Graph Format). |br| See  |bstart| http://tulip.labri.fr->Framework->TLP File Format |bend|  for description. |br| Note: When using the Tulip graphical user interface, |br| choosing  |bstart| File->Import->TLP |bend|  menu item is the same as using  |bstart| File->Open |bend|  menu item. |pend| 
 
 Parameters
 """"""""""

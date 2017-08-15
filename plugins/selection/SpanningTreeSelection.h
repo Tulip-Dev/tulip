@@ -1,6 +1,6 @@
 /**
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -28,7 +28,7 @@
  * This selection plugins enables to find a subgraph of G that is a forest (a set of trees).
  *
  *  \author David Auber, LaBRI University Bordeaux I France:
- *   auber@tulip-software.org
+ *   auber@labri.fr
  */
 class SpanningTreeSelection:public tlp::BooleanAlgorithm {
 public:

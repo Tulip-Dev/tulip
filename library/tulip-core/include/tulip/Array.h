@@ -1,6 +1,6 @@
 /*
  *
- * This file is part of Tulip (www.tulip-software.org)
+ * This file is part of Tulip (http://tulip.labri.fr)
  *
  * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
@@ -31,7 +31,7 @@ namespace tlp {
  * In debug mode, a bound check is performed at each access.
  * Stream operators implementations are provided.
  *
- * @author : David Auber auber@tulip-software.org
+ * @author : David Auber auber@labri.fr
  */
 template <typename Obj,unsigned int SIZE>
 struct Array {
