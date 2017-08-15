@@ -102,13 +102,21 @@ IF(MSVC) #specific options for Visual Studio
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
-SET(TulipIntMMVersion "${TulipMajorVersion}${TulipMinorVersion}")
+SET(TulipMinorVersionTwoDigits "${TulipMinorVersion}")
+# Use two digits for the minor version when generating the Tulip integer version number
+# as there was a 4.10 release that breaks preprocessor test like TULIP_INT_VERSION >= 4100 since the 5.0 release
+# (see https://sourceforge.net/p/auber/bugs/869/)
+STRING(LENGTH "${TulipMinorVersion}" TulipMinorVersionNbDigits)
+IF(TulipMinorVersionNbDigits LESS 2)
+  SET(TulipMinorVersionTwoDigits "0${TulipMinorVersion}")
+ENDIF(TulipMinorVersionNbDigits LESS 2)
+SET(TulipIntMMVersion "${TulipMajorVersion}${TulipMinorVersionTwoDigits}")
 IF(TulipReleaseVersion MATCHES "^[0-9]+$")
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionTwoDigits}${TulipReleaseVersion}")
 ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
   # just a hack to force the display of the full Tulip version in window title bar
   # when it contains non digit characters (like alpha, beta, dev, ...)
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionTwoDigits}1")
   # get current Tulip SVN revision for a dev build
   IF("$ENV{JENKINS_URL}" STREQUAL "")
     # not invoked thru jenkins integration server
