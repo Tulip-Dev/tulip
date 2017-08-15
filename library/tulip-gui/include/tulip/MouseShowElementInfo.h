@@ -50,7 +50,7 @@ class TLP_QT_SCOPE MouseShowElementInfo : public InteractorComponent {
   Q_OBJECT
 
 public:
-  MouseShowElementInfo();
+  MouseShowElementInfo(const bool showVisualPropButton=true);
   ~MouseShowElementInfo();
   virtual bool eventFilter(QObject* widget, QEvent* e);
 

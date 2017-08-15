@@ -36,13 +36,16 @@
 using namespace std;
 using namespace tlp;
 
-MouseShowElementInfo::MouseShowElementInfo():_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL),_show(true) {
+MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton):_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL),_show(true) {
   _informationWidget->installEventFilter(this);
   _ui->setupUi(_informationWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem->setWidget(_informationWidget);
   _informationWidgetItem->setVisible(false);
-  connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
+  if(showVisualPropButton)
+      connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
+  else
+      _ui->displayTulipProp->hide();
 }
 
 MouseShowElementInfo::~MouseShowElementInfo() {
