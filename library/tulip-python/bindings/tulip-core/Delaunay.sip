@@ -76,6 +76,8 @@ That class defines a voronoi diagram. Use the :func:`tlp.voronoiDiagram` functio
 to get an instance of it.
 %End
 
+public:
+
   unsigned int nbSites() const;
 %Docstring
 tlp.VoronoiDiagram.nbSites()
