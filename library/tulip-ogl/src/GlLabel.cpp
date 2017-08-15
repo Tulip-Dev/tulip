@@ -36,7 +36,6 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlXMLTools.h>
 #include <tulip/TlpTools.h>
-#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 

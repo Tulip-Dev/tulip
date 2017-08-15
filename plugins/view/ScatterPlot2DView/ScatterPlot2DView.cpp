@@ -26,7 +26,6 @@
 #include <tulip/GlProgressBar.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/TulipViewSettings.h>
 
 #include <QTime>
 #include <QMenu>
