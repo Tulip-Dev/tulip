@@ -1,0 +1,48 @@
+# Tulip continuous integration on windows platform through AppVeyor.
+# Tulip will be compiled for 32 bits and 64 bits windows using :
+#   - GCC compiler provided by the MSYS2 project
+#   - Microsoft Visual Studio 2015 compiler
+# C++11 standard, Qt 5.9 and Python 3.6 will be used to build Tulip with both compilers.
+
+# use Visual Studio 2015 appveyor image for the builds
+os: Visual Studio 2015
+
+# Use build caches that will be saved and restored between build jobs.
+# Those caches will hold ccache content for gcc builds and clcache content for msvc builds
+# in order to speedup incremental builds.
+# Appveyor cache storage is limited to 1GB, so cache should be cleared once it is exceeding this quota
+# (see https://www.appveyor.com/docs/build-cache/)
+cache:      
+  - C:\msys64\home\appveyor\.ccache
+  - C:\Users\appveyor\clcache	
+
+# define build jobs
+environment:
+  matrix:
+    # 64 bits GCC build
+    - MSYS2_ARCH: x86_64
+      MSYSTEM: MINGW64
+
+    # 32 bits GCC build  
+    - MSYS2_ARCH: i686
+      MSYSTEM: MINGW32
+    
+    # 64 bits MSVC build
+    - CMAKE_VS_GENERATOR: "Visual Studio 14 2015 Win64"
+      MSVC_PLATFORM: "x64"
+      MSVC_PLATFORM_TOOLSET: "v140"
+      QT5_DIR: "C:/Qt/5.9.1/msvc2015_64"
+      PYTHON_EXECUTABLE: "C:/Python36-x64/python.exe"
+
+    # 32 bits MSVC build
+    - CMAKE_VS_GENERATOR: "Visual Studio 14 2015"
+      MSVC_PLATFORM: "Win32"
+      MSVC_PLATFORM_TOOLSET: "v140"
+      QT5_DIR: "C:/Qt/5.9.1/msvc2015"
+      PYTHON_EXECUTABLE: "C:/Python36/python.exe"
+
+# build script that simply call the right batch script depending on the compiler used
+build_script:
+  - 'if defined MSYS2_ARCH ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2.bat") else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")'
+
+deploy: off
