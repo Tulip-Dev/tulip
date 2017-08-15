@@ -81,5 +81,5 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipPythonName})
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-INSTALL_TULIP_PLUGIN(GraphPerspective-${TulipVersion} ${TulipPerspectivePluginsInstallDir})
+TULIP_INSTALL_PLUGIN(GraphPerspective-${TulipVersion} ${TulipPerspectivePluginsInstallDir})
 

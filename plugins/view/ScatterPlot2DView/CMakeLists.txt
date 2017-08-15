@@ -35,4 +35,4 @@ ADD_LIBRARY(ScatterPlot2DView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADER
 
 TARGET_LINK_LIBRARIES(ScatterPlot2DView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
 
-INSTALL_TULIP_PLUGIN(ScatterPlot2DView-${TulipVersion} ${TulipViewPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(ScatterPlot2DView-${TulipVersion} ${TulipViewPluginsInstallDir})

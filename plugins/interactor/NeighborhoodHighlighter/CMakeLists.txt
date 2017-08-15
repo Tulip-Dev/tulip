@@ -24,4 +24,4 @@ NeighborhoodHighlighterResource.qrc
 ADD_LIBRARY(NeighborhoodHighlighter-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(NeighborhoodHighlighter-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
 
-INSTALL_TULIP_PLUGIN(NeighborhoodHighlighter-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(NeighborhoodHighlighter-${TulipVersion} ${TulipInteractorPluginsInstallDir})

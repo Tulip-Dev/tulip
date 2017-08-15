@@ -11,4 +11,4 @@ MouseMagnifyingGlassResource.qrc
 ADD_LIBRARY(MouseMagnifyingGlass-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(MouseMagnifyingGlass-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
 
-INSTALL_TULIP_PLUGIN(MouseMagnifyingGlass-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(MouseMagnifyingGlass-${TulipVersion} ${TulipInteractorPluginsInstallDir})

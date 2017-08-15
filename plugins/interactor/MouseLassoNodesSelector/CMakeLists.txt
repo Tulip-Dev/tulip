@@ -11,4 +11,4 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 ADD_LIBRARY(MouseLassoNodesSelector-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(MouseLassoNodesSelector-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
 
-INSTALL_TULIP_PLUGIN(MouseLassoNodesSelector-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(MouseLassoNodesSelector-${TulipVersion} ${TulipInteractorPluginsInstallDir})

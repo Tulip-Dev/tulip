@@ -118,7 +118,7 @@ ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
       SET(TULIP_SOURCE_DIR ${PROJECT_SOURCE_DIR})
       IF(WIN32)
         IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*" OR "${CMAKE_GENERATOR}" MATCHES ".*MinGW.*" OR "${CMAKE_GENERATOR}" MATCHES "Ninja")
-          WINDOWS_TO_MSYS_PATH(${PROJECT_SOURCE_DIR} TULIP_SOURCE_DIR)
+          TULIP_WINDOWS_TO_MSYS_PATH(${PROJECT_SOURCE_DIR} TULIP_SOURCE_DIR)
         ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*"  OR "${CMAKE_GENERATOR}" MATCHES ".*MinGW.*" OR "${CMAKE_GENERATOR}" MATCHES "Ninja")
       ENDIF(WIN32)
       Subversion_WC_INFO(${TULIP_SOURCE_DIR} TULIP)
@@ -159,7 +159,7 @@ ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -DTulipVersion=${TulipVersi
 ## Compiler-specific options
 ## ========================================================
 
-SET_COMPILER_OPTIONS()
+TULIP_SET_COMPILER_OPTIONS()
 
 ## ========================================================
 ## CORE ONLY

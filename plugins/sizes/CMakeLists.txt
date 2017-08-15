@@ -11,5 +11,5 @@ ADD_LIBRARY(AutoSize-${TulipVersion} SHARED AutoSize.cpp)
 TARGET_LINK_LIBRARIES(AutoSize-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL_TULIP_PLUGIN(MetricSizeMapping-${TulipVersion} ${TulipPluginsInstallDir})
-INSTALL_TULIP_PLUGIN(AutoSize-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(MetricSizeMapping-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(AutoSize-${TulipVersion} ${TulipPluginsInstallDir})

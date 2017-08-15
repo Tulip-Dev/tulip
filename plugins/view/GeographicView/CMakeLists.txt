@@ -54,4 +54,4 @@ ENDIF(WIN32)
 ADD_LIBRARY(GeographicView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(GeographicView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY} ${QT_LIBRARIES})
 
-INSTALL_TULIP_PLUGIN(GeographicView-${TulipVersion} ${TulipViewPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(GeographicView-${TulipVersion} ${TulipViewPluginsInstallDir})

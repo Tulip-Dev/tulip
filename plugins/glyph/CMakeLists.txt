@@ -3,13 +3,13 @@ INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclu
 MACRO(GLYPH name source)
   ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
   TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName})
-  INSTALL_TULIP_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
+  TULIP_INSTALL_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
 ENDMACRO(GLYPH)
 
 MACRO(FONTGLYPH name source)
   ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
   TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${FTGLLibrary})
-  INSTALL_TULIP_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
+  TULIP_INSTALL_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
 ENDMACRO(FONTGLYPH)
 
 GLYPH(Cone cone.cpp)

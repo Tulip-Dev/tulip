@@ -15,9 +15,9 @@ IF(APPLE)
 # as indicated in makeMakefile.config, use -stdlib=libstdc++ for a Macbuild except if C++11 is used
     STRING(FIND "${CMAKE_CXX_FLAGS}" "-std=c++11" STD_POS)
     IF (${STD_POS} EQUAL -1)
-      SET_COMPILER_FLAG("-stdlib=libstdc++")
+      TULIP_SET_CXX_COMPILER_FLAG("-stdlib=libstdc++")
     ELSE()
-      SET_COMPILER_FLAG("-stdlib=libc++")
+      TULIP_SET_CXX_COMPILER_FLAG("-stdlib=libc++")
     ENDIF()
 ENDIF(APPLE)
 
@@ -36,5 +36,5 @@ INSTALL(TARGETS ${OGDFLibrary}
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ogdf)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-COPY_TARGET_LIBRARY_POST_BUILD(${OGDFLibrary} ${TULIP_PYTHON_NATIVE_FOLDER} wheels)
+TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${OGDFLibrary} ${TULIP_PYTHON_NATIVE_FOLDER} wheels)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)

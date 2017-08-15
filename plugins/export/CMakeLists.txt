@@ -22,5 +22,5 @@ TARGET_LINK_LIBRARIES(CSVExport-${TulipVersion} ${LibTulipCoreName})
 ADD_CORE_FILES(CMakeLists.txt GMLExport.cpp)
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL_TULIP_PLUGIN(GMLExport-${TulipVersion} ${TulipPluginsInstallDir})
-INSTALL_TULIP_PLUGIN(CSVExport-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(GMLExport-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(CSVExport-${TulipVersion} ${TulipPluginsInstallDir})

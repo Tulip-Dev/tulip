@@ -39,4 +39,4 @@ TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipCoreName})
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL_TULIP_PLUGIN(ColorMapping-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(ColorMapping-${TulipVersion} ${TulipPluginsInstallDir})

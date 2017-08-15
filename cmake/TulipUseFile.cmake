@@ -7,14 +7,21 @@ SET(TulipUseFile_included TRUE)
 ## -----------------------------------------------------------------------------------------------
 ## Toolchains options
 ## -----------------------------------------------------------------------------------------------
-MACRO(SET_COMPILER_FLAG flag)
+MACRO(TULIP_SET_CXX_COMPILER_FLAG flag)
   STRING(FIND "${CMAKE_CXX_FLAGS}" "${flag}" FLAG_POS)
   IF (${FLAG_POS} EQUAL -1)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
   ENDIF()
-ENDMACRO(SET_COMPILER_FLAG)
+ENDMACRO(TULIP_SET_CXX_COMPILER_FLAG)
 
-MACRO(SET_COMPILER_OPTIONS)
+MACRO(TULIP_SET_C_COMPILER_FLAG flag)
+  STRING(FIND "${CMAKE_C_FLAGS}" "${flag}" FLAG_POS)
+  IF (${FLAG_POS} EQUAL -1)
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flag}")
+  ENDIF()
+ENDMACRO(TULIP_SET_C_COMPILER_FLAG)
+
+MACRO(TULIP_SET_COMPILER_OPTIONS)
 
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
@@ -62,7 +69,7 @@ MACRO(SET_COMPILER_OPTIONS)
     # set -stdlib=libstdc++ only if -stdlib flag is not already bound
     STRING(FIND "${CMAKE_CXX_FLAGS}" "-stdlib=lib" STDLIB_POS)
     IF (${STDLIB_POS} EQUAL -1)
-      SET_COMPILER_FLAG("-stdlib=libstdc++")
+      TULIP_SET_CXX_COMPILER_FLAG("-stdlib=libstdc++")
     ENDIF()
   ENDIF(APPLE AND CLANG)
 
@@ -167,8 +174,12 @@ MACRO(SET_COMPILER_OPTIONS)
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGLIBCXX")
   ENDIF()
 
-ENDMACRO(SET_COMPILER_OPTIONS)
+ENDMACRO(TULIP_SET_COMPILER_OPTIONS)
 
+# for backward compatibility with Tulip < 5.1 for external projects
+MACRO(SET_COMPILER_OPTIONS)
+  TULIP_SET_COMPILER_OPTIONS()
+ENDMACRO(SET_COMPILER_OPTIONS)
 
 # Plugin server generation
 FUNCTION(INSTALL)
@@ -204,23 +215,20 @@ FUNCTION(INSTALL)
   ENDIF()
 ENDFUNCTION(INSTALL)
 
-MACRO(DISABLE_COMPILER_WARNINGS)
+MACRO(TULIP_DISABLE_COMPILER_WARNINGS)
   IF(MSVC)
     STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
   ELSE(MSVC)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w ")
+    TULIP_SET_CXX_COMPILER_FLAG("-w")
+    TULIP_SET_C_COMPILER_FLAG("-w")
   ENDIF(MSVC)
-ENDMACRO()
+ENDMACRO(TULIP_DISABLE_COMPILER_WARNINGS)
 
-MACRO(GET_FILE_DIRECTORY file_path file_dir_var_name)
-  IF(CMAKE_VERSION VERSION_LESS "2.8.12")
-    GET_FILENAME_COMPONENT(${file_dir_var_name} ${file_path} PATH)
-  ELSE()
-    GET_FILENAME_COMPONENT(${file_dir_var_name} ${file_path} DIRECTORY)
-  ENDIF()
-ENDMACRO(GET_FILE_DIRECTORY)
+# for backward compatibility with Tulip < 5.1 for external projects
+MACRO(DISABLE_COMPILER_WARNINGS)
+  TULIP_DISABLE_COMPILER_WARNINGS()
+ENDMACRO(DISABLE_COMPILER_WARNINGS)
 
 # External libraries macros
 IF(WIN32)
@@ -233,7 +241,7 @@ IF(WIN32)
     SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)
   ENDIF(MINGW)
 
-  MACRO(FIND_EXTERNAL_LIB pattern result_var_name)
+  MACRO(TULIP_FIND_EXTERNAL_LIB pattern result_var_name)
     UNSET(${result_var_name})
     UNSET(found_paths)
     FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR} ${MINGW_BIN_PATH} ${CMAKE_LIBRARY_PATH})
@@ -248,7 +256,7 @@ IF(WIN32)
       LIST(REMOVE_DUPLICATES found_paths)
       SET(${result_var_name} ${found_paths})
     ENDIF(found_paths)
-  ENDMACRO(FIND_EXTERNAL_LIB)
+  ENDMACRO(TULIP_FIND_EXTERNAL_LIB)
 
   # Try to locate a dll whose name matches the regular expression passed as argument
   # by looking in the following directories :
@@ -257,8 +265,8 @@ IF(WIN32)
   #    * the MinGW binaries directory
   #    * the Qt binaries directory
   # If a dll is found, install it in the application binaries directory
-  MACRO(INSTALL_EXTERNAL_LIB pattern component)
-    FIND_EXTERNAL_LIB(${pattern} results)
+  MACRO(TULIP_INSTALL_EXTERNAL_LIB pattern component)
+    TULIP_FIND_EXTERNAL_LIB(${pattern} results)
     IF(NOT results)
       MESSAGE("${pattern} could not be located and will not be installed in the binary directory of the application.\n"
               "That library is required to run the application. Please add its path in the CMAKE_LIBRARY_PATH variable in order to install it automatically.")
@@ -267,18 +275,18 @@ IF(WIN32)
         INSTALL(FILES ${F} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
       ENDFOREACH(F ${results})
     ENDIF(NOT results)
-  ENDMACRO(INSTALL_EXTERNAL_LIB)
+  ENDMACRO(TULIP_INSTALL_EXTERNAL_LIB)
 
-  MACRO(COPY_EXTERNAL_LIB pattern destination)
-    FIND_EXTERNAL_LIB(${pattern} results)
+  MACRO(TULIP_COPY_EXTERNAL_LIB pattern destination)
+    TULIP_FIND_EXTERNAL_LIB(${pattern} results)
     IF(results)
       FOREACH(F ${results})
         FILE(COPY ${F} DESTINATION ${destination})
       ENDFOREACH(F ${results})
     ENDIF(results)
-  ENDMACRO(COPY_EXTERNAL_LIB)
+  ENDMACRO(TULIP_COPY_EXTERNAL_LIB)
 
-  MACRO(GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
+  MACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
     UNSET(${dll_name})
     IF(MINGW)
       EXECUTE_PROCESS(COMMAND ${MINGW_BIN_PATH}/dlltool.exe -I ${import_library} OUTPUT_VARIABLE DLL_FILENAME ERROR_VARIABLE DLLTOOL_ERROR)
@@ -319,7 +327,7 @@ IF(WIN32)
       # Restore original PATH environement variable value
       SET(ENV{PATH} "${PATH_BACKUP}")
     ENDIF(MSVC)
-  ENDMACRO(GET_DLL_NAME_FROM_IMPORT_LIBRARY)
+  ENDMACRO(TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY)
 
   # That macro checks if an external library has to be installed in the application directory.
   # It first checks if the library provided as argument is an import library or a static library (for MinGW and MSVC).
@@ -327,70 +335,70 @@ IF(WIN32)
   # If the library is static, it does not need to be installed in the application directory.
   # If the library is an import one, the name of the associated dll is retrieved from it and then provided as parameter to the INSTALL_EXTERNAL_LIB macro.
   # If the library is a dll, its name is provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  MACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
+  MACRO(TULIP_INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
 
     IF(MINGW)
       STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
       STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
       # If an import library is used, we can easily retrieve the dll name with the dlltool utility
       IF(IMPORT_LIBRARY)
-         GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+         TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
          IF(DLL_NAME)
-           INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+           TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
          ENDIF(DLL_NAME)
       # If a dll is directly used, just extract its name from its path
       ELSEIF(DLL_LIBRARY)
-        GET_FILE_DIRECTORY(${library} DLL_DIRECTORY)
+        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
         GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
         SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+        TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
       ENDIF()
     ENDIF(MINGW)
 
     IF(MSVC)
-      GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+      TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
       # If we found a dll name, we need to install that dll
       IF(DLL_NAME)
-        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+        TULIP_INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
       ENDIF(DLL_NAME)
     ENDIF(MSVC)
 
-  ENDMACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED)
+  ENDMACRO(TULIP_INSTALL_EXTERNAL_LIB_IF_NEEDED)
 
-  MACRO(COPY_EXTERNAL_LIB_IF_NEEDED library destination)
+  MACRO(TULIP_COPY_EXTERNAL_LIB_IF_NEEDED library destination)
 
     IF(MINGW)
       STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
       STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
       # If an import library is used, we can easily retrieve the dll name with the dlltool utility
       IF(IMPORT_LIBRARY)
-         GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+         TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
          IF(DLL_NAME)
-           COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
+           TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
          ENDIF(DLL_NAME)
       # If a dll is directly used, just extract its name from its path
       ELSEIF(DLL_LIBRARY)
-        GET_FILE_DIRECTORY(${library} DLL_DIRECTORY)
+        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
         GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
         SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
+        TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
       ENDIF()
     ENDIF(MINGW)
 
     IF(MSVC)
-      GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+      TULIP_GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
       # If we found a dll name, we need to install that dll
       IF(DLL_NAME)
-        COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
+        TULIP_COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
       ENDIF(DLL_NAME)
     ENDIF(MSVC)
 
-  ENDMACRO(COPY_EXTERNAL_LIB_IF_NEEDED)
+  ENDMACRO(TULIP_COPY_EXTERNAL_LIB_IF_NEEDED)
 
 
 ENDIF(WIN32)
 
-MACRO(COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
+MACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
   STRING(MD5 DESTINATION_HASH "${destination}")
   SET(COPY_TARGET_NAME copy-${target_name}-${DESTINATION_HASH})
 
@@ -412,10 +420,10 @@ MACRO(COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
   FOREACH(DEPENDENCY_TARGET ${DEPENDENCIES_TARGETS})
     ADD_DEPENDENCIES(${DEPENDENCY_TARGET} ${COPY_TARGET_NAME})
   ENDFOREACH()
-ENDMACRO(COPY_TARGET_LIBRARY_POST_BUILD)
+ENDMACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD)
 
 # Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
-MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
+MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
   SET(COMPONENT_NAME ${plugin_target})
   STRING(REPLACE "-${TulipVersion}" "" COMPONENT_NAME "${COMPONENT_NAME}")
   INSTALL(TARGETS ${plugin_target}
@@ -452,13 +460,18 @@ MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
       SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
     ENDIF()
 
-    COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${PLUGIN_WHEEL_INSTALL_DIR} wheels)
+    TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${PLUGIN_WHEEL_INSTALL_DIR} wheels)
   ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDMACRO(TULIP_INSTALL_PLUGIN)
+
+# for backward compatibility with Tulip < 5.1 for external projects
+MACRO(INSTALL_TULIP_PLUGIN)
+  TULIP_INSTALL_PLUGIN(${ARGV})
 ENDMACRO(INSTALL_TULIP_PLUGIN)
 
 SET(TULIP_PYTHON_SYSTEM_INSTALL OFF CACHE BOOL "Do you want to install Tulip Python modules in Python ${SYSTEM_PYTHON_INSTALL_FOLDER} (site-packages on windows) folder ? This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
 
-MACRO(INSTALL_TULIP_PYTHON_FILES install_suffix)
+MACRO(TULIP_INSTALL_PYTHON_FILES install_suffix)
   FOREACH(PYTHON_FILE ${ARGN})
 
     SET(SYSTEM_PYTHON_INSTALL_FOLDER "${SYSTEM_PYTHON_INSTALL_FOLDER}")
@@ -489,14 +502,14 @@ MACRO(INSTALL_TULIP_PYTHON_FILES install_suffix)
     ENDIF(TARGET ${PYTHON_FILE})
 
   ENDFOREACH()
-ENDMACRO(INSTALL_TULIP_PYTHON_FILES)
+ENDMACRO(TULIP_INSTALL_PYTHON_FILES)
 
 # Convert a Windows path (C:/folder) to a Msys path (/C/folder)
-MACRO(WINDOWS_TO_MSYS_PATH WindowsPath ResultingPath)
+MACRO(TULIP_WINDOWS_TO_MSYS_PATH WindowsPath ResultingPath)
   STRING(REGEX REPLACE "([a-zA-Z]):" "/\\1" ${ResultingPath} "${WindowsPath}")
-ENDMACRO(WINDOWS_TO_MSYS_PATH)
+ENDMACRO(TULIP_WINDOWS_TO_MSYS_PATH)
 
 # Convert a Msys path (/c/folder) to a Windows path (c:/folder)
-MACRO(MSYS_TO_WINDOWS_PATH MsysPath ResultingPath)
+MACRO(TULIP_MSYS_TO_WINDOWS_PATH MsysPath ResultingPath)
   STRING(REGEX REPLACE "/([a-zA-Z])/" "\\1:/" ${ResultingPath} "${MsysPath}")
-ENDMACRO(MSYS_TO_WINDOWS_PATH)
+ENDMACRO(TULIP_MSYS_TO_WINDOWS_PATH)

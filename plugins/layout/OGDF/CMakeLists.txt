@@ -36,5 +36,5 @@ FOREACH(OGDFPlugin ${PLUGINS_SRCS})
   ADD_LIBRARY(${PLUGIN_NAME}-${TulipVersion} SHARED ${OGDFPlugin})
   TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TulipVersion} ${TulipLibName} ${LibTulipOGDFName} ${OGDF_LIBRARY})
 
-  INSTALL_TULIP_PLUGIN(${PLUGIN_NAME}-${TulipVersion} ${TulipPluginsInstallDir})
+  TULIP_INSTALL_PLUGIN(${PLUGIN_NAME}-${TulipVersion} ${TulipPluginsInstallDir})
 ENDFOREACH()
