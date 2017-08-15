@@ -38,7 +38,6 @@
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
-#include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipFontAwesome.h>
@@ -829,10 +828,12 @@ QString TulipFontEditorCreator::displayText(const QVariant & data) const {
     {LabelPosition::LabelPositions::Left, "Left"},
     {LabelPosition::LabelPositions::Right,"Right"}};
 
+ typedef QMap<LabelPosition::LabelPositions,QString>::iterator itmap;
+
 QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* result = new QComboBox(parent);
 
-  for(QMap<LabelPosition::LabelPositions,QString>::iterator i=POSITION_LABEL_MAP.begin();i!=POSITION_LABEL_MAP.end();++i) {
+  for(itmap i=POSITION_LABEL_MAP.begin();i!=POSITION_LABEL_MAP.end();++i) {
     result->addItem(i.value(), QVariant::fromValue<LabelPosition::LabelPositions>(i.key()));
   }
 
@@ -849,12 +850,13 @@ QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
 QString TulipLabelPositionEditorCreator::displayText(const QVariant& v) const {
   LabelPosition::LabelPositions pos = v.value<LabelPosition::LabelPositions>();
 
-  if (pos < MIN_LABEL_POSITION || pos > MAX_LABEL_POSITION) {
-    qCritical() << QObject::trUtf8("Invalid value found as label position");
-    return QObject::trUtf8("Invalid label position");
+  itmap i = POSITION_LABEL_MAP.find(pos);
+  if(i!=POSITION_LABEL_MAP.end())
+    return i.value();
+  else {
+      qCritical() << QObject::trUtf8("Invalid value found as label position");
+      return QObject::trUtf8("Invalid label position");
   }
-  else
-    return POSITION_LABEL_MAP[pos];
 }
 
 //GraphEditorCreator

@@ -27,6 +27,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/QuickAccessBar.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QToolTip>
 #include <QHelpEvent>

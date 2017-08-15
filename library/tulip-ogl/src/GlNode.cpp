@@ -42,6 +42,7 @@
 #include <tulip/GlLabel.h>
 #include <tulip/GlBox.h>
 #include <tulip/GlGlyphRenderer.h>
+#include <tulip/TulipViewSettings.h>
 
 //====================================================
 tlp::GlLabel* tlp::GlNode::label=NULL;
