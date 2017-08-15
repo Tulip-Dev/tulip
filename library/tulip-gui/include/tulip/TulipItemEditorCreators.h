@@ -24,6 +24,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QVariant>
 #include <QSize>
@@ -236,7 +237,7 @@ public:
 };
 
 class TLP_QT_SCOPE TulipLabelPositionEditorCreator: public tlp::TulipItemEditorCreator {
-  static QVector<QString> POSITION_LABEL;
+  static  QMap<LabelPosition::LabelPositions,QString> POSITION_LABEL_MAP;
 public:
   QWidget* createWidget(QWidget*) const;
   void setEditorData(QWidget*w, const QVariant&var, bool, tlp::Graph*);

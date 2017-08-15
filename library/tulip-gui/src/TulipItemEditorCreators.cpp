@@ -769,7 +769,7 @@ QWidget* EdgeShapeEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* combobox = new QComboBox(parent);
 
   for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++) {
-    combobox->addItem(tlpStringToQString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i])),QVariant(GlGraphStaticData::edgeShapeIds[i]));
+    combobox->addItem(tlpStringToQString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i])),QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(GlGraphStaticData::edgeShapeIds[i])));
   }
 
   return combobox;
@@ -781,7 +781,7 @@ void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data
 
 QVariant EdgeShapeEditorCreator::editorData(QWidget* editor,Graph*) {
   QComboBox* combobox = static_cast<QComboBox*>(editor);
-  return QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(combobox->itemData(combobox->currentIndex()).toInt()));
+  return combobox->itemData(combobox->currentIndex());
 }
 
 QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
@@ -822,18 +822,19 @@ QString TulipFontEditorCreator::displayText(const QVariant & data) const {
 }
 
 //TulipLabelPositionEditorCreator
-QVector<QString> TulipLabelPositionEditorCreator::POSITION_LABEL = QVector<QString>()
-    << QObject::trUtf8("Center")
-    << QObject::trUtf8("Top")
-    << QObject::trUtf8("Bottom")
-    << QObject::trUtf8("Left")
-    << QObject::trUtf8("Right");
+ QMap<LabelPosition::LabelPositions,QString> TulipLabelPositionEditorCreator::POSITION_LABEL_MAP
+    {{LabelPosition::LabelPositions::Center,"Center"},
+     {LabelPosition::LabelPositions::Top,"Top"},
+    {LabelPosition::LabelPositions::Bottom,"Bottom"},
+    {LabelPosition::LabelPositions::Left, "Left"},
+    {LabelPosition::LabelPositions::Right,"Right"}};
 
 QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* result = new QComboBox(parent);
 
-  foreach(const QString& s, POSITION_LABEL)
-    result->addItem(s);
+  for(QMap<LabelPosition::LabelPositions,QString>::iterator i=POSITION_LABEL_MAP.begin();i!=POSITION_LABEL_MAP.end();++i) {
+    result->addItem(i.value(), QVariant::fromValue<LabelPosition::LabelPositions>(i.key()));
+  }
 
   return result;
 }
@@ -842,17 +843,18 @@ void TulipLabelPositionEditorCreator::setEditorData(QWidget* w, const QVariant& 
   comboBox->setCurrentIndex((int)(var.value<LabelPosition::LabelPositions>()));
 }
 QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<QComboBox*>(w)->currentIndex()));
+    QComboBox* comboBox = static_cast<QComboBox*>(w);
+    return comboBox->itemData(comboBox->currentIndex());
 }
 QString TulipLabelPositionEditorCreator::displayText(const QVariant& v) const {
-  int pos = (int)(v.value<LabelPosition::LabelPositions>());
+  LabelPosition::LabelPositions pos = v.value<LabelPosition::LabelPositions>();
 
   if (pos < MIN_LABEL_POSITION || pos > MAX_LABEL_POSITION) {
     qCritical() << QObject::trUtf8("Invalid value found as label position");
     return QObject::trUtf8("Invalid label position");
   }
   else
-    return POSITION_LABEL[pos];
+    return POSITION_LABEL_MAP[pos];
 }
 
 //GraphEditorCreator
