@@ -166,6 +166,10 @@ public:
     _nodes.sort();
     _edges.sort();
   }
+  inline Graph* getRoot() const {
+    // handle root destruction (see GraphAbstract destructor)
+    return id == 0 ? const_cast<GraphView*>(this) : GraphAbstract::getRoot();
+  }
   //=========================================================================
   // only implemented on a root graph
   virtual void reserveNodes(unsigned int nbNodes);
