@@ -71,10 +71,11 @@ chmod 755 $APPRUN_FILE
 DESKTOP_FILE=$BUNDLE_DIR/tulip.desktop
 echo "[Desktop Entry]" > $DESKTOP_FILE
 echo "Name=Tulip" >> $DESKTOP_FILE
-echo "Version=@TulipVersion@" >> $DESKTOP_FILE
+echo "X-Tulip-Version=@TulipVersion@" >> $DESKTOP_FILE
 echo "Type=Application" >> $DESKTOP_FILE
 echo "Exec=tulip_perspective" >> $DESKTOP_FILE
 echo "Icon=Tulip" >> $DESKTOP_FILE
+echo "Categories=Graphics;" >> $DESKTOP_FILE
 
 # copy Tulip.png
 cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
