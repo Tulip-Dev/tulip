@@ -27,6 +27,11 @@
 
 #include <iostream>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 extern "C" {
 #ifdef HAVE_REENTRANT_QHULL
 #include <qhull_ra.h>
@@ -650,3 +655,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
   sites.resize(nbSites);
   return ret;
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

@@ -106,9 +106,9 @@ public:
         printSize(os,sizes->getNodeValue(itn));
         os << "type \"rectangle\"" << endl;
         os << "width 0.12" << endl;
-        os << "fill \"#"<< hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getR()
-           << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()
-           << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getB() << "\""<< endl;
+        os << "fill \"#"<< hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getR())
+           << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getG())
+           << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getB()) << "\""<< endl;
 
         //      os << "outline \"#"<< hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getR()
         //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()

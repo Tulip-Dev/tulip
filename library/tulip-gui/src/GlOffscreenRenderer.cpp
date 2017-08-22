@@ -124,7 +124,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
-  if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
+  if (glFrameBuf != NULL && (vPWidth != uint(glFrameBuf->width()) || vPHeight != uint(glFrameBuf->height()))) {
     delete glFrameBuf;
     glFrameBuf = NULL;
     delete glFrameBuf2;

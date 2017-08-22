@@ -20,7 +20,6 @@
 #include <string>
 #include <iostream>
 
-#include <cppunit/TestCaller.h>
 #include "DoublePropertyTest.h"
 
 #include <tulip/TlpTools.h>

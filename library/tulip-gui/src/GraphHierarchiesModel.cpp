@@ -429,7 +429,7 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
   Graph *g = NULL;
 
   if (parent.isValid())
-    g = reinterpret_cast<Graph*>(parent.internalPointer())->getNthSubGraph(row);
+    g = static_cast<Graph*>(parent.internalPointer())->getNthSubGraph(row);
   else if (row < _graphs.size())
     g = _graphs[row];
 
@@ -444,7 +444,7 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
   if (!child.isValid())
     return QModelIndex();
 
-  Graph* childGraph = reinterpret_cast<Graph*>(child.internalPointer());
+  Graph* childGraph = static_cast<Graph*>(child.internalPointer());
 
   if (childGraph == NULL || _graphs.contains(childGraph) || childGraph->getSuperGraph() == childGraph) {
     return QModelIndex();
@@ -477,7 +477,7 @@ int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
   if (parent.column() != 0)
     return 0;
 
-  Graph* parentGraph = reinterpret_cast<Graph*>(parent.internalPointer());
+  Graph* parentGraph = static_cast<Graph*>(parent.internalPointer());
 
   return parentGraph->numberOfSubGraphs();
 }
@@ -488,7 +488,7 @@ int GraphHierarchiesModel::columnCount(const QModelIndex&) const {
 
 bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (index.column() == NAME_SECTION) {
-    Graph *graph = reinterpret_cast<Graph*>(index.internalPointer());
+    Graph *graph = static_cast<Graph*>(index.internalPointer());
     graph->setName(QStringToTlpString(value.toString()));
     return true;
   }
@@ -501,7 +501,7 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   if (!index.isValid())
     return QVariant();
 
-  Graph *graph = reinterpret_cast<Graph*>(index.internalPointer());
+  Graph *graph = static_cast<Graph*>(index.internalPointer());
 
   if (role == Qt::DisplayRole || role == Qt::EditRole) {
     if (index.column() == NAME_SECTION)
@@ -519,7 +519,7 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   }
 
   else if (role == GraphRole) {
-    return QVariant::fromValue<Graph*>(reinterpret_cast<Graph*>(index.internalPointer()));
+    return QVariant::fromValue<Graph*>(static_cast<Graph*>(index.internalPointer()));
   }
 
   else if (role == Qt::TextAlignmentRole && index.column() != NAME_SECTION)
@@ -704,8 +704,7 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
 
 // Observation
 void GraphHierarchiesModel::treatEvent(const Event &e) {
-  Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
-  assert(g);
+  Graph *g = static_cast<tlp::Graph *>(e.sender());
 
   if (e.type() == Event::TLP_DELETE && _graphs.contains(g)) { // A root graph has been deleted
     int pos = _graphs.indexOf(g);

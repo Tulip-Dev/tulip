@@ -13,7 +13,7 @@ MACRO(UNIT_TEST)
   ENDFOREACH()
   # this is a cpp[unit] test
   IF(TEST_SRCS)
-    INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${CppUnit_INCLUDE_DIRS})
+    INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${CppUnit_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/tests/include)
     LINK_DIRECTORIES(${CppUnit_LIBRARY_DIRS})
     ADD_EXECUTABLE(${TEST_NAME} ${TEST_SRCS})
     ADD_DEPENDENCIES(runTests ${TEST_NAME})

@@ -297,22 +297,22 @@ public:
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
-        node *n = reinterpret_cast<node*>(attribute.second->value);
+        node *n = static_cast<node*>(attribute.second->value);
         n->id = graph->nodePos(*n);
       }
       else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
-        edge *e = reinterpret_cast<edge*>(attribute.second->value);
+        edge *e = static_cast<edge*>(attribute.second->value);
         e->id = g->edgePos(*e);
       }
       else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
-        vector<node> *vn = reinterpret_cast<vector<node>*>(attribute.second->value);
+        vector<node> *vn = static_cast<vector<node>*>(attribute.second->value);
 
         for (size_t i = 0 ; i < vn->size() ; ++i) {
           (*vn)[i].id = graph->nodePos((*vn)[i]);
         }
       }
       else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
-        vector<edge> *ve = reinterpret_cast<vector<edge>*>(attribute.second->value);
+        vector<edge> *ve = static_cast<vector<edge>*>(attribute.second->value);
 
         for (size_t i = 0 ; i < ve->size() ; ++i) {
           (*ve)[i].id = graph->edgePos((*ve)[i]);

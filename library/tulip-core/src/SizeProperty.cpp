@@ -58,8 +58,8 @@ public:
     else
       // between the min and max computed values for other size properties
       prop->setNodeValue(mN,
-                         (((SizeProperty *)prop)->getMax(sg) +
-                          ((SizeProperty *)prop)->getMin(sg)) / 2.0f);
+                         (static_cast<SizeProperty *>(prop)->getMax(sg) +
+                          static_cast<SizeProperty *>(prop)->getMin(sg)) / 2.0f);
   }
 };
 

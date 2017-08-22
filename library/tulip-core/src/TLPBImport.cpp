@@ -68,7 +68,7 @@ bool TLPBImport::importGraph() {
   if (dataSet->exist("file::filename")) {
     dataSet->get<std::string>("file::filename", filename);
     struct stat infoEntry;
-    bool result = (stat(filename.c_str(),&infoEntry) == 0);
+    bool result = stat(filename.c_str(),&infoEntry) == 0;
 
     if (!result) {
       std::stringstream ess;
@@ -106,7 +106,7 @@ bool TLPBImport::importGraph() {
   TLPBHeader header;
 
   // read header
-  if (!bool(is->read((char *) &header, sizeof(header))))
+  if (!bool(is->read(reinterpret_cast<char *>(&header), sizeof(header))))
     return (delete is, errorTrap());
 
   if (!header.checkCompatibility()) {
@@ -131,13 +131,13 @@ bool TLPBImport::importGraph() {
       vEdges.resize(edgesToRead);
 
       // read a bunch of edges
-      if (!bool(is->read((char *) vEdges.data(),
+      if (!bool(is->read(reinterpret_cast<char *>(vEdges.data()),
                          edgesToRead * sizeof(vEdges[0]))))
         return (delete is, errorTrap());
 
       if (pluginProgress->progress(header.numEdges - nbEdges,
-                                   header.numEdges) !=TLP_CONTINUE)
-        return pluginProgress->state()!=TLP_CANCEL;
+                                   header.numEdges) != TLP_CONTINUE)
+        return pluginProgress->state() != TLP_CANCEL;
 
       // add edges in the graph
       graph->addEdges(vEdges);
@@ -151,7 +151,7 @@ bool TLPBImport::importGraph() {
   subgraphs.set(0, graph);
   {
     // read the number of subgraphs
-    if (!bool(is->read((char *) &numSubGraphs, sizeof(numSubGraphs))))
+    if (!bool(is->read(reinterpret_cast<char *>(&numSubGraphs), sizeof(numSubGraphs))))
       return (delete is, errorTrap());
 
     // read loop for subgraphs
@@ -161,12 +161,12 @@ bool TLPBImport::importGraph() {
       std::pair<unsigned int, unsigned int> ids;
 
       // read subgraph id and parent id
-      if (!bool(is->read((char *) &ids, sizeof(ids))))
+      if (!bool(is->read(reinterpret_cast<char *>(&ids), sizeof(ids))))
         return (delete is, errorTrap());
 
       // add subgraph
       Graph* parent = subgraphs.get(ids.second);
-      Graph* sg = ((GraphAbstract *) parent)->addSubGraph((unsigned int) ids.first);
+      Graph* sg = static_cast<GraphAbstract *>(parent)->addSubGraph(ids.first);
       // record sg
       subgraphs.set(ids.first, sg);
       // read sg nodes ranges
@@ -174,7 +174,7 @@ bool TLPBImport::importGraph() {
         unsigned int numRanges = 0;
 
         // read the number of nodes ranges
-        if (!bool(is->read((char *) &numRanges, sizeof(numRanges))))
+        if (!bool(is->read(reinterpret_cast<char *>(&numRanges), sizeof(numRanges))))
           return (delete is, errorTrap());
 
         // we can use a buffer to limit the disk reads
@@ -187,7 +187,7 @@ bool TLPBImport::importGraph() {
           vRanges.resize(rangesToRead);
 
           // read a bunch of ranges
-          if (!bool(is->read((char *) vRanges.data(),
+          if (!bool(is->read(reinterpret_cast<char *>(vRanges.data()),
                              rangesToRead * sizeof(vRanges[0]))))
             return (delete is, errorTrap());
 
@@ -206,7 +206,7 @@ bool TLPBImport::importGraph() {
         unsigned int numRanges = 0;
 
         // read the number of edges ranges
-        if (!bool(is->read((char *) &numRanges, sizeof(numRanges))))
+        if (!bool(is->read(reinterpret_cast<char *>(&numRanges), sizeof(numRanges))))
           return (delete is, errorTrap());
 
         // loop to read ranges
@@ -218,7 +218,7 @@ bool TLPBImport::importGraph() {
           vRanges.resize(rangesToRead);
 
           // read a bunch of ranges
-          if (!bool(is->read((char *) vRanges.data(),
+          if (!bool(is->read(reinterpret_cast<char *>(vRanges.data()),
                              rangesToRead * sizeof(vRanges[0]))))
             return (delete is, errorTrap());
 
@@ -233,8 +233,8 @@ bool TLPBImport::importGraph() {
         }
       }
 
-      if (pluginProgress->progress(i + 1, numSubGraphs) !=TLP_CONTINUE)
-        return pluginProgress->state()!=TLP_CANCEL;
+      if (pluginProgress->progress(i + 1, numSubGraphs) != TLP_CONTINUE)
+        return pluginProgress->state() != TLP_CANCEL;
     }
   }
   // read properties
@@ -242,7 +242,7 @@ bool TLPBImport::importGraph() {
     unsigned int numProperties = 0;
 
     // read number of properties
-    if (!bool(is->read((char *) &numProperties, sizeof(numProperties))))
+    if (!bool(is->read(reinterpret_cast<char *>(&numProperties), sizeof(numProperties))))
       return (delete is, errorTrap());
 
     // read loop on properties
@@ -252,14 +252,14 @@ bool TLPBImport::importGraph() {
       unsigned int size = 0;
 
       // read name length
-      if (!bool(is->read((char *) &size, sizeof(size))))
+      if (!bool(is->read(reinterpret_cast<char *>(&size), sizeof(size))))
         return (delete is, errorTrap());
 
       // + 1 to ensure a null terminated string
       std::string propName(size + 1, 0);
 
       // read name
-      if (!is->read((char *) propName.data(), size))
+      if (!is->read(const_cast<char *>(propName.data()), size))
         return (delete is, errorTrap());
 
       propName.resize(size);
@@ -269,7 +269,7 @@ bool TLPBImport::importGraph() {
                          propName == string("viewTexture"));
 
       // read graph id
-      if (!bool(is->read((char *) &size, sizeof(size))))
+      if (!bool(is->read(reinterpret_cast<char *>(&size), sizeof(size))))
         return (delete is, errorTrap());
 
       // get corresponding graph
@@ -280,14 +280,14 @@ bool TLPBImport::importGraph() {
         return (delete is, errorTrap());
 
       // read type length
-      if (!bool(is->read((char *) &size, sizeof(size))))
+      if (!bool(is->read(reinterpret_cast<char *>(&size), sizeof(size))))
         return (delete is, errorTrap());
 
       // + 1 to ensure a null terminated string
       std::string propType(size + 1, 0);
 
       // read type
-      if (!is->read((char *) propType.data(), size))
+      if (!is->read(const_cast<char *>(propType.data()), size))
         return (delete is, errorTrap());
 
       propType.resize(size);
@@ -339,7 +339,7 @@ bool TLPBImport::importGraph() {
         if (pos!=std::string::npos)
           value.replace(pos, 15, TulipBitmapDir);
 
-        ((StringProperty *)prop)->setAllNodeValue(value);
+        static_cast<StringProperty *>(prop)->setAllNodeValue(value);
 
         StringType::readb(*is, value);
         // if needed replace symbolic path by real path
@@ -348,7 +348,7 @@ bool TLPBImport::importGraph() {
         if (pos!=std::string::npos)
           value.replace(pos, 15, TulipBitmapDir);
 
-        ((StringProperty *)prop)->setAllEdgeValue(value);
+        static_cast<StringProperty *>(prop)->setAllEdgeValue(value);
       }
       else {
         // read and set property node default value
@@ -365,7 +365,7 @@ bool TLPBImport::importGraph() {
         unsigned int numValues = 0;
 
         // read the number of nodes values
-        if (!bool(is->read((char *) &numValues, sizeof(numValues))))
+        if (!bool(is->read(reinterpret_cast<char *>(&numValues), sizeof(numValues))))
           return (delete is, errorTrap());
 
         // std::basic_streambuf::pubsetbuf is a no-op in libcxx (LLVM implementation of STL)
@@ -392,29 +392,29 @@ bool TLPBImport::importGraph() {
           char *vBuf;
 
           if (numValues < MAX_VALUES_TO_READ)
-            vBuf = (char *) malloc(numValues * (sizeof(unsigned int) + size));
+            vBuf = static_cast<char *>(malloc(numValues * (sizeof(unsigned int) + size)));
           else
-            vBuf = (char *) malloc(MAX_VALUES_TO_READ * (sizeof(unsigned int) + size));
+            vBuf = static_cast<char *>(malloc(MAX_VALUES_TO_READ * (sizeof(unsigned int) + size)));
 
           while(numValues) {
             // read a bunch of <node, prop_value>
             unsigned int valuesToRead =
               (numValues > MAX_VALUES_TO_READ) ? MAX_VALUES_TO_READ : numValues;
 
-            if (!is->read((char *) vBuf, valuesToRead * (sizeof(unsigned int) + size)))
+            if (!is->read(reinterpret_cast<char *>(vBuf), valuesToRead * (sizeof(unsigned int) + size)))
               return (delete is, errorTrap(vBuf));
 
             // use a stringstream to read nodes and properties
             stringstream vs;
             // set read buffer of stringstream to vBuf
-            vs.rdbuf()->pubsetbuf((char*) vBuf,
+            vs.rdbuf()->pubsetbuf(reinterpret_cast<char *>(vBuf),
                                   valuesToRead * (sizeof(unsigned int) + size));
 
             for (unsigned int i = 0; i < valuesToRead; ++i) {
               node n;
 
               // read node id
-              if (!bool(vs.read((char *) &n.id, sizeof(unsigned int))))
+              if (!bool(vs.read(reinterpret_cast<char *>(&n.id), sizeof(unsigned int))))
                 return (delete is, errorTrap(vBuf));
 
               // read and set node value
@@ -436,7 +436,7 @@ bool TLPBImport::importGraph() {
             node n;
 
             // read node id
-            if (!bool(is->read((char *) &(n.id), sizeof(unsigned int))))
+            if (!bool(is->read(reinterpret_cast<char *>(&(n.id)), sizeof(unsigned int))))
               return (delete is, errorTrap());
 
             assert(g->isElement(n));
@@ -457,7 +457,7 @@ bool TLPBImport::importGraph() {
               if (pos!=std::string::npos)
                 value.replace(pos, 15, TulipBitmapDir);
 
-              ((StringProperty *)prop)->setNodeValue(n, value);
+              static_cast<StringProperty *>(prop)->setNodeValue(n, value);
             }
             else {
               // read and set node value
@@ -468,7 +468,7 @@ bool TLPBImport::importGraph() {
         }
 
         // read the number of edges values
-        if (!bool(is->read((char *) &numValues, sizeof(numValues))))
+        if (!bool(is->read(reinterpret_cast<char *>(&numValues), sizeof(numValues))))
           return (delete is, errorTrap());
 
         // loop on edges values
@@ -480,29 +480,28 @@ bool TLPBImport::importGraph() {
           char *vBuf;
 
           if (numValues < MAX_VALUES_TO_READ)
-            vBuf = (char *) malloc(numValues * (sizeof(unsigned int) + size));
+            vBuf = static_cast<char *>(malloc(numValues * (sizeof(unsigned int) + size)));
           else
-            vBuf = (char *) malloc(MAX_VALUES_TO_READ * (sizeof(unsigned int) + size));
+            vBuf = static_cast<char *>(malloc(MAX_VALUES_TO_READ * (sizeof(unsigned int) + size)));
 
           while(numValues) {
             // read a bunch of <edge, prop_value> in vBuf
             unsigned int valuesToRead =
               (numValues > MAX_VALUES_TO_READ) ? MAX_VALUES_TO_READ : numValues;
 
-            if (!is->read((char *) vBuf, valuesToRead * (sizeof(unsigned int) + size)))
+            if (!is->read(reinterpret_cast<char *>(vBuf), valuesToRead * (sizeof(unsigned int) + size)))
               return (delete is, errorTrap(vBuf));
 
             // use a stringstream to read edges and properties
             stringstream vs;
             // set read buffer of stringstream to vBuf
-            vs.rdbuf()->pubsetbuf((char *) vBuf,
-                                  valuesToRead * (sizeof(unsigned int) + size));
+            vs.rdbuf()->pubsetbuf(vBuf, valuesToRead * (sizeof(unsigned int) + size));
 
             for (unsigned int i = 0; i < valuesToRead; ++i) {
               edge e;
 
               // read edge id
-              if (!bool(vs.read((char *) &e.id, sizeof(unsigned int))))
+              if (!bool(vs.read(reinterpret_cast<char *>(&e.id), sizeof(unsigned int))))
                 return (delete is, errorTrap(vBuf));
 
               assert(g->isElement(e));
@@ -523,7 +522,7 @@ bool TLPBImport::importGraph() {
                 if (pos!=std::string::npos)
                   value.replace(pos, 15, TulipBitmapDir);
 
-                ((StringProperty *)prop)->setEdgeValue(e, value);
+                static_cast<StringProperty *>(prop)->setEdgeValue(e, value);
               }
               else
 
@@ -544,7 +543,7 @@ bool TLPBImport::importGraph() {
             edge e;
 
             // read edge id
-            if (!bool(is->read((char *) &e.id, sizeof(unsigned int))))
+            if (!bool(is->read(reinterpret_cast<char *>(&e.id), sizeof(unsigned int))))
               return (delete is, errorTrap());
 
             // read and set edge value
@@ -556,8 +555,8 @@ bool TLPBImport::importGraph() {
         }
       }
 
-      if (pluginProgress->progress(i + 1, numProperties) !=TLP_CONTINUE)
-        return pluginProgress->state()!=TLP_CANCEL;
+      if (pluginProgress->progress(i + 1, numProperties) != TLP_CONTINUE)
+        return pluginProgress->state() != TLP_CANCEL;
     }
   }
   // read graphs (root graph + subgraphs) attributes
@@ -567,7 +566,7 @@ bool TLPBImport::importGraph() {
     unsigned int id = 0;
 
     // read graph id
-    if (!bool(is->read((char *) &id, sizeof(id))))
+    if (!bool(is->read(reinterpret_cast<char *>(&id), sizeof(id))))
       return (delete is, errorTrap());
 
     Graph* g = id ? subgraphs.get(id) : graph;

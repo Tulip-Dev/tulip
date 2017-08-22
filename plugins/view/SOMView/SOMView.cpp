@@ -345,14 +345,14 @@ void SOMView::drawPreviews() {
   int thumbHeight = 50;
   int spacing = 5;
   int pos = 0;
-  int colNumber = (int) ceil(sqrt(double(propertiesName.size())));
+  int colNumber = int(ceil(sqrt(double(propertiesName.size()))));
 
   for (vector<string>::iterator it = propertiesName.begin(); it != propertiesName.end(); ++it) {
     double minValue;
     double maxValue;
     ColorProperty *colorProperty = computePropertyColor((*it), minValue, maxValue);
 
-    Coord previewCoord((pos % colNumber) * (thumbWidth + spacing), ((colNumber - 1) - ((int) floor(pos / colNumber))) * (thumbHeight + spacing), 0);
+    Coord previewCoord((pos % colNumber) * (thumbWidth + spacing), (colNumber - 1) - int(floor(pos / colNumber)) * (thumbHeight + spacing), 0);
     Size previewSize(thumbWidth, thumbHeight, 0);
 
     //If the input data uses normalized values we had to translate it to get the real value.
@@ -539,7 +539,7 @@ void SOMView::buildSOMMap() {
   //Keep aspect ratio
   if (som->getWidth() > som->getHeight()) {
     somSize.setW(somMawWidth);
-    somSize.setH((somSize.getW() * som->getHeight()) / (float) som->getWidth());
+    somSize.setH((somSize.getW() * som->getHeight()) / som->getWidth());
   }
   else {
     somSize.setH(somMaxHeight);
@@ -668,10 +668,10 @@ void SOMView::computeMapping() {
   Coord marginShift(nodeDisplayAreaSize.getW() * marginCoef, -(nodeDisplayAreaSize.getH() * marginCoef));
   Size realAreaSize = nodeDisplayAreaSize * (1 - marginCoef * 2);
   //Compute elements size
-  int colNumber = (int) ceil(sqrt(maxSize));
+  int colNumber = int(ceil(sqrt(maxSize)));
 
-  float maxElementWidth = realAreaSize.getW() / (float) colNumber;
-  float maxElementHeight = realAreaSize.getH() / (float) colNumber;
+  float maxElementWidth = realAreaSize.getW() / colNumber;
+  float maxElementHeight = realAreaSize.getH() / colNumber;
 
   float minElementWidth = maxElementWidth * minElementSizeCoef;
   float minElementHeight = maxElementHeight * minElementSizeCoef;
@@ -773,7 +773,7 @@ void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewCom
 
   for (vector<SelectedEntity>::iterator itEntities = selectedEntities.begin(); itEntities != selectedEntities.end(); ++itEntities) {
     for (map<string, SOMPreviewComposite*>::iterator itSOM = propertyToPreviews.begin(); itSOM != propertyToPreviews.end(); ++itSOM) {
-      if (itSOM->second->isElement((GlSimpleEntity*) (itEntities->getSimpleEntity()))) {
+      if (itSOM->second->isElement(itEntities->getSimpleEntity())) {
         result.push_back(itSOM->second);
       }
     }
@@ -791,7 +791,7 @@ void SOMView::computeColor(SOMMap* som, tlp::NumericProperty* property, tlp::Col
     float pos = 0;
 
     if (max - min != 0)
-      pos = fabs((float) ((curentValue - min) / (max - min)));
+      pos = fabs(float((curentValue - min) / (max - min)));
 
     result->setNodeValue(n, colorScale.getColorAtPos(pos));
   }
@@ -801,7 +801,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
 
   if (obj == previewWidget) {
     if (event->type() == QMouseEvent::MouseButtonDblClick) {
-      QMouseEvent *me = (QMouseEvent*) event;
+      QMouseEvent *me = static_cast<QMouseEvent*>(event);
 
       if (me->button() == Qt::LeftButton) {
         vector<SOMPreviewComposite*> properties;
@@ -819,7 +819,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
     }
 
     if (event->type() == QMouseEvent::ToolTip) {
-      QHelpEvent *he = (QHelpEvent*) event;
+      QHelpEvent *he = static_cast<QHelpEvent*>(event);
       vector<SOMPreviewComposite*> properties;
       Coord screenCoords(he->x(), he->y(), 0.0f);
       Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);

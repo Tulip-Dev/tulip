@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include <GL/glew.h>
 
 // libtess2
@@ -620,3 +625,7 @@ void GlComplexPolygon::setWithXML(const string &inString,unsigned int &currentPo
   }
 }
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

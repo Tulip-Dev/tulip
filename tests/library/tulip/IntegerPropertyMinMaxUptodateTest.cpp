@@ -20,7 +20,6 @@
 #include <string>
 #include <iostream>
 
-#include <cppunit/TestCaller.h>
 #include "IntegerPropertyMinMaxUptodateTest.h"
 
 using namespace tlp;

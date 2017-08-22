@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 #include "ConsoleHandlers.h"
@@ -419,7 +424,7 @@ PythonInterpreter::~PythonInterpreter() {
       runString("import sip; sys.stdout.write(sip.__file__)");
 #endif
       QString sipModulePath = consoleOuputString;
-      sipQtAPI **sipQtSupport = reinterpret_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
+      sipQtAPI **sipQtSupport = static_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
 
       if (sipQtSupport)
         *sipQtSupport = NULL;
@@ -1101,3 +1106,7 @@ void PythonInterpreter::clearTracebacks() {
   pythonCode += "sys.last_traceback = None\n";
   runString(pythonCode);
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

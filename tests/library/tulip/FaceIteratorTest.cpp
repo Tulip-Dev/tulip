@@ -17,7 +17,6 @@
  *
  */
 #include "FaceIteratorTest.h"
-#include <cppunit/TestCaller.h>
 
 #include <iostream>
 

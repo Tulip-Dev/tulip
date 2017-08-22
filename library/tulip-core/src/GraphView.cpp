@@ -144,7 +144,7 @@ void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
     // propagate edge reversal on subgraphs
     Graph* sg;
     forEach(sg, getSubGraphs()) {
-      ((GraphView*) sg)->reverseInternal(e, src, tgt);
+      static_cast<GraphView*>(sg)->reverseInternal(e, src, tgt);
     }
   }
 }
@@ -183,7 +183,7 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt,
       // propagate edge ends update on subgraphs
       Graph* sg;
       forEach(sg, getSubGraphs()) {
-        ((GraphView*) sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
+        static_cast<GraphView*>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
     }
     else {
@@ -191,7 +191,7 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt,
       // propagate edge ends update on subgraphs
       Graph* sg;
       forEach(sg, getSubGraphs()) {
-        ((GraphView*) sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
+        static_cast<GraphView*>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
       notifyDelEdge(e);
 
@@ -449,7 +449,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
       delete sgs;
 
       if (sg == sgq.top()) {
-        ((GraphView *) sg)->removeNode(n, ee);
+        static_cast<GraphView *>(sg)->removeNode(n, ee);
         sgq.pop();
       }
     }

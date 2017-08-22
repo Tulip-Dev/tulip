@@ -754,7 +754,8 @@ bool DecodeColor  ( tlp::Color        & outColor,
     int n = sscanf( inValue.c_str(), "%f,%f,%f", &r, &g, &b );
 
     if( n == 3 ) {
-      outColor = tlp::Color((unsigned int)(r*255.0f),(unsigned int)(g*255.0f),(unsigned int)(b*255.0f));
+      outColor = tlp::Color(uchar(r*255.0f),uchar(g*255.0f),
+                            uchar(b*255.0f));
       return true;
     }
   }
@@ -765,7 +766,8 @@ bool DecodeColor  ( tlp::Color        & outColor,
     int n = sscanf( inValue.c_str(), "%f %f %f", &r, &g, &b );
 
     if( n == 3 ) {
-      outColor = tlp::Color((unsigned int)(r*255.0f),(unsigned int)(g*255.0f),(unsigned int)(b*255.0f));
+      outColor = tlp::Color(uchar(r*255.0f), uchar(g*255.0f),
+                            uchar(b*255.0f));
       return true;
     }
   }
@@ -781,7 +783,8 @@ bool DecodeColor  ( tlp::Color        & outColor,
                   float(X11Clut[i].s)/255.0f,
                   float(X11Clut[i].b)/255.0f,
                   r, g ,b );
-        outColor = tlp::Color((unsigned int)(r),(unsigned int)(g),(unsigned int)(b));
+        outColor = tlp::Color(uchar(r), uchar(g),
+                              uchar(b));
         return true;
       }
     }

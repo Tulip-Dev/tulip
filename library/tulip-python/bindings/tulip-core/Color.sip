@@ -69,19 +69,19 @@ class Color {
     unsigned char a = 255;
 
   #if PY_MAJOR_VERSION >= 3
-    r = static_cast<unsigned char>(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 0)));
-    g = static_cast<unsigned char>(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 1)));
-    b = static_cast<unsigned char>(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 2)));
+    r = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 0)));
+    g = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 1)));
+    b = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 2)));
     if (PyList_GET_SIZE(sipPy) > 3)
-      a = static_cast<unsigned char>(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 3)));
+      a = uchar(PyLong_AsLong(PyTuple_GET_ITEM(sipPy, 3)));
   #else
 
     static struct {
       unsigned char operator()(PyObject *item) const {
         if (PyLong_Check(item)) {
-          return static_cast<unsigned char>(PyLong_AsLong(item));
+          return uchar(PyLong_AsLong(item));
         } else {
-          return static_cast<unsigned char>(PyInt_AsLong(item));
+          return uchar(PyInt_AsLong(item));
         }
       }
     } toUnsignedChar;

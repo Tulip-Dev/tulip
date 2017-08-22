@@ -18,8 +18,15 @@
  */
 #include <GL/glew.h>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 #include <FTVectoriser.h>
 #include <FTLibrary.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
@@ -135,7 +142,7 @@ private:
 
     float size = 20;
 
-    err = FT_Set_Char_Size(face, static_cast<int>(size * HRES), 0, DPI * HRES, DPI * HRES);
+    err = FT_Set_Char_Size(face, int(size * HRES), 0, DPI * HRES, DPI * HRES);
 
     if (err) {
       return;

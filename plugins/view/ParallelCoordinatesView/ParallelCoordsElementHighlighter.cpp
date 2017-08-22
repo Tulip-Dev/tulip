@@ -37,7 +37,7 @@ void ParallelCoordsElementHighlighter::selectedEntitiesHandler(ParallelCoordinat
 }
 
 ParallelCoordsElementHighlighter::~ParallelCoordsElementHighlighter() {
-  ParallelCoordinatesView *parallelView = dynamic_cast<ParallelCoordinatesView *>(view());
+  ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
 
   if (parallelView)
     parallelView->resetHighlightedElements();

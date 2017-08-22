@@ -101,6 +101,6 @@ ostream& tlp::operator<<(std::ostream &os,const tlp::IdManager &idM) {
   os << "Minimum index :" << idM.state.firstId<< endl;
   os << "Maximum index :" << idM.state.nextId - 1 << endl;
   os << "Size          :" << idM.state.freeIds.size() << endl;
-  os << "Fragmentation :" << (double)idM.state.freeIds.size() / (1+idM.state.nextId - idM.state.firstId) << endl;
+  os << "Fragmentation :" << double(idM.state.freeIds.size()) / (1+idM.state.nextId - idM.state.firstId) << endl;
   return os;
 }

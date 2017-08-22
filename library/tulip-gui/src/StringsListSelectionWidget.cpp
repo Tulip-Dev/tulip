@@ -88,7 +88,7 @@ void StringsListSelectionWidget::clearSelectedStringsList() {
 void StringsListSelectionWidget::setUnselectedStringsListLabel(
   const std::string &unselectedStringsListLabel) {
   if (listType == DOUBLE_LIST) {
-    ((DoubleStringsListSelectionWidget *) stringsListSelectionWidget)->setUnselectedStringsListLabel(
+    static_cast<DoubleStringsListSelectionWidget *>(stringsListSelectionWidget)->setUnselectedStringsListLabel(
       unselectedStringsListLabel);
   }
 }
@@ -96,7 +96,7 @@ void StringsListSelectionWidget::setUnselectedStringsListLabel(
 void StringsListSelectionWidget::setSelectedStringsListLabel(
   const std::string &selectedStringsListLabel) {
   if (listType == DOUBLE_LIST) {
-    ((DoubleStringsListSelectionWidget *) stringsListSelectionWidget)->setSelectedStringsListLabel(
+    static_cast<DoubleStringsListSelectionWidget *>(stringsListSelectionWidget)->setSelectedStringsListLabel(
       selectedStringsListLabel);
   }
 }

@@ -87,7 +87,7 @@ void GlCPULODCalculator::compute(const Vector<int,4>& globalViewport,const Vecto
     Coord eye;
 
     if(camera->is3D()) {
-      eye=camera->getEyes() + ( camera->getEyes() - camera->getCenter() ) / (float)camera->getZoomFactor();
+      eye=camera->getEyes() + ( camera->getEyes() - camera->getCenter() ) / float(camera->getZoomFactor());
       computeFor3DCamera(&(*it),eye,transformMatrix,globalViewport,currentViewport);
     }
     else {

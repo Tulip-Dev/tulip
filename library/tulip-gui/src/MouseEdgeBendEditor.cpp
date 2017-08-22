@@ -68,7 +68,7 @@ void MouseEdgeBendEditor::stopEdition() {
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
-  QMouseEvent * qMouseEv = (QMouseEvent *) e;
+  QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if(qMouseEv == NULL)
     return false;
@@ -82,7 +82,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonPress) {
     if(!glMainWidget)
-      glMainWidget = (GlMainWidget *) widget;
+      glMainWidget = static_cast<GlMainWidget *>(widget);
 
     initProxies(glMainWidget);
     bool hasSelection = haveSelection(glMainWidget);
@@ -102,7 +102,9 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       }
       else {
 
-        bool entityIsSelected = glMainWidget->pickGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
+        bool entityIsSelected = glMainWidget->pickGlEntities(int(editPosition[0]) - 3,
+                                                             int(editPosition[1]) - 3,
+                                                             6, 6, select, layer);
 
         if(!entityIsSelected) {
           // We have click outside an entity
@@ -146,7 +148,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease &&
       qMouseEv->button() == Qt::LeftButton &&
       _operation != NONE_OP) {
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if(selectedEntity=="targetTriangle") {
       SelectedEntity selectedEntity;
@@ -213,7 +215,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseMove) {
     if(qMouseEv->buttons() == Qt::LeftButton &&
         _operation != NONE_OP) {
-      GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+      GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
       switch (_operation) {
       case TRANSLATE_OP:
@@ -226,7 +228,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     }
     else if(qMouseEv->buttons() == Qt::NoButton) {
       SelectedEntity selectedEntity;
-      GlMainWidget *g = (GlMainWidget *) widget;
+      GlMainWidget *g = static_cast<GlMainWidget *>(widget);
 
       if (g->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         g->setCursor(Qt::CrossCursor);
@@ -319,7 +321,7 @@ void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMa
   initProxies(glMainWidget);
 
   Coord v0(0,0,0);
-  Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
+  Coord v1(editPosition[0] - newX, -(editPosition[1] - newY), 0);
   v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v0));
   v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v1));
   v1 -= v0;

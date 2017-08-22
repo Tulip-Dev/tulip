@@ -78,7 +78,7 @@ public :
 protected :
 
   bool sceneEvent ( QEvent * event ) {
-    return ((SelectionArrowItem*)parentItem())->sceneEvent(event);
+    return static_cast<SelectionArrowItem*>(parentItem())->sceneEvent(event);
   }
 
 };

@@ -223,8 +223,8 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     return;
   }
 
-  float viewRatio = static_cast<float>(ui->graphicsView->width()) / static_cast<float>(ui->graphicsView->height());
-  float imageRatio = static_cast<float>(ui->widthSpinBox->value()) / static_cast<float>(ui->heightSpinBox->value());
+  float viewRatio = float(ui->graphicsView->width()) / float(ui->graphicsView->height());
+  float imageRatio = float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
 
   // regenerate preview pixmap only if the aspect ratio changed
   if (imageRatio != ratio) {
@@ -240,7 +240,7 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
       pixmap = pixmap.scaled(ui->graphicsView->width()-2, (ui->graphicsView->width()-2)/imageRatio, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
-    ratio = static_cast<float>(ui->widthSpinBox->value())/ static_cast<float>(ui->heightSpinBox->value());
+    ratio = float(ui->widthSpinBox->value())/ float(ui->heightSpinBox->value());
 
     if (pixmapItem != NULL) {
       delete scene;

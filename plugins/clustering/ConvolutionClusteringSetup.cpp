@@ -64,26 +64,26 @@ public:
 
     //les 20 de plus permetront de placer des l�gendes sur les axes.
     double scale = double(histogram.size())/64.0;
-    int legendWidth = (int)(20.0*scale);
-    int borderWidth = (int)(10.0*scale);
-    int axisWidth = (int)(15.0*scale);
+    int legendWidth = int(20.0*scale);
+    int borderWidth = int(10.0*scale);
+    int axisWidth = int(15.0*scale);
     painter.setWindow( 0, 0, 2*histogram.size()+legendWidth, histogram.size()+legendWidth ); // defines coordinate system
     painter.fillRect(0, 0,
                      2*histogram.size()+legendWidth, histogram.size()+legendWidth ,
                      QBrush(QColor(255,255,255)));
     // draw bars
     QColor c;
-    double histoScale = double(histogram.size()) / theMax;
+    double histoScale = histogram.size() / theMax;
 
     for (unsigned int i=0; i<histogram.size(); i++ ) {
-      c.setHsv( (int) ((double)i*360.0/(double)histogram.size()) , 255, 255 );
+      c.setHsv(int(i * 360.0 / histogram.size()) , 255, 255 );
       painter.setBrush( c );
       int height;
 
       if (setupDialog->getLogarithmicScale())
-        height = (int)(log10(1.0 + double(histogram[i])) *histoScale );
+        height = int(log10(1.0 + histogram[i]) * histoScale );
       else
-        height = (int)(double(histogram[i]) * histoScale);
+        height = int(histogram[i] * histoScale);
 
       if (height < 1) height = 1;
 

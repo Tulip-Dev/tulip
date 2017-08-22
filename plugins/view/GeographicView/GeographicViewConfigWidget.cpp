@@ -200,11 +200,11 @@ void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
 
 DataSet GeographicViewConfigWidget::state() const {
   DataSet data;
-  data.set("polyFileType",(int)polyFileType());
-  data.set("csvFileName",QStringToTlpString(_ui->csvFile->text()));
-  data.set("polyFileName",QStringToTlpString(_ui->polyFile->text()));
-  data.set("useSharedLayout",useSharedLayoutProperty());
-  data.set("useSharedSize",useSharedSizeProperty());
-  data.set("useSharedShape",useSharedShapeProperty());
+  data.set("polyFileType", int(polyFileType()));
+  data.set("csvFileName", QStringToTlpString(_ui->csvFile->text()));
+  data.set("polyFileName", QStringToTlpString(_ui->polyFile->text()));
+  data.set("useSharedLayout", useSharedLayoutProperty());
+  data.set("useSharedSize", useSharedSizeProperty());
+  data.set("useSharedShape", useSharedShapeProperty());
   return data;
 }

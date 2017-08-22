@@ -165,7 +165,7 @@ bool CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens) {
 
   for(size_t column = 0 ; column < lineTokens.size() ; ++column) {
     //Add a new column if needed
-    if(static_cast<unsigned int>(columnCount()) <= column ) {
+    if(uint(columnCount()) <= column ) {
       insertColumn(column);
     }
 
@@ -589,7 +589,7 @@ const string& CSVImportConfigurationWidget::combinePropertyDataType(const string
 static const std::string emptyString;
 
 const string& CSVImportConfigurationWidget::guessDataType(const string& data) const {
-  char *ptr = (char *) data.c_str();
+  char *ptr = const_cast<char *>(data.c_str());
 
   while(isspace(*ptr))
     ++ptr;

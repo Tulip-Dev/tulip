@@ -19,8 +19,7 @@
 #ifndef BASICLAYOUTTEST_H
 #define BASICLAYOUTTEST_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "CppUnitIncludes.h"
 
 namespace tlp {
 class Graph;

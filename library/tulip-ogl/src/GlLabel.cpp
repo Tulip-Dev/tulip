@@ -16,7 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 #include <FTGL/ftgl.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <tulip/GlLabel.h>
 #include <tulip/Coord.h>
@@ -130,7 +138,7 @@ void GlLabel::setText(const string& text) {
   if (font->Error())
     return;
 
-  if(font->FaceSize()!=(unsigned int)fontSize) {
+  if(font->FaceSize()!=uint(fontSize)) {
     font->FaceSize(fontSize);
     borderFont->FaceSize(fontSize);
   }
@@ -387,8 +395,8 @@ void GlLabel::draw(float, Camera *camera) {
       hModified-=labelsDensity;
     }
     else {
-      wModified=w-w*(((float)labelsDensity)/(100.));
-      hModified=h-h*(((float)labelsDensity)/(100.));
+      wModified=w-w*(float(labelsDensity)/100);
+      hModified=h-h*(float(labelsDensity)/100);
     }
 
     switch(alignment) {
@@ -439,15 +447,15 @@ void GlLabel::draw(float, Camera *camera) {
 
     Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
 
-    glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
-    glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat*>(&modelviewMatrix));
+    glGetFloatv(GL_PROJECTION_MATRIX, reinterpret_cast<GLfloat*>(&projectionMatrix));
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    glMultMatrixf((GLfloat*)&projectionMatrix);
-    glMultMatrixf((GLfloat*)&modelviewMatrix);
-    glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
+    glMultMatrixf(reinterpret_cast<GLfloat*>(&projectionMatrix));
+    glMultMatrixf(reinterpret_cast<GLfloat*>(&modelviewMatrix));
+    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat*>(&transformMatrix));
     glPopMatrix();
 
     BoundingBox bbTmp;
@@ -514,15 +522,15 @@ void GlLabel::draw(float, Camera *camera) {
 
     Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
 
-    glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
-    glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat*>(&modelviewMatrix));
+    glGetFloatv(GL_PROJECTION_MATRIX, reinterpret_cast<GLfloat*>(&projectionMatrix));
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    glMultMatrixf((GLfloat*)&projectionMatrix);
-    glMultMatrixf((GLfloat*)&modelviewMatrix);
-    glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
+    glMultMatrixf(reinterpret_cast<GLfloat*>(&projectionMatrix));
+    glMultMatrixf(reinterpret_cast<GLfloat*>(&modelviewMatrix));
+    glGetFloatv(GL_MODELVIEW_MATRIX, reinterpret_cast<GLfloat*>(&transformMatrix));
     glPopMatrix();
 
     MatrixGL invTransformMatrix(transformMatrix);
@@ -546,19 +554,19 @@ void GlLabel::draw(float, Camera *camera) {
     switch(alignment) {
 
     case LabelPosition::Left:
-      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(-billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      billboardedTranlation=unprojectPoint(billboardedBB.center()+Coord(-billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
     case LabelPosition::Right:
-      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      billboardedTranlation=unprojectPoint(billboardedBB.center()+Coord(billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
     case LabelPosition::Top:
-      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(0,billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      billboardedTranlation=unprojectPoint(billboardedBB.center()+Coord(0,billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
     case LabelPosition::Bottom:
-      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(0,-billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      billboardedTranlation=unprojectPoint(billboardedBB.center()+Coord(0,-billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
     default:
@@ -569,8 +577,8 @@ void GlLabel::draw(float, Camera *camera) {
 
     //Billboard computation
     float mdlM[16];
-    glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
-    glMatrixMode( GL_MODELVIEW );
+    glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);
+    glMatrixMode(GL_MODELVIEW);
 
     mdlM[0]  = 1.;
     mdlM[5]  = 1.;
@@ -578,7 +586,7 @@ void GlLabel::draw(float, Camera *camera) {
     mdlM[1] = mdlM[2] = 0.0f;
     mdlM[4] = mdlM[6] = 0.0f;
     mdlM[8] = mdlM[9] = 0.0f;
-    glLoadMatrixf( mdlM );
+    glLoadMatrixf(mdlM);
   }
 
   glScalef(scaleToApply,scaleToApply,1);

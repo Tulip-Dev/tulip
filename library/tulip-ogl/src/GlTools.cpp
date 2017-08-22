@@ -151,7 +151,7 @@ void glTest(const string &message) {
 }
 //====================================================
 void setColor(const Color &c) {
-  glColor4ubv((unsigned char *) &c);
+  glColor4ubv(reinterpret_cast<const unsigned char *>(&c));
 }
 //====================================================
 void setColor(GLfloat *c) {
@@ -160,10 +160,10 @@ void setColor(GLfloat *c) {
 //====================================================
 void setMaterial(const Color &c) {
   float colorMat[4];
-  colorMat[0] = ((float)c[0])/255.0;
-  colorMat[1] = ((float)c[1])/255.0;
-  colorMat[2] = ((float)c[2])/255.0;
-  colorMat[3] = ((float)c[3])/255.0;
+  colorMat[0] = c[0]/255.f;
+  colorMat[1] = c[1]/255.f;
+  colorMat[2] = c[2]/255.f;
+  colorMat[3] = c[3]/255.f;
   setColor(c);
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
 }
@@ -349,7 +349,7 @@ float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<floa
     return -1;
 
   for(int i=0; i<num; i++) {
-    dst[i] = projectPoint(src[(int)hullVertexTable[pos][i+1]],transformMatrix,globalViewport);
+    dst[i] = projectPoint(src[int(hullVertexTable[pos][i+1])],transformMatrix,globalViewport);
     dst[i][1] = globalViewport[1] + globalViewport[3] - (dst[i][1] - globalViewport[1]);
   }
 

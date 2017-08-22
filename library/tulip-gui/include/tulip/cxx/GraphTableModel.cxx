@@ -64,7 +64,7 @@ void GraphTableModel::removeFromVector(const std::set<T>& objects,std::vector<T>
 
     //Update objToIndex map
     for(unsigned int i = fromIndex ; i < vect.size() ; ++i) {
-      objToIndexes[vect[i]] = static_cast<int>(i);
+      objToIndexes[vect[i]] = int(i);
     }
 
     if(deleteRows) {
@@ -204,6 +204,6 @@ std::pair<unsigned int,unsigned int> GraphTableModel::computeArea(const std::set
   }
 
   first = std::max(first,0);
-  last = std::min(last,static_cast<int>(elements.size()-1));
+  last = std::min(last,int(elements.size()-1));
   return std::make_pair(first,last);
 }

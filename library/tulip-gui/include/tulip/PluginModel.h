@@ -139,7 +139,7 @@ public:
     TreeItem* item = _root;
 
     if (parent.isValid())
-      item = (TreeItem*)parent.internalPointer();
+      item = static_cast<TreeItem*>(parent.internalPointer());
 
     return item->children.size();
   }
@@ -152,7 +152,7 @@ public:
     if (!child.isValid())
       return QModelIndex();
 
-    TreeItem* childItem = (TreeItem*)child.internalPointer();
+    TreeItem* childItem = static_cast<TreeItem*>(child.internalPointer());
 
     if (childItem->parent == _root)
       return QModelIndex();
@@ -166,7 +166,7 @@ public:
     TreeItem* parentItem = _root;
 
     if (parent.isValid()) {
-      parentItem = (TreeItem*)parent.internalPointer();
+      parentItem = static_cast<TreeItem*>(parent.internalPointer());
     }
 
     if (row >= parentItem->children.size())
@@ -176,7 +176,7 @@ public:
   }
 
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
-    TreeItem* item = (TreeItem*)index.internalPointer();
+    TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
 
     if (role == Qt::DisplayRole)
       return item->name;
@@ -204,7 +204,7 @@ public:
     Qt::ItemFlags result(QAbstractItemModel::flags(index));
 
     if(index.isValid()) {
-      TreeItem* item = (TreeItem*)index.internalPointer();
+      TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
 
       if (!PluginLister::instance()->pluginExists<PLUGIN>(tlp::QStringToTlpString(item->name)))
         result = Qt::ItemIsEnabled;

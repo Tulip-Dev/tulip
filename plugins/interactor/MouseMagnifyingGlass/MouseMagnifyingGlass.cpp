@@ -90,7 +90,7 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
     updateMagnifyingGlass = true;
   }
   else if (e->type() == QEvent::Wheel) {
-    QWheelEvent *wheelEvent = (QWheelEvent *) e;
+    QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(e);
     float x = glWidget->width() - wheelEvent->x();
     float y = wheelEvent->y();
     screenCoords = Coord(x, y, 0);
@@ -139,7 +139,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
     antialiased = true;
   }
 
-  int fboSize = static_cast<int>(radius * 2);
+  int fboSize = int(radius * 2);
 
   // instantiate fbo if needed
   if (fbo == NULL) {

@@ -129,7 +129,7 @@ public:
       float lRadiusPrev = lRadius;
       lRadius += nRadii[i] + nRadii[i + 1] + lSpacing;
       // check if there is enough space for nodes of layer i + 1
-      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/static_cast<float>(2 * M_PI);
+      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/float(2 * M_PI);
 
       if (mRadius > lRadius)
         lRadius = mRadius;
@@ -309,8 +309,8 @@ public:
         if (depth > 0) {
           // layout the node in the middle of the sector
           double nAngle = (startAngle + endAngle)/2.0;
-          result->setNodeValue(n, Coord(lRadii[depth] * static_cast<float>(cos(nAngle)),
-                                        lRadii[depth] * static_cast<float>(sin(nAngle)),
+          result->setNodeValue(n, Coord(lRadii[depth] * float(cos(nAngle)),
+                                        lRadii[depth] * float(sin(nAngle)),
                                         0));
         }
         else
@@ -385,7 +385,7 @@ public:
       const Size& boundingBox = sizes->getNodeValue (n);
       double diam = 2.*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
                              boundingBox.getH() * boundingBox.getH()/4.0);
-      circleSizes->setNodeValue (n, Size (static_cast<float>(diam), static_cast<float>(diam), 1.0f));
+      circleSizes->setNodeValue (n, Size (float(diam), float(diam), 1.0f));
     }
     sizes = circleSizes;
 

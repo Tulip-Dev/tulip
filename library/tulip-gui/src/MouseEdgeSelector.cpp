@@ -38,8 +38,8 @@ MouseEdgeSelector::MouseEdgeSelector():
 //==================================================================
 bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (qMouseEv->button()==Qt::LeftButton) {
       if (!started) {
@@ -69,8 +69,8 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if  (e->type() == QEvent::MouseMove) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
@@ -92,7 +92,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if  (e->type() == QEvent::MouseButtonRelease) {
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
@@ -173,7 +173,7 @@ bool MouseEdgeSelector::draw(GlMainWidget *glMainWidget) {
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity ();
-  glOrtho(0.0, (GLdouble) glMainWidget->width(), 0.0, (GLdouble) glMainWidget->height(), -1, 1);
+  glOrtho(0, glMainWidget->width(), 0, glMainWidget->height(), -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();

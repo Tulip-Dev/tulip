@@ -47,7 +47,7 @@ void GlColorScale::setColorScale(ColorScale * scale) {
 }
 
 void GlColorScale::treatEvent(const Event &evt) {
-  if (dynamic_cast<ColorScale *>(evt.sender()) && evt.type() == Event::TLP_MODIFICATION)
+  if (evt.type() == Event::TLP_MODIFICATION)
     updateDrawing();
 }
 

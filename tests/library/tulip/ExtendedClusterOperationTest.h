@@ -21,9 +21,8 @@
 
 #include <string>
 #include <tulip/Graph.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+
+#include "CppUnitIncludes.h"
 
 class ExtendedClusterOperationTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(ExtendedClusterOperationTest);

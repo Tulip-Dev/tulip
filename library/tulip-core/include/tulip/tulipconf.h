@@ -29,7 +29,7 @@
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
-//MSVC and GCC in c++11 mode use decltype instead of typeof
+// MSVC and GCC in c++11 mode use decltype instead of typeof
 #if !defined(_MSC_VER)
 #  if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
 #    define TLP_TYPEOF decltype
@@ -37,6 +37,10 @@
 #    define TLP_TYPEOF typeof
 #  endif
 #endif
+
+// some usefull typedefs
+typedef unsigned int uint;
+typedef unsigned char uchar;
 
 #if defined(_MSC_VER)
 // disable some annoying Visual Studio warnings
@@ -72,7 +76,7 @@
 #include <cmath>
 
 inline double fabs(int i) {
-  return std::fabs(static_cast<double>(i));
+  return std::fabs(double(i));
 }
 
 #  if _MSC_VER < 1800 // Visual Studio 2013 improved C99 support, no need to redefine some cmath functions
@@ -81,27 +85,27 @@ inline double fabs(int i) {
 #include <cstdlib>
 
 inline double sqrt(int i) {
-  return std::sqrt(static_cast<double>(i));
+  return std::sqrt(double(i));
 }
 
 inline double sqrt(unsigned int i) {
-  return std::sqrt(static_cast<double>(i));
+  return std::sqrt(double(i));
 }
 
 inline double log(int i) {
-  return std::log(static_cast<double>(i));
+  return std::log(double(i));
 }
 
 inline double log(unsigned int i) {
-  return std::log(static_cast<double>(i));
+  return std::log(double(i));
 }
 
 inline double floor(int i) {
-  return std::floor(static_cast<double>(i));
+  return std::floor(double(i));
 }
 
 inline double floor(unsigned int i) {
-  return std::floor(static_cast<double>(i));
+  return std::floor(double(i));
 }
 
 inline double round(double d) {
@@ -113,7 +117,7 @@ inline float strtof(const char* cptr, char** endptr) {
 }
 
 #define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
-#define rint(arg) arg > 0 ? static_cast<int>(std::floor(static_cast<double>(arg))) : static_cast<int>(std::ceil(static_cast<double>(arg))) //Hey, nother C99 feature !
+#define rint(arg) arg > 0 ? int(std::floor(double(arg))) : int(std::ceil(double(arg))) //Hey, nother C99 feature !
 
 #if _MSC_VER <= 1600
 inline double log1p(double x) {

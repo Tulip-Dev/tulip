@@ -235,15 +235,15 @@ void GlScene::draw() {
 
         bb = it->boundingBox;
         Coord middle((bb[1] + bb[0])/2.f);
-        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+        dist=(double(middle[0])-double(camPos[0]))*(double(middle[0])-double(camPos[0]));
+        dist+=(double(middle[1])-double(camPos[1]))*(double(middle[1])-double(camPos[1]));
+        dist+=(double(middle[2])-double(camPos[2]))*(double(middle[2])-double(camPos[2]));
         entitiesSet.insert(EntityWithDistance(dist,&(*it)));
       }
 
       for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
         // Simple entities
-        GlSimpleEntity *entity = (((SimpleEntityLODUnit*)(it->entity))->entity);
+        GlSimpleEntity *entity = static_cast<SimpleEntityLODUnit*>(it->entity)->entity;
         glStencilFunc(GL_LEQUAL,entity->getStencil(),0xFFFF);
         entity->draw(it->entity->lod,camera);
       }
@@ -486,7 +486,7 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
       *center=Coord(0,0,0);
 
     if(sceneRadius)
-      *sceneRadius=static_cast<float>(sqrt(300.0));
+      *sceneRadius=float(sqrt(300.0));
 
     if(eye && center && sceneRadius) {
       *eye=Coord(0, 0, *sceneRadius);
@@ -525,37 +525,37 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
 
   if(dx<dy) {
     if(wdx<hdy) {
-      sceneRadiusTmp=static_cast<float>(dx);
+      sceneRadiusTmp=float(dx);
 
       if(yWhiteFactor)
-        *yWhiteFactor=static_cast<float>((1.-(dy/(sceneRadiusTmp*(height/width))))/2.);
+        *yWhiteFactor=float((1.-(dy/(sceneRadiusTmp*(height/width))))/2.);
     }
     else {
       if (width < height)
-        sceneRadiusTmp=static_cast<float>(dx*wdx/hdy);
+        sceneRadiusTmp=float(dx*wdx/hdy);
       else
-        sceneRadiusTmp=static_cast<float>(dy);
+        sceneRadiusTmp=float(dy);
 
       if(xWhiteFactor) {
-        *xWhiteFactor=static_cast<float>((1.-(dx/sceneRadiusTmp))/2.);
+        *xWhiteFactor=float((1.-(dx/sceneRadiusTmp))/2.);
       }
     }
   }
   else {
     if(wdx>hdy) {
-      sceneRadiusTmp=static_cast<float>(dy);
+      sceneRadiusTmp=float(dy);
 
       if(xWhiteFactor)
-        *xWhiteFactor=static_cast<float>((1.-(dx/(sceneRadiusTmp*(width/height))))/2.);
+        *xWhiteFactor=float((1.-(dx/(sceneRadiusTmp*(width/height))))/2.);
     }
     else {
       if (height < width)
-        sceneRadiusTmp=static_cast<float>(dy*hdy/wdx);
+        sceneRadiusTmp=float(dy*hdy/wdx);
       else
-        sceneRadiusTmp=static_cast<float>(dx);
+        sceneRadiusTmp=float(dx);
 
       if(yWhiteFactor)
-        *yWhiteFactor=static_cast<float>((1.-(dy/sceneRadiusTmp))/2.);
+        *yWhiteFactor=float((1.-(dy/sceneRadiusTmp))/2.);
     }
   }
 
@@ -610,8 +610,8 @@ void GlScene::zoomXY(int step, const int x, const int y) {
 
   if (step < 0) step *= -1;
 
-  int factX = (int)(step*(double(viewport[2])/2.0-x)/ 7.0);
-  int factY = (int)(step*(double(viewport[3])/2.0-y)/ 7.0);
+  int factX = int(step*(double(viewport[2])/2.0-x)/ 7.0);
+  int factY = int(step*(double(viewport[3])/2.0-y)/ 7.0);
   translateCamera(factX,-factY,0);
 }
 
@@ -628,7 +628,7 @@ void GlScene::translateCamera(const int x, const int y, const int z) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
       Coord v1(0, 0, 0);
-      Coord v2(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+      Coord v2(x, y, z);
       v1 = it->second->getCamera().viewportTo3DWorld(v1);
       v2 = it->second->getCamera().viewportTo3DWorld(v2);
       Coord move = v2 - v1;
@@ -657,9 +657,9 @@ void GlScene::zoomFactor(float factor) {
 void GlScene::rotateScene(const int x, const int y, const int z) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
-      it->second->getCamera().rotate(static_cast<float>(x/360.0 * M_PI), 1.0f, 0, 0);
-      it->second->getCamera().rotate(static_cast<float>(y/360.0 * M_PI), 0, 1.0f, 0);
-      it->second->getCamera().rotate(static_cast<float>(z/360.0 * M_PI), 0, 0, 1.0f);
+      it->second->getCamera().rotate(float(x/360.0 * M_PI), 1.0f, 0, 0);
+      it->second->getCamera().rotate(float(y/360.0 * M_PI), 0, 1.0f, 0);
+      it->second->getCamera().rotate(float(z/360.0 * M_PI), 0, 0, 1.0f);
     }
   }
 }
@@ -735,7 +735,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
   GlLODCalculator *selectLODCalculator= layerInScene?lodCalculator:lodCalculator->clone();
 
-  selectLODCalculator->setRenderingEntitiesFlag((RenderingEntitiesFlag)(RenderingAll | RenderingWithoutRemove));
+  selectLODCalculator->setRenderingEntitiesFlag(static_cast<RenderingEntitiesFlag>(RenderingAll | RenderingWithoutRemove));
   selectLODCalculator->clear();
 
   //Collect entities if needed
@@ -783,7 +783,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
     //Allocate memory to store the result of the selection
     GLuint (*selectBuf)[4] = new GLuint[size][4];
-    glSelectBuffer(size*4 , (GLuint *)selectBuf);
+    glSelectBuffer(size*4 , reinterpret_cast<GLuint *>(selectBuf));
     //Activate Open Gl Selection mode
     glRenderMode(GL_SELECT);
     glInitNames();
@@ -796,7 +796,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     glLoadIdentity();
     int newX = x + w/2;
     int newY = viewport[3] - (y + h/2);
-    pickMatrix(newX, newY, w, h, (GLint *)&viewport);
+    pickMatrix(newX, newY, w, h, reinterpret_cast<GLint *>(&viewport));
 
     camera->initProjection(false);
 
@@ -879,7 +879,7 @@ void GlScene::outputSVG(unsigned int size,const string& filename) {
   GLfloat clearColor[4];
   GLfloat lineWidth;
   GLfloat pointSize;
-  GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
+  GLfloat* buffer = static_cast<GLfloat *>(calloc(size, sizeof(GLfloat)));
   glFeedbackBuffer(size, GL_3D_COLOR, buffer);
   glRenderMode(GL_FEEDBACK);
   glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
@@ -929,7 +929,7 @@ void GlScene::outputEPS(unsigned int size,const string& filename) {
   GLfloat clearColor[4];
   GLfloat lineWidth;
   GLfloat pointSize;
-  GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
+  GLfloat* buffer = static_cast<GLfloat *>(calloc(size, sizeof(GLfloat)));
   glFeedbackBuffer(size, GL_3D_COLOR, buffer);
   glRenderMode(GL_FEEDBACK);
   glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
@@ -972,7 +972,7 @@ void GlScene::outputEPS(unsigned int size,const string& filename) {
 }
 //====================================================
 unsigned char * GlScene::getImage() {
-  unsigned char *image = (unsigned char *)malloc(viewport[2]*viewport[3]*3*sizeof(unsigned char));
+  unsigned char *image = static_cast<unsigned char *>(malloc(viewport[2]*viewport[3]*3*sizeof(unsigned char)));
   draw();
   glFlush();
   glFinish();

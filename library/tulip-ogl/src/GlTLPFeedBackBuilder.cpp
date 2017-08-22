@@ -23,7 +23,7 @@ namespace tlp {
 void GlTLPFeedBackBuilder::passThroughToken(GLfloat *data) {
   if(!needData) {
 
-    switch ((int)(*data)) {
+    switch (int(*data)) {
 
     case TLP_FB_COLOR_INFO :
       inColorInfo=true;

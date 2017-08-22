@@ -20,8 +20,7 @@
 #ifndef STRINGPROPERTYTEST_H
 #define STRINGPROPERTYTEST_H
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "CppUnitIncludes.h"
 
 namespace tlp {
 class Graph;

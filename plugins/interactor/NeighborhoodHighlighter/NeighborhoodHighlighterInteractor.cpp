@@ -63,7 +63,7 @@ public :
     forEach(n, graph->getNodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
       const Coord &endPos = destLayout->getNodeValue(n);
-      viewLayout->setNodeValue(n, startPos + (animationStep / static_cast<float>(nbAnimationSteps) * (endPos - startPos)));
+      viewLayout->setNodeValue(n, startPos + (animationStep / float(nbAnimationSteps) * (endPos - startPos)));
     }
 
     edge e;
@@ -73,7 +73,7 @@ public :
       vector<Coord> newBends;
 
       for (size_t i = 0 ; i < destBends.size() ; ++i) {
-        newBends.push_back(srcBends[i] + (animationStep / static_cast<float>(nbAnimationSteps) * (destBends[i] - srcBends[i])));
+        newBends.push_back(srcBends[i] + (animationStep / float(nbAnimationSteps) * (destBends[i] - srcBends[i])));
       }
 
       viewLayout->setEdgeValue(e, newBends);
@@ -595,7 +595,7 @@ void NeighborhoodHighlighter::morphCircleAlpha(unsigned char startA, unsigned en
 }
 
 void NeighborhoodHighlighter::morphCircleAlphaAnimStep(int animStep) {
-  circleAlphaValue = static_cast<unsigned char>(startAlpha + animStep/static_cast<float>(nbAnimSteps) * (endAlpha - startAlpha));
+  circleAlphaValue = uchar(startAlpha + animStep/float(nbAnimSteps) * (endAlpha - startAlpha));
   glWidget->redraw();
 }
 

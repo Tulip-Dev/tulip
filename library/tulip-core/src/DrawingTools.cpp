@@ -294,7 +294,7 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
   A *= 0.5;
   Cx *= 1.0 / (6.0*A);
   Cy *= 1.0 / (6.0*A);
-  return Coord(static_cast<float>(Cx), static_cast<float>(Cy));
+  return Coord(float(Cx), float(Cy));
 }
 
 //======================================================================================================
@@ -372,7 +372,7 @@ std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides, c
 
   BoundingBox box;
   vector<Coord> points;
-  float delta = (2.0f * M_PI) / static_cast<float>(numberOfSides);
+  float delta = (2.0f * M_PI) / float(numberOfSides);
 
   for (unsigned int i = 0 ; i < numberOfSides ; ++i) {
     float deltaX = cos(i * delta + startAngle);

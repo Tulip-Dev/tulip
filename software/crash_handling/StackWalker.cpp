@@ -19,6 +19,8 @@
 
 #include "StackWalker.h"
 
+#include <tulip/tulipconf.h>
+
 #include <sstream>
 #include <cstring>
 
@@ -215,7 +217,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
           *offset_end = 0, *runtime_addr = 0,
            *runtime_addr_end = 0, *dsoName = 0;
 
-    if (static_cast<unsigned int>(i) > maxDepth)
+    if (uint(i) > maxDepth)
       return;
 
     for (char *p = messages[i]; *p; ++p) {

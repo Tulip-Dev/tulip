@@ -650,7 +650,7 @@ void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
 }
 
 void GeographicViewGraphicsView::mapToPolygon() {
-  GlComposite *composite=dynamic_cast<GlComposite*>(polygonEntity);
+  GlComposite *composite=polygonEntity;
 
   if(!composite)
     return;
@@ -667,7 +667,7 @@ void GeographicViewGraphicsView::mapToPolygon() {
 
     for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin(); it!=entities.end(); ++it) {
       if((*it).second->getBoundingBox().contains(nodePos)) {
-        GlComplexPolygon *polygon=dynamic_cast<GlComplexPolygon*>((*it).second);
+        GlComplexPolygon *polygon=static_cast<GlComplexPolygon*>((*it).second);
 
         const vector<vector<Coord> > polygonSides=polygon->getPolygonSides();
 
@@ -1047,18 +1047,18 @@ void GeographicViewGraphicsView::setGeoShape(IntegerProperty *property) {
 
 void GeographicViewGraphicsView::afterSetNodeValue(PropertyInterface *prop, const node n) {
   if (geoViewSize != NULL) {
-    SizeProperty *viewSize = (SizeProperty *) prop;
+    SizeProperty *viewSize = static_cast<SizeProperty *>(prop);
     const Size &nodeSize = viewSize->getNodeValue(n);
-    float sizeFactor = pow((float) 1.3, (int) currentMapZoom);
+    float sizeFactor = pow(1.3f, float(currentMapZoom));
     geoViewSize->setNodeValue(n, Size(sizeFactor * nodeSize.getW(), sizeFactor * nodeSize.getH(), sizeFactor * nodeSize.getD()));
   }
 }
 
 void GeographicViewGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
   if (geoViewSize != NULL) {
-    SizeProperty *viewSize = (SizeProperty *) prop;
+    SizeProperty *viewSize = static_cast<SizeProperty *>(prop);
     const Size &nodeSize = viewSize->getNodeValue(graph->getOneNode());
-    float sizeFactor = pow((float) 1.3, (int) currentMapZoom);
+    float sizeFactor = pow(1.3f, float(currentMapZoom));
     geoViewSize->setAllNodeValue(Size(sizeFactor * nodeSize.getW(), sizeFactor * nodeSize.getH(), sizeFactor * nodeSize.getD()));
   }
 }
@@ -1291,7 +1291,7 @@ void GeographicViewGraphicsView::switchViewType() {
         vector<Coord> bends;
 
         for(unsigned int i=0; i<bendsNumber; ++i) {
-          Coord tmp=srcC+((tgtC-srcC)/(bendsNumber+1.f))*((float)i+1);
+          Coord tmp=srcC+((tgtC-srcC)/(bendsNumber+1.f))*(i+1.f);
           float lambda = tmp[1];
           float theta;
 

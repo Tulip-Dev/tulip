@@ -45,8 +45,8 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vect
   connect(_ui->downButton,SIGNAL(clicked()),this,SLOT(downButtonClicked()));
   connect(_ui->upButtonColor,SIGNAL(clicked()),this,SLOT(upButtonColorClicked()));
   connect(_ui->downButtonColor,SIGNAL(clicked()),this,SLOT(downButtonColorClicked()));
-  connect(((QAbstractSlider*)(_ui->firstListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
-  connect(((QAbstractSlider*)(_ui->secondListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
+  connect(_ui->firstListWidget->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
+  connect(_ui->secondListWidget->verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
 }
 
 DoubleStringsListRelationDialog::~DoubleStringsListRelationDialog() {

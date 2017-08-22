@@ -43,9 +43,9 @@ double g(int k,double width,double amplitude) {
     return 0;
   else {
     if (k<0)
-      return ((double)k*slope+amplitude); //partie croissante du signal triangulaire
+      return k*slope+amplitude; //partie croissante du signal triangulaire
     else
-      return ((double)-k*slope+amplitude); //partie décroissante du signal triangulaire
+      return -k*slope+amplitude; //partie décroissante du signal triangulaire
   }
 }
 //================================================================================
@@ -86,7 +86,7 @@ list<int> ConvolutionClustering::getLocalMinimum() {
       if (slopeSens==false) {
         int local = localMinimum.back();
 
-        if ((int) i - local < width/2) {
+        if (int(i) - local < width/2) {
           localMinimum.pop_back();
           localMinimum.push_back((i+local)/2);
         }
@@ -144,7 +144,7 @@ void ConvolutionClustering::autoSetParameter() {
     lastValue=(*itMap).first;
   }
 
-  histosize=(int)((metric->getNodeDoubleMax()-metric->getNodeDoubleMin())/deltaXMin);
+  histosize = int((metric->getNodeDoubleMax()-metric->getNodeDoubleMin())/deltaXMin);
 
   if (histosize > 16384) histosize = 16384; //histosize = histosize <? 16384;
 
@@ -156,7 +156,7 @@ void ConvolutionClustering::autoSetParameter() {
   //width=(int)(deltaXMax*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   //width=(int)(deltaXMin*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   deltaSum /= histo.size();
-  width=(int)(deltaSum*histosize/(metric->getNodeDoubleMax()-metric->getNodeDoubleMin()));
+  width = int(deltaSum*histosize/(metric->getNodeDoubleMax()-metric->getNodeDoubleMin()));
   //===============================================================================
   //Find good threshold
   //make the average of all local minimum
@@ -184,7 +184,7 @@ void ConvolutionClustering::autoSetParameter() {
     }
   }
 
-  threshold=(int)(sum/nbElement);
+  threshold=int(sum/nbElement);
 }
 //================================================================================
 vector<double> *ConvolutionClustering::getHistogram() {
@@ -195,7 +195,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
 
   node n;
   forEach(n, graph->getNodes()) {
-    int tmp=(int)((metric->getNodeDoubleValue(n) - minVal) * (double)histosize /
+    int tmp=int((metric->getNodeDoubleValue(n) - minVal) * histosize /
                   maxMinRange);
 
     if (histogramOfValues.find(tmp) == histogramOfValues.end())
@@ -232,7 +232,7 @@ void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
   double minVal = metric->getNodeDoubleMin();
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
   forEach(n,graph->getNodes()) {
-    int tmp = getInterval((int)((metric->getNodeDoubleValue(n) - minVal)*(double)histosize / maxMinRange), ranges);
+    int tmp = getInterval(int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange), ranges);
     result->setNodeValue(n,tmp);
   }
 }

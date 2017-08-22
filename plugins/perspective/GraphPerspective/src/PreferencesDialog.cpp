@@ -189,8 +189,8 @@ void PreferencesDialog::writeSettings() {
       setDefaultNodeValueInProperty<IntegerProperty>("viewShape", TulipSettings::instance().defaultShape(tlp::NODE), graphPush);
   }
 
-  if (TulipSettings::instance().defaultShape(tlp::EDGE) != (int)(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>())) {
-    TulipSettings::instance().setDefaultShape(tlp::EDGE,(int)(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>()));
+  if (TulipSettings::instance().defaultShape(tlp::EDGE) != int(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>())) {
+    TulipSettings::instance().setDefaultShape(tlp::EDGE, int(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>()));
     setDefaultEdgeValueInProperty<IntegerProperty>("viewShape", TulipSettings::instance().defaultShape(tlp::EDGE), graphPush);
   }
 
@@ -407,17 +407,17 @@ void PreferencesDialog::showGraphDefaultsContextMenu(const QPoint& p) {
       subMenu->setToolTip(QString("Choose the type of elements for which the default value will be reset"));
       action = subMenu->addAction(QString("Node default value"));
       action->setToolTip(QString("Reset the node ") + defaultProp + " to the Tulip predefined value");
-      action->setData(QVariant((int) RESET_NODE));
+      action->setData(QVariant(int(RESET_NODE)));
       action = subMenu->addAction(QString("Edge default value"));
       action->setToolTip(QString("Reset the edge ") + defaultProp + " to the Tulip predefined value");
-      action->setData(QVariant((int) RESET_EDGE));
+      action->setData(QVariant(int(RESET_EDGE)));
       action = subMenu->addAction(QString("Node/Edge default values"));
       action->setToolTip(QString("Reset the node/edge ") + defaultProp + " to the Tulip predefined value");
-      action->setData(QVariant((int) RESET_BOTH));
+      action->setData(QVariant(int(RESET_BOTH)));
     }
     else {
       action = contextMenu.addAction(QString("Reset to Tulip predefined value"));
-      action->setData(QVariant((int) RESET_BOTH));
+      action->setData(QVariant(int(RESET_BOTH)));
       action->setToolTip(QString("Reset ") + defaultProp + " to the Tulip predefined value");
     }
 

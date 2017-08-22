@@ -150,7 +150,7 @@ void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset
   if (inputDataSetWrapper && PyDict_Check(inputDataSetWrapper)) {
     convertTlpDataSetToPyDict(*algorithmOutputDataset, inputDataSetWrapper);
   } else if (inputDataSetWrapper) {
-    tlp::DataSet *wrappedDs = reinterpret_cast<tlp::DataSet*>(sipGetAddress(reinterpret_cast<sipSimpleWrapper *>(inputDataSetWrapper)));
+    tlp::DataSet *wrappedDs = static_cast<tlp::DataSet*>(sipGetAddress(reinterpret_cast<sipSimpleWrapper *>(inputDataSetWrapper)));
     std::pair<std::string, tlp::DataType*> entry;
     forEach(entry, algorithmOutputDataset->getValues()) {
       wrappedDs->setData(entry.first, entry.second);

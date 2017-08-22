@@ -95,7 +95,7 @@ struct PageRank : public DoubleAlgorithm {
       pr[i] = oon;
 
     const double one_minus_d = (1-d)/nbNodes;
-    const unsigned int kMax = (unsigned int) (15*log(nbNodes));
+    const unsigned int kMax = uint(15*log(nbNodes));
 
     for(unsigned int k=0; k < kMax + 1; ++k) {
       if (directed) {

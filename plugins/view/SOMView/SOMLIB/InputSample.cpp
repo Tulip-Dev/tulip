@@ -88,7 +88,7 @@ void InputSample::buildPropertyVector(
 
       if (type.compare("double") == 0 || type.compare("int") == 0) {
         propertiesNameList.push_back(*it);
-        propertiesList.push_back((NumericProperty*) property);
+        propertiesList.push_back(static_cast<NumericProperty*>(property));
       }
       else {
         cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "

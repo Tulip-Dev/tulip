@@ -332,7 +332,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
   if(_hasHulls)
     manager->setGraph(graph);
 
-  GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene->getLayer("Main")->findGlEntity("graph"));
+  GlGraphComposite* oldGraphComposite=static_cast<GlGraphComposite *>(scene->getLayer("Main")->findGlEntity("graph"));
 
   if(!oldGraphComposite) {
     createScene(graph,DataSet());

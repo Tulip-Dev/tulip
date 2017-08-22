@@ -90,7 +90,7 @@ GlProgressBar::~GlProgressBar() {
 }
 
 void GlProgressBar::progress_handler(int step, int max_step) {
-  currentPercent = (unsigned int) (((double) ((double) step / (double) max_step)) * 100.);
+  currentPercent = uint((step / double(max_step)) * 100);
 
   GlSimpleEntity *previousBar = findGlEntity(PROGRESS_BAR_ID);
   GlSimpleEntity *previousComment = findGlEntity(COMMENT_ID);

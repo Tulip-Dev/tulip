@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
@@ -39,9 +44,9 @@ typedef struct {
 static void
 consoleutils_ConsoleOutput_dealloc(consoleutils_ConsoleOutput* self) {
 #if PY_MAJOR_VERSION >= 3
-  Py_TYPE(self)->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free(reinterpret_cast<PyObject*>(self));
 #else
-  self->ob_type->tp_free((PyObject*)self);
+  self->ob_type->tp_free(reinterpret_cast<PyObject*>(self));
 #endif
 }
 
@@ -119,7 +124,7 @@ consoleutils_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
   if(!PyArg_ParseTuple(o, "i", &i))
     return NULL;
 
-  ((consoleutils_ConsoleOutput *)self)->writeToConsole = i > 0;
+  reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole = i > 0;
 
   Py_RETURN_NONE;
 }
@@ -149,15 +154,15 @@ static PyMemberDef consoleutils_ConsoleOutput_members[] = {
 
 static PyMethodDef consoleutils_ConsoleOutput_methods[] = {
   {
-    "write", (PyCFunction) consoleutils_ConsoleOutput_write, METH_VARARGS,
+    "write", static_cast<PyCFunction>(consoleutils_ConsoleOutput_write), METH_VARARGS,
     "Post output to the scripting engine"
   },
   {
-    "enableConsoleOutput", (PyCFunction) consoleutils_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
+    "enableConsoleOutput", static_cast<PyCFunction>(consoleutils_ConsoleOutput_enableConsoleOutput), METH_VARARGS,
     "enable / disable console output"
   },
   {
-    "flush", (PyCFunction) consoleutils_ConsoleOutput_flush, METH_VARARGS,
+    "flush", static_cast<PyCFunction>(consoleutils_ConsoleOutput_flush), METH_VARARGS,
     ""
   },
   {0, 0, 0, 0}  /* Sentinel */
@@ -173,7 +178,7 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
   "consoleutils.ConsoleOutput",             /*tp_name*/
   sizeof(consoleutils_ConsoleOutput),             /*tp_basicsize*/
   0,                         /*tp_itemsize*/
-  (destructor)consoleutils_ConsoleOutput_dealloc, /*tp_dealloc*/
+  reinterpret_cast<destructor>(consoleutils_ConsoleOutput_dealloc), /*tp_dealloc*/
   0,                         /*tp_print*/
   0,                         /*tp_getattr*/
   0,                         /*tp_setattr*/
@@ -204,7 +209,7 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
   0,                         /* tp_descr_get */
   0,                         /* tp_descr_set */
   0,                         /* tp_dictoffset */
-  (initproc)consoleutils_ConsoleOutput_init,      /* tp_init */
+  reinterpret_cast<initproc>(consoleutils_ConsoleOutput_init),      /* tp_init */
   0,                         /* tp_alloc */
   consoleutils_ConsoleOutput_new,                 /* tp_new */
   0,
@@ -229,17 +234,15 @@ typedef struct {
 static void
 consoleutils_ConsoleInput_dealloc(consoleutils_ConsoleInput* self) {
 #if PY_MAJOR_VERSION >= 3
-  Py_TYPE(self)->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free(reinterpret_cast<PyObject*>(self));
 #else
-  self->ob_type->tp_free((PyObject*)self);
+  self->ob_type->tp_free(reinterpret_cast<PyObject*>(self));
 #endif
 }
 
 static PyObject *
 consoleutils_ConsoleInput_new(PyTypeObject *type, PyObject *, PyObject *) {
-  consoleutils_ConsoleInput *self;
-  self = reinterpret_cast<consoleutils_ConsoleInput *>(type->tp_alloc(type, 0));
-  return reinterpret_cast<PyObject *>(self);
+  return type->tp_alloc(type, 0);
 }
 
 static int
@@ -266,7 +269,7 @@ static PyMemberDef consoleutils_ConsoleInput_members[] = {
 
 static PyMethodDef consoleutils_ConsoleInput_methods[] = {
   {
-    "readline", (PyCFunction) consoleutils_ConsoleInput_readline, METH_VARARGS,
+    "readline", static_cast<PyCFunction>(consoleutils_ConsoleInput_readline), METH_VARARGS,
     "read an input line from the console"
   },
   {0, 0, 0, 0}  /* Sentinel */
@@ -282,7 +285,7 @@ static PyTypeObject consoleutils_ConsoleInputType = {
   "consoleutils.ConsoleInput",             /*tp_name*/
   sizeof(consoleutils_ConsoleInput),             /*tp_basicsize*/
   0,                         /*tp_itemsize*/
-  (destructor)consoleutils_ConsoleInput_dealloc, /*tp_dealloc*/
+  reinterpret_cast<destructor>(consoleutils_ConsoleInput_dealloc), /*tp_dealloc*/
   0,                         /*tp_print*/
   0,                         /*tp_getattr*/
   0,                         /*tp_setattr*/
@@ -313,7 +316,7 @@ static PyTypeObject consoleutils_ConsoleInputType = {
   0,                         /* tp_descr_get */
   0,                         /* tp_descr_set */
   0,                         /* tp_dictoffset */
-  (initproc)consoleutils_ConsoleInput_init,      /* tp_init */
+  reinterpret_cast<initproc>(consoleutils_ConsoleInput_init),      /* tp_init */
   0,                         /* tp_alloc */
   consoleutils_ConsoleInput_new,                 /* tp_new */
   0,
@@ -371,3 +374,7 @@ initconsoleutils(void) {
   Py_INCREF(cit);
   PyModule_AddObject(m, "ConsoleInput", cit);
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

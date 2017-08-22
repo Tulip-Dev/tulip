@@ -28,7 +28,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
 
   IF(NOT MSVC) #visual studio does not recognize these options
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long -Wold-style-cast")
     IF(NOT APPLE)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
       # disable annoying GCC 7.x compilation warnings

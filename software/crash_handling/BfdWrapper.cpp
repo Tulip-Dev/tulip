@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include "BfdWrapper.h"
 
 #include <iostream>
@@ -237,7 +242,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
   if (!abfd || !isMini || symbolSize == 0)
     return ret;
 
-  bfd_byte *from = (bfd_byte *)symbolTable;
+  bfd_byte *from = reinterpret_cast<bfd_byte *>(symbolTable);
   bfd_byte *fromend = from + nSymbols * symbolSize;
   int index = 0;
 
@@ -275,13 +280,14 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
         bfd_vma textSection_vma = bfd_get_section_vma(abfd, textSection);
         bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
 
-        if (!INRANGE((int64_t)textSection_vma <=, unrelocatedAddr, <= (int64_t)(textSection_vma+textSection_size))) {
+        if (!INRANGE(static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr, <= static_cast<int64_t>(textSection_vma+textSection_size))) {
           cerr << "Trying to look up an address that's outside of the range of the text section of " << filePath << "... usually this means the executable or DSO in question has changed since the stack trace was generated" << endl;
           return ret;
         }
 
         if (!bfd_find_nearest_line(abfd, textSection, symbolTable, unrelocatedAddr - textSection_vma - 1, &fileName, &funcName, &lineno)) {
-          cerr << "Can't find line for address " << hex << (unsigned long long)relocatedAddr << " <- " << (unsigned long long)unrelocatedAddr << dec << endl;
+          cerr << "Can't find line for address " << hex << static_cast<unsigned long long>(relocatedAddr)
+               << " <- " << static_cast<unsigned long long>(unrelocatedAddr) << dec << endl;
           return ret;
         }
         else {
@@ -314,7 +320,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int6
   int64_t symbolOffset = runtimeAddr - GetModuleBase(runtimeAddr)  - 0x1000 - 1;
   bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
 
-  if (!INRANGE((int64_t)0 <=, symbolOffset, <= (int64_t)textSection_size)) {
+  if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset, <= static_cast<int64_t>(textSection_size))) {
     cerr << "Trying to look up an address that's outside of the range of the text section of " << filePath << "... usually this means the executable or DSO in question has changed since the stack trace was generated" << endl;
   }
   else {
@@ -337,7 +343,7 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
   int64_t symbolOffset = runtimeAddr - GetModuleBase(runtimeAddr) - 0x1000 - 1;
   bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
 
-  if (!INRANGE((int64_t)0 <=, symbolOffset, <= (int64_t)textSection_size)) {
+  if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset, <= static_cast<int64_t>(textSection_size))) {
     cerr << "Trying to look up an address that's outside of the range of the text section of " << filePath << "... usually this means the executable or DSO in question has changed since the stack trace was generated" << endl;
     return funcName;
   }
@@ -346,4 +352,8 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
   return funcName;
 }
 
+#endif
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
 #endif

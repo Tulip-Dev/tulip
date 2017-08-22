@@ -27,7 +27,7 @@ PluginLoader* PluginLister::currentLoader = NULL;
 PluginLister* PluginLister::_instance = NULL;
 
 tlp::PluginLister* PluginLister::instance() {
-  if(dynamic_cast<tlp::PluginLister*>(_instance) == 0) {
+  if(_instance == NULL) {
     _instance = new PluginLister();
   }
 

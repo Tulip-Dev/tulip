@@ -45,7 +45,7 @@ bool getUnsignedInt(unsigned int& i, const string& str) {
   const char* ptr = str.c_str();
   char* endPtr;
   long int value = strtol(ptr, &endPtr, 10);
-  i = (unsigned int) value;
+  i = uint(value);
   return (value >= 0) && (*endPtr == 0);
 }
 
@@ -493,7 +493,7 @@ public :
 
       if (nocasecmp(token, "row")) {
         // 'row' found
-        if (embedding & (unsigned int) DL_ROWS) {
+        if (embedding & uint(DL_ROWS)) {
           error << "invalid specification for parameter ROWS";
           return false;
         }
@@ -514,7 +514,7 @@ public :
             return false;
           }
 
-          embedding += (unsigned int) DL_ROWS;
+          embedding += uint(DL_ROWS);
           continue;
         }
 
@@ -537,7 +537,7 @@ public :
       if (nocasecmp(token, "col") ||
           nocasecmp(token, "column")) {
         // 'col' or 'column' found
-        if (embedding & (unsigned int) DL_COLS)
+        if (embedding & uint(DL_COLS))
           return false;
 
         if (!nextToken(str, " \r\t,", token, pos)
@@ -689,7 +689,7 @@ public :
       label->setNodeValue(nodes[offset + current], labels[i]);
       // and memorize the corresponding uppercase label for each node
       std::transform(labels[i].begin(), labels[i].end(),
-                     labels[i].begin(), (int (*) (int)) std::toupper);
+                     labels[i].begin(), static_cast<int (*) (int)>(std::toupper));
       labelsHMap[labels[i]] = nodes[offset + current];
     }
 
@@ -703,7 +703,7 @@ public :
   void checkColumnLabels(vector<std::string>& tokens, unsigned int &ir,
                          unsigned int &ic, unsigned int &i,
                          const vector<node>& nodes) {
-    if (ir == 0 && embedding & (unsigned int) DL_COLS) {
+    if (ir == 0 && embedding & uint(DL_COLS)) {
       StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
 
       // first nc tokens are for labels of the part 1 of the graph
@@ -713,7 +713,7 @@ public :
 
       if (ic == nc) {
         // all columns labels have been read
-        embedding -= (unsigned int) DL_COLS;
+        embedding -= uint(DL_COLS);
         ic = 0;
       }
     }
@@ -734,7 +734,7 @@ public :
 
     string upcasetoken(token);
     transform(token.begin(), token.end(),
-              upcasetoken.begin(), (int (*) (int)) std::toupper);
+              upcasetoken.begin(), static_cast<int (*) (int)>(std::toupper));
 
     if (n/*embedding == DL_ALL*/) { // 1-mode
       TLP_HASH_MAP<std::string, node>::iterator it =

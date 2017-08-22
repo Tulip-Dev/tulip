@@ -46,12 +46,12 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
 
   painter.setPen(_textColor);
 #ifndef __APPLE__
-  painter.setFont(QFont("Arial", static_cast<int>(10 * tabBar()->height() / 27.0)));
+  painter.setFont(QFont("Arial", int(10 * tabBar()->height() / 27.0)));
 #else
-  painter.setFont(QFont("Arial", static_cast<int>(12 * tabBar()->height() / 27.0)));
+  painter.setFont(QFont("Arial", int(12 * tabBar()->height() / 27.0)));
 #endif
-  int imageWidth = static_cast<int>(25 * tabBar()->height() / 27.0);
-  int labelWidth = static_cast<int>(80 * tabBar()->height() / 27.0);
+  int imageWidth = int(25 * tabBar()->height() / 27.0);
+  int labelWidth = int(80 * tabBar()->height() / 27.0);
   int offset = tabBar()->height() - imageWidth;
   QRectF rect(width()-(imageWidth+labelWidth), tabBar()->pos().y()+offset/2, imageWidth, imageWidth);
   QRectF rect2(width()-labelWidth, tabBar()->pos().y(), labelWidth, tabBar()->height());

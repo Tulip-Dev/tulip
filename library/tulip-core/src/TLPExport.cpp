@@ -375,7 +375,7 @@ public:
           // for GraphProperty we must ensure the reindexing
           // of embedded edges
           edge ite = itE->next();
-          const set<edge>& edges = ((GraphProperty*)prop)->getEdgeValue(ite);
+          const set<edge>& edges = static_cast<GraphProperty*>(prop)->getEdgeValue(ite);
           set<edge> rEdges;
           set<edge>::const_iterator its;
 
@@ -439,22 +439,22 @@ public:
       pair<string, DataType*> attribute;
       forEach(attribute, attributes.getValues()) {
         if (attribute.second->getTypeName() == string(typeid(node).name())) {
-          node *n = reinterpret_cast<node*>(attribute.second->value);
+          node *n = static_cast<node*>(attribute.second->value);
           n->id = getNode(*n).id;
         }
         else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
-          edge *e = reinterpret_cast<edge*>(attribute.second->value);
+          edge *e = static_cast<edge*>(attribute.second->value);
           e->id = getEdge(*e).id;
         }
         else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
-          vector<node> *vn = reinterpret_cast<vector<node>*>(attribute.second->value);
+          vector<node> *vn = static_cast<vector<node>*>(attribute.second->value);
 
           for (size_t i = 0 ; i < vn->size() ; ++i) {
             (*vn)[i].id = getNode((*vn)[i]).id;
           }
         }
         else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
-          vector<edge> *ve = reinterpret_cast<vector<edge>*>(attribute.second->value);
+          vector<edge> *ve = static_cast<vector<edge>*>(attribute.second->value);
 
           for (size_t i = 0 ; i < ve->size() ; ++i) {
             (*ve)[i].id = getEdge((*ve)[i]).id;

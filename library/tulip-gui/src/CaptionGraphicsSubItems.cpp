@@ -259,7 +259,7 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
 
 bool CaptionGraphicsBackgroundItem::sceneEvent ( QEvent * event ) {
   if(event->type()==QEvent::GraphicsSceneMousePress) {
-    if(((QGraphicsSceneMouseEvent*)event)->button()==Qt::LeftButton) {
+    if(static_cast<QGraphicsSceneMouseEvent*>(event)->button()==Qt::LeftButton) {
       activateInteractions(!_interactionsActivated);
       return true;
     }
@@ -338,7 +338,7 @@ SelectionArrowItem::SelectionArrowItem(float initRangePos,const QPoint &initPos)
 
 bool SelectionArrowItem::sceneEvent ( QEvent * event ) {
   if(event->type()==QEvent::GraphicsSceneMouseMove) {
-    QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
+    QGraphicsSceneMouseEvent *e=static_cast<QGraphicsSceneMouseEvent *>(event);
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
     if(pos().y()+diffPosY>initPos.y()+130)
@@ -365,7 +365,7 @@ MovableRectItem::MovableRectItem(const QRectF &rect,const QRectF &size, Selectio
 
 bool MovableRectItem::sceneEvent ( QEvent * event ) {
   if(event->type()==QEvent::GraphicsSceneMouseMove) {
-    QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
+    QGraphicsSceneMouseEvent *e=static_cast<QGraphicsSceneMouseEvent *>(event);
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
     if(_currentRect.bottom()*160+diffPosY>160)
@@ -487,7 +487,7 @@ void MovablePathItem::updatePath() {
       }
     }
 
-    for(int i2=(int)pathsPoints[i1].size()-1; i2>=0; --i2) {
+    for(int i2=int(pathsPoints[i1].size())-1; i2>=0; --i2) {
       paths[i1].lineTo(QPoint(30-pathsPoints[i1][i2].x(),pathsPoints[i1][i2].y()));
     }
 
@@ -505,7 +505,7 @@ void MovablePathItem::updatePath() {
 
 bool MovablePathItem::sceneEvent ( QEvent * event ) {
   if(event->type()==QEvent::GraphicsSceneMouseMove) {
-    QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
+    QGraphicsSceneMouseEvent *e=static_cast<QGraphicsSceneMouseEvent *>(event);
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
     if(_currentRect.bottom()*160+diffPosY>160)

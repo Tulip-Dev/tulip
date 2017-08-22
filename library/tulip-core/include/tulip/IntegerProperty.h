@@ -64,28 +64,28 @@ public :
 
   // NumericProperty interface
   virtual double getNodeDoubleValue(const node n) const {
-    return (double) getNodeValue(n);
+    return getNodeValue(n);
   }
   virtual double getNodeDoubleDefaultValue() const {
-    return (double) getNodeDefaultValue();
+    return getNodeDefaultValue();
   }
   virtual double getNodeDoubleMin(const Graph* g = NULL) {
-    return (double) getNodeMin(g);
+    return getNodeMin(g);
   }
   virtual double getNodeDoubleMax(const Graph* g = NULL) {
-    return (double) getNodeMax(g);
+    return getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
-    return (double) getEdgeValue(e);
+    return getEdgeValue(e);
   }
   virtual double getEdgeDoubleDefaultValue() const {
-    return (double) getEdgeDefaultValue();
+    return getEdgeDefaultValue();
   }
   virtual double getEdgeDoubleMin(const Graph* g = NULL) {
-    return (double) getEdgeMin(g);
+    return getEdgeMin(g);
   }
   virtual double getEdgeDoubleMax(const Graph* g = NULL) {
-    return (double) getEdgeMax(g);
+    return getEdgeMax(g);
   }
 
   void nodesUniformQuantification(unsigned int);

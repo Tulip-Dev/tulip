@@ -18,7 +18,7 @@
  */
 #ifdef _OPENMP
 #include <omp.h>
-#define MAX_THREADS (unsigned int) omp_get_max_threads()
+#define MAX_THREADS uint(omp_get_max_threads())
 #else
 #define MAX_THREADS 1
 #endif
@@ -442,7 +442,7 @@ bool EdgeBundling::run() {
       pair<node, node> ends = graph->ends(e);
       const Coord &a = layout->getNodeValue(ends.first);
       const Coord &b = layout->getNodeValue(ends.second);
-      double abNorm = (double) (a-b).norm();
+      double abNorm = (a-b).norm();
       double initialWeight = pow(abNorm, longEdges);
 
       if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap)

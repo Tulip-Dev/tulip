@@ -17,8 +17,7 @@
  *
  */
 #include <sstream>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "PluginsTest.h"
 
 #include <tulip/TulipRelease.h>

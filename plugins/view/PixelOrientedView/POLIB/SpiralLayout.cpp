@@ -77,7 +77,7 @@ Vector<int, 2> SpiralLayout::project(const unsigned int _id) const {
       c = 1;
     else {
       //c = (int)ceil(eq2D(4., 4., 1. - float(_id)));
-      c = (int)ceil(eq2D2(1. - double(_id)));
+      c = int(ceil(eq2D2(1. - double(_id))));
     }
 
     unsigned int t1 = (c-1), t2 = t1 << 2;
@@ -107,7 +107,7 @@ Vector<int, 2> SpiralLayout::project(const unsigned int _id) const {
       break;
 
     default:
-      cerr << "[error] : " << (int)k << endl;
+      cerr << "[error] : " << int(k) << endl;
     }
   }
 

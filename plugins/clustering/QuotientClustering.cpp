@@ -203,9 +203,9 @@ public:
     // set specific meta value calculators
     // for most properties
     DoubleProperty::PredefinedMetaValueCalculator nodeFn =
-      (DoubleProperty::PredefinedMetaValueCalculator ) nodeFunctions.getCurrent();
+      static_cast<DoubleProperty::PredefinedMetaValueCalculator>(nodeFunctions.getCurrent());
     DoubleProperty::PredefinedMetaValueCalculator edgeFn =
-      (DoubleProperty::PredefinedMetaValueCalculator) edgeFunctions.getCurrent();
+      static_cast<DoubleProperty::PredefinedMetaValueCalculator>(edgeFunctions.getCurrent());
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
     TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *> prevCalcs;
     string pName;
@@ -218,12 +218,12 @@ public:
 
       if (dynamic_cast<DoubleProperty *>(prop)) {
         prevCalcs[prop] = prop->getMetaValueCalculator();
-        ((DoubleProperty *)prop)->setMetaValueCalculator(nodeFn, edgeFn);
+        static_cast<DoubleProperty *>(prop)->setMetaValueCalculator(nodeFn, edgeFn);
       }
 
       if (pName == "viewLabel") {
         prevCalcs[prop] = prop->getMetaValueCalculator();
-        ((StringProperty*) prop)->setMetaValueCalculator(&viewLabelCalc);
+        static_cast<StringProperty*>(prop)->setMetaValueCalculator(&viewLabelCalc);
       }
     }
     // compute meta nodes, edges and associated meta values

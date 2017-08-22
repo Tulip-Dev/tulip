@@ -834,7 +834,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *edge, bool selected) 
   unsigned int bottomOutlineIndicesIdx = edgeToBottomOulineIndexVector[edge->id];
   unsigned int topOutlineIndicesIdx = edgeToTopOutlineIndexVector[edge->id];
 
-  float borderWidth = static_cast<float>(inputData->getElementBorderWidth()->getEdgeValue(tlp::edge(edge->id)));
+  float borderWidth = float(inputData->getElementBorderWidth()->getEdgeValue(tlp::edge(edge->id)));
 
   if(numberOfVertices==0)
     return;
@@ -905,7 +905,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *edge, bool selected) 
 void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge,bool selected) {
   unsigned int index=edgeToPointIndexVector[edge->id];
 
-  if(index==(unsigned int)(-1))
+  if(index==uint(-1))
     return;
 
   if(!selected) {
@@ -919,7 +919,7 @@ void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge,bool selected) 
 void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node, bool selected) {
   unsigned int index=nodeToPointIndexVector[node->id];
 
-  if(index==(unsigned int)(-1))
+  if(index==uint(-1))
     return;
 
   if(!selected) {

@@ -26,8 +26,8 @@ using namespace std;
 namespace tlp {
 
 static int compare(const void *a, const void *b) {
-  DepthIndex *p1 = (DepthIndex *) a;
-  DepthIndex *p2 = (DepthIndex *) b;
+  const DepthIndex *p1 = static_cast<const DepthIndex *>(a);
+  const DepthIndex *p2 = static_cast<const DepthIndex *>(b);
   GLfloat diff = p2->depth - p1->depth;
 
   if (diff > 0.0) {
@@ -79,7 +79,7 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
   loc = feedBackBuffer;
 
   while (loc < end) {
-    token = (int)*loc;
+    token = int(*loc);
     loc++;
 
     switch (token) {
@@ -90,7 +90,7 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
       break;
 
     case GL_POLYGON_TOKEN:
-      nvertices = (int)*loc;
+      nvertices = int(*loc);
       loc++;
       loc += (pointSize * nvertices);
       nprimitives++;
@@ -117,20 +117,20 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
      entry per primitive.  This array is also where we keep the
      primitive's average depth.  There is one entry per
      primitive  in the feedback buffer. */
-  prims = (DepthIndex *) malloc(sizeof(DepthIndex) * nprimitives);
+  prims = static_cast<DepthIndex *>(malloc(sizeof(DepthIndex) * nprimitives));
 
   item = 0;
   loc = feedBackBuffer;
 
   while (loc < end) {
     prims[item].ptr = loc;  /* Save this primitive's location. */
-    token = (int)*loc;
+    token = int(*loc);
     loc++;
 
     switch (token) {
     case GL_LINE_TOKEN:
     case GL_LINE_RESET_TOKEN:
-      vertex = (Feedback3Dcolor *) loc;
+      vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
       depthSum = vertex[0].z + vertex[1].z;
       prims[item].depth = depthSum / 2.0;
       loc += pointSize*2;
@@ -138,9 +138,9 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
       break;
 
     case GL_POLYGON_TOKEN:
-      nvertices = (int)*loc;
+      nvertices = int(*loc);
       loc++;
-      vertex = (Feedback3Dcolor *) loc;
+      vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
       depthSum = vertex[0].z;
 
       for (i = 1; i < nvertices; i++) {
@@ -153,7 +153,7 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
       break;
 
     case GL_POINT_TOKEN:
-      vertex = (Feedback3Dcolor *) loc;
+      vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
       prims[item].depth = vertex[0].z;
       loc += pointSize;
       item++;
@@ -202,7 +202,7 @@ void GlFeedBackRecorder::record(GLint size, GLfloat *feedBackBuffer) {
 }
 
 GLfloat* GlFeedBackRecorder::recordPrimitive(GLfloat *loc) {
-  int token = (int)*loc;
+  int token = int(*loc);
   loc++;
 
   switch (token) {
@@ -216,7 +216,7 @@ GLfloat* GlFeedBackRecorder::recordPrimitive(GLfloat *loc) {
 
   case GL_POLYGON_TOKEN:
     int nvertices;
-    nvertices = (int)*loc;
+    nvertices = int(*loc);
     feedBackBuilder->polygonToken(loc);
     return loc+(pointSize * nvertices)+1;
 

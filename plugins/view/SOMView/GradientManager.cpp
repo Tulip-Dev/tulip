@@ -47,7 +47,7 @@ void GradientManager::init(const std::vector<std::string>& properties) {
     return;
 
   int shift =
-    (int) floor(double((endColorRange - beginColorRange) / properties.size()));
+    int(floor(double((endColorRange - beginColorRange) / properties.size())));
   pair<Color, Color> newColors;
   newColors.first.setV(255);
   newColors.first.setS(255);

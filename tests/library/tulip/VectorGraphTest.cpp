@@ -1,14 +1,11 @@
 #include <cassert>
 #include <iomanip>
 #include <fstream>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
 #include <tulip/vectorgraph.h>
 #include <tulip/ForEach.h>
 #include <tulip/Iterator.h>
+
+#include "CppUnitIncludes.h"
 
 using namespace std;
 
