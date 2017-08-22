@@ -59,7 +59,7 @@ void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBo
   double zoomEnd = zoomStart * zoomFactor;
   bool withZoom = zoomFactor < 0.99 || zoomFactor > 1.01;
 
-  Coord newCamCenter = (Coord(boundingBox[0]) + Coord(boundingBox[1])) / ((float)2.0);
+  Coord newCamCenter = Coord(boundingBox[0]) + Coord(boundingBox[1]) / 2.0f;
   newCamCenter.setZ(boundingBox[0][2]);
 
   camera.setCenter(newCamCenter);

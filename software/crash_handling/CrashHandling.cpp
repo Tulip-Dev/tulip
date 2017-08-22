@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include <tulip/SystemDefinition.h>
 #include <tulip/TulipRelease.h>
 
@@ -193,4 +198,8 @@ exception_filter(LPEXCEPTION_POINTERS info) {
 void CrashHandling::installCrashHandler() {
   SetUnhandledExceptionFilter(exception_filter);
 }
+#endif
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
 #endif

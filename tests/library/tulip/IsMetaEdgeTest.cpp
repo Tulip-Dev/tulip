@@ -19,8 +19,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/ForEach.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
 
 #include "IsMetaEdgeTest.h"
 
@@ -119,7 +117,7 @@ void IsMetaEdgeTest::testIsMetaEdge() {
   set<edge> underlyingEdgesInMetaEdge = quotientGraph->getProperty<GraphProperty>("viewMetaGraph")->getEdgeValue(quotientGraph->getOneEdge());
 
   // check the number of underlying edges in meta edge
-  CPPUNIT_ASSERT_EQUAL((size_t)nbNodesPerCluster * nbNodesPerCluster, underlyingEdgesInMetaEdge.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(nbNodesPerCluster * nbNodesPerCluster), underlyingEdgesInMetaEdge.size());
 
   // check if the quotient edge is a meta edge
   CPPUNIT_ASSERT_EQUAL(1u, nbMetaEdges);

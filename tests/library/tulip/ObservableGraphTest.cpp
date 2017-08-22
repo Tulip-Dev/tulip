@@ -16,8 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include <tulip/ForEach.h>
 #include "ObservableGraphTest.h"
 #include <tulip/BooleanProperty.h>
@@ -379,10 +378,7 @@ public:
       }
     }
     else {
-      Graph* graph =
-          // From my point of view the use of dynamic_cast should be correct
-          // but it fails, so I use reinterpret_cast (pm)
-          reinterpret_cast<Graph *>(evt.sender());
+      Graph* graph = static_cast<Graph *>(evt.sender());
 
       if (graph && evt.type() == Event::TLP_DELETE) {
         if (deleteBug747) {

@@ -17,8 +17,7 @@
  *
  */
 #include <cassert>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "IdManagerTest.h"
 
 using namespace std;
@@ -36,17 +35,17 @@ void IdManagerTest::testFragmentation() {
     idManager->free(i);
   }
 
-  CPPUNIT_ASSERT_EQUAL((size_t)99, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(99), idManager->state.freeIds.size());
   idManager->free(0);
-  CPPUNIT_ASSERT_EQUAL((size_t)0, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), idManager->state.freeIds.size());
 
   for (unsigned int i = 900; i <999; ++i) {
     idManager->free(i);
   }
 
-  CPPUNIT_ASSERT_EQUAL((size_t)99, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(99), idManager->state.freeIds.size());
   idManager->free(999);
-  CPPUNIT_ASSERT_EQUAL((size_t)100, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(100), idManager->state.freeIds.size());
 }
 //==========================================================
 void IdManagerTest::testGetFree() {

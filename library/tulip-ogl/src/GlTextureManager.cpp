@@ -161,6 +161,10 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
   return true;
 }
 //====================================================================
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 static bool loadJPEG(const string &filename, TextureInfo *texture) {
   FILE *file;
 #ifndef _MSC_VER
@@ -208,7 +212,7 @@ static bool loadJPEG(const string &filename, TextureInfo *texture) {
 
   while (cinfo.output_scanline < cinfo.output_height) {
     jpeg_read_scanlines(&cinfo, &row_pointer, 1);
-    memcpy((void *) &(texture->data[(cinfo.output_height - cinfo.output_scanline) * 3 * cinfo.output_width]), row_pointer, (texture->width) * 3);
+    memcpy(&(texture->data[(cinfo.output_height - cinfo.output_scanline) * 3 * cinfo.output_width]), row_pointer, (texture->width) * 3);
   }
 
   delete [] row_pointer;
@@ -217,6 +221,9 @@ static bool loadJPEG(const string &filename, TextureInfo *texture) {
   fclose(file);
   return true;
 }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 //====================================================================
 static bool loadPNG(const string &filename, TextureInfo *texture) {
   FILE *file;
@@ -243,7 +250,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
 
   if (!info_ptr) {
     tlp::error() << "Error reading file: " << filename << std::endl;
-    png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+    png_destroy_read_struct(&png_ptr, static_cast<png_infopp>(NULL), static_cast<png_infopp>(NULL));
     fclose(file);
     return false;
   }
@@ -252,7 +259,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
 
   if (!end_info) {
     tlp::error() << "Error reading file: " << filename << std::endl;
-    png_destroy_read_struct(&png_ptr, &info_ptr,  (png_infopp)NULL);
+    png_destroy_read_struct(&png_ptr, &info_ptr,  static_cast<png_infopp>(NULL));
     fclose(file);
     return false;
   }
@@ -285,7 +292,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   png_bytep* row_pointers = new png_bytep[texture->height];
 
   for (unsigned int i=0; i < texture->height; ++i)
-    row_pointers[i] = (png_bytep) &(texture->data[linestride*(texture->height-1-i)]);
+    row_pointers[i] = static_cast<png_bytep>(&(texture->data[linestride*(texture->height-1-i)]));
 
   png_set_strip_16(png_ptr);  //force 8 bits/channel
   png_set_gray_to_rgb(png_ptr); //force RGB
@@ -436,8 +443,8 @@ bool GlTextureLoader::loadTexture(const string& filename,
                                   GlTexture &texture) {
   string extension = filename.substr(filename.find_last_of('.') + 1);
 
-  for (int i=0; i < (int)extension.length(); ++i)
-    extension[i] = (char) toupper(extension[i]);
+  for (unsigned int i=0; i < extension.length(); ++i)
+    extension[i] = static_cast<char>(toupper(extension[i]));
 
   TextureLoader_t *loader = NULL;
 

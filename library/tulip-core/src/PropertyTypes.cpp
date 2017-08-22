@@ -43,7 +43,7 @@ void GraphType::write(ostream &oss, const RealType &v) {
 
 void GraphType::writeb(ostream &oss, const RealType &v) {
   unsigned int id = v ? v->getId() : 0;
-  oss.write((char *) &id, sizeof(id));
+  oss.write(reinterpret_cast<const char *>(&id), sizeof(id));
 }
 
 bool GraphType::read(istream& iss, RealType& v) {
@@ -51,7 +51,7 @@ bool GraphType::read(istream& iss, RealType& v) {
   bool ok = bool(iss >> lv);
 
   if (ok)
-    v = (RealType) lv;
+    v = reinterpret_cast<RealType>(lv);
   else
     v = 0;
 
@@ -80,13 +80,13 @@ void EdgeSetType::write(ostream& os, const RealType & v ) {
 void EdgeSetType::writeb(ostream& oss, const RealType & v ) {
   unsigned int vSize = v.size();
   // write the size of the set
-  oss.write((char *) &vSize, sizeof(vSize));
+  oss.write(reinterpret_cast<const char *>(&vSize), sizeof(vSize));
 
   set<edge>::const_iterator it;
 
   // loop to write the edges
   for(it = v.begin() ; it != v.end() ; ++it)
-    oss.write((char *) &(it->id), sizeof(unsigned int));
+    oss.write(reinterpret_cast<const char *>(&(it->id)), sizeof(unsigned int));
 }
 
 bool EdgeSetType::read(istream& is, RealType & v) {
@@ -130,7 +130,7 @@ bool EdgeSetType::readb(istream& iss, RealType & s) {
   unsigned int size;
 
   // get the set size
-  if (!bool(iss.read((char *) &size, sizeof(unsigned int))))
+  if (!bool(iss.read(reinterpret_cast<char *>(&size), sizeof(unsigned int))))
     return false;
 
   // use a vector to get the edges
@@ -139,7 +139,7 @@ bool EdgeSetType::readb(istream& iss, RealType & s) {
   edge* data = v.data();
 
   // get the edges in one read
-  if (!bool(iss.read((char *) v.data(), size * sizeof(unsigned int))))
+  if (!bool(iss.read(reinterpret_cast<char *>(v.data()), size * sizeof(unsigned int))))
     return false;
 
   // insert edges in the set
@@ -387,7 +387,7 @@ void BooleanVectorType::write(ostream& os, const RealType & v) {
 void BooleanVectorType::writeb(ostream& oss, const RealType & v) {
   unsigned int vSize = v.size();
   // write the size of the vector
-  oss.write((char *) &vSize, sizeof(vSize));
+  oss.write(reinterpret_cast<const char *>(&vSize), sizeof(vSize));
 
   vector<char> vc;
   vc.resize(vSize);
@@ -451,7 +451,7 @@ bool BooleanVectorType::readb(istream& iss, RealType & v) {
   unsigned int vSize = v.size();
 
   // read the size of the vector
-  if (!iss.read((char *) &vSize, sizeof(vSize)))
+  if (!iss.read(reinterpret_cast<char *>(&vSize), sizeof(vSize)))
     return false;
 
   vector<char> vc;
@@ -682,7 +682,7 @@ void StringType::write(ostream& os, const RealType & v, char openCloseChar) {
   if (openCloseChar)
     os << openCloseChar;
 
-  for(char* str = (char *) v.c_str(); *str; ++str) {
+  for(char* str = const_cast<char *>(v.c_str()); *str; ++str) {
     char c = *str;
 
     if (c == '\\' || c == '"')
@@ -698,10 +698,10 @@ void StringType::write(ostream& os, const RealType & v, char openCloseChar) {
 void StringType::writeb(ostream& os, const RealType & str) {
   // write size of str
   unsigned int size = str.size();
-  os.write((char *) &size, sizeof(size));
+  os.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
   // then write c_str()
-  os.write((char *) str.c_str(), size);
+  os.write(str.c_str(), size);
 }
 
 string StringType::toString( const RealType & v ) {
@@ -766,12 +766,12 @@ bool StringType::readb(istream& iss, RealType & str) {
   // read size of str
   unsigned int size;
 
-  if (!bool(iss.read((char *)&size, sizeof(size))))
+  if (!bool(iss.read(reinterpret_cast<char *>(&size), sizeof(size))))
     return false;
 
   // then read chars
   str.resize(size);
-  return bool(iss.read((char *) str.c_str(), size));
+  return bool(iss.read(const_cast<char *>(str.c_str()), size));
 }
 
 bool StringType::fromString( RealType & v, const string & s ) {
@@ -796,7 +796,7 @@ void StringVectorType::write(ostream& os, const RealType & v) {
 void StringVectorType::writeb(ostream& os, const RealType & v) {
   // write size of vector
   unsigned int size = v.size();
-  os.write((char *) &size, sizeof(size));
+  os.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
   // loop to write strings
   for(unsigned int i = 0; i < size; ++i)
@@ -870,7 +870,7 @@ bool StringVectorType::readb(istream& iss, RealType & v) {
   // read size of vector
   unsigned int size;
 
-  if (!bool(iss.read((char *) &size, sizeof(size))))
+  if (!bool(iss.read(reinterpret_cast<char *>(&size), sizeof(size))))
     return false;
 
   v.resize(size);
@@ -1130,7 +1130,7 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
 
   std::string toString(const DataType *data) {
     return std::string("\"") +
-           ((StringCollection *) data->value)->getCurrentString() + '"';;
+           static_cast<StringCollection *>(data->value)->getCurrentString() + '"';;
   }
 
   bool setData(tlp::DataSet& dts, const string& prop, const string& val) {

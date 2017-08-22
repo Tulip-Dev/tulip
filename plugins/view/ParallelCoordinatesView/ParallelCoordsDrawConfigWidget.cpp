@@ -159,7 +159,7 @@ unsigned int ParallelCoordsDrawConfigWidget::getLinesColorAlphaValue() const {
     return 300;
   }
   else {
-    return (unsigned int) _ui->viewColorAlphaValue->value();
+    return _ui->viewColorAlphaValue->value();
   }
 }
 
@@ -176,7 +176,7 @@ void ParallelCoordsDrawConfigWidget::setDrawPointOnAxis(const bool drawPointOnAx
 }
 
 unsigned int ParallelCoordsDrawConfigWidget::getUnhighlightedEltsColorsAlphaValue() const {
-  return (unsigned int) _ui->nonHighlightedEltsAlphaValue->value();
+  return _ui->nonHighlightedEltsAlphaValue->value();
 }
 
 void ParallelCoordsDrawConfigWidget::setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue) {

@@ -126,7 +126,7 @@ bool FastOverlapRemoval::run () {
     // size initialization
     forEach(n, graph->getNodes())
     size.setNodeValue(n, viewSize->getNodeValue(n) *
-                      passIndex/(float)nbPasses);
+                      passIndex/float(nbPasses));
 
     //actually apply fast overlap removal
     vector<vpsc::Rectangle *>nodeRectangles (graph->numberOfNodes());

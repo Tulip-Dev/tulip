@@ -24,8 +24,7 @@ using namespace tlp;
 
 EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext* context) : edgeExtGlGraphInputData(NULL) {
   if(context != NULL) {
-    const GlyphContext* glyphContext = dynamic_cast<const GlyphContext*>(context);
-    assert(glyphContext != NULL);
+    const GlyphContext* glyphContext = static_cast<const GlyphContext*>(context);
     edgeExtGlGraphInputData = glyphContext->glGraphInputData;
   }
 }

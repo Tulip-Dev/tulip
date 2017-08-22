@@ -333,12 +333,13 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 #else
 
   struct dirent **namelist;
-  int n = scandir((const char *) pluginPath.c_str(),
+  int n = scandir(pluginPath.c_str(),
                   &namelist,
 #if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
-                  (int (*) (const dirent *))
-#endif
+                  reinterpret_cast<int (*) (const dirent *)>(__tulip_select_libs),
+#else
                   __tulip_select_libs,
+#endif
                   alphasort);
 
   if (loader!=NULL)
@@ -416,12 +417,13 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
   if (recursive) {
 
-    n = scandir((const char *) pluginPath.c_str(),
+    n = scandir(pluginPath.c_str(),
                 &namelist,
 #if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
-                (int (*) (const dirent *))
-#endif
+                reinterpret_cast<int (*) (const dirent *)>(__tulip_select_dirs),
+#else
                 __tulip_select_dirs,
+#endif
                 alphasort);
 
     std::string rootPath = pluginPath;

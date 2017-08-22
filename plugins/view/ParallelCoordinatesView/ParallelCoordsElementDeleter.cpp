@@ -30,10 +30,10 @@ namespace tlp {
 bool ParallelCoordsElementDeleter::eventFilter(QObject *, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
     if (me->buttons()==Qt::LeftButton) {
-      ParallelCoordinatesView *parallelView = dynamic_cast<ParallelCoordinatesView *>(view());
+      ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
       Observable::holdObservers();
       parallelView->deleteDataUnderPointer(me->x(), me->y());
       Observable::unholdObservers();

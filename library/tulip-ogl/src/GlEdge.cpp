@@ -252,7 +252,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
     glPassThrough(textColor[3]);
 
     glPassThrough(TLP_FB_BEGIN_EDGE);
-    glPassThrough(static_cast<float>(id)); //id of the node for the feed back mode
+    glPassThrough(float(id)); //id of the node for the feed back mode
   }
 
   bool hasBends(!bends.empty());
@@ -324,7 +324,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
   //draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
-           data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth));
+           data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, float(lineWidth));
   GlTextureManager::getInst().setAnimationFrame(0);
 
   if (data->parameters->getFeedbackRender()) {
@@ -537,12 +537,12 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
 
   if (bends.empty()) {
     position = (srcCoord + tgtCoord) / 2.f;
-    angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*static_cast<float>(180./M_PI);
+    angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*float(180./M_PI);
   }
   else {
     if (bends.size() % 2 == 0) {
       position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
-      angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*static_cast<float>(180./M_PI);
+      angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*float(180./M_PI);
     }
     else {
       position = bends[bends.size() / 2];
@@ -558,8 +558,8 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
         secondVector=bends[bends.size() / 2]-tgtCoord;
       }
 
-      float firstAngle=atan(firstVector[1]/firstVector[0])*static_cast<float>(180./M_PI);
-      float secondAngle=atan(secondVector[1]/secondVector[0])*static_cast<float>(180./M_PI);
+      float firstAngle=atan(firstVector[1]/firstVector[0])*float(180./M_PI);
+      float secondAngle=atan(secondVector[1]/secondVector[0])*float(180./M_PI);
 
       Coord textDirection=firstVector+secondVector;
 
@@ -919,8 +919,8 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
             srcTransformationMatrix, srcScalingMatrix);
 
         glPushMatrix();
-        glMultMatrixf((GLfloat *) &srcTransformationMatrix);
-        glMultMatrixf((GLfloat *) &srcScalingMatrix);
+        glMultMatrixf(reinterpret_cast<GLfloat *>(&srcTransformationMatrix));
+        glMultMatrixf(reinterpret_cast<GLfloat *>(&srcScalingMatrix));
         glDisable(GL_CULL_FACE);
         extremityGlyph->draw(e, source, color, borderColor, 100.);
         glEnable(GL_CULL_FACE);

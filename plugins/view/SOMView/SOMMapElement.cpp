@@ -100,7 +100,7 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
         n = map->getNodeAt(j, i);
         Color c = Color(255, 255, 255, 0);
         tlp::GlCircle *hex = new tlp::GlCircle(center, r, c, c, true, false,
-                                               static_cast<float>(M_PI / 2), 6);
+                                               float(M_PI / 2), 6);
         oss.str("");
         oss << j << "," << i;
         addGlEntity(hex, oss.str());
@@ -141,11 +141,11 @@ void SOMMapElement::updateColors(ColorProperty *newColor) {
   SOMMap::SOMMapConnectivity connect = som->getConnectivity();
   forEach(n,som->getNodes()) {
     if (connect == SOMMap::six) {
-      GlCircle *hex = (GlCircle*) nodesMap[n];
+      GlCircle *hex = static_cast<GlCircle*>(nodesMap[n]);
       hex->setFillColor(newColor->getNodeValue(n));
     }
     else {
-      GlRect *rect = (GlRect*) nodesMap[n];
+      GlRect *rect = static_cast<GlRect*>(nodesMap[n]);
       rect->setBottomRightColor(newColor->getNodeValue(n));
       rect->setTopLeftColor(newColor->getNodeValue(n));
     }

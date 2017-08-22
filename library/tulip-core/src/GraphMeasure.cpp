@@ -399,7 +399,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
       double normalization = 1.0;
 
       if (nbNodes > 1 && graph->numberOfEdges())
-        normalization = 1./(double) (nbNodes - 1);
+        normalization = 1./(nbNodes - 1);
 
       switch(direction) {
       case UNDIRECTED:

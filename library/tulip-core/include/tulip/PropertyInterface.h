@@ -622,7 +622,7 @@ public:
     : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
 
   PropertyInterface* getProperty() const {
-    return reinterpret_cast<PropertyInterface *>(sender());
+    return static_cast<PropertyInterface *>(sender());
   }
 
   node getNode() const {

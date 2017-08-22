@@ -152,11 +152,10 @@ void SimpleTest::treatEvent(const Event& evt) {
     }
   }
   else {
-    // From my point of view the use of dynamic_cast should be correct
-    // but it fails, so I use reinterpret_cast (pm)
-    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
-    if (graph && evt.type() == Event::TLP_DELETE)
+    Graph* graph = static_cast<Graph *>(evt.sender());
+
+    if (evt.type() == Event::TLP_DELETE)
       deleteResult(graph);
   }
 }

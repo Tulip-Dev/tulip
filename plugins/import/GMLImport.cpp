@@ -282,7 +282,7 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     if (st == "fill") {
       // parse color in format #rrggbb
       if (str[0] == '#' && str.length() == 7) {
-        char *c_str = (char *) str.c_str() + 1;
+        char *c_str = const_cast<char *>(str.c_str()) + 1;
 
         for (int i = 0; i < 3; i++, c_str++) {
           unsigned char value = 0;

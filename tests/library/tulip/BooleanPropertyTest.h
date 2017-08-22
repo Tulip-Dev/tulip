@@ -22,9 +22,8 @@
 #include <string>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+
+#include "CppUnitIncludes.h"
 
 namespace tlp {
 class BooleanProperty;

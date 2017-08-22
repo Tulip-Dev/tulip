@@ -142,7 +142,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
     xDim = new DoubleProperty(graph);
     node n;
     forEach(n, graph->getNodes()) {
-      xDim->setNodeValue(n, static_cast<double>(xDimInt->getNodeValue(n)));
+      xDim->setNodeValue(n, double(xDimInt->getNodeValue(n)));
     }
   }
 
@@ -154,7 +154,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
     yDim = new DoubleProperty(graph);
     node n;
     forEach(n, graph->getNodes()) {
-      yDim->setNodeValue(n, static_cast<double>(yDimInt->getNodeValue(n)));
+      yDim->setNodeValue(n, double(yDimInt->getNodeValue(n)));
     }
   }
 
@@ -178,7 +178,7 @@ void ScatterPlotTrendLine::viewChanged(View *view) {
     return;
   }
 
-  scatterView = dynamic_cast<ScatterPlot2DView *>(view);
+  scatterView = static_cast<ScatterPlot2DView *>(view);
   compute(0);
   scatterView->refresh();
 }

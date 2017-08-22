@@ -99,7 +99,7 @@ struct HolmeKim:public ImportModule {
       double k_sum = 0; // degree of present nodes
 
       for(unsigned int j=0; j<i ; ++j)
-        k_sum += (double)graph->deg(nodes[j]);
+        k_sum += graph->deg(nodes[j]);
 
       double proba = tlp::randomDouble();
 
@@ -110,7 +110,7 @@ struct HolmeKim:public ImportModule {
         double firstNeighbour = 0;
 
         while (pr_sum < pr && firstNeighbour <= i) {
-          pr_sum += (double)graph->deg(nodes[firstNeighbour])/(k_sum);
+          pr_sum += graph->deg(nodes[firstNeighbour])/k_sum;
           ++firstNeighbour;
         }
 
@@ -145,7 +145,7 @@ struct HolmeKim:public ImportModule {
         unsigned int rn = 0;
 
         while (pr_sum<pr && rn<(i-1)) {
-          pr_sum += (double)graph->deg(nodes[rn])/(k_sum);
+          pr_sum += graph->deg(nodes[rn])/k_sum;
           ++rn;
         }
 

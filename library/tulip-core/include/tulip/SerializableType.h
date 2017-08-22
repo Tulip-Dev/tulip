@@ -128,8 +128,8 @@ public:
   }
   static void writeb(std::ostream& oss, const typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v) {
     unsigned int vSize = v.size();
-    oss.write((char *) &vSize, sizeof(vSize));
-    oss.write((char *) v.data(), vSize * sizeof(ELT_TYPE));
+    oss.write(reinterpret_cast<const char *>(&vSize), sizeof(vSize));
+    oss.write(reinterpret_cast<const char *>(v.data()), vSize * sizeof(ELT_TYPE));
   }
   static bool read(std::istream& iss, typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v, char openChar = '(', char sepChar = ',', char closeChar = ')') {
     return readVector(iss, v, openChar, sepChar, closeChar);
@@ -137,9 +137,9 @@ public:
   static bool readb(std::istream& iss, typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v) {
     unsigned int vSize;
 
-    if (bool(iss.read((char *) &vSize, sizeof(vSize)))) {
+    if (bool(iss.read(reinterpret_cast<char *>(&vSize), sizeof(vSize)))) {
       v.resize(vSize);
-      return bool(iss.read((char *) v.data(), vSize * sizeof(ELT_TYPE)));
+      return bool(iss.read(reinterpret_cast<char *>(v.data()), vSize * sizeof(ELT_TYPE)));
     }
 
     return false;

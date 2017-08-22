@@ -200,11 +200,11 @@ DataSet GlCompositeHierarchyManager::getData() {
 
   for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
     unsigned int graphId = it->first->getId();
-    unsigned int visibility = (int)it->second.first->isVisible()*2 + (int)it->second.second->isVisible();
+    unsigned int visibility = uint(it->second.first->isVisible())*2 +
+                              uint(it->second.second->isVisible());
     stringstream graph;
     graph << graphId;
-    set.set<unsigned int>(graph.str(), visibility);
-//      set.set<pair<unsigned int, unsigned int> >(graph.str(), pair<unsigned int, unsigned int>(graphId, visibility));
+    set.set(graph.str(), visibility);
   }
 
   return set;
@@ -217,7 +217,7 @@ void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
 
     if(dataSet.exist(graph.str())) {
       unsigned int visibility = 0;
-      dataSet.get<unsigned int>(graph.str(), visibility);
+      dataSet.get(graph.str(), visibility);
       bool firstVisibility = visibility-1 > 0;
       it->second.first->setVisible(firstVisibility);
       bool secondVisibility = visibility%2 > 0;

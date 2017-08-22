@@ -251,7 +251,7 @@ PairingHeap<T>::combineSiblings( PairNode<T> *firstSibling ) const {
   int numSiblings = 0;
 
   for( ; firstSibling != NULL; numSiblings++ ) {
-    if( numSiblings == (int)treeArray.size( ) )
+    if( numSiblings == int(treeArray.size( )) )
       treeArray.resize( numSiblings * 2 );
 
     treeArray[ numSiblings ] = firstSibling;
@@ -259,7 +259,7 @@ PairingHeap<T>::combineSiblings( PairNode<T> *firstSibling ) const {
     firstSibling = firstSibling->nextSibling;
   }
 
-  if( numSiblings == (int)treeArray.size( ) )
+  if( numSiblings == int(treeArray.size( ) ))
     treeArray.resize( numSiblings + 1 );
 
   treeArray[ numSiblings ] = NULL;

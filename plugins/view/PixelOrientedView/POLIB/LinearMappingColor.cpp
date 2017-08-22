@@ -93,7 +93,7 @@ RGBA LinearMappingColor::getColor(const double &value, unsigned int) const {
   RGBA color;
 
   for (unsigned int i = 0; i<3 ; ++i) {
-    color[i] = (unsigned char)(double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * ratio);
+    color[i] = uchar(double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * ratio);
   }
 
   color[3] = 255;

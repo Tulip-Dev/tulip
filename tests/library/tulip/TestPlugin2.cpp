@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
-#include <cppunit/TestCase.h>
+
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;

@@ -83,13 +83,13 @@ public:
     ++current;
 
     while(it != freeIds.end()) {
-      if (current < *it) return (TYPE) tmp;
+      if (current < *it) return static_cast<TYPE>(tmp);
 
       ++current;
       ++it;
     }
 
-    return (TYPE) tmp;
+    return static_cast<TYPE>(tmp);
   }
 };
 
@@ -180,11 +180,11 @@ class TLP_SCOPE IdContainer :public std::vector<ID_TYPE> {
   std::vector<unsigned int> pos;
 
   inline ID_TYPE*& beginPtr() {
-    return ((ID_TYPE **) this)[0];
+    return reinterpret_cast<ID_TYPE **>(this)[0];
   }
 
   inline ID_TYPE*& sizePtr() {
-    return ((ID_TYPE**) this)[1];
+    return reinterpret_cast<ID_TYPE **>(this)[1];
   }
 
   inline void setSize(unsigned int size) {
@@ -219,7 +219,7 @@ public:
 
   // return whether the id exist or not
   inline bool isElement(ID_TYPE elt) const {
-    unsigned int id = (unsigned int) elt;
+    unsigned int id = elt;
     return id < pos.size() && pos[id] != UINT_MAX;
   }
 
@@ -231,7 +231,7 @@ public:
   // return the position of an existing elt
   inline unsigned int getPos(ID_TYPE elt) const {
     assert(isElement(elt));
-    return pos[(unsigned int) elt];
+    return pos[elt];
   }
 
   // return a new elt
@@ -249,7 +249,7 @@ public:
     }
 
     ID_TYPE elt = (*this)[freePos];
-    pos[(unsigned int) elt] = freePos;
+    pos[elt] = freePos;
     return elt;
   }
 
@@ -272,14 +272,14 @@ public:
     }
 
     for (i = 0; i < nb; ++i)
-      pos[(unsigned int)((*this)[freePos + i])] = freePos + i;
+      pos[(*this)[freePos + i]] = freePos + i;
 
     return freePos;
   }
 
   // push the elt in the free storage
   void free(ID_TYPE elt) {
-    unsigned int curPos = pos[(unsigned int) elt];
+    unsigned int curPos = pos[elt];
     unsigned int lastPos = this->size() - 1;
 
     ID_TYPE tmp;
@@ -290,10 +290,10 @@ public:
       (*this)[lastPos] = (*this)[curPos];
       assert((*this)[curPos] == elt);
       (*this)[curPos] = tmp;
-      pos[(unsigned int) tmp] = curPos;
+      pos[tmp] = curPos;
     }
 
-    pos[(unsigned int) elt] = UINT_MAX;
+    pos[elt] = UINT_MAX;
 
     if (lastPos) {
       // lastPos is now the beginning
@@ -324,10 +324,10 @@ public:
   void swap(ID_TYPE a, ID_TYPE b) {
     assert(isElement(a));
     assert(isElement(b));
-    unsigned int pa = pos[(unsigned int) a];
-    unsigned int tmp = pos[(unsigned int) b];
-    pos[(unsigned int) b] = pa;
-    pos[(unsigned int) a] = tmp;
+    unsigned int pa = pos[a];
+    unsigned int tmp = pos[b];
+    pos[b] = pa;
+    pos[a] = tmp;
     (*this)[pa] = b;
     (*this)[tmp] = a;
   }
@@ -340,7 +340,7 @@ public:
 #endif
 
     for(OMP_ITER_TYPE i = 0; i < nbElts; ++i)
-      pos[(unsigned int) (*this)[i]] = i;
+      pos[(*this)[i]] = i;
   }
 
   // ascending sort
@@ -360,44 +360,44 @@ public:
     pos.setAll(UINT_MAX);
   }
   inline bool isElement(ID_TYPE elt) const {
-    return (pos.get((unsigned int) elt) != UINT_MAX);
+    return (pos.get(elt) != UINT_MAX);
   }
 
   inline unsigned int getPos(ID_TYPE elt) const {
     assert(isElement(elt));
-    return pos.get((unsigned int) elt);
+    return pos.get(elt);
   }
 
   void add(ID_TYPE elt) {
     assert(!isElement(elt));
     // put the elt at the end
-    pos.set((unsigned int) elt, this->size());
+    pos.set(elt, this->size());
     this->push_back(elt);
   }
 
   void clone(const std::vector<ID_TYPE>& elts) {
-    ((std::vector<ID_TYPE>&)(*this)) = elts;
+    static_cast<std::vector<ID_TYPE>&>(*this) = elts;
     unsigned int nb = elts.size();
 
     for (unsigned int i = 0; i < nb; ++i)
-      pos.set((unsigned int) elts[i], i);
+      pos.set(elts[i], i);
   }
 
   void remove(ID_TYPE elt) {
     assert(isElement(elt));
     // get the position of the elt to remove
-    unsigned int i = pos.get((unsigned int) elt);
+    unsigned int i = pos.get(elt);
     assert(i < this->size());
     // put the last elt at the freed position
     unsigned int last = this->size() - 1;
 
     if (i < last)
-      pos.set((unsigned int) ((*this)[i] = (*this)[last]), i);
+      pos.set(((*this)[i] = (*this)[last]), i);
 
     // resize the container
     this->resize(last);
     // the elt no loger exist in the container
-    pos.set((unsigned int) elt, UINT_MAX);
+    pos.set(elt, UINT_MAX);
   }
 
   // ascending sort
@@ -406,7 +406,7 @@ public:
     unsigned int nbElts = this->size();
 
     for(unsigned int i = 0; i < nbElts; ++i)
-      pos.set((unsigned int) (*this)[i], i);
+      pos.set((*this)[i], i);
   }
 };
 }

@@ -152,7 +152,7 @@ class TLP_QT_SCOPE TulipMetaTypes {
     T result;
 
     if (dm)
-      result = *((T*)dm->value);
+      result = *(static_cast<T*>(dm->value));
 
     return QVariant::fromValue<T>(result);
   }

@@ -58,7 +58,7 @@ inline unsigned int zorderKey(const Vec2i &p, const unsigned char order) {
 //===============================================================
 namespace pocore {
 ZorderLayout::ZorderLayout(unsigned char order):order(order) {
-  shift = (int)rint(sqrt(pow(4., order))/2.);
+  shift = int(rint(sqrt(pow(4., order))/2.));
 }
 //==============================================================
 unsigned int ZorderLayout::unproject(const Vec2i &point) const {

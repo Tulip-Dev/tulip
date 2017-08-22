@@ -94,7 +94,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
     progressBar->setComment("Creating parallel axes ...");
     progressBar->progress(0, selectedProperties.size());
     glWidget->getScene()->centerScene();
-    float glWidth = (float) glWidget->getScene()->getBoundingBox().width();
+    float glWidth = glWidget->getScene()->getBoundingBox().width();
     glWidget->getScene()->zoomFactor((glWidth - 50)/ glWidth);
     glWidget->draw();
     // needed to display progressBar

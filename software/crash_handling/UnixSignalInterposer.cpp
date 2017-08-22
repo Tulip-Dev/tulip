@@ -26,6 +26,11 @@
 // has to be filled with the path to the resulting shared library before launching the application.
 // For instance : $ LD_PRELOAD=<path to the compiled shared library> <path_to_application_executable> <args>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
@@ -158,3 +163,7 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __TH
   }
 
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

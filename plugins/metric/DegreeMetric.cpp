@@ -65,7 +65,7 @@ bool DegreeMetric::run() {
   }
 
   NodeStaticProperty<double> deg(graph);
-  degree(graph, deg, (EDGE_TYPE) degreeTypes.getCurrent(), weights, norm);
+  degree(graph, deg, static_cast<EDGE_TYPE>(degreeTypes.getCurrent()), weights, norm);
   deg.copyToProperty(result);
 
   return true;

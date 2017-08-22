@@ -29,13 +29,13 @@ namespace tlp {
 
 bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
-  ParallelCoordinatesView *parallelView = dynamic_cast<ParallelCoordinatesView *>(view());
-  GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(widget);
+  ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
 
   if (e->type() == QEvent::MouseButtonPress) {
 
-    QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (qMouseEv->buttons()== Qt::LeftButton) {
 
@@ -55,7 +55,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseMove) {
 
-    QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (qMouseEv->buttons() & Qt::LeftButton && started) {
       if ((qMouseEv->x() > 0) && (qMouseEv->x() < glMainWidget->width()))
@@ -71,7 +71,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonRelease) {
 
-    QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (started) {
       Observable::holdObservers();

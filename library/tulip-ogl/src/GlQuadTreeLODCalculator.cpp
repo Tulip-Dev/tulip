@@ -231,7 +231,7 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
 
       if(camera->is3D()) {
         currentCamera=camera;
-        eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / (float)camera->getZoomFactor();
+        eye=camera->getEyes() + (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
         computeFor3DCamera(&(*it),eye,transformMatrix,globalViewport,currentViewport);
         quadTreesVectorPosition++;
       }
@@ -270,7 +270,7 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
 
       if(camera->is3D()) {
         currentCamera=camera;
-        eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / (float)camera->getZoomFactor();
+        eye=camera->getEyes() + (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
         computeFor3DCamera(layerLODUnit,eye,transformMatrix,globalViewport,currentViewport);
         quadTreesVectorPosition++;
       }
@@ -561,7 +561,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     setHaveToCompute();
   }
   else if (typeid(ev) == typeid(GraphEvent)) {
-    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&ev);
+    const GraphEvent* graphEvent = static_cast<const GraphEvent*>(&ev);
 
     switch(graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
@@ -589,7 +589,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     }
   }
   else if(typeid(ev) == typeid(PropertyEvent)) {
-    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&ev);
+    const PropertyEvent* propertyEvent = static_cast<const PropertyEvent*>(&ev);
     PropertyInterface* property = propertyEvent->getProperty();
 
     switch(propertyEvent->getType()) {

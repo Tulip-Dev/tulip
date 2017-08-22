@@ -37,13 +37,13 @@ ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator() : scatterPlot2dView(NUL
 ScatterPlot2DViewNavigator::~ScatterPlot2DViewNavigator() {}
 
 void ScatterPlot2DViewNavigator::viewChanged(View *view) {
-  scatterPlot2dView = dynamic_cast<ScatterPlot2DView *>(view);
+  scatterPlot2dView = static_cast<ScatterPlot2DView *>(view);
 }
 
 bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (glWidget == NULL) {
-    glWidget = dynamic_cast<GlMainWidget *>(widget);
+    glWidget = static_cast<GlMainWidget *>(widget);
   }
 
   if(glWidget!=NULL) {
@@ -56,7 +56,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (e->type() == QEvent::MouseMove && scatterPlot2dView->matrixViewSet()) {
-      QMouseEvent *me = (QMouseEvent *) e;
+      QMouseEvent *me = static_cast<QMouseEvent *>(e);
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords(x, y, 0.0f);

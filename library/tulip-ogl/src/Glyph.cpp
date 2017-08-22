@@ -25,8 +25,7 @@ using namespace std;
 
 Glyph::Glyph(const tlp::PluginContext* context) : glGraphInputData(NULL) {
   if(context != NULL) {
-    const GlyphContext* glyphContext = dynamic_cast<const GlyphContext*>(context);
-    assert(glyphContext != NULL);
+    const GlyphContext* glyphContext = static_cast<const GlyphContext*>(context);
     glGraphInputData = glyphContext->glGraphInputData;
   }
 }

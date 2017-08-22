@@ -39,7 +39,7 @@ Coord LayoutPropertyAnimation::getNodeFrameValue(const Coord &startValue, const 
     stepVal = it->second;
   else {
     for (unsigned i = 0; i < 3; ++i)
-      stepVal[i] = ((double) endValue[i] - (double) startValue[i]) * 1. / (frameCount() - 1);
+      stepVal[i] = (double(endValue[i]) - double(startValue[i])) * 1. / (frameCount() - 1);
   }
 
   Coord result;

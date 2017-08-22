@@ -34,25 +34,25 @@ extern "C" {
 YajlParseFacade::YajlParseFacade(tlp::PluginProgress* progress) : _progress(progress), _parsingSucceeded(true) {}
 
 static int parse_null(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseNull();
   return 1;
 }
 
 static int parse_boolean(void * ctx, int boolVal) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseBoolean(boolVal);
   return 1;
 }
 
 static int parse_integer(void *ctx, long long integerVal) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseInteger(integerVal);
   return 1;
 }
 
 static int parse_double(void *ctx, double doubleVal) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseDouble(doubleVal);
   return 1;
 }
@@ -65,39 +65,39 @@ static int parse_double(void *ctx, double doubleVal) {
 // }
 
 static int parse_string(void *ctx, const unsigned char * stringVal, size_t stringLen) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
-  std::string key((char*)stringVal, stringLen);
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
+  std::string key(reinterpret_cast<const char *>(stringVal), stringLen);
   facade->parseString(key);
   return 1;
 }
 
 static int parse_map_key(void *ctx, const unsigned char * stringVal, size_t stringLen) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
-  std::string key((char*)stringVal, stringLen);
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
+  std::string key(reinterpret_cast<const char*>(stringVal), stringLen);
   facade->parseMapKey(key);
   return 1;
 }
 
 static int parse_start_map(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseStartMap();
   return 1;
 }
 
 static int parse_end_map(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseEndMap();
   return 1;
 }
 
 static int parse_start_array(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseStartArray();
   return 1;
 }
 
 static int parse_end_array(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade* facade = static_cast<YajlParseFacade*>(ctx);
   facade->parseEndArray();
   return 1;
 }
@@ -105,7 +105,7 @@ static int parse_end_array(void *ctx) {
 void YajlParseFacade::parse(std::string filename) {
   // check if file exists
   tlp_stat_t infoEntry;
-  bool result = (tlp::statPath(filename,&infoEntry) == 0);
+  bool result = tlp::statPath(filename,&infoEntry) == 0;
 
   if (!result) {
     std::stringstream ess;
@@ -135,7 +135,7 @@ void YajlParseFacade::parse(std::string filename) {
   ifs->read (fileData, fileLength);
   delete ifs;
 
-  parse((const unsigned char *) fileData, fileLength);
+  parse(reinterpret_cast<const unsigned char *>(fileData), fileLength);
 
   delete[] fileData;
 }
@@ -160,11 +160,10 @@ void YajlParseFacade::parse(const unsigned char* data, int length) {
   if (stat != yajl_status_ok) {
     unsigned char * str = yajl_get_error(hand, 1, data, length);
     _parsingSucceeded = false;
-    _errorMessage = std::string((const char *)str);
+    _errorMessage = std::string(reinterpret_cast<const char *>(str));
     yajl_free_error(hand, str);
   }
 
-  //   yajl_gen_free(g);
   yajl_free(hand);
 }
 
@@ -245,7 +244,7 @@ void YajlWriteFacade::writeNumber(const char* str, size_t len) {
 }
 
 void YajlWriteFacade::writeString(const std::string& text) {
-  yajl_gen_string(_generator, (unsigned char*)text.c_str(), text.size());
+  yajl_gen_string(_generator, reinterpret_cast<const unsigned char*>(text.c_str()), text.size());
 }
 
 void YajlWriteFacade::writeNull() {
@@ -281,6 +280,6 @@ std::string YajlWriteFacade::generatedString() {
     tlp::debug() << __PRETTY_FUNCTION__ << ": parse error.";
   }
 
-  std::string result((const char*)buffer);
+  std::string result(reinterpret_cast<const char*>(buffer));
   return result;
 }

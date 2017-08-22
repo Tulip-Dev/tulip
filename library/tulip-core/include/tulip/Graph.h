@@ -1163,7 +1163,7 @@ public:
    * @return The attributes of the graph.
    */
   const DataSet & getAttributes() const {
-    return (const_cast<Graph *>(this))->getNonConstAttributes();
+    return const_cast<Graph *>(this)->getNonConstAttributes();
   }
 
   /**

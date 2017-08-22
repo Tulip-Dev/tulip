@@ -98,12 +98,12 @@ void GlQuantitativeAxis::buildAxisGraduations() {
   }
   else {
     if (min >= 1) {
-      minV = minLog = log(min) / log(static_cast<double>(logBase));
-      maxV = maxLog = log(max) / log(static_cast<double>(logBase));
+      minV = minLog = log(min) / log(double(logBase));
+      maxV = maxLog = log(max) / log(double(logBase));
     }
     else {
       minV = minLog = 0;
-      maxV = maxLog = log(1 + max - min) / log(static_cast<double>(logBase));
+      maxV = maxLog = log(1 + max - min) / log(double(logBase));
     }
   }
 
@@ -137,7 +137,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
       gradLabel = getStringFromNumber(i);
     }
     else {
-      double labelValue = pow(static_cast<double>(logBase), i);
+      double labelValue = pow(double(logBase), i);
 
       if (min < 1) {
         labelValue -= (1 - min);
@@ -198,7 +198,7 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
       val += (1 - min);
     }
 
-    val = log(val) / log(static_cast<double>(logBase));
+    val = log(val) / log(double(logBase));
   }
 
   if (ascendingOrder) {
@@ -249,7 +249,7 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
   }
 
   if (logScale) {
-    value = pow(static_cast<double>(logBase), value);
+    value = pow(double(logBase), value);
 
     if (min < 1) {
       value -= (1 - min);

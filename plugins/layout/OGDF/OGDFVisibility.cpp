@@ -83,7 +83,7 @@ public:
   OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), visibility(new ogdf::VisibilityLayout()) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
-    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the VisibilityLayout instance
     csl->setLayoutModule(visibility);
   }

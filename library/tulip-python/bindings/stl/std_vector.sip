@@ -102,7 +102,7 @@ template<TYPE>
   v->reserve(PyList_GET_SIZE(sipPy));
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
-    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = static_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       sipReleaseType(p, kpTypeDef, state);
@@ -190,7 +190,7 @@ template<TYPE*>
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
     PyObject *item = PyList_GET_ITEM(sipPy, i);
-    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = static_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       sipReleaseType(p, kpTypeDef, state);
@@ -316,7 +316,7 @@ template<TYPE*>
   v->reserve(PyList_GET_SIZE(sipPy));
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     PyObject *f = PyNumber_Float(PyList_GET_ITEM(sipPy, i));
-    v->push_back(static_cast<float>(PyFloat_AsDouble(f)));
+    v->push_back(float(PyFloat_AsDouble(f)));
     Py_XDECREF(f);
   }
 
@@ -379,13 +379,13 @@ template<TYPE*>
   v->reserve(PyList_GET_SIZE(sipPy));
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
 #if PY_MAJOR_VERSION >= 3
-    v->push_back(static_cast<int>(PyLong_AsLong(PyList_GET_ITEM(sipPy, i))));
+    v->push_back(int(PyLong_AsLong(PyList_GET_ITEM(sipPy, i))));
 #else
     PyObject *item = PyList_GET_ITEM(sipPy, i);
     if (PyLong_Check(item)) {
-      v->push_back(static_cast<int>(PyLong_AsLong(item)));
+      v->push_back(int(PyLong_AsLong(item)));
     } else {
-      v->push_back(static_cast<int>(PyInt_AsLong(item)));
+      v->push_back(int(PyInt_AsLong(item)));
     }
 #endif
   }
@@ -449,13 +449,13 @@ template<TYPE*>
   v->reserve(PyList_GET_SIZE(sipPy));
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
 #if PY_MAJOR_VERSION >= 3
-    v->push_back(static_cast<unsigned int>(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i))));
+    v->push_back(uint(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i))));
 #else
     PyObject *item = PyList_GET_ITEM(sipPy, i);
     if (PyLong_Check(item)) {
-        v->push_back(static_cast<unsigned int>(PyLong_AsUnsignedLong(item)));
+        v->push_back(uint(PyLong_AsUnsignedLong(item)));
     } else {
-        v->push_back(static_cast<unsigned int>(PyInt_AsUnsignedLongMask(item)));
+        v->push_back(uint(PyInt_AsUnsignedLongMask(item)));
     }
 #endif
   }

@@ -113,7 +113,7 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c):
   _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
   Q_INIT_RESOURCE(GraphPerspective);
 
-  if (c && ((PerspectiveContext *) c)->parameters.contains("gui_testing")) {
+  if (c && static_cast<const PerspectiveContext *>(c)->parameters.contains("gui_testing")) {
     tlp::setGuiTestingMode(true);
     // we must ensure that choosing a file is relative to
     // the current directory to allow to run the gui tests
@@ -341,7 +341,7 @@ void GraphPerspective::findPlugins() {
 
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if(ev->type() == QEvent::DragEnter) {
-    QDragEnterEvent* dragEvent = dynamic_cast<QDragEnterEvent*>(ev);
+    QDragEnterEvent* dragEvent = static_cast<QDragEnterEvent*>(ev);
 
     if(dragEvent->mimeData()->hasUrls()) {
       dragEvent->accept();
@@ -349,7 +349,7 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   }
 
   if(ev->type() == QEvent::Drop) {
-    QDropEvent* dropEvent = dynamic_cast<QDropEvent*>(ev);
+    QDropEvent* dropEvent = static_cast<QDropEvent*>(ev);
 
     foreach(const QUrl& url, dropEvent->mimeData()->urls()) {
       open(url.toLocalFile());

@@ -105,7 +105,7 @@ and the second one can be used to provide an error message
       if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
         std::string paramName = entry.first.substr(filesPrefixes[i].length());
         if (!sipCpp->dataSet->exist(paramName)) {
-          sipCpp->dataSet->set(paramName, *(reinterpret_cast<std::string*>(entry.second->value)));
+          sipCpp->dataSet->set(paramName, *(static_cast<std::string*>(entry.second->value)));
         }
       }
     }

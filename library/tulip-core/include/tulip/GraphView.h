@@ -51,7 +51,7 @@ DECL_STORED_PTR(SGraphNodeDataPtr);
 class GraphView:public GraphAbstract {
 
   inline GraphImpl* getRootImpl() const {
-    return (GraphImpl *) getRoot();
+    return static_cast<GraphImpl *>(getRoot());
   }
 
   friend class GraphImpl;

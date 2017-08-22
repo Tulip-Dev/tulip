@@ -99,7 +99,7 @@ public:
     const vector<node>& nodes = graph->nodes();
 
     for (unsigned int i=0; i<nbNodes; ++i) {
-      newLayout->setNodeValue(nodes[i],Coord(static_cast<float>(randomInteger(WIDTH)), static_cast<float>(randomInteger(HEIGHT)), 0));
+      newLayout->setNodeValue(nodes[i],Coord(float(randomInteger(WIDTH)), float(randomInteger(HEIGHT)), 0));
     }
 
     //double minSize = DBL_MAX;
@@ -113,7 +113,7 @@ public:
           //minSize = std::min(distance, minSize);
 
           //newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
-          if ( distance  < (double)maxDistance)
+          if ( distance  < maxDistance)
             graph->addEdge(nodes[i],nodes[j]);
           else if (!longEdge && enableLongEdge) {
             double distrand = randomDouble();

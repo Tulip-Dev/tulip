@@ -101,9 +101,9 @@ void GlPolyQuad::draw(float, Camera *) {
 
     if (nbSubdivisionsPerSegment == 1) {
 
-      texCoordsArray.push_back(static_cast<GLfloat>(i));
+      texCoordsArray.push_back(GLfloat(i));
       texCoordsArray.push_back(0.0f);
-      texCoordsArray.push_back(static_cast<GLfloat>(i));
+      texCoordsArray.push_back(GLfloat(i));
       texCoordsArray.push_back(1.0f);
       colorsArray.push_back(startColor);
       colorsArray.push_back(startColor);
@@ -121,18 +121,18 @@ void GlPolyQuad::draw(float, Camera *) {
 
         unsigned int n = i * nbSubdivisionsPerSegment + j;
 
-        Coord v1 = polyQuadEdges[2*i] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)] - polyQuadEdges[2*i]);
-        Coord v2 = polyQuadEdges[2*i+1] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)+1] - polyQuadEdges[2*i+1]);
+        Coord v1 = polyQuadEdges[2*i] + (j / float(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)] - polyQuadEdges[2*i]);
+        Coord v2 = polyQuadEdges[2*i+1] + (j / float(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)+1] - polyQuadEdges[2*i+1]);
         vertexArray.push_back(v1);
         vertexArray.push_back(v2);
 
         float texCoordFactor = ((polyQuadEdges[2*i].dist(polyQuadEdges[2*i+2])) / (nbSubdivisionsPerSegment - 1)) / (polyQuadEdges[2*i].dist(polyQuadEdges[2*i+1]));
-        texCoordsArray.push_back(static_cast<GLfloat>(i) + static_cast<GLfloat>(j) * texCoordFactor);
+        texCoordsArray.push_back(GLfloat(i) + GLfloat(j) * texCoordFactor);
         texCoordsArray.push_back(0.0f);
-        texCoordsArray.push_back(static_cast<GLfloat>(i) + static_cast<GLfloat>(j) * texCoordFactor);
+        texCoordsArray.push_back(GLfloat(i) + GLfloat(j) * texCoordFactor);
         texCoordsArray.push_back(1.0f);
 
-        Vector<float, 4> color = startColor + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
+        Vector<float, 4> color = startColor + (j / float(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
         colorsArray.push_back(color);
         colorsArray.push_back(color);
 
@@ -150,9 +150,9 @@ void GlPolyQuad::draw(float, Camera *) {
       quadIndices.push_back(2*(i+1)+1);
       outlineIndices[i+1] = 2*(i+1);
       outlineIndices[nbVertices - (i+2)] = 2*(i+1)+1;
-      texCoordsArray.push_back(static_cast<GLfloat>(i+1));
+      texCoordsArray.push_back(GLfloat(i+1));
       texCoordsArray.push_back(0.0f);
-      texCoordsArray.push_back(static_cast<GLfloat>(i+1));
+      texCoordsArray.push_back(GLfloat(i+1));
       texCoordsArray.push_back(1.0f);
       colorsArray.push_back(endColor);
       colorsArray.push_back(endColor);

@@ -149,12 +149,12 @@ void Histogram::computeHistogram() {
   }
   else {
     if (dataLocation == NODE) {
-      min = (double) graph->getProperty<IntegerProperty>(propertyName)->getNodeMin(graph);
-      max = (double) graph->getProperty<IntegerProperty>(propertyName)->getNodeMax(graph);
+      min = graph->getProperty<IntegerProperty>(propertyName)->getNodeMin(graph);
+      max = graph->getProperty<IntegerProperty>(propertyName)->getNodeMax(graph);
     }
     else {
-      min = (double) graph->getProperty<IntegerProperty>(propertyName)->getEdgeMin(graph);
-      max = (double) graph->getProperty<IntegerProperty>(propertyName)->getEdgeMax(graph);
+      min = graph->getProperty<IntegerProperty>(propertyName)->getEdgeMin(graph);
+      max = graph->getProperty<IntegerProperty>(propertyName)->getEdgeMax(graph);
     }
   }
 
@@ -221,7 +221,7 @@ void Histogram::computeHistogram() {
 
       while (nodesIt->hasNext()) {
         node n = nodesIt->next();
-        unsigned int binId = (unsigned int) propertyCopy->getNodeValue(n);
+        unsigned int binId = uint(propertyCopy->getNodeValue(n));
         histogramBins[binId].push_back(n.id);
 
         if (histogramBins[binId].size() > maxBinSize) {
@@ -254,7 +254,7 @@ void Histogram::computeHistogram() {
 
       while (edgesIt->hasNext()) {
         edge e = edgesIt->next();
-        unsigned int binId = (unsigned int) propertyCopy->getEdgeValue(e);
+        unsigned int binId = uint(propertyCopy->getEdgeValue(e));
         histogramBins[binId].push_back(e.id);
 
         if (histogramBins[binId].size() > maxBinSize) {
@@ -317,11 +317,11 @@ void Histogram::computeHistogram() {
           integerScale = integerScale && (fracpart == 0);
         }
         else {
-          value = (double) graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n);
+          value = graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n);
         }
 
         if (value != max) {
-          unsigned int nodeHistoBin = clamp(static_cast<unsigned int>(floor((value - min) / binWidth)), 0, nbHistogramBins - 1);
+          unsigned int nodeHistoBin = clamp(uint(floor((value - min) / binWidth)), 0, nbHistogramBins - 1);
           histogramBins[nodeHistoBin].push_back(n.id);
 
           if (histogramBins[nodeHistoBin].size() > maxBinSize) {
@@ -354,11 +354,11 @@ void Histogram::computeHistogram() {
           integerScale = integerScale && (fracpart == 0);
         }
         else {
-          value = (double) graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e);
+          value = graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e);
         }
 
         if (value != max) {
-          unsigned int nodeHistoBin = (unsigned int) floor((value - min) / binWidth);
+          unsigned int nodeHistoBin = uint(floor((value - min) / binWidth));
           histogramBins[nodeHistoBin].push_back(e.id);
 
           if (histogramBins[nodeHistoBin].size() > maxBinSize) {
@@ -409,15 +409,15 @@ void Histogram::createAxis() {
   initYAxisScale = make_pair(minAxisValue, maxAxisValue);
 
   if (yAxisScaleDefined) {
-    if (yAxisScale.first < (double)minAxisValue)
-      minAxisValue = (unsigned int)yAxisScale.first;
+    if (yAxisScale.first < double(minAxisValue))
+      minAxisValue = uint(yAxisScale.first);
 
-    if (yAxisScale.second > (double)maxAxisValue)
-      maxAxisValue = (unsigned int)yAxisScale.second;
+    if (yAxisScale.second > double(maxAxisValue))
+      maxAxisValue = uint(yAxisScale.second);
   }
 
-  yAxisScale.first = (double)minAxisValue;
-  yAxisScale.second = (double)maxAxisValue;
+  yAxisScale.first = minAxisValue;
+  yAxisScale.second = maxAxisValue;
 
   yAxisIncrementStep = maxAxisValue / 10;
 
@@ -444,7 +444,7 @@ void Histogram::createAxis() {
   }
 
   yAxis = new GlQuantitativeAxis((dataLocation == NODE ? "number of nodes" : "number of edges"), Coord(0,0,0), axisLength, GlAxis::VERTICAL_AXIS, textColor);
-  yAxis->setAxisParameters((int) minAxisValue ,(int) maxAxisValue, yAxisIncrementStep, GlAxis::LEFT_OR_BELOW, true);
+  yAxis->setAxisParameters(int(minAxisValue) , int(maxAxisValue), yAxisIncrementStep, GlAxis::LEFT_OR_BELOW, true);
   yAxis->setLogScale(yAxisLogScale);
   float yAxisGradsWidth = axisLength / 20;
   yAxis->setAxisGradsWidth(yAxisGradsWidth);
@@ -466,13 +466,13 @@ void Histogram::createAxis() {
   }
   else {
     if (integerScale) {
-      long long axisMin = (long long) min;
-      long long axisMax = (long long) max;
+      long long axisMin = static_cast<long long>(min);
+      long long axisMax = static_cast<long long>(max);
 
       // check the [min, max] double values range
       // fit in a long long range
       if (axisMax != LLONG_MIN) {
-        long long incrementStep = (long long) ((max - min) / nbXGraduations);
+        long long incrementStep = static_cast<long long>((max - min) / nbXGraduations);
 
         if (incrementStep <1) incrementStep = 1;
 
@@ -659,7 +659,7 @@ void Histogram::update() {
     for (unsigned int j = 0 ; j < binSize ; ++j) {
       if (dataLocation == NODE) {
         for (unsigned int k = 0 ; k < 4 ; ++k ) {
-          quadColorCumul[k] += (unsigned int) viewColor->getNodeValue(node(histogramBins[i][j]))[k];
+          quadColorCumul[k] += uint(viewColor->getNodeValue(node(histogramBins[i][j]))[k]);
         }
       }
     }

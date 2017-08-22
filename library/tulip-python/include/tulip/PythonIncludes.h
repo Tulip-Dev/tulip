@@ -69,9 +69,9 @@
 static const sipAPIDef *getSipAPI() {
 #if defined(SIP_USE_PYCAPSULE)
 #ifdef TULIP_SIP
-  return (const sipAPIDef *)PyCapsule_Import("tulipsip._C_API", 0);
+  return static_cast<const sipAPIDef *>(PyCapsule_Import("tulipsip._C_API", 0));
 #else
-  return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
+  return static_cast<const sipAPIDef *>(PyCapsule_Import("sip._C_API", 0);
 #endif
 #else
   PyObject *sip_module;
@@ -102,7 +102,7 @@ static const sipAPIDef *getSipAPI() {
     return NULL;
 
   /* Get the actual pointer from the object. */
-  return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
+  return static_cast<const sipAPIDef *>(PyCObject_AsVoidPtr(c_api));
 #endif
 }
 

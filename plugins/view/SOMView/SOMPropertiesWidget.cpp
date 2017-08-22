@@ -70,7 +70,7 @@ QList<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
 
   QList<QWidget *> widgets;
 
-  widgets << dimensionConfigurationWidget << (QWidget *) this;
+  widgets << dimensionConfigurationWidget << const_cast<QWidget *>(static_cast<const QWidget*>(this));
 
   return widgets;
 }
@@ -215,7 +215,7 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("linkColors", getLinkColor());
 
   //SizeMapping
-  data.set("useSizeMapping", (bool) (getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping));
+  data.set("useSizeMapping", getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping);
 
   //Animation
   data.set("withAnimation", useAnimation());

@@ -23,9 +23,8 @@
 #include <tulip/MutableContainer.h>
 // needed by MutableContainer<std::string>
 #include <tulip/PropertyTypes.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+
+#include "CppUnitIncludes.h"
 
 namespace tlp {
 class MutableContainerTest : public CppUnit::TestFixture {

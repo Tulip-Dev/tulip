@@ -95,7 +95,7 @@ struct TLPGraphBuilder:public TLPTrue {
   bool inTLP;
   double version;
 
-  TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph((GraphImpl *) graph),
+  TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph(static_cast<GraphImpl*>(graph)),
     _cluster(NULL), dataSet(dataSet) {
     clusterIndex[0]=graph;
     inTLP = false;
@@ -452,7 +452,7 @@ struct TLPGraphBuilder:public TLPTrue {
   bool addCluster(int id, const std::string& name, int supergraphId=0) {
     if (clusterIndex[supergraphId]) {
       _cluster = clusterIndex[id] =
-                   ((GraphAbstract *) clusterIndex[supergraphId])->addSubGraph((unsigned int) id);
+                   static_cast<GraphAbstract *>(clusterIndex[supergraphId])->addSubGraph(uint(id));
 
       if (name.size())
         _cluster->setAttribute("name", name);
@@ -633,7 +633,7 @@ struct TLPDataSetBuilder: public TLPFalse {
   DataSet* currentDataSet;
   char* dataSetName;
 
-  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet((DataSet *) &(graphBuilder->_graph->getAttributes())), dataSetName(NULL) {
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet(const_cast<DataSet *>(&(graphBuilder->_graph->getAttributes()))), dataSetName(NULL) {
   }
   TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char* name):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet), dataSetName(name) {
     graphBuilder->dataSet->get(dataSetName, dataSet);
@@ -689,7 +689,7 @@ struct TLPSceneBuilder: public TLPFalse {
   }
 
   bool addString(const std::string &str) {
-    graphBuilder->dataSet->set(SCENE, (std::string) str);
+    graphBuilder->dataSet->set(SCENE, str);
     return true;
   }
   bool close() {
@@ -758,25 +758,25 @@ struct TLPPropertyBuilder:public TLPFalse {
   }
   bool setNodeValue(int nodeId, const std::string& value)  {
     return property ?
-           graphBuilder->setNodeValue(nodeId, property, (std::string&) value,
+           graphBuilder->setNodeValue(nodeId, property, const_cast<std::string&>(value),
                                       isGraphProperty, isPathViewProperty) :
            false;
   }
   bool setEdgeValue(int edgeId, const std::string& value)  {
     return property ?
-           graphBuilder->setEdgeValue(edgeId, property, (std::string&) value,
+           graphBuilder->setEdgeValue(edgeId, property, const_cast<std::string&>(value),
                                       isGraphProperty, isPathViewProperty) :
            false;
   }
   bool setAllNodeValue(const std::string& value)  {
     return property ?
-           graphBuilder->setAllNodeValue(property, (std::string&) value,
+           graphBuilder->setAllNodeValue(property, const_cast<std::string&>(value),
                                          isGraphProperty, isPathViewProperty) :
            false;
   }
   bool setAllEdgeValue(const std::string& value)  {
     return property ?
-           graphBuilder->setAllEdgeValue(property, (std::string&) value,
+           graphBuilder->setAllEdgeValue(property, const_cast<std::string&>(value),
                                          isGraphProperty, isPathViewProperty) :
            false;
   }
@@ -887,7 +887,7 @@ bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBui
     newBuilder=new TLPPropertyBuilder(this);
   }
   else if (structName==DISPLAYING) {
-    newBuilder=new TLPDataSetBuilder(this, (char *) DISPLAYING);
+    newBuilder=new TLPDataSetBuilder(this, const_cast<char*>(DISPLAYING));
   }
   else if (structName==OLD_ATTRIBUTES) {
     newBuilder=new TLPDataSetBuilder(this);
@@ -899,10 +899,10 @@ bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBui
     newBuilder=new TLPSceneBuilder(this);
   }
   else if (structName==VIEWS) {
-    newBuilder=new TLPDataSetBuilder(this, (char *) VIEWS);
+    newBuilder=new TLPDataSetBuilder(this, const_cast<char*>(VIEWS));
   }
   else if (structName==CONTROLLER) {
-    newBuilder=new TLPDataSetBuilder(this, (char *) CONTROLLER);
+    newBuilder=new TLPDataSetBuilder(this, const_cast<char*>(CONTROLLER));
   }
   else
     newBuilder=new TLPFileInfoBuilder(this, structName);
@@ -956,7 +956,6 @@ public:
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<std::string>("file::filename", "The pathname of the TLP file to import.", "");
-//    addInParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}
 

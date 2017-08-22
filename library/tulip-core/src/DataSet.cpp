@@ -152,7 +152,7 @@ void DataSet::setData(const std::string &str, const DataType* value) {
 }
 
 unsigned int DataSet::size() const {
-  return (unsigned int) data.size();
+  return uint(data.size());
 }
 
 bool DataSet::empty() const {
@@ -364,7 +364,7 @@ string DataSet::toString() const {
     }
     else {
       if (p.second->isTulipProperty()) {
-        PropertyInterface* prop = *((PropertyInterface **) p.second->value);
+        PropertyInterface* prop = *(static_cast<PropertyInterface **>(p.second->value));
         ss << "'" << p.first << "'=";
 
         if (prop)

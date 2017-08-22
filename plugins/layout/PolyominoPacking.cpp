@@ -272,7 +272,7 @@ int PolyominoPacking::computeGridStep() {
 
   double r = sqrt(d);
   double l1 = (-b + r) / (2 * a);
-  int root = static_cast<int>(l1);
+  int root = int(l1);
 
   if (root == 0) root = 1;
 
@@ -280,7 +280,7 @@ int PolyominoPacking::computeGridStep() {
 }
 
 static int grid(float x, int s) {
-  return static_cast<int>(ceil(x/s));
+  return int(ceil(x/s));
 }
 
 template <typename T>
@@ -302,7 +302,7 @@ static T cell(const T &p, int gridStep) {
 }
 
 static Vec2i vec3fToVec2i(const Vec3f &c) {
-  return Vec2i((int)rint(c[0]), (int)rint(c[1]));
+  return Vec2i(int(rint(c[0])), int(rint(c[1])));
 }
 
 void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty* layout,

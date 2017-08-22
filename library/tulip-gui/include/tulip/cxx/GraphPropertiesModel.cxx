@@ -119,7 +119,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   if (_graph == NULL || (index.internalPointer() == NULL && index.row() != 0))
     return QVariant();
 
-  PropertyInterface* pi = (PropertyInterface*)(index.internalPointer());
+  PropertyInterface* pi = static_cast<PropertyInterface*>(index.internalPointer());
 
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
     if (!_placeholder.isEmpty() && index.row() == 0)
@@ -151,7 +151,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
     return QVariant::fromValue<PropertyInterface*>(pi);
   }
   else if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
-    return (_checkedProperties.contains((PROPTYPE*) pi) ? Qt::Checked : Qt::Unchecked);
+    return (_checkedProperties.contains(static_cast<PROPTYPE*>(pi)) ? Qt::Checked : Qt::Unchecked);
   }
 
   return QVariant();
@@ -199,12 +199,12 @@ bool tlp::GraphPropertiesModel<PROPTYPE>::setData(const QModelIndex &index, cons
     return false;
 
   if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
-    if (value.value<int>() == (int)Qt::Checked)
-      _checkedProperties.insert((PROPTYPE*)index.internalPointer());
+    if (value.value<int>() == int(Qt::Checked))
+      _checkedProperties.insert(static_cast<PROPTYPE*>(index.internalPointer()));
     else
-      _checkedProperties.remove((PROPTYPE*)index.internalPointer());
+      _checkedProperties.remove(static_cast<PROPTYPE*>(index.internalPointer()));
 
-    emit checkStateChanged(index,(Qt::CheckState)(value.value<int>()));
+    emit checkStateChanged(index, static_cast<Qt::CheckState>(value.value<int>()));
     return true;
   }
 

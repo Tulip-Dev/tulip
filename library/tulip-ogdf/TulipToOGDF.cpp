@@ -189,6 +189,6 @@ void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *m
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
     ogdfAttributes.weight((*ogdfNodes)[i]) =
-      static_cast<int>(metric->getNodeDoubleValue(nodes[i]));
+      int(metric->getNodeDoubleValue(nodes[i]));
   }
 }

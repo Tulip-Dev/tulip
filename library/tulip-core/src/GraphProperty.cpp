@@ -184,69 +184,67 @@ bool GraphProperty::setStringValueToGraphEdges(const std::string&, const tlp::Gr
 }
 //=============================================================
 const set<edge>& GraphProperty::getReferencedEdges(const edge e) const {
-  return ((GraphProperty *) this)->edgeProperties.get(e.id);
+  return const_cast<GraphProperty *>(this)->edgeProperties.get(e.id);
 }
 //=============================================================
 void GraphProperty::treatEvent(const Event& evt) {
   if (evt.type() == Event::TLP_DELETE) {
-    // From my point of view the use of dynamic_cast should be correct
-    // but it fails, so I use reinterpret_cast (pm)
-    Graph* sg = reinterpret_cast<Graph *>(evt.sender());
 
-    if(sg) {
+    Graph* sg = static_cast<Graph *>(evt.sender());
+
 #ifndef NDEBUG
-      tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << std::endl;
+    tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << std::endl;
 #endif
 
-      if (getNodeDefaultValue() == sg) {
-        //we must backup old value
-        MutableContainer<Graph *> backup;
-        backup.setAll(0);
-        Iterator<node> *it = graph->getNodes();
+    if (getNodeDefaultValue() == sg) {
+      //we must backup old value
+      MutableContainer<Graph *> backup;
+      backup.setAll(0);
+      Iterator<node> *it = graph->getNodes();
 
-        while(it->hasNext()) {
-          node n = it->next();
+      while(it->hasNext()) {
+        node n = it->next();
 
-          if (getNodeValue(n) != sg)
-            backup.set(n.id, getNodeValue(n));
-        }
-
-        delete it;
-        setAllNodeValue(0);
-        //restore values
-        it = graph->getNodes();
-
-        while(it->hasNext()) {
-          node n = it->next();
-          setNodeValue(n, backup.get(n.id));
-        }
-
-        delete it;
+        if (getNodeValue(n) != sg)
+          backup.set(n.id, getNodeValue(n));
       }
 
-      const set<node>& refs = referencedGraph.get(sg->getId());
+      delete it;
+      setAllNodeValue(0);
+      //restore values
+      it = graph->getNodes();
 
-      set<node>::const_iterator it = refs.begin();
-
-      if (it != refs.end()) {
-        // don't change values if this non longer exists (when undoing)
-        if (graph->existProperty(name)) {
-          for (; it!=refs.end(); ++it) {
-            AbstractGraphProperty::setNodeValue((*it), 0);
-          }
-        }
-
-        referencedGraph.set(sg->getId(), set<node>());
+      while(it->hasNext()) {
+        node n = it->next();
+        setNodeValue(n, backup.get(n.id));
       }
+
+      delete it;
+    }
+
+    const set<node>& refs = referencedGraph.get(sg->getId());
+
+    set<node>::const_iterator it = refs.begin();
+
+    if (it != refs.end()) {
+      // don't change values if this non longer exists (when undoing)
+      if (graph->existProperty(name)) {
+        for (; it!=refs.end(); ++it) {
+          AbstractGraphProperty::setNodeValue((*it), 0);
+        }
+      }
+
+      referencedGraph.set(sg->getId(), set<node>());
     }
   }
+
 }
 
 bool GraphProperty::readNodeDefaultValue(std::istream& iss) {
   // must read 0 (see GraphType::writeb)
   unsigned int id = 0;
 
-  if (!bool(iss.read((char *) &id, sizeof(id))))
+  if (!bool(iss.read(reinterpret_cast<char *>(&id), sizeof(id))))
     return false;
 
   assert(id == 0);
@@ -257,7 +255,7 @@ bool GraphProperty::readNodeValue(std::istream& iss, node n) {
   // must read the id of a subgraph
   unsigned int id = 0;
 
-  if (!bool(iss.read((char *) &id, sizeof(id))))
+  if (!bool(iss.read(reinterpret_cast<char *>(&id), sizeof(id))))
     return false;
 
   Graph* sg = graph->getRoot()->getDescendantGraph(id);

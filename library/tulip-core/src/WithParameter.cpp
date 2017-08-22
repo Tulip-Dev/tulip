@@ -167,7 +167,7 @@ ParameterDescription* ParameterDescriptionList::getParameter(const string& name)
 }
 
 const string& ParameterDescriptionList::getDefaultValue(const string& name)  const {
-  return ((ParameterDescriptionList *) this)->getParameter(name)->getDefaultValue();
+  return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->getDefaultValue();
 }
 
 void ParameterDescriptionList::setDefaultValue(const string& name,
@@ -181,15 +181,15 @@ void ParameterDescriptionList::setDirection(const string& name,
 }
 
 bool ParameterDescriptionList::isMandatory(const string& name) const {
-  return ((ParameterDescriptionList *) this)->getParameter(name)->isMandatory();
+  return const_cast<ParameterDescriptionList *>(this)->getParameter(name)->isMandatory();
 }
 
 #define CHECK_PROPERTY(T)\
 if (type.compare(typeid(T).name()) == 0) {\
   if (!g || defaultValue.empty() || !g->existProperty(defaultValue))\
-    dataSet.set(name, (T*) NULL);               \
+    dataSet.set(name, static_cast<T*>(NULL));               \
   else\
-    dataSet.set(name, (T*) g->getProperty<T>(defaultValue));  \
+    dataSet.set(name, static_cast<T*>(g->getProperty<T>(defaultValue)));  \
   continue;\
 }\
 
@@ -237,7 +237,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
     if (type.compare(typeid(NumericProperty*).name()) == 0) {
       if (!g || defaultValue.empty())
-        dataSet.set(name, (NumericProperty*) NULL);
+        dataSet.set(name, static_cast<NumericProperty*>(NULL));
       else {
         PropertyInterface* prop = g->getProperty(defaultValue);
 
@@ -246,7 +246,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
           prop = NULL;
         }
 
-        dataSet.set(name, (NumericProperty *) prop);
+        dataSet.set(name, static_cast<NumericProperty *>(prop));
       }
 
       continue;
@@ -254,11 +254,11 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
     if (type.compare(typeid(PropertyInterface*).name()) == 0) {
       if (!g || defaultValue.empty())
-        dataSet.set(name, (PropertyInterface*) NULL);
+        dataSet.set(name, static_cast<PropertyInterface*>(NULL));
       else {
         if (!g->existProperty(defaultValue)) {
           tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << endl;
-          dataSet.set(name, (PropertyInterface*) NULL);
+          dataSet.set(name, static_cast<PropertyInterface*>(NULL));
         }
         else
           dataSet.set(name, g->getProperty(defaultValue));

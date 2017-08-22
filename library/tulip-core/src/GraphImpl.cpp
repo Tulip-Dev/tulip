@@ -274,7 +274,7 @@ void GraphImpl::delNode(const node n, bool) {
     delete sgs;
 
     if (sg == sgq.top()) {
-      ((GraphView *) sg)->removeNode(n, edges);
+      static_cast<GraphView *>(sg)->removeNode(n, edges);
       sgq.pop();
     }
   }
@@ -373,7 +373,7 @@ void GraphImpl::reverse(const edge e) {
   // propagate edge reversal on subgraphs
   Graph* sg;
   forEach(sg, getSubGraphs()) {
-    ((GraphView*) sg)->reverseInternal(e, eEnds.first, eEnds.second);
+    static_cast<GraphView*>(sg)->reverseInternal(e, eEnds.first, eEnds.second);
   }
 }
 //----------------------------------------------------------------
@@ -411,7 +411,7 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   node nTgt = eEnds.second;
 
   forEach(sg, getSubGraphs()) {
-    ((GraphView*) sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
+    static_cast<GraphView*>(sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
 }
 //----------------------------------------------------------------

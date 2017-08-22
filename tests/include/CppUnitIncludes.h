@@ -17,33 +17,19 @@
  *
  */
 
-#ifndef Tulip_FaceIteratorTest_h
-#define Tulip_FaceIteratorTest_h
+#ifndef CPPUNITINCLUDES_H
+#define CPPUNITINCLUDES_H
 
-#include <tulip/FaceIterator.h>
-#include <tulip/PlanarConMap.h>
-#include <tulip/TlpTools.h>
-
-#include "CppUnitIncludes.h"
-
-class FaceIteratorTest : public CppUnit::TestFixture {
-  CPPUNIT_TEST_SUITE(FaceIteratorTest);
-  CPPUNIT_TEST(testNodeFaceIterator);
-  CPPUNIT_TEST(testFaceAdjIterator);
-  CPPUNIT_TEST_SUITE_END();
-
-private :
-  tlp::PlanarConMap* map;
-
-  std::vector<tlp::edge> edges;
-  std::vector<tlp::node> nodes;
-
-public :
-  void setUp();
-  void tearDown();
-
-  void testNodeFaceIterator();
-  void testFaceAdjIterator();
-};
-
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
+#endif // CPPUNITINCLUDES_H

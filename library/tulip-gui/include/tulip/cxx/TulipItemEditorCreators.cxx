@@ -221,7 +221,7 @@ QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
   GraphPropertiesModel<PROPTYPE>* model = static_cast<GraphPropertiesModel<PROPTYPE> *>(combo->model());
   QVariant var = model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
   tlp::PropertyInterface* pi = var.value<tlp::PropertyInterface*>();
-  PROPTYPE* prop = (PROPTYPE*)(pi);
+  PROPTYPE* prop = static_cast<PROPTYPE*>(pi);
   return QVariant::fromValue<PROPTYPE*>(prop);
 }
 

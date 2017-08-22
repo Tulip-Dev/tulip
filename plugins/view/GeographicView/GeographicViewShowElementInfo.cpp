@@ -53,14 +53,15 @@ public:
   }
 
   QVariantList propertiesQVariant() const  {
-    return QVariantList() << QVariant::fromValue<Color>(((GlComplexPolygon *) entity)->getFillColor()) << QVariant::fromValue<Color>(((GlComplexPolygon *) entity)->getOutlineColor());
+    return QVariantList() << QVariant::fromValue<Color>(static_cast<GlComplexPolygon *>(entity)->getFillColor())
+                          << QVariant::fromValue<Color>(static_cast<GlComplexPolygon *>(entity)->getOutlineColor());
   }
 
   void setProperty(const QString &name, const QVariant &value) {
     if(name=="fillColor")
-      ((GlComplexPolygon *) entity)->setFillColor(value.value<Color>());
+      static_cast<GlComplexPolygon *>(entity)->setFillColor(value.value<Color>());
     else if(name=="outlineColor")
-      ((GlComplexPolygon *) entity)->setOutlineColor(value.value<Color>());
+      static_cast<GlComplexPolygon *>(entity)->setOutlineColor(value.value<Color>());
   }
 };
 
@@ -109,7 +110,7 @@ GeographicViewShowElementInfo::~GeographicViewShowElementInfo() {
 }
 
 void GeographicViewShowElementInfo::clear() {
-  dynamic_cast<GeographicView*>(view())->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
+  static_cast<GeographicView*>(view())->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
   _informationWidgetItem->setVisible(false);
 }
 
@@ -129,7 +130,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if(qMouseEv != NULL) {
-    GeographicView *geoView=dynamic_cast<GeographicView*>(view());
+    GeographicView *geoView=static_cast<GeographicView*>(view());
     SelectedEntity selectedEntity;
 
     if(e->type() == QEvent::MouseMove) {
@@ -233,7 +234,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 }
 
 bool GeographicViewShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
-  GeographicView *geoView=dynamic_cast<GeographicView*>(view());
+  GeographicView *geoView=static_cast<GeographicView*>(view());
 
   if(geoView->getGeographicViewGraphicsView()->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity))
     return true;
@@ -254,7 +255,7 @@ void GeographicViewShowElementInfo::viewChanged(View * view) {
     return;
   }
 
-  GeographicView *geoView=dynamic_cast<GeographicView*>(view);
+  GeographicView *geoView=static_cast<GeographicView*>(view);
   _view=geoView;
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationWidgetItem,SLOT(close()));
   _view->getGeographicViewGraphicsView()->scene()->addItem(_informationWidgetItem);

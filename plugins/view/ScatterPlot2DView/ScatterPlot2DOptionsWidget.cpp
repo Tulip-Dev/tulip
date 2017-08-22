@@ -96,11 +96,11 @@ Size ScatterPlot2DOptionsWidget::getMaxSizeMapping() const {
 }
 
 void ScatterPlot2DOptionsWidget::setMinSizeMapping(const float minSize) {
-  _ui-> minSizeSpinBox->setValue((int)minSize);
+  _ui-> minSizeSpinBox->setValue(int(minSize));
 }
 
 void ScatterPlot2DOptionsWidget::setMaxSizeMapping(const float maxSize) {
-  _ui->maxSizeSpinBox->setValue((int)maxSize);
+  _ui->maxSizeSpinBox->setValue(int(maxSize));
 }
 
 bool ScatterPlot2DOptionsWidget::useCustomXAxisScale() const {

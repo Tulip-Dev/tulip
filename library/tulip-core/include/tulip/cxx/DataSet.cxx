@@ -25,7 +25,7 @@ template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) con
     const std::pair<std::string, tlp::DataType*> &p = *it;
 
     if (p.first == str) {
-      value = *((T*) p.second->value);
+      value = *(static_cast<T*>(p.second->value));
       return true;
     }
   }
@@ -39,7 +39,7 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
     std::pair<std::string, tlp::DataType *> &p = *it;
 
     if (p.first == str) {
-      value = *((T*) p.second->value);
+      value = *(static_cast<T*>(p.second->value));
       delete p.second;
       data.erase(it);
       return true;

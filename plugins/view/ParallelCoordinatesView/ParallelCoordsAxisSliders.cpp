@@ -185,7 +185,7 @@ void ParallelCoordsAxisSliders::viewChanged(View *view) {
     return;
   }
 
-  parallelView = dynamic_cast<ParallelCoordinatesView *>(view);
+  parallelView = static_cast<ParallelCoordinatesView *>(view);
   initOrUpdateSliders();
 }
 
@@ -237,7 +237,7 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
 
 bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glWidget = dynamic_cast<GlMainWidget *>(widget);
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
 
   if(glWidget==NULL)
     return false;
@@ -251,7 +251,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0.0f);
@@ -350,7 +350,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   else if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
     if (me->button() == Qt::LeftButton && selectedSlider != NULL && !axisSliderDragStarted) {
       axisSliderDragStarted = true;
@@ -359,7 +359,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     }
     else if (selectedAxis != NULL && pointerBetweenSliders &&
              highlightedEltsSetOperation != ParallelCoordinatesDrawing::INTERSECTION && !slidersRangeDragStarted) {
-      QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+      QMouseEvent *me = static_cast<QMouseEvent *>(e);
       slidersRangeDragStarted = true;
       slidersRangeLength = axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY() -
                            axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY();
@@ -369,7 +369,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     }
   }
   else if (e->type() == QEvent::MouseButtonRelease) {
-    QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
     if (me->button() == Qt::LeftButton && selectedAxis != NULL && (axisSliderDragStarted || slidersRangeDragStarted)) {
       axisSliderDragStarted = false;
@@ -391,7 +391,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     }
   }
   else if (e->type() == QEvent::KeyPress) {
-    QKeyEvent *ke = dynamic_cast<QKeyEvent *>(e);
+    QKeyEvent *ke = static_cast<QKeyEvent *>(e);
 
     if (ke->key() == Qt::Key_Control) {
       highlightedEltsSetOperation = ParallelCoordinatesDrawing::INTERSECTION;
@@ -405,7 +405,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   else if (e->type() == QEvent::KeyRelease) {
-    QKeyEvent *ke = dynamic_cast<QKeyEvent *>(e);
+    QKeyEvent *ke = static_cast<QKeyEvent *>(e);
 
     if (ke->key() == Qt::Key_Control || ke->key() == Qt::Key_Shift) {
       highlightedEltsSetOperation = ParallelCoordinatesDrawing::NONE;

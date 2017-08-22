@@ -37,10 +37,10 @@ ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : parallelView(NULL), selec
 
 bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glWidget = qobject_cast<GlMainWidget*>(widget);
+  GlMainWidget *glWidget = static_cast<GlMainWidget*>(widget);
+  QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *me = (QMouseEvent *) e;
 
     if (!dragStarted) {
       selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
@@ -51,7 +51,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 1], allAxis[1]);
         }
         else {
-          neighborsAxis = make_pair((ParallelAxis *) NULL, allAxis[1]);
+          neighborsAxis = make_pair(static_cast<ParallelAxis *>(NULL), allAxis[1]);
         }
       }
       else if (selectedAxis == allAxis[allAxis.size() - 1]) {
@@ -59,7 +59,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 2], allAxis[0]);
         }
         else {
-          neighborsAxis = make_pair(allAxis[allAxis.size() - 2], (ParallelAxis *) NULL);
+          neighborsAxis = make_pair(allAxis[allAxis.size() - 2], static_cast<ParallelAxis *>(NULL));
         }
       }
 
@@ -120,7 +120,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
     return true;
   }
-  else if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
+  else if (e->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
     if (selectedAxis != NULL && !dragStarted) {
       dragStarted = true;
     }
@@ -128,7 +128,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
     return true;
 
   }
-  else if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
+  else if (e->type() == QEvent::MouseButtonRelease && me->button() == Qt::LeftButton) {
     if (selectedAxis != NULL && dragStarted) {
       dragStarted = false;
       selectedAxis = NULL;
@@ -165,7 +165,7 @@ bool ParallelCoordsAxisSpacer::draw(GlMainWidget *glMainWidget) {
 }
 
 void ParallelCoordsAxisSpacer::viewChanged(View *view) {
-  parallelView = dynamic_cast<ParallelCoordinatesView *>(view);
+  parallelView = static_cast<ParallelCoordinatesView *>(view);
 }
 
 

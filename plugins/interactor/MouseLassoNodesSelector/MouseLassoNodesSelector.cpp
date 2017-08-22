@@ -99,10 +99,10 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
 
   polygonVprt.push_back(polygon[0]);
 
-  int xStart = (int) polygonVprtBB[0][0];
-  int yStart = (int) polygonVprtBB[0][1];
-  int xEnd = (int) polygonVprtBB[1][0];
-  int yEnd = (int) polygonVprtBB[1][1];
+  int xStart = int(polygonVprtBB[0][0]);
+  int yStart = int(polygonVprtBB[0][1]);
+  int xEnd = int(polygonVprtBB[1][0]);
+  int yEnd = int(polygonVprtBB[1][1]);
 
   vector<SelectedEntity> tmpNodes;
   vector<SelectedEntity> tmpEdges;

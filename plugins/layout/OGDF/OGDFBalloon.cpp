@@ -82,7 +82,7 @@ public:
                     "Computes a radial (balloon) layout based on a spanning tree.<br/>The algorithm is partially based on the paper <b>On Balloon Drawings of Rooted Trees</b> by Lin and Yen and on <b>Interacting with Huge Hierarchies: Beyond Cone Trees</b> by Carriere and Kazman. ","1.4","Hierarchical")
   OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), balloon(new ogdf::BalloonLayout()) {
     addInParameter<bool> ("Even angles", paramHelp[0], "false", false);
-    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the BalloonLayout instance
     csl->setLayoutModule(balloon);
   }

@@ -306,7 +306,7 @@ void RoundedBox::draw(node n, float lod) {
 
   // don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
 #ifndef __APPLE__
-  static string glVendor(((const char*)glGetString(GL_VENDOR)));
+  static string glVendor((reinterpret_cast<const char*>(glGetString(GL_VENDOR))));
   static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
 
   if (roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {

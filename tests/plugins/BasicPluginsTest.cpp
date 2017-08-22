@@ -17,8 +17,7 @@
  *
  */
 #include <sstream>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "BasicPluginsTest.h"
 #include <tulip/TlpTools.h>
 #include <tulip/ForEach.h>
@@ -428,7 +427,7 @@ void BasicPluginsTest::testEqualValueClustering() {
 
   for (unsigned int i=0; i<NB_ADD; ++i) {
     nodes.push_back(graph->addNode());
-    metric->setNodeValue(nodes[i], (double) (randomUnsignedInteger(NB_ADD-1)));
+    metric->setNodeValue(nodes[i], randomUnsignedInteger(NB_ADD-1));
   }
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;

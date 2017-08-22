@@ -269,7 +269,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     newValuesRecorded = true;
 
     // get ids memento
-    GraphImpl* root = (GraphImpl*) g;
+    GraphImpl* root = static_cast<GraphImpl*>(g);
     assert(newIdsState == NULL);
 
     // record ids memento only if needed
@@ -597,7 +597,7 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
 void GraphUpdatesRecorder::startRecording(GraphImpl* g) {
   if (g->getSuperGraph() == g) {
     if (oldIdsState == NULL)
-      oldIdsState = ((GraphImpl*) g)->storage.getIdsMemento();
+      oldIdsState = static_cast<GraphImpl*>(g)->storage.getIdsMemento();
   }
 
   restartRecording(g);
@@ -696,7 +696,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     propsToDel.begin();
 
   while(itpg != propsToDel.end()) {
-    Graph* g = (Graph*) itpg->first;
+    Graph* g = itpg->first;
     set<PropertyInterface*>::const_iterator itp = itpg->second.begin();
     set<PropertyInterface*>::const_iterator itpe = itpg->second.end();
 
@@ -713,7 +713,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   std::list<std::pair<Graph*, Graph*> >::const_iterator its = subGraphsToDel.begin();
 
   while(its != subGraphsToDel.end()) {
-    Graph* g = (Graph*) its->first;
+    Graph* g = its->first;
     Graph* sg = its->second;
 
     // remove from list of subgraphs + notify observers
@@ -937,7 +937,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   itpg = propsToAdd.begin();
 
   while(itpg != propsToAdd.end()) {
-    Graph* g = (Graph*) itpg->first;
+    Graph* g = itpg->first;
     set<PropertyInterface*>::const_iterator itp = itpg->second.begin();
     set<PropertyInterface*>::const_iterator itpe = itpg->second.end();
 
@@ -1289,7 +1289,7 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
   }
 
   if (g == g->getSuperGraph())
-    recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), n);
 }
 
 void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
@@ -1382,8 +1382,8 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   if (g == g->getSuperGraph()) {
     // record source & target old containers
     const pair<node, node> &eEnds = g->ends(e);
-    recordEdgeContainer(oldContainers, (GraphImpl*) g, eEnds.first);
-    recordEdgeContainer(oldContainers, (GraphImpl*) g, eEnds.second);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), eEnds.first);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), eEnds.second);
   }
 }
 
@@ -1416,8 +1416,8 @@ void GraphUpdatesRecorder::reverseEdge(Graph* g, edge e) {
         revertedEdges.insert(e);
         // record source & target old containers
         const pair<node, node>& eEnds = g->ends(e);
-        recordEdgeContainer(oldContainers, (GraphImpl*) g, eEnds.first);
-        recordEdgeContainer(oldContainers, (GraphImpl*) g, eEnds.second);
+        recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), eEnds.first);
+        recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), eEnds.second);
       }
     }
   }
@@ -1440,8 +1440,8 @@ void GraphUpdatesRecorder::beforeSetEnds(Graph* g, edge e) {
     }
     else {
       // record source & target old containers
-      recordEdgeContainer(oldContainers, (GraphImpl*) g, ends.first);
-      recordEdgeContainer(oldContainers, (GraphImpl*) g, ends.second);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), ends.first);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl*>(g), ends.second);
     }
 
     // add e old ends in oldEdgesEnds
