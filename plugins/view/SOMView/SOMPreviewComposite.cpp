@@ -92,7 +92,7 @@ Size SOMPreviewComposite::computeAspectRatio(unsigned int width, unsigned int he
 
   if (width > height) {
     elementsSize.setW(maxWidth);
-    elementsSize.setH((elementsSize.getW() * height) / (float) width);
+    elementsSize.setH((elementsSize.getW() * height) / width);
   }
   else {
     elementsSize.setH(maxHeight);

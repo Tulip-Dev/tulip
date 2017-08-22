@@ -291,7 +291,7 @@ void ParallelCoordsAxisBoxPlot::viewChanged(View *view) {
     return;
   }
 
-  parallelView = dynamic_cast<ParallelCoordinatesView *>(view);
+  parallelView = static_cast<ParallelCoordinatesView *>(view);
   initOrUpdateBoxPlots();
 }
 
@@ -344,7 +344,7 @@ void ParallelCoordsAxisBoxPlot::deleteGlAxisPlot() {
 
 bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glWidget = dynamic_cast<GlMainWidget *>(widget);
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
 
   if(!glWidget)
     return false;
@@ -352,7 +352,7 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
   initOrUpdateBoxPlots();
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *me = (QMouseEvent *) e;
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0.0f);

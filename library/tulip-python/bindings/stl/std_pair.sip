@@ -68,8 +68,8 @@ template<T1, T2>
   int t1State = 0;
   int t2State = 0;
 
-  T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-  T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
     sipReleaseType(t1, kpTypeDef1, t1State);
@@ -185,8 +185,8 @@ template<T1*, T2*>
   int t1State = 0;
   int t2State = 0;
 
-  T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
-  T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
+  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
+  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
     sipReleaseType(t1, kpTypeDef1, t1State);
@@ -300,8 +300,8 @@ template<T1*, T2>
   int t1State = 0;
   int t2State = 0;
 
-  T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
-  T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
+  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
     sipReleaseType(t1, kpTypeDef1, t1State);
@@ -415,8 +415,8 @@ template<T1, T2*>
   int t1State = 0;
   int t2State = 0;
 
-  T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-  T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
+  T1 *t1 = static_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+  T2 *t2 = static_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
 
   if (*sipIsErr) {
     sipReleaseType(t1, kpTypeDef1, t1State);

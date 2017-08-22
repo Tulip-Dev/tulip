@@ -131,7 +131,7 @@ void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOl
   connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
 
   setCentralWidget(_glMainWidget,deleteOldGlMainWidget);
-  GlMainWidgetGraphicsItem *glMainWidgetGraphicsItem=dynamic_cast<GlMainWidgetGraphicsItem*>(centralItem());
+  GlMainWidgetGraphicsItem *glMainWidgetGraphicsItem=static_cast<GlMainWidgetGraphicsItem*>(centralItem());
   delete _sceneConfigurationWidget;
   _sceneConfigurationWidget = new SceneConfigWidget();
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
@@ -190,7 +190,7 @@ void GlMainView::centerView(bool graphChanged) {
     return;
   }
 
-  float gvWidth = (float) graphicsView()->width();
+  float gvWidth = graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width
   // to ensure the scene will not be drawn under the configuration tabs title
   getGlMainWidget()->centerScene(graphChanged, (gvWidth - 50) / gvWidth);
@@ -360,7 +360,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
   if (fgLayer) {
-    Gl2DRect *labriLogo = dynamic_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
+    Gl2DRect *labriLogo = static_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
 
     if (labriLogo) {
       labriLogo->setCoordinates((_quickAccessBar != NULL) ? 35. : 0., 5., 50., 50.);
@@ -387,7 +387,7 @@ void GlMainView::openSnapshotDialog() {
 }
 
 void GlMainView::undoCallback() {
-  float gvWidth = (float) graphicsView()->width();
+  float gvWidth = graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width
   // to ensure the scene will not be drawn under the configuration tabs title
   getGlMainWidget()->centerScene(true, (gvWidth - 50) / gvWidth);

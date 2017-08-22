@@ -24,7 +24,7 @@ using namespace std;
 namespace tlp {
 
 static void computeLinearBezierPoints(const Coord &p0, const Coord &p1, vector<Coord> &curvePoints, const unsigned int nbCurvePoints) {
-  float h = 1.0 / static_cast<float>((nbCurvePoints - 1));
+  float h = 1.0 / float((nbCurvePoints - 1));
   Coord firstFD((p1 - p0) * h);
   Coord c(p0);
 
@@ -46,7 +46,7 @@ static void computeLinearBezierPoints(const Coord &p0, const Coord &p1, vector<C
 static void computeQuadraticBezierPoints(const Coord &p0, const Coord &p1, const Coord &p2, vector<Coord> &curvePoints, const unsigned int nbCurvePoints) {
 
   // Compute our step size
-  float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+  float h = 1.0 / float(nbCurvePoints - 1);
   float h2 = h*h;
 
   // Compute Initial forward difference
@@ -81,7 +81,7 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
   Coord C(p0 * -3.f + p1 * 3.f);
 
   // Compute our step size
-  float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+  float h = 1.0 / float(nbCurvePoints - 1);
   float h2 = h*h;
   float h3 = h2*h;
   float h36 = h3*6;
@@ -149,8 +149,8 @@ static void computeCoefficients(double t, unsigned int nbControlPoints) {
     vector<double> tCoeff, sCoeff;
 
     for (size_t i = 0 ; i < nbControlPoints ; ++i) {
-      tCoeff.push_back(pow(t, static_cast<double>(i)));
-      sCoeff.push_back(pow(s, static_cast<double>(i)));
+      tCoeff.push_back(pow(t, double(i)));
+      sCoeff.push_back(pow(s, double(i)));
     }
 
     tCoeffs[t] = tCoeff;
@@ -164,8 +164,8 @@ static void computeCoefficients(double t, unsigned int nbControlPoints) {
       size_t oldSize = tCoeff.size();
 
       for (size_t i = oldSize ; i < nbControlPoints ; ++i) {
-        tCoeff.push_back(pow(t, static_cast<double>(i)));
-        sCoeff.push_back(pow(s, static_cast<double>(i)));
+        tCoeff.push_back(pow(t, double(i)));
+        sCoeff.push_back(pow(s, double(i)));
       }
     }
   }
@@ -180,15 +180,15 @@ Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
   Vector<double, 3> bezierPoint;
   bezierPoint[0] = bezierPoint[1] = bezierPoint[2] = 0;
   double curCoeff = 1.0;
-  double r = static_cast<double>(nbControlPoints);
+  double r = double(nbControlPoints);
 
   for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
     Vector<double, 3> controlPoint;
     controlPoint[0] = controlPoints[i][0];
     controlPoint[1] = controlPoints[i][1];
     controlPoint[2] = controlPoints[i][2];
-    bezierPoint += controlPoint * curCoeff * tCoeffs[static_cast<double>(t)][i] * sCoeffs[static_cast<double>(t)][nbControlPoints - 1 - i];
-    double c = static_cast<double>(i+1);
+    bezierPoint += controlPoint * curCoeff * tCoeffs[double(t)][i] * sCoeffs[double(t)][nbControlPoints - 1 - i];
+    double c = double(i+1);
     curCoeff *= (r -c)/c;
   }
 
@@ -214,7 +214,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 
   default:
     curvePoints.resize(nbCurvePoints);
-    float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+    float h = 1.0 / float(nbCurvePoints - 1);
 // With Visual Studio, the parallelization of the curve points computation
 // leads to incorrect results (why? I don't know ...)
 #if defined(_OPENMP) && !defined(_MSC_VER)
@@ -239,7 +239,7 @@ static void computeCatmullRomGlobalParameter(const vector<Coord> &controlPoints,
   float totalDist = 0.f;
 
   for (size_t i = 1 ; i < controlPoints.size() ; ++i) {
-    float dist = pow((float) controlPoints[i-1].dist(controlPoints[i]), alpha);
+    float dist = pow(controlPoints[i-1].dist(controlPoints[i]), alpha);
     cumDist[i] = cumDist[i-1] + dist;
     totalDist += dist;
   }
@@ -349,7 +349,7 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 #endif
 
   for (OMP_ITER_TYPE i = 0 ; i < nbCurvePoints ; ++i) {
-    curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha);
+    curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / float(nbCurvePoints - 1), globalParameter, closedCurve, alpha);
   }
 }
 
@@ -360,7 +360,7 @@ static float clamp(float f, float minVal, float maxVal) {
 Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const float t, const unsigned int curveDegree) {
   assert(controlPoints.size() > 3);
   unsigned int nbKnots = controlPoints.size() + curveDegree + 1;
-  float stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(curveDegree) + 1.0f)) + 2.0f - 1.0f);
+  float stepKnots = 1.0f / ((float(nbKnots) - 2.0f * (float(curveDegree) + 1.0f)) + 2.0f - 1.0f);
 
   if (t == 0.0) {
     return controlPoints[0];
@@ -382,7 +382,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
     float knotVal = (cpt * stepKnots);
     coeffs[curveDegree] = 1.0;
 
-    for (int i = 1 ; i <= static_cast<int>(curveDegree) ; ++i) {
+    for (int i = 1 ; i <= int(curveDegree) ; ++i) {
       coeffs[curveDegree-i] = (clamp(knotVal + stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + stepKnots, 0.0, 1.0) - clamp(knotVal + (-i+1) * stepKnots, 0.0, 1.0)) * coeffs[curveDegree-i+1];
       int tabIdx = curveDegree-i+1;
 
@@ -414,7 +414,7 @@ void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<
 #endif
 
   for (OMP_ITER_TYPE i = 0 ; i < nbCurvePoints ; ++i) {
-    curvePoints[i] = computeOpenUniformBsplinePoint(controlPoints, i / static_cast<float>(nbCurvePoints - 1), curveDegree);
+    curvePoints[i] = computeOpenUniformBsplinePoint(controlPoints, i / float(nbCurvePoints - 1), curveDegree);
   }
 }
 

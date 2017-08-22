@@ -33,15 +33,13 @@ using namespace tlp;
 using namespace std;
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
-  QMouseEvent * qMouseEv = (QMouseEvent *) e;
+  QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if(qMouseEv != NULL) {
     SelectedEntity selectedEntity;
 
     if (glMainWidget == NULL)
-      glMainWidget = dynamic_cast<GlMainWidget *>(widget);
-
-    assert(glMainWidget);
+      glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if(e->type() == QEvent::MouseMove) {
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
@@ -68,7 +66,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
         Observable::holdObservers();
         node newNode;
         newNode = _graph->addNode();
-        Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),(double) qMouseEv->y(),0);
+        Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(),0);
         point = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(glMainWidget->screenToViewport(point));
 
         // This code is here to block z coordinate to 0 when we are in "2D mode"

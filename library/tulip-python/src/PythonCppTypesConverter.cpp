@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonCppTypesConverter.h"
 
@@ -283,15 +288,15 @@ T *getCppPointerFromPyObject(PyObject *pyObj) {
 
 #define CHECK_BASE_CPP_TYPE_CONVERSION(T)\
     if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {\
-        pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T*>(dataType->value)));\
+        pyObj = getPyObjectFromCppObject(*(static_cast<T*>(dataType->value)));\
     }\
 
 #define CHECK_SIP_CPP_TYPE_CONVERSION(T)\
     if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {\
         if (noCopy) {\
-            pyObj = getPyObjectFromCppObject(reinterpret_cast<T*>(dataType->value));\
+            pyObj = getPyObjectFromCppObject(static_cast<T*>(dataType->value));\
         } else {\
-            pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T*>(dataType->value)));\
+            pyObj = getPyObjectFromCppObject(*(static_cast<T*>(dataType->value)));\
         }\
     }\
 
@@ -408,7 +413,7 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
 
 #define CHECK_SIP_ENUM_CONVERSION(SIP_TYPE_STR)\
     if (sipCanConvertToEnum(pyObj, sipFindType(SIP_TYPE_STR))) {\
-     valSetter.setValue(static_cast<int>(PyLong_AsLong(pyObj)));\
+     valSetter.setValue(int(PyLong_AsLong(pyObj)));\
       return true;\
     }\
 
@@ -443,7 +448,7 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
     long val = getCppObjectFromPyObject<long>(pyObj);
 
     if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
-      valSetter.setValue(static_cast<int>(val));
+      valSetter.setValue(int(val));
     }
     else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
       valSetter.setValue(getCppObjectFromPyObject<unsigned int>(pyObj));
@@ -455,13 +460,13 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
       valSetter.setValue(getCppObjectFromPyObject<unsigned long>(pyObj));
     }
     else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
-      valSetter.setValue(static_cast<float>(val));
+      valSetter.setValue(float(val));
     }
     else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
-      valSetter.setValue(static_cast<double>(val));
+      valSetter.setValue(double(val));
     }
     else {
-      valSetter.setValue(static_cast<int>(val));
+      valSetter.setValue(int(val));
     }
 
     return true;
@@ -473,7 +478,7 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
     long val = getCppObjectFromPyObject<long>(pyObj);
 
     if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
-      valSetter.setValue(static_cast<int>(val));
+      valSetter.setValue(int(val));
     }
     else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
       valSetter.setValue(getCppObjectFromPyObject<unsigned int>(pyObj));
@@ -485,13 +490,13 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
       valSetter.setValue(getCppObjectFromPyObject<unsigned long>(pyObj));
     }
     else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
-      valSetter.setValue(static_cast<float>(val));
+      valSetter.setValue(float(val));
     }
     else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
-      valSetter.setValue(static_cast<double>(val));
+      valSetter.setValue(double(val));
     }
     else {
-      valSetter.setValue(static_cast<int>(val));
+      valSetter.setValue(int(val));
     }
 
     return true;
@@ -671,3 +676,7 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   return false;
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

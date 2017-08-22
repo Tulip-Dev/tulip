@@ -97,13 +97,13 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
   GLfloat xnext, ynext, rnext, gnext, bnext, distance;
   xnext=ynext=rnext=gnext=bnext=distance=0;
 
-  token = (int)*loc;
+  token = int(*loc);
   loc++;
 
   switch (token) {
   case GL_LINE_RESET_TOKEN:
   case GL_LINE_TOKEN:
-    vertex = (Feedback3Dcolor *) loc;
+    vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
 
     dr = vertex[1].red - vertex[0].red;
     dg = vertex[1].green - vertex[0].green;
@@ -124,7 +124,7 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
 #define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth
       lines. */
       colormax = Max(absR, Max(absG, absB));
-      steps =(int) rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR));
+      steps =int(rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR)));
 
       xstep = dx / steps;
       ystep = dy / steps;
@@ -175,10 +175,10 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
     break;
 
   case GL_POLYGON_TOKEN:
-    nvertices =(int) *loc;
+    nvertices = int(*loc);
     loc++;
 
-    vertex = (Feedback3Dcolor *) loc;
+    vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
 
     if (nvertices > 0) {
       red = vertex[0].red;
@@ -228,7 +228,7 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
     break;
 
   case GL_POINT_TOKEN:
-    vertex = (Feedback3Dcolor *) loc;
+    vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
     fprintf(file, "%g %g %g setrgbcolor\n", vertex[0].red, vertex[0].green, vertex[0].blue);
     fprintf(file, "%g %g %g 0 360 arc fill\n\n", vertex[0].x, vertex[0].y, pointSize / 2.0);
     loc += 7;           /* Each vertex element in the feedback
@@ -264,8 +264,8 @@ typedef struct _DepthIndex {
 } DepthIndex;
 //====================================================
 int tlp::compare(const void *a, const void *b) {
-  DepthIndex *p1 = (DepthIndex *) a;
-  DepthIndex *p2 = (DepthIndex *) b;
+  const DepthIndex *p1 = static_cast<const DepthIndex *>(a);
+  const DepthIndex *p2 = static_cast<const DepthIndex *>(b);
   GLfloat diff = p2->depth - p1->depth;
 
   if (diff > 0.0) {
@@ -295,7 +295,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
   loc = buffer;
 
   while (loc < end) {
-    token = (int)*loc;
+    token = int(*loc);
     loc++;
 
     switch (token) {
@@ -306,7 +306,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
       break;
 
     case GL_POLYGON_TOKEN:
-      nvertices = (int)*loc;
+      nvertices = int(*loc);
       loc++;
       loc += (7 * nvertices);
       nprimitives++;
@@ -333,20 +333,20 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
      entry per primitive.  This array is also where we keep the
      primitive's average depth.  There is one entry per
      primitive  in the feedback buffer. */
-  prims = (DepthIndex *) malloc(sizeof(DepthIndex) * nprimitives);
+  prims = static_cast<DepthIndex *>(malloc(sizeof(DepthIndex) * nprimitives));
 
   item = 0;
   loc = buffer;
 
   while (loc < end) {
     prims[item].ptr = loc;  /* Save this primitive's location. */
-    token = (int)*loc;
+    token = int(*loc);
     loc++;
 
     switch (token) {
     case GL_LINE_TOKEN:
     case GL_LINE_RESET_TOKEN:
-      vertex = (Feedback3Dcolor *) loc;
+      vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
       depthSum = vertex[0].z + vertex[1].z;
       prims[item].depth = depthSum / 2.0;
       loc += 14;
@@ -354,9 +354,9 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
       break;
 
     case GL_POLYGON_TOKEN:
-      nvertices = (int)*loc;
+      nvertices = int(*loc);
       loc++;
-      vertex = (Feedback3Dcolor *) loc;
+      vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
       depthSum = vertex[0].z;
 
       for (i = 1; i < nvertices; i++) {
@@ -369,7 +369,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
       break;
 
     case GL_POINT_TOKEN:
-      vertex = (Feedback3Dcolor *) loc;
+      vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
       prims[item].depth = vertex[0].z;
       loc += 7;
       item++;
@@ -489,7 +489,7 @@ void tlp::printBuffer(GLint size, GLfloat * buffer) {
   count = size;
 
   while (count) {
-    int token = (int)buffer[size - count];
+    int token = int(buffer[size - count]);
     count--;
 
     switch (token) {
@@ -518,7 +518,7 @@ void tlp::printBuffer(GLint size, GLfloat * buffer) {
 
     case GL_POLYGON_TOKEN:
       printf("GL_POLYGON_TOKEN\n");
-      int nvertices = (int)buffer[size - count];
+      int nvertices = int(buffer[size - count]);
       count--;
 
       for (; nvertices > 0; nvertices--) {

@@ -76,7 +76,8 @@ void getColors(const Coord *line,const unsigned int lineSize, const Color &c1, c
   for (unsigned int i = 1; i < lineSize - 1; ++i) {
     float delta = sqrnorm(line[i-1] - line[i]);
     _c1 += _c2 * delta;
-    result[i] = Color((unsigned char)_c1[0], (unsigned char)_c1[1], (unsigned char)_c1[2], (unsigned char)_c1[3]);
+    result[i] = Color(uchar(_c1[0]), uchar(_c1[1]),
+                      uchar(_c1[2]), uchar(_c1[3]));
   }
 }
 //================================================
@@ -119,7 +120,7 @@ struct CurvePoints {
     ++size;
   }
   Coord& operator()(unsigned int i, unsigned int j) {
-    return (Coord&)data[j*size*3+i*3];
+    return reinterpret_cast<Coord&>(data[j*size*3+i*3]);
   }
 };
 //================================================
@@ -167,12 +168,12 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
     float newSize=sizes[i];
     Coord u=vertices[i-1]-vertices[i];
     Coord v=vertices[i+1]-vertices[i];
-    float angle=static_cast<float>(M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm())));
+    float angle=float(M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm())));
 
     if(isnan(angle))
       angle=0;
 
-    newSize=newSize/static_cast<float>(cos(angle/2.));
+    newSize=newSize/float(cos(angle/2.));
 
     if(angle<M_PI/2+M_PI/4) {
       //normal form
@@ -273,7 +274,7 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
     bi_xu_xv /= bi_xu_xv.norm();
   }
 
-  angle=static_cast<float>(M_PI-atan2((u^v).norm(), u.dotProduct(v)));
+  angle=float(M_PI-atan2((u^v).norm(), u.dotProduct(v)));
 
   bool angleOk = true;
 
@@ -291,18 +292,18 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
     }
   }
   else {
-    newSize=newSize/static_cast<float>(cos(angle/2.0));
+    newSize=newSize/float(cos(angle/2.0));
   }
 
   if(angleOk && angle<M_PI/2+M_PI/4) {
     //normal form
     if ((xu^xv)[2] > 0) {
-      result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
-      result.push_back(pCurrent - bi_xu_xv*newSize*static_cast<float>(inversion));
+      result.push_back(pCurrent + bi_xu_xv*newSize*float(inversion));
+      result.push_back(pCurrent - bi_xu_xv*newSize*float(inversion));
     }
     else {
-      result.push_back(pCurrent - bi_xu_xv*newSize*static_cast<float>(inversion));
-      result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
+      result.push_back(pCurrent - bi_xu_xv*newSize*float(inversion));
+      result.push_back(pCurrent + bi_xu_xv*newSize*float(inversion));
     }
   }
   else {
@@ -325,8 +326,8 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
       }
     }
     else {
-      result.push_back(pCurrent + vectUnit*size*static_cast<float>(inversion));
-      result.push_back(pCurrent - vectUnit*size*static_cast<float>(inversion));
+      result.push_back(pCurrent + vectUnit*size*float(inversion));
+      result.push_back(pCurrent - vectUnit*size*float(inversion));
       inversion*=-1;
     }
   }
@@ -573,7 +574,7 @@ void polyQuad(const vector<Coord> &vertices,
 
     if(!colorInterpolate) {
       glDisableClientState(GL_COLOR_ARRAY);
-      glColor4ubv(((const GLubyte *)&borderColor));
+      glColor4ubv(reinterpret_cast<const GLubyte *>(&borderColor));
     }
 
     glDrawElements(GL_LINE_STRIP, bottomOutlineIndices.size(), GL_UNSIGNED_INT, &bottomOutlineIndices[0]);
@@ -641,12 +642,12 @@ void simpleQuad(const vector<Coord> &vertices,
     float newSize=sizes[i];
     Coord u=vertices[i-1]-vertices[i];
     Coord v=vertices[i+1]-vertices[i];
-    float angle=static_cast<float>(M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm())));
+    float angle=float(M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm())));
 
     if(isnan(angle))
       angle=0;
 
-    newSize=newSize/static_cast<float>(cos(angle/2.));
+    newSize=newSize/float(cos(angle/2.));
 
     result(i,0) = vertices[i] - xu_xv*newSize;
     result(i,1) = vertices[i] + xu_xv*newSize;
@@ -682,7 +683,7 @@ void simpleQuad(const vector<Coord> &vertices,
   glBegin(GL_QUAD_STRIP);
 
   for (unsigned int i = 0; i < size; ++i) {
-    glColor4ubv(((const GLubyte *)&colors[i]));
+    glColor4ubv(reinterpret_cast<const GLubyte *>(&colors[i]));
 
     if(i==0) {
       glMultiTexCoord2f(GL_TEXTURE0,0, 1.0f);
@@ -726,11 +727,11 @@ void simpleQuad(const vector<Coord> &vertices,
     glBegin(GL_LINE_STRIP);
 
     if(!colorInterpolate)
-      glColor4ubv(((const GLubyte *)&borderColor));
+      glColor4ubv(reinterpret_cast<const GLubyte *>(&borderColor));
 
     for (unsigned int i = 0; i < size; ++i) {
       if(colorInterpolate)
-        glColor4ubv(((const GLubyte *)&colors[i]));
+        glColor4ubv(reinterpret_cast<const GLubyte *>(&colors[i]));
 
       glVertex3fv(&points[i*3]);
     }
@@ -740,11 +741,11 @@ void simpleQuad(const vector<Coord> &vertices,
     glBegin(GL_LINE_STRIP);
 
     if(!colorInterpolate)
-      glColor4ubv(((const GLubyte *)&borderColor));
+      glColor4ubv(reinterpret_cast<const GLubyte *>(&borderColor));
 
     for (unsigned int i = 0; i < size; ++i) {
       if(colorInterpolate)
-        glColor4ubv(((const GLubyte *)&colors[i]));
+        glColor4ubv(reinterpret_cast<const GLubyte *>(&colors[i]));
 
       glVertex3fv(&points[i*3 + size*3]);
     }
@@ -797,7 +798,7 @@ void bezierQuad(const vector<Coord> &vertices,
     delta[i] = float(c2[i]) - float(c1[i]);
   }
 
-  delta /= static_cast<float>(steps);
+  delta /= float(steps);
   unsigned int size;
   vector<float> sizes;
   getSizes(vertices, s1, s2,sizes);
@@ -813,14 +814,14 @@ void bezierQuad(const vector<Coord> &vertices,
   Vector<float, 4> color=baseColor;
 
   for (unsigned int i = 0; i <= steps; ++i) {
-    glColor4ub((unsigned char)color[0], (unsigned char)color[1],
-               (unsigned char)color[2], (unsigned char)color[3]);
+    glColor4ub(uchar(color[0]), uchar(color[1]),
+               uchar(color[2]), uchar(color[3]));
     glTexCoord2f(0.0f, 0.0f);
-    glEvalCoord2f((GLfloat) i/steps,0);
-    glColor4ub((unsigned char)color[0], (unsigned char)color[1],  //Need to be done, bug of opengl ???
-               (unsigned char)color[2], (unsigned char)color[3]);
+    glEvalCoord2f(i/GLfloat(steps),0);
+    glColor4ub(uchar(color[0]), uchar(color[1]),  //Need to be done, bug of opengl ???
+               uchar(color[2]), uchar(color[3]));
     glTexCoord2f(1.0f, 1.0f);
-    glEvalCoord2f((GLfloat) i/steps,1);
+    glEvalCoord2f(i/GLfloat(steps),1);
     color += delta;
   }
 
@@ -830,9 +831,9 @@ void bezierQuad(const vector<Coord> &vertices,
   glBegin(GL_LINE_STRIP);
 
   for (unsigned int i = 0; i <= steps; ++i) {
-    glColor4ub((unsigned char)color[0], (unsigned char)color[1],
-               (unsigned char)color[2], (unsigned char)color[3]);
-    glEvalCoord2f((GLfloat) i/steps,0);
+    glColor4ub(uchar(color[0]), uchar(color[1]),
+               uchar(color[2]), uchar(color[3]));
+    glEvalCoord2f(i/GLfloat(steps),0);
     color += delta;
   }
 
@@ -841,9 +842,9 @@ void bezierQuad(const vector<Coord> &vertices,
   glBegin(GL_LINE_STRIP);
 
   for (unsigned int i = 0; i <= steps; ++i) {
-    glColor4ub((unsigned char)color[0], (unsigned char)color[1],
-               (unsigned char)color[2], (unsigned char)color[3]);
-    glEvalCoord2f((GLfloat) i/steps,1);
+    glColor4ub(uchar(color[0]), uchar(color[1]),
+               uchar(color[2]), uchar(color[3]));
+    glEvalCoord2f(i/GLfloat(steps),1);
     color += delta;
   }
 
@@ -887,7 +888,7 @@ void bezierLine(const vector<Coord> &vertices,
   GLfloat *data = new GLfloat[vertices.size()*3];
 
   for (unsigned int i = 0; i < vertices.size(); ++i) {
-    *((Coord *)&data[i*3]) = vertices[i];
+    *(reinterpret_cast<Coord *>(&data[i*3])) = vertices[i];
   }
 
   unsigned int steps = 40;
@@ -898,15 +899,16 @@ void bezierLine(const vector<Coord> &vertices,
     delta[i] = float(c2[i]) - float(c1[i]);
   }
 
-  delta /= static_cast<float>(steps);
+  delta /= float(steps);
   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, vertices.size(), data);
   glEnable(GL_MAP1_VERTEX_3);
 
   glBegin(GL_LINE_STRIP);
 
   for (unsigned int i = 0; i <= steps; ++i) {
-    setColor(Color((unsigned char)color[0], (unsigned char)color[1],(unsigned char)color[2], (unsigned char)color[3]));
-    glEvalCoord1f((GLfloat) i/steps);
+    setColor(Color(uchar(color[0]), uchar(color[1]),
+                   uchar(color[2]), uchar(color[3])));
+    glEvalCoord1f(i/GLfloat(steps));
     color += delta;
   }
 

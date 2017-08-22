@@ -271,32 +271,34 @@ void RectanglePacking::dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(li
 
 int RectanglePacking::calculOfNumberOptimalRepositionnedRectangles(const char * quality) {
 
+  double numberOfRectanglesDouble = numberOfRectangles;
+
   if(!strcmp(quality,"n5"))
     return numberOfRectangles;
 
   else if(!strcmp(quality,"n4logn"))
-    return (int)floor(pow((double)pow((float)numberOfRectangles,4)*log((float)numberOfRectangles),0.2));
+    return int(floor(pow(pow(numberOfRectanglesDouble, 4.0)*log(numberOfRectanglesDouble),0.2)));
 
   else if(!strcmp(quality,"n4"))
-    return (int)floor(pow((double)numberOfRectangles,0.8));
+    return int(floor(pow(numberOfRectanglesDouble,0.8)));
 
   else if(!strcmp(quality,"n3logn"))
-    return (int)floor(pow((double)pow((float)numberOfRectangles,3)*log((float)numberOfRectangles),0.2));
+    return int(floor(pow(pow(numberOfRectanglesDouble,3.0)*log(numberOfRectanglesDouble),0.2)));
 
   else if(!strcmp(quality,"n3"))
-    return (int)floor(pow((double)numberOfRectangles,0.6));
+    return int(floor(pow(numberOfRectanglesDouble,0.6)));
 
   else if(!strcmp(quality,"n2logn"))
-    return (int)floor(pow((double)pow((float)numberOfRectangles,2)*log((float)numberOfRectangles),0.2));
+    return int(floor(pow(pow(numberOfRectanglesDouble,2.0)*log(numberOfRectanglesDouble),0.2)));
 
   else if(!strcmp(quality,"n2"))
-    return (int)floor(pow((double)numberOfRectangles,0.4));
+    return int(floor(pow(numberOfRectanglesDouble,0.4)));
 
   else if(!strcmp(quality,"nlogn"))
-    return (int)floor(pow((double)numberOfRectangles*log((float)numberOfRectangles),0.2));
+    return int(floor(pow(numberOfRectanglesDouble*log(numberOfRectanglesDouble),0.2)));
 
   else if(!strcmp(quality,"n"))
-    return (int)floor(pow((double)numberOfRectangles,0.2));
+    return int(floor(pow(numberOfRectanglesDouble,0.2)));
 
   return 0;
 }
@@ -569,23 +571,25 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
 
 int RectanglePacking::calculNumberOfTestedPositions(const char * quality) {
 
+  double numberOfRectanglesDouble = numberOfRectangles;
+
   if(!strcmp(quality,"n5"))
     return numberOfRectangles;
 
   else if(!strcmp(quality,"n4logn"))
-    return (int)floor(pow((double)pow((float)numberOfRectangles,3)*log((float)numberOfRectangles),0.25));
+    return int(floor(pow(pow(numberOfRectanglesDouble,3.0)*log(numberOfRectanglesDouble),0.25)));
 
   else if(!strcmp(quality,"n4"))
-    return (int)floor(pow((double)numberOfRectangles,0.75));
+    return int(floor(pow(numberOfRectanglesDouble,0.75)));
 
   else if(!strcmp(quality,"n3logn"))
-    return (int)floor(pow((double)pow((float)numberOfRectangles,2)*log((float)numberOfRectangles),0.25));
+    return int(floor(pow(pow(numberOfRectanglesDouble,2.0)*log(numberOfRectanglesDouble),0.25)));
 
   else if(!strcmp(quality,"n3"))
-    return (int)floor(sqrt((double)numberOfRectangles));
+    return int(floor(sqrt(numberOfRectanglesDouble)));
 
   else if(!strcmp(quality,"n2logn"))
-    return (int)floor(sqrt((double)log((float)numberOfRectangles)));
+    return int(floor(sqrt(log(numberOfRectanglesDouble))));
 
   return 0;
 }

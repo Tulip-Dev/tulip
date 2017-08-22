@@ -46,7 +46,7 @@ public:
   }
 
   size_t id() const {
-    return (size_t) this;
+    return reinterpret_cast<size_t>(this);
   }
 };
 }

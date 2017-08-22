@@ -52,16 +52,16 @@ RGBA HSI::getRGBA() const {
   RGBA ret;
 
   if (saturation == 0.0) {
-    ret[0] = (unsigned char) (intensity * 255);
-    ret[1] = (unsigned char) (intensity * 255);
-    ret[2] = (unsigned char) (intensity * 255);
-    ret[3] = 255;
+    ret[0] = uchar(intensity * 255);
+    ret[1] = uchar(intensity * 255);
+    ret[2] = uchar(intensity * 255);
+    ret[3] = uchar(255);
   }
   else {
-    ret[0] = (unsigned char) (value(hue + 0.0) * 255);                    // 0 Grad = 0 pi
-    ret[1] = (unsigned char) (value(hue + 4.0) * 255);                  // 240 Grad = 4/3 pi
-    ret[2] = (unsigned char) (value(hue + 2.0) * 255);                   // 120 Grad = 2/3 pi
-    ret[3] = 255;
+    ret[0] = uchar(value(hue + 0.0) * 255);                    // 0 Grad = 0 pi
+    ret[1] = uchar(value(hue + 4.0) * 255);                  // 240 Grad = 4/3 pi
+    ret[2] = uchar(value(hue + 2.0) * 255);                   // 120 Grad = 2/3 pi
+    ret[3] = uchar(255);
   }
 
   return ret;

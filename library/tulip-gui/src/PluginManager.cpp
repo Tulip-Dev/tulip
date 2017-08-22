@@ -112,7 +112,7 @@ public:
     reply->open(QIODevice::ReadOnly);
     QByteArray contents = reply->readAll();
     reply->close();
-    parse((const unsigned char *) contents.constData(), contents.size());
+    parse(reinterpret_cast<const unsigned char *>(contents.constData()), contents.size());
     return _result;
   }
 

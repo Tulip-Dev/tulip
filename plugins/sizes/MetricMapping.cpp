@@ -181,11 +181,11 @@ public:
 
         Size size=entrySize->getNodeValue(itn);
 
-        if (xaxis) size[0]=static_cast<float>(sizos);
+        if (xaxis) size[0]=float(sizos);
 
-        if (yaxis) size[1]=static_cast<float>(sizos);
+        if (yaxis) size[1]=float(sizos);
 
-        if (zaxis) size[2]=static_cast<float>(sizos);
+        if (zaxis) size[2]=float(sizos);
 
         result->setNodeValue(itn, size);
 
@@ -211,8 +211,8 @@ public:
         double sizos =
           min+(entryMetric->getEdgeDoubleValue(ite)-shift)*(max-min)/range;
         Size size = entrySize->getEdgeValue(ite);
-        size[0] = static_cast<float>(sizos);
-        size[1] = static_cast<float>(sizos);
+        size[0] = float(sizos);
+        size[1] = float(sizos);
         result->setEdgeValue(ite, size);
 
         if ((++iter % 500 == 0) &&

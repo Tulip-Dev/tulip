@@ -153,7 +153,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   if (bgColor.isValid() && bgColor.type() == QVariant::Color)
     painter->setBrush(bgColor.value<QColor>());
   else {
-    QTableView* tv = dynamic_cast<QTableView*>(parent());
+    QTableView* tv = static_cast<QTableView*>(parent());
     painter->setBrush((tv && tv->alternatingRowColors() && (index.row() % 2))
                       ? option.palette.alternateBase()
                       : option.palette.base());

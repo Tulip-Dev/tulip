@@ -767,12 +767,14 @@ void HistogramMetricMapping::initInteractor() {
 
 bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 
-  if(!dynamic_cast<QMouseEvent *>(e))
+  QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+
+  if(!me)
     return false;
 
   bool ret  = false;
 
-  GlMainWidget *glWidget = (GlMainWidget *) widget;
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
 
   if (!glWidget->hasMouseTracking()) {
     glWidget->setMouseTracking(true);
@@ -783,10 +785,9 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
   initInteractor();
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *me = (QMouseEvent *) e;
     int x = glWidget->width() - me->x();
     int y = me->y();
-    Coord screenCoords((double) x, (double) y, 0);
+    Coord screenCoords(x, y, 0);
     Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
     if (!curveDragStarted) {
@@ -828,10 +829,9 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       selectedAnchor = NULL;
     }
     else {
-      QMouseEvent *me = (QMouseEvent *) e;
       int x = glWidget->width() - me->x();
       int y = me->y();
-      Coord screenCoords((double) x, (double) y, 0);
+      Coord screenCoords(x, y, 0);
       Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
       if (curve->pointBelong(sceneCoords)) {
@@ -865,7 +865,6 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     ret =  true;
   }
   else if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
 
     if (me->buttons() == Qt::LeftButton && selectedAnchor != NULL) {
       curveDragStarted = true;
@@ -874,7 +873,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     else if (me->buttons() == Qt::RightButton) {
       int x = glWidget->width() - me->x();
       int y = me->y();
-      Coord screenCoords((double) x, (double) y, 0);
+      Coord screenCoords(x, y, 0);
       Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
       if (pointerUnderScale(sceneCoords)) {

@@ -106,10 +106,10 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
   newCamera2.setEyes(newCamera2.getCenter()+Coord(0,0,1)*(newCamera2.getEyes()-newCamera2.getCenter()).norm());
   newCamera2.setUp(Coord(0,1,0));
 
-  Coord first=newCamera2.worldTo2DViewport((Coord)(bb[0]));
-  Coord second=newCamera2.worldTo2DViewport((Coord)(bb[1]));
+  Coord first=newCamera2.worldTo2DViewport(bb[0]);
+  Coord second=newCamera2.worldTo2DViewport(bb[1]);
 
-  Coord center=camera->worldTo2DViewport((Coord)(bb[0]+bb[1])/2.f);
+  Coord center=camera->worldTo2DViewport((bb[0]+bb[1])/2.f);
   Coord size=second-first;
 
   Vector<int,4> viewport;
@@ -173,8 +173,8 @@ GlScene *GlMetaNodeRenderer::createScene(Graph* metaGraph) const {
 
 void GlMetaNodeRenderer::treatEvent(const Event &e) {
   if(e.type() == Event::TLP_DELETE) {
-    delete _metaGraphToSceneMap[reinterpret_cast<Graph*>(e.sender())];
-    _metaGraphToSceneMap.erase(reinterpret_cast<Graph*>(e.sender()));
+    delete _metaGraphToSceneMap[static_cast<Graph*>(e.sender())];
+    _metaGraphToSceneMap.erase(static_cast<Graph*>(e.sender()));
   }
 }
 

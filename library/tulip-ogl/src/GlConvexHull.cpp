@@ -81,7 +81,7 @@ void GlConvexHull::draw(float,Camera *) {
       }
 
       //_points[i][2] = 0;
-      glVertex3fv((float *)&_points[i]);
+      glVertex3fv(reinterpret_cast<float *>(&_points[i]));
     }
 
     glEnd();
@@ -96,7 +96,7 @@ void GlConvexHull::draw(float,Camera *) {
       }
 
       //_points[i][2] = 0;
-      glVertex3fv((float *)&_points[i]);
+      glVertex3fv(reinterpret_cast<float *>(&_points[i]));
     }
 
     glEnd();

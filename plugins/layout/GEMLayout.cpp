@@ -133,7 +133,7 @@ Coord GEMLayout::computeForces(unsigned int v,
 
   //Init force in a random position
   for (unsigned int cnt = 0; cnt<_dim; ++cnt) {
-    force[cnt] =  shake  - static_cast<float>(randomDouble(2. * shake));
+    force[cnt] =  shake  - float(randomDouble(2. * shake));
   }
 
   //Add central force
@@ -142,7 +142,7 @@ Coord GEMLayout::computeForces(unsigned int v,
   double  maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0f, (float)metric->getEdgeDoubleMin());
+    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin());
   else
     maxEdgeLength = EDGELENGTH;
 
@@ -155,7 +155,7 @@ Coord GEMLayout::computeForces(unsigned int v,
       float n = d[0]*d[0] + d[1]*d[1] + d[2]*d[2]; //d.norm() * d.norm();
 
       if (n > 0.)
-        force += d * (float)maxEdgeLength / n;
+        force += d * float(maxEdgeLength) / n;
     }
   }
 
@@ -174,14 +174,14 @@ Coord GEMLayout::computeForces(unsigned int v,
       float edgeLength;
 
       if (_useLength)
-        edgeLength = static_cast<float>(metric->getEdgeDoubleValue(e));
+        edgeLength = float(metric->getEdgeDoubleValue(e));
       else
         edgeLength = EDGELENGTH;
 
       Coord d(vPos - gemQ->pos);
       float n = d.norm() / vMass;
       n = std::min(n, MAXATTRACT);  //   1048576L
-      force -= (d * n) / (float)(edgeLength * edgeLength + 1.);
+      force -= (d * n) / (edgeLength * edgeLength + 1.f);
     }
   }
   return force;
@@ -260,7 +260,7 @@ void GEMLayout::insert() {
       }
 
       if (d > 1) {
-        gemP->pos /= static_cast<float>(d);
+        gemP->pos /= float(d);
       }
 
       d = 0;
@@ -323,7 +323,7 @@ void GEMLayout::arrange() {
   double  maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0f, (float)metric->getEdgeDoubleMin());
+    maxEdgeLength = std::max(2.0, metric->getEdgeDoubleMin());
   else
     maxEdgeLength = EDGELENGTH;
 
@@ -334,7 +334,7 @@ void GEMLayout::arrange() {
   _oscillation      = a_oscillation;
   _rotation         = a_rotation;
   _maxtemp          = a_maxtemp;
-  stop_temperature  = static_cast<float>(a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes);
+  stop_temperature  = float(a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes);
   Iteration         = 0;
 
   while (_temperature > stop_temperature && Iteration < max_iter) {
@@ -411,7 +411,7 @@ bool GEMLayout::run() {
   node n;
   unsigned int i = 0;
   forEach(n, graph->getNodes()) {
-    _particules[i] = GEMparticule(static_cast<float>(graph->deg(n)));
+    _particules[i] = GEMparticule(float(graph->deg(n)));
     _particules[i].n = n;
     _particules[i].id = i;
 

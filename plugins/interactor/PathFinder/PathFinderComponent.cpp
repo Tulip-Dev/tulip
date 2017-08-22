@@ -216,6 +216,6 @@ QSet<PathHighlighter *> PathFinderComponent::getHighlighters() {
 }
 
 void PathFinderComponent::clear() {
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  GlMainView *glMainView=static_cast<GlMainView*>(view());
   glMainView->getGlMainWidget()->setCursor(QCursor());
 }

@@ -105,13 +105,14 @@ void trans(Coord &c1,Coord &c2,float angle1, float angle2) {
 
 bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   GeographicView *geoView=static_cast<GeographicView*>(view());
+  GlMainWidget *g = static_cast<GlMainWidget *>(widget);
+  QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
+  QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
   if(geoView->viewType()==GeographicView::GoogleRoadMap ||
       geoView->viewType()==GeographicView::GoogleSatellite ||
       geoView->viewType()==GeographicView::GoogleTerrain ||
       geoView->viewType()==GeographicView::GoogleHybrid) {
-    QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
-    QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
     if(qMouseEv || qWheelEv) {
       GeographicView* geoView=static_cast<GeographicView*>(view());
@@ -122,55 +123,53 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
   else if (geoView->viewType()==GeographicView::Globe) {
     if (e->type() == QEvent::Wheel &&
-        (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
+        qWheelEv->orientation() == Qt::Vertical) {
 #define WHEEL_DELTA 120
-      GlMainWidget *g = (GlMainWidget *) widget;
-      g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
+      g->getScene()->zoomXY(qWheelEv->delta() / WHEEL_DELTA,
                             g->width()/2., g->height()/2.);
       view()->draw();
       return true;
     }
 
     if (e->type() == QEvent::MouseButtonPress && !inRotation) {
-      if(((QMouseEvent*)e)->button()==Qt::LeftButton) {
-        x = ((QMouseEvent *) e)->x();
-        y = ((QMouseEvent *) e)->y();
+      if(qMouseEv->button()==Qt::LeftButton) {
+        x = qMouseEv->x();
+        y = qMouseEv->y();
         inRotation=true;
         return true;
       }
     }
 
     if(e->type() == QEvent::MouseButtonRelease) {
-      if(((QMouseEvent*)e)->button()==Qt::LeftButton) {
+      if(qMouseEv->button()==Qt::LeftButton) {
         inRotation=false;
         return true;
       }
     }
 
     if (e->type() == QEvent::MouseMove && inRotation) {
-      GlMainWidget *g = (GlMainWidget *) widget;
+
       Camera &camera=g->getScene()->getGraphCamera();
       Coord c1=camera.getEyes()-camera.getCenter();
       Coord c2=camera.getEyes()-camera.getCenter()+camera.getUp();
-      trans(c1,c2,-0.005*(((QMouseEvent *) e)->y()-y),-0.005*(((QMouseEvent *) e)->x()-x));
+      trans(c1,c2,-0.005*(qMouseEv->y()-y),-0.005*(qMouseEv->x()-x));
       camera.setCenter(Coord(0,0,0));
       camera.setEyes(c1);
       camera.setUp(c2-camera.getEyes());
 
-      x = ((QMouseEvent *) e)->x();
-      y = ((QMouseEvent *) e)->y();
+      x = qMouseEv->x();
+      y = qMouseEv->y();
 
       view()->draw();
       return true;
     }
 
     if (e->type() == QEvent::KeyPress) {
-      GlMainWidget *g = (GlMainWidget *) widget;
 
       float angle1=0;
       float angle2=0;
 
-      switch(((QKeyEvent *) e)->key()) {
+      switch(static_cast<QKeyEvent *>(e)->key()) {
       case Qt::Key_Left:
         angle2=-0.05f;
         break;

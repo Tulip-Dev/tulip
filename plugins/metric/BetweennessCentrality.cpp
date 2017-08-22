@@ -174,7 +174,7 @@ public:
     //Normalization
     if(norm || !directed) {
       double n = graph->numberOfNodes();
-      const double nNormFactor = 1./(double)((n - 1) * (n - 2));
+      const double nNormFactor = 1.0/((n - 1) * (n - 2));
       it = graph->getNodes();
 
       while(it->hasNext()) {
@@ -191,7 +191,7 @@ public:
       delete it;
 
       Iterator<edge> *itE = graph->getEdges();
-      const double eNormFactor = 4./(double)(n * n);
+      const double eNormFactor = 4.0/(n * n);
 
       while(itE->hasNext()) {
         edge e = itE->next();

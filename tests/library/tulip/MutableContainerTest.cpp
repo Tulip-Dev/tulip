@@ -17,8 +17,7 @@
  *
  */
 #include <cstdlib>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "MutableContainerTest.h"
 #include <tulip/Iterator.h>
 #include <tulip/TlpTools.h>
@@ -217,7 +216,7 @@ void MutableContainerTest::testSetGet() {
 
   for (unsigned int i=101; i<1000; ++i) {
     mutDouble->set(i,i);
-    CPPUNIT_ASSERT_EQUAL((double)i, mutDouble->get(i));
+    CPPUNIT_ASSERT_EQUAL(double(i), mutDouble->get(i));
   }
 
   for (unsigned int i=101; i<999; ++i) {
@@ -234,7 +233,7 @@ void MutableContainerTest::testSetGet() {
     mutDouble->set(rando, rando);
     mutString->set(rando, string("David"));
     CPPUNIT_ASSERT(mutBool->get(rando));
-    CPPUNIT_ASSERT_EQUAL((double)rando, mutDouble->get(rando));
+    CPPUNIT_ASSERT_EQUAL(double(rando), mutDouble->get(rando));
     CPPUNIT_ASSERT_EQUAL(string("David"), mutString->get(rando));
   }
 

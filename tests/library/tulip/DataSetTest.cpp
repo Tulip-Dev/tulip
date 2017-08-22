@@ -18,8 +18,7 @@
  */
 #include <cassert>
 #include <iomanip>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "DataSetTest.h"
 
 #include <string>

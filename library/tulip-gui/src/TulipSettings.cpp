@@ -266,11 +266,11 @@ void TulipSettings::setProxyEnabled(bool f) {
 }
 
 QNetworkProxy::ProxyType TulipSettings::proxyType() const {
-  return (QNetworkProxy::ProxyType)(value(TS_ProxyType).toInt());
+  return static_cast<QNetworkProxy::ProxyType>(value(TS_ProxyType).toInt());
 }
 
 void TulipSettings::setProxyType(QNetworkProxy::ProxyType t) {
-  setValue(TS_ProxyType,(int)t);
+  setValue(TS_ProxyType,int(t));
 }
 
 QString TulipSettings::proxyHost() const {
@@ -387,7 +387,7 @@ void TulipSettings::setViewOrtho(bool f) {
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QSet<QString>& lst) {
-  setValue(TS_FavoriteAlgorithms,(QStringList)(lst.toList()));
+  setValue(TS_FavoriteAlgorithms,static_cast<QStringList>(lst.toList()));
 }
 
 bool TulipSettings::isResultPropertyStored() const {
@@ -417,11 +417,11 @@ unsigned int TulipSettings::logPluginCall() const {
 
     // ensure compatibility
     if (val)
-      ((TulipSettings *)this)->setValue(TS_LogPluginCall,
+      const_cast<TulipSettings *>(this)->setValue(TS_LogPluginCall,
                                         LogCallWithExecutionTime);
 
     // no longer used
-    ((TulipSettings *)this)->remove(TS_RunningTimeComputed);
+    const_cast<TulipSettings *>(this)->remove(TS_RunningTimeComputed);
   }
 
   return value(TS_LogPluginCall, NoLog).toUInt();

@@ -146,7 +146,7 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
 
     for (int i = 0 ; i < colorsListv.size() ; ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
-      float stop = i / static_cast<float>(colorsListv.size()-1);
+      float stop = i / float(colorsListv.size()-1);
       colorsMap[stop] = QColorToColor(color);
     }
   }
@@ -179,7 +179,7 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName, const 
       QList<QVariant> colorsVector;
 
       for (unsigned int i = 0; i < const_cast<ColorScale&>(colorScale).getStopsCount() ; ++i) {
-        float stop = i / static_cast<float>(const_cast<ColorScale&>(colorScale).getStopsCount()-1);
+        float stop = i / float(const_cast<ColorScale&>(colorScale).getStopsCount()-1);
         Color color = colorScale.getColorAtPos(stop);
         colorsVector.push_back(QVariant(colorToQColor(color)));
       }

@@ -44,7 +44,7 @@ int FishEyeConfigWidget::getFishEyeType() const {
 }
 
 float FishEyeConfigWidget::getFishEyeRadius() const {
-  return (float) _ui->radiusValSP->value();
+  return float(_ui->radiusValSP->value());
 }
 
 void FishEyeConfigWidget::setFishEyeRadius(const float radius) {
@@ -52,7 +52,7 @@ void FishEyeConfigWidget::setFishEyeRadius(const float radius) {
 }
 
 float FishEyeConfigWidget::getFishEyeHeight() const {
-  return (float) _ui->heightValSP->value();
+  return float(_ui->heightValSP->value());
 }
 
 void FishEyeConfigWidget::setFishEyeHeight(const float height) {
@@ -60,9 +60,9 @@ void FishEyeConfigWidget::setFishEyeHeight(const float height) {
 }
 
 float FishEyeConfigWidget::getFishEyeRadiusIncrementStep() const {
-  return (float) _ui->radiusIncrementStepSP->value();
+  return float(_ui->radiusIncrementStepSP->value());
 }
 
 float FishEyeConfigWidget::getFishEyeHeightIncrementStep() const {
-  return (float) _ui->heightIncrementStepSP->value();
+  return float(_ui->heightIncrementStepSP->value());
 }

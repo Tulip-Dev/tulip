@@ -53,9 +53,9 @@ bool GlMainWidget::inRendering=false;
 static void setRasterPosition(unsigned int x, unsigned int y) {
   float val[4];
   unsigned char tmp[10];
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
+  glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
   glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
+  glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
   glTest(__PRETTY_FUNCTION__);
 }
 //==================================================
@@ -391,10 +391,10 @@ bool GlMainWidget::pickGlEntities(const int x, const int y,
                                   std::vector<SelectedEntity> &pickedEntities,
                                   GlLayer* layer) {
   makeCurrent();
-  return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),screenToViewport(x), screenToViewport(y),
+  return scene.selectEntities(static_cast<RenderingEntitiesFlag>(RenderingSimpleEntities | RenderingWithoutRemove),
+                              screenToViewport(x), screenToViewport(y),
                               screenToViewport(width), screenToViewport(height),
-                              layer,
-                              pickedEntities);
+                              layer, pickedEntities);
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
@@ -410,11 +410,15 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
   makeCurrent();
 
   if (pickNodes) {
-    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), layer, selectedNodes);
+    scene.selectEntities(static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
+                         screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
+                         layer, selectedNodes);
   }
 
   if (pickEdges) {
-    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), layer, selectedEdges);
+    scene.selectEntities(static_cast<RenderingEntitiesFlag>(RenderingEdges | RenderingWithoutRemove),
+                         screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
+                         layer, selectedEdges);
   }
 }
 //=====================================================
@@ -422,12 +426,16 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
-  if(pickNodes && scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), layer, selectedEntities)) {
+  if(pickNodes && scene.selectEntities(static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
+                                       screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3),
+                                       layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
-  if(pickEdges && scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), layer, selectedEntities)) {
+  if(pickEdges && scene.selectEntities(static_cast<RenderingEntitiesFlag>(RenderingEdges | RenderingWithoutRemove),
+                                       screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3),
+                                       layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }

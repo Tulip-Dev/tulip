@@ -45,17 +45,18 @@ ParallelCoordsAxisSwapper::ParallelCoordsAxisSwapper() : parallelView(NULL), sel
 ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {}
 
 void ParallelCoordsAxisSwapper::viewChanged(View *view) {
-  parallelView = dynamic_cast<ParallelCoordinatesView *>(view);
+  parallelView = static_cast<ParallelCoordinatesView *>(view);
 }
 
 bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glWidget = dynamic_cast<GlMainWidget *>(widget);
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
+  QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
   mouseMove = false;
 
   if (e->type() == QEvent::MouseMove && !axisSwapStarted) {
-    QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+
     mouseMove = true;
 
     if (!dragStarted) {
@@ -90,7 +91,7 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
     return true;
 
   }
-  else if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
+  else if (e->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
     if (selectedAxis != NULL && !dragStarted) {
       dragStarted = true;
       parallelView->removeAxis(selectedAxis);
@@ -103,7 +104,7 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
     return true;
 
   }
-  else if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
+  else if (e->type() == QEvent::MouseButtonRelease && me->button() == Qt::LeftButton) {
 
     if (selectedAxis != NULL && dragStarted) {
       selectedAxis->setRotationAngle(0.0f);

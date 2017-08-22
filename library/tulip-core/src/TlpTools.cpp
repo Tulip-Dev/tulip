@@ -252,8 +252,7 @@ std::string tlp::demangleClassName(const char* className,
   static char demangleBuffer[1024];
   int status;
   size_t length = 1024;
-  abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
-                      &length, &status);
+  abi::__cxa_demangle(className, demangleBuffer, &length, &status);
 
   // skip tlp::
   if (hideTlp && strstr(demangleBuffer, "tlp::") == demangleBuffer)
@@ -340,7 +339,7 @@ void tlp::initRandomSequence() {
     mt.seed(rd());
 #else
     // std::random_device implementation is deterministic in MinGW so initialize seed with current time (microsecond precision)
-    mt.seed(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+    mt.seed(uint(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 #endif
   }
   else {
@@ -350,7 +349,7 @@ void tlp::initRandomSequence() {
 #else
 
   if (randomSeed == UINT_MAX) {
-    unsigned int seed = (unsigned int) time(NULL);
+    unsigned int seed = uint(time(NULL));
     // init a sequence of rand() calls
     srand(seed);
 #ifndef WIN32
@@ -415,7 +414,7 @@ unsigned int tlp::randomUnsignedInteger(unsigned int max) {
   }
 
 #else
-  return static_cast<unsigned int>(randomInteger(static_cast<int>(max)));
+  return uint(randomInteger(int(max)));
 #endif
 }
 
@@ -424,7 +423,7 @@ double tlp::randomDouble(double max) {
   std::uniform_real_distribution<double> dist(0, std::nextafter(max, DBL_MAX));
   return dist(mt);
 #else
-  return max * rand() / static_cast<double>(RAND_MAX);
+  return max * rand() / double(RAND_MAX);
 #endif
 }
 

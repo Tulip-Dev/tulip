@@ -39,7 +39,7 @@ GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
    subGraphToKeep(NULL), metaGraphProperty(NULL) {
   // get id
   if (supergraph != this)
-    id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
+    id = static_cast<GraphImpl *>(getRoot())->getSubGraphId(sgId);
 
   propertyContainer = new PropertyManager(this);
 }
@@ -65,7 +65,7 @@ GraphAbstract::~GraphAbstract() {
   delete propertyContainer;
 
   if (id != 0)
-    ((GraphImpl *) getRoot())->freeSubGraphId(id);
+    static_cast<GraphImpl *>(getRoot())->freeSubGraphId(id);
 }
 //=========================================================================
 void GraphAbstract::clear() {
@@ -179,7 +179,7 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
   StableIterator<Graph *> itS(toRemove->getSubGraphs());
 
   while (itS.hasNext())
-    ((GraphAbstract*) toRemove)->delAllSubGraphs(itS.next());
+    static_cast<GraphAbstract*>(toRemove)->delAllSubGraphs(itS.next());
 
   delSubGraph(toRemove);
 }
@@ -374,7 +374,7 @@ void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface 
   propertyContainer->setLocalProperty(name, prop);
 
   if (name == metaGraphPropertyName) {
-    metaGraphProperty = (GraphProperty *) prop;
+    metaGraphProperty = static_cast<GraphProperty *>(prop);
   }
 
   notifyAddLocalProperty(name);

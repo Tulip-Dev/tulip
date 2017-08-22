@@ -110,7 +110,7 @@ void PixelOrientedView::initGlWidget() {
   }
 
   if (mainLayer->findGlEntity("graph")) {
-    GlGraphComposite *lastGraphComposite = (GlGraphComposite *)mainLayer->findGlEntity("graph");
+    GlGraphComposite *lastGraphComposite = static_cast<GlGraphComposite *>(mainLayer->findGlEntity("graph"));
     Graph *theGraph = lastGraphComposite->getInputData()->getGraph();
 
     if(theGraph)
@@ -327,9 +327,9 @@ void PixelOrientedView::initLayoutFunctions() {
   delete squareLayout;
   delete zorderLayout;
 
-  hilbertLayout = new HilbertLayout((int) ceil(log(pixelOrientedGraph->numberOfNodes())/ log(4)));
-  squareLayout = new SquareLayout((int) ceil(sqrt(pixelOrientedGraph->numberOfNodes())));
-  zorderLayout = new ZorderLayout((int) ceil(log(pixelOrientedGraph->numberOfNodes())/ log(4)));
+  hilbertLayout = new HilbertLayout(int(ceil(log(pixelOrientedGraph->numberOfNodes())/ log(4))));
+  squareLayout = new SquareLayout(int(ceil(sqrt(pixelOrientedGraph->numberOfNodes()))));
+  zorderLayout = new ZorderLayout(int(ceil(log(pixelOrientedGraph->numberOfNodes())/ log(4))));
   layoutFunctionsMap["Zorder"] = zorderLayout;
   layoutFunctionsMap["Peano"] = hilbertLayout;
   layoutFunctionsMap["Square"] = squareLayout;
@@ -349,7 +349,7 @@ void PixelOrientedView::initPixelView() {
   overviewWidth = MIN_IMAGE_WIDTH;
   overviewHeight = MIN_IMAGE_HEIGHT;
 
-  minWidth = ((unsigned int) floor(sqrt((double)pixelOrientedGraph->numberOfNodes()))) + 1;
+  minWidth = uint(floor(sqrt(double(pixelOrientedGraph->numberOfNodes())))) + 1;
 
   while (minWidth > overviewWidth) {
     overviewWidth *= 2;
@@ -369,8 +369,8 @@ void PixelOrientedView::initPixelView() {
   if (selectedGraphProperties.empty())
     return;
 
-  float squareRoot = sqrt(double(selectedGraphProperties.size()));
-  const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedGraphProperties.size(), squareRoot) == 0. ? 0 : 1);
+  float squareRoot = sqrt(float(selectedGraphProperties.size()));
+  const unsigned int N =  uint(squareRoot) + (fmod(float(selectedGraphProperties.size()), squareRoot) == 0.f ? 0u : 1u);
 
   for (size_t i = 0 ; i < selectedGraphProperties.size() ; ++i) {
 
@@ -625,7 +625,7 @@ void PixelOrientedView::centerView(bool) {
 
   // we apply a zoom factor to preserve a 50 px margin height
   // to ensure the scene will not be drawn under the configuration tabs title
-  float glHeight = (float) graphicsView()->height();
+  float glHeight = graphicsView()->height();
   getGlMainWidget()->getScene()->zoomFactor((glHeight - 50)/ glHeight);
   getGlMainWidget()->draw();
 }

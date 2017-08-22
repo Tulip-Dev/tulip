@@ -67,7 +67,7 @@ std::pair<tlp::Coord, tlp::Coord> tlp::MinMaxProperty<tlp::PointType, tlp::LineT
 
   delete itN;
 
-  if (((LayoutProperty *) this)->nbBendedEdges > 0) {
+  if (static_cast<LayoutProperty *>(this)->nbBendedEdges > 0) {
     tlp::Iterator<edge> *itE = sg->getEdges();
 
     while (itE->hasNext()) {
@@ -111,7 +111,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
   if (newValue == oldV)
     return;
 
-  ((LayoutProperty*) this)->nbBendedEdges += (newValue.empty() ? 0 : 1) - (oldV.empty() ? 0 : 1);
+  static_cast<LayoutProperty*>(this)->nbBendedEdges += (newValue.empty() ? 0 : 1) - (oldV.empty() ? 0 : 1);
 
   if (it != minMaxNode.end()) {
     // loop on subgraph min/max
@@ -160,7 +160,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 
       // reset bounding box if needed
       if (reset) {
-        needGraphListener = (((LayoutProperty*) this)->nbBendedEdges > 0);
+        needGraphListener = static_cast<LayoutProperty*>(this)->nbBendedEdges > 0;
         removeListenersAndClearNodeMap();
         return;
       }
@@ -169,7 +169,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 
   // we need to observe the graph as soon as there is an edge
   // with bends
-  if (!needGraphListener && (needGraphListener = (((LayoutProperty*) this)->nbBendedEdges > 0)) &&
+  if (!needGraphListener && (needGraphListener = (static_cast<LayoutProperty*>(this)->nbBendedEdges > 0)) &&
       (minMaxNode.find(graph->getId()) == minMaxNode.end()))
     graph->addListener(this);
 }
@@ -202,14 +202,14 @@ public:
       return;
 
     case 1:
-      layout->setNodeValue(mN,((LayoutProperty *)layout)->getMax(sg));
+      layout->setNodeValue(mN, static_cast<LayoutProperty *>(layout)->getMax(sg));
       return;
 
     default:
       // between the min and max computed values
       layout->setNodeValue(mN,
-                           (((LayoutProperty *)layout)->getMax(sg) +
-                            ((LayoutProperty *)layout)->getMin(sg)) / 2.0f);
+                           (static_cast<LayoutProperty *>(layout)->getMax(sg) +
+                            static_cast<LayoutProperty *>(layout)->getMin(sg)) / 2.0f);
     }
   }
 };
@@ -242,8 +242,8 @@ Coord  LayoutProperty::getMin(const Graph *sg) {
 static void rotateVector(Coord &vec, double alpha, int rot) {
   Coord backupVec(vec);
   double aRot =  2.0*M_PI * alpha / 360.0;
-  float cosA = static_cast<float>(cos(aRot));
-  float sinA = static_cast<float>(sin(aRot));
+  float cosA = float(cos(aRot));
+  float sinA = float(sin(aRot));
 
   switch(rot) {
   case Z_ROT:
@@ -353,7 +353,7 @@ void LayoutProperty::scale(const tlp::Vec3f& v, Iterator<node> *itN, Iterator<ed
   while (itN->hasNext()) {
     node itn = itN->next();
     Coord tmpCoord(getNodeValue(itn));
-    tmpCoord *= *(Coord*)&v;
+    tmpCoord *= v;
     setNodeValue(itn,tmpCoord);
   }
 
@@ -366,7 +366,7 @@ void LayoutProperty::scale(const tlp::Vec3f& v, Iterator<node> *itN, Iterator<ed
       itCoord=tmp.begin();
 
       while(itCoord!=tmp.end()) {
-        *itCoord *= *(Coord*)&v;
+        *itCoord *= v;
         ++itCoord;
       }
 
@@ -408,7 +408,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
     while (itN->hasNext()) {
       node itn = itN->next();
       Coord tmpCoord(getNodeValue(itn));
-      tmpCoord += *(Coord*)&v;
+      tmpCoord += v;
       // minimize computation time
       LayoutMinMaxProperty::setNodeValue(itn,tmpCoord);
     }
@@ -423,7 +423,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
         itCoord=tmp.begin();
 
         while(itCoord!=tmp.end()) {
-          *itCoord += *(Coord*)&v;
+          *itCoord += v;
           ++itCoord;
         }
 
@@ -498,7 +498,7 @@ void LayoutProperty::normalize(const Graph *sg) {
 
   delete itN;
   dtmpMax = 1.0 / sqrt(dtmpMax);
-  scale(Coord(static_cast<float>(dtmpMax),static_cast<float>(dtmpMax),static_cast<float>(dtmpMax)), sg);
+  scale(Coord(float(dtmpMax),float(dtmpMax),float(dtmpMax)), sg);
   resetBoundingBox();
   Observable::unholdObservers();
 }
@@ -511,9 +511,9 @@ void LayoutProperty::perfectAspectRatio(const Graph *subgraph) {
   center(subgraph);
   double scaleX,scaleY,scaleZ;
   double deltaX,deltaY,deltaZ;
-  deltaX = (double )getMax()[0]-(double )getMin()[0];
-  deltaY = (double )getMax()[1]-(double )getMin()[1];
-  deltaZ = (double )getMax()[2]-(double )getMin()[2];
+  deltaX = double(getMax()[0])-double(getMin()[0]);
+  deltaY = double(getMax()[1])-double(getMin()[1]);
+  deltaZ = double(getMax()[2])-double(getMin()[2]);
   double delta = std::max(deltaX , deltaY);
   delta = std::max(delta, deltaZ);
 
@@ -528,14 +528,14 @@ void LayoutProperty::perfectAspectRatio(const Graph *subgraph) {
   scaleX = delta / deltaX;
   scaleY = delta / deltaY;
   scaleZ = delta / deltaZ;
-  scale(Coord(static_cast<float>(scaleX),static_cast<float>(scaleY),static_cast<float>(scaleZ)),subgraph);
+  scale(Coord(float(scaleX),float(scaleY),float(scaleZ)),subgraph);
   Observable::unholdObservers();
 }
 
 //=================================================================================
 void LayoutProperty::clone_handler(AbstractProperty<tlp::PointType, tlp::LineType>& proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
-    LayoutProperty *proxy=(LayoutProperty *)&proxyC;
+    LayoutProperty *proxy=static_cast<LayoutProperty *>(&proxyC);
     minMaxNode = proxy->minMaxNode;
   }
 }
@@ -596,7 +596,7 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
   }
 
   delete itN;
-  return result/(double)sg->numberOfNodes();
+  return result/double(sg->numberOfNodes());
 }
 //=================================================================================
 struct AngularOrder {

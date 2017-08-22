@@ -1360,8 +1360,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     return node();
   }
 
-  GraphProperty* metaInfo =
-    ((GraphAbstract *)getRoot())->getMetaGraphProperty();
+  GraphProperty* metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   node metaNode = addNode();
   metaInfo->setNodeValue(metaNode, subGraph);
   Observable::holdObservers();
@@ -1512,8 +1511,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     return;
   }
 
-  GraphProperty* metaInfo =
-    ((GraphAbstract *) getRoot())->getMetaGraphProperty();
+  GraphProperty* metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
 
   if (metaGraph == NULL) return;
@@ -1751,8 +1749,7 @@ struct less<MetaEdge> {
 
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
                             vector<node>& metaNodes) {
-  GraphProperty *metaInfo =
-    ((GraphAbstract*)getRoot())->getMetaGraphProperty();
+  GraphProperty *metaInfo = static_cast<GraphAbstract*>(getRoot())->getMetaGraphProperty();
   map <edge, set<edge> > eMapping;
   Observable::holdObservers();
   {
@@ -1987,9 +1984,9 @@ const std::vector<node>& GraphEvent::getNodes() const {
            nbElts * sizeof(node));
     // set addedNodes size using underlying vector pointers
     // to avoid unnecessary multiple constructeur calls
-    ((node **) addedNodes)[1] = ((node **) addedNodes)[0] + nbElts;
+    reinterpret_cast<node **>(addedNodes)[1] = reinterpret_cast<node **>(addedNodes)[0] + nbElts;
     // record allocated vector in vectInfos
-    ((GraphEvent *) this)->vectInfos.addedNodes = addedNodes;
+    const_cast<GraphEvent*>(this)->vectInfos.addedNodes = addedNodes;
   }
 
   return *vectInfos.addedNodes;
@@ -2008,9 +2005,9 @@ const std::vector<edge>& GraphEvent::getEdges() const {
            nbElts * sizeof(edge));
     // set addedEdges size using underlying vector pointers
     // to avoid unnecessary multiple constructeur calls
-    ((edge **) addedEdges)[1] = ((edge **) addedEdges)[0] + nbElts;
+    reinterpret_cast<edge **>(addedEdges)[1] = reinterpret_cast<edge **>(addedEdges)[0] + nbElts;
     // record allocated vector in vectInfos
-    ((GraphEvent *) this)->vectInfos.addedEdges = addedEdges;
+    const_cast<GraphEvent*>(this)->vectInfos.addedEdges = addedEdges;
   }
 
   return *vectInfos.addedEdges;

@@ -556,9 +556,9 @@ bool LinLogLayout::minimizeEnergyNoTree (int nrIterations) {
       else if (step <= 0.9*nrIterations) {
         // gradually move to final energy model
         attrExponent += 1.1 * (1.0 - finalRepuExponent)
-                        * (0.9 - ((double)step)/nrIterations) / 0.3;
+                        * (0.9 - (step/double(nrIterations))) / 0.3;
         repuExponent += 0.9 * (1.0 - finalRepuExponent)
-                        * (0.9 - ((double)step)/nrIterations) / 0.3;
+                        * (0.9 - (step/double(nrIterations))) / 0.3;
       }
     }
 
@@ -678,9 +678,9 @@ bool LinLogLayout::minimizeEnergy (int nrIterations) {
       else if (step <= 0.9*nrIterations) {
         // gradually move to final energy model
         attrExponent += 1.1 * (1.0 - finalRepuExponent)
-                        * (0.9 - ((double)step)/nrIterations) / 0.3;
+                        * (0.9 - (step/double(nrIterations))) / 0.3;
         repuExponent += 0.9 * (1.0 - finalRepuExponent)
-                        * (0.9 - ((double)step)/nrIterations) / 0.3;
+                        * (0.9 - (step/double(nrIterations))) / 0.3;
       }
     }
 

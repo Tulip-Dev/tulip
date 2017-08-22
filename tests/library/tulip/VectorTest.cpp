@@ -17,8 +17,7 @@
  *
  */
 #include <cassert>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "VectorTest.h"
 
 using namespace std;

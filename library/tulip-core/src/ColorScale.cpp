@@ -133,7 +133,7 @@ Color ColorScale::getColorAtPos(const float pos) const {
       double ratio = (pos - startPos) / (endPos - startPos);
 
       for (unsigned int i = 0; i < 4; ++i) {
-        ret[i] = static_cast<unsigned char>((double(startColor[i]) + (double(endColor[i])
+        ret[i] = uchar((double(startColor[i]) + (double(endColor[i])
                                              - double(startColor[i])) * ratio));
       }
 

@@ -21,9 +21,8 @@
 #define EXISTEDGETEST_H_
 
 #include <tulip/Graph.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+
+#include "CppUnitIncludes.h"
 
 class ExistEdgeTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(ExistEdgeTest);

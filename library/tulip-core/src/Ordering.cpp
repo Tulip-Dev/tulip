@@ -955,7 +955,7 @@ void Ordering::selectAndUpdate(node n) {
   n2 = Gp->opposite(e,n1);
   bool spli = false;
 
-  for(int i = 0; static_cast<unsigned int>(i) < noeuds.size()-1; i++) {
+  for(int i = 0; uint(i) < noeuds.size()-1; i++) {
     bool entered=false;
 
     while(n2 != noeuds[i+1]) {
@@ -1007,7 +1007,7 @@ void Ordering::selectAndUpdate(node n) {
   }
 
   // update visitedFaces
-  for(int i = 0; static_cast<unsigned int>(i)<noeuds.size(); i++) {
+  for(int i = 0; uint(i)<noeuds.size(); i++) {
     int deg = Gp->deg(noeuds[i]);
     Iterator<Face > * itf = Gp->getFacesAdj(noeuds[i]);
 
@@ -1043,7 +1043,7 @@ void Ordering::selectAndUpdate(node n) {
   vector<Face> v_face;
   update_seqp.setAll(false);
 
-  for(int i=0; static_cast<unsigned int>(i)<faces.size(); i++) {
+  for(int i=0; uint(i)<faces.size(); i++) {
     if(splited[i]) {
       outv.set((faces[i]).id,0);
       oute.set((faces[i]).id,0);

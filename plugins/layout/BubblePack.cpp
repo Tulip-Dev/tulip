@@ -188,7 +188,7 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
 
             for (unsigned int k=0; k<placed.size(); ++k) {
               if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
-                spiralRadius = std::max(spiralRadius, (double) placed[k].norm() + placed[k].radius + radius + 1E-3 );
+                spiralRadius = std::max(spiralRadius, double(placed[k].norm()) + placed[k].radius + radius + 1E-3 );
                 //spiralRadius += 0.01;
                 tmp = Circled(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
                 //restart = true;

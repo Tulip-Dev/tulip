@@ -390,8 +390,8 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
     if (!link.isValid()) {
       // add new link
       // at this time both Observables need to be bound
-      link = _oGraph.addEdge(((Observable &) obs).getBoundNode(),
-      ((Observable *) this)->getBoundNode());
+      link = _oGraph.addEdge(const_cast<Observable &>(obs).getBoundNode(),
+      const_cast<Observable *>(this)->getBoundNode());
       _oType[link] = type;
     }
     else {

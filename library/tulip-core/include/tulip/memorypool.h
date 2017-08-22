@@ -107,18 +107,18 @@ private:
 
       if (_freeObject[threadId].empty()) {
         void *chunk = malloc(BUFFOBJ * sizeof(TYPE));
-        TYPE * p = reinterpret_cast<TYPE *>(chunk);
+        TYPE * p = static_cast<TYPE *>(chunk);
         _allocatedChunks[threadId].push_back(chunk);
 
         for (size_t j=0; j< BUFFOBJ - 1; ++j) {
-          _freeObject[threadId].push_back(reinterpret_cast<void *>(p));
+          _freeObject[threadId].push_back(static_cast<void *>(p));
           p += 1;
         }
 
         result = p;
       }
       else {
-        result = reinterpret_cast<TYPE *>(_freeObject[threadId].back());
+        result = static_cast<TYPE *>(_freeObject[threadId].back());
         _freeObject[threadId].pop_back();
       }
 

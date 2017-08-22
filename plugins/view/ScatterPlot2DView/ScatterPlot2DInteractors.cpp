@@ -114,7 +114,7 @@ public:
 
 
   void viewChanged(View *v) {
-    scp2DView = (ScatterPlot2DView *) v;
+    scp2DView = static_cast<ScatterPlot2DView *>(v);
     MouseShowElementInfo::viewChanged(v);
   }
 

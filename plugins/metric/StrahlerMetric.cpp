@@ -241,16 +241,16 @@ bool StrahlerMetric::run() {
 
       switch(computationTypes.getCurrent()) {
       case ALL:
-        result->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-                                      +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+        result->setNodeValue(itn, sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
+                                       double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
         break;
 
       case REGISTERS:
-        result->setNodeValue(itn, (double)cachedValues[itn].strahler);
+        result->setNodeValue(itn, cachedValues[itn].strahler);
         break;
 
       case STACKS:
-        result->setNodeValue(itn, (double)cachedValues[itn].stacks);
+        result->setNodeValue(itn, cachedValues[itn].stacks);
       }
 
       visited.clear();
@@ -272,16 +272,16 @@ bool StrahlerMetric::run() {
 
       switch(computationTypes.getCurrent()) {
       case ALL:
-        result->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-                                      +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+        result->setNodeValue(itn,sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
+                                      double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
         break;
 
       case REGISTERS:
-        result->setNodeValue(itn, (double)cachedValues[itn].strahler);
+        result->setNodeValue(itn, cachedValues[itn].strahler);
         break;
 
       case STACKS:
-        result->setNodeValue(itn, (double)cachedValues[itn].stacks);
+        result->setNodeValue(itn, cachedValues[itn].stacks);
       }
     }
 

@@ -109,7 +109,7 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
 
   for (unsigned int i = 0; i <= steps; i++) {
     setColor(colorStart);
-    glEvalCoord1f((GLfloat) i/steps);
+    glEvalCoord1f(i/GLfloat(steps));
 
     for (unsigned int j=0; j<4; j++)
       colorStart[j]+=colorDelta[j];
@@ -184,7 +184,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
 
     for (unsigned int i = 0; i <= steps; i++) {
       setColor(colorStart);
-      glEvalCoord1f((GLfloat) i/steps);
+      glEvalCoord1f(i/GLfloat(steps));
 
       for (unsigned int j=0; j<4; j++)
         colorStart[j]+=colorDelta[j];
@@ -230,7 +230,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
 
     for (unsigned int i = 0; i <= steps; i++) {
       setColor(colorStart);
-      glEvalCoord1f((GLfloat) i/steps);
+      glEvalCoord1f(i/GLfloat(steps));
 
       for (unsigned int j=0; j<4; j++)
         colorStart[j]+=colorDelta[j];
@@ -255,7 +255,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
 
     for (unsigned int i = 0; i <= steps; i++) {
       setColor(colorStart);
-      glEvalCoord1f((GLfloat) i/steps);
+      glEvalCoord1f(i/GLfloat(steps));
 
       for (unsigned int j=0; j<4; j++)
         colorStart[j]+=colorDelta[j];

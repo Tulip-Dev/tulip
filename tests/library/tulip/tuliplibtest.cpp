@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-//#include <cppunit/ui/qt/TestRunner.h>
+
 #include <cstdlib>
 #include <fstream>
 

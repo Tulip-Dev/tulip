@@ -95,7 +95,7 @@ void ItemsListWidget::dropEvent(QDropEvent *event) {
 }
 
 bool ItemsListWidget::addItemList(QString item) {
-  if (maxListSize == 0 || ((unsigned int) count() < maxListSize)) {
+  if (maxListSize == 0 || uint(count()) < maxListSize) {
     addItem(item);
     return true;
   }

@@ -155,7 +155,7 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
     }
 
     for (unsigned int i = 0; i < 4; ++i) {
-      backgroundColor[i] = static_cast<unsigned char>((double(startColor[i]) + (double(endColor[i])- double(startColor[i])) * abs(correlationCoeff)));
+      backgroundColor[i] = uchar((double(startColor[i]) + (double(endColor[i])- double(startColor[i])) * abs(correlationCoeff)));
     }
 
     int bgV = backgroundColor.getV();
@@ -213,8 +213,8 @@ void ScatterPlot2D::clean() {
 void ScatterPlot2D::createAxis() {
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
-  NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
-  NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
+  NumericProperty* xProp = static_cast<NumericProperty *>( graph->getProperty(xDim));
+  NumericProperty* yProp = static_cast<NumericProperty *>( graph->getProperty(yDim));
   xType = graph->getProperty(xDim)->getTypename();
   yType = graph->getProperty(yDim)->getTypename();
 
@@ -270,8 +270,8 @@ void ScatterPlot2D::createAxis() {
     xAxis->setAxisParameters(xMin ,xMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
   }
   else {
-    unsigned int step = static_cast<unsigned int>((xMax - xMin) / 20);
-    xAxis->setAxisParameters(static_cast<int>(xMin), static_cast<int>(xMax),
+    unsigned int step = uint((xMax - xMin) / 20);
+    xAxis->setAxisParameters(int(xMin), int(xMax),
                              step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
@@ -285,8 +285,8 @@ void ScatterPlot2D::createAxis() {
     yAxis->setAxisParameters(yMin ,yMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
   }
   else {
-    unsigned int step = static_cast<unsigned int>((yMax - yMin) / 20);
-    yAxis->setAxisParameters(static_cast<int>(yMin) ,static_cast<int>(yMax),
+    unsigned int step = uint((yMax - yMin) / 20);
+    yAxis->setAxisParameters(int(yMin) ,int(yMax),
                              step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
@@ -315,8 +315,8 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
 
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
-  NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
-  NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
+  NumericProperty* xProp = static_cast<NumericProperty *>(graph->getProperty(xDim));
+  NumericProperty* yProp = static_cast<NumericProperty *>(graph->getProperty(yDim));
 
   forEach(n, _graph->getNodes()) {
     Coord nodeCoord;

@@ -424,9 +424,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
         bb=it->boundingBox;
         Coord middle((bb[1]+bb[0])/2.f);
-        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+        dist=(double(middle[0])-double(camPos[0]))*(double(middle[0])-double(camPos[0]));
+        dist+=(double(middle[1])-double(camPos[1]))*(double(middle[1])-double(camPos[1]));
+        dist+=(double(middle[2])-double(camPos[2]))*(double(middle[2])-double(camPos[2]));
         entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
       }
     }
@@ -443,9 +443,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
         bb = it->boundingBox;
         Coord middle((bb[0] + bb[1])/2.f);
-        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+        dist=(double(middle[0])-double(camPos[0]))*(double(middle[0])-double(camPos[0]));
+        dist+=(double(middle[1])-double(camPos[1]))*(double(middle[1])-double(camPos[1]));
+        dist+=(double(middle[2])-double(camPos[2]))*(double(middle[2])-double(camPos[2]));
         entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
       }
     }
@@ -453,7 +453,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     // Draw
     for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
       // Complex entities
-      ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)(it->entity);
+      ComplexEntityLODUnit *entity=static_cast<ComplexEntityLODUnit*>(it->entity);
 
 
       if(it->isNode) {
@@ -563,7 +563,7 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntities
 
   //Allocate memory to store the result oh the selection
   GLuint (*selectBuf)[4] = new GLuint[size][4];
-  glSelectBuffer(size*4 , (GLuint *)selectBuf);
+  glSelectBuffer(size*4 , reinterpret_cast<GLuint *>(selectBuf));
   //Activate Open Gl Selection mode
   glRenderMode(GL_SELECT);
   glInitNames();
@@ -647,7 +647,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
           // Not metric ordered
           if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
             glNode.id=n.id;
-            glNode.drawLabel(occlusionTest,inputData,lod,(Camera *)(layerLODUnit.camera));
+            glNode.drawLabel(occlusionTest,inputData,lod,layerLODUnit.camera);
           }
         }
         else {
@@ -669,7 +669,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
         glNode.id=it->first.id;
-        glNode.drawLabel(occlusionTest,inputData,it->second,(Camera *)(layerLODUnit.camera));
+        glNode.drawLabel(occlusionTest,inputData,it->second,layerLODUnit.camera);
       }
     }
   }
@@ -695,7 +695,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
         if(!metric) {
           // Not metric ordered
           glEdge.id=e.id;
-          glEdge.drawLabel(occlusionTest,inputData,it->lod,(Camera *)(layerLODUnit.camera));
+          glEdge.drawLabel(occlusionTest,inputData,it->lod,layerLODUnit.camera);
         }
         else {
           // Metric ordered
@@ -714,7 +714,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
         glEdge.id=it->first.id;
-        glEdge.drawLabel(occlusionTest,inputData,it->second,(Camera *)(layerLODUnit.camera));
+        glEdge.drawLabel(occlusionTest,inputData,it->second,layerLODUnit.camera);
       }
     }
   }

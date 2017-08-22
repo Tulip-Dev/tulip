@@ -168,12 +168,12 @@ void ExtremityShape::Sphere(QXmlStreamWriter& res, const tlp::Color& color, bool
 
   res.writeStartElement("stop");
   res.writeAttribute("offset","0%");
-  res.writeAttribute("stop-color",QString("rgb(")+QString::number(static_cast<int>(color.getR()))+","+QString::number(static_cast<int>(color.getG()))+","+QString::number(static_cast<int>(color.getB()))+")");
+  res.writeAttribute("stop-color",QString("rgb(")+QString::number(int(color.getR()))+","+QString::number(int(color.getG()))+","+QString::number(int(color.getB()))+")");
   res.writeEndElement();
 
-  unsigned colorR = static_cast<unsigned>(color.getR());
-  unsigned colorG = static_cast<unsigned>(color.getG());
-  unsigned colorB = static_cast<unsigned>(color.getB());
+  unsigned char colorR = color.getR();
+  unsigned char colorG = color.getG();
+  unsigned char colorB = color.getB();
   QString Rcolor(QString::number(colorR - colorR/8));
   QString Gcolor(QString::number(colorG - colorG/8));
   QString Bcolor(QString::number(colorB - colorB/8));
@@ -259,12 +259,12 @@ void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, 
 
   res.writeStartElement("stop");
   res.writeAttribute("offset","0%");
-  res.writeAttribute("stop-color",QString("rgb(")+QString::number(static_cast<int>(color.getR()))+","+QString::number(static_cast<int>(color.getG()))+","+QString::number(static_cast<int>(color.getB()))+")");
+  res.writeAttribute("stop-color",QString("rgb(")+QString::number(int(color.getR()))+","+QString::number(int(color.getG()))+","+QString::number(int(color.getB()))+")");
   res.writeEndElement();
 
-  unsigned colorR = static_cast<unsigned>(color.getR());
-  unsigned colorG = static_cast<unsigned>(color.getG());
-  unsigned colorB = static_cast<unsigned>(color.getB());
+  unsigned char colorR = color.getR();
+  unsigned char colorG = color.getG();
+  unsigned char colorB = color.getB();
   QString Rcolor = QString::number(colorR - colorR/8);
   QString Gcolor = QString::number(colorG - colorG/8);
   QString Bcolor = QString::number(colorB - colorB/8);

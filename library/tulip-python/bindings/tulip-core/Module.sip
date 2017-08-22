@@ -191,16 +191,16 @@ VEC_TYPE *convertToVec3fType(PyObject *pyObj, float zVal = 0) {
   bool isList = PyList_Check(pyObj);
 
   PyObject *f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 0) : PyTuple_GET_ITEM(pyObj, 0));
-  x = static_cast<float>(PyFloat_AsDouble(f));
+  x = float(PyFloat_AsDouble(f));
   Py_XDECREF(f);
 
   f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 1) : PyTuple_GET_ITEM(pyObj, 1));
-  y = static_cast<float>(PyFloat_AsDouble(f));
+  y = float(PyFloat_AsDouble(f));
   Py_XDECREF(f);
 
   if ((isList && PyList_GET_SIZE(pyObj) > 2) || PyTuple_GET_SIZE(pyObj) > 2) {
     f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 2) : PyTuple_GET_ITEM(pyObj, 2));
-    z = static_cast<float>(PyFloat_AsDouble(f));
+    z = float(PyFloat_AsDouble(f));
     Py_XDECREF(f);
   }
 

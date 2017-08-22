@@ -68,7 +68,7 @@ public :
 
   void setAxisParameters(const int min, const int max, const unsigned int incrementStep,
                          const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFirstLabel = true) {
-    setAxisParameters((long long) min, (long long) max, (unsigned long long) incrementStep, axisGradsLabelsPosition, drawFirstLabel);
+    setAxisParameters(static_cast<long long>(min), static_cast<long long>(max), static_cast<unsigned long long>(incrementStep), axisGradsLabelsPosition, drawFirstLabel);
   }
 
   void setNbGraduations(const unsigned int nbGraduations) {

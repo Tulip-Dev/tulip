@@ -84,18 +84,18 @@ void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat*,GLfloat
   stream_out << viewport[0] << " " << viewport[1] << " " << viewport[2] << " " << viewport[3] << " rectfill" << endl << endl;
 }
 void GlEPSFeedBackBuilder::colorInfo(GLfloat* data) {
-  fillColor[0]=(unsigned char)data[0];
-  fillColor[1]=(unsigned char)data[1];
-  fillColor[2]=(unsigned char)data[2];
-  fillColor[3]=(unsigned char)data[3];
-  strokeColor[0]=(unsigned char)data[4];
-  strokeColor[1]=(unsigned char)data[5];
-  strokeColor[2]=(unsigned char)data[6];
-  strokeColor[3]=(unsigned char)data[7];
-  textColor[0]=(unsigned char)data[8];
-  textColor[1]=(unsigned char)data[9];
-  textColor[2]=(unsigned char)data[10];
-  textColor[3]=(unsigned char)data[11];
+  fillColor[0]=uchar(data[0]);
+  fillColor[1]=uchar(data[1]);
+  fillColor[2]=uchar(data[2]);
+  fillColor[3]=uchar(data[3]);
+  strokeColor[0]=uchar(data[4]);
+  strokeColor[1]=uchar(data[5]);
+  strokeColor[2]=uchar(data[6]);
+  strokeColor[3]=uchar(data[7]);
+  textColor[0]=uchar(data[8]);
+  textColor[1]=uchar(data[9]);
+  textColor[2]=uchar(data[10]);
+  textColor[3]=uchar(data[11]);
 }
 void GlEPSFeedBackBuilder::beginGlGraph(GLfloat) {
 }
@@ -114,12 +114,12 @@ void GlEPSFeedBackBuilder::beginEdge(GLfloat) {
 void GlEPSFeedBackBuilder::endEdge() {
 }
 void GlEPSFeedBackBuilder::pointToken(GLfloat *data) {
-  Feedback3Dcolor *vertex = (Feedback3Dcolor *) data;
+  Feedback3Dcolor *vertex = reinterpret_cast<Feedback3Dcolor *>(data);
   stream_out << vertex[0].red << " " << vertex[0].green << " " << vertex[0].blue << " setrgbcolor" << endl;
   stream_out << vertex[0].x << " " <<  vertex[0].y << " " <<  pointSize / 2.0 << " 0 360 arc fill" << endl << endl;
 }
 void GlEPSFeedBackBuilder::lineToken(GLfloat *data) {
-  Feedback3Dcolor *vertex = (Feedback3Dcolor *) data;
+  Feedback3Dcolor *vertex = reinterpret_cast<Feedback3Dcolor *>(data);
   GLfloat dx, dy, dr, dg, db, absR, absG, absB, colormax;
   int steps;
   GLfloat xstep, ystep, rstep, gstep, bstep;
@@ -146,7 +146,7 @@ void GlEPSFeedBackBuilder::lineToken(GLfloat *data) {
 #define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth
     lines. */
     colormax = Max(absR, Max(absG, absB));
-    steps =(int) rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR));
+    steps = int(rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR)));
 
     xstep = dx / steps;
     ystep = dy / steps;
@@ -196,9 +196,9 @@ void GlEPSFeedBackBuilder::lineResetToken(GLfloat *data) {
 }
 
 void GlEPSFeedBackBuilder::polygonToken(GLfloat *data) {
-  int nvertices =(int) *data;
+  int nvertices = int(*data);
   GLfloat red, green, blue;
-  Feedback3Dcolor *vertex = (Feedback3Dcolor *)(data+1);
+  Feedback3Dcolor *vertex = reinterpret_cast<Feedback3Dcolor *>(data+1);
 
   if (nvertices > 0) {
     red = vertex[0].red;

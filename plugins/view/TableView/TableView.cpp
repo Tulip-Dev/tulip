@@ -125,7 +125,7 @@ void TableView::setupWidget() {
 
   setCentralWidget(centralWidget);
 
-  propertiesEditor = new PropertiesEditor((QWidget *) centralItem()->parentWidget());
+  propertiesEditor = new PropertiesEditor(static_cast<QGraphicsProxyWidget *>(centralItem())->widget());
 
   connect(propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
   connect(propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
@@ -345,10 +345,10 @@ void TableView::setMatchProperty() {
   // to popup the menu
   QWidget* pViewport = QApplication::widgetAt(QCursor::pos());
   QWidget* pView = pViewport->parentWidget();
-  QGraphicsView* pGraphicsView = qobject_cast<QGraphicsView*>(pView);
+  QGraphicsView* pGraphicsView = static_cast<QGraphicsView*>(pView);
   QGraphicsItem* pGraphicsItem =
     pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
-  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(((QGraphicsProxyWidget *) pGraphicsItem)->subWidgetRect(_ui->matchPropertyButton).bottomLeft())));
+  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(static_cast<QGraphicsProxyWidget *>(pGraphicsItem)->subWidgetRect(_ui->matchPropertyButton).bottomLeft())));
 
   action = menu.exec(popupPos);
 

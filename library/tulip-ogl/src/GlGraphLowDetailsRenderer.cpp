@@ -89,7 +89,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
       tmp *= 1./(bends.size() + 2);
       tmp *= j+1;
       tmp += ca;
-      colors[i_col++] = Color((int)tmp[0], (int)tmp[1], (int)tmp[2], (int)tmp[3]);
+      colors[i_col++] = Color(uchar(tmp[0]), uchar(tmp[1]),
+                              uchar(tmp[2]), uchar(tmp[3]));
       indices[i_indices++] = i_point;
       indices[i_indices++] = i_point;
       points[i_point][0] = bends[j][0];

@@ -499,16 +499,16 @@ public:
     return NULL;
   }
   virtual void setNodeDataMemValue( const node n, const DataMem* v) {
-    setNodeValue(n, ((TypedValueContainer<typename Tnode::RealType> *) v)->value);
+    setNodeValue(n, static_cast<const TypedValueContainer<typename Tnode::RealType> *>(v)->value);
   }
   virtual void setEdgeDataMemValue( const edge e, const DataMem* v) {
-    setEdgeValue(e, ((TypedValueContainer<typename Tedge::RealType> *) v)->value);
+    setEdgeValue(e, static_cast<const TypedValueContainer<typename Tedge::RealType> *>(v)->value);
   }
   virtual void setAllNodeDataMemValue(const DataMem* v) {
-    setAllNodeValue(((TypedValueContainer<typename Tnode::RealType> *) v)->value);
+    setAllNodeValue(static_cast<const TypedValueContainer<typename Tnode::RealType> *>(v)->value);
   }
   virtual void setAllEdgeDataMemValue(const DataMem* v) {
-    setAllEdgeValue(((TypedValueContainer<typename Tedge::RealType> *) v)->value);
+    setAllEdgeValue(static_cast<const TypedValueContainer<typename Tedge::RealType> *>(v)->value);
   }
 
   // PropertyInterface methods
@@ -516,14 +516,13 @@ public:
   // and mg is the graph owning mN
   virtual void computeMetaValue(node n, Graph* sg, Graph* mg) {
     if (Tprop::metaValueCalculator)
-      ((typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *)
-       Tprop::metaValueCalculator)->computeMetaValue(this, n, sg, mg);
+      static_cast<typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *>(Tprop::metaValueCalculator)->computeMetaValue(this, n, sg, mg);
   }
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
   virtual void computeMetaValue(edge e, tlp::Iterator<edge>* itE, Graph* mg) {
     if (Tprop::metaValueCalculator)
-      ((typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *) Tprop::metaValueCalculator)->computeMetaValue(this, e, itE, mg);
+      static_cast<typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *>(Tprop::metaValueCalculator)->computeMetaValue(this, e, itE, mg);
   }
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc) {
     if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *>(mvCalc)) {

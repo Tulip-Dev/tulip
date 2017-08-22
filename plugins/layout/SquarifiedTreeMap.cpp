@@ -129,8 +129,8 @@ bool SquarifiedTreeMap::run() {
   computeNodesSize(root);
 
   Vec2d center = initialSpace.center();
-  result->setNodeValue(root, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), 0));
-  Size initialSpaceSize(static_cast<float>(initialSpace.width()), static_cast<float>(initialSpace.height()), 0);
+  result->setNodeValue(root, Coord(float(center[0]), float(center[1]), 0));
+  Size initialSpaceSize(float(initialSpace.width()), float(initialSpace.height()), 0);
   sizeResult->setNodeValue(root, initialSpaceSize);
   vector<node> toTreat(orderedChildren(root));
 
@@ -185,8 +185,8 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
     assert(layoutRec.isValid());
     sum += nodesSize.get(it->id);
     Vec2d center = layoutRec.center();
-    result->setNodeValue(*it, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), static_cast<float>(depth * SEPARATION_Z)));
-    sizeResult->setNodeValue(*it, Size(static_cast<float>(layoutRec.width()), static_cast<float>(layoutRec.height()), 0));
+    result->setNodeValue(*it, Coord(float(center[0]), float(center[1]), float(depth * SEPARATION_Z)));
+    sizeResult->setNodeValue(*it, Size(float(layoutRec.width()), float(layoutRec.height()), 0));
 
     if (graph->outdeg(*it) > 0) {
       vector<node> toTreat(orderedChildren(*it));

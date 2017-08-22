@@ -430,7 +430,7 @@ bool HistogramView::eventFilter(QObject *object, QEvent *event) {
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
     int x = glw->width() - he->x();
     int y = he->y();
-    Coord screenCoords((double) x, (double) y, 0);
+    Coord screenCoords(x, y, 0);
     Coord sceneCoords(glw->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glw->screenToViewport(screenCoords)));
     BoundingBox xAxisBB = xAxisDetail->getBoundingBox();
 
@@ -621,8 +621,8 @@ void HistogramView::buildHistograms() {
   float spaceBetweenOverviews = OVERVIEW_SIZE / 10.f;
   float labelHeight = OVERVIEW_SIZE / 6.0f;
 
-  float squareRoot = sqrt(double(selectedProperties.size()));
-  const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedProperties.size(), squareRoot) == 0. ? 0 : 1);
+  float squareRoot = sqrt(float(selectedProperties.size()));
+  const unsigned int N =  uint(squareRoot) + (fmod(float(selectedProperties.size()), squareRoot) == 0.f ? 0u : 1u);
 
   Color backgroundColor(histoOptionsWidget->getBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);

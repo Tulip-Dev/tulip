@@ -18,8 +18,6 @@
  */
 #include "PlanarConMapTest.h"
 #include <tulip/PlanarityTest.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
 
 CPPUNIT_TEST_SUITE_REGISTRATION( tlp::PlanarConMapTest );
 

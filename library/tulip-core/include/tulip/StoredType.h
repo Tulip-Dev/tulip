@@ -38,7 +38,7 @@ struct StoredType {
   enum {isPointer=0};
   // simply get
   inline static TYPE& get(const TYPE& val) {
-    return (TYPE&) val;
+    return const_cast<TYPE&>(val);
   }
   // equallity test
   inline static bool equal(const TYPE& val1, const TYPE& val2) {
@@ -52,7 +52,7 @@ struct StoredType {
   inline static void destroy(Value) {}
   // the default value of that type
   inline static Value defaultValue() {
-    return (Value) 0;
+    return static_cast<Value>(0);
   }
 };
 

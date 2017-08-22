@@ -27,7 +27,7 @@
 
 using namespace tlp;
 
-ChooseColorButton::ChooseColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(parent), _dialogTitle((char *) NULL) {
+ChooseColorButton::ChooseColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(parent) {
   connect(this,SIGNAL(clicked()),this,SLOT(chooseColor()));
   setFocusPolicy(Qt::WheelFocus);
 }

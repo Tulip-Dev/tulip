@@ -47,14 +47,14 @@ public:
 
   static void write(std::ostream&, const RealType&) {}
   static void writeb(std::ostream& oss, const RealType& v) {
-    oss.write((char *) &v, sizeof(v));
+    oss.write(reinterpret_cast<const char *>(&v), sizeof(v));
   }
 
   static bool read(std::istream&, RealType&) {
     return false;
   }
   static bool readb(std::istream& iss, RealType& v) {
-    return bool(iss.read((char *) &v, sizeof(v)));
+    return bool(iss.read(reinterpret_cast<char *>(&v), sizeof(v)));
   }
 
   static std::string toString(const RealType &) {
