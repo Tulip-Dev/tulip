@@ -1,8 +1,8 @@
-# Tulip continuous integration on linux and mac os platforms through TravisCI.
+# Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
-#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on linux, clang 3.5 on mac os), C++98 standard, Qt 4.8 and Python 2.7
-#  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from XCode9 on mac os), C++11 standard, 
-#    Qt 5.9 on linux / Qt 5.8 on macos, and Python 3.6 on linux / Python 2.7 on mac os
+#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++98 standard, Qt 4.8 and Python 2.7
+#  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from XCode9 on Mac OS), C++11 standard, 
+#    Qt 5.9 on Linux / Qt 5.8 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
 # As TravisCI limits build jobs to 45 minutes timeout, we build Tulip in two successive build stages:
 #  - a core build with no Tulip OpenGL and Qt components
 #  - a complete build including OpenGL and Qt components
@@ -19,9 +19,10 @@ cache: ccache
 # define build jobs
 jobs:
   include:
-    # Tulip core build stage
-    - stage: tulip core build
-    # legacy Tulip core build on linux
+  #==============================================================================================================================================================
+    # Tulip core build stage on Linux
+    - stage: Tulip core build (Linux)
+    # legacy Tulip core build on Linux
       os: linux
       dist: trusty
       compiler: gcc
@@ -40,7 +41,7 @@ jobs:
             - libcppunit-dev
             - binutils-dev
             # the dependencies below are not required for a Tulip core build but travis build cache does not work
-            # as expected in the complete build stage that follows (due to cache slug depends on the environment),
+            # as expected in the complete build stage that follows (due to cache slug depending on the environment),
             # so install them anyway
             - libqt4-dev
             - libquazip-dev
@@ -65,7 +66,8 @@ jobs:
         # run Tulip unit tests
         - ninja runTests
 
-    # modern Tulip core build on linux
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # modern Tulip core build on Linux
     - 
       os: linux
       dist: trusty
@@ -121,91 +123,10 @@ jobs:
         - ninja -j4
         # run Tulip unit tests
         - ninja runTests
-    
-    # legacy Tulip core build on mac os
-    - 
-      os: osx
-      compiler: clang
-      install:
-        # set columns in terminal, required for curl to work correctly:
-        - export COLUMNS=80
-        # install MacPorts in order to easily retrieve Tulip dependencies
-        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
-        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
-        # install Tulip core build dependencies
-        - sudo port -N install cmake
-        - sudo port -N install ccache
-        - sudo port -N install ninja
-        - sudo port -N install qhull
-        - sudo port -N install yajl
-        - sudo port -N install autoconf
-        - sudo port -N install automake
-        - sudo port -N install libtool
-        - sudo port -N install pkgconfig
-        # MacPorts offers cppunit 1.14 in its repositories
-        # but cppunit 1.13.2 is the last version supporting C++98, so grab it, compile and install it
-        - wget http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz
-        - tar -xvzf cppunit-1.13.2.tar.gz
-        - cd cppunit-1.13.2
-        - CC=clang CXX=clang++ CXXFLAGS=-stdlib=libstdc++ LIBS=-lstdc++.6 ./configure --prefix=/opt/local
-        - sudo make -j4 install
-        - cd ..
-      env:
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
-      script:
-        # create build directory
-        - mkdir build && cd build
-        # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
-        # compile Tulip using ninja for faster builds
-        - ninja -j4
-        # run Tulip unit tests
-        - ninja runTests
-    
-    # modern Tulip core build on mac os
-    - 
-      os: osx
-      # use xcode9 travis image to get a recent clang compiler
-      osx_image: xcode9
-      compiler: clang
-      install:
-        # set columns in terminal, required for curl to work correctly:
-        - export COLUMNS=80
-        # install MacPorts in order to easily retrieve Tulip dependencies
-        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
-        - chmod +x ./macports-ci
-        - travis_wait ./macports-ci install
-        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
-        # install Tulip core build dependencies
-        - sudo port -N install cmake
-        - sudo port -N install ccache
-        - sudo port -N install ninja
-        - sudo port -N install qhull
-        - sudo port -N install yajl
-        - sudo port -N install pkgconfig
-        - sudo port -N install cppunit
-      env:
-        # use C++11
-        - TULIP_CXX_FLAGS="-std=c++11 -stdlib=libc++"
-        # use system Python 2.7
-        - PYTHON_EXECUTABLE=/usr/bin/python2.7
-        
-      script:
-        # create build directory
-        - mkdir build && cd build
-        # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
-        # compile Tulip using ninja for faster builds
-        - ninja -j4
-        # run Tulip unit tests
-        - ninja runTests
-    
-    # Tulip complete build stage
-    - stage: tulip complete build
-      # legacy Tulip complete build on linux, we also build the documentation in this one
+  #==============================================================================================================================================================
+    # Tulip complete build stage on Linux
+    - stage: Tulip complete build (Linux)
+      # legacy Tulip complete build on Linux, we also build the documentation in this one
       os: linux
       dist: trusty
       compiler: gcc
@@ -247,7 +168,8 @@ jobs:
         # run Tulip unit tests
         - ninja runTests
 
-    # modern Tulip complete build on linux    
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # modern Tulip complete build on Linux    
     - 
       os: linux
       dist: trusty
@@ -301,8 +223,94 @@ jobs:
         # run Tulip unit tests
         - ninja runTests
     
-    # legacy Tulip complete build on mac os
+  #==============================================================================================================================================================
+    # Tulip core build stage on Mac OS
+    - stage: Tulip core build (Mac OS)
+    # legacy Tulip core build on Mac OS
+      os: osx
+      compiler: clang
+      install:
+        # set columns in terminal, required for curl to work correctly:
+        - export COLUMNS=80
+        # install MacPorts in order to easily retrieve Tulip dependencies
+        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        - chmod +x ./macports-ci
+        - travis_wait ./macports-ci install
+        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
+        # install Tulip core build dependencies
+        - sudo port -N install cmake
+        - sudo port -N install ccache
+        - sudo port -N install ninja
+        - sudo port -N install qhull
+        - sudo port -N install yajl
+        - sudo port -N install autoconf
+        - sudo port -N install automake
+        - sudo port -N install libtool
+        - sudo port -N install pkgconfig
+        # MacPorts offers cppunit 1.14 in its repositories
+        # but cppunit 1.13.2 is the last version supporting C++98, so grab it, compile and install it
+        - wget http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz
+        - tar -xvzf cppunit-1.13.2.tar.gz
+        - cd cppunit-1.13.2
+        - CC=clang CXX=clang++ CXXFLAGS=-stdlib=libstdc++ LIBS=-lstdc++.6 ./configure --prefix=/opt/local
+        - sudo make -j4 install
+        - cd ..
+      env:
+        # use system Python 2.7
+        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+      script:
+        # create build directory
+        - mkdir build && cd build
+        # configure Tulip core build using cmake
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        # compile Tulip using ninja for faster builds
+        - ninja -j4
+        # run Tulip unit tests
+        - ninja runTests
+    
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # modern Tulip core build on Mac OS
     - 
+      os: osx
+      # use xcode9 travis image to get a recent clang compiler
+      osx_image: xcode9
+      compiler: clang
+      install:
+        # set columns in terminal, required for curl to work correctly:
+        - export COLUMNS=80
+        # install MacPorts in order to easily retrieve Tulip dependencies
+        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        - chmod +x ./macports-ci
+        - travis_wait ./macports-ci install
+        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
+        # install Tulip core build dependencies
+        - sudo port -N install cmake
+        - sudo port -N install ccache
+        - sudo port -N install ninja
+        - sudo port -N install qhull
+        - sudo port -N install yajl
+        - sudo port -N install pkgconfig
+        - sudo port -N install cppunit
+      env:
+        # use C++11
+        - TULIP_CXX_FLAGS="-std=c++11 -stdlib=libc++"
+        # use system Python 2.7
+        - PYTHON_EXECUTABLE=/usr/bin/python2.7
+        
+      script:
+        # create build directory
+        - mkdir build && cd build
+        # configure Tulip core build using cmake
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        # compile Tulip using ninja for faster builds
+        - ninja -j4
+        # run Tulip unit tests
+        - ninja runTests
+    
+  #==============================================================================================================================================================
+    # Tulip complete build stage on Mac OS
+    - stage: Tulip complete build (Mac OS)
+    # legacy Tulip complete build on Mac OS
       os: osx
       compiler: clang
       install:
@@ -349,7 +357,8 @@ jobs:
         # run Tulip unit tests
         - ninja runTests
     
-    # modern Tulip complete build on mac os
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # modern Tulip complete build on Mac OS
     - 
       os: osx
       # use xcode9 travis image to get a recent clang compiler
