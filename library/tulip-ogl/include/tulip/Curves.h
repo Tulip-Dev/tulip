@@ -63,7 +63,8 @@ TLP_GL_SCOPE void simpleQuad(const std::vector<Coord> &, /* quad vertces */
                              const Coord &,            /* direction of the camera*/
                              bool,         /* if true : use start and end color to border lines, if false : use borderColor*/
                              const Color &,      /* border color */
-                             const std::string &textureName="");     /* textureName */
+                             const std::string &textureName="",
+                             const float outlineWidth=0);     /* textureName */
 TLP_GL_SCOPE void splineQuad(const std::vector<Coord> &,  /* polyline vertces */
                              const Color &,          /* start color */
                              const Color &,          /* end color */

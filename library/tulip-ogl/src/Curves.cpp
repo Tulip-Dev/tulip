@@ -591,7 +591,8 @@ void simpleQuad(const vector<Coord> &vertices,
                 float s1, float s2,
                 const Coord &startN, const Coord &endN, const Coord &lookDir,
                 bool colorInterpolate,const Color &borderColor,
-                const string &textureName) {
+                const string &textureName,
+                const float outlineWidth) {
 
   vector<Color> colors;
   getColors(vertices, c1, c2,colors);
@@ -718,33 +719,39 @@ void simpleQuad(const vector<Coord> &vertices,
     GlTextureManager::getInst().desactivateTexture();
   }
 
-  glBegin(GL_LINE_STRIP);
+  if (outlineWidth > 0) {
 
-  if(!colorInterpolate)
-    glColor4ubv(((const GLubyte *)&borderColor));
+    glLineWidth(outlineWidth);
 
-  for (unsigned int i = 0; i < size; ++i) {
-    if(colorInterpolate)
-      glColor4ubv(((const GLubyte *)&colors[i]));
+    glBegin(GL_LINE_STRIP);
 
-    glVertex3fv(&points[i*3]);
+    if(!colorInterpolate)
+      glColor4ubv(((const GLubyte *)&borderColor));
+
+    for (unsigned int i = 0; i < size; ++i) {
+      if(colorInterpolate)
+        glColor4ubv(((const GLubyte *)&colors[i]));
+
+      glVertex3fv(&points[i*3]);
+    }
+
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+
+    if(!colorInterpolate)
+      glColor4ubv(((const GLubyte *)&borderColor));
+
+    for (unsigned int i = 0; i < size; ++i) {
+      if(colorInterpolate)
+        glColor4ubv(((const GLubyte *)&colors[i]));
+
+      glVertex3fv(&points[i*3 + size*3]);
+    }
+
+    glEnd();
+
   }
-
-  glEnd();
-
-  glBegin(GL_LINE_STRIP);
-
-  if(!colorInterpolate)
-    glColor4ubv(((const GLubyte *)&borderColor));
-
-  for (unsigned int i = 0; i < size; ++i) {
-    if(colorInterpolate)
-      glColor4ubv(((const GLubyte *)&colors[i]));
-
-    glVertex3fv(&points[i*3 + size*3]);
-  }
-
-  glEnd();
 
   delete [] points;
 }

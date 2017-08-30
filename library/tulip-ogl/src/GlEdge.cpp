@@ -378,7 +378,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
   case L3D_BIT + EdgeShape::Polyline: {
     glDisable(GL_LIGHTING);
-    simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+    simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName,outlineWidth);
     glEnable(GL_LIGHTING);
     break;
   }
