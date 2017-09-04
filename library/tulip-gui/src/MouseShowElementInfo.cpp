@@ -42,15 +42,16 @@ MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton):_ui(
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem->setWidget(_informationWidget);
   _informationWidgetItem->setVisible(false);
+
   if(showVisualPropButton)
-      connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
+    connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
   else
-      _ui->displayTulipProp->hide();
+    _ui->displayTulipProp->hide();
 }
 
 MouseShowElementInfo::~MouseShowElementInfo() {
-    delete _informationWidget;
-    delete _ui;
+  delete _informationWidget;
+  delete _ui;
 }
 
 void MouseShowElementInfo::showVisualProp(int show) {
