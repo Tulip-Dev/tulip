@@ -31,6 +31,16 @@
 namespace tlp {
 class Vec3f  {
 
+// Convert Python list or tuple of numbers to a tlp::Vec3f
+%ConvertToTypeCode
+  // Check if type is compatible
+  if (sipIsErr == NULL) {
+    return isListOrTupleAndCanConvertToVec3fType(sipPy);
+  }
+  *sipCppPtr = convertToVec3fType<tlp::Vec3f>(sipPy);
+  return sipGetState(sipTransferObj);
+%End
+
 %Docstring
 This class represents a vector with 3 floating point components.
 It can be instantiated as illustrated in the code below: ::

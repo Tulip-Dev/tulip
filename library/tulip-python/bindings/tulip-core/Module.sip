@@ -182,6 +182,31 @@ extern PyObject* evalPythonStatement(const std::string &pythonStatement);
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 #endif
 
+extern bool isListOrTupleAndCanConvertToVec3fType(PyObject *pyObj);
+
+template <typename VEC_TYPE>
+VEC_TYPE *convertToVec3fType(PyObject *pyObj, float zVal = 0) {
+  float x = 0, y = 0, z = zVal;
+
+  bool isList = PyList_Check(pyObj);
+
+  PyObject *f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 0) : PyTuple_GET_ITEM(pyObj, 0));
+  x = static_cast<float>(PyFloat_AsDouble(f));
+  Py_XDECREF(f);
+
+  f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 1) : PyTuple_GET_ITEM(pyObj, 1));
+  y = static_cast<float>(PyFloat_AsDouble(f));
+  Py_XDECREF(f);
+
+  if ((isList && PyList_GET_SIZE(pyObj) > 2) || PyTuple_GET_SIZE(pyObj) > 2) {
+    f = PyNumber_Float(isList ? PyList_GET_ITEM(pyObj, 2) : PyTuple_GET_ITEM(pyObj, 2));
+    z = static_cast<float>(PyFloat_AsDouble(f));
+    Py_XDECREF(f);
+  }
+
+  return new VEC_TYPE(x, y, z);
+}
+
 %End
 
 
@@ -288,6 +313,30 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
   }
 
   return ret;
+}
+
+bool isListOrTupleAndCanConvertToVec3fType(PyObject *pyObj) {
+  if (!PyList_Check(pyObj) || PyList_GET_SIZE(pyObj) < 2) {
+    if (!PyTuple_Check(pyObj) || PyTuple_GET_SIZE(pyObj) < 2) {
+      return false;
+    }
+  }
+  if (PyList_Check(pyObj)) {
+    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(pyObj); ++i) {
+      PyObject *item = PyList_GET_ITEM(pyObj, i);
+      if (!PyNumber_Check(item)) {
+        return false;
+      }
+    }
+  } else {
+    for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
+      PyObject *item = PyTuple_GET_ITEM(pyObj, i);
+      if (!PyNumber_Check(item)) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 %End

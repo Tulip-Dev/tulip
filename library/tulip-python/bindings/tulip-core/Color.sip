@@ -30,6 +30,77 @@ class Color {
 #include <tulip/Color.h>
 %End
 
+// Convert Python list or tuple of integers to a tlp::Color
+%ConvertToTypeCode
+  // Check if type is compatible
+  if (sipIsErr == NULL) {
+    if (!PyList_Check(sipPy) || PyList_GET_SIZE(sipPy) < 3) {
+      if (!PyTuple_Check(sipPy) || PyTuple_GET_SIZE(sipPy) < 3) {
+        return 0;
+      }
+    }
+    if (PyList_Check(sipPy)) {
+      for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+        PyObject *item = PyList_GET_ITEM(sipPy, i);
+#if PY_MAJOR_VERSION >= 3
+        if (!PyLong_Check(item)) {
+#else
+        if (!PyLong_Check(item) && !PyInt_Check(item)) {
+#endif
+          return 0;
+        }
+      }
+    } else {
+      for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(sipPy); ++i) {
+        PyObject *item = PyTuple_GET_ITEM(sipPy, i);
+#if PY_MAJOR_VERSION >= 3
+        if (!PyLong_Check(item)) {
+#else
+        if (!PyLong_Check(item) && !PyInt_Check(item)) {
+#endif
+          return 0;
+        }
+      }
+    }
+    return 1;
+  }
+
+  unsigned char r = 0;
+  unsigned char g = 0;
+  unsigned char b = 0;
+  unsigned char a = 255;
+
+  bool isList = PyList_Check(sipPy);
+
+#if PY_MAJOR_VERSION >= 3
+  r = static_cast<unsigned char>(PyLong_AsLong(isList ? PyList_GET_ITEM(sipPy, 0) : PyTuple_GET_ITEM(sipPy, 0)));
+  g = static_cast<unsigned char>(PyLong_AsLong(isList ? PyList_GET_ITEM(sipPy, 1) : PyTuple_GET_ITEM(sipPy, 1)));
+  b = static_cast<unsigned char>(PyLong_AsLong(isList ? PyList_GET_ITEM(sipPy, 2) : PyTuple_GET_ITEM(sipPy, 2)));
+  if (PyList_GET_SIZE(sipPy) > 3)
+    a = static_cast<unsigned char>(PyLong_AsLong(isList ? PyList_GET_ITEM(sipPy, 3) : PyTuple_GET_ITEM(sipPy, 3)));
+#else
+
+  static struct {
+    unsigned char operator()(PyObject *item) const {
+      if (PyLong_Check(item)) {
+        return static_cast<unsigned char>(PyLong_AsLong(item));
+      } else {
+        return static_cast<unsigned char>(PyInt_AsLong(item));
+      }
+    }
+  } toUnsignedChar;
+
+  r = toUnsignedChar(isList ? PyList_GET_ITEM(sipPy, 0) : PyTuple_GET_ITEM(sipPy, 0));
+  g = toUnsignedChar(isList ? PyList_GET_ITEM(sipPy, 1) : PyTuple_GET_ITEM(sipPy, 1));
+  b = toUnsignedChar(isList ? PyList_GET_ITEM(sipPy, 2) : PyTuple_GET_ITEM(sipPy, 2));
+  if ((isList && PyList_GET_SIZE(sipPy) > 3) || PyTuple_GET_SIZE(sipPy) > 3)
+    a = toUnsignedChar(isList ? PyList_GET_ITEM(sipPy, 3) : PyTuple_GET_ITEM(sipPy, 3));
+#endif
+
+  *sipCppPtr = new tlp::Color(r, g, b, a);
+  return sipGetState(sipTransferObj);
+%End
+
 %Docstring
 This class represents a color using the RGBA color space. It can be instantiated the following way::
 

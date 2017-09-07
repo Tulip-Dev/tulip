@@ -77,6 +77,9 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 %ConvertToTypeCode
 
   if (sipIsErr == NULL) {
+    if (isListOrTupleAndCanConvertToVec3fType(sipPy)) {
+      return 1;
+    }
     if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
       return 1;
     }
@@ -85,10 +88,10 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 
   int state=0, err=0;
 
-  *sipCppPtr = new tlp::PySize(*reinterpret_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipFindType("tlp::Vec3f"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
-
-  if (!*sipCppPtr) {
-    *sipIsErr = 1;
+  if (PyList_Check(sipPy) || PyTuple_Check(sipPy)) {
+    *sipCppPtr = convertToVec3fType<tlp::PySize>(sipPy, 1);
+  } else {
+    *sipCppPtr = new tlp::PySize(*reinterpret_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipFindType("tlp::Vec3f"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
   }
 
   return sipGetState(sipTransferObj);
