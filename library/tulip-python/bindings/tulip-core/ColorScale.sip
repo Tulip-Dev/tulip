@@ -181,7 +181,7 @@ Clears the color scale.
 
   virtual void setColorScale(const std::vector<tlp::Color> colors, const bool gradient = true);
 %Docstring
-tlp.ColorScale.setColorScale(colors[, gradient = True])
+tlp.ColorScale.setColorScale(colors, gradient=True)
 
 This method configures the color scale from a list of colors and
 associates regular stop points to them.

@@ -25,7 +25,7 @@
 
   double getNodeMin(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.DoubleProperty.getNodeMin([subgraph = None])
+tlp.DoubleProperty.getNodeMin(subgraph=None)
 
 Returns the minimum value on the nodes for that double property.
 
@@ -38,7 +38,7 @@ Returns the minimum value on the nodes for that double property.
 
   double getNodeMax(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.DoubleProperty.getNodeMax([subgraph = None])
+tlp.DoubleProperty.getNodeMax(subgraph=None)
 
 Returns the maximum value on the nodes for that double property.
 
@@ -51,7 +51,7 @@ Returns the maximum value on the nodes for that double property.
 
   double getEdgeMin(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.DoubleProperty.getEdgeMin([subgraph = None])
+tlp.DoubleProperty.getEdgeMin(subgraph=None)
 
 Returns the minimum value on the edges for that double property.
 
@@ -64,7 +64,7 @@ Returns the minimum value on the edges for that double property.
 
   double getEdgeMax(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.DoubleProperty.getEdgeMax([subgraph = None])
+tlp.DoubleProperty.getEdgeMax(subgraph = None)
 
 Returns the maximum value on the edges for that double property.
 

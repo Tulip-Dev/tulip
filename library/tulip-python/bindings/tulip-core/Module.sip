@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-%Module _tulip
+%Module(name=_tulip, keyword_arguments="Optional")
 
 // we define the NO_LIMIT_DOC feature
 // to deal with the limit for string constants length of Visual Studio

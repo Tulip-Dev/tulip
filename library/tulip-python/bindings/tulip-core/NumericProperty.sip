@@ -116,7 +116,7 @@ Returns the value associated to a particular edge.
 
   double  getNodeDoubleMin(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.NumericProperty.getNodeDoubleMin([subgraph = None])
+tlp.NumericProperty.getNodeDoubleMin(subgraph=None)
 
 Returns the minimum value on the nodes for that property.
 
@@ -130,7 +130,7 @@ Returns the minimum value on the nodes for that property.
 
   double  getNodeDoubleMax(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.NumericProperty.getNodeDoubleMax([subgraph = None])
+tlp.NumericProperty.getNodeDoubleMax(subgraph=None)
 
 Returns the maximum value on the nodes for that property.
 
@@ -143,7 +143,7 @@ Returns the maximum value on the nodes for that property.
 
   double  getEdgeDoubleMin(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.NumericProperty.getEdgeDoubleMin([subgraph = None])
+tlp.NumericProperty.getEdgeDoubleMin(subgraph=None)
 
 Returns the minimum value on the edges for that property.
 
@@ -156,7 +156,7 @@ Returns the minimum value on the edges for that property.
 
   double  getEdgeDoubleMax(const tlp::Graph *subgraph=0);
 %Docstring
-tlp.NumericProperty.getEdgeDoubleMax([subgraph = None])
+tlp.NumericProperty.getEdgeDoubleMax(subgraph=None)
 
 Returns the maximum value on the edges for that double property.
 
@@ -215,7 +215,7 @@ An uniform quantification tries to separate the edges in n classes of equivalent
 
   tlp::Iterator<tlp::node>* getSortedNodes(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
-tlp.NumericProperty.getSortedNodes([subgraph=None, ascendingOrder=True])
+tlp.NumericProperty.getSortedNodes(subgraph=None, ascendingOrder=True)
 
 .. versionadded:: 4.8
 
@@ -232,7 +232,7 @@ Gets an iterator sorting nodes according to their values in that numeric propert
 
   tlp::Iterator<tlp::edge>* getSortedEdges(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.NumericProperty.getSortedEdges([subgraph=None, ascendingOrder=True])
+tlp.NumericProperty.getSortedEdges(subgraph=None, ascendingOrder=True)
 
 .. versionadded:: 4.8
 
@@ -249,7 +249,7 @@ Gets an iterator sorting edges according to their values in that numeric propert
 
   tlp::Iterator<tlp::edge>* getSortedEdgesBySourceValue(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.NumericProperty.getSortedEdgesBySourceValue([subgraph=None, ascendingOrder=True])
+tlp.NumericProperty.getSortedEdgesBySourceValue(subgraph=None, ascendingOrder=True)
 
 .. versionadded:: 4.8
 
@@ -266,7 +266,7 @@ Gets an iterator sorting edges according to the values of their source nodes in 
 
   tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.NumericProperty.getSortedEdgesByTargetValue([subgraph=None, ascendingOrder=True])
+tlp.NumericProperty.getSortedEdgesByTargetValue(subgraph=None, ascendingOrder=True)
 
 .. versionadded:: 4.8
 
@@ -283,7 +283,7 @@ Gets an iterator sorting edges according to the values of their target nodes in 
 
   tlp::Iterator<tlp::edge>* getSortedEdgesByExtremitiesValues(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.NumericProperty.getSortedEdgesByExtremitiesValues([subgraph=None, ascendingOrder=True])
+tlp.NumericProperty.getSortedEdgesByExtremitiesValues(subgraph=None, ascendingOrder=True)
 
 .. versionadded:: 4.8
 

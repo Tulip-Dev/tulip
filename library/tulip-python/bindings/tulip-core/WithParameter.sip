@@ -110,7 +110,7 @@ that will be shown when the plug-in in invoked by the user.
                           bool inParam = true, bool outParam = false,
                           const std::string &valuesDescription = "");
 %Docstring
-tlp.WithParameter.addStringParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+tlp.WithParameter.addStringParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False)
 
 Adds a string parameter to the plug-in.
 
@@ -144,7 +144,7 @@ Adds a string parameter to the plug-in.
                                     const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addStringCollectionParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addStringCollectionParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 
@@ -179,7 +179,7 @@ Adds a :class:`tlp.StringCollection` parameter to the plug-in.
                            const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addIntegerParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addIntegerParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds an integer parameter to the plug-in.
 
@@ -213,7 +213,7 @@ Adds an integer parameter to the plug-in.
                                   const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addUnsignedIntegerParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addUnsignedIntegerParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 5.0
 
@@ -249,7 +249,7 @@ Adds an unsigned integer parameter to the plug-in.
                          const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addFloatParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addFloatParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a floating point number parameter to the plug-in.
 
@@ -283,7 +283,7 @@ Adds a floating point number parameter to the plug-in.
                            const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addBooleanParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addBooleanParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a boolean parameter to the plug-in.
 
@@ -317,7 +317,7 @@ Adds a boolean parameter to the plug-in.
                                   const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addDoublePropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addDoublePropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 
@@ -351,7 +351,7 @@ Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
                                         const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addDoubleVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addDoubleVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -387,7 +387,7 @@ Adds a :class:`tlp.DoubleVectorProperty` parameter to the plug-in.
                                    const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addIntegerPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addIntegerPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 
@@ -421,7 +421,7 @@ Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
                                          const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addIntegerVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addIntegerVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -457,7 +457,7 @@ Adds a :class:`tlp.IntegerVectorProperty` parameter to the plug-in.
                                   const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addLayoutPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addLayoutPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 
@@ -491,7 +491,7 @@ Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
                                        const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addCoordVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addCoordVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -527,7 +527,7 @@ Adds a :class:`tlp.CoorVectorProperty` parameter to the plug-in.
                                 const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addSizePropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addSizePropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 
@@ -561,7 +561,7 @@ Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
                                       const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addSizeVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addSizeVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -597,7 +597,7 @@ Adds a :class:`tlp.SizeVectorProperty` parameter to the plug-in.
                                  const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addColorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addColorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 
@@ -631,7 +631,7 @@ Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
                                        const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addColorVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addColorVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -667,7 +667,7 @@ Adds a :class:`tlp.ColorVectorProperty` parameter to the plug-in.
                                    const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addBooleanPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addBooleanPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 
@@ -701,7 +701,7 @@ Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
                                          const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addBooleanVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addBooleanVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -737,7 +737,7 @@ Adds a :class:`tlp.BooleanVectorProperty` parameter to the plug-in.
                                   const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addStringPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addStringPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 
@@ -771,7 +771,7 @@ Adds a :class:`tlp.StringProperty` parameter to the plug-in.
                                         const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addStringVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addStringVectorPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.2
 
@@ -807,7 +807,7 @@ Adds a :class:`tlp.StringVectorProperty` parameter to the plug-in.
                          const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addColorParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addColorParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.Color` parameter to the plug-in.
 
@@ -841,7 +841,7 @@ Adds a :class:`tlp.Color` parameter to the plug-in.
                               const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addColorScaleParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addColorScaleParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.ColorScale` parameter to the plug-in.
 
@@ -875,7 +875,7 @@ Adds a :class:`tlp.ColorScale` parameter to the plug-in.
                             const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
 
@@ -909,7 +909,7 @@ Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
                                   const std::string &valuesDescription = "");
 
 %Docstring
-tlp.WithParameter.addNumericPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+tlp.WithParameter.addNumericPropertyParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 .. versionadded:: 4.10
 
@@ -944,7 +944,7 @@ void addFileParameter(const std::string & str,
                       bool isMandatory = true);
 
 %Docstring
-tlp.WithParameter.addFileParameter(name[, mustExist = True, help = "", defaultValue = "", isMandatory = True])
+tlp.WithParameter.addFileParameter(name, mustExist=True, help="", defaultValue="", isMandatory=True)
 
 .. versionadded:: 4.9
 
@@ -979,7 +979,7 @@ void addDirectoryParameter(const std::string & str,
                            bool isMandatory = true);
 
 %Docstring
-tlp.WithParameter.addDirectoryParameter(name[, help = "", defaultValue = "", isMandatory = True])
+tlp.WithParameter.addDirectoryParameter(name, help="", defaultValue="", isMandatory=True)
 
 .. versionadded:: 4.9
 

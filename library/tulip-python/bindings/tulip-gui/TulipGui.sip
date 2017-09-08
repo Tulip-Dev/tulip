@@ -90,7 +90,7 @@ the available views, use function :func:`tlpgui.getAvailableViews`.
 
             tlp::View *createView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet(), bool show = true);
 %Docstring
-tlpgui.createView(viewName, graph[, dataSet = tlp.DataSet(), show = True])
+tlpgui.createView(viewName, graph, dataSet={}, show=True)
 
 .. versionadded:: 4.4
 
@@ -133,7 +133,7 @@ Returns an instance of the newly created view.
 
 tlp::NodeLinkDiagramComponent *createNodeLinkDiagramView(tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet(), bool show = true);
 %Docstring
-tlpgui.createNodeLinkDiagramView(graph[, dataSet = tlp.DataSet(), show = True])
+tlpgui.createNodeLinkDiagramView(graph, dataSet={}, show=True)
 
 .. versionadded:: 4.4
 

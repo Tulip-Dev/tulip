@@ -436,7 +436,7 @@ Sets the value of a particular edge.
 
   tlp::Iterator<tlp::node>* getNodesEqualTo(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
-tlp.@PROPERTY_TYPE@Property.getNodesEqualTo(val[, graph = None])
+tlp.@PROPERTY_TYPE@Property.getNodesEqualTo(val, graph=None)
 
 .. versionadded:: 5.0
 
@@ -468,7 +468,7 @@ whose associated value is equal to the one given in parameter.
 
   tlp::Iterator<tlp::edge>* getEdgesEqualTo(const @PROPERTY_EDGE_TYPE@ &val /TypeHint="@PYTHON_EDGE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.@PROPERTY_TYPE@Property.getEdgesEqualTo(val[, graph = None])
+tlp.@PROPERTY_TYPE@Property.getEdgesEqualTo(val, graph=None)
 
 .. versionadded:: 5.0
 
@@ -494,7 +494,7 @@ whose associated value is equal to the one given in parameter.
 
   virtual bool copy(tlp::node dst, tlp::node src, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
 %Docstring
-tlp.@PROPERTY_TYPE@Property.copy(nodeDst, nodeSrc, prop[, ifNotDefault=False])
+tlp.@PROPERTY_TYPE@Property.copy(nodeDst, nodeSrc, prop, ifNotDefault=False)
 
 .. versionadded:: 3.8
 
@@ -514,7 +514,7 @@ Copies the value hold by a property on a node to another node in this property.
 
   virtual bool copy(tlp::edge src, tlp::edge dst, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
 %Docstring
-tlp.@PROPERTY_TYPE@Property.copy(edgeDst, edgeSrc, prop[, ifNotDefault=False])
+tlp.@PROPERTY_TYPE@Property.copy(edgeDst, edgeSrc, prop, ifNotDefault=False)
 
 .. versionadded:: 3.8
 
@@ -1256,7 +1256,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
   virtual bool copy(tlp::node src, tlp::node dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
 %Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(nodeDst, nodeSrc, prop[, ifNotDefault=False])
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(nodeDst, nodeSrc, prop, ifNotDefault=False)
 
 .. versionadded:: 3.8
 
@@ -1276,7 +1276,7 @@ Copies the value hold by a property on a node to another node in this property.
 
   virtual bool copy(tlp::edge src, tlp::edge dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
 %Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(edgeDst, edgeSrc, prop[, ifNotDefault=False])
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(edgeDst, edgeSrc, prop, ifNotDefault=False)
 
 .. versionadded:: 3.8
 
@@ -1310,7 +1310,7 @@ Copies the values hold by a property in this property.
 
  tlp::Iterator<tlp::node>* getNodesEqualTo(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodesEqualTo(val[, graph = None])
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodesEqualTo(val, graph=None)
 
 .. versionadded:: 5.0
 
@@ -1332,7 +1332,7 @@ whose associated value is equal to the one given in parameter.
 
 tlp::Iterator<tlp::edge>* getEdgesEqualTo(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgesEqualTo(val[, graph = None])
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgesEqualTo(val, graph=None)
 
 .. versionadded:: 5.0
 

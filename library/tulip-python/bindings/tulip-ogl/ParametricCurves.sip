@@ -88,7 +88,7 @@ The features of this type of spline are the following :
 
 void computeCatmullRomPoints(const std::vector<tlp::Coord> &controlPoints, std::vector<tlp::Coord> &curvePoints /Out/, const bool closedCurve = false, const unsigned int nbCurvePoints = 100, const float alpha = 0.5);
 %Docstring
-tlpogl.computeCatmullRomPoints(controlPoints[, closedCurve=False, nbCurvePoints=100, alpha=0.5])
+tlpogl.computeCatmullRomPoints(controlPoints, closedCurve=False, nbCurvePoints=100, alpha=0.5)
 
 Computes a set of points approximating a Catmull-Rom curve.
 
@@ -107,7 +107,7 @@ Computes a set of points approximating a Catmull-Rom curve.
 
 tlp::Coord computeOpenUniformBsplinePoint(const std::vector<tlp::Coord> &controlPoints, const float t, const unsigned int curveDegree = 3);
 %Docstring
-tlpogl.computeOpenUniformBsplinePoint(controlPoints, t[, curveDegree=3])
+tlpogl.computeOpenUniformBsplinePoint(controlPoints, t, curveDegree=3)
 
 Computes the position of the point at t (0 <= t <= 1)
 along an open uniform B-spline curve defined by a set of control points.
@@ -132,7 +132,7 @@ A B-spline is qualified as open when it passes through its first and last contro
 
 void computeOpenUniformBsplinePoints(const std::vector<tlp::Coord> &controlPoints, std::vector<tlp::Coord> &curvePoints /Out/, const unsigned int curveDegree = 3, const unsigned int nbCurvePoints = 100);
 %Docstring
-tlpogl.computeOpenUniformBsplinePoints(controlPoints[, curveDegree=3, nbCurvePoints=100])
+tlpogl.computeOpenUniformBsplinePoints(controlPoints, curveDegree=3, nbCurvePoints=100)
 
 Computes a set of points approximating an open uniform B-spline curve.
 

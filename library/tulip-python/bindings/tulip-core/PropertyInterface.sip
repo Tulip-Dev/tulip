@@ -84,7 +84,7 @@ Returns the graph on which the property has been defined.
 
   virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
  %Docstring
- tlp.PropertyInterface.numberOfNonDefaultValuatedNodes([subgraph = None])
+ tlp.PropertyInterface.numberOfNonDefaultValuatedNodes(subgraph=None)
 
 .. versionadded:: 4.8
 
@@ -100,7 +100,7 @@ Returns the graph on which the property has been defined.
 
   virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0 /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
-tlp.PropertyInterface.getNonDefaultValuatedNodes([subgraph = None])
+tlp.PropertyInterface.getNonDefaultValuatedNodes(subgraph=None)
 
 Returns an iterator on all nodes whose value is different
 from the default value. 
@@ -118,7 +118,7 @@ from the default value.
 
   virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
  %Docstring
- tlp.PropertyInterface.numberOfNonDefaultValuatedEdges([subgraph = None])
+ tlp.PropertyInterface.numberOfNonDefaultValuatedEdges(subgraph=None)
 
 .. versionadded:: 4.8
 
@@ -134,7 +134,7 @@ from the default value.
 
   virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0 /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
-tlp.PropertyInterface.getNonDefaultValuatedEdges([subgraph = None])
+tlp.PropertyInterface.getNonDefaultValuatedEdges(subgraph=None)
 
 Returns an iterator on all edges whose value is different
 from the default value. 

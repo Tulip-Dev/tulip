@@ -25,7 +25,7 @@
 
   tlp::Coord getMax(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.getMax([subgraph = None])
+tlp.LayoutProperty.getMax(subgraph=None)
 
 Returns the maximum coordinate in that layout property,
 i.e. the top-right corner of the graph drawing bounding box.
@@ -55,7 +55,7 @@ i.e. the top-right corner of the graph drawing bounding box.
 
   tlp::Coord getMin(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.getMin([subgraph = None])
+tlp.LayoutProperty.getMin(subgraph=None)
 
 Returns the minimum coordinate in that layout property,
 i.e. the bottom-left corner of the graph drawing bounding box.
@@ -85,7 +85,7 @@ i.e. the bottom-left corner of the graph drawing bounding box.
 
   void translate(const tlp::Vec3f &move, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.translate(move[, subgraph = None])
+tlp.LayoutProperty.translate(move, subgraph=None)
 
 Translates the current layout according to a movement vector.
 
@@ -131,7 +131,7 @@ Translates the layout of a set of nodes and edges provided through iterators acc
 
   void scale(const tlp::Vec3f &scaleFactors, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.scale(scaleFactors[, subgraph = None])
+tlp.LayoutProperty.scale(scaleFactors, subgraph=None)
 
 Scales the layout according to a vector of scale factors (sx, sy, sz).
 
@@ -177,7 +177,7 @@ Scales the layout of the nodes and edges provided through iterators according to
 
   void rotateX(const double &alpha, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.rotateX(alpha[, subgraph = None])
+tlp.LayoutProperty.rotateX(alpha, subgraph=None)
 
 .. versionadded:: 3.7
 
@@ -209,7 +209,7 @@ Rotates the layout around the X-axis according to an angle in degrees.
 
         void rotateY(const double &alpha, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.rotateY(alpha[, subgraph = None])
+tlp.LayoutProperty.rotateY(alpha, subgraph=None)
 
 .. versionadded:: 3.7
 
@@ -241,7 +241,7 @@ Rotates the layout around the Y-axis according to an angle in degrees.
   
   void rotateZ(const double &alpha, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.rotateZ(alpha[, subgraph = None])
+tlp.LayoutProperty.rotateZ(alpha, subgraph=None)
 
 Rotates the layout around the Z-axis according to an angle in degrees.
 
@@ -319,7 +319,7 @@ Rotates the layout around the Z-axis of the nodes and edges provided through ite
 
   void center(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.center([subgraph = None])
+tlp.LayoutProperty.center(subgraph=None)
 
 Centers the layout, meaning translating it in order that the center of its bounding box is (0,0,0)
 
@@ -347,7 +347,7 @@ Centers the layout, meaning translating it in order that the center of its bound
 
   void center(const tlp::Vec3f &newCenter, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.center(newCenter[, subgraph = None])
+tlp.LayoutProperty.center(newCenter, subgraph=None)
 
 .. versionadded:: 3.7
 
@@ -380,7 +380,7 @@ the center of its bounding box is equal to newCenter.
 
   void normalize(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.normalize([subgraph = None])
+tlp.LayoutProperty.normalize(subgraph=None)
 
 Normalizes the layout, meaning dividing each nodes and edges coordinate by the maximum magnitude of the whole coordinates set
 
@@ -408,7 +408,7 @@ Normalizes the layout, meaning dividing each nodes and edges coordinate by the m
 
   void perfectAspectRatio(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.perfectAspectRatio([subgraph = None])
+tlp.LayoutProperty.perfectAspectRatio(subgraph=None)
 
 Scales the layout in order to approach an aspect ratio (width / height) of 1.0.
 
@@ -444,7 +444,7 @@ Thus, it measures the length of a polyline.
 
   double averageEdgeLength(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.averageEdgeLength([subgraph=None])
+tlp.LayoutProperty.averageEdgeLength(subgraph=None)
 
 .. versionadded:: 3.7
 
@@ -476,7 +476,7 @@ Returns the average edge length of the layout, the bends are taken into account.
   
   double averageAngularResolution(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.averageAngularResolution([subgraph = None])
+tlp.LayoutProperty.averageAngularResolution(subgraph=None)
 
 Returns the average angular resolution of the layout.
 It is only defined for 2D drawing, meaning the third coordinate is omitted
@@ -507,7 +507,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
   
   double averageAngularResolution(const tlp::node n, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.averageAngularResolution(node[, subgraph = None])
+tlp.LayoutProperty.averageAngularResolution(node, subgraph=None)
 
 Returns the average angular resolution of a node.
 It is only defined for 2D drawing, meaning the third coordinate is omitted
@@ -552,7 +552,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
   
   std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.angularResolutions(node[, subgraph=None])
+tlp.LayoutProperty.angularResolutions(node, subgraph=None)
 
 Returns a list of all angular resolution of a node.
 It is only defined for 2D drawing, meaning the third coordinates is omitted
@@ -596,7 +596,7 @@ It is only defined for 2D drawing, meaning the third coordinates is omitted
 
   void computeEmbedding(tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.computeEmbedding([subgraph=None])
+tlp.LayoutProperty.computeEmbedding(subgraph=None)
 
 Fixes embedding of the graph according to the layout,
 ie. sort edges around nodes according to their neighbors/bends position in the layout.
@@ -628,7 +628,7 @@ Only works in 2D, the third coordinate is not taken into account.
   
   void computeEmbedding(const tlp::node n, tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.computeEmbedding(node[, subgraph=None])
+tlp.LayoutProperty.computeEmbedding(node, subgraph=None)
 
 Fixes embedding of the node according to the layout,
 ie. sort edges around the node according to their neighbors/bends position in the layout.

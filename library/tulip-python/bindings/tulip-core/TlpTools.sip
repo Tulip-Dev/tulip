@@ -240,7 +240,7 @@ it is unloaded and removed from the current plugins database.
 
 SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
 %Docstring
-tlp.getDefaultPluginParameters(pluginName[, graph = None])
+tlp.getDefaultPluginParameters(pluginName, graph=None)
 
 Returns a Python dictionnary with string keys filled with default parameters (if any) for a given plugin (algorithm, import, property algorithm, ...).
 

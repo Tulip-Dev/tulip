@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-%Module _tulipogl
+%Module(name=_tulipogl, keyword_arguments="Optional")
 
 %ModuleHeaderCode
 #include <tulip/GlSceneObserver.h>

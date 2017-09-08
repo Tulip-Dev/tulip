@@ -25,7 +25,7 @@
 
   void reverse(const tlp::Graph* graph = NULL);
 %Docstring
-tlp.BooleanProperty.reverse([graph = None])
+tlp.BooleanProperty.reverse(graph = None)
 
 Reverses all values associated to graph elements,
 i.e :const:`True` => :const:`False`, :const:`False` => :const:`True`.
@@ -38,7 +38,7 @@ i.e :const:`True` => :const:`False`, :const:`False` => :const:`True`.
 
   void reverseEdgeDirection(tlp::Graph* graph = NULL);
 %Docstring
-tlp.BooleanProperty.reverseEdgeDirection([graph = None])
+tlp.BooleanProperty.reverseEdgeDirection(graph = None)
 
 Reverses all the direction of edges in the attached graph
 which are set to :const:`True` in this boolean property.

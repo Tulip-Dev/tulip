@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-%Module _tulipgui
+%Module(name=_tulipgui, keyword_arguments="Optional")
 
 %PreInitialisationCode
 

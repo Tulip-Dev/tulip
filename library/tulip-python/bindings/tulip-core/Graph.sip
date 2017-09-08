@@ -310,7 +310,7 @@ public:
 
   bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyAlgorithm(algoName[, params])
+tlp.Graph.applyAlgorithm(algoName, params=None)
 
 .. versionadded:: 3.7
 
@@ -370,7 +370,7 @@ Remove all nodes, edges and sub-graphs from the graph .
 
   tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0, const std::string& name = "unnamed");
 %Docstring
-tlp.Graph.addSubGraph([selection = None, name = "unnamed"])
+tlp.Graph.addSubGraph(selection=None, name="unnamed")
 
 Creates and returns a new sub-graph. The elements of the new sub-graph are those 
 selected in the selection. If there is no selection an empty sub-graph is returned.
@@ -414,7 +414,7 @@ Creates and returns a new named sub-graph of this graph.
 
   tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
 %Docstring
-tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false, addSiblinProperties = false)
+tlp.Graph.addCloneSubGraph(name="unnamed", addSibling=False, addSiblinProperties=False)
 
 .. versionadded:: 4.5
 
@@ -433,7 +433,7 @@ Creates and returns a sub-graph of this graph (or the parent of this graph) that
 
   tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 %Docstring
-tlp.Graph.inducedSubGraph(nodeSet[, parentSubGraph, name])
+tlp.Graph.inducedSubGraph(nodeSet, parentSubGraph=None, name="unnamed")
 
 .. deprecated:: 5.0
 
@@ -454,7 +454,7 @@ between two nodes in the set including self-loops.
 
   tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodes, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 %Docstring
-tlp.Graph.inducedSubGraph(nodes[, parentSubGraph, name])
+tlp.Graph.inducedSubGraph(nodes, parentSubGraph=None, name="unnamed")
 
 .. versionadded:: 5.0
 
@@ -475,7 +475,7 @@ between two nodes in the set including self-loops.
 
   tlp::Graph *inducedSubGraph(tlp::BooleanProperty *selection, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 %Docstring
-tlp.Graph.inducedSubGraph(selection[, parentSubGraph, name])
+tlp.Graph.inducedSubGraph(selection, parentSubGraph=None, name="unnamed")
 
 .. versionadded:: 4.10
 
@@ -757,7 +757,7 @@ Returns an iterator over all the descendant graphs of the graph.
 
   tlp::node addNode(tlp::DataSet *propertiesValues = NULL);
 %Docstring
-tlp.Graph.addNode([propertiesValues])
+tlp.Graph.addNode(propertiesValues=None)
 
 Adds a new node in the graph and returns it. This node is also added in all 
 the graph's ancestors to maintain the sub-graph relation between graphs.
@@ -899,7 +899,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 
   void delNode(const tlp::node node, bool deleteInAllGraphs = false);
 %Docstring
-tlp.Graph.delNode(node[, deleteInAllGraphs = False])
+tlp.Graph.delNode(node, deleteInAllGraphs=False)
 
 Deletes a node in the graph. This node is also removed in all the sub-graphs of the graph 
 to maintain the sub-graph relation between graphs. 
@@ -923,7 +923,7 @@ to maintain the sub-graph relation between graphs.
 
   void delNodes(tlp::Iterator<tlp::node>* itN /TypeHint="Iterator[tlp.node]"/, bool deleteInAllGraphs = false);
 %Docstring
-tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
+tlp.Graph.delNodes(itNodes, deleteInAllGraphs=False)
 
 .. versionadded:: 3.7
 
@@ -959,7 +959,7 @@ the sub-graph relation between graphs.
 
   void delNodes(const std::vector<tlp::node>& nodes, bool deleteInAllGraphs = false);
 %Docstring
-tlp.Graph.delNodes(nodes[, deleteInAllGraphs=False])
+tlp.Graph.delNodes(nodes, deleteInAllGraphs=False)
 
 .. versionadded:: 4.5
 
@@ -992,7 +992,7 @@ the sub-graph relation between graphs.
 
   tlp::edge addEdge(const tlp::node src, const tlp::node tgt, tlp::DataSet *propertiesValues = NULL);
 %Docstring
-tlp.Graph.addEdge(src, tgt[, propertiesValues])
+tlp.Graph.addEdge(src, tgt, propertiesValues=None)
 
 Adds a new edge in the graph and returns it. This edge is also added in all 
 the graph's ancestors to maintain the sub-graph relation between graphs.
@@ -1210,7 +1210,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 
   void delEdge(const tlp::edge edge, bool deleteInAllGraphs = false);
 %Docstring
-tlp.Graph.delEdge(edge[, deleteInAllGraphs = False])
+tlp.Graph.delEdge(edge, deleteInAllGraphs=False)
 
 Deletes an edge in the graph. This edge is also removed in all the sub-graphs 
 of the graph to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
@@ -1234,7 +1234,7 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
   void delEdges(tlp::Iterator<tlp::edge>* itE /TypeHint="Iterator[tlp.edge]"/, bool deleteInAllGraphs = false)=0;
 %Docstring
-tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
+tlp.Graph.delEdges(itEdges, deleteInAllGraphs=False)
 
 .. versionadded:: 3.7
 
@@ -1270,7 +1270,7 @@ The ordering of the remaining edges is preserved.
 
   void delEdges(const std::vector<tlp::edge>& edges, bool deleteInAllGraphs = false);
 %Docstring
-tlp.Graph.delEdges(edges[, deleteInAllGraphs=False])
+tlp.Graph.delEdges(edges, deleteInAllGraphs=False)
 
 .. versionadded:: 4.5
 
@@ -1716,7 +1716,7 @@ Returns an iterator on the neighbours of a node.
 
   tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
-tlp.Graph.bfs([root])
+tlp.Graph.bfs(root=tlp.node())
 
 .. versionadded:: 4.2
 
@@ -1741,7 +1741,7 @@ Returns an iterator performing a breadth-first search on the graph.
 
   tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
-tlp.Graph.dfs([root])
+tlp.Graph.dfs(root=tlp.node())
 
 .. versionadded:: 4.2
 
@@ -2247,7 +2247,7 @@ Returns :const:`True` if the edge is a meta-edge.
 
   tlp::edge existEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const;
 %Docstring
-tlp.Graph.existEdge(node1, node2[, directed=True])
+tlp.Graph.existEdge(node1, node2, directed=True)
 
 Returns the first edge found between two nodes.
 If no edge is found, returns an invalid edge.
@@ -2278,7 +2278,7 @@ If no edge is found, returns an invalid edge.
 
   bool hasEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const;
 %Docstring
-tlp.Graph.hasEdge(node1, node2[, directed=True])
+tlp.Graph.hasEdge(node1, node2, directed=True)
 
 .. versionadded:: 4.2
 
@@ -2311,7 +2311,7 @@ If no edge is found, returns false.
 
   std::vector<tlp::edge> getEdges(const tlp::node node1, const tlp::node node2, bool directed=true) const;
 %Docstring
-tlp.Graph.getEdges(node1, node2[, directed=True])
+tlp.Graph.getEdges(node1, node2, directed=True)
 
 .. versionadded:: 4.2
 
@@ -3200,7 +3200,7 @@ Returns an iterator over the inherited properties attached to the graph.
 
   bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyIntegerAlgorithm(algoName, result[, params = None])
+tlp.Graph.applyIntegerAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3248,7 +3248,7 @@ which can contain an error message.
 
   bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyDoubleAlgorithm(algoName, result[, params = None])
+tlp.Graph.applyDoubleAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3296,7 +3296,7 @@ which can contain an error message.
 
   bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyDoubleAlgorithm(algoName[, params = None])
+tlp.Graph.applyDoubleAlgorithm(algoName, params=None)
 
 .. versionadded:: 4.8
 
@@ -3316,7 +3316,7 @@ This is equivalent to call::
 
   bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyLayoutAlgorithm(algoName, result[, params = None])
+tlp.Graph.applyLayoutAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3364,7 +3364,7 @@ which can contain an error message.
 
   bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyLayoutAlgorithm(algoName[, params = None])
+tlp.Graph.applyLayoutAlgorithm(algoName, params=None)
 
 .. versionadded:: 4.8
 
@@ -3384,7 +3384,7 @@ This is equivalent to call::
 
   bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyBooleanAlgorithm(algoName, result[, params = None])
+tlp.Graph.applyBooleanAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3432,7 +3432,7 @@ which can contain an error message.
 
   bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyBooleanAlgorithm(algoName[, params = None])
+tlp.Graph.applyBooleanAlgorithm(algoName, params=None)
 
 .. versionadded:: 4.8
 
@@ -3452,7 +3452,7 @@ This is equivalent to call::
 
   bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applySizeAlgorithm(algoName, result[, params = None])
+tlp.Graph.applySizeAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3500,7 +3500,7 @@ which can contain an error message.
 
   bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applySizeAlgorithm(algoName[, params = None])
+tlp.Graph.applySizeAlgorithm(algoName, params=None)
 
 .. versionadded:: 4.8
 
@@ -3520,7 +3520,7 @@ This is equivalent to call::
 
   bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyColorAlgorithm(algoName, result[, params = None])
+tlp.Graph.applyColorAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3568,7 +3568,7 @@ which can contain an error message.
 
   bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyColorAlgorithm(algoName[, params = None])
+tlp.Graph.applyColorAlgorithm(algoName, params=None)
 
 .. versionadded:: 4.8
 
@@ -3588,7 +3588,7 @@ This is equivalent to call::
 
   bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyStringAlgorithm(algoName, result[, params = None])
+tlp.Graph.applyStringAlgorithm(algoName, result, params=None)
 
 .. versionadded:: 3.8
 
@@ -3635,7 +3635,7 @@ which can contain an error message.
 
   bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
-tlp.Graph.applyStringAlgorithm(algoName[, params = None])
+tlp.Graph.applyStringAlgorithm(algoName, params=None)
 
 .. versionadded:: 4.8
 
@@ -3654,7 +3654,7 @@ This is equivalent to call::
  //===========================================================================================
   void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
 %Docstring
-tlp.Graph.push([unpopAllowed=True])
+tlp.Graph.push(unpopAllowed=True)
 
 Marks the state of the current root graph in the hierarchy.
 The next updates will be recorded in order to be undone at the
@@ -3669,7 +3669,7 @@ the updates are undone except those who affect the ordering of edges.
 
   void pop(bool unpopAllowed = true);
 %Docstring
-tlp.Graph.pop([unpopAllowed=True])
+tlp.Graph.pop(unpopAllowed=True)
 
 Restores a previously marked state of the current root graph
 in the hierarchy. The restored state does not remain marked.
@@ -3738,7 +3738,7 @@ Remove last pushed state if no updates have been recorded.
 
   tlp::node createMetaNode(const std::set<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
-tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
+tlp.Graph.createMetaNode(nodeSet, multiEdges=True, delAllEdge=True)
 
 .. deprecated:: 5.0
 
@@ -3776,7 +3776,7 @@ edges from the metanode to the other nodes.
 
   tlp::node createMetaNode(const std::vector<tlp::node> &nodes, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
-tlp.Graph.createMetaNode(nodes[, multiEdges=True, delAllEdge=True])
+tlp.Graph.createMetaNode(nodes, multiEdges=True, delAllEdge=True)
 
 .. versionadded:: 5.0
 
@@ -3814,7 +3814,7 @@ edges from the metanode to the other nodes.
 
   tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
-tlp.Graph.createMetaNode(subgraph[, multiEdges=True, delAllEdge=True])
+tlp.Graph.createMetaNode(subgraph, multiEdges=True, delAllEdge=True)
 
 Closes a sub-graph into a metanode and returns it. Edges from nodes
 in the sub-graph to nodes outside the sub-graph are replaced with
@@ -3892,7 +3892,7 @@ Returns a list of created meta-nodes.
 
   void openMetaNode(tlp::node metaNode, bool updateProperties = true);
 %Docstring
-tlp.Graph.openMetaNode(metaNode[, updateProperties=True])
+tlp.Graph.openMetaNode(metaNode, updateProperties=True)
 
 Opens a metanode and replaces all edges between that
 meta node and other nodes in the graph.
@@ -4219,7 +4219,7 @@ Creates and returns a new empty graph.
 
 tlp::Graph *loadGraph(const std::string &filename, tlp::Graph *newGraph);
 %Docstring
-tlp.loadGraph(filename[, graph = None])
+tlp.loadGraph(filename, graph=None)
 
 Loads a graph in the TLP format from a file (extension can be .tlp, .tlp.gz, or .tlpz).
 Returns the graph (a new graph if none is provided) or :const:`None` if the import fails.
@@ -4338,7 +4338,7 @@ tlp::Graph *importGraph(const std::string &importPluginName) /TransferBack/;
 
 tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSet /GetWrapper/ ) /TransferBack/;
 %Docstring
-tlp.importGraph(importPluginName[, params, newGraph = None])
+tlp.importGraph(importPluginName, params={})
 
 Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>`.
 Returns a new graph or None if the import fails.
@@ -4374,9 +4374,9 @@ Returns a new graph or None if the import fails.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet /GetWrapper/, tlp::Graph *newGraph);
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet /GetWrapper/, tlp::Graph *newGraph=NULL);
 %Docstring
-tlp.importGraph(importPluginName, params[, newGraph = None])
+tlp.importGraph(importPluginName, params, newGraph=None)
 
 Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>`.
 Import plugins are objects implementing the tlp::ImportModule interface
@@ -4419,7 +4419,7 @@ Returns a new graph or None if the import fails.
 
 bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const std::string &outputFilePath, tlp::DataSet dataSet /GetWrapper/ = tlp::DataSet());
 %Docstring
-tlp.exportGraph(exportPluginName, graph, outputFilePath[, params])
+    tlp.exportGraph(exportPluginName, graph, outputFilePath, params={})
 
 Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>`.
 
@@ -4469,7 +4469,7 @@ Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>`.
 
 void copyToGraph(tlp::Graph *outGraph, tlp::Graph *inGraph, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0);
 %Docstring
-tlp.copyToGraph(outGraph, inGraph[, inSelection = None, outSelection = None])
+tlp.copyToGraph(outGraph, inGraph, inSelection=None, outSelection=None)
 
 Appends the selected part of a graph (properties, nodes and edges) into another one.
 If no selection is done, the whole input graph graph is appended.
@@ -4492,7 +4492,7 @@ The output selection is used to select the appended nodes & edges
 
 void removeFromGraph(tlp::Graph *inGraph, tlp::BooleanProperty *inSelection = 0);
 %Docstring
-tlp.removeFromGraph(inGraph[, inSelection = None])
+tlp.removeFromGraph(inGraph, inSelection=None)
 
 Removes the selected part of a graph (properties values, nodes and edges).
 If no selection is done, the whole graph is reseted to default value.

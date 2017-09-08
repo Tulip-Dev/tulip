@@ -31,7 +31,7 @@ namespace tlp {
 
 tlp::BoundingBox computeBoundingBox(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
 %Docstring
-tlp.computeBoundingBox(graph[, selection = None])
+tlp.computeBoundingBox(graph, selection=None)
 
 .. versionadded:: 3.8
 
@@ -66,7 +66,7 @@ tlp::BoundingBox computeBoundingBox(tlp::Graph *graph,
                                     tlp::DoubleProperty *rotation,
                                     tlp::BooleanProperty *selection = 0);
 %Docstring
-tlp.computeBoundingBox(graph, layout, size, rotation[, selection = None])
+tlp.computeBoundingBox(graph, layout, size, rotation, selection=None)
 
 Computes the bounding box of a graph according to nodes positions, edges bends,
 nodes z-rotations and sizes of elements.
@@ -107,7 +107,7 @@ nodes z-rotations and sizes of elements.
 
 std::pair<tlp::Coord, tlp::Coord> computeBoundingRadius(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
 %Docstring
-tlp.computeBoundingRadius(graph[, selection = None])
+tlp.computeBoundingRadius(graph, selection=None)
 
 .. versionadded:: 3.8
 
@@ -149,7 +149,7 @@ std::pair<tlp::Coord, tlp::Coord> computeBoundingRadius(tlp::Graph *graph,
                                                         tlp::DoubleProperty *rotation,
                                                         tlp::BooleanProperty *selection = 0);
 %Docstring
-tlp.computeBoundingRadius(graph, layout, size, rotation[, selection = None])
+tlp.computeBoundingRadius(graph, layout, size, rotation, selection=None)
 
 Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to node position edge bends
 node z-rotation, and size of elements.
@@ -212,7 +212,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the points conve
 
 std::vector<tlp::Coord> computeConvexHull(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
 %Docstring
-tlp.computeConvexHull(graph[, selection = None])
+tlp.computeConvexHull(graph, selection=None)
 
 .. versionadded:: 3.8
 
@@ -249,7 +249,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
                                            tlp::DoubleProperty *rotation,
                                            tlp::BooleanProperty *selection = 0);
 %Docstring
-tlp.computeConvexHull(graph, layout, size, rotation[, selection = None])
+tlp.computeConvexHull(graph, layout, size, rotation, selection=None)
 
 Computes a convex hull of a graph according to nodes positions, edges bends,
 nodes z-rotations, and sizes of elements. Only works with 2D layouts.

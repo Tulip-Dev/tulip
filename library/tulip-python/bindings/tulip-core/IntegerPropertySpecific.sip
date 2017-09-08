@@ -25,7 +25,7 @@
 
   int getNodeMin(const tlp::Graph *sg=0);
 %Docstring
-tlp.IntegerProperty.getNodeMin([subgraph = None])
+tlp.IntegerProperty.getNodeMin(subgraph=None)
 
 Returns the minimum value on the nodes for that integer property.
 
@@ -38,7 +38,7 @@ Returns the minimum value on the nodes for that integer property.
 
   int getNodeMax(const tlp::Graph *sg=0);
 %Docstring
-tlp.IntegerProperty.getNodeMax([subgraph = None])
+tlp.IntegerProperty.getNodeMax(subgraph=None)
 
 Returns the maximum value on the nodes for that integer property.
 
@@ -51,7 +51,7 @@ Returns the maximum value on the nodes for that integer property.
 
   int getEdgeMin(const tlp::Graph *sg=0);
 %Docstring
-tlp.IntegerProperty.getEdgeMin([subgraph = None])
+tlp.IntegerProperty.getEdgeMin(subgraph=None)
 
 Returns the minimum value on the edges for that integer property.
 
@@ -64,7 +64,7 @@ Returns the minimum value on the edges for that integer property.
 
   int getEdgeMax(const tlp::Graph *sg=0);
 %Docstring
-tlp.IntegerProperty.getEdgeMax([subgraph = None])
+tlp.IntegerProperty.getEdgeMax(subgraph=None)
 
 Returns the maximum value on the edges for that integer property.
 

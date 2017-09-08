@@ -67,7 +67,7 @@ as the average of the local clustering coefficients
 
   void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = NULL);
 %Docstring 
-tlp.clusteringCoefficient(graph, result[, maxDepth = 1])
+tlp.clusteringCoefficient(graph, result, maxDepth=1)
 
 Assigns to each node its local clustering coefficient
 that is the proportion of edges between the nodes within its neighbourhood
