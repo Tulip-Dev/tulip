@@ -29,16 +29,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -65,19 +56,6 @@ border: 1px solid #C9C9C9;
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="QCheckBox" name="displayTulipProp">
-        <property name="toolTip">
-         <string>Show Tulip reserved visual properties (view*)</string>
-        </property>
-        <property name="text">
-         <string>Show visual properties (view*)</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QLabel" name="label">
         <property name="styleSheet">
@@ -129,6 +107,26 @@ color: black;
         <attribute name="horizontalHeaderStretchLastSection">
          <bool>true</bool>
         </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="displayTulipProp">
+        <property name="toolTip">
+         <string>Show Tulip reserved visual properties (view*)</string>
+        </property>
+        <property name="text">
+         <string>Show visual properties (view*)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
      </layout>
