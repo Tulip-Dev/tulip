@@ -35,9 +35,17 @@ class Vec3f  {
 %ConvertToTypeCode
   // Check if type is compatible
   if (sipIsErr == NULL) {
+    if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+      return 1;
+    }
     return isListOrTupleAndCanConvertToVec3fType(sipPy);
   }
-  *sipCppPtr = convertToVec3fType<tlp::Vec3f>(sipPy);
+  if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+    int state=0, err=0;
+    *sipCppPtr = new tlp::Vec3f(*static_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipFindType("tlp::Vec3f"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+  } else {
+    *sipCppPtr = convertToVec3fType<tlp::Vec3f>(sipPy);
+  }
   return sipGetState(sipTransferObj);
 %End
 
