@@ -57,6 +57,7 @@ NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
+  delete grid_ui->tableView->itemDelegate();
   delete grid_ui;
 }
 
@@ -165,12 +166,12 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   gridParameters.add<bool>("Z grid","","true",false);
   ParameterListModel* model = new ParameterListModel(gridParameters,NULL,this);
 
+
   grid_ui = new Ui::GridOptionsWidget;
   _gridOptions = new QDialog(graphicsView());
   grid_ui->setupUi(_gridOptions);
   grid_ui->tableView->setModel(model);
   grid_ui->tableView->setItemDelegate(new TulipItemDelegate);
-  connect(grid_ui->tableView, SIGNAL(destroyed()), grid_ui->tableView->itemDelegate(), SLOT(deleteLater()));
 
   setOverviewVisible(true);
   setQuickAccessBarVisible(true);
