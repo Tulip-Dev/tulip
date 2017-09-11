@@ -243,6 +243,12 @@ The Tulip-Python modules are installed in the following directory according to y
 This path has to be added to the list of Python module search paths. To do so, you can add it in the **PYTHONPATH**
 environment variable prior executing the Python interpreter or add it to the :data:`sys.path` list once you launched the interpreter.
 
+.. warning::
+
+  If you installed Tulip through a bundle (.dmg) on MacOS and want to successfully import the :mod:`tulipgui` module,
+  you also need to set the following path **/Applications/Tulip-X.Y.Z.app/Contents/Frameworks/** as the value of the
+  environment variables **DYLD_LIBRARY_PATH** and **DYLD_FRAMEWORK_PATH**.
+
 You should now be able to import the Tulip-Python modules through the classical Python shell. Issue the following commands
 at the shell prompt to perform that task::
 
