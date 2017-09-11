@@ -61,10 +61,12 @@ static bool isWow64() {
 }
 #endif
 
+#ifndef MSYS2_PYTHON
 // Check if a path is a valid Python Home, meaning it is not empty and contains the python executable
 static bool validPythonHome(const QString &pythonHome) {
   return !pythonHome.isEmpty() && QFileInfo(pythonHome+"/python.exe").exists();
 }
+#endif
 
 // Function to get the path to Python home directory for a specific Python version.
 // Returns an empty string if the provided version is not installed on the host system.
