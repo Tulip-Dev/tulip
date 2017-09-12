@@ -22,7 +22,6 @@ import platform
 from datetime import date
 
 from tulip import tlp
-from tulipogl import tlpogl
 
 # fix an ubuntu bug when using the nvidia driver,
 # when the python interpreter dynamically loads the GL library,
@@ -48,6 +47,14 @@ sys.path.pop()
 
 class tlpgui(_tulipgui.tlpgui):
   pass
+
+if not sys.argv[0] == 'tulip':
+  # when the tulipgui module is installed from the Python Packaging Index
+  # modify the TulipBitmapDir variable as it is different from the default one
+  bitmapDir = os.path.dirname(__file__) + '/share/bitmaps/'
+  if os.path.isdir(bitmapDir):
+    tlp.TulipBitmapDir = bitmapDir
+    tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
 
 def tulipguiExitFunc():
   import tulipgui

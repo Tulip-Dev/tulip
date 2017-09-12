@@ -410,6 +410,7 @@ bool isListOrTupleAndCanConvertToVec3fType(PyObject *pyObj) {
 %Include TulipFontAwesome.sip
 %Include PluginLister.sip
 %Include TulipMaterialDesignIcons.sip
+%Include ParametricCurves.sip
 
 // force generation of wrappers for specialized template classes
 typedef std::vector<tlp::Graph*> vectorGraphType;

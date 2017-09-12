@@ -56,7 +56,7 @@ tlpgui.NodeLinkDiagramComponent.getInputData()
 
 Returns the current rendering input data for the node link diagram view.
 
-:rtype: :class:`tulipogl.tlpogl.GlGraphInputData`
+:rtype: :class:`tlpgui.GlGraphInputData`
 %End
 
 %MethodCode
@@ -71,7 +71,7 @@ tlpgui.NodeLinkDiagramComponent.getRenderingParameters()
 
 Returns a copy of the current rendering parameters for the node link diagram view.
 
-:rtype: :class:`tulipogl.tlpogl.GlGraphRenderingParameters`
+:rtype: :class:`tlpgui.GlGraphRenderingParameters`
 %End
 
 %MethodCode
@@ -87,7 +87,7 @@ tlpgui.NodeLinkDiagramComponent.setRenderingParameters(parameters)
 Sets the rendering parameters for the node link diagram view.
 
 :param parameters: the new rendering parameters
-:type parameters: :class:`tulipogl.tlpogl.GlGraphRenderingParameters`
+:type parameters: :class:`tlpgui.GlGraphRenderingParameters`
 %End
 
 %MethodCode

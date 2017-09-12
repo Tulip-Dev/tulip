@@ -46,7 +46,7 @@ public:
 
   void setAntialiasing(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setAntiAliasing(antialiasing)
+tlpgui.GlGraphRenderingParameters.setAntiAliasing(antialiasing)
 
 Activates/desactivates antialiasing.
 
@@ -58,7 +58,7 @@ Activates/desactivates antialiasing.
 
   bool isAntialiased() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isAntialiased()
+tlpgui.GlGraphRenderingParameters.isAntialiased()
 
 Returns if antialiasing rendering is activated.
 
@@ -69,7 +69,7 @@ Returns if antialiasing rendering is activated.
 
   void setViewArrow(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setViewArrow(arrow)
+tlpgui.GlGraphRenderingParameters.setViewArrow(arrow)
 
 Activates / desactivates the displaying of arrows along the graph edges.
 
@@ -82,7 +82,7 @@ Activates / desactivates the displaying of arrows along the graph edges.
 
   bool isViewArrow()const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isViewArrow()
+tlpgui.GlGraphRenderingParameters.isViewArrow()
 
 Returns the state of the displaying of arrows along the graph edges.
 
@@ -93,7 +93,7 @@ Returns the state of the displaying of arrows along the graph edges.
 
   void setViewNodeLabel(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setViewNodeLabel(nodeLabel)
+tlpgui.GlGraphRenderingParameters.setViewNodeLabel(nodeLabel)
 
 Activates / desactivates the displaying of nodes labels.
 
@@ -106,7 +106,7 @@ Activates / desactivates the displaying of nodes labels.
 
   bool isViewNodeLabel() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isViewNodeLabel()
+tlpgui.GlGraphRenderingParameters.isViewNodeLabel()
 
 Returns the state of the displaying of nodes labels.
 
@@ -117,7 +117,7 @@ Returns the state of the displaying of nodes labels.
 
   void setViewEdgeLabel(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setViewEdgeLabel(edgeLabel)
+tlpgui.GlGraphRenderingParameters.setViewEdgeLabel(edgeLabel)
 
 Activates / desactivates the displaying of edges labels.
 
@@ -129,7 +129,7 @@ Activates / desactivates the displaying of edges labels.
 
   bool isViewEdgeLabel() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isViewEdgeLabel()
+tlpgui.GlGraphRenderingParameters.isViewEdgeLabel()
 
 Returns the state of the displaying of edges labels.
 
@@ -140,7 +140,7 @@ Returns the state of the displaying of edges labels.
 
   void setViewOutScreenLabel(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setViewOutScreenLabel(outScreenLabel)
+tlpgui.GlGraphRenderingParameters.setViewOutScreenLabel(outScreenLabel)
 
 Activates / desactivates the displaying of labels for elements outside the screen.
 
@@ -152,7 +152,7 @@ Activates / desactivates the displaying of labels for elements outside the scree
 
   bool isViewOutScreenLabel() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isViewOutScreenLabel()
+tlpgui.GlGraphRenderingParameters.isViewOutScreenLabel()
 
 Returns the state of the displaying of labels for elements outside the screen.
 
@@ -163,7 +163,7 @@ Returns the state of the displaying of labels for elements outside the screen.
 
   void setEdgeColorInterpolate(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setEdgeColorInterpolate(interpolate)
+tlpgui.GlGraphRenderingParameters.setEdgeColorInterpolate(interpolate)
 
 Activates / desactivates the interpolation of nodes colors along edges.
 
@@ -175,7 +175,7 @@ Activates / desactivates the interpolation of nodes colors along edges.
 
   bool isEdgeColorInterpolate() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isEdgeColorInterpolate()
+tlpgui.GlGraphRenderingParameters.isEdgeColorInterpolate()
 
 Returns the state of the edge color interpolation.
 
@@ -186,7 +186,7 @@ Returns the state of the edge color interpolation.
 
   void setEdgeSizeInterpolate(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setEdgeSizeInterpolate(interpolate)
+tlpgui.GlGraphRenderingParameters.setEdgeSizeInterpolate(interpolate)
 
 Activates / desactivates the interpolation of nodes sizes along edges.
 
@@ -198,7 +198,7 @@ Activates / desactivates the interpolation of nodes sizes along edges.
 
   bool isEdgeSizeInterpolate() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isEdgeSizeInterpolate()
+tlpgui.GlGraphRenderingParameters.isEdgeSizeInterpolate()
 
 Returns the state of the edge size interpolation.
 
@@ -209,7 +209,7 @@ Returns the state of the edge size interpolation.
 
   void setTexturePath(const std::string& path);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setTexturePath(path)
+tlpgui.GlGraphRenderingParameters.setTexturePath(path)
 
 Sets the absolute path for textures loading.
 
@@ -221,7 +221,7 @@ Sets the absolute path for textures loading.
 
   std::string getTexturePath() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.getTexturePath()
+tlpgui.GlGraphRenderingParameters.getTexturePath()
 
 Returns the absolute path used for texture loading.
 
@@ -232,7 +232,7 @@ Returns the absolute path used for texture loading.
 
   void setFontsPath(const std::string& path);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setFontsPath(path)
+tlpgui.GlGraphRenderingParameters.setFontsPath(path)
 
 Sets the absolute path for fonts loading (.ttf files).
 
@@ -244,7 +244,7 @@ Sets the absolute path for fonts loading (.ttf files).
 
   std::string getFontsPath();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getFontsPath()
+tlpgui.GlGraphRenderingParameters.getFontsPath()
 
 Returns the absolute path used for fonts loading (.ttf files).
 
@@ -255,7 +255,7 @@ Returns the absolute path used for fonts loading (.ttf files).
 
   void setViewMetaLabel(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setViewMetaLabel(metaLabel)
+tlpgui.GlGraphRenderingParameters.setViewMetaLabel(metaLabel)
 
 Activates / desactivates the displaying of labels inside meta-nodes.
 
@@ -267,7 +267,7 @@ Activates / desactivates the displaying of labels inside meta-nodes.
 
   bool isViewMetaLabel() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isViewMetaLabel()
+tlpgui.GlGraphRenderingParameters.isViewMetaLabel()
 
 Returns the state of the displaying of labels inside meta-nodes.
 
@@ -278,7 +278,7 @@ Returns the state of the displaying of labels inside meta-nodes.
 
   void setDisplayEdges(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setDisplayEdges(displayEdges)
+tlpgui.GlGraphRenderingParameters.setDisplayEdges(displayEdges)
 
 Activates / desactivates the displaying of edges.
 
@@ -290,7 +290,7 @@ Activates / desactivates the displaying of edges.
 
   bool isDisplayEdges() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isDisplayEdges()
+tlpgui.GlGraphRenderingParameters.isDisplayEdges()
 
 Returns the state of the displaying of edges.
 
@@ -301,7 +301,7 @@ Returns the state of the displaying of edges.
 
   void setDisplayNodes(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setDisplayNodes(displayNodes)
+tlpgui.GlGraphRenderingParameters.setDisplayNodes(displayNodes)
 
 Activates / desactivates the displaying of nodes.
 
@@ -313,7 +313,7 @@ Activates / desactivates the displaying of nodes.
 
   bool isDisplayNodes() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isDisplayNodes()
+tlpgui.GlGraphRenderingParameters.isDisplayNodes()
 
 Returns the state of the displaying of nodes.
 
@@ -324,7 +324,7 @@ Returns the state of the displaying of nodes.
 
   void setDisplayMetaNodes(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setDisplayMetaNodes(displayMetaNodes)
+tlpgui.GlGraphRenderingParameters.setDisplayMetaNodes(displayMetaNodes)
 
 Activates / desactivates the displaying of nodes.
 
@@ -336,7 +336,7 @@ Activates / desactivates the displaying of nodes.
 
   bool isDisplayMetaNodes() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isDisplayMetaNodes()
+tlpgui.GlGraphRenderingParameters.isDisplayMetaNodes()
 
 Returns the state of the displaying of meta-nodes.
 
@@ -347,7 +347,7 @@ Returns the state of the displaying of meta-nodes.
 
   void setSelectedNodesStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setSelectedNodesStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setSelectedNodesStencil(stencil)
 
 Sets the stencil value for selected nodes. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 2.
@@ -360,7 +360,7 @@ on top of other ones. The default value is 2.
 
   int getSelectedNodesStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getSelectedNodesStencil()
+tlpgui.GlGraphRenderingParameters.getSelectedNodesStencil()
 
 Returns the stencil value for selected nodes.
 
@@ -371,7 +371,7 @@ Returns the stencil value for selected nodes.
 
   void setSelectedMetaNodesStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setSelectedMetaNodesStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setSelectedMetaNodesStencil(stencil)
 
 Sets the stencil value for selected meta-nodes. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 2.
@@ -385,7 +385,7 @@ on top of other ones. The default value is 2.
 
   int getSelectedMetaNodesStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getSelectedMetaNodesStencil()
+tlpgui.GlGraphRenderingParameters.getSelectedMetaNodesStencil()
 
 Returns the stencil value for selected meta-nodes.
 
@@ -396,7 +396,7 @@ Returns the stencil value for selected meta-nodes.
 
   void setSelectedEdgesStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setSelectedEdgesStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setSelectedEdgesStencil(stencil)
 
 Sets the stencil value for selected edges. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 2.
@@ -409,7 +409,7 @@ on top of other ones. The default value is 2.
 
   int getSelectedEdgesStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getSelectedEdgesStencil()
+tlpgui.GlGraphRenderingParameters.getSelectedEdgesStencil()
 
 Returns the stencil value for selected edges.
 
@@ -420,7 +420,7 @@ Returns the stencil value for selected edges.
 
   void setNodesStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setNodesStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setNodesStencil(stencil)
 
 Sets the stencil value for nodes. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 255.
@@ -433,7 +433,7 @@ on top of other ones. The default value is 255.
 
   int getNodesStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getNodesStencil()
+tlpgui.GlGraphRenderingParameters.getNodesStencil()
 
 Returns the stencil value for nodes.
 
@@ -444,7 +444,7 @@ Returns the stencil value for nodes.
 
   void setMetaNodesStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setMetaNodesStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setMetaNodesStencil(stencil)
 
 Sets the stencil value for meta-nodes. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 255.
@@ -457,7 +457,7 @@ on top of other ones. The default value is 255.
 
   int getMetaNodesStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getMetaNodesStencil()
+tlpgui.GlGraphRenderingParameters.getMetaNodesStencil()
 
 Returns the stencil value for meta-nodes.
 
@@ -468,7 +468,7 @@ Returns the stencil value for meta-nodes.
 
   void setEdgesStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setEdgesStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setEdgesStencil(stencil)
 
 Sets the stencil value for edges. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 255.
@@ -481,7 +481,7 @@ on top of other ones. The default value is 255.
 
   int getEdgesStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getEdgesStencil()
+tlpgui.GlGraphRenderingParameters.getEdgesStencil()
 
 Returns the stencil value for edges.
 
@@ -492,7 +492,7 @@ Returns the stencil value for edges.
 
   void setNodesLabelStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setNodesLabelStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setNodesLabelStencil(stencil)
 
 Sets the stencil value for nodes labels. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 255.
@@ -505,7 +505,7 @@ on top of other ones. The default value is 255.
 
   int getNodesLabelStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getNodesLabelStencil()
+tlpgui.GlGraphRenderingParameters.getNodesLabelStencil()
 
 Returns the stencil value for nodes labels.
 
@@ -516,7 +516,7 @@ Returns the stencil value for nodes labels.
 
   void setMetaNodesLabelStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setMetaNodesLabelsStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setMetaNodesLabelsStencil(stencil)
 
 Sets the stencil value for meta-nodes labels. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 255.
@@ -529,7 +529,7 @@ on top of other ones. The default value is 255.
 
   int getMetaNodesLabelStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getMetaNodesLabelStencil()
+tlpgui.GlGraphRenderingParameters.getMetaNodesLabelStencil()
 
 Returns the stencil value for meta-nodes labels.
 
@@ -540,7 +540,7 @@ Returns the stencil value for meta-nodes labels.
 
   void setEdgesLabelStencil(const int stencil);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setEdgesLabelStencil(stencil)
+tlpgui.GlGraphRenderingParameters.setEdgesLabelStencil(stencil)
 
 Sets the stencil value for edges labels. The lower the value is, the more the objects will be drawn
 on top of other ones. The default value is 255.
@@ -554,7 +554,7 @@ on top of other ones. The default value is 255.
 
   int getEdgesLabelStencil();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getEdgesLabelStencil()
+tlpgui.GlGraphRenderingParameters.getEdgesLabelStencil()
 
 Returns the stencil value for edges labels.
 
@@ -565,7 +565,7 @@ Returns the stencil value for edges labels.
 
   void setElementOrdered(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setElementOrdered(elementOrdered)
+tlpgui.GlGraphRenderingParameters.setElementOrdered(elementOrdered)
 
 Activates / desactivates the ordered rendering of graph elements according
 to the values in the element ordering property.
@@ -578,7 +578,7 @@ to the values in the element ordering property.
 
   bool isElementOrdered() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isElementOrdered()
+tlpgui.GlGraphRenderingParameters.isElementOrdered()
 
 Returns the state of the ordered rendering of graph elements.
 
@@ -589,7 +589,7 @@ Returns the state of the ordered rendering of graph elements.
 
   void setElementOrderedDescending(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setElementOrderedDescending(elementOrderedDescending)
+tlpgui.GlGraphRenderingParameters.setElementOrderedDescending(elementOrderedDescending)
 
 .. versionadded:: 4.8
 
@@ -603,7 +603,7 @@ Defines if the graph elements are sorted in descending order when the element or
 
   bool isElementOrderedDescending() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isElementOrderedDescending()
+tlpgui.GlGraphRenderingParameters.isElementOrderedDescending()
 
 .. versionadded:: 4.8
 
@@ -616,7 +616,7 @@ Returns if the graph elements are sorted in descending order when the element or
 
   void setElementOrderingProperty(tlp::NumericProperty* property /AllowNone/);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setElementOrderingProperty(property)
+tlpgui.GlGraphRenderingParameters.setElementOrderingProperty(property)
 
 Defines which property should be used for the ordered rendering of graph elements.
 Setting it to :const:`None` will use the "viewMetric" property if the ordering is enabled.
@@ -629,7 +629,7 @@ Setting it to :const:`None` will use the "viewMetric" property if the ordering i
 
   tlp::NumericProperty* getElementOrderingProperty() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.getElementOrderingProperty()
+tlpgui.GlGraphRenderingParameters.getElementOrderingProperty()
 
 Returns the double property used for the ordered rendering of graph elements.
 
@@ -640,7 +640,7 @@ Returns the double property used for the ordered rendering of graph elements.
 
   void setElementZOrdered(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setElementZOrdered(zOrdering)
+tlpgui.GlGraphRenderingParameters.setElementZOrdered(zOrdering)
 
 Activates / desactivates the ordered rendering of elements according to their
 distance to the camera.
@@ -653,7 +653,7 @@ distance to the camera.
 
   bool isElementZOrdered() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isElementZOrdered()
+tlpgui.GlGraphRenderingParameters.isElementZOrdered()
 
 Returns the state of the z-ordered rendering.
 
@@ -664,7 +664,7 @@ Returns the state of the z-ordered rendering.
 
   void setEdge3D(const bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setEdge3D(edge3d)
+tlpgui.GlGraphRenderingParameters.setEdge3D(edge3d)
 
 Activates / desactivates the 3d displaying of edges instead of 2d lines.
 
@@ -676,7 +676,7 @@ Activates / desactivates the 3d displaying of edges instead of 2d lines.
 
   bool isEdge3D() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.isEdge3D()
+tlpgui.GlGraphRenderingParameters.isEdge3D()
 
 Returns the state of the 3d edge rendering.
 
@@ -687,7 +687,7 @@ Returns the state of the 3d edge rendering.
 
   void setSelectionColor(const tlp::Color &color);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setSelectionColor(color)
+tlpgui.GlGraphRenderingParameters.setSelectionColor(color)
 
 Sets the color of selected elements.
 
@@ -699,7 +699,7 @@ Sets the color of selected elements.
 
   tlp::Color getSelectionColor();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getSelectionColor()
+tlpgui.GlGraphRenderingParameters.getSelectionColor()
 
 Returns the color of selection.
 
@@ -710,7 +710,7 @@ Returns the color of selection.
 
   bool isLabelScaled();
 %Docstring
-tlpogl.GlGraphRenderingParameters.isLabelScaled()
+tlpgui.GlGraphRenderingParameters.isLabelScaled()
 
 Returns the state of the scaling of labels to nodes sizes.
 
@@ -721,7 +721,7 @@ Returns the state of the scaling of labels to nodes sizes.
 
   void setLabelScaled(bool state);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setLabelScaled(labelScaled)
+tlpgui.GlGraphRenderingParameters.setLabelScaled(labelScaled)
 
 Activates / desactivates the scaling of labels to nodes sizes.
 
@@ -733,7 +733,7 @@ Activates / desactivates the scaling of labels to nodes sizes.
 
   bool isLabelFixedFontSize() const;
 %Docstring
-tlpogl.isLabelFixedFontSize()
+tlpgui.isLabelFixedFontSize()
 
 Returns the state of using fixed font size with labels.
 
@@ -744,7 +744,7 @@ Returns the state of using fixed font size with labels.
 
   void setLabelFixedFontSize(bool state);
 %Docstring
-tlpogl.setLabelFixedFontSize(fixedFontSize)
+tlpgui.setLabelFixedFontSize(fixedFontSize)
 
 Activates / desactivates the use of fixed font size with labels (based on the values in the "viewFontSize" property).
 
@@ -756,7 +756,7 @@ Activates / desactivates the use of fixed font size with labels (based on the va
 
   int getLabelsDensity();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getLabelsDensity()
+tlpgui.GlGraphRenderingParameters.getLabelsDensity()
 
 Returns the labels density value.
 
@@ -767,7 +767,7 @@ Returns the labels density value.
 
   void setLabelsDensity(int density);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setLabelsDensity(density)
+tlpgui.GlGraphRenderingParameters.setLabelsDensity(density)
 
 Sets the labels density value. It must be in the range [-100, 100].
 The labels are displayed according to that value :
@@ -784,7 +784,7 @@ The labels are displayed according to that value :
 
     int getMinSizeOfLabel();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getMinSizeOfLabel()
+tlpgui.GlGraphRenderingParameters.getMinSizeOfLabel()
 
 Returns the minimum size of labels. That value is only used if the labels
 are not scaled to nodes sizes.
@@ -796,7 +796,7 @@ are not scaled to nodes sizes.
 
   void setMinSizeOfLabel(int size);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setMinSizeOfLabel(size)
+tlpgui.GlGraphRenderingParameters.setMinSizeOfLabel(size)
 
 Sets the minimum size of labels. That value is only used if the labels
 are not scaled to nodes sizes.
@@ -809,7 +809,7 @@ are not scaled to nodes sizes.
 
   int getMaxSizeOfLabel();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getMaxSizeOfLabel()
+tlpgui.GlGraphRenderingParameters.getMaxSizeOfLabel()
 
 Returns the maximum size of labels. That value is only used if the labels
 are not scaled to nodes sizes.
@@ -821,7 +821,7 @@ are not scaled to nodes sizes.
 
   void setMaxSizeOfLabel(int size);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setMaxSizeOfLabel(size)
+tlpgui.GlGraphRenderingParameters.setMaxSizeOfLabel(size)
 
 Sets the maximum size of labels. That value is only used if the labels
 are not scaled to nodes sizes.
@@ -834,7 +834,7 @@ are not scaled to nodes sizes.
 
   bool getLabelsAreBillboarded();
 %Docstring
-tlpogl.GlGraphRenderingParameters.getLabelsAreBillboarded()
+tlpgui.GlGraphRenderingParameters.getLabelsAreBillboarded()
 
 Returns the state of the labels billboarding (always facing the camera).
 
@@ -845,7 +845,7 @@ Returns the state of the labels billboarding (always facing the camera).
 
   void setLabelsAreBillboarded(bool billboarded);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setLabelsAreBillboarded(billboardLabels)
+tlpgui.GlGraphRenderingParameters.setLabelsAreBillboarded(billboardLabels)
 
 Activates / desactivates labels billboarding (always facing the camera).
 
@@ -857,7 +857,7 @@ Activates / desactivates labels billboarding (always facing the camera).
 
   void setDisplayFilteringProperty(tlp::BooleanProperty *filteringProperty /AllowNone/);
 %Docstring
-tlpogl.GlGraphRenderingParameters.setDisplayFilteringProperty(property)
+tlpgui.GlGraphRenderingParameters.setDisplayFilteringProperty(property)
 
 Sets the boolean property used to filter the rendering of graph elements. If sets to :const:`None`,
 the filtering is desactivated. If the value for a node / edge in that property is :const:`False`,
@@ -871,7 +871,7 @@ it will not be displayed.
 
   tlp::BooleanProperty * getDisplayFilteringProperty() const;
 %Docstring
-tlpogl.GlGraphRenderingParameters.getDisplayFilteringProperty()
+tlpgui.GlGraphRenderingParameters.getDisplayFilteringProperty()
 
 Returns the boolean property used to filter the rendering of graph elements.
 

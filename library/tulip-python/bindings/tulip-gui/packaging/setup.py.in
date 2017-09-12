@@ -62,7 +62,7 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
                     for L in libs:
                         filename = os.path.basename(L)
                         dylibCopy = dirPath + relativeCopyPath + filename
-                        if not os.path.isfile(dylibCopy) and not os.path.isfile(tulipNativeLibsPath + filename) and not os.path.isfile(tulipOglNativeLibsPath + filename):
+                        if not os.path.isfile(dylibCopy) and not os.path.isfile(tulipNativeLibsPath + filename):
                             shutil.copyfile(L, dylibCopy)
                             subprocess.call(
                                 'install_name_tool -id @rpath/%s %s 2>/dev/null' %
@@ -72,21 +72,15 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
             toProcess = os.listdir(dirPath)
 
     tulipNativeLibsPath = os.getcwd() + '/../../tulip-core/tulip_module/tulip/native/'
-    tulipOglNativeLibsPath = os.getcwd() + '/tulipogl/native/'
-    tulipOglNativePluginsLibsPath = os.getcwd() + '/tulipogl/native/plugins/'
     tulipGuiNativeLibsPath = os.getcwd() + '/tulipgui/native/'
     tulipGuiNativePluginsLibsPath = os.getcwd() + '/tulipgui/native/plugins/'
 
     print("Copying dylibs dependencies in tulipgui-python wheel ...")
-    copyDyLibsDependencies(tulipOglNativeLibsPath)
-    copyDyLibsDependencies(tulipOglNativePluginsLibsPath, '../')
     copyDyLibsDependencies(tulipGuiNativeLibsPath)
     copyDyLibsDependencies(tulipGuiNativePluginsLibsPath, '../')
     print("Relinking dylibs and setting rpaths in tulipgui-python wheel ...")
-    relinkDyLibsInDirAndSetRpaths(tulipOglNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/'])
-    relinkDyLibsInDirAndSetRpaths(tulipOglNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/'])
-    relinkDyLibsInDirAndSetRpaths(tulipGuiNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/', '@loader_path/../../tulipogl/native/'])
-    relinkDyLibsInDirAndSetRpaths(tulipGuiNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/', '@loader_path/../../../tulipogl/native/'])
+    relinkDyLibsInDirAndSetRpaths(tulipGuiNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/'])
+    relinkDyLibsInDirAndSetRpaths(tulipGuiNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/'])
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
@@ -189,7 +183,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['tulipogl', 'tulipgui'],
+    packages=['tulipgui'],
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -207,8 +201,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'tulipogl': tulip_native_libs + ['share/bitmaps/*'] + ['share/bitmaps/colorscales/*'],
-        'tulipgui': tulip_native_libs,
+        'tulipgui': tulip_native_libs + ['share/bitmaps/*'] + ['share/bitmaps/colorscales/*'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may

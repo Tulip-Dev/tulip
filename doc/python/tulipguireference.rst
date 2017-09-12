@@ -57,3 +57,15 @@ tlpgui.NodeLinkDiagramComponent
 
 .. autoclass:: tulipgui::tlpgui.NodeLinkDiagramComponent
         :members:
+
+tlpgui.GlGraphRenderingParameters
+----------------------------------
+
+.. autoclass:: tulipgui::tlpgui.GlGraphRenderingParameters
+        :members:
+
+tlpgui.GlGraphInputData
+------------------------
+
+.. autoclass:: tulipgui::tlpgui.GlGraphInputData
+        :members:

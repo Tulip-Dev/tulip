@@ -90,7 +90,6 @@ and creates a Node Link Diagram visualization (which will remain displayed at th
 the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the created view.::
 
     from tulip import tlp
-    from tulipogl import tlpogl
     from tulipgui import tlpgui
 
     # Import a grid approximation (with default parameters)
@@ -167,7 +166,6 @@ visual attributes on graph elements and finally it creates a node link diagram v
 :ref:`Figure 2<fig2a>` introduces the resulting snaphot.::
 
     from tulip import tlp
-    from tulipogl import tlpogl
     from tulipgui import tlpgui
 
     # Set the parameters for the "File System Directory" Import module

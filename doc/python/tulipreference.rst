@@ -88,6 +88,18 @@ Geometry
 
 .. autofunction:: tulip::tlp.voronoiDiagram
 
+.. autofunction:: tulip::tlp.computeBezierPoint
+
+.. autofunction:: tulip::tlp.computeBezierPoints
+
+.. autofunction:: tulip::tlp.computeCatmullRomPoint
+
+.. autofunction:: tulip::tlp.computeCatmullRomPoints
+
+.. autofunction:: tulip::tlp.computeOpenUniformBsplinePoint
+
+.. autofunction:: tulip::tlp.computeOpenUniformBsplinePoints
+
 Plugins Management
 ^^^^^^^^^^^^^^^^^^
 

@@ -356,7 +356,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       runString("site.main()");
 #endif
       runString("from tulip import tlp");
-      runString("from tulipogl import tlpogl");
       runString("from tulipgui import tlpgui");
 
       // When importing the tulip module, Tulip Python plugins and

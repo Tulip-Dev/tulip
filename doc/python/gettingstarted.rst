@@ -216,7 +216,7 @@ To install the :mod:`tulip` module, issue the following command from a terminal 
 
     $ pip install tulip-python
 
-To install the :mod:`tulipogl` and :mod:`tulipgui` modules, issue the following command from a terminal prompt:
+To install the :mod:`tulipgui` module, issue the following command from a terminal prompt:
 
 .. code:: shell
 
@@ -253,7 +253,6 @@ You should now be able to import the Tulip-Python modules through the classical 
 at the shell prompt to perform that task::
 
     >>> from tulip import tlp
-    >>> from tulipogl import tlpogl
     >>> from tulipgui import tlpgui
 
 .. note::

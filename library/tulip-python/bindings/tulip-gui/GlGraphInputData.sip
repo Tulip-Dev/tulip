@@ -51,7 +51,7 @@ Use :meth:`tulipgui.tlpgui.NodeLinkDiagramComponent.getInputData` to get an inst
 
     tlp::Graph* getGraph();
 %Docstring
-tlpogl.GlGraphInputData.getGraph()
+tlpgui.GlGraphInputData.getGraph()
 
 Returns the graph associated to these data.
 
@@ -62,7 +62,7 @@ Returns the graph associated to these data.
 
     tlp::ColorProperty * getElementColor() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementColor()
+tlpgui.GlGraphInputData.getElementColor()
 
 Returns the color property that defines the current colors of graph elements (see :ref:`graph-colors`).
 
@@ -73,7 +73,7 @@ Returns the color property that defines the current colors of graph elements (se
 
     void setElementColor(tlp::ColorProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementColor(property)
+tlpgui.GlGraphInputData.setElementColor(property)
 
 Sets the color property that defines the current colors of graph elements (see :ref:`graph-colors`).
 
@@ -85,7 +85,7 @@ Sets the color property that defines the current colors of graph elements (see :
 
     tlp::ColorProperty *getElementLabelColor() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementLabelColor()
+tlpgui.GlGraphInputData.getElementLabelColor()
 
 Returns the color property that defines the current labels colors of graph elements (see :ref:`graph-colors`).
 
@@ -96,7 +96,7 @@ Returns the color property that defines the current labels colors of graph eleme
 
     void setElementLabelColor(tlp::ColorProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementLabelColor(property)
+tlpgui.GlGraphInputData.setElementLabelColor(property)
 
 Sets the color property that defines the current labels colors of graph elements (see :ref:`graph-colors`).
 
@@ -109,7 +109,7 @@ Sets the color property that defines the current labels colors of graph elements
 
     tlp::ColorProperty *getElementLabelBorderColor() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementLabelBorderColor()
+tlpgui.GlGraphInputData.getElementLabelBorderColor()
 
 Returns the color property that defines the current labels border colors of graph elements (see :ref:`graph-colors`).
 
@@ -120,7 +120,7 @@ Returns the color property that defines the current labels border colors of grap
 
     void setElementLabelBorderColor(tlp::ColorProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementBorderColor(property)
+tlpgui.GlGraphInputData.setElementBorderColor(property)
 
 Sets the color property that defines the current labels borders colors of graph elements (see :ref:`graph-colors`).
 
@@ -133,7 +133,7 @@ Sets the color property that defines the current labels borders colors of graph 
 
     tlp::DoubleProperty *getElementLabelBorderWidth() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementLabelBorderWidth()
+tlpgui.GlGraphInputData.getElementLabelBorderWidth()
 
 Returns the double property that defines the current labels borders widths of graph elements (see :ref:`borders-widths`).
 
@@ -144,7 +144,7 @@ Returns the double property that defines the current labels borders widths of gr
 
     void setElementLabelBorderWidth(tlp::DoubleProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementLabelBorderWidth(property)
+tlpgui.GlGraphInputData.setElementLabelBorderWidth(property)
 
 Sets the double property that defines the current labels borders widths of graph elements (see :ref:`borders-widths`).
 
@@ -156,7 +156,7 @@ Sets the double property that defines the current labels borders widths of graph
 
     tlp::SizeProperty *getElementSize() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementSize()
+tlpgui.GlGraphInputData.getElementSize()
 
 Returns the size property that defines the current sizes of graph elements (see :ref:`graph-sizes`).
 
@@ -167,7 +167,7 @@ Returns the size property that defines the current sizes of graph elements (see 
 
     void setElementSize(tlp::SizeProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementSize(property)
+tlpgui.GlGraphInputData.setElementSize(property)
 
 Sets the size property that defines the current sizes of graph elements (see :ref:`graph-sizes`).
 
@@ -179,7 +179,7 @@ Sets the size property that defines the current sizes of graph elements (see :re
 
     tlp::IntegerProperty *getElementLabelPosition() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementLabelPosition()
+tlpgui.GlGraphInputData.getElementLabelPosition()
 
 Returns the integer property that defines the current labels positions of graph elements (see :ref:`graph-labels`).
 
@@ -190,7 +190,7 @@ Returns the integer property that defines the current labels positions of graph 
 
     void setElementLabelPosition(tlp::IntegerProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementLabelPosition(property)
+tlpgui.GlGraphInputData.setElementLabelPosition(property)
 
 Sets the integer property that defines the current labels positions of graph elements (see :ref:`graph-labels`).
 
@@ -202,7 +202,7 @@ Sets the integer property that defines the current labels positions of graph ele
 
     tlp::IntegerProperty *getElementShape() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementShape()
+tlpgui.GlGraphInputData.getElementShape()
 
 Returns the integer property that defines the current shapes of graph elements (see :ref:`graph-shapes`).
 
@@ -213,7 +213,7 @@ Returns the integer property that defines the current shapes of graph elements (
 
     void setElementShape(tlp::IntegerProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementShape(property)
+tlpgui.GlGraphInputData.setElementShape(property)
 
 Sets the integer property that defines the current shapes of graph elements (see :ref:`graph-shapes`).
 
@@ -225,7 +225,7 @@ Sets the integer property that defines the current shapes of graph elements (see
 
     tlp::DoubleProperty *getElementRotation() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementRotation()
+tlpgui.GlGraphInputData.getElementRotation()
 
 Returns the double property that defines the current rotations of graph nodes (see :ref:`nodes-rotations`).
 
@@ -236,7 +236,7 @@ Returns the double property that defines the current rotations of graph nodes (s
 
     void setElementRotation(tlp::DoubleProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementRotation(property)
+tlpgui.GlGraphInputData.setElementRotation(property)
 
 Sets the double property that defines the current rotations graph nodes (see :ref:`nodes-rotations`).
 
@@ -248,7 +248,7 @@ Sets the double property that defines the current rotations graph nodes (see :re
 
     tlp::BooleanProperty *getElementSelected() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementSelected()
+tlpgui.GlGraphInputData.getElementSelected()
 
 Returns the boolean property that defines the current selection of graph elements (see :ref:`graph-selection`).
 
@@ -259,7 +259,7 @@ Returns the boolean property that defines the current selection of graph element
 
     void setElementSelected(tlp::BooleanProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementSelected(property)
+tlpgui.GlGraphInputData.setElementSelected(property)
 
 Sets the boolean property that defines the current selection of graph elements (see :ref:`graph-selection`).
 
@@ -271,7 +271,7 @@ Sets the boolean property that defines the current selection of graph elements (
 
     tlp::StringProperty *getElementFont() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementFont()
+tlpgui.GlGraphInputData.getElementFont()
 
 Returns the string property that defines the current font files used to render the labels of graph elements (see :ref:`graph-labels`).
 
@@ -282,7 +282,7 @@ Returns the string property that defines the current font files used to render t
 
     void setElementFont(tlp::StringProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementFont(property)
+tlpgui.GlGraphInputData.setElementFont(property)
 
 Sets the string property that defines the current font files used to render the labels of graph elements (see :ref:`graph-labels`).
 
@@ -294,7 +294,7 @@ Sets the string property that defines the current font files used to render the 
 
     tlp::IntegerProperty  *getElementFontSize() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementFontSize()
+tlpgui.GlGraphInputData.getElementFontSize()
 
 Returns the integer property that defines the current font size for labels of graph elements (see :ref:`graph-labels`).
 
@@ -305,7 +305,7 @@ Returns the integer property that defines the current font size for labels of gr
 
     void setElementFontSize(tlp::IntegerProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementFontSize(property)
+tlpgui.GlGraphInputData.setElementFontSize(property)
 
 Sets the integer property that defines the current font size for labels of graph elements (see :ref:`graph-labels`).
 
@@ -317,7 +317,7 @@ Sets the integer property that defines the current font size for labels of graph
 
     tlp::StringProperty *getElementLabel() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementLabel()
+tlpgui.GlGraphInputData.getElementLabel()
 
 Returns the string property that defines the current labels of graph elements (see :ref:`graph-labels`).
 
@@ -328,7 +328,7 @@ Returns the string property that defines the current labels of graph elements (s
 
     void setElementLabel(tlp::StringProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementLabel(property)
+tlpgui.GlGraphInputData.setElementLabel(property)
 
 Sets the string property that defines the current labels of graph elements (see :ref:`graph-labels`).
 
@@ -340,7 +340,7 @@ Sets the string property that defines the current labels of graph elements (see 
 
     tlp::LayoutProperty *getElementLayout() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementLayout()
+tlpgui.GlGraphInputData.getElementLayout()
 
 Returns the layout property that defines the current layout of graph elements (see :ref:`graph-layout`).
 
@@ -351,7 +351,7 @@ Returns the layout property that defines the current layout of graph elements (s
 
     void setElementLayout(tlp::LayoutProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementLayout(property)
+tlpgui.GlGraphInputData.setElementLayout(property)
 
 Sets the layout property that defines the current layout of graph elements (see :ref:`graph-layout`).
 
@@ -363,7 +363,7 @@ Sets the layout property that defines the current layout of graph elements (see 
 
     tlp::StringProperty *getElementTexture() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementTexture()
+tlpgui.GlGraphInputData.getElementTexture()
 
 Returns the string property that defines the current image files used to texture the shapes of graph elements (see :ref:`graph-textures`).
 
@@ -374,7 +374,7 @@ Returns the string property that defines the current image files used to texture
 
     void setElementTexture(tlp::StringProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementTexture(property)
+tlpgui.GlGraphInputData.setElementTexture(property)
 
 Sets the string property that defines the current image files used to texture the shapes of graph elements (see :ref:`graph-textures`).
 
@@ -386,7 +386,7 @@ Sets the string property that defines the current image files used to texture th
 
     tlp::ColorProperty *getElementBorderColor() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementBorderColor()
+tlpgui.GlGraphInputData.getElementBorderColor()
 
 Returns the color property that defines the current borders colors of graph elements (see :ref:`graph-colors`).
 
@@ -397,7 +397,7 @@ Returns the color property that defines the current borders colors of graph elem
 
     void setElementBorderColor(tlp::ColorProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementBorderColor(property)
+tlpgui.GlGraphInputData.setElementBorderColor(property)
 
 Sets the color property that defines the current borders colors of graph elements (see :ref:`graph-colors`).
 
@@ -409,7 +409,7 @@ Sets the color property that defines the current borders colors of graph element
 
     tlp::DoubleProperty *getElementBorderWidth() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementBorderWidth()
+tlpgui.GlGraphInputData.getElementBorderWidth()
 
 Returns the double property that defines the current borders widths of graph elements (see :ref:`borders-widths`).
 
@@ -420,7 +420,7 @@ Returns the double property that defines the current borders widths of graph ele
 
     void setElementBorderWidth(tlp::DoubleProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementBorderWidth(property)
+tlpgui.GlGraphInputData.setElementBorderWidth(property)
 
 Sets the double property that defines the current borders widths of graph elements (see :ref:`borders-widths`).
 
@@ -432,7 +432,7 @@ Sets the double property that defines the current borders widths of graph elemen
 
     tlp::IntegerProperty *getElementSrcAnchorShape() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementSrcAnchorShape()
+tlpgui.GlGraphInputData.getElementSrcAnchorShape()
 
 Returns the integer property that defines the current shapes of the source edges extremities (see :ref:`graph-shapes`).
 
@@ -443,7 +443,7 @@ Returns the integer property that defines the current shapes of the source edges
 
     void setElementSrcAnchorShape(tlp::IntegerProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementSrcAnchorShape(property)
+tlpgui.GlGraphInputData.setElementSrcAnchorShape(property)
 
 Sets the integer property that defines the current shapes of the source edges extremities (see :ref:`graph-shapes`).
 
@@ -455,7 +455,7 @@ Sets the integer property that defines the current shapes of the source edges ex
 
     tlp::SizeProperty *getElementSrcAnchorSize() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementSrcAnchorSize()
+tlpgui.GlGraphInputData.getElementSrcAnchorSize()
 
 Returns the size property that defines the current sizes of the source edges extremities (see :ref:`graph-sizes`).
 
@@ -466,7 +466,7 @@ Returns the size property that defines the current sizes of the source edges ext
 
     void setElementSrcAnchorSize(tlp::SizeProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementSrcAnchorSize(property)
+tlpgui.GlGraphInputData.setElementSrcAnchorSize(property)
 
 Sets the size property that defines the current sizes of the source edges extremities (see :ref:`graph-shapes`).
 
@@ -478,7 +478,7 @@ Sets the size property that defines the current sizes of the source edges extrem
 
     tlp::IntegerProperty *getElementTgtAnchorShape() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementTgtAnchorShape()
+tlpgui.GlGraphInputData.getElementTgtAnchorShape()
 
 Returns the integer property that defines the current shapes of the target edges extremities (see :ref:`graph-shapes`).
 
@@ -489,7 +489,7 @@ Returns the integer property that defines the current shapes of the target edges
 
     void setElementTgtAnchorShape(tlp::IntegerProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementTgtAnchorShape(property)
+tlpgui.GlGraphInputData.setElementTgtAnchorShape(property)
 
 Sets the integer property that defines the current shapes of the target edges extremities (see :ref:`graph-shapes`).
 
@@ -501,7 +501,7 @@ Sets the integer property that defines the current shapes of the target edges ex
 
     tlp::SizeProperty *getElementTgtAnchorSize() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementTgtAnchorSize()
+tlpgui.GlGraphInputData.getElementTgtAnchorSize()
 
 Returns the size property that defines the current sizes of the target edges extremities (see :ref:`graph-sizes`).
 
@@ -512,7 +512,7 @@ Returns the size property that defines the current sizes of the target edges ext
 
     void setElementTgtAnchorSize(tlp::SizeProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementTgtAnchorSize(property)
+tlpgui.GlGraphInputData.setElementTgtAnchorSize(property)
 
 Sets the size property that defines the current sizes of the target edges extremities (see :ref:`graph-shapes`).
 
@@ -524,7 +524,7 @@ Sets the size property that defines the current sizes of the target edges extrem
 
     void reloadGraphProperties();
 %Docstring
-tlpogl.GlGraphInputData.reloadGraphProperties()
+tlpgui.GlGraphInputData.reloadGraphProperties()
 
 Restores all default graph visual properties (whose name is prefixed by "view") as rendering input data.
 %End

@@ -25,7 +25,7 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
                                                          -DAPPLE=${APPLE} -DWIN32=${WIN32}
                                                          -DCMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH_STR}
                                                          -P ${CMAKE_CURRENT_SOURCE_DIR}/genSphinxDoc.cmake
-                                    DEPENDS ${LibTulipCorePythonBindingsName} ${LibTulipOGLPythonBindingsName} ${LibTulipGUIPythonBindingsName} ${LibStlPythonBindingsName}
+                                    DEPENDS ${LibTulipCorePythonBindingsName} ${LibTulipGUIPythonBindingsName} ${LibStlPythonBindingsName}
                                     VERBATIM)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 

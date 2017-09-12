@@ -90,10 +90,6 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
   QString apiEntry(apiEnt);
   int pos = apiEntry.indexOf('.');
 
-  if (apiEntry.contains(QRegExp("^_tulipogl.*\\..+"))) {
-    apiEntry = apiEntry.mid(pos+1);
-  }
-
   if (apiEntry.contains(QRegExp("^_tulipgui.*\\..+"))) {
     apiEntry = apiEntry.mid(pos+1);
   }

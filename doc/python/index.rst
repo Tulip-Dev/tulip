@@ -32,7 +32,6 @@ Contents
    pythonplugins
    tulippluginsdocumentation
    tulipreference
-   tulipoglreference
    tulipguireference
    tulippluginsreference
 

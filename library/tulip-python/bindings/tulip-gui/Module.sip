@@ -177,11 +177,14 @@ namespace tlp {
 %Include Interactor.sip
 %Include View.sip
 %Include GlMainView.sip
+%Include GlGraphRenderingParameters.sip
+%Include GlGraphInputData.sip
 %Include NodeLinkDiagramComponent.sip
 %Include TulipGui.sip
 %Include ColorScalesManager.sip
 
-%Import ../tulip-ogl/Module.sip
+
+%Import ../tulip-core/Module.sip
 
 
 

@@ -486,7 +486,6 @@ PythonIDE::PythonIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonIDE),
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
 
 }

@@ -435,7 +435,6 @@ MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
   # in order to package them with the Tulip Python bindings
   IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
     SET(TULIP_PLUGIN_WHEEL_INSTALL_DIR "${TULIP_PYTHON_NATIVE_FOLDER}/plugins")
-    SET(TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR "${TULIPOGL_PYTHON_NATIVE_FOLDER}/plugins")
     SET(TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR "${TULIPGUI_PYTHON_NATIVE_FOLDER}/plugins")
 
     # Default install folder : tulip-core plugins
@@ -444,9 +443,9 @@ MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
     IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
       SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
     ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
-    # Copy glyph plugins in tulipogl wheel folder
+    # Copy glyph plugins in tulipgui wheel folder
     IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
-      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR})
+      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
     ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
 
     # Those plugins depend on Qt, copy them in tulipgui wheel folder

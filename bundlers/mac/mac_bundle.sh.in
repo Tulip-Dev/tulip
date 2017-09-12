@@ -57,7 +57,6 @@ mv lib/*.dylib Frameworks/
 rm -rf include
 rm lib/python/*.pyc lib/python/*.pyo 2>/dev/null
 rm lib/python/tulip/*.pyc lib/python/tulip/*.pyo 2>/dev/null
-rm lib/python/tulipogl/*.pyc lib/python/tulipogl/*.pyo 2>/dev/null
 rm lib/python/tulipgui/*.pyc lib/python/tulipgui/*.pyo 2>/dev/null
 
 echo 'Copying license'
