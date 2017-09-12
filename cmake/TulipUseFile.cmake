@@ -450,7 +450,6 @@ MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
 
     # Those plugins depend on Qt, copy them in tulipgui wheel folder
     IF("${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
-       "${plugin_target}" MATCHES "^.*ColorMapping.*$" OR
        "${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
        "${plugin_target}" MATCHES "^.*FileSystem.*$" OR
        "${plugin_target}" MATCHES "^.*GEXFImport.*$" OR
