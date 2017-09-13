@@ -19,7 +19,6 @@
 #include <algorithm>
 #include <tulip/Circle.h>
 #include <tulip/ForEach.h>
-#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 
 #ifdef _OPENMP
@@ -33,8 +32,8 @@ public:
   ~BubblePack();
   bool run();
 private:
-  double computeRelativePosition(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vec4f >* relativePosition);
-  void   calcLayout(tlp::node n, tlp::Vec2f pos, TLP_HASH_MAP< tlp::node, tlp::Vec4f >* relativePosition);
+  double computeRelativePosition(tlp::node n, tlp::NodeStaticProperty<tlp::Vec4f>& relativePosition);
+  void calcLayout(tlp::node n, tlp::Vec2f pos, tlp::NodeStaticProperty<tlp::Vec4f>& relativePosition);
 
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;
@@ -47,11 +46,11 @@ using namespace std;
 using namespace tlp;
 
 struct greaterRadius {
-  const std::vector<double> &radius;
-  greaterRadius(const std::vector<double> &r):radius(r) {}
-  bool operator()(unsigned i1,unsigned i2) const {
-    return radius[i1]>radius[i2];
-  }
+    const std::vector<double> &radius;
+    greaterRadius(const std::vector<double> &r):radius(r) {}
+    bool operator()(unsigned i1,unsigned i2) const {
+        return radius[i1]>radius[i2];
+    }
 };
 
 struct lessRadius {
@@ -62,29 +61,25 @@ struct lessRadius {
   }
 };
 
-double BubblePack::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, Vec4f > *relativePosition) {
+
+double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f>& relativePosition) {
 
   Size centralNodeSize = nodeSize->getNodeValue(n);
-  centralNodeSize[2] = 0.; //remove z-coordiantes because the drawing is 2D
+  centralNodeSize[2] = 0.; //remove z-coordinates because the drawing is 2D
   double sizeFather = std::max(centralNodeSize[0],centralNodeSize[1]) /2.;
   if (sizeFather < 1E-5) sizeFather = 0.1;
 
-  /**
-   * Iniatilize node position
-   */
-  (*relativePosition)[n].set(0,0,0,0);
-
+  unsigned int outdeg = tree->outdeg(n);
   /**
    * Special case if the node is a leaf.
    */
-  if (tree->outdeg(n)==0) {
+  if (outdeg==0) {
     return sizeFather + 1.; //minimum spacing
   }
 
   /**
    * Recursive call to obtain the set of radius of the children of n
    */
-  unsigned int outdeg = tree->outdeg(n);
   std::vector<double> realCircleRadius(outdeg);
 
   node ni;
@@ -217,55 +212,56 @@ double BubblePack::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
    */
   Iterator<node> *itN = tree->getOutNodes(n);
   for (unsigned int i=0; i<outdeg; ++i) {
-    node itn = itN->next();
-    (*relativePosition)[itn][0] = circles[i][0] - circleH[0];
-    (*relativePosition)[itn][1] = circles[i][1] - circleH[1];
+    Vec4f& relPos = relativePosition[graph->nodePos(itN->next())];
+    Circled& circle = circles[i];
+    relPos[0] = circle[0] - circleH[0];
+    relPos[1] = circle[1] - circleH[1];
   }
   delete itN;
-
-  (*relativePosition)[n][2] = -circleH[0];
-  (*relativePosition)[n][3] = -circleH[1];
+    
+  Vec4f& relPos = relativePosition[graph->nodePos(n)];
+  relPos[2] = -circleH[0];
+  relPos[3] = -circleH[1];
 
   return circleH.radius + 1.;
 }
 
-void BubblePack::calcLayout(tlp::node n, Vec2f pos, TLP_HASH_MAP< tlp::node, Vec4f >* relativePosition) {
+void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f>& relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
-  Vec2f shift((*relativePosition)[n][2], (*relativePosition)[n][3]);
+  Vec4f& relPos = relativePosition[graph->nodePos(n)];
+  Vec2f shift(relPos[2], relPos[3]);
   result->setNodeValue(n, Coord(pos + shift, 0));
   node ni;
   forEach(ni, tree->getOutNodes(n)) {
-    Vec2f relat((*relativePosition)[ni][0], (*relativePosition)[ni][1]);
+    Vec4f& relPos = relativePosition[graph->nodePos(ni)];
+    Vec2f relat(relPos[0], relPos[1]);
     calcLayout(ni, pos + relat, relativePosition);
   }
-
 }
 
-namespace {
-const char * paramHelp[] = {
-    //Complexity
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
-    HTML_HELP_DEF( "default", "true" ) \
-    HTML_HELP_BODY() \
-    "This parameter enables to choose the complexity of the algorithm." \
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE()
+static const char * paramHelp[] = {
+  //Complexity
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "This parameter enables to choose the complexity of the algorithm." \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Size" ) \
+  HTML_HELP_DEF( "values", "An existing size property" ) \
+  HTML_HELP_DEF( "default", "viewSize" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used for node's sizes." \
+  HTML_HELP_CLOSE()
 };
-}
 
 BubblePack::BubblePack(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
-  addInParameter<bool>("complexity",paramHelp[0],"true");
+  addInParameter<bool>("complexity", paramHelp[0],"true");
   addDependency("Connected Component Packing", "1.0");
 }
 
@@ -285,7 +281,7 @@ bool BubblePack::run() {
       tmp->applyPropertyAlgorithm("Bubble Pack", result, err, pluginProgress, dataSet);
     }
 
-    // call connected componnent packing
+    // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", result);
@@ -306,7 +302,7 @@ bool BubblePack::run() {
     }
   }
 
-  if (dataSet == 0 || !dataSet->get("complexity",nAlgo))
+  if (dataSet == 0 || !dataSet->get("complexity", nAlgo))
     nAlgo = true;
 
   result->setAllEdgeValue(vector<Coord>(0));
@@ -332,11 +328,11 @@ bool BubblePack::run() {
 
   node startNode = tree->getSource();
   assert(startNode.isValid());
-  TLP_HASH_MAP< node, Vec4f > relativePosition;
+  NodeStaticProperty<Vec4f> relativePosition(graph);
   //cerr << "C" << endl << flush;
-  computeRelativePosition(startNode, &relativePosition);
+  computeRelativePosition(startNode, relativePosition);
   //cerr << "D" << endl << flush;
-  calcLayout(startNode, Vec2f(0,0), &relativePosition);
+  calcLayout(startNode, Vec2f(0,0), relativePosition);
   //cerr << "E" << endl << flush;
 
   // forget last temporary graph state
