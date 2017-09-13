@@ -108,7 +108,9 @@ static bool tulipCanOpenFile(const QString &path) {
   return false;
 }
 
-GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
+GraphPerspective::GraphPerspective(const tlp::PluginContext* c):
+  Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)),
+  _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && ((PerspectiveContext *) c)->parameters.contains("gui_testing")) {
@@ -282,6 +284,20 @@ GraphPerspective::~GraphPerspective() {
 #endif
   }
 
+  // ensure the opened views and interactors get deleted before the loaded graphs
+  // to avoid possible segfaults when closing Tulip
+  _ui->workspace->closeAll();
+
+  // ensure all loaded graphs are deleted
+  tlp::Graph *graph = NULL;
+  foreach(graph, _graphs->graphs()) {
+    delete graph;
+  }
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  delete _pythonIDEDialog;
+#endif
+
   delete _ui;
 }
 
@@ -299,17 +315,6 @@ bool GraphPerspective::terminated() {
       return false;
     }
   }
-
-  // ensure all loaded graphs are deleted
-  tlp::Graph *graph = NULL;
-
-  foreach(graph, _graphs->graphs()) {
-    delete graph;
-  }
-
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  delete _pythonIDEDialog;
-#endif
 
   return true;
 }
