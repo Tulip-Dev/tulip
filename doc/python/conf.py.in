@@ -344,7 +344,10 @@ def mdicon_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
 def source_read(app, docname, source):
   if docname == 'tulippluginsdocumentation':
     f = open('@CMAKE_CURRENT_BINARY_DIR@/tulippluginsdocumentation.rst', 'r')
-    source[0] += f.read()
+    if sys.version_info[0] == 2:
+      source[0] += f.read().decode('utf-8')
+    else:
+      source[0] += f.read()
 
 def setup(app):
   app.connect('autodoc-process-signature', process_signature)
