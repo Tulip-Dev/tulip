@@ -67,6 +67,10 @@ ADD_LIBRARY(TreeLeaf-${TulipVersion} SHARED TreeLeaf.cpp)
 TARGET_LINK_LIBRARIES(TreeLeaf-${TulipVersion} ${LayoutUtilsLibraryName} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(BubblePack-${TulipVersion} SHARED BubblePack.cpp)
+TARGET_LINK_LIBRARIES(BubblePack-${TulipVersion} ${LayoutUtilsLibraryName} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(BubbleTree-${TulipVersion} SHARED BubbleTree.cpp)
 TARGET_LINK_LIBRARIES(BubbleTree-${TulipVersion} ${LayoutUtilsLibraryName} ${LibTulipCoreName})
 
@@ -112,6 +116,7 @@ TULIP_INSTALL_PLUGIN(TreeReingoldAndTilforExtended-${TulipVersion} ${TulipPlugin
 TULIP_INSTALL_PLUGIN(ConeTreeExtended-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(TreeRadial-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(TreeLeaf-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(BubblePack-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(BubbleTree-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(Circular-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(HierarchicalGraph-${TulipVersion} ${TulipPluginsInstallDir})
