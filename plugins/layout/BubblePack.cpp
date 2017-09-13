@@ -28,7 +28,7 @@
 
 class BubblePack:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Bubble Pack dev", "D.Auber", "01/10/2012", "Stable", "1.0", "Tree")
+  PLUGININFORMATION("Bubble Pack", "D.Auber", "01/10/2012", "Stable", "1.0", "Tree")
   BubblePack(const tlp::PluginContext* context);
   ~BubblePack();
   bool run();
