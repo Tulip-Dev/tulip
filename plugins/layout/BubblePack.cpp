@@ -46,11 +46,11 @@ using namespace std;
 using namespace tlp;
 
 struct greaterRadius {
-    const std::vector<double> &radius;
-    greaterRadius(const std::vector<double> &r):radius(r) {}
-    bool operator()(unsigned i1,unsigned i2) const {
-        return radius[i1]>radius[i2];
-    }
+  const std::vector<double> &radius;
+  greaterRadius(const std::vector<double> &r):radius(r) {}
+  bool operator()(unsigned i1,unsigned i2) const {
+    return radius[i1]>radius[i2];
+  }
 };
 
 struct lessRadius {
@@ -67,9 +67,11 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
   Size centralNodeSize = nodeSize->getNodeValue(n);
   centralNodeSize[2] = 0.; //remove z-coordinates because the drawing is 2D
   double sizeFather = std::max(centralNodeSize[0],centralNodeSize[1]) /2.;
+
   if (sizeFather < 1E-5) sizeFather = 0.1;
 
   unsigned int outdeg = tree->outdeg(n);
+
   /**
    * Special case if the node is a leaf.
    */
@@ -98,106 +100,125 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
 
   {
     std::vector<unsigned> index(outdeg);
+
     for(unsigned int i=0; i<outdeg; ++i)
       index[i] = i;
+
     sort(index.begin(), index.end(), lessRadius(realCircleRadius));
 
     vector< Circled > placed;
+
     if (index.size() > 3) {
       double alpha  = 0;
       double curRad = sizeFather;
       bool sens = true;
+
       for (unsigned int i=0; i<index.size(); ++i) {
-	double radius = realCircleRadius[index[i]];
-	double crad   = radius + curRad + 0.01;
-	double calpha;
-	if (sens)
-	  calpha = alpha + radius/crad;
-	else
-	  calpha = alpha - radius/crad;
-	Circled tmp(crad * cos(calpha), crad * sin(calpha), radius );
-	bool reject = false;
-	for (unsigned int k=0; k<placed.size(); ++k) {
-	  if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
-	    reject = true;
-	    break;
-	  }
-	}
-	if (reject) {
-	  curRad += radius + 0.01;
-	  sens = !sens;
-	  --i;
-	  continue;
-	}
-	double newalpha;
-	if (sens)
-	  newalpha = alpha + 2.2 * radius / crad;
-	else
-	  newalpha = alpha - 2.2 * radius / crad;
-	Vec2f v0 ( crad * cos(calpha), crad * sin(calpha));
-	Vec2f v1 ( crad * cos(newalpha), crad * sin(newalpha));
-	while(v0.dist(v1) < radius) {
-	  if (sens)
-	    newalpha += 0.01;
-	  else
-	    newalpha -= 0.01;
-	  v1 = Vec2f(crad * cos(newalpha), crad * sin(newalpha));
-	}
-	alpha = newalpha;
-	circles[index[i]] = tmp;
-	placed.push_back(circles[index[i]]);
+        double radius = realCircleRadius[index[i]];
+        double crad   = radius + curRad + 0.01;
+        double calpha;
+
+        if (sens)
+          calpha = alpha + radius/crad;
+        else
+          calpha = alpha - radius/crad;
+
+        Circled tmp(crad * cos(calpha), crad * sin(calpha), radius );
+        bool reject = false;
+
+        for (unsigned int k=0; k<placed.size(); ++k) {
+          if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
+            reject = true;
+            break;
+          }
+        }
+
+        if (reject) {
+          curRad += radius + 0.01;
+          sens = !sens;
+          --i;
+          continue;
+        }
+
+        double newalpha;
+
+        if (sens)
+          newalpha = alpha + 2.2 * radius / crad;
+        else
+          newalpha = alpha - 2.2 * radius / crad;
+
+        Vec2f v0 ( crad * cos(calpha), crad * sin(calpha));
+        Vec2f v1 ( crad * cos(newalpha), crad * sin(newalpha));
+
+        while(v0.dist(v1) < radius) {
+          if (sens)
+            newalpha += 0.01;
+          else
+            newalpha -= 0.01;
+
+          v1 = Vec2f(crad * cos(newalpha), crad * sin(newalpha));
+        }
+
+        alpha = newalpha;
+        circles[index[i]] = tmp;
+        placed.push_back(circles[index[i]]);
       }
     }
-    else //        if (false) //polyo packing
-      {
-	for (unsigned int i=0; i<index.size(); ++i) {
-	  //cerr << i << "." << flush;
-	  double radius = realCircleRadius[index[i]];
-	  double bestRadius = FLT_MAX;
-	  int discret = ceil(2.*(sizeFather + radius)*M_PI) + 3;
-	  angle += M_PI/3.;
+    else { //        if (false) //polyo packing
+      for (unsigned int i=0; i<index.size(); ++i) {
+        //cerr << i << "." << flush;
+        double radius = realCircleRadius[index[i]];
+        double bestRadius = FLT_MAX;
+        int discret = ceil(2.*(sizeFather + radius)*M_PI) + 3;
+        angle += M_PI/3.;
 #ifdef _OPENMP
-#pragma omp parallel for
+        #pragma omp parallel for
 #endif
-	  for (int j = 0; j < discret; ++j) {
-	    float _angle = float(j) * 2. * M_PI / float(discret) + angle;
-	    double spiralRadius = sizeFather + radius + 1E-3;
-	    Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
-	    bool restart = true;
-	    //int restcnt = 0;
-	    while(restart) {
-	      //restcnt += 1;
-	      restart = false;
-	      for (unsigned int k=0; k<placed.size(); ++k) {
-		if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
-		  spiralRadius = std::max(spiralRadius, (double) placed[k].norm() + placed[k].radius + radius + 1E-3 );
-		  //spiralRadius += 0.01;
-		  tmp = Circled(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
-		  //restart = true;
-		}
-	      }
-	    }
-	    //if (restcnt > 10) cout << "Aie" << endl;
+
+        for (int j = 0; j < discret; ++j) {
+          float _angle = float(j) * 2. * M_PI / float(discret) + angle;
+          double spiralRadius = sizeFather + radius + 1E-3;
+          Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
+          bool restart = true;
+
+          //int restcnt = 0;
+          while(restart) {
+            //restcnt += 1;
+            restart = false;
+
+            for (unsigned int k=0; k<placed.size(); ++k) {
+              if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
+                spiralRadius = std::max(spiralRadius, (double) placed[k].norm() + placed[k].radius + radius + 1E-3 );
+                //spiralRadius += 0.01;
+                tmp = Circled(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
+                //restart = true;
+              }
+            }
+          }
+
+          //if (restcnt > 10) cout << "Aie" << endl;
 #ifdef _OPENMP
-#pragma omp critical(GOODCIRCLE)
+          #pragma omp critical(GOODCIRCLE)
 #endif
-	    {
-	      if (spiralRadius < bestRadius) {
-		bestRadius = spiralRadius;
-		bestAngle = _angle;
-	      }
-	    }
-	  }
-	  circles[index[i]][0]     = bestRadius * cos(bestAngle);
-	  circles[index[i]][1]     = bestRadius * sin(bestAngle);
-	  circles[index[i]].radius = radius;
-	  placed.push_back(circles[index[i]]);
-	}
+          {
+            if (spiralRadius < bestRadius) {
+              bestRadius = spiralRadius;
+              bestAngle = _angle;
+            }
+          }
+        }
+
+        circles[index[i]][0]     = bestRadius * cos(bestAngle);
+        circles[index[i]][1]     = bestRadius * sin(bestAngle);
+        circles[index[i]].radius = radius;
+        placed.push_back(circles[index[i]]);
       }
+    }
   }
   circles.push_back(Circled(0., 0., sizeFather));
   //cerr << "Nb circles : " << circles.size() << endl << flush;
   Circled circleH;
+
   if (circles.size()>2000) { // Stack overflow when number of circles exceed 2k
     circleH = tlp::lazyEnclosingCircle(circles);
   }
@@ -211,14 +232,16 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
    * according to the center of the enclosing circle
    */
   Iterator<node> *itN = tree->getOutNodes(n);
+
   for (unsigned int i=0; i<outdeg; ++i) {
     Vec4f& relPos = relativePosition[graph->nodePos(itN->next())];
     Circled& circle = circles[i];
     relPos[0] = circle[0] - circleH[0];
     relPos[1] = circle[1] - circleH[1];
   }
+
   delete itN;
-    
+
   Vec4f& relPos = relativePosition[graph->nodePos(n)];
   relPos[2] = -circleH[0];
   relPos[3] = -circleH[1];

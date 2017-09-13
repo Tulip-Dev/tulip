@@ -105,7 +105,7 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo(): _editor(NULL) {
 }
 
 GeographicViewShowElementInfo::~GeographicViewShowElementInfo() {
-    delete _informationWidgetItem;
+  delete _informationWidgetItem;
 }
 
 void GeographicViewShowElementInfo::clear() {

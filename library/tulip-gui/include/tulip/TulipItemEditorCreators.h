@@ -238,10 +238,10 @@ struct TLP_QT_SCOPE TulipFontEditorCreator: public tlp::TulipItemEditorCreator {
 class TLP_QT_SCOPE TulipLabelPositionEditorCreator: public tlp::TulipItemEditorCreator {
 
 public:
-    QWidget* createWidget(QWidget*) const;
-    void setEditorData(QWidget*w, const QVariant&var, bool, tlp::Graph*);
-    QVariant editorData(QWidget*,tlp::Graph*);
-    QString displayText(const QVariant &) const;
+  QWidget* createWidget(QWidget*) const;
+  void setEditorData(QWidget*w, const QVariant&var, bool, tlp::Graph*);
+  QVariant editorData(QWidget*,tlp::Graph*);
+  QString displayText(const QVariant &) const;
 
 };
 
