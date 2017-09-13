@@ -318,6 +318,7 @@ int main(int argc,char **argv) {
   mainWindow->projectFileChanged(projectFilePath);
 
   delete progress;
+  delete context;
 
   mainWindow->setWindowIcon(icon);
   mainWindow->show();

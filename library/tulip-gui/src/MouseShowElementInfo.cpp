@@ -139,6 +139,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             _informationWidgetItem->setPos(position);
             _informationWidgetItem->setVisible(true);
             QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
+            connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
             animation->setDuration(100);
             animation->setStartValue(0.);
             animation->setEndValue(1);
