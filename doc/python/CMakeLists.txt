@@ -18,14 +18,17 @@ IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
 ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
 
 ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE}
+                                                         -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
                                                          -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                                                          -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
+                                                         -DTULIP_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+                                                         -DTULIP_BUILD_DIR=${CMAKE_BINARY_DIR}
                                                          -DSYSTEM_SIP=${SYSTEM_SIP} -DSIP_VERSION=${SIP_VERSION_STR}
                                                          -DQT_BIN_DIR=${QT_BINARY_DIR}
                                                          -DAPPLE=${APPLE} -DWIN32=${WIN32}
                                                          -DCMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH_STR}
                                                          -P ${CMAKE_CURRENT_SOURCE_DIR}/genSphinxDoc.cmake
-                                    DEPENDS ${LibTulipCorePythonBindingsName} ${LibTulipGUIPythonBindingsName} ${LibStlPythonBindingsName}
+                                    DEPENDS ${LibTulipCorePythonBindingsName} ${LibTulipGUIPythonBindingsName} ${LibStlPythonBindingsName} ${TULIP_PLUGIN_TARGETS}
                                     VERBATIM)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 

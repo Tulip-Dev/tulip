@@ -1,6 +1,7 @@
 # automatically generates the file tulippluginsdocumentation.rst
 # by dynamically introspecting the Tulip plugins metadata
 
+
 from __future__ import print_function
 import sys
 if sys.version_info[0] == 2:
@@ -8,9 +9,22 @@ if sys.version_info[0] == 2:
   sys.setdefaultencoding('utf8')
 from tulip import tlp
 import tulipgui
-# pip install tabulate
 import tabulate
 import re
+import os
+
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/clustering')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/colors')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/export')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/general')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/import')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/layout')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/metric')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/selection')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/sizes')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/string')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/test')
+tlp.loadTulipPluginsFromDir(os.environ['TULIP_SOURCE_DIR'] + '/library/tulip-python/plugins')
 
 f = open('tulippluginsdocumentation.rst','w')
 
@@ -93,9 +107,6 @@ def formatSphinxDoc(doc):
   doc = replaceHtmlTags(doc, 'li', 'listart', 'liend')
   doc = replaceHtmlTags(doc, 'ul', 'ulstart', 'ulend')
   doc = replaceHtmlTags(doc, 'p', 'pstart', 'pend')
-
-
-
   return doc
 
 

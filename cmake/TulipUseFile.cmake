@@ -422,6 +422,9 @@ MACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
   ENDFOREACH()
 ENDMACRO(TULIP_COPY_TARGET_LIBRARY_POST_BUILD)
 
+# internal cache variable to hold the names of the Tulip plugin targets
+SET(TULIP_PLUGIN_TARGETS "" CACHE INTERNAL "")
+
 # Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
 MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
   SET(COMPONENT_NAME ${plugin_target})
@@ -430,6 +433,9 @@ MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
           RUNTIME DESTINATION ${destination}
           LIBRARY DESTINATION ${destination}
           COMPONENT ${COMPONENT_NAME})
+
+  # append the plugin target to the overall plugin targets list
+  SET(TULIP_PLUGIN_TARGETS "${TULIP_PLUGIN_TARGETS};${plugin_target}" CACHE INTERNAL "")
 
   # When building a Python wheel, copy Tulip plugins in wheel build folder
   # in order to package them with the Tulip Python bindings

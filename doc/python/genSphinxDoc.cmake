@@ -27,7 +27,8 @@ ENDIF(WIN32)
 # in order for the interpreter to import them
 SET(PYTHON_PATHS "${BIN_DIR}/../../library/tulip-python/bindings/tulip-core/tulip_module"
                  "${BIN_DIR}/../../library/tulip-python/bindings/tulip-gui/tulipgui_module"
-                 "${SRC_DIR}/../../library/tulip-python/modules")
+                 "${SRC_DIR}/../../library/tulip-python/modules"
+                 "${SRC_DIR}")
 
 # Add the path of the sip Python module if we compile it from thirdparty as
 # the tulip modules depend on it
@@ -45,10 +46,16 @@ ENDIF(NOT WIN32)
 
 SET(ENV{PYTHONPATH} "${PYTHON_PATHS}")
 
+SET(ENV{TULIP_BUILD_DIR} "${TULIP_BUILD_DIR}")
+SET(ENV{TULIP_SOURCE_DIR} "${TULIP_SOURCE_DIR}")
+
 # Fix an encoding issue on Mac OS
 IF(APPLE)
   SET(ENV{LC_ALL} "en_EN.UTF-8")
 ENDIF(APPLE)
+
+# Generate Tulip plugins documentation file from embedded plugins metadata
+EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${SRC_DIR}/gen_plugins_doc.py WORKING_DIRECTORY ${BIN_DIR})
 
 # Everything is now set up, we can generate the documentation
 EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -c ${BIN_DIR} -b html -E -d ${BIN_DIR}/doctrees ${SRC_DIR} ${BIN_DIR}/html)

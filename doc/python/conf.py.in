@@ -340,8 +340,15 @@ def mdicon_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     node = emphasis(**options)
     return [node], []
 
+# hack to include dynamically generated Tulip plugins documentation
+def source_read(app, docname, source):
+  if docname == 'tulippluginsdocumentation':
+    f = open('@CMAKE_CURRENT_BINARY_DIR@/tulippluginsdocumentation.rst', 'r')
+    source[0] += f.read()
+
 def setup(app):
   app.connect('autodoc-process-signature', process_signature)
   app.connect('autodoc-process-docstring', process_docstring)
+  app.connect('source-read', source_read)
   app.add_role('faicon', faicon_role)
   app.add_role('mdicon', mdicon_role)
