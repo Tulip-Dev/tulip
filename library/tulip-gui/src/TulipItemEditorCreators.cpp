@@ -38,7 +38,6 @@
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
-#include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipFontAwesome.h>
@@ -821,19 +820,12 @@ QString TulipFontEditorCreator::displayText(const QVariant & data) const {
   return text;
 }
 
-//TulipLabelPositionEditorCreator
-QVector<QString> TulipLabelPositionEditorCreator::POSITION_LABEL = QVector<QString>()
-    << QObject::trUtf8("Center")
-    << QObject::trUtf8("Top")
-    << QObject::trUtf8("Bottom")
-    << QObject::trUtf8("Left")
-    << QObject::trUtf8("Right");
-
 QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* result = new QComboBox(parent);
 
-  foreach(const QString& s, POSITION_LABEL)
-    result->addItem(s);
+  for(TulipViewSettings::labelmap::const_iterator i=TulipViewSettings::POSITION_LABEL_MAP.begin();i!=TulipViewSettings::POSITION_LABEL_MAP.end();++i) {
+    result->addItem(tlp::tlpStringToQString(i->second), QVariant::fromValue<LabelPosition::LabelPositions>(i->first));
+  }
 
   return result;
 }
@@ -845,14 +837,8 @@ QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<QComboBox*>(w)->currentIndex()));
 }
 QString TulipLabelPositionEditorCreator::displayText(const QVariant& v) const {
-  int pos = (int)(v.value<LabelPosition::LabelPositions>());
+  return tlp::tlpStringToQString(TulipViewSettings::POSITION_LABEL_MAP[v.value<LabelPosition::LabelPositions>()]);
 
-  if (pos < MIN_LABEL_POSITION || pos > MAX_LABEL_POSITION) {
-    qCritical() << QObject::trUtf8("Invalid value found as label position");
-    return QObject::trUtf8("Invalid label position");
-  }
-  else
-    return POSITION_LABEL[pos];
 }
 
 //GraphEditorCreator
@@ -911,8 +897,10 @@ QString EdgeSetEditorCreator::displayText(const QVariant& var) const {
   return ss.str().c_str();
 }
 
-QWidget* QVectorBoolEditorCreator::createWidget(QWidget*) const {
-  VectorEditor* w = new VectorEditor(NULL);
+QWidget* QVectorBoolEditorCreator::createWidget(QWidget*parent) const {
+  VectorEditor* w = new VectorEditor(tlp::Perspective::instance()
+                                     ? tlp::Perspective::instance()->mainWindow()
+                                     : parent);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -1016,8 +1004,10 @@ QString StdStringEditorCreator::displayText(const QVariant& var) const {
 }
 
 //QStringListEditorCreator
-QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
-  VectorEditor* w = new VectorEditor(NULL);
+QWidget *QStringListEditorCreator::createWidget(QWidget *parent) const {
+  VectorEditor* w = new VectorEditor(tlp::Perspective::instance()
+                                     ? tlp::Perspective::instance()->mainWindow()
+                                     : parent);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;

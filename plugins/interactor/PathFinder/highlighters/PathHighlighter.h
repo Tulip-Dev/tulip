@@ -29,9 +29,7 @@
 class QWidget;
 
 namespace tlp {
-class GlMainView;
 class BooleanProperty;
-class DoubleProperty;
 class GlGraphInputData;
 class GlMainWidget;
 class GlLayer;

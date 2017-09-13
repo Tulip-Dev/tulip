@@ -104,6 +104,10 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo(): _editor(NULL) {
   _informationWidgetItem->setVisible(false);
 }
 
+GeographicViewShowElementInfo::~GeographicViewShowElementInfo() {
+    delete _informationWidgetItem;
+}
+
 void GeographicViewShowElementInfo::clear() {
   dynamic_cast<GeographicView*>(view())->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
   _informationWidgetItem->setVisible(false);

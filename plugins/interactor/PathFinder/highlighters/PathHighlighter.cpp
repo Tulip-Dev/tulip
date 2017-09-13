@@ -16,15 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-
 #include "PathHighlighter.h"
-
-using namespace tlp;
-using namespace std;
 
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphComposite.h>
+
+using namespace tlp;
+using namespace std;
 
 PathHighlighter::PathHighlighter(const string &name) :
   name(name), backupScene(0), entityId(0) {

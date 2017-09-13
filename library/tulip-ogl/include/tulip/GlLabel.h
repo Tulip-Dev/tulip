@@ -25,7 +25,6 @@
 #include <tulip/Size.h>
 #include <tulip/Camera.h>
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/TulipViewSettings.h>
 
 class FTGLPolygonFont;
 class FTOutlineFont;
@@ -33,9 +32,6 @@ class FTOutlineFont;
 namespace tlp {
 
 struct OcclusionTest;
-
-#define MIN_LABEL_POSITION LabelPosition::Center
-#define MAX_LABEL_POSITION LabelPosition::Right
 
 /**
  * @ingroup OpenGL

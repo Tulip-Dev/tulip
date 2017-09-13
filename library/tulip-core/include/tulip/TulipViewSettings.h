@@ -27,6 +27,7 @@
 #include <tulip/Observable.h>
 
 #include <string>
+#include <map>
 
 namespace tlp {
 
@@ -116,7 +117,12 @@ class TLP_SCOPE TulipViewSettings : public Observable {
 
 public:
 
+  typedef std::map<LabelPosition::LabelPositions,std::string> labelmap;
+
+
   static TulipViewSettings &instance();
+
+  static  labelmap POSITION_LABEL_MAP;
 
   Color defaultColor(ElementType elem) const;
   void setDefaultColor(ElementType elem, const Color& color);

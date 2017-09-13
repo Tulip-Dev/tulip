@@ -3,6 +3,20 @@
 
 namespace tlp {
 
+//C++03 compliant map initialization
+static TulipViewSettings::labelmap map_init() {
+    TulipViewSettings::labelmap map;
+    map[LabelPosition::Center]="Center";
+    map[LabelPosition::Top]="Top";
+    map[LabelPosition::Bottom]="Bottom";
+    map[LabelPosition::Left]="Left";
+    map[LabelPosition::Right]="Right";
+    return map;
+}
+
+  TulipViewSettings::labelmap TulipViewSettings::POSITION_LABEL_MAP = map_init();
+
+
 TulipViewSettings *TulipViewSettings::_instance(NULL);
 
 TulipViewSettings::TulipViewSettings() :

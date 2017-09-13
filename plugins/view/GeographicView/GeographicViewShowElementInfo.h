@@ -37,6 +37,7 @@ class GlComplexPolygonItemEditor;
 class GeographicViewShowElementInfo : public InteractorComponent {
 public:
   GeographicViewShowElementInfo();
+  ~GeographicViewShowElementInfo();
   virtual bool eventFilter(QObject* widget, QEvent* e);
 
   void viewChanged(View *);
