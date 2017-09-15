@@ -34,7 +34,7 @@ struct PluginLoader;
  * @ingroup Plugins
  *
  * @brief This class takes care of the actual loading of the libraries.
- * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).0
+ * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).
  *
  * It is a singleton to guarantee the currentPluginLibrary member is initialized, but it only shows static functions for syntactic sugar.
  **/
@@ -91,8 +91,6 @@ public:
 private:
   PluginLibraryLoader() {}
 #ifndef EMSCRIPTEN
-  bool loadNextPluginLibrary(PluginLoader *loader);
-
   bool initPluginDir(PluginLoader *loader);
 #endif
 
