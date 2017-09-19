@@ -1,5 +1,6 @@
 !define ARCH "@PROCESSOR_ARCHITECTURE@"
 !define CHECK_PYTHON "@TULIP_BUILD_PYTHON_COMPONENTS@"
+!define PYTHON_INSTALLER_EXT "@PYTHON_INSTALLER_EXT@"
 
 !include "MUI.nsh"
 !include "x64.nsh"
@@ -75,6 +76,13 @@ RequestExecutionLevel admin
 OutFile "${OUT_FILE}"
 
 !if ${CHECK_PYTHON} == "ON"
+
+!if ${PYTHON_INSTALLER_EXT} == "msi"
+!define PYTHON_INSTALL_CMD '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"'
+!else
+!define PYTHON_INSTALL_CMD '"python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"'
+!endif
+
 Function CheckAndInstallPython 
   ${If} ${RunningX64} 
         ReadRegStr $0 HKCU SOFTWARE\Wow6432Node\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
@@ -91,10 +99,10 @@ Function CheckAndInstallPython
   IfErrors +2 0
   IfFileExists $0\python.exe end install
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi$\n$\nand install Python @PYTHON_VERSION@ (x86)."
-        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi" "python-@PYTHON_VERSION_WITH_PATCH@.msi"
-        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.msi"' $0
-        Delete python-@PYTHON_VERSION_WITH_PATCH@.msi
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86)."
+        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@" "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"
+        ExecWait ${PYTHON_INSTALL_CMD} $0
+        Delete python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
 		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86) is installed."
@@ -111,10 +119,10 @@ Function CheckAndInstallPython64
   IfErrors install 0
   IfFileExists $0\python.exe end install
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
-        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi" "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"
-        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"' $0
-        Delete python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
+        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@" "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"
+        ExecWait ${PYTHON_INSTALL_CMD} $0
+        Delete python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
 		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86-64) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86-64) is installed."
