@@ -58,7 +58,8 @@ NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
   if(grid_ui)
-      delete grid_ui->tableView->itemDelegate();
+    delete grid_ui->tableView->itemDelegate();
+
   delete grid_ui;
 }
 

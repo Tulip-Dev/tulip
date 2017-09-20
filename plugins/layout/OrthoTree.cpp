@@ -35,11 +35,11 @@ class OrthoTree : public tlp::LayoutAlgorithm {
 
 public:
 
-PLUGININFORMATION("OrthoTree","Romain Bourqui","20/02/2012","Orthogonal Tree","1.0","Tree")
+  PLUGININFORMATION("OrthoTree","Romain Bourqui","20/02/2012","Orthogonal Tree","1.0","Tree")
 
   OrthoTree(const tlp::PluginContext* context);
 
-  bool run();  
+  bool run();
 };
 
 PLUGIN(OrthoTree)
@@ -52,38 +52,41 @@ static const char * paramHelp[] = {
   "Define the spacing between two nodes"
 };
 
-OrthoTree::OrthoTree(const tlp::PluginContext* context) : 
-  tlp::LayoutAlgorithm(context), nodeSpacing(4), layerSpacing(10), size(NULL){
+OrthoTree::OrthoTree(const tlp::PluginContext* context) :
+  tlp::LayoutAlgorithm(context), nodeSpacing(4), layerSpacing(10), size(NULL) {
   addInParameter<unsigned int>("Layer spacing", paramHelp[0], "10", true);
   addInParameter<unsigned int>("Node spacing", paramHelp[1], "4", true);
 }
 
-void OrthoTree::computeVerticalSize(const node n, 
-				    NodeStaticProperty<double> &verticalSize) {
+void OrthoTree::computeVerticalSize(const node n,
+                                    NodeStaticProperty<double> &verticalSize) {
   unsigned pos_n = graph->nodePos(n);
+
   if(graph->outdeg(n)==0) {
     verticalSize[pos_n] = size->getNodeValue(n)[1];
   }
   else {
     double s = 0.;
     node u;
-    forEach(u, graph->getOutNodes(n)){
+    forEach(u, graph->getOutNodes(n)) {
       computeVerticalSize(u,verticalSize);
       s += verticalSize[graph->nodePos(u)];
     }
-    if(graph->outdeg(n) > 1){
+
+    if(graph->outdeg(n) > 1) {
       s += nodeSpacing * (graph->outdeg(n)-1);
     }
+
     verticalSize[pos_n] =  s;
   }
 }
 
-void OrthoTree::computeLayout(const node n, 
-			      NodeStaticProperty<double> &verticalSize){
+void OrthoTree::computeLayout(const node n,
+                              NodeStaticProperty<double> &verticalSize) {
   Coord cn = result->getNodeValue(n);
   double prev = 0.;
   edge e;
-  forEach(e, graph->getOutEdges(n)){
+  forEach(e, graph->getOutEdges(n)) {
     node u = graph->opposite(e,n);
     Coord c(cn);
     c[0] += layerSpacing;
@@ -91,7 +94,7 @@ void OrthoTree::computeLayout(const node n,
 
     prev += verticalSize[graph->nodePos(u)] + nodeSpacing;
     result->setNodeValue(u, c);
-    
+
     Coord bend(cn[0], c[1], 0);
     vector<Coord> bends(1);
     bends[0] = bend;
@@ -100,11 +103,11 @@ void OrthoTree::computeLayout(const node n,
   }
 }
 
-bool OrthoTree::run(){
+bool OrthoTree::run() {
   layerSpacing = 10;
   nodeSpacing = 4;
 
-  if(dataSet != NULL){
+  if(dataSet != NULL) {
     dataSet->get("Layer spacing", layerSpacing);
     dataSet->get("Node spacing", nodeSpacing);
   }
