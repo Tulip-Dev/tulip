@@ -286,7 +286,8 @@ GraphPerspective::~GraphPerspective() {
 
   // ensure the opened views and interactors get deleted before the loaded graphs
   // to avoid possible segfaults when closing Tulip
-  _ui->workspace->closeAll();
+  if(_ui&&_ui->workspace)
+      _ui->workspace->closeAll();
 
   // ensure all loaded graphs are deleted
   tlp::Graph *graph = NULL;
