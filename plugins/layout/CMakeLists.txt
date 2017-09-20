@@ -103,6 +103,10 @@ ADD_LIBRARY(PerfectLayout-${TulipVersion} SHARED PerfectLayout.cpp)
 TARGET_LINK_LIBRARIES(PerfectLayout-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(OrthoTree-${TulipVersion} SHARED OrthoTree.cpp)
+TARGET_LINK_LIBRARIES(OrthoTree-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(PolyominoPacking-${TulipVersion} SHARED PolyominoPacking.cpp)
 TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LayoutUtilsLibraryName} ${LibTulipCoreName})
 TULIP_INSTALL_PLUGIN(PolyominoPacking-${TulipVersion} ${TulipPluginsInstallDir})
@@ -124,4 +128,5 @@ TULIP_INSTALL_PLUGIN(Tutte-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(Dendrogram-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(ImprovedWalker-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(SquarifiedTreeMap-${TulipVersion} ${TulipPluginsInstallDir})
+TULIP_INSTALL_PLUGIN(OrthoTree-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(PerfectLayout-${TulipVersion} ${TulipPluginsInstallDir})
