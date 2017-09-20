@@ -77,11 +77,7 @@ OutFile "${OUT_FILE}"
 
 !if ${CHECK_PYTHON} == "ON"
 
-!if ${PYTHON_INSTALLER_EXT} == "msi"
-!define PYTHON_INSTALL_CMD '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"'
-!else
-!define PYTHON_INSTALL_CMD '"python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"'
-!endif
+!if ${ARCH} != "64"
 
 Function CheckAndInstallPython 
   ${If} ${RunningX64} 
@@ -101,7 +97,11 @@ Function CheckAndInstallPython
   install:
         MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86)."
         inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@" "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"
-        ExecWait ${PYTHON_INSTALL_CMD} $0
+!if ${PYTHON_INSTALLER_EXT} == "msi"
+        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
+!else
+	ExecWait '"python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
+!endif
         Delete python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
@@ -110,7 +110,9 @@ Function CheckAndInstallPython
   end:  
 FunctionEnd
 
-Function CheckAndInstallPython64 
+!else
+
+Function CheckAndInstallPython
   SetRegView 64
   ReadRegStr $0 HKCU SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
   IfErrors +2 0
@@ -121,7 +123,11 @@ Function CheckAndInstallPython64
   install:
         MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
         inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/@PYTHON_INSTALLER@" "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"
-        ExecWait ${PYTHON_INSTALL_CMD} $0
+!if ${PYTHON_INSTALLER_EXT} == "msi"
+        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
+!else
+	ExecWait '"python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@"' $0
+!endif
         Delete python-@PYTHON_VERSION_WITH_PATCH@.@PYTHON_INSTALLER_EXT@
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
@@ -129,6 +135,9 @@ Function CheckAndInstallPython64
 		${EndIf}
   end:  
 FunctionEnd
+
+!endif
+
 !endif
 
 !define SHCNE_ASSOCCHANGED 0x08000000
@@ -153,10 +162,8 @@ Section "Tulip"
 !if ${CHECK_PYTHON} == "ON"
 !if ${ARCH} == "64"
   SetRegView 64
-  Call CheckAndInstallPython64
-!else
-  Call CheckAndInstallPython
 !endif
+  Call CheckAndInstallPython
 !endif
 
 File /r files\*.*
