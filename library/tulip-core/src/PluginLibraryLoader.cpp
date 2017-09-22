@@ -87,6 +87,37 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string& f
 
 }
 
+void PluginLibraryLoader::loadPluginsFromDir(const std::string& rootPath, PluginLoader *loader) {
+  // backup current plugin path as the pluginPath variable can be modified as a side effect
+  // while loading a plugin that loads plugins
+  std::string currentPluginPath = getInstance()->pluginPath;
+
+  if (loader!=NULL)
+    loader->start(rootPath.c_str());
+
+  PluginLister::currentLoader = loader;
+  getInstance()->pluginPath = rootPath;
+
+  // ensure message is empty before plugins directory loading
+  getInstance()->message.clear();
+
+  if (getInstance()->initPluginDir(loader, true)) {
+    if (loader)
+      loader->finished(true, getInstance()->message);
+  }
+
+#ifndef NDEBUG
+  else
+    tlp::debug() << "loadPlugins info: " << getInstance()->message.c_str() << std::endl;
+
+#endif
+
+  PluginLister::currentLoader = NULL;
+
+  // restore original pluginPath value
+  getInstance()->pluginPath = currentPluginPath;
+}
+
 #ifdef _WIN32
 bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {
   HINSTANCE hDLL = LoadLibrary(filename.c_str());
@@ -166,9 +197,30 @@ int __tulip_select_libs(struct dirent *ent) {
   return 1;
 }
 
+// accepts only sub-directories
+#ifdef __FreeBSD__
+#include <sys/param.h>
+#if (__FreeBSD_version < 900000 && __FreeBSD_version >= 800501) || (__FreeBSD_version >= 900006)
+int __tulip_select_dirs(const struct dirent *ent) {
+#else
+int __tulip_select_dirs(struct dirent *ent) {
+#endif /* __FreeBSD_version */
+#else /* __FreeBSD__ */
+int __tulip_select_dirs(struct dirent *ent) {
 #endif
 
-bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
+  std::string name(ent->d_name);
+
+  if (ent->d_type == DT_DIR && name != "." && name != "..") {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+#endif
+
+bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
   std::string tulip_mm_version(TULIP_MM_VERSION);
   std::string tulip_version(TULIP_VERSION);
 
@@ -241,6 +293,28 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 
     if (hFind != INVALID_HANDLE_VALUE) {
       FindClose(hFind);
+    }
+	
+    if (recursive) {
+
+      hFind = FindFirstFile ("*", &findData);
+
+      std::string rootPath = pluginPath;
+
+      while (FindNextFile (hFind, &findData)) {
+        if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+          std::string dir(findData.cFileName);
+          if (dir != "." && dir != "..") {
+            pluginPath = rootPath + "/" + dir;
+            initPluginDir(loader, true);
+            pluginPath = rootPath;
+          }
+        }
+      }
+
+      if (hFind != INVALID_HANDLE_VALUE)
+        FindClose(hFind);
+
     }
 
     SetCurrentDirectory(currentDirectory);
@@ -322,6 +396,35 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 
     if (loader)
       loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
+  }
+
+  if (recursive) {
+
+    n = scandir((const char *) pluginPath.c_str(),
+                &namelist,
+  #if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
+                (int (*) (const dirent *))
+  #endif
+                __tulip_select_dirs,
+                alphasort);
+
+    std::string rootPath = pluginPath;
+
+    while (n > 0) {
+      n--;
+      std::string dir(namelist[n]->d_name);
+      free(namelist[n]);
+
+      pluginPath = rootPath + "/" + dir;
+
+      initPluginDir(loader, true);
+
+      pluginPath = rootPath;
+
+      if (n == 0)
+        free(namelist);
+    }
+
   }
 
 #endif

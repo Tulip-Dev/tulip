@@ -62,17 +62,34 @@ public:
   * -> libCompleteGraph-4.0.0.so
   *
   *
-  * @param loader A PluginLoader to output what is going on. Defaults to 0.
+  * @param loader A PluginLoader to output what is going on. Defaults to NULL.
   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
   static void loadPlugins(PluginLoader *loader = NULL, const std::string& pluginPath = "");
 
   /**
+  * @brief Recursively loads plugins from a root directory.
+  *
+  * @since Tulip 5.1
+  *
+  * This function enables to recursively load Tulip plugins from a
+  * provided root directory, thus visiting subdirectories of the provided
+  * one and so forth.
+  *
+  *
+  * @param rootPath The root directory from which to look for plugins to load.
+  * @param loader A PluginLoader to output what is going on. Defaults to NULL.
+
+  *
+  **/
+  static void loadPluginsFromDir(const std::string& rootPath, PluginLoader *loader = NULL);
+
+  /**
    * @brief Loads a single plugin library.
    *
    * @param filename The name of the plugin file to load.
-   * @param loader A loader to report what is going on (only its loaded or aborted functions will be called) Defaults to 0.
+   * @param loader A loader to report what is going on (only its loaded or aborted functions will be called) Defaults to NULL.
    * @return bool Whether the plugin was sucessfully loaded.
    **/
   static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = NULL);
@@ -91,7 +108,7 @@ public:
 private:
   PluginLibraryLoader() {}
 #ifndef EMSCRIPTEN
-  bool initPluginDir(PluginLoader *loader);
+  bool initPluginDir(PluginLoader *loader, bool recursive = false);
 #endif
 
   static PluginLibraryLoader* getInstance() {

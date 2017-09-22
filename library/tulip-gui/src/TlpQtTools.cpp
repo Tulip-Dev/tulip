@@ -421,22 +421,9 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   // initialize Texture loader
   GlTextureManager::setTextureLoader(new GlTextureFromQImageLoader());
 
-  tlp::TulipPluginsPath = QStringToTlpString((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip")) +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/glyph" +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/interactor" +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/view" +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/perspective" +
-                          tlp::PATH_DELIMITER +
-                          QStringToTlpString(tlp::getPluginLocalInstallationDir());
-
   // Load plugins
-  tlp::PluginLibraryLoader::loadPlugins(loader);
+  tlp::PluginLibraryLoader::loadPluginsFromDir(tlp::TulipPluginsPath, loader);
+  tlp::PluginLibraryLoader::loadPluginsFromDir(QStringToTlpString(tlp::getPluginLocalInstallationDir()), loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
   tlp::GlyphManager::getInst().loadGlyphPlugins();

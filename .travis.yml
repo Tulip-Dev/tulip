@@ -158,6 +158,11 @@ jobs:
       env:
         # use Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
+      before_script:
+        # run xvfb to simulate a display (needed to instantiate a QApplication for unit tests)
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
+        - sleep 3 # give xvfb some time to start
       script:
         # create build directory
         - mkdir build && cd build
@@ -213,6 +218,11 @@ jobs:
         - PYTHON_EXECUTABLE=/usr/bin/python3.6
         # use GCC 7
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      before_script:
+        # run xvfb to simulate a display (needed to instantiate a QApplication for unit tests)
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
+        - sleep 3 # give xvfb some time to start
       script:
         # create build directoty
         - mkdir build && cd build
