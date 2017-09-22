@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_dendrogram grid_approximation.tlp

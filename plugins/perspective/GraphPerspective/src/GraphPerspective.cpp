@@ -117,7 +117,7 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c):
     tlp::setGuiTestingMode(true);
     // we must ensure that choosing a file is relative to
     // the current directory to allow to run the gui tests
-    // from any relative unit_test/gui directory
+    // from any relative tests/gui directory
     _lastOpenLocation = QDir::currentPath();
   }
 
@@ -1019,7 +1019,7 @@ void GraphPerspective::open(QString fileName) {
 
     // we must ensure that choosing a file is relative to
     // the current directory to allow to run the gui tests
-    // from any relative unit_test/gui directory
+    // from any relative tests/gui directory
     if (!tlp::inGuiTestingMode())
       _lastOpenLocation = fileInfo.absolutePath();
 

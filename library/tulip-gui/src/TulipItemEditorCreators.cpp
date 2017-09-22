@@ -347,7 +347,7 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
   // or if we are in gui testing mode
   // where we must ensure that choosing the file is relative to
   // the current directory to allow to run the gui tests
-  // from any relative unit_test/gui directory
+  // from any relative tests/gui directory
   else if (inGuiTestingMode())
     dlg->setDirectory(QDir::currentPath());
 

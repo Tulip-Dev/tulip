@@ -1,1 +1,0 @@
-sh tulip_run_test.sh measure_dag_level grid_approximation.tlp

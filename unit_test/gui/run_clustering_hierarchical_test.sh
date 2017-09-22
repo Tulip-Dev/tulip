@@ -1,1 +1,0 @@
-sh tulip_run_test.sh clustering_hierarchical grid_approximation.tlp

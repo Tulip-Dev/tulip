@@ -1,0 +1,6 @@
+	dl nr=2, nc=3 format = edgelist2
+	labels embedded
+	data:
+		sanders skvoretz 1
+		sanders s_smith 1.782
+		skvoretz sanders 1.09

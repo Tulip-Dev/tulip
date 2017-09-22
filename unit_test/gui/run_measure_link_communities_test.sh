@@ -1,1 +1,0 @@
-sh tulip_run_test.sh measure_link_communities grid_approximation.tlp

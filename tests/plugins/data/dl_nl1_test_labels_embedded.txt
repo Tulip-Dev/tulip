@@ -1,0 +1,7 @@
+	dl n = 4, format = nodelist1
+	labels embedded
+	data:
+		sanders   skvoretz s.smith
+		skvoretz  sanders s.smith t.smith
+		s.smith   sanders skvoretz
+		t.smith   skvoretz

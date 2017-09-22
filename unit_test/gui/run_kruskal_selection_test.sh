@@ -1,1 +1,0 @@
-sh tulip_run_test.sh kruskal_selection grid_approximation.tlp

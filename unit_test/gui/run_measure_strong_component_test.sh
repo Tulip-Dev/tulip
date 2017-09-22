@@ -1,1 +1,0 @@
-sh tulip_run_test.sh measure_strong_component grid_approximation.tlp

@@ -1,1 +1,0 @@
-sh tulip_run_test.sh measure_page_rank grid_approximation.tlp

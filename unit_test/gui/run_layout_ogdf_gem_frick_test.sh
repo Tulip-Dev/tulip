@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_ogdf_gem_frick grid_approximation.tlp empty_graph_layout.tlp

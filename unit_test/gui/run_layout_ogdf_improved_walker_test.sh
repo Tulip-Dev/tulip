@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_ogdf_improved_walker random_tree.tlp

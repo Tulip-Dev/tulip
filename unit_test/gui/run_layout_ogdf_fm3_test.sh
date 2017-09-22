@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_ogdf_fm3 grid_approximation.tlp

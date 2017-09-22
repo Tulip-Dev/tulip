@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_hierarchical_graph grid_approximation.tlp

@@ -1,1 +1,0 @@
-sh tulip_run_test.sh import_social_network_fu_and_liao 

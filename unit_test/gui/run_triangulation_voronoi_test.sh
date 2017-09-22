@@ -1,1 +1,0 @@
-sh tulip_run_test.sh triangulation_voronoi grid_approximation.tlp

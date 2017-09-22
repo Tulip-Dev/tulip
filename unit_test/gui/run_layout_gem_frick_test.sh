@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_gem_frick grid_approximation.tlp

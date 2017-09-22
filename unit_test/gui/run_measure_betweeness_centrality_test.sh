@@ -1,1 +1,0 @@
-sh tulip_run_test.sh measure_betweeness_centrality grid_approximation.tlp

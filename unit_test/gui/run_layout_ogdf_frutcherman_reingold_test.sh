@@ -1,1 +1,0 @@
-sh tulip_run_test.sh layout_ogdf_frutcherman_reingold grid_approximation.tlp

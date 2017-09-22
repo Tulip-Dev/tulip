@@ -1,0 +1,933 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2017:01:25 
+# Time:                   10:50:26 
+# Xnee program:           cnee 
+# Xnee version:           3.19 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       11804000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             4.4.0-59-generic 
+# OS Version:             #80-Ubuntu SMP Fri Jan 6 17:47:47 UTC 2017 
+# Machine:                x86_64 
+# Nodename:               pm-laptop 
+# Display name:           :0
+# Dimension:              2048x1152
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /home/pm/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_pajek_file.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file import_pajek_file.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  2048x1152
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x161d020
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            66-71 
+error-range                   0-0 
+7,2,0,0,0,37,0,4983795,9,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,4983795,3,Virtual core keyboard
+7,2,0,0,0,50,0,4984110,9,AT Translated Set 2 keyboard
+6,2,0,0,0,50,0,4984110,3,Virtual core keyboard
+7,2,0,0,0,32,0,4984385,9,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,4984385,3,Virtual core keyboard
+7,3,0,0,0,32,0,4984447,9,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,4984447,3,Virtual core keyboard
+7,3,0,0,0,50,0,4984450,9,AT Translated Set 2 keyboard
+6,3,0,0,0,50,0,4984450,3,Virtual core keyboard
+0,21,0,0,0,0,0,4984472
+NEW-WINDOW:461,197:58720301,58720301,23116086,0,0,0:0x0+879+458:0,0:Import
+0,21,0,0,0,0,0,4984472
+0,21,0,0,0,0,0,4984472
+0,21,0,0,0,0,0,4984472
+7,3,0,0,0,37,0,4984487,9,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,4984487,3,Virtual core keyboard
+7,2,0,0,0,116,0,4985934,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4985934,3,Virtual core keyboard
+7,3,0,0,0,116,0,4986047,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4986047,3,Virtual core keyboard
+7,2,0,0,0,116,0,4986199,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4986199,3,Virtual core keyboard
+7,3,0,0,0,116,0,4986281,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4986281,3,Virtual core keyboard
+7,2,0,0,0,116,0,4986432,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4986432,3,Virtual core keyboard
+7,3,0,0,0,116,0,4986515,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4986515,3,Virtual core keyboard
+7,2,0,0,0,116,0,4986635,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4986636,3,Virtual core keyboard
+7,3,0,0,0,116,0,4986720,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4986720,3,Virtual core keyboard
+7,2,0,0,0,116,0,4986830,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4986830,3,Virtual core keyboard
+7,3,0,0,0,116,0,4986933,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4986933,3,Virtual core keyboard
+7,2,0,0,0,116,0,4987064,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4987064,3,Virtual core keyboard
+7,3,0,0,0,116,0,4987178,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4987178,3,Virtual core keyboard
+7,2,0,0,0,116,0,4987441,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4987441,3,Virtual core keyboard
+7,3,0,0,0,116,0,4987543,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4987543,3,Virtual core keyboard
+7,2,0,0,0,116,0,4987641,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4987641,3,Virtual core keyboard
+7,3,0,0,0,116,0,4987843,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4987843,3,Virtual core keyboard
+7,2,0,0,0,116,0,4987941,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,4987941,3,Virtual core keyboard
+7,3,0,0,0,116,0,4987983,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,4987983,3,Virtual core keyboard
+7,6,236,736,0,0,0,4988477,11,'SynPS/2 Synaptics TouchPad'
+7,6,236,735,0,0,0,4988493,11,'SynPS/2 Synaptics TouchPad'
+7,6,236,735,0,0,0,4988509,11,'SynPS/2 Synaptics TouchPad'
+7,6,236,732,0,0,0,4988526,11,'SynPS/2 Synaptics TouchPad'
+7,6,238,730,0,0,0,4988542,11,'SynPS/2 Synaptics TouchPad'
+7,6,250,726,0,0,0,4988559,11,'SynPS/2 Synaptics TouchPad'
+7,6,258,722,0,0,0,4988575,11,'SynPS/2 Synaptics TouchPad'
+7,6,279,713,0,0,0,4988590,11,'SynPS/2 Synaptics TouchPad'
+7,6,306,697,0,0,0,4988607,11,'SynPS/2 Synaptics TouchPad'
+7,6,322,687,0,0,0,4988623,11,'SynPS/2 Synaptics TouchPad'
+7,6,355,664,0,0,0,4988641,11,'SynPS/2 Synaptics TouchPad'
+7,6,372,652,0,0,0,4988656,11,'SynPS/2 Synaptics TouchPad'
+7,6,405,630,0,0,0,4988671,11,'SynPS/2 Synaptics TouchPad'
+7,6,437,610,0,0,0,4988691,11,'SynPS/2 Synaptics TouchPad'
+7,6,450,601,0,0,0,4988709,11,'SynPS/2 Synaptics TouchPad'
+7,6,471,589,0,0,0,4988726,11,'SynPS/2 Synaptics TouchPad'
+7,6,491,579,0,0,0,4988743,11,'SynPS/2 Synaptics TouchPad'
+7,6,511,570,0,0,0,4988763,11,'SynPS/2 Synaptics TouchPad'
+7,6,518,566,0,0,0,4988780,11,'SynPS/2 Synaptics TouchPad'
+7,6,529,562,0,0,0,4988797,11,'SynPS/2 Synaptics TouchPad'
+7,6,538,558,0,0,0,4988814,11,'SynPS/2 Synaptics TouchPad'
+7,6,550,553,0,0,0,4988834,11,'SynPS/2 Synaptics TouchPad'
+7,6,555,550,0,0,0,4988851,11,'SynPS/2 Synaptics TouchPad'
+7,6,567,543,0,0,0,4988868,11,'SynPS/2 Synaptics TouchPad'
+7,6,583,530,0,0,0,4988885,11,'SynPS/2 Synaptics TouchPad'
+7,6,605,514,0,0,0,4988905,11,'SynPS/2 Synaptics TouchPad'
+7,6,616,507,0,0,0,4988922,11,'SynPS/2 Synaptics TouchPad'
+7,6,637,495,0,0,0,4988938,11,'SynPS/2 Synaptics TouchPad'
+7,6,658,488,0,0,0,4988955,11,'SynPS/2 Synaptics TouchPad'
+7,6,669,485,0,0,0,4988973,11,'SynPS/2 Synaptics TouchPad'
+7,6,688,480,0,0,0,4988989,11,'SynPS/2 Synaptics TouchPad'
+7,6,708,477,0,0,0,4989006,11,'SynPS/2 Synaptics TouchPad'
+7,6,719,475,0,0,0,4989023,11,'SynPS/2 Synaptics TouchPad'
+7,6,739,473,0,0,0,4989326,11,'SynPS/2 Synaptics TouchPad'
+7,6,740,473,0,0,0,4989343,11,'SynPS/2 Synaptics TouchPad'
+7,6,755,466,0,0,0,4989361,11,'SynPS/2 Synaptics TouchPad'
+7,6,767,458,0,0,0,4989378,11,'SynPS/2 Synaptics TouchPad'
+7,6,785,447,0,0,0,4989395,11,'SynPS/2 Synaptics TouchPad'
+7,6,798,438,0,0,0,4989413,11,'SynPS/2 Synaptics TouchPad'
+7,6,803,434,0,0,0,4989431,11,'SynPS/2 Synaptics TouchPad'
+7,6,809,431,0,0,0,4989448,11,'SynPS/2 Synaptics TouchPad'
+7,6,812,428,0,0,0,4989465,11,'SynPS/2 Synaptics TouchPad'
+7,6,814,427,0,0,0,4989483,11,'SynPS/2 Synaptics TouchPad'
+7,6,816,426,0,0,0,4989500,11,'SynPS/2 Synaptics TouchPad'
+7,6,818,424,0,0,0,4989517,11,'SynPS/2 Synaptics TouchPad'
+7,6,821,423,0,0,0,4989535,11,'SynPS/2 Synaptics TouchPad'
+7,6,823,422,0,0,0,4989552,11,'SynPS/2 Synaptics TouchPad'
+7,6,825,420,0,0,0,4989570,11,'SynPS/2 Synaptics TouchPad'
+7,6,829,418,0,0,0,4989587,11,'SynPS/2 Synaptics TouchPad'
+7,6,831,416,0,0,0,4989606,11,'SynPS/2 Synaptics TouchPad'
+7,6,832,416,0,0,0,4989624,11,'SynPS/2 Synaptics TouchPad'
+7,6,834,414,0,0,0,4989641,11,'SynPS/2 Synaptics TouchPad'
+7,6,836,412,0,0,0,4989658,11,'SynPS/2 Synaptics TouchPad'
+7,6,838,409,0,0,0,4989676,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,407,0,0,0,4989694,11,'SynPS/2 Synaptics TouchPad'
+7,6,841,405,0,0,0,4989709,11,'SynPS/2 Synaptics TouchPad'
+7,6,842,403,0,0,0,4989727,11,'SynPS/2 Synaptics TouchPad'
+7,6,843,402,0,0,0,4989745,11,'SynPS/2 Synaptics TouchPad'
+7,6,844,400,0,0,0,4989762,11,'SynPS/2 Synaptics TouchPad'
+7,6,845,399,0,0,0,4989777,11,'SynPS/2 Synaptics TouchPad'
+7,6,846,397,0,0,0,4989793,11,'SynPS/2 Synaptics TouchPad'
+7,6,848,395,0,0,0,4989810,11,'SynPS/2 Synaptics TouchPad'
+7,6,849,393,0,0,0,4989827,11,'SynPS/2 Synaptics TouchPad'
+7,6,849,392,0,0,0,4989844,11,'SynPS/2 Synaptics TouchPad'
+7,6,851,390,0,0,0,4989860,11,'SynPS/2 Synaptics TouchPad'
+7,6,851,389,0,0,0,4989878,11,'SynPS/2 Synaptics TouchPad'
+7,6,852,388,0,0,0,4989895,11,'SynPS/2 Synaptics TouchPad'
+7,6,852,387,0,0,0,4989911,11,'SynPS/2 Synaptics TouchPad'
+7,6,852,386,0,0,0,4989928,11,'SynPS/2 Synaptics TouchPad'
+7,6,853,386,0,0,0,4989946,11,'SynPS/2 Synaptics TouchPad'
+7,6,853,386,0,0,0,4989962,11,'SynPS/2 Synaptics TouchPad'
+7,6,853,385,0,0,0,4989979,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,385,0,0,0,4989996,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,385,0,0,0,4990013,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,384,0,0,0,4990030,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,384,0,0,0,4990048,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,384,0,0,0,4990065,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,383,0,0,0,4990083,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,383,0,0,0,4990100,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,383,0,0,0,4990117,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,383,0,0,0,4990153,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,382,0,0,0,4990240,11,'SynPS/2 Synaptics TouchPad'
+7,4,0,0,1,0,0,4990281,11,SynPS/2 Synaptics TouchPad
+6,4,0,0,1,0,0,4990281,2,Virtual core pointer
+7,5,0,0,1,0,0,4990308,11,SynPS/2 Synaptics TouchPad
+6,5,0,0,1,0,0,4990308,2,Virtual core pointer
+0,21,0,0,0,0,0,4990398
+NEW-WINDOW:705,210:58720309,58720309,23116160,0,0,0:0x0+530+400:0,0:Open
+0,21,0,0,0,0,0,4990398
+0,21,0,0,0,0,0,4990398
+0,21,0,0,0,0,0,4990398
+7,6,854,382,0,0,0,4991164,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,385,0,0,0,4991180,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,389,0,0,0,4991194,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,398,0,0,0,4991211,11,'SynPS/2 Synaptics TouchPad'
+7,6,854,406,0,0,0,4991227,11,'SynPS/2 Synaptics TouchPad'
+7,6,853,423,0,0,0,4991244,11,'SynPS/2 Synaptics TouchPad'
+7,6,849,442,0,0,0,4991261,11,'SynPS/2 Synaptics TouchPad'
+7,6,848,451,0,0,0,4991279,11,'SynPS/2 Synaptics TouchPad'
+7,6,846,465,0,0,0,4991296,11,'SynPS/2 Synaptics TouchPad'
+7,6,845,480,0,0,0,4991314,11,'SynPS/2 Synaptics TouchPad'
+7,6,843,487,0,0,0,4991331,11,'SynPS/2 Synaptics TouchPad'
+7,6,842,500,0,0,0,4991349,11,'SynPS/2 Synaptics TouchPad'
+7,6,841,512,0,0,0,4991366,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,523,0,0,0,4991383,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,527,0,0,0,4991401,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,533,0,0,0,4991419,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,541,0,0,0,4991436,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,544,0,0,0,4991453,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,547,0,0,0,4991470,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,550,0,0,0,4991488,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,551,0,0,0,4991507,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,551,0,0,0,4991525,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,552,0,0,0,4991541,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,553,0,0,0,4991559,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,554,0,0,0,4991578,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,555,0,0,0,4991595,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,556,0,0,0,4991613,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,557,0,0,0,4991630,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,558,0,0,0,4991649,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,558,0,0,0,4991666,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,559,0,0,0,4991684,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,559,0,0,0,4991893,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,558,0,0,0,4991908,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,558,0,0,0,4991923,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,556,0,0,0,4991939,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,555,0,0,0,4991954,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,553,0,0,0,4991969,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,553,0,0,0,4991984,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,552,0,0,0,4991999,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,551,0,0,0,4992015,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,550,0,0,0,4992030,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,549,0,0,0,4992045,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,548,0,0,0,4992060,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,548,0,0,0,4992076,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,547,0,0,0,4992091,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,547,0,0,0,4992106,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,546,0,0,0,4992121,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,546,0,0,0,4992139,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,546,0,0,0,4992158,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,545,0,0,0,4992175,11,'SynPS/2 Synaptics TouchPad'
+7,6,839,545,0,0,0,4992192,11,'SynPS/2 Synaptics TouchPad'
+7,4,0,0,1,0,0,4992319,11,SynPS/2 Synaptics TouchPad
+6,4,0,0,1,0,0,4992319,2,Virtual core pointer
+7,5,0,0,1,0,0,4992349,11,SynPS/2 Synaptics TouchPad
+6,5,0,0,1,0,0,4992349,2,Virtual core pointer
+7,2,0,0,0,40,0,4993198,9,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,4993198,3,Virtual core keyboard
+7,3,0,0,0,40,0,4993239,9,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,4993239,3,Virtual core keyboard
+7,2,0,0,0,24,0,4993392,9,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,4993392,3,Virtual core keyboard
+7,3,0,0,0,24,0,4993454,9,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,4993454,3,Virtual core keyboard
+7,2,0,0,0,28,0,4993676,9,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,4993676,3,Virtual core keyboard
+7,3,0,0,0,28,0,4993738,9,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,4993738,3,Virtual core keyboard
+7,2,0,0,0,24,0,4993931,9,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,4993931,3,Virtual core keyboard
+7,3,0,0,0,24,0,4993993,9,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,4993993,3,Virtual core keyboard
+7,2,0,0,0,62,0,4994288,9,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,4994288,3,Virtual core keyboard
+7,2,0,0,0,60,0,4994562,9,AT Translated Set 2 keyboard
+6,2,0,0,0,60,0,4994562,3,Virtual core keyboard
+7,3,0,0,0,60,0,4994694,9,AT Translated Set 2 keyboard
+6,3,0,0,0,60,0,4994694,3,Virtual core keyboard
+7,3,0,0,0,62,0,4994755,9,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,4994755,3,Virtual core keyboard
+7,2,0,0,0,57,0,4995558,9,AT Translated Set 2 keyboard
+6,2,0,0,0,57,0,4995559,3,Virtual core keyboard
+7,3,0,0,0,57,0,4995620,9,AT Translated Set 2 keyboard
+6,3,0,0,0,57,0,4995620,3,Virtual core keyboard
+7,2,0,0,0,26,0,4995782,9,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,4995782,3,Virtual core keyboard
+7,3,0,0,0,26,0,4995834,9,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,4995834,3,Virtual core keyboard
+7,2,0,0,0,28,0,4995987,9,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,4995987,3,Virtual core keyboard
+7,3,0,0,0,28,0,4996049,9,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,4996049,3,Virtual core keyboard
+7,2,0,0,0,39,0,4996282,9,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,4996282,3,Virtual core keyboard
+7,3,0,0,0,39,0,4996375,9,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,4996375,3,Virtual core keyboard
+7,2,0,0,0,54,0,4996658,9,AT Translated Set 2 keyboard
+6,2,0,0,0,54,0,4996658,3,Virtual core keyboard
+7,3,0,0,0,54,0,4996730,9,AT Translated Set 2 keyboard
+6,3,0,0,0,54,0,4996730,3,Virtual core keyboard
+7,2,0,0,0,31,0,4996760,9,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,4996760,3,Virtual core keyboard
+7,3,0,0,0,31,0,4996843,9,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,4996843,3,Virtual core keyboard
+7,2,0,0,0,26,0,4997238,9,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,4997238,3,Virtual core keyboard
+7,3,0,0,0,26,0,4997321,9,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,4997321,3,Virtual core keyboard
+7,2,0,0,0,57,0,4997340,9,AT Translated Set 2 keyboard
+6,2,0,0,0,57,0,4997340,3,Virtual core keyboard
+7,3,0,0,0,57,0,4997402,9,AT Translated Set 2 keyboard
+6,3,0,0,0,57,0,4997402,3,Virtual core keyboard
+7,2,0,0,0,54,0,4997554,9,AT Translated Set 2 keyboard
+6,2,0,0,0,54,0,4997554,3,Virtual core keyboard
+7,3,0,0,0,54,0,4997585,9,AT Translated Set 2 keyboard
+6,3,0,0,0,54,0,4997585,3,Virtual core keyboard
+7,2,0,0,0,26,0,4997839,9,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,4997839,3,Virtual core keyboard
+7,3,0,0,0,26,0,4997902,9,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,4997902,3,Virtual core keyboard
+7,2,0,0,0,62,0,4998704,9,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,4998704,3,Virtual core keyboard
+7,2,0,0,0,59,0,4999102,9,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,4999102,3,Virtual core keyboard
+7,3,0,0,0,59,0,4999204,9,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,4999204,3,Virtual core keyboard
+7,3,0,0,0,62,0,4999255,9,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,4999255,3,Virtual core keyboard
+7,2,0,0,0,57,0,4999662,9,AT Translated Set 2 keyboard
+6,2,0,0,0,57,0,4999662,3,Virtual core keyboard
+7,3,0,0,0,57,0,4999724,9,AT Translated Set 2 keyboard
+6,3,0,0,0,57,0,4999724,3,Virtual core keyboard
+7,2,0,0,0,26,0,4999876,9,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,4999877,3,Virtual core keyboard
+7,3,0,0,0,26,0,4999938,9,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,4999938,3,Virtual core keyboard
+7,2,0,0,0,28,0,5000100,9,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,5000100,3,Virtual core keyboard
+7,3,0,0,0,28,0,5000161,9,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,5000161,3,Virtual core keyboard
+7,2,0,0,0,36,0,5000680,9,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,5000680,3,Virtual core keyboard
+0,21,0,0,0,0,0,5000684
+NEW-WINDOW:0,0:58720322,58720322,748,0,0,1:0x0+328+22:0,0:
+0,21,0,0,0,0,0,5000684
+0,21,0,0,0,0,0,5000684
+0,21,0,0,0,0,0,5000684
+0,21,0,0,0,0,0,5000684
+0,21,0,0,0,0,0,5000684
+0,21,0,0,0,0,0,5000684
+0,21,0,0,0,0,0,5000684
+7,3,0,0,0,36,0,5000785,9,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,5000785,3,Virtual core keyboard
+7,2,0,0,0,36,0,5001524,9,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,5001524,3,Virtual core keyboard
+0,21,0,0,0,0,0,5001535
+NEW-WINDOW:650,334:58720331,58720331,23116372,0,0,0:0x0+500+46:0,0:Pajek
+0,21,0,0,0,0,0,5001535
+0,21,0,0,0,0,0,5001535
+0,21,0,0,0,0,0,5001535
+0,21,0,0,0,0,0,5001585
+NEW-WINDOW:459,141:58720301,58720301,748,0,0,0:459x141+879+458:0,0:Import
+0,21,0,0,0,0,0,5001585
+0,21,0,0,0,0,0,5001585
+0,21,0,0,0,0,0,5001585
+0,21,0,0,0,0,0,5001585
+0,21,0,0,0,0,0,5001585
+7,3,0,0,0,36,0,5001602,9,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,5001602,3,Virtual core keyboard
+0,21,0,0,0,0,0,5002001
+NEW-WINDOW:8384,0:58720376,58720376,748,0,0,0:-1488619472x32767+-1488619480+32767:1942,1942:
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002001
+0,21,0,0,0,0,0,5002081
+NEW-WINDOW:5,49:58720382,58720382,748,0,0,0:91x110+0+0:0,0:
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+0,21,0,0,0,0,0,5002081
+NEW-WINDOW:0,0:58720385,58720385,58720415,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,5002081
+NEW-WINDOW:0,0:58720387,58720387,58720415,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,5002081
+NEW-WINDOW:0,0:58720391,58720391,58720415,0,0,0:0x0+1024+460:0,0:
+0,21,0,0,0,0,0,5002124
+NEW-WINDOW:0,0:58720424,58720424,748,0,0,0:0x0+1172+849:0,0:Spreadsheet view
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002124
+0,21,0,0,0,0,0,5002157
+NEW-WINDOW:0,0:58720410,58720410,748,0,0,0:0x0+943+595:0,0:Node Link Diagram view
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002157
+0,21,0,0,0,0,0,5002203
+NEW-WINDOW:1117,102:58720413,58720413,58720515,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,5002203
+NEW-WINDOW:1117,102:58720415,58720415,58720515,0,0,0:0x0+1024+460:0,0:
+7,6,839,545,0,0,0,5005308,11,'SynPS/2 Synaptics TouchPad'
+7,6,838,545,0,0,0,5005325,11,'SynPS/2 Synaptics TouchPad'
+7,6,837,545,0,0,0,5005342,11,'SynPS/2 Synaptics TouchPad'
+7,6,831,545,0,0,0,5005360,11,'SynPS/2 Synaptics TouchPad'
+7,6,818,541,0,0,0,5005377,11,'SynPS/2 Synaptics TouchPad'
+7,6,798,532,0,0,0,5005395,11,'SynPS/2 Synaptics TouchPad'
+7,6,786,525,0,0,0,5005412,11,'SynPS/2 Synaptics TouchPad'
+7,6,758,513,0,0,0,5005429,11,'SynPS/2 Synaptics TouchPad'
+7,6,719,493,0,0,0,5005448,11,'SynPS/2 Synaptics TouchPad'
+7,6,696,481,0,0,0,5005465,11,'SynPS/2 Synaptics TouchPad'
+7,6,657,459,0,0,0,5005480,11,'SynPS/2 Synaptics TouchPad'
+7,6,613,433,0,0,0,5005495,11,'SynPS/2 Synaptics TouchPad'
+7,6,591,418,0,0,0,5005511,11,'SynPS/2 Synaptics TouchPad'
+7,6,547,390,0,0,0,5005526,11,'SynPS/2 Synaptics TouchPad'
+7,6,528,378,0,0,0,5005858,11,'SynPS/2 Synaptics TouchPad'
+7,6,519,370,0,0,0,5005875,11,'SynPS/2 Synaptics TouchPad'
+7,6,485,345,0,0,0,5005893,11,'SynPS/2 Synaptics TouchPad'
+7,6,458,325,0,0,0,5005911,11,'SynPS/2 Synaptics TouchPad'
+7,6,419,294,0,0,0,5005928,11,'SynPS/2 Synaptics TouchPad'
+7,6,389,265,0,0,0,5005946,11,'SynPS/2 Synaptics TouchPad'
+7,6,379,253,0,0,0,5005964,11,'SynPS/2 Synaptics TouchPad'
+7,6,365,237,0,0,0,5005982,11,'SynPS/2 Synaptics TouchPad'
+7,6,357,228,0,0,0,5005999,11,'SynPS/2 Synaptics TouchPad'
+7,6,349,220,0,0,0,5006016,11,'SynPS/2 Synaptics TouchPad'
+7,6,346,217,0,0,0,5006034,11,'SynPS/2 Synaptics TouchPad'
+7,6,340,210,0,0,0,5006051,11,'SynPS/2 Synaptics TouchPad'
+7,6,332,201,0,0,0,5006068,11,'SynPS/2 Synaptics TouchPad'
+7,6,325,192,0,0,0,5006088,11,'SynPS/2 Synaptics TouchPad'
+7,6,322,187,0,0,0,5006105,11,'SynPS/2 Synaptics TouchPad'
+7,6,319,182,0,0,0,5006122,11,'SynPS/2 Synaptics TouchPad'
+7,6,317,178,0,0,0,5006139,11,'SynPS/2 Synaptics TouchPad'
+7,6,315,176,0,0,0,5006157,11,'SynPS/2 Synaptics TouchPad'
+7,6,314,175,0,0,0,5006175,11,'SynPS/2 Synaptics TouchPad'
+7,6,313,173,0,0,0,5006189,11,'SynPS/2 Synaptics TouchPad'
+7,6,312,172,0,0,0,5006207,11,'SynPS/2 Synaptics TouchPad'
+7,6,312,171,0,0,0,5006226,11,'SynPS/2 Synaptics TouchPad'
+7,6,311,171,0,0,0,5006240,11,'SynPS/2 Synaptics TouchPad'
+7,6,310,170,0,0,0,5006258,11,'SynPS/2 Synaptics TouchPad'
+7,6,310,170,0,0,0,5006276,11,'SynPS/2 Synaptics TouchPad'
+7,6,308,169,0,0,0,5006291,11,'SynPS/2 Synaptics TouchPad'
+7,6,306,168,0,0,0,5006309,11,'SynPS/2 Synaptics TouchPad'
+7,6,306,167,0,0,0,5006327,11,'SynPS/2 Synaptics TouchPad'
+7,6,303,165,0,0,0,5006341,11,'SynPS/2 Synaptics TouchPad'
+7,6,301,161,0,0,0,5006360,11,'SynPS/2 Synaptics TouchPad'
+7,6,300,160,0,0,0,5006378,11,'SynPS/2 Synaptics TouchPad'
+7,6,299,157,0,0,0,5006392,11,'SynPS/2 Synaptics TouchPad'
+7,6,297,155,0,0,0,5006408,11,'SynPS/2 Synaptics TouchPad'
+7,6,296,154,0,0,0,5006424,11,'SynPS/2 Synaptics TouchPad'
+7,6,295,151,0,0,0,5006439,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,150,0,0,0,5006454,11,'SynPS/2 Synaptics TouchPad'
+7,6,293,148,0,0,0,5006472,11,'SynPS/2 Synaptics TouchPad'
+7,6,292,147,0,0,0,5006490,11,'SynPS/2 Synaptics TouchPad'
+7,6,291,145,0,0,0,5006506,11,'SynPS/2 Synaptics TouchPad'
+7,6,290,143,0,0,0,5006523,11,'SynPS/2 Synaptics TouchPad'
+7,6,290,142,0,0,0,5006540,11,'SynPS/2 Synaptics TouchPad'
+7,6,289,140,0,0,0,5006557,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,139,0,0,0,5006574,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,139,0,0,0,5006591,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,138,0,0,0,5006607,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,138,0,0,0,5006642,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,137,0,0,0,5006658,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,137,0,0,0,5006694,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,136,0,0,0,5006709,11,'SynPS/2 Synaptics TouchPad'
+7,4,0,0,1,0,0,5006903,11,SynPS/2 Synaptics TouchPad
+6,4,0,0,1,0,0,5006903,2,Virtual core pointer
+7,5,0,0,1,0,0,5006912,11,SynPS/2 Synaptics TouchPad
+6,5,0,0,1,0,0,5006912,2,Virtual core pointer
+7,2,0,0,0,42,0,5008131,9,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,5008131,3,Virtual core keyboard
+7,3,0,0,0,42,0,5008243,9,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,5008243,3,Virtual core keyboard
+7,2,0,0,0,27,0,5008852,9,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,5008853,3,Virtual core keyboard
+7,3,0,0,0,27,0,5008914,9,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,5008914,3,Virtual core keyboard
+7,2,0,0,0,31,0,5009056,9,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,5009057,3,Virtual core keyboard
+7,3,0,0,0,31,0,5009139,9,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,5009139,3,Virtual core keyboard
+7,2,0,0,0,33,0,5009707,9,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,5009707,3,Virtual core keyboard
+7,3,0,0,0,33,0,5009820,9,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,5009820,3,Virtual core keyboard
+7,6,288,136,0,0,0,5011380,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,136,0,0,0,5011397,11,'SynPS/2 Synaptics TouchPad'
+7,6,288,136,0,0,0,5011414,11,'SynPS/2 Synaptics TouchPad'
+7,6,289,136,0,0,0,5011430,11,'SynPS/2 Synaptics TouchPad'
+7,6,289,136,0,0,0,5011448,11,'SynPS/2 Synaptics TouchPad'
+7,6,290,136,0,0,0,5011465,11,'SynPS/2 Synaptics TouchPad'
+7,6,290,136,0,0,0,5011533,11,'SynPS/2 Synaptics TouchPad'
+7,6,290,136,0,0,0,5011550,11,'SynPS/2 Synaptics TouchPad'
+7,6,291,136,0,0,0,5011569,11,'SynPS/2 Synaptics TouchPad'
+7,6,291,136,0,0,0,5011586,11,'SynPS/2 Synaptics TouchPad'
+7,6,292,136,0,0,0,5011603,11,'SynPS/2 Synaptics TouchPad'
+7,6,292,137,0,0,0,5011620,11,'SynPS/2 Synaptics TouchPad'
+7,6,293,140,0,0,0,5011638,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,142,0,0,0,5011655,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,146,0,0,0,5011672,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,150,0,0,0,5011690,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,152,0,0,0,5011708,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,157,0,0,0,5011725,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,162,0,0,0,5011742,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,168,0,0,0,5011759,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,171,0,0,0,5011777,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,177,0,0,0,5011794,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,183,0,0,0,5011812,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,186,0,0,0,5011829,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,191,0,0,0,5011847,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,195,0,0,0,5011864,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,198,0,0,0,5011880,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,200,0,0,0,5011896,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,203,0,0,0,5011914,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,205,0,0,0,5011928,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,208,0,0,0,5011944,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,210,0,0,0,5011958,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,212,0,0,0,5011975,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,213,0,0,0,5011989,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,214,0,0,0,5012005,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,214,0,0,0,5012019,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,215,0,0,0,5012036,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,215,0,0,0,5012053,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,215,0,0,0,5012070,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,216,0,0,0,5012088,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,216,0,0,0,5012106,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,217,0,0,0,5012123,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,218,0,0,0,5012139,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,219,0,0,0,5012156,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,220,0,0,0,5012174,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,222,0,0,0,5012191,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,224,0,0,0,5012208,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,225,0,0,0,5012227,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,226,0,0,0,5012244,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,227,0,0,0,5012261,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,228,0,0,0,5012278,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,228,0,0,0,5012296,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,228,0,0,0,5012313,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,229,0,0,0,5012330,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,229,0,0,0,5012348,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,229,0,0,0,5012366,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,230,0,0,0,5012383,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,230,0,0,0,5012400,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,230,0,0,0,5012418,11,'SynPS/2 Synaptics TouchPad'
+7,4,0,0,1,0,0,5013271,11,SynPS/2 Synaptics TouchPad
+6,4,0,0,1,0,0,5013271,2,Virtual core pointer
+7,5,0,0,1,0,0,5013299,11,SynPS/2 Synaptics TouchPad
+6,5,0,0,1,0,0,5013299,2,Virtual core pointer
+0,21,0,0,0,0,0,5013305
+NEW-WINDOW:650,328:58720542,58720542,23116560,0,0,0:0x0+500+65:0,0:GRIP
+0,21,0,0,0,0,0,5013305
+0,21,0,0,0,0,0,5013305
+0,21,0,0,0,0,0,5013305
+7,6,294,231,0,0,0,5013821,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,231,0,0,0,5014491,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,235,0,0,0,5014509,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,239,0,0,0,5014526,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,245,0,0,0,5014544,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,248,0,0,0,5014561,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,253,0,0,0,5014577,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,258,0,0,0,5014594,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,261,0,0,0,5014609,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,269,0,0,0,5014624,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,273,0,0,0,5014639,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,283,0,0,0,5014655,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,288,0,0,0,5014670,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,298,0,0,0,5014685,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,302,0,0,0,5014700,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,312,0,0,0,5014716,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,317,0,0,0,5014731,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,327,0,0,0,5014747,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,333,0,0,0,5014765,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,343,0,0,0,5014782,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,354,0,0,0,5014800,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,360,0,0,0,5014817,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,373,0,0,0,5014834,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,387,0,0,0,5014852,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,394,0,0,0,5014869,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,407,0,0,0,5014887,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,419,0,0,0,5014904,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,432,0,0,0,5014922,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,439,0,0,0,5014939,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,452,0,0,0,5014956,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,465,0,0,0,5014973,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,472,0,0,0,5014991,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,484,0,0,0,5015009,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,494,0,0,0,5015026,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,505,0,0,0,5015043,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,510,0,0,0,5015340,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,514,0,0,0,5015357,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,519,0,0,0,5015375,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,538,0,0,0,5015391,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,558,0,0,0,5015408,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,566,0,0,0,5015425,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,580,0,0,0,5015442,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,589,0,0,0,5015459,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,593,0,0,0,5015476,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,599,0,0,0,5015492,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,605,0,0,0,5015510,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,609,0,0,0,5015527,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,614,0,0,0,5015543,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,618,0,0,0,5015560,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,620,0,0,0,5015578,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,624,0,0,0,5015595,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,627,0,0,0,5015612,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,629,0,0,0,5015630,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,633,0,0,0,5015648,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,639,0,0,0,5015665,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,644,0,0,0,5015682,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,647,0,0,0,5015700,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,652,0,0,0,5015717,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,657,0,0,0,5015734,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,660,0,0,0,5015752,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,665,0,0,0,5015769,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,670,0,0,0,5015785,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,674,0,0,0,5015803,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,676,0,0,0,5015817,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,679,0,0,0,5015833,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,681,0,0,0,5015848,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,683,0,0,0,5015864,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,684,0,0,0,5015878,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,685,0,0,0,5015894,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,686,0,0,0,5015909,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,687,0,0,0,5015925,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,687,0,0,0,5015939,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,689,0,0,0,5015957,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,690,0,0,0,5015976,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,691,0,0,0,5015990,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,692,0,0,0,5016008,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,693,0,0,0,5016026,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,694,0,0,0,5016042,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,695,0,0,0,5016057,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,696,0,0,0,5016072,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,697,0,0,0,5016087,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,697,0,0,0,5016104,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,698,0,0,0,5016138,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,698,0,0,0,5016156,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,699,0,0,0,5016174,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,699,0,0,0,5016191,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,699,0,0,0,5016208,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,700,0,0,0,5016225,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,700,0,0,0,5016243,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,700,0,0,0,5016260,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,701,0,0,0,5016278,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,702,0,0,0,5016295,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,703,0,0,0,5016313,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,703,0,0,0,5016330,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,704,0,0,0,5016347,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,704,0,0,0,5016383,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,705,0,0,0,5016400,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,705,0,0,0,5016417,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,706,0,0,0,5016435,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,706,0,0,0,5016452,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,706,0,0,0,5016469,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,706,0,0,0,5016487,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,707,0,0,0,5016505,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,708,0,0,0,5016522,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,709,0,0,0,5016539,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,710,0,0,0,5016557,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,711,0,0,0,5016574,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,711,0,0,0,5016591,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,712,0,0,0,5016623,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,712,0,0,0,5016638,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,712,0,0,0,5017562,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,712,0,0,0,5017597,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,712,0,0,0,5017633,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,711,0,0,0,5017702,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,711,0,0,0,5017720,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,711,0,0,0,5017736,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,710,0,0,0,5017753,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,710,0,0,0,5017770,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,709,0,0,0,5017787,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,709,0,0,0,5017804,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,709,0,0,0,5017821,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,709,0,0,0,5017837,11,'SynPS/2 Synaptics TouchPad'
+7,6,294,708,0,0,0,5017872,11,'SynPS/2 Synaptics TouchPad'
+7,4,0,0,3,0,0,5019371,11,SynPS/2 Synaptics TouchPad
+6,4,0,0,3,0,0,5019371,2,Virtual core pointer
+7,5,0,0,3,0,0,5019432,11,SynPS/2 Synaptics TouchPad
+6,5,0,0,3,0,0,5019432,2,Virtual core pointer
+7,2,0,0,0,116,0,5021337,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,5021337,3,Virtual core keyboard
+7,3,0,0,0,116,0,5021409,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,5021409,3,Virtual core keyboard
+7,2,0,0,0,116,0,5021550,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,5021550,3,Virtual core keyboard
+7,3,0,0,0,116,0,5021632,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,5021632,3,Virtual core keyboard
+7,2,0,0,0,116,0,5021764,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,5021765,3,Virtual core keyboard
+7,3,0,0,0,116,0,5021857,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,5021857,3,Virtual core keyboard
+7,2,0,0,0,116,0,5021998,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,5021998,3,Virtual core keyboard
+7,3,0,0,0,116,0,5022151,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,5022151,3,Virtual core keyboard
+7,2,0,0,0,36,0,5022972,9,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,5022972,3,Virtual core keyboard
+7,3,0,0,0,36,0,5023060,9,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,5023060,3,Virtual core keyboard
+7,2,0,0,0,62,0,5023767,9,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,5023767,3,Virtual core keyboard
+7,2,0,0,0,33,0,5024102,9,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,5024102,3,Virtual core keyboard
+7,3,0,0,0,33,0,5024195,9,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,5024195,3,Virtual core keyboard
+7,3,0,0,0,62,0,5024226,9,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,5024226,3,Virtual core keyboard
+7,2,0,0,0,24,0,5025069,9,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,5025069,3,Virtual core keyboard
+7,3,0,0,0,24,0,5025182,9,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,5025182,3,Virtual core keyboard
+7,2,0,0,0,44,0,5025486,9,AT Translated Set 2 keyboard
+6,2,0,0,0,44,0,5025486,3,Virtual core keyboard
+7,3,0,0,0,44,0,5025558,9,AT Translated Set 2 keyboard
+6,3,0,0,0,44,0,5025558,3,Virtual core keyboard
+7,2,0,0,0,26,0,5025751,9,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,5025751,3,Virtual core keyboard
+7,3,0,0,0,26,0,5025803,9,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,5025803,3,Virtual core keyboard
+7,2,0,0,0,45,0,5025964,9,AT Translated Set 2 keyboard
+6,2,0,0,0,45,0,5025965,3,Virtual core keyboard
+7,3,0,0,0,45,0,5026057,9,AT Translated Set 2 keyboard
+6,3,0,0,0,45,0,5026057,3,Virtual core keyboard
+7,2,0,0,0,36,0,5028337,9,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,5028337,3,Virtual core keyboard
+7,3,0,0,0,36,0,5028419,9,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,5028419,3,Virtual core keyboard
+7,4,0,0,3,0,0,5030333,11,SynPS/2 Synaptics TouchPad
+6,4,0,0,3,0,0,5030333,2,Virtual core pointer
+7,5,0,0,3,0,0,5030391,11,SynPS/2 Synaptics TouchPad
+6,5,0,0,3,0,0,5030391,2,Virtual core pointer
+7,2,0,0,0,116,0,5030925,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,5030925,3,Virtual core keyboard
+7,3,0,0,0,116,0,5031028,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,5031028,3,Virtual core keyboard
+7,2,0,0,0,116,0,5031189,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,5031189,3,Virtual core keyboard
+7,3,0,0,0,116,0,5031312,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,5031312,3,Virtual core keyboard
+7,2,0,0,0,36,0,5032061,9,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,5032062,3,Virtual core keyboard
+0,21,0,0,0,0,0,5032113
+NEW-WINDOW:461,197:58720571,58720571,23116729,0,0,0:0x0+879+458:0,0:Export of graph "Pajek"
+0,21,0,0,0,0,0,5032113
+0,21,0,0,0,0,0,5032113
+0,21,0,0,0,0,0,5032113
+7,3,0,0,0,36,0,5032146,9,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,5032146,3,Virtual core keyboard
+7,2,0,0,0,28,0,5033935,9,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,5033935,3,Virtual core keyboard
+7,3,0,0,0,28,0,5034007,9,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,5034007,3,Virtual core keyboard
+7,2,0,0,0,26,0,5034169,9,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,5034169,3,Virtual core keyboard
+7,3,0,0,0,26,0,5034220,9,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,5034220,3,Virtual core keyboard
+7,2,0,0,0,39,0,5034383,9,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,5034383,3,Virtual core keyboard
+7,3,0,0,0,39,0,5034436,9,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,5034436,3,Virtual core keyboard
+7,2,0,0,0,28,0,5034638,9,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,5034638,3,Virtual core keyboard
+7,3,0,0,0,28,0,5034710,9,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,5034710,3,Virtual core keyboard
+7,2,0,0,0,17,0,5034831,9,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,5034831,3,Virtual core keyboard
+7,3,0,0,0,17,0,5034904,9,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,5034904,3,Virtual core keyboard
+7,2,0,0,0,42,0,5035177,9,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,5035177,3,Virtual core keyboard
+7,3,0,0,0,42,0,5035239,9,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,5035239,3,Virtual core keyboard
+7,2,0,0,0,30,0,5035279,9,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,5035279,3,Virtual core keyboard
+7,2,0,0,0,31,0,5035360,9,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,5035360,3,Virtual core keyboard
+7,3,0,0,0,30,0,5035413,9,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,5035413,3,Virtual core keyboard
+7,3,0,0,0,31,0,5035474,9,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,5035474,3,Virtual core keyboard
+7,2,0,0,0,62,0,5036144,9,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,5036144,3,Virtual core keyboard
+7,2,0,0,0,59,0,5036592,9,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,5036592,3,Virtual core keyboard
+7,3,0,0,0,59,0,5036674,9,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,5036674,3,Virtual core keyboard
+7,3,0,0,0,62,0,5036725,9,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,5036725,3,Virtual core keyboard
+7,2,0,0,0,28,0,5037070,9,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,5037070,3,Virtual core keyboard
+7,3,0,0,0,28,0,5037172,9,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,5037172,3,Virtual core keyboard
+7,2,0,0,0,46,0,5037175,9,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,5037176,3,Virtual core keyboard
+7,3,0,0,0,46,0,5037376,9,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,5037376,3,Virtual core keyboard
+7,2,0,0,0,33,0,5037437,9,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,5037437,3,Virtual core keyboard
+7,3,0,0,0,33,0,5037539,9,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,5037539,3,Virtual core keyboard
+7,2,0,0,0,36,0,5038506,9,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,5038506,3,Virtual core keyboard
+0,21,0,0,0,0,0,5038527
+NEW-WINDOW:650,338:58720579,58720579,23116830,0,0,0:0x0+500+36:0,0:TLP Export
+0,21,0,0,0,0,0,5038527
+0,21,0,0,0,0,0,5038527
+0,21,0,0,0,0,0,5038527
+7,3,0,0,0,36,0,5038639,9,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,5038639,3,Virtual core keyboard
+0,21,0,0,0,0,0,5038664
+NEW-WINDOW:459,141:58720571,58720571,748,0,0,0:459x141+879+458:0,0:Export of graph "Pajek"
+0,21,0,0,0,0,0,5038664
+0,21,0,0,0,0,0,5038664
+0,21,0,0,0,0,0,5038664
+0,21,0,0,0,0,0,5038664
+0,21,0,0,0,0,0,5038664

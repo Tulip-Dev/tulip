@@ -1,1 +1,0 @@
-sh tulip_run_test.sh induced_subgraph_selection grid_approximation.tlp

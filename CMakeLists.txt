@@ -722,9 +722,9 @@ FUNCTION(ADD_EXECUTABLE name)
 ENDFUNCTION()
 
 ## ========================================================
-## Unit tests
+## Tests
 ## ========================================================
-IF(EXISTS ${CMAKE_SOURCE_DIR}/unit_test/CMakeLists.txt)
+IF(EXISTS ${CMAKE_SOURCE_DIR}/tests/CMakeLists.txt)
   SET(TULIP_BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
 ELSE()
   SET(TULIP_BUILD_TESTS OFF)
@@ -765,7 +765,7 @@ IF(TULIP_BUILD_TESTS)
   ELSE(CMAKE_CONFIGURATION_TYPES)
     ADD_CUSTOM_TARGET(runTests COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure)
   ENDIF(CMAKE_CONFIGURATION_TYPES)
-  ADD_SUBDIRECTORY(unit_test)
+  ADD_SUBDIRECTORY(tests)
 ENDIF(TULIP_BUILD_TESTS)
 
 INSTALL(FILES AUTHORS
