@@ -213,7 +213,8 @@ int __tulip_select_dirs(struct dirent *ent) {
 
   if (ent->d_type == DT_DIR && name != "." && name != "..") {
     return 1;
-  } else {
+  }
+  else {
     return 0;
   }
 }
@@ -294,7 +295,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     if (hFind != INVALID_HANDLE_VALUE) {
       FindClose(hFind);
     }
-	
+
     if (recursive) {
 
       hFind = FindFirstFile ("*", &findData);
@@ -304,6 +305,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
       while (FindNextFile (hFind, &findData)) {
         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
           std::string dir(findData.cFileName);
+
           if (dir != "." && dir != "..") {
             pluginPath = rootPath + "/" + dir;
             initPluginDir(loader, true);
@@ -402,9 +404,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
     n = scandir((const char *) pluginPath.c_str(),
                 &namelist,
-  #if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
+#if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
                 (int (*) (const dirent *))
-  #endif
+#endif
                 __tulip_select_dirs,
                 alphasort);
 
