@@ -349,7 +349,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     if (n == 0)
       free(namelist);
 
-    std::string currentPluginLibrary = pluginPath +"/"+ lib;
+    currentPluginLibrary = pluginPath +"/"+ lib;
     // looking for a suffix matching -A.B.C.(so/dylib)
     unsigned long idx = lib.rfind('.');
 
