@@ -77,6 +77,7 @@ INSTALL(FILES
   tulip/QuickAccessBar.h
   tulip/TulipFont.h
   tulip/TulipFontDialog.h
+  tulip/TulipFontIconDialog.h
   tulip/GLInteractor.h
   tulip/ScrollPopupButton.h
   tulip/WorkspaceExposeWidget.h
