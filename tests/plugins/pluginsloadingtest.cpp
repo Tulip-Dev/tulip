@@ -34,8 +34,15 @@ public:
 
   PluginLoaderTest() : allPluginsLoaded(true) {}
 
-  void aborted(const std::string &filename,const  std::string &errormsg) {
-    allPluginsLoaded = false;
+  void aborted(const std::string &filename, const std::string &errormsg) {
+    const std::string& libName = 
+      tlp::PluginLibraryLoader::getCurrentPluginFileName();
+    // plugins may be loaded twice because it may exist an other version
+    // of the plugins in a CMakeFiles sub dir (/CMakeRelink.dir)
+    // So set the failure flag only if the plugin was not found
+    // under the CMakeFiles dir
+    if (libName.find("CMakeFiles") == std::string::npos)
+      allPluginsLoaded = false;
     tlp::PluginLoaderTxt::aborted(filename, errormsg);
   }
 
