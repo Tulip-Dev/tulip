@@ -1,1 +1,1 @@
-UNIT_TEST(PythonGraphStructureTest test_graph_structure.py)
+UNIT_TEST(PythonGraphStructureTest test_graph_structure)
