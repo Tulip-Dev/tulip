@@ -16,11 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include <tulip/Algorithm.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
+#include <tulip/StaticProperty.h>
 #include <tulip/TreeTest.h>
 #include <tulip/TulipViewSettings.h>
 
@@ -29,14 +34,20 @@ using namespace tlp;
 using namespace std;
 
 static const char * paramHelp[] = {
-  //Complexity
+  // leaf size
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "double" ) \
-  HTML_HELP_DEF( "values", "[0..inf]" ) \
+  HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_DEF( "default", "none" ) \
   HTML_HELP_BODY() \
-  "This parameter determines the number of tries of the algorithm during the optimization of external links." \
-  HTML_HELP_CLOSE()
+  "Input size of tree leaves." \
+  HTML_HELP_CLOSE(),
+  // real surface
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "Indicates if the real surface must be computed." \
+  HTML_HELP_CLOSE(),
 };
 
 class SunBurst:public tlp::Algorithm {
@@ -47,16 +58,18 @@ public:
   bool run();
   bool check(std::string &);
   void reset();
-  void labelize();
-private:
-  tlp::DoubleProperty * _sizeMetric;
+  void layout(node n, double alpha1, double alpha2,
+	      double radius, double radiusIncr, bool equalSurface,
+	      NodeStaticProperty<double>& sizes,
+	      NodeStaticProperty<vector<Coord> >& polygons);
+  void updateSize(node n, NodeStaticProperty<double>& sizes);
 };
 
 PLUGIN(SunBurst)
 
 //================================================================================
 SunBurst::SunBurst(const PluginContext* context):Algorithm(context) {
-    addInParameter<DoubleProperty>("leafsize", paramHelp[0], "none", false);
+    addInParameter<DoubleProperty>("Leaf size", paramHelp[0], "none", false);
     addInParameter<bool>("Real surface", "", "true", false);
 }
 //================================================================================
@@ -64,7 +77,7 @@ SunBurst::~SunBurst() {
 }
 
 double DEFAULT_RADIUS_INCR  = 10.;
-double raidusSpace = 1.;
+double radiusSpace = 1.;
 
 
 double circleArea(double radius){
@@ -87,10 +100,13 @@ double computeRadiusIncr(double currentStartRadius, double radiusIncr, double ne
  * @param radiusIncr the increment of the radius
  * @param sizes the values of the nodes.
  */
-void sunburstLayout(Graph * tree, node n, double alpha1,double alpha2, double radius, double radiusIncr,bool equalSurface, DoubleProperty *sizes) {
+  void SunBurst::layout(node n, double alpha1, double alpha2,
+			double radius, double radiusIncr, bool equalSurface,
+			NodeStaticProperty<double>& sizes,
+			NodeStaticProperty<vector<Coord> >& polygons) {
     size_t slices = rint((alpha2 - alpha1)*50./(2.* M_PI)) + 4;
     double dalpha = (alpha2 - alpha1)/double(slices-1);//Compute the delta alpha
-    vector<Coord>  shape;
+    vector<Coord>& shape = polygons[n];
     vector<Coord>  label;
     vector<double> lsize;
     double labelLength = (alpha2-alpha1) * (radius + radiusIncr/2.); //use the minumarcsize
@@ -134,9 +150,9 @@ void sunburstLayout(Graph * tree, node n, double alpha1,double alpha2, double ra
         shape.push_back(p);
         alpha -= dalpha;
     }
-    CoordVectorProperty  * polygons     = tree->getProperty<CoordVectorProperty>("viewPolygonCoords");
-    CoordVectorProperty  * labelPath    = tree->getProperty<CoordVectorProperty>("viewLabelPaths");
-    DoubleVectorProperty * labelPathSze = tree->getProperty<DoubleVectorProperty>("viewLabelPathsSize");
+
+    /*CoordVectorProperty  * labelPath    = graph->getProperty<CoordVectorProperty>("viewLabelPaths");
+      DoubleVectorProperty * labelPathSze = graph->getProperty<DoubleVectorProperty>("viewLabelPathsSize");
 
     //vertical label
     // P1 and P2 should be enough but the render path function do not work with 2 points
@@ -177,43 +193,42 @@ void sunburstLayout(Graph * tree, node n, double alpha1,double alpha2, double ra
     }
 
     labelPath->setNodeValue(n, label);
-    labelPathSze->setNodeValue(n, lsize);
-    polygons->setNodeValue(n, shape);
+    labelPathSze->setNodeValue(n, lsize);*/
+    
     //recursive call
-    double curS = sizes->getNodeValue(n);
+    double curS = sizes[n];
     double deltaAlpha = (alpha2 - alpha1) / curS;
     alpha = alpha1;
 
-    double nextStartRadius = radius + radiusIncr + raidusSpace;
+    double nextStartRadius = radius + radiusIncr + radiusSpace;
     double nextRadiusIncrement = equalSurface?computeRadiusIncr(radius,radiusIncr,nextStartRadius):DEFAULT_RADIUS_INCR;
 
     node ni;
-    forEach(ni, tree->getOutNodes(n)) {
-        sunburstLayout(tree, ni, alpha, alpha + deltaAlpha * sizes->getNodeValue(ni), nextStartRadius,nextRadiusIncrement,equalSurface, sizes);
-        alpha += deltaAlpha * sizes->getNodeValue(ni);
+    forEach(ni, graph->getOutNodes(n)) {
+      layout(ni, alpha, alpha + deltaAlpha * sizes[ni], nextStartRadius,
+	     nextRadiusIncrement, equalSurface, sizes, polygons);
+        alpha += deltaAlpha * sizes[ni];
     }
 }
 //================================================================================
 /**
  * @brief updateSize computes the values of the nodes according to the sum of its children. If the node is a leaf return it's value in the size property.
- * @param tree the graph tree
  * @param n the node to treat.
- * @param sizes the values of the nodes.
  */
-void updateSize(Graph *tree, node n, DoubleProperty *sizes) {
-    if (tree->outdeg(n) == 0) {//If the element is a leaf
-        if (sizes->getNodeValue(n) < 1E-5) { //algorithm fail with size <= 0.
-            sizes->setNodeValue(n, 1E-5);
+void SunBurst::updateSize(node n, NodeStaticProperty<double>& sizes) {
+    if (graph->outdeg(n) == 0) {//If the element is a leaf
+        if (sizes[n] < 1E-5) { //algorithm fail with size <= 0.
+            sizes[n] = 1E-5;
         }
         return;
     }
     double sum = 0;
     node ni;
-    forEach(ni, tree->getOutNodes(n)) {
-        updateSize(tree, ni, sizes);//Compute the value of the child.
-        sum += sizes->getNodeValue(ni);//Add the child value to current value.
+    forEach(ni, graph->getOutNodes(n)) {
+      updateSize(ni, sizes);//Compute the value of the child.
+      sum += sizes[ni];//Add the child value to current value.
     }
-    sizes->setNodeValue(n, sum);//Update node value.
+    sizes[n] = sum;//Update node value.
 }
 //================================================================================
 bool SunBurst ::run() {
@@ -221,31 +236,45 @@ bool SunBurst ::run() {
         cout << "The graph is not a tree" << endl;
         return false;
     }
-    _sizeMetric = NULL;
+    DoubleProperty* leafSize = NULL;
     bool equalSurface = true;
-    if(dataSet != NULL){
-        if(dataSet->get<DoubleProperty*>("leafsize", _sizeMetric) && _sizeMetric){
-        }
-        else {
-            _sizeMetric = graph->getProperty<DoubleProperty>("size");
-        }
-        dataSet->get<bool>("Real surface", equalSurface);
-    }
-    CoordVectorProperty  * polygons = graph->getLocalProperty<CoordVectorProperty>("viewPolygonCoords");
-    LayoutProperty       * layout   = graph->getLocalProperty<LayoutProperty>("viewLayout");
-    SizeProperty         * size     = graph->getLocalProperty<SizeProperty>("viewSize");
-    IntegerProperty      * shape    = graph->getLocalProperty<IntegerProperty>("viewShape");
-    /*CoordVectorProperty  * labelPath =*/ graph->getLocalProperty<CoordVectorProperty>("viewLabelPaths");
-    /*DoubleVectorProperty * labelPathSze =*/ graph->getLocalProperty<DoubleVectorProperty>("viewLabelPathsSize");
 
+    if(dataSet != NULL) {
+      dataSet->get<DoubleProperty*>("Leaf size", leafSize);
+      dataSet->get<bool>("Real surface", equalSurface);
+    }
+    NodeStaticProperty<double> sizes(graph);
+    if (leafSize)
+      sizes.copyFromProperty(leafSize);
+    else {
+      const std::vector<node>& nodes = graph->nodes();
+      unsigned int nbNodes = nodes.size();
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
+      sizes[i] = 1E-5;
+    }
+    
+    NodeStaticProperty<vector<Coord> > polygons(graph);
     node start = graph->getSource();
 
-    updateSize(graph, start, _sizeMetric);//Compute node values.
-    sunburstLayout(graph, start, -M_PI/2., 2.*M_PI - M_PI/2., 5.,DEFAULT_RADIUS_INCR,equalSurface, _sizeMetric);
+    updateSize(start, sizes);//Compute node values.
+    layout(start, -M_PI/2., 2.*M_PI - M_PI/2., 5.,
+	   DEFAULT_RADIUS_INCR,equalSurface, sizes, polygons);
+    LayoutProperty* layout =
+      graph->getLocalProperty<LayoutProperty>("viewLayout");
     layout->setAllEdgeValue(vector<Coord>());
+    
+    IntegerProperty* shape =
+      graph->getLocalProperty<IntegerProperty>("viewShape");
+    shape->setAllNodeValue(NodeShape::CubeOutlined);
+    SizeProperty* size = graph->getLocalProperty<SizeProperty>("viewSize");
+
+
     node n;
     forEach(n, graph->getNodes()) {
-        vector<Coord> poly = polygons->getNodeValue(n);
+        vector<Coord>& poly = polygons[n];
         Coord minC = poly[0];
         Coord maxC = poly[0];
         for (size_t i = 1; i< poly.size(); ++i) {
@@ -256,7 +285,6 @@ bool SunBurst ::run() {
         Size tmpS(maxC-minC);
         tmpS[2] = 1;
         size->setNodeValue(n, tmpS);
-        shape->setNodeValue(n, NodeShape::CubeOutlined);
     }
     return true;
 }
