@@ -30,7 +30,7 @@ environment:
       QT5_DIR: "C:/Qt/5.9.1/msvc2015_64"
       PYTHON_EXECUTABLE: "C:/Python36-x64/python.exe"
       
-    # 32 bits GCC build  
+    # 32 bits GCC build
     - MSYS2_ARCH: i686
       MSYSTEM: MINGW32
     

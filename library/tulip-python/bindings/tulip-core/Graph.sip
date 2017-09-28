@@ -921,7 +921,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void delNodes(tlp::Iterator<tlp::node>* itN /TypeHint="Iterator[tlp.node]"/, bool deleteInAllGraphs = false);
+  void delNodes(tlp::Iterator<tlp::node>* itN /Transfer, TypeHint="Iterator[tlp.node]"/, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNodes(itNodes, deleteInAllGraphs=False)
 
@@ -1232,7 +1232,7 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
 //===========================================================================================
 
-  void delEdges(tlp::Iterator<tlp::edge>* itE /TypeHint="Iterator[tlp.edge]"/, bool deleteInAllGraphs = false)=0;
+  void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer, TypeHint="Iterator[tlp.edge]"/, bool deleteInAllGraphs = false)=0;
 %Docstring
 tlp.Graph.delEdges(itEdges, deleteInAllGraphs=False)
 

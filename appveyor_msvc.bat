@@ -32,7 +32,7 @@ msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release /p:TrackFile
 
 rem get, compile and install libpng
 cd C:/tulip_dependencies
-curl -LO http://prdownloads.sourceforge.net/libpng/libpng-1.6.30.tar.gz
+curl -LO https://sourceforge.mirrorservice.org/l/li/libpng/libpng16/older-releases/1.6.30/libpng-1.6.30.tar.gz
 7z x libpng-1.6.30.tar.gz -so | 7z x -aoa -si -ttar
 cd libpng-1.6.30
 md build && cd build
@@ -41,7 +41,7 @@ msbuild INSTALL.vcxproj /clp:ErrorsOnly /p:Configuration=Release /p:TrackFileAcc
 
 rem get, compile and install glew
 cd C:/tulip_dependencies
-curl -LO https://downloads.sourceforge.net/project/glew/glew/2.1.0/glew-2.1.0.zip
+curl -LO https://sourceforge.mirrorservice.org/g/gl/glew/glew/2.1.0/glew-2.1.0.zip
 7z x glew-2.1.0.zip
 cd glew-2.1.0/build/cmake
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" .
@@ -49,7 +49,7 @@ msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release /p:TrackFile
 
 rem get, compile and install libjpeg
 cd C:/tulip_dependencies
-curl -LO https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
+curl -LO https://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
 7z x libjpeg-turbo-1.5.2.tar.gz -so | 7z x -aoa -si -ttar
 cd libjpeg-turbo-1.5.2
 md build && cd build
@@ -70,4 +70,4 @@ cd %APPVEYOR_BUILD_FOLDER%
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_TESTS=ON ..
 msbuild tulip.sln /m /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
-msbuild runTests.vcxproj /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache         
+msbuild runTests.vcxproj /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
