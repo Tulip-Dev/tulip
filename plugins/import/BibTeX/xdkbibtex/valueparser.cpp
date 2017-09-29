@@ -15,7 +15,7 @@ using namespace xdkbib;
 
 void valueparser::setSplitWord(const string s)
 #if __cplusplus < 201103L
-  throw(invalid_argument)
+throw(invalid_argument)
 #endif
 {
   try {
