@@ -33,7 +33,13 @@ class CUSTOM_API valueparser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, publi
               textStack_.push(t);
               splitWord_ = NULL;
           }
+      
+#if __cplusplus < 201103L
       void setSplitWord(const std::string s) throw(std::invalid_argument);
+#else
+      void setSplitWord(const std::string s);
+#endif
+
 #line 24 "valueparser.hpp"
 public:
 	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );

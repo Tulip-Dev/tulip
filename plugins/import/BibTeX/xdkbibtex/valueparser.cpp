@@ -13,7 +13,11 @@
 using namespace std;
 using namespace xdkbib;
 
-void valueparser::setSplitWord(const string s) throw(invalid_argument) {
+void valueparser::setSplitWord(const string s)
+#if __cplusplus < 201103L
+  throw(invalid_argument)
+#endif
+{
   try {
     splitText_.clear();
     splitText_.readFrom(s);
@@ -28,7 +32,6 @@ void valueparser::setSplitWord(const string s) throw(invalid_argument) {
     throw invalid_argument(s+" is not a valid Text");
   }
 }
-
 
 #line 35 "valueparser.cpp"
 valueparser::valueparser(ANTLR_USE_NAMESPACE(antlr)TokenBuffer& tokenBuf, int k)
