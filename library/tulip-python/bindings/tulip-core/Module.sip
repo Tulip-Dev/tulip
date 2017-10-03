@@ -182,7 +182,7 @@ extern PyObject* evalPythonStatement(const std::string &pythonStatement);
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 #endif
 
-extern bool isListOrTupleAndCanConvertToVec3fType(PyObject *pyObj);
+extern bool isTupleAndCanConvertToVec3fType(PyObject *pyObj);
 
 template <typename VEC_TYPE>
 VEC_TYPE *convertToVec3fType(PyObject *pyObj, float zVal = 0) {
@@ -315,27 +315,18 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
   return ret;
 }
 
-bool isListOrTupleAndCanConvertToVec3fType(PyObject *pyObj) {
-  if (!PyList_Check(pyObj) || PyList_GET_SIZE(pyObj) < 2) {
-    if (!PyTuple_Check(pyObj) || PyTuple_GET_SIZE(pyObj) < 2) {
+bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
+  if (!PyTuple_Check(pyObj) || PyTuple_GET_SIZE(pyObj) < 2) {
+    return false;
+  }
+
+  for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
+    PyObject *item = PyTuple_GET_ITEM(pyObj, i);
+    if (PyBool_Check(item) || !PyFloat_Check(item)) {
       return false;
     }
   }
-  if (PyList_Check(pyObj)) {
-    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(pyObj); ++i) {
-      PyObject *item = PyList_GET_ITEM(pyObj, i);
-      if (!PyNumber_Check(item)) {
-        return false;
-      }
-    }
-  } else {
-    for (SIP_SSIZE_T i = 0; i < PyTuple_GET_SIZE(pyObj); ++i) {
-      PyObject *item = PyTuple_GET_ITEM(pyObj, i);
-      if (!PyNumber_Check(item)) {
-        return false;
-      }
-    }
-  }
+
   return true;
 }
 

@@ -38,7 +38,7 @@ class Vec3f  {
     if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
       return 1;
     }
-    return isListOrTupleAndCanConvertToVec3fType(sipPy);
+    return isTupleAndCanConvertToVec3fType(sipPy);
   }
   if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
     int state=0, err=0;

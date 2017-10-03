@@ -30,7 +30,8 @@ tlp.BooleanProperty.reverse(graph = None)
 Reverses all values associated to graph elements,
 i.e :const:`True` => :const:`False`, :const:`False` => :const:`True`.
 
-:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:param graph: a sub-graph can be given in parameter, in that case reverse
+  only values of elements belonging to that sub-graph
 :type graph: :class:`tlp.Graph`
 %End
 
@@ -43,7 +44,8 @@ tlp.BooleanProperty.reverseEdgeDirection(graph = None)
 Reverses all the direction of edges in the attached graph
 which are set to :const:`True` in this boolean property.
 
-:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:param graph: a sub-graph can be given in parameter, in that case reverse
+  only the direction of edges belonging to it
 :type graph: :class:`tlp.Graph`
 
 %End

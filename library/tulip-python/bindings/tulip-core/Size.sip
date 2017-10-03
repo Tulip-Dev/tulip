@@ -77,7 +77,10 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 %ConvertToTypeCode
 
   if (sipIsErr == NULL) {
-    if (isListOrTupleAndCanConvertToVec3fType(sipPy)) {
+    if (sipCanConvertToType(sipPy, sipFindType("tlp::PySize"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+      return 1;
+    }
+    if (isTupleAndCanConvertToVec3fType(sipPy)) {
       return 1;
     }
     if (sipCanConvertToType(sipPy, sipFindType("tlp::Vec3f"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
@@ -88,7 +91,9 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 
   int state=0, err=0;
 
-  if (PyList_Check(sipPy) || PyTuple_Check(sipPy)) {
+  if (sipCanConvertToType(sipPy, sipFindType("tlp::PySize"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+    *sipCppPtr = new tlp::PySize(*reinterpret_cast<tlp::PySize*>(sipConvertToType(sipPy, sipFindType("tlp::PySize"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+  } else if (PyList_Check(sipPy) || PyTuple_Check(sipPy)) {
     *sipCppPtr = convertToVec3fType<tlp::PySize>(sipPy, 1);
   } else {
     *sipCppPtr = new tlp::PySize(*reinterpret_cast<tlp::Vec3f*>(sipConvertToType(sipPy, sipFindType("tlp::Vec3f"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
@@ -145,3 +150,81 @@ class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 typedef tlp::PySize Size;
 
 };
+
+%MappedType std::vector<tlp::PySize> {
+%TypeHeaderCode
+#include <vector>
+%End
+
+%ConvertFromTypeCode
+  PyObject *l;
+
+  const sipTypeDef* kpTypeDef = getSipType("tlp::PySize");
+
+  if (!kpTypeDef) {
+    return NULL;
+  }
+
+  if ((l = PyList_New(sipCpp -> size())) == NULL) {
+    return NULL;
+  }
+
+  for (size_t i = 0; i < sipCpp -> size(); ++i) {
+    tlp::PySize *cpp = new tlp::PySize(sipCpp -> at(i));
+    PyObject *pobj;
+
+    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+      Py_XDECREF(l);
+      return NULL;
+    }
+
+    PyList_SET_ITEM(l, i, pobj);
+  }
+
+  return l;
+%End
+
+%ConvertToTypeCode
+
+  const sipTypeDef* kpTypeDef = getSipType("tlp::PySize");
+
+  if (!kpTypeDef) {
+    return 0;
+  }
+
+  // Check if type is compatible
+  if (sipIsErr == NULL) {
+    if (!PyList_Check(sipPy)) {
+      return 0;
+    }
+    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+      PyObject *item = PyList_GET_ITEM(sipPy, i);
+      if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+        return 0;
+      }
+    }
+    return 1;
+  }
+
+  std::vector<tlp::PySize> *v = new std::vector<tlp::PySize>();
+  v->reserve(PyList_GET_SIZE(sipPy));
+  for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+    int state;
+    tlp::PySize* p = reinterpret_cast<tlp::PySize*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, sipIsErr));
+
+    if (*sipIsErr) {
+      sipReleaseType(p, kpTypeDef, state);
+      delete v;
+      return 0;
+    }
+
+    v->push_back(*p);
+
+    sipReleaseType(p, kpTypeDef, state);
+  }
+
+  *sipCppPtr = v;
+  return sipGetState(sipTransferObj);
+%End
+};
+

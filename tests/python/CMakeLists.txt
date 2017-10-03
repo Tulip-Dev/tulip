@@ -1,1 +1,2 @@
 UNIT_TEST(PythonGraphStructureTest test_graph_structure)
+UNIT_TEST(PythonGraphPropertiesTest test_graph_properties)
