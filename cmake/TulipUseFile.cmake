@@ -473,38 +473,17 @@ MACRO(INSTALL_TULIP_PLUGIN)
   TULIP_INSTALL_PLUGIN(${ARGV})
 ENDMACRO(INSTALL_TULIP_PLUGIN)
 
-SET(TULIP_PYTHON_SYSTEM_INSTALL OFF CACHE BOOL "Do you want to install Tulip Python modules in Python ${SYSTEM_PYTHON_INSTALL_FOLDER} (site-packages on windows) folder ? This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
-
 MACRO(TULIP_INSTALL_PYTHON_FILES install_suffix)
   FOREACH(PYTHON_FILE ${ARGN})
-
-    SET(SYSTEM_PYTHON_INSTALL_FOLDER "${SYSTEM_PYTHON_INSTALL_FOLDER}")
-    IF(WIN32)
-      SET(SYSTEM_PYTHON_INSTALL_FOLDER "site-packages")
-    ENDIF(WIN32)
-
     IF(TARGET ${PYTHON_FILE})
-      IF(NOT TULIP_PYTHON_SYSTEM_INSTALL)
-        INSTALL(TARGETS ${PYTHON_FILE}
-                RUNTIME DESTINATION ${TulipBinInstallDir}/python/${install_suffix} COMPONENT tulip_python
-                LIBRARY DESTINATION ${TulipLibInstallDir}/python/${install_suffix} COMPONENT tulip_python)
-      ELSE(NOT TULIP_PYTHON_SYSTEM_INSTALL)
-        INSTALL(TARGETS ${PYTHON_FILE}
-                RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/${SYSTEM_PYTHON_INSTALL_FOLDER}/${install_suffix} COMPONENT tulip_python
-                LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/${SYSTEM_PYTHON_INSTALL_FOLDER}/${install_suffix} COMPONENT tulip_python)
-      ENDIF(NOT TULIP_PYTHON_SYSTEM_INSTALL)
-    ELSE(TARGET ${PYTHON_FILE})
-      IF(NOT TULIP_PYTHON_SYSTEM_INSTALL)
-        IF(WIN32)
-          INSTALL(FILES ${PYTHON_FILE} DESTINATION ${TulipBinInstallDir}/python/${install_suffix} COMPONENT tulip_python)
-        ELSE(WIN32)
-          INSTALL(FILES ${PYTHON_FILE} DESTINATION ${TulipLibInstallDir}/python/${install_suffix} COMPONENT tulip_python)
-        ENDIF(WIN32)
-      ELSE(NOT TULIP_PYTHON_SYSTEM_INSTALL)
-        INSTALL(FILES ${PYTHON_FILE} DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/${SYSTEM_PYTHON_INSTALL_FOLDER}/${install_suffix} COMPONENT tulip_python)
-      ENDIF(NOT TULIP_PYTHON_SYSTEM_INSTALL)
+      INSTALL(TARGETS ${PYTHON_FILE}
+              RUNTIME DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python
+              LIBRARY DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
+    ELSEIF(IS_DIRECTORY ${PYTHON_FILE})
+      INSTALL(DIRECTORY ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
+    ELSE()
+      INSTALL(FILES ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
     ENDIF(TARGET ${PYTHON_FILE})
-
   ENDFOREACH()
 ENDMACRO(TULIP_INSTALL_PYTHON_FILES)
 

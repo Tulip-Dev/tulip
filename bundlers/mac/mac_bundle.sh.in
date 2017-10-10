@@ -55,9 +55,9 @@ cd "${DEST_DIR}/application/Tulip.app/Contents/"
 cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
 rm -rf include
-rm lib/python/*.pyc lib/python/*.pyo 2>/dev/null
-rm lib/python/tulip/*.pyc lib/python/tulip/*.pyo 2>/dev/null
-rm lib/python/tulipgui/*.pyc lib/python/tulipgui/*.pyo 2>/dev/null
+rm lib/tulip/python/*.pyc lib/tulip/python/*.pyo 2>/dev/null
+rm lib/tulip/python/tulip/*.pyc lib/tulip/python/tulip/*.pyo 2>/dev/null
+rm lib/tulip/python/tulipgui/*.pyc lib/tulip/python/tulipgui/*.pyo 2>/dev/null
 
 echo 'Copying license'
 cd "${DEST_DIR}/application"

@@ -272,6 +272,14 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     while (success) {
       std::string currentPluginLibrary = pluginPath +"/"+ findData.cFileName;
       std::string lib(findData.cFileName);
+
+      // don't print error messages when trying to load Tulip Python
+      // binary modules
+      if (lib.find("_") == 0) {
+        success = FindNextFile (hFind, &findData);
+        continue;
+      }
+
       // looking for a suffix matching -A.B.C.dll
       size_t idx = lib.rfind('.');
 
@@ -348,6 +356,12 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
     if (n == 0)
       free(namelist);
+
+    // don't print error messages when trying to load Tulip Python
+    // binary modules
+    if (lib.find("_") == 0) {
+      continue;
+    }
 
     currentPluginLibrary = pluginPath +"/"+ lib;
     // looking for a suffix matching -A.B.C.(so/dylib)

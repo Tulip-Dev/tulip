@@ -338,11 +338,9 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       addModuleSearchPath(pythonPluginsPathHome);
 
 #if defined(__APPLE__)
-      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "../lib/python", true);
-#elif defined(WIN32)
-      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "../bin/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "../lib/tulip/python", true);
 #else
-      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "/tulip/python", true);
 #endif
 
       initconsoleutils();
