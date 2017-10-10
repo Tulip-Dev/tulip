@@ -40,6 +40,6 @@ bash -lc "env"
 
 rem Build Tulip and run its unit tests
 bash -lc "mkdir build"
-bash -lc "cd build && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DTULIP_BUILD_TESTS=ON -DTULIP_USE_QT5=ON -DTULIP_USE_CCACHE=ON -DPYTHON_EXECUTABLE=C:/msys64/%MSYSTEM%/bin/python3.exe .."
-bash -lc "cd build && ninja -j4"
+bash -lc "cd build && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=C:/msys64/%MSYSTEM% -DTULIP_BUILD_TESTS=ON -DTULIP_USE_QT5=ON -DTULIP_USE_CCACHE=ON -DPYTHON_EXECUTABLE=C:/msys64/%MSYSTEM%/bin/python3.exe -DTULIP_FIXUP_BUNDLE=OFF -DTULIP_PYTHON_SITE_INSTALL=ON .."
+bash -lc "cd build && ninja -j4 install"
 bash -lc "cd build && ninja runTests"

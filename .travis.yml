@@ -12,9 +12,6 @@
 
 # inform travis that we are building a cpp project
 language: cpp
-# we will use ccache to speedup incremental builds, so ensure its cache content
-# will be saved and restored by travis between build jobs
-cache: ccache
 
 # define build jobs
 jobs:
@@ -26,6 +23,7 @@ jobs:
       os: linux
       dist: trusty
       compiler: gcc
+      cache: ccache
       addons:
         apt:
           # install Tulip build dependencies
@@ -60,18 +58,20 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Linux
-    - 
+    -
       os: linux
       dist: trusty
       compiler: gcc
+      cache: ccache
       addons:
         apt:
           # we get GCC 7.x and Python 3.6 from external ppas
@@ -118,11 +118,13 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
+
   #==============================================================================================================================================================
     # Tulip complete build stage on Linux
     - stage: Tulip complete build (Linux)
@@ -130,6 +132,7 @@ jobs:
       os: linux
       dist: trusty
       compiler: gcc
+      cache: ccache
       addons:
         apt:
           # install Tulip build dependencies
@@ -167,18 +170,20 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # modern Tulip complete build on Linux    
-    - 
+    # modern Tulip complete build on Linux
+    -
       os: linux
       dist: trusty
       compiler: gcc
+      cache: ccache
       addons:
         apt:
           # we get GCC 7.x and Python 3.6 from external ppas
@@ -227,18 +232,75 @@ jobs:
         # create build directoty
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
-    
+
+  #==============================================================================================================================================================
+    # Tulip AppImage build on CentOS
+    - stage: Tulip AppImage build (CentOS)
+      # Tulip AppImage build on CentOS 6
+      os: linux
+      dist: trusty
+      cache:
+        directories:
+          - $HOME/ccache
+
+      sudo: required
+      env:
+        - OS_TYPE=centos
+        - OS_VERSION=6
+
+      services:
+        - docker
+
+      before_install:
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull centos:${OS_VERSION}
+        - sudo docker create -v $HOME/ccache:/ccache --name ccache centos:${OS_VERSION}
+
+      script:
+        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw centos:${OS_VERSION} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos_build.sh"
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Tulip AppImage build on CentOS 7
+    -
+      os: linux
+      dist: trusty
+      cache:
+        directories:
+          - $HOME/ccache
+
+      sudo: required
+      env:
+        - OS_TYPE=centos
+        - OS_VERSION=7
+
+      services:
+        - docker
+
+      before_install:
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull centos:${OS_VERSION}
+        - sudo docker create -v $HOME/ccache:/ccache --name ccache centos:${OS_VERSION}
+
+      script:
+        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw centos:${OS_VERSION} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos_build.sh"
+
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
     - stage: Tulip core build (Mac OS)
     # legacy Tulip core build on Mac OS
       os: osx
       compiler: clang
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -275,6 +337,7 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
     
@@ -285,6 +348,7 @@ jobs:
       # use xcode9 travis image to get a recent clang compiler
       osx_image: xcode9
       compiler: clang
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -314,6 +378,7 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
     
@@ -323,6 +388,7 @@ jobs:
     # legacy Tulip complete build on Mac OS
       os: osx
       compiler: clang
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -364,6 +430,7 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=${TULIP_BUILD_DOC} -DTULIP_USE_CCACHE=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
     
@@ -374,6 +441,7 @@ jobs:
       # use xcode9 travis image to get a recent clang compiler
       osx_image: xcode9
       compiler: clang
+      cache: ccache
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
@@ -409,10 +477,6 @@ jobs:
         - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=${TULIP_BUILD_DOC} -DTULIP_USE_CCACHE=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
+        - sudo ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
-
-        
-
-
-
