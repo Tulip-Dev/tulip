@@ -811,15 +811,17 @@ ENDIF(TULIP_BUILD_TESTS)
 
 INSTALL(FILES AUTHORS
               COPYING.LESSER
-              cmake/FindTULIP.cmake
-              cmake/TulipUseFile.cmake
         DESTINATION ${TulipShareInstallDir})
 
+INSTALL(FILES cmake/FindTULIP.cmake
+        RENAME TULIPConfig.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
+
+INSTALL(FILES cmake/TulipUseFile.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
+
 IF(NOT TULIP_BUILD_CORE_ONLY)
-  INSTALL(FILES cmake/FindQtX.cmake
-                cmake/FindSphinx.cmake
-          DESTINATION ${TulipShareInstallDir})
-	
+
   ADD_SUBDIRECTORY(bundlers)
 
   ## ========================================================
