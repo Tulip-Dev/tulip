@@ -635,7 +635,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutTulipPage()));
 
   if (QFile(tlpStringToQString(tlp::TulipShareDir) +
-            "doc/tulip-user/html/index.html").exists()) {
+            "../doc/tulip/tulip-user/html/index.html").exists()) {
     connect(_ui->actionShowUserDocumentation,SIGNAL(triggered()),this,SLOT(showUserDocumentation()));
     connect(_ui->actionShowDevelDocumentation,SIGNAL(triggered()),this,SLOT(showDevelDocumentation()));
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
@@ -651,7 +651,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   if (QFile(tlpStringToQString(tlp::TulipShareDir) +
-            "doc/doxygen/html/index.html").exists()) {
+            "../doc/tulip/doxygen/html/index.html").exists()) {
     connect(_ui->actionShowAPIDocumentation,SIGNAL(triggered()),this,SLOT(showAPIDocumentation()));
   }
   else {
@@ -1641,19 +1641,19 @@ void GraphPerspective::showPythonIDE() {
 }
 
 void GraphPerspective::showUserDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-user/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/tulip/tulip-user/html/index.html"));
 }
 
 void GraphPerspective::showDevelDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-dev/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/tulip/tulip-dev/html/index.html"));
 }
 
 void GraphPerspective::showPythonDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-python/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/tulip/tulip-python/html/index.html"));
 }
 
 void GraphPerspective::showAPIDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/doxygen/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "../doc/tulip/doxygen/html/index.html"));
 }
 
 void GraphPerspective::showHideSideBar() {

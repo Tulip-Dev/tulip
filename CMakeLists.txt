@@ -86,6 +86,23 @@ IF(APPLE)
 ENDIF(APPLE)
 
 ## ========================================================
+## Install paths
+## ========================================================
+
+INCLUDE(GNUInstallDirs)
+
+SET(TulipLibInstallDir ${CMAKE_INSTALL_LIBDIR})
+SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tulip/)
+SET(TulipGlyphPluginsInstallDir ${TulipPluginsInstallDir}/glyph/)
+SET(TulipViewPluginsInstallDir ${TulipPluginsInstallDir}/view/)
+SET(TulipInteractorPluginsInstallDir ${TulipPluginsInstallDir}/interactor/)
+SET(TulipPerspectivePluginsInstallDir ${TulipPluginsInstallDir}/perspective/)
+SET(TulipBinInstallDir ${CMAKE_INSTALL_BINDIR})
+SET(TulipIncludeInstallDir ${CMAKE_INSTALL_INCLUDEDIR})
+SET(TulipShareInstallDir ${CMAKE_INSTALL_DATADIR}/tulip)
+SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
+
+## ========================================================
 ## Tulip CMake macros
 ## ========================================================
 INCLUDE(cmake/TulipUseFile.cmake)
@@ -642,20 +659,6 @@ SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)
 SET(TulipGUIBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/include/)
 SET(TulipPythonInclude ${PROJECT_SOURCE_DIR}/library/tulip-python/include)
-
-## ========================================================
-## Install paths
-## ========================================================
-SET(TulipLibInstallDir lib/)
-SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tulip/)
-SET(TulipGlyphPluginsInstallDir ${TulipPluginsInstallDir}/glyph/)
-SET(TulipViewPluginsInstallDir ${TulipPluginsInstallDir}/view/)
-SET(TulipInteractorPluginsInstallDir ${TulipPluginsInstallDir}/interactor/)
-SET(TulipPerspectivePluginsInstallDir ${TulipPluginsInstallDir}/perspective/)
-SET(TulipBinInstallDir bin/)
-SET(TulipIncludeInstallDir include/)
-SET(TulipShareInstallDir share/tulip)
-SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
 
 ## ========================================================
 ## Point RPATH to lib folder

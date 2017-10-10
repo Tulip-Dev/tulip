@@ -32,5 +32,5 @@ ELSE()
 ENDIF()
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html 
-        DESTINATION ${TulipShareInstallDir}/doc/doxygen
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}/doxygen
         COMPONENT doxygen_doc)
