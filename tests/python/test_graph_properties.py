@@ -61,9 +61,9 @@ def random_string():
 
 max_list_size = 30
 
-def random_boolean_list():
+def random_boolean_list(val=False):
   size = random.randint(max_list_size, max_list_size*2)
-  return [i % 2 == 0 for i in range(size)]
+  return [val for i in range(size)]
 
 def random_color_list():
   size = random.randint(1, max_list_size)
@@ -217,7 +217,7 @@ class TestGraphProperties(unittest.TestCase):
   def test_boolean_vector_property(self):
     self.prop = self.graph.getBooleanVectorProperty(self.prop_name)
     self.generic_property_test(tlp.BooleanVectorProperty, random_boolean_list(), random_boolean_list(), 
-                               random_boolean_list(), random_boolean_list())
+                               random_boolean_list(True), random_boolean_list(True))
 
 
   def test_color_vector_property(self):
