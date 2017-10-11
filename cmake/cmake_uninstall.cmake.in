@@ -1,41 +1,43 @@
-if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
-    message(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
-endif(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+IF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+    MESSAGE(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
+ENDIF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
 
-file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
-string(REGEX REPLACE "\n" ";" files "${files}")
-list(REVERSE files)
-foreach (file ${files})
-    message(STATUS "Uninstalling \"$ENV{DESTDIR}${file}\"")
-    if (EXISTS "$ENV{DESTDIR}${file}")
-        execute_process(
-            COMMAND @CMAKE_COMMAND@ -E remove "$ENV{DESTDIR}${file}"
-            OUTPUT_VARIABLE rm_out
-            RESULT_VARIABLE rm_retval
-        )
-        if(NOT ${rm_retval} EQUAL 0)
-            message(FATAL_ERROR "Problem when removing \"$ENV{DESTDIR}${file}\"")
-        endif (NOT ${rm_retval} EQUAL 0)
-    else (EXISTS "$ENV{DESTDIR}${file}")
-        message(STATUS "File \"$ENV{DESTDIR}${file}\" does not exist.")
-    endif (EXISTS "$ENV{DESTDIR}${file}")
-endforeach(file)
+MACRO(REMOVE_FILE file)
+  IF(EXISTS "${file}")
+      MESSAGE(STATUS "Uninstalling \"${file}\"")
+      EXECUTE_PROCESS(
+          COMMAND @CMAKE_COMMAND@ -E remove "${file}"
+          OUTPUT_QUIET ERROR_QUIET
+      )
+      IF(NOT ${rm_retval} EQUAL 0)
+          MESSAGE(FATAL_ERROR "Problem when removing \"${file}\"")
+      ENDIF(NOT ${rm_retval} EQUAL 0)
+  ENDIF(EXISTS "${file}")
+ENDMACRO(REMOVE_FILE)
+
+# remove installed files
+FILE(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
+STRING(REGEX REPLACE "\n" ";" files "${files}")
+LIST(REVERSE files)
+FOREACH(file ${files})
+    REMOVE_FILE($ENV{DESTDIR}${file})
+ENDFOREACH(file)
+
+# remove tulip dedicated folders
+EXECUTE_PROCESS(
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/tulip"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/tulip"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/tulip2ogdf"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/cmake/TULIP"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATADIR@/tulip"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DOCDIR@"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@TulipPythonModulesInstallDir@/tulip"
+    COMMAND @CMAKE_COMMAND@ -E remove_directory "@TulipPythonModulesInstallDir@/tulipgui"
+    OUTPUT_QUIET ERROR_QUIET
+)
 
 # also remove desktop file and file associations on Linux
-if (NOT WIN32 AND NOT APPLE)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlpx.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlp.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlpgz.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlpz.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlpb.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlpbgz.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/mime/packages/application-x-tulip-tlpbz.xml" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/applications/Tulip.desktop" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/applications/Tulip-${TulipVersion}.desktop" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/pixmaps/tulip.png" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/pixmaps/tulip-file-icon.png" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/icons/tulip.png" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND @CMAKE_COMMAND@ -E remove "$ENV{HOME}/.local/share/icons/tulip-file-icon.png" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND update-desktop-database "$ENV{HOME}/.local/share/applications" OUTPUT_QUIET ERROR_QUIET)
-  execute_process(COMMAND update-mime-database "$ENV{HOME}/.local/share/mime" OUTPUT_QUIET ERROR_QUIET)
+IF(NOT WIN32 AND NOT APPLE)
+  EXECUTE_PROCESS(COMMAND update-desktop-database "@DESKTOP_CONFIG_INSTALL_PREFIX@/share/applications" OUTPUT_QUIET ERROR_QUIET)
+  EXECUTE_PROCESS(COMMAND update-mime-database "@DESKTOP_CONFIG_INSTALL_PREFIX@/share/mime" OUTPUT_QUIET ERROR_QUIET)
 endif (NOT WIN32 AND NOT APPLE)

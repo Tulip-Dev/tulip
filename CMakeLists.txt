@@ -174,12 +174,6 @@ SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTul
 STRING(TIMESTAMP CurrentYear "%Y")
 
 ## ========================================================
-## Configure file for uninstall target
-## ========================================================
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
-ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -DTulipVersion=${TulipVersion} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
-
-## ========================================================
 ## Compiler-specific options
 ## ========================================================
 
@@ -782,6 +776,21 @@ ELSE()
   SET(TulipBuildIsRelease 0)
 ENDIF()
 CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tulip-core/include/tulip/TulipRelease.h")
+
+## ========================================================
+## Configure file for uninstall target
+## ========================================================
+
+IF(LINUX)
+  IF("${CMAKE_INSTALL_PREFIX}" MATCHES "^/home.*$")
+    SET(DESKTOP_CONFIG_INSTALL_PREFIX "$ENV{HOME}/.local")
+  ELSE("${CMAKE_INSTALL_PREFIX}" MATCHES "^/home.*$")
+    SET(DESKTOP_CONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+  ENDIF("${CMAKE_INSTALL_PREFIX}" MATCHES "^/home.*$")
+ENDIF(LINUX)
+
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
+ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
 
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)

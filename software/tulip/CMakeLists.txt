@@ -91,11 +91,48 @@ IF(LINUX)
 
   IF(TULIP_LINUX_DESKTOP_REGISTRATION)
 
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/register_tulip_application_and_file_associations.sh.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/register_tulip_application_and_file_associations.sh)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/Tulip.desktop.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/Tulip-${TulipVersion}.desktop)
 
     INSTALL(CODE
-      "EXECUTE_PROCESS(COMMAND sh ${CMAKE_CURRENT_BINARY_DIR}/register_tulip_application_and_file_associations.sh OUTPUT_QUIET ERROR_QUIET)"
+      "EXECUTE_PROCESS(COMMAND mkdir -p ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime/packages
+                       COMMAND mkdir -p ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/applications
+                       COMMAND mkdir -p ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/pixmaps
+                       COMMAND mkdir -p ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/icons)"
+    )
+
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpx.xml
+                  ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlp.xml
+                  ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpgz.xml
+                  ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpz.xml
+                  ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpb.xml
+                  ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpbgz.xml
+                  ${CMAKE_CURRENT_SOURCE_DIR}/resources/linux_desktop/application-x-tulip-tlpbz.xml
+            DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime/packages)
+
+    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/Tulip-${TulipVersion}.desktop
+            DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/applications)
+
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/tulip-icon.png
+            RENAME tulip.png
+            DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/pixmaps)
+
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/tulip-file-icon.png
+            RENAME application-x-tulip.png
+            DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/pixmaps)
+
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/tulip-icon.png
+            RENAME tulip.png
+            DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/icons)
+
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/tulip-file-icon.png
+            RENAME application-x-tulip.png
+            DESTINATION ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/icons)
+
+
+    INSTALL(CODE
+      "EXECUTE_PROCESS(COMMAND update-desktop-database ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/applications
+                       COMMAND update-mime-database ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime)"
     )
 
   ENDIF(TULIP_LINUX_DESKTOP_REGISTRATION)
