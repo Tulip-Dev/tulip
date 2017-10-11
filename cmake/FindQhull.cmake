@@ -27,7 +27,7 @@ ELSE(QHULL_USE_STATIC)
 ENDIF(QHULL_USE_STATIC)
 
 FIND_FILE(QHULL_HEADER
-          NAMES libqhull.h
+          NAMES qhull_a.h
           HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}" "${QHULL_INCLUDE_DIR}"
           PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
           PATH_SUFFIXES qhull src/libqhull libqhull include)
