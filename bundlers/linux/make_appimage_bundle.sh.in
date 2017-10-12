@@ -66,7 +66,7 @@ echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 # do not set LD_LIBRARY_PATH to ensure a successful launch
 # of the default web browser to show the Tuip documentation
 #echo "export LD_LIBRARY_PATH=\${TLP_DIR}:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
-echo "export PYTHONHOME=\${BUNDLE_USR_DIR}" >> $APPRUN_FILE
+echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
 echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
