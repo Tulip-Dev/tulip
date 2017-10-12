@@ -53,6 +53,16 @@ IF(WIN32)
   # in order to run Tulip and copy them to the bin install folder (thanks to the CMake module named BundleUtilities)
   # In the case where a dll dependency is not automatically found, you must add its path to the CMAKE_LIBRARY_PATH variable.
   IF(TULIP_FIXUP_BUNDLE)
+    # copy required Qt plugins
+    INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
+    IF(USE_QT5)
+      INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})
+    ENDIF(USE_QT5)
+
+    # then schedule a call to FIXUP_BUNDLE at the end of the CMake install process
+    # this process is configured here instead in the root CMakeLists.txt as
+    # CMake inserts install commands before the ones defined in sub directories
+    # and we need Tulip to be fully installed before running the bundle fixing process
     SET(APP "${CMAKE_INSTALL_PREFIX}/bin/tulip_perspective.exe")
     SET(LIB_DIRS ${QT_BINARY_DIR} ${CMAKE_LIBRARY_PATH})
     STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
