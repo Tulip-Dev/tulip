@@ -69,7 +69,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   }
 
   if (!plugin.getParameters().empty()) {
-    _ui->parameters->setItemDelegate(new TulipItemDelegate);
+    _ui->parameters->setItemDelegate(new TulipItemDelegate(_ui->parameters));
   }
   else {
     _ui->settingsButton->setVisible(false);

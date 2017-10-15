@@ -45,8 +45,7 @@ ExportWizard::ExportWizard(Graph *g, const QString& exportFile, QWidget *parent)
   _ui->exportModules->expandAll();
   connect(_ui->exportModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
 
-  _ui->parametersList->setItemDelegate(new TulipItemDelegate);
-  connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
+  _ui->parametersList->setItemDelegate(new TulipItemDelegate(_ui->parametersList));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 #else
@@ -195,7 +194,9 @@ bool ExportWizard::validateCurrentPage() {
 
   //check correct extension
   ExportModule* p = PluginLister::instance()->getPluginObject<ExportModule>(tlp::QStringToTlpString(algorithm()),NULL);
-  const std::list<std::string> extension = p->allFileExtensions();
+  std::list<std::string> extension;
+  if(p!=NULL)
+      extension = p->allFileExtensions();
   bool extok(false);
   QString ext;
 
@@ -214,8 +215,10 @@ bool ExportWizard::validateCurrentPage() {
       _ui->pathEdit->setText(exportFile+"."+tlp::tlpStringToQString(*extension.begin()));
     else {
       ext.resize(ext.length()-2);
-      QMessageBox::warning(parentWidget(), "Filename not valid", "Filename does not terminate with a valid extension. \
-                               Please add one.<br>Valid extensions for " + algorithm() +" are: "+ext);
+      QString msg = "Filename does not terminate with a valid extension. ";
+      if(!algorithm().isEmpty())
+          msg += "Please add one.<br>Valid extensions for " + algorithm() +" are: "+ext;
+      QMessageBox::warning(parentWidget(), "Filename not valid", msg);
       return false;
     }
   }

@@ -43,8 +43,7 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
   _ui->importModules->expandAll();
   connect(_ui->importModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
 
-  _ui->parametersList->setItemDelegate(new TulipItemDelegate);
-  connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
+  _ui->parametersList->setItemDelegate(new TulipItemDelegate(_ui->parametersList));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 #else

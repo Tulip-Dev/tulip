@@ -173,7 +173,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   _gridOptions = new QDialog(graphicsView());
   grid_ui->setupUi(_gridOptions);
   grid_ui->tableView->setModel(model);
-  grid_ui->tableView->setItemDelegate(new TulipItemDelegate);
+  grid_ui->tableView->setItemDelegate(new TulipItemDelegate(grid_ui->tableView));
 
   setOverviewVisible(true);
   setQuickAccessBarVisible(true);
