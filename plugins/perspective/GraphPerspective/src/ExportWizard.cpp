@@ -195,8 +195,10 @@ bool ExportWizard::validateCurrentPage() {
   //check correct extension
   ExportModule* p = PluginLister::instance()->getPluginObject<ExportModule>(tlp::QStringToTlpString(algorithm()),NULL);
   std::list<std::string> extension;
+
   if(p!=NULL)
-      extension = p->allFileExtensions();
+    extension = p->allFileExtensions();
+
   bool extok(false);
   QString ext;
 
@@ -216,8 +218,10 @@ bool ExportWizard::validateCurrentPage() {
     else {
       ext.resize(ext.length()-2);
       QString msg = "Filename does not terminate with a valid extension. ";
+
       if(!algorithm().isEmpty())
-          msg += "Please add one.<br>Valid extensions for " + algorithm() +" are: "+ext;
+        msg += "Please add one.<br>Valid extensions for " + algorithm() +" are: "+ext;
+
       QMessageBox::warning(parentWidget(), "Filename not valid", msg);
       return false;
     }
