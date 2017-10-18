@@ -470,11 +470,11 @@ NEW-WINDOW:1,28:62914800,62914800,23113046,0,0,0:0x0+500+65:0,0:OrthoTree
 7,6,1495,933,0,0,0,4532886,11,'SynPS/2 Synaptics TouchPad'
 7,6,1496,933,0,0,0,4532903,11,'SynPS/2 Synaptics TouchPad'
 7,6,1496,933,0,0,0,4532920,11,'SynPS/2 Synaptics TouchPad'
-7,6,1497,933,0,0,0,4532938,11,'SynPS/2 Synaptics TouchPad'
-7,6,1497,933,0,0,0,4532955,11,'SynPS/2 Synaptics TouchPad'
-7,6,1497,933,0,0,0,4532970,11,'SynPS/2 Synaptics TouchPad'
-7,6,1498,933,0,0,0,4532986,11,'SynPS/2 Synaptics TouchPad'
-7,6,1498,933,0,0,0,4533001,11,'SynPS/2 Synaptics TouchPad'
+7,6,1507,933,0,0,0,4532938,11,'SynPS/2 Synaptics TouchPad'
+7,6,1507,933,0,0,0,4532955,11,'SynPS/2 Synaptics TouchPad'
+7,6,1507,933,0,0,0,4532970,11,'SynPS/2 Synaptics TouchPad'
+7,6,1508,933,0,0,0,4532986,11,'SynPS/2 Synaptics TouchPad'
+7,6,1508,933,0,0,0,4533001,11,'SynPS/2 Synaptics TouchPad'
 7,4,0,0,1,0,0,4533292,11,SynPS/2 Synaptics TouchPad
 6,4,0,0,1,0,0,4533292,2,Virtual core pointer
 7,5,0,0,1,0,0,4533321,11,SynPS/2 Synaptics TouchPad
