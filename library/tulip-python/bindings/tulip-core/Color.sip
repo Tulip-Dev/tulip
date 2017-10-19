@@ -36,7 +36,9 @@ class Color {
   if (sipIsErr == NULL) {
     if (sipCanConvertToType(sipPy, sipFindType("tlp::Color"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
       return 1;
-    } if (!PyTuple_Check(sipPy) || PyTuple_GET_SIZE(sipPy) < 3) {
+    }
+
+    if (!PyTuple_Check(sipPy) || PyTuple_GET_SIZE(sipPy) < 3) {
       return 0;
     }
 
@@ -327,10 +329,7 @@ Sets the value component of the color in the HSV color space (must be in the ran
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
-  std::string s = oss.str();
-  s[0] = '[';
-  s[s.size() - 1] = ']';
-  sipRes = new std::string(s);
+  sipRes = new std::string(oss.str());
 %End
 
   static const tlp::Color Amaranth;

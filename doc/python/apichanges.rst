@@ -137,8 +137,8 @@ working with Tulip, several improvements have been added to facilitate their use
 
 .. _colorScalesNewSyntax:
 
-No need to use the :class:`tlp.ColorScale` class directly anymore
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+No need to use the :class:`tlp.ColorScale` class directly as plugin parameter anymore
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 For commodity of use in the Python world, it is now possible to define Tulip color scales
 trough the following ways:

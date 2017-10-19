@@ -104,13 +104,13 @@ that will be shown when the plug-in in invoked by the user.
 // ==================================================================================
 
   void addStringParameter(const std::string & str,
-                          const std::string & inHelp = "",
-                          const std::string & inDefValue = "",
+                          const std::string & help = "",
+                          const std::string & defaultValue = "",
                           bool isMandatory = true,
                           bool inParam = true, bool outParam = false,
                           const std::string &valuesDescription = "");
 %Docstring
-tlp.WithParameter.addStringParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False)
+tlp.WithParameter.addStringParameter(name, help="", defaultValue="", isMandatory=True, inParam=True, outParam=False, valuesDescription="")
 
 Adds a string parameter to the plug-in.
 
@@ -137,8 +137,8 @@ Adds a string parameter to the plug-in.
 // ==================================================================================
 
   void addStringCollectionParameter(const std::string & str,
-                                    const std::string & inHelp = "",
-                                    const std::string & inDefValue = "",
+                                    const std::string & help = "",
+                                    const std::string & defaultValue = "",
                                     bool isMandatory = true,
                                     bool inParam = true, bool outParam = false,
                                     const std::string &valuesDescription = "");
@@ -172,8 +172,8 @@ Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 // ==================================================================================
 
   void addIntegerParameter(const std::string & str,
-                           const std::string & inHelp = "",
-                           const std::string & inDefValue = "",
+                           const std::string & help = "",
+                           const std::string & defaultValue = "",
                            bool isMandatory = true,
                            bool inParam = true, bool outParam = false,
                            const std::string &valuesDescription = "");
@@ -206,8 +206,8 @@ Adds an integer parameter to the plug-in.
 // ==================================================================================
 
  void addUnsignedIntegerParameter(const std::string & str,
-                                  const std::string & inHelp = "",
-                                  const std::string & inDefValue = "",
+                                  const std::string & help = "",
+                                  const std::string & defaultValue = "",
                                   bool isMandatory = true,
                                   bool inParam = true, bool outParam = false,
                                   const std::string &valuesDescription = "");
@@ -242,8 +242,8 @@ Adds an unsigned integer parameter to the plug-in.
 // ==================================================================================
 
   void addFloatParameter(const std::string & str,
-                         const std::string & inHelp = "",
-                         const std::string & inDefValue = "",
+                         const std::string & help = "",
+                         const std::string & defaultValue = "",
                          bool isMandatory = true,
                          bool inParam = true, bool outParam = false,
                          const std::string &valuesDescription = "");
@@ -276,8 +276,8 @@ Adds a floating point number parameter to the plug-in.
 // ==================================================================================
 
   void addBooleanParameter(const std::string & str,
-                           const std::string & inHelp = "",
-                           const std::string & inDefValue = "",
+                           const std::string & help = "",
+                           const std::string & defaultValue = "",
                            bool isMandatory = true,
                            bool inParam = true, bool outParam = false,
                            const std::string &valuesDescription = "");
@@ -310,8 +310,8 @@ Adds a boolean parameter to the plug-in.
 // ==================================================================================
 
   void addDoublePropertyParameter(const std::string & str,
-                                  const std::string & inHelp = "",
-                                  const std::string & inDefValue = "",
+                                  const std::string & help = "",
+                                  const std::string & defaultValue = "",
                                   bool isMandatory = true,
                                   bool inParam = true, bool outParam = false,
                                   const std::string &valuesDescription = "");
@@ -344,8 +344,8 @@ Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addDoubleVectorPropertyParameter(const std::string & str,
-                                        const std::string & inHelp = "",
-                                        const std::string & inDefValue = "",
+                                        const std::string & help = "",
+                                        const std::string & defaultValue = "",
                                         bool isMandatory = true,
                                         bool inParam = true, bool outParam = false,
                                         const std::string &valuesDescription = "");
@@ -380,8 +380,8 @@ Adds a :class:`tlp.DoubleVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addIntegerPropertyParameter(const std::string & str,
-                                   const std::string & inHelp = "",
-                                   const std::string & inDefValue = "",
+                                   const std::string & help = "",
+                                   const std::string & defaultValue = "",
                                    bool isMandatory = true,
                                    bool inParam = true, bool outParam = false,
                                    const std::string &valuesDescription = "");
@@ -414,8 +414,8 @@ Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addIntegerVectorPropertyParameter(const std::string & str,
-                                         const std::string & inHelp = "",
-                                         const std::string & inDefValue = "",
+                                         const std::string & help = "",
+                                         const std::string & defaultValue = "",
                                          bool isMandatory = true,
                                          bool inParam = true, bool outParam = false,
                                          const std::string &valuesDescription = "");
@@ -450,8 +450,8 @@ Adds a :class:`tlp.IntegerVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addLayoutPropertyParameter(const std::string & str,
-                                  const std::string & inHelp = "",
-                                  const std::string & inDefValue = "",
+                                  const std::string & help = "",
+                                  const std::string & defaultValue = "",
                                   bool isMandatory = true,
                                   bool inParam = true, bool outParam = false,
                                   const std::string &valuesDescription = "");
@@ -484,8 +484,8 @@ Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addCoordVectorPropertyParameter(const std::string & str,
-                                       const std::string & inHelp = "",
-                                       const std::string & inDefValue = "",
+                                       const std::string & help = "",
+                                       const std::string & defaultValue = "",
                                        bool isMandatory = true,
                                        bool inParam = true, bool outParam = false,
                                        const std::string &valuesDescription = "");
@@ -520,8 +520,8 @@ Adds a :class:`tlp.CoorVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addSizePropertyParameter(const std::string & str,
-                                const std::string & inHelp = "",
-                                const std::string & inDefValue = "",
+                                const std::string & help = "",
+                                const std::string & defaultValue = "",
                                 bool isMandatory = true,
                                 bool inParam = true, bool outParam = false,
                                 const std::string &valuesDescription = "");
@@ -554,8 +554,8 @@ Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addSizeVectorPropertyParameter(const std::string & str,
-                                      const std::string & inHelp = "",
-                                      const std::string & inDefValue = "",
+                                      const std::string & help = "",
+                                      const std::string & defaultValue = "",
                                       bool isMandatory = true,
                                       bool inParam = true, bool outParam = false,
                                       const std::string &valuesDescription = "");
@@ -590,8 +590,8 @@ Adds a :class:`tlp.SizeVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addColorPropertyParameter(const std::string & str,
-                                 const std::string & inHelp = "",
-                                 const std::string & inDefValue = "",
+                                 const std::string & help = "",
+                                 const std::string & defaultValue = "",
                                  bool isMandatory = true,
                                  bool inParam = true, bool outParam = false,
                                  const std::string &valuesDescription = "");
@@ -624,8 +624,8 @@ Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addColorVectorPropertyParameter(const std::string & str,
-                                       const std::string & inHelp = "",
-                                       const std::string & inDefValue = "",
+                                       const std::string & help = "",
+                                       const std::string & defaultValue = "",
                                        bool isMandatory = true,
                                        bool inParam = true, bool outParam = false,
                                        const std::string &valuesDescription = "");
@@ -660,8 +660,8 @@ Adds a :class:`tlp.ColorVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addBooleanPropertyParameter(const std::string & str,
-                                   const std::string & inHelp = "",
-                                   const std::string & inDefValue = "",
+                                   const std::string & help = "",
+                                   const std::string & defaultValue = "",
                                    bool isMandatory = true,
                                    bool inParam = true, bool outParam = false,
                                    const std::string &valuesDescription = "");
@@ -694,8 +694,8 @@ Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addBooleanVectorPropertyParameter(const std::string & str,
-                                         const std::string & inHelp = "",
-                                         const std::string & inDefValue = "",
+                                         const std::string & help = "",
+                                         const std::string & defaultValue = "",
                                          bool isMandatory = true,
                                          bool inParam = true, bool outParam = false,
                                          const std::string &valuesDescription = "");
@@ -730,8 +730,8 @@ Adds a :class:`tlp.BooleanVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addStringPropertyParameter(const std::string & str,
-                                  const std::string & inHelp = "",
-                                  const std::string & inDefValue = "",
+                                  const std::string & help = "",
+                                  const std::string & defaultValue = "",
                                   bool isMandatory = true,
                                   bool inParam = true, bool outParam = false,
                                   const std::string &valuesDescription = "");
@@ -764,8 +764,8 @@ Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addStringVectorPropertyParameter(const std::string & str,
-                                        const std::string & inHelp = "",
-                                        const std::string & inDefValue = "",
+                                        const std::string & help = "",
+                                        const std::string & defaultValue = "",
                                         bool isMandatory = true,
                                         bool inParam = true, bool outParam = false,
                                         const std::string &valuesDescription = "");
@@ -800,8 +800,8 @@ Adds a :class:`tlp.StringVectorProperty` parameter to the plug-in.
 // ==================================================================================
 
   void addColorParameter(const std::string & str,
-                         const std::string & inHelp = "",
-                         const std::string & inDefValue = "",
+                         const std::string & help = "",
+                         const std::string & defaultValue = "",
                          bool isMandatory = true,
                          bool inParam = true, bool outParam = false,
                          const std::string &valuesDescription = "");
@@ -834,8 +834,8 @@ Adds a :class:`tlp.Color` parameter to the plug-in.
 // ==================================================================================
 
   void addColorScaleParameter(const std::string & str,
-                              const std::string & inHelp = "",
-                              const std::string & inDefValue = "",
+                              const std::string & help = "",
+                              const std::string & defaultValue = "",
                               bool isMandatory = true,
                               bool inParam = true, bool outParam = false,
                               const std::string &valuesDescription = "");
@@ -868,8 +868,8 @@ Adds a :class:`tlp.ColorScale` parameter to the plug-in.
 // ==================================================================================
 
   void addPropertyParameter(const std::string & str,
-                            const std::string & inHelp = "",
-                            const std::string & inDefValue = "",
+                            const std::string & help = "",
+                            const std::string & defaultValue = "",
                             bool isMandatory = true,
                             bool inParam = true, bool outParam = false,
                             const std::string &valuesDescription = "");
@@ -902,8 +902,8 @@ Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
 // ==================================================================================
 
  void addNumericPropertyParameter(const std::string & str,
-                                  const std::string & inHelp = "",
-                                  const std::string & inDefValue = "",
+                                  const std::string & help = "",
+                                  const std::string & defaultValue = "",
                                   bool isMandatory = true,
                                   bool inParam = true, bool outParam = false,
                                   const std::string &valuesDescription = "");
@@ -939,8 +939,8 @@ Adds a :class:`tlp.NumericProperty` parameter to the plug-in.
 
 void addFileParameter(const std::string & str,
                       bool mustExist = true,
-                      const std::string & inHelp = "",
-                      const std::string & inDefValue = "",
+                      const std::string & help = "",
+                      const std::string & defaultValue = "",
                       bool isMandatory = true);
 
 %Docstring
@@ -974,8 +974,8 @@ Adds a file parameter to the plug-in. A dialog will be created by the Tulip GUI 
 // ==================================================================================
 
 void addDirectoryParameter(const std::string & str,
-                           const std::string & inHelp = "",
-                           const std::string & inDefValue = "",
+                           const std::string & help = "",
+                           const std::string & defaultValue = "",
                            bool isMandatory = true);
 
 %Docstring

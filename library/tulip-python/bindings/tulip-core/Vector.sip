@@ -464,10 +464,7 @@ Computes and returns the dot product (scalar product) of the vector with another
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
-  std::string s = oss.str();
-  s[0] = '[';
-  s[s.size() - 1] = ']';
-  sipRes = new std::string(s);
+  sipRes = new std::string(oss.str());
 %End
 
 };
@@ -656,10 +653,7 @@ Convenient method. Returns the fourth component of the vector.
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
-  std::string s = oss.str();
-  s[0] = '[';
-  s[s.size() - 1] = ']';
-  sipRes = new std::string(s);
+  sipRes = new std::string(oss.str());
 %End
 
 };
@@ -757,10 +751,7 @@ public:
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
-  std::string s = oss.str();
-  s[0] = '[';
-  s[s.size() - 1] = ']';
-  sipRes = new std::string(s);
+  sipRes = new std::string(oss.str());
 %End
 
 };

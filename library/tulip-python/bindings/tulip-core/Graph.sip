@@ -119,24 +119,26 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
   }
   // if some file parameters are defined without the special prefix provided, ensure
   // the prefixed versions are defined and set their values before calling Tulip algorithm
-  std::vector<std::string> filesPrefixes;
-  filesPrefixes.push_back("file::");
-  filesPrefixes.push_back("anyfile::");
-  filesPrefixes.push_back("dir::");
-  std::pair<std::string, tlp::DataType*> entry;
-  stableForEach(entry, params->getValues()) {
-    for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
-      std::string fileParamTlpName = filesPrefixes[i] + entry.first;
-      if (algoParams.exist(fileParamTlpName)) {
-        std::string fileParamTlp;
-        std::string fileParam;
-        params->get(fileParamTlpName, fileParamTlp);
-        params->get(entry.first, fileParam);
-        if (fileParamTlp.empty() && !fileParam.empty()) {
-          params->set(fileParamTlpName, fileParam);
-        }
-        if (!fileParamTlp.empty() && fileParam.empty()) {
-          params->set(entry.first, fileParamTlp);
+  if (params) {
+    std::vector<std::string> filesPrefixes;
+    filesPrefixes.push_back("file::");
+    filesPrefixes.push_back("anyfile::");
+    filesPrefixes.push_back("dir::");
+    std::pair<std::string, tlp::DataType*> entry;
+    stableForEach(entry, params->getValues()) {
+      for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
+        std::string fileParamTlpName = filesPrefixes[i] + entry.first;
+        if (algoParams.exist(fileParamTlpName)) {
+          std::string fileParamTlp;
+          std::string fileParam;
+          params->get(fileParamTlpName, fileParamTlp);
+          params->get(entry.first, fileParam);
+          if (fileParamTlp.empty() && !fileParam.empty()) {
+            params->set(fileParamTlpName, fileParam);
+          }
+          if (!fileParamTlp.empty() && fileParam.empty()) {
+            params->set(entry.first, fileParamTlp);
+          }
         }
       }
     }

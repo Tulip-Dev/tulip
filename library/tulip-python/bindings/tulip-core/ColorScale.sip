@@ -30,18 +30,6 @@ class ColorScale {
 #include <tulip/ColorScale.h>
 %End
 
-%ConvertFromTypeCode
-  PyObject *dict = PyDict_New();
-  std::map<float, tlp::Color> colorMap = sipCpp->getColorMap();
-  std::map<float, tlp::Color>::const_iterator it;
-  for(it = colorMap.begin() ; it != colorMap.end() ; ++it) {
-    PyObject *key = PyFloat_FromDouble(it->first);
-    PyObject *val = sipConvertFromNewType(new tlp::Color(it->second), sipFindType("tlp::Color"), NULL);
-    PyDict_SetItem(dict, key, val);
-  }
-  return dict;
-%End
-
 %ConvertToTypeCode
 
   PyObject *key = NULL;
@@ -101,7 +89,7 @@ class ColorScale {
     }
     *sipCppPtr = new tlp::ColorScale(colors);
   } else {
-    *sipCppPtr = new tlp::ColorScale(*reinterpret_cast<tlp::ColorScale*>(sipConvertToType(sipPy, sipFindType("tlp::ColorScale"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    *sipCppPtr = new tlp::ColorScale(*reinterpret_cast<tlp::ColorScale*>(sipConvertToType(sipPy, sipFindType("tlp::ColorScale"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
   }
 
   if (!*sipCppPtr) {
@@ -154,7 +142,7 @@ The sample code below illustrates how to create and manipulate a color scale::
   color = colorScale.getColorAtPos(0.7)
 
 Since Tulip 4.10, color scales can also be defined in a more Pythonic way through
-the use of a list or a dictionnary. (see :ref:`No need to use the tlp.ColorScale class directly anymore <colorScalesNewSyntax>`).
+the use of a list or a dictionnary. (see :ref:`No need to use the tlp.ColorScale class directly as plugin parameter anymore <colorScalesNewSyntax>`).
 
 %End
 
@@ -310,6 +298,33 @@ Sets the transparency of all the colors in the underlying map.
 
 :param alpha: the alpha value of each colors (0 <= alpha <= 255)
 :type alpha: integer
+%End
+
+//==========================================================================================
+
+  bool operator==(const tlp::ColorScale &) const;
+
+  std::string __repr__() const;
+%MethodCode
+  std::ostringstream oss;
+  std::vector<float> v;
+  std::map<float, tlp::Color> colorMap = sipCpp->getColorMap();
+  std::map<float, tlp::Color>::const_iterator it = colorMap.begin();
+
+  for(; it != colorMap.end() ; ++it) {
+    v.push_back(it->first);
+  }
+
+  std::sort(v.begin(), v.end());
+  oss << "{";
+  for (size_t i = 0 ; i < v.size() ; ++i) {
+    oss << v[i] << ": " << colorMap[v[i]];
+    if (i != v.size() - 1) {
+      oss << ", ";
+    }
+  }
+  oss << "}";
+  sipRes = new std::string(oss.str());
 %End
 
 };

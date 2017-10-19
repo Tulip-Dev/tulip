@@ -61,7 +61,7 @@ Returns the color scale registered with the provided name.
 
 .. warning:: If there is no such colorscale, the returned one will be empty.
 
-:rtype: a dictionnary with float keys between 0.0 an 1.0 and :class:`tlp.Color` values representing the color scale
+:rtype: :class:`tulip.tlp.ColorScale`
 %End
 
 %MethodCode
