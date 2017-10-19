@@ -82,7 +82,7 @@ CubeOutLinedTransparent::~CubeOutLinedTransparent() {
 void CubeOutLinedTransparent::draw(node n, float lod) {
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawBox(glGraphInputData->getElementBorderColor()->getNodeValue(n),
@@ -117,7 +117,7 @@ public:
     glEnable(GL_LIGHTING);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawBox(borderColor,

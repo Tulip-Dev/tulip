@@ -548,7 +548,7 @@ void polyQuad(const vector<Coord> &vertices,
     quadColors[i*2+1]=colors[i];
   }
 
-  if(textureName!="") {
+  if(!textureName.empty()) {
     GlTextureManager::getInst().activateTexture(textureName);
   }
 
@@ -562,7 +562,7 @@ void polyQuad(const vector<Coord> &vertices,
 
   glDrawArrays(GL_QUAD_STRIP, 0, quadVertices.size());
 
-  if(textureName!="") {
+  if(!textureName.empty()) {
     GlTextureManager::getInst().desactivateTexture();
   }
 
@@ -662,7 +662,7 @@ void simpleQuad(const vector<Coord> &vertices,
   unsigned int size=vertices.size();
   GLfloat *points = result.data;
 
-  if(textureName!="") {
+  if(!textureName.empty()) {
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
     GlTextureManager::getInst().activateTexture(textureName);
@@ -714,7 +714,7 @@ void simpleQuad(const vector<Coord> &vertices,
   glDisable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE0);
 
-  if(textureName!="") {
+  if(!textureName.empty()) {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     GlTextureManager::getInst().desactivateTexture();
   }

@@ -148,7 +148,7 @@ void Cone::draw(node n, float) {
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (texFile != "") {
+  if (!texFile.empty()) {
     string texturePath = glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath + texFile);
   }
@@ -206,7 +206,7 @@ public:
     setMaterial(glyphColor);
     string texFile = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if (texFile != "") {
+    if (!texFile.empty()) {
       string texturePath =
         edgeExtGlGraphInputData->parameters->getTexturePath();
       GlTextureManager::getInst().activateTexture(texturePath + texFile);

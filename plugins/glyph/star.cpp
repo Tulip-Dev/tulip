@@ -85,7 +85,7 @@ void Star::draw(node n, float lod) {
   //star->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawStar(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -108,7 +108,7 @@ public:
     //star->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawStar(glyphColor,

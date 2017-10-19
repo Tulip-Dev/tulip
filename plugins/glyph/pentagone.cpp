@@ -84,7 +84,7 @@ void Pentagon::draw(node n, float lod) {
   pentagon->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawPentagon(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -107,7 +107,7 @@ public:
     pentagon->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawPentagon(glyphColor,

@@ -338,7 +338,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     }
 
     // texture Array
-    if(textureName!="") {
+    if(!textureName.empty()) {
       GlTextureManager::getInst().activateTexture(textureName);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -379,7 +379,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
 
-    if(textureName!="") {
+    if(!textureName.empty()) {
       GlTextureManager::getInst().desactivateTexture();
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }

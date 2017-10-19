@@ -85,7 +85,7 @@ void Hexagon::draw(node n, float lod) {
   hexagon->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawHexagon(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -112,7 +112,7 @@ public:
     hexagon->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawHexagon(glyphColor,

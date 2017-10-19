@@ -84,7 +84,7 @@ void Circle::draw(node n, float lod) {
   circle->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawCircle(Glyph::glGraphInputData->getElementColor()->getNodeValue(n),
@@ -106,7 +106,7 @@ public:
     eecircle->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawCircle(glyphColor,

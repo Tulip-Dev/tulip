@@ -452,7 +452,7 @@ void GlComplexPolygon::draw(float,Camera *) {
   glDisable(GL_CULL_FACE);
   glEnable(GL_COLOR_MATERIAL);
 
-  if(textureName!="") {
+  if(!textureName.empty()) {
     if(GlTextureManager::getInst().activateTexture(textureName))
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   }
@@ -470,7 +470,7 @@ void GlComplexPolygon::draw(float,Camera *) {
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-  if(textureName!="") {
+  if(!textureName.empty()) {
     GlTextureManager::getInst().desactivateTexture();
   }
 

@@ -121,7 +121,7 @@ void Cross::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 void Cross::draw(node n, float lod) {
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawCross(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -174,7 +174,7 @@ public:
             float lod) {
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawCross(glyphColor,

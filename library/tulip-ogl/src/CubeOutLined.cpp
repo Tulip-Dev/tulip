@@ -62,7 +62,7 @@ void CubeOutLined::draw(node n, float lod) {
 
   const string& texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (texFile.size() != 0) {
+  if (!texFile.empty()) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();
     box->setTextureName(texturePath+texFile);
   }

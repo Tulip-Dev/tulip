@@ -75,7 +75,7 @@ void Billboard::draw(node n,float lod) {
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (texFile != "") {
+  if (!texFile.empty()) {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     rect->setTextureName(texturePath+texFile);
   }

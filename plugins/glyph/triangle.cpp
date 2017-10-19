@@ -72,7 +72,7 @@ void Triangle::draw(node n,float lod) {
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (texFile != "") {
+  if (!texFile.empty()) {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     triangle->setTextureName(texturePath+texFile);
   }

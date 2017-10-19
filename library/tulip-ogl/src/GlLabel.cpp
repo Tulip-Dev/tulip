@@ -688,14 +688,14 @@ void GlLabel::draw(float, Camera *camera) {
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
                     -textBoundingBox[1][1]+(textBoundingBox[1][1]-textBoundingBox[0][1])/2.+yShift+(textBoundingBox[1][1]-textBoundingBox[0][1])*yShiftFactor);
 
-      if(textureName!="")
+      if(!textureName.empty())
         GlTextureManager::getInst().activateTexture(textureName);
 
       setMaterial(color);
 
       font->Render((*it).c_str(),-1,shift);
 
-      if(textureName!="")
+      if(!textureName.empty())
         GlTextureManager::getInst().desactivateTexture();
 
       if (outlineSize > 0) {

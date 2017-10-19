@@ -89,7 +89,7 @@ void Diamond::draw(node n, float lod) {
   diamond->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(textureName!="")
+  if(!textureName.empty())
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawDiamond(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -145,7 +145,7 @@ public:
     diamond->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(textureName!="")
+    if(!textureName.empty())
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawDiamond(glyphColor,
