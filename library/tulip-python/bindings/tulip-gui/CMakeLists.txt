@@ -103,15 +103,17 @@ SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
                       PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
+FILE(RELATIVE_PATH TulipLibsInstallRelPath ${TulipPythonModulesInstallDir}/tulipgui/native ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir})
+
 # On MacOS, add the paths of dependencies dylibs in install rpaths of the _tulipgui.so binary
 # That way, the tulipgui module can be imported in a classical Python shell without having to
 # modify the content of the DYLD_LIBRARY_PATH environment variable
 IF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   GET_TARGET_PROPERTY(CURRENT_INSTALL_RPATHS ${LibTulipGUIPythonBindingsName} INSTALL_RPATH)
-  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/../../../;@loader_path/../../../../Frameworks")
+  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/${TulipLibsInstallRelPath}/;@loader_path/../../../../Frameworks")
 ELSEIF(LINUX AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   GET_TARGET_PROPERTY(CURRENT_INSTALL_RPATHS ${LibTulipGUIPythonBindingsName} INSTALL_RPATH)
-  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS}:$ORIGIN/../../../")
+  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS}:$ORIGIN/${TulipLibsInstallRelPath}")
 ENDIF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})

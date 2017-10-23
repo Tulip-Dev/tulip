@@ -380,6 +380,12 @@ ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
+
+  SET(TULIP_PYTHON_SITE_INSTALL OFF CACHE BOOL "Do you want to install Tulip Python modules in a Python standard module folder on your system ?
+The selected folder path will be the first in the list returned by site.getsitepackages() whose prefix equals ${CMAKE_INSTALL_PREFIX}.
+If no such folder is found, the path will be the one returned by site.getusersitepackages().
+This should only be used when packaging Tulip for a Linux distribution or MSYS2. [OFF|ON]")
+
   # Python
   # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
   # If not, compile the SIP version located in thirdparty.
@@ -389,6 +395,38 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
     STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
     STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
     STRING(REGEX MATCH "[0-9]\\.[0-9]+\\.[0-9]+" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
+
+    IF(TULIP_PYTHON_SITE_INSTALL)
+
+      EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
+from __future__ import print_function
+import site
+import sys
+from distutils.sysconfig import get_python_lib
+py_version = str(sys.version_info[0]) + '.' + str(sys.version_info[1])
+if sys.version_info >= (2, 7):
+  for path in site.getsitepackages():
+    # check that we select a valid install path
+    if path.startswith('${CMAKE_INSTALL_PREFIX}') and py_version in path:
+      # avoid to install in /usr/local when CMAKE_INSTALL_PREFIX is /usr on debian
+      if '${CMAKE_INSTALL_PREFIX}' == '/usr' and '/usr/local' in path:
+        continue
+      print(path)
+      exit()
+  print(site.getusersitepackages())
+else:
+  path = get_python_lib(1)
+  if path.startswith('${CMAKE_INSTALL_PREFIX}') and py_version in path:
+    print(path)
+    exit()
+  print(site.USER_SITE)
+"
+                       OUTPUT_VARIABLE TulipPythonModulesInstallDir)
+      STRING(REPLACE "\n" "" TulipPythonModulesInstallDir "${TulipPythonModulesInstallDir}")
+
+    ELSE(TULIP_PYTHON_SITE_INSTALL)
+      SET(TulipPythonModulesInstallDir ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir}/tulip/python)
+    ENDIF(TULIP_PYTHON_SITE_INSTALL)
 
     # Unset the previous values of the CMake cache variables related to Python libraries
     # in case the value of PYTHON_EXECUTABLE CMake variable changed
@@ -605,8 +643,6 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
     ENDIF(PYTHONLIBS_FOUND)
   ENDIF(PYTHONINTERP_FOUND)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
-
-
 
 ## ========================================================
 ## Include and library paths

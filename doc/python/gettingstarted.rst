@@ -231,14 +231,14 @@ In order to be able to import the Tulip-Python modules bundled with the Tulip so
 their path must be provided to Python. In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
 The Tulip-Python modules are installed in the following directory according to your system :
 
-        * Linux : **<tulip_install_dir>/lib/python** (if you compiled Tulip yourself,
+        * Linux : **<tulip_install_dir>/lib/tulip/python** (if you compiled Tulip yourself,
           <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
 
-        * Windows : **<tulip_install_dir>/bin/python** (if you installed Tulip from an installer,
+        * Windows : **<tulip_install_dir>/lib/tulip/python** (if you installed Tulip from an installer,
           <tulip_install_dir> should be C:/Program Files (x86)/Tulip-X.Y/ for 32 bits Tulip and C:/Program Files/Tulip-X.Y/ for 64 bits Tulip)
 
-        * Mac OS : **<tulip_install_dir>/Contents/Frameworks/python** if you installed Tulip from a bundle (<tulip_install_dir> should then be /Applications/Tulip-X.Y.Z.app/) or
-                   **<tulip_install_dir>/lib/python** if you compiled and installed Tulip yourself.
+        * Mac OS : **<tulip_install_dir>/Contents/lib/tulip/python** if you installed Tulip from a bundle (<tulip_install_dir> should then be /Applications/Tulip-X.Y.Z.app/) or
+                   **<tulip_install_dir>/lib/tulip/python** if you compiled and installed Tulip yourself.
 
 This path has to be added to the list of Python module search paths. To do so, you can add it in the **PYTHONPATH**
 environment variable prior executing the Python interpreter or add it to the :data:`sys.path` list once you launched the interpreter.

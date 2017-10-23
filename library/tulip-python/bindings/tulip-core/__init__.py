@@ -130,7 +130,7 @@ def runStartupScripts(scriptsPath):
 runStartupScripts(startupScriptsPath)
 runStartupScripts(startupScriptsHomePath)
 
-tlpPythonPluginsPath = tlp.TulipLibDir + '/tulip/python'
+tlpPythonPluginsPath = tlp.TulipLibDir + '/tulip/python/tulip/plugins'
 tlpPythonPluginsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion + '/plugins/python'
 
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsPath, False)

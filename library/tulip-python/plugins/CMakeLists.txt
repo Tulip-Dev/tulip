@@ -1,7 +1,6 @@
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/import
-                  ${CMAKE_CURRENT_SOURCE_DIR}/color
-                  ${CMAKE_CURRENT_SOURCE_DIR}/general
-        DESTINATION ${TulipLibInstallDir}/tulip/python)
+TULIP_INSTALL_PYTHON_FILES(tulip/plugins ${CMAKE_CURRENT_SOURCE_DIR}/import
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/color
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/general)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   ADD_CUSTOM_TARGET(copyTulipPythonPlugins ALL 
