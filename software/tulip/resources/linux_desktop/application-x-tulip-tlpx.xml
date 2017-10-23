@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-tulip-tlpx">
+        <comment>Tulip project file</comment>
+        <icon name="application-x-tulip"/>
+        <glob pattern="*.tlpx"/>
+    </mime-type>
+</mime-info>
