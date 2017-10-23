@@ -19,25 +19,33 @@ void reverseQList(QList<T> &list) {
   }
 }
 
-list<string> ColorScalesManager::getColorScalesList() {
+void ColorScalesManager::getColorScalesFromDir(const string &colorScalesDir,
+                                               list<string> &colorScalesList) {
 
-  list<string> ret;
-
-  QFileInfo colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
+  QFileInfo colorscaleDirectory(tlpStringToQString(colorScalesDir));
 
   if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
-    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
 
     for (int i = 0; i < list.size(); ++i) {
       QFileInfo fileInfo = list.at(i);
-      QString colorScaleName = fileInfo.fileName();
-      colorScaleName.replace(".png", "");
-      colorScaleName.replace("_from_ColorBrewer.org", "");
-      ret.push_back(QStringToTlpString(colorScaleName));
+      if (fileInfo.isDir()) {
+        getColorScalesFromDir(QStringToTlpString(fileInfo.absoluteFilePath()), colorScalesList);
+      } else if (fileInfo.suffix() == "png") {
+        QString colorScaleName = fileInfo.fileName();
+        colorScaleName.replace(".png", "");
+        colorScalesList.push_back(QStringToTlpString(colorScaleName));
+      }
     }
   }
+}
+
+list<string> ColorScalesManager::getColorScalesList() {
+
+  list<string> ret;
+  getColorScalesFromDir(TulipBitmapDir + "colorscales", ret);
 
   TulipSettings::instance().beginGroup("ColorScales");
   QStringList savedColorScalesIdList = TulipSettings::instance().childKeys();
@@ -88,19 +96,37 @@ static ColorScale getColorScaleFromImageFile(const QString &imageFilePath) {
   return ColorScale(colors);
 }
 
-ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
-  QString colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
+string ColorScalesManager::findColorScaleFile(const string &rootDir, const string &colorScaleName) {
+  QFileInfo colorscaleDirectory(tlpStringToQString(rootDir));
 
-  QFileInfo colorScaleFile(colorscaleDirectory + "/" + colorScaleName.c_str() + ".png");
+  string ret;
 
-  if (colorScaleFile.exists()) {
-    return getColorScaleFromImageFile(colorScaleFile.absoluteFilePath());
+  if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
+    QDir dir(colorscaleDirectory.absoluteFilePath());
+    dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
+    QFileInfoList list = dir.entryInfoList();
+
+    for (int i = 0; i < list.size(); ++i) {
+      QFileInfo fileInfo = list.at(i);
+      if (fileInfo.isDir()) {
+        ret = findColorScaleFile(QStringToTlpString(fileInfo.absoluteFilePath()), colorScaleName);
+        if (!ret.empty()) {
+          return ret;
+        }
+      } else if (fileInfo.suffix() == "png" && QStringToTlpString(fileInfo.baseName()) == colorScaleName) {
+        return QStringToTlpString(fileInfo.absoluteFilePath());
+      }
+    }
   }
 
-  colorScaleFile = QFileInfo(colorscaleDirectory + "/" + colorScaleName.c_str() + "_from_ColorBrewer.org.png");
+  return ret;
+}
 
-  if (colorScaleFile.exists()) {
-    return getColorScaleFromImageFile(colorScaleFile.absoluteFilePath());
+ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
+  string colorScaleFile = findColorScaleFile(TulipBitmapDir + "colorscales", colorScaleName);
+
+  if (!colorScaleFile.empty()) {
+    return getColorScaleFromImageFile(tlpStringToQString(colorScaleFile));
   }
 
   map<float, Color> colorsMap;
@@ -203,8 +229,8 @@ void ColorScalesManager::setLatestColorScale(ColorScale& cs) {
   QList<QVariant> colors;
   QList<QVariant> stops;
 
-  std::map<float, Color> cm = cs.getColorMap();
-  std::map<float, Color>::iterator it = cm.begin();
+  map<float, Color> cm = cs.getColorMap();
+  map<float, Color>::iterator it = cm.begin();
 
   for (; it !=  cm.end(); ++it) {
     Color& c = it->second;
@@ -230,7 +256,7 @@ ColorScale ColorScalesManager::getLatestColorScale() {
       TulipSettings::instance().value("stops").toList();
     bool gradient = TulipSettings::instance().value("gradient?").toBool();
 
-    std::map<float, Color> cm;
+    map<float, Color> cm;
 
     for (int i = 0 ; i < colorsListv.size() ; ++i) {
       QColor color = colorsListv.at(i).value<QColor>();

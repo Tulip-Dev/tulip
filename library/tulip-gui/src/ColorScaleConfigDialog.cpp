@@ -158,19 +158,27 @@ ColorScale ColorScaleConfigDialog::getColorScaleFromImageFile(const std::string 
   return ColorScale(getColorScaleFromImageFile(tlpStringToQString(imageFilePath)), gradient);
 }
 
-void ColorScaleConfigDialog::loadTulipImageColorScales() {
-  QFileInfo colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
+void ColorScaleConfigDialog::loadImageColorScalesFromDir(const QString &colorScalesDir) {
+  QFileInfo colorscaleDirectory(colorScalesDir);
 
   if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
-    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
 
     for (int i = 0; i < list.size(); ++i) {
       QFileInfo fileInfo = list.at(i);
-      tulipImageColorScales[fileInfo.fileName()] = getColorScaleFromImageFile(fileInfo.absoluteFilePath());
+      if (fileInfo.isDir()) {
+        loadImageColorScalesFromDir(fileInfo.absoluteFilePath());
+      } else if (fileInfo.suffix() == "png") {
+        tulipImageColorScales[fileInfo.fileName()] = getColorScaleFromImageFile(fileInfo.absoluteFilePath());
+      }
     }
   }
+}
+
+void ColorScaleConfigDialog::loadTulipImageColorScales() {
+  loadImageColorScalesFromDir(tlpStringToQString(TulipBitmapDir) + "colorscales");
 }
 
 void ColorScaleConfigDialog::importColorScaleFromFile(const QString& currentDir) {

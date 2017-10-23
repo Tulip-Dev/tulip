@@ -52,6 +52,10 @@ public:
   static ColorScale getLatestColorScale();
   static void setLatestColorScale(ColorScale& cs);
 
+private:
+
+  static void getColorScalesFromDir(const std::string &colorScalesDir, std::list<std::string> &colorScalesList);
+  static std::string findColorScaleFile(const std::string &rootDir, const std::string &colorScaleName);
 
 };
 
