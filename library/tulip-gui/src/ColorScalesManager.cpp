@@ -20,7 +20,7 @@ void reverseQList(QList<T> &list) {
 }
 
 void ColorScalesManager::getColorScalesFromDir(const string &colorScalesDir,
-                                               list<string> &colorScalesList) {
+    list<string> &colorScalesList) {
 
   QFileInfo colorscaleDirectory(tlpStringToQString(colorScalesDir));
 
@@ -31,9 +31,11 @@ void ColorScalesManager::getColorScalesFromDir(const string &colorScalesDir,
 
     for (int i = 0; i < list.size(); ++i) {
       QFileInfo fileInfo = list.at(i);
+
       if (fileInfo.isDir()) {
         getColorScalesFromDir(QStringToTlpString(fileInfo.absoluteFilePath()), colorScalesList);
-      } else if (fileInfo.suffix() == "png") {
+      }
+      else if (fileInfo.suffix() == "png") {
         QString colorScaleName = fileInfo.fileName();
         colorScaleName.replace(".png", "");
         colorScalesList.push_back(QStringToTlpString(colorScaleName));
@@ -108,12 +110,15 @@ string ColorScalesManager::findColorScaleFile(const string &rootDir, const strin
 
     for (int i = 0; i < list.size(); ++i) {
       QFileInfo fileInfo = list.at(i);
+
       if (fileInfo.isDir()) {
         ret = findColorScaleFile(QStringToTlpString(fileInfo.absoluteFilePath()), colorScaleName);
+
         if (!ret.empty()) {
           return ret;
         }
-      } else if (fileInfo.suffix() == "png" && QStringToTlpString(fileInfo.baseName()) == colorScaleName) {
+      }
+      else if (fileInfo.suffix() == "png" && QStringToTlpString(fileInfo.baseName()) == colorScaleName) {
         return QStringToTlpString(fileInfo.absoluteFilePath());
       }
     }

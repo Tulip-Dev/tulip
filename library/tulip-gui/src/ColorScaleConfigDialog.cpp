@@ -168,9 +168,11 @@ void ColorScaleConfigDialog::loadImageColorScalesFromDir(const QString &colorSca
 
     for (int i = 0; i < list.size(); ++i) {
       QFileInfo fileInfo = list.at(i);
+
       if (fileInfo.isDir()) {
         loadImageColorScalesFromDir(fileInfo.absoluteFilePath());
-      } else if (fileInfo.suffix() == "png") {
+      }
+      else if (fileInfo.suffix() == "png") {
         tulipImageColorScales[fileInfo.fileName()] = getColorScaleFromImageFile(fileInfo.absoluteFilePath());
       }
     }
