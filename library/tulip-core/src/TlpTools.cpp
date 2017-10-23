@@ -114,7 +114,17 @@ extern "C" {
       if (symbol != NULL) {
         if (dladdr(symbol, &info)) {
           std::string tmp = info.dli_fname;
-          tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+          tulipLibDir = tmp.substr(0, tmp.rfind('/')+1);
+#ifdef X86_64
+          // check for lib64
+          string tlpPath64 = tulipLibDir + "../lib64";
+          tlp_stat_t statInfo;
+
+          if (statPath(tlpPath64, &statInfo) == 0)
+            tulipLibDir.append("../lib64");
+          else
+#endif
+            tulipLibDir.append("../lib");
         }
       }
     }

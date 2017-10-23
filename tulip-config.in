@@ -13,7 +13,7 @@ libversion=@libversion@
 libextension=so
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
-pluginpath=${prefix}/lib/tulip
+pluginpath=@libdir@/tulip
 quaziplib=@QuazipLibrary@
 
 WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
