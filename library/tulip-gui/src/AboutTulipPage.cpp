@@ -57,13 +57,15 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p></body></html>");
 
   bool openGL_OK = GlMainWidget::getFirstQGLWidget()->isValid();
+
   if (openGL_OK)
     GlMainWidget::getFirstQGLWidget()->makeCurrent();
+
   QString tulipDependenciesInfo = "<p style=\"font-size:12pt\">"
                                   "This open source software is powered by:"
                                   "<ul>"
                                   "  <li> <b> Qt </b> " + tlpStringToQString(qVersion()) + ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
-    "  <li> <b> OpenGL </b> " + (openGL_OK ? QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) : QString("?.?")) + " (from vendor " + (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) : QString("unknown")) + "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
+                                  "  <li> <b> OpenGL </b> " + (openGL_OK ? QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) : QString("?.?")) + " (from vendor " + (openGL_OK ? tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) : QString("unknown")) + "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
                                   "  <li> <b>OGDF</b> v2015.05 (Baobab) aka the Open Graph Drawing Framework : <a href=\"http://www.ogdf.net\">http://www.ogdf.net</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
@@ -73,6 +75,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
                                   "</ul>"
                                   "</p>"
                                   ;
+
   if (openGL_OK)
     GlMainWidget::getFirstQGLWidget()->doneCurrent();
 
