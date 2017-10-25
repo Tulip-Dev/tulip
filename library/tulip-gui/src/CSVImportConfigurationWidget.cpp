@@ -613,20 +613,21 @@ const string& CSVImportConfigurationWidget::guessDataType(const string& data) co
   if(ok)
     return IntegerProperty::propertyTypename;
 
-  QLocale prevLocale;
-
-  if (parser->decimalMark() == ',')
-    QLocale::setDefault(QLocale::French);
-
-  str.toDouble(&ok);
-  QLocale::setDefault(prevLocale);
+  if (parser->decimalMark() == ',') {
+      QLocale c(QLocale::French);
+      c.toDouble(str, &ok);
+  }
+  else
+      str.toDouble(&ok);
 
   //The type is double
-  if(ok)
-    return DoubleProperty::propertyTypename;
-  else
+  if(ok) {
+      return DoubleProperty::propertyTypename;
+  }
+  else {
     //All the other cases are treated as string.
     return StringProperty::propertyTypename;
+  }
 }
 
 bool CSVImportConfigurationWidget::eventFilter(QObject *obj, QEvent *evt) {
