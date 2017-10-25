@@ -827,7 +827,7 @@ void ScatterPlot2DView::generateScatterPlots() {
                       // use same green color as the highlighting one
                       // in workspace panel
                       Color(0xCB, 0xDE, 0x5D));
-  progressBar->setComment("Updating scatter plot matrix ...");
+  progressBar->setComment("Updating scatter plot matrix...");
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");
   centerView();
@@ -846,7 +846,7 @@ void ScatterPlot2DView::generateScatterPlots() {
       overview->generateOverview();
       scatterPlotsGenMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])] = true;
 
-      currentStep += 2;
+      currentStep += 1;
       progressBar->progress(currentStep, nbOverviews);
 
       // needed to display progressBar
