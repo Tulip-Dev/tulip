@@ -132,7 +132,8 @@ IF(LINUX)
 
     INSTALL(CODE
       "EXECUTE_PROCESS(COMMAND update-desktop-database ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/applications
-                       COMMAND update-mime-database ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime)"
+                       COMMAND update-mime-database ${DESKTOP_CONFIG_INSTALL_PREFIX}/share/mime
+                       OUTPUT_QUIET ERROR_QUIET)"
     )
 
   ENDIF(TULIP_LINUX_DESKTOP_REGISTRATION)
