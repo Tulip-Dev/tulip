@@ -614,15 +614,15 @@ const string& CSVImportConfigurationWidget::guessDataType(const string& data) co
     return IntegerProperty::propertyTypename;
 
   if (parser->decimalMark() == ',') {
-      QLocale c(QLocale::French);
-      c.toDouble(str, &ok);
+    QLocale c(QLocale::French);
+    c.toDouble(str, &ok);
   }
   else
-      str.toDouble(&ok);
+    str.toDouble(&ok);
 
   //The type is double
   if(ok) {
-      return DoubleProperty::propertyTypename;
+    return DoubleProperty::propertyTypename;
   }
   else {
     //All the other cases are treated as string.
