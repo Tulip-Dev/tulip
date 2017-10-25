@@ -90,13 +90,12 @@ ENDMACRO(RETRIEVE_VERSION)
 # Check if the given version corresponds to the one asked when calling FIND_PACKAGE
 # This will exit with a fatal error if provided version is considered as not compatible with requested version
 MACRO(CHECK_VERSION)
-  IF(TULIP_FIND_VERSION)
-    IF(NOT ${TULIP_MAJOR_VERSION} EQUAL ${TULIP_FIND_VERSION_MAJOR})
+  # backward compatibility version check for users that still uses the old TULIP CMake setup (using CMAKE_MODULE_PATH and FindTULIP.cmake)
+  IF(TULIP_FIND_VERSION AND NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/TULIPConfigVersion.cmake")
+    IF("${TULIP_VERSION}" VERSION_LESS "${TULIP_FIND_VERSION}")
       MESSAGE(FATAL_ERROR "Invalid Tulip version string given: ${TULIP_FIND_VERSION}, detected version is ${TULIP_VERSION}")
-    ELSEIF(${TULIP_MINOR_VERSION} LESS ${TULIP_FIND_VERSION_MINOR})
-      MESSAGE(FATAL_ERROR "Invalid Tulip version string given: ${TULIP_FIND_VERSION}, detected version is ${TULIP_VERSION}")
-    ENDIF()
-  ENDIF(TULIP_FIND_VERSION)
+    ENDIF("${TULIP_VERSION}" VERSION_LESS "${TULIP_FIND_VERSION}")
+  ENDIF(TULIP_FIND_VERSION AND NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/TULIPConfigVersion.cmake")
 ENDMACRO(CHECK_VERSION)
 
 # CMAKE_FIND_ROOT_PATH_MODE_* are set to ONLY in the CMake platform file for emscripten

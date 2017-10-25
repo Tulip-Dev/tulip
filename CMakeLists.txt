@@ -826,7 +826,10 @@ INSTALL(FILES cmake/FindTULIP.cmake
         RENAME TULIPConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
 
+CONFIGURE_FILE(cmake/TULIPConfigVersion.cmake.in ${CMAKE_BINARY_DIR}/cmake/TULIPConfigVersion.cmake @ONLY)
+
 INSTALL(FILES cmake/TulipUseFile.cmake
+              ${CMAKE_BINARY_DIR}/cmake/TULIPConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TULIP/)
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
