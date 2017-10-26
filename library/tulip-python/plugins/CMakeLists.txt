@@ -1,6 +1,7 @@
 TULIP_INSTALL_PYTHON_FILES(tulip/plugins ${CMAKE_CURRENT_SOURCE_DIR}/import
                                          ${CMAKE_CURRENT_SOURCE_DIR}/color
-                                         ${CMAKE_CURRENT_SOURCE_DIR}/general)
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/general
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/layout)
 
 
 ADD_CUSTOM_TARGET(copyTulipPythonPlugins ALL
