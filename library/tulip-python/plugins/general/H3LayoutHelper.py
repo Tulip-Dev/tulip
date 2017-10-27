@@ -41,7 +41,12 @@ class H3LayoutHelper(tlp.Algorithm):
       scaling = self.dataSet["layout scaling"]
     
     params = tlp.getDefaultPluginParameters('H3', self.graph)
-    self.graph.applyLayoutAlgorithm("H3", params)
+    success, errmsg = self.graph.applyLayoutAlgorithm("H3", params)
+    if not success:
+      if self.pluginProgress:
+        self.pluginProgress.setError(errmsg)
+        return False
+    
     
     self.graph['viewBorderWidth'].setAllNodeValue(0)
     self.graph['viewShape'].setAllNodeValue(tlp.NodeShape.Sphere)

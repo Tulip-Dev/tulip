@@ -16,8 +16,14 @@
 from tulip import tlp
 import tulipplugins
 
-# https://github.com/buzzfeed/pyh3
-from h3.tree import Tree
+numpyOk = True
+
+# h3 module requires numpy so we need to check it is available in the Python environment 
+try:
+  # https://github.com/buzzfeed/pyh3
+  from h3.tree import Tree
+except:
+  numpyOk = False
 
 class H3Layout(tlp.LayoutAlgorithm):
   
@@ -26,6 +32,10 @@ class H3Layout(tlp.LayoutAlgorithm):
     self.addFloatParameter("layout scaling", "the scale factor to apply to the computed layout", "1000")
 
   def check(self):
+    
+    if not numpyOk:
+      return (False, "Python numpy module is required to execute that layout algorithm.\n"
+                     "You can easily install it with the pip tool or your package manager if you are a linux user.")
     
     if not tlp.ConnectedTest.isConnected(self.graph):
       return (False, "The graph must be connected")
