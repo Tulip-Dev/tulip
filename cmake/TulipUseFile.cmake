@@ -480,7 +480,7 @@ MACRO(TULIP_INSTALL_PYTHON_FILES install_suffix)
               RUNTIME DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python
               LIBRARY DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
     ELSEIF(IS_DIRECTORY ${PYTHON_FILE})
-      INSTALL(DIRECTORY ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
+      INSTALL(DIRECTORY ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python PATTERN ".svn" EXCLUDE)
     ELSE()
       INSTALL(FILES ${PYTHON_FILE} DESTINATION ${TulipPythonModulesInstallDir}/${install_suffix} COMPONENT tulip_python)
     ENDIF(TARGET ${PYTHON_FILE})
