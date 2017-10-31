@@ -307,6 +307,7 @@ bool GraphPerspective::terminated() {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE->savePythonFilesAndWriteToProject(true);
+  _pythonIDEDialog->hide();
 #endif
 
   if(_graphs->needsSaving() || mainWindow()->isWindowModified()) {
