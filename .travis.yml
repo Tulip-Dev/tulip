@@ -265,34 +265,7 @@ jobs:
         - sudo docker create -v $HOME/ccache:/ccache --name ccache centos:${OS_VERSION}
 
       script:
-        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw centos:${OS_VERSION} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos_build.sh"
-
-    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Tulip AppImage build on CentOS 7
-    -
-      os: linux
-      dist: trusty
-      cache:
-        directories:
-          - $HOME/ccache
-
-      sudo: required
-      env:
-        - OS_TYPE=centos
-        - OS_VERSION=7
-
-      services:
-        - docker
-
-      before_install:
-        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
-        - sudo service docker restart
-        - sleep 5
-        - sudo docker pull centos:${OS_VERSION}
-        - sudo docker create -v $HOME/ccache:/ccache --name ccache centos:${OS_VERSION}
-
-      script:
-        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw centos:${OS_VERSION} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos_build.sh"
+        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw centos:${OS_VERSION} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
 
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
