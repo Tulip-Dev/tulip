@@ -885,7 +885,7 @@ void PythonIDE::writeFileToProject(const QString &projectFile, const QString &fi
   } else {
     hasher.reset();
     QIODevice *fs = _project->fileStream(projectFile, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.addData(fs);
+    hasher.addData(fs->readAll());
     delete fs;
     fileModified = fileContentHash != hasher.result();
   }
@@ -1417,7 +1417,7 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
   } else {
     QIODevice *fs = _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::ReadOnly | QIODevice::Text);
     hasher.reset();
-    hasher.addData(fs);
+    hasher.addData(fs->readAll());
     delete fs;
     fileModified = scriptFilesListHash != hasher.result();
   }
@@ -1466,7 +1466,7 @@ void PythonIDE::writePluginsFilesList(int deleted) {
   } else {
     hasher.reset();
     QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.addData(fs);
+    hasher.addData(fs->readAll());
     delete fs;
     fileModified = pluginFilesListHash != hasher.result();
   }
@@ -1525,7 +1525,7 @@ void PythonIDE::writeModulesFilesList(int deleted) {
   } else {
     hasher.reset();
     QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
-    hasher.addData(fs);
+    hasher.addData(fs->readAll());
     delete fs;
     fileModified = moduleFilesListHash != hasher.result();
   }
