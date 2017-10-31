@@ -28,6 +28,8 @@
 #include <QLineEdit>
 #include <QXmlStreamReader>
 #include <QMainWindow>
+#include <QCryptographicHash>
+#include <QByteArray>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -59,6 +61,8 @@
 
 using namespace std;
 using namespace tlp;
+
+static QCryptographicHash hasher(QCryptographicHash::Md5);
 
 static const QString updateVisualizationFunc =
   "import tuliputils\n"
@@ -869,17 +873,32 @@ void PythonIDE::writeFileToProject(const QString &projectFile, const QString &fi
     return;
   }
 
+  hasher.reset();
+  hasher.addData(fileContent.toUtf8());
+  QByteArray fileContentHash = hasher.result();
+
+  bool fileModified = false;
+
   if (!_project->exists(projectFile)) {
     _project->touch(projectFile);
+    fileModified = true;
+  } else {
+    hasher.reset();
+    QIODevice *fs = _project->fileStream(projectFile, QIODevice::ReadOnly | QIODevice::Text);
+    hasher.addData(fs);
+    delete fs;
+    fileModified = fileContentHash != hasher.result();
   }
 
-  QIODevice *fs = _project->fileStream(projectFile, QIODevice::WriteOnly | QIODevice::Text);
-  fs->write(fileContent.toUtf8());
-  fs->close();
-  delete fs;
+  if (fileModified) {
+    QIODevice *fs = _project->fileStream(projectFile, QIODevice::WriteOnly | QIODevice::Text);
+    fs->write(fileContent.toUtf8());
+    fs->close();
+    delete fs;
+  }
 
   // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified) {
+  if (Perspective::instance() && _notifyProjectModified && fileModified) {
     Perspective::instance()->mainWindow()->setWindowModified(true);
   }
 
@@ -1349,17 +1368,8 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
     return;
   }
 
-  createTulipProjectPythonPaths();
-
-  if (_project->exists(PYTHON_SCRIPTS_FILES)) {
-    _project->removeFile(PYTHON_SCRIPTS_FILES);
-  }
-
-  _project->touch(PYTHON_SCRIPTS_FILES);
-  QIODevice *fs = _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::WriteOnly | QIODevice::Text);
-
   QStringList existingScriptFilenames;
-
+  QString scriptFilesList;
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     QString fileName = getMainScriptEditor(i)->getFileName();
 
@@ -1387,20 +1397,42 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
         }
       }
 
-      fs->write((fileName+"\n").toUtf8());
-
+      scriptFilesList += (fileName+"\n");
       existingScriptFilenames.append(QFileInfo(fileName).fileName());
 
     }
   }
 
-  fs->close();
-  delete fs;
+  hasher.reset();
+  hasher.addData(scriptFilesList.toUtf8());
+  QByteArray scriptFilesListHash = hasher.result();
+
+  bool fileModified = false;
+
+  createTulipProjectPythonPaths();
+
+  if (!_project->exists(PYTHON_SCRIPTS_FILES)) {
+    _project->touch(PYTHON_SCRIPTS_FILES);
+    fileModified = true;
+  } else {
+    QIODevice *fs = _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::ReadOnly | QIODevice::Text);
+    hasher.reset();
+    hasher.addData(fs);
+    delete fs;
+    fileModified = scriptFilesListHash != hasher.result();
+  }
+
+  if (fileModified) {
+    QIODevice *fs = _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::WriteOnly | QIODevice::Text);
+    fs->write(scriptFilesList.toUtf8());
+    fs->close();
+    delete fs;
+  }
 
   deleteFilesFromProjectIfRemoved(PYTHON_SCRIPTS_PATH, existingScriptFilenames);
 
   // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified) {
+  if (Perspective::instance() && _notifyProjectModified && fileModified) {
     Perspective::instance()->mainWindow()->setWindowModified(true);
   }
 
@@ -1411,31 +1443,45 @@ void PythonIDE::writePluginsFilesList(int deleted) {
     return;
   }
 
-  createTulipProjectPythonPaths();
-
-  if (_project->exists(PYTHON_PLUGINS_FILES)) {
-    _project->removeFile(PYTHON_PLUGINS_FILES);
-  }
-
-  _project->touch(PYTHON_PLUGINS_FILES);
-  QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::WriteOnly | QIODevice::Text);
-
   QStringList existingPluginsFilenames;
-
+  QString pluginFilesList;
   for (int i = 0 ; i < _ui->pluginsTabWidget->count() ; ++i) {
     if (deleted == -1 || i != deleted) {
-      fs->write((getPluginEditor(i)->getFileName()+"\n").toUtf8());
+      pluginFilesList += (getPluginEditor(i)->getFileName()+"\n");
       existingPluginsFilenames.append(QFileInfo(getPluginEditor(i)->getFileName()).fileName());
     }
   }
 
-  fs->close();
-  delete fs;
+  hasher.reset();
+  hasher.addData(pluginFilesList.toUtf8());
+  QByteArray pluginFilesListHash = hasher.result();
+
+  bool fileModified = false;
+
+  createTulipProjectPythonPaths();
+
+  if (!_project->exists(PYTHON_PLUGINS_FILES)) {
+    _project->touch(PYTHON_PLUGINS_FILES);
+    fileModified = true;
+  } else {
+    hasher.reset();
+    QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
+    hasher.addData(fs);
+    delete fs;
+    fileModified = pluginFilesListHash != hasher.result();
+  }
+
+  if (fileModified) {
+    QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::WriteOnly | QIODevice::Text);
+    fs->write(pluginFilesList.toUtf8());
+    fs->close();
+    delete fs;
+  }
 
   deleteFilesFromProjectIfRemoved(PYTHON_PLUGINS_PATH, existingPluginsFilenames);
 
   // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified) {
+  if (Perspective::instance() && _notifyProjectModified && fileModified) {
     Perspective::instance()->mainWindow()->setWindowModified(true);
   }
 
@@ -1446,16 +1492,8 @@ void PythonIDE::writeModulesFilesList(int deleted) {
     return;
   }
 
-  createTulipProjectPythonPaths();
-
-  if (_project->exists(PYTHON_MODULES_FILES)) {
-    _project->removeFile(PYTHON_MODULES_FILES);
-  }
-
-  _project->touch(PYTHON_MODULES_FILES);
-  QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::WriteOnly | QIODevice::Text);
-
   QStringList existingModuleFilenames;
+  QString moduleFilesList;
 
   for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
     QString fileName = getModuleEditor(i)->getFileName();
@@ -1467,18 +1505,42 @@ void PythonIDE::writeModulesFilesList(int deleted) {
         fileName = tabText.replace("&", "");
       }
 
-      fs->write((fileName+"\n").toUtf8());
+      moduleFilesList += (fileName+"\n");
       existingModuleFilenames.append(QFileInfo(fileName).fileName());
     }
   }
 
-  fs->close();
-  delete fs;
+  hasher.reset();
+  hasher.addData(moduleFilesList.toUtf8());
+
+  QByteArray moduleFilesListHash = hasher.result();
+
+  bool fileModified = false;
+
+  createTulipProjectPythonPaths();
+
+  if (!_project->exists(PYTHON_MODULES_FILES)) {
+    _project->touch(PYTHON_MODULES_FILES);
+    fileModified = true;
+  } else {
+    hasher.reset();
+    QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
+    hasher.addData(fs);
+    delete fs;
+    fileModified = moduleFilesListHash != hasher.result();
+  }
+
+  if (fileModified) {
+    QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::WriteOnly | QIODevice::Text);
+    fs->write(moduleFilesList.toUtf8());
+    fs->close();
+    delete fs;
+  }
 
   deleteFilesFromProjectIfRemoved(PYTHON_MODULES_PATH, existingModuleFilenames);
 
   // notify the Tulip main window that the Tulip project has been modified
-  if (Perspective::instance() && _notifyProjectModified) {
+  if (Perspective::instance() && _notifyProjectModified && fileModified) {
     Perspective::instance()->mainWindow()->setWindowModified(true);
   }
 
