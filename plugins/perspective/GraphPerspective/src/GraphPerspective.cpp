@@ -311,7 +311,11 @@ bool GraphPerspective::terminated() {
 #endif
 
   if(_graphs->needsSaving() || mainWindow()->isWindowModified()) {
-    QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you want to save your changes?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+    QString message = trUtf8("The project has been modified. Do you want to save your changes?");
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+    message = trUtf8("The project has been modified (loaded graphs or Python files opened in the IDE). Do you want to save your changes?");
+#endif
+    QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), message, QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
     if ((answer == QMessageBox::Yes && !save()) ||
         (answer == QMessageBox::Cancel)) {
