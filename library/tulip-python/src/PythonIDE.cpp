@@ -882,7 +882,8 @@ void PythonIDE::writeFileToProject(const QString &projectFile, const QString &fi
   if (!_project->exists(projectFile)) {
     _project->touch(projectFile);
     fileModified = true;
-  } else {
+  }
+  else {
     hasher.reset();
     QIODevice *fs = _project->fileStream(projectFile, QIODevice::ReadOnly | QIODevice::Text);
     hasher.addData(fs->readAll());
@@ -1370,6 +1371,7 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
 
   QStringList existingScriptFilenames;
   QString scriptFilesList;
+
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     QString fileName = getMainScriptEditor(i)->getFileName();
 
@@ -1414,7 +1416,8 @@ void PythonIDE::writeScriptsFilesList(int deleted) {
   if (!_project->exists(PYTHON_SCRIPTS_FILES)) {
     _project->touch(PYTHON_SCRIPTS_FILES);
     fileModified = true;
-  } else {
+  }
+  else {
     QIODevice *fs = _project->fileStream(PYTHON_SCRIPTS_FILES, QIODevice::ReadOnly | QIODevice::Text);
     hasher.reset();
     hasher.addData(fs->readAll());
@@ -1445,6 +1448,7 @@ void PythonIDE::writePluginsFilesList(int deleted) {
 
   QStringList existingPluginsFilenames;
   QString pluginFilesList;
+
   for (int i = 0 ; i < _ui->pluginsTabWidget->count() ; ++i) {
     if (deleted == -1 || i != deleted) {
       pluginFilesList += (getPluginEditor(i)->getFileName()+"\n");
@@ -1463,7 +1467,8 @@ void PythonIDE::writePluginsFilesList(int deleted) {
   if (!_project->exists(PYTHON_PLUGINS_FILES)) {
     _project->touch(PYTHON_PLUGINS_FILES);
     fileModified = true;
-  } else {
+  }
+  else {
     hasher.reset();
     QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
     hasher.addData(fs->readAll());
@@ -1522,7 +1527,8 @@ void PythonIDE::writeModulesFilesList(int deleted) {
   if (!_project->exists(PYTHON_MODULES_FILES)) {
     _project->touch(PYTHON_MODULES_FILES);
     fileModified = true;
-  } else {
+  }
+  else {
     hasher.reset();
     QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
     hasher.addData(fs->readAll());
