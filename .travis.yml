@@ -13,6 +13,11 @@
 # inform travis that we are building a cpp project
 language: cpp
 
+# send build status notifications to tulipdev mailing list
+notifications:
+  email:
+    - tulipdev@labri.fr
+
 # define build jobs
 jobs:
   include:
@@ -242,7 +247,7 @@ jobs:
   #==============================================================================================================================================================
     # Tulip AppImage build on CentOS
     - stage: Tulip AppImage build (CentOS)
-      # Tulip AppImage build on CentOS 6
+      # Tulip x86_64 AppImage build on CentOS 6
       os: linux
       dist: trusty
       cache:
@@ -251,8 +256,8 @@ jobs:
 
       sudo: required
       env:
-        - OS_TYPE=centos
-        - OS_VERSION=6
+        - ARCH=x86_64
+        - DOCKER_IMAGE=centos:6
 
       services:
         - docker
@@ -261,11 +266,60 @@ jobs:
         - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
         - sudo service docker restart
         - sleep 5
-        - sudo docker pull centos:${OS_VERSION}
-        - sudo docker create -v $HOME/ccache:/ccache --name ccache centos:${OS_VERSION}
+        - sudo docker pull ${DOCKER_IMAGE}
+        - sudo docker create -v $HOME/ccache:/ccache --name ccache ${DOCKER_IMAGE}
 
       script:
-        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw centos:${OS_VERSION} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
+        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
+
+      # deploy Tulip AppImage to bintray
+      deploy:
+        on:
+          branch: master
+          repo: Tulip-Dev/tulip
+        provider: bintray
+        file: "build/deploy/TulipPackagesToBintray.json"
+        user: "anlambert"
+        key:
+          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    -
+      # Tulip i686 AppImage build on CentOS 6
+      os: linux
+      dist: trusty
+      cache:
+        directories:
+          - $HOME/ccache
+
+      sudo: required
+      env:
+        - ARCH=i686
+        - DOCKER_IMAGE=toopher/centos-i386:centos6
+
+      services:
+        - docker
+
+      before_install:
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull ${DOCKER_IMAGE}
+        - sudo docker create -v $HOME/ccache:/ccache --name ccache ${DOCKER_IMAGE}
+
+      script:
+        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
+
+      # deploy Tulip AppImage to bintray
+      deploy:
+        on:
+          branch: master
+          repo: Tulip-dev/tulip
+        provider: bintray
+        file: "build/deploy/TulipPackagesToBintray.json"
+        user: "anlambert"
+        key:
+          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
 
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
@@ -316,7 +370,7 @@ jobs:
     
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS
-    - 
+    -
       os: osx
       # use xcode9 travis image to get a recent clang compiler
       osx_image: xcode9
@@ -385,6 +439,7 @@ jobs:
         - sudo port -N install automake
         - sudo port -N install libtool
         - sudo port -N install pkgconfig
+        - sudo pip install sphinx
         # MacPorts offers cppunit 1.14 in its repositories 
         # but cppunit 1.13.2 is the last version supporting C++98, so grab it, compile and install it
         - wget http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz
@@ -400,12 +455,26 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=${TULIP_BUILD_DOC} -DTULIP_USE_CCACHE=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
+        # build Tulip bundle
+        - ninja bundle
+        - cd ..
+
+      # deploy Tulip bundle to bintray
+      deploy:
+        on:
+          branch: master
+          repo: Tulip-Dev/tulip
+        provider: bintray
+        file: "build/deploy/TulipPackagesToBintray.json"
+        user: "anlambert"
+        key:
+          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
     
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS
@@ -428,6 +497,7 @@ jobs:
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qt5-qtbase
+        - sudo port -N install qt5-qttools
         - sudo port -N install qt5-qtwebkit
         - sudo port -N install freetype
         - sudo port -N install glew
@@ -437,6 +507,7 @@ jobs:
         - sudo port -N install yajl
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
+        - sudo pip install sphinx --ignore-installed six
       env:
         # use C++11
         - TULIP_CXX_FLAGS="-std=c++11 -stdlib=libc++"
@@ -447,9 +518,23 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=${TULIP_BUILD_DOC} -DTULIP_USE_CCACHE=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4 install
         # run Tulip unit tests
         - ninja runTests
+        # build Tulip bundle
+        - ninja bundle
+        - cd ..
+
+      # deploy Tulip bundle to bintray
+      deploy:
+        on:
+          branch: master
+          repo: Tulip-Dev/tulip
+        provider: bintray
+        file: "build/deploy/TulipPackagesToBintray.json"
+        user: "anlambert"
+        key:
+          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="

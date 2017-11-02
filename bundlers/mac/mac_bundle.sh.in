@@ -81,7 +81,14 @@ cd ..
 # configure tulip & tulip_perspective
 mv bin/tulip MacOS/Tulip
 # run macdeployqt with tulip_perspective as an other executable to update
+# but also the Tulip Python dynamic modules (not processed by macdeployqt as
+# they are suffixed by .so instead of .dylib)
+if [ "$PYTHON_BUILD" = "ON" ]
+then
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulip/native/_tulip.so -executable=${DEST_DIR}/application/Tulip.app/Contents/lib/tulip/python/tulipgui/native/_tulipgui.so
+else
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
+fi
 mv MacOS/Tulip bin/tulip
 # rename
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
@@ -93,7 +100,6 @@ cat > MacOs/Tulip <<EOF
 wd="\${0%/*}"
 cd "\$wd/.."
 
-export DYLD_LIBRARY_PATH="\$(pwd)/Frameworks"
 export DYLD_FRAMEWORK_PATH="\$(pwd)/Frameworks"
 export QT_QPA_PLATFORM_PLUGIN_PATH="\$(pwd)/PlugIns/platforms"
 export QT_PLUGIN_PATH="\$(pwd)/PlugIns"
@@ -111,8 +117,9 @@ sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/applicatio
 # rename dmg if needed
 if [ "$PYTHON_BUILD" = "ON" ]
 then
-echo "${APP_NAME}-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
+echo "${APP_NAME}-@TulipVersion@_qt$(echo "@QT_VERSION@" | cut -c1).dmg has been correctly generated in ${DEST_DIR}"
+mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt$(echo "@QT_VERSION@" | cut -c1).dmg
 else
-echo "${APP_NAME}-@TulipVersion@_no_python.dmg has been correctly generated in ${DEST_DIR}"
-mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_no_python.dmg
+echo "${APP_NAME}-@TulipVersion@_qt$(echo "@QT_VERSION@" | cut -c1)_no_python.dmg has been correctly generated in ${DEST_DIR}"
+mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_qt$(echo "@QT_VERSION@" | cut -c1)_no_python.dmg
 fi

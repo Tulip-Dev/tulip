@@ -61,9 +61,9 @@ RequestExecutionLevel admin
 !ifndef OUT_FILE
 !if ${CHECK_PYTHON} == "ON"
 !if ${ARCH} == "64"
-!define OUT_FILE "tulip-@TulipVersion@_x64_setup.exe"
+!define OUT_FILE "tulip-@TulipVersion@_x64_python@PYTHON_VERSION_NO_DOT@_setup.exe"
 !else
-!define OUT_FILE "tulip-@TulipVersion@_setup.exe"
+!define OUT_FILE "tulip-@TulipVersion@_python@PYTHON_VERSION_NO_DOT@_setup.exe"
 !endif
 !else
 !if ${ARCH} == "64"

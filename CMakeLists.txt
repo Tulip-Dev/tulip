@@ -389,6 +389,7 @@ This should only be used when packaging Tulip for a Linux distribution or MSYS2.
     STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
     STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
     STRING(REGEX MATCH "[0-9]\\.[0-9]+\\.[0-9]+" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
+    STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
 
     IF(TULIP_PYTHON_SITE_INSTALL)
 
@@ -466,7 +467,6 @@ else:
       # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
       IF(MINGW)
         STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
-        STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
 
         IF(MSYS2_PYTHON)
           IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
@@ -835,6 +835,7 @@ INSTALL(FILES cmake/TulipUseFile.cmake
 IF(NOT TULIP_BUILD_CORE_ONLY)
 
   ADD_SUBDIRECTORY(bundlers)
+  ADD_SUBDIRECTORY(deploy)
 
   ## ========================================================
   ## tulip-config script
