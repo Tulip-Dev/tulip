@@ -6,7 +6,7 @@ git clone https://github.com/frerich/clcache.git
 set PATH=C:/Python35-x64;C:/Python35-x64/Scripts;%PATH%
 pip install pyinstaller --upgrade
 cd clcache
-pyinstaller clcache.py
+pyinstaller pyinstaller/clcache_main.py -n clcache
 set PATH=C:/clcache/dist/clcache;%PATH%
 
 rem create a directory to store Tulip dependencies
