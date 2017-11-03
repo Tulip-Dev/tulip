@@ -54,12 +54,13 @@ fi
 rm -f test_gui.* data/test_gui.*
 
 # backup original Tulip settings
-cp ~/.config/TulipSoftware/Tulip.conf /tmp
+tmp_conf=$(mktemp /tmp/Tulip.conf.XXXXXXXX)
+cp ~/.config/TulipSoftware/Tulip.conf $tmp_conf
 # run the test
 sh tulip_replay.sh $TEST_NAME.xns $TLP_INPUT_FILE
 # restore original Tulip settings to ensure that a failure
 # of this test will not impact the following ones
-mv /tmp/Tulip.conf ~/.config/TulipSoftware
+mv $tmp_conf ~/.config/TulipSoftware/Tulip.conf
 
 # check for a crash
 if [ ! -f tulip.pid ]; then
