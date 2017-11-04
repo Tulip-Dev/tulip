@@ -1,7 +1,6 @@
 # automatically generates the file tulippluginsdocumentation.rst
 # by dynamically introspecting the Tulip plugins metadata
 
-
 from __future__ import print_function
 import sys
 if sys.version_info[0] == 2:
@@ -12,6 +11,21 @@ import tulipgui
 import tabulate
 import re
 import os
+
+def safeprint(s, file=None):
+  try:
+    print(s, file=file)
+  except UnicodeEncodeError:
+    if sys.version_info >= (3,):
+      print(s.encode('utf8').decode(sys.stdout.encoding), file=file)
+    else:
+      print(s.encode('utf8'), file=file)
+
+def utf8len(s):
+  if sys.version_info >= (3,):
+    return len(s.encode('utf8').decode(sys.stdout.encoding))
+  else:
+    return len(s.encode('utf8'))
 
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/clustering')
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/colors')
@@ -28,7 +42,7 @@ tlp.loadTulipPluginsFromDir(os.environ['TULIP_PYTHON_PLUGINS_DIR'])
 
 f = open('tulippluginsdocumentation.rst','w')
 
-print("""
+safeprint("""
 .. |br| raw:: html
 
    <br />
@@ -75,16 +89,16 @@ print("""
 
 """, file=f)
 
-print('.. py:currentmodule:: tulip\n', file=f)
+safeprint('.. py:currentmodule:: tulip\n', file=f)
 
-print('.. _tulippluginsdoc:\n', file=f)
+safeprint('.. _tulippluginsdoc:\n', file=f)
 
 def writeSection(title, sectionChar):
-  print(title, file=f)
+  safeprint(title, file=f)
   underline = ''
-  for i in range(len(title)):
+  for i in range(utf8len(title)):
     underline += sectionChar
-  print(underline+'\n', file=f)
+  safeprint(underline+'\n', file=f)
 
 def replaceHtmlTags(doc, htmlTag, htmlTagStartReplacement, htmlTagEndReplacement):
   tmp = re.sub('^<'+htmlTag+'>', '|' + htmlTagStartReplacement + '| ', doc)
@@ -140,7 +154,7 @@ def getTulipPythonType(tulipType):
 
 writeSection('Tulip plugins documentation', '=')
 
-print("""
+safeprint("""
 In this section, you can find some documentation regarding the C++ algorithm plugins bundled in the Tulip 
 software but also with the Tulip Python modules installable through the pip tool.
 In particular, an exhaustive description of the input and output parameters for each plugin is given.
@@ -164,38 +178,38 @@ for cat in sorted(plugins.keys()):
     continue
   writeSection(cat, '-')
   if cat == 'Algorithm':
-    print('.. _algorithmpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applyAlgorithm` method. See also :ref:`Calling a general algorithm on a graph <callGeneralAlgorithm>` for more details.\n', file=f)
+    safeprint('.. _algorithmpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applyAlgorithm` method. See also :ref:`Calling a general algorithm on a graph <callGeneralAlgorithm>` for more details.\n', file=f)
   elif cat == 'Coloring':
-    print('.. _colorpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applyColorAlgorithm` method. See also for more details.\n', file=f)
+    safeprint('.. _colorpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applyColorAlgorithm` method. See also for more details.\n', file=f)
   elif cat == 'Export':
-    print('.. _exportpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :func:`tlp.exportGraph` function.\n', file=f)
+    safeprint('.. _exportpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :func:`tlp.exportGraph` function.\n', file=f)
   elif cat == 'Import':
-    print('.. _importpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :func:`tlp.importGraph` function.\n', file=f)
+    safeprint('.. _importpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :func:`tlp.importGraph` function.\n', file=f)
   elif cat == 'Labeling':
-    print('.. _stringpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applyStringAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
+    safeprint('.. _stringpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applyStringAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
   elif cat == 'Layout':
-    print('.. _layoutpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applyLayoutAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
+    safeprint('.. _layoutpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applyLayoutAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
   elif cat == 'Measure':
-    print('.. _doublepluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applyDoubleAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
+    safeprint('.. _doublepluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applyDoubleAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
   elif cat == 'Resizing':
-    print('.. _sizepluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applySizeAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
+    safeprint('.. _sizepluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applySizeAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
   elif cat == 'Selection':
-    print('.. _booleanpluginsdoc:\n', file=f)
-    print('To call these plugins, you must use the :meth:`tlp.Graph.applyBooleanAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
+    safeprint('.. _booleanpluginsdoc:\n', file=f)
+    safeprint('To call these plugins, you must use the :meth:`tlp.Graph.applyBooleanAlgorithm` method. See also :ref:`Calling a property algorithm on a graph <callPropertyAlgorithm>` for more details.\n', file=f)
 
   for p in sorted(plugins[cat], key=lambda p : p.name()):
     writeSection(p.name(), '^')
     writeSection('Description', '"')
     infos = formatSphinxDoc(p.info())
-    print(infos+'\n', file=f)
+    safeprint(infos+'\n', file=f)
 
     params = tlp.PluginLister.getPluginParameters(p.name())
     headers = ["name", "type", "default", "direction", "description"]
@@ -256,62 +270,62 @@ for cat in sorted(plugins.keys()):
       paramsTable.append([paramName, paramType, paramDefValue, paramDir, paramHelp])
     if len(paramsTable) > 0:
       writeSection('Parameters', '"')
-      print(tabulate.tabulate(paramsTable, headers, tablefmt="grid")+'\n', file=f)
+      safeprint(tabulate.tabulate(paramsTable, headers, tablefmt="grid")+'\n', file=f)
     writeSection('Calling the plugin from Python', '"')
-    print("To call that plugin from Python, use the following code snippet::\n", file=f)
-    print("  # get a dictionnary filled with the default plugin parameters values", file=f)
+    safeprint("To call that plugin from Python, use the following code snippet::\n", file=f)
+    safeprint("  # get a dictionnary filled with the default plugin parameters values", file=f)
     if p.category() != 'Import':
-      print("  # graph is an instance of the tlp.Graph class\n" +
+      safeprint("  # graph is an instance of the tlp.Graph class\n" +
             "  params = tlp.getDefaultPluginParameters('" + p.name() + "', graph)\n" , file=f)
     else:
-      print("  params = tlp.getDefaultPluginParameters('" + p.name() + "')\n" , file=f)
+      safeprint("  params = tlp.getDefaultPluginParameters('" + p.name() + "')\n" , file=f)
     if nbInParams > 0 and not(len(paramsTable) == 1 and paramsTable[0][0] == 'result'):
-      print("  # set any input parameter value if needed", file=f)
+      safeprint("  # set any input parameter value if needed", file=f)
       for paramData in paramsTable:
-        print("  # params['" + paramData[0] + "'] = ...", file=f)
-      print("", file=f)
+        safeprint("  # params['" + paramData[0] + "'] = ...", file=f)
+      safeprint("", file=f)
     if p.category() == "Import":
-      print("  graph = tlp.importGraph('" + p.name() + "', params)", file=f)
+      safeprint("  graph = tlp.importGraph('" + p.name() + "', params)", file=f)
     elif p.category() == "Export":
-      print("  outputFile = '<path to a file>'", file=f)
-      print("  success = tlp.exportGraph('" + p.name() + "', graph, outputFile, params)", file=f)
+      safeprint("  outputFile = '<path to a file>'", file=f)
+      safeprint("  success = tlp.exportGraph('" + p.name() + "', graph, outputFile, params)", file=f)
     elif p.category() == "Layout":
-      print("  # either create or get a layout property from the graph to store the result of the algorithm", file=f)
-      print("  resultLayout = graph.getLayoutProperty('resultLayout')", file=f)
-      print("  success = graph.applyLayoutAlgorithm('" + p.name() + "', resultLayout, params)\n", file=f)
-      print("  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'", file=f)
-      print("  success = graph.applyLayoutAlgorithm('" + p.name() + "', params)\n", file=f)
+      safeprint("  # either create or get a layout property from the graph to store the result of the algorithm", file=f)
+      safeprint("  resultLayout = graph.getLayoutProperty('resultLayout')", file=f)
+      safeprint("  success = graph.applyLayoutAlgorithm('" + p.name() + "', resultLayout, params)\n", file=f)
+      safeprint("  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'", file=f)
+      safeprint("  success = graph.applyLayoutAlgorithm('" + p.name() + "', params)\n", file=f)
     elif p.category() == "Measure":
-      print("  # either create or get a double property from the graph to store the result of the algorithm", file=f)
-      print("  resultMetric = graph.getDoubleProperty('resultMetric')", file=f)
-      print("  success = graph.applyDoubleAlgorithm('" + p.name() + "', resultMetric, params)\n", file=f)
-      print("  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'", file=f)
-      print("  success = graph.applyDoubleAlgorithm('" + p.name() + "', params)\n", file=f)
+      safeprint("  # either create or get a double property from the graph to store the result of the algorithm", file=f)
+      safeprint("  resultMetric = graph.getDoubleProperty('resultMetric')", file=f)
+      safeprint("  success = graph.applyDoubleAlgorithm('" + p.name() + "', resultMetric, params)\n", file=f)
+      safeprint("  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'", file=f)
+      safeprint("  success = graph.applyDoubleAlgorithm('" + p.name() + "', params)\n", file=f)
     elif p.category() == "Coloring":
-      print("  # either create or get a color property from the graph to store the result of the algorithm", file=f)
-      print("  resultColor = graph.getColorProperty('resultColor')", file=f)
-      print("  success = graph.applyColorAlgorithm('" + p.name() + "', resultColor, params)\n", file=f)
-      print("  # or store the result of the algorithm in the default Tulip color property named 'viewColor'", file=f)
-      print("  success = graph.applyColorAlgorithm('" + p.name() + "', params)\n", file=f)
+      safeprint("  # either create or get a color property from the graph to store the result of the algorithm", file=f)
+      safeprint("  resultColor = graph.getColorProperty('resultColor')", file=f)
+      safeprint("  success = graph.applyColorAlgorithm('" + p.name() + "', resultColor, params)\n", file=f)
+      safeprint("  # or store the result of the algorithm in the default Tulip color property named 'viewColor'", file=f)
+      safeprint("  success = graph.applyColorAlgorithm('" + p.name() + "', params)\n", file=f)
     elif p.category() == "Resizing":
-      print("  # either create or get a size property from the graph to store the result of the algorithm", file=f)
-      print("  resultSize = graph.getSizeProperty('resultSize')", file=f)
-      print("  success = graph.applySizeAlgorithm('" + p.name() + "', resultSize, params)\n", file=f)
-      print("  # or store the result of the algorithm in the default Tulip size property named 'viewSize'", file=f)
-      print("  success = graph.applySizeAlgorithm('" + p.name() + "', params)\n", file=f)
+      safeprint("  # either create or get a size property from the graph to store the result of the algorithm", file=f)
+      safeprint("  resultSize = graph.getSizeProperty('resultSize')", file=f)
+      safeprint("  success = graph.applySizeAlgorithm('" + p.name() + "', resultSize, params)\n", file=f)
+      safeprint("  # or store the result of the algorithm in the default Tulip size property named 'viewSize'", file=f)
+      safeprint("  success = graph.applySizeAlgorithm('" + p.name() + "', params)\n", file=f)
     elif p.category() == "Selection":
-      print("  # either create or get a boolean property from the graph to store the result of the algorithm", file=f)
-      print("  resultSelection = graph.getBooleanProperty('resultSelection')", file=f)
-      print("  success = graph.applyBooleanAlgorithm('" + p.name() + "', resultSelection, params)\n", file=f)
-      print("  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'", file=f)
-      print("  success = graph.applyBooleanAlgorithm('" + p.name() + "', params)\n", file=f)
+      safeprint("  # either create or get a boolean property from the graph to store the result of the algorithm", file=f)
+      safeprint("  resultSelection = graph.getBooleanProperty('resultSelection')", file=f)
+      safeprint("  success = graph.applyBooleanAlgorithm('" + p.name() + "', resultSelection, params)\n", file=f)
+      safeprint("  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'", file=f)
+      safeprint("  success = graph.applyBooleanAlgorithm('" + p.name() + "', params)\n", file=f)
     elif p.category() == "Labeling":
-      print("  # either create or get a string property from the graph to store the result of the algorithm", file=f)
-      print("  resultString = graph.getStringProperty('resultString')", file=f)
-      print("  success = graph.applyStringAlgorithm('" + p.name() + "', resultString, params)\n", file=f)
-      print("  # or store the result of the algorithm in the default Tulip string property named 'viewLabel'", file=f)
-      print("  success = graph.applyStringAlgorithm('" + p.name() + "', params)\n", file=f)
+      safeprint("  # either create or get a string property from the graph to store the result of the algorithm", file=f)
+      safeprint("  resultString = graph.getStringProperty('resultString')", file=f)
+      safeprint("  success = graph.applyStringAlgorithm('" + p.name() + "', resultString, params)\n", file=f)
+      safeprint("  # or store the result of the algorithm in the default Tulip string property named 'viewLabel'", file=f)
+      safeprint("  success = graph.applyStringAlgorithm('" + p.name() + "', params)\n", file=f)
     elif p.category() == "Algorithm":
-      print("  success = graph.applyAlgorithm('" + p.name() + "', params)\n", file=f)
-    print("  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary\n", file=f)
+      safeprint("  success = graph.applyAlgorithm('" + p.name() + "', params)\n", file=f)
+    safeprint("  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary\n", file=f)
 f.close()
