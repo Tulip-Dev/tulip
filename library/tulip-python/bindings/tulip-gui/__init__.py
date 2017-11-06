@@ -35,11 +35,22 @@ if hasattr(os, 'uname'):
     ctypes.CDLL(ctypes.util.find_library('GL'), ctypes.RTLD_GLOBAL)
 
 _tulipGuiNativeLibsPath = os.path.dirname(__file__) + '/native/'
+_tulipGuiNativePluginsPath = _tulipGuiNativeLibsPath + 'plugins'
+_tulipGuiPluginsPath = os.path.dirname(__file__) + '/plugins/'
 
 sys.path.append(_tulipGuiNativeLibsPath)
 
 if platform.system() == 'Windows':
   os.environ['PATH'] = _tulipGuiNativeLibsPath + ';' + _tulipGuiNativeLibsPath + '../../../;' + os.environ['PATH']
+
+if not sys.argv[0] == 'tulip':
+  # when the tulipgui module is installed from the Python Packaging Index
+  # modify the TulipBitmapDir variable as it is different from the default one
+  bitmapDir = os.path.dirname(__file__) + '/share/bitmaps/'
+  if os.path.isdir(bitmapDir):
+    tlp.TulipBitmapDir = bitmapDir
+    tlp.TulipPluginsPath = _tulipGuiNativePluginsPath
+    tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
 
 import _tulipgui
 
@@ -48,19 +59,9 @@ sys.path.pop()
 class tlpgui(_tulipgui.tlpgui):
   pass
 
-if not sys.argv[0] == 'tulip':
-  # when the tulipgui module is installed from the Python Packaging Index
-  # modify the TulipBitmapDir variable as it is different from the default one
-  bitmapDir = os.path.dirname(__file__) + '/share/bitmaps/'
-  if os.path.isdir(bitmapDir):
-    tlp.TulipBitmapDir = bitmapDir
-    tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
-
 def tulipguiExitFunc():
   import tulipgui
   tulipgui.tlpgui.runQtMainLoop()
-
-_tulipGuiNativePluginsPath = _tulipGuiNativeLibsPath + 'plugins'
 
 # fix loading of Tulip plugins when the tulipgui module has been installed through pip
 if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
@@ -72,7 +73,7 @@ if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
     dlOpenFlags = os.RTLD_NOW | os.RTLD_GLOBAL
   sys.setdlopenflags(dlOpenFlags)
 
-tlp.loadTulipPluginsFromDir(_tulipGuiNativePluginsPath)
+tlp.loadTulipPluginsFromDir(_tulipGuiPluginsPath)
 
 if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
   sys.setdlopenflags(dlOpenFlagsBackup)
@@ -86,9 +87,6 @@ if not hasattr(sys, 'ps1') and not sys.flags.interactive:
 
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-if not sys.argv[0] == 'tulip':
-  tlpgui.initInteractorsDependencies()
 
 __all__ = ['tlpgui']
 __author__ = "David Auber, Antoine Lambert and the Tulip development Team"
