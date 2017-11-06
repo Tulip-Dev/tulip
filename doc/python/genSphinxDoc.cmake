@@ -49,6 +49,7 @@ SET(ENV{PYTHONPATH} "${PYTHON_PATHS}")
 SET(ENV{TULIP_BUILD_DIR} "${TULIP_BUILD_DIR}")
 SET(ENV{TULIP_SOURCE_DIR} "${TULIP_SOURCE_DIR}")
 SET(ENV{TULIP_PYTHON_PLUGINS_DIR} "${BIN_DIR}/../../library/tulip-python/bindings/tulip-core/tulip_module/tulip/plugins")
+SET(ENV{TULIPGUI_PYTHON_PLUGINS_DIR} "${BIN_DIR}/../../library/tulip-python/bindings/tulip-gui/tulipgui_module/tulipgui/plugins")
 
 # Fix an encoding issue on Mac OS
 IF(APPLE)

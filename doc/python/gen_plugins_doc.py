@@ -39,6 +39,7 @@ tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/sizes')
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/string')
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_BUILD_DIR'] + '/plugins/test')
 tlp.loadTulipPluginsFromDir(os.environ['TULIP_PYTHON_PLUGINS_DIR'])
+tlp.loadTulipPluginsFromDir(os.environ['TULIPGUI_PYTHON_PLUGINS_DIR'])
 
 f = open('tulippluginsdocumentation.rst','w')
 
