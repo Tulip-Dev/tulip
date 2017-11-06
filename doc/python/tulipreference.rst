@@ -88,6 +88,11 @@ Geometry
 
 .. autofunction:: tulip::tlp.voronoiDiagram
 
+.. _parametric-curves:
+
+Parametric curves computation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. autofunction:: tulip::tlp.computeBezierPoint
 
 .. autofunction:: tulip::tlp.computeBezierPoints
@@ -177,6 +182,8 @@ Modification of the graph structure
 .. automethod:: tulip::tlp.Graph.addNodes
 
 .. automethod:: tulip::tlp.Graph.delNode
+
+.. automethod:: tulip::tlp.Graph.delNodes
 
 .. automethod:: tulip::tlp.Graph.delNodes
 

@@ -3,6 +3,83 @@
 Release notes and API changes
 =============================
 
+Tulip-Python 5.1
+-----------------
+
+This is mainly a bugs fixes release for the Tulip bindings with some API improvements.
+The focus since the 5.0 release has been on stabilizing the API by writing non regression tests.
+
+Bugs fixes
+^^^^^^^^^^
+
+The following bugs have been corrected since the 5.0 release:
+
+  * methods of class :class:`tlp.VoronoiDiagram` were not callable due to a visibility issue.
+  * on MacOS, the impossibility to import the :mod:`tulipgui` module when using the Anaconda Python distribution.
+  * segfaults when calling the iterator version of the methods :meth:`tlp.Graph.delNodes` and :meth:`tlp.Graph.delEdges`
+  * some other internal issues
+
+Also, the automatic graph property creation by type inference introduced in Tulip-Python 4.9
+should now behave correctly for all supported property types (especially list ones).
+
+API improvements
+^^^^^^^^^^^^^^^^
+
+Values for graph properties of type :class:`tlp.ColorProperty`, :class:`tlp.LayoutProperty` and
+:class:`tlp.SizeProperty` can now be set using tuples.
+
+For modifying the content of a :class:`tlp.ColorProperty`, it is now possible to use the
+following syntax::
+
+  viewColor = graph.getColorProperty('viewColor')
+  viewColor[n] = (100, 0, 255)
+  viewColor[n] = (0, 0, 255, 200)
+
+  # or even shorter
+  graph['viewColor'][n] = (100, 0, 255)
+  graph['viewColor'][n] = (0, 0, 255, 200)
+
+For modifying the content of a :class:`tlp.LayoutProperty` or :class:`tlp.SizeProperty`,
+it is now possible to use the following syntax::
+
+  viewLayout = graph.getLayoutProperty('viewLayout')
+  viewLayout[n] = (0.0, 0.0)
+  viewLayout[n] = (10.0, 10.0, 10.0)
+
+  viewSize = graph.getSizeProperty('viewSize')
+  viewSize[n] = (2.0, 2.0)
+  viewSize[n] = (1.0, 1.0, 1.0)
+
+  # or even shorter
+  graph['viewLayout'][n] = (0.0, 0.0)
+  graph['viewLayout'][n] = (10.0, 10.0, 10.0)
+
+  graph['viewSize'][n] = (2.0, 2.0)
+  graph['viewSize'][n] = (1.0, 1.0, 1.0)
+
+.. warning::
+
+  In order to successfully set a property values using a tuple, the types of the elements
+  it contains and its length are constrained according to the the property type:
+
+    * for :class:`tlp.ColorProperty`: the tuple must contain 3 or 4 integers between 0 and 255
+    * for :class:`tlp.LayoutProperty` and :class:`tlp.SizeProperty`: the tuple must contain 2 or 3
+      float (meaning the value will fail to be set if the tuple contains integers)
+
+Another slight API change is that now optional parameters for functions and class methods
+can now be used as keyword arguments. Signature of functions and methods have been adapted
+accordingly in the whole documentation.
+
+Removal of the tulipogl module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Due to its small content, the tulipogl module has been removed. Nevertheless, the features it offered
+have been splitted in the :mod:`tulip` and :mod:`tulipgui` modules:
+
+  * :ref:`parametric-curves`
+  * :class:`tulipgui.tlpgui.GlGraphInputData`
+  * :class:`tulipgui.tlpgui.GlGraphRenderingParameters`
+
 Tulip-Python 5.0
 -----------------
 

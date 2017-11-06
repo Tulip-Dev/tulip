@@ -27,6 +27,8 @@ Release notes
 
 Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **5.1.0**: based on Tulip 5.1.0 released on 07/11/2017
+
     * **5.0.0**: based on Tulip 5.0.0 released on 27/06/2017
 
     * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
@@ -98,23 +100,23 @@ A window containing an OpenGL visualization of the graph will be created and dis
     renderingParameters.setEdgeColorInterpolate(True)
     nodeLinkView.setRenderingParameters(renderingParameters)
 
-
-
 References
 ==========
 
 .. [1] David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert,
        Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet.
        TULIP 4. Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016.
-       https://hal.archives-ouvertes.fr/hal-01359308/
+       https://hal.archives-ouvertes.fr/hal-01359308
 
 .. [2] David Auber, Daniel Archambault, Romain Bourqui, Antoine Lambert, Morgan Mathiaut,
        Patrick Mary, Maylis Delest, Jonathan Dubois, and Guy Mélançon. The Tulip 3 Framework:
        A Scalable Software Library for Information Visualization Applications Based on Relational
        Data. Technical report RR-7860, INRIA, January 2012
+       https://hal.archives-ouvertes.fr/hal-00659880
 
 .. [3] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python.
        EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
+       https://hal.archives-ouvertes.fr/hal-00744969
 
 .. [4] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
        C and C++ libraries. http://www.riverbankcomputing.co.uk/software/sip

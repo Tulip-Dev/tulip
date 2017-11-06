@@ -275,7 +275,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
       // don't print error messages when trying to load Tulip Python
       // binary modules
-      if (lib.find("_") == 0) {
+      if (lib.find("_") == 0 || lib.find("tulipsip") != std::string::npos) {
         success = FindNextFile (hFind, &findData);
         continue;
       }
@@ -359,7 +359,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
     // don't print error messages when trying to load Tulip Python
     // binary modules
-    if (lib.find("_") == 0) {
+    if (lib.find("_") == 0 || lib.find("tulipsip") != std::string::npos) {
       continue;
     }
 
