@@ -61,7 +61,7 @@ rm lib/tulip/python/tulipgui/*.pyc lib/tulip/python/tulipgui/*.pyo 2>/dev/null
 
 echo 'Copying license'
 cd "${DEST_DIR}/application"
-cp "${SRC_DIR}/../../COPYING" .
+cp "${SRC_DIR}/../../COPYING.LESSER" .
 
 QT_LIB_DIR="@QT_QTCORE_LIBRARY@/.."
 echo 'Copying Resources'

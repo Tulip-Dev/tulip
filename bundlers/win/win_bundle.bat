@@ -35,7 +35,7 @@ del /Q /F /S "%DEST_DIR%\\files\\bin\\platforms\\q*d.pdb" >nul 2>&1
 echo 'Copying NSIS script and licence'
 
 copy "%SRC_DIR%\\Tulip.nsi" "%DEST_DIR%\\"
-copy "%SRC_DIR%\\COPYING" "%DEST_DIR%\\"
+copy "%SRC_DIR%\\COPYING.LESSER" "%DEST_DIR%\\"
 
 echo 'Running NSIS installer generator'
 cd "%DEST_DIR%"
