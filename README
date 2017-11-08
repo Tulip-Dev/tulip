@@ -9,11 +9,15 @@ Requirements:
 - zlib
 - libjpeg
 - libpng
-- Qt 4.7.0 or higher
+- Qt 4.6.0 or higher
 - OpenGl 2.0
 - glew 1.4 or higher
-- gcc, g++ >= 4.5.0, clang or MS Visual Studio
-- python >=2.5
+- gcc, g++ >= 4.2.1, clang or MS Visual Studio
+- python >= 2.5
+- sip >= 4.19.3
+- qhull (optional)
+- quazip (optional)
+- yajl >= 2.0 (optional)
 - sphinx and doxygen to generate the documentation
 
 
