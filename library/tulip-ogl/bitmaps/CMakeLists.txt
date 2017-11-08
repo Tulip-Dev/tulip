@@ -1,23 +1,21 @@
-INSTALL(FILES
-  fontb.ttf
-  font.ttf 
-  fontawesome-webfont.ttf
-  fontawesome-webfont.woff
-  fontawesome-webfont.woff2
-  materialdesignicons-webfont.ttf
-  materialdesignicons-webfont.woff
-  materialdesignicons-webfont.woff2
-  halfCylinderTexture.png
-  cylinderTexture.png
-  roundTexture.png
-DESTINATION ${TulipBitmapInstallDir}
-COMPONENT tulip_ogl)
+INSTALL(FILES fontb.ttf
+              font.ttf
+              fontawesome-webfont.ttf
+              fontawesome-webfont.woff
+              fontawesome-webfont.woff2
+              materialdesignicons-webfont.ttf
+              materialdesignicons-webfont.woff
+              materialdesignicons-webfont.woff2
+              halfCylinderTexture.png
+              cylinderTexture.png
+              roundTexture.png
+        DESTINATION ${TulipBitmapInstallDir}
+        COMPONENT tulip_ogl)
 
-INSTALL(DIRECTORY
-  fonts
-COMPONENT tulip_ogl
-DESTINATION ${TulipBitmapInstallDir}
-PATTERN ".svn" EXCLUDE)
+INSTALL(DIRECTORY fonts
+        COMPONENT tulip_ogl
+        DESTINATION ${TulipBitmapInstallDir}
+        PATTERN ".svn" EXCLUDE)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_CUSTOM_TARGET(copyTulipGuiBitmaps ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fontb.ttf ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/fontb.ttf

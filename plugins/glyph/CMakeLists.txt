@@ -37,7 +37,11 @@ GLYPH(Star star.cpp)
 FONTGLYPH(FontIcon fonticon.cpp)
 
 ## radialGradientTexture.png is used in glowsphere.cpp
-INSTALL(FILES
-  radialGradientTexture.png
-  DESTINATION ${TulipBitmapInstallDir}
-  COMPONENT tulip_plugins)
+INSTALL(FILES radialGradientTexture.png
+        DESTINATION ${TulipBitmapInstallDir}
+        COMPONENT tulip_plugins)
+
+IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  ADD_CUSTOM_TARGET(copyGlyphTextures ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/radialGradientTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/radialGradientTexture.png)
+  ADD_DEPENDENCIES(tulip-gui-wheel copyGlyphTextures)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
