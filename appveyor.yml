@@ -63,7 +63,7 @@ deploy:
   - provider: BinTray
     username: anlambert
     api_key:
-      secure: eW4mdof1xbDrmXPrEoFeeRHxagCkh+48b/SHxFkq1/qbdPHJS1u9n6ONdtTjIKK/
+      secure: W3mHvyyVwEOMbCCDQ0NXobR3ByebQBxtxiATX4EE7Nt88Xei8cfrmIWHbi1Z2IKi
     subject: tulip-dev
     repo: tulip_binaries
     package: Tulip

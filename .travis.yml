@@ -281,7 +281,7 @@ jobs:
         file: "build/deploy/TulipPackagesToBintray.json"
         user: "anlambert"
         key:
-          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
+          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     -
@@ -314,12 +314,12 @@ jobs:
       deploy:
         on:
           branch: master
-          repo: Tulip-dev/tulip
+          repo: Tulip-Dev/tulip
         provider: bintray
         file: "build/deploy/TulipPackagesToBintray.json"
         user: "anlambert"
         key:
-          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
+          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
 
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
@@ -474,7 +474,7 @@ jobs:
         file: "build/deploy/TulipPackagesToBintray.json"
         user: "anlambert"
         key:
-          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
+          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
     
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS
@@ -537,4 +537,4 @@ jobs:
         file: "build/deploy/TulipPackagesToBintray.json"
         user: "anlambert"
         key:
-          secure: "Ak2sv7ArwPAnXriH1PeBzl4zqbcAwYLxBQFqMjw4jFgBq+R7jHT9nkMu3kl1pNFZOKOkKtAZMfBsZxFwepY9d4xl69GnVrcTQR7V2F1ntDjCUe46BknfOl85BnrY2kXtg0IK9pF7DgrXonE5hUrUNZaMhziUbnqgUbndvkVXOQCz8GwwkCycuBz956b4UVA/9i0mg6b5u+3PVtyk81BaA9dqs+ed4vdQxCR9savyDx37h57kg8GPABS+7KEXVjGcVAXH7IWG8EciXRhmnkI6xucRU5oRG7xnUeC5zFAzEq9z5DxoF35ayZ3k2dtMv7WD6l7QeIU57CHR6R52w1fGXkqa9e16VaJVpfGMAqpgGe/VBFE32N7rK0rIQvY8pZRGnhNPunm85JUDelbbvKjmfHFPIGprwtG45Iy26ZQ3qC9nOwvKxqQm9x9YnQ+uvwJPNR5oHHK1pV6fa060c80h06wRSrIr0cutWgmLw+fXJreXODNqh4YQH4k5W0LzIi+/TIat5FgzOdDMYl5SEt4fSAdIKCoxQSUSOmWyDyPeXCH9vMmcOhKuDIFBFv5IuY9RrxfTXbU4s0+mqZAq1w4AMTKJriBmA0UAZ9xyQqEmt3KMS3+GRDCoxVhPaI7jD8n1L0IaBBJD/enY9RjAbL839RUc0/0GWbIieSvMjyvUiAY="
+          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
