@@ -111,8 +111,8 @@ INCLUDE(cmake/TulipUseFile.cmake)
 ## Tulip version variables
 ## ========================================================
 SET(TulipMajorVersion 5)
-SET(TulipMinorVersion 1)
-SET(TulipReleaseVersion "0")
+SET(TulipMinorVersion 2)
+SET(TulipReleaseVersion "0-dev")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
