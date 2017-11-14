@@ -1,4 +1,4 @@
-# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://travis-ci.org/Tulip-Dev/tulip.svg?branch=master)](https://travis-ci.org/Tulip-Dev/tulip) [![Build Status](https://ci.appveyor.com/api/projects/status/github/anlambert/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/anlambert/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [ ![Download](https://api.bintray.com/packages/tulip-dev/tulip_binaries/Tulip/images/download.svg?version=5.1.0) ](https://bintray.com/tulip-dev/tulip_binaries/Tulip/5.1.0/link) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python) [![Download](https://api.bintray.com/packages/tulip-dev/tulip_binaries/Tulip/images/download.svg) ](https://bintray.com/tulip-dev/tulip_binaries/Tulip/_latestVersion)
+# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://travis-ci.org/Tulip-Dev/tulip.svg?branch=master)](https://travis-ci.org/Tulip-Dev/tulip) [![Build Status](https://ci.appveyor.com/api/projects/status/github/anlambert/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/anlambert/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![Download](https://api.bintray.com/packages/tulip-dev/tulip_binaries/Tulip/images/download.svg)](https://bintray.com/tulip-dev/tulip_binaries/Tulip/_latestVersion) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python) [![Download](https://api.bintray.com/packages/tulip-dev/tulip_binaries/Tulip/images/download.svg?version=5.1.1-dev)](https://bintray.com/tulip-dev/tulip_binaries/Tulip/5.1.1-dev/link)
 
 ![alt text](http://tulip.labri.fr/TulipDrupal/sites/default/files/logo_web.png "Tulip")
 
@@ -80,16 +80,18 @@ Below are some links to relevant documentation resources about the Tulip framewo
   
 ## Installing Tulip
 
-Tulip is a cross-platform framework and can be compiled or installed on FreeBSD, Linux, MacOs and Windows.
+Tulip is a cross-platform framework and can be compiled or installed on [FreeBSD](https://www.freshports.org/graphics/tulip/),
+Linux (packages available for [Debian](https://packages.debian.org/search?keywords=tulip), [OpenSUSE](https://software.opensuse.org/download.html?project=graphics&package=tulip), [Ubuntu](https://packages.ubuntu.com/fr/xenial/tulip) or [Fedora](https://fedora.pkgs.org/26/rpm-sphere/tulip-4.9.0-6.1.x86_64.rpm.html) but not necessarily
+in synch with latest Tulip version), MacOs and Windows.
 
 ### Precompiled binaries
 
 For each release, Tulip offers precompiled binaries for Linux (using [AppImage](https://github.com/AppImage/AppImageKit)), 
-MacOS (dmg bundles) or Windows (NSIS based installers).
-You can download those binaries from [Bintray](https://bintray.com/tulip-dev/tulip_binaries/Tulip/5.1.0), 
+MacOS (dmg bundles) or Windows ([NSIS](http://nsis.sourceforge.net/Main_Page) based installers).
+You can download those binaries from [Bintray](https://bintray.com/tulip-dev/tulip_binaries/Tulip/_latestVersion),
 [GitHub](https://github.com/Tulip-Dev/tulip/releases/latest) or [SourceForge](https://sourceforge.net/projects/auber/files/tulip/). 
 
-You can also test the latest development version of Tulip from the installers continuously uploaded on [Bintray](https://bintray.com/tulip-dev/tulip_binaries/Tulip/_latestVersion). Development versions are not considered stable so use at your own risks.
+You can also test the latest development version of Tulip from the installers continuously uploaded on [Bintray](https://bintray.com/tulip-dev/tulip_binaries/Tulip/5.1.1-dev). Development versions are not considered stable so use at your own risks.
 
 ### Compiling from scratch
 
@@ -107,7 +109,7 @@ The following dependencies are required to build Tulip:
   * [libjpeg](https://libjpeg-turbo.org/)
   * [libpng](http://www.libpng.org/pub/png/libpng.html)
   * [Qt](https://www.qt.io) >= 4.6.0
-  * [OpenGl](https://www.opengl.org) >= 2.0
+  * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
 
 In order to build the Python components, the following dependencies are needed:
