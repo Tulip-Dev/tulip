@@ -22,7 +22,8 @@ MACRO(UNIT_TEST)
   # otherwise this is a Python test
   ELSEIF(TULIP_BUILD_PYTHON_COMPONENTS)
     SET(PYTHON_TEST_MODULE ${ARGV1})
-    ADD_TEST(NAME ${TEST_NAME} COMMAND ${PYTHON_EXECUTABLE} -m unittest ${PYTHON_TEST_MODULE})
+    FILE(COPY ${PYTHON_TEST_MODULE}.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${PYTHON_TEST_MODULE}.py)
+    ADD_TEST(NAME ${TEST_NAME} COMMAND ${PYTHON_EXECUTABLE} -m unittest ${PYTHON_TEST_MODULE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
   ENDIF()
   # In order to run the tests on windows, we need to add the paths of the dll depencencies (cppunit, tulip, gzstream, yajl)
   # in the PATH environment variable
