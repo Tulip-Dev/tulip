@@ -27,7 +27,7 @@ ENDIF(WIN32)
 # in order for the interpreter to import them
 SET(PYTHON_PATHS "${BIN_DIR}/../../library/tulip-python/bindings/tulip-core/tulip_module"
                  "${BIN_DIR}/../../library/tulip-python/bindings/tulip-gui/tulipgui_module"
-                 "${SRC_DIR}/../../library/tulip-python/modules"
+                 "${BIN_DIR}/../../library/tulip-python/modules"
                  "${SRC_DIR}")
 
 # Add the path of the sip Python module if we compile it from thirdparty as

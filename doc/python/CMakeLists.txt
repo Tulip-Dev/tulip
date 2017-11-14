@@ -33,6 +33,7 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
                                             ${LibStlPythonBindingsName}
                                             ${TULIP_PLUGIN_TARGETS}
                                             copyTulipPythonPlugins
+					    copyTulipPluginsPyInBuild
                                     VERBATIM)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 
