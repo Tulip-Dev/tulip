@@ -17,6 +17,11 @@ IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
   TULIP_WINDOWS_TO_MSYS_PATH(${CMAKE_LIBRARY_PATH_STR} CMAKE_LIBRARY_PATH_STR)
 ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
 
+# copy .py files in CMAKE_CURRENT_BINARY_DIR
+# in order to avoid polluting the source tree with python .pyc files
+FILE(GLOB PYFILES *.py)
+FILE(COPY ${PYFILES} DESTINATION .)
+
 ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE}
                                                          -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
                                                          -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}

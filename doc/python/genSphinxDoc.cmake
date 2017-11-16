@@ -57,7 +57,7 @@ IF(APPLE)
 ENDIF(APPLE)
 
 # Generate Tulip plugins documentation file from embedded plugins metadata
-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${SRC_DIR}/gen_plugins_doc.py WORKING_DIRECTORY ${BIN_DIR})
+EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${BIN_DIR}/gen_plugins_doc.py WORKING_DIRECTORY ${BIN_DIR})
 
 # Everything is now set up, we can generate the documentation
 EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -c ${BIN_DIR} -b html -E -d ${BIN_DIR}/doctrees ${SRC_DIR} ${BIN_DIR}/html)
