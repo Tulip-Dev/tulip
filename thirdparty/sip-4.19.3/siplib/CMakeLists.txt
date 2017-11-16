@@ -26,7 +26,7 @@ SET(siplib_SRCS
 DISABLE_COMPILER_WARNINGS()
 
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sip.h ${CMAKE_CURRENT_BINARY_DIR}/siplib.c
-                   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../configure.py --sip-module ${SIP_LIB}
+                   COMMAND ${PYTHON_EXECUTABLE} -B ${CMAKE_CURRENT_SOURCE_DIR}/../configure.py --sip-module ${SIP_LIB}
                                                 -b ${CMAKE_CURRENT_BINARY_DIR}/../sipgen
                                                 -e ${CMAKE_CURRENT_BINARY_DIR}/../siplib
                                                 -d ${CMAKE_CURRENT_BINARY_DIR}/../siplib
