@@ -17,6 +17,11 @@
  *
  */
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
@@ -68,7 +73,7 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
         int err = 0;
 
         // Unwrapping C++ instance
-        tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipConvertToType(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
+        tlp::Graph *graph = static_cast<tlp::Graph *>(sipConvertToType(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
 
         if (!PythonInterpreter::getInstance()->runGraphScript(scriptName, "main", graph)) {
           PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
@@ -155,3 +160,6 @@ inittuliputils(void) {
 #endif
 }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

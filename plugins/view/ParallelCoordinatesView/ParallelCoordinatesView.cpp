@@ -232,7 +232,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     if (dataSet.exist("dataLocation")) {
       int dataLocation = 0;
       dataSet.get("dataLocation", dataLocation);
-      dataConfigWidget->setDataLocation((ElementType) dataLocation);
+      dataConfigWidget->setDataLocation(static_cast<ElementType>(dataLocation));
     }
 
     if (dataSet.exist("backgroundColor")) {
@@ -364,19 +364,19 @@ DataSet ParallelCoordinatesView::state() const {
   }
 
   dataSet.set("selectedProperties", selectedPropertiesData);
-  dataSet.set("dataLocation", (int) graphProxy->getDataLocation());
+  dataSet.set("dataLocation", int(graphProxy->getDataLocation()));
   dataSet.set("backgroundColor", drawConfigWidget->getBackgroundColor());
   dataSet.set("axisHeight", drawConfigWidget->getAxisHeight());
-  unsigned int axisPointMinSize = (unsigned int) drawConfigWidget->getAxisPointMinSize().getW();
-  unsigned int axisPointMaxSize = (unsigned int) drawConfigWidget->getAxisPointMaxSize().getW();
+  unsigned int axisPointMinSize = uint(drawConfigWidget->getAxisPointMinSize().getW());
+  unsigned int axisPointMaxSize = uint(drawConfigWidget->getAxisPointMaxSize().getW());
   dataSet.set("axisPointMinSize", axisPointMinSize);
   dataSet.set("axisPointMaxSize", axisPointMaxSize);
   dataSet.set("drawPointsOnAxis", drawConfigWidget->drawPointOnAxis());
   dataSet.set("linesTextureFileName", drawConfigWidget->getLinesTextureFilename());
   dataSet.set("linesColorAlphaValue", drawConfigWidget->getLinesColorAlphaValue());
   dataSet.set("non highlighted alpha value", drawConfigWidget->getUnhighlightedEltsColorsAlphaValue());
-  dataSet.set("layoutType", (int) getLayoutType());
-  dataSet.set("linesType", (int) getLinesType());
+  dataSet.set("layoutType", int(getLayoutType()));
+  dataSet.set("linesType", int(getLinesType()));
   dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
 

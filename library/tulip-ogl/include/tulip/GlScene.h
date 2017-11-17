@@ -53,8 +53,8 @@ struct SelectedEntity {
     SIMPLE_ENTITY_SELECTED = 3
   };
 
-  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),entityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
-  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),entityType(SIMPLE_ENTITY_SELECTED),complexEntityGraph(NULL) {}
+  SelectedEntity():simpleEntity(NULL),complexEntityId(uint(-1)),entityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
+  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId(uint(-1)),entityType(SIMPLE_ENTITY_SELECTED),complexEntityGraph(NULL) {}
   SelectedEntity(Graph *graph,unsigned int id,SelectedEntityType type):simpleEntity(NULL),complexEntityId(id),entityType(type),complexEntityGraph(graph) {}
 
   GlSimpleEntity *getSimpleEntity() const {

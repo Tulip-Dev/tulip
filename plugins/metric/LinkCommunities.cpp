@@ -252,7 +252,7 @@ double LinkCommunities::getSimilarity(edge ee, const std::vector<edge>& edges) {
     wuv+=2;
 
   if(m>0)
-    return (double)wuv / (double)m;
+    return wuv / double(m);
   else
     return 0.0;
 }

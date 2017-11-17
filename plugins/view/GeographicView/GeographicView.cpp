@@ -224,7 +224,7 @@ DataSet GeographicView::state() const {
   DataSet dataSet;
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
-  dataSet.set("viewType", static_cast<int>(_viewType));
+  dataSet.set("viewType", int(_viewType));
   pair<double, double> mapCenter = geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapCenter();
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
@@ -384,9 +384,9 @@ void GeographicView::loadStoredPolyInformation(const DataSet &dataset) {
         polyConf.get((*it).first,entityData);
         Color color;
         entityData.get("color",color);
-        ((GlComplexPolygon*)(*it).second)->setFillColor(color);
+        static_cast<GlComplexPolygon*>((*it).second)->setFillColor(color);
         entityData.get("outlineColor",color);
-        ((GlComplexPolygon*)(*it).second)->setOutlineColor(color);
+        static_cast<GlComplexPolygon*>((*it).second)->setOutlineColor(color);
       }
     }
   }
@@ -399,8 +399,8 @@ void GeographicView::saveStoredPolyInformation(DataSet &dataset) const {
 
   for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin(); it!=entities.end(); ++it) {
     DataSet entityData;
-    entityData.set("color",((GlComplexPolygon*)(*it).second)->getFillColor());
-    entityData.set("outlineColor",((GlComplexPolygon*)(*it).second)->getOutlineColor());
+    entityData.set("color", static_cast<GlComplexPolygon*>((*it).second)->getFillColor());
+    entityData.set("outlineColor", static_cast<GlComplexPolygon*>((*it).second)->getOutlineColor());
     polyConf.set((*it).first,entityData);
   }
 

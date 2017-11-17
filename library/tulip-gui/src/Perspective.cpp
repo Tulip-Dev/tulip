@@ -42,7 +42,7 @@ void Perspective::setInstance(Perspective* p) {
 
 Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(NULL), _maximised(false), _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()) {
   if(c != NULL) {
-    const PerspectiveContext* perspectiveContext = dynamic_cast<const PerspectiveContext*>(c);
+    const PerspectiveContext* perspectiveContext = static_cast<const PerspectiveContext*>(c);
     _mainWindow = perspectiveContext->mainWindow;
     _project = perspectiveContext->project;
     _externalFile = perspectiveContext->externalFile;

@@ -474,7 +474,7 @@ void QuickAccessBarImpl::setEdgeBorderColor(const QColor& c) {
 void QuickAccessBarImpl::setAllValues(unsigned int eltType,
                                       PropertyInterface* prop) {
   QVariant val =
-    TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
+    TulipItemDelegate::showEditorDialog(static_cast<tlp::ElementType>(eltType),
                                         prop, _mainView->graph(),
                                         delegate,
                                         _mainView->graphicsView()->window());

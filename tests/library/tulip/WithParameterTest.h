@@ -22,8 +22,7 @@
 
 #include <tulip/WithParameter.h>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "CppUnitIncludes.h"
 
 class WithParameterTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(WithParameterTest);

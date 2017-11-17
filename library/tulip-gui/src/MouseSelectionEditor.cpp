@@ -208,7 +208,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if (!hasSelection ||
-          (!glMainWidget->pickGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
+          (!glMainWidget->pickGlEntities(int(editPosition[0])-3, int(editPosition[1])-3,
                                          6, 6, select,layer))) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseSelector object
@@ -241,8 +241,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
       if (shapeId != -1) {
         if(!advShape) {
-          ((GlCircle *)select[shapeId].getSimpleEntity())->setFillColor(Color(40,255,40,200));
-          ((GlCircle *)select[shapeId].getSimpleEntity())->setOutlineColor(Color(20,128,20,200));
+          static_cast<GlCircle *>(select[shapeId].getSimpleEntity())->setFillColor(Color(40,255,40,200));
+          static_cast<GlCircle *>(select[shapeId].getSimpleEntity())->setOutlineColor(Color(20,128,20,200));
         }
 
         getOperation(select[shapeId].getSimpleEntity());
@@ -350,7 +350,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if(hasSelection) {
-      switch(((QKeyEvent*)e)->key()) {
+      switch(static_cast<QKeyEvent*>(e)->key()) {
       case Qt::Key_Left:
         mMouseTranslate(editPosition[0]-1, editPosition[1], glMainWidget);
         break;
@@ -525,7 +525,7 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidge
   Observable::holdObservers();
   initProxies(glMainWidget);
   Coord v0(0,0,0);
-  Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
+  Coord v1(editPosition[0] - newX, -(editPosition[1] - newY), 0);
   v0 = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(v0);
   v1 = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v1));
   v1 -= v0;

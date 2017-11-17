@@ -47,17 +47,10 @@ EditColorScaleInteractor::~EditColorScaleInteractor() {
 }
 
 bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
-  tlp::GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
-
-  if (glMainWidget == NULL)
-    return false;
+  tlp::GlMainWidget *glMainWidget = static_cast<tlp::GlMainWidget*>(obj);
 
   if (event->type() == QEvent::MouseButtonDblClick) {
-    QMouseEvent *me = (QMouseEvent*) event;
-    GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
-
-    if (!glMainWidget)
-      return false;
+    QMouseEvent *me = static_cast<QMouseEvent*>(event);
 
     glMainWidget->getScene()->getGraphCamera().initGl();
     selectionLayer->set2DMode();
@@ -79,7 +72,7 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
           foundGlColorScale = true;
 
           if (dialog.exec()) {
-            SOMView *somView = dynamic_cast<SOMView*> (view());
+            SOMView *somView = static_cast<SOMView*> (view());
             // update shared color scale
             somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
             somView->updateDefaultColorProperty();
@@ -98,7 +91,7 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
   return false;
 }
 void EditColorScaleInteractor::viewChanged(View *view) {
-  SOMView *somView = dynamic_cast<SOMView*> (view);
+  SOMView *somView = static_cast<SOMView*> (view);
 
   if (somView != NULL) {
     assert(colorScale == NULL);
@@ -115,7 +108,7 @@ void EditColorScaleInteractor::viewChanged(View *view) {
 }
 
 bool EditColorScaleInteractor::compute(GlMainWidget *) {
-  SOMView *somView = dynamic_cast<SOMView*> (view());
+  SOMView *somView = static_cast<SOMView*> (view());
   assert(somView != NULL);
 
   screenSizeChanged(somView);
@@ -123,7 +116,7 @@ bool EditColorScaleInteractor::compute(GlMainWidget *) {
 }
 
 bool EditColorScaleInteractor::draw(GlMainWidget *glMainWidget) {
-  SOMView *somView = dynamic_cast<SOMView*> (view());
+  SOMView *somView = static_cast<SOMView*> (view());
   assert(somView != NULL);
 
   if (colorScale) {

@@ -75,9 +75,9 @@ public:
     graph->addListener(this);
   }
   void treatEvent(const Event& evt) {
-    Graph* g = dynamic_cast<Graph *>(evt.sender());
+    Graph* g = static_cast<Graph *>(evt.sender());
 
-    if (g && (graph == g) && evt.type() == Event::TLP_DELETE) {
+    if (graph == g && evt.type() == Event::TLP_DELETE) {
       delete this;
     }
     else {

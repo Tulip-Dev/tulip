@@ -270,12 +270,12 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   int minSizeMap = 0;
 
   if (dataSet.get("min Size Mapping", minSizeMap))
-    optionsWidget->setMinSizeMapping(static_cast<float>(minSizeMap));
+    optionsWidget->setMinSizeMapping(float(minSizeMap));
 
   int maxSizeMap = 0;
 
   if (dataSet.get("max Size Mapping", maxSizeMap))
-    optionsWidget->setMaxSizeMapping(static_cast<float>(maxSizeMap));
+    optionsWidget->setMaxSizeMapping(float(maxSizeMap));
 
   optionsWidget->configurationChanged();
 
@@ -368,8 +368,8 @@ DataSet ScatterPlot2DView::state() const {
   }
 
   dataSet.set("generated scatter plots", generatedScatterPlotDataSet);
-  dataSet.set("min Size Mapping", static_cast<int>(optionsWidget->getMinSizeMapping().getW()));
-  dataSet.set("max Size Mapping", static_cast<int>(optionsWidget->getMaxSizeMapping().getW()));
+  dataSet.set("min Size Mapping", int(optionsWidget->getMinSizeMapping().getW()));
+  dataSet.set("max Size Mapping", int(optionsWidget->getMaxSizeMapping().getW()));
   dataSet.set("background color", optionsWidget->getBackgroundColor());
   dataSet.set("display graph edges", optionsWidget->displayGraphEdges());
   dataSet.set("display node labels", optionsWidget->displayNodeLabels());
@@ -726,7 +726,7 @@ void ScatterPlot2DView::centerView(bool) {
 
   // we apply a zoom factor to preserve a 50 px margin width
   // to ensure the scene will not be drawn under the configuration tabs title
-  float glWidth = (float) graphicsView()->width();
+  float glWidth = graphicsView()->width();
   getGlMainWidget()->getScene()->zoomFactor((glWidth - 50)/ glWidth);
   getGlMainWidget()->draw();
   center = false;

@@ -126,7 +126,7 @@ struct WangRong:public ImportModule {
         unsigned int rn = 0;
 
         while (pr_sum<pr && rn<(nbNodes-1)) {
-          pr_sum += (double)graph->deg(nodes[rn])/k_sum;
+          pr_sum += graph->deg(nodes[rn])/k_sum;
           ++rn;
         }
 

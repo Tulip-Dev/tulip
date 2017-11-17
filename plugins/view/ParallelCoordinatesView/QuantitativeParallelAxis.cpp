@@ -99,7 +99,7 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
       value = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType> (getAxisName(), dataId);
     }
     else {
-      value = static_cast<double>(graphProxy->getPropertyValueForData<IntegerProperty, IntegerType> (getAxisName(), dataId));
+      value = double(graphProxy->getPropertyValueForData<IntegerProperty, IntegerType> (getAxisName(), dataId));
     }
 
     propertyValuesSet.insert(value);
@@ -197,7 +197,7 @@ double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
       return graphProxy->getPropertyMinValue<DoubleProperty, DoubleType>(getAxisName());
     }
     else {
-      return (double) graphProxy->getPropertyMinValue<IntegerProperty, IntegerType>(getAxisName());
+      return graphProxy->getPropertyMinValue<IntegerProperty, IntegerType>(getAxisName());
     }
   }
   else {
@@ -238,7 +238,7 @@ double QuantitativeParallelAxis::getAssociatedPropertyMaxValue() {
     return graphProxy->getPropertyMaxValue<DoubleProperty, DoubleType>(getAxisName());
   }
   else {
-    return (double) graphProxy->getPropertyMaxValue<IntegerProperty, IntegerType>(getAxisName());
+    return graphProxy->getPropertyMaxValue<IntegerProperty, IntegerType>(getAxisName());
   }
 }
 
@@ -259,7 +259,7 @@ Coord QuantitativeParallelAxis::getPointCoordOnAxisForData(const unsigned int da
     value = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), dataIdx);
   }
   else if (getAxisDataTypeName() == "int") {
-    value = static_cast<double>(graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(getAxisName(), dataIdx));
+    value = double(graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(getAxisName(), dataIdx));
   }
 
   Coord axisPointCoord(glQuantitativeAxis->getAxisPointCoordForValue(value));
@@ -297,7 +297,7 @@ double QuantitativeParallelAxis::getValueForAxisCoord(const Coord &axisCoord) {
 
 std::string QuantitativeParallelAxis::getTopSliderTextValue() {
   if (getAxisDataTypeName() == "int" || integerScale) {
-    int val = (int) getValueForAxisCoord(topSliderCoord);
+    int val = int(getValueForAxisCoord(topSliderCoord));
 
     if (glQuantitativeAxis->hasAscendingOrder()) {
       return getStringFromNumber(val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
@@ -316,7 +316,7 @@ std::string QuantitativeParallelAxis::getTopSliderTextValue() {
 
 std::string QuantitativeParallelAxis::getBottomSliderTextValue() {
   if (getAxisDataTypeName() == "int" || integerScale) {
-    int val = (int) getValueForAxisCoord(bottomSliderCoord);
+    int val = int(getValueForAxisCoord(bottomSliderCoord));
 
     if (!glQuantitativeAxis->hasAscendingOrder()) {
       return getStringFromNumber(val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);

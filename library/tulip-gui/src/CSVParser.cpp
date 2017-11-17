@@ -327,7 +327,7 @@ bool CSVInvertMatrixParser::begin() {
 }
 
 bool CSVInvertMatrixParser::line(unsigned int ,const std::vector<std::string>& lineTokens) {
-  maxLineSize = max(maxLineSize,static_cast<unsigned int>(lineTokens.size()));
+  maxLineSize = max(maxLineSize,uint(lineTokens.size()));
   columns.push_back(lineTokens);
   return true;
 }

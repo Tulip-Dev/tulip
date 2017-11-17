@@ -287,7 +287,7 @@ int GoogleMaps::getWorldWidth() {
   QVariant ret = executeJavascript(code);
 
   QString retStr = ret.toString();
-  return (int) (retStr.toDouble() + 1);
+  return int(retStr.toDouble() + 1);
 }
 
 string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, double> &latLng, bool skipMultipleResults) {

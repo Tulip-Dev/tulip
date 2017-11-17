@@ -197,10 +197,7 @@ ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(const ScatterPlot
 ScatterPlotCorrelCoeffSelector::~ScatterPlotCorrelCoeffSelector() {}
 
 bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
-  GlMainWidget *glWidget = dynamic_cast<GlMainWidget *>(obj);
-
-  if(glWidget==NULL)
-    return false;
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(obj);
 
   Camera &camera = glWidget->getScene()->getLayer("Main")->getCamera();
   Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -211,7 +208,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *me = (QMouseEvent *) e;
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     x = glWidget->screenToViewport(glWidget->width() - me->x());
     y = glWidget->screenToViewport(me->y());
     Coord newPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0));
@@ -265,7 +262,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     return true;
   }
   else if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     x = glWidget->screenToViewport(glWidget->width() - me->x());
     y = glWidget->screenToViewport(me->y());
     currentPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0));
@@ -351,7 +348,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     return true;
   }
   else if (e->type() == QEvent::MouseButtonDblClick) {
-    QMouseEvent *me = (QMouseEvent *) e;
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     x = glWidget->screenToViewport(glWidget->width() - me->x());
     y = glWidget->screenToViewport(me->y());
     currentPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0.0f));
@@ -502,10 +499,10 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
 
   polygonScr.push_back(camera.worldTo2DViewport(polygonVertices[0]));
 
-  int xStart = static_cast<int>(polygonScrBB[0][0]);
-  int yStart = static_cast<int>(polygonScrBB[0][1]);
-  int xEnd = static_cast<int>(polygonScrBB[1][0]);
-  int yEnd = static_cast<int>(polygonScrBB[1][1]);
+  int xStart = int(polygonScrBB[0][0]);
+  int yStart = int(polygonScrBB[0][1]);
+  int xEnd = int(polygonScrBB[1][0]);
+  int yEnd = int(polygonScrBB[1][1]);
 
   vector<SelectedEntity> tmpNodes;
   vector<SelectedEntity> tmpEdges;
@@ -573,8 +570,8 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
     string yDim(scatterView->getDetailedScatterPlot()->getYDim());
     NumericProperty *xProp = NULL, *yProp = NULL;
 
-    xProp = (NumericProperty *) graph->getProperty(xDim);
-    yProp = (NumericProperty *) graph->getProperty(yDim);
+    xProp = static_cast<NumericProperty *>(graph->getProperty(xDim));
+    yProp = static_cast<NumericProperty *>(graph->getProperty(yDim));
 
     double sumxiyi = 0, sumxi = 0, sumyi = 0, sumxi2 = 0, sumyi2 = 0;
 
@@ -614,7 +611,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
     }
 
     for (unsigned int i = 0; i < 4; ++i) {
-      polygonColor[i] = static_cast<unsigned char>((double(startColor[i]) + (double(endColor[i])- double(startColor[i])) * abs(correlationCoeff)));
+      polygonColor[i] = uchar((double(startColor[i]) + (double(endColor[i])- double(startColor[i])) * abs(correlationCoeff)));
     }
 
     polygon->setColor(polygonColor);

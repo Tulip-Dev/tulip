@@ -775,7 +775,7 @@ QWidget* EdgeShapeEditorCreator::createWidget(QWidget* parent) const {
 }
 void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data, bool, Graph*) {
   QComboBox* combobox = static_cast<QComboBox*>(editor);
-  combobox->setCurrentIndex(combobox->findData(static_cast<int>(data.value<EdgeShape::EdgeShapes>())));
+  combobox->setCurrentIndex(combobox->findData(int(data.value<EdgeShape::EdgeShapes>())));
 }
 
 QVariant EdgeShapeEditorCreator::editorData(QWidget* editor,Graph*) {
@@ -831,7 +831,7 @@ QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
 }
 void TulipLabelPositionEditorCreator::setEditorData(QWidget* w, const QVariant& var,bool,tlp::Graph*) {
   QComboBox* comboBox = static_cast<QComboBox*>(w);
-  comboBox->setCurrentIndex((int)(var.value<LabelPosition::LabelPositions>()));
+  comboBox->setCurrentIndex(int(var.value<LabelPosition::LabelPositions>()));
 }
 QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<QComboBox*>(w)->currentIndex()));

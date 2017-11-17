@@ -148,15 +148,15 @@ QModelIndex GraphModel::index(int row, int column, const QModelIndex &parent) co
 
 QVariant GraphModel::data(const QModelIndex &index, int role) const {
   if (role == Qt::DisplayRole)
-    return value(_elements[index.row()],(PropertyInterface*)(index.internalPointer()));
+    return value(_elements[index.row()],static_cast<PropertyInterface*>(index.internalPointer()));
   else if (role == PropertyRole)
-    return QVariant::fromValue<PropertyInterface*>((PropertyInterface*)(index.internalPointer()));
+    return QVariant::fromValue<PropertyInterface*>(static_cast<PropertyInterface*>(index.internalPointer()));
   else if (role == GraphRole)
     return QVariant::fromValue<Graph*>(_graph);
   else if (role == IsNodeRole)
     return isNode();
   else if (role == StringRole)
-    return stringValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()));
+    return stringValue(_elements[index.row()],static_cast<PropertyInterface*>(index.internalPointer()));
   else if (role == ElementIdRole)
     return _elements[index.row()];
 
@@ -165,7 +165,7 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const {
 
 bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    bool ok = setValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()),value);
+    bool ok = setValue(_elements[index.row()],static_cast<PropertyInterface*>(index.internalPointer()),value);
 
     if (ok) {
       emit dataChanged(index, index);
@@ -178,8 +178,8 @@ bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int ro
 }
 
 void GraphModel::treatEvent(const Event& ev) {
-  if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
-    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+  const GraphEvent* graphEv = dynamic_cast<const GraphEvent*>(&ev);
+  if (graphEv != NULL) {
 
     if (graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
 #ifdef NDEBUG
@@ -844,7 +844,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
       // id of element to add is greather than the last one currently stored in the model,
       // meaning its index in the model will be contiguous with the one of the last added element.
       // So add it to the current rows sequence that will be further added in the model
-      if (_elements.empty() || id > static_cast<unsigned int>(_elements.back())) {
+      if (_elements.empty() || id > uint(_elements.back())) {
         rowsSequence.push_back(id);
       }
       // case where an element previously deleted, whose id is lower than the last one stored in the model,

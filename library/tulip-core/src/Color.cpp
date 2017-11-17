@@ -114,7 +114,7 @@ std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
     if( i>0 )
       os << ",";
 
-    os << (unsigned int)a[i];
+    os << uint(a[i]);
   }
 
   os << ")" ;
@@ -224,11 +224,11 @@ void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s,
   }
 
   if(r == theMax)
-    h = (int) (60 * (float)(g - b) / (float)delta);   // between yellow & magenta
+    h = int(60 * (g - b) / float(delta));   // between yellow & magenta
   else if(g == theMax)
-    h = (int) (60 * (2.0f + (float)(b - r) / (float)delta));  // between cyan & yellow
+    h = int(60 * (2.0f + (b - r) / float(delta)));  // between cyan & yellow
   else
-    h = (int) (60 * (4.0f + (float)(r - g) / (float)delta));  // between magenta & cyan
+    h = int(60 * (4.0f + (r - g) / float(delta)));  // between magenta & cyan
 
   if(h < 0)
     h += 360;
@@ -256,9 +256,9 @@ void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned 
 
   i = h/60;     // sector 0 to 5
   f = (h/60.0f - i);      // factorial part of h
-  p = (int) (v * (1 - sf));
-  q = (int) (v * (1 - sf * f));
-  t = (int) (v * (1 - sf * (1 - f)));
+  p = int(v * (1 - sf));
+  q = int(v * (1 - sf * f));
+  t = int(v * (1 - sf * (1 - f)));
 
   switch(i) {
   case 0:

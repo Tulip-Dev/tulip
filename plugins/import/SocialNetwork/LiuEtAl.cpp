@@ -89,7 +89,7 @@ struct LiuEtAl:public ImportModule {
       double k_sum = 0;
 
       for(j=0; j<i ; ++j) {
-        k_sum += (double)graph->deg(nodes[j]);
+        k_sum += graph->deg(nodes[j]);
       }
 
       /*
@@ -101,7 +101,7 @@ struct LiuEtAl:public ImportModule {
         unsigned int rn = 0;
 
         while (pr_sum<pr && rn<(i-1)) {
-          pr_sum += (double)graph->deg(nodes[rn])/(k_sum+j);
+          pr_sum += graph->deg(nodes[rn])/(k_sum+j);
           ++rn;
         }
 
@@ -114,7 +114,7 @@ struct LiuEtAl:public ImportModule {
         double k2_sum = 0;
         node n;
         forEach(n, graph->getInOutNodes(nodes[rn])) {
-          k2_sum += (double)graph->deg(n);
+          k2_sum += graph->deg(n);
         }
         pr = tlp::randomDouble();
         pr_sum = 0;
@@ -123,7 +123,7 @@ struct LiuEtAl:public ImportModule {
 
         while(it->hasNext() && pr_sum<pr) {
           v = it->next();
-          pr_sum += (double)graph->deg(v)/(k2_sum);
+          pr_sum += graph->deg(v)/k2_sum;
         }
 
         delete it;

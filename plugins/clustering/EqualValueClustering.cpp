@@ -68,7 +68,7 @@ bool EqualValueClustering::run() {
 
   // try to work with NumericProperty
   if (dynamic_cast<NumericProperty*>(property))
-    return computeClusters((NumericProperty *) property,
+    return computeClusters(static_cast<NumericProperty *>(property),
                            onNodes, connected);
 
   return computeClusters(property, onNodes, connected);

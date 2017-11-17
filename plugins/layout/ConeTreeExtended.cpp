@@ -110,19 +110,19 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
 
   for (unsigned int i=0; i<subCircleRadius.size()-1; ++i) {
     for (unsigned int j=i+1; j<subCircleRadius.size(); ++j) {
-      newRadius = std::max(newRadius , minRadius(static_cast<float>(subCircleRadius[i]),static_cast<float>(vangles[i]),static_cast<float>(subCircleRadius[j]),static_cast<float>(vangles[j])));
+      newRadius = std::max(newRadius , minRadius(float(subCircleRadius[i]),float(vangles[i]),float(subCircleRadius[j]),float(vangles[j])));
     }
   }
 
-  if (newRadius==0) newRadius=static_cast<float>(radius);
+  if (newRadius==0) newRadius=float(radius);
 
   //compute Circle Hull
   vector<Circlef > circles(subCircleRadius.size());
 
   for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
-    circles[i][0]=newRadius*static_cast<float>(cos(vangles[i]));
-    circles[i][1]=newRadius*static_cast<float>(sin(vangles[i]));
-    circles[i].radius=static_cast<float>(subCircleRadius[i]);
+    circles[i][0]=newRadius*float(cos(vangles[i]));
+    circles[i][1]=newRadius*float(sin(vangles[i]));
+    circles[i].radius=float(subCircleRadius[i]);
   }
 
   tlp::Circlef circleH=tlp::enclosingCircle(circles);
@@ -143,7 +143,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
 void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
                                   TLP_HASH_MAP<tlp::node,double> *py,
                                   double x, double y, int level) {
-  result->setNodeValue(n,Coord(static_cast<float>(x+(*px)[n]), - static_cast<float>(yCoordinates[level]),static_cast<float>(y+(*py)[n])));
+  result->setNodeValue(n,Coord(float(x+(*px)[n]), - float(yCoordinates[level]),float(y+(*py)[n])));
   node itn;
   forEach(itn, tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);

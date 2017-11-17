@@ -68,7 +68,7 @@ public :
   }
   Coord getOverviewCenter() const;
   float getOverviewSize() const {
-    return static_cast<float>(size);
+    return float(size);
   }
   LayoutProperty *getScatterPlotLayout() const {
     return scatterLayout;

@@ -250,7 +250,7 @@ public :
     else
       pn = nodesMap[pid];
 
-    Graph* sg = (Graph*) nodeToSubgraph.get(pn.id);
+    Graph* sg = nodeToSubgraph.get(pn.id);
 
     if (sg == NULL) {
       // add a subgraph for the fake meta node
@@ -258,7 +258,7 @@ public :
       // record pn as its fake meta node
       sg->setAttribute<node>("meta-node", pn);
       // and vice-versa
-      nodeToSubgraph.set(pn.id, (size_t) sg);
+      nodeToSubgraph.set(pn.id, sg);
     }
 
     // add n in the subgraph found
@@ -313,9 +313,8 @@ public :
           a = xmlReader.attributes().value("a").toString().toFloat();
         }
 
-        viewColor->setNodeValue(n, Color((unsigned char) r, (unsigned char) g,
-                                         (unsigned char) b,
-                                         (unsigned char) (a * 255)));
+        viewColor->setNodeValue(n, Color(uchar(r), uchar(g),
+                                         uchar(b), uchar(a * 255)));
       }
       // parse node coordinates
       else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "viz:position") {
@@ -349,7 +348,7 @@ public :
       }
       // check for subgraph
       else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "nodes") {
-        Graph* sg = (Graph *) nodeToSubgraph.get(n.id);
+        Graph* sg = nodeToSubgraph.get(n.id);
 
         if (sg == NULL) {
           // add subgraph
@@ -357,7 +356,7 @@ public :
           // record the current node as its fake meta node
           sg->setAttribute<node>("meta-node", n);
           // and vice-versa
-          nodeToSubgraph.set(n.id, (size_t) sg);
+          nodeToSubgraph.set(n.id, sg);
         }
 
         // create its nodes
@@ -454,7 +453,7 @@ public :
 
       while(itn.hasNext()) {
         node n = itn.next();
-        Graph* msg = (Graph*) nodeToSubgraph.get(n.id);
+        Graph* msg = nodeToSubgraph.get(n.id);
 
         if (msg) {
           // if the current node is a fake meta node
@@ -507,7 +506,7 @@ public :
 
       while(itn.hasNext()) {
         node n = itn.next();
-        Graph* msg = (Graph*) nodeToSubgraph.get(n.id);
+        Graph* msg = nodeToSubgraph.get(n.id);
 
         if (msg != NULL) {
           // n is a fake meta node
@@ -617,7 +616,7 @@ private :
   IntegerProperty *viewShape;
   // to register the subgraph corresponding
   // to a fake meta node
-  MutableContainer<size_t> nodeToSubgraph;
+  MutableContainer<Graph *> nodeToSubgraph;
 
   bool nodesHaveCoordinates;
 

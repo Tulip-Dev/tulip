@@ -151,7 +151,7 @@ public :
     const char* ptr = str.c_str();
     char* endPtr;
     long int value = strtol(ptr, &endPtr, 10);
-    i = (unsigned int) value;
+    i = uint(value);
     return (value >= 0) && (*endPtr == 0);
   }
 
@@ -159,7 +159,7 @@ public :
     const char* ptr = str.c_str();
     char* endPtr;
     double d = strtod(ptr, &endPtr);
-    f = (float) d;
+    f = float(d);
     return (*endPtr == 0);
   }
 

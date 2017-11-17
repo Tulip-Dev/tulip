@@ -16,8 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include <vector>
 #include "TlpImportExportTest.h"
 #include <tulip/Graph.h>
@@ -65,7 +64,7 @@ void TlpImportExportTest::testSave() {
   bool ok = saveGraph(graph, "save_test.tlp");
   delete graph;
   CPPUNIT_ASSERT(ok);
-  graph = (Graph *) NULL;
+  graph = NULL;
   graph = loadGraph("save_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
   node n;
@@ -94,7 +93,7 @@ void TlpImportExportTest::testExport() {
   delete graph;
   delete os;
   CPPUNIT_ASSERT(ok);
-  graph = (Graph *) NULL;
+  graph = NULL;
   graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
   node n;
@@ -123,7 +122,7 @@ void TlpImportExportTest::testExportCluster() {
   delete graph;
   delete os;
   CPPUNIT_ASSERT(ok);
-  graph = (Graph *) NULL;
+  graph = NULL;
   graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
   node n;
@@ -193,7 +192,7 @@ void TlpImportExportTest::testExportAttributes() {
   delete graph;
   delete os;
   CPPUNIT_ASSERT(ok);
-  graph = (Graph *) NULL;
+  graph = NULL;
   graph = tlp_loadGraph("export_attributes.tlp");
   CPPUNIT_ASSERT(graph);
 

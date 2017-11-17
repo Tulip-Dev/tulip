@@ -24,6 +24,11 @@
 #include <map>
 #include <algorithm>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 extern "C" {
 #ifdef HAVE_REENTRANT_QHULL
 #include <qhull_ra.h>
@@ -208,3 +213,7 @@ void tlp::convexHull(const std::vector<Coord> &points,
 
   runQHull(dim, pointsQHull, convexHullFacets, facetNeighbors);
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

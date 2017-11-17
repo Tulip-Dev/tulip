@@ -119,7 +119,7 @@ void FishEyeInteractorComponent::viewChanged(View *view) {
     return;
   }
 
-  GlMainView *glView = (GlMainView *) view;
+  GlMainView *glView = static_cast<GlMainView *>(view);
   GlMainWidget *glWidget = glView->getGlMainWidget();
 
   if (!glWidget->hasMouseTracking()) {
@@ -134,7 +134,7 @@ void FishEyeInteractorComponent::viewChanged(View *view) {
 
 bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
 
-  GlMainWidget *glWidget = (GlMainWidget*)obj;
+  GlMainWidget *glWidget = static_cast<GlMainWidget*>(obj);
   Camera *camera=&glWidget->getScene()->getGraphCamera();
 
   activateFishEye = false;
@@ -143,7 +143,7 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
       e->type() == QEvent::MouseButtonPress ||
       e->type() == QEvent::MouseButtonRelease) {
     activateFishEye = true;
-    QMouseEvent *me = (QMouseEvent *) e;
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
     float x = glWidget->width() - me->x();
     float y = me->y();
     Coord screenCoords(x, y, 0);
@@ -153,7 +153,7 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
   }
   else if (e->type() == QEvent::Wheel) {
     activateFishEye = true;
-    QWheelEvent *wheelEvent = (QWheelEvent *) e;
+    QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(e);
     int numSteps = wheelEvent->delta() / 120;
 
     if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ControlModifier)) {

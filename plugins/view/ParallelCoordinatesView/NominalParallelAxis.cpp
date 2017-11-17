@@ -32,7 +32,7 @@ namespace tlp {
 
 NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor, const float rotationAngle, const GlAxis::CaptionLabelPosition captionPosition) :
   ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor), axisAreaWidth, rotationAngle, captionPosition), graphProxy(graph) {
-  glNominativeAxis = dynamic_cast<GlNominativeAxis *>(glAxis);
+  glNominativeAxis = static_cast<GlNominativeAxis *>(glAxis);
   setLabels();
   ParallelAxis::redraw();
 }

@@ -23,9 +23,7 @@
 #include <tulip/PlanarConMap.h>
 #include <tulip/TlpTools.h>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "CppUnitIncludes.h"
 
 namespace tlp {
 

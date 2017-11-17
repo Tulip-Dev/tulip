@@ -195,8 +195,8 @@ public:
                                      DoubleProperty::PredefinedMetaValueCalculator eCalc =
                                        DoubleProperty::AVG_CALC)
     :AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>::MetaValueCalculator(),
-     nodeCalc(nodeCalculators[(int) nCalc]),
-     edgeCalc(edgeCalculators[(int) eCalc]) {}
+     nodeCalc(nodeCalculators[nCalc]),
+     edgeCalc(edgeCalculators[eCalc]) {}
 
   void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg, Graph*) {
     if (nodeCalc)
@@ -246,7 +246,7 @@ void DoubleProperty::nodesUniformQuantification(unsigned int k) {
 
   while(itN->hasNext()) {
     node itn=itN->next();
-    setNodeValue(itn, (double) nodeMapping[getNodeValue(itn)]);
+    setNodeValue(itn, nodeMapping[getNodeValue(itn)]);
   }
 
   delete itN;
@@ -260,14 +260,14 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
 
   while(itE->hasNext()) {
     edge ite=itE->next();
-    setEdgeValue(ite, (double) edgeMapping[getEdgeValue(ite)]);
+    setEdgeValue(ite, edgeMapping[getEdgeValue(ite)]);
   }
 
   delete itE;
 }
 //====================================================================
 void DoubleProperty::clone_handler(AbstractProperty< DoubleType, DoubleType, tlp::NumericProperty>& proxyC) {
-  DoubleProperty *proxy=(DoubleProperty *)&proxyC;
+  DoubleProperty *proxy = static_cast<DoubleProperty *>(&proxyC);
   minMaxNode = proxy->minMaxNode;
   minMaxEdge = proxy->minMaxEdge;
 }

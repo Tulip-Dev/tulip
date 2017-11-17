@@ -81,7 +81,7 @@ void SOMMap::initMap() {
     gridDataSet .set("connectivity", connectivityCollection);
     gridDataSet.set("oppositeNodesConnected", oppositeConnected);
     //Suppress spacing
-    gridDataSet.set("spacing", (double) 0.0);
+    gridDataSet.set("spacing", 0.0);
     graph_component = importGraph("Grid", gridDataSet, NULL, graph_component);
   }
 
@@ -158,7 +158,7 @@ void SOMMap::registerModification(const vector<string>&propertiesToListen) {
 
       //If the property is double no need to convert
       if (properties[propertyNumber]->getTypename().compare("double") == 0) {
-        ((DoubleProperty*) properties[propertyNumber])->setNodeValue(n,
+        static_cast<DoubleProperty*>(properties[propertyNumber])->setNodeValue(n,
             nodeToNodeVec[n][propertyNumber]);
       }
       else {
@@ -172,7 +172,7 @@ void SOMMap::registerModification(const vector<string>&propertiesToListen) {
   }
 }
 tlp::node SOMMap::getNodeAt(unsigned int pos) {
-  return getNodeAt(pos % height, (unsigned int) floor(pos / height));
+  return getNodeAt(pos % height, uint(floor(pos / height)));
 
 }
 tlp::node SOMMap::getNodeAt(unsigned int x, unsigned int y) {

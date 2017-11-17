@@ -22,9 +22,8 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/AbstractProperty.h>
-#include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/TestSuite.h>
+
+#include "CppUnitIncludes.h"
 
 class ObservablePropertyTest : public CppUnit::TestFixture {
 private:

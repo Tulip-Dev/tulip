@@ -37,7 +37,7 @@ PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict)
     PyObject *key = sipConvertFromNewType(new std::string(entry.first), sipFindType("std::string"), NULL);
     PyObject *val = NULL;
     if (entry.second->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
-      tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(entry.second->value);
+      tlp::StringCollection *sc = static_cast<tlp::StringCollection*>(entry.second->value);
       val = sipConvertFromNewType(new std::string(sc->getCurrentString()), sipFindType("std::string"), NULL);
     } else {
       val = getPyObjectFromDataType(entry.second);
@@ -58,7 +58,7 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
   }
   enableErrorMessages(false);
   while (PyDict_Next(dict, &pos, &key, &val)) {
-    std::string *keyStr = reinterpret_cast<std::string*>(sipConvertToType(key, sipFindType("std::string"), Py_None, SIP_NOT_NONE, &state, &err));
+    std::string *keyStr = static_cast<std::string*>(sipConvertToType(key, sipFindType("std::string"), Py_None, SIP_NOT_NONE, &state, &err));
     tlp::DataType *dataType = NULL;
     if (refDataSet) {
       dataType = refDataSet->getData(*keyStr);
@@ -85,7 +85,7 @@ bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, 
 #else
   PyString_Check(value)) {
 #endif
-    tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(dataType->value);
+    tlp::StringCollection *sc = static_cast<tlp::StringCollection*>(dataType->value);
 #if PY_MAJOR_VERSION >= 3
     std::string entry(convertPythonUnicodeObjectToStdString(value));
 #else
@@ -168,7 +168,7 @@ struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}"/ {
   if (PyDict_Check(sipPy)) {
     *sipCppPtr = convertPyDictToTlpDataSet(sipPy);
   } else {
-    *sipCppPtr = new tlp::DataSet(*reinterpret_cast<tlp::DataSet*>(sipConvertToType(sipPy, sipFindType("tlp::DataSet"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+    *sipCppPtr = new tlp::DataSet(*static_cast<tlp::DataSet*>(sipConvertToType(sipPy, sipFindType("tlp::DataSet"), sipTransferObj, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
   }
 
   if (!*sipCppPtr) {

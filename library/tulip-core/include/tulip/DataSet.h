@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * This file is part of Tulip (http://tulip.labri.fr)
  *
@@ -94,18 +94,18 @@ template<typename T>
 struct TypedData :public DataType {
   TypedData(void *value) :DataType(value) {}
   ~TypedData() {
-    delete (T*) value;
+    delete static_cast<T*>(value);
   }
   DataType* clone() const {
-    return new TypedData<T>(new T(*(T*)value));
+    return new TypedData<T>(new T(getValue()));
   }
 
   std::string getTypeName() const {
     return std::string(typeid(T).name());
   }
 
-  const T& getValue() {
-    return (T&) this->value;
+  const T& getValue() const {
+    return *(static_cast<const T*>(this->value));
   }
 };
 
@@ -145,7 +145,7 @@ struct TypedDataSerializer :public DataTypeSerializer {
   virtual bool read(std::istream& is, T& value)=0;
   // define virtually inherited functions using the previous ones
   void writeData(std::ostream& os, const DataType* data) {
-    write(os, *((T*) data->value));
+    write(os, *(static_cast<T*>(data->value)));
   }
   DataType* readData(std::istream& is) {
     T value;

@@ -253,7 +253,7 @@ private:
     _lastModifiedDates->setNodeValue(n,tlp::QStringToTlpString(info.lastModified().toString()));
     _lastReadDates->setNodeValue(n,tlp::QStringToTlpString(info.lastRead().toString()));
     _owners->setNodeValue(n,tlp::QStringToTlpString(info.owner()));
-    _permissions->setNodeValue(n,(int)(info.permissions()));
+    _permissions->setNodeValue(n,int(info.permissions()));
     _suffixes->setNodeValue(n,tlp::QStringToTlpString(info.suffix()));
     _sizes->setNodeValue(n,info.size());
 

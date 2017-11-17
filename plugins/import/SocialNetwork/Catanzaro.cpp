@@ -99,7 +99,7 @@ struct Catanzaro:public ImportModule {
       double k_sum = 0;
 
       for(j=0; j<i ; j++) {
-        k_sum += (double)graph->deg(nodes[j]);
+        k_sum += graph->deg(nodes[j]);
       }
 
       for(j=0; j<m ; j++) {
@@ -109,11 +109,11 @@ struct Catanzaro:public ImportModule {
         unsigned int u = 0;
 
         while (pr_sum<pr && u<(i-1)) {
-          pr_sum += (double)graph->deg(nodes[u])/(k_sum+j);
+          pr_sum += graph->deg(nodes[u])/(k_sum+j);
           ++u;
         }
 
-        if(((double)rand()/(double)RAND_MAX)<=p) { // PA
+        if(tlp::randomDouble()<=p) { // PA
           if(!graph->hasEdge(nodes[i],nodes[u], false))
             graph->addEdge(nodes[i],nodes[u]);
         }
@@ -124,7 +124,7 @@ struct Catanzaro:public ImportModule {
 
           for(k=0; k<i ; ++k) {
             for(l=0; l<k ; ++l) {
-              k_sum += ((double)graph->deg(nodes[k])/(k_sum+j)) * exp(-fabs(double(graph->deg(nodes[k]))-double(graph->deg(nodes[l]))));
+              k_sum += graph->deg(nodes[k])/(k_sum+j) * exp(-fabs(double(graph->deg(nodes[k]))-double(graph->deg(nodes[l]))));
             }
           }
 
@@ -132,7 +132,7 @@ struct Catanzaro:public ImportModule {
 
           for(k=0; k<i ; ++k) {
             for(l=0; l<k ; ++l) {
-              pr_sum += ((double)graph->deg(nodes[k])/(k_sum+j)) * exp(-fabs(double(graph->deg(nodes[k]))-double(graph->deg(nodes[l]))));
+              pr_sum += graph->deg(nodes[k])/(k_sum+j) * exp(-fabs(double(graph->deg(nodes[k]))-double(graph->deg(nodes[l]))));
             }
 
             if (pr_sum>pr) {

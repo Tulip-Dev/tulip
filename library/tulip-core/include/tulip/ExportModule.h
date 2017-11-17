@@ -43,8 +43,7 @@ public:
 
   ExportModule(const tlp::PluginContext* context) {
     if(context != NULL) {
-      const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
-      assert(algoritmContext != NULL);
+      const tlp::AlgorithmContext* algoritmContext = static_cast<const tlp::AlgorithmContext*>(context);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
       dataSet = algoritmContext->dataSet;

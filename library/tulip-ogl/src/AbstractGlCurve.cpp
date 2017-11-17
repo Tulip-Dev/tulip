@@ -516,7 +516,7 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
   curveVertexBuffersIndices[nbCurvePoints][3] = new GLushort[nbCurvePoints];
 
   for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-    float t =  i / static_cast<float>(nbCurvePoints - 1);
+    float t =  i / float(nbCurvePoints - 1);
     curveVertexBuffersData[nbCurvePoints][6*i] = t;
     curveVertexBuffersData[nbCurvePoints][6*i+1] = 1.0f;
     curveVertexBuffersData[nbCurvePoints][6*i+2] = t;
@@ -695,8 +695,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
   if (texture != "") {
     unsigned int i = nbCurvePoints / 2;
-    Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
-    Coord nexCurvePoint(computeCurvePointOnCPU(controlPoints, (i+1) / static_cast<float>(nbCurvePoints - 1)));
+    Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / float(nbCurvePoints - 1)));
+    Coord nexCurvePoint(computeCurvePointOnCPU(controlPoints, (i+1) / float(nbCurvePoints - 1)));
     float dist = firstCurvePoint.dist(nexCurvePoint);
     texCoordFactor = dist / (startSize * 2.0f);
   }
@@ -714,8 +714,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
     static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
-    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
-    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
+    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
+    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
 
     if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) != curvesGeometryShadersMap.end()) {
       geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
@@ -738,7 +738,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       currentActiveShader->getUniformFloatVariableValue("center", fisheyeCenter);
       currentActiveShader->getUniformFloatVariableValue("radius", &fisheyeRadius);
       currentActiveShader->getUniformFloatVariableValue("height", &fisheyeHeight);
-      currentActiveShader->getUniformIntVariableValue("fisheyeType", (int*)(&fisheyeType));
+      currentActiveShader->getUniformIntVariableValue("fisheyeType", &fisheyeType);
       currentActiveShader->desactivate();
     }
 
@@ -747,9 +747,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     if (controlPointsTexId == 0) {
       glGenTextures(1, &controlPointsTexId);
     }
-
-    vector<float> controlPointsData(1024*4, 0);
-
 
     glEnable(GL_TEXTURE_1D);
     glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
@@ -788,7 +785,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
 
     if (!geometryShaderActivated) {
-      curveShaderProgram->setUniformFloat("step", 1.0f / (static_cast<float>(nbCurvePoints) - 1.0f));
+      curveShaderProgram->setUniformFloat("step", 1.0f / (float(nbCurvePoints) - 1.0f));
     }
     else {
       curveShaderProgram->setUniformBool("topOutline", true);

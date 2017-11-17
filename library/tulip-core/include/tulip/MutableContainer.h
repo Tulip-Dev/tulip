@@ -155,7 +155,7 @@ public:
     return tmp;
   }
   unsigned int nextValue(DataMem& val) {
-    ((TypedValueContainer<TYPE>&) val).value = StoredType<TYPE>::get(*it);
+    static_cast<TypedValueContainer<TYPE>&>(val).value = StoredType<TYPE>::get(*it);
     unsigned int pos = _pos;
 
     do {
@@ -205,7 +205,7 @@ public:
     return tmp;
   }
   unsigned int nextValue(DataMem& val) {
-    ((TypedValueContainer<TYPE>&) val).value =
+    static_cast<TypedValueContainer<TYPE>&>(val).value =
       StoredType<TYPE>::get((*it).second);
     unsigned int pos = (*it).first;
 

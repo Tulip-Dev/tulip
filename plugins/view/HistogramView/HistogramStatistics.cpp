@@ -358,12 +358,12 @@ void HistogramStatistics::computeInteractor() {
   }
   else {
     if (histoView->getDataLocation() == NODE) {
-      min = (double) graph->getProperty<IntegerProperty>(selectedProperty)->getNodeMin();
-      max = (double) graph->getProperty<IntegerProperty>(selectedProperty)->getNodeMax();
+      min = graph->getProperty<IntegerProperty>(selectedProperty)->getNodeMin();
+      max = graph->getProperty<IntegerProperty>(selectedProperty)->getNodeMax();
     }
     else {
-      min = (double) graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeMin();
-      max = (double) graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeMax();
+      min = graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeMin();
+      max = graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeMax();
     }
   }
 
@@ -379,7 +379,7 @@ void HistogramStatistics::computeInteractor() {
         nodeVal = graph->getProperty<DoubleProperty>(selectedProperty)->getNodeValue(n);
       }
       else {
-        nodeVal = (double) graph->getProperty<IntegerProperty>(selectedProperty)->getNodeValue(n);
+        nodeVal = graph->getProperty<IntegerProperty>(selectedProperty)->getNodeValue(n);
       }
 
       graphPropertyValueSet[n.id] = nodeVal;
@@ -398,7 +398,7 @@ void HistogramStatistics::computeInteractor() {
         edgeVal = graph->getProperty<DoubleProperty>(selectedProperty)->getEdgeValue(e);
       }
       else {
-        edgeVal = (double) graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeValue(e);
+        edgeVal = graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeValue(e);
       }
 
       graphPropertyValueSet[e.id] = edgeVal;
@@ -430,10 +430,10 @@ void HistogramStatistics::computeInteractor() {
       float fx = 0;
 
       for (map<unsigned, double>::iterator it = graphPropertyValueSet.begin() ; it != graphPropertyValueSet.end() ; ++it) {
-        fx +=  (*kf)((val - (it->second)) / (bandwidth / 2.));
+        fx +=  float((*kf)((val - (it->second)) / (bandwidth / 2.)));
       }
 
-      fx *= (1. / (float) (graphPropertyValueSet.size() * (bandwidth / 2.)));
+      fx *= (1.f / float(graphPropertyValueSet.size() * (bandwidth / 2.)));
       estimatedDensity.push_back(fx);
 
       if (fx > maxDensityValue) {
@@ -452,7 +452,7 @@ void HistogramStatistics::computeInteractor() {
 
     densityAxis = new GlQuantitativeAxis("density", Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), 0, 0),
                                          histoYAxis->getAxisLength(), GlAxis::VERTICAL_AXIS, Color(255,0,0), true);
-    densityAxis->setAxisParameters((double) 0 ,(double) maxDensityValue, 15, GlAxis::RIGHT_OR_ABOVE, true);
+    densityAxis->setAxisParameters(0.0, double(maxDensityValue), 15, GlAxis::RIGHT_OR_ABOVE, true);
     densityAxis->updateAxis();
     densityAxis->addCaption(GlAxis::LEFT, densityAxis->getSpaceBetweenAxisGrads(), false);
   }

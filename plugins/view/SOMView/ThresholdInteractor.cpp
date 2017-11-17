@@ -333,20 +333,21 @@ bool ThresholdInteractor::draw(GlMainWidget *glMainWidget) {
 }
 bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
 
-  GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget*>(widget);
-  SOMView *somView = dynamic_cast<SOMView*>(view());
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget*>(widget);
+  SOMView *somView = static_cast<SOMView*>(view());
 
-  if (event->type() == QEvent::MouseButtonPress && ((QMouseEvent*) event)->button()
-      == Qt::LeftButton) {
+  QMouseEvent *me = static_cast<QMouseEvent*>(event);
 
-    QMouseEvent *e = static_cast<QMouseEvent*>(event);
+  if (event->type() == QEvent::MouseButtonPress &&
+      me->button() == Qt::LeftButton) {
+
     vector<SelectedEntity> selectedEntities;
     //set<Slider*> finalSelectedEntities;
 
     //Update Camera for selection
     layer->set2DMode();
     glMainWidget->getScene()->addExistingLayer(layer);
-    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, e->x(), e->y(), 0, 0, layer,
+    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->x(), me->y(), 0, 0, layer,
         selectedEntities);
     glMainWidget->getScene()->removeLayer(layer,false);
 
@@ -392,7 +393,7 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
         //mouvingSlider = *finalSelectedEntities.begin();
         assert(mouvingSlider);
         mouvingSlider->beginShift();
-        XPosCursor = e->x();
+        XPosCursor = me->x();
         glMainWidget->getScene()->getGraphCamera().initGl();
 
         layer->setVisible(false);
@@ -409,9 +410,8 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
 
   if (event->type() == QEvent::MouseMove) {
     if (startDrag) {
-      QMouseEvent *e = (QMouseEvent*) event;
-      float xShift = e->x() - XPosCursor;
-      XPosCursor = e->x();
+      float xShift = me->x() - XPosCursor;
+      XPosCursor = me->x();
 
       if (xShift == 0) {
         return true;
@@ -425,7 +425,6 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
   }
 
   if (event->type() == QEvent::MouseButtonRelease && startDrag) {
-    QMouseEvent *me = (QMouseEvent*) event;
     SOMMap *som = somView->getSOM();
     assert(mouvingSlider != NULL);
     glMainWidget->setMouseTracking(false);

@@ -158,8 +158,8 @@ NodeSet* getRightNeighbours(NodeSet &scanline,Node *v) {
 }
 
 int compare_events(const void *a, const void *b) {
-  Event *ea=*(Event**)a;
-  Event *eb=*(Event**)b;
+  const Event *ea=*(static_cast<const Event * const *>(a));
+  const Event *eb=*(static_cast<const Event * const *>(b));
 
   if(ea->v->r==eb->v->r) {
     // when comparing opening and closing from the same rect
@@ -199,7 +199,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle** rs, Variable** vars, 
     events[ctr++]=new Event(Close,v,rs[i]->getMaxY());
   }
 
-  qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events );
+  qsort(reinterpret_cast<Event*>(events), static_cast<size_t>(2*n), sizeof(Event*), compare_events );
 
   NodeSet scanline;
   vector<Constraint*> constraints;
@@ -299,7 +299,7 @@ int ConstraintsGenerator::generateYConstraints(Rectangle** rs, Variable** vars, 
     events[ctr++] = new Event(Close,v,rs[i]->getMaxX());
   }
 
-  qsort((Event*)events, (size_t)2*n, sizeof(Event*), compare_events );
+  qsort(reinterpret_cast<Event*>(events), static_cast<size_t>(2*n), sizeof(Event*), compare_events );
   NodeSet scanline;
   vector<Constraint*> constraints;
 

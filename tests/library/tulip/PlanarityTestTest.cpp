@@ -18,8 +18,7 @@
  */
 
 #include <cassert>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include <tulip/PlanarityTest.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/ConnectedTest.h>

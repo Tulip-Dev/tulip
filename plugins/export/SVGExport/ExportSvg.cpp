@@ -42,7 +42,7 @@ using namespace tlp;
 namespace {
 QString tlpColor2SvgColor(const Color &color) {
   //converting color to SVG
-  return QString("rgb(")+QString::number(static_cast<int>(color.getR()))+","+QString::number(static_cast<int>(color.getG()))+","+QString::number(static_cast<int>(color.getB()))+")";
+  return QString("rgb(")+QString::number(int(color.getR()))+","+QString::number(int(color.getG()))+","+QString::number(int(color.getB()))+")";
 }
 
 QString tlpAlphaColor2Opacity(const Color &color) {

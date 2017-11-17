@@ -34,11 +34,11 @@ SizeScaleConfigDialog::~SizeScaleConfigDialog() {
 }
 
 float SizeScaleConfigDialog::getMinSize() const {
-  return (float) _ui->minSizeSpinBox->value();
+  return float(_ui->minSizeSpinBox->value());
 }
 
 float SizeScaleConfigDialog::getMaxSize() const {
-  return (float) _ui->maxSizeSpinBox->value();
+  return float(_ui->maxSizeSpinBox->value());
 }
 
 bool SizeScaleConfigDialog::applySizeMappingOnX() const {

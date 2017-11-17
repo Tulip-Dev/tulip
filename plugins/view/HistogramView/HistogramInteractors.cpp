@@ -152,7 +152,7 @@ public:
 
 
   void viewChanged(View *v) {
-    hView = (HistogramView *) v;
+    hView = static_cast<HistogramView *>(v);
     MouseShowElementInfo::viewChanged(v);
   }
 

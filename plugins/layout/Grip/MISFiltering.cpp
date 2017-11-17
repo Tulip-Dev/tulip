@@ -60,7 +60,7 @@ void MISFiltering::computeFiltering() {
     inCurVi.setAll(false);
     inCurVi.set(firstNode.id,true);
 
-    unsigned int depth = (unsigned int) 2 << (level - 1);
+    unsigned int depth = 2u << (level - 1u);
 
     for(unsigned int i = 0; i < toVisit.size() ; ++i) {
       node current = toVisit[i];

@@ -98,7 +98,7 @@ public:
     addInParameter<double>("default node size", paramHelp[3], "20.0");
     addInParameter<double>("default edge length", paramHelp[4], "1.0");
     addInParameter<int>("number of threads", paramHelp[5], "3");
-    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
     csl->setLayoutModule(fme);
   }

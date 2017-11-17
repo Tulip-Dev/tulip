@@ -21,9 +21,7 @@
 
 #include <string>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "CppUnitIncludes.h"
 
 #include <tulip/Graph.h>
 

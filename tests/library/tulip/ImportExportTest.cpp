@@ -225,22 +225,22 @@ void ImportExportTest::testSubGraphsImportExport() {
 }
 
 static Color genRandomColor() {
-  return Color(static_cast<unsigned char>(tlp::randomUnsignedInteger(255)),
-               static_cast<unsigned char>(tlp::randomUnsignedInteger(255)),
-               static_cast<unsigned char>(tlp::randomUnsignedInteger(255)),
-               static_cast<unsigned char>(tlp::randomUnsignedInteger(255)));
+  return Color(uchar(tlp::randomUnsignedInteger(255)),
+               uchar(tlp::randomUnsignedInteger(255)),
+               uchar(tlp::randomUnsignedInteger(255)),
+               uchar(tlp::randomUnsignedInteger(255)));
 }
 
 static Coord genRandomCoord() {
-  return tlp::Coord(static_cast<float>(tlp::randomDouble(1000)),
-                    static_cast<float>(tlp::randomDouble(1000)),
-                    static_cast<float>(tlp::randomDouble(1000)));
+  return tlp::Coord(float(tlp::randomDouble(1000)),
+                    float(tlp::randomDouble(1000)),
+                    float(tlp::randomDouble(1000)));
 }
 
 static Size genRandomSize() {
-  return tlp::Size(static_cast<float>(tlp::randomDouble(10)),
-                    static_cast<float>(tlp::randomDouble(10)),
-                    static_cast<float>(tlp::randomDouble(10)));
+  return tlp::Size(float(tlp::randomDouble(10)),
+                    float(tlp::randomDouble(10)),
+                    float(tlp::randomDouble(10)));
 }
 
 Graph* ImportExportTest::createSimpleGraph() const {

@@ -149,7 +149,7 @@ Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getDataIterator() {
 }
 
 Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getSelectedDataIterator() {
-  BooleanProperty *viewSelection = (BooleanProperty *) getProperty("viewSelection");
+  BooleanProperty *viewSelection = static_cast<BooleanProperty *>(getProperty("viewSelection"));
 
   if (getDataLocation() == NODE) {
     return new ParallelCoordinatesDataIterator<node>(viewSelection->getNodesEqualTo(true, graph_component));
@@ -160,7 +160,7 @@ Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getSelectedDataIterator()
 }
 
 Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getUnselectedDataIterator() {
-  BooleanProperty *viewSelection = (BooleanProperty *) getProperty("viewSelection");
+  BooleanProperty *viewSelection = static_cast<BooleanProperty *>(getProperty("viewSelection"));
 
   if (getDataLocation() == NODE) {
     return new ParallelCoordinatesDataIterator<node>(viewSelection->getNodesEqualTo(false));

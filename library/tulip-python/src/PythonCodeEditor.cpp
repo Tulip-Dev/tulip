@@ -82,11 +82,11 @@ private:
 
 AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent) : QListWidget(parent), _codeEditor(parent) {
 #if defined(__APPLE__)
-  setWindowFlags((Qt::WindowFlags) Qt::Popup|Qt::FramelessWindowHint);
+  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Popup|Qt::FramelessWindowHint));
 #elif QT_VERSION >= 0x040500
-  setWindowFlags((Qt::WindowFlags) Qt::ToolTip);
+  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::ToolTip));
 #else
-  setWindowFlags((Qt::WindowFlags) Qt::Tool|Qt::FramelessWindowHint);
+  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Tool|Qt::FramelessWindowHint));
 #endif
   setAttribute(Qt::WA_StaticContents);
   setFrameShape(StyledPanel);
@@ -605,8 +605,8 @@ void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
 
   QTextBlock block = firstVisibleBlock();
   int blockNumber = block.blockNumber();
-  int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
-  int bottom = top + static_cast<int>(blockBoundingRect(block).height());
+  int top = int(blockBoundingGeometry(block).translated(contentOffset()).top());
+  int bottom = top + int(blockBoundingRect(block).height());
 
   while (block.isValid() && top <= event->rect().bottom()) {
     if (block.isVisible() && bottom >= event->rect().top()) {
@@ -620,7 +620,7 @@ void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
 
     block = block.next();
     top = bottom;
-    bottom = top + static_cast<int>(blockBoundingRect(block).height());
+    bottom = top + int(blockBoundingRect(block).height());
     ++blockNumber;
   }
 }
@@ -672,9 +672,9 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
   if (isTooltipActive()) {
     QTextBlock tooltipBlock = document()->findBlockByNumber(_toolTipPos.x());
-    int top = static_cast<int>(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).top());
-    int left = static_cast<int>(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).left());
-    int bottom = top + static_cast<int>(blockBoundingRect(tooltipBlock).height());
+    int top = int(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).top());
+    int left = int(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).left());
+    int bottom = top + int(blockBoundingRect(tooltipBlock).height());
     QString blockText = tooltipBlock.text();
 
     for (int i = 0 ; i < _toolTipPos.y() ; ++i) {
@@ -724,9 +724,9 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
   }
 
   QTextBlock block = firstVisibleBlock();
-  int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
+  int top = int(blockBoundingGeometry(block).translated(contentOffset()).top());
 
-  int bottom = top + static_cast<int>(blockBoundingRect(block).height());
+  int bottom = top + int(blockBoundingRect(block).height());
 
   QPen pen;
   pen.setStyle(Qt::DotLine);
@@ -758,7 +758,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
     block = block.next();
     top = bottom;
-    bottom = top + static_cast<int>(blockBoundingRect(block).height());
+    bottom = top + int(blockBoundingRect(block).height());
   }
 }
 
@@ -1262,9 +1262,9 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   if (!_autoCompletionList->isVisible())
     return;
 
-  int left = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).left());
-  int top = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top());
-  int bottom = top + static_cast<int>(blockBoundingRect(textCursor().block()).height());
+  int left = int(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).left());
+  int top = int(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top());
+  int bottom = top + int(blockBoundingRect(textCursor().block()).height());
   QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
   int pos = lineNumberAreaWidth() + left + 1;
   int stop = 0;

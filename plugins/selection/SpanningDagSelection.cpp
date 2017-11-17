@@ -50,7 +50,7 @@ bool SpanningDagSelection::run() {
 
   //output some useful information
   if (dataSet!=NULL) {
-    dataSet->set("#Edges selected", static_cast<unsigned int>(graph->numberOfEdges()-obstructions.size()));
+    dataSet->set("#Edges selected", uint(graph->numberOfEdges()-obstructions.size()));
   }
 
   return true;

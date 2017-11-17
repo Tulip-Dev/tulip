@@ -345,7 +345,7 @@ void Workspace::updatePanels() {
   if (_currentPanelIndex<0)
     _currentPanelIndex=0;
 
-  if ((uint)_currentPanelIndex > _panels.size()-currentSlotsCount())
+  if (uint(_currentPanelIndex) > _panels.size()-currentSlotsCount())
     _currentPanelIndex = _panels.size()-currentSlotsCount();
 
   //   Fill up slots according to the current index until there is no panel to show
@@ -746,7 +746,7 @@ bool Workspace::isBottomFrameVisible() const {
 }
 
 void Workspace::swapPanelsRequested(WorkspacePanel* panel) {
-  WorkspacePanel* sourcePanel = dynamic_cast<WorkspacePanel*>(sender());
+  WorkspacePanel* sourcePanel = static_cast<WorkspacePanel*>(sender());
 
   if(sourcePanel) {
     _panels.swap(_panels.indexOf(sourcePanel), _panels.indexOf(panel));

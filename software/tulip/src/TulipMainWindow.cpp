@@ -268,7 +268,8 @@ void TulipMainWindow::showAboutCenter() {
 }
 
 void TulipMainWindow::showTrayMessage(const QString &message) {
-  showTrayMessage(trUtf8("Perspective"),"\n" + message + "\n\n" + trUtf8("Click to dismiss"),(uint)QSystemTrayIcon::Information,3000);
+  showTrayMessage(trUtf8("Perspective"),"\n" + message + "\n\n" + trUtf8("Click to dismiss"),
+                  uint(QSystemTrayIcon::Information), 3000);
 }
 
 void TulipMainWindow::openProject(const QString &file) {
@@ -312,7 +313,7 @@ void TulipMainWindow::showTrayMessage(const QString &title, const QString &messa
   if (!_systemTrayIcon)
     return;
 
-  _systemTrayIcon->showMessage(title,message,(QSystemTrayIcon::MessageIcon)icon,duration);
+  _systemTrayIcon->showMessage(title,message,static_cast<QSystemTrayIcon::MessageIcon>(icon),duration);
 }
 
 void TulipMainWindow::showErrorMessage(const QString &title, const QString &message) {
@@ -323,5 +324,5 @@ void TulipMainWindow::showErrorMessage(const QString &title, const QString &mess
 
 void TulipMainWindow::pluginErrorMessage(const QString &message) {
   _currentTrayMessage = PluginErrorMessage;
-  showTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed information"),(uint)QSystemTrayIcon::Critical,10000);
+  showTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed information"),uint(QSystemTrayIcon::Critical),10000);
 }

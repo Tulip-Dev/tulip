@@ -16,8 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include <tulip/ForEach.h>
 #include "SuperGraphTest.h"
 #include <tulip/BooleanProperty.h>
@@ -809,7 +808,7 @@ void SuperGraphTest::testAttributes() {
   CPPUNIT_ASSERT(dt != NULL);
   delete dt;
   TypedData<string> dtc(new string("test"));
-  graph->setAttribute("name", (const DataType *) &dtc);
+  graph->setAttribute("name", static_cast<const DataType *>(&dtc));
   CPPUNIT_ASSERT(graph->existAttribute("name"));
   dt = graph->getAttribute("name");
   CPPUNIT_ASSERT_EQUAL(0, dt->getTypeName().compare(typeid(string).name()));

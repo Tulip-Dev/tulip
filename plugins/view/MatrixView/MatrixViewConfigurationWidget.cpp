@@ -132,7 +132,7 @@ void MatrixViewConfigurationWidget::orderingDirectionChanged() {
 }
 
 GridDisplayMode MatrixViewConfigurationWidget::gridDisplayMode() const {
-  return (GridDisplayMode)_ui->gridDisplayCombo->currentIndex();
+  return static_cast<GridDisplayMode>(_ui->gridDisplayCombo->currentIndex());
 }
 
 int MatrixViewConfigurationWidget::orderingProperty() const {

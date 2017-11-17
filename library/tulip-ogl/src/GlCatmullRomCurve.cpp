@@ -151,7 +151,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &sta
     totalLength = 0.0f;
 
     for (size_t i = 1 ; i < controlPointsP->size() ; ++i) {
-      float dist = pow((float) (*controlPointsP)[i-1].dist((*controlPointsP)[i]), alpha);
+      float dist = pow((*controlPointsP)[i-1].dist((*controlPointsP)[i]), alpha);
       totalLength += dist;
     }
   }

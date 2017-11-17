@@ -94,7 +94,7 @@ struct FuLiao:public ImportModule {
       double k_sum = 0;
 
       for(j=0; j<i ; ++j) {
-        k_sum += (double)graph->deg(nodes[j]);
+        k_sum += graph->deg(nodes[j]);
       }
 
       // add first edge

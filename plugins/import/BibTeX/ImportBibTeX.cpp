@@ -98,7 +98,7 @@ static string& forceUtf8String(string& str) {
         (i + 1) < str.size() &&
         // begin of a 2 chars utf8 sequence
         // skip next char if it is valid utf8
-        ((unsigned char) str[i + 1] >  '\177') &&
+        (uchar(str[i + 1]) >  '\177') &&
         (str[i + 1] < '\300')) {
       ++i;
       continue;
@@ -109,9 +109,9 @@ static string& forceUtf8String(string& str) {
         (i + 2) < str.size() &&
         // begin of a 3 chars utf8 sequence
         // skip next 2 chars if it is valid utf8
-        ((unsigned char) str[i + 1] > '\177') &&
+        (uchar(str[i + 1]) > '\177') &&
         (str[i + 1] < '\300') &&
-        ((unsigned char) str[i + 2] > '\177') &&
+        (uchar(str[i + 2]) > '\177') &&
         (str[i + 2] < '\300')) {
       i+=2;
       continue;
@@ -1503,7 +1503,7 @@ public :
       unsigned int i = 0;
 
       for(; it != itEnd; ++it, ++i) {
-        xdkbib::FileEntry& fe = (xdkbib::FileEntry&) *it;
+        xdkbib::FileEntry& fe = const_cast<xdkbib::FileEntry&>(*it);
 
         node publi;
 
@@ -1589,12 +1589,12 @@ public :
 
             if (pos != string::npos) {
               authorsComments = fe.comment().substr(pos + 7);
-              labriAuthors = (char *) authorsComments.c_str();
+              labriAuthors = const_cast<char *>(authorsComments.c_str());
               pos = fe.comment().find("LaBRI: ", pos + 7);
 
               if (pos != string::npos) {
                 teamsComments = fe.comment().substr(pos + 7);
-                labriTeams = (char *) teamsComments.c_str();
+                labriTeams = const_cast<char *>(teamsComments.c_str());
               }
             }
 
@@ -1629,7 +1629,7 @@ public :
               bool labriAuthor = labriAuthors && j == labriIndex;
 
               if (labriAuthor) {
-                indices.push_back((int) labriIndex);
+                indices.push_back(int(labriIndex));
                 char* token = strtok_r(NULL, " \n", &authorsPtr);
                 labriIndex = token ? (atoi(token) - 1) : 0;
               }

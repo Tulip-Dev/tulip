@@ -199,10 +199,7 @@ void PathFinder::configureHighlighterButtonPressed() {
    * Each highlighter has it's own configuration widget.
    * We build a QDialog and integrate this widget into it to display highlighter-specific configuration to the user.
    */
-  QListWidget *listWidget = dynamic_cast<QListWidget *> (highlightersListWidget->findChild<QListWidget *> ("listWidget"));
-
-  if (!listWidget)
-    return;
+  QListWidget *listWidget = static_cast<QListWidget *> (highlightersListWidget->findChild<QListWidget *> ("listWidget"));
 
   QList<QListWidgetItem *> lst = listWidget->selectedItems();
   string text("");

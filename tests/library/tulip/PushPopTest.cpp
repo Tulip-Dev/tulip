@@ -16,8 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include <tulip/ForEach.h>
 #include "PushPopTest.h"
 #include <tulip/BooleanProperty.h>

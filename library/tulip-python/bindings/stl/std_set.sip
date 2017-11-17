@@ -101,7 +101,7 @@ template<TYPE>
   PyObject *item = NULL;
   while (item = PyIter_Next(iterator)) {
     int state;
-    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = static_cast<TYPE*>(sipConvertToType(item, kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       Py_DECREF(item);
@@ -199,7 +199,7 @@ template<TYPE*>
   PyObject *item = NULL;
   while (item = PyIter_Next(iterator)) {
     int state;
-    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = static_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       Py_DECREF(item);
@@ -338,7 +338,7 @@ template<TYPE*>
   PyObject *item = NULL;
   while (item = PyIter_Next(iterator)) {
     PyObject *f = PyNumber_Float(item);
-    s->insert(static_cast<float>(PyFloat_AsDouble(f)));
+    s->insert(float(PyFloat_AsDouble(f)));
     Py_XDECREF(f);
     Py_DECREF(item);
   }
@@ -406,12 +406,12 @@ template<TYPE*>
   PyObject *item = NULL;
   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
-    s->insert(static_cast<int>(PyLong_AsLong(item)));
+    s->insert(int(PyLong_AsLong(item)));
 #else
     if (PyLong_Check(item)) {
-      s->insert(static_cast<int>(PyLong_AsLong(item)));
+      s->insert(int(PyLong_AsLong(item)));
     } else {
-      s->insert(static_cast<int>(PyInt_AsLong(item)));
+      s->insert(int(PyInt_AsLong(item)));
     }
 #endif
     Py_DECREF(item);
@@ -554,12 +554,12 @@ template<TYPE*>
   PyObject *item = NULL;
   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
-    s->insert(static_cast<unsigned int>(PyLong_AsUnsignedLong(item)));
+    s->insert(uint(PyLong_AsUnsignedLong(item)));
 #else
     if (PyLong_Check(item)) {
-      s->insert(static_cast<unsigned int>(PyLong_AsUnsignedLong(item)));
+      s->insert(uint(PyLong_AsUnsignedLong(item)));
     } else {
-      s->insert(static_cast<unsigned int>(PyInt_AsUnsignedLongMask(item)));
+      s->insert(uint(PyInt_AsUnsignedLongMask(item)));
     }
 #endif
     Py_DECREF(item);

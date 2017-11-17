@@ -94,7 +94,7 @@ public:
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className);
 
     if (cppObjPointer) {
-      cppObject = *reinterpret_cast<T*>(cppObjPointer);
+      cppObject = *static_cast<T*>(cppObjPointer);
       return true;
     }
 
@@ -114,7 +114,7 @@ public:
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className, true);
 
     if (cppObjPointer) {
-      cppObject = reinterpret_cast<T*>(cppObjPointer);
+      cppObject = static_cast<T*>(cppObjPointer);
       return true;
     }
 

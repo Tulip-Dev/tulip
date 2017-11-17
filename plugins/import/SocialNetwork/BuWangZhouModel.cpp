@@ -109,13 +109,13 @@ public:
         pr_sum = 0;
 
         for(random_node=0; random_node<nodes[random_type].size() ; random_node++)
-          k_sum += (double)graph->deg(nodes[random_type][random_node]);
+          k_sum += graph->deg(nodes[random_type][random_node]);
 
         pr = tlp::randomDouble();
         random_node = 0;
 
         while (pr_sum<pr && nodes[random_type].size()>(random_node+1)) {
-          pr_sum += (double)graph->deg(nodes[random_type][random_node])/k_sum;
+          pr_sum += graph->deg(nodes[random_type][random_node])/k_sum;
           random_node++;
         }
 

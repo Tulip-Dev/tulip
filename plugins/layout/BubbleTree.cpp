@@ -236,8 +236,8 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5 >&nrPos,
   rot2[2]=0.;
   zeta = rot1*zeta[0] + rot2*zeta[1];
 
-  result->setNodeValue(n, Coord(static_cast<float>(enclosingCircleCenter[0]+zeta[0]),
-                                static_cast<float>(enclosingCircleCenter[1]+zeta[1]),
+  result->setNodeValue(n, Coord(float(enclosingCircleCenter[0]+zeta[0]),
+                                float(enclosingCircleCenter[1]+zeta[1]),
                                 0.) );
 
   /*
@@ -257,7 +257,7 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5 >&nrPos,
       edge ite=itE->next();
       delete itE;
       vector<Coord>tmp(1);
-      tmp[0] = Coord(static_cast<float>(bend[0]), static_cast<float>(bend[1]), 0.);
+      tmp[0] = Coord(float(bend[0]), float(bend[1]), 0.);
       result->setEdgeValue(ite,tmp);
     }
   }

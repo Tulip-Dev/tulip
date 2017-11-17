@@ -27,8 +27,6 @@
 #include <tulip/BiconnectedTest.h>
 #include <tulip/TriconnectedTest.h>
 
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
 #include "TestAlgorithmTest.h"
 
 using namespace std;

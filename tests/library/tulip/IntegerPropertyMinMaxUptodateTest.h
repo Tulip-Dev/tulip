@@ -22,9 +22,8 @@
 
 #include <tulip/Graph.h>
 #include <tulip/IntegerProperty.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+
+#include "CppUnitIncludes.h"
 
 class IntegerPropertyMinMaxUpdateTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(IntegerPropertyMinMaxUpdateTest);

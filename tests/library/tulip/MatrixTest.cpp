@@ -18,8 +18,7 @@
  */
 #include <cassert>
 #include <iomanip>
-#include <cppunit/TestCase.h>
-#include <cppunit/TestCaller.h>
+
 #include "MatrixTest.h"
 
 using namespace std;
@@ -157,7 +156,7 @@ void MatrixTest::testInternalOperation() {
       if (i==j) matid[i][j] = 1.0;
 
       CPPUNIT_ASSERT_EQUAL(0.0, matnull[i][j]);
-      CPPUNIT_ASSERT_EQUAL((double)((i+1)*(j+SIZE)), mat1[i][j]);
+      CPPUNIT_ASSERT_EQUAL(double(((i+1)*(j+SIZE))), mat1[i][j]);
 
       if (i==j) mat1[i][j] = 0.0;
     }

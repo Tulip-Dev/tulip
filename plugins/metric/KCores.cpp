@@ -106,7 +106,7 @@ bool KCores::run() {
     dataSet->get("metric", metric);
   }
 
-  EDGE_TYPE degree_type = (EDGE_TYPE) degreeTypes.getCurrent();
+  EDGE_TYPE degree_type = static_cast<EDGE_TYPE>(degreeTypes.getCurrent());
 
   // the famous k
   double k = DBL_MAX;

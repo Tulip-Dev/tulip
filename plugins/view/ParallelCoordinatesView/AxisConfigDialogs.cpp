@@ -65,9 +65,9 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
   if (axis->getAxisDataTypeName() == "int") {
     intAxisMinValue = new QSpinBox();
-    intAxisMinValue->setMaximum((int)axis->getAssociatedPropertyMinValue());
+    intAxisMinValue->setMaximum(int(axis->getAssociatedPropertyMinValue()));
     intAxisMinValue->setMinimum(INT_MIN);
-    intAxisMinValue->setValue((int)axis->getAxisMinValue());
+    intAxisMinValue->setValue(int(axis->getAxisMinValue()));
     axisMinLayout->addWidget(intAxisMinValue);
   }
   else {
@@ -82,9 +82,9 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
   if (axis->getAxisDataTypeName() == "int") {
     intAxisMaxValue = new QSpinBox();
-    intAxisMaxValue->setMinimum((int)axis->getAssociatedPropertyMaxValue());
+    intAxisMaxValue->setMinimum(int(axis->getAssociatedPropertyMaxValue()));
     intAxisMaxValue->setMaximum(INT_MAX);
-    intAxisMaxValue->setValue((int)axis->getAxisMaxValue());
+    intAxisMaxValue->setValue(int(axis->getAxisMaxValue()));
     axisMaxLayout->addWidget(intAxisMaxValue);
   }
   else {

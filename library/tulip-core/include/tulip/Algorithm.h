@@ -52,8 +52,7 @@ public :
    */
   Algorithm (const PluginContext* context) : graph(NULL),pluginProgress(NULL),dataSet(NULL) {
     if(context != NULL) {
-      const AlgorithmContext* algorithmContext = dynamic_cast<const AlgorithmContext*>(context);
-      assert(algorithmContext != NULL);
+      const AlgorithmContext* algorithmContext = static_cast<const AlgorithmContext*>(context);
       graph = algorithmContext->graph;
       pluginProgress = algorithmContext->pluginProgress;
       dataSet = algorithmContext->dataSet;

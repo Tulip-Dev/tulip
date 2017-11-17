@@ -83,7 +83,7 @@ tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Grap
       for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
         if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
           std::string paramName = entry.first.substr(filesPrefixes[i].length());
-          result.set(paramName, *(reinterpret_cast<std::string*>(entry.second->value)));
+          result.set(paramName, *(static_cast<std::string*>(entry.second->value)));
           result.remove(entry.first);
         }
       }
