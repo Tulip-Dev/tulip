@@ -20,7 +20,8 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-// comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleNoTwistLayout.cpp
+// comments below have been extracted from
+// OGDF/src/energybased/multilevelmixer/MMEExampleNoTwistLayout.cpp
 /** \addtogroup layout */
 
 /// useable example of the Modular Multilevel Mixer
@@ -74,13 +75,15 @@
 class OGDFMMMExampleNoTwistLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010",
-                    "Implements a multilevel graph layout with using the OGDF modular multilevel-mixer. It is tuned to reduce twists in the final drawing and uses LocalBiconnectedMerger and BarycenterPlacer as merging and placement strategies.",
-                    "1.0","Multilevel")
-  OGDFMMMExampleNoTwistLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
+  PLUGININFORMATION("MMM Example No Twist Layout (OGDF)", "Gereon Bartel", "01/09/2010",
+                    "Implements a multilevel graph layout with using the OGDF modular "
+                    "multilevel-mixer. It is tuned to reduce twists in the final drawing and uses "
+                    "LocalBiconnectedMerger and BarycenterPlacer as merging and placement "
+                    "strategies.",
+                    "1.0", "Multilevel")
+  OGDFMMMExampleNoTwistLayout(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
   ~OGDFMMMExampleNoTwistLayout() {}
-
 };
-
 
 PLUGIN(OGDFMMMExampleNoTwistLayout)

@@ -28,18 +28,19 @@
 namespace tlp {
 class GlMainWidget;
 
-class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent {
+class TLP_QT_SCOPE MouseNodeBuilder : public InteractorComponent {
 
 public:
-  MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress):_eventType(eventType), glMainWidget(NULL)  {}
+  MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress)
+      : _eventType(eventType), glMainWidget(NULL) {}
   ~MouseNodeBuilder() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();
+
 private:
   QEvent::Type _eventType;
-  GlMainWidget* glMainWidget;
+  GlMainWidget *glMainWidget;
 };
-
 }
 #endif
 ///@endcond

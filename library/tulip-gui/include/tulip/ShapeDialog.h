@@ -22,9 +22,7 @@ class TLP_QT_SCOPE ShapeDialog : public QDialog {
   std::list<std::pair<QString, QPixmap> > shapes;
 
 public:
-
-  ShapeDialog(std::list<std::pair<QString, QPixmap> >& nodeShapes,
-              QWidget *parent = NULL);
+  ShapeDialog(std::list<std::pair<QString, QPixmap> > &nodeShapes, QWidget *parent = NULL);
   ~ShapeDialog();
 
   QString getSelectedShapeName() const;
@@ -38,7 +36,6 @@ public:
 protected slots:
   void updateShapeList();
 };
-
 }
 
 #endif

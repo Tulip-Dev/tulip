@@ -37,7 +37,8 @@ class Graph;
  *
  * @li The constructor. Observe the graph given in parameter for modification
  * @li needsSaving. Returns true is the graph has been modified
- * @li saved. The graph has been saved, and the status of the class must be reset. needsSaving will return false if called after saved().
+ * @li saved. The graph has been saved, and the status of the class must be reset. needsSaving will
+ * return false if called after saved().
  * @li savingNeeded. Signal send when the status of the graph evolves.
  *
  */
@@ -46,22 +47,23 @@ class TLP_QT_SCOPE GraphNeedsSavingObserver : public QObject, Observable {
   Q_OBJECT
 
   bool _needsSaving;
-  Graph* _graph;
-  QMainWindow* _mainWindow;
+  Graph *_graph;
+  QMainWindow *_mainWindow;
 
   void addObserver();
   void removeObservers();
 
-public :
+public:
   /**
    * @brief GraphNeedsSavingObserver Class constructor
    * @param graph The graph which needs to be observed for modifications
    * @param mainWindow The Qt QMainWindow object behin the perspective
    */
-  GraphNeedsSavingObserver(Graph* graph,QMainWindow* mainWindow=NULL);
+  GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow = NULL);
 
   /**
-    * @brief saved If the graph has been saved, one has to call this method to reset the status of the graph (it does not need to be saved).
+    * @brief saved If the graph has been saved, one has to call this method to reset the status of
+   * the graph (it does not need to be saved).
     * to indicate that the graph does not need to be saved until a new modification.
     */
   void saved();
@@ -75,31 +77,33 @@ public :
 
   /**
     *
-    * @brief forceToSave Even if there is no modification on the graph, this method can be used to force to save the graph.
+    * @brief forceToSave Even if there is no modification on the graph, this method can be used to
+   * force to save the graph.
     */
   void forceToSave();
 
-protected :
+protected:
   /**
     * @see Listener
     * @see Observer
     * @see Observable
     * @see Observable::treatEvents(const std::vector<Event>&)
     *
-    * @brief treatEvents This function is called when events are sent to Observers, and Observers only.
+    * @brief treatEvents This function is called when events are sent to Observers, and Observers
+   * only.
     *
     * @param events The events that happened since the last unHoldObservers().
     */
-  virtual void treatEvents(const std::vector<Event>&);
+  virtual void treatEvents(const std::vector<Event> &);
 
 signals:
 
   /**
-   * @brief savingNeeded This signal is sent when the graph needs to be saved (it has been modified).
+   * @brief savingNeeded This signal is sent when the graph needs to be saved (it has been
+   * modified).
    */
 
   void savingNeeded();
-
 };
 }
-#endif //GRAPHNEEDSSAVINGOBSERVER_H
+#endif // GRAPHNEEDSSAVINGOBSERVER_H

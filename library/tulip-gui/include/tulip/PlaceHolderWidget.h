@@ -23,15 +23,15 @@
 
 #include <QWidget>
 
-class PlaceHolderWidget: public QWidget {
+class PlaceHolderWidget : public QWidget {
   Q_OBJECT
 
-  QWidget* _widget;
+  QWidget *_widget;
 
 public:
   explicit PlaceHolderWidget(QWidget *parent = NULL);
-  QWidget* widget() const;
-  void setWidget(QWidget* widget);
+  QWidget *widget() const;
+  void setWidget(QWidget *widget);
   void resetWidget();
 };
 

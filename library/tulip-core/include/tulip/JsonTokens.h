@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef JSON_TOKENS_H
 #define JSON_TOKENS_H
 
@@ -40,5 +39,5 @@ const std::string PropertiesToken = "properties";
 const std::string TypeToken = "type";
 const std::string SubgraphsToken = "subgraphs";
 
-#endif //JSON_TOKENS_H
+#endif // JSON_TOKENS_H
 ///@endcond

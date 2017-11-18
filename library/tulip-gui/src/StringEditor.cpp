@@ -24,13 +24,13 @@
 
 using namespace tlp;
 
-StringEditor::StringEditor(QWidget *parent) :
-  QDialog(parent) {
-  QVBoxLayout* layout = new QVBoxLayout;
+StringEditor::StringEditor(QWidget *parent) : QDialog(parent) {
+  QVBoxLayout *layout = new QVBoxLayout;
   setLayout(layout);
   edit = new QTextEdit(this);
   layout->addWidget(edit);
-  QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
+  QDialogButtonBox *buttonBox =
+      new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal);
   layout->addWidget(buttonBox);
   QWidget::setTabOrder(edit, buttonBox);
   QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -40,11 +40,11 @@ StringEditor::StringEditor(QWidget *parent) :
   setWindowTitle("Set string value");
 }
 
-QString StringEditor::getString()const {
+QString StringEditor::getString() const {
   return currentString;
 }
 
-void StringEditor::setString(const QString& qstr) {
+void StringEditor::setString(const QString &qstr) {
   currentString = qstr;
   blockSignals(true);
   edit->setPlainText(qstr);
@@ -59,12 +59,10 @@ void StringEditor::done(int r) {
 }
 
 // to ensure it is shown in the center of its parent
-void StringEditor::showEvent(QShowEvent* ev) {
+void StringEditor::showEvent(QShowEvent *ev) {
   QDialog::showEvent(ev);
 
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
-         parentWidget()->window()->rect().center() -
-         rect().center());
+         parentWidget()->window()->rect().center() - rect().center());
 }
-

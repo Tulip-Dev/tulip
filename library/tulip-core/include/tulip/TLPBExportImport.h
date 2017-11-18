@@ -48,7 +48,8 @@
  * nodes_desc = nb_nodes_intervals * <first_node, last_node>
  * edges_desc = nb_edges_intervals *<first_edge, last_edge>
  * nb_properties = uint32
- * properties = <prop_name, graph_id, type, default_node_val, default_edge_val, nodes_val, edges_val>
+ * properties = <prop_name, graph_id, type, default_node_val, default_edge_val, nodes_val,
+ * edges_val>
  * prop_name = length + utf8 text
  * graph_id = uint32
  * type = length + utf8 text
@@ -68,12 +69,12 @@
  * \brief This plugin saves a Tulip graph using a binary format
  *
  */
-class TLPBExport: public tlp::ExportModule {
+class TLPBExport : public tlp::ExportModule {
 public:
-
-  PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary","13/07/2012",
-                    "<p>Supported extensions: tlpb, tlpbz (compressed), tlpb.gz (compressed)</p><p>Exports a graph in a file using the Tulip binary format.",
-                    "1.2","File")
+  PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary", "13/07/2012",
+                    "<p>Supported extensions: tlpb, tlpbz (compressed), tlpb.gz "
+                    "(compressed)</p><p>Exports a graph in a file using the Tulip binary format.",
+                    "1.2", "File")
 
   std::string fileExtension() const {
     return "tlpb";
@@ -86,7 +87,7 @@ public:
     return ext;
   }
 
-  TLPBExport(const tlp::PluginContext *context) :ExportModule(context) {}
+  TLPBExport(const tlp::PluginContext *context) : ExportModule(context) {}
   ~TLPBExport() {}
 
   bool exportGraph(std::ostream &);
@@ -105,9 +106,9 @@ public:
     return tlp::edge(graph->edgePos(e));
   }
 
-  void getSubGraphs(tlp::Graph*, std::vector<tlp::Graph*>&);
+  void getSubGraphs(tlp::Graph *, std::vector<tlp::Graph *> &);
 
-  void writeAttributes(std::ostream&, tlp::Graph*);
+  void writeAttributes(std::ostream &, tlp::Graph *);
 };
 
 /// Import plugin for TLPB format
@@ -116,12 +117,15 @@ public:
  * \brief This plugin reads a Tulip graph using a binary format
  *
  */
-class TLPBImport:public tlp::ImportModule {
+class TLPBImport : public tlp::ImportModule {
 public:
   PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
-                    "<p>Supported extensions: tlpb, tlpb.gz (compressed), tlpbz (compressed)</p><p>Imports a graph recorded in a file using the Tulip binary format.</p>", "1.2", "File")
+                    "<p>Supported extensions: tlpb, tlpb.gz (compressed), tlpbz "
+                    "(compressed)</p><p>Imports a graph recorded in a file using the Tulip binary "
+                    "format.</p>",
+                    "1.2", "File")
 
-  TLPBImport(tlp::PluginContext* context);
+  TLPBImport(tlp::PluginContext *context);
   ~TLPBImport() {}
 
   std::string icon() const {
@@ -146,7 +150,7 @@ public:
 
 /*@}*/
 
-//Don't ask why it is David favorite 9 digit number.
+// Don't ask why it is David favorite 9 digit number.
 #define TLPB_MAGIC_NUMBER 578374683
 #define TLPB_MAJOR 1
 #define TLPB_MINOR 2
@@ -160,12 +164,11 @@ struct TLPBHeader {
   unsigned int numEdges;
 
   TLPBHeader(unsigned int nbN = 0, unsigned int nbE = 0)
-    : magicNumber(TLPB_MAGIC_NUMBER), major(TLPB_MAJOR), minor(TLPB_MINOR), numNodes(nbN), numEdges(nbE) {}
+      : magicNumber(TLPB_MAGIC_NUMBER), major(TLPB_MAJOR), minor(TLPB_MINOR), numNodes(nbN),
+        numEdges(nbE) {}
 
   bool checkCompatibility() {
-    return ((magicNumber == TLPB_MAGIC_NUMBER) &&
-            (major == TLPB_MAJOR) &&
-            (minor <= TLPB_MINOR));
+    return ((magicNumber == TLPB_MAGIC_NUMBER) && (major == TLPB_MAJOR) && (minor <= TLPB_MINOR));
   }
 };
 

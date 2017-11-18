@@ -28,7 +28,7 @@ using namespace tlp;
 
 namespace pocore {
 
-map<Graph *, TulipNodeMetricSorter *>TulipNodeMetricSorter::instances;
+map<Graph *, TulipNodeMetricSorter *> TulipNodeMetricSorter::instances;
 
 TulipNodeMetricSorter *TulipNodeMetricSorter::getInstance(Graph *graph) {
   if (instances.find(graph) == instances.end()) {
@@ -45,7 +45,7 @@ TulipNodeMetricSorter::~TulipNodeMetricSorter() {
   instances.erase(graph);
 }
 
-void TulipNodeMetricSorter::sortNodesForProperty(const string& propertyName) {
+void TulipNodeMetricSorter::sortNodesForProperty(const string &propertyName) {
   cleanupSortNodesForProperty(propertyName);
   Iterator<node> *nodeIt = graph->getNodes();
 
@@ -55,21 +55,23 @@ void TulipNodeMetricSorter::sortNodesForProperty(const string& propertyName) {
 
   delete nodeIt;
 
-  const string& propertyType = graph->getProperty(propertyName)->getTypename();
+  const string &propertyType = graph->getProperty(propertyName)->getTypename();
 
   if (propertyType == "double") {
-    sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<DoubleType, DoubleProperty>(graph, propertyName));
-  }
-  else if (propertyType == "int") {
-    sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<IntegerType, IntegerProperty>(graph, propertyName));
+    sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(),
+         NodeMetricPropertyOrderRelation<DoubleType, DoubleProperty>(graph, propertyName));
+  } else if (propertyType == "int") {
+    sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(),
+         NodeMetricPropertyOrderRelation<IntegerType, IntegerProperty>(graph, propertyName));
   }
 }
 
-void TulipNodeMetricSorter::cleanupSortNodesForProperty(const std::string& propertyName) {
+void TulipNodeMetricSorter::cleanupSortNodesForProperty(const std::string &propertyName) {
   nodeSortingMap.erase(propertyName);
 }
 
-node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank, const string& propertyName) {
+node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank,
+                                                     const string &propertyName) {
   if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
     sortNodesForProperty(propertyName);
   }
@@ -77,10 +79,10 @@ node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank, co
   return nodeSortingMap[propertyName][rank];
 }
 
-unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string& propertyName)  {
+unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string &propertyName) {
   if (nbValuesPropertyMap.find(propertyName) == nbValuesPropertyMap.end()) {
     unsigned int count = 0;
-    const string& propertyType = graph->getProperty(propertyName)->getTypename();
+    const string &propertyType = graph->getProperty(propertyName)->getTypename();
 
     if (propertyType == "double") {
       set<double> sd;
@@ -92,8 +94,7 @@ unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string& propert
 
       delete nodeIt;
       count = sd.size();
-    }
-    else if (propertyType == "int") {
+    } else if (propertyType == "int") {
       set<int> si;
       Iterator<node> *nodeIt = graph->getNodes();
 
@@ -115,12 +116,13 @@ void TulipNodeMetricSorter::reset() {
   nodeSortingMap.clear();
 }
 
-unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n, const string& propertyName) {
+unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n,
+                                                           const string &propertyName) {
   if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
     sortNodesForProperty(propertyName);
   }
 
-  for (unsigned int i = 0 ; i < nodeSortingMap[propertyName].size() ; ++i) {
+  for (unsigned int i = 0; i < nodeSortingMap[propertyName].size(); ++i) {
     if (nodeSortingMap[propertyName][i] == n) {
       return i;
     }
@@ -128,5 +130,4 @@ unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n, const st
 
   return 0;
 }
-
 }

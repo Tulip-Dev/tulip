@@ -31,53 +31,48 @@ class HistoStatsConfigWidget;
 
 class HistogramInteractor : public NodeLinkDiagramComponentInteractor {
 
-public :
-
+public:
   HistogramInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
-
 };
 
 class HistogramInteractorNavigation : public HistogramInteractor {
 
-public :
-
-  PLUGININFORMATION("HistogramInteractorNavigation", "Tulip Team", "02/04/2009", "Histogram Navigation Interactor", "1.0","Navigation")
+public:
+  PLUGININFORMATION("HistogramInteractorNavigation", "Tulip Team", "02/04/2009",
+                    "Histogram Navigation Interactor", "1.0", "Navigation")
 
   HistogramInteractorNavigation(const PluginContext *);
 
   void construct();
-
 };
 
 class HistogramInteractorMetricMapping : public HistogramInteractor {
 
-public :
-
-  PLUGININFORMATION("HistogramInteractorColorMapping", "Tulip Team", "02/04/2009", "Histogram Color Mapping Interactor", "1.0", "Information")
+public:
+  PLUGININFORMATION("HistogramInteractorColorMapping", "Tulip Team", "02/04/2009",
+                    "Histogram Color Mapping Interactor", "1.0", "Information")
 
   HistogramInteractorMetricMapping(const PluginContext *);
 
   void construct();
-
 };
 
 class HistogramInteractorStatistics : public HistogramInteractor {
 
-public :
-
-  PLUGININFORMATION("HistogramInteractorStatistics", "Tulip Team", "02/04/2009", "Histogram Statistics Interactor", "1.0", "Information")
+public:
+  PLUGININFORMATION("HistogramInteractorStatistics", "Tulip Team", "02/04/2009",
+                    "Histogram Statistics Interactor", "1.0", "Information")
 
   HistogramInteractorStatistics(const PluginContext *);
   ~HistogramInteractorStatistics();
 
   void construct();
-  QWidget* configurationWidget() const;
+  QWidget *configurationWidget() const;
   void install(QObject *target);
 
-private :
-
+private:
   HistoStatsConfigWidget *histoStatsConfigWidget;
   HistogramStatistics *histoStatistics;
 };
@@ -85,13 +80,14 @@ private :
 /**
  *  \brief interactor to get information about an element of the graph
  */
-class HistogramInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+class HistogramInteractorGetInformation : public NodeLinkDiagramComponentInteractor {
 public:
-  PLUGININFORMATION("HistogramInteractorGetInformation", "Tulip Team", "18/06/2015", "Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("HistogramInteractorGetInformation", "Tulip Team", "18/06/2015",
+                    "Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
-  HistogramInteractorGetInformation(const tlp::PluginContext*);
+  HistogramInteractorGetInformation(const tlp::PluginContext *);
 
   /**
    * Construct chain of responsibility
@@ -100,8 +96,6 @@ public:
 
   bool isCompatible(const std::string &viewName) const;
 };
-
 }
-
 
 #endif /* HISTOGRAMINTERACTORS_H_ */

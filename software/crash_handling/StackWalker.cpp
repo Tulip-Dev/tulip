@@ -37,10 +37,10 @@ int backtrace(void **buffer, int size) {
   void *ip = frame[1];
   int i;
 
-  for (i = 0; bp && ip && i < size ; ++i) {
+  for (i = 0; bp && ip && i < size; ++i) {
     ip = bp[1];
     buffer[i] = ip;
-    bp = reinterpret_cast<void**>(bp[0]);
+    bp = reinterpret_cast<void **>(bp[0]);
   }
 
   return i;
@@ -51,22 +51,23 @@ char *getStackFrameDetails(void *address) {
   char tmp[1024];
 
   if (dladdr(address, &dli)) {
-    int64_t function_offset = reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
-    sprintf(tmp, "%s(%s+%p)[%p]", dli.dli_fname, dli.dli_sname, reinterpret_cast<void *>(function_offset), address);
-  }
-  else {
+    int64_t function_offset =
+        reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
+    sprintf(tmp, "%s(%s+%p)[%p]", dli.dli_fname, dli.dli_sname,
+            reinterpret_cast<void *>(function_offset), address);
+  } else {
     sprintf(tmp, "%s(%s+%s)[%p]", "???", "???", "???", address);
   }
 
-  char *ret = new char[strlen(tmp)+1];
+  char *ret = new char[strlen(tmp) + 1];
   strcpy(ret, tmp);
   return ret;
 }
 
 char **backtrace_symbols(void *const *buffer, int size) {
-  char **ret = new char*[size];
+  char **ret = new char *[size];
 
-  for (int i = 0 ; i < size ; ++i) {
+  for (int i = 0; i < size; ++i) {
     ret[i] = getStackFrameDetails(buffer[i]);
   }
 
@@ -90,7 +91,7 @@ int64_t getOffsetInExecutable(void *address) {
 }
 
 std::string pOpen(const std::string &cmd) {
-  const int MAX =1024;
+  const int MAX = 1024;
   FILE *cmdPipe = popen(cmd.c_str(), "r+");
 
   if (cmdPipe) {
@@ -100,8 +101,7 @@ std::string pOpen(const std::string &cmd) {
 
     if (s == NULL) {
       return "";
-    }
-    else {
+    } else {
       std::string str(buffer);
       return str.substr(0, str.size() - 1);
     }
@@ -114,7 +114,7 @@ std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atos
   std::string ext[5] = {".cpp", ".cc", ".c", ".hpp", ".h"};
   std::pair<const char *, unsigned int> ret = std::make_pair("", 0);
 
-  for (size_t i = 0 ; i < 5 ; ++i) {
+  for (size_t i = 0; i < 5; ++i) {
     size_t pos = atosOutput.find(ext[i]);
 
     if (pos != std::string::npos) {
@@ -125,7 +125,8 @@ std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atos
         --pos;
       }
 
-      ret = std::make_pair(atosOutput.substr(pos+1, pos2-pos-1).c_str(), atoi(atosOutput.substr(pos2+1, pos3-pos2-1).c_str()));
+      ret = std::make_pair(atosOutput.substr(pos + 1, pos2 - pos - 1).c_str(),
+                           atoi(atosOutput.substr(pos2 + 1, pos3 - pos2 - 1).c_str()));
       break;
     }
   }
@@ -148,7 +149,7 @@ StackWalkerGCC::~StackWalkerGCC() {
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *>::iterator it = bfdMap.begin();
 
-  for ( ; it != bfdMap.end() ; ++it) {
+  for (; it != bfdMap.end(); ++it) {
     delete it->second;
   }
 
@@ -161,7 +162,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   void *array[MAX_BACKTRACE_SIZE];
   int size = backtrace(array, MAX_BACKTRACE_SIZE);
-  char ** messages = backtrace_symbols(array, size);
+  char **messages = backtrace_symbols(array, size);
 
   if (messages == NULL || size < 2)
     return;
@@ -197,7 +198,8 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     ++i;
   }
 
-  if (i == size) i = 1;
+  if (i == size)
+    i = 1;
 
   std::string msg(messages[i]);
 
@@ -208,14 +210,14 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #endif
 
-  if (i == size) i = 0;
+  if (i == size)
+    i = 0;
 
   int offset = i;
 
-  for (; i < size ; ++i) {
-    char *mangled_name = 0, *runtime_offset = 0,
-          *offset_end = 0, *runtime_addr = 0,
-           *runtime_addr_end = 0, *dsoName = 0;
+  for (; i < size; ++i) {
+    char *mangled_name = 0, *runtime_offset = 0, *offset_end = 0, *runtime_addr = 0,
+         *runtime_addr_end = 0, *dsoName = 0;
 
     if (uint(i) > maxDepth)
       return;
@@ -223,17 +225,13 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     for (char *p = messages[i]; *p; ++p) {
       if (*p == '(' && !mangled_name) {
         mangled_name = p;
-      }
-      else if (*p == '+') {
+      } else if (*p == '+') {
         runtime_offset = p;
-      }
-      else if (*p == ')') {
+      } else if (*p == ')') {
         offset_end = p;
-      }
-      else if (*p == '[') {
+      } else if (*p == '[') {
         runtime_addr = p;
-      }
-      else if (*p == ']') {
+      } else if (*p == ']') {
         runtime_addr_end = p;
       }
     }
@@ -250,13 +248,12 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     *runtime_addr++ = '\0';
     *runtime_addr_end = '\0';
 
-    if (mangled_name && runtime_offset &&
-        mangled_name < runtime_offset) {
+    if (mangled_name && runtime_offset && mangled_name < runtime_offset) {
 
       std::string dsoNameStr(dsoName);
 
       int status = 0;
-      char * real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
+      char *real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
 
       char *end;
       int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
@@ -274,8 +271,9 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       }
 
       if (bfdMap[dsoNameStr]) {
-        dsoName = const_cast<char*>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
-        info = bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+        dsoName = const_cast<char *>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
+        info =
+            bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
       }
 
 #endif
@@ -301,17 +299,16 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       if (status == 0) {
         if (std::string(info.first) == "") {
           printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
+        } else {
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, info.first,
+                         info.second);
         }
-        else {
-          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, info.first, info.second);
-        }
-      }
-      else {
+      } else {
         if (std::string(info.first) == "") {
           printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
-        }
-        else {
-          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, info.first, info.second);
+        } else {
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset,
+                         info.first, info.second);
         }
       }
 
@@ -333,7 +330,7 @@ StackWalkerMinGW::~StackWalkerMinGW() {
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *>::iterator it = bfdMap.begin();
 
-  for ( ; it != bfdMap.end() ; ++it) {
+  for (; it != bfdMap.end(); ++it) {
     delete it->second;
   }
 
@@ -355,37 +352,31 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   GetModuleFileNameA(NULL, procname, sizeof procname);
 
   STACKFRAME frame;
-  memset(&frame,0,sizeof(frame));
+  memset(&frame, 0, sizeof(frame));
 
 #ifndef X86_64
   DWORD machine = IMAGE_FILE_MACHINE_I386;
-  frame.AddrPC.Offset    = context->Eip;
+  frame.AddrPC.Offset = context->Eip;
   frame.AddrStack.Offset = context->Esp;
   frame.AddrFrame.Offset = context->Ebp;
 #else
   DWORD machine = IMAGE_FILE_MACHINE_AMD64;
-  frame.AddrPC.Offset    = context->Rip;
+  frame.AddrPC.Offset = context->Rip;
   frame.AddrStack.Offset = context->Rsp;
   frame.AddrFrame.Offset = context->Rbp;
 #endif
 
-  frame.AddrPC.Mode      = AddrModeFlat;
-  frame.AddrStack.Mode   = AddrModeFlat;
-  frame.AddrFrame.Mode   = AddrModeFlat;
+  frame.AddrPC.Mode = AddrModeFlat;
+  frame.AddrStack.Mode = AddrModeFlat;
+  frame.AddrFrame.Mode = AddrModeFlat;
 
   char symbol_buffer[sizeof(IMAGEHLP_SYMBOL) + 255];
   char module_name_raw[MAX_PATH];
 
   int depth = maxDepth;
 
-  while(StackWalk(machine,
-                  process,
-                  thread,
-                  &frame,
-                  context,
-                  0,
-                  SymFunctionTableAccess,
-                  SymGetModuleBase, 0)) {
+  while (StackWalk(machine, process, thread, &frame, context, 0, SymFunctionTableAccess,
+                   SymGetModuleBase, 0)) {
 
     --depth;
 
@@ -402,9 +393,9 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     DWORD64 module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
 #endif
 
-    int64_t symbolOffset = frame.AddrPC.Offset - module_base  - 0x1000 - 1;
+    int64_t symbolOffset = frame.AddrPC.Offset - module_base - 0x1000 - 1;
 
-    const char * module_name = "[unknown module]";
+    const char *module_name = "[unknown module]";
 
     if (module_base &&
         GetModuleFileNameA(reinterpret_cast<HMODULE>(module_base), module_name_raw, MAX_PATH)) {
@@ -420,7 +411,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #endif
 
-    const char * func = NULL;
+    const char *func = NULL;
 
 #ifndef X86_64
     DWORD dummy = 0;
@@ -455,16 +446,17 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #ifdef HAVE_BFD
     std::pair<const char *, unsigned int> info =
-      bfdMap[moduleNameStr]->getFileAndLineForAddress(frame.AddrPC.Offset);
+        bfdMap[moduleNameStr]->getFileAndLineForAddress(frame.AddrPC.Offset);
 #else
     std::pair<const char *, unsigned int> info = std::make_pair("", 0);
 #endif
 
     if (info.first == NULL || info.second == 0) {
-      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset);
-    }
-    else {
-      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset, info.first, info.second);
+      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func,
+                     symbolOffset);
+    } else {
+      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset,
+                     info.first, info.second);
     }
   }
 
@@ -475,7 +467,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #include <dbghelp.h>
 
-StackWalkerMSVC::StackWalkerMSVC(): context(NULL) {}
+StackWalkerMSVC::StackWalkerMSVC() : context(NULL) {}
 
 StackWalkerMSVC::~StackWalkerMSVC() {}
 
@@ -501,52 +493,44 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     SymSetSearchPath(process, searchPathsStr.c_str());
   }
 
-  STACKFRAME        stack;
-  ULONG               frame;
-  IMAGEHLP_SYMBOL   *symbol = reinterpret_cast<IMAGEHLP_SYMBOL*>(malloc(sizeof(IMAGEHLP_SYMBOL)+2048*sizeof(TCHAR)));
+  STACKFRAME stack;
+  ULONG frame;
+  IMAGEHLP_SYMBOL *symbol =
+      reinterpret_cast<IMAGEHLP_SYMBOL *>(malloc(sizeof(IMAGEHLP_SYMBOL) + 2048 * sizeof(TCHAR)));
 #ifdef X86_64
-  DWORD64             displacement = 0;
+  DWORD64 displacement = 0;
 #else
-  DWORD             displacement = 0;
+  DWORD displacement = 0;
 #endif
 
-  DWORD         displacement2 = 0;
+  DWORD displacement2 = 0;
 
-  memset( &stack, 0, sizeof( STACKFRAME ) );
+  memset(&stack, 0, sizeof(STACKFRAME));
 
-  symbol->SizeOfStruct  = sizeof( IMAGEHLP_SYMBOL );
+  symbol->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
   symbol->MaxNameLength = 2048;
 
 #ifndef X86_64
   DWORD machine = IMAGE_FILE_MACHINE_I386;
-  stack.AddrPC.Offset    = context->Eip;
+  stack.AddrPC.Offset = context->Eip;
   stack.AddrStack.Offset = context->Esp;
   stack.AddrFrame.Offset = context->Ebp;
 #else
   DWORD machine = IMAGE_FILE_MACHINE_AMD64;
-  stack.AddrPC.Offset    = context->Rip;
+  stack.AddrPC.Offset = context->Rip;
   stack.AddrStack.Offset = context->Rsp;
   stack.AddrFrame.Offset = context->Rbp;
 #endif
 
-  stack.AddrPC.Mode      = AddrModeFlat;
-  stack.AddrStack.Mode   = AddrModeFlat;
-  stack.AddrFrame.Mode   = AddrModeFlat;
+  stack.AddrPC.Mode = AddrModeFlat;
+  stack.AddrStack.Mode = AddrModeFlat;
+  stack.AddrFrame.Mode = AddrModeFlat;
 
-  for( frame = 0; ; frame++ ) {
-    result = StackWalk(
-               machine,
-               process,
-               thread,
-               &stack,
-               context,
-               NULL,
-               SymFunctionTableAccess,
-               SymGetModuleBase,
-               NULL
-             );
+  for (frame = 0;; frame++) {
+    result = StackWalk(machine, process, thread, &stack, context, NULL, SymFunctionTableAccess,
+                       SymGetModuleBase, NULL);
 
-    if(!result) {
+    if (!result) {
       break;
     }
 
@@ -567,21 +551,21 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     DWORD64 module_base = SymGetModuleBase(process, stack.AddrPC.Offset);
 #endif
 
-    if (SymGetModuleInfo(process,stack.AddrPC.Offset, &image_module)) {
+    if (SymGetModuleInfo(process, stack.AddrPC.Offset, &image_module)) {
       module_name = image_module.ImageName;
     }
 
-    if (SymGetSymFromAddr( process, stack.AddrPC.Offset, &displacement, symbol )) {
+    if (SymGetSymFromAddr(process, stack.AddrPC.Offset, &displacement, symbol)) {
       symbol_name = symbol->Name;
     }
 
-    if (SymGetLineFromAddr( process, stack.AddrPC.Offset - 1, &displacement2, &image_line )) {
+    if (SymGetLineFromAddr(process, stack.AddrPC.Offset - 1, &displacement2, &image_line)) {
       file_name = image_line.FileName;
       line = image_line.LineNumber;
     }
 
-    printFrameInfo(os, frame, stack.AddrPC.Offset, module_name, symbol_name, stack.AddrPC.Offset - module_base, file_name, line);
-
+    printFrameInfo(os, frame, stack.AddrPC.Offset, module_name, symbol_name,
+                   stack.AddrPC.Offset - module_base, file_name, line);
   }
 }
 

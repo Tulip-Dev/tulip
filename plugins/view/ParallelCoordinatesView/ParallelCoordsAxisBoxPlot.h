@@ -26,19 +26,17 @@
 #include <tulip/GLInteractor.h>
 #include <tulip/Color.h>
 
-
 namespace tlp {
 
 class QuantitativeParallelAxis;
 
 class GlAxisBoxPlot : public GlSimpleEntity {
 
-public :
-
-  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color& fillColor, const Color& outlineColor);
+public:
+  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor, const Color &outlineColor);
   ~GlAxisBoxPlot() {}
 
-  void draw(float lod,Camera* camera);
+  void draw(float lod, Camera *camera);
 
   void getXML(std::string &) {}
 
@@ -46,10 +44,8 @@ public :
 
   void setHighlightRangeIfAny(Coord sceneCoords);
 
-
-private :
-
-  void drawLabel(const Coord& position, const std::string& labelName, Camera *camera);
+private:
+  void drawLabel(const Coord &position, const std::string &labelName, Camera *camera);
 
   QuantitativeParallelAxis *axis;
   Coord bottomOutlierCoord;
@@ -61,7 +57,6 @@ private :
   Color fillColor, outlineColor;
   Coord *highlightRangeLowBound;
   Coord *highlightRangeHighBound;
-
 };
 
 class ParallelAxis;
@@ -69,8 +64,7 @@ class ParallelCoordinatesView;
 
 class ParallelCoordsAxisBoxPlot : public GLInteractorComponent {
 
-public :
-
+public:
   ParallelCoordsAxisBoxPlot();
   ~ParallelCoordsAxisBoxPlot();
   bool eventFilter(QObject *, QEvent *);
@@ -78,8 +72,7 @@ public :
   bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   void buildGlAxisPlot(std::vector<ParallelAxis *> currentAxis);
   void deleteGlAxisPlot();
 
@@ -90,9 +83,7 @@ private :
   std::map<QuantitativeParallelAxis *, GlAxisBoxPlot *> axisBoxPlotMap;
   ParallelAxis *selectedAxis;
   unsigned int lastNbAxis;
-
 };
-
 }
 
 #endif /* PARALLELCOORDSBOXPLOT_H_ */

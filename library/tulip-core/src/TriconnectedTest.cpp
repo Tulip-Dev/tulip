@@ -23,30 +23,30 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-TriconnectedTest * TriconnectedTest::instance=NULL;
+TriconnectedTest *TriconnectedTest::instance = NULL;
 //=================================================================
-TriconnectedTest::TriconnectedTest() {
-}
+TriconnectedTest::TriconnectedTest() {}
 //=================================================================
-bool TriconnectedTest::isTriconnected(Graph* graph) {
-  if (instance==NULL)
-    instance=new TriconnectedTest();
+bool TriconnectedTest::isTriconnected(Graph *graph) {
+  if (instance == NULL)
+    instance = new TriconnectedTest();
 
   return instance->compute(graph);
 }
 //=================================================================
-bool TriconnectedTest::compute(Graph* graph) {
-  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+bool TriconnectedTest::compute(Graph *graph) {
+  if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
-  if (graph->numberOfNodes()==0) return false;
+  if (graph->numberOfNodes() == 0)
+    return false;
 
   graph->addListener(this);
   bool result = true;
   Graph *tmp = graph->addCloneSubGraph();
   Iterator<node> *itN = graph->getNodes();
 
-  while(itN->hasNext()) {
+  while (itN->hasNext()) {
     node n = itN->next();
     tmp->delNode(n);
 
@@ -58,7 +58,7 @@ bool TriconnectedTest::compute(Graph* graph) {
     tmp->addNode(n);
     Iterator<edge> *itE = graph->getInOutEdges(n);
 
-    while(itE->hasNext()) {
+    while (itE->hasNext()) {
       tmp->addEdge(itE->next());
     }
 
@@ -71,17 +71,18 @@ bool TriconnectedTest::compute(Graph* graph) {
   return result;
 }
 //=================================================================
-void TriconnectedTest::treatEvent(const Event& evt) {
-  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+void TriconnectedTest::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
-    Graph* graph = gEvt->getGraph();
+    Graph *graph = gEvt->getGraph();
 
-    switch(gEvt->getType()) {
+    switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -98,20 +99,18 @@ void TriconnectedTest::treatEvent(const Event& evt) {
       break;
 
     case GraphEvent::TLP_ADD_NODE:
-      resultsBuffer[graph]=false;
+      resultsBuffer[graph] = false;
       break;
 
     default:
-      //we don't care about other events
+      // we don't care about other events
       break;
     }
-  }
-  else {
+  } else {
 
-    Graph* graph = static_cast<Graph *>(evt.sender());
+    Graph *graph = static_cast<Graph *>(evt.sender());
 
     if (evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);
   }
 }
-

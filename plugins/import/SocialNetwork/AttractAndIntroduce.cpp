@@ -26,19 +26,22 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  // nodes
-  "This parameter defines the amount of nodes used to build the graph.",
+static const char *paramHelp[] = {
+    // nodes
+    "This parameter defines the amount of nodes used to build the graph.",
 
-  // edges
-  "This parameter defines the amount of edges used to build the graph.",
+    // edges
+    "This parameter defines the amount of edges used to build the graph.",
 
-  // alpha
-  "This parameter defines the alpha parameter between [0,1]. This one is a percentage and describes the distribution of attractiveness; the model suggests about 1 - alpha of the individuals have very low attractiveness whereas the remaining alpha are approximately evenly distributed between low, medium, and high attractiveness",
+    // alpha
+    "This parameter defines the alpha parameter between [0,1]. This one is a percentage and "
+    "describes the distribution of attractiveness; the model suggests about 1 - alpha of the "
+    "individuals have very low attractiveness whereas the remaining alpha are approximately evenly "
+    "distributed between low, medium, and high attractiveness",
 
-  // beta
-  "This parameter defines the beta parameter between [0,1]. This parameter indicates the probability a person will have the desire to introduce someone."
-};
+    // beta
+    "This parameter defines the beta parameter between [0,1]. This parameter indicates the "
+    "probability a person will have the desire to introduce someone."};
 
 //=================================================================================
 
@@ -50,16 +53,20 @@ static const char * paramHelp[] = {
  * PNAS 106 (6): 1720-1724, 2009.
  *
  */
-class AttractAndIntroduce:public ImportModule {
-public :
+class AttractAndIntroduce : public ImportModule {
+public:
   PLUGININFORMATION("Attract And Introduce Model", "Arnaud Sallabery & Patrick Mary", "25/03/2014",
-                    "Randomly generates a graph using the Attract and Introduce Model described in<br/>J. H. Fowlera, C. T. Dawesa, N. A. Christakisb.<br/><b>Model of genetic variation in human social networks.</b><br/>PNAS 106 (6): 1720-1724, 2009.", "1.0", "Social network")
+                    "Randomly generates a graph using the Attract and Introduce Model described "
+                    "in<br/>J. H. Fowlera, C. T. Dawesa, N. A. Christakisb.<br/><b>Model of "
+                    "genetic variation in human social networks.</b><br/>PNAS 106 (6): 1720-1724, "
+                    "2009.",
+                    "1.0", "Social network")
 
-  AttractAndIntroduce(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"750");
-    addInParameter<unsigned int>("edges",paramHelp[1],"3150");
-    addInParameter<double>("alpha",paramHelp[2],"0.9");
-    addInParameter<double>("beta",paramHelp[3],"0.3");
+  AttractAndIntroduce(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "750");
+    addInParameter<unsigned int>("edges", paramHelp[1], "3150");
+    addInParameter<double>("alpha", paramHelp[2], "0.9");
+    addInParameter<double>("beta", paramHelp[3], "0.3");
   }
 
   bool importGraph() {
@@ -69,7 +76,7 @@ public :
     double alpha = 0.9;
     double beta = 0.3;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", n);
       dataSet->get("edges", e);
       dataSet->get("alpha", alpha);
@@ -80,8 +87,7 @@ public :
     if (alpha < 0 || alpha > 1) {
       pluginProgress->setError("alpha is not a percentage,\nit is not between [0, 1]");
       return false;
-    }
-    else if (beta < 0 || beta > 1) {
+    } else if (beta < 0 || beta > 1) {
       pluginProgress->setError("beta is not a probability,\nit is is not between [0, 1]");
       return false;
     }
@@ -89,7 +95,7 @@ public :
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    unsigned int iterations = e+n;
+    unsigned int iterations = e + n;
 
     graph->addNodes(n);
     graph->reserveEdges(e);
@@ -100,8 +106,8 @@ public :
     unsigned int i, j;
     double pIAttract, pIIntroduce;
 
-    for (i=0; i < n; ++i) {
-      if ((1-alpha) > randomDouble(1.0))
+    for (i = 0; i < n; ++i) {
+      if ((1 - alpha) > randomDouble(1.0))
         pIAttract = 0;
       else
         pIAttract = randomDouble(1.0);
@@ -115,21 +121,20 @@ public :
       pIntroduceProperty[i] = pIIntroduce;
 
       if (i % 1000 == 0) {
-        if (pluginProgress->progress(i, iterations)!=TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, iterations) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
     }
 
     unsigned int tmpE = 0;
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
     while (tmpE < e) {
       i = randomInteger(n - 1);
 
       do {
         j = randomInteger(n - 1);
-      }
-      while (i==j);
+      } while (i == j);
 
       node nj = nodes[j];
 
@@ -162,7 +167,7 @@ public :
 
         if (tmpE % 1000 == 0) {
           if (pluginProgress->progress(tmpE, iterations) != TLP_CONTINUE)
-            return pluginProgress->state()!=TLP_CANCEL;
+            return pluginProgress->state() != TLP_CANCEL;
         }
       }
     }
@@ -170,6 +175,5 @@ public :
     return true;
   }
 };
-
 
 PLUGIN(AttractAndIntroduce)

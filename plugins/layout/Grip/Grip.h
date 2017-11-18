@@ -46,10 +46,11 @@
 class Grip : public tlp::LayoutAlgorithm {
 
 public:
-
-  PLUGININFORMATION("GRIP","Romain Bourqui","01/11/2010",
+  PLUGININFORMATION("GRIP", "Romain Bourqui", "01/11/2010",
                     "Implements a force directed graph drawing algorithm first published as:<br/>"
-                    "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. Kobourov, Journal Graph Algorithm and Applications, vol. 6, no. 3, pages 203--224, (2002).",
+                    "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. "
+                    "Kobourov, Journal Graph Algorithm and Applications, vol. 6, no. 3, pages "
+                    "203--224, (2002).",
                     "1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);
@@ -57,7 +58,7 @@ public:
 
   bool run();
 
-private :
+private:
   void computeCurrentGraphLayout();
   void computeOrdering();
   void firstNodesPlacement();
@@ -75,10 +76,9 @@ private :
 
   unsigned int rounds(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
   void set_nbr_size();
-  float sched( int, int, int, int, int);
+  float sched(int, int, int, int, int);
 
-
-  MISFiltering * misf;
+  MISFiltering *misf;
   float edgeLength;
   int level;
   TLP_HASH_MAP<tlp::node, std::vector<unsigned int> > neighbors_dist;

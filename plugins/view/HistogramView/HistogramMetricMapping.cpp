@@ -74,8 +74,7 @@ Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2
   if ((xbl1 - xal1) != 0) {
     al1 = (ybl1 - yal1) / (xbl1 - xal1);
     bl1 = ybl1 - al1 * xbl1;
-  }
-  else {
+  } else {
     line1ParallelToYaxis = true;
   }
 
@@ -91,8 +90,7 @@ Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2
   if ((xbl2 - xal2) != 0) {
     al2 = (ybl2 - yal2) / (xbl2 - xal2);
     bl2 = ybl2 - al2 * xbl2;
-  }
-  else {
+  } else {
     line2ParallelToYaxis = true;
   }
 
@@ -108,34 +106,27 @@ Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2
   if (line1ParallelToXaxis && line2ParallelToYaxis) {
     x = xal2;
     y = yal1;
-  }
-  else if (line2ParallelToXaxis && line1ParallelToYaxis) {
+  } else if (line2ParallelToXaxis && line1ParallelToYaxis) {
     x = xal1;
     y = yal2;
-  }
-  else if (line1ParallelToXaxis && al2 != 0) {
+  } else if (line1ParallelToXaxis && al2 != 0) {
     y = yal1;
     x = (y - bl2) / al2;
-  }
-  else if (line2ParallelToXaxis && al1 != 0) {
+  } else if (line2ParallelToXaxis && al1 != 0) {
     y = yal2;
     x = (y - bl1) / al1;
-  }
-  else if(line1ParallelToYaxis && !line2ParallelToYaxis) {
+  } else if (line1ParallelToYaxis && !line2ParallelToYaxis) {
     x = xal1;
     y = al2 * x + bl2;
-  }
-  else if(line2ParallelToYaxis && !line1ParallelToYaxis) {
+  } else if (line2ParallelToYaxis && !line1ParallelToYaxis) {
     x = xal2;
     y = al1 * x + bl1;
-  }
-  else if (al1 != al2) {
+  } else if (al1 != al2) {
     float d1 = (bl2 - bl1);
     float d2 = (al1 - al2);
     x = d1 / d2;
-    y = al1 *x + bl1;
-  }
-  else {
+    y = al1 * x + bl1;
+  } else {
     parallelLines = true;
   }
 
@@ -150,7 +141,8 @@ const float CIRCLE_RADIUS = 5.;
 const float scaleWidth = 60.;
 
 GlEditableCurve::GlEditableCurve(const Coord &start, const Coord &end, const Color &curveColor)
-  : startPoint(start), endPoint(end), minPoint(startPoint), maxPoint(endPoint), curveColor(curveColor), xAxis(NULL) {
+    : startPoint(start), endPoint(end), minPoint(startPoint), maxPoint(endPoint),
+      curveColor(curveColor), xAxis(NULL) {
   init();
 }
 
@@ -175,15 +167,16 @@ void GlEditableCurve::init() {
   basicCircle.setOutlineColor(Color(0, 0, 255, 255));
 }
 
-void GlEditableCurve::draw(float lod,Camera* camera) {
+void GlEditableCurve::draw(float lod, Camera *camera) {
 
   std::sort(curvePoints.begin(), curvePoints.end(), CoordXOrdering());
   camera->initGl();
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glDisable(GL_LIGHTING);
   glDisable(GL_DEPTH_TEST);
-  GlLines::glDrawCurve(startPoint, curvePoints, endPoint, 2., GlLines::TLP_PLAIN, curveColor, curveColor);
+  GlLines::glDrawCurve(startPoint, curvePoints, endPoint, 2., GlLines::TLP_PLAIN, curveColor,
+                       curveColor);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
 
@@ -195,14 +188,14 @@ void GlEditableCurve::draw(float lod,Camera* camera) {
   Camera camera2D(camera->getScene(), false);
   camera2D.setScene(camera->getScene());
 
-  for (it = curvePointsCp.begin() ; it != curvePointsCp.end() ; ++it) {
+  for (it = curvePointsCp.begin(); it != curvePointsCp.end(); ++it) {
     Coord anchor(*it);
     camera->initGl();
     Coord tmp(camera->worldTo2DViewport(anchor));
     tmp[2] = 0;
     camera2D.initGl();
     basicCircle.set(tmp, CIRCLE_RADIUS, 0.);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     basicCircle.draw(lod, camera);
 
     if (xAxis != NULL) {
@@ -214,7 +207,8 @@ void GlEditableCurve::draw(float lod,Camera* camera) {
         factor = 5;
       }
 
-      GlLabel label(Coord(tmp.getX(), tmp.getY() + factor * CIRCLE_RADIUS, 0), Size((2*factor)*CIRCLE_RADIUS, (2*factor)*CIRCLE_RADIUS), curveColor);
+      GlLabel label(Coord(tmp.getX(), tmp.getY() + factor * CIRCLE_RADIUS, 0),
+                    Size((2 * factor) * CIRCLE_RADIUS, (2 * factor) * CIRCLE_RADIUS), curveColor);
       label.setText(labelText);
       label.draw(lod, camera);
     }
@@ -231,11 +225,11 @@ bool GlEditableCurve::pointBelong(const Coord &point) {
   curvePointsCp.insert(curvePointsCp.begin(), startPoint);
   curvePointsCp.push_back(endPoint);
 
-  for (size_t i = 0 ; i < curvePointsCp.size() - 1 ; ++i) {
-    double startToEndDist = curvePointsCp[i].dist(curvePointsCp[i+1]);
+  for (size_t i = 0; i < curvePointsCp.size() - 1; ++i) {
+    double startToEndDist = curvePointsCp[i].dist(curvePointsCp[i + 1]);
     double startToPointDist = curvePointsCp[i].dist(point);
-    double pointToEndDist = point.dist(curvePointsCp[i+1]);
-    ret = ret || (((startToPointDist + pointToEndDist) - startToEndDist)/startToEndDist < 1E-3);
+    double pointToEndDist = point.dist(curvePointsCp[i + 1]);
+    ret = ret || (((startToPointDist + pointToEndDist) - startToEndDist) / startToEndDist < 1E-3);
   }
 
   return ret;
@@ -259,11 +253,13 @@ Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point, Camera *c
   vector<Coord>::iterator it;
   camera->initGl();
 
-  for (it = curvePointsCp.begin() ; it != curvePointsCp.end() ; ++it) {
+  for (it = curvePointsCp.begin(); it != curvePointsCp.end(); ++it) {
     Coord anchorCenter(camera->worldTo2DViewport(*it));
 
-    if (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) && point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
-        point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) && point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS)) {
+    if (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) &&
+        point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
+        point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) &&
+        point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS)) {
       anchor = new Coord(*it);
       break;
     }
@@ -272,35 +268,32 @@ Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point, Camera *c
   return anchor;
 }
 
-Coord GlEditableCurve::translateCurveAnchorToPoint(const Coord &curveAnchor, const Coord &targetPoint) {
+Coord GlEditableCurve::translateCurveAnchorToPoint(const Coord &curveAnchor,
+                                                   const Coord &targetPoint) {
   Coord translationVector(targetPoint - curveAnchor);
   Coord newAnchorCenter(curveAnchor + translationVector);
 
   if (newAnchorCenter.getX() < minPoint.getX()) {
     newAnchorCenter.setX(minPoint.getX());
-  }
-  else if (newAnchorCenter.getX() > maxPoint.getX()) {
+  } else if (newAnchorCenter.getX() > maxPoint.getX()) {
     newAnchorCenter.setX(maxPoint.getX());
   }
 
   if (newAnchorCenter.getY() < minPoint.getY()) {
     newAnchorCenter.setY(minPoint.getY());
-  }
-  else if (newAnchorCenter.getY() > maxPoint.getY()) {
+  } else if (newAnchorCenter.getY() > maxPoint.getY()) {
     newAnchorCenter.setY(maxPoint.getY());
   }
 
   newAnchorCenter[2] = 0;
 
-  if (curveAnchor.getX() == startPoint.getX() &&  curveAnchor.getY() == startPoint.getY()) {
+  if (curveAnchor.getX() == startPoint.getX() && curveAnchor.getY() == startPoint.getY()) {
     newAnchorCenter.setX(startPoint.getX());
     startPoint = newAnchorCenter;
-  }
-  else if (curveAnchor.getX() == endPoint.getX() &&  curveAnchor.getY() == endPoint.getY()) {
+  } else if (curveAnchor.getX() == endPoint.getX() && curveAnchor.getY() == endPoint.getY()) {
     newAnchorCenter.setX(endPoint.getX());
     endPoint = newAnchorCenter;
-  }
-  else {
+  } else {
     std::replace(curvePoints.begin(), curvePoints.end(), curveAnchor, newAnchorCenter);
   }
 
@@ -308,7 +301,8 @@ Coord GlEditableCurve::translateCurveAnchorToPoint(const Coord &curveAnchor, con
 }
 
 void GlEditableCurve::removeCurveAnchor(const Coord &curveAnchor) {
-  curvePoints.erase(std::remove(curvePoints.begin(), curvePoints.end(), curveAnchor), curvePoints.end());
+  curvePoints.erase(std::remove(curvePoints.begin(), curvePoints.end(), curveAnchor),
+                    curvePoints.end());
 }
 
 float GlEditableCurve::getYCoordForX(const float xCoord) {
@@ -319,10 +313,10 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
   curvePointsCp.insert(curvePointsCp.begin(), startPoint);
   curvePointsCp.push_back(endPoint);
 
-  for (size_t i = 0 ; i < curvePointsCp.size() - 1 ; ++i) {
-    if (xCoord >= curvePointsCp[i].getX() && xCoord <= curvePointsCp[i+1].getX()) {
+  for (size_t i = 0; i < curvePointsCp.size() - 1; ++i) {
+    if (xCoord >= curvePointsCp[i].getX() && xCoord <= curvePointsCp[i + 1].getX()) {
       line2[0] = curvePointsCp[i];
-      line2[1] = curvePointsCp[i+1];
+      line2[1] = curvePointsCp[i + 1];
       break;
     }
   }
@@ -333,8 +327,7 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
   if (intersectionPoint != NULL) {
     ret = intersectionPoint->getY();
     delete intersectionPoint;
-  }
-  else {
+  } else {
     ret = line2[1].getY();
   }
 
@@ -345,8 +338,9 @@ void GlEditableCurve::updateSize(const Coord &newMinPoint, const Coord &newMaxPo
   float oldLength = maxPoint.getX() - minPoint.getX();
   float newLength = newMaxPoint.getX() - newMinPoint.getX();
 
-  for (size_t i = 0 ; i < curvePoints.size() ; ++i) {
-    curvePoints[i].setX(newMinPoint.getX() + ((curvePoints[i].getX() - minPoint.getX()) * newLength) / oldLength);
+  for (size_t i = 0; i < curvePoints.size(); ++i) {
+    curvePoints[i].setX(newMinPoint.getX() +
+                        ((curvePoints[i].getX() - minPoint.getX()) * newLength) / oldLength);
   }
 
   minPoint = newMinPoint;
@@ -361,8 +355,11 @@ void GlEditableCurve::resetCurve() {
   endPoint = maxPoint;
 }
 
-GlSizeScale::GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length, const float thickness, const Color &color, Orientation orientation) :
-  minSize(minSize), maxSize(maxSize), baseCoord(baseCoord), length(length), thickness(thickness), color(color), orientation(orientation), polyquad(new GlPolyQuad()) {
+GlSizeScale::GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord,
+                         const float length, const float thickness, const Color &color,
+                         Orientation orientation)
+    : minSize(minSize), maxSize(maxSize), baseCoord(baseCoord), length(length),
+      thickness(thickness), color(color), orientation(orientation), polyquad(new GlPolyQuad()) {
 
   float labelWidth = 80;
   float labelHeight = labelWidth / (1.5);
@@ -370,30 +367,38 @@ GlSizeScale::GlSizeScale(const float minSize, const float maxSize, const Coord &
   polyquad->setOutlined(true);
 
   if (orientation == Vertical) {
-    for (unsigned int i = 0 ; i <= 100 ; ++i) {
-      float edgeLength = (i/100.) * thickness;
-      float y = baseCoord.getY() + (i/100.) * length;
-      polyquad->addQuadEdge(Coord(baseCoord.getX() - edgeLength / 2, y), Coord(baseCoord.getX() + edgeLength / 2, y), color);
+    for (unsigned int i = 0; i <= 100; ++i) {
+      float edgeLength = (i / 100.) * thickness;
+      float y = baseCoord.getY() + (i / 100.) * length;
+      polyquad->addQuadEdge(Coord(baseCoord.getX() - edgeLength / 2, y),
+                            Coord(baseCoord.getX() + edgeLength / 2, y), color);
     }
 
-    minLabel = new GlLabel(Coord(baseCoord.getX() - labelWidth / 2 - (1./5.) * labelWidth, baseCoord.getY()), Size(labelWidth, labelHeight), color);
-    maxLabel = new GlLabel(Coord(baseCoord.getX() - labelWidth / 2 - (1./5.) * labelWidth, baseCoord.getY() + length), Size(labelWidth, labelHeight), color);
+    minLabel = new GlLabel(
+        Coord(baseCoord.getX() - labelWidth / 2 - (1. / 5.) * labelWidth, baseCoord.getY()),
+        Size(labelWidth, labelHeight), color);
+    maxLabel = new GlLabel(Coord(baseCoord.getX() - labelWidth / 2 - (1. / 5.) * labelWidth,
+                                 baseCoord.getY() + length),
+                           Size(labelWidth, labelHeight), color);
     boundingBox.expand(Coord(baseCoord.getX() - thickness / 2, baseCoord.getY()));
     boundingBox.expand(Coord(baseCoord.getX() + thickness / 2, baseCoord.getY() + length));
-  }
-  else {
-    for (unsigned int i = 0 ; i <= 100 ; ++i) {
-      float edgeLength = (i/100.) * thickness;
-      float x = baseCoord.getX() + (i/100.) * length;
-      polyquad->addQuadEdge(Coord(x, baseCoord.getY() - edgeLength / 2), Coord(x, baseCoord.getY() - edgeLength / 2), color);
+  } else {
+    for (unsigned int i = 0; i <= 100; ++i) {
+      float edgeLength = (i / 100.) * thickness;
+      float x = baseCoord.getX() + (i / 100.) * length;
+      polyquad->addQuadEdge(Coord(x, baseCoord.getY() - edgeLength / 2),
+                            Coord(x, baseCoord.getY() - edgeLength / 2), color);
     }
 
-    minLabel = new GlLabel(Coord(baseCoord.getX(), baseCoord.getY() - labelHeight / 2 - (1./5.) * labelHeight), Size(labelWidth, labelHeight), color);
-    maxLabel = new GlLabel(Coord(baseCoord.getX() + length, baseCoord.getY() - labelHeight / 2 - (1./5.) * labelHeight), Size(labelWidth, labelHeight), color);
+    minLabel = new GlLabel(
+        Coord(baseCoord.getX(), baseCoord.getY() - labelHeight / 2 - (1. / 5.) * labelHeight),
+        Size(labelWidth, labelHeight), color);
+    maxLabel = new GlLabel(Coord(baseCoord.getX() + length,
+                                 baseCoord.getY() - labelHeight / 2 - (1. / 5.) * labelHeight),
+                           Size(labelWidth, labelHeight), color);
     boundingBox.expand(Coord(baseCoord.getX(), baseCoord.getY() - thickness / 2));
     boundingBox.expand(Coord(baseCoord.getX() + length, baseCoord.getY() + thickness / 2));
   }
-
 }
 
 GlSizeScale::~GlSizeScale() {
@@ -406,30 +411,25 @@ float GlSizeScale::getSizeAtPos(const Coord &pos) {
   if (orientation == Vertical) {
     if (pos.getY() < baseCoord.getY()) {
       return minSize;
-    }
-    else if (pos.getY() > baseCoord.getY() + length) {
+    } else if (pos.getY() > baseCoord.getY() + length) {
       return maxSize;
-    }
-    else {
+    } else {
       float ratio = (pos.getY() - baseCoord.getY()) / length;
       return minSize + ratio * (maxSize - minSize);
     }
-  }
-  else {
+  } else {
     if (pos.getX() < baseCoord.getX()) {
       return minSize;
-    }
-    else if (pos.getX() > baseCoord.getX() + length) {
+    } else if (pos.getX() > baseCoord.getX() + length) {
       return maxSize;
-    }
-    else {
+    } else {
       float ratio = (pos.getX() - baseCoord.getX()) / length;
       return minSize + ratio * (maxSize - minSize);
     }
   }
 }
 
-void GlSizeScale::draw(float lod, Camera* camera) {
+void GlSizeScale::draw(float lod, Camera *camera) {
   minLabel->setText(getStringFromNumber(minSize));
   maxLabel->setText(getStringFromNumber(maxSize));
   minLabel->setColor(color);
@@ -448,9 +448,10 @@ void GlSizeScale::translate(const Coord &move) {
   baseCoord += move;
 }
 
-
-GlGlyphScale::GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation) :
-  glyphGraph(newGraph()), glyphGraphInputData(new GlGraphInputData(glyphGraph, &glyphGraphRenderingParameters)), baseCoord(baseCoord), length(length), orientation(orientation) {
+GlGlyphScale::GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation)
+    : glyphGraph(newGraph()),
+      glyphGraphInputData(new GlGraphInputData(glyphGraph, &glyphGraphRenderingParameters)),
+      baseCoord(baseCoord), length(length), orientation(orientation) {
   glyphGraphLayout = glyphGraph->getProperty<LayoutProperty>("viewLayout");
   glyphGraphSize = glyphGraph->getProperty<SizeProperty>("viewSize");
   glyphGraphColor = glyphGraph->getProperty<ColorProperty>("viewColor");
@@ -472,7 +473,7 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
 
   glyphScaleMap.clear();
 
-  for (size_t i = 0 ; i < glyphsList.size() ; ++i) {
+  for (size_t i = 0; i < glyphsList.size(); ++i) {
     node n = glyphGraph->addNode();
     glyphGraphShape->setNodeValue(n, glyphsList[i]);
   }
@@ -492,20 +493,21 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
       node n = nodesIt->next();
       glyphGraphLayout->setNodeValue(n, Coord(xCenter, baseCoord.getY() + i * size + size / 2));
       int oldI = i++;
-      glyphScaleMap[make_pair(baseCoord.getY() + oldI * size, baseCoord.getY() + i * size)] = glyphGraphShape->getNodeValue(n);
+      glyphScaleMap[make_pair(baseCoord.getY() + oldI * size, baseCoord.getY() + i * size)] =
+          glyphGraphShape->getNodeValue(n);
     }
 
     boundingBox[0] = Coord(baseCoord.getX() - size, baseCoord.getY());
     boundingBox[1] = Coord(baseCoord.getX() + size, baseCoord.getY() + length);
-  }
-  else {
+  } else {
     float yCenter = baseCoord.getY() - size / 2;
 
     while (nodesIt->hasNext()) {
       node n = nodesIt->next();
       glyphGraphLayout->setNodeValue(n, Coord(baseCoord.getX() + i++ * size + size / 2, yCenter));
       int oldI = i++;
-      glyphScaleMap[make_pair(baseCoord.getX() + oldI * size, baseCoord.getX() + i * size)] = glyphGraphShape->getNodeValue(n);
+      glyphScaleMap[make_pair(baseCoord.getX() + oldI * size, baseCoord.getX() + i * size)] =
+          glyphGraphShape->getNodeValue(n);
     }
 
     boundingBox[0] = Coord(baseCoord.getX(), baseCoord.getY() - size);
@@ -519,31 +521,26 @@ int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
   if (orientation == Vertical) {
     if (pos.getY() < baseCoord.getY()) {
       return glyphScaleMap[make_pair(baseCoord.getY(), baseCoord.getY() + size)];
-    }
-    else if (pos.getY() > baseCoord.getY() + length) {
+    } else if (pos.getY() > baseCoord.getY() + length) {
       return glyphScaleMap[make_pair(baseCoord.getY() + length - size, baseCoord.getY() + length)];
-    }
-    else {
+    } else {
       map<pair<float, float>, int>::iterator it;
 
-      for (it = glyphScaleMap.begin() ; it != glyphScaleMap.end() ; ++it) {
+      for (it = glyphScaleMap.begin(); it != glyphScaleMap.end(); ++it) {
         if (pos.getY() >= (*it).first.first && pos.getY() < (*it).first.second) {
           return (*it).second;
         }
       }
     }
-  }
-  else {
+  } else {
     if (pos.getX() < baseCoord.getX()) {
       return glyphScaleMap[make_pair(baseCoord.getX(), baseCoord.getX() + size)];
-    }
-    else if (pos.getX() > baseCoord.getX() + length) {
+    } else if (pos.getX() > baseCoord.getX() + length) {
       return glyphScaleMap[make_pair(baseCoord.getX() + length - size, baseCoord.getX() + length)];
-    }
-    else {
+    } else {
       map<pair<float, float>, int>::iterator it;
 
-      for (it = glyphScaleMap.begin() ; it != glyphScaleMap.end() ; ++it) {
+      for (it = glyphScaleMap.begin(); it != glyphScaleMap.end(); ++it) {
         if (pos.getX() >= (*it).first.first && pos.getX() < (*it).first.second) {
           return (*it).second;
         }
@@ -554,13 +551,13 @@ int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
   return 0;
 }
 
-void GlGlyphScale::draw(float lod, Camera* camera) {
-  (void) lod;
+void GlGlyphScale::draw(float lod, Camera *camera) {
+  (void)lod;
   node n;
   GlNode glNode(0);
   glEnable(GL_LIGHTING);
   glEnable(GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   forEach(n, glyphGraph->getNodes()) {
     glNode.id = n.id;
     glNode.draw(30, glyphGraphInputData, camera);
@@ -575,21 +572,26 @@ void GlGlyphScale::translate(const Coord &move) {
   }
 }
 
-HistogramMetricMapping::HistogramMetricMapping() :
-  histoView(NULL), curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
-  colorScale(new ColorScale(ColorScalesManager::getLatestColorScale())), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
-  colorScaleConfigDialog(NULL), sizeScaleConfigDialog(NULL), glyphScaleConfigDialog(NULL), lastXAxisLength(0), histoXAxis(NULL),
-  mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
-  mappingType(VIEWCOLOR_MAPPING), popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL), viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
-}
+HistogramMetricMapping::HistogramMetricMapping()
+    : histoView(NULL), curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
+      colorScale(new ColorScale(ColorScalesManager::getLatestColorScale())), glColorScale(NULL),
+      glSizeScale(NULL), glGlyphScale(NULL), colorScaleConfigDialog(NULL),
+      sizeScaleConfigDialog(NULL), glyphScaleConfigDialog(NULL), lastXAxisLength(0),
+      histoXAxis(NULL), mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+      glyphMappingGraphInputData(
+          new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
+      mappingType(VIEWCOLOR_MAPPING), popupMenu(NULL), colorMappingMenu(NULL),
+      viewColorMappingAction(NULL), viewBorderColorMappingAction(NULL), sizeMapping(NULL),
+      glyphMapping(NULL) {}
 
 HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &histoMetricMapping)
-  : curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
-    colorScale(NULL), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
-    histoXAxis(NULL), mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
-    glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
-    popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL),
-    viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
+    : curve(NULL), curveDragStarted(false), selectedAnchor(NULL), colorScale(NULL),
+      glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL), histoXAxis(NULL),
+      mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+      glyphMappingGraphInputData(
+          new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
+      popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL),
+      viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
 
   GlEditableCurve *lastCurve = histoMetricMapping.curve;
 
@@ -671,12 +673,12 @@ void HistogramMetricMapping::viewChanged(View *view) {
 }
 
 void HistogramMetricMapping::initInteractor() {
-  if(!histoView->getDetailedHistogram())
+  if (!histoView->getDetailedHistogram())
     return;
 
   if (colorScaleConfigDialog == NULL) {
     colorScaleConfigDialog = new ColorScaleConfigDialog(*colorScale, histoView->getGlMainWidget());
-    dialogColorScale = *colorScale=colorScaleConfigDialog->getColorScale();
+    dialogColorScale = *colorScale = colorScaleConfigDialog->getColorScale();
     colorScale->setColorMapTransparency(200);
   }
 
@@ -698,13 +700,13 @@ void HistogramMetricMapping::initInteractor() {
   Coord curveStartPoint(histoXAxis->getAxisBaseCoord());
 
   if (curve == NULL || lastXAxisLength != histoXAxis->getAxisLength()) {
-    Coord curveEndPoint(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), histoYAxis->getAxisBaseCoord().getY() + histoYAxis->getAxisLength(), 0);
+    Coord curveEndPoint(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(),
+                        histoYAxis->getAxisBaseCoord().getY() + histoYAxis->getAxisLength(), 0);
 
     if (curve != NULL) {
       curve->updateSize(curveStartPoint, curveEndPoint);
       updateMapping(histoXAxis, histoView->getDetailedHistogram()->getNbHistogramBins());
-    }
-    else {
+    } else {
       curve = new GlEditableCurve(curveStartPoint, curveEndPoint, histoXAxis->getAxisColor());
     }
 
@@ -715,20 +717,19 @@ void HistogramMetricMapping::initInteractor() {
 
   if (!histoView->getDetailedHistogram()->uniformQuantificationHistogram()) {
     curve->setXAxisScale(histoXAxis);
-  }
-  else {
+  } else {
     curve->setXAxisScale(NULL);
   }
 
   scaleAxisOffset = histoYAxis->getMaxLabelWidth() + scaleWidth;
 
-
   if (glColorScale == NULL) {
-    glColorScale = new GlColorScale(colorScale, curveStartPoint - Coord(scaleAxisOffset,0,0), histoYAxis->getAxisLength(), scaleWidth, GlColorScale::Vertical);
-  }
-  else {
+    glColorScale =
+        new GlColorScale(colorScale, curveStartPoint - Coord(scaleAxisOffset, 0, 0),
+                         histoYAxis->getAxisLength(), scaleWidth, GlColorScale::Vertical);
+  } else {
     Coord lastBaseCoord(glColorScale->getBaseCoord());
-    Coord newBaseCoord(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth() + scaleWidth,0,0));
+    Coord newBaseCoord(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth() + scaleWidth, 0, 0));
 
     if (lastBaseCoord != newBaseCoord) {
       glColorScale->translate(newBaseCoord - lastBaseCoord);
@@ -736,11 +737,13 @@ void HistogramMetricMapping::initInteractor() {
   }
 
   if (glSizeScale == NULL) {
-    glSizeScale = new GlSizeScale(sizeScaleConfigDialog->getMinSize(), sizeScaleConfigDialog->getMaxSize(), curveStartPoint - Coord(scaleAxisOffset,0,0), histoYAxis->getAxisLength(), scaleWidth, Color(0,0,0), GlSizeScale::Vertical);
-  }
-  else {
+    glSizeScale =
+        new GlSizeScale(sizeScaleConfigDialog->getMinSize(), sizeScaleConfigDialog->getMaxSize(),
+                        curveStartPoint - Coord(scaleAxisOffset, 0, 0), histoYAxis->getAxisLength(),
+                        scaleWidth, Color(0, 0, 0), GlSizeScale::Vertical);
+  } else {
     Coord lastBaseCoord(glSizeScale->getBaseCoord());
-    Coord newBaseCoord(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth() + scaleWidth,0,0));
+    Coord newBaseCoord(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth() + scaleWidth, 0, 0));
 
     if (lastBaseCoord != newBaseCoord) {
       glSizeScale->translate(newBaseCoord - lastBaseCoord);
@@ -750,12 +753,12 @@ void HistogramMetricMapping::initInteractor() {
   }
 
   if (glGlyphScale == NULL) {
-    glGlyphScale = new GlGlyphScale(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth(),0,0), histoYAxis->getAxisLength(), GlGlyphScale::Vertical);
+    glGlyphScale = new GlGlyphScale(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth(), 0, 0),
+                                    histoYAxis->getAxisLength(), GlGlyphScale::Vertical);
     glGlyphScale->setGlyphsList(glyphScaleConfigDialog->getSelectedGlyphsId());
-  }
-  else {
+  } else {
     Coord lastBaseCoord(glGlyphScale->getBaseCoord());
-    Coord newBaseCoord(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth(),0,0));
+    Coord newBaseCoord(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth(), 0, 0));
 
     if (lastBaseCoord != newBaseCoord) {
       glGlyphScale->translate(newBaseCoord - lastBaseCoord);
@@ -769,10 +772,10 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 
   QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
-  if(!me)
+  if (!me)
     return false;
 
-  bool ret  = false;
+  bool ret = false;
 
   GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
 
@@ -788,10 +791,13 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+        glWidget->screenToViewport(screenCoords)));
 
     if (!curveDragStarted) {
-      Coord *anchor = curve->getCurveAnchorAtPointIfAny(glWidget->screenToViewport(Coord(me->x(), glWidget->height() - me->y(), 0)), &glWidget->getScene()->getLayer("Main")->getCamera());
+      Coord *anchor = curve->getCurveAnchorAtPointIfAny(
+          glWidget->screenToViewport(Coord(me->x(), glWidget->height() - me->y(), 0)),
+          &glWidget->getScene()->getLayer("Main")->getCamera());
       bool pointerColorScale = pointerUnderScale(sceneCoords);
 
       if (selectedAnchor != NULL) {
@@ -802,15 +808,12 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 
       if (selectedAnchor != NULL) {
         glWidget->setCursor(QCursor(Qt::OpenHandCursor));
-      }
-      else if (pointerColorScale) {
+      } else if (pointerColorScale) {
         glWidget->setCursor(QCursor(Qt::WhatsThisCursor));
-      }
-      else {
+      } else {
         glWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
-    }
-    else if (selectedAnchor != NULL) {
+    } else if (selectedAnchor != NULL) {
       Coord newAnchorCord(curve->translateCurveAnchorToPoint(*selectedAnchor, sceneCoords));
       delete selectedAnchor;
       selectedAnchor = new Coord(newAnchorCord);
@@ -819,62 +822,62 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 
     histoView->refresh();
     ret = true;
-  }
-  else if (e->type() == QEvent::MouseButtonDblClick) {
+  } else if (e->type() == QEvent::MouseButtonDblClick) {
     if (selectedAnchor != NULL) {
       curve->removeCurveAnchor(*selectedAnchor);
-      updateGraphWithMapping(histoView->histoGraph(), histoView->getDetailedHistogram()->getHistogramLayout());
+      updateGraphWithMapping(histoView->histoGraph(),
+                             histoView->getDetailedHistogram()->getHistogramLayout());
       updateMapping(histoXAxis, histoView->getDetailedHistogram()->getNbHistogramBins());
       delete selectedAnchor;
       selectedAnchor = NULL;
-    }
-    else {
+    } else {
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords(x, y, 0);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+          glWidget->screenToViewport(screenCoords)));
 
       if (curve->pointBelong(sceneCoords)) {
         curve->addCurveAnchor(sceneCoords);
-      }
-      else if (pointerUnderScale(sceneCoords)) {
+      } else if (pointerUnderScale(sceneCoords)) {
         bool updateMappingNeeded = false;
 
         colorScaleConfigDialog->setColorScale(dialogColorScale);
 
-        if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) && colorScaleConfigDialog->exec() == QDialog::Accepted) {
+        if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) &&
+            colorScaleConfigDialog->exec() == QDialog::Accepted) {
           updateMappingNeeded = true;
-        }
-        else if (mappingType == SIZE_MAPPING && sizeScaleConfigDialog->exec() == QDialog::Accepted) {
+        } else if (mappingType == SIZE_MAPPING &&
+                   sizeScaleConfigDialog->exec() == QDialog::Accepted) {
           glSizeScale->setMinSize(sizeScaleConfigDialog->getMinSize());
           glSizeScale->setMaxSize(sizeScaleConfigDialog->getMaxSize());
           updateMappingNeeded = true;
-        }
-        else if (mappingType == GLYPH_MAPPING && glyphScaleConfigDialog->exec() == QDialog::Accepted) {
+        } else if (mappingType == GLYPH_MAPPING &&
+                   glyphScaleConfigDialog->exec() == QDialog::Accepted) {
           glGlyphScale->setGlyphsList(glyphScaleConfigDialog->getSelectedGlyphsId());
           updateMappingNeeded = true;
         }
 
         if (updateMappingNeeded) {
-          updateGraphWithMapping(histoView->histoGraph(), histoView->getDetailedHistogram()->getHistogramLayout());
+          updateGraphWithMapping(histoView->histoGraph(),
+                                 histoView->getDetailedHistogram()->getHistogramLayout());
           updateMapping(histoXAxis, histoView->getDetailedHistogram()->getNbHistogramBins());
         }
       }
     }
 
-    ret =  true;
-  }
-  else if (e->type() == QEvent::MouseButtonPress) {
+    ret = true;
+  } else if (e->type() == QEvent::MouseButtonPress) {
 
     if (me->buttons() == Qt::LeftButton && selectedAnchor != NULL) {
       curveDragStarted = true;
       glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
-    }
-    else if (me->buttons() == Qt::RightButton) {
+    } else if (me->buttons() == Qt::RightButton) {
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords(x, y, 0);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+          glWidget->screenToViewport(screenCoords)));
 
       if (pointerUnderScale(sceneCoords)) {
         if (mappingType == VIEWCOLOR_MAPPING) {
@@ -882,20 +885,17 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
           viewBorderColorMappingAction->setChecked(false);
           sizeMapping->setChecked(false);
           glyphMapping->setChecked(false);
-        }
-        else if (mappingType == VIEWBORDERCOLOR_MAPPING) {
+        } else if (mappingType == VIEWBORDERCOLOR_MAPPING) {
           viewColorMappingAction->setChecked(false);
           viewBorderColorMappingAction->setChecked(true);
           sizeMapping->setChecked(false);
           glyphMapping->setChecked(false);
-        }
-        else if (mappingType == SIZE_MAPPING) {
+        } else if (mappingType == SIZE_MAPPING) {
           viewColorMappingAction->setChecked(false);
           viewBorderColorMappingAction->setChecked(false);
           sizeMapping->setChecked(true);
           glyphMapping->setChecked(false);
-        }
-        else {
+        } else {
           viewColorMappingAction->setChecked(false);
           viewBorderColorMappingAction->setChecked(false);
           sizeMapping->setChecked(false);
@@ -907,14 +907,11 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 
         if (clickedAction == viewColorMappingAction) {
           mappingType = VIEWCOLOR_MAPPING;
-        }
-        else if (clickedAction == viewBorderColorMappingAction) {
+        } else if (clickedAction == viewBorderColorMappingAction) {
           mappingType = VIEWBORDERCOLOR_MAPPING;
-        }
-        else if (clickedAction == sizeMapping) {
+        } else if (clickedAction == sizeMapping) {
           mappingType = SIZE_MAPPING;
-        }
-        else {
+        } else {
           mappingType = GLYPH_MAPPING;
         }
 
@@ -922,7 +919,8 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
           vector<Coord> oldCurvePoints;
           oldCurvePoints.push_back(curve->getFirstCurvePoint());
           vector<Coord> intermediateCurvePoints = curve->getCurvePoints();
-          oldCurvePoints.insert(oldCurvePoints.end(), intermediateCurvePoints.begin(), intermediateCurvePoints.end());
+          oldCurvePoints.insert(oldCurvePoints.end(), intermediateCurvePoints.begin(),
+                                intermediateCurvePoints.end());
           oldCurvePoints.push_back(curve->getLastCurvePoint());
           curveShapeForMapping[oldMappingType] = oldCurvePoints;
 
@@ -933,8 +931,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
             curvePoints.erase(curvePoints.begin());
             curvePoints.pop_back();
             curve->setCurvePoints(curvePoints);
-          }
-          else {
+          } else {
             curve->resetCurve();
           }
         }
@@ -944,10 +941,10 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     }
 
     ret = true;
-  }
-  else if (e->type() == QEvent::MouseButtonRelease) {
+  } else if (e->type() == QEvent::MouseButtonRelease) {
     if (curveDragStarted) {
-      updateGraphWithMapping(histoView->histoGraph(), histoView->getDetailedHistogram()->getHistogramLayout());
+      updateGraphWithMapping(histoView->histoGraph(),
+                             histoView->getDetailedHistogram()->getHistogramLayout());
       updateMapping(histoXAxis, histoView->getDetailedHistogram()->getNbHistogramBins());
       curveDragStarted = false;
     }
@@ -969,7 +966,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
     glEnable(GL_BLEND);
 
     if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING)) {
-      glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glColorScale->draw(0, &camera);
 
       if (mappinqPolyQuad != NULL) {
@@ -978,8 +975,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
 
       xStart = glColorScale->getBaseCoord().getX() + (glColorScale->getThickness() / 2.);
       yEnd = glColorScale->getBaseCoord().getY();
-    }
-    else if (mappingType == SIZE_MAPPING) {
+    } else if (mappingType == SIZE_MAPPING) {
       glSizeScale->draw(0, &camera);
 
       if (mappinqPolyQuad != NULL) {
@@ -988,8 +984,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
 
       xStart = glSizeScale->getBaseCoord().getX() + (glSizeScale->getThickness() / 2.);
       yEnd = glSizeScale->getBaseCoord().getY();
-    }
-    else {
+    } else {
       glGlyphScale->draw(0, &camera);
       GlNode glNode(0);
       node n;
@@ -1013,11 +1008,13 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
 
     glDisable(GL_LIGHTING);
 
-    for (size_t i = 0 ; i < curvePointsCp.size() ; ++i) {
+    for (size_t i = 0; i < curvePointsCp.size(); ++i) {
       Coord startLine(xStart, curvePointsCp[i].getY(), 0);
-      GlLines::glDrawLine(startLine, curvePointsCp[i], 0.5, GlLines::TLP_DASHED, lineColor, lineColor);
+      GlLines::glDrawLine(startLine, curvePointsCp[i], 0.5, GlLines::TLP_DASHED, lineColor,
+                          lineColor);
       Coord endLine(curvePointsCp[i].getX(), yEnd);
-      GlLines::glDrawLine(curvePointsCp[i], endLine, 0.5, GlLines::TLP_DASHED, lineColor, lineColor);
+      GlLines::glDrawLine(curvePointsCp[i], endLine, 0.5, GlLines::TLP_DASHED, lineColor,
+                          lineColor);
     }
 
     glEnable(GL_LIGHTING);
@@ -1033,18 +1030,15 @@ bool HistogramMetricMapping::pointerUnderScale(const Coord &sceneCoords) {
 
   if (mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) {
     scale = glColorScale;
-  }
-  else if (mappingType == SIZE_MAPPING) {
+  } else if (mappingType == SIZE_MAPPING) {
     scale = glSizeScale;
-  }
-  else {
+  } else {
     scale = glGlyphScale;
   }
 
   if (scale == NULL) {
     return false;
-  }
-  else {
+  } else {
     BoundingBox scaleBB(scale->getBoundingBox());
     return (sceneCoords.getX() >= scaleBB[0][0] && sceneCoords.getX() <= scaleBB[1][0] &&
             sceneCoords.getY() >= scaleBB[0][1] && sceneCoords.getY() <= scaleBB[1][1]);
@@ -1053,11 +1047,12 @@ bool HistogramMetricMapping::pointerUnderScale(const Coord &sceneCoords) {
 
 void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout) {
 
-  dialogColorScale = *colorScale=colorScaleConfigDialog->getColorScale();
+  dialogColorScale = *colorScale = colorScaleConfigDialog->getColorScale();
   colorScale->setColorMapTransparency(200);
   glColorScale->setColorScale(colorScale);
 
-  if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) && !colorScale->colorScaleInitialized()) {
+  if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) &&
+      !colorScale->colorScaleInitialized()) {
     return;
   }
 
@@ -1066,8 +1061,7 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
 
   if (mappingType == VIEWCOLOR_MAPPING) {
     graphColors = graph->getProperty<ColorProperty>("viewColor");
-  }
-  else if (mappingType == VIEWBORDERCOLOR_MAPPING) {
+  } else if (mappingType == VIEWBORDERCOLOR_MAPPING) {
     graphColors = graph->getProperty<ColorProperty>("viewBorderColor");
   }
 
@@ -1084,11 +1078,10 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
       float yCurve = curve->getYCoordForX(nodeHistoCoord.getX());
 
       if (mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) {
-        Color newNodeColor(glColorScale->getColorAtPos(Coord(0,yCurve,0)));
+        Color newNodeColor(glColorScale->getColorAtPos(Coord(0, yCurve, 0)));
         graphColors->setNodeValue(n, newNodeColor);
-      }
-      else if (mappingType == SIZE_MAPPING) {
-        float newNodeSize = glSizeScale->getSizeAtPos(Coord(0,yCurve,0));
+      } else if (mappingType == SIZE_MAPPING) {
+        float newNodeSize = glSizeScale->getSizeAtPos(Coord(0, yCurve, 0));
 
         if (sizeScaleConfigDialog->doMappingOnViewSize()) {
           Size newSize(newNodeSize, newNodeSize, newNodeSize);
@@ -1107,20 +1100,17 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
           }
 
           graphSizes->setNodeValue(n, newSize);
-        }
-        else {
+        } else {
           graphBorderSizes->setNodeValue(n, newNodeSize);
         }
-      }
-      else {
+      } else {
         int newGlyphId = glGlyphScale->getGlyphAtPos(Coord(0, yCurve, 0));
         graphShapes->setNodeValue(n, newGlyphId);
       }
     }
 
     delete nodesIt;
-  }
-  else {
+  } else {
     Iterator<edge> *edgesIt = graph->getEdges();
 
     while (edgesIt->hasNext()) {
@@ -1129,20 +1119,22 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
       float yCurve = curve->getYCoordForX(edgeHistoCoord.getX());
 
       if (mappingType == VIEWCOLOR_MAPPING) {
-        Color newEdgeColor(glColorScale->getColorAtPos(Coord(0,yCurve,0)));
+        Color newEdgeColor(glColorScale->getColorAtPos(Coord(0, yCurve, 0)));
         graphColors->setEdgeValue(e, newEdgeColor);
       }
     }
   }
 }
 
-void HistogramMetricMapping::updateMapping(GlQuantitativeAxis *histoXAxis, unsigned int nbHistogramBins) {
+void HistogramMetricMapping::updateMapping(GlQuantitativeAxis *histoXAxis,
+                                           unsigned int nbHistogramBins) {
   if (mappinqPolyQuad != NULL) {
     delete mappinqPolyQuad;
     mappinqPolyQuad = NULL;
   }
 
-  if (mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING || mappingType == SIZE_MAPPING) {
+  if (mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING ||
+      mappingType == SIZE_MAPPING) {
     mappinqPolyQuad = new GlPolyQuad();
   }
 
@@ -1158,40 +1150,46 @@ void HistogramMetricMapping::updateMapping(GlQuantitativeAxis *histoXAxis, unsig
 
     Color color;
 
-    for (float x = histoXAxis->getAxisBaseCoord().getX() ; x <= histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength() ; x += increment) {
+    for (float x = histoXAxis->getAxisBaseCoord().getX();
+         x <= histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(); x += increment) {
       float yCurve = curve->getYCoordForX(x);
 
-      if (yCurve < 0) yCurve = 0;
+      if (yCurve < 0)
+        yCurve = 0;
 
-      color = glColorScale->getColorAtPos(Coord(0,yCurve,0));
-      mappinqPolyQuad->addQuadEdge(Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - scaleWidth, 0),
-                                   Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset, 0),
-                                   color);
+      color = glColorScale->getColorAtPos(Coord(0, yCurve, 0));
+      mappinqPolyQuad->addQuadEdge(
+          Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - scaleWidth, 0),
+          Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset, 0), color);
     }
 
-    mappinqPolyQuad->addQuadEdge(Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), histoXAxis->getAxisBaseCoord().getY() - offset - scaleWidth, 0),
-                                 Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), histoXAxis->getAxisBaseCoord().getY() - offset, 0),
-                                 color);
-  }
-  else if (mappingType == SIZE_MAPPING) {
+    mappinqPolyQuad->addQuadEdge(
+        Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(),
+              histoXAxis->getAxisBaseCoord().getY() - offset - scaleWidth, 0),
+        Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(),
+              histoXAxis->getAxisBaseCoord().getY() - offset, 0),
+        color);
+  } else if (mappingType == SIZE_MAPPING) {
     Color color(histoXAxis->getAxisColor());
     mappinqPolyQuad->setOutlined(true);
     mappinqPolyQuad->setOutlineColor(histoXAxis->getAxisColor());
 
-    for (float x = histoXAxis->getAxisBaseCoord().getX() ; x <= histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength() ; x += increment) {
+    for (float x = histoXAxis->getAxisBaseCoord().getX();
+         x <= histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(); x += increment) {
       float yCurve = curve->getYCoordForX(x);
 
-      if (yCurve < 0) yCurve = 0;
+      if (yCurve < 0)
+        yCurve = 0;
 
       float minSize = glSizeScale->getMinSize();
       float maxSize = glSizeScale->getMaxSize();
       float size = glSizeScale->getSizeAtPos(Coord(0, yCurve, 0));
       float offset2 = (scaleWidth - (((size - minSize) * scaleWidth) / (maxSize))) / 2.;
-      mappinqPolyQuad->addQuadEdge(Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - scaleWidth + offset2, 0),
-                                   Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - offset2, 0), color);
+      mappinqPolyQuad->addQuadEdge(
+          Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - scaleWidth + offset2, 0),
+          Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - offset2, 0), color);
     }
-  }
-  else {
+  } else {
     BooleanProperty *wholeGlyphMappingGraphSelec = new BooleanProperty(glyphMappingGraph);
     wholeGlyphMappingGraphSelec->setAllNodeValue(true);
     wholeGlyphMappingGraphSelec->setAllEdgeValue(true);
@@ -1202,23 +1200,26 @@ void HistogramMetricMapping::updateMapping(GlQuantitativeAxis *histoXAxis, unsig
     SizeProperty *glyphGraphSize = glyphMappingGraph->getProperty<SizeProperty>("viewSize");
     ColorProperty *glyphGraphColor = glyphMappingGraph->getProperty<ColorProperty>("viewColor");
     glyphGraphSize->setAllNodeValue(Size(increment, increment, increment));
-    glyphGraphColor->setAllNodeValue(Color(255,0,0));
+    glyphGraphColor->setAllNodeValue(Color(255, 0, 0));
 
-    for (float x = histoXAxis->getAxisBaseCoord().getX() ; x <= histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength() ; x += increment) {
-      if (x+increment/2 > histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength()) {
+    for (float x = histoXAxis->getAxisBaseCoord().getX();
+         x <= histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(); x += increment) {
+      if (x + increment / 2 > histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength()) {
         break;
       }
 
       node n = glyphMappingGraph->addNode();
-      float yCurve = curve->getYCoordForX(x+increment/2);
+      float yCurve = curve->getYCoordForX(x + increment / 2);
 
-      if (yCurve < 0) yCurve = 0;
+      if (yCurve < 0)
+        yCurve = 0;
 
       int glyphId = glGlyphScale->getGlyphAtPos(Coord(0, yCurve, 0));
       glyphGraphShape->setNodeValue(n, glyphId);
-      glyphGraphLayout->setNodeValue(n, Coord(x+increment/2, histoXAxis->getAxisBaseCoord().getY() - offset - increment/2, 0));
+      glyphGraphLayout->setNodeValue(
+          n, Coord(x + increment / 2,
+                   histoXAxis->getAxisBaseCoord().getY() - offset - increment / 2, 0));
     }
   }
 }
-
 }

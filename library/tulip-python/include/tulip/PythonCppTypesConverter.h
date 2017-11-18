@@ -37,8 +37,11 @@
 #include <tulip/NumericProperty.h>
 #include <tulip/TlpTools.h>
 
-TLP_PYTHON_SCOPE void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename, const bool transferTo=false);
-TLP_PYTHON_SCOPE PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypename, bool fromNew=false);
+TLP_PYTHON_SCOPE void *convertSipWrapperToCppType(PyObject *sipWrapper,
+                                                  const std::string &cppTypename,
+                                                  const bool transferTo = false);
+TLP_PYTHON_SCOPE PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypename,
+                                                      bool fromNew = false);
 
 TLP_PYTHON_SCOPE bool convertPyObjectToBool(PyObject *pyObject, bool &cppObject);
 TLP_PYTHON_SCOPE PyObject *convertBoolToPyObject(bool cppObject);
@@ -55,66 +58,61 @@ TLP_PYTHON_SCOPE PyObject *convertUnsignedLongToPyObject(unsigned long cppObject
 class TLP_PYTHON_SCOPE ValueSetter {
 
 public:
+  ValueSetter(tlp::DataSet *dataSet, const std::string &key)
+      : dataSet(dataSet), graph(NULL), key(key) {}
 
-  ValueSetter(tlp::DataSet *dataSet, const std::string& key) :
-    dataSet(dataSet), graph(NULL), key(key) {}
-
-  ValueSetter(tlp::Graph *graph, const std::string& key) :
-    dataSet(NULL), graph(graph), key(key) {}
+  ValueSetter(tlp::Graph *graph, const std::string &key) : dataSet(NULL), graph(graph), key(key) {}
 
   template <typename T>
   void setValue(const T &value) {
     if (dataSet) {
       dataSet->set(key, value);
-    }
-    else if (graph) {
+    } else if (graph) {
       graph->setAttribute(key, value);
     }
   }
 
-private :
-
+private:
   tlp::DataSet *dataSet;
   tlp::Graph *graph;
   std::string key;
 };
 
-TLP_PYTHON_SCOPE PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy=false);
+TLP_PYTHON_SCOPE PyObject *getPyObjectFromDataType(const tlp::DataType *dataType,
+                                                   bool noCopy = false);
 
-TLP_PYTHON_SCOPE bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataType *dataType=NULL);
+TLP_PYTHON_SCOPE bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter,
+                                              tlp::DataType *dataType = NULL);
 
 template <typename T>
 class PyObjectToCppObjectConvertor {
 
 public:
-
   bool convert(PyObject *pyObject, T &cppObject) {
     std::string className = tlp::demangleClassName(typeid(T).name());
 
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className);
 
     if (cppObjPointer) {
-      cppObject = *static_cast<T*>(cppObjPointer);
+      cppObject = *static_cast<T *>(cppObjPointer);
       return true;
     }
 
     return false;
   }
-
 };
 
 template <typename T>
-class PyObjectToCppObjectConvertor<T*> {
+class PyObjectToCppObjectConvertor<T *> {
 
 public:
-
   bool convert(PyObject *pyObject, T *&cppObject) {
     std::string className = tlp::demangleClassName(typeid(T).name());
 
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className, true);
 
     if (cppObjPointer) {
-      cppObject = static_cast<T*>(cppObjPointer);
+      cppObject = static_cast<T *>(cppObjPointer);
       return true;
     }
 
@@ -151,7 +149,7 @@ template <>
 class PyObjectToCppObjectConvertor<float> {
 public:
   bool convert(PyObject *pyObject, float &cppObject) {
-    double val=0;
+    double val = 0;
     PyObjectToCppObjectConvertor<double> convertor;
     bool ok = convertor.convert(pyObject, val);
     cppObject = val;
@@ -172,7 +170,7 @@ template <>
 class PyObjectToCppObjectConvertor<int> {
 public:
   bool convert(PyObject *pyObject, int &cppObject) {
-    long val=0;
+    long val = 0;
     PyObjectToCppObjectConvertor<long> convertor;
     bool ok = convertor.convert(pyObject, val);
     cppObject = val;
@@ -192,7 +190,7 @@ template <>
 class PyObjectToCppObjectConvertor<unsigned int> {
 public:
   bool convert(PyObject *pyObject, unsigned int &cppObject) {
-    unsigned long val=0;
+    unsigned long val = 0;
     PyObjectToCppObjectConvertor<unsigned long> convertor;
     bool ok = convertor.convert(pyObject, val);
     cppObject = val;
@@ -204,7 +202,6 @@ template <typename T>
 class CppObjectToPyObjectConvertor {
 
 public:
-
   bool convert(const T &cppObject, PyObject *&pyObject) {
     std::string className = tlp::demangleClassName(typeid(T).name());
 
@@ -214,8 +211,7 @@ public:
     if (pyObj) {
       pyObject = pyObj;
       return true;
-    }
-    else {
+    } else {
       delete objCopy;
     }
 
@@ -224,10 +220,9 @@ public:
 };
 
 template <typename T>
-class CppObjectToPyObjectConvertor<T*> {
+class CppObjectToPyObjectConvertor<T *> {
 
 public:
-
   bool convert(T *cppObject, PyObject *&pyObject) {
     std::string className = tlp::demangleClassName(typeid(T).name());
 
@@ -240,14 +235,13 @@ public:
 
     return false;
   }
-
 };
 
 template <>
-class CppObjectToPyObjectConvertor<PyObject*> {
+class CppObjectToPyObjectConvertor<PyObject *> {
 public:
-  bool convert(const PyObject* &cppObject, PyObject *&pyObject) {
-    pyObject = const_cast<PyObject*>(cppObject);
+  bool convert(const PyObject *&cppObject, PyObject *&pyObject) {
+    pyObject = const_cast<PyObject *>(cppObject);
     return true;
   }
 };
@@ -314,7 +308,5 @@ public:
     return true;
   }
 };
-
-
 
 #endif // PYTHONCPPTYPESCONVERTERS_H

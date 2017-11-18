@@ -26,25 +26,27 @@
 using namespace tlp;
 using namespace std;
 
-float centerOnOriginAndScale(Graph* graph, LayoutProperty * layout, float dist) {
-  graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0,0,0));
-  BoundingBox bb = tlp::computeBoundingBox(graph, graph->getProperty<LayoutProperty>("viewLayout"), graph->getProperty<SizeProperty>("viewSize"), graph->getProperty<DoubleProperty>("viewRotation"), 0);
+float centerOnOriginAndScale(Graph *graph, LayoutProperty *layout, float dist) {
+  graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0, 0, 0));
+  BoundingBox bb = tlp::computeBoundingBox(graph, graph->getProperty<LayoutProperty>("viewLayout"),
+                                           graph->getProperty<SizeProperty>("viewSize"),
+                                           graph->getProperty<DoubleProperty>("viewRotation"), 0);
   Coord move_coord = Coord((bb[0] + bb[1])) / (-2.f);
   layout->translate(move_coord, graph);
   float ray = (move_coord - bb[1]).norm();
-  float  scaleFactor = dist / ray;
+  float scaleFactor = dist / ray;
   layout->scale(Coord(scaleFactor, scaleFactor, scaleFactor), graph);
   graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0.1f, 0.1f, 0.1f));
-  return sqrt( ray*ray / 2.);
+  return sqrt(ray * ray / 2.);
 }
 
-void moveBendsToSphere(Graph *graph, float ray, LayoutProperty * layout) {
+void moveBendsToSphere(Graph *graph, float ray, LayoutProperty *layout) {
   edge e;
   forEach(e, graph->getEdges()) {
     vector<Coord> bends;
     bends = layout->getEdgeValue(e);
 
-    for(size_t i = 0 ; i < bends.size(); ++i) {
+    for (size_t i = 0; i < bends.size(); ++i) {
       Coord c = bends[i];
       double dist = c.norm();
       c /= dist;
@@ -57,7 +59,7 @@ void moveBendsToSphere(Graph *graph, float ray, LayoutProperty * layout) {
 
   node n;
   forEach(n, graph->getNodes()) {
-    Coord c= layout->getNodeValue(n);
+    Coord c = layout->getNodeValue(n);
     c /= c.norm();
     c *= ray;
     layout->setNodeValue(n, c);
@@ -65,23 +67,23 @@ void moveBendsToSphere(Graph *graph, float ray, LayoutProperty * layout) {
 }
 
 static Coord getCoordFromPolar(double rayon, double a1, double a2) {
-  a1 = a1 * M_PI /2. / 90.;
-  a2 = a2 * M_PI /2. / 90.;
+  a1 = a1 * M_PI / 2. / 90.;
+  a2 = a2 * M_PI / 2. / 90.;
   float x, y, z;
   x = rayon * cos(a1) * sin(a2);
   y = rayon * sin(a1) * sin(a2);
   z = rayon * cos(a2);
-  return Coord(x,y,z);
+  return Coord(x, y, z);
 }
 
 void addSphereGraph(Graph *graph, double radius) {
-  LayoutProperty * layout = graph->getProperty<LayoutProperty>("viewLayout");
+  LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
   double rho = 0;
 
-  while( rho  < 360 ) {
+  while (rho < 360) {
     double teta = 5;
 
-    while( teta < 180) {
+    while (teta < 180) {
       node n = graph->addNode();
       Coord c = getCoordFromPolar(radius, rho, teta);
       layout->setNodeValue(n, c);

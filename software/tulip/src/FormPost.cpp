@@ -25,11 +25,10 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-FormPost::FormPost():
-  QObject() {
-  _userAgent="";
-  _userAgent="utf-8";
-  _referer="";
+FormPost::FormPost() : QObject() {
+  _userAgent = "";
+  _userAgent = "utf-8";
+  _referer = "";
 }
 
 QString FormPost::userAgent() {
@@ -37,7 +36,7 @@ QString FormPost::userAgent() {
 }
 
 void FormPost::setUserAgent(QString agent) {
-  _userAgent=agent;
+  _userAgent = agent;
 }
 
 QString FormPost::referer() {
@@ -45,7 +44,7 @@ QString FormPost::referer() {
 }
 
 void FormPost::setReferer(QString ref) {
-  _referer=ref;
+  _referer = ref;
 }
 
 QString FormPost::encoding() {
@@ -53,16 +52,15 @@ QString FormPost::encoding() {
 }
 
 void FormPost::setEncoding(QString enc) {
-  if (enc=="utf-8" || enc=="ascii") {
-    _encoding=enc;
+  if (enc == "utf-8" || enc == "ascii") {
+    _encoding = enc;
   }
 }
 
 QByteArray FormPost::strToEnc(QString s) {
-  if (_encoding=="utf-8") {
+  if (_encoding == "utf-8") {
     return s.toUtf8();
-  }
-  else {
+  } else {
     return s.toLatin1();
   }
 }
@@ -82,61 +80,64 @@ void FormPost::addFile(QString fieldName, QByteArray file, QString name, QString
 void FormPost::addFile(QString fieldName, QString fileName, QString mime) {
   QFile f(fileName);
   f.open(QIODevice::ReadOnly);
-  QByteArray file=f.readAll();
+  QByteArray file = f.readAll();
   f.close();
   QString name;
 
   if (fileName.contains("/")) {
-    int pos=fileName.lastIndexOf("/");
-    name=fileName.right(fileName.length()-pos-1);
-  }
-  else if (fileName.contains("\\")) {
-    int pos=fileName.lastIndexOf("\\");
-    name=fileName.right(fileName.length()-pos-1);
-  }
-  else {
-    name=fileName;
+    int pos = fileName.lastIndexOf("/");
+    name = fileName.right(fileName.length() - pos - 1);
+  } else if (fileName.contains("\\")) {
+    int pos = fileName.lastIndexOf("\\");
+    name = fileName.right(fileName.length() - pos - 1);
+  } else {
+    name = fileName;
   }
 
-  addFile(fieldName,file,name,mime);
+  addFile(fieldName, file, name, mime);
 }
 
-QNetworkReply * FormPost::postData(QString url) {
+QNetworkReply *FormPost::postData(QString url) {
   QString host;
-  host=url.right(url.length()-url.indexOf("://")-3);
-  host=host.left(host.indexOf("/"));
-  QString crlf="\r\n";
+  host = url.right(url.length() - url.indexOf("://") - 3);
+  host = host.left(host.indexOf("/"));
+  QString crlf = "\r\n";
   qsrand(QDateTime::currentDateTime().toTime_t());
-  QString b=QVariant(qrand()).toString()+QVariant(qrand()).toString()+QVariant(qrand()).toString();
-  QString boundary="---------------------------"+b;
-  QString endBoundary=crlf+"--"+boundary+"--"+crlf;
-  QString contentType="multipart/form-data; boundary="+boundary;
-  boundary="--"+boundary+crlf;
-  QByteArray bond=boundary.toLatin1();
+  QString b =
+      QVariant(qrand()).toString() + QVariant(qrand()).toString() + QVariant(qrand()).toString();
+  QString boundary = "---------------------------" + b;
+  QString endBoundary = crlf + "--" + boundary + "--" + crlf;
+  QString contentType = "multipart/form-data; boundary=" + boundary;
+  boundary = "--" + boundary + crlf;
+  QByteArray bond = boundary.toLatin1();
   QByteArray send;
-  bool first=true;
+  bool first = true;
 
-  for (int i=0; i<_fieldNames.size(); i++) {
+  for (int i = 0; i < _fieldNames.size(); i++) {
     send.append(bond);
 
     if (first) {
-      boundary=crlf+boundary;
-      bond=boundary.toLatin1();
-      first=false;
+      boundary = crlf + boundary;
+      bond = boundary.toLatin1();
+      first = false;
     }
 
-    send.append(QString("Content-Disposition: form-data; name=\""+_fieldNames.at(i)+"\""+crlf).toLatin1());
+    send.append(QString("Content-Disposition: form-data; name=\"" + _fieldNames.at(i) + "\"" + crlf)
+                    .toLatin1());
 
-    if (_encoding=="utf-8") send.append(QString("Content-Transfer-Encoding: 8bit"+crlf).toLatin1());
+    if (_encoding == "utf-8")
+      send.append(QString("Content-Transfer-Encoding: 8bit" + crlf).toLatin1());
 
     send.append(crlf.toLatin1());
     send.append(strToEnc(_fieldValues.at(i)));
   }
 
-  for (int i=0; i<files.size(); i++) {
+  for (int i = 0; i < files.size(); i++) {
     send.append(bond);
-    send.append(QString("Content-Disposition: form-data; name=\""+_fileFieldNames.at(i)+"\"; filename=\""+_fileNames.at(i)+"\""+crlf).toLatin1());
-    send.append(QString("Content-Type: "+_fileMimes.at(i)+crlf+crlf).toLatin1());
+    send.append(QString("Content-Disposition: form-data; name=\"" + _fileFieldNames.at(i) +
+                        "\"; filename=\"" + _fileNames.at(i) + "\"" + crlf)
+                    .toLatin1());
+    send.append(QString("Content-Type: " + _fileMimes.at(i) + crlf + crlf).toLatin1());
     send.append(files.at(i));
   }
 
@@ -149,24 +150,26 @@ QNetworkReply * FormPost::postData(QString url) {
   _fileMimes.clear();
   files.clear();
 
-  QNetworkAccessManager * http=new QNetworkAccessManager(this);
-  connect(http,SIGNAL(finished(QNetworkReply *)),this,SLOT(readData(QNetworkReply *)));
+  QNetworkAccessManager *http = new QNetworkAccessManager(this);
+  connect(http, SIGNAL(finished(QNetworkReply *)), this, SLOT(readData(QNetworkReply *)));
   QNetworkRequest request;
   request.setRawHeader("Host", host.toLatin1());
 
-  if (_userAgent!="") request.setRawHeader("User-Agent", _userAgent.toLatin1());
+  if (_userAgent != "")
+    request.setRawHeader("User-Agent", _userAgent.toLatin1());
 
-  if (_referer!="") request.setRawHeader("Referer", _referer.toLatin1());
+  if (_referer != "")
+    request.setRawHeader("Referer", _referer.toLatin1());
 
   request.setHeader(QNetworkRequest::ContentTypeHeader, contentType.toLatin1());
   request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(send.size()).toString());
   request.setUrl(QUrl(url));
-  QNetworkReply * reply=http->post(request,send);
+  QNetworkReply *reply = http->post(request, send);
   return reply;
 }
 
-void FormPost::readData(QNetworkReply * r) {
-  _data=r->readAll();
+void FormPost::readData(QNetworkReply *r) {
+  _data = r->readAll();
 }
 
 QByteArray FormPost::response() {

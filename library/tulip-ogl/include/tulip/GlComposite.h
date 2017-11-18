@@ -38,14 +38,13 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlComposite : public GlSimpleEntity {
 
-
 public:
-
   /**
    * @brief Constructor
-   * @param deleteComponentsInDestructor if true : call delete on components when the GlComposite is delete
+   * @param deleteComponentsInDestructor if true : call delete on components when the GlComposite is
+   * delete
    */
-  GlComposite(bool deleteComponentsInDestructor=true);
+  GlComposite(bool deleteComponentsInDestructor = true);
 
   /**
    * @brief Destructor
@@ -61,7 +60,8 @@ public:
   /**
    * @brief Add new entity with name : key.
    *
-   * The composite does not takes the entity's ownership, i.e. it is not its responsibility to delete it.
+   * The composite does not takes the entity's ownership, i.e. it is not its responsibility to
+   * delete it.
    */
   void addGlEntity(GlSimpleEntity *entity, const std::string &key);
   /**
@@ -69,13 +69,13 @@ public:
    *
    * The entity is not deleted
    */
-  void deleteGlEntity(const std::string &key,bool informTheEntity=true);
+  void deleteGlEntity(const std::string &key, bool informTheEntity = true);
   /**
    * @brief Remove given entity
    *
    * The entity is not deleted
    */
-  void deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity=true);
+  void deleteGlEntity(GlSimpleEntity *entity, bool informTheEntity = true);
   /**
    * @brief Find name of given entity
    */
@@ -83,12 +83,11 @@ public:
   /**
    * @brief Find entity with name : key
    */
-  GlSimpleEntity* findGlEntity(const std::string &key);
+  GlSimpleEntity *findGlEntity(const std::string &key);
   /**
    * @brief Return map of entities in composite
    */
-  const std::map<std::string, GlSimpleEntity*> &
-  getGlEntities () const {
+  const std::map<std::string, GlSimpleEntity *> &getGlEntities() const {
     return elements;
   }
 
@@ -99,9 +98,10 @@ public:
    * @see GlSimpleEntity
    */
   virtual void setStencil(int stencil) {
-    this->stencil=stencil;
+    this->stencil = stencil;
 
-    for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
+    for (std::list<GlSimpleEntity *>::iterator it = _sortedElements.begin();
+         it != _sortedElements.end(); ++it) {
       (*it)->setStencil(stencil);
     }
   }
@@ -110,7 +110,7 @@ public:
    * @brief Set if at the destruction of composite, components well be deleted
    */
   void setDeleteComponentsInDestructor(bool deleteComponentsInDestructor) {
-    this->deleteComponentsInDestructor=deleteComponentsInDestructor;
+    this->deleteComponentsInDestructor = deleteComponentsInDestructor;
   }
 
   /**
@@ -128,22 +128,24 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
-///@cond DOXYGEN_HIDDEN
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * Function used to visit composite's children
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor) {
-    //visitor->visit(this);
-    for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
-      if((*it)->isVisible()) {
+    // visitor->visit(this);
+    for (std::list<GlSimpleEntity *>::iterator it = _sortedElements.begin();
+         it != _sortedElements.end(); ++it) {
+      if ((*it)->isVisible()) {
 
 #ifndef NDEBUG
-        GlComposite *composite=dynamic_cast<GlComposite*>(*it);
+        GlComposite *composite = dynamic_cast<GlComposite *>(*it);
 
-        if(!composite && !(*it)->getBoundingBox().isValid()) {
-          for(std::map<std::string, GlSimpleEntity*>::iterator itE=elements.begin(); itE!=elements.end(); ++itE) {
-            if(itE->second==(*it)) {
+        if (!composite && !(*it)->getBoundingBox().isValid()) {
+          for (std::map<std::string, GlSimpleEntity *>::iterator itE = elements.begin();
+               itE != elements.end(); ++itE) {
+            if (itE->second == (*it)) {
               tlp::warning() << "Invalid bounding box for entity: " << itE->first << std::endl;
               assert(false);
             }
@@ -173,19 +175,19 @@ public:
   void notifyModified(GlSimpleEntity *entity);
 
   /**
-   * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
+   * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be
+   * define
    */
-  virtual void draw(float,Camera *) {}
+  virtual void draw(float, Camera *) {}
 
-///@endcond
+  ///@endcond
 
 protected:
-
-  std::map<std::string, GlSimpleEntity*> elements;
-  std::list<GlSimpleEntity *> _sortedElements; //necessary to enable ordering of elements (for alpha blending)
+  std::map<std::string, GlSimpleEntity *> elements;
+  std::list<GlSimpleEntity *>
+      _sortedElements; // necessary to enable ordering of elements (for alpha blending)
   std::vector<GlLayer *> layerParents;
   bool deleteComponentsInDestructor;
 };
-
 }
 #endif

@@ -66,37 +66,38 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-  // minDistCircle
-  "The minimal distance between nodes on a circle.",
+    // minDistCircle
+    "The minimal distance between nodes on a circle.",
 
-  // minDistLevel
-  "The minimal distance between father and child circle.",
+    // minDistLevel
+    "The minimal distance between father and child circle.",
 
-  // minDistSibling
-  "The minimal distance between circles on same level.",
+    // minDistSibling
+    "The minimal distance between circles on same level.",
 
-  // minDistCC
-  "The minimal distance between connected components.",
+    // minDistCC
+    "The minimal distance between connected components.",
 
-  // pageRatio
-  "The page ratio used for packing connected components."
-};
+    // pageRatio
+    "The page ratio used for packing connected components."};
 
 class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Implements a circular layout.","1.4","Basic")
-  OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
-    addInParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
-    addInParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
-    addInParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
-    addInParameter<double> ("minDistCC", paramHelp[3], "20.0", false);
-    addInParameter<double> ("pageRatio", paramHelp[4], "1.0", false);
+  PLUGININFORMATION("Circular (OGDF)", "Carsten Gutwenger", "13/11/2007",
+                    "Implements a circular layout.", "1.4", "Basic")
+  OGDFCircular(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
+    addInParameter<double>("minDistCircle", paramHelp[0], "20.0", false);
+    addInParameter<double>("minDistLevel", paramHelp[1], "20.0", false);
+    addInParameter<double>("minDistSibling", paramHelp[2], "10.0", false);
+    addInParameter<double>("minDistCC", paramHelp[3], "20.0", false);
+    addInParameter<double>("pageRatio", paramHelp[4], "1.0", false);
   }
   ~OGDFCircular() {}
 
   void beforeCall() {
-    ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
+    ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       double val = 0;
@@ -117,8 +118,6 @@ public:
         circular->pageRatio(val);
     }
   }
-
 };
-
 
 PLUGIN(OGDFCircular)

@@ -21,8 +21,7 @@
 
 namespace pocore {
 
-UniformDeformationScreen::UniformDeformationScreen():
-  _tx(0), _ty(0), _zoom(1) {
+UniformDeformationScreen::UniformDeformationScreen() : _tx(0), _ty(0), _zoom(1) {
   updateMatrix();
 }
 //=======================================================
@@ -33,8 +32,8 @@ Vec2f UniformDeformationScreen::project(const Vec2f &point) const {
   vect[1] = point[1];
   vect[2] = 1.0;
   vectres = _mat * vect;
-  scPoint[0] = (vectres[0]/vectres[2]);
-  scPoint[1] = (vectres[1]/vectres[2]);
+  scPoint[0] = (vectres[0] / vectres[2]);
+  scPoint[1] = (vectres[1] / vectres[2]);
   return scPoint;
 }
 //=======================================================
@@ -45,8 +44,8 @@ Vec2f UniformDeformationScreen::unproject(const Vec2f &point) const {
   vect[1] = point[1];
   vect[2] = 1.0;
   vectres = _invMat * vect;
-  scPoint[0] = vectres[0]/vectres[2];
-  scPoint[1] = vectres[1]/vectres[2];
+  scPoint[0] = vectres[0] / vectres[2];
+  scPoint[1] = vectres[1] / vectres[2];
   return scPoint;
 }
 //=======================================================
@@ -57,8 +56,8 @@ void UniformDeformationScreen::setTranslation(double x, double y) {
 }
 //=======================================================
 void UniformDeformationScreen::getTranslation(double &x, double &y) {
-  x=_tx;
-  y=_ty;
+  x = _tx;
+  y = _ty;
 }
 //=======================================================
 void UniformDeformationScreen::setZoom(double zoom) {
@@ -72,21 +71,21 @@ double UniformDeformationScreen::getZoom() {
 //=======================================================
 void UniformDeformationScreen::updateMatrix() {
   tlp::Matrix<double, 3> tmp;
-  //zoom
+  // zoom
   tmp.fill(0);
   tmp[0][0] = _zoom;
   tmp[1][1] = _zoom;
   tmp[2][2] = 1.0;
   tmp[2][0] = 0.;
   tmp[2][1] = 0.;
-  //translate
+  // translate
   _mat.fill(0);
   _mat[0][0] = 1.;
   _mat[1][1] = 1.;
   _mat[2][2] = 1.;
   _mat[0][2] = -_tx;
   _mat[1][2] = -_ty;
-  _mat =  tmp * _mat;
+  _mat = tmp * _mat;
   _invMat = _mat;
   _invMat.inverse();
 }

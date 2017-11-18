@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TYPEINTERFACE_H
 #define TYPEINTERFACE_H
 
@@ -30,7 +29,7 @@
 #include <sstream>
 
 namespace tlp {
-template<typename T>
+template <typename T>
 class TypeInterface {
 public:
   typedef T RealType;
@@ -45,15 +44,15 @@ public:
     return sizeof(T);
   }
 
-  static void write(std::ostream&, const RealType&) {}
-  static void writeb(std::ostream& oss, const RealType& v) {
+  static void write(std::ostream &, const RealType &) {}
+  static void writeb(std::ostream &oss, const RealType &v) {
     oss.write(reinterpret_cast<const char *>(&v), sizeof(v));
   }
 
-  static bool read(std::istream&, RealType&) {
+  static bool read(std::istream &, RealType &) {
     return false;
   }
-  static bool readb(std::istream& iss, RealType& v) {
+  static bool readb(std::istream &iss, RealType &v) {
     return bool(iss.read(reinterpret_cast<char *>(&v), sizeof(v)));
   }
 

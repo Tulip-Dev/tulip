@@ -32,7 +32,6 @@ struct ParenInfo {
   bool operator<(const ParenInfo &info) const {
     return position < info.position;
   }
-
 };
 
 class ParenInfoTextBlockData : public QTextBlockUserData {
@@ -40,13 +39,11 @@ class ParenInfoTextBlockData : public QTextBlockUserData {
   QVector<ParenInfo> _parenInfo;
 
 public:
-
   ParenInfoTextBlockData();
 
   QVector<ParenInfo> parens();
   void insert(const ParenInfo &parenInfo);
   void sortParenInfo();
-
 };
 
 class ParenMatcherHighlighter : public QSyntaxHighlighter {
@@ -55,13 +52,10 @@ class ParenMatcherHighlighter : public QSyntaxHighlighter {
   QVector<char> _rightParensToMatch;
 
 public:
-
   explicit ParenMatcherHighlighter(QTextDocument *parent = 0);
 
 protected:
-
   void highlightBlock(const QString &text);
-
 };
 
 #endif /* PARENMATCHERHIGHLIGHTER_H_ */

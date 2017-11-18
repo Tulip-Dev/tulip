@@ -46,15 +46,15 @@ class CSVImportParameters;
 class CSVParsingConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
-  CSVParsingConfigurationQWizardPage ( QWidget * parent = NULL );
+  CSVParsingConfigurationQWizardPage(QWidget *parent = NULL);
   bool isComplete() const;
-  CSVParser* buildParser(int firstLine = 0)const;
+  CSVParser *buildParser(int firstLine = 0) const;
   int getFirstLineIndex() const;
 
 private:
   void updatePreview();
-  CSVParserConfigurationWidget* parserConfigurationWidget;
-  CSVTableWidget* previewTableWidget;
+  CSVParserConfigurationWidget *parserConfigurationWidget;
+  CSVTableWidget *previewTableWidget;
   unsigned int previewLineNumber;
 
 private slots:
@@ -64,24 +64,24 @@ private slots:
 class CSVImportConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
-  CSVImportConfigurationQWizardPage ( QWidget * parent = NULL );
+  CSVImportConfigurationQWizardPage(QWidget *parent = NULL);
   void initializePage();
-  CSVImportParameters getImportParameters()const;
+  CSVImportParameters getImportParameters() const;
 
 private:
-  CSVImportConfigurationWidget* importConfigurationWidget;
+  CSVImportConfigurationWidget *importConfigurationWidget;
 };
 
 class CSVGraphMappingConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
-  CSVGraphMappingConfigurationQWizardPage ( QWidget * parent = NULL );
+  CSVGraphMappingConfigurationQWizardPage(QWidget *parent = NULL);
   void initializePage();
   bool isComplete() const;
-  CSVToGraphDataMapping* buildMappingObject()const;
+  CSVToGraphDataMapping *buildMappingObject() const;
 
 private:
-  CSVGraphMappingConfigurationWidget* graphMappingConfigurationWidget;
+  CSVGraphMappingConfigurationWidget *graphMappingConfigurationWidget;
 };
 
 class TLP_QT_SCOPE CSVImportWizard : public QWizard {
@@ -91,23 +91,24 @@ public:
   explicit CSVImportWizard(QWidget *parent = NULL);
   ~CSVImportWizard();
 
-  CSVParsingConfigurationQWizardPage* getParsingConfigurationPage()const;
-  CSVImportConfigurationQWizardPage* getImportConfigurationPage()const;
-  CSVGraphMappingConfigurationQWizardPage* getMappingConfigurationPage()const;
+  CSVParsingConfigurationQWizardPage *getParsingConfigurationPage() const;
+  CSVImportConfigurationQWizardPage *getImportConfigurationPage() const;
+  CSVGraphMappingConfigurationQWizardPage *getMappingConfigurationPage() const;
 
-  inline  void setGraph(Graph* graph) {
+  inline void setGraph(Graph *graph) {
     this->graph = graph;
   }
 
-  inline  Graph* getGraph()const {
+  inline Graph *getGraph() const {
     return graph;
   }
 
 public slots:
   void accept();
+
 private:
   Ui::CSVImportWizard *ui;
-  tlp::Graph* graph;
+  tlp::Graph *graph;
 };
 }
 #endif // CSVIMPORTWIZARD_H

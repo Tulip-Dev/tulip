@@ -28,8 +28,8 @@ struct DimensionBase {
   virtual ~DimensionBase() {}
   virtual unsigned int numberOfItems() const = 0;
   virtual unsigned int numberOfValues() const = 0;
-  virtual std::string getItemLabelAtRank(const unsigned int rank) const =0;
-  virtual std::string getItemLabel(const unsigned int itemId) const =0;
+  virtual std::string getItemLabelAtRank(const unsigned int rank) const = 0;
+  virtual std::string getItemLabel(const unsigned int itemId) const = 0;
   virtual double getItemValue(const unsigned int itemId) const = 0;
   virtual double getItemValueAtRank(const unsigned int rank) const = 0;
   virtual unsigned int getItemIdAtRank(const unsigned int rank) = 0;

@@ -22,9 +22,9 @@
 namespace pocore {
 
 PixelOrientedMediator::PixelOrientedMediator(LayoutFunction *layout, ColorFunction *color)
-  : layout(layout), color(color), trans1(new FishEyesScreen()), trans2(new UniformDeformationScreen()),
-    zoomBak(1), translationXBak(0), translationYBak(0), fishEyeRadiusBak(0),
-    centerItem(uint(-1)) {
+    : layout(layout), color(color), trans1(new FishEyesScreen()),
+      trans2(new UniformDeformationScreen()), zoomBak(1), translationXBak(0), translationYBak(0),
+      fishEyeRadiusBak(0), centerItem(uint(-1)) {
   zoom = 1.0;
   totalMove[0] = 0;
   totalMove[1] = 0;
@@ -60,8 +60,7 @@ void PixelOrientedMediator::changeZoom(int i) {
   if (i < 50) {
     zoom = double(i) / 50.;
     trans2->setZoom(double(i) / 50.);
-  }
-  else {
+  } else {
     zoom = double(i) - 49.;
     trans2->setZoom(double(i) - 49.);
   }
@@ -73,7 +72,9 @@ void PixelOrientedMediator::backupScreenFunctionsParameters() {
   fishEyeRadiusBak = trans1->getRadius();
 }
 
-void PixelOrientedMediator::setScreenFunctionsParameters(double zoom, double translationX, double translationY, double fishEyeRadius) {
+void PixelOrientedMediator::setScreenFunctionsParameters(double zoom, double translationX,
+                                                         double translationY,
+                                                         double fishEyeRadius) {
   trans2->setZoom(zoom);
   trans2->setTranslation(translationX, translationY);
   trans1->setRadius(fishEyeRadius);
@@ -108,8 +109,7 @@ void PixelOrientedMediator::updateFishEyePosition(const int x, const int y, Dime
     centerItem = data->getItemIdAtRank(layout->unproject(point));
     fishCenter = trans2->project(pos);
     trans1->setCenter(fishCenter[0], fishCenter[1]);
-  }
-  else {
+  } else {
     totalMove[0] += int((lastMousePosition[0] - x) / zoom);
     totalMove[1] -= int((lastMousePosition[1] - yScreen) / zoom);
     totalFishMove[0] += lastMousePosition[0] - x;
@@ -119,11 +119,12 @@ void PixelOrientedMediator::updateFishEyePosition(const int x, const int y, Dime
 
 void PixelOrientedMediator::translateFishEye(const int x, const int y) {
   int yScreen = imageSize[1] - y;
-//  trans2->setTranslation((totalMove[0] + (lastMousePosition[0] - x) / zoom),
-//              (totalMove[1] - (lastMousePosition[1] - yScreen) / zoom));
+  //  trans2->setTranslation((totalMove[0] + (lastMousePosition[0] - x) / zoom),
+  //              (totalMove[1] - (lastMousePosition[1] - yScreen) / zoom));
   fishTranslation[0] = -((totalFishMove[0] + lastMousePosition[0] - x));
   fishTranslation[1] = ((totalFishMove[1] + lastMousePosition[1] - yScreen));
-  trans1->setCenter(fishCenter[0] - ((totalFishMove[0] + lastMousePosition[0] - x)), fishCenter[1] + ((totalFishMove[1] + lastMousePosition[1] - yScreen)));
+  trans1->setCenter(fishCenter[0] - ((totalFishMove[0] + lastMousePosition[0] - x)),
+                    fishCenter[1] + ((totalFishMove[1] + lastMousePosition[1] - yScreen)));
 }
 
 unsigned int PixelOrientedMediator::getRankForPixelPos(Vec2i pos) {
@@ -134,7 +135,8 @@ unsigned int PixelOrientedMediator::getRankForPixelPos(Vec2i pos) {
   return layout->unproject(fPosI);
 }
 
-RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data, bool withFishEye) {
+RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data,
+                                                  bool withFishEye) {
   RGBA backgroundColor;
   backgroundColor.fill(255);
 
@@ -169,8 +171,7 @@ RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data
 
     return curColor;
 
-  }
-  else {
+  } else {
     return backgroundColor;
   }
 }
@@ -178,5 +179,4 @@ RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data
 Vec2i PixelOrientedMediator::getPixelPosForRank(const unsigned int rank) {
   return sceneToScreen(layout->project(rank));
 }
-
 }

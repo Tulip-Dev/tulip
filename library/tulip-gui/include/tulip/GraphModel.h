@@ -25,7 +25,6 @@
 #include <QSet>
 #include <QSortFilterProxyModel>
 
-
 #include <tulip/Observable.h>
 #include <tulip/TulipModel.h>
 
@@ -37,21 +36,21 @@ class BooleanProperty;
 class TLP_QT_SCOPE GraphModel : public tlp::TulipModel, public Observable {
 
 public:
-  static QVariant nodeValue(unsigned int, tlp::PropertyInterface*);
-  static QVariant nodeDefaultValue(tlp::PropertyInterface*);
-  static bool setNodeValue(unsigned int,tlp::PropertyInterface*, QVariant);
-  static bool setNodeDefaultValue(tlp::PropertyInterface*, QVariant);
-  static bool setAllNodeValue(tlp::PropertyInterface*, QVariant, Graph *graph = NULL);
-  static QVariant edgeValue(unsigned int, tlp::PropertyInterface*);
-  static QVariant edgeDefaultValue(tlp::PropertyInterface*);
-  static bool setEdgeValue(unsigned int,tlp::PropertyInterface*, QVariant);
-  static bool setEdgeDefaultValue(tlp::PropertyInterface*, QVariant);
-  static bool setAllEdgeValue(tlp::PropertyInterface*, QVariant, Graph *graph = NULL);
+  static QVariant nodeValue(unsigned int, tlp::PropertyInterface *);
+  static QVariant nodeDefaultValue(tlp::PropertyInterface *);
+  static bool setNodeValue(unsigned int, tlp::PropertyInterface *, QVariant);
+  static bool setNodeDefaultValue(tlp::PropertyInterface *, QVariant);
+  static bool setAllNodeValue(tlp::PropertyInterface *, QVariant, Graph *graph = NULL);
+  static QVariant edgeValue(unsigned int, tlp::PropertyInterface *);
+  static QVariant edgeDefaultValue(tlp::PropertyInterface *);
+  static bool setEdgeValue(unsigned int, tlp::PropertyInterface *, QVariant);
+  static bool setEdgeDefaultValue(tlp::PropertyInterface *, QVariant);
+  static bool setAllEdgeValue(tlp::PropertyInterface *, QVariant, Graph *graph = NULL);
 
   explicit GraphModel(QObject *parent = NULL);
 
-  virtual void setGraph(tlp::Graph*);
-  tlp::Graph* graph() const;
+  virtual void setGraph(tlp::Graph *);
+  tlp::Graph *graph() const;
 
   // Methods re-implemented from QAbstractItemModel
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -60,59 +59,59 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const;
 
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-  void treatEvent(const tlp::Event&);
+  void treatEvent(const tlp::Event &);
   void treatEvents(const std::vector<tlp::Event> &);
 
   unsigned int elementAt(int) const;
-  virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const = 0;
-  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const = 0;
-  virtual QVariant value(unsigned int,tlp::PropertyInterface*) const = 0;
+  virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const = 0;
+  virtual QString stringValue(unsigned int, tlp::PropertyInterface *) const = 0;
+  virtual QVariant value(unsigned int, tlp::PropertyInterface *) const = 0;
   virtual bool isNode() const = 0;
 
 protected:
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
   QVector<unsigned int> _elements;
-  QVector<QPair<unsigned int,bool> > _elementsToModify;
-  QVector<PropertyInterface*> _properties;
-  QSet<PropertyInterface*> _propertiesModified;
+  QVector<QPair<unsigned int, bool> > _elementsToModify;
+  QVector<PropertyInterface *> _properties;
+  QSet<PropertyInterface *> _propertiesModified;
 
-  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;
+  virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const = 0;
   void addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add);
 };
 
-class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel, public Observable {
-  QVector<PropertyInterface*> _properties;
-  BooleanProperty* _filterProperty;
+class TLP_QT_SCOPE GraphSortFilterProxyModel : public QSortFilterProxyModel, public Observable {
+  QVector<PropertyInterface *> _properties;
+  BooleanProperty *_filterProperty;
 
 public:
-  GraphSortFilterProxyModel(QObject* parent = NULL);
+  GraphSortFilterProxyModel(QObject *parent = NULL);
 
-  void setFilterProperty(tlp::BooleanProperty*);
+  void setFilterProperty(tlp::BooleanProperty *);
   void setSelectedOnly(bool);
-  void setProperties(QVector<PropertyInterface*>);
+  void setProperties(QVector<PropertyInterface *>);
 
   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
   bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
-  void treatEvent(const tlp::Event&);
+  void treatEvent(const tlp::Event &);
 
-  tlp::BooleanProperty* filterProperty() const;
+  tlp::BooleanProperty *filterProperty() const;
 };
 
-class TLP_QT_SCOPE NodesGraphModel: public GraphModel {
+class TLP_QT_SCOPE NodesGraphModel : public GraphModel {
 public:
-  NodesGraphModel(QObject* parent = NULL);
+  NodesGraphModel(QObject *parent = NULL);
   void setGraph(Graph *);
 
   void treatEvent(const tlp::Event &);
   void treatEvents(const std::vector<tlp::Event> &);
-  virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
-  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
-  virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
+  virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const;
+  virtual QString stringValue(unsigned int, tlp::PropertyInterface *) const;
+  virtual QVariant value(unsigned int, tlp::PropertyInterface *) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
   bool isNode() const {
@@ -122,21 +121,22 @@ public:
   static QString getNodeTooltip(Graph *graph, node n);
 
 protected:
-  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
+  virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const;
+
 private:
   bool _nodesAdded;
   bool _nodesRemoved;
 };
 
-class TLP_QT_SCOPE EdgesGraphModel: public GraphModel {
+class TLP_QT_SCOPE EdgesGraphModel : public GraphModel {
 public:
-  EdgesGraphModel(QObject* parent = NULL);
+  EdgesGraphModel(QObject *parent = NULL);
   void setGraph(Graph *);
   void treatEvent(const tlp::Event &);
   void treatEvents(const std::vector<tlp::Event> &);
-  virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
-  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
-  virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
+  virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const;
+  virtual QString stringValue(unsigned int, tlp::PropertyInterface *) const;
+  virtual QVariant value(unsigned int, tlp::PropertyInterface *) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
   bool isNode() const {
@@ -146,12 +146,12 @@ public:
   static QString getEdgeTooltip(Graph *graph, edge e);
 
 protected:
-  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
+  virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const;
+
 private:
   bool _edgesAdded;
   bool _edgesRemoved;
 };
-
 }
 
 #endif // GRAPHMODEL_H

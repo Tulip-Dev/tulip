@@ -26,18 +26,19 @@
 /** This plugin is an implementation of the connected component decompostion algorithm. each
  *  node and edge that belongs to the same component receives the same value.
  *
- *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
+ *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the
+ * same
  *  connected component they have the same value else they have a different value.
  *
  */
-class ConnectedComponent:public tlp::DoubleAlgorithm {
+class ConnectedComponent : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Connected Component","David Auber","01/07/2002",
+  PLUGININFORMATION("Connected Component", "David Auber", "01/07/2002",
                     "Implements a decompostion in connected components. \
                     This algorithm assigns to each node a value defined as following: if two nodes are in the same \
-                    connected component they have the same value else they have a different value. Edges get the value of their source node."
-                    ,"1.0","Component")
-  ConnectedComponent(const tlp::PluginContext* context);
+                    connected component they have the same value else they have a different value. Edges get the value of their source node.",
+                    "1.0", "Component")
+  ConnectedComponent(const tlp::PluginContext *context);
   bool run();
 };
 

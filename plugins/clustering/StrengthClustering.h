@@ -39,22 +39,25 @@
 * 2003.
 *
 */
-class StrengthClustering:public tlp::DoubleAlgorithm {
+class StrengthClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Strength Clustering", "David Auber", "27/01/2003",
-                    "Implements a single-linkage clustering. The similarity measure used here is the Strength Metric computed on edges. The best threshold is found using MQ Quality Measure. See :<br/>"
-                    "<b>Software component capture using graph clustering</b>, Y. Chiricota. F.Jourdan, an G.Melancon, IWPC (2002).", "2.0","Clustering")
-  StrengthClustering(tlp::PluginContext* context);
+                    "Implements a single-linkage clustering. The similarity measure used here is "
+                    "the Strength Metric computed on edges. The best threshold is found using MQ "
+                    "Quality Measure. See :<br/>"
+                    "<b>Software component capture using graph clustering</b>, Y. Chiricota. "
+                    "F.Jourdan, an G.Melancon, IWPC (2002).",
+                    "2.0", "Clustering")
+  StrengthClustering(tlp::PluginContext *context);
   ~StrengthClustering();
   bool run();
   bool check(std::string &);
+
 private:
-  void computeNodePartition(double threshold,
-                            std::vector< std::set<tlp::node> >&);
-  double computeMQValue(const std::vector< std::set<tlp::node> >& partition,
-                        tlp::Graph *);
-  double findBestThreshold(int numberOfSteps, bool& stopped);
-  tlp::DoubleProperty* values;
+  void computeNodePartition(double threshold, std::vector<std::set<tlp::node> > &);
+  double computeMQValue(const std::vector<std::set<tlp::node> > &partition, tlp::Graph *);
+  double findBestThreshold(int numberOfSteps, bool &stopped);
+  tlp::DoubleProperty *values;
 };
 
 #endif

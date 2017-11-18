@@ -26,7 +26,7 @@
 using namespace std;
 using namespace tlp;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( MutableContainerTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(MutableContainerTest);
 
 //==========================================================
 void MutableContainerTest::setUp() {
@@ -35,9 +35,9 @@ void MutableContainerTest::setUp() {
   tlp::setSeedOfRandomSequence(1);
   tlp::initRandomSequence();
 #endif
-  mutBool    = new MutableContainer<bool>();
-  mutDouble  = new MutableContainer<double>();
-  mutString  = new MutableContainer<string>();
+  mutBool = new MutableContainer<bool>();
+  mutDouble = new MutableContainer<double>();
+  mutString = new MutableContainer<string>();
 }
 //==========================================================
 void MutableContainerTest::tearDown() {
@@ -51,28 +51,28 @@ void MutableContainerTest::testCompression() {
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0), mutDouble->elementInserted);
 
-  for (unsigned int i=0; i<1000; ++i) {
-    mutDouble->set(100+i,13.0);
+  for (unsigned int i = 0; i < 1000; ++i) {
+    mutDouble->set(100 + i, 13.0);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
-    CPPUNIT_ASSERT_EQUAL(i+1 , mutDouble->elementInserted);
+    CPPUNIT_ASSERT_EQUAL(i + 1, mutDouble->elementInserted);
   }
 
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0), mutDouble->elementInserted);
 
-  for (unsigned int i=0; i<1000; ++i) {
-    mutDouble->set(10000+i*2,13.0);
+  for (unsigned int i = 0; i < 1000; ++i) {
+    mutDouble->set(10000 + i * 2, 13.0);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
-    CPPUNIT_ASSERT_EQUAL(i+1 , mutDouble->elementInserted);
+    CPPUNIT_ASSERT_EQUAL(i + 1, mutDouble->elementInserted);
   }
 
-  for (unsigned int i=0; i<1000; ++i) {
-    mutDouble->set(10000+i*2,13.0);
-    mutDouble->add(10000+i*2, i);
-    CPPUNIT_ASSERT_EQUAL(mutDouble->get(10000+i*2), 13. + i);
+  for (unsigned int i = 0; i < 1000; ++i) {
+    mutDouble->set(10000 + i * 2, 13.0);
+    mutDouble->add(10000 + i * 2, i);
+    CPPUNIT_ASSERT_EQUAL(mutDouble->get(10000 + i * 2), 13. + i);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
-    CPPUNIT_ASSERT_EQUAL(unsigned(1000) , mutDouble->elementInserted);
+    CPPUNIT_ASSERT_EQUAL(unsigned(1000), mutDouble->elementInserted);
   }
 
   mutDouble->setAll(10.0);
@@ -89,9 +89,9 @@ void MutableContainerTest::testCompression() {
   mutDouble->add(100, 1000.45);
   CPPUNIT_ASSERT_EQUAL(mutDouble->get(100), 1010.45);
 
-  for (unsigned int i=1001; i<10000; ++i) {
+  for (unsigned int i = 1001; i < 10000; ++i) {
     mutDouble->set(i, 345);
-    CPPUNIT_ASSERT_EQUAL(unsigned(i+3-1000) , mutDouble->elementInserted);
+    CPPUNIT_ASSERT_EQUAL(unsigned(i + 3 - 1000), mutDouble->elementInserted);
   }
 
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
@@ -111,17 +111,17 @@ void MutableContainerTest::testFindAll() {
   mutDouble->setAll(10.0);
   mutString->setAll("David");
 
-  mutBool->set(10,true);
-  mutBool->set(15,true);
-  mutBool->set(17,true);
+  mutBool->set(10, true);
+  mutBool->set(15, true);
+  mutBool->set(17, true);
 
-  mutDouble->set(10,13.0);
-  mutDouble->set(15,13.0);
-  mutDouble->set(17,13.0);
+  mutDouble->set(10, 13.0);
+  mutDouble->set(15, 13.0);
+  mutDouble->set(17, 13.0);
 
-  mutString->set(10,"Sophie");
-  mutString->set(15,"Sophie");
-  mutString->set(17,"Sophie");
+  mutString->set(10, "Sophie");
+  mutString->set(15, "Sophie");
+  mutString->set(17, "Sophie");
 
   Iterator<unsigned int> *itB;
   Iterator<unsigned int> *itD;
@@ -172,7 +172,7 @@ void MutableContainerTest::testSetAll() {
   mutDouble->setAll(10.0);
   mutString->setAll("David");
 
-  for (unsigned int i=0; i<NBTEST; ++i) {
+  for (unsigned int i = 0; i < NBTEST; ++i) {
     CPPUNIT_ASSERT(mutBool->get(i));
     CPPUNIT_ASSERT_EQUAL(10.0, mutDouble->get(i));
     CPPUNIT_ASSERT_EQUAL(string("David"), mutString->get(i));
@@ -182,26 +182,26 @@ void MutableContainerTest::testSetAll() {
   mutDouble->setAll(-33.0);
   mutString->setAll("Sophie");
 
-  for (unsigned int i=0; i<NBTEST; ++i) {
+  for (unsigned int i = 0; i < NBTEST; ++i) {
     CPPUNIT_ASSERT(!mutBool->get(i));
     CPPUNIT_ASSERT_EQUAL(-33.0, mutDouble->get(i));
     CPPUNIT_ASSERT_EQUAL(string("Sophie"), mutString->get(i));
   }
 
-  //New test bug at index 0
+  // New test bug at index 0
   MutableContainer<int> vect;
   vect.setAll(-1);
   CPPUNIT_ASSERT_EQUAL(-1, vect.get(1));
-  vect.set(1,1);
+  vect.set(1, 1);
   CPPUNIT_ASSERT_EQUAL(1, vect.get(1));
   CPPUNIT_ASSERT_EQUAL(-1, vect.get(2));
   CPPUNIT_ASSERT_EQUAL(-1, vect.get(0));
 
   MutableContainer<int> vect2;
   vect2.setAll(0);
-  vect2.set(0,0);
+  vect2.set(0, 0);
   CPPUNIT_ASSERT_EQUAL(0, vect2.get(0));
-  vect2.set(1,0);
+  vect2.set(1, 0);
   CPPUNIT_ASSERT_EQUAL(0, vect2.get(1));
 }
 //==========================================================
@@ -212,24 +212,24 @@ void MutableContainerTest::testSetGet() {
   mutDouble->set(1000000, 20);
   CPPUNIT_ASSERT_EQUAL(10.0, mutDouble->get(100));
   CPPUNIT_ASSERT_EQUAL(20.0, mutDouble->get(1000000));
-  mutDouble->set(1000000,-33.0);
+  mutDouble->set(1000000, -33.0);
 
-  for (unsigned int i=101; i<1000; ++i) {
-    mutDouble->set(i,i);
+  for (unsigned int i = 101; i < 1000; ++i) {
+    mutDouble->set(i, i);
     CPPUNIT_ASSERT_EQUAL(double(i), mutDouble->get(i));
   }
 
-  for (unsigned int i=101; i<999; ++i) {
-    mutDouble->set(i,-33.0);
+  for (unsigned int i = 101; i < 999; ++i) {
+    mutDouble->set(i, -33.0);
   }
 
   CPPUNIT_ASSERT_EQUAL(10.0, mutDouble->get(100));
 
   mutString->setAll("Sophie");
 
-  for (unsigned int i=0; i<NBTEST*10; ++i) {
-    unsigned int rando=randomUnsignedInteger(NBTEST-1);
-    mutBool->set(rando,true);
+  for (unsigned int i = 0; i < NBTEST * 10; ++i) {
+    unsigned int rando = randomUnsignedInteger(NBTEST - 1);
+    mutBool->set(rando, true);
     mutDouble->set(rando, rando);
     mutString->set(rando, string("David"));
     CPPUNIT_ASSERT(mutBool->get(rando));
@@ -239,14 +239,14 @@ void MutableContainerTest::testSetGet() {
 
   mutBool->setAll(true);
 
-  for (unsigned int i=0; i<NBTEST*10; ++i) {
-    unsigned int rando=randomUnsignedInteger(NBTEST-1);
+  for (unsigned int i = 0; i < NBTEST * 10; ++i) {
+    unsigned int rando = randomUnsignedInteger(NBTEST - 1);
     mutBool->set(rando, false);
     CPPUNIT_ASSERT(!mutBool->get(rando));
   }
 
-  for (unsigned int i=0; i<NBTEST*10; ++i) {
-    unsigned int rando=randomUnsignedInteger(NBTEST-1);
+  for (unsigned int i = 0; i < NBTEST * 10; ++i) {
+    unsigned int rando = randomUnsignedInteger(NBTEST - 1);
     bool isNotDefault = true;
     mutBool->set(rando, true);
     CPPUNIT_ASSERT(mutBool->get(rando, isNotDefault));

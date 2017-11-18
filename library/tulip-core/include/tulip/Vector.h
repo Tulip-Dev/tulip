@@ -30,26 +30,25 @@
 #include <limits>
 #include <cstring>
 
-#define VECTOR Vector<TYPE,SIZE,OTYPE,DTYPE>
+#define VECTOR Vector<TYPE, SIZE, OTYPE, DTYPE>
 #define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE, typename OTYPE, typename DTYPE>
 
 namespace tlp {
 
-template<typename TYPE, typename OTYPE>
+template <typename TYPE, typename OTYPE>
 inline OTYPE tlpsqr(const TYPE a) {
   return static_cast<OTYPE>(a) * static_cast<OTYPE>(a);
 }
 
-template<typename TYPE, typename OTYPE>
+template <typename TYPE, typename OTYPE>
 inline TYPE tlpsqrt(const OTYPE a) {
   return static_cast<TYPE>(sqrt(a));
 }
 
-template<>
+template <>
 inline double tlpsqrt<double, long double>(long double a) {
   return double(sqrtl(a));
 }
-
 
 /**
  * @ingroup Structures
@@ -65,10 +64,10 @@ inline double tlpsqrt<double, long double>(long double a) {
  * \version 0.0.1 24/01/2003
  */
 template <typename TYPE, unsigned int SIZE, typename OTYPE = double, typename DTYPE = TYPE>
-class Vector:public Array<TYPE,SIZE> {
+class Vector : public Array<TYPE, SIZE> {
 public:
   inline VECTOR() {
-    memset( &((*this)[0]), 0, SIZE * sizeof(TYPE) );
+    memset(&((*this)[0]), 0, SIZE * sizeof(TYPE));
   }
   inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
     set(v);
@@ -89,14 +88,14 @@ public:
 
   explicit inline VECTOR(const TYPE x, const TYPE y) {
     if (int(SIZE) - 2 > 0)
-      memset( &((*this)[2]), 0, (SIZE - 2) * sizeof(TYPE) );
+      memset(&((*this)[2]), 0, (SIZE - 2) * sizeof(TYPE));
 
-    set(x,y);
+    set(x, y);
   }
 
   explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z) {
     if (int(SIZE) - 3 > 0)
-      memset( &((*this)[3]), 0, (SIZE - 3) * sizeof(TYPE) );
+      memset(&((*this)[3]), 0, (SIZE - 3) * sizeof(TYPE));
 
     set(x, y, z);
   }
@@ -117,117 +116,117 @@ public:
     (*this)[0] = x;
   }
   inline void set(const TYPE x, const TYPE y) {
-    assert(SIZE>1);
+    assert(SIZE > 1);
     (*this)[0] = x;
     (*this)[1] = y;
   }
   inline void set(const TYPE x, const TYPE y, const TYPE z) {
-    assert(SIZE>2);
+    assert(SIZE > 2);
     (*this)[0] = x;
     (*this)[1] = y;
     (*this)[2] = z;
   }
   inline void set(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
-    assert(SIZE>3);
+    assert(SIZE > 3);
     (*this)[0] = x;
     (*this)[1] = y;
     (*this)[2] = z;
     (*this)[3] = w;
   }
   inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
-    assert(SIZE>2);
-    memcpy( &((*this)[0]), &(v.array[0]), 2 * sizeof(TYPE) );
+    assert(SIZE > 2);
+    memcpy(&((*this)[0]), &(v.array[0]), 2 * sizeof(TYPE));
     (*this)[2] = z;
   }
   inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
-    assert(SIZE>3);
-    memcpy( &((*this)[0]), &(v.array[0]), 2 * sizeof(TYPE) );
+    assert(SIZE > 3);
+    memcpy(&((*this)[0]), &(v.array[0]), 2 * sizeof(TYPE));
     (*this)[2] = z;
     (*this)[3] = w;
   }
   inline void set(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
-    assert(SIZE>3);
-    memcpy( &((*this)[0]), &(v.array[0]), 3 * sizeof(TYPE) );
+    assert(SIZE > 3);
+    memcpy(&((*this)[0]), &(v.array[0]), 3 * sizeof(TYPE));
     (*this)[3] = w;
   }
   inline void set(const Vector<TYPE, SIZE, OTYPE> &v) {
-    memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE) );
+    memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE));
   }
   inline void set(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
-    memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE) );
+    memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE));
   }
   inline void get(TYPE &x) const {
     x = (*this)[0];
   }
-  inline void get(TYPE &x,TYPE &y) const {
-    assert(SIZE>1);
+  inline void get(TYPE &x, TYPE &y) const {
+    assert(SIZE > 1);
     x = (*this)[0];
     y = (*this)[1];
   }
-  inline void get(TYPE &x,TYPE &y,TYPE &z) const {
-    assert(SIZE>2);
+  inline void get(TYPE &x, TYPE &y, TYPE &z) const {
+    assert(SIZE > 2);
     x = (*this)[0];
     y = (*this)[1];
     z = (*this)[2];
   }
-  inline void get(TYPE &x,TYPE &y,TYPE &z,TYPE &w) const {
-    assert(SIZE>3);
+  inline void get(TYPE &x, TYPE &y, TYPE &z, TYPE &w) const {
+    assert(SIZE > 3);
     x = (*this)[0];
     y = (*this)[1];
     z = (*this)[2];
     w = (*this)[3];
   }
 
-  //convenient accessor for coordinates
+  // convenient accessor for coordinates
   inline TYPE x() const {
     return (*this)[0];
   }
   inline TYPE y() const {
-    assert(SIZE>1);
+    assert(SIZE > 1);
     return (*this)[1];
   }
   inline TYPE z() const {
-    assert(SIZE>2);
+    assert(SIZE > 2);
     return (*this)[2];
   }
   inline TYPE w() const {
-    assert(SIZE>3);
+    assert(SIZE > 3);
     return (*this)[3];
   }
 
-  inline TYPE& x() {
+  inline TYPE &x() {
     return (*this)[0];
   }
-  inline TYPE& y() {
-    assert(SIZE>1);
+  inline TYPE &y() {
+    assert(SIZE > 1);
     return (*this)[1];
   }
-  inline TYPE& z() {
-    assert(SIZE>2);
+  inline TYPE &z() {
+    assert(SIZE > 2);
     return (*this)[2];
   }
-  inline TYPE& w() {
-    assert(SIZE>3);
+  inline TYPE &w() {
+    assert(SIZE > 3);
     return (*this)[3];
   }
 
-  inline TYPE width()  const {
+  inline TYPE width() const {
     return x();
   }
   inline TYPE height() const {
     return y();
   }
-  inline TYPE depth()  const {
+  inline TYPE depth() const {
     return z();
   }
 
-  inline TYPE& width()  {
+  inline TYPE &width() {
     return x();
   }
-  inline TYPE& height() {
+  inline TYPE &height() {
     return y();
   }
-  inline TYPE& depth()  {
+  inline TYPE &depth() {
     return z();
   }
 
@@ -244,16 +243,16 @@ public:
     return w();
   }
 
-  inline TYPE& r() {
+  inline TYPE &r() {
     return x();
   }
-  inline TYPE& g() {
+  inline TYPE &g() {
     return y();
   }
-  inline TYPE& b() {
+  inline TYPE &b() {
     return z();
   }
-  inline TYPE& a() {
+  inline TYPE &a() {
     return w();
   }
 
@@ -270,16 +269,16 @@ public:
     return w();
   }
 
-  inline TYPE& s() {
+  inline TYPE &s() {
     return x();
   }
-  inline TYPE& t() {
+  inline TYPE &t() {
     return y();
   }
-  inline TYPE& p() {
+  inline TYPE &p() {
     return z();
   }
-  inline TYPE& q() {
+  inline TYPE &q() {
     return w();
   }
 
@@ -325,42 +324,40 @@ public:
     return z();
   }
 
-
-
-//    inline VECTOR & operator*=(const OTYPE );
-  inline VECTOR & operator*=(const TYPE );
-  inline VECTOR & operator*=(const VECTOR &);
-//    inline VECTOR & operator/=(const OTYPE );
-  inline VECTOR & operator/=(const TYPE );
-  inline VECTOR & operator/=(const VECTOR &);
-//    inline VECTOR & operator+=(const OTYPE );
-  inline VECTOR & operator+=(const TYPE );
-  inline VECTOR & operator+=(const VECTOR &);
-//    inline VECTOR & operator-=(const OTYPE );
-  inline VECTOR & operator-=(const TYPE );
-  inline VECTOR & operator-=(const VECTOR &);
-  inline VECTOR & operator^=(const VECTOR &);
+  //    inline VECTOR & operator*=(const OTYPE );
+  inline VECTOR &operator*=(const TYPE);
+  inline VECTOR &operator*=(const VECTOR &);
+  //    inline VECTOR & operator/=(const OTYPE );
+  inline VECTOR &operator/=(const TYPE);
+  inline VECTOR &operator/=(const VECTOR &);
+  //    inline VECTOR & operator+=(const OTYPE );
+  inline VECTOR &operator+=(const TYPE);
+  inline VECTOR &operator+=(const VECTOR &);
+  //    inline VECTOR & operator-=(const OTYPE );
+  inline VECTOR &operator-=(const TYPE);
+  inline VECTOR &operator-=(const VECTOR &);
+  inline VECTOR &operator^=(const VECTOR &);
 
   inline bool operator>(const VECTOR &) const;
   inline bool operator<(const VECTOR &) const;
   inline bool operator!=(const VECTOR &) const;
   inline bool operator==(const VECTOR &) const;
-  inline VECTOR & fill(const TYPE obj);
-  inline TYPE norm () const;
-  inline TYPE length () const {
+  inline VECTOR &fill(const TYPE obj);
+  inline TYPE norm() const;
+  inline TYPE length() const {
     return norm();
   }
-  inline VECTOR & normalize () {
+  inline VECTOR &normalize() {
     OTYPE tmp = 0;
 
-    for (unsigned int i=0; i<SIZE; ++i)
+    for (unsigned int i = 0; i < SIZE; ++i)
       tmp += tlpsqr<TYPE, OTYPE>((*this)[i]);
 
     if (tmp < sqrt(std::numeric_limits<TYPE>::epsilon())) {
       return *this;
     }
 
-    for (unsigned int i=0; i<SIZE; ++i) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
       if ((*this)[i] < 0.)
         (*this)[i] = -tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>((*this)[i]) / tmp);
       else
@@ -369,7 +366,7 @@ public:
 
     return *this;
   }
-  inline DTYPE dist (const VECTOR &) const;
+  inline DTYPE dist(const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;
 };
 
@@ -383,7 +380,6 @@ inline TYPE dist(const VECTOR &a, const VECTOR &b) {
   return a.dist(b);
 }
 
-
 /**
   * Return the minimun of each dimension of the two vectors
   * for instance for a 2 vectors of dim 2 :
@@ -393,7 +389,7 @@ TEMPLATEVECTOR
 inline VECTOR minVector(const VECTOR &u, const VECTOR &v) {
   VECTOR tmp;
 
-  for(unsigned int i = 0; i<SIZE; ++i)
+  for (unsigned int i = 0; i < SIZE; ++i)
     tmp[i] = std::min(u[i], v[i]);
 
   return tmp;
@@ -404,10 +400,10 @@ inline VECTOR minVector(const VECTOR &u, const VECTOR &v) {
   * max(V1, V2) = (max(V1[0], v2[0]), max(V1[1], v2[1))
   */
 TEMPLATEVECTOR
-inline VECTOR maxVector(const VECTOR &u, const VECTOR &v)  {
+inline VECTOR maxVector(const VECTOR &u, const VECTOR &v) {
   VECTOR tmp;
 
-  for(unsigned int i = 0; i<SIZE; ++i)
+  for (unsigned int i = 0; i < SIZE; ++i)
     tmp[i] = std::max(u[i], v[i]);
 
   return tmp;
@@ -416,40 +412,40 @@ inline VECTOR maxVector(const VECTOR &u, const VECTOR &v)  {
 TEMPLATEVECTOR
 inline VECTOR operator*(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator*(const TYPE  , const VECTOR &);
+inline VECTOR operator*(const TYPE, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator*(const VECTOR &, const TYPE );
+inline VECTOR operator*(const VECTOR &, const TYPE);
 
-//TEMPLATEVECTOR
-//inline VECTOR operator*(const OTYPE  , const VECTOR &);
-//TEMPLATEVECTOR
-//inline VECTOR operator*(const VECTOR &, const OTYPE );
+// TEMPLATEVECTOR
+// inline VECTOR operator*(const OTYPE  , const VECTOR &);
+// TEMPLATEVECTOR
+// inline VECTOR operator*(const VECTOR &, const OTYPE );
 
 TEMPLATEVECTOR
 inline VECTOR operator+(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator+(const VECTOR &, const TYPE );
-//TEMPLATEVECTOR
-//inline VECTOR operator+(const VECTOR &, const OTYPE );
+inline VECTOR operator+(const VECTOR &, const TYPE);
+// TEMPLATEVECTOR
+// inline VECTOR operator+(const VECTOR &, const OTYPE );
 
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator-(const VECTOR &, const TYPE );
-//TEMPLATEVECTOR
-//inline VECTOR operator-(const VECTOR &, const OTYPE );
+inline VECTOR operator-(const VECTOR &, const TYPE);
+// TEMPLATEVECTOR
+// inline VECTOR operator-(const VECTOR &, const OTYPE );
 
 TEMPLATEVECTOR
 inline VECTOR operator/(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator/(const VECTOR &, const TYPE );
-//TEMPLATEVECTOR
-//inline VECTOR operator/(const VECTOR &, const OTYPE );
+inline VECTOR operator/(const VECTOR &, const TYPE);
+// TEMPLATEVECTOR
+// inline VECTOR operator/(const VECTOR &, const OTYPE );
 
 TEMPLATEVECTOR
 inline VECTOR operator^(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator-(const VECTOR&);
+inline VECTOR operator-(const VECTOR &);
 /**
   * @brief typedef for 2D vector of unsigned int
   */
@@ -489,20 +485,20 @@ typedef Vector<double, 4, long double> Vec4d;
 /**
   * @brief typedef for 2D vector of float
   */
-typedef Vector<float,  2, double> Vec2f;
+typedef Vector<float, 2, double> Vec2f;
 /**
   * @brief typedef for 3D vector of float
   */
-typedef Vector<float,  3, double> Vec3f;
+typedef Vector<float, 3, double> Vec3f;
 /**
   * @brief typedef for 4D vector of float
   */
-typedef Vector<float,  4, double> Vec4f;
+typedef Vector<float, 4, double> Vec4f;
 }
 
 #ifdef _MSC_VER
-//template<unsigned int SIZE>
-static double sqrt(tlp::Vector<float, 5>& v) {
+// template<unsigned int SIZE>
+static double sqrt(tlp::Vector<float, 5> &v) {
   return sqrt((double)v[0]);
 }
 
@@ -515,7 +511,7 @@ TLP_BEGIN_HASH_NAMESPACE {
   size_t hash_vector(const tlp::VECTOR &v) {
     size_t seed = 0;
 
-    for (unsigned int i = 0 ; i < SIZE ; ++i) {
+    for (unsigned int i = 0; i < SIZE; ++i) {
       hash_combine(seed, v[i]);
     }
 
@@ -605,9 +601,8 @@ TLP_BEGIN_HASH_NAMESPACE {
       return hash_vector(v);
     }
   };
-
-
-} TLP_END_HASH_NAMESPACE
+}
+TLP_END_HASH_NAMESPACE
 
 #include "cxx/Vector.cxx"
 

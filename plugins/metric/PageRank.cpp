@@ -26,12 +26,11 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // d
-  "Enables to choose a damping factor in ]0,1[.",
+    // d
+    "Enables to choose a damping factor in ]0,1[.",
 
-  // directed
-  "Indicates if the graph should be considered as directed or not."
-};
+    // directed
+    "Indicates if the graph should be considered as directed or not."};
 
 /*@{*/
 /** \file
@@ -57,10 +56,11 @@ static const char *paramHelp[] = {
 /*@}*/
 struct PageRank : public DoubleAlgorithm {
 
-  PLUGININFORMATION("Page Rank","Mohamed Bouklit & David Auber","16/12/10",
+  PLUGININFORMATION("Page Rank", "Mohamed Bouklit & David Auber", "16/12/10",
                     "Nodes measure used for links analysis.<br/>"
-                    "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm that assigns a measure to each node of an 'hyperlinked' graph.",
-                    "2.0","Graph")
+                    "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm "
+                    "that assigns a measure to each node of an 'hyperlinked' graph.",
+                    "2.0", "Graph")
 
   PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<double>("d", paramHelp[0], "0.85");
@@ -71,56 +71,53 @@ struct PageRank : public DoubleAlgorithm {
     double d = 0.85;
     bool directed = true;
 
-    if ( dataSet!=0 ) {
-      dataSet->get("d",d);
-      dataSet->get("directed",directed);
+    if (dataSet != 0) {
+      dataSet->get("d", d);
+      dataSet->get("directed", directed);
     }
 
-    if(d <= 0 || d >= 1) return false;
+    if (d <= 0 || d >= 1)
+      return false;
 
-
-    const std::vector<node>& nodes = graph->nodes();
+    const std::vector<node> &nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
 
     // Initialize the PageRank
     NodeStaticProperty<double> pr(graph);
     NodeStaticProperty<double> next_pr(graph);
 
-    double oon = 1./nbNodes;
+    double oon = 1. / nbNodes;
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-    for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
+    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
       pr[i] = oon;
 
-    const double one_minus_d = (1-d)/nbNodes;
-    const unsigned int kMax = uint(15*log(nbNodes));
+    const double one_minus_d = (1 - d) / nbNodes;
+    const unsigned int kMax = uint(15 * log(nbNodes));
 
-    for(unsigned int k=0; k < kMax + 1; ++k) {
+    for (unsigned int k = 0; k < kMax + 1; ++k) {
       if (directed) {
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-        for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
-          forEach(n, graph->getInNodes(nodes[i]))
-          n_sum += pr.getNodeValue(n)/graph->outdeg(n);
+          forEach(n, graph->getInNodes(nodes[i])) n_sum += pr.getNodeValue(n) / graph->outdeg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
-      }
-      else {
+      } else {
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-        for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
-          forEach(n, graph->getInOutNodes(nodes[i]))
-          n_sum += pr.getNodeValue(n)/graph->deg(n);
+          forEach(n, graph->getInOutNodes(nodes[i])) n_sum += pr.getNodeValue(n) / graph->deg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       }

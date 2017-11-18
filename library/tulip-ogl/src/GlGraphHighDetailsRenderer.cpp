@@ -45,12 +45,10 @@ namespace tlp {
  */
 struct EntityWithDistance {
 
-  EntityWithDistance(const double &dist,EntityLODUnit *entity)
-    :distance(dist),entity(entity),isComplexEntity(false),isNode(false) {
-  }
-  EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
-    :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode) {
-  }
+  EntityWithDistance(const double &dist, EntityLODUnit *entity)
+      : distance(dist), entity(entity), isComplexEntity(false), isNode(false) {}
+  EntityWithDistance(const double &dist, ComplexEntityLODUnit *entity, bool isNode)
+      : distance(dist), entity(entity), isComplexEntity(true), isNode(isNode) {}
 
   double distance;
   EntityLODUnit *entity;
@@ -63,24 +61,26 @@ struct EntityWithDistance {
  */
 struct entityWithDistanceCompare {
   static const GlGraphInputData *inputData;
-  bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
+  bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2) const {
 
     // opaque objects have to be drawn first
     if (e1.isComplexEntity && e2.isComplexEntity) {
       Color e1Color, e2Color;
 
       if (e1.isNode) {
-        e1Color = inputData->getElementColor()->getNodeValue(node(static_cast<ComplexEntityLODUnit*>(e1.entity)->id));
-      }
-      else {
-        e1Color = inputData->getElementColor()->getEdgeValue(edge(static_cast<ComplexEntityLODUnit*>(e1.entity)->id));
+        e1Color = inputData->getElementColor()->getNodeValue(
+            node(static_cast<ComplexEntityLODUnit *>(e1.entity)->id));
+      } else {
+        e1Color = inputData->getElementColor()->getEdgeValue(
+            edge(static_cast<ComplexEntityLODUnit *>(e1.entity)->id));
       }
 
       if (e2.isNode) {
-        e2Color = inputData->getElementColor()->getNodeValue(node(static_cast<ComplexEntityLODUnit*>(e2.entity)->id));
-      }
-      else {
-        e2Color = inputData->getElementColor()->getEdgeValue(edge(static_cast<ComplexEntityLODUnit*>(e2.entity)->id));
+        e2Color = inputData->getElementColor()->getNodeValue(
+            node(static_cast<ComplexEntityLODUnit *>(e2.entity)->id));
+      } else {
+        e2Color = inputData->getElementColor()->getEdgeValue(
+            edge(static_cast<ComplexEntityLODUnit *>(e2.entity)->id));
       }
 
       if (e1Color[3] == 255 && e2Color[3] == 255) {
@@ -112,26 +112,25 @@ struct entityWithDistanceCompare {
 
     // if e1 is further from the viewer than e2,
     // e1 must be drawn before e2
-    if(e1.distance>e2.distance)
+    if (e1.distance > e2.distance)
       return true;
 
     // if e2 is further from the viewer than e1,
     // e2 must be drawn before e2
-    if(e1.distance<e2.distance)
+    if (e1.distance < e2.distance)
       return false;
 
     BoundingBox &bb1 = e1.entity->boundingBox;
     BoundingBox &bb2 = e2.entity->boundingBox;
 
-    if(bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
+    if (bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
       return false;
     else
       return true;
-
   }
 };
 
-const GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
+const GlGraphInputData *entityWithDistanceCompare::inputData = NULL;
 
 /** \brief Comparator to order entities with metric to display labels with metric ordering
  * Comparator to order entities with metric to display labels with metric ordering
@@ -139,7 +138,7 @@ const GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 class GreatThanNode {
 public:
   NumericProperty *metric;
-  bool operator() (pair<node,float> n1,pair<node,float> n2)  {
+  bool operator()(pair<node, float> n1, pair<node, float> n2) {
     return (metric->getNodeDoubleValue(n1.first) > metric->getNodeDoubleValue(n2.first));
   }
 };
@@ -149,7 +148,7 @@ public:
 class GreatThanEdge {
 public:
   NumericProperty *metric;
-  bool operator() (pair<edge,float> e1,pair<edge,float> e2) {
+  bool operator()(pair<edge, float> e1, pair<edge, float> e2) {
     return (metric->getEdgeDoubleValue(e1.first) > metric->getEdgeDoubleValue(e2.first));
   }
 };
@@ -160,16 +159,19 @@ public:
 //
 //===================================================================
 
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData),lodCalculator(NULL),baseScene(NULL),fakeScene(new GlScene) {
+GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData)
+    : GlGraphRenderer(inputData), lodCalculator(NULL), baseScene(NULL), fakeScene(new GlScene) {
   fakeScene->createLayer("fakeLayer");
 }
 //===================================================================
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,GlScene *scene):GlGraphRenderer(inputData),lodCalculator(NULL),baseScene(scene),fakeScene(new GlScene) {
+GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,
+                                                       GlScene *scene)
+    : GlGraphRenderer(inputData), lodCalculator(NULL), baseScene(scene), fakeScene(new GlScene) {
   fakeScene->createLayer("fakeLayer");
 }
 //===================================================================
 GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
-  if(lodCalculator)
+  if (lodCalculator)
     lodCalculator->setAttachedLODCalculator(NULL);
 
   delete lodCalculator;
@@ -177,22 +179,21 @@ GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
   delete fakeScene;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
+void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   if (!inputData->renderingParameters()->isAntialiased()) {
     OpenGlConfigManager::getInst().desactivateAntiAliasing();
   }
 
-  Graph *graph=inputData->getGraph();
+  Graph *graph = inputData->getGraph();
 
   // If we don't init lod calculator : clone the scene one
-  if(!lodCalculator) {
-    if(baseScene) {
-      lodCalculator=baseScene->getCalculator()->clone();
+  if (!lodCalculator) {
+    if (baseScene) {
+      lodCalculator = baseScene->getCalculator()->clone();
       lodCalculator->setAttachedLODCalculator(baseScene->getCalculator());
-    }
-    else {
-      lodCalculator=camera->getScene()->getCalculator()->clone();
+    } else {
+      lodCalculator = camera->getScene()->getCalculator()->clone();
       lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
     }
 
@@ -204,18 +205,19 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   if (!selectionDrawActivate) {
     lodCalculator->setRenderingEntitiesFlag(RenderingAll);
-  }
-  else {
-    lodCalculator->setRenderingEntitiesFlag(static_cast<RenderingEntitiesFlag>(selectionType|RenderingWithoutRemove));
+  } else {
+    lodCalculator->setRenderingEntitiesFlag(
+        static_cast<RenderingEntitiesFlag>(selectionType | RenderingWithoutRemove));
   }
 
   // Fake scene creation
   //  This scene is needed by lod calculator to compute lod
-  fakeScene->setViewport(camera->getViewport()[0],camera->getViewport()[1],camera->getViewport()[2],camera->getViewport()[3]);
+  fakeScene->setViewport(camera->getViewport()[0], camera->getViewport()[1],
+                         camera->getViewport()[2], camera->getViewport()[3]);
   fakeScene->getLayer("fakeLayer")->setSharedCamera(camera);
 
   // LOD computation
-  if(lodCalculator->needEntities()) {
+  if (lodCalculator->needEntities()) {
     GlLODSceneVisitor visitor(lodCalculator, inputData);
     visitor.visit(fakeScene->getLayer("fakeLayer"));
     visitGraph(&visitor);
@@ -223,36 +225,34 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   if (!selectionDrawActivate) {
     lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
-  }
-  else {
+  } else {
     lodCalculator->compute(fakeScene->getViewport(), selectionViewport);
   }
 
   LayersLODVector &layersLODVector = lodCalculator->getResult();
 
-  bool vertexArrayManagerActivated=inputData->getGlVertexArrayManager()->isActivated();
+  bool vertexArrayManagerActivated = inputData->getGlVertexArrayManager()->isActivated();
 
-  if(vertexArrayManagerActivated) {
+  if (vertexArrayManagerActivated) {
     // VertexArrayManager begin
-    if(!selectionDrawActivate) {
-      //inputData->getGlVertexArrayManager()->activate(true);
+    if (!selectionDrawActivate) {
+      // inputData->getGlVertexArrayManager()->activate(true);
       inputData->getGlVertexArrayManager()->beginRendering();
       inputData->getGlGlyphRenderer()->startRendering();
-    }
-    else {
+    } else {
       inputData->getGlVertexArrayManager()->activate(false);
     }
   }
 
   // VertexArrayManager update
-  if(inputData->getGlVertexArrayManager()->haveToCompute()) {
+  if (inputData->getGlVertexArrayManager()->haveToCompute()) {
     GlVertexArrayVisitor vertexArrayVisitor(inputData);
-    visitGraph(&vertexArrayVisitor,true);
+    visitGraph(&vertexArrayVisitor, true);
     inputData->getGlVertexArrayManager()->setHaveToComputeAll(false);
   }
 
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
-  NumericProperty *metric=inputData->parameters->getElementOrderingProperty();
+  NumericProperty *metric = inputData->parameters->getElementOrderingProperty();
   bool displayNodes = inputData->parameters->isDisplayNodes();
   bool displayMetaNodes = inputData->parameters->isDisplayMetaNodes();
   bool displayMetaNodesLabel = inputData->parameters->isViewMetaLabel();
@@ -262,115 +262,120 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   GlEdge glEdge(0);
   glEdge.setSelectionDraw(selectionDrawActivate);
 
-  bool renderOnlyOneNode=false;
+  bool renderOnlyOneNode = false;
 
-  if(!selectionDrawActivate) {
-    Iterator<node> *nonDefaultLayoutNodes = inputData->getElementLayout()->getNonDefaultValuatedNodes();
+  if (!selectionDrawActivate) {
+    Iterator<node> *nonDefaultLayoutNodes =
+        inputData->getElementLayout()->getNonDefaultValuatedNodes();
     Iterator<node> *nonDefaultSizeNodes = inputData->getElementSize()->getNonDefaultValuatedNodes();
 
-    if(!nonDefaultLayoutNodes->hasNext() && !nonDefaultSizeNodes->hasNext())
-      renderOnlyOneNode=true;
+    if (!nonDefaultLayoutNodes->hasNext() && !nonDefaultSizeNodes->hasNext())
+      renderOnlyOneNode = true;
 
     delete nonDefaultLayoutNodes;
     delete nonDefaultSizeNodes;
   }
 
-  if(!inputData->parameters->isElementZOrdered()) {
+  if (!inputData->parameters->isElementZOrdered()) {
 
-    vector<pair<node,float> > nodesMetricOrdered;
-    vector<pair<edge,float> > edgesMetricOrdered;
+    vector<pair<node, float> > nodesMetricOrdered;
+    vector<pair<edge, float> > edgesMetricOrdered;
 
-    //draw nodes and metanodes
-    for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
+    // draw nodes and metanodes
+    for (vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].nodesLODVector.begin();
+         it != layersLODVector[0].nodesLODVector.end(); ++it) {
 
-      if(it->lod<=0)
+      if (it->lod <= 0)
         continue;
 
-      if(filteringProperty) {
-        if(filteringProperty->getNodeValue(node(it->id)))
+      if (filteringProperty) {
+        if (filteringProperty->getNodeValue(node(it->id)))
           continue;
       }
 
-      if(displayNodes || ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(it->id)))) {
-        if (!metric)  {
-          if(selectionDrawActivate) {
-            if((selectionType & RenderingNodes)==0)
+      if (displayNodes ||
+          ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(it->id)))) {
+        if (!metric) {
+          if (selectionDrawActivate) {
+            if ((selectionType & RenderingNodes) == 0)
               continue;
 
-            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::NODE_SELECTED);
+            (*selectionIdMap)[*selectionCurrentId] =
+                SelectedEntity(graph, it->id, SelectedEntity::NODE_SELECTED);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
 
-          glNode.id=it->id;
-          glNode.draw(it->lod,inputData,camera);
-        }
-        else {
+          glNode.id = it->id;
+          glNode.draw(it->lod, inputData, camera);
+        } else {
           nodesMetricOrdered.push_back(make_pair(node(it->id), it->lod));
         }
 
-        if(renderOnlyOneNode)
+        if (renderOnlyOneNode)
           break;
-      }
-      else {
+      } else {
         continue;
       }
     }
 
-    if(metric) {
+    if (metric) {
       // Draw nodes with metric ordering
       GreatThanNode ltn;
-      ltn.metric=metric;
-      sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
+      ltn.metric = metric;
+      sort(nodesMetricOrdered.begin(), nodesMetricOrdered.end(), ltn);
 
       if (!inputData->renderingParameters()->isElementOrderedDescending()) {
         std::reverse(nodesMetricOrdered.begin(), nodesMetricOrdered.end());
       }
 
-      for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
-        if(selectionDrawActivate) {
-          if((selectionType & RenderingNodes)==0)
+      for (vector<pair<node, float> >::iterator it = nodesMetricOrdered.begin();
+           it != nodesMetricOrdered.end(); ++it) {
+        if (selectionDrawActivate) {
+          if ((selectionType & RenderingNodes) == 0)
             continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->first.id,SelectedEntity::NODE_SELECTED);
+          (*selectionIdMap)[*selectionCurrentId] =
+              SelectedEntity(graph, it->first.id, SelectedEntity::NODE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
 
-        glNode.id=it->first.id;
-        glNode.draw(it->second,inputData,camera);
+        glNode.id = it->first.id;
+        glNode.draw(it->second, inputData, camera);
       }
     }
 
-    if(!renderOnlyOneNode) {
+    if (!renderOnlyOneNode) {
 
-      //draw edges
-      for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-        if(it->lod<=0)
+      // draw edges
+      for (vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin();
+           it != layersLODVector[0].edgesLODVector.end(); ++it) {
+        if (it->lod <= 0)
           continue;
 
-        if(filteringProperty) {
-          if(filteringProperty->getEdgeValue(edge(it->id)))
+        if (filteringProperty) {
+          if (filteringProperty->getEdgeValue(edge(it->id)))
             continue;
         }
 
-        if(!displayEdges)
+        if (!displayEdges)
           continue;
 
         if (!metric) {
-          if(selectionDrawActivate) {
-            if((selectionType & RenderingEdges)==0)
+          if (selectionDrawActivate) {
+            if ((selectionType & RenderingEdges) == 0)
               continue;
 
-            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::EDGE_SELECTED);
+            (*selectionIdMap)[*selectionCurrentId] =
+                SelectedEntity(graph, it->id, SelectedEntity::EDGE_SELECTED);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
 
-          glEdge.id=it->id;
-          glEdge.draw(it->lod,inputData,camera);
-        }
-        else {
+          glEdge.id = it->id;
+          glEdge.draw(it->lod, inputData, camera);
+        } else {
           edgesMetricOrdered.push_back(make_pair(edge(it->id), it->lod));
         }
       }
@@ -378,87 +383,91 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       if (metric) {
         // Draw edges with metric ordering
         GreatThanEdge lte;
-        lte.metric=metric;
-        sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
+        lte.metric = metric;
+        sort(edgesMetricOrdered.begin(), edgesMetricOrdered.end(), lte);
 
         if (!inputData->renderingParameters()->isElementOrderedDescending()) {
           reverse(edgesMetricOrdered.begin(), edgesMetricOrdered.end());
         }
 
-        for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
-          if(selectionDrawActivate) {
-            if((selectionType & RenderingEdges)==0)
+        for (vector<pair<edge, float> >::iterator it = edgesMetricOrdered.begin();
+             it != edgesMetricOrdered.end(); ++it) {
+          if (selectionDrawActivate) {
+            if ((selectionType & RenderingEdges) == 0)
               continue;
 
-            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->first.id,SelectedEntity::EDGE_SELECTED);
+            (*selectionIdMap)[*selectionCurrentId] =
+                SelectedEntity(graph, it->first.id, SelectedEntity::EDGE_SELECTED);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
 
-          glEdge.id=it->first.id;
-          glEdge.draw(it->second,inputData,camera);
+          glEdge.id = it->first.id;
+          glEdge.draw(it->second, inputData, camera);
         }
       }
     }
-  }
-  else {
+  } else {
 
-    entityWithDistanceCompare::inputData=inputData;
-    multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
-    Coord camPos=camera->getEyes();
+    entityWithDistanceCompare::inputData = inputData;
+    multiset<EntityWithDistance, entityWithDistanceCompare> entitiesSet;
+    Coord camPos = camera->getEyes();
 
     BoundingBox bb;
     double dist;
 
-    if(!selectionDrawActivate || ((selectionType & RenderingNodes)!=0)) {
+    if (!selectionDrawActivate || ((selectionType & RenderingNodes) != 0)) {
       // Colect complex entities
-      for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
+      for (vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].nodesLODVector.begin();
+           it != layersLODVector[0].nodesLODVector.end(); ++it) {
 
-        if (it->lod<0)
+        if (it->lod < 0)
           continue;
 
-        if(filteringProperty) {
-          if(filteringProperty->getNodeValue(node(it->id)))
-            continue;
-        }
-
-        bb=it->boundingBox;
-        Coord middle((bb[1]+bb[0])/2.f);
-        dist=(double(middle[0])-double(camPos[0]))*(double(middle[0])-double(camPos[0]));
-        dist+=(double(middle[1])-double(camPos[1]))*(double(middle[1])-double(camPos[1]));
-        dist+=(double(middle[2])-double(camPos[2]))*(double(middle[2])-double(camPos[2]));
-        entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
-      }
-    }
-
-    if(!selectionDrawActivate || ((selectionType & RenderingEdges)!=0)) {
-      for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-        if(it->lod<0)
-          continue;
-
-        if(filteringProperty) {
-          if(filteringProperty->getEdgeValue(edge(it->id)))
+        if (filteringProperty) {
+          if (filteringProperty->getNodeValue(node(it->id)))
             continue;
         }
 
         bb = it->boundingBox;
-        Coord middle((bb[0] + bb[1])/2.f);
-        dist=(double(middle[0])-double(camPos[0]))*(double(middle[0])-double(camPos[0]));
-        dist+=(double(middle[1])-double(camPos[1]))*(double(middle[1])-double(camPos[1]));
-        dist+=(double(middle[2])-double(camPos[2]))*(double(middle[2])-double(camPos[2]));
-        entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
+        Coord middle((bb[1] + bb[0]) / 2.f);
+        dist = (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
+        dist += (double(middle[1]) - double(camPos[1])) * (double(middle[1]) - double(camPos[1]));
+        dist += (double(middle[2]) - double(camPos[2])) * (double(middle[2]) - double(camPos[2]));
+        entitiesSet.insert(EntityWithDistance(dist, &(*it), true));
+      }
+    }
+
+    if (!selectionDrawActivate || ((selectionType & RenderingEdges) != 0)) {
+      for (vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin();
+           it != layersLODVector[0].edgesLODVector.end(); ++it) {
+        if (it->lod < 0)
+          continue;
+
+        if (filteringProperty) {
+          if (filteringProperty->getEdgeValue(edge(it->id)))
+            continue;
+        }
+
+        bb = it->boundingBox;
+        Coord middle((bb[0] + bb[1]) / 2.f);
+        dist = (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
+        dist += (double(middle[1]) - double(camPos[1])) * (double(middle[1]) - double(camPos[1]));
+        dist += (double(middle[2]) - double(camPos[2])) * (double(middle[2]) - double(camPos[2]));
+        entitiesSet.insert(EntityWithDistance(dist, &(*it), false));
       }
     }
 
     // Draw
-    for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
+    for (multiset<EntityWithDistance, entityWithDistanceCompare>::iterator it = entitiesSet.begin();
+         it != entitiesSet.end(); ++it) {
       // Complex entities
-      ComplexEntityLODUnit *entity=static_cast<ComplexEntityLODUnit*>(it->entity);
+      ComplexEntityLODUnit *entity = static_cast<ComplexEntityLODUnit *>(it->entity);
 
+      if (it->isNode) {
 
-      if(it->isNode) {
-
-        if(displayNodes || ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(entity->id)))) {
+        if (displayNodes ||
+            ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(entity->id)))) {
 
           // All opaque elements have been drawn, turn the depth buffer read-only
           // in order for a transparent object to not occlude another transparent object
@@ -466,25 +475,25 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
             glDepthMask(GL_FALSE);
           }
 
-          if(selectionDrawActivate) {
-            if((selectionType & RenderingNodes)==0)
+          if (selectionDrawActivate) {
+            if ((selectionType & RenderingNodes) == 0)
               continue;
 
-            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::NODE_SELECTED);
+            (*selectionIdMap)[*selectionCurrentId] =
+                SelectedEntity(graph, entity->id, SelectedEntity::NODE_SELECTED);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
 
-          glNode.id=entity->id;
-          glNode.draw(entity->lod,inputData,camera);
+          glNode.id = entity->id;
+          glNode.draw(entity->lod, inputData, camera);
 
-          if(renderOnlyOneNode)
+          if (renderOnlyOneNode)
             break;
         }
 
-      }
-      else {
-        if(!displayEdges)
+      } else {
+        if (!displayEdges)
           continue;
 
         // All opaque elements have been drawn, turn the depth buffer read-only
@@ -493,32 +502,31 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
           glDepthMask(GL_FALSE);
         }
 
-        if(selectionDrawActivate) {
-          if((selectionType & RenderingEdges)==0)
+        if (selectionDrawActivate) {
+          if ((selectionType & RenderingEdges) == 0)
             continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::EDGE_SELECTED);
+          (*selectionIdMap)[*selectionCurrentId] =
+              SelectedEntity(graph, entity->id, SelectedEntity::EDGE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
 
-        glEdge.id=entity->id;
-        glEdge.draw(entity->lod,inputData,camera);
+        glEdge.id = entity->id;
+        glEdge.draw(entity->lod, inputData, camera);
       }
     }
 
     glDepthMask(GL_TRUE);
-
   }
 
-  if(!selectionDrawActivate) {
-    if(vertexArrayManagerActivated) {
+  if (!selectionDrawActivate) {
+    if (vertexArrayManagerActivated) {
       inputData->getGlVertexArrayManager()->endRendering();
       inputData->getGlGlyphRenderer()->endRendering();
     }
-  }
-  else {
-    selectionDrawActivate=false;
+  } else {
+    selectionDrawActivate = false;
     inputData->getGlVertexArrayManager()->activate(true);
     OpenGlConfigManager::getInst().activateAntiAliasing();
     return;
@@ -528,132 +536,139 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     Label draw
   */
   OcclusionTest occlusionTest;
-  bool labelDensityAtZero=true;
+  bool labelDensityAtZero = true;
 
-  if(inputData->parameters->getLabelsDensity()!=-100)
-    labelDensityAtZero=false;
+  if (inputData->parameters->getLabelsDensity() != -100)
+    labelDensityAtZero = false;
 
-  if(!labelDensityAtZero) {
+  if (!labelDensityAtZero) {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_LIGHTING);
-    glDepthFunc(GL_ALWAYS );
+    glDepthFunc(GL_ALWAYS);
     glDisable(GL_CULL_FACE);
     glDisable(GL_COLOR_MATERIAL);
 
     // Draw Labels for selected entities
-    drawLabelsForComplexEntities(true,&occlusionTest,layersLODVector[0]);
+    drawLabelsForComplexEntities(true, &occlusionTest, layersLODVector[0]);
 
     // Draw Labels for unselected entities
-    drawLabelsForComplexEntities(false,&occlusionTest,layersLODVector[0]);
+    drawLabelsForComplexEntities(false, &occlusionTest, layersLODVector[0]);
 
     glPopAttrib();
   }
 
-  selectionDrawActivate=false;
+  selectionDrawActivate = false;
 
   OpenGlConfigManager::getInst().activateAntiAliasing();
-
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {
+void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitiesFlag type, int x,
+                                                int y, int w, int h,
+                                                vector<SelectedEntity> &selectedEntities) {
   map<unsigned int, SelectedEntity> idToEntity;
-  unsigned int id=1;
+  unsigned int id = 1;
 
-  unsigned int size=inputData->getGraph()->numberOfNodes() + inputData->getGraph()->numberOfEdges();
+  unsigned int size =
+      inputData->getGraph()->numberOfNodes() + inputData->getGraph()->numberOfEdges();
 
-  //Allocate memory to store the result oh the selection
-  GLuint (*selectBuf)[4] = new GLuint[size][4];
-  glSelectBuffer(size*4 , reinterpret_cast<GLuint *>(selectBuf));
-  //Activate Open Gl Selection mode
+  // Allocate memory to store the result oh the selection
+  GLuint(*selectBuf)[4] = new GLuint[size][4];
+  glSelectBuffer(size * 4, reinterpret_cast<GLuint *>(selectBuf));
+  // Activate Open Gl Selection mode
   glRenderMode(GL_SELECT);
   glInitNames();
   glPushName(0);
 
-  initSelectionRendering(type, x, y, w, h, idToEntity,id);
+  initSelectionRendering(type, x, y, w, h, idToEntity, id);
 
-  draw(20,camera);
+  draw(20, camera);
 
   glFlush();
   GLint hits = glRenderMode(GL_RENDER);
 
-  while(hits>0) {
-    selectedEntities.push_back(idToEntity[selectBuf[hits-1][3]]);
+  while (hits > 0) {
+    selectedEntities.push_back(idToEntity[selectBuf[hits - 1][3]]);
     hits--;
   }
 
   delete[] selectBuf;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type, int x, int y, int w, int h, map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
-  selectionType=type;
-  selectionIdMap=&idMap;
-  selectionCurrentId=&currentId;
-  selectionDrawActivate=true;
+void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type, int x, int y,
+                                                        int w, int h,
+                                                        map<unsigned int, SelectedEntity> &idMap,
+                                                        unsigned int &currentId) {
+  selectionType = type;
+  selectionIdMap = &idMap;
+  selectionCurrentId = &currentId;
+  selectionDrawActivate = true;
   selectionViewport[0] = x;
   selectionViewport[1] = y;
   selectionViewport[2] = w;
   selectionViewport[3] = h;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit) {
-  Graph *graph=inputData->getGraph();
-  BooleanProperty *selectionProperty=inputData->getElementSelected();
-  bool viewOutScreenLabel=inputData->parameters->isViewOutScreenLabel();
-  NumericProperty *metric=inputData->parameters->getElementOrderingProperty();
+void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
+                                                              OcclusionTest *occlusionTest,
+                                                              LayerLODUnit &layerLODUnit) {
+  Graph *graph = inputData->getGraph();
+  BooleanProperty *selectionProperty = inputData->getElementSelected();
+  bool viewOutScreenLabel = inputData->parameters->isViewOutScreenLabel();
+  NumericProperty *metric = inputData->parameters->getElementOrderingProperty();
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
 
-  vector<pair<node,float> > nodesMetricOrdered;
-  vector<pair<edge,float> > edgesMetricOrdered;
+  vector<pair<node, float> > nodesMetricOrdered;
+  vector<pair<edge, float> > edgesMetricOrdered;
   GlNode glNode(0);
   GlEdge glEdge(0);
 
   Iterator<node> *nonDefaultLabelNodes = inputData->getElementLabel()->getNonDefaultValuatedNodes();
   Iterator<edge> *nonDefaultLabelEdges = inputData->getElementLabel()->getNonDefaultValuatedEdges();
 
-  bool nodeLabelEmpty=(!nonDefaultLabelNodes->hasNext())
-                      && inputData->getElementLabel()->getNodeDefaultStringValue()=="";
-  bool edgeLabelEmpty=(!nonDefaultLabelEdges->hasNext())
-                      && inputData->getElementLabel()->getEdgeDefaultStringValue()=="";
+  bool nodeLabelEmpty = (!nonDefaultLabelNodes->hasNext()) &&
+                        inputData->getElementLabel()->getNodeDefaultStringValue() == "";
+  bool edgeLabelEmpty = (!nonDefaultLabelEdges->hasNext()) &&
+                        inputData->getElementLabel()->getEdgeDefaultStringValue() == "";
 
   delete nonDefaultLabelNodes;
   delete nonDefaultLabelEdges;
 
-  bool viewNodeLabel=inputData->parameters->isViewNodeLabel();
+  bool viewNodeLabel = inputData->parameters->isViewNodeLabel();
 
   // Draw Labels for Nodes
-  if(viewNodeLabel && !nodeLabelEmpty) {
+  if (viewNodeLabel && !nodeLabelEmpty) {
     node n;
 
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin(); it!=layerLODUnit.nodesLODVector.end(); ++it) {
-      if(it->lod<0 && !viewOutScreenLabel)
+    for (vector<ComplexEntityLODUnit>::iterator it = layerLODUnit.nodesLODVector.begin();
+         it != layerLODUnit.nodesLODVector.end(); ++it) {
+      if (it->lod < 0 && !viewOutScreenLabel)
         continue;
 
       if (it->lod < 10 && inputData->renderingParameters()->isLabelScaled())
         continue;
 
-      float lod=it->lod;
+      float lod = it->lod;
 
-      if(viewOutScreenLabel && lod<0)
-        lod=-lod;
+      if (viewOutScreenLabel && lod < 0)
+        lod = -lod;
 
-      n.id=it->id;
+      n.id = it->id;
 
       if (filteringProperty && filteringProperty->getNodeValue(n)) {
         continue;
       }
 
-      if(selectionProperty->getNodeValue(n)==drawSelected) {
-        if(!metric) {
+      if (selectionProperty->getNodeValue(n) == drawSelected) {
+        if (!metric) {
           // Not metric ordered
-          if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
-            glNode.id=n.id;
-            glNode.drawLabel(occlusionTest,inputData,lod,layerLODUnit.camera);
+          if ((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
+            glNode.id = n.id;
+            glNode.drawLabel(occlusionTest, inputData, lod, layerLODUnit.camera);
           }
-        }
-        else {
+        } else {
           // Metric ordered
-          if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
-            nodesMetricOrdered.push_back(pair<node,float>(n,lod));
+          if ((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
+            nodesMetricOrdered.push_back(pair<node, float>(n, lod));
           }
         }
       }
@@ -661,63 +676,64 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
     // If not Metric ordered : a this point selected nodes are draw
 
-    if(metric) {
+    if (metric) {
       // Draw selected nodes label with metric ordering
       GreatThanNode ltn;
-      ltn.metric=metric;
-      sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
+      ltn.metric = metric;
+      sort(nodesMetricOrdered.begin(), nodesMetricOrdered.end(), ltn);
 
-      for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
-        glNode.id=it->first.id;
-        glNode.drawLabel(occlusionTest,inputData,it->second,layerLODUnit.camera);
+      for (vector<pair<node, float> >::iterator it = nodesMetricOrdered.begin();
+           it != nodesMetricOrdered.end(); ++it) {
+        glNode.id = it->first.id;
+        glNode.drawLabel(occlusionTest, inputData, it->second, layerLODUnit.camera);
       }
     }
   }
 
   // Draw Labels for Edges
-  if(inputData->parameters->isViewEdgeLabel() && !edgeLabelEmpty) {
+  if (inputData->parameters->isViewEdgeLabel() && !edgeLabelEmpty) {
     edge e;
 
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.edgesLODVector.begin(); it!=layerLODUnit.edgesLODVector.end(); ++it) {
-      if(it->lod<0 && !viewOutScreenLabel)
+    for (vector<ComplexEntityLODUnit>::iterator it = layerLODUnit.edgesLODVector.begin();
+         it != layerLODUnit.edgesLODVector.end(); ++it) {
+      if (it->lod < 0 && !viewOutScreenLabel)
         continue;
 
       if (it->lod < 5)
         continue;
 
-      e.id=it->id;
+      e.id = it->id;
 
       if (filteringProperty && filteringProperty->getEdgeValue(e)) {
         continue;
       }
 
-      if(selectionProperty->getEdgeValue(e) == drawSelected) {
-        if(!metric) {
+      if (selectionProperty->getEdgeValue(e) == drawSelected) {
+        if (!metric) {
           // Not metric ordered
-          glEdge.id=e.id;
-          glEdge.drawLabel(occlusionTest,inputData,it->lod,layerLODUnit.camera);
-        }
-        else {
+          glEdge.id = e.id;
+          glEdge.drawLabel(occlusionTest, inputData, it->lod, layerLODUnit.camera);
+        } else {
           // Metric ordered
-          edgesMetricOrdered.push_back(pair<edge,float>(e,it->lod));
+          edgesMetricOrdered.push_back(pair<edge, float>(e, it->lod));
         }
       }
     }
 
     // If not Metric ordered : a this point selected edges are draw
-    if(metric) {
+    if (metric) {
       // Draw selected edges label with metric ordering
 
       GreatThanEdge lte;
-      lte.metric=metric;
-      sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
+      lte.metric = metric;
+      sort(edgesMetricOrdered.begin(), edgesMetricOrdered.end(), lte);
 
-      for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
-        glEdge.id=it->first.id;
-        glEdge.drawLabel(occlusionTest,inputData,it->second,layerLODUnit.camera);
+      for (vector<pair<edge, float> >::iterator it = edgesMetricOrdered.begin();
+           it != edgesMetricOrdered.end(); ++it) {
+        glEdge.id = it->first.id;
+        glEdge.drawLabel(occlusionTest, inputData, it->second, layerLODUnit.camera);
       }
     }
   }
 }
-
 }

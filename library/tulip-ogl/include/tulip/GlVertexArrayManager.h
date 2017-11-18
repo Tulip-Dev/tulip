@@ -50,7 +50,6 @@ class DoubleProperty;
 class TLP_GL_SCOPE GlVertexArrayManager : private Observable {
 
 public:
-
   /**
    * Constructor
    * \param inputData : input data to use for this GlVertexArrayManager
@@ -101,11 +100,13 @@ public:
   void endRendering();
 
   /**
-   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need to render an edge
+   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need
+   * to render an edge
    */
   void addEdge(GlEdge *edge);
   /**
-   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need to render a node
+   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need
+   * to render a node
    */
   void addNode(GlNode *node);
 
@@ -142,26 +143,25 @@ public:
   void activatePointNodeDisplay(GlNode *node, bool selected);
 
 protected:
-
   void propertyValueChanged(tlp::PropertyInterface *property);
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   void clearLayoutData();
   void clearColorData();
   void clearData();
   void initObservers();
-  void clearObservers(PropertyInterface *deletedProperty=NULL);
+  void clearObservers(PropertyInterface *deletedProperty = NULL);
 
   GlGraphInputData *inputData;
   Graph *graph;
-  //Store properties used to compute the arrays
-  LayoutProperty* layoutProperty;
-  SizeProperty* sizeProperty;
-  IntegerProperty* shapeProperty;
-  DoubleProperty* rotationProperty;
-  ColorProperty* colorProperty;
-  ColorProperty* borderColorProperty;
-  DoubleProperty* borderWidthProperty;
+  // Store properties used to compute the arrays
+  LayoutProperty *layoutProperty;
+  SizeProperty *sizeProperty;
+  IntegerProperty *shapeProperty;
+  DoubleProperty *rotationProperty;
+  ColorProperty *colorProperty;
+  ColorProperty *borderColorProperty;
+  DoubleProperty *borderWidthProperty;
   IntegerProperty *srcAnchorShapeProperty;
   IntegerProperty *tgtAnchorShapeProperty;
   SizeProperty *srcAnchorSizeProperty;
@@ -184,7 +184,6 @@ protected:
   bool colorInterpolate;
   bool sizeInterpolate;
   bool viewArrow;
-
 
   std::vector<Coord> linesCoordsArray;
   std::vector<Color> linesColorsArray;
@@ -216,8 +215,8 @@ protected:
   std::vector<GLuint> pointsEdgesRenderingIndexArray;
   std::vector<GLuint> pointsEdgesSelectedRenderingIndexArray;
 
-  TLP_HASH_MAP<unsigned int, std::pair<unsigned int,unsigned int> > edgeToLineIndexVector;
-  TLP_HASH_MAP<unsigned int, std::pair<unsigned int,unsigned int> > edgeToQuadIndexVector;
+  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int> > edgeToLineIndexVector;
+  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int> > edgeToQuadIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToBottomOulineIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToTopOutlineIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToPointIndexVector;
@@ -241,9 +240,7 @@ protected:
 
   bool verticesUploadNeeded;
   bool colorsUploadNeeded;
-
 };
-
 }
 
 #endif

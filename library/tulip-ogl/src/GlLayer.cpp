@@ -23,35 +23,34 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
 
-
 using namespace std;
 
 namespace tlp {
 
-GlLayer::GlLayer(const std::string& name,bool workingLayer)
-  :name(name),scene(0),camera(new Camera(0)),sharedCamera(false),workingLayer(workingLayer) {
+GlLayer::GlLayer(const std::string &name, bool workingLayer)
+    : name(name), scene(0), camera(new Camera(0)), sharedCamera(false), workingLayer(workingLayer) {
   composite.addLayerParent(this);
 }
 
-GlLayer::GlLayer(const std::string& name,Camera *camera,bool workingLayer)
-  :name(name),scene(0),camera(camera),sharedCamera(true),workingLayer(workingLayer) {
+GlLayer::GlLayer(const std::string &name, Camera *camera, bool workingLayer)
+    : name(name), scene(0), camera(camera), sharedCamera(true), workingLayer(workingLayer) {
   composite.addLayerParent(this);
 }
 
 GlLayer::~GlLayer() {
-  if(!sharedCamera)
+  if (!sharedCamera)
     delete camera;
 
   composite.removeLayerParent(this);
 }
 
 void GlLayer::setScene(GlScene *scene) {
-  this->scene=scene;
+  this->scene = scene;
   camera->setScene(scene);
 }
 
-void GlLayer::setCamera(Camera* camera) {
-  Camera *oldCamera=this->camera;
+void GlLayer::setCamera(Camera *camera) {
+  Camera *oldCamera = this->camera;
   this->camera = camera;
 
   if (!sharedCamera)
@@ -61,7 +60,7 @@ void GlLayer::setCamera(Camera* camera) {
 }
 
 void GlLayer::setSharedCamera(Camera *camera) {
-  Camera *oldCamera=this->camera;
+  Camera *oldCamera = this->camera;
   this->camera = camera;
 
   if (!sharedCamera)
@@ -71,8 +70,8 @@ void GlLayer::setSharedCamera(Camera *camera) {
 }
 
 void GlLayer::set2DMode() {
-  Camera *oldCamera=this->camera;
-  this->camera = new Camera(oldCamera->getScene(),false);
+  Camera *oldCamera = this->camera;
+  this->camera = new Camera(oldCamera->getScene(), false);
 
   if (!sharedCamera)
     delete oldCamera;
@@ -81,124 +80,119 @@ void GlLayer::set2DMode() {
 }
 
 void GlLayer::setVisible(bool visible) {
-  if(composite.isVisible()==visible)
+  if (composite.isVisible() == visible)
     return;
 
   composite.setVisible(visible);
 
-  if(scene)
-    scene->notifyModifyLayer(this->name,this);
+  if (scene)
+    scene->notifyModifyLayer(this->name, this);
 }
 
 void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {
-  if(composite.isVisible()) {
+  if (composite.isVisible()) {
     visitor->visit(this);
     composite.acceptVisitor(visitor);
   }
 }
 
-void GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name) {
-  composite.addGlEntity(entity,name);
+void GlLayer::addGlEntity(GlSimpleEntity *entity, const std::string &name) {
+  composite.addGlEntity(entity, name);
 
-  if(scene)
-    scene->notifyModifyLayer(this->name,this);
+  if (scene)
+    scene->notifyModifyLayer(this->name, this);
 }
 
 void GlLayer::addGraph(tlp::Graph *graph, const string &name) {
-  GlGraphComposite* graphComposite=new GlGraphComposite(graph,scene);
-  addGlEntity(graphComposite,name);
+  GlGraphComposite *graphComposite = new GlGraphComposite(graph, scene);
+  addGlEntity(graphComposite, name);
 }
 
 void GlLayer::deleteGlEntity(const std::string &key) {
   composite.deleteGlEntity(key);
 
-  if(scene)
-    scene->notifyModifyLayer(this->name,this);
+  if (scene)
+    scene->notifyModifyLayer(this->name, this);
 }
 
 void GlLayer::deleteGlEntity(GlSimpleEntity *entity) {
   composite.deleteGlEntity(entity);
 
-  if(scene)
-    scene->notifyModifyLayer(this->name,this);
+  if (scene)
+    scene->notifyModifyLayer(this->name, this);
 }
 
-GlSimpleEntity* GlLayer::findGlEntity(const std::string &key) {
+GlSimpleEntity *GlLayer::findGlEntity(const std::string &key) {
   return composite.findGlEntity(key);
 }
 
-const std::map<std::string, GlSimpleEntity*> &GlLayer::getGlEntities() const {
+const std::map<std::string, GlSimpleEntity *> &GlLayer::getGlEntities() const {
   return composite.getGlEntities();
 }
 
 void GlLayer::getXML(string &outString) {
   GlXMLTools::beginDataNode(outString);
 
-  GlXMLTools::beginChildNode(outString,"camera");
+  GlXMLTools::beginChildNode(outString, "camera");
   camera->getXML(outString);
-  GlXMLTools::endChildNode(outString,"camera");
+  GlXMLTools::endChildNode(outString, "camera");
 
-  bool visible=composite.isVisible();
-  GlXMLTools::getXML(outString,"visible",visible);
+  bool visible = composite.isVisible();
+  GlXMLTools::getXML(outString, "visible", visible);
 
   GlXMLTools::endDataNode(outString);
 
-  GlXMLTools::beginChildNode(outString,"GlEntity");
+  GlXMLTools::beginChildNode(outString, "GlEntity");
   composite.getXML(outString);
   GlXMLTools::endChildNode(outString);
-
 }
 
 void GlLayer::getXMLOnlyForCameras(string &outString) {
   GlXMLTools::beginDataNode(outString);
 
-  GlXMLTools::beginChildNode(outString,"camera");
+  GlXMLTools::beginChildNode(outString, "camera");
   camera->getXML(outString);
-  GlXMLTools::endChildNode(outString,"camera");
+  GlXMLTools::endChildNode(outString, "camera");
 
-  bool visible=composite.isVisible();
-  GlXMLTools::getXML(outString,"visible",visible);
+  bool visible = composite.isVisible();
+  GlXMLTools::getXML(outString, "visible", visible);
 
   GlXMLTools::endDataNode(outString);
 }
 
 void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::enterDataNode(inString,currentPosition);
-  string childName=GlXMLTools::enterChildNode(inString,currentPosition);
-  assert(childName=="camera");
-  camera->setWithXML(inString,currentPosition);
-  GlXMLTools::leaveChildNode(inString,currentPosition,"camera");
+  GlXMLTools::enterDataNode(inString, currentPosition);
+  string childName = GlXMLTools::enterChildNode(inString, currentPosition);
+  assert(childName == "camera");
+  camera->setWithXML(inString, currentPosition);
+  GlXMLTools::leaveChildNode(inString, currentPosition, "camera");
 
   bool visible;
-  GlXMLTools::setWithXML(inString,currentPosition,"visible",visible);
+  GlXMLTools::setWithXML(inString, currentPosition, "visible", visible);
   composite.setVisible(visible);
 
-  GlXMLTools::leaveDataNode(inString,currentPosition);
+  GlXMLTools::leaveDataNode(inString, currentPosition);
 
-  childName=GlXMLTools::enterChildNode(inString,currentPosition);
+  childName = GlXMLTools::enterChildNode(inString, currentPosition);
 
-  if(childName!="") {
+  if (childName != "") {
 
-    map<string,string> childMap=GlXMLTools::getProperties(inString,currentPosition);
-    assert(childMap["type"]=="GlComposite");
-    composite.setWithXML(inString,currentPosition);
+    map<string, string> childMap = GlXMLTools::getProperties(inString, currentPosition);
+    assert(childMap["type"] == "GlComposite");
+    composite.setWithXML(inString, currentPosition);
 
-    GlXMLTools::leaveChildNode(inString,currentPosition,"children");
+    GlXMLTools::leaveChildNode(inString, currentPosition, "children");
   }
-
 }
 
 void GlLayer::glGraphCompositeAdded(GlGraphComposite *composite) {
   assert(scene);
-  scene->glGraphCompositeAdded(this,composite);
+  scene->glGraphCompositeAdded(this, composite);
 }
 
 void GlLayer::glGraphCompositeRemoved(GlGraphComposite *composite) {
   assert(scene);
-  scene->glGraphCompositeRemoved(this,composite);
+  scene->glGraphCompositeRemoved(this, composite);
 }
-
-
-
 }

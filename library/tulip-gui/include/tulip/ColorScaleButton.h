@@ -23,32 +23,30 @@
 
 #include <QPushButton>
 
-
 #include <tulip/ColorScale.h>
 
 namespace tlp {
 
 class ColorScaleConfigDialog;
 
-class TLP_QT_SCOPE ColorScaleButton: public QPushButton {
+class TLP_QT_SCOPE ColorScaleButton : public QPushButton {
   Q_OBJECT
   ColorScale _colorScale;
-  ColorScaleConfigDialog* dlg;
+  ColorScaleConfigDialog *dlg;
 
 public:
-  static void paintScale(QPainter*,const QRect&, const ColorScale&);
+  static void paintScale(QPainter *, const QRect &, const ColorScale &);
 
-  ColorScaleButton(ColorScale colorScale=ColorScale(), QWidget* parent=NULL);
+  ColorScaleButton(ColorScale colorScale = ColorScale(), QWidget *parent = NULL);
 
-  const ColorScale& colorScale() const;
-  void setColorScale(const ColorScale&) const;
+  const ColorScale &colorScale() const;
+  void setColorScale(const ColorScale &) const;
   void paintEvent(QPaintEvent *event);
-  void editColorScale(const ColorScale& colorScale);
+  void editColorScale(const ColorScale &colorScale);
 
 public slots:
   void editColorScale();
 };
-
 }
 #endif // COLORSCALEBUTTON_H
 ///@endcond

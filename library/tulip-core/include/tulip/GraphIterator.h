@@ -38,70 +38,67 @@ class GraphView;
 
 struct node;
 struct edge;
-class TLP_SCOPE NodeIterator :public Iterator<node> {
-};
+class TLP_SCOPE NodeIterator : public Iterator<node> {};
 
-class TLP_SCOPE EdgeIterator :public Iterator<edge> {
-};
+class TLP_SCOPE EdgeIterator : public Iterator<edge> {};
 
 #if !defined(NDEBUG) && !defined(_OPENMP)
-class TLP_SCOPE NodeIteratorObserver :public NodeIterator, public Observable {
+class TLP_SCOPE NodeIteratorObserver : public NodeIterator, public Observable {
 private:
   // Observable interface
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 };
 
-class TLP_SCOPE EdgeIteratorObserver :public EdgeIterator, public Observable {
+class TLP_SCOPE EdgeIteratorObserver : public EdgeIterator, public Observable {
 private:
   // Observable interface
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 };
 #endif
 //===========================================================
-///Factorization of code for iterators
+/// Factorization of code for iterators
 class TLP_SCOPE FactorNodeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
-  :public NodeIterator
+    : public NodeIterator
 #else
-  :public NodeIteratorObserver
+    : public NodeIteratorObserver
 #endif
 {
 protected:
   Graph *_parentGraph;
+
 public:
-  FactorNodeIterator(const Graph *sG):
-    _parentGraph(sG->getSuperGraph()) {
-  }
+  FactorNodeIterator(const Graph *sG) : _parentGraph(sG->getSuperGraph()) {}
 };
 
 class TLP_SCOPE FactorEdgeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
-  :public EdgeIterator
+    : public EdgeIterator
 #else
-  :public EdgeIteratorObserver
+    : public EdgeIteratorObserver
 #endif
 {
 protected:
   Graph *_parentGraph;
+
 public:
-  FactorEdgeIterator(const Graph *sG):
-    _parentGraph(sG->getSuperGraph()) {
-  }
+  FactorEdgeIterator(const Graph *sG) : _parentGraph(sG->getSuperGraph()) {}
 };
 //============================================================
-///Node iterator for GraphView
-template<typename VALUE_TYPE>
-class SGraphNodeIterator:public FactorNodeIterator, public MemoryPool<SGraphNodeIterator<VALUE_TYPE> > {
+/// Node iterator for GraphView
+template <typename VALUE_TYPE>
+class SGraphNodeIterator : public FactorNodeIterator,
+                           public MemoryPool<SGraphNodeIterator<VALUE_TYPE> > {
 private:
-  const Graph* sg;
+  const Graph *sg;
   Iterator<node> *it;
   node curNode;
   VALUE_TYPE value;
-  const MutableContainer<VALUE_TYPE>& _filter;
+  const MutableContainer<VALUE_TYPE> &_filter;
 
 protected:
   void prepareNext() {
-    while(it->hasNext()) {
+    while (it->hasNext()) {
       curNode = it->next();
 
       if (_filter.get(curNode) == value)
@@ -113,17 +110,17 @@ protected:
   }
 
 public:
-  SGraphNodeIterator(const Graph *sG,
-                     const MutableContainer<VALUE_TYPE>& filter,
-                     typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val) :FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
-    it=sg->getNodes();
+  SGraphNodeIterator(const Graph *sG, const MutableContainer<VALUE_TYPE> &filter,
+                     typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
+      : FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
+    it = sg->getNodes();
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->addListener(this);
 #endif
     // anticipate first iteration
     prepareNext();
   }
-  ~SGraphNodeIterator()  {
+  ~SGraphNodeIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->removeListener(this);
 #endif
@@ -144,8 +141,8 @@ public:
 };
 
 //============================================================
-///Out node iterator for GraphView
-class TLP_SCOPE OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
+/// Out node iterator for GraphView
+class TLP_SCOPE OutNodesIterator : public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
 private:
   Iterator<edge> *it;
 #if !defined(NDEBUG) && !defined(_OPENMP)
@@ -158,8 +155,8 @@ public:
   bool hasNext();
 };
 //============================================================
-///In node iterator for GraphView
-class InNodesIterator:public FactorNodeIterator, public MemoryPool<InNodesIterator> {
+/// In node iterator for GraphView
+class InNodesIterator : public FactorNodeIterator, public MemoryPool<InNodesIterator> {
 private:
   Iterator<edge> *it;
 #if !defined(NDEBUG) && !defined(_OPENMP)
@@ -172,8 +169,9 @@ public:
   bool hasNext();
 };
 //============================================================
-///In Out node iterator for GraphView
-class TLP_SCOPE InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodesIterator> {
+/// In Out node iterator for GraphView
+class TLP_SCOPE InOutNodesIterator : public FactorNodeIterator,
+                                     public MemoryPool<InOutNodesIterator> {
 private:
   Iterator<edge> *it;
   node n;
@@ -187,20 +185,21 @@ public:
   bool hasNext();
 };
 //=============================================================
-///Edge iterator for GraphView
-template<typename VALUE_TYPE>
-class SGraphEdgeIterator:public FactorEdgeIterator, public MemoryPool<SGraphEdgeIterator<VALUE_TYPE> > {
+/// Edge iterator for GraphView
+template <typename VALUE_TYPE>
+class SGraphEdgeIterator : public FactorEdgeIterator,
+                           public MemoryPool<SGraphEdgeIterator<VALUE_TYPE> > {
 private:
-  const Graph* sg;
+  const Graph *sg;
   Iterator<edge> *it;
   edge curEdge;
   VALUE_TYPE value;
-  const MutableContainer<VALUE_TYPE>& _filter;
+  const MutableContainer<VALUE_TYPE> &_filter;
 
 protected:
   void prepareNext() {
-    while(it->hasNext()) {
-      curEdge=it->next();
+    while (it->hasNext()) {
+      curEdge = it->next();
 
       if (_filter.get(curEdge.id) == value)
         return;
@@ -211,11 +210,10 @@ protected:
   }
 
 public:
-  SGraphEdgeIterator(const Graph *sG,
-                     const MutableContainer<VALUE_TYPE>& filter,
+  SGraphEdgeIterator(const Graph *sG, const MutableContainer<VALUE_TYPE> &filter,
                      typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
-    : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
-    it=sg->getEdges();
+      : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
+    it = sg->getEdges();
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->addListener(this);
 #endif
@@ -233,7 +231,7 @@ public:
   edge next() {
     assert(curEdge.isValid());
     // we are already pointing to the next
-    edge tmp=curEdge;
+    edge tmp = curEdge;
     // anticipating the next iteration
     prepareNext();
     return tmp;
@@ -244,62 +242,67 @@ public:
   }
 };
 //============================================================
-///Out edge iterator for GraphView
-class TLP_SCOPE OutEdgesIterator:public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
+/// Out edge iterator for GraphView
+class TLP_SCOPE OutEdgesIterator : public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
-  const GraphView* sg;
+  const GraphView *sg;
 
 public:
   OutEdgesIterator(const GraphView *sG, node n);
   ~OutEdgesIterator();
   edge next();
   bool hasNext();
+
 protected:
   void prepareNext();
 };
 //============================================================
-///In edge iterator for GraphView
-class TLP_SCOPE InEdgesIterator:public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
+/// In edge iterator for GraphView
+class TLP_SCOPE InEdgesIterator : public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
-  const GraphView* sg;
+  const GraphView *sg;
 
 public:
   InEdgesIterator(const GraphView *sG, node n);
   ~InEdgesIterator();
   edge next();
   bool hasNext();
+
 protected:
   void prepareNext();
 };
 //============================================================
-///In Out edge iterator for GraphView
-class TLP_SCOPE InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdgesIterator> {
+/// In Out edge iterator for GraphView
+class TLP_SCOPE InOutEdgesIterator : public FactorEdgeIterator,
+                                     public MemoryPool<InOutEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
-  const GraphView* sg;
+  const GraphView *sg;
 
 public:
   InOutEdgesIterator(const GraphView *sG, node n);
   ~InOutEdgesIterator();
   edge next();
   bool hasNext();
+
 protected:
   void prepareNext();
 };
 
 //============================================================
-//Iterator for the Graph
+// Iterator for the Graph
 //============================================================
 class TLP_SCOPE GraphNodeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
-  :public NodeIterator, public MemoryPool<GraphNodeIterator>
+    : public NodeIterator,
+      public MemoryPool<GraphNodeIterator>
 #else
-  :public NodeIteratorObserver
+    : public NodeIteratorObserver
 #endif
 {
 private:
@@ -307,19 +310,21 @@ private:
   const Graph *graph;
 #endif
   Iterator<node> *itId;
+
 public:
-  GraphNodeIterator(const Graph *g, Iterator<node>* it);
+  GraphNodeIterator(const Graph *g, Iterator<node> *it);
   ~GraphNodeIterator();
   node next();
   bool hasNext();
 };
 //=============================================================
-///Edge iterator for data sg
+/// Edge iterator for data sg
 class TLP_SCOPE GraphEdgeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
-  :public EdgeIterator, public MemoryPool<GraphEdgeIterator>
+    : public EdgeIterator,
+      public MemoryPool<GraphEdgeIterator>
 #else
-  :public EdgeIteratorObserver
+    : public EdgeIteratorObserver
 #endif
 {
 private:
@@ -327,14 +332,14 @@ private:
   const Graph *graph;
 #endif
   Iterator<edge> *itId;
+
 public:
-  GraphEdgeIterator(const Graph *g, Iterator<edge>* it);
+  GraphEdgeIterator(const Graph *g, Iterator<edge> *it);
   ~GraphEdgeIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-
 }
 #endif
 

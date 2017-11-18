@@ -4,7 +4,8 @@
 
 using namespace tlp;
 
-ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap> >& nodeShapes, QWidget *parent) : QDialog(parent), _ui(new Ui::ShapeDialog), shapes(nodeShapes) {
+ShapeDialog::ShapeDialog(std::list<std::pair<QString, QPixmap> > &nodeShapes, QWidget *parent)
+    : QDialog(parent), _ui(new Ui::ShapeDialog), shapes(nodeShapes) {
 
   _ui->setupUi(this);
 
@@ -18,7 +19,8 @@ ShapeDialog::~ShapeDialog() {
 void ShapeDialog::updateShapeList() {
   _ui->shapeListWidget->clear();
 
-  for(std::list<std::pair<QString, QPixmap> >::const_iterator it = shapes.begin(); it != shapes.end(); ++it) {
+  for (std::list<std::pair<QString, QPixmap> >::const_iterator it = shapes.begin();
+       it != shapes.end(); ++it) {
     _ui->shapeListWidget->addItem(new QListWidgetItem(it->second, it->first));
   }
 
@@ -55,6 +57,5 @@ void ShapeDialog::showEvent(QShowEvent *ev) {
 
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
-         parentWidget()->window()->rect().center() -
-         rect().center());
+         parentWidget()->window()->rect().center() - rect().center());
 }

@@ -28,8 +28,7 @@
 
 using namespace std;
 
-static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
-                                  bool originalClone) {
+static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bool originalClone) {
   tlp::NodeStaticProperty<tlp::Coord> points(graph);
   points.copyFromProperty(graph->getProperty<tlp::LayoutProperty>("viewLayout"));
 
@@ -43,21 +42,21 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
       graph->addCloneSubGraph("Original graph");
 
     tlp::Graph *delaunaySg = graph->addSubGraph("Delaunay");
-    const std::vector<tlp::node>& nodes = graph->nodes();
+    const std::vector<tlp::node> &nodes = graph->nodes();
     delaunaySg->addNodes(nodes);
 
-    for (size_t i = 0 ; i < edges.size() ; ++i) {
+    for (size_t i = 0; i < edges.size(); ++i) {
       delaunaySg->addEdge(nodes[edges[i].first], nodes[edges[i].second]);
     }
 
     if (simplicesSubGraphs) {
-      for (size_t i = 0 ; i < simplices.size() ; ++i) {
+      for (size_t i = 0; i < simplices.size(); ++i) {
         vector<tlp::node> sNodes(simplices[i].size());
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-        for (OMP_ITER_TYPE j = 0 ; j < static_cast<OMP_ITER_TYPE>(simplices[i].size()) ; ++j) {
+        for (OMP_ITER_TYPE j = 0; j < static_cast<OMP_ITER_TYPE>(simplices[i].size()); ++j) {
           sNodes[j] = nodes[simplices[i][j]];
         }
 
@@ -73,26 +72,28 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
 }
 
 static const char *paramHelp[] = {
-  // simplices
-  "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d).",
-  // original clone
-  "If true, a clone subgraph named 'Original graph' will be first added."
-};
+    // simplices
+    "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron "
+    "in 3d).",
+    // original clone
+    "If true, a clone subgraph named 'Original graph' will be first added."};
 
 class DelaunayTriangulation : public tlp::Algorithm {
 
-public :
-
+public:
   DelaunayTriangulation(tlp::PluginContext *context) : Algorithm(context) {
     addInParameter<bool>("simplices", paramHelp[0], "false");
     addInParameter<bool>("original clone", paramHelp[1], "true");
   }
 
   PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "",
-                    "Performs a Delaunay triangulation, in considering the positions of the graph nodes as a set of points. The building of simplices (triangles in 2D or tetrahedrons in 3D) consists in adding edges between adjacent nodes.","1.1","Triangulation")
+                    "Performs a Delaunay triangulation, in considering the positions of the graph "
+                    "nodes as a set of points. The building of simplices (triangles in 2D or "
+                    "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
+                    "1.1", "Triangulation")
 
   bool run() {
-    if(graph->numberOfNodes()==0)
+    if (graph->numberOfNodes() == 0)
       return true;
 
     bool simplicesSg = false;
@@ -107,7 +108,6 @@ public :
 
     return ret;
   }
-
 };
 
 PLUGIN(DelaunayTriangulation)

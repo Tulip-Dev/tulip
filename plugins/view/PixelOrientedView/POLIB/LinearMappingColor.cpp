@@ -19,7 +19,6 @@
 
 #include "LinearMappingColor.h"
 
-
 /*static void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
   int i;
   float f, p, q, t;
@@ -76,9 +75,8 @@
   }*/
 
 namespace pocore {
-LinearMappingColor::LinearMappingColor(const double &min, const double &max) :
-  _min(min),
-  _max(max) {
+LinearMappingColor::LinearMappingColor(const double &min, const double &max)
+    : _min(min), _max(max) {
   startColor[0] = 255;
   startColor[1] = 255;
   startColor[2] = 0;
@@ -92,12 +90,11 @@ RGBA LinearMappingColor::getColor(const double &value, unsigned int) const {
   double ratio = (value - _min) / (_max - _min);
   RGBA color;
 
-  for (unsigned int i = 0; i<3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     color[i] = uchar(double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * ratio);
   }
 
   color[3] = 255;
   return color;
 }
-
 }

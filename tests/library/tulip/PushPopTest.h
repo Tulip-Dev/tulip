@@ -45,6 +45,7 @@ class PushPopTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testMetaNode);
 
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
 

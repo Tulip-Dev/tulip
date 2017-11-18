@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef TULIP_CONNECTEDTEST_H
 #define TULIP_CONNECTEDTEST_H
 
@@ -31,19 +30,20 @@ namespace tlp {
 
 /**
  * @ingroup Checks
- * @brief @brief Performs a test of connexity on the graph, and provides a function to make a graph connected.
- * From Wikipedia: "A graph is said to be connected if every pair of vertices in the graph are connected." (i.e. there is a path between every pair of vertices).
+ * @brief @brief Performs a test of connexity on the graph, and provides a function to make a graph
+ *connected.
+ * From Wikipedia: "A graph is said to be connected if every pair of vertices in the graph are
+ *connected." (i.e. there is a path between every pair of vertices).
  **/
 class TLP_SCOPE ConnectedTest : public Observable {
 public:
-
   /**
    * @brief Checks if a graph is connected (i.e. there is a path between every pair of vertices).
    *
    * @param graph The graph to check.
    * @return bool True if the graph is connected, false otherwise.
    **/
-  static bool isConnected(const Graph* const graph);
+  static bool isConnected(const Graph *const graph);
 
   /**
    * @brief If the graph is not connected, adds edges to make it connected.
@@ -52,7 +52,7 @@ public:
    * @param addedEdges The edges that were added to make it connected.
    * @return void
    **/
-  static void makeConnected(Graph *graph, std::vector<edge>& addedEdges);
+  static void makeConnected(Graph *graph, std::vector<edge> &addedEdges);
 
   /**
    * @brief Gets the number of connected components in the graph.
@@ -60,27 +60,30 @@ public:
    * @param graph The graph in which to count the number of connected components.
    * @return unsigned int The number of connected componments.
    **/
-  static unsigned int numberOfConnectedComponents(const Graph* const graph);
+  static unsigned int numberOfConnectedComponents(const Graph *const graph);
 
   /**
   * @brief Computes the sets of connected components and stores the result in the components vector.
   *
   * @param graph The graph on which to compute connected components.
-  * @param components The components that were found. It is passed as a reference to avoid copying the data when returning.
+  * @param components The components that were found. It is passed as a reference to avoid copying
+  *the data when returning.
   * @return void
-  * @note The components parameter can be returned with c++11 thanks to move constructors without performance loss, change this function once c++11 compilers are used.
+  * @note The components parameter can be returned with c++11 thanks to move constructors without
+  *performance loss, change this function once c++11 compilers are used.
   **/
-  static void computeConnectedComponents(const Graph *graph, std::vector< std::vector<node> >& components);
+  static void computeConnectedComponents(const Graph *graph,
+                                         std::vector<std::vector<node> > &components);
 
   /**
    * @brief This function is defined for compatibility purpose only.
    * @warning This function is deprecated, use the one above.
    **/
-  static _DEPRECATED void computeConnectedComponents(const Graph *graph, std::vector< std::set<node> >& components);
+  static _DEPRECATED void computeConnectedComponents(const Graph *graph,
+                                                     std::vector<std::set<node> > &components);
 
 private:
   ConnectedTest();
-
 
   /**
    * @brief Makes the graph connected.
@@ -89,7 +92,7 @@ private:
    * @param toLink The nodes that need to be linked so the graph is connected.
    * @return void
    **/
-  void connect(const Graph * const, std::vector<node>& toLink);
+  void connect(const Graph *const, std::vector<node> &toLink);
 
   /**
    * @brief check if the graph is biconnected.
@@ -97,21 +100,21 @@ private:
    * @param graph the graph to check.
    * @return bool true if the graph is connected, false otherwise.
    **/
-  bool compute(const Graph * const);
+  bool compute(const Graph *const);
 
-  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  virtual void treatEvent(const Event&);
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  virtual void treatEvent(const Event &);
 
   /**
    * @brief Singleton instance of this class.
    **/
-  static ConnectedTest * instance;
+  static ConnectedTest *instance;
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
+   *hashmap.
    **/
-  TLP_HASH_MAP<const Graph*,bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
 }
 
 #endif

@@ -28,48 +28,51 @@
 #include <quazip.h>
 #include <quazipfile.h>
 
-//QuaZIPFacade::QuaZIPFacade() {
+// QuaZIPFacade::QuaZIPFacade() {
 //}
 
-void copy(QIODevice &in,QIODevice &out) {
+void copy(QIODevice &in, QIODevice &out) {
   char buffer[40960];
   int cnt;
 
-  while ((cnt = in.read(buffer,40960)))
-    out.write(buffer,cnt);
+  while ((cnt = in.read(buffer, 40960)))
+    out.write(buffer, cnt);
 
   in.close();
   out.close();
 }
 
+bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath,
+                   tlp::PluginProgress *progress) {
+  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
+                                                       QDir::Hidden | QDir::AllDirs | QDir::Files,
+                                                   QDir::DirsFirst);
+  progress->setComment(
+      tlp::QStringToTlpString("Compressing directory " + currentDir.absolutePath()));
+  int i = 0;
+  progress->progress(i, entries.size());
 
-bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath, tlp::PluginProgress *progress) {
-  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
-  progress->setComment(tlp::QStringToTlpString("Compressing directory " + currentDir.absolutePath()));
-  int i=0;
-  progress->progress(i,entries.size());
-
-  foreach(const QFileInfo& info, entries) {
-    progress->progress(i++,entries.size());
+  foreach (const QFileInfo &info, entries) {
+    progress->progress(i++, entries.size());
 
     if (info.isDir()) { // Recurse in directories if they are different from . and ..
       QDir childDir(info.absoluteFilePath());
       QFileInfo childInfo(childDir.absolutePath());
-      zipDirContent(childDir,archive,archivePath + childInfo.fileName() + "/",progress);
+      zipDirContent(childDir, archive, archivePath + childInfo.fileName() + "/", progress);
     }
 
     else {
       QuaZipFile outFile(&archive);
-      QuaZipNewInfo newFileInfo(archivePath + info.fileName(),info.absoluteFilePath());
+      QuaZipNewInfo newFileInfo(archivePath + info.fileName(), info.absoluteFilePath());
       newFileInfo.externalAttr = 0x81fd0000;
       QFile inFile(info.absoluteFilePath());
 
-      if (!outFile.open(QIODevice::WriteOnly,newFileInfo) || !inFile.open(QIODevice::ReadOnly))
+      if (!outFile.open(QIODevice::WriteOnly, newFileInfo) || !inFile.open(QIODevice::ReadOnly))
         return false;
 
-      copy(inFile,outFile);
+      copy(inFile, outFile);
 
-      if(outFile.getZipError()!=UNZ_OK)
+      if (outFile.getZipError() != UNZ_OK)
         return false;
     }
   }
@@ -77,7 +80,8 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
   return true;
 }
 
-bool QuaZIPFacade::zipDir(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress) {
+bool QuaZIPFacade::zipDir(const QString &rootPath, const QString &archivePath,
+                          tlp::PluginProgress *progress) {
   QFileInfo rootInfo(rootPath);
 
   if (!rootInfo.exists() || !rootInfo.isDir())
@@ -97,15 +101,17 @@ bool QuaZIPFacade::zipDir(const QString &rootPath, const QString &archivePath, t
     deleteProgress = true;
   }
 
-  bool result = zipDirContent(rootDir,archive,"",progress);
+  bool result = zipDirContent(rootDir, archive, "", progress);
   archive.close();
 
-  if (deleteProgress) delete progress;
+  if (deleteProgress)
+    delete progress;
 
   return result;
 }
 
-bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress) {
+bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath,
+                         tlp::PluginProgress *progress) {
 
   QFileInfo rootPathInfo(rootPath);
 
@@ -123,7 +129,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
 
   QFile archiveFile(archivePath);
 
-  if(!archiveFile.exists()) {
+  if (!archiveFile.exists()) {
     progress->setError(tlp::QStringToTlpString("No such file: " + archivePath));
     return false;
   }
@@ -143,11 +149,11 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
   }
 
   progress->setComment(tlp::QStringToTlpString("Uncompressing archive " + archivePath));
-  int i=0,n=archive.getEntriesCount();
-  progress->progress(i,n);
+  int i = 0, n = archive.getEntriesCount();
+  progress->progress(i, n);
 
   for (bool readMore = archive.goToFirstFile(); readMore; readMore = archive.goToNextFile()) {
-    progress->progress(i++,n);
+    progress->progress(i++, n);
 
     QuaZipFile inFile(&archive);
     QuaZipFileInfo inInfo;
@@ -163,11 +169,11 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
       return false;
     }
 
-    copy(inFile,outFile);
+    copy(inFile, outFile);
   }
 
-  if (deleteProgress) delete progress;
+  if (deleteProgress)
+    delete progress;
 
   return true;
 }
-

@@ -24,7 +24,8 @@
 
 using namespace tlp;
 
-PythonEditorsTabWidget::PythonEditorsTabWidget(QWidget *parent) : QTabWidget(parent), _fontZoom(0), _dontTreatFocusIn(false) {
+PythonEditorsTabWidget::PythonEditorsTabWidget(QWidget *parent)
+    : QTabWidget(parent), _fontZoom(0), _dontTreatFocusIn(false) {
   connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTabRequested(int)));
 }
 
@@ -46,13 +47,13 @@ int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   setCurrentIndex(idx);
 
   if (_fontZoom < 0) {
-    for (int i = _fontZoom ; i < 0 ; ++i) {
+    for (int i = _fontZoom; i < 0; ++i) {
       codeEditor->zoomOut();
     }
   }
 
   if (_fontZoom > 0) {
-    for (int i = _fontZoom ; i > 0 ; --i) {
+    for (int i = _fontZoom; i > 0; --i) {
       codeEditor->zoomIn();
     }
   }
@@ -66,9 +67,8 @@ PythonCodeEditor *PythonEditorsTabWidget::getCurrentEditor() const {
 
 PythonCodeEditor *PythonEditorsTabWidget::getEditor(int editorIdx) const {
   if (editorIdx >= 0 && editorIdx < count()) {
-    return static_cast<PythonCodeEditor*>(widget(editorIdx));
-  }
-  else {
+    return static_cast<PythonCodeEditor *>(widget(editorIdx));
+  } else {
     return NULL;
   }
 }
@@ -86,29 +86,29 @@ void PythonEditorsTabWidget::scriptTextChanged() {
   if (curTabText == "")
     return;
 
-  if (curTabText[curTabText.size() -1] != '*') {
+  if (curTabText[curTabText.size() - 1] != '*') {
     curTabText += "*";
     setTabText(currentIndex(), curTabText);
   }
 }
 
 void PythonEditorsTabWidget::indicateErrors(const QMap<QString, QVector<int> > &errorLines) {
-  for (int i = 0 ; i < count() ; ++i) {
+  for (int i = 0; i < count(); ++i) {
     QString moduleFile = getEditor(i)->getFileName();
 
     if (errorLines.find(moduleFile) != errorLines.end()) {
       const QVector<int> &linesErrorNumbers = errorLines[moduleFile];
       PythonCodeEditor *codeEditor = getEditor(i);
 
-      for (int i = 0 ; i < linesErrorNumbers.size() ; ++i) {
-        codeEditor->indicateScriptCurrentError(linesErrorNumbers[i]-1);
+      for (int i = 0; i < linesErrorNumbers.size(); ++i) {
+        codeEditor->indicateScriptCurrentError(linesErrorNumbers[i] - 1);
       }
     }
   }
 }
 
 void PythonEditorsTabWidget::clearErrorIndicators() {
-  for (int i = 0 ; i < count() ; ++i) {
+  for (int i = 0; i < count(); ++i) {
     getEditor(i)->clearErrorIndicator();
   }
 }
@@ -133,8 +133,7 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
         if (!moduleFile.contains("no file")) {
           saveCurrentEditorContentToFile();
           return true;
-        }
-        else {
+        } else {
           // when there is no file associated to the Python module, its content will then be saved
           // in the project file (.tlpx) currenty loaded in Tulip
           if (moduleFile[moduleFile.size() - 1] == '*')
@@ -146,8 +145,7 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
         }
       }
     }
-  }
-  else if (event->type() == QEvent::FocusIn && !_dontTreatFocusIn) {
+  } else if (event->type() == QEvent::FocusIn && !_dontTreatFocusIn) {
     _dontTreatFocusIn = true;
     reloadCodeInEditorsIfNeeded();
     _dontTreatFocusIn = false;
@@ -159,7 +157,7 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
 void PythonEditorsTabWidget::reloadCodeInEditorsIfNeeded() {
   bool emitSignal = false;
 
-  for (int i = 0 ; i < count() ; ++i) {
+  for (int i = 0; i < count(); ++i) {
     emitSignal = reloadCodeInEditorIfNeeded(i) || emitSignal;
   }
 
@@ -205,7 +203,7 @@ void PythonEditorsTabWidget::saveEditorContentToFile(int editorIdx) {
       // workaround a Qt5 bug on linux
       moduleName = moduleName.replace("&", "");
 
-      setTabText(editorIdx, moduleName+".py");
+      setTabText(editorIdx, moduleName + ".py");
       QFile file(getEditor(editorIdx)->getFileName());
       QFileInfo fileInfo(file);
 
@@ -227,7 +225,7 @@ void PythonEditorsTabWidget::closeTabRequested(int tab) {
 }
 
 void PythonEditorsTabWidget::decreaseFontSize() {
-  for (int i = 0 ; i < count() ; ++i) {
+  for (int i = 0; i < count(); ++i) {
     getEditor(i)->zoomOut();
   }
 
@@ -235,7 +233,7 @@ void PythonEditorsTabWidget::decreaseFontSize() {
 }
 
 void PythonEditorsTabWidget::increaseFontSize() {
-  for (int i = 0 ; i < count() ; ++i) {
+  for (int i = 0; i < count(); ++i) {
     getEditor(i)->zoomIn();
   }
 

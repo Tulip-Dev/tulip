@@ -29,7 +29,9 @@ using namespace std;
 namespace tlp {
 // Computes the enclosing circle of the elements contained in a boolean property.
 Circlef getEnclosingCircle(GlGraphInputData *inputData, BooleanProperty *selection) {
-  BoundingBox bbox(computeBoundingBox(inputData->getGraph(), inputData->getElementLayout(), inputData->getElementSize(), inputData->getElementRotation(), selection));
+  BoundingBox bbox(computeBoundingBox(inputData->getGraph(), inputData->getElementLayout(),
+                                      inputData->getElementSize(), inputData->getElementRotation(),
+                                      selection));
   Coord center(bbox.center());
   float norm = (bbox[1] - bbox[0]).norm();
   Circlef result;

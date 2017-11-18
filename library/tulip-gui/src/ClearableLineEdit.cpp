@@ -22,7 +22,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-QPixmap* ClearableLineEdit::CLEAR_PIXMAP = NULL;
+QPixmap *ClearableLineEdit::CLEAR_PIXMAP = NULL;
 
 void ClearableLineEdit::initPixmap() {
   if (CLEAR_PIXMAP == NULL) {
@@ -30,25 +30,27 @@ void ClearableLineEdit::initPixmap() {
   }
 }
 
-ClearableLineEdit::ClearableLineEdit(QWidget *parent): tlp::TulipLineEdit(parent), _clearButtonHovered(false) {
+ClearableLineEdit::ClearableLineEdit(QWidget *parent)
+    : tlp::TulipLineEdit(parent), _clearButtonHovered(false) {
   setMouseTracking(true);
 }
 
-void ClearableLineEdit::paintEvent(QPaintEvent* ev) {
+void ClearableLineEdit::paintEvent(QPaintEvent *ev) {
   QLineEdit::paintEvent(ev);
   QPainter p(this);
   p.setOpacity(_clearButtonHovered ? 1 : 0.7);
   initPixmap();
-  p.drawPixmap(pixmapRect(),*CLEAR_PIXMAP);
+  p.drawPixmap(pixmapRect(), *CLEAR_PIXMAP);
 }
 
 QRect ClearableLineEdit::pixmapRect() {
   initPixmap();
-  QRect pixmapRect(width() - CLEAR_PIXMAP->width() - 5, height()/2-CLEAR_PIXMAP->height()/2,CLEAR_PIXMAP->width(),CLEAR_PIXMAP->height());
+  QRect pixmapRect(width() - CLEAR_PIXMAP->width() - 5, height() / 2 - CLEAR_PIXMAP->height() / 2,
+                   CLEAR_PIXMAP->width(), CLEAR_PIXMAP->height());
   return pixmapRect;
 }
 
-void ClearableLineEdit::mouseMoveEvent(QMouseEvent* ev) {
+void ClearableLineEdit::mouseMoveEvent(QMouseEvent *ev) {
   QLineEdit::mouseMoveEvent(ev);
   bool oldValue = _clearButtonHovered;
   _clearButtonHovered = pixmapRect().contains(ev->pos());
@@ -57,7 +59,7 @@ void ClearableLineEdit::mouseMoveEvent(QMouseEvent* ev) {
     repaint();
 }
 
-void ClearableLineEdit::mousePressEvent(QMouseEvent* ev) {
+void ClearableLineEdit::mousePressEvent(QMouseEvent *ev) {
   QLineEdit::mousePressEvent(ev);
 
   if (pixmapRect().contains(ev->pos())) {
@@ -66,5 +68,3 @@ void ClearableLineEdit::mousePressEvent(QMouseEvent* ev) {
     emit editingFinished();
   }
 }
-
-

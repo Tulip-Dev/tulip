@@ -34,8 +34,7 @@ class HistoOptionsWidget : public QWidget {
 
   Q_OBJECT
 
-public :
-
+public:
   HistoOptionsWidget(QWidget *parent = 0);
   ~HistoOptionsWidget();
 
@@ -62,20 +61,20 @@ public :
   void setYAxisLogScale(const bool yAxisLogScale);
   bool yAxisLogScaleSet() const;
 
-  bool useCustomXAxisScale() const ;
+  bool useCustomXAxisScale() const;
   void useCustomXAxisScale(const bool value);
 
   bool useCustomYAxisScale() const;
   void useCustomYAxisScale(const bool value);
 
   std::pair<double, double> getXAxisScale() const;
-  void setXAxisScale(const std::pair<double, double>& value);
+  void setXAxisScale(const std::pair<double, double> &value);
 
   std::pair<double, double> getYAxisScale() const;
-  void setYAxisScale(const std::pair<double, double>& value);
+  void setYAxisScale(const std::pair<double, double> &value);
 
-  void setInitXAxisScale(const std::pair<double, double>& value);
-  void setInitYAxisScale(const std::pair<double, double>& value);
+  void setInitXAxisScale(const std::pair<double, double> &value);
+  void setInitYAxisScale(const std::pair<double, double> &value);
 
   void resetAxisScale();
 
@@ -91,14 +90,13 @@ public :
 
   bool configurationChanged();
 
-private slots :
+private slots:
 
   void enableOrDisableNbXGraduationsSP(int uniQuantState);
   void pressXScaleCheckBox(bool checked);
   void pressYScaleCheckBox(bool checked);
 
-private :
-
+private:
   bool oldValueInitialized;
   unsigned int oldNbOfHistogramBins;
   unsigned int oldNbXGraduations;
@@ -111,12 +109,10 @@ private :
   bool oldShowGraphEdges;
   bool oldUseCustomXAxisScale;
   bool oldUseCustomYAxisScale;
-  std::pair <double, double> oldXAxisScale, oldYAxisScale; //<min, max>
-  std::pair <double, double> initXAxisScale, initYAxisScale;
-  Ui::HistoOptionsWidgetData* _ui;
-
+  std::pair<double, double> oldXAxisScale, oldYAxisScale; //<min, max>
+  std::pair<double, double> initXAxisScale, initYAxisScale;
+  Ui::HistoOptionsWidgetData *_ui;
 };
-
 }
 
 #endif /* HISTOOPTIONSWIDGET_H_ */

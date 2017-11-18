@@ -58,7 +58,7 @@ class GlGraphComposite;
  **/
 class TLP_QT_SCOPE GlOffscreenRenderer {
 
-public :
+public:
   /**
    * @brief Get the renderer instance.
    **/
@@ -97,7 +97,7 @@ public :
   /**
    * @brief Add a graph to the scene. Just create a new GraphComposite and call GlGraphComposite.
    **/
-  void addGraphToScene(Graph* graph);
+  void addGraphToScene(Graph *graph);
 
   /**
    * @brief Delete all the elements of the scene and clear it.
@@ -105,23 +105,25 @@ public :
   void clearScene(bool deleteGlEntities = false);
 
   /**
-   * @brief Render the scene in a buffer. You need to call this function before getting the result with getImage or getGlTexture.
+   * @brief Render the scene in a buffer. You need to call this function before getting the result
+   *with getImage or getGlTexture.
    **/
   void renderScene(const bool centerScene = true, const bool antialiased = false);
 
   void renderExternalScene(GlScene *scene, const bool antialiased = false);
 
   /**
-   * @brief Generate a QImage from the scene. You need to call the renderScene function before this function.
+   * @brief Generate a QImage from the scene. You need to call the renderScene function before this
+   *function.
    **/
   QImage getImage();
   /**
-   * @brief Generate an open gl texture from the scene. You need to call the renderScene function before this function.
+   * @brief Generate an open gl texture from the scene. You need to call the renderScene function
+   *before this function.
    **/
   GLuint getGLTexture(const bool generateMipMaps = false);
 
-private :
-
+private:
   GlOffscreenRenderer();
 
   void initFrameBuffers(const bool antialiased);
@@ -136,12 +138,8 @@ private :
   double zoomFactor;
   Coord cameraCenter;
   bool antialiasedFbo;
-
 };
-
-
 }
-
 
 #endif /* GLOFFSCREENRENDERER_H_ */
 ///@endcond

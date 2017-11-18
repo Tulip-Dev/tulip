@@ -32,19 +32,15 @@ class ConfigurationIconItem : public QObject, public QGraphicsPixmapItem {
 
   Q_OBJECT
 
-public :
+public:
+  ConfigurationIconItem() {}
 
-  ConfigurationIconItem() {
-
-  }
-
-signals :
+signals:
 
   void configurationIconPressed();
 
-protected :
-
-  void mousePressEvent( QGraphicsSceneMouseEvent *) {
+protected:
+  void mousePressEvent(QGraphicsSceneMouseEvent *) {
     emit configurationIconPressed();
   }
 };
@@ -53,54 +49,48 @@ class SelectionArrowItem : public QObject, public QGraphicsPathItem {
 
   Q_OBJECT
 
-public :
+public:
+  SelectionArrowItem(float initRangePos, const QPoint &initPos);
 
-  SelectionArrowItem(float initRangePos,const QPoint &initPos);
+  bool sceneEvent(QEvent *event);
 
-  bool sceneEvent ( QEvent * event );
-
-signals :
+signals:
 
   void circleMoved();
 
-protected :
-
+protected:
   int yPos;
   QPoint initPos;
 };
 
 class SelectionTextItem : public QGraphicsTextItem {
 
-public :
-
+public:
   SelectionTextItem();
 
-protected :
-
-  bool sceneEvent ( QEvent * event ) {
-    return static_cast<SelectionArrowItem*>(parentItem())->sceneEvent(event);
+protected:
+  bool sceneEvent(QEvent *event) {
+    return static_cast<SelectionArrowItem *>(parentItem())->sceneEvent(event);
   }
-
 };
 
 class MovableRectItem : public QObject, public QGraphicsRectItem {
 
   Q_OBJECT
 
-public :
-
-  MovableRectItem(const QRectF &rect,const QRectF &size,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
+public:
+  MovableRectItem(const QRectF &rect, const QRectF &size, SelectionArrowItem *topCircle,
+                  SelectionArrowItem *bottomCircle);
 
   void setInternalRect(const QRectF &rect);
 
-signals :
+signals:
 
   // begin and end in 0,1 range
   void moved(float begin, float end);
 
-protected :
-
-  bool sceneEvent ( QEvent * event );
+protected:
+  bool sceneEvent(QEvent *event);
 
   QRectF _currentRect;
   QPoint _initPos;
@@ -112,26 +102,27 @@ class MovablePathItem : public QObject, public QGraphicsPathItem {
 
   Q_OBJECT
 
-public :
+public:
+  MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem,
+                  QGraphicsPathItem *bottomPathItem, SelectionArrowItem *topCircle,
+                  SelectionArrowItem *bottomCircle);
 
-  MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem, QGraphicsPathItem *bottomPathItem,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
-
-  void setDataToPath(const std::vector< std::pair< double,float > > &metricToSizeFilteredList, double minMetric, double maxMetric);
+  void setDataToPath(const std::vector<std::pair<double, float> > &metricToSizeFilteredList,
+                     double minMetric, double maxMetric);
 
   void setRect(const QRectF &rect);
 
-signals :
+signals:
 
   // begin and end in 0,1 range
   void moved(float begin, float end);
 
-protected :
-
+protected:
   void updatePath();
 
-  bool sceneEvent ( QEvent * event );
+  bool sceneEvent(QEvent *event);
 
-  std::vector<std::pair <double, float> > _metricToSizeFilteredList;
+  std::vector<std::pair<double, float> > _metricToSizeFilteredList;
   double _minMetric;
   double _maxMetric;
 
@@ -146,15 +137,16 @@ class CaptionGraphicsBackgroundItem : public QObject, public QGraphicsRectItem {
 
   Q_OBJECT
 
-public :
-
+public:
   CaptionGraphicsBackgroundItem(const QRect &rect);
 
-  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const std::string &propertyName, double minValue, double maxValue);
+  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient,
+                            const std::string &propertyName, double minValue, double maxValue);
 
-  void generateSizeCaption(const std::vector< std::pair< double,float > > &metricToSizeFilteredList, const std::string &propertyName, double minValue, double maxValue);
+  void generateSizeCaption(const std::vector<std::pair<double, float> > &metricToSizeFilteredList,
+                           const std::string &propertyName, double minValue, double maxValue);
 
-public slots :
+public slots:
 
   void updateCaption();
   // begin and end in 0,1 range
@@ -164,7 +156,7 @@ public slots :
   void activateInteractions();
   void removeInteractions();
 
-signals :
+signals:
 
   void filterChanged(float begin, float end);
   void configurationIconPressed();
@@ -172,11 +164,10 @@ signals :
   void interactionsActivated();
   void interactionsRemoved();
 
-protected :
-
+protected:
   void activateInteractions(bool);
 
-  bool sceneEvent ( QEvent * event );
+  bool sceneEvent(QEvent *event);
   void updateSelectionText(float begin, float end);
 
   bool _interactionsActivated;
@@ -206,14 +197,11 @@ protected :
   QGraphicsRectItem *_bottomCaptionRectItem;
 
   // Size caption Items
-  //MovableRectItem *_selectionSizeRectItem;
+  // MovableRectItem *_selectionSizeRectItem;
   MovablePathItem *_sizeCaptionPathItem;
   QGraphicsPathItem *_topSizeCaptionPathItem;
   QGraphicsPathItem *_bottomSizeCaptionPathItem;
-
-
 };
-
 }
 
 #endif // CAPTIONGRAPHICSSUB_H

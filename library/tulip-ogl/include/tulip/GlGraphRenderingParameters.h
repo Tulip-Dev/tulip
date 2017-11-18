@@ -61,7 +61,7 @@ public:
   /**
    * @brief Return true if antialiasing is activated else false.
    */
-  bool isAntialiased()const;
+  bool isAntialiased() const;
 
   /**
    * @brief Activate or deactivate displaying of arrows along the graph's edges.
@@ -71,7 +71,7 @@ public:
   /**
    * @brief Return true if arrows drawing is activated else false.
    */
-  bool isViewArrow()const;
+  bool isViewArrow() const;
 
   /**
    * @brief Activate or deactivate displaying of labels on nodes.
@@ -135,7 +135,7 @@ public:
   /**
    * @brief Set the path for the texture loading
    */
-  void setTexturePath(const std::string& path);
+  void setTexturePath(const std::string &path);
 
   /**
    * @brief Return the absolute path used for texture loading
@@ -145,7 +145,7 @@ public:
   /**
    * @brief Set the absolute path used for the fonts loading
    */
-  void setFontsPath(const std::string& path);
+  void setFontsPath(const std::string &path);
 
   /**
    * @brief Return the absolute path used for the fonts loading
@@ -195,7 +195,8 @@ public:
   /**
    * @brief set stencil number for selected nodes
    *
-   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity. It's a "guaranted visibility" system.
+   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity.
+   * It's a "guaranted visibility" system.
    * A small number causes a guaranted visibility
    * Default value in Tulip is 0xFFFF (greater integer)
    * And when we have stencil on entity value is 0x2
@@ -304,7 +305,8 @@ public:
   int getEdgesLabelStencil() const;
 
   /**
-   * @brief If true node and edges are ordered according to the element ordering property (default to viewMetric)
+   * @brief If true node and edges are ordered according to the element ordering property (default
+   * to viewMetric)
    */
   void setElementOrdered(const bool state);
 
@@ -314,14 +316,16 @@ public:
   bool isElementOrdered() const;
 
   /**
-   * @brief If true (default value) nodes and edges are sorted in descending order according to the element ordering property (default to viewMetric)
+   * @brief If true (default value) nodes and edges are sorted in descending order according to the
+   * element ordering property (default to viewMetric)
    *
    * @since Tulip 4.8
    */
   void setElementOrderedDescending(const bool state);
 
   /**
-   * @brief Returns true if the nodes and edges are sorted in descending order when the element ordering is activated
+   * @brief Returns true if the nodes and edges are sorted in descending order when the element
+   * ordering is activated
    *
    * @since Tulip 4.8
    */
@@ -333,14 +337,15 @@ public:
    * @param property The property to use to order the elements.
    *
    **/
-  void setElementOrderingProperty(tlp::NumericProperty* property);
+  void setElementOrderingProperty(tlp::NumericProperty *property);
 
   /**
-   * @brief Gets the property used for element ordering. Setting it to NULL will use viewMetric if the ordering is enabled.
+   * @brief Gets the property used for element ordering. Setting it to NULL will use viewMetric if
+   *the ordering is enabled.
    *
    * @return :NumericProperty* The Property currently used.
    **/
-  tlp::NumericProperty* getElementOrderingProperty() const;
+  tlp::NumericProperty *getElementOrderingProperty() const;
 
   /**
    * @brief If true node and edges are ordered according to the distance with camera
@@ -451,22 +456,26 @@ public:
   void setLabelsDensity(int density);
 
   /**
-   * @brief return min size of label : this min size is only used if labels are not scaled and are not rendered with a fixed font size
+   * @brief return min size of label : this min size is only used if labels are not scaled and are
+   * not rendered with a fixed font size
    */
   int getMinSizeOfLabel() const;
 
   /**
-   * @brief Set min size of label : this min size is only used if labels are not scaled and are not rendered with a fixed font size
+   * @brief Set min size of label : this min size is only used if labels are not scaled and are not
+   * rendered with a fixed font size
    */
   void setMinSizeOfLabel(int size);
 
   /**
-   * @brief return max size of label : this max size is only used if labels are not scaled and are not rendered with a fixed font size
+   * @brief return max size of label : this max size is only used if labels are not scaled and are
+   * not rendered with a fixed font size
    */
   int getMaxSizeOfLabel() const;
 
   /**
-   * @brief Set max size of label : this max size is only used if labels are not scaled and are not rendered with a fixed font size
+   * @brief Set max size of label : this max size is only used if labels are not scaled and are not
+   * rendered with a fixed font size
    */
   void setMaxSizeOfLabel(int size);
 
@@ -481,27 +490,27 @@ public:
    * @brief Set if labels are billboarded
    */
   void setLabelsAreBillboarded(bool billboarded) {
-    _labelsAreBillboarded=billboarded;
+    _labelsAreBillboarded = billboarded;
   }
 
   /**
-   * @brief This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
+   * @brief This property is use to filter nodes/edges display, for a node/edge if this property is
+   * false : the node/edge will not be diplayed
    *
    * @Warning : this property will not be saved in DataSet
    */
   void setDisplayFilteringProperty(BooleanProperty *filteringProperty) {
-    _displayFilteringProperty=filteringProperty;
+    _displayFilteringProperty = filteringProperty;
   }
 
   /**
    * @brief Get the boolean property use to filtering displaying of nodes/edges
    */
-  BooleanProperty * getDisplayFilteringProperty() const {
+  BooleanProperty *getDisplayFilteringProperty() const {
     return _displayFilteringProperty;
   }
 
 private:
-
   bool _antialiased;
   bool _viewArrow;
   bool _viewNodeLabel;
@@ -538,7 +547,7 @@ private:
   bool _feedbackRender;
   Color _selectionColor;
   BooleanProperty *_displayFilteringProperty;
-  NumericProperty* _elementOrderingProperty;
+  NumericProperty *_elementOrderingProperty;
 };
 
 /** \brief Class to get the default selection color
@@ -547,10 +556,10 @@ class TLP_GL_SCOPE GlDefaultSelectionColorManager {
 public:
   static void setManager(GlDefaultSelectionColorManager *);
   static tlp::Color getDefaultSelectionColor();
-  virtual tlp::Color defaultSelectionColor(bool tulipDefault = false)=0;
+  virtual tlp::Color defaultSelectionColor(bool tulipDefault = false) = 0;
 
 private:
-  static GlDefaultSelectionColorManager* manager;
+  static GlDefaultSelectionColorManager *manager;
 };
 }
 

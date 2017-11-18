@@ -38,7 +38,7 @@ namespace tlp {
 
 static GlComplexPolygon *cross = NULL;
 static void initCross() {
-  if(!cross) {
+  if (!cross) {
     float bWidth = 0.1f;
     vector<Coord> points;
     points.push_back(Coord(-bWidth, 0.5, 0));
@@ -56,11 +56,8 @@ static void initCross() {
     cross = new GlComplexPolygon(points, Color());
   }
 }
-void drawCross(const Color &fillColor,
-               const Color &borderColor,
-               float borderWidth,
-               const std::string &textureName,
-               float lod) {
+void drawCross(const Color &fillColor, const Color &borderColor, float borderWidth,
+               const std::string &textureName, float lod) {
 
   cross->setFillColor(fillColor);
 
@@ -68,13 +65,12 @@ void drawCross(const Color &fillColor,
     cross->setOutlineMode(true);
     cross->setOutlineColor(borderColor);
     cross->setOutlineSize(borderWidth);
-  }
-  else {
+  } else {
     cross->setOutlineMode(false);
   }
 
   cross->setTextureName(textureName);
-  cross->draw(lod,NULL);
+  cross->draw(lod, NULL);
 }
 
 /** \addtogroup glyph */
@@ -85,12 +81,13 @@ void drawCross(const Color &fillColor,
  * node property value. If this property has no value, the cross
  * is then colored using the "viewColor" node property value.
  */
-class Cross: public Glyph {
+class Cross : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0", NodeShape::Cross)
-  Cross(const tlp::PluginContext* context = NULL);
+  GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0",
+                   NodeShape::Cross)
+  Cross(const tlp::PluginContext *context = NULL);
   virtual ~Cross();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 };
@@ -108,27 +105,23 @@ PLUGIN(Cross)
      7---6                       (-bWidth, -0.5)  (bWidth, -0.5)
 */
 
-Cross::Cross(const tlp::PluginContext* context) :
-  Glyph(context) {
+Cross::Cross(const tlp::PluginContext *context) : Glyph(context) {
   initCross();
 }
-Cross::~Cross() {
-}
-void Cross::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+Cross::~Cross() {}
+void Cross::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.5, -0.5, 0);
   boundingBox[1] = Coord(0.5, 0.5, 0);
 }
 void Cross::draw(node n, float lod) {
-  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+  string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(!textureName.empty())
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+  if (!textureName.empty())
+    textureName = glGraphInputData->parameters->getTexturePath() + textureName;
 
   drawCross(glGraphInputData->getElementColor()->getNodeValue(n),
             glGraphInputData->getElementBorderColor()->getNodeValue(n),
-            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-            textureName,
-            lod);
+            glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 Coord Cross::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -136,9 +129,9 @@ Coord Cross::getAnchor(const Coord &vector) const {
   v.get(x, y, z);
   // initialize anchor as the middle of segment points[0], points[1]
   Coord anchor(0, 0.5, 0);
-  float distMin = x*x + ((y - 0.5) * (y - 0.5));
+  float distMin = x * x + ((y - 0.5) * (y - 0.5));
   // check with the middle of segment points[3], points[4]
-  float dist = ((x - 0.5) * (x - 0.5)) + y*y;
+  float dist = ((x - 0.5) * (x - 0.5)) + y * y;
 
   if (distMin > dist) {
     distMin = dist;
@@ -146,7 +139,7 @@ Coord Cross::getAnchor(const Coord &vector) const {
   }
 
   // check with the middle of segment points[7], points[6]
-  dist = x*x + ((y + 0.5)*(y + 0.5));
+  dist = x * x + ((y + 0.5) * (y + 0.5));
 
   if (distMin > dist) {
     distMin = dist;
@@ -154,34 +147,29 @@ Coord Cross::getAnchor(const Coord &vector) const {
   }
 
   // check with the middle of segment points[9], points[10]
-  if (distMin > ((x + 0.5) * (x + 0.5)) + y*y)
+  if (distMin > ((x + 0.5) * (x + 0.5)) + y * y)
     return Coord(-0.5, 0, 0);
 
   return anchor;
 }
 
-class EECross: public EdgeExtremityGlyph {
+class EECross : public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATION("2D - Cross extremity", "Patrick Mary", "23/06/2011", "Textured Cross for edge extremities", "1.0", EdgeExtremityShape::Cross)
+  GLYPHINFORMATION("2D - Cross extremity", "Patrick Mary", "23/06/2011",
+                   "Textured Cross for edge extremities", "1.0", EdgeExtremityShape::Cross)
 
-  EECross(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+  EECross(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
     initCross();
   }
 
-  void draw(edge e, node,
-            const Color & glyphColor,
-            const Color &borderColor,
-            float lod) {
-    string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(!textureName.empty())
-      textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+    if (!textureName.empty())
+      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawCross(glyphColor,
-              borderColor,
-              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-              textureName,
-              lod);
+    drawCross(glyphColor, borderColor,
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
   }
 };
 PLUGIN(EECross)

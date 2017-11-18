@@ -36,12 +36,10 @@ namespace tlp {
 class TLP_GL_SCOPE GlQuad : public GlPolygon {
 
 public:
-
   /**
    * Constructor
    */
   GlQuad();
-
 
   /**
    * Constructor
@@ -54,12 +52,12 @@ public:
    * \param p4 the fourth quad vertex
    * \param color A single color indicating the color for every point of the quadrilateral.
    */
-  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
-         const Color &color);
+  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4, const Color &color);
 
   /* Constructor
    *
-   * Initializes a quadrilateral with 4 points winding in clockwise order and a color attached to each point.
+   * Initializes a quadrilateral with 4 points winding in clockwise order and a color attached to
+   * each point.
    *
    * \param p1 the first quad vertex
    * \param p2 the second quad vertex
@@ -70,8 +68,8 @@ public:
    * \param c3 the color of the third quad vertex
    * \param c4 the color of the fourth quad vertex
    */
-  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
-         const Color &c1, const Color &c2, const Color &c3, const Color &c4);
+  GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4, const Color &c1,
+         const Color &c2, const Color &c3, const Color &c4);
 
   /**
    * Destructor
@@ -93,19 +91,19 @@ public:
   /**
    * Accessor in writing to the basic color of GlAugmentedDisplay
    */
-  void setColor(const Color& color);
+  void setColor(const Color &color);
 
   /**
    * Accessor in reading to the position.
    * \param idPosition Indicates which point we want to get the position.
    */
-  const Coord& getPosition(const int idPosition) const;
+  const Coord &getPosition(const int idPosition) const;
 
   /**
    * Accessor in reading to the color.
    * \param idColor Indicates which point we want to get the color.
    */
-  const Color& getColor(const int idColor) const;
+  const Color &getColor(const int idColor) const;
 
   /**
    * Function to export data in outString (in XML format)
@@ -116,10 +114,7 @@ public:
    * Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
-
-
 };
-
 }
 #endif
 ///@endcond

@@ -22,16 +22,18 @@
 
 #include <tulip/TulipPluginHeaders.h>
 
-class PathLengthMetric:public tlp::DoubleAlgorithm {
+class PathLengthMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Path Length","David Auber","15/02/2001",
-                    "Assigns to each node the number of paths that goes through it.<br/><b>The graph must be acyclic</b>.",
-                    "1.0","Hierarchical")
-  PathLengthMetric(const tlp::PluginContext* context);
+  PLUGININFORMATION("Path Length", "David Auber", "15/02/2001",
+                    "Assigns to each node the number of paths that goes through it.<br/><b>The "
+                    "graph must be acyclic</b>.",
+                    "1.0", "Hierarchical")
+  PathLengthMetric(const tlp::PluginContext *context);
   bool run();
   bool check(std::string &);
+
 private:
-  double getNodeValue(const tlp::node n, tlp::DoubleProperty* leafMetric);
+  double getNodeValue(const tlp::node n, tlp::DoubleProperty *leafMetric);
 };
 
 #endif

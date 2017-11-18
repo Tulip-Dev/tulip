@@ -35,7 +35,7 @@ const double originalMax = 10;
 const double newMin = 1;
 const double newMax = 15;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( DoublePropertyTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(DoublePropertyTest);
 
 void DoublePropertyTest::setUp() {
   graph = newGraph();
@@ -121,7 +121,7 @@ void DoublePropertyTest::testDoublePropertyMaxUpdateFromString() {
 
 void DoublePropertyTest::testDoublePropertySubGraphMin() {
   DoubleProperty *doubleProperty = graph->getProperty<DoubleProperty>(doublePropertyName);
-  Graph* subGraph = graph->addSubGraph();
+  Graph *subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
   doubleProperty->setNodeValue(n2, 6);
   node n3 = subGraph->addNode();
@@ -139,7 +139,7 @@ void DoublePropertyTest::testDoublePropertySubGraphMin() {
 
 void DoublePropertyTest::testDoublePropertySubGraphMax() {
   DoubleProperty *doubleProperty = graph->getProperty<DoubleProperty>(doublePropertyName);
-  Graph* subGraph = graph->addSubGraph();
+  Graph *subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
   doubleProperty->setNodeValue(n2, 6.0);
   node n3 = subGraph->addNode();
@@ -155,17 +155,16 @@ void DoublePropertyTest::testDoublePropertySubGraphMax() {
   CPPUNIT_ASSERT(doubleProperty->getNodeMax() == 9);
 }
 
-void DoublePropertyTest::testDoublePropertyInfValue() { 
+void DoublePropertyTest::testDoublePropertyInfValue() {
   double zero = 0.0;
-  double infValue = 1.0/zero;
+  double infValue = 1.0 / zero;
 
   CPPUNIT_ASSERT(infValue == std::numeric_limits<double>::infinity());
   CPPUNIT_ASSERT(-infValue == -std::numeric_limits<double>::infinity());
 
   node n = graph->addNode();
 
-  DoubleProperty* prop =
-    graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  DoubleProperty *prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
   CPPUNIT_ASSERT(prop->getNodeValue(n) == 0.0);
 
   prop->setNodeValue(n, infValue);
@@ -180,10 +179,10 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
   prop->setNodeValue(n, 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n) == 1.0);
 
-  prop->setNodeStringValue(n , "inf");
+  prop->setNodeStringValue(n, "inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == infValue);
 
-  prop->setNodeStringValue(n , "-inf");
+  prop->setNodeStringValue(n, "-inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
 }
 
@@ -199,7 +198,7 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   const double v2 = tlp::randomDouble();
 
   // create a double property and set all values for nodes and edges
-  DoubleProperty* prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  DoubleProperty *prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
   prop->setAllNodeValue(v1);
   prop->setAllEdgeValue(v2);
 
@@ -252,7 +251,6 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   }
   // check that the default edge value has not been modified
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
-
 }
 
 void DoublePropertyTest::testDoublePropertySetDefaultValue() {
@@ -261,7 +259,7 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   const double v2 = tlp::randomDouble();
 
   // create a double property and set all values for nodes and edges
-  DoubleProperty* prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  DoubleProperty *prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
   prop->setAllNodeValue(v1);
   prop->setAllEdgeValue(v2);
 

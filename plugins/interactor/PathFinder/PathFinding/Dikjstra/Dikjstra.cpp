@@ -26,14 +26,10 @@ using namespace tlp;
 using namespace std;
 
 //============================================================
-void Dikjstra::initDikjstra(const tlp::Graph * const graph,
-                            const tlp::Graph * const forbiddenNodes,
-                            tlp::node src,
-                            EdgeOrientation directed,
-                            const tlp::MutableContainer<double> &weights,
-                            double,
-                            const set<node> &focus
-                           ) {
+void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *const forbiddenNodes,
+                            tlp::node src, EdgeOrientation directed,
+                            const tlp::MutableContainer<double> &weights, double,
+                            const set<node> &focus) {
   assert(src.isValid());
   this->graph = graph;
   this->forbiddenNodes = forbiddenNodes;
@@ -45,8 +41,8 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
   mapDik.setAll(0);
 
   node n;
-  forEach (n, graph->getNodes()) {
-    if (n != src) { //init all nodes to +inf
+  forEach(n, graph->getNodes()) {
+    if (n != src) { // init all nodes to +inf
       DikjstraElement *tmp = new DikjstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
 
@@ -54,9 +50,8 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
         focusTable.insert(tmp);
 
       mapDik.set(n.id, tmp);
-    }
-    else { //init starting node to 0
-      DikjstraElement * tmp = new DikjstraElement(0, n, n);
+    } else { // init starting node to 0
+      DikjstraElement *tmp = new DikjstraElement(0, n, n);
       dikjstraTable.insert(tmp);
       mapDik.set(n.id, tmp);
     }
@@ -66,17 +61,18 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
   nodeDistance.set(src.id, 0);
 
   while (!dikjstraTable.empty()) {
-    //select the first element in the list the one with min value
+    // select the first element in the list the one with min value
     set<DikjstraElement *, LessDikjstraElement>::iterator it = dikjstraTable.begin();
     DikjstraElement &u = *(*it);
     dikjstraTable.erase(it);
 
     if (!focusTable.empty()) {
       set<DikjstraElement *, LessDikjstraElement>::reverse_iterator it = focusTable.rbegin();
-      //set<DikjstraElement *>::iterator it2 = focusTable.begin();
+      // set<DikjstraElement *>::iterator it2 = focusTable.begin();
       double maxDist = (*it)->dist;
 
-      if (u.dist > maxDist) break;
+      if (u.dist > maxDist)
+        break;
 
       /*
        if (fabs(u.dist - maxDist) > 1E-9) {
@@ -86,11 +82,11 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
           }
       }
       */
-      //if ((u.dist > maxDist) break;
+      // if ((u.dist > maxDist) break;
     }
 
     if (forbiddenNodes != 0)
-      if (forbiddenNodes->isElement(u.n) && u.n!=this->src)
+      if (forbiddenNodes->isElement(u.n) && u.n != this->src)
         continue;
 
     edge e;
@@ -113,42 +109,44 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
 
     forEach(e, iter) {
       node v = graph->opposite(e, u.n);
-      DikjstraElement & dEle = *mapDik.get(v.id);
+      DikjstraElement &dEle = *mapDik.get(v.id);
       assert(weights.get(e.id) > 0);
 
       /*
                   if (DBL_MAX - u.dist <  weights.get(e.id))
-              cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" << endl;
+              cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" <<
+         endl;
             if (DBL_MAX - fabs((u.dist + weights.get(e.id))) < dEle.dist)
-              cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" << endl;
+              cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" <<
+         endl;
                     */
-      if ( fabs((u.dist + weights.get(e.id)) - dEle.dist) < 1E-9) //path of the same length
+      if (fabs((u.dist + weights.get(e.id)) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
       else
 
-        //we find a node closer with that path
-        if ( (u.dist + weights.get(e.id)) < dEle.dist) {
-          dEle.usedEdge.clear();
-          //**********************************************
-          dikjstraTable.erase(&dEle);
+          // we find a node closer with that path
+          if ((u.dist + weights.get(e.id)) < dEle.dist) {
+        dEle.usedEdge.clear();
+        //**********************************************
+        dikjstraTable.erase(&dEle);
 
-          if (focus.find(dEle.n)!=focus.end()) {
-            focusTable.erase(&dEle);
-          }
-
-          dEle.dist = u.dist + weights.get(e.id);
-          /*
-          if (DBL_MAX - u.dist <  weights.get(e.id))
-          cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" << endl;
-          */
-          dEle.previous = u.n;
-          dEle.usedEdge.push_back(e);
-          dikjstraTable.insert(&dEle);
-
-          if (focus.find(dEle.n)!=focus.end()) {
-            focusTable.insert(&dEle);
-          }
+        if (focus.find(dEle.n) != focus.end()) {
+          focusTable.erase(&dEle);
         }
+
+        dEle.dist = u.dist + weights.get(e.id);
+        /*
+        if (DBL_MAX - u.dist <  weights.get(e.id))
+        cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" << endl;
+        */
+        dEle.previous = u.n;
+        dEle.usedEdge.push_back(e);
+        dikjstraTable.insert(&dEle);
+
+        if (focus.find(dEle.n) != focus.end()) {
+          focusTable.insert(&dEle);
+        }
+      }
     }
   }
 
@@ -158,7 +156,7 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
     DikjstraElement *dEle = mapDik.get(tmpN.id);
     nodeDistance.set(tmpN.id, dEle->dist);
 
-    for (unsigned int i=0; i < dEle->usedEdge.size(); ++i) {
+    for (unsigned int i = 0; i < dEle->usedEdge.size(); ++i) {
       usedEdges.set(dEle->usedEdge[i].id, true);
     }
 
@@ -167,18 +165,22 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
 }
 //=======================================================================
 void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProperty *depth) {
-  if (result->getNodeValue(n)) return;
+  if (result->getNodeValue(n))
+    return;
 
   result->setNodeValue(n, true);
   edge e;
   forEach(e, graph->getInOutEdges(n)) {
-    if (!usedEdges.get(e.id)) continue;
+    if (!usedEdges.get(e.id))
+      continue;
 
-    if (result->getEdgeValue(e)) continue;
+    if (result->getEdgeValue(e))
+      continue;
 
     node tgt = graph->opposite(e, n);
 
-    if (nodeDistance.get(tgt.id) >= nodeDistance.get(n.id)) continue;
+    if (nodeDistance.get(tgt.id) >= nodeDistance.get(n.id))
+      continue;
 
     result->setEdgeValue(e, true);
     double dep = depth->getEdgeValue(e) + 1.;
@@ -187,7 +189,8 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProper
   }
 }
 //=============================================================================
-bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes, DoubleProperty *preference) {
+bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
+                          DoubleProperty *preference) {
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
   bool ok = true;
@@ -196,25 +199,28 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
     result->setNodeValue(n, true);
     vNodes.push_back(n);
     ok = false;
-    //set<edge> validEdge;
+    // set<edge> validEdge;
     map<double, edge> validEdge;
     edge e;
     forEach(e, graph->getInOutEdges(n)) {
-      if (!usedEdges.get(e.id)) continue; //edge does not belong to the shortest path
+      if (!usedEdges.get(e.id))
+        continue; // edge does not belong to the shortest path
 
-      if (result->getEdgeValue(e)) continue; //edge already treated
+      if (result->getEdgeValue(e))
+        continue; // edge already treated
 
       node tgt = graph->opposite(e, n);
 
-      if (nodeDistance.get(tgt.id) >= nodeDistance.get(n.id)) continue;
+      if (nodeDistance.get(tgt.id) >= nodeDistance.get(n.id))
+        continue;
 
-      validEdge[preference->getNodeValue(tgt)] = e ;
+      validEdge[preference->getNodeValue(tgt)] = e;
     }
 
     if (!validEdge.empty()) {
       ok = true;
       e = validEdge.rbegin()->second;
-      n = graph->opposite(e, n);//validEdge.begin()->first;
+      n = graph->opposite(e, n); // validEdge.begin()->first;
       result->setEdgeValue(e, true);
     }
   }
@@ -230,7 +236,6 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
 }
 //========================================
 bool Dikjstra::searchPaths(tlp::node n, tlp::BooleanProperty *result, tlp::DoubleProperty *depth) {
-  internalSearchPaths(n,result,depth);
+  internalSearchPaths(n, result, depth);
   return result->getNodeValue(src);
 }
-

@@ -22,20 +22,16 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/NumericProperty.h>
 
-class EqualValueClustering:public tlp::Algorithm {
+class EqualValueClustering : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Equal Value","Patrick Mary","16/04/2014","Performs a graph clusterization grouping in the same cluster the nodes or edges having the same value for a given property.","1.1", "Clustering")
-  EqualValueClustering(tlp::PluginContext* context);
+  PLUGININFORMATION("Equal Value", "Patrick Mary", "16/04/2014",
+                    "Performs a graph clusterization grouping in the same cluster the nodes or "
+                    "edges having the same value for a given property.",
+                    "1.1", "Clustering")
+  EqualValueClustering(tlp::PluginContext *context);
   bool run();
-  bool computeClusters(tlp::NumericProperty* prop,
-                       bool onNodes, bool connected);
-  bool computeClusters(tlp::PropertyInterface* prop,
-                       bool onNodes, bool connected);
+  bool computeClusters(tlp::NumericProperty *prop, bool onNodes, bool connected);
+  bool computeClusters(tlp::PropertyInterface *prop, bool onNodes, bool connected);
 };
 
 #endif
-
-
-
-
-

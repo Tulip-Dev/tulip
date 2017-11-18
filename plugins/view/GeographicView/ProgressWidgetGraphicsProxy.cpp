@@ -24,10 +24,12 @@
 
 using namespace tlp;
 
-ProgressWidget::ProgressWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::ProgressWidgetData), cancelClicked(true) {
+ProgressWidget::ProgressWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::ProgressWidgetData), cancelClicked(true) {
   _ui->setupUi(this);
   connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
-// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type
+// 1"
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   setWindowOpacity(0.99);
@@ -47,7 +49,7 @@ void ProgressWidget::setProgress(int value, int max) {
   _ui->progressBar->setValue(value);
 }
 
-void ProgressWidget::showEvent(QShowEvent * event) {
+void ProgressWidget::showEvent(QShowEvent *event) {
   cancelClicked = false;
   QWidget::showEvent(event);
 }
@@ -60,7 +62,7 @@ ProgressWidgetGraphicsProxy::ProgressWidgetGraphicsProxy() : frameColor(Qt::gree
   progressWidget = new ProgressWidget();
   setWidget(progressWidget);
   setWindowFlags(Qt::Window);
-  setWindowFrameMargins(0,0,0,0);
+  setWindowFrameMargins(0, 0, 0, 0);
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
   setOpacity(0.8);
 #endif
@@ -76,18 +78,23 @@ void ProgressWidgetGraphicsProxy::setProgress(int value, int max) {
 
 const float offset = 10.;
 
-void ProgressWidgetGraphicsProxy::paintWindowFrame (QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *) {
+void ProgressWidgetGraphicsProxy::paintWindowFrame(QPainter *painter,
+                                                   const QStyleOptionGraphicsItem *, QWidget *) {
   QRectF widgetGeometry = windowFrameRect();
   QPainterPath path;
   path.addRect(widgetGeometry);
   path.moveTo(widgetGeometry.topLeft() + QPointF(0, -offset));
-  path.quadTo(widgetGeometry.topLeft() + QPointF(-offset, -offset), widgetGeometry.topLeft() + QPointF(-offset, 0));
+  path.quadTo(widgetGeometry.topLeft() + QPointF(-offset, -offset),
+              widgetGeometry.topLeft() + QPointF(-offset, 0));
   path.lineTo(widgetGeometry.bottomLeft() + QPointF(-offset, 0));
-  path.quadTo(widgetGeometry.bottomLeft() + QPointF(-offset, offset), widgetGeometry.bottomLeft() + QPointF(0, offset));
+  path.quadTo(widgetGeometry.bottomLeft() + QPointF(-offset, offset),
+              widgetGeometry.bottomLeft() + QPointF(0, offset));
   path.lineTo(widgetGeometry.bottomRight() + QPointF(0, offset));
-  path.quadTo(widgetGeometry.bottomRight() + QPointF(offset, offset), widgetGeometry.bottomRight() + QPointF(offset, 0));
+  path.quadTo(widgetGeometry.bottomRight() + QPointF(offset, offset),
+              widgetGeometry.bottomRight() + QPointF(offset, 0));
   path.lineTo(widgetGeometry.topRight() + QPointF(offset, 0));
-  path.quadTo(widgetGeometry.topRight() + QPointF(offset, -offset), widgetGeometry.topRight() + QPointF(0, -offset));
+  path.quadTo(widgetGeometry.topRight() + QPointF(offset, -offset),
+              widgetGeometry.topRight() + QPointF(0, -offset));
   path.lineTo(widgetGeometry.topLeft() + QPointF(0, -offset));
 
   painter->setPen(Qt::black);

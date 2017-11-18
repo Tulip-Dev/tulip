@@ -28,25 +28,23 @@ namespace tlp {
 /** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
  *
  */
-class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor
-  : public GLInteractorComposite {
-  QLabel* _label;
+class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor : public GLInteractorComposite {
+  QLabel *_label;
   unsigned int _priority;
 
-public :
-
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text, unsigned int priority=0);
+public:
+  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text,
+                                     unsigned int priority = 0);
 
   virtual ~NodeLinkDiagramComponentInteractor();
 
-  void setConfigurationWidgetText(const QString& text);
+  void setConfigurationWidgetText(const QString &text);
 
-  virtual QWidget* configurationWidget() const;
+  virtual QWidget *configurationWidget() const;
 
   virtual unsigned int priority() const;
 
   void setPriority(const unsigned int p);
-
 };
 }
 

@@ -31,12 +31,13 @@
  *  available in each graph.
  *
  */
-class DegreeMetric:public tlp::DoubleAlgorithm {
+class DegreeMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Degree","David Auber","04/10/2001","Assigns its degree to each node.","1.0","Graph")
-  DegreeMetric(const tlp::PluginContext* context);
+  PLUGININFORMATION("Degree", "David Auber", "04/10/2001", "Assigns its degree to each node.",
+                    "1.0", "Graph")
+  DegreeMetric(const tlp::PluginContext *context);
   bool run();
-  bool check(std::string& errorMsg);
+  bool check(std::string &errorMsg);
 };
 
 #endif

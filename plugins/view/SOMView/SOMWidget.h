@@ -27,10 +27,10 @@ class SOMWidget;
 }
 
 namespace tlp {
-class SOMWidget:public QWidget {
+class SOMWidget : public QWidget {
   Q_OBJECT
 
-  Ui::SOMWidget* _ui;
+  Ui::SOMWidget *_ui;
 
 public:
   SOMWidget(QWidget *parent = NULL);

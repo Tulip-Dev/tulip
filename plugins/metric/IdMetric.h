@@ -27,19 +27,12 @@
 /** This plugins assigns id to nodes/edges or both. The ids are those used internally by Tulip.
  *
  */
-class IdMetric:public tlp::DoubleAlgorithm {
+class IdMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Id","David Auber","06/04/2000","Assigns their Tulip id to nodes and edges.","1.1","Misc")
-  IdMetric(const tlp::PluginContext* context);
+  PLUGININFORMATION("Id", "David Auber", "06/04/2000", "Assigns their Tulip id to nodes and edges.",
+                    "1.1", "Misc")
+  IdMetric(const tlp::PluginContext *context);
   bool run();
 };
 
-
-
 #endif
-
-
-
-
-
-

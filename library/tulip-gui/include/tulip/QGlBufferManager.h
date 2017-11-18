@@ -36,13 +36,12 @@ namespace tlp {
 class TLP_QT_SCOPE QGlBufferManager {
 
 public:
-
   /**
    * Return the QGlBuffer manager singleton, il singleton doesn't exist this function create it
    */
   static QGlBufferManager &getInst() {
-    if(!inst)
-      inst=new QGlBufferManager();
+    if (!inst)
+      inst = new QGlBufferManager();
 
     return *inst;
   }
@@ -74,24 +73,21 @@ public:
   QGLFramebufferObject *getFramebufferObject(int width, int height);
 
 private:
-
   /**
    * empty private constructor for singleton
    */
   QGlBufferManager();
 
-  static QGlBufferManager* inst;
+  static QGlBufferManager *inst;
 
-  std::map<std::pair<int,int>,QGLPixelBuffer*> widthHeightToBuffer;
-  std::map<QGLPixelBuffer*,std::pair<int,int> > bufferToWidthHeight;
-  std::map<std::pair<int,int>,QGLFramebufferObject*> widthHeightToFramebuffer;
-  std::map<QGLFramebufferObject*,std::pair<int,int> > framebufferToWidthHeight;
+  std::map<std::pair<int, int>, QGLPixelBuffer *> widthHeightToBuffer;
+  std::map<QGLPixelBuffer *, std::pair<int, int> > bufferToWidthHeight;
+  std::map<std::pair<int, int>, QGLFramebufferObject *> widthHeightToFramebuffer;
+  std::map<QGLFramebufferObject *, std::pair<int, int> > framebufferToWidthHeight;
 
   bool pixelBufferWork;
   bool framebufferObjectWork;
-
 };
-
 }
 
 #endif // Tulip_QGLBUFFERMANAGER_H

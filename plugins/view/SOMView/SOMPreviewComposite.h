@@ -27,11 +27,12 @@
 #include <SOMMap.h>
 #include "SOMMapElement.h"
 /**
- * @brief GlComposite used to print SOM preview. Use a SOMMapElement to print the SOM and add other information like property name or color scale and min and max value.
+ * @brief GlComposite used to print SOM preview. Use a SOMMapElement to print the SOM and add other
+ * information like property name or color scale and min and max value.
  */
 namespace tlp {
 
-class SOMPreviewComposite: public GlComposite {
+class SOMPreviewComposite : public GlComposite {
 public:
   /**
     *@brief Constructor for the SOMPreviewComposite.
@@ -44,8 +45,9 @@ public:
     * @param minValue The minium value label.
     * @param maxValue The maximum value label.
     **/
-  SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string& propertyName, tlp::ColorProperty* colorProperty, SOMMap *map,
-                      tlp::ColorScale* colorScale, double minValue, double maxValue);
+  SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string &propertyName,
+                      tlp::ColorProperty *colorProperty, SOMMap *map, tlp::ColorScale *colorScale,
+                      double minValue, double maxValue);
   virtual ~SOMPreviewComposite();
 
   inline std::string getPropertyName() const {
@@ -67,14 +69,14 @@ public:
   /**
    * @brief Test is the entity is an internal element of the SOM.
    */
-  bool isElement(GlEntity* entity);
-
+  bool isElement(GlEntity *entity);
 
 protected:
+  tlp::Size computeAspectRatio(unsigned int width, unsigned int height, float maxWidth,
+                               float maxHeight);
 
-  tlp::Size computeAspectRatio(unsigned int width, unsigned int height, float maxWidth, float maxHeight);
-
-  void buildMainComposite(const std::string& colorPropertyName, SOMMap* map, tlp::Coord topLeft, tlp::Size elementSize);
+  void buildMainComposite(const std::string &colorPropertyName, SOMMap *map, tlp::Coord topLeft,
+                          tlp::Size elementSize);
 
   tlp::GlLabel *label;
   tlp::GlRect *frame;
@@ -82,7 +84,6 @@ protected:
   std::string propertyName;
   GlLabelledColorScale *lColorScale;
   tlp::Coord currentPosition;
-
 };
 }
 #endif /* SOMPREVIEWCOMPOSITE_H_ */

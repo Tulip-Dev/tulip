@@ -22,7 +22,8 @@
 
 namespace tlp {
 
-AddressSelectionDialog::AddressSelectionDialog(QWidget *parent) : QDialog(parent),_ui(new Ui::AddressSelectionDialogData) {
+AddressSelectionDialog::AddressSelectionDialog(QWidget *parent)
+    : QDialog(parent), _ui(new Ui::AddressSelectionDialogData) {
   _ui->setupUi(this);
   connect(_ui->okButton, SIGNAL(clicked()), this, SLOT(accept()));
 }

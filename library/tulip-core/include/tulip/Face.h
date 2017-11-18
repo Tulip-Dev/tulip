@@ -29,36 +29,40 @@ namespace tlp {
 
 struct Face {
   unsigned int id;
-  Face():id(UINT_MAX) {}
-  explicit Face(unsigned int j):id(j) {}
+  Face() : id(UINT_MAX) {}
+  explicit Face(unsigned int j) : id(j) {}
   bool operator!=(const Face f) const {
-    return id!=f.id;
+    return id != f.id;
   }
   bool operator==(const Face f) const {
-    return id==f.id;
+    return id == f.id;
   }
   bool isValid() const {
-    return id!=UINT_MAX;
+    return id != UINT_MAX;
   }
 };
-
 }
 
 TLP_BEGIN_HASH_NAMESPACE {
-  template<> struct hash<tlp::Face> {
-    size_t operator()(const tlp::Face f) const {return f.id;}
+  template <>
+  struct hash<tlp::Face> {
+    size_t operator()(const tlp::Face f) const {
+      return f.id;
+    }
   };
 }
 TLP_END_HASH_NAMESPACE
 
 namespace std {
-template<> struct equal_to<tlp::Face> {
-  size_t operator()(const tlp::Face f,const tlp::Face f2) const {
+template <>
+struct equal_to<tlp::Face> {
+  size_t operator()(const tlp::Face f, const tlp::Face f2) const {
     return f.id == f2.id;
   }
 };
-template<> struct less<tlp::Face> {
-  size_t operator()(const tlp::Face f,const tlp::Face f2) const {
+template <>
+struct less<tlp::Face> {
+  size_t operator()(const tlp::Face f, const tlp::Face f2) const {
     return f.id < f2.id;
   }
 };

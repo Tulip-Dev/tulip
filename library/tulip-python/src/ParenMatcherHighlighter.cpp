@@ -35,7 +35,8 @@ void ParenInfoTextBlockData::sortParenInfo() {
   std::sort(_parenInfo.begin(), _parenInfo.end());
 }
 
-ParenMatcherHighlighter::ParenMatcherHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
+ParenMatcherHighlighter::ParenMatcherHighlighter(QTextDocument *parent)
+    : QSyntaxHighlighter(parent) {
   _leftParensToMatch.append('(');
   _leftParensToMatch.append('[');
   _leftParensToMatch.append('{');
@@ -54,7 +55,7 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
   int pos = dblQuotesRegexp.indexIn(modifiedText);
 
   while (pos != -1) {
-    for (int i = pos ; i < pos + dblQuotesRegexp.matchedLength() ; ++i) {
+    for (int i = pos; i < pos + dblQuotesRegexp.matchedLength(); ++i) {
       modifiedText[i] = ' ';
     }
 
@@ -64,14 +65,14 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
   pos = simpleQuotesRegexp.indexIn(modifiedText);
 
   while (pos != -1) {
-    for (int i = pos ; i < pos + simpleQuotesRegexp.matchedLength() ; ++i) {
+    for (int i = pos; i < pos + simpleQuotesRegexp.matchedLength(); ++i) {
       modifiedText[i] = ' ';
     }
 
     pos = simpleQuotesRegexp.indexIn(modifiedText, pos + simpleQuotesRegexp.matchedLength());
   }
 
-  for (int i = 0 ; i < _leftParensToMatch.size() ; ++i) {
+  for (int i = 0; i < _leftParensToMatch.size(); ++i) {
     int leftPos = modifiedText.indexOf(_leftParensToMatch.at(i));
 
     while (leftPos != -1) {
@@ -79,11 +80,11 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
       info.character = _leftParensToMatch.at(i);
       info.position = currentBlock().position() + leftPos;
       data->insert(info);
-      leftPos = modifiedText.indexOf(_leftParensToMatch.at(i), leftPos+1);
+      leftPos = modifiedText.indexOf(_leftParensToMatch.at(i), leftPos + 1);
     }
   }
 
-  for (int i = 0 ; i < _rightParensToMatch.size() ; ++i) {
+  for (int i = 0; i < _rightParensToMatch.size(); ++i) {
     int rightPos = modifiedText.indexOf(_rightParensToMatch.at(i));
 
     while (rightPos != -1) {
@@ -91,7 +92,7 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
       info.character = _rightParensToMatch.at(i);
       info.position = currentBlock().position() + rightPos;
       data->insert(info);
-      rightPos = modifiedText.indexOf(_rightParensToMatch.at(i), rightPos+1);
+      rightPos = modifiedText.indexOf(_rightParensToMatch.at(i), rightPos + 1);
     }
   }
 

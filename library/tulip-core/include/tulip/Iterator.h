@@ -36,7 +36,8 @@ extern TLP_SCOPE int getNumIterators();
 * Allows basic iteration operations only.
 * @see forEach
 **/
-template<class itType> struct Iterator {
+template <class itType>
+struct Iterator {
   ///
   Iterator() {
 #ifndef NDEBUG
@@ -54,22 +55,22 @@ template<class itType> struct Iterator {
   *
   * @return The current element pointed by the Iterator.
   **/
-  virtual itType next()=0;
+  virtual itType next() = 0;
 
   /**
   * @brief Tells if the sequence is at its end.
   *
   * @return bool Whether there are more elements to iterate.
   **/
-  virtual bool hasNext()=0;
+  virtual bool hasNext() = 0;
 };
 
-//template<class C>class Iterator;
+// template<class C>class Iterator;
 #ifndef DOXYGEN_NOTFOR_DEVEL
-template<typename TYPE> class UINTIterator : public Iterator<TYPE> {
+template <typename TYPE>
+class UINTIterator : public Iterator<TYPE> {
 public:
-  UINTIterator(Iterator<unsigned int> *it):it(it) {
-  }
+  UINTIterator(Iterator<unsigned int> *it) : it(it) {}
   ~UINTIterator() {
     delete it;
   }
@@ -79,13 +80,12 @@ public:
   TYPE next() {
     return TYPE(it->next());
   }
+
 private:
   Iterator<unsigned int> *it;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
-
 }
-
 
 #ifdef _MSC_VER
 

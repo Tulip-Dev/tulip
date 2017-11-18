@@ -31,24 +31,24 @@ unsigned int getDist(Graph *g, node n1, node n2) {
   bool found = false;
   alreadyTreated.setAll(false);
   nextNodes.push_back(n1);
-  nodeDepth[n1]=0;
-  alreadyTreated.set(n1.id,true);
+  nodeDepth[n1] = 0;
+  alreadyTreated.set(n1.id, true);
 
-  for(unsigned int i = 0 ; !found && i < nextNodes.size(); ++i) {
+  for (unsigned int i = 0; !found && i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
-    Iterator<node> * itn = g->getInOutNodes(current);
+    Iterator<node> *itn = g->getInOutNodes(current);
 
-    while(itn->hasNext()) {
+    while (itn->hasNext()) {
       node v = itn->next();
 
-      if(alreadyTreated.get(v.id))
+      if (alreadyTreated.get(v.id))
         continue;
 
-      alreadyTreated.set(v.id,true);
+      alreadyTreated.set(v.id, true);
       nextNodes.push_back(v);
-      nodeDepth[v] = nodeDepth[current]+1;
+      nodeDepth[v] = nodeDepth[current] + 1;
 
-      if(v == n2) {
+      if (v == n2) {
         found = true;
         break;
       }

@@ -22,32 +22,29 @@
 using namespace std;
 using namespace tlp;
 
-GradientManager::GradientManager() :
-  beginColorRange(0), endColorRange(359), minSVal(0) {
-}
+GradientManager::GradientManager() : beginColorRange(0), endColorRange(359), minSVal(0) {}
 
 GradientManager::~GradientManager() {
   cleanAllGradients();
 }
 
 void GradientManager::cleanAllGradients() {
-  for (map<string, ColorScale*>::iterator it = colorScaleMap.begin(); it
-       != colorScaleMap.end(); ++it) {
+  for (map<string, ColorScale *>::iterator it = colorScaleMap.begin(); it != colorScaleMap.end();
+       ++it) {
     delete it->second;
   }
 
   colorScaleMap.clear();
 }
 
-void GradientManager::init(const std::vector<std::string>& properties) {
-  //Save old map in order to preserve user definition
+void GradientManager::init(const std::vector<std::string> &properties) {
+  // Save old map in order to preserve user definition
   cleanAllGradients();
 
   if (properties.empty())
     return;
 
-  int shift =
-    int(floor(double((endColorRange - beginColorRange) / properties.size())));
+  int shift = int(floor(double((endColorRange - beginColorRange) / properties.size())));
   pair<Color, Color> newColors;
   newColors.first.setV(255);
   newColors.first.setS(255);
@@ -56,7 +53,7 @@ void GradientManager::init(const std::vector<std::string>& properties) {
 
   for (unsigned int i = 0; i < properties.size(); ++i) {
 
-    //newColors.second.setS(minSVal);
+    // newColors.second.setS(minSVal);
     newColors.first.setS(255);
     newColors.first.setV(minSVal);
     newColors.first.setH(beginColorRange + (i * shift));
@@ -72,11 +69,9 @@ void GradientManager::init(const std::vector<std::string>& properties) {
   }
 }
 
-ColorScale *GradientManager::getColorScale(const std::string& propertyName) {
+ColorScale *GradientManager::getColorScale(const std::string &propertyName) {
   if (colorScaleMap.find(propertyName) != colorScaleMap.end()) {
     return colorScaleMap[propertyName];
-  }
-  else
+  } else
     return NULL;
 }
-

@@ -23,7 +23,8 @@
 using namespace tlp;
 using namespace std;
 
-ComputeSOMWidget::ComputeSOMWidget(QWidget* parent):QWidget(parent),_ui(new Ui::SOMComputeWidget) {
+ComputeSOMWidget::ComputeSOMWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::SOMComputeWidget) {
   _ui->setupUi(this);
 }
 

@@ -62,11 +62,10 @@ class Camera;
 class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
 
 public:
-
   /**
    * @brief Constructor
    */
-  GlSimpleEntity():visible(true),stencil(0xFFFF) {}
+  GlSimpleEntity() : visible(true), stencil(0xFFFF) {}
 
   /**
    * @brief Destructor
@@ -86,13 +85,14 @@ public:
   /**
    * @brief Set stencil number of the entity
    *
-   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity; it's a "guaranted visibility" system.
+   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity;
+   * it's a "guaranted visibility" system.
    * A small number causes a guaranted visibility
    * Default value in Tulip is 0xFFFF (greater integer)
    * And when we have stencil on entity value is 0x2
    */
   virtual void setStencil(int stencil) {
-    this->stencil=stencil;
+    this->stencil = stencil;
   }
   /**
    * @brief Return stencil number of entity
@@ -108,7 +108,7 @@ public:
    *
    * @warning You don't have to call this function, the Tulip OpenGL engine call it.
    */
-  virtual void draw(float lod,Camera* camera) = 0;
+  virtual void draw(float lod, Camera *camera) = 0;
 
   /**
    * @brief Return the entity boundingbox
@@ -124,16 +124,16 @@ public:
    *
    * @warning You don't have to call this function, the Tulip OpenGL engine call it.
    */
-  virtual void getXML(std::string &outString) =0;
+  virtual void getXML(std::string &outString) = 0;
 
   /**
    * @brief Load entity with inString (in XML format)
    *
    * @warning You don't have to call this function, the Tulip OpenGL engine call it.
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) = 0;
 
-///@cond DOXYGEN_HIDDEN
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * @brief Accept visitor function
@@ -157,27 +157,23 @@ public:
    */
   virtual void translate(const Coord &) {}
 
-  GlComposite* getParent() const {
+  GlComposite *getParent() const {
     if (parents.empty())
       return NULL;
 
     return parents[0];
   }
 
-///@endcond
+  ///@endcond
 
 protected:
-
   bool visible;
   int stencil;
 
   BoundingBox boundingBox;
 
-  std::vector<GlComposite*> parents;
-
+  std::vector<GlComposite *> parents;
 };
-
 }
 
 #endif // Tulip_GLSIMPLEENTITY_H
-

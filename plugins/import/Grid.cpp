@@ -23,62 +23,61 @@
 
 using namespace std;
 using namespace tlp;
-#define DEGTORAD(x) (M_PI/180) * x
+#define DEGTORAD(x) (M_PI / 180) * x
 
 static const char *paramHelp[] = {
-  // width
-  "Grid node width.",
+    // width
+    "Grid node width.",
 
-  // height
-  "Grid node height.",
+    // height
+    "Grid node height.",
 
-  // Connectivity
-  "Connectivity number of each node.",
+    // Connectivity
+    "Connectivity number of each node.",
 
-  // tore
-  "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the resulting object is a torus.",
+    // tore
+    "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the "
+    "resulting object is a torus.",
 
-  // Line spacing
-  "Spacing between nodes."
-};
+    // Line spacing
+    "Spacing between nodes."};
 
 /** \addtogroup import */
 
 /// Grid - Import of a grid.
 /** This plugin enables to create a grid.
  *
- *  User can specify the connectivity of each nodes in the grid, spacing between nodes and if opposite nodes are connected.
+ *  User can specify the connectivity of each nodes in the grid, spacing between nodes and if
+ * opposite nodes are connected.
  */
-class Grid: public ImportModule {
+class Grid : public ImportModule {
 public:
-  PLUGININFORMATION("Grid","Jonathan Dubois","02/12/2003","Imports a new grid structured graph.","2.0","Graph")
-  Grid(tlp::PluginContext* context) :
-    ImportModule(context) {
-    addInParameter<unsigned int> ("width", paramHelp[0], "10");
-    addInParameter<unsigned int> ("height", paramHelp[1], "10");
-    addInParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8", true, "4 <br> 6 <br> 8");
-    addInParameter<bool> ("oppositeNodesConnected", paramHelp[3], "false");
-    addInParameter<double> ("spacing", paramHelp[4], "1.0");
+  PLUGININFORMATION("Grid", "Jonathan Dubois", "02/12/2003", "Imports a new grid structured graph.",
+                    "2.0", "Graph")
+  Grid(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("width", paramHelp[0], "10");
+    addInParameter<unsigned int>("height", paramHelp[1], "10");
+    addInParameter<StringCollection>("connectivity", paramHelp[2], "4;6;8", true,
+                                     "4 <br> 6 <br> 8");
+    addInParameter<bool>("oppositeNodesConnected", paramHelp[3], "false");
+    addInParameter<double>("spacing", paramHelp[4], "1.0");
   }
-  ~Grid() {
-  }
+  ~Grid() {}
 
-  void buildRow(const vector<node>& nodes, vector<pair<node, node> >& ends,
-                unsigned int iRow, unsigned width,
-                int conn, bool isTore, double spacing) {
-    LayoutProperty *layout = graph->getProperty<LayoutProperty> ("viewLayout");
+  void buildRow(const vector<node> &nodes, vector<pair<node, node> > &ends, unsigned int iRow,
+                unsigned width, int conn, bool isTore, double spacing) {
+    LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
 
-    //Used for conn == 6
+    // Used for conn == 6
     double r = 0.5;
     double h = sqrt((r * r) - ((r / 2) * (r / 2)));
     double hHeight = cos(DEGTORAD(60)) * r;
     double shift = 0;
 
-    //If iRow is even introduce a shift
+    // If iRow is even introduce a shift
     if (iRow % 2 == 0) {
       shift += h;
-    }
-    else {
+    } else {
       shift += 0;
     }
 
@@ -89,14 +88,10 @@ public:
       current = nodes[iBegin + i];
 
       if (conn == 6) {
-        layout->setNodeValue(current,
-                             Coord(i * 2 * h + shift + i * spacing,
-                                   iRow * (1.0 - hHeight + spacing), 0));
-      }
-      else
-        layout->setNodeValue(current,
-                             Coord(i * (1.0 + spacing), iRow * (1.0
-                                   + spacing), 0));
+        layout->setNodeValue(
+            current, Coord(i * 2 * h + shift + i * spacing, iRow * (1.0 - hHeight + spacing), 0));
+      } else
+        layout->setNodeValue(current, Coord(i * (1.0 + spacing), iRow * (1.0 + spacing), 0));
 
       if (previous.isValid())
         ends.push_back(pair<node, node>(previous, current));
@@ -108,57 +103,45 @@ public:
       ends.push_back(pair<node, node>(current, nodes[iBegin]));
   }
 
-  void connectRow(const vector<node> &nodes, vector<pair<node, node> > &ends,
-                  unsigned int row1, unsigned int row2, unsigned int width,
-                  int conn, bool isTore) {
+  void connectRow(const vector<node> &nodes, vector<pair<node, node> > &ends, unsigned int row1,
+                  unsigned int row2, unsigned int width, int conn, bool isTore) {
     unsigned int row1Begin = row1 * width;
     unsigned int row2Begin = row2 * width;
 
     for (unsigned int i = 0; i < width; ++i) {
-      ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                      nodes[row2Begin + i]));
+      ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i]));
 
       if (conn == 8) {
         if (i > 0) {
-          ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                          nodes[row2Begin + i - 1]));
-        }
-        else if (isTore) {
-          ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                          nodes[row2Begin + width - 1]));
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i - 1]));
+        } else if (isTore) {
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + width - 1]));
         }
 
         if (i < width - 1) {
-          ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                          nodes[row2Begin + i + 1]));
-        }
-        else if (isTore) {
-          ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                          nodes[row2Begin]));
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i + 1]));
+        } else if (isTore) {
+          ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
         }
       }
 
       if (conn == 6) {
-        //In this case row1 must be even in order to ensure right connectivity in the hexagonal grid.
+        // In this case row1 must be even in order to ensure right connectivity in the hexagonal
+        // grid.
         if (row1 % 2 == 0) {
           if (i < width - 1)
-            ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                            nodes[row2Begin + i + 1]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i + 1]));
           else if (isTore)
             ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
-        }
-        else {
+        } else {
           if (i > 0)
-            ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                            nodes[row2Begin + i - 1]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + i - 1]));
           else if (isTore)
-            ends.push_back(pair<node, node>(nodes[row1Begin + i],
-                                            nodes[row2Begin + width - 1]));
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin + width - 1]));
         }
       }
     }
   }
-
 
   bool importGraph() {
     unsigned int width = 10;
@@ -202,16 +185,19 @@ public:
     else if (connectivity.getCurrentString().compare("6") == 0) {
       conn = 6;
 
-      if(isTore && height%2 == 1) {
+      if (isTore && height % 2 == 1) {
         if (pluginProgress)
-          pluginProgress->setError("Error : cannot connect opposite nodes in an hexagonal grid with odd height");
+          pluginProgress->setError(
+              "Error : cannot connect opposite nodes in an hexagonal grid with odd height");
         else
-          tlp::warning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height" << std::endl;
+          tlp::warning()
+              << __PRETTY_FUNCTION__ << ":" << __LINE__
+              << " Error : cannot connect opposite nodes in an hexagonal grid with odd height"
+              << std::endl;
 
         return false;
       }
-    }
-    else
+    } else
       conn = 8;
 
     // graph is predimensioned according the parameters
@@ -246,7 +232,7 @@ public:
     ends.reserve(nbEdges);
     graph->reserveEdges(nbEdges);
 
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
     buildRow(nodes, ends, 0, width, conn, isTore, spacing);
 
     for (unsigned int i = 1; i < height; ++i) {

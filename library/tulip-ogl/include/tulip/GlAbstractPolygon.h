@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef GLABSTRACTPOLYGON_H
 #define GLABSTRACTPOLYGON_H
 
@@ -39,7 +38,6 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
 public:
-
   ///@cond DOXYGEN_HIDDEN
 
   /**
@@ -51,7 +49,7 @@ public:
    */
   virtual ~GlAbstractPolygon();
 
-  enum PolygonMode {POLYGON = 0, QUAD_STRIP = 1};
+  enum PolygonMode { POLYGON = 0, QUAD_STRIP = 1 };
 
   /**
    * Get the polygon mode (see PolygonMode enum)
@@ -169,17 +167,17 @@ public:
   /**
    * Draw the polygon
    */
-  virtual void draw(float lod,Camera *camera);
+  virtual void draw(float lod, Camera *camera);
 
   /**
    * Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * Scale entity
    */
-  virtual void scale(const tlp::Size& factor);
+  virtual void scale(const tlp::Size &factor);
 
   /**
    * Function to export data and type in outString (in XML format)
@@ -199,7 +197,6 @@ public:
   ///@endcond
 
 protected:
-
   ///@cond DOXYGEN_HIDDEN
 
   /**
@@ -254,7 +251,5 @@ protected:
   bool generated;
   GLuint buffers[7];
 };
-
 }
 #endif
-

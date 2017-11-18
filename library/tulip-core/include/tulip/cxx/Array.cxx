@@ -18,65 +18,67 @@
  */
 
 //=================================================================
-template <typename Obj,unsigned int SIZE>
-Obj tlp::Array<Obj,SIZE>::operator[](const unsigned int i) const {
-  assert(i<SIZE);
+template <typename Obj, unsigned int SIZE>
+Obj tlp::Array<Obj, SIZE>::operator[](const unsigned int i) const {
+  assert(i < SIZE);
   return array[i];
 }
 //=================================================================
-template <typename Obj,unsigned int SIZE>
-Obj& tlp::Array<Obj,SIZE>::operator[](const unsigned int i) {
-  assert(i<SIZE);
+template <typename Obj, unsigned int SIZE>
+Obj &tlp::Array<Obj, SIZE>::operator[](const unsigned int i) {
+  assert(i < SIZE);
   return array[i];
 }
 //=================================================================
-template <typename Obj,unsigned int SIZE>
-std::ostream& tlp::operator<<(std::ostream &os,const tlp::Array<Obj,SIZE> &a) {
-  os << "(" ;
+template <typename Obj, unsigned int SIZE>
+std::ostream &tlp::operator<<(std::ostream &os, const tlp::Array<Obj, SIZE> &a) {
+  os << "(";
 
-  for ( unsigned int i=0 ; i<SIZE ; ++i ) {
-    if( i>0 )
+  for (unsigned int i = 0; i < SIZE; ++i) {
+    if (i > 0)
       os << ",";
 
     os << a[i];
   }
 
-  os << ")" ;
+  os << ")";
   return os;
 }
 //#include <sstream>
 //=================================================================
-//template <typename Obj,unsigned int SIZE>
-//QDebug operator<<(QDebug dbg,const tlp::Array<Obj,SIZE>& s) {
+// template <typename Obj,unsigned int SIZE>
+// QDebug operator<<(QDebug dbg,const tlp::Array<Obj,SIZE>& s) {
 //  std::stringstream ss;
 //  ss << s;
 //  dbg.nospace() << ss.str().c_str();
 //  return dbg.space();
 //}
 
-template <typename Obj,unsigned int SIZE>
-std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
+template <typename Obj, unsigned int SIZE>
+std::istream &tlp::operator>>(std::istream &is, tlp::Array<Obj, SIZE> &outA) {
   char c;
   int pos = is.tellg();
   is.clear();
 
   // skip spaces
-  while(bool(is >> c) && isspace(c)) {}
+  while (bool(is >> c) && isspace(c)) {
+  }
 
-  if(c!='(') {
+  if (c != '(') {
     is.seekg(pos);
     is.setstate(std::ios::failbit);
     return is;
   }
 
-  for(unsigned int i=0; i<SIZE; ++i) {
+  for (unsigned int i = 0; i < SIZE; ++i) {
     bool ok;
 
-    if (i>0 ) {
+    if (i > 0) {
       // skip spaces
-      while((ok = bool(is >> c)) && isspace(c)) {}
+      while ((ok = bool(is >> c)) && isspace(c)) {
+      }
 
-      if (!ok || c!=',') {
+      if (!ok || c != ',') {
         is.seekg(pos);
         is.setstate(std::ios::failbit);
         return is;
@@ -84,12 +86,13 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
     }
 
     // skip spaces
-    while((ok = bool(is >> c)) && isspace(c)) {}
+    while ((ok = bool(is >> c)) && isspace(c)) {
+    }
 
     is.unget();
     bool done = bool(is >> outA.array[i]);
 
-    if( !done ) {
+    if (!done) {
       is.seekg(pos);
       is.setstate(std::ios::failbit);
       return is;
@@ -97,9 +100,10 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
   }
 
   // skip spaces
-  while(bool(is >> c) && isspace(c)) {}
+  while (bool(is >> c) && isspace(c)) {
+  }
 
-  if (c!=')' ) {
+  if (c != ')') {
     is.seekg(pos);
     is.setstate(std::ios::failbit);
     return is;

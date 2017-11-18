@@ -32,14 +32,15 @@ namespace tlp {
 class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   std::vector<ParameterDescription> _params;
   tlp::DataSet _data;
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
 
 public:
-  explicit ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph=NULL, QObject *parent=NULL);
+  explicit ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph = NULL,
+                              QObject *parent = NULL);
   tlp::DataSet parametersValues() const;
-  void setParametersValues(const tlp::DataSet& data);
+  void setParametersValues(const tlp::DataSet &data);
 
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -48,7 +49,6 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const;
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 };
-
 }
 
 #endif // PARAMETERLISTMODEL_H

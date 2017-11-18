@@ -27,12 +27,13 @@
 
 namespace tlp {
 
-ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
-  : TulipModel(parent), _graph(graph) {
+ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
+                                       tlp::Graph *graph, QObject *parent)
+    : TulipModel(parent), _graph(graph) {
   ParameterDescription param;
   std::vector<ParameterDescription> outParams;
   // first add in parameters
-  forEach(param,params.getParameters()) {
+  forEach(param, params.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
       _params.push_back(param);
     else
@@ -40,35 +41,35 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
   }
 
   // then add out parameters
-  for(unsigned int i = 0; i < outParams.size(); ++i) {
+  for (unsigned int i = 0; i < outParams.size(); ++i) {
     _params.push_back(outParams[i]);
   }
 
   // no sort, keep the predefined ordering
-  params.buildDefaultDataSet(_data,graph);
+  params.buildDefaultDataSet(_data, graph);
 }
 
-QModelIndex ParameterListModel::index(int row, int column,const QModelIndex&) const {
-  return createIndex(row,column);
+QModelIndex ParameterListModel::index(int row, int column, const QModelIndex &) const {
+  return createIndex(row, column);
 }
 
-QModelIndex ParameterListModel::parent(const QModelIndex&) const {
+QModelIndex ParameterListModel::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 
-int ParameterListModel::rowCount(const QModelIndex&) const {
+int ParameterListModel::rowCount(const QModelIndex &) const {
   return _params.size();
 }
 
-int ParameterListModel::columnCount(const QModelIndex&) const {
+int ParameterListModel::columnCount(const QModelIndex &) const {
   return 1;
 }
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   if (role == GraphRole)
-    return QVariant::fromValue<tlp::Graph*>(_graph);
+    return QVariant::fromValue<tlp::Graph *>(_graph);
 
-  const ParameterDescription& info = _params[index.row()];
+  const ParameterDescription &info = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
     return tlp::tlpStringToQString(info.getHelp());
@@ -79,8 +80,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
       return QColor(255, 255, 222);
     else
       return QColor(222, 255, 222);
-  }
-  else if (role == Qt::DisplayRole) {
+  } else if (role == Qt::DisplayRole) {
     tlp::DataType *dataType = _data.getData(info.getName());
 
     if (!dataType)
@@ -89,8 +89,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
     QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType, info.getName());
     delete dataType;
     return result;
-  }
-  else if (role == MandatoryRole) {
+  } else if (role == MandatoryRole) {
     return info.isMandatory();
   }
 
@@ -107,7 +106,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
   }
 
   if (orientation == Qt::Vertical) {
-    const ParameterDescription& info = _params[section];
+    const ParameterDescription &info = _params[section];
 
     if (role == Qt::DisplayRole) {
       // remove prefix if any
@@ -117,42 +116,36 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
         return tlp::tlpStringToQString(info.getName().c_str() + pos + 2);
 
       return tlp::tlpStringToQString(info.getName().c_str());
-    }
-    else if (role == Qt::BackgroundRole) {
+    } else if (role == Qt::BackgroundRole) {
       if (info.isMandatory())
         return QColor(255, 255, 222);
       else
         return QColor(222, 255, 222);
-    }
-    else if (role == Qt::ToolTipRole) {
+    } else if (role == Qt::ToolTipRole) {
       return tlp::tlpStringToQString(info.getHelp());
-    }
-    else if (role == Qt::DecorationRole) {
+    } else if (role == Qt::DecorationRole) {
       if (info.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
-      }
-      else if (info.getDirection() == OUT_PARAM) {
+      } else if (info.getDirection() == OUT_PARAM) {
         return QIcon(":/tulip/gui/icons/32/output.png");
-      }
-      else {
+      } else {
         return QIcon(":/tulip/gui/icons/32/input-output.png");
       }
     }
   }
 
-  return TulipModel::headerData(section,orientation,role);
+  return TulipModel::headerData(section, orientation, role);
 }
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
-  const ParameterDescription& info = _params[index.row()];
+  const ParameterDescription &info = _params[index.row()];
   bool editable = info.isEditable();
 
   if (index.column() == 0) {
     if (editable)
       result |= Qt::ItemIsEditable;
-  }
-  else if (!editable)
+  } else if (!editable)
     result ^= Qt::ItemIsEditable;
 
   return result;
@@ -160,7 +153,7 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
 
 bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    const ParameterDescription& info = _params[index.row()];
+    const ParameterDescription &info = _params[index.row()];
 
     DataType *dataType = TulipMetaTypes::qVariantToDataType(value);
 
@@ -170,7 +163,7 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
     return (dataType != NULL);
   }
 
-  return QAbstractItemModel::setData(index,value,role);
+  return QAbstractItemModel::setData(index, value, role);
 }
 
 DataSet ParameterListModel::parametersValues() const {
@@ -180,5 +173,4 @@ DataSet ParameterListModel::parametersValues() const {
 void ParameterListModel::setParametersValues(const DataSet &data) {
   _data = data;
 }
-
 }

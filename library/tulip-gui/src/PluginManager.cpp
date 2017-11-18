@@ -34,8 +34,10 @@
 
 using namespace tlp;
 
-const QString PluginManager::STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_VERSION;
-const QString PluginManager::TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_VERSION;
+const QString PluginManager::STABLE_LOCATION =
+    QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_VERSION;
+const QString PluginManager::TESTING_LOCATION =
+    QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_VERSION;
 
 QDebug operator<<(QDebug dbg, const PluginVersionInformation &c) {
   dbg.nospace() << "(author " << c.author << ") "
@@ -58,35 +60,34 @@ QDebug operator<<(QDebug dbg, const PluginInformation &c) {
   return dbg.space();
 }
 
-class PluginServerClient: public YajlParseFacade {
+class PluginServerClient : public YajlParseFacade {
   QString _location;
 
   PluginManager::PluginInformationList _result;
   QString _currentKey;
-  QMap<QString,QString> _currentMap;
+  QMap<QString, QString> _currentMap;
 
 public:
-  PluginServerClient(const QString& location): _location(location) {
-  }
+  PluginServerClient(const QString &location) : _location(location) {}
 
-  void fetch(const QString& name, QObject* recv, const char* progressSlot) {
+  void fetch(const QString &name, QObject *recv, const char *progressSlot) {
     QNetworkAccessManager mgr;
 
-    QNetworkReply* reply = NULL;
-    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" + name);
+    QNetworkReply *reply = NULL;
+    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" +
+             TULIP_MM_VERSION + "&name=" + name);
 
     do {
       QNetworkRequest request(url);
       reply = mgr.get(request);
-      QObject::connect(reply,SIGNAL(downloadProgress(qint64,qint64)),recv,progressSlot);
+      QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)), recv, progressSlot);
 
       while (!reply->isFinished()) {
         QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
       }
 
       url = QUrl(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl());
-    }
-    while (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid());
+    } while (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid());
 
     reply->open(QIODevice::ReadOnly);
     QString tmpOutPath = QDir::temp().absoluteFilePath("tulip_plugin_" + name + ".zip");
@@ -95,15 +96,18 @@ public:
     tmpOut.write(reply->readAll());
     tmpOut.close();
     reply->close();
-    QuaZIPFacade::unzip(tlp::localPluginsPath(),tmpOutPath);
+    QuaZIPFacade::unzip(tlp::localPluginsPath(), tmpOutPath);
     tmpOut.remove();
   }
 
-  PluginManager::PluginInformationList list(const QString& nameFilter, const QString& categoryFilter) {
+  PluginManager::PluginInformationList list(const QString &nameFilter,
+                                            const QString &categoryFilter) {
     _result.clear();
     QNetworkAccessManager mgr;
-    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" + nameFilter + "&category=" + categoryFilter));
-    QNetworkReply* reply = mgr.get(request);
+    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" +
+                                 OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" +
+                                 nameFilter + "&category=" + categoryFilter));
+    QNetworkReply *reply = mgr.get(request);
 
     while (!reply->isFinished()) {
       QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -116,11 +120,11 @@ public:
     return _result;
   }
 
-  virtual void parseString(const std::string& value) {
+  virtual void parseString(const std::string &value) {
     _currentMap[_currentKey] = tlpStringToQString(value);
   }
 
-  virtual void parseMapKey(const std::string& value) {
+  virtual void parseMapKey(const std::string &value) {
     _currentKey = value.c_str();
   }
 
@@ -160,26 +164,30 @@ QStringList PluginManager::remoteLocations() {
 
 QStringList PluginManager::_markedForInstallation = QStringList();
 
-PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations locations, const QString &nameFilter, const QString &categoryFilter) {
-  QMap<QString,PluginInformation> nameToInfo;
+PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations locations,
+                                                                const QString &nameFilter,
+                                                                const QString &categoryFilter) {
+  QMap<QString, PluginInformation> nameToInfo;
 
   if (locations.testFlag(Local)) {
     std::list<std::string> localResults = PluginLister::instance()->availablePlugins();
 
-    for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end(); ++it) {
-      const Plugin& info = PluginLister::instance()->pluginInformation(*it);
+    for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end();
+         ++it) {
+      const Plugin &info = PluginLister::instance()->pluginInformation(*it);
 
-      if (QString(info.category().c_str()).contains(categoryFilter) && QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
+      if (QString(info.category().c_str()).contains(categoryFilter) &&
+          QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
         nameToInfo[info.name().c_str()].fillLocalInfo(info);
       }
     }
   }
 
   if (locations.testFlag(Remote)) {
-    foreach(const QString& loc, remoteLocations()) {
+    foreach (const QString &loc, remoteLocations()) {
       PluginServerClient client(loc);
 
-      foreach(const PluginInformation& info, client.list(nameFilter,categoryFilter)) {
+      foreach (const PluginInformation &info, client.list(nameFilter, categoryFilter)) {
         PluginInformation storedInfo = nameToInfo[info.name];
         storedInfo.name = info.name;
         storedInfo.category = info.category;
@@ -191,9 +199,7 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
 
   PluginInformationList result;
 
-  foreach(const PluginInformation& i, nameToInfo.values()) {
-    result.push_back(i);
-  }
+  foreach (const PluginInformation &i, nameToInfo.values()) { result.push_back(i); }
 
   return result;
 }
@@ -202,8 +208,9 @@ void PluginManager::markForRemoval(const QString &plugin) {
   TulipSettings::instance().markPluginForRemoval(plugin);
 }
 
-void PluginManager::markForInstallation(const QString& plugin, QObject* recv, const char *progressSlot) {
-  PluginInformationList lst = listPlugins(Remote,plugin);
+void PluginManager::markForInstallation(const QString &plugin, QObject *recv,
+                                        const char *progressSlot) {
+  PluginInformationList lst = listPlugins(Remote, plugin);
 
   if (lst.size() == 0 || !lst.first().availableVersion.isValid)
     return;
@@ -226,8 +233,7 @@ void PluginManager::unmarkForRemoval(const QString &file) {
   TulipSettings::instance().unmarkPluginForRemoval(file);
 }
 
-PluginInformation::PluginInformation() {
-}
+PluginInformation::PluginInformation() {}
 
 PluginInformation::PluginInformation(const PluginInformation &copy) {
   name = copy.name;
@@ -236,7 +242,7 @@ PluginInformation::PluginInformation(const PluginInformation &copy) {
   availableVersion = copy.availableVersion;
 }
 
-void PluginInformation::fillLocalInfo(const Plugin& info) {
+void PluginInformation::fillLocalInfo(const Plugin &info) {
   name = tlp::tlpStringToQString(info.name());
   category = tlp::tlpStringToQString(info.category());
   installedVersion.description = tlp::tlpStringToQString(info.info());
@@ -244,19 +250,20 @@ void PluginInformation::fillLocalInfo(const Plugin& info) {
   installedVersion.version = info.release().c_str();
   installedVersion.date = info.date().c_str();
   installedVersion.author = tlp::tlpStringToQString(info.author());
-  installedVersion.libraryLocation = tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
-  std::list<tlp::Dependency> dependencies = PluginLister::instance()->getPluginDependencies(info.name());
+  installedVersion.libraryLocation =
+      tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
+  std::list<tlp::Dependency> dependencies =
+      PluginLister::instance()->getPluginDependencies(info.name());
 
-  for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
+  for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end();
+       ++it) {
     installedVersion.dependencies.push_back(it->pluginName.c_str());
   }
 
   installedVersion.isValid = true;
 }
 
-
-PluginVersionInformation::PluginVersionInformation(): isValid(false) {
-}
+PluginVersionInformation::PluginVersionInformation() : isValid(false) {}
 
 PluginVersionInformation::PluginVersionInformation(const PluginVersionInformation &copy) {
   libraryLocation = copy.libraryLocation;

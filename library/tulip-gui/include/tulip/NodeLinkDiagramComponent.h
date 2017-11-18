@@ -34,12 +34,12 @@ namespace tlp {
 class GlGrid;
 class GlCompositeHierarchyManager;
 
-class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
+class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
   Q_OBJECT
 
-  GlGrid* _grid;
-  QDialog* _gridOptions;
-  GlCompositeHierarchyManager* manager;
+  GlGrid *_grid;
+  QDialog *_gridOptions;
+  GlCompositeHierarchyManager *manager;
   bool _hasHulls;
 
   void registerTriggers();
@@ -47,16 +47,19 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 
   bool _tooltips;
 
-  Ui::GridOptionsWidget* grid_ui;
+  Ui::GridOptionsWidget *grid_ui;
 
 public:
   static const std::string viewName;
   PLUGININFORMATION(NodeLinkDiagramComponent::viewName, "Tulip Team", "16/04/2008",
-                    "The Node Link Diagram view is the standard representation of relational data, where entities are represented as nodes, and their relation as edges.<br>"
-                    "This view allows you to change the glyph used to represent nodes (e.g. square, round, cross, ...), as well as the shape of the arrows indicating the direction of the relationship.",
+                    "The Node Link Diagram view is the standard representation of relational data, "
+                    "where entities are represented as nodes, and their relation as edges.<br>"
+                    "This view allows you to change the glyph used to represent nodes (e.g. "
+                    "square, round, cross, ...), as well as the shape of the arrows indicating the "
+                    "direction of the relationship.",
                     "1.0", "relational")
 
-  NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
+  NodeLinkDiagramComponent(const tlp::PluginContext *context = NULL);
   virtual ~NodeLinkDiagramComponent();
   std::string icon() const {
     return ":/tulip/gui/icons/32/node_link_diagram_view.png";
@@ -67,7 +70,7 @@ public:
 public slots:
   void draw();
   void requestChangeGraph(Graph *graph);
-  const Camera& goInsideItem(node meta);
+  const Camera &goInsideItem(node meta);
 
 protected slots:
 
@@ -80,17 +83,26 @@ protected slots:
   void ungroupItem();
   void setZOrdering(bool);
   void showGridControl();
-  void fillContextMenu(QMenu *menu,const QPointF &point);
+  void fillContextMenu(QMenu *menu, const QPointF &point);
   void displayToolTips(bool display);
 
-  void addRemoveItemToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveInNodesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveOutNodesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveInEdgesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveOutEdgesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveNodeAndAllNeighbourNodesAndEdges(bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveExtremitiesToSelection(bool pushGraph = true, bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
-  void addRemoveEdgeAndExtremitiesToSelection(bool toggleSelection = true, bool selectValue = false, bool resetSelection = false);
+  void addRemoveItemToSelection(bool pushGraph = true, bool toggleSelection = true,
+                                bool selectValue = false, bool resetSelection = false);
+  void addRemoveInNodesToSelection(bool pushGraph = true, bool toggleSelection = true,
+                                   bool selectValue = false, bool resetSelection = false);
+  void addRemoveOutNodesToSelection(bool pushGraph = true, bool toggleSelection = true,
+                                    bool selectValue = false, bool resetSelection = false);
+  void addRemoveInEdgesToSelection(bool pushGraph = true, bool toggleSelection = true,
+                                   bool selectValue = false, bool resetSelection = false);
+  void addRemoveOutEdgesToSelection(bool pushGraph = true, bool toggleSelection = true,
+                                    bool selectValue = false, bool resetSelection = false);
+  void addRemoveNodeAndAllNeighbourNodesAndEdges(bool toggleSelection = true,
+                                                 bool selectValue = false,
+                                                 bool resetSelection = false);
+  void addRemoveExtremitiesToSelection(bool pushGraph = true, bool toggleSelection = true,
+                                       bool selectValue = false, bool resetSelection = false);
+  void addRemoveEdgeAndExtremitiesToSelection(bool toggleSelection = true, bool selectValue = false,
+                                              bool resetSelection = false);
 
   void selectItem();
   void selectInNodes(bool pushGraph = true);
@@ -125,22 +137,17 @@ protected:
 
   void graphChanged(tlp::Graph *);
 
-  void createScene(Graph *graph,DataSet dataSet);
+  void createScene(Graph *graph, DataSet dataSet);
   DataSet sceneData() const;
   void loadGraphOnScene(Graph *graph);
   void useHulls(bool hasHulls);
   bool hasHulls() const;
   void setupWidget();
-  bool eventFilter(QObject *,QEvent *e);
-  void editValue(PropertyInterface* pi);
+  bool eventFilter(QObject *, QEvent *e);
+  void editValue(PropertyInterface *pi);
 };
 }
 
 #endif /* NODELINKDIAGRAMCOMPONENT_H_ */
-
-
-
-
-
 
 ///@endcond

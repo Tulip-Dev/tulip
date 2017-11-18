@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #include <tulip/GlOpenUniformCubicBSpline.h>
 
 namespace tlp {
@@ -31,8 +30,7 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlCubicBSplineInterpolation : public GlOpenUniformCubicBSpline {
 
-public :
-
+public:
   /**
    * GlCubicBSplineInterpolation constructor
    *
@@ -43,15 +41,13 @@ public :
    * \param endSize the width at the end of the curve
    * \param nbCurvePoints the number of curve points to generate
    */
-  GlCubicBSplineInterpolation(const std::vector<Coord> &pointsToInterpolate, const Color &startColor, const Color &endColor,
-                              const float startSize, const float endSize, const unsigned int nbCurvePoints = 100);
+  GlCubicBSplineInterpolation(const std::vector<Coord> &pointsToInterpolate,
+                              const Color &startColor, const Color &endColor, const float startSize,
+                              const float endSize, const unsigned int nbCurvePoints = 100);
 
-
-private :
-
-  std::vector<Coord> constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
-
+private:
+  std::vector<Coord>
+  constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
 };
-
 }
 ///@endcond

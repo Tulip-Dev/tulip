@@ -36,7 +36,8 @@ namespace tlp {
   * Iteration order is the same.
   *
   * @warning By default StableIterator takes ownership of the iterator given in parameter, (ie,
-  * delete will be called on the input iterator). The deletion takes place when constructing the StableIterator.
+  * delete will be called on the input iterator). The deletion takes place when constructing the
+ * StableIterator.
   *
   * This class is really useful when one needs to modify the graph during an iteration. For
   * instance the following code remove all nodes that match the function myfunc().
@@ -53,17 +54,21 @@ namespace tlp {
   *
   * @see stableForEach
   */
-template<class itType>
+template <class itType>
 struct StableIterator : public Iterator<itType> {
   //=============================
   /**
-  * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating on them.
+  * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating on
+  *them.
   *
-  * @param inputIterator Input Iterator, which defines the sequence on which this Iterator will iterate.
+  * @param inputIterator Input Iterator, which defines the sequence on which this Iterator will
+  *iterate.
   * @param nbElements The number of elements the iteration will take place on. Defaults to 0.
-  * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults to true.
+  * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults
+  *to true.
   **/
-  StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true, bool sortCopy = false) {
+  StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true,
+                 bool sortCopy = false) {
     sequenceCopy.reserve(nbElements);
 
     for (; inputIterator->hasNext();) {
@@ -101,7 +106,7 @@ struct StableIterator : public Iterator<itType> {
     copyIterator = sequenceCopy.begin();
   }
   //=============================
-protected :
+protected:
   /**
   * @brief A copy of the sequence of the elements to iterate.
   **/
@@ -112,7 +117,6 @@ protected :
   **/
   typename std::vector<itType>::const_iterator copyIterator;
 };
-
 }
 #endif
 ///@endcond

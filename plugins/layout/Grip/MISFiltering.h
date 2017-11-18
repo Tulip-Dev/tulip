@@ -25,17 +25,18 @@
 
 class MISFiltering {
 
-public :
+public:
   MISFiltering(tlp::Graph *);
   ~MISFiltering();
 
   void computeFiltering();
-  void getNearest(tlp::node, std::vector<tlp::node> &,std::vector<unsigned int>&, unsigned int, unsigned int = 3);
+  void getNearest(tlp::node, std::vector<tlp::node> &, std::vector<unsigned int> &, unsigned int,
+                  unsigned int = 3);
 
   std::vector<tlp::node> ordering;
   std::vector<unsigned int> index;
 
-private :
+private:
   unsigned int level;
   tlp::MutableContainer<bool> inLastVi;
   tlp::MutableContainer<bool> inCurVi;
@@ -44,12 +45,10 @@ private :
 
   TLP_HASH_MAP<unsigned int, TLP_HASH_SET<tlp::node> > levelToNodes;
 
-
-
   void bfsDepth(tlp::node, unsigned int);
   void updateVectors();
 
-  tlp::Graph * g_copy;
+  tlp::Graph *g_copy;
   tlp::MutableContainer<bool> removedVisit;
   tlp::MutableContainer<bool> attendedVisit;
   tlp::MutableContainer<bool> visited;

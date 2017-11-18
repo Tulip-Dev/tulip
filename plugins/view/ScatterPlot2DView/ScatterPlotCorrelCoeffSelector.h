@@ -31,12 +31,11 @@ class ScatterPlot2DView;
 
 class GlEditableComplexPolygon : public GlSimpleEntity {
 
-public :
-
+public:
   GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color);
 
   void translate(const Coord &move);
-  void draw(float lod,Camera* camera);
+  void draw(float lod, Camera *camera);
   BoundingBox getBoundingBox();
   void getXML(std::string &) {}
   void setWithXML(const std::string &, unsigned int &) {}
@@ -66,12 +65,11 @@ public :
     return selected;
   }
 
-  const std::vector<Coord> & getPolygonVertices() const {
+  const std::vector<Coord> &getPolygonVertices() const {
     return polygonPoints;
   }
 
-private :
-
+private:
   std::vector<Coord> polygonPoints;
   Color color;
   GlCircle basicCircle;
@@ -80,10 +78,10 @@ private :
 
 class ScatterPlotCorrelCoeffSelector : public GLInteractorComponent {
 
-public :
-
+public:
   ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget);
-  ScatterPlotCorrelCoeffSelector(const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector);
+  ScatterPlotCorrelCoeffSelector(
+      const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector);
   ~ScatterPlotCorrelCoeffSelector();
 
   bool eventFilter(QObject *, QEvent *);
@@ -91,10 +89,10 @@ public :
   bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   void getPolygonAndPointUnderPointerIfAny(const Coord &pointerSceneCoord, Camera *camera);
-  void mapPolygonColorToCorrelCoeffOfData(GlEditableComplexPolygon *polygon, GlMainWidget *glWidget);
+  void mapPolygonColorToCorrelCoeffOfData(GlEditableComplexPolygon *polygon,
+                                          GlMainWidget *glWidget);
 
   ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
   ScatterPlot2DView *scatterView;
@@ -106,10 +104,9 @@ private :
   Coord *selectedPolygonPoint;
   bool dragStarted;
   int x, y;
-  std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double > > polygonsToNodesSubsetAndCorrelCoeff;
-
+  std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double> >
+      polygonsToNodesSubsetAndCorrelCoeff;
 };
-
 }
 
 #endif /* SCATTERPLOTCORELCOEFFSELECTOR_H_ */

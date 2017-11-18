@@ -43,22 +43,22 @@ using namespace std;
 namespace tlp {
 
 //======================================================================
-void makeProperDag(Graph* graph, list<node> &addedNodes,
-                   TLP_HASH_MAP<edge,edge> &replacedEdges,
+void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge> &replacedEdges,
                    IntegerProperty *edgeLength) {
-  if (TreeTest::isTree(graph)) return;
+  if (TreeTest::isTree(graph))
+    return;
 
   assert(AcyclicTest::isAcyclic(graph));
-  //We compute the dag level metric on resulting sg.
+  // We compute the dag level metric on resulting sg.
   NodeStaticProperty<unsigned int> dLevel(graph);
   dagLevel(graph, dLevel);
 
   if (edgeLength)
     edgeLength->setAllEdgeValue(1);
 
-  //we now transform the dag in a proper Dag, two linked nodes of a proper dag
-  //must have a difference of one of dag level metric.
-  const vector<edge>& edges = graph->edges();
+  // we now transform the dag in a proper Dag, two linked nodes of a proper dag
+  // must have a difference of one of dag level metric.
+  const vector<edge> &edges = graph->edges();
   unsigned int nbEdges = edges.size();
 
   for (unsigned int i = 0; i < nbEdges; ++i) {
@@ -66,41 +66,42 @@ void makeProperDag(Graph* graph, list<node> &addedNodes,
     pair<node, node> eEnds = graph->ends(e);
     unsigned int fLevel = dLevel.getNodeValue(eEnds.first);
     unsigned int sLevel = dLevel.getNodeValue(eEnds.second);
-    int delta= sLevel - fLevel;
+    int delta = sLevel - fLevel;
 
-    if (delta>1) {
-      node n1=graph->addNode();
-      replacedEdges[e]=graph->addEdge(eEnds.first, n1);
+    if (delta > 1) {
+      node n1 = graph->addNode();
+      replacedEdges[e] = graph->addEdge(eEnds.first, n1);
       addedNodes.push_back(n1);
       dLevel.addNodeValue(n1, fLevel + 1);
 
-      if (delta>2) {
-        node n2=graph->addNode();
+      if (delta > 2) {
+        node n2 = graph->addNode();
         addedNodes.push_back(n2);
-        edge e=graph->addEdge(n1, n2);
+        edge e = graph->addEdge(n1, n2);
 
         if (edgeLength)
-          edgeLength->setEdgeValue(e, delta-2);
+          edgeLength->setEdgeValue(e, delta - 2);
 
         dLevel.addNodeValue(n2, sLevel - 1);
-        n1=n2;
+        n1 = n2;
       }
 
       graph->addEdge(n1, eEnds.second);
     }
   }
 
-  for (TLP_HASH_MAP<edge,edge>::const_iterator it=replacedEdges.begin(); it!=replacedEdges.end(); ++it)
+  for (TLP_HASH_MAP<edge, edge>::const_iterator it = replacedEdges.begin();
+       it != replacedEdges.end(); ++it)
     graph->delEdge((*it).first);
 
   assert(AcyclicTest::isAcyclic(graph));
 }
 //======================================================================
-node makeSimpleSource(Graph* graph) {
+node makeSimpleSource(Graph *graph) {
   assert(AcyclicTest::isAcyclic(graph));
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
-  node startNode=graph->addNode();
+  node startNode = graph->addNode();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = nodes[i];
@@ -114,12 +115,11 @@ node makeSimpleSource(Graph* graph) {
   return startNode;
 }
 //======================================================================
-vector<vector<node> > computeCanonicalOrdering(PlanarConMap* carte,
-    std::vector<edge>* dummyEdges,
-    PluginProgress* pluginProgress) {
+vector<vector<node> > computeCanonicalOrdering(PlanarConMap *carte, std::vector<edge> *dummyEdges,
+                                               PluginProgress *pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
-  if (dummyEdges!=NULL)
+  if (dummyEdges != NULL)
     *dummyEdges = o.getDummyEdges();
 
   vector<vector<node> > res;
@@ -128,7 +128,7 @@ vector<vector<node> > computeCanonicalOrdering(PlanarConMap* carte,
   if (nbMax) {
     res.reserve(nbMax);
 
-    while(nbMax) {
+    while (nbMax) {
       res.push_back(o[--nbMax]);
     }
   }
@@ -136,15 +136,15 @@ vector<vector<node> > computeCanonicalOrdering(PlanarConMap* carte,
   return res;
 }
 //======================================================================
-std::vector<node> computeGraphCenters(Graph* graph) {
+std::vector<node> computeGraphCenters(Graph *graph) {
   assert(ConnectedTest::isConnected(graph));
   std::vector<unsigned int> dist;
   unsigned int minD = UINT_MAX;
   unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
 
 #ifdef _OPENMP
-  #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
   for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
@@ -152,7 +152,7 @@ std::vector<node> computeGraphCenters(Graph* graph) {
     unsigned int maxD = maxDistance(graph, i, tmp, UNDIRECTED);
     dist[i] = maxD;
 #ifdef _OPENMP
-    #pragma omp critical(COMPUTE_MIN)
+#pragma omp critical(COMPUTE_MIN)
 #endif
     minD = std::min(minD, maxD);
   }
@@ -167,15 +167,14 @@ std::vector<node> computeGraphCenters(Graph* graph) {
   return result;
 }
 //======================================================================
-node graphCenterHeuristic(Graph * graph,
-                          PluginProgress *pluginProgress) {
+node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
   unsigned int nbNodes = graph->numberOfNodes();
 
   if (nbNodes == 0)
     return node();
 
-  const vector<node>& nodes = graph->nodes();
+  const vector<node> &nodes = graph->nodes();
   tlp::NodeStaticProperty<bool> toTreat(graph);
   toTreat.setAll(true);
   tlp::NodeStaticProperty<unsigned int> dist(graph);
@@ -192,7 +191,7 @@ node graphCenterHeuristic(Graph * graph,
     if (pluginProgress) {
       pluginProgress->setComment("Computing graph center...");
 
-      if (maxTries - nbTry % 200 == 0 )
+      if (maxTries - nbTry % 200 == 0)
         pluginProgress->progress(maxTries - nbTry, maxTries);
     }
 
@@ -204,13 +203,12 @@ node graphCenterHeuristic(Graph * graph,
       if (di < cDist) {
         result = n;
         cDist = di;
-      }
-      else {
+      } else {
         unsigned int delta = di - cDist;
 
         for (unsigned int v = 0; v < nbNodes; v++)
           if (dist[v] < delta)
-            //all the nodes at distance less than delta can't be center
+            // all the nodes at distance less than delta can't be center
             toTreat[v] = false;
       }
 
@@ -218,7 +216,7 @@ node graphCenterHeuristic(Graph * graph,
       node v;
 
       for (unsigned int v = 0; v < nbNodes; v++) {
-        if (dist[v] > (di/2 + di%2) )
+        if (dist[v] > (di / 2 + di % 2))
           toTreat[v] = false;
         else {
           if (toTreat[v]) {
@@ -243,20 +241,19 @@ node graphCenterHeuristic(Graph * graph,
   return nodes[result];
 }
 //======================================================================
-void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
+void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
                           PluginProgress *pluginProgress) {
   list<node> fifo;
 
   NodeStaticProperty<bool> nodeFlag(graph);
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
 
   unsigned int nbNodes = nodes.size();
-  unsigned int nbSelectedNodes =
-    selectionProperty->numberOfNonDefaultValuatedNodes();
+  unsigned int nbSelectedNodes = selectionProperty->numberOfNonDefaultValuatedNodes();
 
   // get previously selected nodes
   if (nbSelectedNodes) {
-    for (unsigned int i = 0;  i < nbNodes; ++i) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
       node n = nodes[i];
 
       if (selectionProperty->getNodeValue(n)) {
@@ -264,32 +261,31 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
         nodeFlag[i] = true;
       }
     }
-  }
-  else {
+  } else {
     node n = graph->getOneNode();
     fifo.push_back(n);
-    nodeFlag.setNodeValue(n,true);
+    nodeFlag.setNodeValue(n, true);
     nbSelectedNodes = 1;
   }
 
   EdgeStaticProperty<bool> edgeSel(graph);
   edgeSel.setAll(true);
 
-  //select all nodes
-  for(unsigned i=0; i<nodes.size(); ++i)
-    selectionProperty->setNodeValue(nodes[i],true);
+  // select all nodes
+  for (unsigned i = 0; i < nodes.size(); ++i)
+    selectionProperty->setNodeValue(nodes[i], true);
 
-  bool ok=true;
+  bool ok = true;
   unsigned int edgeCount = 0;
 
   while (ok) {
     while (!fifo.empty()) {
-      node n1=fifo.front();
+      node n1 = fifo.front();
       fifo.pop_front();
-      Iterator<edge> *itE=graph->getOutEdges(n1);
+      Iterator<edge> *itE = graph->getOutEdges(n1);
 
-      for(; itE->hasNext();) {
-        edge adjit=itE->next();
+      for (; itE->hasNext();) {
+        edge adjit = itE->next();
         node tgt = graph->target(adjit);
         unsigned int tgtPos = graph->nodePos(tgt);
 
@@ -297,17 +293,15 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
           nodeFlag[tgtPos] = true;
           ++nbSelectedNodes;
           fifo.push_back(tgt);
-        }
-        else
+        } else
           edgeSel[graph->edgePos(adjit)] = false;
-
 
         if (pluginProgress) {
           pluginProgress->setComment("Computing a spanning forest...");
           ++edgeCount;
 
-          if (edgeCount == 200 ) {
-            if (pluginProgress->progress(nbSelectedNodes*100/nbNodes, 100) != TLP_CONTINUE) {
+          if (edgeCount == 200) {
+            if (pluginProgress->progress(nbSelectedNodes * 100 / nbNodes, 100) != TLP_CONTINUE) {
               return;
             }
 
@@ -319,34 +313,34 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
       delete itE;
     }
 
-    ok=false;
-    bool degZ=false;
+    ok = false;
+    bool degZ = false;
     unsigned int goodNodePos = 0;
 
-    for (unsigned int i = 0;  i < nbNodes; ++i) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
       node n = nodes[i];
 
       if (!nodeFlag[i]) {
         if (!ok) {
           goodNodePos = i;
-          ok=true;
+          ok = true;
         }
 
-        if (graph->indeg(n)==0) {
+        if (graph->indeg(n) == 0) {
           fifo.push_back(n);
           nodeFlag[i] = true;
           ++nbSelectedNodes;
-          degZ=true;
+          degZ = true;
         }
 
         if (!degZ) {
           node goodNode = nodes[goodNodePos];
 
-          if (graph->indeg(n)<graph->indeg(goodNode))
+          if (graph->indeg(n) < graph->indeg(goodNode))
             goodNodePos = i;
           else {
             if ((graph->indeg(n) == graph->indeg(goodNode)) &&
-                (graph->outdeg(n)>graph->outdeg(goodNode)))
+                (graph->outdeg(n) > graph->outdeg(goodNode)))
               goodNodePos = i;
           }
         }
@@ -363,8 +357,7 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
   edgeSel.copyToProperty(selectionProperty);
 }
 //======================================================================
-void selectSpanningTree(Graph* graph, BooleanProperty *selection,
-                        PluginProgress *pluginProgress) {
+void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
@@ -377,17 +370,17 @@ void selectSpanningTree(Graph* graph, BooleanProperty *selection,
   selection->setNodeValue(root, true);
   roots.push_back(root);
 
-  while(nbNodes != size) {
+  while (nbNodes != size) {
     root = roots[i];
-    Iterator<edge> * ite = graph->getInOutEdges(root);
+    Iterator<edge> *ite = graph->getInOutEdges(root);
 
-    while(ite->hasNext()) {
+    while (ite->hasNext()) {
       edge e = ite->next();
 
-      if(!selection->getEdgeValue(e)) {
+      if (!selection->getEdgeValue(e)) {
         node neighbour = graph->opposite(e, root);
 
-        if(!selection->getNodeValue(neighbour)) {
+        if (!selection->getNodeValue(neighbour)) {
           selection->setNodeValue(neighbour, true);
           roots.push_back(neighbour);
           nbNodes++;
@@ -397,7 +390,7 @@ void selectSpanningTree(Graph* graph, BooleanProperty *selection,
             pluginProgress->setComment("Computing spanning tree...");
             ++edgeCount;
 
-            if (edgeCount % 200  == 0) {
+            if (edgeCount % 200 == 0) {
               if (pluginProgress->progress(edgeCount, graph->numberOfEdges()) != TLP_CONTINUE)
                 return;
             }
@@ -414,7 +407,6 @@ void selectSpanningTree(Graph* graph, BooleanProperty *selection,
     pluginProgress->setComment("Spanning tree computed");
     pluginProgress->progress(100, 100);
   }
-
 }
 //======================================================================
 struct ltEdge {
@@ -425,18 +417,17 @@ struct ltEdge {
   }
 };
 
-void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
-                               NumericProperty *edgeWeight,
-                               PluginProgress *pluginProgress) {
+void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
+                               NumericProperty *edgeWeight, PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
 
   if (!edgeWeight)
     // no weight return a spanning tree
     return selectSpanningTree(graph, selection, pluginProgress);
 
-  const vector<node>& nodes = graph->nodes();
+  const vector<node> &nodes = graph->nodes();
 
-  for(unsigned i=0; i<nodes.size(); ++i)
+  for (unsigned i = 0; i < nodes.size(); ++i)
     selection->setNodeValue(nodes[i], true);
 
   selection->setAllEdgeValue(false);
@@ -447,10 +438,10 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
   unsigned int numClasses = nbNodes;
 
 #ifdef _OPENMP
-  #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-  for(OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
     classes[i] = i;
   }
 
@@ -462,7 +453,7 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
   unsigned int nbEdges = sortedEdges.size();
   unsigned int iE = 0;
 
-  while(numClasses > 1) {
+  while (numClasses > 1) {
     edge cur;
     pair<node, node> curEnds;
     unsigned int srcClass = 0, tgtClass = 0;
@@ -478,11 +469,11 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
     selection->setEdgeValue(cur, true);
 
     if (pluginProgress) {
-      pluginProgress->setComment("Computing minimum spanning tree..." );
+      pluginProgress->setComment("Computing minimum spanning tree...");
       ++edgeCount;
 
-      if (edgeCount == 200 ) {
-        if (pluginProgress->progress((maxCount - numClasses)*100/maxCount, 100) != TLP_CONTINUE)
+      if (edgeCount == 200) {
+        if (pluginProgress->progress((maxCount - numClasses) * 100 / maxCount, 100) != TLP_CONTINUE)
           return;
 
         edgeCount = 0;
@@ -490,7 +481,7 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
     }
 
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
     for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
@@ -504,19 +495,19 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
 //======================================================================
 struct visitedElt {
   tlp::node n;
-  visitedElt* next;
+  visitedElt *next;
 
-  visitedElt(tlp::node _n): n(_n), next(NULL) {}
+  visitedElt(tlp::node _n) : n(_n), next(NULL) {}
 };
 
-static void bfs(const Graph *graph, node root, std::vector<tlp::node>& nodes,
-                MutableContainer<bool>& visited) {
+static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes,
+                MutableContainer<bool> &visited) {
   if (visited.get(root.id))
     return;
 
   visited.set(root, true);
-  visitedElt* first = new visitedElt(root);
-  visitedElt* current, *last;
+  visitedElt *first = new visitedElt(root);
+  visitedElt *current, *last;
   last = current = first;
   unsigned nbNodes = 1;
 
@@ -537,16 +528,16 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node>& nodes,
 
   current = first;
 
-  while(current) {
+  while (current) {
     nodes.push_back(current->n);
-    visitedElt* tmp = current->next;
+    visitedElt *tmp = current->next;
     delete current;
     current = tmp;
   }
 }
 
 // bfs from a root node
-void bfs(const Graph *graph, node root, std::vector<tlp::node>& nodes) {
+void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes) {
   if (graph->numberOfNodes() > 0) {
     if (!root.isValid()) {
       root = graph->getSource();
@@ -570,10 +561,10 @@ std::vector<node> bfs(const Graph *graph, node root) {
 }
 
 // cumulative bfs from every node of the graph
-void bfs(const Graph *graph, std::vector<tlp::node>& visitedNodes) {
+void bfs(const Graph *graph, std::vector<tlp::node> &visitedNodes) {
   MutableContainer<bool> visited;
   visited.setAll(false);
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
@@ -581,7 +572,7 @@ void bfs(const Graph *graph, std::vector<tlp::node>& visitedNodes) {
   }
 }
 //======================================================================
-static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
+static void dfs(const Graph *graph, node n, std::vector<node> &nodes,
                 MutableContainer<bool> &visited) {
   if (!visited.get(n.id)) {
     visited.set(n.id, true);
@@ -593,11 +584,11 @@ static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
       node current = toVisit.top();
       toVisit.pop();
       nodes.push_back(current);
-      const std::vector<edge>& edges = graph->allEdges(current);
+      const std::vector<edge> &edges = graph->allEdges(current);
       unsigned int nbEdges = edges.size();
       unsigned int i = nbEdges;
 
-      while(i) {
+      while (i) {
         edge e = edges[--i];
 
         if (edgeOK || graph->isElement(e)) {
@@ -614,7 +605,7 @@ static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
 }
 
 // dfs from a root node
-void dfs(const Graph *graph, node root, std::vector<node>& visitedNodes) {
+void dfs(const Graph *graph, node root, std::vector<node> &visitedNodes) {
   if (graph->numberOfNodes() > 0) {
     if (!root.isValid()) {
       root = graph->getSource();
@@ -640,10 +631,10 @@ std::vector<node> dfs(const Graph *graph, node root) {
 }
 
 // cumulative dfs from every node of the graph
-void dfs(const Graph *graph, std::vector<node>& visitedNodes) {
+void dfs(const Graph *graph, std::vector<node> &visitedNodes) {
   MutableContainer<bool> visited;
   visited.setAll(false);
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
@@ -651,89 +642,86 @@ void dfs(const Graph *graph, std::vector<node>& visitedNodes) {
   }
 }
 //==================================================
-void buildNodesUniformQuantification(const Graph* graph,
-                                     const NumericProperty* prop,
-                                     unsigned int k,
-                                     std::map<double, int>& nodeMapping) {
-  //build the histogram of node values
-  map<double,int> histogram;
-  const std::vector<node>& nodes = graph->nodes();
+void buildNodesUniformQuantification(const Graph *graph, const NumericProperty *prop,
+                                     unsigned int k, std::map<double, int> &nodeMapping) {
+  // build the histogram of node values
+  map<double, int> histogram;
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    double value=prop->getNodeDoubleValue(nodes[i]);
-    map<double,int>::iterator it = histogram.find(value);
+    double value = prop->getNodeDoubleValue(nodes[i]);
+    map<double, int>::iterator it = histogram.find(value);
 
-    if (it==histogram.end())
-      histogram[value]=1;
+    if (it == histogram.end())
+      histogram[value] = 1;
     else
       ++(it->second);
   }
 
-  //Build the color map
-  double sum=0;
-  double cK=double(nbNodes)/double(k);
-  int k2=0;
-  map<double,int>::iterator it=histogram.begin(), ite = histogram.end();
+  // Build the color map
+  double sum = 0;
+  double cK = double(nbNodes) / double(k);
+  int k2 = 0;
+  map<double, int>::iterator it = histogram.begin(), ite = histogram.end();
 
-  for (; it!=ite; ++it) {
-    sum+=it->second;
-    nodeMapping[it->first]=k2;
+  for (; it != ite; ++it) {
+    sum += it->second;
+    nodeMapping[it->first] = k2;
 
     if (sum > cK * (k2 + 1))
-      k2 = ceil(sum/cK) - 1;
+      k2 = ceil(sum / cK) - 1;
   }
 }
 //==================================================
-void buildEdgesUniformQuantification(const Graph* graph,
-                                     const NumericProperty* prop,
-                                     unsigned int k,
-                                     std::map<double, int>& edgeMapping) {
-  //build the histogram of edges values
-  map<double,int> histogram;
+void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *prop,
+                                     unsigned int k, std::map<double, int> &edgeMapping) {
+  // build the histogram of edges values
+  map<double, int> histogram;
   const std::vector<edge> edges = graph->edges();
   unsigned int nbEdges = edges.size();
 
   for (unsigned int i = 0; i < nbEdges; ++i) {
-    double value=prop->getEdgeDoubleValue(edges[i]);
-    map<double,int>::iterator it = histogram.find(value);
+    double value = prop->getEdgeDoubleValue(edges[i]);
+    map<double, int>::iterator it = histogram.find(value);
 
-    if (it==histogram.end())
-      histogram[value]=1;
+    if (it == histogram.end())
+      histogram[value] = 1;
     else
       ++(it->second);
   }
 
-  //Build the color map
-  double sum=0;
-  double cK=double(nbEdges)/double(k);
-  int k2=0;
-  map<double,int>::iterator it=histogram.begin(), ite = histogram.end();
+  // Build the color map
+  double sum = 0;
+  double cK = double(nbEdges) / double(k);
+  int k2 = 0;
+  map<double, int>::iterator it = histogram.begin(), ite = histogram.end();
 
-  for (; it!=ite; ++it) {
-    sum+=it->second;
-    edgeMapping[it->first]=k2;
+  for (; it != ite; ++it) {
+    sum += it->second;
+    edgeMapping[it->first] = k2;
 
     if (sum > cK * (k2 + 1))
-      k2 = ceil(sum/cK) - 1;
+      k2 = ceil(sum / cK) - 1;
   }
 }
 
 unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test) {
   Observable::holdObservers();
   edge e;
-  unsigned added=0;
-  forEach(e,selection->getEdgesEqualTo(true, graph)) {
+  unsigned added = 0;
+  forEach(e, selection->getEdgesEqualTo(true, graph)) {
     const pair<node, node> ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {
 #ifndef NDEBUG
-      tlp::debug() << "[Make selection a graph] node #" << ends.first.id << " source of edge #" << e.id << " automatically added to selection.";
+      tlp::debug() << "[Make selection a graph] node #" << ends.first.id << " source of edge #"
+                   << e.id << " automatically added to selection.";
 #endif
-      selection->setNodeValue(ends.first,true);
+      selection->setNodeValue(ends.first, true);
       added++;
 
-      if(test) {
+      if (test) {
         *test = false;
         return -1;
       }
@@ -741,12 +729,13 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
     if (!selection->getNodeValue(ends.second)) {
 #ifndef NDEBUG
-      tlp::debug() << "[Make selection a graph] node #" << ends.second.id << " target of edge #" << e.id << " automatically added to selection.";
+      tlp::debug() << "[Make selection a graph] node #" << ends.second.id << " target of edge #"
+                   << e.id << " automatically added to selection.";
 #endif
-      selection->setNodeValue(ends.second,true);
+      selection->setNodeValue(ends.second, true);
       added++;
 
-      if(test) {
+      if (test) {
         *test = false;
         return -1;
       }
@@ -754,7 +743,7 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
   }
   Observable::unholdObservers();
 
-  if(test)
+  if (test)
     *test = true;
 
   return added;

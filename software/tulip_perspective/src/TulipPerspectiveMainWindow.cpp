@@ -24,27 +24,25 @@
 #include <tulip/Perspective.h>
 #include <tulip/TulipProject.h>
 
-TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent): QMainWindow(parent), _project(NULL), _title(title) {
+TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
+    : QMainWindow(parent), _project(NULL), _title(title) {}
 
-}
-
-void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent* event) {
+void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent *event) {
   if (tlp::Perspective::instance()->terminated()) {
     QMainWindow::closeEvent(event);
-  }
-  else
+  } else
     event->ignore();
 }
 
-void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject* project) {
+void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject *project) {
   _project = project;
-  connect(project, SIGNAL(projectFileChanged(const QString&)),
-          this, SLOT(projectFileChanged(const QString&)));
-  connect(tlp::Perspective::instance(), SIGNAL(resetWindowTitle()),
-          this, SLOT(projectFileChanged()));
+  connect(project, SIGNAL(projectFileChanged(const QString &)), this,
+          SLOT(projectFileChanged(const QString &)));
+  connect(tlp::Perspective::instance(), SIGNAL(resetWindowTitle()), this,
+          SLOT(projectFileChanged()));
 }
 
-void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projectFile) {
+void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projectFile) {
   QString wTitle(_title);
 
   wTitle += QString(" [") + _project->perspective() + "]";
@@ -53,12 +51,12 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projec
     wTitle += QString(" - ") + _project->name();
   else if (!projectFile.isEmpty())
     wTitle += QString(" - ") + projectFile;
-  else { //all graphs are deleted. Clear project. Useful?
+  else { // all graphs are deleted. Clear project. Useful?
     _project->clearProject();
     wTitle += QString(" - unsaved project");
   }
 
-  wTitle += "[*]"; //placeholder for window modification
+  wTitle += "[*]"; // placeholder for window modification
 #ifndef NDEBUG
   wTitle += " - [ Debug mode ]";
 #endif

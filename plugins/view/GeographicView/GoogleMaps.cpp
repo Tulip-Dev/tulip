@@ -32,144 +32,145 @@ using namespace std;
 
 namespace tlp {
 
-const string htmlMap = ""
-                       "<html>"
-                       "<head>"
+const string htmlMap =
+    ""
+    "<html>"
+    "<head>"
 #ifdef QT_HAS_WEBENGINE
-                       "<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"></script>"
+    "<script type=\"text/javascript\" src=\"qrc:///qtwebchannel/qwebchannel.js\"></script>"
 #endif
-                       "<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=false\"></script>"
-                       "<script type=\"text/javascript\">"
-                       "var map;"
-                       "var mapProjectionAccessor;"
-                       "var geocoder;"
-                       "var mapBounds;"
-                       "function MapProjectionAccessor(map) {"
-                       "  this.setMap(map);"
-                       "}"
-                       "MapProjectionAccessor.prototype = new google.maps.OverlayView();"
-                       "MapProjectionAccessor.prototype.onAdd = function() {};"
-                       "MapProjectionAccessor.prototype.onRemove = function() {};"
-                       "MapProjectionAccessor.prototype.draw = function() {};"
-                       "MapProjectionAccessor.prototype.getPixelPositionOnScreenForLatLng = function(lat, lng) {"
-                       "  var screenPos = this.getProjection().fromLatLngToContainerPixel(new google.maps.LatLng(lat, lng));"
-                       "  return screenPos.toString();"
-                       "};"
-                       "MapProjectionAccessor.prototype.getLatLngForPixelPosition = function(x, y) {"
-                       "  var latLng = this.getProjection().fromContainerPixelToLatLng(new google.maps.Point(x, y));"
-                       "  return latLng.toString();"
-                       "};"
-                       "function init(lat, lng) { "
-                       "  map = new google.maps.Map(document.getElementById(\"map_canvas\"), { zoom: 5, center: new google.maps.LatLng(lat, lng), mapTypeControl: false,"
-                       "  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},"
-                       "  disableDefaultUI: true,"
-                       "  mapTypeId: google.maps.MapTypeId.ROADMAP  });"
-                       "  google.maps.event.addListener(map, 'idle', function(evt) {"
-                       "    googleMapsQObject.refreshMap();"
-                       "  });"
-                       "  google.maps.event.addListener(map, 'tilesloaded', function(evt) {"
-                       "    googleMapsQObject.refreshMap();"
-                       "  });"
-                       "  mapProjectionAccessor = new MapProjectionAccessor(map);"
-                       "  geocoder = new google.maps.Geocoder();"
-                       "  geocoder.results = null;"
-                       "  geocoder.done = false;"
-                       "  geocoder.requestStatus = null;"
-                       "}"
-                       "function setMapBounds(latLngArray) {"
-                       "  var latLngBounds = new google.maps.LatLngBounds();"
-                       "  for (var i = 0 ; i < latLngArray.length ; ++i) {"
-                       "    latLngBounds.extend(latLngArray[i]);"
-                       "  }"
-                       "  map.setCenter(latLngBounds.getCenter());"
-                       "  map.fitBounds(latLngBounds);"
-                       "}"
-                       "function geocodeResult(results, status) {"
-                       "  if (status == google.maps.GeocoderStatus.OK) {"
-                       "    geocoder.results = results;"
-                       "  } "
-                       "  geocoder.done = true;"
-                       "  geocoder.requestStatus = status;"
-                       "}"
-                       "function codeAddress(address) {"
-                       "  geocoder.done = false;"
-                       "  geocoder.results = null;"
-                       "  geocoder.geocode({'address' : address}, geocodeResult);"
-                       "}"
-                       "function geocodingDone() {"
-                       "  return geocoder.done;"
-                       "}"
-                       "function getGeocodingStatus() {"
-                       "  if (geocoder.requestStatus == google.maps.GeocoderStatus.OK) {"
-                       "    return \"OK\";"
-                       "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.UNKNOWN_ERROR) {"
-                       "    return \"UNKNOWN_ERROR\";"
-                       "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {"
-                       "    return \"OVER_QUERY_LIMIT\";"
-                       "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.REQUEST_DENIED) {"
-                       "    return \"REQUEST_DENIED\";"
-                       "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.INVALID_REQUEST) {"
-                       "    return \"INVALID_REQUEST\";"
-                       "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.ZERO_RESULTS) {"
-                       "    return \"ZERO_RESULTS\";"
-                       "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.ERROR) {"
-                       "    return \"ERROR\";"
-                       "  }"
-                       "}"
-                       "function getGeocodingNumberOfResults() {"
-                       "  if (geocoder.results) {"
-                       "    return geocoder.results.length;"
-                       "  } else {"
-                       "    return 0;"
-                       "  }"
-                       "}"
-                       "function getGeocodingResultAddress(idx) {"
-                       "  if (geocoder.results) {"
-                       "    return geocoder.results[idx].formatted_address.toString();"
-                       "  } else {"
-                       "    return null;"
-                       "  }"
-                       "}"
-                       "function getGeocodingResultLatLng(idx) {"
-                       "  if (geocoder.results) {"
-                       "    return geocoder.results[idx].geometry.location.toString();"
-                       "  } else {"
-                       "    return null;"
-                       "  }"
-                       "}"
-                       "function switchToSatelliteView() {"
-                       "  map.setMapTypeId(google.maps.MapTypeId.SATELLITE);"
-                       "  googleMapsQObject.refreshMap();"
-                       "}"
-                       "function switchToRoadMapView() {"
-                       "  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);"
-                       "  googleMapsQObject.refreshMap();"
-                       "}"
-                       "function switchToHybridView() {"
-                       "  map.setMapTypeId(google.maps.MapTypeId.HYBRID);"
-                       "  googleMapsQObject.refreshMap();"
-                       "}"
-                       "function switchToTerrainView() {"
-                       "  map.setMapTypeId(google.maps.MapTypeId.TERRAIN);"
-                       "  googleMapsQObject.refreshMap();"
-                       "}"
+    "<script type=\"text/javascript\" "
+    "src=\"http://maps.google.com/maps/api/js?sensor=false\"></script>"
+    "<script type=\"text/javascript\">"
+    "var map;"
+    "var mapProjectionAccessor;"
+    "var geocoder;"
+    "var mapBounds;"
+    "function MapProjectionAccessor(map) {"
+    "  this.setMap(map);"
+    "}"
+    "MapProjectionAccessor.prototype = new google.maps.OverlayView();"
+    "MapProjectionAccessor.prototype.onAdd = function() {};"
+    "MapProjectionAccessor.prototype.onRemove = function() {};"
+    "MapProjectionAccessor.prototype.draw = function() {};"
+    "MapProjectionAccessor.prototype.getPixelPositionOnScreenForLatLng = function(lat, lng) {"
+    "  var screenPos = this.getProjection().fromLatLngToContainerPixel(new google.maps.LatLng(lat, "
+    "lng));"
+    "  return screenPos.toString();"
+    "};"
+    "MapProjectionAccessor.prototype.getLatLngForPixelPosition = function(x, y) {"
+    "  var latLng = this.getProjection().fromContainerPixelToLatLng(new google.maps.Point(x, y));"
+    "  return latLng.toString();"
+    "};"
+    "function init(lat, lng) { "
+    "  map = new google.maps.Map(document.getElementById(\"map_canvas\"), { zoom: 5, center: new "
+    "google.maps.LatLng(lat, lng), mapTypeControl: false,"
+    "  mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},"
+    "  disableDefaultUI: true,"
+    "  mapTypeId: google.maps.MapTypeId.ROADMAP  });"
+    "  google.maps.event.addListener(map, 'idle', function(evt) {"
+    "    googleMapsQObject.refreshMap();"
+    "  });"
+    "  google.maps.event.addListener(map, 'tilesloaded', function(evt) {"
+    "    googleMapsQObject.refreshMap();"
+    "  });"
+    "  mapProjectionAccessor = new MapProjectionAccessor(map);"
+    "  geocoder = new google.maps.Geocoder();"
+    "  geocoder.results = null;"
+    "  geocoder.done = false;"
+    "  geocoder.requestStatus = null;"
+    "}"
+    "function setMapBounds(latLngArray) {"
+    "  var latLngBounds = new google.maps.LatLngBounds();"
+    "  for (var i = 0 ; i < latLngArray.length ; ++i) {"
+    "    latLngBounds.extend(latLngArray[i]);"
+    "  }"
+    "  map.setCenter(latLngBounds.getCenter());"
+    "  map.fitBounds(latLngBounds);"
+    "}"
+    "function geocodeResult(results, status) {"
+    "  if (status == google.maps.GeocoderStatus.OK) {"
+    "    geocoder.results = results;"
+    "  } "
+    "  geocoder.done = true;"
+    "  geocoder.requestStatus = status;"
+    "}"
+    "function codeAddress(address) {"
+    "  geocoder.done = false;"
+    "  geocoder.results = null;"
+    "  geocoder.geocode({'address' : address}, geocodeResult);"
+    "}"
+    "function geocodingDone() {"
+    "  return geocoder.done;"
+    "}"
+    "function getGeocodingStatus() {"
+    "  if (geocoder.requestStatus == google.maps.GeocoderStatus.OK) {"
+    "    return \"OK\";"
+    "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.UNKNOWN_ERROR) {"
+    "    return \"UNKNOWN_ERROR\";"
+    "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {"
+    "    return \"OVER_QUERY_LIMIT\";"
+    "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.REQUEST_DENIED) {"
+    "    return \"REQUEST_DENIED\";"
+    "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.INVALID_REQUEST) {"
+    "    return \"INVALID_REQUEST\";"
+    "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.ZERO_RESULTS) {"
+    "    return \"ZERO_RESULTS\";"
+    "  } else if (geocoder.requestStatus == google.maps.GeocoderStatus.ERROR) {"
+    "    return \"ERROR\";"
+    "  }"
+    "}"
+    "function getGeocodingNumberOfResults() {"
+    "  if (geocoder.results) {"
+    "    return geocoder.results.length;"
+    "  } else {"
+    "    return 0;"
+    "  }"
+    "}"
+    "function getGeocodingResultAddress(idx) {"
+    "  if (geocoder.results) {"
+    "    return geocoder.results[idx].formatted_address.toString();"
+    "  } else {"
+    "    return null;"
+    "  }"
+    "}"
+    "function getGeocodingResultLatLng(idx) {"
+    "  if (geocoder.results) {"
+    "    return geocoder.results[idx].geometry.location.toString();"
+    "  } else {"
+    "    return null;"
+    "  }"
+    "}"
+    "function switchToSatelliteView() {"
+    "  map.setMapTypeId(google.maps.MapTypeId.SATELLITE);"
+    "  googleMapsQObject.refreshMap();"
+    "}"
+    "function switchToRoadMapView() {"
+    "  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);"
+    "  googleMapsQObject.refreshMap();"
+    "}"
+    "function switchToHybridView() {"
+    "  map.setMapTypeId(google.maps.MapTypeId.HYBRID);"
+    "  googleMapsQObject.refreshMap();"
+    "}"
+    "function switchToTerrainView() {"
+    "  map.setMapTypeId(google.maps.MapTypeId.TERRAIN);"
+    "  googleMapsQObject.refreshMap();"
+    "}"
 #ifdef QT_HAS_WEBENGINE
-                       "document.addEventListener(\"DOMContentLoaded\", function () {"
-                       "  new QWebChannel(qt.webChannelTransport, function (channel) {"
-                       "    googleMapsQObject = channel.objects.googleMapsQObject;"
-                       "    googleMapsQObject.refreshMap();"
-                       "  });"
-                       "});"
+    "document.addEventListener(\"DOMContentLoaded\", function () {"
+    "  new QWebChannel(qt.webChannelTransport, function (channel) {"
+    "    googleMapsQObject = channel.objects.googleMapsQObject;"
+    "    googleMapsQObject.refreshMap();"
+    "  });"
+    "});"
 #endif
-                       "</script>"
-                       "</head>"
-                       "<body style=\"margin:0px; padding:0px;\" >"
-                       "<div id=\"map_canvas\" style=\"width:100%; height:100%\"></div>"
-                       "</body>"
-                       "</html>"
-                       ;
-
-
+    "</script>"
+    "</head>"
+    "<body style=\"margin:0px; padding:0px;\" >"
+    "<div id=\"map_canvas\" style=\"width:100%; height:100%\"></div>"
+    "</body>"
+    "</html>";
 
 #ifdef QT_HAS_WEBENGINE
 
@@ -177,7 +178,7 @@ void MapRefresher::refreshMap() {
   emit refreshMapSignal();
 }
 
-JsCallback* JsCallback::_lastCreatedInstance = NULL;
+JsCallback *JsCallback::_lastCreatedInstance = NULL;
 
 #endif
 
@@ -256,19 +257,20 @@ Coord GoogleMaps::getPixelPosOnScreenForLatLng(double lat, double lng) {
 
   QString pointStr = ret.toString();
   QString xStr = pointStr.mid(1, pointStr.lastIndexOf(',') - 1);
-  QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 2, pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 2);
+  QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 2,
+                              pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 2);
 
   bool ok;
   return Coord(xStr.toDouble(&ok), yStr.toDouble(&ok), 0);
-
 }
 
-Coord GoogleMaps::mercatorProjection(const Coord &swPixel, const Coord &nePixel, const double latitude, const double longitude) {
+Coord GoogleMaps::mercatorProjection(const Coord &swPixel, const Coord &nePixel,
+                                     const double latitude, const double longitude) {
   double dLng = longitude + 180.0;
   double latRadians = M_PI * latitude / 180.0;
   double worldHeight = nePixel[1] - swPixel[1];
   double worldWidth = nePixel[0] - swPixel[0];
-  double y = worldHeight / 2.0 + log(tan(M_PI/4.0 + latRadians / 2.0)) * worldWidth / (2 * M_PI);
+  double y = worldHeight / 2.0 + log(tan(M_PI / 4.0 + latRadians / 2.0)) * worldWidth / (2 * M_PI);
   return Coord(swPixel.getX() + (dLng / 360.0) * worldWidth, swPixel.getY() + y);
 }
 
@@ -278,7 +280,8 @@ std::pair<double, double> GoogleMaps::getLatLngForPixelPosOnScreen(int x, int y)
 
   QString latLngStr = ret.toString();
   QString latStr = latLngStr.mid(1, latLngStr.lastIndexOf(',') - 1);
-  QString lngStr = latLngStr.mid(latLngStr.lastIndexOf(',') + 1, latLngStr.lastIndexOf(')') - latLngStr.lastIndexOf(',') - 1);
+  QString lngStr = latLngStr.mid(latLngStr.lastIndexOf(',') + 1,
+                                 latLngStr.lastIndexOf(')') - latLngStr.lastIndexOf(',') - 1);
   return make_pair(latStr.toDouble(), lngStr.toDouble());
 }
 
@@ -290,7 +293,8 @@ int GoogleMaps::getWorldWidth() {
   return int(retStr.toDouble() + 1);
 }
 
-string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, double> &latLng, bool skipMultipleResults) {
+string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, double> &latLng,
+                                       bool skipMultipleResults) {
   QString code = "codeAddress(\"%1\")";
   executeJavascript(code.arg(address));
   code = "geocodingDone()";
@@ -307,7 +311,6 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
 
   // reenable user input
   tlp::enableQtUserInput();
-
 
   code = "getGeocodingNumberOfResults()";
   ret = executeJavascript(code);
@@ -326,7 +329,7 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
     addressSelectionDialog->clearList();
     addressSelectionDialog->setBaseAddress(address);
 
-    for (int i = 0 ; i < nbResults ; ++i) {
+    for (int i = 0; i < nbResults; ++i) {
       code = "getGeocodingResultAddress(%1)";
 
       ret = executeJavascript(code.arg(i));
@@ -334,7 +337,9 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
       addressSelectionDialog->addResultToList(ret.toString());
     }
 
-    addresseSelectionProxy->setPos(width() / 2 - addresseSelectionProxy->sceneBoundingRect().width() / 2, height() / 2 - addresseSelectionProxy->sceneBoundingRect().height() / 2);
+    addresseSelectionProxy->setPos(
+        width() / 2 - addresseSelectionProxy->sceneBoundingRect().width() / 2,
+        height() / 2 - addresseSelectionProxy->sceneBoundingRect().height() / 2);
     addresseSelectionProxy->show();
 
     if (addressSelectionDialog->exec() == QDialog::Accepted) {
@@ -346,8 +351,7 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
     if (showProgressWidget) {
       progressWidget->show();
     }
-  }
-  else if (nbResults > 1) {
+  } else if (nbResults > 1) {
     return "MULTIPLE_RESULTS";
   }
 
@@ -358,7 +362,8 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
   if (!ret.isNull()) {
     QString pointStr = ret.toString();
     QString xStr = pointStr.mid(1, pointStr.lastIndexOf(',') - 1);
-    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1, pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
+    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1,
+                                pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
     latLng = make_pair(xStr.toDouble(), yStr.toDouble());
   }
 
@@ -394,7 +399,8 @@ pair<double, double> GoogleMaps::getCurrentMapCenter() {
   if (!ret.isNull()) {
     QString pointStr = ret.toString();
     QString xStr = pointStr.mid(1, pointStr.lastIndexOf(',') - 1);
-    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1, pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
+    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1,
+                                pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
     latLng = make_pair(xStr.toDouble(), yStr.toDouble());
   }
 
@@ -410,7 +416,7 @@ void GoogleMaps::setMapBounds(Graph *graph, const map<node, pair<double, double>
 
     map<node, pair<double, double> >::const_iterator it;
 
-    for (it = nodesLatLngs.begin() ; it != nodesLatLngs.end() ; ++it) {
+    for (it = nodesLatLngs.begin(); it != nodesLatLngs.end(); ++it) {
       if (graph->isElement(it->first)) {
         minLatLng.first = std::min(minLatLng.first, (it->second).first);
         minLatLng.second = std::min(minLatLng.second, (it->second).second);
@@ -429,7 +435,7 @@ void GoogleMaps::setMapBounds(Graph *graph, const map<node, pair<double, double>
   }
 }
 
-void GoogleMaps::setMapBounds(Coord nw,Coord se) {
+void GoogleMaps::setMapBounds(Coord nw, Coord se) {
   QString code = "mapBounds = [];";
   executeJavascript(code);
 
@@ -443,17 +449,17 @@ void GoogleMaps::setMapBounds(Coord nw,Coord se) {
   executeJavascript(code);
 }
 
-void GoogleMaps::wheelEvent(QWheelEvent * ev) {
+void GoogleMaps::wheelEvent(QWheelEvent *ev) {
   setCurrentZoom(getCurrentMapZoom() + ev->delta() / 120);
 }
 
-void GoogleMaps::mouseMoveEvent(QMouseEvent * ev) {
+void GoogleMaps::mouseMoveEvent(QMouseEvent *ev) {
   panMap(x - ev->x(), y - ev->y());
   x = ev->x();
   y = ev->y();
 }
 
-void GoogleMaps::mousePressEvent(QMouseEvent * ev) {
+void GoogleMaps::mousePressEvent(QMouseEvent *ev) {
   x = ev->x();
   y = ev->y();
 #ifdef QT_HAS_WEBKIT
@@ -477,7 +483,8 @@ pair<double, double> GoogleMaps::getMapCurrentSouthWestLatLng() {
   if (!ret.isNull()) {
     QString pointStr = ret.toString();
     QString xStr = pointStr.mid(1, pointStr.lastIndexOf(',') - 1);
-    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1, pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
+    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1,
+                                pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
     latLng = make_pair(xStr.toDouble(), yStr.toDouble());
   }
 
@@ -493,11 +500,11 @@ pair<double, double> GoogleMaps::getMapCurrentNorthEastLatLng() {
   if (!ret.isNull()) {
     QString pointStr = ret.toString();
     QString xStr = pointStr.mid(1, pointStr.lastIndexOf(',') - 1);
-    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1, pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
+    QString yStr = pointStr.mid(pointStr.lastIndexOf(',') + 1,
+                                pointStr.lastIndexOf(')') - pointStr.lastIndexOf(',') - 1);
     latLng = make_pair(xStr.toDouble(), yStr.toDouble());
   }
 
   return latLng;
 }
-
 }

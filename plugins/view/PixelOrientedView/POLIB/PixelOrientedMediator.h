@@ -34,8 +34,7 @@ namespace pocore {
 
 class PixelOrientedMediator {
 
-public :
-
+public:
   PixelOrientedMediator(LayoutFunction *layout = new SpiralLayout(),
                         ColorFunction *color = new HSIColorMapping());
 
@@ -56,7 +55,7 @@ public :
   }
 
   void setImageSize(unsigned int width, unsigned int height) {
-    imageSize[0] = width ;
+    imageSize[0] = width;
     imageSize[1] = height;
   }
   unsigned int getImageWidth() const {
@@ -69,7 +68,8 @@ public :
   void changeZoom(int i);
 
   void backupScreenFunctionsParameters();
-  void setScreenFunctionsParameters(double zoom, double translationX, double translationY, double fishEyeRadius);
+  void setScreenFunctionsParameters(double zoom, double translationX, double translationY,
+                                    double fishEyeRadius);
   void restoreScreenFunctionsParameters();
 
   unsigned int getCenterItem() const {
@@ -93,15 +93,14 @@ public :
   unsigned int getRankForPixelPos(Vec2i pos);
   Vec2i getPixelPosForRank(const unsigned int rank);
 
-private :
-
+private:
   Vec2f screenToScene(const pocore::Vec2i &p);
   Vec2i sceneToScreen(const pocore::Vec2i &p);
 
   Vec2i imageSize;
 
   LayoutFunction *layout;
-  ColorFunction * color;
+  ColorFunction *color;
   FishEyesScreen *trans1;
   UniformDeformationScreen *trans2;
 
@@ -116,7 +115,6 @@ private :
   Vec2i fishTranslation;
   Vec2f fishCenter;
 };
-
 }
 
 #endif /* PIXELORIENTEDALGORITHMS_H_ */

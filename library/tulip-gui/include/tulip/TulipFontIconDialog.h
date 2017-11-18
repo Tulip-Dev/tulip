@@ -21,8 +21,7 @@ class TLP_QT_SCOPE TulipFontIconDialog : public QDialog {
   QString _selectedIconName;
 
 public:
-
-  TulipFontIconDialog(QWidget *parent=0);
+  TulipFontIconDialog(QWidget *parent = 0);
 
   QString getSelectedIconName() const;
 
@@ -41,9 +40,7 @@ protected slots:
   void updateIconList();
 
   void openUrlInBrowser(const QString &url);
-
 };
-
 }
 
 #endif

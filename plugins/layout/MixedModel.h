@@ -19,7 +19,6 @@
 #ifndef _MixedModel_H
 #define _MixedModel_H
 
-
 /** \addtogroup layout */
 
 /** This plugin is an implementation of the planar polyline graph
@@ -44,25 +43,27 @@
  */
 class MixedModel : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Mixed Model","Romain BOURQUI ","09/11/2005",
-                    "Implements the planar polyline graph drawing algorithm, the mixed model algorithm, first published as:<br/>"
-                    "<b>Planar Polyline Drawings with Good Angular Resolution</b>, C. Gutwenger and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1998).",
-                    "1.0","Planar")
-  MixedModel(const tlp::PluginContext* context);
+  PLUGININFORMATION("Mixed Model", "Romain BOURQUI ", "09/11/2005",
+                    "Implements the planar polyline graph drawing algorithm, the mixed model "
+                    "algorithm, first published as:<br/>"
+                    "<b>Planar Polyline Drawings with Good Angular Resolution</b>, C. Gutwenger "
+                    "and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1998).",
+                    "1.0", "Planar")
+  MixedModel(const tlp::PluginContext *context);
   ~MixedModel();
   bool run();
   bool check(std::string &);
 
 private:
-
-  std::vector<tlp::edge> getPlanarSubGraph(tlp::PlanarConMap *graph, std::vector<tlp::edge> unplanar_edges);
+  std::vector<tlp::edge> getPlanarSubGraph(tlp::PlanarConMap *graph,
+                                           std::vector<tlp::edge> unplanar_edges);
   void initPartition();
   void assignInOutPoints();
   void computeCoords();
   void placeNodesEdges();
 
   tlp::edge existEdge(tlp::node n, tlp::node v) {
-    return carte->existEdge(n , v, false);
+    return carte->existEdge(n, v, false);
   }
 
   tlp::node rightV(unsigned int k);
@@ -70,8 +71,8 @@ private:
   int next_right(unsigned int k, const tlp::node v);
   int next_left(unsigned int k, const tlp::node v);
 
-  tlp::PlanarConMap* carte;
-  std::vector< std::vector<tlp::node> > V;
+  tlp::PlanarConMap *carte;
+  std::vector<std::vector<tlp::node> > V;
   std::map<tlp::node, tlp::Coord> NodeCoords;
 
   std::map<tlp::node, int> outl;
@@ -86,9 +87,9 @@ private:
   std::map<tlp::edge, std::vector<tlp::Coord> > InPoints;
   std::map<tlp::edge, tlp::Coord> OutPoints;
 
-  tlp::Graph * Pere;
-  tlp::PlanarConMap * graphMap;
-  tlp::Graph * currentGraph;
+  tlp::Graph *Pere;
+  tlp::PlanarConMap *graphMap;
+  tlp::Graph *currentGraph;
   std::vector<tlp::edge> dummy;
   std::map<tlp::node, std::vector<tlp::Coord> > out_points;
   tlp::MutableContainer<tlp::Coord> nodeSize;

@@ -15,15 +15,15 @@
 
 namespace vpsc {
 class Rectangle {
-  friend std::ostream& operator <<(std::ostream &os, const Rectangle &r);
+  friend std::ostream &operator<<(std::ostream &os, const Rectangle &r);
+
 public:
-  Rectangle(double x, double X, double y, double Y,
-            const double& xBorder, const double& yBorder);
+  Rectangle(double x, double X, double y, double Y, const double &xBorder, const double &yBorder);
   double getMaxX() const {
-    return maxX+xBorder;
+    return maxX + xBorder;
   }
   double getMaxY() const {
-    return maxY+yBorder;
+    return maxY + yBorder;
   }
   double getMinX() const {
     return minX;
@@ -32,36 +32,36 @@ public:
     return minY;
   }
   double getMinD(unsigned const d) const {
-    return ( d == 0 ? getMinX() : getMinY() );
+    return (d == 0 ? getMinX() : getMinY());
   }
   double getMaxD(unsigned const d) const {
-    return ( d == 0 ? getMaxX() : getMaxY() );
+    return (d == 0 ? getMaxX() : getMaxY());
   }
   double getCentreX() const {
-    return minX+width()/2.0;
+    return minX + width() / 2.0;
   }
   double getCentreY() const {
-    return minY+height()/2.0;
+    return minY + height() / 2.0;
   }
   double width() const {
-    return getMaxX()-minX;
+    return getMaxX() - minX;
   }
   double height() const {
-    return getMaxY()-minY;
+    return getMaxY() - minY;
   }
   void moveCentreX(double x) {
-    moveMinX(x-width()/2.0);
+    moveMinX(x - width() / 2.0);
   }
   void moveCentreY(double y) {
-    moveMinY(y-height()/2.0);
+    moveMinY(y - height() / 2.0);
   }
   void moveMinX(double x) {
-    maxX=x+width()-xBorder;
-    minX=x;
+    maxX = x + width() - xBorder;
+    minX = x;
   }
   void moveMinY(double y) {
-    maxY=y+height()-yBorder;
-    minY=y;
+    maxY = y + height() - yBorder;
+    minY = y;
   }
   inline double overlapX(Rectangle *r) const {
     if (getCentreX() <= r->getCentreX() && r->minX < getMaxX())
@@ -81,23 +81,23 @@ public:
 
     return 0;
   }
-private:
-  double minX,maxX,minY,maxY;
-  const double& xBorder;
-  const double& yBorder;
-};
 
+private:
+  double minX, maxX, minY, maxY;
+  const double &xBorder;
+  const double &yBorder;
+};
 
 class Variable;
 class Constraint;
 struct Node;
 
-typedef enum {Open, Close} EventType;
+typedef enum { Open, Close } EventType;
 struct Event {
   EventType type;
   Node *v;
   double pos;
-  Event(EventType t, Node *v, double p) : type(t),v(v),pos(p) {};
+  Event(EventType t, Node *v, double p) : type(t), v(v), pos(p){};
   void init(EventType t, Node *n, double p) {
     type = t;
     v = n;
@@ -110,20 +110,19 @@ class ConstraintsGenerator {
   const unsigned int n;
 
 public:
-
-  ConstraintsGenerator(unsigned int nbRectangles): n(nbRectangles) {
-    events = new Event*[2*n];
+  ConstraintsGenerator(unsigned int nbRectangles) : n(nbRectangles) {
+    events = new Event *[2 * n];
   }
 
   ~ConstraintsGenerator() {
-    delete [] events;
+    delete[] events;
   }
 
   // returns number of constraints generated
-  int generateXConstraints(Rectangle** rs, Variable** vars, Constraint** &cs, const bool useNeighbourLists);
-  int generateYConstraints(Rectangle** rs, Variable** vars, Constraint** &cs);
+  int generateXConstraints(Rectangle **rs, Variable **vars, Constraint **&cs,
+                           const bool useNeighbourLists);
+  int generateYConstraints(Rectangle **rs, Variable **vars, Constraint **&cs);
 };
-
 }
 
 #endif // SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H

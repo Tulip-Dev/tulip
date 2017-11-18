@@ -31,7 +31,8 @@ using namespace std;
 
 namespace tlp {
 
-PixelOrientedViewNavigator::PixelOrientedViewNavigator() : pixelView(NULL), selectedOverview(NULL) {}
+PixelOrientedViewNavigator::PixelOrientedViewNavigator()
+    : pixelView(NULL), selectedOverview(NULL) {}
 
 PixelOrientedViewNavigator::~PixelOrientedViewNavigator() {}
 
@@ -41,7 +42,7 @@ void PixelOrientedViewNavigator::viewChanged(View *view) {
 
 bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
-  if(e->type() != QEvent::MouseButtonDblClick && e->type() != QEvent::MouseMove)
+  if (e->type() != QEvent::MouseButtonDblClick && e->type() != QEvent::MouseMove)
     return false;
 
   GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
@@ -63,7 +64,8 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
+    Coord sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+        glWidget->screenToViewport(screenCoords));
     PixelOrientedOverview *overviewUnderPointer = getOverviewUnderPointer(sceneCoords);
 
     if (overviewUnderPointer != NULL && overviewUnderPointer != selectedOverview) {
@@ -71,21 +73,19 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     }
 
     return true;
-  }
-  else if (e->type() == QEvent::MouseButtonDblClick) {
+  } else if (e->type() == QEvent::MouseButtonDblClick) {
     if (selectedOverview != NULL && !selectedOverview->overviewGenerated()) {
       pixelView->generatePixelOverview(selectedOverview, glWidget);
       glWidget->draw();
-    }
-    else if (selectedOverview != NULL && pixelView->smallMultiplesViewSet()) {
+    } else if (selectedOverview != NULL && pixelView->smallMultiplesViewSet()) {
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedOverview->getBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
       pixelView->switchFromSmallMultiplesToDetailView(selectedOverview);
       selectedOverview = NULL;
-    }
-    else if (!pixelView->smallMultiplesViewSet() && pixelView->getOverviews().size() > 1) {
+    } else if (!pixelView->smallMultiplesViewSet() && pixelView->getOverviews().size() > 1) {
       pixelView->switchFromDetailViewToSmallMultiples();
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, pixelView->getSmallMultiplesViewBoundingBox());
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
+                                                     pixelView->getSmallMultiplesViewBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
       pixelView->centerView();
     }
@@ -100,7 +100,8 @@ PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord
   PixelOrientedOverview *ret = NULL;
   vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
 
-  for (vector<PixelOrientedOverview *>::const_iterator it = overviews.begin() ; it != overviews.end() ; ++it) {
+  for (vector<PixelOrientedOverview *>::const_iterator it = overviews.begin();
+       it != overviews.end(); ++it) {
     BoundingBox overviewBB = (*it)->getBoundingBox();
 
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
@@ -112,5 +113,4 @@ PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord
 
   return ret;
 }
-
 }

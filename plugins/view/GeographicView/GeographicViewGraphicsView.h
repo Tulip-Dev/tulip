@@ -38,15 +38,16 @@ class GeographicViewGraphicsView : public QGraphicsView, public Observable {
 
   Q_OBJECT
 
-public :
-
-  GeographicViewGraphicsView(GeographicView *_geoView, QGraphicsScene *graphicsScene, QWidget *parent = 0);
+public:
+  GeographicViewGraphicsView(GeographicView *_geoView, QGraphicsScene *graphicsScene,
+                             QWidget *parent = 0);
   ~GeographicViewGraphicsView();
 
   void setGraph(Graph *graph);
-  void createLayoutWithAddresses(const std::string& addressPropertyName, bool createLatAndLngProps);
-  void createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName,
-                               const std::string& edgesPathsPropertyName);
+  void createLayoutWithAddresses(const std::string &addressPropertyName, bool createLatAndLngProps);
+  void createLayoutWithLatLngs(const std::string &latitudePropertyName,
+                               const std::string &longitudePropertyName,
+                               const std::string &edgesPathsPropertyName);
 
   GlGraphComposite *getGlGraphComposite() const;
 
@@ -58,7 +59,7 @@ public :
     nodeLatLng[n] = latLng;
   }
 
-  void setEdgeBendsLatLng(edge e, const std::vector<std::pair< double, double> > &bendsLatLng) {
+  void setEdgeBendsLatLng(edge e, const std::vector<std::pair<double, double> > &bendsLatLng) {
     edgeBendsLatLng[e] = bendsLatLng;
   }
 
@@ -95,11 +96,11 @@ public :
 
   void setGeoShape(IntegerProperty *);
 
-  void treatEvent(const Event& ev);
+  void treatEvent(const Event &ev);
 
-  void afterSetNodeValue(PropertyInterface*, const node);
+  void afterSetNodeValue(PropertyInterface *, const node);
 
-  void afterSetAllNodeValue(PropertyInterface*);
+  void afterSetAllNodeValue(PropertyInterface *);
 
   void forceRedraw() {
     currentMapZoom = 0;
@@ -129,7 +130,7 @@ public :
 
   void setGeoLayoutComputed();
 
-public slots :
+public slots:
 
   void mapToPolygon();
   void zoomIn();
@@ -138,15 +139,13 @@ public slots :
   void queueMapRefresh();
   void refreshMap();
 
-protected :
-
+protected:
   void cleanup();
 
-  void paintEvent (QPaintEvent * event);
+  void paintEvent(QPaintEvent *event);
   void resizeEvent(QResizeEvent *event);
 
-private :
-
+private:
   GeographicView *_geoView;
   GlMainWidget *glWidget;
   Graph *graph;
@@ -173,8 +172,8 @@ private :
   GlMainWidget *glMainWidget;
   GlMainWidgetGraphicsItem *glWidgetItem;
   QComboBox *viewTypeComboBox;
-  QPushButton* zoomOutButton;
-  QPushButton* zoomInButton;
+  QPushButton *zoomOutButton;
+  QPushButton *zoomInButton;
 
   GlComposite *polygonEntity;
   GlSimpleEntity *planisphereEntity;
@@ -189,14 +188,12 @@ private :
 
   std::pair<double, double> prevMapCenter;
   int prevMapZoom;
-  QGraphicsRectItem* _placeholderItem;
+  QGraphicsRectItem *_placeholderItem;
 
   bool geoLayoutComputed;
 
   static unsigned int planisphereTextureId;
-
 };
-
 }
 
 #endif // GOOGLEMAPSGRAPHICSVIEW_H

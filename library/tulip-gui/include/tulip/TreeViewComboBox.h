@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
 
@@ -30,7 +29,7 @@
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 
   Q_OBJECT
-  QTreeView* _treeView;
+  QTreeView *_treeView;
   bool _skipNextHide;
   bool _popupVisible;
   QModelIndex _lastIndex;
@@ -38,25 +37,24 @@ class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 public:
   explicit TreeViewComboBox(QWidget *parent = NULL);
 
-  void setModel(QAbstractItemModel * model);
+  void setModel(QAbstractItemModel *model);
 
   virtual void showPopup();
   virtual void hidePopup();
 
   QModelIndex selectedIndex() const;
 
-  bool eventFilter(QObject*, QEvent*);
+  bool eventFilter(QObject *, QEvent *);
 
 public slots:
 
-  void selectIndex(const QModelIndex&);
-  void rowsRemoved(const QModelIndex&, int, int);
+  void selectIndex(const QModelIndex &);
+  void rowsRemoved(const QModelIndex &, int, int);
   void currentIndexChanged();
 
 signals:
 
   void currentItemChanged();
-
 };
 
 #endif // TREEVIEWCOMBOBOX_H

@@ -26,17 +26,17 @@
 using namespace tlp;
 
 PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
-  : QSyntaxHighlighter(parent), _shellMode(false) {
+    : QSyntaxHighlighter(parent), _shellMode(false) {
 
   QTextCharFormat builtinFormat;
-  builtinFormat.setForeground(QColor(0,87,187));
+  builtinFormat.setForeground(QColor(0, 87, 187));
 
   HighlightingRule rule;
 
   _commentFormat.setForeground(Qt::darkGreen);
   _functionFormat.setFontWeight(QFont::Bold);
   _functionFormat.setForeground(Qt::darkCyan);
-  _tlpApiFormat.setForeground(QColor(128,128,0));
+  _tlpApiFormat.setForeground(QColor(128, 128, 0));
   _classFormat.setFontWeight(QFont::Bold);
   _classFormat.setForeground(Qt::blue);
   _qtApiFormat.setForeground(QColor(0, 110, 40));
@@ -66,11 +66,28 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
     keywordPatterns << "\\b" + QString(PythonInterpreter::pythonKeywords[i++]) + "\\b";
   }
 
-
   QStringList specialCharsPatterns;
-  specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!" << "\\*" << "/"
-                       << "\\{" << "\\}" << ":" << "\\." << ">" << "<" << "%" << "&" << "\\^" << "\\|";
-
+  specialCharsPatterns << "\\+"
+                       << "-"
+                       << "="
+                       << "\\("
+                       << "\\)"
+                       << "\\["
+                       << "\\]"
+                       << ","
+                       << "!"
+                       << "\\*"
+                       << "/"
+                       << "\\{"
+                       << "\\}"
+                       << ":"
+                       << "\\."
+                       << ">"
+                       << "<"
+                       << "%"
+                       << "&"
+                       << "\\^"
+                       << "\\|";
 
   QString builtinModName = "__builtin__";
 
@@ -79,10 +96,11 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   }
 
   if (PythonInterpreter::getInstance()->runString(QString("import ") + builtinModName)) {
-    QVector<QString> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
+    QVector<QString> builtinDictContent =
+        PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
     QStringList builtinPatterns;
 
-    for (int i = 0 ; i < builtinDictContent.size() ; ++i) {
+    for (int i = 0; i < builtinDictContent.size(); ++i) {
       builtinPatterns << "\\b" + builtinDictContent[i] + "\\b";
     }
 
@@ -120,7 +138,6 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   _highlightingRules.append(rule);
 
   _quotationFormat.setForeground(Qt::darkMagenta);
-
 }
 
 void PythonCodeHighlighter::highlightBlock(const QString &text) {
@@ -144,63 +161,61 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
   int quoteStartPos = -1;
 
-  for (int i = 0 ; i < text.length() ; ++i) {
-    if (text[i] == '"' && (i == 0 || text[i-1] != '\\')) {
+  for (int i = 0; i < text.length(); ++i) {
+    if (text[i] == '"' && (i == 0 || text[i - 1] != '\\')) {
       // don't treat multiline strings here (enclosed in """)
-      if ((i+1) < text.length() && (i+2) < text.length() && text[i+1] == '"' && text[i+2] == '"') {
+      if ((i + 1) < text.length() && (i + 2) < text.length() && text[i + 1] == '"' &&
+          text[i + 2] == '"') {
         continue;
       }
 
-      if ((i-1) > 0 && (i+1) < text.length() && text[i-1] == '"' && text[i+1] == '"') {
+      if ((i - 1) > 0 && (i + 1) < text.length() && text[i - 1] == '"' && text[i + 1] == '"') {
         continue;
       }
 
-      if ((i-1) > 0 && (i-2) > 0 && text[i-1] == '"' && text[i-2] == '"') {
+      if ((i - 1) > 0 && (i - 2) > 0 && text[i - 1] == '"' && text[i - 2] == '"') {
         continue;
       }
 
       if (quoteStartPos == -1) {
         quoteStartPos = i;
         setFormat(quoteStartPos, 1, _quotationFormat);
-      }
-      else {
-        setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
+      } else {
+        setFormat(quoteStartPos, i - quoteStartPos + 1, _quotationFormat);
         quoteStartPos = -1;
       }
-    }
-    else if (quoteStartPos != -1) {
-      setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
+    } else if (quoteStartPos != -1) {
+      setFormat(quoteStartPos, i - quoteStartPos + 1, _quotationFormat);
     }
   }
 
   quoteStartPos = -1;
 
-  for (int i = 0 ; i < text.length() ; ++i) {
-    if (text[i] == '\'' && (i == 0 || text[i-1] != '\\')) {
+  for (int i = 0; i < text.length(); ++i) {
+    if (text[i] == '\'' && (i == 0 || text[i - 1] != '\\')) {
       // don't treat multiline strings here (enclosed in ''')
-      if ((i+1) < text.length() && (i+2) < text.length() && text[i+1] == '\'' && text[i+2] == '\'') {
+      if ((i + 1) < text.length() && (i + 2) < text.length() && text[i + 1] == '\'' &&
+          text[i + 2] == '\'') {
         continue;
       }
 
-      if ((i-1) > 0 && (i+1) < text.length() && text[i-1] == '\'' && text[i+1] == '\'') {
+      if ((i - 1) > 0 && (i + 1) < text.length() && text[i - 1] == '\'' && text[i + 1] == '\'') {
         continue;
       }
 
-      if ((i-1) > 0 && (i-2) > 0 && text[i-1] == '\'' && text[i-2] == '\'') {
+      if ((i - 1) > 0 && (i - 2) > 0 && text[i - 1] == '\'' && text[i - 2] == '\'') {
         continue;
       }
 
       if (quoteStartPos == -1) {
         quoteStartPos = i;
         setFormat(quoteStartPos, 1, _quotationFormat);
-      }
-      else {
-        setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
+      } else {
+        setFormat(quoteStartPos, i - quoteStartPos + 1, _quotationFormat);
         quoteStartPos = -1;
       }
-    }
-    else if (quoteStartPos != -1) {
-      setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
+    } else if (quoteStartPos != -1) {
+      setFormat(quoteStartPos, i - quoteStartPos + 1, _quotationFormat);
     }
   }
 
@@ -211,16 +226,16 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
     int length = qtApiRegexp.matchedLength();
     QString expr = text.mid(index, length);
 
-    if (APIDataBase::getInstance()->typeExists(expr) || APIDataBase::getInstance()->getFullTypeName(expr) != "") {
+    if (APIDataBase::getInstance()->typeExists(expr) ||
+        APIDataBase::getInstance()->getFullTypeName(expr) != "") {
       setFormat(index, length, _qtApiFormat);
-    }
-    else if (expr.indexOf(".") != -1) {
+    } else if (expr.indexOf(".") != -1) {
       QString type = expr.mid(0, expr.lastIndexOf("."));
 
       if (APIDataBase::getInstance()->getFullTypeName(type) != "")
         type = APIDataBase::getInstance()->getFullTypeName(type);
 
-      QString entry = expr.mid(expr.lastIndexOf(".")+1);
+      QString entry = expr.mid(expr.lastIndexOf(".") + 1);
 
       if (APIDataBase::getInstance()->dictEntryExists(type, entry)) {
         setFormat(index, length, _qtApiFormat);
@@ -247,7 +262,7 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   while (index >= 0 && currentBlockState() == 0) {
     int nbQuotes = 0;
 
-    for (int j = index - 1 ; j >= 0 ; --j) {
+    for (int j = index - 1; j >= 0; --j) {
       if (text[j] == '\'') {
         ++nbQuotes;
       }
@@ -255,7 +270,7 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
     int nbDblQuotes = 0;
 
-    for (int j = index - 1 ; j >= 0 ; --j) {
+    for (int j = index - 1; j >= 0; --j) {
       if (text[j] == '"') {
         ++nbDblQuotes;
       }
@@ -263,18 +278,20 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
     int length = commentRegexp.matchedLength();
 
-    if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
+    if (nbQuotes % 2 == 0 && nbDblQuotes % 2 == 0) {
       if (previousBlockState() <= 0 ||
           (previousBlockState() == 1 && triSingleQuote.indexIn(text) < index) ||
           (previousBlockState() == 2 && triDoubleQuote.indexIn(text) < index))
         setFormat(index, length, _commentFormat);
     }
 
-    index = commentRegexp.indexIn(text, index+length);
+    index = commentRegexp.indexIn(text, index + length);
   }
 }
 
-bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style) {
+bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegExp &delimiter,
+                                                     const int inState,
+                                                     const QTextCharFormat &style) {
   int start = -1;
   int add = -1;
   int commentPos = -1;
@@ -282,8 +299,7 @@ bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const 
   if (previousBlockState() == inState) {
     start = 0;
     add = 0;
-  }
-  else {
+  } else {
     start = delimiter.indexIn(text);
     add = delimiter.matchedLength();
     commentPos = text.indexOf('#');
@@ -298,8 +314,7 @@ bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const 
       if (end >= add) {
         length = end - start + add + delimiter.matchedLength();
         setCurrentBlockState(0);
-      }
-      else {
+      } else {
         setCurrentBlockState(inState);
         length = text.length() - start + add;
       }
@@ -308,7 +323,6 @@ bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const 
       start = delimiter.indexIn(text, start + length);
       add = delimiter.matchedLength();
     }
-
   }
 
   return (currentBlockState() == inState);

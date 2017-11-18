@@ -22,7 +22,8 @@
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 struct Strahler {
-  Strahler(int stra=1,int sta=0,int used=0):strahler(stra),stacks(sta),usedStack(used) {}
+  Strahler(int stra = 1, int sta = 0, int used = 0)
+      : strahler(stra), stacks(sta), usedStack(used) {}
   int strahler;
   int stacks;
   int usedStack;
@@ -54,36 +55,28 @@ struct Strahler {
  *  the starting nodes.
  *
  */
-class StrahlerMetric:public tlp::DoubleAlgorithm {
+class StrahlerMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Strahler","David Auber","06/04/2000",
-                    "Computes the Strahler numbers."
-                    "This is an implementation of the Strahler numbers computation, first published as:<br/>"
-                    "<b>Hypsomic analysis of erosional topography</b>, A.N. Strahler, Bulletin Geological Society of America 63,pages 1117-1142 (1952).<br/>"
-                    "Extended to graphs in :<br/><b>Using Strahler numbers for real time visual exploration of huge graphs</b>, D. Auber, ICCVG, International Conference on Computer Vision and Graphics, pages 56-69 (2002)",
-                    "1.0","Graph")
-  StrahlerMetric(const tlp::PluginContext* context);
+  PLUGININFORMATION(
+      "Strahler", "David Auber", "06/04/2000",
+      "Computes the Strahler numbers."
+      "This is an implementation of the Strahler numbers computation, first published as:<br/>"
+      "<b>Hypsomic analysis of erosional topography</b>, A.N. Strahler, Bulletin Geological "
+      "Society of America 63,pages 1117-1142 (1952).<br/>"
+      "Extended to graphs in :<br/><b>Using Strahler numbers for real time visual exploration of "
+      "huge graphs</b>, D. Auber, ICCVG, International Conference on Computer Vision and Graphics, "
+      "pages 56-69 (2002)",
+      "1.0", "Graph")
+  StrahlerMetric(const tlp::PluginContext *context);
   bool run();
 
 private:
-  Strahler topSortStrahler(tlp::node n,int &curPref,
-                           TLP_HASH_MAP<tlp::node,int> &tofree,
-                           TLP_HASH_MAP<tlp::node,int> &prefix,
-                           TLP_HASH_MAP<tlp::node,bool> &visited,
-                           TLP_HASH_MAP<tlp::node,bool> &finished,
-                           TLP_HASH_MAP<tlp::node,Strahler> &cachedValues);
+  Strahler topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP<tlp::node, int> &tofree,
+                           TLP_HASH_MAP<tlp::node, int> &prefix,
+                           TLP_HASH_MAP<tlp::node, bool> &visited,
+                           TLP_HASH_MAP<tlp::node, bool> &finished,
+                           TLP_HASH_MAP<tlp::node, Strahler> &cachedValues);
   bool allNodes;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

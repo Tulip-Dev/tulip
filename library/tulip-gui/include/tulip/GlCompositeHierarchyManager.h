@@ -49,14 +49,12 @@ class GlLayer;
 class TLP_QT_SCOPE GlCompositeHierarchyManager : private Observable {
 
 public:
-  GlCompositeHierarchyManager(Graph* graph, GlLayer* layer,
-                              const std::string& layerName,
-                              LayoutProperty* layout, SizeProperty* size,
-                              DoubleProperty* rotation, bool visible = false,
-                              const std::string& namingProperty = "name",
-                              const std::string& subCompositeSuffix = " sub-hulls");
+  GlCompositeHierarchyManager(Graph *graph, GlLayer *layer, const std::string &layerName,
+                              LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation,
+                              bool visible = false, const std::string &namingProperty = "name",
+                              const std::string &subCompositeSuffix = " sub-hulls");
 
-  void setGraph(tlp::Graph* graph);
+  void setGraph(tlp::Graph *graph);
   DataSet getData();
   void setData(const DataSet &dataSet);
 
@@ -65,9 +63,9 @@ public:
   void setVisible(bool visible);
   bool isVisible() const;
 
-protected :
-  virtual void treatEvents(const  std::vector<Event> &events );
-  virtual void treatEvent(const Event&);
+protected:
+  virtual void treatEvents(const std::vector<Event> &events);
+  virtual void treatEvent(const Event &);
 
 private:
   bool _shouldRecreate;
@@ -77,14 +75,14 @@ private:
   /**
    * Create the hierarchy of ConvexHullItem
    */
-  void buildComposite(tlp::Graph* current, tlp::GlComposite* composite);
+  void buildComposite(tlp::Graph *current, tlp::GlComposite *composite);
 
-  Graph* _graph;
-  GlLayer* _layer;
-  GlComposite* _composite;
-  LayoutProperty* _layout;
-  SizeProperty* _size;
-  DoubleProperty* _rotation;
+  Graph *_graph;
+  GlLayer *_layer;
+  GlComposite *_composite;
+  LayoutProperty *_layout;
+  SizeProperty *_size;
+  DoubleProperty *_rotation;
   std::vector<Color> _fillColors;
   std::string _layerName;
   bool _isVisible;
@@ -95,15 +93,16 @@ private:
   /**
    * This map contains the composite that contains the associated graph's hull.
    */
-  std::map<tlp::Graph*, std::pair<tlp::GlComposite*, GlConvexGraphHull*> > _graphsComposites;
+  std::map<tlp::Graph *, std::pair<tlp::GlComposite *, GlConvexGraphHull *> > _graphsComposites;
 };
 
 class GlHierarchyMainComposite : public GlComposite {
 public:
-  GlHierarchyMainComposite(GlCompositeHierarchyManager* manager);
+  GlHierarchyMainComposite(GlCompositeHierarchyManager *manager);
   virtual void setVisible(bool visible);
+
 private:
-  GlCompositeHierarchyManager* _manager;
+  GlCompositeHierarchyManager *_manager;
 };
 }
 

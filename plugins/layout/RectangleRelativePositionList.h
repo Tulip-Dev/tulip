@@ -29,16 +29,23 @@
  *rectangleIterator.
  */
 struct RectangleRelativePosition {
-  std::vector<tlp::Rectangle<float> >::iterator rectangleIterator;/**< pointer towards the rectangle whose position optimal is searched.*/
-  int rectangleNumber; /**< the number which identifies the rectangle. */
-  float rectangleWidth; /**< the width of the rectangle. */
-  float rectangleHeight;/**< the height of the rectangle. */
-  float rectangleLeftAbscissa;/**< the left abscissa of the rectangle chosen after the position tests. */
-  float rectangleLowOrdinate;/**< the low ordinate of the rectangle chosen after the position tests. */
-  float rectangleTemporaryLeftAbscissa;/**< the left abscissa of the rectangle for the current test. */
-  float rectangleTemporaryLowOrdinate;/**< the low ordinate of the rectangle for the current test. */
-  float rectangleTemporaryBestLeftAbscissa;/** the best left abscissa of the rectangle calculated since the beginning of the tests. */
-  float rectangleTemporaryBestLowOrdinate;/** the best low ordinate of the rectangle calculated since the beginning of the tests. */
+  std::vector<tlp::Rectangle<float> >::iterator
+      rectangleIterator; /**< pointer towards the rectangle whose position optimal is searched.*/
+  int rectangleNumber;   /**< the number which identifies the rectangle. */
+  float rectangleWidth;  /**< the width of the rectangle. */
+  float rectangleHeight; /**< the height of the rectangle. */
+  float rectangleLeftAbscissa; /**< the left abscissa of the rectangle chosen after the position
+                                  tests. */
+  float rectangleLowOrdinate;  /**< the low ordinate of the rectangle chosen after the position
+                                  tests. */
+  float rectangleTemporaryLeftAbscissa; /**< the left abscissa of the rectangle for the current
+                                           test. */
+  float
+      rectangleTemporaryLowOrdinate; /**< the low ordinate of the rectangle for the current test. */
+  float rectangleTemporaryBestLeftAbscissa; /** the best left abscissa of the rectangle calculated
+                                               since the beginning of the tests. */
+  float rectangleTemporaryBestLowOrdinate;  /** the best low ordinate of the rectangle calculated
+                                               since the beginning of the tests. */
 };
 
 /**
@@ -46,16 +53,15 @@ struct RectangleRelativePosition {
  *the stocking of the first sequence of the even sequence made up as we insert
  *the new rectangles.
  */
-class RectangleRelativePositionList:public std::list<RectangleRelativePosition> {
+class RectangleRelativePositionList : public std::list<RectangleRelativePosition> {
 
 public:
   /**
    *Add a structure RectangleRelativePosition to the list.
    */
-  void addRectangleRelativePosition(std::vector<tlp::Rectangle<float> >::iterator itr,
-                                    int numRect, float wdth, float hght,
-                                    float x, float y,
-                                    std::list<RectangleRelativePosition>::iterator itRectangleRelativePosition);
+  void addRectangleRelativePosition(
+      std::vector<tlp::Rectangle<float> >::iterator itr, int numRect, float wdth, float hght,
+      float x, float y, std::list<RectangleRelativePosition>::iterator itRectangleRelativePosition);
 
   /**
    *Modify the co-ordinates of the Rectangles pointed by the fields
@@ -72,7 +78,6 @@ public:
    *the elements of the list from one position in the list.
    */
   void stockOfTemporaryBestCoordinates(int bestPlaceInFirstSequence);
-
 };
 
 #endif

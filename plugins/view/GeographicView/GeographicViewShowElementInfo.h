@@ -38,7 +38,7 @@ class GeographicViewShowElementInfo : public InteractorComponent {
 public:
   GeographicViewShowElementInfo();
   ~GeographicViewShowElementInfo();
-  virtual bool eventFilter(QObject* widget, QEvent* e);
+  virtual bool eventFilter(QObject *widget, QEvent *e);
 
   void viewChanged(View *);
 
@@ -47,15 +47,13 @@ public:
   virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
 
 protected:
-
   GeographicView *_view;
   QWidget *_informationWidget;
   QGraphicsProxyWidget *_informationWidgetItem;
   GlComplexPolygonItemEditor *_editor;
 
-  QTableView* tableView() const;
+  QTableView *tableView() const;
 };
-
 }
 
 #endif // GOOGLEMAPSSHOWELEMENTINFO_H

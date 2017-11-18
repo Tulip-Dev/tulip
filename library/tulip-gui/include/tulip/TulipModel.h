@@ -27,29 +27,28 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE TulipModel: public QAbstractItemModel {
+class TLP_QT_SCOPE TulipModel : public QAbstractItemModel {
   Q_OBJECT
   Q_ENUMS(TulipRole)
 
 public:
   enum TulipRole {
-    GraphRole = Qt::UserRole+1,
-    PropertyRole = Qt::UserRole+2,
-    IsNodeRole = Qt::UserRole+3,
-    StringRole = Qt::UserRole+4,
-    MandatoryRole = Qt::UserRole+5,
-    ElementIdRole = Qt::UserRole+6
+    GraphRole = Qt::UserRole + 1,
+    PropertyRole = Qt::UserRole + 2,
+    IsNodeRole = Qt::UserRole + 3,
+    StringRole = Qt::UserRole + 4,
+    MandatoryRole = Qt::UserRole + 5,
+    ElementIdRole = Qt::UserRole + 6
   };
 
-  explicit TulipModel(QObject *parent=NULL);
+  explicit TulipModel(QObject *parent = NULL);
   virtual ~TulipModel();
 
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 signals:
-  void checkStateChanged(QModelIndex,Qt::CheckState);
+  void checkStateChanged(QModelIndex, Qt::CheckState);
 };
-
 }
 
 #endif // TULIPMODEL_H

@@ -30,17 +30,21 @@ using namespace tlp;
 /** \brief Tulip interactor to do a rectangle zoom
  *
  */
-class InteractorRectangleZoom  : public NodeLinkDiagramComponentInteractor {
+class InteractorRectangleZoom : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorRectangleZoom", "Tulip Team", "01/04/2009", "Rectangle Zoom Interactor", "1.0", "Navigation")
+  PLUGININFORMATION("InteractorRectangleZoom", "Tulip Team", "01/04/2009",
+                    "Rectangle Zoom Interactor", "1.0", "Navigation")
   /**
    * Default constructor
    */
-  InteractorRectangleZoom(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png","Zoom on rectangle") {
+  InteractorRectangleZoom(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle") {
     setPriority(StandardInteractorPriority::ZoomOnRectangle);
-    setConfigurationWidgetText(QString("<h3>Zoom on rectangle</h3>")+
-                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner.<br> <b>Mouse left</b> up indicates the opposite corner.<br> <b>Mouse left Doucle click</b> to center the view.");
+    setConfigurationWidgetText(QString("<h3>Zoom on rectangle</h3>") +
+                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates "
+                               "the first corner.<br> <b>Mouse left</b> up indicates the opposite "
+                               "corner.<br> <b>Mouse left Doucle click</b> to center the view.");
   }
 
   /**
@@ -56,16 +60,12 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::HistogramViewName)
-            ||(viewName==ViewName::MatrixViewName)
-            ||(viewName==ViewName::ParallelCoordinatesViewName)
-            ||(viewName==ViewName::PixelOrientedViewName)
-            ||(viewName==ViewName::ScatterPlot2DViewName)
-           );
+    return ((viewName == NodeLinkDiagramComponent::viewName) ||
+            (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
+            (viewName == ViewName::ParallelCoordinatesViewName) ||
+            (viewName == ViewName::PixelOrientedViewName) ||
+            (viewName == ViewName::ScatterPlot2DViewName));
   }
-
-
 };
 
 PLUGIN(InteractorRectangleZoom)

@@ -33,7 +33,8 @@
 
 using namespace tlp;
 
-SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
+SceneConfigWidget::SceneConfigWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
   _ui->setupUi(this);
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
@@ -55,20 +56,20 @@ SceneConfigWidget::~SceneConfigWidget() {
   delete _ui;
 }
 
-void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
+void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget *glMainWidget) {
   if (_glMainWidget != NULL) {
-    disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
-    disconnect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(resetChanges()));
+    disconnect(_glMainWidget, SIGNAL(graphChanged()), this, SLOT(resetChanges()));
+    disconnect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(resetChanges()));
   }
 
   _glMainWidget = glMainWidget;
 
   if (_glMainWidget != NULL) {
-    connect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
+    connect(_glMainWidget, SIGNAL(graphChanged()), this, SLOT(resetChanges()));
     // we assume that if an outside action causes an update of one
     // of the rendering parameters managed in this widget, necessarily
     // a call to _glMainWidget->draw will follow
-    connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(resetChanges()));
+    connect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(resetChanges()));
   }
 
   resetChanges();
@@ -79,21 +80,25 @@ void SceneConfigWidget::resetChanges() {
 
   _ui->scrollArea->setEnabled(_glMainWidget != NULL);
 
-  if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL)
+  if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL ||
+      _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL)
     return;
 
-  Graph* graph = _glMainWidget->getScene()->getGlGraphComposite()->getGraph();
-  GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
+  Graph *graph = _glMainWidget->getScene()->getGlGraphComposite()->getGraph();
+  GlGraphRenderingParameters *renderingParameters =
+      _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
   delete _ui->labelsOrderingCombo->model();
-  GraphPropertiesModel<NumericProperty>* model = new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"),graph);
+  GraphPropertiesModel<NumericProperty> *model =
+      new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"), graph);
   _ui->labelsOrderingCombo->setModel(model);
 
   if (renderingParameters->getElementOrderingProperty() == NULL)
     _ui->labelsOrderingCombo->setCurrentIndex(0);
   else
-    _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters->getElementOrderingProperty()));
+    _ui->labelsOrderingCombo->setCurrentIndex(
+        model->rowOf(renderingParameters->getElementOrderingProperty()));
 
   _ui->descendingCB->setChecked(renderingParameters->isElementOrderedDescending());
 
@@ -127,21 +132,19 @@ void SceneConfigWidget::resetChanges() {
   else
     _ui->centerSceneRadioButton->setChecked(true);
 
-//  QApplication::processEvents();
+  //  QApplication::processEvents();
   _resetting = false;
 }
 
-bool SceneConfigWidget::eventFilter(QObject* obj, QEvent* ev) {
+bool SceneConfigWidget::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::MouseButtonPress) {
     if (obj == _ui->labelsDisabledLabel) {
       _ui->labelsDensitySlider->setValue(-100);
       applySettings();
-    }
-    else if (obj == _ui->labelsNoOverlapLabel) {
+    } else if (obj == _ui->labelsNoOverlapLabel) {
       _ui->labelsDensitySlider->setValue(0);
       applySettings();
-    }
-    else if (obj == _ui->labelsShowAllLabel) {
+    } else if (obj == _ui->labelsShowAllLabel) {
       _ui->labelsDensitySlider->setValue(100);
       applySettings();
     }
@@ -153,17 +156,22 @@ bool SceneConfigWidget::eventFilter(QObject* obj, QEvent* ev) {
 }
 
 void SceneConfigWidget::applySettings() {
-  if(_resetting || !_glMainWidget->getScene()->getGlGraphComposite())
+  if (_resetting || !_glMainWidget->getScene()->getGlGraphComposite())
     return;
 
-  GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
+  GlGraphRenderingParameters *renderingParameters =
+      _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
-  if (_ui->labelsOrderingCombo->currentIndex()==0)
+  if (_ui->labelsOrderingCombo->currentIndex() == 0)
     renderingParameters->setElementOrderingProperty(NULL);
   else {
-    GraphPropertiesModel<NumericProperty>* model = static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
-    renderingParameters->setElementOrderingProperty(dynamic_cast<NumericProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
+    GraphPropertiesModel<NumericProperty> *model =
+        static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
+    renderingParameters->setElementOrderingProperty(
+        dynamic_cast<NumericProperty *>(model->index(_ui->labelsOrderingCombo->currentIndex(), 0)
+                                            .data(TulipModel::PropertyRole)
+                                            .value<PropertyInterface *>()));
   }
 
   renderingParameters->setElementOrderedDescending(_ui->descendingCB->isChecked());

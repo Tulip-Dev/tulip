@@ -29,10 +29,11 @@
 
 using namespace tlp;
 
-TulipSplashScreen::TulipSplashScreen(): PluginLoader(), QSplashScreen(), _fileCounter(0) {
-  setPixmap(QPixmap(QDir(QApplication::applicationDirPath()).absoluteFilePath("../share/tulip/bitmaps/logo.bmp")));
+TulipSplashScreen::TulipSplashScreen() : PluginLoader(), QSplashScreen(), _fileCounter(0) {
+  setPixmap(QPixmap(QDir(QApplication::applicationDirPath())
+                        .absoluteFilePath("../share/tulip/bitmaps/logo.bmp")));
   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-  QPropertyAnimation *fadeInAnimation = new QPropertyAnimation(this,"windowOpacity");
+  QPropertyAnimation *fadeInAnimation = new QPropertyAnimation(this, "windowOpacity");
   fadeInAnimation->setStartValue(0);
   fadeInAnimation->setEndValue(1);
   fadeInAnimation->setDuration(200);
@@ -53,7 +54,7 @@ void TulipSplashScreen::loading(const std::string &filename) {
   repaint();
 }
 
-void TulipSplashScreen::loaded(const Plugin* info, const std::list <Dependency>& ) {
+void TulipSplashScreen::loaded(const Plugin *info, const std::list<Dependency> &) {
   _message = info->name().c_str() + trUtf8(" loaded.");
 }
 
@@ -61,7 +62,7 @@ void TulipSplashScreen::aborted(const std::string &filename, const std::string &
   _message = trUtf8("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
 }
 
-void TulipSplashScreen::finished(bool state, const std::string&) {
+void TulipSplashScreen::finished(bool state, const std::string &) {
   _title = trUtf8("Plugins loaded.");
 
   if (!state)
@@ -72,13 +73,14 @@ void TulipSplashScreen::finished(bool state, const std::string&) {
 
 void TulipSplashScreen::drawContents(QPainter *painter) {
   QSize size(pixmap().size());
-  painter->drawPixmap(0,0,pixmap());
-  QRectF messageRect(0,size.height()*2/3,size.width(),size.height()/3);
+  painter->drawPixmap(0, 0, pixmap());
+  QRectF messageRect(0, size.height() * 2 / 3, size.width(), size.height() / 3);
 
   painter->setPen(Qt::transparent);
-  QLinearGradient grad(messageRect.x(),messageRect.y(),messageRect.x(),messageRect.y()+messageRect.height());
-  grad.setColorAt(0,Qt::transparent);
-  grad.setColorAt(0.4,QColor(255,255,255,170));
+  QLinearGradient grad(messageRect.x(), messageRect.y(), messageRect.x(),
+                       messageRect.y() + messageRect.height());
+  grad.setColorAt(0, Qt::transparent);
+  grad.setColorAt(0.4, QColor(255, 255, 255, 170));
   painter->setBrush(grad);
   painter->drawRect(messageRect);
 
@@ -87,20 +89,23 @@ void TulipSplashScreen::drawContents(QPainter *painter) {
   QFont font = painter->font();
   font.setBold(true);
   painter->setFont(font);
-  painter->drawText(messageRect.x(),messageRect.y()+messageRect.height()/3,messageRect.width(),messageRect.height()/3,Qt::AlignHCenter,_title);
+  painter->drawText(messageRect.x(), messageRect.y() + messageRect.height() / 3,
+                    messageRect.width(), messageRect.height() / 3, Qt::AlignHCenter, _title);
   font.setBold(false);
   painter->setFont(font);
-  painter->drawText(messageRect.x(),messageRect.y()+messageRect.height()*2/3,messageRect.width(),messageRect.height()/3,Qt::AlignHCenter,_message);
+  painter->drawText(messageRect.x(), messageRect.y() + messageRect.height() * 2 / 3,
+                    messageRect.width(), messageRect.height() / 3, Qt::AlignHCenter, _message);
 
-  QRectF progressRect(messageRect.x() + 10, messageRect.y()+messageRect.height() - 10, messageRect.width()-20, 5);
-  painter->setBrush(QColor(0,0,0,50));
-  painter->setPen(QColor(0,0,0,50));
+  QRectF progressRect(messageRect.x() + 10, messageRect.y() + messageRect.height() - 10,
+                      messageRect.width() - 20, 5);
+  painter->setBrush(QColor(0, 0, 0, 50));
+  painter->setPen(QColor(0, 0, 0, 50));
   painter->drawRect(progressRect);
   qreal w = progressRect.width();
 
-  if (_numberOfFiles>0)
-    w = 1. * _fileCounter*progressRect.width()/_numberOfFiles;
+  if (_numberOfFiles > 0)
+    w = 1. * _fileCounter * progressRect.width() / _numberOfFiles;
 
-  painter->setBrush(QColor(0,0,0,200));
-  painter->drawRect(progressRect.x(),progressRect.y(),w,progressRect.height());
+  painter->setBrush(QColor(0, 0, 0, 200));
+  painter->drawRect(progressRect.x(), progressRect.y(), w, progressRect.height());
 }

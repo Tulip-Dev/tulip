@@ -30,26 +30,24 @@ class ParallelCoordinatesView;
 
 class ParallelCoordsAxisSwapper : public GLInteractorComponent {
 
-public :
+public:
   ParallelCoordsAxisSwapper();
   ~ParallelCoordsAxisSwapper();
   bool eventFilter(QObject *, QEvent *);
   bool draw(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   ParallelCoordinatesView *parallelView;
   ParallelAxis *selectedAxis;
   ParallelAxis *otherAxisToSwap;
   Coord initialSelectedAxisCoord;
   float initialSelectedAxisRotAngle;
   bool dragStarted;
-  int x,y;
+  int x, y;
   bool mouseMove;
   bool axisSwapStarted;
 };
-
 }
 
 #endif /* PARALLELCOORDSAXISSWAPPER_H_ */

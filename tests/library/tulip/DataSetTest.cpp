@@ -32,16 +32,14 @@
 using namespace std;
 using namespace tlp;
 
-
-
-CPPUNIT_TEST_SUITE_REGISTRATION( DataSetTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(DataSetTest);
 
 //==========================================================
 void DataSetTest::testSetGetBool() {
   DataSet dSet;
   CPPUNIT_ASSERT(!dSet.exist("bool"));
 
-  bool v1,v2;
+  bool v1, v2;
   v1 = true;
   CPPUNIT_ASSERT(!dSet.get("bool", v1));
 
@@ -56,7 +54,7 @@ void DataSetTest::testSetGetDouble() {
   DataSet dSet;
   CPPUNIT_ASSERT(!dSet.exist("double"));
 
-  double v1,v2;
+  double v1, v2;
   v1 = 1.1;
   CPPUNIT_ASSERT(!dSet.get("double", v1));
 
@@ -71,7 +69,7 @@ void DataSetTest::testSetGetInt() {
   DataSet dSet;
   CPPUNIT_ASSERT(!dSet.exist("int"));
 
-  int v1,v2;
+  int v1, v2;
   v1 = 1;
   CPPUNIT_ASSERT(!dSet.get("int", v1));
 
@@ -86,7 +84,7 @@ void DataSetTest::testSetGetString() {
   DataSet dSet;
   CPPUNIT_ASSERT(!dSet.exist("string"));
 
-  std::string v1,v2;
+  std::string v1, v2;
   v1 = "test";
   CPPUNIT_ASSERT(!dSet.get("string", v1));
 
@@ -102,7 +100,7 @@ struct Struct {
 
   std::string value;
 
-  Struct& operator=(const Struct &st) {
+  Struct &operator=(const Struct &st) {
     value = st.value;
     return *this;
   }
@@ -111,7 +109,7 @@ struct Struct {
     ++nbInstances;
   }
 
-  Struct(const std::string& val) {
+  Struct(const std::string &val) {
     ++nbInstances;
     value = val;
   }
@@ -184,7 +182,7 @@ void DataSetTest::testDataSetSerialization() {
   dataSet.set("long", l);
 
   // tlp::Coord
-  const Coord c(1,2,3);
+  const Coord c(1, 2, 3);
   dataSet.set("Coord", c);
 
   // tlp::Color
@@ -192,7 +190,7 @@ void DataSetTest::testDataSetSerialization() {
   dataSet.set("Color", col);
 
   // tlp::Size
-  const Size s(4,5,6);
+  const Size s(4, 5, 6);
   dataSet.set("Size", s);
 
   // std::vector<std::string>
@@ -222,14 +220,14 @@ void DataSetTest::testDataSetSerialization() {
   // std::vector<tlp::Coord>
   vector<Coord> vc;
   vc.push_back(c);
-  vc.push_back(Coord(10,20,30));
+  vc.push_back(Coord(10, 20, 30));
   dataSet.set("vector<Coord>", vc);
 
   // std::set<tlp::edge>, std::vector<tlp::edge>, std::vector<tlp::node>
   set<edge> se;
   vector<edge> ve;
   vector<node> vn;
-  for (unsigned int i = 0 ; i < 100 ; ++i) {
+  for (unsigned int i = 0; i < 100; ++i) {
     vn.push_back(node(i));
     ve.push_back(edge(i));
     se.insert(edge(i));
@@ -342,5 +340,4 @@ void DataSetTest::testDataSetSerialization() {
   StringCollection sc2;
   CPPUNIT_ASSERT(dataSet2.get("StringCollection", sc2));
   CPPUNIT_ASSERT(sc.getValues() == sc2.getValues());
-
 }

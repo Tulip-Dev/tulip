@@ -30,9 +30,12 @@ namespace tlp {
 
 /**
  * @brief This class represents a color scale to perform color mapping.
- * The color scale can be either a gradient or defined by colors associated to consecutive intervals.
- * If the color scale is a gradient, returned colors are interpolated in function of a position between 0.0 and 1.0.
- * If the color scale is not a gradient returned colors are computed according to the interval the position belongs to.
+ * The color scale can be either a gradient or defined by colors associated to consecutive
+ * intervals.
+ * If the color scale is a gradient, returned colors are interpolated in function of a position
+ * between 0.0 and 1.0.
+ * If the color scale is not a gradient returned colors are computed according to the interval the
+ * position belongs to.
  * @code
  * // Creates the color scale.
  * tlp::ColorScale colorScale;
@@ -59,7 +62,6 @@ namespace tlp {
 class TLP_SCOPE ColorScale : public Observable {
 
 public:
-
   /**
    * Initializes a color scale with a default set of colors.
    *
@@ -68,7 +70,8 @@ public:
 
   /**
    * Initializes a color scale with a set of colors passed as parameter.
-   * @param colors a vector of colors defining the color scale (first color is at position 0.0, last color at position 1.0)
+   * @param colors a vector of colors defining the color scale (first color is at position 0.0, last
+   * color at position 1.0)
    * @param gradient specifies if the color scale should be a gradient or not
    *
    */
@@ -77,15 +80,16 @@ public:
   /**
    * Initializes a color scale with a map of stop points and colors passed as parameter.
    * @since Tulip 4.10
-   * @param colorMap a map of stop points and colors defining the color scale (The keys of the map must be between 0.0 and 1.0, other ones will be ignored.)
+   * @param colorMap a map of stop points and colors defining the color scale (The keys of the map
+   * must be between 0.0 and 1.0, other ones will be ignored.)
    * @param gradient specifies if the color scale should be a gradient or not
    *
    */
   ColorScale(const std::map<float, Color> &colorMap, const bool gradient = true);
 
-  ColorScale(const ColorScale& scale);
+  ColorScale(const ColorScale &scale);
 
-  ColorScale& operator=(const ColorScale& scale);
+  ColorScale &operator=(const ColorScale &scale);
 
   virtual ~ColorScale();
 
@@ -134,8 +138,10 @@ public:
   /**
    * @brief Returns the color for a given position in the color scale.
    *
-   * This method computes the color associated to a specific position in the color scale and returns it.
-   * @param pos This value defines the position of the color in the scale and must be between 0.0 and 1.0 (it will be clamped otherwise)
+   * This method computes the color associated to a specific position in the color scale and returns
+   * it.
+   * @param pos This value defines the position of the color in the scale and must be between 0.0
+   * and 1.0 (it will be clamped otherwise)
    * @return the color corresponding to the position in the scale
    *
    */
@@ -151,7 +157,8 @@ public:
 
   /**
    * @brief Returns a map corresponding to the color scale.
-   * The index of the map is the position for the corresponding color in the color scale. The index is comprised between 0 and 1.
+   * The index of the map is the position for the corresponding color in the color scale. The index
+   * is comprised between 0 and 1.
    *
    */
   std::map<float, Color> getColorMap() const {
@@ -164,7 +171,7 @@ public:
    * @warning The keys of the map must be between 0.0 and 1.0, other values will be ignored.
    *
    */
-  void setColorMap(const std::map<float, Color>& colorMap);
+  void setColorMap(const std::map<float, Color> &colorMap);
 
   /**
    * @brief Returns true if the color scale is a gradient.
@@ -191,7 +198,7 @@ public:
    * @brief Tests color scale equality with another one.
    *
    */
-  bool operator==(const ColorScale& cs) const {
+  bool operator==(const ColorScale &cs) const {
     return (gradient == cs.gradient) && (colorMap == cs.colorMap);
   }
 
@@ -202,7 +209,8 @@ public:
   bool operator==(const std::vector<Color> &colors) const;
 
   /**
-   * @brief Tests if the color scale has regular stop points, meaning the distance between each consecutive stop is constant.
+   * @brief Tests if the color scale has regular stop points, meaning the distance between each
+   * consecutive stop is constant.
    *
    * @since Tulip 4.10
    *
@@ -213,7 +221,6 @@ protected:
   std::map<float, Color> colorMap;
   bool gradient;
 };
-
 }
 
 #endif /* COLORSCALE_H_ */

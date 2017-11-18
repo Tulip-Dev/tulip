@@ -38,17 +38,18 @@ class PropertiesEditor;
 class TableView : public tlp::ViewWidget {
   Q_OBJECT
 
-  Ui::TableViewWidget* _ui;
-  PropertiesEditor* propertiesEditor;
-  tlp::GraphModel* _model;
+  Ui::TableViewWidget *_ui;
+  PropertiesEditor *propertiesEditor;
+  tlp::GraphModel *_model;
   bool isNewGraph;
   bool filteringColumns;
-  tlp::Graph* previousGraph;
+  tlp::Graph *previousGraph;
 
 public:
-  PLUGININFORMATION("Spreadsheet view","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
+  PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012", "Spreadsheet view for raw data",
+                    "4.0", "")
 
-  TableView(tlp::PluginContext*);
+  TableView(tlp::PluginContext *);
   virtual ~TableView();
   std::string icon() const {
     return ":/spreadsheet_view.png";
@@ -56,35 +57,35 @@ public:
   tlp::DataSet state() const;
   void setState(const tlp::DataSet &);
   void setupWidget();
-  QList<QWidget*> configurationWidgets() const;
+  QList<QWidget *> configurationWidgets() const;
 
 public slots:
   void readSettings();
-  void setPropertyVisible(tlp::PropertyInterface*,bool);
+  void setPropertyVisible(tlp::PropertyInterface *, bool);
   void filterChanged();
-  tlp::BooleanProperty* getFilteringProperty() const;
+  tlp::BooleanProperty *getFilteringProperty() const;
   bool hasEffectiveFiltering();
 
 protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted(tlp::Graph *);
-  bool eventFilter(QObject* obj, QEvent* event);
+  bool eventFilter(QObject *obj, QEvent *event);
 
 protected slots:
   void delHighlightedRows();
   void toggleHighlightedRows();
   void selectHighlightedRows();
-  bool setAllHighlightedRows(tlp::PropertyInterface*);
-  void setLabelsOfHighlightedRows(tlp::PropertyInterface*);
+  bool setAllHighlightedRows(tlp::PropertyInterface *);
+  void setLabelsOfHighlightedRows(tlp::PropertyInterface *);
   void setMatchProperty();
   void setColumnsFilter(QString);
   void setPropertiesFilter(QString);
   void mapToGraphSelection();
 
-  void columnsInserted(const QModelIndex&,int,int);
-  void showCustomContextMenu(const QPoint & pos);
-  void showHorizontalHeaderCustomContextMenu(const QPoint & pos);
-  void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+  void columnsInserted(const QModelIndex &, int, int);
+  void showCustomContextMenu(const QPoint &pos);
+  void showHorizontalHeaderCustomContextMenu(const QPoint &pos);
+  void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 #endif // TABLEVIEW_H

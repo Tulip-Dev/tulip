@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef STRINGLISTSELECTIONWIDGETINTERFACE_H_
 #define STRINGLISTSELECTIONWIDGETINTERFACE_H_
 
@@ -29,10 +28,9 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE StringsListSelectionWidgetInterface  {
+class TLP_QT_SCOPE StringsListSelectionWidgetInterface {
 
-public :
-
+public:
   virtual ~StringsListSelectionWidgetInterface() {}
 
   virtual void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) = 0;
@@ -52,9 +50,7 @@ public :
   virtual void selectAllStrings() = 0;
 
   virtual void unselectAllStrings() = 0;
-
 };
-
 }
 
 #endif /* STRINGLISTSELECTIONWIDGETINTERFACE_H_ */

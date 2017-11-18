@@ -26,10 +26,12 @@ class IsMetaEdgeTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(IsMetaEdgeTest);
   CPPUNIT_TEST(testIsMetaEdge);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   void setUp();
   void tearDown();
   void testIsMetaEdge();
+
 private:
   tlp::Graph *graph;
   tlp::Graph *quotientGraph;

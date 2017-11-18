@@ -39,15 +39,15 @@
 
 using namespace tlp;
 
-PluginLibraryLoader* PluginLibraryLoader::_instance = NULL;
+PluginLibraryLoader *PluginLibraryLoader::_instance = NULL;
 
 #ifndef EMSCRIPTEN
-void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string& folder) {
+void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &folder) {
   std::vector<std::string> paths;
   std::stringstream ss(TulipPluginsPath);
   std::string item;
 
-  while(getline(ss, item, PATH_DELIMITER)) {
+  while (getline(ss, item, PATH_DELIMITER)) {
     paths.push_back(item);
   }
 
@@ -55,11 +55,11 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string& f
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
 
-  //load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
-  for(std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
+  // load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
+  for (std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
     std::string dir = (*it) + "/" + folder;
 
-    if (loader!=NULL)
+    if (loader != NULL)
       loader->start(dir.c_str());
 
     PluginLister::currentLoader = loader;
@@ -84,15 +84,14 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string& f
 
   // restore original pluginPath value
   getInstance()->pluginPath = currentPluginPath;
-
 }
 
-void PluginLibraryLoader::loadPluginsFromDir(const std::string& rootPath, PluginLoader *loader) {
+void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader) {
   // backup current plugin path as the pluginPath variable can be modified as a side effect
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
 
-  if (loader!=NULL)
+  if (loader != NULL)
     loader->start(rootPath.c_str());
 
   PluginLister::currentLoader = loader;
@@ -119,29 +118,26 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string& rootPath, Plugin
 }
 
 #ifdef _WIN32
-bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {
+bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginLoader *loader) {
   HINSTANCE hDLL = LoadLibrary(filename.c_str());
 
   if (hDLL == NULL) {
-    if (loader!=NULL) {
+    if (loader != NULL) {
       char *msg;
       DWORD dwErrCode = GetLastError();
-      FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                    FORMAT_MESSAGE_FROM_SYSTEM,
-                    NULL,               // no source buffer needed
-                    dwErrCode,          // error code for this message
+      FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+                    NULL,      // no source buffer needed
+                    dwErrCode, // error code for this message
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                    (LPTSTR)&msg,       // allocated by fcn
-                    0,               // minimum size of buffer
-                    NULL);              // no inserts
+                    (LPTSTR)&msg, // allocated by fcn
+                    0,            // minimum size of buffer
+                    NULL);        // no inserts
 
       if (!msg) {
         char scode[128];
-        sprintf(scode, "%s: unable to load(error %d)",
-                filename.c_str(), (int) dwErrCode);
+        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), (int)dwErrCode);
         loader->aborted(filename, std::string(scode));
-      }
-      else {
+      } else {
         loader->aborted(filename, filename + ": " + msg);
         LocalFree(msg);
       }
@@ -156,10 +152,10 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, Plugin
 #else
 
 bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginLoader *loader) {
-  void *handle = dlopen (filename.c_str() , RTLD_NOW);
+  void *handle = dlopen(filename.c_str(), RTLD_NOW);
 
   if (!handle) {
-    if (loader!=NULL)
+    if (loader != NULL)
       loader->aborted(filename, std::string(dlerror()));
 
     return false;
@@ -176,7 +172,7 @@ int __tulip_select_libs(const struct dirent *ent) {
 #else
 int __tulip_select_libs(struct dirent *ent) {
 #endif /* __FreeBSD_version */
-#else /* __FreeBSD__ */
+#else  /* __FreeBSD__ */
 int __tulip_select_libs(struct dirent *ent) {
 #endif
 #if !defined(__APPLE__)
@@ -188,10 +184,12 @@ int __tulip_select_libs(struct dirent *ent) {
 #endif
   int idx = strlen(ent->d_name) - suffix_len;
 
-  if (idx < 0) return 0;
+  if (idx < 0)
+    return 0;
 
-  for (unsigned long i=0; i < suffix_len; ++i) {
-    if ((ent->d_name[idx + i]) != suffix[i]) return 0;
+  for (unsigned long i = 0; i < suffix_len; ++i) {
+    if ((ent->d_name[idx + i]) != suffix[i])
+      return 0;
   }
 
   return 1;
@@ -205,7 +203,7 @@ int __tulip_select_dirs(const struct dirent *ent) {
 #else
 int __tulip_select_dirs(struct dirent *ent) {
 #endif /* __FreeBSD_version */
-#else /* __FreeBSD__ */
+#else  /* __FreeBSD__ */
 int __tulip_select_dirs(struct dirent *ent) {
 #endif
 
@@ -213,8 +211,7 @@ int __tulip_select_dirs(struct dirent *ent) {
 
   if (ent->d_type == DT_DIR && name != "." && name != "..") {
     return 1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -233,11 +230,10 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
   DWORD dwRet;
   dwRet = GetCurrentDirectory(FILENAME_MAX, currentDirectory);
 
-  if(dwRet == 0) {
+  if (dwRet == 0) {
     message = pluginPath + " - Scandir error";
     return false;
-  }
-  else {
+  } else {
     // first check is pluginPath exists
     DWORD fileAttr = GetFileAttributes(pluginPath.c_str());
 
@@ -246,8 +242,8 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
       return false;
     }
 
-    SetCurrentDirectory (pluginPath.c_str());
-    hFind = FindFirstFile ("*.dll", &findData);
+    SetCurrentDirectory(pluginPath.c_str());
+    hFind = FindFirstFile("*.dll", &findData);
 
     if (loader != NULL) {
       // count files loop
@@ -256,7 +252,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
       if (hFind != INVALID_HANDLE_VALUE)
         nbFiles = 1;
 
-      while (FindNextFile (hFind, &findData)) {
+      while (FindNextFile(hFind, &findData)) {
         ++nbFiles;
       }
 
@@ -264,19 +260,19 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
         FindClose(hFind);
 
       loader->numberOfFiles(nbFiles);
-      hFind = FindFirstFile ("*.dll", &findData);
+      hFind = FindFirstFile("*.dll", &findData);
     }
 
     BOOL success = hFind != INVALID_HANDLE_VALUE;
 
     while (success) {
-      std::string currentPluginLibrary = pluginPath +"/"+ findData.cFileName;
+      std::string currentPluginLibrary = pluginPath + "/" + findData.cFileName;
       std::string lib(findData.cFileName);
 
       // don't print error messages when trying to load Tulip Python
       // binary modules
       if (lib.find("_") == 0 || lib.find("tulipsip") != std::string::npos) {
-        success = FindNextFile (hFind, &findData);
+        success = FindNextFile(hFind, &findData);
         continue;
       }
 
@@ -289,15 +285,14 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
             loader->loading(findData.cFileName);
 
           loadPluginLibrary(currentPluginLibrary, loader);
-        }
-        else if (loader)
-          loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not compatible with Tulip "
-                          + TULIP_VERSION);
-      }
-      else if (loader)
-        loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
+        } else if (loader)
+          loader->aborted(currentPluginLibrary,
+                          currentPluginLibrary + " is not compatible with Tulip " + TULIP_VERSION);
+      } else if (loader)
+        loader->aborted(currentPluginLibrary,
+                        currentPluginLibrary + " is not a Tulip plugin library");
 
-      success = FindNextFile (hFind, &findData);
+      success = FindNextFile(hFind, &findData);
     }
 
     if (hFind != INVALID_HANDLE_VALUE) {
@@ -306,11 +301,11 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
     if (recursive) {
 
-      hFind = FindFirstFile ("*", &findData);
+      hFind = FindFirstFile("*", &findData);
 
       std::string rootPath = pluginPath;
 
-      while (FindNextFile (hFind, &findData)) {
+      while (FindNextFile(hFind, &findData)) {
         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
           std::string dir(findData.cFileName);
 
@@ -324,7 +319,6 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
       if (hFind != INVALID_HANDLE_VALUE)
         FindClose(hFind);
-
     }
 
     SetCurrentDirectory(currentDirectory);
@@ -333,16 +327,16 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 #else
 
   struct dirent **namelist;
-  int n = scandir(pluginPath.c_str(),
-                  &namelist,
-#if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
-                  reinterpret_cast<int (*) (const dirent *)>(__tulip_select_libs),
+  int n = scandir(pluginPath.c_str(), &namelist,
+#if !(defined(__APPLE__) || defined(__FreeBSD__)) ||                                               \
+    (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
+                  reinterpret_cast<int (*)(const dirent *)>(__tulip_select_libs),
 #else
                   __tulip_select_libs,
 #endif
                   alphasort);
 
-  if (loader!=NULL)
+  if (loader != NULL)
     loader->numberOfFiles(n);
 
   if (n < 0) {
@@ -364,13 +358,13 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
       continue;
     }
 
-    currentPluginLibrary = pluginPath +"/"+ lib;
+    currentPluginLibrary = pluginPath + "/" + lib;
     // looking for a suffix matching -A.B.C.(so/dylib)
     unsigned long idx = lib.rfind('.');
 
     if (idx != std::string::npos) {
       if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
-        if (loader!=NULL)
+        if (loader != NULL)
           loader->loading(lib);
 
         loadPluginLibrary(currentPluginLibrary, loader);
@@ -403,7 +397,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
             }
 
             if (isNumber && loader) {
-              loader->aborted(currentPluginLibrary,  currentPluginLibrary + " is not compatible with Tulip " + TULIP_VERSION);
+              loader->aborted(currentPluginLibrary, currentPluginLibrary +
+                                                        " is not compatible with Tulip " +
+                                                        TULIP_VERSION);
               return n > 0;
             }
           }
@@ -412,15 +408,16 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     }
 
     if (loader)
-      loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
+      loader->aborted(currentPluginLibrary,
+                      currentPluginLibrary + " is not a Tulip plugin library");
   }
 
   if (recursive) {
 
-    n = scandir(pluginPath.c_str(),
-                &namelist,
-#if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
-                reinterpret_cast<int (*) (const dirent *)>(__tulip_select_dirs),
+    n = scandir(pluginPath.c_str(), &namelist,
+#if !(defined(__APPLE__) || defined(__FreeBSD__)) ||                                               \
+    (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
+                reinterpret_cast<int (*)(const dirent *)>(__tulip_select_dirs),
 #else
                 __tulip_select_dirs,
 #endif
@@ -442,10 +439,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
       if (n == 0)
         free(namelist);
     }
-
   }
 
 #endif
   return true;
 }
-#endif //EMSCRIPTEN
+#endif // EMSCRIPTEN

@@ -25,16 +25,15 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  // nodes
-  "Number of nodes.",
+static const char *paramHelp[] = {
+    // nodes
+    "Number of nodes.",
 
-  // m
-  "Number of activated nodes.",
+    // m
+    "Number of activated nodes.",
 
-  // proba
-  "Probability to connect a node to a random other node<br/>instead of an activated node."
-};
+    // proba
+    "Probability to connect a node to a random other node<br/>instead of an activated node."};
 
 /**
  *
@@ -45,25 +44,30 @@ static const char * paramHelp[] = {
  * Physical Review E, 65, 057102,(2002).
  *
  */
-struct KlemmEguiluzModel:public ImportModule {
-  PLUGININFORMATION("Klemm Eguiluz Model","Sallaberry & Pennarun","21/02/2011 & 08/04/2014","Randomly generates a small world graph using the model described in<br/>Konstantin Klemm and Victor M. Eguiluz.<br/><b>Growing Scale-Free Networks with Small World Behavior.</b><br/>Physical Review E, 65, 057102,(2002).","1.0","Social network")
+struct KlemmEguiluzModel : public ImportModule {
+  PLUGININFORMATION("Klemm Eguiluz Model", "Sallaberry & Pennarun", "21/02/2011 & 08/04/2014",
+                    "Randomly generates a small world graph using the model described "
+                    "in<br/>Konstantin Klemm and Victor M. Eguiluz.<br/><b>Growing Scale-Free "
+                    "Networks with Small World Behavior.</b><br/>Physical Review E, 65, "
+                    "057102,(2002).",
+                    "1.0", "Social network")
 
-  KlemmEguiluzModel(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"200");
-    addInParameter<unsigned int>("m",paramHelp[1],"10");
-    addInParameter<double>("mu",paramHelp[2],"0.5");
+  KlemmEguiluzModel(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "200");
+    addInParameter<unsigned int>("m", paramHelp[1], "10");
+    addInParameter<double>("mu", paramHelp[2], "0.5");
   }
 
   bool importGraph() {
 
     unsigned int n = 200;
-    unsigned int m  = 10;
+    unsigned int m = 10;
     double mu = 0.5;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", n);
       dataSet->get("m", m);
-      dataSet->get("mu",mu);
+      dataSet->get("mu", mu);
     }
 
     // check arguments
@@ -85,29 +89,29 @@ struct KlemmEguiluzModel:public ImportModule {
     vector<bool> activated(n, false);
 
     graph->addNodes(n);
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
     // fully connect and activate the m first nodes
     for (unsigned int i = 0; i < m; ++i) {
       activated[i] = true;
 
-      for(unsigned int j = i + 1; j < m; ++j)
-        graph->addEdge(nodes[i],nodes[j]);
+      for (unsigned int j = i + 1; j < m; ++j)
+        graph->addEdge(nodes[i], nodes[j]);
     }
 
-    for (unsigned i=m; i<n; ++i) {
+    for (unsigned i = m; i < n; ++i) {
       if (i % 100 == 0) {
         if (pluginProgress->progress(i, n) != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
       a = 0;
 
-      for(unsigned int j=0; j<i; ++j)
-        a += 1/double(graph->deg(nodes[j]));
+      for (unsigned int j = 0; j < i; ++j)
+        a += 1 / double(graph->deg(nodes[j]));
 
       // the new node is connected to m nodes
-      for (unsigned int j=0; j<i; ++j) {
+      for (unsigned int j = 0; j < i; ++j) {
         if (activated[j]) {
           proba = tlp::randomDouble();
 
@@ -117,14 +121,13 @@ struct KlemmEguiluzModel:public ImportModule {
             unsigned int sn = 0;
 
             while (pr_sum < pr && sn <= i) {
-              pr_sum += (1/double(graph->deg(nodes[sn])))*a;
+              pr_sum += (1 / double(graph->deg(nodes[sn]))) * a;
               ++sn;
             }
 
-            graph->addEdge(nodes[i],nodes[--sn]);
-          }
-          else { // keep the edge
-            graph->addEdge(nodes[i],nodes[j]);
+            graph->addEdge(nodes[i], nodes[--sn]);
+          } else { // keep the edge
+            graph->addEdge(nodes[i], nodes[j]);
           }
         }
       }
@@ -135,9 +138,9 @@ struct KlemmEguiluzModel:public ImportModule {
       // deactivate one of the previously m activated nodes
       a = 0;
 
-      for(unsigned int j=0; j<i; ++j)
+      for (unsigned int j = 0; j < i; ++j)
         if (activated[j])
-          a += 1/double(graph->deg(nodes[j]));
+          a += 1 / double(graph->deg(nodes[j]));
 
       pr = tlp::randomDouble();
       pr_sum = 0;
@@ -145,7 +148,7 @@ struct KlemmEguiluzModel:public ImportModule {
 
       while (pr_sum < pr && sn < i) {
         if (activated[sn])
-          pr_sum += a*(1/double(graph->deg(nodes[sn])));
+          pr_sum += a * (1 / double(graph->deg(nodes[sn])));
 
         ++sn;
       }

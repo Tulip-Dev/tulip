@@ -35,13 +35,12 @@ class GlLODCalculator;
 class TLP_GL_SCOPE GlLODSceneVisitor : public GlSceneVisitor {
 
 public:
-
   /**
    * Basic constructor
    */
-  GlLODSceneVisitor(GlLODCalculator *calculator,const GlGraphInputData* inputData)
-    : calculator(calculator),inputData(inputData) {
-    threadSafe=true;
+  GlLODSceneVisitor(GlLODCalculator *calculator, const GlGraphInputData *inputData)
+      : calculator(calculator), inputData(inputData) {
+    threadSafe = true;
   }
 
   /**
@@ -72,12 +71,9 @@ public:
   virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
 
 private:
-
-  GlLODCalculator* calculator;
-  const GlGraphInputData* inputData;
-
+  GlLODCalculator *calculator;
+  const GlGraphInputData *inputData;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

@@ -42,8 +42,7 @@ using namespace tlp;
 
 //================================================================================
 
-static bool runQHull(int dim, vector<double> &points,
-                     vector<vector<unsigned int> > &facets,
+static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int> > &facets,
                      vector<vector<unsigned int> > &neighbors) {
 
   // Set default options for qhull convex hull
@@ -56,12 +55,14 @@ static bool runQHull(int dim, vector<double> &points,
 // run qhull convex hull computation
 #ifdef HAVE_REENTRANT_QHULL
   qhT qh_qh;
-  qhT *qh= &qh_qh;
+  qhT *qh = &qh_qh;
   QHULL_LIB_CHECK
   qh_zero(qh, stderr);
-  int qhullKo = qh_new_qhull(qh, dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+  int qhullKo = qh_new_qhull(qh, dim, points.size() / dim, &points[0], false,
+                             const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
 #else
-  int qhullKo = qh_new_qhull(dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+  int qhullKo = qh_new_qhull(dim, points.size() / dim, &points[0], false,
+                             const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
 #endif
 
   if (!qhullKo) {
@@ -72,7 +73,7 @@ static bool runQHull(int dim, vector<double> &points,
     FORALLfacets {
       std::vector<unsigned int> facetV;
       std::vector<unsigned int> neighborsV;
-      FOREACHvertex_ (facet->vertices) {
+      FOREACHvertex_(facet->vertices) {
 #ifdef HAVE_REENTRANT_QHULL
         facetV.push_back(qh_pointid(qh, vertex->point));
 #else
@@ -88,15 +89,15 @@ static bool runQHull(int dim, vector<double> &points,
       neighbors.push_back(neighborsV);
     }
 
-    for (size_t i = 0 ; i < neighbors.size() ; ++i) {
-      for (size_t j = 0 ; j < neighbors[i].size() ; ++j) {
+    for (size_t i = 0; i < neighbors.size(); ++i) {
+      for (size_t j = 0; j < neighbors[i].size(); ++j) {
         neighbors[i][j] = faceIds[neighbors[i][j]];
       }
     }
   }
 
   int curlong, totlong;
-  // free memory allocated by qhull
+// free memory allocated by qhull
 #ifdef HAVE_REENTRANT_QHULL
   qh_freeqhull(qh, !qh_ALL);
   qh_memfreeshort(qh, &curlong, &totlong);
@@ -109,15 +110,14 @@ static bool runQHull(int dim, vector<double> &points,
 }
 
 //================================================================================
-void tlp::convexHull(const std::vector<Coord> &points,
-                     std::vector<unsigned int> &hull) {
+void tlp::convexHull(const std::vector<Coord> &points, std::vector<unsigned int> &hull) {
   hull.clear();
 
   vector<double> pointsQHull;
   vector<vector<unsigned int> > facets;
   vector<vector<unsigned int> > neighbors;
 
-  for(size_t i = 0 ; i < points.size() ; ++i) {
+  for (size_t i = 0; i < points.size(); ++i) {
     pointsQHull.push_back(points[i][0]);
     pointsQHull.push_back(points[i][1]);
   }
@@ -139,16 +139,13 @@ void tlp::convexHull(const std::vector<Coord> &points,
       if (facets[neighFaceAId][0] == ridge) {
         hull.push_back(facets[neighFaceAId][1]);
         curFaceId = neighFaceAId;
-      }
-      else if (facets[neighFaceAId][1] == ridge) {
+      } else if (facets[neighFaceAId][1] == ridge) {
         hull.push_back(facets[neighFaceAId][0]);
         curFaceId = neighFaceAId;
-      }
-      else if (facets[neighFaceBId][0] == ridge) {
+      } else if (facets[neighFaceBId][0] == ridge) {
         hull.push_back(facets[neighFaceBId][1]);
         curFaceId = neighFaceBId;
-      }
-      else {
+      } else {
         hull.push_back(facets[neighFaceBId][0]);
         curFaceId = neighFaceBId;
       }
@@ -156,8 +153,8 @@ void tlp::convexHull(const std::vector<Coord> &points,
       size_t hullSize = hull.size();
 
       if (hullSize > 1) {
-        const Coord &point = points[hull[hullSize-2]];
-        const Coord &nextPoint = points[hull[hullSize-1]];
+        const Coord &point = points[hull[hullSize - 2]];
+        const Coord &nextPoint = points[hull[hullSize - 1]];
         signedArea += (point[0] * nextPoint[1] - nextPoint[0] * point[1]);
       }
 
@@ -195,16 +192,15 @@ void tlp::convexHull(const std::vector<Coord> &points,
   int dim = 3;
 
   if (!coPlanarLayout) {
-    for (size_t i = 0 ; i < points.size() ; ++i) {
+    for (size_t i = 0; i < points.size(); ++i) {
       pointsQHull.push_back(points[i][0]);
       pointsQHull.push_back(points[i][1]);
       pointsQHull.push_back(points[i][2]);
     }
-  }
-  else {
+  } else {
     dim = 2;
 
-    for(size_t i = 0 ; i < points.size() ; ++i) {
+    for (size_t i = 0; i < points.size(); ++i) {
       Coord p = Coord(invTransformMatrix * points[i]);
       pointsQHull.push_back(p[0]);
       pointsQHull.push_back(p[1]);

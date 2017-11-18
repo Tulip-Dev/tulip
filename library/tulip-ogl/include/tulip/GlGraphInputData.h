@@ -48,48 +48,48 @@ class GlGlyphRenderer;
 class TLP_GL_SCOPE GlGraphInputData : public Observable {
 
 public:
-
   /**
    * GlGraphInputData available properties
    */
   enum PropertyName {
-    VIEW_COLOR=0, /**< color of nodes/edges */
-    VIEW_LABELCOLOR, /**< color of labels */
+    VIEW_COLOR = 0,        /**< color of nodes/edges */
+    VIEW_LABELCOLOR,       /**< color of labels */
     VIEW_LABELBORDERCOLOR, /**< border color of labels */
     VIEW_LABELBORDERWIDTH, /**< border width of labels */
-    VIEW_SIZE, /**< size of nodes/edges */
-    VIEW_LABELPOSITION, /**< position of labels */
-    VIEW_SHAPE, /**< shape of nodes/edges */
-    VIEW_ROTATION, /**< rotation apply on nodes */
-    VIEW_SELECTED, /**< nodes/edges selected */
-    VIEW_FONT, /**< font name of labels */
-    VIEW_FONTSIZE, /**< font size of labels */
-    VIEW_LABEL, /**< text of labels */
-    VIEW_LAYOUT, /**< position of nodes */
-    VIEW_TEXTURE, /**< texture of nodes/edges */
-    VIEW_BORDERCOLOR, /**< border color of nodes/edges */
-    VIEW_BORDERWIDTH, /**< border width of nodes/edges */
-    VIEW_SRCANCHORSHAPE, /**< shape of source arrow edge extremity */
-    VIEW_SRCANCHORSIZE, /**< size of source arrow edge extremity */
-    VIEW_TGTANCHORSHAPE, /**< shape of target arrow edge extremity */
-    VIEW_TGTANCHORSIZE, /**< size of target arrow edge extremity */
-    VIEW_ANIMATIONFRAME, /**< animation frame */
-    VIEW_FONTAWESOMEICON, /**< font awesome icon name for the font awesome icon glyph*/
-    VIEW_ICON, /**< icon name for the icon glyph*/
-    NB_PROPS /** must be the last, give the number of enum props */
+    VIEW_SIZE,             /**< size of nodes/edges */
+    VIEW_LABELPOSITION,    /**< position of labels */
+    VIEW_SHAPE,            /**< shape of nodes/edges */
+    VIEW_ROTATION,         /**< rotation apply on nodes */
+    VIEW_SELECTED,         /**< nodes/edges selected */
+    VIEW_FONT,             /**< font name of labels */
+    VIEW_FONTSIZE,         /**< font size of labels */
+    VIEW_LABEL,            /**< text of labels */
+    VIEW_LAYOUT,           /**< position of nodes */
+    VIEW_TEXTURE,          /**< texture of nodes/edges */
+    VIEW_BORDERCOLOR,      /**< border color of nodes/edges */
+    VIEW_BORDERWIDTH,      /**< border width of nodes/edges */
+    VIEW_SRCANCHORSHAPE,   /**< shape of source arrow edge extremity */
+    VIEW_SRCANCHORSIZE,    /**< size of source arrow edge extremity */
+    VIEW_TGTANCHORSHAPE,   /**< shape of target arrow edge extremity */
+    VIEW_TGTANCHORSIZE,    /**< size of target arrow edge extremity */
+    VIEW_ANIMATIONFRAME,   /**< animation frame */
+    VIEW_FONTAWESOMEICON,  /**< font awesome icon name for the font awesome icon glyph*/
+    VIEW_ICON,             /**< icon name for the icon glyph*/
+    NB_PROPS               /** must be the last, give the number of enum props */
   };
 
   /**
    * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
    */
-  GlGraphInputData(Graph* graph, GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer = NULL);
+  GlGraphInputData(Graph *graph, GlGraphRenderingParameters *parameters,
+                   GlMetaNodeRenderer *renderer = NULL);
 
   ~GlGraphInputData();
 
   /**
    * Return the graph of this inputData
    */
-  Graph* getGraph() const {
+  Graph *getGraph() const {
     return graph;
   }
 
@@ -99,7 +99,7 @@ public:
    * Set metaNode renderer
    * If deleteOldMetaNodeRenderer==true : this function delete old meta node renderer
    */
-  void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer=true);
+  void setMetaNodeRenderer(GlMetaNodeRenderer *renderer, bool deleteOldMetaNodeRenderer = true);
 
   /**
    * Return metaNode renderer
@@ -122,17 +122,16 @@ public:
   /**
    * Set glEdgeDisplayManager
    */
-  void setGlVertexArrayManager(GlVertexArrayManager * manager) {
-    _glVertexArrayManager=manager;
+  void setGlVertexArrayManager(GlVertexArrayManager *manager) {
+    _glVertexArrayManager = manager;
   }
 
   /**
    * Function to get the PropertyInterface* corresponding
    * to a given name
    */
-  tlp::PropertyInterface* getProperty(const std::string& name) const {
-    std::map<std::string, PropertyName>::iterator it =
-      _propertiesNameMap.find(name);
+  tlp::PropertyInterface *getProperty(const std::string &name) const {
+    std::map<std::string, PropertyName>::iterator it = _propertiesNameMap.find(name);
 
     if (it != _propertiesNameMap.end())
       return _propertiesMap[it->second];
@@ -144,9 +143,9 @@ public:
    * Function to get the typed PropertyInterface* for a given propertyName
    * See PropertyName enum for more details on available properties
    */
-  template<typename T>
-  T* getProperty(PropertyName propertyName) const {
-    return static_cast<T*>(_propertiesMap[propertyName]);
+  template <typename T>
+  T *getProperty(PropertyName propertyName) const {
+    return static_cast<T *>(_propertiesMap[propertyName]);
   }
 
   /**
@@ -155,31 +154,31 @@ public:
    */
   void setProperty(PropertyName propertyName, PropertyInterface *property) {
     _properties.erase(_propertiesMap[propertyName]);
-    _propertiesMap[propertyName]=property;
+    _propertiesMap[propertyName] = property;
     _properties.insert(property);
   }
 
   /**
    * Function to set the PropertyInterface* for a given name
    */
-  bool setProperty(const std::string& name, PropertyInterface *property);
+  bool setProperty(const std::string &name, PropertyInterface *property);
 
   /**
    * Function to set a bunch of named PropertyInterface*
    */
-  bool installProperties(const std::map<std::string, tlp::PropertyInterface*>& propsMap);
+  bool installProperties(const std::map<std::string, tlp::PropertyInterface *> &propsMap);
 
   /**
    * Return a pointer on the property used to elementColor
    */
-  ColorProperty * getElementColor() const {
+  ColorProperty *getElementColor() const {
     return getProperty<ColorProperty>(VIEW_COLOR);
   }
   /**
    * Set the pointer on the property used to elementColor
    */
   void setElementColor(ColorProperty *property) {
-    setProperty(VIEW_COLOR,property);
+    setProperty(VIEW_COLOR, property);
   }
   /**
    * Return a pointer on the property used to elementLabelColor
@@ -191,7 +190,7 @@ public:
    * Set the pointer on the property used to elementLabelColor
    */
   void setElementLabelColor(ColorProperty *property) {
-    setProperty(VIEW_LABELCOLOR,property);
+    setProperty(VIEW_LABELCOLOR, property);
   }
   /**
    * Return a pointer on the property used to elementLabelBorderColor
@@ -203,7 +202,7 @@ public:
    * Set the pointer on the property used to elementLabelBorderColor
    */
   void setElementLabelBorderColor(ColorProperty *property) {
-    setProperty(VIEW_LABELBORDERCOLOR,property);
+    setProperty(VIEW_LABELBORDERCOLOR, property);
   }
   /**
    * Return a pointer on the property used to elementLabelBorderWidth
@@ -215,7 +214,7 @@ public:
    * Set the pointer on the property used to elementLabelBorderColor
    */
   void setElementLabelBorderWidth(DoubleProperty *property) {
-    setProperty(VIEW_LABELBORDERWIDTH,property);
+    setProperty(VIEW_LABELBORDERWIDTH, property);
   }
   /**
    * Return a pointer on the property used to elementSize
@@ -227,7 +226,7 @@ public:
    * Set the pointer on the property used to elementSize
    */
   void setElementSize(SizeProperty *property) {
-    setProperty(VIEW_SIZE,property);
+    setProperty(VIEW_SIZE, property);
   }
   /**
    * Return a pointer on the property used to elementLabelPosition
@@ -239,7 +238,7 @@ public:
    * Set the pointer on the property used to elementLabelPosition
    */
   void setElementLabelPosition(IntegerProperty *property) {
-    setProperty(VIEW_LABELPOSITION,property);
+    setProperty(VIEW_LABELPOSITION, property);
   }
   /**
    * Return a pointer on the property used to elementShape
@@ -251,7 +250,7 @@ public:
    * Set the pointer on the property used to elementShape
    */
   void setElementShape(IntegerProperty *property) {
-    setProperty(VIEW_SHAPE,property);
+    setProperty(VIEW_SHAPE, property);
   }
   /**
    * Return a pointer on the property used to elementRotation
@@ -263,7 +262,7 @@ public:
    * Set the pointer on the property used to elementRotation
    */
   void setElementRotation(DoubleProperty *property) {
-    setProperty(VIEW_ROTATION,property);
+    setProperty(VIEW_ROTATION, property);
   }
   /**
    * Return a pointer on the property used to elementSelected
@@ -275,7 +274,7 @@ public:
    * Set the pointer on the property used to elementSelected
    */
   void setElementSelected(BooleanProperty *property) {
-    setProperty(VIEW_SELECTED,property);
+    setProperty(VIEW_SELECTED, property);
   }
   /**
    * Return a pointer on the property used to elementFont
@@ -287,19 +286,19 @@ public:
    * Set the pointer on the property used to elementFont
    */
   void setElementFont(StringProperty *property) {
-    setProperty(VIEW_FONT,property);
+    setProperty(VIEW_FONT, property);
   }
   /**
    * Return a pointer on the property used to elementFontSize
    */
-  IntegerProperty  *getElementFontSize() const {
+  IntegerProperty *getElementFontSize() const {
     return getProperty<IntegerProperty>(VIEW_FONTSIZE);
   }
   /**
    * Set the pointer on the property used to elementFontSize
    */
   void setElementFontSize(IntegerProperty *property) {
-    setProperty(VIEW_FONTSIZE,property);
+    setProperty(VIEW_FONTSIZE, property);
   }
   /**
    * Return a pointer on the property used to elementLabel
@@ -311,7 +310,7 @@ public:
    * Set the pointer on the property used to elementLabel
    */
   void setElementLabel(StringProperty *property) {
-    setProperty(VIEW_LABEL,property);
+    setProperty(VIEW_LABEL, property);
   }
   /**
    * Return a pointer on the property used to elementLayout
@@ -323,7 +322,7 @@ public:
    * Set the pointer on the property used to elementLayout
    */
   void setElementLayout(LayoutProperty *property) {
-    setProperty(VIEW_LAYOUT,property);
+    setProperty(VIEW_LAYOUT, property);
   }
   /**
    * Return a pointer on the property used to elementTexture
@@ -335,7 +334,7 @@ public:
    * Set the pointer on the property used to elementTexture
    */
   void setElementTexture(StringProperty *property) {
-    setProperty(VIEW_TEXTURE,property);
+    setProperty(VIEW_TEXTURE, property);
   }
   /**
    * Return a pointer on the property used to elementBorderColor
@@ -347,7 +346,7 @@ public:
    * Set the pointer on the property used to elementBorderColor
    */
   void setElementBorderColor(ColorProperty *property) {
-    setProperty(VIEW_BORDERCOLOR,property);
+    setProperty(VIEW_BORDERCOLOR, property);
   }
   /**
    * Return a pointer on the property used to elementBorderWidth
@@ -359,7 +358,7 @@ public:
    * Set the pointer on the property used to elementBorderWidth
    */
   void setElementBorderWidth(DoubleProperty *property) {
-    setProperty(VIEW_BORDERWIDTH,property);
+    setProperty(VIEW_BORDERWIDTH, property);
   }
   /**
    * Return a pointer on the property used to elementSrcAnchorShape
@@ -371,7 +370,7 @@ public:
    * Set the pointer on the property used to elementSrcAnchorShape
    */
   void setElementSrcAnchorShape(IntegerProperty *property) {
-    setProperty(VIEW_SRCANCHORSHAPE,property);
+    setProperty(VIEW_SRCANCHORSHAPE, property);
   }
   /**
    * Return a pointer on the property used to elementSrcAnchorSize
@@ -383,7 +382,7 @@ public:
    * Set the pointer on the property used to elementSrcAnchorSize
    */
   void setElementSrcAnchorSize(SizeProperty *property) {
-    setProperty(VIEW_SRCANCHORSIZE,property);
+    setProperty(VIEW_SRCANCHORSIZE, property);
   }
   /**
    * Return a pointer on the property used to elementTgtAnchorShape
@@ -395,7 +394,7 @@ public:
    * Set the pointer on the property used to elementTgtAnchorShape
    */
   void setElementTgtAnchorShape(IntegerProperty *property) {
-    setProperty(VIEW_TGTANCHORSHAPE,property);
+    setProperty(VIEW_TGTANCHORSHAPE, property);
   }
   /**
    * Return a pointer on the property used to elementTgtAnchorSize
@@ -407,7 +406,7 @@ public:
    * Set the property name for elementSourceAnchorSize
    */
   void setElementTgtAnchorSize(SizeProperty *property) {
-    setProperty(VIEW_TGTANCHORSIZE,property);
+    setProperty(VIEW_TGTANCHORSIZE, property);
   }
   /**
    * Return a pointer on the property used to elementAnimationFrame
@@ -419,7 +418,7 @@ public:
    * Set the pointer on the property used to elementAnimationFrame
    */
   void setElementAnimationFrame(IntegerProperty *property) {
-    setProperty(VIEW_ANIMATIONFRAME,property);
+    setProperty(VIEW_ANIMATIONFRAME, property);
   }
 
   /**
@@ -436,7 +435,7 @@ public:
    * @deprecated use setElementIcon(StringProperty *property) instead
    */
   _DEPRECATED void setElementFontAwesomeIcon(StringProperty *property) {
-    setProperty(VIEW_FONTAWESOMEICON,property);
+    setProperty(VIEW_FONTAWESOMEICON, property);
   }
 
   /**
@@ -454,10 +453,10 @@ public:
    * @since Tulip 5.0
    */
   void setElementIcon(StringProperty *property) {
-    setProperty(VIEW_ICON,property);
+    setProperty(VIEW_ICON, property);
   }
 
-  std::set<tlp::PropertyInterface*> properties() const {
+  std::set<tlp::PropertyInterface *> properties() const {
     return _properties;
   }
 
@@ -470,7 +469,7 @@ public:
    * @brief renderingParameters return a pointer on the rendering parameters.
    * @return
    */
-  GlGraphRenderingParameters* renderingParameters()const {
+  GlGraphRenderingParameters *renderingParameters() const {
     return parameters;
   }
 
@@ -478,31 +477,27 @@ public:
    * @brief setRenderingParameters set the pointer on the rendering parameters.
    * @param newParameters
    */
-  void setRenderingParameters(GlGraphRenderingParameters* newParameters) {
+  void setRenderingParameters(GlGraphRenderingParameters *newParameters) {
     parameters = newParameters;
   }
 
-public :
+public:
+  Graph *graph;
 
-  Graph* graph;
-
-  GlGraphRenderingParameters* parameters;
+  GlGraphRenderingParameters *parameters;
 
   MutableContainer<Glyph *> glyphs;
   MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
 
 protected:
+  std::set<PropertyInterface *> _properties;
 
-  std::set<PropertyInterface*> _properties;
-
-  PropertyInterface* _propertiesMap[NB_PROPS];
-  static std::map<std::string,PropertyName> _propertiesNameMap;
+  PropertyInterface *_propertiesMap[NB_PROPS];
+  static std::map<std::string, PropertyName> _propertiesNameMap;
 
   GlMetaNodeRenderer *_metaNodeRenderer;
   GlVertexArrayManager *_glVertexArrayManager;
   GlGlyphRenderer *_glGlyphRenderer;
-
-
 };
 }
 

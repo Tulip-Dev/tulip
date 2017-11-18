@@ -39,10 +39,10 @@ class Camera;
 class TLP_GL_SCOPE GlGraphRenderer {
 
 public:
-
   /**
    * @brief Constructor
-   * \param inputData : GlGraphInputData used by renderer to display the graph (in input data you have pointers on properties used to render nodes/edges
+   * \param inputData : GlGraphInputData used by renderer to display the graph (in input data you
+   * have pointers on properties used to render nodes/edges
    * \param parameters : GlGraphRenderingParameters used by renderer to display the graph
    */
   GlGraphRenderer(const GlGraphInputData *inputData);
@@ -55,12 +55,13 @@ public:
   /**
    * @brief This function is call by GlGraphComposite to draw the graph
    *
-   * If you reimplement this function you have to render nodes/edges. It's the most important function of GlGraphRenderer
+   * If you reimplement this function you have to render nodes/edges. It's the most important
+   * function of GlGraphRenderer
    *
    * \param lod : lod used to this Rendering
    * \param camera : camera used to this rendering
    */
-  virtual void draw(float lod,Camera* camera) = 0;
+  virtual void draw(float lod, Camera *camera) = 0;
 
   /**
    * @brief This function is call by GlGraphComposite to selected entities into the graph
@@ -71,26 +72,26 @@ public:
    * \param h : height of the selected zone
    * \param selectedEntities : you have to put selected entities into this vector
    */
-  virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int x, int y, int w, int h, std::vector<SelectedEntity>& selectedEntities) = 0;
+  virtual void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w,
+                              int h, std::vector<SelectedEntity> &selectedEntities) = 0;
 
   /**
    * @brief You can use this funtion if you want to inject a visitor on the graph
    */
-  virtual void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
+  virtual void visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities = false);
 
   /**
    * @brief This function set if the content of the graph is modified
    */
   void setGraphModified(bool graphModified) {
-    this->graphModified=graphModified;
+    this->graphModified = graphModified;
   }
 
 protected:
+  void visitNodes(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities = false);
+  void visitEdges(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities = false);
 
-  void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-  void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-
-  const GlGraphInputData* inputData;
+  const GlGraphInputData *inputData;
 
   bool graphModified;
 

@@ -22,27 +22,24 @@
 namespace tlp {
 namespace ViewName {
 
-const static char GeographicViewName[]="Geographic view";
-const static char HistogramViewName[]="Histogram view";
-const static char MatrixViewName[]="Adjacency Matrix view";
-const static char ParallelCoordinatesViewName[]="Parallel Coordinates view";
-const static char PixelOrientedViewName[]="Pixel Oriented view";
-const static char ScatterPlot2DViewName[]="Scatter Plot 2D view";
-const static char SOMViewName[]="Self Organizing Map view";
-
+const static char GeographicViewName[] = "Geographic view";
+const static char HistogramViewName[] = "Histogram view";
+const static char MatrixViewName[] = "Adjacency Matrix view";
+const static char ParallelCoordinatesViewName[] = "Parallel Coordinates view";
+const static char PixelOrientedViewName[] = "Pixel Oriented view";
+const static char ScatterPlot2DViewName[] = "Scatter Plot 2D view";
+const static char SOMViewName[] = "Self Organizing Map view";
 }
 
 namespace SelectionAlgorithm {
 
-const static char LoopSelection[]="Loop Selection";
-const static char MultipleEdgeSelection[]="Multiple Edges Selection";
-const static char InducedSubGraphSelection[]="Induced Sub-Graph";
-const static char ReachableSubGraphSelection[]="Reachable Sub-Graph";
-const static char SpanningDagSelection[]="Spanning Dag";
-const static char MakeSelectionGraph[]="Make Selection a Graph";
+const static char LoopSelection[] = "Loop Selection";
+const static char MultipleEdgeSelection[] = "Multiple Edges Selection";
+const static char InducedSubGraphSelection[] = "Induced Sub-Graph";
+const static char ReachableSubGraphSelection[] = "Reachable Sub-Graph";
+const static char SpanningDagSelection[] = "Spanning Dag";
+const static char MakeSelectionGraph[] = "Make Selection a Graph";
 }
-
 }
-
 
 #endif // VIEWNAMES_H

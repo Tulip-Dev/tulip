@@ -39,8 +39,7 @@ class GlSimpleEntity;
 
 class TLP_GL_SCOPE GlXMLTools {
 
-public :
-
+public:
   /**
    * Create and enter into a new data node
    */
@@ -64,12 +63,12 @@ public :
   /**
    * Create and enter into a new children node with name : name
    */
-  static void beginChildNode(std::string &outString, const std::string &name="children");
+  static void beginChildNode(std::string &outString, const std::string &name = "children");
 
   /**
    * End last children node with name : name
    */
-  static void endChildNode(std::string &outString, const std::string &name="children");
+  static void endChildNode(std::string &outString, const std::string &name = "children");
 
   /**
    * Enter into a child node and set the currentPosition integer to the position next the child tag
@@ -78,21 +77,25 @@ public :
   static std::string enterChildNode(const std::string &inString, unsigned int &currentPosition);
 
   /**
-   * Leave into a child node and set the currentPosition integer to the position next the child end tag
+   * Leave into a child node and set the currentPosition integer to the position next the child end
+   * tag
    * \return child name
    */
-  static void leaveChildNode(const std::string &inString, unsigned int &currentPosition, const std::string &childName);
+  static void leaveChildNode(const std::string &inString, unsigned int &currentPosition,
+                             const std::string &childName);
 
   /**
    * Create a property with name and value in rootNode
    */
-  static void createProperty(std::string &outString, const std::string &name, const std::string &value, const std::string &parent="");
+  static void createProperty(std::string &outString, const std::string &name,
+                             const std::string &value, const std::string &parent = "");
 
   /**
    * Get properties associated with the last opened child
    * These properties is returned into a map of string/string
    */
-  static std::map<std::string,std::string> getProperties(const std::string &inString, unsigned int &currentPosition);
+  static std::map<std::string, std::string> getProperties(const std::string &inString,
+                                                          unsigned int &currentPosition);
 
   /**
    * Create a GlEntity with the given name
@@ -103,50 +106,51 @@ public :
    * Get the XML output for a vector of Object
    */
   template <typename Obj>
-  static void getXML(std::string &outString,const std::string &name,const typename std::vector<Obj> &vect) {
+  static void getXML(std::string &outString, const std::string &name,
+                     const typename std::vector<Obj> &vect) {
 
     std::stringstream str;
-    str << "(" ;
-    typename std::vector<Obj>::const_iterator it=vect.begin();
+    str << "(";
+    typename std::vector<Obj>::const_iterator it = vect.begin();
     assert(it != vect.end());
-    str << *it ;
+    str << *it;
     ++it;
 
-    for(; it!=vect.end(); ++it) {
-      str << "," << *it ;
+    for (; it != vect.end(); ++it) {
+      str << "," << *it;
     }
 
-    str << ")" ;
-    outString.append("<"+name+">"+str.str()+"</"+name+">\n");
+    str << ")";
+    outString.append("<" + name + ">" + str.str() + "</" + name + ">\n");
   }
 
   /**
    * Set vector of Object with the given XML
    */
   template <typename Obj>
-  static void setWithXML(const std::string &inString, unsigned int &currentPosition,const std::string &name,std::vector<Obj> &vect) {
+  static void setWithXML(const std::string &inString, unsigned int &currentPosition,
+                         const std::string &name, std::vector<Obj> &vect) {
 
-    goToNextCaracter(inString,currentPosition);
+    goToNextCaracter(inString, currentPosition);
 
-    std::string nameTag=inString.substr(currentPosition,name.size()+2);
-    assert(nameTag=="<"+name+">");
-    currentPosition+=name.size()+2;
+    std::string nameTag = inString.substr(currentPosition, name.size() + 2);
+    assert(nameTag == "<" + name + ">");
+    currentPosition += name.size() + 2;
 
-    size_t endValuePosition=inString.find("</"+name+">",currentPosition);
-    assert(endValuePosition!=std::string::npos);
+    size_t endValuePosition = inString.find("</" + name + ">", currentPosition);
+    assert(endValuePosition != std::string::npos);
 
-    std::istringstream is(inString.substr(currentPosition,endValuePosition-currentPosition));
+    std::istringstream is(inString.substr(currentPosition, endValuePosition - currentPosition));
     Obj data;
-    char c=is.get();
+    char c = is.get();
 
-    while(c!=')') {
-      is >> data ;
+    while (c != ')') {
+      is >> data;
       vect.push_back(data);
-      c=is.get();
+      c = is.get();
     }
 
-    currentPosition=endValuePosition+name.size()+3;
-
+    currentPosition = endValuePosition + name.size() + 3;
   }
 
   /**
@@ -155,74 +159,72 @@ public :
   template <typename Obj>
   static void getXML(std::string &outString, const std::string &name, const Obj &value) {
     std::stringstream str;
-    str << value ;
+    str << value;
     applyIndentation(outString);
-    outString.append("<"+name+">"+str.str()+"</"+name+">\n");
+    outString.append("<" + name + ">" + str.str() + "</" + name + ">\n");
   }
 
-
-  static bool checkNextXMLtag(const std::string &inString, unsigned int &currentPosition, const std::string &name) {
-    unsigned int tmp=currentPosition;
-    goToNextCaracter(inString,tmp);
-    std::string nameTag=inString.substr(tmp,name.size()+2);
-    return (nameTag=="<"+name+">");
+  static bool checkNextXMLtag(const std::string &inString, unsigned int &currentPosition,
+                              const std::string &name) {
+    unsigned int tmp = currentPosition;
+    goToNextCaracter(inString, tmp);
+    std::string nameTag = inString.substr(tmp, name.size() + 2);
+    return (nameTag == "<" + name + ">");
   }
 
   /**
    * Set an Object with the given XML
    */
   template <typename Obj>
-  static void setWithXML(const std::string &inString, unsigned int &currentPosition, const std::string &name, Obj &value) {
+  static void setWithXML(const std::string &inString, unsigned int &currentPosition,
+                         const std::string &name, Obj &value) {
 
-    goToNextCaracter(inString,currentPosition);
+    goToNextCaracter(inString, currentPosition);
 
-    std::string nameTag=inString.substr(currentPosition,name.size()+2);
-    assert(nameTag=="<"+name+">");
-    currentPosition+=name.size()+2;
+    std::string nameTag = inString.substr(currentPosition, name.size() + 2);
+    assert(nameTag == "<" + name + ">");
+    currentPosition += name.size() + 2;
 
-    size_t endValuePosition=inString.find("</"+name+">",currentPosition);
-    assert(endValuePosition!=std::string::npos);
+    size_t endValuePosition = inString.find("</" + name + ">", currentPosition);
+    assert(endValuePosition != std::string::npos);
 
-    std::stringstream str(inString.substr(currentPosition,endValuePosition-currentPosition));
+    std::stringstream str(inString.substr(currentPosition, endValuePosition - currentPosition));
     str >> value;
-    currentPosition=endValuePosition+name.size()+3;
+    currentPosition = endValuePosition + name.size() + 3;
   }
 
   /**
    * Set an Object with the given XML and default value
    */
   template <typename Obj>
-  static void setWithXML(const std::string &inString, unsigned int &currentPosition, const std::string &name, Obj &value,const Obj &defValue) {
-    goToNextCaracter(inString,currentPosition);
+  static void setWithXML(const std::string &inString, unsigned int &currentPosition,
+                         const std::string &name, Obj &value, const Obj &defValue) {
+    goToNextCaracter(inString, currentPosition);
 
-    std::string nameTag=inString.substr(currentPosition,name.size()+2);
+    std::string nameTag = inString.substr(currentPosition, name.size() + 2);
 
-    if(nameTag=="<"+name+">") {
-      currentPosition+=name.size()+2;
+    if (nameTag == "<" + name + ">") {
+      currentPosition += name.size() + 2;
 
-      size_t endValuePosition=inString.find("</"+name+">",currentPosition);
-      assert(endValuePosition!=std::string::npos);
+      size_t endValuePosition = inString.find("</" + name + ">", currentPosition);
+      assert(endValuePosition != std::string::npos);
 
-      std::stringstream str(inString.substr(currentPosition,endValuePosition-currentPosition));
+      std::stringstream str(inString.substr(currentPosition, endValuePosition - currentPosition));
       str >> value;
-      currentPosition=endValuePosition+name.size()+3;
-    }
-    else {
-      value=defValue;
+      currentPosition = endValuePosition + name.size() + 3;
+    } else {
+      value = defValue;
     }
   }
 
-private :
-
+private:
   static void applyIndentation(std::string &outString);
   static void goToNextCaracter(const std::string &inString, unsigned int &currentPosition);
 
   static unsigned int indentationNumber;
-
 };
-
 }
 #endif
 
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 ///@endcond

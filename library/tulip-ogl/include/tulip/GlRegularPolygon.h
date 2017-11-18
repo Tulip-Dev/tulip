@@ -38,15 +38,11 @@ public:
    *
    * The fill is inside the regular polygon
    */
-  GlRegularPolygon(const Coord &position,
-                   const Size &size,
-                   unsigned int numberOfSides,
-                   const Color &outlineColor = Color(255, 0 , 0 , 255),
-                   const Color &fillColor = Color (0, 0, 255,255),
-                   bool filled = true,
-                   bool outlined =true,
-                   const std::string &textureName="",
-                   float outlineSize=1.);
+  GlRegularPolygon(const Coord &position, const Size &size, unsigned int numberOfSides,
+                   const Color &outlineColor = Color(255, 0, 0, 255),
+                   const Color &fillColor = Color(0, 0, 255, 255), bool filled = true,
+                   bool outlined = true, const std::string &textureName = "",
+                   float outlineSize = 1.);
   /**
    * @brief Destructor
    */
@@ -74,17 +70,13 @@ public:
    */
   void setNumberOfSides(unsigned int number);
 
-protected :
-
+protected:
   void computePolygon();
-
 
   Coord position;
   Size size;
   unsigned int numberOfSides;
   float startAngle;
-
 };
-
 }
 #endif

@@ -26,32 +26,26 @@
 namespace tlp {
 
 class Graph;
-class TLP_QT_SCOPE MouseSelector:public GLInteractorComponent {
+class TLP_QT_SCOPE MouseSelector : public GLInteractorComponent {
 public:
-  enum SelectionMode {
-    EdgesAndNodes = 0,
-    EdgesOnly,
-    NodesOnly
-  };
+  enum SelectionMode { EdgesAndNodes = 0, EdgesOnly, NodesOnly };
 
   MouseSelector(Qt::MouseButton button = Qt::LeftButton,
-                Qt::KeyboardModifier modifier = Qt::NoModifier,
-                SelectionMode mode = EdgesAndNodes);
+                Qt::KeyboardModifier modifier = Qt::NoModifier, SelectionMode mode = EdgesAndNodes);
   ~MouseSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
+
 protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
   Qt::KeyboardModifiers mousePressModifier;
-  unsigned int x,y;
-  int w,h;
+  unsigned int x, y;
+  int w, h;
   bool started;
   Graph *graph;
   SelectionMode _mode;
 };
-
-
 }
 #endif
 ///@endcond

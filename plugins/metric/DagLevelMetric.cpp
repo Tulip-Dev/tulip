@@ -23,7 +23,7 @@ PLUGIN(DagLevelMetric)
 using namespace std;
 using namespace tlp;
 
-DagLevelMetric::DagLevelMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+DagLevelMetric::DagLevelMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
 DagLevelMetric::~DagLevelMetric() {}
 //======================================================
@@ -37,11 +37,10 @@ bool DagLevelMetric::run() {
 //======================================================
 bool DagLevelMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph)) {
-    erreurMsg="";
+    erreurMsg = "";
     return true;
-  }
-  else {
-    erreurMsg="The graph must be a acylic.";
+  } else {
+    erreurMsg = "The graph must be a acylic.";
     return false;
   }
 }

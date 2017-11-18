@@ -18,9 +18,8 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
-#ifndef         TULIPTOOGDF_H_
-#define         TULIPTOOGDF_H_
+#ifndef TULIPTOOGDF_H_
+#define TULIPTOOGDF_H_
 
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/fileformats/GmlParser.h>
@@ -49,11 +48,10 @@ class SizeProperty;
 
 class TLP_OGDF_SCOPE TulipToOGDF {
 public:
-
-  TulipToOGDF(tlp::Graph *g, bool importEdgeBends=true);
+  TulipToOGDF(tlp::Graph *g, bool importEdgeBends = true);
   ~TulipToOGDF();
 
-  void saveToGML(const char * fileName);
+  void saveToGML(const char *fileName);
 
   tlp::Graph &getTlp();
   ogdf::GraphAttributes &getOGDFGraphAttr();
@@ -74,9 +72,9 @@ private:
   tlp::Graph *tulipGraph;
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
-  tlp::NodeStaticProperty<ogdf::node>* ogdfNodes;
+  tlp::NodeStaticProperty<ogdf::node> *ogdfNodes;
   std::vector<ogdf::edge> ogdfEdges;
 };
 
-#endif      /* !TULIPTOOGDF_H_ */
+#endif /* !TULIPTOOGDF_H_ */
 ///@endcond

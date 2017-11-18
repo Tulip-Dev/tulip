@@ -34,9 +34,9 @@ static const std::string PROPERTY_ALGORITHM_CATEGORY = "Property";
  * @brief A non-template interface for tlp::TemplateAlgorithm
  * @see tlp::TemplateAlgorithm
  **/
-class TLP_SCOPE PropertyAlgorithm: public tlp::Algorithm {
-public :
-  PropertyAlgorithm(const tlp::PluginContext* context):Algorithm(context) {}
+class TLP_SCOPE PropertyAlgorithm : public tlp::Algorithm {
+public:
+  PropertyAlgorithm(const tlp::PluginContext *context) : Algorithm(context) {}
   virtual std::string category() const {
     return PROPERTY_ALGORITHM_CATEGORY;
   }
@@ -44,13 +44,18 @@ public :
 
 /**
  * @ingroup Plugins
- * @brief The TemplateAlgorithm class describes a plugin that can operate on a single graph's property.
- * @param Property The property template arguments gives the type of the property the algorithm operates on.
+ * @brief The TemplateAlgorithm class describes a plugin that can operate on a single graph's
+ * property.
+ * @param Property The property template arguments gives the type of the property the algorithm
+ * operates on.
  *
- * A TemplateAlgorithm takes a graph as input (plus additional parameters defined via tlp::WithParameter) and outputs its results in a tlp::PropertyInterface subclass.
- * The output property is defined as an output parameter named "result" and as a class member called result.
+ * A TemplateAlgorithm takes a graph as input (plus additional parameters defined via
+ * tlp::WithParameter) and outputs its results in a tlp::PropertyInterface subclass.
+ * The output property is defined as an output parameter named "result" and as a class member called
+ * result.
  *
- * @warning Subclassing TemplateAlgorithm is not recommended since template specifications are available for every Tulip property types.
+ * @warning Subclassing TemplateAlgorithm is not recommended since template specifications are
+ * available for every Tulip property types.
  *
  * @see tlp::BooleanAlgorithm
  * @see tlp::StringAlgorithm
@@ -59,32 +64,30 @@ public :
  * @see tlp::LayoutAlgorithm
  * @see tlp::SizeAlgorithm
  */
-template<class Property>
+template <class Property>
 class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
 public:
-  Property* result;
-  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {
+  Property *result;
+  TemplateAlgorithm(const tlp::PluginContext *context)
+      : tlp::PropertyAlgorithm(context), result(NULL) {
     if (dataSet != NULL) {
-      if(!dataSet->exist("result")) {
+      if (!dataSet->exist("result")) {
         std::stringstream propname;
         propname << "result";
         unsigned number = 0;
 
-        while(graph->existProperty(propname.str())) {
+        while (graph->existProperty(propname.str())) {
           propname.clear();
           propname << "result" << number;
           ++number;
         }
 
         result = graph->getProperty<Property>(propname.str());
-      }
-      else {
+      } else {
         dataSet->get("result", result);
       }
     }
   }
 };
-
-
 }
 #endif

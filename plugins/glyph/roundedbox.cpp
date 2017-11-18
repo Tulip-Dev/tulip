@@ -170,7 +170,8 @@ const string roundedBoxOutlineGeometryShaderSrc =
 
 class RoundedBox : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0", NodeShape::RoundedBox)
+  GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0",
+                   NodeShape::RoundedBox)
   RoundedBox(const tlp::PluginContext *context = NULL);
   ~RoundedBox() {}
   void draw(node n, float lod);
@@ -178,7 +179,6 @@ public:
   void getIncludeBoundingBox(BoundingBox &boundingBox, node);
 
 private:
-
   void initRoundedSquare();
   GlPolygon *createRoundedRect(const Size &size);
 
@@ -189,34 +189,36 @@ private:
 
 static Coord computeCircleArcMidPoint(const Coord &start, const Coord &end, const Coord &center) {
   float radius = start.dist(center);
-  float c=atan2(start[1]+end[1], start[0]+end[0]);
-  return Coord(center.x() + radius*cos(c), center.y() + radius*sin(c));
+  float c = atan2(start[1] + end[1], start[0] + end[0]);
+  return Coord(center.x() + radius * cos(c), center.y() + radius * sin(c));
 }
 
-GlPolygon* RoundedBox::roundedSquare=NULL;
+GlPolygon *RoundedBox::roundedSquare = NULL;
 Coord RoundedBox::minIncludeBBSquare;
 Coord RoundedBox::maxIncludeBBSquare;
 
-RoundedBox::RoundedBox(const tlp::PluginContext* context) : Glyph(context) {
-  minIncludeBBSquare = computeCircleArcMidPoint(Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
+RoundedBox::RoundedBox(const tlp::PluginContext *context) : Glyph(context) {
+  minIncludeBBSquare =
+      computeCircleArcMidPoint(Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
   maxIncludeBBSquare = -minIncludeBBSquare;
 }
 
 void RoundedBox::initRoundedSquare() {
-  roundedSquare = createRoundedRect(Size(1,1,1));
+  roundedSquare = createRoundedRect(Size(1, 1, 1));
 }
 
-void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox,node n) {
+void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox, node n) {
   const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
 
   if (size[0] == size[1]) {
     boundingBox[0] = minIncludeBBSquare;
     boundingBox[1] = maxIncludeBBSquare;
-  }
-  else {
+  } else {
     float radius = min(size[0] / 4, size[1] / 4);
-    radius = min(radius/size[0], radius/size[1]);
-    boundingBox[0] = computeCircleArcMidPoint(Coord(-0.5+radius, -0.5), Coord(-0.5, -0.5+radius), Coord(-0.5+radius, -0.5+radius));
+    radius = min(radius / size[0], radius / size[1]);
+    boundingBox[0] =
+        computeCircleArcMidPoint(Coord(-0.5 + radius, -0.5), Coord(-0.5, -0.5 + radius),
+                                 Coord(-0.5 + radius, -0.5 + radius));
     boundingBox[1] = -boundingBox[0];
   }
 }
@@ -226,8 +228,8 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   float radiusL = radius / size[0];
   float radiusH = radius / size[1];
 
-  float wi = 1.0 - 2*radiusL;
-  float hi = 1.0 - 2*radiusH;
+  float wi = 1.0 - 2 * radiusL;
+  float hi = 1.0 - 2 * radiusH;
 
   Coord P1 = Coord(-0.5, 0.5) + Coord(radiusL, -radiusH);
   Coord P2 = P1 + Coord(wi, 0);
@@ -235,16 +237,16 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   Coord P4 = P1 + Coord(0, -hi);
 
   int steps = 20;
-  float delta = (M_PI/2) / steps;
+  float delta = (M_PI / 2) / steps;
 
   vector<Coord> boxPoints;
   boxPoints.resize(steps * 4);
 
 #ifdef _OPENMP
-  #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-  for (int i = 0 ; i < steps; ++i ) {
+  for (int i = 0; i < steps; ++i) {
     float w = delta + i * delta;
     float x = -cos(w);
     float y = sin(w);
@@ -257,7 +259,7 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
     p = P2 + Coord(x, y) * Coord(radiusL, radiusH);
     boxPoints[steps + i] = p;
 
-    w = delta +  i * delta;
+    w = delta + i * delta;
     x = cos(w);
     y = -sin(w);
     p = P3 + Coord(x, y) * Coord(radiusL, radiusH);
@@ -273,8 +275,8 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   vector<Color> fillColors;
   vector<Color> outlineColors;
 
-  fillColors.push_back(Color(255,255,255));
-  outlineColors.push_back(Color(0,0,0));
+  fillColors.push_back(Color(255, 255, 255));
+  outlineColors.push_back(Color(0, 0, 0));
 
   GlPolygon *ret = new GlPolygon(boxPoints, fillColors, outlineColors, true, true);
   ret->setInvertYTexture(false);
@@ -283,37 +285,29 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
 }
 
 const float squareVerticesData[56] = {
-  /* front face (vvttnnn) */
-  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-  0.5f,  0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-  -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    /* front face (vvttnnn) */
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f,
+    0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 
-  /* back face (vvttnnn) */
-  -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-  -0.5f,  0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
-  0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f,
-  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f
-};
+    /* back face (vvttnnn) */
+    -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.5f,
+    0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f};
 
-const float outlineVeticesData[8] = {
-  -0.5f, 0.5f,
-  0.5f, 0.5f,
-  0.5f, -0.5f,
-  -0.5f, -0.5f
-};
+const float outlineVeticesData[8] = {-0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f};
 
 void RoundedBox::draw(node n, float lod) {
 
   static GlShaderProgram *roundedBoxShader = NULL;
   static GlShaderProgram *roundedBoxOutlineShader = NULL;
 
-  // don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
+// don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
 #ifndef __APPLE__
-  static string glVendor((reinterpret_cast<const char*>(glGetString(GL_VENDOR))));
-  static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
+  static string glVendor((reinterpret_cast<const char *>(glGetString(GL_VENDOR))));
+  static bool glVendorOk =
+      (glVendor.find("NVIDIA") != string::npos) || (glVendor.find("ATI") != string::npos);
 
-  if (roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
+  if (roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() &&
+      GlShaderProgram::geometryShaderSupported()) {
     roundedBoxShader = new GlShaderProgram();
     roundedBoxShader->addShaderFromSourceCode(Fragment, roundedBoxFragmentShaderSrc);
     roundedBoxShader->link();
@@ -321,7 +315,8 @@ void RoundedBox::draw(node n, float lod) {
 
     roundedBoxOutlineShader = new GlShaderProgram();
     roundedBoxOutlineShader->addShaderFromSourceCode(Vertex, roundedBoxOutlineVertexShaderSrc);
-    roundedBoxOutlineShader->addGeometryShaderFromSourceCode(roundedBoxOutlineGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
+    roundedBoxOutlineShader->addGeometryShaderFromSourceCode(roundedBoxOutlineGeometryShaderSrc,
+                                                             GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
     roundedBoxOutlineShader->link();
     roundedBoxOutlineShader->printInfoLog();
   }
@@ -334,7 +329,8 @@ void RoundedBox::draw(node n, float lod) {
 
   const string &texture = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked() || GlShaderProgram::getCurrentActiveShader()) {
+  if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() ||
+      !roundedBoxOutlineShader->isLinked() || GlShaderProgram::getCurrentActiveShader()) {
     if (roundedSquare == NULL)
       initRoundedSquare();
 
@@ -348,14 +344,12 @@ void RoundedBox::draw(node n, float lod) {
     polygon->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     polygon->setOutlineSize(outlineWidth);
     polygon->setTextureName(texture);
-    polygon->draw(lod,NULL);
+    polygon->draw(lod, NULL);
 
     if (polygon != roundedSquare)
       // because createRoundedRect() creates a new GlPolygon
       delete polygon;
-  }
-  else {
-
+  } else {
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -391,8 +385,7 @@ void RoundedBox::draw(node n, float lod) {
     if (outlineWidth == 0) {
       glLineWidth(1.0);
       setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-    }
-    else {
+    } else {
       glLineWidth(outlineWidth);
       setMaterial(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     }
@@ -425,4 +418,3 @@ Coord RoundedBox::getAnchor(const Coord &vector) const {
 PLUGIN(RoundedBox)
 
 } // end of namespace tlp
-

@@ -27,7 +27,8 @@ class QMouseEvent;
 
 /**
  * @brief Label used to preview ColorScale object in Qt widget.
- * Label used to preview ColorScale object in Qt widget. This object display the render of a ColorScale in a label.
+ * Label used to preview ColorScale object in Qt widget. This object display the render of a
+ * ColorScale in a label.
  * When user click on this object he can edit the ColorScale.
  */
 
@@ -35,25 +36,23 @@ namespace tlp {
 
 class ColorScale;
 
-class ColorScalePreview: public QLabel {
+class ColorScalePreview : public QLabel {
   Q_OBJECT
 public:
-  ColorScalePreview(ColorScale* colorScale);
+  ColorScalePreview(ColorScale *colorScale);
   virtual ~ColorScalePreview();
-  void setColorScale(ColorScale* colorScale);
-  ColorScale* getColorScale() {
+  void setColorScale(ColorScale *colorScale);
+  ColorScale *getColorScale() {
     return currentColorScale;
   }
 
-  void resizeEvent (QResizeEvent * event);
-  void mousePressEvent ( QMouseEvent * event );
+  void resizeEvent(QResizeEvent *event);
+  void mousePressEvent(QMouseEvent *event);
 
 protected:
-
   void fillLabel();
 
-  ColorScale* currentColorScale;
-
+  ColorScale *currentColorScale;
 };
 }
 #endif /* COLORSCALEPREVIEW_H_ */

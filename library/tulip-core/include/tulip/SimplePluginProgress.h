@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef SIMPLEPLUGINPROGRESS_H
 #define SIMPLEPLUGINPROGRESS_H
 
@@ -31,29 +30,28 @@ namespace tlp {
   **/
 class TLP_SCOPE SimplePluginProgress : public PluginProgress {
 public:
-
   SimplePluginProgress();
   virtual ProgressState progress(int step, int max_step);
   virtual void cancel();
   virtual void stop();
-  virtual bool isPreviewMode() const ;
+  virtual bool isPreviewMode() const;
   virtual void setPreviewMode(bool);
   virtual void showPreview(bool);
   virtual ProgressState state() const;
   virtual std::string getError() {
     return _error;
   }
-  virtual void setError(const std::string& error) {
+  virtual void setError(const std::string &error) {
     _error = error;
   }
-  virtual void setComment(const std::string&) {}
-  virtual void setTitle(const std::string&) {}
-
+  virtual void setComment(const std::string &) {}
+  virtual void setTitle(const std::string &) {}
 
 protected:
   virtual void progress_handler(int step, int max_step);
-  //call when the _preview variable change.
+  // call when the _preview variable change.
   virtual void preview_handler(bool);
+
 private:
   ProgressState _state;
   bool _preview;

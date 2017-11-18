@@ -23,11 +23,10 @@
 using namespace tlp;
 using namespace std;
 
-BendsTools::BendsTools() {
-}
+BendsTools::BendsTools() {}
 
 //============================================
-double BendsTools::cosAlpha(LayoutProperty * layout, const node a, const node b, const node c) {
+double BendsTools::cosAlpha(LayoutProperty *layout, const node a, const node b, const node c) {
   Vector<double, 2> point[3];
   Coord aC = layout->getNodeValue(a);
   point[0][0] = aC[0];
@@ -47,7 +46,7 @@ double BendsTools::cosAlpha(LayoutProperty * layout, const node a, const node b,
   return ba.dotProduct(bc) / (ba.norm() * bc.norm());
 }
 //============================================
-bool BendsTools::straightLine( LayoutProperty *  layout, const node a, const node b, const node c) {
+bool BendsTools::straightLine(LayoutProperty *layout, const node a, const node b, const node c) {
   Vector<double, 2> point[3];
   Coord aC = layout->getNodeValue(a);
   point[0][0] = aC[0];
@@ -63,17 +62,16 @@ bool BendsTools::straightLine( LayoutProperty *  layout, const node a, const nod
   Vector<double, 2> bc = point[2] - point[1];
   Vector<double, 2> ac = point[2] - point[0];
 
-  //assert(ba.norm() + bc.norm() - ac.norm() >= 0.);
+  // assert(ba.norm() + bc.norm() - ac.norm() >= 0.);
   if (fabs(ba.norm() + bc.norm() - ac.norm()) < 1E-9) {
-    //cout << fabs(ac.norm() - ba.norm() - bc.norm()) << ",";
+    // cout << fabs(ac.norm() - ba.norm() - bc.norm()) << ",";
     return true;
-  }
-  else
+  } else
     return false;
 }
 //============================================
-vector<node> BendsTools::bendsSimplification(vector<node> &bends,  LayoutProperty *  layout) {
-  //remove all <=90° angles if the 3 point are in a freecell
+vector<node> BendsTools::bendsSimplification(vector<node> &bends, LayoutProperty *layout) {
+  // remove all <=90° angles if the 3 point are in a freecell
   vector<node> result1;
   bool redo = true;
 
@@ -81,44 +79,42 @@ vector<node> BendsTools::bendsSimplification(vector<node> &bends,  LayoutPropert
     redo = false;
     result1.push_back(bends[0]);
 
-    for (size_t i = 1; i<bends.size()-1; ++i) {
-      double cAlpha = cosAlpha(layout, bends[i-1], bends[i], bends[i+1]);
+    for (size_t i = 1; i < bends.size() - 1; ++i) {
+      double cAlpha = cosAlpha(layout, bends[i - 1], bends[i], bends[i + 1]);
 
-      if ( fabs(cAlpha) < 1E-9) {
-        //found 90
-        bends[i] = bends[i-1];
+      if (fabs(cAlpha) < 1E-9) {
+        // found 90
+        bends[i] = bends[i - 1];
         redo = true;
-      }
-      else {
+      } else {
         result1.push_back(bends[i]);
       }
     }
 
-    result1.push_back(bends[bends.size()-1]);
+    result1.push_back(bends[bends.size() - 1]);
 
     bends = result1;
     result1.clear();
   }
 
   //  return bends;
-  //remove all straight line points
+  // remove all straight line points
   result1.push_back(bends[0]);
 
-  for (size_t i = 1; i<bends.size()-1; ++i) {
-    //double cAlpha = cosAlpha(layout, bends[i-1], bends[i], bends[i+1]);
-    bool straight = straightLine(layout, bends[i-1], bends[i], bends[i+1]);
+  for (size_t i = 1; i < bends.size() - 1; ++i) {
+    // double cAlpha = cosAlpha(layout, bends[i-1], bends[i], bends[i+1]);
+    bool straight = straightLine(layout, bends[i - 1], bends[i], bends[i + 1]);
 
     //        cout << 1. - fabs(cAlpha) << ",";
-//        assert(1. - fabs(cAlpha) > 0.);
-    if ( straight) {
-      //found 180°
-      bends[i] = bends[i-1];
-    }
-    else {
+    //        assert(1. - fabs(cAlpha) > 0.);
+    if (straight) {
+      // found 180°
+      bends[i] = bends[i - 1];
+    } else {
       result1.push_back(bends[i]);
     }
   }
 
-  result1.push_back(bends[bends.size()-1]);
+  result1.push_back(bends[bends.size() - 1]);
   return result1;
 }

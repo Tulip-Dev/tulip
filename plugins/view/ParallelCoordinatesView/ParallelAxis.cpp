@@ -29,27 +29,33 @@ using namespace std;
 namespace tlp {
 
 void drawComposite(GlComposite *composite, float lod, Camera *camera) {
-  map<string, GlSimpleEntity*> glEntities(composite->getGlEntities());
+  map<string, GlSimpleEntity *> glEntities(composite->getGlEntities());
 
-  for (map<string, GlSimpleEntity*>::const_iterator it2 = glEntities.begin(); it2 != glEntities.end() ; ++it2) {
+  for (map<string, GlSimpleEntity *>::const_iterator it2 = glEntities.begin();
+       it2 != glEntities.end(); ++it2) {
     GlSimpleEntity *entity = it2->second;
     GlComposite *compositeEntity = dynamic_cast<GlComposite *>(entity);
 
     if (compositeEntity != NULL) {
       drawComposite(compositeEntity, lod, camera);
-    }
-    else {
+    } else {
       entity->draw(lod, camera);
     }
   }
 }
 
-ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth, const float rotationAngle, const GlAxis::CaptionLabelPosition captionPosition) : glAxis(glAxis), axisAreaWidth(axisAreaWidth), slidersActivated(false), rotationAngle(rotationAngle), hidden(false) {
+ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth, const float rotationAngle,
+                           const GlAxis::CaptionLabelPosition captionPosition)
+    : glAxis(glAxis), axisAreaWidth(axisAreaWidth), slidersActivated(false),
+      rotationAngle(rotationAngle), hidden(false) {
   setStencil(1);
-  glAxis->addCaption(captionPosition, 20.0f, true, axisAreaWidth / 2.0f, glAxis->getAxisLength() / 18.0f);
+  glAxis->addCaption(captionPosition, 20.0f, true, axisAreaWidth / 2.0f,
+                     glAxis->getAxisLength() / 18.0f);
   glAxis->updateAxis();
   BoundingBox axisBB(glAxis->getBoundingBox());
-  emptyRect = new GlRect(Coord(axisBB[0][0], axisBB[1][1] + glAxis->getAxisLength() / 10.0f), Coord(axisBB[1][0], axisBB[0][1] - glAxis->getAxisLength() / 15.0f), Color(0,0,0,0), Color(0,0,0,0), true, false);
+  emptyRect = new GlRect(Coord(axisBB[0][0], axisBB[1][1] + glAxis->getAxisLength() / 10.0f),
+                         Coord(axisBB[1][0], axisBB[0][1] - glAxis->getAxisLength() / 15.0f),
+                         Color(0, 0, 0, 0), Color(0, 0, 0, 0), true, false);
   enableTrickForSelection();
   glAxis->updateAxis();
   resetSlidersPosition();
@@ -63,8 +69,10 @@ void ParallelAxis::setAxisHeight(const float height) {
   float resizeFactor = height / getAxisHeight();
   glAxis->setAxisLength(height);
   Coord baseCoord(glAxis->getAxisBaseCoord());
-  bottomSliderCoord = baseCoord + Coord(0.0f ,(bottomSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
-  topSliderCoord = baseCoord + Coord(0.0f ,(topSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
+  bottomSliderCoord =
+      baseCoord + Coord(0.0f, (bottomSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
+  topSliderCoord =
+      baseCoord + Coord(0.0f, (topSliderCoord.getY() - baseCoord.getY()) * resizeFactor);
 }
 
 void ParallelAxis::setRotationAngle(const float rotationAngle) {
@@ -72,7 +80,8 @@ void ParallelAxis::setRotationAngle(const float rotationAngle) {
 }
 
 void ParallelAxis::setCaptionPosition(const GlAxis::CaptionLabelPosition captionPosition) {
-  glAxis->addCaption(captionPosition, 20.0f, true, axisAreaWidth / 2.0f, glAxis->getAxisLength() / 18.0f);
+  glAxis->addCaption(captionPosition, 20.0f, true, axisAreaWidth / 2.0f,
+                     glAxis->getAxisLength() / 18.0f);
   glAxis->updateAxis();
 }
 
@@ -86,12 +95,13 @@ void ParallelAxis::setBaseCoord(const Coord &baseCoord) {
   translate(baseCoord - glAxis->getAxisBaseCoord());
 }
 
-void ParallelAxis::draw(float lod,Camera *camera) {
+void ParallelAxis::draw(float lod, Camera *camera) {
   if (rotationAngle != 0.0f) {
     glPushMatrix();
-    glRotatef(rotationAngle, 0.0f , 0.0f, 1.0f);
+    glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);
     GlLabel *captionLabel = NULL;
-    GlComposite *axisCaptionComposite = dynamic_cast<GlComposite *>(glAxis->findGlEntity("caption composite"));
+    GlComposite *axisCaptionComposite =
+        dynamic_cast<GlComposite *>(glAxis->findGlEntity("caption composite"));
 
     if (axisCaptionComposite != NULL) {
       string captionLabelId = glAxis->getAxisName() + " axis caption";
@@ -101,8 +111,7 @@ void ParallelAxis::draw(float lod,Camera *camera) {
     if (captionLabel != NULL) {
       if (rotationAngle > -270.0f && rotationAngle < -90.0f) {
         captionLabel->rotate(0.0f, 0.0f, -180.0f);
-      }
-      else {
+      } else {
         captionLabel->rotate(0.0f, 0.0f, 0.0f);
       }
     }
@@ -183,7 +192,5 @@ Coord ParallelAxis::getBaseCoord() const {
 
 Coord ParallelAxis::getTopCoord() const {
   return glAxis->getAxisBaseCoord() + Coord(0, getAxisHeight(), 0.0f);
-
 }
-
 }

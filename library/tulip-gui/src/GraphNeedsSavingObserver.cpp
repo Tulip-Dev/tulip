@@ -28,12 +28,13 @@
 using namespace tlp;
 using namespace std;
 
-GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph* graph, QMainWindow* mainWindow) :_needsSaving(false), _graph(graph), _mainWindow(mainWindow) {
+GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow)
+    : _needsSaving(false), _graph(graph), _mainWindow(mainWindow) {
   addObserver();
 }
 
-void GraphNeedsSavingObserver::treatEvents(const vector<Event>&) {
-  if(!_needsSaving)
+void GraphNeedsSavingObserver::treatEvents(const vector<Event> &) {
+  if (!_needsSaving)
     forceToSave();
 }
 
@@ -42,7 +43,7 @@ void GraphNeedsSavingObserver::saved() {
   removeObservers();
   addObserver();
 
-  if(_mainWindow)
+  if (_mainWindow)
     _mainWindow->setWindowModified(false);
 }
 
@@ -51,11 +52,11 @@ bool GraphNeedsSavingObserver::needsSaving() const {
 }
 
 void GraphNeedsSavingObserver::forceToSave() {
-  _needsSaving=true;
+  _needsSaving = true;
   // No need to listen to the graph anymore
   removeObservers();
 
-  if(_mainWindow)
+  if (_mainWindow)
     _mainWindow->setWindowModified(true);
 
   emit(savingNeeded());
@@ -65,51 +66,50 @@ void GraphNeedsSavingObserver::forceToSave() {
     * @brief Listen all the observable objects in the graph (subgraphs, properties).
     **/
 void GraphNeedsSavingObserver::addObserver() {
-  deque<Graph*> toObserve;
+  deque<Graph *> toObserve;
   toObserve.push_back(_graph);
 
-  while(!toObserve.empty()) {
-    Graph* current = toObserve.front();
+  while (!toObserve.empty()) {
+    Graph *current = toObserve.front();
     current->addObserver(this);
     toObserve.pop_front();
 
-    //Listen properties.
-    PropertyInterface* property;
-    forEach(property,current->getLocalObjectProperties()) {
+    // Listen properties.
+    PropertyInterface *property;
+    forEach(property, current->getLocalObjectProperties()) {
       property->addObserver(this);
     }
 
-    //Fetch subgraphs
-    Graph* subgraphs;
-    forEach(subgraphs,current->getSubGraphs()) {
+    // Fetch subgraphs
+    Graph *subgraphs;
+    forEach(subgraphs, current->getSubGraphs()) {
       toObserve.push_back(subgraphs);
     }
   }
-
 }
 
 /**
   * @brief  Stop listening all the observable objects in the graph (subgraphs, properties).
 **/
 void GraphNeedsSavingObserver::removeObservers() {
-  deque<Graph*> toUnobserve;
+  deque<Graph *> toUnobserve;
   toUnobserve.push_back(_graph);
 
-  while(!toUnobserve.empty()) {
-    Graph* current = toUnobserve.front();
+  while (!toUnobserve.empty()) {
+    Graph *current = toUnobserve.front();
     toUnobserve.pop_front();
 
     current->removeObserver(this);
 
-    //Stop listening properties.
-    PropertyInterface* property;
-    forEach(property,current->getLocalObjectProperties()) {
+    // Stop listening properties.
+    PropertyInterface *property;
+    forEach(property, current->getLocalObjectProperties()) {
       property->removeObserver(this);
     }
 
-    //Fetch subgraphs
-    Graph* subgraphs;
-    forEach(subgraphs,current->getSubGraphs()) {
+    // Fetch subgraphs
+    Graph *subgraphs;
+    forEach(subgraphs, current->getSubGraphs()) {
       toUnobserve.push_back(subgraphs);
     }
   }

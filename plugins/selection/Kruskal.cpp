@@ -28,12 +28,11 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // edge weight
-  "Metric containing the edge weights."
-};
+    // edge weight
+    "Metric containing the edge weights."};
 //======================================================
-Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "viewMetric");
+Kruskal::Kruskal(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
+  addInParameter<NumericProperty *>("edge weight", paramHelp[0], "viewMetric");
 }
 
 //======================================================
@@ -52,7 +51,7 @@ bool Kruskal::run() {
   /* Initialisation */
   NumericProperty *edgeWeight = NULL;
 
-  if ( dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("edge weight", edgeWeight);
   }
 
@@ -61,8 +60,8 @@ bool Kruskal::run() {
 
   selectMinimumSpanningTree(graph, result, edgeWeight, pluginProgress);
 
-  //output some useful information
-  if (dataSet!=NULL) {
+  // output some useful information
+  if (dataSet != NULL) {
     dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
   }
 

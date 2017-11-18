@@ -43,9 +43,8 @@ namespace {
 #endif
 
 static const char *paramHelp[] = {
-  // filename
-  "The dot file to import."
-};
+    // filename
+    "The dot file to import."};
 
 /** \addtogroup import */
 
@@ -62,16 +61,19 @@ static const char *paramHelp[] = {
  *    - this parser can be largely optimized ...
  *
  */
-class DotImport:public ImportModule {
+class DotImport : public ImportModule {
 public:
-  PLUGININFORMATION("graphviz","Gerald Gainant", "01/03/2004","<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot input format.</p>","1.0","File")
+  PLUGININFORMATION("graphviz", "Gerald Gainant", "01/03/2004",
+                    "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
+                    "input format.</p>",
+                    "1.0", "File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("dot");
     return l;
   }
-  DotImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<string>("file::filename",paramHelp[0],"");
+  DotImport(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<string>("file::filename", paramHelp[0], "");
   }
   ~DotImport() {}
 
@@ -83,16 +85,16 @@ public:
 
     // Open input stream
     string fn;
-    dataSet->get( "file::filename", fn );
+    dataSet->get("file::filename", fn);
 #ifndef WIN32
-    FILE * fd = fopen( fn.c_str(), "r" );
+    FILE *fd = fopen(fn.c_str(), "r");
 #else
     wstring wfn;
     utf8::utf8to16(fn.begin(), fn.end(), back_inserter(wfn));
-    FILE * fd = _wfopen( wfn.c_str(), L"r" );
+    FILE *fd = _wfopen(wfn.c_str(), L"r");
 #endif
 
-    if( !fd ) {
+    if (!fd) {
       if (pluginProgress)
         pluginProgress->setError(strerror(errno));
 
@@ -108,10 +110,10 @@ public:
     }
 
     dotyy = &_dotyy;
-    yyrestart( fd );
+    yyrestart(fd);
     yyparse();
 
-    fclose( fd );
+    fclose(fd);
 
     return _dotyy.pStatus != TLP_CANCEL;
   }

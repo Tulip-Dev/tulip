@@ -33,7 +33,8 @@
 #if defined(_MSC_VER) && !defined(strtok_r)
 #define strtok_r strtok_s
 #endif
-#if defined(strtok_r) && defined(_WIN32) && defined(__GNUC__) && ((__GNUC__*100 + __GNUC__MINOR) < 409)
+#if defined(strtok_r) && defined(_WIN32) && defined(__GNUC__) &&                                   \
+    ((__GNUC__ * 100 + __GNUC__MINOR) < 409)
 // in MINGW environment
 // strtok_r is declared in pthread.h instead of string.h
 // and is a not reentrant macro so use a public domain version
@@ -48,7 +49,7 @@
  *     (Declaration that it's public domain):
  *      http://groups.google.com/group/comp.lang.c/msg/7c7b39328fefab9c
  */
-static char* strtok_r(char *str, const char *delim, char **nextp) {
+static char *strtok_r(char *str, const char *delim, char **nextp) {
   char *ret;
 
   if (str == NULL) {
@@ -82,231 +83,224 @@ using namespace tlp;
 // ill-formed utf8 chars (ascii or windows 1252 chars)
 // latex special chars
 // and to replace them by the corresponding utf8 sequence
-static char* utf8seq;
-static char* seq(char cc[2]) {
+static char *utf8seq;
+static char *seq(char cc[2]) {
   return utf8seq = cc;
 }
-static string& forceUtf8String(string& str) {
+static string &forceUtf8String(string &str) {
   char c3[2] = {'\303', ' '};
   char c4[2] = {'\304', ' '};
   char c5[2] = {'\305', ' '};
   char charComposing = 0;
 
   for (unsigned int i = 0; i < str.size(); ++i) {
-    if ((str[i] > '\301') &&
-        (str[i] < '\340') &&
-        (i + 1) < str.size() &&
+    if ((str[i] > '\301') && (str[i] < '\340') && (i + 1) < str.size() &&
         // begin of a 2 chars utf8 sequence
         // skip next char if it is valid utf8
-        (uchar(str[i + 1]) >  '\177') &&
-        (str[i + 1] < '\300')) {
+        (uchar(str[i + 1]) > '\177') && (str[i + 1] < '\300')) {
       ++i;
       continue;
     }
 
-    if ((str[i] > '\337') &&
-        (str[i] < '\360') &&
-        (i + 2) < str.size() &&
+    if ((str[i] > '\337') && (str[i] < '\360') && (i + 2) < str.size() &&
         // begin of a 3 chars utf8 sequence
         // skip next 2 chars if it is valid utf8
-        (uchar(str[i + 1]) > '\177') &&
-        (str[i + 1] < '\300') &&
-        (uchar(str[i + 2]) > '\177') &&
+        (uchar(str[i + 1]) > '\177') && (str[i + 1] < '\300') && (uchar(str[i + 2]) > '\177') &&
         (str[i + 2] < '\300')) {
-      i+=2;
+      i += 2;
       continue;
     }
 
-    switch(/*(unsigned char)*/ str[i]) {
+    switch (/*(unsigned char)*/ str[i]) {
     // é
-    case '\202' : // extended ascii
-    case '\351' : // windows 1252
-      seq(c3)[1]='\251';
+    case '\202': // extended ascii
+    case '\351': // windows 1252
+      seq(c3)[1] = '\251';
       break;
 
     // ê
-    case '\210' : // extended ascii
-    case '\352' : // windows 1252
-      seq(c3)[1]='\252';
+    case '\210': // extended ascii
+    case '\352': // windows 1252
+      seq(c3)[1] = '\252';
       break;
 
     // ë
     case '\211': // extended ascii
     case '\353': // windows 1252
-      seq(c3)[1]='\253';
+      seq(c3)[1] = '\253';
       break;
 
     // è
     case '\212': // extended ascii
     case '\350': // windows 1252
-      seq(c3)[1]='\250';
+      seq(c3)[1] = '\250';
       break;
 
     // á
     case '\240': // extended ascii
     case '\341': // windows 1252
-      seq(c3)[1]='\241';
+      seq(c3)[1] = '\241';
       break;
 
     // â
     case '\203': // extended ascii
     case '\342': // windows 1252
-      seq(c3)[1]='\242';
+      seq(c3)[1] = '\242';
       break;
 
     // ä
     case '\204': // extended ascii
     case '\344': // windows 1252
-      seq(c3)[1]='\244';
+      seq(c3)[1] = '\244';
       break;
 
     // à
     case '\205': // extended ascii
     case '\340': // windows 1252
-      seq(c3)[1]='\240';
+      seq(c3)[1] = '\240';
       break;
 
     // å
     case '\206': // extended ascii
     case '\345': // windows 1252
-      seq(c3)[1]='\245';
+      seq(c3)[1] = '\245';
       break;
 
     // ã
     case '\343': // windows 1252
-      seq(c3)[1]='\243';
+      seq(c3)[1] = '\243';
       break;
 
     // ï
     case '\213': // extended ascii
     case '\357': // windows 1252
-      seq(c3)[1]='\257';
+      seq(c3)[1] = '\257';
       break;
 
     // î
     case '\214': // extended ascii
     case '\356': // windows 1252
-      seq(c3)[1]='\256';
+      seq(c3)[1] = '\256';
       break;
 
     // ì
     case '\215': // extended ascii
     case '\354': // windows 1252
-      seq(c3)[1]='\254';
+      seq(c3)[1] = '\254';
       break;
 
     // í
     case '\241': // extended ascii
     case '\355': // windows 1252
-      seq(c3)[1]='\255';
+      seq(c3)[1] = '\255';
       break;
 
     // ô
     case '\223': // extended ascii
     case '\364': // windows 1252
-      seq(c3)[1]='\264';
+      seq(c3)[1] = '\264';
       break;
 
     // ö
     case '\224': // extended ascii
     case '\366': // windows 1252
-      seq(c3)[1]='\266';
+      seq(c3)[1] = '\266';
       break;
 
     // ò
     case '\225': // extended ascii
     case '\362': // windows 1252
-      seq(c3)[1]='\262';
+      seq(c3)[1] = '\262';
       break;
 
     // ø
     case '\233': // extended ascii
     case '\370': // windows 1252
-      seq(c3)[1]='\270';
+      seq(c3)[1] = '\270';
       break;
 
     // õ
     case '\365': // windows 1252
-      seq(c3)[1]='\265';
+      seq(c3)[1] = '\265';
       break;
 
     // ó
     case '\242': // extended ascii
     case '\363': // windows 1252
-      seq(c3)[1]='\263';
+      seq(c3)[1] = '\263';
       break;
 
     // ü
     case '\201': // extended ascii
     case '\374': // windows 1252
-      seq(c3)[1]='\274';
+      seq(c3)[1] = '\274';
       break;
 
     // û
     case '\226': // extended ascii
     case '\373': // windows 1252
-      seq(c3)[1]='\273';
+      seq(c3)[1] = '\273';
       break;
 
     // ù
     case '\227': // extended ascii
     case '\371': // windows 1252
-      seq(c3)[1]='\271';
+      seq(c3)[1] = '\271';
       break;
 
     // ú
     case '\243': // extended ascii
     case '\372': // windows 1252
-      seq(c3)[1]='\272';
+      seq(c3)[1] = '\272';
       break;
 
     // ÿ
     case '\230': // extended ascii
     case '\377': // windows 1252
-      seq(c3)[1]='\277';
+      seq(c3)[1] = '\277';
       break;
 
     // ç
     case '\347': // extended ascii & windows 1252
-      seq(c3)[1]='\247';
+      seq(c3)[1] = '\247';
       break;
 
     // ñ
     case '\244': // extended ascii
     case '\361': // windows 1252
-      seq(c3)[1]='\261';
+      seq(c3)[1] = '\261';
       break;
 
     // É
     case '\220': // extended ascii
     case '\311': // windows 1252
-      seq(c3)[1]='\211';
+      seq(c3)[1] = '\211';
       break;
 
     // Ê
     case '\322': // extended ascii
     case '\312': // windows 1252
-      seq(c3)[1]='\212';
+      seq(c3)[1] = '\212';
       break;
 
     // Ë
     case '\323': // extended ascii
     case '\313': // windows 1252
-      seq(c3)[1]='\213';
+      seq(c3)[1] = '\213';
       break;
 
     // È
     case '\324': // extended ascii
     case '\310': // windows 1252
-      seq(c3)[1]='\210';
+      seq(c3)[1] = '\210';
       break;
 
     // ß
     // '\341' is the extended ascii code of ß
     // but is also the windows 1252 code of á
-    //case '\341': // extended ascii
+    // case '\341': // extended ascii
     case '\337': // windows 1252
-      seq(c3)[1]='\237';
+      seq(c3)[1] = '\237';
       break;
 
     case '\303': // begin of a 2 bytes utf8 char
@@ -362,7 +356,7 @@ static string& forceUtf8String(string& str) {
         continue;
       }
 
-      switch(str[i + 1]) {
+      switch (str[i + 1]) {
       case '`':  // grave
       case '\'': // acute
       case '^':  // circumflex
@@ -384,9 +378,8 @@ static string& forceUtf8String(string& str) {
         --i;
         continue;
 
-      case 'a' :
-        if (str.size() > i + 2 &&
-            str[i + 2] == 'e') {
+      case 'a':
+        if (str.size() > i + 2 && str[i + 2] == 'e') {
           // replace by æ
           c3[1] = '\246';
           str.replace(i, 3, c3, 2);
@@ -395,9 +388,8 @@ static string& forceUtf8String(string& str) {
 
         continue;
 
-      case 'A' :
-        if (str.size() > i + 2 &&
-            str[i + 2] == 'E') {
+      case 'A':
+        if (str.size() > i + 2 && str[i + 2] == 'E') {
           // replace by Æ
           c3[1] = '\206';
           str.replace(i, 3, c3, 2);
@@ -429,7 +421,7 @@ static string& forceUtf8String(string& str) {
 
       case 'H':
         if (str.size() > i + 2) {
-          switch(str[i + 2]) {
+          switch (str[i + 2]) {
           case '0': // Ő
             seq(c5)[1] = '\220';
             str.replace(i, 3, c5, 2);
@@ -480,13 +472,11 @@ static string& forceUtf8String(string& str) {
         continue;
 
       case 'o':
-        if (str.size() > i + 2 &&
-            str[i + 2] == 'e') {
+        if (str.size() > i + 2 && str[i + 2] == 'e') {
           // replace by œ
           c5[1] = '\223';
           str.replace(i, 3, c5, 2);
-        }
-        else {
+        } else {
           // replace by ø
           c3[1] = '\270';
           str.replace(i, 2, c3, 2);
@@ -496,13 +486,11 @@ static string& forceUtf8String(string& str) {
         continue;
 
       case 'O':
-        if (str.size() > i + 2 &&
-            str[i + 2] == 'E') {
+        if (str.size() > i + 2 && str[i + 2] == 'E') {
           // replace by Œ
           c5[1] = '\222';
           str.replace(i, 3, c5, 2);
-        }
-        else {
+        } else {
           // replace by Ø
           c3[1] = '\230';
           str.replace(i, 2, c3, 2);
@@ -538,9 +526,9 @@ static string& forceUtf8String(string& str) {
 
     default:
       if (charComposing) {
-        switch(str[i]) {
+        switch (str[i]) {
         case 'a':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // à
             seq(c3)[1] = '\240';
             break;
@@ -584,7 +572,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'c':
-          switch(charComposing) {
+          switch (charComposing) {
           case 'c': // ç
             seq(c3)[1] = '\247';
             break;
@@ -616,12 +604,11 @@ static string& forceUtf8String(string& str) {
             // ď
             seq(c4)[1] = '\217';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'e':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // è
             seq(c3)[1] = '\250';
             break;
@@ -665,7 +652,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'g':
-          switch(charComposing) {
+          switch (charComposing) {
           case '^': // ĝ
             seq(c4)[1] = '\235';
             break;
@@ -689,33 +676,30 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'h':
-          if(charComposing == '^') {
+          if (charComposing == '^') {
             seq(c4)[1] = '\245';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'j':
-          if(charComposing == '^') {
+          if (charComposing == '^') {
             // ĵ
             seq(c4)[1] = '\265';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'k':
-          if(charComposing == 'c') {
+          if (charComposing == 'c') {
             // ķ
             seq(c4)[1] = '\267';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'l':
-          switch(charComposing) {
+          switch (charComposing) {
           case '\'': // ĺ
             seq(c4)[1] = '\272';
             break;
@@ -735,7 +719,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'n':
-          switch(charComposing) {
+          switch (charComposing) {
           case '~': //  ñ
             seq(c3)[1] = '\261';
             break;
@@ -759,7 +743,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'o':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // ò
             seq(c3)[1] = '\262';
             break;
@@ -795,16 +779,16 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'r':
-          switch(charComposing) {
-          case '\'':  // ŕ
+          switch (charComposing) {
+          case '\'': // ŕ
             seq(c5)[1] = '\225';
             break;
 
-          case 'c':  // ŗ
+          case 'c': // ŗ
             seq(c5)[1] = '\227';
             break;
 
-          case 'v':  // ř
+          case 'v': // ř
             seq(c5)[1] = '\230';
             break;
 
@@ -815,7 +799,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 's':
-          switch(charComposing) {
+          switch (charComposing) {
           case 's': // ß
             seq(c3)[1] = '\237';
             break;
@@ -843,7 +827,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 't':
-          switch(charComposing) {
+          switch (charComposing) {
           case 'c': // ţ
             seq(c5)[1] = '\243';
             break;
@@ -859,7 +843,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'u':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // ù
             seq(c3)[1] = '\271';
             break;
@@ -903,16 +887,15 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'w':
-          if(charComposing == '^') {
+          if (charComposing == '^') {
             // ŵ
             seq(c5)[1] = '\265';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'y':
-          switch(charComposing) {
+          switch (charComposing) {
           case '\'': // ý
             seq(c3)[1] = '\275';
             break;
@@ -952,7 +935,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'A':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // À
             seq(c3)[1] = '\200';
             break;
@@ -996,7 +979,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'C':
-          switch(charComposing) {
+          switch (charComposing) {
           case 'c':
             // Ç
             seq(c3)[1] = '\207';
@@ -1028,12 +1011,11 @@ static string& forceUtf8String(string& str) {
             // Ď
             seq(c4)[1] = '\216';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'E':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // È
             seq(c3)[1] = '\210';
             break;
@@ -1077,7 +1059,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'G':
-          switch(charComposing) {
+          switch (charComposing) {
           case '^': // Ĝ
             seq(c4)[1] = '\234';
             break;
@@ -1101,16 +1083,15 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'H':
-          if(charComposing == '^') {
+          if (charComposing == '^') {
             // Ĥ
             seq(c4)[1] = '\244';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'I':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // Ì
             seq(c3)[1] = '\214';
             break;
@@ -1138,25 +1119,23 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'J':
-          if(charComposing == '^') {
+          if (charComposing == '^') {
             // Ĵ
             seq(c4)[1] = '\264';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'K':
-          if(charComposing == 'c') {
+          if (charComposing == 'c') {
             // Ķ
             seq(c4)[1] = '\266';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'L':
-          switch(charComposing) {
+          switch (charComposing) {
           case '\'': // Ĺ
             seq(c4)[1] = '\271';
             break;
@@ -1176,20 +1155,20 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'N':
-          switch(charComposing) {
-          case '~':  // Ñ
+          switch (charComposing) {
+          case '~': // Ñ
             seq(c3)[1] = '\221';
             break;
 
-          case '\'':  // Ń
+          case '\'': // Ń
             seq(c5)[1] = '\203';
             break;
 
-          case 'c':  // Ņ
+          case 'c': // Ņ
             seq(c5)[1] = '\205';
             break;
 
-          case 'v':  // Ň
+          case 'v': // Ň
             seq(c5)[1] = '\207';
             break;
 
@@ -1200,7 +1179,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'O':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // Ò
             seq(c3)[1] = '\222';
             break;
@@ -1236,16 +1215,16 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'R':
-          switch(charComposing) {
-          case '\'':  // Ŕ
+          switch (charComposing) {
+          case '\'': // Ŕ
             seq(c5)[1] = '\224';
             break;
 
-          case 'c':  // Ŗ
+          case 'c': // Ŗ
             seq(c5)[1] = '\226';
             break;
 
-          case 'v':  // Ř
+          case 'v': // Ř
             seq(c5)[1] = '\230';
             break;
 
@@ -1256,7 +1235,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'S':
-          switch(charComposing) {
+          switch (charComposing) {
           case '\'': // Ś
             seq(c5)[1] = '\232';
             break;
@@ -1280,7 +1259,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'T':
-          switch(charComposing) {
+          switch (charComposing) {
           case 'c': // Ţ
             seq(c5)[1] = '\242';
             break;
@@ -1296,7 +1275,7 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'U':
-          switch(charComposing) {
+          switch (charComposing) {
           case '`': // Ù
             seq(c3)[1] = '\231';
             break;
@@ -1340,12 +1319,11 @@ static string& forceUtf8String(string& str) {
           break;
 
         case 'W':
-          if(charComposing == '^') {
+          if (charComposing == '^') {
             // Ŵ
             seq(c5)[1] = '\264';
             break;
-          }
-          else
+          } else
             continue;
 
         case 'Y':
@@ -1391,15 +1369,13 @@ static string& forceUtf8String(string& str) {
         default:
           continue;
         }
-      }
-      else
+      } else
         continue;
     }
 
     str.replace(i, 1, utf8seq, 2);
     charComposing = 0;
     ++i;
-
   }
 
   return str;
@@ -1413,14 +1389,21 @@ static string& forceUtf8String(string& str) {
 
 class ImportBibTeX : public ImportModule {
 
-public :
+public:
+  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014",
+                    "<p>Supported extensions: bib</p><p>Import a co-authorship graph from a BibTeX "
+                    "formatted file.</p>",
+                    "1.1", "File")
 
-  PLUGININFORMATION("BibTeX", "Patrick Mary", "09/01/2014", "<p>Supported extensions: bib</p><p>Import a co-authorship graph from a BibTeX formatted file.</p>", "1.1", "File")
-
-  ImportBibTeX(const tlp::PluginContext *context):ImportModule(context) {
-    addInParameter<string>("file::filename","This parameter indicates the pathname of the file(.bib) to import.","");
+  ImportBibTeX(const tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<string>(
+        "file::filename", "This parameter indicates the pathname of the file(.bib) to import.", "");
     addInParameter<StringCollection>("Nodes to import",
-                                     "The type of nodes to create: Authors <i>(Create nodes for authors only, publications are represented as edges between authors)</i><br/>Authors and Publications <i>(Create nodes for both authors and publications)</i><br/>Publications <i>(Create nodes for publications only)</i>",
+                                     "The type of nodes to create: Authors <i>(Create nodes for "
+                                     "authors only, publications are represented as edges between "
+                                     "authors)</i><br/>Authors and Publications <i>(Create nodes "
+                                     "for both authors and publications)</i><br/>Publications "
+                                     "<i>(Create nodes for publications only)</i>",
                                      NODES_TO_IMPORT);
   }
 
@@ -1456,30 +1439,33 @@ public :
     bool createPubliNodes = toImport != IMPORT_AUTHORS;
 
     // known properties to extract
-    StringProperty* keyProp = graph->getProperty<StringProperty>("key");
-    StringProperty* typeProp = graph->getProperty<StringProperty>("type");
-    IntegerProperty* yearProp = graph->getProperty<IntegerProperty>("year");
-    BooleanProperty* fromLabriProp = createAuthNodes ?
-                                     graph->getProperty<BooleanProperty>("from LaBRI") : NULL;
-    IntegerVectorProperty* labriAuthorsProp = createPubliNodes ?
-        graph->getProperty<IntegerVectorProperty>("LaBRI authors") : NULL;
-    StringVectorProperty* labriTeamsProp = createPubliNodes ?
-                                           graph->getProperty<StringVectorProperty>("LaBRI teams") : NULL;
-    StringVectorProperty* authProp = createPubliNodes ?
-                                     graph->getProperty<StringVectorProperty>("authors") : NULL;
-    StringProperty* authNameProp = createAuthNodes ?
-                                   graph->getProperty<StringProperty>("name") : NULL;
-    StringProperty* labriTeamProp = createAuthNodes ?
-                                    graph->getProperty<StringProperty>("LaBRI team") : NULL;
-    IntegerProperty *countProp = createAuthNodes ? graph->getProperty<IntegerProperty>("nbPublications") : NULL;
+    StringProperty *keyProp = graph->getProperty<StringProperty>("key");
+    StringProperty *typeProp = graph->getProperty<StringProperty>("type");
+    IntegerProperty *yearProp = graph->getProperty<IntegerProperty>("year");
+    BooleanProperty *fromLabriProp =
+        createAuthNodes ? graph->getProperty<BooleanProperty>("from LaBRI") : NULL;
+    IntegerVectorProperty *labriAuthorsProp =
+        createPubliNodes ? graph->getProperty<IntegerVectorProperty>("LaBRI authors") : NULL;
+    StringVectorProperty *labriTeamsProp =
+        createPubliNodes ? graph->getProperty<StringVectorProperty>("LaBRI teams") : NULL;
+    StringVectorProperty *authProp =
+        createPubliNodes ? graph->getProperty<StringVectorProperty>("authors") : NULL;
+    StringProperty *authNameProp =
+        createAuthNodes ? graph->getProperty<StringProperty>("name") : NULL;
+    StringProperty *labriTeamProp =
+        createAuthNodes ? graph->getProperty<StringProperty>("LaBRI team") : NULL;
+    IntegerProperty *countProp =
+        createAuthNodes ? graph->getProperty<IntegerProperty>("nbPublications") : NULL;
 
     // rendering properties
-    ColorProperty* color = graph->getProperty<ColorProperty>("viewColor");
-    StringProperty* icon = graph->getProperty<StringProperty>("viewIcon");
-    StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
+    ColorProperty *color = graph->getProperty<ColorProperty>("viewColor");
+    StringProperty *icon = graph->getProperty<StringProperty>("viewIcon");
+    StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
 
-    graph->getProperty<IntegerProperty>("viewLabelPosition")->setAllNodeValue(LabelPosition::Bottom);
-    graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(tlp::NodeShape::FontAwesomeIcon);
+    graph->getProperty<IntegerProperty>("viewLabelPosition")
+        ->setAllNodeValue(LabelPosition::Bottom);
+    graph->getProperty<IntegerProperty>("viewShape")
+        ->setAllNodeValue(tlp::NodeShape::FontAwesomeIcon);
 
     TLP_HASH_MAP<std::string, node> authorsMap;
     TLP_HASH_MAP<std::string, bool> publisMap;
@@ -1489,7 +1475,7 @@ public :
 
       // extract entries from BibTeX file
       bibFile.readFromFile(filename, xdkbib::File::StrictQuote);
-      const std::vector<xdkbib::FileEntry>& entries = bibFile.entries();
+      const std::vector<xdkbib::FileEntry> &entries = bibFile.entries();
 
       // first add nodes for publication
       vector<node> publis;
@@ -1502,8 +1488,8 @@ public :
       std::vector<xdkbib::FileEntry>::const_iterator itEnd = entries.end();
       unsigned int i = 0;
 
-      for(; it != itEnd; ++it, ++i) {
-        xdkbib::FileEntry& fe = const_cast<xdkbib::FileEntry&>(*it);
+      for (; it != itEnd; ++it, ++i) {
+        xdkbib::FileEntry &fe = const_cast<xdkbib::FileEntry &>(*it);
 
         node publi;
 
@@ -1526,8 +1512,7 @@ public :
           // setup key, type and year
           keyProp->setNodeValue(publi, key);
           std::string type;
-          std::transform(fe.type().begin(), fe.type().end(), type.begin(),
-                         ::tolower);
+          std::transform(fe.type().begin(), fe.type().end(), type.begin(), ::tolower);
           typeProp->setNodeValue(publi, type);
           yearProp->setNodeValue(publi, year);
           // set rendering properties
@@ -1537,21 +1522,20 @@ public :
         }
 
         // loop of entry fields
-        std::map<std::string, xdkbib::Field>::const_iterator fit =
-          fe.fields().begin();
+        std::map<std::string, xdkbib::Field>::const_iterator fit = fe.fields().begin();
 
-        for(; fit != fe.fields().end(); ++fit) {
+        for (; fit != fe.fields().end(); ++fit) {
           string pName = fit->first;
 
           // year is already set
           if (pName == "year")
             continue;
 
-          const xdkbib::Field& field = fit->second;
-          bool isNumber = !field.valueParts().empty() &&
-                          (field.valueParts()[0].type() == xdkbib::Number);
+          const xdkbib::Field &field = fit->second;
+          bool isNumber =
+              !field.valueParts().empty() && (field.valueParts()[0].type() == xdkbib::Number);
           bool isAuthor = (pName == "author");
-          PropertyInterface* prop = NULL;
+          PropertyInterface *prop = NULL;
 
           if (createPubliNodes) {
             if (isNumber && (pName != "volume") && (pName != "number"))
@@ -1579,8 +1563,8 @@ public :
 
           if (isAuthor) {
             // author
-            char* labriAuthors = NULL;
-            char* labriTeams = NULL;
+            char *labriAuthors = NULL;
+            char *labriTeams = NULL;
             std::string authorsComments;
             std::string teamsComments;
             vector<int> indices;
@@ -1602,7 +1586,7 @@ public :
             vector<string> teams;
 
             if (labriTeams) {
-              char* teamsPtr;
+              char *teamsPtr;
               char *token = strtok_r(labriTeams, " \n", &teamsPtr);
 
               while (token) {
@@ -1614,10 +1598,9 @@ public :
                 labriTeamsProp->setNodeValue(publi, teams);
             }
 
-            char* authorsPtr;
-            unsigned int labriIndex = labriAuthors
-                                      ? (atoi(strtok_r(labriAuthors, " \n", &authorsPtr)) - 1)
-                                      : 0;
+            char *authorsPtr;
+            unsigned int labriIndex =
+                labriAuthors ? (atoi(strtok_r(labriAuthors, " \n", &authorsPtr)) - 1) : 0;
             unsigned int teamIndex = 0;
             // add authors
             xdkbib::AuthorList authors;
@@ -1625,22 +1608,22 @@ public :
             vector<string> authPropValue;
             vector<node> authorNodes;
 
-            for(unsigned int j = 0; j < authors.size(); ++j) {
+            for (unsigned int j = 0; j < authors.size(); ++j) {
               bool labriAuthor = labriAuthors && j == labriIndex;
 
               if (labriAuthor) {
                 indices.push_back(int(labriIndex));
-                char* token = strtok_r(NULL, " \n", &authorsPtr);
+                char *token = strtok_r(NULL, " \n", &authorsPtr);
                 labriIndex = token ? (atoi(token) - 1) : 0;
               }
 
-              xdkbib::Author& auth = authors[j];
+              xdkbib::Author &auth = authors[j];
               vector<std::string> firstNames = auth.first();
               string aName;
               string aKey;
 
-              for(unsigned int k = 0; k < firstNames.size(); ++k) {
-                string& firstName = firstNames[k];
+              for (unsigned int k = 0; k < firstNames.size(); ++k) {
+                string &firstName = firstNames[k];
 
                 if (k) {
                   aName += " ";
@@ -1676,7 +1659,7 @@ public :
               // we assume aKey is utf8 encoded
               for (unsigned int k = 0; k < aKey.size() - 1; ++k) {
                 if (aKey[k] == '\303') {
-                  switch(aKey[k + 1]) {
+                  switch (aKey[k + 1]) {
                   case '\200': // À
                   case '\201': // Á
                   case '\202': // Â
@@ -1782,9 +1765,8 @@ public :
                   default:
                     break;
                   }
-                }
-                else if (aKey[k] == '\304') {
-                  switch(aKey[k + 1]) {
+                } else if (aKey[k] == '\304') {
+                  switch (aKey[k + 1]) {
                   case '\200': // Ā
                   case '\202': // Ă
                   case '\204': // Ą
@@ -1908,9 +1890,8 @@ public :
                   default:
                     break;
                   }
-                }
-                else if (aKey[k] == '\305') {
-                  switch(aKey[k + 1]) {
+                } else if (aKey[k] == '\305') {
+                  switch (aKey[k + 1]) {
                   case '\201': // Ł
                     continue;
                     aKey.replace(k, 2, "L");
@@ -1992,14 +1973,12 @@ public :
 
               node author;
               // check if the author already exists
-              TLP_HASH_MAP<std::string, node>::const_iterator itAuth =
-                authorsMap.find(aKey);
+              TLP_HASH_MAP<std::string, node>::const_iterator itAuth = authorsMap.find(aKey);
 
               if (itAuth != authorsMap.end()) {
                 authorNodes.push_back(author = itAuth->second);
-                countProp->setNodeValue(author, countProp->getNodeValue(author)+1);
-              }
-              else {
+                countProp->setNodeValue(author, countProp->getNodeValue(author) + 1);
+              } else {
                 authorNodes.push_back(author = graph->addNode());
                 authorsMap[aKey] = author;
                 authNameProp->setNodeValue(author, aName);
@@ -2033,8 +2012,7 @@ public :
               authProp->setNodeValue(publi, authPropValue);
               // store Labri authors
               labriAuthorsProp->setNodeValue(publi, indices);
-            }
-            else {
+            } else {
               // display a warning for publication without author
               if (authorNodes.empty()) {
                 tlp::warning() << "Warning: found the publication '" << key.c_str()
@@ -2051,8 +2029,7 @@ public :
                 keyProp->setEdgeValue(e, key);
                 typeProp->setEdgeValue(e, fe.type());
                 yearProp->setEdgeValue(e, year);
-              }
-              else {
+              } else {
                 for (unsigned int j = 0; j < authorNodes.size() - 1; ++j) {
                   for (unsigned int k = j + 1; k < authorNodes.size(); ++k) {
                     edge e = graph->addEdge(authorNodes[j], authorNodes[k]);
@@ -2074,10 +2051,10 @@ public :
         for (; i < entries.size(); ++i)
           graph->delNode(publis[i]);
       }
-    }
-    catch (xdkbib::parsing_error& e) {
+    } catch (xdkbib::parsing_error &e) {
       stringstream sstr;
-      sstr << "BibTeX file parsing error at char " << e.column() << " of line " << e.line() << ": " << e.what() << std::endl;
+      sstr << "BibTeX file parsing error at char " << e.column() << " of line " << e.line() << ": "
+           << e.what() << std::endl;
       tlp::error() << sstr.str();
       pluginProgress->setError(sstr.str());
     }
@@ -2101,9 +2078,8 @@ public :
         graph->delLocalProperty(fromLabriProp->getName());
 
       string err;
-      return graph->applyPropertyAlgorithm("FM^3 (OGDF)",
-                                           graph->getProperty<LayoutProperty>("viewLayout"),
-                                           err, pluginProgress);
+      return graph->applyPropertyAlgorithm(
+          "FM^3 (OGDF)", graph->getProperty<LayoutProperty>("viewLayout"), err, pluginProgress);
     }
 
     return true;

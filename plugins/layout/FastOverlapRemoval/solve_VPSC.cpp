@@ -26,21 +26,22 @@ using namespace std;
 
 namespace vpsc {
 
-static const double ZERO_UPPERBOUND=-0.0000001;
+static const double ZERO_UPPERBOUND = -0.0000001;
 
-IncSolver::IncSolver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[])
-  : Solver(n,vs,m,cs), splitCnt(0) {
-  inactive.assign(cs,cs+m);
+IncSolver::IncSolver(const unsigned n, Variable *const vs[], const unsigned m, Constraint *cs[])
+    : Solver(n, vs, m, cs), splitCnt(0) {
+  inactive.assign(cs, cs + m);
 
-  for(ConstraintList::iterator i=inactive.begin(); i!=inactive.end(); ++i) {
-    (*i)->active=false;
+  for (ConstraintList::iterator i = inactive.begin(); i != inactive.end(); ++i) {
+    (*i)->active = false;
   }
 }
-Solver::Solver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]) : m(m), cs(cs), n(n), vs(vs) {
-  bs=new Blocks(n, vs);
+Solver::Solver(const unsigned n, Variable *const vs[], const unsigned m, Constraint *cs[])
+    : m(m), cs(cs), n(n), vs(vs) {
+  bs = new Blocks(n, vs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
   printBlocks();
-  //assert(!constraintGraphIsCyclic(n,vs));
+// assert(!constraintGraphIsCyclic(n,vs));
 #endif
 }
 Solver::~Solver() {
@@ -50,15 +51,15 @@ Solver::~Solver() {
 // useful in debugging
 void Solver::printBlocks() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  ofstream f(LOGFILE,ios::app);
+  ofstream f(LOGFILE, ios::app);
 
-  for(set<Block*>::iterator i=bs->begin(); i!=bs->end(); ++i) {
-    Block *b=*i;
-    f<<"  "<<*b<<endl;
+  for (set<Block *>::iterator i = bs->begin(); i != bs->end(); ++i) {
+    Block *b = *i;
+    f << "  " << *b << endl;
   }
 
-  for(unsigned i=0; i<m; i++) {
-    f<<"  "<<*cs[i]<<endl;
+  for (unsigned i = 0; i < m; i++) {
+    f << "  " << *cs[i] << endl;
   }
 
 #endif
@@ -74,25 +75,25 @@ void Solver::printBlocks() {
 * another so that constraints internal to the block are satisfied.
 */
 void Solver::satisfy() {
-  list<Variable*> *vs=bs->totalOrder();
+  list<Variable *> *vs = bs->totalOrder();
 
-  for(list<Variable*>::iterator i=vs->begin(); i!=vs->end(); ++i) {
-    Variable *v=*i;
+  for (list<Variable *>::iterator i = vs->begin(); i != vs->end(); ++i) {
+    Variable *v = *i;
 
-    if(!v->block->deleted) {
+    if (!v->block->deleted) {
       bs->mergeLeft(v->block);
     }
   }
 
   bs->cleanup();
 
-  for(unsigned i=0; i<m; i++) {
-    if(cs[i]->slack() < ZERO_UPPERBOUND) {
+  for (unsigned i = 0; i < m; i++) {
+    if (cs[i]->slack() < ZERO_UPPERBOUND) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-      ofstream f(LOGFILE,ios::app);
-      f<<"Error: Unsatisfied constraint: "<<*cs[i]<<endl;
+      ofstream f(LOGFILE, ios::app);
+      f << "Error: Unsatisfied constraint: " << *cs[i] << endl;
 #endif
-      //assert(cs[i]->slack()>-0.0000001);
+      // assert(cs[i]->slack()>-0.0000001);
       throw "Unsatisfied constraint";
     }
   }
@@ -101,44 +102,44 @@ void Solver::satisfy() {
 }
 
 void Solver::refine() {
-  bool solved=false;
+  bool solved = false;
   // Solve shouldn't loop indefinately
   // ... but just to make sure we limit the number of iterations
-  unsigned maxtries=100;
+  unsigned maxtries = 100;
 
-  while(!solved&&maxtries>0) {
-    solved=true;
+  while (!solved && maxtries > 0) {
+    solved = true;
     maxtries--;
 
-    for(set<Block*>::const_iterator i=bs->begin(); i!=bs->end(); ++i) {
-      Block *b=*i;
+    for (set<Block *>::const_iterator i = bs->begin(); i != bs->end(); ++i) {
+      Block *b = *i;
       b->setUpInConstraints();
       b->setUpOutConstraints();
     }
 
-    for(set<Block*>::const_iterator i=bs->begin(); i!=bs->end(); ++i) {
-      Block *b=*i;
-      Constraint *c=b->findMinLM();
+    for (set<Block *>::const_iterator i = bs->begin(); i != bs->end(); ++i) {
+      Block *b = *i;
+      Constraint *c = b->findMinLM();
 
-      if(c!=NULL && c->lm<0) {
+      if (c != NULL && c->lm < 0) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-        ofstream f(LOGFILE,ios::app);
-        f<<"Split on constraint: "<<*c<<endl;
+        ofstream f(LOGFILE, ios::app);
+        f << "Split on constraint: " << *c << endl;
 #endif
         // Split on c
-        Block *l=NULL, *r=NULL;
-        bs->split(b,l,r,c);
+        Block *l = NULL, *r = NULL;
+        bs->split(b, l, r, c);
         bs->cleanup();
         // split alters the block set so we have to restart
-        solved=false;
+        solved = false;
         break;
       }
     }
   }
 
-  for(unsigned i=0; i<m; i++) {
-    if(cs[i]->slack() < ZERO_UPPERBOUND) {
-      assert(cs[i]->slack()>ZERO_UPPERBOUND);
+  for (unsigned i = 0; i < m; i++) {
+    if (cs[i]->slack() < ZERO_UPPERBOUND) {
+      assert(cs[i]->slack() > ZERO_UPPERBOUND);
       throw "Unsatisfied constraint";
     }
   }
@@ -156,21 +157,20 @@ void Solver::solve() {
 
 void IncSolver::solve() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  ofstream f(LOGFILE,ios::app);
-  f<<"solve_inc()..."<<endl;
+  ofstream f(LOGFILE, ios::app);
+  f << "solve_inc()..." << endl;
 #endif
-  double lastcost,cost = bs->cost();
+  double lastcost, cost = bs->cost();
 
   do {
-    lastcost=cost;
+    lastcost = cost;
     satisfy();
     splitBlocks();
     cost = bs->cost();
 #ifdef RECTANGLE_OVERLAP_LOGGING
-    f<<"  cost="<<cost<<endl;
+    f << "  cost=" << cost << endl;
 #endif
-  }
-  while(fabs(lastcost-cost)>0.0001);
+  } while (fabs(lastcost - cost) > 0.0001);
 }
 /**
  * incremental version of satisfy that allows refinement after blocks are
@@ -187,115 +187,114 @@ void IncSolver::solve() {
  */
 void IncSolver::satisfy() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  ofstream f(LOGFILE,ios::app);
-  f<<"satisfy_inc()..."<<endl;
+  ofstream f(LOGFILE, ios::app);
+  f << "satisfy_inc()..." << endl;
 #endif
   splitBlocks();
   long splitCtr = 0;
-  Constraint* v = NULL;
+  Constraint *v = NULL;
 
-  while((v=mostViolated(inactive))&&(v->equality || v->slack() < ZERO_UPPERBOUND)) {
+  while ((v = mostViolated(inactive)) && (v->equality || v->slack() < ZERO_UPPERBOUND)) {
     assert(!v->active);
     Block *lb = v->left->block, *rb = v->right->block;
 
-    if(lb != rb) {
-      lb->merge(rb,v);
-    }
-    else {
-      if(lb->isActiveDirectedPathBetween(v->right,v->left)) {
+    if (lb != rb) {
+      lb->merge(rb, v);
+    } else {
+      if (lb->isActiveDirectedPathBetween(v->right, v->left)) {
         // cycle found, relax the violated, cyclic constraint
         v->gap = v->slack();
         continue;
       }
 
-      if(splitCtr++>10000) {
+      if (splitCtr++ > 10000) {
         throw "Cycle Error!";
       }
 
       // constraint is within block, need to split first
-      inactive.push_back(lb->splitBetween(v->left,v->right,lb,rb));
-      lb->merge(rb,v);
+      inactive.push_back(lb->splitBetween(v->left, v->right, lb, rb));
+      lb->merge(rb, v);
       bs->insert(lb);
     }
   }
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  f<<"  finished merges."<<endl;
+  f << "  finished merges." << endl;
 #endif
   bs->cleanup();
 
-  for(unsigned i=0; i<m; i++) {
-    v=cs[i];
+  for (unsigned i = 0; i < m; i++) {
+    v = cs[i];
 
-    if(v->slack() < ZERO_UPPERBOUND) {
+    if (v->slack() < ZERO_UPPERBOUND) {
       ostringstream s;
-      s<<"Unsatisfied constraint: "<<*v;
+      s << "Unsatisfied constraint: " << *v;
 #ifdef RECTANGLE_OVERLAP_LOGGING
-      ofstream f(LOGFILE,ios::app);
-      f<<s.str()<<endl;
+      ofstream f(LOGFILE, ios::app);
+      f << s.str() << endl;
 #endif
       throw s.str().c_str();
     }
   }
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  f<<"  finished cleanup."<<endl;
+  f << "  finished cleanup." << endl;
   printBlocks();
 #endif
 }
 void IncSolver::moveBlocks() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  ofstream f(LOGFILE,ios::app);
-  f<<"moveBlocks()..."<<endl;
+  ofstream f(LOGFILE, ios::app);
+  f << "moveBlocks()..." << endl;
 #endif
 
-  for(set<Block*>::const_iterator i(bs->begin()); i!=bs->end(); ++i) {
+  for (set<Block *>::const_iterator i(bs->begin()); i != bs->end(); ++i) {
     Block *b = *i;
     b->wposn = b->desiredWeightedPosition();
     b->posn = b->wposn / b->weight;
   }
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  f<<"  moved blocks."<<endl;
+  f << "  moved blocks." << endl;
 #endif
 }
 void IncSolver::splitBlocks() {
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  ofstream f(LOGFILE,ios::app);
+  ofstream f(LOGFILE, ios::app);
 #endif
   moveBlocks();
-  splitCnt=0;
+  splitCnt = 0;
 
   // Split each block if necessary on min LM
-  for(set<Block*>::const_iterator i(bs->begin()); i!=bs->end(); ++i) {
-    Block* b = *i;
-    Constraint* v=b->findMinLM();
+  for (set<Block *>::const_iterator i(bs->begin()); i != bs->end(); ++i) {
+    Block *b = *i;
+    Constraint *v = b->findMinLM();
 
-    if(v!=NULL && v->lm < ZERO_UPPERBOUND) {
+    if (v != NULL && v->lm < ZERO_UPPERBOUND) {
       assert(!v->equality);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-      f<<"    found split point: "<<*v<<" lm="<<v->lm<<endl;
+      f << "    found split point: " << *v << " lm=" << v->lm << endl;
 #endif
       splitCnt++;
-      Block *b = v->left->block, *l=NULL, *r=NULL;
+      Block *b = v->left->block, *l = NULL, *r = NULL;
       assert(v->left->block == v->right->block);
       double pos = b->posn;
-      b->split(l,r,v);
-      l->posn=r->posn=pos;
+      b->split(l, r, v);
+      l->posn = r->posn = pos;
       l->wposn = l->posn * l->weight;
       r->wposn = r->posn * r->weight;
       bs->insert(l);
       bs->insert(r);
-      b->deleted=true;
+      b->deleted = true;
       inactive.push_back(v);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-      f<<"  new blocks: "<<*l<<" and "<<*r<<endl;
+      f << "  new blocks: " << *l << " and " << *r << endl;
 #endif
     }
   }
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  f<<"  finished splits."<<endl;
+  f << "  finished splits." << endl;
 #endif
   bs->cleanup();
 }
@@ -304,26 +303,27 @@ void IncSolver::splitBlocks() {
  * Scan constraint list for the most violated constraint, or the first equality
  * constraint
  */
-Constraint* IncSolver::mostViolated(ConstraintList &l) {
+Constraint *IncSolver::mostViolated(ConstraintList &l) {
   double minSlack = DBL_MAX;
-  Constraint* v=NULL;
+  Constraint *v = NULL;
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  ofstream f(LOGFILE,ios::app);
-  f<<"Looking for most violated..."<<endl;
+  ofstream f(LOGFILE, ios::app);
+  f << "Looking for most violated..." << endl;
 #endif
   ConstraintList::iterator end = l.end();
   ConstraintList::iterator deletePoint = end;
 
-  for(ConstraintList::iterator i=l.begin(); i!=end; ++i) {
-    Constraint *c=*i;
+  for (ConstraintList::iterator i = l.begin(); i != end; ++i) {
+    Constraint *c = *i;
     double slack = c->slack();
 
-    if(c->equality || slack < minSlack) {
-      minSlack=slack;
-      v=c;
-      deletePoint=i;
+    if (c->equality || slack < minSlack) {
+      minSlack = slack;
+      v = c;
+      deletePoint = i;
 
-      if(c->equality) break;
+      if (c->equality)
+        break;
     }
   }
 
@@ -331,65 +331,64 @@ Constraint* IncSolver::mostViolated(ConstraintList &l) {
   // move the last element over the deletePoint and resize
   // downwards.  There is always at least 1 element in the
   // vector because of search.
-  if(deletePoint != end && (minSlack<ZERO_UPPERBOUND||v->equality)) {
-    *deletePoint = l[l.size()-1];
+  if (deletePoint != end && (minSlack < ZERO_UPPERBOUND || v->equality)) {
+    *deletePoint = l[l.size() - 1];
     l.pop_back();
   }
 
 #ifdef RECTANGLE_OVERLAP_LOGGING
-  f<<"  most violated is: "<<*v<<endl;
+  f << "  most violated is: " << *v << endl;
 #endif
   return v;
 }
 
 struct node {
-  set<node*> in;
-  set<node*> out;
+  set<node *> in;
+  set<node *> out;
 };
 // useful in debugging - cycles would be BAD
-bool Solver::constraintGraphIsCyclic(const unsigned n, Variable* const vs[]) {
-  map<Variable*, node*> varmap;
-  vector<node*> localGraph;
+bool Solver::constraintGraphIsCyclic(const unsigned n, Variable *const vs[]) {
+  map<Variable *, node *> varmap;
+  vector<node *> localGraph;
 
-  for(unsigned i=0; i<n; i++) {
-    node *u=new node;
+  for (unsigned i = 0; i < n; i++) {
+    node *u = new node;
     localGraph.push_back(u);
-    varmap[vs[i]]=u;
+    varmap[vs[i]] = u;
   }
 
-  for(unsigned i=0; i<n; i++) {
-    for(vector<Constraint*>::iterator c=vs[i]->in.begin(); c!=vs[i]->in.end(); ++c) {
-      Variable *l=(*c)->left;
+  for (unsigned i = 0; i < n; i++) {
+    for (vector<Constraint *>::iterator c = vs[i]->in.begin(); c != vs[i]->in.end(); ++c) {
+      Variable *l = (*c)->left;
       varmap[vs[i]]->in.insert(varmap[l]);
     }
 
-    for(vector<Constraint*>::iterator c=vs[i]->out.begin(); c!=vs[i]->out.end(); ++c) {
-      Variable *r=(*c)->right;
+    for (vector<Constraint *>::iterator c = vs[i]->out.begin(); c != vs[i]->out.end(); ++c) {
+      Variable *r = (*c)->right;
       varmap[vs[i]]->out.insert(varmap[r]);
     }
   }
 
-  while(!localGraph.empty()) {
-    node *u=NULL;
-    vector<node*>::iterator i=localGraph.begin();
+  while (!localGraph.empty()) {
+    node *u = NULL;
+    vector<node *>::iterator i = localGraph.begin();
 
-    for(; i!=localGraph.end(); ++i) {
-      u=*i;
+    for (; i != localGraph.end(); ++i) {
+      u = *i;
 
-      if(u->in.empty()) {
+      if (u->in.empty()) {
         break;
       }
     }
 
-    if(i==localGraph.end() && !localGraph.empty()) {
-      //cycle found!
+    if (i == localGraph.end() && !localGraph.empty()) {
+      // cycle found!
       return true;
-    }
-    else {
+    } else {
       localGraph.erase(i);
 
-      for(set<node*>::iterator j=u->out.begin(); j!=u->out.end(); ++j) {
-        node *v=*j;
+      for (set<node *>::iterator j = u->out.begin(); j != u->out.end(); ++j) {
+        node *v = *j;
         v->in.erase(u);
       }
 
@@ -397,7 +396,7 @@ bool Solver::constraintGraphIsCyclic(const unsigned n, Variable* const vs[]) {
     }
   }
 
-  for(unsigned i=0; i<localGraph.size(); ++i) {
+  for (unsigned i = 0; i < localGraph.size(); ++i) {
     delete localGraph[i];
   }
 
@@ -407,60 +406,59 @@ bool Solver::constraintGraphIsCyclic(const unsigned n, Variable* const vs[]) {
 #ifndef NDEBUG
 // useful in debugging - cycles would be BAD
 bool Solver::blockGraphIsCyclic() {
-  map<Block*, node*> bmap;
-  vector<node*> localGraph;
+  map<Block *, node *> bmap;
+  vector<node *> localGraph;
 
-  for(set<Block*>::const_iterator i=bs->begin(); i!=bs->end(); ++i) {
-    Block *b=*i;
-    node *u=new node;
+  for (set<Block *>::const_iterator i = bs->begin(); i != bs->end(); ++i) {
+    Block *b = *i;
+    node *u = new node;
     localGraph.push_back(u);
-    bmap[b]=u;
+    bmap[b] = u;
   }
 
-  for(set<Block*>::const_iterator i=bs->begin(); i!=bs->end(); ++i) {
-    Block *b=*i;
+  for (set<Block *>::const_iterator i = bs->begin(); i != bs->end(); ++i) {
+    Block *b = *i;
     b->setUpInConstraints();
-    Constraint *c=b->findMinInConstraint();
+    Constraint *c = b->findMinInConstraint();
 
-    while(c!=NULL) {
-      Block *l=c->left->block;
+    while (c != NULL) {
+      Block *l = c->left->block;
       bmap[b]->in.insert(bmap[l]);
       b->deleteMinInConstraint();
-      c=b->findMinInConstraint();
+      c = b->findMinInConstraint();
     }
 
     b->setUpOutConstraints();
-    c=b->findMinOutConstraint();
+    c = b->findMinOutConstraint();
 
-    while(c!=NULL) {
-      Block *r=c->right->block;
+    while (c != NULL) {
+      Block *r = c->right->block;
       bmap[b]->out.insert(bmap[r]);
       b->deleteMinOutConstraint();
-      c=b->findMinOutConstraint();
+      c = b->findMinOutConstraint();
     }
   }
 
-  while(!localGraph.empty()) {
-    node *u=NULL;
-    vector<node*>::iterator i=localGraph.begin();
+  while (!localGraph.empty()) {
+    node *u = NULL;
+    vector<node *>::iterator i = localGraph.begin();
 
-    for(; i!=localGraph.end(); ++i) {
-      u=*i;
+    for (; i != localGraph.end(); ++i) {
+      u = *i;
 
-      if(u->in.empty()) {
+      if (u->in.empty()) {
         break;
       }
     }
 
-    if(i==localGraph.end() && !localGraph.empty()) {
-      //cycle found!
+    if (i == localGraph.end() && !localGraph.empty()) {
+      // cycle found!
       return true;
-    }
-    else {
+    } else {
       localGraph.erase(i);
 
-      for(set<node*>::iterator j=u->out.begin(); j!=u->out.end(); ++j) {
-        node *v=*j;
+      for (set<node *>::iterator j = u->out.begin(); j != u->out.end(); ++j) {
+        node *v = *j;
         v->in.erase(u);
       }
 
@@ -468,7 +466,7 @@ bool Solver::blockGraphIsCyclic() {
     }
   }
 
-  for(unsigned i=0; i<localGraph.size(); i++) {
+  for (unsigned i = 0; i < localGraph.size(); i++) {
     delete localGraph[i];
   }
 

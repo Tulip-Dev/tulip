@@ -32,7 +32,7 @@ bool ParallelCoordsElementDeleter::eventFilter(QObject *, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
-    if (me->buttons()==Qt::LeftButton) {
+    if (me->buttons() == Qt::LeftButton) {
       ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
       Observable::holdObservers();
       parallelView->deleteDataUnderPointer(me->x(), me->y());
@@ -43,5 +43,4 @@ bool ParallelCoordsElementDeleter::eventFilter(QObject *, QEvent *e) {
 
   return false;
 }
-
 }

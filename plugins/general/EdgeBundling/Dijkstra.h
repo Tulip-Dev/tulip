@@ -39,7 +39,7 @@ public:
   //============================================================
   Dijkstra() {
 #ifdef _OPENMP
-    #pragma omp critical(DIKCREATE)
+#pragma omp critical(DIKCREATE)
 #endif
     {
       graph.alloc(forbiddenNodes);
@@ -53,7 +53,7 @@ public:
 
   ~Dijkstra() {
 #ifdef _OPENMP
-    #pragma omp critical(DIKCREATE)
+#pragma omp critical(DIKCREATE)
 #endif
     {
       graph.free(forbiddenNodes);
@@ -64,8 +64,6 @@ public:
       graph.free(mapDik);
     }
   }
-
-
 
   static void loadGraph(const tlp::Graph *src) {
 
@@ -87,33 +85,27 @@ public:
       graph.reserveAdj(newNode, src->deg(n));
     }
 
-
     tlp::edge e;
     forEach(e, src->getEdges()) {
-      const std::pair<tlp::node, tlp::node>& eEnds = src->ends(e);
+      const std::pair<tlp::node, tlp::node> &eEnds = src->ends(e);
       tlp::edge tmp = graph.addEdge(ntlp2dik.get(eEnds.first), ntlp2dik.get(eEnds.second));
       etlp2dik.set(e, tmp);
       edik2tlp[tmp] = e;
     }
   }
 
-
-  void initDijkstra(const tlp::Graph * const forbiddenNodes,
-                    tlp::node src,
-                    const tlp::MutableContainer<double> &weights,
-                    const std::set<tlp::node> &focus);
+  void initDijkstra(const tlp::Graph *const forbiddenNodes, tlp::node src,
+                    const tlp::MutableContainer<double> &weights, const std::set<tlp::node> &focus);
 
   //========================================================
   void searchPaths(tlp::node n, tlp::IntegerProperty *depth);
-  void searchPath (tlp::node n, std::vector<tlp::node> &vNodes);
+  void searchPath(tlp::node n, std::vector<tlp::node> &vNodes);
   //=============================================================
 private:
   struct DijkstraElement {
-    DijkstraElement ( const double dist = DBL_MAX, const tlp::node previous = tlp::node(), const tlp::node n = tlp::node()) :
-      dist(dist),
-      previous(previous),
-      n(n) {
-    }
+    DijkstraElement(const double dist = DBL_MAX, const tlp::node previous = tlp::node(),
+                    const tlp::node n = tlp::node())
+        : dist(dist), previous(previous), n(n) {}
     //=========================================================
     bool operator==(const DijkstraElement &b) const {
       return n == b.n;
@@ -122,33 +114,29 @@ private:
       return n != b.n;
     }
     double dist;
-    tlp::node   previous;
-    tlp::node   n;
+    tlp::node previous;
+    tlp::node n;
     std::vector<tlp::edge> usedEdge;
   };
 
   struct LessDijkstraElement {
-    bool operator()(const DijkstraElement * const a, const DijkstraElement * const b ) const {
+    bool operator()(const DijkstraElement *const a, const DijkstraElement *const b) const {
       if (fabs(a->dist - b->dist) > 1.E-9) {
         return (a->dist < b->dist);
-      }
-      else {
+      } else {
         return (a->n.id < b->n.id);
       }
     }
   };
 
-
-
-  tlp::node  src;
-
+  tlp::node src;
 
   tlp::NodeProperty<double> nodeDistance;
   tlp::NodeProperty<bool> forbiddenNodes;
   tlp::EdgeProperty<bool> usedEdges;
   tlp::NodeProperty<bool> resultNodes;
   tlp::EdgeProperty<bool> resultEdges;
-  tlp::NodeProperty<DijkstraElement*> mapDik;
+  tlp::NodeProperty<DijkstraElement *> mapDik;
 
   static tlp::VectorGraph graph;
   static tlp::NodeProperty<tlp::node> ndik2tlp;
@@ -162,10 +150,6 @@ private:
     graph.alloc(edik2tlp);
     return true;
   }
-
 };
-
-
-
 
 #endif // DIKJSTRA_H

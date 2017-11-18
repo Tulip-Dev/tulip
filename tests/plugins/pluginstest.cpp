@@ -31,50 +31,50 @@
 #endif
 #include <tulip/PluginLibraryLoader.h>
 
-static void loadTulipPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *pluginLoader=NULL) {
-    std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
-    tlp::TulipPluginsPath = pluginsDir;
-    tlp::PluginLibraryLoader::loadPlugins(pluginLoader);
-    tlp::TulipPluginsPath = oldTlpPluginsPath;
+static void loadTulipPluginsFromDir(const std::string &pluginsDir,
+                                    tlp::PluginLoader *pluginLoader = NULL) {
+  std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
+  tlp::TulipPluginsPath = pluginsDir;
+  tlp::PluginLibraryLoader::loadPlugins(pluginLoader);
+  tlp::TulipPluginsPath = oldTlpPluginsPath;
 }
 
 int main(int /* arg */, char ** /* argv */) {
 
-    std::string tulipBuildDir = TULIP_BUILD_DIR;
+  std::string tulipBuildDir = TULIP_BUILD_DIR;
 
-    tlp::initTulipLib();
-    tlp::PluginLoader* pLoader = NULL;
+  tlp::initTulipLib();
+  tlp::PluginLoader *pLoader = NULL;
 #ifndef NDEBUG
-    tlp::PluginLoaderTxt loader;
-    pLoader = &loader;
+  tlp::PluginLoaderTxt loader;
+  pLoader = &loader;
 #endif
 
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/clustering", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/colors", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/export", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/import", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout/FastOverlapRemoval", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/metric", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/selection", pLoader);
-    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/sizes", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/clustering", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/colors", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/export", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/import", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout/FastOverlapRemoval", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/metric", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/selection", pLoader);
+  loadTulipPluginsFromDir(tulipBuildDir + "/plugins/sizes", pLoader);
 
+  // CPPUNIT_NS::QtUi::TestRunner runner;
+  CPPUNIT_NS::TestResult controller;
+  CPPUNIT_NS::TestResultCollector result;
+  controller.addListener(&result);
 
-    //CPPUNIT_NS::QtUi::TestRunner runner;
-    CPPUNIT_NS::TestResult controller;
-    CPPUNIT_NS::TestResultCollector result;
-    controller.addListener(&result);
+  CPPUNIT_NS::TextUi::TestRunner runner;
+  runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+  runner.run(controller);
 
-    CPPUNIT_NS::TextUi::TestRunner runner;
-    runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
-    runner.run(controller);
+  std::ofstream xmlFileOut("cpptestresults.xml");
+  CPPUNIT_NS::XmlOutputter xmlOut(&result, xmlFileOut);
+  xmlOut.write();
 
-    std::ofstream xmlFileOut("cpptestresults.xml");
-    CPPUNIT_NS::XmlOutputter xmlOut(&result, xmlFileOut);
-    xmlOut.write();
+  CPPUNIT_NS::TextOutputter stdOut(&result, std::cout);
+  stdOut.write();
 
-    CPPUNIT_NS::TextOutputter stdOut(&result, std::cout);
-    stdOut.write();
-
-    return result.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
+  return result.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
 }

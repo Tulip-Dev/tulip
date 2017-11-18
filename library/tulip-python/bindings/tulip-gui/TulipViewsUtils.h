@@ -29,7 +29,7 @@
 #include <tulip/Workspace.h>
 #include <tulip/WorkspacePanel.h>
 
-typedef std::set< tlp::Observable * >::iterator ObserverIterator;
+typedef std::set<tlp::Observable *>::iterator ObserverIterator;
 
 class TulipViewsManager;
 
@@ -37,18 +37,15 @@ class ViewMainWindow : public QMainWindow {
 
   Q_OBJECT
 
-public :
-
+public:
   ViewMainWindow();
-
 };
 
 class TulipViewsManager : public QObject, public tlp::Observable {
 
   Q_OBJECT
 
-public :
-
+public:
   TulipViewsManager();
 
   std::vector<std::string> getTulipViews();
@@ -57,15 +54,16 @@ public :
 
   std::vector<tlp::View *> getOpenedViewsWithName(const std::string &viewName);
 
-  tlp::View *addView(const std::string &viewName, tlp::Graph *graph, const tlp::DataSet &dataSet = tlp::DataSet(), bool show=true);
+  tlp::View *addView(const std::string &viewName, tlp::Graph *graph,
+                     const tlp::DataSet &dataSet = tlp::DataSet(), bool show = true);
 
   void closeView(tlp::View *view);
 
-  std::vector<tlp::View*> getViewsOfGraph(tlp::Graph *graph);
+  std::vector<tlp::View *> getViewsOfGraph(tlp::Graph *graph);
 
   void closeAllViews();
 
-  void closeViewsRelatedToGraph(tlp::Graph* graph);
+  void closeViewsRelatedToGraph(tlp::Graph *graph);
 
   void setViewVisible(tlp::View *view, const bool visible);
 
@@ -81,19 +79,17 @@ public :
 
   tlp::Workspace *tlpWorkspace();
 
-  void treatEvent(const tlp::Event& ev);
+  void treatEvent(const tlp::Event &ev);
 
 public slots:
 
   void viewDestroyed(QObject *view);
 
 private:
-
   std::vector<tlp::View *> openedViews;
   std::map<tlp::View *, tlp::WorkspacePanel *> viewToPanel;
   std::map<tlp::View *, ViewMainWindow *> viewToWindow;
   tlp::GraphHierarchiesModel *model;
-
 };
 
 #endif

@@ -25,14 +25,13 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  // nodes
-  "Number of nodes.",
-  // nodes
-  "Number of node types.",
-  // m
-  "Number of edges added for each new node."
-};
+static const char *paramHelp[] = {
+    // nodes
+    "Number of nodes.",
+    // nodes
+    "Number of node types.",
+    // m
+    "Number of edges added for each new node."};
 
 /**
  *
@@ -47,21 +46,25 @@ static const char * paramHelp[] = {
  * as the article states that this give small world, scale-free networks.
  *
  */
-class BuWangZhouModel:public ImportModule {
+class BuWangZhouModel : public ImportModule {
 public:
-  PLUGININFORMATION("Bu Wang Zhou Model", "sallaberry", "20/06/2011","Randomly generates a scale-free graph unsing the model described in<br/>Shouliang Bu, Bing-Hong Wang, Tao Zhou.<br/><b>Gaining scale-free and high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007.", "1.0", "Social network")
-  BuWangZhouModel(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes", paramHelp[0],"200");
-    addInParameter<unsigned int>("types of nodes", paramHelp[1],"3");
+  PLUGININFORMATION("Bu Wang Zhou Model", "sallaberry", "20/06/2011",
+                    "Randomly generates a scale-free graph unsing the model described "
+                    "in<br/>Shouliang Bu, Bing-Hong Wang, Tao Zhou.<br/><b>Gaining scale-free and "
+                    "high clustering complex networks.</b><br/>Physica A, 374, 864--868, 2007.",
+                    "1.0", "Social network")
+  BuWangZhouModel(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "200");
+    addInParameter<unsigned int>("types of nodes", paramHelp[1], "3");
     addInParameter<unsigned int>("m", paramHelp[2], "2");
   }
 
   bool importGraph() {
-    unsigned int nb_nodes  = 200;
-    unsigned int types_of_nodes  = 3;
-    unsigned int m  = 2;
+    unsigned int nb_nodes = 200;
+    unsigned int types_of_nodes = 3;
+    unsigned int m = 2;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nb_nodes);
       dataSet->get("types of nodes", types_of_nodes);
       dataSet->get("m", m);
@@ -69,7 +72,8 @@ public:
 
     // check arguments
     if (types_of_nodes > nb_nodes) {
-      pluginProgress->setError("The number of node types cannot be greater than the number of nodes");
+      pluginProgress->setError(
+          "The number of node types cannot be greater than the number of nodes");
       return false;
     }
 
@@ -79,58 +83,57 @@ public:
     vector<vector<node> > nodes(types_of_nodes);
     graph->reserveNodes(nb_nodes);
 
-    //In the paper, there are 3 types starting from a triangle without telling if the whole graph or a cycle has to be taken into account.
-    for (unsigned int i=0; i<types_of_nodes; ++i) {
+    // In the paper, there are 3 types starting from a triangle without telling if the whole graph
+    // or a cycle has to be taken into account.
+    for (unsigned int i = 0; i < types_of_nodes; ++i) {
       nodes[i].push_back(graph->addNode());
 
-      for (unsigned j=0; j<i; ++j) {
-        graph->addEdge(nodes[j][0],nodes[i][0]);
+      for (unsigned j = 0; j < i; ++j) {
+        graph->addEdge(nodes[j][0], nodes[i][0]);
       }
     }
 
-    graph->addEdge(nodes[types_of_nodes-1][0],nodes[0][0]);
+    graph->addEdge(nodes[types_of_nodes - 1][0], nodes[0][0]);
 
     unsigned int random_type, random_node;
     double pr, k_sum, pr_sum;
 
-    for (unsigned int i=0; i<nb_nodes-types_of_nodes; ++i) {
-      nodes[i%types_of_nodes].push_back(graph->addNode());
+    for (unsigned int i = 0; i < nb_nodes - types_of_nodes; ++i) {
+      nodes[i % types_of_nodes].push_back(graph->addNode());
 
-      for (unsigned int j=0; j<m; ++j) {
+      for (unsigned int j = 0; j < m; ++j) {
 
         // Random type
         do {
-          random_type = tlp::randomUnsignedInteger(types_of_nodes-1);
-        }
-        while(random_type==i%types_of_nodes);
+          random_type = tlp::randomUnsignedInteger(types_of_nodes - 1);
+        } while (random_type == i % types_of_nodes);
 
         // Random node
         k_sum = 0;
         pr_sum = 0;
 
-        for(random_node=0; random_node<nodes[random_type].size() ; random_node++)
+        for (random_node = 0; random_node < nodes[random_type].size(); random_node++)
           k_sum += graph->deg(nodes[random_type][random_node]);
 
         pr = tlp::randomDouble();
         random_node = 0;
 
-        while (pr_sum<pr && nodes[random_type].size()>(random_node+1)) {
-          pr_sum += graph->deg(nodes[random_type][random_node])/k_sum;
+        while (pr_sum < pr && nodes[random_type].size() > (random_node + 1)) {
+          pr_sum += graph->deg(nodes[random_type][random_node]) / k_sum;
           random_node++;
         }
 
-        graph->addEdge(nodes[i%types_of_nodes].back(), nodes[random_type][random_node]);
+        graph->addEdge(nodes[i % types_of_nodes].back(), nodes[random_type][random_node]);
       }
 
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i, nb_nodes-types_of_nodes) != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, nb_nodes - types_of_nodes) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
     }
 
-    return  true;
+    return true;
   }
 };
 
 PLUGIN(BuWangZhouModel)
-

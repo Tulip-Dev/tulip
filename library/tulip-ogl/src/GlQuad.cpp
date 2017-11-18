@@ -25,11 +25,11 @@ using namespace std;
 
 namespace tlp {
 
-GlQuad::GlQuad() : GlPolygon(4,4,4,true,false) {
-}
+GlQuad::GlQuad() : GlPolygon(4, 4, 4, true, false) {}
 
 GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
-               const Color &color) : GlPolygon(4,4,4,true,false) {
+               const Color &color)
+    : GlPolygon(4, 4, 4, true, false) {
   points[0] = p1;
   points[1] = p2;
   points[2] = p3;
@@ -38,8 +38,8 @@ GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p
   recomputeBoundingBox();
 }
 
-GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
-               const Color &c1, const Color &c2, const Color &c3, const Color &c4) {
+GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4, const Color &c1,
+               const Color &c2, const Color &c3, const Color &c4) {
   points[0] = p1;
   points[1] = p2;
   points[2] = p3;
@@ -51,40 +51,37 @@ GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p
   recomputeBoundingBox();
 }
 
-GlQuad::~GlQuad() {
-}
+GlQuad::~GlQuad() {}
 
-void GlQuad::setColor(const Color& color) {
+void GlQuad::setColor(const Color &color) {
   setFillColor(color);
 }
 
 void GlQuad::setPosition(const int idPosition, const Coord &position) {
-  setPoint(idPosition,position);
+  setPoint(idPosition, position);
 }
 
 void GlQuad::setColor(const int idColor, const Color &color) {
-  setFillColor(idColor,color);
+  setFillColor(idColor, color);
 }
 
-const Coord& GlQuad::getPosition(const int idPosition) const {
-  return  (*(const_cast< vector<Coord> * > (&points)))[idPosition];
+const Coord &GlQuad::getPosition(const int idPosition) const {
+  return (*(const_cast<vector<Coord> *>(&points)))[idPosition];
 }
 
-const Color& GlQuad::getColor(const int idColor) const {
-  return (*(const_cast< vector<Color> * > (&fillColors)))[idColor];
+const Color &GlQuad::getColor(const int idColor) const {
+  return (*(const_cast<vector<Color> *>(&fillColors)))[idColor];
 }
 //===========================================================
 void GlQuad::getXML(string &outString) {
 
-  GlXMLTools::createProperty(outString,"type","GlQuad","GlEntity");
+  GlXMLTools::createProperty(outString, "type", "GlQuad", "GlEntity");
 
   GlPolygon::getXMLOnlyData(outString);
-
 }
 //============================================================
 void GlQuad::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlPolygon::setWithXML(inString,currentPosition);
+  GlPolygon::setWithXML(inString, currentPosition);
 }
-
 }

@@ -37,7 +37,8 @@ namespace tlp {
 class PropertyInterface;
 class BooleanProperty;
 class PluginProgress;
-template<class C>struct Iterator;
+template <class C>
+struct Iterator;
 
 /**
  * @enum This Enum describes the possible types of an element of the graph.
@@ -53,12 +54,14 @@ enum ElementType {
 
 /**
  * @ingroup Graph
- * @brief Loads a graph from a file (extension can be any of the Tulip supported input graph file format).
+ * @brief Loads a graph from a file (extension can be any of the Tulip supported input graph file
+ *format).
  *
  * This function loads a graph serialized in a file trough the available Tulip import plugins.
  * Since Tulip 4.8, the selection of the import plugin is based on the provided filename extension.
  * The import will fail if the selected import plugin is not loaded.
- * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz, *.tlpz), TLP Binary (*.tlpb, *.tlpb.gz, *.tlpbz), TLP JSON (*.json),
+ * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz, *.tlpz), TLP
+ *Binary (*.tlpb, *.tlpb.gz, *.tlpbz), TLP JSON (*.json),
  * Gephi (*.gexf), Pajek (*.net, *.paj), GML (*.gml), Graphviz (*.dot) and UCINET (*.txt)
  *
  * Before Tulip 4.8 and as a fallback, the function uses the "TLP Import" import plugin
@@ -69,13 +72,15 @@ enum ElementType {
  * @param filename the file in one of the supported formats to parse.
  * @return Graph* the imported Graph, NULL if the import failed.
  **/
-TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* progress = NULL);
+TLP_SCOPE Graph *loadGraph(const std::string &filename, tlp::PluginProgress *progress = NULL);
 
 /**
  * @ingroup Graph
- * @brief Saves the corresponding graph to a file (extension can be any of the Tulip supported ouput graph file format)..
+ * @brief Saves the corresponding graph to a file (extension can be any of the Tulip supported ouput
+ *graph file format)..
  *
- * This function serializes the corresponding graph and all its subgraphs (depending on the format) to a file
+ * This function serializes the corresponding graph and all its subgraphs (depending on the format)
+ *to a file
  * through the available Tulip export plugins.
  * Since Tulip 4.8, the selection of the export plugin is based on the provided filename extension.
  * The export will fail if the selected export plugin is not loaded.
@@ -85,53 +90,68 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
  *
  * @param graph the graph to save.
  * @param filename the file to save the graph to.
- * @param progress  PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
- * @param data Parameters to pass to the export plugin (e.g. additional data, options for the format)
+ * @param progress  PluginProgress to report the progress of the operation, as well as final state.
+ *Defaults to NULL.
+ * @param data Parameters to pass to the export plugin (e.g. additional data, options for the
+ *format)
  * @return bool whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL, tlp::DataSet *data = NULL);
+TLP_SCOPE bool saveGraph(Graph *graph, const std::string &filename,
+                         tlp::PluginProgress *progress = NULL, tlp::DataSet *data = NULL);
 
 /**
  * @ingroup Graph
  * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
  *
- * You determine the destination, whether by using a fstream, or by saving the contents of the stream to the destination of your choice.
+ * You determine the destination, whether by using a fstream, or by saving the contents of the
+ *stream to the destination of your choice.
  *
  * @param graph The graph to export.
- * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a gzipped ostream.
+ * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a
+ *gzipped ostream.
  * @param format The format to use to export the Graph.
- * @param dataSet Parameters to pass to the export plugin (e.g. additional data, options for the format)
- * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @param dataSet Parameters to pass to the export plugin (e.g. additional data, options for the
+ *format)
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state.
+ *Defaults to NULL.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
+TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format,
+                           DataSet &dataSet, PluginProgress *progress = NULL);
 
 /**
  * @ingroup Graph
- * @brief Imports a graph using the specified import plugin with the parameters stored in the DataSet.
+ * @brief Imports a graph using the specified import plugin with the parameters stored in the
+ *DataSet.
  *
- * If no graph is passed, then a new graph will be created. You can pass a graph in order to import data into it.
- * Returns the graph with imported data, or NULL if the import failed. In this case, the Pluginprogress should have an error that can be displayed.
+ * If no graph is passed, then a new graph will be created. You can pass a graph in order to import
+ *data into it.
+ * Returns the graph with imported data, or NULL if the import failed. In this case, the
+ *Pluginprogress should have an error that can be displayed.
  *
  * @param format The format to use to import the graph.
  * @param dataSet The parameters to pass to the import plugin (file to read, ...)
- * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
- * @param newGraph The graph to import the data into. This can be useful to import data into a subgraph. Defaults to NULL.
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state.
+ *Defaults to NULL.
+ * @param newGraph The graph to import the data into. This can be useful to import data into a
+ *subgraph. Defaults to NULL.
  * @return :Graph* The graph containing the imported data, or NULL in case of failure.
  **/
-TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
+TLP_SCOPE Graph *importGraph(const std::string &format, DataSet &dataSet,
+                             PluginProgress *progress = NULL, Graph *newGraph = NULL);
 
 /**
  * @ingroup Graph
  * @brief Creates a new, empty graph.
  *
- * This is a simple method factory to create a Graph implementation (remember, Graph is only an interface).
+ * This is a simple method factory to create a Graph implementation (remember, Graph is only an
+ *interface).
  *
  * This is the recommended way to create a new Graph.
  *
  * @return :Graph* A new, empty graph.
  **/
-TLP_SCOPE Graph* newGraph();
+TLP_SCOPE Graph *newGraph();
 
 /**
  * @ingroup Graph
@@ -140,7 +160,8 @@ TLP_SCOPE Graph* newGraph();
  * The output selection is used to select the appended nodes & edges
  * \warning The input selection is extended to all selected edge ends.
  */
-TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=NULL, BooleanProperty* outSelection=NULL );
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSelection = NULL,
+                           BooleanProperty *outSelection = NULL);
 
 /**
  * @ingroup Graph
@@ -148,15 +169,17 @@ TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSel
  * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
  * \warning The selection is extended to all selected edge ends.
  */
-TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
-
+TLP_SCOPE void removeFromGraph(Graph *ioG, BooleanProperty *inSelection = NULL);
 
 /**
  * @ingroup Graph
- * Gets an iterator over the root graphs. That is all the currently existing graphs which have been created using the tlp::newGraph, tlp::loadGraph or tlp::importGraph functions and are the root graphs of an existing graph hierarchy.
- * @return An iterator over all the root graphs. The caller of this function is responsible of the deletion of the returned iterator.
+ * Gets an iterator over the root graphs. That is all the currently existing graphs which have been
+ * created using the tlp::newGraph, tlp::loadGraph or tlp::importGraph functions and are the root
+ * graphs of an existing graph hierarchy.
+ * @return An iterator over all the root graphs. The caller of this function is responsible of the
+ * deletion of the returned iterator.
  */
-TLP_SCOPE Iterator<Graph*>* getRootGraphs();
+TLP_SCOPE Iterator<Graph *> *getRootGraphs();
 
 /**
  * @ingroup Graph
@@ -171,8 +194,10 @@ TLP_SCOPE Iterator<Graph*>* getRootGraphs();
  * @chapter Inheritance
  *
  * Subgraphs inherit from their parent graph.
- * This is true of nodes and edges; every node and edge in a subgraph also exists in each of its parent graphs.
- * This is also true of properties; every property in a graph exist in all of its subgraphs, except if it has been replaced
+ * This is true of nodes and edges; every node and edge in a subgraph also exists in each of its
+ *parent graphs.
+ * This is also true of properties; every property in a graph exist in all of its subgraphs, except
+ *if it has been replaced
  * by a local property.
  *
  * For instance, if you have the following graph hierarchy:
@@ -184,7 +209,8 @@ TLP_SCOPE Iterator<Graph*>* getRootGraphs();
  * Nodes can be in A and root but not B; or in B and root but not A.
  *
  * For instance, imagine a graph. You want to compare it to its Delaunay triangulation.
- * You need to create a subgraph that is a clone of the original (say this is A) to keep the original graph,
+ * You need to create a subgraph that is a clone of the original (say this is A) to keep the
+ *original graph,
  * and another copy (say this one is B) on which you will perform the delaunay triangulation.
  *
  * B will have none of the original edges, and A will have only the original edges.
@@ -212,7 +238,7 @@ class TLP_SCOPE Graph : public Observable {
   friend class PropertyInterface;
 
 public:
-  Graph():id(0) {}
+  Graph() : id(0) {}
   virtual ~Graph() {}
 
   /**
@@ -231,12 +257,15 @@ public:
    * If an error occurs, a message describing the error should be stored in errorMessage.
    *
    * @param algorithm The algorithm to apply.
-   * @param errorMessage A string that will be modified to contain an error message should an error occur.
+   * @param errorMessage A string that will be modified to contain an error message should an error
+   *occur.
    * @param dataSet The parameters to the algorithm. Defaults to NULL.
-   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+   * @param progress A PluginProgress to report the progress of the operation, as well as final
+   *state. Defaults to NULL.
    * @return bool Whether the algorithm was successfully applied.
    **/
-  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage, DataSet *dataSet=NULL, PluginProgress *progress=NULL);
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage,
+                      DataSet *dataSet = NULL, PluginProgress *progress = NULL);
 
   //=========================================================================
   // Graph hierarchy access and building
@@ -249,20 +278,21 @@ public:
    *
    * @return void
    **/
-  virtual  void clear()=0;
+  virtual void clear() = 0;
 
   /**
     * @brief Creates and returns a new sub-graph of this graph.
     *
-    * If a BooleanProperty is provided, only nodes and edges for which it is true will be added to the subgraph.
+    * If a BooleanProperty is provided, only nodes and edges for which it is true will be added to
+    *the subgraph.
     * If none is provided, then the subgraph will be empty.
     *
     * @param selection The elements to add to the new subgraph. Defaults to NULL.
     * @param name The name of the newly created subgraph. Defaults to "unnamed".
     * @return :Graph* The newly created subgraph.
     **/
-  virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
-                             const std::string& name = "unnamed")=0;
+  virtual Graph *addSubGraph(BooleanProperty *selection = NULL,
+                             const std::string &name = "unnamed") = 0;
 
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
@@ -270,17 +300,21 @@ public:
    * @param name The name of the newly created subgraph.
    * @return :Graph* The newly created subgraph.
    **/
-  Graph *addSubGraph(const std::string& name);
+  Graph *addSubGraph(const std::string &name);
 
   /**
    * @brief Creates and returns a subgraph that contains all the elements of this graph.
    *
    * @param name The name of the newly created subgraph. Defaults to "unnamed".
-   * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the default) it will be a subgraph of this graph
-   * @param addSiblingProperties if true the local properties will be cloned into the sibling of this graph, if false (the default) the local properties will not be cloned
-   * @return :Graph* The newly created clone subgraph. NULL will be returned if addSibling is set to true and this graph is a root graph.
+   * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the
+   *default) it will be a subgraph of this graph
+   * @param addSiblingProperties if true the local properties will be cloned into the sibling of
+   *this graph, if false (the default) the local properties will not be cloned
+   * @return :Graph* The newly created clone subgraph. NULL will be returned if addSibling is set to
+   *true and this graph is a root graph.
    **/
-  virtual Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
+  virtual Graph *addCloneSubGraph(const std::string &name = "unnamed", bool addSibling = false,
+                                  bool addSiblingProperties = false);
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a vector of nodes.
@@ -288,34 +322,36 @@ public:
    * Every node contained in the given vector is added to the subgraph.
    * Every edge connecting any two nodes in the set of given nodes is also added.
    * @param nodes The nodes to add to the subgraph. All the edges between these nodes are added too.
-   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph
+   * instead of the graph this method is called on.
    * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(const std::vector<node>& nodes,
-                         Graph* parentSubGraph = NULL,
-                         const std::string& name = "unnamed");
+  Graph *inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph = NULL,
+                         const std::string &name = "unnamed");
 
   /**
-   * @brief deprecated, use inducedSubGraph(const std::set<node>&, Graph* = NULL, const std::string& = "unamed") instead
+   * @brief deprecated, use inducedSubGraph(const std::set<node>&, Graph* = NULL, const std::string&
+   * = "unamed") instead
    */
-  _DEPRECATED Graph *inducedSubGraph(const std::set<node>& nodeSet,
-                                     Graph* parentSubGraph = NULL,
-                                     const std::string& name = "unnamed");
+  _DEPRECATED Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = NULL,
+                                     const std::string &name = "unnamed");
 
   /**
-   * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.
+   * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and
+   * edges.
    * @since Tulip 4.10
    * Every node contained in the selection is added to the subgraph.
    * Every edge and its source and target node contained in the selection is added to the subgraph.
    * Every edge connecting any two nodes in the resulting set of nodes is also added.
    * @param selection a selection of nodes and edges.
-   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph
+   * instead of the graph this method is called on.
    * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(BooleanProperty *selection,
-                         Graph* parentSubGraph = NULL, const std::string& name = "unnamed");
+  Graph *inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph = NULL,
+                         const std::string &name = "unnamed");
 
   /**
    * @brief Deletes a sub-graph of this graph.
@@ -337,7 +373,7 @@ public:
    *
    * @see delAllSubGraphs() if you want to remove all descendants of a graph.
    */
-  virtual void delSubGraph(Graph *graph)=0;
+  virtual void delSubGraph(Graph *graph) = 0;
 
   /**
    * @brief Deletes a sub-graph of this graph and all of its sub-graphs.
@@ -357,20 +393,20 @@ public:
    * @param graph The subgraph to delete.
    * @see delSubGraph() if you want to keep the descendants of the subgraph to remove.
    */
-  virtual void delAllSubGraphs(Graph *graph)=0;
+  virtual void delAllSubGraphs(Graph *graph) = 0;
 
   /**
    * @brief Returns the parent of the graph. If called on the root graph, it returns itself.
    * @return The parent of this graph (or itself if it is the root graph).
    * @see getRoot() to directly retrieve the root graph.
    */
-  virtual Graph* getSuperGraph()const =0;
+  virtual Graph *getSuperGraph() const = 0;
 
   /**
    * @brief Gets the root graph of the graph hierarchy.
    * @return The root graph of the graph hierarchy.
    */
-  virtual Graph* getRoot() const =0;
+  virtual Graph *getRoot() const = 0;
 
   /**
    * @cond DOXYGEN_HIDDEN
@@ -378,7 +414,7 @@ public:
    * @warning ONLY USE IF YOU KNOW EXACTLY WHAT YOU ARE DOING.
    * @endcond
    */
-  virtual void setSuperGraph(Graph *)=0;
+  virtual void setSuperGraph(Graph *) = 0;
 
   /**
    * @brief Gets an iterator over all the sub-graphs of the graph.
@@ -393,11 +429,12 @@ public:
    * Will return an iterator over A and B, but not C, D and E.
    * @return An iterator over this graph's direct subgraphs.
    */
-  virtual Iterator<Graph *> * getSubGraphs() const=0;
+  virtual Iterator<Graph *> *getSubGraphs() const = 0;
 
   /**
    * @brief This method returns the nth subgraph.
-   * Since subgraphs order cannot be ensured in every implementation, this method should be equivalent to:
+   * Since subgraphs order cannot be ensured in every implementation, this method should be
+   equivalent to:
    * @code
     int i=0;
     Iterator<Graph *> *it = g->getSubGraphs();
@@ -430,7 +467,7 @@ public:
    * @return The number of direct subgraphs.
    * @see numberOfDescendantGraphs() to count in the whole hierarchy.
    */
-  virtual unsigned int numberOfSubGraphs() const=0;
+  virtual unsigned int numberOfSubGraphs() const = 0;
 
   /**
    * @brief Return the number of descendant sub-graphs.
@@ -446,7 +483,7 @@ public:
    * @return The number of descendants subgraphs.
    * @see numberOfSubGraphs() to count only direct subgraphs.
    */
-  virtual unsigned int numberOfDescendantGraphs() const=0;
+  virtual unsigned int numberOfDescendantGraphs() const = 0;
 
   /**
    * @brief Indicates if the graph argument is a direct sub-graph.
@@ -454,7 +491,7 @@ public:
    * @return Whether subGraph is a direct subgraph of this graph.
    * @see isDescendantGraph() to search in the whole hierarchy.
    */
-  virtual bool isSubGraph(const Graph* subGraph) const=0;
+  virtual bool isSubGraph(const Graph *subGraph) const = 0;
 
   /**
    * @brief Indicates if the graph argument is a descendant of this graph.
@@ -462,7 +499,7 @@ public:
    * @return Whether subGraph is a descendant of this graph.
    * @see isSubGraph to search only in direct subgraphs.
    */
-  virtual bool isDescendantGraph(const Graph* subGraph) const=0;
+  virtual bool isDescendantGraph(const Graph *subGraph) const = 0;
 
   /**
    * @brief Returns a pointer on the sub-graph with the corresponding id
@@ -471,7 +508,7 @@ public:
    * @return A subgraph of the given id, or null if no such subgraph exists on this graph.
    * @see getDescendantGraph(unsigned int) to search in the whole hierarchy.
    */
-  virtual Graph* getSubGraph(unsigned int id) const=0;
+  virtual Graph *getSubGraph(unsigned int id) const = 0;
 
   /**
    * @brief Returns a pointer on the sub-graph with the corresponding name
@@ -480,7 +517,7 @@ public:
    * @return A Graph named name, or NULL if no such subgraph exists on this graph.
    * @see getDescendantGraph(const std::string &) to search in the whole hierarchy.
    */
-  virtual Graph* getSubGraph(const std::string &name) const=0;
+  virtual Graph *getSubGraph(const std::string &name) const = 0;
 
   /**
    * @brief Returns a pointer on the descendant with the corresponding id
@@ -489,7 +526,7 @@ public:
    * @return A graph with the given id, or NULL if no such graph exists in this graph's descendants.
    * @see getSubGraph(unsigned int) to search only in direct subgraphs.
    */
-  virtual Graph* getDescendantGraph(unsigned int id) const=0;
+  virtual Graph *getDescendantGraph(unsigned int id) const = 0;
 
   /**
    * @brief Returns a pointer on the first descendant graph with the corresponding name
@@ -498,7 +535,7 @@ public:
    * @return A graph named name, or NULL if there is no such graph in this graph's descendants.
    * @see getSubGraph(const std::string &) to search only in direct subgraphs.
    */
-  virtual Graph* getDescendantGraph(const std::string &name) const=0;
+  virtual Graph *getDescendantGraph(const std::string &name) const = 0;
 
   /**
    * @brief Gets an iterator over all the descendant sub-graphs of the graph.
@@ -513,7 +550,7 @@ public:
    * Will return an iterator over A B, C, D and E.
    * @return An iterator over this graph's descendant subgraphs.
    */
-  Iterator<Graph *> * getDescendantGraphs() const;
+  Iterator<Graph *> *getDescendantGraphs() const;
 
   //==============================================================================
   // Modification of the graph structure
@@ -524,7 +561,7 @@ public:
    * @return The newly added node.
    * @see addNodes() if you want to add more than one node.
    */
-  virtual node addNode()=0;
+  virtual node addNode() = 0;
 
   /**
    * @brief Adds new nodes in the graph.
@@ -533,7 +570,7 @@ public:
    * @param nbNodes The number of nodes to add.
    * @see addNode() to add a single node.
    */
-  virtual void addNodes(unsigned int nbNodes)=0;
+  virtual void addNodes(unsigned int nbNodes) = 0;
 
   /**
    * @brief Adds new nodes in the graph and returns them in the addedNodes vector.
@@ -543,70 +580,77 @@ public:
    * @param addedNodes The newly added nodes. This vector is cleared before being filled.
    * @see addNode() to add a single node.
    */
-  virtual void addNodes(unsigned int nbNodes, std::vector<node>& addedNodes)=0;
+  virtual void addNodes(unsigned int nbNodes, std::vector<node> &addedNodes) = 0;
 
   /**
    * @brief Adds an existing node in the graph. This node is also added in all the ancestor graphs.
    * This node must exists in the graph hierarchy (which means it must exist in the root graph).
-   * You cannot add a node to the root graph this way (as it must already be an element of the root graph).
+   * You cannot add a node to the root graph this way (as it must already be an element of the root
+   * graph).
    * @warning Using this method on the root graph will display a warning on the console.
    *
    * @param n The node to add to a subgraph. This node must exist in the root graph.
    * @see addNode() to add a new node to a graph.
    */
-  virtual void addNode(const node n)=0;
+  virtual void addNode(const node n) = 0;
 
   /**
    * @brief Adds existing nodes in the graph. The nodes are also added in all the ancestor graphs.
-   * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in the root graph,
+   * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in
+   the root graph,
    * and node cannot be added this way to the root graph.
 
    * @warning Using this method on the root graph will display a warning on the console.
    * @warning The graph does not take ownership of the Iterator.
    *
-   * @param nodes An iterator over nodes to add to this subgraph. The graph does not takes ownership of this iterator.
+   * @param nodes An iterator over nodes to add to this subgraph. The graph does not takes ownership
+   of this iterator.
    */
-  virtual void addNodes(Iterator<node>* nodes)=0;
+  virtual void addNodes(Iterator<node> *nodes) = 0;
 
   /**
   * @brief Adds existing nodes in the graph. The nodes are also added in all the ancestor graphs.
-  * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in the root graph,
+  * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in
+  the root graph,
   * and nodes cannot be added this way to the root graph.
 
   * @warning Using this method on the root graph will display a warning on the console.
   *
   * @param nodes a vector of nodes to add to this subgraph.
   */
-  void addNodes(const std::vector<node>& nodes);
+  void addNodes(const std::vector<node> &nodes);
 
   /**
    * @brief Deletes a node in the graph.
    * This node is also removed in the sub-graphs hierarchy of the current graph.
    * @param n The node to delete.
-   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
+   * default only removes in the current graph.
    * @see delNodes() to remove multiple nodes.
    */
-  virtual void delNode(const node n, bool deleteInAllGraphs = false)=0;
+  virtual void delNode(const node n, bool deleteInAllGraphs = false) = 0;
 
   /**
    * @brief Deletes nodes in the graph.
    * These nodes are also removed in the sub-graphs hierarchy of the current graph.
    * @warning the graph does not take ownership of the Iterator.
    * @param it The nodes to delete.
-   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
+   * default only removes in the current graph.
    * @see delNode() to remove a single node.
    */
-  virtual void delNodes(Iterator<node>* it, bool deleteInAllGraphs = false)=0;
+  virtual void delNodes(Iterator<node> *it, bool deleteInAllGraphs = false) = 0;
 
   /**
    * @brief Deletes nodes in the graph.
    * These nodes are also removed in the sub-graphs hierarchy of the current graph.
    * @warning the graph does not take ownership of the Iterator.
    * @param nodes a vector of the nodes to delete.
-   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
+   * default only removes in the current graph.
    * @see delNode() to remove a single node.
    */
-  void delNodes(const std::vector<node>& nodes, bool deleteInAllGraphs = false);
+  void delNodes(const std::vector<node> &nodes, bool deleteInAllGraphs = false);
 
   /**
    * @brief Adds a new edge in the graph
@@ -616,7 +660,7 @@ public:
    * @return The newly added edge.
    * @see addEdges() to add multiple edges at once.
    */
-  virtual edge addEdge(const node source, const node target)=0;
+  virtual edge addEdge(const node source, const node target) = 0;
 
   /**
    * @brief Adds new edges in the graph.
@@ -628,7 +672,7 @@ public:
    * The first element of the pair is the source, the second is the destination.
    *
    */
-  virtual void addEdges(const std::vector<std::pair<node, node> >& edges)=0;
+  virtual void addEdges(const std::vector<std::pair<node, node> > &edges) = 0;
 
   /**
    * @brief Adds new edges in the graph and returns them in the addedEdges vector.
@@ -641,8 +685,8 @@ public:
    * @param addedEdges The newly added edges. This vector is cleared before being filled.
    *
    */
-  virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
-                        std::vector<edge>& addedEdges)=0;
+  virtual void addEdges(const std::vector<std::pair<node, node> > &edges,
+                        std::vector<edge> &addedEdges) = 0;
 
   /**
    * @brief Adds an existing edge in the graph. This edge is also added in all
@@ -654,7 +698,7 @@ public:
    * @see addEgdes() to add more than one edge at once.
    * @see addNode() to add nodes.
    */
-  virtual void addEdge(const edge e)=0;
+  virtual void addEdge(const edge e) = 0;
 
   /**
    * @brief Adds existing edges in the graph. The edges are also added in all
@@ -665,7 +709,7 @@ public:
    * @warning The graph does not take ownership of the iterator.
    * @param edges The edges to add on this subgraph.
    */
-  virtual void addEdges(Iterator<edge>* edges)=0;
+  virtual void addEdges(Iterator<edge> *edges) = 0;
 
   /**
    * @brief Adds existing edges in the graph. The edges are also added in all
@@ -675,45 +719,49 @@ public:
    * @warning Using this method on the root graph will display a warning on the console.
    * @param edges a vector of the edges to add on this subgraph.
    */
-  void addEdges(const std::vector<edge>& edges);
+  void addEdges(const std::vector<edge> &edges);
 
   /**
    * @brief Deletes an edge in the graph. The edge is also removed in
    * the sub-graphs hierarchy.
    * The ordering of remaining edges is preserved.
    * @param e The edge to delete.
-   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
+   * default only removes in the current graph.
    */
-  virtual void delEdge(const edge e, bool deleteInAllGraphs = false)=0;
+  virtual void delEdge(const edge e, bool deleteInAllGraphs = false) = 0;
 
   /**
    * @brief Deletes edges in the graph. These edges are also removed in the sub-graphs hierarchy.
    * The ordering of remaining edges is preserved.
    * @warning The graph does not take ownership of the Iterator.
    * @param itE
-   * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By
+   * default only removes in the current graph.
    */
-  virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
+  virtual void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false) = 0;
 
   /**
    * @brief Deletes edges in the graph. These edges are also removed in the sub-graphs hierarchy.
    * The ordering of remaining edges is preserved.
    * @warning The graph does not take ownership of the Iterator.
    * @param edges a vector of the edges to delete
-   * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By
+   * default only removes in the current graph.
    */
-  void delEdges(const std::vector<edge>& edges, bool deleteInAllGraphs = false);
+  void delEdges(const std::vector<edge> &edges, bool deleteInAllGraphs = false);
 
   /**
    * @brief Sets the order of the edges around a node.
    * This operation ensures that adjacent edges of a node will
    * be ordered as they are in the vector of edges given in parameter.
    *
-   * This can be useful if you want to make sure you retrieve the edges in a specific order when iterating upon them.
+   * This can be useful if you want to make sure you retrieve the edges in a specific order when
+   * iterating upon them.
    * @param n The node whose edges to order.
    * @param edges The edges, in the order you want them.
    */
-  virtual void setEdgeOrder(const node n,const std::vector<edge> &edges)=0;
+  virtual void setEdgeOrder(const node n, const std::vector<edge> &edges) = 0;
 
   /**
    * @brief Swaps two edges in the adjacency list of a node.
@@ -721,7 +769,7 @@ public:
    * @param e1 The first edge, that will take the second edge's position.
    * @param e2 The second edge, that will take the first edge's position.
    */
-  virtual void swapEdgeOrder(const node n,const edge e1, const edge e2)=0;
+  virtual void swapEdgeOrder(const node n, const edge e1, const edge e2) = 0;
 
   /**
    * @brief Sets the source of an edge to be the given node.
@@ -752,7 +800,7 @@ public:
    *  the ordering of a graph you change the ordering of the hierarchy.
    * @param e The edge top reverse.
    */
-  virtual void reverse(const edge e)=0;
+  virtual void reverse(const edge e) = 0;
   // Attempts to reserve enough space to store nodes.
   // Only defined on root graph.
   virtual void reserveNodes(unsigned int nbNodes) = 0;
@@ -760,19 +808,21 @@ public:
   // Only defined on root graph.
   virtual void reserveEdges(unsigned int nbEdges) = 0;
   //================================================================================
-  //Iterators on the graph structure.
+  // Iterators on the graph structure.
   //================================================================================
   /**
    * @brief Finds the first node whose input degree equals 0.
    *
-   * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none was found.
+   * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none
+   *was found.
    **/
   virtual tlp::node getSource() const;
 
   /**
    * @brief Finds the first node whose output degree equals 0.
    *
-   * @return tlp::node The first encountered node with output degree of 0, or an invalid node if none was found.
+   * @return tlp::node The first encountered node with output degree of 0, or an invalid node if
+   *none was found.
    **/
   virtual tlp::node getSink() const;
 
@@ -780,7 +830,7 @@ public:
    * @brief Returns the first node in the graph.
    *
    */
-  virtual node getOneNode() const =0;
+  virtual node getOneNode() const = 0;
 
   /**
    * @brief Returns a random node in the graph.
@@ -788,20 +838,20 @@ public:
    * @since Tulip 4.8
    *
    */
-  virtual node getRandomNode() const =0;
+  virtual node getRandomNode() const = 0;
 
   /**
    * @brief Return a const reference on the vector of nodes of the graph
    * It is the fastest way to access to nodes, Iterators are 25% slower.
    * @remark o(1)
    */
-  virtual const std::vector<node>& nodes() const =0;
+  virtual const std::vector<node> &nodes() const = 0;
 
   /**
    * @brief Return the position of a node in the vector of nodes of the graph
    * @param n The node for which the position is requested
    */
-  virtual unsigned int nodePos(const node n) const =0;
+  virtual unsigned int nodePos(const node n) const = 0;
 
   /**
    * @brief Gets an iterator over this graph's nodes.
@@ -811,7 +861,7 @@ public:
    * @see getInOutNodes()
    * @see getEdges()
    */
-  virtual Iterator<node>* getNodes() const =0;
+  virtual Iterator<node> *getNodes() const = 0;
 
   /**
    * @brief Gets the i-th node in the input nodes of a given node.
@@ -834,7 +884,7 @@ public:
    * @see getInNodes()
    * @see getInEdges()
    */
-  virtual node getInNode(const node n,unsigned int i)const =0;
+  virtual node getInNode(const node n, unsigned int i) const = 0;
 
   /**
    * @brief Gets an iterator over the input nodes of a node.
@@ -844,7 +894,7 @@ public:
    * @see getInOutNodes()
    * @see getInEdges()
    */
-  virtual Iterator<node>* getInNodes(const node n) const =0;
+  virtual Iterator<node> *getInNodes(const node n) const = 0;
 
   /**
    * @brief Gets the i-th node in the output nodes of a given node.
@@ -867,7 +917,7 @@ public:
    * @see getOutNodes()
    * @see getOutEdges()
    */
-  virtual node getOutNode(const node n,unsigned int i) const =0;
+  virtual node getOutNode(const node n, unsigned int i) const = 0;
 
   /**
    * @brief Gets an iterator over the output nodes of a node.
@@ -877,14 +927,14 @@ public:
    * @see getInOutNodes()
    * @see getOutEdges()
    */
-  virtual Iterator<node>* getOutNodes(const node n) const =0;
+  virtual Iterator<node> *getOutNodes(const node n) const = 0;
 
   /**
    * @brief Gets an iterator over the neighbors of a given node.
    * @param n The node to retrieve the neighbors of.
    * @return An iterator over the node's neighbors.
    */
-  virtual Iterator<node>* getInOutNodes(const node n) const =0;
+  virtual Iterator<node> *getInOutNodes(const node n) const = 0;
 
   /**
    * @brief Gets an iterator performing a breadth-first search on the graph.
@@ -893,7 +943,7 @@ public:
    * If there is no source node in the graph, a random node will be picked.
    * @return A stable iterator over the graph nodes in the BFS order.
    */
-  virtual Iterator<node>* bfs(const node root = node()) const = 0;
+  virtual Iterator<node> *bfs(const node root = node()) const = 0;
 
   /**
    * @brief Gets an iterator performing a depth-first search on the graph.
@@ -902,7 +952,7 @@ public:
    * If there is no source node in the graph, a random node will be picked.
    * @return A stable iterator over the graph nodes in the DFS order.
    */
-  virtual Iterator<node>* dfs(const node root = node()) const = 0;
+  virtual Iterator<node> *dfs(const node root = node()) const = 0;
 
   /**
    * @brief Gets the underlying graph of a meta node.
@@ -910,20 +960,20 @@ public:
    * @return The Graph pointed to by the metanode.
    * @see getEdgeMetaInfo()
    */
-  virtual Graph* getNodeMetaInfo(const node metaNode) const = 0;
+  virtual Graph *getNodeMetaInfo(const node metaNode) const = 0;
 
   /**
    * @brief Return a const reference on the vector of edges of the graph
    * It is the fastest way to access to edges, Iterators are 25% slower.
    * @remark o(1)
    */
-  virtual const std::vector<edge>& edges() const =0;
+  virtual const std::vector<edge> &edges() const = 0;
 
   /**
    * @brief Return the position of an edge in the vector of edges of the graph
    * @param e The edge for which the position is requested
    */
-  virtual unsigned int edgePos(const edge e) const =0;
+  virtual unsigned int edgePos(const edge e) const = 0;
 
   /**
    * @brief Get an iterator over all the graph's edges.
@@ -932,13 +982,13 @@ public:
    * @see getOutEdges()
    * @see getInOutEdges()
    */
-  virtual Iterator<edge>* getEdges() const =0;
+  virtual Iterator<edge> *getEdges() const = 0;
 
   /**
    * @brief Returns the first edge in the graph.
    *
    */
-  virtual edge getOneEdge() const =0;
+  virtual edge getOneEdge() const = 0;
 
   /**
    * @brief Returns a random edge in the graph.
@@ -946,7 +996,7 @@ public:
    * @since Tulip 4.8
    *
    */
-  virtual edge getRandomEdge() const =0;
+  virtual edge getRandomEdge() const = 0;
 
   /**
    * @brief Gets an iterator over the output edges of a node.
@@ -956,7 +1006,7 @@ public:
    * @see getOutEdges()
    * @see getInOutEdges()
    */
-  virtual Iterator<edge>* getOutEdges(const node n) const =0;
+  virtual Iterator<edge> *getOutEdges(const node n) const = 0;
 
   /**
    * @brief Gets an iterator over the edges of a node.
@@ -966,7 +1016,7 @@ public:
    * @see getOutEdges()
    * @see getInEdges()
    */
-  virtual Iterator<edge>* getInOutEdges(const node n) const =0;
+  virtual Iterator<edge> *getInOutEdges(const node n) const = 0;
 
   /**
    * @brief Gets an iterator over the input edges of a node.
@@ -976,7 +1026,7 @@ public:
    * @see getOutEdges()
    * @see getInOutEdges()
    */
-  virtual Iterator<edge>* getInEdges(const node n) const =0;
+  virtual Iterator<edge> *getInEdges(const node n) const = 0;
 
   /**
    * @brief Gets all input/output edges of a node existing in the root graph
@@ -985,7 +1035,7 @@ public:
    * @param n The node to get the input/ouput edges from.
    * @return a const reference to the vector of all edges of a node
    */
-  virtual const std::vector<edge>& allEdges(const node n) const =0;
+  virtual const std::vector<edge> &allEdges(const node n) const = 0;
 
   /**
    * @brief Gets an iterator over the edges composing a meta edge.
@@ -993,14 +1043,14 @@ public:
    * @return An Iterator over the edges composing the metaEdge.
    * @see getNodeMetaInfo()
    */
-  virtual Iterator<edge>* getEdgeMetaInfo(const edge metaEdge) const =0;
+  virtual Iterator<edge> *getEdgeMetaInfo(const edge metaEdge) const = 0;
 
   /**
    * @brief sort the graph elements in ascending order
    * @warning: That operation modify the vector of nodes and the vector of edges
    * and thus devalidate all iterators.
    */
-  virtual void sortElts()=0;
+  virtual void sortElts() = 0;
 
   //================================================================================
   // Graph, nodes and edges information about the graph stucture
@@ -1018,55 +1068,55 @@ public:
    * @return The number of nodes in this graph.
    * @see numberOfEdges()
    */
-  virtual unsigned int numberOfNodes()const =0;
+  virtual unsigned int numberOfNodes() const = 0;
 
   /**
    * @brief Gets the number of edges in this graph.
    * @return The number of edges in this graph.
    * @see numberOfNodes()
    */
-  virtual unsigned int numberOfEdges()const =0;
+  virtual unsigned int numberOfEdges() const = 0;
 
   /**
    * @param n The node to get the degree of.
    * @return The degree of the given node.
    */
-  virtual unsigned int deg(const node n)const =0;
+  virtual unsigned int deg(const node n) const = 0;
 
   /**
    * @brief Get the input degree of a node.
    * @param n The node to get the input degree of.
    * @return The input degree of the given node.
    */
-  virtual unsigned int indeg(const node n)const =0;
+  virtual unsigned int indeg(const node n) const = 0;
 
   /**
    * @brief Get the output degree of a node.
    * @param n The node to get the output degree of.
    * @return The output degree of the given node.
    */
-  virtual unsigned int outdeg(const node n)const =0;
+  virtual unsigned int outdeg(const node n) const = 0;
 
   /**
    * @brief Gets the source of an edge.
    * @param e The edge to get the source of.
    * @return The source of the given edge.
    */
-  virtual node source(const edge e)const =0;
+  virtual node source(const edge e) const = 0;
 
   /**
    * @brief Gets the target of an edge.
    * @param e The edge to get the target of.
    * @return The target of the given edge.
    */
-  virtual node target(const edge e)const =0;
+  virtual node target(const edge e) const = 0;
 
   /**
    * @brief Gets the source and the target of an edge.
    * @param e The edge to get the ends of.
    * @return A pair whose first element is the source, and second is the target.
    */
-  virtual const std::pair<node, node>& ends(const edge e)const=0;
+  virtual const std::pair<node, node> &ends(const edge e) const = 0;
 
   /**
    * @brief Gets the opposite node  of n through e.
@@ -1074,35 +1124,35 @@ public:
    * @param n The node at one end of e.
    * @return The node at the other end of e.
    */
-  virtual node opposite(const edge e, const node n)const =0;
+  virtual node opposite(const edge e, const node n) const = 0;
 
   /**
    * @brief Checks if an element belongs to this graph.
    * @param n The node to check if it is an element of the graph.
    * @return Whether or not the element belongs to the graph.
    */
-  virtual bool isElement(const node n) const =0;
+  virtual bool isElement(const node n) const = 0;
 
   /**
    * @brief Checks if a node is a meta node.
    * @param n The node to check if it is a meta node.
    * @return Whether or not the node is a meta node.
    */
-  virtual bool isMetaNode(const node n) const =0;
+  virtual bool isMetaNode(const node n) const = 0;
 
   /**
    * @brief Checks if an element belongs to this graph.
    * @param e The edge to check if it is an element of the graph.
    * @return Whether or not the element belongs to the graph.
    */
-  virtual bool isElement(const edge e) const =0;
+  virtual bool isElement(const edge e) const = 0;
 
   /**
    * @brief Checks if an edge is a meta edge.
    * @param e The edge to check if it is a meta edge.
    * @return Whether or not the edge is a meta edge.
    */
-  virtual bool isMetaEdge(const edge e) const =0;
+  virtual bool isMetaEdge(const edge e) const = 0;
 
   /**
    * @brief Checks if an edge exists between two given nodes.
@@ -1111,11 +1161,9 @@ public:
    * @param directed When set to false edges from target to source are also considered
    * @return true if such an edge exists
    */
-  virtual bool hasEdge(const node source, const node target,
-                       bool directed = true) const {
+  virtual bool hasEdge(const node source, const node target, bool directed = true) const {
     return existEdge(source, target, directed).isValid();
   }
-
 
   /**
    * @brief Returns all the edges between two nodes.
@@ -1125,7 +1173,7 @@ public:
    * @return a vector of existing edges
    */
   virtual std::vector<edge> getEdges(const node source, const node target,
-                                     bool directed = true) const=0;
+                                     bool directed = true) const = 0;
 
   /**
    * @brief Returns the first edge found between the two given nodes.
@@ -1137,8 +1185,7 @@ public:
    * an edge from target to source may also be returned
    * @return An edge that is only valid if it exists.
    */
-  virtual edge existEdge(const node source, const node target,
-                         bool directed = true) const=0;
+  virtual edge existEdge(const node source, const node target, bool directed = true) const = 0;
 
   //================================================================================
   // Access to the graph attributes and to the node/edge property.
@@ -1162,7 +1209,7 @@ public:
    * The attributes contains the name and any user-defined value.
    * @return The attributes of the graph.
    */
-  const DataSet & getAttributes() const {
+  const DataSet &getAttributes() const {
     return const_cast<Graph *>(this)->getNonConstAttributes();
   }
 
@@ -1172,30 +1219,30 @@ public:
    * @param value The value to set.
    * @return Whether the setting of the attribute was sucessful.
    */
-  template<typename ATTRIBUTETYPE>
-  bool getAttribute(const std::string &name, ATTRIBUTETYPE& value) const;
+  template <typename ATTRIBUTETYPE>
+  bool getAttribute(const std::string &name, ATTRIBUTETYPE &value) const;
 
   /**
    * @brief Gets a copy of the attribute.
    * @param name The name of the attribute to retrieve.
    * @return A copy of the attribute to retrieve.
    */
-  DataType* getAttribute(const std::string& name) const;
+  DataType *getAttribute(const std::string &name) const;
 
   /**
    * @brief Sets an attribute on the graph.
    * @param name The name of the attribute to set.
    * @param value The value to set on this attribute.
    */
-  template<typename ATTRIBUTETYPE>
-  void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
+  template <typename ATTRIBUTETYPE>
+  void setAttribute(const std::string &name, const ATTRIBUTETYPE &value);
 
   /**
    * @brief Sets an attribute on the graph.
    * @param name The name of the attribute to set.
    * @param value The value to set.
    */
-  void setAttribute(const std::string &name, const DataType* value);
+  void setAttribute(const std::string &name, const DataType *value);
 
   /**
    * @brief Removes an attribute on the graph.
@@ -1229,7 +1276,7 @@ public:
    * @param name The unique identifier of the property.
    * @param prop The property to add.
    */
-  virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
+  virtual void addLocalProperty(const std::string &name, PropertyInterface *prop) = 0;
 
   /**
    * @brief Gets an existing property.
@@ -1241,7 +1288,7 @@ public:
    * @param name The unique identifier of the property.
    * @return An existing property, or NULL if no property with the given name exists.
    */
-  virtual PropertyInterface* getProperty(const std::string& name) const = 0;
+  virtual PropertyInterface *getProperty(const std::string &name) const = 0;
 
   /**
    * @brief Gets a property on this graph.
@@ -1255,8 +1302,8 @@ public:
    * @param The unique identifier of the property.
    * @return The property of given name.
    */
-  template<typename PropertyType>
-  PropertyType* getLocalProperty(const std::string &name);
+  template <typename PropertyType>
+  PropertyType *getLocalProperty(const std::string &name);
 
   /**
    * @brief Gets a property on this graph or one of its ancestors.
@@ -1266,104 +1313,111 @@ public:
    * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
-   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid
+   * property type will always return NULL.
    * @param name The unique identifier of the property.
    * @return An existing property, or a new one if none exists with the given name.
    */
-  template<typename PropertyType>
-  PropertyType* getProperty(const std::string &name);
+  template <typename PropertyType>
+  PropertyType *getProperty(const std::string &name);
 
   /**
    * @brief Gets a property on this graph, and this graph only.
-   * This forwards the call to the template version of getLocalProperty(), with the correct template parameter deduced from the propertyType parameter.
+   * This forwards the call to the template version of getLocalProperty(), with the correct template
+   * parameter deduced from the propertyType parameter.
    *
    * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
-   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid
+   * property type will always return NULL.
    * @param propertyName The unique identifier of the property.
    * @param propertyType A string describing the type of the property.
    * @return The property of given name.
    * @see getLocalProperty().
    */
-  PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
+  PropertyInterface *getLocalProperty(const std::string &propertyName,
+                                      const std::string &propertyType);
 
   /**
    * @brief Gets a property on this graph or one of its ancestors.
-   * This forwards the call to the template version of getProperty(), with the correct template parameter deduced from the propertyType parameter.
+   * This forwards the call to the template version of getProperty(), with the correct template
+   * parameter deduced from the propertyType parameter.
    *
    * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
-   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid
+   * property type will always return NULL.
    * @param propertyName The unique identifier of the property.
    * @param propertyType A string describing the type of the property.
    * @return The property of given name.
    * @see getProperty().
    */
-  PropertyInterface *getProperty(const std::string& propertyName, const std::string& propertyType);
+  PropertyInterface *getProperty(const std::string &propertyName, const std::string &propertyType);
 
   /**
    * @brief Checks if a property exists in this graph or one of its ancestors.
    * @param The unique identifier of the property.
    * @return Whether a property with the given name exists.
    */
-  virtual  bool existProperty(const std::string& name) const = 0;
+  virtual bool existProperty(const std::string &name) const = 0;
 
   /**
    * @brief Checks if a property exists in this graph.
    * @param The unique identifier of the property.
    * @return Whether a property with the given name exists.
    */
-  virtual  bool existLocalProperty(const std::string& name) const = 0;
+  virtual bool existLocalProperty(const std::string &name) const = 0;
 
   /**
    * @brief Removes and deletes a property from this graph.
-   * The property is removed from the graph's property pool, meaning its name can now be used by another property.
+   * The property is removed from the graph's property pool, meaning its name can now be used by
+   * another property.
    * The object is deleted and the memory freed.
    * @param name The unique identifier of the property.
    */
-  virtual  void delLocalProperty(const std::string& name)=0;
+  virtual void delLocalProperty(const std::string &name) = 0;
 
   /**
    * @brief Gets an iterator over the names of the local properties of this graph.
    * @return An iterator over this graph's properties names.
    */
-  virtual Iterator<std::string>* getLocalProperties() const=0;
+  virtual Iterator<std::string> *getLocalProperties() const = 0;
 
   /**
    * @brief Gets an iterator over the local properties of this graph.
    * @return An iterator over this graph's properties.
    */
-  virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
+  virtual Iterator<PropertyInterface *> *getLocalObjectProperties() const = 0;
 
   /**
    * @brief Gets an iterator over the names of the properties inherited from this graph's ancestors,
    * excluding this graph's local properties.
    * @return An iterator over the names of the properties this graph inherited.
    */
-  virtual Iterator<std::string>* getInheritedProperties() const=0;
+  virtual Iterator<std::string> *getInheritedProperties() const = 0;
 
   /**
    * @brief Gets an iterator over the properties inherited from this graph's ancestors,
    * excluding this graph's local properties.
    * @return An iterator over the properties this graph inherited.
    */
-  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
+  virtual Iterator<PropertyInterface *> *getInheritedObjectProperties() const = 0;
 
   /**
    * @brief Gets an iterator over the names of all the properties attached to this graph,
    * whether they are local or inherited.
    * @return An iterator over the names of all the properties attached to this graph.
    */
-  virtual Iterator<std::string>* getProperties() const=0;
+  virtual Iterator<std::string> *getProperties() const = 0;
 
   /**
    * @brief Gets an iterator over the properties attached to this graph,
    * whether they are local or inherited.
    * @return An iterator over all of the properties attached to this graph.
    */
-  virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
+  virtual Iterator<PropertyInterface *> *getObjectProperties() const = 0;
 
   /**
    * @brief Runs a plugin on the graph, whose result is a property.
@@ -1371,25 +1425,28 @@ public:
    * @param algorithm The name of the plugin to run.
    * @param result The property in which to put the results. All previous values will be erased.
    * @param errorMessage Stores the error message if the plugin fails.
-   * @param progress A means of feedback during the plugin execution. Some plugins support being stopped or cancelled through this.
-   * @param parameters The parameters of the algorithm. Some algorithms use this DataSet to output some additional information.
+   * @param progress A means of feedback during the plugin execution. Some plugins support being
+   * stopped or cancelled through this.
+   * @param parameters The parameters of the algorithm. Some algorithms use this DataSet to output
+   * some additional information.
    * @return Whether the plugin executed successfully or not. If not, check the error message.
    *
-   * @see PluginLister::getPluginParameters() to retrieve the list of default parameters for the pligin.
+   * @see PluginLister::getPluginParameters() to retrieve the list of default parameters for the
+   * pligin.
    */
-  bool applyPropertyAlgorithm(const std::string &algorithm,
-                              PropertyInterface* result,
-                              std::string &errorMessage,
-                              PluginProgress *progress=NULL,
-                              DataSet *parameters=NULL);
+  bool applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *result,
+                              std::string &errorMessage, PluginProgress *progress = NULL,
+                              DataSet *parameters = NULL);
 
   // updates management
   /**
-   * @brief Saves the current state of the whole graph hierarchy and allows to revert to this state later on, using pop().
+   * @brief Saves the current state of the whole graph hierarchy and allows to revert to this state
+   * later on, using pop().
    * All modifications except those altering the ordering of the edges will be undone.
    *
    * This allows to undo/redo modifications on a graph.
-   * This is mostly useful from a user interface point of view, but some algorithms use this mechanism to clean up before finishing.
+   * This is mostly useful from a user interface point of view, but some algorithms use this
+   * mechanism to clean up before finishing.
    * For instance:
    * @code
    * Graph* graph = tlp::newGraph();
@@ -1406,9 +1463,11 @@ public:
    * graph->applyPropertyAlgorithm("Degree", prop, errorMessage);
    *
    * // save this state to be able to revert to it later
-   * //however we do not want to allow to unpop(), which would go forward again to the state where prop contains 'Depth'.
+   * //however we do not want to allow to unpop(), which would go forward again to the state where
+   * prop contains 'Depth'.
    * //this saves some memory.
-   * //Also we always want to keep the value of our super property, so we pass it in the collection of properties to leave unaffected by the pop().
+   * //Also we always want to keep the value of our super property, so we pass it in the collection
+   * of properties to leave unaffected by the pop().
    * graph->push(false, propertiesToKeep);
    *
    * //compute the quality of this metric, or whatever makes sense
@@ -1425,7 +1484,8 @@ public:
    *
    * //if the degree was better, revert back to the state where its contents were in prop.
    * if(degreeQuality > depthQuality) {
-   *    //this does not affect superProperty, as we told the system not to consider it when recording modifications to potentially revert.
+   *    //this does not affect superProperty, as we told the system not to consider it when
+   * recording modifications to potentially revert.
    *    graph->pop();
    * }
    *
@@ -1436,7 +1496,8 @@ public:
    * @endcode
    *
    * @param unpopAllowed Whether or not to allow to re-do the modifications once they are undone.
-   * @param propertiesToPreserveOnPop A collection of properties whose state to preserve when using pop().
+   * @param propertiesToPreserveOnPop A collection of properties whose state to preserve when using
+   * pop().
    * @see pop()
    * @see popIfNoUpdates()
    * @see unpop()
@@ -1445,20 +1506,19 @@ public:
    * @see canPopThenUnPop()
    */
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
+                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = NULL) = 0;
 
   /**
    * @brief Undoes modifications and reverts the whole graph hierarchy back to a previous state.
    *
    * @param unpopAllowed Whether or not it is possible to redo what will be undoe by this call.
    */
-  virtual void pop(bool unpopAllowed = true)=0;
+  virtual void pop(bool unpopAllowed = true) = 0;
 
   /**
    * @brief abort last push if no updates have been recorded
    */
-  virtual void popIfNoUpdates()=0;
-
+  virtual void popIfNoUpdates() = 0;
 
   /**
    * @brief Re-perform actions that were undone using pop().
@@ -1494,30 +1554,32 @@ public:
    * graph->unpop();
    * @endcode
    */
-  virtual void unpop()=0;
+  virtual void unpop() = 0;
 
   /**
    * @brief Checks if there is a state to revert to.
    * @return Whether there was a previous call to push() that was not yet pop()'ed.
    */
-  virtual bool canPop()=0;
+  virtual bool canPop() = 0;
 
   /**
    * @brief Checks if the last undone modifications can be redone.
    * @return Whether it is possible to re-do modifications that have been undone by pop().
    */
-  virtual bool canUnpop()=0;
+  virtual bool canUnpop() = 0;
 
   /**
-   * @brief Checks if it is possible to call pop() and then unPop(), to undo then re-do modifications.
+   * @brief Checks if it is possible to call pop() and then unPop(), to undo then re-do
+   * modifications.
    * @return Whether it is possible to undo and then redo.
    */
-  virtual bool canPopThenUnpop()=0;
+  virtual bool canPopThenUnpop() = 0;
 
   // meta nodes management
   /**
    * @brief Creates a meta-node from a vector of nodes.
-   * Every edges from any node in the vector to another node of the graph will be replaced with meta edges
+   * Every edges from any node in the vector to another node of the graph will be replaced with meta
+   * edges
    * from the meta node to the other nodes.
    * @warning This method will fail when called on the root graph.
    *
@@ -1530,10 +1592,10 @@ public:
                       bool delAllEdge = true);
 
   /**
-   * @brief deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool delAllEdge = true) instead
+   * @brief deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool
+   * delAllEdge = true) instead
    */
-  _DEPRECATED node createMetaNode(const std::set<node> &nodeSet,
-                                  bool multiEdges = true,
+  _DEPRECATED node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true,
                                   bool delAllEdge = true);
 
   /**
@@ -1545,8 +1607,7 @@ public:
    * @param metaNodes will contains all the added meta nodes after the call
    *
    */
-  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                       std::vector<node>& metaNodes);
+  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node> &metaNodes);
   /**
    * @brief Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
@@ -1557,7 +1618,7 @@ public:
    * @param multiEdges indicates if a meta edge will be created for each underlying edge
    * @param delAllEdge indicates if the underlying edges will be removed from the entire hierarchy
    */
-  node createMetaNode(Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
+  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
 
   /**
    * @brief Opens a metanode and replaces all edges between that
@@ -1566,127 +1627,127 @@ public:
    * @warning this method will fail when called on the root graph.
    *
    * @param n The meta node to open.
-   * @param updateProperties If set to true, open meta node will update inner nodes layout, color, size, etc
+   * @param updateProperties If set to true, open meta node will update inner nodes layout, color,
+   * size, etc
    */
-  void openMetaNode(node n, bool updateProperties=true);
+  void openMetaNode(node n, bool updateProperties = true);
 
-///@cond DOXYGEN_HIDDEN
+  ///@cond DOXYGEN_HIDDEN
 protected:
   virtual DataSet &getNonConstAttributes() = 0;
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
-  virtual void restoreNode(node)=0;
-  virtual void restoreEdge(edge, node source, node target)=0;
+  virtual void restoreNode(node) = 0;
+  virtual void restoreEdge(edge, node source, node target) = 0;
   // designed to only update own structures
   // used by GraphUpdatesRecorder
-  virtual void removeNode(const node)=0;
-  virtual void removeEdge(const edge)=0;
+  virtual void removeNode(const node) = 0;
+  virtual void removeEdge(const edge) = 0;
 
   // to check if a property can be deleted
   // used by PropertyManager
-  virtual bool canDeleteProperty(Graph* g, PropertyInterface *prop) {
+  virtual bool canDeleteProperty(Graph *g, PropertyInterface *prop) {
     return getRoot()->canDeleteProperty(g, prop);
   }
 
   // local property renaming
   // can failed if a property with the same name already exists
-  virtual bool renameLocalProperty(PropertyInterface* prop,
-                                   const std::string& newName)=0;
+  virtual bool renameLocalProperty(PropertyInterface *prop, const std::string &newName) = 0;
 
   // internally used to deal with sub graph deletion
-  virtual void removeSubGraph(Graph*)=0;
-  virtual void clearSubGraphs()=0;
-  virtual void restoreSubGraph(Graph*)=0;
-  virtual void setSubGraphToKeep(Graph*)=0;
+  virtual void removeSubGraph(Graph *) = 0;
+  virtual void clearSubGraphs() = 0;
+  virtual void restoreSubGraph(Graph *) = 0;
+  virtual void setSubGraphToKeep(Graph *) = 0;
 
   // for notification of GraphObserver
   void notifyAddNode(const node n);
-  void notifyAddNode(Graph*, const node n) {
+  void notifyAddNode(Graph *, const node n) {
     notifyAddNode(n);
   }
   void notifyAddEdge(const edge e);
-  void notifyAddEdge(Graph*, const edge e) {
+  void notifyAddEdge(Graph *, const edge e) {
     notifyAddEdge(e);
   }
   void notifyBeforeSetEnds(const edge e);
-  void notifyBeforeSetEnds(Graph*, const edge e) {
+  void notifyBeforeSetEnds(Graph *, const edge e) {
     notifyBeforeSetEnds(e);
   }
   void notifyAfterSetEnds(const edge e);
-  void notifyAfterSetEnds(Graph*, const edge e) {
+  void notifyAfterSetEnds(Graph *, const edge e) {
     notifyAfterSetEnds(e);
   }
   void notifyDelNode(const node n);
-  void notifyDelNode(Graph*, const node n) {
+  void notifyDelNode(Graph *, const node n) {
     notifyDelNode(n);
   }
   void notifyDelEdge(const edge e);
-  void notifyDelEdge(Graph*, const edge e) {
+  void notifyDelEdge(Graph *, const edge e) {
     notifyDelEdge(e);
   }
   void notifyReverseEdge(const edge e);
-  void notifyReverseEdge(Graph*, const edge e) {
+  void notifyReverseEdge(Graph *, const edge e) {
     notifyReverseEdge(e);
   }
-  void notifyBeforeAddSubGraph(const Graph*);
-  void notifyAfterAddSubGraph(const Graph*);
-  void notifyBeforeAddSubGraph(Graph*, const Graph* sg) {
+  void notifyBeforeAddSubGraph(const Graph *);
+  void notifyAfterAddSubGraph(const Graph *);
+  void notifyBeforeAddSubGraph(Graph *, const Graph *sg) {
     notifyBeforeAddSubGraph(sg);
   }
-  void notifyAfterAddSubGraph(Graph*, const Graph* sg) {
+  void notifyAfterAddSubGraph(Graph *, const Graph *sg) {
     notifyAfterAddSubGraph(sg);
   }
-  void notifyBeforeDelSubGraph(const Graph*);
-  void notifyAfterDelSubGraph(const Graph*);
-  void notifyBeforeDelSubGraph(Graph*, const Graph* sg) {
+  void notifyBeforeDelSubGraph(const Graph *);
+  void notifyAfterDelSubGraph(const Graph *);
+  void notifyBeforeDelSubGraph(Graph *, const Graph *sg) {
     notifyBeforeDelSubGraph(sg);
   }
-  void notifyAfterDelSubGraph(Graph*, const Graph* sg) {
+  void notifyAfterDelSubGraph(Graph *, const Graph *sg) {
     notifyAfterDelSubGraph(sg);
   }
 
-  void notifyBeforeAddDescendantGraph(const Graph*);
-  void notifyAfterAddDescendantGraph(const Graph*);
-  void notifyBeforeDelDescendantGraph(const Graph*);
-  void notifyAfterDelDescendantGraph(const Graph*);
+  void notifyBeforeAddDescendantGraph(const Graph *);
+  void notifyAfterAddDescendantGraph(const Graph *);
+  void notifyBeforeDelDescendantGraph(const Graph *);
+  void notifyAfterDelDescendantGraph(const Graph *);
 
-  void notifyBeforeAddLocalProperty(const std::string&);
-  void notifyAddLocalProperty(const std::string&);
-  void notifyAddLocalProperty(Graph*, const std::string& name) {
+  void notifyBeforeAddLocalProperty(const std::string &);
+  void notifyAddLocalProperty(const std::string &);
+  void notifyAddLocalProperty(Graph *, const std::string &name) {
     notifyAddLocalProperty(name);
   }
-  void notifyBeforeDelLocalProperty(const std::string&);
-  void notifyAfterDelLocalProperty(const std::string&);
-  void notifyDelLocalProperty(Graph*, const std::string& name) {
+  void notifyBeforeDelLocalProperty(const std::string &);
+  void notifyAfterDelLocalProperty(const std::string &);
+  void notifyDelLocalProperty(Graph *, const std::string &name) {
     notifyBeforeDelLocalProperty(name);
   }
-  void notifyBeforeSetAttribute(const std::string&);
-  void notifyBeforeSetAttribute(Graph*, const std::string& name) {
+  void notifyBeforeSetAttribute(const std::string &);
+  void notifyBeforeSetAttribute(Graph *, const std::string &name) {
     notifyBeforeSetAttribute(name);
   }
-  void notifyAfterSetAttribute(const std::string&);
-  void notifyAfterSetAttribute(Graph*, const std::string& name) {
+  void notifyAfterSetAttribute(const std::string &);
+  void notifyAfterSetAttribute(Graph *, const std::string &name) {
     notifyAfterSetAttribute(name);
   }
-  void notifyRemoveAttribute(const std::string&);
-  void notifyRemoveAttribute(Graph*, const std::string& name) {
+  void notifyRemoveAttribute(const std::string &);
+  void notifyRemoveAttribute(Graph *, const std::string &name) {
     notifyRemoveAttribute(name);
   }
   void notifyDestroy();
-  void notifyDestroy(Graph*) {
+  void notifyDestroy(Graph *) {
     notifyDestroy();
   }
 
   unsigned int id;
-  TLP_HASH_MAP<std::string, tlp::PropertyInterface*> circularCalls;
-///@endcond
+  TLP_HASH_MAP<std::string, tlp::PropertyInterface *> circularCalls;
+  ///@endcond
 };
 
 /**
  * @ingroup Observation
  * Event class for specific events on Graph
  **/
-class TLP_SCOPE GraphEvent :public Event {
+class TLP_SCOPE GraphEvent : public Event {
 public:
   // be careful about the ordering of the constants
   // in the enum below because it is used in some assertions
@@ -1724,9 +1785,9 @@ public:
   };
 
   // constructor for node/edge/nodes/edges events
-  GraphEvent(const Graph& g, GraphEventType graphEvtType, unsigned int id,
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, unsigned int id,
              Event::EventType evtType = Event::TLP_MODIFICATION)
-    : Event(g, evtType), evtType(graphEvtType) {
+      : Event(g, evtType), evtType(graphEvtType) {
     if (graphEvtType == TLP_ADD_NODES || graphEvtType == TLP_ADD_EDGES)
       info.nbElts = id;
     else
@@ -1735,35 +1796,31 @@ public:
     vectInfos.addedNodes = NULL;
   }
   // constructor for subgraph events
-  GraphEvent(const Graph& g, GraphEventType graphEvtType,
-             const Graph* sg)
-    : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, const Graph *sg)
+      : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
     info.subGraph = sg;
     vectInfos.addedNodes = NULL;
   }
 
   // constructor for attribute/property events
-  GraphEvent(const Graph& g, GraphEventType graphEvtType,
-             const std::string& str,
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, const std::string &str,
              Event::EventType evtType = Event::TLP_MODIFICATION)
-    : Event(g, evtType), evtType(graphEvtType) {
+      : Event(g, evtType), evtType(graphEvtType) {
     info.name = new std::string(str);
     vectInfos.addedNodes = NULL;
   }
 
   // constructor for rename property events
-  GraphEvent(const Graph& g, GraphEventType graphEvtType,
-             PropertyInterface* prop,
-             const std::string& newName)
-    : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
-    info.renamedProp =
-      new std::pair<PropertyInterface*,std::string>(prop, newName);
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, PropertyInterface *prop,
+             const std::string &newName)
+      : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
+    info.renamedProp = new std::pair<PropertyInterface *, std::string>(prop, newName);
     vectInfos.addedNodes = NULL;
   }
 
   ~GraphEvent();
 
-  Graph* getGraph() const {
+  Graph *getGraph() const {
     return static_cast<Graph *>(sender());
   }
 
@@ -1777,44 +1834,44 @@ public:
     return edge(info.eltId);
   }
 
-  const std::vector<node>& getNodes() const;
+  const std::vector<node> &getNodes() const;
 
   unsigned int getNumberOfNodes() const {
     assert(evtType == TLP_ADD_NODES);
     return info.nbElts;
   }
 
-  const std::vector<edge>& getEdges() const;
+  const std::vector<edge> &getEdges() const;
 
   unsigned int getNumberOfEdges() const {
     assert(evtType == TLP_ADD_EDGES);
     return info.nbElts;
   }
 
-  const Graph* getSubGraph() const {
+  const Graph *getSubGraph() const {
     assert(evtType > TLP_ADD_EDGES && evtType < TLP_ADD_LOCAL_PROPERTY);
     return info.subGraph;
   }
 
-  const std::string& getAttributeName() const {
+  const std::string &getAttributeName() const {
     assert(evtType > TLP_AFTER_DEL_INHERITED_PROPERTY);
     return *(info.name);
   }
 
-  const std::string& getPropertyName() const;
+  const std::string &getPropertyName() const;
 
-  PropertyInterface* getProperty() const {
+  PropertyInterface *getProperty() const {
     assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
            evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
     return info.renamedProp->first;
   }
 
-  const std::string& getPropertyNewName() const {
+  const std::string &getPropertyNewName() const {
     assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY);
     return info.renamedProp->second;
   }
 
-  const std::string& getPropertyOldName() const {
+  const std::string &getPropertyOldName() const {
     assert(evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
     return info.renamedProp->second;
   }
@@ -1827,21 +1884,20 @@ protected:
   GraphEventType evtType;
   union {
     unsigned int eltId;
-    const Graph* subGraph;
-    std::string* name;
+    const Graph *subGraph;
+    std::string *name;
     unsigned int nbElts;
-    std::pair<PropertyInterface*, std::string>* renamedProp;
+    std::pair<PropertyInterface *, std::string> *renamedProp;
   } info;
   union {
-    std::vector<node>* addedNodes;
-    std::vector<edge>* addedEdges;
+    std::vector<node> *addedNodes;
+    std::vector<edge> *addedEdges;
   } vectInfos;
 };
-
 }
 
-///Print the graph (only nodes and edges) in ostream, in the tulip format
-TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
+/// Print the graph (only nodes and edges) in ostream, in the tulip format
+TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
 
 //================================================================================
 // these functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. hashmap).
@@ -1850,13 +1906,18 @@ TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 TLP_BEGIN_HASH_NAMESPACE {
   template <>
   struct TLP_SCOPE hash<const tlp::Graph *> {
-    size_t operator()(const tlp::Graph *s) const {return size_t(s->getId());}
+    size_t operator()(const tlp::Graph *s) const {
+      return size_t(s->getId());
+    }
   };
   template <>
   struct TLP_SCOPE hash<tlp::Graph *> {
-    size_t operator()(tlp::Graph *s) const {return size_t(s->getId());}
+    size_t operator()(tlp::Graph *s) const {
+      return size_t(s->getId());
+    }
   };
-} TLP_END_HASH_NAMESPACE
+}
+TLP_END_HASH_NAMESPACE
 ///@endcond
 
 #include "cxx/Graph.cxx"

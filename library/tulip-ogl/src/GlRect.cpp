@@ -22,19 +22,19 @@ using namespace std;
 
 namespace tlp {
 
-GlRect::GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol, bool filled,
-               bool outlined) :
-  GlPolygon(4u, 4u, 4u, filled, outlined) {
+GlRect::GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol,
+               const Color &bottomRightCol, bool filled, bool outlined)
+    : GlPolygon(4u, 4u, 4u, filled, outlined) {
 
-  invertYTexture=false;
+  invertYTexture = false;
 
   vector<Coord> coords;
   coords.push_back(topLeftPos);
   coords.push_back(topLeftPos);
   coords.push_back(bottomRightPos);
   coords.push_back(bottomRightPos);
-  coords[1][0]=bottomRightPos[0];
-  coords[3][0]=topLeftPos[0];
+  coords[1][0] = bottomRightPos[0];
+  coords[3][0] = topLeftPos[0];
 
   setPoints(coords);
 
@@ -44,17 +44,17 @@ GlRect::GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color
   setFillColor(3, bottomRightCol);
 }
 
-GlRect::GlRect(const Coord &center, const float width, const float height,
-               const Color &fillColor, const Color &outlineColor) :
-  GlPolygon(4u, 4u, 4u, true, true) {
+GlRect::GlRect(const Coord &center, const float width, const float height, const Color &fillColor,
+               const Color &outlineColor)
+    : GlPolygon(4u, 4u, 4u, true, true) {
 
-  invertYTexture=false;
+  invertYTexture = false;
 
   vector<Coord> coords;
-  coords.push_back(center+Coord(width/2.,height/2.,0));
-  coords.push_back(center+Coord(width/2.,-height/2.,0));
-  coords.push_back(center+Coord(-width/2.,-height/2.,0));
-  coords.push_back(center+Coord(-width/2.,height/2.0));
+  coords.push_back(center + Coord(width / 2., height / 2., 0));
+  coords.push_back(center + Coord(width / 2., -height / 2., 0));
+  coords.push_back(center + Coord(-width / 2., -height / 2., 0));
+  coords.push_back(center + Coord(-width / 2., height / 2.0));
   setPoints(coords);
 
   setFillColor(fillColor);
@@ -63,7 +63,8 @@ GlRect::GlRect(const Coord &center, const float width, const float height,
 
 //=====================================================
 /*
-GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor):
+GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color
+&outlineColor):
   GlPolygon(4u, 4u, 4u, true, true) {
 
   invertYTexture=false;
@@ -81,22 +82,19 @@ GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, co
 }
 */
 //=====================================================
-GlRect::GlRect(bool filled, bool outlined) :
-  GlPolygon(4u, 4u, 4u, filled, outlined) {
-}
+GlRect::GlRect(bool filled, bool outlined) : GlPolygon(4u, 4u, 4u, filled, outlined) {}
 //=====================================================
-GlRect::~GlRect() {
-}
+GlRect::~GlRect() {}
 //=====================================================
 Coord GlRect::getCenter() {
   return (point(0) + point(2)) / 2.f;
 }
 //=====================================================
 void GlRect::setCenterAndSize(const Coord &center, const Size &size) {
-  points[0]=center+Coord(size[0]/2.,size[1]/2.,0);
-  points[1]=center+Coord(size[0]/2.,-size[1]/2.,0);
-  points[2]=center+Coord(-size[0]/2.,-size[1]/2.,0);
-  points[3]=center+Coord(-size[0]/2.,size[1]/2.,0);
+  points[0] = center + Coord(size[0] / 2., size[1] / 2., 0);
+  points[1] = center + Coord(size[0] / 2., -size[1] / 2., 0);
+  points[2] = center + Coord(-size[0] / 2., -size[1] / 2., 0);
+  points[3] = center + Coord(-size[0] / 2., size[1] / 2., 0);
 }
 //=====================================================
 Coord GlRect::getTopLeftPos() {
@@ -157,4 +155,3 @@ void GlRect::draw(float lod, Camera *camera) {
   GlPolygon::draw(lod, camera);
 }
 }
-

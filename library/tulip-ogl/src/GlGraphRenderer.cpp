@@ -35,40 +35,41 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphRenderer::GlGraphRenderer(const GlGraphInputData *inputData):inputData(inputData),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
-}
+GlGraphRenderer::GlGraphRenderer(const GlGraphInputData *inputData)
+    : inputData(inputData), graphModified(true), selectionDrawActivate(false), selectionIdMap(NULL),
+      selectionCurrentId(NULL) {}
 
 void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
-  Graph *graph=inputData->getGraph();
+  Graph *graph = inputData->getGraph();
 
-  if(!graph)
+  if (!graph)
     return;
 
-  visitNodes(graph,visitor,visitHiddenEntities);
-  visitEdges(graph,visitor,visitHiddenEntities);
+  visitNodes(graph, visitor, visitHiddenEntities);
+  visitEdges(graph, visitor, visitHiddenEntities);
 }
 
-void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
-  if(inputData->parameters->isDisplayNodes()|| inputData->parameters->isViewNodeLabel() || inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    const std::vector<node>& nodes = graph->nodes();
+void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities) {
+  if (inputData->parameters->isDisplayNodes() || inputData->parameters->isViewNodeLabel() ||
+      inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
+    const std::vector<node> &nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
     visitor->reserveMemoryForNodes(nbNodes);
 
 #ifdef HAVE_OMP
 
-    if(visitor->isThreadSafe()) {
-      #pragma omp parallel for
+    if (visitor->isThreadSafe()) {
+#pragma omp parallel for
 #endif
 
-      for(unsigned int i = 0; i < nbNodes; ++i) {
+      for (unsigned int i = 0; i < nbNodes; ++i) {
         GlNode glNode(nodes[i].id);
         glNode.acceptVisitor(visitor);
       }
 
 #ifdef HAVE_OMP
-    }
-    else {
-      for(unsigned int i = 0; i < nbNodes; ++i) {
+    } else {
+      for (unsigned int i = 0; i < nbNodes; ++i) {
         GlNode glNode(nodes[i].id);
         glNode.acceptVisitor(visitor);
       }
@@ -78,27 +79,27 @@ void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visit
   }
 }
 
-void GlGraphRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
-  if(inputData->parameters->isDisplayEdges() || inputData->parameters->isViewEdgeLabel() || inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    const std::vector<edge>& edges = graph->edges();
+void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities) {
+  if (inputData->parameters->isDisplayEdges() || inputData->parameters->isViewEdgeLabel() ||
+      inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
+    const std::vector<edge> &edges = graph->edges();
     unsigned int nbEdges = edges.size();
     visitor->reserveMemoryForEdges(nbEdges);
 
 #ifdef HAVE_OMP
 
-    if(visitor->isThreadSafe()) {
-      #pragma omp parallel for
+    if (visitor->isThreadSafe()) {
+#pragma omp parallel for
 #endif
 
-      for(unsigned int i = 0; i < nbEdges; ++i) {
+      for (unsigned int i = 0; i < nbEdges; ++i) {
         GlEdge glEdge(edges[i].id);
         glEdge.acceptVisitor(visitor);
       }
 
 #ifdef HAVE_OMP
-    }
-    else {
-      for(unsigned int i = 0; i < nbEdges; ++i) {
+    } else {
+      for (unsigned int i = 0; i < nbEdges; ++i) {
         GlEdge glEdge(edges[i].id);
         glEdge.acceptVisitor(visitor);
       }

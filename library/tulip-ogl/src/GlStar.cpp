@@ -18,24 +18,17 @@
  */
 #include <tulip/GlStar.h>
 
-const float startAngle = float(M_PI)/2.0f;
+const float startAngle = float(M_PI) / 2.0f;
 
 using namespace std;
 
 namespace tlp {
 
-GlStar::GlStar(const Coord &position,
-               const Size &size,
-               unsigned int numberOfStarPoints,
-               const Color &fillColor,
-               const Color &outlineColor,
-               bool outlined,
-               const string &textureName,
-               float outlineSize):
-  GlComplexPolygon(vector<Coord>(), fillColor, outlineColor, 0, textureName),
-  position(position),
-  size(size),
-  numberOfStarPoints(numberOfStarPoints) {
+GlStar::GlStar(const Coord &position, const Size &size, unsigned int numberOfStarPoints,
+               const Color &fillColor, const Color &outlineColor, bool outlined,
+               const string &textureName, float outlineSize)
+    : GlComplexPolygon(vector<Coord>(), fillColor, outlineColor, 0, textureName),
+      position(position), size(size), numberOfStarPoints(numberOfStarPoints) {
   setFillColor(fillColor);
   setOutlineColor(outlineColor);
   setOutlineMode(outlined);
@@ -44,8 +37,7 @@ GlStar::GlStar(const Coord &position,
   computeStar();
 }
 //=====================================================
-GlStar::~GlStar() {
-}
+GlStar::~GlStar() {}
 //=====================================================
 unsigned int GlStar::getNumberOfStarPoints() {
   return numberOfStarPoints;
@@ -58,24 +50,28 @@ void GlStar::computeStar() {
   vector<Coord> points;
   float delta = float(2.0 * M_PI / numberOfStarPoints);
 
-  for (unsigned int i=0; i < numberOfStarPoints; ++i) {
+  for (unsigned int i = 0; i < numberOfStarPoints; ++i) {
     float deltaX = cos(i * delta + startAngle);
     float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX,deltaY,0));
+    points.push_back(Coord(deltaX, deltaY, 0));
     box.expand(points.back());
-    deltaX = 0.5f * cos(i * delta + delta/2.0f + startAngle);
-    deltaY = 0.5f * sin(i * delta + delta/2.0f + startAngle);
-    points.push_back(Coord(deltaX,deltaY,0));
+    deltaX = 0.5f * cos(i * delta + delta / 2.0f + startAngle);
+    deltaY = 0.5f * sin(i * delta + delta / 2.0f + startAngle);
+    points.push_back(Coord(deltaX, deltaY, 0));
     box.expand(points.back());
   }
 
-  for(vector<Coord>::iterator it=points.begin(); it!=points.end(); ++it) {
-    (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.))/((box[1][0]-box[0][0])/2.))*size[0];
-    (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
+  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
+    (*it)[0] =
+        position[0] +
+        (((*it)[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0];
+    (*it)[1] =
+        position[1] +
+        (((*it)[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1];
   }
 
-  boundingBox.expand(position+size/2.f);
-  boundingBox.expand(position-size/2.f);
+  boundingBox.expand(position + size / 2.f);
+  boundingBox.expand(position - size / 2.f);
 
   createPolygon(points, 0);
   runTesselation();

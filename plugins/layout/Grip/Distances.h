@@ -19,10 +19,8 @@
 #ifndef DISTANCES_H
 #define DISTANCES_H
 
-
 #include <tulip/TulipPluginHeaders.h>
 
-
-unsigned int getDist(tlp::Graph*, tlp::node, tlp::node);
+unsigned int getDist(tlp::Graph *, tlp::node, tlp::node);
 
 #endif

@@ -32,5 +32,4 @@ void GlVertexArrayVisitor::visit(GlEdge *glEdge) {
 void GlVertexArrayVisitor::visit(GlNode *glNode) {
   inputData->getGlVertexArrayManager()->addNode(glNode);
 }
-
 }

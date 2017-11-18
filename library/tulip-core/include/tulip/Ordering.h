@@ -34,8 +34,7 @@ class PluginProgress;
 class PlanarConMap;
 
 class TLP_SCOPE Ordering {
-public :
-
+public:
   typedef struct FaceAndPos_ {
     Face face;
     node n_first;
@@ -46,23 +45,23 @@ public :
     return dummy_edge;
   }
 
-  Ordering(PlanarConMap * G, PluginProgress* pluginProgress = 0,
-           int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
+  Ordering(PlanarConMap *G, PluginProgress *pluginProgress = 0, int minProgress = 0,
+           int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
-//   inline void push_back(std::vector<node> nodeVector) {
+  //   inline void push_back(std::vector<node> nodeVector) {
   inline size_t size() {
     return _data.size();
   }
   inline std::vector<node> operator[](const unsigned int i) const {
     return _data[i];
   }
-  inline std::vector<node>& operator[](const unsigned int i) {
+  inline std::vector<node> &operator[](const unsigned int i) {
     return _data[i];
   }
 
-private :
+private:
   std::vector<std::vector<node> > _data;
-  PlanarConMap * Gp;
+  PlanarConMap *Gp;
   MutableContainer<int> oute;
   MutableContainer<int> outv;
   MutableContainer<bool> visitedNodes;
@@ -78,19 +77,21 @@ private :
   MutableContainer<node> left;
   MutableContainer<node> right;
   bool existMarkedF;
-  FaceAndPos minMarkedFace ;
+  FaceAndPos minMarkedFace;
   Face ext;
   std::vector<node> v1;
   std::vector<edge> dummy_edge;
 
   node getLastOfQ(Face f, node prec, node n, edge e);
-  node getLastOfP(Face f, node prec, node n,edge e);
+  node getLastOfP(Face f, node prec, node n, edge e);
   std::vector<node> getPathFrom(std::vector<node> fn, int from);
   int infFaceSize();
 
   void updateOutAndVisitedFaces(Face f);
   void updateContourLeftRight(node prec, node n, edge e, node last);
-  void updateNewSelectableNodes(node node_f, node no_tmp2,edge ed_tmp, node node_last,std::vector<Face> v_faces, bool one_face = false, bool was_visited = false, bool selection_face = false);
+  void updateNewSelectableNodes(node node_f, node no_tmp2, edge ed_tmp, node node_last,
+                                std::vector<Face> v_faces, bool one_face = false,
+                                bool was_visited = false, bool selection_face = false);
   void updateSelectableFaces(std::vector<Face> v_faces);
 
   int seqp(Face f);
@@ -110,9 +111,7 @@ private :
   void init_outv_oute();
   void init_seqP();
   void init_outerface();
-
 };
-
 }
 #endif
 

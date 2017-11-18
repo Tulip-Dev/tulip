@@ -69,26 +69,29 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-  // number of threads
-  "The number of threads to use during the computation of the layout.",
+    // number of threads
+    "The number of threads to use during the computation of the layout.",
 
-  // multilevel nodes bound
-  "The bound for the number of nodes in a multilevel step."
-};
+    // multilevel nodes bound
+    "The bound for the number of nodes in a multilevel step."};
 
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","The FMME layout algorithm is a variant of multilevel, force-directed layout, which utilizes various tools to speed up the computation.","1.1","Multilevel")
-  OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :
-    OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), fmme(new ogdf::FastMultipoleMultilevelEmbedder()) {
+  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)", "Martin Gronemann", "12/11/2007",
+                    "The FMME layout algorithm is a variant of multilevel, force-directed layout, "
+                    "which utilizes various tools to speed up the computation.",
+                    "1.1", "Multilevel")
+  OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),
+        fmme(new ogdf::FastMultipoleMultilevelEmbedder()) {
     addInParameter<int>("number of threads", paramHelp[0], "2");
     addInParameter<int>("multilevel nodes bound", paramHelp[1], "10");
 
-    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
     csl->setLayoutModule(fmme);
-
   }
 
   ~OGDFFastMultipoleMultiLevelEmbedder() {}
@@ -107,12 +110,10 @@ public:
 
     // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
     ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
-
   }
 
 private:
   ogdf::FastMultipoleMultilevelEmbedder *fmme;
 };
-
 
 PLUGIN(OGDFFastMultipoleMultiLevelEmbedder)

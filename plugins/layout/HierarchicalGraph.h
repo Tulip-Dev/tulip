@@ -24,7 +24,7 @@
 class LessThanNode2 {
 public:
   tlp::DoubleProperty *metric;
-  bool operator() (tlp::node n1, tlp::node n2) {
+  bool operator()(tlp::node n1, tlp::node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
   }
 };
@@ -45,29 +45,32 @@ public:
  *  pages 105 - 126.
  *
 */
-class HierarchicalGraph:public tlp::LayoutAlgorithm {
+class HierarchicalGraph : public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATION("Hierarchical Graph","David Auber","23/05/2000",
+  PLUGININFORMATION("Hierarchical Graph", "David Auber", "23/05/2000",
                     "Implements the hierarchical layout algorithm  first published as:<br/>"
-                    "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
-                    "1.0","Hierarchical")
-  HierarchicalGraph(const tlp::PluginContext* context);
+                    "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph "
+                    "Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
+                    "1.0", "Hierarchical")
+  HierarchicalGraph(const tlp::PluginContext *context);
   ~HierarchicalGraph();
   bool run();
 
 private:
-  void DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty* embedding);
-  std::vector< std::vector<tlp::node> > grid;
+  void DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty *embedding);
+  std::vector<std::vector<tlp::node> > grid;
   tlp::DoubleProperty *embedding;
-  void twoLayerCrossReduction(tlp::Graph* sg, unsigned int freeLayer);
-  void crossReduction(tlp::Graph* sg);
+  void twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer);
+  void crossReduction(tlp::Graph *sg);
   void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
-                        const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges);
-  void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
-  void buildGrid(tlp::Graph*);
-  unsigned int degree(tlp::Graph* sg, tlp::node n, bool sense);
-  void initCross(tlp::Graph* sg, tlp::node n, tlp::MutableContainer< bool >& visited, int id);
+                        const TLP_HASH_MAP<tlp::edge, tlp::edge> &replacedEdges,
+                        const std::vector<tlp::edge> &reversedEdges);
+  void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
+                        std::vector<tlp::SelfLoops> &listSelfLoops);
+  void buildGrid(tlp::Graph *);
+  unsigned int degree(tlp::Graph *sg, tlp::node n, bool sense);
+  void initCross(tlp::Graph *sg, tlp::node n, tlp::MutableContainer<bool> &visited, int id);
 
   LessThanNode2 lessNode;
   std::string orientation;
@@ -76,13 +79,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

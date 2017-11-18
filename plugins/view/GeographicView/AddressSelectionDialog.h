@@ -32,10 +32,9 @@ class AddressSelectionDialogData;
 namespace tlp {
 class AddressSelectionDialog : public QDialog {
 
-  Ui::AddressSelectionDialogData* _ui;
+  Ui::AddressSelectionDialogData *_ui;
 
-public :
-
+public:
   AddressSelectionDialog(QWidget *parent = 0);
   ~AddressSelectionDialog();
 
@@ -48,7 +47,6 @@ public :
   int getPickedResultIdx();
 
   bool rememberAddressChoice() const;
-
 };
 }
 #endif /* ADDRESSSELECTIONDIALOG_H_ */

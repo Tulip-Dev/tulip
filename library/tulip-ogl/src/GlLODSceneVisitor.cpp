@@ -29,16 +29,16 @@ using namespace std;
 namespace tlp {
 
 void GlLODSceneVisitor::visit(GlSimpleEntity *entity) {
-  if(entity->isVisible())
+  if (entity->isVisible())
     calculator->addSimpleEntityBoundingBox(entity, entity->getBoundingBox());
 }
 
 void GlLODSceneVisitor::visit(GlNode *glNode) {
-  calculator->addNodeBoundingBox(glNode->id,glNode->getBoundingBox(inputData));
+  calculator->addNodeBoundingBox(glNode->id, glNode->getBoundingBox(inputData));
 }
 
 void GlLODSceneVisitor::visit(GlEdge *glEdge) {
-  calculator->addEdgeBoundingBox(glEdge->id,glEdge->getBoundingBox(inputData));
+  calculator->addEdgeBoundingBox(glEdge->id, glEdge->getBoundingBox(inputData));
 }
 
 void GlLODSceneVisitor::visit(GlLayer *layer) {

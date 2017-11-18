@@ -23,21 +23,21 @@
 using namespace std;
 using namespace tlp;
 
-tlp::Graph* nullGraph = NULL;
+tlp::Graph *nullGraph = NULL;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( GraphPropertyTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(GraphPropertyTest);
 
 //==========================================================
 void GraphPropertyTest::setUp() {
-  graph    = tlp::newGraph();
-  //add three nodes
-  node n1=graph->addNode();
-  node n2=graph->addNode();
-  node n3=graph->addNode();
-  //add three edges
-  graph->addEdge(n2,n3);
-  graph->addEdge(n1,n2);
-  graph->addEdge(n3,n1);
+  graph = tlp::newGraph();
+  // add three nodes
+  node n1 = graph->addNode();
+  node n2 = graph->addNode();
+  node n3 = graph->addNode();
+  // add three edges
+  graph->addEdge(n2, n3);
+  graph->addEdge(n1, n2);
+  graph->addEdge(n3, n1);
 }
 //==========================================================
 void GraphPropertyTest::tearDown() {
@@ -45,11 +45,11 @@ void GraphPropertyTest::tearDown() {
 }
 //==========================================================
 void GraphPropertyTest::testDestroyGraph() {
-  //build the hierarchy
-  Graph * g1 = graph->addCloneSubGraph("G1");
-  Graph * g2 = graph->addCloneSubGraph("G2");
-  Graph * meta1 = graph->addSubGraph("META1");
-  GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
+  // build the hierarchy
+  Graph *g1 = graph->addCloneSubGraph("G1");
+  Graph *g2 = graph->addCloneSubGraph("G2");
+  Graph *meta1 = graph->addSubGraph("META1");
+  GraphProperty *proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
@@ -63,12 +63,12 @@ void GraphPropertyTest::testDestroyGraph() {
 }
 //==========================================================
 void GraphPropertyTest::testSetGet() {
-  //build the hierarchy
-  Graph * g1 = graph->addCloneSubGraph("G1");
-  Graph * g2 = graph->addCloneSubGraph("G2");
-  Graph * g3 = graph->addCloneSubGraph("G3");
-  Graph * meta1 = graph->addSubGraph("META1");
-  GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
+  // build the hierarchy
+  Graph *g1 = graph->addCloneSubGraph("G1");
+  Graph *g2 = graph->addCloneSubGraph("G2");
+  Graph *g3 = graph->addCloneSubGraph("G3");
+  Graph *meta1 = graph->addSubGraph("META1");
+  GraphProperty *proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
@@ -80,11 +80,11 @@ void GraphPropertyTest::testSetGet() {
 }
 //==========================================================
 void GraphPropertyTest::testSetAll() {
-  //build the hierarchy
-  Graph * g1 = graph->addCloneSubGraph("G1");
-  Graph * g2 = graph->addCloneSubGraph("G2");
-  Graph * g3 = graph->addCloneSubGraph("G3");
-  Graph * meta1 = graph->addSubGraph("META1");
+  // build the hierarchy
+  Graph *g1 = graph->addCloneSubGraph("G1");
+  Graph *g2 = graph->addCloneSubGraph("G2");
+  Graph *g3 = graph->addCloneSubGraph("G3");
+  Graph *meta1 = graph->addSubGraph("META1");
   GraphProperty proxy(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
@@ -98,7 +98,7 @@ void GraphPropertyTest::testSetAll() {
   graph->delSubGraph(g3);
   CPPUNIT_ASSERT_EQUAL(g1, proxy.getNodeValue(mnode1));
   CPPUNIT_ASSERT_EQUAL(g2, proxy.getNodeValue(mnode2));
-  CPPUNIT_ASSERT_EQUAL(nullGraph , proxy.getNodeValue(mnode3));
+  CPPUNIT_ASSERT_EQUAL(nullGraph, proxy.getNodeValue(mnode3));
   proxy.setAllNodeValue(0);
   graph->delSubGraph(g1);
   graph->delSubGraph(g2);

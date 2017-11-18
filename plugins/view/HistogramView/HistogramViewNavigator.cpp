@@ -32,8 +32,6 @@ namespace tlp {
 
 HistogramViewNavigator::HistogramViewNavigator() : histoView(NULL), selectedHistoOverview(NULL) {}
 
-
-
 HistogramViewNavigator::~HistogramViewNavigator() {}
 
 void HistogramViewNavigator::viewChanged(View *view) {
@@ -61,20 +59,21 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+        glWidget->screenToViewport(screenCoords)));
     selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
     return true;
-  }
-  else if (e->type() == QEvent::MouseButtonDblClick) {
+  } else if (e->type() == QEvent::MouseButtonDblClick) {
     if (selectedHistoOverview != NULL && histoView->smallMultiplesViewSet()) {
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedHistoOverview->getBoundingBox());
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
+                                                     selectedHistoOverview->getBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
       histoView->switchFromSmallMultiplesToDetailedView(selectedHistoOverview);
       selectedHistoOverview = NULL;
-    }
-    else if (!histoView->smallMultiplesViewSet()) {
+    } else if (!histoView->smallMultiplesViewSet()) {
       histoView->switchFromDetailedViewToSmallMultiples();
-      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, histoView->getSmallMultiplesBoundingBox());
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
+                                                     histoView->getSmallMultiplesBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
     }
 
@@ -88,7 +87,7 @@ Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoo
   Histogram *ret = NULL;
   vector<Histogram *> overviews = histoView->getHistograms();
 
-  for (vector<Histogram *>::const_iterator it = overviews.begin() ; it != overviews.end() ; ++it) {
+  for (vector<Histogram *>::const_iterator it = overviews.begin(); it != overviews.end(); ++it) {
     BoundingBox overviewBB((*it)->getBoundingBox());
 
     if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
@@ -100,5 +99,4 @@ Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoo
 
   return ret;
 }
-
 }

@@ -19,14 +19,12 @@
 
 #ifndef DYNAMICVECTOR_H_
 #define DYNAMICVECTOR_H_
-template<class T>
+template <class T>
 class DynamicVector {
 public:
-  DynamicVector() :
-    array(NULL), size(0) {
-  }
+  DynamicVector() : array(NULL), size(0) {}
 
-  DynamicVector(const DynamicVector<T>& vect) {
+  DynamicVector(const DynamicVector<T> &vect) {
     array = new T[vect.size];
     size = vect.size;
 
@@ -35,8 +33,7 @@ public:
     }
   }
 
-  DynamicVector(unsigned int size) :
-    size(size) {
+  DynamicVector(unsigned int size) : size(size) {
     array = new T[size];
   }
   virtual ~DynamicVector() {
@@ -44,20 +41,20 @@ public:
       delete[] array;
   }
 
-  inline DynamicVector<T>& operator=(const DynamicVector<T>&);
+  inline DynamicVector<T> &operator=(const DynamicVector<T> &);
 
   inline T operator[](const unsigned int i) const;
-  inline T& operator[](const unsigned int i);
+  inline T &operator[](const unsigned int i);
 
-  inline DynamicVector<T> & operator*=(const T &);
-  inline DynamicVector<T> & operator*=(const DynamicVector<T> &);
-  inline DynamicVector<T> & operator/=(const T &);
-  inline DynamicVector<T> & operator/=(const DynamicVector<T> &);
-  inline DynamicVector<T> & operator+=(const T &);
-  inline DynamicVector<T> & operator+=(const DynamicVector<T> &);
-  inline DynamicVector<T> & operator-=(const T &);
-  inline DynamicVector<T> & operator-=(const DynamicVector<T> &);
-  inline DynamicVector<T> & operator^=(const DynamicVector<T> &);
+  inline DynamicVector<T> &operator*=(const T &);
+  inline DynamicVector<T> &operator*=(const DynamicVector<T> &);
+  inline DynamicVector<T> &operator/=(const T &);
+  inline DynamicVector<T> &operator/=(const DynamicVector<T> &);
+  inline DynamicVector<T> &operator+=(const T &);
+  inline DynamicVector<T> &operator+=(const DynamicVector<T> &);
+  inline DynamicVector<T> &operator-=(const T &);
+  inline DynamicVector<T> &operator-=(const DynamicVector<T> &);
+  inline DynamicVector<T> &operator^=(const DynamicVector<T> &);
 
   inline DynamicVector<T> operator+(const DynamicVector<T> &) const;
   inline DynamicVector<T> operator+(const T &) const;
@@ -70,7 +67,7 @@ public:
 
   inline bool operator!=(const DynamicVector<T> &) const;
   inline bool operator==(const DynamicVector<T> &) const;
-  inline DynamicVector<T> & fill(const T &val);
+  inline DynamicVector<T> &fill(const T &val);
   inline T norm() const;
   inline T dist(const DynamicVector<T> &) const;
   inline T dotProduct(const DynamicVector<T> &) const;
@@ -78,15 +75,16 @@ public:
   inline unsigned int getSize() const {
     return size;
   }
+
 protected:
   T *array;
   unsigned int size;
 };
 
-template<class T>
-std::ostream& operator<<(std::ostream &os, const DynamicVector<T> &);
-template<class T>
-std::istream& operator>>(std::istream &is, DynamicVector<T> &);
+template <class T>
+std::ostream &operator<<(std::ostream &os, const DynamicVector<T> &);
+template <class T>
+std::istream &operator>>(std::istream &is, DynamicVector<T> &);
 
 #include "DynamicVector.cxx"
 #endif /* DYNAMICVECTOR_H_ */

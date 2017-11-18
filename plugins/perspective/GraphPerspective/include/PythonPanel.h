@@ -22,7 +22,6 @@
 
 #include <QWidget>
 
-
 namespace Ui {
 class PythonPanel;
 }
@@ -33,18 +32,15 @@ class GraphHierarchiesModel;
 
 class PythonPanel : public QWidget {
 
-
   Q_OBJECT
   Ui::PythonPanel *_ui;
 
-public :
-
+public:
   explicit PythonPanel(QWidget *parent = 0);
   ~PythonPanel();
-  void setModel(tlp::GraphHierarchiesModel* model);
+  void setModel(tlp::GraphHierarchiesModel *model);
 
 protected:
-
   void dragEnterEvent(QDragEnterEvent *);
   void dropEvent(QDropEvent *);
 

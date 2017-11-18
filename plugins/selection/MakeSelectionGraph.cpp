@@ -23,42 +23,42 @@
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // selection
-  "The property indicating the selected elements"
-};
+    // selection
+    "The property indicating the selected elements"};
 
-MakeSelectionGraph::MakeSelectionGraph(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addInParameter<BooleanProperty> ("selection", paramHelp[0], "viewSelection");
+MakeSelectionGraph::MakeSelectionGraph(const tlp::PluginContext *context)
+    : BooleanAlgorithm(context) {
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection");
 }
 
 bool MakeSelectionGraph::run() {
-  BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *sel = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if(dataSet!=NULL)
+  if (dataSet != NULL)
     dataSet->get("selection", sel);
 
   result->copy(sel);
-  unsigned added = makeSelectionGraph(graph,result);
+  unsigned added = makeSelectionGraph(graph, result);
 
-  //output some useful information
-  if (dataSet!=NULL)
+  // output some useful information
+  if (dataSet != NULL)
     dataSet->set("#elements added to the selection", added);
 
   return true;
 }
 
-isGraphTest::isGraphTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
-  addInParameter<BooleanProperty> ("selection", paramHelp[0], "viewSelection");
+isGraphTest::isGraphTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection");
 }
 
 bool isGraphTest::test() {
-  BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *sel = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if(dataSet!=NULL)
+  if (dataSet != NULL)
     dataSet->get("selection", sel);
 
   bool test;
-  makeSelectionGraph(graph,sel,&test);
+  makeSelectionGraph(graph, sel, &test);
   return test;
 }
 

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef CONSOLE_UTILS
 #define CONSOLE_UTILS
 
@@ -59,15 +58,15 @@ static bool processInForeground(void) {
   return fg == getpgrp();
 }
 
-
 static std::pair<int, int> getConsoleCursorPosition() {
-  int row=0, col=0;
+  int row = 0, col = 0;
 
   if (isatty(fileno(stdin)) && processInForeground()) {
     setConsoleSettingsForAnsiRequest();
     fprintf(stdout, "\x1b[6n");
 
-    if (fscanf(stdin, "\x1b[%d;%dR", &row, &col)) {}
+    if (fscanf(stdin, "\x1b[%d;%dR", &row, &col)) {
+    }
 
     resetConsoleSettings();
   }
@@ -76,12 +75,12 @@ static std::pair<int, int> getConsoleCursorPosition() {
 }
 
 static std::pair<int, int> getConsoleSize() {
-  int rows=-1, cols=-1;
+  int rows = -1, cols = -1;
   struct winsize ws;
 
-  if (ioctl(0,TIOCGWINSZ,&ws)==0) {
+  if (ioctl(0, TIOCGWINSZ, &ws) == 0) {
     rows = ws.ws_row;
-    cols =  ws.ws_col;
+    cols = ws.ws_col;
   }
 
   return std::make_pair(rows, cols);
@@ -90,10 +89,10 @@ static std::pair<int, int> getConsoleSize() {
 #elif defined(WIN32)
 
 inline std::pair<int, int> getConsoleCursorPosition() {
-  int row=0, col=0;
+  int row = 0, col = 0;
   CONSOLE_SCREEN_BUFFER_INFO SBInfo;
 
-  if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &SBInfo)) {
+  if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &SBInfo)) {
     row = SBInfo.dwCursorPosition.Y;
     col = SBInfo.dwCursorPosition.X;
   }
@@ -102,12 +101,12 @@ inline std::pair<int, int> getConsoleCursorPosition() {
 }
 
 inline std::pair<int, int> getConsoleSize() {
-  int rows=200, cols=200;
+  int rows = 200, cols = 200;
   CONSOLE_SCREEN_BUFFER_INFO SBInfo;
 
-  if(GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &SBInfo)) {
+  if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &SBInfo)) {
     rows = SBInfo.dwSize.Y;
-    cols = SBInfo.dwSize.X-1;
+    cols = SBInfo.dwSize.X - 1;
   }
 
   return std::make_pair(rows, cols);
@@ -115,45 +114,50 @@ inline std::pair<int, int> getConsoleSize() {
 
 #endif
 
-enum TextEffect {NORMAL=1, BOLD=2, UNDERLINED=4, BLINK=8};
+enum TextEffect { NORMAL = 1, BOLD = 2, UNDERLINED = 4, BLINK = 8 };
 
-enum TextColor {BLACK, RED, GREEN, YELLOW, BLUE,
-                MAGENTA, CYAN, LIGHT_GRAY, DARK_GRAY,
-                LIGHT_RED, LIGHT_GREEN, LIGHT_YELLOW,
-                LIGHT_BLUE, LIGHT_MAGENTA, LIGHT_CYAN, WHITE
-               };
+enum TextColor {
+  BLACK,
+  RED,
+  GREEN,
+  YELLOW,
+  BLUE,
+  MAGENTA,
+  CYAN,
+  LIGHT_GRAY,
+  DARK_GRAY,
+  LIGHT_RED,
+  LIGHT_GREEN,
+  LIGHT_YELLOW,
+  LIGHT_BLUE,
+  LIGHT_MAGENTA,
+  LIGHT_CYAN,
+  WHITE
+};
 
 class TextFgColorSetup {
 
-public :
-
-  TextFgColorSetup(TextColor color) :
-    color(color) {}
+public:
+  TextFgColorSetup(TextColor color) : color(color) {}
 
   TextColor color;
 };
 
 class TextBgColorSetup {
 
-public :
-
-  TextBgColorSetup(TextColor color) :
-    color(color) {}
+public:
+  TextBgColorSetup(TextColor color) : color(color) {}
 
   TextColor color;
 };
 
 class TextEffectSetup {
 
-public :
-
-  TextEffectSetup(int effect) :
-    effect(effect) {}
+public:
+  TextEffectSetup(int effect) : effect(effect) {}
 
   int effect;
 };
-
-
 
 static std::map<TextColor, std::string> initAnsiFgColors() {
   const char *colorterm = getenv("COLORTERM");
@@ -214,7 +218,7 @@ static std::map<TextColor, int> initCrtFgColors() {
   ret[BLUE] = FOREGROUND_BLUE;
   ret[MAGENTA] = FOREGROUND_BLUE | FOREGROUND_RED;
   ret[CYAN] = FOREGROUND_GREEN | FOREGROUND_BLUE;
-  ret[LIGHT_GRAY]= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+  ret[LIGHT_GRAY] = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
   ret[DARK_GRAY] = FOREGROUND_INTENSITY;
   ret[LIGHT_RED] = FOREGROUND_RED | FOREGROUND_INTENSITY;
   ret[LIGHT_GREEN] = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
@@ -235,7 +239,7 @@ static std::map<TextColor, int> initCrtBgColors() {
   ret[BLUE] = BACKGROUND_BLUE;
   ret[MAGENTA] = BACKGROUND_BLUE | BACKGROUND_RED;
   ret[CYAN] = BACKGROUND_GREEN | BACKGROUND_BLUE;
-  ret[LIGHT_GRAY]= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+  ret[LIGHT_GRAY] = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
   ret[DARK_GRAY] = BACKGROUND_INTENSITY;
   ret[LIGHT_RED] = BACKGROUND_RED | BACKGROUND_INTENSITY;
   ret[LIGHT_GREEN] = BACKGROUND_GREEN | BACKGROUND_INTENSITY;
@@ -251,20 +255,23 @@ static WORD getCurrentBgColor() {
   HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO info;
   GetConsoleScreenBufferInfo(hStdout, &info);
-  return info.wAttributes & (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
+  return info.wAttributes &
+         (BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }
 
 static WORD getCurrentFgColor() {
   HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO info;
   GetConsoleScreenBufferInfo(hStdout, &info);
-  return info.wAttributes & (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+  return info.wAttributes &
+         (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 }
 static std::map<TextColor, int> crtFgColors = initCrtFgColors();
 static std::map<TextColor, int> crtBgColors = initCrtBgColors();
 #endif
 
-static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode, const std::string &endEscape ="m") {
+static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode,
+                           const std::string &endEscape = "m") {
   static const char *stdOutNoAnsiEscapes = getenv("STDOUT_NO_ANSI_ESCAPES");
   static const char *stdErrNoAnsiEscapes = getenv("STDERR_NO_ANSI_ESCAPES");
 #ifndef WIN32
@@ -272,8 +279,7 @@ static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode, const 
   if ((&os == &std::cout && !stdOutNoAnsiEscapes && isatty(fileno(stdout))) ||
       (&os == &std::cerr && !stdErrNoAnsiEscapes && isatty(fileno(stderr))))
 #else
-  if ((&os == &std::cout && !stdOutNoAnsiEscapes) ||
-      (&os == &std::cerr && !stdErrNoAnsiEscapes))
+  if ((&os == &std::cout && !stdOutNoAnsiEscapes) || (&os == &std::cerr && !stdErrNoAnsiEscapes))
 #endif
     os << "\x1b[" << ansiCode << endEscape;
 }
@@ -289,18 +295,20 @@ static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode, const 
   Below is an example on how to use it :
 
   // Output a bold text colored in red on a white background
-  std::cout << setTextEffect(BOLD) << setTextColor(RED) << setTextBackgroundColor(WHITE) << "Hello World!" << std::endl;
+  std::cout << setTextEffect(BOLD) << setTextColor(RED) << setTextBackgroundColor(WHITE) << "Hello
+  World!" << std::endl;
 
   // Reset the text colors to the default ones
   std::cout << defaultTextColor;
 
-  // You can also use some predefined color schemes (only affects text color) : black, white, red, green,
+  // You can also use some predefined color schemes (only affects text color) : black, white, red,
+  green,
   // blue, yellow, white, cyan, magenta, darkGray, lightGray, lightRed, lightGreen, ...
   std::cout << red << "Hello " << blue << World !!" << defaulTextColor << std::endl;
 
  */
 
-inline std::ostream& defaultTextColor(std::ostream &s) {
+inline std::ostream &defaultTextColor(std::ostream &s) {
   if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, "0");
@@ -315,8 +323,7 @@ inline std::ostream& defaultTextColor(std::ostream &s) {
       escapeAnsiCode(s, "0");
       escapeAnsiCode(s, "39");
       escapeAnsiCode(s, "49");
-    }
-    else {
+    } else {
       HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
       SetConsoleTextAttribute(hStdout, crtBgColors[BLACK] | crtFgColors[WHITE]);
     }
@@ -327,7 +334,7 @@ inline std::ostream& defaultTextColor(std::ostream &s) {
   return s;
 }
 
-inline std::ostream& operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) {
+inline std::ostream &operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) {
   if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, ansiFgColors[tgfcs.color]);
@@ -338,8 +345,7 @@ inline std::ostream& operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) 
 
     if (term && std::string(term) != "cygwin") {
       escapeAnsiCode(s, ansiFgColors[tgfcs.color]);
-    }
-    else {
+    } else {
       HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
       SetConsoleTextAttribute(hStdout, crtFgColors[tgfcs.color] | getCurrentBgColor());
     }
@@ -350,7 +356,7 @@ inline std::ostream& operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) 
   return s;
 }
 
-inline std::ostream& operator<<(std::ostream &s, const TextBgColorSetup &tbgcs) {
+inline std::ostream &operator<<(std::ostream &s, const TextBgColorSetup &tbgcs) {
   if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, ansiBgColors[tbgcs.color]);
@@ -361,8 +367,7 @@ inline std::ostream& operator<<(std::ostream &s, const TextBgColorSetup &tbgcs) 
 
     if (term && std::string(term) != "cygwin") {
       escapeAnsiCode(s, ansiBgColors[tbgcs.color]);
-    }
-    else {
+    } else {
       HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
       SetConsoleTextAttribute(hStdout, getCurrentFgColor() | crtBgColors[tbgcs.color]);
     }
@@ -387,7 +392,7 @@ inline void setEffects(std::ostream &s, const int &effect) {
     escapeAnsiCode(s, "5");
 }
 
-inline std::ostream& operator<<(std::ostream &s, const TextEffectSetup &tes) {
+inline std::ostream &operator<<(std::ostream &s, const TextEffectSetup &tes) {
   if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     setEffects(s, tes.effect);
@@ -416,95 +421,95 @@ inline TextEffectSetup setTextEffect(int effect) {
   return TextEffectSetup(effect);
 }
 
-inline std::ostream& bold(std::ostream& s) {
+inline std::ostream &bold(std::ostream &s) {
   return s << setTextEffect(BOLD);
 }
 
-inline std::ostream& underlined(std::ostream& s) {
+inline std::ostream &underlined(std::ostream &s) {
   return s << setTextEffect(UNDERLINED);
 }
 
-inline std::ostream& red(std::ostream& s) {
+inline std::ostream &red(std::ostream &s) {
   return s << setTextColor(RED);
 }
 
-inline std::ostream& green(std::ostream& s) {
+inline std::ostream &green(std::ostream &s) {
   return s << setTextColor(GREEN);
 }
 
-inline std::ostream& blue(std::ostream& s) {
+inline std::ostream &blue(std::ostream &s) {
   return s << setTextColor(BLUE);
 }
 
-inline std::ostream& yellow(std::ostream& s) {
+inline std::ostream &yellow(std::ostream &s) {
   return s << setTextColor(YELLOW);
 }
 
-inline std::ostream& white(std::ostream& s) {
+inline std::ostream &white(std::ostream &s) {
   return s << setTextColor(WHITE);
 }
 
-inline std::ostream& black(std::ostream& s) {
+inline std::ostream &black(std::ostream &s) {
   return s << setTextColor(BLACK);
 }
 
-inline std::ostream& magenta(std::ostream& s) {
+inline std::ostream &magenta(std::ostream &s) {
   return s << setTextColor(MAGENTA);
 }
 
-inline std::ostream& cyan(std::ostream& s) {
+inline std::ostream &cyan(std::ostream &s) {
   return s << setTextColor(CYAN);
 }
 
-inline std::ostream& lightRed(std::ostream& s) {
+inline std::ostream &lightRed(std::ostream &s) {
   return s << setTextColor(LIGHT_RED);
 }
 
-inline std::ostream& lightGreen(std::ostream& s) {
+inline std::ostream &lightGreen(std::ostream &s) {
   return s << setTextColor(LIGHT_GREEN);
 }
 
-inline std::ostream& lightBlue(std::ostream& s) {
+inline std::ostream &lightBlue(std::ostream &s) {
   return s << setTextColor(LIGHT_BLUE);
 }
 
-inline std::ostream& lightYellow(std::ostream& s) {
+inline std::ostream &lightYellow(std::ostream &s) {
   return s << setTextColor(LIGHT_YELLOW);
 }
 
-inline std::ostream& lightGray(std::ostream& s) {
+inline std::ostream &lightGray(std::ostream &s) {
   return s << setTextColor(LIGHT_GRAY);
 }
 
-inline std::ostream& darkGray(std::ostream& s) {
+inline std::ostream &darkGray(std::ostream &s) {
   return s << setTextColor(DARK_GRAY);
 }
 
-inline std::ostream& lightMagenta(std::ostream& s) {
+inline std::ostream &lightMagenta(std::ostream &s) {
   return s << setTextColor(LIGHT_MAGENTA);
 }
 
-inline std::ostream& lightCyan(std::ostream& s) {
+inline std::ostream &lightCyan(std::ostream &s) {
   return s << setTextColor(LIGHT_CYAN);
 }
 
 // Fill the current line of the terminal with space characters from the
 // current cursor position to the end of the line.
 // The purpose is to have a constant background color on the line.
-inline std::ostream& fillToEndOfLine(std::ostream& s) {
+inline std::ostream &fillToEndOfLine(std::ostream &s) {
 #ifndef WIN32
 
-  if (processInForeground() && ((&s == &std::cout && isatty(fileno(stdout))) || (&s == &std::cerr && isatty(fileno(stderr))))) {
+  if (processInForeground() && ((&s == &std::cout && isatty(fileno(stdout))) ||
+                                (&s == &std::cerr && isatty(fileno(stderr))))) {
 #endif
     std::pair<int, int> cursorPos = getConsoleCursorPosition();
     std::pair<int, int> consoleSize = getConsoleSize();
 
     if ((cursorPos.second + consoleSize.second) != 0) {
-      for (int i = cursorPos.second ; i <= consoleSize.second ; ++i) {
+      for (int i = cursorPos.second; i <= consoleSize.second; ++i) {
         s << " ";
       }
-    }
-    else {
+    } else {
       s << std::endl;
     }
 
@@ -513,7 +518,8 @@ inline std::ostream& fillToEndOfLine(std::ostream& s) {
 
 #endif
 
-  if ((&s == &std::cout && !isatty(fileno(stdout))) || (&s == &std::cerr && !isatty(fileno(stderr)))) {
+  if ((&s == &std::cout && !isatty(fileno(stdout))) ||
+      (&s == &std::cerr && !isatty(fileno(stderr)))) {
     s << std::endl;
   }
 

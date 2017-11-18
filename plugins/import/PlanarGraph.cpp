@@ -19,21 +19,17 @@
 #include <climits>
 #include <tulip/TulipPluginHeaders.h>
 
-
 using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // nodes
-  "Number of nodes in the final graph."
-};
+    // nodes
+    "Number of nodes in the final graph."};
 
 namespace {
 struct Triangle {
-  Triangle(node a, node b, node c):
-    a(a),b(b),c(c) {
-  }
-  node a,b,c;
+  Triangle(node a, node b, node c) : a(a), b(b), c(c) {}
+  node a, b, c;
 };
 }
 //=============================================================
@@ -44,38 +40,38 @@ struct Triangle {
  *
  *  User can specify the number of nodes.
  */
-class PlanarGraph:public ImportModule {
+class PlanarGraph : public ImportModule {
 public:
-  PLUGININFORMATION("Planar Graph","Auber","25/06/2005","Imports a new randomly generated planar graph.","1.0","Graph")
-  PlanarGraph(tlp::PluginContext* context):ImportModule(context) {
+  PLUGININFORMATION("Planar Graph", "Auber", "25/06/2005",
+                    "Imports a new randomly generated planar graph.", "1.0", "Graph")
+  PlanarGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph() {}
 
   bool importGraph() {
-    unsigned int nbNodes  = 30;
+    unsigned int nbNodes = 30;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nbNodes);
     }
 
-    if (nbNodes < 3) nbNodes = 3;
+    if (nbNodes < 3)
+      nbNodes = 3;
 
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
     LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
-    SizeProperty  *newSize   = graph->getLocalProperty<SizeProperty>("viewSize");
-    newSize->setAllNodeValue(Size(1.0,1.0,1.0));
+    SizeProperty *newSize = graph->getLocalProperty<SizeProperty>("viewSize");
+    newSize->setAllNodeValue(Size(1.0, 1.0, 1.0));
 
     // reserve graph needed elts
     graph->reserveNodes(nbNodes);
     graph->reserveEdges(3 * (nbNodes - 2));
 
     vector<Triangle> faces;
-    Triangle f(graph->addNode(),
-               graph->addNode(),
-               graph->addNode());
+    Triangle f(graph->addNode(), graph->addNode(), graph->addNode());
     faces.push_back(f);
     graph->addEdge(f.a, f.b);
     graph->addEdge(f.b, f.c);
@@ -86,22 +82,21 @@ public:
     newLayout->setNodeValue(f.c, Coord(val, -val, 0));
     unsigned int nb = 3;
 
-    while(nb<nbNodes) {
-      //choose a Triangle randomly
-      unsigned int i = randomUnsignedInteger(faces.size()-1);
+    while (nb < nbNodes) {
+      // choose a Triangle randomly
+      unsigned int i = randomUnsignedInteger(faces.size() - 1);
       Triangle f = faces[i];
       node n = graph->addNode();
-      Coord tmp = newLayout->getNodeValue(f.a) +
-                  newLayout->getNodeValue(f.b) +
+      Coord tmp = newLayout->getNodeValue(f.a) + newLayout->getNodeValue(f.b) +
                   newLayout->getNodeValue(f.c);
       tmp /= 3.0;
       newLayout->setNodeValue(n, tmp);
 
-      //Split the triangle in three part
+      // Split the triangle in three part
       graph->addEdge(n, f.a);
       graph->addEdge(n, f.b);
       graph->addEdge(n, f.c);
-      //add the three new Triangle, remove the old one(replace)
+      // add the three new Triangle, remove the old one(replace)
       Triangle f1(f.a, f.b, n);
       Triangle f2(f.b, f.c, n);
       Triangle f3(f.c, f.a, n);
@@ -111,7 +106,7 @@ public:
       ++nb;
     }
 
-    return  pluginProgress->state()!=TLP_CANCEL;
+    return pluginProgress->state() != TLP_CANCEL;
   }
 };
 

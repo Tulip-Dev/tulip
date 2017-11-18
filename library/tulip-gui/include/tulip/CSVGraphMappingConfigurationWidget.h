@@ -41,7 +41,8 @@ class CSVToGraphDataMapping;
 /**
   * @brief Widget generating the CSVToGraphDataMapping object.
   *
-  * This widget allow user to configure a CSVToGraphDataMapping object. This object is used during the CSV import process to map CSV columns to graph elements like nodes or edges.
+  * This widget allow user to configure a CSVToGraphDataMapping object. This object is used during
+  *the CSV import process to map CSV columns to graph elements like nodes or edges.
   **/
 class TLP_QT_SCOPE CSVGraphMappingConfigurationWidget : public QWidget {
   Q_OBJECT
@@ -52,7 +53,7 @@ public:
   /**
     * @brief Configure the widget with the CSV import parameters.
     **/
-  void updateWidget(tlp::Graph* graph,const CSVImportParameters& importParameters);
+  void updateWidget(tlp::Graph *graph, const CSVImportParameters &importParameters);
   /**
     * @brief Build the mapping object between the CSV columns and the graph elements.
     **/
@@ -63,10 +64,10 @@ public:
     *
     * If return true you are sure that buildMappingObject never return a NULL object.
     **/
-  bool isValid()const;
+  bool isValid() const;
 
 protected:
-  tlp::Graph* graph;
+  tlp::Graph *graph;
   std::vector<std::string> columns;
   std::vector<unsigned int> nodeColumnIds;
   std::vector<std::string> nodeProperties;
@@ -79,12 +80,10 @@ protected:
 
 private:
   Ui::CSVGraphMappingConfigurationWidget *ui;
-  void selectColumns(const QString& title,
-                     std::vector<unsigned int>& columnIds,
-                     QPushButton* button);
-  void selectProperties(const QString& title,
-                        std::vector<std::string>& selProperties,
-                        QPushButton* button);
+  void selectColumns(const QString &title, std::vector<unsigned int> &columnIds,
+                     QPushButton *button);
+  void selectProperties(const QString &title, std::vector<std::string> &selProperties,
+                        QPushButton *button);
 
 private slots:
   void createNewProperty();

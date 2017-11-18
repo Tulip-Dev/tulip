@@ -58,22 +58,22 @@
 class SameLayout : public ogdf::LayoutModule {
 
 public:
-
   virtual void call(GraphAttributes &GA) {}
-
 };
 
 class OGDFTileToRowsPacking : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Tile To Rows Packing (OGDF)","Carsten Gutwenger","12/11/2007","The tile-to-rows algorithm for packing drawings of connected components.","1.0","Misc")
-  OGDFTileToRowsPacking(const tlp::PluginContext* context) :
-    OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
-    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+  PLUGININFORMATION("Tile To Rows Packing (OGDF)", "Carsten Gutwenger", "12/11/2007",
+                    "The tile-to-rows algorithm for packing drawings of connected components.",
+                    "1.0", "Misc")
+  OGDFTileToRowsPacking(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the SameLayout instance
     csl->setLayoutModule(new SameLayout());
   }
 };
-
 
 PLUGIN(OGDFTileToRowsPacking)

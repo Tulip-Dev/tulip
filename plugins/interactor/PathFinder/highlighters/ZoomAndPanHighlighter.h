@@ -26,10 +26,11 @@
 
 namespace tlp {
 
-class ZoomAndPanHighlighter: public PathHighlighter, public QObject {
+class ZoomAndPanHighlighter : public PathHighlighter, public QObject {
 public:
-  inline ZoomAndPanHighlighter(): PathHighlighter("Zoom and pan") {}
-  void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
+  inline ZoomAndPanHighlighter() : PathHighlighter("Zoom and pan") {}
+  void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget,
+                 tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
   void draw(tlp::GlMainWidget *glMainWidget);
   bool isConfigurable() const;
   QWidget *getConfigurationWidget();

@@ -32,18 +32,18 @@ class Graph;
 class ParameterListModel;
 }
 
-class AlgorithmRunnerItem: public QWidget {
+class AlgorithmRunnerItem : public QWidget {
   Q_OBJECT
-  Ui::AlgorithmRunnerItem* _ui;
+  Ui::AlgorithmRunnerItem *_ui;
   QString _pluginName;
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
   bool _storeResultAsLocal;
   QPointF _dragStartPosition;
   tlp::DataSet _initData;
-  static tlp::ParameterListModel* colorMappingModel;
+  static tlp::ParameterListModel *colorMappingModel;
 
 public:
-  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = NULL);
+  explicit AlgorithmRunnerItem(QString pluginName, QWidget *parent = NULL);
   virtual ~AlgorithmRunnerItem();
 
   QString name() const;
@@ -53,22 +53,22 @@ public:
   void setFavorite(bool);
 
 protected:
-  virtual void mousePressEvent(QMouseEvent* ev);
-  virtual void mouseMoveEvent(QMouseEvent* ev);
+  virtual void mousePressEvent(QMouseEvent *ev);
+  virtual void mouseMoveEvent(QMouseEvent *ev);
 
 public slots:
-  void setGraph(tlp::Graph*);
-  void setData(const tlp::DataSet& data);
+  void setGraph(tlp::Graph *);
+  void setData(const tlp::DataSet &data);
   void setStoreResultAsLocal(bool);
   void favoriteChanged(int state);
 
-  void run(tlp::Graph* g = NULL);
+  void run(tlp::Graph *g = NULL);
 
 signals:
   void favorized(bool);
 
 protected slots:
-  void afterRun(tlp::Graph*, const tlp::DataSet&);
+  void afterRun(tlp::Graph *, const tlp::DataSet &);
   void initModel();
 };
 #endif // ALGORITHMRUNNERITEM_H

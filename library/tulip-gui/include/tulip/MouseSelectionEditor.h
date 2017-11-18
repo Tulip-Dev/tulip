@@ -34,10 +34,9 @@ class DoubleProperty;
 class SizeProperty;
 
 /// This interactor allows to move/rotate/stretch the current selection layout
-class TLP_QT_SCOPE MouseSelectionEditor:public GLInteractorComponent {
+class TLP_QT_SCOPE MouseSelectionEditor : public GLInteractorComponent {
 
 public:
-
   MouseSelectionEditor();
   ~MouseSelectionEditor();
   void clear();
@@ -46,8 +45,22 @@ public:
   bool eventFilter(QObject *, QEvent *);
 
 private:
-  enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE, ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_VERTICALLY, ALIGN_HORIZONTALLY};
-  enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
+  enum EditOperation {
+    NONE = 0,
+    ROTATE_Z,
+    ROTATE_XY,
+    STRETCH_X,
+    STRETCH_Y,
+    STRETCH_XY,
+    TRANSLATE,
+    ALIGN_TOP,
+    ALIGN_BOTTOM,
+    ALIGN_LEFT,
+    ALIGN_RIGHT,
+    ALIGN_VERTICALLY,
+    ALIGN_HORIZONTALLY
+  };
+  enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE };
 
   GlMainWidget *glMainWidget;
   DoubleProperty *_rotation;
@@ -67,11 +80,10 @@ private:
   GlRect advRect;
   Coord _layoutCenter;
 
-  bool computeFFD(GlMainWidget*);
+  bool computeFFD(GlMainWidget *);
   void getOperation(GlEntity *select);
 
 protected:
-
   EditOperation operation;
   OperationTarget mode;
 
@@ -83,16 +95,12 @@ protected:
   SizeProperty *_sizes;
   Coord editLayoutCenter;
 
-  virtual void mMouseTranslate(double, double, GlMainWidget*);
-  virtual void mMouseRotate(double, double, GlMainWidget*);
-  virtual void mMouseStretchAxis(double, double, GlMainWidget*);
-  virtual void mAlign(EditOperation operation,GlMainWidget*);
-
-
+  virtual void mMouseTranslate(double, double, GlMainWidget *);
+  virtual void mMouseRotate(double, double, GlMainWidget *);
+  virtual void mMouseStretchAxis(double, double, GlMainWidget *);
+  virtual void mAlign(EditOperation operation, GlMainWidget *);
 };
-
 }
-
 
 #endif
 ///@endcond

@@ -30,19 +30,19 @@ namespace tlp {
 
 class Graph;
 
-class GeolocalisationConfigWidget : public QWidget  {
+class GeolocalisationConfigWidget : public QWidget {
 
   Q_OBJECT
-  Ui::GeolocalisationConfigWidgetData* _ui;
+  Ui::GeolocalisationConfigWidgetData *_ui;
 
-public :
-
+public:
   GeolocalisationConfigWidget(QWidget *parent = 0);
   ~GeolocalisationConfigWidget();
 
   void setGraph(Graph *graph);
 
-  void setLatLngGeoLocMethod(const std::string &latitudePropertyName, const std::string &longitudePropertyName);
+  void setLatLngGeoLocMethod(const std::string &latitudePropertyName,
+                             const std::string &longitudePropertyName);
 
   void setEdgesPathsPropertyName(const std::string &edgesPathsPropertyName);
 
@@ -60,14 +60,12 @@ public :
 
   std::string getEdgesPathsPropertyName() const;
 
-public slots :
+public slots:
 
   void enableDisableComboBoxes();
 
 signals:
   void computeGeoLayout();
-
-
 };
 }
 

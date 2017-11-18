@@ -25,42 +25,31 @@
 using namespace std;
 
 namespace tlp {
-GlCurve::GlCurve(const vector<Coord> &points,
-                 const Color &beginFColor,
-                 const Color &endFColor ,
-                 const float &beginSize,
-                 const float &endSize):
-  _points(points),
-  _beginFillColor(beginFColor),
-  _endFillColor(endFColor),
-  _beginSize(beginSize),
-  _endSize(endSize),
-  texture("") {
+GlCurve::GlCurve(const vector<Coord> &points, const Color &beginFColor, const Color &endFColor,
+                 const float &beginSize, const float &endSize)
+    : _points(points), _beginFillColor(beginFColor), _endFillColor(endFColor),
+      _beginSize(beginSize), _endSize(endSize), texture("") {
 
   assert(points.size() >= 3);
 
-  for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
     boundingBox.expand(*it);
 }
 //=====================================================
-GlCurve::GlCurve(const unsigned int nbPoints):
-  _points(nbPoints),
-  texture("") {
-}
+GlCurve::GlCurve(const unsigned int nbPoints) : _points(nbPoints), texture("") {}
 //=====================================================
-GlCurve::~GlCurve() {
-}
+GlCurve::~GlCurve() {}
 //=====================================================
 void GlCurve::resizePoints(const unsigned int nbPoints) {
   assert(nbPoints >= 3);
   _points.resize(nbPoints);
 }
 //=====================================================
-const tlp::Coord& GlCurve::point(const unsigned int i) const {
+const tlp::Coord &GlCurve::point(const unsigned int i) const {
   return _points[i];
 }
 //=====================================================
-tlp::Coord& GlCurve::point(const unsigned int i) {
+tlp::Coord &GlCurve::point(const unsigned int i) {
   return _points[i];
 }
 //=====================================================
@@ -69,31 +58,24 @@ void GlCurve::draw(float, Camera *) {
 
   glDisable(GL_CULL_FACE);
   glDisable(GL_LIGHTING);
-  //glEnable(GL_COLOR_MATERIAL);
+  // glEnable(GL_COLOR_MATERIAL);
   vector<Coord> newPoints(_points.size());
 
-  for(unsigned int i=0; i < _points.size(); ++i) {
+  for (unsigned int i = 0; i < _points.size(); ++i) {
     newPoints[i] = _points[i];
   }
 
   glLineWidth(2);
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  tlp::splineLine(newPoints,
-                  _beginFillColor,
-                  _endFillColor);
+  tlp::splineLine(newPoints, _beginFillColor, _endFillColor);
   glPopAttrib();
 
-  if(texture!="") {
+  if (texture != "") {
     GlTextureManager::getInst().activateTexture(texture);
   }
 
-  tlp::splineQuad(newPoints,
-                  _beginFillColor,
-                  _endFillColor,
-                  _beginSize,
-                  _endSize,
-                  newPoints[0] - Coord(1.  , 0.0, 0.),
-                  newPoints[3] + Coord(1.  , 0.0, 0.));
+  tlp::splineQuad(newPoints, _beginFillColor, _endFillColor, _beginSize, _endSize,
+                  newPoints[0] - Coord(1., 0.0, 0.), newPoints[3] + Coord(1., 0.0, 0.));
 
   GlTextureManager::getInst().desactivateTexture();
   glEnable(GL_LIGHTING);
@@ -101,37 +83,37 @@ void GlCurve::draw(float, Camera *) {
 }
 //=====================================================
 void GlCurve::setTexture(const std::string &texture) {
-  this->texture=texture;
+  this->texture = texture;
 }
 //=====================================================
-void GlCurve::translate(const Coord& mouvement) {
+void GlCurve::translate(const Coord &mouvement) {
   boundingBox.translate(mouvement);
 
-  for(vector<Coord>::iterator it=_points.begin(); it!=_points.end(); ++it) {
-    (*it)+=mouvement;
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it) {
+    (*it) += mouvement;
   }
 }
 //=====================================================
 void GlCurve::getXML(string &outString) {
 
-  GlXMLTools::createProperty(outString,"type","GlCurve","GlEntity");
+  GlXMLTools::createProperty(outString, "type", "GlCurve", "GlEntity");
 
-  GlXMLTools::getXML(outString,"points",_points);
-  GlXMLTools::getXML(outString,"beginFillColor",_beginFillColor);
-  GlXMLTools::getXML(outString,"endFillColor",_endFillColor);
-  GlXMLTools::getXML(outString,"beginSize",_beginSize);
-  GlXMLTools::getXML(outString,"endSize",_endSize);
+  GlXMLTools::getXML(outString, "points", _points);
+  GlXMLTools::getXML(outString, "beginFillColor", _beginFillColor);
+  GlXMLTools::getXML(outString, "endFillColor", _endFillColor);
+  GlXMLTools::getXML(outString, "beginSize", _beginSize);
+  GlXMLTools::getXML(outString, "endSize", _endSize);
 }
 //============================================================
 void GlCurve::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::setWithXML(inString, currentPosition,"points",_points);
-  GlXMLTools::setWithXML(inString, currentPosition,"beginFillColor",_beginFillColor);
-  GlXMLTools::setWithXML(inString, currentPosition,"endFillColor",_endFillColor);
-  GlXMLTools::setWithXML(inString, currentPosition,"beginSize",_beginSize);
-  GlXMLTools::setWithXML(inString, currentPosition,"endSize",_endSize);
+  GlXMLTools::setWithXML(inString, currentPosition, "points", _points);
+  GlXMLTools::setWithXML(inString, currentPosition, "beginFillColor", _beginFillColor);
+  GlXMLTools::setWithXML(inString, currentPosition, "endFillColor", _endFillColor);
+  GlXMLTools::setWithXML(inString, currentPosition, "beginSize", _beginSize);
+  GlXMLTools::setWithXML(inString, currentPosition, "endSize", _endSize);
 
-  for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
     boundingBox.expand(*it);
 }
 }

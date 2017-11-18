@@ -38,8 +38,7 @@ class TLP_PYTHON_SCOPE PythonShellWidget : public PythonCodeEditor {
   QVector<QString> _history;
   int _currentHistoryPos;
 
-public :
-
+public:
   explicit PythonShellWidget(QWidget *parent = 0);
 
 signals:
@@ -48,14 +47,13 @@ signals:
   void endCurrentLinesExecution();
 
 protected:
-
-  void keyPressEvent(QKeyEvent * e);
+  void keyPressEvent(QKeyEvent *e);
 
   bool isCursorOnLastLine();
 
   void executeCurrentLines();
 
-  void showEvent(QShowEvent * event);
+  void showEvent(QShowEvent *event);
 
 public slots:
 
@@ -63,10 +61,8 @@ public slots:
 
 protected slots:
 
-  void updateAutoCompletionList(bool dotContext=false);
-
+  void updateAutoCompletionList(bool dotContext = false);
 };
-
 }
 
 #endif /* PYTHONSHELLWIDGET_H_ */

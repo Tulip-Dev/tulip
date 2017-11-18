@@ -21,25 +21,24 @@
 #include <cassert>
 
 //====================================================
-tlp::GlDisplayListManager* tlp::GlDisplayListManager::inst=0;
+tlp::GlDisplayListManager *tlp::GlDisplayListManager::inst = 0;
 
 using namespace std;
 
 namespace tlp {
 //====================================================================
 void GlDisplayListManager::changeContext(uintptr_t context) {
-  currentContext=context;
+  currentContext = context;
 }
 //====================================================================
 void GlDisplayListManager::removeContext(uintptr_t context) {
   displayListMap.erase(context);
 }
 //====================================================================
-bool GlDisplayListManager::beginNewDisplayList(const string& name) {
-  if(displayListMap[currentContext].find(name)!=displayListMap[currentContext].end()) {
+bool GlDisplayListManager::beginNewDisplayList(const string &name) {
+  if (displayListMap[currentContext].find(name) != displayListMap[currentContext].end()) {
     return false;
-  }
-  else {
+  } else {
     GLuint id;
     glNewList(id = glGenLists(1), GL_COMPILE);
     (displayListMap[currentContext])[name] = id;
@@ -51,10 +50,10 @@ void GlDisplayListManager::endNewDisplayList() {
   glEndList();
 }
 //====================================================================
-bool GlDisplayListManager::callDisplayList(const std::string& name) {
-  map<string,GLuint>::iterator it=displayListMap[currentContext].find(name);
+bool GlDisplayListManager::callDisplayList(const std::string &name) {
+  map<string, GLuint>::iterator it = displayListMap[currentContext].find(name);
 
-  if(it==displayListMap[currentContext].end()) {
+  if (it == displayListMap[currentContext].end()) {
     assert(false);
   }
 

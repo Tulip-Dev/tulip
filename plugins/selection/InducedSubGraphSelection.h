@@ -33,16 +33,14 @@
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@labri.fr
  */
-class InducedSubGraphSelection:public tlp::BooleanAlgorithm {
+class InducedSubGraphSelection : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION(tlp::SelectionAlgorithm::InducedSubGraphSelection,"David Auber","08/08/2001",
-                    "Selects all the nodes/edges of the subgraph induced by a set of selected nodes.","1.1", "Selection")
-  InducedSubGraphSelection(const tlp::PluginContext* context);
+  PLUGININFORMATION(
+      tlp::SelectionAlgorithm::InducedSubGraphSelection, "David Auber", "08/08/2001",
+      "Selects all the nodes/edges of the subgraph induced by a set of selected nodes.", "1.1",
+      "Selection")
+  InducedSubGraphSelection(const tlp::PluginContext *context);
   bool run();
 };
 
 #endif
-
-
-
-

@@ -33,11 +33,12 @@ namespace tlp {
 class TLP_GL_SCOPE GlSVGFeedBackBuilder : public GlTLPFeedBackBuilder {
 
 public:
-
   GlSVGFeedBackBuilder()
-    :stream_out(std::stringstream::in | std::stringstream::out),inGlEntity(false),inGlGraph(false),inNode(false),inEdge(false) {}
+      : stream_out(std::stringstream::in | std::stringstream::out), inGlEntity(false),
+        inGlGraph(false), inNode(false), inEdge(false) {}
 
-  virtual void begin(const Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
+  virtual void begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize,
+                     GLfloat lineWidth);
   virtual void colorInfo(GLfloat *data);
   virtual void beginGlEntity(GLfloat data);
   virtual void endGlEntity();
@@ -56,10 +57,9 @@ public:
   virtual void copyPixelToken(GLfloat *data);
   virtual void end();
 
-  virtual void getResult(std::string* str);
+  virtual void getResult(std::string *str);
 
 private:
-
   std::stringstream stream_out;
 
   GLfloat clearColor[4];
@@ -77,9 +77,7 @@ private:
 
   int width;
   int height;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

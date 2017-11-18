@@ -32,7 +32,6 @@ namespace tlp {
  **/
 class TLP_SCOPE TriconnectedTest : private Observable {
 public:
-
   /**
    * @brief Checks if the graph is triconnected.
    * Creates a clone sugraph in which to operate, then iterates over the nodes, and deletes them.
@@ -48,20 +47,19 @@ public:
 private:
   TriconnectedTest();
 
-  bool compute(tlp::Graph* graph);
+  bool compute(tlp::Graph *graph);
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   /**
    * @brief Singleton instance of this class.
    **/
-  static TriconnectedTest * instance;
+  static TriconnectedTest *instance;
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
+   *hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
-
 }
 #endif

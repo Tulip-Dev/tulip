@@ -33,8 +33,10 @@ namespace tlp {
  *
  * @since Tulip 5.0
  *
- * Material Design Icons (https://materialdesignicons.com/) : a growing icon collection allows designers and developers
- * targeting various platforms to download icons in the format, color and size they need for any project.
+ * Material Design Icons (https://materialdesignicons.com/) : a growing icon collection allows
+ *designers and developers
+ * targeting various platforms to download icons in the format, color and size they need for any
+ *project.
  *
  * A glyph has been added to Tulip enabling to use these great icons
  * as nodes and edges extremities shapes.
@@ -2024,10 +2026,7 @@ public:
   static const char *YinYang;
   static const char *YoutubePlay;
   static const char *ZipBox;
-
-
 };
-
 }
 
 #endif // TULIPMATERIALDESIGNICONS_H

@@ -35,7 +35,6 @@ class OutputPanelButton : public QPushButton {
   QColor _glowColor;
 
 public:
-
   explicit OutputPanelButton(QWidget *parent = 0);
 
   int number() const {
@@ -67,7 +66,6 @@ public slots:
   void setGlowColor(const QColor &color);
 
   void resetBackgroundColor();
-
 };
 
 #endif // OUTPUTPANELBUTTON_H

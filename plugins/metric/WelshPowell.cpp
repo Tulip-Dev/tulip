@@ -27,10 +27,9 @@ using namespace tlp;
 
 class CompNodes {
 
-public :
-  Graph * graph;
-  CompNodes(Graph *g):graph(g) {
-  }
+public:
+  Graph *graph;
+  CompNodes(Graph *g) : graph(g) {}
 
   bool operator()(const node u, const node v) {
     unsigned int du = graph->deg(u), dv = graph->deg(v);
@@ -41,7 +40,6 @@ public :
     return du > dv;
   }
 };
-
 
 /*@{*/
 /** \file
@@ -61,7 +59,7 @@ public :
  *
  *
 */
-class WelshPowell:public DoubleAlgorithm {
+class WelshPowell : public DoubleAlgorithm {
   // to maximize the locality of reference we will use a vector
   // holding the all the nodes needed info in the structure below
   struct nodeInfo {
@@ -71,7 +69,7 @@ class WelshPowell:public DoubleAlgorithm {
 
   // a comparator used to sort the vector
   struct nodesInfoCmp {
-    bool operator()(const nodeInfo& u, const nodeInfo& v) {
+    bool operator()(const nodeInfo &u, const nodeInfo &v) {
       int du = u.val, dv = v.val;
 
       if (du == dv)
@@ -82,10 +80,12 @@ class WelshPowell:public DoubleAlgorithm {
   };
 
 public:
+  PLUGININFORMATION(
+      "Welsh & Powell", "David Auber", "03/01/2005",
+      "Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.", "1.0",
+      "Graph")
 
-  PLUGININFORMATION("Welsh & Powell","David Auber","03/01/2005","Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.","1.0", "Graph")
-
-  WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {}
+  WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
   bool run() {
     const std::vector<node> nodes = graph->nodes();
@@ -94,12 +94,12 @@ public:
     node n;
     OMP_ITER_TYPE i = 0;
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-    for(i = 0; i < nbNodes; ++i) {
+    for (i = 0; i < nbNodes; ++i) {
       node n = nodes[i];
-      nodeInfo& nInfo = nodesInfo[i];
+      nodeInfo &nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
     }
 
@@ -108,11 +108,11 @@ public:
     // build a map
     NodeStaticProperty<unsigned int> toNodesInfo(graph);
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
     for (i = 0; i < nbNodes; ++i) {
-      nodeInfo& nInfo = nodesInfo[i];
+      nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;
       toNodesInfo.setNodeValue(nInfo.n, i);
@@ -125,15 +125,15 @@ public:
 
     while (numberOfColoredNodes != nbNodes) {
 #ifndef NDEBUG
-      cout << "nbColored :"  << numberOfColoredNodes << endl;
+      cout << "nbColored :" << numberOfColoredNodes << endl;
 #endif
       unsigned int nextMaxIndex = minIndex;
 
-      for(i = minIndex; i < maxIndex; ++i) {
+      for (i = minIndex; i < maxIndex; ++i) {
 #ifndef NDEBUG
-        cout << "i:" <<  i << endl;
+        cout << "i:" << i << endl;
 #endif
-        nodeInfo& nInfo = nodesInfo[i];
+        nodeInfo &nInfo = nodesInfo[i];
 
         if (nInfo.val == -1) {
           bool sameColor = false;
@@ -154,11 +154,9 @@ public:
 
             if (i == minIndex)
               ++minIndex;
-          }
-          else
+          } else
             nextMaxIndex = i + 1;
-        }
-        else if (i == minIndex)
+        } else if (i == minIndex)
           ++minIndex;
       }
 
@@ -168,7 +166,7 @@ public:
 
     // finally set the values
     for (i = 0; i < nbNodes; ++i) {
-      nodeInfo& nInfo = nodesInfo[i];
+      nodeInfo &nInfo = nodesInfo[i];
       result->setNodeValue(nInfo.n, nInfo.val);
     }
 

@@ -31,7 +31,7 @@
 
 namespace tlp {
 
-template<class itType >
+template <class itType>
 struct Iterator;
 
 class Graph;
@@ -48,11 +48,9 @@ typedef Matrix<float, 3> Mat3f;
   * nodes z-rotations and sizes of elements.
   *
   */
-TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph, const LayoutProperty *layout,
+                                         const SizeProperty *size, const DoubleProperty *rotation,
+                                         const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
@@ -60,48 +58,48 @@ TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph,
  * Compute the bounding box of graph elements according to node positions, edges bends,
  * nodes z-rotations and sizes of elements.
  *
- * Iterator itN and itE will be deleted after the computations (i.e. no need to delete them yourself).
+ * Iterator itN and itE will be deleted after the computations (i.e. no need to delete them
+ * yourself).
  */
-TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
-    Iterator<edge> *itE,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE,
+                                         const LayoutProperty *layout, const SizeProperty *size,
+                                         const DoubleProperty *rotation,
+                                         const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
 /**
- * Compute the bounding box of graph elements in corresponding vectors according to node positions, edges bends,
+ * Compute the bounding box of graph elements in corresponding vectors according to node positions,
+ * edges bends,
  * nodes z-rotations and sizes of elements.
  *
  */
-TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node>& nodes,
-    const std::vector<edge>& edges,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node> &nodes,
+                                         const std::vector<edge> &edges,
+                                         const LayoutProperty *layout, const SizeProperty *size,
+                                         const DoubleProperty *rotation,
+                                         const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
 /**
   *
-  * Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions, edges bends,
+  * Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph
+ * according to nodes positions, edges bends,
   * nodes z-rotations and sizes of elements.
   *
-  * Returns a pair of tlp::Coord whose first member is the center of the bounding sphere (circle for 2D layout)
-  * and second member is the farthest point from the center (computed from graph elements positions).
+  * Returns a pair of tlp::Coord whose first member is the center of the bounding sphere (circle for
+ * 2D layout)
+  * and second member is the farthest point from the center (computed from graph elements
+ * positions).
   * To get the bounding radius, you have to compute the distance between the two members of the pair
   * (use the dist method from tlp::Coord).
   *
   */
 
-TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE std::pair<Coord, Coord>
+computeBoundingRadius(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size,
+                      const DoubleProperty *rotation, const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
@@ -110,14 +108,14 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
   * Computes a convex hull of a graph according to nodes positions, edges bends,
   * nodes z-rotations, and sizes of elements. Only works with 2D layouts.
   *
-  * Returns a vector of tlp::Coord containing the vertices of the graph convex hull correctly ordered.
+  * Returns a vector of tlp::Coord containing the vertices of the graph convex hull correctly
+ * ordered.
   *
   */
-TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE std::vector<Coord> computeConvexHull(const Graph *graph, const LayoutProperty *layout,
+                                               const SizeProperty *size,
+                                               const DoubleProperty *rotation,
+                                               const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
@@ -126,13 +124,13 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
   * Computes a convex hull of a set of points,
   * Only works with 2D layouts.
   *
-  * Returns a vector of tlp::Coord containing the vertices of the points convex hull correctly ordered.
+  * Returns a vector of tlp::Coord containing the vertices of the points convex hull correctly
+ * ordered.
   *
   */
 TLP_SCOPE std::vector<Coord> computeConvexHull(const std::vector<tlp::Coord> &points);
 
 //======================================================================================================
-
 
 /**
  * Computes the intersection point (if any) of two 3d lines.
@@ -178,11 +176,11 @@ TLP_SCOPE bool isLayoutCoPlanar(const std::vector<Coord> &points, Mat3f &invTran
  * @return a vector filled with the numberOfSides polygon vertices
  *
  */
-TLP_SCOPE std::vector<tlp::Coord> computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center,
-    const tlp::Size &size, float startAngle = 0);
-
+TLP_SCOPE std::vector<tlp::Coord> computeRegularPolygon(unsigned int numberOfSides,
+                                                        const tlp::Coord &center,
+                                                        const tlp::Size &size,
+                                                        float startAngle = 0);
 }
-
 
 #endif
 ///@endcond

@@ -26,123 +26,118 @@ struct Feedback3DColor {
   float x, y, z, r, g, b, a;
 };
 
-void GlSVGFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat* clearColor,GLfloat pointSize,GLfloat lineWidth) {
-  this->clearColor[0]=clearColor[0];
-  this->clearColor[1]=clearColor[1];
-  this->clearColor[2]=clearColor[2];
-  this->pointSize=pointSize;
-  this->lineWidth=lineWidth;
+void GlSVGFeedBackBuilder::begin(const Vector<int, 4> &viewport, GLfloat *clearColor,
+                                 GLfloat pointSize, GLfloat lineWidth) {
+  this->clearColor[0] = clearColor[0];
+  this->clearColor[1] = clearColor[1];
+  this->clearColor[2] = clearColor[2];
+  this->pointSize = pointSize;
+  this->lineWidth = lineWidth;
 
-  width=viewport[2] - viewport[0];
-  height=viewport[3] - viewport[1];
+  width = viewport[2] - viewport[0];
+  height = viewport[3] - viewport[1];
 
-  stream_out << "<?xml version=\"1.0\" standalone=\"no\" ?>" << endl ;
-  stream_out << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
-  stream_out << "<svg width=\"" << viewport[2] - viewport[0] << "px\" height=\"" << viewport[3] - viewport[1] << "px\" xmlns=\"http://www.w3.org/2000/svg\">" << endl;
-  stream_out << "\t<!-- Exported from Tulip - plugin made by " << "OF-JD-NL-SH" << " (using OpenGL feedback) -->" << endl;
+  stream_out << "<?xml version=\"1.0\" standalone=\"no\" ?>" << endl;
+  stream_out << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" "
+                "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
+             << endl;
+  stream_out << "<svg width=\"" << viewport[2] - viewport[0] << "px\" height=\""
+             << viewport[3] - viewport[1] << "px\" xmlns=\"http://www.w3.org/2000/svg\">" << endl;
+  stream_out << "\t<!-- Exported from Tulip - plugin made by "
+             << "OF-JD-NL-SH"
+             << " (using OpenGL feedback) -->" << endl;
 
   /* Clear the background like OpenGL had it. */
-  stream_out << "\t<rect x=\"" << viewport[0] << "\" y=\"" << viewport[1] << "\" widht=\"" << viewport[2] << "\" height=\"" << viewport[3] << "\" " <<
-             "fill=\"rgb(" << 0 << "," << 0 << "," << 0 << ")\"/>" <<endl;
+  stream_out << "\t<rect x=\"" << viewport[0] << "\" y=\"" << viewport[1] << "\" widht=\""
+             << viewport[2] << "\" height=\"" << viewport[3] << "\" "
+             << "fill=\"rgb(" << 0 << "," << 0 << "," << 0 << ")\"/>" << endl;
 
   /*fprintf(file, "%s<g id=\"g%d\"><!-- Graph %d -->\n", indentation.c_str(), graphId,
     graphId);*/
 }
-void GlSVGFeedBackBuilder::colorInfo(GLfloat* data) {
-  fillColor[0]=uchar(data[0]);
-  fillColor[1]=uchar(data[1]);
-  fillColor[2]=uchar(data[2]);
-  fillColor[3]=uchar(data[3]);
-  strokeColor[0]=uchar(data[4]);
-  strokeColor[1]=uchar(data[5]);
-  strokeColor[2]=uchar(data[6]);
-  strokeColor[3]=uchar(data[7]);
-  textColor[0]=uchar(data[8]);
-  textColor[1]=uchar(data[9]);
-  textColor[2]=uchar(data[10]);
-  textColor[3]=uchar(data[11]);
+void GlSVGFeedBackBuilder::colorInfo(GLfloat *data) {
+  fillColor[0] = uchar(data[0]);
+  fillColor[1] = uchar(data[1]);
+  fillColor[2] = uchar(data[2]);
+  fillColor[3] = uchar(data[3]);
+  strokeColor[0] = uchar(data[4]);
+  strokeColor[1] = uchar(data[5]);
+  strokeColor[2] = uchar(data[6]);
+  strokeColor[3] = uchar(data[7]);
+  textColor[0] = uchar(data[8]);
+  textColor[1] = uchar(data[9]);
+  textColor[2] = uchar(data[10]);
+  textColor[3] = uchar(data[11]);
 }
 void GlSVGFeedBackBuilder::beginGlEntity(GLfloat data) {
-  if(inGlEntity)
+  if (inGlEntity)
     endGlEntity();
 
   stream_out << "<e id=\"" << data << "\"><!-- Entity " << data << "-->" << endl;
-  inGlEntity=true;
+  inGlEntity = true;
 }
 
 void GlSVGFeedBackBuilder::endGlEntity() {
-  inGlEntity=false;
+  inGlEntity = false;
 }
 
 void GlSVGFeedBackBuilder::beginGlGraph(GLfloat data) {
-  if(inGlGraph)
+  if (inGlGraph)
     endGlGraph();
 
   stream_out << "<g id=\"g" << data << "\"><!-- Graph " << data << "-->" << endl;
-  inGlGraph=true;
+  inGlGraph = true;
 }
 
 void GlSVGFeedBackBuilder::endGlGraph() {
-  inGlGraph=false;
+  inGlGraph = false;
 }
 
 void GlSVGFeedBackBuilder::beginNode(GLfloat data) {
-  if(inNode)
+  if (inNode)
     endNode();
 
-  stream_out << "\t<g id=\"n"<< data << "\"><!-- Node " << data << "-->" << endl;
-  inNode=true;
+  stream_out << "\t<g id=\"n" << data << "\"><!-- Node " << data << "-->" << endl;
+  inNode = true;
 }
 void GlSVGFeedBackBuilder::endNode() {
-  inNode=false;
+  inNode = false;
   stream_out << "</g>" << endl;
 }
 
 void GlSVGFeedBackBuilder::beginEdge(GLfloat data) {
-  if(inNode)
+  if (inNode)
     endNode();
 
-  if(inEdge)
+  if (inEdge)
     endEdge();
 
-  stream_out << "\t<g id=\"e"<< data << "\"><!-- Edge " << data << "-->" << endl;
-  inEdge=true;
+  stream_out << "\t<g id=\"e" << data << "\"><!-- Edge " << data << "-->" << endl;
+  inEdge = true;
 }
 void GlSVGFeedBackBuilder::endEdge() {
-  inEdge=false;
+  inEdge = false;
   stream_out << "</g>" << endl;
 }
 void GlSVGFeedBackBuilder::pointToken(GLfloat *data) {
   Feedback3DColor *vertex = reinterpret_cast<Feedback3DColor *>(data);
-  stream_out << "<circle cx=\"" << vertex->x
-             << "\" cy=\"" << height-vertex->y
-             << "\" r=\"" << pointSize
-             << "\" fill=\"rgb(" << int(strokeColor.getR())
-             << ", " << int(strokeColor.getG())
-             << ", " << int(strokeColor.getB())
-             << ")\" fill-opacity=\"" << strokeColor.getA()/255.
-             << "\" stroke=\"rgb(" << int(strokeColor.getR())
-             << ", " << int(strokeColor.getG())
-             << ", " << int(strokeColor.getB())
-             << ")\" stroke-opacity=\"" << strokeColor.getA()/255.
-             << "\"/>" << endl;
+  stream_out << "<circle cx=\"" << vertex->x << "\" cy=\"" << height - vertex->y << "\" r=\""
+             << pointSize << "\" fill=\"rgb(" << int(strokeColor.getR()) << ", "
+             << int(strokeColor.getG()) << ", " << int(strokeColor.getB()) << ")\" fill-opacity=\""
+             << strokeColor.getA() / 255. << "\" stroke=\"rgb(" << int(strokeColor.getR()) << ", "
+             << int(strokeColor.getG()) << ", " << int(strokeColor.getB())
+             << ")\" stroke-opacity=\"" << strokeColor.getA() / 255. << "\"/>" << endl;
 }
 void GlSVGFeedBackBuilder::lineToken(GLfloat *data) {
   Feedback3DColor *vertex1 = reinterpret_cast<Feedback3DColor *>(data);
-  Feedback3DColor *vertex2 = reinterpret_cast<Feedback3DColor *>((data+7));
-  stream_out << "<line x1=\"" << vertex1->x
-             << "\" y1=\"" << height-vertex1->y
-             << "\" x2=\"" << vertex2->x
-             << "\" y2=\"" << height-vertex2->y
-             << "\" fill=\"rgb(" << int(fillColor.getR())
-             << ", " << int(fillColor.getG())
-             << ", " << int(fillColor.getB())
-             << ")\" fill-opacity=\"" << fillColor.getA()/255.
-             << "\" stroke=\"rgb(" << int(strokeColor.getR())
-             << ", " << int(strokeColor.getG())
-             << ", " << int(strokeColor.getB())
-             << ")\" stroke-opacity=\"" << strokeColor.getA()/255.
-             << "\"/>" << endl;
+  Feedback3DColor *vertex2 = reinterpret_cast<Feedback3DColor *>((data + 7));
+  stream_out << "<line x1=\"" << vertex1->x << "\" y1=\"" << height - vertex1->y << "\" x2=\""
+             << vertex2->x << "\" y2=\"" << height - vertex2->y << "\" fill=\"rgb("
+             << int(fillColor.getR()) << ", " << int(fillColor.getG()) << ", "
+             << int(fillColor.getB()) << ")\" fill-opacity=\"" << fillColor.getA() / 255.
+             << "\" stroke=\"rgb(" << int(strokeColor.getR()) << ", " << int(strokeColor.getG())
+             << ", " << int(strokeColor.getB()) << ")\" stroke-opacity=\""
+             << strokeColor.getA() / 255. << "\"/>" << endl;
 }
 void GlSVGFeedBackBuilder::lineResetToken(GLfloat *data) {
   lineToken(data);
@@ -151,31 +146,24 @@ void GlSVGFeedBackBuilder::polygonToken(GLfloat *data) {
   stream_out << "<polygon points=\"";
   unsigned int nbvertices = uint(*data);
 
-  for(unsigned int i = 0; i < nbvertices; i++) {
-    Feedback3DColor *vertex = reinterpret_cast<Feedback3DColor *>(data+7*i+1);
-    stream_out << ((i == 0) ? "" : " ") << vertex->x << "," << height-vertex->y;
+  for (unsigned int i = 0; i < nbvertices; i++) {
+    Feedback3DColor *vertex = reinterpret_cast<Feedback3DColor *>(data + 7 * i + 1);
+    stream_out << ((i == 0) ? "" : " ") << vertex->x << "," << height - vertex->y;
   }
 
-  stream_out << "\" fill=\"rgb(" << int(fillColor.getR())
-             << ", " << int(fillColor.getG())
-             << ", " << int(fillColor.getB())
-             << ")\" fill-opacity=\"" << fillColor.getA()/255.
+  stream_out << "\" fill=\"rgb(" << int(fillColor.getR()) << ", " << int(fillColor.getG()) << ", "
+             << int(fillColor.getB()) << ")\" fill-opacity=\"" << fillColor.getA() / 255.
              << "\" stroke-opacity=\"0.0\""
-             << " stroke=\"rgb(" << int(fillColor.getR())
-             << ", " << int(fillColor.getG())
-             << ", " << int(fillColor.getB())
-             << ")\"/>" << endl;
+             << " stroke=\"rgb(" << int(fillColor.getR()) << ", " << int(fillColor.getG()) << ", "
+             << int(fillColor.getB()) << ")\"/>" << endl;
 }
-void GlSVGFeedBackBuilder::bitmapToken(GLfloat*) {
-}
-void GlSVGFeedBackBuilder::drawPixelToken(GLfloat*) {
-}
-void GlSVGFeedBackBuilder::copyPixelToken(GLfloat*) {
-}
+void GlSVGFeedBackBuilder::bitmapToken(GLfloat *) {}
+void GlSVGFeedBackBuilder::drawPixelToken(GLfloat *) {}
+void GlSVGFeedBackBuilder::copyPixelToken(GLfloat *) {}
 void GlSVGFeedBackBuilder::end() {
   stream_out << "</svg>" << endl;
 }
-void GlSVGFeedBackBuilder::getResult(string* str) {
-  *str=stream_out.str();
+void GlSVGFeedBackBuilder::getResult(string *str) {
+  *str = stream_out.str();
 }
 }

@@ -25,16 +25,15 @@
 using namespace std;
 using namespace tlp;
 
-InputSample::InputSample(Graph *graph) :
-  rootGraph(graph) {
+InputSample::InputSample(Graph *graph) : rootGraph(graph) {
   if (rootGraph) {
-    //mWeightTab.setAll(DynamicVector<double> ());
+    // mWeightTab.setAll(DynamicVector<double> ());
     mWeightTab.clear();
   }
 
   initGraphObs();
 
-  usingNormalizedValues=true;
+  usingNormalizedValues = true;
 }
 
 InputSample::~InputSample() {
@@ -42,75 +41,70 @@ InputSample::~InputSample() {
   clearPropertiesObs();
 }
 
-InputSample::InputSample(Graph *graph, const vector<string>& propertiesToListen) :
-  rootGraph(graph) {
-  //mWeightTab.setAll(DynamicVector<double> ());
+InputSample::InputSample(Graph *graph, const vector<string> &propertiesToListen)
+    : rootGraph(graph) {
+  // mWeightTab.setAll(DynamicVector<double> ());
   mWeightTab.clear();
 
   setPropertiesToListen(propertiesToListen);
   initGraphObs();
 
-  usingNormalizedValues=true;
+  usingNormalizedValues = true;
 }
 
 void InputSample::setGraph(tlp::Graph *graph) {
 
   clearGraphObs();
   rootGraph = graph;
-  //rootGraph->addObserver(this);
-  //mWeightTab.setAll(DynamicVector<double> ());
+  // rootGraph->addObserver(this);
+  // mWeightTab.setAll(DynamicVector<double> ());
   mWeightTab.clear();
 
-  setPropertiesToListen(vector<string> (propertiesNameList));
+  setPropertiesToListen(vector<string>(propertiesNameList));
 
   initGraphObs();
 }
 
-void InputSample::setGraph(tlp::Graph *graph,
-                           const std::vector<std::string>& propertiesToListen) {
+void InputSample::setGraph(tlp::Graph *graph, const std::vector<std::string> &propertiesToListen) {
   clearGraphObs();
   setGraph(graph);
   setPropertiesToListen(propertiesToListen);
   initGraphObs();
 }
 
-void InputSample::buildPropertyVector(
-  const std::vector<std::string>& propertiesToListen) {
+void InputSample::buildPropertyVector(const std::vector<std::string> &propertiesToListen) {
   propertiesNameList.clear();
   propertiesList.clear();
   PropertyInterface *property;
 
-  for (vector<string>::const_iterator it = propertiesToListen.begin(); it
-       != propertiesToListen.end(); ++it) {
+  for (vector<string>::const_iterator it = propertiesToListen.begin();
+       it != propertiesToListen.end(); ++it) {
     if (rootGraph->existProperty(*it)) {
       property = rootGraph->getProperty((*it));
       string type = property->getTypename();
 
       if (type.compare("double") == 0 || type.compare("int") == 0) {
         propertiesNameList.push_back(*it);
-        propertiesList.push_back(static_cast<NumericProperty*>(property));
-      }
-      else {
+        propertiesList.push_back(static_cast<NumericProperty *>(property));
+      } else {
         cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
              << "Type not managed" << endl;
       }
     }
   }
 
-  if(usingNormalizedValues) {
+  if (usingNormalizedValues) {
     updateAllMeanValues();
     updateAllSDValues();
   }
 }
 
-
-void InputSample::setPropertiesToListen(
-  const vector<string>& propertiesToListen) {
+void InputSample::setPropertiesToListen(const vector<string> &propertiesToListen) {
   if (rootGraph) {
     clearPropertiesObs();
     buildPropertyVector(propertiesToListen);
-    //Clear all the cache
-    //mWeightTab.setAll(DynamicVector<double> ());
+    // Clear all the cache
+    // mWeightTab.setAll(DynamicVector<double> ());
     mWeightTab.clear();
     initPropertiesObs();
   }
@@ -135,8 +129,7 @@ node InputSample::getNodeNumber(unsigned int i) {
 
     delete nIt;
     return n;
-  }
-  else
+  } else
     return node();
 }
 
@@ -162,51 +155,49 @@ void InputSample::buildNodeVector(node n) {
   nodeVec.fill(0);
   unsigned int propNum = 0;
 
-  if(usingNormalizedValues) {
+  if (usingNormalizedValues) {
     for (; propNum < propertiesList.size(); ++propNum) {
-      nodeVec[propNum] = normalize(propertiesList[propNum]->getNodeDoubleValue(n),propNum);
+      nodeVec[propNum] = normalize(propertiesList[propNum]->getNodeDoubleValue(n), propNum);
     }
-  }
-  else {
+  } else {
     for (; propNum < propertiesList.size(); ++propNum) {
       nodeVec[propNum] = propertiesList[propNum]->getNodeDoubleValue(n);
     }
   }
 
-  //mWeightTab.set(n.id, nodeVec);
+  // mWeightTab.set(n.id, nodeVec);
   mWeightTab[n.id] = nodeVec;
 }
 
 double InputSample::normalize(double val, unsigned propNum) {
-  if(propNum<meanProperties.size() && propNum<sdProperties.size())
-    return (val-meanProperties[propNum])/sdProperties[propNum];
+  if (propNum < meanProperties.size() && propNum < sdProperties.size())
+    return (val - meanProperties[propNum]) / sdProperties[propNum];
 
   return val;
 }
 
 double InputSample::unnormalize(double val, unsigned propNum) {
-  if(propNum<meanProperties.size() && propNum<sdProperties.size())
-    return val*sdProperties[propNum]+meanProperties[propNum];
+  if (propNum < meanProperties.size() && propNum < sdProperties.size())
+    return val * sdProperties[propNum] + meanProperties[propNum];
 
   return val;
 }
 
-const DynamicVector<double>& InputSample::getWeight(tlp::node n) {
+const DynamicVector<double> &InputSample::getWeight(tlp::node n) {
   if (rootGraph && propertiesList.empty()) {
     std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
               << "Warning no properties specified" << std::endl;
     assert(false);
-    //return DynamicVector<double>();
+    // return DynamicVector<double>();
   }
 
   DynamicVector<double> vec;
 
-  if (/*!mWeightTab.getIfNotDefaultValue(n.id, vec)*/mWeightTab.find(n.id)
-      == mWeightTab.end()) {
+  if (/*!mWeightTab.getIfNotDefaultValue(n.id, vec)*/ mWeightTab.find(n.id) == mWeightTab.end()) {
     buildNodeVector(n);
   }
 
-  //return mWeightTab.getReference(n.id);
+  // return mWeightTab.getReference(n.id);
 
   return mWeightTab[n.id];
 }
@@ -221,33 +212,33 @@ void InputSample::clearGraphObs() {
 }
 
 void InputSample::initPropertiesObs() {
-  for (vector<NumericProperty*>::iterator it = propertiesList.begin(); it
-       != propertiesList.end(); ++it) {
+  for (vector<NumericProperty *>::iterator it = propertiesList.begin(); it != propertiesList.end();
+       ++it) {
     (*it)->addObserver(this);
   }
 }
 void InputSample::clearPropertiesObs() {
-  for (vector<NumericProperty*>::iterator it = propertiesList.begin(); it
-       != propertiesList.end(); ++it) {
+  for (vector<NumericProperty *>::iterator it = propertiesList.begin(); it != propertiesList.end();
+       ++it) {
     (*it)->removeObserver(this);
   }
 }
 
-void InputSample::update(std::set<Observable *>::iterator begin, std::set<
-                         Observable *>::iterator end) {
+void InputSample::update(std::set<Observable *>::iterator begin,
+                         std::set<Observable *>::iterator end) {
   bool updated = false;
 
-  //A property has been updated clear the cache
+  // A property has been updated clear the cache
   for (std::set<Observable *>::iterator it = begin; it != end; ++it) {
-    unsigned int propNum=0;
+    unsigned int propNum = 0;
 
-    for (std::vector<tlp::NumericProperty*>::iterator itP =
-           propertiesList.begin(); itP != propertiesList.end(); ++itP) {
+    for (std::vector<tlp::NumericProperty *>::iterator itP = propertiesList.begin();
+         itP != propertiesList.end(); ++itP) {
       if ((*it) == (*itP)) {
-        //mWeightTab.setAll(DynamicVector<double> ());
+        // mWeightTab.setAll(DynamicVector<double> ());
         mWeightTab.clear();
 
-        if(usingNormalizedValues) {
+        if (usingNormalizedValues) {
           updateMeanValue(propNum);
           updateSDValue(propNum);
         }
@@ -267,13 +258,14 @@ void InputSample::update(std::set<Observable *>::iterator begin, std::set<
     if (updated)
       break;
   }
-
 }
 
-void InputSample::addNode(Graph*, const node n) {
-  if(usingNormalizedValues) {
-    for(unsigned int i=0; i<propertiesList.size(); ++i) {
-      meanProperties[i]=(double(rootGraph->numberOfNodes()-1)*meanProperties[i]+propertiesList[i]->getNodeDoubleValue(n))/double(rootGraph->numberOfNodes());
+void InputSample::addNode(Graph *, const node n) {
+  if (usingNormalizedValues) {
+    for (unsigned int i = 0; i < propertiesList.size(); ++i) {
+      meanProperties[i] = (double(rootGraph->numberOfNodes() - 1) * meanProperties[i] +
+                           propertiesList[i]->getNodeDoubleValue(n)) /
+                          double(rootGraph->numberOfNodes());
       updateSDValue(i);
     }
   }
@@ -282,10 +274,12 @@ void InputSample::addNode(Graph*, const node n) {
   if (hasOnlookers())
     sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
-void InputSample::delNode(Graph*, const node n) {
-  if(usingNormalizedValues) {
-    for(unsigned int i=0; i<propertiesList.size(); ++i) {
-      meanProperties[i]=(double(rootGraph->numberOfNodes()+1)*meanProperties[i]-propertiesList[i]->getNodeDoubleValue(n))/double(rootGraph->numberOfNodes());
+void InputSample::delNode(Graph *, const node n) {
+  if (usingNormalizedValues) {
+    for (unsigned int i = 0; i < propertiesList.size(); ++i) {
+      meanProperties[i] = (double(rootGraph->numberOfNodes() + 1) * meanProperties[i] -
+                           propertiesList[i]->getNodeDoubleValue(n)) /
+                          double(rootGraph->numberOfNodes());
       updateSDValue(i);
     }
   }
@@ -298,16 +292,16 @@ void InputSample::delNode(Graph*, const node n) {
   if (hasOnlookers())
     sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
-void InputSample::delLocalProperty(Graph*, const std::string& propName) {
+void InputSample::delLocalProperty(Graph *, const std::string &propName) {
   unsigned int i = 0;
 
   for (; i < propertiesNameList.size(); ++i) {
     if (propertiesNameList[i].compare(propName) == 0) {
       propertiesNameList.erase(propertiesNameList.begin() + i);
       propertiesList.erase(propertiesList.begin() + i);
-      meanProperties.erase(meanProperties.begin()+i);
-      sdProperties.erase(meanProperties.begin()+i);
-      //mWeightTab.setAll(DynamicVector<double> ());
+      meanProperties.erase(meanProperties.begin() + i);
+      sdProperties.erase(meanProperties.begin() + i);
+      // mWeightTab.setAll(DynamicVector<double> ());
       mWeightTab.clear();
 
       // notify observers
@@ -319,94 +313,90 @@ void InputSample::delLocalProperty(Graph*, const std::string& propName) {
   }
 }
 
-tlp::Iterator<tlp::node>* InputSample::getNodes() {
+tlp::Iterator<tlp::node> *InputSample::getNodes() {
   if (rootGraph)
     return rootGraph->getNodes();
   else
     return NULL;
 }
 
-tlp::Iterator<tlp::node>* InputSample::getRandomNodeOrder() {
+tlp::Iterator<tlp::node> *InputSample::getRandomNodeOrder() {
   if (rootGraph) {
     randomVector.clear();
     node n;
-    forEach(n,rootGraph->getNodes()) {
-      //Random placing nodes
+    forEach(n, rootGraph->getNodes()) {
+      // Random placing nodes
       randomVector.push_back(n);
     }
     random_shuffle(randomVector.begin(), randomVector.end());
 
-    return new StlIterator<node, vector<node>::iterator> (randomVector.begin(),
-           randomVector.end());
-  }
-  else
+    return new StlIterator<node, vector<node>::iterator>(randomVector.begin(), randomVector.end());
+  } else
     return NULL;
 }
 
 void InputSample::updateMeanValue(unsigned int propNum) {
-  assert(propNum<propertiesList.size());
-  NumericProperty* property = propertiesList[propNum];
-  double mean=0.0;
+  assert(propNum < propertiesList.size());
+  NumericProperty *property = propertiesList[propNum];
+  double mean = 0.0;
   node n;
-  forEach(n,rootGraph->getNodes()) {
-    mean+=property->getNodeDoubleValue(n);
+  forEach(n, rootGraph->getNodes()) {
+    mean += property->getNodeDoubleValue(n);
   }
-  meanProperties[propNum]=mean/double(rootGraph->numberOfNodes());
-
+  meanProperties[propNum] = mean / double(rootGraph->numberOfNodes());
 }
 
 void InputSample::updateSDValue(unsigned int propNum) {
-  assert(propNum<propertiesList.size());
+  assert(propNum < propertiesList.size());
 
-  if(rootGraph->numberOfNodes()<=1) {
-    sdProperties[propNum]=1.0;
+  if (rootGraph->numberOfNodes() <= 1) {
+    sdProperties[propNum] = 1.0;
     return;
   }
 
-  NumericProperty* property = propertiesList[propNum];
-  double sd=0.0;
+  NumericProperty *property = propertiesList[propNum];
+  double sd = 0.0;
   node n;
-  forEach(n,rootGraph->getNodes())
-  sd+=pow(property->getNodeDoubleValue(n)-meanProperties[propNum],2.0);
+  forEach(n, rootGraph->getNodes()) sd +=
+      pow(property->getNodeDoubleValue(n) - meanProperties[propNum], 2.0);
 
-  if(sd<=0.0) {
-    sdProperties[propNum]=1.0;
+  if (sd <= 0.0) {
+    sdProperties[propNum] = 1.0;
     return;
   }
 
-  sdProperties[propNum]=sqrt(sd/double(rootGraph->numberOfNodes()-1));
+  sdProperties[propNum] = sqrt(sd / double(rootGraph->numberOfNodes() - 1));
 }
 
 void InputSample::updateAllMeanValues() {
-  meanProperties.resize(propertiesList.size(),0.0);
+  meanProperties.resize(propertiesList.size(), 0.0);
 
-  for(unsigned int i=0; i<propertiesList.size(); ++i) {
+  for (unsigned int i = 0; i < propertiesList.size(); ++i) {
     updateMeanValue(i);
   }
 }
 
 void InputSample::updateAllSDValues() {
-  sdProperties.resize(propertiesList.size(),1.0);
+  sdProperties.resize(propertiesList.size(), 1.0);
 
-  for(unsigned int i=0; i<propertiesList.size(); ++i) {
+  for (unsigned int i = 0; i < propertiesList.size(); ++i) {
     updateSDValue(i);
   }
 }
 
-
-double InputSample::getMeanProperty(const std::string& propertyName) {
+double InputSample::getMeanProperty(const std::string &propertyName) {
   unsigned int i = findIndexForProperty(propertyName);
 
-  if(i<meanProperties.size())
+  if (i < meanProperties.size())
     return meanProperties[i];
 
   return 0.0;
 }
 
-double InputSample::getSDProperty(const std::string& propertyName) {
+double InputSample::getSDProperty(const std::string &propertyName) {
   unsigned int i = findIndexForProperty(propertyName);
 
-  if(i<sdProperties.size())
+  if (i < sdProperties.size())
     return sdProperties[i];
 
   return 1.0;
@@ -417,20 +407,19 @@ bool InputSample::isUsingNormalizedValues() const {
 }
 
 void InputSample::setUsingNormalizedValues(bool norm) {
-  if(norm!=usingNormalizedValues)
+  if (norm != usingNormalizedValues)
     mWeightTab.clear();
 
-  usingNormalizedValues=norm;
+  usingNormalizedValues = norm;
 
-  if(usingNormalizedValues) {
+  if (usingNormalizedValues) {
     updateAllMeanValues();
     updateAllSDValues();
   }
 }
 
-
-unsigned InputSample::findIndexForProperty(const std::string& propertyName)const {
-  for (unsigned int i=0; i < propertiesNameList.size(); ++i) {
+unsigned InputSample::findIndexForProperty(const std::string &propertyName) const {
+  for (unsigned int i = 0; i < propertiesNameList.size(); ++i) {
     if (propertiesNameList[i].compare(propertyName) == 0) {
       return i;
     }

@@ -22,14 +22,14 @@
 
 #include "DiffusionRateFunction.h"
 
-class DifusionRateFunctionGaussian: public DiffusionRateFunction {
+class DifusionRateFunctionGaussian : public DiffusionRateFunction {
 public:
-  DifusionRateFunctionGaussian(TimeDecreasingFunction* decreasingFunction );
+  DifusionRateFunctionGaussian(TimeDecreasingFunction *decreasingFunction);
   virtual ~DifusionRateFunctionGaussian();
   double computeSpaceRate(unsigned int distance, unsigned int currentIteration,
                           unsigned int maxIteration, unsigned int inputSampleSize);
-protected:
 
+protected:
 };
 
 #endif /* DIFUSIONRATEFUNCTIONGAUSSIAN_H_ */

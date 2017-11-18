@@ -33,14 +33,13 @@ QVariantList GlSimpleEntityItemEditor::propertiesQVariant() const {
   return QVariantList();
 }
 
-void GlSimpleEntityItemEditor::setProperty(const QString &, const QVariant &) {
-}
+void GlSimpleEntityItemEditor::setProperty(const QString &, const QVariant &) {}
 
-GlSimpleEntityItemModel::GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent): QAbstractItemModel(parent),editor(itemEditor) {
-}
+GlSimpleEntityItemModel::GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor,
+                                                 QObject *parent)
+    : QAbstractItemModel(parent), editor(itemEditor) {}
 
-GlSimpleEntityItemModel::~GlSimpleEntityItemModel() {
-}
+GlSimpleEntityItemModel::~GlSimpleEntityItemModel() {}
 
 int GlSimpleEntityItemModel::rowCount(const QModelIndex &parent) const {
   if (parent.isValid())
@@ -60,14 +59,14 @@ QModelIndex GlSimpleEntityItemModel::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 
-QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orientation,
+                                             int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
       return headerText();
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
-  }
-  else if(role==Qt::DisplayRole) {
+  } else if (role == Qt::DisplayRole) {
     return editor->propertiesNames()[section];
   }
 
@@ -81,11 +80,11 @@ QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orient
   return QVariant();
 }
 
-QModelIndex GlSimpleEntityItemModel::index(int row, int column,const QModelIndex &parent) const {
-  if (!hasIndex(row,column,parent))
+QModelIndex GlSimpleEntityItemModel::index(int row, int column, const QModelIndex &parent) const {
+  if (!hasIndex(row, column, parent))
     return QModelIndex();
 
-  return QAbstractItemModel::createIndex(row,column,static_cast<void*>(NULL));
+  return QAbstractItemModel::createIndex(row, column, static_cast<void *>(NULL));
 }
 
 QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const {
@@ -97,12 +96,11 @@ QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const
 }
 
 bool GlSimpleEntityItemModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-  if(role==Qt::EditRole) {
-    editor->setProperty(editor->propertiesNames()[index.row()],value);
+  if (role == Qt::EditRole) {
+    editor->setProperty(editor->propertiesNames()[index.row()], value);
     return true;
   }
 
   return false;
 }
-
 }

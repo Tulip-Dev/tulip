@@ -34,7 +34,6 @@ namespace tlp {
 class TLP_GL_SCOPE GlBox : public GlSimpleEntity {
 
 public:
-
   /**
    * @brief Don't use this constructor
    */
@@ -51,14 +50,16 @@ public:
    * @param outlined outline the box ?
    * @param outlineSize The size of the outline
    */
-  GlBox(const Coord& position, const Size &size, const Color& fillColor, const Color &outlineColor,bool filled=true, bool outlined=true, const std::string &textureName="",float outlineSize=1.);
+  GlBox(const Coord &position, const Size &size, const Color &fillColor, const Color &outlineColor,
+        bool filled = true, bool outlined = true, const std::string &textureName = "",
+        float outlineSize = 1.);
 
   /**
    * @brief Destructor.
    */
   virtual ~GlBox();
 
-  virtual void draw(float lod,Camera *camera);
+  virtual void draw(float lod, Camera *camera);
 
   /**
    * @brief Accessor in reading to the size.
@@ -68,17 +69,17 @@ public:
   /**
    * @brief Accessor in writing to the size of the box
    */
-  void setSize(const Size& size);
+  void setSize(const Size &size);
 
   /**
    * @brief Accessor in reading to the position.
    */
-  Coord* getPosition() const;
+  Coord *getPosition() const;
 
   /**
    * @brief Accessor in writing to the position.
    */
-  void setPosition(const Coord& position);
+  void setPosition(const Coord &position);
 
   /**
    * @brief Accessor in reading to the fill color.
@@ -88,7 +89,7 @@ public:
   /**
    * @brief Accessor in writing to the fill color of the box
    */
-  void setFillColor(const Color& color);
+  void setFillColor(const Color &color);
 
   /**
    * @brief Accessor in reading to the outline color.
@@ -98,7 +99,7 @@ public:
   /**
    * @brief Accessor in writing to the outline color of the box
    */
-  void setOutlineColor(const Color& color);
+  void setOutlineColor(const Color &color);
 
   /**
    * @brief Accessor in reading to the outline size.
@@ -118,12 +119,12 @@ public:
   /**
    * @brief Accessor in writing to the texture name of the box
    */
-  void setTextureName(const std::string& textureName);
+  void setTextureName(const std::string &textureName);
 
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * @brief Function to export data in outString (in XML format)
@@ -136,15 +137,14 @@ public:
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 protected:
-
   virtual void clearGenerated();
 
-  Coord position; /**< The position of the center of the box*/
-  Size size; /**< size is the "radius" of the box */
-  std::vector<Color> fillColors; /**< fillColor of the box */
+  Coord position;                   /**< The position of the center of the box*/
+  Size size;                        /**< size is the "radius" of the box */
+  std::vector<Color> fillColors;    /**< fillColor of the box */
   std::vector<Color> outlineColors; /**< outlineColor of the box */
-  bool filled; /**< the box is filled ? */
-  bool outlined; /**< the box is outlined ? */
+  bool filled;                      /**< the box is filled ? */
+  bool outlined;                    /**< the box is outlined ? */
   std::string textureName;
   float outlineSize; /**< size of the ouline */
 
@@ -152,6 +152,5 @@ protected:
   bool generated;
   GLuint buffers[5];
 };
-
 }
 #endif

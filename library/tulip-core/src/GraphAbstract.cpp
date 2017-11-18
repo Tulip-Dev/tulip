@@ -34,9 +34,9 @@ const string metaGraphPropertyName = "viewMetaGraph";
 
 //=========================================================================
 GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
-  :supergraph(supergraph ? supergraph : this),
-   root((supergraph == this) ? this : supergraph->getRoot()),
-   subGraphToKeep(NULL), metaGraphProperty(NULL) {
+    : supergraph(supergraph ? supergraph : this),
+      root((supergraph == this) ? this : supergraph->getRoot()), subGraphToKeep(NULL),
+      metaGraphProperty(NULL) {
   // get id
   if (supergraph != this)
     id = static_cast<GraphImpl *>(getRoot())->getSubGraphId(sgId);
@@ -47,8 +47,8 @@ GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
 GraphAbstract::~GraphAbstract() {
   StableIterator<Graph *> itS(getSubGraphs());
 
-  while(itS.hasNext()) {
-    Graph* sg = itS.next();
+  while (itS.hasNext()) {
+    Graph *sg = itS.next();
 
     // avoid double free
     // in a push context, a 'deleted' graph (see delSubGraph)
@@ -71,26 +71,26 @@ GraphAbstract::~GraphAbstract() {
 void GraphAbstract::clear() {
   StableIterator<Graph *> itS(getSubGraphs());
 
-  while(itS.hasNext())
+  while (itS.hasNext())
     delAllSubGraphs(itS.next());
 
   StableIterator<node> itN(getNodes());
 
-  while(itN.hasNext())
+  while (itN.hasNext())
     delNode(itN.next());
 }
 //=========================================================================
-void GraphAbstract::restoreSubGraph(Graph* sg) {
+void GraphAbstract::restoreSubGraph(Graph *sg) {
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
 }
 //=========================================================================
-void GraphAbstract::setSubGraphToKeep(Graph* sg) {
+void GraphAbstract::setSubGraphToKeep(Graph *sg) {
   subGraphToKeep = sg;
 }
 //=========================================================================
 Graph *GraphAbstract::addSubGraph(unsigned int id, BooleanProperty *selection,
-                                  const std::string& name) {
+                                  const std::string &name) {
   Graph *tmp = new GraphView(this, selection, id);
 
   if (!name.empty())
@@ -114,7 +114,7 @@ unsigned int GraphAbstract::numberOfDescendantGraphs() const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   int result = numberOfSubGraphs();
 
-  while(it != subgraphs.end()) {
+  while (it != subgraphs.end()) {
     result += (*it)->numberOfDescendantGraphs();
     ++it;
   }
@@ -124,8 +124,7 @@ unsigned int GraphAbstract::numberOfDescendantGraphs() const {
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
   // look for the graph we want to remove in the subgraphs
-  GRAPH_SEQ::iterator it =
-    std::find(subgraphs.begin(), subgraphs.end(), toRemove);
+  GRAPH_SEQ::iterator it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
   assert(it != subgraphs.end());
 
@@ -152,8 +151,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       // avoid deletion of toRemove subgraphs
       toRemove->clearSubGraphs();
       delete toRemove;
-    }
-    else
+    } else
       // toRemove is not deleted,
       // and its subgraphs list is not erased;
       // beacause it is registered into a GraphUpdatesRecorder
@@ -162,24 +160,23 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   }
 }
 //=========================================================================
-void GraphAbstract::removeSubGraph(Graph * toRemove) {
-  GRAPH_SEQ::iterator it =
-    std::find(subgraphs.begin(), subgraphs.end(), toRemove);
+void GraphAbstract::removeSubGraph(Graph *toRemove) {
+  GRAPH_SEQ::iterator it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
   if (it != subgraphs.end()) {
     subgraphs.erase(it);
   }
 }
 //=========================================================================
-void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
-  if (this != toRemove->getSuperGraph() || this==toRemove)
+void GraphAbstract::delAllSubGraphs(Graph *toRemove) {
+  if (this != toRemove->getSuperGraph() || this == toRemove)
     // this==toRemove : root graph
     return;
 
   StableIterator<Graph *> itS(toRemove->getSubGraphs());
 
   while (itS.hasNext())
-    static_cast<GraphAbstract*>(toRemove)->delAllSubGraphs(itS.next());
+    static_cast<GraphAbstract *>(toRemove)->delAllSubGraphs(itS.next());
 
   delSubGraph(toRemove);
 }
@@ -189,24 +186,24 @@ void GraphAbstract::clearSubGraphs() {
 }
 //=========================================================================
 void GraphAbstract::setSuperGraph(Graph *sg) {
-  supergraph=sg;
+  supergraph = sg;
 }
 //=========================================================================
-Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
-  return new StlIterator<Graph *, GRAPH_SEQ::const_iterator >(subgraphs.begin(),subgraphs.end());
+Iterator<Graph *> *GraphAbstract::getSubGraphs() const {
+  return new StlIterator<Graph *, GRAPH_SEQ::const_iterator>(subgraphs.begin(), subgraphs.end());
 }
 //=========================================================================
-bool GraphAbstract::isSubGraph(const Graph* sg) const {
+bool GraphAbstract::isSubGraph(const Graph *sg) const {
   return (std::find(subgraphs.begin(), subgraphs.end(), sg) != subgraphs.end());
 }
 //=========================================================================
-bool GraphAbstract::isDescendantGraph(const Graph* sg) const {
+bool GraphAbstract::isDescendantGraph(const Graph *sg) const {
   if (isSubGraph(sg))
     return true;
 
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
 
-  while(it != subgraphs.end()) {
+  while (it != subgraphs.end()) {
     if ((*it)->isDescendantGraph(sg))
       return true;
 
@@ -216,10 +213,10 @@ bool GraphAbstract::isDescendantGraph(const Graph* sg) const {
   return false;
 }
 //=========================================================================
-Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
+Graph *GraphAbstract::getSubGraph(unsigned int sgId) const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
 
-  while(it != subgraphs.end()) {
+  while (it != subgraphs.end()) {
     if ((*it)->getId() == sgId)
       return *it;
 
@@ -229,10 +226,10 @@ Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
   return NULL;
 }
 //=========================================================================
-Graph* GraphAbstract::getSubGraph(const std::string &name) const {
+Graph *GraphAbstract::getSubGraph(const std::string &name) const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
 
-  while(it != subgraphs.end()) {
+  while (it != subgraphs.end()) {
     if ((*it)->getName() == name)
       return *it;
 
@@ -242,15 +239,15 @@ Graph* GraphAbstract::getSubGraph(const std::string &name) const {
   return NULL;
 }
 //=========================================================================
-Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
-  Graph* sg = getSubGraph(sgId);
+Graph *GraphAbstract::getDescendantGraph(unsigned int sgId) const {
+  Graph *sg = getSubGraph(sgId);
 
   if (sg)
     return sg;
 
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
 
-  while(it != subgraphs.end()) {
+  while (it != subgraphs.end()) {
     if ((sg = (*it)->getDescendantGraph(sgId)))
       return sg;
 
@@ -260,15 +257,15 @@ Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
   return NULL;
 }
 //=========================================================================
-Graph* GraphAbstract::getDescendantGraph(const string &name) const {
-  Graph* sg = getSubGraph(name);
+Graph *GraphAbstract::getDescendantGraph(const string &name) const {
+  Graph *sg = getSubGraph(name);
 
   if (sg)
     return sg;
 
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
 
-  while(it != subgraphs.end()) {
+  while (it != subgraphs.end()) {
     if ((sg = (*it)->getDescendantGraph(name)))
       return sg;
 
@@ -279,40 +276,40 @@ Graph* GraphAbstract::getDescendantGraph(const string &name) const {
 }
 //=========================================================================
 node GraphAbstract::getOneNode() const {
-  const std::vector<node>& vNodes = nodes();
+  const std::vector<node> &vNodes = nodes();
   return (vNodes.size() > 0) ? vNodes[0] : node();
 }
 //=========================================================================
 node GraphAbstract::getRandomNode() const {
-  const std::vector<node>& vNodes = nodes();
+  const std::vector<node> &vNodes = nodes();
 
-  if(!vNodes.empty())
-    return vNodes[randomUnsignedInteger(vNodes.size()-1)];
+  if (!vNodes.empty())
+    return vNodes[randomUnsignedInteger(vNodes.size() - 1)];
 
   return node();
 }
 //=========================================================================
 edge GraphAbstract::getOneEdge() const {
-  const std::vector<edge>& vEdges = edges();
+  const std::vector<edge> &vEdges = edges();
   return (vEdges.size() > 0) ? vEdges[0] : edge();
 }
 //=========================================================================
 edge GraphAbstract::getRandomEdge() const {
-  const std::vector<edge>& vEdges = edges();
+  const std::vector<edge> &vEdges = edges();
 
-  if(!vEdges.empty())
-    return vEdges[randomUnsignedInteger(vEdges.size()-1)];
+  if (!vEdges.empty())
+    return vEdges[randomUnsignedInteger(vEdges.size() - 1)];
 
   return edge();
 }
 //=========================================================================
 node GraphAbstract::getInNode(const node n, unsigned int i) const {
-  assert(i<=indeg(n) && i>0);
-  Iterator<node>*itN=getInNodes(n);
+  assert(i <= indeg(n) && i > 0);
+  Iterator<node> *itN = getInNodes(n);
   node result;
 
-  while(i--) {
-    result=itN->next();
+  while (i--) {
+    result = itN->next();
   }
 
   delete itN;
@@ -320,30 +317,30 @@ node GraphAbstract::getInNode(const node n, unsigned int i) const {
 }
 //=========================================================================
 node GraphAbstract::getOutNode(const node n, unsigned int i) const {
-  assert(i<=outdeg(n) && i>0);
-  Iterator<node>*itN=getOutNodes(n);
+  assert(i <= outdeg(n) && i > 0);
+  Iterator<node> *itN = getOutNodes(n);
   node result;
 
-  while(i--) {
-    result=itN->next();
+  while (i--) {
+    result = itN->next();
   }
 
   delete itN;
   return result;
 }
 //=========================================================================
-void GraphAbstract::delNodes(Iterator<node>* itN, bool deleteInAllGraphs) {
+void GraphAbstract::delNodes(Iterator<node> *itN, bool deleteInAllGraphs) {
   assert(itN != NULL);
 
-  while(itN->hasNext()) {
+  while (itN->hasNext()) {
     delNode(itN->next(), deleteInAllGraphs);
   }
 }
 //=========================================================================
-void GraphAbstract::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
+void GraphAbstract::delEdges(Iterator<edge> *itE, bool deleteInAllGraphs) {
   assert(itE != NULL);
 
-  while(itE->hasNext()) {
+  while (itE->hasNext()) {
     delEdge(itE->next(), deleteInAllGraphs);
   }
 }
@@ -356,12 +353,13 @@ bool GraphAbstract::existLocalProperty(const std::string &name) const {
   return propertyContainer->existLocalProperty(name);
 }
 //=========================================================================
-PropertyInterface* GraphAbstract::getProperty(const string &str) const {
+PropertyInterface *GraphAbstract::getProperty(const string &str) const {
   return propertyContainer->getProperty(str);
 }
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
-  std::string nameCopy = name; // the name is copied to ensure that the notifyBeforeDel event will not use an invalid reference
+  std::string nameCopy = name; // the name is copied to ensure that the notifyBeforeDel event will
+                               // not use an invalid reference
   assert(existLocalProperty(nameCopy));
   notifyBeforeDelLocalProperty(nameCopy);
   propertyContainer->delLocalProperty(nameCopy);
@@ -380,65 +378,66 @@ void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface 
   notifyAddLocalProperty(name);
 }
 //=========================================================================
-bool GraphAbstract::renameLocalProperty(PropertyInterface* prop, const std::string& newName) {
+bool GraphAbstract::renameLocalProperty(PropertyInterface *prop, const std::string &newName) {
   return propertyContainer->renameLocalProperty(prop, newName);
 }
 //=========================================================================
-void GraphAbstract::notifyAddInheritedProperty(const std::string& propName) {
+void GraphAbstract::notifyAddInheritedProperty(const std::string &propName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_INHERITED_PROPERTY, propName));
 }
-void GraphAbstract::notifyBeforeAddInheritedProperty(const std::string& propName) {
+void GraphAbstract::notifyBeforeAddInheritedProperty(const std::string &propName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY, propName));
 }
 //=========================================================================
-void GraphAbstract::notifyBeforeDelInheritedProperty(const std::string& propName) {
+void GraphAbstract::notifyBeforeDelInheritedProperty(const std::string &propName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY, propName,Event::TLP_INFORMATION));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY, propName,
+                         Event::TLP_INFORMATION));
 }
 //=========================================================================
-void GraphAbstract::notifyAfterDelInheritedProperty(const std::string& name) {
+void GraphAbstract::notifyAfterDelInheritedProperty(const std::string &name) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY, name));
 }
 //=========================================================================
-void GraphAbstract::notifyBeforeRenameLocalProperty(PropertyInterface* prop,
-    const std::string& newName) {
+void GraphAbstract::notifyBeforeRenameLocalProperty(PropertyInterface *prop,
+                                                    const std::string &newName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_RENAME_LOCAL_PROPERTY,
-                         prop, newName));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_RENAME_LOCAL_PROPERTY, prop, newName));
 }
 //=========================================================================
-void GraphAbstract::notifyAfterRenameLocalProperty(PropertyInterface* prop,
-    const std::string& oldName) {
+void GraphAbstract::notifyAfterRenameLocalProperty(PropertyInterface *prop,
+                                                   const std::string &oldName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY,
-                         prop, oldName));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY, prop, oldName));
 }
 //=========================================================================
-Iterator<std::string>* GraphAbstract::getLocalProperties() const {
+Iterator<std::string> *GraphAbstract::getLocalProperties() const {
   return propertyContainer->getLocalProperties();
 }
 //=========================================================================
-Iterator<std::string>* GraphAbstract::getInheritedProperties() const {
+Iterator<std::string> *GraphAbstract::getInheritedProperties() const {
   return propertyContainer->getInheritedProperties();
 }
 //=========================================================================
-Iterator<std::string>* GraphAbstract::getProperties() const {
-  return new ConcatIterator<std::string> (propertyContainer->getLocalProperties(),propertyContainer->getInheritedProperties());
+Iterator<std::string> *GraphAbstract::getProperties() const {
+  return new ConcatIterator<std::string>(propertyContainer->getLocalProperties(),
+                                         propertyContainer->getInheritedProperties());
 }
 //=========================================================================
-Iterator<PropertyInterface*>* GraphAbstract::getLocalObjectProperties() const {
+Iterator<PropertyInterface *> *GraphAbstract::getLocalObjectProperties() const {
   return propertyContainer->getLocalObjectProperties();
 }
 //=========================================================================
-Iterator<PropertyInterface*>* GraphAbstract::getInheritedObjectProperties() const {
+Iterator<PropertyInterface *> *GraphAbstract::getInheritedObjectProperties() const {
   return propertyContainer->getInheritedObjectProperties();
 }
 //=========================================================================
-Iterator<PropertyInterface*>* GraphAbstract::getObjectProperties() const {
-  return new ConcatIterator<PropertyInterface*> (propertyContainer->getLocalObjectProperties(),propertyContainer->getInheritedObjectProperties());
+Iterator<PropertyInterface *> *GraphAbstract::getObjectProperties() const {
+  return new ConcatIterator<PropertyInterface *>(propertyContainer->getLocalObjectProperties(),
+                                                 propertyContainer->getInheritedObjectProperties());
 }
 //=========================================================================
 bool GraphAbstract::isMetaNode(const node n) const {
@@ -451,7 +450,7 @@ bool GraphAbstract::isMetaEdge(const edge e) const {
   return metaGraphProperty && metaGraphProperty->hasNonDefaultValue(e);
 }
 //=========================================================================
-Graph* GraphAbstract::getNodeMetaInfo(const node n) const {
+Graph *GraphAbstract::getNodeMetaInfo(const node n) const {
   if (metaGraphProperty)
     return metaGraphProperty->getNodeValue(n);
 
@@ -461,7 +460,7 @@ Graph* GraphAbstract::getNodeMetaInfo(const node n) const {
 // only used to return a reference on an empty vector of edges
 static set<edge> noReferencedEdges;
 //=========================================================================
-const set<edge>& GraphAbstract::getReferencedEdges(const edge e) const {
+const set<edge> &GraphAbstract::getReferencedEdges(const edge e) const {
   if (metaGraphProperty)
     return metaGraphProperty->getReferencedEdges(e);
   else
@@ -470,33 +469,32 @@ const set<edge>& GraphAbstract::getReferencedEdges(const edge e) const {
 //=========================================================================
 // Iterator on a vector of edges
 // used for the edge associated value of a GraphProperty
-class EdgeSetIterator:public Iterator<edge> {
+class EdgeSetIterator : public Iterator<edge> {
   set<edge>::const_iterator it, itEnd;
+
 public:
-  EdgeSetIterator(const set<edge>& edges):
-    it(edges.begin()), itEnd(edges.end()) {}
+  EdgeSetIterator(const set<edge> &edges) : it(edges.begin()), itEnd(edges.end()) {}
   ~EdgeSetIterator() {}
   edge next() {
-    edge tmp=(*it);
+    edge tmp = (*it);
     ++it;
     return tmp;
   }
 
   bool hasNext() {
-    return (it!=itEnd);
+    return (it != itEnd);
   }
 };
 
-Iterator<edge>* GraphAbstract::getEdgeMetaInfo(const edge e) const {
+Iterator<edge> *GraphAbstract::getEdgeMetaInfo(const edge e) const {
   return new EdgeSetIterator(getReferencedEdges(e));
 }
 
-GraphProperty* GraphAbstract::getMetaGraphProperty() {
+GraphProperty *GraphAbstract::getMetaGraphProperty() {
   if (metaGraphProperty)
     return metaGraphProperty;
 
-  return metaGraphProperty =
-           getRoot()->getProperty<GraphProperty>(metaGraphPropertyName);
+  return metaGraphProperty = getRoot()->getProperty<GraphProperty>(metaGraphPropertyName);
 }
 
 void GraphAbstract::setName(const std::string &name) {
@@ -509,14 +507,16 @@ std::string GraphAbstract::getName() const {
   return name;
 }
 
-Iterator<node>* GraphAbstract::bfs(const node root) const {
+Iterator<node> *GraphAbstract::bfs(const node root) const {
   vector<node> bfsResult;
   tlp::bfs(this, root, bfsResult);
-  return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(bfsResult.begin(), bfsResult.end()));
+  return new StableIterator<tlp::node>(
+      new StlIterator<node, std::vector<tlp::node>::iterator>(bfsResult.begin(), bfsResult.end()));
 }
 
-Iterator<node>* GraphAbstract::dfs(const node root) const {
+Iterator<node> *GraphAbstract::dfs(const node root) const {
   vector<node> dfsResult;
   tlp::dfs(this, root, dfsResult);
-  return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(dfsResult.begin(), dfsResult.end()));
+  return new StableIterator<tlp::node>(
+      new StlIterator<node, std::vector<tlp::node>::iterator>(dfsResult.begin(), dfsResult.end()));
 }

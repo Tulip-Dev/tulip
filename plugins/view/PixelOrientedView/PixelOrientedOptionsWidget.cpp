@@ -29,11 +29,12 @@
 using namespace std;
 using namespace tlp;
 
-PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::PixelOrientedOptionsWidgetData), oldValuesInitialized(false) {
+PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::PixelOrientedOptionsWidgetData), oldValuesInitialized(false) {
   _ui->setupUi(this);
   _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->backColorButton->setDialogTitle("Choose the background color");
-  setBackgroundColor(Color(255,255,255));
+  setBackgroundColor(Color(255, 255, 255));
 }
 
 PixelOrientedOptionsWidget::~PixelOrientedOptionsWidget() {
@@ -52,7 +53,7 @@ string PixelOrientedOptionsWidget::getLayoutType() const {
   return QStringToTlpString(_ui->layoutTypeCB->currentText());
 }
 
-void PixelOrientedOptionsWidget::setLayoutType(const string& layoutType) {
+void PixelOrientedOptionsWidget::setLayoutType(const string &layoutType) {
   int idx = _ui->layoutTypeCB->findText(QString(layoutType.c_str()));
 
   if (idx != -1) {
@@ -61,22 +62,20 @@ void PixelOrientedOptionsWidget::setLayoutType(const string& layoutType) {
 }
 
 bool PixelOrientedOptionsWidget::configurationChanged() {
-  bool confChanged=false;
+  bool confChanged = false;
 
-  if(oldValuesInitialized) {
-    if(oldBackgroundColor!=getBackgroundColor() ||
-        oldLayoutType!=getLayoutType() ) {
-      confChanged=true;
+  if (oldValuesInitialized) {
+    if (oldBackgroundColor != getBackgroundColor() || oldLayoutType != getLayoutType()) {
+      confChanged = true;
     }
-  }
-  else {
-    confChanged=true;
-    oldValuesInitialized=true;
+  } else {
+    confChanged = true;
+    oldValuesInitialized = true;
   }
 
-  if(confChanged) {
-    oldBackgroundColor=getBackgroundColor();
-    oldLayoutType=getLayoutType();
+  if (confChanged) {
+    oldBackgroundColor = getBackgroundColor();
+    oldLayoutType = getLayoutType();
   }
 
   return confChanged;

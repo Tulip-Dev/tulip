@@ -20,7 +20,6 @@
 #ifndef HISTOGRAMOVERVIEW_H_
 #define HISTOGRAMOVERVIEW_H_
 
-
 #include <tulip/GlComposite.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlQuantitativeAxis.h>
@@ -34,12 +33,13 @@ const std::string BIN_RECT_TEXTURE = "histo_texture";
 
 class Histogram : public GlComposite {
 
-public :
-
-  Histogram(Graph *graph, Graph* edgeGraph, std::map<edge, node>& edgeMap, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
+public:
+  Histogram(Graph *graph, Graph *edgeGraph, std::map<edge, node> &edgeMap,
+            const std::string &propertyName, const ElementType &dataLocation, const Coord &blCorner,
+            unsigned int size, const Color &backgroundColor, const Color &textColor);
   ~Histogram();
 
-  const std::string& getPropertyName() const {
+  const std::string &getPropertyName() const {
     return propertyName;
   }
   GlQuantitativeAxis *getXAxis() const {
@@ -48,7 +48,7 @@ public :
   GlQuantitativeAxis *getYAxis() const {
     return yAxis;
   }
-  GlComposite *getBinsComposite() const  {
+  GlComposite *getBinsComposite() const {
     return histoBinsComposite;
   }
   LayoutProperty *getHistogramLayout() const {
@@ -132,29 +132,29 @@ public :
   void setYAxisScaleDefined(const bool value) {
     yAxisScaleDefined = value;
   }
-  const std::pair<double,double>& getXAxisScale() const {
+  const std::pair<double, double> &getXAxisScale() const {
     return xAxisScale;
   }
-  void setXAxisScale(const std::pair<double, double>& value) {
+  void setXAxisScale(const std::pair<double, double> &value) {
     xAxisScale = value;
   }
-  const std::pair<double, double>& getYAxisScale() const {
+  const std::pair<double, double> &getYAxisScale() const {
     return yAxisScale;
   }
-  void setYAxisScale(const std::pair<double, double>& value) {
+  void setYAxisScale(const std::pair<double, double> &value) {
     yAxisScale = value;
   }
 
-  const std::pair<double, double>& getInitXAxisScale() const {
+  const std::pair<double, double> &getInitXAxisScale() const {
     return initXAxisScale;
   }
-  void setInitXAxisScale(const std::pair<double, double>& value) {
+  void setInitXAxisScale(const std::pair<double, double> &value) {
     initXAxisScale = value;
   }
-  const std::pair<double, double>& getInitYAxisScale() const {
+  const std::pair<double, double> &getInitYAxisScale() const {
     return initYAxisScale;
   }
-  void setInitYAxisScale(const std::pair<double, double>& value) {
+  void setInitYAxisScale(const std::pair<double, double> &value) {
     initYAxisScale = value;
   }
 
@@ -180,8 +180,7 @@ public :
     return displayEdges;
   }
 
-private :
-
+private:
   void computeBoundingBox() {
     GlBoundingBoxSceneVisitor glBBSV(NULL);
     acceptVisitor(&glBBSV);
@@ -217,7 +216,7 @@ private :
   std::string textureName;
   GlGraphComposite *graphComposite;
   Graph *edgeAsNodeGraph;
-  std::map<edge, node>& edgeToNode;
+  std::map<edge, node> &edgeToNode;
   Color backgroundColor;
   Color textColor;
   bool integerScale;
@@ -234,7 +233,6 @@ private :
   int overviewId;
   static int overviewCpt;
 };
-
 }
 
 #endif /* HISTOGRAMOVERVIEW_H_ */

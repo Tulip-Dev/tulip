@@ -22,9 +22,11 @@
 // It allows to override the following system functions : sigaction, signal and sigset.
 // The purpose is to prevent custom signal handlers being overwritten by libraries
 // linked against the application (e.g. graphics driver).
-// When compiled as a shared library the environment variable LD_PRELOAD (DYLD_INSERT_LIBRARIES on MacOS)
+// When compiled as a shared library the environment variable LD_PRELOAD (DYLD_INSERT_LIBRARIES on
+// MacOS)
 // has to be filled with the path to the resulting shared library before launching the application.
-// For instance : $ LD_PRELOAD=<path to the compiled shared library> <path_to_application_executable> <args>
+// For instance : $ LD_PRELOAD=<path to the compiled shared library>
+// <path_to_application_executable> <args>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -45,7 +47,7 @@
 using namespace std;
 
 // some typedef on function pointers
-typedef SignalHandlerFunc* SignalFunc(int, SignalHandlerFunc*);
+typedef SignalHandlerFunc *SignalFunc(int, SignalHandlerFunc *);
 typedef int SigactionFunc(int, const struct sigaction *, struct sigaction *);
 
 static SigactionFunc *real_sigaction = NULL;
@@ -58,7 +60,8 @@ static set<int> handledSignals;
 #define __THROW
 #endif
 
-template <typename TO, typename FROM> TO nasty_cast(FROM f) {
+template <typename TO, typename FROM>
+TO nasty_cast(FROM f) {
   union {
     FROM f;
     TO t;
@@ -86,7 +89,6 @@ void installSignalHandler(int sig, SignalHandlerFunc *handler) {
   action.sa_handler = handler;
 
   real_sigaction(sig, &action, NULL);
-
 }
 
 void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
@@ -101,27 +103,24 @@ void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
   action.sa_sigaction = handler;
 
   real_sigaction(sig, &action, NULL);
-
 }
 
 // redefinition of the signal function
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real signal function
-SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) __THROW {
+SignalHandlerFunc *signal(int sig, SignalHandlerFunc *handler) __THROW {
 
   if (handledSignals.find(sig) != handledSignals.end()) {
     return SIG_DFL;
-  }
-  else {
-    //Init function if needed
-    if(real_signal == NULL) {
+  } else {
+    // Init function if needed
+    if (real_signal == NULL) {
       initSignalInterposer();
     }
 
     return real_signal(sig, handler);
   }
-
 }
 
 // redefinition of the sigset function
@@ -130,18 +129,16 @@ SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) __THROW {
 // if the signal is not treated by our custom handler, call the real sigset function
 SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
 
-  if(handledSignals.find(sig) != handledSignals.end()) {
+  if (handledSignals.find(sig) != handledSignals.end()) {
     return SIG_DFL;
-  }
-  else {
-    //Init function if needed
-    if(real_sigset == NULL) {
+  } else {
+    // Init function if needed
+    if (real_sigset == NULL) {
       initSignalInterposer();
     }
 
     return real_sigset(sig, handler);
   }
-
 }
 
 // redefinition of the sigaction function
@@ -150,18 +147,16 @@ SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
 // if the signal is not treated by our custom handler, call the real sigaction function
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __THROW {
 
-  if (handledSignals.find(sig) != handledSignals.end() ) {
+  if (handledSignals.find(sig) != handledSignals.end()) {
     return 0;
-  }
-  else {
-    //Init function if needed
-    if(real_sigaction == NULL) {
+  } else {
+    // Init function if needed
+    if (real_sigaction == NULL) {
       initSignalInterposer();
     }
 
     return real_sigaction(sig, act, oact);
   }
-
 }
 
 #ifdef __GNUC__

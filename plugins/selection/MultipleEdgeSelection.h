@@ -22,9 +22,7 @@
 #include <tulip/BooleanProperty.h>
 #include "../utils/PluginNames.h"
 
-
 /** \addtogroup selection */
-
 
 /**
  * This selection plugins enables to find the multiple-edges and parallel-edges in a graph.
@@ -35,18 +33,16 @@
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@labri.fr
  */
-class MultipleEdgeSelection:public tlp::BooleanAlgorithm {
+class MultipleEdgeSelection : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION(tlp::SelectionAlgorithm::MultipleEdgeSelection,"David Auber","20/01/2003",
-                    "Selects the multiple or parallel edges of a graph.<br/>Two edges are considered as parallel if they have the same source/origin and the same target/destination."
+  PLUGININFORMATION(tlp::SelectionAlgorithm::MultipleEdgeSelection, "David Auber", "20/01/2003",
+                    "Selects the multiple or parallel edges of a graph.<br/>Two edges are "
+                    "considered as parallel if they have the same source/origin and the same "
+                    "target/destination."
                     "If it exists n edges between two nodes, only n-1 edges will be selected.",
                     "1.0", "Selection")
-  MultipleEdgeSelection(const tlp::PluginContext* context);
+  MultipleEdgeSelection(const tlp::PluginContext *context);
   bool run();
 };
 
 #endif
-
-
-
-

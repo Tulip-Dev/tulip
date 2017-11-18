@@ -26,52 +26,51 @@
 using namespace tlp;
 
 //====================================================
-void tlp::Line(float x1, float y1, float z1, float x2, float y2 ,  float z2, Color &C1, Color &C2) {
+void tlp::Line(float x1, float y1, float z1, float x2, float y2, float z2, Color &C1, Color &C2) {
   glBegin(GL_LINES);
   setColor(C1);
   glVertex3f(x1, y1, z1);
   setColor(C2);
-  glVertex3f(x2, y2 , z2);
+  glVertex3f(x2, y2, z2);
   glEnd();
 }
 //====================================================
-void tlp::Rect(float x, float y , float z, float w , float h) {
+void tlp::Rect(float x, float y, float z, float w, float h) {
   glBegin(GL_QUADS);
-  glVertex3f(x, y , z);
-  glVertex3f(x+w, y ,z);
-  glVertex3f(x+w, y+h ,z);
-  glVertex3f(x, y+h , z);
+  glVertex3f(x, y, z);
+  glVertex3f(x + w, y, z);
+  glVertex3f(x + w, y + h, z);
+  glVertex3f(x, y + h, z);
   glEnd();
 }
 //====================================================
-static const char* gouraudtriangleEPS[] = {
-  "/bd{bind def}bind def /triangle { aload pop   setrgbcolor  aload pop 5 3",
-  "roll 4 2 roll 3 2 roll exch moveto lineto lineto closepath fill } bd",
-  "/computediff1 { 2 copy sub abs threshold ge {pop pop pop true} { exch 2",
-  "index sub abs threshold ge { pop pop true} { sub abs threshold ge } ifelse",
-  "} ifelse } bd /computediff3 { 3 copy 0 get 3 1 roll 0 get 3 1 roll 0 get",
-  "computediff1 {true} { 3 copy 1 get 3 1 roll 1 get 3 1 roll 1 get",
-  "computediff1 {true} { 3 copy 2 get 3 1 roll  2 get 3 1 roll 2 get",
-  "computediff1 } ifelse } ifelse } bd /middlecolor { aload pop 4 -1 roll",
-  "aload pop 4 -1 roll add 2 div 5 1 roll 3 -1 roll add 2 div 3 1 roll add 2",
-  "div 3 1 roll exch 3 array astore } bd /gouraudtriangle { computediff3 { 4",
-  "-1 roll aload 7 1 roll 6 -1 roll pop 3 -1 roll pop add 2 div 3 1 roll add",
-  "2 div exch 3 -1 roll aload 7 1 roll exch pop 4 -1 roll pop add 2 div 3 1",
-  "roll add 2 div exch 3 -1 roll aload 7 1 roll pop 3 -1 roll pop add 2 div 3",
-  "1 roll add 2 div exch 7 3 roll 10 -3 roll dup 3 index middlecolor 4 1 roll",
-  "2 copy middlecolor 4 1 roll 3 copy pop middlecolor 4 1 roll 13 -1 roll",
-  "aload pop 17 index 6 index 15 index 19 index 6 index 17 index 6 array",
-  "astore 10 index 10 index 14 index gouraudtriangle 17 index 5 index 17",
-  "index 19 index 5 index 19 index 6 array astore 10 index 9 index 13 index",
-  "gouraudtriangle 13 index 16 index 5 index 15 index 18 index 5 index 6",
-  "array astore 12 index 12 index 9 index gouraudtriangle 17 index 16 index",
-  "15 index 19 index 18 index 17 index 6 array astore 10 index 12 index 14",
-  "index gouraudtriangle 18 {pop} repeat } { aload pop 5 3 roll aload pop 7 3",
-  "roll aload pop 9 3 roll 4 index 6 index 4 index add add 3 div 10 1 roll 7",
-  "index 5 index 3 index add add 3 div 10 1 roll 6 index 4 index 2 index add",
-  "add 3 div 10 1 roll 9 {pop} repeat 3 array astore triangle } ifelse } bd",
-  NULL
-};
+static const char *gouraudtriangleEPS[] = {
+    "/bd{bind def}bind def /triangle { aload pop   setrgbcolor  aload pop 5 3",
+    "roll 4 2 roll 3 2 roll exch moveto lineto lineto closepath fill } bd",
+    "/computediff1 { 2 copy sub abs threshold ge {pop pop pop true} { exch 2",
+    "index sub abs threshold ge { pop pop true} { sub abs threshold ge } ifelse",
+    "} ifelse } bd /computediff3 { 3 copy 0 get 3 1 roll 0 get 3 1 roll 0 get",
+    "computediff1 {true} { 3 copy 1 get 3 1 roll 1 get 3 1 roll 1 get",
+    "computediff1 {true} { 3 copy 2 get 3 1 roll  2 get 3 1 roll 2 get",
+    "computediff1 } ifelse } ifelse } bd /middlecolor { aload pop 4 -1 roll",
+    "aload pop 4 -1 roll add 2 div 5 1 roll 3 -1 roll add 2 div 3 1 roll add 2",
+    "div 3 1 roll exch 3 array astore } bd /gouraudtriangle { computediff3 { 4",
+    "-1 roll aload 7 1 roll 6 -1 roll pop 3 -1 roll pop add 2 div 3 1 roll add",
+    "2 div exch 3 -1 roll aload 7 1 roll exch pop 4 -1 roll pop add 2 div 3 1",
+    "roll add 2 div exch 3 -1 roll aload 7 1 roll pop 3 -1 roll pop add 2 div 3",
+    "1 roll add 2 div exch 7 3 roll 10 -3 roll dup 3 index middlecolor 4 1 roll",
+    "2 copy middlecolor 4 1 roll 3 copy pop middlecolor 4 1 roll 13 -1 roll",
+    "aload pop 17 index 6 index 15 index 19 index 6 index 17 index 6 array",
+    "astore 10 index 10 index 14 index gouraudtriangle 17 index 5 index 17",
+    "index 19 index 5 index 19 index 6 array astore 10 index 9 index 13 index",
+    "gouraudtriangle 13 index 16 index 5 index 15 index 18 index 5 index 6",
+    "array astore 12 index 12 index 9 index gouraudtriangle 17 index 16 index",
+    "15 index 19 index 18 index 17 index 6 array astore 10 index 12 index 14",
+    "index gouraudtriangle 18 {pop} repeat } { aload pop 5 3 roll aload pop 7 3",
+    "roll aload pop 9 3 roll 4 index 6 index 4 index add add 3 div 10 1 roll 7",
+    "index 5 index 3 index add add 3 div 10 1 roll 6 index 4 index 2 index add",
+    "add 3 div 10 1 roll 9 {pop} repeat 3 array astore triangle } ifelse } bd",
+    NULL};
 //====================================================
 typedef struct _Feedback3Dcolor {
   GLfloat x;
@@ -85,7 +84,7 @@ typedef struct _Feedback3Dcolor {
 //====================================================
 GLfloat pointSize;
 //====================================================
-GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
+GLfloat *tlp::spewPrimitiveEPS(FILE *file, GLfloat *loc) {
   int token;
   int nvertices, i;
   GLfloat red, green, blue;
@@ -93,9 +92,9 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
   int steps;
   Feedback3Dcolor *vertex;
   GLfloat xstep, ystep, rstep, gstep, bstep;
-  xstep=ystep=rstep=gstep=bstep=0;
+  xstep = ystep = rstep = gstep = bstep = 0;
   GLfloat xnext, ynext, rnext, gnext, bnext, distance;
-  xnext=ynext=rnext=gnext=bnext=distance=0;
+  xnext = ynext = rnext = gnext = bnext = distance = 0;
 
   token = int(*loc);
   loc++;
@@ -119,12 +118,13 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
       absG = fabs(dg);
       absB = fabs(db);
 
-#define Max(a,b) (((a)>(b))?(a):(b))
+#define Max(a, b) (((a) > (b)) ? (a) : (b))
 
-#define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth
-      lines. */
+#define EPS_SMOOTH_LINE_FACTOR                                                                     \
+  1 /* Upper for better smooth                                                                     \
+lines. */
       colormax = Max(absR, Max(absG, absB));
-      steps =int(rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR)));
+      steps = int(rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR)));
 
       xstep = dx / steps;
       ystep = dy / steps;
@@ -146,14 +146,12 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
       rnext -= rstep / 2.0;
       gnext -= gstep / 2.0;
       bnext -= bstep / 2.0;
-    }
-    else {
+    } else {
       /* Single color line. */
       steps = 0;
     }
 
-    fprintf(file, "%g %g %g setrgbcolor\n",
-            vertex[0].red, vertex[0].green, vertex[0].blue);
+    fprintf(file, "%g %g %g setrgbcolor\n", vertex[0].red, vertex[0].green, vertex[0].blue);
     fprintf(file, "%g %g moveto\n", vertex[0].x, vertex[0].y);
 
     for (i = 0; i < steps; i++) {
@@ -169,8 +167,8 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
 
     fprintf(file, "%g %g lineto stroke\n", vertex[1].x, vertex[1].y);
 
-    loc += 14;          /* Each vertex element in the feedback
-         buffer is 7 GLfloats. */
+    loc += 14; /* Each vertex element in the feedback
+buffer is 7 GLfloats. */
 
     break;
 
@@ -198,16 +196,13 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
 
         /* Break polygon into "nvertices-2" triangle fans. */
         for (i = 0; i < nvertices - 2; i++) {
-          fprintf(file, "[%g %g %g %g %g %g]",
-                  vertex[0].x, vertex[i + 1].x, vertex[i + 2].x,
+          fprintf(file, "[%g %g %g %g %g %g]", vertex[0].x, vertex[i + 1].x, vertex[i + 2].x,
                   vertex[0].y, vertex[i + 1].y, vertex[i + 2].y);
-          fprintf(file, " [%g %g %g] [%g %g %g] [%g %g %g] gouraudtriangle\n",
-                  vertex[0].red, vertex[0].green, vertex[0].blue,
-                  vertex[i + 1].red, vertex[i + 1].green, vertex[i + 1].blue,
-                  vertex[i + 2].red, vertex[i + 2].green, vertex[i + 2].blue);
+          fprintf(file, " [%g %g %g] [%g %g %g] [%g %g %g] gouraudtriangle\n", vertex[0].red,
+                  vertex[0].green, vertex[0].blue, vertex[i + 1].red, vertex[i + 1].green,
+                  vertex[i + 1].blue, vertex[i + 2].red, vertex[i + 2].green, vertex[i + 2].blue);
         }
-      }
-      else {
+      } else {
         /* Flat shaded polygon; all vertex colors the same. */
         fprintf(file, "newpath\n");
         fprintf(file, "%g %g %g setrgbcolor\n", red, green, blue);
@@ -223,16 +218,16 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
       }
     }
 
-    loc += nvertices * 7;  /* Each vertex element in the
-            feedback buffer is 7 GLfloats. */
+    loc += nvertices * 7; /* Each vertex element in the
+           feedback buffer is 7 GLfloats. */
     break;
 
   case GL_POINT_TOKEN:
     vertex = reinterpret_cast<Feedback3Dcolor *>(loc);
     fprintf(file, "%g %g %g setrgbcolor\n", vertex[0].red, vertex[0].green, vertex[0].blue);
     fprintf(file, "%g %g %g 0 360 arc fill\n\n", vertex[0].x, vertex[0].y, pointSize / 2.0);
-    loc += 7;           /* Each vertex element in the feedback
-         buffer is 7 GLfloats. */
+    loc += 7; /* Each vertex element in the feedback
+buffer is 7 GLfloats. */
     break;
 
   case GL_PASS_THROUGH_TOKEN:
@@ -248,7 +243,7 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
   return loc;
 }
 //====================================================
-void tlp::spewUnsortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
+void tlp::spewUnsortedFeedback(FILE *file, GLint size, GLfloat *buffer) {
   GLfloat *loc, *end;
   loc = buffer;
   end = buffer + size;
@@ -270,16 +265,14 @@ int tlp::compare(const void *a, const void *b) {
 
   if (diff > 0.0) {
     return 1;
-  }
-  else if (diff < 0.0) {
+  } else if (diff < 0.0) {
     return -1;
-  }
-  else {
+  } else {
     return 0;
   }
 }
 //====================================================
-void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
+void tlp::spewSortedFeedback(FILE *file, GLint size, GLfloat *buffer) {
   int token;
   GLfloat *loc, *end;
   Feedback3Dcolor *vertex;
@@ -323,8 +316,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
 
     default:
       /* XXX Left as an excersie to the reader. */
-      printf("Incomplete implementation.  Unexpected token (%d).\n",
-             token);
+      printf("Incomplete implementation.  Unexpected token (%d).\n", token);
     }
   }
 
@@ -339,7 +331,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
   loc = buffer;
 
   while (loc < end) {
-    prims[item].ptr = loc;  /* Save this primitive's location. */
+    prims[item].ptr = loc; /* Save this primitive's location. */
     token = int(*loc);
     loc++;
 
@@ -401,17 +393,18 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
   /* Emit the Encapsulated PostScript for the primitives in
      back to front order. */
   for (item = 0; item < nprimitives; item++) {
-    (void) spewPrimitiveEPS(file, prims[item].ptr);
+    (void)spewPrimitiveEPS(file, prims[item].ptr);
   }
 
   free(prims);
 }
 //====================================================
-#define EPS_GOURAUD_THRESHOLD 0.5  /* Lower for better (slower)
-
+#define EPS_GOURAUD_THRESHOLD                                                                      \
+  0.5 /* Lower for better (slower)                                                                 \
+                                                                                                   \
 smooth shading. */
 
-void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, char *creator) {
+void tlp::spewWireFrameEPS(FILE *file, int doSort, GLint size, GLfloat *buffer, char *creator) {
 
   GLfloat clearColor[4], viewport[4];
   GLfloat lineWidth;
@@ -429,7 +422,8 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
   fputs("%!PS-Adobe-2.0 EPSF-2.0\n", file);
   /* Notice %% for a single % in the fprintf calls. */
   fprintf(file, "%%%%Creator: %s (using OpenGL feedback)\n", creator);
-  fprintf(file, "%%%%BoundingBox: %g %g %g %g\n", viewport[0], viewport[1], viewport[2], viewport[3]);
+  fprintf(file, "%%%%BoundingBox: %g %g %g %g\n", viewport[0], viewport[1], viewport[2],
+          viewport[3]);
   fputs("%%EndComments\n", file);
   fputs("\n", file);
   fputs("gsave\n", file);
@@ -450,28 +444,24 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
   /* Clear the background like OpenGL had it. */
   //  fprintf(file, "%g %g %g setrgbcolor\n",
   //    clearColor[0], clearColor[1], clearColor[2]);
-  fprintf(file, "%g %g %g setrgbcolor\n",
-          1.0 , 1.0 , 1.0);
-  fprintf(file, "%g %g %g %g rectfill\n\n",
-          viewport[0], viewport[1], viewport[2], viewport[3]);
+  fprintf(file, "%g %g %g setrgbcolor\n", 1.0, 1.0, 1.0);
+  fprintf(file, "%g %g %g %g rectfill\n\n", viewport[0], viewport[1], viewport[2], viewport[3]);
 
   if (doSort) {
     spewSortedFeedback(file, size, buffer);
-  }
-  else {
+  } else {
     spewUnsortedFeedback(file, size, buffer);
   }
 
   /* Emit EPS trailer. */
   fputs("grestore\n\n", file);
-  fputs("%Add `showpage' to the end of this file to be able to print to a printer.\n",
-        file);
+  fputs("%Add `showpage' to the end of this file to be able to print to a printer.\n", file);
 
   fclose(file);
 }
 //====================================================
 /* Write contents of one vertex to stdout. */
-void tlp::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer) {
+void tlp::print3DcolorVertex(GLint size, GLint *count, GLfloat *buffer) {
   int i;
   printf("  ");
 
@@ -483,7 +473,7 @@ void tlp::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer) {
   printf("\n");
 }
 //====================================================
-void tlp::printBuffer(GLint size, GLfloat * buffer) {
+void tlp::printBuffer(GLint size, GLfloat *buffer) {
   GLint count;
 
   count = size;

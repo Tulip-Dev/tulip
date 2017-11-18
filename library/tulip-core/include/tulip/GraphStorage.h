@@ -50,7 +50,6 @@ public:
   */
 class GraphStorage {
 public:
-
   //=======================================================
   void clear();
   //=======================================================
@@ -113,12 +112,12 @@ public:
   /**
    * @brief restore adjacency edges of a given node
    */
-  void restoreAdj(const node n, const std::vector<edge>& edges);
+  void restoreAdj(const node n, const std::vector<edge> &edges);
   //=======================================================
   /**
    * @brief return the adjacency edges of a given node
    */
-  inline const std::vector<edge>& adj(const node n) const {
+  inline const std::vector<edge> &adj(const node n) const {
     assert(isElement(n));
     return nodeData[n.id].edges;
   }
@@ -135,7 +134,7 @@ public:
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    * @complexity: o(1)
    */
-  inline Iterator<node>* getNodes() const {
+  inline Iterator<node> *getNodes() const {
     return nodeIds.getElts();
   }
   //=======================================================
@@ -144,18 +143,18 @@ public:
    * must be deleted by the caller
    * this can be used for push/pop
    */
-  const GraphStorageIdsMemento* getIdsMemento() const;
+  const GraphStorageIdsMemento *getIdsMemento() const;
   //=======================================================
   /**
    * @brief  restore a state of the ids management
    */
-  void restoreIdsMemento(const GraphStorageIdsMemento*);
+  void restoreIdsMemento(const GraphStorageIdsMemento *);
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on edges of the graph
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  inline Iterator<edge>* getEdges() const {
+  inline Iterator<edge> *getEdges() const {
     return edgeIds.getElts();
   }
   //=======================================================
@@ -164,19 +163,19 @@ public:
    * @warning: be careful that loops appear twice
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getInOutEdges(const node n) const;
+  Iterator<edge> *getInOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getOutEdges(const node n) const;
+  Iterator<edge> *getOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in edges of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getInEdges(const node n) const;
+  Iterator<edge> *getInEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return if edges exist between two nodes
@@ -188,28 +187,27 @@ public:
    * @param onlyFirst If true only the first edge found will be returned
    * @return true if an edge has been bound
    */
-  bool getEdges(const node src, const node tgt, bool directed,
-                std::vector<edge>& edges, const Graph* sg = NULL,
-                bool onlyFirst = false) const;
+  bool getEdges(const node src, const node tgt, bool directed, std::vector<edge> &edges,
+                const Graph *sg = NULL, bool onlyFirst = false) const;
 
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getInOutNodes(const node n) const;
+  Iterator<node> *getInOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getInNodes(const node n) const;
+  Iterator<node> *getInNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getOutNodes(const node n) const;
+  Iterator<node> *getOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return the degree of a node
@@ -232,14 +230,14 @@ public:
    */
   inline unsigned int indeg(const node n) const {
     assert(isElement(n));
-    const NodeData& ctnr = nodeData[n.id];
+    const NodeData &ctnr = nodeData[n.id];
     return ctnr.edges.size() - ctnr.outDegree;
   }
   //=======================================================
   /**
    * @brief Return the edges of the graph
    */
-  inline const std::vector<edge>& edges() const {
+  inline const std::vector<edge> &edges() const {
     return edgeIds;
   }
   //=======================================================
@@ -253,7 +251,7 @@ public:
   /**
    * @brief Return the nodes of the graph
    */
-  inline const std::vector<node>& nodes() const {
+  inline const std::vector<node> &nodes() const {
     return nodeIds;
   }
   //=======================================================
@@ -267,7 +265,7 @@ public:
   /**
    * @brief Return the extremities of an edge (src, target)
    */
-  inline const std::pair<node, node>& ends(const edge e) const {
+  inline const std::pair<node, node> &ends(const edge e) const {
     assert(isElement(e));
     return edgeEnds[e.id];
   }
@@ -293,7 +291,7 @@ public:
    */
   inline node opposite(const edge e, const node n) const {
     assert(isElement(e));
-    const std::pair<node, node>& eEnds = edgeEnds[e.id];
+    const std::pair<node, node> &eEnds = edgeEnds[e.id];
     assert((eEnds.first == n) || (eEnds.second == n));
     return (eEnds.first == n) ? eEnds.second : eEnds.first;
   }
@@ -302,14 +300,16 @@ public:
   /**
    * @brief Reconnect the edge e to have the new given ends
    * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
+   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * and nodes.
    */
   void setEnds(const edge e, const node newSrc, const node newTgt);
   //=======================================================
   /**
    * @brief change the source of an edge
    * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
+   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * and nodes.
    * \see setEnds
    */
   inline void setSource(const edge e, const node n) {
@@ -319,7 +319,8 @@ public:
   /**
    * @brief change the target of an edge
    * @warning That operation modify the array of neighboors of extrmities of edges, thus
-   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
+   * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges
+   * and nodes.
    * \see setEnds
    */
   inline void setTarget(const edge e, const node n) {
@@ -334,7 +335,7 @@ public:
   /**
    * \brief Set the ordering of edges around n according to their order in v.
    */
-  void setEdgeOrder(const node n, const std::vector<edge> &v );
+  void setEdgeOrder(const node n, const std::vector<edge> &v);
   //=======================================================
   /**
    * \brief swap to edge in the ordered adjacency vector
@@ -366,7 +367,7 @@ public:
    * is cleared before adding nodes
    * @complexity: o(1)
    */
-  void addNodes(unsigned int nb, std::vector<node>* addedNodes = NULL);
+  void addNodes(unsigned int nb, std::vector<node> *addedNodes = NULL);
   //=======================================================
   /**
    * @brief remove a node from the nodes structure only
@@ -412,9 +413,9 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  void addEdges(const std::vector<std::pair<node, node> >& edges,
-                std::vector<edge>* addedEdges = NULL);
-//=======================================================
+  void addEdges(const std::vector<std::pair<node, node> > &edges,
+                std::vector<edge> *addedEdges = NULL);
+  //=======================================================
   /**
    * @brief Delete an edge in the graph
    * @warning: That operation modify the array of edges
@@ -449,14 +450,14 @@ public:
     edgeIds.sort();
   }
   //=======================================================
-private :
+private:
   // specific types
   struct NodeData {
     std::vector<edge> edges;
     unsigned int outDegree;
     unsigned int pos;
 
-    NodeData(unsigned int pos = UINT_MAX): outDegree(0), pos(pos) {}
+    NodeData(unsigned int pos = UINT_MAX) : outDegree(0), pos(pos) {}
   };
 
   // data members

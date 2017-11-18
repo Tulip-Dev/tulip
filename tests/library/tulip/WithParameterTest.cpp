@@ -44,13 +44,13 @@ const std::string ColorParameter = "colorParameter";
 
 typedef unsigned int uint;
 
-#define EXPECTED_VALUE(TYPE, VALUE) \
-TYPE TYPE##Value = TYPE(); \
-set.get<TYPE>(TYPE##Parameter, TYPE##Value); \
-CPPUNIT_ASSERT_EQUAL(VALUE, TYPE##Value)
+#define EXPECTED_VALUE(TYPE, VALUE)                                                                \
+  TYPE TYPE##Value = TYPE();                                                                       \
+  set.get<TYPE>(TYPE##Parameter, TYPE##Value);                                                     \
+  CPPUNIT_ASSERT_EQUAL(VALUE, TYPE##Value)
 
 void WithParameterTest::testBuildDefaultDataSet() {
-  WithParameter* parametrizedStuff = new ParameteredClass();
+  WithParameter *parametrizedStuff = new ParameteredClass();
 
   DataSet set;
   parametrizedStuff->getParameters().buildDefaultDataSet(set);
@@ -91,4 +91,3 @@ ParameteredClass::ParameteredClass() {
   addInParameter<Size>(SizeParameter, "this is a test Size parameter", "(2.2, 1.1, 4)");
   addInParameter<Color>(ColorParameter, "this is a test Color parameter", "(1, 4, 255, 9)");
 }
-

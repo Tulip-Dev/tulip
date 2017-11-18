@@ -18,6 +18,4 @@
  */
 #include "ExportInterface.h"
 
-ExportInterface::ExportInterface(tlp::PluginProgress *prg, std::ostream &os):_os(os),_prg(prg) {
-
-}
+ExportInterface::ExportInterface(tlp::PluginProgress *prg, std::ostream &os) : _os(os), _prg(prg) {}

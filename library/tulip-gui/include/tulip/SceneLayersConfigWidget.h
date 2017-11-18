@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef SCENELAYERSCONFIGWIDGET_H
 #define SCENELAYERSCONFIGWIDGET_H
 
@@ -37,13 +36,14 @@ class GlMainWidget;
 class TLP_QT_SCOPE SceneLayersConfigWidget : public QWidget {
   Q_OBJECT
 
-  Ui::SceneLayersConfigWidget* _ui;
-  tlp::GlMainWidget* _glMainWidget;
+  Ui::SceneLayersConfigWidget *_ui;
+  tlp::GlMainWidget *_glMainWidget;
+
 public:
   explicit SceneLayersConfigWidget(QWidget *parent = NULL);
   virtual ~SceneLayersConfigWidget();
 
-  void setGlMainWidget(tlp::GlMainWidget* glMainWidget);
+  void setGlMainWidget(tlp::GlMainWidget *glMainWidget);
 
 public slots:
 
@@ -51,8 +51,6 @@ public slots:
 
 signals:
   void drawNeeded();
-
-
 };
 }
 

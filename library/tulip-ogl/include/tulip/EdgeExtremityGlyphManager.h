@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef EDGEEXTREMITYGLYPHMANAGER_H_
 #define EDGEEXTREMITYGLYPHMANAGER_H_
 
@@ -35,8 +34,7 @@ class Graph;
 class TLP_GL_SCOPE EdgeExtremityGlyphManager {
 
 public:
-  virtual ~EdgeExtremityGlyphManager() {
-  }
+  virtual ~EdgeExtremityGlyphManager() {}
 
   /**
    * Return the singleton (if the singleton doesn't exist this function create it)
@@ -52,7 +50,7 @@ public:
   /**
    * Return the id if glyph with given name
    */
-  int glyphId(const std::string& name);
+  int glyphId(const std::string &name);
   /**
    * Load glyphs plugins
    */
@@ -61,21 +59,19 @@ public:
   /**
    * Create the glyph list and store it in glyphs parameter
    */
-  void initGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
-                     MutableContainer<EdgeExtremityGlyph *>& glyphs);
+  void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                     MutableContainer<EdgeExtremityGlyph *> &glyphs);
   /**
    * Clear the glyph list
    */
-  void clearGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
-                      MutableContainer<EdgeExtremityGlyph *>& glyphs);
-private:
+  void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                      MutableContainer<EdgeExtremityGlyph *> &glyphs);
 
+private:
   EdgeExtremityGlyphManager();
 
   static std::list<std::string> plugins;
   static EdgeExtremityGlyphManager eeinst;
-
-
 };
 }
 #endif /* EDGEEXTREMITYGLYPHMANAGER_H_ */

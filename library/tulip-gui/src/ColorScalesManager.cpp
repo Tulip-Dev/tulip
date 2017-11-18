@@ -14,17 +14,17 @@ using namespace tlp;
 
 template <typename T>
 void reverseQList(QList<T> &list) {
-  for (int k = 0 ; k < (list.size()/2) ; ++k) {
-    list.swap(k, list.size()-(1+k));
+  for (int k = 0; k < (list.size() / 2); ++k) {
+    list.swap(k, list.size() - (1 + k));
   }
 }
 
 void ColorScalesManager::getColorScalesFromDir(const string &colorScalesDir,
-    list<string> &colorScalesList) {
+                                               list<string> &colorScalesList) {
 
   QFileInfo colorscaleDirectory(tlpStringToQString(colorScalesDir));
 
-  if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
+  if (colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
     dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
@@ -34,8 +34,7 @@ void ColorScalesManager::getColorScalesFromDir(const string &colorScalesDir,
 
       if (fileInfo.isDir()) {
         getColorScalesFromDir(QStringToTlpString(fileInfo.absoluteFilePath()), colorScalesList);
-      }
-      else if (fileInfo.suffix() == "png") {
+      } else if (fileInfo.suffix() == "png") {
         QString colorScaleName = fileInfo.fileName();
         colorScaleName.replace(".png", "");
         colorScalesList.push_back(QStringToTlpString(colorScaleName));
@@ -52,7 +51,7 @@ list<string> ColorScalesManager::getColorScalesList() {
   TulipSettings::instance().beginGroup("ColorScales");
   QStringList savedColorScalesIdList = TulipSettings::instance().childKeys();
 
-  for (int i = 0 ; i < savedColorScalesIdList.size() ; ++i) {
+  for (int i = 0; i < savedColorScalesIdList.size(); ++i) {
     if (!savedColorScalesIdList.at(i).contains("_gradient?"))
       ret.push_back(QStringToTlpString(savedColorScalesIdList.at(i)));
   }
@@ -62,7 +61,7 @@ list<string> ColorScalesManager::getColorScalesList() {
   TulipSettings::instance().beginGroup("ColorScalesNoRegular");
   savedColorScalesIdList = TulipSettings::instance().childKeys();
 
-  for (int i = 0 ; i < savedColorScalesIdList.size() ; ++i) {
+  for (int i = 0; i < savedColorScalesIdList.size(); ++i) {
     if (!savedColorScalesIdList.at(i).contains("_gradient?"))
       ret.push_back(QStringToTlpString(savedColorScalesIdList.at(i)));
   }
@@ -70,7 +69,6 @@ list<string> ColorScalesManager::getColorScalesList() {
   TulipSettings::instance().endGroup();
 
   return ret;
-
 }
 
 static ColorScale getColorScaleFromImageFile(const QString &imageFilePath) {
@@ -86,12 +84,14 @@ static ColorScale getColorScaleFromImageFile(const QString &imageFilePath) {
 
   for (unsigned int i = 0; i < imageHeight; i += step) {
     QRgb pixelValue = gradientImage.pixel(0, i);
-    colors.push_back(Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
+    colors.push_back(
+        Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
   }
 
   if (imageHeight % step != 0) {
     QRgb pixelValue = gradientImage.pixel(0, imageHeight - 1);
-    colors.push_back(Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
+    colors.push_back(
+        Color(qRed(pixelValue), qGreen(pixelValue), qBlue(pixelValue), qAlpha(pixelValue)));
   }
 
   reverse(colors.begin(), colors.end());
@@ -103,7 +103,7 @@ string ColorScalesManager::findColorScaleFile(const string &rootDir, const strin
 
   string ret;
 
-  if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
+  if (colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
     dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
@@ -117,8 +117,8 @@ string ColorScalesManager::findColorScaleFile(const string &rootDir, const strin
         if (!ret.empty()) {
           return ret;
         }
-      }
-      else if (fileInfo.suffix() == "png" && QStringToTlpString(fileInfo.baseName()) == colorScaleName) {
+      } else if (fileInfo.suffix() == "png" &&
+                 QStringToTlpString(fileInfo.baseName()) == colorScaleName) {
         return QStringToTlpString(fileInfo.absoluteFilePath());
       }
     }
@@ -140,13 +140,12 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   TulipSettings::instance().beginGroup("ColorScales");
 
   if (TulipSettings::instance().contains(colorScaleName.c_str())) {
-    QList<QVariant> colorsListv =
-      TulipSettings::instance().value(colorScaleName.c_str()).toList();
+    QList<QVariant> colorsListv = TulipSettings::instance().value(colorScaleName.c_str()).toList();
     reverseQList(colorsListv);
 
-    for (int i = 0 ; i < colorsListv.size() ; ++i) {
+    for (int i = 0; i < colorsListv.size(); ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
-      float stop = i / float(colorsListv.size()-1);
+      float stop = i / float(colorsListv.size() - 1);
       colorsMap[stop] = QColorToColor(color);
     }
   }
@@ -158,10 +157,9 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   TulipSettings::instance().beginGroup("ColorScalesNoRegular");
 
   if (TulipSettings::instance().contains(colorScaleName.c_str())) {
-    QVariantMap colorsMapv =
-      TulipSettings::instance().value(colorScaleName.c_str()).toMap();
+    QVariantMap colorsMapv = TulipSettings::instance().value(colorScaleName.c_str()).toMap();
 
-    for(QVariantMap::iterator it = colorsMapv.begin() ; it != colorsMapv.end() ; ++it) {
+    for (QVariantMap::iterator it = colorsMapv.begin(); it != colorsMapv.end(); ++it) {
       colorsMap[(it.key()).toDouble()] = QColorToColor(it.value().value<QColor>());
     }
 
@@ -171,15 +169,17 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   return ColorScale(colorsMap, gradient);
 }
 
-void ColorScalesManager::registerColorScale(const string &colorScaleName, const ColorScale &colorScale) {
+void ColorScalesManager::registerColorScale(const string &colorScaleName,
+                                            const ColorScale &colorScale) {
   list<string> colorScalesList = ColorScalesManager::getColorScalesList();
 
-  if (find(colorScalesList.begin(), colorScalesList.end(), colorScaleName) != colorScalesList.end()) {
+  if (find(colorScalesList.begin(), colorScalesList.end(), colorScaleName) !=
+      colorScalesList.end()) {
     if (colorScale.hasRegularStops()) {
       QList<QVariant> colorsVector;
 
-      for (unsigned int i = 0; i < const_cast<ColorScale&>(colorScale).getStopsCount() ; ++i) {
-        float stop = i / float(const_cast<ColorScale&>(colorScale).getStopsCount()-1);
+      for (unsigned int i = 0; i < const_cast<ColorScale &>(colorScale).getStopsCount(); ++i) {
+        float stop = i / float(const_cast<ColorScale &>(colorScale).getStopsCount() - 1);
         Color color = colorScale.getColorAtPos(stop);
         colorsVector.push_back(QVariant(colorToQColor(color)));
       }
@@ -190,12 +190,11 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName, const 
       QString gradientId = tlpStringToQString(colorScaleName) + "_gradient?";
       TulipSettings::instance().setValue(gradientId, colorScale.isGradient());
       TulipSettings::instance().endGroup();
-    }
-    else {
+    } else {
       QVariantMap colorsMap;
       map<float, Color> colorsMapTlp = colorScale.getColorMap();
 
-      for (map<float, Color>::iterator it = colorsMapTlp.begin() ; it != colorsMapTlp.end() ; ++it) {
+      for (map<float, Color>::iterator it = colorsMapTlp.begin(); it != colorsMapTlp.end(); ++it) {
         colorsMap[QString::number(it->first)] = colorToQColor(it->second);
       }
 
@@ -214,7 +213,7 @@ void ColorScalesManager::removeColorScale(const string &colorScaleName) {
 
   if (TulipSettings::instance().contains(savedColorScaleId)) {
     TulipSettings::instance().remove(savedColorScaleId);
-    TulipSettings::instance().remove(savedColorScaleId+"_gradient?");
+    TulipSettings::instance().remove(savedColorScaleId + "_gradient?");
   }
 
   TulipSettings::instance().endGroup();
@@ -223,22 +222,21 @@ void ColorScalesManager::removeColorScale(const string &colorScaleName) {
 
   if (TulipSettings::instance().contains(savedColorScaleId)) {
     TulipSettings::instance().remove(savedColorScaleId);
-    TulipSettings::instance().remove(savedColorScaleId+"_gradient?");
+    TulipSettings::instance().remove(savedColorScaleId + "_gradient?");
   }
 
   TulipSettings::instance().endGroup();
 }
 
-
-void ColorScalesManager::setLatestColorScale(ColorScale& cs) {
+void ColorScalesManager::setLatestColorScale(ColorScale &cs) {
   QList<QVariant> colors;
   QList<QVariant> stops;
 
   map<float, Color> cm = cs.getColorMap();
   map<float, Color>::iterator it = cm.begin();
 
-  for (; it !=  cm.end(); ++it) {
-    Color& c = it->second;
+  for (; it != cm.end(); ++it) {
+    Color &c = it->second;
     QColor qc(c.getR(), c.getG(), c.getB(), c.getA());
     colors.push_back(QVariant(qc));
     stops.push_back(QVariant(it->first));
@@ -255,15 +253,13 @@ ColorScale ColorScalesManager::getLatestColorScale() {
   TulipSettings::instance().beginGroup("viewLatestColorScale");
 
   if (TulipSettings::instance().contains("colors")) {
-    QList<QVariant> colorsListv =
-      TulipSettings::instance().value("colors").toList();
-    QList<QVariant> stopsListv =
-      TulipSettings::instance().value("stops").toList();
+    QList<QVariant> colorsListv = TulipSettings::instance().value("colors").toList();
+    QList<QVariant> stopsListv = TulipSettings::instance().value("stops").toList();
     bool gradient = TulipSettings::instance().value("gradient?").toBool();
 
     map<float, Color> cm;
 
-    for (int i = 0 ; i < colorsListv.size() ; ++i) {
+    for (int i = 0; i < colorsListv.size(); ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
       float stop = stopsListv.at(i).value<float>();
       cm[stop] = QColorToColor(color);
@@ -276,4 +272,3 @@ ColorScale ColorScalesManager::getLatestColorScale() {
   TulipSettings::instance().endGroup();
   return ColorScale();
 }
-

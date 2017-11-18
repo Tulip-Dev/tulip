@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _TLP_MIMES_H
 #define _TLP_MIMES_H
 
@@ -34,30 +33,31 @@ class WorkspacePanel;
 class Algorithm;
 class DataSet;
 
-
-const QString GRAPH_MIME_TYPE=QString("application/x-tulip-mime;value=\"graph\"");
-const QString WORKSPACE_PANEL_MIME_TYPE=QString("application/x-tulip-mime;value=\"workspace-panel\"");
-const QString ALGORITHM_NAME_MIME_TYPE=QString("application/x-tulip-mime;value=\"algorithm-name\"");
-const QString DATASET_MIME_TYPE=QString("application/x-tulip-mime;value=\"dataset\"");
+const QString GRAPH_MIME_TYPE = QString("application/x-tulip-mime;value=\"graph\"");
+const QString WORKSPACE_PANEL_MIME_TYPE =
+    QString("application/x-tulip-mime;value=\"workspace-panel\"");
+const QString ALGORITHM_NAME_MIME_TYPE =
+    QString("application/x-tulip-mime;value=\"algorithm-name\"");
+const QString DATASET_MIME_TYPE = QString("application/x-tulip-mime;value=\"dataset\"");
 
 /**
  * @brief The GraphMimeType class allows to tranfer a graph pointer trought a QMimeData
  */
 class TLP_QT_SCOPE GraphMimeType : public QMimeData {
 public:
-  GraphMimeType():QMimeData(),_graph(NULL) {}
-  void setGraph(tlp::Graph* graph) {
+  GraphMimeType() : QMimeData(), _graph(NULL) {}
+  void setGraph(tlp::Graph *graph) {
     _graph = graph;
   }
 
-  tlp::Graph* graph() const {
+  tlp::Graph *graph() const {
     return _graph;
   }
 
-  QStringList formats()const;
+  QStringList formats() const;
 
 private:
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
 };
 
 class TLP_QT_SCOPE AlgorithmMimeType : public QMimeData {
@@ -65,12 +65,10 @@ class TLP_QT_SCOPE AlgorithmMimeType : public QMimeData {
 
   QString _algorithm;
   tlp::DataSet _params;
+
 public:
-
-
-
-  AlgorithmMimeType(QString algorithmName, const tlp::DataSet& data);
-  void run(tlp::Graph*) const;
+  AlgorithmMimeType(QString algorithmName, const tlp::DataSet &data);
+  void run(tlp::Graph *) const;
 
   QString algorithm() const {
     return _algorithm;
@@ -79,29 +77,26 @@ public:
     return _params;
   }
 
-  QStringList formats()const;
+  QStringList formats() const;
 
 signals:
-  void mimeRun(tlp::Graph*) const;
+  void mimeRun(tlp::Graph *) const;
 };
 
 class TLP_QT_SCOPE PanelMimeType : public QMimeData {
 public:
-
-
-
-  void setPanel(tlp::WorkspacePanel* panel) {
+  void setPanel(tlp::WorkspacePanel *panel) {
     _panel = panel;
   }
 
-  tlp::WorkspacePanel* panel() const {
+  tlp::WorkspacePanel *panel() const {
     return _panel;
   }
 
-  QStringList formats()const;
+  QStringList formats() const;
 
 private:
-  tlp::WorkspacePanel* _panel;
+  tlp::WorkspacePanel *_panel;
 };
 }
 #endif //_TLP_MIMES_H

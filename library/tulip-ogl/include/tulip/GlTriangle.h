@@ -33,22 +33,16 @@ public:
   /**
    * @brief Constructor
    */
-  GlTriangle(const Coord &position,
-             const Size &size,
-             const Color &outlineColor = Color(255, 0 , 0 , 255),
-             const Color &fillColor = Color (0, 0, 255,255),
-             bool filled = true,
-             bool outlined =true,
-             const std::string &textureName="",
-             float outlineSize=1.);
+  GlTriangle(const Coord &position, const Size &size,
+             const Color &outlineColor = Color(255, 0, 0, 255),
+             const Color &fillColor = Color(0, 0, 255, 255), bool filled = true,
+             bool outlined = true, const std::string &textureName = "", float outlineSize = 1.);
   /**
    * @brief Default empty destructor
    *
    * @warning Don't use this constructor
    */
   virtual ~GlTriangle();
-
 };
-
 }
 #endif

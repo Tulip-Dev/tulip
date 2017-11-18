@@ -36,14 +36,13 @@ namespace tlp {
 class TLP_GL_SCOPE GlEPSFeedBackBuilder : public GlTLPFeedBackBuilder {
 
 public:
-
-  GlEPSFeedBackBuilder()
-    :stream_out(std::stringstream::in | std::stringstream::out) {}
+  GlEPSFeedBackBuilder() : stream_out(std::stringstream::in | std::stringstream::out) {}
 
   /**
    * Begin new EPS document with viewport, clearColor, pointSize and lineWidth information
    */
-  virtual void begin(const Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
+  virtual void begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize,
+                     GLfloat lineWidth);
   /**
    * Record a new color
    */
@@ -104,10 +103,9 @@ public:
   /**
    * Put in str the built EPS document
    */
-  virtual void getResult(std::string* str);
+  virtual void getResult(std::string *str);
 
 private:
-
   std::stringstream stream_out;
 
   GLfloat pointSize;
@@ -115,9 +113,7 @@ private:
   Color fillColor;
   Color strokeColor;
   Color textColor;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

@@ -38,11 +38,10 @@ class GlGraphInputData;
 class TLP_GL_SCOPE GlBoundingBoxSceneVisitor : public GlSceneVisitor {
 
 public:
-
   /**
    * Constructor
    */
-  GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData) {
+  GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : inputData(inputData) {
     threadSafe = true;
   }
 
@@ -67,12 +66,9 @@ public:
   }
 
 private:
-
   BoundingBox boundingBox;
-  GlGraphInputData* inputData;
-
+  GlGraphInputData *inputData;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

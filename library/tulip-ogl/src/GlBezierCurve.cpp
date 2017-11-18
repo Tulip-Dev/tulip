@@ -31,41 +31,46 @@ static const unsigned int CONTROL_POINTS_LIMIT = 120;
 
 static string bezierSpecificVertexShaderSrc =
 
-  "vec3 computeCurvePoint(float t) {"
-  "	if (t == 0.0) {"
-  "		return getControlPoint(0);"
-  "	} else if (t == 1.0) {"
-  "		return getControlPoint(nbControlPoints - 1);"
-  "	} else {"
-  "		float s = (1.0 - t);"
-  "     float r = float(nbControlPoints);"
-  "     float curCoeff = 1.0;"
-  "     float t2 = 1.0;"
-  "		vec3 bezierPoint = vec3(0.0);"
-  "		for (int i = 0 ; i < nbControlPoints ; ++i) { "
-  "			bezierPoint += getControlPoint(i).xyz * curCoeff * t2 * pow(s, float(nbControlPoints - 1 - i));"
-  "         float c = float(i+1);"
-  "         curCoeff *= (r-c)/c;"
-  "         t2 *= t;"
-  "		}"
-  "		return bezierPoint;"
-  "	}"
-  "}"
+    "vec3 computeCurvePoint(float t) {"
+    "	if (t == 0.0) {"
+    "		return getControlPoint(0);"
+    "	} else if (t == 1.0) {"
+    "		return getControlPoint(nbControlPoints - 1);"
+    "	} else {"
+    "		float s = (1.0 - t);"
+    "     float r = float(nbControlPoints);"
+    "     float curCoeff = 1.0;"
+    "     float t2 = 1.0;"
+    "		vec3 bezierPoint = vec3(0.0);"
+    "		for (int i = 0 ; i < nbControlPoints ; ++i) { "
+    "			bezierPoint += getControlPoint(i).xyz * curCoeff * t2 * pow(s, "
+    "float(nbControlPoints - 1 - i));"
+    "         float c = float(i+1);"
+    "         curCoeff *= (r-c)/c;"
+    "         t2 *= t;"
+    "		}"
+    "		return bezierPoint;"
+    "	}"
+    "}"
 
-  ;
+    ;
 
 namespace tlp {
 
-GlBezierCurve::GlBezierCurve() : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc) {}
+GlBezierCurve::GlBezierCurve()
+    : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc) {}
 
-GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-                             const float &startSize, const float &endSize, const unsigned int nbCurvePoints) :
-  AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {
-}
+GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &startColor,
+                             const Color &endColor, const float &startSize, const float &endSize,
+                             const unsigned int nbCurvePoints)
+    : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints,
+                      startColor, endColor, startSize, endSize, nbCurvePoints) {}
 
 GlBezierCurve::~GlBezierCurve() {}
 
-void GlBezierCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
+void GlBezierCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
+                                            std::vector<Coord> &curvePoints,
+                                            unsigned int nbCurvePoints) {
   computeBezierPoints(controlPoints, curvePoints, nbCurvePoints);
 }
 
@@ -73,12 +78,14 @@ Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoi
   return computeBezierPoint(controlPoints, t);
 }
 
-void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor,
+                              const Color &endColor, const float startSize, const float endSize,
+                              const unsigned int nbCurvePoints) {
 
   if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
-    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
-  }
-  else {
+    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize,
+                               nbCurvePoints);
+  } else {
 
     static GlCatmullRomCurve curve;
 
@@ -94,5 +101,4 @@ void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &st
     curve.drawCurve(curvePoints, startColor, endColor, startSize, endSize, nbCurvePoints);
   }
 }
-
 }

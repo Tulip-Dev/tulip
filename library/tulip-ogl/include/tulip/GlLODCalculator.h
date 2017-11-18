@@ -35,7 +35,7 @@ class GlScene;
 class GlGraphInputData;
 
 enum RenderingEntitiesFlag {
-  RenderingSimpleEntities =1,
+  RenderingSimpleEntities = 1,
   RenderingNodes = 2,
   RenderingEdges = 4,
   RenderingAll = 7,
@@ -43,31 +43,30 @@ enum RenderingEntitiesFlag {
 };
 
 struct EntityLODUnit {
-  EntityLODUnit(const BoundingBox &boundingBox):boundingBox(boundingBox),lod(-1) {}
+  EntityLODUnit(const BoundingBox &boundingBox) : boundingBox(boundingBox), lod(-1) {}
   BoundingBox boundingBox;
   float lod;
 };
 
 // struct to store simple entity lod
 struct SimpleEntityLODUnit : public EntityLODUnit {
-  SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox):
-    EntityLODUnit(boundingBox),
-    entity(entity) {
-  }
+  SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox)
+      : EntityLODUnit(boundingBox), entity(entity) {}
   GlSimpleEntity *entity;
 };
 
 // struct to store complex entity (nodes/edges) lod
 struct ComplexEntityLODUnit : public EntityLODUnit {
-  ComplexEntityLODUnit(unsigned int id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id) {}
+  ComplexEntityLODUnit(unsigned int id, const BoundingBox &boundingBox)
+      : EntityLODUnit(boundingBox), id(id) {}
   unsigned int id;
 };
 
 struct LayerLODUnit {
-  std::vector<SimpleEntityLODUnit>  simpleEntitiesLODVector;
+  std::vector<SimpleEntityLODUnit> simpleEntitiesLODVector;
   std::vector<ComplexEntityLODUnit> nodesLODVector;
   std::vector<ComplexEntityLODUnit> edgesLODVector;
-  Camera * camera;
+  Camera *camera;
 };
 
 typedef std::vector<LayerLODUnit> LayersLODVector;
@@ -78,30 +77,30 @@ typedef std::vector<LayerLODUnit> LayersLODVector;
 class TLP_GL_SCOPE GlLODCalculator {
 
 public:
-
-  GlLODCalculator():glScene(NULL),inputData(NULL),attachedLODCalculator(NULL) {}
+  GlLODCalculator() : glScene(NULL), inputData(NULL), attachedLODCalculator(NULL) {}
   virtual ~GlLODCalculator() {}
-  virtual GlLODCalculator *clone()=0;
+  virtual GlLODCalculator *clone() = 0;
 
   /**
    * Set scene use by this LOD calculator
    */
   virtual void setScene(GlScene &scene) {
-    glScene=&scene;
+    glScene = &scene;
   }
 
   /**
    * Set input data use to render
    */
   virtual void setInputData(const GlGraphInputData *inputData) {
-    this->inputData=inputData;
+    this->inputData = inputData;
   }
 
   /**
-   * Set RenderingEntitiesFlag to : RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
+   * Set RenderingEntitiesFlag to :
+   * RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
    */
   virtual void setRenderingEntitiesFlag(RenderingEntitiesFlag flag) {
-    renderingEntitiesFlag=flag;
+    renderingEntitiesFlag = flag;
   }
 
   /**
@@ -117,19 +116,19 @@ public:
   /**
    * Begin a new camera
    */
-  virtual void beginNewCamera(Camera* camera)=0;
+  virtual void beginNewCamera(Camera *camera) = 0;
   /**
    * Record a new simple entity in current camera context
    */
-  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity,const BoundingBox& bb)=0;
+  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) = 0;
   /**
    * Record a new node in current camera context
    */
-  virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
+  virtual void addNodeBoundingBox(unsigned int id, const BoundingBox &bb) = 0;
   /**
    * Record a new edge in current camera context
    */
-  virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
+  virtual void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb) = 0;
 
   /**
    * Reserve memory to store nodes LOD
@@ -144,7 +143,8 @@ public:
   /**
    * Compute all lod
    */
-  virtual void compute(const Vector<int,4>& globalViewport, const Vector<int,4>& currentViewport)=0;
+  virtual void compute(const Vector<int, 4> &globalViewport,
+                       const Vector<int, 4> &currentViewport) = 0;
 
   /**
    * Return a pointer on LOD result
@@ -160,14 +160,13 @@ public:
     layersLODVector.clear();
   }
 
-  virtual BoundingBox getSceneBoundingBox()=0;
+  virtual BoundingBox getSceneBoundingBox() = 0;
 
   void setAttachedLODCalculator(GlLODCalculator *calculator) {
-    attachedLODCalculator=calculator;
+    attachedLODCalculator = calculator;
   }
 
-protected :
-
+protected:
   GlScene *glScene;
   const GlGraphInputData *inputData;
 
@@ -177,7 +176,6 @@ protected :
 
   GlLODCalculator *attachedLODCalculator;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

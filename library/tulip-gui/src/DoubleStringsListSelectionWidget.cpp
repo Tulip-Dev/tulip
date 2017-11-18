@@ -26,7 +26,9 @@ using namespace std;
 
 namespace tlp {
 
-DoubleStringsListSelectionWidget::DoubleStringsListSelectionWidget(QWidget *parent, const unsigned int maxSelectedStringsListSize) : QWidget(parent), _ui(new Ui::DoubleStringsListSelectionData()) {
+DoubleStringsListSelectionWidget::DoubleStringsListSelectionWidget(
+    QWidget *parent, const unsigned int maxSelectedStringsListSize)
+    : QWidget(parent), _ui(new Ui::DoubleStringsListSelectionData()) {
   _ui->setupUi(this);
 
   _ui->outputList->setMaxListSize(maxSelectedStringsListSize);
@@ -39,13 +41,15 @@ DoubleStringsListSelectionWidget::~DoubleStringsListSelectionWidget() {
   delete _ui;
 }
 
-void DoubleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
+void DoubleStringsListSelectionWidget::setUnselectedStringsList(
+    const std::vector<std::string> &unselectedStringsList) {
   for (unsigned int i = 0; i < unselectedStringsList.size(); ++i) {
     _ui->inputList->addItemList(tlpStringToQString(unselectedStringsList[i]));
   }
 }
 
-void DoubleStringsListSelectionWidget::setSelectedStringsList(const std::vector<std::string> &selectedStringsList) {
+void DoubleStringsListSelectionWidget::setSelectedStringsList(
+    const std::vector<std::string> &selectedStringsList) {
   for (unsigned int i = 0; i < selectedStringsList.size(); ++i) {
     _ui->outputList->addItemList(tlpStringToQString(selectedStringsList[i]));
   }
@@ -59,21 +63,23 @@ void DoubleStringsListSelectionWidget::clearSelectedStringsList() {
   _ui->outputList->clear();
 }
 
-void DoubleStringsListSelectionWidget::setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel) {
+void DoubleStringsListSelectionWidget::setUnselectedStringsListLabel(
+    const std::string &unselectedStringsListLabel) {
   _ui->inputListLabel->setText(tlpStringToQString(unselectedStringsListLabel));
 }
 
-void DoubleStringsListSelectionWidget::setSelectedStringsListLabel(const std::string &selectedStringsListLabel) {
+void DoubleStringsListSelectionWidget::setSelectedStringsListLabel(
+    const std::string &selectedStringsListLabel) {
   _ui->outputListLabel->setText(tlpStringToQString(selectedStringsListLabel));
 }
 
-void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) {
+void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(
+    const unsigned int maxSelectedStringsListSize) {
   _ui->outputList->setMaxListSize(maxSelectedStringsListSize);
 
   if (maxSelectedStringsListSize != 0) {
     _ui->selectButton->setEnabled(false);
-  }
-  else {
+  } else {
     _ui->selectButton->setEnabled(true);
   }
 }
@@ -100,7 +106,7 @@ vector<string> DoubleStringsListSelectionWidget::getUnselectedStringsList() cons
 
 void DoubleStringsListSelectionWidget::selectAllStrings() {
   if (_ui->outputList->getMaxListSize() == 0) {
-    for (int i = 0 ; i < _ui->inputList->count() ; ++i) {
+    for (int i = 0; i < _ui->inputList->count(); ++i) {
       _ui->outputList->addItem(new QListWidgetItem(*(_ui->inputList->item(i))));
     }
 
@@ -109,7 +115,7 @@ void DoubleStringsListSelectionWidget::selectAllStrings() {
 }
 
 void DoubleStringsListSelectionWidget::unselectAllStrings() {
-  for (int i = 0 ; i < _ui->outputList->count() ; ++i) {
+  for (int i = 0; i < _ui->outputList->count(); ++i) {
     _ui->inputList->addItem(new QListWidgetItem(*(_ui->outputList->item(i))));
   }
 
@@ -117,10 +123,10 @@ void DoubleStringsListSelectionWidget::unselectAllStrings() {
 }
 
 void DoubleStringsListSelectionWidget::qtWidgetsConnection() {
-  connect(_ui->addButton, SIGNAL(clicked()),this, SLOT(pressButtonAdd()));
-  connect(_ui->removeButton, SIGNAL(clicked()),this, SLOT(pressButtonRem()));
-  connect(_ui->upButton, SIGNAL(clicked()),this, SLOT(pressButtonUp()));
-  connect(_ui->downButton, SIGNAL(clicked()),this, SLOT(pressButtonDown()));
+  connect(_ui->addButton, SIGNAL(clicked()), this, SLOT(pressButtonAdd()));
+  connect(_ui->removeButton, SIGNAL(clicked()), this, SLOT(pressButtonRem()));
+  connect(_ui->upButton, SIGNAL(clicked()), this, SLOT(pressButtonUp()));
+  connect(_ui->downButton, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
   connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
   connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
 }
@@ -179,5 +185,4 @@ void DoubleStringsListSelectionWidget::pressButtonSelectAll() {
 void DoubleStringsListSelectionWidget::pressButtonUnselectAll() {
   unselectAllStrings();
 }
-
 }

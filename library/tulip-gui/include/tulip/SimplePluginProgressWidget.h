@@ -35,8 +35,7 @@ class QCloseEvent;
 
 namespace tlp {
 
-
-class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::PluginProgress {
+class TLP_QT_SCOPE SimplePluginProgressWidget : public QWidget, public tlp::PluginProgress {
   Q_OBJECT
   Ui::SimplePluginProgressWidgetData *_ui;
 
@@ -47,10 +46,10 @@ class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::Plugi
   tlp::ProgressState _state;
 
 public:
-  explicit SimplePluginProgressWidget(QWidget *parent=NULL,Qt::WindowFlags f=0);
+  explicit SimplePluginProgressWidget(QWidget *parent = NULL, Qt::WindowFlags f = 0);
   virtual ~SimplePluginProgressWidget();
 
-  void setComment(const std::string&);
+  void setComment(const std::string &);
   void setComment(const QString &);
   void setComment(const char *);
 
@@ -82,13 +81,13 @@ protected slots:
   void stopClicked();
 };
 
-class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::PluginProgress {
+class TLP_QT_SCOPE SimplePluginProgressDialog : public QDialog, public tlp::PluginProgress {
   Q_OBJECT
 public:
-  explicit SimplePluginProgressDialog(QWidget *parent=NULL);
+  explicit SimplePluginProgressDialog(QWidget *parent = NULL);
   virtual ~SimplePluginProgressDialog();
 
-  void setComment(const std::string&);
+  void setComment(const std::string &);
   void setComment(const QString &);
   void setComment(const char *);
 
@@ -118,7 +117,6 @@ public slots:
 private:
   tlp::SimplePluginProgressWidget *_progress;
 };
-
 }
 
 #endif // SIMPLEPLUGINPROGRESSWIDGET_H

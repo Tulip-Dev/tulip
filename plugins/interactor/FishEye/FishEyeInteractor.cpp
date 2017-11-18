@@ -75,23 +75,23 @@ string fisheyeVertexProgram =
 
 // clang-format on
 
-FishEyeInteractor::FishEyeInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"),fisheyeConfigWidget(NULL) {}
+FishEyeInteractor::FishEyeInteractor(const PluginContext *)
+    : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"), fisheyeConfigWidget(NULL) {}
 
 void FishEyeInteractor::construct() {
   fisheyeConfigWidget = new FishEyeConfigWidget();
   push_back(new MousePanNZoomNavigator());
-  FishEyeInteractorComponent *fisheyeInteractorComponent = new FishEyeInteractorComponent(fisheyeConfigWidget);
+  FishEyeInteractorComponent *fisheyeInteractorComponent =
+      new FishEyeInteractorComponent(fisheyeConfigWidget);
   push_back(fisheyeInteractorComponent);
 }
 
 bool FishEyeInteractor::isCompatible(const std::string &viewName) const {
-  return ((viewName==NodeLinkDiagramComponent::viewName)
-          ||(viewName==ViewName::HistogramViewName)
-          ||(viewName==ViewName::MatrixViewName)
-          ||(viewName==ViewName::ParallelCoordinatesViewName)
-          ||(viewName==ViewName::PixelOrientedViewName)
-          ||(viewName==ViewName::ScatterPlot2DViewName)
-         );
+  return ((viewName == NodeLinkDiagramComponent::viewName) ||
+          (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
+          (viewName == ViewName::ParallelCoordinatesViewName) ||
+          (viewName == ViewName::PixelOrientedViewName) ||
+          (viewName == ViewName::ScatterPlot2DViewName));
 }
 
 void FishEyeInteractor::uninstall() {
@@ -110,9 +110,11 @@ PLUGIN(FishEyeInteractor)
 
 GlShaderProgram *FishEyeInteractorComponent::fisheyeShader(NULL);
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget) : configWidget(configWidget), activateFishEye(false) {}
+FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget)
+    : configWidget(configWidget), activateFishEye(false) {}
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) {
+FishEyeInteractorComponent::FishEyeInteractorComponent(
+    const FishEyeInteractorComponent &fisheyeInteractorComponent) {
   fisheyeCenter = fisheyeInteractorComponent.fisheyeCenter;
   configWidget = fisheyeInteractorComponent.configWidget;
   activateFishEye = false;
@@ -131,20 +133,19 @@ void FishEyeInteractorComponent::viewChanged(View *view) {
   }
 
   if (configWidget->getFishEyeRadius() == 0.) {
-    configWidget->setFishEyeRadius(glWidget->getScene()->getGraphCamera().getSceneRadius()/4.);
+    configWidget->setFishEyeRadius(glWidget->getScene()->getGraphCamera().getSceneRadius() / 4.);
     configWidget->setFishEyeHeight(4.);
   }
 }
 
 bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
 
-  GlMainWidget *glWidget = static_cast<GlMainWidget*>(obj);
-  Camera *camera=&glWidget->getScene()->getGraphCamera();
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(obj);
+  Camera *camera = &glWidget->getScene()->getGraphCamera();
 
   activateFishEye = false;
 
-  if (e->type() == QEvent::MouseMove ||
-      e->type() == QEvent::MouseButtonPress ||
+  if (e->type() == QEvent::MouseMove || e->type() == QEvent::MouseButtonPress ||
       e->type() == QEvent::MouseButtonRelease) {
     activateFishEye = true;
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
@@ -154,21 +155,23 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
     fisheyeCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     glWidget->redraw();
     return true;
-  }
-  else if (e->type() == QEvent::Wheel) {
+  } else if (e->type() == QEvent::Wheel) {
     activateFishEye = true;
     QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(e);
     int numSteps = wheelEvent->delta() / 120;
 
-    if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ControlModifier)) {
+    if (wheelEvent->orientation() == Qt::Vertical &&
+        (wheelEvent->modifiers() == Qt::ControlModifier)) {
       activateFishEye = true;
-      configWidget->setFishEyeRadius(configWidget->getFishEyeRadius() + configWidget->getFishEyeRadiusIncrementStep() * numSteps);
+      configWidget->setFishEyeRadius(configWidget->getFishEyeRadius() +
+                                     configWidget->getFishEyeRadiusIncrementStep() * numSteps);
       glWidget->redraw();
       return true;
-    }
-    else if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ShiftModifier)) {
+    } else if (wheelEvent->orientation() == Qt::Vertical &&
+               (wheelEvent->modifiers() == Qt::ShiftModifier)) {
       activateFishEye = true;
-      float newHeight = configWidget->getFishEyeHeight() + configWidget->getFishEyeHeightIncrementStep() * numSteps;
+      float newHeight = configWidget->getFishEyeHeight() +
+                        configWidget->getFishEyeHeightIncrementStep() * numSteps;
 
       if (newHeight < 0) {
         newHeight = 0;
@@ -183,11 +186,10 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
   }
 
   return false;
-
 }
 
 bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
-  Camera *camera=&glWidget->getScene()->getGraphCamera();
+  Camera *camera = &glWidget->getScene()->getGraphCamera();
 
   if (GlShaderProgram::shaderProgramsSupported() && !fisheyeShader) {
     fisheyeShader = new GlShaderProgram("fisheye");
@@ -211,8 +213,7 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
 
     if (fishEyeType == 2) {
       radius = (radius * radius) / 2.0;
-    }
-    else if (fishEyeType == 3) {
+    } else if (fishEyeType == 3) {
       radius = radius / 4.0;
     }
 
@@ -223,14 +224,13 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     fisheyeShader->setUniformFloat("height", height);
     fisheyeShader->setUniformInt("fisheyeType", fishEyeType);
 
-    bool clearBufferAtDraw =  glWidget->getScene()->getClearBufferAtDraw();
+    bool clearBufferAtDraw = glWidget->getScene()->getClearBufferAtDraw();
 
     glWidget->getScene()->setClearBufferAtDraw(true);
     glWidget->getScene()->draw();
     glWidget->getScene()->setClearBufferAtDraw(clearBufferAtDraw);
 
     fisheyeShader->desactivate();
-
 
     return true;
   }

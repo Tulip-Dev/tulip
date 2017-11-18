@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _DRAGHANDLE_H
 #define _DRAGHANDLE_H
 
@@ -31,19 +30,18 @@ class WorkspacePanel;
 class DragHandle : public QLabel {
   Q_OBJECT
 public:
-  explicit DragHandle(QWidget* parent = NULL, Qt::WindowFlags f = 0);
-  virtual void mousePressEvent(QMouseEvent* ev);
-  virtual void mouseReleaseEvent(QMouseEvent* ev);
-  virtual void mouseMoveEvent(QMouseEvent* ev);
+  explicit DragHandle(QWidget *parent = NULL, Qt::WindowFlags f = 0);
+  virtual void mousePressEvent(QMouseEvent *ev);
+  virtual void mouseReleaseEvent(QMouseEvent *ev);
+  virtual void mouseMoveEvent(QMouseEvent *ev);
 
-  void setPanel(tlp::WorkspacePanel* panel);
+  void setPanel(tlp::WorkspacePanel *panel);
 
 private:
-  tlp::WorkspacePanel* _panel;
+  tlp::WorkspacePanel *_panel;
   bool _pressed;
   QPoint _clickPosition;
 };
-
 }
 #endif //_DRAGHANDLE_H
 ///@endcond

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef COORDEDITOR_H
 #define COORDEDITOR_H
 
@@ -49,11 +48,10 @@ public:
   tlp::Coord coord() const;
 
   // redefinition to ensure it is shown in the center of its parent
-  void showEvent(QShowEvent* ev);
-
+  void showEvent(QShowEvent *ev);
 
 public slots:
-  void setCoord(const tlp::Coord& s);
+  void setCoord(const tlp::Coord &s);
   // redefinition to ensure to catch the end of input
   void done(int r);
 

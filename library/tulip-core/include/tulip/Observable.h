@@ -33,10 +33,13 @@ class Observable;
   * @ingroup Observation
   * @brief Event is the base class for all events used in the Observation mechanism.
   *
-  * An Event is characterized by its type. The base Event class only carries information as to the type of event, nothing specific.
+  * An Event is characterized by its type. The base Event class only carries information as to the
+  *type of event, nothing specific.
   *
-  * Event::DELETE : send directly to all Observers/Listeners, not affected by Observable::holdObservers().
-  * Event::MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to Observers and then to Listeners.
+  * Event::DELETE : send directly to all Observers/Listeners, not affected by
+  *Observable::holdObservers().
+  * Event::MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to Observers
+  *and then to Listeners.
   * Event::INFORMATION : sent only to Listeners.
   * Event::INVALID : never sent, used internally for delaying events.
   *
@@ -44,18 +47,20 @@ class Observable;
   * @see Observer
   * @see Observable
   **/
-class  TLP_SCOPE Event {
+class TLP_SCOPE Event {
   friend class Observable;
   friend class Graph;
   friend class PropertyInterface;
+
 public:
-  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
+  enum EventType { TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID };
   virtual ~Event();
-  Observable* sender() const;
+  Observable *sender() const;
   Event(const Observable &sender, EventType type);
   EventType type() const {
     return _type;
   }
+
 private:
   Event() {}
   tlp::node _sender;
@@ -65,16 +70,16 @@ private:
 /**
  * @ingroup Observation
   * @class ObservableException
-  * @brief ObservableException is the base class of all exceptions sent by the Observable/Listener/Observer system.
+  * @brief ObservableException is the base class of all exceptions sent by the
+ *Observable/Listener/Observer system.
   *
   * @see Listener
   * @see Observer
   * @see Observable
   **/
-class  TLP_SCOPE ObservableException : public tlp::TulipException {
+class TLP_SCOPE ObservableException : public tlp::TulipException {
 public:
-  ObservableException(const std::string &desc):tlp::TulipException(desc) {
-  }
+  ObservableException(const std::string &desc) : tlp::TulipException(desc) {}
 };
 
 /**
@@ -89,38 +94,50 @@ public:
  * it will receive.
  *
  * The Listener is closer to the original pattern, where events are sent directly to the recipient.
- * The Observer is a twist for performance purposes, it can receive the events in a delayed fashion, and cannot know if the event was just sent or was delayed.
+ * The Observer is a twist for performance purposes, it can receive the events in a delayed fashion,
+ *and cannot know if the event was just sent or was delayed.
  *
- * The purpose of this twist is to allow algorithms that perform a high number of modifications (e.g. creating a grid to route edges,
- *  creating multiple subgraphs with metrics or layouts) to run smoothly without overcrowding the event queue.
- * As events are sent for every graph modification (e.g. adding a node, deleting a node, setting a value on a node), the sheer quantity of events sent by these
+ * The purpose of this twist is to allow algorithms that perform a high number of modifications
+ *(e.g. creating a grid to route edges,
+ *  creating multiple subgraphs with metrics or layouts) to run smoothly without overcrowding the
+ *event queue.
+ * As events are sent for every graph modification (e.g. adding a node, deleting a node, setting a
+ *value on a node), the sheer quantity of events sent by these
  * algorithms would cause a big performance hit.
  *
  * This can be avoided by using Observable::holdObservers().
- * This holds all events in a queue and only sends them when Observable::unholdObservers() is called.
+ * This holds all events in a queue and only sends them when Observable::unholdObservers() is
+ *called.
  *
  * The only exception to this mechanism is the Event::DELETE kind of event, that is never held back.
- * Think of it as an unmaskable POSIX signal; whatever the connection to the object and the state of holdObserver, this event will get through.
- * This is used to prevent crashes in the case where and object is listened or observed and is deleted, as it is likely the recipient
+ * Think of it as an unmaskable POSIX signal; whatever the connection to the object and the state of
+ *holdObserver, this event will get through.
+ * This is used to prevent crashes in the case where and object is listened or observed and is
+ *deleted, as it is likely the recipient
  * keeps a pointer to the now deleted object.
  *
- * The Listener however is not affected by the use of Observable::holdObservers() and Observable::unholdObservers().
+ * The Listener however is not affected by the use of Observable::holdObservers() and
+ *Observable::unholdObservers().
  *
- * The observable Observers and Listeners are internally store in a Graph structure, allowing to easily visualize their connections.
+ * The observable Observers and Listeners are internally store in a Graph structure, allowing to
+ *easily visualize their connections.
  * This eases debugging of Observation-related bugs.
  *
  * Events are always sent to Listeners first, and then to Observers, even when there is no hold.
  *
- * If you wish to receive events, you must inherit from Observable, and implement at least one of the two virtual functions below.
+ * If you wish to receive events, you must inherit from Observable, and implement at least one of
+ *the two virtual functions below.
  *
- * If you need to receive events without delay, you will be a Listener, and need to implement treatEvent(const Event &message).
+ * If you need to receive events without delay, you will be a Listener, and need to implement
+ *treatEvent(const Event &message).
  * You will attach to the object you wish to receive events from using addListener().
  *
- * If you can receive events after a delay, you will be an Observer, and need to implement treatEvents(const std::vector<Event> &events).
+ * If you can receive events after a delay, you will be an Observer, and need to implement
+ *treatEvents(const std::vector<Event> &events).
  * You will attach to the object you wish to receive events from using addObserver().
  *
  **/
-class  TLP_SCOPE Observable {
+class TLP_SCOPE Observable {
   friend class Event;
 
 public:
@@ -128,14 +145,16 @@ public:
   * @brief Holds back all events until Observable::unholdObservers() is called.
   *
   * Listeners are not affected by this function.
-  * Once this function is called, all events heading to an Observer will be held, except DELETE events.
+  * Once this function is called, all events heading to an Observer will be held, except DELETE
+  * events.
   * The events are stored in a queue, and will be sent once Observable::unholdObservers() is called.
   *
   * It is possible to nest calls to  Observable::holdObservers() and  Observable::unholdObservers(),
   * and in this case the events will only be sent when there
   * have been as many calls to  Observable::unholdObservers() as to  Observable::holdObservers().
   *
-  * It is possible to check whether the events are being help by checking the Observable::observersHoldCounter() function.
+  * It is possible to check whether the events are being help by checking the
+  * Observable::observersHoldCounter() function.
   *
   * @see unholdObservers
   * @see observersHoldCounter
@@ -146,7 +165,8 @@ public:
   *
   * Listeners are not affected by this function.
   *
-  * In debug mode, if the hold counter is less than one when calling this function, an ObservableException will be raised.
+  * In debug mode, if the hold counter is less than one when calling this function, an
+  * ObservableException will be raised.
   *
   * @see holdObservers
   * @see observersHoldCounter
@@ -154,8 +174,10 @@ public:
   static void unholdObservers();
 
   /**
-   * @brief observersHoldCounter gives the number of times holdObservers() has been called without a matching unholdObservers() call.
-   * @return the number of times holdObservers() has been called without a matching unholdObservers() call.
+   * @brief observersHoldCounter gives the number of times holdObservers() has been called without a
+   * matching unholdObservers() call.
+   * @return the number of times holdObservers() has been called without a matching
+   * unholdObservers() call.
    */
   static unsigned int observersHoldCounter() {
     return _oHoldCounter;
@@ -167,15 +189,16 @@ public:
    * The observer will receive events sent by this object, if there is no hold applied.
    * @param observer The object that will receive events.
    */
-  void addObserver(Observable * const observer) const;
+  void addObserver(Observable *const observer) const;
 
   /**
    * @brief Adds a Listener to this object.
    *
-   * The Listener will receive events regardless of the state of holdObservers() and unholdObservers().
+   * The Listener will receive events regardless of the state of holdObservers() and
+   * unholdObservers().
    * @param listener The object that will receive events.
    */
-  void addListener(Observable * const listener) const;
+  void addListener(Observable *const listener) const;
 
   /**
    * @brief Removes an observer from this object.
@@ -183,7 +206,7 @@ public:
    * The observer will no longer receive events from this object.
    * @param observer The observer to remove from this object.
    */
-  void  removeObserver(Observable  * const observerver) const;
+  void removeObserver(Observable *const observerver) const;
 
   /**
    * @brief Removes a listener from this object.
@@ -191,18 +214,18 @@ public:
    * The listener will no longer receive events from this object.
    * @param listener The listener to remove from this object.
    */
-  void  removeListener(Observable  * const listener) const;
+  void removeListener(Observable *const listener) const;
 
   /**
    * @brief gets the number of sent events.
    * @return the number of sent events (0 when compiling with -DNDEBUG).
    */
   unsigned int getSent() const;
-  \
-  /**
-   * @brief get the number of received events.
-   * @return the number of received events (0 when compiling with -DNDEBUG).
-   */
+
+      /**
+       * @brief get the number of received events.
+       * @return the number of received events (0 when compiling with -DNDEBUG).
+       */
   unsigned int getReceived() const;
 
   /**
@@ -234,7 +257,7 @@ public:
    * @param n The node representing the object to retrieve.
    * @return The object represented by the node.
   **/
-  static Observable* getObject(tlp::node n);
+  static Observable *getObject(tlp::node n);
 
   /**
    * @brief internal function for debugging purpose
@@ -250,23 +273,25 @@ public:
    * @param obs the Observable object
    * @return the node of the Observable object in the Observable Graph.
    */
-  static tlp::node getNode(const tlp::Observable* obs);
+  static tlp::node getNode(const tlp::Observable *obs);
 
   /**
    * @brief Gets the observation graph.
-   * @return The graph containing a node for each Observable/Observer/Listener, and an edge between connected objects.
+   * @return The graph containing a node for each Observable/Observer/Listener, and an edge between
+   * connected objects.
    */
-  static const tlp::VectorGraph& getObservableGraph();
+  static const tlp::VectorGraph &getObservableGraph();
 
 protected:
   Observable();
   Observable(const Observable &);
   virtual ~Observable();
-  Observable& operator=(const Observable &);
+  Observable &operator=(const Observable &);
 
   /**
    * @brief Sends an event to all the Observers/Listeners.
-   * It is higly recommended to check if there are observers/listeners to send the event to before actually sending it
+   * It is higly recommended to check if there are observers/listeners to send the event to before
+   * actually sending it
    * to avoid the overhead of creating too many objects.
    *
    * This can be achieved by using the hasOnLookers() function :
@@ -285,7 +310,8 @@ protected:
    * @brief This function is called when events are sent to Observers, and Observers only.
    *
    * It is passed a vector of all the events that happened since the last call.
-   * If events were held, this vector can be pretty large, and if events were not held it is likely it only contains a single element.
+   * If events were held, this vector can be pretty large, and if events were not held it is likely
+   * it only contains a single element.
    *
    * @param events The events that happened since the last unHoldObservers().
    */
@@ -304,14 +330,17 @@ protected:
   * @brief Sends the Event::DELETE before the deletion of the subclass and its internal objects.
   *
   * The observation system automatically sends the DELETE event when the Observable is deleted, but
-  * in the case you need to access members of the class inheriting from Observable, you need the event
+  * in the case you need to access members of the class inheriting from Observable, you need the
+  * event
   * sent *before* the outermost objects are destroyed.
   *
-  * To achieve this, you can call this function in your destructor, and the DELETE event will be sent.
+  * To achieve this, you can call this function in your destructor, and the DELETE event will be
+  * sent.
   * This will allow your Listeners/Observers to access your members one last time before deletion.
   *
   * @warning This function must be called only once per object.
-  * Make sure no other class in the inheritance tree calls this function before adding this call to your destructor.
+  * Make sure no other class in the inheritance tree calls this function before adding this call to
+  * your destructor.
   */
   void observableDeleted();
 
@@ -332,7 +361,7 @@ protected:
   /**
   * @brief use for old observer tulip compatibility
   */
-  _DEPRECATED  tlp::Iterator<tlp::Observable *> * getObservables() const;
+  _DEPRECATED tlp::Iterator<tlp::Observable *> *getObservables() const;
 
   /**
   * @brief use for old observer tulip compatibility
@@ -340,7 +369,7 @@ protected:
   _DEPRECATED void notifyObservers();
 
 private:
-  enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
+  enum OBSERVABLEEDGETYPE { OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04 };
 
   /**
    * @brief deleteMsgSent This allows for calling observableDeleted() multiple times safely.
@@ -379,13 +408,16 @@ private:
 
   /**
    * @brief getInObjects Retrieves Inbound objects (observed objects; i.e. Observable).
-   * @return an iterator on 'in' objects (Observable), the iterator guarantees that all objects are alive (not deleted during hold or notify).
+   * @return an iterator on 'in' objects (Observable), the iterator guarantees that all objects are
+   * alive (not deleted during hold or notify).
    */
   tlp::Iterator<tlp::node> *getInObjects() const;
 
   /**
-   * @brief getOutObjects Retrieves Outbound objects (observing objects; i.e. Listeners and Observers).
-   * @return an iterator on out objects (Listener/Observer), the iterator garantees that all objects are alive (not deleted during hold or notify).
+   * @brief getOutObjects Retrieves Outbound objects (observing objects; i.e. Listeners and
+   * Observers).
+   * @return an iterator on out objects (Listener/Observer), the iterator garantees that all objects
+   * are alive (not deleted during hold or notify).
    */
   tlp::Iterator<tlp::node> *getOutObjects() const;
 
@@ -404,7 +436,8 @@ private:
   /**
    * @brief removeOnlooker removes an Observer/Listener from this object.
    *
-   * In case of nested unholding (higly unlikely), calling that function inside a hold/unhold block could
+   * In case of nested unholding (higly unlikely), calling that function inside a hold/unhold block
+   * could
    * make the Observer not receive an event that was sent when it was connected.
    *
    * @warning removing OnLooker that has been created outside of your code can create serious
@@ -422,7 +455,7 @@ private:
    */
   tlp::node getNode() const;
 
-  //static members and methods
+  // static members and methods
   /**
    * @brief _oGraph the graph used to store all observers and connection between them.
    */
@@ -478,7 +511,8 @@ private:
   static bool _oInitialized;
 
   /**
-  * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and check bad use of the mechanism.
+  * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and
+  * check bad use of the mechanism.
   */
   static void updateObserverGraph();
 
@@ -493,22 +527,27 @@ private:
   }
 
   /**
-  * @brief Trick to init the ObservableGraph properties (called at the loading of the library, during static initialization).
+  * @brief Trick to init the ObservableGraph properties (called at the loading of the library,
+  * during static initialization).
   */
   static bool init();
 };
 
 /**
- * @brief The ObserverHolder class is a convenience class to automatically hold and unhold observers.
- * It performs a call to Observable::holdObserver() at its creation and a call to Observable::unholdObserver() at its destruction.
- * You can use it if you have to hold observers in a function with multiple return points to avoid to call Observable::unholdObserver() for each of them.
+ * @brief The ObserverHolder class is a convenience class to automatically hold and unhold
+ * observers.
+ * It performs a call to Observable::holdObserver() at its creation and a call to
+ * Observable::unholdObserver() at its destruction.
+ * You can use it if you have to hold observers in a function with multiple return points to avoid
+ * to call Observable::unholdObserver() for each of them.
  * @code
  * void myFunc(){
  *  ObserverHolder holder;//Automatically call Observable::holdObserver()
  *
  *  if(someTest()){
  *      someOperation1();
- *      return;//No need to call Observable::unholdObserver() it will be called with the destruction of the locker object
+ *      return;//No need to call Observable::unholdObserver() it will be called with the destruction
+ * of the locker object
  *  }
  *
  * }
@@ -516,7 +555,7 @@ private:
  *
  */
 class TLP_SCOPE ObserverHolder {
-public :
+public:
   ObserverHolder() {
     Observable::holdObservers();
   }
@@ -527,7 +566,6 @@ public :
 
 // deprecated name of this class
 _DEPRECATED_TYPEDEF(ObserverHolder, ObserverLocker);
-
 }
 
 #endif

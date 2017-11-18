@@ -32,16 +32,17 @@ class Camera;
 /**
  * \brief A class which encapsulate a Tulip OpenGL scene animation
  *  This class aims to encapsulate a Tulip OpenGL scene animation.
- *  Derive it if you want to add extra animations to the Tulip OpenGL scene while a Zoom and Pan is performed
+ *  Derive it if you want to add extra animations to the Tulip OpenGL scene while a Zoom and Pan is
+ * performed
  */
 class TLP_GL_SCOPE AdditionalGlSceneAnimation {
 
-public :
-
+public:
   virtual ~AdditionalGlSceneAnimation() {}
 
   /**
-   * Method to set the total number of animation steps. No need to call it because the GlSceneZoomAndPan class do that task.
+   * Method to set the total number of animation steps. No need to call it because the
+   * GlSceneZoomAndPan class do that task.
    *
    */
   inline void setNbAnimationSteps(int nbAnimationSteps) {
@@ -51,41 +52,49 @@ public :
   /**
    * Pure virtual method called at each step of the Zoom and Pan animation.
    *
-   * Implement it in your derived class to perform any extra animation you want on the Tulip OpenGL scene.
+   * Implement it in your derived class to perform any extra animation you want on the Tulip OpenGL
+   * scene.
    */
   virtual void animationStep(int animationStep) = 0;
 
-protected :
-
+protected:
   int nbAnimationSteps;
 };
 
 /** \brief A convenient class to perform Zoom and Pan animation on Tulip OpenGL scene
  *
  *  This class allow to perform a smooth and efficient zooming and panning on Tulip OpenGL scene.
- *  The algorithm used to perform this task is the one published in: Jarke J. van Wijk and Wim A.A. Nuij, "Smooth and efficient zooming and panning"
- *  For more details, the paper can be downloaded at the following url: http://www.win.tue.nl/~vanwijk/zoompan.pdf
- *  Even if this class contains the whole Zoom and Pan implementation, it is not aimed to be used directly because its role is only to compute new camera parameters.
- *  Use the derived class QtGlSceneZoomAndPanAnimator in the tulip-gui library instead to perform the animation.
+ *  The algorithm used to perform this task is the one published in: Jarke J. van Wijk and Wim A.A.
+ * Nuij, "Smooth and efficient zooming and panning"
+ *  For more details, the paper can be downloaded at the following url:
+ * http://www.win.tue.nl/~vanwijk/zoompan.pdf
+ *  Even if this class contains the whole Zoom and Pan implementation, it is not aimed to be used
+ * directly because its role is only to compute new camera parameters.
+ *  Use the derived class QtGlSceneZoomAndPanAnimator in the tulip-gui library instead to perform
+ * the animation.
  */
-class TLP_GL_SCOPE GlSceneZoomAndPan  {
+class TLP_GL_SCOPE GlSceneZoomAndPan {
 
-public :
-
+public:
   virtual ~GlSceneZoomAndPan() {}
 
   /**
    * GlSceneZoomAndPan constructor
    *
    * \param glScene the Tulip OpenGL scene on which to perform zooming and panning
-   * \param boundingBox the bounding box in scene coordinates on which the Tulip OpenGL scene has to be zoomed and panned.
-   *            At the end of the animation, the viewport will be zoomed and centered on the content of that bounding box.
+   * \param boundingBox the bounding box in scene coordinates on which the Tulip OpenGL scene has to
+   * be zoomed and panned.
+   *            At the end of the animation, the viewport will be zoomed and centered on the content
+   * of that bounding box.
    * \param layerName The name of the layer animation should be done on
    * \param nbAnimationSteps the number of steps to perform during the animation
-   * \param optimalPath if true zooming and panning will be combined at each step of the animation, if false the scene will be zoomed out/in, panned then zoomed in/out
+   * \param optimalPath if true zooming and panning will be combined at each step of the animation,
+   * if false the scene will be zoomed out/in, panned then zoomed in/out
    * \param p zoom/pan trade-off parameter, adjust it according to your needs
    */
-  GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const std::string &layerName="Main", const int nbAnimationSteps = 50, const bool optimalPath = true, const double p = sqrt(1.6));
+  GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox,
+                    const std::string &layerName = "Main", const int nbAnimationSteps = 50,
+                    const bool optimalPath = true, const double p = sqrt(1.6));
 
   /**
    * Method to add an additional scene animation while zooming and panning
@@ -109,13 +118,14 @@ public :
   }
 
   /**
-   * Method which performs the zoom and pan animation. Its role is to compute new camera parameters at step animationStep.
-   * The scene is not redrawn with this method, you have to call the draw method on the associated GlScene object
+   * Method which performs the zoom and pan animation. Its role is to compute new camera parameters
+   * at step animationStep.
+   * The scene is not redrawn with this method, you have to call the draw method on the associated
+   * GlScene object
    */
   void zoomAndPanAnimationStep(int animationStep);
 
-protected :
-
+protected:
   Camera &camera;
   Vector<int, 4> viewport;
   int nbAnimationSteps;
@@ -126,9 +136,7 @@ protected :
   AdditionalGlSceneAnimation *additionalAnimation;
   float zoomAreaWidth, zoomAreaHeight;
   bool doZoomAndPan;
-
 };
-
 }
 
 #endif /* GLSCENEZOOMANDPAN_H_ */

@@ -24,28 +24,25 @@
 #include <iostream>
 #include <sstream>
 
-
 //====================================================
-tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=NULL;
+tlp::OpenGlConfigManager *tlp::OpenGlConfigManager::inst = NULL;
 
 using namespace std;
 
 namespace tlp {
 
-OpenGlConfigManager& OpenGlConfigManager::getInst() {
-  if(!inst)
-    inst=new OpenGlConfigManager();
+OpenGlConfigManager &OpenGlConfigManager::getInst() {
+  if (!inst)
+    inst = new OpenGlConfigManager();
 
   return *inst;
 }
 
-OpenGlConfigManager::OpenGlConfigManager():
-  glewIsInit(false), antialiased(true) {
-}
+OpenGlConfigManager::OpenGlConfigManager() : glewIsInit(false), antialiased(true) {}
 
 void OpenGlConfigManager::initExtensions() {
   if (!glewIsInit) {
-    glewExperimental=true;
+    glewExperimental = true;
     glewIsInit = (glewInit() == GLEW_OK);
   }
 }
@@ -56,13 +53,13 @@ string OpenGlConfigManager::getOpenGLVersionString() const {
 
 double OpenGlConfigManager::getOpenGLVersion() const {
   double ret = 0;
-  std::istringstream iss(getOpenGLVersionString());//.substr(0,3));
+  std::istringstream iss(getOpenGLVersionString()); //.substr(0,3));
   iss >> ret;
   return ret;
 }
 
 string OpenGlConfigManager::getOpenGLVendor() const {
-  return string(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+  return string(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
 }
 
 bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
@@ -96,9 +93,9 @@ void OpenGlConfigManager::activateLineAndPointAntiAliasing() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_LINE_SMOOTH);
-    glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_POINT_SMOOTH);
-    glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
   }
 }
 
@@ -131,7 +128,4 @@ int OpenGlConfigManager::maxNumberOfSamples() const {
 
   return maxSamples / 4;
 }
-
 }
-
-

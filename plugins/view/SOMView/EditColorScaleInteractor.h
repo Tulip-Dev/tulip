@@ -34,9 +34,8 @@ class GlLabelledColorScale;
 class NumericProperty;
 class SOMView;
 
-class EditColorScaleInteractor: public GLInteractorComponent {
+class EditColorScaleInteractor : public GLInteractorComponent {
 public:
-
   EditColorScaleInteractor();
   virtual ~EditColorScaleInteractor();
   bool eventFilter(QObject *, QEvent *);
@@ -45,8 +44,9 @@ public:
   bool draw(GlMainWidget *glMainWidget);
 
 protected:
-  virtual void propertyChanged(SOMView* somView,const std::string& propertyName, NumericProperty *newProperty);
-  virtual bool screenSizeChanged(SOMView* somView);
+  virtual void propertyChanged(SOMView *somView, const std::string &propertyName,
+                               NumericProperty *newProperty);
+  virtual bool screenSizeChanged(SOMView *somView);
   NumericProperty *currentProperty;
   GlLabelledColorScale *colorScale;
   float widthPercent;

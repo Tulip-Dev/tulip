@@ -33,13 +33,14 @@ class EnclosingCircleConfigurationData;
 
 namespace tlp {
 
-class EnclosingCircleConfigurationWidget: public QWidget {
+class EnclosingCircleConfigurationWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::EnclosingCircleConfigurationData* _ui;
+  Ui::EnclosingCircleConfigurationData *_ui;
+
 public:
-  EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent=0);
+  EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent = 0);
   ~EnclosingCircleConfigurationWidget();
 
   void circleColorBtnDisabled(const bool disabled);
@@ -55,13 +56,14 @@ signals:
   void alphaChanged(int);
 };
 
-class EnclosingCircleHighlighter: public QObject, public PathHighlighter {
+class EnclosingCircleHighlighter : public QObject, public PathHighlighter {
   Q_OBJECT
 
 public:
   EnclosingCircleHighlighter();
   ~EnclosingCircleHighlighter();
-  void highlight(const PathFinder *parent, GlMainWidget *glMainWidget, BooleanProperty *selection, tlp::node src, tlp::node tgt);
+  void highlight(const PathFinder *parent, GlMainWidget *glMainWidget, BooleanProperty *selection,
+                 tlp::node src, tlp::node tgt);
   void draw(GlMainWidget *glMainWidget);
   bool isConfigurable() const;
   QWidget *getConfigurationWidget();

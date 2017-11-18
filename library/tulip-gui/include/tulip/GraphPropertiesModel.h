@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GRAPHPROPERTIESMODEL_H
 #define GRAPHPROPERTIESMODEL_H
 
@@ -32,31 +31,32 @@
 
 namespace tlp {
 
-template<typename PROPTYPE>
+template <typename PROPTYPE>
 class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
   QString _placeholder;
   bool _checkable;
-  QSet<PROPTYPE*> _checkedProperties;
-  QVector<PROPTYPE*> _properties;
+  QSet<PROPTYPE *> _checkedProperties;
+  QVector<PROPTYPE *> _properties;
   bool _removingRows;
   bool forcingRedraw;
 
   void rebuildCache();
 
 public:
-  explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
-  explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
+  explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false, QObject *parent = NULL);
+  explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph, bool checkable = false,
+                                QObject *parent = NULL);
   virtual ~GraphPropertiesModel() {
     if (_graph != NULL)
       _graph->removeListener(this);
   }
 
-  tlp::Graph* graph() const {
+  tlp::Graph *graph() const {
     return _graph;
   }
 
-  void setGraph(tlp::Graph* graph) {
+  void setGraph(tlp::Graph *graph) {
     if (_graph == graph)
       return;
 
@@ -74,12 +74,12 @@ public:
     endResetModel();
   }
 
-  QSet<PROPTYPE*> checkedProperties() const {
+  QSet<PROPTYPE *> checkedProperties() const {
     return _checkedProperties;
   }
 
   // Methods re-implemented from QAbstractItemModel
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -88,7 +88,7 @@ public:
   bool setData(const QModelIndex &quiindex, const QVariant &value, int role);
 
   // Methods inherited from the observable system
-  void treatEvent(const tlp::Event& evt) {
+  void treatEvent(const tlp::Event &evt) {
     if (evt.type() == Event::TLP_DELETE) {
       // calls to *ResetModel() functions below
       // are not needed because they may cause a Free Memory Read.
@@ -100,54 +100,53 @@ public:
       return;
     }
 
-    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+    const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
     if (graphEvent == NULL)
       return;
 
-    if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
+    if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY ||
+        graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
 
-      PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
+      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != NULL) {
         int row = rowOf(prop);
-        beginRemoveRows(QModelIndex(),row,row);
+        beginRemoveRows(QModelIndex(), row, row);
         _properties.remove(_properties.indexOf(prop));
         _removingRows = true;
         _checkedProperties.remove(prop);
       }
-    }
-    else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
+    } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
+               graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       if (_removingRows) {
         endRemoveRows();
         _removingRows = false;
       }
-    }
-    else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
-      PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
+    } else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY ||
+               graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
+      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != NULL) {
         rebuildCache();
         int row = rowOf(prop);
 
         if (row >= 0) {
-          beginInsertRows(QModelIndex(),row,row);
+          beginInsertRows(QModelIndex(), row, row);
           endInsertRows();
         }
       }
-    }
-    else if (graphEvent->getType() == GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
+    } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
       // force any needed sorting
       emit layoutAboutToBeChanged();
-      changePersistentIndex(createIndex(0, 0),
-                            createIndex(_properties.size() - 1, 0));
+      changePersistentIndex(createIndex(0, 0), createIndex(_properties.size() - 1, 0));
       emit layoutChanged();
     }
   }
 
-  int rowOf(PROPTYPE*) const;
+  int rowOf(PROPTYPE *) const;
 
-  int rowOf(const QString& pName) const;
+  int rowOf(const QString &pName) const;
 
   Qt::ItemFlags flags(const QModelIndex &index) const {
     Qt::ItemFlags result = QAbstractItemModel::flags(index);
@@ -158,11 +157,9 @@ public:
     return result;
   }
 };
-
 }
 
 #include "cxx/GraphPropertiesModel.cxx"
-
 
 #endif // GRAPHPROPERTIESMODEL_H
 ///@endcond

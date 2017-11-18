@@ -35,12 +35,12 @@ class Graph;
 /**
  * @brief Class configuring properties selected and number of iteration for computing SOM.
  */
-class ComputeSOMWidget: public QWidget {
+class ComputeSOMWidget : public QWidget {
   Q_OBJECT
-  Ui::SOMComputeWidget* _ui;
+  Ui::SOMComputeWidget *_ui;
 
 public:
-  ComputeSOMWidget(QWidget* parent = NULL);
+  ComputeSOMWidget(QWidget *parent = NULL);
   ~ComputeSOMWidget();
   unsigned number() const;
   void setNumber(unsigned uintValue);

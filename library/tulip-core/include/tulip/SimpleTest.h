@@ -29,11 +29,11 @@ namespace tlp {
 /**
  * @ingroup Checks
  * @brief Performs test to check if a graph is Simple.
- * From Wikipedia: "A simple graph is an undirected graph that has no loops and no more than one edge between any two different vertices."
+ * From Wikipedia: "A simple graph is an undirected graph that has no loops and no more than one
+ *edge between any two different vertices."
  **/
 class TLP_SCOPE SimpleTest : private Observable {
 public:
-
   /**
    * @brief Checks if the graph is simple (i.e. it contains no self loops or parallel edges).
    *
@@ -53,7 +53,7 @@ public:
    * @param removed The edges that were removed to make the graph simple.
    * @return void
    **/
-  static void makeSimple(Graph* graph, std::vector<edge> &removed);
+  static void makeSimple(Graph *graph, std::vector<edge> &removed);
 
   /**
    * Performs simple test and stores found parallel edges in the multipleEdges vector
@@ -61,19 +61,22 @@ public:
    * Returns true if the graph is simple, false otherwise.
    */
   /**
-   * @brief Checks if the graph is simple, and stores parallel edges and self loops in different vectors.
+   * @brief Checks if the graph is simple, and stores parallel edges and self loops in different
+   *vectors.
    *
    * @param graph The graph to check for simplicity.
-   * @param multipleEdges The parallel edges that need to be removed to make the graph simple. Defaults to 0.
+   * @param multipleEdges The parallel edges that need to be removed to make the graph simple.
+   *Defaults to 0.
    * @param loops The self loops that need to be removed to make the graph simple. Defaults to 0.
    * @return bool True if the graph is simple, false otherwise.
    **/
-  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges=NULL, std::vector<edge> *loops=NULL);
+  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges = NULL,
+                         std::vector<edge> *loops = NULL);
 
 private:
   SimpleTest();
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
   void deleteResult(Graph *graph);
 
   /**
@@ -81,11 +84,10 @@ private:
    **/
   static SimpleTest *instance;
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
+   *hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
-
 }
 #endif

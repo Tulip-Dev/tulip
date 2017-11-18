@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _EXPORTMODULE_H
 #define _EXPORTMODULE_H
 
@@ -38,12 +37,12 @@ class PluginProgress;
  * @ingroup Plugins
  * @brief The ExportModule class
  */
-class ExportModule: public tlp::Plugin {
+class ExportModule : public tlp::Plugin {
 public:
-
-  ExportModule(const tlp::PluginContext* context) {
-    if(context != NULL) {
-      const tlp::AlgorithmContext* algoritmContext = static_cast<const tlp::AlgorithmContext*>(context);
+  ExportModule(const tlp::PluginContext *context) {
+    if (context != NULL) {
+      const tlp::AlgorithmContext *algoritmContext =
+          static_cast<const tlp::AlgorithmContext *>(context);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
       dataSet = algoritmContext->dataSet;
@@ -69,7 +68,8 @@ public:
   virtual std::string fileExtension() const = 0;
 
   /**
-   * @brief Gets a list of the extensions file format when compressed with gzip this export plugin saves to.
+   * @brief Gets a list of the extensions file format when compressed with gzip this export plugin
+   *saves to.
    *
    * @since Tulip 5.0
    *
@@ -80,13 +80,14 @@ public:
   }
 
   /**
-   * @brief Gets a list of all extensions file format (normal and gzipped) this export plugin saves to.
+   * @brief Gets a list of all extensions file format (normal and gzipped) this export plugin saves
+   * to.
    *
    * @since Tulip 5.0
    *
    * @return the list of file extensions this export plugin saves to.
    */
-  std::list<std::string>  allFileExtensions() const {
+  std::list<std::string> allFileExtensions() const {
     std::list<std::string> ext(gzipFileExtensions());
     ext.push_back(fileExtension());
     return ext;
@@ -97,7 +98,7 @@ public:
    * @param the output stream
    * @return bool Whether the export was successful or not.
    **/
-  virtual bool exportGraph(std::ostream &os)=0;
+  virtual bool exportGraph(std::ostream &os) = 0;
 
   /** It is the root graph*/
   Graph *graph;
@@ -105,8 +106,6 @@ public:
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };
-
-
 }
 #endif
 ///@endcond

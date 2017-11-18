@@ -22,7 +22,6 @@
 
 #include <tulip/GLInteractor.h>
 
-
 namespace tlp {
 
 class ParallelCoordinatesView;
@@ -30,15 +29,13 @@ class ParallelAxis;
 
 class ParallelCoordsAxisSpacer : public GLInteractorComponent {
 
-public :
-
+public:
   ParallelCoordsAxisSpacer();
   bool eventFilter(QObject *, QEvent *);
   bool draw(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   void determineAxisRegionAtPos(const Coord &pos);
   void drawCurrentEditedRegionMarker();
 
@@ -47,9 +44,7 @@ private :
   std::pair<ParallelAxis *, ParallelAxis *> neighborsAxis;
   int x, y;
   bool dragStarted;
-
 };
-
 }
 
 #endif /* PARALLELCOORDSAXISSPACER_H_ */

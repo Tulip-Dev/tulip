@@ -36,19 +36,17 @@ class GlQuantitativeAxis;
 
 class KernelFunction : public std::unary_function<double, double> {
 
-public :
+public:
   virtual ~KernelFunction() {}
 
   virtual double operator()(double val) = 0;
-
 };
 
 class HistogramStatistics : public GLInteractorComponent {
 
   Q_OBJECT
 
-public :
-
+public:
   HistogramStatistics(HistoStatsConfigWidget *ConfigWidget);
   HistogramStatistics(const HistogramStatistics &histoStats);
   ~HistogramStatistics();
@@ -58,20 +56,18 @@ public :
 
   void viewChanged(View *view);
 
-private slots :
+private slots:
 
   void computeAndDrawInteractor();
 
 public slots:
   void computeInteractor();
 
-private :
-
+private:
   void cleanupAxis();
   void initKernelFunctionsMap();
 
-protected :
-
+protected:
   HistogramView *histoView;
   HistoStatsConfigWidget *histoStatsConfigWidget;
   std::map<unsigned int, double> graphPropertyValueSet;
@@ -83,9 +79,7 @@ protected :
   GlAxis *meanAxis, *standardDeviationPosAxis, *standardDeviationNegAxis;
   GlAxis *standardDeviation2PosAxis, *standardDeviation2NegAxis;
   GlAxis *standardDeviation3PosAxis, *standardDeviation3NegAxis;
-
 };
-
 }
 
 #endif /* HISTOGRAMSTATISTICS_H_ */

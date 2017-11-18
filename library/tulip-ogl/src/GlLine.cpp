@@ -24,15 +24,14 @@
 using namespace std;
 
 namespace tlp {
-GlLine::GlLine(const vector<Coord> &points, const vector<Color> &colors):
-  _points(points),_colors(colors),width(1.0),factor(1),pattern(0) {
+GlLine::GlLine(const vector<Coord> &points, const vector<Color> &colors)
+    : _points(points), _colors(colors), width(1.0), factor(1), pattern(0) {
 
-  for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
     boundingBox.expand(*it);
 }
 //=====================================================
-GlLine::~GlLine() {
-}
+GlLine::~GlLine() {}
 //=====================================================
 void GlLine::resizePoints(const unsigned int nbPoints) {
   _points.resize(nbPoints);
@@ -43,35 +42,35 @@ void GlLine::resizeColors(const unsigned int nbColors) {
   _points.resize(nbColors);
 }
 //=====================================================
-const tlp::Coord& GlLine::point(const unsigned int i) const {
+const tlp::Coord &GlLine::point(const unsigned int i) const {
   return _points[i];
 }
 //=====================================================
-tlp::Coord& GlLine::point(const unsigned int i) {
+tlp::Coord &GlLine::point(const unsigned int i) {
   return _points[i];
 }
 //=====================================================
-void GlLine::addPoint(const Coord& point,const Color& color) {
+void GlLine::addPoint(const Coord &point, const Color &color) {
   _points.push_back(point);
   _colors.push_back(color);
   boundingBox.expand(point);
 }
 //=====================================================
-const tlp::Color& GlLine::color(const unsigned int i) const {
+const tlp::Color &GlLine::color(const unsigned int i) const {
   return _colors[i];
 }
 //=====================================================
-tlp::Color& GlLine::color(const unsigned int i) {
+tlp::Color &GlLine::color(const unsigned int i) {
   return _colors[i];
 }
 //=====================================================
-void GlLine::draw(float,Camera *) {
+void GlLine::draw(float, Camera *) {
 
   glDisable(GL_LIGHTING);
   glLineWidth(width);
 
-  if(pattern!=0) {
-    glLineStipple(factor,pattern);
+  if (pattern != 0) {
+    glLineStipple(factor, pattern);
     glEnable(GL_LINE_STIPPLE);
   }
 
@@ -83,7 +82,7 @@ void GlLine::draw(float,Camera *) {
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
 
-  if(pattern!=0)
+  if (pattern != 0)
     glDisable(GL_LINE_STIPPLE);
 
   glLineWidth(1.0);
@@ -92,41 +91,41 @@ void GlLine::draw(float,Camera *) {
 }
 //=====================================================
 void GlLine::setLineWidth(float width) {
-  this->width=width;
+  this->width = width;
 }
 //=====================================================
-void GlLine::setLineStipple(unsigned char factor,unsigned int pattern) {
-  this->factor=factor;
-  this->pattern=pattern;
+void GlLine::setLineStipple(unsigned char factor, unsigned int pattern) {
+  this->factor = factor;
+  this->pattern = pattern;
 }
 //=====================================================
-void GlLine::translate(const Coord& mouvement) {
+void GlLine::translate(const Coord &mouvement) {
   boundingBox.translate(mouvement);
 
-  for(vector<Coord>::iterator it=_points.begin(); it!=_points.end(); ++it) {
-    (*it)+=mouvement;
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it) {
+    (*it) += mouvement;
   }
 }
 //=====================================================
 void GlLine::getXML(string &outString) {
-  GlXMLTools::createProperty(outString,"type","GlLine","GlEntity");
+  GlXMLTools::createProperty(outString, "type", "GlLine", "GlEntity");
 
-  GlXMLTools::getXML(outString,"points",_points);
-  GlXMLTools::getXML(outString,"colors",_colors);
-  GlXMLTools::getXML(outString,"width",width);
-  GlXMLTools::getXML(outString,"factor",factor);
-  GlXMLTools::getXML(outString,"pattern",pattern);
+  GlXMLTools::getXML(outString, "points", _points);
+  GlXMLTools::getXML(outString, "colors", _colors);
+  GlXMLTools::getXML(outString, "width", width);
+  GlXMLTools::getXML(outString, "factor", factor);
+  GlXMLTools::getXML(outString, "pattern", pattern);
 }
 //============================================================
 void GlLine::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   GlXMLTools::setWithXML(inString, currentPosition, "points", _points);
   GlXMLTools::setWithXML(inString, currentPosition, "colors", _colors);
-  GlXMLTools::setWithXML(inString, currentPosition,"width",width);
-  GlXMLTools::setWithXML(inString, currentPosition,"factor",factor);
-  GlXMLTools::setWithXML(inString, currentPosition,"pattern",pattern);
+  GlXMLTools::setWithXML(inString, currentPosition, "width", width);
+  GlXMLTools::setWithXML(inString, currentPosition, "factor", factor);
+  GlXMLTools::setWithXML(inString, currentPosition, "pattern", pattern);
 
-  for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
     boundingBox.expand(*it);
 }
 }

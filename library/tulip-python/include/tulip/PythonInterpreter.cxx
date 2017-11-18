@@ -19,7 +19,7 @@
 
 TLP_PYTHON_SCOPE void decrefPyObject(PyObject *obj);
 
-template<typename T>
+template <typename T>
 bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStatement, T &value) {
   holdGIL();
 
@@ -38,24 +38,29 @@ bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStat
   return ok;
 }
 
-template<typename PARAM_TYPE>
-bool PythonInterpreter::callFunctionOneParam(const QString &module, const QString &function, const PARAM_TYPE &parameter) {
+template <typename PARAM_TYPE>
+bool PythonInterpreter::callFunctionOneParam(const QString &module, const QString &function,
+                                             const PARAM_TYPE &parameter) {
   tlp::DataSet parameters;
   parameters.set("param1", parameter);
   return callFunction(module, function, parameters);
 }
 
-template<typename PARAM1_TYPE, typename PARAM2_TYPE>
-bool PythonInterpreter::callFunctionTwoParams(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2) {
+template <typename PARAM1_TYPE, typename PARAM2_TYPE>
+bool PythonInterpreter::callFunctionTwoParams(const QString &module, const QString &function,
+                                              const PARAM1_TYPE &parameter1,
+                                              const PARAM2_TYPE &parameter2) {
   tlp::DataSet parameters;
   parameters.set("param1", parameter1);
   parameters.set("param2", parameter2);
   return callFunction(module, function, parameters);
 }
 
-template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE>
-bool PythonInterpreter::callFunctionThreeParams(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
-    const PARAM3_TYPE &parameter3) {
+template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE>
+bool PythonInterpreter::callFunctionThreeParams(const QString &module, const QString &function,
+                                                const PARAM1_TYPE &parameter1,
+                                                const PARAM2_TYPE &parameter2,
+                                                const PARAM3_TYPE &parameter3) {
   tlp::DataSet parameters;
   parameters.set("param1", parameter1);
   parameters.set("param2", parameter2);
@@ -63,9 +68,12 @@ bool PythonInterpreter::callFunctionThreeParams(const QString &module, const QSt
   return callFunction(module, function, parameters);
 }
 
-template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE>
-bool PythonInterpreter::callFunctionFourParams(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
-    const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4) {
+template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE>
+bool PythonInterpreter::callFunctionFourParams(const QString &module, const QString &function,
+                                               const PARAM1_TYPE &parameter1,
+                                               const PARAM2_TYPE &parameter2,
+                                               const PARAM3_TYPE &parameter3,
+                                               const PARAM4_TYPE &parameter4) {
   tlp::DataSet parameters;
   parameters.set("param1", parameter1);
   parameters.set("param2", parameter2);
@@ -74,16 +82,22 @@ bool PythonInterpreter::callFunctionFourParams(const QString &module, const QStr
   return callFunction(module, function, parameters);
 }
 
-template<typename PARAM_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionOneParamAndGetReturnValue(const QString &module, const QString &function, const PARAM_TYPE &parameter, RETURN_TYPE &returnValue) {
+template <typename PARAM_TYPE, typename RETURN_TYPE>
+bool PythonInterpreter::callFunctionOneParamAndGetReturnValue(const QString &module,
+                                                              const QString &function,
+                                                              const PARAM_TYPE &parameter,
+                                                              RETURN_TYPE &returnValue) {
   tlp::DataSet parameters;
   parameters.set("param1", parameter);
   return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
 }
 
-template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionTwoParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
-    const PARAM2_TYPE &parameter2, RETURN_TYPE &returnValue) {
+template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename RETURN_TYPE>
+bool PythonInterpreter::callFunctionTwoParamsAndGetReturnValue(const QString &module,
+                                                               const QString &function,
+                                                               const PARAM1_TYPE &parameter1,
+                                                               const PARAM2_TYPE &parameter2,
+                                                               RETURN_TYPE &returnValue) {
 
   tlp::DataSet parameters;
   parameters.set("param1", parameter1);
@@ -91,8 +105,9 @@ bool PythonInterpreter::callFunctionTwoParamsAndGetReturnValue(const QString &mo
   return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
 }
 
-template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionThreeParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
+template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename RETURN_TYPE>
+bool PythonInterpreter::callFunctionThreeParamsAndGetReturnValue(
+    const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
     const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, RETURN_TYPE &returnValue) {
 
   tlp::DataSet parameters;
@@ -102,8 +117,10 @@ bool PythonInterpreter::callFunctionThreeParamsAndGetReturnValue(const QString &
   return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
 }
 
-template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE, typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
+template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE,
+          typename RETURN_TYPE>
+bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(
+    const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
     const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4,
     RETURN_TYPE &returnValue) {
 
@@ -116,43 +133,50 @@ bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(const QString &m
 }
 
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
-//use c++11 variadic template for more convenience
-template<typename RETURN_TYPE, typename... Param>
-bool PythonInterpreter::callFunctionWithParamsAndGetReturnValue(const QString &module, const QString &function, RETURN_TYPE &returnValue, Param... param) {
+// use c++11 variadic template for more convenience
+template <typename RETURN_TYPE, typename... Param>
+bool PythonInterpreter::callFunctionWithParamsAndGetReturnValue(const QString &module,
+                                                                const QString &function,
+                                                                RETURN_TYPE &returnValue,
+                                                                Param... param) {
   tlp::DataSet ds;
   buildParamDataSet(&ds, param...);
   return callFunctionAndGetReturnValue(module, function, ds, returnValue);
 }
 
-template<typename... Param>
-bool PythonInterpreter::callFunctionWithParams(const QString &module, const QString &function, Param... param) {
+template <typename... Param>
+bool PythonInterpreter::callFunctionWithParams(const QString &module, const QString &function,
+                                               Param... param) {
   tlp::DataSet ds;
   buildParamDataSet(&ds, param...);
   return callFunction(module, function, ds);
 }
 
-template<typename T, typename... Param>
-void PythonInterpreter::buildParamDataSet(DataSet* ds, T a, Param... param) {
-  addParameter(ds,a);
+template <typename T, typename... Param>
+void PythonInterpreter::buildParamDataSet(DataSet *ds, T a, Param... param) {
+  addParameter(ds, a);
   buildParamDataSet(ds, param...);
 }
 
-template<typename T>
-void PythonInterpreter::buildParamDataSet(DataSet* ds, T a) {
-  addParameter(ds,a);
+template <typename T>
+void PythonInterpreter::buildParamDataSet(DataSet *ds, T a) {
+  addParameter(ds, a);
 }
 
-template<typename T>
-void PythonInterpreter::addParameter(DataSet* ds, T a) {
+template <typename T>
+void PythonInterpreter::addParameter(DataSet *ds, T a) {
   std::string st("param_");
-  st+=std::to_string(ds->size()+1);
+  st += std::to_string(ds->size() + 1);
   ds->set(st, a);
 }
 
 #endif
 
-template<typename RETURN_TYPE>
-bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module, const QString &function, const tlp::DataSet &parameters, RETURN_TYPE &returnValue) {
+template <typename RETURN_TYPE>
+bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module,
+                                                      const QString &function,
+                                                      const tlp::DataSet &parameters,
+                                                      RETURN_TYPE &returnValue) {
   holdGIL();
   bool ok = false;
   PyObject *ret = callPythonFunction(module, function, parameters);
@@ -166,4 +190,3 @@ bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module, con
   releaseGIL();
   return ok;
 }
-

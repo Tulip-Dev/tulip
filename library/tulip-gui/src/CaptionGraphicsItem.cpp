@@ -35,20 +35,22 @@ using namespace std;
 
 namespace tlp {
 
-CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
+CaptionGraphicsItem::CaptionGraphicsItem(View *view) : _view(view) {
 
-  _rondedRectItem=new CaptionGraphicsBackgroundItem(QRect(QPoint(0,0),QSize(130,260)));
-  _rondedRectItem->setBrush(QBrush(QColor(255,255,255,180)));
-  connect(_rondedRectItem,SIGNAL(filterChanged(float,float)),this,SLOT(filterChangedSlot(float,float)));
+  _rondedRectItem = new CaptionGraphicsBackgroundItem(QRect(QPoint(0, 0), QSize(130, 260)));
+  _rondedRectItem->setBrush(QBrush(QColor(255, 255, 255, 180)));
+  connect(_rondedRectItem, SIGNAL(filterChanged(float, float)), this,
+          SLOT(filterChangedSlot(float, float)));
 
   _confPropertySelectionWidget = new QPushButton();
-  _confPropertySelectionWidget->resize(QSize(120,25));
+  _confPropertySelectionWidget->resize(QSize(120, 25));
   _confPropertySelectionItem = new QGraphicsProxyWidget(_rondedRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
-  _confPropertySelectionItem->setPos(5,230);
+  _confPropertySelectionItem->setPos(5, 230);
   _confPropertySelectionItem->setZValue(2);
   _nodesEdgesTextItem = new QGraphicsSimpleTextItem(_rondedRectItem);
-  connect(_confPropertySelectionWidget,SIGNAL(clicked()),this,SLOT(selectPropertyButtonClicked()));
+  connect(_confPropertySelectionWidget, SIGNAL(clicked()), this,
+          SLOT(selectPropertyButtonClicked()));
 }
 
 void CaptionGraphicsItem::loadConfiguration() {
@@ -56,25 +58,31 @@ void CaptionGraphicsItem::loadConfiguration() {
 }
 
 void CaptionGraphicsItem::setType(unsigned int type) {
-  if(type==1 || type==2)
+  if (type == 1 || type == 2)
     _nodesEdgesTextItem->setText("on nodes");
   else
     _nodesEdgesTextItem->setText("on edges");
 
-  _nodesEdgesTextItem->setPos(35,210);
+  _nodesEdgesTextItem->setPos(35, 210);
 }
 
-void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
-  _rondedRectItem->generateColorCaption(activeGradient,hideGradient,propertyName,minValue,maxValue);
+void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient,
+                                               const QGradient &hideGradient,
+                                               const string &propertyName, double minValue,
+                                               double maxValue) {
+  _rondedRectItem->generateColorCaption(activeGradient, hideGradient, propertyName, minValue,
+                                        maxValue);
 }
 
-void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> > &metricToSizeFilteredList,const string &propertyName, double minValue, double maxValue) {
-  _rondedRectItem->generateSizeCaption(metricToSizeFilteredList,propertyName,minValue,maxValue);
+void CaptionGraphicsItem::generateSizeCaption(
+    const vector<pair<double, float> > &metricToSizeFilteredList, const string &propertyName,
+    double minValue, double maxValue) {
+  _rondedRectItem->generateSizeCaption(metricToSizeFilteredList, propertyName, minValue, maxValue);
 }
 
 void CaptionGraphicsItem::constructConfigWidget() {
 
-  if(_view->graph()==NULL) {
+  if (_view->graph() == NULL) {
     _confPropertySelectionWidget->setText("");
     _confPropertySelectionWidget->setToolTip("");
     return;
@@ -89,18 +97,18 @@ void CaptionGraphicsItem::constructConfigWidget() {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 
-    if(firstDoubleMetricName.isEmpty())
-      firstDoubleMetricName=piName.c_str();
+    if (firstDoubleMetricName.isEmpty())
+      firstDoubleMetricName = piName.c_str();
 
     if (oldName == piName.c_str())
       selectedProp = piName.c_str();
 
-    if(piName == "viewMetric")
+    if (piName == "viewMetric")
       findViewMetric = true;
   }
 
-  if(selectedProp.isEmpty()) {
-    if(findViewMetric)
+  if (selectedProp.isEmpty()) {
+    if (findViewMetric)
       selectedProp = "viewMetric";
     else
       selectedProp = firstDoubleMetricName;
@@ -114,11 +122,10 @@ string CaptionGraphicsItem::usedProperty() {
   return QStringToTlpString(_confPropertySelectionWidget->toolTip());
 }
 
-CaptionGraphicsItem::~CaptionGraphicsItem() {
-}
+CaptionGraphicsItem::~CaptionGraphicsItem() {}
 
-void CaptionGraphicsItem::filterChangedSlot(float begin,float end) {
-  emit filterChanged(begin,end);
+void CaptionGraphicsItem::filterChangedSlot(float begin, float end) {
+  emit filterChanged(begin, end);
 }
 
 void CaptionGraphicsItem::selectPropertyButtonClicked() {
@@ -131,29 +138,34 @@ void CaptionGraphicsItem::selectPropertyButtonClicked() {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 
-    QAction* action =
-      menu.addAction(piName.c_str(),this,SLOT(propertySelectedSlot()));
+    QAction *action = menu.addAction(piName.c_str(), this, SLOT(propertySelectedSlot()));
 
     if (_confPropertySelectionWidget->text() == QString(piName.c_str()))
       menu.setActiveAction(action);
-
   }
   // set a combo like stylesheet
   QPalette palette = QComboBox().palette();
-  menu.setStyleSheet(QString("QMenu::item {color: %1; background-color: %2;} QMenu::item:selected {color: %3; background-color: %4}").arg(palette.color(QPalette::Active, QPalette::Text).name()).arg(palette.color(QPalette::Active, QPalette::Base).name()).arg(palette.color(QPalette::Active, QPalette::HighlightedText).name()).arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+  menu.setStyleSheet(QString("QMenu::item {color: %1; background-color: %2;} QMenu::item:selected "
+                             "{color: %3; background-color: %4}")
+                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
+                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
 
   // compute a combo like position
   // to popup the menu
-  QWidget* pViewport = QApplication::widgetAt(QCursor::pos());
-  QWidget* pView = pViewport->parentWidget();
-  QGraphicsView* pGraphicsView = qobject_cast<QGraphicsView*>(pView);
-  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(_confPropertySelectionItem->mapToScene(_confPropertySelectionItem->subWidgetRect(_confPropertySelectionWidget).bottomLeft())));
+  QWidget *pViewport = QApplication::widgetAt(QCursor::pos());
+  QWidget *pView = pViewport->parentWidget();
+  QGraphicsView *pGraphicsView = qobject_cast<QGraphicsView *>(pView);
+  QPoint popupPos =
+      pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(_confPropertySelectionItem->mapToScene(
+          _confPropertySelectionItem->subWidgetRect(_confPropertySelectionWidget).bottomLeft())));
 
   menu.exec(popupPos);
 }
 
 void CaptionGraphicsItem::propertySelectedSlot() {
-  QAction* action = static_cast<QAction*>(sender());
+  QAction *action = static_cast<QAction *>(sender());
   _confPropertySelectionWidget->setText(wrappedPropName(action->text()));
   _confPropertySelectionWidget->setToolTip(action->text());
   emit selectedPropertyChanged(QStringToTlpString(action->text()));
@@ -162,5 +174,4 @@ void CaptionGraphicsItem::propertySelectedSlot() {
 QString CaptionGraphicsItem::wrappedPropName(const QString &originalName) const {
   return originalName;
 }
-
 }

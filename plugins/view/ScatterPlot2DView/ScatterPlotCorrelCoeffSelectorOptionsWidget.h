@@ -37,8 +37,7 @@ class ScatterPlotCorrelCoeffSelectorOptionsWidget : public QWidget {
 
   Q_OBJECT
 
-public :
-
+public:
   ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent = 0);
   ~ScatterPlotCorrelCoeffSelectorOptionsWidget();
 
@@ -46,19 +45,16 @@ public :
   Color getZeroColor() const;
   Color getOneColor() const;
 
-protected :
+protected:
+  void showEvent(QShowEvent *event);
 
-  void showEvent(QShowEvent * event);
-
-private slots :
+private slots:
   void updateColorScale();
 
-private :
+private:
   void setButtonColor(tlp::ColorButton *button, const Color &color);
-  Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData* _ui;
-
+  Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData *_ui;
 };
-
 }
 
 #endif /* SCATTERPLOTCORRELCOEFFSELECTOROPTIONSWIDGET_H_ */

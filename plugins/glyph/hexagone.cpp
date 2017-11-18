@@ -36,7 +36,8 @@ namespace tlp {
 
 static GlHexagon *hexagon = NULL;
 
-static void drawHexagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
+static void drawHexagon(const Color &fillColor, const Color &borderColor, float borderWidth,
+                        const std::string &textureName, float lod) {
 
   hexagon->setFillColor(fillColor);
 
@@ -44,13 +45,12 @@ static void drawHexagon(const Color &fillColor,const Color &borderColor,float bo
     hexagon->setOutlineMode(true);
     hexagon->setOutlineColor(borderColor);
     hexagon->setOutlineSize(borderWidth);
-  }
-  else {
+  } else {
     hexagon->setOutlineMode(false);
   }
 
   hexagon->setTextureName(textureName);
-  hexagon->draw(lod,NULL);
+  hexagon->draw(lod, NULL);
 }
 
 /** \addtogroup glyph */
@@ -61,64 +61,56 @@ static void drawHexagon(const Color &fillColor,const Color &borderColor,float bo
  * node property value. If this property has no value, the hexagon
  * is then colored using the "viewColor" node property value.
  */
-class Hexagon: public Glyph {
+class Hexagon : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0", NodeShape::Hexagon)
+  GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0",
+                   NodeShape::Hexagon)
   Hexagon(const tlp::PluginContext *context = NULL);
   virtual ~Hexagon();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
 };
 PLUGIN(Hexagon)
-Hexagon::Hexagon(const tlp::PluginContext* context) :
-  Glyph(context) {
-  if(!hexagon)
-    hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
+Hexagon::Hexagon(const tlp::PluginContext *context) : Glyph(context) {
+  if (!hexagon)
+    hexagon = new GlHexagon(Coord(0, 0, 0), Size(.5, .5, 0));
 }
-Hexagon::~Hexagon() {
-}
-void Hexagon::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+Hexagon::~Hexagon() {}
+void Hexagon::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
   boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 void Hexagon::draw(node n, float lod) {
   hexagon->setLightingMode(true);
-  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+  string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(!textureName.empty())
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+  if (!textureName.empty())
+    textureName = glGraphInputData->parameters->getTexturePath() + textureName;
 
   drawHexagon(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-              textureName,
-              lod);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 
-class EEHexagon: public EdgeExtremityGlyph {
+class EEHexagon : public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATION("2D - Hexagon extremity", "David Auber", "09/07/2002", "Textured Hexagon for edge extremities", "1.0", EdgeExtremityShape::Hexagon)
+  GLYPHINFORMATION("2D - Hexagon extremity", "David Auber", "09/07/2002",
+                   "Textured Hexagon for edge extremities", "1.0", EdgeExtremityShape::Hexagon)
 
-  EEHexagon(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+  EEHexagon(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
     if (hexagon == NULL)
-      hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
+      hexagon = new GlHexagon(Coord(0, 0, 0), Size(.5, .5, 0));
   }
 
-  void draw(edge e,
-            node,
-            const Color & glyphColor,
-            const Color &borderColor,
-            float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
     hexagon->setLightingMode(false);
-    string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(!textureName.empty())
-      textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+    if (!textureName.empty())
+      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawHexagon(glyphColor,
-                borderColor,
-                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-                textureName,
+    drawHexagon(glyphColor, borderColor,
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName,
                 lod);
   }
 };

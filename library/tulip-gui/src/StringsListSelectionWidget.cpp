@@ -28,21 +28,19 @@ using namespace std;
 
 namespace tlp {
 
-StringsListSelectionWidget::StringsListSelectionWidget(QWidget *parent,
-    const ListType listType, const unsigned int maxSelectedStringsListSize) :
-  QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
+StringsListSelectionWidget::StringsListSelectionWidget(
+    QWidget *parent, const ListType listType, const unsigned int maxSelectedStringsListSize)
+    : QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
   setListType(listType);
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-    maxSelectedStringsListSize);
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
 }
 
 StringsListSelectionWidget::StringsListSelectionWidget(
-  const vector<string> &unselectedStringsList, QWidget *parent,
-  const ListType listType, const unsigned int maxSelectedStringsListSize) :
-  QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
+    const vector<string> &unselectedStringsList, QWidget *parent, const ListType listType,
+    const unsigned int maxSelectedStringsListSize)
+    : QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
   setListType(listType);
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-    maxSelectedStringsListSize);
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
   stringsListSelectionWidget->setUnselectedStringsList(unselectedStringsList);
 }
 
@@ -51,29 +49,27 @@ void StringsListSelectionWidget::setListType(const ListType listType) {
   delete currentLayout;
 
   if (stringsListSelectionWidget != NULL) {
-    QWidget *widget = dynamic_cast<QWidget *> (stringsListSelectionWidget);
+    QWidget *widget = dynamic_cast<QWidget *>(stringsListSelectionWidget);
     delete widget;
   }
 
   if (listType == DOUBLE_LIST) {
     stringsListSelectionWidget = new DoubleStringsListSelectionWidget();
-  }
-  else {
+  } else {
     stringsListSelectionWidget = new SimpleStringsListSelectionWidget();
   }
 
   QVBoxLayout *newLayout = new QVBoxLayout;
-  newLayout->addWidget(dynamic_cast<QWidget *> (stringsListSelectionWidget));
+  newLayout->addWidget(dynamic_cast<QWidget *>(stringsListSelectionWidget));
   setLayout(newLayout);
 }
 
 void StringsListSelectionWidget::setUnselectedStringsList(
-  const vector<string> &unselectedStringsList) {
+    const vector<string> &unselectedStringsList) {
   stringsListSelectionWidget->setUnselectedStringsList(unselectedStringsList);
 }
 
-void StringsListSelectionWidget::setSelectedStringsList(
-  const vector<string> &selectedStringsList) {
+void StringsListSelectionWidget::setSelectedStringsList(const vector<string> &selectedStringsList) {
   stringsListSelectionWidget->setSelectedStringsList(selectedStringsList);
 }
 
@@ -86,25 +82,24 @@ void StringsListSelectionWidget::clearSelectedStringsList() {
 }
 
 void StringsListSelectionWidget::setUnselectedStringsListLabel(
-  const std::string &unselectedStringsListLabel) {
+    const std::string &unselectedStringsListLabel) {
   if (listType == DOUBLE_LIST) {
-    static_cast<DoubleStringsListSelectionWidget *>(stringsListSelectionWidget)->setUnselectedStringsListLabel(
-      unselectedStringsListLabel);
+    static_cast<DoubleStringsListSelectionWidget *>(stringsListSelectionWidget)
+        ->setUnselectedStringsListLabel(unselectedStringsListLabel);
   }
 }
 
 void StringsListSelectionWidget::setSelectedStringsListLabel(
-  const std::string &selectedStringsListLabel) {
+    const std::string &selectedStringsListLabel) {
   if (listType == DOUBLE_LIST) {
-    static_cast<DoubleStringsListSelectionWidget *>(stringsListSelectionWidget)->setSelectedStringsListLabel(
-      selectedStringsListLabel);
+    static_cast<DoubleStringsListSelectionWidget *>(stringsListSelectionWidget)
+        ->setSelectedStringsListLabel(selectedStringsListLabel);
   }
 }
 
 void StringsListSelectionWidget::setMaxSelectedStringsListSize(
-  const unsigned int maxSelectedStringsListSize) {
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-    maxSelectedStringsListSize);
+    const unsigned int maxSelectedStringsListSize) {
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
 }
 
 vector<string> StringsListSelectionWidget::getSelectedStringsList() const {
@@ -116,12 +111,9 @@ vector<string> StringsListSelectionWidget::getUnselectedStringsList() const {
 }
 
 std::vector<std::string> StringsListSelectionWidget::getCompleteStringsList() const {
-  vector<string> completeList =
-    stringsListSelectionWidget->getSelectedStringsList();
-  vector<string> unselected =
-    stringsListSelectionWidget->getUnselectedStringsList();
-  completeList.insert(completeList.end(), unselected.begin(),
-                      unselected.end());
+  vector<string> completeList = stringsListSelectionWidget->getSelectedStringsList();
+  vector<string> unselected = stringsListSelectionWidget->getUnselectedStringsList();
+  completeList.insert(completeList.end(), unselected.begin(), unselected.end());
   return completeList;
 }
 
@@ -132,5 +124,4 @@ void StringsListSelectionWidget::selectAllStrings() {
 void StringsListSelectionWidget::unselectAllStrings() {
   stringsListSelectionWidget->unselectAllStrings();
 }
-
 }

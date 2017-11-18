@@ -25,7 +25,6 @@
 
 #include <tulip/Algorithm.h>
 
-
 /** \addtogroup algorithm */
 /*@{*/
 /**
@@ -54,33 +53,32 @@
  *  (at your option) any later version.
  *
  */
-class CliqueEnumeration:public tlp::Algorithm {
-
+class CliqueEnumeration : public tlp::Algorithm {
 
   void addClique(const std::vector<tlp::node> &);
 
   void getDegenerateOrdering(std::vector<tlp::node> &);
   void getNeighborhood(const tlp::node, std::set<tlp::node> &);
   tlp::node choosePivot(const std::set<tlp::node> &);
-  void maxCliquePivot(std::set<tlp::node>&, const std::vector<tlp::node> &, std::set<tlp::node>&);
+  void maxCliquePivot(std::set<tlp::node> &, const std::vector<tlp::node> &, std::set<tlp::node> &);
 
   unsigned int minsize;
   unsigned cliqueid;
 
 public:
-  PLUGININFORMATION("Maximal Cliques Enumeration", "Francois Queyroi", "24/10/2013", "Compute all maximal cliques (or maximal cliques whose size is above a given threshold)"
-                    " according to the Eppstein algorithm. See"
-                    " Eppstein, Loffler and Strash, "
-                    "Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time, "
-                    "Experimental Algorithms, Springer, "
-                    "2011", "1.0", "Clustering")
+  PLUGININFORMATION(
+      "Maximal Cliques Enumeration", "Francois Queyroi", "24/10/2013",
+      "Compute all maximal cliques (or maximal cliques whose size is above a given threshold)"
+      " according to the Eppstein algorithm. See"
+      " Eppstein, Loffler and Strash, "
+      "Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time, "
+      "Experimental Algorithms, Springer, "
+      "2011",
+      "1.0", "Clustering")
 
-  CliqueEnumeration(tlp::PluginContext*);
+  CliqueEnumeration(tlp::PluginContext *);
   bool run();
   bool check(std::string &);
 };
 /*@}*/
 #endif // CLIQUEENUMERATION_H
-
-
-

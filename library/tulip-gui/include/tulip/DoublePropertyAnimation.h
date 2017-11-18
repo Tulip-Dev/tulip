@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef DOUBLEPROPERTYANIMATION_H
 #define DOUBLEPROPERTYANIMATION_H
 
@@ -27,17 +26,19 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE DoublePropertyAnimation:public CachedPropertyAnimation<tlp::DoubleProperty, double, double> {
+class TLP_QT_SCOPE DoublePropertyAnimation
+    : public CachedPropertyAnimation<tlp::DoubleProperty, double, double> {
 public:
-  DoublePropertyAnimation(tlp::Graph *graph, tlp::DoubleProperty *start, tlp::DoubleProperty *end, tlp::DoubleProperty *out,
-                          tlp::BooleanProperty *selection = NULL, int frameCount = 1, bool computeNodes = true, bool computeEdges = false,QObject* parent=NULL);
+  DoublePropertyAnimation(tlp::Graph *graph, tlp::DoubleProperty *start, tlp::DoubleProperty *end,
+                          tlp::DoubleProperty *out, tlp::BooleanProperty *selection = NULL,
+                          int frameCount = 1, bool computeNodes = true, bool computeEdges = false,
+                          QObject *parent = NULL);
   ~DoublePropertyAnimation() {}
 
 protected:
   double getNodeFrameValue(const double &startValue, const double &endValue, int frame);
   double getEdgeFrameValue(const double &startValue, const double &endValue, int frame);
 };
-
 }
 
 #endif // DOUBLEPROPERTYANIMATION_H

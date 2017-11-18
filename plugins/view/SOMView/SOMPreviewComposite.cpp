@@ -26,9 +26,11 @@
 using namespace tlp;
 using namespace std;
 
-SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string& propertyName, tlp::ColorProperty* colorProperty,
-    SOMMap *map, ColorScale* colorScale, double minValue, double maxValue) :
-  propertyName(propertyName), currentPosition(position) {
+SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size,
+                                         const std::string &propertyName,
+                                         tlp::ColorProperty *colorProperty, SOMMap *map,
+                                         ColorScale *colorScale, double minValue, double maxValue)
+    : propertyName(propertyName), currentPosition(position) {
 
   double spacing = 1;
   double labelSizeRate = 0.1;
@@ -37,12 +39,14 @@ SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, co
 
   Coord frameTopLeft(position.getX(), position.getY() + size.getH(), 0);
   Coord frameBottomRight(position.getX() + size.getW(), position.getY(), 0);
-  //Creating the frame.
-  frame = new GlRect(frameTopLeft, frameBottomRight, Color(255, 255, 255, 0), Color(255, 255, 255, 0), true, true);
+  // Creating the frame.
+  frame = new GlRect(frameTopLeft, frameBottomRight, Color(255, 255, 255, 0),
+                     Color(255, 255, 255, 0), true, true);
   addGlEntity(frame, "frame");
 
   tlp::Size labelSize(size.getW() - spacing * 2, labelHeightSize);
-  tlp::Coord labelPosition(position.getX() + labelSize.getW() / 2, position.getY() + size.getW() - labelSize.getH() / 2);
+  tlp::Coord labelPosition(position.getX() + labelSize.getW() / 2,
+                           position.getY() + size.getW() - labelSize.getH() / 2);
 
   label = new tlp::GlLabel(labelPosition, labelSize, tlp::Color(0, 0, 0));
   label->setText(propertyName);
@@ -51,13 +55,17 @@ SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, co
   Coord lColorScalePosition(position.getX() + spacing, position.getY(), 0);
   Size lColorScaleSize(size.getW() - 2 * spacing, labelHeightSize + size.getH() * scaleSizeRate, 0);
 
-  lColorScale = new GlLabelledColorScale(lColorScalePosition, lColorScaleSize, colorScale, minValue, maxValue);
+  lColorScale = new GlLabelledColorScale(lColorScalePosition, lColorScaleSize, colorScale, minValue,
+                                         maxValue);
   addGlEntity(lColorScale, "scale");
 
-  Size screenshotMaxSize(size.getW() - 2 * spacing, size.getH() - labelSize.getH() - spacing - lColorScaleSize.getH());
-  Size screenshotSize = computeAspectRatio(map->getWidth(), map->getHeight(), screenshotMaxSize.getW(), screenshotMaxSize.getH());
+  Size screenshotMaxSize(size.getW() - 2 * spacing,
+                         size.getH() - labelSize.getH() - spacing - lColorScaleSize.getH());
+  Size screenshotSize = computeAspectRatio(map->getWidth(), map->getHeight(),
+                                           screenshotMaxSize.getW(), screenshotMaxSize.getH());
 
-  Coord screenshotCoord(position.getX() + spacing, position.getY() + spacing + lColorScaleSize.getH());
+  Coord screenshotCoord(position.getX() + spacing,
+                        position.getY() + spacing + lColorScaleSize.getH());
 
   Size diff = screenshotMaxSize - screenshotSize;
 
@@ -86,15 +94,15 @@ void SOMPreviewComposite::setFrameColor(tlp::Color color) {
   frame->setOutlineColor(color);
 }
 
-Size SOMPreviewComposite::computeAspectRatio(unsigned int width, unsigned int height, float maxWidth, float maxHeight) {
+Size SOMPreviewComposite::computeAspectRatio(unsigned int width, unsigned int height,
+                                             float maxWidth, float maxHeight) {
 
   Size elementsSize;
 
   if (width > height) {
     elementsSize.setW(maxWidth);
     elementsSize.setH((elementsSize.getW() * height) / width);
-  }
-  else {
+  } else {
     elementsSize.setH(maxHeight);
     elementsSize.setW((width * elementsSize.getH()) / height);
   }
@@ -102,24 +110,25 @@ Size SOMPreviewComposite::computeAspectRatio(unsigned int width, unsigned int he
   return elementsSize;
 }
 
-bool SOMPreviewComposite::isElement(GlEntity* entity) {
-  deque<GlComposite*> compositeToExplore;
-  //Search in the current composite and all internal composites to find the element.
+bool SOMPreviewComposite::isElement(GlEntity *entity) {
+  deque<GlComposite *> compositeToExplore;
+  // Search in the current composite and all internal composites to find the element.
   compositeToExplore.push_back(this);
 
   while (!compositeToExplore.empty()) {
     GlComposite *current = compositeToExplore.front();
     compositeToExplore.pop_front();
 
-    map<string, GlSimpleEntity*> displays = current->getGlEntities();
+    map<string, GlSimpleEntity *> displays = current->getGlEntities();
 
-    for (map<string, GlSimpleEntity*>::iterator itElements = displays.begin(); itElements != displays.end(); ++itElements) {
+    for (map<string, GlSimpleEntity *>::iterator itElements = displays.begin();
+         itElements != displays.end(); ++itElements) {
       if (itElements->second == entity) {
         return true;
       }
 
-      //If the element is a composite add it to the list of composite to explore.
-      GlComposite *composite = dynamic_cast<GlComposite*> (itElements->second);
+      // If the element is a composite add it to the list of composite to explore.
+      GlComposite *composite = dynamic_cast<GlComposite *>(itElements->second);
 
       if (composite) {
         compositeToExplore.push_back(composite);

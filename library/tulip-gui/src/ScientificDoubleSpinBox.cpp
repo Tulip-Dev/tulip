@@ -1,4 +1,5 @@
-// original code is written in Python and is taken from https://jdreaver.com/posts/2014-07-28-scientific-notation-spin-box-pyside.html
+// original code is written in Python and is taken from
+// https://jdreaver.com/posts/2014-07-28-scientific-notation-spin-box-pyside.html
 // see also https://gist.github.com/jdreaver/0be2e44981159d0854f5
 
 #include <cfloat>
@@ -18,10 +19,9 @@ static FloatValidator floatValidator;
 bool validFloatString(const QString &s) {
   int pos = floatRe.indexIn(s);
 
-  if (pos != - 1) {
+  if (pos != -1) {
     return floatRe.capturedTexts()[1] == s;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -31,7 +31,7 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
     return QValidator::Acceptable;
   }
 
-  if (input == "" || input.mid(pos-1, 1).count(QRegExp("[e.-+]+")) == 1) {
+  if (input == "" || input.mid(pos - 1, 1).count(QRegExp("[e.-+]+")) == 1) {
     return QValidator::Intermediate;
   }
 
@@ -41,10 +41,9 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
 void FloatValidator::fixup(QString &text) const {
   int pos = floatRe.indexIn(text);
 
-  if (pos != - 1) {
+  if (pos != -1) {
     text = floatRe.capturedTexts()[1];
-  }
-  else {
+  } else {
     text = "";
   }
 }

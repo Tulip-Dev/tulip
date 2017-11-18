@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef STRINGEDITOR_H
 #define STRINGEDITOR_H
 
@@ -34,16 +33,16 @@ namespace tlp {
 **/
 class TLP_QT_SCOPE StringEditor : public QDialog {
   QString currentString;
-  QTextEdit* edit;
+  QTextEdit *edit;
 
 public:
   explicit StringEditor(QWidget *parent = NULL);
 
   QString getString() const;
-  void setString(const QString& qstr);
+  void setString(const QString &qstr);
 
   // redefinition to ensure it is shown in the center of its parent
-  void showEvent(QShowEvent* ev);
+  void showEvent(QShowEvent *ev);
 
 public slots:
   // redefinition to ensure to catch the end of input

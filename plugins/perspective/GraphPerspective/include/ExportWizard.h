@@ -31,15 +31,14 @@ namespace tlp {
 class GraphHierarchiesModel;
 }
 
-class ExportWizard: public QWizard {
+class ExportWizard : public QWizard {
   Q_OBJECT
 
-  Ui::ExportWizard* _ui;
-  tlp::Graph* _graph;
+  Ui::ExportWizard *_ui;
+  tlp::Graph *_graph;
 
 public:
-  explicit ExportWizard(tlp::Graph* g, const QString& exportFile,
-                        QWidget *parent = NULL);
+  explicit ExportWizard(tlp::Graph *g, const QString &exportFile, QWidget *parent = NULL);
   virtual ~ExportWizard();
 
   QString algorithm() const;
@@ -47,7 +46,7 @@ public:
   QString outputFile() const;
 
 protected slots:
-  void algorithmSelected (const QModelIndex& index);
+  void algorithmSelected(const QModelIndex &index);
   void updateFinishButton();
 
   void pathChanged(QString s);

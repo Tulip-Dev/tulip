@@ -33,29 +33,30 @@
 using namespace tlp;
 using namespace std;
 
-SOMAlgorithm::SOMAlgorithm(TimeDecreasingFunction* learningRateFunction, DiffusionRateFunction* diffusionRateFunction) :
+SOMAlgorithm::SOMAlgorithm(TimeDecreasingFunction *learningRateFunction,
+                           DiffusionRateFunction *diffusionRateFunction)
+    :
 
-  learningRateFunction(learningRateFunction), diffusionRateFunction(diffusionRateFunction) {
+      learningRateFunction(learningRateFunction),
+      diffusionRateFunction(diffusionRateFunction) {
 
-  //Init default degenerescence functions if user don't do it
+  // Init default degenerescence functions if user don't do it
   if (this->learningRateFunction == NULL)
     this->learningRateFunction = new TimeDecreasingFunctionSimple(0.7);
 
   if (this->diffusionRateFunction == NULL)
-    this->diffusionRateFunction = new DiffusionRateFunctionSimple(
-      new TimeDecreasingFunctionSimple(0.7), 3);
-
+    this->diffusionRateFunction =
+        new DiffusionRateFunctionSimple(new TimeDecreasingFunctionSimple(0.7), 3);
 }
 
 SOMAlgorithm::~SOMAlgorithm() {
   delete learningRateFunction;
   delete diffusionRateFunction;
-
 }
 
-void SOMAlgorithm::run(SOMMap* map, InputSample& inputSample, unsigned int nTimes,
+void SOMAlgorithm::run(SOMMap *map, InputSample &inputSample, unsigned int nTimes,
                        tlp::PluginProgress *pluginProgress) {
-  //Map initialisation
+  // Map initialisation
   if (pluginProgress)
     pluginProgress->setComment("Initialization");
 
@@ -66,15 +67,14 @@ void SOMAlgorithm::run(SOMMap* map, InputSample& inputSample, unsigned int nTime
 
   trainNInputSample(map, inputSample, nTimes, pluginProgress);
 
-  //registering modification
+  // registering modification
   map->registerModification(inputSample.getListenedProperties());
-
 }
 
 /**
  * For each node in the map use a random value
  */
-void SOMAlgorithm::initMap(SOMMap* map, InputSample& inputSample,
+void SOMAlgorithm::initMap(SOMMap *map, InputSample &inputSample,
                            tlp::PluginProgress *pluginProgress) {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
@@ -83,17 +83,17 @@ void SOMAlgorithm::initMap(SOMMap* map, InputSample& inputSample,
   int numberOfNode = map->numberOfNodes();
   int currentNumberOfNode = 0;
   Iterator<node> *nodeIterator = inputSample.getRandomNodeOrder();
-  forEach(n,map->getNodes()) {
+  forEach(n, map->getNodes()) {
     if (!nodeIterator->hasNext()) {
       delete nodeIterator;
       nodeIterator = inputSample.getRandomNodeOrder();
     }
 
-    //Ramdom choice
+    // Ramdom choice
     map->setWeight(n, inputSample.getWeight(nodeIterator->next()));
 
     if (pluginProgress) {
-      //Increase the number of iterators why?
+      // Increase the number of iterators why?
       pluginProgress->progress(currentNumberOfNode, numberOfNode);
     }
 
@@ -102,20 +102,20 @@ void SOMAlgorithm::initMap(SOMMap* map, InputSample& inputSample,
   delete nodeIterator;
 }
 
-void SOMAlgorithm::trainNInputSample(SOMMap* map, InputSample& inputSample, unsigned int nTimes,
+void SOMAlgorithm::trainNInputSample(SOMMap *map, InputSample &inputSample, unsigned int nTimes,
                                      tlp::PluginProgress *pluginProgress) {
   train(map, inputSample, nTimes * inputSample.getSampleSize(), pluginProgress);
 }
 
-void SOMAlgorithm::train(SOMMap* map, InputSample& inputSample, unsigned int maxIteration,
+void SOMAlgorithm::train(SOMMap *map, InputSample &inputSample, unsigned int maxIteration,
                          tlp::PluginProgress *pluginProgress) {
-  assert( learningRateFunction);
-  assert( diffusionRateFunction);
+  assert(learningRateFunction);
+  assert(diffusionRateFunction);
   unsigned int currentIteration = 0;
-  Iterator<node>* nodeIterator = inputSample.getRandomNodeOrder();
+  Iterator<node> *nodeIterator = inputSample.getRandomNodeOrder();
 
   while (currentIteration < maxIteration) {
-    //Find BMU
+    // Find BMU
     double dist;
 
     if (!nodeIterator->hasNext()) {
@@ -123,18 +123,17 @@ void SOMAlgorithm::train(SOMMap* map, InputSample& inputSample, unsigned int max
       nodeIterator = inputSample.getRandomNodeOrder();
     }
 
-    const DynamicVector<double>& currentInputVector = inputSample.getWeight(
-          nodeIterator->next());
+    const DynamicVector<double> &currentInputVector = inputSample.getWeight(nodeIterator->next());
 
     node bmu = findBMU(map, currentInputVector, dist);
 
-    //Environment modification
+    // Environment modification
     assert(map->isElement(bmu));
 
     propagateModification(map, currentInputVector, bmu, currentIteration, maxIteration,
                           inputSample.getSampleSize());
 
-    //Next Iteration
+    // Next Iteration
     ++currentIteration;
 
     if (pluginProgress)
@@ -144,12 +143,12 @@ void SOMAlgorithm::train(SOMMap* map, InputSample& inputSample, unsigned int max
   delete nodeIterator;
 }
 
-node SOMAlgorithm::findBMU(SOMMap* map, const DynamicVector<double>& input, double &dist) {
+node SOMAlgorithm::findBMU(SOMMap *map, const DynamicVector<double> &input, double &dist) {
   vector<node> matchList;
   node n;
   double bestDist;
   Iterator<node> *gridNodes = map->getNodes();
-  //take the first to init the comparaison
+  // take the first to init the comparaison
   n = gridNodes->next();
   matchList.push_back(n);
   bestDist = input.dist(map->getWeight(n));
@@ -162,8 +161,7 @@ node SOMAlgorithm::findBMU(SOMMap* map, const DynamicVector<double>& input, doub
       bestDist = newDist;
       matchList.clear();
       matchList.push_back(n);
-    }
-    else if (newDist == bestDist) {
+    } else if (newDist == bestDist) {
       matchList.push_back(n);
     }
   }
@@ -175,10 +173,9 @@ node SOMAlgorithm::findBMU(SOMMap* map, const DynamicVector<double>& input, doub
 
   if (matchList.size() == 1) {
     n = matchList.front();
-  }
-  else {
-    //Take randomly a vector in the matchlist.
-    unsigned int num = randomUnsignedInteger(matchList.size()-1);
+  } else {
+    // Take randomly a vector in the matchlist.
+    unsigned int num = randomUnsignedInteger(matchList.size() - 1);
     assert(num < matchList.size());
     n = matchList[num];
   }
@@ -188,10 +185,11 @@ node SOMAlgorithm::findBMU(SOMMap* map, const DynamicVector<double>& input, doub
   return n;
 }
 
-void SOMAlgorithm::propagateModification(SOMMap* map, const DynamicVector<double>& input, node bmu,
-    unsigned int currentIteration, unsigned int maxIteration, unsigned int sampleSize) {
+void SOMAlgorithm::propagateModification(SOMMap *map, const DynamicVector<double> &input, node bmu,
+                                         unsigned int currentIteration, unsigned int maxIteration,
+                                         unsigned int sampleSize) {
 
-  //Parcour en largeur
+  // Parcour en largeur
   MutableContainer<bool> seen;
   seen.setAll(false);
   MutableContainer<int> distance;
@@ -201,36 +199,36 @@ void SOMAlgorithm::propagateModification(SOMMap* map, const DynamicVector<double
   toVisit.push_back(bmu);
   seen.set(bmu.id, true);
 
-  //Computing learning rate for this propagation
-  double learningRate = learningRateFunction->computeCurrentTimeRate(currentIteration,
-                        maxIteration, sampleSize);
+  // Computing learning rate for this propagation
+  double learningRate =
+      learningRateFunction->computeCurrentTimeRate(currentIteration, maxIteration, sampleSize);
 
   if (learningRate == 0)
     return;
 
-  //Treatment of the deque
+  // Treatment of the deque
   while (!toVisit.empty()) {
     node current = toVisit.front();
     toVisit.pop_front();
 
     assert(current.isValid());
     assert(map->isElement(current));
-    //Treat its value
+    // Treat its value
     DynamicVector<double> weight = map->getWeight(current);
     assert(weight.getSize() != 0);
-    double diffusionRate = diffusionRateFunction->computeSpaceRate(distance.get(current.id),
-                           currentIteration, maxIteration, sampleSize);
+    double diffusionRate = diffusionRateFunction->computeSpaceRate(
+        distance.get(current.id), currentIteration, maxIteration, sampleSize);
 
-    //Diffusion function
+    // Diffusion function
     weight = weight + ((input - weight) * learningRate * diffusionRate);
     map->setWeight(current, weight);
 
-    //Mark neighborhood
-    //If the diffusion rate is equal to 0 no need to propagate modification
+    // Mark neighborhood
+    // If the diffusion rate is equal to 0 no need to propagate modification
     if (diffusionRate > 0) {
       node neighbor;
-      forEach   (neighbor,map->getInOutNodes(current)) {
-        //not already treated
+      forEach(neighbor, map->getInOutNodes(current)) {
+        // not already treated
         if (!seen.get(neighbor.id)) {
           seen.set(neighbor.id, true);
           distance.set(neighbor.id, distance.get(current.id) + 1);
@@ -239,11 +237,11 @@ void SOMAlgorithm::propagateModification(SOMMap* map, const DynamicVector<double
       }
     }
   }
-
 }
 
-void SOMAlgorithm::computeMapping(SOMMap* map, InputSample& inputSample, std::map<tlp::node,
-                                  std::set<tlp::node> >& mappingTab, double& medDist, unsigned int& maxElement) {
+void SOMAlgorithm::computeMapping(SOMMap *map, InputSample &inputSample,
+                                  std::map<tlp::node, std::set<tlp::node> > &mappingTab,
+                                  double &medDist, unsigned int &maxElement) {
 
   double cumDist = 0;
   double dist;
@@ -251,7 +249,7 @@ void SOMAlgorithm::computeMapping(SOMMap* map, InputSample& inputSample, std::ma
 
   node n;
 
-  forEach(n,inputSample.getNodes()) {
+  forEach(n, inputSample.getNodes()) {
     node somNode = findBMU(map, inputSample.getWeight(n), dist);
     cumDist += dist;
     mappingTab[somNode].insert(n);
@@ -261,4 +259,3 @@ void SOMAlgorithm::computeMapping(SOMMap* map, InputSample& inputSample, std::ma
   }
   medDist = cumDist / inputSample.getSampleSize();
 }
-

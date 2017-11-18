@@ -38,34 +38,29 @@ class GlScene;
 class TLP_GL_SCOPE GlMetaNodeRenderer : public Observable {
 
 public:
-
   GlMetaNodeRenderer(GlGraphInputData *inputData);
 
   virtual ~GlMetaNodeRenderer();
 
-  virtual void render(node,float,Camera*);
+  virtual void render(node, float, Camera *);
 
   virtual void setInputData(GlGraphInputData *inputData);
 
   virtual GlGraphInputData *getInputData() const;
 
-  GlScene* getSceneForMetaGraph(Graph *g) const;
+  GlScene *getSceneForMetaGraph(Graph *g) const;
 
 protected:
-
   void clearScenes();
 
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
-  virtual GlScene* createScene(Graph*) const;
+  virtual GlScene *createScene(Graph *) const;
 
 private:
-
   GlGraphInputData *_inputData;
-  std::map<Graph *,GlScene *> _metaGraphToSceneMap;
-
+  std::map<Graph *, GlScene *> _metaGraphToSceneMap;
 };
-
 }
 
 #endif // Tulip_GLMETANODERENDERER_H

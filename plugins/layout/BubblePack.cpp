@@ -25,15 +25,18 @@
 #include <omp.h>
 #endif
 
-class BubblePack:public tlp::LayoutAlgorithm {
+class BubblePack : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Bubble Pack", "D.Auber", "01/10/2012", "Stable", "1.0", "Tree")
-  BubblePack(const tlp::PluginContext* context);
+  BubblePack(const tlp::PluginContext *context);
   ~BubblePack();
   bool run();
+
 private:
-  double computeRelativePosition(tlp::node n, tlp::NodeStaticProperty<tlp::Vec4f>& relativePosition);
-  void calcLayout(tlp::node n, tlp::Vec2f pos, tlp::NodeStaticProperty<tlp::Vec4f>& relativePosition);
+  double computeRelativePosition(tlp::node n,
+                                 tlp::NodeStaticProperty<tlp::Vec4f> &relativePosition);
+  void calcLayout(tlp::node n, tlp::Vec2f pos,
+                  tlp::NodeStaticProperty<tlp::Vec4f> &relativePosition);
 
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;
@@ -47,36 +50,37 @@ using namespace tlp;
 
 struct greaterRadius {
   const std::vector<double> &radius;
-  greaterRadius(const std::vector<double> &r):radius(r) {}
-  bool operator()(unsigned i1,unsigned i2) const {
-    return radius[i1]>radius[i2];
+  greaterRadius(const std::vector<double> &r) : radius(r) {}
+  bool operator()(unsigned i1, unsigned i2) const {
+    return radius[i1] > radius[i2];
   }
 };
 
 struct lessRadius {
   const std::vector<double> &radius;
-  lessRadius(const std::vector<double> &r):radius(r) {}
-  bool operator()(unsigned i1,unsigned i2) const {
-    return radius[i1]<radius[i2];
+  lessRadius(const std::vector<double> &r) : radius(r) {}
+  bool operator()(unsigned i1, unsigned i2) const {
+    return radius[i1] < radius[i2];
   }
 };
 
-
-double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f>& relativePosition) {
+double BubblePack::computeRelativePosition(tlp::node n,
+                                           NodeStaticProperty<Vec4f> &relativePosition) {
 
   Size centralNodeSize = nodeSize->getNodeValue(n);
-  centralNodeSize[2] = 0.; //remove z-coordinates because the drawing is 2D
-  double sizeFather = std::max(centralNodeSize[0],centralNodeSize[1]) /2.;
+  centralNodeSize[2] = 0.; // remove z-coordinates because the drawing is 2D
+  double sizeFather = std::max(centralNodeSize[0], centralNodeSize[1]) / 2.;
 
-  if (sizeFather < 1E-5) sizeFather = 0.1;
+  if (sizeFather < 1E-5)
+    sizeFather = 0.1;
 
   unsigned int outdeg = tree->outdeg(n);
 
   /**
    * Special case if the node is a leaf.
    */
-  if (outdeg==0) {
-    return sizeFather + 1.; //minimum spacing
+  if (outdeg == 0) {
+    return sizeFather + 1.; // minimum spacing
   }
 
   /**
@@ -94,40 +98,40 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
   /**
    * Pack Circles
    */
-  vector<Circled > circles(outdeg);
-  double angle = 2. * M_PI; //start position
-  double bestAngle  = angle;
+  vector<Circled> circles(outdeg);
+  double angle = 2. * M_PI; // start position
+  double bestAngle = angle;
 
   {
     std::vector<unsigned> index(outdeg);
 
-    for(unsigned int i=0; i<outdeg; ++i)
+    for (unsigned int i = 0; i < outdeg; ++i)
       index[i] = i;
 
     sort(index.begin(), index.end(), lessRadius(realCircleRadius));
 
-    vector< Circled > placed;
+    vector<Circled> placed;
 
     if (index.size() > 3) {
-      double alpha  = 0;
+      double alpha = 0;
       double curRad = sizeFather;
       bool sens = true;
 
-      for (unsigned int i=0; i<index.size(); ++i) {
+      for (unsigned int i = 0; i < index.size(); ++i) {
         double radius = realCircleRadius[index[i]];
-        double crad   = radius + curRad + 0.01;
+        double crad = radius + curRad + 0.01;
         double calpha;
 
         if (sens)
-          calpha = alpha + radius/crad;
+          calpha = alpha + radius / crad;
         else
-          calpha = alpha - radius/crad;
+          calpha = alpha - radius / crad;
 
-        Circled tmp(crad * cos(calpha), crad * sin(calpha), radius );
+        Circled tmp(crad * cos(calpha), crad * sin(calpha), radius);
         bool reject = false;
 
-        for (unsigned int k=0; k<placed.size(); ++k) {
-          if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
+        for (unsigned int k = 0; k < placed.size(); ++k) {
+          if (placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
             reject = true;
             break;
           }
@@ -147,10 +151,10 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
         else
           newalpha = alpha - 2.2 * radius / crad;
 
-        Vec2f v0 ( crad * cos(calpha), crad * sin(calpha));
-        Vec2f v1 ( crad * cos(newalpha), crad * sin(newalpha));
+        Vec2f v0(crad * cos(calpha), crad * sin(calpha));
+        Vec2f v1(crad * cos(newalpha), crad * sin(newalpha));
 
-        while(v0.dist(v1) < radius) {
+        while (v0.dist(v1) < radius) {
           if (sens)
             newalpha += 0.01;
           else
@@ -163,42 +167,42 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
         circles[index[i]] = tmp;
         placed.push_back(circles[index[i]]);
       }
-    }
-    else { //        if (false) //polyo packing
-      for (unsigned int i=0; i<index.size(); ++i) {
-        //cerr << i << "." << flush;
+    } else { //        if (false) //polyo packing
+      for (unsigned int i = 0; i < index.size(); ++i) {
+        // cerr << i << "." << flush;
         double radius = realCircleRadius[index[i]];
         double bestRadius = FLT_MAX;
-        int discret = ceil(2.*(sizeFather + radius)*M_PI) + 3;
-        angle += M_PI/3.;
+        int discret = ceil(2. * (sizeFather + radius) * M_PI) + 3;
+        angle += M_PI / 3.;
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
         for (int j = 0; j < discret; ++j) {
           float _angle = float(j) * 2. * M_PI / float(discret) + angle;
           double spiralRadius = sizeFather + radius + 1E-3;
-          Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
+          Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius);
           bool restart = true;
 
-          //int restcnt = 0;
-          while(restart) {
-            //restcnt += 1;
+          // int restcnt = 0;
+          while (restart) {
+            // restcnt += 1;
             restart = false;
 
-            for (unsigned int k=0; k<placed.size(); ++k) {
-              if(placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
-                spiralRadius = std::max(spiralRadius, double(placed[k].norm()) + placed[k].radius + radius + 1E-3 );
-                //spiralRadius += 0.01;
-                tmp = Circled(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius );
-                //restart = true;
+            for (unsigned int k = 0; k < placed.size(); ++k) {
+              if (placed[k].dist(tmp) < placed[k].radius + tmp.radius) {
+                spiralRadius = std::max(spiralRadius, double(placed[k].norm()) + placed[k].radius +
+                                                          radius + 1E-3);
+                // spiralRadius += 0.01;
+                tmp = Circled(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius);
+                // restart = true;
               }
             }
           }
 
-          //if (restcnt > 10) cout << "Aie" << endl;
+// if (restcnt > 10) cout << "Aie" << endl;
 #ifdef _OPENMP
-          #pragma omp critical(GOODCIRCLE)
+#pragma omp critical(GOODCIRCLE)
 #endif
           {
             if (spiralRadius < bestRadius) {
@@ -208,83 +212,75 @@ double BubblePack::computeRelativePosition(tlp::node n, NodeStaticProperty<Vec4f
           }
         }
 
-        circles[index[i]][0]     = bestRadius * cos(bestAngle);
-        circles[index[i]][1]     = bestRadius * sin(bestAngle);
+        circles[index[i]][0] = bestRadius * cos(bestAngle);
+        circles[index[i]][1] = bestRadius * sin(bestAngle);
         circles[index[i]].radius = radius;
         placed.push_back(circles[index[i]]);
       }
     }
   }
   circles.push_back(Circled(0., 0., sizeFather));
-  //cerr << "Nb circles : " << circles.size() << endl << flush;
+  // cerr << "Nb circles : " << circles.size() << endl << flush;
   Circled circleH;
 
-  if (circles.size()>2000) { // Stack overflow when number of circles exceed 2k
+  if (circles.size() > 2000) { // Stack overflow when number of circles exceed 2k
     circleH = tlp::lazyEnclosingCircle(circles);
-  }
-  else {
+  } else {
     circleH = tlp::enclosingCircle(circles);
   }
 
-  //cerr << "packed " << endl << flush;
+  // cerr << "packed " << endl << flush;
   /*
    * Set relative position of all children
    * according to the center of the enclosing circle
    */
   Iterator<node> *itN = tree->getOutNodes(n);
 
-  for (unsigned int i=0; i<outdeg; ++i) {
-    Vec4f& relPos = relativePosition[graph->nodePos(itN->next())];
-    Circled& circle = circles[i];
+  for (unsigned int i = 0; i < outdeg; ++i) {
+    Vec4f &relPos = relativePosition[graph->nodePos(itN->next())];
+    Circled &circle = circles[i];
     relPos[0] = circle[0] - circleH[0];
     relPos[1] = circle[1] - circleH[1];
   }
 
   delete itN;
 
-  Vec4f& relPos = relativePosition[graph->nodePos(n)];
+  Vec4f &relPos = relativePosition[graph->nodePos(n)];
   relPos[2] = -circleH[0];
   relPos[3] = -circleH[1];
 
   return circleH.radius + 1.;
 }
 
-void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f>& relativePosition) {
+void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f> &relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
-  Vec4f& relPos = relativePosition[graph->nodePos(n)];
+  Vec4f &relPos = relativePosition[graph->nodePos(n)];
   Vec2f shift(relPos[2], relPos[3]);
   result->setNodeValue(n, Coord(pos + shift, 0));
   node ni;
   forEach(ni, tree->getOutNodes(n)) {
-    Vec4f& relPos = relativePosition[graph->nodePos(ni)];
+    Vec4f &relPos = relativePosition[graph->nodePos(ni)];
     Vec2f relat(relPos[0], relPos[1]);
     calcLayout(ni, pos + relat, relativePosition);
   }
 }
 
-static const char * paramHelp[] = {
-  //Complexity
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "This parameter enables to choose the complexity of the algorithm." \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Size" ) \
-  HTML_HELP_DEF( "values", "An existing size property" ) \
-  HTML_HELP_DEF( "default", "viewSize" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used for node's sizes." \
-  HTML_HELP_CLOSE()
-};
+static const char *paramHelp[] = {
+    // Complexity
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "bool")
+        HTML_HELP_DEF("values", "[true, false] o(nlog(n)) / o(n)") HTML_HELP_DEF("default", "true")
+            HTML_HELP_BODY() "This parameter enables to choose the complexity of the "
+                             "algorithm." HTML_HELP_CLOSE(),
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "Size")
+        HTML_HELP_DEF("values", "An existing size property") HTML_HELP_DEF("default", "viewSize")
+            HTML_HELP_BODY() "This parameter defines the property used for node's "
+                             "sizes." HTML_HELP_CLOSE()};
 
-BubblePack::BubblePack(const tlp::PluginContext* context):LayoutAlgorithm(context) {
+BubblePack::BubblePack(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
-  addInParameter<bool>("complexity", paramHelp[0],"true");
+  addInParameter<bool>("complexity", paramHelp[0], "true");
   addDependency("Connected Component Packing", "1.0");
 }
 
@@ -300,7 +296,7 @@ bool BubblePack::run() {
     ConnectedTest::computeConnectedComponents(graph, components);
 
     for (unsigned int i = 0; i < components.size(); ++i) {
-      Graph * tmp = graph->inducedSubGraph(components[i]);
+      Graph *tmp = graph->inducedSubGraph(components[i]);
       tmp->applyPropertyAlgorithm("Bubble Pack", result, err, pluginProgress, dataSet);
     }
 
@@ -308,7 +304,8 @@ bool BubblePack::run() {
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, pluginProgress, &tmpdataSet);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, pluginProgress,
+                                  &tmpdataSet);
     // forget last temporary graph state
     graph->pop();
     *result = tmpLayout;
@@ -318,8 +315,7 @@ bool BubblePack::run() {
   if (!((dataSet != NULL) && dataSet->get("node size", nodeSize))) {
     if (graph->existProperty("viewSize")) {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");
-    }
-    else {
+    } else {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");
       nodeSize->setAllNodeValue(Size(1., 1., 1.));
     }
@@ -335,7 +331,7 @@ bool BubblePack::run() {
 
   // push a temporary graph state (not redoable)
   // preserving layout updates
-  std::vector<PropertyInterface*> propsToPreserve;
+  std::vector<PropertyInterface *> propsToPreserve;
 
   if (result->getName() != "")
     propsToPreserve.push_back(result);
@@ -352,11 +348,11 @@ bool BubblePack::run() {
   node startNode = tree->getSource();
   assert(startNode.isValid());
   NodeStaticProperty<Vec4f> relativePosition(graph);
-  //cerr << "C" << endl << flush;
+  // cerr << "C" << endl << flush;
   computeRelativePosition(startNode, relativePosition);
-  //cerr << "D" << endl << flush;
-  calcLayout(startNode, Vec2f(0,0), relativePosition);
-  //cerr << "E" << endl << flush;
+  // cerr << "D" << endl << flush;
+  calcLayout(startNode, Vec2f(0, 0), relativePosition);
+  // cerr << "E" << endl << flush;
 
   // forget last temporary graph state
   graph->pop();

@@ -28,7 +28,8 @@
 
 using namespace tlp;
 
-PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent) : QDialog(parent), _ui(new Ui::PythonPluginCreationDialog) {
+PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent)
+    : QDialog(parent), _ui(new Ui::PythonPluginCreationDialog) {
   _ui->setupUi(this);
 
   connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
@@ -42,15 +43,18 @@ PythonPluginCreationDialog::~PythonPluginCreationDialog() {
 
 void PythonPluginCreationDialog::accept() {
   if (_ui->pluginFileName->text().isEmpty()) {
-    QMessageBox::critical(this, "Error", "No file has been selected to save the plugin source code.");
+    QMessageBox::critical(this, "Error",
+                          "No file has been selected to save the plugin source code.");
     return;
   }
 
-  QString moduleName = _ui->pluginFileName->text().mid(_ui->pluginFileName->text().lastIndexOf("/")+1);
+  QString moduleName =
+      _ui->pluginFileName->text().mid(_ui->pluginFileName->text().lastIndexOf("/") + 1);
   moduleName = moduleName.mid(0, moduleName.length() - 3);
 
   if (moduleName.at(0).isNumber()) {
-    QMessageBox::critical(this, "Error", "Python does not allow a module name to begin with a number.");
+    QMessageBox::critical(this, "Error",
+                          "Python does not allow a module name to begin with a number.");
     return;
   }
 
@@ -74,7 +78,8 @@ void PythonPluginCreationDialog::accept() {
   }
 
   if (_ui->pluginClassName->text().at(0).isNumber()) {
-    QMessageBox::critical(this, "Error", "Python does not allow a class name to begin with a number.");
+    QMessageBox::critical(this, "Error",
+                          "Python does not allow a class name to begin with a number.");
     return;
   }
 
@@ -101,7 +106,8 @@ void PythonPluginCreationDialog::accept() {
 }
 
 void PythonPluginCreationDialog::selectPluginSourceFile() {
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source file"),"","Python script (*.py)");
+  QString fileName =
+      QFileDialog::getSaveFileName(this, tr("Set Plugin source file"), "", "Python script (*.py)");
 
   if (fileName.isEmpty())
     return;
@@ -147,4 +153,3 @@ QString PythonPluginCreationDialog::getPluginRelease() const {
 QString PythonPluginCreationDialog::getPluginGroup() const {
   return _ui->group->text();
 }
-

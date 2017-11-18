@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef PROPERTYCREATIONDIALOG_H
 #define PROPERTYCREATIONDIALOG_H
 
@@ -58,10 +57,9 @@ public:
   /**
     * @brief Constructs a property creation dialog with the given parent graph and parent widget.
     **/
-  explicit PropertyCreationDialog(tlp::Graph* graph,QWidget *parent = NULL,
-                                  const std::string& selectedType = "");
+  explicit PropertyCreationDialog(tlp::Graph *graph, QWidget *parent = NULL,
+                                  const std::string &selectedType = "");
   ~PropertyCreationDialog();
-
 
   /**
     * @brief Try to create a new property from the givent parameters.
@@ -72,41 +70,43 @@ public:
   /**
     * @brief Change the graph to use as parent for the properties to create.
     **/
-  void setGraph(tlp::Graph* graph);
+  void setGraph(tlp::Graph *graph);
 
-
-  tlp::Graph* getGraph()const {
+  tlp::Graph *getGraph() const {
     return _graph;
   }
 
   /**
-    * @brief Return the property created. You need to call this function after the accept() function.
+    * @brief Return the property created. You need to call this function after the accept()
+    *function.
     *
-    * @return The last created property or NULL if no property there is an error during the property creation.
+    * @return The last created property or NULL if no property there is an error during the property
+    *creation.
     **/
-  tlp::PropertyInterface* createdProperty()const {
+  tlp::PropertyInterface *createdProperty() const {
     return _createdProperty;
   }
 
   /**
-    * @brief This is a convenience static function that create a new property using user parameters. If the user presses Cancel or an error occur, it returns a null pointer.
+    * @brief This is a convenience static function that create a new property using user parameters.
+    *If the user presses Cancel or an error occur, it returns a null pointer.
     *
     * The function creates a modal property creation dialog with the given graph and parent widget.
     *
     * @param graph The graph to use as parent for the properties to create.
     **/
-  static PropertyInterface* createNewProperty(tlp::Graph* graph,
-      QWidget* parent=NULL,
-      const std::string& selectedType = "");
+  static PropertyInterface *createNewProperty(tlp::Graph *graph, QWidget *parent = NULL,
+                                              const std::string &selectedType = "");
 private slots:
   void checkValidity();
+
 private:
   void initGui();
 
   Ui::PropertyCreationDialog *ui;
-  QPushButton* _createPropertyButton;
-  Graph* _graph;
-  PropertyInterface* _createdProperty;
+  QPushButton *_createPropertyButton;
+  Graph *_graph;
+  PropertyInterface *_createdProperty;
 };
 }
 

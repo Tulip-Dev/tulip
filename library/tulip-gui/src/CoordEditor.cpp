@@ -25,9 +25,8 @@
 
 using namespace tlp;
 
-CoordEditor::CoordEditor(QWidget *parent, bool editSize) :
-  QDialog(parent),
-  ui(new Ui::CoordEditor) {
+CoordEditor::CoordEditor(QWidget *parent, bool editSize)
+    : QDialog(parent), ui(new Ui::CoordEditor) {
   ui->setupUi(this);
 
   if (editSize) {
@@ -38,14 +37,14 @@ CoordEditor::CoordEditor(QWidget *parent, bool editSize) :
   }
 
   QDoubleValidator *validator = new QDoubleValidator(this);
-  validator->setRange(-FLT_MAX,FLT_MAX,1000);
+  validator->setRange(-FLT_MAX, FLT_MAX, 1000);
   ui->xLineEdit->setValidator(validator);
   ui->yLineEdit->setValidator(validator);
   ui->zLineEdit->setValidator(validator);
   setCoord(Coord());
-  connect(ui->xLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
-  connect(ui->yLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
-  connect(ui->zLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
+  connect(ui->xLineEdit, SIGNAL(textChanged(QString)), this, SLOT(coordUpdated()));
+  connect(ui->yLineEdit, SIGNAL(textChanged(QString)), this, SLOT(coordUpdated()));
+  connect(ui->zLineEdit, SIGNAL(textChanged(QString)), this, SLOT(coordUpdated()));
   setModal(true);
 }
 
@@ -53,10 +52,10 @@ CoordEditor::~CoordEditor() {
   delete ui;
 }
 
-Coord CoordEditor::coord()const {
+Coord CoordEditor::coord() const {
   return currentCoord;
 }
-void CoordEditor::setCoord(const Coord& coord) {
+void CoordEditor::setCoord(const Coord &coord) {
   currentCoord = coord;
   blockSignals(true);
   ui->xLineEdit->setText(QString::number(coord[0]));
@@ -72,18 +71,17 @@ void CoordEditor::coordUpdated() {
 
 void CoordEditor::done(int r) {
   if (r == QDialog::Accepted)
-    currentCoord = Coord(ui->xLineEdit->text().toFloat(),ui->yLineEdit->text().toFloat(),ui->zLineEdit->text().toFloat());
+    currentCoord = Coord(ui->xLineEdit->text().toFloat(), ui->yLineEdit->text().toFloat(),
+                         ui->zLineEdit->text().toFloat());
 
   QDialog::done(r);
 }
 
 // to ensure it is shown in the center of its parent
-void CoordEditor::showEvent(QShowEvent* ev) {
+void CoordEditor::showEvent(QShowEvent *ev) {
   QDialog::showEvent(ev);
 
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
-         parentWidget()->window()->rect().center() -
-         rect().center());
+         parentWidget()->window()->rect().center() - rect().center());
 }
-

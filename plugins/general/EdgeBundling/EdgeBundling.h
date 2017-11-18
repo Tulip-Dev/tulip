@@ -30,11 +30,15 @@
  * This plugin is an implementation of the intuitive Edge Bundling technique published in :
  * "Winding Roads: Routing edges into bundles"
  * Antoine Lambert, Romain Bourqui and David Auber
- * Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization, June 2010, pages 853-862
+ * Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization,
+ * June 2010, pages 853-862
  *
- * Visualizations of large graphs usually suffer from visual clutter due to a large amount of edge crossings and node-edge overlaps.
- * Edge bundling is a technique aiming to reduce such clutter by routing edges and grouping them into bundles.
- * It also helps to uncover high level edge patterns to show how information flows between different region of a graph.
+ * Visualizations of large graphs usually suffer from visual clutter due to a large amount of edge
+ * crossings and node-edge overlaps.
+ * Edge bundling is a technique aiming to reduce such clutter by routing edges and grouping them
+ * into bundles.
+ * It also helps to uncover high level edge patterns to show how information flows between different
+ * region of a graph.
  *
  * To apply this edge bundling technique, all nodes must have different positions.
  * If you encounter some crashs, try to apply the "Fast Overlap Removal" plugin before
@@ -43,17 +47,21 @@
  *  \author David Auber, Romain Bourqui, Antoine Lambert, LaBRI University Bordeaux I France:
  *   auber@labri.fr
  */
-class EdgeBundling:public tlp::Algorithm {
+class EdgeBundling : public tlp::Algorithm {
 public:
   EdgeBundling(const tlp::PluginContext *);
-  PLUGININFORMATION("Edge bundling","David Auber/ Romain Bourqui / Antoine Lambert","2010-...",
-                    "Edges routing algorithm, implementing the intuitive Edge Bundling technique published in :<br/>"
-                    "<b>Winding Roads: Routing edges into bundles</b>, Antoine Lambert, Romain Bourqui and David Auber, Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization, pages 853-862 (2010).",
-                    "1.3","")
+  PLUGININFORMATION("Edge bundling", "David Auber/ Romain Bourqui / Antoine Lambert", "2010-...",
+                    "Edges routing algorithm, implementing the intuitive Edge Bundling technique "
+                    "published in :<br/>"
+                    "<b>Winding Roads: Routing edges into bundles</b>, Antoine Lambert, Romain "
+                    "Bourqui and David Auber, Computer Graphics Forum special issue on 12th "
+                    "Eurographics/IEEE-VGTC Symposium on Visualization, pages 853-862 (2010).",
+                    "1.3", "")
   bool run();
+
 private:
-  //tlp::DoubleProperty* computeWeights(tlp::Graph *);
-  void fixEdgeType(tlp::IntegerProperty*);
+  // tlp::DoubleProperty* computeWeights(tlp::Graph *);
+  void fixEdgeType(tlp::IntegerProperty *);
   void computeDistances();
   void computeDistance(tlp::node);
   double longEdges;

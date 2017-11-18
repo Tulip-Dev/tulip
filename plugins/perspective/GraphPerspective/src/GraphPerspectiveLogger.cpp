@@ -32,23 +32,25 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
-GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
-  _pythonOutput(false) {
+GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
+    : QDialog(parent), _logType(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger),
+      _pythonOutput(false) {
   _ui->setupUi(this);
   _ui->listWidget->installEventFilter(this);
   _ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-  QPushButton *copybutton = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "&Copy selection", this);
+  QPushButton *copybutton =
+      new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), "&Copy selection", this);
   copybutton->setToolTip("Copy the selected lines into the clipboard");
   _ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
   QPushButton *clearbutton = new QPushButton("Clear", this);
   clearbutton->setToolTip("Remove all messages");
   _ui->buttonBox->addButton(clearbutton, QDialogButtonBox::ActionRole);
-  connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+  connect(_ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)), this,
+          SLOT(showContextMenu(QPoint)));
   connect(copybutton, SIGNAL(clicked()), this, SLOT(copy()));
   connect(clearbutton, SIGNAL(clicked()), this, SLOT(clear()));
   _ui->buttonBox->button(QDialogButtonBox::Close)->setToolTip("Close this window");
-  QPushButton* resetb = _ui->buttonBox->button(QDialogButtonBox::Reset);
+  QPushButton *resetb = _ui->buttonBox->button(QDialogButtonBox::Reset);
   resetb->setToolTip("Remove all messages and close this window");
   connect(resetb, SIGNAL(clicked()), this, SLOT(clear()));
   connect(resetb, SIGNAL(clicked()), this, SLOT(hide()));
@@ -78,7 +80,6 @@ GraphPerspectiveLogger::LogType GraphPerspectiveLogger::getLastLogType() const {
   case QtCriticalMsg:
   case QtFatalMsg:
     return Error;
-
   }
 
   return Info;
@@ -97,7 +98,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
   logImpl(type, msg);
 }
 #else
-void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
+void GraphPerspectiveLogger::log(QtMsgType type, const char *msg) {
   logImpl(type, QString::fromUtf8(msg));
 }
 #endif
@@ -118,17 +119,15 @@ void GraphPerspectiveLogger::logImpl(QtMsgType type, const QString &msg) {
   _logType = type;
   QString msgClean = msg;
 
-
   if (msg.startsWith("[Python")) {
-    // remove quotes around message added by Qt
+// remove quotes around message added by Qt
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    msgClean = msg.mid(14).mid(2, msg.length()-17);
+    msgClean = msg.mid(14).mid(2, msg.length() - 17);
 #else
-    msgClean = msg.mid(14).mid(2, msg.length()-18);
+    msgClean = msg.mid(14).mid(2, msg.length() - 18);
 #endif
     _pythonOutput = true;
-  }
-  else {
+  } else {
     _pythonOutput = false;
   }
 
@@ -145,15 +144,15 @@ QPixmap GraphPerspectiveLogger::icon(LogType logType) const {
     return QPixmap(":/tulip/graphperspective/icons/16/python.png");
 
   case Info:
-    pxUrl+="info";
+    pxUrl += "info";
     break;
 
   case Warning:
-    pxUrl+="danger";
+    pxUrl += "danger";
     break;
 
   case Error:
-    pxUrl+="error";
+    pxUrl += "error";
     break;
   }
 
@@ -175,20 +174,20 @@ void GraphPerspectiveLogger::clear() {
 void GraphPerspectiveLogger::copy() {
   QStringList strings;
 
-  foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
+  foreach (QListWidgetItem *item, _ui->listWidget->selectedItems())
     strings << item->text();
 
-  if(!strings.isEmpty())
+  if (!strings.isEmpty())
     QApplication::clipboard()->setText(strings.join("\n"));
 }
 
 void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
   QMenu m;
-  QAction* clear = m.addAction("Clear content", this, SLOT(clear()));
-  QAction* copy = m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
+  QAction *clear = m.addAction("Clear content", this, SLOT(clear()));
+  QAction *copy = m.addAction("Copy", this, SLOT(copy()), QKeySequence::Copy);
   m.addAction("Close", this, SLOT(close()), QKeySequence::Close);
-  copy->setEnabled(_ui->listWidget->count()!=0);
-  clear->setEnabled(_ui->listWidget->count()!=0);
+  copy->setEnabled(_ui->listWidget->count() != 0);
+  clear->setEnabled(_ui->listWidget->count() != 0);
   m.exec(_ui->listWidget->mapToGlobal(pos));
 }
 
@@ -196,7 +195,7 @@ void GraphPerspectiveLogger::showContextMenu(const QPoint &pos) {
 // its behaviour in order to be able to copy the text of all the selected rows
 // (only the text of the current item is copied otherwise)
 bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
-  QKeyEvent *ke = dynamic_cast<QKeyEvent*>(event);
+  QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
 
   if (ke && ke->matches(QKeySequence::Copy)) {
     copy();
@@ -221,7 +220,7 @@ void GraphPerspectiveLogger::hideEvent(QHideEvent *evt) {
 }
 
 void GraphPerspectiveLogger::setGeometry(int x, int y, int w, int h) {
-  setMinimumSize(QSize(0,0));
+  setMinimumSize(QSize(0, 0));
   setMaximumSize(QSize(16777215, 16777215));
   QDialog::setGeometry(x, y, w, h);
   _windowGeometry = saveGeometry();
@@ -242,11 +241,10 @@ void GraphPerspectiveLogger::setAnchored(bool anchored) {
     setMinimumSize(size());
     setMaximumSize(size());
     emit resetLoggerPosition();
-  }
-  else {
+  } else {
     setAttribute(Qt::WA_X11NetWmWindowTypeDialog, true);
     setWindowFlags(Qt::Dialog);
-    setMinimumSize(QSize(0,0));
+    setMinimumSize(QSize(0, 0));
     setMaximumSize(QSize(16777215, 16777215));
   }
 

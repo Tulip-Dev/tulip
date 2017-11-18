@@ -29,15 +29,16 @@ using namespace tlp;
 
 //===============================================================
 float sqr(float x) {
-  return x*x;
+  return x * x;
 }
 //===============================================================
-float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
-  return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2)) + sqr(sin(alpha1)-sin(alpha2))));
+float minRadius(float radius1, float alpha1, float radius2, float alpha2) {
+  return sqrt(sqr(radius1 + radius2) /
+              (sqr(cos(alpha1) - cos(alpha2)) + sqr(sin(alpha1) - sin(alpha2))));
 }
 //===============================================================
 void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
-  if (levelSize.size() < level+1 )
+  if (levelSize.size() < level + 1)
     levelSize.push_back(0);
 
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]);
@@ -55,113 +56,117 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   yCoordinates[0] = 0;
 
   for (unsigned int i = 1; i < levelSize.size(); ++i) {
-    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0f + levelSize[i-1] / 2.0f + spaceBetweenLevels;
+    yCoordinates[i] =
+        yCoordinates[i - 1] + levelSize[i] / 2.0f + levelSize[i - 1] / 2.0f + spaceBetweenLevels;
   }
 }
 //===============================================================
-double ConeTreeExtended::treePlace3D(tlp::node n,
-                                     TLP_HASH_MAP<tlp::node,double> *posRelX,
-                                     TLP_HASH_MAP<tlp::node,double> *posRelY) {
-  (*posRelX)[n]=0;
-  (*posRelY)[n]=0;
+double ConeTreeExtended::treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double> *posRelX,
+                                     TLP_HASH_MAP<tlp::node, double> *posRelY) {
+  (*posRelX)[n] = 0;
+  (*posRelY)[n] = 0;
 
-  if (tree->outdeg(n)==0) {
-    const Coord& tmp = Coord(nodeSize->getNodeValue(n));
-    return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
+  if (tree->outdeg(n) == 0) {
+    const Coord &tmp = Coord(nodeSize->getNodeValue(n));
+    return sqrt(tmp[0] * tmp[0] + tmp[2] * tmp[2]) / 2.0;
   }
 
-  if (tree->outdeg(n)==1) {
-    Iterator<node> *itN=tree->getOutNodes(n);
-    node itn=itN->next();
+  if (tree->outdeg(n) == 1) {
+    Iterator<node> *itN = tree->getOutNodes(n);
+    node itn = itN->next();
     delete itN;
-    return treePlace3D(itn,posRelX,posRelY);
+    return treePlace3D(itn, posRelX, posRelY);
   }
 
-  double sumRadius=0;
-  double maxRadius=0;
+  double sumRadius = 0;
+  double maxRadius = 0;
   float newRadius;
 
   vector<double> subCircleRadius(tree->outdeg(n));
-  Iterator<node> *itN=tree->getOutNodes(n);
+  Iterator<node> *itN = tree->getOutNodes(n);
 
-  for (int i=0; itN->hasNext(); ++i)  {
+  for (int i = 0; itN->hasNext(); ++i) {
     node itn = itN->next();
-    subCircleRadius[i] = treePlace3D(itn,posRelX,posRelY);
-    sumRadius += 2*subCircleRadius[i];
-    maxRadius = std::max(maxRadius , subCircleRadius[i]);
+    subCircleRadius[i] = treePlace3D(itn, posRelX, posRelY);
+    sumRadius += 2 * subCircleRadius[i];
+    maxRadius = std::max(maxRadius, subCircleRadius[i]);
   }
 
   delete itN;
 
-  double radius=sumRadius/(2*M_PI);
+  double radius = sumRadius / (2 * M_PI);
 
-  //treat angles
+  // treat angles
   vector<double> vangles(subCircleRadius.size());
-  double angle=0;
-  vangles[0]=0;
+  double angle = 0;
+  vangles[0] = 0;
 
-  for (unsigned int i=1; i<subCircleRadius.size(); ++i) {
-    angle+=(subCircleRadius[i-1]+subCircleRadius[i])/radius;
-    vangles[i]=angle;
+  for (unsigned int i = 1; i < subCircleRadius.size(); ++i) {
+    angle += (subCircleRadius[i - 1] + subCircleRadius[i]) / radius;
+    vangles[i] = angle;
   }
 
   // compute new radius
-  newRadius=0;
+  newRadius = 0;
 
-  for (unsigned int i=0; i<subCircleRadius.size()-1; ++i) {
-    for (unsigned int j=i+1; j<subCircleRadius.size(); ++j) {
-      newRadius = std::max(newRadius , minRadius(float(subCircleRadius[i]),float(vangles[i]),float(subCircleRadius[j]),float(vangles[j])));
+  for (unsigned int i = 0; i < subCircleRadius.size() - 1; ++i) {
+    for (unsigned int j = i + 1; j < subCircleRadius.size(); ++j) {
+      newRadius = std::max(newRadius, minRadius(float(subCircleRadius[i]), float(vangles[i]),
+                                                float(subCircleRadius[j]), float(vangles[j])));
     }
   }
 
-  if (newRadius==0) newRadius=float(radius);
+  if (newRadius == 0)
+    newRadius = float(radius);
 
-  //compute Circle Hull
-  vector<Circlef > circles(subCircleRadius.size());
+  // compute Circle Hull
+  vector<Circlef> circles(subCircleRadius.size());
 
-  for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
-    circles[i][0]=newRadius*float(cos(vangles[i]));
-    circles[i][1]=newRadius*float(sin(vangles[i]));
-    circles[i].radius=float(subCircleRadius[i]);
+  for (unsigned int i = 0; i < subCircleRadius.size(); ++i) {
+    circles[i][0] = newRadius * float(cos(vangles[i]));
+    circles[i][1] = newRadius * float(sin(vangles[i]));
+    circles[i].radius = float(subCircleRadius[i]);
   }
 
-  tlp::Circlef circleH=tlp::enclosingCircle(circles);
+  tlp::Circlef circleH = tlp::enclosingCircle(circles);
 
-  //Place relative position
+  // Place relative position
   itN = tree->getOutNodes(n);
 
-  for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
+  for (unsigned int i = 0; i < subCircleRadius.size(); ++i) {
     node itn = itN->next();
-    (*posRelX)[itn]=newRadius*cos(vangles[i])-circleH[0];
-    (*posRelY)[itn]=newRadius*sin(vangles[i])-circleH[1];
+    (*posRelX)[itn] = newRadius * cos(vangles[i]) - circleH[0];
+    (*posRelY)[itn] = newRadius * sin(vangles[i]) - circleH[1];
   }
 
   delete itN;
   return circleH.radius;
 }
 //===============================================================
-void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
-                                  TLP_HASH_MAP<tlp::node,double> *py,
-                                  double x, double y, int level) {
-  result->setNodeValue(n,Coord(float(x+(*px)[n]), - float(yCoordinates[level]),float(y+(*py)[n])));
+void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *px,
+                                  TLP_HASH_MAP<tlp::node, double> *py, double x, double y,
+                                  int level) {
+  result->setNodeValue(
+      n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
   node itn;
   forEach(itn, tree->getOutNodes(n)) {
-    calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
+    calcLayout(itn, px, py, x + (*px)[n], y + (*py)[n], level + 1);
   }
 }
 //===============================================================
 static const char *paramHelp[] = {
-  // orientation
-  "This parameter enables to choose the orientation of the drawing.",
+    // orientation
+    "This parameter enables to choose the orientation of the drawing.",
 
-  // space between levels
-  "This parameter enables to add extra spacing between the different levels of the tree"
-};
+    // space between levels
+    "This parameter enables to add extra spacing between the different levels of the tree"};
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgorithm(context), spaceBetweenLevels(10) {
+ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext *context)
+    : LayoutAlgorithm(context), spaceBetweenLevels(10) {
   addNodeSizePropertyParameter(this);
-  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION, true, "vertical <br> horizontal");
+  addInParameter<StringCollection>("orientation", paramHelp[0], ORIENTATION, true,
+                                   "vertical <br> horizontal");
   addInParameter<float>("space between levels", paramHelp[1], "1.0");
 }
 //===============================================================
@@ -171,7 +176,7 @@ bool ConeTreeExtended::run() {
   nodeSize = NULL;
   string orientation = "vertical";
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
     StringCollection tmp;
 
@@ -188,12 +193,12 @@ bool ConeTreeExtended::run() {
     nodeSize = graph->getProperty<SizeProperty>("viewSize");
 
   //=========================================================
-  //rotate size if needed
-  //will be undone at then end
+  // rotate size if needed
+  // will be undone at then end
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = nodeSize->getNodeValue(n);
+      const Size &tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
@@ -206,7 +211,7 @@ bool ConeTreeExtended::run() {
 
   // push a temporary graph state (not redoable)
   // preserving layout updates
-  std::vector<PropertyInterface*> propsToPreserve;
+  std::vector<PropertyInterface *> propsToPreserve;
 
   if (result->getName() != "")
     propsToPreserve.push_back(result);
@@ -223,25 +228,25 @@ bool ConeTreeExtended::run() {
 
   node root = tree->getSource();
   assert(root.isValid());
-  TLP_HASH_MAP<node,double> posX;
-  TLP_HASH_MAP<node,double> posY;
-  treePlace3D(root,&posX,&posY);
+  TLP_HASH_MAP<node, double> posX;
+  TLP_HASH_MAP<node, double> posY;
+  treePlace3D(root, &posX, &posY);
   computeYCoodinates(root);
-  calcLayout(root,&posX,&posY,0,0,0);
+  calcLayout(root, &posX, &posY, 0, 0, 0);
 
-  //rotate layout and size
+  // rotate layout and size
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
       // if not in tulip gui, ensure cleanup
-      LayoutProperty* elementLayout;
+      LayoutProperty *elementLayout;
 
       if (!graph->getAttribute("viewLayout", elementLayout)) {
-        const Size&  tmp = nodeSize->getNodeValue(n);
+        const Size &tmp = nodeSize->getNodeValue(n);
         nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       }
 
-      const Coord& tmpC = result->getNodeValue(n);
+      const Coord &tmpC = result->getNodeValue(n);
 
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }

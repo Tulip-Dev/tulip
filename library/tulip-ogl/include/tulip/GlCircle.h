@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef GLCIRCLE_H
 #define GLCIRCLE_H
 
@@ -38,17 +37,14 @@ public:
   /**
    * @brief Constructor
    *
-   * @param startAngle if start angle is equal to 0, the circle construction begin with the top center point
+   * @param startAngle if start angle is equal to 0, the circle construction begin with the top
+   * center point
    * @param segment number of triangle used to render the circle
    */
-  GlCircle(const Coord &center = Coord(0,0,0),
-           float radius = 1.,
-           const Color &outlineColor = Color(255, 0 , 0 , 255),
-           const Color &fillColor = Color (0, 0, 255,255),
-           bool filled = false,
-           bool outlined = true,
-           float startAngle = 0.0,
-           unsigned int segments = 10);
+  GlCircle(const Coord &center = Coord(0, 0, 0), float radius = 1.,
+           const Color &outlineColor = Color(255, 0, 0, 255),
+           const Color &fillColor = Color(0, 0, 255, 255), bool filled = false,
+           bool outlined = true, float startAngle = 0.0, unsigned int segments = 10);
 
   /**
    * @brief Write-acess Accessor to the center, the radius and the startAngle of the circle.
@@ -60,7 +56,6 @@ public:
    */
   virtual void getXML(std::string &outString);
 };
-
 }
 
 #endif

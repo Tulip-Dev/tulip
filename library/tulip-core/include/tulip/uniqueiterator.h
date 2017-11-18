@@ -23,7 +23,6 @@
 #include <set>
 #include <tulip/memorypool.h>
 
-
 //===============================================================================
 namespace tlp {
 /**
@@ -45,7 +44,8 @@ class CheckAllFunctor {
   * @brief UniqueIterator enables to remove duplicated elements in an iterator
   *
   * @param it the iterator in which we want to filter out duplicated elements
-  * @param checkFuncor a functor that enable to indicate wheter or not the element could be duplicated (default test all elements)
+  * @param checkFuncor a functor that enable to indicate wheter or not the element could be
+ * duplicated (default test all elements)
   *
   * The functor function shoul have the following form
   * @code
@@ -55,12 +55,14 @@ class CheckAllFunctor {
   *  }
   * };
   * @endcode
-  * checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when not necessary.
+  * checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when
+ * not necessary.
   */
 template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
 class UniqueIterator : public Iterator<TYPE> {
 public:
-  UniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR()):_it(it), _checkFunctor(checkFunctor) {
+  UniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR())
+      : _it(it), _checkFunctor(checkFunctor) {
     update();
   }
   //================================================
@@ -81,17 +83,16 @@ public:
   void update() {
     _hasNext = false;
 
-    while(_it->hasNext()) {
+    while (_it->hasNext()) {
       curVal = _it->next();
 
-      if (_checkFunctor(curVal) ) {
+      if (_checkFunctor(curVal)) {
         if (_flag.find(curVal) == _flag.end()) {
           _hasNext = true;
           _flag.insert(curVal);
           return;
         }
-      }
-      else {
+      } else {
         _hasNext = true;
         return;
       }
@@ -113,14 +114,12 @@ private:
   * @see UniqueIterator
   */
 template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
-class MPUniqueIterator : public UniqueIterator<TYPE, TOCHECKFUNCTOR> ,
-  public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR> > {
+class MPUniqueIterator : public UniqueIterator<TYPE, TOCHECKFUNCTOR>,
+                         public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR> > {
 public:
-  MPUniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR()):
-    UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {
-  }
+  MPUniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR())
+      : UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {}
 };
-
 }
 #endif // UNIQUEITERATOR_H
 ///@endcond

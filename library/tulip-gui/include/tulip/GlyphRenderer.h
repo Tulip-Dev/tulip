@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLYPHPREVIEWGENERATOR_H
 #define GLYPHPREVIEWGENERATOR_H
 
@@ -33,13 +32,12 @@
 namespace tlp {
 class Graph;
 
-
 /**
   * @brief Generate Qt previews for Glyphs plug-ins.
   **/
 class TLP_QT_SCOPE GlyphRenderer {
 public:
-  static GlyphRenderer & getInst();
+  static GlyphRenderer &getInst();
   ~GlyphRenderer();
   /**
     * @brief Get the preview for the glyph with the given Id.
@@ -48,9 +46,9 @@ public:
 
 private:
   GlyphRenderer();
-  static GlyphRenderer* _instance;
-  std::map<unsigned int,QPixmap> _previews;
-  tlp::Graph* _graph;
+  static GlyphRenderer *_instance;
+  std::map<unsigned int, QPixmap> _previews;
+  tlp::Graph *_graph;
   tlp::node _node;
 };
 
@@ -59,9 +57,8 @@ private:
   **/
 class TLP_QT_SCOPE EdgeExtremityGlyphRenderer {
 public:
-
   ~EdgeExtremityGlyphRenderer();
-  static EdgeExtremityGlyphRenderer & getInst();
+  static EdgeExtremityGlyphRenderer &getInst();
   /**
     * @brief Get the preview for the edge extremity glyph with the given Id.
     */
@@ -69,11 +66,10 @@ public:
 
 private:
   EdgeExtremityGlyphRenderer();
-  static EdgeExtremityGlyphRenderer* _instance;
-  std::map<unsigned int,QPixmap> _previews;
-  tlp::Graph* _graph;
+  static EdgeExtremityGlyphRenderer *_instance;
+  std::map<unsigned int, QPixmap> _previews;
+  tlp::Graph *_graph;
   tlp::edge _edge;
-
 };
 }
 #endif // GLYPHPREVIEWGENERATOR_H

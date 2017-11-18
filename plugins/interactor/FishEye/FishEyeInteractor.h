@@ -32,8 +32,7 @@ class GlShaderProgram;
 
 class FishEyeInteractorComponent : public GLInteractorComponent {
 
-public :
-
+public:
   FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
   FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
 
@@ -47,13 +46,11 @@ public :
 
   bool draw(GlMainWidget *glMainWidget);
 
-private :
-
+private:
   FishEyeConfigWidget *configWidget;
   Coord fisheyeCenter;
   static GlShaderProgram *fisheyeShader;
   bool activateFishEye;
-
 };
 
 /*@{*/
@@ -70,9 +67,9 @@ private :
  */
 class FishEyeInteractor : public GLInteractorComposite {
 
-public :
-
-  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor", "1.0", "Visualization")
+public:
+  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor",
+                    "1.0", "Visualization")
 
   FishEyeInteractor(const PluginContext *);
   ~FishEyeInteractor();
@@ -89,11 +86,9 @@ public :
 
   virtual bool isCompatible(const std::string &viewName) const;
 
-private :
-
+private:
   FishEyeConfigWidget *fisheyeConfigWidget;
 };
-
 }
 
 #endif /* FISHEYEINTERACTOR_H_ */

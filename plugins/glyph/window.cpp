@@ -38,10 +38,11 @@ namespace tlp {
 
 class Window : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", NodeShape::Window)
+  GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0",
+                   NodeShape::Window)
   Window(const tlp::PluginContext *context);
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual void getTextBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
+  virtual void getTextBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
@@ -71,26 +72,23 @@ private:
 
 PLUGIN(Window)
 
-Window::Window(const tlp::PluginContext* context):
-  Glyph(context),
-  _rectColor(205, 205, 205, 255),
-  _textColor(205, 205, 205, 255),
-  _borderWidth(0.02f),
-  _border(TulipBitmapDir + "halfCylinderTexture.png") {
+Window::Window(const tlp::PluginContext *context)
+    : Glyph(context), _rectColor(205, 205, 205, 255), _textColor(205, 205, 205, 255),
+      _borderWidth(0.02f), _border(TulipBitmapDir + "halfCylinderTexture.png") {
 
   const float textheight = 0.05f;
 
   Coord v[10];
   v[0].set(-0.5, 0.5, 0);
-  v[1].set( 0.5, 0.5, 0);
-  v[2].set( 0.5,-0.5, 0);
-  v[3].set(-0.5,-0.5, 0);
+  v[1].set(0.5, 0.5, 0);
+  v[2].set(0.5, -0.5, 0);
+  v[3].set(-0.5, -0.5, 0);
   v[4].set(-0.5 + _borderWidth, 0.5 - _borderWidth, 0);
-  v[5].set( 0.5 - _borderWidth, 0.5 - _borderWidth, 0);
-  v[6].set( 0.5 - _borderWidth,-0.5 + _borderWidth, 0);
-  v[7].set(-0.5 + _borderWidth,-0.5 + _borderWidth, 0);
-  v[8].set( 0.5 - _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
-  v[9].set(-0.5 + _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
+  v[5].set(0.5 - _borderWidth, 0.5 - _borderWidth, 0);
+  v[6].set(0.5 - _borderWidth, -0.5 + _borderWidth, 0);
+  v[7].set(-0.5 + _borderWidth, -0.5 + _borderWidth, 0);
+  v[8].set(0.5 - _borderWidth, 0.5 - _borderWidth - textheight * 2.f, 0);
+  v[9].set(-0.5 + _borderWidth, 0.5 - _borderWidth - textheight * 2.f, 0);
 
   _bb.expand(v[6]);
   _bb.expand(v[9]);
@@ -109,7 +107,6 @@ Window::Window(const tlp::PluginContext* context):
   _titleRec.setPosition(3, v[9]);
   _titleRec.setTextureName(TulipBitmapDir + "titlebarGradient.png");
 
-
   _textbb.expand(v[4]);
   _textbb.expand(v[8]);
   _textbb.expand(v[5]);
@@ -119,25 +116,23 @@ Window::Window(const tlp::PluginContext* context):
   _center.setPosition(1, v[8]);
   _center.setPosition(2, v[6]);
   _center.setPosition(3, v[7]);
-
-
 }
 //=====================================================
-void Window::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+void Window::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox = _bb;
 }
 //=====================================================
-void Window::getTextBoundingBox(BoundingBox &boundingBox,node) {
+void Window::getTextBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox = _textbb;
 }
 //=====================================================
 void Window::draw(node n, float lod) {
-  ColorProperty* color = glGraphInputData->getElementColor();
-  ColorProperty* colorBorder = glGraphInputData->getElementBorderColor();
+  ColorProperty *color = glGraphInputData->getElementColor();
+  ColorProperty *colorBorder = glGraphInputData->getElementBorderColor();
   string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(!textureName.empty())
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+  if (!textureName.empty())
+    textureName = glGraphInputData->parameters->getTexturePath() + textureName;
 
   _border.setColor(colorBorder->getNodeValue(n));
   _titleRec.setColor(colorBorder->getNodeValue(n));

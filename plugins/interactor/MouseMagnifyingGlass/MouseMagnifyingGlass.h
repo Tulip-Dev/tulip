@@ -31,10 +31,10 @@ namespace tlp {
 
 class MouseMagnifyingGlassInteractorComponent : public GLInteractorComponent {
 
-public :
-
+public:
   MouseMagnifyingGlassInteractorComponent();
-  MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent);
+  MouseMagnifyingGlassInteractorComponent(
+      const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent);
   ~MouseMagnifyingGlassInteractorComponent();
 
   bool eventFilter(QObject *widget, QEvent *e);
@@ -47,8 +47,7 @@ public :
 
   void viewChanged(View *view);
 
-private :
-
+private:
   void generateMagnifyingGlassTexture(const Coord &magnifyingGlassCenterScr);
 
   QGLFramebufferObject *fbo;
@@ -60,7 +59,6 @@ private :
   std::string textureName;
   float radius;
   float magnifyPower;
-
 };
 
 /*@{*/
@@ -75,9 +73,9 @@ private :
  */
 class MouseMagnifyingGlassInteractor : public GLInteractorComposite {
 
-public :
-
-  PLUGININFORMATION("MouseMagnifyingGlassInteractor", "Antoine Lambert", "19/06/2009", "Mouse Magnifying Glass Interactor Interactor", "1.0", "Visualization")
+public:
+  PLUGININFORMATION("MouseMagnifyingGlassInteractor", "Antoine Lambert", "19/06/2009",
+                    "Mouse Magnifying Glass Interactor Interactor", "1.0", "Visualization")
 
   MouseMagnifyingGlassInteractor(const tlp::PluginContext *);
 

@@ -32,54 +32,55 @@ class Graph;
 
 ///@cond DOXYGEN_HIDDEN
 struct LessThan {
-  LessThan(const tlp::NumericProperty* m): metric(m) {
-  }
-  const tlp::NumericProperty* metric;
-  bool operator() (const node &n1, const node &n2) const {
+  LessThan(const tlp::NumericProperty *m) : metric(m) {}
+  const tlp::NumericProperty *metric;
+  bool operator()(const node &n1, const node &n2) const {
     return (metric->getNodeDoubleValue(n1) < metric->getNodeDoubleValue(n2));
   }
-  bool operator() (const edge &e1, const edge &e2) const {
+  bool operator()(const edge &e1, const edge &e2) const {
     return (metric->getEdgeDoubleValue(e1) < metric->getEdgeDoubleValue(e2));
   }
 };
 
 struct LessThanEdgeTargetMetric {
-  LessThanEdgeTargetMetric(const Graph *sg, const tlp::NumericProperty* metric):
-    metric(metric), sg(sg) {
+  LessThanEdgeTargetMetric(const Graph *sg, const tlp::NumericProperty *metric)
+      : metric(metric), sg(sg) {}
+  bool operator()(const edge &e1, const edge &e2) const {
+    return (metric->getNodeDoubleValue(sg->target(e1)) <
+            metric->getNodeDoubleValue(sg->target(e2)));
   }
-  bool operator() (const edge &e1, const edge &e2) const {
-    return (metric->getNodeDoubleValue(sg->target(e1)) < metric->getNodeDoubleValue(sg->target(e2)));
-  }
+
 private:
-  const tlp::NumericProperty* metric;
+  const tlp::NumericProperty *metric;
   const Graph *sg;
 };
 
 struct LessThanEdgeSourceMetric {
-  LessThanEdgeSourceMetric(const Graph *sg, const tlp::NumericProperty* metric):
-    metric(metric), sg(sg) {
+  LessThanEdgeSourceMetric(const Graph *sg, const tlp::NumericProperty *metric)
+      : metric(metric), sg(sg) {}
+  bool operator()(const edge &e1, const edge &e2) const {
+    return (metric->getNodeDoubleValue(sg->source(e1)) <
+            metric->getNodeDoubleValue(sg->source(e2)));
   }
-  bool operator() (const edge &e1, const edge &e2) const {
-    return (metric->getNodeDoubleValue(sg->source(e1)) < metric->getNodeDoubleValue(sg->source(e2)));
-  }
+
 private:
-  const tlp::NumericProperty* metric;
+  const tlp::NumericProperty *metric;
   const Graph *sg;
 };
 
 struct LessThanEdgeExtremitiesMetric {
-  LessThanEdgeExtremitiesMetric(const Graph *sg, const tlp::NumericProperty* metric):
-    metric(metric), sg(sg) {
-  }
-  bool operator() (const edge &e1, const edge &e2) const {
+  LessThanEdgeExtremitiesMetric(const Graph *sg, const tlp::NumericProperty *metric)
+      : metric(metric), sg(sg) {}
+  bool operator()(const edge &e1, const edge &e2) const {
     std::pair<node, node> ends = sg->ends(e1);
     Vec2d v1(metric->getNodeDoubleValue(ends.first), metric->getNodeDoubleValue(ends.second));
     ends = sg->ends(e2);
     Vec2d v2(metric->getNodeDoubleValue(ends.first), metric->getNodeDoubleValue(ends.second));
     return v1 < v2;
   }
+
 private:
-  const tlp::NumericProperty* metric;
+  const tlp::NumericProperty *metric;
   const Graph *sg;
 };
 ///@endcond
@@ -89,15 +90,17 @@ private:
 **/
 struct SortNodeIterator : public StableIterator<tlp::node> {
   ///
-  SortNodeIterator(Iterator<tlp::node> *itIn, const tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::node>(itIn) {
+  SortNodeIterator(Iterator<tlp::node> *itIn, const tlp::NumericProperty *metric,
+                   bool ascendingOrder = true)
+      : StableIterator<tlp::node>(itIn) {
     LessThan tmp(metric);
-    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+    sort(sequenceCopy.begin(), sequenceCopy.end(), tmp);
 
     if (!ascendingOrder) {
-      reverse(sequenceCopy.begin(),sequenceCopy.end());
+      reverse(sequenceCopy.begin(), sequenceCopy.end());
     }
 
-    copyIterator=sequenceCopy.begin();
+    copyIterator = sequenceCopy.begin();
   }
   ///
   ~SortNodeIterator() {}
@@ -108,76 +111,86 @@ struct SortNodeIterator : public StableIterator<tlp::node> {
 **/
 struct SortEdgeIterator : public StableIterator<tlp::edge> {
   ///
-  SortEdgeIterator(Iterator<tlp::edge> *itIn, const tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
+  SortEdgeIterator(Iterator<tlp::edge> *itIn, const tlp::NumericProperty *metric,
+                   bool ascendingOrder = true)
+      : StableIterator<tlp::edge>(itIn) {
     LessThan tmp(metric);
-    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+    sort(sequenceCopy.begin(), sequenceCopy.end(), tmp);
 
     if (!ascendingOrder) {
-      reverse(sequenceCopy.begin(),sequenceCopy.end());
+      reverse(sequenceCopy.begin(), sequenceCopy.end());
     }
 
-    copyIterator=sequenceCopy.begin();
+    copyIterator = sequenceCopy.begin();
   }
   ///
   ~SortEdgeIterator() {}
 };
 
 /**
-* @brief This Iterator sorts the edges based on the values of their target nodes in a NumericProperty.
+* @brief This Iterator sorts the edges based on the values of their target nodes in a
+*NumericProperty.
 **/
 struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
   ///
-  SortTargetEdgeIterator(Iterator<tlp::edge> *itIn, const Graph* sg, const tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
-    LessThanEdgeTargetMetric tmp(sg,metric);
-    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+  SortTargetEdgeIterator(Iterator<tlp::edge> *itIn, const Graph *sg,
+                         const tlp::NumericProperty *metric, bool ascendingOrder = true)
+      : StableIterator<tlp::edge>(itIn) {
+    LessThanEdgeTargetMetric tmp(sg, metric);
+    sort(sequenceCopy.begin(), sequenceCopy.end(), tmp);
 
     if (!ascendingOrder) {
-      reverse(sequenceCopy.begin(),sequenceCopy.end());
+      reverse(sequenceCopy.begin(), sequenceCopy.end());
     }
 
-    copyIterator=sequenceCopy.begin();
+    copyIterator = sequenceCopy.begin();
   }
   ///
   ~SortTargetEdgeIterator() {}
 };
 
 /**
-* @brief This Iterator sorts the edges based on the values of their source nodes in a NumericProperty.
+* @brief This Iterator sorts the edges based on the values of their source nodes in a
+*NumericProperty.
 **/
 struct SortSourceEdgeIterator : public StableIterator<tlp::edge> {
   ///
-  SortSourceEdgeIterator(Iterator<tlp::edge> *itIn, const Graph* sg, const tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
-    LessThanEdgeSourceMetric tmp(sg,metric);
-    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+  SortSourceEdgeIterator(Iterator<tlp::edge> *itIn, const Graph *sg,
+                         const tlp::NumericProperty *metric, bool ascendingOrder = true)
+      : StableIterator<tlp::edge>(itIn) {
+    LessThanEdgeSourceMetric tmp(sg, metric);
+    sort(sequenceCopy.begin(), sequenceCopy.end(), tmp);
 
     if (!ascendingOrder) {
-      reverse(sequenceCopy.begin(),sequenceCopy.end());
+      reverse(sequenceCopy.begin(), sequenceCopy.end());
     }
 
-    copyIterator=sequenceCopy.begin();
+    copyIterator = sequenceCopy.begin();
   }
   ///
   ~SortSourceEdgeIterator() {}
 };
 
 /**
-* @brief This Iterator sorts the edges based on the values of their extremities nodes in a NumericProperty.
+* @brief This Iterator sorts the edges based on the values of their extremities nodes in a
+*NumericProperty.
 **/
 struct SortExtremitiesEdgeIterator : public StableIterator<tlp::edge> {
   ///
-  SortExtremitiesEdgeIterator(Iterator<tlp::edge> *itIn, const Graph* sg, const tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
-    LessThanEdgeExtremitiesMetric tmp(sg,metric);
-    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+  SortExtremitiesEdgeIterator(Iterator<tlp::edge> *itIn, const Graph *sg,
+                              const tlp::NumericProperty *metric, bool ascendingOrder = true)
+      : StableIterator<tlp::edge>(itIn) {
+    LessThanEdgeExtremitiesMetric tmp(sg, metric);
+    sort(sequenceCopy.begin(), sequenceCopy.end(), tmp);
 
     if (!ascendingOrder) {
-      reverse(sequenceCopy.begin(),sequenceCopy.end());
+      reverse(sequenceCopy.begin(), sequenceCopy.end());
     }
 
-    copyIterator=sequenceCopy.begin();
+    copyIterator = sequenceCopy.begin();
   }
   ///
   ~SortExtremitiesEdgeIterator() {}
 };
-
 }
 #endif

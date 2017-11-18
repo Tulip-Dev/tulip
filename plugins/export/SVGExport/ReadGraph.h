@@ -1,7 +1,6 @@
 #ifndef READGRAPH_H
 #define READGRAPH_H
 
-
 /**
  *
  * This file is part of Tulip (http://tulip.labri.fr)
@@ -31,7 +30,8 @@ class PluginProgress;
 
 // Director
 struct ReadGraph {
-  static bool readGraph(tlp::Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, ExportInterface &exportint);
+  static bool readGraph(tlp::Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp,
+                        ExportInterface &exportint);
 };
 
 #endif // READGRAPH_H

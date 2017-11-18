@@ -39,33 +39,53 @@ class PropertyValuesDispatcher;
 /*@{*/
 /** \file
  *  \brief Adjacency matrix view
- * In mathematics and computer science, an adjacency matrix is a means of representing which vertices of a graph are adjacent to which other vertices. Another matrix representation for a graph is the incidence matrix.
+ * In mathematics and computer science, an adjacency matrix is a means of representing which
+ * vertices of a graph are adjacent to which other vertices. Another matrix representation for a
+ * graph is the incidence matrix.
  *
- * Specifically, the adjacency matrix of a finite graph G on n vertices is the n  n matrix where the non-diagonal entry aij is the number of edges from vertex i to vertex j, and the diagonal entry aii, depending on the convention, is either once or twice the number of edges (loops) from vertex i to itself.
- * Undirected graphs often use the former convention of counting loops twice, whereas directed graphs typically use the latter convention.
- * There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its diagonal.
+ * Specifically, the adjacency matrix of a finite graph G on n vertices is the n  n matrix where the
+ * non-diagonal entry aij is the number of edges from vertex i to vertex j, and the diagonal entry
+ * aii, depending on the convention, is either once or twice the number of edges (loops) from vertex
+ * i to itself.
+ * Undirected graphs often use the former convention of counting loops twice, whereas directed
+ * graphs typically use the latter convention.
+ * There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows
+ * and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the
+ * special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its
+ * diagonal.
  * If the graph is undirected, the adjacency matrix is symmetric.
  */
-class MatrixView: public NodeLinkDiagramComponent {
+class MatrixView : public NodeLinkDiagramComponent {
   Q_OBJECT
 
-  MatrixViewQuickAccessBar* _bar;
+  MatrixViewQuickAccessBar *_bar;
 
 public:
-
   PLUGININFORMATION(tlp::ViewName::MatrixViewName, "Ludwig Fiolka", "07/01/2011",
-                    "<p>In Mathematics and Computer Science, an adjacency matrix is used to represent which vertices of a graph are adjacents to each other. Another matrix representation for a graph is the incidence matrix.</p>"
-                    "<p>Specifically, the adjacency matrix of a finite graph G on n vertices is the n x n matrix where the non-diagonal entry a<sub>ij</sub> is the number of edges from vertex <i>i</i> to vertex <i>j</i>, and the diagonal entry a<sub>ii</sub>, depending on the convention, is either once or twice the number of edges (loops) from vertex <i>i</i> to itself. "
-                    "Undirected graphs often use the former convention of counting loops twice, whereas directed graphs typically use the latter convention.</p>"
-                    "<p>There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its diagonal.</p>"
-                    "If the graph is undirected, the adjacency matrix is symmetric.</p>", "2.0","View")
+                    "<p>In Mathematics and Computer Science, an adjacency matrix is used to "
+                    "represent which vertices of a graph are adjacents to each other. Another "
+                    "matrix representation for a graph is the incidence matrix.</p>"
+                    "<p>Specifically, the adjacency matrix of a finite graph G on n vertices is "
+                    "the n x n matrix where the non-diagonal entry a<sub>ij</sub> is the number of "
+                    "edges from vertex <i>i</i> to vertex <i>j</i>, and the diagonal entry "
+                    "a<sub>ii</sub>, depending on the convention, is either once or twice the "
+                    "number of edges (loops) from vertex <i>i</i> to itself. "
+                    "Undirected graphs often use the former convention of counting loops twice, "
+                    "whereas directed graphs typically use the latter convention.</p>"
+                    "<p>There exists a unique adjacency matrix for each isomorphism class of "
+                    "graphs (up to permuting rows and columns), and it is not the adjacency matrix "
+                    "of any other isomorphism class of graphs. In the special case of a finite "
+                    "simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its "
+                    "diagonal.</p>"
+                    "If the graph is undirected, the adjacency matrix is symmetric.</p>",
+                    "2.0", "View")
 
   MatrixView(const tlp::PluginContext *);
   ~MatrixView();
   std::string icon() const {
     return ":/adjacency_matrix_view.png";
   }
-  QuickAccessBar* getQuickAccessBarImpl();
+  QuickAccessBar *getQuickAccessBarImpl();
   void setState(const tlp::DataSet &dataSet);
   void graphChanged(tlp::Graph *graph);
 
@@ -80,16 +100,16 @@ public:
   }
 
   void addNode(tlp::Graph *, const tlp::node);
-  void addEdge(tlp::Graph *, const tlp::edge );
-  void delNode(tlp::Graph *,const tlp::node );
-  void delEdge(tlp::Graph *,const tlp::edge );
+  void addEdge(tlp::Graph *, const tlp::edge);
+  void delNode(tlp::Graph *, const tlp::node);
+  void delEdge(tlp::Graph *, const tlp::edge);
   void treatEvent(const Event &message);
 
-  void fillContextMenu(QMenu *menu,const QPointF &point);
+  void fillContextMenu(QMenu *menu, const QPointF &point);
 
 private slots:
   void setBackgroundColor(QColor);
-  void setOrderingMetric(const std::string&);
+  void setOrderingMetric(const std::string &);
   void setGridDisplayMode();
   void applySettings();
   void showEdges(bool);
@@ -97,7 +117,6 @@ private slots:
   void setOriented(bool);
 
 private:
-
   void registerTriggers();
 
   tlp::Graph *_matrixGraph;
@@ -108,7 +127,7 @@ private:
   tlp::IntegerProperty *_displayedEdgesToGraphEdges;
   tlp::BooleanProperty *_displayedNodesAreNodes;
   PropertyValuesDispatcher *_dispatcher;
-  QHash<tlp::edge,tlp::edge> _edgesMap;
+  QHash<tlp::edge, tlp::edge> _edgesMap;
 
   MatrixViewConfigurationWidget *_configurationWidget;
 
@@ -120,12 +139,11 @@ private:
   std::string _orderingMetricName;
   std::vector<node> _orderedNodes;
 
-
   void deleteDisplayedGraph();
   void initDisplayedGraph();
   void addGridBackground();
   void removeGridBackground();
-  void normalizeSizes(double max=1);
+  void normalizeSizes(double max = 1);
   void updateNodesOrder();
   void updateLayout();
 };

@@ -29,9 +29,8 @@ using namespace tlp;
 using namespace std;
 
 // Current Python versions
-static const char *pythonVersion[]  = {
-  "3.6", "3.5", "3.4", "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0
-};
+static const char *pythonVersion[] = {"3.6", "3.5", "3.4", "3.3", "3.2", "3.1",
+                                      "3.0", "2.7", "2.6", "2.5", 0};
 
 // Windows specific functions
 #ifdef WIN32
@@ -45,16 +44,16 @@ static const char *pythonVersion[]  = {
 static bool isWow64() {
   BOOL bIsWow64 = FALSE;
 
-  typedef BOOL (APIENTRY *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
+  typedef BOOL(APIENTRY * LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
 
   LPFN_ISWOW64PROCESS fnIsWow64Process;
 
   HMODULE module = GetModuleHandle(TEXT("kernel32"));
   const char funcName[] = "IsWow64Process";
-  fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(module, funcName);
+  fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(module, funcName);
 
   if (fnIsWow64Process != NULL) {
-    fnIsWow64Process(GetCurrentProcess(),&bIsWow64);
+    fnIsWow64Process(GetCurrentProcess(), &bIsWow64);
   }
 
   return bIsWow64 != FALSE;
@@ -62,22 +61,24 @@ static bool isWow64() {
 #endif
 
 #ifndef MSYS2_PYTHON
-// Check if a path is a valid Python Home, meaning it is not empty and contains the python executable
+// Check if a path is a valid Python Home, meaning it is not empty and contains the python
+// executable
 static bool validPythonHome(const QString &pythonHome) {
-  return !pythonHome.isEmpty() && QFileInfo(pythonHome+"/python.exe").exists();
+  return !pythonHome.isEmpty() && QFileInfo(pythonHome + "/python.exe").exists();
 }
 #endif
 
 // Function to get the path to Python home directory for a specific Python version.
 // Returns an empty string if the provided version is not installed on the host system.
 // The path to the Python home directory is retrieved from the windows registry.
-// On windows, Python can be installed for all users or for the current user only. That function handles both cases.
+// On windows, Python can be installed for all users or for the current user only. That function
+// handles both cases.
 // The current user installation will be prefered over the all users one.
 static QString pythonHome(const QString &pythonVersion) {
 
 // special case when using Python provided by MSYS2
 #ifdef MSYS2_PYTHON
-  (void) pythonVersion;
+  (void)pythonVersion;
   return PYTHON_HOME_PATH;
 
 // standard Python installation on Windows
@@ -90,40 +91,45 @@ static QString pythonHome(const QString &pythonVersion) {
 
   // on windows 64 bit
   if (isWow64()) {
-    winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-    winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") +
+                        pythonVersion + QString("\\InstallPath");
+    winRegKeyCurrentUser =
+        QString("HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion +
+        QString("\\InstallPath");
   }
   // on windows 32 bit
   else {
-    winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-    winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") +
+                        pythonVersion + QString("\\InstallPath");
+    winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") +
+                           pythonVersion + QString("\\InstallPath");
   }
 
 // 64 bit Python
 #else
 
-  winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-  winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+  winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") +
+                      pythonVersion + QString("\\InstallPath");
+  winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") +
+                         pythonVersion + QString("\\InstallPath");
 
 #endif
 
   QSettings winSettingsAllUsers(winRegKeyAllUsers, QSettings::NativeFormat);
   QSettings winSettingsCurrentUser(winRegKeyCurrentUser, QSettings::NativeFormat);
   QString pythonHomeAllUsers = winSettingsAllUsers.value("Default").toString().replace("\\", "/");
-  QString pythonHomeCurrentUser = winSettingsCurrentUser.value("Default").toString().replace("\\", "/");
+  QString pythonHomeCurrentUser =
+      winSettingsCurrentUser.value("Default").toString().replace("\\", "/");
 
   if (validPythonHome(pythonHomeCurrentUser)) {
     return pythonHomeCurrentUser;
-  }
-  else if (validPythonHome(pythonHomeAllUsers)) {
+  } else if (validPythonHome(pythonHomeAllUsers)) {
     return pythonHomeAllUsers;
-  }
-  else {
+  } else {
     return "";
   }
 
 #endif
-
 }
 
 // Linux and Mac OS specific
@@ -132,7 +138,7 @@ static QString pythonHome(const QString &pythonVersion) {
 // Function which tries to run a specific version of the python interpreter.
 static bool runPython(const QString &version) {
   QProcess pythonProcess;
-  pythonProcess.start(QString("python")+version,QStringList() << "--version");
+  pythonProcess.start(QString("python") + version, QStringList() << "--version");
   return pythonProcess.waitForFinished(-1) && pythonProcess.exitStatus() == QProcess::NormalExit;
 }
 
@@ -145,7 +151,8 @@ static QString getDefaultPythonVersionIfAny() {
 
   QString pythonCommand = "python";
 
-// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
+// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python
+// 3.X installed in a non standard way.
 #ifdef __MINGW32__
   char *pythonDirEv = getenv("PYTHONDIR");
 
@@ -172,7 +179,8 @@ static QString getDefaultPythonVersionIfAny() {
     if (versionRegexp.exactMatch(result)) {
       defaultPythonVersion = versionRegexp.cap(1);
 
-// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
+// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python
+// 3.X installed in a non standard way.
 #ifdef __MINGW32__
 
       if (pythonDirEv) {
@@ -184,7 +192,11 @@ static QString getDefaultPythonVersionIfAny() {
 #endif
 
       // Check the binary type of the python executable (32 or 64 bits)
-      pythonProcess.start(pythonCommand, QStringList() << "-c" << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
+      pythonProcess.start(
+          pythonCommand,
+          QStringList()
+              << "-c"
+              << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
       pythonProcess.waitForFinished(-1);
       QString arch = pythonProcess.readAll();
 
@@ -201,7 +213,6 @@ static QString getDefaultPythonVersionIfAny() {
       }
 
 #endif
-
     }
   }
 
@@ -253,7 +264,6 @@ QStringList PythonVersionChecker::installedVersions() {
     }
 
     _installedVersionsChecked = true;
-
   }
 
   return _installedVersions;
@@ -271,7 +281,8 @@ bool PythonVersionChecker::isPythonVersionMatching() {
 QString PythonVersionChecker::getPythonHome() {
   if (isPythonVersionMatching()) {
     QString pythonHomeDir = pythonHome(compiledVersion());
-// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
+// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python
+// 3.X installed in a non standard way.
 #ifdef __MINGW32__
 
     if (pythonHomeDir.isEmpty()) {

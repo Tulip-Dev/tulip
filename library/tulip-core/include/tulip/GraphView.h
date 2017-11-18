@@ -32,7 +32,7 @@ namespace tlp {
 struct SGraphNodeData {
   unsigned int outDegree;
   unsigned int inDegree;
-  SGraphNodeData() :outDegree(0), inDegree(0) {}
+  SGraphNodeData() : outDegree(0), inDegree(0) {}
   inline void outDegreeAdd(int i) {
     outDegree += i;
   }
@@ -41,39 +41,39 @@ struct SGraphNodeData {
   }
 };
 
-typedef SGraphNodeData* SGraphNodeDataPtr;
+typedef SGraphNodeData *SGraphNodeDataPtr;
 DECL_STORED_PTR(SGraphNodeDataPtr);
 
 /**
  * This class is one of the implementation of the Graph Interface
  * It only filters the elements of its parents.
  */
-class GraphView:public GraphAbstract {
+class GraphView : public GraphAbstract {
 
-  inline GraphImpl* getRootImpl() const {
+  inline GraphImpl *getRootImpl() const {
     return static_cast<GraphImpl *>(getRoot());
   }
 
   friend class GraphImpl;
+
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id);
   ~GraphView();
   //========================================================================
   node addNode();
   void addNodes(unsigned int nb);
-  void addNodes(unsigned int nb, std::vector<node>& addedNodes);
+  void addNodes(unsigned int nb, std::vector<node> &addedNodes);
   void addNode(const node);
-  void addNodes(Iterator<node>* nodes);
-  edge addEdge(const node n1,const node n2);
-  void addEdges(const std::vector<std::pair<node, node> >& edges,
-                std::vector<edge>& addedEdges);
-  void addEdges(const std::vector<std::pair<node, node> >& edges);
+  void addNodes(Iterator<node> *nodes);
+  edge addEdge(const node n1, const node n2);
+  void addEdges(const std::vector<std::pair<node, node> > &edges, std::vector<edge> &addedEdges);
+  void addEdges(const std::vector<std::pair<node, node> > &edges);
   void addEdge(const edge);
-  void addEdges(Iterator<edge>* edges);
+  void addEdges(Iterator<edge> *edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
   void setEdgeOrder(const node n, const std::vector<edge> &v) {
-    getRootImpl()->setEdgeOrder(n,v);
+    getRootImpl()->setEdgeOrder(n, v);
   }
   void swapEdgeOrder(const node n, const edge e1, const edge e2) {
     getRootImpl()->swapEdgeOrder(n, e1, e2);
@@ -85,8 +85,7 @@ public:
   inline bool isElement(const edge e) const {
     return _edges.isElement(e);
   }
-  edge existEdge(const node source, const node target,
-                 bool directed) const;
+  edge existEdge(const node source, const node target, bool directed) const;
   inline unsigned int numberOfNodes() const {
     return _nodes.size();
   }
@@ -96,7 +95,7 @@ public:
   //=========================================================================
   inline unsigned int deg(const node n) const {
     assert(isElement(n));
-    SGraphNodeData* nData = _nodeData.get(n.id);
+    SGraphNodeData *nData = _nodeData.get(n.id);
     return nData->inDegree + nData->outDegree;
   }
   inline unsigned int indeg(const node n) const {
@@ -122,14 +121,14 @@ public:
     assert(isElement(e));
     getRootImpl()->setEnds(e, node(), newTgt);
   }
-  inline const std::pair<node, node>& ends(const edge e) const {
+  inline const std::pair<node, node> &ends(const edge e) const {
     return getRootImpl()->ends(e);
   }
   inline void setEnds(const edge e, const node newSrc, const node newTgt) {
     assert(isElement(e));
     getRootImpl()->setEnds(e, newSrc, newTgt);
   }
-  inline node opposite(const edge e, const node n)const {
+  inline node opposite(const edge e, const node n) const {
     return getRootImpl()->opposite(e, n);
   }
   inline void reverse(const edge e) {
@@ -137,38 +136,37 @@ public:
     getRootImpl()->reverse(e);
   }
   //=========================================================================
-  inline const std::vector<node>& nodes() const {
+  inline const std::vector<node> &nodes() const {
     return _nodes;
   }
   inline unsigned int nodePos(const node n) const {
     return _nodes.getPos(n);
   }
-  Iterator<node>* getNodes() const;
-  Iterator<node>* getInNodes(const node) const;
-  Iterator<node>* getOutNodes(const node) const;
-  Iterator<node>* getInOutNodes(const node) const;
-  inline const std::vector<edge>& edges() const {
+  Iterator<node> *getNodes() const;
+  Iterator<node> *getInNodes(const node) const;
+  Iterator<node> *getOutNodes(const node) const;
+  Iterator<node> *getInOutNodes(const node) const;
+  inline const std::vector<edge> &edges() const {
     return _edges;
   }
   inline unsigned int edgePos(const edge e) const {
     return _edges.getPos(e);
   }
-  Iterator<edge>* getEdges() const;
-  Iterator<edge>* getInEdges(const node) const;
-  Iterator<edge>* getOutEdges(const node) const;
-  Iterator<edge>* getInOutEdges(const node) const;
-  std::vector<edge> getEdges(const node source, const node target,
-                             bool directed = true) const;
-  inline const std::vector<edge>& allEdges(const node n) const {
+  Iterator<edge> *getEdges() const;
+  Iterator<edge> *getInEdges(const node) const;
+  Iterator<edge> *getOutEdges(const node) const;
+  Iterator<edge> *getInOutEdges(const node) const;
+  std::vector<edge> getEdges(const node source, const node target, bool directed = true) const;
+  inline const std::vector<edge> &allEdges(const node n) const {
     return getRootImpl()->allEdges(n);
   }
   inline void sortElts() {
     _nodes.sort();
     _edges.sort();
   }
-  inline Graph* getRoot() const {
+  inline Graph *getRoot() const {
     // handle root destruction (see GraphAbstract destructor)
-    return id == 0 ? const_cast<GraphView*>(this) : GraphAbstract::getRoot();
+    return id == 0 ? const_cast<GraphView *>(this) : GraphAbstract::getRoot();
   }
   //=========================================================================
   // only implemented on a root graph
@@ -177,7 +175,7 @@ public:
   //=========================================================================
   // updates management
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL);
+                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = NULL);
   virtual void pop(bool unpopAllowed = true);
   virtual void popIfNoUpdates();
   virtual void unpop();
@@ -194,8 +192,8 @@ protected:
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
   virtual void removeEdge(const edge);
-  void removeNode(const node n, const std::vector<edge>& edges);
-  void removeEdges(const std::vector<edge>& edges);
+  void removeNode(const node n, const std::vector<edge> &edges);
+  void removeEdges(const std::vector<edge> &edges);
 
 private:
   MutableContainer<SGraphNodeDataPtr> _nodeData;
@@ -205,13 +203,11 @@ private:
   void inDegreeAdd(node n, int i);
   edge addEdgeInternal(edge);
   void reverseInternal(const edge, const node src, const node tgt);
-  void setEndsInternal(const edge, node src, node tgt,
-                       const node newSrc, const node newTgt);
-  void addNodesInternal(unsigned int nbAdded, const std::vector<node>* nodes);
-  void addEdgesInternal(unsigned int nbAdded, const std::vector<edge>* edges,
-                        const std::vector<std::pair<node, node> >& ends);
+  void setEndsInternal(const edge, node src, node tgt, const node newSrc, const node newTgt);
+  void addNodesInternal(unsigned int nbAdded, const std::vector<node> *nodes);
+  void addEdgesInternal(unsigned int nbAdded, const std::vector<edge> *edges,
+                        const std::vector<std::pair<node, node> > &ends);
 };
-
 }
 #endif
 

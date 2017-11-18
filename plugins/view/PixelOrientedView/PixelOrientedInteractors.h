@@ -26,26 +26,22 @@ namespace tlp {
 
 class PixelOrientedInteractor : public NodeLinkDiagramComponentInteractor {
 
-public :
-
+public:
   PixelOrientedInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
-
 };
 
 class PixelOrientedInteractorNavigation : public PixelOrientedInteractor {
 
-public :
-
-  PLUGININFORMATION("PixelOrientedInteractorNavigation", "Tulip Team", "02/04/2009", "Pixel Oriented Navigation Interactor", "1.0", "Navigation")
+public:
+  PLUGININFORMATION("PixelOrientedInteractorNavigation", "Tulip Team", "02/04/2009",
+                    "Pixel Oriented Navigation Interactor", "1.0", "Navigation")
 
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
 
   void construct();
-
 };
-
 }
 
 #endif /* PIXELORIENTEDVIEWINTERACTORS_H_ */

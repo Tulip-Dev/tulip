@@ -47,7 +47,6 @@ class PythonCodeHighlighter : public QSyntaxHighlighter {
   bool _shellMode;
 
 public:
-
   explicit PythonCodeHighlighter(QTextDocument *parent = 0);
 
   void setShellMode(const bool shellMode) {
@@ -55,11 +54,10 @@ public:
   }
 
 protected:
-
   void highlightBlock(const QString &text);
 
-  bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style);
-
+  bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState,
+                                const QTextCharFormat &style);
 };
 
 #endif /* PYTHONCODEHIGHLIGHTER_H_ */

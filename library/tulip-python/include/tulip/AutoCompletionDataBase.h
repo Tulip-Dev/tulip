@@ -31,11 +31,15 @@ namespace tlp {
 
 class TLP_PYTHON_SCOPE AutoCompletionDataBase {
 
-  QSet<QString> getSubGraphsListIfContext(const QString &context, const QString &editedFunction) const ;
-  QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
-  QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
+  QSet<QString> getSubGraphsListIfContext(const QString &context,
+                                          const QString &editedFunction) const;
+  QSet<QString> getGraphPropertiesListIfContext(const QString &context,
+                                                const QString &editedFunction) const;
+  QSet<QString> getPluginParametersListIfContext(const QString &context,
+                                                 const QString &editedFunction) const;
   QString getClassAttributeType(const QString &className, const QString &classAttribute) const;
-  QSet<QString> getGraphsAttributesListIfContext(const QString &context, const QString &editedFunction) const;
+  QSet<QString> getGraphsAttributesListIfContext(const QString &context,
+                                                 const QString &editedFunction) const;
 
   tlp::Graph *_graph;
   APIDataBase *_apiDb;
@@ -50,36 +54,39 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
   QHash<QString, QSet<QString> > _classBases;
   QString _lastFoundType;
 
-public :
-
+public:
   AutoCompletionDataBase(APIDataBase *_apiDb = NULL);
 
-  void setGraph(tlp::Graph * graph) {
+  void setGraph(tlp::Graph *graph) {
     _graph = graph;
   }
 
-  void analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession=false, const QString &moduleName="");
+  void analyseCurrentScriptCode(const QString &code, const int currentLine,
+                                const bool interactiveSession = false,
+                                const QString &moduleName = "");
 
-  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction, bool dotContext=false);
+  QSet<QString> getAutoCompletionListForContext(const QString &context,
+                                                const QString &editedFunction,
+                                                bool dotContext = false);
 
   QString getLastFoundType() const {
     return _lastFoundType;
   }
 
-  QString findTypeForExpr(const QString &expr, const QString &funcName) const ;
+  QString findTypeForExpr(const QString &expr, const QString &funcName) const;
 
-  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &type, const QString &funcName) const;
+  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &type,
+                                                              const QString &funcName) const;
 
   QString getReturnTypeForMethodOrFunction(const QString &type, const QString &funcName) const;
 
-  QSet<QString> getAllDictForType(const QString &type, const QString &prefix, const bool root=true) const;
+  QSet<QString> getAllDictForType(const QString &type, const QString &prefix,
+                                  const bool root = true) const;
 
   QString getTypeNameForVar(const QString &varName) const;
 
   QString getTypeNameForExpr(const QString &varName) const;
-
 };
-
 }
 
 #endif /* AUTOCOMPLETIONDATABASE_H_ */

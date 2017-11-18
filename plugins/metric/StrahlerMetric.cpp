@@ -29,108 +29,106 @@ using namespace tlp;
 
 namespace std {
 struct couple {
-  int p,r;
-  bool operator ==(const couple&d) {
-    if ((p==d.p) && (r==d.r)) return true;
+  int p, r;
+  bool operator==(const couple &d) {
+    if ((p == d.p) && (r == d.r))
+      return true;
 
     return false;
   }
 };
 
-template<>
+template <>
 struct equal_to<couple> {
-  bool operator()(const couple &c,const couple &d) {
-    if ((c.r==d.r) && (c.p==d.p)) return true;
+  bool operator()(const couple &c, const couple &d) {
+    if ((c.r == d.r) && (c.p == d.p))
+      return true;
 
     return false;
   }
 };
 
-template<>
+template <>
 struct less<couple> {
-  bool operator()(const couple &c,const couple &d) {
-    return (c.r < d.r) ||
-           ((c.r == d.r) && (c.p < d.p));
+  bool operator()(const couple &c, const couple &d) {
+    return (c.r < d.r) || ((c.r == d.r) && (c.p < d.p));
   }
 };
 }
 
 struct StackEval {
-  StackEval(int f,int u):freeS(f),usedS(u) {}
-  int freeS,usedS;
+  StackEval(int f, int u) : freeS(f), usedS(u) {}
+  int freeS, usedS;
 };
 
 struct GreaterStackEval {
-  bool operator()(const StackEval& e1,const StackEval& e2) {
-    return (e1.freeS>e2.freeS);
+  bool operator()(const StackEval &e1, const StackEval &e2) {
+    return (e1.freeS > e2.freeS);
   }
 };
 
-Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
-    TLP_HASH_MAP<node,int> &tofree,
-    TLP_HASH_MAP<node,int> &prefix,
-    TLP_HASH_MAP<node,bool> &visited,
-    TLP_HASH_MAP<node,bool> &finished,
-    TLP_HASH_MAP<node,Strahler> &cachedValues) {
-  visited[n]=true;
+Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP<node, int> &tofree,
+                                         TLP_HASH_MAP<node, int> &prefix,
+                                         TLP_HASH_MAP<node, bool> &visited,
+                                         TLP_HASH_MAP<node, bool> &finished,
+                                         TLP_HASH_MAP<node, Strahler> &cachedValues) {
+  visited[n] = true;
   Strahler result;
-  prefix[n]=curPref;
+  prefix[n] = curPref;
   curPref++;
 
-  if (graph->outdeg(n)==0) {
-    finished[n]=true;
-    return(result);
+  if (graph->outdeg(n) == 0) {
+    finished[n] = true;
+    return (result);
   }
 
   list<int> strahlerResult;
   list<StackEval> tmpEval;
-  //Construction des ensembles pour evaluer le strahler
-  Iterator<node> *itN=graph->getOutNodes(n);
+  // Construction des ensembles pour evaluer le strahler
+  Iterator<node> *itN = graph->getOutNodes(n);
 
   for (; itN->hasNext();) {
-    node tmpN=itN->next();
+    node tmpN = itN->next();
 
     if (!visited[tmpN]) {
-      //Arc Normal
-      tofree[n]=0;
-      Strahler tmpValue=topSortStrahler(tmpN,curPref,tofree,prefix,visited,finished,cachedValues);
-      //Data for strahler evaluation on the spanning Dag.
+      // Arc Normal
+      tofree[n] = 0;
+      Strahler tmpValue =
+          topSortStrahler(tmpN, curPref, tofree, prefix, visited, finished, cachedValues);
+      // Data for strahler evaluation on the spanning Dag.
       strahlerResult.push_front(tmpValue.strahler);
-      //Counting current used stacks.
-      tmpEval.push_back(StackEval(tmpValue.stacks-tmpValue.usedStack+tofree[n],tmpValue.usedStack-tofree[n]));
-      //Looking if we need more stacks to evaluate this node.
-      //old freeStacks=max(freeStacks,tmpValue.stacks-tmpValue.usedStack+tofree[n]);
-    }
-    else {
+      // Counting current used stacks.
+      tmpEval.push_back(StackEval(tmpValue.stacks - tmpValue.usedStack + tofree[n],
+                                  tmpValue.usedStack - tofree[n]));
+      // Looking if we need more stacks to evaluate this node.
+      // old freeStacks=max(freeStacks,tmpValue.stacks-tmpValue.usedStack+tofree[n]);
+    } else {
       if (finished[tmpN]) {
-        if(prefix[tmpN]<prefix[n]) {
-          //Cross Edge
-          Strahler tmpValue=cachedValues[tmpN];
-          //Data for strahler evaluation on the spanning Dag.
+        if (prefix[tmpN] < prefix[n]) {
+          // Cross Edge
+          Strahler tmpValue = cachedValues[tmpN];
+          // Data for strahler evaluation on the spanning Dag.
           strahlerResult.push_front(tmpValue.strahler);
-          //Looking if we need more stacks to evaluate this node.
-          tmpEval.push_back(StackEval(tmpValue.stacks,0));
-        }
-        else {
-          //Arc descent
-          Strahler tmpValue=cachedValues[tmpN];
-          //Data for strahler evaluation on the spanning Dag.
+          // Looking if we need more stacks to evaluate this node.
+          tmpEval.push_back(StackEval(tmpValue.stacks, 0));
+        } else {
+          // Arc descent
+          Strahler tmpValue = cachedValues[tmpN];
+          // Data for strahler evaluation on the spanning Dag.
           strahlerResult.push_front(tmpValue.strahler);
         }
-      }
-      else {
-        if(tmpN==n) {
-          tmpEval.push_back(StackEval(1,0));
-        }
-        else {
-          //New nested cycle.
+      } else {
+        if (tmpN == n) {
+          tmpEval.push_back(StackEval(1, 0));
+        } else {
+          // New nested cycle.
           tofree[tmpN]++;
-          tmpEval.push_back(StackEval(0,1));
-          //result.usedStack++;
+          tmpEval.push_back(StackEval(0, 1));
+          // result.usedStack++;
         }
 
-        //Return edge
-        //Register needed tp store the result of the recursive call
+        // Return edge
+        // Register needed tp store the result of the recursive call
         strahlerResult.push_front(1);
       }
     }
@@ -138,50 +136,50 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
 
   delete itN;
 
-  //compute the minimal nested cycles
+  // compute the minimal nested cycles
   GreaterStackEval gSE;
   tmpEval.sort(gSE);
-  result.stacks=0;
-  result.usedStack=0;
+  result.stacks = 0;
+  result.usedStack = 0;
 
-  for (list<StackEval>::iterator it=tmpEval.begin(); it!=tmpEval.end(); ++it) {
-    result.usedStack+=it->usedS;
-    result.stacks=std::max(result.stacks,it->freeS+it->usedS);
-    result.stacks-=it->usedS;
+  for (list<StackEval>::iterator it = tmpEval.begin(); it != tmpEval.end(); ++it) {
+    result.usedStack += it->usedS;
+    result.stacks = std::max(result.stacks, it->freeS + it->usedS);
+    result.stacks -= it->usedS;
   }
 
-  result.stacks=result.stacks+result.usedStack;
-  //evaluation of tree strahler
-  int additional=0;
-  int available=0;
+  result.stacks = result.stacks + result.usedStack;
+  // evaluation of tree strahler
+  int additional = 0;
+  int available = 0;
   strahlerResult.sort();
 
   while (!strahlerResult.empty()) {
-    int tmpDbl=strahlerResult.back();
+    int tmpDbl = strahlerResult.back();
     strahlerResult.pop_back();
 
-    if (tmpDbl>available) {
-      additional+=tmpDbl - available;
-      available=tmpDbl - 1;
-    }
-    else
-      available -=1;
+    if (tmpDbl > available) {
+      additional += tmpDbl - available;
+      available = tmpDbl - 1;
+    } else
+      available -= 1;
   }
 
-  result.strahler=additional;
+  result.strahler = additional;
   strahlerResult.clear();
-  finished [n]=true;
-  cachedValues[n]=result;
+  finished[n] = true;
+  cachedValues[n] = result;
   return result;
 }
 
 static const char *paramHelp[] = {
-  // All nodes
-  "If true, for each node the Strahler number is computed from a spanning tree having that node as root: complexity o(n^2). If false the Strahler number is computed from a spanning tree having the heuristicly estimated graph center as root.",
+    // All nodes
+    "If true, for each node the Strahler number is computed from a spanning tree having that node "
+    "as root: complexity o(n^2). If false the Strahler number is computed from a spanning tree "
+    "having the heuristicly estimated graph center as root.",
 
-  // Type
-  "Sets the type of computation."
-};
+    // Type
+    "Sets the type of computation."};
 
 #define COMPUTATION_TYPE "Type"
 #define COMPUTATION_TYPES "all;ramification;nested cycles;"
@@ -189,9 +187,11 @@ static const char *paramHelp[] = {
 #define REGISTERS 1
 #define STACKS 2
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), allNodes(false) {
+StrahlerMetric::StrahlerMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context), allNodes(false) {
   addInParameter<bool>("All nodes", paramHelp[0], "false");
-  addInParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES, true, "all <br> ramification <br> nested cycles");
+  addInParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES, true,
+                                   "all <br> ramification <br> nested cycles");
 }
 //==============================================================================
 bool StrahlerMetric::run() {
@@ -199,17 +199,17 @@ bool StrahlerMetric::run() {
   StringCollection computationTypes(COMPUTATION_TYPES);
   computationTypes.setCurrent(0);
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("All nodes", allNodes);
     dataSet->get(COMPUTATION_TYPE, computationTypes);
   }
 
-  TLP_HASH_MAP<node,bool> visited;
-  TLP_HASH_MAP<node,bool> finished;
-  TLP_HASH_MAP<node,int> prefix;
-  TLP_HASH_MAP<node,int> tofree;
-  TLP_HASH_MAP<node,Strahler> cachedValues;
-  int curPref=0;
+  TLP_HASH_MAP<node, bool> visited;
+  TLP_HASH_MAP<node, bool> finished;
+  TLP_HASH_MAP<node, int> prefix;
+  TLP_HASH_MAP<node, int> tofree;
+  TLP_HASH_MAP<node, Strahler> cachedValues;
+  int curPref = 0;
   /*
     Selection *parameter=graph->getProperty<BooleanProperty>("viewSelection");
     Iterator<node> *it=graph->getNodes();
@@ -221,7 +221,7 @@ bool StrahlerMetric::run() {
     }
     } delete it;
   */
-  Iterator<node> *itN=graph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
   unsigned int i = 0;
 
   if (pluginProgress)
@@ -232,17 +232,19 @@ bool StrahlerMetric::run() {
     tofree[itn] = 0;
 
     if (!finished[itn]) {
-      topSortStrahler(itn,curPref,tofree,prefix,visited,finished,cachedValues);
+      topSortStrahler(itn, curPref, tofree, prefix, visited, finished, cachedValues);
     }
 
     if (allNodes) {
       if (pluginProgress && ((++i % 100) == 0) &&
-          (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE)) break;
+          (pluginProgress->progress(i, graph->numberOfNodes()) != TLP_CONTINUE))
+        break;
 
-      switch(computationTypes.getCurrent()) {
+      switch (computationTypes.getCurrent()) {
       case ALL:
-        result->setNodeValue(itn, sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
-                                       double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
+        result->setNodeValue(
+            itn, sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
+                      double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
         break;
 
       case REGISTERS:
@@ -258,7 +260,7 @@ bool StrahlerMetric::run() {
       prefix.clear();
       tofree.clear();
       cachedValues.clear();
-      curPref=0;
+      curPref = 0;
     }
   }
 
@@ -268,12 +270,13 @@ bool StrahlerMetric::run() {
     itN = graph->getNodes();
 
     while (itN->hasNext()) {
-      node itn=itN->next();
+      node itn = itN->next();
 
-      switch(computationTypes.getCurrent()) {
+      switch (computationTypes.getCurrent()) {
       case ALL:
-        result->setNodeValue(itn,sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
-                                      double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
+        result->setNodeValue(
+            itn, sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
+                      double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
         break;
 
       case REGISTERS:
@@ -288,7 +291,6 @@ bool StrahlerMetric::run() {
     delete itN;
   }
 
-  return pluginProgress->state()!=TLP_CANCEL;
+  return pluginProgress->state() != TLP_CANCEL;
 }
 //==============================================================================
-

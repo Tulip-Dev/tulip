@@ -24,27 +24,27 @@
 
 using namespace std;
 
-static std::ostream* debugStream = NULL;
-std::ostream& tlp::debug() {
+static std::ostream *debugStream = NULL;
+std::ostream &tlp::debug() {
   return debugStream ? *debugStream : std::cout;
 }
-void tlp::setDebugOutput(std::ostream& os) {
+void tlp::setDebugOutput(std::ostream &os) {
   debugStream = &os;
 }
 
-static std::ostream* warningStream = NULL;
-std::ostream& tlp::warning() {
+static std::ostream *warningStream = NULL;
+std::ostream &tlp::warning() {
   return warningStream ? *warningStream : std::cerr;
 }
-void tlp::setWarningOutput(std::ostream& os) {
+void tlp::setWarningOutput(std::ostream &os) {
   warningStream = &os;
 }
 
-static std::ostream* errorStream = NULL;
-std::ostream& tlp::error() {
+static std::ostream *errorStream = NULL;
+std::ostream &tlp::error() {
   return errorStream ? *errorStream : std::cerr;
 }
-void tlp::setErrorOutput(std::ostream& os) {
+void tlp::setErrorOutput(std::ostream &os) {
   errorStream = &os;
 }
 

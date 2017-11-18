@@ -32,12 +32,11 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
   ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
-
   if (e->type() == QEvent::MouseButtonPress) {
 
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
-    if (qMouseEv->buttons()== Qt::LeftButton) {
+    if (qMouseEv->buttons() == Qt::LeftButton) {
 
       if (!started) {
         x = qMouseEv->x();
@@ -50,7 +49,6 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
       return true;
     }
-
   }
 
   if (e->type() == QEvent::MouseMove) {
@@ -84,12 +82,11 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 #else
             Qt::ShiftModifier
 #endif
-           ) {
+            ) {
 
           unselectAllEntitiesHandler(parallelView);
 
-        }
-        else
+        } else
           boolVal = false; // remove from selection
       }
 
@@ -97,8 +94,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
         selectedEntitiesHandler(parallelView, x, y, boolVal);
 
-      }
-      else {
+      } else {
 
         if (w < 0) {
           w *= -1;
@@ -121,5 +117,4 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
   return false;
 }
-
 }

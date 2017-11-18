@@ -21,8 +21,7 @@
 using namespace tlp;
 
 //====================================================================
-OrientableLayout::OrientableLayout(tlp::LayoutProperty* layoutParam,
-                                   orientationType mask) {
+OrientableLayout::OrientableLayout(tlp::LayoutProperty *layoutParam, orientationType mask) {
   layout = layoutParam;
   setOrientation(mask);
 }
@@ -31,26 +30,26 @@ OrientableLayout::OrientableLayout(tlp::LayoutProperty* layoutParam,
 void OrientableLayout::setOrientation(orientationType mask) {
   orientation = mask;
 
-  readX  = &Coord::getX;
-  readY  = &OrientableCoord::getInvertedY;
-  readZ  = &Coord::getZ;
+  readX = &Coord::getX;
+  readY = &OrientableCoord::getInvertedY;
+  readZ = &Coord::getZ;
   writeX = &Coord::setX;
   writeY = &OrientableCoord::setInvertedY;
   writeZ = &Coord::setZ;
 
   if (orientation & ORI_INVERSION_HORIZONTAL) {
-    readX   = &OrientableCoord::getInvertedX;
-    writeX  = &OrientableCoord::setInvertedX;
+    readX = &OrientableCoord::getInvertedX;
+    writeX = &OrientableCoord::setInvertedX;
   }
 
   if (orientation & ORI_INVERSION_VERTICAL) {
-    readY   = &Coord::getY;
-    writeY  = &Coord::setY;
+    readY = &Coord::getY;
+    writeY = &Coord::setY;
   }
 
   if (orientation & ORI_INVERSION_Z) {
-    readZ   = &OrientableCoord::getInvertedZ;
-    writeZ  = &OrientableCoord::setInvertedZ;
+    readZ = &OrientableCoord::getInvertedZ;
+    writeZ = &OrientableCoord::setInvertedZ;
   }
 
   if (orientation & ORI_ROTATION_XY) {
@@ -60,23 +59,22 @@ void OrientableLayout::setOrientation(orientationType mask) {
 }
 
 //====================================================================
-OrientableCoord OrientableLayout::createCoord(const float x, const float y,
-    const float z) {
+OrientableCoord OrientableLayout::createCoord(const float x, const float y, const float z) {
   return OrientableCoord(this, x, y, z);
 }
 
 //====================================================================
-OrientableCoord OrientableLayout::createCoord(const tlp::Coord& v) {
+OrientableCoord OrientableLayout::createCoord(const tlp::Coord &v) {
   return OrientableCoord(this, v);
 }
 
 //====================================================================
-std::vector<OrientableCoord> OrientableLayout::
-convertEdgeLinetype(const std::vector<tlp::Coord>& v) {
-  std::vector<OrientableCoord>  orientableLine;
+std::vector<OrientableCoord>
+OrientableLayout::convertEdgeLinetype(const std::vector<tlp::Coord> &v) {
+  std::vector<OrientableCoord> orientableLine;
   CoordLineType::const_iterator itCoordLineType = v.begin();
 
-  for ( ; itCoordLineType < v.end() ; ++itCoordLineType )  {
+  for (; itCoordLineType < v.end(); ++itCoordLineType) {
     OrientableCoord newOrientableCoord(this, *itCoordLineType);
     orientableLine.push_back(newOrientableCoord);
   }
@@ -85,12 +83,12 @@ convertEdgeLinetype(const std::vector<tlp::Coord>& v) {
 }
 
 //====================================================================
-void OrientableLayout::setAllNodeValue(const PointType& v) {
+void OrientableLayout::setAllNodeValue(const PointType &v) {
   layout->setAllNodeValue(v);
 }
 
 //====================================================================
-void OrientableLayout::setNodeValue(tlp::node n, const PointType& v) {
+void OrientableLayout::setNodeValue(tlp::node n, const PointType &v) {
   layout->setNodeValue(n, v);
 }
 
@@ -105,13 +103,13 @@ OrientableLayout::PointType OrientableLayout::getNodeDefaultValue() {
 }
 
 //====================================================================
-void OrientableLayout::setAllEdgeValue(const LineType& v) {
+void OrientableLayout::setAllEdgeValue(const LineType &v) {
   CoordLineType vecCoord(v.begin(), v.end());
   layout->setAllEdgeValue(vecCoord);
 }
 
 //====================================================================
-void OrientableLayout::setEdgeValue(const tlp::edge e, const LineType& v) {
+void OrientableLayout::setEdgeValue(const tlp::edge e, const LineType &v) {
   CoordLineType vecCoord(v.begin(), v.end());
   layout->setEdgeValue(e, vecCoord);
 }
@@ -127,13 +125,13 @@ OrientableLayout::LineType OrientableLayout::getEdgeDefaultValue() {
 }
 
 //====================================================================
-void OrientableLayout::setOrthogonalEdge(const Graph* tree, float interNodeDistance) {
-  Iterator<node>* itNode = tree->getNodes();
+void OrientableLayout::setOrthogonalEdge(const Graph *tree, float interNodeDistance) {
+  Iterator<node> *itNode = tree->getNodes();
 
   while (itNode->hasNext()) {
-    node            currentNode      = itNode->next();
+    node currentNode = itNode->next();
     OrientableCoord currentNodeCoord = getNodeValue(currentNode);
-    Iterator<edge>* itEdge           = tree->getOutEdges(currentNode);
+    Iterator<edge> *itEdge = tree->getOutEdges(currentNode);
 
     while (itEdge->hasNext())
       addControlPoints(tree, currentNodeCoord, itEdge->next(), interNodeDistance);
@@ -145,20 +143,20 @@ void OrientableLayout::setOrthogonalEdge(const Graph* tree, float interNodeDista
 }
 
 //====================================================================
-void OrientableLayout::addControlPoints(const Graph* tree, OrientableCoord fatherCoord, edge e, float interNodeDistance) {
-  node child                  = tree->target(e);
-  OrientableCoord childCoord  = getNodeValue(child);
+void OrientableLayout::addControlPoints(const Graph *tree, OrientableCoord fatherCoord, edge e,
+                                        float interNodeDistance) {
+  node child = tree->target(e);
+  OrientableCoord childCoord = getNodeValue(child);
 
   if (fatherCoord.getX() != childCoord.getX()) {
-    OrientableLayout::LineType  newControlPoints;
+    OrientableLayout::LineType newControlPoints;
 
-    float coordModifier  = interNodeDistance / 2.f;
+    float coordModifier = interNodeDistance / 2.f;
 
-    OrientableCoord coord  = createCoord();
-    float           coordY = fatherCoord.getY() + coordModifier;
+    OrientableCoord coord = createCoord();
+    float coordY = fatherCoord.getY() + coordModifier;
     coord.set(fatherCoord.getX(), coordY, 0);
     newControlPoints.push_back(coord);
-
 
     coord.set(childCoord.getX(), coordY, 0);
     newControlPoints.push_back(coord);

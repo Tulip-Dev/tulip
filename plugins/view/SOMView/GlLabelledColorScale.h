@@ -26,9 +26,9 @@
 namespace tlp {
 class GlLayer;
 
-class GlLabelledColorScale: public tlp::GlComposite {
+class GlLabelledColorScale : public tlp::GlComposite {
 public:
-  GlLabelledColorScale(tlp::Coord position, tlp::Size size, tlp::ColorScale* colorScale,
+  GlLabelledColorScale(tlp::Coord position, tlp::Size size, tlp::ColorScale *colorScale,
                        double minValue = 0, double maxValue = 0, bool ColorScaleAtTop = true);
 
   virtual ~GlLabelledColorScale();
@@ -55,7 +55,7 @@ public:
     return glColorScale;
   }
 
-  void setColorScale(tlp::ColorScale* cs);
+  void setColorScale(tlp::ColorScale *cs);
 
   void setPosition(tlp::Coord nPosition);
 
@@ -64,7 +64,7 @@ public:
   void addLayerParent(tlp::GlLayer *layer);
 
 protected:
-  void buildComposite(tlp::ColorScale* colorScale);
+  void buildComposite(tlp::ColorScale *colorScale);
   tlp::Coord position;
   tlp::Size size;
   tlp::GlColorScale *glColorScale;

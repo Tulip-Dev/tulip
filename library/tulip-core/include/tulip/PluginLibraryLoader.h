@@ -34,20 +34,22 @@ struct PluginLoader;
  * @ingroup Plugins
  *
  * @brief This class takes care of the actual loading of the libraries.
- * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).
+ * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder
+ *(loadPlugins).
  *
- * It is a singleton to guarantee the currentPluginLibrary member is initialized, but it only shows static functions for syntactic sugar.
+ * It is a singleton to guarantee the currentPluginLibrary member is initialized, but it only shows
+ *static functions for syntactic sugar.
  **/
 class TLP_SCOPE PluginLibraryLoader {
 public:
-
 #ifndef EMSCRIPTEN
   /**
   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
   * This function will not look into subfolders of the specified folder.
   *
   *
-  * To load all the plugins in the following example, you need to call this function once for the lib/tulip folder,
+  * To load all the plugins in the following example, you need to call this function once for the
+  *lib/tulip folder,
   * once for the glyph folder, and once for the interactors folder.
   *
   * lib/tulip/
@@ -66,7 +68,7 @@ public:
   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
-  static void loadPlugins(PluginLoader *loader = NULL, const std::string& pluginPath = "");
+  static void loadPlugins(PluginLoader *loader = NULL, const std::string &pluginPath = "");
 
   /**
   * @brief Recursively loads plugins from a root directory.
@@ -83,17 +85,18 @@ public:
 
   *
   **/
-  static void loadPluginsFromDir(const std::string& rootPath, PluginLoader *loader = NULL);
+  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = NULL);
 
   /**
    * @brief Loads a single plugin library.
    *
    * @param filename The name of the plugin file to load.
-   * @param loader A loader to report what is going on (only its loaded or aborted functions will be called) Defaults to NULL.
+   * @param loader A loader to report what is going on (only its loaded or aborted functions will be
+   *called) Defaults to NULL.
    * @return bool Whether the plugin was sucessfully loaded.
    **/
-  static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = NULL);
-#endif //EMSCRIPTEN
+  static bool loadPluginLibrary(const std::string &filename, PluginLoader *loader = NULL);
+#endif // EMSCRIPTEN
 
   /**
    * @brief Gets the name of the plug-in library being loaded.
@@ -101,7 +104,7 @@ public:
    *
    * @return :string& The name of the plugin library being loaded.
    **/
-  static const std::string& getCurrentPluginFileName() {
+  static const std::string &getCurrentPluginFileName() {
     return getInstance()->currentPluginLibrary;
   }
 
@@ -111,22 +114,21 @@ private:
   bool initPluginDir(PluginLoader *loader, bool recursive = false);
 #endif
 
-  static PluginLibraryLoader* getInstance() {
-    if(_instance == NULL) {
+  static PluginLibraryLoader *getInstance() {
+    if (_instance == NULL) {
       _instance = new PluginLibraryLoader();
     }
 
     return _instance;
   }
-  static PluginLibraryLoader* _instance;
+  static PluginLibraryLoader *_instance;
 
   std::string message;
   std::string pluginPath;
   std::string currentPluginLibrary;
 };
-
 }
 
-#endif //PLUGINLIBLOADER_H
+#endif // PLUGINLIBLOADER_H
 
 ///@endcond

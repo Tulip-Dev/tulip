@@ -34,13 +34,13 @@ class DoubleStringsListRelationDialog : public QDialog {
 
   Q_OBJECT
 
-  Ui::DoubleStringsListRelationDialogData* _ui;
+  Ui::DoubleStringsListRelationDialogData *_ui;
 
-public :
-
-  DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,const std::vector<Color> &secondValues,QWidget *parent = 0);
+public:
+  DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,
+                                  const std::vector<Color> &secondValues, QWidget *parent = 0);
   ~DoubleStringsListRelationDialog();
-  void getResult(std::vector<std::pair<std::string,Color> > &result);
+  void getResult(std::vector<std::pair<std::string, Color> > &result);
 
 private slots:
   void upButtonClicked();
@@ -49,7 +49,6 @@ private slots:
   void downButtonColorClicked();
   void scrollBarValueChanged(int value);
 };
-
 }
 
 #endif /* DOUBLESTRINGSLISTRELATIONDIALOG_H_ */

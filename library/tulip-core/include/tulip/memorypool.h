@@ -29,14 +29,14 @@
 #endif
 
 #ifdef _OPENMP
-#define THREAD_NUMBER  omp_get_thread_num()
+#define THREAD_NUMBER omp_get_thread_num()
 static const size_t MAXNBTHREADS = 128;
 #else
 #define THREAD_NUMBER 0
 static const size_t MAXNBTHREADS = 1;
 #endif
 
-static const size_t BUFFOBJ      = 20;
+static const size_t BUFFOBJ = 20;
 
 namespace tlp {
 /**
@@ -69,55 +69,52 @@ namespace tlp {
   * @endcode
   *
   */
-template <typename  TYPE >
+template <typename TYPE>
 class MemoryPool {
 public:
-  MemoryPool() {
-  }
+  MemoryPool() {}
 
 #ifndef NDEBUG
-  inline void *operator new( size_t sizeofObj) {
+  inline void *operator new(size_t sizeofObj) {
 #else
-  inline void *operator new( size_t ) {
+  inline void *operator new(size_t) {
 #endif
-    assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
-    TYPE * t;
+    assert(sizeof(TYPE) == sizeofObj); // to prevent inheritance with different size of object
+    TYPE *t;
     t = _memoryChunkManager.getObject(THREAD_NUMBER);
     return t;
   }
 
-  inline void operator delete( void *p ) {
+  inline void operator delete(void *p) {
     _memoryChunkManager.releaseObject(THREAD_NUMBER, p);
   }
-private:
 
+private:
   class MemoryChunkManager {
   public:
-
     ~MemoryChunkManager() {
-      for (unsigned int i = 0 ; i < MAXNBTHREADS ; ++i) {
-        for (size_t j = 0 ; j < _allocatedChunks[i].size() ; ++j) {
+      for (unsigned int i = 0; i < MAXNBTHREADS; ++i) {
+        for (size_t j = 0; j < _allocatedChunks[i].size(); ++j) {
           free(_allocatedChunks[i][j]);
         }
       }
     }
 
-    TYPE* getObject(size_t threadId) {
+    TYPE *getObject(size_t threadId) {
       TYPE *result;
 
       if (_freeObject[threadId].empty()) {
         void *chunk = malloc(BUFFOBJ * sizeof(TYPE));
-        TYPE * p = static_cast<TYPE *>(chunk);
+        TYPE *p = static_cast<TYPE *>(chunk);
         _allocatedChunks[threadId].push_back(chunk);
 
-        for (size_t j=0; j< BUFFOBJ - 1; ++j) {
+        for (size_t j = 0; j < BUFFOBJ - 1; ++j) {
           _freeObject[threadId].push_back(static_cast<void *>(p));
           p += 1;
         }
 
         result = p;
-      }
-      else {
+      } else {
         result = static_cast<TYPE *>(_freeObject[threadId].back());
         _freeObject[threadId].pop_back();
       }
@@ -130,18 +127,15 @@ private:
     }
 
   private:
-    std::vector<void * > _allocatedChunks[MAXNBTHREADS];
-    std::vector<void * > _freeObject[MAXNBTHREADS];
-
+    std::vector<void *> _allocatedChunks[MAXNBTHREADS];
+    std::vector<void *> _freeObject[MAXNBTHREADS];
   };
 
   static MemoryChunkManager _memoryChunkManager;
-
 };
 
-template <typename  TYPE >
+template <typename TYPE>
 typename MemoryPool<TYPE>::MemoryChunkManager MemoryPool<TYPE>::_memoryChunkManager;
-
 }
 #endif // MEMORYPOOL_H
 ///@endcond

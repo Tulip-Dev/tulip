@@ -22,7 +22,7 @@
 
 namespace tlp {
 
-template<typename PROPTYPE>
+template <typename PROPTYPE>
 void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   _properties.clear();
 
@@ -30,73 +30,80 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
     return;
 
   std::string propName;
-  forEach(propName,_graph->getInheritedProperties()) {
+  forEach(propName, _graph->getInheritedProperties()) {
 #ifdef NDEBUG
 
     if (propName == "viewMetaGraph")
       continue;
 
 #endif
-    PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
+    PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(propName));
 
     if (prop != NULL) {
-      _properties+=prop;
+      _properties += prop;
     }
   }
-  forEach(propName,_graph->getLocalProperties()) {
+  forEach(propName, _graph->getLocalProperties()) {
 #ifdef NDEBUG
 
     if (propName == "viewMetaGraph")
       continue;
 
 #endif
-    PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
+    PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(propName));
 
     if (prop != NULL) {
-      _properties+=prop;
+      _properties += prop;
     }
   }
 }
 
-template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _checkable(checkable), _removingRows(false), forcingRedraw(false) {
+template <typename PROPTYPE>
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph *graph, bool checkable,
+                                                     QObject *parent)
+    : tlp::TulipModel(parent), _graph(graph), _checkable(checkable), _removingRows(false),
+      forcingRedraw(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
   }
 }
 
-template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable), _removingRows(false), forcingRedraw(false) {
+template <typename PROPTYPE>
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph *graph,
+                                                     bool checkable, QObject *parent)
+    : tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable),
+      _removingRows(false), forcingRedraw(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
   }
 }
 
-template<typename PROPTYPE>
-QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QModelIndex &parent) const {
-  if (_graph == NULL || !hasIndex(row,column,parent))
+template <typename PROPTYPE>
+QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,
+                                                  const QModelIndex &parent) const {
+  if (_graph == NULL || !hasIndex(row, column, parent))
     return QModelIndex();
 
   int vectorIndex = row;
 
   if (!_placeholder.isEmpty()) {
     if (row == 0)
-      return createIndex(row,column);
+      return createIndex(row, column);
 
     vectorIndex--;
   }
 
-  return createIndex(row,column,_properties[vectorIndex]);
+  return createIndex(row, column, _properties[vectorIndex]);
 }
 
-template<typename PROPTYPE>
+template <typename PROPTYPE>
 QModelIndex GraphPropertiesModel<PROPTYPE>::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 
-template<typename PROPTYPE>
+template <typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
   if (parent.isValid() || _graph == NULL || forcingRedraw)
     return 0;
@@ -109,17 +116,17 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
   return result;
 }
 
-template<typename PROPTYPE>
+template <typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::columnCount(const QModelIndex &) const {
   return 3;
 }
 
-template<typename PROPTYPE>
+template <typename PROPTYPE>
 QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role) const {
   if (_graph == NULL || (index.internalPointer() == NULL && index.row() != 0))
     return QVariant();
 
-  PropertyInterface* pi = static_cast<PropertyInterface*>(index.internalPointer());
+  PropertyInterface *pi = static_cast<PropertyInterface *>(index.internalPointer());
 
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
     if (!_placeholder.isEmpty() && index.row() == 0)
@@ -133,10 +140,14 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
     else if (index.column() == 1)
       return pi->getTypename().c_str();
     else if (index.column() == 2)
-      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" + tlpStringToQString(pi->getGraph()->getName()) + ')');
+      return (_graph->existLocalProperty(pi->getName())
+                  ? trUtf8("Local")
+                  : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" +
+                        tlpStringToQString(pi->getGraph()->getName()) + ')');
   }
 
-  else if (role == Qt::DecorationRole && index.column() == 0 && pi != NULL && !_graph->existLocalProperty(pi->getName()))
+  else if (role == Qt::DecorationRole && index.column() == 0 && pi != NULL &&
+           !_graph->existLocalProperty(pi->getName()))
     return QIcon(":/tulip/gui/ui/inherited_properties.png");
 
   else if (role == Qt::FontRole) {
@@ -146,19 +157,17 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
       f.setItalic(true);
 
     return f;
-  }
-  else if (role == PropertyRole) {
-    return QVariant::fromValue<PropertyInterface*>(pi);
-  }
-  else if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
-    return (_checkedProperties.contains(static_cast<PROPTYPE*>(pi)) ? Qt::Checked : Qt::Unchecked);
+  } else if (role == PropertyRole) {
+    return QVariant::fromValue<PropertyInterface *>(pi);
+  } else if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
+    return (_checkedProperties.contains(static_cast<PROPTYPE *>(pi)) ? Qt::Checked : Qt::Unchecked);
   }
 
   return QVariant();
 }
 
-template<typename PROPTYPE>
-int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
+template <typename PROPTYPE>
+int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE *pi) const {
   int result = _properties.indexOf(pi);
 
   if (!_placeholder.isEmpty())
@@ -167,9 +176,9 @@ int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
   return result;
 }
 
-template<typename PROPTYPE>
-int GraphPropertiesModel<PROPTYPE>::rowOf(const QString& pName) const {
-  for(int i = 0; i < _properties.size(); ++i) {
+template <typename PROPTYPE>
+int GraphPropertiesModel<PROPTYPE>::rowOf(const QString &pName) const {
+  for (int i = 0; i < _properties.size(); ++i) {
     if (pName == tlpStringToQString(_properties[i]->getName()))
       return i;
   }
@@ -177,8 +186,9 @@ int GraphPropertiesModel<PROPTYPE>::rowOf(const QString& pName) const {
   return -1;
 }
 
-template<typename PROPTYPE>
-QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orientation orientation, int role) const {
+template <typename PROPTYPE>
+QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orientation orientation,
+                                                         int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
       if (section == 0)
@@ -190,19 +200,20 @@ QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orient
     }
   }
 
-  return TulipModel::headerData(section,orientation,role);
+  return TulipModel::headerData(section, orientation, role);
 }
 
-template<typename PROPTYPE>
-bool tlp::GraphPropertiesModel<PROPTYPE>::setData(const QModelIndex &index, const QVariant &value, int role) {
+template <typename PROPTYPE>
+bool tlp::GraphPropertiesModel<PROPTYPE>::setData(const QModelIndex &index, const QVariant &value,
+                                                  int role) {
   if (_graph == NULL)
     return false;
 
   if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
     if (value.value<int>() == int(Qt::Checked))
-      _checkedProperties.insert(static_cast<PROPTYPE*>(index.internalPointer()));
+      _checkedProperties.insert(static_cast<PROPTYPE *>(index.internalPointer()));
     else
-      _checkedProperties.remove(static_cast<PROPTYPE*>(index.internalPointer()));
+      _checkedProperties.remove(static_cast<PROPTYPE *>(index.internalPointer()));
 
     emit checkStateChanged(index, static_cast<Qt::CheckState>(value.value<int>()));
     return true;
@@ -210,5 +221,4 @@ bool tlp::GraphPropertiesModel<PROPTYPE>::setData(const QModelIndex &index, cons
 
   return false;
 }
-
 }

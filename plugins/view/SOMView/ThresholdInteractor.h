@@ -41,22 +41,20 @@ class GlLabel;
 
 class Slider {
 public:
-  virtual ~Slider() {
-  }
+  virtual ~Slider() {}
 
   virtual float getLeftBound() = 0;
   virtual float getRightBound() = 0;
   virtual void beginShift() = 0;
-  virtual void shift(float shift)=0;
+  virtual void shift(float shift) = 0;
   virtual void endShift() = 0;
 };
 
-class ColorScaleSlider: public Slider, public GlComposite, public Observable {
+class ColorScaleSlider : public Slider, public GlComposite, public Observable {
 public:
-  enum SliderWay {
-    ToLeft, ToRight
-  };
-  ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScale *colorScale,const std::string& textureName);
+  enum SliderWay { ToLeft, ToRight };
+  ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScale *colorScale,
+                   const std::string &textureName);
   ~ColorScaleSlider();
   void draw(float lod, tlp::Camera *camera);
   void setColor(Color c);
@@ -69,8 +67,8 @@ public:
   SliderWay getWay() {
     return way;
   }
-  void setLinkedSlider(ColorScaleSlider* linkedSlider);
-  ColorScaleSlider* getLinkedSlider() {
+  void setLinkedSlider(ColorScaleSlider *linkedSlider);
+  ColorScaleSlider *getLinkedSlider() {
     return linkedSlider;
   }
   float getLeftBound();
@@ -84,11 +82,11 @@ public:
   }
 
   void setValue(double value);
-  void update(std::set<Observable *>::iterator begin,
-              std::set<Observable *>::iterator end);
+  void update(std::set<Observable *>::iterator begin, std::set<Observable *>::iterator end);
   void observableDestroyed(Observable *);
+
 protected:
-  void buildComposite(const std::string& textureName);
+  void buildComposite(const std::string &textureName);
   void updatePosition();
   void computeBoundingBox();
   SliderWay way;
@@ -97,16 +95,16 @@ protected:
   GlPolygon *arrow;
   GlQuad *rect;
   GlLabel *label;
-  ColorScaleSlider* linkedSlider;
+  ColorScaleSlider *linkedSlider;
   GlLabelledColorScale *linkedScale;
 
   float currentShift;
 };
 
-class SliderBar: public Slider, public tlp::GlSimpleEntity {
+class SliderBar : public Slider, public tlp::GlSimpleEntity {
 
 public:
-  SliderBar(ColorScaleSlider* left, ColorScaleSlider* right,const std::string& textureName);
+  SliderBar(ColorScaleSlider *left, ColorScaleSlider *right, const std::string &textureName);
   ~SliderBar();
   float getLeftBound();
   float getRightBound();
@@ -118,33 +116,35 @@ public:
   void setWithXML(const std::string &, unsigned int &) {}
 
 protected:
-  ColorScaleSlider* left;
-  ColorScaleSlider* right;
+  ColorScaleSlider *left;
+  ColorScaleSlider *right;
   std::string texture;
   bool isVisible;
 };
 
-class ThresholdInteractor: public EditColorScaleInteractor {
+class ThresholdInteractor : public EditColorScaleInteractor {
 public:
   ThresholdInteractor();
   virtual ~ThresholdInteractor();
   bool draw(tlp::GlMainWidget *glMainWidget);
   bool eventFilter(QObject *, QEvent *);
   void setView(View *view);
+
 protected:
-  bool screenSizeChanged(SOMView* somView);
-  void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::NumericProperty *newProperty);
+  bool screenSizeChanged(SOMView *somView);
+  void propertyChanged(SOMView *somView, const std::string &propertyName,
+                       tlp::NumericProperty *newProperty);
   void performSelection(SOMView *somView, Iterator<node> *it);
-  void buildSliders(SOMView* somView);
+  void buildSliders(SOMView *somView);
   void clearSliders();
-  void generateSliderTexture(tlp::GlMainWidget* widget);
+  void generateSliderTexture(tlp::GlMainWidget *widget);
 
   tlp::GlLayer *layer;
 
   Slider *mouvingSlider;
   ColorScaleSlider *rSlider;
   ColorScaleSlider *lSlider;
-  SliderBar* bar;
+  SliderBar *bar;
   bool startDrag;
   int XPosCursor;
 

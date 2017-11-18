@@ -18,7 +18,7 @@
  */
 namespace tlp {
 
-template<typename T>
+template <typename T>
 void TulipItemDelegate::registerCreator(tlp::TulipItemEditorCreator *c) {
   int id = qMetaTypeId<T>();
 
@@ -28,7 +28,7 @@ void TulipItemDelegate::registerCreator(tlp::TulipItemEditorCreator *c) {
   _creators[id] = c;
 }
 
-template<typename T>
+template <typename T>
 void TulipItemDelegate::unregisterCreator() {
   int id = qMetaTypeId<T>();
 
@@ -38,9 +38,8 @@ void TulipItemDelegate::unregisterCreator() {
   }
 }
 
-template<typename T>
-tlp::TulipItemEditorCreator* TulipItemDelegate::creator() const {
+template <typename T>
+tlp::TulipItemEditorCreator *TulipItemDelegate::creator() const {
   return creator(qMetaTypeId<T>());
 }
-
 }

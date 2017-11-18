@@ -28,9 +28,9 @@ using namespace std;
 namespace tlp {
 
 GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
-                           const float thickness, Orientation orientation) :
-  colorScale(colorScale), baseCoord(baseCoord), length(length),
-  thickness(thickness), colorScalePolyQuad(NULL),orientation(orientation) {
+                           const float thickness, Orientation orientation)
+    : colorScale(colorScale), baseCoord(baseCoord), length(length), thickness(thickness),
+      colorScalePolyQuad(NULL), orientation(orientation) {
   colorScale->addListener(this);
   updateDrawing();
 }
@@ -39,7 +39,7 @@ GlColorScale::~GlColorScale() {
   delete colorScalePolyQuad;
 }
 
-void GlColorScale::setColorScale(ColorScale * scale) {
+void GlColorScale::setColorScale(ColorScale *scale) {
   colorScale->removeListener(this);
   colorScale = scale;
   colorScale->addListener(this);
@@ -64,23 +64,27 @@ void GlColorScale::updateDrawing() {
   map<float, Color> colorMap = colorScale->getColorMap();
   Coord currentMin, currentMax;
 
-  for (map<float, Color>::iterator colorMapIt = colorMap.begin(); colorMapIt != colorMap.end(); ++colorMapIt) {
+  for (map<float, Color>::iterator colorMapIt = colorMap.begin(); colorMapIt != colorMap.end();
+       ++colorMapIt) {
     if (orientation == Vertical) {
-      currentMin.set(baseCoord.getX() - thickness / 2, baseCoord.getY() + colorMapIt->first * length);
-      currentMax.set(baseCoord.getX() + thickness / 2, baseCoord.getY() + colorMapIt->first * length);
-    }
-    else {
-      currentMin.set(baseCoord.getX() + colorMapIt->first * length, baseCoord.getY() - thickness / 2, 0);
-      currentMax.set(baseCoord.getX() + colorMapIt->first * length, baseCoord.getY() + thickness / 2, 0);
+      currentMin.set(baseCoord.getX() - thickness / 2,
+                     baseCoord.getY() + colorMapIt->first * length);
+      currentMax.set(baseCoord.getX() + thickness / 2,
+                     baseCoord.getY() + colorMapIt->first * length);
+    } else {
+      currentMin.set(baseCoord.getX() + colorMapIt->first * length,
+                     baseCoord.getY() - thickness / 2, 0);
+      currentMax.set(baseCoord.getX() + colorMapIt->first * length,
+                     baseCoord.getY() + thickness / 2, 0);
     }
 
-    colorScalePolyQuad->addQuadEdge(currentMin, currentMax,colorMapIt->second);
+    colorScalePolyQuad->addQuadEdge(currentMin, currentMax, colorMapIt->second);
   }
 
   boundingBox = colorScalePolyQuad->getBoundingBox();
 }
 
-void GlColorScale::draw(float lod, Camera* camera) {
+void GlColorScale::draw(float lod, Camera *camera) {
   if (colorScalePolyQuad != NULL) {
     colorScalePolyQuad->draw(lod, camera);
   }
@@ -91,18 +95,17 @@ Color GlColorScale::getColorAtPos(Coord pos) {
 
   if (orientation == GlColorScale::Vertical) {
     position = (pos.getY() - baseCoord.getY()) / length;
-  }
-  else {
+  } else {
     position = (pos.getX() - baseCoord.getX()) / length;
   }
 
-  //Ensure to always have a valid position.
-  if(position<0) {
-    position=0;
+  // Ensure to always have a valid position.
+  if (position < 0) {
+    position = 0;
   }
 
-  if(position>1) {
-    position=1;
+  if (position > 1) {
+    position = 1;
   }
 
   return colorScale->getColorAtPos(position);
@@ -115,5 +118,4 @@ void GlColorScale::translate(const Coord &move) {
     boundingBox = colorScalePolyQuad->getBoundingBox();
   }
 }
-
 }

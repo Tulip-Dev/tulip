@@ -40,8 +40,7 @@ class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject, public QGraphicsRect
   Q_OBJECT
 
 public:
-
-  GlOverviewGraphicsItem(GlMainView *view,GlScene &scene);
+  GlOverviewGraphicsItem(GlMainView *view, GlScene &scene);
   ~GlOverviewGraphicsItem();
 
   void setSize(unsigned int width, unsigned int height);
@@ -60,17 +59,16 @@ public:
     _frameWidth = width;
   }
 
-  void setLayerVisible(const std::string &name,bool visible);
+  void setLayerVisible(const std::string &name, bool visible);
 
-public slots :
+public slots:
 
   void draw(bool generatePixmap);
 
-private :
-
-  void mousePressEvent(QGraphicsSceneMouseEvent* event);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+private:
+  void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
   void setScenePosition(QPointF pos);
 
   GlMainView *view;
@@ -90,9 +88,7 @@ private :
 
   Color _frameColor;
   int _frameWidth;
-
 };
-
 }
 
 #endif // GLOVERVIEWGRAPHICSITEM_H

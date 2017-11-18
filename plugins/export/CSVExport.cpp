@@ -28,25 +28,29 @@ PLUGIN(CsvExport)
 using namespace tlp;
 using namespace std;
 
-static const char * paramHelp[] = {
-  // the type of element to export
-  "This parameter enables to choose the type of graph elements to export",
-  // export selection
-  "This parameter indicates if only selected elements have to be exported",
-  // export selection property
-  "This parameters enables to choose the property used for the selection",
-  // export id of graph elements
-  "This parameter indicates if the id of graph elements has to be exported",
-  // export visual properties selection
-  "This parameter indicates if the visual properties of Tulip will be exported",
-  // the field separator
-  "This parameter indicates the field separator (sequence of one or more characters used to specify the boundary between two consecutive fields).",
-  // the field separator custom value
-  "This parameter allows to indicate a custom field separator. The 'Field separator' parameter must be set to 'Custom'",
-  // the text delimiter
-  "This parameter indicates the text delimiter (sequence of one or more characters used to specify the boundary of value of type text).",
-  // the decimal mark
-  "This parameter indicates the character used to separate the integer part from the fractional part of a number written in decimal form.",
+static const char *paramHelp[] = {
+    // the type of element to export
+    "This parameter enables to choose the type of graph elements to export",
+    // export selection
+    "This parameter indicates if only selected elements have to be exported",
+    // export selection property
+    "This parameters enables to choose the property used for the selection",
+    // export id of graph elements
+    "This parameter indicates if the id of graph elements has to be exported",
+    // export visual properties selection
+    "This parameter indicates if the visual properties of Tulip will be exported",
+    // the field separator
+    "This parameter indicates the field separator (sequence of one or more characters used to "
+    "specify the boundary between two consecutive fields).",
+    // the field separator custom value
+    "This parameter allows to indicate a custom field separator. The 'Field separator' parameter "
+    "must be set to 'Custom'",
+    // the text delimiter
+    "This parameter indicates the text delimiter (sequence of one or more characters used to "
+    "specify the boundary of value of type text).",
+    // the decimal mark
+    "This parameter indicates the character used to separate the integer part from the fractional "
+    "part of a number written in decimal form.",
 };
 
 #define ELT_TYPE "Type of elements"
@@ -79,7 +83,7 @@ static const char * paramHelp[] = {
 #define DECIMAL_MARKS " . ; , "
 
 //================================================================================
-CsvExport::CsvExport(const PluginContext *context):ExportModule(context) {
+CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
   addInParameter<bool>(EXPORT_SELECTION, paramHelp[1], "false");
   addInParameter<BooleanProperty>("Export selection property", paramHelp[2], "viewSelection");
@@ -95,7 +99,7 @@ CsvExport::CsvExport(const PluginContext *context):ExportModule(context) {
 // define a special facet to force the output
 // of a comma as decimal mark
 struct decimal_comma : std::numpunct<char> {
-  char do_decimal_point()   const {
+  char do_decimal_point() const {
     return ',';
   }
 };
@@ -155,7 +159,6 @@ bool CsvExport::exportGraph(std::ostream &os) {
       default:
         fieldSeparator = fieldSeparatorCustom;
       }
-
     }
 
     if (dataSet->get(STRING_DELIMITER, stringDelimiters))
@@ -192,14 +195,14 @@ bool CsvExport::exportGraph(std::ostream &os) {
   vector<bool> propIsString;
   unsigned int nbProps = 0;
 
-  while(it->hasNext()) {
-    PropertyInterface* prop = it->next();
-    const string& propName = prop->getName();
+  while (it->hasNext()) {
+    PropertyInterface *prop = it->next();
+    const string &propName = prop->getName();
 
     if (propName.compare(0, 4, "view") != 0 || exportVisualProperties) {
       ++nbProps;
       props.push_back(prop);
-      propIsString.push_back(dynamic_cast<tlp::StringProperty*>(prop));
+      propIsString.push_back(dynamic_cast<tlp::StringProperty *>(prop));
 
       if (!first)
         os << fieldSeparator;
@@ -214,9 +217,9 @@ bool CsvExport::exportGraph(std::ostream &os) {
   os << endl;
 
   // export nodes
-  BooleanProperty* prop = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty *prop = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if(exportSelection && dataSet != NULL) {
+  if (exportSelection && dataSet != NULL) {
     dataSet->get("Export selection property", prop);
   }
 
@@ -228,18 +231,18 @@ bool CsvExport::exportGraph(std::ostream &os) {
     std::locale::global(std::locale(prevLocale, new decimal_comma));
 
   if (eltType != EDGE_TYPE) {
-    Iterator<node>* it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
+    Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
-    while(it->hasNext()) {
+    while (it->hasNext()) {
       node n = it->next();
 
       if (exportId) {
-        os << n ;
+        os << n;
 
         if (eltType == BOTH_TYPES)
           os << fieldSeparator << fieldSeparator;
 
-        if (nbProps>0)
+        if (nbProps > 0)
           os << fieldSeparator;
       }
 
@@ -266,20 +269,19 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
   // export edges
   if (eltType != NODE_TYPE) {
-    Iterator<edge>* it =
-      exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
+    Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
 
-    while(it->hasNext()) {
+    while (it->hasNext()) {
       edge e = it->next();
 
       if (exportId) {
         if (eltType == BOTH_TYPES)
           os << fieldSeparator;
 
-        const std::pair<node, node>& ends = graph->ends(e);
+        const std::pair<node, node> &ends = graph->ends(e);
         os << ends.first << fieldSeparator << ends.second.id;
 
-        if (nbProps>0)
+        if (nbProps > 0)
           os << fieldSeparator;
       }
 

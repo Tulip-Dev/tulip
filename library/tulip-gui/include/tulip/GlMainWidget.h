@@ -20,7 +20,6 @@
 #ifndef Tulip_GLMAINWIDGET_H
 #define Tulip_GLMAINWIDGET_H
 
-
 #include <QGLWidget>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QWindow>
@@ -73,10 +72,15 @@ public:
     * @see render
     **/
   enum RenderingOption {
-    RenderScene=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
-    SwapBuffers=0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled it's up to you to call the swapBuffer function. **/
+    RenderScene = 0x1, /** Force to render the graph even if there is a previous buffered render.
+                          You need to call this option if the graph is updated to regenerate the
+                          buffer. If not set try to use the last buffered graph render, if there is
+                          no valid buffer this flag is forced. **/
+    SwapBuffers =
+        0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled
+               it's up to you to call the swapBuffer function. **/
   };
-  Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption )
+  Q_DECLARE_FLAGS(RenderingOptions, RenderingOption)
 
   /**
    * @brief Constructor of GlMainWidget
@@ -85,7 +89,7 @@ public:
    * @param parent Qt Widget parent system
    * @param view if you want to link this GlMainWidget to a view : use this parameter
    */
-  GlMainWidget(QWidget *parent=NULL, View *view=NULL);
+  GlMainWidget(QWidget *parent = NULL, View *view = NULL);
   ~GlMainWidget();
 
   /**
@@ -96,7 +100,7 @@ public:
    * @see GlScene::createLayer(const std::string &name)
    * @see GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name)
    */
-  tlp::GlScene* getScene() {
+  tlp::GlScene *getScene() {
     return &scene;
   }
 
@@ -110,10 +114,10 @@ public:
    *  @param pickNodes enable or disable the picking of nodes
    *  @param pickEdges enable or disable the picking of edges
    */
-  void pickNodesEdges(const int x, const int y,
-                      const int width, const int height,
-                      std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
-                      tlp::GlLayer* layer=NULL, bool pickNodes=true, bool pickEdges=true);
+  void pickNodesEdges(const int x, const int y, const int width, const int height,
+                      std::vector<SelectedEntity> &selectedNodes,
+                      std::vector<SelectedEntity> &selectedEdges, tlp::GlLayer *layer = NULL,
+                      bool pickNodes = true, bool pickEdges = true);
 
   /** @brief Select a node or edge at a screen point
    *  Try to select at point (x,y) a node in the first place then if no result try to select an edge
@@ -123,27 +127,21 @@ public:
    *  @param pickEdges enable or disable the picking of edges
    *  @return true if something has been found, false otherwise
    */
-  bool pickNodesEdges(const int x, const int y,
-                      SelectedEntity &selectedEntity,
-                      tlp::GlLayer* layer=NULL,
-                      bool pickNodes=true, bool pickEdges=true);
+  bool pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity,
+                      tlp::GlLayer *layer = NULL, bool pickNodes = true, bool pickEdges = true);
 
   /**
    * @deprecated this function should not be used anymore, use pickNodesEdges()
    */
-  _DEPRECATED void doSelect(const int x, const int y,
-                            const int width, const int height,
+  _DEPRECATED void doSelect(const int x, const int y, const int width, const int height,
                             std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
-                            tlp::GlLayer* layer=NULL);
+                            tlp::GlLayer *layer = NULL);
 
   /**
    * @deprecated this function should not be used anymore, use pickNodesEdges()
    */
-  _DEPRECATED bool doSelect(const int x, const int y,
-                            tlp::ElementType &type,
-                            tlp::node &n,tlp::edge &e,
-                            tlp::GlLayer* layer=NULL);
-
+  _DEPRECATED bool doSelect(const int x, const int y, tlp::ElementType &type, tlp::node &n,
+                            tlp::edge &e, tlp::GlLayer *layer = NULL);
 
   /**
    * @brief convert a screen measure into a viewport measure
@@ -176,7 +174,7 @@ public:
    * @param a point in screen coordinates
    * @return the converted point in viewport coordinates
    */
-  Coord screenToViewport(const Coord& point) {
+  Coord screenToViewport(const Coord &point) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
     return Coord(point.x() * dpr, point.y() * dpr);
@@ -203,7 +201,7 @@ public:
    * @param a point in viewport coordinates
    * @return the converted point in screen coordinates
    */
-  Coord viewportToScreen(const Coord& point) {
+  Coord viewportToScreen(const Coord &point) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
     return Coord(point.x() / dpr, point.y() / dpr);
@@ -219,13 +217,15 @@ public:
   /**
    * @brief SVG output of the GlMainWidget
    */
-  bool outputSVG(int size, const char* filename);
+  bool outputSVG(int size, const char *filename);
 
   /**
    * @brief Compute texture size in power of two with given height and width
-   * For example if you set width to 94 and height to 256, this function set textureRealWidth to 128 and textureRealHeight to 256
+   * For example if you set width to 94 and height to 256, this function set textureRealWidth to 128
+   * and textureRealHeight to 256
    */
-  static void getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight);
+  static void getTextureRealSize(int width, int height, int &textureRealWidth,
+                                 int &textureRealHeight);
 
   /**
    * @brief Take a snapshot of the Widget and put it in an OpenGl texture
@@ -234,14 +234,14 @@ public:
    * You can use this texture with Tulip texture system
    * @see GlTextureManager
    */
-  QGLFramebufferObject *createTexture(const std::string &textureName,int width, int height);
+  QGLFramebufferObject *createTexture(const std::string &textureName, int width, int height);
   /**
    * @brief Take a snapshot of the Widget and put it in a picture
    * @param width size
    * @param height size
    * @param center if true this function call a centerScene() before picture output
    */
-  void createPicture(const std::string &pictureName,int width, int height,bool center=true);
+  void createPicture(const std::string &pictureName, int width, int height, bool center = true);
 
   /**
    * Take a snapshot of the Widget and return it
@@ -249,7 +249,7 @@ public:
    * @param height size
    * @param center if true this function call a centerScene() before picture output
    */
-  QImage createPicture(int width, int height, bool center=true);
+  QImage createPicture(int width, int height, bool center = true);
 
   /**
    * @brief Function to do picking on entities in a screen region
@@ -261,11 +261,8 @@ public:
    * @param pickedEntities filled with entity under the selection screen rectangle
    * @param layer if you want to do the selection only on one GlLayer
    */
-  bool pickGlEntities(const int x, const int y,
-                      const int width, const int height,
-                      std::vector<SelectedEntity>
-                      &pickedEntities,
-                      tlp::GlLayer* layer=NULL);
+  bool pickGlEntities(const int x, const int y, const int width, const int height,
+                      std::vector<SelectedEntity> &pickedEntities, tlp::GlLayer *layer = NULL);
   /**
    * @brief Function to do picking on entities.
    * It just calls selectEntities on the GlScene instance with a small window of twelve pixels.
@@ -274,26 +271,23 @@ public:
    * @param pickedEntities filled with entity under the selection screen rectangle
    * @param layer if you want to do the selection only on one GlLayer
    */
-  bool pickGlEntities(const int x, const int y,
-                      std::vector<SelectedEntity>
-                      &pickedEntities,
-                      tlp::GlLayer* layer=NULL);
+  bool pickGlEntities(const int x, const int y, std::vector<SelectedEntity> &pickedEntities,
+                      tlp::GlLayer *layer = NULL);
 
   /**
    * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
    */
-  _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    const int width, const int height,
-                                    std::vector<GlSimpleEntity*> &pickedEntities,
-                                    tlp::GlLayer* layer=NULL) {
+  _DEPRECATED bool selectGlEntities(const int x, const int y, const int width, const int height,
+                                    std::vector<GlSimpleEntity *> &pickedEntities,
+                                    tlp::GlLayer *layer = NULL) {
     std::vector<SelectedEntity> entities;
-    pickGlEntities(x,y,width,height,entities,layer);
-    bool foundEntity=false;
+    pickGlEntities(x, y, width, height, entities, layer);
+    bool foundEntity = false;
 
-    for(std::vector<SelectedEntity>::iterator it=entities.begin(); it!=entities.end(); ++it) {
-      if((*it).getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED) {
+    for (std::vector<SelectedEntity>::iterator it = entities.begin(); it != entities.end(); ++it) {
+      if ((*it).getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
         pickedEntities.push_back((*it).getSimpleEntity());
-        foundEntity=true;
+        foundEntity = true;
       }
     }
 
@@ -304,16 +298,16 @@ public:
    * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    std::vector<GlSimpleEntity*> &pickedEntities,
-                                    tlp::GlLayer* layer=NULL) {
+                                    std::vector<GlSimpleEntity *> &pickedEntities,
+                                    tlp::GlLayer *layer = NULL) {
     std::vector<SelectedEntity> entities;
-    pickGlEntities(x,y,entities,layer);
-    bool foundEntity=false;
+    pickGlEntities(x, y, entities, layer);
+    bool foundEntity = false;
 
-    for(std::vector<SelectedEntity>::iterator it=entities.begin(); it!=entities.end(); ++it) {
-      if((*it).getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED) {
+    for (std::vector<SelectedEntity>::iterator it = entities.begin(); it != entities.end(); ++it) {
+      if ((*it).getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
         pickedEntities.push_back((*it).getSimpleEntity());
-        foundEntity=true;
+        foundEntity = true;
       }
     }
 
@@ -326,35 +320,39 @@ public:
    */
   virtual QImage grabFrameBuffer(bool withAlpha = false);
 
-
   /**
-   * Extend makeCurrent function of QGLWidget to inform TextureManager and DisplayListManager of context changement
+   * Extend makeCurrent function of QGLWidget to inform TextureManager and DisplayListManager of
+   * context changement
    */
   virtual void makeCurrent();
 
   /**
    * Resize openGL view
    */
-  void  resizeGL(int w, int h);
+  void resizeGL(int w, int h);
 
   /**
    * Compute interactors before drawing
    */
-  void  computeInteractors();
+  void computeInteractors();
 
   /**
    * Draw interactors
    */
-  void  drawInteractors();
+  void drawInteractors();
 
   /**
     * @brief This function performs all the rendering process of the graph.
-    * Use this function only for advanced purpose, if you want to perform simple rendering use the draw or redraw functions instead.
-    * @param options Configure the rendering process, see the RenderingOption documentation for more information on each rendering option effect.
+    * Use this function only for advanced purpose, if you want to perform simple rendering use the
+    *draw or redraw functions instead.
+    * @param options Configure the rendering process, see the RenderingOption documentation for more
+    *information on each rendering option effect.
     * @see RenderingOption
-    * @param checkVisibility If check visibility is set as true : the engine check if GlMainWidget QWidget is visible. If set at false : the engine render the scene in all cases
+    * @param checkVisibility If check visibility is set as true : the engine check if GlMainWidget
+    *QWidget is visible. If set at false : the engine render the scene in all cases
     **/
-  void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers), bool checkVisibility=true);
+  void render(RenderingOptions options = RenderingOptions(RenderScene | SwapBuffers),
+              bool checkVisibility = true);
 
   /**
    * @brief Specify if the scene point of view must be kept
@@ -370,9 +368,11 @@ public:
   /**
    * @brief Specify if an advanced technique for better scene anti-aliasing has to be activated
    *
-   * That option allows to obtain a better scene antialiasing through the use of offscreen rendering and sampling.
+   * That option allows to obtain a better scene antialiasing through the use of offscreen rendering
+   * and sampling.
    * The result rendering will look better while the performance will be slightly altered.
-   * That option is desactivated by default. Use it with caution as it could cause crashes with some buggy OpenGL drivers.
+   * That option is desactivated by default. Use it with caution as it could cause crashes with some
+   * buggy OpenGL drivers.
    */
   void setAdvancedAntiAliasing(bool advancedAntiAliasing) {
     this->advancedAntiAliasing = advancedAntiAliasing;
@@ -386,8 +386,7 @@ public:
   }
 
 private:
-
-  void  setupOpenGlContext();
+  void setupOpenGlContext();
   void createRenderingStore(int width, int height);
   void deleteRenderingStore();
 
@@ -408,7 +407,7 @@ public slots:
   /**
    * Draw the GlScene and the interactors
    */
-  void draw(bool graphChanged=true);
+  void draw(bool graphChanged = true);
   /**
    * This function is given for optimisation purpose only. If the hardware enable it,
    * it enables to redraw only the Augmented display and the interactors and not the graph
@@ -418,11 +417,11 @@ public slots:
    */
   void redraw();
 
-
   void closeEvent(QCloseEvent *e);
 
   /**
-   * @brief Convenience function that call center function on the current scene, apply a zoom (if needed) and draw the view.
+   * @brief Convenience function that call center function on the current scene, apply a zoom (if
+   *needed) and draw the view.
    * Same thing than
    * @code
    * getScene()->centerScene();
@@ -435,7 +434,7 @@ public slots:
   void emitGraphChanged();
 
 protected slots:
-  void paintEvent( QPaintEvent* );
+  void paintEvent(QPaintEvent *);
 
 signals:
   /**
@@ -450,28 +449,24 @@ signals:
   /**
    * This signal is emit when GlMainWidget::draw() is call
    */
-  void viewDrawn(GlMainWidget *glWidget,bool graphChanged);
+  void viewDrawn(GlMainWidget *glWidget, bool graphChanged);
 
-  void glResized(int w,int h);
+  void glResized(int w, int h);
 
   void graphChanged();
 
-public :
-
+public:
   /**
    * This function return the first QGLWidget created
    * This function is use to share OpenGL context
    */
-  static QGLWidget* getFirstQGLWidget();
+  static QGLWidget *getFirstQGLWidget();
 
   static void clearFirstQGLWidget();
 
-private :
+private:
   static QGLWidget *firstQGLWidget;
-
 };
-
 }
-
 
 #endif

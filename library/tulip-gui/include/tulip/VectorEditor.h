@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef VECTOREDITOR_H
 #define VECTOREDITOR_H
 
@@ -31,18 +30,18 @@ namespace Ui {
 class VectorEditor;
 }
 
-class TLP_QT_SCOPE VectorEditor:public QDialog {
+class TLP_QT_SCOPE VectorEditor : public QDialog {
   Q_OBJECT
-  Ui::VectorEditor* _ui;
+  Ui::VectorEditor *_ui;
 
   int _userType;
   QVector<QVariant> currentVector;
 
 public:
-  explicit VectorEditor(QWidget* parent=0);
+  explicit VectorEditor(QWidget *parent = 0);
   ~VectorEditor();
-  void setVector(const QVector<QVariant>& d, int userType);
-  const QVector<QVariant>& vector() const {
+  void setVector(const QVector<QVariant> &d, int userType);
+  const QVector<QVariant> &vector() const {
     return currentVector;
   }
 

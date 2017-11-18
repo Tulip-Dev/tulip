@@ -47,39 +47,30 @@
  *
  *  \author David Auber University Bordeaux I France: Email:auber@labri.fr
  */
-class ConeTreeExtended:public tlp::LayoutAlgorithm {
+class ConeTreeExtended : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Cone Tree","David Auber","01/04/2001",
-                    "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
-                    "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995).",
-                    "1.0","Tree")
-  ConeTreeExtended(const tlp::PluginContext* context);
+  PLUGININFORMATION(
+      "Cone Tree", "David Auber", "01/04/2001",
+      "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
+      "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. "
+      "Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995).",
+      "1.0", "Tree")
+  ConeTreeExtended(const tlp::PluginContext *context);
   ~ConeTreeExtended();
   bool run();
+
 private:
-  double treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node,double> *posRelX,
-                     TLP_HASH_MAP<tlp::node,double> *posRelY);
-  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
-                  TLP_HASH_MAP<tlp::node,double> *py,
-                  double x, double y, int level);
+  double treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double> *posRelX,
+                     TLP_HASH_MAP<tlp::node, double> *posRelY);
+  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *px,
+                  TLP_HASH_MAP<tlp::node, double> *py, double x, double y, int level);
   void computeLayerSize(tlp::node n, unsigned int level);
   void computeYCoodinates(tlp::node root);
   tlp::Graph *tree;
-  tlp::SizeProperty * nodeSize;
+  tlp::SizeProperty *nodeSize;
   std::vector<float> yCoordinates;
   std::vector<float> levelSize;
   float spaceBetweenLevels;
-
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

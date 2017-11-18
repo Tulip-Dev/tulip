@@ -32,10 +32,10 @@ namespace tlp {
  *
  * This class provide QuadTree system
  */
-template <class TYPE> class QuadTreeNode {
+template <class TYPE>
+class QuadTreeNode {
 
 public:
-
   //======================================
   /*
      * build a new Quadtree
@@ -45,18 +45,19 @@ public:
   /**
    * Contructor, you have to put the global bounding box of the quadtree
    */
-  QuadTreeNode(const tlp::Rectangle<float> &box):_box(box) {
+  QuadTreeNode(const tlp::Rectangle<float> &box) : _box(box) {
     assert(_box.isValid());
 
-    for(int i=0; i<4; ++i)
+    for (int i = 0; i < 4; ++i)
       children[i] = 0;
   }
   /**
    * Basic destructor
    */
   ~QuadTreeNode() {
-    for(int i=0; i<4; ++i)
-      if (children[i] != NULL) delete children[i];
+    for (int i = 0; i < 4; ++i)
+      if (children[i] != NULL)
+        delete children[i];
   }
   /**
    * Insert an element in the quadtree
@@ -65,18 +66,18 @@ public:
     assert(box.isValid());
     assert(_box.isValid());
 
-    if (box[0]==box[1])
+    if (box[0] == box[1])
       return;
 
-    //Check for infini recursion : check if we are on float limit case
-    Vec2f subBox((_box[0]+_box[1])/2.f);
+    // Check for infini recursion : check if we are on float limit case
+    Vec2f subBox((_box[0] + _box[1]) / 2.f);
 
-    if( !((subBox == _box[0]) || (subBox == _box[1]))) {
-      for (int i=0; i<4; ++i) {
+    if (!((subBox == _box[0]) || (subBox == _box[1]))) {
+      for (int i = 0; i < 4; ++i) {
         if (getChildBox(i).isInside(box)) {
-          QuadTreeNode *child=getChild(i);
+          QuadTreeNode *child = getChild(i);
 
-          if(child)
+          if (child)
             child->insert(box, id);
           else
             entities.push_back(id);
@@ -99,12 +100,12 @@ public:
     assert(_box.isValid());
 
     if (_box.intersect(box)) {
-      for (size_t i=0; i<entities.size(); ++i) {
+      for (size_t i = 0; i < entities.size(); ++i) {
         result.push_back(entities[i]);
       }
 
-      for (unsigned int i=0; i<4; ++i) {
-        if (children[i]!=NULL)
+      for (unsigned int i = 0; i < 4; ++i) {
+        if (children[i] != NULL)
           children[i]->getElements(box, result);
       }
     }
@@ -114,12 +115,12 @@ public:
    * Return all elements of the quadtree
    */
   void getElements(std::vector<TYPE> &result) const {
-    for (size_t i=0; i<entities.size(); ++i) {
+    for (size_t i = 0; i < entities.size(); ++i) {
       result.push_back(entities[i]);
     }
 
-    for (unsigned int i=0; i<4; ++i) {
-      if (children[i]!=NULL)
+    for (unsigned int i = 0; i < 4; ++i) {
+      if (children[i] != NULL)
         children[i]->getElements(result);
     }
   }
@@ -133,39 +134,40 @@ public:
    * the size of box is max(1000,800) times smaller than the box given in parameter.
    * so the ratio should be 1000.(merge elements that are 1000 times smaller
    */
-  void getElementsWithRatio(const tlp::Rectangle<float> &box, std::vector<TYPE> &result, float ratio = 1000.) const {
+  void getElementsWithRatio(const tlp::Rectangle<float> &box, std::vector<TYPE> &result,
+                            float ratio = 1000.) const {
     assert(_box.isValid());
     assert(box.isValid());
 
     if (_box.intersect(box)) {
-      float xRatio = (box[1][0] - box[0][0]) / (_box[1][0] - _box[0][0]) ;
+      float xRatio = (box[1][0] - box[0][0]) / (_box[1][0] - _box[0][0]);
       float yRatio = (box[1][1] - box[0][1]) / (_box[1][1] - _box[0][1]);
 
-      //elements are big enough and all of them must be displayed
+      // elements are big enough and all of them must be displayed
       if (xRatio < ratio || yRatio < ratio) {
-        for (size_t i=0; i<entities.size(); ++i) {
+        for (size_t i = 0; i < entities.size(); ++i) {
           result.push_back(entities[i]);
         }
 
-        for (unsigned int i=0; i<4; ++i) {
-          if (children[i]!=NULL)
+        for (unsigned int i = 0; i < 4; ++i) {
+          if (children[i] != NULL)
             children[i]->getElementsWithRatio(box, result, ratio);
         }
       }
-      //elements are too small return only one elements (we must seach it)
+      // elements are too small return only one elements (we must seach it)
       else {
-        bool find=false;
+        bool find = false;
 
         if (entities.size() > 0) {
           result.push_back(entities[0]);
-          find=true;
+          find = true;
         }
 
-        if(!find) {
-          for (unsigned int i=0; i<4; ++i) {
-            if (children[i]!=NULL && children[i]->_box.intersect(box)) {
-              //if children[i]!=NULL we are sure to find an elements in that branch of the tree
-              //thus we do not have to explore the other branches.
+        if (!find) {
+          for (unsigned int i = 0; i < 4; ++i) {
+            if (children[i] != NULL && children[i]->_box.intersect(box)) {
+              // if children[i]!=NULL we are sure to find an elements in that branch of the tree
+              // thus we do not have to explore the other branches.
               children[i]->getElementsWithRatio(box, result, ratio);
               break;
             }
@@ -177,11 +179,11 @@ public:
 
 private:
   //======================================
-  QuadTreeNode* getChild(int i) {
+  QuadTreeNode *getChild(int i) {
     if (children[i] == 0) {
-      Rectangle<float> box (getChildBox(i));
+      Rectangle<float> box(getChildBox(i));
 
-      if(box[0] ==_box[0] && box[1]==_box[1])
+      if (box[0] == _box[0] && box[1] == _box[1])
         return NULL;
 
       children[i] = new QuadTreeNode<TYPE>(box);
@@ -206,7 +208,7 @@ private:
     I[0] = (_box[0][0] + _box[1][0]) / 2.;
     I[1] = _box[0][1];
     Vec2f E;
-    E[0] =  _box[0][0];
+    E[0] = _box[0][0];
     E[1] = (_box[0][1] + _box[1][1]) / 2.;
     Vec2f F;
     F[0] = I[0];
@@ -218,7 +220,7 @@ private:
     H[0] = F[0];
     H[1] = _box[1][1];
 
-    switch(i) {
+    switch (i) {
     case 0:
       return Rectangle<float>(_box[0], F);
       break;
@@ -235,7 +237,7 @@ private:
       return Rectangle<float>(E, H);
 
     default:
-      tlp::error() << "ERROR" << __PRETTY_FUNCTION__  << std::endl;
+      tlp::error() << "ERROR" << __PRETTY_FUNCTION__ << std::endl;
       exit(1);
     }
   }
@@ -244,7 +246,6 @@ private:
   std::vector<TYPE> entities;
   tlp::Rectangle<float> _box;
 };
-
 }
 
 #endif // QUADTREE_H

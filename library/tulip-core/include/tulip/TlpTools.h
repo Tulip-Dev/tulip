@@ -47,11 +47,12 @@ extern TLP_SCOPE std::string TulipShareDir;
  * The plug-ins directory can be defined in different ways, given by order of prevalence :
  * 1. the TLP_DIR environment variable, if it has a value
  * 2. the appDirPath parameter, if it is not NULL
- * 3. at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared library
+ * 3. at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared
+ * library
  *  (you must dispose of a standard Tulip installation for that feature to work).
  * 4. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on Unix.
  */
-extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
+extern TLP_SCOPE void initTulipLib(const char *appDirPath = NULL);
 
 /**
  * @ingroup Plugins
@@ -61,8 +62,7 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
  * @param hideTlp a flag to indicate if the 'tlp::' prefix
  * @return string The demangled name of a Tulip C++ class.
  */
-TLP_SCOPE std::string demangleClassName(const char *className,
-                                        bool hideTlp = false);
+TLP_SCOPE std::string demangleClassName(const char *className, bool hideTlp = false);
 
 /**
  * @ingroup Plugins
@@ -117,7 +117,8 @@ TLP_SCOPE unsigned int getSeedOfRandomSequence();
 TLP_SCOPE void initRandomSequence();
 
 /**
- * @brief Returns a random integer in the range [0, max] if max is positive or in the range [max, 0] if max is negative
+ * @brief Returns a random integer in the range [0, max] if max is positive or in the range [max, 0]
+ * if max is negative
  */
 TLP_SCOPE int randomInteger(int max);
 
@@ -142,18 +143,24 @@ TLP_SCOPE int statPath(const std::string &pathname, tlp_stat_t *buf);
 /**
  * @brief Cross-platform function to get an input file stream. Its purpose is to support
  * paths on windows platform containing non-ascii characters.
- * @param filename an utf-8 encoded string containing the path of the file to open for performing input operations
- * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode constants).
+ * @param filename an utf-8 encoded string containing the path of the file to open for performing
+ * input operations
+ * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode
+ * constants).
  */
-TLP_SCOPE std::istream *getInputFileStream(const std::string &filename, std::ios_base::openmode open_mode = std::ios::in);
+TLP_SCOPE std::istream *getInputFileStream(const std::string &filename,
+                                           std::ios_base::openmode open_mode = std::ios::in);
 
 /**
  * @brief Cross-platform function to get an output file stream. Its purpose is to support
  * paths on windows platform containing non-ascii characters.
- * @param filename an utf-8 encoded string containing the path of the file to open for performing output operations
- * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode constants).
+ * @param filename an utf-8 encoded string containing the path of the file to open for performing
+ * output operations
+ * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode
+ * constants).
  */
-TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename, std::ios_base::openmode open_mode = std::ios::out);
+TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename,
+                                            std::ios_base::openmode open_mode = std::ios::out);
 
 ///@cond DOXYGEN_HIDDEN
 // Gui test mode
@@ -161,6 +168,5 @@ TLP_SCOPE bool inGuiTestingMode();
 
 TLP_SCOPE void setGuiTestingMode(bool);
 ///@endcond
-
 }
 #endif

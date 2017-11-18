@@ -26,23 +26,24 @@ class TulipProject;
 }
 
 /*
-  This class can be used to add pre(-defined behavior to the main window before passing it to the perspective.
-  Note that no GUI modification should be done since the Perspective must be free to do anything on it
+  This class can be used to add pre(-defined behavior to the main window before passing it to the
+  perspective.
+  Note that no GUI modification should be done since the Perspective must be free to do anything on
+  it
   */
 class TulipPerspectiveProcessMainWindow : public QMainWindow {
   Q_OBJECT
-  tlp::TulipProject* _project;
+  tlp::TulipProject *_project;
   QString _title;
 
 public:
-  explicit TulipPerspectiveProcessMainWindow(QString title,
-      QWidget *parent = NULL);
-  void setProject(tlp::TulipProject* project);
+  explicit TulipPerspectiveProcessMainWindow(QString title, QWidget *parent = NULL);
+  void setProject(tlp::TulipProject *project);
 
 signals:
 
 public slots:
-  void projectFileChanged(const QString& projectFile=QString(""));
+  void projectFileChanged(const QString &projectFile = QString(""));
 
 protected:
   void closeEvent(QCloseEvent *);

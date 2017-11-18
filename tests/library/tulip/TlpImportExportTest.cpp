@@ -31,14 +31,14 @@
 using namespace std;
 using namespace tlp;
 
-static Graph* tlp_loadGraph(const std::string& filename) {
+static Graph *tlp_loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph("TLP Import", dataSet);
   return sg;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( TlpImportExportTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(TlpImportExportTest);
 
 //==========================================================
 void TlpImportExportTest::testImport() {
@@ -113,7 +113,7 @@ void TlpImportExportTest::testExportCluster() {
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
-  Graph* sg = graph->addSubGraph("\"name with double quotes \"");
+  Graph *sg = graph->addSubGraph("\"name with double quotes \"");
   sg->addNode(n1);
   sg->addNode(n2);
   ostream *os = new ofstream("export_test.tlp");
@@ -133,7 +133,7 @@ void TlpImportExportTest::testExportCluster() {
   forEach(e, graph->getEdges()) {
     CPPUNIT_ASSERT_EQUAL(e1, e);
   }
-  Graph* g;
+  Graph *g;
   forEach(g, graph->getSubGraphs()) {
     string name;
     g->getAttribute(string("name"), name);
@@ -151,11 +151,11 @@ void TlpImportExportTest::testExportAttributes() {
   bool b = true, sb = false;
   double d = 100., sd = 50.;
   Color color(1, 2, 3, 4), scolor(4, 3, 2, 1);
-  Coord coord(5., 6., 7.), scoord(0., 8. ,9.);
+  Coord coord(5., 6., 7.), scoord(0., 8., 9.);
   float f = 200., sf = 100.;
   int i = -10, si = -5;
   unsigned int ui = 10, sui = 5;
-  Size size(8., 9., 10.), ssize (10., 9., 8.);
+  Size size(8., 9., 10.), ssize(10., 9., 8.);
   string str("data"), sstr("atad");
   vector<string> sv;
   sv.push_back(str);
@@ -173,7 +173,7 @@ void TlpImportExportTest::testExportAttributes() {
   graph->setAttribute("type = string", str);
   graph->setAttribute("type = stringvector", sv);
 
-  Graph* sg = graph->addSubGraph("sg");
+  Graph *sg = graph->addSubGraph("sg");
   CPPUNIT_ASSERT_EQUAL(1u, sg->getId());
 
   // set sg attributes of different types

@@ -33,7 +33,7 @@ namespace tlp {
  *
  * @author : David Auber auber@labri.fr
  */
-template <typename Obj,unsigned int SIZE>
+template <typename Obj, unsigned int SIZE>
 struct Array {
   /**
    * @brief array The underlying array of data.
@@ -45,36 +45,36 @@ struct Array {
    * @param i The index of the element to read.
    * @return The element at index i.
    */
-  inline Obj  operator[](const unsigned int i) const;
+  inline Obj operator[](const unsigned int i) const;
 
   /**
    * @brief operator [] Write accessor.
    * @param i The index at which to write a value.
    * @return A reference to the value at index i.
    */
-  inline Obj& operator[](const unsigned int i);
+  inline Obj &operator[](const unsigned int i);
 };
 
-template <typename Obj,unsigned int SIZE>
+template <typename Obj, unsigned int SIZE>
 /**
  * @brief operator << stream operator to easily print an array, or save it to a file.
  * @param os The stream to output to.
  * @param array The array to output.
  * @return The stream to output to, to chain calls.
  */
-std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &array);
+std::ostream &operator<<(std::ostream &os, const Array<Obj, SIZE> &array);
 
-template <typename Obj,unsigned int SIZE>
+template <typename Obj, unsigned int SIZE>
 /**
  * @brief operator >> stream operator to easily read an array
  * @param is The stream to read from.
  * @param array A reference to an array, that will be written to.
  * @return The stream to read from, to chain calls.
  */
-std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &array);
+std::istream &operator>>(std::istream &is, Array<Obj, SIZE> &array);
 
-//template <typename Obj,unsigned int SIZE>
-//QDebug operator<<(QDebug dbg,const Array<Obj,SIZE>& s);
+// template <typename Obj,unsigned int SIZE>
+// QDebug operator<<(QDebug dbg,const Array<Obj,SIZE>& s);
 }
 
 #include "cxx/Array.cxx"

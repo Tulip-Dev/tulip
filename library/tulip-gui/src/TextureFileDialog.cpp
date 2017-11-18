@@ -25,7 +25,7 @@
 using namespace tlp;
 
 TextureFileDialog::TextureFileDialog(QWidget *parent)
-  : QDialog(parent),ui(new Ui::TextureFileDialogData()) {
+    : QDialog(parent), ui(new Ui::TextureFileDialogData()) {
   ui->setupUi(this);
   connect(ui->chooseFileOrDirButton, SIGNAL(clicked()), this, SLOT(browse()));
 }
@@ -38,8 +38,7 @@ void TextureFileDialog::done(int res) {
   if (res) {
     if (ui->localFilesystemRB->isChecked()) {
       _data.texturePath = ui->fileOrDirLineEdit->text();
-    }
-    else {
+    } else {
       _data.texturePath = ui->urlLineEdit->text();
     }
   }
@@ -47,15 +46,14 @@ void TextureFileDialog::done(int res) {
   QDialog::done(res);
 }
 
-void TextureFileDialog::setData(const TextureFile& tf) {
+void TextureFileDialog::setData(const TextureFile &tf) {
   _data = tf;
   setWindowTitle("Choose a texture file");
 
   if (tf.texturePath.startsWith("http")) {
     ui->httpUrlRB->setChecked(true);
     ui->urlLineEdit->setText(tf.texturePath);
-  }
-  else {
+  } else {
     ui->localFilesystemRB->setChecked(true);
     ui->fileOrDirLineEdit->setText(tf.texturePath);
   }
@@ -65,10 +63,8 @@ void TextureFileDialog::setData(const TextureFile& tf) {
 }
 
 void TextureFileDialog::browse() {
-  QString result =
-    QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
-                                 _data.texturePath,
-                                 "Images (*.jpg *.jpeg *.png)");
+  QString result = QFileDialog::getOpenFileName(parentWidget(), "Choose a texture file",
+                                                _data.texturePath, "Images (*.jpg *.jpeg *.png)");
 
   if (!result.isEmpty())
     ui->fileOrDirLineEdit->setText(result);

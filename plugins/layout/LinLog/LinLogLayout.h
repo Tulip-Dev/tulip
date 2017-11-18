@@ -25,32 +25,26 @@
 class LinLogLayout {
 
 public:
-  LinLogLayout (tlp::Graph* _graph, tlp::PluginProgress* pluginProgress);
-  ~LinLogLayout ();
-  bool initAlgo (tlp::LayoutProperty* _layoutResult,
-                 tlp::NumericProperty* _weight,
-                 double _attrExponent,
-                 double _repuExponent,
-                 double _gravFactor,
-                 unsigned int _max_iter,
-                 bool _is3D,
-                 bool _useOctTree,
-                 tlp::BooleanProperty* _skipNodes);
+  LinLogLayout(tlp::Graph *_graph, tlp::PluginProgress *pluginProgress);
+  ~LinLogLayout();
+  bool initAlgo(tlp::LayoutProperty *_layoutResult, tlp::NumericProperty *_weight,
+                double _attrExponent, double _repuExponent, double _gravFactor,
+                unsigned int _max_iter, bool _is3D, bool _useOctTree,
+                tlp::BooleanProperty *_skipNodes);
 
-  bool startAlgo ();
+  bool startAlgo();
 
 private:
+  tlp::NumericProperty *edgeWeight;
+  tlp::LayoutProperty *layoutResult;
+  tlp::DoubleProperty *linLogWeight;
+  tlp::BooleanProperty *skipNodes;
+  tlp::Graph *graph;
 
-  tlp::NumericProperty* edgeWeight;
-  tlp::LayoutProperty* layoutResult;
-  tlp::DoubleProperty* linLogWeight;
-  tlp::BooleanProperty* skipNodes;
-  tlp::Graph* graph;
+  tlp::PluginProgress *pluginProgress;
 
-  tlp::PluginProgress* pluginProgress;
-
-  unsigned int _dim; //2 or 3;
-  unsigned int _nbNodes; //number of nodes in the graph
+  unsigned int _dim;     // 2 or 3;
+  unsigned int _nbNodes; // number of nodes in the graph
   unsigned int max_iter; // the max number of iterations
   bool useOctTree;
 
@@ -67,33 +61,32 @@ private:
   /** Position of the barycenter of the nodes. */
   Coord baryCenter;
 
-  double getGravitationEnergy (node u) ;
-  double getAttractionEnergy (node u);
-  double getRepulsionEnergy (node u);
-  double getEnergy (node u);
-  double getDist (const Coord& pos1, const Coord& pos2) ;
-  double getDistForComparison (const Coord& pos1, const Coord& pos2) ;
+  double getGravitationEnergy(node u);
+  double getAttractionEnergy(node u);
+  double getRepulsionEnergy(node u);
+  double getEnergy(node u);
+  double getDist(const Coord &pos1, const Coord &pos2);
+  double getDistForComparison(const Coord &pos1, const Coord &pos2);
 
+  double addRepulsionDir(node u, double *dir);
+  double addAttractionDir(node u, double *dir);
+  double addGravitationDir(node u, double *dir);
+  void getDirection(node u, double *dir);
 
-  double addRepulsionDir (node u, double* dir);
-  double addAttractionDir (node u, double* dir);
-  double addGravitationDir (node u, double* dir);
-  void getDirection (node u, double* dir);
+  bool minimizeEnergyNoTree(int nrIterations);
 
-  bool minimizeEnergyNoTree (int nrIterations);
+  void initEnergyFactors();
+  void computeBaryCenter();
 
-  void initEnergyFactors ();
-  void computeBaryCenter ();
+  void setComputationalWeigths();
 
-  void setComputationalWeigths ();
+  void initWeights();
 
-  void initWeights ();
-
-  OctTree* buildOctTree ();
-  bool minimizeEnergy (int nrIterations);
-  double addRepulsionDir (node u, double* dir, OctTree* tree);
-  double getRepulsionEnergy (node u, OctTree* tree);
-  double getEnergy (node u, OctTree* tree);
-  void getDirection(node u, double* dir, OctTree* tree);
+  OctTree *buildOctTree();
+  bool minimizeEnergy(int nrIterations);
+  double addRepulsionDir(node u, double *dir, OctTree *tree);
+  double getRepulsionEnergy(node u, OctTree *tree);
+  double getEnergy(node u, OctTree *tree);
+  void getDirection(node u, double *dir, OctTree *tree);
 };
 #endif

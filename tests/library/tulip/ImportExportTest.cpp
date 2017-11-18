@@ -38,18 +38,20 @@
 using namespace tlp;
 using namespace std;
 
-ImportExportTest::ImportExportTest(const string &importAlgorithm, const string &exportAlgorithm) :
-  importAlgorithm(importAlgorithm), exportAlgorithm(exportAlgorithm) {}
+ImportExportTest::ImportExportTest(const string &importAlgorithm, const string &exportAlgorithm)
+    : importAlgorithm(importAlgorithm), exportAlgorithm(exportAlgorithm) {}
 
 void ImportExportTest::setUp() {
   CppUnit::TestFixture::setUp();
 
-  CPPUNIT_ASSERT_MESSAGE("Export plugin not loaded: " + exportAlgorithm, PluginLister::pluginExists(exportAlgorithm));
-  CPPUNIT_ASSERT_MESSAGE("Import plugin not loaded: " + importAlgorithm, PluginLister::pluginExists(importAlgorithm));
+  CPPUNIT_ASSERT_MESSAGE("Export plugin not loaded: " + exportAlgorithm,
+                         PluginLister::pluginExists(exportAlgorithm));
+  CPPUNIT_ASSERT_MESSAGE("Import plugin not loaded: " + importAlgorithm,
+                         PluginLister::pluginExists(importAlgorithm));
 }
 
 void ImportExportTest::testgridImportExport() {
-  Graph* original = createSimpleGraph();
+  Graph *original = createSimpleGraph();
 
   importExportGraph(original);
 
@@ -57,7 +59,7 @@ void ImportExportTest::testgridImportExport() {
 }
 
 void ImportExportTest::testAttributes() {
-  Graph* original = createSimpleGraph();
+  Graph *original = createSimpleGraph();
 
   const string originalName = "rootGraph";
   const bool b = true;
@@ -66,10 +68,10 @@ void ImportExportTest::testAttributes() {
   const int i = 33;
   const unsigned int ui = 256;
   const long l = 56845725;
-  const Coord c(1,2,3);
-  const Coord c2(10,20,30);
+  const Coord c(1, 2, 3);
+  const Coord c2(10, 20, 30);
   const Color col = Color::Azure;
-  const Size s(4,5,6);
+  const Size s(4, 5, 6);
   vector<string> vs;
   vs.push_back("foo");
   vs.push_back("bar");
@@ -155,7 +157,7 @@ void ImportExportTest::testAttributes() {
 }
 
 void ImportExportTest::testSubGraphsImportExport() {
-  Graph* original = createSimpleGraph();
+  Graph *original = createSimpleGraph();
   const string originalName = "rootGraph";
   original->setAttribute("name", originalName);
 
@@ -171,14 +173,14 @@ void ImportExportTest::testSubGraphsImportExport() {
   int i = 0;
   node n;
   forEach(n, original->getNodes()) {
-    if(i >= sub1lowerBound && i <= sub1higherBound) {
+    if (i >= sub1lowerBound && i <= sub1higherBound) {
       sub1nodes.push_back(n);
     }
 
-    if(i >= sub2lowerBound && i <= sub2higherBound) {
+    if (i >= sub2lowerBound && i <= sub2higherBound) {
       sub2nodes.push_back(n);
 
-      if(i >= subsublowerBound && i <= subsubhigherBound) {
+      if (i >= subsublowerBound && i <= subsubhigherBound) {
         subsubnodes.push_back(n);
       }
     }
@@ -188,10 +190,10 @@ void ImportExportTest::testSubGraphsImportExport() {
   const string sub1name = "sub1";
   const string sub2name = "sub2";
   const string subsubname = "subsub";
-  Graph* sub1 = original->inducedSubGraph(sub1nodes);
-  Graph* sub0 = original->addSubGraph();
-  Graph* sub2 = original->inducedSubGraph(sub2nodes);
-  Graph* subsub = sub2->inducedSubGraph(subsubnodes);
+  Graph *sub1 = original->inducedSubGraph(sub1nodes);
+  Graph *sub0 = original->addSubGraph();
+  Graph *sub2 = original->inducedSubGraph(sub2nodes);
+  Graph *subsub = sub2->inducedSubGraph(subsubnodes);
   sub1->setAttribute("name", sub1name);
   sub2->setAttribute("name", sub2name);
   subsub->setAttribute("name", subsubname);
@@ -199,19 +201,19 @@ void ImportExportTest::testSubGraphsImportExport() {
   original->delSubGraph(sub0);
 
   i = 0;
-  IntegerProperty* sub1id = sub1->getLocalProperty<IntegerProperty>("sub1id");
+  IntegerProperty *sub1id = sub1->getLocalProperty<IntegerProperty>("sub1id");
   forEach(n, sub1->getNodes()) {
     sub1id->setNodeValue(n, i++);
   }
 
   i = 0;
-  IntegerProperty* sub2id = sub2->getLocalProperty<IntegerProperty>("sub2id");
+  IntegerProperty *sub2id = sub2->getLocalProperty<IntegerProperty>("sub2id");
   forEach(n, sub2->getNodes()) {
     sub2id->setNodeValue(n, i++);
   }
 
   i = 0;
-  IntegerProperty* subsubid = subsub->getLocalProperty<IntegerProperty>("subsubid");
+  IntegerProperty *subsubid = subsub->getLocalProperty<IntegerProperty>("subsubid");
   forEach(n, subsub->getNodes()) {
     subsubid->setNodeValue(n, i++);
   }
@@ -225,41 +227,37 @@ void ImportExportTest::testSubGraphsImportExport() {
 }
 
 static Color genRandomColor() {
-  return Color(uchar(tlp::randomUnsignedInteger(255)),
-               uchar(tlp::randomUnsignedInteger(255)),
-               uchar(tlp::randomUnsignedInteger(255)),
-               uchar(tlp::randomUnsignedInteger(255)));
+  return Color(uchar(tlp::randomUnsignedInteger(255)), uchar(tlp::randomUnsignedInteger(255)),
+               uchar(tlp::randomUnsignedInteger(255)), uchar(tlp::randomUnsignedInteger(255)));
 }
 
 static Coord genRandomCoord() {
-  return tlp::Coord(float(tlp::randomDouble(1000)),
-                    float(tlp::randomDouble(1000)),
+  return tlp::Coord(float(tlp::randomDouble(1000)), float(tlp::randomDouble(1000)),
                     float(tlp::randomDouble(1000)));
 }
 
 static Size genRandomSize() {
-  return tlp::Size(float(tlp::randomDouble(10)),
-                    float(tlp::randomDouble(10)),
-                    float(tlp::randomDouble(10)));
+  return tlp::Size(float(tlp::randomDouble(10)), float(tlp::randomDouble(10)),
+                   float(tlp::randomDouble(10)));
 }
 
-Graph* ImportExportTest::createSimpleGraph() const {
-  Graph* original = tlp::newGraph();
-  LayoutProperty* layout = original->getProperty<LayoutProperty>("viewLayout");
+Graph *ImportExportTest::createSimpleGraph() const {
+  Graph *original = tlp::newGraph();
+  LayoutProperty *layout = original->getProperty<LayoutProperty>("viewLayout");
 
-  for(unsigned int i = 0; i < 100; ++i) {
+  for (unsigned int i = 0; i < 100; ++i) {
     node n = original->addNode();
-    layout->setNodeValue(n, Coord(i%11, i/10));
+    layout->setNodeValue(n, Coord(i % 11, i / 10));
   }
 
-  for(int x = 0; x < 10; ++x) {
-    for(int y = 0; y < 10; ++y) {
-      node origin(x+10*y);
+  for (int x = 0; x < 10; ++x) {
+    for (int y = 0; y < 10; ++y) {
+      node origin(x + 10 * y);
 
-      for(int xDelta = -1; xDelta <= 1; ++xDelta) {
-        for(int yDelta = -1; yDelta <= 1; ++yDelta) {
-          if(x+xDelta >= 0 && x+xDelta <= 9 && y+yDelta >= 0 && y+yDelta <= 9) {
-            node destination(x+xDelta + 10*(y+yDelta));
+      for (int xDelta = -1; xDelta <= 1; ++xDelta) {
+        for (int yDelta = -1; yDelta <= 1; ++yDelta) {
+          if (x + xDelta >= 0 && x + xDelta <= 9 && y + yDelta >= 0 && y + yDelta <= 9) {
+            node destination(x + xDelta + 10 * (y + yDelta));
             original->addEdge(origin, destination);
           }
         }
@@ -267,7 +265,7 @@ Graph* ImportExportTest::createSimpleGraph() const {
     }
   }
 
-  IntegerProperty* id = original->getProperty<IntegerProperty>("id");
+  IntegerProperty *id = original->getProperty<IntegerProperty>("id");
   node n;
   forEach(n, original->getNodes()) {
     id->setNodeValue(n, n.id);
@@ -288,13 +286,17 @@ Graph* ImportExportTest::createSimpleGraph() const {
   SizeProperty *sizeProp = original->getProperty<SizeProperty>("sizeProp");
   StringProperty *stringProp = original->getProperty<StringProperty>("stringProp");
 
-  BooleanVectorProperty *booleanVecProp = original->getProperty<BooleanVectorProperty>("booleanVecProp");
+  BooleanVectorProperty *booleanVecProp =
+      original->getProperty<BooleanVectorProperty>("booleanVecProp");
   ColorVectorProperty *colorVecProp = original->getProperty<ColorVectorProperty>("colorVecProp");
-  DoubleVectorProperty *doubleVecProp = original->getProperty<DoubleVectorProperty>("doubleVecProp");
-  IntegerVectorProperty *integerVecProp = original->getProperty<IntegerVectorProperty>("intVecProp");
+  DoubleVectorProperty *doubleVecProp =
+      original->getProperty<DoubleVectorProperty>("doubleVecProp");
+  IntegerVectorProperty *integerVecProp =
+      original->getProperty<IntegerVectorProperty>("intVecProp");
   LayoutVectorProperty *coordVecProp = original->getProperty<CoordVectorProperty>("coordVecProp");
   SizeVectorProperty *sizeVecProp = original->getProperty<SizeVectorProperty>("sizeVecProp");
-  StringVectorProperty *stringVecProp = original->getProperty<StringVectorProperty>("stringVecProp");
+  StringVectorProperty *stringVecProp =
+      original->getProperty<StringVectorProperty>("stringVecProp");
 
   std::ostringstream oss;
   forEach(n, original->getNodes()) {
@@ -307,8 +309,8 @@ Graph* ImportExportTest::createSimpleGraph() const {
     vector<int> intVec;
     vector<Size> sizeVec;
     vector<string> stringVec;
-    for (unsigned int i = 0 ; i < vecSize ; ++i) {
-      boolVec.push_back((n.id+i)%2 == 0);
+    for (unsigned int i = 0; i < vecSize; ++i) {
+      boolVec.push_back((n.id + i) % 2 == 0);
       coordVec.push_back(genRandomCoord());
       colorVec.push_back(genRandomColor());
       doubleVec.push_back(tlp::randomDouble(DBL_MAX));
@@ -349,8 +351,8 @@ Graph* ImportExportTest::createSimpleGraph() const {
     vector<Size> sizeVec;
     vector<string> stringVec;
 
-    for (unsigned int i = 0 ; i < vecSize ; ++i) {
-      boolVec.push_back((n.id+i)%2 == 0);
+    for (unsigned int i = 0; i < vecSize; ++i) {
+      boolVec.push_back((n.id + i) % 2 == 0);
       coordVec.push_back(genRandomCoord());
       colorVec.push_back(genRandomColor());
       doubleVec.push_back(tlp::randomDouble(DBL_MAX));
@@ -384,15 +386,15 @@ Graph* ImportExportTest::createSimpleGraph() const {
 }
 
 void ImportExportTest::testNanInfValuesImportExport() {
-  Graph* original = createSimpleGraph();
+  Graph *original = createSimpleGraph();
   DoubleProperty *doubleProp = original->getProperty<DoubleProperty>("doubleProp");
-  DoubleVectorProperty *doubleVecProp = original->getProperty<DoubleVectorProperty>("doubleVecProp");
+  DoubleVectorProperty *doubleVecProp =
+      original->getProperty<DoubleVectorProperty>("doubleVecProp");
   node n;
   forEach(n, original->getNodes()) {
     if (n.id % 3 == 0) {
       doubleProp->setNodeValue(n, std::numeric_limits<double>::quiet_NaN());
-    } else
-    if (n.id % 3 == 1) {
+    } else if (n.id % 3 == 1) {
       doubleProp->setNodeValue(n, numeric_limits<float>::infinity());
     } else {
       doubleProp->setNodeValue(n, -numeric_limits<float>::infinity());
@@ -408,20 +410,21 @@ void ImportExportTest::testNanInfValuesImportExport() {
   delete original;
 }
 
-void ImportExportTest::importExportGraph(tlp::Graph* original) {
+void ImportExportTest::importExportGraph(tlp::Graph *original) {
 
   const string exportFilename = "graph_export";
 
   exportGraph(original, exportAlgorithm, exportFilename);
 
-  Graph* imported = importGraph(importAlgorithm, exportFilename);
+  Graph *imported = importGraph(importAlgorithm, exportFilename);
 
   testGraphsAreEqual(original, imported);
 
   delete imported;
 }
 
-void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename) {
+void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName,
+                                   const std::string &filename) {
   std::ostream *os = NULL;
 
   if ((filename.rfind(".gz") == (filename.length() - 3)) ||
@@ -439,27 +442,29 @@ void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportP
   delete os;
 }
 
-tlp::Graph *ImportExportTest::importGraph(const std::string &importPluginName, const std::string &filename) {
+tlp::Graph *ImportExportTest::importGraph(const std::string &importPluginName,
+                                          const std::string &filename) {
   DataSet input;
   input.set("file::filename", filename);
   return tlp::importGraph(importPluginName, input);
 }
 
-void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
+void ImportExportTest::testGraphsAreEqual(Graph *first, Graph *second) {
   CPPUNIT_ASSERT_MESSAGE("The import failed; the graph is null", second != NULL);
 
   testGraphsTopologiesAreEqual(first, second);
   testGraphAttributesAreEqual(first, second);
   testGraphPropertiesAreEqual(first, second);
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of subgraphs", first->numberOfSubGraphs(), second->numberOfSubGraphs());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of subgraphs",
+                               first->numberOfSubGraphs(), second->numberOfSubGraphs());
 
-  Iterator<Graph*>* firstSubGraphs = first->getSubGraphs();
-  Iterator<Graph*>* secondSubGraphs = second->getSubGraphs();
+  Iterator<Graph *> *firstSubGraphs = first->getSubGraphs();
+  Iterator<Graph *> *secondSubGraphs = second->getSubGraphs();
 
-  while(firstSubGraphs->hasNext() && secondSubGraphs->hasNext()) {
-    Graph* firstSub = firstSubGraphs->next();
-    Graph* secondSub = secondSubGraphs->next();
+  while (firstSubGraphs->hasNext() && secondSubGraphs->hasNext()) {
+    Graph *firstSub = firstSubGraphs->next();
+    Graph *secondSub = secondSubGraphs->next();
 
     testGraphsAreEqual(firstSub, secondSub);
   }
@@ -467,22 +472,27 @@ void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
   delete secondSubGraphs;
 }
 
-void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph* second) {
-  std::pair<std::string, tlp::DataType*> attribute;
+void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph *first, tlp::Graph *second) {
+  std::pair<std::string, tlp::DataType *> attribute;
   forEach(attribute, first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
 
-    attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph.";
+    attributeNameMessage << "attribute \"" << attribute.first
+                         << "\" does not exists on imported graph.";
     CPPUNIT_ASSERT_MESSAGE(attributeNameMessage.str(), second->existAttribute(attribute.first));
 
     stringstream attributeTypeMessage;
-    attributeTypeMessage << "attribute \"" << attribute.first << "\" has different type on imported graph";
+    attributeTypeMessage << "attribute \"" << attribute.first
+                         << "\" has different type on imported graph";
     tlp::DataType *secondAttr = second->getAttribute(attribute.first);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeTypeMessage.str(), attribute.second->getTypeName(), secondAttr->getTypeName());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeTypeMessage.str(), attribute.second->getTypeName(),
+                                 secondAttr->getTypeName());
 
     stringstream attributeValueMessage;
-    attributeValueMessage << "attribute \"" << attribute.first << "\" has different value on imported graph";
-    tlp::DataTypeSerializer* serializer = DataSet::typenameToSerializer(attribute.second->getTypeName());
+    attributeValueMessage << "attribute \"" << attribute.first
+                          << "\" has different value on imported graph";
+    tlp::DataTypeSerializer *serializer =
+        DataSet::typenameToSerializer(attribute.second->getTypeName());
     stringstream firstValue;
     stringstream secondValue;
     serializer->writeData(firstValue, attribute.second);
@@ -492,14 +502,13 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
   }
 }
 
-void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) {
+void ImportExportTest::testGraphPropertiesAreEqual(Graph *first, Graph *second) {
   unsigned int firstPropertiesCount = 0;
   unsigned int secondPropertiesCount = 0;
-  IntegerProperty* secondIdProperty =
-    second->getProperty<IntegerProperty>("id");
-  
-  PropertyInterface* firstProperty;
-  PropertyInterface* secondProperty;
+  IntegerProperty *secondIdProperty = second->getProperty<IntegerProperty>("id");
+
+  PropertyInterface *firstProperty;
+  PropertyInterface *secondProperty;
   forEach(firstProperty, first->getObjectProperties()) {
     ++firstPropertiesCount;
   }
@@ -507,11 +516,12 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
     ++secondPropertiesCount;
   }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of properties", firstPropertiesCount, secondPropertiesCount);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of properties", firstPropertiesCount,
+                               secondPropertiesCount);
 
-  Iterator<string>* firstPropIt = first->getProperties();
+  Iterator<string> *firstPropIt = first->getProperties();
 
-  while(firstPropIt->hasNext()) {
+  while (firstPropIt->hasNext()) {
     string firstPropertyName = firstPropIt->next();
     firstProperty = first->getProperty(firstPropertyName);
 
@@ -522,32 +532,36 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
     secondProperty = second->getProperty(firstPropertyName);
 
     message.str("");
-    message << "a node value for property " << firstPropertyName << " in the first graph is not equal to the one in the second graph";
+    message << "a node value for property " << firstPropertyName
+            << " in the first graph is not equal to the one in the second graph";
 
-    Iterator<node>* secondNodeIt = second->getNodes();
+    Iterator<node> *secondNodeIt = second->getNodes();
     while (secondNodeIt->hasNext()) {
       node n2 = secondNodeIt->next();
       node n1(secondIdProperty->getNodeValue(n2));
-      CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getNodeStringValue(n1), secondProperty->getNodeStringValue(n2));
+      CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getNodeStringValue(n1),
+                                   secondProperty->getNodeStringValue(n2));
     }
     delete secondNodeIt;
 
     message.str("");
-    message << "an edge value for property " << firstPropertyName << " in the first graph is not equal to the one in the second graph";
+    message << "an edge value for property " << firstPropertyName
+            << " in the first graph is not equal to the one in the second graph";
 
-    Iterator<edge>* secondEdgeIt = second->getEdges();
+    Iterator<edge> *secondEdgeIt = second->getEdges();
     while (secondEdgeIt->hasNext()) {
       edge e2 = secondEdgeIt->next();
       edge e1(secondIdProperty->getEdgeValue(e2));
 
-      CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getEdgeStringValue(e1), secondProperty->getEdgeStringValue(e2));
+      CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getEdgeStringValue(e1),
+                                   secondProperty->getEdgeStringValue(e2));
     }
     delete secondEdgeIt;
   }
   delete firstPropIt;
 }
 
-void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second) {
+void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Graph *second) {
   stringstream nodesMessage;
   string name1, name2;
   first->getAttribute("name", name1);
@@ -558,72 +572,83 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
   CPPUNIT_ASSERT_EQUAL_MESSAGE(nodesMessage.str(), first->numberOfNodes(), second->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL_MESSAGE(edgesMessage.str(), first->numberOfEdges(), second->numberOfEdges());
 
-  CPPUNIT_ASSERT_MESSAGE("id control property does not exists on original graph, please add it before testing if graphs are equal.", first->existProperty("id"));
-  CPPUNIT_ASSERT_MESSAGE("id control property does not exists on imported graph", second->existProperty("id"));
+  CPPUNIT_ASSERT_MESSAGE("id control property does not exists on original graph, please add it "
+                         "before testing if graphs are equal.",
+                         first->existProperty("id"));
+  CPPUNIT_ASSERT_MESSAGE("id control property does not exists on imported graph",
+                         second->existProperty("id"));
 
-  IntegerProperty* firstIdProperty = first->getProperty<IntegerProperty>("id");
-  IntegerProperty* secondIdProperty = second->getProperty<IntegerProperty>("id");
+  IntegerProperty *firstIdProperty = first->getProperty<IntegerProperty>("id");
+  IntegerProperty *secondIdProperty = second->getProperty<IntegerProperty>("id");
 
-  CPPUNIT_ASSERT_MESSAGE("layout property does not exists on original graph", first->existProperty("viewLayout"));
-  CPPUNIT_ASSERT_MESSAGE("layout property does not exists on imported graph", second->existProperty("viewLayout"));
+  CPPUNIT_ASSERT_MESSAGE("layout property does not exists on original graph",
+                         first->existProperty("viewLayout"));
+  CPPUNIT_ASSERT_MESSAGE("layout property does not exists on imported graph",
+                         second->existProperty("viewLayout"));
 
-  LayoutProperty* firstLayout = first->getProperty<LayoutProperty>("viewLayout");
-  LayoutProperty* secondLayout = second->getProperty<LayoutProperty>("viewLayout");
+  LayoutProperty *firstLayout = first->getProperty<LayoutProperty>("viewLayout");
+  LayoutProperty *secondLayout = second->getProperty<LayoutProperty>("viewLayout");
 
   std::set<unsigned int> fNodes;
   std::set<unsigned int> sNodes;
 
-  Iterator<node>* firstNodeIt = first->getNodes();
-  Iterator<node>* secondNodeIt = second->getNodes();
-  while(firstNodeIt->hasNext() && secondNodeIt->hasNext()) {
+  Iterator<node> *firstNodeIt = first->getNodes();
+  Iterator<node> *secondNodeIt = second->getNodes();
+  while (firstNodeIt->hasNext() && secondNodeIt->hasNext()) {
     fNodes.insert(firstNodeIt->next().id);
     sNodes.insert(secondIdProperty->getNodeValue(secondNodeIt->next()));
   }
-  CPPUNIT_ASSERT_MESSAGE("all nodes of the first graph have not been iterated upon", !firstNodeIt->hasNext());
-  CPPUNIT_ASSERT_MESSAGE("all nodes of the second graph have not been iterated upon", !secondNodeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all nodes of the first graph have not been iterated upon",
+                         !firstNodeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all nodes of the second graph have not been iterated upon",
+                         !secondNodeIt->hasNext());
   delete firstNodeIt;
   delete secondNodeIt;
-  CPPUNIT_ASSERT_MESSAGE("the sets of nodes not are not equal",
-			 fNodes == sNodes);
+  CPPUNIT_ASSERT_MESSAGE("the sets of nodes not are not equal", fNodes == sNodes);
 
   secondNodeIt = second->getNodes();
-  while(secondNodeIt->hasNext()) {
+  while (secondNodeIt->hasNext()) {
     node secondNode = secondNodeIt->next();
     node firstNode(secondIdProperty->getNodeValue(secondNode));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes do not have same id",
-				 firstIdProperty->getNodeValue(firstNode),
-				 secondIdProperty->getNodeValue(secondNode));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes do not have same degree", first->deg(firstNode), second->deg(secondNode));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes are not at the same position", firstLayout->getNodeStringValue(firstNode), secondLayout->getNodeStringValue(secondNode));
+                                 firstIdProperty->getNodeValue(firstNode),
+                                 secondIdProperty->getNodeValue(secondNode));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes do not have same degree", first->deg(firstNode),
+                                 second->deg(secondNode));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes are not at the same position",
+                                 firstLayout->getNodeStringValue(firstNode),
+                                 secondLayout->getNodeStringValue(secondNode));
   }
   delete secondNodeIt;
 
   std::set<unsigned int> fEdges;
   std::set<unsigned int> sEdges;
 
-  Iterator<edge>* firstEdgeIt = first->getEdges();
-  Iterator<edge>* secondEdgeIt = second->getEdges();
-  while(firstEdgeIt->hasNext() && secondEdgeIt->hasNext()) {
+  Iterator<edge> *firstEdgeIt = first->getEdges();
+  Iterator<edge> *secondEdgeIt = second->getEdges();
+  while (firstEdgeIt->hasNext() && secondEdgeIt->hasNext()) {
     fEdges.insert(firstEdgeIt->next().id);
     sEdges.insert(secondIdProperty->getEdgeValue(secondEdgeIt->next()));
   }
-  CPPUNIT_ASSERT_MESSAGE("all edges of the first graph have not been iterated upon", !firstEdgeIt->hasNext());
-  CPPUNIT_ASSERT_MESSAGE("all edges of the second graph have not been iterated upon", !secondEdgeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all edges of the first graph have not been iterated upon",
+                         !firstEdgeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all edges of the second graph have not been iterated upon",
+                         !secondEdgeIt->hasNext());
 
   delete firstEdgeIt;
   delete secondEdgeIt;
   assert(fEdges == sEdges);
 
   // subgraphs test
-  Iterator<Graph*>* subIt = first->getDescendantGraphs();
+  Iterator<Graph *> *subIt = first->getDescendantGraphs();
   while (subIt->hasNext()) {
-    Graph* firstSub = subIt->next();
+    Graph *firstSub = subIt->next();
     string name(firstSub->getName());
-    Graph* secondSub = second->getDescendantGraph(name);
+    Graph *secondSub = second->getDescendantGraph(name);
     CPPUNIT_ASSERT_MESSAGE("a subgraph is missing", secondSub != NULL);
     CPPUNIT_ASSERT_MESSAGE("subgraphs have not the same id",
-			   firstSub->getId() == secondSub->getId());
+                           firstSub->getId() == secondSub->getId());
   }
   delete subIt;
 }
@@ -707,7 +732,6 @@ void TulipSaveLoadGraphFunctionsTest::testTulipSaveLoadGraphFunctions() {
 
   delete graph;
 }
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TlpImportExportTest);
 

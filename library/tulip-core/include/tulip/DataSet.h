@@ -41,12 +41,12 @@ struct TLP_SCOPE DataMem {
 };
 
 // basic template to embed a value of a known type
-template<typename TYPE> struct TypedValueContainer: public DataMem {
+template <typename TYPE>
+struct TypedValueContainer : public DataMem {
   TYPE value;
   TypedValueContainer() {}
-  TypedValueContainer(const TYPE& val) : value(val) {}
-  ~TypedValueContainer() {
-  }
+  TypedValueContainer(const TYPE &val) : value(val) {}
+  ~TypedValueContainer() {}
 };
 ///@endcond
 
@@ -54,9 +54,9 @@ template<typename TYPE> struct TypedValueContainer: public DataMem {
  * @ingroup Structures
  * @brief Describes a value of any type
  */
-struct TLP_SCOPE DataType :public DataMem {
+struct TLP_SCOPE DataType : public DataMem {
   DataType() {}
-  DataType(void *value):value(value) {}
+  DataType(void *value) : value(value) {}
 
   /**
    * @return A deep copy of the stored value.
@@ -71,7 +71,7 @@ struct TLP_SCOPE DataType :public DataMem {
   /**
    * @brief indicates if it is a Tulip property
    */
-  static bool isTulipProperty(const std::string& typeName);
+  static bool isTulipProperty(const std::string &typeName);
 
   /**
    * @brief indicates if it is a Tulip property
@@ -84,19 +84,17 @@ struct TLP_SCOPE DataType :public DataMem {
    * @brief The actual pointer to the element's data
    */
   void *value;
-
-
 };
 
 ///@cond DOXYGEN_HIDDEN
 // template class to embed value of known type
-template<typename T>
-struct TypedData :public DataType {
-  TypedData(void *value) :DataType(value) {}
+template <typename T>
+struct TypedData : public DataType {
+  TypedData(void *value) : DataType(value) {}
   ~TypedData() {
-    delete static_cast<T*>(value);
+    delete static_cast<T *>(value);
   }
-  DataType* clone() const {
+  DataType *clone() const {
     return new TypedData<T>(new T(getValue()));
   }
 
@@ -104,8 +102,8 @@ struct TypedData :public DataType {
     return std::string(typeid(T).name());
   }
 
-  const T& getValue() const {
-    return *(static_cast<const T*>(this->value));
+  const T &getValue() const {
+    return *(static_cast<const T *>(this->value));
   }
 };
 
@@ -116,38 +114,38 @@ class DataSet;
 struct DataTypeSerializer {
   // the readable type name the serializer is designed for
   std::string outputTypeName;
-  DataTypeSerializer(const std::string& otn):outputTypeName(otn) {}
+  DataTypeSerializer(const std::string &otn) : outputTypeName(otn) {}
   virtual ~DataTypeSerializer() {}
   // return a copy of this
-  virtual DataTypeSerializer* clone() const = 0;
+  virtual DataTypeSerializer *clone() const = 0;
   // write the DataType embedded value into the output stream
-  virtual void writeData(std::ostream& os, const DataType *data)=0;
+  virtual void writeData(std::ostream &os, const DataType *data) = 0;
   // return the DataType embedded value as a std::string
   virtual std::string toString(const DataType *data) {
     std::stringstream ss;
-    writeData(ss,data);
+    writeData(ss, data);
     return ss.str();
   }
   // build a DataType embedding value read from input stream
-  virtual DataType* readData(std::istream &is)=0;
+  virtual DataType *readData(std::istream &is) = 0;
   // set a value into a DataSet
-  virtual bool setData(DataSet& ds, const std::string& prop, const std::string& value)=0;
+  virtual bool setData(DataSet &ds, const std::string &prop, const std::string &value) = 0;
 };
 
 // a template class designs to simplify the developer's work
 // when writing a serializer class
-template<typename T>
-struct TypedDataSerializer :public DataTypeSerializer {
-  TypedDataSerializer(const std::string& otn):DataTypeSerializer(otn) {}
+template <typename T>
+struct TypedDataSerializer : public DataTypeSerializer {
+  TypedDataSerializer(const std::string &otn) : DataTypeSerializer(otn) {}
   // declare new serialization virtual functions
-  virtual void write(std::ostream& os, const T& value)=0;
+  virtual void write(std::ostream &os, const T &value) = 0;
   // return true if the read of value succeeded, false if not
-  virtual bool read(std::istream& is, T& value)=0;
+  virtual bool read(std::istream &is, T &value) = 0;
   // define virtually inherited functions using the previous ones
-  void writeData(std::ostream& os, const DataType* data) {
-    write(os, *(static_cast<T*>(data->value)));
+  void writeData(std::ostream &os, const DataType *data) {
+    write(os, *(static_cast<T *>(data->value)));
   }
-  DataType* readData(std::istream& is) {
+  DataType *readData(std::istream &is) {
     T value;
     bool ok = read(is, value);
 
@@ -157,26 +155,24 @@ struct TypedDataSerializer :public DataTypeSerializer {
     return NULL;
   }
   // set a value into a DataSet
-  virtual bool setData(DataSet& ds, const std::string& prop, const std::string& value)=0;
+  virtual bool setData(DataSet &ds, const std::string &prop, const std::string &value) = 0;
 };
 
 // This class is there to ensure the destruction of DataTypeSerializer objects
 // when program ends
 class DataTypeSerializerContainer {
 
-public :
-
+public:
   ~DataTypeSerializerContainer() {
-    TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it = tnTodts.begin();
+    TLP_HASH_MAP<std::string, DataTypeSerializer *>::iterator it = tnTodts.begin();
 
-    for (; it != tnTodts.end() ; ++it) {
+    for (; it != tnTodts.end(); ++it) {
       delete it->second;
     }
   }
 
-  TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts;
-  TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
-
+  TLP_HASH_MAP<std::string, DataTypeSerializer *> tnTodts;
+  TLP_HASH_MAP<std::string, DataTypeSerializer *> otnTodts;
 };
 ///@endcond
 
@@ -184,20 +180,23 @@ public :
  * @ingroup Structures
  * @brief A container that can store data from any type.
  *
- * The DataSet aggregate data of various types into a single structure and map each value to a key (std::string) describing its name.
- * DataSet is mainly used in plugins. When creating a plugin, one can add input parameters (using tlp::WithParameter methods) and retrieve them from the dataSet member variable once they have been set by the user.
+ * The DataSet aggregate data of various types into a single structure and map each value to a key
+ *(std::string) describing its name.
+ * DataSet is mainly used in plugins. When creating a plugin, one can add input parameters (using
+ *tlp::WithParameter methods) and retrieve them from the dataSet member variable once they have been
+ *set by the user.
  **/
 class TLP_SCOPE DataSet {
-  //Internal list of key-value pairs.
-  std::list< std::pair<std::string, DataType*> > data;
+  // Internal list of key-value pairs.
+  std::list<std::pair<std::string, DataType *> > data;
   /* management of data serialization
       two hashmap to retrieve data serializer from their
       type names and output type names
       tnTodsts => typename to data type serializer
       otnTodts => output type name to data type serializer */
   static DataTypeSerializerContainer serializerContainer;
-  static void registerDataTypeSerializer(const std::string& typeName,
-                                         DataTypeSerializer* dts);
+  static void registerDataTypeSerializer(const std::string &typeName, DataTypeSerializer *dts);
+
 public:
   DataSet() {}
   DataSet(const DataSet &set);
@@ -206,7 +205,7 @@ public:
   /**
    * @brief Performs a deep copy of a DataSet into another
    */
-  DataSet& operator=(const DataSet &set);
+  DataSet &operator=(const DataSet &set);
 
   /**
    * @brief Returns the stored value associated with the given key.
@@ -217,7 +216,8 @@ public:
    * @param value A variable wich will be overwritten with the value to retrieve.
    * @return bool Whether there is a value associated with given key or not.
    **/
-  template<typename T> bool get(const std::string &key, T& value) const;
+  template <typename T>
+  bool get(const std::string &key, T &value) const;
 
   /**
    * @brief Returns the stored value, and deletes the stored copy.
@@ -227,7 +227,8 @@ public:
    * @param value A variable wich will be overwritten with the value to retrieve.
    * @return bool Whether there is a value associated with given key or not.
    **/
-  template<typename T> bool getAndFree(const std::string &key, T& value);
+  template <typename T>
+  bool getAndFree(const std::string &key, T &value);
 
   /**
    * @brief Stores a copy of the given param, associated with the key.
@@ -237,36 +238,38 @@ public:
    * @param value The data to store.
    * @return void
    **/
-  template<typename T> void set(const std::string &key, const T& value);
+  template <typename T>
+  void set(const std::string &key, const T &value);
 
   /**
    * @brief Registers a serializer for a known type
    *
    * Serializers are used to write/read from std::ostream objects when saving DataSet instances.
   */
-  template<typename T> static void registerDataTypeSerializer(const DataTypeSerializer &serializer) {
+  template <typename T>
+  static void registerDataTypeSerializer(const DataTypeSerializer &serializer) {
     registerDataTypeSerializer(std::string(typeid(T).name()), serializer.clone());
   }
 
   /**
    * @brief write an embedded value
   */
-  void writeData(std::ostream& os, const std::string& prop,const DataType* dt) const;
+  void writeData(std::ostream &os, const std::string &prop, const DataType *dt) const;
 
   /**
    * @brief Serializes a DataSet into a stream
    */
-  static void write(std::ostream& os, const DataSet& ds);
+  static void write(std::ostream &os, const DataSet &ds);
 
   /**
    * @brief Read a value and stores it into the specified type
    */
-  bool readData(std::istream& is, const std::string& prop, const std::string& outputTypeName);
+  bool readData(std::istream &is, const std::string &prop, const std::string &outputTypeName);
 
   /**
    * @brief Reads a stream and stores its contents into a DataSet
    */
-  static bool read(std::istream& is, DataSet& ds);
+  static bool read(std::istream &is, DataSet &ds);
 
   /**
    * @param str the name of the member to look for
@@ -284,17 +287,17 @@ public:
    * @param str The name of the element to retrieve
    * @return A untyped value for a given element name. NULL if the element does not exist
    */
-  DataType* getData(const std::string &str) const;
+  DataType *getData(const std::string &str) const;
 
   /**
    * @brief Set from an untyped value
    */
-  void setData(const std::string &str, const DataType* value);
+  void setData(const std::string &str, const DataType *value);
 
   /**
    * @return An iterator over stored values as a std::pair name => untyped value
    */
-  tlp::Iterator< std::pair<std::string, DataType*> > *getValues() const;
+  tlp::Iterator<std::pair<std::string, DataType *> > *getValues() const;
 
   /**
    * @brief Returns the number of registered values
@@ -307,7 +310,8 @@ public:
   bool empty() const;
 
   /**
-   * @return the data type serializer associated to the given typename. NULL if no serializer is found
+   * @return the data type serializer associated to the given typename. NULL if no serializer is
+   * found
    */
   static DataTypeSerializer *typenameToSerializer(const std::string &name);
 
@@ -316,7 +320,6 @@ public:
    */
   std::string toString() const;
 };
-
 }
 
 #include "cxx/DataSet.cxx"

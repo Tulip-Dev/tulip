@@ -24,7 +24,7 @@
 
 class QNetworkReply;
 
-class FormPost: public QObject {
+class FormPost : public QObject {
   Q_OBJECT
 public:
   FormPost();
@@ -60,7 +60,7 @@ private:
   QByteArray strToEnc(QString s);
 
 private slots:
-  void readData(QNetworkReply * r);
+  void readData(QNetworkReply *r);
 };
 
 #endif // FORMPOST_H

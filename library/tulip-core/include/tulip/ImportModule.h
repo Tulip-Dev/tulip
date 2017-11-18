@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _IMPORTMODULE_H
 #define _IMPORTMODULE_H
 
@@ -35,17 +34,16 @@ class PluginProgress;
 class Graph;
 class DataSet;
 
-
 /**
  * @addtogroup Plugins
  * @brief Base class for import plug-ins.
 **/
 class ImportModule : public tlp::Plugin {
 public:
-
-  ImportModule (const tlp::PluginContext* context) {
-    if(context != NULL) {
-      const tlp::AlgorithmContext* algoritmContext = static_cast<const tlp::AlgorithmContext*>(context);
+  ImportModule(const tlp::PluginContext *context) {
+    if (context != NULL) {
+      const tlp::AlgorithmContext *algoritmContext =
+          static_cast<const tlp::AlgorithmContext *>(context);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
       dataSet = algoritmContext->dataSet;
@@ -81,7 +79,7 @@ public:
    *
    * @return the list of file extensions the plugin can import.
    **/
-  std::list<std::string>  allFileExtensions() const {
+  std::list<std::string> allFileExtensions() const {
     std::list<std::string> zext(gzipFileExtensions());
     std::list<std::string> ext(fileExtensions());
     ext.splice(ext.end(), zext);
@@ -101,7 +99,7 @@ public:
   *
   * @return bool Whether the import was successful or not.
   **/
-  virtual bool importGraph()=0;
+  virtual bool importGraph() = 0;
 
   /**
   * @brief The Graph in which to write the data to import.
@@ -118,8 +116,6 @@ public:
   **/
   DataSet *dataSet;
 };
-
-
 }
 #endif
 ///@endcond

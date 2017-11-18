@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIPFONT_H
 #define TULIPFONT_H
 
@@ -30,8 +29,8 @@
 namespace tlp {
 
 class TLP_QT_SCOPE TulipFont : public QObject {
-  static QMap<QString,int> FONT_IDS;
-  static int fontId(const QString&);
+  static QMap<QString, int> FONT_IDS;
+  static int fontId(const QString &);
 
   Q_OBJECT
   Q_PROPERTY(bool bold READ isBold WRITE setBold)
@@ -47,17 +46,17 @@ class TLP_QT_SCOPE TulipFont : public QObject {
   Q_PROPERTY(QString fontFamily READ fontFamily)
 
   void refreshFontFile();
-public:
 
+public:
   static QString tulipFontsDirectory();
   static QStringList installedFontNames();
-  static TulipFont fromFile(const QString&);
+  static TulipFont fromFile(const QString &);
 
   explicit TulipFont(QObject *parent = NULL);
   explicit TulipFont(const QString fontName, QObject *parent = NULL);
-  TulipFont(const TulipFont&);
+  TulipFont(const TulipFont &);
 
-  TulipFont& operator=(const TulipFont&);
+  TulipFont &operator=(const TulipFont &);
   bool isBold() const;
   bool isItalic() const;
   QString fontName() const;
@@ -69,9 +68,8 @@ public:
 public slots:
   void setItalic(bool);
   void setBold(bool);
-  void setFontName(const QString&);
+  void setFontName(const QString &);
 };
-
 }
 
 #endif // TULIPFONT_H

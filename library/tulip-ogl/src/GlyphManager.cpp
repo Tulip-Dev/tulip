@@ -29,17 +29,15 @@ tlp::GlyphManager tlp::GlyphManager::inst;
 using namespace std;
 
 namespace tlp {
-static TLP_HASH_MAP<int,std::string>   glyphIdToName;
-static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
+static TLP_HASH_MAP<int, std::string> glyphIdToName;
+static TLP_HASH_MAP<std::string, int> nameToGlyphId;
 
-GlyphManager::GlyphManager() {
-}
+GlyphManager::GlyphManager() {}
 //====================================================
 string GlyphManager::glyphName(int id) {
-  if (glyphIdToName.find(id)!=glyphIdToName.end()) {
+  if (glyphIdToName.find(id) != glyphIdToName.end()) {
     return glyphIdToName[id];
-  }
-  else {
+  } else {
     assert(false);
     tlp::warning() << __PRETTY_FUNCTION__ << endl;
     tlp::warning() << "Invalid glyph id: " << id << endl;
@@ -47,11 +45,10 @@ string GlyphManager::glyphName(int id) {
   }
 }
 //====================================================
-int GlyphManager::glyphId(const string& name) {
-  if (nameToGlyphId.find(name)!=nameToGlyphId.end()) {
+int GlyphManager::glyphId(const string &name) {
+  if (nameToGlyphId.find(name) != nameToGlyphId.end()) {
     return nameToGlyphId[name];
-  }
-  else {
+  } else {
     assert(false);
     tlp::warning() << __PRETTY_FUNCTION__ << endl;
     tlp::warning() << "Invalid glyph name: \"" << name.c_str() << '"' << endl;
@@ -62,35 +59,36 @@ int GlyphManager::glyphId(const string& name) {
 void GlyphManager::loadGlyphPlugins() {
   glyphList = PluginLister::instance()->availablePlugins<Glyph>();
 
-  for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
+  for (std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string pluginName(*it);
-    int pluginId=PluginLister::pluginInformation(pluginName).id();
-    glyphIdToName[pluginId]=pluginName;
-    nameToGlyphId[pluginName]=pluginId;
+    int pluginId = PluginLister::pluginInformation(pluginName).id();
+    glyphIdToName[pluginId] = pluginName;
+    nameToGlyphId[pluginName] = pluginId;
   }
 }
 
-void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
+void GlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                                 MutableContainer<Glyph *> &glyphs) {
   // first destroy current default glyph
-  Glyph* defaultGlyph = glyphs.getDefault();
+  Glyph *defaultGlyph = glyphs.getDefault();
 
   if (defaultGlyph)
     delete defaultGlyph;
 
   // then set a new one
-  GlyphContext gc = GlyphContext(graph,glGraphInputData);
+  GlyphContext gc = GlyphContext(graph, glGraphInputData);
   glyphs.setAll(PluginLister::instance()->getPluginObject<Glyph>("3D - Cube OutLined", &gc));
 
-  for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
+  for (std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     Glyph *newGlyph = PluginLister::instance()->getPluginObject<Glyph>(glyphName, &gc);
     glyphs.set(PluginLister::pluginInformation(glyphName).id(), newGlyph);
   }
 }
 
-void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
+void GlyphManager::clearGlyphList(Graph **, GlGraphInputData *, MutableContainer<Glyph *> &glyphs) {
 
-  for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
+  for (std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     delete glyphs.get(PluginLister::pluginInformation(glyphName).id());
   }

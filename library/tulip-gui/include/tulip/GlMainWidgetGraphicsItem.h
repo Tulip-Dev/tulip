@@ -23,7 +23,6 @@
 
 #include <QGraphicsObject>
 
-
 #include <tulip/tulipconf.h>
 
 namespace tlp {
@@ -42,7 +41,7 @@ public:
   void resize(int width, int height);
 
   void setRedrawNeeded(bool redrawNeeded) {
-    this->_redrawNeeded=redrawNeeded;
+    this->_redrawNeeded = redrawNeeded;
   }
 
   tlp::GlMainWidget *getGlMainWidget() {
@@ -57,32 +56,31 @@ signals:
 
   void widgetPainted(bool redraw);
 
-protected :
+protected:
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
   void wheelEvent(QGraphicsSceneWheelEvent *event);
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-  void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
+  void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-  void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+  void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
   void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
   void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
   void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
   void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 protected slots:
-  void glMainWidgetDraw(GlMainWidget *,bool);
+  void glMainWidgetDraw(GlMainWidget *, bool);
   void glMainWidgetRedraw(GlMainWidget *);
 
-private :
+private:
   tlp::GlMainWidget *glMainWidget;
   bool _redrawNeeded;
   bool _graphChanged;
   int width, height;
 };
-
 }
 
 #endif // GLMAINWIDGETGRAPHICSITEM_H

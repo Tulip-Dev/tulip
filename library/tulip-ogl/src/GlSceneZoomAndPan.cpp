@@ -27,9 +27,13 @@ using namespace std;
 
 namespace tlp {
 
-GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const std::string &layerName, const int nbAnimationSteps, const bool optimalPath, const double p) :
-  camera(glScene->getLayer(layerName)->getCamera()),viewport(glScene->getViewport()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p),
-  camCenterStart(camera.getCenter()),camCenterEnd(Coord(boundingBox.center())),additionalAnimation(NULL) {
+GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox,
+                                     const std::string &layerName, const int nbAnimationSteps,
+                                     const bool optimalPath, const double p)
+    : camera(glScene->getLayer(layerName)->getCamera()), viewport(glScene->getViewport()),
+      nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p),
+      camCenterStart(camera.getCenter()), camCenterEnd(Coord(boundingBox.center())),
+      additionalAnimation(NULL) {
 
   camCenterEnd[2] = camCenterStart[2];
 
@@ -48,8 +52,7 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
   if (zoomAreaWidth > (aspectRatio * zoomAreaHeight)) {
     w0 = sceneBB[1][0] - sceneBB[0][0];
     w1 = zoomAreaWidth;
-  }
-  else {
+  } else {
     w0 = sceneBB[1][1] - sceneBB[0][1];
     w1 = zoomAreaHeight;
   }
@@ -57,7 +60,8 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
   u0 = 0;
   u1 = camCenterStart.dist(camCenterEnd);
 
-  if (u1 < 1e-3) u1 = 0;
+  if (u1 < 1e-3)
+    u1 = 0;
 
   if (optimalPath) {
     if (u0 != u1) {
@@ -67,12 +71,10 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
       r1 = log(-b1 + sqrt(b1 * b1 + 1));
 
       S = (r1 - r0) / p;
-    }
-    else {
+    } else {
       S = abs(log(w1 / w0)) / p;
     }
-  }
-  else {
+  } else {
     wm = max(w0, max(w1, p * p * (u1 - u0) / 2));
     sA = log(wm / w0) / p;
     sB = sA + p * (u1 - u0) / wm;
@@ -81,14 +83,13 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 
   if (abs(w0 - w1) > 1e-3 || u1 > 0) {
     doZoomAndPan = true;
-  }
-  else {
+  } else {
     doZoomAndPan = false;
   }
-
 }
 
-void GlSceneZoomAndPan::setAdditionalGlSceneAnimation(AdditionalGlSceneAnimation *additionalAnimation) {
+void GlSceneZoomAndPan::setAdditionalGlSceneAnimation(
+    AdditionalGlSceneAnimation *additionalAnimation) {
   this->additionalAnimation = additionalAnimation;
 
   if (additionalAnimation != NULL) {
@@ -107,31 +108,26 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
         u = w0 / (p * p) * cosh(r0) * tanh(p * s + r0) - w0 / (p * p) * sinh(r0) + u0;
         w = w0 * cosh(r0) / cosh(p * s + r0);
         f = u / u1;
-      }
-      else {
+      } else {
         double k = (w1 < w0) ? -1 : 1;
         w = w0 * exp(k * p * s);
         f = 0;
       }
-    }
-    else {
+    } else {
       if (s >= 0 && s < sA) {
         u = u0;
         w = w0 * exp(p * s);
-      }
-      else if (s >= sA && s < sB) {
+      } else if (s >= sA && s < sB) {
         u = wm * (s - sA) / p + u0;
         w = wm;
-      }
-      else {
+      } else {
         u = u1;
         w = wm * exp(p * (sB - s));
       }
 
       if (u0 != u1) {
         f = u / u1;
-      }
-      else {
+      } else {
         f = 0;
       }
     }
@@ -141,8 +137,8 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
     camera.setEyes(camera.getEyes() + camera.getCenter());
     camera.setUp(Coord(0, 1., 0));
 
-    Coord bbViewportFirst = camera.worldTo2DViewport(camera.getCenter() - Coord(w/2, w/2, 0));
-    Coord bbViewportSecond = camera.worldTo2DViewport(camera.getCenter() + Coord(w/2, w/2, 0));
+    Coord bbViewportFirst = camera.worldTo2DViewport(camera.getCenter() - Coord(w / 2, w / 2, 0));
+    Coord bbViewportSecond = camera.worldTo2DViewport(camera.getCenter() + Coord(w / 2, w / 2, 0));
     float bbWidthViewport = abs(bbViewportSecond.getX() - bbViewportFirst.getX());
     float bbHeightViewport = abs(bbViewportSecond.getY() - bbViewportFirst.getY());
     double newZoomFactor = 0.0;
@@ -151,8 +147,7 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
 
     if (zoomAreaWidth > (zoomAreaHeight * aspectRatio)) {
       newZoomFactor = viewport[2] / bbWidthViewport;
-    }
-    else {
+    } else {
       newZoomFactor = viewport[3] / bbHeightViewport;
     }
 
@@ -163,5 +158,4 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
     additionalAnimation->animationStep(animationStep);
   }
 }
-
 }

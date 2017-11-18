@@ -39,14 +39,15 @@ class AdditionalGlSceneAnimation;
 /** \file
  *  \brief  Tulip Node Neighbourhood Highlighter
 
- * This interactor plugin allow to get information regarding the neighbourhood of a node by highlighting
+ * This interactor plugin allow to get information regarding the neighbourhood of a node by
+ highlighting
  * the nodes connected to it. A "Bring and Go" feature is also implemented allowing to navigate
  */
 class NeighborhoodHighlighterInteractor : public GLInteractorComposite {
 
-public :
-
-  PLUGININFORMATION("NeighborhoodHighlighterInteractor", "Antoine Lambert", "19/05/2009", "Node neighborhood highlighter", "1.0", "Navigation")
+public:
+  PLUGININFORMATION("NeighborhoodHighlighterInteractor", "Antoine Lambert", "19/05/2009",
+                    "Node neighborhood highlighter", "1.0", "Navigation")
 
   NeighborhoodHighlighterInteractor(const PluginContext *);
 
@@ -64,19 +65,15 @@ public :
 
   virtual bool isCompatible(const std::string &viewName) const;
 
-private :
-
+private:
   NeighborhoodHighlighterConfigWidget *configWidget;
-
 };
-
 
 class NeighborhoodHighlighter : public GLInteractorComponent {
 
   Q_OBJECT
 
-public :
-
+public:
   NeighborhoodHighlighter();
 
   NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter);
@@ -93,14 +90,13 @@ public :
     this->configWidget = configWidget;
   }
 
-public slots :
+public slots:
 
   void updateNeighborhoodGraph();
 
   void morphCircleAlphaAnimStep(int animStep);
 
-private :
-
+private:
   node selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y);
 
   void buildNeighborhoodGraph(node n, Graph *g);
@@ -119,9 +115,10 @@ private :
 
   void computeNeighborhoodGraphBoundingBoxes();
 
-  void performZoomAndPan(const BoundingBox &destBB, AdditionalGlSceneAnimation *additionalAnimation=NULL);
+  void performZoomAndPan(const BoundingBox &destBB,
+                         AdditionalGlSceneAnimation *additionalAnimation = NULL);
 
-  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
+  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps = 40);
 
   void checkIfGraphHasChanged();
 
@@ -152,9 +149,7 @@ private :
   unsigned char circleAlphaValue;
   unsigned char startAlpha, endAlpha;
   int nbAnimSteps;
-
 };
-
 }
 
 #endif /* NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_ */

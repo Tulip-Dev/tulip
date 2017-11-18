@@ -31,9 +31,7 @@ namespace tlp {
  */
 class TLP_QT_SCOPE CSVContentHandler {
 public:
-  virtual ~CSVContentHandler() {
-
-  }
+  virtual ~CSVContentHandler() {}
   /**
    * Function called at the beginning of the file parsing.
    */
@@ -44,7 +42,7 @@ public:
    * @param row The number of the row.
    * @param lineTokens The tokens.
    */
-  virtual bool line(unsigned int row,const std::vector<std::string>& lineTokens) = 0;
+  virtual bool line(unsigned int row, const std::vector<std::string> &lineTokens) = 0;
 
   /**
    * Function called at the end of the parsing.

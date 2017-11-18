@@ -23,7 +23,8 @@ PLUGIN(ConnectedComponent)
 
 using namespace tlp;
 
-ConnectedComponent::ConnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {}
 //======================================================
 bool ConnectedComponent::run() {
   std::vector<std::vector<node> > components;
@@ -31,15 +32,16 @@ bool ConnectedComponent::run() {
 
   // assign the index of each component as value for its nodes
   for (unsigned curComponent = 0; curComponent < components.size(); ++curComponent) {
-    std::vector<node>& component = components[curComponent];
+    std::vector<node> &component = components[curComponent];
 
-    for(std::vector<node>::const_iterator itNode = component.begin(); itNode!=component.end(); ++itNode) {
+    for (std::vector<node>::const_iterator itNode = component.begin(); itNode != component.end();
+         ++itNode) {
       result->setNodeValue(*itNode, curComponent);
     }
   }
 
   // propagate nodes computed value to edges
-  const std::vector<edge>& edges = graph->edges();
+  const std::vector<edge> &edges = graph->edges();
   unsigned int nbEdges = edges.size();
 
   for (unsigned int i = 0; i < nbEdges; ++i) {
@@ -47,10 +49,9 @@ bool ConnectedComponent::run() {
     result->setEdgeValue(e, result->getNodeValue(graph->source(e)));
   }
 
-  if (dataSet!=NULL)
+  if (dataSet != NULL)
     dataSet->set<unsigned>("#connected components", components.size());
 
   return true;
 }
 //======================================================
-

@@ -72,59 +72,63 @@
 #define ELT_LOGARITHMIC 1
 
 static const char *paramHelp[] = {
-  // iterations
-  "The number of iterations.",
+    // iterations
+    "The number of iterations.",
 
-  // noise
-  "Sets the parameter noise.",
+    // noise
+    "Sets the parameter noise.",
 
-  // use node weights
-  "Indicates if the node weights have to be used.",
+    // use node weights
+    "Indicates if the node weights have to be used.",
 
-  // node weights
-  "The metric containing node weights.",
+    // node weights
+    "The metric containing node weights.",
 
-  // Cooling function
-  "Sets the parameter cooling function",
+    // Cooling function
+    "Sets the parameter cooling function",
 
-  // ideal edge length
-  "The ideal edge length.",
+    // ideal edge length
+    "The ideal edge length.",
 
-  // minDistCC
-  "The minimal distance between connected components.",
+    // minDistCC
+    "The minimal distance between connected components.",
 
-  // pageRatio
-  "The page ratio used for packing connected components.",
+    // pageRatio
+    "The page ratio used for packing connected components.",
 
-  // check convergence
-  "Indicates if the convergence has to be checked.",
+    // check convergence
+    "Indicates if the convergence has to be checked.",
 
-  // convergence tolerance
-  "The convergence tolerance parameter."
-};
+    // convergence tolerance
+    "The convergence tolerance parameter."};
 
-class OGDFFrutchermanReingold: public OGDFLayoutPluginBase {
+class OGDFFrutchermanReingold : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Implements the Fruchterman and Reingold layout algorithm, first published as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume 21, Issue 11, pages 1129–1164, (1991)", "1.1","Force Directed")
-  OGDFFrutchermanReingold(const tlp::PluginContext* context);
+  PLUGININFORMATION("Frutcherman Reingold (OGDF)", "Stephan Hachul", "15/11/2007",
+                    "Implements the Fruchterman and Reingold layout algorithm, first published "
+                    "as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas "
+                    "M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume "
+                    "21, Issue 11, pages 1129–1164, (1991)",
+                    "1.1", "Force Directed")
+  OGDFFrutchermanReingold(const tlp::PluginContext *context);
   ~OGDFFrutchermanReingold();
 
   void beforeCall();
 };
 
-
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,information, realease, groupe*/
 PLUGIN(OGDFFrutchermanReingold)
 
-OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* context) :
-  OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
+OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext *context)
+    : OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
   addInParameter<int>("iterations", paramHelp[0], "1000");
   addInParameter<bool>("noise", paramHelp[1], "true");
   addInParameter<bool>("use node weights", paramHelp[2], "false");
-  addInParameter<NumericProperty*>("node weights", paramHelp[3], "viewMetric");
-  addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST, true, "Factor<br> Logarithmic");
+  addInParameter<NumericProperty *>("node weights", paramHelp[3], "viewMetric");
+  addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST, true,
+                                   "Factor<br> Logarithmic");
   addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
   addInParameter<double>("minDistCC", paramHelp[6], "20.0");
   addInParameter<double>("pageRatio", paramHelp[7], "1.0");
@@ -135,7 +139,7 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* conte
 OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 
 void OGDFFrutchermanReingold::beforeCall() {
-  ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact*>(ogdfLayoutAlgo);
+  ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
 
   if (dataSet != NULL) {
     int ival = 0;
@@ -158,8 +162,7 @@ void OGDFFrutchermanReingold::beforeCall() {
     if (dataSet->get(ELT_COOLING, sc)) {
       if (sc.getCurrent() == ELT_FACTOR) {
         sefr->coolingFunction(ogdf::SpringEmbedderFRExact::cfFactor);
-      }
-      else {
+      } else {
         sefr->coolingFunction(ogdf::SpringEmbedderFRExact::cfLogarithmic);
       }
     }
@@ -179,6 +182,5 @@ void OGDFFrutchermanReingold::beforeCall() {
 
     if (dataSet->get("convergence tolerance", dval))
       sefr->convTolerance(dval);
-
   }
 }

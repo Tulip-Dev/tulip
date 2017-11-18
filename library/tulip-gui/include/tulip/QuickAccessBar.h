@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef QUICKACCESSBAR_H
 #define QUICKACCESSBAR_H
 
@@ -49,19 +48,17 @@ class ColorButton;
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
 
-
-
 protected:
-  GlMainView* _mainView;
-  GlScene* scene() const;
-  GlGraphInputData* inputData() const;
-  GlGraphRenderingParameters* renderingParameters() const;
+  GlMainView *_mainView;
+  GlScene *scene() const;
+  GlGraphInputData *inputData() const;
+  GlGraphRenderingParameters *renderingParameters() const;
 
 public:
-  QuickAccessBar(QWidget *parent=0);
+  QuickAccessBar(QWidget *parent = 0);
 public slots:
-  void setGlMainView(tlp::GlMainView*);
-  virtual void reset()=0;
+  void setGlMainView(tlp::GlMainView *);
+  virtual void reset() = 0;
 
 signals:
   void settingsChanged();
@@ -69,59 +66,75 @@ signals:
 
 class TLP_QT_SCOPE QuickAccessBarImpl : public QuickAccessBar {
   Q_OBJECT
-  Ui::QuickAccessBar* _ui;
+  Ui::QuickAccessBar *_ui;
   QGraphicsItem *_quickAccessBarItem;
 
-  TulipItemDelegate* delegate;
+  TulipItemDelegate *delegate;
   bool _resetting;
   double _oldFontScale;
   double _oldNodeScale;
   bool _captionsInitialized;
   CaptionItem *_captions[4];
 
-
 public:
+  enum QuickAccessButton {
+    NODESCOLORCAPTION = 0x1,
+    NODESSIZECAPTION = 0x2,
+    EDGESCOLORCAPTION = 0x4,
+    EDGESIZECAPTION = 0x8,
+    SCREENSHOT = 0x10,
+    BACKGROUNDCOLOR = 0x20,
+    NODECOLOR = 0x40,
+    EDGECOLOR = 0x80,
+    NODEBORDERCOLOR = 0x100,
+    EDGEBORDERCOLOR = 0x200,
+    LABELCOLOR = 0x400,
+    COLORINTERPOLATION = 0x800,
+    SIZEINTERPOLATION = 0x1000,
+    SHOWEDGES = 0x2000,
+    SHOWLABELS = 0x4000,
+    LABELSSCALED = 0x8000,
+    NODESHAPE = 0x10000,
+    EDGESHAPE = 0x20000,
+    NODESIZE = 0x40000,
+    EDGESIZE = 0x80000,
+    NODELABELPOSITION = 0x100000,
+    SELECTFONT = 0x200000,
+    SHOWNODES = 0x400000,
+    ALLBUTTONS = 0xFFFFFF
+  };
+  Q_DECLARE_FLAGS(QuickAccessButtons, QuickAccessButton)
 
-  enum QuickAccessButton {NODESCOLORCAPTION=0x1,NODESSIZECAPTION=0x2,EDGESCOLORCAPTION=0x4,EDGESIZECAPTION=0x8,
-                          SCREENSHOT=0x10,BACKGROUNDCOLOR=0x20,NODECOLOR=0x40,EDGECOLOR=0x80,NODEBORDERCOLOR=0x100,
-                          EDGEBORDERCOLOR=0x200,LABELCOLOR=0x400,COLORINTERPOLATION=0x800,SIZEINTERPOLATION=0x1000,
-                          SHOWEDGES=0x2000,SHOWLABELS=0x4000,LABELSSCALED=0x8000,
-                          NODESHAPE=0x10000,EDGESHAPE=0x20000,NODESIZE=0x40000,EDGESIZE=0x80000,
-                          NODELABELPOSITION=0x100000,SELECTFONT=0x200000, SHOWNODES=0x400000,
-                          ALLBUTTONS=0xFFFFFF
-                         };
-  Q_DECLARE_FLAGS(QuickAccessButtons,QuickAccessButton)
-
-  explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem=NULL,QuickAccessButtons button=ALLBUTTONS,QWidget *parent = 0);
+  explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem = NULL,
+                              QuickAccessButtons button = ALLBUTTONS, QWidget *parent = 0);
   virtual ~QuickAccessBarImpl();
 
-  QPushButton* showEdgesButton();
-  QPushButton* showNodesButton();
-  ColorButton* backgroundColorButton();
-  QPushButton* showLabelsButton();
-  QPushButton* showLabelScaled();
-  QPushButton* showColorInterpolation();
+  QPushButton *showEdgesButton();
+  QPushButton *showNodesButton();
+  ColorButton *backgroundColorButton();
+  QPushButton *showLabelsButton();
+  QPushButton *showLabelScaled();
+  QPushButton *showColorInterpolation();
 
 protected:
-  void addButtonAtEnd(QAbstractButton* button);
-  void addButtonsAtEnd(const QVector<QAbstractButton*>& buttonvect);
+  void addButtonAtEnd(QAbstractButton *button);
+  void addButtonsAtEnd(const QVector<QAbstractButton *> &buttonvect);
   void addSeparator();
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
-  void setAllValues(unsigned int eltType, PropertyInterface* prop);
-  void setAllColorValues(unsigned int eltType, ColorProperty* prop,
-                         const Color &color);
+  void setAllValues(unsigned int eltType, PropertyInterface *prop);
+  void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
 
 public slots:
   void reset();
 
-  virtual void setBackgroundColor(const QColor&);
+  virtual void setBackgroundColor(const QColor &);
   virtual void setColorInterpolation(bool);
-  void setLabelColor(const QColor&);
-  void setNodeColor(const QColor&);
-  void setNodeBorderColor(const QColor&);
-  void setEdgeColor(const QColor&);
-  void setEdgeBorderColor(const QColor&);
+  void setLabelColor(const QColor &);
+  void setNodeColor(const QColor &);
+  void setNodeBorderColor(const QColor &);
+  void setEdgeColor(const QColor &);
+  void setEdgeBorderColor(const QColor &);
   void setNodeShape();
   void setEdgeShape();
   void setNodeSize();

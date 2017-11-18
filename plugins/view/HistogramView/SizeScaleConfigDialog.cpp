@@ -22,10 +22,13 @@
 
 namespace tlp {
 
-SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d):QDialog(d),_ui(new Ui::SizeScaleConfigDialogData) {
+SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d)
+    : QDialog(d), _ui(new Ui::SizeScaleConfigDialogData) {
   _ui->setupUi(this);
-  connect(_ui->minSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(minSizeValueChanged(double)));
-  connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(maxSizeValueChanged(double)));
+  connect(_ui->minSizeSpinBox, SIGNAL(valueChanged(double)), this,
+          SLOT(minSizeValueChanged(double)));
+  connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(double)), this,
+          SLOT(maxSizeValueChanged(double)));
   connect(_ui->viewSizeRB, SIGNAL(toggled(bool)), this, SLOT(viewSizeRadioButtonToggled(bool)));
 }
 

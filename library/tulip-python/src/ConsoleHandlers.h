@@ -35,36 +35,32 @@ class ConsoleOutputHandler : public QObject {
   Q_OBJECT
 
 public:
-
   ConsoleOutputHandler() {
     timer.start();
   }
 
-
-public slots :
+public slots:
 
   void writeToConsole(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput) {
 
     if (!consoleWidget) {
       if (!errorOutput) {
         qDebug() << "[PythonStdOut]" << output;
-      }
-      else {
+      } else {
         qWarning() << "[PythonStdErr]" << output;
       }
 
       return;
     }
 
-    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(consoleWidget);
-    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(consoleWidget);
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser *>(consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit *>(consoleWidget);
 
     QBrush brush(Qt::SolidPattern);
 
     if (errorOutput) {
       brush.setColor(Qt::red);
-    }
-    else {
+    } else {
       brush.setColor(Qt::black);
     }
 
@@ -76,8 +72,7 @@ public slots :
       formt.setForeground(brush);
       textEdit->moveCursor(QTextCursor::End);
       cursor = textEdit->textCursor();
-    }
-    else {
+    } else {
       formt = textBrowser->textCursor().charFormat();
       formt.setForeground(brush);
       formt.setAnchor(false);
@@ -87,7 +82,7 @@ public slots :
       cursor = textBrowser->textCursor();
     }
 
-    cursor.insertText(output+'\n', formt);
+    cursor.insertText(output + '\n', formt);
 
     if (textBrowser) {
       QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
@@ -117,9 +112,7 @@ public slots :
   }
 
 private:
-
   QTime timer;
-
 };
 
 class ConsoleOutputEmitter : public QObject {
@@ -127,7 +120,6 @@ class ConsoleOutputEmitter : public QObject {
   Q_OBJECT
 
 public:
-
   ConsoleOutputEmitter() : _consoleWidget(NULL) {}
 
   void sendOutputToConsole(const QString &output, bool errorOutput) {
@@ -146,8 +138,7 @@ signals:
 
   void consoleOutput(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput);
 
-private :
-
+private:
   QAbstractScrollArea *_consoleWidget;
 };
 
@@ -156,8 +147,8 @@ class ConsoleInputHandler : public QObject {
   Q_OBJECT
 
 public:
-
-  ConsoleInputHandler() : _startReadCol(-1), _consoleWidget(NULL), _lineRead(false), _wasReadOnly(false) {}
+  ConsoleInputHandler()
+      : _startReadCol(-1), _consoleWidget(NULL), _lineRead(false), _wasReadOnly(false) {}
 
   void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
     _consoleWidget = consoleWidget;
@@ -172,15 +163,14 @@ public:
       _consoleWidget->installEventFilter(this);
       qApp->installEventFilter(this);
       _consoleWidget->setFocus();
-    }
-    else {
+    } else {
       _lineRead = true;
       return;
     }
 
     _lineRead = false;
-    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(_consoleWidget);
-    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(_consoleWidget);
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser *>(_consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit *>(_consoleWidget);
     QColor lineColor = QColor(Qt::green).lighter(160);
 
     if (textBrowser) {
@@ -188,8 +178,7 @@ public:
       _wasReadOnly = textBrowser->isReadOnly();
       textBrowser->setReadOnly(false);
       textBrowser->verticalScrollBar()->setValue(textBrowser->verticalScrollBar()->maximum());
-    }
-    else if (textEdit) {
+    } else if (textEdit) {
       _readPos = textEdit->textCursor();
       _wasReadOnly = textEdit->isReadOnly();
       textEdit->setReadOnly(false);
@@ -211,14 +200,13 @@ public:
   }
 
   bool eventFilter(QObject *, QEvent *event) {
-    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(_consoleWidget);
-    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(_consoleWidget);
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser *>(_consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit *>(_consoleWidget);
     QTextCursor curCursor;
 
     if (textBrowser) {
       curCursor = textBrowser->textCursor();
-    }
-    else {
+    } else {
       curCursor = textEdit->textCursor();
     }
 
@@ -226,7 +214,7 @@ public:
       QKeyEvent *kev = static_cast<QKeyEvent *>(event);
       int key = kev->key();
 
-      if ((key ==  Qt::Key_Enter || key ==  Qt::Key_Return) && kev->modifiers() == Qt::NoModifier) {
+      if ((key == Qt::Key_Enter || key == Qt::Key_Return) && kev->modifiers() == Qt::NoModifier) {
         _lineRead = true;
         _line = _readPos.block().text().mid(_startReadCol);
         _line.append("\n");
@@ -235,48 +223,41 @@ public:
 
         if (textBrowser) {
           textBrowser->setReadOnly(_wasReadOnly);
-        }
-        else {
+        } else {
           textEdit->setReadOnly(_wasReadOnly);
         }
 
         _consoleWidget->removeEventFilter(this);
         qApp->removeEventFilter(this);
         return true;
-      }
-      else if (key ==  Qt::Key_Up || key ==  Qt::Key_Down) {
+      } else if (key == Qt::Key_Up || key == Qt::Key_Down) {
         return true;
-      }
-      else if (key == Qt::Key_Left) {
+      } else if (key == Qt::Key_Left) {
         if (curCursor.columnNumber() > _startReadCol) {
           if (textEdit) {
             textEdit->moveCursor(QTextCursor::Left);
-          }
-          else {
+          } else {
             textBrowser->moveCursor(QTextCursor::Left);
           }
         }
 
         return true;
-      }
-      else if (key == Qt::Key_Right) {
+      } else if (key == Qt::Key_Right) {
         if (textEdit) {
           textEdit->moveCursor(QTextCursor::Right);
-        }
-        else {
+        } else {
           textBrowser->moveCursor(QTextCursor::Right);
         }
-      }
-      else if (key == Qt::Key_Backspace) {
+      } else if (key == Qt::Key_Backspace) {
         if (curCursor.columnNumber() > _startReadCol) {
           curCursor.deletePreviousChar();
         }
 
         return true;
       }
-    }
-    else if (event->type() == QEvent::MouseButtonDblClick || event->type() == QEvent::MouseButtonPress ||
-             event->type() == QEvent::MouseButtonRelease) {
+    } else if (event->type() == QEvent::MouseButtonDblClick ||
+               event->type() == QEvent::MouseButtonPress ||
+               event->type() == QEvent::MouseButtonRelease) {
       return true;
     }
 
@@ -284,7 +265,6 @@ public:
   }
 
 private:
-
   QTextCursor _readPos;
   int _startReadCol;
   QAbstractScrollArea *_consoleWidget;
@@ -292,9 +272,6 @@ private:
   QString _line;
   bool _wasReadOnly;
   QTextBlockFormat _blockFormat;
-
 };
-
-
 
 #endif

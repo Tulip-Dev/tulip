@@ -31,27 +31,35 @@ using namespace tlp;
 /** \brief Tulip interactor to move/reshape
  *
  */
-class InteractorSelectionModifier  : public NodeLinkDiagramComponentInteractor {
+class InteractorSelectionModifier : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorSelectionModifier", "Tulip Team", "01/04/2009",
+                    "Selection Modifier Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorSelectionModifier(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape rectangle selection") {
+  InteractorSelectionModifier(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png",
+                                           "Move/Reshape rectangle selection") {
     setPriority(StandardInteractorPriority::RectangleSelectionModifier);
-    setConfigurationWidgetText(QString("<h3>Move/Reshape rectangle selection</h3>")+
-                               "Modify selection<br/><br/>"+
-                               "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
-                               "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
-                               "Only change node size : <ul><li><b>Ctrl + Mouse left</b> down on triangle + moves</li></ul>" +
-                               "Only change selection size : <ul><li><b>Shift + Mouse left</b> down on triangle + moves</li></ul>" +
-                               "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
-                               "Only rotate nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
-                               "Only rotate selection : <ul><li><b>Shift + Mouse left</b> down on circle + moves</li></ul>" +
-                               "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>"+
-                               "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top right zone</li></ul>"+
-                               "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top right zone</li></ul>");
+    setConfigurationWidgetText(
+        QString("<h3>Move/Reshape rectangle selection</h3>") + "Modify selection<br/><br/>" +
+        "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
+        "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
+        "Only change node size : <ul><li><b>Ctrl + Mouse left</b> down on triangle + "
+        "moves</li></ul>" +
+        "Only change selection size : <ul><li><b>Shift + Mouse left</b> down on triangle + "
+        "moves</li></ul>" +
+        "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+        "Only rotate nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+        "Only rotate selection : <ul><li><b>Shift + Mouse left</b> down on circle + "
+        "moves</li></ul>" +
+        "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>" +
+        "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top "
+        "right zone</li></ul>" +
+        "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top "
+        "right zone</li></ul>");
   }
 
   /**
@@ -68,10 +76,9 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::GeographicViewName));
+    return ((viewName == NodeLinkDiagramComponent::viewName) ||
+            (viewName == ViewName::GeographicViewName));
   }
-
 };
 
 PLUGIN(InteractorSelectionModifier)

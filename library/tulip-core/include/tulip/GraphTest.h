@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _GRAPHTEST_H
 #define _GRAPHTEST_H
 
@@ -27,7 +26,7 @@
 namespace tlp {
 class GraphTest : public tlp::Algorithm {
 public:
-  GraphTest(const tlp::PluginContext* context) : Algorithm(context) {
+  GraphTest(const tlp::PluginContext *context) : Algorithm(context) {
     addOutParameter<bool>("result", "Whether the test succeeded or not.");
   }
 
@@ -35,15 +34,14 @@ public:
     bool result = test();
 
     if (dataSet) {
-      dataSet->set("result",result);
+      dataSet->set("result", result);
     }
 
     return true;
   }
 
-  virtual bool test()=0;
+  virtual bool test() = 0;
 };
-
 }
 #endif //_GRAPHTEST_H
 ///@endcond

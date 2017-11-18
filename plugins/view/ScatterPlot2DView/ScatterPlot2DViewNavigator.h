@@ -30,32 +30,27 @@ class ScatterPlot2D;
 
 class ScatterPlot2DViewNavigator : public GLInteractorComponent {
 
-public :
-
+public:
   ScatterPlot2DViewNavigator();
   ~ScatterPlot2DViewNavigator();
 
   bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget*) {
+  bool draw(GlMainWidget *) {
     return false;
   }
-  bool compute(GlMainWidget*) {
+  bool compute(GlMainWidget *) {
     return false;
   }
   void viewChanged(View *view);
 
-private :
-
+private:
   ScatterPlot2D *getOverviewUnderPointer(const Coord &sceneCoord);
 
   ScatterPlot2DView *scatterPlot2dView;
   ScatterPlot2D *selectedScatterPlotOverview;
 
   GlMainWidget *glWidget;
-
 };
-
 }
-
 
 #endif /* SCATTERPLOTPREVIEWGENERATOR_H_ */

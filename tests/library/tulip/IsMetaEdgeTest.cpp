@@ -31,14 +31,14 @@ void createCompleteGraphAndSelect(Graph *graph, BooleanProperty *selection) {
 
   vector<node> addedNodes;
 
-  for (unsigned int j=0; j<nbNodesPerCluster; ++j) {
+  for (unsigned int j = 0; j < nbNodesPerCluster; ++j) {
     node n = graph->addNode();
     addedNodes.push_back(n);
     selection->setNodeValue(n, true);
   }
 
-  for (size_t i = 0 ; i < addedNodes.size() ; ++i) {
-    for (size_t j = 0 ; j < addedNodes.size() ; ++j) {
+  for (size_t i = 0; i < addedNodes.size(); ++i) {
+    for (size_t j = 0; j < addedNodes.size(); ++j) {
       if (addedNodes[i] != addedNodes[j]) {
         edge e = graph->addEdge(addedNodes[i], addedNodes[j]);
         selection->setEdgeValue(e, true);
@@ -47,7 +47,7 @@ void createCompleteGraphAndSelect(Graph *graph, BooleanProperty *selection) {
   }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( IsMetaEdgeTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(IsMetaEdgeTest);
 
 void IsMetaEdgeTest::setUp() {
 
@@ -80,7 +80,6 @@ void IsMetaEdgeTest::setUp() {
   vector<node> mNodes;
   graph->createMetaNodes(itS, quotientGraph, mNodes);
   delete itS;
-
 }
 
 void IsMetaEdgeTest::tearDown() {
@@ -113,11 +112,12 @@ void IsMetaEdgeTest::testIsMetaEdge() {
   // check that the two quotient nodes are meta nodes
   CPPUNIT_ASSERT_EQUAL(2u, nbMetaNodes);
 
-
-  set<edge> underlyingEdgesInMetaEdge = quotientGraph->getProperty<GraphProperty>("viewMetaGraph")->getEdgeValue(quotientGraph->getOneEdge());
+  set<edge> underlyingEdgesInMetaEdge = quotientGraph->getProperty<GraphProperty>("viewMetaGraph")
+                                            ->getEdgeValue(quotientGraph->getOneEdge());
 
   // check the number of underlying edges in meta edge
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(nbNodesPerCluster * nbNodesPerCluster), underlyingEdgesInMetaEdge.size());
+  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(nbNodesPerCluster * nbNodesPerCluster),
+                       underlyingEdgesInMetaEdge.size());
 
   // check if the quotient edge is a meta edge
   CPPUNIT_ASSERT_EQUAL(1u, nbMetaEdges);

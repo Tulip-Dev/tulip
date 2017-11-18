@@ -35,22 +35,20 @@ using namespace tlp;
 namespace tlp {
 
 static GlStar *star = NULL;
-static void drawStar(const Color &fillColor,const Color &borderColor,
-                     float borderWidth,const std::string &textureName,
-                     float lod) {
+static void drawStar(const Color &fillColor, const Color &borderColor, float borderWidth,
+                     const std::string &textureName, float lod) {
   star->setFillColor(fillColor);
 
   if (borderWidth > 0) {
     star->setOutlineMode(true);
     star->setOutlineColor(borderColor);
     star->setOutlineSize(borderWidth);
-  }
-  else {
+  } else {
     star->setOutlineMode(false);
   }
 
   star->setTextureName(textureName);
-  star->draw(lod,NULL);
+  star->draw(lod, NULL);
 }
 
 /** \addtogroup glyph */
@@ -61,61 +59,56 @@ static void drawStar(const Color &fillColor,const Color &borderColor,
  * node property value. If this property has no value, the star
  * is then colored using the "viewColor" node property value.
  */
-class Star: public Glyph {
+class Star : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0", NodeShape::Star)
+  GLYPHINFORMATION("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0",
+                   NodeShape::Star)
   Star(const tlp::PluginContext *context = NULL);
   virtual ~Star();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
 };
 PLUGIN(Star)
-Star::Star(const tlp::PluginContext* context) :
-  Glyph(context) {
-  if(!star)
-    star=new GlStar(Coord(0,0,0),Size(.5,.5,0),5);
+Star::Star(const tlp::PluginContext *context) : Glyph(context) {
+  if (!star)
+    star = new GlStar(Coord(0, 0, 0), Size(.5, .5, 0), 5);
 }
-Star::~Star() {
-}
-void Star::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+Star::~Star() {}
+void Star::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.3f, -0.35f, 0);
   boundingBox[1] = Coord(0.3f, 0.35f, 0);
 }
 void Star::draw(node n, float lod) {
-  //star->setLightingMode(true);
-  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+  // star->setLightingMode(true);
+  string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if(!textureName.empty())
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+  if (!textureName.empty())
+    textureName = glGraphInputData->parameters->getTexturePath() + textureName;
 
   drawStar(glGraphInputData->getElementColor()->getNodeValue(n),
            glGraphInputData->getElementBorderColor()->getNodeValue(n),
-           glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-           textureName,
-           lod);
+           glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 
-class EEStar: public EdgeExtremityGlyph {
+class EEStar : public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATION("2D - Star extremity", "David Auber", "09/07/2002", "Textured Star for edge extremities", "1.0", EdgeExtremityShape::Star)
+  GLYPHINFORMATION("2D - Star extremity", "David Auber", "09/07/2002",
+                   "Textured Star for edge extremities", "1.0", EdgeExtremityShape::Star)
 
-  EEStar(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
-    if(!star)
-      star=new GlStar(Coord(0,0,0),Size(.5,.5,0),5);
+  EEStar(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
+    if (!star)
+      star = new GlStar(Coord(0, 0, 0), Size(.5, .5, 0), 5);
   }
 
-  void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
-    //star->setLightingMode(false);
-    string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+    // star->setLightingMode(false);
+    string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
-    if(!textureName.empty())
-      textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+    if (!textureName.empty())
+      textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawStar(glyphColor,
-             borderColor,
-             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-             textureName,
-             lod);
+    drawStar(glyphColor, borderColor,
+             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
   }
 };
 PLUGIN(EEStar)

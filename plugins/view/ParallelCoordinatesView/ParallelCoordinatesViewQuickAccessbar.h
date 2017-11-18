@@ -28,13 +28,15 @@ class ParallelCoordinatesViewQuickAccessBar : public tlp::QuickAccessBarImpl {
   Q_OBJECT
 
   ParallelCoordsDrawConfigWidget *_optionsWidget;
+
 public:
-  ParallelCoordinatesViewQuickAccessBar(ParallelCoordsDrawConfigWidget *opt, QWidget* parent=NULL);
+  ParallelCoordinatesViewQuickAccessBar(ParallelCoordsDrawConfigWidget *opt,
+                                        QWidget *parent = NULL);
 
 public slots:
   void reset();
   virtual void setNodesVisible(bool);
-  virtual void setBackgroundColor(const QColor&);
+  virtual void setBackgroundColor(const QColor &);
   virtual void setLabelsVisible(bool);
 };
 }

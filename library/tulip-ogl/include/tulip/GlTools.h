@@ -34,7 +34,7 @@ namespace tlp {
 struct BoundingBox;
 
 typedef Matrix<float, 4> MatrixGL;
-TLP_GL_SCOPE const std::string& glGetErrorDescription(GLuint errorCode);
+TLP_GL_SCOPE const std::string &glGetErrorDescription(GLuint errorCode);
 TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"));
 TLP_GL_SCOPE void setColor(const Color &c);
 TLP_GL_SCOPE void setColor(GLfloat *);
@@ -44,22 +44,24 @@ TLP_GL_SCOPE bool cameraIs3D();
  * Project point on screnn according to the transformation matrix (modelview * projection)
  * and the viewport (x, y, width, height) given in parmaeter.
  */
-TLP_GL_SCOPE Coord projectPoint(const Coord &obj,
-                                const MatrixGL &,
-                                const Vector<int, 4> &viewport);
+TLP_GL_SCOPE Coord projectPoint(const Coord &obj, const MatrixGL &, const Vector<int, 4> &viewport);
 /*
- * UnProject point from screen to 3D world according to the inverse transformation matrix (modelview * projection)^-1
+ * UnProject point from screen to 3D world according to the inverse transformation matrix (modelview
+ * * projection)^-1
  * and the viewport (x, y, width, height) given in parmaeter.
  */
-TLP_GL_SCOPE Coord unprojectPoint(const Coord &obj,
-                                  const MatrixGL &,
+TLP_GL_SCOPE Coord unprojectPoint(const Coord &obj, const MatrixGL &,
                                   const tlp::Vector<int, 4> &viewport);
-TLP_GL_SCOPE GLfloat projectSize(const BoundingBox& bb,
-                                 const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
-TLP_GL_SCOPE GLfloat projectSize(const Coord& position,const Size& size,
-                                 const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
-TLP_GL_SCOPE float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport);
-TLP_GL_SCOPE float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport);
+TLP_GL_SCOPE GLfloat projectSize(const BoundingBox &bb, const MatrixGL &, const MatrixGL &,
+                                 const Vector<int, 4> &viewport);
+TLP_GL_SCOPE GLfloat projectSize(const Coord &position, const Size &size, const MatrixGL &,
+                                 const MatrixGL &, const Vector<int, 4> &viewport);
+TLP_GL_SCOPE float calculateAABBSize(const BoundingBox &bb, const Coord &eye,
+                                     const Matrix<float, 4> &transformMatrix,
+                                     const Vector<int, 4> &globalViewport,
+                                     const Vector<int, 4> &currentViewport);
+TLP_GL_SCOPE float calculate2DLod(const BoundingBox &bb, const Vector<int, 4> &globalViewport,
+                                  const Vector<int, 4> &currentViewport);
 
 /**
  * Computes the normals associated to the vertices of a triangulated mesh.
@@ -67,11 +69,14 @@ TLP_GL_SCOPE float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& gl
  * @since Tulip 4.8
  *
  * @param vertices a vector containing the vertices to compute associated normals
- * @param facesIndices a vector containing the unsigned short indices of the triangles faces (its size must be a multiple of 3)
- * @return a vector, with the same size as the one holding vertices, filled with the computed normals
+ * @param facesIndices a vector containing the unsigned short indices of the triangles faces (its
+ * size must be a multiple of 3)
+ * @return a vector, with the same size as the one holding vertices, filled with the computed
+ * normals
  *
  */
-TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertices, const std::vector<unsigned short> &facesIndices);
+TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
+                                               const std::vector<unsigned short> &facesIndices);
 
 /**
  * Computes the normals associated to the vertices of a triangulated mesh.
@@ -79,14 +84,16 @@ TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertice
  * @since Tulip 4.8
  *
  * @param vertices a vector containing the vertices to compute associated normals
- * @param facesIndices a vector containing the unsigned int indices of the triangles faces (its size must be a multiple of 3)
- * @return a vector, with the same size as the one holding vertices, filled with the computed normals
+ * @param facesIndices a vector containing the unsigned int indices of the triangles faces (its size
+ * must be a multiple of 3)
+ * @return a vector, with the same size as the one holding vertices, filled with the computed
+ * normals
  *
  */
-TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertices, const std::vector<unsigned int> &facesIndices);
-
+TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
+                                               const std::vector<unsigned int> &facesIndices);
 }
 
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 #endif
 ///@endcond

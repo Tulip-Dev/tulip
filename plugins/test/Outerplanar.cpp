@@ -22,13 +22,12 @@
 
 class OuterplanarTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Outer Planar", "Tulip team", "18/04/2012", "Tests whether a graph is outer planar or not.", "1.0", "Topological Test")
-  OuterplanarTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
-  }
+  PLUGININFORMATION("Outer Planar", "Tulip team", "18/04/2012",
+                    "Tests whether a graph is outer planar or not.", "1.0", "Topological Test")
+  OuterplanarTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
   virtual bool test() {
     return tlp::OuterPlanarTest::isOuterPlanar(graph);
   }
-
 };
 PLUGIN(OuterplanarTest)

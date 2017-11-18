@@ -24,16 +24,15 @@ using namespace tlp;
 const string ColorProperty::propertyTypename = "color";
 const string ColorVectorProperty::propertyTypename = "vector<color>";
 
-class ViewColorCalculator :public AbstractColorProperty::MetaValueCalculator {
+class ViewColorCalculator : public AbstractColorProperty::MetaValueCalculator {
 public:
-  virtual void computeMetaValue(AbstractColorProperty* color, node mN,
-                                Graph*, Graph*) {
+  virtual void computeMetaValue(AbstractColorProperty *color, node mN, Graph *, Graph *) {
     // meta node color is half opaque white
     color->setNodeValue(mN, Color(255, 255, 255, 127));
   }
 
-  virtual void computeMetaValue(AbstractColorProperty* color, edge mE,
-                                Iterator<edge>*itE, Graph*) {
+  virtual void computeMetaValue(AbstractColorProperty *color, edge mE, Iterator<edge> *itE,
+                                Graph *) {
     // meta edge color is the color of the first underlying edge
     color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
   }
@@ -42,64 +41,61 @@ public:
 // meta value calculator for viewColor
 static ViewColorCalculator vColorCalc;
 
-//Comparison of colors using hsv color space
-//Return 0 if the colors are equal otherwise return -1 if the first object is lower than the second and 1 if the first object is greater than the second.
-static int compareHSVValues(const Color& c1,const Color& c2);
+// Comparison of colors using hsv color space
+// Return 0 if the colors are equal otherwise return -1 if the first object is lower than the second
+// and 1 if the first object is greater than the second.
+static int compareHSVValues(const Color &c1, const Color &c2);
 
 //=================================================================================
-ColorProperty::ColorProperty(Graph *g, const std::string& n) : AbstractColorProperty(g, n) {
+ColorProperty::ColorProperty(Graph *g, const std::string &n) : AbstractColorProperty(g, n) {
   if (n == "viewColor") {
     setMetaValueCalculator(&vColorCalc);
   }
 }
 //=================================================================================
-PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *ColorProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  ColorProperty * p = n.empty()
-                      ? new ColorProperty(g) : g->getLocalProperty<ColorProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  ColorProperty *p = n.empty() ? new ColorProperty(g) : g->getLocalProperty<ColorProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
-PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *ColorVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  ColorVectorProperty * p = n.empty()
-                            ? new ColorVectorProperty(g) : g->getLocalProperty<ColorVectorProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  ColorVectorProperty *p =
+      n.empty() ? new ColorVectorProperty(g) : g->getLocalProperty<ColorVectorProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 
 int ColorProperty::compare(const node n1, const node n2) const {
-  return compareHSVValues(getNodeValue(n1),getNodeValue(n2));
+  return compareHSVValues(getNodeValue(n1), getNodeValue(n2));
 }
 
 int ColorProperty::compare(const edge e1, const edge e2) const {
-  return compareHSVValues(getEdgeValue(e1),getEdgeValue(e2));
+  return compareHSVValues(getEdgeValue(e1), getEdgeValue(e2));
 }
 
-int compareHSVValues(const Color& c1,const Color& c2) {
-  if(c1.getH() == c2.getH()) {
-    if(c1.getS() == c2.getS()) {
-      if(c1.getV() == c2.getV()) {
+int compareHSVValues(const Color &c1, const Color &c2) {
+  if (c1.getH() == c2.getH()) {
+    if (c1.getS() == c2.getS()) {
+      if (c1.getV() == c2.getV()) {
         return 0;
+      } else {
+        return c1.getV() < c2.getV() ? -1 : 1;
       }
-      else {
-        return c1.getV() < c2.getV() ? -1 : 1 ;
-      }
+    } else {
+      return c1.getS() < c2.getS() ? -1 : 1;
     }
-    else {
-      return c1.getS() < c2.getS() ? -1 : 1 ;
-    }
-  }
-  else {
-    return c1.getH() < c2.getH() ? -1 : 1 ;
+  } else {
+    return c1.getH() < c2.getH() ? -1 : 1;
   }
 }

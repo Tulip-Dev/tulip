@@ -37,10 +37,9 @@ class ProgressWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::ProgressWidgetData* _ui;
+  Ui::ProgressWidgetData *_ui;
 
-public :
-
+public:
   ProgressWidget(QWidget *parent = 0);
   ~ProgressWidget();
 
@@ -52,24 +51,20 @@ public :
     return cancelClicked;
   }
 
-protected :
+protected:
+  void showEvent(QShowEvent *event);
 
-  void showEvent(QShowEvent * event);
-
-private slots :
+private slots:
 
   void cancelButtonClicked();
 
-private :
-
+private:
   bool cancelClicked;
-
 };
 
 class ProgressWidgetGraphicsProxy : public QGraphicsProxyWidget {
 
-public :
-
+public:
   ProgressWidgetGraphicsProxy();
 
   void setComment(const QString &comment);
@@ -82,12 +77,11 @@ public :
 
   bool cancelRequested() const;
 
-protected :
+protected:
+  void paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                        QWidget *widget = 0);
 
-  void paintWindowFrame (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-
-private :
-
+private:
   ProgressWidget *progressWidget;
   QColor frameColor;
 };

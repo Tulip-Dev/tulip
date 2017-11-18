@@ -31,8 +31,7 @@ using namespace std;
 template <typename T>
 class StlVectorIterator : public Iterator<T> {
 
-public :
-
+public:
   StlVectorIterator(const vector<T> &stlVector) : stlVector(stlVector), curIdx(0) {}
 
   T next() {
@@ -43,23 +42,26 @@ public :
     return curIdx < stlVector.size();
   }
 
-private :
-
+private:
   vector<T> stlVector;
   unsigned int curIdx;
 };
 
-NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n, NeighborNodesType neighborsNodesType,
-    unsigned int neighborhoodDist, bool computeReachableSubGraph, const std::string& propertyName, int nbNodes)
-  : GraphDecorator(graph), centralNode(n), neighborsType(neighborsNodesType), currentDist(neighborhoodDist), computeReachableSubGraph(computeReachableSubGraph), nbNodes(nbNodes), property(NULL) {
-  if(!propertyName.empty()) {
+NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n,
+                                           NeighborNodesType neighborsNodesType,
+                                           unsigned int neighborhoodDist,
+                                           bool computeReachableSubGraph,
+                                           const std::string &propertyName, int nbNodes)
+    : GraphDecorator(graph), centralNode(n), neighborsType(neighborsNodesType),
+      currentDist(neighborhoodDist), computeReachableSubGraph(computeReachableSubGraph),
+      nbNodes(nbNodes), property(NULL) {
+  if (!propertyName.empty()) {
     property = graph->getProperty<DoubleProperty>(propertyName);
   }
 
   graphViewNodes.push_back(n);
 
   getNeighbors(n, currentDist);
-
 }
 
 void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecursion) {
@@ -74,16 +76,16 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       getOutNeighbors(n, dist, noRecursion);
     }
 
-    if(nbNodes > 0) {
-      //filtering nodes
-      if(property == NULL) {
-        graphViewNodes.erase(graphViewNodes.begin()+nbNodes+1, graphViewNodes.end());
-      }
-      else {
+    if (nbNodes > 0) {
+      // filtering nodes
+      if (property == NULL) {
+        graphViewNodes.erase(graphViewNodes.begin() + nbNodes + 1, graphViewNodes.end());
+      } else {
         map<double, vector<node> > nodesTokeep;
         nodesAtDist[currentDist].clear();
 
-        for(vector<node>::const_iterator it = graphViewNodes.begin(); it != graphViewNodes.end(); ++it) {
+        for (vector<node>::const_iterator it = graphViewNodes.begin(); it != graphViewNodes.end();
+             ++it) {
           nodesTokeep[property->getNodeValue(*it)].push_back(*it);
         }
 
@@ -91,9 +93,11 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
         graphViewNodes.push_back(n);
         int count = 0;
 
-        for(std::map<double, vector<node> >::const_iterator it = nodesTokeep.begin(); it != nodesTokeep.end(); ++it) {
-          for(vector<node>::const_iterator nodeIt = it->second.begin(); nodeIt != it->second.end(); ++nodeIt) {
-            if(count++ > nbNodes)
+        for (std::map<double, vector<node> >::const_iterator it = nodesTokeep.begin();
+             it != nodesTokeep.end(); ++it) {
+          for (vector<node>::const_iterator nodeIt = it->second.begin(); nodeIt != it->second.end();
+               ++nodeIt) {
+            if (count++ > nbNodes)
               break;
 
             graphViewNodes.push_back(*nodeIt);
@@ -102,20 +106,20 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
         }
       }
 
-      //removing the edges that are connected to filtered nodes
-      for(vector<edge>::iterator it = graphViewEdges.begin(); it != graphViewEdges.end();) {
-        const std::pair<node, node>& eEnds = graph_component->ends(*it);
+      // removing the edges that are connected to filtered nodes
+      for (vector<edge>::iterator it = graphViewEdges.begin(); it != graphViewEdges.end();) {
+        const std::pair<node, node> &eEnds = graph_component->ends(*it);
 
-        if(find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.first) == graphViewNodes.end() ||
-            find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.second) == graphViewNodes.end()) {
+        if (find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.first) ==
+                graphViewNodes.end() ||
+            find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.second) ==
+                graphViewNodes.end()) {
           it = graphViewEdges.erase(it);
-        }
-        else
+        } else
           ++it;
       }
     }
-  }
-  else {
+  } else {
     BooleanProperty nodesSelection(graph_component);
     nodesSelection.setAllNodeValue(false);
     nodesSelection.setNodeValue(centralNode, true);
@@ -127,7 +131,8 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
 
     BooleanProperty result(graph_component);
     string errorMsg;
-    graph_component->applyPropertyAlgorithm(tlp::SelectionAlgorithm::ReachableSubGraphSelection, &result, errorMsg, NULL, &dataSet);
+    graph_component->applyPropertyAlgorithm(tlp::SelectionAlgorithm::ReachableSubGraphSelection,
+                                            &result, errorMsg, NULL, &dataSet);
 
     graphViewNodes.clear();
     graphViewEdges.clear();
@@ -200,26 +205,29 @@ void NodeNeighborhoodView::updateWithDistance(const unsigned int dist) {
   if (!computeReachableSubGraph) {
     if (dist > currentDist) {
       if (nodesAtDist.find(dist) == nodesAtDist.end()) {
-        for (unsigned int i = 0 ; i < nodesAtDist[currentDist].size() ; ++i) {
+        for (unsigned int i = 0; i < nodesAtDist[currentDist].size(); ++i) {
           getNeighbors(nodesAtDist[currentDist][i], dist, true);
         }
+      } else {
+        graphViewNodes.insert(graphViewNodes.end(), nodesAtDist[dist].begin(),
+                              nodesAtDist[dist].end());
+        graphViewEdges.insert(graphViewEdges.end(), edgesAtDist[dist].begin(),
+                              edgesAtDist[dist].end());
       }
-      else {
-        graphViewNodes.insert(graphViewNodes.end(), nodesAtDist[dist].begin(), nodesAtDist[dist].end() );
-        graphViewEdges.insert(graphViewEdges.end(), edgesAtDist[dist].begin(), edgesAtDist[dist].end() );
-      }
-    }
-    else if (dist < currentDist) {
-      for (unsigned int i = 0 ; i < nodesAtDist[currentDist].size() ; ++i) {
-        graphViewNodes.erase(remove(graphViewNodes.begin(), graphViewNodes.end(), nodesAtDist[currentDist][i]), graphViewNodes.end());
+    } else if (dist < currentDist) {
+      for (unsigned int i = 0; i < nodesAtDist[currentDist].size(); ++i) {
+        graphViewNodes.erase(
+            remove(graphViewNodes.begin(), graphViewNodes.end(), nodesAtDist[currentDist][i]),
+            graphViewNodes.end());
       }
 
-      for (unsigned int i = 0 ; i < edgesAtDist[currentDist].size() ; ++i) {
-        graphViewEdges.erase(remove(graphViewEdges.begin(), graphViewEdges.end(), edgesAtDist[currentDist][i]), graphViewEdges.end());
+      for (unsigned int i = 0; i < edgesAtDist[currentDist].size(); ++i) {
+        graphViewEdges.erase(
+            remove(graphViewEdges.begin(), graphViewEdges.end(), edgesAtDist[currentDist][i]),
+            graphViewEdges.end());
       }
     }
-  }
-  else {
+  } else {
     getNeighbors(centralNode, dist);
   }
 
@@ -234,14 +242,14 @@ bool NodeNeighborhoodView::isElement(const edge e) const {
   return find(graphViewEdges.begin(), graphViewEdges.end(), e) != graphViewEdges.end();
 }
 
-Iterator<node>* NodeNeighborhoodView::getNodes() const {
+Iterator<node> *NodeNeighborhoodView::getNodes() const {
   return new StlVectorIterator<node>(graphViewNodes);
 }
 
-Iterator<node>* NodeNeighborhoodView::getInNodes(const node n) const {
+Iterator<node> *NodeNeighborhoodView::getInNodes(const node n) const {
   vector<node> inNodes;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
       inNodes.push_back(source(graphViewEdges[i]));
     }
@@ -250,10 +258,10 @@ Iterator<node>* NodeNeighborhoodView::getInNodes(const node n) const {
   return new StlVectorIterator<node>(inNodes);
 }
 
-Iterator<node>* NodeNeighborhoodView::getOutNodes(const node n) const {
+Iterator<node> *NodeNeighborhoodView::getOutNodes(const node n) const {
   vector<node> outNodes;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
       outNodes.push_back(target(graphViewEdges[i]));
     }
@@ -262,10 +270,10 @@ Iterator<node>* NodeNeighborhoodView::getOutNodes(const node n) const {
   return new StlVectorIterator<node>(outNodes);
 }
 
-Iterator<node>* NodeNeighborhoodView::getInOutNodes(const node n) const {
+Iterator<node> *NodeNeighborhoodView::getInOutNodes(const node n) const {
   vector<node> inNodes;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
       inNodes.push_back(source(graphViewEdges[i]));
     }
@@ -273,7 +281,7 @@ Iterator<node>* NodeNeighborhoodView::getInOutNodes(const node n) const {
 
   vector<node> outNodes;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
       outNodes.push_back(target(graphViewEdges[i]));
     }
@@ -283,14 +291,14 @@ Iterator<node>* NodeNeighborhoodView::getInOutNodes(const node n) const {
   return new StlVectorIterator<node>(inNodes);
 }
 
-Iterator<edge>* NodeNeighborhoodView::getEdges() const {
+Iterator<edge> *NodeNeighborhoodView::getEdges() const {
   return new StlVectorIterator<edge>(graphViewEdges);
 }
 
-Iterator<edge>* NodeNeighborhoodView::getOutEdges(const node n) const {
+Iterator<edge> *NodeNeighborhoodView::getOutEdges(const node n) const {
   vector<edge> outEdges;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
       outEdges.push_back(graphViewEdges[i]);
     }
@@ -299,10 +307,10 @@ Iterator<edge>* NodeNeighborhoodView::getOutEdges(const node n) const {
   return new StlVectorIterator<edge>(outEdges);
 }
 
-Iterator<edge>* NodeNeighborhoodView::getInOutEdges(const node n) const {
+Iterator<edge> *NodeNeighborhoodView::getInOutEdges(const node n) const {
   vector<edge> inEdges;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
       inEdges.push_back(graphViewEdges[i]);
     }
@@ -310,7 +318,7 @@ Iterator<edge>* NodeNeighborhoodView::getInOutEdges(const node n) const {
 
   vector<edge> outEdges;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (source(graphViewEdges[i]) == n) {
       outEdges.push_back(graphViewEdges[i]);
     }
@@ -320,10 +328,10 @@ Iterator<edge>* NodeNeighborhoodView::getInOutEdges(const node n) const {
   return new StlVectorIterator<edge>(inEdges);
 }
 
-Iterator<edge>* NodeNeighborhoodView::getInEdges(const node n) const {
+Iterator<edge> *NodeNeighborhoodView::getInEdges(const node n) const {
   vector<edge> inEdges;
 
-  for (unsigned int i = 0 ; i < graphViewEdges.size() ; ++i) {
+  for (unsigned int i = 0; i < graphViewEdges.size(); ++i) {
     if (target(graphViewEdges[i]) == n) {
       inEdges.push_back(graphViewEdges[i]);
     }
@@ -331,4 +339,3 @@ Iterator<edge>* NodeNeighborhoodView::getInEdges(const node n) const {
 
   return new StlVectorIterator<edge>(inEdges);
 }
-

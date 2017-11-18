@@ -25,10 +25,10 @@ namespace Ui {
 class HeaderFrameData;
 }
 
-class HeaderFrame: public QWidget {
+class HeaderFrame : public QWidget {
   Q_OBJECT
 
-  QPair<int,int> _oldHeightInfo;
+  QPair<int, int> _oldHeightInfo;
 
   Ui::HeaderFrameData *_ui;
   Q_PROPERTY(QString title READ title WRITE setTitle)
@@ -42,19 +42,19 @@ class HeaderFrame: public QWidget {
   Q_PROPERTY(QStringList menus READ menus WRITE setMenus)
 
 public:
-  explicit HeaderFrame(QWidget *parent=0);
+  explicit HeaderFrame(QWidget *parent = 0);
   virtual ~HeaderFrame();
 
   QString title() const;
   QStringList menus() const;
-  QString currentMenu()const;
-  int currentMenuIndex()const;
+  QString currentMenu() const;
+  int currentMenuIndex() const;
 
   bool isExpandable() const;
   bool isExpanded() const;
 
   QWidget *expandControl() const;
-  QWidget* mainFrame() const;
+  QWidget *mainFrame() const;
 
 public slots:
   void setTitle(const QString &title);
@@ -62,7 +62,7 @@ public slots:
   void setExpandable(bool f);
 
   void expand(bool e);
-  void insertWidget(QWidget*);
+  void insertWidget(QWidget *);
 
 signals:
   void menuChanged(const QString &);

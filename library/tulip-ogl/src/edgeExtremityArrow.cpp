@@ -25,33 +25,33 @@
 
 using namespace tlp;
 using namespace std;
-class GlArrow2DEdgeExtremity: public EdgeExtremityGlyph {
+class GlArrow2DEdgeExtremity : public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATION("2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",EdgeExtremityShape::Arrow)
+  GLYPHINFORMATION("2D - Arrow", "Jonathan Dubois", "09/04/09", "Edge Extremity with 2D arrow",
+                   "1.0", EdgeExtremityShape::Arrow)
   GlArrow2DEdgeExtremity(tlp::PluginContext *gc);
   virtual ~GlArrow2DEdgeExtremity();
-  void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-protected :
+  void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float lod);
+
+protected:
   static GlTriangle *triangle;
 };
 
 PLUGIN(GlArrow2DEdgeExtremity)
 
-GlTriangle* GlArrow2DEdgeExtremity::triangle=0;
+GlTriangle *GlArrow2DEdgeExtremity::triangle = 0;
 
-GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(tlp::PluginContext *gc) :
-  EdgeExtremityGlyph(gc) {
-  if(!triangle) {
-    triangle=new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0.5));
+GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(tlp::PluginContext *gc) : EdgeExtremityGlyph(gc) {
+  if (!triangle) {
+    triangle = new GlTriangle(Coord(0, 0, 0), Size(0.5, 0.5, 0.5));
     triangle->setLightingMode(false);
     triangle->setStartAngle(0);
   }
 }
 
-GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {
-}
+GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {}
 
-void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const Color &borderColor,
+void GlArrow2DEdgeExtremity::draw(edge e, node, const Color &glyphColor, const Color &borderColor,
                                   float lod) {
 
   double width = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
@@ -59,5 +59,5 @@ void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const C
   triangle->setFillColor(glyphColor);
   triangle->setOutlineSize(width);
   triangle->setOutlineColor(borderColor);
-  triangle->draw(lod,NULL);
+  triangle->draw(lod, NULL);
 }

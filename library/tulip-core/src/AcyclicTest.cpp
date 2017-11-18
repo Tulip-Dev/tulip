@@ -24,10 +24,9 @@
 using namespace std;
 using namespace tlp;
 
-AcyclicTest * AcyclicTest::instance = NULL;
+AcyclicTest *AcyclicTest::instance = NULL;
 //**********************************************************************
-AcyclicTest::AcyclicTest() {
-}
+AcyclicTest::AcyclicTest() {}
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
   if (instance == NULL)
@@ -41,29 +40,29 @@ bool AcyclicTest::isAcyclic(const Graph *graph) {
   return instance->resultsBuffer[graph];
 }
 //**********************************************************************
-void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
-  if (AcyclicTest::isAcyclic(graph)) return;
+void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
+                              vector<tlp::SelfLoops> &selfLoops) {
+  if (AcyclicTest::isAcyclic(graph))
+    return;
 
-  //replace self loops by three edges and two nodes.
+  // replace self loops by three edges and two nodes.
   StableIterator<edge> itE(graph->getEdges());
 
   while (itE.hasNext()) {
     edge e = itE.next();
-    const pair<node, node>& eEnds = graph->ends(e);
+    const pair<node, node> &eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();
       node n2 = graph->addNode();
-      selfLoops.push_back(tlp::SelfLoops(n1 , n2 ,
-                                         graph->addEdge(eEnds.first, n1) ,
-                                         graph->addEdge(n1,n2) ,
-                                         graph->addEdge(eEnds.first, n2) ,
-                                         e ));
+      selfLoops.push_back(tlp::SelfLoops(n1, n2, graph->addEdge(eEnds.first, n1),
+                                         graph->addEdge(n1, n2), graph->addEdge(eEnds.first, n2),
+                                         e));
       graph->delEdge(e);
     }
   }
 
-  //find obstruction edges
+  // find obstruction edges
   reversed.clear();
   acyclicTest(graph, &reversed);
 
@@ -94,10 +93,10 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
     if (!visited.get(curNode.id)) {
       stack<node> nodesToVisit;
       nodesToVisit.push(curNode);
-      stack<Iterator<edge>*> neighboursToVisit;
+      stack<Iterator<edge> *> neighboursToVisit;
       neighboursToVisit.push(graph->getOutEdges(curNode));
 
-      while(!nodesToVisit.empty()) {
+      while (!nodesToVisit.empty()) {
         curNode = nodesToVisit.top();
         Iterator<edge> *ite = neighboursToVisit.top();
 
@@ -111,8 +110,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
           // mark curNode as to be skipped
           // during further exploration
           finished.set(curNode.id, true);
-        }
-        else {
+        } else {
           visited.set(curNode.id, true);
 
           // loop on remaining neighbours
@@ -135,8 +133,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
                   break;
                 }
               }
-            }
-            else {
+            } else {
               // found a new neighbour to explore
               // go deeper in our dfs traversal
               nodesToVisit.push(neighbour);
@@ -156,7 +153,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
       // to collect obstruction edges
       if ((!result) && (obstructionEdges == NULL)) {
         // don't froget to delete remaining iterators
-        while(!neighboursToVisit.empty()) {
+        while (!neighboursToVisit.empty()) {
           delete neighboursToVisit.top();
           neighboursToVisit.pop();
         }
@@ -170,16 +167,16 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
   return result;
 }
 //**********************************************************************
-void AcyclicTest::treatEvent(const Event& evt) {
-  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+void AcyclicTest::treatEvent(const Event &evt) {
+  const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
   if (graphEvent) {
-    Graph* graph = graphEvent->getGraph();
+    Graph *graph = graphEvent->getGraph();
 
-    switch(graphEvent->getType()) {
+    switch (graphEvent->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer[graph]==false)
+      if (resultsBuffer[graph] == false)
         return;
 
       graph->removeListener(this);
@@ -188,7 +185,8 @@ void AcyclicTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer[graph]==true) return;
+      if (resultsBuffer[graph] == true)
+        return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -200,13 +198,12 @@ void AcyclicTest::treatEvent(const Event& evt) {
       break;
 
     default:
-      //we don't care about other events
+      // we don't care about other events
       break;
     }
-  }
-  else {
+  } else {
 
-    Graph* graph = static_cast<Graph *>(evt.sender());
+    Graph *graph = static_cast<Graph *>(evt.sender());
 
     if (evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);

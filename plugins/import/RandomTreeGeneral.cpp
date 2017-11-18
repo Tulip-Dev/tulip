@@ -22,18 +22,17 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // minsize
-  "Minimal number of nodes in the tree.",
+    // minsize
+    "Minimal number of nodes in the tree.",
 
-  // maxsize
-  "Maximal number of nodes in the tree.",
+    // maxsize
+    "Maximal number of nodes in the tree.",
 
-  // maxdegree
-  "Maximal degree of the nodes.",
+    // maxdegree
+    "Maximal degree of the nodes.",
 
-  // tree layout
-  "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."
-};
+    // tree layout
+    "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."};
 
 /** \addtogroup import */
 
@@ -42,39 +41,41 @@ static const char *paramHelp[] = {
  *
  *  User can specify the minimal/maximal number of nodes and the maximal degree.
  */
-class RandomTreeGeneral:public ImportModule {
+class RandomTreeGeneral : public ImportModule {
 
-  bool buildNode(node n,unsigned int sizeM,int arityMax) {
-    if (graph->numberOfNodes()>=sizeM) return true;
+  bool buildNode(node n, unsigned int sizeM, int arityMax) {
+    if (graph->numberOfNodes() >= sizeM)
+      return true;
 
-    bool result=true;
-    int randNumber=randomInteger(RAND_MAX);
+    bool result = true;
+    int randNumber = randomInteger(RAND_MAX);
     int i = 0;
 
-    while (randNumber < RAND_MAX/pow(2.0,1.0+i))
+    while (randNumber < RAND_MAX / pow(2.0, 1.0 + i))
       ++i;
 
     i = i % arityMax;
     graph->reserveNodes(i);
     graph->reserveEdges(i);
 
-    for (; i>0; --i) {
+    for (; i > 0; --i) {
       node n1;
-      n1=graph->addNode();
-      graph->addEdge(n,n1);
-      result= result && buildNode(n1,sizeM,arityMax);
+      n1 = graph->addNode();
+      graph->addEdge(n, n1);
+      result = result && buildNode(n1, sizeM, arityMax);
     }
 
     return result;
   }
 
 public:
-  PLUGININFORMATION("Random General Tree","Auber","16/02/2001","Imports a new randomly generated tree.","1.1","Graph")
-  RandomTreeGeneral(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned>("Minimum size",paramHelp[0],"10");
-    addInParameter<unsigned>("Maximum size",paramHelp[1],"100");
-    addInParameter<unsigned>("Maximal node's degree",paramHelp[2],"5");
-    addInParameter<bool>("tree layout",paramHelp[3],"false");
+  PLUGININFORMATION("Random General Tree", "Auber", "16/02/2001",
+                    "Imports a new randomly generated tree.", "1.1", "Graph")
+  RandomTreeGeneral(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned>("Minimum size", paramHelp[0], "10");
+    addInParameter<unsigned>("Maximum size", paramHelp[1], "100");
+    addInParameter<unsigned>("Maximal node's degree", paramHelp[2], "5");
+    addInParameter<bool>("tree layout", paramHelp[3], "false");
     addDependency("Tree Leaf", "1.0");
   }
 
@@ -82,33 +83,34 @@ public:
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    unsigned int sizeMin  = 10;
-    unsigned int sizeMax  = 100;
+    unsigned int sizeMin = 10;
+    unsigned int sizeMax = 100;
     unsigned int arityMax = 5;
     bool needLayout = false;
 
-    if (dataSet!=NULL) {
-      if(dataSet->exist("Minimum size"))
+    if (dataSet != NULL) {
+      if (dataSet->exist("Minimum size"))
         dataSet->get("Minimum size", sizeMin);
       else
-        dataSet->get("minsize", sizeMin);   //keep old parameter name for backward compatibility
+        dataSet->get("minsize", sizeMin); // keep old parameter name for backward compatibility
 
-      if(dataSet->exist("Maximum size"))
+      if (dataSet->exist("Maximum size"))
         dataSet->get("Maximum size", sizeMax);
       else
-        dataSet->get("maxsize", sizeMax); //keep old parameter name for backward compatibility
+        dataSet->get("maxsize", sizeMax); // keep old parameter name for backward compatibility
 
-      if(dataSet->exist("Maximal node's degree"))
+      if (dataSet->exist("Maximal node's degree"))
         dataSet->get("Maximal node's degree", arityMax);
       else
-        dataSet->get("maxdegree", arityMax); //keep old parameter name for backward compatibility
+        dataSet->get("maxdegree", arityMax); // keep old parameter name for backward compatibility
 
       dataSet->get("tree layout", needLayout);
     }
 
     if (arityMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maximum node's degree must be a strictly positive integer");
+        pluginProgress->setError(
+            "Error: maximum node's degree must be a strictly positive integer");
 
       return false;
     }
@@ -127,26 +129,28 @@ public:
       return false;
     }
 
-    bool ok=true;
-    int i=0;
-    unsigned int nbTest=0;
+    bool ok = true;
+    int i = 0;
+    unsigned int nbTest = 0;
 
     while (ok) {
       ++nbTest;
 
-      if (nbTest%100 == 0) {
-        if (pluginProgress->progress((i/100)%100,100)!=TLP_CONTINUE) break;
+      if (nbTest % 100 == 0) {
+        if (pluginProgress->progress((i / 100) % 100, 100) != TLP_CONTINUE)
+          break;
       }
 
       ++i;
       graph->clear();
-      node n=graph->addNode();
-      ok=!buildNode(n,sizeMax,arityMax);
+      node n = graph->addNode();
+      ok = !buildNode(n, sizeMax, arityMax);
 
-      if (graph->numberOfNodes()<sizeMin) ok=true;
+      if (graph->numberOfNodes() < sizeMin)
+        ok = true;
     }
 
-    if (pluginProgress->progress(100,100)==TLP_CANCEL)
+    if (pluginProgress->progress(100, 100) == TLP_CANCEL)
       return false;
 
     if (needLayout) {
@@ -154,8 +158,7 @@ public:
       DataSet dSet;
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg,
-                                           pluginProgress, &dSet);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, pluginProgress, &dSet);
     }
 
     return true;

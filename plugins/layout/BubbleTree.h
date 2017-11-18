@@ -24,7 +24,6 @@
 
 /** \addtogroup layout */
 
-
 /** This plug-in implement the bubble tree drawing algorithm
  *  first published as:
  *
@@ -51,33 +50,28 @@
  *  \author David Auber, S. Grivet  University Bordeaux I France:
  *   auber@labri.fr, grivet@labri.fr
  */
-class BubbleTree:public tlp::LayoutAlgorithm {
+class BubbleTree : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Bubble Tree","D.Auber/S.Grivet","16/05/2003",
+  PLUGININFORMATION("Bubble Tree", "D.Auber/S.Grivet", "16/05/2003",
                     "Implement the bubble tree drawing algorithm first published as:<br/>"
-                    "<b>Bubble Tree Drawing Algorithm</b>, D. Auber and S. Grivet and J-P Domenger and Guy Melancon, ICCVG, pages 633-641 (2004).",
-                    "1.0","Tree")
-  BubbleTree(const tlp::PluginContext* context);
+                    "<b>Bubble Tree Drawing Algorithm</b>, D. Auber and S. Grivet and J-P Domenger "
+                    "and Guy Melancon, ICCVG, pages 633-641 (2004).",
+                    "1.0", "Tree")
+  BubbleTree(const tlp::PluginContext *context);
   ~BubbleTree();
   bool run();
+
 private:
-  double computeRelativePosition(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< double, 5 > >* relativePosition);
-  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout2(tlp::node n, tlp::Vector<double, 5 >& nrPos, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
-                   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
+  double
+  computeRelativePosition(tlp::node n,
+                          TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition);
+  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition);
+  void calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
+                   TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition,
+                   const tlp::Vector<double, 3> &, const tlp::Vector<double, 3> &);
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;
   bool nAlgo;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

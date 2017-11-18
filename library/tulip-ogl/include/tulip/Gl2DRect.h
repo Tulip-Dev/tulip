@@ -30,7 +30,8 @@ namespace tlp {
  *
  * @brief Create a 2D rectangle
  *
- * This rect add screen percentage system (for example you can create a rectangle that start on (10%,10%) and finish on (90%90%)
+ * This rect add screen percentage system (for example you can create a rectangle that start on
+ * (10%,10%) and finish on (90%90%)
  * If you whan a simple 2D rectangle with normal coordinates use GlRect class
  * @see GlRect
  */
@@ -52,9 +53,8 @@ public:
    * @param textureName path to a texture
    * @param inPercent if true : top/bottom/left/right is used as in percent parameters
    */
-  Gl2DRect(float top,float bottom,float left, float right,
-           const std::string& textureName,
-           bool inPercent=false);
+  Gl2DRect(float top, float bottom, float left, float right, const std::string &textureName,
+           bool inPercent = false);
 
   /**
    * @brief Constructor
@@ -67,8 +67,7 @@ public:
    * @param xInv if true : use viewportX - left and viewportX - right
    * @param yInv if true : use viewportY - top and viewportY - bottom
    */
-  Gl2DRect(float bottom,float left,float height, float width,
-           const std::string& textureName,
+  Gl2DRect(float bottom, float left, float height, float width, const std::string &textureName,
            bool xInv, bool yInv);
 
   /**
@@ -78,9 +77,9 @@ public:
 
   virtual BoundingBox getBoundingBox();
 
-  virtual void draw(float lod,Camera *camera);
+  virtual void draw(float lod, Camera *camera);
 
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * @brief Set texture
@@ -102,7 +101,6 @@ public:
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 protected:
-
   float top;
   float bottom;
   float left;
@@ -110,8 +108,6 @@ protected:
   bool inPercent;
   bool xInv;
   bool yInv;
-
 };
-
 }
 #endif

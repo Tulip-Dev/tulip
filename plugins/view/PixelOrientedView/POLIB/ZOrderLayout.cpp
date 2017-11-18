@@ -32,10 +32,10 @@ inline Vec2i zorderPoint(const unsigned int key, const unsigned char order) {
   point.fill(0);
 
   for (char i = order - 1; i >= 0; --i) {
-    //read two bits;
-    unsigned char bits = (key >> (i << 1))  & 3;
+    // read two bits;
+    unsigned char bits = (key >> (i << 1)) & 3;
     point[1] += (bits & 1) << i;
-    point[0] += ((bits >> 1) ) << i;
+    point[0] += ((bits >> 1)) << i;
   }
 
   return point;
@@ -46,9 +46,9 @@ inline unsigned int zorderKey(const Vec2i &p, const unsigned char order) {
   unsigned int key = 0;
 
   for (char i = order - 1; i >= 0; --i) {
-    //read two bits;
-    unsigned char bits = (p[1] >> i)  & 1;
-    bits += ((p[0] >> i)  & 1) << 1;
+    // read two bits;
+    unsigned char bits = (p[1] >> i) & 1;
+    bits += ((p[0] >> i) & 1) << 1;
     key += bits << (i << 1);
   }
 
@@ -57,8 +57,8 @@ inline unsigned int zorderKey(const Vec2i &p, const unsigned char order) {
 }
 //===============================================================
 namespace pocore {
-ZorderLayout::ZorderLayout(unsigned char order):order(order) {
-  shift = int(rint(sqrt(pow(4., order))/2.));
+ZorderLayout::ZorderLayout(unsigned char order) : order(order) {
+  shift = int(rint(sqrt(pow(4., order)) / 2.));
 }
 //==============================================================
 unsigned int ZorderLayout::unproject(const Vec2i &point) const {
@@ -77,7 +77,7 @@ unsigned int ZorderLayout::unproject(const Vec2i &point) const {
 }
 //==============================================================
 Vec2i ZorderLayout::project(const unsigned int id) const {
-  return zorderPoint(id, order)-=shift;
+  return zorderPoint(id, order) -= shift;
 }
 }
 //==============================================================================

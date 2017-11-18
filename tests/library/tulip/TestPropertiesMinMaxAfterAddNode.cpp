@@ -22,7 +22,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 
-CPPUNIT_TEST_SUITE_REGISTRATION( TestPropertiesMinMaxAfterAddNode );
+CPPUNIT_TEST_SUITE_REGISTRATION(TestPropertiesMinMaxAfterAddNode);
 
 using namespace tlp;
 

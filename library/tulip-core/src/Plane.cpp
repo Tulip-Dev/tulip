@@ -35,11 +35,10 @@ Plane::Plane(float a, float b, float c, float d) {
   this->d = d;
 }
 
-Plane::~Plane() {
-}
+Plane::~Plane() {}
 
 float Plane::planeValue(float a, float b, float c, float d, float x, float y) {
-  return - (a * x + b * y + c) / d;
+  return -(a * x + b * y + c) / d;
 }
 
 bool Plane::computePlane(Coord &p1, Coord &p2, Coord &p3, Coord &p4) {
@@ -48,10 +47,10 @@ bool Plane::computePlane(Coord &p1, Coord &p2, Coord &p3, Coord &p4) {
     return false;
 
   if (a != 0) {
-    p2    = p1;
+    p2 = p1;
     p2[2] = p3[2];
 
-    p4    = p3;
+    p4 = p3;
     p4[2] = p1[2];
 
     p1[0] = planeValue(b, c, d, a, p1[1], p1[2]);
@@ -59,25 +58,23 @@ bool Plane::computePlane(Coord &p1, Coord &p2, Coord &p3, Coord &p4) {
     p3[0] = planeValue(b, c, d, a, p3[1], p3[2]);
     p4[0] = planeValue(b, c, d, a, p4[1], p4[2]);
 
-  }
-  else if (b != 0) {
-    p2    = p1;
+  } else if (b != 0) {
+    p2 = p1;
     p2[2] = p3[2];
 
-    p4    = p3;
+    p4 = p3;
     p4[2] = p1[2];
 
     p1[1] = planeValue(a, c, d, b, p1[0], p1[2]);
     p2[1] = planeValue(a, c, d, b, p2[0], p2[2]);
     p3[1] = planeValue(a, c, d, b, p3[0], p3[2]);
     p4[1] = planeValue(a, c, d, b, p4[0], p4[2]);
-  }
-  else if (c != 0) {
+  } else if (c != 0) {
     // The same for z, a = b = 0 => z = -d/c
-    p2    = p1;
+    p2 = p1;
     p2[0] = p3[0];
 
-    p4    = p3;
+    p4 = p3;
     p4[0] = p1[0];
 
     p1[2] = planeValue(a, b, d, c, p1[0], p1[1]);

@@ -27,38 +27,39 @@ PLUGIN(DegreeMetric)
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // type
-  "Type of degree to compute (in/out/inout).",
+    // type
+    "Type of degree to compute (in/out/inout).",
 
-  // metric
-  "The weighted degree of a node is the sum of weights of "
-  "all its in/out/inout edges. "
-  "If no metric is specified, using a uniform metric value of 1 for all edges "
-  "returns the usual degree for nodes (number of neighbors).",
+    // metric
+    "The weighted degree of a node is the sum of weights of "
+    "all its in/out/inout edges. "
+    "If no metric is specified, using a uniform metric value of 1 for all edges "
+    "returns the usual degree for nodes (number of neighbors).",
 
-  // norm
-  "If true, the measure is normalized in the following way."
-  "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "
-  "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>"
+    // norm
+    "If true, the measure is normalized in the following way."
+    "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "
+    "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>"
 
 };
 
 #define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
 //==============================================================================
-DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
-  addInParameter<NumericProperty*>("metric", paramHelp[1], "", false);
+DegreeMetric::DegreeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true,
+                                   "InOut <br> In <br> Out");
+  addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
 //==================================================================
 bool DegreeMetric::run() {
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
-  NumericProperty* weights = NULL;
+  NumericProperty *weights = NULL;
   bool norm = false;
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", weights);
     dataSet->get("norm", norm);
@@ -71,11 +72,11 @@ bool DegreeMetric::run() {
   return true;
 }
 //==================================================================
-bool DegreeMetric::check(std::string& errorMsg) {
+bool DegreeMetric::check(std::string &errorMsg) {
   // check weights validity if it exists
-  DoubleProperty* weights = NULL;
+  DoubleProperty *weights = NULL;
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("metric", weights);
 
     if (weights && !weights->getEdgeDefaultValue()) {
@@ -93,5 +94,3 @@ bool DegreeMetric::check(std::string& errorMsg) {
 
   return true;
 }
-
-
