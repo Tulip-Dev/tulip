@@ -1,6 +1,6 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
-#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++98 standard, Qt 4.8 and Python 2.7
+#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++11 standard Qt 4.8 and Python 2.7
 #  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from XCode9 on Mac OS), C++11 standard, 
 #    Qt 5.9 on Linux / Qt 5.8 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
 # As TravisCI limits build jobs to 45 minutes timeout, we build Tulip in two successive build stages:
@@ -58,12 +58,13 @@ jobs:
         # install sphinx in order to have the same build environment as in the complete build (for cache slug)
         - sudo pip install sphinx
       env:
+        # use Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
       script:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - sudo ninja -j4 install
@@ -104,7 +105,7 @@ jobs:
             - libfreetype6-dev
       before_install:
         # set up external ppa for Qt 5.9 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt591-trusty
+        - sudo add-apt-repository -y ppa:beineri/opt-qt592-trusty
         # update packages list
         - sudo apt-get -qy update
         # force the use of GCC 7
@@ -113,8 +114,6 @@ jobs:
         # install Qt 5.9 from external ppa (not required for this build though but needed for travis build cache to work correctly between builds stages)
         - sudo apt-get -qy install qt59-meta-minimal qt59webengine
       env:
-        # use C++11
-        - TULIP_CXX_FLAGS="-std=c++11"
         # use Python 3.6
         - PYTHON_EXECUTABLE=/usr/bin/python3.6
         # use GCC 7
@@ -123,7 +122,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - sudo ninja -j4 install
@@ -175,7 +174,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - sudo ninja -j4 install
@@ -213,7 +212,7 @@ jobs:
             - libfreetype6-dev
       before_install:
         # set up external ppa for Qt 5.9 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt591-trusty
+        - sudo add-apt-repository -y ppa:beineri/opt-qt592-trusty
         # update packages list
         - sudo apt-get -qy update
         # force the use of GCC 7
@@ -222,8 +221,6 @@ jobs:
         # install Qt 5.9 from external ppa
         - sudo apt-get -qy install qt59-meta-minimal qt59webengine
       env:
-        # use C++11
-        - TULIP_CXX_FLAGS="-std=c++11"
         # use Python 3.6
         - PYTHON_EXECUTABLE=/usr/bin/python3.6
         # use GCC 7
@@ -237,7 +234,7 @@ jobs:
         # create build directoty
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - sudo ninja -j4 install
@@ -361,7 +358,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - sudo ninja -j4 install
@@ -393,8 +390,6 @@ jobs:
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
       env:
-        # use C++11
-        - TULIP_CXX_FLAGS="-std=c++11 -stdlib=libc++"
         # use system Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
         
@@ -402,7 +397,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - sudo ninja -j4 install
@@ -455,7 +450,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - ninja -j4 install
@@ -509,8 +504,6 @@ jobs:
         - sudo port -N install cppunit
         - sudo pip install sphinx --ignore-installed six
       env:
-        # use C++11
-        - TULIP_CXX_FLAGS="-std=c++11 -stdlib=libc++"
         # use system Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
         
@@ -518,7 +511,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="${TULIP_CXX_FLAGS}" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - ninja -j4 install

@@ -23,6 +23,18 @@ ENDMACRO(TULIP_SET_C_COMPILER_FLAG)
 
 MACRO(TULIP_SET_COMPILER_OPTIONS)
 
+  # enable C++11 (not required for GCC >= 6.1 as the standard is enabled by default)
+  IF(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
+    TULIP_SET_CXX_COMPILER_FLAG("-std=c++0x")
+  ELSE(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
+    IF((CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.1) OR CLANG)
+      TULIP_SET_CXX_COMPILER_FLAG("-std=c++11")
+      IF(CLANG AND APPLE)
+        TULIP_SET_CXX_COMPILER_FLAG("-stdlib=libc++")
+      ENDIF(CLANG AND APPLE)
+    ENDIF((CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.1) OR CLANG)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
+
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
   STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
@@ -42,7 +54,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
       IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.8.0)
         # Those flags are required to compile Tulip with gcc >= 4.8 or clang on FreeBSD 9.x and 10.x
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_C99 -std=c++11 -fno-omit-frame-pointer")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_C99 -fno-omit-frame-pointer")
       ENDIF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8.0 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.8.0)
       # Need to set rpath for the right libstdc++ to use
       IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9.0)
@@ -63,16 +75,6 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
     ENDIF(BSD)
   ENDIF(NOT MSVC)
   
-  # use legacy libstdc++ with clang on MacOS (no c++11 support but Tulip does not use any of its feature)
-  # OGDF need to be linked against to work properly, so does Tulip in order to be able to use the OGDF layouts (crash otherwise)
-  IF(APPLE AND CLANG)
-    # set -stdlib=libstdc++ only if -stdlib flag is not already bound
-    STRING(FIND "${CMAKE_CXX_FLAGS}" "-stdlib=lib" STDLIB_POS)
-    IF (${STDLIB_POS} EQUAL -1)
-      TULIP_SET_CXX_COMPILER_FLAG("-stdlib=libstdc++")
-    ENDIF()
-  ENDIF(APPLE AND CLANG)
-
   IF(EMSCRIPTEN)
     # Ensure emscripten port of zlib is compiled before compiling Tulip
     FIND_PACKAGE(PythonInterp REQUIRED)
@@ -80,7 +82,7 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
 
     SET(EM_COMPILER_FLAGS "-s USE_ZLIB=1 -Wno-warn-absolute-paths")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EM_COMPILER_FLAGS}")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${EM_COMPILER_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EM_COMPILER_FLAGS}")
 
     SET(EM_COMPILER_FLAGS_RELEASE "-DNDEBUG -Oz")
     SET(CMAKE_CXX_FLAGS_RELEASE "${EM_COMPILER_FLAGS_RELEASE}")

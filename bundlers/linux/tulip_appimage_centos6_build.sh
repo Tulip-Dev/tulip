@@ -9,12 +9,16 @@ yum -y update
 
 # install base build system
 yum -y install epel-release
-yum -y install xz gcc gcc-c++ cmake git subversion tar gzip make wget ccache
+yum -y install xz cmake git subversion tar gzip make wget ccache
+
+# install GCC 4.8.2 as Tulip requires a C++11 compiler
+wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+yum -y upgrade
+yum -y install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++
 
 # install tulip deps
 yum -y install zlib-devel qhull-devel
 yum -y install freetype-devel libpng-devel libjpeg-devel glew-devel
-yum -y install binutils-devel
 
 # needed for generating the doc
 yum -y install doxygen graphviz
@@ -34,7 +38,7 @@ yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel r
 wget http://python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz
 tar xf Python-2.7.14.tar.xz
 cd Python-2.7.14
-./configure --prefix=/usr --enable-unicode=ucs4 --enable-shared --enable-optimizations CC="ccache gcc" CXX="ccache g++"
+./configure --prefix=/usr --enable-unicode=ucs4 --enable-shared --enable-optimizations CC="ccache /opt/rh/devtoolset-2/root/usr/bin/gcc" CXX="ccache /opt/rh/devtoolset-2/root/usr/bin/g++"
 make -j4 && make altinstall
 
 # some extra setup for cmake et appimage build to succeed
@@ -52,7 +56,7 @@ pip2.7 install sphinx
 # build and install tulip
 mkdir /tulip/build
 cd /tulip/build
-cmake -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_INSTALL_PREFIX=$PWD/install -DTULIP_USE_CCACHE=ON ..
+cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_INSTALL_PREFIX=$PWD/install -DTULIP_USE_CCACHE=ON ..
 make -j4 install
 
 # build a bundle dir suitable for AppImageKit
