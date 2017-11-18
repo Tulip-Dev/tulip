@@ -31,6 +31,8 @@ using namespace std;
 
 namespace tlp {
 
+// clang-format off
+
 static string fisheyeDistortionVertexShaderSrc =
   "#version 120\n"
 
@@ -465,6 +467,8 @@ static string curveFragmentShaderSrc =
   "  }"
   "}"
   ;
+
+// clang-format on
 
 map<unsigned int, GLfloat *> AbstractGlCurve::curveVertexBuffersData;
 map<unsigned int, vector<GLushort *> > AbstractGlCurve::curveVertexBuffersIndices;

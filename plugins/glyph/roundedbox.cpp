@@ -31,6 +31,8 @@ using namespace std;
 
 namespace tlp {
 
+// clang-format off
+
 const string roundedBoxFragmentShaderSrc =
   "uniform float boxWidth;"
   "uniform float boxHeight;"
@@ -152,6 +154,8 @@ const string roundedBoxOutlineGeometryShaderSrc =
   "	EmitVertex();"
   "}"
   ;
+
+// clang-format on
 
 /** @addtogroup glyph */
 
