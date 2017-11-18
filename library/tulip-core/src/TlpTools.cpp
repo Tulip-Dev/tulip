@@ -60,6 +60,10 @@ using namespace tlp;
 static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
 #endif
 
+// the relative path (a string), from the install dir
+// of the directory where the tulip libraries are installed
+#define TULIP_INSTALL_LIBDIR_STR STRINGIFY(TULIP_INSTALL_LIBDIR)
+
 string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
 string tlp::TulipBitmapDir;
@@ -93,7 +97,7 @@ extern "C" {
       if (dwLen > 0) {
         std::string tmp = szPath;
         std::replace(tmp.begin(), tmp.end(), '\\', '/');
-        tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+        tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../" + TULIP_INSTALL_LIBDIR_STR;
       }
     }
 
@@ -115,16 +119,7 @@ extern "C" {
         if (dladdr(symbol, &info)) {
           std::string tmp = info.dli_fname;
           tulipLibDir = tmp.substr(0, tmp.rfind('/')+1);
-#ifdef X86_64
-          // check for lib64
-          string tlpPath64 = tulipLibDir + "../lib64";
-          tlp_stat_t statInfo;
-
-          if (statPath(tlpPath64, &statInfo) == 0)
-            tulipLibDir.append("../lib64");
-          else
-#endif
-            tulipLibDir.append("../lib");
+	  tulipLibDir.append("../").append(TULIP_INSTALL_LIBDIR_STR);
         }
       }
     }
@@ -166,22 +161,13 @@ void tlp::initTulipLib(const char* appDirPath) {
   if (getEnvTlp==0) {
     if (appDirPath) {
 #ifdef _WIN32
-      TulipLibDir = std::string(appDirPath) + "/../lib";
+      TulipLibDir = std::string(appDirPath) + "/../" + TULIP_INSTALL_LIBDIR_STR;
 #else
       // one dir up to initialize the lib dir
       TulipLibDir.append(appDirPath,
                          strlen(appDirPath) -
                          strlen(strrchr(appDirPath, '/') + 1));
-#ifdef X86_64
-      // check for lib64
-      string tlpPath64 = TulipLibDir + "lib64/tulip";
-      tlp_stat_t statInfo;
-
-      if (statPath(tlpPath64, &statInfo) == 0)
-        TulipLibDir.append("lib64");
-      else
-#endif
-        TulipLibDir.append("lib");
+      TulipLibDir.append(TULIP_INSTALL_LIBDIR_STR);
 
 #endif
     }
