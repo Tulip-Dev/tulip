@@ -9,6 +9,7 @@ ADD_CORE_FILES(CMakeLists.txt
 
 ADD_SUBDIRECTORY(gzstream)
 ADD_SUBDIRECTORY(OGDF)
+
 IF(NOT QHULL_FOUND)
   MESSAGE(STATUS "Qhull library was not found on the system, the version located in thirdparty will be compiled and used instead.")
   ADD_SUBDIRECTORY(libqhull)
@@ -17,6 +18,9 @@ IF(NOT YAJL_FOUND)
   MESSAGE(STATUS "Yajl library was not found on the system, the version located in thirdparty will be compiled and used instead.")
   ADD_SUBDIRECTORY(yajl)
 ENDIF(NOT YAJL_FOUND)
+
+ADD_SUBDIRECTORY(antlr)
+ADD_SUBDIRECTORY(xdkbibtex)
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(ftgl)
