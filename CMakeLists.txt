@@ -112,7 +112,7 @@ INCLUDE(cmake/TulipUseFile.cmake)
 ## ========================================================
 SET(TulipMajorVersion 5)
 SET(TulipMinorVersion 1)
-SET(TulipReleaseVersion "0")
+SET(TulipReleaseVersion "1-dev")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)

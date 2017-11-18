@@ -72,7 +72,7 @@ deploy:
     override: true
     artifact: tulip_installers
     on:
-      branch: master
+      branch: tulip_5_1_maint
       APPVEYOR_REPO_NAME: Tulip-Dev/tulip
 
 # send build status notifications to tulipdev mailing list
