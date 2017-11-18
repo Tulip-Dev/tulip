@@ -1,7 +1,4 @@
-ADD_SUBDIRECTORY(antlr)
-ADD_SUBDIRECTORY(xdkbibtex)
-
-INCLUDE_DIRECTORIES(./ ${TulipCoreBuildInclude} ${TulipCoreInclude})        
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 FILE(GLOB LIB_SRCS "*.cpp")
 
