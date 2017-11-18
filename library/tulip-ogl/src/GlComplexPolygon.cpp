@@ -36,6 +36,8 @@
 
 using namespace std;
 
+// clang-format off
+
 static const string outlineExtrusionVertexShaderSrc =
   "#version 120\n"
   "attribute float indice;"
@@ -237,6 +239,8 @@ static const string outlineExtrusionGeometryShaderSrc =
   "}"
 
   ;
+
+// clang-format on
 
 const int nbFloatPerVertex = 5;
 

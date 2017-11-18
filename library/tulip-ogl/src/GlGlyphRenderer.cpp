@@ -8,6 +8,8 @@
 
 using namespace std;
 
+// clang-format off
+
 static string glyphShaderSrc =
   "#version 120\n"
 
@@ -54,6 +56,8 @@ static string glyphShaderSrc =
   "   gl_TexCoord[0] = gl_MultiTexCoord0;"
   "}"
   ;
+
+// clang-format on
 
 namespace tlp {
 

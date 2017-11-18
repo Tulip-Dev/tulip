@@ -36,6 +36,8 @@
 using namespace std;
 using namespace tlp;
 
+// clang-format off
+
 string fisheyeVertexProgram =
   "#version 120\n"
   "uniform vec4 center;"
@@ -70,6 +72,8 @@ string fisheyeVertexProgram =
   "gl_FrontColor =  gl_Color;"
   "gl_TexCoord[0] = gl_MultiTexCoord0;"
   "}";
+
+// clang-format on
 
 FishEyeInteractor::FishEyeInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"),fisheyeConfigWidget(NULL) {}
 
