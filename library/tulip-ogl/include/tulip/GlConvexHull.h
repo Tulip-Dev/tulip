@@ -33,11 +33,11 @@ class Graph;
 
 /** \brief Class used to represent ConvexHull
  *
- * Class used to represent ConvexHull. GlHierarchyConvexHull class use this to create all convexHull of the graph
+ * Class used to represent ConvexHull. GlHierarchyConvexHull class use this to create all convexHull
+ * of the graph
  */
-class TLP_GL_SCOPE GlConvexHull: public GlComposite {
+class TLP_GL_SCOPE GlConvexHull : public GlComposite {
 public:
-
   /**
    * Default constructor
    */
@@ -46,13 +46,9 @@ public:
   /**
    * Build a Polygon with the convex hull of points
    */
-  GlConvexHull(const std::vector<Coord> &points,
-               const std::vector<Color> &fillColors,
-               const std::vector<Color> &outlineColors,
-               const bool filled,
-               const bool outlined,
-               const std::string &name,
-               bool computeHull=true);
+  GlConvexHull(const std::vector<Coord> &points, const std::vector<Color> &fillColors,
+               const std::vector<Color> &outlineColors, const bool filled, const bool outlined,
+               const std::string &name, bool computeHull = true);
 
   virtual ~GlConvexHull() {}
 
@@ -60,15 +56,15 @@ public:
    * Function used to visit composite's children
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor) {
-    if(boundingBox.isValid()) {
+    if (boundingBox.isValid()) {
       visitor->visit(this);
     }
 
-    for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
+    for (std::list<GlSimpleEntity *>::iterator it = _sortedElements.begin();
+         it != _sortedElements.end(); ++it) {
       (*it)->acceptVisitor(visitor);
     }
   }
-
 
   /**
    * Retrun the name of this convex hull
@@ -80,22 +76,20 @@ public:
   /**
    * Draw the convexHull
    */
-  virtual void draw(float lod,Camera *camera);
+  virtual void draw(float lod, Camera *camera);
 
   /**
    * Static function who build a hierarchy of convexHull with the given graph
    */
-  static ConvexHullItem *buildConvexHullsFromHierarchy(Graph *graph,
-      std::vector<Color> fColors,
-      std::vector<Color> oColors,
-      bool deduceFromChilds = true,
-      Graph *root = NULL,
-      unsigned int depth = 0);
+  static ConvexHullItem *buildConvexHullsFromHierarchy(Graph *graph, std::vector<Color> fColors,
+                                                       std::vector<Color> oColors,
+                                                       bool deduceFromChilds = true,
+                                                       Graph *root = NULL, unsigned int depth = 0);
 
   /**
    * Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * Function to export data in outString (in XML format)
@@ -119,12 +113,11 @@ protected:
 };
 
 struct ConvexHullItem {
-  GlConvexHull* hull;
+  GlConvexHull *hull;
   Graph *_graph;
   std::string name;
   std::vector<ConvexHullItem *> children;
 };
-
 }
 #endif
 ///@endcond

@@ -24,7 +24,8 @@
 
 using namespace tlp;
 
-NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
+NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
   _ui->setupUi(this);
   connect(_ui->applyButton, SIGNAL(clicked()), this, SIGNAL(updateNeighborhoodGraph()));
 }
@@ -33,14 +34,13 @@ NeighborhoodHighlighterConfigWidget::~NeighborhoodHighlighterConfigWidget() {
   delete _ui;
 }
 
-NodeNeighborhoodView::NeighborNodesType NeighborhoodHighlighterConfigWidget::getNeighborsType() const {
+NodeNeighborhoodView::NeighborNodesType
+NeighborhoodHighlighterConfigWidget::getNeighborsType() const {
   if (_ui->outputEdgesRB->isChecked()) {
     return NodeNeighborhoodView::OUT_NEIGHBORS;
-  }
-  else if (_ui->inputEdgesRB->isChecked()) {
+  } else if (_ui->inputEdgesRB->isChecked()) {
     return NodeNeighborhoodView::IN_NEIGHBORS;
-  }
-  else {
+  } else {
     return NodeNeighborhoodView::IN_OUT_NEIGHBORS;
   }
 }
@@ -49,7 +49,8 @@ bool NeighborhoodHighlighterConfigWidget::computeReachableSubGraph() const {
   return _ui->computeReachableSGCB->isChecked();
 }
 
-void NeighborhoodHighlighterConfigWidget::setCurrentMaxDistanceForReachableNodes(unsigned int distance) {
+void NeighborhoodHighlighterConfigWidget::setCurrentMaxDistanceForReachableNodes(
+    unsigned int distance) {
   _ui->distanceLineEdit->setText(QString::number(distance));
 }
 

@@ -22,65 +22,66 @@
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // input
-  "Property to stringify values on labels.",
+    // input
+    "Property to stringify values on labels.",
 
-  // selection
-  "Set of elements for which to set the labels.",
+    // selection
+    "Set of elements for which to set the labels.",
 
-  // nodes
-  "Sets labels on nodes.",
+    // nodes
+    "Sets labels on nodes.",
 
-  // edges
-  "Set labels on edges."
-};
+    // edges
+    "Set labels on edges."};
 
-class ToLabels: public tlp::StringAlgorithm {
+class ToLabels : public tlp::StringAlgorithm {
 public:
-  PLUGININFORMATION("To labels","Ludwig Fiolka","2012/03/16","Maps the labels of the graph elements onto the values of a given property.","1.0","")
-  ToLabels(const tlp::PluginContext* context): StringAlgorithm(context) {
-    addInParameter<PropertyInterface*>("input", paramHelp[0], "viewMetric", true);
+  PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16",
+                    "Maps the labels of the graph elements onto the values of a given property.",
+                    "1.0", "")
+  ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context) {
+    addInParameter<PropertyInterface *>("input", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
     addInParameter<bool>("nodes", paramHelp[2], "true");
     addInParameter<bool>("edges", paramHelp[3], "true");
   }
 
   bool run() {
-    PropertyInterface* input = NULL;
-    BooleanProperty* selection = NULL;
+    PropertyInterface *input = NULL;
+    BooleanProperty *selection = NULL;
     bool onNodes = true;
     bool onEdges = true;
 
     if (dataSet != NULL) {
-      dataSet->get("input",input);
-      dataSet->get("selection",selection);
-      dataSet->get("nodes",onNodes);
-      dataSet->get("edges",onEdges);
+      dataSet->get("input", input);
+      dataSet->get("selection", selection);
+      dataSet->get("nodes", onNodes);
+      dataSet->get("edges", onEdges);
     }
 
     pluginProgress->showPreview(false);
 
     if (onNodes) {
       pluginProgress->setComment("Copying nodes values");
-      int step=0,max_step = graph->numberOfNodes();
+      int step = 0, max_step = graph->numberOfNodes();
       node n;
       forEach(n, selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 
-        result->setNodeValue(n,input->getNodeStringValue(n));
+        result->setNodeValue(n, input->getNodeStringValue(n));
       }
     }
 
     if (onEdges) {
       pluginProgress->setComment("Copying edges values");
-      int step=0,max_step = graph->numberOfEdges();
+      int step = 0, max_step = graph->numberOfEdges();
       edge e;
       forEach(e, selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 
-        result->setEdgeValue(e,input->getEdgeStringValue(e));
+        result->setEdgeValue(e, input->getEdgeStringValue(e));
       }
     }
 

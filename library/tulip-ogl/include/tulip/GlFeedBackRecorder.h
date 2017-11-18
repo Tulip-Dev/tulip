@@ -38,11 +38,10 @@ class GlFeedBackBuilder;
 class TLP_GL_SCOPE GlFeedBackRecorder {
 
 public:
-
   /**
    * Constructor : the recorder use GlFeedBackBuilder : builder
    */
-  GlFeedBackRecorder(GlFeedBackBuilder *builder,unsigned int pointSize=7);
+  GlFeedBackRecorder(GlFeedBackBuilder *builder, unsigned int pointSize = 7);
   /**
    * Record a new feedback buffer
    * \param doSort : sort the feedback buffer
@@ -50,19 +49,16 @@ public:
    * \param feedBackBuffer : the feedback buffer
    * \param viewport : the viewport of the scene
    */
-  void record(bool doSort, GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport);
+  void record(bool doSort, GLint size, GLfloat *feedBackBuffer, const Vector<int, 4> &viewport);
 
 private:
-
   void sortAndRecord(GLint size, GLfloat *feedBackBuffer);
   void record(GLint size, GLfloat *feedBackBuffer);
-  GLfloat* recordPrimitive(GLfloat *loc);
+  GLfloat *recordPrimitive(GLfloat *loc);
 
   GlFeedBackBuilder *feedBackBuilder;
   unsigned int pointSize;
-
 };
-
 }
 
 #endif // Tulip_GLFEEDBACKRECORDER_H

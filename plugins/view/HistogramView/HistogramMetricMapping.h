@@ -44,8 +44,7 @@ namespace tlp {
 
 class GlEditableCurve : public GlSimpleEntity {
 
-public :
-
+public:
   GlEditableCurve(const Coord &startPoint, const Coord &endPoint, const Color &curveColor);
   GlEditableCurve(const GlEditableCurve &curve);
   ~GlEditableCurve() {}
@@ -62,9 +61,9 @@ public :
   void updateSize(const Coord &newMinPoint, const Coord &newMaxPoint);
   void resetCurve();
 
-  void draw(float lod,Camera* camera);
+  void draw(float lod, Camera *camera);
   void getXML(std::string &) {}
-  void setWithXML(const std::string &,unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) {}
 
   Coord getMinPoint() const {
     return minPoint;
@@ -101,8 +100,7 @@ public :
     curveColor = color;
   }
 
-private :
-
+private:
   void init();
 
   Coord startPoint, endPoint;
@@ -115,24 +113,22 @@ private :
 
 class GlSizeScale : public GlSimpleEntity {
 
-public :
-  enum Orientation {
-    Horizontal, Vertical
-  };
+public:
+  enum Orientation { Horizontal, Vertical };
 
-
-  GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length, const float thickness, const Color &color, Orientation orientation);
+  GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length,
+              const float thickness, const Color &color, Orientation orientation);
   ~GlSizeScale();
 
   float getSizeAtPos(const Coord &pos);
 
-  void draw(float lod, Camera* camera);
+  void draw(float lod, Camera *camera);
 
   void translate(const Coord &move);
 
   void getXML(std::string &) {}
 
-  void setWithXML(const std::string &,unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) {}
 
   Coord getBaseCoord() const {
     return baseCoord;
@@ -164,8 +160,7 @@ public :
     this->color = color;
   }
 
-private :
-
+private:
   float minSize, maxSize;
   Coord baseCoord;
   float length, thickness;
@@ -173,16 +168,12 @@ private :
   Orientation orientation;
   GlPolyQuad *polyquad;
   GlLabel *minLabel, *maxLabel;
-
 };
 
 class GlGlyphScale : public GlSimpleEntity {
 
-public :
-  enum Orientation {
-    Horizontal, Vertical
-  };
-
+public:
+  enum Orientation { Horizontal, Vertical };
 
   GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation);
   ~GlGlyphScale();
@@ -191,13 +182,13 @@ public :
 
   int getGlyphAtPos(const Coord &pos);
 
-  void draw(float lod, Camera* camera);
+  void draw(float lod, Camera *camera);
 
   void translate(const Coord &move);
 
   void getXML(std::string &) {}
 
-  void setWithXML(const std::string &,unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) {}
 
   Coord getBaseCoord() const {
     return baseCoord;
@@ -207,8 +198,7 @@ public :
     return length;
   }
 
-private :
-
+private:
   GlGraphRenderingParameters glyphGraphRenderingParameters;
   Graph *glyphGraph;
   LayoutProperty *glyphGraphLayout;
@@ -221,15 +211,13 @@ private :
   Orientation orientation;
   std::map<std::pair<float, float>, int> glyphScaleMap;
   float size;
-
 };
 
 class HistogramMetricMapping : public GLInteractorComponent {
 
-  enum MappingType {VIEWCOLOR_MAPPING, VIEWBORDERCOLOR_MAPPING, SIZE_MAPPING, GLYPH_MAPPING};
+  enum MappingType { VIEWCOLOR_MAPPING, VIEWBORDERCOLOR_MAPPING, SIZE_MAPPING, GLYPH_MAPPING };
 
-public :
-
+public:
   HistogramMetricMapping();
   HistogramMetricMapping(const HistogramMetricMapping &histogramMetricMapping);
   ~HistogramMetricMapping();
@@ -243,12 +231,10 @@ public :
   void updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout);
   void updateMapping(GlQuantitativeAxis *histoXAxis, unsigned int nbHistogramBins);
 
-private :
-
+private:
   void initInteractor();
 
-protected :
-
+protected:
   HistogramView *histoView;
   GlEditableCurve *curve;
   bool curveDragStarted;
@@ -279,9 +265,7 @@ protected :
   QAction *glyphMapping;
 
   std::map<MappingType, std::vector<Coord> > curveShapeForMapping;
-
 };
-
 }
 
 #endif /* HISTOGRAMCOLORMAPPING_H_ */

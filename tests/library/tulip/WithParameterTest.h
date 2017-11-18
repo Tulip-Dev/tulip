@@ -28,12 +28,13 @@ class WithParameterTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(WithParameterTest);
   CPPUNIT_TEST(testBuildDefaultDataSet);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   void testBuildDefaultDataSet();
 };
 
 class ParameteredClass : public tlp::WithParameter {
-public :
+public:
   ParameteredClass();
 };
 

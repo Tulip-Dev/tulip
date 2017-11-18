@@ -27,13 +27,12 @@ namespace tlp {
  * @ingroup Plugins
  * @brief A simple implementation of tlp::PluginLoader to display load state into the console
  */
-struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
+struct TLP_SCOPE PluginLoaderTxt : public PluginLoader {
   virtual void start(const std::string &path);
   virtual void loading(const std::string &filename);
-  virtual void loaded(const Plugin* info, const std::list <Dependency>&);
-  virtual void aborted(const std::string &filename,const  std::string &erreurmsg);
-  virtual void finished(bool state,const std::string &msg);
+  virtual void loaded(const Plugin *info, const std::list<Dependency> &);
+  virtual void aborted(const std::string &filename, const std::string &erreurmsg);
+  virtual void finished(bool state, const std::string &msg);
 };
-
 }
 #endif

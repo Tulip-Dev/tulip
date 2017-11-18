@@ -26,7 +26,7 @@
 
 namespace tlp {
 
-template<class itType >
+template <class itType>
 struct Iterator;
 
 class PropertyInterface;
@@ -35,36 +35,35 @@ class Graph;
 class PropertyManager {
 
 private:
-  std::map<std::string, PropertyInterface*> localProperties;
-  std::map<std::string, PropertyInterface*> inheritedProperties;
+  std::map<std::string, PropertyInterface *> localProperties;
+  std::map<std::string, PropertyInterface *> inheritedProperties;
 
 public:
   Graph *graph;
-  explicit  PropertyManager(Graph*);
+  explicit PropertyManager(Graph *);
   ~PropertyManager();
   //======================================================================================
-  bool existProperty(const std::string&) const;
-  bool existLocalProperty(const std::string&) const;
-  bool existInheritedProperty(const std::string&) const;
-  void setLocalProperty(const std::string&, PropertyInterface *);
-  bool renameLocalProperty(PropertyInterface *, const std::string&);
-  PropertyInterface* getProperty(const std::string&) const;
-  PropertyInterface* getLocalProperty(const std::string&) const;
-  PropertyInterface* getInheritedProperty(const std::string&) const;
-  void delLocalProperty(const std::string&);
-  void notifyBeforeDelInheritedProperty(const std::string&);
-  void erase(const node );
-  void erase(const edge );
+  bool existProperty(const std::string &) const;
+  bool existLocalProperty(const std::string &) const;
+  bool existInheritedProperty(const std::string &) const;
+  void setLocalProperty(const std::string &, PropertyInterface *);
+  bool renameLocalProperty(PropertyInterface *, const std::string &);
+  PropertyInterface *getProperty(const std::string &) const;
+  PropertyInterface *getLocalProperty(const std::string &) const;
+  PropertyInterface *getInheritedProperty(const std::string &) const;
+  void delLocalProperty(const std::string &);
+  void notifyBeforeDelInheritedProperty(const std::string &);
+  void erase(const node);
+  void erase(const edge);
   //======================================================================================
-  Iterator<std::string>* getLocalProperties();
-  Iterator<std::string>* getInheritedProperties();
-  Iterator<PropertyInterface*>* getLocalObjectProperties();
-  Iterator<PropertyInterface*>* getInheritedObjectProperties();
+  Iterator<std::string> *getLocalProperties();
+  Iterator<std::string> *getInheritedProperties();
+  Iterator<PropertyInterface *> *getLocalObjectProperties();
+  Iterator<PropertyInterface *> *getInheritedObjectProperties();
 
 protected:
-  void setInheritedProperty(const std::string&, PropertyInterface *);
+  void setInheritedProperty(const std::string &, PropertyInterface *);
 };
-
 }
 
 #endif

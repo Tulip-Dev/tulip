@@ -43,9 +43,12 @@ using namespace std;
 
 PLUGIN(PathFinder)
 
-PathFinder::PathFinder(const tlp::PluginContext *) :
-  GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the path(s) between two nodes"), weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
-  pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION), tolerance(DEFAULT_TOLERANCE), _configurationWidget(NULL), highlightersListWidget(NULL), configureHighlighterBtn(NULL) {
+PathFinder::PathFinder(const tlp::PluginContext *)
+    : GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the path(s) between two nodes"),
+      weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
+      pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION),
+      tolerance(DEFAULT_TOLERANCE), _configurationWidget(NULL), highlightersListWidget(NULL),
+      configureHighlighterBtn(NULL) {
 
   edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
   edgeOrientationLabels[PathAlgorithm::NonOriented] = "Consider edges as non-oriented";
@@ -60,7 +63,7 @@ PathFinder::~PathFinder() {
 }
 
 bool PathFinder::isCompatible(const std::string &viewName) const {
-  return (viewName==NodeLinkDiagramComponent::viewName);
+  return (viewName == NodeLinkDiagramComponent::viewName);
 }
 
 void PathFinder::construct() {
@@ -80,18 +83,23 @@ void PathFinder::construct() {
   string s;
 
   _configurationWidget->addweightComboItem(NO_METRIC);
-  forEach (s, g->getProperties()) {
+  forEach(s, g->getProperties()) {
     if (g->getProperty(s)->getTypename().compare("double") == 0)
       _configurationWidget->addweightComboItem(s.c_str());
   }
-  _configurationWidget->setCurrentweightComboIndex(_configurationWidget->weightComboFindText(weightMetric.c_str()));
+  _configurationWidget->setCurrentweightComboIndex(
+      _configurationWidget->weightComboFindText(weightMetric.c_str()));
 
-  for (map<PathAlgorithm::EdgeOrientation, string>::iterator it = edgeOrientationLabels.begin(); it != edgeOrientationLabels.end(); ++it)
+  for (map<PathAlgorithm::EdgeOrientation, string>::iterator it = edgeOrientationLabels.begin();
+       it != edgeOrientationLabels.end(); ++it)
     _configurationWidget->addedgeOrientationComboItem(it->second.c_str());
 
-  _configurationWidget->setCurrentedgeOrientationComboIndex(_configurationWidget->edgeOrientationComboFindText(edgeOrientationLabels[edgeOrientation].c_str()));
+  _configurationWidget->setCurrentedgeOrientationComboIndex(
+      _configurationWidget->edgeOrientationComboFindText(
+          edgeOrientationLabels[edgeOrientation].c_str()));
 
-  for (map<PathAlgorithm::PathType, string>::iterator it = pathsTypesLabels.begin(); it != pathsTypesLabels.end(); ++it)
+  for (map<PathAlgorithm::PathType, string>::iterator it = pathsTypesLabels.begin();
+       it != pathsTypesLabels.end(); ++it)
     _configurationWidget->addpathsTypeComboItem(it->second.c_str());
 
   setPathsType(pathsTypesLabels[pathsTypes].c_str());
@@ -99,11 +107,12 @@ void PathFinder::construct() {
   _configurationWidget->toleranceChecked(toleranceActivated);
   _configurationWidget->setToleranceSpinValue(tolerance);
 
-  highlightersListWidget = new StringsListSelectionWidget(_configurationWidget, StringsListSelectionWidget::SIMPLE_LIST, 0);
+  highlightersListWidget = new StringsListSelectionWidget(
+      _configurationWidget, StringsListSelectionWidget::SIMPLE_LIST, 0);
   vector<string> activeList, inactiveList;
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
 
-  foreach(PathHighlighter *h, highlighters)
+  foreach (PathHighlighter *h, highlighters)
     inactiveList.push_back(h->getName());
 
   highlightersListWidget->setSelectedStringsList(activeList);
@@ -116,16 +125,21 @@ void PathFinder::construct() {
 
   _configurationWidget->addbottomWidget(highlightersListWidget);
   configureHighlighterBtn = new QPushButton("Configure", _configurationWidget);
-  QHBoxLayout *hlLayout = highlightersListWidget->findChild<QHBoxLayout *> ("horizontalLayout_2");
+  QHBoxLayout *hlLayout = highlightersListWidget->findChild<QHBoxLayout *>("horizontalLayout_2");
 
   if (hlLayout)
     hlLayout->addWidget(configureHighlighterBtn);
 
-  connect(configureHighlighterBtn, SIGNAL(clicked(bool)), this, SLOT(configureHighlighterButtonPressed()));
-  connect(_configurationWidget, SIGNAL(setWeightMetric(const QString &)), this, SLOT(setWeightMetric(const QString &)));
-  connect(_configurationWidget, SIGNAL(setEdgeOrientation(const QString &)), this, SLOT(setEdgeOrientation(const QString &)));
-  connect(_configurationWidget, SIGNAL(setPathsType(const QString &)), this, SLOT(setPathsType(const QString &)));
-  connect(_configurationWidget, SIGNAL(activateTolerance(bool)), this, SLOT(activateTolerance(bool)));
+  connect(configureHighlighterBtn, SIGNAL(clicked(bool)), this,
+          SLOT(configureHighlighterButtonPressed()));
+  connect(_configurationWidget, SIGNAL(setWeightMetric(const QString &)), this,
+          SLOT(setWeightMetric(const QString &)));
+  connect(_configurationWidget, SIGNAL(setEdgeOrientation(const QString &)), this,
+          SLOT(setEdgeOrientation(const QString &)));
+  connect(_configurationWidget, SIGNAL(setPathsType(const QString &)), this,
+          SLOT(setPathsType(const QString &)));
+  connect(_configurationWidget, SIGNAL(activateTolerance(bool)), this,
+          SLOT(activateTolerance(bool)));
   connect(_configurationWidget, SIGNAL(setTolerance(int)), this, SLOT(setTolerance(int)));
 }
 
@@ -140,7 +154,8 @@ void PathFinder::setWeightMetric(const QString &metric) {
 void PathFinder::setEdgeOrientation(const QString &metric) {
   string cmp(QStringToTlpString(metric));
 
-  for (map<PathAlgorithm::EdgeOrientation, string>::iterator it = edgeOrientationLabels.begin(); it != edgeOrientationLabels.end(); ++it) {
+  for (map<PathAlgorithm::EdgeOrientation, string>::iterator it = edgeOrientationLabels.begin();
+       it != edgeOrientationLabels.end(); ++it) {
     if (it->second.compare(cmp) == 0)
       edgeOrientation = it->first;
   }
@@ -153,7 +168,8 @@ void PathFinder::setSelectAllPaths(bool s) {
 void PathFinder::setPathsType(const QString &pathType) {
   string cmp(QStringToTlpString(pathType));
 
-  for (map<PathAlgorithm::PathType, string>::iterator it = pathsTypesLabels.begin(); it != pathsTypesLabels.end(); ++it) {
+  for (map<PathAlgorithm::PathType, string>::iterator it = pathsTypesLabels.begin();
+       it != pathsTypesLabels.end(); ++it) {
     if (it->second.compare(cmp) == 0)
       pathsTypes = it->first;
   }
@@ -197,9 +213,11 @@ vector<string> PathFinder::getHighlighters() {
 void PathFinder::configureHighlighterButtonPressed() {
   /*
    * Each highlighter has it's own configuration widget.
-   * We build a QDialog and integrate this widget into it to display highlighter-specific configuration to the user.
+   * We build a QDialog and integrate this widget into it to display highlighter-specific
+   * configuration to the user.
    */
-  QListWidget *listWidget = static_cast<QListWidget *> (highlightersListWidget->findChild<QListWidget *> ("listWidget"));
+  QListWidget *listWidget =
+      static_cast<QListWidget *>(highlightersListWidget->findChild<QListWidget *>("listWidget"));
 
   QList<QListWidgetItem *> lst = listWidget->selectedItems();
   string text("");
@@ -208,16 +226,16 @@ void PathFinder::configureHighlighterButtonPressed() {
     text = QStringToTlpString((*it)->text());
 
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
-  PathHighlighter *hler=NULL;
+  PathHighlighter *hler = NULL;
 
-  foreach(PathHighlighter *h, highlighters) {
+  foreach (PathHighlighter *h, highlighters) {
     if (h->getName() == text) {
       hler = h;
       break;
     }
   }
 
-  if(hler==NULL) {
+  if (hler == NULL) {
     QMessageBox::warning(0, "Nothing selected", "No highlighter selected");
     return;
   }
@@ -245,15 +263,16 @@ void PathFinder::configureHighlighterButtonPressed() {
     dialog->setWindowTitle(tlpStringToQString(hler->getName()));
     dialog->exec();
     delete dialog;
-  }
-  else
-    QMessageBox::warning(0, tlpStringToQString(hler->getName()), "No configuration available for this highlighter");
+  } else
+    QMessageBox::warning(0, tlpStringToQString(hler->getName()),
+                         "No configuration available for this highlighter");
 }
 
 PathFinderComponent *PathFinder::getPathFinderComponent() {
-  // Look upon all the installed components and stop as soon as we get a PathFinderComponent * object.
+  // Look upon all the installed components and stop as soon as we get a PathFinderComponent *
+  // object.
   for (iterator it = begin(); it != end(); ++it) {
-    PathFinderComponent *c = dynamic_cast<PathFinderComponent *> (*it);
+    PathFinderComponent *c = dynamic_cast<PathFinderComponent *>(*it);
 
     if (c)
       return c;

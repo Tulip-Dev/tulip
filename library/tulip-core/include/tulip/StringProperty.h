@@ -33,14 +33,14 @@ typedef AbstractProperty<tlp::StringType, tlp::StringType> AbstractStringPropert
  * @ingroup Graph
  * @brief A graph property that maps a std::string value to graph elements.
  */
-class TLP_SCOPE StringProperty:public AbstractStringProperty {
-public :
-  StringProperty (Graph *g, const std::string& n="");
+class TLP_SCOPE StringProperty : public AbstractStringProperty {
+public:
+  StringProperty(Graph *g, const std::string &n = "");
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
   // the value size of a StringVectorProperty is not fixed
@@ -50,22 +50,24 @@ public :
   virtual unsigned int edgeValueSize() const {
     return 0;
   }
-  int compare(const node n1,const node n2)const;
-  int compare(const edge e1,const edge e2)const;
+  int compare(const node n1, const node n2) const;
+  int compare(const edge e1, const edge e2) const;
 };
 
 /**
  * @ingroup Graph
  * @brief A graph property that maps a std::vector<std::string> value to graph elements.
  */
-class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType> {
-public :
-  StringVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
+class TLP_SCOPE StringVectorProperty
+    : public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType> {
+public:
+  StringVectorProperty(Graph *g, const std::string &n = "")
+      : AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
   // the value size of a StringVectorProperty is not fixed

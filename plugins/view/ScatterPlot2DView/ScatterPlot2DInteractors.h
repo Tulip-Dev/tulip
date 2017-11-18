@@ -28,43 +28,39 @@ class ScatterPlotCorrelCoeffSelectorOptionsWidget;
 
 class ScatterPlot2DInteractor : public NodeLinkDiagramComponentInteractor {
 
-public :
-
+public:
   ScatterPlot2DInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
-
 };
 
 class ScatterPlot2DInteractorNavigation : public ScatterPlot2DInteractor {
 
-public :
-
-  PLUGININFORMATION("ScatterPlot2DInteractorNavigation", "Tulip Team", "02/04/2009", "Scatter Plot 2D Navigation Interactor", "1.0" ,"Navigation")
+public:
+  PLUGININFORMATION("ScatterPlot2DInteractorNavigation", "Tulip Team", "02/04/2009",
+                    "Scatter Plot 2D Navigation Interactor", "1.0", "Navigation")
 
   ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);
 
   void construct();
-
 };
 
 class ScatterPlot2DInteractorTrendLine : public ScatterPlot2DInteractor {
 
-public :
-
-  PLUGININFORMATION("ScatterPlot2DInteractorTrendLine", "Tulip Team", "02/04/2009", "Scatter Plot 2D Trend Line Interactor", "1.0", "Information")
+public:
+  PLUGININFORMATION("ScatterPlot2DInteractorTrendLine", "Tulip Team", "02/04/2009",
+                    "Scatter Plot 2D Trend Line Interactor", "1.0", "Information")
 
   ScatterPlot2DInteractorTrendLine(const tlp::PluginContext *);
 
   void construct();
-
 };
 
 class ScatterPlot2DInteractorCorrelCoeffSelector : public ScatterPlot2DInteractor {
 
-public :
-
-  PLUGININFORMATION("ScatterPlot2DInteractorCorrelCoeffSelector", "Tulip Team", "02/04/2009", "Scatter Plot 2D Correlation Coefficient Interactor", "1.0", "Information")
+public:
+  PLUGININFORMATION("ScatterPlot2DInteractorCorrelCoeffSelector", "Tulip Team", "02/04/2009",
+                    "Scatter Plot 2D Correlation Coefficient Interactor", "1.0", "Information")
 
   ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *);
   ~ScatterPlot2DInteractorCorrelCoeffSelector();
@@ -73,22 +69,21 @@ public :
 
   QWidget *configurationWidget() const;
 
-private :
-
+private:
   ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
-
 };
 
 /**
  *  \brief interactor to get information about an element of the graph
  */
-class ScatterPlot2DInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+class ScatterPlot2DInteractorGetInformation : public NodeLinkDiagramComponentInteractor {
 public:
-  PLUGININFORMATION("ScatterPlot2DInteractorGetInformation", "Tulip Team", "18/06/2015", "Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("ScatterPlot2DInteractorGetInformation", "Tulip Team", "18/06/2015",
+                    "Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
-  ScatterPlot2DInteractorGetInformation(const tlp::PluginContext*);
+  ScatterPlot2DInteractorGetInformation(const tlp::PluginContext *);
 
   /**
    * Construct chain of responsibility
@@ -97,7 +92,6 @@ public:
 
   bool isCompatible(const std::string &viewName) const;
 };
-
 }
 
 #endif /* SCATTERPLOT2DINTERACTORS_H_ */

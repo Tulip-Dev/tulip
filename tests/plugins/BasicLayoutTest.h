@@ -47,11 +47,14 @@ class BasicLayoutTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testKruskal);
   CPPUNIT_TEST(testFastOverlapRemoval);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
-  void initializeGraph(const std::string& type);
-  template<typename PropType>
-  bool computeProperty(const std::string &algorithm, const std::string& graphType = "Planar Graph", PropType* prop = NULL);
+  void initializeGraph(const std::string &type);
+  template <typename PropType>
+  bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph",
+                       PropType *prop = NULL);
+
 public:
   virtual void setUp();
   virtual void tearDown();

@@ -32,14 +32,14 @@
 using namespace std;
 using namespace tlp;
 
-static Graph* tlp_loadGraph(const std::string& filename) {
+static Graph *tlp_loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph("TLP Import", dataSet);
   return sg;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( TestAlgorithmTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(TestAlgorithmTest);
 
 //==========================================================
 void TestAlgorithmTest::setUp() {
@@ -71,7 +71,7 @@ void TestAlgorithmTest::testFreeTree() {
   graph->addEdge(n4, n1);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
-  Graph* clone = graph->addCloneSubGraph();
+  Graph *clone = graph->addCloneSubGraph();
   CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
   clone->reverse(e1);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
@@ -100,7 +100,7 @@ void TestAlgorithmTest::testTree() {
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   edge e2 = graph->addEdge(n4, n1);
   CPPUNIT_ASSERT(TreeTest::isTree(graph));
-  Graph* clone = graph->addCloneSubGraph();
+  Graph *clone = graph->addCloneSubGraph();
   CPPUNIT_ASSERT(TreeTest::isTree(clone));
   graph->reverse(e1);
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
@@ -112,7 +112,7 @@ void TestAlgorithmTest::testTree() {
   clone->delNode(n3);
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   CPPUNIT_ASSERT(TreeTest::isTree(clone));
-  //known bug test
+  // known bug test
   {
     graph->clear();
     node n1 = graph->addNode();
@@ -126,14 +126,14 @@ void TestAlgorithmTest::testTree() {
 }
 //==========================================================
 void TestAlgorithmTest::testAcyclic() {
-  //TODO check this test, as it was not executed for some time
+  // TODO check this test, as it was not executed for some time
   graph->clear();
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   node n3 = graph->addNode();
   graph->addEdge(n1, n2);
   graph->addEdge(n1, n3);
-  Graph* clone = graph->addCloneSubGraph();
+  Graph *clone = graph->addCloneSubGraph();
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
   clone->addEdge(n2, n3);
@@ -176,44 +176,44 @@ void TestAlgorithmTest::testBiconnected() {
   node n[10];
   edge e[10];
 
-  for (int i=0; i<4; ++i)
-    n[i]=graph->addNode();
+  for (int i = 0; i < 4; ++i)
+    n[i] = graph->addNode();
 
-  for (int i=0; i<4; ++i)
-    e[i]=graph->addEdge(n[i],n[(i+1)%4]);
+  for (int i = 0; i < 4; ++i)
+    e[i] = graph->addEdge(n[i], n[(i + 1) % 4]);
 
   CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(graph));
   graph->delEdge(e[0]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
-  e[0]=graph->addEdge(n[0],n[2]);
-  n[4]=graph->addNode();
-  e[4]=graph->addEdge(n[4],n[1]);
-  e[5]=graph->addEdge(n[4],n[2]);
+  e[0] = graph->addEdge(n[0], n[2]);
+  n[4] = graph->addNode();
+  e[4] = graph->addEdge(n[4], n[1]);
+  e[5] = graph->addEdge(n[4], n[2]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
-  e[6]=graph->addEdge(n[4],n[0]);
+  e[6] = graph->addEdge(n[4], n[0]);
   CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(graph));
-  n[5]=graph->addNode();
+  n[5] = graph->addNode();
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
-  e[7]=graph->addEdge(n[1],n[5]);
+  e[7] = graph->addEdge(n[1], n[5]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
-  //Root separator
+  // Root separator
   graph->clear();
 
-  for (int i=0; i<5; ++i)
-    n[i]=graph->addNode();
+  for (int i = 0; i < 5; ++i)
+    n[i] = graph->addNode();
 
-  e[0]=graph->addEdge(n[0],n[1]);
-  e[1]=graph->addEdge(n[0],n[2]);
-  e[2]=graph->addEdge(n[1],n[2]);
+  e[0] = graph->addEdge(n[0], n[1]);
+  e[1] = graph->addEdge(n[0], n[2]);
+  e[2] = graph->addEdge(n[1], n[2]);
 
-  e[3]=graph->addEdge(n[0],n[3]);
-  e[4]=graph->addEdge(n[0],n[4]);
-  e[5]=graph->addEdge(n[3],n[4]);
+  e[3] = graph->addEdge(n[0], n[3]);
+  e[4] = graph->addEdge(n[0], n[4]);
+  e[5] = graph->addEdge(n[3], n[4]);
 
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
-  e[6]=graph->addEdge(n[2],n[4]);
+  e[6] = graph->addEdge(n[2], n[4]);
   CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(graph));
-  //Test makeBiconnected
+  // Test makeBiconnected
   graph->delEdge(e[6]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
   vector<edge> addedEdges;
@@ -225,7 +225,7 @@ void TestAlgorithmTest::testBiconnected() {
 
   Graph *tmpGraph;
 
-  for (unsigned int i = 0; i<5; ++i) {
+  for (unsigned int i = 0; i < 5; ++i) {
     tmpGraph = tlp_loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     vector<edge> vEdges;
@@ -239,7 +239,6 @@ void TestAlgorithmTest::testBiconnected() {
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     delete tmpGraph;
   }
-
 }
 //==========================================================
 void TestAlgorithmTest::testTriconnected() {

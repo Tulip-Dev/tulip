@@ -33,7 +33,8 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> IntegerMinMaxProperty;
+typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty>
+    IntegerMinMaxProperty;
 
 /**
  * @ingroup Graph
@@ -41,18 +42,16 @@ typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty>
  */
 class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
-public :
-  IntegerProperty(Graph *, const std::string& n = "");
+public:
+  IntegerProperty(Graph *, const std::string &n = "");
 
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
-  virtual void setNodeValue(const node n,
-                            tlp::StoredType<int>::ReturnedConstValue v);
-  virtual void setEdgeValue(const edge e,
-                            tlp::StoredType<int>::ReturnedConstValue v);
+  virtual void setNodeValue(const node n, tlp::StoredType<int>::ReturnedConstValue v);
+  virtual void setEdgeValue(const edge e, tlp::StoredType<int>::ReturnedConstValue v);
   virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v);
 
   virtual void setValueToGraphNodes(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
@@ -69,10 +68,10 @@ public :
   virtual double getNodeDoubleDefaultValue() const {
     return getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(const Graph* g = NULL) {
+  virtual double getNodeDoubleMin(const Graph *g = NULL) {
     return getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(const Graph* g = NULL) {
+  virtual double getNodeDoubleMax(const Graph *g = NULL) {
     return getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
@@ -81,10 +80,10 @@ public :
   virtual double getEdgeDoubleDefaultValue() const {
     return getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(const Graph* g = NULL) {
+  virtual double getEdgeDoubleMin(const Graph *g = NULL) {
     return getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(const Graph* g = NULL) {
+  virtual double getEdgeDoubleMax(const Graph *g = NULL) {
     return getEdgeMax(g);
   }
 
@@ -92,41 +91,43 @@ public :
 
   void edgesUniformQuantification(unsigned int);
 
-  NumericProperty* copyProperty(Graph *g) {
-    IntegerProperty* newProp = new IntegerProperty(g);
+  NumericProperty *copyProperty(Graph *g) {
+    IntegerProperty *newProp = new IntegerProperty(g);
     newProp->copy(this);
 
     return newProp;
   }
 
-  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
-  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph);
+  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v,
+                                           const Graph *graph);
+  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v,
+                                           const Graph *graph);
 
 protected:
-  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &);
+  virtual void
+  clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &);
 
 private:
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 };
 
 /**
  * @ingroup Graph
  * @brief A graph property that maps a std::vector<int> value to graph elements.
  */
-class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
-public :
-  IntegerVectorProperty(Graph *g, const std::string& n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
+class TLP_SCOPE IntegerVectorProperty
+    : public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
+public:
+  IntegerVectorProperty(Graph *g, const std::string &n = "")
+      : AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
-
 };
-
-
 }
 #endif
 ///@endcond

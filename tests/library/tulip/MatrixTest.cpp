@@ -24,14 +24,14 @@
 using namespace std;
 using namespace tlp;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( MatrixTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(MatrixTest);
 
-template<typename Obj, unsigned int SIZE>
+template <typename Obj, unsigned int SIZE>
 void display(const Matrix<Obj, SIZE> &mat) {
-  for (unsigned int row=0; row<SIZE; ++row) {
+  for (unsigned int row = 0; row < SIZE; ++row) {
     cout << "| ";
 
-    for (unsigned int col=0; col<SIZE; ++col) {
+    for (unsigned int col = 0; col < SIZE; ++col) {
       cout << setw(4) << mat[row][col] << setw(1) << " ";
     }
 
@@ -47,15 +47,17 @@ void MatrixTest::testExternalOperation() {
   matid.fill(0);
   Vector<double, SIZE> vec;
 
-  for (unsigned int i=0; i<SIZE; ++i) {
+  for (unsigned int i = 0; i < SIZE; ++i) {
     vec[i] = i;
 
-    for (unsigned int j=0; j<SIZE; ++j) {
-      mat1[i][j] = double((i+1)*(j+SIZE));
+    for (unsigned int j = 0; j < SIZE; ++j) {
+      mat1[i][j] = double((i + 1) * (j + SIZE));
 
-      if (i==j) matid[i][j] = 1.0;
+      if (i == j)
+        matid[i][j] = 1.0;
 
-      if (i==j) mat1[i][j] = 0.0; //ensure be inversible
+      if (i == j)
+        mat1[i][j] = 0.0; // ensure be inversible
     }
   }
 
@@ -91,12 +93,13 @@ void MatrixTest::testExternalOperation() {
 
   result = mat2 * matinv;
 
-  for (unsigned int i=0; i<SIZE; ++i)
-    for (unsigned int j=0; j<SIZE; ++j) {
+  for (unsigned int i = 0; i < SIZE; ++i)
+    for (unsigned int j = 0; j < SIZE; ++j) {
       double res = fabs(matid[i][j] - result[i][j]);
       bool ok = false;
 
-      if (fabs(res) < 1.E-5) ok = true;
+      if (fabs(res) < 1.E-5)
+        ok = true;
 
       CPPUNIT_ASSERT(ok);
     }
@@ -109,11 +112,12 @@ void MatrixTest::testExternalOperation() {
   vec2 = mat2 * vec;
   vec2 = matinv * vec2;
 
-  for (unsigned int j=0; j<SIZE; ++j) {
+  for (unsigned int j = 0; j < SIZE; ++j) {
     double res = fabs(vec2[j] - vec[j]);
     bool ok = false;
 
-    if (res < 1.E-5) ok = true;
+    if (res < 1.E-5)
+      ok = true;
 
     CPPUNIT_ASSERT(ok);
   }
@@ -122,10 +126,11 @@ void MatrixTest::testExternalOperation() {
   vec3 = vec * mat2;
   bool ok = false;
 
-  for (unsigned int j=0; j<SIZE; ++j) {
+  for (unsigned int j = 0; j < SIZE; ++j) {
     double res = fabs(vec2[j] - vec3[j]);
 
-    if (res > 1.E-5) ok = true;
+    if (res > 1.E-5)
+      ok = true;
   }
 
   CPPUNIT_ASSERT(ok);
@@ -133,11 +138,12 @@ void MatrixTest::testExternalOperation() {
   vec2 = vec * mat2;
   vec3 = vec2 * matinv;
 
-  for (unsigned int j=0; j<SIZE; ++j) {
+  for (unsigned int j = 0; j < SIZE; ++j) {
     bool ok = false;
     double res = fabs(vec[j] - vec3[j]);
 
-    if (res < 1.E-5) ok = true;
+    if (res < 1.E-5)
+      ok = true;
 
     CPPUNIT_ASSERT(ok);
   }
@@ -149,16 +155,18 @@ void MatrixTest::testInternalOperation() {
   matnull.fill(0);
   matid.fill(0);
 
-  for (unsigned int i=0; i<SIZE; ++i)
-    for (unsigned int j=0; j<SIZE; ++j) {
-      mat1[i][j] = double((i+1)*(j+SIZE));
+  for (unsigned int i = 0; i < SIZE; ++i)
+    for (unsigned int j = 0; j < SIZE; ++j) {
+      mat1[i][j] = double((i + 1) * (j + SIZE));
 
-      if (i==j) matid[i][j] = 1.0;
+      if (i == j)
+        matid[i][j] = 1.0;
 
       CPPUNIT_ASSERT_EQUAL(0.0, matnull[i][j]);
-      CPPUNIT_ASSERT_EQUAL(double(((i+1)*(j+SIZE))), mat1[i][j]);
+      CPPUNIT_ASSERT_EQUAL(double(((i + 1) * (j + SIZE))), mat1[i][j]);
 
-      if (i==j) mat1[i][j] = 0.0;
+      if (i == j)
+        mat1[i][j] = 0.0;
     }
 
   Matrix<double, SIZE> mat2(mat1);
@@ -181,22 +189,23 @@ void MatrixTest::testInternalOperation() {
   matinv.inverse();
   mat1 *= matinv;
 
-  for (unsigned int i=0; i<SIZE; ++i)
-    for (unsigned int j=0; j<SIZE; ++j) {
+  for (unsigned int i = 0; i < SIZE; ++i)
+    for (unsigned int j = 0; j < SIZE; ++j) {
       double res = fabs(matid[i][j] - mat1[i][j]);
       bool ok = false;
 
-      if (res < 1.E-5) ok = true;
+      if (res < 1.E-5)
+        ok = true;
 
       CPPUNIT_ASSERT(ok);
     }
 
   mat1.fill(1.0);
   mat2 = mat1;
-  mat1*= mat2;
-  mat2*= SIZE;
+  mat1 *= mat2;
+  mat2 *= SIZE;
   CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   mat1.fill(1.0);
-  mat1*= mat1;
+  mat1 *= mat1;
   CPPUNIT_ASSERT_EQUAL(mat2, mat1);
 }

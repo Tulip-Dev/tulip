@@ -26,11 +26,14 @@ using namespace std;
 namespace tlp {
 
 const int GlGraphStaticData::edgeShapesCount = 4;
-int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {EdgeShape::Polyline, EdgeShape::BezierCurve, EdgeShape::CatmullRomCurve, EdgeShape::CubicBSplineCurve};
-string GlGraphStaticData::labelPositionNames[] = { string("Center"), string("Top"), string("Bottom"),string("Left"), string("Right") };
+int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {EdgeShape::Polyline, EdgeShape::BezierCurve,
+                                                        EdgeShape::CatmullRomCurve,
+                                                        EdgeShape::CubicBSplineCurve};
+string GlGraphStaticData::labelPositionNames[] = {string("Center"), string("Top"), string("Bottom"),
+                                                  string("Left"), string("Right")};
 
 string GlGraphStaticData::edgeShapeName(int id) {
-  switch(id) {
+  switch (id) {
   case EdgeShape::Polyline:
     return string("Polyline");
 
@@ -50,7 +53,7 @@ string GlGraphStaticData::edgeShapeName(int id) {
   }
 }
 
-int GlGraphStaticData::edgeShapeId(const string& name) {
+int GlGraphStaticData::edgeShapeId(const string &name) {
   if (name == edgeShapeName(EdgeShape::Polyline))
     return EdgeShape::Polyline;
 
@@ -68,7 +71,6 @@ int GlGraphStaticData::edgeShapeId(const string& name) {
   return -1;
 }
 
-
 string GlGraphStaticData::labelPositionName(int id) {
   if (id > -1 && id < 5)
     return labelPositionNames[id];
@@ -76,7 +78,7 @@ string GlGraphStaticData::labelPositionName(int id) {
   return string("invalid label position id");
 }
 
-int GlGraphStaticData::labelPositionId(const string& name) {
+int GlGraphStaticData::labelPositionId(const string &name) {
   for (int i = 0; i < 5; i++) {
     if (name == labelPositionNames[i])
       return i;
@@ -86,5 +88,4 @@ int GlGraphStaticData::labelPositionId(const string& name) {
   tlp::warning() << "Invalid label position name" << endl;
   return -1;
 }
-
 }

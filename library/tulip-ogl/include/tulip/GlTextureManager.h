@@ -51,7 +51,7 @@ public:
    * can be loaded.
    * Return false if an error occurs
    */
-  virtual bool loadTexture(const std::string& filename, GlTexture& texture);
+  virtual bool loadTexture(const std::string &filename, GlTexture &texture);
 
   virtual ~GlTextureLoader() {}
 };
@@ -61,17 +61,16 @@ public:
  */
 class TLP_GL_SCOPE GlTextureManager {
 
-  typedef std::map<std::string,GlTexture> TextureUnit;
-  typedef std::map<uintptr_t,TextureUnit> ContextAndTextureMap;
+  typedef std::map<std::string, GlTexture> TextureUnit;
+  typedef std::map<uintptr_t, TextureUnit> ContextAndTextureMap;
 
 public:
-
   /**
   * Return the texture manager singleton, il singleton doesn't exist this function create it
   */
   static GlTextureManager &getInst() {
-    if(!inst)
-      inst=new GlTextureManager();
+    if (!inst)
+      inst = new GlTextureManager();
 
     return *inst;
   }
@@ -88,16 +87,16 @@ public:
   /**
    * Return texture info (id, width and height) for the given name
    */
-  GlTexture getTextureInfo(const std::string&);
+  GlTexture getTextureInfo(const std::string &);
 
   /**
    * Check if a texture fo the given name exists in the current context
    */
-  bool existsTexture(const std::string& filename);
+  bool existsTexture(const std::string &filename);
   /**
    * Load texture with given name
    */
-  bool loadTexture(const std::string&);
+  bool loadTexture(const std::string &);
   /**
    * Remove texture with given name
    */
@@ -105,15 +104,15 @@ public:
   /**
    * Begin a new texture with given name
    */
-  void beginNewTexture(const std::string&);
+  void beginNewTexture(const std::string &);
   /**
    * Activate a texture with given name
    */
-  bool activateTexture(const std::string&,unsigned int);
+  bool activateTexture(const std::string &, unsigned int);
   /**
    * Activate a texture with given name
    */
-  bool activateTexture(const std::string&);
+  bool activateTexture(const std::string &);
   /**
    * Disable texture with given name
    */
@@ -122,7 +121,7 @@ public:
    * Set animationStep for next textures (for next activateTexture)
    */
   void setAnimationFrame(unsigned int id) {
-    animationFrame=id;
+    animationFrame = id;
   }
   /**
    * Get animationStep of next textures
@@ -143,7 +142,6 @@ public:
     texturesWithError.erase(name);
   }
 
-
   /**
    * Register an external texture is GlTextureManager
    */
@@ -152,14 +150,14 @@ public:
   /**
    * Get Texture loader
    */
-  static GlTextureLoader* getTextureLoader() {
+  static GlTextureLoader *getTextureLoader() {
     return loader ? loader : (loader = new GlTextureLoader());
   }
 
   /**
    * Set Texture loader
    */
-  static void setTextureLoader(GlTextureLoader* texLoader) {
+  static void setTextureLoader(GlTextureLoader *texLoader) {
     if (loader)
       delete loader;
 
@@ -167,14 +165,13 @@ public:
   }
 
 private:
-
   /**
    * empty private constructor for singleton
    */
   GlTextureManager();
 
-  static GlTextureManager* inst;
-  static GlTextureLoader* loader;
+  static GlTextureManager *inst;
+  static GlTextureLoader *loader;
 
   uintptr_t currentContext;
 
@@ -182,9 +179,7 @@ private:
   std::set<std::string> texturesWithError;
 
   unsigned int animationFrame;
-
 };
-
 }
 
 #endif // Tulip_GLTEXTUREMANAGER_H

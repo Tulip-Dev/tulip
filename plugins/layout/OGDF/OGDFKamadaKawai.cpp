@@ -65,33 +65,40 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-  // stop tolerance
-  "The value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped.",
+    // stop tolerance
+    "The value for the stop tolerance, below which the system is regarded stable (balanced) and "
+    "the optimization stopped.",
 
-  // used layout
-  "If set to true, the given layout is used for the initial positions.",
+    // used layout
+    "If set to true, the given layout is used for the initial positions.",
 
-  // zero length
-  "If set != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes.",
+    // zero length
+    "If set != 0, value zerolength is used to determine the desirable edge length by L = "
+    "zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and "
+    "sizes.",
 
-  // edge length
-  "The desirable edge length.",
+    // edge length
+    "The desirable edge length.",
 
-  // compute max iterations
-  "If set to true, the number of iterations is computed depending on G.",
+    // compute max iterations
+    "If set to true, the number of iterations is computed depending on G.",
 
-  // global iterations
-  "The number of global iterations.",
+    // global iterations
+    "The number of global iterations.",
 
-  // local iterations
-  "The number of local iterations."
-};
+    // local iterations
+    "The number of local iterations."};
 
 class OGDFKamadaKawai : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Implements the Kamada-Kawai layout algorithm.<br/>It is a force-directed layout algorithm that tries to place vertices with a distance corresponding to their graph theoretic distance. ","1.0","Force Directed")
-  OGDFKamadaKawai(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
+  PLUGININFORMATION("Kamada Kawai (OGDF)", "Karsten Klein", "12/11/2007",
+                    "Implements the Kamada-Kawai layout algorithm.<br/>It is a force-directed "
+                    "layout algorithm that tries to place vertices with a distance corresponding "
+                    "to their graph theoretic distance. ",
+                    "1.0", "Force Directed")
+  OGDFKamadaKawai(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
     addInParameter<double>("stop tolerance", paramHelp[0], "0.001");
     addInParameter<bool>("used layout", paramHelp[1], "true");
     addInParameter<double>("zero length", paramHelp[2], "0");
@@ -103,7 +110,7 @@ public:
   ~OGDFKamadaKawai() {}
 
   void beforeCall() {
-    ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK*>(ogdfLayoutAlgo);
+    ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK *>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       double dval = 0;
@@ -130,11 +137,8 @@ public:
 
       if (dataSet->get("local iterations", ival))
         kamada->setMaxLocalIterations(ival);
-
     }
   }
-
 };
-
 
 PLUGIN(OGDFKamadaKawai)

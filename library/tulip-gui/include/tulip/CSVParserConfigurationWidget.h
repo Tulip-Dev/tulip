@@ -41,25 +41,27 @@ public:
   CSVParserConfigurationWidget(QWidget *parent = NULL);
   ~CSVParserConfigurationWidget();
   /**
-    * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.
+    * @brief Generate a csv parser in function of the parameters in the widget. User define the
+    *range of line to import.
     * The user takes the ownership of the widget.
     **/
-  CSVParser* buildParser(unsigned int firstLine=0, unsigned int lastLine=UINT_MAX)const;
+  CSVParser *buildParser(unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX) const;
 
-  std::string getFile()const;
-  bool isValid()const;
-  QString getSeparator()const;
-  char getTextSeparator()const;
-  char getDecimalMark()const;
-  std::string getEncoding()const;
-  bool invertMatrix()const;
+  std::string getFile() const;
+  bool isValid() const;
+  QString getSeparator() const;
+  char getTextSeparator() const;
+  char getDecimalMark() const;
+  std::string getEncoding() const;
+  bool invertMatrix() const;
   bool getMergeSeparator() const;
   void initWithLastOpenedFile();
   int getFirstLineIndex() const;
   void setNbIgnoredLines(int);
 
 public slots:
-  void setFileToOpen(const QString& fileToOpen);
+  void setFileToOpen(const QString &fileToOpen);
+
 protected:
   void fillEncodingComboBox();
 
@@ -70,8 +72,7 @@ protected slots:
   void ignoreFirstLines(int checkState);
 
 private:
-
-  QString getSeparator(int index)const;
+  QString getSeparator(int index) const;
 
   Ui::CSVParserConfigurationWidget *ui;
   static QString lastOpenedFile;

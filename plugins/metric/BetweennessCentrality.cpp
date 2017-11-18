@@ -26,17 +26,16 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // directed
-  "Indicates if the graph should be considered as directed or not.",
+    // directed
+    "Indicates if the graph should be considered as directed or not.",
 
-  // norm
-  "If true the node measure will be normalized<br>"
-  " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br>"
-  " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br>"
-  "If true the edge measure will be normalized<br>"
-  " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br>"
-  " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)"
-};
+    // norm
+    "If true the node measure will be normalized<br>"
+    " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br>"
+    " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br>"
+    "If true the edge measure will be normalized<br>"
+    " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br>"
+    " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)"};
 
 /** \addtogroup metric */
 
@@ -69,10 +68,11 @@ static const char *paramHelp[] = {
  *  - 03/01/05 Version 1.0: Initial release
  *
  */
-class BetweennessCentrality:public DoubleAlgorithm {
+class BetweennessCentrality : public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Betweenness Centrality","David Auber","03/01/2005","Computes the betweenness centrality.","1.2","Graph")
-  BetweennessCentrality(const PluginContext* context):DoubleAlgorithm(context) {
+  PLUGININFORMATION("Betweenness Centrality", "David Auber", "03/01/2005",
+                    "Computes the betweenness centrality.", "1.2", "Graph")
+  BetweennessCentrality(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
   }
@@ -82,13 +82,14 @@ public:
     bool directed = false;
     bool norm = false;
 
-    if ( dataSet!=NULL ) {
-      dataSet->get("directed",directed);
+    if (dataSet != NULL) {
+      dataSet->get("directed", directed);
       dataSet->get("norm", norm);
     }
 
-    //Metric is 0 in this case
-    if(graph->numberOfNodes()<=2) return true;
+    // Metric is 0 in this case
+    if (graph->numberOfNodes() <= 2)
+      return true;
 
     Iterator<node> *it = graph->getNodes();
     unsigned int nbNodes = graph->numberOfNodes();
@@ -96,9 +97,8 @@ public:
 
     pluginProgress->showPreview(false);
 
-    while(it->hasNext()) {
-      if (((++count % 50) == 0) &&
-          (pluginProgress->progress(count, nbNodes)!=TLP_CONTINUE))
+    while (it->hasNext()) {
+      if (((++count % 50) == 0) && (pluginProgress->progress(count, nbNodes) != TLP_CONTINUE))
         break;
 
       node s = it->next();
@@ -106,14 +106,14 @@ public:
       TLP_HASH_MAP<node, list<node> > P;
       MutableContainer<int> sigma;
       sigma.setAll(0);
-      sigma.set(s.id,1);
+      sigma.set(s.id, 1);
       MutableContainer<int> d;
       d.setAll(-1);
       d.set(s.id, 0);
       queue<node> Q;
       Q.push(s);
 
-      while(!Q.empty()) {
+      while (!Q.empty()) {
         node v = Q.front();
         int vd = d.get(v.id);
         int vs = sigma.get(v.id);
@@ -153,14 +153,13 @@ public:
         S.pop();
         list<node>::const_iterator itn = P[w].begin();
 
-        for (; itn!=P[w].end(); ++itn) {
+        for (; itn != P[w].end(); ++itn) {
           node v = *itn;
-          double vd =
-            double(sigma.get(v.id))/double(sigma.get(w.id)) * (1.0 + wD);
+          double vd = double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + wD);
           delta.add(v.id, vd);
-          edge e = graph->existEdge(v,w,directed);
+          edge e = graph->existEdge(v, w, directed);
 
-          if(e.isValid())
+          if (e.isValid())
             result->setEdgeValue(e, result->getEdgeValue(e) + vd);
         }
 
@@ -171,43 +170,42 @@ public:
 
     delete it;
 
-    //Normalization
-    if(norm || !directed) {
+    // Normalization
+    if (norm || !directed) {
       double n = graph->numberOfNodes();
-      const double nNormFactor = 1.0/((n - 1) * (n - 2));
+      const double nNormFactor = 1.0 / ((n - 1) * (n - 2));
       it = graph->getNodes();
 
-      while(it->hasNext()) {
+      while (it->hasNext()) {
         node s = it->next();
 
-        //In the undirected case, the metric must be divided by two, then
-        if(norm)
-          result->setNodeValue(s,result->getNodeValue(s) * nNormFactor);
+        // In the undirected case, the metric must be divided by two, then
+        if (norm)
+          result->setNodeValue(s, result->getNodeValue(s) * nNormFactor);
 
-        if(!directed)
-          result->setNodeValue(s,result->getNodeValue(s) * 0.5);
+        if (!directed)
+          result->setNodeValue(s, result->getNodeValue(s) * 0.5);
       }
 
       delete it;
 
       Iterator<edge> *itE = graph->getEdges();
-      const double eNormFactor = 4.0/(n * n);
+      const double eNormFactor = 4.0 / (n * n);
 
-      while(itE->hasNext()) {
+      while (itE->hasNext()) {
         edge e = itE->next();
 
-        if(norm)
-          result->setEdgeValue(e,result->getEdgeValue(e) * eNormFactor);
+        if (norm)
+          result->setEdgeValue(e, result->getEdgeValue(e) * eNormFactor);
 
-        if(!directed)
-          result->setEdgeValue(e,result->getEdgeValue(e) * 0.5);
+        if (!directed)
+          result->setEdgeValue(e, result->getEdgeValue(e) * 0.5);
       }
 
       delete itE;
     }
 
-
-    return pluginProgress->state()!=TLP_CANCEL;
+    return pluginProgress->state() != TLP_CANCEL;
   }
 };
 

@@ -33,8 +33,7 @@ class GlLayer;
 class TLP_GL_SCOPE GlSceneVisitor {
 
 public:
-
-  GlSceneVisitor():threadSafe(false) {}
+  GlSceneVisitor() : threadSafe(false) {}
   virtual ~GlSceneVisitor() {}
 
   virtual void visit(GlSimpleEntity *) {}
@@ -47,12 +46,9 @@ public:
     return threadSafe;
   }
 
-protected :
-
+protected:
   bool threadSafe;
-
 };
-
 }
 
 #endif // Tulip_GLSCENEVISITOR_H

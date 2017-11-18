@@ -49,6 +49,7 @@ public:
   void conc(BmdList<TYPE> &l);
   void clear();
   void swap(BmdList<TYPE> &l);
+
 private:
   BMDTYPE *head;
   BMDTYPE *tail;
@@ -57,49 +58,50 @@ private:
 
 #include <tulip/cxx/BmdList.cxx>
 
-
-template<typename TYPE>
+template <typename TYPE>
 struct BmdListIt : public Iterator<TYPE> {
 
-  BmdListIt(BmdList<TYPE> &bmdList):bmdList(bmdList) {
+  BmdListIt(BmdList<TYPE> &bmdList) : bmdList(bmdList) {
     pos = bmdList.firstItem();
     pred = 0;
   }
   bool hasNext() {
-    return pos!=0;
+    return pos != 0;
   }
   TYPE next() {
     TYPE val = pos->getData();
-    tlp::BmdLink< TYPE > *tmp = pos;
+    tlp::BmdLink<TYPE> *tmp = pos;
     pos = bmdList.nextItem(pos, pred);
     pred = tmp;
     return val;
   }
+
 private:
-  tlp::BmdLink< TYPE > *pos;
-  tlp::BmdLink< TYPE > *pred;
+  tlp::BmdLink<TYPE> *pos;
+  tlp::BmdLink<TYPE> *pred;
   BmdList<TYPE> &bmdList;
 };
 
-template<typename TYPE>
+template <typename TYPE>
 struct BmdListRevIt : public Iterator<TYPE> {
-  BmdListRevIt(BmdList<TYPE> &bmdList):bmdList(bmdList) {
+  BmdListRevIt(BmdList<TYPE> &bmdList) : bmdList(bmdList) {
     pos = bmdList.lastItem();
     suc = 0;
   }
   bool hasNext() {
-    return pos!=0;
+    return pos != 0;
   }
   TYPE next() {
     TYPE val = pos->getData();
-    tlp::BmdLink< TYPE > *tmp = pos;
+    tlp::BmdLink<TYPE> *tmp = pos;
     pos = bmdList.predItem(pos, suc);
     suc = tmp;
     return val;
   }
+
 private:
-  tlp::BmdLink< TYPE > *pos;
-  tlp::BmdLink< TYPE > *suc;
+  tlp::BmdLink<TYPE> *pos;
+  tlp::BmdLink<TYPE> *suc;
   BmdList<TYPE> &bmdList;
 };
 }

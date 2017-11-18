@@ -83,22 +83,29 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-  // page ratio
-  "Sets the option pageRatio."
-};
+    // page ratio
+    "Sets the option pageRatio."};
 
 class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Planarization Grid (OGDF)","Carsten Gutwenger","12/11/2007","The planarization grid layout algorithm applies the planarization approach for crossing minimization, combined with the topology-shape-metrics approach for orthogonal planar graph drawing. It produces drawings with few crossings and is suited for small to medium sized sparse graphs. It uses a planar grid layout algorithm to produce a drawing on a grid.","1.0","Planar")
-  OGDFPlanarizationGrid(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
+  PLUGININFORMATION("Planarization Grid (OGDF)", "Carsten Gutwenger", "12/11/2007",
+                    "The planarization grid layout algorithm applies the planarization approach "
+                    "for crossing minimization, combined with the topology-shape-metrics approach "
+                    "for orthogonal planar graph drawing. It produces drawings with few crossings "
+                    "and is suited for small to medium sized sparse graphs. It uses a planar grid "
+                    "layout algorithm to produce a drawing on a grid.",
+                    "1.0", "Planar")
+  OGDFPlanarizationGrid(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
   }
 
   ~OGDFPlanarizationGrid() {}
 
   void beforeCall() {
-    ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
+    ogdf::PlanarizationGridLayout *pgl =
+        static_cast<ogdf::PlanarizationGridLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       double dval = 0;
@@ -107,8 +114,6 @@ public:
         pgl->pageRatio(dval);
     }
   }
-
 };
-
 
 PLUGIN(OGDFPlanarizationGrid)

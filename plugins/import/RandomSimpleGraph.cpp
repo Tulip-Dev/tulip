@@ -23,31 +23,29 @@ using namespace std;
 using namespace tlp;
 
 struct edgeS {
-  unsigned  source,target;
+  unsigned source, target;
 };
 
 namespace std {
-template<>
+template <>
 struct less<edgeS> {
-  bool operator()(const edgeS &c,const edgeS &d) const {
-    int cs,ct,ds,dt;
+  bool operator()(const edgeS &c, const edgeS &d) const {
+    int cs, ct, ds, dt;
 
-    if (c.source<=c.target) {
-      cs=c.source;
-      ct=c.target;
-    }
-    else {
-      ct=c.source;
-      cs=c.target;
+    if (c.source <= c.target) {
+      cs = c.source;
+      ct = c.target;
+    } else {
+      ct = c.source;
+      cs = c.target;
     }
 
-    if (d.source<=d.target) {
-      ds=d.source;
-      dt=d.target;
-    }
-    else {
-      dt=d.source;
-      ds=d.target;
+    if (d.source <= d.target) {
+      ds = d.source;
+      dt = d.target;
+    } else {
+      dt = d.source;
+      ds = d.target;
     }
 
     return (cs < ds) || ((cs == ds) && (ct < dt));
@@ -56,12 +54,11 @@ struct less<edgeS> {
 }
 
 static const char *paramHelp[] = {
-  // nodes
-  "Number of nodes in the final graph.",
+    // nodes
+    "Number of nodes in the final graph.",
 
-  // edges
-  "Number of edges in the final graph."
-};
+    // edges
+    "Number of edges in the final graph."};
 
 /** \addtogroup import */
 
@@ -70,22 +67,23 @@ static const char *paramHelp[] = {
  *
  *  User can specify the number of nodes and the number of edges of the graph.
  */
-class RandomSimpleGraph:public ImportModule {
+class RandomSimpleGraph : public ImportModule {
 public:
-  PLUGININFORMATION("Random Simple Graph","Auber","16/06/2002","Imports a new randomly generated simple graph.","1.0","Graph")
-  RandomSimpleGraph(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"500");
-    addInParameter<unsigned int>("edges",paramHelp[1],"1000");
+  PLUGININFORMATION("Random Simple Graph", "Auber", "16/06/2002",
+                    "Imports a new randomly generated simple graph.", "1.0", "Graph")
+  RandomSimpleGraph(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "500");
+    addInParameter<unsigned int>("edges", paramHelp[1], "1000");
   }
 
   bool importGraph() {
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    unsigned int nbNodes  = 5;
-    unsigned int nbEdges  = 9;
+    unsigned int nbNodes = 5;
+    unsigned int nbEdges = 9;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
     }
@@ -97,27 +95,28 @@ public:
       return false;
     }
 
-    int ite = nbNodes*nbEdges;
+    int ite = nbNodes * nbEdges;
     int nbIteration = ite;
     set<edgeS> myGraph;
 
     if (pluginProgress)
       pluginProgress->showPreview(false);
 
-    while (ite>0) {
-      if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+    while (ite > 0) {
+      if (ite % nbNodes == 1)
+        if (pluginProgress->progress(nbIteration - ite, nbIteration) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
 
       edgeS tmp;
-      tmp.source = randomUnsignedInteger(nbNodes-1);
-      tmp.target = randomUnsignedInteger(nbNodes-1);
+      tmp.source = randomUnsignedInteger(nbNodes - 1);
+      tmp.target = randomUnsignedInteger(nbNodes - 1);
 
-      while (tmp.source==tmp.target) {
-        tmp.source = randomUnsignedInteger(nbNodes-1);
-        tmp.target = randomUnsignedInteger(nbNodes-1);
+      while (tmp.source == tmp.target) {
+        tmp.source = randomUnsignedInteger(nbNodes - 1);
+        tmp.target = randomUnsignedInteger(nbNodes - 1);
       }
 
-      if (myGraph.find(tmp)==myGraph.end()) {
+      if (myGraph.find(tmp) == myGraph.end()) {
         myGraph.insert(tmp);
 
         if (myGraph.size() == nbEdges)
@@ -131,9 +130,9 @@ public:
 
     graph->reserveEdges(myGraph.size());
 
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
-    for (set<edgeS>::iterator it=myGraph.begin(); it!=myGraph.end(); ++it)   {
+    for (set<edgeS>::iterator it = myGraph.begin(); it != myGraph.end(); ++it) {
       graph->addEdge(nodes[it->source], nodes[it->target]);
     }
 

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLLINE_H
 #define GLLINE_H
 
@@ -41,19 +40,18 @@ public:
   /**
    * Enpty constructor
    */
-  GlLine():width(1.0),factor(1),pattern(0) {}
+  GlLine() : width(1.0), factor(1), pattern(0) {}
   /**
    * Constructor with a list of coord and a list of color
    */
-  GlLine(const std::vector<Coord> &points,
-         const std::vector<Color> &colors);
+  GlLine(const std::vector<Coord> &points, const std::vector<Color> &colors);
 
   virtual ~GlLine();
 
   /**
    * Render the line
    */
-  void draw(float lod,Camera *camera);
+  void draw(float lod, Camera *camera);
 
   /**
    * Change number of points
@@ -64,37 +62,38 @@ public:
    */
   virtual void resizeColors(const unsigned int nbColors);
 
-  virtual const Coord& point(const unsigned int i) const;
+  virtual const Coord &point(const unsigned int i) const;
   /**
    * Return the coord of point with given id
    */
-  virtual Coord& point(const unsigned int i);
+  virtual Coord &point(const unsigned int i);
   /**
    * Add a new point with given coord and given color
    */
-  virtual void addPoint(const Coord& point, const Color& color);
+  virtual void addPoint(const Coord &point, const Color &color);
 
   /**
    * return the ith color used for draw the line
    */
-  virtual const Color& color(const unsigned int i) const;
+  virtual const Color &color(const unsigned int i) const;
   /**
    * return the ith color used for draw the line
    */
-  virtual Color& color(const unsigned int i);
+  virtual Color &color(const unsigned int i);
   /**
    * Set line width
    */
   virtual void setLineWidth(float width);
   /**
-   * Set the style of the line (documentation can be found in OpenGL manuel of fuction glLineStipple)
+   * Set the style of the line (documentation can be found in OpenGL manuel of fuction
+   * glLineStipple)
    */
-  virtual void setLineStipple(unsigned char factor,unsigned int pattern);
+  virtual void setLineStipple(unsigned char factor, unsigned int pattern);
 
   /**
    * Translate entity
    */
-  virtual void translate(const Coord& vec);
+  virtual void translate(const Coord &vec);
 
   /**
    * Function to export data in outString (in XML format)
@@ -113,7 +112,6 @@ protected:
   unsigned char factor;
   unsigned int pattern;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

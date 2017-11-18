@@ -25,7 +25,7 @@ using namespace std;
 using namespace tlp;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
+PathLengthMetric::PathLengthMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   // Leaf metric needed
   addDependency("Leaf", "1.0");
 }
@@ -33,11 +33,10 @@ PathLengthMetric::PathLengthMetric(const tlp::PluginContext* context):DoubleAlgo
 // structure below is used to implement dfs loop
 struct dfsStruct {
   node current;
-  Iterator<node>* outNodes;
+  Iterator<node> *outNodes;
   double res;
 
-  dfsStruct(node n, Iterator<node>* nodes):
-    current(n), outNodes(nodes), res(0.0) {}
+  dfsStruct(node n, Iterator<node> *nodes) : current(n), outNodes(nodes), res(0.0) {}
 };
 //=======================================
 // original recursive algorithm
@@ -55,9 +54,9 @@ struct dfsStruct {
   return res;
   }*/
 //=======================================================================
-double PathLengthMetric::getNodeValue(tlp::node current,
-                                      tlp::DoubleProperty* leafMetric) {
-  if (graph->outdeg(current) == 0) return 0.0;
+double PathLengthMetric::getNodeValue(tlp::node current, tlp::DoubleProperty *leafMetric) {
+  if (graph->outdeg(current) == 0)
+    return 0.0;
 
   double value = result->getNodeValue(current);
 
@@ -66,12 +65,12 @@ double PathLengthMetric::getNodeValue(tlp::node current,
 
   // dfs loop
   stack<dfsStruct> dfsLevels;
-  Iterator<node>* outNodes = graph->getOutNodes(current);
+  Iterator<node> *outNodes = graph->getOutNodes(current);
   dfsStruct dfsParams(current, outNodes);
   double res = 0.0;
   dfsLevels.push(dfsParams);
 
-  while(!dfsLevels.empty()) {
+  while (!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
@@ -92,8 +91,7 @@ double PathLengthMetric::getNodeValue(tlp::node current,
           dfsLevels.push(dfsParams);
           // and go deeper
           break;
-        }
-        else {
+        } else {
           delete outNodes;
           outNodes = dfsParams.outNodes;
         }
@@ -138,8 +136,7 @@ bool PathLengthMetric::run() {
   }
 
   node _n;
-  forEach(_n, graph->getNodes())
-  getNodeValue(_n, &leafMetric);
+  forEach(_n, graph->getNodes()) getNodeValue(_n, &leafMetric);
   return true;
 }
 //=======================================
@@ -147,7 +144,7 @@ bool PathLengthMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
-    erreurMsg="The graph must be acyclic.";
+    erreurMsg = "The graph must be acyclic.";
     return false;
   }
 }

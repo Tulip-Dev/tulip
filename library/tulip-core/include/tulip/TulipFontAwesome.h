@@ -58,7 +58,6 @@ namespace tlp {
 class TLP_SCOPE TulipFontAwesome {
 
 public:
-
   /**
    * Returns the location of the Font Awesome TrueType font file bundled with Tulip
    */
@@ -73,20 +72,20 @@ public:
    * Checks if the provided Font Awesome icon name is supported
    * @param iconName the name of the icon to check support
    */
-  static bool isFontAwesomeIconSupported(const std::string& iconName);
+  static bool isFontAwesomeIconSupported(const std::string &iconName);
 
   /**
    * Returns the Unicode code point associated to an icon name
    * @param iconName the name of the icon to get the codepoint
    */
-  static unsigned int getFontAwesomeIconCodePoint(const std::string& iconName);
+  static unsigned int getFontAwesomeIconCodePoint(const std::string &iconName);
 
   /**
    * Returns an UTF-8 encoded string of a Font Awesome icon
    * @param iconName a Font Awesome icon name
    * @return
    */
-  static std::string getFontAwesomeIconUtf8String(const std::string& iconName);
+  static std::string getFontAwesomeIconUtf8String(const std::string &iconName);
 
   // static constants for the Font Awesome 4.7 icons names
   static const char *Px500;
@@ -875,10 +874,7 @@ public:
   static const char *Youtube;
   static const char *YoutubePlay;
   static const char *YoutubeSquare;
-
 };
-
 }
 
 #endif // TULIPFONTAWESOME_H
-

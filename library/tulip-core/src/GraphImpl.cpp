@@ -98,7 +98,7 @@ static bool integrityTest(Graph *graph) {
 }
 */
 //----------------------------------------------------------------
-GraphImpl::GraphImpl(): GraphAbstract(this) {
+GraphImpl::GraphImpl() : GraphAbstract(this) {
   // id 0 is for the root
   graphIds.get();
 }
@@ -109,9 +109,9 @@ GraphImpl::~GraphImpl() {
   // delete recorders
   if (!recorders.empty()) {
     recorders.front()->stopRecording(this);
-    std::list<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+    std::list<GraphUpdatesRecorder *>::iterator it = recorders.begin();
 
-    while(it != recorders.end()) {
+    while (it != recorders.end()) {
       delete (*it);
       ++it;
     }
@@ -130,8 +130,7 @@ void GraphImpl::clear() {
   storage.clear();
 }
 //----------------------------------------------------------------
-edge GraphImpl::existEdge(const node src, const node tgt,
-                          bool directed) const {
+edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
   return storage.getEdges(src, tgt, directed, edges, NULL, true) ? edges[0] : edge();
 }
@@ -168,7 +167,7 @@ void GraphImpl::addNodes(unsigned int nb) {
   }
 }
 //----------------------------------------------------------------
-void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
+void GraphImpl::addNodes(unsigned int nb, std::vector<node> &addedNodes) {
   if (nb) {
     storage.addNodes(nb, &addedNodes);
 
@@ -178,11 +177,13 @@ void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
 }
 //----------------------------------------------------------------
 void GraphImpl::addNode(const node) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
 }
 //----------------------------------------------------------------
-void GraphImpl::addNodes(Iterator<node>*) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
+void GraphImpl::addNodes(Iterator<node> *) {
+  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveNodes(unsigned int nb) {
@@ -195,14 +196,14 @@ void GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
 }
 //----------------------------------------------------------------
 edge GraphImpl::addEdge(const node src, const node tgt) {
-  assert(src.isValid()&&tgt.isValid());
+  assert(src.isValid() && tgt.isValid());
   edge newEdge = storage.addEdge(src, tgt);
   notifyAddEdge(newEdge);
   return newEdge;
 }
 //----------------------------------------------------------------
-void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges,
-                         std::vector<edge>& addedEdges) {
+void GraphImpl::addEdges(const std::vector<std::pair<node, node> > &edges,
+                         std::vector<edge> &addedEdges) {
   if (!edges.empty()) {
     storage.addEdges(edges, &addedEdges);
 
@@ -211,7 +212,7 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges,
   }
 }
 //----------------------------------------------------------------
-void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges) {
+void GraphImpl::addEdges(const std::vector<std::pair<node, node> > &edges) {
   if (!edges.empty()) {
     storage.addEdges(edges);
 
@@ -221,12 +222,15 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges) {
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
-  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
-  tlp::warning() << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")";
+  tlp::warning() << "Warning: " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
+  tlp::warning() << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id
+                 << ")";
 }
 //----------------------------------------------------------------
-void GraphImpl::addEdges(Iterator<edge>*) {
-  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
+void GraphImpl::addEdges(Iterator<edge> *) {
+  tlp::warning() << "Warning: " << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph"
+                 << std::endl;
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveEdges(unsigned int nb) {
@@ -242,15 +246,15 @@ void GraphImpl::removeNode(const node n) {
 }
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
-  assert (isElement(n));
+  assert(isElement(n));
   std::vector<edge> edges(storage.adj(n));
 
   // use a stack for a dfs subgraphs propagation
-  std::stack<Graph*> sgq;
-  Iterator<Graph*>* sgs = getSubGraphs();
+  std::stack<Graph *> sgq;
+  Iterator<Graph *> *sgs = getSubGraphs();
 
   while (sgs->hasNext()) {
-    Graph* sg = sgs->next();
+    Graph *sg = sgs->next();
 
     if (sg->isElement(n))
       sgq.push(sg);
@@ -259,13 +263,13 @@ void GraphImpl::delNode(const node n, bool) {
   delete sgs;
 
   // subgraphs loop
-  while(!sgq.empty()) {
-    Graph* sg = sgq.top();
+  while (!sgq.empty()) {
+    Graph *sg = sgq.top();
 
     sgs = sg->getSubGraphs();
 
     while (sgs->hasNext()) {
-      Graph* ssg = sgs->next();
+      Graph *ssg = sgs->next();
 
       if (ssg->isElement(n))
         sgq.push(ssg);
@@ -300,14 +304,14 @@ void GraphImpl::delNode(const node n, bool) {
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e, bool) {
-  assert(existEdgeE(this, source(e),target(e), e));
+  assert(existEdgeE(this, source(e), target(e), e));
 
   if (!isElement(e)) {
     return;
   }
 
   // propagate to subgraphs
-  Iterator<Graph *>*itS=getSubGraphs();
+  Iterator<Graph *> *itS = getSubGraphs();
 
   while (itS->hasNext()) {
     Graph *subgraph = itS->next();
@@ -322,40 +326,39 @@ void GraphImpl::delEdge(const edge e, bool) {
   removeEdge(e);
 }
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getNodes() const {
+Iterator<node> *GraphImpl::getNodes() const {
   return new GraphNodeIterator(this, storage.getNodes());
 }
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getInNodes(const node n) const {
+Iterator<node> *GraphImpl::getInNodes(const node n) const {
   return new GraphNodeIterator(this, storage.getInNodes(n));
 }
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getOutNodes(const node n) const {
+Iterator<node> *GraphImpl::getOutNodes(const node n) const {
   return new GraphNodeIterator(this, storage.getOutNodes(n));
 }
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getInOutNodes(const node n) const {
+Iterator<node> *GraphImpl::getInOutNodes(const node n) const {
   return new GraphNodeIterator(this, storage.getInOutNodes(n));
 }
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getEdges() const {
+Iterator<edge> *GraphImpl::getEdges() const {
   return new GraphEdgeIterator(this, storage.getEdges());
 }
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getInEdges(const node n) const {
+Iterator<edge> *GraphImpl::getInEdges(const node n) const {
   return new GraphEdgeIterator(this, storage.getInEdges(n));
 }
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getOutEdges(const node n) const {
+Iterator<edge> *GraphImpl::getOutEdges(const node n) const {
   return new GraphEdgeIterator(this, storage.getOutEdges(n));
 }
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getInOutEdges(const node n) const {
+Iterator<edge> *GraphImpl::getInOutEdges(const node n) const {
   return new GraphEdgeIterator(this, storage.getInOutEdges(n));
 }
 //----------------------------------------------------------------
-std::vector<edge> GraphImpl::getEdges(const node src, const node tgt,
-                                      bool directed) const {
+std::vector<edge> GraphImpl::getEdges(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
   storage.getEdges(src, tgt, directed, edges);
   return edges;
@@ -371,9 +374,9 @@ void GraphImpl::reverse(const edge e) {
   storage.reverse(e);
 
   // propagate edge reversal on subgraphs
-  Graph* sg;
+  Graph *sg;
   forEach(sg, getSubGraphs()) {
-    static_cast<GraphView*>(sg)->reverseInternal(e, eEnds.first, eEnds.second);
+    static_cast<GraphView *>(sg)->reverseInternal(e, eEnds.first, eEnds.second);
   }
 }
 //----------------------------------------------------------------
@@ -405,13 +408,13 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   notifyAfterSetEnds(e);
 
   // propagate edge reversal on subgraphs
-  Graph* sg;
+  Graph *sg;
   eEnds = storage.ends(e);
   node nSrc = eEnds.first;
   node nTgt = eEnds.second;
 
   forEach(sg, getSubGraphs()) {
-    static_cast<GraphView*>(sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
+    static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
 }
 //----------------------------------------------------------------
@@ -436,14 +439,13 @@ bool GraphImpl::canUnpop() {
 }
 //----------------------------------------------------------------
 void GraphImpl::delPreviousRecorders() {
-  std::list<GraphUpdatesRecorder*>::reverse_iterator it =
-    previousRecorders.rbegin();
+  std::list<GraphUpdatesRecorder *>::reverse_iterator it = previousRecorders.rbegin();
 
   // we delete previous recorders in reverse order
   // because they are pushed in front of previousRecorders
   // when they are popped from recorders,
   // so the lasts created are back in previousRecorders
-  while(it != previousRecorders.rend()) {
+  while (it != previousRecorders.rend()) {
     delete (*it);
     ++it;
   }
@@ -451,7 +453,7 @@ void GraphImpl::delPreviousRecorders() {
   previousRecorders.clear();
 }
 //----------------------------------------------------------------
-void GraphImpl::treatEvents(const  std::vector<Event> &) {
+void GraphImpl::treatEvents(const std::vector<Event> &) {
   // an update occurs in the graph hierarchy
   // so delete the previous recorders
   delPreviousRecorders();
@@ -463,14 +465,14 @@ void GraphImpl::observeUpdates(Graph *g) {
   observedGraphs.push_front(g);
 
   // loop on local properties
-  PropertyInterface* prop;
+  PropertyInterface *prop;
   forEach(prop, g->getLocalObjectProperties()) {
     prop->addObserver(this);
     observedProps.push_front(prop);
   }
 
   // loop on subgraphs
-  Graph* sg;
+  Graph *sg;
   forEach(sg, g->getSubGraphs()) {
     observeUpdates(sg);
   }
@@ -478,21 +480,20 @@ void GraphImpl::observeUpdates(Graph *g) {
 //----------------------------------------------------------------
 void GraphImpl::unobserveUpdates() {
   // loop on observed graphs
-  while(!observedGraphs.empty()) {
+  while (!observedGraphs.empty()) {
     observedGraphs.front()->removeObserver(this);
     observedGraphs.pop_front();
   }
 
   // loop on observed properties
-  while(!observedProps.empty()) {
+  while (!observedProps.empty()) {
     observedProps.front()->removeObserver(this);
     observedProps.pop_front();
   }
 }
 //----------------------------------------------------------------
 #define NB_MAX_RECORDERS 10
-void GraphImpl::push(bool unpopAllowed,
-                     std::vector<PropertyInterface*>* propsToPreserve) {
+void GraphImpl::push(bool unpopAllowed, std::vector<PropertyInterface *> *propsToPreserve) {
   // from now if previous recorders exist
   // they cannot be unpop
   // so delete them
@@ -514,11 +515,10 @@ void GraphImpl::push(bool unpopAllowed,
     // stop recording for current recorder
     recorders.front()->stopRecording(this);
 
-  const GraphStorageIdsMemento* prevIdsMemento =
-    hasRecorders ? recorders.front()->newIdsState : NULL;
+  const GraphStorageIdsMemento *prevIdsMemento =
+      hasRecorders ? recorders.front()->newIdsState : NULL;
 
-  GraphUpdatesRecorder* recorder =
-    new GraphUpdatesRecorder(unpopAllowed, prevIdsMemento);
+  GraphUpdatesRecorder *recorder = new GraphUpdatesRecorder(unpopAllowed, prevIdsMemento);
   recorder->startRecording(this);
   recorders.push_front(recorder);
 
@@ -529,8 +529,7 @@ void GraphImpl::push(bool unpopAllowed,
     unsigned int nb = recorders.size();
 
     if (nb > NB_MAX_RECORDERS) {
-      std::list<GraphUpdatesRecorder*>::reverse_iterator it =
-        recorders.rbegin();
+      std::list<GraphUpdatesRecorder *>::reverse_iterator it = recorders.rbegin();
 
       while (nb > NB_MAX_RECORDERS) {
         delete (*it);
@@ -552,9 +551,9 @@ void GraphImpl::pop(bool unpopAllowed) {
   // save the front recorder
   // to allow unpop
   if (!recorders.empty()) {
-    //if (!previousRecorders.empty())
+    // if (!previousRecorders.empty())
     unobserveUpdates();
-    GraphUpdatesRecorder* prevRecorder = recorders.front();
+    GraphUpdatesRecorder *prevRecorder = recorders.front();
 
     if (unpopAllowed && prevRecorder->restartAllowed)
       prevRecorder->recordNewValues(this);
@@ -569,8 +568,7 @@ void GraphImpl::pop(bool unpopAllowed) {
       // observe any updates
       // in order to remove previous recorders if needed
       observeUpdates(this);
-    }
-    else
+    } else
       delete prevRecorder;
 
     // must be done here (see canPop, canUnpop)
@@ -583,7 +581,7 @@ void GraphImpl::pop(bool unpopAllowed) {
 }
 //----------------------------------------------------------------
 void GraphImpl::popIfNoUpdates() {
-  if(!recorders.empty() && !recorders.front()->hasUpdates())
+  if (!recorders.empty() && !recorders.front()->hasUpdates())
     // no need of a "no updates" recorder
     this->pop(false);
 }
@@ -597,7 +595,7 @@ void GraphImpl::unpop() {
     if (!recorders.empty())
       recorders.front()->stopRecording(this);
 
-    GraphUpdatesRecorder* prevRecorder = previousRecorders.front();
+    GraphUpdatesRecorder *prevRecorder = previousRecorders.front();
     previousRecorders.pop_front();
     recorders.push_front(prevRecorder);
     // redo all recorded updates
@@ -612,8 +610,6 @@ void GraphImpl::unpop() {
   }
 }
 //----------------------------------------------------------------
-bool GraphImpl::canDeleteProperty(Graph* g, PropertyInterface *prop) {
-  return recorders.empty() ||
-         !recorders.front()->isAddedOrDeletedProperty(g, prop);
+bool GraphImpl::canDeleteProperty(Graph *g, PropertyInterface *prop) {
+  return recorders.empty() || !recorders.front()->isAddedOrDeletedProperty(g, prop);
 }
-

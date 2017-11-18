@@ -38,19 +38,23 @@ using namespace std;
 
 namespace tlp {
 
-GlQuantitativeAxis::GlQuantitativeAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
-                                       const AxisOrientation &axisOrientation, const Color &axisColor,
-                                       const bool addArrow, const bool ascendingOrder)
-  : GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor) ,
-    ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10),
-    integerScale(false), incrementStep(0), minMaxSet(false) {
+GlQuantitativeAxis::GlQuantitativeAxis(const std::string &axisName, const Coord &axisBaseCoord,
+                                       const float axisLength,
+                                       const AxisOrientation &axisOrientation,
+                                       const Color &axisColor, const bool addArrow,
+                                       const bool ascendingOrder)
+    : GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor),
+      ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10),
+      integerScale(false), incrementStep(0), minMaxSet(false) {
   if (addArrow) {
     addArrowDrawing();
   }
 }
 
-void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV, const unsigned int nbGrads,
-    const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
+void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
+                                           const unsigned int nbGrads,
+                                           const LabelPosition &axisGradsLabelsPos,
+                                           const bool firstLabel) {
   integerScale = false;
   min = minV;
   max = maxV;
@@ -65,15 +69,17 @@ void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
   minMaxSet = true;
 }
 
-
-void GlQuantitativeAxis::setAxisParameters(const long long minV, const long long maxV, const unsigned long long incrementStepV,
-    const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
+void GlQuantitativeAxis::setAxisParameters(const long long minV, const long long maxV,
+                                           const unsigned long long incrementStepV,
+                                           const LabelPosition &axisGradsLabelsPos,
+                                           const bool firstLabel) {
   integerScale = true;
   min = minV;
   long long maxVCp = maxV;
 
   if (incrementStepV)
-    while (((maxVCp - minV)%incrementStepV) != 0) ++maxVCp;
+    while (((maxVCp - minV) % incrementStepV) != 0)
+      ++maxVCp;
 
   max = maxVCp;
   incrementStep = incrementStepV;
@@ -95,13 +101,11 @@ void GlQuantitativeAxis::buildAxisGraduations() {
   if (!logScale) {
     minV = min;
     maxV = max;
-  }
-  else {
+  } else {
     if (min >= 1) {
       minV = minLog = log(min) / log(double(logBase));
       maxV = maxLog = log(max) / log(double(logBase));
-    }
-    else {
+    } else {
       minV = minLog = 0;
       maxV = maxLog = log(1 + max - min) / log(double(logBase));
     }
@@ -109,8 +113,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 
   if (!integerScale || logScale) {
     increment = (maxV - minV) / (nbGraduations - 1);
-  }
-  else {
+  } else {
     increment = incrementStep;
   }
 
@@ -126,7 +129,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 
   axisLabels.push_back(minStr);
 
-  for (double i = minV + increment ; i < maxV ; i += increment) {
+  for (double i = minV + increment; i < maxV; i += increment) {
 
     if (axisLabels.size() == nbGraduations - 1)
       break;
@@ -135,8 +138,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 
     if (!logScale) {
       gradLabel = getStringFromNumber(i);
-    }
-    else {
+    } else {
       double labelValue = pow(double(logBase), i);
 
       if (min < 1) {
@@ -168,8 +170,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
   if (!drawFistLabel) {
     if (ascendingOrder) {
       axisLabels[0] = " ";
-    }
-    else {
+    } else {
       axisLabels[axisLabels.size() - 1] = " ";
     }
   }
@@ -185,8 +186,7 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
   if (!logScale) {
     minV = min;
     maxV = max;
-  }
-  else {
+  } else {
     minV = minLog;
     maxV = maxLog;
   }
@@ -203,15 +203,13 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
 
   if (ascendingOrder) {
     offset = (val - minV) * scale;
-  }
-  else {
+  } else {
     offset = (maxV - val) * scale;
   }
 
   if (axisOrientation == HORIZONTAL_AXIS) {
     ret = Coord(axisBaseCoord.getX() + offset, axisBaseCoord.getY(), 0);
-  }
-  else if (axisOrientation == VERTICAL_AXIS) {
+  } else if (axisOrientation == VERTICAL_AXIS) {
     ret = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + offset, 0);
   }
 
@@ -223,8 +221,7 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
 
   if (axisOrientation == HORIZONTAL_AXIS) {
     offset = axisPointCoord.getX() - axisBaseCoord.getX();
-  }
-  else if (axisOrientation == VERTICAL_AXIS) {
+  } else if (axisOrientation == VERTICAL_AXIS) {
     offset = axisPointCoord.getY() - axisBaseCoord.getY();
   }
 
@@ -233,8 +230,7 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
   if (!logScale) {
     minV = min;
     maxV = max;
-  }
-  else {
+  } else {
     minV = minLog;
     maxV = maxLog;
   }
@@ -243,8 +239,7 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
 
   if (ascendingOrder) {
     value = minV + (offset / scale);
-  }
-  else {
+  } else {
     value = maxV - (offset / scale);
   }
 
@@ -258,8 +253,7 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
 
   if (!integerScale) {
     return value;
-  }
-  else {
+  } else {
     return ceil(value);
   }
 }
@@ -274,34 +268,35 @@ void GlQuantitativeAxis::addArrowDrawing() {
   float arrowOrientation;
   float pi = 3.141592654f;
   Coord arrowEndCoord;
-  Size arrowSize = Size(axisLength/50, axisLength/50, 0);
+  Size arrowSize = Size(axisLength / 50, axisLength / 50, 0);
 
   if (axisOrientation == HORIZONTAL_AXIS) {
     if (ascendingOrder) {
-      arrowEndCoord = Coord(axisBaseCoord.getX() + axisLength + axisExtensionLength, axisBaseCoord.getY());
+      arrowEndCoord =
+          Coord(axisBaseCoord.getX() + axisLength + axisExtensionLength, axisBaseCoord.getY());
       arrowOrientation = 0.0;
-      arrowLine->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()), axisColor);
+      arrowLine->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()),
+                          axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
-    }
-    else {
+    } else {
       arrowEndCoord = Coord(axisBaseCoord.getX() - axisExtensionLength, axisBaseCoord.getY());
       arrowOrientation = pi;
       arrowLine->addPoint(axisBaseCoord, axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
     }
-  }
-  else {
+  } else {
     assert(axisOrientation == VERTICAL_AXIS);
 
     if (ascendingOrder) {
-      arrowEndCoord = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + axisExtensionLength);
-      arrowOrientation = 1./2.*pi;
-      arrowLine->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength), axisColor);
+      arrowEndCoord =
+          Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + axisExtensionLength);
+      arrowOrientation = 1. / 2. * pi;
+      arrowLine->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength),
+                          axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
-    }
-    else {
+    } else {
       arrowEndCoord = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() - axisExtensionLength);
-      arrowOrientation = -1./2.*pi;
+      arrowOrientation = -1. / 2. * pi;
       arrowLine->addPoint(axisBaseCoord, axisColor);
       arrowLine->addPoint(arrowEndCoord, axisColor);
     }
@@ -336,5 +331,4 @@ void GlQuantitativeAxis::setLogScale(const bool log, const unsigned int base) {
   logScale = log;
   logBase = base;
 }
-
 }

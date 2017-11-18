@@ -45,9 +45,8 @@ struct TLP_QT_SCOPE PluginVersionInformation {
   QStringList dependencies;
 
   PluginVersionInformation();
-  PluginVersionInformation(const PluginVersionInformation& copy);
+  PluginVersionInformation(const PluginVersionInformation &copy);
 };
-
 
 struct TLP_QT_SCOPE PluginInformation {
   QString name;
@@ -56,19 +55,16 @@ struct TLP_QT_SCOPE PluginInformation {
   PluginVersionInformation availableVersion;
 
   PluginInformation();
-  PluginInformation(const PluginInformation& copy);
+  PluginInformation(const PluginInformation &copy);
 
-  void fillLocalInfo(const tlp::Plugin& info);
+  void fillLocalInfo(const tlp::Plugin &info);
 };
 
 class TLP_QT_SCOPE PluginManager {
   static QStringList _markedForInstallation;
 
 public:
-  enum PluginLocation {
-    Remote = 0x01,
-    Local = 0x02
-  };
+  enum PluginLocation { Remote = 0x01, Local = 0x02 };
   Q_DECLARE_FLAGS(PluginLocations, PluginLocation)
 
   static const QString STABLE_LOCATION;
@@ -78,22 +74,24 @@ public:
 
   typedef QList<PluginInformation> PluginInformationList;
 
-  static void addRemoteLocation(const QString& location);
-  static void removeRemoteLocation(const QString& location);
+  static void addRemoteLocation(const QString &location);
+  static void removeRemoteLocation(const QString &location);
   static QStringList remoteLocations();
 
-  static PluginInformationList listPlugins(PluginLocations locations,const QString& nameFilter = QString(),const QString& categoryFilter = QString());
+  static PluginInformationList listPlugins(PluginLocations locations,
+                                           const QString &nameFilter = QString(),
+                                           const QString &categoryFilter = QString());
 
-  static void markForRemoval(const QString& plugin);
-  static void markForInstallation(const QString& plugin, QObject *recv, const char* progressSlot);
+  static void markForRemoval(const QString &plugin);
+  static void markForInstallation(const QString &plugin, QObject *recv, const char *progressSlot);
 
   static QStringList markedForInstallation();
   static QStringList markedForRemoval();
-  static void unmarkForRemoval(const QString& file);
+  static void unmarkForRemoval(const QString &file);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::PluginLocations)
 }
 
-#endif //PLUGINMANAGER_H
+#endif // PLUGINMANAGER_H
 ///@endcond

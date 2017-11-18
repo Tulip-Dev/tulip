@@ -38,11 +38,12 @@ class ObservableGraphTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testDeleteBug747);
   CPPUNIT_TEST(testAddEdgesEventForTLPBImport);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   static tlp::Graph *graph;
 
 public:
-  static void setGraph(tlp::Graph* g) {
+  static void setGraph(tlp::Graph *g) {
     graph = g;
   }
   void setUp();

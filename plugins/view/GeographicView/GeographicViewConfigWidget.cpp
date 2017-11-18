@@ -29,7 +29,9 @@
 using namespace std;
 using namespace tlp;
 
-GeographicViewConfigWidget::GeographicViewConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::GeographicViewConfigWidgetData), _oldPolyFileType(None),_oldFileLoaded("") {
+GeographicViewConfigWidget::GeographicViewConfigWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::GeographicViewConfigWidgetData), _oldPolyFileType(None),
+      _oldFileLoaded("") {
   _ui->setupUi(this);
 }
 
@@ -38,19 +40,25 @@ GeographicViewConfigWidget::~GeographicViewConfigWidget() {
 }
 
 void GeographicViewConfigWidget::openCsvFileBrowser() {
-  _ui->csvFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open csv file"), "./", tr("cvs file (*.*)")));
+  _ui->csvFile->setText(
+      QFileDialog::getOpenFileName(NULL, tr("Open csv file"), "./", tr("cvs file (*.*)")));
 }
 
 void GeographicViewConfigWidget::openPolyFileBrowser() {
-  _ui->polyFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
+  _ui->polyFile->setText(
+      QFileDialog::getOpenFileName(NULL, tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
 }
 
 void GeographicViewConfigWidget::openCsvHelp() {
-  QMessageBox::about(NULL,"Map csv file format","If you want to import a csv file into this view, your file must be in the format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
+  QMessageBox::about(NULL, "Map csv file format",
+                     "If you want to import a csv file into this view, your file must be in the "
+                     "format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox::about(NULL,"Map poly files",".poly files format are an open street map format.\nYou can donwload .poly file on :\nhttp://downloads.cloudmade.com/");
+  QMessageBox::about(NULL, "Map poly files", ".poly files format are an open street map "
+                                             "format.\nYou can donwload .poly file on "
+                                             ":\nhttp://downloads.cloudmade.com/");
 }
 
 bool GeographicViewConfigWidget::useSharedLayoutProperty() const {
@@ -64,13 +72,13 @@ bool GeographicViewConfigWidget::useSharedSizeProperty() const {
 GeographicViewConfigWidget::PolyFileType GeographicViewConfigWidget::polyFileType() const {
   _ui->mapToPolygon->setEnabled(false);
 
-  if(_ui->useDefaultShape->isChecked())
+  if (_ui->useDefaultShape->isChecked())
     return Default;
 
-  if(_ui->useCsvFile->isChecked())
+  if (_ui->useCsvFile->isChecked())
     return CsvFile;
 
-  if(_ui->usePolyFile->isChecked()) {
+  if (_ui->usePolyFile->isChecked()) {
     _ui->mapToPolygon->setEnabled(true);
     return PolyFile;
   }
@@ -81,13 +89,13 @@ GeographicViewConfigWidget::PolyFileType GeographicViewConfigWidget::polyFileTyp
 void GeographicViewConfigWidget::setPolyFileType(PolyFileType &fileType) {
   _ui->mapToPolygon->setEnabled(false);
 
-  if(fileType==Default)
+  if (fileType == Default)
     _ui->useDefaultShape->setChecked(true);
 
-  if(fileType==CsvFile)
+  if (fileType == CsvFile)
     _ui->useCsvFile->setChecked(true);
 
-  if(fileType==PolyFile) {
+  if (fileType == PolyFile) {
     _ui->usePolyFile->setChecked(true);
     _ui->mapToPolygon->setEnabled(true);
   }
@@ -106,38 +114,37 @@ bool GeographicViewConfigWidget::useSharedShapeProperty() const {
 }
 
 bool GeographicViewConfigWidget::polyOptionsChanged() {
-  if(polyFileType()!=_oldPolyFileType) {
-    _oldPolyFileType=polyFileType();
+  if (polyFileType() != _oldPolyFileType) {
+    _oldPolyFileType = polyFileType();
 
-    switch(_oldPolyFileType) {
+    switch (_oldPolyFileType) {
     case Default: {
-      _oldFileLoaded="";
+      _oldFileLoaded = "";
       break;
     }
 
     case CsvFile: {
-      _oldFileLoaded=QStringToTlpString(_ui->csvFile->text());
+      _oldFileLoaded = QStringToTlpString(_ui->csvFile->text());
       break;
     }
 
     case PolyFile: {
-      _oldFileLoaded=QStringToTlpString(_ui->polyFile->text());
+      _oldFileLoaded = QStringToTlpString(_ui->polyFile->text());
       break;
     }
 
-    default :
+    default:
       break;
     }
 
     return true;
-  }
-  else {
-    switch(_oldPolyFileType) {
+  } else {
+    switch (_oldPolyFileType) {
     case CsvFile: {
       string file = QStringToTlpString(_ui->csvFile->text());
 
-      if(_oldFileLoaded!=file) {
-        _oldFileLoaded=file;
+      if (_oldFileLoaded != file) {
+        _oldFileLoaded = file;
         return true;
       }
 
@@ -147,15 +154,15 @@ bool GeographicViewConfigWidget::polyOptionsChanged() {
     case PolyFile: {
       string file = QStringToTlpString(_ui->polyFile->text());
 
-      if(_oldFileLoaded!=file) {
-        _oldFileLoaded=file;
+      if (_oldFileLoaded != file) {
+        _oldFileLoaded = file;
         return true;
       }
 
       break;
     }
 
-    default :
+    default:
       break;
     }
   }
@@ -168,33 +175,33 @@ void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
     PolyFileType polyFileType;
     int type = 0;
 
-    if (dataSet.get("polyFileType",type)) {
+    if (dataSet.get("polyFileType", type)) {
       polyFileType = static_cast<PolyFileType>(type);
       setPolyFileType(polyFileType);
     }
   }
 
-  if(dataSet.exist("csvFileName")) {
+  if (dataSet.exist("csvFileName")) {
     string fileName;
-    dataSet.get("csvFileName",fileName);
+    dataSet.get("csvFileName", fileName);
     _ui->csvFile->setText(tlpStringToQString(fileName));
   }
 
-  if(dataSet.exist("polyFileName")) {
+  if (dataSet.exist("polyFileName")) {
     string fileName;
-    dataSet.get("polyFileName",fileName);
+    dataSet.get("polyFileName", fileName);
     _ui->polyFile->setText(tlpStringToQString(fileName));
   }
 
   bool useShared = false;
 
-  if (dataSet.get("useSharedLayout",useShared))
+  if (dataSet.get("useSharedLayout", useShared))
     _ui->layoutCheckBox->setChecked(useShared);
 
-  if (dataSet.get("useSharedSize",useShared))
+  if (dataSet.get("useSharedSize", useShared))
     _ui->sizeCheckBox->setChecked(useShared);
 
-  if (dataSet.get("useSharedShape",useShared))
+  if (dataSet.get("useSharedShape", useShared))
     _ui->shapeCheckBox->setChecked(useShared);
 }
 

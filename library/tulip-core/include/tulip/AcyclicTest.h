@@ -40,11 +40,10 @@ class BooleanProperty;
  **/
 struct SelfLoops {
 public:
-  SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
-    n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old) {
-  }
-  node n1,n2;
-  edge e1,e2,e3,old;
+  SelfLoops(node n1, node n2, edge e1, edge e2, edge e3, edge old)
+      : n1(n1), n2(n2), e1(e1), e2(e2), e3(e3), old(old) {}
+  node n1, n2;
+  edge e1, e2, e3, old;
 };
 
 /**
@@ -52,12 +51,12 @@ public:
  *
  * @brief This class provides tests for acyclicity on a graph.
  * Results are cached in a map of graphs and result.
- * This class observes the graphs that have been tested to remove the result from this graph if it is modified.
+ * This class observes the graphs that have been tested to remove the result from this graph if it
+ *is modified.
  * This forces the use of the singleton pattern instead of simply using static functions/members.
  **/
 class TLP_SCOPE AcyclicTest : private Observable {
 public:
-
   /**
    * @brief Checks whether the graph is acyclic or not.
    * The result is cached so subsequent calls are in O(1).
@@ -75,32 +74,36 @@ public:
    * @param selfLoops Sets of two nodes and three edges that were added instead of self loops.
    * @return void
    **/
-  static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+  static void makeAcyclic(Graph *graph, std::vector<edge> &reversed,
+                          std::vector<tlp::SelfLoops> &selfLoops);
 
   /**
    * @brief Returns whether the graph is acyclic.
-   * Collection of obstruction edges takes a bit of time, as iteration over the graph must continue even when it has been found cyclic.
+   * Collection of obstruction edges takes a bit of time, as iteration over the graph must continue
+   *even when it has been found cyclic.
    *
    * @param graph the graph to test for acyclicity
-   * @param obstructionEdges If not null, will be filled with edges that cause the graph to be cyclic. Defaults to 0.
+   * @param obstructionEdges If not null, will be filled with edges that cause the graph to be
+   *cyclic. Defaults to 0.
    * @return bool
    **/
-  static bool acyclicTest(const Graph * graph, std::vector<edge> *obstructionEdges = NULL);
+  static bool acyclicTest(const Graph *graph, std::vector<edge> *obstructionEdges = NULL);
 
 private:
   AcyclicTest();
   /**
    * @brief Singleton instance of this class.
    **/
-  static AcyclicTest * instance;
+  static AcyclicTest *instance;
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
+   *hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 
-  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  virtual void treatEvent(const Event&);
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  virtual void treatEvent(const Event &);
 };
 }
 
-#endif //TULIP_ACYCLICITY_TEST_H
+#endif // TULIP_ACYCLICITY_TEST_H

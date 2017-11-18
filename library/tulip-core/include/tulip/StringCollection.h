@@ -38,7 +38,6 @@ class TLP_SCOPE StringCollection {
   size_t current;
 
 public:
-
   /**
    * Initializes an empty string collection.
    */
@@ -54,7 +53,8 @@ public:
   /**
    * Initializes a string collection from a semicolon separated values string.
    *
-   * @param param  a semicolon separated values string ("entry1;...;entryN"). If an entry need to contain a semicolon, you have to escape it the following way : \; .
+   * @param param  a semicolon separated values string ("entry1;...;entryN"). If an entry need to
+   * contain a semicolon, you have to escape it the following way : \; .
    */
   explicit StringCollection(const std::string &param);
 
@@ -64,7 +64,7 @@ public:
    * @param vectorParam a vector of strings entries for the string collection
    * @param currentParam the index of the current selected string in the vector
    */
-  StringCollection(const std::vector<std::string>&  vectorParam, const int currentParam);
+  StringCollection(const std::vector<std::string> &vectorParam, const int currentParam);
 
   /**
    * Initializes a string collection with strings stored in a vector.
@@ -72,17 +72,17 @@ public:
    * @param vectorParam a vector of strings entries for the string collection
    * @param currentString the current selected string value from the vector
    */
-  StringCollection(const std::vector<std::string>& vectorParam, const std::string &currentString);
+  StringCollection(const std::vector<std::string> &vectorParam, const std::string &currentString);
 
   /**
   * Returns all the selectable string entries.
   **/
-  const std::vector<std::string>& getValues()const;
+  const std::vector<std::string> &getValues() const;
 
   /**
    * Returns the current selected string value.
    */
-  const std::string& getCurrentString() const;
+  const std::string &getCurrentString() const;
 
   /**
    * Sets the current selected string index.
@@ -110,7 +110,7 @@ public:
    *
    * @param element the string to add to the collection
    */
-  void push_back(const std::string& element) {
+  void push_back(const std::string &element) {
     _data.push_back(element);
   }
 
@@ -118,7 +118,7 @@ public:
    * Concatenete a string collection to the current collection
    *
    */
-  inline void insert(const tlp::StringCollection& str) {
+  inline void insert(const tlp::StringCollection &str) {
     _data.insert(_data.end(), str._data.begin(), str._data.end());
   }
 
@@ -154,11 +154,10 @@ public:
   inline std::string operator[](const unsigned int i) const {
     return _data[i];
   }
-  inline std::string& operator[](const unsigned int i) {
+  inline std::string &operator[](const unsigned int i) {
     return _data[i];
   }
 };
-
 }
 #endif
 ///@endcond

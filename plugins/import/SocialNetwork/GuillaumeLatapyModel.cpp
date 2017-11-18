@@ -26,12 +26,9 @@
 using namespace std;
 using namespace tlp;
 
-
-static const char * paramHelp[] = {
-  // nodes
-  "This parameter defines the amount of nodes used to build the small-world graph."
-};
-
+static const char *paramHelp[] = {
+    // nodes
+    "This parameter defines the amount of nodes used to build the small-world graph."};
 
 //=================================================================================
 
@@ -63,27 +60,32 @@ struct TopNode {
  * Random graph models of social networks. PNAS, 99(Suppl 1):2566-2572, 2002.
  *
  */
-struct GuillaumeLatapyModel:public ImportModule {
-  PLUGININFORMATION("Guillaume Latapy Model", "Arnaud Sallaberry","20/06/2011","Randomly generates a small word graph using the model described in<br/>J.-L. Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of Networking (CAAN), LNCS, volume 1, 2004.","1.0","Social network")
+struct GuillaumeLatapyModel : public ImportModule {
+  PLUGININFORMATION("Guillaume Latapy Model", "Arnaud Sallaberry", "20/06/2011",
+                    "Randomly generates a small word graph using the model described in<br/>J.-L. "
+                    "Guillaume and M. Latapy.<br/><b>Bipartite graphs as models of complex "
+                    "networks.</b><br/>In Workshop on Combinatorial and Algorithmic Aspects of "
+                    "Networking (CAAN), LNCS, volume 1, 2004.",
+                    "1.0", "Social network")
 
-  GuillaumeLatapyModel(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"200");
+  GuillaumeLatapyModel(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "200");
   }
 
   bool importGraph() {
 
-    unsigned int nbNodes  = 200;
+    unsigned int nbNodes = 200;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nbNodes);
     }
 
     pluginProgress->showPreview(false);
-    unsigned int iterations = nbNodes*3;
+    unsigned int iterations = nbNodes * 3;
     unsigned int i, j, l;
 
-    vector<BottomNode>  vec_bottom_nodes(nbNodes);
-    vector<TopNode>   vec_top_nodes(nbNodes);
+    vector<BottomNode> vec_bottom_nodes(nbNodes);
+    vector<TopNode> vec_top_nodes(nbNodes);
 
     unsigned int nbNodesSmallWorld = uint(ceil(0.8 * nbNodes));
     unsigned int nbNodesScaleFree = nbNodes - nbNodesSmallWorld;
@@ -94,15 +96,15 @@ struct GuillaumeLatapyModel:public ImportModule {
 
     graph->reserveNodes(nbNodes);
 
-    for (i=0; i<nbNodes; ++i) {
+    for (i = 0; i < nbNodes; ++i) {
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i,iterations)!=TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, iterations) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
-      if (i<nbNodesScaleFree)
+      if (i < nbNodesScaleFree)
         vec_bottom_nodes[i].degree =
-          uint(ceil(((nbNodes/2.0-10.0)/nbNodesScaleFree/2)*(i+1)));
+            uint(ceil(((nbNodes / 2.0 - 10.0) / nbNodesScaleFree / 2) * (i + 1)));
       else
         vec_bottom_nodes[i].degree = maxDegreeSmallWorldNodes;
 
@@ -110,50 +112,50 @@ struct GuillaumeLatapyModel:public ImportModule {
       vec_bottom_nodes[i].n = graph->addNode();
     }
 
-    unsigned int degreeTop = numberOfEdges/nbNodes;
-    unsigned int dixieme =
-      uint(ceil((10.0 * numberOfEdges)/nbNodes))%10;
+    unsigned int degreeTop = numberOfEdges / nbNodes;
+    unsigned int dixieme = uint(ceil((10.0 * numberOfEdges) / nbNodes)) % 10;
 
-    for (i=0; i<nbNodes-1; ++i) {
-      if(i%10 >= dixieme)
+    for (i = 0; i < nbNodes - 1; ++i) {
+      if (i % 10 >= dixieme)
         vec_top_nodes[i].degree = degreeTop;
       else
-        vec_top_nodes[i].degree = degreeTop+1;
+        vec_top_nodes[i].degree = degreeTop + 1;
 
       numberOfEdges -= vec_top_nodes[i].degree;
     }
 
-    vec_top_nodes[nbNodes-1].degree = numberOfEdges;
+    vec_top_nodes[nbNodes - 1].degree = numberOfEdges;
 
-    for (i=0; i<nbNodes; ++i) {
+    for (i = 0; i < nbNodes; ++i) {
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i + nbNodes,iterations)!=TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i + nbNodes, iterations) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
-      for (j=0; j<vec_top_nodes[i].degree; ++j) {
+      for (j = 0; j < vec_top_nodes[i].degree; ++j) {
         int bottom_id = tlp::randomInteger(vec_bottom_nodes.size() - 1);
 
-        if(isNotNodeInVector(vec_top_nodes[i].bottom_nodes,vec_bottom_nodes[bottom_id].n))
+        if (isNotNodeInVector(vec_top_nodes[i].bottom_nodes, vec_bottom_nodes[bottom_id].n))
           vec_top_nodes[i].bottom_nodes.push_back(vec_bottom_nodes[bottom_id].n);
 
         vec_bottom_nodes[bottom_id].degree--;
 
-        if(vec_bottom_nodes[bottom_id].degree==0)
-          vec_bottom_nodes.erase(vec_bottom_nodes.begin()+bottom_id);
+        if (vec_bottom_nodes[bottom_id].degree == 0)
+          vec_bottom_nodes.erase(vec_bottom_nodes.begin() + bottom_id);
       }
     }
 
-    for (i=0; i<nbNodes; ++i) {
+    for (i = 0; i < nbNodes; ++i) {
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i + 2* nbNodes,iterations)!=TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i + 2 * nbNodes, iterations) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
-      for (j=0; j<vec_top_nodes[i].bottom_nodes.size(); ++j) {
-        for (l=0; l<j; ++l) {
-          if(!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j],vec_top_nodes[i].bottom_nodes[l])) {
-            if(!graph->hasEdge(vec_top_nodes[i].bottom_nodes[l],vec_top_nodes[i].bottom_nodes[j])) {
+      for (j = 0; j < vec_top_nodes[i].bottom_nodes.size(); ++j) {
+        for (l = 0; l < j; ++l) {
+          if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l])) {
+            if (!graph->hasEdge(vec_top_nodes[i].bottom_nodes[l],
+                                vec_top_nodes[i].bottom_nodes[j])) {
               graph->addEdge(vec_top_nodes[i].bottom_nodes[j], vec_top_nodes[i].bottom_nodes[l]);
             }
           }
@@ -161,11 +163,11 @@ struct GuillaumeLatapyModel:public ImportModule {
       }
     }
 
-    return  pluginProgress->state()!=TLP_CANCEL;
+    return pluginProgress->state() != TLP_CANCEL;
   }
 
   bool isNotNodeInVector(vector<node> vec, node n) {
-    return std::find(vec.begin(), vec.end(), n)==vec.end();
+    return std::find(vec.begin(), vec.end(), n) == vec.end();
   }
 };
 

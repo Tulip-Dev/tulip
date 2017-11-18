@@ -28,15 +28,15 @@ class MatrixViewQuickAccessBar : public tlp::QuickAccessBarImpl {
   Q_OBJECT
 
   MatrixViewConfigurationWidget *_optionsWidget;
+
 public:
-  MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget* parent=NULL);
+  MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget *parent = NULL);
 
 public slots:
   void reset();
   virtual void setEdgesVisible(bool);
-  virtual void setBackgroundColor(const QColor&);
+  virtual void setBackgroundColor(const QColor &);
   virtual void setColorInterpolation(bool);
-
 };
 }
 #endif // SCATTERPLOTQUICKACCESSBAR_H

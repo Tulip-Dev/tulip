@@ -25,18 +25,15 @@ using namespace std;
 
 namespace tlp {
 
-GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer)
-  :Event(scene, Event::TLP_MODIFICATION),
-   sceneEventType(sceneEventType),
-   layerName(layerName),
-   layer(layer) {
-}
+GlSceneEvent::GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType,
+                           const std::string &layerName, GlLayer *layer)
+    : Event(scene, Event::TLP_MODIFICATION), sceneEventType(sceneEventType), layerName(layerName),
+      layer(layer) {}
 
-GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,GlSimpleEntity *entity)
-  :Event(scene, Event::TLP_MODIFICATION),
-   sceneEventType(sceneEventType),
-   glSimpleEntity(entity) {
-}
+GlSceneEvent::GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType,
+                           GlSimpleEntity *entity)
+    : Event(scene, Event::TLP_MODIFICATION), sceneEventType(sceneEventType),
+      glSimpleEntity(entity) {}
 
 GlSimpleEntity *GlSceneEvent::getGlSimpleEntity() const {
   return glSimpleEntity;
@@ -53,6 +50,4 @@ GlLayer *GlSceneEvent::getLayer() const {
 GlSceneEvent::GlSceneEventType GlSceneEvent::getSceneEventType() const {
   return sceneEventType;
 }
-
 }
-

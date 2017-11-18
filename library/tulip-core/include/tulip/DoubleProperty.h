@@ -38,33 +38,38 @@ typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> D
  * @brief A graph property that maps a double value to graph elements.
  */
 class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
-public :
-  DoubleProperty (Graph *, const std::string& n="");
+public:
+  DoubleProperty(Graph *, const std::string &n = "");
 
-  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &);
+  virtual void
+  clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &);
 
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
 
-  virtual void setNodeValue(const node n,
-                            tlp::StoredType<double>::ReturnedConstValue v);
-  virtual void setEdgeValue(const edge e,
-                            tlp::StoredType<double>::ReturnedConstValue v);
+  virtual void setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v);
+  virtual void setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v);
   virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v);
 
-  virtual void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v, const Graph* graph);
+  virtual void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,
+                                    const Graph *graph);
   virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v);
-  virtual void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph);
+  virtual void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,
+                                    const Graph *graph);
 
-  enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
-                                      MAX_CALC = 3, MIN_CALC = 4
-                                     };
+  enum PredefinedMetaValueCalculator {
+    NO_CALC = 0,
+    AVG_CALC = 1,
+    SUM_CALC = 2,
+    MAX_CALC = 3,
+    MIN_CALC = 4
+  };
 
   // setMetaValueCalculator overloading
-  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator* calc);
+  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc);
   void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
                               PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
@@ -75,10 +80,10 @@ public :
   virtual double getNodeDoubleDefaultValue() const {
     return getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(const Graph* g = NULL) {
+  virtual double getNodeDoubleMin(const Graph *g = NULL) {
     return getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(const Graph* g = NULL) {
+  virtual double getNodeDoubleMax(const Graph *g = NULL) {
     return getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
@@ -87,10 +92,10 @@ public :
   virtual double getEdgeDoubleDefaultValue() const {
     return getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(const Graph* g = NULL) {
+  virtual double getEdgeDoubleMin(const Graph *g = NULL) {
     return getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(const Graph* g = NULL) {
+  virtual double getEdgeDoubleMax(const Graph *g = NULL) {
     return getEdgeMax(g);
   }
 
@@ -98,20 +103,21 @@ public :
 
   void edgesUniformQuantification(unsigned int);
 
-  NumericProperty* copyProperty(Graph *g) {
-    DoubleProperty* newProp = new DoubleProperty(g);
+  NumericProperty *copyProperty(Graph *g) {
+    DoubleProperty *newProp = new DoubleProperty(g);
     newProp->copy(this);
 
     return newProp;
   }
 
-  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph);
-  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v, const Graph* graph);
+  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
+                                           const Graph *graph);
+  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
+                                           const Graph *graph);
 
 private:
   // override Observable::treatEvent
-  void treatEvent(const Event&);
-
+  void treatEvent(const Event &);
 };
 
 /**
@@ -119,18 +125,17 @@ private:
  * @brief A graph property that maps a std::vector<double> value to graph elements.
  */
 
-class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
-public :
-  DoubleVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
+class TLP_SCOPE DoubleVectorProperty
+    : public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
+public:
+  DoubleVectorProperty(Graph *g, const std::string &n = "")
+      : AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
-
 };
-
-
 }
 #endif

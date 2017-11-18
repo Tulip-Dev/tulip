@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef _Tulip_GLGRID_H_
 #define _Tulip_GLGRID_H_
 
@@ -36,7 +35,6 @@ namespace tlp {
 class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
 
 public:
-
   /**
    * @brief Constructor
    * @warning Don't use this constructor : see other constructor
@@ -53,12 +51,12 @@ public:
    * @param displays The dimensions of the grid to display.
    * @param hollowGrid Indicates if the grid chould be hollowed.
    */
-  GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight,
-         const Size& cell, const Color& color, bool displays[3]);
+  GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Size &cell,
+         const Color &color, bool displays[3]);
   /**
    * @brief Virtual function used to draw the grid.
    */
-  virtual void draw(float lod,Camera *camera);
+  virtual void draw(float lod, Camera *camera);
   /**
    * @brief Accessor in reading to the dimensions to display.
    */
@@ -71,7 +69,7 @@ public:
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * @brief Function to export data in outString (in XML format)
@@ -83,15 +81,14 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
-
 protected:
-  bool displayDim[3]; /**< Which dimensions should be displayed ? Note that only one dimension at most should be disabled*/
-  bool hollowGrid; /**< Should the grid be hollowed ?*/
-  Coord frontTopLeft; /**< Front top left point of the grid, the "minimum" */
+  bool displayDim[3];    /**< Which dimensions should be displayed ? Note that only one dimension at
+                            most should be disabled*/
+  bool hollowGrid;       /**< Should the grid be hollowed ?*/
+  Coord frontTopLeft;    /**< Front top left point of the grid, the "minimum" */
   Coord backBottomRight; /**< Back bottom right point of the grid, the "maximum" */
-  Color color; /**< The color of the grid */
-  Size cell; /**< The size of a cell of the grid */
+  Color color;           /**< The color of the grid */
+  Size cell;             /**< The size of a cell of the grid */
 };
-
 }
 #endif

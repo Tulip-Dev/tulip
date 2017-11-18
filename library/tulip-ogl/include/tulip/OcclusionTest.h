@@ -67,7 +67,7 @@ struct TLP_GL_SCOPE OcclusionTest {
   * @return true if the AABB intersect else false.
   */
   bool testRectangle(const RectangleInt2D &rec) {
-    for (std::vector<RectangleInt2D>::const_iterator it=data.begin(); it!=data.end(); ++it) {
+    for (std::vector<RectangleInt2D>::const_iterator it = data.begin(); it != data.end(); ++it) {
       if (rec.intersect(*it))
         return true;
     }
@@ -75,9 +75,8 @@ struct TLP_GL_SCOPE OcclusionTest {
     return false;
   }
 };
-
 }
 
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 #endif
 ///@endcond

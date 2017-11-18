@@ -37,39 +37,40 @@ namespace tlp {
 class Graph;
 }
 
-class AlgorithmRunner: public QWidget {
+class AlgorithmRunner : public QWidget {
   Q_OBJECT
 
-  Ui::AlgorithmRunner* _ui;
-  tlp::Graph* _graph;
-  QToolButton* _storeResultAsLocalButton;
-  QAction* _resultAsLocalPropAction;
+  Ui::AlgorithmRunner *_ui;
+  tlp::Graph *_graph;
+  QToolButton *_storeResultAsLocalButton;
+  QAction *_resultAsLocalPropAction;
 
-  QList<AlgorithmRunnerItem*> _favorites;
+  QList<AlgorithmRunnerItem *> _favorites;
 
-  void refreshTreeUi(QWidget* w);
-  void buildTreeUi(QWidget* w, tlp::PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, bool root = false);
-  void insertItem(QWidget* w, const QString& name);
+  void refreshTreeUi(QWidget *w);
+  void buildTreeUi(QWidget *w, tlp::PluginModel<tlp::Algorithm> *model, const QModelIndex &parent,
+                   bool root = false);
+  void insertItem(QWidget *w, const QString &name);
 
 public:
-  explicit AlgorithmRunner(QWidget* parent = NULL);
+  explicit AlgorithmRunner(QWidget *parent = NULL);
   virtual ~AlgorithmRunner();
 
 signals:
   void setStoreResultAsLocal(bool);
 
 public slots:
-  void setGraph(tlp::Graph*);
+  void setGraph(tlp::Graph *);
   void findPlugins();
 
   void refreshPluginsList();
 
 protected slots:
   void setFilter(QString);
-  void addFavorite(const QString& algName, const tlp::DataSet& data=tlp::DataSet());
-  void removeFavorite(const QString& algName);
+  void addFavorite(const QString &algName, const tlp::DataSet &data = tlp::DataSet());
+  void removeFavorite(const QString &algName);
   void favorized(bool);
-  void setStoreResultAsLocal(QAction*);
+  void setStoreResultAsLocal(QAction *);
   void expanded(bool);
 
 protected:

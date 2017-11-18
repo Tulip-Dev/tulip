@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLCONVEXGRAPHHULL_H_
 #define GLCONVEXGRAPHHULL_H_
 
@@ -39,15 +38,17 @@ class GlComplexPolygon;
 /**
  * @brief This class draws a convex hull around a graph.
  *
- * Given a graph, this class computes the various control points of a convex hull that embraces the nodes and edges present into the graph.
- * If this entity is translated using the translate method, every element of the linked graph will be translated as well.
+ * Given a graph, this class computes the various control points of a convex hull that embraces the
+ * nodes and edges present into the graph.
+ * If this entity is translated using the translate method, every element of the linked graph will
+ * be translated as well.
  *
- * @warning The graph or any of the properties linked to a GlConvexGraphHull should never be deleted before the entity. Such a thing should be
+ * @warning The graph or any of the properties linked to a GlConvexGraphHull should never be deleted
+ * before the entity. Such a thing should be
  * reported to the user in debug mode, raising an assertion.
  */
 class TLP_GL_SCOPE GlConvexGraphHull {
 public:
-
   /**
    * @brief ...
    *
@@ -59,7 +60,9 @@ public:
    * @param size The property defining the graph's elements' sizes.
    * @param rotation The property defining the graph's elements' rotation.
    **/
-  GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
+  GlConvexGraphHull(GlComposite *parent, const std::string &name, const tlp::Color &fcolor,
+                    Graph *graph, LayoutProperty *layout, SizeProperty *size,
+                    DoubleProperty *rotation);
 
   ~GlConvexGraphHull();
 
@@ -70,11 +73,12 @@ public:
 
   void setVisible(bool visible);
   bool isVisible();
+
 private:
-  GlComposite* _parent;
+  GlComposite *_parent;
   std::string _name;
   Color _fcolor;
-  GlComplexPolygon* _polygon;
+  GlComplexPolygon *_polygon;
   Graph *graph;
   LayoutProperty *layout;
   SizeProperty *size;

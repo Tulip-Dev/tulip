@@ -42,30 +42,26 @@ struct Face;
  * but it completely compute the map.
  */
 
-
 class TLP_SCOPE PlanarConMap : public GraphDecorator {
 
   /* for test classes */
   friend class FaceIteratorTest;
   friend class PlanarConMapTest;
 
-
   friend class FaceIterator;
   friend class FaceAdjIterator;
   friend class NodeFaceIterator;
   friend class EdgeFaceIterator;
 
-  friend TLP_SCOPE PlanarConMap* computePlanarConMap(Graph* graph);
+  friend TLP_SCOPE PlanarConMap *computePlanarConMap(Graph *graph);
 
 protected:
   /** Constructor
    * Warning, the graph must be planar, connected and simple.
    */
-  PlanarConMap(Graph* s);
-
+  PlanarConMap(Graph *s);
 
 public:
-
   /**
    *  Remove all nodes, edges, faces and subgraphs of the map
    */
@@ -89,7 +85,8 @@ public:
    * element of the root graph.
    * Warning : One can't add an existing edge to the root graph
    */
-  edge addEdgeMap(const node v, const node w, Face f, const edge e1, const edge e2, Face new_face= Face());
+  edge addEdgeMap(const node v, const node w, Face f, const edge e1, const edge e2,
+                  Face new_face = Face());
 
   /** Split the face by adding an edge between the two nodes and return the
    * new face. Possibility to specify which will be the new face, by giving a
@@ -111,42 +108,41 @@ public:
    */
   void mergeFaces(Face f, Face g);
 
-
   //================================================================================
-  //Iterators on the graph structure.
+  // Iterators on the graph structure.
   //================================================================================
 
-  ///Return an iterator on the faces.
-  Iterator<Face>* getFaces();
-  ///Return an iterator on the adjacent faces of a node.
-  Iterator<Face>* getFacesAdj(const node);
-  ///Return an iterator on the nodes of a face.
-  Iterator<node>* getFaceNodes(const Face);
-  ///Return an iterator on the edges of a face.
-  Iterator<edge>* getFaceEdges(const Face);
+  /// Return an iterator on the faces.
+  Iterator<Face> *getFaces();
+  /// Return an iterator on the adjacent faces of a node.
+  Iterator<Face> *getFacesAdj(const node);
+  /// Return an iterator on the nodes of a face.
+  Iterator<node> *getFaceNodes(const Face);
+  /// Return an iterator on the edges of a face.
+  Iterator<edge> *getFaceEdges(const Face);
 
   //================================================================================
   // Graph, nodes and edges information about the graph stucture
   //================================================================================
-  ///Return the edge which is the succcessor of an edge in the cycle of a node.
+  /// Return the edge which is the succcessor of an edge in the cycle of a node.
   edge succCycleEdge(const edge, const node) const;
-  ///Return the edge which is the predecessor of an edge in the cycle of a node.
+  /// Return the edge which is the predecessor of an edge in the cycle of a node.
   edge predCycleEdge(const edge, const node) const;
-  ///Return the node which is the succcessor of a node in the cycle of a node.
+  /// Return the node which is the succcessor of a node in the cycle of a node.
   node succCycleNode(const node, const node) const;
-  ///Return the node which is the predecessor of a node in the cycle of a node.
+  /// Return the node which is the predecessor of a node in the cycle of a node.
   node predCycleNode(const node, const node) const;
 
-  ///Return the number of faces.
+  /// Return the number of faces.
   unsigned int nbFaces();
-  ///Return the number of nodes contained into a face.
+  /// Return the number of nodes contained into a face.
   unsigned int nbFacesNodes(const Face);
-  ///Return the number of edges contained into a face.
+  /// Return the number of edges contained into a face.
   unsigned int nbFacesEdges(const Face);
 
-  ///Return true if the face contains the node.
-  bool containNode(const Face, const node) ;
-  ///Return true if the face contains the edge.
+  /// Return true if the face contains the node.
+  bool containNode(const Face, const node);
+  /// Return true if the face contains the edge.
   bool containEdge(const Face, const edge);
   /** Returns the face containing the two nodes in this order
    * and the edge between this two nodes.
@@ -156,9 +152,7 @@ public:
   /// Return a face containing the two nodes if it exists and Face() otherwise
   Face sameFace(const node, const node);
 
-
 private:
-
   /** Compute faces and initialize all variables.
    */
   void computeFaces();
@@ -170,7 +164,7 @@ private:
    */
   void delEdgeMap(edge, Face = Face());
 
-  typedef TLP_HASH_MAP<Face , std::vector<edge> > faceMap;
+  typedef TLP_HASH_MAP<Face, std::vector<edge> > faceMap;
   typedef faceMap::value_type faceMapEntry;
   typedef TLP_HASH_MAP<edge, std::vector<Face> > edgeMap;
   typedef edgeMap::value_type edgeMapEntry;
@@ -181,20 +175,18 @@ private:
   faceMap facesEdges;
   edgeMap edgesFaces;
   nodeMap nodesFaces;
-  mutable std::vector<Face > faces;
+  mutable std::vector<Face> faces;
 
   unsigned int faceId;
-
 };
 
 // Compute a PlanarConMap from a graph.
 // return a NULL value if the graph is not connected
-TLP_SCOPE PlanarConMap* computePlanarConMap(Graph* graph);
-
+TLP_SCOPE PlanarConMap *computePlanarConMap(Graph *graph);
 }
 
-///Print the map (only faces, nodes and edges) in ostream, in the tulip format
-TLP_SCOPE std::ostream& operator<< (std::ostream &, tlp::PlanarConMap *);
+/// Print the map (only faces, nodes and edges) in ostream, in the tulip format
+TLP_SCOPE std::ostream &operator<<(std::ostream &, tlp::PlanarConMap *);
 
 #endif
 

@@ -35,19 +35,20 @@ class PluginsCenter;
 class QLabel;
 
 /**
-  @brief The window used in the tulip_app process to display the Welcome, plugins center and getting help screens.
+  @brief The window used in the tulip_app process to display the Welcome, plugins center and getting
+  help screens.
   This class is basically a controller for the 3 underleying screens that manage their own logic.
   */
-class TulipMainWindow: public QMainWindow {
+class TulipMainWindow : public QMainWindow {
   Q_OBJECT
 
-  static TulipMainWindow* _instance;
-  TulipMainWindow(QWidget *parent=NULL);
+  static TulipMainWindow *_instance;
+  TulipMainWindow(QWidget *parent = NULL);
 
-  QLabel* _errorMessage;
+  QLabel *_errorMessage;
 
 public:
-  static TulipMainWindow* instance() {
+  static TulipMainWindow *instance() {
     if (!_instance)
       _instance = new TulipMainWindow;
 
@@ -62,20 +63,21 @@ public slots:
   void closeApp();
   void pluginErrorMessage(const QString &message);
   void showTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
-  void showErrorMessage(const QString& title, const QString& message);
+  void showErrorMessage(const QString &title, const QString &message);
 
   void createPerspective(const QString &name);
   void createPerspective(const QString &name, const QVariantMap &parameters);
 
   void openProject(const QString &file);
-  void openProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters = QVariantMap());
+  void openProjectWith(const QString &file, const QString &perspective,
+                       const QVariantMap &parameters = QVariantMap());
 
   void showOpenProjectWindow();
 
   void showPluginsCenter();
   void showProjectsCenter();
   void showAboutCenter();
-  void showTrayMessage(const QString& message);
+  void showTrayMessage(const QString &message);
 
 protected:
   void closeEvent(QCloseEvent *);
@@ -87,17 +89,13 @@ protected slots:
   void pageSwitched(int);
 
 private:
-
   void bringWindowToFront();
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void checkPython();
 #endif
 
-  enum SystemTrayMessage {
-    NoMessage,
-    PluginErrorMessage
-  };
+  enum SystemTrayMessage { NoMessage, PluginErrorMessage };
 
   Ui::TulipMainWindowData *_ui;
   QSystemTrayIcon *_systemTrayIcon;

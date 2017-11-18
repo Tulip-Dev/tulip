@@ -34,9 +34,10 @@ class ConvolutionClustering;
 class ConvolutionClusteringSetup : public QDialog {
   Q_OBJECT
 
-  Ui::ConvolutionClusteringSetupData* _ui;
+  Ui::ConvolutionClusteringSetupData *_ui;
+
 public:
-  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,QWidget* parent = NULL);
+  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin, QWidget *parent = NULL);
   ~ConvolutionClusteringSetup();
 
   inline ConvolutionClustering *getPlugin() const {
@@ -52,6 +53,7 @@ public:
 public slots:
   void update();
   void setlog(bool);
+
 private:
   QWidget *histogramWidget;
   ConvolutionClustering *convolPlugin;

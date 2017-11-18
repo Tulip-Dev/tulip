@@ -44,10 +44,13 @@ bool pointInPolygon(const vector<Coord> &polygon, const Coord &point) {
   size_t i, j;
   bool ret = false;
 
-  for (i = 0, j = polygon.size() - 1 ; i < polygon.size() ; j = i++) {
+  for (i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++) {
     if ((((polygon[i].getY() <= point.getY()) && (point.getY() < polygon[j].getY())) ||
          ((polygon[j].getY() <= point.getY()) && (point.getY() < polygon[i].getY()))) &&
-        (point.getX() < (polygon[j].getX() - polygon[i].getX()) * (point.getY() - polygon[i].getY()) / (polygon[j].getY() - polygon[i].getY()) + polygon[i].getX()))
+        (point.getX() < (polygon[j].getX() - polygon[i].getX()) *
+                                (point.getY() - polygon[i].getY()) /
+                                (polygon[j].getY() - polygon[i].getY()) +
+                            polygon[i].getX()))
       ret = !ret;
   }
 
@@ -57,16 +60,19 @@ bool pointInPolygon(const vector<Coord> &polygon, const Coord &point) {
 bool isPolygonAincludesInB(const vector<Coord> &A, const vector<Coord> &B) {
   bool ret = true;
 
-  for (size_t i = 0 ; i < A.size() ; ++i) {
+  for (size_t i = 0; i < A.size(); ++i) {
     ret = ret && pointInPolygon(B, A[i]);
 
-    if (!ret) break;
+    if (!ret)
+      break;
   }
 
   return ret;
 }
 
-GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color) : polygonPoints(polygonPoints), color(color), selected(false) {
+GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoints,
+                                                   const Color &color)
+    : polygonPoints(polygonPoints), color(color), selected(false) {
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);
@@ -75,7 +81,7 @@ GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoi
 }
 
 void GlEditableComplexPolygon::translate(const Coord &move) {
-  for (size_t i = 0 ; i < polygonPoints.size() ; ++i) {
+  for (size_t i = 0; i < polygonPoints.size(); ++i) {
     polygonPoints[i] += move;
   }
 }
@@ -83,7 +89,7 @@ void GlEditableComplexPolygon::translate(const Coord &move) {
 BoundingBox GlEditableComplexPolygon::getBoundingBox() {
   BoundingBox ret;
 
-  for (size_t i = 0 ; i < polygonPoints.size() ; ++i) {
+  for (size_t i = 0; i < polygonPoints.size(); ++i) {
     ret.expand(polygonPoints[i]);
   }
 
@@ -94,16 +100,20 @@ bool GlEditableComplexPolygon::pointInsidePolygon(const Coord &point) {
   return pointInPolygon(polygonPoints, point);
 }
 
-Coord *GlEditableComplexPolygon::getPolygonVertexUnderPointerIfAny(const Coord &pointerViewportCoord, Camera *camera) {
+Coord *
+GlEditableComplexPolygon::getPolygonVertexUnderPointerIfAny(const Coord &pointerViewportCoord,
+                                                            Camera *camera) {
   Coord *ret = NULL;
   vector<Coord>::iterator it;
   camera->initGl();
 
-  for (it = polygonPoints.begin() ; it != polygonPoints.end() ; ++it) {
+  for (it = polygonPoints.begin(); it != polygonPoints.end(); ++it) {
     Coord pointCenter = camera->worldTo2DViewport(*it);
 
-    if (pointerViewportCoord.getX() > (pointCenter.getX() - POINT_RADIUS) && pointerViewportCoord.getX() < (pointCenter.getX() + POINT_RADIUS) &&
-        pointerViewportCoord.getY() > (pointCenter.getY() - POINT_RADIUS) && pointerViewportCoord.getY() < (pointCenter.getY() + POINT_RADIUS)) {
+    if (pointerViewportCoord.getX() > (pointCenter.getX() - POINT_RADIUS) &&
+        pointerViewportCoord.getX() < (pointCenter.getX() + POINT_RADIUS) &&
+        pointerViewportCoord.getY() > (pointCenter.getY() - POINT_RADIUS) &&
+        pointerViewportCoord.getY() < (pointCenter.getY() + POINT_RADIUS)) {
       ret = new Coord(*it);
       break;
     }
@@ -112,49 +122,54 @@ Coord *GlEditableComplexPolygon::getPolygonVertexUnderPointerIfAny(const Coord &
   return ret;
 }
 
-std::pair<Coord, Coord> *GlEditableComplexPolygon::getPolygonSegmentUnderPointerIfAny(const Coord &pointerSceneCoord) {
+std::pair<Coord, Coord> *
+GlEditableComplexPolygon::getPolygonSegmentUnderPointerIfAny(const Coord &pointerSceneCoord) {
   vector<Coord> polygonPointsCp(polygonPoints);
   polygonPointsCp.push_back(polygonPoints.front());
 
-  for (size_t i = 0 ; i < polygonPointsCp.size() - 1 ; ++i) {
-    double startToEndDist = polygonPointsCp[i].dist(polygonPointsCp[i+1]);
+  for (size_t i = 0; i < polygonPointsCp.size() - 1; ++i) {
+    double startToEndDist = polygonPointsCp[i].dist(polygonPointsCp[i + 1]);
     double startToPointDist = polygonPointsCp[i].dist(pointerSceneCoord);
-    double pointToEndDist = pointerSceneCoord.dist(polygonPointsCp[i+1]);
+    double pointToEndDist = pointerSceneCoord.dist(polygonPointsCp[i + 1]);
 
-    if ((((startToPointDist + pointToEndDist) - startToEndDist)/startToEndDist < 1E-3)) {
-      return new pair<Coord, Coord>(polygonPointsCp[i], polygonPointsCp[i+1]);
+    if ((((startToPointDist + pointToEndDist) - startToEndDist) / startToEndDist < 1E-3)) {
+      return new pair<Coord, Coord>(polygonPointsCp[i], polygonPointsCp[i + 1]);
     }
   }
 
   return NULL;
 }
 
-void GlEditableComplexPolygon::movePolygonVertexToPoint(const Coord &polygonVertex, const Coord &targetPoint) {
+void GlEditableComplexPolygon::movePolygonVertexToPoint(const Coord &polygonVertex,
+                                                        const Coord &targetPoint) {
   std::replace(polygonPoints.begin(), polygonPoints.end(), polygonVertex, targetPoint);
 }
 
-void GlEditableComplexPolygon::addPolygonVertex(std::pair<Coord, Coord> polygonSegment, const Coord &newVertex) {
+void GlEditableComplexPolygon::addPolygonVertex(std::pair<Coord, Coord> polygonSegment,
+                                                const Coord &newVertex) {
   vector<Coord>::iterator it;
 
-  for (it = polygonPoints.begin() ; it != polygonPoints.end() ; ++it) {
+  for (it = polygonPoints.begin(); it != polygonPoints.end(); ++it) {
     if ((*it) == polygonSegment.second) {
       polygonPoints.insert(it, newVertex);
       return;
     }
   }
 
-  if (polygonSegment.first == polygonPoints.back() && polygonSegment.second == polygonPoints.front()) {
+  if (polygonSegment.first == polygonPoints.back() &&
+      polygonSegment.second == polygonPoints.front()) {
     polygonPoints.push_back(newVertex);
   }
 }
 
 void GlEditableComplexPolygon::removePolygonVertex(const Coord &vertex) {
   if (find(polygonPoints.begin(), polygonPoints.end(), vertex) != polygonPoints.end()) {
-    polygonPoints.erase(std::remove(polygonPoints.begin(), polygonPoints.end(), vertex), polygonPoints.end());
+    polygonPoints.erase(std::remove(polygonPoints.begin(), polygonPoints.end(), vertex),
+                        polygonPoints.end());
   }
 }
 
-void GlEditableComplexPolygon::draw(float lod,Camera* camera) {
+void GlEditableComplexPolygon::draw(float lod, Camera *camera) {
   camera->initGl();
   GlComplexPolygon complexPolygon(polygonPoints, color, color, 1);
   glDisable(GL_DEPTH_TEST);
@@ -164,7 +179,7 @@ void GlEditableComplexPolygon::draw(float lod,Camera* camera) {
     Camera camera2D(camera->getScene(), false);
     camera2D.setScene(camera->getScene());
 
-    for (size_t i = 0 ; i < polygonPoints.size() ; ++i) {
+    for (size_t i = 0; i < polygonPoints.size(); ++i) {
       camera->initGl();
       Coord tmp = camera->worldTo2DViewport(polygonPoints[i]);
       camera2D.initGl();
@@ -174,8 +189,10 @@ void GlEditableComplexPolygon::draw(float lod,Camera* camera) {
   }
 }
 
-ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget) :
-  optionsWidget(optionsWidget), scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL), dragStarted(false), x(0), y(0) {
+ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(
+    ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget)
+    : optionsWidget(optionsWidget), scatterView(NULL), selectedPolygon(NULL),
+      selectedPolygonPoint(NULL), dragStarted(false), x(0), y(0) {
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);
@@ -183,9 +200,10 @@ ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(ScatterPlotCorrel
   basicCircle.setOutlineColor(Color(0, 0, 255, 255));
 }
 
-ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector) :
-  scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL),
-  dragStarted(false), x(0), y(0) {
+ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(
+    const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector)
+    : scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL), dragStarted(false),
+      x(0), y(0) {
   optionsWidget = scatterPlotCorrelCoeffSelector.optionsWidget;
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
@@ -221,21 +239,18 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
 
         if (selectedPolygonPoint != NULL) {
           glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
-        }
-        else if (selectedPolygon != NULL) {
+        } else if (selectedPolygon != NULL) {
           glWidget->setCursor(QCursor(Qt::SizeAllCursor));
-        }
-        else {
+        } else {
           glWidget->setCursor(QCursor(Qt::ArrowCursor));
         }
-      }
-      else {
+      } else {
         if (selectedPolygon != NULL && selectedPolygonPoint != NULL) {
-          selectedPolygon->movePolygonVertexToPoint(*selectedPolygonPoint, currentPointerSceneCoords);
+          selectedPolygon->movePolygonVertexToPoint(*selectedPolygonPoint,
+                                                    currentPointerSceneCoords);
           delete selectedPolygonPoint;
           selectedPolygonPoint = new Coord(currentPointerSceneCoords);
-        }
-        else if (selectedPolygon != NULL) {
+        } else if (selectedPolygon != NULL) {
           selectedPolygon->translate(translationVectorScene);
 
           if (selectedPolygonPoint != NULL) {
@@ -243,25 +258,27 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
           }
         }
       }
-    }
-    else if (polygonEdit.size() > 2) {
+    } else if (polygonEdit.size() > 2) {
       Coord startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
-      Coord pointerGlViewportCoord = Coord(glWidget->screenToViewport(me->x()), glWidget->screenToViewport(glWidget->height() - me->y()));
-      bool underFirstPoint = (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) && pointerGlViewportCoord.getX() < (startPolygonPointScr.getX() + POINT_RADIUS) &&
-                              pointerGlViewportCoord.getY() > (startPolygonPointScr.getY() - POINT_RADIUS) && pointerGlViewportCoord.getY() < (startPolygonPointScr.getY() + POINT_RADIUS));
+      Coord pointerGlViewportCoord =
+          Coord(glWidget->screenToViewport(me->x()),
+                glWidget->screenToViewport(glWidget->height() - me->y()));
+      bool underFirstPoint =
+          (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) &&
+           pointerGlViewportCoord.getX() < (startPolygonPointScr.getX() + POINT_RADIUS) &&
+           pointerGlViewportCoord.getY() > (startPolygonPointScr.getY() - POINT_RADIUS) &&
+           pointerGlViewportCoord.getY() < (startPolygonPointScr.getY() + POINT_RADIUS));
 
       if (underFirstPoint) {
         glWidget->setCursor(QCursor(Qt::SizeAllCursor));
-      }
-      else {
+      } else {
         glWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
     }
 
     glWidget->redraw();
     return true;
-  }
-  else if (e->type() == QEvent::MouseButtonPress) {
+  } else if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
     x = glWidget->screenToViewport(glWidget->width() - me->x());
     y = glWidget->screenToViewport(me->y());
@@ -270,59 +287,65 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     if (me->buttons() == Qt::LeftButton) {
       if (selectedPolygon != NULL || selectedPolygonPoint != NULL) {
         dragStarted = true;
-      }
-      else if (polygonEdit.size() < 2) {
+      } else if (polygonEdit.size() < 2) {
         polygonEdit.push_back(currentPointerSceneCoords);
-      }
-      else {
+      } else {
         Coord startPolygonPointScr = camera.worldTo2DViewport(polygonEdit[0]);
-        Coord pointerGlViewportCoord = Coord(glWidget->screenToViewport(me->x()), glWidget->screenToViewport(glWidget->height() - me->y()));
-        bool underFirstPoint = (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) && pointerGlViewportCoord.getX() < (startPolygonPointScr.getX() + POINT_RADIUS) &&
-                                pointerGlViewportCoord.getY() > (startPolygonPointScr.getY() - POINT_RADIUS) && pointerGlViewportCoord.getY() < (startPolygonPointScr.getY() + POINT_RADIUS));
+        Coord pointerGlViewportCoord =
+            Coord(glWidget->screenToViewport(me->x()),
+                  glWidget->screenToViewport(glWidget->height() - me->y()));
+        bool underFirstPoint =
+            (pointerGlViewportCoord.getX() > (startPolygonPointScr.getX() - POINT_RADIUS) &&
+             pointerGlViewportCoord.getX() < (startPolygonPointScr.getX() + POINT_RADIUS) &&
+             pointerGlViewportCoord.getY() > (startPolygonPointScr.getY() - POINT_RADIUS) &&
+             pointerGlViewportCoord.getY() < (startPolygonPointScr.getY() + POINT_RADIUS));
 
         if (underFirstPoint) {
-          polygons.push_back(new GlEditableComplexPolygon(polygonEdit, Color(0,255,0,100)));
+          polygons.push_back(new GlEditableComplexPolygon(polygonEdit, Color(0, 255, 0, 100)));
           polygonEdit.clear();
           mapPolygonColorToCorrelCoeffOfData(polygons.back(), glWidget);
           glWidget->setCursor(QCursor(Qt::ArrowCursor));
-        }
-        else {
+        } else {
           polygonEdit.push_back(currentPointerSceneCoords);
         }
 
         glWidget->redraw();
       }
-    }
-    else if (me->buttons() == Qt::RightButton) {
+    } else if (me->buttons() == Qt::RightButton) {
       if (!polygonEdit.empty()) {
         polygonEdit.clear();
         glWidget->redraw();
-      }
-      else if (selectedPolygon != NULL) {
+      } else if (selectedPolygon != NULL) {
         QMenu contextMenu(glWidget);
         QAction *deletePoly = contextMenu.addAction("Remove polygon");
         QAction *selectData = contextMenu.addAction("Select nodes under polygon");
         QAction *selectedAction = contextMenu.exec(me->globalPos());
 
         if (selectedAction == deletePoly) {
-          polygons.erase(std::remove(polygons.begin(), polygons.end(), selectedPolygon), polygons.end());
+          polygons.erase(std::remove(polygons.begin(), polygons.end(), selectedPolygon),
+                         polygons.end());
           polygonsToNodesSubsetAndCorrelCoeff.erase(selectedPolygon);
           delete selectedPolygon;
           selectedPolygon = NULL;
           delete selectedPolygonPoint;
           selectedPolygonPoint = NULL;
           glWidget->redraw();
-        }
-        else if (selectedAction == selectData) {
+        } else if (selectedAction == selectData) {
           Observable::holdObservers();
 
-          for (size_t i = 0 ; i < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size() ; ++i) {
-            viewSelection->setNodeValue(polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i], true);
+          for (size_t i = 0; i < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size();
+               ++i) {
+            viewSelection->setNodeValue(
+                polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i], true);
           }
 
-          for (size_t i = 0 ; i < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size() ; ++i) {
-            for (size_t j = i+1 ; j < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size() ; ++j) {
-              edge e = graph->existEdge(polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i], polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[j], false);
+          for (size_t i = 0; i < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size();
+               ++i) {
+            for (size_t j = i + 1;
+                 j < polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first.size(); ++j) {
+              edge e = graph->existEdge(
+                  polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[i],
+                  polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].first[j], false);
 
               if (e.isValid()) {
                 viewSelection->setEdgeValue(e, true);
@@ -336,8 +359,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     }
 
     return true;
-  }
-  else if (e->type() == QEvent::MouseButtonRelease) {
+  } else if (e->type() == QEvent::MouseButtonRelease) {
     dragStarted = false;
 
     if (selectedPolygon != NULL) {
@@ -346,8 +368,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     }
 
     return true;
-  }
-  else if (e->type() == QEvent::MouseButtonDblClick) {
+  } else if (e->type() == QEvent::MouseButtonDblClick) {
     QMouseEvent *me = static_cast<QMouseEvent *>(e);
     x = glWidget->screenToViewport(glWidget->width() - me->x());
     y = glWidget->screenToViewport(me->y());
@@ -359,9 +380,9 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
         delete selectedPolygonPoint;
         selectedPolygonPoint = NULL;
       }
-    }
-    else if (selectedPolygon != NULL) {
-      pair<Coord, Coord> *polygonSegment = selectedPolygon->getPolygonSegmentUnderPointerIfAny(currentPointerSceneCoords);
+    } else if (selectedPolygon != NULL) {
+      pair<Coord, Coord> *polygonSegment =
+          selectedPolygon->getPolygonSegmentUnderPointerIfAny(currentPointerSceneCoords);
 
       if (polygonSegment != NULL) {
         selectedPolygon->addPolygonVertex(*polygonSegment, currentPointerSceneCoords);
@@ -380,9 +401,9 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
 
   glDisable(GL_STENCIL_TEST);
   glEnable(GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  for (size_t i = 0 ; i < polygons.size() ; ++i) {
+  for (size_t i = 0; i < polygons.size(); ++i) {
     polygons[i]->draw(0, &camera);
   }
 
@@ -391,12 +412,16 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
   if (selectedPolygon != NULL) {
     GlQuantitativeAxis *xAxis = scatterView->getDetailedScatterPlot()->getXAxis();
     GlQuantitativeAxis *yAxis = scatterView->getDetailedScatterPlot()->getYAxis();
-    GlLabel coeffLabel(Coord(xAxis->getAxisBaseCoord().getX() + (1.0f / 2.0f) * xAxis->getAxisLength(), yAxis->getAxisBaseCoord().getY() + yAxis->getAxisLength() + yAxis->getLabelHeight()),
-                       Size(3.0f * (xAxis->getAxisLength() / 4.0f), yAxis->getLabelHeight()), selectedPolygon->getColor());
+    GlLabel coeffLabel(
+        Coord(xAxis->getAxisBaseCoord().getX() + (1.0f / 2.0f) * xAxis->getAxisLength(),
+              yAxis->getAxisBaseCoord().getY() + yAxis->getAxisLength() + yAxis->getLabelHeight()),
+        Size(3.0f * (xAxis->getAxisLength() / 4.0f), yAxis->getLabelHeight()),
+        selectedPolygon->getColor());
     ostringstream oss;
-    oss << "correlation coefficient for data under polygon = " << polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].second;
+    oss << "correlation coefficient for data under polygon = "
+        << polygonsToNodesSubsetAndCorrelCoeff[selectedPolygon].second;
     coeffLabel.setText(oss.str());
-    coeffLabel.draw(0,&camera);
+    coeffLabel.draw(0, &camera);
   }
 
   Camera camera2D(camera.getScene(), false);
@@ -406,29 +431,30 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
   int bgV = backgroundColor.getV();
 
   if (bgV < 128) {
-    foregroundColor = Color(255,255,255);
-  }
-  else {
-    foregroundColor = Color(0,0,0);
+    foregroundColor = Color(255, 255, 255);
+  } else {
+    foregroundColor = Color(0, 0, 0);
   }
 
   if (!polygonEdit.empty()) {
-    for (size_t i = 0 ; i < polygonEdit.size() - 1 ; ++i) {
+    for (size_t i = 0; i < polygonEdit.size() - 1; ++i) {
       camera.initGl();
       Coord lineStart(camera.worldTo2DViewport(polygonEdit[i]));
-      Coord lineEnd(camera.worldTo2DViewport(polygonEdit[i+1]));
+      Coord lineEnd(camera.worldTo2DViewport(polygonEdit[i + 1]));
       camera2D.initGl();
-      GlLines::glDrawLine(lineStart, lineEnd, 1.0f, GlLines::TLP_DASHED, foregroundColor, foregroundColor);
+      GlLines::glDrawLine(lineStart, lineEnd, 1.0f, GlLines::TLP_DASHED, foregroundColor,
+                          foregroundColor);
     }
 
     camera.initGl();
     Coord lineStart(camera.worldTo2DViewport(polygonEdit[polygonEdit.size() - 1]));
     Coord lineEnd(camera.worldTo2DViewport(currentPointerSceneCoords));
     camera2D.initGl();
-    GlLines::glDrawLine(lineStart, lineEnd, 1.0f, GlLines::TLP_DASHED, foregroundColor, foregroundColor);
+    GlLines::glDrawLine(lineStart, lineEnd, 1.0f, GlLines::TLP_DASHED, foregroundColor,
+                        foregroundColor);
   }
 
-  for (size_t i = 0 ; i < polygonEdit.size() ; ++i) {
+  for (size_t i = 0; i < polygonEdit.size(); ++i) {
     camera.initGl();
     Coord pointCoord(camera.worldTo2DViewport(polygonEdit[i]));
     camera2D.initGl();
@@ -439,7 +465,7 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
   return true;
 }
 
-bool ScatterPlotCorrelCoeffSelector::compute(GlMainWidget*) {
+bool ScatterPlotCorrelCoeffSelector::compute(GlMainWidget *) {
   return false;
 }
 
@@ -447,14 +473,16 @@ void ScatterPlotCorrelCoeffSelector::viewChanged(View *view) {
   scatterView = dynamic_cast<ScatterPlot2DView *>(view);
 }
 
-void ScatterPlotCorrelCoeffSelector::getPolygonAndPointUnderPointerIfAny(const Coord &pointerSceneCoord, Camera *camera) {
+void ScatterPlotCorrelCoeffSelector::getPolygonAndPointUnderPointerIfAny(
+    const Coord &pointerSceneCoord, Camera *camera) {
   selectedPolygon = NULL;
   delete selectedPolygonPoint;
   selectedPolygonPoint = NULL;
   Coord pointerViewportCoord(camera->worldTo2DViewport(pointerSceneCoord));
 
-  for (size_t i = 0 ; i < polygons.size() ; ++i) {
-    selectedPolygonPoint = polygons[i]->getPolygonVertexUnderPointerIfAny(pointerViewportCoord, camera);
+  for (size_t i = 0; i < polygons.size(); ++i) {
+    selectedPolygonPoint =
+        polygons[i]->getPolygonVertexUnderPointerIfAny(pointerViewportCoord, camera);
 
     if (selectedPolygonPoint != NULL) {
       selectedPolygon = polygons[i];
@@ -463,7 +491,7 @@ void ScatterPlotCorrelCoeffSelector::getPolygonAndPointUnderPointerIfAny(const C
   }
 
   if (selectedPolygon == NULL) {
-    for (size_t i = 0 ; i < polygons.size() ; ++i) {
+    for (size_t i = 0; i < polygons.size(); ++i) {
       if (polygons[i]->pointInsidePolygon(pointerSceneCoord)) {
         selectedPolygon = polygons[i];
         break;
@@ -471,17 +499,17 @@ void ScatterPlotCorrelCoeffSelector::getPolygonAndPointUnderPointerIfAny(const C
     }
   }
 
-  for (size_t i = 0 ; i < polygons.size() ; ++i) {
+  for (size_t i = 0; i < polygons.size(); ++i) {
     if (polygons[i] == selectedPolygon) {
       polygons[i]->setSelected(true);
-    }
-    else {
+    } else {
       polygons[i]->setSelected(false);
     }
   }
 }
 
-void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditableComplexPolygon *polygon, GlMainWidget *glWidget) {
+void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(
+    GlEditableComplexPolygon *polygon, GlMainWidget *glWidget) {
 
   Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   Camera &camera = glWidget->getScene()->getLayer("Main")->getCamera();
@@ -493,7 +521,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
   vector<Coord> polygonScr;
   const vector<Coord> &polygonVertices = polygon->getPolygonVertices();
 
-  for (size_t i = 0 ; i < polygonVertices.size() ; ++i) {
+  for (size_t i = 0; i < polygonVertices.size(); ++i) {
     polygonScr.push_back(camera.worldTo2DViewport(polygonVertices[i]));
   }
 
@@ -506,16 +534,18 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
 
   vector<SelectedEntity> tmpNodes;
   vector<SelectedEntity> tmpEdges;
-  glWidget->pickNodesEdges(xStart, glWidget->height() - yEnd, (xEnd - xStart), (yEnd - yStart), tmpNodes, tmpEdges);
+  glWidget->pickNodesEdges(xStart, glWidget->height() - yEnd, (xEnd - xStart), (yEnd - yStart),
+                           tmpNodes, tmpEdges);
   vector<node> selectedNodes;
   double correlationCoeff = 0;
 
   if (!tmpNodes.empty()) {
     GlNode glNode(0);
 
-    for (size_t i = 0 ; i < tmpNodes.size() ; ++i) {
+    for (size_t i = 0; i < tmpNodes.size(); ++i) {
       glNode.id = tmpNodes[i].getComplexEntityId();
-      BoundingBox nodeBB (glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
+      BoundingBox nodeBB(
+          glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
       float dx = nodeBB[1][0] - nodeBB[0][0];
       float dy = nodeBB[1][1] - nodeBB[0][1];
       float dz = nodeBB[1][2] - nodeBB[0][2];
@@ -553,10 +583,14 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
       xVec.push_back(nodeBBBRFScr.getX());
       yVec.push_back(nodeBBBRFScr.getY());
       vector<Coord> quad;
-      quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
-      quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-      quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-      quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
       quad.push_back(quad[0]);
 
       if (isPolygonAincludesInB(quad, polygonScr)) {
@@ -575,7 +609,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
 
     double sumxiyi = 0, sumxi = 0, sumyi = 0, sumxi2 = 0, sumyi2 = 0;
 
-    for (size_t i = 0 ; i < selectedNodes.size() ; ++i) {
+    for (size_t i = 0; i < selectedNodes.size(); ++i) {
       node n = selectedNodes[i];
       double xValue = 0, yValue = 0;
 
@@ -591,13 +625,13 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
       sumxiyi += (xValue * yValue);
     }
 
-    double numerator = sumxiyi - (1./selectedNodes.size()) * sumxi * sumyi;
-    double denominator = sqrt(sumxi2 - (1./selectedNodes.size()) * (sumxi * sumxi)) * sqrt(sumyi2 - (1./selectedNodes.size()) * (sumyi * sumyi));
+    double numerator = sumxiyi - (1. / selectedNodes.size()) * sumxi * sumyi;
+    double denominator = sqrt(sumxi2 - (1. / selectedNodes.size()) * (sumxi * sumxi)) *
+                         sqrt(sumyi2 - (1. / selectedNodes.size()) * (sumyi * sumyi));
 
     if (denominator == 0) {
       correlationCoeff = 0.0;
-    }
-    else {
+    } else {
       correlationCoeff = numerator / denominator;
     }
 
@@ -605,22 +639,21 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
 
     if (correlationCoeff < 0) {
       endColor = optionsWidget->getMinusOneColor();
-    }
-    else {
+    } else {
       endColor = optionsWidget->getOneColor();
     }
 
     for (unsigned int i = 0; i < 4; ++i) {
-      polygonColor[i] = uchar((double(startColor[i]) + (double(endColor[i])- double(startColor[i])) * abs(correlationCoeff)));
+      polygonColor[i] =
+          uchar((double(startColor[i]) +
+                 (double(endColor[i]) - double(startColor[i])) * abs(correlationCoeff)));
     }
 
     polygon->setColor(polygonColor);
-  }
-  else {
+  } else {
     polygon->setColor(optionsWidget->getZeroColor());
   }
 
   polygonsToNodesSubsetAndCorrelCoeff[polygon] = make_pair(selectedNodes, correlationCoeff);
 }
-
 }

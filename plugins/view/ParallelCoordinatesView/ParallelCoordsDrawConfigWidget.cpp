@@ -33,18 +33,21 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) : QWidget(parent),oldValuesInitialized(false),_ui(new Ui::ParallelCoordsDrawConfigWidgetData) {
+ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent)
+    : QWidget(parent), oldValuesInitialized(false),
+      _ui(new Ui::ParallelCoordsDrawConfigWidgetData) {
   _ui->setupUi(this);
-  setBackgroundColor(Color(255,255,255));
-  connect(_ui->browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
+  setBackgroundColor(Color(255, 255, 255));
+  connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(pressButtonBrowse()));
   connect(_ui->userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
-  connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
-  connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
+  connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this,
+          SLOT(minAxisPointSizeValueChanged(int)));
+  connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this,
+          SLOT(maxAxisPointSizeValueChanged(int)));
 
   if (Perspective::instance() != NULL && Perspective::instance()->mainWindow() != NULL) {
     _ui->bgColorButton->setDialogParent(Perspective::instance()->mainWindow());
   }
-
 }
 
 ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {
@@ -52,7 +55,8 @@ ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {
 }
 
 void ParallelCoordsDrawConfigWidget::pressButtonBrowse() {
-  QString fileName(QFileDialog::getOpenFileName(this, tr("Open Texture File"), "./", tr("Image Files (*.png *.jpg *.bmp)")));
+  QString fileName(QFileDialog::getOpenFileName(this, tr("Open Texture File"), "./",
+                                                tr("Image Files (*.png *.jpg *.bmp)")));
   _ui->userTextureFile->setText(fileName);
 }
 
@@ -72,29 +76,26 @@ string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
   if (_ui->gBoxLineTexture->isChecked()) {
     if (_ui->defaultTexture->isChecked()) {
       return DEFAULT_TEXTURE_FILE;
-    }
-    else {
+    } else {
       return QStringToTlpString(_ui->userTextureFile->text());
     }
-  }
-  else {
+  } else {
     return "";
   }
 }
 
-void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(const std::string &linesTextureFileName) {
+void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(
+    const std::string &linesTextureFileName) {
   if (!linesTextureFileName.empty()) {
     _ui->gBoxLineTexture->setChecked(true);
 
     if (linesTextureFileName == string(TulipBitmapDir + DEFAULT_TEXTURE_FILE)) {
       _ui->defaultTexture->setChecked(true);
-    }
-    else {
+    } else {
       _ui->userTexture->setChecked(true);
       _ui->userTextureFile->setText(tlpStringToQString(linesTextureFileName));
     }
-  }
-  else {
+  } else {
     _ui->gBoxLineTexture->setChecked(false);
   }
 }
@@ -146,8 +147,7 @@ void ParallelCoordsDrawConfigWidget::setLinesColorAlphaValue(unsigned int value)
   if (value > 255) {
     _ui->viewColorAlphaRb->setChecked(true);
     _ui->userAlphaRb->setChecked(false);
-  }
-  else {
+  } else {
     _ui->viewColorAlphaRb->setChecked(false);
     _ui->userAlphaRb->setChecked(true);
     _ui->viewColorAlphaValue->setValue(value);
@@ -157,8 +157,7 @@ void ParallelCoordsDrawConfigWidget::setLinesColorAlphaValue(unsigned int value)
 unsigned int ParallelCoordsDrawConfigWidget::getLinesColorAlphaValue() const {
   if (_ui->viewColorAlphaRb->isChecked()) {
     return 300;
-  }
-  else {
+  } else {
     return _ui->viewColorAlphaValue->value();
   }
 }
@@ -179,44 +178,42 @@ unsigned int ParallelCoordsDrawConfigWidget::getUnhighlightedEltsColorsAlphaValu
   return _ui->nonHighlightedEltsAlphaValue->value();
 }
 
-void ParallelCoordsDrawConfigWidget::setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue) {
+void ParallelCoordsDrawConfigWidget::setUnhighlightedEltsColorsAlphaValue(
+    const unsigned int alphaValue) {
   _ui->nonHighlightedEltsAlphaValue->setValue(alphaValue);
 }
 
 bool ParallelCoordsDrawConfigWidget::configurationChanged() {
-  bool confChanged=false;
+  bool confChanged = false;
 
-  if(oldValuesInitialized) {
-    if(oldAxisHeight!=getAxisHeight() ||
-        oldDrawPointOnAxis!=drawPointOnAxis() ||
-        oldAxisPointMinSize!=getAxisPointMinSize() ||
-        oldAxisPointMaxSize!=getAxisPointMaxSize() ||
-        oldDisplayNodesLabels!=displayNodeLabels() ||
-        oldLinesColorAlphaValue!=getLinesColorAlphaValue() ||
-        oldBackgroundColor!=getBackgroundColor() ||
-        oldUnhighlightedEltsColorsAlphaValue!=getUnhighlightedEltsColorsAlphaValue() ||
-        oldLinesTextureFilename!=getLinesTextureFilename() ) {
-      confChanged=true;
+  if (oldValuesInitialized) {
+    if (oldAxisHeight != getAxisHeight() || oldDrawPointOnAxis != drawPointOnAxis() ||
+        oldAxisPointMinSize != getAxisPointMinSize() ||
+        oldAxisPointMaxSize != getAxisPointMaxSize() ||
+        oldDisplayNodesLabels != displayNodeLabels() ||
+        oldLinesColorAlphaValue != getLinesColorAlphaValue() ||
+        oldBackgroundColor != getBackgroundColor() ||
+        oldUnhighlightedEltsColorsAlphaValue != getUnhighlightedEltsColorsAlphaValue() ||
+        oldLinesTextureFilename != getLinesTextureFilename()) {
+      confChanged = true;
     }
-  }
-  else {
-    confChanged=true;
-    oldValuesInitialized=true;
+  } else {
+    confChanged = true;
+    oldValuesInitialized = true;
   }
 
-  if(confChanged) {
-    oldAxisHeight=getAxisHeight();
-    oldDrawPointOnAxis=drawPointOnAxis();
-    oldAxisPointMinSize=getAxisPointMinSize();
-    oldAxisPointMaxSize=getAxisPointMaxSize();
-    oldDisplayNodesLabels=displayNodeLabels();
-    oldLinesColorAlphaValue=getLinesColorAlphaValue();
-    oldBackgroundColor=getBackgroundColor();
-    oldUnhighlightedEltsColorsAlphaValue=getUnhighlightedEltsColorsAlphaValue();
-    oldLinesTextureFilename=getLinesTextureFilename();
+  if (confChanged) {
+    oldAxisHeight = getAxisHeight();
+    oldDrawPointOnAxis = drawPointOnAxis();
+    oldAxisPointMinSize = getAxisPointMinSize();
+    oldAxisPointMaxSize = getAxisPointMaxSize();
+    oldDisplayNodesLabels = displayNodeLabels();
+    oldLinesColorAlphaValue = getLinesColorAlphaValue();
+    oldBackgroundColor = getBackgroundColor();
+    oldUnhighlightedEltsColorsAlphaValue = getUnhighlightedEltsColorsAlphaValue();
+    oldLinesTextureFilename = getLinesTextureFilename();
   }
 
   return confChanged;
 }
-
 }

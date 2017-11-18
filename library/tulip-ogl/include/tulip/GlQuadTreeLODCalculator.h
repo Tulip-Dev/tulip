@@ -31,7 +31,8 @@
 namespace tlp {
 
 class Camera;
-template <class TYPE> class QuadTreeNode;
+template <class TYPE>
+class QuadTreeNode;
 class GlScene;
 class PropertyInterface;
 class Graph;
@@ -43,7 +44,6 @@ class GlLayer;
 class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, private Observable {
 
 public:
-
   GlQuadTreeLODCalculator();
   ~GlQuadTreeLODCalculator();
 
@@ -64,30 +64,30 @@ public:
   /**
    * This function is call by GlLODSceneVisitor when a simple entitie is found
    */
-  void addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb);
+  void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb);
   /**
    * This function is call by GlLODSceneVisitor when a node is found
    */
-  void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
+  void addNodeBoundingBox(unsigned int id, const BoundingBox &bb);
   /**
    * This function is call by GlLODSceneVisitor when an edge is found
    */
-  void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
+  void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb);
 
   /**
    * This function compute LOD
    * See compute function of GlCPULODCalculator for more details
    * This function do some computation and after call computeFor2DCamera() or computeFor3DCamera()
    */
-  void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+  void compute(const Vector<int, 4> &globalViewport, const Vector<int, 4> &currentViewport);
 
   /**
    * Specific function to compute LOD for 3D cameras
    */
-  void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,
-                          const Matrix<float, 4>& transformMatrix,
-                          const Vector<int,4>& globalViewport,
-                          const Vector<int,4>& currentViewport);
+  void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye,
+                          const Matrix<float, 4> &transformMatrix,
+                          const Vector<int, 4> &globalViewport,
+                          const Vector<int, 4> &currentViewport);
 
   /**
    * Change the input data used by this LOD calculator
@@ -98,14 +98,13 @@ public:
    * Clone the calculator
    */
   virtual GlLODCalculator *clone() {
-    GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
+    GlQuadTreeLODCalculator *newCalculator = new GlQuadTreeLODCalculator();
     newCalculator->setScene(*glScene);
     newCalculator->setInputData(inputData);
     return newCalculator;
   }
 
-protected :
-
+protected:
   void update(PropertyInterface *property);
   void treatEvent(const Event &ev);
 
@@ -130,7 +129,7 @@ protected :
   BoundingBox entitiesGlobalBoundingBox;
 
   std::vector<Camera *> cameras;
-  std::map<GlLayer*, Camera> layerToCamera;
+  std::map<GlLayer *, Camera> layerToCamera;
   Camera *currentCamera;
   Graph *currentGraph;
   PropertyInterface *layoutProperty;
@@ -141,7 +140,6 @@ protected :
   int quadTreesVectorPosition;
   int simpleEntitiesVectorPosition;
 };
-
 }
 
 #endif // Tulip_QTQUADTREELODCALCULATOR_H

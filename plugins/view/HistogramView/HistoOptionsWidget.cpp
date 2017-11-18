@@ -28,11 +28,12 @@ using namespace std;
 
 namespace tlp {
 
-HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldValueInitialized(false),_ui(new Ui::HistoOptionsWidgetData) {
+HistoOptionsWidget::HistoOptionsWidget(QWidget *parent)
+    : QWidget(parent), oldValueInitialized(false), _ui(new Ui::HistoOptionsWidgetData) {
   _ui->setupUi(this);
   _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->backColorButton->setDialogTitle("Choose the background color");
-  setBackgroundColor(Color(255,255,255));
+  setBackgroundColor(Color(255, 255, 255));
   connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressXScaleCheckBox(bool)));
   connect(_ui->useYScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressYScaleCheckBox(bool)));
 }
@@ -126,27 +127,27 @@ void HistoOptionsWidget::useCustomYAxisScale(const bool value) {
 std::pair<double, double> HistoOptionsWidget::getXAxisScale() const {
   return make_pair(_ui->useXMinSpinBox->value(), _ui->useXMaxSpinBox->value());
 }
-void HistoOptionsWidget::setXAxisScale(const std::pair<double, double>& value) {
+void HistoOptionsWidget::setXAxisScale(const std::pair<double, double> &value) {
   _ui->useXMinSpinBox->setValue(value.first);
   _ui->useXMaxSpinBox->setValue(value.second);
 }
 std::pair<double, double> HistoOptionsWidget::getYAxisScale() const {
   return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
 }
-void HistoOptionsWidget::setYAxisScale(const std::pair<double, double>& value) {
+void HistoOptionsWidget::setYAxisScale(const std::pair<double, double> &value) {
   _ui->useYMinSpinBox->setValue(value.first);
   _ui->useYMaxSpinBox->setValue(value.second);
 }
 
-void HistoOptionsWidget::setInitXAxisScale(const std::pair<double, double>& value) {
+void HistoOptionsWidget::setInitXAxisScale(const std::pair<double, double> &value) {
   initXAxisScale = value;
 }
-void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double>& value) {
+void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double> &value) {
   initYAxisScale = value;
 }
 
 void HistoOptionsWidget::resetAxisScale() {
-  std::pair<double, double> tmp_pair = make_pair(0,0);
+  std::pair<double, double> tmp_pair = make_pair(0, 0);
   setXAxisScale(tmp_pair);
   setYAxisScale(tmp_pair);
   useCustomXAxisScale(false);
@@ -194,50 +195,47 @@ void HistoOptionsWidget::pressYScaleCheckBox(bool checked) {
 }
 
 bool HistoOptionsWidget::configurationChanged() {
-  bool confChanged=false;
+  bool confChanged = false;
 
-  if(oldValueInitialized) {
-    if (oldXAxisScale!=getXAxisScale()) {
+  if (oldValueInitialized) {
+    if (oldXAxisScale != getXAxisScale()) {
       confChanged = useCustomXAxisScale();
     }
 
-    if (oldYAxisScale!=getYAxisScale()) {
+    if (oldYAxisScale != getYAxisScale()) {
       confChanged = confChanged || useCustomYAxisScale();
     }
 
-    if(oldNbOfHistogramBins!=getNbOfHistogramBins() ||
-        oldNbXGraduations!=getNbXGraduations() ||
-        oldYAxisIncrementStep!=getYAxisIncrementStep() ||
-        oldCumulativeFrequenciesHistogram!=cumulativeFrequenciesHisto() ||
-        oldUniformQuantification!=uniformQuantification() ||
-        oldXAxisLogScale!=xAxisLogScaleSet() ||
-        oldYAxisLogScale!=yAxisLogScaleSet() ||
-        oldBackgroundColor!=getBackgroundColor() ||
-        oldShowGraphEdges!=showGraphEdges() ||
-        oldUseCustomXAxisScale!=useCustomXAxisScale() ||
-        oldUseCustomYAxisScale!=useCustomYAxisScale()) {
-      confChanged=true;
+    if (oldNbOfHistogramBins != getNbOfHistogramBins() ||
+        oldNbXGraduations != getNbXGraduations() ||
+        oldYAxisIncrementStep != getYAxisIncrementStep() ||
+        oldCumulativeFrequenciesHistogram != cumulativeFrequenciesHisto() ||
+        oldUniformQuantification != uniformQuantification() ||
+        oldXAxisLogScale != xAxisLogScaleSet() || oldYAxisLogScale != yAxisLogScaleSet() ||
+        oldBackgroundColor != getBackgroundColor() || oldShowGraphEdges != showGraphEdges() ||
+        oldUseCustomXAxisScale != useCustomXAxisScale() ||
+        oldUseCustomYAxisScale != useCustomYAxisScale()) {
+      confChanged = true;
     }
-  }
-  else {
-    confChanged=true;
-    oldValueInitialized=true;
+  } else {
+    confChanged = true;
+    oldValueInitialized = true;
   }
 
-  if(confChanged) {
-    oldNbOfHistogramBins=getNbOfHistogramBins();
-    oldNbXGraduations=getNbXGraduations();
-    oldYAxisIncrementStep=getYAxisIncrementStep();
-    oldCumulativeFrequenciesHistogram=cumulativeFrequenciesHisto();
-    oldUniformQuantification=uniformQuantification();
-    oldXAxisLogScale=xAxisLogScaleSet();
-    oldYAxisLogScale=yAxisLogScaleSet();
-    oldBackgroundColor=getBackgroundColor();
-    oldShowGraphEdges=showGraphEdges();
-    oldUseCustomXAxisScale=useCustomXAxisScale();
-    oldUseCustomYAxisScale=useCustomYAxisScale();
-    oldXAxisScale=getXAxisScale();
-    oldYAxisScale=getYAxisScale();
+  if (confChanged) {
+    oldNbOfHistogramBins = getNbOfHistogramBins();
+    oldNbXGraduations = getNbXGraduations();
+    oldYAxisIncrementStep = getYAxisIncrementStep();
+    oldCumulativeFrequenciesHistogram = cumulativeFrequenciesHisto();
+    oldUniformQuantification = uniformQuantification();
+    oldXAxisLogScale = xAxisLogScaleSet();
+    oldYAxisLogScale = yAxisLogScaleSet();
+    oldBackgroundColor = getBackgroundColor();
+    oldShowGraphEdges = showGraphEdges();
+    oldUseCustomXAxisScale = useCustomXAxisScale();
+    oldUseCustomYAxisScale = useCustomYAxisScale();
+    oldXAxisScale = getXAxisScale();
+    oldYAxisScale = getYAxisScale();
 
     if (_ui->useXMinSpinBox->value() > initXAxisScale.first)
       _ui->useXMinSpinBox->setValue(initXAxisScale.first);
@@ -254,5 +252,4 @@ bool HistoOptionsWidget::configurationChanged() {
 
   return confChanged;
 }
-
 }

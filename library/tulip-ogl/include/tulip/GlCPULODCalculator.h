@@ -32,17 +32,18 @@ class Camera;
 /**
  * \brief Class used to compute LOD of GlEntities with OpenMP parallelization
  *
- * This class perform LOD computation of GlEntities based on screen projection of entities bounding boxes
- * \warning By default this class don't compute LOD for edges (for optimisation) and return a lod of 10. to these edges, if you want to compute edges' LOD call setComputeEdgesLOD(true)
+ * This class perform LOD computation of GlEntities based on screen projection of entities bounding
+ * boxes
+ * \warning By default this class don't compute LOD for edges (for optimisation) and return a lod of
+ * 10. to these edges, if you want to compute edges' LOD call setComputeEdgesLOD(true)
  */
 class TLP_GL_SCOPE GlCPULODCalculator : public GlLODCalculator {
 
 public:
-
   GlCPULODCalculator();
   virtual ~GlCPULODCalculator();
   virtual GlLODCalculator *clone() {
-    GlCPULODCalculator *calculator=new GlCPULODCalculator();
+    GlCPULODCalculator *calculator = new GlCPULODCalculator();
     calculator->setComputeOutScreenLOD(computeOutScreenLOD);
     return calculator;
   }
@@ -50,19 +51,19 @@ public:
   /**
    * Begin a new camera (use to render next entities)
    */
-  virtual void beginNewCamera(Camera* camera);
+  virtual void beginNewCamera(Camera *camera);
   /**
    * This function is called by GlLODSceneVisitor when a simple entity is found
    */
-  virtual void addSimpleEntityBoundingBox(GlSimpleEntity * entity, const BoundingBox& bb);
+  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb);
   /**
    * This function is called by GlLODSceneVisitor when a node is found
    */
-  virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
+  virtual void addNodeBoundingBox(unsigned int id, const BoundingBox &bb);
   /**
    * This function is called by GlLODSceneVisitor when an edge is found
    */
-  virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
+  virtual void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb);
 
   /**
    * Reserve memory to store nodes LOD, this function is an optimisation function
@@ -76,12 +77,15 @@ public:
 
   /**
    * Compute all bounding boxes
-   * If you want to compute LOD for a simple scene, you just have to call this function with the same value for globalViewport and currentViewport
-   * But if you want to perform a sub screen part selection you have to call this function with: globalViewport the viewport of the visualisation and currentViewport the viewport of the selection
+   * If you want to compute LOD for a simple scene, you just have to call this function with the
+   * same value for globalViewport and currentViewport
+   * But if you want to perform a sub screen part selection you have to call this function with:
+   * globalViewport the viewport of the visualisation and currentViewport the viewport of the
+   * selection
    * \param globalViewport is used to compute LOD
    * \param currentViewport return -1 for all entities outside this viewport
    */
-  virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+  virtual void compute(const Vector<int, 4> &globalViewport, const Vector<int, 4> &currentViewport);
 
   /**
    * This function return the scene bounding box
@@ -95,22 +99,24 @@ public:
    * \Warning If not calcultated, the default edge LOD is 10.
    */
   inline void setComputeEdgesLOD(bool state) {
-    computeEdgesLOD=state;
+    computeEdgesLOD = state;
   }
 
   /**
    * Set if the LOD is computed for out screen entities
    */
   inline void setComputeOutScreenLOD(bool state) {
-    computeOutScreenLOD=state;
+    computeOutScreenLOD = state;
   }
 
-
 protected:
+  virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye,
+                                  const Matrix<float, 4> &transformMatrix,
+                                  const Vector<int, 4> &globalViewport,
+                                  const Vector<int, 4> &currentViewport);
 
-  virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye, const Matrix<float, 4>& transformMatrix, const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
-
-  virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+  virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit, const Vector<int, 4> &globalViewport,
+                                  const Vector<int, 4> &currentViewport);
 
   bool computeEdgesLOD;
   bool computeOutScreenLOD;
@@ -118,9 +124,7 @@ protected:
   BoundingBox sceneBoundingBox;
 
   LayerLODUnit *currentLayerLODUnit;
-
 };
-
 }
 
 #endif // Tulip_GLCPULODCALCULATOR_H

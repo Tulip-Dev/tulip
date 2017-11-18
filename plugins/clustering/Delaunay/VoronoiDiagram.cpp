@@ -33,7 +33,7 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
 
   sites.reserve(graph->numberOfNodes());
-  const std::vector<tlp::node>& nodes = graph->nodes();
+  const std::vector<tlp::node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
@@ -48,14 +48,14 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
     if (originalClone)
       graph->addCloneSubGraph("Original graph");
 
-    for (size_t i = 0 ; i < voronoiDiag.nbVertices() ; ++i) {
+    for (size_t i = 0; i < voronoiDiag.nbVertices(); ++i) {
       tlp::node n = voronoiSg->addNode();
       layout->setNodeValue(n, voronoiDiag.vertex(i));
     }
 
-    const std::vector<tlp::node>& sgNodes = voronoiSg->nodes();
+    const std::vector<tlp::node> &sgNodes = voronoiSg->nodes();
 
-    for (size_t i = 0 ; i < voronoiDiag.nbEdges() ; ++i) {
+    for (size_t i = 0; i < voronoiDiag.nbEdges(); ++i) {
       voronoiSg->addEdge(sgNodes[voronoiDiag.edge(i).first], sgNodes[voronoiDiag.edge(i).second]);
     }
 
@@ -63,16 +63,14 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
       ostringstream oss;
       unsigned int cellCpt = 0;
 
-      for (unsigned int i = 0 ; i < voronoiDiag.nbSites() ; ++i) {
+      for (unsigned int i = 0; i < voronoiDiag.nbSites(); ++i) {
         oss.str("");
         oss << "voronoi cell " << cellCpt++;
-        const tlp::VoronoiDiagram::Cell& cell =
-          voronoiDiag.voronoiCellForSite(i);
+        const tlp::VoronoiDiagram::Cell &cell = voronoiDiag.voronoiCellForSite(i);
         vector<tlp::node> cellSgNodes;
         cellSgNodes.reserve(cell.size());
 
-        for (set<unsigned int>::iterator it2 = cell.begin();
-             it2 != cell.end() ; ++it2) {
+        for (set<unsigned int>::iterator it2 = cell.begin(); it2 != cell.end(); ++it2) {
           cellSgNodes.push_back(sgNodes[*it2]);
         }
 
@@ -82,14 +80,12 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
     }
 
     if (connectNodeToCellBorder) {
-      for (unsigned int i = 0 ; i < voronoiDiag.nbSites() ; ++i) {
+      for (unsigned int i = 0; i < voronoiDiag.nbSites(); ++i) {
         voronoiSg->addNode(nodes[i]);
 
-        const tlp::VoronoiDiagram::Cell& cell =
-          voronoiDiag.voronoiCellForSite(i);
+        const tlp::VoronoiDiagram::Cell &cell = voronoiDiag.voronoiCellForSite(i);
 
-        for (set<unsigned int>::iterator it2 = cell.begin();
-             it2 != cell.end() ; ++it2) {
+        for (set<unsigned int>::iterator it2 = cell.begin(); it2 != cell.end(); ++it2) {
           voronoiSg->addEdge(nodes[i], sgNodes[*it2]);
         }
       }
@@ -101,20 +97,18 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
 
 static const char *paramHelp[] = {
 
-  // voronoi cells
-  "If true, a subgraph will be added for each computed voronoi cell.",
+    // voronoi cells
+    "If true, a subgraph will be added for each computed voronoi cell.",
 
-  // connect
-  "If true, existing graph nodes will be connected to the vertices of their voronoi cell.",
+    // connect
+    "If true, existing graph nodes will be connected to the vertices of their voronoi cell.",
 
-  // original clone
-  "If true, a clone subgraph named 'Original graph' will be first added."
-};
+    // original clone
+    "If true, a clone subgraph named 'Original graph' will be first added."};
 
 class VoronoiDiagram : public tlp::Algorithm {
 
-public :
-
+public:
   VoronoiDiagram(tlp::PluginContext *context) : tlp::Algorithm(context) {
     addInParameter<bool>("voronoi cells", paramHelp[0], "false");
     addInParameter<bool>("connect", paramHelp[1], "false");
@@ -122,11 +116,15 @@ public :
   }
 
   PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "",
-                    "Performs a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.1","Triangulation")
+                    "Performs a Voronoi decomposition, in considering the positions of the graph "
+                    "nodes as a set of points. These points define the seeds (or sites) of the "
+                    "voronoi cells. New nodes and edges are added to build the convex polygons "
+                    "defining the contours of these cells.",
+                    "1.1", "Triangulation")
 
   bool run() {
-    //no nodes. Nothing to do.
-    if(graph->numberOfNodes()==0)
+    // no nodes. Nothing to do.
+    if (graph->numberOfNodes() == 0)
       return true;
 
     bool voronoiCellSg = false;
@@ -139,8 +137,7 @@ public :
       dataSet->get("original clone", originalClone);
     }
 
-    bool ret = voronoiDiagram(graph, voronoiCellSg, connectNodesToVoronoiCell,
-                              originalClone);
+    bool ret = voronoiDiagram(graph, voronoiCellSg, connectNodesToVoronoiCell, originalClone);
 
     return ret;
   }

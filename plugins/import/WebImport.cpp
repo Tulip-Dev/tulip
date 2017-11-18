@@ -44,15 +44,14 @@ public:
     return !http_prefix.empty();
   }
   UrlElement parseUrl(const std::string &href);
-  void setUrl(const std::string&);
+  void setUrl(const std::string &);
   std::string getUrl() const {
     return clean_url.size() ? clean_url : url;
   }
 
 private:
   void fill(std::string &result);
-  bool siteconnect(const std::string &server, const std::string &url,
-                   bool headonly);
+  bool siteconnect(const std::string &server, const std::string &url, bool headonly);
 
 private:
   HttpContext *context;
@@ -78,36 +77,35 @@ namespace std {
 template <>
 struct less<UrlElement> {
   bool operator()(const UrlElement &lhs, const UrlElement &rhs) const {
-    if (lhs.server.compare(rhs.server) < 0 ) return true;
+    if (lhs.server.compare(rhs.server) < 0)
+      return true;
 
-    if (lhs.server.compare(rhs.server) > 0 ) return false;
+    if (lhs.server.compare(rhs.server) > 0)
+      return false;
 
     return lhs.getUrl().compare(rhs.getUrl()) < 0;
   }
 };
 }
 
-HttpContext::HttpContext():
-  status(false), code(-1), reply(NULL),
-  processed(false), redirected(false), isHtml(false) {
-}
+HttpContext::HttpContext()
+    : status(false), code(-1), reply(NULL), processed(false), redirected(false), isHtml(false) {}
 
 HttpContext::~HttpContext() {
-  if (reply)  {
+  if (reply) {
     reply->close();
     reply->deleteLater();
   }
 }
 
-void HttpContext::request(const std::string& url, bool head) {
+void HttpContext::request(const std::string &url, bool head) {
   processed = isHtml = redirected = false;
   QNetworkRequest request(QUrl(url.c_str()));
 
   if (head) {
     reply = DownloadManager::getInstance()->head(request);
     connect(reply, SIGNAL(finished()), this, SLOT(headerReceived()));
-  }
-  else {
+  } else {
     reply = DownloadManager::getInstance()->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
   }
@@ -115,7 +113,7 @@ void HttpContext::request(const std::string& url, bool head) {
 
 void HttpContext::finished() {
   // check to see if it is the request we made
-  if (reply != qobject_cast<QNetworkReply*>(sender()))
+  if (reply != qobject_cast<QNetworkReply *>(sender()))
     return;
 
   // OK
@@ -132,7 +130,7 @@ void HttpContext::finished() {
 
 void HttpContext::headerReceived() {
   // check to see if it is the request we made
-  if (reply != qobject_cast<QNetworkReply*>(sender()))
+  if (reply != qobject_cast<QNetworkReply *>(sender()))
     return;
 
   processed = true;
@@ -145,8 +143,7 @@ void HttpContext::headerReceived() {
 
       if (code > 399) /* error codes */
         isHtml = false;
-      else if ((code > 299) &&
-               (code < 305 || code == 307)) {
+      else if ((code > 299) && (code < 305 || code == 307)) {
         /* redirection codes */
         redirected = true;
         QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
@@ -166,8 +163,8 @@ void HttpContext::headerReceived() {
 
     /* normal codes */
     value = reply->header(QNetworkRequest::ContentTypeHeader);
-    status = isHtml = (value.canConvert<QString>() &&
-                       value.toString().contains(QString("text/html")));
+    status = isHtml =
+        (value.canConvert<QString>() && value.toString().contains(QString("text/html")));
     reply->close();
     reply->deleteLater();
     reply = NULL;
@@ -187,14 +184,12 @@ void HttpContext::setTimer(QTimer *timer) {
   connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 }
 
-UrlElement::UrlElement():http_prefix("http://"),data(""),context(0)  {
-}
-UrlElement::UrlElement(const UrlElement &c):
-  http_prefix(c.http_prefix),
-  data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(NULL) {
-}
+UrlElement::UrlElement() : http_prefix("http://"), data(""), context(0) {}
+UrlElement::UrlElement(const UrlElement &c)
+    : http_prefix(c.http_prefix), data(""), server(c.server), url(c.url), clean_url(c.clean_url),
+      context(NULL) {}
 
-void UrlElement::setUrl(const std::string& theUrl) {
+void UrlElement::setUrl(const std::string &theUrl) {
   url = theUrl;
   size_t len = theUrl.find_first_of("?", 0);
 
@@ -217,19 +212,17 @@ void UrlElement::clear() {
   data = "";
 }
 
-
 bool UrlElement::load() {
-  if (!siteconnect(server,url,false))
+  if (!siteconnect(server, url, false))
     return false;
 
   fill(data);
   return true;
 }
 
-static const char* not_html_extensions[] = {
-  ".bmp", ".css", ".doc", ".ico", ".exe", ".gif", ".gz", ".js", ".jpeg", ".jpg",
-  ".pdf", ".png", ".ps", ".rss", ".tar", ".tgz", ".wav", ".zip", ".z",
-  0 /* must be the last */
+static const char *not_html_extensions[] = {
+    ".bmp", ".css", ".doc", ".ico", ".exe", ".gif", ".gz",  ".js", ".jpeg", ".jpg", ".pdf",
+    ".png", ".ps",  ".rss", ".tar", ".tgz", ".wav", ".zip", ".z",  0 /* must be the last */
 };
 
 bool UrlElement::isHtmlPage() {
@@ -243,16 +236,16 @@ bool UrlElement::isHtmlPage() {
     if (lowercase.rfind(not_html_extensions[i], len) != string::npos)
       return false;
 
-  if(!siteconnect(server,url,true))
+  if (!siteconnect(server, url, true))
     return false;
 
   return context->isHtml;
 }
 
-bool UrlElement::siteconnect(const std::string &server, const std::string &path,
-                             bool headonly) {
+bool UrlElement::siteconnect(const std::string &server, const std::string &path, bool headonly) {
   // check that we actually got data..
-  if (server.empty()) return false;
+  if (server.empty())
+    return false;
 
   if (!context)
     context = new HttpContext();
@@ -278,7 +271,7 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
   context->setTimer(&timer);
   timer.start(20000);
 
-  while(!context->processed) {
+  while (!context->processed) {
     QCoreApplication::processEvents();
   }
 
@@ -286,12 +279,11 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
   return context->status && context->code < 400;
 } /* end, siteconnect */
 
-static const char * rejected_protocols[] = {
-  "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:",
-  0 /* must be the last */
+static const char *rejected_protocols[] = {
+    "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:", 0 /* must be the last */
 };
 
-UrlElement UrlElement::parseUrl (const std::string &href) {
+UrlElement UrlElement::parseUrl(const std::string &href) {
   UrlElement newUrl;
   string lowercase(href);
   size_t i, len = lowercase.length();
@@ -313,52 +305,50 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
     return newUrl;
   }
 
-  size_t pos=0;
+  size_t pos = 0;
   bool host = false;
   pos = lowercase.rfind("://", len);
 
   if (pos == string::npos)
-    pos=0;
+    pos = 0;
   else {
-    host=true;
+    host = true;
 
     if (lowercase[pos - 1] == 's')
       newUrl.http_prefix = "https://";
 
-    pos+=3;
+    pos += 3;
   }
 
   if (host) {
-    size_t endhost = lowercase.find_first_of("/ ",pos);
+    size_t endhost = lowercase.find_first_of("/ ", pos);
 
     if (endhost == string::npos)
-      endhost=len;
+      endhost = len;
 
-    string hostname = href.substr(pos,endhost-pos);
+    string hostname = href.substr(pos, endhost - pos);
     newUrl.server = hostname;
     newUrl.setUrl(href.substr(endhost));
-  }
-  else {
-    size_t querystart = lowercase.find_first_of("#",pos); /* previously ?#  instead of # */
+  } else {
+    size_t querystart = lowercase.find_first_of("#", pos); /* previously ?#  instead of # */
 
     if (querystart != string::npos)
       len = querystart;
 
-    string theUrl = href.substr(pos,len-pos);
+    string theUrl = href.substr(pos, len - pos);
 
     if (theUrl.empty())
       return newUrl;
 
-    //Manage relative urls
-    if (theUrl[0]!='/') {
+    // Manage relative urls
+    if (theUrl[0] != '/') {
       string urlreference(this->url);
       size_t findUp = urlreference.rfind("/", urlreference.length());
 
-      if (findUp==string::npos) {
+      if (findUp == string::npos) {
         urlreference.clear();
         urlreference.append(1, '/');
-      }
-      else
+      } else
         urlreference = urlreference.substr(0, findUp + 1);
 
       size_t pos;
@@ -384,14 +374,13 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
           theUrl = theUrl.substr(3);
           findUp = urlreference.rfind('/', findUp - 1);
 
-          if (findUp==string::npos) {
+          if (findUp == string::npos) {
             tlp::warning() << "bad url reference, to much ../" << endl;
             return newUrl;
           }
 
           urlreference = urlreference.substr(0, findUp + 1);
-        }
-        else {
+        } else {
           tlp::warning() << "bad url reference, to much ../" << endl;
           return newUrl;
         }
@@ -410,36 +399,39 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
 }
 
 static const char *paramHelp[] = {
-  // server
-  "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end.",
+    // server
+    "This parameter defines the web server that you want to inspect. No need for http:// at the "
+    "beginning; http protocol is always assumed. No need for / at the end.",
 
-  // initial page
-  "This parameter defines the first web page to visit. No need for / at the beginning.",
+    // initial page
+    "This parameter defines the first web page to visit. No need for / at the beginning.",
 
-  // max number of links
-  "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph.",
+    // max number of links
+    "This parameter defines the maximum number of nodes (different pages) allowed in the extracted "
+    "graph.",
 
-  // non http links
-  "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted.",
+    // non http links
+    "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted.",
 
-  // other server
-  "This parameter indicates if links or redirection to other server pages have to be followed.",
+    // other server
+    "This parameter indicates if links or redirection to other server pages have to be followed.",
 
-  // compute layout
-  "This parameter indicates if a layout of the extracted graph has to be computed.",
+    // compute layout
+    "This parameter indicates if a layout of the extracted graph has to be computed.",
 
-  // page color
-  "This parameter indicates the color used to display nodes.",
+    // page color
+    "This parameter indicates the color used to display nodes.",
 
-  // link color
-  "This parameter indicates the color used to display links.",
+    // link color
+    "This parameter indicates the color used to display links.",
 
-  // link color
-  "This parameter indicates the color used to display redirections."
-};
+    // link color
+    "This parameter indicates the color used to display redirections."};
 
-struct WebImport:public ImportModule {
-  PLUGININFORMATION("Web Site","Auber","15/11/2004","Imports a new graph from Web site structure (one node per page).","1.1","Misc")
+struct WebImport : public ImportModule {
+  PLUGININFORMATION("Web Site", "Auber", "15/11/2004",
+                    "Imports a new graph from Web site structure (one node per page).", "1.1",
+                    "Misc")
 
   std::deque<UrlElement> toVisit;
   std::set<UrlElement> visited;
@@ -452,20 +444,22 @@ struct WebImport:public ImportModule {
   bool visitOther;
   bool extractNonHttp;
 
-  WebImport(tlp::PluginContext* context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), visitOther(false), extractNonHttp(true) {
-    addInParameter<string>("server",paramHelp[0],"www.labri.fr");
-    addInParameter<string>("web page",paramHelp[1], "");
-    addInParameter<int>("max size",paramHelp[2], "1000");
-    addInParameter<bool>("non http links",paramHelp[3], "false");
-    addInParameter<bool>("other server",paramHelp[4], "false");
-    addInParameter<bool>("compute layout",paramHelp[5], "true");
-    addInParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
-    addInParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
-    addInParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
+  WebImport(tlp::PluginContext *context)
+      : ImportModule(context), labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL),
+        maxSize(1000), visitOther(false), extractNonHttp(true) {
+    addInParameter<string>("server", paramHelp[0], "www.labri.fr");
+    addInParameter<string>("web page", paramHelp[1], "");
+    addInParameter<int>("max size", paramHelp[2], "1000");
+    addInParameter<bool>("non http links", paramHelp[3], "false");
+    addInParameter<bool>("other server", paramHelp[4], "false");
+    addInParameter<bool>("compute layout", paramHelp[5], "true");
+    addInParameter<Color>("page color", paramHelp[6], "(240, 0, 120, 128)");
+    addInParameter<Color>("link color", paramHelp[7], "(96,96,191,128)");
+    addInParameter<Color>("redirection color", paramHelp[8], "(191,175,96,128)");
     addDependency("FM^3 (OGDF)", "1.2");
   }
 
-  string urlDecode(const string& url) {
+  string urlDecode(const string &url) {
     string buffer = "";
     int len = url.length();
 
@@ -492,13 +486,11 @@ struct WebImport:public ImportModule {
             chnum += ch - 'A';
           else
             chnum += ch - 'a';
-        }
-        else
+        } else
           chnum += ch - '0';
 
         buffer += chnum;
-      }
-      else {
+      } else {
         buffer += ch;
       }
     }
@@ -507,15 +499,15 @@ struct WebImport:public ImportModule {
   }
 
   //========================================================
-  bool addNode(const UrlElement &url, node& n) {
-    if (nodes.find(url)==nodes.end()) {
+  bool addNode(const UrlElement &url, node &n) {
+    if (nodes.find(url) == nodes.end()) {
       // no more added node after maxSize
       if (graph->numberOfNodes() == maxSize) {
         n = node();
         return false;
       }
 
-      n=graph->addNode();
+      n = graph->addNode();
       stringstream str;
       str << url.server;
 
@@ -526,12 +518,12 @@ struct WebImport:public ImportModule {
       labels->setNodeValue(n, urlDecode(str.str()));
       ostringstream oss;
 
-      if(url.is_http()) {
-        oss<<url.http_prefix.c_str();
+      if (url.is_http()) {
+        oss << url.http_prefix.c_str();
       }
 
       oss << str.str();
-      urls->setNodeValue(n,oss.str());
+      urls->setNodeValue(n, oss.str());
       nodes[url] = n;
       return true;
     }
@@ -541,9 +533,9 @@ struct WebImport:public ImportModule {
   }
 
   //========================================================
-  bool addEdge(const UrlElement &source, const UrlElement &target,
-               const char* type, const Color *color) {
-    node sNode,tNode;
+  bool addEdge(const UrlElement &source, const UrlElement &target, const char *type,
+               const Color *color) {
+    node sNode, tNode;
     bool sAdded = addNode(source, sNode);
     bool tAdded = addNode(target, tNode);
 
@@ -565,13 +557,13 @@ struct WebImport:public ImportModule {
     return true;
   }
   //========================================================
-  bool nextUrl(UrlElement & url) {
-    //tlp::warning() << __PRETTY_FUNCTION__ << endl;
-    while(!toVisit.empty()) {
+  bool nextUrl(UrlElement &url) {
+    // tlp::warning() << __PRETTY_FUNCTION__ << endl;
+    while (!toVisit.empty()) {
       url = toVisit.front();
       toVisit.pop_front();
 
-      if (visited.find(url)==visited.end()) {
+      if (visited.find(url) == visited.end()) {
         visited.insert(url);
         return true;
       }
@@ -580,15 +572,14 @@ struct WebImport:public ImportModule {
     return false;
   }
   //========================================================
-  void findAndTreatUrls(const string&lowercase,
-                        const string&balise, UrlElement &url) {
+  void findAndTreatUrls(const string &lowercase, const string &balise, UrlElement &url) {
     size_t llen = lowercase.length();
     size_t len = llen;
 
-    while ( len != string::npos ) {
+    while (len != string::npos) {
       len = lowercase.rfind(balise, len);
 
-      if( len != string::npos ) {
+      if (len != string::npos) {
         bool urlFound = true;
         // find the next '=' then the first '"'
         size_t start = len + balise.length();
@@ -596,15 +587,13 @@ struct WebImport:public ImportModule {
         char c = '=';
 
         for (; start < llen; start++) {
-          if (lowercase[start] == c ||
-              ((c == '"') && lowercase[start] == '\'')) {
+          if (lowercase[start] == c || ((c == '"') && lowercase[start] == '\'')) {
             // found =
             if (c == '=') {
               // now looking for "
               c = '"';
               continue;
-            }
-            else {
+            } else {
               c = lowercase[start];
               break;
             }
@@ -638,32 +627,32 @@ struct WebImport:public ImportModule {
   }
   //========================================================
   // parsehtml - parse the given html and add to queue
-  void parseHtml (UrlElement &url) {
-    //tlp::warning() << __PRETTY_FUNCTION__ << endl << flush;
-    if (url.data.empty()) return;
+  void parseHtml(UrlElement &url) {
+    // tlp::warning() << __PRETTY_FUNCTION__ << endl << flush;
+    if (url.data.empty())
+      return;
 
     string lowercase(url.data);
 
-    for (size_t i = 0; i< lowercase.length(); ++i)
+    for (size_t i = 0; i < lowercase.length(); ++i)
       lowercase[i] = tolower(lowercase[i]);
 
-    findAndTreatUrls(lowercase," href",url);
-    findAndTreatUrls(lowercase," src",url);
+    findAndTreatUrls(lowercase, " href", url);
+    findAndTreatUrls(lowercase, " src", url);
   }
   //========================================================
-  void addUrl (const UrlElement &url, bool _toVisit) {
-    if (visited.find(url)!=visited.end())
+  void addUrl(const UrlElement &url, bool _toVisit) {
+    if (visited.find(url) != visited.end())
       return;
 
     if (_toVisit && url.is_http())
       toVisit.push_back(url);
   }
   //========================================================
-  void parseUrl (const string &href, UrlElement &starturl) {
+  void parseUrl(const string &href, UrlElement &starturl) {
     UrlElement newUrl = starturl.parseUrl(href);
 
-    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http()) &&
-        addEdge(starturl, newUrl, 0, 0))
+    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http()) && addEdge(starturl, newUrl, 0, 0))
       addUrl(newUrl, visitOther || (newUrl.server == starturl.server));
   }
   //========================================================
@@ -676,15 +665,14 @@ struct WebImport:public ImportModule {
         unsigned int nbNodes = graph->numberOfNodes();
 
         if (pluginProgress && ((nbNodes % step) == 0)) {
-          pluginProgress->setComment(string("Visiting ") +
-                                     urlDecode(url.server + url.url));
+          pluginProgress->setComment(string("Visiting ") + urlDecode(url.server + url.url));
 
-          if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
-            return pluginProgress->state()!= TLP_CANCEL;
+          if (pluginProgress->progress(nbNodes, maxSize) != TLP_CONTINUE)
+            return pluginProgress->state() != TLP_CANCEL;
         }
 
 #ifndef NDEBUG
-        tlp::warning() << "Visiting: " << url.server << url.url << " ..."  << std::endl << flush;
+        tlp::warning() << "Visiting: " << url.server << url.url << " ..." << std::endl << flush;
 #endif
 
         if (url.isRedirected()) {
@@ -692,17 +680,15 @@ struct WebImport:public ImportModule {
 
           if (redirection.isValid()) {
 #ifndef NDEBUG
-            tlp::warning() << endl << "redirected to " << redirection.server << redirection.url << endl;
+            tlp::warning() << endl
+                           << "redirected to " << redirection.server << redirection.url << endl;
 #endif
 
-            if (addEdge(url, redirection,  "redirection", redirectionColor))
-              addUrl(redirection,
-                     visitOther || redirection.server == url.server);
-          }
-          else
+            if (addEdge(url, redirection, "redirection", redirectionColor))
+              addUrl(redirection, visitOther || redirection.server == url.server);
+          } else
             tlp::warning() << endl << "invalid redirection" << endl;
-        }
-        else {
+        } else {
           url.load();
           parseHtml(url);
           url.clear();
@@ -714,7 +700,7 @@ struct WebImport:public ImportModule {
 
 #ifndef NDEBUG
       else
-        tlp::warning() << "Omitting : " << url.server << url.url << " ==> [not html]"<< endl;
+        tlp::warning() << "Omitting : " << url.server << url.url << " ==> [not html]" << endl;
 
 #endif
     }
@@ -722,14 +708,13 @@ struct WebImport:public ImportModule {
     return true;
   }
 
-
   bool importGraph() {
     string server = "www.labri.fr";
     string url;
     bool computelayout = true;
-    Color pColor(255,0,0);
-    Color lColor(0,0,255,128);
-    Color rColor(255,255,0,128);
+    Color pColor(255, 0, 0);
+    Color lColor(0, 0, 255, 128);
+    Color rColor(255, 255, 0, 128);
     maxSize = 1000;
     visitOther = false;
     extractNonHttp = true;
@@ -779,12 +764,13 @@ struct WebImport:public ImportModule {
     redirectionColor = &rColor;
 
     graph->getProperty<IntegerProperty>("viewShape")
-    ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
+        ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
 
     if (!mySite.load()) {
       if (pluginProgress) {
         stringstream sstr;
-        sstr << "Unable to access http://" << mySite.server << mySite.url << " (ERROR " << mySite.getCode() << ')';
+        sstr << "Unable to access http://" << mySite.server << mySite.url << " (ERROR "
+             << mySite.getCode() << ')';
         pluginProgress->setError(sstr.str());
       }
 
@@ -815,6 +801,5 @@ struct WebImport:public ImportModule {
     return true;
   }
 };
-
 
 PLUGIN(WebImport)

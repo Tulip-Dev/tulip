@@ -27,8 +27,9 @@
 
 using namespace tlp;
 
-ChooseColorButton::ChooseColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(parent) {
-  connect(this,SIGNAL(clicked()),this,SLOT(chooseColor()));
+ChooseColorButton::ChooseColorButton(QWidget *parent)
+    : QPushButton(parent), _color(Qt::black), _dialogParent(parent) {
+  connect(this, SIGNAL(clicked()), this, SLOT(chooseColor()));
   setFocusPolicy(Qt::WheelFocus);
 }
 
@@ -44,7 +45,7 @@ void ChooseColorButton::setDialogParent(QWidget *w) {
   _dialogParent = w;
 }
 
-void ChooseColorButton::setDialogTitle(const QString& title) {
+void ChooseColorButton::setDialogTitle(const QString &title) {
   _dialogTitle = title;
 }
 
@@ -52,27 +53,25 @@ tlp::Color ChooseColorButton::tulipColor() const {
   return QColorToColor(_color);
 }
 
-void ChooseColorButton::setText(const QString& text) {
+void ChooseColorButton::setText(const QString &text) {
   _text = text;
 }
 
-void ChooseColorButton::setColor(const QColor& c) {
+void ChooseColorButton::setColor(const QColor &c) {
   _color = c;
   update();
   emit colorChanged(_color);
   emit tulipColorChanged(QColorToColor(_color));
 }
 
-void ChooseColorButton::setTulipColor(const tlp::Color& c) {
+void ChooseColorButton::setTulipColor(const tlp::Color &c) {
   setColor(colorToQColor(c));
 }
 
 void ChooseColorButton::chooseColor() {
-  QColor c = QColorDialog::getColor(_color, _dialogParent,
-                                    _dialogTitle.isEmpty()
-                                    ? QString("Choose a color")
-                                    : _dialogTitle,
-                                    QColorDialog::ShowAlphaChannel);
+  QColor c = QColorDialog::getColor(
+      _color, _dialogParent, _dialogTitle.isEmpty() ? QString("Choose a color") : _dialogTitle,
+      QColorDialog::ShowAlphaChannel);
 
   if (c.isValid())
     setColor(c);
@@ -87,9 +86,8 @@ void ColorButton::paintEvent(QPaintEvent *event) {
   p.setBrush(_color);
   QRectF r(tickW, tickH, tickW * 2, tickH * 2);
   p.drawRect(r);
-  p.setPen(QColor(255^_color.red(),255^_color.green(),255^_color.blue(),255));
+  p.setPen(QColor(255 ^ _color.red(), 255 ^ _color.green(), 255 ^ _color.blue(), 255));
 
-  if(!_text.isEmpty())
+  if (!_text.isEmpty())
     p.drawText(r, Qt::AlignCenter, _text);
 }
-

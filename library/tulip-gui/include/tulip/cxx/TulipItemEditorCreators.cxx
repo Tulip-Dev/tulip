@@ -35,11 +35,10 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ScientificDoubleSpinBox.h>
 
-
 namespace tlp {
 
-template<typename T>
-QWidget* NumberEditorCreator<T>::createWidget(QWidget* parent) const {
+template <typename T>
+QWidget *NumberEditorCreator<T>::createWidget(QWidget *parent) const {
   QDoubleSpinBox *dsb = NULL;
 
   // emulate a QSpinBox for integer types
@@ -49,8 +48,7 @@ QWidget* NumberEditorCreator<T>::createWidget(QWidget* parent) const {
     dsb = new QDoubleSpinBox(parent);
     dsb->setDecimals(0);
     // otherwise for floating point number types
-  }
-  else {
+  } else {
     // use a dedicated QDoubleSpinBox supporting scientific notation
     dsb = new tlp::ScientificDoubleSpinBox(parent);
     // force the use of dot character for decimal separator
@@ -60,61 +58,60 @@ QWidget* NumberEditorCreator<T>::createWidget(QWidget* parent) const {
   // set correct range of values according to type
   if (typeid(T).name() == typeid(tlp::IntegerType).name()) {
     dsb->setRange(-INT_MAX, INT_MAX);
-  }
-  else if (typeid(T).name() == typeid(tlp::UnsignedIntegerType).name()) {
+  } else if (typeid(T).name() == typeid(tlp::UnsignedIntegerType).name()) {
     dsb->setRange(0, UINT_MAX);
-  }
-  else if (typeid(T).name() == typeid(tlp::LongType).name()) {
+  } else if (typeid(T).name() == typeid(tlp::LongType).name()) {
     dsb->setRange(-LONG_MAX, LONG_MAX);
-  }
-  else if (typeid(T).name() == typeid(tlp::FloatType).name()) {
+  } else if (typeid(T).name() == typeid(tlp::FloatType).name()) {
     dsb->setRange(-FLT_MAX, FLT_MAX);
-  }
-  else {
+  } else {
     dsb->setRange(-DBL_MAX, DBL_MAX);
   }
 
   return dsb;
 }
 
-template<typename T>
-void NumberEditorCreator<T>::setEditorData(QWidget* editor, const QVariant& data, bool, tlp::Graph*) {
-  static_cast<QDoubleSpinBox*>(editor)->setValue(data.value<typename T::RealType>());
+template <typename T>
+void NumberEditorCreator<T>::setEditorData(QWidget *editor, const QVariant &data, bool,
+                                           tlp::Graph *) {
+  static_cast<QDoubleSpinBox *>(editor)->setValue(data.value<typename T::RealType>());
 }
 
-template<typename T>
-QVariant NumberEditorCreator<T>::editorData(QWidget* editor, tlp::Graph*) {
+template <typename T>
+QVariant NumberEditorCreator<T>::editorData(QWidget *editor, tlp::Graph *) {
   QVariant result;
-  result.setValue(static_cast<typename T::RealType>(static_cast<QDoubleSpinBox*>(editor)->value()));
+  result.setValue(
+      static_cast<typename T::RealType>(static_cast<QDoubleSpinBox *>(editor)->value()));
   return result;
 }
 
-template<typename T>
-QWidget* LineEditEditorCreator<T>::createWidget(QWidget *parent) const {
+template <typename T>
+QWidget *LineEditEditorCreator<T>::createWidget(QWidget *parent) const {
   return new QLineEdit(parent);
 }
 
-template<typename T>
-void LineEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data, bool, tlp::Graph*) {
+template <typename T>
+void LineEditEditorCreator<T>::setEditorData(QWidget *editor, const QVariant &data, bool,
+                                             tlp::Graph *) {
   typename T::RealType val = data.value<typename T::RealType>();
-  static_cast<QLineEdit*>(editor)->setText(tlpStringToQString(T::toString(val)));
-  static_cast<QLineEdit*>(editor)->selectAll();
+  static_cast<QLineEdit *>(editor)->setText(tlpStringToQString(T::toString(val)));
+  static_cast<QLineEdit *>(editor)->selectAll();
 }
 
-template<typename T>
-QVariant LineEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
-  std::string strVal = QStringToTlpString(static_cast<QLineEdit*>(editor)->text());
+template <typename T>
+QVariant LineEditEditorCreator<T>::editorData(QWidget *editor, tlp::Graph *) {
+  std::string strVal = QStringToTlpString(static_cast<QLineEdit *>(editor)->text());
   QVariant result;
   typename T::RealType val;
 
-  if (T::fromString(val,strVal))
+  if (T::fromString(val, strVal))
     result.setValue<typename T::RealType>(val);
 
   return result;
 }
 
-template<typename T>
-QWidget* MultiLinesEditEditorCreator<T>::createWidget(QWidget *parent) const {
+template <typename T>
+QWidget *MultiLinesEditEditorCreator<T>::createWidget(QWidget *parent) const {
   QTextEdit *edit = new QTextEdit(parent);
   edit->setFocusPolicy(Qt::StrongFocus);
   edit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -122,27 +119,29 @@ QWidget* MultiLinesEditEditorCreator<T>::createWidget(QWidget *parent) const {
   return edit;
 }
 
-template<typename T>
-void MultiLinesEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,bool,tlp::Graph*) {
+template <typename T>
+void MultiLinesEditEditorCreator<T>::setEditorData(QWidget *editor, const QVariant &data, bool,
+                                                   tlp::Graph *) {
   typename T::RealType val = data.value<typename T::RealType>();
-  static_cast<QTextEdit*>(editor)->setPlainText(tlpStringToQString(T::toString(val)));
-  static_cast<QTextEdit*>(editor)->selectAll();
+  static_cast<QTextEdit *>(editor)->setPlainText(tlpStringToQString(T::toString(val)));
+  static_cast<QTextEdit *>(editor)->selectAll();
 }
 
-template<typename T>
-QVariant MultiLinesEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
-  std::string strVal = QStringToTlpString(static_cast<QTextEdit*>(editor)->toPlainText());
+template <typename T>
+QVariant MultiLinesEditEditorCreator<T>::editorData(QWidget *editor, tlp::Graph *) {
+  std::string strVal = QStringToTlpString(static_cast<QTextEdit *>(editor)->toPlainText());
   QVariant result;
   typename T::RealType val;
 
-  if (T::fromString(val,strVal))
+  if (T::fromString(val, strVal))
     result.setValue<typename T::RealType>(val);
 
   return result;
 }
 
-template<typename T>
-QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const {
+template <typename T>
+QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem &option,
+                                               const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
   typename T::RealType val = data.value<typename T::RealType>();
   QString valS = tlpStringToQString(T::toString(val));
@@ -151,7 +150,7 @@ QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & opti
   int height = 0;
   int width = 0;
 
-  for (int i = 0 ; i < lines.count() ; ++i) {
+  for (int i = 0; i < lines.count(); ++i) {
     QRect textBB = fontMetrics.boundingRect(lines.at(i));
     height += fontMetrics.boundingRect("|").height();
     width = std::max(width, textBB.width());
@@ -160,12 +159,13 @@ QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & opti
   // restrict column width in case of really large string to display
   width = std::min(width, 500);
 
-  return QSize(width+15, height+5);
+  return QSize(width + 15, height + 5);
 }
 
-template<typename T>
-bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOptionViewItem &option, const QVariant &data, const QModelIndex &index) const {
-  TulipItemEditorCreator::paint(painter,option,data,index);
+template <typename T>
+bool MultiLinesEditEditorCreator<T>::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                                           const QVariant &data, const QModelIndex &index) const {
+  TulipItemEditorCreator::paint(painter, option, data, index);
   QRect rect = option.rect;
   typename T::RealType val = data.value<typename T::RealType>();
   QString valS = tlpStringToQString(T::toString(val));
@@ -174,108 +174,110 @@ bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOption
   if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
     painter->setPen(option.palette.highlightedText().color());
     painter->setBrush(option.palette.highlightedText());
-  }
-  else {
+  } else {
     painter->setPen(option.palette.text().color());
     painter->setBrush(option.palette.text());
   }
 
-  for (int i = 0 ; i < lines.count() ; ++i) {
-    painter->drawText(rect.x(), rect.y() + i * rect.height()/lines.count(), rect.width(), rect.height()/lines.count(),Qt::AlignLeft | Qt::AlignVCenter, lines.at(i));
+  for (int i = 0; i < lines.count(); ++i) {
+    painter->drawText(rect.x(), rect.y() + i * rect.height() / lines.count(), rect.width(),
+                      rect.height() / lines.count(), Qt::AlignLeft | Qt::AlignVCenter, lines.at(i));
   }
 
   return true;
 }
 
-template<typename PROPTYPE>
-QWidget* PropertyEditorCreator<PROPTYPE>::createWidget(QWidget* parent) const {
+template <typename PROPTYPE>
+QWidget *PropertyEditorCreator<PROPTYPE>::createWidget(QWidget *parent) const {
   return new QComboBox(parent);
 }
 
-template<typename PROPTYPE>
-void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& val,bool isMandatory,tlp::Graph* g) {
+template <typename PROPTYPE>
+void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget *w, const QVariant &val,
+                                                    bool isMandatory, tlp::Graph *g) {
   if (g == NULL) {
     w->setEnabled(false);
     return;
   }
 
-  PROPTYPE* prop = val.value<PROPTYPE*>();
-  QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PROPTYPE>* model = NULL;
+  PROPTYPE *prop = val.value<PROPTYPE *>();
+  QComboBox *combo = static_cast<QComboBox *>(w);
+  GraphPropertiesModel<PROPTYPE> *model = NULL;
 
   if (isMandatory)
-    model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
+    model = new GraphPropertiesModel<PROPTYPE>(g, false, combo);
   else
-    model = new GraphPropertiesModel<PROPTYPE>(QObject::trUtf8("Select a property"),g,false,combo);
+    model =
+        new GraphPropertiesModel<PROPTYPE>(QObject::trUtf8("Select a property"), g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
 }
 
-template<typename PROPTYPE>
-QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
+template <typename PROPTYPE>
+QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget *w, tlp::Graph *g) {
   if (g == NULL)
     return QVariant();
 
-  QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PROPTYPE>* model = static_cast<GraphPropertiesModel<PROPTYPE> *>(combo->model());
-  QVariant var = model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
-  tlp::PropertyInterface* pi = var.value<tlp::PropertyInterface*>();
-  PROPTYPE* prop = static_cast<PROPTYPE*>(pi);
-  return QVariant::fromValue<PROPTYPE*>(prop);
+  QComboBox *combo = static_cast<QComboBox *>(w);
+  GraphPropertiesModel<PROPTYPE> *model =
+      static_cast<GraphPropertiesModel<PROPTYPE> *>(combo->model());
+  QVariant var = model->data(model->index(combo->currentIndex(), 0), TulipModel::PropertyRole);
+  tlp::PropertyInterface *pi = var.value<tlp::PropertyInterface *>();
+  PROPTYPE *prop = static_cast<PROPTYPE *>(pi);
+  return QVariant::fromValue<PROPTYPE *>(prop);
 }
 
-template<typename PROPTYPE>
-QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
-  PROPTYPE *prop = v.value<PROPTYPE*>();
+template <typename PROPTYPE>
+QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant &v) const {
+  PROPTYPE *prop = v.value<PROPTYPE *>();
 
-  if (prop==NULL)
+  if (prop == NULL)
     return QObject::trUtf8("Select a property");
 
   return tlpStringToQString(prop->getName());
 }
 
-template<typename ElementType>
-QWidget* VectorEditorCreator<ElementType>::createWidget(QWidget*) const {
-  VectorEditor* w = new VectorEditor(NULL);
+template <typename ElementType>
+QWidget *VectorEditorCreator<ElementType>::createWidget(QWidget *) const {
+  VectorEditor *w = new VectorEditor(NULL);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
-
 }
 
-template<typename ElementType>
-void VectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& v,bool,tlp::Graph*) {
+template <typename ElementType>
+void VectorEditorCreator<ElementType>::setEditorData(QWidget *editor, const QVariant &v, bool,
+                                                     tlp::Graph *) {
   QVector<QVariant> editorData;
   std::vector<ElementType> vect = v.value<std::vector<ElementType> >();
 
-  for (size_t i=0; i < vect.size(); ++i)  {
+  for (size_t i = 0; i < vect.size(); ++i) {
     editorData.push_back(QVariant::fromValue<ElementType>(vect[i]));
   }
 
-  static_cast<VectorEditor*>(editor)->setVector(editorData,qMetaTypeId<ElementType>());
+  static_cast<VectorEditor *>(editor)->setVector(editorData, qMetaTypeId<ElementType>());
 
-  static_cast<VectorEditor*>(editor)->move(QCursor::pos());
+  static_cast<VectorEditor *>(editor)->move(QCursor::pos());
 }
 
-template<typename ElementType>
-QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph*) {
+template <typename ElementType>
+QVariant VectorEditorCreator<ElementType>::editorData(QWidget *editor, tlp::Graph *) {
   std::vector<ElementType> result;
-  QVector<QVariant> editorData = static_cast<VectorEditor*>(editor)->vector();
+  QVector<QVariant> editorData = static_cast<VectorEditor *>(editor)->vector();
 
-  foreach(QVariant v, editorData)
+  foreach (QVariant v, editorData)
     result.push_back(v.value<ElementType>());
 
   return QVariant::fromValue<std::vector<ElementType> >(result);
 }
 
 // the template below is only used for displayText method implementation
-template<typename T>
-struct DisplayVectorDataType :public DataType {
-  DisplayVectorDataType(void *value) :DataType(value) {}
-  ~DisplayVectorDataType() {
-  }
-  DataType* clone() const {
+template <typename T>
+struct DisplayVectorDataType : public DataType {
+  DisplayVectorDataType(void *value) : DataType(value) {}
+  ~DisplayVectorDataType() {}
+  DataType *clone() const {
     return NULL;
   }
 
@@ -284,8 +286,7 @@ struct DisplayVectorDataType :public DataType {
   }
 };
 
-
-template<typename ElementType>
+template <typename ElementType>
 QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
   std::vector<ElementType> v = data.value<std::vector<ElementType> >();
 
@@ -293,8 +294,7 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
     return QString();
 
   // use a DataTypeSerializer if any
-  DataTypeSerializer* dts =
-    DataSet::typenameToSerializer(std::string(typeid(v).name()));
+  DataTypeSerializer *dts = DataSet::typenameToSerializer(std::string(typeid(v).name()));
 
   if (dts) {
     DisplayVectorDataType<ElementType> dt(&v);
@@ -314,5 +314,4 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
 
   return QString::number(v.size()) + QObject::trUtf8(" elements");
 }
-
 }

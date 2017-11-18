@@ -22,17 +22,18 @@
 
 #include "ui_HeaderFrame.h"
 
-void switchToLabel(Ui::HeaderFrameData *ui, bool f=true) {
+void switchToLabel(Ui::HeaderFrameData *ui, bool f = true) {
   ui->titleLabel->setVisible(f);
   ui->menusCombo->setVisible(!f);
 }
 
-HeaderFrame::HeaderFrame(QWidget *parent):
-  QWidget(parent), _ui(new Ui::HeaderFrameData), _expanded(true) {
+HeaderFrame::HeaderFrame(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::HeaderFrameData), _expanded(true) {
   _ui->setupUi(this);
   switchToLabel(_ui);
-  connect(_ui->menusCombo,SIGNAL(currentIndexChanged(QString)),this,SIGNAL(menuChanged(QString)));
-  connect(_ui->expandButton,SIGNAL(toggled(bool)),this,SLOT(setExpanded(bool)));
+  connect(_ui->menusCombo, SIGNAL(currentIndexChanged(QString)), this,
+          SIGNAL(menuChanged(QString)));
+  connect(_ui->expandButton, SIGNAL(toggled(bool)), this, SLOT(setExpanded(bool)));
 }
 
 HeaderFrame::~HeaderFrame() {
@@ -53,7 +54,7 @@ void HeaderFrame::setTitle(const QString &title) {
 QStringList HeaderFrame::menus() const {
   QStringList result;
 
-  for(int i=0; i<_ui->menusCombo->count(); ++i)
+  for (int i = 0; i < _ui->menusCombo->count(); ++i)
     result << _ui->menusCombo->itemText(i);
 
   return result;
@@ -61,17 +62,17 @@ QStringList HeaderFrame::menus() const {
 
 void HeaderFrame::setMenus(const QStringList &menus) {
   _ui->menusCombo->clear();
-  switchToLabel(_ui,menus.empty());
+  switchToLabel(_ui, menus.empty());
 
-  foreach(const QString& s,menus)
+  foreach (const QString &s, menus)
     _ui->menusCombo->addItem(s);
 }
 
-QString HeaderFrame::currentMenu()const {
+QString HeaderFrame::currentMenu() const {
   return _ui->menusCombo->currentText();
 }
 
-int HeaderFrame::currentMenuIndex()const {
+int HeaderFrame::currentMenuIndex() const {
   return _ui->menusCombo->currentIndex();
 }
 
@@ -95,27 +96,26 @@ void HeaderFrame::setExpanded(bool e) {
   if (!pw)
     return;
 
-  foreach(QObject *obj, pw->children()) {
+  foreach (QObject *obj, pw->children()) {
     QWidget *w = dynamic_cast<QWidget *>(obj);
 
     if (w && w != this)
       w->setVisible(e);
   }
 
-  int maxH,minH;
+  int maxH, minH;
 
   if (!e) {
-    _oldHeightInfo = QPair<int,int>(pw->minimumHeight(),pw->maximumHeight());
+    _oldHeightInfo = QPair<int, int>(pw->minimumHeight(), pw->maximumHeight());
     maxH = height();
     minH = height();
-  }
-  else {
+  } else {
     minH = _oldHeightInfo.first;
     maxH = _oldHeightInfo.second;
   }
 
-  pw->setMinimumSize(pw->minimumWidth(),minH);
-  pw->setMaximumSize(pw->maximumWidth(),maxH);
+  pw->setMinimumSize(pw->minimumWidth(), minH);
+  pw->setMaximumSize(pw->maximumWidth(), maxH);
 
   _ui->expandButton->setToolTip(e ? "Hide contents" : "Show contents");
 
@@ -134,6 +134,6 @@ QWidget *HeaderFrame::mainFrame() const {
   return _ui->mainFrame;
 }
 
-void HeaderFrame::insertWidget(QWidget* w) {
-  _ui->horizontalLayout->insertWidget(_ui->horizontalLayout->indexOf(_ui->expandButton),w);
+void HeaderFrame::insertWidget(QWidget *w) {
+  _ui->horizontalLayout->insertWidget(_ui->horizontalLayout->indexOf(_ui->expandButton), w);
 }

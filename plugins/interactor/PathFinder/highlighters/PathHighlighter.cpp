@@ -25,9 +25,7 @@
 using namespace tlp;
 using namespace std;
 
-PathHighlighter::PathHighlighter(const string &name) :
-  name(name), backupScene(0), entityId(0) {
-}
+PathHighlighter::PathHighlighter(const string &name) : name(name), backupScene(0), entityId(0) {}
 
 PathHighlighter::~PathHighlighter() {
   if (backupScene)
@@ -70,7 +68,8 @@ void PathHighlighter::clear() {
   }
 }
 
-void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity, bool deleteOnExit, const string &name) {
+void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity, bool deleteOnExit,
+                                  const string &name) {
   string realName = name;
 
   if (realName.compare("") == 0) {
@@ -91,7 +90,7 @@ void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity, bool d
 }
 
 void PathHighlighter::treatEvent(const Event &ev) {
-  if (ev.type()==Event::TLP_DELETE) {
+  if (ev.type() == Event::TLP_DELETE) {
     if (ev.sender() == backupScene) {
       // reset backupScene to avoid segfault
       // on destructor invocation

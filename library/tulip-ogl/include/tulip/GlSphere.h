@@ -36,7 +36,6 @@ namespace tlp {
 class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
 
 public:
-
   /**
    * @brief Constructor
    *
@@ -47,36 +46,40 @@ public:
   ~GlSphere();
 
   /**
-   * @brief Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
+   * @brief Create a sphere with a position, a radius a fill color and multiple rotation (if you
+   * want)
    */
-  GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
+  GlSphere(const Coord &position, float radius, const Color &color = Color(0, 0, 0, 255),
+           float rotX = 0, float rotY = 0, float rotZ = 0);
 
   /**
-   * @brief Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if you want)
+   * @brief Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if
+   * you want)
    */
-  GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
+  GlSphere(const Coord &position, float radius, const std::string &textureFile, int alpha = 255,
+           float rotX = 0, float rotY = 0, float rotZ = 0);
 
   /**
    * @brief Draw the sphere
    */
-  virtual void draw(float lod,Camera *camera);
+  virtual void draw(float lod, Camera *camera);
 
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * @brief Get absolute position
    */
-  const Coord& getPosition() const {
+  const Coord &getPosition() const {
     return position;
   }
 
   /**
    * @brief Set absolute position
    */
-  void setPosition(const Coord& pos) {
+  void setPosition(const Coord &pos) {
     position = pos;
   }
 
@@ -84,13 +87,13 @@ public:
    * @brief Set the texture name
    */
   virtual void setTexture(const std::string &texture) {
-    textureFile=texture;
+    textureFile = texture;
   }
 
   /**
    * @brief Get the color
    */
-  const Color& getColor() const {
+  const Color &getColor() const {
     return color;
   }
 
@@ -112,7 +115,6 @@ public:
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 private:
-
   void generateBuffers(int space);
 
   Coord position;
@@ -121,15 +123,12 @@ private:
   std::string textureFile;
   Coord rot;
 
-  std::vector<unsigned int > buffers;
+  std::vector<unsigned int> buffers;
   std::vector<float> vertices;
   std::vector<float> texturesCoord;
   std::vector<unsigned short> indices;
   unsigned int verticesCount;
-
 };
-
-
 }
 
 #endif // Tulip_GLSCENE_H

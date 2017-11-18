@@ -26,7 +26,9 @@
 
 namespace tlp {
 
-ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
+ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptionsWidget(
+    QWidget *parent)
+    : QWidget(parent), _ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
   _ui->setupUi(this);
   _ui->minusOneColorButton->setDialogParent(parent);
   _ui->zeroColorButton->setDialogParent(parent);
@@ -34,9 +36,9 @@ ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptio
   _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
   _ui->zeroColorButton->setDialogTitle("Choose the color for 0");
   _ui->oneColorButton->setDialogTitle("Choose the color for 1");
-  setButtonColor(_ui->minusOneColorButton, Color(0,0,255,150));
-  setButtonColor(_ui->zeroColorButton, Color(255,0,0,150));
-  setButtonColor(_ui->oneColorButton, Color(0,255,0,150));
+  setButtonColor(_ui->minusOneColorButton, Color(0, 0, 255, 150));
+  setButtonColor(_ui->zeroColorButton, Color(255, 0, 0, 150));
+  setButtonColor(_ui->oneColorButton, Color(0, 255, 0, 150));
   updateColorScale();
 
   connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
@@ -48,7 +50,8 @@ ScatterPlotCorrelCoeffSelectorOptionsWidget::~ScatterPlotCorrelCoeffSelectorOpti
   delete _ui;
 }
 
-void ScatterPlotCorrelCoeffSelectorOptionsWidget::setButtonColor(ColorButton *button, const Color &color) {
+void ScatterPlotCorrelCoeffSelectorOptionsWidget::setButtonColor(ColorButton *button,
+                                                                 const Color &color) {
   button->setTulipColor(color);
 }
 
@@ -69,17 +72,19 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::updateColorScale() {
   pixmap.fill(Qt::transparent);
   QPainter painter;
   painter.begin(&pixmap);
-  QLinearGradient qLinearGradient(0, _ui->colorScaleLabel->height() / 2, _ui->colorScaleLabel->width()-1, _ui->colorScaleLabel->height() / 2);
+  QLinearGradient qLinearGradient(0, _ui->colorScaleLabel->height() / 2,
+                                  _ui->colorScaleLabel->width() - 1,
+                                  _ui->colorScaleLabel->height() / 2);
   qLinearGradient.setColorAt(0, _ui->minusOneColorButton->color());
-  qLinearGradient.setColorAt(1./2., _ui->zeroColorButton->color());
+  qLinearGradient.setColorAt(1. / 2., _ui->zeroColorButton->color());
   qLinearGradient.setColorAt(1, _ui->oneColorButton->color());
-  painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(), qLinearGradient);
+  painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(),
+                   qLinearGradient);
   painter.end();
   _ui->colorScaleLabel->setPixmap(pixmap);
 }
 
-void ScatterPlotCorrelCoeffSelectorOptionsWidget::showEvent(QShowEvent*) {
+void ScatterPlotCorrelCoeffSelectorOptionsWidget::showEvent(QShowEvent *) {
   updateColorScale();
 }
-
 }

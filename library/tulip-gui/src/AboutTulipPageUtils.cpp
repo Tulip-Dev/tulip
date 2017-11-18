@@ -9,7 +9,6 @@ QString getSipVersion() {
 #endif
 
 QString getTulipGitRevision() {
-return TULIP_GIT_REVISION;
+  return TULIP_GIT_REVISION;
 }
-
 }

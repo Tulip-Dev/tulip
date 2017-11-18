@@ -24,8 +24,8 @@ using namespace std;
 
 namespace tlp {
 GlSimpleEntity::~GlSimpleEntity() {
-  for(std::vector<GlComposite*>::iterator it=parents.begin(); it!=parents.end(); ++it) {
-    (*it)->deleteGlEntity(this,false);
+  for (std::vector<GlComposite *>::iterator it = parents.begin(); it != parents.end(); ++it) {
+    (*it)->deleteGlEntity(this, false);
   }
 }
 
@@ -34,18 +34,18 @@ void GlSimpleEntity::addParent(GlComposite *composite) {
 }
 
 void GlSimpleEntity::setVisible(bool visible) {
-  if(this->visible==visible)
+  if (this->visible == visible)
     return;
 
-  this->visible=visible;
+  this->visible = visible;
 
-  for(vector<GlComposite*>::iterator it=parents.begin(); it!=parents.end(); ++it) {
+  for (vector<GlComposite *>::iterator it = parents.begin(); it != parents.end(); ++it) {
     (*it)->notifyModified(this);
   }
 }
 void GlSimpleEntity::removeParent(GlComposite *composite) {
-  for(std::vector<GlComposite*>::iterator it=parents.begin(); it!=parents.end(); ++it) {
-    if((*it)==composite) {
+  for (std::vector<GlComposite *>::iterator it = parents.begin(); it != parents.end(); ++it) {
+    if ((*it) == composite) {
       parents.erase(it);
       return;
     }

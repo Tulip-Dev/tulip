@@ -38,14 +38,9 @@ public:
    *
    * The fill is inside the regular star
    */
-  GlStar(const Coord &position,
-         const Size &size,
-         unsigned int numberOfStarPoints,
-         const Color &fillColor = Color (0, 0, 255),
-         const Color &outlineColor = Color(0, 0, 0),
-         bool outlined =true,
-         const std::string &textureName="",
-         float outlineSize=1.);
+  GlStar(const Coord &position, const Size &size, unsigned int numberOfStarPoints,
+         const Color &fillColor = Color(0, 0, 255), const Color &outlineColor = Color(0, 0, 0),
+         bool outlined = true, const std::string &textureName = "", float outlineSize = 1.);
   /**
    * @brief Destructor
    */
@@ -56,15 +51,12 @@ public:
    */
   unsigned int getNumberOfStarPoints();
 
-protected :
-
+protected:
   void computeStar();
-
 
   Coord position;
   Size size;
   unsigned int numberOfStarPoints;
 };
-
 }
 #endif

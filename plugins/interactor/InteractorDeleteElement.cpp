@@ -27,17 +27,20 @@ using namespace tlp;
 /** \brief Tulip interactor to delete an element
  *
  */
-class InteractorDeleteElement  : public NodeLinkDiagramComponentInteractor {
+class InteractorDeleteElement : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorDeleteElement", "Tulip Team", "01/04/2009",
+                    "Delete Element Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorDeleteElement(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges") {
+  InteractorDeleteElement(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png", "Delete nodes or edges") {
     setPriority(StandardInteractorPriority::DeleteElement);
-    setConfigurationWidgetText(QString("<h3>Delete nodes or edges</h3>")+
-                               "<b>Mouse left</b> click on an element to delete it.<br/>No deletion confirmation will be asked.");
+    setConfigurationWidgetText(QString("<h3>Delete nodes or edges</h3>") +
+                               "<b>Mouse left</b> click on an element to delete it.<br/>No "
+                               "deletion confirmation will be asked.");
   }
 
   /**
@@ -49,10 +52,8 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return (viewName==NodeLinkDiagramComponent::viewName);
+    return (viewName == NodeLinkDiagramComponent::viewName);
   }
-
-
 };
 
 PLUGIN(InteractorDeleteElement)

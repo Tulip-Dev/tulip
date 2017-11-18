@@ -52,7 +52,7 @@ public:
   void testDoublePropertySetAllValue();
   void testDoublePropertySetDefaultValue();
 
-private :
+private:
   tlp::Graph *graph;
   tlp::node n1, n2, n3, n4;
   tlp::edge e1, e2;

@@ -32,19 +32,25 @@ namespace tlp {
 
 class ParallelCoordinatesGraphProxy;
 
-enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUARTILE = 3,
-                   TOP_OUTLIER = 4, NO_VALUE = 5
-                  };
+enum BoxPlotValue {
+  BOTTOM_OUTLIER = 0,
+  FIRST_QUARTILE = 1,
+  MEDIAN = 2,
+  THIRD_QUARTILE = 3,
+  TOP_OUTLIER = 4,
+  NO_VALUE = 5
+};
 
 // Class which allows to render a quantitative axis
 // Associated datatypes can be real or integer
 class QuantitativeParallelAxis : public ParallelAxis {
 
-public :
-
-  QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
-                           const std::string &graphPropertyName, const bool ascendingOrder = true, const Color &axisColor = Color(0,0,0),
-                           const float rotationAngle = 0, const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
+public:
+  QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth,
+                           ParallelCoordinatesGraphProxy *graphProxy,
+                           const std::string &graphPropertyName, const bool ascendingOrder = true,
+                           const Color &axisColor = Color(0, 0, 0), const float rotationAngle = 0,
+                           const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
   void setNbAxisGrad(const unsigned int nbAxisGrad) {
     this->nbAxisGrad = nbAxisGrad;
@@ -73,7 +79,7 @@ public :
   double getAssociatedPropertyMaxValue();
 
   void setAxisMinMaxValues(const double min, const double max) {
-    axisMinValue = min ;
+    axisMinValue = min;
     axisMaxValue = max;
   }
 
@@ -90,11 +96,11 @@ public :
   std::string getTopSliderTextValue();
   std::string getBottomSliderTextValue();
 
-  const std::set<unsigned int> &getDataInSlidersRange() ;
+  const std::set<unsigned int> &getDataInSlidersRange();
   void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
 
   void setBoxPlotHighlightBounds(BoxPlotValue lowBound, BoxPlotValue highBound) {
-    boxPlotLowBound = lowBound ;
+    boxPlotLowBound = lowBound;
     boxPlotHighBound = highBound;
   }
   const std::set<unsigned int> &getDataBetweenBoxPlotBounds();
@@ -137,8 +143,7 @@ public :
   }
 
 private:
-
-  const std::set<unsigned int> &getDataInRange(float yLowBound, float yHighBound) ;
+  const std::set<unsigned int> &getDataInRange(float yLowBound, float yHighBound);
 
   void computeBoxPlotCoords();
 
@@ -158,9 +163,7 @@ private:
   std::vector<std::string> boxPlotStringValues;
   BoxPlotValue boxPlotLowBound, boxPlotHighBound;
   bool integerScale;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

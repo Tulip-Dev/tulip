@@ -25,7 +25,8 @@ std::string tlp::getMinor(const std::string &release) {
 #ifdef _MSC_VER
   char sep = '_';
 
-  // handle the case where the version number separator is not an underscore (e.g. for Tulip plugins)
+  // handle the case where the version number separator is not an underscore (e.g. for Tulip
+  // plugins)
   if (release.find(sep) == std::string::npos) {
     sep = '.';
   }
@@ -35,17 +36,17 @@ std::string tlp::getMinor(const std::string &release) {
 #endif
   size_t pos = release.find(sep);
 
-  //if there is no minor version number, return a default '0'
+  // if there is no minor version number, return a default '0'
   if (pos == std::string::npos)
     return std::string("0");
 
   size_t rpos = release.rfind(sep);
 
-  //if there is only one dot, return everything after it
+  // if there is only one dot, return everything after it
   if (pos == rpos)
-    return release.substr(pos+1);
+    return release.substr(pos + 1);
 
-  //if there is more than one dot, return everything between the first and last dots
+  // if there is more than one dot, return everything between the first and last dots
   return release.substr(pos + 1, rpos - pos - 1);
 }
 
@@ -53,7 +54,8 @@ std::string tlp::getMajor(const std::string &release) {
 #ifdef _MSC_VER
   char sep = '_';
 
-  // handle the case where the version number separator is not an underscore (e.g. for Tulip plugins)
+  // handle the case where the version number separator is not an underscore (e.g. for Tulip
+  // plugins)
   if (release.find(sep) == std::string::npos) {
     sep = '.';
   }
@@ -77,7 +79,7 @@ string Plugin::tulipMajor() const {
   return tlp::getMajor(tulipRelease());
 }
 
-string Plugin::tulipMinor() const  {
+string Plugin::tulipMinor() const {
   return tlp::getMinor(tulipRelease());
 }
 

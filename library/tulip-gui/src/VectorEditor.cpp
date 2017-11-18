@@ -26,7 +26,8 @@
 
 using namespace tlp;
 
-VectorEditor::VectorEditor(QWidget *parent): QDialog(parent), _ui(new Ui::VectorEditor), _userType(0) {
+VectorEditor::VectorEditor(QWidget *parent)
+    : QDialog(parent), _ui(new Ui::VectorEditor), _userType(0) {
   _ui->setupUi(this);
   _ui->list->setItemDelegate(new TulipItemDelegate(_ui->list));
 }
@@ -39,13 +40,13 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
   _userType = userType;
   _ui->list->clear();
 
-  foreach(const QVariant& v, d) {
-    QListWidgetItem* i = new QListWidgetItem();
+  foreach (const QVariant &v, d) {
+    QListWidgetItem *i = new QListWidgetItem();
 
     if (_userType == qMetaTypeId<std::string>())
       i->setData(Qt::DisplayRole, QVariant::fromValue(tlpStringToQString(v.value<std::string>())));
     else
-      i->setData(Qt::DisplayRole,v);
+      i->setData(Qt::DisplayRole, v);
 
     i->setFlags(i->flags() | Qt::ItemIsEditable);
     _ui->list->addItem(i);
@@ -56,15 +57,14 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
 }
 
 void VectorEditor::add() {
-  QListWidgetItem* i = new QListWidgetItem();
+  QListWidgetItem *i = new QListWidgetItem();
 
   if (_userType == qMetaTypeId<std::string>()) {
     // workaround to indicate there is a new string to edit
     // because the height of the line if very small with an empty string
     i->setData(Qt::DisplayRole, QVariant::fromValue(QString("edit this string")));
-  }
-  else
-    i->setData(Qt::DisplayRole, QVariant(_userType,static_cast<const void*>(NULL)));
+  } else
+    i->setData(Qt::DisplayRole, QVariant(_userType, static_cast<const void *>(NULL)));
 
   // needed for color
   i->setSizeHint(QSize(i->sizeHint().width(), 15));
@@ -74,7 +74,7 @@ void VectorEditor::add() {
 }
 
 void VectorEditor::remove() {
-  foreach(QListWidgetItem* i, _ui->list->selectedItems())
+  foreach (QListWidgetItem *i, _ui->list->selectedItems())
     delete i;
 
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
@@ -82,17 +82,17 @@ void VectorEditor::remove() {
 
 void VectorEditor::done(int r) {
   if (r == QDialog::Accepted) {
-    QAbstractItemModel* model = _ui->list->model();
+    QAbstractItemModel *model = _ui->list->model();
     currentVector.clear();
 
     if (_userType == qMetaTypeId<std::string>()) {
-      for (int i=0; i<model->rowCount(); ++i) {
-        currentVector.push_back(QVariant::fromValue(QStringToTlpString(model->data(model->index(i,0)).toString())));
+      for (int i = 0; i < model->rowCount(); ++i) {
+        currentVector.push_back(
+            QVariant::fromValue(QStringToTlpString(model->data(model->index(i, 0)).toString())));
       }
-    }
-    else {
-      for (int i=0; i<model->rowCount(); ++i) {
-        currentVector.push_back(model->data(model->index(i,0)));
+    } else {
+      for (int i = 0; i < model->rowCount(); ++i) {
+        currentVector.push_back(model->data(model->index(i, 0)));
       }
     }
   }

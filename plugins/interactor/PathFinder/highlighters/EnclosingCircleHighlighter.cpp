@@ -28,7 +28,6 @@
 
 #include <QWidget>
 
-
 #include "EnclosingCircleHighlighter.h"
 #include "../PathFinderTools.h"
 #include "ui_EnclosingCircleConfiguration.h"
@@ -36,10 +35,13 @@
 using namespace tlp;
 using namespace std;
 
-EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(Color& circleColor,QWidget *parent): QWidget(parent),_ui(new Ui::EnclosingCircleConfigurationData) {
+EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(Color &circleColor,
+                                                                       QWidget *parent)
+    : QWidget(parent), _ui(new Ui::EnclosingCircleConfigurationData) {
   _ui->setupUi(this);
   connect(_ui->solidColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(solidColorRadioChecked(bool)));
-  connect(_ui->inverseColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(inverseColorRadioChecked(bool)));
+  connect(_ui->inverseColorRadio, SIGNAL(clicked(bool)), this,
+          SIGNAL(inverseColorRadioChecked(bool)));
   connect(_ui->circleColorBtn, SIGNAL(clicked()), this, SIGNAL(colorButtonClicked()));
   connect(_ui->alphaSlider, SIGNAL(valueChanged(int)), this, SIGNAL(alphaChanged(int)));
   _ui->circleColorBtn->setDialogParent(parent);
@@ -76,21 +78,21 @@ Color getInverseColor(const Color &c) {
 }
 
 //******************************************************
-EnclosingCircleHighlighter::EnclosingCircleHighlighter():PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false),configurationWidget(NULL) {
+EnclosingCircleHighlighter::EnclosingCircleHighlighter()
+    : PathHighlighter("Enclosing circle"), circleColor(200, 200, 200), outlineColor(0, 0, 0),
+      alpha(128), inversedColor(false), configurationWidget(NULL) {}
 
-}
-
-
-void EnclosingCircleHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
+void EnclosingCircleHighlighter::highlight(const PathFinder *, GlMainWidget *glMainWidget,
+                                           BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   GlScene *scene = glMainWidget->getScene();
   LayoutProperty *layout = inputData->getElementLayout();
-  vector<Circlef > circles;
+  vector<Circlef> circles;
   node n;
-  float minDepth=-.5; // We'll draw the circle beyond the deeper node. Will work in most cases.
+  float minDepth = -.5; // We'll draw the circle beyond the deeper node. Will work in most cases.
   forEach(n, selection->getNodesEqualTo(true)) {
     Circlef c;
-    minDepth=min(minDepth, layout->getNodeValue(n).getZ());
+    minDepth = min(minDepth, layout->getNodeValue(n).getZ());
 
     if (getNodeEnclosingCircle(c, inputData, n))
       circles.push_back(c);
@@ -102,34 +104,33 @@ void EnclosingCircleHighlighter::highlight(const PathFinder*, GlMainWidget *glMa
     if (getEdgeEnclosingCircle(c, inputData, e))
       circles.push_back(c);
   }
-  Circlef enclosing(enclosingCircle<float> (circles));
+  Circlef enclosing(enclosingCircle<float>(circles));
 
   Color inside, outline;
 
   if (inversedColor) {
     inside = getInverseColor(glMainWidget->getScene()->getBackgroundColor());
     outline = inside;
-  }
-  else {
+  } else {
     inside = circleColor;
     outline = outlineColor;
   }
 
   inside.setA(alpha);
 
-  GlCircle *glCircle = new GlCircle(Coord(enclosing[0], enclosing[1], minDepth), enclosing.radius, outline, inside, true, true, 0, 256);
+  GlCircle *glCircle = new GlCircle(Coord(enclosing[0], enclosing[1], minDepth), enclosing.radius,
+                                    outline, inside, true, true, 0, 256);
   addGlEntity(scene, glCircle, true, "PathFinderCircle");
 }
 
-void EnclosingCircleHighlighter::draw(GlMainWidget*) {
-}
+void EnclosingCircleHighlighter::draw(GlMainWidget *) {}
 
 bool EnclosingCircleHighlighter::isConfigurable() const {
   return true;
 }
 
 EnclosingCircleHighlighter::~EnclosingCircleHighlighter() {
-//no need to delete the configurationWidget. Qt will do it well.
+  // no need to delete the configurationWidget. Qt will do it well.
   // delete configurationWidget;
 }
 
@@ -139,13 +140,14 @@ QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
   if (inversedColor) {
     configurationWidget->inverseColorRadioCheck(true);
     configurationWidget->circleColorBtnDisabled(true);
-  }
-  else
+  } else
     configurationWidget->solidColorRadioCheck(true);
 
   configurationWidget->alphaSliderSetValue(alpha);
-  connect(configurationWidget, SIGNAL(solidColorRadioChecked(bool)), this, SLOT(solidColorRadioChecked(bool)));
-  connect(configurationWidget, SIGNAL(inverseColorRadioChecked(bool)), this, SLOT(inverseColorRadioChecked(bool)));
+  connect(configurationWidget, SIGNAL(solidColorRadioChecked(bool)), this,
+          SLOT(solidColorRadioChecked(bool)));
+  connect(configurationWidget, SIGNAL(inverseColorRadioChecked(bool)), this,
+          SLOT(inverseColorRadioChecked(bool)));
   connect(configurationWidget, SIGNAL(colorButtonClicked()), this, SLOT(colorButtonClicked()));
   connect(configurationWidget, SIGNAL(alphaChanged(int)), this, SLOT(alphaChanged(int)));
   return configurationWidget;
@@ -153,16 +155,16 @@ QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
 
 void EnclosingCircleHighlighter::solidColorRadioChecked(bool) {
   configurationWidget->circleColorBtnDisabled(false);
-  inversedColor=false;
+  inversedColor = false;
 }
 
 void EnclosingCircleHighlighter::inverseColorRadioChecked(bool) {
   configurationWidget->circleColorBtnDisabled(true);
-  inversedColor=true;
+  inversedColor = true;
 }
 
 void EnclosingCircleHighlighter::colorButtonClicked() {
-  outlineColor = Color(0,0,0);
+  outlineColor = Color(0, 0, 0);
   circleColor = configurationWidget->getCircleColor();
 }
 

@@ -36,22 +36,23 @@ using namespace std;
 namespace tlp {
 
 // Computes the Linear regression function of a graph on two metrics (y = ax +b)
-void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &a, float &b) {
+void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &a,
+                                     float &b) {
   float sxk, syk, sxkxk, sxkyk;
-  sxk   = 0.0f;
-  syk   = 0.0f;
+  sxk = 0.0f;
+  syk = 0.0f;
   sxkxk = 0.0f;
   sxkyk = 0.0f;
 
   // We compute the sum of xk, yk, xk² and xkyk for the whole set of nodes
   Iterator<node> *itN = graph->getNodes();
 
-  while(itN->hasNext()) {
+  while (itN->hasNext()) {
     node n = itN->next();
     float nodeValx = xk->getNodeValue(n), nodeValy = yk->getNodeValue(n);
-    sxk   += nodeValx;
+    sxk += nodeValx;
     sxkxk += (nodeValx * nodeValx);
-    syk   += nodeValy;
+    syk += nodeValy;
     sxkyk += (nodeValx * nodeValy);
   }
 
@@ -64,12 +65,11 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
   b = (syk / n) - a * (sxk / n);
 }
 
-ScatterPlotTrendLine::ScatterPlotTrendLine() :
-  scatterView(NULL), a(0.0f), b(0.0f) {}
+ScatterPlotTrendLine::ScatterPlotTrendLine() : scatterView(NULL), a(0.0f), b(0.0f) {}
 
-ScatterPlotTrendLine:: ~ScatterPlotTrendLine() {}
+ScatterPlotTrendLine::~ScatterPlotTrendLine() {}
 
-bool ScatterPlotTrendLine::eventFilter(QObject*, QEvent *e) {
+bool ScatterPlotTrendLine::eventFilter(QObject *, QEvent *e) {
   if (e->type() == QEvent::MouseMove) {
     scatterView->refresh();
     return true;
@@ -98,29 +98,35 @@ bool ScatterPlotTrendLine::draw(GlMainWidget *glMainWidget) {
   camera.initGl();
 
   GlLine trendLine;
-  trendLine.addPoint(Coord(xAxis->getAxisBaseCoord().getX(), yAxis->getAxisPointCoordForValue(yStart).getY(), 0.0f), Color(0,255,0));
-  trendLine.addPoint(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength(), yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f), Color(0,255,0));
+  trendLine.addPoint(Coord(xAxis->getAxisBaseCoord().getX(),
+                           yAxis->getAxisPointCoordForValue(yStart).getY(), 0.0f),
+                     Color(0, 255, 0));
+  trendLine.addPoint(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength(),
+                           yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
+                     Color(0, 255, 0));
   trendLine.setLineWidth(3);
 
   glDisable(GL_STENCIL_TEST);
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  trendLine.draw(0,0);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  trendLine.draw(0, 0);
   glDisable(GL_BLEND);
 
-  GlLabel lineEquationLabel(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength() + xAxis->getAxisLength() / 8.0f, yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
-                            Size(xAxis->getAxisLength() / 4.0f, yAxis->getAxisLength() / 10.0f), Color(0,255,0));
+  GlLabel lineEquationLabel(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength() +
+                                      xAxis->getAxisLength() / 8.0f,
+                                  yAxis->getAxisPointCoordForValue(yEnd).getY(), 0.0f),
+                            Size(xAxis->getAxisLength() / 4.0f, yAxis->getAxisLength() / 10.0f),
+                            Color(0, 255, 0));
   ostringstream oss;
   oss << "y = " << a << " * x + " << b;
   lineEquationLabel.setText(oss.str());
-  lineEquationLabel.draw(0,&glMainWidget->getScene()->getLayer("Main")->getCamera());
+  lineEquationLabel.draw(0, &glMainWidget->getScene()->getLayer("Main")->getCamera());
 
   return true;
-
 }
 
-bool ScatterPlotTrendLine::compute(GlMainWidget*) {
+bool ScatterPlotTrendLine::compute(GlMainWidget *) {
   ScatterPlot2D *currentScatterPlot = scatterView->getDetailedScatterPlot();
 
   if (currentScatterPlot == NULL) {
@@ -136,8 +142,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
 
   if (xDimType == "double") {
     xDim = graph->getProperty<DoubleProperty>(xDimName);
-  }
-  else {
+  } else {
     IntegerProperty *xDimInt = graph->getProperty<IntegerProperty>(xDimName);
     xDim = new DoubleProperty(graph);
     node n;
@@ -148,8 +153,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
 
   if (yDimType == "double") {
     yDim = graph->getProperty<DoubleProperty>(yDimName);
-  }
-  else {
+  } else {
     IntegerProperty *yDimInt = graph->getProperty<IntegerProperty>(yDimName);
     yDim = new DoubleProperty(graph);
     node n;
@@ -157,7 +161,6 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
       yDim->setNodeValue(n, double(yDimInt->getNodeValue(n)));
     }
   }
-
 
   computeLinearRegressionFunction(graph, xDim, yDim, a, b);
 
@@ -182,6 +185,4 @@ void ScatterPlotTrendLine::viewChanged(View *view) {
   compute(0);
   scatterView->refresh();
 }
-
-
 }

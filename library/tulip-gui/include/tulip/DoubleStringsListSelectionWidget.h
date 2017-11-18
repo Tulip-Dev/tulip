@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 #define DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 
@@ -32,15 +31,16 @@ class DoubleStringsListSelectionData;
 
 namespace tlp {
 
-class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface {
+class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget,
+                                                      public StringsListSelectionWidgetInterface {
 
   Q_OBJECT
 
   Ui::DoubleStringsListSelectionData *_ui;
 
-public :
-
-  DoubleStringsListSelectionWidget(QWidget *parent = NULL, const unsigned int maxSelectedStringsListSize = 0);
+public:
+  DoubleStringsListSelectionWidget(QWidget *parent = NULL,
+                                   const unsigned int maxSelectedStringsListSize = 0);
   ~DoubleStringsListSelectionWidget();
 
   void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
@@ -74,12 +74,9 @@ private slots:
   void pressButtonUp();
   void pressButtonDown();
 
-private :
-
+private:
   void qtWidgetsConnection();
-
 };
-
 }
 
 #endif /* DOUBLESTRINGSLISTSELECTIONWIDGET_H_ */

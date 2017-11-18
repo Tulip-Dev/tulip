@@ -32,46 +32,48 @@ using namespace tlp;
 
 //==============================================================================
 static const char *paramHelp[] = {
-  // oriented
-  "If true, the graph is considered oriented.",
+    // oriented
+    "If true, the graph is considered oriented.",
 
-  // recursive
-  "If true, the algorithm is applied along the entire hierarchy of subgraphs.",
+    // recursive
+    "If true, the algorithm is applied along the entire hierarchy of subgraphs.",
 
-  // node aggregation function
-  "Function used to compute a measure for a meta-node based on the values of its underlying nodes. If 'none', no value is computed.",
+    // node aggregation function
+    "Function used to compute a measure for a meta-node based on the values of its underlying "
+    "nodes. If 'none', no value is computed.",
 
-  // edge aggregation function
-  "Function used to compute a measure for a meta-edge based on the values of its underlying edges. If 'none', no value is computed.",
+    // edge aggregation function
+    "Function used to compute a measure for a meta-edge based on the values of its underlying "
+    "edges. If 'none', no value is computed.",
 
-  // meta-node label
-  "Property used to label meta-nodes. An arbitrary underlying node is chosen and its associated value for the given property becomes the meta-node label.",
+    // meta-node label
+    "Property used to label meta-nodes. An arbitrary underlying node is chosen and its associated "
+    "value for the given property becomes the meta-node label.",
 
-  // use name of subgraphs
-  "If true, the meta-node label is the same as the name of the subgraph it represents.",
+    // use name of subgraphs
+    "If true, the meta-node label is the same as the name of the subgraph it represents.",
 
-  // edge cardinality
-  "If true, the property edgeCardinality is created for each meta-edge of the quotient graph (and store the number of edges it represents).",
+    // edge cardinality
+    "If true, the property edgeCardinality is created for each meta-edge of the quotient graph "
+    "(and store the number of edges it represents).",
 
-  // layout quotient graph
-  "If true, a force directed layout is computed for each quotient graph.",
+    // layout quotient graph
+    "If true, a force directed layout is computed for each quotient graph.",
 
-  // layout clusters graphs
-  "If true, a force directed layout is computed for each cluster graph."
-};
+    // layout clusters graphs
+    "If true, a force directed layout is computed for each cluster graph."};
 
 //===============================================================================
 // define a specific calculator for viewLabel
-class QuotientLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
-  StringProperty* sgLabel;
+class QuotientLabelCalculator : public AbstractStringProperty::MetaValueCalculator {
+  StringProperty *sgLabel;
   bool useSubGraphName;
-public:
-  QuotientLabelCalculator(StringProperty* label, bool useSgName)
-    : AbstractStringProperty::MetaValueCalculator(),
-      sgLabel(label), useSubGraphName(useSgName) {}
 
-  void computeMetaValue(AbstractStringProperty* label, node mN, Graph* sg,
-                        Graph*) {
+public:
+  QuotientLabelCalculator(StringProperty *label, bool useSgName)
+      : AbstractStringProperty::MetaValueCalculator(), sgLabel(label), useSubGraphName(useSgName) {}
+
+  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) {
     if (sgLabel)
       label->setNodeValue(mN, sgLabel->getNodeValue(sg->getOneNode()));
     else if (useSubGraphName) {
@@ -83,13 +85,13 @@ public:
 };
 
 // define a specific calculator for edgeCardinality
-class EdgeCardinalityCalculator :public IntegerMinMaxProperty::MetaValueCalculator {
+class EdgeCardinalityCalculator : public IntegerMinMaxProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractProperty<IntegerType, IntegerType, NumericProperty>* card,
-                        edge mE, Iterator<edge>* itE, Graph*) {
+  void computeMetaValue(AbstractProperty<IntegerType, IntegerType, NumericProperty> *card, edge mE,
+                        Iterator<edge> *itE, Graph *) {
     unsigned int nbEdges = 0;
 
-    while(itE->hasNext()) {
+    while (itE->hasNext()) {
       itE->next();
       ++nbEdges;
     }
@@ -98,18 +100,22 @@ public:
   }
 };
 
-
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
-class QuotientClustering:public tlp::Algorithm {
+class QuotientClustering : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Computes a quotient sub-graph (meta-nodes pointing on sub-graphs) using an already existing sub-graphs hierarchy.","1.5", "Clustering")
-//================================================================================
-  QuotientClustering(PluginContext* context):Algorithm(context) {
+  PLUGININFORMATION("Quotient Clustering", "David Auber", "13/06/2001",
+                    "Computes a quotient sub-graph (meta-nodes pointing on sub-graphs) using an "
+                    "already existing sub-graphs hierarchy.",
+                    "1.5", "Clustering")
+  //================================================================================
+  QuotientClustering(PluginContext *context) : Algorithm(context) {
     addDependency("FM^3 (OGDF)", "1.2");
     addDependency("Fast Overlap Removal", "1.3");
     addInParameter<bool>("oriented", paramHelp[0], "true");
-    addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS, true, "none <br> average <br> sum <br> max <br> min");
-    addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS, true, "none <br> average <br> sum <br> max <br> min");
+    addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS, true,
+                                     "none <br> average <br> sum <br> max <br> min");
+    addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS, true,
+                                     "none <br> average <br> sum <br> max <br> min");
     addInParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
     addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
     addInParameter<bool>("recursive", paramHelp[1], "false");
@@ -128,7 +134,7 @@ public:
     StringCollection edgeFunctions(AGGREGATION_FUNCTIONS);
     edgeFunctions.setCurrent(0);
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("oriented", oriented);
       dataSet->get("node function", nodeFunctions);
       dataSet->get("edge function", edgeFunctions);
@@ -140,7 +146,7 @@ public:
       dataSet->get("layout clusters", clustersLayout);
     }
 
-    Iterator<Graph *> *itS= graph->getSubGraphs();
+    Iterator<Graph *> *itS = graph->getSubGraphs();
 
     // do nothing if there is no subgraph
     if (!itS->hasNext()) {
@@ -161,12 +167,16 @@ public:
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
         Size maxSize = viewSize->getMax(cluster);
-        layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1])*5.0);
-        cluster->applyPropertyAlgorithm(layoutName, cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
+        layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
+        cluster->applyPropertyAlgorithm(layoutName,
+                                        cluster->getLocalProperty<LayoutProperty>("viewLayout"),
+                                        errMsg, NULL, &layoutParams);
         double border = std::min(minSize[0], minSize[1]);
         layoutParams.set("x border", border);
         layoutParams.set("y border", border);
-        cluster->applyPropertyAlgorithm("Fast Overlap Removal", cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
+        cluster->applyPropertyAlgorithm("Fast Overlap Removal",
+                                        cluster->getLocalProperty<LayoutProperty>("viewLayout"),
+                                        errMsg, NULL, &layoutParams);
       }
     }
 
@@ -203,17 +213,17 @@ public:
     // set specific meta value calculators
     // for most properties
     DoubleProperty::PredefinedMetaValueCalculator nodeFn =
-      static_cast<DoubleProperty::PredefinedMetaValueCalculator>(nodeFunctions.getCurrent());
+        static_cast<DoubleProperty::PredefinedMetaValueCalculator>(nodeFunctions.getCurrent());
     DoubleProperty::PredefinedMetaValueCalculator edgeFn =
-      static_cast<DoubleProperty::PredefinedMetaValueCalculator>(edgeFunctions.getCurrent());
+        static_cast<DoubleProperty::PredefinedMetaValueCalculator>(edgeFunctions.getCurrent());
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
-    TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *> prevCalcs;
+    TLP_HASH_MAP<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
     string pName;
     forEach(pName, quotientGraph->getProperties()) {
       PropertyInterface *prop = quotientGraph->getProperty(pName);
 
-      //do nothing for viewBorderWidth
-      if(pName == "viewBorderWidth")
+      // do nothing for viewBorderWidth
+      if (pName == "viewBorderWidth")
         continue;
 
       if (dynamic_cast<DoubleProperty *>(prop)) {
@@ -223,7 +233,7 @@ public:
 
       if (pName == "viewLabel") {
         prevCalcs[prop] = prop->getMetaValueCalculator();
-        static_cast<StringProperty*>(prop)->setMetaValueCalculator(&viewLabelCalc);
+        static_cast<StringProperty *>(prop)->setMetaValueCalculator(&viewLabelCalc);
       }
     }
     // compute meta nodes, edges and associated meta values
@@ -234,15 +244,15 @@ public:
 
     IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
 
-    for (size_t i = 0 ; i < mNodes.size() ; ++i) {
+    for (size_t i = 0; i < mNodes.size(); ++i) {
       viewShape->setNodeValue(mNodes[i], NodeShape::Square);
     }
 
     // restore previous calculators
-    TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *>::iterator itC =
-      prevCalcs.begin();
+    TLP_HASH_MAP<PropertyInterface *, PropertyInterface::MetaValueCalculator *>::iterator itC =
+        prevCalcs.begin();
 
-    while(itC != prevCalcs.end()) {
+    while (itC != prevCalcs.end()) {
       if (dynamic_cast<DoubleProperty *>((*itC).first)) {
         delete ((*itC).first)->getMetaValueCalculator();
       }
@@ -251,8 +261,7 @@ public:
       ++itC;
     }
 
-    GraphProperty *metaInfo =
-      graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
+    GraphProperty *metaInfo = graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
 
     // orientation
     if (!oriented) {
@@ -260,7 +269,7 @@ public:
       // store opposite edge in opProp
       edge mE;
       forEach(mE, quotientGraph->getEdges()) {
-        const std::pair<node, node>& eEnds = quotientGraph->ends(mE);
+        const std::pair<node, node> &eEnds = quotientGraph->ends(mE);
         edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 
         if (op.isValid()) {
@@ -269,21 +278,18 @@ public:
         }
       }
       set<edge> edgesToDel;
-      DoubleProperty* viewMetric =
-        quotientGraph->getProperty<DoubleProperty>("viewMetric");
-      Iterator<edge>* itE = quotientGraph->getEdges();
+      DoubleProperty *viewMetric = quotientGraph->getProperty<DoubleProperty>("viewMetric");
+      Iterator<edge> *itE = quotientGraph->getEdges();
 
       while (itE->hasNext()) {
         edge mE = itE->next();
         edge op(opProp->getEdgeValue(mE));
 
-        if (op.isValid() &&
-            edgesToDel.find(mE) == edgesToDel.end() &&
+        if (op.isValid() && edgesToDel.find(mE) == edgesToDel.end() &&
             edgesToDel.find(op) == edgesToDel.end()) {
           // if the opposite edge viewMetric associated value is greater
           // than the mE associated value than we will keep it instead of mE
-          bool opOK =
-            viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
+          bool opOK = viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
 
           if (edgeFn != DoubleProperty::NO_CALC) {
             forEach(pName, graph->getProperties()) {
@@ -295,9 +301,9 @@ public:
                 DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
                 double value = metric->getEdgeValue(mE);
 
-                switch(edgeFn) {
+                switch (edgeFn) {
                 case DoubleProperty::AVG_CALC:
-                  value = (value + metric->getEdgeValue(op))/2;
+                  value = (value + metric->getEdgeValue(op)) / 2;
                   break;
 
                 case DoubleProperty::SUM_CALC:
@@ -332,8 +338,7 @@ public:
 
           // compute cardinaly if needed
           if (cardProp) {
-            unsigned int card =
-              cardProp->getEdgeValue(mE) + cardProp->getEdgeValue(op);
+            unsigned int card = cardProp->getEdgeValue(mE) + cardProp->getEdgeValue(op);
 
             if (opOK)
               cardProp->setEdgeValue(op, card);
@@ -350,10 +355,10 @@ public:
 
           edgesToDel.insert(meToDel);
           set<edge> se = metaInfo->getEdgeValue(meToKeep);
-          const set<edge>& nse = metaInfo->getEdgeValue(meToDel);
+          const set<edge> &nse = metaInfo->getEdgeValue(meToDel);
           set<edge>::const_iterator itnse;
 
-          for(itnse = nse.begin(); itnse != nse.end(); ++itnse)
+          for (itnse = nse.begin(); itnse != nse.end(); ++itnse)
             se.insert(*itnse);
 
           metaInfo->setEdgeValue(meToKeep, se);
@@ -363,14 +368,14 @@ public:
       delete itE;
       set<edge>::const_iterator it;
 
-      for ( it = edgesToDel.begin(); it!=edgesToDel.end(); ++it)
+      for (it = edgesToDel.begin(); it != edgesToDel.end(); ++it)
         quotientGraph->delEdge(*it);
     }
 
     if (opProp)
       delete opProp;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->set("quotientGraph", quotientGraph);
     }
 
@@ -379,12 +384,16 @@ public:
       SizeProperty *viewSize = quotientGraph->getProperty<SizeProperty>("viewSize");
       Size minSize = viewSize->getMin(quotientGraph);
       Size maxSize = viewSize->getMax(quotientGraph);
-      layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1])*2.0);
-      quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
+      layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
+      quotientGraph->applyPropertyAlgorithm(
+          layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL,
+          &layoutParams);
       double border = std::min(minSize[0], minSize[1]);
       layoutParams.set("x border", border);
       layoutParams.set("y border", border);
-      quotientGraph->applyPropertyAlgorithm("Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
+      quotientGraph->applyPropertyAlgorithm(
+          "Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"),
+          errMsg, NULL, &layoutParams);
     }
 
     // recursive call if needed
@@ -400,9 +409,9 @@ public:
       dSet.set("layout quotient graph(s)", quotientLayout);
       vector<node>::iterator itn = mNodes.begin();
 
-      while(itn != mNodes.end()) {
+      while (itn != mNodes.end()) {
         node mn = *itn;
-        Graph* sg = quotientGraph->getNodeMetaInfo(mn);
+        Graph *sg = quotientGraph->getNodeMetaInfo(mn);
         string eMsg;
         sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet, pluginProgress);
 

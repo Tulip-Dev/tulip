@@ -61,17 +61,17 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testQuotientClustering);
   CPPUNIT_TEST(testStrengthClustering);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
 
 public:
   void setUp();
   void tearDown();
-  void initializeGraph(const std::string& type);
-  template<typename PropType>
-  bool computeProperty(const std::string &algorithm,
-                       const std::string& graphType = "Planar Graph",
-                       PropType* prop = NULL);
+  void initializeGraph(const std::string &type);
+  template <typename PropType>
+  bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph",
+                       PropType *prop = NULL);
   void testImportCompleteGraph();
   void testImportCompleteTree();
   void testImportRandomGraph();

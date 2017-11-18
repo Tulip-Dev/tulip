@@ -38,21 +38,28 @@ using namespace tlp;
 /**
  * @brief Exports a Tulip Graph to a JSON format.
  *
- * In order to maintain full capabilities of exporting to older format versions, the export of the data is decomposed in two parts:
+ * In order to maintain full capabilities of exporting to older format versions, the export of the
+ *data is decomposed in two parts:
  * * The metadata
  * * The Graph Hierarchy
  *
- * The metadata is exported by saveMetaData() and the graph hierarchy saved (recursively) by saveGraph().
+ * The metadata is exported by saveMetaData() and the graph hierarchy saved (recursively) by
+ *saveGraph().
  *
- * These functions are suffixed by the format version they export to (e.g. saveGraph_V4() as of version 4.0 of the format).
+ * These functions are suffixed by the format version they export to (e.g. saveGraph_V4() as of
+ *version 4.0 of the format).
  * Under no circumstances should these functions be modified for anything besides a simple bugfix.
  *
- * Any feature addition should be done by writing a new version of saveMetaData and saveGraph, and switching on the version number in the main function.
+ * Any feature addition should be done by writing a new version of saveMetaData and saveGraph, and
+ *switching on the version number in the main function.
  *
  **/
 class TlpJsonExport : public ExportModule {
 public:
-  PLUGININFORMATION("JSON Export","Charles Huet","18/05/2011","<p>Supported extensions: json</p><p>Exports a graph in a file using the Tulip JSON format.</p>","1.0","File")
+  PLUGININFORMATION("JSON Export", "Charles Huet", "18/05/2011",
+                    "<p>Supported extensions: json</p><p>Exports a graph in a file using the Tulip "
+                    "JSON format.</p>",
+                    "1.0", "File")
 
   std::string fileExtension() const {
     return "json";
@@ -67,11 +74,13 @@ public:
    *
    * @param context The context this export algorithm will be initialized with.
    **/
-  TlpJsonExport(tlp::PluginContext* context) : ExportModule(context) {
-    addInParameter<bool>("Beautify JSON string", "If true, generate a JSON string with indentation and line breaks.", "false");
+  TlpJsonExport(tlp::PluginContext *context) : ExportModule(context) {
+    addInParameter<bool>("Beautify JSON string",
+                         "If true, generate a JSON string with indentation and line breaks.",
+                         "false");
   }
 
-  virtual bool exportGraph(ostream& fileOut) {
+  virtual bool exportGraph(ostream &fileOut) {
 
     if (dataSet && dataSet->exist("Beautify JSON string")) {
       bool beautify = false;
@@ -83,7 +92,7 @@ public:
     Graph *superGraph = graph->getSuperGraph();
     graph->setSuperGraph(graph);
 
-    _writer.writeMapOpen(); //top-level map
+    _writer.writeMapOpen(); // top-level map
 
     _writer.writeString("version");
     _writer.writeString("4.0");
@@ -91,7 +100,7 @@ public:
     saveMetaData_V4();
 
     _writer.writeString(GraphToken);
-    _writer.writeMapOpen(); //graph hierarchy map
+    _writer.writeMapOpen(); // graph hierarchy map
     saveGraph_V4(graph);
     _writer.writeMapClose(); // graph hierarchy map
 
@@ -132,7 +141,7 @@ public:
    * @param graph The graph to save.
    * @return void
    **/
-  void saveGraph_V4(Graph* g) {
+  void saveGraph_V4(Graph *g) {
     node n;
     edge e;
 
@@ -140,28 +149,27 @@ public:
 
     if (g->getSuperGraph() == g) {
       _writer.writeInteger(0);
-    }
-    else {
+    } else {
       _writer.writeInteger(g->getId());
     }
 
-    //we need to save all nodes and edges on the root graph
-    if(g->getSuperGraph() == g) {
-      //saving nodes only requires knowing how many of them there are
+    // we need to save all nodes and edges on the root graph
+    if (g->getSuperGraph() == g) {
+      // saving nodes only requires knowing how many of them there are
       _writer.writeString(NodesNumberToken);
       _writer.writeInteger(g->numberOfNodes());
-      //saving the number of edges will speed up the import phase
-      //because the space needed to store the edges will be
-      //allocated in one call
+      // saving the number of edges will speed up the import phase
+      // because the space needed to store the edges will be
+      // allocated in one call
       _writer.writeString(EdgesNumberToken);
-      const std::vector<edge>& edges = g->edges();
+      const std::vector<edge> &edges = g->edges();
       unsigned int nbEdges = edges.size();
       _writer.writeInteger(nbEdges);
-      //saving edges requires writing source and target for every edge
+      // saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
 
-      for(unsigned int i = 0; i < nbEdges; ++i) {
+      for (unsigned int i = 0; i < nbEdges; ++i) {
         std::pair<node, node> ends = g->ends(edges[i]);
         _writer.writeArrayOpen();
         _writer.writeInteger(graph->nodePos(ends.first));
@@ -170,10 +178,9 @@ public:
       }
 
       _writer.writeArrayClose();
-    }
-    else {
-      //only saving relevant nodes and edges
-      const std::vector<node>& nodes = g->nodes();
+    } else {
+      // only saving relevant nodes and edges
+      const std::vector<node> &nodes = g->nodes();
       unsigned int nbElts = nodes.size();
       std::vector<unsigned int> pos(nbElts);
 
@@ -183,7 +190,7 @@ public:
       std::sort(pos.begin(), pos.end());
       writeInterval(NodesIDsToken, pos);
 
-      const std::vector<edge>& edges = g->edges();
+      const std::vector<edge> &edges = g->edges();
       pos.resize(nbElts = edges.size());
 
       for (unsigned int i = 0; i < nbElts; ++i)
@@ -195,17 +202,16 @@ public:
 
     _writer.writeString(PropertiesToken);
     _writer.writeMapOpen();
-    //saving properties
-    Iterator<PropertyInterface*> *itP = NULL;
+    // saving properties
+    Iterator<PropertyInterface *> *itP = NULL;
 
     if (g->getSuperGraph() == g) {
       itP = g->getObjectProperties();
-    }
-    else {
+    } else {
       itP = g->getLocalObjectProperties();
     }
 
-    PropertyInterface* property;
+    PropertyInterface *property;
     forEach(property, itP) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
@@ -214,16 +220,15 @@ public:
       _writer.writeString(property->getTypename());
 
       _writer.writeString(NodeDefaultToken);
-      bool writingPathViewProperty =
-        (property->getName() == string("viewFont") ||
-         property->getName() == string("viewTexture"));
+      bool writingPathViewProperty = (property->getName() == string("viewFont") ||
+                                      property->getName() == string("viewTexture"));
 
       string dsValue = property->getNodeDefaultStringValue();
 
       if (writingPathViewProperty && !TulipBitmapDir.empty()) {
         size_t pos = dsValue.find(TulipBitmapDir);
 
-        if(pos != string::npos)
+        if (pos != string::npos)
           dsValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
 
@@ -235,13 +240,13 @@ public:
       if (writingPathViewProperty && !TulipBitmapDir.empty()) {
         size_t pos = dsValue.find(TulipBitmapDir);
 
-        if(pos != string::npos)
+        if (pos != string::npos)
           dsValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
 
       _writer.writeString(dsValue);
 
-      if(property->numberOfNonDefaultValuatedNodes() > 0) {
+      if (property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
         forEach(n, property->getNonDefaultValuatedNodes(g)) {
@@ -253,7 +258,7 @@ public:
           if (writingPathViewProperty && !TulipBitmapDir.empty()) {
             size_t pos = sValue.find(TulipBitmapDir);
 
-            if(pos != string::npos)
+            if (pos != string::npos)
               sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
           }
 
@@ -262,7 +267,7 @@ public:
         _writer.writeMapClose();
       }
 
-      if(property->numberOfNonDefaultValuatedEdges() > 0) {
+      if (property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
         forEach(e, property->getNonDefaultValuatedEdges(g)) {
@@ -274,7 +279,7 @@ public:
           if (writingPathViewProperty && !TulipBitmapDir.empty()) {
             size_t pos = sValue.find(TulipBitmapDir);
 
-            if(pos != string::npos)
+            if (pos != string::npos)
               sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
           }
 
@@ -289,37 +294,35 @@ public:
 
     _writer.writeString(AttributesToken);
     _writer.writeMapOpen();
-    //saving attributes
+    // saving attributes
     DataSet attributes = g->getAttributes();
-    pair<string, DataType*> attribute;
+    pair<string, DataType *> attribute;
     forEach(attribute, attributes.getValues()) {
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
-        node *n = static_cast<node*>(attribute.second->value);
+        node *n = static_cast<node *>(attribute.second->value);
         n->id = graph->nodePos(*n);
-      }
-      else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
-        edge *e = static_cast<edge*>(attribute.second->value);
+      } else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
+        edge *e = static_cast<edge *>(attribute.second->value);
         e->id = g->edgePos(*e);
-      }
-      else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
-        vector<node> *vn = static_cast<vector<node>*>(attribute.second->value);
+      } else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
+        vector<node> *vn = static_cast<vector<node> *>(attribute.second->value);
 
-        for (size_t i = 0 ; i < vn->size() ; ++i) {
+        for (size_t i = 0; i < vn->size(); ++i) {
           (*vn)[i].id = graph->nodePos((*vn)[i]);
         }
-      }
-      else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
-        vector<edge> *ve = static_cast<vector<edge>*>(attribute.second->value);
+      } else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
+        vector<edge> *ve = static_cast<vector<edge> *>(attribute.second->value);
 
-        for (size_t i = 0 ; i < ve->size() ; ++i) {
+        for (size_t i = 0; i < ve->size(); ++i) {
           (*ve)[i].id = graph->edgePos((*ve)[i]);
         }
       }
 
-      DataTypeSerializer* serializer = DataSet::typenameToSerializer(attribute.second->getTypeName());
+      DataTypeSerializer *serializer =
+          DataSet::typenameToSerializer(attribute.second->getTypeName());
       _writer.writeString(attribute.first);
       _writer.writeArrayOpen();
       _writer.writeString(serializer->outputTypeName);
@@ -331,10 +334,10 @@ public:
     }
     _writer.writeMapClose();
 
-    //saving subgraphs
+    // saving subgraphs
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
-    Graph* sub;
+    Graph *sub;
     forEach(sub, g->getSubGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
@@ -344,7 +347,8 @@ public:
   }
 
   /**
-   * @brief Writes a set of identifiers as contiguous intervals (defined by arrays containing lower and higher bounds).
+   * @brief Writes a set of identifiers as contiguous intervals (defined by arrays containing lower
+   *and higher bounds).
    * e.g. the set {0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 17} will be saved as the array:
    * [ [0, 7], [9, 11], 15, 17]
    *
@@ -352,8 +356,7 @@ public:
    * @param iterator An iterator over the values to save.
    * @return void
    **/
-  void writeInterval(const std::string& intervalName,
-                     std::vector<unsigned int>& pos) {
+  void writeInterval(const std::string &intervalName, std::vector<unsigned int> &pos) {
     _writer.writeString(intervalName);
     _writer.writeArrayOpen();
     unsigned int intervalBegin = UINT_MAX;
@@ -365,42 +368,40 @@ public:
     for (unsigned int i = 0; i < nbElts; ++i) {
       currentId = pos[i];
 
-      //we don't need/want to do all this on the first time we loop
+      // we don't need/want to do all this on the first time we loop
       if (previousId != UINT_MAX) {
 
-        //if the ID are continuous, define an interval, otherwise write the IDs (either intervals or single)
-        if(currentId == previousId + 1) {
-          //if we have no interval being defined, set the lower bound to the previous edge ID
-          //if an interval is being defined, set its end to the current edge ID
-          if(intervalBegin == UINT_MAX) {
+        // if the ID are continuous, define an interval, otherwise write the IDs (either intervals
+        // or single)
+        if (currentId == previousId + 1) {
+          // if we have no interval being defined, set the lower bound to the previous edge ID
+          // if an interval is being defined, set its end to the current edge ID
+          if (intervalBegin == UINT_MAX) {
             intervalBegin = previousId;
           }
 
           intervalEnd = currentId;
-        }
-        else {
-          //if an interval is defined, write it
-          if(intervalBegin != UINT_MAX) {
+        } else {
+          // if an interval is defined, write it
+          if (intervalBegin != UINT_MAX) {
             _writer.writeArrayOpen();
             _writer.writeInteger(intervalBegin);
             _writer.writeInteger(intervalEnd);
             _writer.writeArrayClose();
             intervalBegin = UINT_MAX;
             intervalEnd = UINT_MAX;
-          }
-          else {
+          } else {
             _writer.writeInteger(previousId);
           }
         }
 
-        if(i == (nbElts - 1)) {
-          if(intervalBegin != UINT_MAX) {
+        if (i == (nbElts - 1)) {
+          if (intervalBegin != UINT_MAX) {
             _writer.writeArrayOpen();
             _writer.writeInteger(intervalBegin);
             _writer.writeInteger(intervalEnd);
             _writer.writeArrayClose();
-          }
-          else {
+          } else {
             _writer.writeInteger(currentId);
           }
         }

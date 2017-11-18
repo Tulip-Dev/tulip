@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef SCENELAYERSMODEL_H
 #define SCENELAYERSMODEL_H
 
@@ -35,14 +34,14 @@ class GlScene;
 class TLP_QT_SCOPE SceneLayersModel : public TulipModel, tlp::Observable {
   Q_OBJECT
 
-  tlp::GlScene* _scene;
+  tlp::GlScene *_scene;
 
   QModelIndex graphCompositeIndex() const;
 
 public:
-  explicit SceneLayersModel(tlp::GlScene* scene, QObject *parent = NULL);
+  explicit SceneLayersModel(tlp::GlScene *scene, QObject *parent = NULL);
 
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -54,7 +53,7 @@ public:
   void treatEvent(const tlp::Event &);
 
 signals:
-  void drawNeeded(tlp::GlScene*);
+  void drawNeeded(tlp::GlScene *);
 };
 }
 

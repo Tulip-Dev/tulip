@@ -28,13 +28,14 @@ class ScatterPlotQuickAccessBar : public tlp::QuickAccessBarImpl {
   Q_OBJECT
 
   ScatterPlot2DOptionsWidget *_optionsWidget;
+
 public:
-  ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt, QWidget* parent=NULL);
+  ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt, QWidget *parent = NULL);
 
 public slots:
   void reset();
   virtual void setEdgesVisible(bool);
-  virtual void setBackgroundColor(const QColor&);
+  virtual void setBackgroundColor(const QColor &);
   virtual void setLabelsVisible(bool);
   virtual void setLabelsScaled(bool);
 };

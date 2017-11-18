@@ -23,38 +23,40 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // 3D
-  "If true the layout is in 3D else it is computed in 2D",
+    // 3D
+    "If true the layout is in 3D else it is computed in 2D",
 
-  // OctTree
-  "If true, use the OctTree optimization",
+    // OctTree
+    "If true, use the OctTree optimization",
 
-  // edge weight
-  "This property is used to compute the length of edges.",
+    // edge weight
+    "This property is used to compute the length of edges.",
 
-  // max iterations
-  "This parameter allows to limit the number of iterations. The value of 0 corresponds to a default value of 100.",
+    // max iterations
+    "This parameter allows to limit the number of iterations. The value of 0 corresponds to a "
+    "default value of 100.",
 
-  // attraction exponent
-  "This parameter allows to set the exponent of attraction.",
+    // attraction exponent
+    "This parameter allows to set the exponent of attraction.",
 
-  // repulsion exponent
-  "This parameter allows to set the exponent of repulsion.",
+    // repulsion exponent
+    "This parameter allows to set the exponent of repulsion.",
 
-  // gravitation factor
-  "This parameter allows to set the factor of gravitation.",
+    // gravitation factor
+    "This parameter allows to set the factor of gravitation.",
 
-  // nodes to skip
-  "This boolean property is used to skip nodes in computation when their value are set to true.",
+    // nodes to skip
+    "This boolean property is used to skip nodes in computation when their value are set to true.",
 
-  // initial layout
-  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm."
-};
+    // initial layout
+    "The layout property used to compute the initial position of the graph elements. If none is "
+    "given the initial position will be computed by the algorithm."};
 
-LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context), linlog(NULL) {
+LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context)
+    : LayoutAlgorithm(context), linlog(NULL) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<bool>("octtree", paramHelp[1], "true");
-  addInParameter<NumericProperty*>("edge weight", paramHelp[2], "", false);
+  addInParameter<NumericProperty *>("edge weight", paramHelp[2], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[3], "100");
   addInParameter<float>("repulsion exponent", paramHelp[4], "0.0");
   addInParameter<float>("attraction exponent", paramHelp[5], "1.0");
@@ -63,24 +65,21 @@ LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgo
   addInParameter<LayoutProperty>("initial layout", paramHelp[8], "", false);
 }
 
-
-LinLogAlgorithm::~LinLogAlgorithm() {
-}
-
+LinLogAlgorithm::~LinLogAlgorithm() {}
 
 bool LinLogAlgorithm::run() {
   bool is3D = false;
   bool useOctTree = false;
 
   unsigned int max_iter = 100;
-  tlp::NumericProperty* edgeWeight = NULL;
-  tlp::BooleanProperty* skipNodes = NULL;
+  tlp::NumericProperty *edgeWeight = NULL;
+  tlp::BooleanProperty *skipNodes = NULL;
   float aExp = 1.0;
   float rExp = 0.0;
   float gFac = 0.9f;
-  LayoutProperty* layout = NULL;
+  LayoutProperty *layout = NULL;
 
-  if ( dataSet!=NULL ) {
+  if (dataSet != NULL) {
     dataSet->get("3D layout", is3D);
     dataSet->get("octtree", useOctTree);
     dataSet->get("edge weight", edgeWeight);
@@ -105,11 +104,8 @@ bool LinLogAlgorithm::run() {
     }
   }
 
-  //launches the lin log algorithm
-  linlog->initAlgo(result, edgeWeight,
-                   aExp, rExp,  gFac,
-                   max_iter,
-                   is3D, useOctTree, skipNodes);
+  // launches the lin log algorithm
+  linlog->initAlgo(result, edgeWeight, aExp, rExp, gFac, max_iter, is3D, useOctTree, skipNodes);
 
   return linlog->startAlgo();
 }

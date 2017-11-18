@@ -34,61 +34,59 @@ namespace tlp {
  */
 class CubeOutLined : public Glyph {
 public:
-  GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", NodeShape::CubeOutlined)
-  CubeOutLined(tlp::PluginContext* context);
+  GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined",
+                   "1.0", NodeShape::CubeOutlined)
+  CubeOutLined(tlp::PluginContext *context);
   virtual ~CubeOutLined();
-  virtual void draw(node n,float lod);
-  virtual Coord getAnchor(const Coord & vector) const;
+  virtual void draw(node n, float lod);
+  virtual Coord getAnchor(const Coord &vector) const;
+
 protected:
-  static GlBox* box;
+  static GlBox *box;
 };
 }
-tlp::GlBox* tlp::CubeOutLined::box=NULL;
+tlp::GlBox *tlp::CubeOutLined::box = NULL;
 
 namespace tlp {
 PLUGIN(CubeOutLined)
 
-
 //===================================================================================
-CubeOutLined::CubeOutLined(tlp::PluginContext* context): Glyph(context) {
-  if(!box)
-    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
+CubeOutLined::CubeOutLined(tlp::PluginContext *context) : Glyph(context) {
+  if (!box)
+    box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
 }
 
-CubeOutLined::~CubeOutLined() {
-}
+CubeOutLined::~CubeOutLined() {}
 
 void CubeOutLined::draw(node n, float lod) {
 
-  const string& texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
-    const string& texturePath=glGraphInputData->parameters->getTexturePath();
-    box->setTextureName(texturePath+texFile);
-  }
-  else
+    const string &texturePath = glGraphInputData->parameters->getTexturePath();
+    box->setTextureName(texturePath + texFile);
+  } else
     box->setTextureName("");
 
   box->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
   box->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
-  double lineWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+  double lineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
-  if(lineWidth < 1e-6)
-    lineWidth=1e-6;
+  if (lineWidth < 1e-6)
+    lineWidth = 1e-6;
 
   box->setOutlineSize(lineWidth);
 
-  box->draw(lod,NULL);
+  box->draw(lod, NULL);
 }
 
-
-Coord CubeOutLined::getAnchor(const Coord & vector ) const {
-  float x,y,z, fmax;
-  vector.get(x,y,z);
+Coord CubeOutLined::getAnchor(const Coord &vector) const {
+  float x, y, z, fmax;
+  vector.get(x, y, z);
   fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
 
-  if( fmax > 0.0f )
-    return vector * (0.5f/fmax);
+  if (fmax > 0.0f)
+    return vector * (0.5f / fmax);
   else
     return vector;
 }

@@ -31,22 +31,27 @@ class LayoutProperty;
 class Graph;
 class BooleanProperty;
 
-class TLP_QT_SCOPE LayoutPropertyAnimation: public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord> > {
+class TLP_QT_SCOPE LayoutPropertyAnimation
+    : public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord> > {
 public:
-  LayoutPropertyAnimation(tlp::Graph *g, tlp::LayoutProperty *start, tlp::LayoutProperty *end, tlp::LayoutProperty *out,
-                          tlp::BooleanProperty *selection = NULL, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject *parent=NULL);
+  LayoutPropertyAnimation(tlp::Graph *g, tlp::LayoutProperty *start, tlp::LayoutProperty *end,
+                          tlp::LayoutProperty *out, tlp::BooleanProperty *selection = NULL,
+                          int frameCount = 1, bool computeNodes = true, bool computeEdges = true,
+                          QObject *parent = NULL);
 
   virtual ~LayoutPropertyAnimation() {}
 
 protected:
-  virtual tlp::Coord getNodeFrameValue(const tlp::Coord &startValue, const tlp::Coord &endValue, int frame);
-  virtual std::vector<tlp::Coord> getEdgeFrameValue(const std::vector<tlp::Coord> &startValue, const std::vector<tlp::Coord> &endValue, int frame);
+  virtual tlp::Coord getNodeFrameValue(const tlp::Coord &startValue, const tlp::Coord &endValue,
+                                       int frame);
+  virtual std::vector<tlp::Coord> getEdgeFrameValue(const std::vector<tlp::Coord> &startValue,
+                                                    const std::vector<tlp::Coord> &endValue,
+                                                    int frame);
   bool equalEdges(const std::vector<tlp::Coord> &v1, const std::vector<tlp::Coord> &v2);
 
 private:
-  std::map<std::pair<tlp::Coord,tlp::Coord>, tlp::Vector<double, 3> > steps;
+  std::map<std::pair<tlp::Coord, tlp::Coord>, tlp::Vector<double, 3> > steps;
 };
-
 }
 
 #endif /* LAYOUTPROPERTYANIMATION_H_ */

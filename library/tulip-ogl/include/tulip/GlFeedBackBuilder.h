@@ -52,24 +52,21 @@ typedef struct _DepthIndex {
 class TLP_GL_SCOPE GlFeedBackBuilder {
 
 public:
-
   virtual ~GlFeedBackBuilder() {}
 
-  virtual void begin(const Vector<int, 4> &, GLfloat *, GLfloat , GLfloat) {}
-  virtual void passThroughToken(GLfloat*) {}
-  virtual void pointToken(GLfloat*) {}
-  virtual void lineToken(GLfloat*) {}
-  virtual void lineResetToken(GLfloat*) {}
-  virtual void polygonToken(GLfloat*) {}
-  virtual void bitmapToken(GLfloat*) {}
-  virtual void drawPixelToken(GLfloat*) {}
-  virtual void copyPixelToken(GLfloat*) {}
+  virtual void begin(const Vector<int, 4> &, GLfloat *, GLfloat, GLfloat) {}
+  virtual void passThroughToken(GLfloat *) {}
+  virtual void pointToken(GLfloat *) {}
+  virtual void lineToken(GLfloat *) {}
+  virtual void lineResetToken(GLfloat *) {}
+  virtual void polygonToken(GLfloat *) {}
+  virtual void bitmapToken(GLfloat *) {}
+  virtual void drawPixelToken(GLfloat *) {}
+  virtual void copyPixelToken(GLfloat *) {}
   virtual void end() {}
 
-  virtual void getResult(std::string* str) = 0;
-
+  virtual void getResult(std::string *str) = 0;
 };
-
 }
 
 #endif // Tulip_GLFEEDBACKBUILDER_H

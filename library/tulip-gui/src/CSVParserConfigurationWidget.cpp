@@ -32,30 +32,33 @@ using namespace std;
 
 QString CSVParserConfigurationWidget::lastOpenedFile;
 
-CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::CSVParserConfigurationWidget) {
+CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent)
+    : QWidget(parent), ui(new Ui::CSVParserConfigurationWidget) {
   ui->setupUi(this);
-  //Fill the encoding combo box
+  // Fill the encoding combo box
   fillEncodingComboBox();
-  //Set the default encoding to UTF8
+  // Set the default encoding to UTF8
   ui->encodingComboBox->setCurrentIndex(ui->encodingComboBox->findText(QString("UTF-8")));
 
-  connect(ui->encodingComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
+  connect(ui->encodingComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(parserChanged()));
 
-  //Invert rows and column
-  connect(ui->switchRowColumnCheckBox,SIGNAL(stateChanged ( int )),this,SIGNAL(parserChanged()));
-  //Ignore first lines
-  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged ( int )),this,SLOT(ignoreFirstLines(int)));
-  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged ( int )),this,SIGNAL(parserChanged()));
-  connect(ui->nbOfIgnoredLinesSpinBox, SIGNAL(valueChanged ( int )),this,SIGNAL(parserChanged()));
+  // Invert rows and column
+  connect(ui->switchRowColumnCheckBox, SIGNAL(stateChanged(int)), this, SIGNAL(parserChanged()));
+  // Ignore first lines
+  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged(int)), this,
+          SLOT(ignoreFirstLines(int)));
+  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged(int)), this, SIGNAL(parserChanged()));
+  connect(ui->nbOfIgnoredLinesSpinBox, SIGNAL(valueChanged(int)), this, SIGNAL(parserChanged()));
 
-  //Separator and text delimiters.
-  connect(ui->separatorComboBox,SIGNAL(currentIndexChanged ( int)),this,SLOT(changeSeparator(int)));
-  connect(ui->textDelimiterComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
-  connect(ui->mergesep,SIGNAL(stateChanged(int)),this,SIGNAL(parserChanged()));
-  connect(ui->othersep,SIGNAL(textEdited(const QString &)), this, SIGNAL(parserChanged()));
-  connect(ui->fileChooserPushButton,SIGNAL(clicked(bool)),this,SLOT(changeFileNameButtonPressed()));
+  // Separator and text delimiters.
+  connect(ui->separatorComboBox, SIGNAL(currentIndexChanged(int)), this,
+          SLOT(changeSeparator(int)));
+  connect(ui->textDelimiterComboBox, SIGNAL(currentIndexChanged(int)), this,
+          SIGNAL(parserChanged()));
+  connect(ui->mergesep, SIGNAL(stateChanged(int)), this, SIGNAL(parserChanged()));
+  connect(ui->othersep, SIGNAL(textEdited(const QString &)), this, SIGNAL(parserChanged()));
+  connect(ui->fileChooserPushButton, SIGNAL(clicked(bool)), this,
+          SLOT(changeFileNameButtonPressed()));
 }
 
 void CSVParserConfigurationWidget::initWithLastOpenedFile() {
@@ -67,13 +70,15 @@ CSVParserConfigurationWidget::~CSVParserConfigurationWidget() {
   delete ui;
 }
 
-CSVParser * CSVParserConfigurationWidget::buildParser(unsigned int firstLine, unsigned int lastLine)const {
+CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
+                                                     unsigned int lastLine) const {
   CSVParser *parser = NULL;
 
-  if(isValid()) {
-    parser = new CSVSimpleParser(getFile(),getSeparator(),getMergeSeparator(),getTextSeparator(),getDecimalMark(),getEncoding(),firstLine,lastLine);
+  if (isValid()) {
+    parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(), getTextSeparator(),
+                                 getDecimalMark(), getEncoding(), firstLine, lastLine);
 
-    if(invertMatrix()) {
+    if (invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);
     }
   }
@@ -82,11 +87,11 @@ CSVParser * CSVParserConfigurationWidget::buildParser(unsigned int firstLine, un
 }
 
 void CSVParserConfigurationWidget::fillEncodingComboBox() {
-  QList<QByteArray> codecs = QTextCodec::availableCodecs ();
+  QList<QByteArray> codecs = QTextCodec::availableCodecs();
   ui->encodingComboBox->clear();
   QStringList list;
 
-  for(QList<QByteArray>::const_iterator it = codecs.constBegin() ; it != codecs.constEnd(); ++it) {
+  for (QList<QByteArray>::const_iterator it = codecs.constBegin(); it != codecs.constEnd(); ++it) {
     list.push_back(QString(*it));
   }
 
@@ -95,13 +100,12 @@ void CSVParserConfigurationWidget::fillEncodingComboBox() {
 }
 
 void CSVParserConfigurationWidget::changeSeparator(int index) {
-  if(ui->separatorComboBox->itemText(index)=="Other") {
-    if(!ui->othersep->isEnabled())
+  if (ui->separatorComboBox->itemText(index) == "Other") {
+    if (!ui->othersep->isEnabled())
       ui->othersep->setEnabled(true);
-    else if(!ui->othersep->text().isEmpty())
+    else if (!ui->othersep->text().isEmpty())
       emit(parserChanged());
-  }
-  else {
+  } else {
     ui->othersep->setEnabled(false);
     emit(parserChanged());
   }
@@ -110,62 +114,57 @@ void CSVParserConfigurationWidget::changeSeparator(int index) {
 QString CSVParserConfigurationWidget::getSeparator(int index) const {
   QString text = ui->separatorComboBox->itemText(index);
 
-  if(text == "Tab") {
+  if (text == "Tab") {
     return "\t";
-  }
-  else if(text == "Space") {
+  } else if (text == "Space") {
     return " ";
-  }
-  else if(text=="Other") {
-    return ui->othersep->text().isEmpty()?" ":ui->othersep->text();
-  }
-  else {
+  } else if (text == "Other") {
+    return ui->othersep->text().isEmpty() ? " " : ui->othersep->text();
+  } else {
     return text;
   }
 }
 
-QString CSVParserConfigurationWidget::getSeparator()const {
+QString CSVParserConfigurationWidget::getSeparator() const {
   return getSeparator(ui->separatorComboBox->currentIndex());
 }
 
 void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CSV file"),
-                     lastOpenedFile.isEmpty() ?
-                     QString() :
-                     QFileInfo(lastOpenedFile).absoluteDir().absolutePath(),
-                     tr(
-                       "CSV files (*.csv);;Text files (*.txt);;All files (*)"));
+  QString fileName = QFileDialog::getOpenFileName(
+      this, tr("Choose a CSV file"),
+      lastOpenedFile.isEmpty() ? QString() : QFileInfo(lastOpenedFile).absoluteDir().absolutePath(),
+      tr("CSV files (*.csv);;Text files (*.txt);;All files (*)"));
   setFileToOpen(fileName);
 }
 
-void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen) {
-  if(QFile::exists(fileToOpen)) {
+void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
+  if (QFile::exists(fileToOpen)) {
     ui->fileLineEdit->setText(fileToOpen);
 
-    //Try to autodetect separator
+    // Try to autodetect separator
     QFile file(fileToOpen);
 
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      //Read the first line
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      // Read the first line
       QByteArray firstLine = file.readLine();
 
-      if(!firstLine.isEmpty()) {
+      if (!firstLine.isEmpty()) {
         QString line(firstLine);
-        //Search for the best matching separator in the default list
+        // Search for the best matching separator in the default list
         QVector<int> separatorOccurence(ui->separatorComboBox->count());
 
-        for(int i=0; i<ui->separatorComboBox->count(); ++i) {
+        for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
           QString separator = getSeparator(i);
-          //Count the number of occurence for this separator
+          // Count the number of occurence for this separator
           separatorOccurence[i] = line.count(separator);
         }
 
         int currentMaxOccurence = -1;
 
-        for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i) {
-          if(separatorOccurence[i] > currentMaxOccurence) {
+        for (int i = 0; i < ui->separatorComboBox->count(); ++i) {
+          if (separatorOccurence[i] > currentMaxOccurence) {
             currentMaxOccurence = separatorOccurence[i];
-            //Set as separator the one with the greatest occurence number.
+            // Set as separator the one with the greatest occurence number.
             ui->separatorComboBox->setCurrentIndex(i);
           }
         }
@@ -183,13 +182,13 @@ void CSVParserConfigurationWidget::encodingChanged() {
   emit parserChanged();
 }
 
-string CSVParserConfigurationWidget::getFile()const {
+string CSVParserConfigurationWidget::getFile() const {
   return QStringToTlpString(ui->fileLineEdit->text());
 }
-bool CSVParserConfigurationWidget::isValid()const {
+bool CSVParserConfigurationWidget::isValid() const {
   return QFile::exists(ui->fileLineEdit->text());
 }
-string CSVParserConfigurationWidget::getEncoding()const {
+string CSVParserConfigurationWidget::getEncoding() const {
   return QStringToTlpString(ui->encodingComboBox->currentText());
 }
 char CSVParserConfigurationWidget::getTextSeparator() const {
@@ -202,7 +201,7 @@ bool CSVParserConfigurationWidget::getMergeSeparator() const {
   return ui->mergesep->isChecked();
 }
 
-bool CSVParserConfigurationWidget::invertMatrix()const {
+bool CSVParserConfigurationWidget::invertMatrix() const {
   return ui->switchRowColumnCheckBox->isChecked();
 }
 
@@ -211,8 +210,7 @@ void CSVParserConfigurationWidget::ignoreFirstLines(int state) {
 }
 
 int CSVParserConfigurationWidget::getFirstLineIndex() const {
-  return ui->ignoreFirstLinesCheckBox->isChecked() ?
-         ui->nbOfIgnoredLinesSpinBox->value() : 0;
+  return ui->ignoreFirstLinesCheckBox->isChecked() ? ui->nbOfIgnoredLinesSpinBox->value() : 0;
 }
 
 void CSVParserConfigurationWidget::setNbIgnoredLines(int nb) {

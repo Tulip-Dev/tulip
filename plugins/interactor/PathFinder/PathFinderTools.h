@@ -29,9 +29,9 @@ class GlGraphInputData;
 class SizeProperty;
 class LayoutProperty;
 
-
 /**
- * Computes the enclosing circle of a graph's node using the layout,size etc properties specified in the input data.
+ * Computes the enclosing circle of a graph's node using the layout,size etc properties specified in
+ * the input data.
  * @param circle The resulting circle.
  * @param inputData The graph's input data
  * @param n the node.
@@ -40,7 +40,8 @@ class LayoutProperty;
 bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, node n);
 
 /**
- * Computes the enclosing circle of a graph's edge bends using the layout,size etc properties specified in the input data.
+ * Computes the enclosing circle of a graph's edge bends using the layout,size etc properties
+ * specified in the input data.
  * @param circle The resulting circle.
  * @param inputData The graph's input data
  * @param n the node.

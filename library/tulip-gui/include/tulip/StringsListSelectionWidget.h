@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef STRINGLISTSELECTIONWIDGET_H_
 #define STRINGLISTSELECTIONWIDGET_H_
 
@@ -34,40 +33,42 @@ namespace tlp {
  *
  * This widget allow to select a subset of strings from an initial input strings list.
  * The look of the widget can be set via the ListType parameter :
- *    -> SIMPLE_LIST : the widget contains only one strings list, the selection of strings is done via the checkboxes located on the left of the items list
- *    -> DOUBLE_LIST : the widget contains two lists, the left one contains the unselected string list and the right one the selected strings list. To select
- *                     a string (resp. unselect a string), it has to be moved from the list on the left to the list on the right (resp. from the list on the right to
- *                     the list on the left) via the buttons located between the two lists or by drag'n drop.
+ *    -> SIMPLE_LIST : the widget contains only one strings list, the selection of strings is done
+ * via the checkboxes located on the left of the items list
+ *    -> DOUBLE_LIST : the widget contains two lists, the left one contains the unselected string
+ * list and the right one the selected strings list. To select
+ *                     a string (resp. unselect a string), it has to be moved from the list on the
+ * left to the list on the right (resp. from the list on the right to
+ *                     the list on the left) via the buttons located between the two lists or by
+ * drag'n drop.
  */
-class TLP_QT_SCOPE StringsListSelectionWidget: public QWidget,
-  public StringsListSelectionWidgetInterface {
+class TLP_QT_SCOPE StringsListSelectionWidget : public QWidget,
+                                                public StringsListSelectionWidgetInterface {
 
 public:
-
-  enum ListType {
-    SIMPLE_LIST, DOUBLE_LIST
-  };
+  enum ListType { SIMPLE_LIST, DOUBLE_LIST };
 
   /**
    * Default constructor (for qt designer)
    * \param parent the widget's parent
    * \param listType this parameter defines the widget's look (see class description)
-   * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no size restriction)
+   * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
+   * size restriction)
    */
-  StringsListSelectionWidget(QWidget *parent = NULL, const ListType listType =
-                               DOUBLE_LIST, const unsigned int maxSelectedStringsListSize = 0);
+  StringsListSelectionWidget(QWidget *parent = NULL, const ListType listType = DOUBLE_LIST,
+                             const unsigned int maxSelectedStringsListSize = 0);
 
   /**
    * This constructor creates the widget and initializes the unselected strings list
    * \param unselectedStringsList a vector containing the set of strings that can be selected
    * \param parent the widget's parent
    * \param listType this parameter defines the widget's look (see class description)
-   * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no size restriction)
+   * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
+   * size restriction)
    */
-  StringsListSelectionWidget(
-    const std::vector<std::string> &unselectedStringsList,
-    QWidget *parent = NULL, const ListType listType = DOUBLE_LIST,
-    const unsigned int maxSelectedStringsListSize = 0);
+  StringsListSelectionWidget(const std::vector<std::string> &unselectedStringsList,
+                             QWidget *parent = NULL, const ListType listType = DOUBLE_LIST,
+                             const unsigned int maxSelectedStringsListSize = 0);
 
   /**
    * Method which sets the look of the widget
@@ -79,15 +80,13 @@ public:
    * Method which sets the unselected strings list
    * \param unselectedStringsList a vector containing a set of strings to be unselected
    */
-  void setUnselectedStringsList(
-    const std::vector<std::string> &unselectedStringsList);
+  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
 
   /**
    * Method which sets the selected strings list
    * \param selectedStringsList a vector containing a set of strings to be selected
    */
-  void setSelectedStringsList(
-    const std::vector<std::string> &selectedStringsList);
+  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
 
   /**
    * Method which empty the unselected strings list
@@ -103,21 +102,18 @@ public:
    * Method which sets the label text value of the unselected strings list
    * (this method does nothing if listType = SIMPLE_LIST)
    */
-  void setUnselectedStringsListLabel(
-    const std::string &unselectedStringsListLabel);
+  void setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
 
   /**
    * Method which sets the label text value of the selected strings list
    * (this method does nothing if listType = SIMPLE_LIST)
    */
-  void setSelectedStringsListLabel(
-    const std::string &selectedStringsListLabel);
+  void setSelectedStringsListLabel(const std::string &selectedStringsListLabel);
 
   /**
    * Method which sets the maximum size of the selected strings list
    */
-  void setMaxSelectedStringsListSize(
-    const unsigned int maxSelectedStringsListSize);
+  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
 
   /**
    * Method which returns the selected strings as a vector
@@ -145,12 +141,9 @@ public:
   void unselectAllStrings();
 
 private:
-
   ListType listType;
   StringsListSelectionWidgetInterface *stringsListSelectionWidget;
-
 };
-
 }
 
 #endif /* STRINGLISTSELECTIONWIDGET_H_ */

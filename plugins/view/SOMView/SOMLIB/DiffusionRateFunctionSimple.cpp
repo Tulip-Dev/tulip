@@ -18,24 +18,22 @@
  */
 
 #include "DiffusionRateFunctionSimple.h"
-DiffusionRateFunctionSimple::DiffusionRateFunctionSimple(
-  TimeDecreasingFunction* timeFunction, unsigned int neighborhood) :
-  DiffusionRateFunction(timeFunction), neighborhoodMax(neighborhood) {
-
-}
+DiffusionRateFunctionSimple::DiffusionRateFunctionSimple(TimeDecreasingFunction *timeFunction,
+                                                         unsigned int neighborhood)
+    : DiffusionRateFunction(timeFunction), neighborhoodMax(neighborhood) {}
 
 DiffusionRateFunctionSimple::~DiffusionRateFunctionSimple() {
   // TODO Auto-generated destructor stub
 }
 
 double DiffusionRateFunctionSimple::computeSpaceRate(unsigned int distance,
-    unsigned int currentIteration, unsigned int maxIteration,
-    unsigned int inputSampleSize) {
+                                                     unsigned int currentIteration,
+                                                     unsigned int maxIteration,
+                                                     unsigned int inputSampleSize) {
 
   if (distance <= neighborhoodMax)
-    return 1 * timeFunction->computeCurrentTimeRate(currentIteration,
-           maxIteration, inputSampleSize);
+    return 1 *
+           timeFunction->computeCurrentTimeRate(currentIteration, maxIteration, inputSampleSize);
   else
     return 0;
 }
-

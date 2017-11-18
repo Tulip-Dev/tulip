@@ -44,45 +44,41 @@ static GlRect *rect = NULL;
 /**
  * This glyph draws a sphere using the "viewColor" node property value.
  */
-class GlowSphere: public Glyph {
+class GlowSphere : public Glyph {
 public:
-  GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0", NodeShape::GlowSphere)
-  GlowSphere(const tlp::PluginContext *context = NULL) :
-    Glyph(context) {
-  }
+  GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
+                   NodeShape::GlowSphere)
+  GlowSphere(const tlp::PluginContext *context = NULL) : Glyph(context) {}
   virtual ~GlowSphere() {}
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
-  static void drawGlyph(const Color& glyphColor, const Size& glyphSize,
-                        const string& texture,
-                        const string& texturePath);
+  static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
+                        const string &texturePath);
 };
 
 PLUGIN(GlowSphere)
 
-void GlowSphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+void GlowSphere::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
   boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
-void GlowSphere::drawGlyph(const Color& glyphColor,
-                           const Size& glyphSize,
-                           const string& texture,
-                           const string& texturePath) {
+void GlowSphere::drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
+                           const string &texturePath) {
 
   // draw a sphere
   if (!sphere) {
-    sphere = new GlSphere(Coord(0,0,0), 0.5);
+    sphere = new GlSphere(Coord(0, 0, 0), 0.5);
   }
 
   sphere->setColor(glyphColor);
-  sphere->setTexture(texturePath+texture);
-  sphere->draw(0,0);
+  sphere->setTexture(texturePath + texture);
+  sphere->draw(0, 0);
 
   // draw a glow ring around
   // setup its orientation to ensure it is drawn is the screen's plane
   if (!rect) {
-    rect = new GlRect(Coord(0,0,0), 2., 2, Color(0,0,0,255),Color(0,0,0,255));
+    rect = new GlRect(Coord(0, 0, 0), 2., 2, Color(0, 0, 0, 255), Color(0, 0, 0, 255));
     rect->setOutlineMode(false);
   }
 
@@ -93,19 +89,19 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
   rect->setTextureName(TulipBitmapDir + "radialGradientTexture.png");
 
   float mdlM[16];
-  glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
-  glMatrixMode( GL_MODELVIEW );
+  glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);
+  glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   float nx = glyphSize.getW();
   float ny = glyphSize.getH();
   float nz = glyphSize.getD();
-  mdlM[0]  = nx;
-  mdlM[5]  = ny;
+  mdlM[0] = nx;
+  mdlM[5] = ny;
   mdlM[10] = nz;
   mdlM[1] = mdlM[2] = 0.0f;
   mdlM[4] = mdlM[6] = 0.0f;
   mdlM[8] = mdlM[9] = 0.0f;
-  glLoadMatrixf( mdlM );
+  glLoadMatrixf(mdlM);
   glStencilMask(0x00);
   glDepthMask(GL_FALSE);
   rect->draw(0, 0);
@@ -121,18 +117,16 @@ void GlowSphere::draw(node n, float /* lod */) {
             glGraphInputData->parameters->getTexturePath());
 }
 
-class EEGlowSphere: public EdgeExtremityGlyph {
+class EEGlowSphere : public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATION("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012", "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
-  EEGlowSphere(const tlp::PluginContext *context = NULL) :
-    EdgeExtremityGlyph(context) {
-  }
+  GLYPHINFORMATION("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012",
+                   "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
+  EEGlowSphere(const tlp::PluginContext *context = NULL) : EdgeExtremityGlyph(context) {}
   virtual ~EEGlowSphere() {}
-  virtual void draw(edge e, node n, const Color& glyphColor,
-                    const Color &/* borderColor */, float /* lod */) {
+  virtual void draw(edge e, node n, const Color &glyphColor, const Color & /* borderColor */,
+                    float /* lod */) {
     glDisable(GL_LIGHTING);
-    GlowSphere::drawGlyph(glyphColor,
-                          edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
+    GlowSphere::drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
                           edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
                           edgeExtGlGraphInputData->parameters->getTexturePath());
   }

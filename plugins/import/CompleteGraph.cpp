@@ -22,26 +22,27 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // nodes
-  "Number of nodes in the final graph.",
+    // nodes
+    "Number of nodes in the final graph.",
 
-  // undirected
-  "If true, the generated graph is undirected. If false, two edges are created between each pair of nodes."
-};
+    // undirected
+    "If true, the generated graph is undirected. If false, two edges are created between each pair "
+    "of nodes."};
 
-class CompleteGraph:public ImportModule {
+class CompleteGraph : public ImportModule {
 public:
-  PLUGININFORMATION("Complete General Graph","Auber","16/12/2002","Imports a new complete graph.","1.1","Graph")
-  CompleteGraph(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"5");
-    addInParameter<bool>("undirected",paramHelp[1],"true");
+  PLUGININFORMATION("Complete General Graph", "Auber", "16/12/2002",
+                    "Imports a new complete graph.", "1.1", "Graph")
+  CompleteGraph(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "5");
+    addInParameter<bool>("undirected", paramHelp[1], "true");
   }
 
   bool importGraph() {
-    unsigned int nbNodes  = 5;
+    unsigned int nbNodes = 5;
     bool undirected = true;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("undirected", undirected);
     }
@@ -60,16 +61,16 @@ public:
 
     graph->reserveNodes(nbNodes);
 
-    for (size_t j=0; j<nbNodes; ++j)
+    for (size_t j = 0; j < nbNodes; ++j)
       nodes[j] = graph->addNode();
 
-    if(undirected)
-      graph->reserveEdges(nbNodes-1);
+    if (undirected)
+      graph->reserveEdges(nbNodes - 1);
     else
-      graph->reserveEdges(2*(nbNodes-1));
+      graph->reserveEdges(2 * (nbNodes - 1));
 
-    for (size_t i=0; i < nbNodes-1; ++i)
-      for (size_t j = i+1; j < nbNodes; ++j) {
+    for (size_t i = 0; i < nbNodes - 1; ++i)
+      for (size_t j = i + 1; j < nbNodes; ++j) {
         graph->addEdge(nodes[i], nodes[j]);
 
         if (!undirected)

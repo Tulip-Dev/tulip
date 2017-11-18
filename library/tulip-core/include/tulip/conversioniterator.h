@@ -27,7 +27,8 @@ namespace tlp {
 /**
   * @class ConversionIterator
   * @ingroup Iterators
-  * @brief Iterator that enables to convert an Iterator of type TYPEIN to an Iterator if type TYPEOUT
+  * @brief Iterator that enables to convert an Iterator of type TYPEIN to an Iterator if type
+ * TYPEOUT
   * @param it, the iterator that should be converted
   * @param convFunctor, the functor that enable to convert TYPEIN in TYPEOUT
   *
@@ -43,8 +44,8 @@ namespace tlp {
 template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
 class ConversionIterator : public Iterator<TYPEOUT> {
 public:
-  ConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor):_it(it), _convFunctor(convFunctor) {
-  }
+  ConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor)
+      : _it(it), _convFunctor(convFunctor) {}
   ~ConversionIterator() {
     delete _it;
   }
@@ -54,6 +55,7 @@ public:
   inline TYPEOUT next() {
     return _convFunctor(_it->next());
   }
+
 private:
   tlp::Iterator<TYPEIN> *_it;
   CONVERSIONFUNCTOR _convFunctor;
@@ -66,13 +68,13 @@ private:
   * @see ConversionIterator
   */
 template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
-class MPConversionIterator : public ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>, public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR> > {
+class MPConversionIterator
+    : public ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>,
+      public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR> > {
 public:
-  MPConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor):
-    ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {
-  }
+  MPConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor)
+      : ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {}
 };
-
 }
 #endif // CONVERSIONITERATOR_H
 ///@endcond

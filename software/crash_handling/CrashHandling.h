@@ -33,7 +33,6 @@
 class CrashHandling {
 
 public:
-
   static void setDumpPath(std::string);
 
   static void installCrashHandler();
@@ -44,7 +43,6 @@ public:
   // Multiple paths can be provided, separated by a semi-colon (;).
   static void setExtraSymbolsSearchPaths(const std::string &searchPaths);
 #endif
-
 };
 
 #endif /* CRASHHANDLING_H_ */

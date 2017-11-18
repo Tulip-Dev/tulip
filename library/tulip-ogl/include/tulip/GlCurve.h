@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef Tulip_GLCURVE_H
 #define Tulip_GLCURVE_H
 
@@ -33,11 +32,8 @@ public:
   /**
    * Basic constructor with vector of coord, begin/end color and begin/end size
    */
-  GlCurve(const std::vector<tlp::Coord> &points,
-          const Color &beginFColor,
-          const Color &endFColor,
-          const float &beginSize=0.,
-          const float &endSize=0.);
+  GlCurve(const std::vector<tlp::Coord> &points, const Color &beginFColor, const Color &endFColor,
+          const float &beginSize = 0., const float &endSize = 0.);
 
   /**
    * Basic constructor with number of points
@@ -48,7 +44,7 @@ public:
   /**
    * Draw the curve
    */
-  void draw(float lod,Camera *camera);
+  void draw(float lod, Camera *camera);
 
   /**
    * Set the texture of the curve (if you want texture)
@@ -63,16 +59,16 @@ public:
   /**
    * Return the ith coord
    */
-  virtual const tlp::Coord& point(const unsigned int i) const;
+  virtual const tlp::Coord &point(const unsigned int i) const;
   /**
    * Return the ith coord
    */
-  virtual tlp::Coord& point(const unsigned int i);
+  virtual tlp::Coord &point(const unsigned int i);
 
   /**
    * Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * Function to export data in outString (in XML format)

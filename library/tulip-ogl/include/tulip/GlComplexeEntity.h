@@ -40,23 +40,21 @@ class Camera;
 class TLP_GL_SCOPE GlComplexeEntity : public GlEntity {
 
 public:
-
   /**
    * return the bounding box of this entity
    */
-  virtual BoundingBox getBoundingBox(const GlGraphInputData* data) = 0;
+  virtual BoundingBox getBoundingBox(const GlGraphInputData *data) = 0;
 
   /**
    * Draw this entity with GlGraphInputData and Camera
    */
-  virtual void draw(float lod,const GlGraphInputData* data,Camera* camera) = 0;
+  virtual void draw(float lod, const GlGraphInputData *data, Camera *camera) = 0;
 
   /**
    * Draw label of this entity
    */
-  virtual void drawLabel(OcclusionTest* test,const GlGraphInputData* data) = 0;
+  virtual void drawLabel(OcclusionTest *test, const GlGraphInputData *data) = 0;
 };
-
 }
 
 #endif // Tulip_GLCOMPLEXEENTITY_H

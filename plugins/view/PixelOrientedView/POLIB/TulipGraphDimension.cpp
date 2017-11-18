@@ -32,15 +32,15 @@ namespace pocore {
 
 map<Graph *, unsigned int> TulipGraphDimension::graphDimensionsMap;
 
-TulipGraphDimension::TulipGraphDimension(Graph *graph, const string& dimName) : graph(graph), dimName(dimName) {
+TulipGraphDimension::TulipGraphDimension(Graph *graph, const string &dimName)
+    : graph(graph), dimName(dimName) {
   nodeSorter = TulipNodeMetricSorter::getInstance(graph);
   nodeSorter->sortNodesForProperty(dimName);
   propertyType = graph->getProperty(dimName)->getTypename();
 
   if (graphDimensionsMap.find(graph) == graphDimensionsMap.end()) {
     graphDimensionsMap[graph] = 1;
-  }
-  else {
+  } else {
     ++graphDimensionsMap[graph];
   }
 }
@@ -88,11 +88,9 @@ std::string TulipGraphDimension::getItemLabel(const unsigned int itemId) const {
 double TulipGraphDimension::getItemValue(const unsigned int itemId) const {
   if (propertyType == "double") {
     return getNodeValue<DoubleProperty>(node(itemId));
-  }
-  else if (propertyType == "int") {
+  } else if (propertyType == "int") {
     return getNodeValue<IntegerProperty>(node(itemId));
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -102,11 +100,9 @@ double TulipGraphDimension::getItemValueAtRank(const unsigned int rank) const {
 
   if (propertyType == "double") {
     return getNodeValue<DoubleProperty>(n);
-  }
-  else if (propertyType == "int") {
+  } else if (propertyType == "int") {
     return getNodeValue<IntegerProperty>(n);
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -123,11 +119,9 @@ unsigned int TulipGraphDimension::getRankForItem(const unsigned int itemId) {
 double TulipGraphDimension::minValue() const {
   if (propertyType == "double") {
     return graph->getProperty<DoubleProperty>(dimName)->getNodeMin(graph);
-  }
-  else if (propertyType == "int") {
+  } else if (propertyType == "int") {
     return graph->getProperty<IntegerProperty>(dimName)->getNodeMin(graph);
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -135,11 +129,9 @@ double TulipGraphDimension::minValue() const {
 double TulipGraphDimension::maxValue() const {
   if (propertyType == "double") {
     return graph->getProperty<DoubleProperty>(dimName)->getNodeMax(graph);
-  }
-  else if (propertyType == "int") {
+  } else if (propertyType == "int") {
     return graph->getProperty<IntegerProperty>(dimName)->getNodeMax(graph);
-  }
-  else {
+  } else {
     return 0;
   }
 }
@@ -165,5 +157,4 @@ vector<unsigned int> TulipGraphDimension::links(const unsigned int itemId) const
 
   return v;
 }
-
 }

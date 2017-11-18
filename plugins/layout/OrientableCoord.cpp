@@ -20,17 +20,15 @@
 #include "OrientableLayout.h"
 #include "OrientableCoord.h"
 
-
-
 //====================================================================
-OrientableCoord::OrientableCoord(OrientableLayout* fatherParam, const float x,
-                                 const float y, const float z)
-  :father(fatherParam) {
+OrientableCoord::OrientableCoord(OrientableLayout *fatherParam, const float x, const float y,
+                                 const float z)
+    : father(fatherParam) {
   set(x, y, z);
 }
 //====================================================================
-OrientableCoord::OrientableCoord(OrientableLayout* fatherParam, const tlp::Coord& v)
-  :father(fatherParam) {
+OrientableCoord::OrientableCoord(OrientableLayout *fatherParam, const tlp::Coord &v)
+    : father(fatherParam) {
   set(v);
 }
 //====================================================================
@@ -40,7 +38,7 @@ void OrientableCoord::set(const float x, const float y, const float z) {
   setZ(z);
 }
 //====================================================================
-void OrientableCoord::set(const tlp::Coord& coord) {
+void OrientableCoord::set(const tlp::Coord &coord) {
   tlp::Coord::setX(coord.getX());
   tlp::Coord::setY(coord.getY());
   tlp::Coord::setZ(coord.getZ());

@@ -23,41 +23,31 @@
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 struct NodeInfo {
-  NodeInfo(int stra=0,int sta=0):prefixOrder(stra),minAttach(sta) {}
+  NodeInfo(int stra = 0, int sta = 0) : prefixOrder(stra), minAttach(sta) {}
   int prefixOrder;
   int minAttach;
 };
 
 /** This plugin is an implementation of a strongly connected components decomposition.
  *
- *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
+ *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the
+ * same
  *  strongly connected component they have the same value else they have a
  *  different value.
  *
  */
-class StrongComponent:public tlp::DoubleAlgorithm {
+class StrongComponent : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Strongly Connected Component","David Auber","12/06/2001","Implements a strongly connected components decomposition.","1.0","Component")
-  StrongComponent(const tlp::PluginContext* context);
+  PLUGININFORMATION("Strongly Connected Component", "David Auber", "12/06/2001",
+                    "Implements a strongly connected components decomposition.", "1.0", "Component")
+  StrongComponent(const tlp::PluginContext *context);
   ~StrongComponent();
   bool run();
 
 private:
-  int  attachNumerotation(tlp::node, TLP_HASH_MAP<tlp::node,bool> &,
-                          TLP_HASH_MAP<tlp::node,bool> &,
-                          TLP_HASH_MAP<tlp::node,int> &, int &,
-                          std::stack<tlp::node> &, int &);
+  int attachNumerotation(tlp::node, TLP_HASH_MAP<tlp::node, bool> &,
+                         TLP_HASH_MAP<tlp::node, bool> &, TLP_HASH_MAP<tlp::node, int> &, int &,
+                         std::stack<tlp::node> &, int &);
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

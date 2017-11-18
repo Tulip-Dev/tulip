@@ -34,7 +34,8 @@ namespace tlp {
  * \author : David Auber/Daniel Archambault/Antoine Lambert : auber@labri.fr
  *
  * Computes the delaunay triangulation and returns the set of delaunay edges in the
- * vector edges and delaunay simplices (triangles in 2d, tetrahedra in 3d) of the triangulation in the vector simplices.
+ * vector edges and delaunay simplices (triangles in 2d, tetrahedra in 3d) of the triangulation in
+ * the vector simplices.
  * Edges and simplices are defined using a indexes into the original
  * set of points.
  */
@@ -49,7 +50,6 @@ TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
  */
 class TLP_SCOPE VoronoiDiagram {
 public:
-
   // A voronoi site.
   typedef Coord Site;
 
@@ -106,7 +106,7 @@ public:
   std::vector<Edge> voronoiEdgesForSite(const unsigned int siteIdx) {
     std::vector<Edge> ret;
 
-    for (size_t i = 0 ; i < siteToCellEdges[siteIdx].size() ; ++i) {
+    for (size_t i = 0; i < siteToCellEdges[siteIdx].size(); ++i) {
       ret.push_back(edges[siteToCellEdges[siteIdx][i]]);
     }
 
@@ -138,8 +138,6 @@ public:
  * for each input site.
  */
 TLP_SCOPE bool voronoiDiagram(std::vector<Coord> &sites, VoronoiDiagram &voronoiDiagram);
-
-
 }
 #endif
 ///@endcond

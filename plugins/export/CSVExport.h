@@ -23,7 +23,6 @@
 
 #include <tulip/ExportModule.h>
 
-
 /*@{*/
 /// Export plugin for CSV format
 /**
@@ -62,10 +61,12 @@
  * It has 2 possible values - double quote("), quote(') - and its default
  * value is double quote.
  */
-class CsvExport: public tlp::ExportModule {
+class CsvExport : public tlp::ExportModule {
 public:
-
-  PLUGININFORMATION("CSV Export", "David Auber, Patrick Mary","18/01/2011","<p>Supported extensions: csv</p><p>Exports the values of tulip graph properties associated to graph elements in a CSV file.</p>","1.0","File")
+  PLUGININFORMATION("CSV Export", "David Auber, Patrick Mary", "18/01/2011",
+                    "<p>Supported extensions: csv</p><p>Exports the values of tulip graph "
+                    "properties associated to graph elements in a CSV file.</p>",
+                    "1.0", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/spreadsheet.png";
@@ -82,7 +83,7 @@ public:
   char stringDelimiter;
   char decimalMark;
 
-  void exportString(std::ostream &os, const std::string& s) {
+  void exportString(std::ostream &os, const std::string &s) {
     os << stringDelimiter << s << stringDelimiter;
   }
 };

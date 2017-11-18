@@ -25,11 +25,11 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // search cycle
-  "If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). If false, nodes are ordered using a depth first search."
-};
+    // search cycle
+    "If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). "
+    "If false, nodes are ordered using a depth first search."};
 
-Circular::Circular(const tlp::PluginContext* context):LayoutAlgorithm(context) {
+Circular::Circular(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("search cycle", paramHelp[0], "false");
 }
@@ -41,7 +41,7 @@ vector<node> extractCycle(node n, deque<node> &st) {
   vector<node> result;
   deque<node>::const_reverse_iterator it = st.rbegin();
 
-  while( (*it) != n ) {
+  while ((*it) != n) {
     result.push_back(*it);
     ++it;
   }
@@ -50,10 +50,10 @@ vector<node> extractCycle(node n, deque<node> &st) {
   return result;
 }
 //===============================================================================
-void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag,
-         unsigned int &nbCalls, PluginProgress *pluginProgress) {
+void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
+         MutableContainer<bool> &flag, unsigned int &nbCalls, PluginProgress *pluginProgress) {
   {
-    //to enable stop of the recursion
+    // to enable stop of the recursion
     ++nbCalls;
 
     if (nbCalls % 10000 == 0) {
@@ -61,20 +61,21 @@ void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, Muta
       nbCalls = 0;
     }
 
-    if (pluginProgress->state()!=TLP_CONTINUE) return;
+    if (pluginProgress->state() != TLP_CONTINUE)
+      return;
   }
 
-  if(flag.get(n.id)) {
+  if (flag.get(n.id)) {
     vector<node> cycle(extractCycle(n, st));
 
-    if(cycle.size() > maxCycle.size())
+    if (cycle.size() > maxCycle.size())
       maxCycle = cycle;
 
     return;
   }
 
   st.push_back(n);
-  flag.set(n.id,true);
+  flag.set(n.id, true);
   node n2;
   forEach(n2, sg->getInOutNodes(n)) {
     dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
@@ -83,10 +84,9 @@ void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, Muta
   st.pop_back();
 }
 
-
 //=======================================================================
-vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
-  Graph * g = sg->addCloneSubGraph();
+vector<node> findMaxCycle(Graph *sg, PluginProgress *pluginProgress) {
+  Graph *g = sg->addCloneSubGraph();
   tlp::warning() << __PRETTY_FUNCTION__ << endl;
 
   // compute the connected components's subgraphs
@@ -97,23 +97,23 @@ vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
     g->inducedSubGraph(components[i]);
   }
 
-  Graph * g_tmp;
+  Graph *g_tmp;
 
   MutableContainer<bool> flag;
   deque<node> st;
   vector<node> res;
   vector<node> max;
   unsigned int nbCalls = 0;
-  forEach(g_tmp,g->getSubGraphs()) {
-    if(g_tmp->numberOfNodes() == 1)
+  forEach(g_tmp, g->getSubGraphs()) {
+    if (g_tmp->numberOfNodes() == 1)
       continue;
 
     st.clear();
     res.clear();
     flag.setAll(false);
-    dfs(g_tmp->getOneNode( ),g_tmp,st,res,flag, nbCalls, pluginProgress);
+    dfs(g_tmp->getOneNode(), g_tmp, st, res, flag, nbCalls, pluginProgress);
 
-    if(max.size() < res.size())
+    if (max.size() < res.size())
       max = res;
   }
 
@@ -122,10 +122,10 @@ vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
 }
 }
 
-//this inline function computes the radius size given a size
-inline double computeRadius (const Size &s) {
-  return std::max(1E-3, sqrt (s[0]*s[0]/4.0 + s[1]*s[1]/4.0));
-}//end computeRad
+// this inline function computes the radius size given a size
+inline double computeRadius(const Size &s) {
+  return std::max(1E-3, sqrt(s[0] * s[0] / 4.0 + s[1] * s[1] / 4.0));
+} // end computeRad
 
 bool Circular::run() {
   SizeProperty *nodeSize;
@@ -136,14 +136,14 @@ bool Circular::run() {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");
     else {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");
-      nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
+      nodeSize->setAllNodeValue(Size(1.0, 1.0, 1.0));
     }
   }
 
-  if ( dataSet != NULL )
+  if (dataSet != NULL)
     dataSet->get("search cycle", searchCycle);
 
-  //compute the sum of radii and the max radius of the graph
+  // compute the sum of radii and the max radius of the graph
   double sumOfRad = 0;
   double maxRad = 0;
   node maxRadNode;
@@ -155,31 +155,31 @@ bool Circular::run() {
     if (maxRad < rad) {
       maxRad = rad;
       maxRadNode = itn;
-    }//end if
+    } // end if
   }
 
-  //with two nodes, lay them on a line max rad appart
+  // with two nodes, lay them on a line max rad appart
   if (graph->numberOfNodes() <= 2) {
-    //set the (max 2) nodes maxRad appart
-    double xcoord = maxRad/2.0;
+    // set the (max 2) nodes maxRad appart
+    double xcoord = maxRad / 2.0;
     node itn;
     forEach(itn, graph->getNodes()) {
-      result->setNodeValue (itn, Coord (xcoord, 0, 0));
+      result->setNodeValue(itn, Coord(xcoord, 0, 0));
       xcoord *= -1;
     }
-  }//end if
+  } // end if
   else {
-    //this is the current angle
+    // this is the current angle
     double gamma = 0;
-    //if the ratio of maxRad/sumOfRad > .5, we need to ajust angles
+    // if the ratio of maxRad/sumOfRad > .5, we need to ajust angles
     bool angleAdjust = false;
 
-    if (maxRad/sumOfRad > 0.5) {
+    if (maxRad / sumOfRad > 0.5) {
       sumOfRad -= maxRad;
       angleAdjust = true;
-    }//end if
+    } // end if
 
-    //tlp::warning() << "*************************" << endl;
+    // tlp::warning() << "*************************" << endl;
 
     vector<node> cycleOrdering;
 
@@ -192,38 +192,36 @@ bool Circular::run() {
     MutableContainer<bool> inCir;
     inCir.setAll(false);
 
-    for(unsigned int i =0; i < cycleOrdering.size(); ++i)
+    for (unsigned int i = 0; i < cycleOrdering.size(); ++i)
       inCir.set(cycleOrdering[i].id, true);
 
-    for(unsigned int i =0; i < dfsOrdering.size(); ++i)
-      if(!inCir.get(dfsOrdering[i].id))
+    for (unsigned int i = 0; i < dfsOrdering.size(); ++i)
+      if (!inCir.get(dfsOrdering[i].id))
         cycleOrdering.push_back(dfsOrdering[i]);
 
     vector<node>::const_iterator it = cycleOrdering.begin();
 
-    for(; it!=cycleOrdering.end(); ++it) {
+    for (; it != cycleOrdering.end(); ++it) {
       node itn = *it;
-      //compute the radius to ensure non overlap.  If adjustment to
-      //ensure no angle greater than pi done, detect it.
+      // compute the radius to ensure non overlap.  If adjustment to
+      // ensure no angle greater than pi done, detect it.
       double nodeRad = computeRadius(nodeSize->getNodeValue(itn));
-      double halfAngle =
-        (nodeRad/sumOfRad)*((angleAdjust) ? M_PI/2.0 : M_PI);
-      double rayon = nodeRad/sin(halfAngle);
+      double halfAngle = (nodeRad / sumOfRad) * ((angleAdjust) ? M_PI / 2.0 : M_PI);
+      double rayon = nodeRad / sin(halfAngle);
 
-      //if this node was the node that took up more than half the circle,
-      //we complet the adjustment to make sure that it does not.
+      // if this node was the node that took up more than half the circle,
+      // we complet the adjustment to make sure that it does not.
       if (angleAdjust && (maxRadNode == itn)) {
-        halfAngle = M_PI/2.0;
+        halfAngle = M_PI / 2.0;
         rayon = nodeRad;
-      }//end if
+      } // end if
 
-      //compute the position of the node.
+      // compute the position of the node.
       gamma += halfAngle;
-      result->setNodeValue(itn, Coord(rayon*cos(gamma),
-                                      rayon*sin(gamma), 0));
+      result->setNodeValue(itn, Coord(rayon * cos(gamma), rayon * sin(gamma), 0));
       gamma += halfAngle;
-    }//end while
-  }//end else
+    } // end while
+  }   // end else
 
   return true;
-} //end run
+} // end run

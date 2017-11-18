@@ -27,9 +27,8 @@ class ScreenFunction {
 
 public:
   virtual ~ScreenFunction() {}
-  virtual Vec2f project(const Vec2f& ) const = 0;
-  virtual Vec2f unproject(const Vec2f& ) const = 0;
+  virtual Vec2f project(const Vec2f &) const = 0;
+  virtual Vec2f unproject(const Vec2f &) const = 0;
 };
 }
-#endif //SCREENFUNCTION_H
-
+#endif // SCREENFUNCTION_H

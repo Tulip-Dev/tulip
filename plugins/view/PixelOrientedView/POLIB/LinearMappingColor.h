@@ -26,8 +26,9 @@
 namespace pocore {
 class LinearMappingColor : public ColorFunction {
 public:
-  LinearMappingColor(const double& min, const double& max);
-  RGBA getColor(const double& value, const unsigned int) const;
+  LinearMappingColor(const double &min, const double &max);
+  RGBA getColor(const double &value, const unsigned int) const;
+
 private:
   double _min;
   double _max;
@@ -35,5 +36,4 @@ private:
   RGBA endColor;
 };
 }
-#endif //LINEARMAPPINGCOLOR_H
-
+#endif // LINEARMAPPINGCOLOR_H

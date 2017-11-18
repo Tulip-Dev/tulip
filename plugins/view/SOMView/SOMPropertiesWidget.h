@@ -45,17 +45,14 @@ class ColorScale;
 class Graph;
 class ColorScalePreview;
 
-class SOMPropertiesWidget: public QWidget, public tlp::Observable {
+class SOMPropertiesWidget : public QWidget, public tlp::Observable {
   Q_OBJECT
 
-  Ui::SOMPropertiesWidget* _ui;
+  Ui::SOMPropertiesWidget *_ui;
 
 public:
-
-  enum SizeMappingType {
-    NoSizeMapping, RealNodeSizeMapping, DistanceMapping
-  };
-  SOMPropertiesWidget(SOMView* view, QWidget *parent = NULL);
+  enum SizeMappingType { NoSizeMapping, RealNodeSizeMapping, DistanceMapping };
+  SOMPropertiesWidget(SOMView *view, QWidget *parent = NULL);
   ~SOMPropertiesWidget();
 
   unsigned int getGridWidth() const;
@@ -69,11 +66,11 @@ public:
   bool getAutoMapping() const;
   bool getLinkColor() const;
 
-  ColorScale* getDefaultColorScale() const {
+  ColorScale *getDefaultColorScale() const {
     return defaultScale;
   }
 
-  ColorScale* getPropertyColorScale(const std::string& propertyName);
+  ColorScale *getPropertyColorScale(const std::string &propertyName);
   void clearpropertiesConfigurationWidget();
   void addfilter(Graph *g, std::vector<std::string> &propertyFilterType);
   void graphChanged(Graph *graph);
@@ -83,7 +80,8 @@ public:
   SizeMappingType getSizeMapping() const;
   QList<QWidget *> configurationWidgets() const;
 
-  void update(std::set<tlp::Observable *>::iterator begin, std::set<tlp::Observable *>::iterator end);
+  void update(std::set<tlp::Observable *>::iterator begin,
+              std::set<tlp::Observable *>::iterator end);
 
   void observableDestroyed(tlp::Observable *);
   /**
@@ -106,17 +104,17 @@ public:
    * @brief Restore saved properties from data set.
    * @param data The previously saved dataset.
    */
-  void setData(const DataSet& data);
+  void setData(const DataSet &data);
 
-  QButtonGroup* colorScalingButtonGroup;
-  QRadioButton* singleColorScale;
+  QButtonGroup *colorScalingButtonGroup;
+  QRadioButton *singleColorScale;
   ColorScalePreview *singleColorScaleGradientPreview;
-  QRadioButton* multipleColorScale;
-  QPushButton* editGradients;
+  QRadioButton *multipleColorScale;
+  QPushButton *editGradients;
 
-  QButtonGroup* sizeMappingButtonGroup;
-  QRadioButton* noNodeSizeMappingRadioButton;
-  QRadioButton* realNodeSizeMappingRadioButton;
+  QButtonGroup *sizeMappingButtonGroup;
+  QRadioButton *noNodeSizeMappingRadioButton;
+  QRadioButton *realNodeSizeMappingRadioButton;
 
   bool multiplePropertiesRepresentation;
 

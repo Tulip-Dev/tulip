@@ -40,7 +40,8 @@ using namespace std;
 
 namespace tlp {
 
-QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis) : QDialog(), axis(axis) {
+QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis)
+    : QDialog(), axis(axis) {
   setWindowTitle("Quantitative Axis Configuration");
 
   QVBoxLayout *dialogLayout = new QVBoxLayout();
@@ -69,8 +70,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
     intAxisMinValue->setMinimum(INT_MIN);
     intAxisMinValue->setValue(int(axis->getAxisMinValue()));
     axisMinLayout->addWidget(intAxisMinValue);
-  }
-  else {
+  } else {
     doubleAxisMinValue = new QDoubleSpinBox();
     doubleAxisMinValue->setMaximum(axis->getAssociatedPropertyMinValue());
     doubleAxisMinValue->setMinimum(-DBL_MAX);
@@ -86,8 +86,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
     intAxisMaxValue->setMaximum(INT_MAX);
     intAxisMaxValue->setValue(int(axis->getAxisMaxValue()));
     axisMaxLayout->addWidget(intAxisMaxValue);
-  }
-  else {
+  } else {
     doubleAxisMaxValue = new QDoubleSpinBox();
     doubleAxisMaxValue->setMinimum(axis->getAssociatedPropertyMaxValue());
     doubleAxisMaxValue->setMaximum(DBL_MAX);
@@ -100,8 +99,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
   if (axis->hasAscendingOrder()) {
     axisOrder->setCurrentIndex(0);
-  }
-  else {
+  } else {
     axisOrder->setCurrentIndex(1);
   }
 
@@ -119,28 +117,27 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
   dialogLayout->addLayout(okButtonLayout);
 
   setLayout(dialogLayout);
-  connect(okButton,SIGNAL(clicked()),this,SLOT(close()));
+  connect(okButton, SIGNAL(clicked()), this, SLOT(close()));
 
   resize(300, 100);
-
 }
 
-void QuantitativeAxisConfigDialog::closeEvent (QCloseEvent*) {
+void QuantitativeAxisConfigDialog::closeEvent(QCloseEvent *) {
   axis->setNbAxisGrad(nbGrads->value());
   axis->setAscendingOrder(axisOrder->currentText() == "ascending");
   axis->setLog10Scale(log10Scale->isChecked());
 
   if (axis->getAxisDataTypeName() == "int") {
     axis->setAxisMinMaxValues(intAxisMinValue->value(), intAxisMaxValue->value());
-  }
-  else {
+  } else {
     axis->setAxisMinMaxValues(doubleAxisMinValue->value(), doubleAxisMaxValue->value());
   }
 
   axis->redraw();
 }
 
-NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QDialog(), axis(axis) {
+NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis)
+    : QDialog(), axis(axis) {
 
   setWindowTitle("Nominal Axis Configuration");
 
@@ -151,10 +148,10 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 
   okButton = new QPushButton("OK");
   axisLabelsOrder = new ItemsListWidget(this);
-  QPushButton* up = new QPushButton(QIcon(":/tulip/gui/icons/16/go-up.png"),"");
-  QPushButton* lexOrder = new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +  QString("     order"));
-  QPushButton *down = new QPushButton(QIcon(":/tulip/gui/icons/16/go-down.png"),"");
-
+  QPushButton *up = new QPushButton(QIcon(":/tulip/gui/icons/16/go-up.png"), "");
+  QPushButton *lexOrder = new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +
+                                          QString("     order"));
+  QPushButton *down = new QPushButton(QIcon(":/tulip/gui/icons/16/go-down.png"), "");
 
   buttonsUpDownLayout->addWidget(up);
   buttonsUpDownLayout->addWidget(lexOrder);
@@ -173,19 +170,19 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
   vector<string> labelsOrder = axis->getLabelsOrder();
   vector<string>::reverse_iterator it;
 
-  for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
+  for (it = labelsOrder.rbegin(); it != labelsOrder.rend(); ++it) {
     axisLabelsOrder->addItem(tlpStringToQString(*it));
   }
 
   setLayout(dialogLayout);
 
-  connect(okButton,SIGNAL(clicked()),this,SLOT(close()));
-  connect(up,SIGNAL(clicked()),this,SLOT(pressButtonUp()));
-  connect(down,SIGNAL(clicked()),this,SLOT(pressButtonDown()));
-  connect(lexOrder,SIGNAL(clicked()),this,SLOT(pressButtonLexOrder()));
+  connect(okButton, SIGNAL(clicked()), this, SLOT(close()));
+  connect(up, SIGNAL(clicked()), this, SLOT(pressButtonUp()));
+  connect(down, SIGNAL(clicked()), this, SLOT(pressButtonDown()));
+  connect(lexOrder, SIGNAL(clicked()), this, SLOT(pressButtonLexOrder()));
 }
 
-void NominalAxisConfigDialog::closeEvent (QCloseEvent *) {
+void NominalAxisConfigDialog::closeEvent(QCloseEvent *) {
   vector<string> labelsOrder;
 
   for (int i = 0; i < axisLabelsOrder->count(); ++i) {
@@ -238,18 +235,15 @@ void NominalAxisConfigDialog::pressButtonLexOrder() {
   if (++clickCount % 2 == 1) {
     vector<string>::iterator it;
 
-    for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+    for (it = labelsOrder.begin(); it != labelsOrder.end(); ++it) {
       axisLabelsOrder->addItem(tlpStringToQString(*it));
     }
-  }
-  else {
+  } else {
     vector<string>::reverse_iterator it;
 
-    for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
+    for (it = labelsOrder.rbegin(); it != labelsOrder.rend(); ++it) {
       axisLabelsOrder->addItem(tlpStringToQString(*it));
     }
   }
-
 }
-
 }

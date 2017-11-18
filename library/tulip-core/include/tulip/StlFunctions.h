@@ -32,13 +32,13 @@ struct edge;
  */
 class LessByMetric {
 public:
-  LessByMetric(DoubleProperty *metric):metric(metric) {}
-  bool operator() (node n1,node n2);
-  bool operator() (edge e1,edge e2);
+  LessByMetric(DoubleProperty *metric) : metric(metric) {}
+  bool operator()(node n1, node n2);
+  bool operator()(edge e1, edge e2);
+
 private:
   DoubleProperty *metric;
 };
-
 }
 #endif
 

@@ -21,14 +21,13 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/GraphProperty.h>
 
-
 PLUGIN(TLPBExport)
 
 using namespace tlp;
 using namespace std;
 
 //================================================================================
-void TLPBExport::getSubGraphs(Graph* g, vector<Graph*>& vsg) {
+void TLPBExport::getSubGraphs(Graph *g, vector<Graph *> &vsg) {
   // get subgraphs in a vector
   Graph *sg;
   forEach(sg, g->getSubGraphs()) {
@@ -38,33 +37,30 @@ void TLPBExport::getSubGraphs(Graph* g, vector<Graph*>& vsg) {
 }
 //================================================================================
 void TLPBExport::writeAttributes(ostream &os, Graph *g) {
-  const DataSet& attributes = g->getAttributes();
+  const DataSet &attributes = g->getAttributes();
 
   if (!attributes.empty()) {
     // If nodes and edges are stored as graph attributes
     // we need to update their ids before serializing them
     // as nodes and edges have been reindexed
-    pair<string, DataType*> attribute;
+    pair<string, DataType *> attribute;
     forEach(attribute, attributes.getValues()) {
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
-        node *n = static_cast<node*>(attribute.second->value);
+        node *n = static_cast<node *>(attribute.second->value);
         n->id = getNode(*n).id;
-      }
-      else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
-        edge *e = static_cast<edge*>(attribute.second->value);
+      } else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
+        edge *e = static_cast<edge *>(attribute.second->value);
         e->id = getEdge(*e).id;
-      }
-      else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
-        vector<node> *vn = static_cast<vector<node>*>(attribute.second->value);
+      } else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
+        vector<node> *vn = static_cast<vector<node> *>(attribute.second->value);
 
-        for (size_t i = 0 ; i < vn->size() ; ++i) {
+        for (size_t i = 0; i < vn->size(); ++i) {
           (*vn)[i].id = getNode((*vn)[i]).id;
         }
-      }
-      else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
-        vector<edge> *ve = static_cast<vector<edge>*>(attribute.second->value);
+      } else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
+        vector<edge> *ve = static_cast<vector<edge> *>(attribute.second->value);
 
-        for (size_t i = 0 ; i < ve->size() ; ++i) {
+        for (size_t i = 0; i < ve->size(); ++i) {
           (*ve)[i].id = getEdge((*ve)[i]).id;
         }
       }
@@ -95,7 +91,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   {
     pluginProgress->setComment("writing edges...");
     // use a vector as buffer
-    std::vector< std::pair<node, node> > vEdges(MAX_EDGES_TO_WRITE);
+    std::vector<std::pair<node, node> > vEdges(MAX_EDGES_TO_WRITE);
     edge e;
     unsigned int edgesToWrite = 0, nbWrittenEdges = 0;
     forEach(e, graph->getEdges()) {
@@ -110,9 +106,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
                  MAX_EDGES_TO_WRITE * sizeof(vEdges[0]));
         nbWrittenEdges += edgesToWrite;
 
-        if (pluginProgress->progress(nbWrittenEdges, header.numNodes)
-            != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(nbWrittenEdges, header.numNodes) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
 
         edgesToWrite = 0;
       }
@@ -125,7 +120,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     }
   }
   // write subgraphs
-  std::vector<Graph*> vSubGraphs;
+  std::vector<Graph *> vSubGraphs;
   // get subgraphs in a vector
   getSubGraphs(graph, vSubGraphs);
   unsigned int numSubGraphs = vSubGraphs.size();
@@ -134,8 +129,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     // write nb subgraphs
     os.write(reinterpret_cast<const char *>(&numSubGraphs), sizeof(numSubGraphs));
 
-    for(unsigned int i = 0; i < numSubGraphs; ++i) {
-      Graph* sg = vSubGraphs[i];
+    for (unsigned int i = 0; i < numSubGraphs; ++i) {
+      Graph *sg = vSubGraphs[i];
       unsigned int parentId = sg->getSuperGraph()->getId();
 
       if (parentId == graph->getId())
@@ -147,7 +142,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // loop to write sg nodes ranges
       {
         // first sort sg nodes
-        const std::vector<node>& nodes = sg->nodes();
+        const std::vector<node> &nodes = sg->nodes();
         unsigned int nbNodes = nodes.size();
         std::vector<node> sgNodes(nbNodes);
 
@@ -167,7 +162,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         bool pendingWrite = false;
         node beginNode, lastNode;
 
-        for(unsigned int j = 0; j < nbNodes; ++j) {
+        for (unsigned int j = 0; j < nbNodes; ++j) {
           node current = sgNodes[j];
           pendingWrite = true;
 
@@ -202,7 +197,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write already buffered ranges
         int numRangesV = numRanges / MAX_RANGES_TO_WRITE;
 
-        for (int j = 0 ; j < numRangesV ; ++j) {
+        for (int j = 0; j < numRangesV; ++j) {
           os.write(reinterpret_cast<const char *>(vRangesVec[j].data()),
                    MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
         }
@@ -210,12 +205,11 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write last buffered ranges
         os.write(reinterpret_cast<const char *>(vRanges.data()),
                  rangesToWrite * sizeof(vRanges[0]));
-
       }
       // loop to write sg edges ranges
       {
         // first sort sg edges
-        const std::vector<edge>& edges = sg->edges();
+        const std::vector<edge> &edges = sg->edges();
         unsigned int nbEdges = edges.size();
         std::vector<edge> sgEdges(nbEdges);
 
@@ -235,7 +229,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         bool pendingWrite = false;
         edge beginEdge, lastEdge;
 
-        for(unsigned int j = 0; j < nbEdges; ++j) {
+        for (unsigned int j = 0; j < nbEdges; ++j) {
           edge current = sgEdges[j];
           pendingWrite = true;
 
@@ -270,7 +264,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // write already buffered ranges
         int numRangesV = numRanges / MAX_RANGES_TO_WRITE;
 
-        for (int j = 0 ; j < numRangesV ; ++j) {
+        for (int j = 0; j < numRangesV; ++j) {
           os.write(reinterpret_cast<const char *>(vRangesVec[j].data()),
                    MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
         }
@@ -289,8 +283,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     pluginProgress->setComment("writing properties...");
     unsigned int numGraphProperties = 0;
     unsigned int numProperties = 0;
-    std::vector<PropertyInterface*> props;
-    PropertyInterface* prop;
+    std::vector<PropertyInterface *> props;
+    PropertyInterface *prop;
     // get local properties in a vector
     forEach(prop, graph->getObjectProperties()) {
       props.push_back(prop);
@@ -300,7 +294,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
     // get subgraphs local properties too
     for (unsigned int i = 0; i < numSubGraphs; ++i) {
-      Graph* sg = vSubGraphs[i];
+      Graph *sg = vSubGraphs[i];
       forEach(prop, sg->getLocalObjectProperties()) {
         props.push_back(prop);
         ++numProperties;
@@ -326,8 +320,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
       os.write(reinterpret_cast<const char *>(&propGraphId), sizeof(propGraphId));
       // special treament for pathnames view properties
-      bool pnViewProp = (nameOrType == string("viewFont") ||
-                         nameOrType == string("viewTexture"));
+      bool pnViewProp = (nameOrType == string("viewFont") || nameOrType == string("viewTexture"));
       // write type
       nameOrType = prop->getTypename();
       size = nameOrType.size();
@@ -350,8 +343,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           defVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
         StringType::writeb(os, defVal);
-      }
-      else {
+      } else {
         // write node default value
         prop->writeNodeDefaultValue(os);
         // write edge default value
@@ -372,19 +364,20 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // and also in STL implementation of Microsoft Visual C++
         // so fallback writing directly to the output stream in these cases
         bool canUsePubSetBuf = true;
-#if defined(_LIBCPP_VERSION) || defined (_MSC_VER)
+#if defined(_LIBCPP_VERSION) || defined(_MSC_VER)
         canUsePubSetBuf = false;
         std::ostream &s = os;
 #else
         std::ostream &s = vs;
 #endif
-        char* vBuf = NULL;
+        char *vBuf = NULL;
         unsigned int valueSize = prop->nodeValueSize();
 
         if (valueSize && canUsePubSetBuf) {
           // allocate a special buffer for values
           // this will ease the write of a bunch of values
-          vBuf = static_cast<char *>(malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize)));
+          vBuf =
+              static_cast<char *>(malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize)));
           vs.rdbuf()->pubsetbuf(vBuf, MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
         }
 
@@ -403,8 +396,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
             StringType::writeb(s, sVal);
-          }
-          else {
+          } else {
             if (propGraphId && // if it is not the real root graph
                 prop->getTypename() == GraphProperty::propertyTypename) {
               string tmp = prop->getNodeStringValue(n);
@@ -416,8 +408,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
                 unsigned int id = 0;
                 UnsignedIntegerType::writeb(s, id);
               }
-            }
-            else
+            } else
               prop->writeNodeValue(s, n);
           }
 
@@ -444,8 +435,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
-          }
-          else {
+          } else {
             std::string sbuf = vs.str();
             size = uint(vs.tellp());
             // write buffer
@@ -477,17 +467,17 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 #else
         ostream &s = vs;
 #endif
-        char* vBuf = NULL;
+        char *vBuf = NULL;
         unsigned int valueSize = prop->edgeValueSize();
         bool isGraphProperty = false;
 
         if (valueSize && canUsePubSetBuf) {
           // allocate a special buffer for values
           // this will ease the write of a bunch of values
-          vBuf = static_cast<char *>(malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize)));
+          vBuf =
+              static_cast<char *>(malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize)));
           vs.rdbuf()->pubsetbuf(vBuf, MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
-        }
-        else {
+        } else {
           if (prop->getTypename() == GraphProperty::propertyTypename)
             isGraphProperty = true;
         }
@@ -501,7 +491,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
           if (isGraphProperty) {
             // re-index embedded edges
-            const set<edge>& edges = static_cast<GraphProperty*>(prop)->getEdgeValue(e);
+            const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(e);
             set<edge> rEdges;
             set<edge>::const_iterator its;
 
@@ -511,8 +501,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
             // finally save set
             EdgeSetType::writeb(s, rEdges);
-          }
-          else if (pnViewProp && !TulipBitmapDir.empty()) {   // viewFont || viewTexture
+          } else if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
             string sVal = prop->getEdgeStringValue(e);
             size_t pos = sVal.find(TulipBitmapDir);
 
@@ -520,8 +509,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
             StringType::writeb(s, sVal);
-          }
-          else
+          } else
             prop->writeEdgeValue(s, e);
 
           ++nbValues;
@@ -547,8 +535,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
-          }
-          else {
+          } else {
             std::string sbuf = vs.str();
             size = uint(vs.tellp());
             // write buffer

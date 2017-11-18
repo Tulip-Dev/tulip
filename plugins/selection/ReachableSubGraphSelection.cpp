@@ -27,31 +27,29 @@ using namespace tlp;
 PLUGIN(ReachableSubGraphSelection)
 
 static const char *paramHelp[] = {
-  // edge direction
-  "This parameter defines the navigation direction.",
+    // edge direction
+    "This parameter defines the navigation direction.",
 
-  // starting nodes
-  "This parameter defines the starting set of nodes used to walk in the graph.",
+    // starting nodes
+    "This parameter defines the starting set of nodes used to walk in the graph.",
 
-  // distance
-  "This parameter defines the maximal distance of reachable nodes."
-};
+    // distance
+    "This parameter defines the maximal distance of reachable nodes."};
 
 static const char *directionValuesDescription =
-  "output edges : <i>follow ouput edges (directed)</i><br>"
-  "input edges : <i>follow input edges (reverse-directed)</i><br>"
-  "all edges : <i>all edges (undirected)</i>";
+    "output edges : <i>follow ouput edges (directed)</i><br>"
+    "input edges : <i>follow input edges (reverse-directed)</i><br>"
+    "all edges : <i>all edges (undirected)</i>";
 
-static const char *edgesDirectionLabels[] = {
-  "output edges",
-  "input edges",
-  "all edges"
-};
+static const char *edgesDirectionLabels[] = {"output edges", "input edges", "all edges"};
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context):BooleanAlgorithm(context) {
-  addInParameter<StringCollection> ("edge direction", paramHelp[0], "output edges;input edges;all edges", true, directionValuesDescription);
-  addInParameter<BooleanProperty> ("starting nodes", paramHelp[1], "viewSelection");
-  addInParameter<int> ("distance", paramHelp[2], "5");
+ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context)
+    : BooleanAlgorithm(context) {
+  addInParameter<StringCollection>("edge direction", paramHelp[0],
+                                   "output edges;input edges;all edges", true,
+                                   directionValuesDescription);
+  addInParameter<BooleanProperty>("starting nodes", paramHelp[1], "viewSelection");
+  addInParameter<int>("distance", paramHelp[2], "5");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
@@ -60,37 +58,35 @@ ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 bool ReachableSubGraphSelection::run() {
   unsigned int maxDistance = 5;
   StringCollection edgeDirectionCollecion;
-  EDGE_TYPE edgeDirection=DIRECTED;
-  BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
+  EDGE_TYPE edgeDirection = DIRECTED;
+  BooleanProperty *startNodes = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if ( dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("distance", maxDistance);
 
-    //Get the edge orientation
+    // Get the edge orientation
     bool found(false);
 
-    if(dataSet->get("edge direction",edgeDirectionCollecion))
-      found=true;
+    if (dataSet->get("edge direction", edgeDirectionCollecion))
+      found = true;
     else
-      found = dataSet->get("edges direction",edgeDirectionCollecion); //former buggy parameter name
+      found = dataSet->get("edges direction", edgeDirectionCollecion); // former buggy parameter
+                                                                       // name
 
-    if(found) {
-      if(edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
+    if (found) {
+      if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
         edgeDirection = DIRECTED;
-      }
-      else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[1]) {
+      } else if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[1]) {
         edgeDirection = INV_DIRECTED;
-      }
-      else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[2]) {
+      } else if (edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[2]) {
         edgeDirection = UNDIRECTED;
       }
-    }
-    else {
-      //If the new parameter is not defined search for the old one.
-      int direction=0;
+    } else {
+      // If the new parameter is not defined search for the old one.
+      int direction = 0;
 
-      if(dataSet->get("direction",direction)) {
-        switch(direction) {
+      if (dataSet->get("direction", direction)) {
+        switch (direction) {
         case 0:
           edgeDirection = DIRECTED;
           break;
@@ -105,23 +101,21 @@ bool ReachableSubGraphSelection::run() {
       }
     }
 
-    //keep startingnodes for compatibility
-    if(!dataSet->get("starting nodes", startNodes))
+    // keep startingnodes for compatibility
+    if (!dataSet->get("starting nodes", startNodes))
       dataSet->get("startingnodes", startNodes);
-
   }
 
-  unsigned num_nodes=0, num_edges=0;
+  unsigned num_nodes = 0, num_edges = 0;
 
   if (startNodes) {
     // as the input selection property and the result property can be the same one,
     // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
     // of the result property are reseted to false below
-    //delete done by the forEach macro
-    Iterator<node>* itN =
-      (result == startNodes) ?
-      new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true)) :
-      startNodes->getNodesEqualTo(true);
+    // delete done by the forEach macro
+    Iterator<node> *itN = (result == startNodes)
+                              ? new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true))
+                              : startNodes->getNodesEqualTo(true);
 
     TLP_HASH_MAP<node, bool> reachables;
 
@@ -132,8 +126,7 @@ bool ReachableSubGraphSelection::run() {
     node current;
     forEach(current, itN) {
       reachables[current] = true;
-      markReachableNodes(graph, current, reachables, maxDistance,
-                         edgeDirection);
+      markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }
 
     TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
@@ -149,30 +142,24 @@ bool ReachableSubGraphSelection::run() {
     // select corresponding edges
     edge e;
     forEach(e, graph->getEdges()) {
-      const std::pair<node, node>& ends = graph->ends(e);
+      const std::pair<node, node> &ends = graph->ends(e);
 
-      if ((reachables.find(ends.first) != ite) &&
-          (reachables.find(ends.second) != ite)) {
+      if ((reachables.find(ends.first) != ite) && (reachables.find(ends.second) != ite)) {
         result->setEdgeValue(e, true);
         ++num_edges;
       }
     }
 
-  }
-  else {
+  } else {
     result->setAllEdgeValue(false);
     result->setAllNodeValue(false);
   }
 
-  //output some useful information
-  if (dataSet!=NULL) {
+  // output some useful information
+  if (dataSet != NULL) {
     dataSet->set("#Edges added to the selection", num_edges);
     dataSet->set("#Nodes added to the selection", num_nodes);
   }
 
   return true;
 }
-
-
-
-

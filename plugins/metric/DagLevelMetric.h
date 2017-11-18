@@ -27,13 +27,14 @@
  *  \note This algorithm works on general DAG, the complexity is in O(|E|+|V|);
  *
  */
-class DagLevelMetric:public tlp::DoubleAlgorithm {
+class DagLevelMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Dag Level","David Auber","10/03/2000","Implements a DAG layer decomposition.","1.0","Hierarchical")
-  DagLevelMetric(const tlp::PluginContext* context);
+  PLUGININFORMATION("Dag Level", "David Auber", "10/03/2000",
+                    "Implements a DAG layer decomposition.", "1.0", "Hierarchical")
+  DagLevelMetric(const tlp::PluginContext *context);
   ~DagLevelMetric();
   bool run();
-  bool check(std::string& erreurMsg);
+  bool check(std::string &erreurMsg);
 };
 
 #endif

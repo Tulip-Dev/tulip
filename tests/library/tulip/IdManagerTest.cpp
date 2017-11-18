@@ -23,15 +23,15 @@
 using namespace std;
 using namespace tlp;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( IdManagerTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(IdManagerTest);
 
 //==========================================================
 void IdManagerTest::testFragmentation() {
-  for (unsigned int i = 0; i <1000; ++i) {
+  for (unsigned int i = 0; i < 1000; ++i) {
     CPPUNIT_ASSERT_EQUAL(i, idManager->get());
   }
 
-  for (unsigned int i = 1; i <100; ++i) {
+  for (unsigned int i = 1; i < 100; ++i) {
     idManager->free(i);
   }
 
@@ -39,7 +39,7 @@ void IdManagerTest::testFragmentation() {
   idManager->free(0);
   CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), idManager->state.freeIds.size());
 
-  for (unsigned int i = 900; i <999; ++i) {
+  for (unsigned int i = 900; i < 999; ++i) {
     idManager->free(i);
   }
 
@@ -49,19 +49,19 @@ void IdManagerTest::testFragmentation() {
 }
 //==========================================================
 void IdManagerTest::testGetFree() {
-  for (unsigned int i = 0; i <1000; ++i) {
+  for (unsigned int i = 0; i < 1000; ++i) {
     CPPUNIT_ASSERT_EQUAL(i, idManager->get());
   }
 
-  for (unsigned int i = 0; i <500; ++i) {
-    idManager->free(i*2);
+  for (unsigned int i = 0; i < 500; ++i) {
+    idManager->free(i * 2);
   }
 
   for (unsigned int i = 0; i < 500; ++i) {
 #ifdef TLP_NO_IDS_REUSE
     CPPUNIT_ASSERT_EQUAL(++maxId, idManager->get());
 #else
-    CPPUNIT_ASSERT_EQUAL(i*2, idManager->get());
+    CPPUNIT_ASSERT_EQUAL(i * 2, idManager->get());
 #endif
   }
 
@@ -79,12 +79,12 @@ void IdManagerTest::testGetFree() {
 }
 //==========================================================
 void IdManagerTest::testIsFree() {
-  for (unsigned int i = 0; i <1000; ++i) {
+  for (unsigned int i = 0; i < 1000; ++i) {
     idManager->get();
   }
 
-  for (unsigned int i = 0; i <500; ++i) {
-    idManager->free(i*2);
+  for (unsigned int i = 0; i < 500; ++i) {
+    idManager->free(i * 2);
   }
 
   for (unsigned int i = 0; i < 500; ++i) {
@@ -96,28 +96,28 @@ void IdManagerTest::testIsFree() {
 }
 //==========================================================
 void IdManagerTest::testIterate() {
-  for (unsigned int i = 0; i <1000; ++i) {
+  for (unsigned int i = 0; i < 1000; ++i) {
     idManager->get();
   }
 
-  Iterator<unsigned int>* it = idManager->getIds<unsigned int>();
+  Iterator<unsigned int> *it = idManager->getIds<unsigned int>();
   unsigned int id = 0;
 
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     CPPUNIT_ASSERT_EQUAL(id, it->next());
     ++id;
   }
 
   delete it;
 
-  for (unsigned int i = 0; i <500; ++i) {
-    idManager->free(i*2);
+  for (unsigned int i = 0; i < 500; ++i) {
+    idManager->free(i * 2);
   }
 
   it = idManager->getIds<unsigned int>();
   id = 0;
 
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     CPPUNIT_ASSERT_EQUAL(2u * id + 1u, it->next());
     ++id;
   }

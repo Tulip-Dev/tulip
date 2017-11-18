@@ -26,39 +26,39 @@
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // orientation
-  "Choose a desired orientation.",
+    // orientation
+    "Choose a desired orientation.",
 
-  // orthogonal
-  "If true then use orthogonal edges.",
+    // orthogonal
+    "If true then use orthogonal edges.",
 
-  // layer spacing
-  "This parameter enables to set up the minimum space between two layers in the drawing.",
+    // layer spacing
+    "This parameter enables to set up the minimum space between two layers in the drawing.",
 
-  // node spacing
-  "This parameter enables to set up the minimum space between two nodes in the same layer.",
+    // node spacing
+    "This parameter enables to set up the minimum space between two nodes in the same layer.",
 
-  // node size
-  "This parameter defines the property used for node sizes."
-};
+    // node size
+    "This parameter defines the property used for node sizes."};
 
 //====================================================================
-void addOrientationParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addInParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION, true,
+void addOrientationParameters(LayoutAlgorithm *pLayout) {
+  pLayout->addInParameter<StringCollection>(
+      ORIENTATION_ID, paramHelp[0], ORIENTATION, true,
       "up to down <br> down to up <br> right to left <br> left to right");
 }
 
 //====================================================================
-void addOrthogonalParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addInParameter<bool>(ORTHOGONAL,paramHelp[1],"false");
+void addOrthogonalParameters(LayoutAlgorithm *pLayout) {
+  pLayout->addInParameter<bool>(ORTHOGONAL, paramHelp[1], "false");
 }
 
 //====================================================================
-void addSpacingParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addInParameter<float>("layer spacing", paramHelp[2], "64." );
-  pLayout->addInParameter<float>("node spacing", paramHelp[3], "18." );
+void addSpacingParameters(LayoutAlgorithm *pLayout) {
+  pLayout->addInParameter<float>("layer spacing", paramHelp[2], "64.");
+  pLayout->addInParameter<float>("node spacing", paramHelp[3], "18.");
 }
-void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpacing) {
+void getSpacingParameters(DataSet *dataSet, float &nodeSpacing, float &layerSpacing) {
   layerSpacing = 64.;
   nodeSpacing = 18.;
 
@@ -68,14 +68,14 @@ void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpac
   }
 }
 //====================================================================
-void addNodeSizePropertyParameter(LayoutAlgorithm* pLayout, bool inout) {
+void addNodeSizePropertyParameter(LayoutAlgorithm *pLayout, bool inout) {
   if (inout)
     pLayout->addInOutParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
   else
     pLayout->addInParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
 }
 
-bool getNodeSizePropertyParameter(DataSet* dataSet, SizeProperty* &sizes) {
+bool getNodeSizePropertyParameter(DataSet *dataSet, SizeProperty *&sizes) {
   return (dataSet != NULL) && dataSet->get("node size", sizes) && sizes;
 }
 
@@ -89,7 +89,7 @@ DataSet setOrientationParameters(int pOrientation) {
 }
 
 //====================================================================
-orientationType getMask(DataSet* dataSet) {
+orientationType getMask(DataSet *dataSet) {
   StringCollection orientation(ORIENTATION);
   orientation.setCurrent(0);
   int current = 0;
@@ -110,26 +110,25 @@ orientationType getMask(DataSet* dataSet) {
   }
 
   switch (current) {
-  case 0  :
+  case 0:
     return ORI_DEFAULT;
 
-  case 1  :
+  case 1:
     return ORI_INVERSION_VERTICAL;
 
-  case 2  :
+  case 2:
     return ORI_ROTATION_XY;
 
-  case 3  :
+  case 3:
     return orientationType(ORI_ROTATION_XY | ORI_INVERSION_HORIZONTAL);
 
-  default :
+  default:
     return ORI_DEFAULT;
   }
 }
 
-
 //====================================================================
-bool hasOrthogonalEdge(DataSet* dataSet) {
+bool hasOrthogonalEdge(DataSet *dataSet) {
   bool orthogonalEdge = false;
 
   if (dataSet != NULL) {

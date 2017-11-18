@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef GLPOLYGON_H
 #define GLPOLYGON_H
 
@@ -37,31 +36,25 @@ namespace tlp {
 class TLP_GL_SCOPE GlPolygon : public GlAbstractPolygon {
 public:
   /**
-   * @brief Constructor where specify if the polygon is filled, is outlines the texture name and the outline size
+   * @brief Constructor where specify if the polygon is filled, is outlines the texture name and the
+   * outline size
    */
-  GlPolygon(const bool filled = true,
-            const bool outlined= true,
-            const std::string &textureName="",
-            const float outlineSize = 1);
+  GlPolygon(const bool filled = true, const bool outlined = true,
+            const std::string &textureName = "", const float outlineSize = 1);
   /**
-   * @brief Constructor with a vector of point, a vector of fill color, a vector of outline color and if the polygon is filled, is outlined and the outline size
+   * @brief Constructor with a vector of point, a vector of fill color, a vector of outline color
+   * and if the polygon is filled, is outlined and the outline size
    */
-  GlPolygon(const std::vector<Coord> &points,
-            const std::vector<Color> &fillColors,
-            const std::vector<Color> &outlineColors,
-            const bool filled,
-            const bool outlined,
-            const std::string &textureName="",
-            const float outlineSize = 1);
+  GlPolygon(const std::vector<Coord> &points, const std::vector<Color> &fillColors,
+            const std::vector<Color> &outlineColors, const bool filled, const bool outlined,
+            const std::string &textureName = "", const float outlineSize = 1);
   /**
-   * @brief Constructor with a number of point, a number of fill color, a number of outline color and if the polygon is filled, outlined and the ouline size
+   * @brief Constructor with a number of point, a number of fill color, a number of outline color
+   * and if the polygon is filled, outlined and the ouline size
    */
-  GlPolygon(const unsigned int nbPoints,
-            const unsigned int nbFillColors,
-            const unsigned int nbOutlineColors,
-            const bool filled = true,
-            const bool outlined = true,
-            const std::string &textureName="",
+  GlPolygon(const unsigned int nbPoints, const unsigned int nbFillColors,
+            const unsigned int nbOutlineColors, const bool filled = true,
+            const bool outlined = true, const std::string &textureName = "",
             const float outlineSize = 1);
   virtual ~GlPolygon();
 
@@ -77,12 +70,11 @@ public:
   /**
    * @brief return the ith point
    */
-  virtual const Coord& point(const unsigned int i) const;
+  virtual const Coord &point(const unsigned int i) const;
   /**
    * @brief return the ith point
    */
-  virtual Coord& point(const unsigned int i);
+  virtual Coord &point(const unsigned int i);
 };
-
 }
 #endif

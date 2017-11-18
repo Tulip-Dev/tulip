@@ -27,12 +27,12 @@
 #include "ScatterPlot2DViewNavigator.h"
 #include "ScatterPlot2D.h"
 
-
 using namespace std;
 
 namespace tlp {
 
-ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator() : scatterPlot2dView(NULL), selectedScatterPlotOverview(NULL), glWidget(NULL) {}
+ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator()
+    : scatterPlot2dView(NULL), selectedScatterPlotOverview(NULL), glWidget(NULL) {}
 
 ScatterPlot2DViewNavigator::~ScatterPlot2DViewNavigator() {}
 
@@ -46,7 +46,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     glWidget = static_cast<GlMainWidget *>(widget);
   }
 
-  if(glWidget!=NULL) {
+  if (glWidget != NULL) {
     if (!glWidget->hasMouseTracking()) {
       glWidget->setMouseTracking(true);
     }
@@ -60,24 +60,25 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords(x, y, 0.0f);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(
+          glWidget->screenToViewport(screenCoords)));
       selectedScatterPlotOverview = getOverviewUnderPointer(sceneCoords);
       return true;
-    }
-    else if (e->type() == QEvent::MouseButtonDblClick) {
-      if (selectedScatterPlotOverview != NULL && !selectedScatterPlotOverview->overviewGenerated()) {
+    } else if (e->type() == QEvent::MouseButtonDblClick) {
+      if (selectedScatterPlotOverview != NULL &&
+          !selectedScatterPlotOverview->overviewGenerated()) {
         scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview, glWidget);
         glWidget->draw();
-      }
-      else if (selectedScatterPlotOverview != NULL && scatterPlot2dView->matrixViewSet()) {
-        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedScatterPlotOverview->getBoundingBox());
+      } else if (selectedScatterPlotOverview != NULL && scatterPlot2dView->matrixViewSet()) {
+        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
+            glWidget, selectedScatterPlotOverview->getBoundingBox());
         zoomAndPanAnimator.animateZoomAndPan();
         scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
         selectedScatterPlotOverview = NULL;
-      }
-      else if (!scatterPlot2dView->matrixViewSet()) {
+      } else if (!scatterPlot2dView->matrixViewSet()) {
         scatterPlot2dView->switchFromDetailViewToMatrixView();
-        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, scatterPlot2dView->getMatrixBoundingBox());
+        QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
+                                                       scatterPlot2dView->getMatrixBoundingBox());
         zoomAndPanAnimator.animateZoomAndPan();
       }
 
@@ -90,12 +91,11 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
 ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
   ScatterPlot2D *ret = NULL;
-  vector<ScatterPlot2D *> overviews =
-    scatterPlot2dView->getSelectedScatterPlots();
+  vector<ScatterPlot2D *> overviews = scatterPlot2dView->getSelectedScatterPlots();
   vector<ScatterPlot2D *>::iterator it;
 
-  for (it = overviews.begin() ; it != overviews.end() ; ++it) {
-    if(!(*it))
+  for (it = overviews.begin(); it != overviews.end(); ++it) {
+    if (!(*it))
       continue;
 
     BoundingBox overviewBB = (*it)->getBoundingBox();
@@ -109,5 +109,4 @@ ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &
 
   return ret;
 }
-
 }

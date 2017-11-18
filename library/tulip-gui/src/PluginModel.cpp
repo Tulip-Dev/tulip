@@ -22,33 +22,31 @@
 using namespace tlp;
 using namespace std;
 
-SimplePluginListModel::SimplePluginListModel(const QList<std::string>& plugins,QObject *parent):TulipModel(parent), _list(plugins) {
-}
+SimplePluginListModel::SimplePluginListModel(const QList<std::string> &plugins, QObject *parent)
+    : TulipModel(parent), _list(plugins) {}
 
-SimplePluginListModel::~SimplePluginListModel() {
-}
+SimplePluginListModel::~SimplePluginListModel() {}
 
-string SimplePluginListModel::pluginName(const QModelIndex& idx) const {
+string SimplePluginListModel::pluginName(const QModelIndex &idx) const {
   int index = idx.row();
 
-  if(index > -1 && index < _list.size()) {
+  if (index > -1 && index < _list.size()) {
     return _list.at(index);
-  }
-  else {
+  } else {
     return string();
   }
 }
 
-QList<std::string> SimplePluginListModel::plugins()const {
+QList<std::string> SimplePluginListModel::plugins() const {
   return _list;
 }
 
-int SimplePluginListModel::columnCount ( const QModelIndex& ) const {
+int SimplePluginListModel::columnCount(const QModelIndex &) const {
   return 1;
 }
 
 int SimplePluginListModel::rowCount(const QModelIndex &parent) const {
-  if(parent.isValid())
+  if (parent.isValid())
     return 0;
 
   return _list.size();
@@ -58,22 +56,21 @@ QModelIndex SimplePluginListModel::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 
-QModelIndex SimplePluginListModel::index(int row, int column,const QModelIndex &parent) const {
-  if(parent.isValid())
+QModelIndex SimplePluginListModel::index(int row, int column, const QModelIndex &parent) const {
+  if (parent.isValid())
     return QModelIndex();
 
   return createIndex(row, column);
 }
 
 QVariant SimplePluginListModel::data(const QModelIndex &index, int role) const {
-  if(index.row() < _list.size()) {
+  if (index.row() < _list.size()) {
     std::string name(_list[index.row()]);
 
-    if(role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole) {
       return tlp::tlpStringToQString(name);
-    }
-    else if (role == Qt::DecorationRole) {
-      const Plugin& p = PluginLister::pluginInformation(name);
+    } else if (role == Qt::DecorationRole) {
+      const Plugin &p = PluginLister::pluginInformation(name);
       QPixmap pix(tlp::tlpStringToQString(p.icon()));
       return pix;
     }

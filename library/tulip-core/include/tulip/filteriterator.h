@@ -23,8 +23,6 @@
 
 #include <tulip/memorypool.h>
 
-
-
 namespace tlp {
 /**
   * @class FilterIterator
@@ -44,9 +42,7 @@ namespace tlp {
 template <typename TYPE, typename FILTER>
 class FilterIterator : public Iterator<TYPE> {
 public:
-  FilterIterator(Iterator<TYPE> *it, FILTER filter):
-    _it(it),
-    _filter(filter) {
+  FilterIterator(Iterator<TYPE> *it, FILTER filter) : _it(it), _filter(filter) {
     update();
   }
   ~FilterIterator() {
@@ -77,7 +73,7 @@ private:
 
   bool _hasNext;
   Iterator<TYPE> *_it;
-  TYPE   _curVal;
+  TYPE _curVal;
   FILTER _filter;
   size_t _nbele;
 };
@@ -88,13 +84,11 @@ private:
   * @see FilterIterator
   */
 template <typename TYPE, typename FILTER>
-class MPFilterIterator : public FilterIterator<TYPE, FILTER>, public MemoryPool<MPFilterIterator<TYPE, FILTER> > {
+class MPFilterIterator : public FilterIterator<TYPE, FILTER>,
+                         public MemoryPool<MPFilterIterator<TYPE, FILTER> > {
 public:
-  MPFilterIterator(Iterator<TYPE> *it, FILTER filter):
-    FilterIterator<TYPE, FILTER>(it, filter) {
-  }
+  MPFilterIterator(Iterator<TYPE> *it, FILTER filter) : FilterIterator<TYPE, FILTER>(it, filter) {}
 };
-
 }
 #endif // FILTERITERATOR_H
 ///@endcond

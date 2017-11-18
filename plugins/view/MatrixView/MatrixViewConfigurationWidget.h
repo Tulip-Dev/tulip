@@ -31,19 +31,15 @@ class MatrixViewConfigurationWidget;
 namespace tlp {
 class Graph;
 
-enum GridDisplayMode {
-  SHOW_ALWAYS = 0,
-  SHOW_NEVER = 1,
-  SHOW_ON_ZOOM = 2
-};
+enum GridDisplayMode { SHOW_ALWAYS = 0, SHOW_NEVER = 1, SHOW_ON_ZOOM = 2 };
 
-class MatrixViewConfigurationWidget: public QWidget {
+class MatrixViewConfigurationWidget : public QWidget {
   Q_OBJECT
 
-  Ui::MatrixViewConfigurationWidget* _ui;
+  Ui::MatrixViewConfigurationWidget *_ui;
 
 public:
-  MatrixViewConfigurationWidget(QWidget *parent=0);
+  MatrixViewConfigurationWidget(QWidget *parent = 0);
   void setGraph(tlp::Graph *);
   ~MatrixViewConfigurationWidget();
 

@@ -39,8 +39,7 @@ class TLP_PYTHON_SCOPE APIDataBase {
 
   static APIDataBase _instance;
 
-public :
-
+public:
   static APIDataBase *getInstance() {
     return &_instance;
   }
@@ -60,9 +59,7 @@ public :
   bool typeExists(const QString &type) const;
   QString getFullTypeName(const QString &type) const;
   bool dictEntryExists(const QString &type, const QString &dictEntry) const;
-
 };
-
 }
 
 #endif /* APIDATABASE_H_ */

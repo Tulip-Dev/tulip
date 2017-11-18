@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-#define BUFFER_OFFSET(bytes) (static_cast<GLubyte*>(NULL) + (bytes))
+#define BUFFER_OFFSET(bytes) (static_cast<GLubyte *>(NULL) + (bytes))
 
 namespace tlp {
 
@@ -37,7 +37,6 @@ namespace tlp {
 class TLP_GL_SCOPE OpenGlConfigManager {
 
 public:
-
   /**
    * Return the current instance. If instance doesn't exist, create it.
    *
@@ -65,7 +64,8 @@ public:
 
   /**
    * Checks if an OpenGL extension is supported by the driver installed on the host system.
-   * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
+   * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for
+   * instance "GL_ARB_vertex_buffer_object")
    */
   bool isExtensionSupported(const std::string &extensionName);
 
@@ -90,13 +90,15 @@ public:
 
   /**
    * Activates anti-aliasing
-   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   * This method has no effect if anti-aliasing has been disabled by a call to
+   * setAntiAliasing(false).
    */
   void activateAntiAliasing();
 
   /**
    * Desactivates anti-aliasing
-   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   * This method has no effect if anti-aliasing has been disabled by a call to
+   * setAntiAliasing(false).
    */
   void desactivateAntiAliasing();
 
@@ -108,43 +110,44 @@ public:
 
   /**
    * Activates the anti-aliasing of lines and points primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   * This method has no effect if anti-aliasing has been disabled by a call to
+   * setAntiAliasing(false).
    */
   _DEPRECATED void activateLineAndPointAntiAliasing();
 
   /**
    * Desactivates the anti-aliasing of lines and points primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   * This method has no effect if anti-aliasing has been disabled by a call to
+   * setAntiAliasing(false).
    */
   _DEPRECATED void desactivateLineAndPointAntiAliasing();
 
   /**
    * Activates the anti-aliasing of polygons primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   * This method has no effect if anti-aliasing has been disabled by a call to
+   * setAntiAliasing(false).
    */
   _DEPRECATED void activatePolygonAntiAliasing();
   /**
    * Desactivates the anti-aliasing of polygons primitives.
-   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   * This method has no effect if anti-aliasing has been disabled by a call to
+   * setAntiAliasing(false).
    */
   _DEPRECATED void desactivatePolygonAntiAliasing();
 
 private:
-
   /**
    * Private constructor for singleton
    */
   OpenGlConfigManager();
 
-  static OpenGlConfigManager* inst;
+  static OpenGlConfigManager *inst;
 
   bool glewIsInit;
   bool antialiased;
 
   std::map<std::string, bool> checkedExtensions;
-
 };
-
 }
 
 #endif

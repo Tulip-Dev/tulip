@@ -20,7 +20,8 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-// comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleFastLayout.cpp
+// comments below have been extracted from
+// OGDF/src/energybased/multilevelmixer/MMEExampleFastLayout.cpp
 /** \addtogroup layout */
 
 ///  useable example of the Modular Multilevel Mixer
@@ -72,11 +73,14 @@
 class OGDFMMMExampleFastLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("MMM Example Fast Layout (OGDF)","Gereon Bartel","01/09/2010","Implements a fast multilevel graph layout using the OGDF modular multilevel-mixer. SolarMerger and SolarPlacer are used as merging and placement strategies.","1.0","Multilevel")
-  OGDFMMMExampleFastLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
+  PLUGININFORMATION("MMM Example Fast Layout (OGDF)", "Gereon Bartel", "01/09/2010",
+                    "Implements a fast multilevel graph layout using the OGDF modular "
+                    "multilevel-mixer. SolarMerger and SolarPlacer are used as merging and "
+                    "placement strategies.",
+                    "1.0", "Multilevel")
+  OGDFMMMExampleFastLayout(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
   ~OGDFMMMExampleFastLayout() {}
-
 };
-
 
 PLUGIN(OGDFMMMExampleFastLayout)

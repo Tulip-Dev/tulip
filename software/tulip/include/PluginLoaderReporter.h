@@ -23,23 +23,23 @@
 #include <QMap>
 #include <QString>
 
-class PluginLoaderReporter: public tlp::PluginLoader {
+class PluginLoaderReporter : public tlp::PluginLoader {
 public:
   PluginLoaderReporter();
 
   virtual void start(const std::string &) {}
   virtual void numberOfFiles(int) {}
   virtual void loading(const std::string &) {}
-  virtual void loaded(const tlp::Plugin *, const std::list <tlp::Dependency>&) {}
-  virtual void aborted(const std::string &,const  std::string &);
-  virtual void finished(bool ,const std::string &) {}
+  virtual void loaded(const tlp::Plugin *, const std::list<tlp::Dependency> &) {}
+  virtual void aborted(const std::string &, const std::string &);
+  virtual void finished(bool, const std::string &) {}
 
-  QMap<QString,QString> errors() {
+  QMap<QString, QString> errors() {
     return _errors;
   }
 
 private:
-  QMap<QString,QString> _errors;
+  QMap<QString, QString> _errors;
 };
 
 #endif // PLUGINLOADERREPORTER_H

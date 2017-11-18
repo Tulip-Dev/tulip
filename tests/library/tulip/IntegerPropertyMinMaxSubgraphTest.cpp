@@ -51,20 +51,24 @@ void IntegerPropertyMinMaxSubgraphTest::tearDown() {
 
 void IntegerPropertyMinMaxSubgraphTest::testIntegerPropertyRootGraphMin() {
   IntegerProperty *intProperty = graph->getProperty<IntegerProperty>(integerPropertyName);
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value on root graph", rootGraphMin, intProperty->getNodeMin());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value on root graph", rootGraphMin,
+                               intProperty->getNodeMin());
 }
 
 void IntegerPropertyMinMaxSubgraphTest::testIntegerPropertyRootGraphMax() {
   IntegerProperty *intProperty = graph->getProperty<IntegerProperty>(integerPropertyName);
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value on root graph", rootGraphMax, intProperty->getNodeMax());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value on root graph", rootGraphMax,
+                               intProperty->getNodeMax());
 }
 
 void IntegerPropertyMinMaxSubgraphTest::testIntegerPropertySubgraphMin() {
   IntegerProperty *intProperty = subGraph->getProperty<IntegerProperty>(integerPropertyName);
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value on subgraph graph", subgraphMin, intProperty->getNodeMin(subGraph));
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value on subgraph graph", subgraphMin,
+                               intProperty->getNodeMin(subGraph));
 }
 
 void IntegerPropertyMinMaxSubgraphTest::testIntegerPropertySubgraphMax() {
   IntegerProperty *intProperty = subGraph->getProperty<IntegerProperty>(integerPropertyName);
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value on subgraph", subgraphMax, intProperty->getNodeMax(subGraph));
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value on subgraph", subgraphMax,
+                               intProperty->getNodeMax(subGraph));
 }

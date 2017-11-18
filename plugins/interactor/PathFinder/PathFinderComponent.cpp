@@ -32,22 +32,21 @@
 using namespace std;
 using namespace tlp;
 
-
-PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false), timerId(0), lastX(0), lastY(0), glMW(NULL) {
-}
+PathFinderComponent::PathFinderComponent(PathFinder *parent)
+    : parent(parent), graphPopable(false), timerId(0), lastX(0), lastY(0), glMW(NULL) {}
 
 PathFinderComponent::~PathFinderComponent() {
   qDeleteAll(highlighters);
 }
 
 bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
-  QMouseEvent *qMouseEv = static_cast<QMouseEvent *> (event);
-  GlMainWidget *glw= dynamic_cast<GlMainWidget *> (obj);
+  QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(event);
+  GlMainWidget *glw = dynamic_cast<GlMainWidget *>(obj);
 
-  if (glw==NULL)
+  if (glw == NULL)
     return false;
 
-  if(event->type() == QEvent::MouseMove) {
+  if (event->type() == QEvent::MouseMove) {
     // we need to avoid too much calls to
     // time consuming pickNodesEdges method
     // so it is called only if the mouse is not moving
@@ -65,8 +64,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     glw->setCursor(Qt::ArrowCursor);
   }
 
-  if (event->type() == QEvent::MouseButtonPress &&
-      qMouseEv->button() == Qt::LeftButton) {
+  if (event->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
     // kill current timer if needed
     if (timerId) {
       killTimer(timerId);
@@ -80,7 +78,8 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     glw->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), 0, 0, selNodes, selEdges);
 
     clearHighlighters(glw);
-    BooleanProperty *selectionProperty = glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+    BooleanProperty *selectionProperty =
+        glw->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
     selectionProperty->setAllNodeValue(false);
     selectionProperty->setAllEdgeValue(false);
 
@@ -88,15 +87,15 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
       src = node();
       tgt = node();
       glw->setCursor(Qt::ArrowCursor);
-    }
-    else {
+    } else {
       node tmp(selNodes[0].getComplexEntityId());
 
-      if ((src.isValid() && tmp == src) || (tgt.isValid() && tmp == tgt)) { // User clicked back on the source or target node: reset the selection.
+      if ((src.isValid() && tmp == src) ||
+          (tgt.isValid() &&
+           tmp == tgt)) { // User clicked back on the source or target node: reset the selection.
         src = node();
         tgt = node();
-      }
-      else if (src.isValid())
+      } else if (src.isValid())
         tgt = tmp;
       else
         src = tmp;
@@ -104,7 +103,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
       glw->setCursor(Qt::CrossCursor);
     }
 
-    selectPath(glw,glw->getScene()->getGlGraphComposite()->getGraph());
+    selectPath(glw, glw->getScene()->getGlGraphComposite()->getGraph());
 
     Observable::unholdObservers();
 
@@ -124,7 +123,8 @@ void PathFinderComponent::timerEvent(QTimerEvent *ev) {
     SelectedEntity entity;
 
     // check if there is a node at the current mouse pos
-    if((glMW->pickNodesEdges(lastX, lastY,entity))&&(entity.getEntityType()==SelectedEntity::NODE_SELECTED))
+    if ((glMW->pickNodesEdges(lastX, lastY, entity)) &&
+        (entity.getEntityType() == SelectedEntity::NODE_SELECTED))
       // find one, show a cross
       glMW->setCursor(Qt::CrossCursor);
     else
@@ -147,10 +147,12 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
       PropertyInterface *prop = graph->getProperty(weightsMetricName);
 
       if (prop && prop->getTypename().compare("double") == 0)
-        weights = graph->getProperty<DoubleProperty> (weightsMetricName);
+        weights = graph->getProperty<DoubleProperty>(weightsMetricName);
     }
 
-    bool pathFound = PathAlgorithm::computePath(graph, parent->getPathsType(), parent->getEdgeOrientation(), src, tgt, selection, weights, parent->getTolerance());
+    bool pathFound =
+        PathAlgorithm::computePath(graph, parent->getPathsType(), parent->getEdgeOrientation(), src,
+                                   tgt, selection, weights, parent->getTolerance());
     Observable::unholdObservers();
 
     if (!pathFound) {
@@ -159,22 +161,21 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
       selection->setNodeValue(src, true);
       QMessageBox::warning(0, "Path finder", "A path between the selected nodes cannot be found.");
 
-    }
-    else
+    } else
       // A path has been found: highlight it
-      runHighlighters(glMainWidget,selection, src, tgt);
-  }
-  else if (src.isValid())
+      runHighlighters(glMainWidget, selection, src, tgt);
+  } else if (src.isValid())
     selection->setNodeValue(src, true);
-
 }
 
-void PathFinderComponent::runHighlighters(GlMainWidget *glMainWidget,BooleanProperty *selection, node src, node tgt) {
+void PathFinderComponent::runHighlighters(GlMainWidget *glMainWidget, BooleanProperty *selection,
+                                          node src, node tgt) {
   glMainWidget->getScene()->getGlGraphComposite()->getGraph()->push(true);
   graphPopable = true;
   vector<string> activeHighlighters(parent->getActiveHighlighters());
 
-  for (vector<string>::iterator it = activeHighlighters.begin(); it != activeHighlighters.end(); ++it) {
+  for (vector<string>::iterator it = activeHighlighters.begin(); it != activeHighlighters.end();
+       ++it) {
     PathHighlighter *hler = findHighlighter(*it);
 
     if (hler)
@@ -190,7 +191,8 @@ void PathFinderComponent::clearHighlighters(GlMainWidget *glMainWidget) {
 
   vector<string> activeHighlighters(parent->getHighlighters());
 
-  for (vector<string>::iterator it = activeHighlighters.begin(); it != activeHighlighters.end(); ++it) {
+  for (vector<string>::iterator it = activeHighlighters.begin(); it != activeHighlighters.end();
+       ++it) {
     PathHighlighter *hler = findHighlighter(*it);
 
     if (hler)
@@ -199,7 +201,7 @@ void PathFinderComponent::clearHighlighters(GlMainWidget *glMainWidget) {
 }
 
 PathHighlighter *PathFinderComponent::findHighlighter(const string &name) {
-  foreach(PathHighlighter *p, highlighters) {
+  foreach (PathHighlighter *p, highlighters) {
     if (p->getName() == name)
       return p;
   }
@@ -216,6 +218,6 @@ QSet<PathHighlighter *> PathFinderComponent::getHighlighters() {
 }
 
 void PathFinderComponent::clear() {
-  GlMainView *glMainView=static_cast<GlMainView*>(view());
+  GlMainView *glMainView = static_cast<GlMainView *>(view());
   glMainView->getGlMainWidget()->setCursor(QCursor());
 }

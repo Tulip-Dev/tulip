@@ -30,17 +30,22 @@ using namespace tlp;
 /** \brief Tulip interactor to get information about an element of the graph
  *
  */
-class InteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+class InteractorGetInformation : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorGetInformation", "Tulip Team", "01/04/2009", "Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorGetInformation", "Tulip Team", "01/04/2009",
+                    "Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
-  InteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Display node or edge properties") {
+  InteractorGetInformation(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
+                                           "Display node or edge properties") {
     setPriority(StandardInteractorPriority::GetInformation);
-    setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>")+
-                               "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
+    setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
+                               "<b>Mouse left click</b> on an element to display its "
+                               "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
+                               "corresponding value.");
   }
 
   /**
@@ -52,10 +57,9 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::PixelOrientedViewName));
+    return ((viewName == NodeLinkDiagramComponent::viewName) ||
+            (viewName == ViewName::PixelOrientedViewName));
   }
-
 };
 
 PLUGIN(InteractorGetInformation)

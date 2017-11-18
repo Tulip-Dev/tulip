@@ -9,7 +9,7 @@
 using namespace std;
 using namespace tlp;
 
-int main(int ,char **  ) {
+int main(int, char **) {
 
   /*
    * Let's create the following graph
@@ -21,15 +21,15 @@ int main(int ,char **  ) {
    *    D - E
    */
 
-    /*
-     Initialize the library and load all plugins
-     */
-    tlp::initTulipLib();
-    PluginLoaderTxt loadertxt;
-    PluginLibraryLoader::loadPlugins(&loadertxt);
+  /*
+   Initialize the library and load all plugins
+   */
+  tlp::initTulipLib();
+  PluginLoaderTxt loadertxt;
+  PluginLibraryLoader::loadPlugins(&loadertxt);
 
-  //create a new graph
-  Graph* myGraph = tlp::newGraph();
+  // create a new graph
+  Graph *myGraph = tlp::newGraph();
 
   node a = myGraph->addNode();
   node b = myGraph->addNode();
@@ -43,39 +43,38 @@ int main(int ,char **  ) {
   myGraph->addEdge(c, e);
   myGraph->addEdge(d, e);
 
-
-  //now in color. 'viewColor' is the Tulip GUI's default color property, so when we load it we will see the color immediately
-  //If 'viewColor' did not exist before, this creates it.
-  ColorProperty* color = myGraph->getProperty<ColorProperty>("viewColor");
+  // now in color. 'viewColor' is the Tulip GUI's default color property, so when we load it we will
+  // see the color immediately
+  // If 'viewColor' did not exist before, this creates it.
+  ColorProperty *color = myGraph->getProperty<ColorProperty>("viewColor");
   color->setNodeValue(a, Color(255, 0, 0));
   color->setNodeValue(b, Color(0, 255, 0));
   color->setNodeValue(c, Color(0, 0, 255));
   color->setNodeValue(d, Color(255, 0, 0));
   color->setNodeValue(e, Color(0, 255, 0));
-  //hey look, this is a 3-coloration :)
+  // hey look, this is a 3-coloration :)
 
-  //set the label of the nodes (again, with Tulip's default label property)
-  StringProperty* label = myGraph->getProperty<StringProperty>("viewLabel");
+  // set the label of the nodes (again, with Tulip's default label property)
+  StringProperty *label = myGraph->getProperty<StringProperty>("viewLabel");
   label->setNodeValue(a, "A");
   label->setNodeValue(b, "B");
   label->setNodeValue(c, "C");
   label->setNodeValue(d, "D");
   label->setNodeValue(e, "E");
 
-  DoubleProperty* metric = myGraph->getProperty<DoubleProperty>("degree");
+  DoubleProperty *metric = myGraph->getProperty<DoubleProperty>("degree");
 
-  //if the degree plugin is available, let's call it.
-  if(tlp::PluginLister::instance()->pluginExists("Degree")) {
-    //now compute the degree of the nodes.
+  // if the degree plugin is available, let's call it.
+  if (tlp::PluginLister::instance()->pluginExists("Degree")) {
+    // now compute the degree of the nodes.
     string errorMessage;
-    //this calls the Tulip plugin 'Degree'.
+    // this calls the Tulip plugin 'Degree'.
     bool success = myGraph->applyPropertyAlgorithm("Degree", metric, errorMessage);
 
-    if(!success) {
+    if (!success) {
       std::cout << errorMessage << std::endl;
     }
-  }
-  else {
+  } else {
     std::cout << "could not find the plugin, computing" << std::endl;
     node n;
     forEach(n, myGraph->getNodes()) {
@@ -83,12 +82,11 @@ int main(int ,char **  ) {
     }
   }
 
-  //output the degree of node a;
-  std::cout << metric->getNodeValue(a) <<std::endl;
+  // output the degree of node a;
+  std::cout << metric->getNodeValue(a) << std::endl;
 
-  //saveGraph is a shortcut ofr exportGraph that uses the TLP export.
+  // saveGraph is a shortcut ofr exportGraph that uses the TLP export.
   tlp::saveGraph(myGraph, "mygraph.tlp");
 
   return EXIT_SUCCESS;
 }
-

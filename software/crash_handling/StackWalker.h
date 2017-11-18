@@ -44,9 +44,12 @@ public:
     printCallStack(std::cerr, maxDepth);
   }
 
-  virtual void printFrameInfo(std::ostream &os, unsigned int frameId, int64_t pcAddress, const std::string& moduleName, const std::string& funcName="", int64_t symbolOffset=0, const std::string& fileName="", unsigned int line=0) {
+  virtual void printFrameInfo(std::ostream &os, unsigned int frameId, int64_t pcAddress,
+                              const std::string &moduleName, const std::string &funcName = "",
+                              int64_t symbolOffset = 0, const std::string &fileName = "",
+                              unsigned int line = 0) {
 
-    if (frameId%2 == 0)
+    if (frameId % 2 == 0)
       os << setTextBackgroundColor(DARK_GRAY);
     else
       os << setTextBackgroundColor(LIGHT_GRAY);
@@ -60,8 +63,7 @@ public:
 
     if (funcName != "") {
       os << funcName;
-    }
-    else {
+    } else {
       os << "??";
     }
 
@@ -75,15 +77,12 @@ public:
 
     if (moduleName != "") {
       os << lightRed << " from " << lightCyan << moduleName;
-    }
-    else {
+    } else {
       os << lightRed << " from " << lightGreen << "??";
     }
 
     os << fillToEndOfLine << defaultTextColor << std::endl;
-
   }
-
 };
 
 #if defined(__unix__) || defined(__APPLE__)
@@ -93,7 +92,6 @@ public:
 class StackWalkerGCC : public StackWalker {
 
 public:
-
   StackWalkerGCC();
 
   ~StackWalkerGCC();
@@ -105,14 +103,11 @@ public:
   }
 
 private:
-
   void *callerAddress;
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *> bfdMap;
 #endif
-
 };
-
 
 #elif defined(__MINGW32__)
 
@@ -151,7 +146,7 @@ public:
     this->context = context;
   }
 
-private :
+private:
   CONTEXT *context;
   std::string extraSymbolsSearchPaths;
 };

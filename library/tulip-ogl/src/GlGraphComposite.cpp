@@ -34,25 +34,25 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer):inputData(graph,&parameters),graphRenderer(graphRenderer),nodesModified(true) {
-  if(graphRenderer==NULL) {
-    this->graphRenderer=new GlGraphHighDetailsRenderer(&inputData);
+GlGraphComposite::GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer)
+    : inputData(graph, &parameters), graphRenderer(graphRenderer), nodesModified(true) {
+  if (graphRenderer == NULL) {
+    this->graphRenderer = new GlGraphHighDetailsRenderer(&inputData);
   }
 
-  if(!graph) {
-    rootGraph=NULL;
-  }
-  else {
-    rootGraph=graph->getRoot();
+  if (!graph) {
+    rootGraph = NULL;
+  } else {
+    rootGraph = graph->getRoot();
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
-    Iterator<node>* nodesIterator = graph->getNodes();
+    Iterator<node> *nodesIterator = graph->getNodes();
 
     while (nodesIterator->hasNext()) {
-      node n=nodesIterator->next();
+      node n = nodesIterator->next();
 
-      if(graph->getNodeMetaInfo(n))
+      if (graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }
 
@@ -60,23 +60,23 @@ GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer)
   }
 }
 
-GlGraphComposite::GlGraphComposite(Graph* graph, GlScene *scene):inputData(graph,&parameters),nodesModified(true) {
-  this->graphRenderer=new GlGraphHighDetailsRenderer(&inputData,scene);
+GlGraphComposite::GlGraphComposite(Graph *graph, GlScene *scene)
+    : inputData(graph, &parameters), nodesModified(true) {
+  this->graphRenderer = new GlGraphHighDetailsRenderer(&inputData, scene);
 
-  if(!graph) {
-    rootGraph=NULL;
-  }
-  else {
-    rootGraph=graph->getRoot();
+  if (!graph) {
+    rootGraph = NULL;
+  } else {
+    rootGraph = graph->getRoot();
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
-    Iterator<node>* nodesIterator = graph->getNodes();
+    Iterator<node> *nodesIterator = graph->getNodes();
 
     while (nodesIterator->hasNext()) {
-      node n=nodesIterator->next();
+      node n = nodesIterator->next();
 
-      if(graph->getNodeMetaInfo(n))
+      if (graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }
 
@@ -91,9 +91,9 @@ GlGraphComposite::~GlGraphComposite() {
 void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
   GlBoundingBoxSceneVisitor bbVisitor(&inputData);
   graphRenderer->visitGraph(&bbVisitor);
-  boundingBox=bbVisitor.getBoundingBox();
+  boundingBox = bbVisitor.getBoundingBox();
 
-  if(boundingBox.isValid())
+  if (boundingBox.isValid())
     visitor->visit(this);
 }
 
@@ -102,52 +102,51 @@ void GlGraphComposite::acceptVisitorOnGraph(GlSceneVisitor *visitor) {
 }
 
 //===================================================================
-void GlGraphComposite::draw(float lod,Camera* camera) {
+void GlGraphComposite::draw(float lod, Camera *camera) {
   graphRenderer->draw(lod, camera);
 }
 //===================================================================
-void GlGraphComposite::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {
+void GlGraphComposite::selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y,
+                                      int w, int h, vector<SelectedEntity> &selectedEntities) {
   graphRenderer->selectEntities(camera, type, x, y, w, h, selectedEntities);
 }
 //===================================================================
-const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
+const GlGraphRenderingParameters &GlGraphComposite::getRenderingParameters() {
   return parameters;
 }
 //===================================================================
 void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
-  if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
+  if (parameters.isElementOrdered() != parameter.isElementOrdered()) {
     parameters = parameter;
     graphRenderer->setGraphModified(true);
-  }
-  else {
+  } else {
     parameters = parameter;
   }
 }
 //===================================================================
-GlGraphRenderingParameters* GlGraphComposite::getRenderingParametersPointer() {
+GlGraphRenderingParameters *GlGraphComposite::getRenderingParametersPointer() {
   return &parameters;
 }
 //===================================================================
-GlGraphInputData* GlGraphComposite::getInputData() {
+GlGraphInputData *GlGraphComposite::getInputData() {
   return &inputData;
 }
 //====================================================
 void GlGraphComposite::getXML(string &outString) {
-  GlXMLTools::createProperty(outString, "type", "GlGraphComposite","GlEntity");
+  GlXMLTools::createProperty(outString, "type", "GlGraphComposite", "GlEntity");
 }
 //====================================================
-void GlGraphComposite::setWithXML(const string &, unsigned int&) {
-}
+void GlGraphComposite::setWithXML(const string &, unsigned int &) {}
 
-void GlGraphComposite::treatEvent(const Event& evt) {
-  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+void GlGraphComposite::treatEvent(const Event &evt) {
+  const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
   if (graphEvent) {
-    switch(graphEvent->getType()) {
+    switch (graphEvent->getType()) {
 
     case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_DEL_NODE:
-      nodesModified=true;
+      nodesModified = true;
       graphRenderer->setGraphModified(true);
       break;
 
@@ -161,35 +160,28 @@ void GlGraphComposite::treatEvent(const Event& evt) {
     default:
       break;
     }
-  }
-  else if(evt.type() == Event::TLP_DELETE) {
-    Graph* g = dynamic_cast<Graph*>(evt.sender());
+  } else if (evt.type() == Event::TLP_DELETE) {
+    Graph *g = dynamic_cast<Graph *>(evt.sender());
 
-    if(g && inputData.getGraph() == g) {
+    if (g && inputData.getGraph() == g) {
       inputData.graph = NULL;
     }
-  }
-  else {
-    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+  } else {
+    const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&evt);
 
-    if(propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
-      nodesModified=true;
+    if (propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
+      nodesModified = true;
     }
   }
 }
 
-void GlGraphComposite::setRenderer(tlp::GlGraphRenderer* renderer) {
+void GlGraphComposite::setRenderer(tlp::GlGraphRenderer *renderer) {
   delete graphRenderer;
 
-  if(renderer == NULL) {
+  if (renderer == NULL) {
     graphRenderer = new GlGraphHighDetailsRenderer(&inputData);
-  }
-  else {
+  } else {
     graphRenderer = renderer;
   }
-
 }
-
 }
-
-

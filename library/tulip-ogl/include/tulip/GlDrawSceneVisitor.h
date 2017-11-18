@@ -31,9 +31,9 @@ class GlGraphInputData;
 class TLP_GL_SCOPE GlDrawSceneVisitor : public GlSceneVisitor {
 
 public:
-
-  GlDrawSceneVisitor(TLP_HASH_MAP<unsigned int,float>* lod,GlGraphInputData* inputData):inputData(inputData) {
-    lodMap=lod;
+  GlDrawSceneVisitor(TLP_HASH_MAP<unsigned int, float> *lod, GlGraphInputData *inputData)
+      : inputData(inputData) {
+    lodMap = lod;
   }
 
   virtual void visit(GlSimpleEntity *entity);
@@ -41,12 +41,9 @@ public:
   virtual void visit(GlLayout *layout);
 
 private:
-
-  TLP_HASH_MAP<unsigned int,float>* lodMap;
+  TLP_HASH_MAP<unsigned int, float> *lodMap;
   GlGraphInputData *inputData;
-
 };
-
 }
 
 #endif // Tulip_GLDRAWSCENEVISITOR_H

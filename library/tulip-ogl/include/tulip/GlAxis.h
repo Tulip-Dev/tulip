@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef GLAXIS_H_
 #define GLAXIS_H_
 
@@ -37,25 +36,27 @@ class GlLabel;
  * @brief A base class to draw an axis with graduations
  *
  * This class allow to render an axis with graduations. This class is there for code factorisation
- * and should not be used directly. Use derivated classes instead : GlQuantitativeAxis for a numerical
+ * and should not be used directly. Use derivated classes instead : GlQuantitativeAxis for a
+ * numerical
  * graduated axis and GlNominativeAxis for a string graduated axis
  */
 class TLP_GL_SCOPE GlAxis : public GlComposite {
 
-public :
+public:
+  enum AxisOrientation { HORIZONTAL_AXIS, VERTICAL_AXIS };
 
-  enum AxisOrientation {HORIZONTAL_AXIS, VERTICAL_AXIS};
-
-  enum LabelPosition {LEFT_OR_BELOW, RIGHT_OR_ABOVE};
-  enum CaptionLabelPosition {LEFT, RIGHT, BELOW, ABOVE};
+  enum LabelPosition { LEFT_OR_BELOW, RIGHT_OR_ABOVE };
+  enum CaptionLabelPosition { LEFT, RIGHT, BELOW, ABOVE };
 
   /**
    * @brief GlAxis constructor
    *
    * @param axisName the name of the axis
-   * @param axisBaseCoord the base coord of the axis (if the axis is horizontal, it is the the left end, if vertical it is the down end)
+   * @param axisBaseCoord the base coord of the axis (if the axis is horizontal, it is the the left
+   * end, if vertical it is the down end)
    * @param axisLength the length of the axis
-   * @param axisOrientation the orientation of the axis, 2 possible values (HORIZONTAL_AXIS or VERTICAL_AXIS)
+   * @param axisOrientation the orientation of the axis, 2 possible values (HORIZONTAL_AXIS or
+   * VERTICAL_AXIS)
    * @param axisColor the color of the axis
    */
   GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
@@ -165,32 +166,40 @@ public :
   virtual void updateAxis();
 
   /**
-   * @brief Method to set the axis graduations. No need to call updateAxis after calling this method.
+   * @brief Method to set the axis graduations. No need to call updateAxis after calling this
+   * method.
    *
    * @param axisGradsLabels the labels of the graduations, they will be equally spaced on the axis
-   * @param axisGradsLabelsPosition the relative position of the axis graduations label. Two possible values : LEFT_OR_BELOW (if the axis is horizontal, labels will be on the left of the axis, otherwise below) or RIGHT_OR_ABOVE
+   * @param axisGradsLabelsPosition the relative position of the axis graduations label. Two
+   * possible values : LEFT_OR_BELOW (if the axis is horizontal, labels will be on the left of the
+   * axis, otherwise below) or RIGHT_OR_ABOVE
    *
    */
   void setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
                           const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW);
-
 
   void setAxisGraduationsMaxLabelWidth(const float maxWidth) {
     maxGraduationLabelWidth = maxWidth;
   }
 
   /**
-   * @brief Method which adds a caption to the axis. No need to call updateAxis after calling this method.
+   * @brief Method which adds a caption to the axis. No need to call updateAxis after calling this
+   * method.
    *
-   * @param captionPos the relative position of the caption. Two possible values : LEFT_OR_BELOW (if the axis is vertical, caption will be below of the axis, otherwise on the left) or RIGHT_OR_ABOVE
+   * @param captionPos the relative position of the caption. Two possible values : LEFT_OR_BELOW (if
+   * the axis is vertical, caption will be below of the axis, otherwise on the left) or
+   * RIGHT_OR_ABOVE
    * @param captionHeight the caption text height
    * @param captionFrame if true the caption will be framed
    * @param maxCaptionWidth fill this parameter if you want to restrain the caption width
-   * @param captionOffset fill this parameter if you want to fix the offset between the axis and the caption
-   * @param caption if this parameter is filled, use this value as caption text, otherwise the caption text will be the axis name
+   * @param captionOffset fill this parameter if you want to fix the offset between the axis and the
+   * caption
+   * @param caption if this parameter is filled, use this value as caption text, otherwise the
+   * caption text will be the axis name
    */
-  void addCaption(const CaptionLabelPosition &captionPos, const float captionHeight, const bool captionFrame = false,
-                  const float maxCaptionWidth = 0, const float captionOffset = 0, const std::string caption = "");
+  void addCaption(const CaptionLabelPosition &captionPos, const float captionHeight,
+                  const bool captionFrame = false, const float maxCaptionWidth = 0,
+                  const float captionOffset = 0, const std::string caption = "");
 
   /**
    * @brief Method to set the axis graduations labels size.
@@ -208,13 +217,10 @@ public :
 
   void setCaptionHeight(float height, bool frame);
 
-private :
-
+private:
   void buildAxisLine();
 
-
-protected :
-
+protected:
   void computeBoundingBox();
   virtual Coord computeCaptionCenter(const bool captionFrame);
   virtual void computeCaptionSize(float height);
@@ -239,13 +245,12 @@ protected :
   GlComposite *axisLinesComposite;
   GlComposite *captionComposite;
   GlComposite *gradsComposite;
-  std::vector<GlLabel*> gradsLabelsVector;
+  std::vector<GlLabel *> gradsLabelsVector;
   bool captionSet;
   CaptionLabelPosition captionPosition;
   float maxCaptionWidth;
   float maxGraduationLabelWidth;
 };
-
 }
 
 #endif /* GLAXIS_H_ */

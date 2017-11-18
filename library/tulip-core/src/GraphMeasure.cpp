@@ -31,7 +31,7 @@ using namespace std;
 using namespace tlp;
 namespace {
 inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
-  switch(direction) {
+  switch (direction) {
   case DIRECTED:
     return graph->getOutNodes(n);
 
@@ -51,14 +51,12 @@ inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
 }
 //================================================================
 unsigned int tlp::maxDistance(const Graph *graph, const node n,
-                              MutableContainer<unsigned int> &distance,
-                              EDGE_TYPE direction) {
+                              MutableContainer<unsigned int> &distance, EDGE_TYPE direction) {
   distance.setAll(UINT_MAX);
   unsigned int nbNodes = graph->numberOfNodes();
   tlp::NodeStaticProperty<unsigned int> dist(graph);
-  unsigned int result =
-    tlp::maxDistance(graph, graph->nodePos(n), dist, direction);
-  const std::vector<node>& nodes = graph->nodes();
+  unsigned int result = tlp::maxDistance(graph, graph->nodePos(n), dist, direction);
+  const std::vector<node> &nodes = graph->nodes();
 
   for (unsigned int i = 0; i < nbNodes; ++i)
     distance.set(nodes[i], dist[i]);
@@ -73,15 +71,15 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
   distance.setAll(UINT_MAX);
   fifo.push_back(nPos);
   distance[nPos] = 0;
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int maxDist = 0;
 
-  while(!fifo.empty()) {
+  while (!fifo.empty()) {
     unsigned int current = fifo.front();
     fifo.pop_front();
     unsigned int nDist = distance[current] + 1;
 
-    Iterator<node>* itn;
+    Iterator<node> *itn;
     itn = getIt(graph, nodes[current], direction);
 
     while (itn->hasNext()) {
@@ -100,26 +98,27 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
   return maxDist;
 }
 //================================================================
-//Warning the algorithm is not optimal
-double tlp::averagePathLength(const Graph *graph,
-                              PluginProgress *pluginProgress) {
+// Warning the algorithm is not optimal
+double tlp::averagePathLength(const Graph *graph, PluginProgress *pluginProgress) {
   double result = 0;
 
   size_t nbNodes = graph->numberOfNodes();
 
-  if (nbNodes < 2) return result;
+  if (nbNodes < 2)
+    return result;
 
   OMP_ITER_TYPE i, steps = 0;
   bool stopfor = false;
 #ifdef _OPENMP
-  #pragma omp parallel for private(i) schedule(dynamic, 1)
+#pragma omp parallel for private(i) schedule(dynamic, 1)
 #endif
 
-  for (i = 0 ; i < static_cast<OMP_ITER_TYPE>(nbNodes) ; ++i) {
-    if (stopfor) continue;
+  for (i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
+    if (stopfor)
+      continue;
 
-    // check if we are in the main thread.
-    // Qt calls can't be done outside of the master thread
+// check if we are in the main thread.
+// Qt calls can't be done outside of the master thread
 #ifdef _OPENMP
 
     if (omp_get_thread_num() == 0) {
@@ -130,7 +129,7 @@ double tlp::averagePathLength(const Graph *graph,
 
         if (pluginProgress->state() != TLP_CONTINUE) {
 #ifdef _OPENMP
-          #pragma omp critical(STOPFOR)
+#pragma omp critical(STOPFOR)
 #endif
           stopfor = true;
         }
@@ -147,11 +146,11 @@ double tlp::averagePathLength(const Graph *graph,
       if (j == i)
         continue;
 
-      unsigned int d =  distance[i];
+      unsigned int d = distance[i];
 
       if (d != UINT_MAX) {
 #ifdef _OPENMP
-        #pragma omp critical(SUMPATH)
+#pragma omp critical(SUMPATH)
 #endif
         result += d;
       }
@@ -166,14 +165,13 @@ double tlp::averagePathLength(const Graph *graph,
   return result;
 }
 //================================================================
-double tlp::averageClusteringCoefficient(const Graph *graph,
-    PluginProgress * pluginProgress) {
+double tlp::averageClusteringCoefficient(const Graph *graph, PluginProgress *pluginProgress) {
   tlp::NodeStaticProperty<double> clusters(graph);
   unsigned int nbNodes = graph->numberOfNodes();
   tlp::clusteringCoefficient(graph, clusters, UINT_MAX, pluginProgress);
-  double sum=0;
+  double sum = 0;
 
-  for(unsigned int i = 0; i < clusters.size(); ++i)
+  for (unsigned int i = 0; i < clusters.size(); ++i)
     sum += clusters[i];
 
   return sum / nbNodes;
@@ -182,9 +180,9 @@ double tlp::averageClusteringCoefficient(const Graph *graph,
 unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
   unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
 
-  for(unsigned int i = 0; i < nbNodes; ++i)
+  for (unsigned int i = 0; i < nbNodes; ++i)
     maxdeg = std::max(maxdeg, graph->deg(nodes[i]));
 
   return maxdeg;
@@ -193,17 +191,16 @@ unsigned int tlp::maxDegree(const Graph *graph) {
 unsigned int tlp::minDegree(const Graph *graph) {
   unsigned int nbNodes = graph->numberOfNodes();
   unsigned int mindeg = nbNodes;
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
 
-  for(unsigned int i = 0; i < nbNodes; ++i)
+  for (unsigned int i = 0; i < nbNodes; ++i)
     mindeg = std::min(mindeg, graph->deg(nodes[i]));
 
   return mindeg;
 }
 //================================================================
-void tlp::reachableNodes(const Graph *graph, const node startNode,
-                         std::set<node> &result, unsigned int maxDistance,
-                         EDGE_TYPE direction) {
+void tlp::reachableNodes(const Graph *graph, const node startNode, std::set<node> &result,
+                         unsigned int maxDistance, EDGE_TYPE direction) {
   TLP_HASH_MAP<node, bool> hResult;
   markReachableNodes(graph, startNode, hResult, maxDistance, direction);
   TLP_HASH_MAP<node, bool>::const_iterator itr = hResult.begin();
@@ -216,8 +213,7 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
 }
 //================================================================
 void tlp::markReachableNodes(const Graph *graph, const node startNode,
-                             TLP_HASH_MAP<node, bool> &result,
-                             unsigned int maxDistance,
+                             TLP_HASH_MAP<node, bool> &result, unsigned int maxDistance,
                              EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
@@ -228,7 +224,7 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
   visited.set(startNode.id, true);
   distance.set(startNode.id, 0);
 
-  while(!fifo.empty()) {
+  while (!fifo.empty()) {
     node current = fifo.front();
     unsigned int curDist = distance.get(current.id);
     fifo.pop_front();
@@ -236,13 +232,13 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
     if (curDist < maxDistance) {
       Iterator<node> *itN = getIt(graph, current, direction);
 
-      while(itN->hasNext()) {
+      while (itN->hasNext()) {
         node itn = itN->next();
 
         if (!visited.get(itn.id)) {
           fifo.push_back(itn);
           result[itn] = true;
-          visited.set(itn.id,true);
+          visited.set(itn.id, true);
           distance.set(itn.id, curDist + 1);
         }
       }
@@ -252,40 +248,37 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
   }
 }
 //=================================================
-void tlp::clusteringCoefficient(const Graph *graph,
-                                MutableContainer<double>& clusters,
+void tlp::clusteringCoefficient(const Graph *graph, MutableContainer<double> &clusters,
                                 unsigned int maxDepth, PluginProgress *pp) {
   tlp::NodeStaticProperty<double> vClusters(graph);
   tlp::clusteringCoefficient(graph, vClusters, maxDepth, pp);
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
 
-  for(unsigned int i = 0; i < nodes.size(); ++i)
+  for (unsigned int i = 0; i < nodes.size(); ++i)
     clusters.set(nodes[i].id, vClusters[i]);
 }
 //=================================================
-void tlp::clusteringCoefficient(const Graph *graph,
-                                tlp::NodeStaticProperty<double>& clusters,
+void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
                                 unsigned int maxDepth, PluginProgress *) {
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; i++) {
     TLP_HASH_MAP<node, bool> reachables;
     markReachableNodes(graph, nodes[i], reachables, maxDepth);
-    double nbEdge=0; //e(N_v)*2$
+    double nbEdge = 0; // e(N_v)*2$
 
     TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
     TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
 
-    while(itr != ite) {
+    while (itr != ite) {
       node itn = itr->first;
       Iterator<edge> *itE = graph->getInOutEdges(itn);
 
       while (itE->hasNext()) {
         pair<node, node> eEnds = graph->ends(itE->next());
 
-        if ((reachables.find(eEnds.first)!=ite) &&
-            (reachables.find(eEnds.second)!=ite)) {
+        if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
           ++nbEdge;
         }
       }
@@ -296,45 +289,41 @@ void tlp::clusteringCoefficient(const Graph *graph,
 
     double nNode = reachables.size(); //$|N_v|$
 
-    if (reachables.size()>1) {
+    if (reachables.size() > 1) {
       //$e(N_v)/(\frac{k*(k-1)}{2}}$
-      clusters[i] = nbEdge/(nNode*(nNode-1));
-    }
-    else
+      clusters[i] = nbEdge / (nNode * (nNode - 1));
+    } else
       clusters[i] = 0;
   }
 }
 //==================================================
-void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
-                    PluginProgress* pp) {
+void tlp::dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress *pp) {
   tlp::NodeStaticProperty<unsigned int> tmp(graph);
   dagLevel(graph, tmp, pp);
   unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node>& nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
 
-  for(unsigned int i = 0; i < nbNodes; ++i)
+  for (unsigned int i = 0; i < nbNodes; ++i)
     level.set(nodes[i].id, tmp[i]);
 }
 
 //==================================================
-void tlp::dagLevel (const Graph *graph,
-                    tlp::NodeStaticProperty<unsigned int>& level,
-                    PluginProgress*) {
+void tlp::dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level,
+                   PluginProgress *) {
   unsigned int nbNodes = graph->numberOfNodes();
-  const vector<node>& nodes = graph->nodes();
+  const vector<node> &nodes = graph->nodes();
   tlp::NodeStaticProperty<unsigned int> totreat(graph);
   deque<node> fifo;
 
   //===============================================
-  for(unsigned int i = 0; i < nbNodes; ++i) {
+  for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = nodes[i];
     unsigned int indegree = graph->indeg(n);
 
-    if (indegree==0) {
+    if (indegree == 0) {
       fifo.push_back(n);
       level[i] = 0;
-    }
-    else
+    } else
       totreat[i] = indegree - 1;
   }
 
@@ -349,7 +338,7 @@ void tlp::dagLevel (const Graph *graph,
       unsigned int childLevel = totreat[childPos];
 
       if (childLevel > 0)
-        totreat[childPos]= childLevel - 1;
+        totreat[childPos] = childLevel - 1;
       else {
         level[childPos] = curLevel;
         fifo.push_back(child);
@@ -359,17 +348,17 @@ void tlp::dagLevel (const Graph *graph,
 }
 
 //==================================================
-void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
-                 EDGE_TYPE direction, NumericProperty* weights, bool norm) {
-  const std::vector<node>& nodes = graph->nodes();
+void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_TYPE direction,
+                 NumericProperty *weights, bool norm) {
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
 
   if (!weights) {
     if (!norm) {
-      switch(direction) {
+      switch (direction) {
       case UNDIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = graph->deg(nodes[i]);
@@ -378,7 +367,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case INV_DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = graph->indeg(nodes[i]);
@@ -387,24 +376,23 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = graph->outdeg(nodes[i]);
 
         break;
       }
-    }
-    else {
+    } else {
       double normalization = 1.0;
 
       if (nbNodes > 1 && graph->numberOfEdges())
-        normalization = 1./(nbNodes - 1);
+        normalization = 1. / (nbNodes - 1);
 
-      switch(direction) {
+      switch (direction) {
       case UNDIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = normalization * graph->deg(nodes[i]);
@@ -413,7 +401,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case INV_DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = normalization * graph->indeg(nodes[i]);
@@ -422,7 +410,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
           deg[i] = normalization * graph->outdeg(nodes[i]);
@@ -430,13 +418,12 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
         break;
       }
     }
-  }
-  else {
+  } else {
     if (!norm) {
-      switch(direction) {
+      switch (direction) {
       case UNDIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
@@ -451,7 +438,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case INV_DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
@@ -466,7 +453,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
@@ -479,14 +466,13 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
         break;
       }
-    }
-    else {
+    } else {
       double normalization = 1.0;
       unsigned int nbEdges = graph->numberOfEdges();
 
       if (nbNodes > 1 && nbEdges > 0) {
         double sum = 0;
-        const std::vector<edge>& edges = graph->edges();
+        const std::vector<edge> &edges = graph->edges();
 
         for (unsigned int i = 0; i < nbEdges; ++i)
           sum += fabs(weights->getEdgeDoubleValue(edges[i]));
@@ -496,13 +482,13 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
         if (fabs(normalization) < 1E-9)
           normalization = 1.0;
         else
-          normalization = 1.0/normalization;
+          normalization = 1.0 / normalization;
       }
 
-      switch(direction) {
+      switch (direction) {
       case UNDIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
@@ -517,7 +503,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case INV_DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
@@ -532,7 +518,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
 
       case DIRECTED:
 #ifdef _OPENMP
-        #pragma omp parallel for
+#pragma omp parallel for
 #endif
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;

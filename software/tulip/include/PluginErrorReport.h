@@ -34,10 +34,11 @@ class PluginErrorReportData;
   @li Reinstall it from a distant repository
   @list
   */
-class PluginErrorReport: public QWidget {
+class PluginErrorReport : public QWidget {
   Q_OBJECT
 public:
-  explicit PluginErrorReport(const QString &fileName, const QString &errorMsg, QWidget *parent=NULL);
+  explicit PluginErrorReport(const QString &fileName, const QString &errorMsg,
+                             QWidget *parent = NULL);
   ~PluginErrorReport();
 
 protected:

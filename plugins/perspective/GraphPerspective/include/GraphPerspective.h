@@ -62,41 +62,44 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   void buildRecentDocumentsMenu();
   void addRecentDocument(const QString &path);
 
-  void showStartPanels(tlp::Graph*);
-  void applyRandomLayout(tlp::Graph*);
+  void showStartPanels(tlp::Graph *);
+  void applyRandomLayout(tlp::Graph *);
 
 public:
-  GraphPerspectiveLogger* _logger;
+  GraphPerspectiveLogger *_logger;
 
-  PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11", "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore data from various graph or csv file formats)", "1.0", "")
+  PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11",
+                    "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore "
+                    "data from various graph or csv file formats)",
+                    "1.0", "")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
 
-  GraphPerspective(const tlp::PluginContext* c);
+  GraphPerspective(const tlp::PluginContext *c);
   virtual ~GraphPerspective();
   virtual void start(tlp::PluginProgress *);
-  tlp::GraphHierarchiesModel* model() const;
-  void copy(tlp::Graph*, bool deleteAfter=false);
-  tlp::Graph* createSubGraph(tlp::Graph*);
+  tlp::GraphHierarchiesModel *model() const;
+  void copy(tlp::Graph *, bool deleteAfter = false);
+  tlp::Graph *createSubGraph(tlp::Graph *);
 
   void treatEvent(const tlp::Event &);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
 #else
-  void log(QtMsgType,const char*);
+  void log(QtMsgType, const char *);
 #endif
 
   virtual bool terminated();
 
 public slots:
   void importGraph();
-  void exportGraph(tlp::Graph*g = NULL);
-  void saveGraphHierarchyInTlpFile(tlp::Graph*g = NULL);
-  void createPanel(tlp::Graph* g = NULL);
+  void exportGraph(tlp::Graph *g = NULL);
+  void saveGraphHierarchyInTlpFile(tlp::Graph *g = NULL);
+  void createPanel(tlp::Graph *g = NULL);
   bool save();
-  bool saveAs(const QString& path="");
+  bool saveAs(const QString &path = "");
   void open(QString fileName = "");
   virtual void openProjectFile(const QString &path);
 
@@ -106,13 +109,15 @@ public slots:
   void showDevelDocumentation();
   void showPythonDocumentation();
 
-  virtual void redrawPanels(bool center=false);
-  void centerPanelsForGraph(tlp::Graph*, bool graphChanged, bool onlyGlMainView);
-  void centerPanelsForGraph(tlp::Graph* g) {
+  virtual void redrawPanels(bool center = false);
+  void centerPanelsForGraph(tlp::Graph *, bool graphChanged, bool onlyGlMainView);
+  void centerPanelsForGraph(tlp::Graph *g) {
     centerPanelsForGraph(g, false, false);
   }
-  void closePanelsForGraph(tlp::Graph* g = NULL);
-  bool setGlMainViewPropertiesForGraph(tlp::Graph* g, const std::map<std::string, tlp::PropertyInterface*>& propsMap);
+  void closePanelsForGraph(tlp::Graph *g = NULL);
+  bool
+  setGlMainViewPropertiesForGraph(tlp::Graph *g,
+                                  const std::map<std::string, tlp::PropertyInterface *> &propsMap);
   void setSearchOutput(bool);
   void setPythonPanel(bool);
   void openPreferences();
@@ -128,19 +133,19 @@ public slots:
   void showAboutTulipPage();
 
 protected slots:
-  void currentGraphChanged(tlp::Graph* graph);
+  void currentGraphChanged(tlp::Graph *graph);
   void refreshDockExpandControls();
-  void panelFocused(tlp::View*);
-  void focusedPanelGraphSet(tlp::Graph*);
+  void panelFocused(tlp::View *);
+  void focusedPanelGraphSet(tlp::Graph *);
   void focusedPanelSynchronized();
   void clearGraph();
-  void deleteSelectedElements(bool fromRoot=false);
+  void deleteSelectedElements(bool fromRoot = false);
   void deleteSelectedElementsFromRootGraph();
   void invertSelection();
   void reverseSelectedEdges();
   void cancelSelection();
   void make_graph();
-  void selectAll(bool nodes=true, bool edges=true);
+  void selectAll(bool nodes = true, bool edges = true);
   void selectAllNodes();
   void selectAllEdges();
   void undo();
@@ -172,16 +177,14 @@ protected slots:
 
 protected:
   bool eventFilter(QObject *, QEvent *);
-  void importGraph(const std::string& module, tlp::DataSet& data);
+  void importGraph(const std::string &module, tlp::DataSet &data);
   void updateLogIconsAndCounters();
-
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   PythonPanel *_pythonPanel;
   tlp::PythonIDE *_pythonIDE;
   QDialog *_pythonIDEDialog;
 #endif
-
 };
 
 #endif // GRAPHPERSPECTIVE_H

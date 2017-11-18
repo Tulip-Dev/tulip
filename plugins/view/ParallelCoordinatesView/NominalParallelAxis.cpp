@@ -30,22 +30,30 @@ using namespace std;
 
 namespace tlp {
 
-NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor, const float rotationAngle, const GlAxis::CaptionLabelPosition captionPosition) :
-  ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor), axisAreaWidth, rotationAngle, captionPosition), graphProxy(graph) {
+NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height,
+                                         const float axisAreaWidth,
+                                         ParallelCoordinatesGraphProxy *graph,
+                                         const std::string &propertyName, const Color &axisColor,
+                                         const float rotationAngle,
+                                         const GlAxis::CaptionLabelPosition captionPosition)
+    : ParallelAxis(
+          new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor),
+          axisAreaWidth, rotationAngle, captionPosition),
+      graphProxy(graph) {
   glNominativeAxis = static_cast<GlNominativeAxis *>(glAxis);
   setLabels();
   ParallelAxis::redraw();
 }
 
-void
-NominalParallelAxis::setLabels() {
+void NominalParallelAxis::setLabels() {
 
   vector<string> labels;
   Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 
   while (dataIt->hasNext()) {
     unsigned int dataId = dataIt->next();
-    string labelName = graphProxy->getPropertyValueForData<StringProperty,StringType> (getAxisName(), dataId);
+    string labelName =
+        graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
 
     if (std::find(labels.begin(), labels.end(), labelName) == labels.end()) {
       labels.push_back(labelName);
@@ -62,7 +70,8 @@ NominalParallelAxis::setLabels() {
 }
 
 Coord NominalParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {
-  string propertyValue(graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataIdx));
+  string propertyValue(
+      graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataIdx));
   Coord axisPointCoord(glNominativeAxis->getAxisPointCoordForValue(propertyValue));
 
   if (rotationAngle != 0.0f) {
@@ -83,10 +92,11 @@ const set<unsigned int> &NominalParallelAxis::getDataInSlidersRange() {
   map<string, unsigned int> labelsInRange;
   vector<string>::iterator it;
 
-  for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+  for (it = labelsOrder.begin(); it != labelsOrder.end(); ++it) {
     Coord labelCoord = glNominativeAxis->getAxisPointCoordForValue(*it);
 
-    if (labelCoord.getY() >= bottomSliderCoord.getY() && labelCoord.getY() <= topSliderCoord.getY()) {
+    if (labelCoord.getY() >= bottomSliderCoord.getY() &&
+        labelCoord.getY() <= topSliderCoord.getY()) {
       labelsInRange[*it] = 1;
     }
   }
@@ -95,7 +105,8 @@ const set<unsigned int> &NominalParallelAxis::getDataInSlidersRange() {
 
   while (dataIt->hasNext()) {
     unsigned int dataId = dataIt->next();
-    string labelName = graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
+    string labelName =
+        graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
 
     if (labelsInRange.find(labelName) != labelsInRange.end()) {
       dataSubset.insert(dataId);
@@ -114,7 +125,7 @@ void NominalParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &d
   Coord max(getBaseCoord());
   Coord min(getBaseCoord() + Coord(0.0f, getAxisHeight()));
 
-  for (it = dataSubset.begin() ; it != dataSubset.end() ; ++it) {
+  for (it = dataSubset.begin(); it != dataSubset.end(); ++it) {
     Coord labelCoord(getPointCoordOnAxisForData(*it));
 
     if (labelCoord.getY() < min.getY()) {
@@ -135,5 +146,4 @@ void NominalParallelAxis::redraw() {
   setLabels();
   ParallelAxis::redraw();
 }
-
 }

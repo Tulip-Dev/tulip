@@ -34,9 +34,8 @@
 using namespace std;
 using namespace tlp;
 
-MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button,
-                               Qt::KeyboardModifier modifier)
-  : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(0) {}
+MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier)
+    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(0) {}
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
@@ -44,20 +43,18 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   GlGraphInputData *inputData = glw->getScene()->getGlGraphComposite()->getInputData();
 
   if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (qMouseEv->buttons() == mButton &&
-        (kModifier == Qt::NoModifier ||
-         qMouseEv->modifiers() & kModifier)) {
+        (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier)) {
       if (!started) {
         x = qMouseEv->x();
-        y =  glw->height() - qMouseEv->y();
+        y = glw->height() - qMouseEv->y();
         w = 0;
         h = 0;
         started = true;
         graph = inputData->getGraph();
-      }
-      else {
+      } else {
         if (inputData->getGraph() != graph) {
           graph = NULL;
           started = false;
@@ -67,7 +64,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
 
-    if (qMouseEv->buttons()==Qt::MidButton) {
+    if (qMouseEv->buttons() == Qt::MidButton) {
       started = false;
       glw->redraw();
       return true;
@@ -77,11 +74,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if ((qMouseEv->buttons() & mButton) &&
-        (kModifier == Qt::NoModifier ||
-         qMouseEv->modifiers() & kModifier)) {
+        (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier)) {
       if (inputData->getGraph() != graph) {
         graph = NULL;
         started = false;
@@ -110,11 +106,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonRelease) {
 
-    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if ((qMouseEv->button() == mButton &&
-         (kModifier == Qt::NoModifier ||
-          qMouseEv->modifiers() & kModifier))) {
+         (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier))) {
       if (inputData->getGraph() != graph) {
         graph = NULL;
         started = false;
@@ -123,18 +118,20 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       if (started) {
         started = false;
 
-        if(!(w==0 && h==0)) {
+        if (!(w == 0 && h == 0)) {
           int width = glw->width();
           int height = glw->height();
 
-          Coord bbMin(width-x, height - y+h);
-          Coord bbMax(width-(x+w), height - y);
+          Coord bbMin(width - x, height - y + h);
+          Coord bbMax(width - (x + w), height - y);
 
           if (abs(bbMax[0] - bbMin[0]) > 1 && abs(bbMax[1] - bbMin[1]) > 1) {
 
             BoundingBox sceneBB;
-            sceneBB.expand(glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMin)));
-            sceneBB.expand(glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMax)));
+            sceneBB.expand(
+                glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMin)));
+            sceneBB.expand(
+                glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMax)));
 
             QtGlSceneZoomAndPanAnimator zoomAnPan(glw, sceneBB);
             zoomAnPan.animateZoomAndPan();
@@ -150,7 +147,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 }
 //=====================================================================
 bool MouseBoxZoomer::draw(GlMainWidget *glw) {
-  if (!started) return false;
+  if (!started)
+    return false;
 
   if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
     graph = NULL;
@@ -158,7 +156,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   }
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glMatrixMode (GL_PROJECTION);
+  glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
   glOrtho(0, glw->width(), 0, glw->height(), -1, 1);
@@ -175,9 +173,9 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y-h);
-  glVertex2f(x, y-h);
+  glVertex2f(x + w, y);
+  glVertex2f(x + w, y - h);
+  glVertex2f(x, y - h);
   glEnd();
   glDisable(GL_BLEND);
 
@@ -186,15 +184,15 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glEnable(GL_LINE_STIPPLE);
   glBegin(GL_LINE_LOOP);
   glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y-h);
-  glVertex2f(x, y-h);
+  glVertex2f(x + w, y);
+  glVertex2f(x + w, y - h);
+  glVertex2f(x, y - h);
   glEnd();
 
   glPopMatrix();
-  glMatrixMode (GL_PROJECTION);
+  glMatrixMode(GL_PROJECTION);
   glPopMatrix();
-  glMatrixMode (GL_MODELVIEW);
+  glMatrixMode(GL_MODELVIEW);
   glPopAttrib();
   return true;
 }

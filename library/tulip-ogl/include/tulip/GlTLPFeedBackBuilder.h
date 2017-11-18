@@ -44,14 +44,9 @@ enum TLP_FB_TROUGHTOKENTYPE {
 class TLP_GL_SCOPE GlTLPFeedBackBuilder : public GlFeedBackBuilder {
 
 public:
-
   GlTLPFeedBackBuilder()
-    :inGlEntity(false),
-     inGlGraph(false),
-     inNode(false),
-     inEdge(false),
-     inColorInfo(false),
-     needData(false) {}
+      : inGlEntity(false), inGlGraph(false), inNode(false), inEdge(false), inColorInfo(false),
+        needData(false) {}
 
   virtual ~GlTLPFeedBackBuilder() {}
 
@@ -75,7 +70,6 @@ public:
   virtual void end() {}
 
 private:
-
   bool inGlEntity;
   bool inGlGraph;
   bool inNode;
@@ -84,9 +78,7 @@ private:
   bool needData;
 
   std::vector<GLfloat> dataBuffer;
-
 };
-
 }
 
 #endif // Tulip_GLFEEDBACKBUILDER_H

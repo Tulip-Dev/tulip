@@ -29,10 +29,10 @@
 
 using namespace tlp;
 
-struct MyGraphicsView: public QGraphicsView {
-  QGraphicsItem* _centralItem;
+struct MyGraphicsView : public QGraphicsView {
+  QGraphicsItem *_centralItem;
 
-  MyGraphicsView(): QGraphicsView(new QGraphicsScene()), _centralItem(NULL) {
+  MyGraphicsView() : QGraphicsView(new QGraphicsScene()), _centralItem(NULL) {
     setAcceptDrops(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -49,26 +49,28 @@ struct MyGraphicsView: public QGraphicsView {
       scene()->setSceneRect(QRect(QPoint(0, 0), size()));
     }
 
-    GlMainWidgetGraphicsItem* glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem*>(_centralItem);
-    QGraphicsProxyWidget* proxyWidget = dynamic_cast<QGraphicsProxyWidget*>(_centralItem);
+    GlMainWidgetGraphicsItem *glMainWidgetItem =
+        dynamic_cast<GlMainWidgetGraphicsItem *>(_centralItem);
+    QGraphicsProxyWidget *proxyWidget = dynamic_cast<QGraphicsProxyWidget *>(_centralItem);
 
     if (glMainWidgetItem)
-      glMainWidgetItem->resize(width(),height());
+      glMainWidgetItem->resize(width(), height());
     else if (proxyWidget)
-      proxyWidget->resize(width(),height());
+      proxyWidget->resize(width(), height());
 
     if (scene())
       scene()->update();
 
-    // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
-    QMouseEvent eventModif(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed
+    // when maximizing or minimizing the graphics view)
+    QMouseEvent eventModif(QEvent::MouseMove, QPoint(size().width() / 2, size().height() / 2),
+                           Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     QApplication::sendEvent(this, &eventModif);
   }
 };
 
 ViewWidget::ViewWidget()
-  : View(), _graphicsView(NULL), _centralWidget(NULL), _centralWidgetItem(NULL) {
-}
+    : View(), _graphicsView(NULL), _centralWidget(NULL), _centralWidgetItem(NULL) {}
 
 ViewWidget::~ViewWidget() {
   // ensure to uninstall event filter of current interactor to
@@ -83,7 +85,7 @@ ViewWidget::~ViewWidget() {
   }
 }
 
-QGraphicsView* ViewWidget::graphicsView() const {
+QGraphicsView *ViewWidget::graphicsView() const {
   return _graphicsView;
 }
 
@@ -103,7 +105,7 @@ void ViewWidget::graphDeleted(Graph *parentGraph) {
   setGraph(parentGraph);
 }
 
-void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
+void ViewWidget::setCentralWidget(QWidget *w, bool deleteOldCentralWidget) {
   assert(w);
   QGraphicsItem *oldCentralItem = _centralWidgetItem;
 
@@ -118,18 +120,20 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
 
   if (glMainWidget) {
-    _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
+    _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
+                                  QPainter::TextAntialiasing);
     _graphicsView->setViewport(new GlMainWidget());
     _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    GlMainWidgetGraphicsItem* glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem);
+    GlMainWidgetGraphicsItem *glMainWidgetItem =
+        dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem);
 
     if (glMainWidgetItem) {
       deleteOldCentralWidget = false;
       glMainWidgetItem->setGlMainWidget(glMainWidget);
-    }
-    else {
-      glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
+    } else {
+      glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(),
+                                                      _graphicsView->height());
 
       if (_centralWidgetItem)
         _graphicsView->scene()->removeItem(_centralWidgetItem);
@@ -138,25 +142,24 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
       _graphicsView->scene()->addItem(_centralWidgetItem);
     }
 
-    glMainWidgetItem->resize(_graphicsView->width(),_graphicsView->height());
-  }
-  else {
+    glMainWidgetItem->resize(_graphicsView->width(), _graphicsView->height());
+  } else {
     _graphicsView->setRenderHints(QPainter::TextAntialiasing);
     _graphicsView->setViewport(NULL);
     _graphicsView->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     _centralWidgetItem = _graphicsView->scene()->addWidget(w);
-    _centralWidget->resize(_graphicsView->width(),_graphicsView->height());
+    _centralWidget->resize(_graphicsView->width(), _graphicsView->height());
   }
 
-  static_cast<MyGraphicsView*>(_graphicsView)->_centralItem = _centralWidgetItem;
+  static_cast<MyGraphicsView *>(_graphicsView)->_centralItem = _centralWidgetItem;
 
-  _centralWidgetItem->setPos(0,0);
+  _centralWidgetItem->setPos(0, 0);
 
   _centralWidgetItem->setZValue(0);
 
   refreshItemsParenthood();
 
-  if(deleteOldCentralWidget) {
+  if (deleteOldCentralWidget) {
     delete oldCentralItem;
   }
 }
@@ -190,7 +193,7 @@ void ViewWidget::refreshItemsParenthood() {
   }
 }
 
-QGraphicsItem* ViewWidget::centralItem() const {
+QGraphicsItem *ViewWidget::centralItem() const {
   return _centralWidgetItem;
 }
 
@@ -200,8 +203,6 @@ QPixmap ViewWidget::snapshot(const QSize &outputSize) const {
 
   QPixmap result(_centralWidget->size());
   _centralWidget->render(&result);
-
-
 
   if (outputSize.isValid()) {
     return result.scaled(outputSize);

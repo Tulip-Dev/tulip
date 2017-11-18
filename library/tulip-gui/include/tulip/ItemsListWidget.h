@@ -40,11 +40,11 @@ class TLP_QT_SCOPE ItemsListWidget : public QListWidget {
   Q_OBJECT
 
 public:
-
   ItemsListWidget(QWidget *parent = NULL, const unsigned int maxListSize = 0);
 
   // Method which adds an item in the list
-  // return true if the item has been added, false if the maximum size of the list is already reached
+  // return true if the item has been added, false if the maximum size of the list is already
+  // reached
   bool addItemList(QString item);
 
   void deleteItemList(QListWidgetItem *item);
@@ -59,7 +59,6 @@ public:
   }
 
 protected:
-
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
   void dragEnterEvent(QDragEnterEvent *event);
@@ -67,20 +66,17 @@ protected:
   void dropEvent(QDropEvent *event);
 
 private:
-
   void beginDrag(QListWidgetItem *item);
   void changeStatus(QListWidgetItem *item);
   void dragMoveOrEnterEvent(QDragMoveEvent *event);
   QPoint startPos;
-  QHash<QString,itemInfo> hashDataBase;
+  QHash<QString, itemInfo> hashDataBase;
   unsigned int maxListSize;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
-
 
 ///@endcond

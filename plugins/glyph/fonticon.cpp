@@ -63,15 +63,13 @@ class FontIcon {
   BoundingBox boundingBox;
 
 public:
+  FontIcon()
+      : iconCodePoint(0), renderingDataBuffer(0), indicesBuffer(0), nbVertices(0), nbIndices(0),
+        nbOutlineIndices(0) {}
 
-  FontIcon() :
-    iconCodePoint(0), renderingDataBuffer(0), indicesBuffer(0),
-    nbVertices(0), nbIndices(0), nbOutlineIndices(0) {}
-
-  FontIcon(const std::string &fontFile, unsigned int iconCodePoint) :
-    fontFile(fontFile), iconCodePoint(iconCodePoint),
-    renderingDataBuffer(0), indicesBuffer(0),
-    nbVertices(0), nbIndices(0), nbOutlineIndices(0) {}
+  FontIcon(const std::string &fontFile, unsigned int iconCodePoint)
+      : fontFile(fontFile), iconCodePoint(iconCodePoint), renderingDataBuffer(0), indicesBuffer(0),
+        nbVertices(0), nbIndices(0), nbOutlineIndices(0) {}
 
   ~FontIcon() {
     if (renderingDataBuffer != 0) {
@@ -82,7 +80,6 @@ public:
       glDeleteBuffers(1, &indicesBuffer);
     }
   }
-
 
   void render(const tlp::Color &fillColor, const tlp::Color &outlineColor,
               const float outlineSize) {
@@ -96,7 +93,7 @@ public:
 
     glBindBuffer(GL_ARRAY_BUFFER, renderingDataBuffer);
     glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
-    glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(nbVertices*3*sizeof(float)));
+    glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(nbVertices * 3 * sizeof(float)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
     setMaterial(fillColor);
@@ -107,7 +104,8 @@ public:
     if (outlineSize > 0) {
       setMaterial(outlineColor);
       glLineWidth(outlineSize);
-      glDrawElements(GL_LINES, nbOutlineIndices, GL_UNSIGNED_SHORT, BUFFER_OFFSET(nbIndices*sizeof(unsigned short)));
+      glDrawElements(GL_LINES, nbOutlineIndices, GL_UNSIGNED_SHORT,
+                     BUFFER_OFFSET(nbIndices * sizeof(unsigned short)));
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -121,7 +119,6 @@ public:
   }
 
 private:
-
   void tesselateIcon() {
 
     const FT_Library *library = FTLibrary::Instance().GetLibrary();
@@ -142,7 +139,7 @@ private:
 
     float size = 20;
 
-    err = FT_Set_Char_Size(face, int(size * HRES), 0, DPI * HRES, DPI * HRES);
+    err = FT_Set_Char_Size(face, int(size * HRES), 0, DPI *HRES, DPI *HRES);
 
     if (err) {
       return;
@@ -189,8 +186,7 @@ private:
           vertices.push_back(p);
           indices.push_back(idx++);
           vertexIdx[vertices.back()] = indices.back();
-        }
-        else {
+        } else {
           indices.push_back(vertexIdx[p]);
         }
       }
@@ -199,11 +195,11 @@ private:
     for (unsigned int t = 0; t < vectoriser.ContourCount(); ++t) {
       const FTContour *contour = vectoriser.Contour(t);
 
-      for (unsigned int i = 0; i < contour->PointCount() - 1 ; ++i) {
+      for (unsigned int i = 0; i < contour->PointCount() - 1; ++i) {
         FTPoint point = contour->Point(i);
         tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
         outlineIndices.push_back(ushort_cast(vertexIdx[p]));
-        point = contour->Point(i+1);
+        point = contour->Point(i + 1);
         p = Coord(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
         outlineIndices.push_back(ushort_cast(vertexIdx[p]));
       }
@@ -221,29 +217,36 @@ private:
 
     for (size_t i = 0; i < vertices.size(); ++i) {
       if (meshBB.height() > meshBB.width()) {
-        vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) * (meshBB.width() / float(meshBB.height()));
+        vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) *
+                         (meshBB.width() / float(meshBB.height()));
         vertices[i][1] = ((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5;
-      }
-      else {
+      } else {
         vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0])) - 0.5;
-        vertices[i][1] = (((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) * (meshBB.height() / float(meshBB.width()));
+        vertices[i][1] = (((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) *
+                         (meshBB.height() / float(meshBB.width()));
       }
 
       const tlp::Coord &v = vertices[i];
-      texCoords.push_back(Vec2f(v[0]+0.5, v[1]+0.5));
+      texCoords.push_back(Vec2f(v[0] + 0.5, v[1] + 0.5));
     }
 
     glGenBuffers(1, &renderingDataBuffer);
     glGenBuffers(1, &indicesBuffer);
 
     glBindBuffer(GL_ARRAY_BUFFER, renderingDataBuffer);
-    glBufferData(GL_ARRAY_BUFFER, (vertices.size() * 3 + texCoords.size() * 2) * sizeof(float), NULL, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (vertices.size() * 3 + texCoords.size() * 2) * sizeof(float),
+                 NULL, GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * 3 * sizeof(float), &vertices[0]);
-    glBufferSubData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float), texCoords.size() * 2 * sizeof(float), &texCoords[0]);
+    glBufferSubData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float),
+                    texCoords.size() * 2 * sizeof(float), &texCoords[0]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indices.size() + outlineIndices.size()) * sizeof(unsigned short), NULL, GL_STATIC_DRAW);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned short), &indices[0]);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), outlineIndices.size() * sizeof(unsigned short), &outlineIndices[0]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 (indices.size() + outlineIndices.size()) * sizeof(unsigned short), NULL,
+                 GL_STATIC_DRAW);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned short),
+                    &indices[0]);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short),
+                    outlineIndices.size() * sizeof(unsigned short), &outlineIndices[0]);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -251,19 +254,17 @@ private:
     nbIndices = indices.size();
     nbOutlineIndices = outlineIndices.size();
 
-    for (size_t i = 0 ; i < vertices.size() ; ++i) {
+    for (size_t i = 0; i < vertices.size(); ++i) {
       boundingBox.expand(vertices[i]);
     }
-
   }
-
 };
 
 static map<string, FontIcon> fontIcons;
 
-static void drawIcon(const string &iconName, const string &fontFile, const unsigned int iconCodePoint,
-                     const Color &color, const Color &outlineColor,
-                     const float outlineSize, const string &texture) {
+static void drawIcon(const string &iconName, const string &fontFile,
+                     const unsigned int iconCodePoint, const Color &color,
+                     const Color &outlineColor, const float outlineSize, const string &texture) {
   if (fontIcons.find(iconName) == fontIcons.end()) {
     fontIcons[iconName] = FontIcon(fontFile, iconCodePoint);
   }
@@ -280,10 +281,9 @@ static void drawIcon(const string &iconName, const string &fontFile, const unsig
 class FontIconGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Icon", "Antoine Lambert", "26/02/2015", "Icon", "2.0", NodeShape::Icon)
 
-  FontIconGlyph(const tlp::PluginContext* context = NULL) : Glyph(context) {}
+  FontIconGlyph(const tlp::PluginContext *context = NULL) : Glyph(context) {}
 
   ~FontIconGlyph() {}
 
@@ -294,17 +294,17 @@ public:
     const tlp::Color &nodeColor = glGraphInputData->getElementColor()->getNodeValue(n);
     const tlp::Color &nodeBorderColor = glGraphInputData->getElementBorderColor()->getNodeValue(n);
     float nodeBorderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
-    const string &nodeTexture = glGraphInputData->parameters->getTexturePath() + glGraphInputData->getElementTexture()->getNodeValue(n);
+    const string &nodeTexture = glGraphInputData->parameters->getTexturePath() +
+                                glGraphInputData->getElementTexture()->getNodeValue(n);
 
     if (iconName.substr(0, 3) == "fa-") {
       drawIcon(iconName, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(),
-               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName),
-               nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
-    }
-    else {
+               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), nodeColor, nodeBorderColor,
+               nodeBorderWidth, nodeTexture);
+    } else {
       drawIcon(iconName, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName),
-               nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
+               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), nodeColor,
+               nodeBorderColor, nodeBorderWidth, nodeTexture);
     }
   }
 
@@ -317,7 +317,6 @@ public:
   }
 
 private:
-
   string getNodeIcon(node n) {
     StringProperty *viewIcon = glGraphInputData->getElementIcon();
     string iconName = viewIcon->getNodeValue(n);
@@ -329,7 +328,6 @@ private:
 
     return iconName;
   }
-
 };
 
 PLUGIN(FontIconGlyph)
@@ -337,12 +335,12 @@ PLUGIN(FontIconGlyph)
 class EEFontIconGlyph : public EdgeExtremityGlyph {
 
 public:
+  GLYPHINFORMATION("2D - Icon extremity", "Antoine Lambert", "02/03/2015",
+                   "Icon for edge extremities", "2.0", EdgeExtremityShape::Icon)
 
-  GLYPHINFORMATION("2D - Icon extremity", "Antoine Lambert", "02/03/2015", "Icon for edge extremities", "2.0", EdgeExtremityShape::Icon)
+  EEFontIconGlyph(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  EEFontIconGlyph(const tlp::PluginContext* context) : EdgeExtremityGlyph(context) {}
-
-  void draw(edge e, node, const Color& glyphColor,const Color &borderColor, float) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float) {
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
     string iconName = viewIcon->getEdgeValue(e);
 
@@ -351,20 +349,20 @@ public:
       iconName = defaultIcon;
     }
 
-    string edgeTexture = edgeExtGlGraphInputData->parameters->getTexturePath() + edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+    string edgeTexture = edgeExtGlGraphInputData->parameters->getTexturePath() +
+                         edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
     float borderWidth = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 
     if (iconName.substr(0, 2) == "fa") {
       drawIcon(iconName, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(),
-               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName),
-               glyphColor, borderColor, borderWidth, edgeTexture);
-    }
-    else {
+               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), glyphColor, borderColor,
+               borderWidth, edgeTexture);
+    } else {
       drawIcon(iconName, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName),
-               glyphColor, borderColor, borderWidth, edgeTexture);
+               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), glyphColor,
+               borderColor, borderWidth, edgeTexture);
     }
   }
 };

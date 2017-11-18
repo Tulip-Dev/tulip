@@ -42,23 +42,24 @@ class EdgeEntity : public GlSimpleEntity {
   Coord end;
   std::vector<Coord> bends;
 
-public :
-
-  void setCoordinates(const Coord &startPos, const Coord &endPos,const std::vector<Coord> &bendsPos) {
+public:
+  void setCoordinates(const Coord &startPos, const Coord &endPos,
+                      const std::vector<Coord> &bendsPos) {
     boundingBox = BoundingBox();
-    start=startPos;
-    end=endPos;
-    bends=bendsPos;
+    start = startPos;
+    end = endPos;
+    bends = bendsPos;
     boundingBox.expand(start);
     boundingBox.expand(end);
 
-    for(std::vector<Coord>::iterator it=bends.begin(); it!=bends.end(); ++it) {
+    for (std::vector<Coord>::iterator it = bends.begin(); it != bends.end(); ++it) {
       boundingBox.expand(*it);
     }
   }
 
-  void draw(float,Camera *) {
-    GlLines::glDrawCurve(start,bends,end,10,0,Color(127,127,127,255),Color(127,127,127,255));
+  void draw(float, Camera *) {
+    GlLines::glDrawCurve(start, bends, end, 10, 0, Color(127, 127, 127, 255),
+                         Color(127, 127, 127, 255));
   }
 
   void getXML(std::string &) {}
@@ -66,10 +67,9 @@ public :
 };
 
 /// This interactor allows to move/add/delete EdgeBends
-class TLP_QT_SCOPE MouseEdgeBendEditor:public GLInteractorComponent {
+class TLP_QT_SCOPE MouseEdgeBendEditor : public GLInteractorComponent {
 
 public:
-
   MouseEdgeBendEditor();
   ~MouseEdgeBendEditor();
   bool compute(GlMainWidget *glMainWidget);
@@ -78,24 +78,23 @@ public:
   bool eventFilter(QObject *, QEvent *);
 
 protected:
-  enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+  enum EditOperation { NONE_OP = 0, TRANSLATE_OP, NEW_OP, DELETE_OP };
 
-  EditOperation operation()const {
+  EditOperation operation() const {
     return _operation;
   }
 
-  tlp::edge getEdge()const {
+  tlp::edge getEdge() const {
     return mEdge;
   }
 
   void stopEdition();
 
 private:
-
-  enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
+  enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE };
 
   Graph *_graph;
-  GlMainWidget* glMainWidget;
+  GlMainWidget *glMainWidget;
   LayoutProperty *_layout;
   BooleanProperty *_selection;
   DoubleProperty *_rotation;
@@ -104,7 +103,6 @@ private:
   CoordVectorProperty *_coordsVectorProperty;
 
   void initProxies(GlMainWidget *glMainWidget);
-
 
   EditOperation _operation;
   OperationTarget mode;
@@ -119,24 +117,22 @@ private:
   GlTriangle targetTriangle;
   GlCircle sourceCircle;
   GlComposite *circleString;
-  std::vector <SelectedEntity> select;
+  std::vector<SelectedEntity> select;
   bool edgeSelected;
   tlp::edge mEdge;
   node mNode;
   Coord start, end;
   std::string selectedEntity;
   bool mouseButtonPressOnEdge;
-  bool belong(Coord, Coord, Coord, GlMainWidget*);
+  bool belong(Coord, Coord, Coord, GlMainWidget *);
   bool haveSelection(GlMainWidget *);
   void computeSrcTgtEntities(GlMainWidget *);
-  bool computeBendsCircles(GlMainWidget*);
-  void mMouseTranslate(int, int, GlMainWidget*);
+  bool computeBendsCircles(GlMainWidget *);
+  void mMouseTranslate(int, int, GlMainWidget *);
   void mMouseDelete();
-  void mMouseCreate(int, int, GlMainWidget*);
+  void mMouseCreate(int, int, GlMainWidget *);
 };
-
 }
-
 
 #endif
 ///@endcond

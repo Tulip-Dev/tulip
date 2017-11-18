@@ -44,19 +44,20 @@ class GlGraphRenderer;
  * @see GlGraphRenderingParameters
  * @see getRenderingParametersPointer()
  *
- * To render the graph in OpenGL, GlGraphComposite use a GlGraphRenderer. So if you want to change the system to render the graph, you have to create a new GlGraphRender
+ * To render the graph in OpenGL, GlGraphComposite use a GlGraphRenderer. So if you want to change
+ * the system to render the graph, you have to create a new GlGraphRender
  * @see GlGraphRenderer
  */
 class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public Observable {
 
 public:
-
   /**
    * @brief Build a GlGraphComposite with the graph data
    *
-   * You can specify a GlGraphRenderer, if you don't do this a GlGraphHighDetailsRenderer will be used to display the graph
+   * You can specify a GlGraphRenderer, if you don't do this a GlGraphHighDetailsRenderer will be
+   * used to display the graph
    */
-  GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer=NULL);
+  GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer = NULL);
 
   /**
    * @brief Build a GlGraphComposite with the graph data
@@ -65,7 +66,7 @@ public:
    *
    * This graph composite is associated to the scene passed in parameter
    */
-  GlGraphComposite(Graph* graph, GlScene *scene);
+  GlGraphComposite(Graph *graph, GlScene *scene);
 
   /**
    * @brief Destructor
@@ -77,7 +78,7 @@ public:
    *
    * So after you have to call setRenderingParameters
    */
-  const GlGraphRenderingParameters& getRenderingParameters();
+  const GlGraphRenderingParameters &getRenderingParameters();
   /**
    * @brief Set the rendering parameters use for rendering
    */
@@ -88,14 +89,14 @@ public:
    *
    * With this function you don't have to call setRenderingParameters() function
    */
-  GlGraphRenderingParameters* getRenderingParametersPointer();
+  GlGraphRenderingParameters *getRenderingParametersPointer();
 
   /**
    * @brief Return the inputData use by the composite
    *
    * In GlGraphInputData you have properties used to render the graph
    */
-  GlGraphInputData* getInputData();
+  GlGraphInputData *getInputData();
 
   /**
    * @brief Return the graph used by this GlGraphComposite
@@ -104,7 +105,7 @@ public:
     return inputData.getGraph();
   }
 
-///@cond DOXYGEN_HIDDEN
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * Function used to visit composite's children
@@ -115,30 +116,31 @@ public:
    */
   virtual void acceptVisitorOnGraph(GlSceneVisitor *visitor);
 
-  virtual void draw(float lod,Camera* camera);
+  virtual void draw(float lod, Camera *camera);
 
-  virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int x, int y, int w, int h, std::vector<SelectedEntity>& selectedEntities);
+  virtual void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w,
+                              int h, std::vector<SelectedEntity> &selectedEntities);
 
   /**
    * Return set of metaNodes
    */
   std::set<node> &getMetaNodes() {
-    if(nodesModified) {
+    if (nodesModified) {
       metaNodes.clear();
 
-      Graph *graph=inputData.getGraph();
-      Iterator<node>* nodesIterator = graph->getNodes();
+      Graph *graph = inputData.getGraph();
+      Iterator<node> *nodesIterator = graph->getNodes();
 
       while (nodesIterator->hasNext()) {
-        node n=nodesIterator->next();
+        node n = nodesIterator->next();
 
-        if(graph->getNodeMetaInfo(n))
+        if (graph->getNodeMetaInfo(n))
           metaNodes.insert(n);
       }
 
       delete nodesIterator;
 
-      nodesModified=false;
+      nodesModified = false;
     }
 
     return metaNodes;
@@ -149,11 +151,12 @@ public:
   }
 
   /**
-   * @brief setRenderer Delete the old renderer and replace it by the new one. If the new renderer is equal to NULL create a GlGraphHighDetailsRenderer.
+   * @brief setRenderer Delete the old renderer and replace it by the new one. If the new renderer
+   * is equal to NULL create a GlGraphHighDetailsRenderer.
    */
-  void setRenderer(tlp::GlGraphRenderer*);
+  void setRenderer(tlp::GlGraphRenderer *);
 
-///@endcond
+  ///@endcond
 
   /**
    * @brief Function to export data in outString (in XML format)
@@ -166,12 +169,11 @@ public:
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 protected:
+  ///@cond DOXYGEN_HIDDEN
 
-///@cond DOXYGEN_HIDDEN
+  void treatEvent(const Event &evt);
 
-  void treatEvent(const Event& evt);
-
-///@endcond
+  ///@endcond
 
   GlGraphRenderingParameters parameters;
   GlGraphInputData inputData;
@@ -181,7 +183,6 @@ protected:
 
   bool nodesModified;
   std::set<node> metaNodes;
-
 };
 }
 

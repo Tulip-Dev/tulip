@@ -25,9 +25,8 @@
 namespace tlp {
 
 class ParallelCoordsElementShowInfo : public MouseShowElementInfo {
-public :
+public:
   bool pick(int x, int y, SelectedEntity &selectedEntity);
 };
-
 }
 #endif /* PARALLELCOORDSELEMENTSHOWINFO_H_ */

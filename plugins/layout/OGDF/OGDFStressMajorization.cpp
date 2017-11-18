@@ -69,43 +69,50 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-  // terminationCriterion
-  "Tells which TERMINATION_CRITERIA should be used.",
+    // terminationCriterion
+    "Tells which TERMINATION_CRITERIA should be used.",
 
-  // fixXCoordinates
-  "Tells whether the x coordinates are allowed to be modified or not.",
+    // fixXCoordinates
+    "Tells whether the x coordinates are allowed to be modified or not.",
 
-  // fixYCoordinates
-  "Tells whether the y coordinates are allowed to be modified or not.",
+    // fixYCoordinates
+    "Tells whether the y coordinates are allowed to be modified or not.",
 
-  // hasInitialLayout
-  "Tells whether the current layout should be used or the initial layout needs to be computed.",
+    // hasInitialLayout
+    "Tells whether the current layout should be used or the initial layout needs to be computed.",
 
-  // layoutComponentsSeparately
-  "Sets whether the graph components should be layouted separately or a dummy distance should be used for nodes within different components.",
+    // layoutComponentsSeparately
+    "Sets whether the graph components should be layouted separately or a dummy distance should be "
+    "used for nodes within different components.",
 
-  // numberOfIterations
-  "Sets a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used.",
+    // numberOfIterations
+    "Sets a fixed number of iterations for stress majorization. If the new value is smaller or "
+    "equal 0 the default value (200) is used.",
 
-  // edgeCosts
-  "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used.",
+    // edgeCosts
+    "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the "
+    "default value (100) is used.",
 
-  // useEdgeCostsProperty
-  "Tells whether the edge costs are uniform or defined in an edge costs property.",
+    // useEdgeCostsProperty
+    "Tells whether the edge costs are uniform or defined in an edge costs property.",
 
-  // edgeCostsProperty
-  "The numeric property that holds the desired cost for each edge."
+    // edgeCostsProperty
+    "The numeric property that holds the desired cost for each edge."
 
 };
 
 class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Stress Majorization (OGDF)","Karsten Klein","12/11/2007",
-                    "Implements an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","2.0","Force Directed")
-  OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
-    addInParameter<StringCollection>("terminationCriterion", paramHelp[0], "None;PositionDifference;Stress",
-                                     true, "None <br> PositionDifference <br> Stress");
+  PLUGININFORMATION("Stress Majorization (OGDF)", "Karsten Klein", "12/11/2007",
+                    "Implements an alternative to force-directed layout which is a distance-based "
+                    "layout realized by the stress majorization approach. ",
+                    "2.0", "Force Directed")
+  OGDFStressMajorization(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
+    addInParameter<StringCollection>("terminationCriterion", paramHelp[0],
+                                     "None;PositionDifference;Stress", true,
+                                     "None <br> PositionDifference <br> Stress");
     addInParameter<bool>("fixXCoordinates", paramHelp[1], "false");
     addInParameter<bool>("fixYCoordinates", paramHelp[2], "false");
     addInParameter<bool>("hasInitialLayout", paramHelp[3], "false");
@@ -113,14 +120,13 @@ public:
     addInParameter<int>("numberOfIterations", paramHelp[5], "200");
     addInParameter<double>("edgeCosts", paramHelp[6], "100");
     addInParameter<bool>("useEdgeCostsProperty", paramHelp[7], "false");
-    addInParameter<tlp::NumericProperty*>("edgeCostsProperty", paramHelp[8], "viewMetric");
-
+    addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[8], "viewMetric");
   }
 
   ~OGDFStressMajorization() {}
 
   void beforeCall() {
-    ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization*>(ogdfLayoutAlgo);
+    ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       double dval = 0;
@@ -132,11 +138,9 @@ public:
       if (dataSet->get("terminationCriterion", sc)) {
         if (sc.getCurrentString() == "PositionDifference") {
           stressm->convergenceCriterion(ogdf::StressMinimization::POSITION_DIFFERENCE);
-        }
-        else if (sc.getCurrentString() == "Stress") {
+        } else if (sc.getCurrentString() == "Stress") {
           stressm->convergenceCriterion(ogdf::StressMinimization::STRESS);
-        }
-        else {
+        } else {
           stressm->convergenceCriterion(ogdf::StressMinimization::NONE);
         }
       }
@@ -173,11 +177,8 @@ public:
           tlpToOGDF->copyTlpNumericPropertyToOGDFEdgeLength(edgeCosts);
         }
       }
-
     }
   }
-
 };
-
 
 PLUGIN(OGDFStressMajorization)

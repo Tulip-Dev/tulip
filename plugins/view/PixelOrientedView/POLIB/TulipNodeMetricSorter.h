@@ -28,13 +28,11 @@
 
 namespace pocore {
 
-
-template<typename PROPERTYTYPE, typename PROPERTY>
+template <typename PROPERTYTYPE, typename PROPERTY>
 class NodeMetricPropertyOrderRelation {
 
-public :
-
-  NodeMetricPropertyOrderRelation(tlp::Graph *graph, const std::string& dimName) {
+public:
+  NodeMetricPropertyOrderRelation(tlp::Graph *graph, const std::string &dimName) {
     nodeProperty = graph->getProperty<PROPERTY>(dimName);
   }
 
@@ -44,27 +42,24 @@ public :
     return v1 < v2;
   }
 
-private :
-
+private:
   PROPERTY *nodeProperty;
 };
 
-class TulipNodeMetricSorter  {
+class TulipNodeMetricSorter {
 
-public :
-
+public:
   static TulipNodeMetricSorter *getInstance(tlp::Graph *graph);
 
   ~TulipNodeMetricSorter();
 
-  void sortNodesForProperty(const std::string& propertyName);
-  void cleanupSortNodesForProperty(const std::string& propertyName);
-  unsigned int getNbValuesForProperty(const std::string& propertyName) ;
-  tlp::node getNodeAtRankForProperty(const unsigned int rank, const std::string& propertyName);
-  unsigned int getNodeRankForProperty(tlp::node n, const std::string& propertyName);
+  void sortNodesForProperty(const std::string &propertyName);
+  void cleanupSortNodesForProperty(const std::string &propertyName);
+  unsigned int getNbValuesForProperty(const std::string &propertyName);
+  tlp::node getNodeAtRankForProperty(const unsigned int rank, const std::string &propertyName);
+  unsigned int getNodeRankForProperty(tlp::node n, const std::string &propertyName);
 
-private :
-
+private:
   TulipNodeMetricSorter(tlp::Graph *graph);
 
   void reset();
@@ -74,9 +69,7 @@ private :
   std::map<std::string, unsigned int> nbValuesPropertyMap;
 
   static std::map<tlp::Graph *, TulipNodeMetricSorter *> instances;
-
 };
-
 }
 
 #endif /* TULIPNODESORTER_H_ */

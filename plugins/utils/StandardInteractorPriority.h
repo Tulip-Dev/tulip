@@ -49,7 +49,6 @@ public:
     Navigation
   };
 };
-
 }
 
 #endif

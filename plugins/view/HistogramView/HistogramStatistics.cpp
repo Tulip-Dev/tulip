@@ -38,31 +38,28 @@
  */
 template <class OP1, class OP2, class OP3>
 class compose_f_gx_hx_t
-  : public std::unary_function<typename OP2::argument_type,
-    typename OP1::result_type> {
+    : public std::unary_function<typename OP2::argument_type, typename OP1::result_type> {
 private:
-  OP1 op1;    // process: op1(op2(x),op3(x))
+  OP1 op1; // process: op1(op2(x),op3(x))
   OP2 op2;
   OP3 op3;
+
 public:
   // constructor
-  compose_f_gx_hx_t (const OP1& o1, const OP2& o2, const OP3& o3)
-    : op1(o1), op2(o2), op3(o3) {
-  }
+  compose_f_gx_hx_t(const OP1 &o1, const OP2 &o2, const OP3 &o3) : op1(o1), op2(o2), op3(o3) {}
 
   // function call
-  typename OP1::result_type
-  operator()(const typename OP2::argument_type& x) const {
-    return op1(op2(x),op3(x));
+  typename OP1::result_type operator()(const typename OP2::argument_type &x) const {
+    return op1(op2(x), op3(x));
   }
 };
 
 /* convenience functions for the compose_f_gx_hx adapter
  */
 template <class OP1, class OP2, class OP3>
-inline compose_f_gx_hx_t<OP1,OP2,OP3>
-compose_f_gx_hx (const OP1& o1, const OP2& o2, const OP3& o3) {
-  return compose_f_gx_hx_t<OP1,OP2,OP3>(o1,o2,o3);
+inline compose_f_gx_hx_t<OP1, OP2, OP3> compose_f_gx_hx(const OP1 &o1, const OP2 &o2,
+                                                        const OP3 &o3) {
+  return compose_f_gx_hx_t<OP1, OP2, OP3>(o1, o2, o3);
 }
 
 #define compose_fn compose_f_gx_hx
@@ -82,11 +79,11 @@ template <class K, class V>
 class map_value_greater_equal : public unary_function<pair<K, V>, bool> {
 private:
   V value;
+
 public:
+  map_value_greater_equal(const V &v) : value(v) {}
 
-  map_value_greater_equal(const V& v) : value(v) {}
-
-  bool operator() (const pair<K, V> &elem) const {
+  bool operator()(const pair<K, V> &elem) const {
     return elem.second >= value;
   }
 };
@@ -95,18 +92,18 @@ template <class K, class V>
 class map_value_less_equal : public unary_function<pair<K, V>, bool> {
 private:
   V value;
+
 public:
+  map_value_less_equal(const V &v) : value(v) {}
 
-  map_value_less_equal(const V& v) : value(v) {}
-
-  bool operator() (const pair<K, V> &elem) const {
+  bool operator()(const pair<K, V> &elem) const {
     return elem.second <= value;
   }
 };
 
 namespace {
 inline double square(double x) {
-  return x*x;
+  return x * x;
 }
 
 /*inline double cube(double x) {
@@ -114,17 +111,16 @@ return x*x*x;
 }*/
 }
 static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *camera) {
-  map<string, tlp::GlSimpleEntity*> glEntities = composite->getGlEntities();
-  map<string, tlp::GlSimpleEntity*>::iterator it2;
+  map<string, tlp::GlSimpleEntity *> glEntities = composite->getGlEntities();
+  map<string, tlp::GlSimpleEntity *>::iterator it2;
 
-  for (it2 = glEntities.begin(); it2 != glEntities.end() ; ++it2) {
+  for (it2 = glEntities.begin(); it2 != glEntities.end(); ++it2) {
     tlp::GlSimpleEntity *entity = it2->second;
     tlp::GlComposite *compositeEntity = dynamic_cast<tlp::GlComposite *>(entity);
 
     if (compositeEntity != NULL) {
       drawComposite(compositeEntity, lod, camera);
-    }
-    else {
+    } else {
       entity->draw(lod, camera);
     }
   }
@@ -134,13 +130,11 @@ namespace tlp {
 
 class UniformKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
     if (fabs(val) < 1) {
-      return 1./2.;
-    }
-    else {
+      return 1. / 2.;
+    } else {
       return 0.;
     }
   }
@@ -148,25 +142,21 @@ public :
 
 class GaussianKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
-    return (1./M_PI)*exp(-square(val)/2.);
+    return (1. / M_PI) * exp(-square(val) / 2.);
   }
-
 };
 
 class TriangleKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
       return 1 - valAbs;
-    }
-    else {
+    } else {
       return 0.;
     }
   }
@@ -174,32 +164,27 @@ public :
 
 class EpanechnikovKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
-      return (3./4.)*(1-square(val));
-    }
-    else {
+      return (3. / 4.) * (1 - square(val));
+    } else {
       return 0.;
     }
   }
-
 };
 
 class QuarticKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
-      return (15./16.)*square(1-square(val));
-    }
-    else {
+      return (15. / 16.) * square(1 - square(val));
+    } else {
       return 0.;
     }
   }
@@ -207,16 +192,14 @@ public :
 
 class CubicKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
     double valAbs = fabs(val);
 
     if (valAbs < 1.) {
-      double d = (35./32.) * pow((1. - square(val)), 3);
+      double d = (35. / 32.) * pow((1. - square(val)), 3);
       return d;
-    }
-    else {
+    } else {
       return 0.;
     }
   }
@@ -224,50 +207,50 @@ public :
 
 class CosineKernel : public KernelFunction {
 
-public :
-
+public:
   double operator()(double val) {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
-      return (M_PI/4.)*cos((M_PI/2.)*val);
-    }
-    else {
+      return (M_PI / 4.) * cos((M_PI / 2.) * val);
+    } else {
       return 0.;
     }
   }
 };
 
-
 HistogramStatistics::HistogramStatistics(HistoStatsConfigWidget *ConfigWidget)
-  : histoView(NULL) , histoStatsConfigWidget(ConfigWidget),
-    propertyMean(0), propertyStandardDeviation(0),
-    densityAxis(NULL), meanAxis(NULL), standardDeviationPosAxis(NULL),
-    standardDeviationNegAxis(NULL), standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
-    standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
+    : histoView(NULL), histoStatsConfigWidget(ConfigWidget), propertyMean(0),
+      propertyStandardDeviation(0), densityAxis(NULL), meanAxis(NULL),
+      standardDeviationPosAxis(NULL), standardDeviationNegAxis(NULL),
+      standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
+      standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
   initKernelFunctionsMap();
 }
 
 HistogramStatistics::HistogramStatistics(const HistogramStatistics &histoStats)
-  : histoView(histoStats.histoView), histoStatsConfigWidget(histoStats.histoStatsConfigWidget), propertyMean(0), propertyStandardDeviation(0),
-    densityAxis(NULL), meanAxis(NULL), standardDeviationPosAxis(NULL),
-    standardDeviationNegAxis(NULL), standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
-    standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
+    : histoView(histoStats.histoView), histoStatsConfigWidget(histoStats.histoStatsConfigWidget),
+      propertyMean(0), propertyStandardDeviation(0), densityAxis(NULL), meanAxis(NULL),
+      standardDeviationPosAxis(NULL), standardDeviationNegAxis(NULL),
+      standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
+      standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
   initKernelFunctionsMap();
 }
 
 HistogramStatistics::~HistogramStatistics() {
   cleanupAxis();
 
-  for (map<QString, KernelFunction *>::iterator it = kernelFunctionsMap.begin() ; it != kernelFunctionsMap.end() ; ++it) {
+  for (map<QString, KernelFunction *>::iterator it = kernelFunctionsMap.begin();
+       it != kernelFunctionsMap.end(); ++it) {
     delete it->second;
   }
 }
 
 void HistogramStatistics::viewChanged(View *view) {
   histoView = static_cast<HistogramView *>(view);
-  connect(histoStatsConfigWidget, SIGNAL(computeAndDrawInteractor()), this, SLOT(computeAndDrawInteractor()));
-  //computeAndDrawInteractor();
+  connect(histoStatsConfigWidget, SIGNAL(computeAndDrawInteractor()), this,
+          SLOT(computeAndDrawInteractor()));
+  // computeAndDrawInteractor();
 }
 
 void HistogramStatistics::initKernelFunctionsMap() {
@@ -344,24 +327,21 @@ void HistogramStatistics::computeInteractor() {
   cleanupAxis();
 
   string propertyType(graph->getProperty(selectedProperty)->getTypename());
-  double min ,max;
+  double min, max;
 
   if (propertyType == "double") {
     if (histoView->getDataLocation() == NODE) {
       min = graph->getProperty<DoubleProperty>(selectedProperty)->getNodeMin();
       max = graph->getProperty<DoubleProperty>(selectedProperty)->getNodeMax();
-    }
-    else {
+    } else {
       min = graph->getProperty<DoubleProperty>(selectedProperty)->getEdgeMin();
       max = graph->getProperty<DoubleProperty>(selectedProperty)->getEdgeMax();
     }
-  }
-  else {
+  } else {
     if (histoView->getDataLocation() == NODE) {
       min = graph->getProperty<IntegerProperty>(selectedProperty)->getNodeMin();
       max = graph->getProperty<IntegerProperty>(selectedProperty)->getNodeMax();
-    }
-    else {
+    } else {
       min = graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeMin();
       max = graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeMax();
     }
@@ -377,18 +357,15 @@ void HistogramStatistics::computeInteractor() {
 
       if (propertyType == "double") {
         nodeVal = graph->getProperty<DoubleProperty>(selectedProperty)->getNodeValue(n);
-      }
-      else {
+      } else {
         nodeVal = graph->getProperty<IntegerProperty>(selectedProperty)->getNodeValue(n);
       }
 
       graphPropertyValueSet[n.id] = nodeVal;
       propertyMean += nodeVal;
-
     }
 
-  }
-  else {
+  } else {
     nbElements = graph->numberOfEdges();
     edge e;
     forEach(e, graph->getEdges()) {
@@ -396,21 +373,19 @@ void HistogramStatistics::computeInteractor() {
 
       if (propertyType == "double") {
         edgeVal = graph->getProperty<DoubleProperty>(selectedProperty)->getEdgeValue(e);
-      }
-      else {
+      } else {
         edgeVal = graph->getProperty<IntegerProperty>(selectedProperty)->getEdgeValue(e);
       }
 
       graphPropertyValueSet[e.id] = edgeVal;
       propertyMean += edgeVal;
-
     }
   }
 
-
   propertyMean /= (nbElements);
 
-  for (map<unsigned int, double>::iterator it = graphPropertyValueSet.begin() ; it != graphPropertyValueSet.end() ; ++it) {
+  for (map<unsigned int, double>::iterator it = graphPropertyValueSet.begin();
+       it != graphPropertyValueSet.end(); ++it) {
     propertyStandardDeviation += square(it->second - propertyMean);
   }
 
@@ -426,11 +401,12 @@ void HistogramStatistics::computeInteractor() {
 
     KernelFunction *kf = kernelFunctionsMap[histoStatsConfigWidget->getKernelFunctionName()];
 
-    for (double val = min ; val <= max ; val += sampleStep) {
+    for (double val = min; val <= max; val += sampleStep) {
       float fx = 0;
 
-      for (map<unsigned, double>::iterator it = graphPropertyValueSet.begin() ; it != graphPropertyValueSet.end() ; ++it) {
-        fx +=  float((*kf)((val - (it->second)) / (bandwidth / 2.)));
+      for (map<unsigned, double>::iterator it = graphPropertyValueSet.begin();
+           it != graphPropertyValueSet.end(); ++it) {
+        fx += float((*kf)((val - (it->second)) / (bandwidth / 2.)));
       }
 
       fx *= (1.f / float(graphPropertyValueSet.size() * (bandwidth / 2.)));
@@ -444,14 +420,20 @@ void HistogramStatistics::computeInteractor() {
     double val;
     unsigned int i;
 
-    for (val = min , i = 0 ; val <= max ; val += sampleStep , ++i) {
+    for (val = min, i = 0; val <= max; val += sampleStep, ++i) {
       float x = histoXAxis->getAxisPointCoordForValue(val).getX();
-      float y = histoYAxis->getAxisPointCoordForValue((estimatedDensity[i] * (histoView->getDetailedHistogram()->getMaxBinSize())) / maxDensityValue).getY();
+      float y =
+          histoYAxis
+              ->getAxisPointCoordForValue(
+                  (estimatedDensity[i] * (histoView->getDetailedHistogram()->getMaxBinSize())) /
+                  maxDensityValue)
+              .getY();
       densityEstimationCurvePoints.push_back(Coord(x, y, 0));
     }
 
-    densityAxis = new GlQuantitativeAxis("density", Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), 0, 0),
-                                         histoYAxis->getAxisLength(), GlAxis::VERTICAL_AXIS, Color(255,0,0), true);
+    densityAxis = new GlQuantitativeAxis(
+        "density", Coord(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), 0, 0),
+        histoYAxis->getAxisLength(), GlAxis::VERTICAL_AXIS, Color(255, 0, 0), true);
     densityAxis->setAxisParameters(0.0, double(maxDensityValue), 15, GlAxis::RIGHT_OR_ABOVE, true);
     densityAxis->updateAxis();
     densityAxis->addCaption(GlAxis::LEFT, densityAxis->getSpaceBetweenAxisGrads(), false);
@@ -463,37 +445,45 @@ void HistogramStatistics::computeInteractor() {
     float axisLength = histoYAxis->getAxisLength() + axisExtension;
     float captionHeight = histoXAxis->getAxisGradsWidth();
     float x = histoXAxis->getAxisPointCoordForValue(propertyMean).getX();
-    meanAxis = new GlAxis("m", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+    meanAxis = new GlAxis("m", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
     meanAxis->addCaption(GlAxis::LEFT, captionHeight, false);
     x = histoXAxis->getAxisPointCoordForValue(propertyMean + propertyStandardDeviation).getX();
-    standardDeviationPosAxis = new GlAxis("+sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+    standardDeviationPosAxis =
+        new GlAxis("+sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
     standardDeviationPosAxis->addCaption(GlAxis::LEFT, captionHeight, false);
     x = histoXAxis->getAxisPointCoordForValue(propertyMean - propertyStandardDeviation).getX();
-    standardDeviationNegAxis = new GlAxis("-sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+    standardDeviationNegAxis =
+        new GlAxis("-sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
     standardDeviationNegAxis->addCaption(GlAxis::LEFT, captionHeight, false);
 
     if (propertyMean - 2 * propertyStandardDeviation > min) {
-      x = histoXAxis->getAxisPointCoordForValue(propertyMean + 2 * propertyStandardDeviation).getX();
-      standardDeviation2PosAxis = new GlAxis("+2sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+      x = histoXAxis->getAxisPointCoordForValue(propertyMean + 2 * propertyStandardDeviation)
+              .getX();
+      standardDeviation2PosAxis =
+          new GlAxis("+2sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
       standardDeviation2PosAxis->addCaption(GlAxis::LEFT, captionHeight, false);
-      x = histoXAxis->getAxisPointCoordForValue(propertyMean - 2 * propertyStandardDeviation).getX();
-      standardDeviation2NegAxis = new GlAxis("-2sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+      x = histoXAxis->getAxisPointCoordForValue(propertyMean - 2 * propertyStandardDeviation)
+              .getX();
+      standardDeviation2NegAxis =
+          new GlAxis("-2sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
       standardDeviation2NegAxis->addCaption(GlAxis::LEFT, captionHeight, false);
-    }
-    else {
+    } else {
       standardDeviation2NegAxis = NULL;
       standardDeviation2PosAxis = NULL;
     }
 
     if (propertyMean - 3 * propertyStandardDeviation > min) {
-      x = histoXAxis->getAxisPointCoordForValue(propertyMean + 3 * propertyStandardDeviation).getX();
-      standardDeviation3PosAxis = new GlAxis("+3sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+      x = histoXAxis->getAxisPointCoordForValue(propertyMean + 3 * propertyStandardDeviation)
+              .getX();
+      standardDeviation3PosAxis =
+          new GlAxis("+3sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
       standardDeviation3PosAxis->addCaption(GlAxis::LEFT, captionHeight, false);
-      x = histoXAxis->getAxisPointCoordForValue(propertyMean - 3 * propertyStandardDeviation).getX();
-      standardDeviation3NegAxis = new GlAxis("-3sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255,0,0));
+      x = histoXAxis->getAxisPointCoordForValue(propertyMean - 3 * propertyStandardDeviation)
+              .getX();
+      standardDeviation3NegAxis =
+          new GlAxis("-3sd", Coord(x, y, 0), axisLength, GlAxis::VERTICAL_AXIS, Color(255, 0, 0));
       standardDeviation3NegAxis->addCaption(GlAxis::LEFT, captionHeight, false);
-    }
-    else {
+    } else {
       standardDeviation3NegAxis = NULL;
       standardDeviation3PosAxis = NULL;
     }
@@ -505,20 +495,21 @@ void HistogramStatistics::computeInteractor() {
       viewSelection->setAllEdgeValue(false);
       double lowerBound = histoStatsConfigWidget->getSelectionLowerBound();
       double upperBound = histoStatsConfigWidget->getSelectionUpperBound();
-      map<unsigned int, double>::iterator pos = find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
+      map<unsigned int, double>::iterator pos = find_if(
+          graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
           compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
                      map_value_less_equal<unsigned int, double>(upperBound)));
 
       while (pos != graphPropertyValueSet.end()) {
         if (histoView->getDataLocation() == EDGE) {
           viewSelection->setNodeValue(node(pos->first), true);
-        }
-        else {
+        } else {
           viewSelection->setEdgeValue(edge(pos->first), true);
         }
 
         pos = find_if(++pos, graphPropertyValueSet.end(),
-                      compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
+                      compose_fn(logical_and<bool>(),
+                                 map_value_greater_equal<unsigned int, double>(lowerBound),
                                  map_value_less_equal<unsigned int, double>(upperBound)));
       }
 
@@ -537,18 +528,19 @@ bool HistogramStatistics::draw(GlMainWidget *glMainWidget) {
   Camera &camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
   camera.initGl();
   glEnable(GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glDisable(GL_LIGHTING);
   glDisable(GL_DEPTH_TEST);
 
   if (!densityEstimationCurvePoints.empty()) {
-    Color curveColor(255,0,0);
+    Color curveColor(255, 0, 0);
     Coord startPoint(densityEstimationCurvePoints[0]);
     Coord endPoint(densityEstimationCurvePoints[densityEstimationCurvePoints.size() - 1]);
     vector<Coord> densityEstimationCurvePointsCp(densityEstimationCurvePoints);
     densityEstimationCurvePointsCp.erase(densityEstimationCurvePointsCp.begin());
     densityEstimationCurvePointsCp.pop_back();
-    GlLines::glDrawCurve(startPoint, densityEstimationCurvePointsCp, endPoint, 2., GlLines::TLP_PLAIN, curveColor, curveColor);
+    GlLines::glDrawCurve(startPoint, densityEstimationCurvePointsCp, endPoint, 2.,
+                         GlLines::TLP_PLAIN, curveColor, curveColor);
     drawComposite(densityAxis, 0, &camera);
   }
 
@@ -575,5 +567,4 @@ bool HistogramStatistics::draw(GlMainWidget *glMainWidget) {
   glEnable(GL_LIGHTING);
   return true;
 }
-
 }

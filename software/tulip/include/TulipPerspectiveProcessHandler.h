@@ -31,18 +31,18 @@
 
 // Some utility class used in crash handler dialog designer form
 
-class SelectionButton: public QPushButton {
+class SelectionButton : public QPushButton {
 public:
-  explicit SelectionButton(QWidget *parent=NULL);
+  explicit SelectionButton(QWidget *parent = NULL);
   void paintEvent(QPaintEvent *e);
 };
 
 struct PerspectiveProcessInfo {
   PerspectiveProcessInfo() {}
 
-  PerspectiveProcessInfo(const QString &name, const QVariantMap &args, const QString &file, time_t id):
-    name(name), args(args), file(file), _perspectiveId(id) {
-  }
+  PerspectiveProcessInfo(const QString &name, const QVariantMap &args, const QString &file,
+                         time_t id)
+      : name(name), args(args), file(file), _perspectiveId(id) {}
 
   QString name;
   QVariantMap args;
@@ -51,7 +51,7 @@ struct PerspectiveProcessInfo {
   time_t _perspectiveId;
 };
 
-class TulipPerspectiveProcessHandler: public QTcpServer {
+class TulipPerspectiveProcessHandler : public QTcpServer {
   Q_OBJECT
 
   QMap<QProcess *, PerspectiveProcessInfo> _processInfo;
@@ -59,7 +59,7 @@ class TulipPerspectiveProcessHandler: public QTcpServer {
   static TulipPerspectiveProcessHandler *_instance;
   TulipPerspectiveProcessHandler();
 
-  QThread* _serverThread;
+  QThread *_serverThread;
 
   QProcess *fromId(unsigned int);
 
@@ -67,7 +67,8 @@ public:
   static TulipPerspectiveProcessHandler *instance();
 
 public slots:
-  void createPerspective(const QString &perspective, const QString &file, const QVariantMap &parameters);
+  void createPerspective(const QString &perspective, const QString &file,
+                         const QVariantMap &parameters);
 
 protected slots:
   void perspectiveCrashed(QProcess::ProcessError);
@@ -81,11 +82,10 @@ signals:
   void showProjectsAgent();
   void showAboutAgent();
   void showTrayMessage(QString);
-  void showErrorMessage(QString,QString);
+  void showErrorMessage(QString, QString);
   void openProject(QString);
-  void openProjectWith(QString,QString);
+  void openProjectWith(QString, QString);
   void openPerspective(QString);
-
 };
 
 #endif // TULIPPERSPECTIVEPROCESSHANDLER_H

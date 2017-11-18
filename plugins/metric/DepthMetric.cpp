@@ -27,28 +27,29 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // edge weight
-  "This parameter defines the metric used for edge weights."
-};
+    // edge weight
+    "This parameter defines the metric used for edge weights."};
 
-DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(NULL) {
-  addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "", false);
+DepthMetric::DepthMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context), edgeWeight(NULL) {
+  addInParameter<NumericProperty *>("edge weight", paramHelp[0], "", false);
 }
 
 // structure below is used to implement dfs loop
 struct dfsDepthStruct {
   node current;
-  Iterator<edge>* outEdges;
+  Iterator<edge> *outEdges;
   double maxDepth;
   double edgeValue;
 
-  dfsDepthStruct(): outEdges(NULL), maxDepth(0.0), edgeValue(0.0) {}
-  dfsDepthStruct(node n, Iterator<edge>* edges):
-    current(n), outEdges(edges), maxDepth(0.0), edgeValue(0.0) {}
+  dfsDepthStruct() : outEdges(NULL), maxDepth(0.0), edgeValue(0.0) {}
+  dfsDepthStruct(node n, Iterator<edge> *edges)
+      : current(n), outEdges(edges), maxDepth(0.0), edgeValue(0.0) {}
 };
 //=================================================
 double DepthMetric::getNodeValue(tlp::node current) {
-  if (graph->outdeg(current) == 0) return 0.0;
+  if (graph->outdeg(current) == 0)
+    return 0.0;
 
   double value = result->getNodeValue(current);
 
@@ -57,13 +58,13 @@ double DepthMetric::getNodeValue(tlp::node current) {
 
   // dfs loop
   stack<dfsDepthStruct> dfsLevels;
-  Iterator<edge>* outEdges = graph->getOutEdges(current);
+  Iterator<edge> *outEdges = graph->getOutEdges(current);
   dfsDepthStruct dfsParams(current, outEdges);
   double maxDepth = 0.0;
   dfsLevels.push(dfsParams);
 
-  while(!dfsLevels.empty()) {
-    while(outEdges->hasNext()) {
+  while (!dfsLevels.empty()) {
+    while (outEdges->hasNext()) {
       edge e = outEdges->next();
       double edgeValue = edgeWeight ? edgeWeight->getEdgeDoubleValue(e) : 1.0;
       node neighbour = graph->target(e);
@@ -92,8 +93,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
           dfsLevels.push(dfsParams);
           // and go deeper
           break;
-        }
-        else { // no out edges for neighbour
+        } else { // no out edges for neighbour
           // so its depth value will remain to 0.0
           delete outEdges;
           // go on with the current
@@ -122,8 +122,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
     current = dfsParams.current;
     outEdges = dfsParams.outEdges;
     // update current maxDepth
-    dfsParams.maxDepth = std::max(dfsParams.maxDepth,
-                                  maxDepth + dfsParams.edgeValue);
+    dfsParams.maxDepth = std::max(dfsParams.maxDepth, maxDepth + dfsParams.edgeValue);
     maxDepth = dfsParams.maxDepth;
   }
 
@@ -131,7 +130,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
 }
 //====================================================================
 bool DepthMetric::run() {
-  if ( dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("edge weight", edgeWeight);
   }
 
@@ -146,7 +145,7 @@ bool DepthMetric::run() {
 //=================================================
 bool DepthMetric::check(std::string &erreurMsg) {
   if (!AcyclicTest::isAcyclic(graph)) {
-    erreurMsg="The graph must be acyclic.";
+    erreurMsg = "The graph must be acyclic.";
     return false;
   }
 

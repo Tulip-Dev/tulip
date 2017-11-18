@@ -34,20 +34,23 @@
 using namespace std;
 using namespace tlp;
 
-MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *):NodeLinkDiagramComponentInteractor(":/i_lasso.png", "Select nodes in a freehand drawn region", StandardInteractorPriority::FreeHandSelection) {
-  setConfigurationWidgetText(QString("<h3>Select nodes in a freehand drawn region</h3>")+ "<b>Mouse left</b> down begins the freehand drawing of the selection region,<br/><b>Mouse left</b> up ends the drawing of the region.<br/>All the nodes enclosed in the region are selected and the edges linking them too.");
+MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *)
+    : NodeLinkDiagramComponentInteractor(":/i_lasso.png", "Select nodes in a freehand drawn region",
+                                         StandardInteractorPriority::FreeHandSelection) {
+  setConfigurationWidgetText(QString("<h3>Select nodes in a freehand drawn region</h3>") +
+                             "<b>Mouse left</b> down begins the freehand drawing of the selection "
+                             "region,<br/><b>Mouse left</b> up ends the drawing of the "
+                             "region.<br/>All the nodes enclosed in the region are selected and "
+                             "the edges linking them too.");
 }
 
 bool MouseLassoNodesSelectorInteractor::isCompatible(const std::string &viewName) const {
-  return ((viewName==NodeLinkDiagramComponent::viewName)
-          ||(viewName==ViewName::ScatterPlot2DViewName)
-          ||(viewName==ViewName::HistogramViewName)
-          ||(viewName==ViewName::PixelOrientedViewName)
-          ||(viewName==ViewName::MatrixViewName)
-          ||(viewName==ViewName::ParallelCoordinatesViewName)
-         );
+  return ((viewName == NodeLinkDiagramComponent::viewName) ||
+          (viewName == ViewName::ScatterPlot2DViewName) ||
+          (viewName == ViewName::HistogramViewName) ||
+          (viewName == ViewName::PixelOrientedViewName) || (viewName == ViewName::MatrixViewName) ||
+          (viewName == ViewName::ParallelCoordinatesViewName));
 }
-
 
 void MouseLassoNodesSelectorInteractor::construct() {
   push_back(new MouseLassoNodesSelectorInteractorComponent());
@@ -56,7 +59,8 @@ void MouseLassoNodesSelectorInteractor::construct() {
 
 PLUGIN(MouseLassoNodesSelectorInteractor)
 
-MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent() : drawInteractor(false), camera(NULL), graph(NULL), viewSelection(NULL), dragStarted(false) {}
+MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent()
+    : drawInteractor(false), camera(NULL), graph(NULL), viewSelection(NULL), dragStarted(false) {}
 
 MouseLassoNodesSelectorInteractorComponent::~MouseLassoNodesSelectorInteractorComponent() {}
 
@@ -65,34 +69,38 @@ bool pointInsidePolygon(const vector<Coord> &polygon, const Coord &point) {
   unsigned int i, j;
   bool ret = false;
 
-  for (i = 0, j = polygon.size() - 1 ; i < polygon.size() ; j = i++) {
+  for (i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++) {
     if ((((polygon[i].getY() <= point.getY()) && (point.getY() < polygon[j].getY())) ||
          ((polygon[j].getY() <= point.getY()) && (point.getY() < polygon[i].getY()))) &&
-        (point.getX() < (polygon[j].getX() - polygon[i].getX()) * (point.getY() - polygon[i].getY()) / (polygon[j].getY() - polygon[i].getY()) + polygon[i].getX()))
+        (point.getX() < (polygon[j].getX() - polygon[i].getX()) *
+                                (point.getY() - polygon[i].getY()) /
+                                (polygon[j].getY() - polygon[i].getY()) +
+                            polygon[i].getX()))
       ret = !ret;
   }
 
   return ret;
 }
 
-
 bool isPolygonAincludesInB(const vector<Coord> &A, const vector<Coord> &B) {
   bool ret = true;
 
-  for (unsigned int i = 0 ; i < A.size() ; ++i) {
+  for (unsigned int i = 0; i < A.size(); ++i) {
     ret = ret && pointInsidePolygon(B, A[i]);
 
-    if (!ret) break;
+    if (!ret)
+      break;
   }
 
   return ret;
 }
 
-void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon(GlMainWidget *glWidget) {
+void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon(
+    GlMainWidget *glWidget) {
   vector<Coord> polygonVprt;
   BoundingBox polygonVprtBB;
 
-  for (unsigned int i = 0 ; i < polygon.size() ; ++i) {
+  for (unsigned int i = 0; i < polygon.size(); ++i) {
     polygonVprt.push_back(polygon[i]);
     polygonVprtBB.expand(polygonVprt[i]);
   }
@@ -106,7 +114,10 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
 
   vector<SelectedEntity> tmpNodes;
   vector<SelectedEntity> tmpEdges;
-  glWidget->pickNodesEdges(glWidget->viewportToScreen(xStart), glWidget->height() - glWidget->viewportToScreen(yEnd), glWidget->viewportToScreen(xEnd - xStart), glWidget->viewportToScreen(yEnd - yStart), tmpNodes, tmpEdges);
+  glWidget->pickNodesEdges(glWidget->viewportToScreen(xStart),
+                           glWidget->height() - glWidget->viewportToScreen(yEnd),
+                           glWidget->viewportToScreen(xEnd - xStart),
+                           glWidget->viewportToScreen(yEnd - yStart), tmpNodes, tmpEdges);
 
   if (!tmpNodes.empty()) {
     vector<node> selectedNodes;
@@ -114,9 +125,10 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
 
     bool needPush = true;
 
-    for (unsigned int i = 0 ; i < tmpNodes.size() ; ++i) {
+    for (unsigned int i = 0; i < tmpNodes.size(); ++i) {
       glNode.id = tmpNodes[i].getComplexEntityId();
-      BoundingBox nodeBB(glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
+      BoundingBox nodeBB(
+          glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
       float dx = nodeBB[1][0] - nodeBB[0][0];
       float dy = nodeBB[1][1] - nodeBB[0][1];
       float dz = nodeBB[1][2] - nodeBB[0][2];
@@ -132,32 +144,42 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
       Coord nodeBBBLBScr(camera->worldTo2DViewport(Coord(nodeBB[0])));
       xVec.push_back(nodeBBBLBScr.getX());
       yVec.push_back(nodeBBBLBScr.getY());
-      Coord nodeBBTLBScr(camera->worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[0][2])));
+      Coord nodeBBTLBScr(
+          camera->worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[0][2])));
       xVec.push_back(nodeBBTLBScr[0]);
       yVec.push_back(nodeBBTLBScr[1]);
-      Coord nodeBBTRBScr(camera->worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[1][1], nodeBB[0][2])));
+      Coord nodeBBTRBScr(
+          camera->worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[1][1], nodeBB[0][2])));
       xVec.push_back(nodeBBTRBScr[0]);
       yVec.push_back(nodeBBTRBScr[1]);
-      Coord nodeBBBRBScr(camera->worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[0][2])));
+      Coord nodeBBBRBScr(
+          camera->worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[0][2])));
       xVec.push_back(nodeBBBRBScr[0]);
       yVec.push_back(nodeBBBRBScr[1]);
-      Coord nodeBBBLFScr(camera->worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[0][1], nodeBB[1][2])));
+      Coord nodeBBBLFScr(
+          camera->worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[0][1], nodeBB[1][2])));
       xVec.push_back(nodeBBBLFScr[0]);
       yVec.push_back(nodeBBBLFScr[1]);
-      Coord nodeBBTLFScr(camera->worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[1][2])));
+      Coord nodeBBTLFScr(
+          camera->worldTo2DViewport(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[1][2])));
       xVec.push_back(nodeBBTLFScr[0]);
       yVec.push_back(nodeBBTLFScr[1]);
       Coord nodeBBTRFScr(camera->worldTo2DViewport(Coord(nodeBB[1])));
       xVec.push_back(nodeBBTRFScr[0]);
       yVec.push_back(nodeBBTRFScr[1]);
-      Coord nodeBBBRFScr(camera->worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[1][2])));
+      Coord nodeBBBRFScr(
+          camera->worldTo2DViewport(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[1][2])));
       xVec.push_back(nodeBBBRFScr[0]);
       yVec.push_back(nodeBBBRFScr[1]);
       vector<Coord> quad;
-      quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
-      quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-      quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-      quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
+      quad.push_back(
+          Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
       quad.push_back(quad[0]);
 
       if (isPolygonAincludesInB(quad, polygonVprt)) {
@@ -171,22 +193,20 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
       }
     }
 
-    for (unsigned int i = 0 ; i < selectedNodes.size() ; ++i) {
-      for (unsigned int j = i+1 ; j < selectedNodes.size() ; ++j) {
+    for (unsigned int i = 0; i < selectedNodes.size(); ++i) {
+      for (unsigned int j = i + 1; j < selectedNodes.size(); ++j) {
         vector<edge> edges = graph->getEdges(selectedNodes[i], selectedNodes[j], false);
 
-        for (size_t i = 0 ; i < edges.size() ; ++i) {
+        for (size_t i = 0; i < edges.size(); ++i) {
           viewSelection->setEdgeValue(edges[i], true);
         }
       }
     }
-
   }
 }
 
-
 bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
-  GlMainWidget *glWidget=static_cast<GlMainWidget *>(obj);
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(obj);
 
   if (!glWidget->hasMouseTracking()) {
     glWidget->setMouseTracking(true);
@@ -194,7 +214,8 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
 
   QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
-  if (!me) return false;
+  if (!me)
+    return false;
 
   camera = &glWidget->getScene()->getLayer("Main")->getCamera();
   graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -207,28 +228,24 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
       polygon.push_back(glWidget->screenToViewport(currentPointerScreenCoord));
       drawInteractor = true;
       glWidget->redraw();
-
     }
 
     return true;
-  }
-  else if (me->type() == QEvent::MouseButtonPress) {
+  } else if (me->type() == QEvent::MouseButtonPress) {
     if (me->button() == Qt::LeftButton) {
       dragStarted = true;
       polygon.push_back(glWidget->screenToViewport(currentPointerScreenCoord));
-    }
-    else if (me->button() == Qt::RightButton) {
+    } else if (me->button() == Qt::RightButton) {
       dragStarted = false;
 
       if (!polygon.empty()) {
         polygon.clear();
         drawInteractor = true;
         glWidget->redraw();
-      }
-      else {
+      } else {
         Observable::holdObservers();
         SelectedEntity selectedEntity;
-        bool result = glWidget->pickNodesEdges(me->x(), me->y(),  selectedEntity);
+        bool result = glWidget->pickNodesEdges(me->x(), me->y(), selectedEntity);
 
         if (result && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           bool sel = viewSelection->getNodeValue(node(selectedEntity.getComplexEntityId()));
@@ -240,8 +257,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
     }
 
     return true;
-  }
-  else if (me->type() == QEvent::MouseButtonRelease) {
+  } else if (me->type() == QEvent::MouseButtonRelease) {
     dragStarted = false;
 
     if (me->button() == Qt::LeftButton && polygon.size() > 10) {
@@ -254,11 +270,9 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
 
       selectGraphElementsUnderPolygon(glWidget);
       Observable::unholdObservers();
-
     }
 
     polygon.clear();
-
   }
 
   return false;
@@ -279,20 +293,18 @@ bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
     int bgV = backgroundColor.getV();
 
     if (bgV < 128) {
-      foregroundColor = Color(255,255,255);
-    }
-    else {
-      foregroundColor = Color(0,0,0);
+      foregroundColor = Color(255, 255, 255);
+    } else {
+      foregroundColor = Color(0, 0, 0);
     }
 
     glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     camera2D.initGl();
-    GlComplexPolygon complexPolygon(polygon, Color(0,255,0,100), Color(0,255,0));
-    complexPolygon.draw(0,0);
+    GlComplexPolygon complexPolygon(polygon, Color(0, 255, 0, 100), Color(0, 255, 0));
+    complexPolygon.draw(0, 0);
   }
-
 
   drawInteractor = false;
 

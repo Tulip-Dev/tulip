@@ -41,12 +41,12 @@ public:
   QString text() const;
   Color tulipColor() const;
 
-  void setDialogParent(QWidget* w);
+  void setDialogParent(QWidget *w);
 
 protected:
   QColor _color;
   QString _text;
-  QWidget* _dialogParent;
+  QWidget *_dialogParent;
   QString _dialogTitle;
 
 signals:
@@ -54,10 +54,10 @@ signals:
   void tulipColorChanged(Color);
 
 public slots:
-  void setColor(const QColor&);
-  void setText(const QString& text);
-  void setTulipColor(const Color&);
-  void setDialogTitle(const QString&);
+  void setColor(const QColor &);
+  void setText(const QString &text);
+  void setTulipColor(const Color &);
+  void setDialogTitle(const QString &);
 
 protected slots:
   void chooseColor();
@@ -67,11 +67,11 @@ class TLP_QT_SCOPE ColorButton : public ChooseColorButton {
   Q_OBJECT
 
 public:
-  explicit ColorButton(QWidget *parent = NULL): ChooseColorButton(parent) {}
+  explicit ColorButton(QWidget *parent = NULL) : ChooseColorButton(parent) {}
+
 protected:
   void paintEvent(QPaintEvent *);
 };
-
 }
 
 #endif // COLORBUTTON_H

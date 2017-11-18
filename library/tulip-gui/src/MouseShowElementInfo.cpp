@@ -36,14 +36,16 @@
 using namespace std;
 using namespace tlp;
 
-MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton):_ui(new Ui::ElementInformationWidget),_informationWidget(new QWidget()),_informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL),_show(true) {
+MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
+    : _ui(new Ui::ElementInformationWidget), _informationWidget(new QWidget()),
+      _informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL), _show(true) {
   _informationWidget->installEventFilter(this);
   _ui->setupUi(_informationWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem->setWidget(_informationWidget);
   _informationWidgetItem->setVisible(false);
 
-  if(showVisualPropButton)
+  if (showVisualPropButton)
     connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
   else
     _ui->displayTulipProp->hide();
@@ -56,8 +58,7 @@ MouseShowElementInfo::~MouseShowElementInfo() {
 
 void MouseShowElementInfo::showVisualProp(int show) {
   _show = show == Qt::Checked;
-  static_cast<GraphElementModel*>(tableView()->model())->setShowVisualProp(_show);
-
+  static_cast<GraphElementModel *>(tableView()->model())->setShowVisualProp(_show);
 }
 
 void MouseShowElementInfo::clear() {
@@ -67,78 +68,84 @@ void MouseShowElementInfo::clear() {
     glMainWidget->setCursor(QCursor());
 }
 
-QTableView* MouseShowElementInfo::tableView() const {
-  return _informationWidget->findChild<QTableView*>();
+QTableView *MouseShowElementInfo::tableView() const {
+  return _informationWidget->findChild<QTableView *>();
 }
 
-bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
-  if (widget == _informationWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
+bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
+  if (widget == _informationWidget &&
+      (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
     return true;
 
   // ensure the info window stays visible while using the wheel or clicking in it
-  if(_informationWidget->isVisible() && (e->type()==QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
+  if (_informationWidget->isVisible() &&
+      (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
     QRect widgetRect = _informationWidget->geometry();
 
     if (!widgetRect.contains(QCursor::pos())) {
       _informationWidgetItem->setVisible(false);
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
 
-  QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
+  QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if(qMouseEv != NULL) {
+  if (qMouseEv != NULL) {
     if (glMainWidget == NULL)
-      glMainWidget=dynamic_cast<GlMainWidget*>(widget);
+      glMainWidget = dynamic_cast<GlMainWidget *>(widget);
 
     assert(glMainWidget);
 
     SelectedEntity selectedEntity;
 
-    if(e->type() == QEvent::MouseMove) {
-      if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
+    if (e->type() == QEvent::MouseMove) {
+      if (pick(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
         glMainWidget->setCursor(Qt::WhatsThisCursor);
-      }
-      else {
+      } else {
         glMainWidget->setCursor(QCursor());
       }
 
       return false;
-    }
-    else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
-      if(_informationWidgetItem->isVisible()) {
+    } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
+      if (_informationWidgetItem->isVisible()) {
         // Hide widget if we click outside it
         _informationWidgetItem->setVisible(false);
       }
 
-      if(!_informationWidgetItem->isVisible()) {
+      if (!_informationWidgetItem->isVisible()) {
 
         // Show widget if we click on node or edge
-        if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
-          if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
+        if (pick(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
+          if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
               selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
 
-            QLabel* title = _informationWidget->findChild<QLabel*>();
+            QLabel *title = _informationWidget->findChild<QLabel *>();
 
-            ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED?NODE:EDGE;
+            ElementType eltType =
+                selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
-            tableView()->setModel(buildModel(eltType,selectedEntity.getComplexEntityId(),_informationWidget));
-            title->setText(elementName(eltType,selectedEntity.getComplexEntityId()));
+            tableView()->setModel(
+                buildModel(eltType, selectedEntity.getComplexEntityId(), _informationWidget));
+            title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
 
-            QPoint position=qMouseEv->pos();
+            QPoint position = qMouseEv->pos();
 
-            if(position.x()+_informationWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width() - 5)
-              position.setX(_view->graphicsView()->sceneRect().width()-_informationWidgetItem->rect().width() - 5);
+            if (position.x() + _informationWidgetItem->rect().width() >
+                _view->graphicsView()->sceneRect().width() - 5)
+              position.setX(_view->graphicsView()->sceneRect().width() -
+                            _informationWidgetItem->rect().width() - 5);
 
-            if(position.y()+_informationWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height() - 5)
-              position.setY(_view->graphicsView()->sceneRect().height()-_informationWidgetItem->rect().height() - 5);
+            if (position.y() + _informationWidgetItem->rect().height() >
+                _view->graphicsView()->sceneRect().height() - 5)
+              position.setY(_view->graphicsView()->sceneRect().height() -
+                            _informationWidgetItem->rect().height() - 5);
 
             _informationWidgetItem->setPos(position);
             _informationWidgetItem->setVisible(true);
-            QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
+            QPropertyAnimation *animation =
+                new QPropertyAnimation(_informationWidgetItem, "opacity");
             connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
             animation->setDuration(100);
             animation->setStartValue(0.);
@@ -146,8 +153,7 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             animation->start();
 
             return true;
-          }
-          else {
+          } else {
             return false;
           }
         }
@@ -160,32 +166,33 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 
 bool MouseShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
   assert(glMainWidget);
-  return glMainWidget->pickNodesEdges(x,y,selectedEntity);
+  return glMainWidget->pickNodesEdges(x, y, selectedEntity);
 }
 
-void MouseShowElementInfo::viewChanged(View * view) {
+void MouseShowElementInfo::viewChanged(View *view) {
   if (view == NULL) {
     _view = NULL;
     return;
   }
 
-  ViewWidget *viewWidget=dynamic_cast<ViewWidget*>(view);
+  ViewWidget *viewWidget = dynamic_cast<ViewWidget *>(view);
   assert(viewWidget);
-  _view=viewWidget;
-  connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationWidgetItem,SLOT(close()));
+  _view = viewWidget;
+  connect(_view, SIGNAL(graphSet(tlp::Graph *)), _informationWidgetItem, SLOT(close()));
   _view->graphicsView()->scene()->addItem(_informationWidgetItem);
 }
 
-QAbstractItemModel* MouseShowElementInfo::buildModel(ElementType elementType,unsigned int elementId,QObject* parent)const {
-  if(elementType == NODE) {
-    return new GraphNodeElementModel(view()->graph(),elementId,parent,_show);
-  }
-  else {
-    return new GraphEdgeElementModel(view()->graph(),elementId,parent,_show);
+QAbstractItemModel *MouseShowElementInfo::buildModel(ElementType elementType,
+                                                     unsigned int elementId,
+                                                     QObject *parent) const {
+  if (elementType == NODE) {
+    return new GraphNodeElementModel(view()->graph(), elementId, parent, _show);
+  } else {
+    return new GraphEdgeElementModel(view()->graph(), elementId, parent, _show);
   }
 }
 
-QString MouseShowElementInfo::elementName(ElementType elementType, unsigned int elementId)const {
-  QString elementTypeLabel = elementType==NODE?QString("Node"):QString("Edge");
-  return elementTypeLabel +" #" + QString::number(elementId);
+QString MouseShowElementInfo::elementName(ElementType elementType, unsigned int elementId) const {
+  QString elementTypeLabel = elementType == NODE ? QString("Node") : QString("Edge");
+  return elementTypeLabel + " #" + QString::number(elementId);
 }

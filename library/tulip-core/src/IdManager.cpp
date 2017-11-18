@@ -25,27 +25,33 @@ namespace tlp {
 
 //-----------------------------------------------------------
 bool IdManager::is_free(const unsigned int id) const {
-  if (id < state.firstId) return true;
+  if (id < state.firstId)
+    return true;
 
-  if (id >= state.nextId) return true;
+  if (id >= state.nextId)
+    return true;
 
-  if (state.freeIds.find(id)!=state.freeIds.end()) return true;
+  if (state.freeIds.find(id) != state.freeIds.end())
+    return true;
 
   return false;
 }
 //-----------------------------------------------------------
 void IdManager::free(const unsigned int id) {
-  if (id<state.firstId) return;
+  if (id < state.firstId)
+    return;
 
-  if (id>= state.nextId) return;
+  if (id >= state.nextId)
+    return;
 
-  if (state.freeIds.find(id)!=state.freeIds.end()) return;
+  if (state.freeIds.find(id) != state.freeIds.end())
+    return;
 
   if (state.firstId == state.nextId)
     return;
 
   if (id == state.firstId) {
-    for(;;) {
+    for (;;) {
       set<unsigned int>::iterator it = state.freeIds.find(++state.firstId);
 
       if (it == state.freeIds.end())
@@ -59,8 +65,7 @@ void IdManager::free(const unsigned int id) {
     if (state.firstId == state.nextId) {
       state.firstId = state.nextId = 0;
     }
-  }
-  else
+  } else
     state.freeIds.insert(id);
 }
 //-----------------------------------------------------------
@@ -86,8 +91,7 @@ void IdManager::getFreeId(unsigned int id) {
     }
 
     state.nextId = id + 1;
-  }
-  else {
+  } else {
     assert(state.freeIds.find(id) != state.freeIds.end());
     state.freeIds.erase(state.freeIds.find(id));
   }
@@ -95,12 +99,13 @@ void IdManager::getFreeId(unsigned int id) {
 }
 
 //-----------------------------------------------------------
-ostream& tlp::operator<<(std::ostream &os,const tlp::IdManager &idM) {
+ostream &tlp::operator<<(std::ostream &os, const tlp::IdManager &idM) {
   os << endl << "--------------------------------------" << endl;
   os << "Id Manager Information :" << endl;
-  os << "Minimum index :" << idM.state.firstId<< endl;
+  os << "Minimum index :" << idM.state.firstId << endl;
   os << "Maximum index :" << idM.state.nextId - 1 << endl;
   os << "Size          :" << idM.state.freeIds.size() << endl;
-  os << "Fragmentation :" << double(idM.state.freeIds.size()) / (1+idM.state.nextId - idM.state.firstId) << endl;
+  os << "Fragmentation :"
+     << double(idM.state.freeIds.size()) / (1 + idM.state.nextId - idM.state.firstId) << endl;
   return os;
 }

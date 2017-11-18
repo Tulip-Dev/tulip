@@ -24,16 +24,19 @@ using namespace std;
 
 namespace tlp {
 
-void ParallelCoordsElementsSelector::unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) {
+void ParallelCoordsElementsSelector::unselectAllEntitiesHandler(
+    ParallelCoordinatesView *parallelView) {
   parallelView->resetSelection();
 }
 
-void ParallelCoordsElementsSelector::selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, bool addToSelection) {
+void ParallelCoordsElementsSelector::selectedEntitiesHandler(ParallelCoordinatesView *parallelView,
+                                                             int x, int y, bool addToSelection) {
   parallelView->setDataUnderPointerSelectFlag(x, y, addToSelection);
 }
 
-void ParallelCoordsElementsSelector::selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection) {
+void ParallelCoordsElementsSelector::selectedEntitiesHandler(ParallelCoordinatesView *parallelView,
+                                                             int x, int y, int w, int h,
+                                                             bool addToSelection) {
   parallelView->setDataInRegionSelectFlag(x, y, w, h, addToSelection);
 }
-
 }

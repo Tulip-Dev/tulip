@@ -31,7 +31,8 @@ namespace tlp {
  * This structure only contains an identifier, and a function to check if the node is valid.
  * A node is considered invalid when its id has the UINT_MAX value.
  *
- * Most operations performed on a node (getting out edges etc) are available into the tlp::Graph object.
+ * Most operations performed on a node (getting out edges etc) are available into the tlp::Graph
+ * object.
  *
  * @see tlp::edge
  * @see tlp::Graph
@@ -45,16 +46,17 @@ struct node {
   /**
    * @brief node creates an invalid node.
    */
-  node():id(UINT_MAX) {}
+  node() : id(UINT_MAX) {}
 
   /**
    * @brief node Create a node of given identifier.
    * It is your responsibility to make sure a node of this ID exists when you create the node.
-   * If you want to make sure this node exists, use Graph::isElement(), as isValid() will only tell is the node was correctly initialized.
+   * If you want to make sure this node exists, use Graph::isElement(), as isValid() will only tell
+   * is the node was correctly initialized.
    *
    * @param j the identifier this node will use.
    */
-  explicit node(unsigned int j):id(j) {}
+  explicit node(unsigned int j) : id(j) {}
 
   /**
    * @brief operator unsigned int A convenience function to get the id of a node.
@@ -69,7 +71,7 @@ struct node {
    * @return Whether or not the two nodes are different.
    */
   bool operator!=(const node n) const {
-    return id!=n.id;
+    return id != n.id;
   }
 
   /**
@@ -78,7 +80,7 @@ struct node {
    * @return Whether or not the two nodes are the same.
    */
   bool operator==(const node n) const {
-    return id==n.id;
+    return id == n.id;
   }
 
   /**
@@ -88,30 +90,35 @@ struct node {
    * @return whether the node is valid or not.
    */
   bool isValid() const {
-    return id!=UINT_MAX;
+    return id != UINT_MAX;
   }
 };
-
 }
 
 ///@cond DOXYGEN_HIDDEN
-//these three functions allow to use tlp::node as a key in a hash-based data structure (e.g. hashmap).
+// these three functions allow to use tlp::node as a key in a hash-based data structure (e.g.
+// hashmap).
 TLP_BEGIN_HASH_NAMESPACE {
-  template<> struct hash<tlp::node> {
-    size_t operator()(const tlp::node n) const {return n.id;}
+  template <>
+  struct hash<tlp::node> {
+    size_t operator()(const tlp::node n) const {
+      return n.id;
+    }
   };
-} TLP_END_HASH_NAMESPACE
-
+}
+TLP_END_HASH_NAMESPACE
 
 namespace std {
-template<> struct equal_to<tlp::node> {
-  size_t operator()(const tlp::node n,const tlp::node n2) const {
-    return n.id==n2.id;
+template <>
+struct equal_to<tlp::node> {
+  size_t operator()(const tlp::node n, const tlp::node n2) const {
+    return n.id == n2.id;
   }
 };
-template<> struct less<tlp::node> {
-  size_t operator()(const tlp::node n,const tlp::node n2) const {
-    return n.id<n2.id;
+template <>
+struct less<tlp::node> {
+  size_t operator()(const tlp::node n, const tlp::node n2) const {
+    return n.id < n2.id;
   }
 };
 }

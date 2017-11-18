@@ -23,12 +23,12 @@
 
 #include <string>
 
-class HttpContext :public QObject {
+class HttpContext : public QObject {
   Q_OBJECT
 public:
   bool status;
   int code;
-  QNetworkReply* reply;
+  QNetworkReply *reply;
   bool processed;
   bool redirected;
   bool isHtml;
@@ -37,7 +37,7 @@ public:
   HttpContext();
   ~HttpContext();
   void setTimer(QTimer *timer);
-  void request(const std::string& url, bool header = false);
+  void request(const std::string &url, bool header = false);
 
 public slots:
   void finished();

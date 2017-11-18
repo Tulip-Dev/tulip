@@ -39,30 +39,27 @@ class CustomTreeView : public QTreeView {
 
   Q_OBJECT
 
-public :
+public:
+  CustomTreeView(QWidget *parent = 0);
 
-  CustomTreeView(QWidget *parent=0);
-
-  void setModel(QAbstractItemModel * model);
+  void setModel(QAbstractItemModel *model);
 
 public slots:
 
   void resizeFirstColumnToContent();
 
 protected:
-
   int sizeHintForColumn(int col) const;
   void scrollContentsBy(int dx, int dy);
-
 };
 
 class GraphHierarchiesEditor : public QWidget {
   Q_OBJECT
   Ui::GraphHierarchiesEditorData *_ui;
-  tlp::Graph* _contextGraph;
+  tlp::Graph *_contextGraph;
   QModelIndex _contextIndex;
-  QAbstractButton* _linkButton;
-  tlp::GraphHierarchiesModel* _model;
+  QAbstractButton *_linkButton;
+  tlp::GraphHierarchiesModel *_model;
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = NULL);
@@ -77,10 +74,10 @@ public slots:
   void setSynchronizeButtonVisible(bool);
 
 protected slots:
-  void contextMenuRequested(const QPoint&);
-  void doubleClicked(const QModelIndex&);
-  void clicked(const QModelIndex&);
-  void currentChanged(const QModelIndex&, const QModelIndex&);
+  void contextMenuRequested(const QPoint &);
+  void doubleClicked(const QModelIndex &);
+  void clicked(const QModelIndex &);
+  void currentChanged(const QModelIndex &, const QModelIndex &);
 
   void addSubGraph();
   void cloneSubGraph();

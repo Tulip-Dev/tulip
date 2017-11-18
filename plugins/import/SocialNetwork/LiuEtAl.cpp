@@ -25,11 +25,9 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  // n
-  "Number of nodes."
-};
-
+static const char *paramHelp[] = {
+    // n
+    "Number of nodes."};
 
 /**
  *
@@ -40,11 +38,16 @@ static const char * paramHelp[] = {
  * Chinese Phys. Lett., 23(3):746, Oct. 31 2005.
  *
  */
-struct LiuEtAl:public ImportModule {
-  PLUGININFORMATION("Liu et al. model","Arnaud Sallaberry","20/06/2011","Randomly generates a small world graph using the model described in<br/>J.-G. Liu, Y.-Z. Dang, and Z. tuo Wang.<br/><b>Multistage random growing small-world networks with power-law degree distribution.</b><br/>Chinese Phys. Lett., 23(3):746, Oct. 31 2005.","1.0", "Social network")
+struct LiuEtAl : public ImportModule {
+  PLUGININFORMATION("Liu et al. model", "Arnaud Sallaberry", "20/06/2011",
+                    "Randomly generates a small world graph using the model described in<br/>J.-G. "
+                    "Liu, Y.-Z. Dang, and Z. tuo Wang.<br/><b>Multistage random growing "
+                    "small-world networks with power-law degree distribution.</b><br/>Chinese "
+                    "Phys. Lett., 23(3):746, Oct. 31 2005.",
+                    "1.0", "Social network")
 
-  LiuEtAl(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"300");
+  LiuEtAl(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "300");
   }
 
   ~LiuEtAl() {}
@@ -53,7 +56,7 @@ struct LiuEtAl:public ImportModule {
     unsigned int n = 300;
     unsigned int m = 5;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", n);
     }
 
@@ -67,41 +70,41 @@ struct LiuEtAl:public ImportModule {
      */
     unsigned int m0 = 3;
     graph->addNodes(n);
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
-    graph->reserveEdges(m0 + (2 * (n - m0) * m/2));
+    graph->reserveEdges(m0 + (2 * (n - m0) * m / 2));
 
-    for (i=1; i<m0 ; ++i) {
-      graph->addEdge(nodes[i-1],nodes[i]);
+    for (i = 1; i < m0; ++i) {
+      graph->addEdge(nodes[i - 1], nodes[i]);
     }
 
-    graph->addEdge(nodes[m0-1],nodes[0]);
+    graph->addEdge(nodes[m0 - 1], nodes[0]);
 
     /*
      * Main loop
      */
-    for (i=m0; i<n; ++i) {
+    for (i = m0; i < n; ++i) {
       if (i % 100 == 0) {
         if (pluginProgress->progress(i, n) != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
       double k_sum = 0;
 
-      for(j=0; j<i ; ++j) {
+      for (j = 0; j < i; ++j) {
         k_sum += graph->deg(nodes[j]);
       }
 
       /*
        * Preferential attachement
        */
-      for(j=0; j<m/2 ; ++j) {
+      for (j = 0; j < m / 2; ++j) {
         double pr = tlp::randomDouble();
         double pr_sum = 0;
         unsigned int rn = 0;
 
-        while (pr_sum<pr && rn<(i-1)) {
-          pr_sum += graph->deg(nodes[rn])/(k_sum+j);
+        while (pr_sum < pr && rn < (i - 1)) {
+          pr_sum += graph->deg(nodes[rn]) / (k_sum + j);
           ++rn;
         }
 
@@ -119,17 +122,17 @@ struct LiuEtAl:public ImportModule {
         pr = tlp::randomDouble();
         pr_sum = 0;
         node v;
-        Iterator<node>* it = graph->getInOutNodes(nodes[rn]);
+        Iterator<node> *it = graph->getInOutNodes(nodes[rn]);
 
-        while(it->hasNext() && pr_sum<pr) {
+        while (it->hasNext() && pr_sum < pr) {
           v = it->next();
-          pr_sum += graph->deg(v)/k2_sum;
+          pr_sum += graph->deg(v) / k2_sum;
         }
 
         delete it;
 
-        graph->addEdge(nodes[i],nodes[rn]);
-        graph->addEdge(nodes[i],v);
+        graph->addEdge(nodes[i], nodes[rn]);
+        graph->addEdge(nodes[i], v);
       }
     }
 

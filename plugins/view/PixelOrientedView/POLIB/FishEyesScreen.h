@@ -27,14 +27,13 @@ namespace pocore {
 class FishEyesScreen : public ScreenFunction {
 
 public:
-  FishEyesScreen ();
-  Vec2f  project (const Vec2f& )const ;
-  Vec2f  unproject (const Vec2f& )const ;
-  void   setCenter (double x, double y);
-  void   setRadius (double r);
+  FishEyesScreen();
+  Vec2f project(const Vec2f &) const;
+  Vec2f unproject(const Vec2f &) const;
+  void setCenter(double x, double y);
+  void setRadius(double r);
   double getRadius();
-  void   setHeight (double h);
-
+  void setHeight(double h);
 
 private:
   double R;
@@ -42,5 +41,4 @@ private:
   Vec2f fisheyesCenter;
 };
 }
-#endif //FISHEYESSCREEN_H
-
+#endif // FISHEYESSCREEN_H

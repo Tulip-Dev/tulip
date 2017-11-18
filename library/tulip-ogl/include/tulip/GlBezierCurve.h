@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef GLBEZIERCURVE_H_
 #define GLBEZIERCURVE_H_
 
@@ -35,14 +34,14 @@ namespace tlp {
  * lend itself to shape design.
  * Bezier curves are widely used in computer graphics to model smooth curves. A Bezier curve is
  * completely contained in the convex hull of its control points and passes through its first and
- * last control points. The curve is also always tangent to the first and last convex hull polygon segments.
+ * last control points. The curve is also always tangent to the first and last convex hull polygon
+ * segments.
  * In addition, the curve shape tends to follow the polygon shape.
  *
  */
 class TLP_GL_SCOPE GlBezierCurve : public AbstractGlCurve {
 
 public:
-
   GlBezierCurve();
 
   /**
@@ -55,22 +54,23 @@ public:
    * @param endSize the width at the end of the curve
    * @param nbCurvePoints the number of curve points to generate
    */
-  GlBezierCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-                const float &startSize, const float &endSize, const unsigned int nbCurvePoints = 200);
+  GlBezierCurve(const std::vector<Coord> &controlPoints, const Color &startColor,
+                const Color &endColor, const float &startSize, const float &endSize,
+                const unsigned int nbCurvePoints = 200);
 
   ~GlBezierCurve();
 
-  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
+  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
+                 const float startSize, const float endSize,
+                 const unsigned int nbCurvePoints = 200);
 
-protected :
-
+protected:
   Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
 
-  void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+  void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
+                               std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
   std::string genCurveVertexShaderSpecificCode();
-
 };
-
 }
 #endif /* GLBEZIERCURVE_H_ */

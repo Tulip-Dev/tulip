@@ -22,23 +22,25 @@
 
 using namespace tlp;
 
-EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext* context) : edgeExtGlGraphInputData(NULL) {
-  if(context != NULL) {
-    const GlyphContext* glyphContext = static_cast<const GlyphContext*>(context);
+EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext *context)
+    : edgeExtGlGraphInputData(NULL) {
+  if (context != NULL) {
+    const GlyphContext *glyphContext = static_cast<const GlyphContext *>(context);
     edgeExtGlGraphInputData = glyphContext->glGraphInputData;
   }
 }
 
-EdgeExtremityGlyph::~EdgeExtremityGlyph() {
+EdgeExtremityGlyph::~EdgeExtremityGlyph() {}
 
-}
-
-void EdgeExtremityGlyph::get3DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) {
-  //Vecteur AB
+void EdgeExtremityGlyph::get3DTransformationMatrix(const Coord &src, const Coord &dest,
+                                                   const Size &glyphSize,
+                                                   MatrixGL &transformationMatrix,
+                                                   MatrixGL &scalingMatrix) {
+  // Vecteur AB
   Vector<float, 3> vAB;
-  //Vecteur V
+  // Vecteur V
   Vector<float, 3> vV;
-  //Vecteur W
+  // Vecteur W
   Vector<float, 3> vW;
 
   vAB = dest - src;
@@ -48,18 +50,16 @@ void EdgeExtremityGlyph::get3DTransformationMatrix(const Coord &src, const Coord
   if (fabs(nAB) > 1E-6)
     vAB /= nAB;
 
-  //vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
+  // vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
   if (fabs(vAB[2]) < 1E-6) {
     vV[0] = 0;
     vV[1] = 0;
     vV[2] = 1.0;
-  }
-  else if (fabs(vAB[1]) < 1E-6) {
+  } else if (fabs(vAB[1]) < 1E-6) {
     vV[0] = 0;
     vV[1] = 1.0;
     vV[2] = 0;
-  }
-  else {
+  } else {
     vV[0] = 0;
     vV[1] = 1. / vAB[1];
     vV[2] = -1. / vAB[2];
@@ -91,12 +91,15 @@ void EdgeExtremityGlyph::get3DTransformationMatrix(const Coord &src, const Coord
   scalingMatrix[3][3] = 1;
 }
 
-void EdgeExtremityGlyph::get2DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) {
+void EdgeExtremityGlyph::get2DTransformationMatrix(const Coord &src, const Coord &dest,
+                                                   const Size &glyphSize,
+                                                   MatrixGL &transformationMatrix,
+                                                   MatrixGL &scalingMatrix) {
   //  Vecteur AB
   Vector<float, 3> vAB;
-  //Vecteur V
+  // Vecteur V
   Vector<float, 3> vV;
-  //Vecteur W
+  // Vecteur W
   Vector<float, 3> vW;
 
   vAB = dest - src;
@@ -106,18 +109,16 @@ void EdgeExtremityGlyph::get2DTransformationMatrix(const Coord &src, const Coord
   if (fabs(nAB) > 1E-6)
     vAB /= nAB;
 
-  //vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
+  // vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
   if (fabs(vAB[2]) < 1E-6) {
     vV[0] = 0;
     vV[1] = 0;
     vV[2] = 1.0;
-  }
-  else if (fabs(vAB[1]) < 1E-6) {
+  } else if (fabs(vAB[1]) < 1E-6) {
     vV[0] = 0;
     vV[1] = 1.0;
     vV[2] = 0;
-  }
-  else {
+  } else {
     vV[0] = 0;
     vV[1] = 1. / vAB[1];
     vV[2] = -1. / vAB[2];

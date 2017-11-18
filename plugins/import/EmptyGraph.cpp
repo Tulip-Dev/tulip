@@ -21,12 +21,12 @@
 
 using namespace tlp;
 
-class EmptyGraphImport: public ImportModule {
+class EmptyGraphImport : public ImportModule {
 public:
-  PLUGININFORMATION("Empty graph","Tulip team", "05/09/2012","A no-op plugin to import empty graphs","1.0","")
+  PLUGININFORMATION("Empty graph", "Tulip team", "05/09/2012",
+                    "A no-op plugin to import empty graphs", "1.0", "")
 
-  EmptyGraphImport(const tlp::PluginContext* context): ImportModule(context) {
-  }
+  EmptyGraphImport(const tlp::PluginContext *context) : ImportModule(context) {}
 
   virtual bool importGraph() {
     return true;

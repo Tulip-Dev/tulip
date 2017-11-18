@@ -50,8 +50,7 @@ class TLP_GL_SCOPE GlLabel : public GlSimpleEntity {
    */
   void init();
 
-public :
-
+public:
   /**
    * @brief Constructor
    * @warning Don't use this constructor : see other constructor
@@ -65,7 +64,7 @@ public :
    * @param fontColor color of the label
    * @param leftAlign true if you want a left align label
    */
-  GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false);
+  GlLabel(Coord centerPosition, Size size, Color fontColor, bool leftAlign = false);
 
   /**
    * @brief Destructor
@@ -75,13 +74,13 @@ public :
   /**
    * @brief Set the text of the label
    */
-  void setText(const std::string& text);
+  void setText(const std::string &text);
 
   /**
    * @brief getText gets the text of this label.
    * @return The text of this label.
    */
-  const std::string& getText() const;
+  const std::string &getText() const;
 
   /**
    * @brief Set the position used to render the label
@@ -99,7 +98,7 @@ public :
    * @brief Set the translation used after rotation of the label
    */
   virtual void setTranslationAfterRotation(Coord translation) {
-    translationAfterRotation=translation;
+    translationAfterRotation = translation;
   }
 
   /**
@@ -112,13 +111,15 @@ public :
   ///@endcond
 
   /**
-   * @brief Set the alignment of the label : LabelPosition::Center, LabelPosition::Top, LabelPosition::Bottom, LabelPosition::Left, LabelPosition::Right
-   * This function is usefull when you have an entity : you spesify the size of the position of this entity and you tell that you want a label outside this entity
+   * @brief Set the alignment of the label : LabelPosition::Center, LabelPosition::Top,
+   * LabelPosition::Bottom, LabelPosition::Left, LabelPosition::Right
+   * This function is usefull when you have an entity : you spesify the size of the position of this
+   * entity and you tell that you want a label outside this entity
    * @see LabelPosition
    * @see setSizeOfOutAlign
    */
   virtual void setAlignment(int alignment) {
-    this->alignment=alignment;
+    this->alignment = alignment;
   }
 
   /**
@@ -161,7 +162,7 @@ public :
    * @brief Set color of label
    */
   virtual void setColor(const Color &color) {
-    this->color=color;
+    this->color = color;
   }
 
   /**
@@ -175,20 +176,21 @@ public :
    * @brief Enable/disable the OpenGL depth test for the label (default depth test is enable)
    */
   virtual void enableDepthTest(bool state) {
-    depthTestEnabled=state;
+    depthTestEnabled = state;
   }
 
   /**
    * @brief Enable/disable if label is scaled to size
    */
   virtual void setScaleToSize(bool state) {
-    scaleToSize=state;
+    scaleToSize = state;
   }
 
   /**
-   * @brief Set the stencil and draw the Label, this function is usefull when we directly call draw without tulip engine
+   * @brief Set the stencil and draw the Label, this function is usefull when we directly call draw
+   * without tulip engine
    */
-  void drawWithStencil(float lod,Camera *camera=NULL);
+  void drawWithStencil(float lod, Camera *camera = NULL);
 
   /**
    * @brief Return the height of the label after scaling in  size box
@@ -198,12 +200,12 @@ public :
   /**
    * @brief Draw the Label
    */
-  virtual void draw(float, Camera *camera=NULL);
+  virtual void draw(float, Camera *camera = NULL);
 
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord& mouvement);
+  virtual void translate(const Coord &mouvement);
 
   /**
    * @brief Rotate Label
@@ -238,7 +240,8 @@ public :
   /**
    * @brief Change font name, size and color of the text
    */
-  virtual void setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color);
+  virtual void setFontNameSizeAndColor(const std::string &name, const int &size,
+                                       const Color &color);
 
   ///@cond DOXYGEN_HIDDEN
   /**
@@ -252,15 +255,15 @@ public :
    * If occlusionTester is NULL : deactivate occlusion test
    */
   virtual void setOcclusionTester(OcclusionTest *tester) {
-    occlusionTester=tester;
+    occlusionTester = tester;
   }
 
   /**
    * @brief Set if the label is otimized with the lod
    */
-  virtual void setUseLODOptimisation(bool state,BoundingBox bb=BoundingBox()) {
-    useLOD=state;
-    lodBoundingBox=bb;
+  virtual void setUseLODOptimisation(bool state, BoundingBox bb = BoundingBox()) {
+    useLOD = state;
+    lodBoundingBox = bb;
   }
 
   /**
@@ -279,12 +282,12 @@ public :
    * - If density > 0 : GlLabels don't overlap and have space wetween us
    */
   virtual void setLabelsDensity(int density) {
-    if(density<-100)
-      labelsDensity=-100;
-    else if(density>100)
-      labelsDensity=100;
+    if (density < -100)
+      labelsDensity = -100;
+    else if (density > 100)
+      labelsDensity = 100;
     else
-      labelsDensity=density;
+      labelsDensity = density;
   }
 
   /**
@@ -300,7 +303,7 @@ public :
    * @see setUseMinMaxSize
    */
   void setMinSize(int size) {
-    minSize=size;
+    minSize = size;
   }
 
   /**
@@ -316,7 +319,7 @@ public :
    * @see setUseMinMaxSize
    */
   void setMaxSize(int size) {
-    maxSize=size;
+    maxSize = size;
   }
 
   /**
@@ -331,7 +334,7 @@ public :
    * @brief Set if the label use min/max screen size in not scaled mode
    */
   void setUseMinMaxSize(bool state) {
-    useMinMaxSize=state;
+    useMinMaxSize = state;
   }
 
   /**
@@ -394,7 +397,7 @@ public :
    * @brief Sets the texture name used when rendering the label.
    */
   void setTextureName(const std::string &name) {
-    textureName=name;
+    textureName = name;
   }
 
   /**
@@ -408,11 +411,10 @@ public :
    * @brief Set if the label is billboarded
    */
   void setBillboarded(bool billboarded) {
-    this->billboarded=billboarded;
+    this->billboarded = billboarded;
   }
 
-private :
-
+private:
   std::string text;
   std::string fontName;
   int fontSize;
@@ -451,7 +453,5 @@ private :
   std::vector<float> textWidthVector;
   BoundingBox textBoundingBox;
 };
-
 }
 #endif
-

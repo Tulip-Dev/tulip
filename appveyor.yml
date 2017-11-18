@@ -16,6 +16,9 @@ cache:
   - C:\msys64\home\appveyor\.ccache
   - C:\Users\appveyor\clcache	
 
+init:
+  - ps: $env:APPVEYOR_SAVE_CACHE_ON_ERROR = "true"
+
 # define build jobs
 environment:
   matrix:
@@ -29,7 +32,7 @@ environment:
     - CMAKE_VS_GENERATOR: "Visual Studio 14 2015 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v140"
-      QT5_DIR: "C:/Qt/5.9.1/msvc2015_64"
+      QT5_DIR: "C:/Qt/5.9/msvc2015_64"
       PYTHON_EXECUTABLE: "C:/Python36-x64/python.exe"
       
     # 32 bits GCC build
@@ -42,7 +45,7 @@ environment:
     - CMAKE_VS_GENERATOR: "Visual Studio 14 2015"
       MSVC_PLATFORM: "Win32"
       MSVC_PLATFORM_TOOLSET: "v140"
-      QT5_DIR: "C:/Qt/5.9.1/msvc2015"
+      QT5_DIR: "C:/Qt/5.9/msvc2015"
       PYTHON_EXECUTABLE: "C:/Python36/python.exe"
 
 # build script that simply call the right batch script depending on the compiler used

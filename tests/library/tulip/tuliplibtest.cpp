@@ -29,10 +29,10 @@
 
 #include <tulip/TlpTools.h>
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   tlp::initTulipLib();
 
-  //CPPUNIT_NS::QtUi::TestRunner runner;
+  // CPPUNIT_NS::QtUi::TestRunner runner;
   CPPUNIT_NS::TestResult controller;
   CPPUNIT_NS::TestResultCollector result;
   controller.addListener(&result);
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
   std::stringstream s;
   s << "cpptestresults";
 
-  if(argc > 1) {
+  if (argc > 1) {
     s << "-" << argv[1];
   }
 

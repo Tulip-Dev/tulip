@@ -28,14 +28,13 @@ class HistoStatsConfigWidget;
 
 namespace tlp {
 
-class HistoStatsConfigWidget : public QWidget  {
+class HistoStatsConfigWidget : public QWidget {
 
   Q_OBJECT
 
   Ui::HistoStatsConfigWidget *_ui;
 
-public :
-
+public:
   HistoStatsConfigWidget(QWidget *parent = 0);
   ~HistoStatsConfigWidget();
 
@@ -49,8 +48,7 @@ public :
   double getSelectionLowerBound() const;
   double getSelectionUpperBound() const;
 
-private :
-
+private:
   double getBoundFromString(const QString &bound) const;
 
   double min, max;
@@ -58,10 +56,7 @@ private :
 
 signals:
   void computeAndDrawInteractor();
-
 };
-
-
 }
 
 #endif /* HISTOSTATSCONFIGWIDGET_H_ */

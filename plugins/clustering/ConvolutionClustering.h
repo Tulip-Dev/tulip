@@ -23,7 +23,6 @@
 
 #include <tulip/TulipPluginHeaders.h>
 
-
 /** This plugin allow the discretization and the filtering of the distribution of
 * a node metric using convolution.
 *
@@ -38,31 +37,28 @@
 
 namespace tlp {
 
-class ConvolutionClustering:public tlp::DoubleAlgorithm {
+class ConvolutionClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Convolution","David Auber","14/08/2001","Discretization and filtering of the distribution of a node metric using a convolution.","2.1","Clustering")
-  ConvolutionClustering(tlp::PluginContext* context);
+  PLUGININFORMATION(
+      "Convolution", "David Auber", "14/08/2001",
+      "Discretization and filtering of the distribution of a node metric using a convolution.",
+      "2.1", "Clustering")
+  ConvolutionClustering(tlp::PluginContext *context);
   bool run();
-  bool check(std::string&);
+  bool check(std::string &);
   std::vector<double> *getHistogram();
-  void setParameters(int histosize,int threshold,int width);
-  void getParameters(int &histosize,int &threshold,int &width);
+  void setParameters(int histosize, int threshold, int width);
+  void getParameters(int &histosize, int &threshold, int &width);
   void autoSetParameter();
   std::list<int> getLocalMinimum();
+
 private:
-  void getClusters(const std::vector<int>& ranges);
+  void getClusters(const std::vector<int> &ranges);
   std::vector<double> smoothHistogram;
-  std::map<int,int> histogramOfValues;
-  int histosize,threshold,width;
+  std::map<int, int> histogramOfValues;
+  int histosize, threshold, width;
   tlp::NumericProperty *metric;
 };
-
 }
 
-
 #endif
-
-
-
-
-

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef WORKSPACEEXPOSEWIDGET_H
 #define WORKSPACEEXPOSEWIDGET_H
 
@@ -32,46 +31,47 @@ class QAbstractAnimation;
 namespace tlp {
 class WorkspacePanel;
 
-class PreviewItem: public QGraphicsObject {
+class PreviewItem : public QGraphicsObject {
   Q_OBJECT
 
-  static QPixmap* _closeButtonPixmap;
+  static QPixmap *_closeButtonPixmap;
   static QRect _closePixmapRect;
 
   QPixmap _pixmap;
-  WorkspacePanel* _panel;
+  WorkspacePanel *_panel;
   bool _hovered;
   bool _closeButtonHovered;
 
   int textHeight() const;
+
 public:
-  explicit PreviewItem(const QPixmap& pixmap, WorkspacePanel* panel, QGraphicsItem* parent = NULL);
+  explicit PreviewItem(const QPixmap &pixmap, WorkspacePanel *panel, QGraphicsItem *parent = NULL);
   QRectF boundingRect() const;
-  void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-  WorkspacePanel* panel() const;
-  bool shouldClose(const QPointF&);
+  void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+  WorkspacePanel *panel() const;
+  bool shouldClose(const QPointF &);
+
 protected:
-  void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
-  void hoverMoveEvent(QGraphicsSceneHoverEvent*);
-  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *);
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+  void hoverMoveEvent(QGraphicsSceneHoverEvent *);
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
 signals:
   void opened();
 };
 
-
 class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   Q_OBJECT
 
-  QAbstractAnimation* _positionAnimation;
-  QList<PreviewItem*> _items;
-  PreviewItem* _selectedItem;
-  QGraphicsRectItem* _placeholderItem;
+  QAbstractAnimation *_positionAnimation;
+  QList<PreviewItem *> _items;
+  PreviewItem *_selectedItem;
+  QGraphicsRectItem *_placeholderItem;
   bool _switchToSingleMode;
 
   int _currentPanelIndex;
 
-  void updatePositions(bool resetScenePos=true);
+  void updatePositions(bool resetScenePos = true);
   static const int MARGIN;
 
   void finish();
@@ -82,12 +82,12 @@ public:
   explicit WorkspaceExposeWidget(QWidget *parent = NULL);
   ~WorkspaceExposeWidget();
   int currentPanelIndex() const;
-  QVector<WorkspacePanel*> panels() const;
+  QVector<WorkspacePanel *> panels() const;
 
   bool isSwitchToSingleMode() const;
 
 public slots:
-  void setData(const QVector<WorkspacePanel*>& panels, int currentPanelIndex);
+  void setData(const QVector<WorkspacePanel *> &panels, int currentPanelIndex);
 
 signals:
   void exposeFinished();
@@ -95,14 +95,13 @@ signals:
 protected:
   void resizeEvent(QResizeEvent *event);
   bool eventFilter(QObject *, QEvent *);
-  bool event(QEvent*);
+  bool event(QEvent *);
 
 protected slots:
   void updatePositionsAnimationFinished();
   void resetSceneRect();
   void itemOpened();
 };
-
 }
 
 #endif // WORKSPACEEXPOSEWIDGET_H

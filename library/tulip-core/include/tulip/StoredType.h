@@ -35,17 +35,17 @@ struct StoredType {
   // the type of a returned const value
   typedef TYPE ReturnedConstValue;
   // indicates if a pointer to the value is stored
-  enum {isPointer=0};
+  enum { isPointer = 0 };
   // simply get
-  inline static TYPE& get(const TYPE& val) {
-    return const_cast<TYPE&>(val);
+  inline static TYPE &get(const TYPE &val) {
+    return const_cast<TYPE &>(val);
   }
   // equallity test
-  inline static bool equal(const TYPE& val1, const TYPE& val2) {
+  inline static bool equal(const TYPE &val1, const TYPE &val2) {
     return val2 == val1;
   }
   // cloning before storage
-  inline static Value clone(const TYPE& val) {
+  inline static Value clone(const TYPE &val) {
     return val;
   }
   // destruction of stored value
@@ -56,33 +56,33 @@ struct StoredType {
   }
 };
 
-#define DECL_STORED_PTR(T)         \
-  template <>             \
-    struct StoredType<T> {         \
-    typedef T Value;           \
-    typedef T ReturnedValue;         \
-    typedef const T ReturnedConstValue;      \
-                \
-    enum {isPointer=1};           \
-                \
-    inline static T get(T val) {       \
-      return val;          \
-    }               \
-                \
-    inline static bool equal(const T val1, const T val2) { \
-      return val2 == val1;         \
-    }               \
-                \
-    inline static T clone(T val) {     \
-      return val;          \
-    }               \
-                \
-    inline static void destroy(T val) {     \
-      delete val;           \
-    }               \
-    inline static T defaultValue() {      \
-      return NULL;           \
-    }               \
+#define DECL_STORED_PTR(T)                                                                         \
+  template <>                                                                                      \
+  struct StoredType<T> {                                                                           \
+    typedef T Value;                                                                               \
+    typedef T ReturnedValue;                                                                       \
+    typedef const T ReturnedConstValue;                                                            \
+                                                                                                   \
+    enum { isPointer = 1 };                                                                        \
+                                                                                                   \
+    inline static T get(T val) {                                                                   \
+      return val;                                                                                  \
+    }                                                                                              \
+                                                                                                   \
+    inline static bool equal(const T val1, const T val2) {                                         \
+      return val2 == val1;                                                                         \
+    }                                                                                              \
+                                                                                                   \
+    inline static T clone(T val) {                                                                 \
+      return val;                                                                                  \
+    }                                                                                              \
+                                                                                                   \
+    inline static void destroy(T val) {                                                            \
+      delete val;                                                                                  \
+    }                                                                                              \
+    inline static T defaultValue() {                                                               \
+      return NULL;                                                                                 \
+    }                                                                                              \
   }
 
 // non basic types are returned by reference
@@ -91,70 +91,70 @@ struct StoredType {
 // which can simply be flagged in storing a null pointer
 // the macro below must be used to enable thies type of management
 #ifdef TLP_NO_CONST_STORED_TYPE
-#define DECL_STORED_STRUCT(T)         \
-  template <>             \
-    struct StoredType<T> {         \
-    typedef T *Value;           \
-    typedef T& ReturnedValue;         \
-    typedef T ReturnedConstValue;      \
-                \
-    enum {isPointer=1};           \
-                \
-    inline static T& get(const Value& val) {       \
-      return *val;            \
-    }               \
-                \
-    inline static bool equal(Value val1, const T& val2) { \
-      return val2 == *val1;         \
-    }               \
-                \
-    inline static bool equal(const T& val2, Value val1) { \
-      return val2 == *val1;         \
-    }               \
-                \
-    inline static Value clone(const T& val) {     \
-      return new T(val);          \
-    }               \
-                \
-    inline static void destroy(Value val) {     \
-      delete val;           \
-    }               \
-    inline static Value defaultValue() {      \
-      return new T();           \
-    }               \
+#define DECL_STORED_STRUCT(T)                                                                      \
+  template <>                                                                                      \
+  struct StoredType<T> {                                                                           \
+    typedef T *Value;                                                                              \
+    typedef T &ReturnedValue;                                                                      \
+    typedef T ReturnedConstValue;                                                                  \
+                                                                                                   \
+    enum { isPointer = 1 };                                                                        \
+                                                                                                   \
+    inline static T &get(const Value &val) {                                                       \
+      return *val;                                                                                 \
+    }                                                                                              \
+                                                                                                   \
+    inline static bool equal(Value val1, const T &val2) {                                          \
+      return val2 == *val1;                                                                        \
+    }                                                                                              \
+                                                                                                   \
+    inline static bool equal(const T &val2, Value val1) {                                          \
+      return val2 == *val1;                                                                        \
+    }                                                                                              \
+                                                                                                   \
+    inline static Value clone(const T &val) {                                                      \
+      return new T(val);                                                                           \
+    }                                                                                              \
+                                                                                                   \
+    inline static void destroy(Value val) {                                                        \
+      delete val;                                                                                  \
+    }                                                                                              \
+    inline static Value defaultValue() {                                                           \
+      return new T();                                                                              \
+    }                                                                                              \
   };
 #else
-#define DECL_STORED_STRUCT(T)         \
-  template <>             \
-    struct StoredType<T> {         \
-    typedef T *Value;           \
-    typedef T& ReturnedValue;         \
-    typedef const T& ReturnedConstValue;      \
-                \
-    enum {isPointer=1};           \
-                \
-    inline static T& get(const Value& val) {       \
-      return *val;            \
-    }               \
-                \
-    inline static bool equal(Value val1, const T& val2) { \
-      return val2 == *val1;         \
-    }               \
-                \
-    inline static bool equal(const T& val2, Value val1) { \
-      return val2 == *val1;         \
-    }               \
-                \
-    inline static Value clone(const T& val) {     \
-      return new T(val);          \
-    }               \
-                \
-    inline static void destroy(Value val) {     \
-      delete val;           \
-    }               \
-    inline static Value defaultValue() {      \
-      return new T();           \
-    }               \
+#define DECL_STORED_STRUCT(T)                                                                      \
+  template <>                                                                                      \
+  struct StoredType<T> {                                                                           \
+    typedef T *Value;                                                                              \
+    typedef T &ReturnedValue;                                                                      \
+    typedef const T &ReturnedConstValue;                                                           \
+                                                                                                   \
+    enum { isPointer = 1 };                                                                        \
+                                                                                                   \
+    inline static T &get(const Value &val) {                                                       \
+      return *val;                                                                                 \
+    }                                                                                              \
+                                                                                                   \
+    inline static bool equal(Value val1, const T &val2) {                                          \
+      return val2 == *val1;                                                                        \
+    }                                                                                              \
+                                                                                                   \
+    inline static bool equal(const T &val2, Value val1) {                                          \
+      return val2 == *val1;                                                                        \
+    }                                                                                              \
+                                                                                                   \
+    inline static Value clone(const T &val) {                                                      \
+      return new T(val);                                                                           \
+    }                                                                                              \
+                                                                                                   \
+    inline static void destroy(Value val) {                                                        \
+      delete val;                                                                                  \
+    }                                                                                              \
+    inline static Value defaultValue() {                                                           \
+      return new T();                                                                              \
+    }                                                                                              \
   };
 #endif
 }

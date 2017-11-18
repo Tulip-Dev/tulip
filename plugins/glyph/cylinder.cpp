@@ -40,68 +40,73 @@ namespace tlp {
 class CylinderBase {
 
 public:
-
   void drawCylinder(float cylinderHeight = 1.0, float dz = 0) {
     if (cylinderVertices.empty()) {
       const unsigned int numberOfSides = 30;
-      cylinderVertices = computeRegularPolygon(numberOfSides, Coord(0,0,-cylinderHeight/2+dz), Size(0.5, 0.5));
-      cylinderVertices.push_back(Coord(0,0,-cylinderHeight/2+dz));
-      vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0,0,cylinderHeight/2+dz), Size(0.5, 0.5));
+      cylinderVertices = computeRegularPolygon(numberOfSides, Coord(0, 0, -cylinderHeight / 2 + dz),
+                                               Size(0.5, 0.5));
+      cylinderVertices.push_back(Coord(0, 0, -cylinderHeight / 2 + dz));
+      vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, cylinderHeight / 2 + dz),
+                                                Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
-      cylinderVertices.push_back(Coord(0,0,cylinderHeight/2+dz));
+      cylinderVertices.push_back(Coord(0, 0, cylinderHeight / 2 + dz));
 
-      for (size_t i = 0 ; i < cylinderVertices.size() ; ++i) {
-        cylinderTexCoords.push_back(Vec2f(cylinderVertices[i][0]+0.5, cylinderVertices[i][1]+0.5));
+      for (size_t i = 0; i < cylinderVertices.size(); ++i) {
+        cylinderTexCoords.push_back(
+            Vec2f(cylinderVertices[i][0] + 0.5, cylinderVertices[i][1] + 0.5));
       }
 
       size_t startIdx = cylinderVertices.size();
 
-      tmp = computeRegularPolygon(numberOfSides, Coord(0,0,-cylinderHeight/2+dz), Size(0.5, 0.5));
+      tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, -cylinderHeight / 2 + dz),
+                                  Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
-      tmp = computeRegularPolygon(numberOfSides, Coord(0,0,cylinderHeight/2+dz), Size(0.5, 0.5));
+      tmp = computeRegularPolygon(numberOfSides, Coord(0, 0, cylinderHeight / 2 + dz),
+                                  Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
 
-      for (size_t i = startIdx ; i < cylinderVertices.size() ; ++i) {
-        cylinderTexCoords.push_back(Vec2f(cylinderVertices[i][0]+0.5, cylinderVertices[i][2]+0.5));
+      for (size_t i = startIdx; i < cylinderVertices.size(); ++i) {
+        cylinderTexCoords.push_back(
+            Vec2f(cylinderVertices[i][0] + 0.5, cylinderVertices[i][2] + 0.5));
       }
 
-      for (unsigned int i = 0 ; i < numberOfSides -1 ; ++i) {
+      for (unsigned int i = 0; i < numberOfSides - 1; ++i) {
         cylinderIndices.push_back(numberOfSides);
-        cylinderIndices.push_back(i+1);
+        cylinderIndices.push_back(i + 1);
         cylinderIndices.push_back(i);
       }
 
       cylinderIndices.push_back(numberOfSides);
       cylinderIndices.push_back(0);
-      cylinderIndices.push_back(numberOfSides-1);
+      cylinderIndices.push_back(numberOfSides - 1);
 
-      for (unsigned int i = 0 ; i < numberOfSides -1 ; ++i) {
-        cylinderIndices.push_back(numberOfSides+1+i);
-        cylinderIndices.push_back(numberOfSides+1+i+1);
-        cylinderIndices.push_back(2*numberOfSides);
+      for (unsigned int i = 0; i < numberOfSides - 1; ++i) {
+        cylinderIndices.push_back(numberOfSides + 1 + i);
+        cylinderIndices.push_back(numberOfSides + 1 + i + 1);
+        cylinderIndices.push_back(2 * numberOfSides);
       }
 
-      cylinderIndices.push_back(2*numberOfSides);
-      cylinderIndices.push_back(numberOfSides+1);
-      cylinderIndices.push_back(numberOfSides+1+numberOfSides-1);
+      cylinderIndices.push_back(2 * numberOfSides);
+      cylinderIndices.push_back(numberOfSides + 1);
+      cylinderIndices.push_back(numberOfSides + 1 + numberOfSides - 1);
 
-      for (unsigned int i = 0 ; i < numberOfSides -1 ; ++i) {
-        cylinderIndices.push_back(startIdx+i);
-        cylinderIndices.push_back(startIdx+i+1);
-        cylinderIndices.push_back(startIdx+numberOfSides+i);
+      for (unsigned int i = 0; i < numberOfSides - 1; ++i) {
+        cylinderIndices.push_back(startIdx + i);
+        cylinderIndices.push_back(startIdx + i + 1);
+        cylinderIndices.push_back(startIdx + numberOfSides + i);
 
-        cylinderIndices.push_back(startIdx+i+1);
-        cylinderIndices.push_back(startIdx+numberOfSides+i+1);
-        cylinderIndices.push_back(startIdx+numberOfSides+i);
+        cylinderIndices.push_back(startIdx + i + 1);
+        cylinderIndices.push_back(startIdx + numberOfSides + i + 1);
+        cylinderIndices.push_back(startIdx + numberOfSides + i);
       }
 
-      cylinderIndices.push_back(startIdx+numberOfSides-1);
+      cylinderIndices.push_back(startIdx + numberOfSides - 1);
       cylinderIndices.push_back(startIdx);
-      cylinderIndices.push_back(startIdx+numberOfSides);
+      cylinderIndices.push_back(startIdx + numberOfSides);
 
-      cylinderIndices.push_back(startIdx+numberOfSides);
-      cylinderIndices.push_back(startIdx+numberOfSides+numberOfSides-1);
-      cylinderIndices.push_back(startIdx+numberOfSides-1);
+      cylinderIndices.push_back(startIdx + numberOfSides);
+      cylinderIndices.push_back(startIdx + numberOfSides + numberOfSides - 1);
+      cylinderIndices.push_back(startIdx + numberOfSides - 1);
 
       cylinderNormals = computeNormals(cylinderVertices, cylinderIndices);
 
@@ -109,13 +114,17 @@ public:
       glGenBuffers(4, &buffers[0]);
 
       glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-      glBufferData(GL_ARRAY_BUFFER, cylinderVertices.size() * 3 * sizeof(float), &cylinderVertices[0], GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, cylinderVertices.size() * 3 * sizeof(float),
+                   &cylinderVertices[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-      glBufferData(GL_ARRAY_BUFFER, cylinderNormals.size() * 3 * sizeof(float), &cylinderNormals[0], GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, cylinderNormals.size() * 3 * sizeof(float), &cylinderNormals[0],
+                   GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-      glBufferData(GL_ARRAY_BUFFER, cylinderTexCoords.size() * 2 * sizeof(float), &cylinderTexCoords[0], GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, cylinderTexCoords.size() * 2 * sizeof(float),
+                   &cylinderTexCoords[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, cylinderIndices.size() * sizeof(unsigned short), &cylinderIndices[0], GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, cylinderIndices.size() * sizeof(unsigned short),
+                   &cylinderIndices[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
@@ -141,19 +150,15 @@ public:
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
   }
 
 private:
-
   vector<Coord> cylinderVertices;
   vector<Coord> cylinderNormals;
   vector<Vec2f> cylinderTexCoords;
   vector<unsigned short> cylinderIndices;
   vector<unsigned int> buffers;
-
 };
-
 
 /** \addtogroup glyph */
 /// A 3D glyph.
@@ -164,22 +169,19 @@ private:
  */
 class Cylinder : public Glyph, public CylinderBase {
 public:
-  GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", NodeShape::Cylinder)
-  Cylinder(const tlp::PluginContext* context = NULL);
+  GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0",
+                   NodeShape::Cylinder)
+  Cylinder(const tlp::PluginContext *context = NULL);
   virtual ~Cylinder();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
-
 };
 PLUGIN(Cylinder)
 
-Cylinder::Cylinder(const tlp::PluginContext* context) :
-  Glyph(context) {
-}
-Cylinder::~Cylinder() {
-}
-void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+Cylinder::Cylinder(const tlp::PluginContext *context) : Glyph(context) {}
+Cylinder::~Cylinder() {}
+void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
   boundingBox[1] = Coord(0.35f, 0.35f, 1);
 }
@@ -213,10 +215,10 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
   z *= n;
 
   if (z < -0.5f)
-    z = -0.5f; //z = z >? -0.5f;
+    z = -0.5f; // z = z >? -0.5f;
 
   if (z > +0.5f)
-    z = +0.5f; //z = z <? +0.5f;
+    z = +0.5f; // z = z <? +0.5f;
 
   return Coord(x, y, z);
 }
@@ -230,15 +232,15 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
  * is then colored using the "viewColor" node property value.
  */
 
-
 //=================================================================================================
 class HalfCylinder : public Glyph, public CylinderBase {
 public:
-  GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", NodeShape::HalfCylinder)
+  GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder",
+                   "1.0", NodeShape::HalfCylinder)
   HalfCylinder(const tlp::PluginContext *context = NULL);
   virtual ~HalfCylinder();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual void draw(node n,float lod);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
+  virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
 private:
@@ -246,25 +248,23 @@ private:
 
 PLUGIN(HalfCylinder)
 //=================================================================================================
-HalfCylinder::HalfCylinder(const tlp::PluginContext* context): Glyph(context) {
-}
+HalfCylinder::HalfCylinder(const tlp::PluginContext *context) : Glyph(context) {}
 //=================================================================================================
-HalfCylinder::~HalfCylinder() {
-}
+HalfCylinder::~HalfCylinder() {}
 //=====================================================
-void HalfCylinder::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+void HalfCylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
   boundingBox[1] = Coord(0.35f, 0.35f, 1);
 }
 //=================================================================================================
-void HalfCylinder::draw(node n,float) {
+void HalfCylinder::draw(node n, float) {
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
-    string texturePath=glGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath+texFile);
+    string texturePath = glGraphInputData->parameters->getTexturePath();
+    GlTextureManager::getInst().activateTexture(texturePath + texFile);
   }
 
   drawCylinder(0.5, 0.25);
@@ -274,11 +274,11 @@ void HalfCylinder::draw(node n,float) {
 //=================================================================================================
 Coord HalfCylinder::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
-  float x,y,z,n;
-  anchor.get(x,y,z);
-  n = sqrt(x*x + y*y);
+  float x, y, z, n;
+  anchor.get(x, y, z);
+  n = sqrt(x * x + y * y);
 
-  if( n == 0.0f )
+  if (n == 0.0f)
     return anchor;
 
   n = 0.5f / n;
@@ -286,21 +286,23 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const {
   y *= n;
   z *= n;
 
-  if (z < 0.0f) z = 0.0f; //z = z >? 0.0f;
+  if (z < 0.0f)
+    z = 0.0f; // z = z >? 0.0f;
 
-  if (z > 0.5f) z = 0.5f; //z = z <? 0.5f;
+  if (z > 0.5f)
+    z = 0.5f; // z = z <? 0.5f;
 
-  return Coord(x,y,z);
+  return Coord(x, y, z);
 }
 
-class EECylinder: public EdgeExtremityGlyph, public CylinderBase {
+class EECylinder : public EdgeExtremityGlyph, public CylinderBase {
 public:
-  GLYPHINFORMATION("3D - Cylinder extremity", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder for edge extremities", "1.0", EdgeExtremityShape::Cylinder)
+  GLYPHINFORMATION("3D - Cylinder extremity", "Bertrand Mathieu", "31/07/2002",
+                   "Textured Cylinder for edge extremities", "1.0", EdgeExtremityShape::Cylinder)
 
-  EECylinder(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
-  }
+  EECylinder(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge, node n, const Color& glyphColor, const Color&, float) {
+  void draw(edge, node n, const Color &glyphColor, const Color &, float) {
     glEnable(GL_LIGHTING);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 
@@ -308,8 +310,7 @@ public:
     string texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
 
     if (!texFile.empty()) {
-      string texturePath =
-        edgeExtGlGraphInputData->parameters->getTexturePath();
+      string texturePath = edgeExtGlGraphInputData->parameters->getTexturePath();
       GlTextureManager::getInst().activateTexture(texturePath + texFile);
     }
 

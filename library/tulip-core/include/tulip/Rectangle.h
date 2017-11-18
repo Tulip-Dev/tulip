@@ -34,8 +34,8 @@ namespace tlp {
  *
  * Author : <a href="http://tulip.labri.fr>Tulip team</a>
  */
-template<typename Obj, typename OTYPE = double>
-struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
+template <typename Obj, typename OTYPE = double>
+struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
   /**
     * Create a new invalid rectangle
     */
@@ -72,7 +72,7 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
   * create a new Rectangle
   * \warning the rectangle must be valid (tested in debug mode)
   */
-  Rectangle(const Vector<Obj,2, OTYPE> &min, const Vector<Obj,2, OTYPE> &max) {
+  Rectangle(const Vector<Obj, 2, OTYPE> &min, const Vector<Obj, 2, OTYPE> &max) {
     (*this)[0] = min;
     (*this)[1] = max;
     assert(isValid());
@@ -85,30 +85,36 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
     assert(this->isValid());
     assert(r.isValid());
 
-    if ((*this)[0][0] > r[1][0])  return false;
+    if ((*this)[0][0] > r[1][0])
+      return false;
 
-    if ((*this)[1][0] < r[0][0])  return false;
+    if ((*this)[1][0] < r[0][0])
+      return false;
 
-    if ((*this)[0][1] > r[1][1])  return false;
+    if ((*this)[0][1] > r[1][1])
+      return false;
 
-    if ((*this)[1][1] < r[0][1])  return false;
+    if ((*this)[1][1] < r[0][1])
+      return false;
 
     return true;
   }
   /**
-       * @return the true if there is an intersection else false, the intersection parameter is used to stored the Rectangle pf intersection (if it exists).
+       * @return the true if there is an intersection else false, the intersection parameter is used
+   * to stored the Rectangle pf intersection (if it exists).
        * \warning the rectangle must be valid (tested in debug mode)
        */
   bool intersect(const Rectangle &r, Rectangle &intersection) const {
     assert(this->isValid());
     assert(r.isValid());
 
-    if (!this->intersect(r)) return false;
+    if (!this->intersect(r))
+      return false;
 
-    intersection[0][0] = std::max((*this)[0][0] , r[0][0]);
-    intersection[1][0] = std::min((*this)[1][0] , r[1][0]);
-    intersection[0][1] = std::max((*this)[0][1] , r[0][1]);
-    intersection[1][1] = std::min((*this)[1][1] , r[1][1]);
+    intersection[0][0] = std::max((*this)[0][0], r[0][0]);
+    intersection[1][0] = std::min((*this)[1][0], r[1][0]);
+    intersection[0][1] = std::max((*this)[0][1], r[0][1]);
+    intersection[1][1] = std::min((*this)[1][1], r[1][1]);
 
     return true;
   }
@@ -125,13 +131,17 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
   bool isInside(const Vector<Obj, 2, OTYPE> &p) const {
     assert(isValid());
 
-    if (p[0] > (*this)[1][0]) return false;
+    if (p[0] > (*this)[1][0])
+      return false;
 
-    if (p[0] < (*this)[0][0]) return false;
+    if (p[0] < (*this)[0][0])
+      return false;
 
-    if (p[1] > (*this)[1][1]) return false;
+    if (p[1] > (*this)[1][1])
+      return false;
 
-    if (p[1] < (*this)[0][1]) return false;
+    if (p[1] < (*this)[0][1])
+      return false;
 
     return true;
   }
@@ -143,9 +153,11 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
     assert(isValid());
     assert(r.isValid());
 
-    if ((*this)[0] == r[0] && (*this)[1] == r[1]) return true;
+    if ((*this)[0] == r[0] && (*this)[1] == r[1])
+      return true;
 
-    if (this->isInside(r[0]) && this->isInside(r[1])) return true;
+    if (this->isInside(r[0]) && this->isInside(r[1]))
+      return true;
 
     return false;
   }
@@ -154,7 +166,7 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
   * Translate "this" by vector v
   * \warning the rectangle must be valid (tested in debug mode)
   */
-  void translate(const tlp::Vector<Obj,2, OTYPE> &v) {
+  void translate(const tlp::Vector<Obj, 2, OTYPE> &v) {
     assert(isValid());
     (*this)[0] += v;
     (*this)[1] += v;
@@ -204,16 +216,12 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
     assert(isValid());
     return ((*this)[0] + (*this)[1]) / Obj(2);
   }
-
 };
 
 typedef Rectangle<double, long double> Rectd;
 typedef Rectangle<float, double> Rectf;
 typedef Rectangle<int, double> Recti;
 typedef Rectangle<unsigned int, double> Rectui;
-
-
-
 }
 #endif
 ///@endcond

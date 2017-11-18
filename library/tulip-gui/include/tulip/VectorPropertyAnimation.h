@@ -25,28 +25,31 @@
 
 namespace tlp {
 
-template<typename PropType, typename RealType, typename VectorType, unsigned int SIZE>
-class VectorPropertyAnimation: public CachedPropertyAnimation<PropType, RealType, RealType> {
+template <typename PropType, typename RealType, typename VectorType, unsigned int SIZE>
+class VectorPropertyAnimation : public CachedPropertyAnimation<PropType, RealType, RealType> {
 public:
-  VectorPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out, tlp::BooleanProperty *selection = NULL, int frameCount = 1,
-                          bool computeNodes = true, bool computeEdges = true, QObject* parent=NULL);
+  VectorPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
+                          tlp::BooleanProperty *selection = NULL, int frameCount = 1,
+                          bool computeNodes = true, bool computeEdges = true,
+                          QObject *parent = NULL);
 
   virtual ~VectorPropertyAnimation() {}
 
 protected:
-  virtual RealType
-  getNodeFrameValue(const RealType &startValue, const RealType &endValue, int frame);
-  virtual RealType
-  getEdgeFrameValue(const RealType &startValue, const RealType &endValue, int frame);
+  virtual RealType getNodeFrameValue(const RealType &startValue, const RealType &endValue,
+                                     int frame);
+  virtual RealType getEdgeFrameValue(const RealType &startValue, const RealType &endValue,
+                                     int frame);
 
 private:
   typedef tlp::Vector<VectorType, SIZE> PropVector;
 
-  std::map<std::pair<tlp::Vector<VectorType, SIZE>, tlp::Vector<VectorType, SIZE> >, tlp::Vector<double, SIZE> > steps;
+  std::map<std::pair<tlp::Vector<VectorType, SIZE>, tlp::Vector<VectorType, SIZE> >,
+           tlp::Vector<double, SIZE> >
+      steps;
 };
 
 #include "cxx/VectorPropertyAnimation.cxx"
-
 }
 
 #endif /* VECTORPROPERTYANIMATION_H_ */

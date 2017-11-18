@@ -32,12 +32,12 @@
 static const QString SEPARATOR = "=======================\n";
 
 TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
-  : QDialog(parent), _ui(new Ui::TulipPerspectiveCrashHandlerData), _isDetailedView(false) {
+    : QDialog(parent), _ui(new Ui::TulipPerspectiveCrashHandlerData), _isDetailedView(false) {
   _ui->setupUi(this);
   setDetailedView(false);
-  connect(_ui->detailsLink,SIGNAL(linkActivated(QString)),this,SLOT(toggleDetailedView()));
-  connect(_ui->sendReportButton,SIGNAL(clicked()),this,SLOT(sendReport()));
-  //connect(_ui->saveButton,SIGNAL(clicked()),this,SLOT(saveData()));
+  connect(_ui->detailsLink, SIGNAL(linkActivated(QString)), this, SLOT(toggleDetailedView()));
+  connect(_ui->sendReportButton, SIGNAL(clicked()), this, SLOT(sendReport()));
+  // connect(_ui->saveButton,SIGNAL(clicked()),this,SLOT(saveData()));
   _ui->saveButton->hide();
   _ui->commentsEdit->moveCursor(QTextCursor::End);
   QPixmap px(":/tulip/gui/icons/logo32x32.png");
@@ -47,7 +47,6 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   px.setDevicePixelRatio(QGuiApplication::primaryScreen()->devicePixelRatio());
 #endif
   _ui->icon->setPixmap(px);
-
 }
 
 TulipPerspectiveCrashHandler::~TulipPerspectiveCrashHandler() {
@@ -56,8 +55,10 @@ TulipPerspectiveCrashHandler::~TulipPerspectiveCrashHandler() {
 
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {
   _isDetailedView = f;
-  _ui->detailsLink->setText(f ? "<a href=\"Hide details\">Hide details</a>" :
-                            "<a href=\"Show details\">View details</a> <span style=\"font-size:small\"><i>(sent with your comments)</i></span>");
+  _ui->detailsLink->setText(f ? "<a href=\"Hide details\">Hide details</a>"
+                              : "<a href=\"Show details\">View details</a> <span "
+                                "style=\"font-size:small\"><i>(sent with your "
+                                "comments)</i></span>");
   _ui->stackedWidget->setCurrentIndex(int(f));
 }
 
@@ -68,9 +69,12 @@ void TulipPerspectiveCrashHandler::toggleDetailedView() {
 void TulipPerspectiveCrashHandler::sendReport() {
   _poster = new FormPost;
 
-  _poster->addField("summary","[ Tulip " + _ui->versionValue->text() + " (" + _ui->plateformValue->text() + ") ] Crash report from perspective: " + _ui->perspectiveNameValue->text() + " " + _ui->perspectiveArgumentsValue->text());
+  _poster->addField("summary",
+                    "[ Tulip " + _ui->versionValue->text() + " (" + _ui->plateformValue->text() +
+                        ") ] Crash report from perspective: " + _ui->perspectiveNameValue->text() +
+                        " " + _ui->perspectiveArgumentsValue->text());
 
-  QString description = + "System:\n\n";
+  QString description = +"System:\n\n";
   description += "Plateform: " + _ui->plateformValue->text() + "\n";
   description += "Architecture: " + _ui->archValue->text() + "\n";
   description += "Compiler: " + _ui->compilerValue->text() + "\n";
@@ -83,13 +87,14 @@ void TulipPerspectiveCrashHandler::sendReport() {
   description += "Stack trace:\n";
   description += _ui->dumpEdit->toPlainText();
 
-  _poster->addField("description",description);
-  _poster->addField("platform",_ui->compilerValue->text());
-  _poster->addField("os",_ui->plateformValue->text());
-  _poster->addField("os_build",_ui->archValue->text());
-  _poster->addField("steps_to_reproduce",_ui->commentsEdit->toPlainText());
+  _poster->addField("description", description);
+  _poster->addField("platform", _ui->compilerValue->text());
+  _poster->addField("os", _ui->plateformValue->text());
+  _poster->addField("os_build", _ui->archValue->text());
+  _poster->addField("steps_to_reproduce", _ui->commentsEdit->toPlainText());
 
-  connect(_poster->postData("http://tulip.labri.fr/devel/tulip_crash_report.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
+  connect(_poster->postData("http://tulip.labri.fr/devel/tulip_crash_report.php"),
+          SIGNAL(finished()), this, SLOT(reportPosted()));
 
   _ui->sendReportButton->setText(trUtf8("Sending report..."));
   _ui->detailsFrame->setEnabled(false);
@@ -98,13 +103,13 @@ void TulipPerspectiveCrashHandler::sendReport() {
 }
 
 void TulipPerspectiveCrashHandler::reportPosted() {
-  QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
+  QNetworkReply *reply = static_cast<QNetworkReply *>(sender());
 
   if (reply->error() == QNetworkReply::NoError) {
     _ui->sendReportButton->setText(trUtf8("Report sent"));
-    _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !"));
-  }
-  else {
+    _ui->errorReportTitle->setText(
+        trUtf8("<b>Report has been sent. Thank you for supporting Tulip !"));
+  } else {
     _ui->sendReportButton->setText(trUtf8("Error while sending report"));
     _ui->errorReportTitle->setText("<i>" + reply->errorString() + "</i>");
     _ui->sendReportButton->setEnabled(true);
@@ -114,13 +119,15 @@ void TulipPerspectiveCrashHandler::reportPosted() {
   _poster->deleteLater();
 }
 
-//void TulipPerspectiveCrashHandler::saveData() {
+// void TulipPerspectiveCrashHandler::saveData() {
 //  tlp::TulipProject* project = tlp::TulipProject::restoreProject(_perspectiveInfo.projectPath);
 
 //  if (!project->isValid())
-//    QMessageBox::critical(this,trUtf8("Error while saving data"),trUtf8("The perspective data could not be retrieved."));
+//    QMessageBox::critical(this,trUtf8("Error while saving data"),trUtf8("The perspective data
+//    could not be retrieved."));
 //  else {
-//    QString outputPath = QFileDialog::getSaveFileName(this,trUtf8("Save project"),QDir::homePath(),trUtf8("Tulip project (*.tlpx)"));
+//    QString outputPath = QFileDialog::getSaveFileName(this,trUtf8("Save
+//    project"),QDir::homePath(),trUtf8("Tulip project (*.tlpx)"));
 
 //    if (!outputPath.isEmpty()) {
 //      project->write(outputPath);
@@ -132,7 +139,9 @@ void TulipPerspectiveCrashHandler::reportPosted() {
 //  _ui->saveButton->setEnabled(false);
 //}
 
-void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &stackTrace) {
+void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QString &arch,
+                                              const QString &compiler, const QString &version,
+                                              const QString &stackTrace) {
   _ui->plateformValue->setText(plateform);
   _ui->archValue->setText(arch);
   _ui->compilerValue->setText(compiler);
@@ -145,7 +154,7 @@ void TulipPerspectiveCrashHandler::setPerspectiveData(const PerspectiveProcessIn
   _ui->perspectiveNameValue->setText(info.name);
   QString args;
 
-  foreach(const QString &a,info.args.keys())
+  foreach (const QString &a, info.args.keys())
     args += "--" + a + "=" + info.args[a].toString() + " ";
 
   _ui->perspectiveArgumentsValue->setText(args);

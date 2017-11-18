@@ -23,12 +23,16 @@
 using namespace tlp;
 using namespace std;
 
-PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent): QWidget(parent),_ui(new Ui::PathFinderConfigurationData) {
+PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::PathFinderConfigurationData) {
   _ui->setupUi(this);
 
-  connect(_ui->weightCombo, SIGNAL(activated(const QString &)), this, SIGNAL(setWeightMetric(const QString &)));
-  connect(_ui->edgeOrientationCombo, SIGNAL(activated(const QString &)), this, SIGNAL(setEdgeOrientation(const QString &)));
-  connect(_ui->pathsTypeCombo, SIGNAL(activated(const QString &)), this, SIGNAL(setPathsType(const QString &)));
+  connect(_ui->weightCombo, SIGNAL(activated(const QString &)), this,
+          SIGNAL(setWeightMetric(const QString &)));
+  connect(_ui->edgeOrientationCombo, SIGNAL(activated(const QString &)), this,
+          SIGNAL(setEdgeOrientation(const QString &)));
+  connect(_ui->pathsTypeCombo, SIGNAL(activated(const QString &)), this,
+          SIGNAL(setPathsType(const QString &)));
   connect(_ui->toleranceCheck, SIGNAL(clicked(bool)), this, SIGNAL(activateTolerance(bool)));
   connect(_ui->toleranceSpin, SIGNAL(valueChanged(int)), this, SIGNAL(setTolerance(int)));
 }

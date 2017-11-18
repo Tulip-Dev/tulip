@@ -19,28 +19,18 @@
 #include <tulip/GlRegularPolygon.h>
 #include <tulip/DrawingTools.h>
 
-
-
 using namespace std;
 
 namespace tlp {
 
-GlRegularPolygon::GlRegularPolygon(const Coord &position,
-                                   const Size &size,
-                                   unsigned int numberOfSides,
-                                   const Color &fillColor,
-                                   const Color &outlineColor,
-                                   bool filled,
-                                   bool outlined,
-                                   const string &textureName,
-                                   float outlineSize):
-  position(position),
-  size(size),
-  numberOfSides(numberOfSides),
-  startAngle(float(M_PI)/2.0f) {
+GlRegularPolygon::GlRegularPolygon(const Coord &position, const Size &size,
+                                   unsigned int numberOfSides, const Color &fillColor,
+                                   const Color &outlineColor, bool filled, bool outlined,
+                                   const string &textureName, float outlineSize)
+    : position(position), size(size), numberOfSides(numberOfSides), startAngle(float(M_PI) / 2.0f) {
   computePolygon();
 
-  invertYTexture=false;
+  invertYTexture = false;
 
   setFillColor(fillColor);
   setOutlineColor(outlineColor);
@@ -50,11 +40,10 @@ GlRegularPolygon::GlRegularPolygon(const Coord &position,
   setOutlineSize(outlineSize);
 }
 //=====================================================
-GlRegularPolygon::~GlRegularPolygon() {
-}
+GlRegularPolygon::~GlRegularPolygon() {}
 //=====================================================
 void GlRegularPolygon::setStartAngle(float angle) {
-  startAngle=angle;
+  startAngle = angle;
   computePolygon();
 }
 //=====================================================
@@ -63,7 +52,7 @@ unsigned int GlRegularPolygon::getNumberOfSides() {
 }
 //=====================================================
 void GlRegularPolygon::setNumberOfSides(unsigned int number) {
-  numberOfSides=number;
+  numberOfSides = number;
   computePolygon();
 }
 //=====================================================
@@ -73,8 +62,8 @@ void GlRegularPolygon::resizePoints(const unsigned int number) {
 //=====================================================
 void GlRegularPolygon::computePolygon() {
   boundingBox = BoundingBox();
-  boundingBox.expand(position+size/2.f);
-  boundingBox.expand(position-size/2.f);
+  boundingBox.expand(position + size / 2.f);
+  boundingBox.expand(position - size / 2.f);
 
   setPoints(computeRegularPolygon(numberOfSides, position, size, startAngle));
 

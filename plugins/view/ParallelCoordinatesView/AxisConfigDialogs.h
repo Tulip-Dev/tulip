@@ -43,13 +43,11 @@ class QuantitativeAxisConfigDialog : public QDialog {
 
   Q_OBJECT
 
-public :
-
+public:
   QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis);
-  void closeEvent (QCloseEvent * event);
+  void closeEvent(QCloseEvent *event);
 
-private :
-
+private:
   void initAxisPartitionsTable();
 
   QuantitativeParallelAxis *axis;
@@ -61,35 +59,30 @@ private :
   QCheckBox *log10Scale;
 };
 
-
 // A really simple dialog which allows user to set labels order
 // on a particular nominative axis
 class NominalAxisConfigDialog : public QDialog {
 
   Q_OBJECT
 
-public :
-
+public:
   NominalAxisConfigDialog(NominalParallelAxis *axis);
-  void closeEvent (QCloseEvent * event);
+  void closeEvent(QCloseEvent *event);
 
-public slots :
+public slots:
 
   void pressButtonUp();
   void pressButtonDown();
   void pressButtonLexOrder();
 
-private :
-
+private:
   NominalParallelAxis *axis;
   QPushButton *okButton;
-  QHash<QString,itemInfo > hashDataBase;
+  QHash<QString, itemInfo> hashDataBase;
   ItemsListWidget *axisLabelsOrder;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif /* AXISCONFIGDIALOGS_H_ */
-

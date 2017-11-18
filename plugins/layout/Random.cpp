@@ -19,23 +19,22 @@
 #include "Random.h"
 
 static const char *paramHelp[] = {
-  // 3D layout
-  "If true, the layout is computed in 3D, else it is computed in 2D."
-};
+    // 3D layout
+    "If true, the layout is computed in 3D, else it is computed in 2D."};
 
 PLUGIN(Random)
 
 using namespace std;
 using namespace tlp;
 
-Random::Random(const tlp::PluginContext* context):LayoutAlgorithm(context) {
+Random::Random(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
 }
 
 bool Random::run() {
-  bool is3D = false ;
+  bool is3D = false;
 
-  if ( dataSet!=NULL ) {
+  if (dataSet != NULL) {
     dataSet->get("3D layout", is3D);
   }
 
@@ -43,15 +42,16 @@ bool Random::run() {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
-  Iterator<node> *itN=graph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
 
   while (itN->hasNext()) {
-    node itn=itN->next();
+    node itn = itN->next();
 
-    if(is3D)
-      result->setNodeValue(itn,Coord(randomInteger(1024),randomInteger(1024),randomInteger(1024)));
+    if (is3D)
+      result->setNodeValue(itn,
+                           Coord(randomInteger(1024), randomInteger(1024), randomInteger(1024)));
     else
-      result->setNodeValue(itn,Coord(randomInteger(1024),randomInteger(1024),0));
+      result->setNodeValue(itn, Coord(randomInteger(1024), randomInteger(1024), 0));
   }
 
   delete itN;

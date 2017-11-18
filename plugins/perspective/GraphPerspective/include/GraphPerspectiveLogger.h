@@ -33,26 +33,20 @@ class GraphPerspectiveLogger;
 class QShowEvent;
 class QHideEvent;
 
-class GraphPerspectiveLogger: public QDialog {
+class GraphPerspectiveLogger : public QDialog {
   Q_OBJECT
 
   QtMsgType _logType;
-  Ui::GraphPerspectiveLogger* _ui;
+  Ui::GraphPerspectiveLogger *_ui;
   bool _pythonOutput;
   QMap<int, int> _logCounts;
   QByteArray _windowGeometry;
   bool _anchored;
 
 public:
+  enum LogType { Info, Warning, Error, Python };
 
-  enum LogType {
-    Info,
-    Warning,
-    Error,
-    Python
-  };
-
-  GraphPerspectiveLogger(QWidget* parent = NULL);
+  GraphPerspectiveLogger(QWidget *parent = NULL);
   ~GraphPerspectiveLogger();
   QPixmap icon(LogType logType) const;
   int count() const;
@@ -61,7 +55,7 @@ public:
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
 #else
-  void log(QtMsgType, const char*);
+  void log(QtMsgType, const char *);
 #endif
 
   bool eventFilter(QObject *, QEvent *);
@@ -82,7 +76,7 @@ public slots:
 
 private slots:
   void copy();
-  void showContextMenu(const QPoint&pos);
+  void showContextMenu(const QPoint &pos);
 
 private:
   void logImpl(QtMsgType, const QString &);

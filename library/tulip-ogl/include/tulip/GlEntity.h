@@ -34,16 +34,13 @@ class GlLayout;
 class TLP_GL_SCOPE GlEntity {
 
 public:
-
   virtual ~GlEntity() {}
 
   /**
    * Accpet visitor function
    */
-  virtual void acceptVisitor(GlSceneVisitor *visitor)=0;
-
+  virtual void acceptVisitor(GlSceneVisitor *visitor) = 0;
 };
-
 }
 
 #endif // Tulip_GLENTITY_H

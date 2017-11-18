@@ -28,22 +28,21 @@ using namespace std;
 
 namespace tlp {
 
-GlMatrixBackgroundGrid::GlMatrixBackgroundGrid(MatrixView *view): _view(view) {
-}
+GlMatrixBackgroundGrid::GlMatrixBackgroundGrid(MatrixView *view) : _view(view) {}
 
 BoundingBox GlMatrixBackgroundGrid::getBoundingBox() {
   int N = _view->graph()->numberOfNodes();
   BoundingBox result;
-  result.expand(Coord(0,0,0));
-  result.expand(Coord(1+N,-1-N,0));
+  result.expand(Coord(0, 0, 0));
+  result.expand(Coord(1 + N, -1 - N, 0));
   return result;
 }
 
-void GlMatrixBackgroundGrid::draw(float lod,tlp::Camera* camera) {
-  Vector<int,4> viewPort = camera->getViewport();
+void GlMatrixBackgroundGrid::draw(float lod, tlp::Camera *camera) {
+  Vector<int, 4> viewPort = camera->getViewport();
 
-  Coord topLeft(camera->viewportTo3DWorld(Coord(viewPort[0]+viewPort[2],viewPort[1],0))),
-        bottomRight(camera->viewportTo3DWorld(Coord(viewPort[0],viewPort[1]+viewPort[3],0)));
+  Coord topLeft(camera->viewportTo3DWorld(Coord(viewPort[0] + viewPort[2], viewPort[1], 0))),
+      bottomRight(camera->viewportTo3DWorld(Coord(viewPort[0], viewPort[1] + viewPort[3], 0)));
 
   GridDisplayMode mode = _view->gridDisplayMode();
 
@@ -51,26 +50,29 @@ void GlMatrixBackgroundGrid::draw(float lod,tlp::Camera* camera) {
     return;
 
   int N = _view->graph()->numberOfNodes();
-  double startX = max<double>(0.5,floor(topLeft[0])-0.5), startY = min<double>(-0.5,ceil(topLeft[1])+0.5), endX = min<double>(0.5+N,ceil(bottomRight[0])+0.5), endY = max<double>(-0.5-N,floor(bottomRight[1])-0.5);
+  double startX = max<double>(0.5, floor(topLeft[0]) - 0.5),
+         startY = min<double>(-0.5, ceil(topLeft[1]) + 0.5),
+         endX = min<double>(0.5 + N, ceil(bottomRight[0]) + 0.5),
+         endY = max<double>(-0.5 - N, floor(bottomRight[1]) - 0.5);
 
-  for (double x=startX; x <= endX; ++x) {
+  for (double x = startX; x <= endX; ++x) {
     vector<Coord> points(2);
     points[0] = Coord(x, startY, 0);
     points[1] = Coord(x, endY, 0);
     vector<Color> colors(2);
-    colors[0] = Color(0,0,0);
-    colors[1] = Color(0,0,0);
+    colors[0] = Color(0, 0, 0);
+    colors[1] = Color(0, 0, 0);
     GlLine line(points, colors);
     line.draw(lod, camera);
   }
 
-  for (double y=startY; y >= endY; --y) {
+  for (double y = startY; y >= endY; --y) {
     vector<Coord> points(2);
     points[0] = Coord(startX, y, 0);
     points[1] = Coord(endX, y, 0);
     vector<Color> colors(2);
-    colors[0] = Color(0,0,0);
-    colors[1] = Color(0,0,0);
+    colors[0] = Color(0, 0, 0);
+    colors[1] = Color(0, 0, 0);
     GlLine line(points, colors);
     line.draw(lod, camera);
   }

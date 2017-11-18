@@ -35,13 +35,19 @@ namespace tlp {
 /** \file
  *  \brief  Tulip Scatter Plot view
 
- * This view plugin allows to create 2D scatter plots with numerical properties attached to graph nodes or edges.
- * A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values for two variables for a set of data.
- * The data is displayed as a collection of points, each having the value of one variable determining the position
- * on the horizontal axis and the value of the other variable determining the position on the vertical axis.
+ * This view plugin allows to create 2D scatter plots with numerical properties attached to graph
+ nodes or edges.
+ * A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values
+ for two variables for a set of data.
+ * The data is displayed as a collection of points, each having the value of one variable
+ determining the position
+ * on the horizontal axis and the value of the other variable determining the position on the
+ vertical axis.
  *
- * By selecting a set of graph properties, a scatter plot matrix will be displayed for each combination
- * of two different properties. Each scatter plot can then be displayed individually in a more detailed way.
+ * By selecting a set of graph properties, a scatter plot matrix will be displayed for each
+ combination
+ * of two different properties. Each scatter plot can then be displayed individually in a more
+ detailed way.
  *
  * A set of interactors are bundled with the view to perform selection, statistical analysis, ...
  *
@@ -62,14 +68,23 @@ class ScatterPlot2DView : public GlMainView {
   Q_OBJECT
 
   void registerTriggers();
-  ScatterPlotQuickAccessBar* _bar;
-public :
+  ScatterPlotQuickAccessBar *_bar;
 
+public:
   PLUGININFORMATION(ViewName::ScatterPlot2DViewName, "Antoine Lambert", "03/2009",
-                    "<p>The Scatter Plot 2D view allows to create 2d scatter plots of graph nodes from graph properties (supported types are Double and Integer).</p>"
-                    "<p>A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values for two variables for a set of data. The data are displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.</p>"
-                    "<p>By selecting a set of graph properties, a scatter plot matrix will be displayed for each combination of two different properties. Each scatter plot can then be displayed individually in a more detailed way.</p>"
-                    "<p>A set of interactors are bundled with the view to perform selection, statistical analysis, ...</p>", "1.0", "View")
+                    "<p>The Scatter Plot 2D view allows to create 2d scatter plots of graph nodes "
+                    "from graph properties (supported types are Double and Integer).</p>"
+                    "<p>A scatter plot is a type of mathematical diagram using Cartesian "
+                    "coordinates to display values for two variables for a set of data. The data "
+                    "are displayed as a collection of points, each having the value of one "
+                    "variable determining the position on the horizontal axis and the value of the "
+                    "other variable determining the position on the vertical axis.</p>"
+                    "<p>By selecting a set of graph properties, a scatter plot matrix will be "
+                    "displayed for each combination of two different properties. Each scatter plot "
+                    "can then be displayed individually in a more detailed way.</p>"
+                    "<p>A set of interactors are bundled with the view to perform selection, "
+                    "statistical analysis, ...</p>",
+                    "1.0", "View")
 
   ScatterPlot2DView(const PluginContext *);
   ~ScatterPlot2DView();
@@ -77,8 +92,7 @@ public :
     return ":/scatter_plot2d_view.png";
   }
 
-
-  QuickAccessBar* getQuickAccessBarImpl();
+  QuickAccessBar *getQuickAccessBarImpl();
 
   void setState(const DataSet &dataSet);
   DataSet state() const;
@@ -122,21 +136,21 @@ public :
 
   void treatEvent(const Event &message);
 
-  void afterSetNodeValue(PropertyInterface*, const node);
-  void afterSetEdgeValue(PropertyInterface*, const edge);
-  void afterSetAllNodeValue(PropertyInterface*);
-  void afterSetAllEdgeValue(PropertyInterface*);
+  void afterSetNodeValue(PropertyInterface *, const node);
+  void afterSetEdgeValue(PropertyInterface *, const edge);
+  void afterSetAllNodeValue(PropertyInterface *);
+  void afterSetAllEdgeValue(PropertyInterface *);
 
-  virtual void addEdge(Graph *, const edge );
-  virtual void delNode(Graph *,const node );
-  virtual void delEdge(Graph *,const edge );
+  virtual void addEdge(Graph *, const edge);
+  virtual void delNode(Graph *, const node);
+  virtual void delEdge(Graph *, const edge);
 
   // return the id of the corresponding graph elt
   // see ScatterPlot2DMouseShowElementInfo
   // in ScatterPlot2DInteractors.cpp
   unsigned int getMappedId(unsigned int id);
 
-public slots :
+public slots:
 
   void init();
   void viewConfigurationChanged();
@@ -145,9 +159,8 @@ public slots :
   void centerView(bool graphChanged = false);
   void applySettings();
 
-private :
-
-  void interactorsInstalled(const QList<tlp::Interactor*>&);
+private:
+  void interactorsInstalled(const QList<tlp::Interactor *> &);
   void initGlWidget(Graph *graph);
   void generateScatterPlots();
 
@@ -166,7 +179,7 @@ private :
   SizeProperty *scatterPlotSize;
   std::vector<std::string> selectedGraphProperties;
   GlComposite *matrixComposite, *axisComposite, *labelsComposite;
-  std::map<std::pair<std::string, std::string>, ScatterPlot2D *>  scatterPlotsMap;
+  std::map<std::pair<std::string, std::string>, ScatterPlot2D *> scatterPlotsMap;
   ScatterPlot2D *detailedScatterPlot;
   std::pair<std::string, std::string> detailedScatterPlotPropertyName;
   std::map<std::pair<std::string, std::string>, bool> scatterPlotsGenMap;
@@ -193,7 +206,6 @@ private :
   std::map<edge, node> edgeToNode;
   std::map<node, edge> nodeToEdge;
 };
-
 }
 
 #endif /* SCATTERPLOT2DVIEW_H_ */

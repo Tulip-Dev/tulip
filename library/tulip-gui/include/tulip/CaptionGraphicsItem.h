@@ -42,7 +42,6 @@ class CaptionGraphicsItem : public QObject {
   Q_OBJECT
 
 public:
-
   CaptionGraphicsItem(View *view);
   ~CaptionGraphicsItem();
 
@@ -50,9 +49,11 @@ public:
 
   void loadConfiguration();
 
-  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const std::string &propertyName, double minValue, double maxValue);
+  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient,
+                            const std::string &propertyName, double minValue, double maxValue);
 
-  void generateSizeCaption(const std::vector< std::pair <double,float> > &metricToSizeFilteredList,const std::string &propertyName, double minValue, double maxValue);
+  void generateSizeCaption(const std::vector<std::pair<double, float> > &metricToSizeFilteredList,
+                           const std::string &propertyName, double minValue, double maxValue);
 
   CaptionGraphicsBackgroundItem *getCaptionItem() const {
     return _rondedRectItem;
@@ -60,19 +61,19 @@ public:
 
   std::string usedProperty();
 
-signals :
+signals:
 
   void filterChanged(float begin, float end);
   void selectedPropertyChanged(std::string propertyName);
 
-protected slots :
+protected slots:
 
   void filterChangedSlot(float begin, float end);
   void selectPropertyButtonClicked();
   void propertySelectedSlot();
 
-private :
-  QString wrappedPropName(const QString& originalName) const;
+private:
+  QString wrappedPropName(const QString &originalName) const;
 
   void constructConfigWidget();
 
@@ -82,9 +83,8 @@ private :
 
   QGraphicsProxyWidget *_confPropertySelectionItem;
   QGraphicsSimpleTextItem *_nodesEdgesTextItem;
-  QPushButton* _confPropertySelectionWidget;
+  QPushButton *_confPropertySelectionWidget;
 };
-
 }
 
 #endif // CAPTIONGRAPHICSITEM_H

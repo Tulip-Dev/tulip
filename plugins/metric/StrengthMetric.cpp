@@ -23,31 +23,31 @@ PLUGIN(StrengthMetric)
 using namespace std;
 using namespace tlp;
 
-StrengthMetric::StrengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+StrengthMetric::StrengthMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
-double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U,TLP_HASH_SET<tlp::node> &V) {
+double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V) {
   TLP_HASH_SET<node>::const_iterator itU;
-  double result=0;
+  double result = 0;
   TLP_HASH_SET<node> *A, *B;
 
-  if (U.size()<V.size()) {
+  if (U.size() < V.size()) {
     A = &U;
-    B=&V;
-  }
-  else {
+    B = &V;
+  } else {
     A = &V;
-    B=&U;
+    B = &U;
   }
 
-  for (itU=A->begin(); itU!=A->end(); ++itU) {
-    Iterator<node> *itN=graph->getInOutNodes(*itU);
+  for (itU = A->begin(); itU != A->end(); ++itU) {
+    Iterator<node> *itN = graph->getInOutNodes(*itU);
 
     while (itN->hasNext()) {
-      node itn=itN->next();
+      node itn = itN->next();
 
-      if (B->find(itn)!=B->end()) result+=1.0;
+      if (B->find(itn) != B->end())
+        result += 1.0;
     }
 
     delete itN;
@@ -58,83 +58,90 @@ double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U,TLP_HASH_SET<tlp::node> &V) 
 //=============================================================
 double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
   TLP_HASH_SET<node>::const_iterator itU;
-  double result=0.0;
+  double result = 0.0;
 
-  for (itU=U.begin(); itU!=U.end(); ++itU) {
-    Iterator<node> *itN=graph->getInOutNodes(*itU);
+  for (itU = U.begin(); itU != U.end(); ++itU) {
+    Iterator<node> *itN = graph->getInOutNodes(*itU);
 
     while (itN->hasNext()) {
-      node itn=itN->next();
+      node itn = itN->next();
 
-      if (U.find(itn)!=U.end()) result+=1.0;
+      if (U.find(itn) != U.end())
+        result += 1.0;
     }
 
     delete itN;
   }
 
-  return result/2.0;
+  return result / 2.0;
 }
 //=============================================================
 double StrengthMetric::s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V) {
-  if ((U.empty()) || (V.empty())) return 0;
+  if ((U.empty()) || (V.empty()))
+    return 0;
 
-  return (e(U,V) / double(U.size()*V.size()));
+  return (e(U, V) / double(U.size() * V.size()));
 }
 //=============================================================
 double StrengthMetric::s(const TLP_HASH_SET<tlp::node> &U) {
-  if (U.size()<2) return 0.0;
+  if (U.size() < 2)
+    return 0.0;
 
-  return  (e(U)) * 2.0 / double(U.size()*(U.size()-1));
+  return (e(U)) * 2.0 / double(U.size() * (U.size() - 1));
 }
 //=============================================================
-double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
-  const std::pair<node, node>& eEnds = graph->ends(ee);
+double StrengthMetric::getEdgeValue(const tlp::edge ee) {
+  const std::pair<node, node> &eEnds = graph->ends(ee);
   node u = eEnds.first;
   node v = eEnds.second;
-  TLP_HASH_SET<node> Nu,Nv,Wuv;
+  TLP_HASH_SET<node> Nu, Nv, Wuv;
 
-  //Compute Nu
+  // Compute Nu
   Iterator<node> *itN = graph->getInOutNodes(u);
 
   while (itN->hasNext()) {
-    node n=itN->next();
+    node n = itN->next();
 
-    if (n!=v) Nu.insert(n);
+    if (n != v)
+      Nu.insert(n);
   }
 
   delete itN;
 
-  if (Nu.empty()) return 0;
+  if (Nu.empty())
+    return 0;
 
-  //Compute Nv
-  itN=graph->getInOutNodes(v);
+  // Compute Nv
+  itN = graph->getInOutNodes(v);
 
   while (itN->hasNext()) {
-    node n=itN->next();
+    node n = itN->next();
 
-    if (n!=u) Nv.insert(n);
+    if (n != u)
+      Nv.insert(n);
   }
 
   delete itN;
 
-  if (Nv.empty()) return 0;
+  if (Nv.empty())
+    return 0;
 
-  //Compute Wuv, choose the minimum set to minimize operation
+  // Compute Wuv, choose the minimum set to minimize operation
   TLP_HASH_SET<node> *A, *B;
 
-  if (Nu.size()<Nv.size()) {
+  if (Nu.size() < Nv.size()) {
     A = &Nu;
-    B=&Nv;
-  }
-  else {
+    B = &Nv;
+  } else {
     A = &Nv;
-    B=&Nu;
+    B = &Nu;
   }
 
   TLP_HASH_SET<node>::const_iterator itNu;
 
-  for (itNu=A->begin(); itNu!=A->end(); ++itNu) {
-    if (B->find(*itNu)!=B->end()) Wuv.insert(*itNu);
+  for (itNu = A->begin(); itNu != A->end(); ++itNu) {
+    if (B->find(*itNu) != B->end())
+      Wuv.insert(*itNu);
   }
 
   TLP_HASH_SET<node> &Mu = Nu;
@@ -143,20 +150,18 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
   /* Compute Mu and Mv, we do not need Nu and Nv anymore,
      thus we modify them to speed up computation
   */
-  for (itNu=Wuv.begin(); itNu!=Wuv.end(); ++itNu) {
+  for (itNu = Wuv.begin(); itNu != Wuv.end(); ++itNu) {
     Mu.erase(*itNu);
     Mv.erase(*itNu);
   }
 
-  //compute strength metric
+  // compute strength metric
   double gamma3 = double(Wuv.size());
-  double norm3  = double((Wuv.size()+Mv.size()+Mu.size()));
+  double norm3 = double((Wuv.size() + Mv.size() + Mu.size()));
 
-  double gamma4 = (e(Mu,Wuv) +  e(Mv,Wuv) +  e(Mu,Mv) +  e(Wuv));
-  double norm4  = (double(Mu.size() * Wuv.size() +
-                          Mv.size() * Wuv.size() +
-                          Mu.size() * Mv.size() ) +
-                   double(Wuv.size()*(Wuv.size()-1)) / 2.0);
+  double gamma4 = (e(Mu, Wuv) + e(Mv, Wuv) + e(Mu, Mv) + e(Wuv));
+  double norm4 = (double(Mu.size() * Wuv.size() + Mv.size() * Wuv.size() + Mu.size() * Mv.size()) +
+                  double(Wuv.size() * (Wuv.size() - 1)) / 2.0);
 
   double norm = norm3 + norm4;
   double gamma = gamma3 + gamma4;
@@ -169,11 +174,12 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
   return gamma;
 }
 //=============================================================
-double StrengthMetric::getNodeValue(const tlp::node n ) {
+double StrengthMetric::getNodeValue(const tlp::node n) {
   //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
-  if (graph->deg(n)==0) return 0;
+  if (graph->deg(n) == 0)
+    return 0;
 
-  double res=0;
+  double res = 0;
   Iterator<edge> *itE = graph->getInOutEdges(n);
 
   while (itE->hasNext()) {
@@ -182,7 +188,7 @@ double StrengthMetric::getNodeValue(const tlp::node n ) {
   }
 
   delete itE;
-  return res/double(graph->deg(n));
+  return res / double(graph->deg(n));
 }
 //=============================================================
 bool StrengthMetric::run() {
@@ -201,8 +207,8 @@ bool StrengthMetric::run() {
     if ((++steps % (maxSteps / 10)) == 0) {
       pluginProgress->progress(steps, maxSteps);
 
-      if (pluginProgress->state() !=TLP_CONTINUE)
-        return pluginProgress->state()!= TLP_CANCEL;
+      if (pluginProgress->state() != TLP_CONTINUE)
+        return pluginProgress->state() != TLP_CANCEL;
     }
   }
   node n;
@@ -219,8 +225,8 @@ bool StrengthMetric::run() {
     if ((++steps % (maxSteps / 10)) == 0) {
       pluginProgress->progress(steps, maxSteps);
 
-      if (pluginProgress->state() !=TLP_CONTINUE)
-        return pluginProgress->state()!= TLP_CANCEL;
+      if (pluginProgress->state() != TLP_CONTINUE)
+        return pluginProgress->state() != TLP_CANCEL;
     }
   }
 

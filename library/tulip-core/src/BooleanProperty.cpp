@@ -29,63 +29,61 @@ const string BooleanVectorProperty::propertyTypename = "vector<bool>";
 
 //=================================================================================
 void BooleanProperty::reverse(const Graph *sg) {
-  if (sg == NULL) sg = graph;
+  if (sg == NULL)
+    sg = graph;
 
-  const vector<node>& nodes = sg->nodes();
-  const vector<edge>& edges = sg->edges();
+  const vector<node> &nodes = sg->nodes();
+  const vector<edge> &edges = sg->edges();
   unsigned nbNodes = nodes.size();
   unsigned nbEdges = edges.size();
 
-  for(unsigned i=0; i<nbNodes; ++i) {
+  for (unsigned i = 0; i < nbNodes; ++i) {
     node n(nodes[i]);
-    setNodeValue(n,!getNodeValue(n));
+    setNodeValue(n, !getNodeValue(n));
   }
 
-  for(unsigned i=0; i<nbEdges; ++i) {
+  for (unsigned i = 0; i < nbEdges; ++i) {
     edge e(edges[i]);
-    setEdgeValue(e,!getEdgeValue(e));
+    setEdgeValue(e, !getEdgeValue(e));
   }
 }
 
 //=================================================================================
 void BooleanProperty::reverseEdgeDirection(Graph *sg) {
-  if (sg == NULL) sg = graph;
+  if (sg == NULL)
+    sg = graph;
 
-  const vector<edge>&edges = sg->edges();
+  const vector<edge> &edges = sg->edges();
   unsigned nbEdges = edges.size();
 
-  for(unsigned i=0; i<nbEdges; ++i) {
+  for (unsigned i = 0; i < nbEdges; ++i) {
     edge e(edges[i]);
 
-    if(getEdgeValue(e))
+    if (getEdgeValue(e))
       sg->reverse(e);
   }
 }
 
 //=================================================================================
-PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( g==NULL )
+PropertyInterface *BooleanProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (g == NULL)
     return NULL;
 
   // allow to get an unregistered property (empty name)
-  BooleanProperty * p = n.empty()
-                        ? new BooleanProperty(g) : g->getLocalProperty<BooleanProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  BooleanProperty *p = n.empty() ? new BooleanProperty(g) : g->getLocalProperty<BooleanProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
-PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *BooleanVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  BooleanVectorProperty * p = n.empty()
-                              ? new BooleanVectorProperty(g) : g->getLocalProperty<BooleanVectorProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  BooleanVectorProperty *p =
+      n.empty() ? new BooleanVectorProperty(g) : g->getLocalProperty<BooleanVectorProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
-
-
-

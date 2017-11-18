@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef Tulip_GLSCENEOBSERVER_H
 #define Tulip_GLSCENEOBSERVER_H
 
@@ -38,10 +37,16 @@ class GlSimpleEntity;
  */
 class TLP_GL_SCOPE GlSceneEvent : public Event {
 public:
+  enum GlSceneEventType {
+    TLP_ADDLAYER = 0,
+    TLP_DELLAYER,
+    TLP_MODIFYLAYER,
+    TLP_MODIFYENTITY,
+    TLP_DELENTITY
+  };
 
-  enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY, TLP_DELENTITY};
-
-  GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer);
+  GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType, const std::string &layerName,
+               GlLayer *layer);
 
   GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType, GlSimpleEntity *entity);
 
@@ -53,13 +58,11 @@ public:
 
   GlSceneEventType getSceneEventType() const;
 
-protected :
-
+protected:
   GlSceneEventType sceneEventType;
   std::string layerName;
   GlLayer *layer;
   GlSimpleEntity *glSimpleEntity;
-
 };
 }
 

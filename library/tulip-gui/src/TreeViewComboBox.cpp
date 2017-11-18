@@ -26,19 +26,19 @@
 #include <QMouseEvent>
 #include <QTreeView>
 
-class TreeViewDelegate: public QStyledItemDelegate {
+class TreeViewDelegate : public QStyledItemDelegate {
 public:
-  TreeViewDelegate(QObject* parent = 0): QStyledItemDelegate(parent) {
-  }
+  TreeViewDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {}
 
   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
-    QSize result = QStyledItemDelegate::sizeHint(option,index);
-    result.setHeight(result.height()+10);
+    QSize result = QStyledItemDelegate::sizeHint(option, index);
+    result.setHeight(result.height() + 10);
     return result;
   }
 };
 
-TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _skipNextHide(false), _popupVisible(false) {
+TreeViewComboBox::TreeViewComboBox(QWidget *parent)
+    : QComboBox(parent), _treeView(NULL), _skipNextHide(false), _popupVisible(false) {
   _treeView = new QTreeView(this);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);
   _treeView->setAlternatingRowColors(true);
@@ -55,9 +55,10 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeVie
 
 void TreeViewComboBox::setModel(QAbstractItemModel *model) {
   QComboBox::setModel(model);
-  connect(model, SIGNAL(rowsRemoved (const QModelIndex&, int, int)), this , SLOT(rowsRemoved(const QModelIndex&, int, int)));
+  connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this,
+          SLOT(rowsRemoved(const QModelIndex &, int, int)));
 
-  for(int i=1; i<model->columnCount(); ++i)
+  for (int i = 1; i < model->columnCount(); ++i)
     _treeView->hideColumn(i);
 }
 
@@ -66,7 +67,7 @@ void TreeViewComboBox::showPopup() {
   _treeView->expandAll();
   _treeView->resizeColumnToContents(0);
   QComboBox::showPopup();
-  QWidget *popup = findChild<QFrame*>();
+  QWidget *popup = findChild<QFrame *>();
 
   if (_treeView->columnWidth(0) > popup->width()) {
     popup->resize(_treeView->columnWidth(0), popup->height());
@@ -88,7 +89,7 @@ void TreeViewComboBox::hidePopup() {
   }
 }
 
-void TreeViewComboBox::selectIndex(const QModelIndex& index) {
+void TreeViewComboBox::selectIndex(const QModelIndex &index) {
   if (!_popupVisible && index != _lastIndex) {
     _lastIndex = index;
     setRootModelIndex(index.parent());
@@ -98,12 +99,12 @@ void TreeViewComboBox::selectIndex(const QModelIndex& index) {
 }
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
-  return model()->index(currentIndex(),0,rootModelIndex());
+  return model()->index(currentIndex(), 0, rootModelIndex());
 }
 
-bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
+bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event) {
   if (event->type() == QEvent::MouseButtonPress && object == view()->viewport()) {
-    QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
     QModelIndex index = view()->indexAt(mouseEvent->pos());
 
     if (!view()->visualRect(index).contains(mouseEvent->pos()))
@@ -112,7 +113,6 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 
   return false;
 }
-
 
 void TreeViewComboBox::rowsRemoved(const QModelIndex &parent, int, int) {
   QModelIndex currentIndex = selectedIndex();

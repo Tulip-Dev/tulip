@@ -28,11 +28,11 @@ class ExpandableGroupBox : public QGroupBox {
   Q_PROPERTY(bool expanded READ expanded WRITE setExpanded)
   bool _expanded;
 
-  Q_PROPERTY(QWidget * widget READ widget WRITE setWidget)
+  Q_PROPERTY(QWidget *widget READ widget WRITE setWidget)
   QWidget *_widget;
 
 public:
-  explicit ExpandableGroupBox(QWidget *parent = NULL, const QString &title=QString());
+  explicit ExpandableGroupBox(QWidget *parent = NULL, const QString &title = QString());
   virtual ~ExpandableGroupBox();
   bool expanded() const {
     return _expanded;

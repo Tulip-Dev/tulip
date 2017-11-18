@@ -26,7 +26,7 @@
 #include <cassert>
 #include <tulip/Vector.h>
 
-#define TEMPLATEVECTORCAST template <typename Obj, unsigned int SIZE, typename TYPE >
+#define TEMPLATEVECTORCAST template <typename Obj, unsigned int SIZE, typename TYPE>
 
 #define VECTORCAST tlp::VectorCast<Obj, SIZE, TYPE>
 
@@ -44,76 +44,70 @@ namespace tlp {
  * \version 0.0.1 24/01/2003
  */
 TEMPLATEVECTORCAST
-class TLP_SCOPE VectorCast : public Vector<Obj,SIZE> {
+class TLP_SCOPE VectorCast : public Vector<Obj, SIZE> {
 public:
   VectorCast() {}
-  inline explicit VectorCast(const tlp::Vector<float,3> &v):Vector<Obj,SIZE>(v) {
+  inline explicit VectorCast(const tlp::Vector<float, 3> &v) : Vector<Obj, SIZE>(v) {}
+
+  inline TYPE &operator*=(const Obj obj) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator*=(obj);
+  }
+  inline TYPE &operator*=(const Vector<Obj, SIZE> &vec) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator*=(vec);
+  }
+  inline TYPE &operator/=(const Obj obj) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator/=(obj);
+  }
+  inline TYPE &operator/=(const Vector<Obj, SIZE> &vec) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator/=(vec);
+  }
+  inline TYPE &operator+=(const Obj obj) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator+=(obj);
+  }
+  inline TYPE &operator+=(const Vector<Obj, SIZE> &vec) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator+=(vec);
+  }
+  inline TYPE &operator-=(const Obj obj) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator-=(obj);
+  }
+  inline TYPE &operator-=(const Vector<Obj, SIZE> &vec) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator-=(vec);
+  }
+  inline TYPE &operator^=(const Vector<Obj, SIZE> &vec) {
+    return (TYPE &)this->Vector<Obj, SIZE>::operator^=(vec);
+  }
+  inline TYPE &fill(const Obj obj) {
+    return (TYPE &)this->Vector<Obj, SIZE>::fill(obj);
   }
 
-  inline TYPE & operator*=(const Obj obj) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator*=(obj);
-  }
-  inline TYPE & operator*=(const Vector<Obj,SIZE> &vec) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator*=(vec);
-  }
-  inline TYPE & operator/=(const Obj obj) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator/=(obj);
-  }
-  inline TYPE & operator/=(const Vector<Obj,SIZE> &vec) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator/=(vec);
-  }
-  inline TYPE & operator+=(const Obj obj) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator+=(obj);
-  }
-  inline TYPE & operator+=(const Vector<Obj,SIZE> &vec) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator+=(vec);
-  }
-  inline TYPE & operator-=(const Obj obj) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator-=(obj);
-  }
-  inline TYPE & operator-=(const Vector<Obj,SIZE> &vec) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator-=(vec);
-  }
-  inline TYPE & operator^=(const Vector<Obj,SIZE> &vec) {
-    return (TYPE &)this->Vector<Obj,SIZE>::operator^=(vec);
-  }
-  inline TYPE & fill(const Obj obj) {
-    return (TYPE &)this->Vector<Obj,SIZE>::fill(obj);
-  }
-
-  inline TYPE operator*(const Vector<Obj,SIZE> &v) const {
-    return VECTORCAST(*this)*=v;
+  inline TYPE operator*(const Vector<Obj, SIZE> &v) const {
+    return VECTORCAST(*this) *= v;
   }
   inline TYPE operator*(const Obj v) const {
-    return VECTORCAST(*this)*=v;
+    return VECTORCAST(*this) *= v;
   }
-  inline TYPE operator+(const Vector<Obj,SIZE> &v) const {
-    return VECTORCAST(*this)+=v;
+  inline TYPE operator+(const Vector<Obj, SIZE> &v) const {
+    return VECTORCAST(*this) += v;
   }
   inline TYPE operator+(const Obj v) const {
-    return VECTORCAST(*this)+=v;
+    return VECTORCAST(*this) += v;
   }
-  inline TYPE operator-(const Vector<Obj,SIZE> &v) const {
-    return VECTORCAST(*this)-=v;
+  inline TYPE operator-(const Vector<Obj, SIZE> &v) const {
+    return VECTORCAST(*this) -= v;
   }
-  inline TYPE operator-(const Obj v)const {
-    return VECTORCAST(*this)-=v;
+  inline TYPE operator-(const Obj v) const {
+    return VECTORCAST(*this) -= v;
   }
-  inline TYPE operator/(const Vector<Obj,SIZE> &v) const {
-    return VECTORCAST(*this)/=v;
+  inline TYPE operator/(const Vector<Obj, SIZE> &v) const {
+    return VECTORCAST(*this) /= v;
   }
   inline TYPE operator/(const Obj v) const {
-    return VECTORCAST(*this)/=v;
+    return VECTORCAST(*this) /= v;
   }
-  inline TYPE operator^(const Vector<Obj,SIZE> &v) const {
-    return VECTORCAST(*this)^=v;
+  inline TYPE operator^(const Vector<Obj, SIZE> &v) const {
+    return VECTORCAST(*this) ^= v;
   }
-
 };
-
-
-
-
 }
 
 #endif

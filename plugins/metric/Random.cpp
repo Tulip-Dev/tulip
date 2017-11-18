@@ -26,9 +26,8 @@ PLUGIN(RandomMetric)
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // target
-  "Whether metric is computed only for nodes, only for edges, or for both."
-};
+    // target
+    "Whether metric is computed only for nodes, only for edges, or for both."};
 
 #define TARGET_TYPE "target"
 #define TARGET_TYPES "both;nodes;edges"
@@ -36,8 +35,9 @@ static const char *paramHelp[] = {
 #define EDGES_TARGET 2
 #define BOTH_TARGET 0
 
-RandomMetric::RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true, "both <br> nodes <br> edges");
+RandomMetric::RandomMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true,
+                                   "both <br> nodes <br> edges");
 
   // result needs to be an inout parameter
   // in order to preserve the original values of non targetted elements
@@ -53,34 +53,30 @@ bool RandomMetric::run() {
 
   bool nodes(true), edges(true);
 
-  if ( dataSet!=NULL ) {
+  if (dataSet != NULL) {
     StringCollection targetType;
     dataSet->get(TARGET_TYPE, targetType);
 
-    if(targetType.getCurrent()==NODES_TARGET) {
-      edges=false;
-      nodes=true;
-    }
-    else if (targetType.getCurrent()==EDGES_TARGET) {
-      edges=true;
-      nodes=false;
-    }
-    else {
-      edges=true;
-      nodes=true;
+    if (targetType.getCurrent() == NODES_TARGET) {
+      edges = false;
+      nodes = true;
+    } else if (targetType.getCurrent() == EDGES_TARGET) {
+      edges = true;
+      nodes = false;
+    } else {
+      edges = true;
+      nodes = true;
     }
   }
 
-  if(nodes) {
+  if (nodes) {
     node n;
-    forEach(n, graph->getNodes())
-    result->setNodeValue(n, randomDouble());
+    forEach(n, graph->getNodes()) result->setNodeValue(n, randomDouble());
   }
 
-  if(edges) {
+  if (edges) {
     edge e;
-    forEach(e, graph->getEdges())
-    result->setEdgeValue(e, randomDouble());
+    forEach(e, graph->getEdges()) result->setEdgeValue(e, randomDouble());
   }
 
   return true;

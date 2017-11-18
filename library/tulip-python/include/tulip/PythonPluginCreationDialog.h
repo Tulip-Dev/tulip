@@ -30,13 +30,12 @@ class PythonPluginCreationDialog;
 
 namespace tlp {
 
-class TLP_PYTHON_SCOPE PythonPluginCreationDialog : public QDialog  {
+class TLP_PYTHON_SCOPE PythonPluginCreationDialog : public QDialog {
 
   Q_OBJECT
   Ui::PythonPluginCreationDialog *_ui;
 
 public:
-
   PythonPluginCreationDialog(QWidget *parent = 0);
   ~PythonPluginCreationDialog();
   QString getPluginFileName() const;
@@ -62,9 +61,7 @@ protected slots:
   void accept();
 
   void selectPluginSourceFile();
-
 };
-
 }
 
 #endif /* PLUGINCREATIONDIALOG_H_ */

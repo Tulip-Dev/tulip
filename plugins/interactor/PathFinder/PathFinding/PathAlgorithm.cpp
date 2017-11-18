@@ -44,7 +44,9 @@ double computePathLength(BooleanProperty *result, MutableContainer<double> &weig
   return retVal;
 }
 
-bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation edgesOrientation, node src, node tgt, BooleanProperty *result, DoubleProperty *weights, double tolerance) {
+bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,
+                                node src, node tgt, BooleanProperty *result,
+                                DoubleProperty *weights, double tolerance) {
 #ifndef NDEBUG
   assert(graph);
   assert(result);
@@ -62,10 +64,8 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
 
   if (!weights) {
     edge e;
-    forEach(e, graph->getEdges())
-    weightsContainer.set(e.id, SMALLEST_WEIGHT);
-  }
-  else {
+    forEach(e, graph->getEdges()) weightsContainer.set(e.id, SMALLEST_WEIGHT);
+  } else {
     edge e;
     forEach(e, graph->getEdges()) {
       double val(weights->getEdgeValue(e));
@@ -101,13 +101,14 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       double pathLength;
 
       if (tolerance == DBL_MAX)
-        pathLength=DBL_MAX;
+        pathLength = DBL_MAX;
       else {
         pathLength = computePathLength(result, weightsContainer);
         pathLength *= tolerance;
       }
 
-      if (tolerance > 1) { // We only compute the other paths if the tolerance is greater than 1. Meaning that the user doesn't want only the shortest path.
+      if (tolerance > 1) { // We only compute the other paths if the tolerance is greater than 1.
+                           // Meaning that the user doesn't want only the shortest path.
         result->setAllNodeValue(false);
         result->setAllEdgeValue(false);
         DoubleProperty *dists = new DoubleProperty(result->getGraph());

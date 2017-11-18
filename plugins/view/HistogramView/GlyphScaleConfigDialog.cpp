@@ -30,24 +30,26 @@
 using namespace std;
 using namespace tlp;
 
-GlyphScaleConfigDialog::GlyphScaleConfigDialog(QWidget *parent) : QDialog(parent),_ui(new Ui::GlyphScaleConfigDialogData) {
+GlyphScaleConfigDialog::GlyphScaleConfigDialog(QWidget *parent)
+    : QDialog(parent), _ui(new Ui::GlyphScaleConfigDialogData) {
   _ui->setupUi(this);
   _ui->tableWidget->setRowCount(5);
   list<string> pluginsList = PluginLister::instance()->availablePlugins<Glyph>();
 
-  for(list<string>::iterator it=pluginsList.begin(); it!=pluginsList.end(); ++it) {
-    string glyphName=*it;
+  for (list<string>::iterator it = pluginsList.begin(); it != pluginsList.end(); ++it) {
+    string glyphName = *it;
     glyphsNameList << QString(glyphName.c_str());
   }
 
-  for (int i = 0 ; i < 5 ; ++i) {
+  for (int i = 0; i < 5; ++i) {
     QComboBox *glyphNameComboBox = new QComboBox(this);
     glyphNameComboBox->addItems(glyphsNameList);
     glyphNameComboBox->setCurrentIndex(i);
     _ui->tableWidget->setCellWidget(i, 0, glyphNameComboBox);
   }
 
-  connect(_ui->nbGlyphsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(nbGlyphsSpinBoxValueChanged(int)));
+  connect(_ui->nbGlyphsSpinBox, SIGNAL(valueChanged(int)), this,
+          SLOT(nbGlyphsSpinBoxValueChanged(int)));
 }
 
 GlyphScaleConfigDialog::~GlyphScaleConfigDialog() {
@@ -57,8 +59,9 @@ GlyphScaleConfigDialog::~GlyphScaleConfigDialog() {
 vector<int> GlyphScaleConfigDialog::getSelectedGlyphsId() const {
   vector<int> ret;
 
-  for (int i = 0 ; i < _ui->tableWidget->rowCount() ; ++i) {
-    string glyphName = QStringToTlpString(static_cast<QComboBox *>(_ui->tableWidget->cellWidget(i, 0))->currentText());
+  for (int i = 0; i < _ui->tableWidget->rowCount(); ++i) {
+    string glyphName = QStringToTlpString(
+        static_cast<QComboBox *>(_ui->tableWidget->cellWidget(i, 0))->currentText());
     ret.push_back(PluginLister::pluginInformation(glyphName).id());
   }
 
@@ -66,11 +69,9 @@ vector<int> GlyphScaleConfigDialog::getSelectedGlyphsId() const {
   return ret;
 }
 
-
-
 void GlyphScaleConfigDialog::nbGlyphsSpinBoxValueChanged(int value) {
   if (value > glyphsNameList.size()) {
-    _ui->nbGlyphsSpinBox->setValue(value-1);
+    _ui->nbGlyphsSpinBox->setValue(value - 1);
   }
 
   int lastCount = _ui->tableWidget->rowCount();
@@ -79,7 +80,7 @@ void GlyphScaleConfigDialog::nbGlyphsSpinBoxValueChanged(int value) {
   if (lastCount < value) {
     QComboBox *glyphNameComboBox = new QComboBox(this);
     glyphNameComboBox->addItems(glyphsNameList);
-    _ui->tableWidget->setCellWidget(value-1, 0, glyphNameComboBox);
+    _ui->tableWidget->setCellWidget(value - 1, 0, glyphNameComboBox);
   }
 }
 

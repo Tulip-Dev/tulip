@@ -31,12 +31,13 @@
 using namespace tlp;
 
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
-  :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData), _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
+    : QWidget(parent, f), _ui(new Ui::SimplePluginProgressWidgetData),
+      _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
   _ui->setupUi(this);
   _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
   _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
-  connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(cancelClicked()));
-  connect(_ui->stopButton,SIGNAL(clicked()),this,SLOT(stopClicked()));
+  connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelClicked()));
+  connect(_ui->stopButton, SIGNAL(clicked()), this, SLOT(stopClicked()));
 }
 
 SimplePluginProgressWidget::~SimplePluginProgressWidget() {
@@ -50,7 +51,7 @@ void SimplePluginProgressWidget::checkLastUpdate() {
   }
 }
 
-void SimplePluginProgressWidget::setComment(const std::string& s) {
+void SimplePluginProgressWidget::setComment(const std::string &s) {
   setComment(tlpStringToQString(s));
 }
 
@@ -64,7 +65,7 @@ void SimplePluginProgressWidget::setComment(const char *s) {
 }
 
 ProgressState SimplePluginProgressWidget::progress(int step, int max_step) {
-  PluginProgress::progress(step,max_step);
+  PluginProgress::progress(step, max_step);
   _ui->progressBar->setValue(step);
   _ui->progressBar->setMaximum(max_step);
   checkLastUpdate();
@@ -104,7 +105,7 @@ void SimplePluginProgressWidget::setError(const std::string &error) {
   _error = error;
 }
 
-void SimplePluginProgressWidget::closeEvent(QCloseEvent* ev) {
+void SimplePluginProgressWidget::closeEvent(QCloseEvent *ev) {
   ev->ignore();
 }
 
@@ -128,28 +129,30 @@ void SimplePluginProgressWidget::stopClicked() {
 // DIALOG
 // ===================
 
-SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent,Qt::WindowTitleHint | Qt::CustomizeWindowHint), _progress(new SimplePluginProgressWidget(this)) {
+SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent)
+    : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
+      _progress(new SimplePluginProgressWidget(this)) {
   setModal(true);
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
-  mainLayout->setContentsMargins(0,0,0,0);
+  mainLayout->setContentsMargins(0, 0, 0, 0);
   mainLayout->addWidget(_progress);
   setWindowIcon(QIcon(":/tulip/gui/icons/tulip.ico"));
-  resize(500,height());
+  resize(500, height());
 }
 
 SimplePluginProgressDialog::~SimplePluginProgressDialog() {
   delete _progress;
 }
 
-void SimplePluginProgressDialog::setComment(const std::string& s) {
+void SimplePluginProgressDialog::setComment(const std::string &s) {
   _progress->setComment(s);
 }
 
-void SimplePluginProgressDialog::setComment(const QString& s) {
+void SimplePluginProgressDialog::setComment(const QString &s) {
   _progress->setComment(s);
 }
 
-void SimplePluginProgressDialog::setComment(const char* s) {
+void SimplePluginProgressDialog::setComment(const char *s) {
   _progress->setComment(s);
 }
 
@@ -159,8 +162,8 @@ void SimplePluginProgressDialog::setTitle(const std::string &title) {
 }
 
 ProgressState SimplePluginProgressDialog::progress(int step, int max_step) {
-  PluginProgress::progress(step,max_step);
-  return _progress->progress(step,max_step);
+  PluginProgress::progress(step, max_step);
+  return _progress->progress(step, max_step);
 }
 
 void SimplePluginProgressDialog::cancel() {
@@ -195,7 +198,7 @@ void SimplePluginProgressDialog::setError(const std::string &error) {
   _progress->setError(error);
 }
 
-void SimplePluginProgressDialog::closeEvent(QCloseEvent * ev) {
+void SimplePluginProgressDialog::closeEvent(QCloseEvent *ev) {
   ev->ignore();
 }
 

@@ -43,29 +43,28 @@ struct IdManagerState {
   // the unused ids between the first and the next
   std::set<unsigned int> freeIds;
 
-  IdManagerState(): firstId(0), nextId(0) {}
+  IdManagerState() : firstId(0), nextId(0) {}
 };
 
 // define a class to iterate through the non free ids
 // of an IdManagerState
 template <typename TYPE>
-class IdManagerIterator:public Iterator<TYPE> {
+class IdManagerIterator : public Iterator<TYPE> {
 
 private:
   unsigned int current;
   unsigned int last;
-  const std::set<unsigned int>& freeIds;
+  const std::set<unsigned int> &freeIds;
   std::set<unsigned int>::const_iterator it;
 
 public:
-
-  IdManagerIterator(const IdManagerState& info):
-    current(info.firstId), last(info.nextId), freeIds(info.freeIds), it(freeIds.begin()) {
+  IdManagerIterator(const IdManagerState &info)
+      : current(info.firstId), last(info.nextId), freeIds(info.freeIds), it(freeIds.begin()) {
 #ifdef TLP_NO_IDS_REUSE
     std::set<unsigned int>::const_reverse_iterator itr;
     itr = freeIds.rbegin();
 
-    while(itr != freeIds.rend() && (*itr) == last - 1) {
+    while (itr != freeIds.rend() && (*itr) == last - 1) {
       --last;
       ++itr;
     }
@@ -82,8 +81,9 @@ public:
     unsigned int tmp = current;
     ++current;
 
-    while(it != freeIds.end()) {
-      if (current < *it) return static_cast<TYPE>(tmp);
+    while (it != freeIds.end()) {
+      if (current < *it)
+        return static_cast<TYPE>(tmp);
 
       ++current;
       ++it;
@@ -116,9 +116,7 @@ public:
 #ifdef TLP_NO_IDS_REUSE
     return state.nextId++;
 #else
-    return state.firstId ?
-           --state.firstId :
-           (state.freeIds.empty() ? state.nextId++ : getFreeId());
+    return state.firstId ? --state.firstId : (state.freeIds.empty() ? state.nextId++ : getFreeId());
 #endif
   }
   /**
@@ -145,13 +143,13 @@ public:
   /**
    * return the current state of the Id manager
    */
-  const IdManagerState& getState() {
+  const IdManagerState &getState() {
     return state;
   }
   /**
    * restore a saved state, used by push/pop
    */
-  void restoreState(const IdManagerState& info) {
+  void restoreState(const IdManagerState &info) {
     state = info;
   }
   /**
@@ -159,31 +157,31 @@ public:
    * the idManager is modified (free, get) this iterator
    * will be invalid.
    */
-  template<typename TYPE>
-  Iterator<TYPE>* getIds() const {
+  template <typename TYPE>
+  Iterator<TYPE> *getIds() const {
     return new IdManagerIterator<TYPE>(state);
   }
 
-  friend std::ostream& operator<<(std::ostream &, const IdManager &);
+  friend std::ostream &operator<<(std::ostream &, const IdManager &);
   friend class IdManagerTest;
 };
 
-std::ostream& operator<<(std::ostream &,const IdManager &);
+std::ostream &operator<<(std::ostream &, const IdManager &);
 
 // class for the management of the identifiers: node, edge
 // or any type which can be easily cast in an unsigned int
-template<typename ID_TYPE>
-class TLP_SCOPE IdContainer :public std::vector<ID_TYPE> {
+template <typename ID_TYPE>
+class TLP_SCOPE IdContainer : public std::vector<ID_TYPE> {
   // the number of free ids
   unsigned int nbFree;
   // the position of the ids
   std::vector<unsigned int> pos;
 
-  inline ID_TYPE*& beginPtr() {
+  inline ID_TYPE *&beginPtr() {
     return reinterpret_cast<ID_TYPE **>(this)[0];
   }
 
-  inline ID_TYPE*& sizePtr() {
+  inline ID_TYPE *&sizePtr() {
     return reinterpret_cast<ID_TYPE **>(this)[1];
   }
 
@@ -224,8 +222,9 @@ public:
   }
 
   // return an iterator on the existing elts
-  inline Iterator<ID_TYPE>* getElts() const {
-    return new StlIterator<ID_TYPE, typename std::vector<ID_TYPE>::const_iterator>(this->begin(), this->end());
+  inline Iterator<ID_TYPE> *getElts() const {
+    return new StlIterator<ID_TYPE, typename std::vector<ID_TYPE>::const_iterator>(this->begin(),
+                                                                                   this->end());
   }
 
   // return the position of an existing elt
@@ -241,8 +240,7 @@ public:
     if (nbFree) {
       setSize(freePos + 1);
       --nbFree;
-    }
-    else {
+    } else {
       this->resize(freePos + 1);
       pos.resize(freePos + 1);
       (*this)[freePos] = ID_TYPE(freePos);
@@ -300,8 +298,7 @@ public:
       // of the freed elts
       ++nbFree;
       setSize(lastPos);
-    }
-    else {
+    } else {
       // all elts are freed so forget them
       nbFree = 0;
       setSize(0);
@@ -310,7 +307,7 @@ public:
   }
 
   // copy this into ids
-  void copyTo(IdContainer<ID_TYPE>& ids) const {
+  void copyTo(IdContainer<ID_TYPE> &ids) const {
     unsigned int sz = std::vector<ID_TYPE>::size() + nbFree;
     ids.reserve(sz);
     memcpy(ids.data(), this->data(), sz * sizeof(ID_TYPE));
@@ -336,10 +333,10 @@ public:
   void reIndex() {
     unsigned int nbElts = this->size();
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-    for(OMP_ITER_TYPE i = 0; i < nbElts; ++i)
+    for (OMP_ITER_TYPE i = 0; i < nbElts; ++i)
       pos[(*this)[i]] = i;
   }
 
@@ -351,10 +348,11 @@ public:
 };
 
 // used as nodes/edges container in GraphView
-template<typename ID_TYPE>
-class SGraphIdContainer :public std::vector<ID_TYPE> {
+template <typename ID_TYPE>
+class SGraphIdContainer : public std::vector<ID_TYPE> {
   // used to store the elts positions in the vector
   MutableContainer<unsigned int> pos;
+
 public:
   SGraphIdContainer() {
     pos.setAll(UINT_MAX);
@@ -375,8 +373,8 @@ public:
     this->push_back(elt);
   }
 
-  void clone(const std::vector<ID_TYPE>& elts) {
-    static_cast<std::vector<ID_TYPE>&>(*this) = elts;
+  void clone(const std::vector<ID_TYPE> &elts) {
+    static_cast<std::vector<ID_TYPE> &>(*this) = elts;
     unsigned int nb = elts.size();
 
     for (unsigned int i = 0; i < nb; ++i)
@@ -405,7 +403,7 @@ public:
     std::sort(this->begin(), this->end());
     unsigned int nbElts = this->size();
 
-    for(unsigned int i = 0; i < nbElts; ++i)
+    for (unsigned int i = 0; i < nbElts; ++i)
       pos.set((*this)[i], i);
   }
 };

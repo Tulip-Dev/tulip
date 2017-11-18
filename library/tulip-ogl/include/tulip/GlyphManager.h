@@ -40,7 +40,6 @@ class Graph;
 class TLP_GL_SCOPE GlyphManager {
 
 public:
-
   /**
    * Return the singleton (if the singleton doesn't exist this function create it)
    */
@@ -55,7 +54,7 @@ public:
   /**
    * Return the id if glyph with given name
    */
-  int glyphId(const std::string& name);
+  int glyphId(const std::string &name);
   /**
    * Load glyphs plugins
    */
@@ -64,22 +63,21 @@ public:
   /**
    * Create the glyph list and store it in glyphs parameter
    */
-  void initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
+  void initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                     MutableContainer<Glyph *> &glyphs);
   /**
    * Clear the glyph list
    */
-  void clearGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
+  void clearGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
+                      MutableContainer<Glyph *> &glyphs);
 
 private:
-
   GlyphManager();
 
   static std::list<std::string> glyphList;
 
   static GlyphManager inst;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

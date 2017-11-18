@@ -33,6 +33,7 @@ class PluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(availablePlugins);
   CPPUNIT_TEST(pluginInformation);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
 

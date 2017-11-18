@@ -31,15 +31,14 @@
 
 #include "TulipToOGDF.h"
 
-class TLP_OGDF_SCOPE OGDFLayoutPluginBase: public tlp::LayoutAlgorithm {
+class TLP_OGDF_SCOPE OGDFLayoutPluginBase : public tlp::LayoutAlgorithm {
 public:
-  OGDFLayoutPluginBase(const tlp::PluginContext* context, LayoutModule* ogdfLayoutAlgo);
+  OGDFLayoutPluginBase(const tlp::PluginContext *context, LayoutModule *ogdfLayoutAlgo);
   virtual ~OGDFLayoutPluginBase();
 
   virtual bool run();
 
 protected:
-
   virtual void beforeCall() {}
   virtual void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes);
   virtual void afterCall() {}
@@ -51,4 +50,4 @@ protected:
 };
 
 #endif // OGDF_LAYOUT_PLUGIN_BASE
-///@endcond
+       ///@endcond

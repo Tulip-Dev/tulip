@@ -25,14 +25,12 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  // nodes
-  "This parameter defines the amount of nodes used to build the scale-free graph.",
+static const char *paramHelp[] = {
+    // nodes
+    "This parameter defines the amount of nodes used to build the scale-free graph.",
 
-  // d
-  "Minimum degree."
-};
-
+    // d
+    "Minimum degree."};
 
 /**
  *
@@ -46,19 +44,24 @@ static const char * paramHelp[] = {
  * Vladimir Batagelj and Ulrik Brandes. Efficient Generation of Large Random Networks, 2005.
  *
  */
-struct BollobasModel:public ImportModule {
-  PLUGININFORMATION("Bollobas et al. Model", "Arnaud Sallaberry","21/02/2011","Randomly generates a scale-free graph using the model described in<br/>B. Bollobas, O.M Riordan, J. Spencer and G. Tusnady.<br/><b>The Degree Sequence of a Scale-Free Random Graph Process.</b><br/>RSA: Random Structures & Algorithms, 18, 279 (2001)", "1.1", "Social network")
+struct BollobasModel : public ImportModule {
+  PLUGININFORMATION("Bollobas et al. Model", "Arnaud Sallaberry", "21/02/2011",
+                    "Randomly generates a scale-free graph using the model described in<br/>B. "
+                    "Bollobas, O.M Riordan, J. Spencer and G. Tusnady.<br/><b>The Degree Sequence "
+                    "of a Scale-Free Random Graph Process.</b><br/>RSA: Random Structures & "
+                    "Algorithms, 18, 279 (2001)",
+                    "1.1", "Social network")
 
-  BollobasModel(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"2000");
-    addInParameter<unsigned int>("minimum degree",paramHelp[1],"4");
+  BollobasModel(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "2000");
+    addInParameter<unsigned int>("minimum degree", paramHelp[1], "4");
   }
 
   bool importGraph() {
     unsigned int n = 2000;
     unsigned int d = 4;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", n);
       dataSet->get("minimum degree", d);
     }
@@ -72,34 +75,32 @@ struct BollobasModel:public ImportModule {
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    vector<unsigned int> M(2*n*d);
+    vector<unsigned int> M(2 * n * d);
     graph->addNodes(n);
 
-    for (unsigned int v=0; v<n ; ++v) {
-      for (unsigned int i=0; i<d ; ++i) {
-        M[2*(v*d+i)] = v;
-        int r = tlp::randomInteger(2*(v*d+i)+1);
-        M[2*(v*d+i)+1] = M[r];
+    for (unsigned int v = 0; v < n; ++v) {
+      for (unsigned int i = 0; i < d; ++i) {
+        M[2 * (v * d + i)] = v;
+        int r = tlp::randomInteger(2 * (v * d + i) + 1);
+        M[2 * (v * d + i) + 1] = M[r];
       }
 
       if (v % 100 == 0) {
-        if (pluginProgress->progress(v, n * (d + 1))
-            != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(v, n * (d + 1)) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
     }
 
-    graph->reserveEdges(n*d);
+    graph->reserveEdges(n * d);
 
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
-    for (unsigned int i=0; i<(n*d) ; ++i) {
-      graph->addEdge(nodes[M[2*i]],nodes[M[2*i+1]]);
+    for (unsigned int i = 0; i < (n * d); ++i) {
+      graph->addEdge(nodes[M[2 * i]], nodes[M[2 * i + 1]]);
 
       if (i % 100 == 0) {
-        if (pluginProgress->progress(i, n * (d + 1))
-            != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, n * (d + 1)) != TLP_CONTINUE)
+          return pluginProgress->state() != TLP_CANCEL;
       }
     }
 

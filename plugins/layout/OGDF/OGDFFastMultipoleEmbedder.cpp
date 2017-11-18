@@ -67,38 +67,41 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-  // number of iterations
-  "The maximum number of iterations.",
+    // number of iterations
+    "The maximum number of iterations.",
 
-  // number of coefficients
-  "The number of coefficients for the expansions.",
+    // number of coefficients
+    "The number of coefficients for the expansions.",
 
-  // randomize layout
-  "If true, the initial layout will be randomized.",
+    // randomize layout
+    "If true, the initial layout will be randomized.",
 
-  // default node size
-  "The default node size.",
+    // default node size
+    "The default node size.",
 
-  // default edge length
-  "The default edge length.",
+    // default edge length
+    "The default edge length.",
 
-  // number of threads
-  "The number of threads to use during the computation of the layout."
-};
+    // number of threads
+    "The number of threads to use during the computation of the layout."};
 
 class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
-
-  PLUGININFORMATION("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Implements the fast multipole embedder layout algorithm of Martin Gronemann.","1.0","Force Directed")
-  OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), fme(new ogdf::FastMultipoleEmbedder()) {
+  PLUGININFORMATION("Fast Multipole Embedder (OGDF)", "Martin Gronemann", "12/11/2007",
+                    "Implements the fast multipole embedder layout algorithm of Martin Gronemann.",
+                    "1.0", "Force Directed")
+  OGDFFastMultipoleEmbedder(const tlp::PluginContext *context)
+      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),
+        fme(new ogdf::FastMultipoleEmbedder()) {
     addInParameter<int>("number of iterations", paramHelp[0], "100");
     addInParameter<int>("number of coefficients", paramHelp[1], "5");
     addInParameter<bool>("randomize layout", paramHelp[2], "true");
     addInParameter<double>("default node size", paramHelp[3], "20.0");
     addInParameter<double>("default edge length", paramHelp[4], "1.0");
     addInParameter<int>("number of threads", paramHelp[5], "3");
-    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl =
+        static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
     csl->setLayoutModule(fme);
   }
@@ -133,14 +136,10 @@ public:
 
     // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
     ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
-
   }
 
 private:
-
   ogdf::FastMultipoleEmbedder *fme;
-
 };
-
 
 PLUGIN(OGDFFastMultipoleEmbedder)

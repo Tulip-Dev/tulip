@@ -27,26 +27,26 @@ using namespace std;
 
 namespace tlp {
 
-GlSelectSceneVisitor::GlSelectSceneVisitor(SelectionFlag flag,GlGraphInputData* inputData,GlLODCalculator *calculator)
-  :selectionFlag(flag),inputData(inputData),calculator(calculator) {}
+GlSelectSceneVisitor::GlSelectSceneVisitor(SelectionFlag flag, GlGraphInputData *inputData,
+                                           GlLODCalculator *calculator)
+    : selectionFlag(flag), inputData(inputData), calculator(calculator) {}
 
 void GlSelectSceneVisitor::visit(GlSimpleEntity *entity) {
-  if(selectionFlag==SelectSimpleEntities)
-    calculator->addSimpleEntityBoundingBox(entity,entity->getBoundingBox());
+  if (selectionFlag == SelectSimpleEntities)
+    calculator->addSimpleEntityBoundingBox(entity, entity->getBoundingBox());
 }
 
 void GlSelectSceneVisitor::visit(GlNode *glNode) {
-  if(selectionFlag == SelectNodes)
-    calculator->addNodeBoundingBox(glNode->id,glNode->getBoundingBox(inputData));
+  if (selectionFlag == SelectNodes)
+    calculator->addNodeBoundingBox(glNode->id, glNode->getBoundingBox(inputData));
 }
 
 void GlSelectSceneVisitor::visit(GlEdge *glEdge) {
-  if(selectionFlag == SelectEdges)
-    calculator->addEdgeBoundingBox(glEdge->id,glEdge->getBoundingBox(inputData));
+  if (selectionFlag == SelectEdges)
+    calculator->addEdgeBoundingBox(glEdge->id, glEdge->getBoundingBox(inputData));
 }
 
 void GlSelectSceneVisitor::visit(GlLayer *layer) {
   calculator->beginNewCamera(&layer->getCamera());
 }
-
 }

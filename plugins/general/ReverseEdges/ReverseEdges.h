@@ -22,16 +22,16 @@
 
 #include <tulip/Algorithm.h>
 
-class ReverseEdges:public tlp::Algorithm {
+class ReverseEdges : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Reverse edges", "Ludwig Fiolka", "10/10/2012", "Reverse selected edges of the graph (or all if no selection property is given).", "0.1", "Topology Update")
+  PLUGININFORMATION(
+      "Reverse edges", "Ludwig Fiolka", "10/10/2012",
+      "Reverse selected edges of the graph (or all if no selection property is given).", "0.1",
+      "Topology Update")
 
-  ReverseEdges(tlp::PluginContext* context);
+  ReverseEdges(tlp::PluginContext *context);
 
   bool run();
 };
 
 #endif // REVERSEEDGES_H
-
-
-

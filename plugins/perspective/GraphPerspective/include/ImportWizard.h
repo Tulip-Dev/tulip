@@ -31,10 +31,11 @@ namespace tlp {
 class GraphHierarchiesModel;
 }
 
-class ImportWizard: public QWizard {
+class ImportWizard : public QWizard {
   Q_OBJECT
 
-  Ui::ImportWizard* _ui;
+  Ui::ImportWizard *_ui;
+
 public:
   explicit ImportWizard(QWidget *parent = NULL);
   virtual ~ImportWizard();
@@ -43,7 +44,7 @@ public:
   tlp::DataSet parameters() const;
 
 protected slots:
-  void algorithmSelected (const QModelIndex& index);
+  void algorithmSelected(const QModelIndex &index);
   void updateFinishButton();
 };
 

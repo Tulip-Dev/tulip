@@ -24,10 +24,9 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/Graph.h>
 
-bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface* prop,
-    QWidget* parent) {
+bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface *prop, QWidget *parent) {
   if (prop == NULL) {
-    QMessageBox::critical(parent,"Renaming error", "The property is NULL");
+    QMessageBox::critical(parent, "Renaming error", "The property is NULL");
     return false;
   }
 
@@ -35,21 +34,23 @@ bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface* prop,
 
   while (!valid) {
     QString errorMsg;
-    QString pName = QInputDialog::getText(parent, "Renaming property '" + tlp::tlpStringToQString(prop->getName()) + "'", "New name: ", QLineEdit::Normal,  tlpStringToQString(prop->getName()),&valid);
+    QString pName = QInputDialog::getText(
+        parent, "Renaming property '" + tlp::tlpStringToQString(prop->getName()) + "'",
+        "New name: ", QLineEdit::Normal, tlpStringToQString(prop->getName()), &valid);
 
-    if(!valid)
+    if (!valid)
       return false;
 
-    //Check if parameters are valid.
+    // Check if parameters are valid.
     std::string propertyName = tlp::QStringToTlpString(pName);
 
     if (propertyName.empty()) {
       valid = false;
       errorMsg = "Cannot rename a property with an empty name";
-    }
-    else if (prop->getGraph()->existLocalProperty(propertyName)) {
+    } else if (prop->getGraph()->existLocalProperty(propertyName)) {
       valid = false;
-      errorMsg = "A local property named '" + tlpStringToQString(propertyName) + "'\n already exists";
+      errorMsg =
+          "A local property named '" + tlpStringToQString(propertyName) + "'\n already exists";
     }
 
     if (valid) {
@@ -58,7 +59,7 @@ bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface* prop,
     }
 
     if (!valid)
-      QMessageBox::critical(parent,"Error when renaming property",errorMsg);
+      QMessageBox::critical(parent, "Error when renaming property", errorMsg);
     else
       return true;
   }

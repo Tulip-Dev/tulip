@@ -24,54 +24,51 @@
 #include <tulip/View.h>
 #include <tulip/Glyph.h>
 
-
 using namespace std;
 using namespace tlp;
 
-QMap<std::string,QList<std::string> > InteractorLister::_compatibilityMap = QMap<std::string,QList<std::string> >();
+QMap<std::string, QList<std::string> > InteractorLister::_compatibilityMap =
+    QMap<std::string, QList<std::string> >();
 
-bool interactorLessThan(Interactor* a, Interactor* b) {
+bool interactorLessThan(Interactor *a, Interactor *b) {
   return a->priority() > b->priority();
 }
 
 void InteractorLister::initInteractorsDependencies() {
   _compatibilityMap.clear();
 
-  QMap<Interactor*,string> interactorToName;
+  QMap<Interactor *, string> interactorToName;
 
   std::list<std::string> interactors(PluginLister::instance()->availablePlugins<Interactor>());
 
-  for(std::list<std::string>::const_iterator it = interactors.begin(); it != interactors.end(); ++it) {
+  for (std::list<std::string>::const_iterator it = interactors.begin(); it != interactors.end();
+       ++it) {
     string interactorName(*it);
-    interactorToName[PluginLister::instance()->getPluginObject<Interactor>(interactorName,NULL)] = interactorName;
+    interactorToName[PluginLister::instance()->getPluginObject<Interactor>(interactorName, NULL)] =
+        interactorName;
   }
 
   std::list<std::string> views(PluginLister::instance()->availablePlugins<View>());
 
-  for(std::list<std::string>::const_iterator it = views.begin(); it != views.end(); ++it) {
+  for (std::list<std::string>::const_iterator it = views.begin(); it != views.end(); ++it) {
     string viewName(*it);
-    QList<Interactor*> compatibleInteractors;
+    QList<Interactor *> compatibleInteractors;
 
-    foreach(Interactor* i,interactorToName.keys()) {
+    foreach (Interactor *i, interactorToName.keys()) {
       if (i->isCompatible(viewName))
         compatibleInteractors << i;
     }
 
-    qSort(compatibleInteractors.begin(),compatibleInteractors.end(),interactorLessThan);
+    qSort(compatibleInteractors.begin(), compatibleInteractors.end(), interactorLessThan);
 
     QList<string> compatibleNames;
 
-    foreach(Interactor* i,compatibleInteractors) {
-      compatibleNames << interactorToName[i];
-    }
+    foreach (Interactor *i, compatibleInteractors) { compatibleNames << interactorToName[i]; }
 
     _compatibilityMap[viewName] = compatibleNames;
-
   }
 
-  foreach(Interactor* i, interactorToName.keys()) {
-    delete i;
-  }
+  foreach (Interactor *i, interactorToName.keys()) { delete i; }
 }
 
 QList<string> InteractorLister::compatibleInteractors(const std::string &viewName) {

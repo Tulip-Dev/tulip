@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QDebug>
 
-PlaceHolderWidget::PlaceHolderWidget(QWidget *parent): QWidget(parent), _widget(NULL) {
+PlaceHolderWidget::PlaceHolderWidget(QWidget *parent) : QWidget(parent), _widget(NULL) {
   setLayout(new QVBoxLayout);
   layout()->setMargin(0);
   layout()->setSpacing(0);
@@ -46,7 +46,7 @@ void PlaceHolderWidget::setWidget(QWidget *widget) {
   }
 }
 
-QWidget* PlaceHolderWidget::widget() const {
+QWidget *PlaceHolderWidget::widget() const {
   return _widget;
 }
 

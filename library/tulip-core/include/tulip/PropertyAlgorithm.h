@@ -31,11 +31,12 @@ static const std::string BOOLEAN_ALGORITHM_CATEGORY = "Selection";
 
 /**
  * @ingroup Plugins
- * @brief The boolean algorithm takes a graph as input and output its results as a tlp::BooleanProperty
+ * @brief The boolean algorithm takes a graph as input and output its results as a
+ * tlp::BooleanProperty
  */
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {
 protected:
-  BooleanAlgorithm (const tlp::PluginContext*);
+  BooleanAlgorithm(const tlp::PluginContext *);
 
 public:
   virtual std::string category() const {
@@ -52,7 +53,8 @@ static const std::string COLOR_ALGORITHM_CATEGORY = "Coloring";
  */
 class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<tlp::ColorProperty> {
 protected:
-  ColorAlgorithm (const tlp::PluginContext*);
+  ColorAlgorithm(const tlp::PluginContext *);
+
 public:
   virtual std::string category() const {
     return COLOR_ALGORITHM_CATEGORY;
@@ -64,12 +66,14 @@ static const std::string DOUBLE_ALGORITHM_CATEGORY = "Measure";
 
 /**
  * @ingroup Plugins
- * @brief The double algorithm takes a graph as input and output its results as a tlp::DoubleProperty
+ * @brief The double algorithm takes a graph as input and output its results as a
+ * tlp::DoubleProperty
  */
 class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<tlp::DoubleProperty> {
 protected:
   ///
-  DoubleAlgorithm (const tlp::PluginContext*);
+  DoubleAlgorithm(const tlp::PluginContext *);
+
 public:
   virtual std::string category() const {
     return DOUBLE_ALGORITHM_CATEGORY;
@@ -81,11 +85,13 @@ static const std::string INTEGER_ALGORITHM_CATEGORY = "Measure";
 
 /**
  * @ingroup Plugins
- * @brief The integer algorithm takes a graph as input and output its results as a tlp::IntegerProperty
+ * @brief The integer algorithm takes a graph as input and output its results as a
+ * tlp::IntegerProperty
  */
 class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<tlp::IntegerProperty> {
 protected:
-  IntegerAlgorithm (const tlp::PluginContext*);
+  IntegerAlgorithm(const tlp::PluginContext *);
+
 public:
   virtual std::string category() const {
     return INTEGER_ALGORITHM_CATEGORY;
@@ -97,12 +103,14 @@ static const std::string LAYOUT_ALGORITHM_CATEGORY = "Layout";
 
 /**
  * @ingroup Plugins
- * @brief The layout algorithm takes a graph as input and output its results as a tlp::LayoutProperty
+ * @brief The layout algorithm takes a graph as input and output its results as a
+ * tlp::LayoutProperty
  */
 class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<tlp::LayoutProperty> {
 protected:
   ///
-  LayoutAlgorithm (const tlp::PluginContext*);
+  LayoutAlgorithm(const tlp::PluginContext *);
+
 public:
   virtual std::string category() const {
     return LAYOUT_ALGORITHM_CATEGORY;
@@ -118,7 +126,8 @@ static const std::string SIZE_ALGORITHM_CATEGORY = "Resizing";
  */
 class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<tlp::SizeProperty> {
 protected:
-  SizeAlgorithm (const tlp::PluginContext*);
+  SizeAlgorithm(const tlp::PluginContext *);
+
 public:
   virtual std::string category() const {
     return SIZE_ALGORITHM_CATEGORY;
@@ -130,12 +139,14 @@ static const std::string STRING_ALGORITHM_CATEGORY = "Labeling";
 
 /**
  * @ingroup Plugins
- * @brief The string algorithm takes a graph as input and output its results as a tlp::StringProperty
+ * @brief The string algorithm takes a graph as input and output its results as a
+ * tlp::StringProperty
  */
 class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<tlp::StringProperty> {
 protected:
   ///
-  StringAlgorithm (const tlp::PluginContext*);
+  StringAlgorithm(const tlp::PluginContext *);
+
 public:
   virtual std::string category() const {
     return STRING_ALGORITHM_CATEGORY;

@@ -35,18 +35,17 @@ class GlGraphInputData;
 class TLP_GL_SCOPE GlVertexArrayVisitor : public GlSceneVisitor {
 
 public:
-
   /**
    * Constructor
    */
-  GlVertexArrayVisitor(const GlGraphInputData* inputData):inputData(inputData) {
-    threadSafe=true;
+  GlVertexArrayVisitor(const GlGraphInputData *inputData) : inputData(inputData) {
+    threadSafe = true;
   }
 
   /**
    * Method used for GlSimpleEntity
    */
-  virtual void visit(GlSimpleEntity*) {}
+  virtual void visit(GlSimpleEntity *) {}
   /**
    * Method used for GlNodes (and GlMetaNodes)
    */
@@ -57,11 +56,8 @@ public:
   virtual void visit(GlEdge *glEdge);
 
 private:
-
-  const GlGraphInputData* inputData;
-
+  const GlGraphInputData *inputData;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

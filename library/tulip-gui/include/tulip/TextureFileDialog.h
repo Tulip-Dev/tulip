@@ -51,9 +51,9 @@ public:
 
   void done(int res);
 
-  void setData(const TextureFile& tf);
+  void setData(const TextureFile &tf);
 
-  const TextureFile& data() {
+  const TextureFile &data() {
     return _data;
   }
 public slots:

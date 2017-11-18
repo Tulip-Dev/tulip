@@ -30,13 +30,13 @@
 #include <tulip/IdManager.h>
 
 namespace tlp {
-template<class itType >
+template <class itType>
 struct Iterator;
 class GraphView;
 class GraphUpdatesRecorder;
 
-///Implementation of the graph support of the Graph.
-class TLP_SCOPE GraphImpl:public GraphAbstract {
+/// Implementation of the graph support of the Graph.
+class TLP_SCOPE GraphImpl : public GraphAbstract {
 
   friend class GraphUpdatesRecorder;
   friend class TLPExport;
@@ -49,59 +49,55 @@ public:
   inline bool isElement(const node n) const {
     return storage.isElement(n);
   }
-  bool isElement(const edge e) const  {
+  bool isElement(const edge e) const {
     return storage.isElement(e);
   }
-  edge existEdge(const node source, const node target,
-                 bool directed = true) const;
+  edge existEdge(const node source, const node target, bool directed = true) const;
   node addNode();
   void addNodes(unsigned int nb);
-  void addNodes(unsigned int nb, std::vector<node>& addedNodes);
+  void addNodes(unsigned int nb, std::vector<node> &addedNodes);
   void addNode(const node);
-  void addNodes(Iterator<node>* nodes);
-  edge addEdge(const node ,const node);
-  void addEdges(const std::vector<std::pair<node, node> >& edges);
-  void addEdges(const std::vector<std::pair<node, node> >& edges,
-                std::vector<edge>& addedEdges);
+  void addNodes(Iterator<node> *nodes);
+  edge addEdge(const node, const node);
+  void addEdges(const std::vector<std::pair<node, node> > &edges);
+  void addEdges(const std::vector<std::pair<node, node> > &edges, std::vector<edge> &addedEdges);
   void addEdge(const edge);
-  void addEdges(Iterator<edge>* edges);
+  void addEdges(Iterator<edge> *edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
-  inline void setEdgeOrder(const node n,const std::vector<edge> &v) {
+  inline void setEdgeOrder(const node n, const std::vector<edge> &v) {
     storage.setEdgeOrder(n, v);
   }
   inline void swapEdgeOrder(const node n, const edge e1, const edge e2) {
     storage.swapEdgeOrder(n, e1, e2);
   }
   //=========================================================================
-  inline const std::vector<node>& nodes() const {
+  inline const std::vector<node> &nodes() const {
     return storage.nodes();
   }
   inline unsigned int nodePos(const node n) const {
     return storage.nodePos(n);
   }
-  Iterator<node>* getNodes() const;
-  Iterator<node>* getInNodes(const node) const;
-  Iterator<node>* getOutNodes(const node) const;
-  Iterator<node>* getInOutNodes(const node) const;
-  inline const std::vector<edge>& edges() const {
+  Iterator<node> *getNodes() const;
+  Iterator<node> *getInNodes(const node) const;
+  Iterator<node> *getOutNodes(const node) const;
+  Iterator<node> *getInOutNodes(const node) const;
+  inline const std::vector<edge> &edges() const {
     return storage.edges();
   }
   inline unsigned int edgePos(const edge e) const {
     return storage.edgePos(e);
   }
-  Iterator<edge>* getEdges() const;
-  Iterator<edge>* getInEdges(const node) const;
-  Iterator<edge>* getOutEdges(const node) const;
-  Iterator<edge>* getInOutEdges(const node) const;
-  std::vector<edge> getEdges(const node source, const node target,
-                             bool directed = true) const;
-  bool getEdges(const node source, const node target, bool directed,
-                std::vector<edge>& edges, const Graph* sg = NULL,
-                bool onlyFirst = false) const {
+  Iterator<edge> *getEdges() const;
+  Iterator<edge> *getInEdges(const node) const;
+  Iterator<edge> *getOutEdges(const node) const;
+  Iterator<edge> *getInOutEdges(const node) const;
+  std::vector<edge> getEdges(const node source, const node target, bool directed = true) const;
+  bool getEdges(const node source, const node target, bool directed, std::vector<edge> &edges,
+                const Graph *sg = NULL, bool onlyFirst = false) const {
     return storage.getEdges(source, target, directed, edges, sg, onlyFirst);
   }
-  inline const std::vector<edge>& allEdges(const node n) const {
+  inline const std::vector<edge> &allEdges(const node n) const {
     return storage.adj(n);
   }
   //========================================================================
@@ -130,7 +126,7 @@ public:
     assert(isElement(e));
     return storage.opposite(e, n);
   }
-  inline const std::pair<node, node>& ends(const edge e) const  {
+  inline const std::pair<node, node> &ends(const edge e) const {
     return storage.ends(e);
   }
   inline void setSource(const edge e, const node newSrc) {
@@ -156,7 +152,7 @@ public:
   //=======================================================================
   // updates management
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL);
+                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = NULL);
   virtual void pop(bool unpopAllowed = true);
   virtual void popIfNoUpdates();
   virtual void unpop();
@@ -186,21 +182,20 @@ protected:
   virtual void removeNode(const node);
   virtual void removeEdge(const edge);
   // used by PropertyManager
-  virtual bool canDeleteProperty(Graph* g, PropertyInterface *prop);
+  virtual bool canDeleteProperty(Graph *g, PropertyInterface *prop);
 
-private :
+private:
   GraphStorage storage;
   IdManager graphIds;
-  std::list<GraphUpdatesRecorder*> previousRecorders;
+  std::list<GraphUpdatesRecorder *> previousRecorders;
   std::list<Graph *> observedGraphs;
-  std::list<PropertyInterface*> observedProps;
-  std::list<GraphUpdatesRecorder*> recorders;
+  std::list<PropertyInterface *> observedProps;
+  std::list<GraphUpdatesRecorder *> recorders;
 
-  void observeUpdates(Graph*);
+  void observeUpdates(Graph *);
   void unobserveUpdates();
   void delPreviousRecorders();
 };
-
 }
 #endif
 

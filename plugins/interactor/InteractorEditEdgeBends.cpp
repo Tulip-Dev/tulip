@@ -31,28 +31,31 @@ using namespace tlp;
 /** \brief Tulip interactor to edit edge bends
  *
  */
-class InteractorEditEdgeBends  : public NodeLinkDiagramComponentInteractor {
+class InteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorEditEdgeBends", "Tulip Team", "01/04/2009", "Edit Edge Bends Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorEditEdgeBends", "Tulip Team", "01/04/2009",
+                    "Edit Edge Bends Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorEditEdgeBends(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png","Edit edge bends") {
+  InteractorEditEdgeBends(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png", "Edit edge bends") {
     setPriority(StandardInteractorPriority::EditEdgeBends);
-    setConfigurationWidgetText(QString("<h3>Edit edge bends</h3>")+
-                               "Modify edge bends<br/><br/>"+
-                               "Select edge: <ul><li>use rectangle selection</li></ul>" +
-                               "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
-                               "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>"+
-                               "Change target node: <ul><li><b>Drag and drop triangle on target node</li></ul>"+
-                               "Add bend: <ul><li><b>Double click with mouse left</b> click on the selected edge</li></ul>"+
+    setConfigurationWidgetText(
+        QString("<h3>Edit edge bends</h3>") + "Modify edge bends<br/><br/>" +
+        "Select edge: <ul><li>use rectangle selection</li></ul>" +
+        "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
+        "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>" +
+        "Change target node: <ul><li><b>Drag and drop triangle on target node</li></ul>" +
+        "Add bend: <ul><li><b>Double click with mouse left</b> click on the selected "
+        "edge</li></ul>" +
 #if !defined(__APPLE__)
-                               "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
+        "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
 #else
-                               "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
+        "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
 #endif
-                              );
+        );
   }
 
   /**
@@ -65,9 +68,8 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return (viewName==NodeLinkDiagramComponent::viewName);
+    return (viewName == NodeLinkDiagramComponent::viewName);
   }
-
 };
 
 PLUGIN(InteractorEditEdgeBends)

@@ -27,10 +27,10 @@ using namespace std;
 namespace tlp {
 
 void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
-  if(entity->isVisible()) {
-    BoundingBox bb=entity->getBoundingBox();
+  if (entity->isVisible()) {
+    BoundingBox bb = entity->getBoundingBox();
 
-    if(bb.isValid()) {
+    if (bb.isValid()) {
       boundingBox.expand(bb[0]);
       boundingBox.expand(bb[1]);
     }
@@ -38,14 +38,14 @@ void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
 }
 
 void GlBoundingBoxSceneVisitor::visit(GlNode *glNode) {
-  BoundingBox bb=glNode->getBoundingBox(inputData);
+  BoundingBox bb = glNode->getBoundingBox(inputData);
 
   boundingBox.expand(bb[0]);
   boundingBox.expand(bb[1]);
 }
 
 void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
-  BoundingBox bb=glEdge->getBoundingBox(inputData);
+  BoundingBox bb = glEdge->getBoundingBox(inputData);
 
   boundingBox.expand(bb[0]);
   boundingBox.expand(bb[1]);

@@ -25,10 +25,9 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  // n
-  "Number of nodes."
-};
+static const char *paramHelp[] = {
+    // n
+    "Number of nodes."};
 
 /**
  *
@@ -39,18 +38,23 @@ static const char * paramHelp[] = {
  * The European Physical Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006).
  *
  */
-struct WangEtAl:public ImportModule {
-  PLUGININFORMATION("Wang et al. Model","Arnaud Sallaberry","21/02/2011","Randomly generates a small world graph using the model described in<br/>L.Wang, F. Du, H. P. Dai, and Y. X. Sun.<br/><b>Random pseudofractal scale-free networks with small-world effect.</b><br/>The European Physical Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006).","1.0","Social network")
+struct WangEtAl : public ImportModule {
+  PLUGININFORMATION("Wang et al. Model", "Arnaud Sallaberry", "21/02/2011",
+                    "Randomly generates a small world graph using the model described "
+                    "in<br/>L.Wang, F. Du, H. P. Dai, and Y. X. Sun.<br/><b>Random pseudofractal "
+                    "scale-free networks with small-world effect.</b><br/>The European Physical "
+                    "Journal B - Condensed Matter and Complex Systems, 53, 361-366, (2006).",
+                    "1.0", "Social network")
 
-  WangEtAl(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"300");
+  WangEtAl(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "300");
   }
 
   bool importGraph() {
 
     unsigned int n = 300;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", n);
     }
 
@@ -58,24 +62,24 @@ struct WangEtAl:public ImportModule {
     tlp::initRandomSequence();
 
     graph->addNodes(n);
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
-    graph->reserveEdges(2*n-3);
+    graph->reserveEdges(2 * n - 3);
 
-    vector<edge> e(2*n-3);
-    e[0]=graph->addEdge(nodes[0],nodes[1]);
+    vector<edge> e(2 * n - 3);
+    e[0] = graph->addEdge(nodes[0], nodes[1]);
     unsigned int nbe = 1;
 
-    for (unsigned i=2; i<n ; ++i) {
+    for (unsigned i = 2; i < n; ++i) {
       if (i % 100 == 0) {
         if (pluginProgress->progress(i, n) != TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+          return pluginProgress->state() != TLP_CANCEL;
       }
 
-      int id = tlp::randomInteger(nbe-1);
+      int id = tlp::randomInteger(nbe - 1);
       const pair<node, node> ends = graph->ends(e[id]);
-      e[nbe] = graph->addEdge(ends.first,nodes[i]);
-      e[nbe+1] = graph->addEdge(ends.second,nodes[i]);
+      e[nbe] = graph->addEdge(ends.first, nodes[i]);
+      e[nbe + 1] = graph->addEdge(ends.second, nodes[i]);
       nbe += 2;
     }
 

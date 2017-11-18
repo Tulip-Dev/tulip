@@ -32,65 +32,63 @@
 
 namespace tlp {
 
-template<typename T, unsigned int N>
+template <typename T, unsigned int N>
 class Matrix;
 //====================================================================
-//return vertices, update startN and endN to prevent bad edge drawing
-TLP_GL_SCOPE void computeCleanVertices(const std::vector<Coord> &bends,
-                                       const Coord &startPoint, const Coord &endPoint,
-                                       Coord &startN, Coord &endN,std::vector<Coord> &);
-TLP_GL_SCOPE void polyLine(const std::vector<Coord> &,/* polyline vertices */
-                           const Color &,             /* start color */
-                           const Color &);            /* end color */
-TLP_GL_SCOPE void polyQuad(const std::vector<Coord> &, /* polyline vertces */
-                           const Color &,            /* start color */
-                           const Color &,            /* end color */
-                           const float,              /* start size */
-                           const float,              /* end size */
-                           const Coord &,            /* normal to the begin of the curve */
-                           const Coord &,            /* normal to the end curve */
-                           bool,         /* if true : use start and end color to border lines, if false : use borderColor*/
-                           const Color &,      /* border color */
-                           const std::string &textureName="", /* textureName */
-                           const float outlineWidth=0);
-TLP_GL_SCOPE void simpleQuad(const std::vector<Coord> &, /* quad vertces */
-                             const Color &,            /* start color */
-                             const Color &,            /* end color */
-                             const float,              /* start size */
-                             const float,              /* end size */
-                             const Coord &,            /* normal to the begin of the curve */
-                             const Coord &,            /* normal to the end curve */
-                             const Coord &,            /* direction of the camera*/
-                             bool,         /* if true : use start and end color to border lines, if false : use borderColor*/
-                             const Color &,      /* border color */
-                             const std::string &textureName="",
-                             const float outlineWidth=0);     /* textureName */
-TLP_GL_SCOPE void splineQuad(const std::vector<Coord> &,  /* polyline vertces */
-                             const Color &,          /* start color */
-                             const Color &,          /* end color */
-                             const float,            /* start size */
-                             const float,            /* end size */
-                             const Coord &,          /* nomal to the begin of the curve */
-                             const Coord &);         /* nomal to the end curve */
-TLP_GL_SCOPE void splineLine(const std::vector<Coord> &,  /* polyline vertces */
-                             const Color &,          /* start color */
-                             const Color &);          /* end color */
+// return vertices, update startN and endN to prevent bad edge drawing
+TLP_GL_SCOPE void computeCleanVertices(const std::vector<Coord> &bends, const Coord &startPoint,
+                                       const Coord &endPoint, Coord &startN, Coord &endN,
+                                       std::vector<Coord> &);
+TLP_GL_SCOPE void polyLine(const std::vector<Coord> &, /* polyline vertices */
+                           const Color &,              /* start color */
+                           const Color &);             /* end color */
+TLP_GL_SCOPE void
+polyQuad(const std::vector<Coord> &, /* polyline vertces */
+         const Color &,              /* start color */
+         const Color &,              /* end color */
+         const float,                /* start size */
+         const float,                /* end size */
+         const Coord &,              /* normal to the begin of the curve */
+         const Coord &,              /* normal to the end curve */
+         bool, /* if true : use start and end color to border lines, if false : use borderColor*/
+         const Color &,                       /* border color */
+         const std::string &textureName = "", /* textureName */
+         const float outlineWidth = 0);
+TLP_GL_SCOPE void
+simpleQuad(const std::vector<Coord> &, /* quad vertces */
+           const Color &,              /* start color */
+           const Color &,              /* end color */
+           const float,                /* start size */
+           const float,                /* end size */
+           const Coord &,              /* normal to the begin of the curve */
+           const Coord &,              /* normal to the end curve */
+           const Coord &,              /* direction of the camera*/
+           bool, /* if true : use start and end color to border lines, if false : use borderColor*/
+           const Color &,                                                      /* border color */
+           const std::string &textureName = "", const float outlineWidth = 0); /* textureName */
+TLP_GL_SCOPE void splineQuad(const std::vector<Coord> &, /* polyline vertces */
+                             const Color &,              /* start color */
+                             const Color &,              /* end color */
+                             const float,                /* start size */
+                             const float,                /* end size */
+                             const Coord &,              /* nomal to the begin of the curve */
+                             const Coord &);             /* nomal to the end curve */
+TLP_GL_SCOPE void splineLine(const std::vector<Coord> &, /* polyline vertces */
+                             const Color &,              /* start color */
+                             const Color &);             /* end color */
 //====================================================================
-TLP_GL_SCOPE void getColors(const Coord *line,unsigned int lineSize, const Color &c1, const Color &c2,std::vector<Color> &);
-TLP_GL_SCOPE void getSizes(const std::vector<Coord> &line, float s1, float s2, std::vector<float> &);
-TLP_GL_SCOPE GLfloat* buildCurvePoints (const std::vector<Coord> &vertices,
-                                        const std::vector<float> &sizes,
-                                        const Coord &startN,
-                                        const Coord &endN,
-                                        unsigned int &resultSize,
-                                        std::vector<unsigned int> *dec=NULL);
-TLP_GL_SCOPE void buildCurvePoints (const std::vector<Coord> &vertices,
-                                    const std::vector<float> &sizes,
-                                    const Coord &startN,
-                                    const Coord &endN,
-                                    std::vector<Coord> &result);
-
+TLP_GL_SCOPE void getColors(const Coord *line, unsigned int lineSize, const Color &c1,
+                            const Color &c2, std::vector<Color> &);
+TLP_GL_SCOPE void getSizes(const std::vector<Coord> &line, float s1, float s2,
+                           std::vector<float> &);
+TLP_GL_SCOPE GLfloat *buildCurvePoints(const std::vector<Coord> &vertices,
+                                       const std::vector<float> &sizes, const Coord &startN,
+                                       const Coord &endN, unsigned int &resultSize,
+                                       std::vector<unsigned int> *dec = NULL);
+TLP_GL_SCOPE void buildCurvePoints(const std::vector<Coord> &vertices,
+                                   const std::vector<float> &sizes, const Coord &startN,
+                                   const Coord &endN, std::vector<Coord> &result);
 }
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 #endif
 ///@endcond

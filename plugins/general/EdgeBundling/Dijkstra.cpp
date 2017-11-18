@@ -32,12 +32,8 @@ VectorGraph Dijkstra::graph;
 bool Dijkstra::_initB = Dijkstra::initG();
 
 //============================================================
-void Dijkstra::initDijkstra(
-  const tlp::Graph * const forbidden,
-  tlp::node srcTlp,
-  const tlp::MutableContainer<double> &weights,
-  const set<node> &fous
-) {
+void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
+                            const tlp::MutableContainer<double> &weights, const set<node> &fous) {
 
   assert(srcTlp.isValid());
   src = ntlp2dik.get(srcTlp);
@@ -61,16 +57,15 @@ void Dijkstra::initDijkstra(
   vector<bool> focus(graph.numberOfNodes(), false);
   set<node>::const_iterator it = fous.begin();
 
-  for (; it!= fous.end(); ++it)
+  for (; it != fous.end(); ++it)
     focus[ntlp2dik.get(*it)] = true;
-
 
   const vector<node> &bNodes = graph.nodes();
 
-  for (size_t i = 0 ; i < bNodes.size() ; ++i) {
+  for (size_t i = 0; i < bNodes.size(); ++i) {
     n = bNodes[i];
 
-    if (n != src) { //init all nodes to +inf
+    if (n != src) { // init all nodes to +inf
       DijkstraElement *tmp = new DijkstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
 
@@ -78,9 +73,8 @@ void Dijkstra::initDijkstra(
         focusTable.insert(tmp);
 
       mapDik[n] = tmp;
-    }
-    else { //init starting node to 0
-      DijkstraElement * tmp = new DijkstraElement(0, n, n);
+    } else { // init starting node to 0
+      DijkstraElement *tmp = new DijkstraElement(0, n, n);
       dikjstraTable.insert(tmp);
       mapDik[n] = tmp;
     }
@@ -90,7 +84,7 @@ void Dijkstra::initDijkstra(
   nodeDistance[src] = 0;
 
   while (!dikjstraTable.empty()) {
-    //select the first element in the list the one with min value
+    // select the first element in the list the one with min value
     set<DijkstraElement *, LessDijkstraElement>::iterator it = dikjstraTable.begin();
     DijkstraElement &u = *(*it);
     dikjstraTable.erase(it);
@@ -104,94 +98,91 @@ void Dijkstra::initDijkstra(
       }
     }
 
-
     if (forbiddenNodes[u.n] && u.n != src)
       continue;
-
 
     edge e;
     const vector<edge> &adjEdges = graph.star(u.n);
 
-    for (size_t i = 0 ; i < adjEdges.size() ; ++i) {
+    for (size_t i = 0; i < adjEdges.size(); ++i) {
       e = adjEdges[i];
       node v = graph.opposite(e, u.n);
-      DijkstraElement & dEle = *mapDik[v];
-      //assert(weights.get(edik2tlp[e]) > 0);
+      DijkstraElement &dEle = *mapDik[v];
+      // assert(weights.get(edik2tlp[e]) > 0);
 
-
-
-      if ( fabs((u.dist + weights.get(edik2tlp[e])) - dEle.dist) < 1E-9) //path of the same length
+      if (fabs((u.dist + weights.get(edik2tlp[e])) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
       else
 
-        //we find a node closer with that path
-        if ( (u.dist + weights.get(edik2tlp[e])) < dEle.dist) {
-          dEle.usedEdge.clear();
-          //**********************************************
-          dikjstraTable.erase(&dEle);
+          // we find a node closer with that path
+          if ((u.dist + weights.get(edik2tlp[e])) < dEle.dist) {
+        dEle.usedEdge.clear();
+        //**********************************************
+        dikjstraTable.erase(&dEle);
 
-          if (focus[dEle.n]) {
-            focusTable.erase(&dEle);
-          }
-
-          dEle.dist = u.dist + weights.get(edik2tlp[e]);
-          dEle.previous = u.n;
-          dEle.usedEdge.push_back(e);
-          dikjstraTable.insert(&dEle);
-
-          if (focus[dEle.n]) {
-            focusTable.insert(&dEle);
-          }
+        if (focus[dEle.n]) {
+          focusTable.erase(&dEle);
         }
+
+        dEle.dist = u.dist + weights.get(edik2tlp[e]);
+        dEle.previous = u.n;
+        dEle.usedEdge.push_back(e);
+        dikjstraTable.insert(&dEle);
+
+        if (focus[dEle.n]) {
+          focusTable.insert(&dEle);
+        }
+      }
     }
   }
 
-
   node tmpN;
 
-  for (size_t i = 0 ; i < bNodes.size() ; ++i) {
+  for (size_t i = 0; i < bNodes.size(); ++i) {
     tmpN = bNodes[i];
     DijkstraElement *dEle = mapDik[tmpN];
     nodeDistance[tmpN.id] = dEle->dist;
 
-    for (size_t i=0; i < dEle->usedEdge.size(); ++i) {
+    for (size_t i = 0; i < dEle->usedEdge.size(); ++i) {
       usedEdges[dEle->usedEdge[i]] = true;
     }
 
     delete dEle;
   }
 
-
   resultNodes.setAll(false);
   resultEdges.setAll(false);
-
 }
 //=======================================================================
 void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
 
   node n = ntlp2dik.get(ntlp);
 
-  if (resultNodes[n]) return;
+  if (resultNodes[n])
+    return;
 
   resultNodes[n] = true;
   edge e;
   const vector<edge> &adjEdges = graph.star(n);
 
-  for (size_t i = 0 ; i < adjEdges.size() ; ++i) {
+  for (size_t i = 0; i < adjEdges.size(); ++i) {
     e = adjEdges[i];
 
-    if (!usedEdges[e]) continue;
+    if (!usedEdges[e])
+      continue;
 
-    if (resultEdges[e]) continue;
+    if (resultEdges[e])
+      continue;
 
     node tgt = graph.opposite(e, n);
 
-    if (nodeDistance[tgt] >= nodeDistance[n]) continue;
+    if (nodeDistance[tgt] >= nodeDistance[n])
+      continue;
 
     resultEdges[e] = true;
     int dep = depth->getEdgeValue(edik2tlp[e]) + 1;
 #ifdef _OPENMP
-    #pragma omp critical(DEPTH)
+#pragma omp critical(DEPTH)
 #endif
     depth->setEdgeValue(edik2tlp[e], dep);
     searchPaths(ndik2tlp[tgt], depth);
@@ -216,17 +207,20 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
     bool findEdge = false;
     const vector<edge> &adjEdges = graph.star(n);
 
-    for (size_t i = 0 ; i < adjEdges.size() ; ++i) {
+    for (size_t i = 0; i < adjEdges.size(); ++i) {
       edik = adjEdges[i];
       e = edik2tlp[edik];
 
-      if (!usedEdges[edik])  continue; //that edge do not belongs to the shortest path edges
+      if (!usedEdges[edik])
+        continue; // that edge do not belongs to the shortest path edges
 
-      if (resultEdges[edik]) continue; //that edge has already been treated
+      if (resultEdges[edik])
+        continue; // that edge has already been treated
 
       node tgt = graph.opposite(edik, n);
 
-      if (nodeDistance[tgt] >= nodeDistance[n]) continue;
+      if (nodeDistance[tgt] >= nodeDistance[n])
+        continue;
 
       findEdge = true;
       break;
@@ -234,10 +228,12 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
 
     if (findEdge) {
       ok = true;
-      n = graph.opposite(edik, n);//validEdge.begin()->first;
-      resultEdges[edik] =  true;
+      n = graph.opposite(edik, n); // validEdge.begin()->first;
+      resultEdges[edik] = true;
     }
   }
 
-  if (n != src) cout << "A path does not exist between node "<< src.id << " and node " << tgte.id << "!" << endl;
+  if (n != src)
+    cout << "A path does not exist between node " << src.id << " and node " << tgte.id << "!"
+         << endl;
 }

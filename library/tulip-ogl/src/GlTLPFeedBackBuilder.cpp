@@ -21,96 +21,90 @@
 namespace tlp {
 
 void GlTLPFeedBackBuilder::passThroughToken(GLfloat *data) {
-  if(!needData) {
+  if (!needData) {
 
     switch (int(*data)) {
 
-    case TLP_FB_COLOR_INFO :
-      inColorInfo=true;
-      needData=true;
+    case TLP_FB_COLOR_INFO:
+      inColorInfo = true;
+      needData = true;
       break;
 
-    case TLP_FB_BEGIN_ENTITY :
-      inGlEntity=true;
-      needData=true;
+    case TLP_FB_BEGIN_ENTITY:
+      inGlEntity = true;
+      needData = true;
       break;
 
-    case TLP_FB_END_ENTITY :
+    case TLP_FB_END_ENTITY:
       assert(inGlEntity);
-      inGlEntity=false;
+      inGlEntity = false;
       endGlEntity();
       break;
 
-    case TLP_FB_BEGIN_GRAPH :
-      inGlGraph=true;
-      needData=true;
+    case TLP_FB_BEGIN_GRAPH:
+      inGlGraph = true;
+      needData = true;
       break;
 
-    case TLP_FB_END_GRAPH :
+    case TLP_FB_END_GRAPH:
       assert(inGlGraph);
-      inGlGraph=false;
+      inGlGraph = false;
       endGlGraph();
       break;
 
-    case TLP_FB_BEGIN_NODE :
-      inNode=true;
-      needData=true;
+    case TLP_FB_BEGIN_NODE:
+      inNode = true;
+      needData = true;
       break;
 
-    case TLP_FB_END_NODE :
+    case TLP_FB_END_NODE:
       assert(inNode);
-      inNode=false;
+      inNode = false;
       endNode();
       break;
 
-    case TLP_FB_BEGIN_EDGE :
-      inEdge=true;
-      needData=true;
+    case TLP_FB_BEGIN_EDGE:
+      inEdge = true;
+      needData = true;
       break;
 
-    case TLP_FB_END_EDGE :
+    case TLP_FB_END_EDGE:
       assert(inEdge);
-      inEdge=false;
+      inEdge = false;
       endEdge();
       break;
 
-    default :
+    default:
       assert(false);
       break;
-
     }
 
-  }
-  else {
-    if(!inColorInfo) {
-      needData=false;
+  } else {
+    if (!inColorInfo) {
+      needData = false;
 
-      if(inGlEntity) {
+      if (inGlEntity) {
         beginGlEntity(*data);
-      }
-      else if(inEdge) {
+      } else if (inEdge) {
         beginEdge(*data);
-      }
-      else if(inNode) {
+      } else if (inNode) {
         beginNode(*data);
-      }
-      else if(inGlGraph) {
+      } else if (inGlGraph) {
         beginGlGraph(*data);
       }
-    }
-    else {
+    } else {
       dataBuffer.push_back(*data);
 
-      if(dataBuffer.size()>=12) {
-        GLfloat* tmp = new GLfloat[dataBuffer.size()];
+      if (dataBuffer.size() >= 12) {
+        GLfloat *tmp = new GLfloat[dataBuffer.size()];
 
-        for(unsigned int i=0; i<dataBuffer.size(); i++)
-          tmp[i]=dataBuffer[i];
+        for (unsigned int i = 0; i < dataBuffer.size(); i++)
+          tmp[i] = dataBuffer[i];
 
         colorInfo(tmp);
         dataBuffer.clear();
-        needData=false;
-        inColorInfo=false;
+        needData = false;
+        inColorInfo = false;
       }
     }
   }

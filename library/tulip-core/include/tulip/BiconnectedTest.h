@@ -28,14 +28,17 @@ namespace tlp {
 
 /**
  * @ingroup Checks
- * @brief Performs a test of biconnexity on the graph, and provides a function to make a graph biconnected.
- * From Wikipedia: "A biconnected graph is connected and nonseparable, meaning that if any vertex were to be removed, the graph will remain connected."
+ * @brief Performs a test of biconnexity on the graph, and provides a function to make a graph
+ *biconnected.
+ * From Wikipedia: "A biconnected graph is connected and nonseparable, meaning that if any vertex
+ *were to be removed, the graph will remain connected."
  **/
 class TLP_SCOPE BiconnectedTest : private Observable {
 
 public:
   /**
-   * @brief Checks whether the graph is biconnected (i.e. removing one edge does not disconnect the graph, at least two must be removed).
+   * @brief Checks whether the graph is biconnected (i.e. removing one edge does not disconnect the
+   *graph, at least two must be removed).
    *
    * @param graph The graph to check for biconnectivity.
    * @return bool True if the graph is biconnected, false otherwise.
@@ -53,7 +56,7 @@ public:
    * @param addedEdges The edges that were added in the process.
    * @return void
    **/
-  static void makeBiconnected(Graph *graph, std::vector<edge>& addedEdges);
+  static void makeBiconnected(Graph *graph, std::vector<edge> &addedEdges);
 
 private:
   BiconnectedTest();
@@ -65,7 +68,7 @@ private:
    * @param addedEdges The edges that were added to make it biconnected.
    * @return void
    **/
-  void connect(Graph * graph, std::vector<edge>& addedEdges);
+  void connect(Graph *graph, std::vector<edge> &addedEdges);
 
   /**
    * @brief check if the graph is biconnected.
@@ -73,19 +76,20 @@ private:
    * @param graph the graph to check.
    * @return bool true if the graph is biconnected, false otherwise.
    **/
-  bool compute(const Graph * graph);
+  bool compute(const Graph *graph);
 
-  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  virtual void treatEvent(const Event&);
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  virtual void treatEvent(const Event &);
 
   /**
    * @brief Singleton instance of this class.
    **/
-  static BiconnectedTest * instance;
+  static BiconnectedTest *instance;
   /**
-   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the
+   *hashmap.
    **/
-  TLP_HASH_MAP<const Graph*,bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
 }
 

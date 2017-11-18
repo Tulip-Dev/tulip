@@ -32,7 +32,7 @@ namespace tlp {
 
 class Graph;
 class PluginProgress;
-enum EDGE_TYPE {UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2};
+enum EDGE_TYPE { UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2 };
 #define IN_EDGE INV_DIRECTED
 #define OUT_EDGE DIRECTED
 #define INOUT_EDGE UNDIRECTED
@@ -43,7 +43,7 @@ enum EDGE_TYPE {UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2};
  * the shorted distance is set to 0.
  * see http://en.wikipedia.org/wiki/Average_path_length for more details
  */
-TLP_SCOPE double averagePathLength(const Graph* g, PluginProgress* = NULL);
+TLP_SCOPE double averagePathLength(const Graph *g, PluginProgress * = NULL);
 /*
  * return the clustering coefficient of a graph
  * as the average of the local clustering coefficients
@@ -59,7 +59,9 @@ TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = 
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
  * WARNING: this function is deprecated
  */
-TLP_SCOPE _DEPRECATED void clusteringCoefficient(const Graph *g, MutableContainer<double> &result, unsigned int maxDepth = 1, PluginProgress* = NULL);
+TLP_SCOPE _DEPRECATED void clusteringCoefficient(const Graph *g, MutableContainer<double> &result,
+                                                 unsigned int maxDepth = 1,
+                                                 PluginProgress * = NULL);
 /*
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
@@ -67,14 +69,16 @@ TLP_SCOPE _DEPRECATED void clusteringCoefficient(const Graph *g, MutableContaine
  * This quantifies how close its neighbors are to being a clique.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
  */
-TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result, unsigned int maxDepth = 1, PluginProgress* = NULL);
+TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result,
+                                     unsigned int maxDepth = 1, PluginProgress * = NULL);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
  * the number of level used is minimal.
  * WARNING: this function is deprecated
  */
-TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress* = NULL);
+TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level,
+                                    PluginProgress * = NULL);
 /*
  * assign to each node of a graph its (in/ou/inout) degree.
  * The weighted degree of a node is the sum of weights of
@@ -86,8 +90,8 @@ TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigne
  * weighted case => m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)]
  */
 TLP_SCOPE void degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
-                      EDGE_TYPE direction = UNDIRECTED,
-                      NumericProperty* weights = NULL, bool norm = false);
+                      EDGE_TYPE direction = UNDIRECTED, NumericProperty *weights = NULL,
+                      bool norm = false);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
@@ -95,7 +99,8 @@ TLP_SCOPE void degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
  *
  * Warning: the graph must be acyclic (no self loops).
  */
-TLP_SCOPE void dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level, PluginProgress* = NULL);
+TLP_SCOPE void dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level,
+                        PluginProgress * = NULL);
 // return the maximum value of the degree of the graph's nodes
 TLP_SCOPE unsigned int maxDegree(const Graph *);
 // return the minimum value of the degree of the graph's nodes
@@ -107,7 +112,9 @@ TLP_SCOPE unsigned int minDegree(const Graph *);
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
-TLP_SCOPE _DEPRECATED unsigned int maxDistance(const Graph *graph, const node n, MutableContainer<unsigned int> &distance, EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE _DEPRECATED unsigned int maxDistance(const Graph *graph, const node n,
+                                               MutableContainer<unsigned int> &distance,
+                                               EDGE_TYPE direction = UNDIRECTED);
 /*
  * compute the maximum distance from n to all the other nodes of graph
  * and store it into distance, (stored value is UINT_MAX for non connected nodes),
@@ -115,7 +122,9 @@ TLP_SCOPE _DEPRECATED unsigned int maxDistance(const Graph *graph, const node n,
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
-TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos, tlp::NodeStaticProperty<unsigned int> &distance, EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos,
+                                   tlp::NodeStaticProperty<unsigned int> &distance,
+                                   EDGE_TYPE direction = UNDIRECTED);
 /*
  * add to a result set, all the nodes, according to direction,
  * at distance less or equal to maxDistance of startNode.
@@ -123,7 +132,9 @@ TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos, 
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  * WARNING: this function is deprecated use markReachableNodes instead
  */
-TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNode, std::set<node> &result, unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNode,
+                                          std::set<node> &result, unsigned int maxDistance,
+                                          EDGE_TYPE direction = UNDIRECTED);
 /*
  * mark as reachable (set value in "reachables" hash map to true),
  * all the nodes, according to direction,
@@ -132,7 +143,9 @@ TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNo
  * DIRECTED use directed graph
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  */
-TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
+                                  TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
+                                  EDGE_TYPE direction = UNDIRECTED);
 }
 #endif
 ///@endcond

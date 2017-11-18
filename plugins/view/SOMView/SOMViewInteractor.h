@@ -24,59 +24,55 @@
 
 namespace tlp {
 
-class SOMViewInteractor: public tlp::NodeLinkDiagramComponentInteractor {
+class SOMViewInteractor : public tlp::NodeLinkDiagramComponentInteractor {
 public:
   SOMViewInteractor(const QString &iconPath, const QString &text);
 
   virtual bool isCompatible(const std::string &viewName) const;
-
 };
 
-class SOMViewNavigation: public SOMViewInteractor {
+class SOMViewNavigation : public SOMViewInteractor {
 
-  PLUGININFORMATION("SOMViewNavigation", "Dubois Jonathan", "02/04/2009", "Standard navigation with scale", "1.0","Navigation")
+  PLUGININFORMATION("SOMViewNavigation", "Dubois Jonathan", "02/04/2009",
+                    "Standard navigation with scale", "1.0", "Navigation")
 
 public:
-
   SOMViewNavigation(tlp::PluginContext *);
 
   virtual void construct();
 };
 
-class SOMViewSelection: public SOMViewInteractor {
+class SOMViewSelection : public SOMViewInteractor {
 
-  PLUGININFORMATION("SOMViewSelection", "Dubois Jonathan", "02/04/2009", "Standard selection with scale","1.0","Selection")
+  PLUGININFORMATION("SOMViewSelection", "Dubois Jonathan", "02/04/2009",
+                    "Standard selection with scale", "1.0", "Selection")
 
 public:
-
   SOMViewSelection(tlp::PluginContext *);
 
   virtual void construct();
-
 };
 
-class SOMViewProperties:public SOMViewInteractor {
+class SOMViewProperties : public SOMViewInteractor {
 
-  PLUGININFORMATION("SOMViewProperties", "Dubois Jonathan", "02/04/2009", "Standard show element info with scale","1.0","Information")
+  PLUGININFORMATION("SOMViewProperties", "Dubois Jonathan", "02/04/2009",
+                    "Standard show element info with scale", "1.0", "Information")
 
-public :
-
+public:
   SOMViewProperties(tlp::PluginContext *);
 
   virtual void construct();
-
 };
 
-class SOMViewThreshold: public SOMViewInteractor {
+class SOMViewThreshold : public SOMViewInteractor {
 
-  PLUGININFORMATION("SOMViewThreshold", "Dubois Jonathan", "02/04/2009", "Threshold selection on SOM", "1.0","Information")
+  PLUGININFORMATION("SOMViewThreshold", "Dubois Jonathan", "02/04/2009",
+                    "Threshold selection on SOM", "1.0", "Information")
 
 public:
-
   SOMViewThreshold(tlp::PluginContext *);
 
   virtual void construct();
-
 };
 }
 #endif /* SOMVIEWINTERACTOR_H_ */

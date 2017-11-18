@@ -24,15 +24,14 @@
 using namespace std;
 using namespace tlp;
 
-const string StringProperty::propertyTypename="string";
-const string StringVectorProperty::propertyTypename="vector<string>";
+const string StringProperty::propertyTypename = "string";
+const string StringVectorProperty::propertyTypename = "vector<string>";
 
 // viewLabel
-class ViewLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
+class ViewLabelCalculator : public AbstractStringProperty::MetaValueCalculator {
 public:
   // set the meta node label to label of viewMetric max corresponding node
-  void computeMetaValue(AbstractStringProperty* label,
-                        node mN, Graph* sg, Graph*) {
+  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) {
     // nothing to do if viewMetric does not exist
     if (!sg->existProperty("viewMetric"))
       return;
@@ -40,11 +39,11 @@ public:
     node viewMetricMaxNode;
     double vMax = -DBL_MAX;
     DoubleProperty *metric = sg->getProperty<DoubleProperty>("viewMetric");
-    Iterator<node> *itN= sg->getNodes();
+    Iterator<node> *itN = sg->getNodes();
 
     while (itN->hasNext()) {
       node itn = itN->next();
-      const double& value = metric->getNodeValue(itn);
+      const double &value = metric->getNodeValue(itn);
 
       if (value > vMax) {
         vMax = value;
@@ -63,43 +62,39 @@ public:
 static ViewLabelCalculator vLabelCalc;
 
 //=================================================================================
-StringProperty::StringProperty(Graph *g, const std::string& n) : AbstractStringProperty(g, n) {
+StringProperty::StringProperty(Graph *g, const std::string &n) : AbstractStringProperty(g, n) {
   if (n == "viewLabel") {
     setMetaValueCalculator(&vLabelCalc);
   }
 }
 //=================================================================================
-PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *StringProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  StringProperty * p = n.empty()
-                       ? new StringProperty(g) : g->getLocalProperty<StringProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  StringProperty *p = n.empty() ? new StringProperty(g) : g->getLocalProperty<StringProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
-int StringProperty::compare(const node n1,const node n2)const {
+int StringProperty::compare(const node n1, const node n2) const {
   return getNodeValue(n1).compare(getNodeValue(n2));
 }
 //=================================================================================
-int StringProperty::compare(const edge e1,const edge e2)const {
+int StringProperty::compare(const edge e1, const edge e2) const {
   return getEdgeValue(e1).compare(getEdgeValue(e2));
 }
 //=================================================================================
-PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *StringVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  StringVectorProperty * p = n.empty()
-                             ? new StringVectorProperty(g) : g->getLocalProperty<StringVectorProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  StringVectorProperty *p =
+      n.empty() ? new StringVectorProperty(g) : g->getLocalProperty<StringVectorProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
-
-
-

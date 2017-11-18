@@ -27,8 +27,10 @@
 using namespace tlp;
 using namespace std;
 
-DFS::DFS(Graph *graph, BooleanProperty *result, DoubleProperty *dists, node tgt, MutableContainer<double> &weights, EdgeOrientation edgesOrientation, double maxDist) :
-  graph(graph), result(result), dists(dists), tgt(tgt), currentDist(0), edgesOrientation(edgesOrientation), maxDist(maxDist) {
+DFS::DFS(Graph *graph, BooleanProperty *result, DoubleProperty *dists, node tgt,
+         MutableContainer<double> &weights, EdgeOrientation edgesOrientation, double maxDist)
+    : graph(graph), result(result), dists(dists), tgt(tgt), currentDist(0),
+      edgesOrientation(edgesOrientation), maxDist(maxDist) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
 #endif /* NDEBUG */
@@ -67,12 +69,12 @@ bool DFS::searchPaths(node src) {
       result->setEdgeValue(e, true);
       result->setNodeValue(opposite, true);
       result->setNodeValue(nd, true);
-      dists->setNodeValue(nd, min<double> (distLeft, dists->getNodeValue(nd)));
+      dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
       distLeft += weights->get(e.id);
       nd = opposite;
     }
 
-    dists->setNodeValue(nd, min<double> (distLeft, dists->getNodeValue(nd)));
+    dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
 
     return true;
   }
@@ -81,7 +83,7 @@ bool DFS::searchPaths(node src) {
   visitable->setNodeValue(src, false);
   edge e;
 
-  Iterator<edge> *edgeIt=0;
+  Iterator<edge> *edgeIt = 0;
 
   switch (edgesOrientation) {
   case NonOriented:
@@ -98,7 +100,7 @@ bool DFS::searchPaths(node src) {
   }
 
   while (edgeIt->hasNext()) {
-    edge e=edgeIt->next();
+    edge e = edgeIt->next();
     currentDist += weights->get(e.id);
     path.push_back(e);
     result |= searchPaths(graph->opposite(e, src));

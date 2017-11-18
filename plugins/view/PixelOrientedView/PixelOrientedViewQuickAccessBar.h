@@ -28,13 +28,13 @@ class PixelOrientedViewQuickAccessBar : public tlp::QuickAccessBarImpl {
   Q_OBJECT
 
   PixelOrientedOptionsWidget *_optionsWidget;
+
 public:
-  PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget* parent=NULL);
+  PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget *parent = NULL);
 
 public slots:
   void reset();
-  virtual void setBackgroundColor(const QColor&);
-
+  virtual void setBackgroundColor(const QColor &);
 };
 }
 #endif

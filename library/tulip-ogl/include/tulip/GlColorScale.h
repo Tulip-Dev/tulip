@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLCOLORSCALE_H_
 #define GLCOLORSCALE_H_
 
@@ -34,10 +33,7 @@ class GlPolyQuad;
 class TLP_GL_SCOPE GlColorScale : public GlSimpleEntity, public Observable {
 
 public:
-
-  enum Orientation {
-    Horizontal, Vertical
-  };
+  enum Orientation { Horizontal, Vertical };
 
   GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
                const float thickness, Orientation orientation);
@@ -46,12 +42,13 @@ public:
 
   /**
     * @brief Compute the color corresponding to the position in the color scale.
-    * The orientation of the scale define the coordinate used to compute the color (if the orientation is horizontal use only the X coordinate).
+    * The orientation of the scale define the coordinate used to compute the color (if the
+    *orientation is horizontal use only the X coordinate).
     * If the position is outside of the entity coordinates returns the nearest extremity value.
     **/
   Color getColorAtPos(Coord pos);
 
-  void draw(float lod, Camera* camera);
+  void draw(float lod, Camera *camera);
 
   void translate(const Coord &move);
 
@@ -71,7 +68,7 @@ public:
     return colorScalePolyQuad;
   }
 
-  void setColorScale(ColorScale * scale);
+  void setColorScale(ColorScale *scale);
 
   ColorScale *getColorScale() {
     return colorScale;
@@ -79,14 +76,12 @@ public:
 
   void getXML(std::string &) {}
 
-  void setWithXML(const std::string &,unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) {}
 
-protected :
-
+protected:
   void treatEvent(const Event &);
 
 private:
-
   void updateDrawing();
 
   ColorScale *colorScale;
@@ -95,7 +90,6 @@ private:
   GlPolyQuad *colorScalePolyQuad;
   Orientation orientation;
 };
-
 }
 
 #endif /* GLCOLORSCALE_H_ */

@@ -27,31 +27,29 @@
  */
 
 #if defined(__isnan)
-# define isNaN(_a) (__isnan(_a))  /* MacOSX/Darwin definition < 10.4 */
+#define isNaN(_a) (__isnan(_a)) /* MacOSX/Darwin definition < 10.4 */
 #elif (defined(WIN32) && __cplusplus < 201103) || defined(_isnan)
-# define isNaN(_a) (_isnan(_a))   /* Win32 definition */
+#define isNaN(_a) (_isnan(_a)) /* Win32 definition */
 #elif defined(isnan)
-# define isNaN(_a) (isnan(_a))    /* GNU definition */
+#define isNaN(_a) (isnan(_a)) /* GNU definition */
 #else
-# define isNaN(_a) (std::isnan(_a))
+#define isNaN(_a) (std::isnan(_a))
 #endif
 /* If the above doesn't work, then try (a != a).
  * Also, please report a bug as per http://www.inkscape.org/report_bugs.php,
  * giving information about what platform and compiler version you're using.
  */
 
-
 #if defined(__isfinite)
-# define isFinite(_a) (__isfinite(_a))  /* MacOSX/Darwin definition < 10.4 */
+#define isFinite(_a) (__isfinite(_a)) /* MacOSX/Darwin definition < 10.4 */
 #elif defined(isfinite)
-# define isFinite(_a) (isfinite(_a))
+#define isFinite(_a) (isfinite(_a))
 #else
-# define isFinite(_a) (std::isfinite(_a))
+#define isFinite(_a) (std::isfinite(_a))
 #endif
 /* If the above doesn't work, then try (finite(_a) && !isNaN(_a)) or (!isNaN((_a) - (_a))).
  * Also, please report a bug as per http://www.inkscape.org/report_bugs.php,
  * giving information about what platform and compiler version you're using.
  */
-
 
 #endif /* __ISNAN_H__ */

@@ -23,8 +23,8 @@
 
 /** \addtogroup selection */
 
-
-/// This selection plugins implements the so called Kruskal algorithm. This algorithm enables to find a minimum spanning tree in a connected graph.
+/// This selection plugins implements the so called Kruskal algorithm. This algorithm enables to
+/// find a minimum spanning tree in a connected graph.
 /**
  * This selection plugins enables to find all nodes and
  * edges at a fixed distance of a set of nodes.
@@ -36,14 +36,15 @@
  *
  *  \author Anthony Don, LaBRI University Bordeaux I France:
  */
-class Kruskal:public tlp::BooleanAlgorithm {
+class Kruskal : public tlp::BooleanAlgorithm {
 
 public:
-  PLUGININFORMATION("Kruskal","Anthony DON","14/04/03",
-                    "Implements the classical Kruskal algorithm to select a minimum spanning tree in a connected graph."
+  PLUGININFORMATION("Kruskal", "Anthony DON", "14/04/03",
+                    "Implements the classical Kruskal algorithm to select a minimum spanning tree "
+                    "in a connected graph."
                     "Only works on undirected graphs, (ie. the orientation of edges is omitted).",
                     "1.0", "Selection")
-  Kruskal(const tlp::PluginContext* context);
+  Kruskal(const tlp::PluginContext *context);
   bool run();
   bool check(std::string &);
 };

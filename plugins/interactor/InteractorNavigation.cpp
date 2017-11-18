@@ -29,29 +29,38 @@ using namespace tlp;
 /** \brief Tulip interactor to navigate on the graph
  *
  */
-class InteractorNavigation  : public NodeLinkDiagramComponentInteractor {
+class InteractorNavigation : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorNavigation", "Tulip Team", "01/04/2009", "Navigation Interactor", "1.0", "Navigation")
+  PLUGININFORMATION("InteractorNavigation", "Tulip Team", "01/04/2009", "Navigation Interactor",
+                    "1.0", "Navigation")
   /**
    * Default constructor
    */
-  InteractorNavigation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph") {
+  InteractorNavigation(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png",
+                                           "Navigate in graph") {
     setPriority(StandardInteractorPriority::Navigation);
-    setConfigurationWidgetText(QString("<h3>Navigate in graph</h3>")+
-                               "3D Navigation in the graph<br/><br/>"+
-                               "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys down</li></ul>" +
-                               "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right moves</li></ul>" +
+    setConfigurationWidgetText(
+        QString("<h3>Navigate in graph</h3>") + "3D Navigation in the graph<br/><br/>" +
+        "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
+        "down</li></ul>" +
+        "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right "
+        "moves</li></ul>" +
 #if !defined(__APPLE__)
-                               "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
-                               "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+        "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or "
+        "<b>Insert</b> key</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg "
+        "up/Pg down</b> keys</li></ul>"
 #else
-                               "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
-                               "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+        "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or "
+        "<b>Insert</b> key</li></ul>" +
+        "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg "
+        "down</b> keys</li></ul>"
 #endif
-                               + "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>"+
-                               "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>"
-                              );
+        +
+        "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>" +
+        "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>");
   }
 
   /**
@@ -66,12 +75,10 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::MatrixViewName)
-            ||(viewName==ViewName::ParallelCoordinatesViewName)
-           );
+    return ((viewName == NodeLinkDiagramComponent::viewName) ||
+            (viewName == ViewName::MatrixViewName) ||
+            (viewName == ViewName::ParallelCoordinatesViewName));
   }
-
 };
 
 PLUGIN(InteractorNavigation)

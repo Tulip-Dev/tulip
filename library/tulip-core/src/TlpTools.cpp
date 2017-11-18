@@ -57,7 +57,7 @@ using namespace std;
 using namespace tlp;
 
 #ifndef __EMSCRIPTEN__
-static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
+static const char *TULIP_PLUGINS_PATH_VARIABLE = "TLP_PLUGINS_PATH";
 #endif
 
 // the relative path (a string), from the install dir
@@ -78,56 +78,57 @@ const char tlp::PATH_DELIMITER = ':';
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
 extern "C" {
-  char* getTulipLibDir(char* buf) {
-    std::string tulipLibDir;
-    std::string libTulipName;
+char *getTulipLibDir(char *buf) {
+  std::string tulipLibDir;
+  std::string libTulipName;
 
 #ifdef _WIN32
 #ifdef __MINGW32__
-    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dll";
+  libTulipName =
+      "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dll";
 #else
-    libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" + getMinor(TULIP_VERSION) + ".dll";
+  libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" + getMinor(TULIP_VERSION) + ".dll";
 #endif
-    HMODULE hmod = GetModuleHandle(libTulipName.c_str());
+  HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
-    if (hmod != NULL) {
-      TCHAR szPath[512 + 1];
-      DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
+  if (hmod != NULL) {
+    TCHAR szPath[512 + 1];
+    DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
 
-      if (dwLen > 0) {
-        std::string tmp = szPath;
-        std::replace(tmp.begin(), tmp.end(), '\\', '/');
-        tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../" + TULIP_INSTALL_LIBDIR_STR;
-      }
+    if (dwLen > 0) {
+      std::string tmp = szPath;
+      std::replace(tmp.begin(), tmp.end(), '\\', '/');
+      tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1) + "../" + TULIP_INSTALL_LIBDIR_STR;
     }
+  }
 
 #else
 #ifdef __APPLE__
-    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dylib";
+  libTulipName =
+      "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dylib";
 #else
-    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
+  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
 #endif
-    void *ptr;
-    Dl_info info;
+  void *ptr;
+  Dl_info info;
 
-    ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+  ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
-    if (ptr != NULL) {
-      void* symbol = dlsym(ptr, "getTulipLibDir");
+  if (ptr != NULL) {
+    void *symbol = dlsym(ptr, "getTulipLibDir");
 
-      if (symbol != NULL) {
-        if (dladdr(symbol, &info)) {
-          std::string tmp = info.dli_fname;
-          tulipLibDir = tmp.substr(0, tmp.rfind('/')+1);
-	  tulipLibDir.append("../").append(TULIP_INSTALL_LIBDIR_STR);
-        }
+    if (symbol != NULL) {
+      if (dladdr(symbol, &info)) {
+        std::string tmp = info.dli_fname;
+        tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1);
+        tulipLibDir.append("../").append(TULIP_INSTALL_LIBDIR_STR);
       }
     }
-
-#endif
-    return strcpy(buf, tulipLibDir.c_str());
   }
 
+#endif
+  return strcpy(buf, tulipLibDir.c_str());
+}
 }
 
 // throw an exception if an expected directory does not exist
@@ -139,7 +140,7 @@ static void checkDirectory(std::string dir) {
 
   tlp_stat_t infoEntry;
 
-  if (statPath(dir,&infoEntry) != 0) {
+  if (statPath(dir, &infoEntry) != 0) {
     std::stringstream ess;
     ess << "Error - " << dir << ": " << std::endl << strerror(errno);
     ess << std::endl << "Check your TLP_DIR environment variable";
@@ -149,42 +150,38 @@ static void checkDirectory(std::string dir) {
 }
 
 //=========================================================
-void tlp::initTulipLib(const char* appDirPath) {
+void tlp::initTulipLib(const char *appDirPath) {
   if (!TulipShareDir.empty()) // already initialized
     return;
 
   char *getEnvTlp;
   string::size_type pos;
 
-  getEnvTlp=getenv("TLP_DIR");
+  getEnvTlp = getenv("TLP_DIR");
 
-  if (getEnvTlp==0) {
+  if (getEnvTlp == 0) {
     if (appDirPath) {
 #ifdef _WIN32
       TulipLibDir = std::string(appDirPath) + "/../" + TULIP_INSTALL_LIBDIR_STR;
 #else
       // one dir up to initialize the lib dir
-      TulipLibDir.append(appDirPath,
-                         strlen(appDirPath) -
-                         strlen(strrchr(appDirPath, '/') + 1));
+      TulipLibDir.append(appDirPath, strlen(appDirPath) - strlen(strrchr(appDirPath, '/') + 1));
       TulipLibDir.append(TULIP_INSTALL_LIBDIR_STR);
 
 #endif
-    }
-    else {
+    } else {
       char buf[1024];
       // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
       TulipLibDir = getTulipLibDir(buf);
     }
-  }
-  else
-    TulipLibDir=string(getEnvTlp);
+  } else
+    TulipLibDir = string(getEnvTlp);
 
 #ifdef _WIN32
   // ensure it is a unix-style path
   pos = TulipLibDir.find('\\', 0);
 
-  while(pos != string::npos) {
+  while (pos != string::npos) {
     TulipLibDir[pos] = '/';
     pos = TulipLibDir.find('\\', pos);
   }
@@ -193,44 +190,42 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   // ensure it is '/' terminated
   if (TulipLibDir[TulipLibDir.length() - 1] != '/')
-    TulipLibDir+='/';
+    TulipLibDir += '/';
 
   // check TulipLibDir exists
-  bool tlpDirSet = (getEnvTlp!=NULL);
+  bool tlpDirSet = (getEnvTlp != NULL);
 
   if (tlpDirSet)
     checkDirectory(TulipLibDir);
 
-  getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
+  getEnvTlp = getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
-  if (getEnvTlp!=NULL) {
-    TulipPluginsPath=string(getEnvTlp);
+  if (getEnvTlp != NULL) {
+    TulipPluginsPath = string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
     pos = TulipPluginsPath.find('\\', 0);
 
-    while(pos != string::npos) {
+    while (pos != string::npos) {
       TulipPluginsPath[pos] = '/';
       pos = TulipPluginsPath.find('\\', pos);
     }
 
 #endif
-    TulipPluginsPath= TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
-  }
-  else
-    TulipPluginsPath= TulipLibDir + "tulip";
-
+    TulipPluginsPath = TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
+  } else
+    TulipPluginsPath = TulipLibDir + "tulip";
 
   // one dir up to initialize the share dir
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
-  TulipShareDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
+  TulipShareDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
 
   // check it exists
   if (tlpDirSet)
     checkDirectory(TulipShareDir);
 
-  TulipBitmapDir=TulipShareDir+"bitmaps/";
+  TulipBitmapDir = TulipShareDir + "bitmaps/";
 
   // check it exists
   if (tlpDirSet)
@@ -247,8 +242,7 @@ void tlp::initTulipLib(const char* appDirPath) {
 // tlp class names demangler
 #if defined(__GNUC__)
 #include <cxxabi.h>
-std::string tlp::demangleClassName(const char* className,
-                                   bool hideTlp) {
+std::string tlp::demangleClassName(const char *className, bool hideTlp) {
   static char demangleBuffer[1024];
   int status;
   size_t length = 1024;
@@ -264,9 +258,8 @@ std::string tlp::demangleClassName(const char* className,
 // With Visual Studio, typeid(tlp::T).name() does not return a mangled type name
 // but a human readable type name in the form "class tlp::T"
 // so just remove the first 11 characters to return T
-std::string tlp::demangleClassName(const char* className,
-                                   bool hideTlp) {
-  char* clName = const_cast<char*>(className);
+std::string tlp::demangleClassName(const char *className, bool hideTlp) {
+  char *clName = const_cast<char *>(className);
 
   if (strstr(className, "class ") == className)
     clName += 6;
@@ -282,9 +275,9 @@ std::string tlp::demangleClassName(const char* className,
 
 #else // __EMSCRIPTEN__
 
-void initTulipLib(const char*) {}
+void initTulipLib(const char *) {}
 
-std::string tlp::demangleClassName(const char* className, bool) {
+std::string tlp::demangleClassName(const char *className, bool) {
   return std::string(className);
 }
 
@@ -316,7 +309,8 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 
 static unsigned int randomSeed = UINT_MAX;
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
-// uniformly-distributed integer random number generator that produces non-deterministic random numbers
+// uniformly-distributed integer random number generator that produces non-deterministic random
+// numbers
 static std::random_device rd;
 // Mersenne Twister pseudo-random generator of 32-bit numbers
 static std::mt19937 mt;
@@ -338,11 +332,11 @@ void tlp::initRandomSequence() {
 #ifndef __MINGW32__
     mt.seed(rd());
 #else
-    // std::random_device implementation is deterministic in MinGW so initialize seed with current time (microsecond precision)
+    // std::random_device implementation is deterministic in MinGW so initialize seed with current
+    // time (microsecond precision)
     mt.seed(uint(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 #endif
-  }
-  else {
+  } else {
     mt.seed(randomSeed);
   }
 
@@ -356,8 +350,7 @@ void tlp::initRandomSequence() {
     // init a sequence of random() calls
     srandom(seed);
 #endif
-  }
-  else {
+  } else {
     srand(randomSeed);
 #ifndef WIN32
     srandom(randomSeed);
@@ -372,12 +365,10 @@ int tlp::randomInteger(int max) {
 
   if (max == 0) {
     return 0;
-  }
-  else if (max > 0) {
+  } else if (max > 0) {
     std::uniform_int_distribution<int> dist(0, max);
     return dist(mt);
-  }
-  else {
+  } else {
     std::uniform_int_distribution<int> dist(max, 0);
     return dist(mt);
   }
@@ -393,12 +384,13 @@ int tlp::randomInteger(int max) {
     return x;
 
   // keep searching for an x in a range divisible by n
-  // see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
-  while (x >= RAND_MAX - (RAND_MAX % (max+1))) {
+  // see
+  // http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
+  while (x >= RAND_MAX - (RAND_MAX % (max + 1))) {
     x = rand();
   }
 
-  return x % (max+1);
+  return x % (max + 1);
 #endif
 }
 
@@ -407,8 +399,7 @@ unsigned int tlp::randomUnsignedInteger(unsigned int max) {
 
   if (max == 0) {
     return 0;
-  }
-  else {
+  } else {
     std::uniform_int_distribution<unsigned int> dist(0, max);
     return dist(mt);
   }
@@ -442,7 +433,8 @@ int tlp::statPath(const std::string &pathname, tlp_stat_t *buf) {
 //=========================================================
 
 #if defined(WIN32) && defined(__GLIBCXX__)
-// function to get the string representation of the bitwise combination of std::ios_base::openmode flags
+// function to get the string representation of the bitwise combination of std::ios_base::openmode
+// flags
 static std::wstring openmodeToWString(std::ios_base::openmode mode) {
   std::wstring ret;
   bool testb = (mode & std::ios_base::binary) == std::ios_base::binary;
@@ -478,7 +470,8 @@ static std::wstring openmodeToWString(std::ios_base::openmode mode) {
 // class to open a file for reading whose path contains non ascii characters (MinGW only)
 class wifilestream : public std::istream {
 public:
-  wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode) : fp(NULL), buffer(NULL) {
+  wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode)
+      : fp(NULL), buffer(NULL) {
     fp = _wfopen(wfilename.c_str(), openmodeToWString(mode).c_str());
 
     if (fp) {
@@ -494,15 +487,17 @@ public:
       fclose(fp);
     }
   }
+
 private:
   FILE *fp;
-  __gnu_cxx::stdio_filebuf<char>* buffer;
+  __gnu_cxx::stdio_filebuf<char> *buffer;
 };
 
 // class to open a file for writing whose path contains non ascii characters (MinGW only)
 class wofilestream : public std::ostream {
 public:
-  wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode) : fp(NULL), buffer(NULL) {
+  wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode)
+      : fp(NULL), buffer(NULL) {
     fp = _wfopen(wfilename.c_str(), openmodeToWString(open_mode).c_str());
 
     if (fp) {
@@ -518,9 +513,10 @@ public:
       fclose(fp);
     }
   }
+
 private:
   FILE *fp;
-  __gnu_cxx::stdio_filebuf<char>* buffer;
+  __gnu_cxx::stdio_filebuf<char> *buffer;
 };
 #endif
 
@@ -531,12 +527,13 @@ std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base
   // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ifstream
   return new std::ifstream(filename.c_str(), mode);
 #else
-  // On Windows, the path name (possibly containing non ascii characters) has to be converted to UTF-16 in order to open a stream
+  // On Windows, the path name (possibly containing non ascii characters) has to be converted to
+  // UTF-16 in order to open a stream
   std::wstring utf16filename;
   utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
   // With MinGW, it's a little bit tricky to get an input stream
-  return new wifilestream(utf16filename,mode);
+  return new wifilestream(utf16filename, mode);
 #elif defined(_MSC_VER)
   // Visual Studio has wide char version of std::ifstream
   return new std::ifstream(utf16filename.c_str(), mode);
@@ -549,12 +546,14 @@ std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base
 
 //=========================================================
 
-std::ostream *tlp::getOutputFileStream(const std::string &filename, std::ios_base::openmode open_mode) {
+std::ostream *tlp::getOutputFileStream(const std::string &filename,
+                                       std::ios_base::openmode open_mode) {
 #ifndef WIN32
   // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ofstream
   return new std::ofstream(filename.c_str(), open_mode);
 #else
-  // On Windows, the path name (possibly containing non ascii characters) has to be converted to UTF-16 in order to open a stream
+  // On Windows, the path name (possibly containing non ascii characters) has to be converted to
+  // UTF-16 in order to open a stream
   std::wstring utf16filename;
   utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
@@ -582,4 +581,3 @@ bool tlp::inGuiTestingMode() {
 void tlp::setGuiTestingMode(bool enabled) {
   GuiTestingMode = enabled;
 }
-

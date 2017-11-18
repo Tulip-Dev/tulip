@@ -38,17 +38,17 @@ class Graph;
 
 class ScatterPlot2D : public GlComposite {
 
-public :
-
-  ScatterPlot2D(Graph *graph, Graph* edgeGraph,
-                std::map<node, edge>& nodeMap,
-                const std::string& xDim, const std::string& yDim,
-                const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
+public:
+  ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::map<node, edge> &nodeMap,
+                const std::string &xDim, const std::string &yDim, const ElementType &dataLocation,
+                Coord blCorner, unsigned int size, const Color &backgroundColor,
+                const Color &foregroundColor);
   ~ScatterPlot2D();
 
   void setBLCorner(const Coord &blCorner);
   void setUniformBackgroundColor(const Color &backgroundColor);
-  void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor, const Color &zeroColor, const Color &oneColor);
+  void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor,
+                                       const Color &zeroColor, const Color &oneColor);
   void setForegroundColor(const Color &foregroundColor);
 
   const Color &getBackgroundColor() const {
@@ -60,10 +60,10 @@ public :
     return overviewGen;
   }
 
-  const std::string& getXDim() const {
+  const std::string &getXDim() const {
     return xDim;
   }
-  const std::string& getYDim() const {
+  const std::string &getYDim() const {
     return yDim;
   }
   Coord getOverviewCenter() const;
@@ -92,29 +92,29 @@ public :
   void setYAxisScaleDefined(const bool value) {
     yAxisScaleDefined = value;
   }
-  std::pair<double,double> getXAxisScale() const {
+  std::pair<double, double> getXAxisScale() const {
     return xAxisScale;
   }
-  void setXAxisScale(const std::pair<double, double>& value) {
+  void setXAxisScale(const std::pair<double, double> &value) {
     xAxisScale = value;
   }
   std::pair<double, double> getYAxisScale() const {
     return yAxisScale;
   }
-  void setYAxisScale(const std::pair<double, double>& value) {
+  void setYAxisScale(const std::pair<double, double> &value) {
     yAxisScale = value;
   }
 
   std::pair<double, double> getInitXAxisScale() const {
     return initXAxisScale;
   }
-  void setInitXAxisScale(const std::pair<double, double>& value) {
+  void setInitXAxisScale(const std::pair<double, double> &value) {
     initXAxisScale = value;
   }
   std::pair<double, double> getInitYAxisScale() const {
     return initYAxisScale;
   }
-  void setInitYAxisScale(const std::pair<double, double>& value) {
+  void setInitYAxisScale(const std::pair<double, double> &value) {
     initYAxisScale = value;
   }
 
@@ -139,8 +139,7 @@ public :
 
   void setDataLocation(const ElementType &dataLocation);
 
-private :
-
+private:
   void computeBoundingBox() {
     GlBoundingBoxSceneVisitor glBBSV(NULL);
     acceptVisitor(&glBBSV);
@@ -173,7 +172,7 @@ private :
   Color minusOneColor, zeroColor, oneColor;
 
   Graph *edgeAsNodeGraph;
-  std::map<node, edge>& nodeToEdge;
+  std::map<node, edge> &nodeToEdge;
   ElementType dataLocation;
   bool xAxisScaleDefined, yAxisScaleDefined;
   std::pair<double, double> xAxisScale, yAxisScale;
@@ -187,9 +186,7 @@ private :
 
   int overviewId;
   static int overviewCpt;
-
 };
-
 }
 
 #endif /* SCATTERPLOTOVERVIEW_H_ */

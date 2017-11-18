@@ -30,23 +30,29 @@ using namespace tlp;
 /** \brief Tulip interactor to select par of the graph
  *
  */
-class InteractorSelection  : public NodeLinkDiagramComponentInteractor {
+class InteractorSelection : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor",
+                    "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorSelection(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png","Select nodes/edges in a rectangle") {
+  InteractorSelection(const tlp::PluginContext *)
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png",
+                                           "Select nodes/edges in a rectangle") {
     setPriority(StandardInteractorPriority::RectangleSelection);
-    setConfigurationWidgetText(QString("<h3>Selection nodes/edges in a rectangle</h3>")+
-                               "Draw selection rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner,<br/>all graph elements instersecting the rectangle are selected<br/><br/>"+
+    setConfigurationWidgetText(
+        QString("<h3>Selection nodes/edges in a rectangle</h3>") +
+        "Draw selection rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse "
+        "left</b> up indicates the opposite corner,<br/>all graph elements instersecting the "
+        "rectangle are selected<br/><br/>" +
 #if !defined(__APPLE__)
-                               "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
+        "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
 #else
-                               "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>"+
+        "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>" +
 #endif
-                               "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
+        "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
   }
 
   /**
@@ -62,15 +68,12 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-    return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::GeographicViewName)
-            ||(viewName==ViewName::HistogramViewName)
-            ||(viewName==ViewName::MatrixViewName)
-            ||(viewName==ViewName::PixelOrientedViewName)
-            ||(viewName==ViewName::ScatterPlot2DViewName)
-           );
+    return ((viewName == NodeLinkDiagramComponent::viewName) ||
+            (viewName == ViewName::GeographicViewName) ||
+            (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
+            (viewName == ViewName::PixelOrientedViewName) ||
+            (viewName == ViewName::ScatterPlot2DViewName));
   }
-
 };
 
 PLUGIN(InteractorSelection)

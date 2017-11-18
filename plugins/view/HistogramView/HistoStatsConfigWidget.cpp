@@ -24,10 +24,10 @@ using namespace std;
 
 namespace tlp {
 
-HistoStatsConfigWidget::HistoStatsConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::HistoStatsConfigWidget) {
+HistoStatsConfigWidget::HistoStatsConfigWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::HistoStatsConfigWidget) {
   _ui->setupUi(this);
   connect(_ui->applyButton, SIGNAL(clicked()), this, SIGNAL(computeAndDrawInteractor()));
-
 }
 
 HistoStatsConfigWidget::~HistoStatsConfigWidget() {
@@ -66,30 +66,31 @@ double HistoStatsConfigWidget::getSelectionUpperBound() const {
   return getBoundFromString(_ui->upperBoundCB->currentText());
 }
 
-void HistoStatsConfigWidget::setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation) {
-  bool changed=false;
+void HistoStatsConfigWidget::setMinMaxMeanAndSd(double min, double max, double mean,
+                                                double standardDeviation) {
+  bool changed = false;
 
-  if(this->min!=min) {
+  if (this->min != min) {
     this->min = min;
-    changed=true;
+    changed = true;
   }
 
-  if(this->max!=max) {
+  if (this->max != max) {
     this->max = max;
-    changed=true;
+    changed = true;
   }
 
-  if(this->mean!=mean) {
+  if (this->mean != mean) {
     this->mean = mean;
-    changed=true;
+    changed = true;
   }
 
-  if(this->standardDeviation!=standardDeviation) {
+  if (this->standardDeviation != standardDeviation) {
     this->standardDeviation = standardDeviation;
-    changed=true;
+    changed = true;
   }
 
-  if(changed) {
+  if (changed) {
     _ui->meanValue->setText(QString::number(mean));
     _ui->standardDeviationValue->setText(QString::number(standardDeviation));
     _ui->lowerBoundCB->clear();
@@ -139,31 +140,22 @@ void HistoStatsConfigWidget::setMinMaxMeanAndSd(double min, double max, double m
 double HistoStatsConfigWidget::getBoundFromString(const QString &bound) const {
   if (bound == "min") {
     return min;
-  }
-  else if (bound == "m - 3sd") {
+  } else if (bound == "m - 3sd") {
     return (mean - 3 * standardDeviation);
-  }
-  else if (bound == "m - 2sd") {
+  } else if (bound == "m - 2sd") {
     return (mean - 2 * standardDeviation);
-  }
-  else if (bound == "m - sd") {
+  } else if (bound == "m - sd") {
     return (mean - standardDeviation);
-  }
-  else if (bound == "m") {
+  } else if (bound == "m") {
     return mean;
-  }
-  else if (bound == "m + sd") {
+  } else if (bound == "m + sd") {
     return (mean + standardDeviation);
-  }
-  else if (bound == "m + 2sd") {
+  } else if (bound == "m + 2sd") {
     return (mean + 2 * standardDeviation);
-  }
-  else if (bound == "m + 3sd") {
+  } else if (bound == "m + 3sd") {
     return (mean + 3 * standardDeviation);
-  }
-  else {
+  } else {
     return max;
   }
 }
-
 }

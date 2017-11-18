@@ -23,7 +23,8 @@
 
 using namespace tlp;
 
-FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::FishEyeConfigWidget) {
+FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::FishEyeConfigWidget) {
   _ui->setupUi(this);
 }
 
@@ -34,11 +35,9 @@ FishEyeConfigWidget::~FishEyeConfigWidget() {
 int FishEyeConfigWidget::getFishEyeType() const {
   if (_ui->furnasFisheyeRb->isChecked()) {
     return 1;
-  }
-  else if (_ui->auberFishEyeRb->isChecked()) {
+  } else if (_ui->auberFishEyeRb->isChecked()) {
     return 2;
-  }
-  else {
+  } else {
     return 3;
   }
 }

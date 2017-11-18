@@ -35,8 +35,7 @@ class ParallelCoordsDrawConfigWidget : public QWidget {
 
   Q_OBJECT
 
-public :
-
+public:
   ParallelCoordsDrawConfigWidget(QWidget *parent = 0);
   ~ParallelCoordsDrawConfigWidget();
 
@@ -60,7 +59,7 @@ public :
   void setDisplayNodeLabels(const bool set);
   bool configurationChanged();
 
-private slots :
+private slots:
 
   void pressButtonBrowse();
   void userTextureRbToggled(const bool checked);
@@ -68,7 +67,6 @@ private slots :
   void maxAxisPointSizeValueChanged(const int newValue);
 
 private:
-
   bool oldValuesInitialized;
   unsigned int oldAxisHeight;
   bool oldDrawPointOnAxis;
@@ -79,11 +77,8 @@ private:
   Color oldBackgroundColor;
   unsigned int oldUnhighlightedEltsColorsAlphaValue;
   std::string oldLinesTextureFilename;
-  Ui::ParallelCoordsDrawConfigWidgetData* _ui;
-
-
+  Ui::ParallelCoordsDrawConfigWidgetData *_ui;
 };
-
 }
 
 #endif /* PARALLELCOORDSDRAWCONFIGWIDGET_H_ */

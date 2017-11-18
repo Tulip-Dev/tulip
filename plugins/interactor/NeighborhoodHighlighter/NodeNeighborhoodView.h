@@ -31,44 +31,41 @@ using namespace tlp;
 
 class NodeNeighborhoodView : public GraphDecorator {
 
-public :
+public:
+  enum NeighborNodesType { IN_NEIGHBORS, OUT_NEIGHBORS, IN_OUT_NEIGHBORS };
 
-  enum NeighborNodesType {IN_NEIGHBORS, OUT_NEIGHBORS, IN_OUT_NEIGHBORS};
-
-  NodeNeighborhoodView(Graph *graph, node n, NeighborNodesType neighborsNodesType = IN_OUT_NEIGHBORS,
-                       unsigned int neighborhoodDist = 1,
-                       bool computeReachableSubGraph = false,
-                       const std::string& propertyName = "", int nbNodes = 0);
+  NodeNeighborhoodView(Graph *graph, node n,
+                       NeighborNodesType neighborsNodesType = IN_OUT_NEIGHBORS,
+                       unsigned int neighborhoodDist = 1, bool computeReachableSubGraph = false,
+                       const std::string &propertyName = "", int nbNodes = 0);
 
   void updateWithDistance(const unsigned int dist);
 
   bool isElement(const node n) const;
   bool isElement(const edge e) const;
 
-  Iterator<node>* getNodes() const;
-  Iterator<node>* getInNodes(const node n) const;
-  Iterator<node>* getOutNodes(const node n) const;
-  Iterator<node>* getInOutNodes(const node n) const;
-  Iterator<edge>* getEdges() const;
-  Iterator<edge>* getOutEdges(const node n) const;
-  Iterator<edge>* getInOutEdges(const node n) const;
-  Iterator<edge>* getInEdges(const node n) const;
+  Iterator<node> *getNodes() const;
+  Iterator<node> *getInNodes(const node n) const;
+  Iterator<node> *getOutNodes(const node n) const;
+  Iterator<node> *getInOutNodes(const node n) const;
+  Iterator<edge> *getEdges() const;
+  Iterator<edge> *getOutEdges(const node n) const;
+  Iterator<edge> *getInOutEdges(const node n) const;
+  Iterator<edge> *getInEdges(const node n) const;
 
-  const std::vector<node>& nodes() const {
+  const std::vector<node> &nodes() const {
     return graphViewNodes;
   }
 
-  const std::vector<edge>& edges() const {
+  const std::vector<edge> &edges() const {
     return graphViewEdges;
   }
 
-
   Graph *getRoot() const {
-    return const_cast<NodeNeighborhoodView*>(this);
+    return const_cast<NodeNeighborhoodView *>(this);
   }
 
-private :
-
+private:
   void getNeighbors(node n, unsigned int dist, bool noRecursion = false);
   void getInNeighbors(node n, unsigned int dist, bool noRecursion = false);
   void getOutNeighbors(node n, unsigned int dist, bool noRecursion = false);
@@ -85,8 +82,7 @@ private :
   unsigned int currentDist;
   bool computeReachableSubGraph;
   int nbNodes;
-  tlp::DoubleProperty* property;
+  tlp::DoubleProperty *property;
 };
-
 
 #endif /* REACHABLESUBGRAPHVIEW_H_ */

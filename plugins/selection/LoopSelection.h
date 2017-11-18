@@ -24,7 +24,6 @@
 
 /** \addtogroup selection */
 
-
 /**
  * This selection plugins enables to find loops in a graph
  * A loop is an edge that has the same source and target.
@@ -32,17 +31,14 @@
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@labri.fr
  */
-class LoopSelection:public tlp::BooleanAlgorithm {
+class LoopSelection : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION(tlp::SelectionAlgorithm::LoopSelection,"David Auber","20/01/2003",
-                    "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.",
-                    "1.0", "Selection")
-  LoopSelection(const tlp::PluginContext* context);
+  PLUGININFORMATION(
+      tlp::SelectionAlgorithm::LoopSelection, "David Auber", "20/01/2003",
+      "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.", "1.0",
+      "Selection")
+  LoopSelection(const tlp::PluginContext *context);
   bool run();
 };
 
 #endif
-
-
-
-

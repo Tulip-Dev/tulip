@@ -35,7 +35,7 @@
 using namespace std;
 using namespace tlp;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(PluginsTest);
 
 #if defined(_WIN32)
 const std::string suffix = "dll";
@@ -58,10 +58,10 @@ void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
   CPPUNIT_ASSERT(!tlp::PluginLister::pluginExists("Test"));
   PluginLoaderTxt loader;
-  PluginLibraryLoader::loadPluginLibrary("./testPlugin."+suffix, &loader);
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin." + suffix, &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
-  const list<Dependency>& deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
+  const list<Dependency> &deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
@@ -77,7 +77,7 @@ void PluginsTest::testCircularPlugin() {
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
-  PluginLibraryLoader::loadPluginLibrary("./testPlugin2."+suffix);
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin2." + suffix);
   string simpleAlgorithm = "Test2";
   string invalidAlgorithm = "Test3";
   string err;
@@ -95,15 +95,15 @@ void PluginsTest::testAncestorGraph() {
 
   Graph *child2 = graph->addSubGraph();
 
-  //since the property belongs to a descendant graph, this fails
+  // since the property belongs to a descendant graph, this fails
   bool result = graph->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
-  //since the property belongs to a descendant of a sibling graph, this fails
+  // since the property belongs to a descendant of a sibling graph, this fails
   result = child2->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
-  //These will fail because the graph is empty
+  // These will fail because the graph is empty
   result = child1->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
@@ -112,14 +112,14 @@ void PluginsTest::testAncestorGraph() {
 
   grandchild->addNode();
 
-  //now the graph is not empty they will pass
+  // now the graph is not empty they will pass
   result = child1->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
   result = grandchild->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
-  //now testing with an algorithm that does not exists
+  // now testing with an algorithm that does not exists
   result = child1->applyPropertyAlgorithm(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
@@ -128,8 +128,10 @@ void PluginsTest::testAncestorGraph() {
 }
 
 void PluginsTest::availablePlugins() {
-  CPPUNIT_ASSERT_MESSAGE("The 'Test' plugin is not listed by the PluginLister", PluginLister::pluginExists("Test"));
-  CPPUNIT_ASSERT_MESSAGE("The 'Test2' plugin is not listed by the PluginLister", PluginLister::pluginExists("Test2"));
+  CPPUNIT_ASSERT_MESSAGE("The 'Test' plugin is not listed by the PluginLister",
+                         PluginLister::pluginExists("Test"));
+  CPPUNIT_ASSERT_MESSAGE("The 'Test2' plugin is not listed by the PluginLister",
+                         PluginLister::pluginExists("Test2"));
 }
 
 void PluginsTest::pluginInformation() {
@@ -142,7 +144,7 @@ void PluginsTest::pluginInformation() {
 
   tlp::ParameterDescriptionList parameters = PluginLister::instance()->getPluginParameters("Test");
 
-  Iterator<ParameterDescription>* it = parameters.getParameters();
+  Iterator<ParameterDescription> *it = parameters.getParameters();
   CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
   ParameterDescription param = it->next();
   CPPUNIT_ASSERT_EQUAL(string("result"), param.getName());
@@ -157,7 +159,7 @@ void PluginsTest::pluginInformation() {
 #endif
   delete it;
 
-  const Plugin& factory(PluginLister::instance()->pluginInformation("Test"));
+  const Plugin &factory(PluginLister::instance()->pluginInformation("Test"));
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());
   CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.date());
   CPPUNIT_ASSERT_EQUAL(string(""), factory.group());

@@ -26,27 +26,33 @@ using namespace std;
 
 namespace tlp {
 
-GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(QWidget *parent, const StringsListSelectionWidget::ListType &listType, const unsigned int maxNbSelectedProperties) :
-  StringsListSelectionWidget(parent, listType, maxNbSelectedProperties) {}
+GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(
+    QWidget *parent, const StringsListSelectionWidget::ListType &listType,
+    const unsigned int maxNbSelectedProperties)
+    : StringsListSelectionWidget(parent, listType, maxNbSelectedProperties) {}
 
-GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(Graph *graph, QWidget *parent, const StringsListSelectionWidget::ListType &listType,
+GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(
+    Graph *graph, QWidget *parent, const StringsListSelectionWidget::ListType &listType,
     const unsigned int maxNbSelectedProperties, const std::vector<std::string> &propertiesTypes,
-    const bool includeViewProperties)  :
-  StringsListSelectionWidget(parent, listType, maxNbSelectedProperties), graph(graph), propertiesTypes(propertiesTypes), includeViewProperties(includeViewProperties) {
+    const bool includeViewProperties)
+    : StringsListSelectionWidget(parent, listType, maxNbSelectedProperties), graph(graph),
+      propertiesTypes(propertiesTypes), includeViewProperties(includeViewProperties) {
   initWidget();
 }
 
-void GraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, const std::vector<std::string> &propertiesTypes, const bool includeViewProperties) {
+void GraphPropertiesSelectionWidget::setWidgetParameters(
+    Graph *graph, const std::vector<std::string> &propertiesTypes,
+    const bool includeViewProperties) {
   this->graph = graph;
   this->propertiesTypes = propertiesTypes;
   this->includeViewProperties = includeViewProperties;
 
-  if(graph)
+  if (graph)
     initWidget();
 }
 
 void GraphPropertiesSelectionWidget::initWidget() {
-  Iterator<string> * it = graph->getProperties();
+  Iterator<string> *it = graph->getProperties();
   string propertyName;
   vector<string> inputProperties;
 
@@ -70,15 +76,16 @@ bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &prope
   if (propertiesTypes.size() > 0) {
     string propertyType = graph->getProperty(propertyName)->getTypename();
 
-    if (std::find(propertiesTypes.begin(), propertiesTypes.end(), propertyType) != propertiesTypes.end()) {
+    if (std::find(propertiesTypes.begin(), propertiesTypes.end(), propertyType) !=
+        propertiesTypes.end()) {
       selectProperty = true;
     }
-  }
-  else {
+  } else {
     selectProperty = true;
   }
 
-  if (selectProperty && !includeViewProperties && propertyName.find("view")==0 && propertyName!="viewMetric") {
+  if (selectProperty && !includeViewProperties && propertyName.find("view") == 0 &&
+      propertyName != "viewMetric") {
     selectProperty = false;
   }
 
@@ -88,7 +95,7 @@ bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &prope
 void GraphPropertiesSelectionWidget::setInputPropertiesList(vector<string> &inputPropertiesList) {
   vector<string> inputPropertiesListFiltered;
 
-  for (unsigned int i = 0 ; i < inputPropertiesList.size() ; ++i) {
+  for (unsigned int i = 0; i < inputPropertiesList.size(); ++i) {
     if (propertySelectable(inputPropertiesList[i])) {
       inputPropertiesListFiltered.push_back(inputPropertiesList[i]);
     }
@@ -100,7 +107,7 @@ void GraphPropertiesSelectionWidget::setInputPropertiesList(vector<string> &inpu
 void GraphPropertiesSelectionWidget::setOutputPropertiesList(vector<string> &outputPropertiesList) {
   vector<string> outputPropertiesListFiltered;
 
-  for (unsigned int i = 0 ; i < outputPropertiesList.size() ; ++i) {
+  for (unsigned int i = 0; i < outputPropertiesList.size(); ++i) {
     if (propertySelectable(outputPropertiesList[i])) {
       outputPropertiesListFiltered.push_back(outputPropertiesList[i]);
     }
@@ -117,5 +124,4 @@ void GraphPropertiesSelectionWidget::clearLists() {
   clearSelectedStringsList();
   clearUnselectedStringsList();
 }
-
 }

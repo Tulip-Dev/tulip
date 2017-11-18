@@ -40,8 +40,10 @@ struct TLP_GL_SCOPE NodeGlyphData {
 
   NodeGlyphData() {}
 
-  NodeGlyphData(Glyph *glyph, node n, float lod, const Coord &nodePos, const Size &nodeSize, float nodeRot, bool selected) :
-    glyph(glyph), n(n), lod(lod), nodePos(nodePos), nodeSize(nodeSize), nodeRot(nodeRot), selected(selected) {}
+  NodeGlyphData(Glyph *glyph, node n, float lod, const Coord &nodePos, const Size &nodeSize,
+                float nodeRot, bool selected)
+      : glyph(glyph), n(n), lod(lod), nodePos(nodePos), nodeSize(nodeSize), nodeRot(nodeRot),
+        selected(selected) {}
 
   Glyph *glyph;
   node n;
@@ -50,18 +52,18 @@ struct TLP_GL_SCOPE NodeGlyphData {
   Size nodeSize;
   float nodeRot;
   bool selected;
-
 };
 
 struct TLP_GL_SCOPE EdgeExtremityGlyphData {
 
   EdgeExtremityGlyphData() {}
 
-  EdgeExtremityGlyphData(EdgeExtremityGlyph *glyph, edge e, node source,
-                         Color glyphColor, Color glyphBorderColor, float lod,
-                         Coord beginAnchor, Coord srcAnchor, Size size, bool selected) :
-    glyph(glyph), e(e), source(source), glyphColor(glyphColor), glyphBorderColor(glyphBorderColor),
-    lod(lod), beginAnchor(beginAnchor), srcAnchor(srcAnchor), size(size), selected(selected) {}
+  EdgeExtremityGlyphData(EdgeExtremityGlyph *glyph, edge e, node source, Color glyphColor,
+                         Color glyphBorderColor, float lod, Coord beginAnchor, Coord srcAnchor,
+                         Size size, bool selected)
+      : glyph(glyph), e(e), source(source), glyphColor(glyphColor),
+        glyphBorderColor(glyphBorderColor), lod(lod), beginAnchor(beginAnchor),
+        srcAnchor(srcAnchor), size(size), selected(selected) {}
 
   EdgeExtremityGlyph *glyph;
   edge e;
@@ -73,15 +75,12 @@ struct TLP_GL_SCOPE EdgeExtremityGlyphData {
   Coord srcAnchor;
   Size size;
   bool selected;
-
 };
 
 class TLP_GL_SCOPE GlGlyphRenderer {
 
 public:
-
-  GlGlyphRenderer(GlGraphInputData *inputData) :
-    _inputData(inputData), _renderingStarted(false) {}
+  GlGlyphRenderer(GlGraphInputData *inputData) : _inputData(inputData), _renderingStarted(false) {}
 
   void startRendering();
 
@@ -97,16 +96,13 @@ public:
   void endRendering();
 
 private:
-
   GlGraphInputData *_inputData;
   bool _renderingStarted;
   std::vector<NodeGlyphData> _nodeGlyphsToRender;
   std::vector<EdgeExtremityGlyphData> _edgeExtremityGlyphsToRender;
   static GlShaderProgram *_glyphShader;
-  static GlBox* _selectionBox;
-
+  static GlBox *_selectionBox;
 };
-
 }
 
 #endif // GLYPHRENDERER_H

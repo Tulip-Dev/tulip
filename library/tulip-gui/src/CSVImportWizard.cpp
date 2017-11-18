@@ -31,9 +31,11 @@
 
 using namespace tlp;
 
-CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)),previewLineNumber(6) {
-  QVBoxLayout* vbLayout = new QVBoxLayout();
-  vbLayout->setContentsMargins(0,0,0,0);
+CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *parent)
+    : QWizardPage(parent), parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
+      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6) {
+  QVBoxLayout *vbLayout = new QVBoxLayout();
+  vbLayout->setContentsMargins(0, 0, 0, 0);
   vbLayout->setSpacing(0);
   setLayout(vbLayout);
   layout()->addWidget(parserConfigurationWidget);
@@ -41,10 +43,12 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget
   previewTableWidget->setMaxPreviewLineNumber(previewLineNumber);
   previewTableWidget->horizontalHeader()->setVisible(false);
   previewTableWidget->verticalHeader()->setVisible(false);
-  connect(parserConfigurationWidget,SIGNAL(parserChanged()),this,SLOT(parserChanged()));
-  QLabel* noteWidget=new QLabel(this);
+  connect(parserConfigurationWidget, SIGNAL(parserChanged()), this, SLOT(parserChanged()));
+  QLabel *noteWidget = new QLabel(this);
   noteWidget->setWordWrap(true);
-  noteWidget->setText(" <em>Note: several (node and/or edge) import operations using the same source file may be required to get all data to be imported and inserted into a same graph.</em>");
+  noteWidget->setText(" <em>Note: several (node and/or edge) import operations using the same "
+                      "source file may be required to get all data to be imported and inserted "
+                      "into a same graph.</em>");
   layout()->addWidget(noteWidget);
 
   // init with last opened file if possible
@@ -56,26 +60,24 @@ bool CSVParsingConfigurationQWizardPage::isComplete() const {
 }
 
 void CSVParsingConfigurationQWizardPage::parserChanged() {
-  //Fill the preview widget
+  // Fill the preview widget
   int firstLine = parserConfigurationWidget->getFirstLineIndex();
-  CSVParser* parser =
-    parserConfigurationWidget->buildParser(firstLine,
-        firstLine + previewLineNumber);
-  //Force widget to clear content.
+  CSVParser *parser =
+      parserConfigurationWidget->buildParser(firstLine, firstLine + previewLineNumber);
+  // Force widget to clear content.
   previewTableWidget->begin();
 
-  if(parser!=NULL) {
+  if (parser != NULL) {
     previewTableWidget->setEnabled(true);
     SimplePluginProgressDialog progress(this);
     progress.showPreview(false);
     progress.setWindowTitle(tr("Parsing file"));
-    parser->parse(previewTableWidget,&progress);
+    parser->parse(previewTableWidget, &progress);
     unsigned int nbCommentsLines = previewTableWidget->getNbCommentsLines();
 
     if (nbCommentsLines)
       parserConfigurationWidget->setNbIgnoredLines(nbCommentsLines);
-  }
-  else {
+  } else {
     previewTableWidget->setEnabled(false);
   }
 
@@ -83,11 +85,11 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   emit completeChanged();
 }
 
-//CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
+// CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
 //  return graphMappingConfigurationWidget->buildMappingObject();
 //}
 
-CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
+CSVToGraphDataMapping *CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
   return graphMappingConfigurationWidget->buildMappingObject();
 }
 
@@ -96,7 +98,7 @@ void CSVParsingConfigurationQWizardPage::updatePreview() {
   previewTableWidget->setColumnCount(0);
 }
 
-CSVParser* CSVParsingConfigurationQWizardPage::buildParser(int firstLine) const {
+CSVParser *CSVParsingConfigurationQWizardPage::buildParser(int firstLine) const {
   return parserConfigurationWidget->buildParser(firstLine);
 }
 
@@ -104,42 +106,46 @@ int CSVParsingConfigurationQWizardPage::getFirstLineIndex() const {
   return parserConfigurationWidget->getFirstLineIndex();
 }
 
-CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent), importConfigurationWidget(new CSVImportConfigurationWidget(this)) {
+CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage(QWidget *parent)
+    : QWizardPage(parent), importConfigurationWidget(new CSVImportConfigurationWidget(this)) {
   setLayout(new QVBoxLayout());
   layout()->addWidget(importConfigurationWidget);
 }
 
 void CSVImportConfigurationQWizardPage::initializePage() {
-  CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
-  assert(csvWizard!=NULL);
+  CSVImportWizard *csvWizard = qobject_cast<CSVImportWizard *>(wizard());
+  assert(csvWizard != NULL);
   int firstLine = csvWizard->getParsingConfigurationPage()->getFirstLineIndex();
   importConfigurationWidget->setFirstLineIndex(firstLine);
-  importConfigurationWidget->setNewParser(csvWizard->getParsingConfigurationPage()->buildParser(firstLine));
+  importConfigurationWidget->setNewParser(
+      csvWizard->getParsingConfigurationPage()->buildParser(firstLine));
 }
 
-CSVGraphMappingConfigurationQWizardPage::CSVGraphMappingConfigurationQWizardPage ( QWidget * parent ):QWizardPage(parent),graphMappingConfigurationWidget(new CSVGraphMappingConfigurationWidget()) {
+CSVGraphMappingConfigurationQWizardPage::CSVGraphMappingConfigurationQWizardPage(QWidget *parent)
+    : QWizardPage(parent),
+      graphMappingConfigurationWidget(new CSVGraphMappingConfigurationWidget()) {
   setLayout(new QVBoxLayout());
   layout()->addWidget(graphMappingConfigurationWidget);
-  connect(graphMappingConfigurationWidget,SIGNAL(mappingChanged()),this,SIGNAL(completeChanged()));
+  connect(graphMappingConfigurationWidget, SIGNAL(mappingChanged()), this,
+          SIGNAL(completeChanged()));
 }
 
 bool CSVGraphMappingConfigurationQWizardPage::isComplete() const {
   return graphMappingConfigurationWidget->isValid();
 }
 
-CSVImportParameters CSVImportConfigurationQWizardPage::getImportParameters()const {
+CSVImportParameters CSVImportConfigurationQWizardPage::getImportParameters() const {
   return importConfigurationWidget->getImportParameters();
 }
 
 void CSVGraphMappingConfigurationQWizardPage::initializePage() {
-  CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
-  assert(csvWizard!=NULL);
-  graphMappingConfigurationWidget->updateWidget(csvWizard->getGraph(),csvWizard->getImportConfigurationPage()->getImportParameters());
+  CSVImportWizard *csvWizard = qobject_cast<CSVImportWizard *>(wizard());
+  assert(csvWizard != NULL);
+  graphMappingConfigurationWidget->updateWidget(
+      csvWizard->getGraph(), csvWizard->getImportConfigurationPage()->getImportParameters());
 }
 
-CSVImportWizard::CSVImportWizard(QWidget *parent) :
-  QWizard(parent),
-  ui(new Ui::CSVImportWizard) {
+CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::CSVImportWizard) {
   // ensure there is a Cancel button (may be hidden on Mac)
   setOptions(options() & ~QWizard::NoCancelButton);
   ui->setupUi(this);
@@ -149,55 +155,56 @@ CSVImportWizard::~CSVImportWizard() {
   delete ui;
 }
 
-CSVParsingConfigurationQWizardPage* CSVImportWizard::getParsingConfigurationPage()const {
-  return qobject_cast<CSVParsingConfigurationQWizardPage*>(page(0));
+CSVParsingConfigurationQWizardPage *CSVImportWizard::getParsingConfigurationPage() const {
+  return qobject_cast<CSVParsingConfigurationQWizardPage *>(page(0));
 }
-CSVImportConfigurationQWizardPage* CSVImportWizard::getImportConfigurationPage()const {
-  return qobject_cast<CSVImportConfigurationQWizardPage*>(page(1));
+CSVImportConfigurationQWizardPage *CSVImportWizard::getImportConfigurationPage() const {
+  return qobject_cast<CSVImportConfigurationQWizardPage *>(page(1));
 }
-CSVGraphMappingConfigurationQWizardPage* CSVImportWizard::getMappingConfigurationPage()const {
-  return qobject_cast<CSVGraphMappingConfigurationQWizardPage*>(page(2));
+CSVGraphMappingConfigurationQWizardPage *CSVImportWizard::getMappingConfigurationPage() const {
+  return qobject_cast<CSVGraphMappingConfigurationQWizardPage *>(page(2));
 }
 
 void CSVImportWizard::accept() {
-  bool processIsValid=false;
+  bool processIsValid = false;
 
-  if(graph != NULL) {
-    CSVParser* parser = getParsingConfigurationPage()->buildParser();
+  if (graph != NULL) {
+    CSVParser *parser = getParsingConfigurationPage()->buildParser();
 
-    if(parser != NULL) {
+    if (parser != NULL) {
       processIsValid = true;
       CSVImportParameters importParam = getImportConfigurationPage()->getImportParameters();
-      //Get row to graph element mapping
+      // Get row to graph element mapping
       CSVToGraphDataMapping *rowMapping = getMappingConfigurationPage()->buildMappingObject();
-      //Get column to graph properties mapping
-      CSVImportColumnToGraphPropertyMapping *columnMapping = new CSVImportColumnToGraphPropertyMappingProxy(graph,importParam,this);
+      // Get column to graph properties mapping
+      CSVImportColumnToGraphPropertyMapping *columnMapping =
+          new CSVImportColumnToGraphPropertyMappingProxy(graph, importParam, this);
 
-      //Invalid mapping objects
-      if(rowMapping== NULL || columnMapping==NULL) {
+      // Invalid mapping objects
+      if (rowMapping == NULL || columnMapping == NULL) {
         processIsValid = false;
       }
 
-      if(processIsValid) {
-        //Launch the import process
+      if (processIsValid) {
+        // Launch the import process
         SimplePluginProgressDialog progress(this);
         progress.showPreview(false);
         progress.show();
-        //Build import object
-        CSVGraphImport csvToGraph(rowMapping,columnMapping,importParam);
+        // Build import object
+        CSVGraphImport csvToGraph(rowMapping, columnMapping, importParam);
         progress.setWindowTitle("Importing data");
-        processIsValid = parser->parse(&csvToGraph,&progress);
+        processIsValid = parser->parse(&csvToGraph, &progress);
       }
 
-      //Release objects
+      // Release objects
       delete rowMapping;
       delete columnMapping;
       delete parser;
     }
   }
 
-  if(processIsValid) {
-    //Call QDialog accept
+  if (processIsValid) {
+    // Call QDialog accept
     QWizard::accept();
   }
 }

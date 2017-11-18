@@ -31,14 +31,19 @@
  *   2002.
  *
  */
-class StrengthMetric:public tlp::DoubleAlgorithm {
+class StrengthMetric : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Strength","David Auber","26/02/2003","Computes the Strength metric described in<br/><b>Software component capture using graph clustering</b>, Y. Chiricota. F.Jourdan, an G.Melancon, IWPC (2002).","1.0","Graph")
-  StrengthMetric(const tlp::PluginContext* context);
+  PLUGININFORMATION("Strength", "David Auber", "26/02/2003",
+                    "Computes the Strength metric described in<br/><b>Software component capture "
+                    "using graph clustering</b>, Y. Chiricota. F.Jourdan, an G.Melancon, IWPC "
+                    "(2002).",
+                    "1.0", "Graph")
+  StrengthMetric(const tlp::PluginContext *context);
   ~StrengthMetric();
   double getNodeValue(const tlp::node n);
   double getEdgeValue(const tlp::edge n);
   bool run();
+
 private:
   double e(const TLP_HASH_SET<tlp::node> &U);
   double e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V);

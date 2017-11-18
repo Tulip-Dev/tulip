@@ -17,10 +17,9 @@
  *
  */
 
-
-// This implementation of HSI Color Space is from the following paper : "Issues in Visualizing Large Databases"
+// This implementation of HSI Color Space is from the following paper : "Issues in Visualizing Large
+// Databases"
 // D. A. Keim, H.-P. Kriegel
-
 
 #ifndef HSI_H_
 #define HSI_H_
@@ -31,30 +30,24 @@ namespace pocore {
 
 class HSI {
 
-public :
-
+public:
   HSI(double hue, double saturation, double intensity);
   HSI(const RGBA &c);
   double value(double hue_phase) const;
   RGBA getRGBA() const;
 
   double hue, saturation, intensity;
-
 };
 
 class HSIColorScale {
 
-public :
-
-  HSIColorScale(const HSI& from, const HSI& to);
+public:
+  HSIColorScale(const HSI &from, const HSI &to);
   HSI operator[](double f) const;
 
-private :
-
+private:
   HSI foot;
   double hue_range, sat_range, int_range;
-
 };
-
 }
 #endif /* HSI_H_ */

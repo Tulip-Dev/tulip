@@ -47,11 +47,12 @@
 
 // Helper class for filesystem types handling
 struct TulipFileDescriptor {
-  enum FileType {File,Directory};
+  enum FileType { File, Directory };
 
   TulipFileDescriptor() {}
-  TulipFileDescriptor(const QString& absolutePath,FileType fileType, bool existing = true):absolutePath(absolutePath),type(fileType),mustExist(existing) {}
-  TulipFileDescriptor(const TulipFileDescriptor& d) {
+  TulipFileDescriptor(const QString &absolutePath, FileType fileType, bool existing = true)
+      : absolutePath(absolutePath), type(fileType), mustExist(existing) {}
+  TulipFileDescriptor(const TulipFileDescriptor &d) {
     absolutePath = d.absolutePath;
     type = d.type;
     mustExist = d.mustExist;
@@ -76,55 +77,54 @@ struct TulipFontIcon {
   TulipFontIcon(const QString &iconName) : iconName(iconName) {}
 
   QString iconName;
-
 };
 
-//Declare tulip type compatible with QVariant
+// Declare tulip type compatible with QVariant
 Q_DECLARE_METATYPE(tlp::DataSet)
 
-Q_DECLARE_METATYPE(tlp::DoubleProperty*)
-Q_DECLARE_METATYPE(tlp::DoubleVectorProperty*)
+Q_DECLARE_METATYPE(tlp::DoubleProperty *)
+Q_DECLARE_METATYPE(tlp::DoubleVectorProperty *)
 Q_DECLARE_METATYPE(std::vector<double>)
 
 Q_DECLARE_METATYPE(tlp::Color)
-Q_DECLARE_METATYPE(tlp::ColorProperty*)
-Q_DECLARE_METATYPE(tlp::ColorVectorProperty*)
+Q_DECLARE_METATYPE(tlp::ColorProperty *)
+Q_DECLARE_METATYPE(tlp::ColorVectorProperty *)
 Q_DECLARE_METATYPE(std::vector<tlp::Color>)
 
 Q_DECLARE_METATYPE(tlp::Size)
-Q_DECLARE_METATYPE(tlp::SizeProperty*)
-Q_DECLARE_METATYPE(tlp::SizeVectorProperty*)
+Q_DECLARE_METATYPE(tlp::SizeProperty *)
+Q_DECLARE_METATYPE(tlp::SizeVectorProperty *)
 Q_DECLARE_METATYPE(std::vector<tlp::Size>)
 
 Q_DECLARE_METATYPE(std::string)
-Q_DECLARE_METATYPE(tlp::StringProperty*)
-Q_DECLARE_METATYPE(tlp::StringVectorProperty*)
+Q_DECLARE_METATYPE(tlp::StringProperty *)
+Q_DECLARE_METATYPE(tlp::StringVectorProperty *)
 Q_DECLARE_METATYPE(std::vector<std::string>)
 
-//Q_DECLARE_METATYPE(tlp::Coord)
-Q_DECLARE_METATYPE(tlp::LayoutProperty*)
-Q_DECLARE_METATYPE(tlp::CoordVectorProperty*)
-//Q_DECLARE_METATYPE(std::vector<tlp::Coord>)
+// Q_DECLARE_METATYPE(tlp::Coord)
+Q_DECLARE_METATYPE(tlp::LayoutProperty *)
+Q_DECLARE_METATYPE(tlp::CoordVectorProperty *)
+// Q_DECLARE_METATYPE(std::vector<tlp::Coord>)
 
-Q_DECLARE_METATYPE(tlp::Graph*)
-Q_DECLARE_METATYPE(tlp::GraphProperty*)
+Q_DECLARE_METATYPE(tlp::Graph *)
+Q_DECLARE_METATYPE(tlp::GraphProperty *)
 
-Q_DECLARE_METATYPE(tlp::IntegerProperty*)
-Q_DECLARE_METATYPE(tlp::IntegerVectorProperty*)
+Q_DECLARE_METATYPE(tlp::IntegerProperty *)
+Q_DECLARE_METATYPE(tlp::IntegerVectorProperty *)
 Q_DECLARE_METATYPE(std::vector<int>)
 
-Q_DECLARE_METATYPE(tlp::BooleanProperty*)
-Q_DECLARE_METATYPE(tlp::BooleanVectorProperty*)
-//Q_DECLARE_METATYPE(std::vector<bool>)
+Q_DECLARE_METATYPE(tlp::BooleanProperty *)
+Q_DECLARE_METATYPE(tlp::BooleanVectorProperty *)
+// Q_DECLARE_METATYPE(std::vector<bool>)
 Q_DECLARE_METATYPE(QVector<bool>)
 
 Q_DECLARE_METATYPE(tlp::node)
 Q_DECLARE_METATYPE(tlp::edge)
 Q_DECLARE_METATYPE(std::set<tlp::edge>)
 
-Q_DECLARE_METATYPE(tlp::NumericProperty*)
+Q_DECLARE_METATYPE(tlp::NumericProperty *)
 
-Q_DECLARE_METATYPE(tlp::PropertyInterface*)
+Q_DECLARE_METATYPE(tlp::PropertyInterface *)
 
 Q_DECLARE_METATYPE(tlp::ColorScale)
 
@@ -147,38 +147,37 @@ namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {
   TulipMetaTypes() {}
 
-  template<typename T>
+  template <typename T>
   inline static QVariant typedVariant(tlp::DataType *dm) {
     T result;
 
     if (dm)
-      result = *(static_cast<T*>(dm->value));
+      result = *(static_cast<T *>(dm->value));
 
     return QVariant::fromValue<T>(result);
   }
 
 public:
   static tlp::DataType *qVariantToDataType(const QVariant &);
-  static QVariant dataTypeToQvariant(tlp::DataType *,const std::string& paramName);
+  static QVariant dataTypeToQvariant(tlp::DataType *, const std::string &paramName);
 };
 
-class TLP_QT_SCOPE QStringListType: public TypeInterface<QStringList> {
+class TLP_QT_SCOPE QStringListType : public TypeInterface<QStringList> {
 public:
-  static void write(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
+  static void write(std::ostream &, const RealType &);
+  static bool read(std::istream &, RealType &);
   FORWARD_STRING_METHODS(QStringListType)
 };
 
-class TLP_QT_SCOPE QStringType: public TypeInterface<QString> {
+class TLP_QT_SCOPE QStringType : public TypeInterface<QString> {
 public:
-  static void write(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
+  static void write(std::ostream &, const RealType &);
+  static bool read(std::istream &, RealType &);
   static std::string toString(const RealType &);
   static bool fromString(RealType &, const std::string &);
 };
 
 extern void initQTypeSerializers();
-
 }
 
 #endif // TULIPMETATYPES_H

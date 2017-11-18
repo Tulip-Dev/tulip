@@ -31,6 +31,7 @@ class VectorGraph;
  */
 class ValArrayInterface {
   friend class VectorGraph;
+
 protected:
   virtual void addElement(const unsigned int id) = 0;
   virtual void reserve(const size_t size) = 0;
@@ -42,8 +43,9 @@ protected:
  * @warning never use that class
  */
 template <typename TYPE>
-class  ValArray : public  ValArrayInterface {
+class ValArray : public ValArrayInterface {
   friend class VectorGraph;
+
 protected:
   ValArray(const unsigned int size = 0, const unsigned int capacity = 0) {
     _data.reserve(capacity);
@@ -65,7 +67,8 @@ public:
 };
 /**
   * @class VectorGraphProperty
-  * @brief That class enables to factorize code for NodeProperty and EdgeProperty in VectorGraph, it could not be used directly.
+  * @brief That class enables to factorize code for NodeProperty and EdgeProperty in VectorGraph, it
+ * could not be used directly.
   * @see NodeProperty
   * @see EdgeProperty
   * @see VectorGraph
@@ -73,6 +76,7 @@ public:
 template <typename TYPE>
 class VectorGraphProperty {
   friend class VectorGraph;
+
 public:
   virtual ~VectorGraphProperty() {}
   /**
@@ -81,7 +85,7 @@ public:
     * return the value of the ith element and enables to modify it.
     */
   typename std::vector<TYPE>::reference operator[](const size_t id) {
-    //assert(isValid());
+    // assert(isValid());
     assert(id < (*_array)._data.size());
     return (*_array)._data[id];
   }
@@ -91,7 +95,7 @@ public:
     * return the value of the ith element.
     */
   typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
-    //assert(isValid());
+    // assert(isValid());
     assert(id < (*_array)._data.size());
     return (*_array)._data[id];
   }
@@ -130,15 +134,13 @@ public:
 #endif
 
 protected:
-  VectorGraphProperty():_array(0), _graph(0) {
-  }
-  VectorGraphProperty(const VectorGraphProperty &obj): _array(obj._array), _graph(obj._graph) {
-  }
-  VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph):_array(array), _graph(graph) {
-  }
+  VectorGraphProperty() : _array(0), _graph(0) {}
+  VectorGraphProperty(const VectorGraphProperty &obj) : _array(obj._array), _graph(obj._graph) {}
+  VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph) : _array(array), _graph(graph) {}
+
 protected:
   ValArray<TYPE> *_array; /**< TODO */
-  VectorGraph *_graph; /**< TODO */
+  VectorGraph *_graph;    /**< TODO */
 };
 
 /**
@@ -167,7 +169,8 @@ protected:
  * forEach(e, g.getEdges()) {
  *   weight[n] = g.deg(g.target(e)) + g.deg(g.source(e));
  * }
- * EdgeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory addres
+ * EdgeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory
+ * addres
  * weight2[g[0]] = 3;
  * tlp::debug() << weight[g[0]]; //output 3
  * g.free(weight2); //free the memory, weight and weight2 are no more valid.
@@ -179,16 +182,17 @@ protected:
 template <typename TYPE>
 class EdgeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
+
 public:
-  EdgeProperty():VectorGraphProperty<TYPE>() {}
-  EdgeProperty(const EdgeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
+  EdgeProperty() : VectorGraphProperty<TYPE>() {}
+  EdgeProperty(const EdgeProperty &obj) : VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
   bool isValid() const;
 #endif
 
 private:
-  EdgeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
-
+  EdgeProperty(ValArray<TYPE> *array, VectorGraph *graph)
+      : VectorGraphProperty<TYPE>(array, graph) {}
 };
 /**
   * @class NodeProperty
@@ -216,7 +220,8 @@ private:
   * forEach(n, g.getNodes()) {
   *   weight[n] = g.deg(n);
   * }
-  * NodeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory addres
+  * NodeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory
+ * addres
   * weight2[g[0]] = 3;
   * tlp::debug() << weight[g[0]]; //output 3
   * g.free(weight2); //free the memory, weight and weight2 are no more valid.
@@ -227,17 +232,18 @@ private:
 template <typename TYPE>
 class NodeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
+
 public:
-  NodeProperty():VectorGraphProperty<TYPE>() {}
-  NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
+  NodeProperty() : VectorGraphProperty<TYPE>() {}
+  NodeProperty(const NodeProperty &obj) : VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
   bool isValid() const;
 #endif
 
 private:
-  NodeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
+  NodeProperty(ValArray<TYPE> *array, VectorGraph *graph)
+      : VectorGraphProperty<TYPE>(array, graph) {}
 };
-
 }
 #endif // VECTORGRAPHPROPERTY_H
 ///@endcond

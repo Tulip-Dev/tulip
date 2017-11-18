@@ -17,7 +17,6 @@
  *
  */
 
-
 #ifndef GL_RECT_H
 #define GL_RECT_H
 
@@ -35,23 +34,24 @@ namespace tlp {
 
 class TLP_GL_SCOPE GlRect : public GlPolygon {
 protected:
-
 public:
   /**
-   * Constructor : with topLeft/bottomRight coords, topLeft/bottomRight colors and if GlRect is filled/outlined
+   * Constructor : with topLeft/bottomRight coords, topLeft/bottomRight colors and if GlRect is
+   * filled/outlined
    */
-  GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol, bool filled=true, bool outlined=false);
+  GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol,
+         const Color &bottomRightCol, bool filled = true, bool outlined = false);
 
   /**
    * Constructor : with center coords and size, fill color and outline color
    */
-  GlRect(const Coord &center, const float width, const float height, const Color &fillColor, const Color &outlineColor);
-
+  GlRect(const Coord &center, const float width, const float height, const Color &fillColor,
+         const Color &outlineColor);
 
   /**
    * Constructor : with GlRect is filled/outlined
    */
-  GlRect(bool filled=true, bool outlined=false);
+  GlRect(bool filled = true, bool outlined = false);
 
   /**
    * Destructor
@@ -113,9 +113,7 @@ public:
    */
   bool inRect(double x, double y);
 
-  virtual void draw(float lod,Camera *camera);
-
+  virtual void draw(float lod, Camera *camera);
 };
-
 }
 #endif

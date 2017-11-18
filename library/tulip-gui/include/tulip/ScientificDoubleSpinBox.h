@@ -17,7 +17,8 @@
  *
  */
 
-// original code is written in Python and is taken from https://jdreaver.com/posts/2014-07-28-scientific-notation-spin-box-pyside.html
+// original code is written in Python and is taken from
+// https://jdreaver.com/posts/2014-07-28-scientific-notation-spin-box-pyside.html
 // see also https://gist.github.com/jdreaver/0be2e44981159d0854f5
 
 #ifndef SCIENTIFICDOUBLESPINBOX_H
@@ -31,7 +32,8 @@
 namespace tlp {
 
 /**
- * @brief Utility class used to validate that a QString contains a valid representation of a floating point number
+ * @brief Utility class used to validate that a QString contains a valid representation of a
+ * floating point number
  * including scientific notation
  *
  * @since Tulip 5.0
@@ -39,11 +41,9 @@ namespace tlp {
 class TLP_QT_SCOPE FloatValidator : public QValidator {
 
 public:
-
   State validate(QString &input, int &pos) const;
 
   void fixup(QString &text) const;
-
 };
 
 /**
@@ -54,8 +54,7 @@ public:
 class TLP_QT_SCOPE ScientificDoubleSpinBox : public QDoubleSpinBox {
 
 public:
-
-  ScientificDoubleSpinBox(QWidget *parent=0);
+  ScientificDoubleSpinBox(QWidget *parent = 0);
 
   QValidator::State validate(QString &input, int &pos) const;
 
@@ -66,9 +65,7 @@ public:
   QString textFromValue(double value) const;
 
   void stepBy(int steps);
-
 };
-
 }
 
 #endif // SCIENTIFICDOUBLESPINBOX_H

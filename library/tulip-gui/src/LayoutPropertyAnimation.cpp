@@ -24,15 +24,18 @@
 using namespace std;
 using namespace tlp;
 
-LayoutPropertyAnimation::LayoutPropertyAnimation(Graph *g, LayoutProperty *start, LayoutProperty *end, LayoutProperty *out,
-    BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges,QObject* parent) :
-  CachedPropertyAnimation<LayoutProperty, Coord, vector<Coord> > (g, start, end, out, selection, frameCount, computeNodes,
-      computeEdges,parent) {
-}
+LayoutPropertyAnimation::LayoutPropertyAnimation(Graph *g, LayoutProperty *start,
+                                                 LayoutProperty *end, LayoutProperty *out,
+                                                 BooleanProperty *selection, int frameCount,
+                                                 bool computeNodes, bool computeEdges,
+                                                 QObject *parent)
+    : CachedPropertyAnimation<LayoutProperty, Coord, vector<Coord> >(
+          g, start, end, out, selection, frameCount, computeNodes, computeEdges, parent) {}
 
-Coord LayoutPropertyAnimation::getNodeFrameValue(const Coord &startValue, const Coord &endValue, int frame) {
+Coord LayoutPropertyAnimation::getNodeFrameValue(const Coord &startValue, const Coord &endValue,
+                                                 int frame) {
   pair<Coord, Coord> values(startValue, endValue);
-  map<pair<Coord, Coord> , Vector<double, 3> >::iterator it = steps.find(values);
+  map<pair<Coord, Coord>, Vector<double, 3> >::iterator it = steps.find(values);
   Vector<double, 3> stepVal;
 
   if (it != steps.end())
@@ -50,10 +53,11 @@ Coord LayoutPropertyAnimation::getNodeFrameValue(const Coord &startValue, const 
   return result;
 }
 
-vector<Coord> LayoutPropertyAnimation::getEdgeFrameValue(const vector<Coord> &startValue, const vector<Coord> &endValue, int frame) {
+vector<Coord> LayoutPropertyAnimation::getEdgeFrameValue(const vector<Coord> &startValue,
+                                                         const vector<Coord> &endValue, int frame) {
   vector<Coord> result;
 
-  for (unsigned i = 0; i < min<unsigned> (startValue.size(), endValue.size()); ++i)
+  for (unsigned i = 0; i < min<unsigned>(startValue.size(), endValue.size()); ++i)
     result.push_back(getNodeFrameValue(startValue[i], endValue[i], frame));
 
   return result;

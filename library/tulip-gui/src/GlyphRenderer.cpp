@@ -29,27 +29,27 @@
 using namespace tlp;
 using namespace std;
 
-GlyphRenderer* GlyphRenderer::_instance=NULL;
+GlyphRenderer *GlyphRenderer::_instance = NULL;
 
-GlyphRenderer::GlyphRenderer():_graph(newGraph()),_node(_graph->addNode()) {
-  //Init graph parameters.
+GlyphRenderer::GlyphRenderer() : _graph(newGraph()), _node(_graph->addNode()) {
+  // Init graph parameters.
   GlGraphRenderingParameters parameters;
   {
     // need a block to ensure inputData
     // will be destroyed before _graph
-    GlGraphInputData inputData(_graph,&parameters);
-    inputData.getElementSize()->setAllNodeValue(Size(1,1,1));
-    inputData.getElementColor()->setAllNodeValue(Color(192,192,192));
-    inputData.getElementBorderColor()->setAllNodeValue(Color(0,0,0));
+    GlGraphInputData inputData(_graph, &parameters);
+    inputData.getElementSize()->setAllNodeValue(Size(1, 1, 1));
+    inputData.getElementColor()->setAllNodeValue(Color(192, 192, 192));
+    inputData.getElementBorderColor()->setAllNodeValue(Color(0, 0, 0));
     inputData.getElementBorderWidth()->setAllNodeValue(1);
 
     // init previews
     std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
 
-    for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+    for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
       std::string glyphName(*it);
       int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
-      //Create the glyph preview
+      // Create the glyph preview
       render(glyphIndex);
     }
   }
@@ -63,8 +63,8 @@ GlyphRenderer::~GlyphRenderer() {
   assert(_graph = NULL);
 }
 
-GlyphRenderer& GlyphRenderer::getInst() {
-  if(_instance==NULL) {
+GlyphRenderer &GlyphRenderer::getInst() {
+  if (_instance == NULL) {
     _instance = new GlyphRenderer();
   }
 
@@ -72,11 +72,11 @@ GlyphRenderer& GlyphRenderer::getInst() {
 }
 
 QPixmap GlyphRenderer::render(unsigned int pluginId) {
-  if(_previews.find(pluginId) == _previews.end()) {
+  if (_previews.find(pluginId) == _previews.end()) {
     if (_graph) {
-      _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node,pluginId);
+      _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node, pluginId);
       GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
-      renderer->setViewPortSize(16,16);
+      renderer->setViewPortSize(16, 16);
       renderer->clearScene();
       renderer->addGraphToScene(_graph);
       renderer->getScene()->centerScene();
@@ -85,48 +85,47 @@ QPixmap GlyphRenderer::render(unsigned int pluginId) {
       QImage preview = renderer->getImage();
       _previews[pluginId] = QPixmap::fromImage(preview);
       renderer->clearScene(true);
-    }
-    else
+    } else
       return QPixmap(":/tulip/gui/icons/i_invalid.png");
   }
 
   return _previews[pluginId];
 }
 
-EdgeExtremityGlyphRenderer* EdgeExtremityGlyphRenderer::_instance = NULL;
-EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer():_graph(newGraph()) {
-  //No edge extremity pixmap
+EdgeExtremityGlyphRenderer *EdgeExtremityGlyphRenderer::_instance = NULL;
+EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer() : _graph(newGraph()) {
+  // No edge extremity pixmap
   _previews[EdgeExtremityShape::None] = QPixmap();
 
-  //Init graph.
+  // Init graph.
   GlGraphRenderingParameters parameters;
-  GlGraphInputData inputData(_graph,&parameters);
-  inputData.getElementSize()->setAllNodeValue(Size(0.01f,0.2f,0.1f));
-  inputData.getElementSize()->setAllEdgeValue(Size(0.125f,0.125f,0.125f));
-  inputData.getElementColor()->setAllNodeValue(Color(255,255,255,0));
-  inputData.getElementBorderColor()->setAllNodeValue(Color(255,255,255,0));
-  inputData.getElementColor()->setAllEdgeValue(Color(192,192,192));
-  inputData.getElementBorderColor()->setAllEdgeValue(Color(0,0,0));
+  GlGraphInputData inputData(_graph, &parameters);
+  inputData.getElementSize()->setAllNodeValue(Size(0.01f, 0.2f, 0.1f));
+  inputData.getElementSize()->setAllEdgeValue(Size(0.125f, 0.125f, 0.125f));
+  inputData.getElementColor()->setAllNodeValue(Color(255, 255, 255, 0));
+  inputData.getElementBorderColor()->setAllNodeValue(Color(255, 255, 255, 0));
+  inputData.getElementColor()->setAllEdgeValue(Color(192, 192, 192));
+  inputData.getElementBorderColor()->setAllEdgeValue(Color(0, 0, 0));
   node n1 = _graph->addNode();
-  node n2= _graph->addNode();
-  _edge = _graph->addEdge(n1,n2);
-  inputData.getElementLayout()->setNodeValue(n1,Coord(0,0,0));
-  inputData.getElementLayout()->setNodeValue(n2,Coord(0.3f,0,0));
+  node n2 = _graph->addNode();
+  _edge = _graph->addEdge(n1, n2);
+  inputData.getElementLayout()->setNodeValue(n1, Coord(0, 0, 0));
+  inputData.getElementLayout()->setNodeValue(n2, Coord(0.3f, 0, 0));
   vector<Coord> bends;
-  bends.push_back(Coord(0.01f,0,0));
+  bends.push_back(Coord(0.01f, 0, 0));
   inputData.getElementLayout()->setAllEdgeValue(bends);
 
   inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityShape::None);
-  inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2,2,1));
+  inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2, 2, 1));
 
   // init previews
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
 
-  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+  for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
     std::string glyphName(*it);
-    const tlp::Plugin& info = PluginLister::pluginInformation(glyphName);
+    const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
     int glyphIndex = info.id();
-    //Create the glyph preview
+    // Create the glyph preview
     render(glyphIndex);
   }
 
@@ -139,8 +138,8 @@ EdgeExtremityGlyphRenderer::~EdgeExtremityGlyphRenderer() {
   assert(_graph == NULL);
 }
 
-EdgeExtremityGlyphRenderer & EdgeExtremityGlyphRenderer::getInst() {
-  if(_instance==NULL) {
+EdgeExtremityGlyphRenderer &EdgeExtremityGlyphRenderer::getInst() {
+  if (_instance == NULL) {
     _instance = new EdgeExtremityGlyphRenderer();
   }
 
@@ -148,14 +147,15 @@ EdgeExtremityGlyphRenderer & EdgeExtremityGlyphRenderer::getInst() {
 }
 
 QPixmap EdgeExtremityGlyphRenderer::render(unsigned int pluginId) {
-  if(_previews.find(pluginId) == _previews.end()) {
+  if (_previews.find(pluginId) == _previews.end()) {
     if (_graph) {
-      _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge,pluginId);
+      _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge, pluginId);
       GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
-      renderer->setViewPortSize(16,16);
+      renderer->setViewPortSize(16, 16);
       renderer->clearScene();
       renderer->addGraphToScene(_graph);
-      GlGraphRenderingParameters renderingParamerters = renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
+      GlGraphRenderingParameters renderingParamerters =
+          renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
       renderingParamerters.setEdgeColorInterpolate(false);
       renderingParamerters.setEdgeSizeInterpolate(false);
       renderingParamerters.setViewArrow(true);
@@ -163,11 +163,9 @@ QPixmap EdgeExtremityGlyphRenderer::render(unsigned int pluginId) {
       renderer->renderScene(true);
       QImage preview = renderer->getImage();
       _previews[pluginId] = QPixmap::fromImage(preview);
-    }
-    else
+    } else
       return QPixmap(":/tulip/gui/icons/i_invalid.png");
   }
 
   return _previews[pluginId];
 }
-

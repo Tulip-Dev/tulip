@@ -24,16 +24,16 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-const char * paramHelp[] = {
-  // nodes
-  "Number of nodes in the final graph.",
+const char *paramHelp[] = {
+    // nodes
+    "Number of nodes in the final graph.",
 
-  // probability
-  "Probability of having an edge between each pair of vertices in the graph.",
+    // probability
+    "Probability of having an edge between each pair of vertices in the graph.",
 
-  // self loop
-  "Generate self loops (an edge with source and target on the same node) with the same probability"
-};
+    // self loop
+    "Generate self loops (an edge with source and target on the same node) with the same "
+    "probability"};
 }
 
 /** \addtogroup import */
@@ -42,24 +42,29 @@ const char * paramHelp[] = {
  *
  *  User can specify the number of nodes and the probability of having an edge between two nodes.
  */
-class ERRandomGraph:public ImportModule {
+class ERRandomGraph : public ImportModule {
 public:
-  PLUGININFORMATION("Erdős-Rényi Random Graph","Bruno Pinaud","08/09/2014","Import a randomly generated graph following the Erdős-Rényi model. Given a positive integer n and a probability value in [0,1], define the graph G(n,p) to be the undirected graph on n vertices whose edges are chosen as follows: For all pairs of vertices v,w there is an edge (v,w) with probability p.","1.0","Graph")
-  ERRandomGraph(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"50");
-    addInParameter<double>("probability",paramHelp[1],"0.5");
-    addInParameter<bool>("self loop",paramHelp[2],"false");
+  PLUGININFORMATION("Erdős-Rényi Random Graph", "Bruno Pinaud", "08/09/2014",
+                    "Import a randomly generated graph following the Erdős-Rényi model. Given a "
+                    "positive integer n and a probability value in [0,1], define the graph G(n,p) "
+                    "to be the undirected graph on n vertices whose edges are chosen as follows: "
+                    "For all pairs of vertices v,w there is an edge (v,w) with probability p.",
+                    "1.0", "Graph")
+  ERRandomGraph(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "50");
+    addInParameter<double>("probability", paramHelp[1], "0.5");
+    addInParameter<bool>("self loop", paramHelp[2], "false");
   }
 
   bool importGraph() {
     // initialize a random sequence according to the given seed
     tlp::initRandomSequence();
 
-    unsigned int nbNodes  = 50;
-    double proba  = 0.5;
+    unsigned int nbNodes = 50;
+    double proba = 0.5;
     bool self_loop = false;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("probability", proba);
       dataSet->get("self loop", self_loop);
@@ -72,41 +77,40 @@ public:
       return false;
     }
 
-    if ((proba < 0)||(proba>1)) {
+    if ((proba < 0) || (proba > 1)) {
       if (pluginProgress)
         pluginProgress->setError(string("Error: the probability must be between ]0, 1[."));
 
       return false;
     }
 
-    //add nodes
+    // add nodes
     graph->addNodes(nbNodes);
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
-    unsigned i=0;
+    unsigned i = 0;
 
-    while(i != nbNodes) {
+    while (i != nbNodes) {
       ++i;
       node u = nodes[nbNodes - i];
 
-      if (pluginProgress&&pluginProgress->progress(i, nbNodes) != TLP_CONTINUE)
-        return pluginProgress->state()!=TLP_CANCEL;
+      if (pluginProgress && pluginProgress->progress(i, nbNodes) != TLP_CONTINUE)
+        return pluginProgress->state() != TLP_CANCEL;
 
       for (unsigned int j = 0; j < nbNodes - i + 1; ++j) {
         node v = nodes[j];
 
-        if((u==v)&&(!self_loop))
+        if ((u == v) && (!self_loop))
           continue;
 
-        if(tlp::randomDouble()<proba) {
-          graph->addEdge(u,v);
+        if (tlp::randomDouble() < proba) {
+          graph->addEdge(u, v);
         }
       }
     }
 
     return true;
   }
-
 };
 
 PLUGIN(ERRandomGraph)

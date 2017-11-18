@@ -31,12 +31,10 @@
 // when loading plugins
 class PluginLoaderTest : public tlp::PluginLoaderTxt {
 public:
-
   PluginLoaderTest() : allPluginsLoaded(true) {}
 
   void aborted(const std::string &filename, const std::string &errormsg) {
-    const std::string& libName = 
-      tlp::PluginLibraryLoader::getCurrentPluginFileName();
+    const std::string &libName = tlp::PluginLibraryLoader::getCurrentPluginFileName();
     // plugins may be loaded twice because it may exist an other version
     // of the plugins in a CMakeFiles sub dir (/CMakeRelink.dir)
     // So set the failure flag only if the plugin was not found
@@ -55,30 +53,30 @@ public:
 // This can be helpfull to catch possible segfaults or memory leaks.
 int main(int argc, char **argv) {
 
-    // we need to create a QApplication as some plugins (view, perspective, interactor)
-    // need one to load correctly
-    QApplication app(argc, argv);
+  // we need to create a QApplication as some plugins (view, perspective, interactor)
+  // need one to load correctly
+  QApplication app(argc, argv);
 
-    std::string tulipBuildDir = TULIP_BUILD_DIR;
+  std::string tulipBuildDir = TULIP_BUILD_DIR;
 
-    tlp::initTulipLib();
+  tlp::initTulipLib();
 
-    // load all plugins from the Tulip build folder
-    PluginLoaderTest pLoader;
-    tlp::PluginLibraryLoader::loadPluginsFromDir(tulipBuildDir + "/plugins", &pLoader);
+  // load all plugins from the Tulip build folder
+  PluginLoaderTest pLoader;
+  tlp::PluginLibraryLoader::loadPluginsFromDir(tulipBuildDir + "/plugins", &pLoader);
 
-    // create an instance of each of them, then destroy it
-    std::list<std::string> pluginNames = tlp::PluginLister::instance()->availablePlugins();
-    std::list<std::string>::const_iterator it = pluginNames.begin();
-    for(; it != pluginNames.end() ; ++it) {
-      tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, NULL);
-      delete plugin;
-    }
+  // create an instance of each of them, then destroy it
+  std::list<std::string> pluginNames = tlp::PluginLister::instance()->availablePlugins();
+  std::list<std::string>::const_iterator it = pluginNames.begin();
+  for (; it != pluginNames.end(); ++it) {
+    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, NULL);
+    delete plugin;
+  }
 
-    // test is successfull if there was no plugin loading issue
-    if (pLoader.allPluginsLoaded) {
-      return EXIT_SUCCESS;
-    } else {
-      return EXIT_FAILURE;
-    }
+  // test is successfull if there was no plugin loading issue
+  if (pLoader.allPluginsLoaded) {
+    return EXIT_SUCCESS;
+  } else {
+    return EXIT_FAILURE;
+  }
 }

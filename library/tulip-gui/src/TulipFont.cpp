@@ -29,7 +29,7 @@
 
 using namespace tlp;
 
-QMap<QString,int> TulipFont::FONT_IDS = QMap<QString,int>();
+QMap<QString, int> TulipFont::FONT_IDS = QMap<QString, int>();
 
 QString TulipFont::tulipFontsDirectory() {
   return tlpStringToQString(TulipBitmapDir) + "fonts/";
@@ -39,16 +39,19 @@ QStringList TulipFont::installedFontNames() {
   QStringList result;
   QDir installedFontsDir(tulipFontsDirectory());
 
-  foreach(const QFileInfo& fontDirInfo, installedFontsDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs)) {
+  foreach (const QFileInfo &fontDirInfo,
+           installedFontsDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs)) {
     QString fontName(fontDirInfo.fileName());
     // sanity checks
-    TulipFont normalFont(fontName), boldFont(normalFont), italicFont(normalFont), boldItalicFont(normalFont);
+    TulipFont normalFont(fontName), boldFont(normalFont), italicFont(normalFont),
+        boldItalicFont(normalFont);
     boldFont.setBold(true);
     italicFont.setItalic(true);
     boldItalicFont.setBold(true);
     boldItalicFont.setItalic(true);
 
-    if (!normalFont.exists() || !boldFont.exists() || !italicFont.exists() || !boldItalicFont.exists())
+    if (!normalFont.exists() || !boldFont.exists() || !italicFont.exists() ||
+        !boldItalicFont.exists())
       continue;
 
     result << fontName;
@@ -66,7 +69,7 @@ TulipFont TulipFont::fromFile(const QString &path) {
   return result;
 }
 
-TulipFont& TulipFont::operator=(const TulipFont& other) {
+TulipFont &TulipFont::operator=(const TulipFont &other) {
   _bold = other._bold;
   _italic = other._italic;
   _fontName = other._fontName;
@@ -74,15 +77,16 @@ TulipFont& TulipFont::operator=(const TulipFont& other) {
   return *this;
 }
 
-TulipFont::TulipFont(const TulipFont& other): QObject(other.parent()),_bold(other._bold), _italic(other._italic), _fontName(other._fontName), _fontFile(other._fontFile) {
+TulipFont::TulipFont(const TulipFont &other)
+    : QObject(other.parent()), _bold(other._bold), _italic(other._italic),
+      _fontName(other._fontName), _fontFile(other._fontFile) {}
 
-}
-
-TulipFont::TulipFont(const QString fontName, QObject *parent): QObject(parent), _bold(false), _italic(false), _fontName(fontName) {
+TulipFont::TulipFont(const QString fontName, QObject *parent)
+    : QObject(parent), _bold(false), _italic(false), _fontName(fontName) {
   refreshFontFile();
 }
 
-TulipFont::TulipFont(QObject *parent): QObject(parent), _bold(false), _italic(false) {
+TulipFont::TulipFont(QObject *parent) : QObject(parent), _bold(false), _italic(false) {
   refreshFontFile();
 }
 
@@ -98,14 +102,13 @@ QString TulipFont::fontName() const {
   return _fontName;
 }
 
-int TulipFont::fontId(const QString& path) {
+int TulipFont::fontId(const QString &path) {
   int result = -1;
 
   if (!FONT_IDS.contains(path)) {
     result = QFontDatabase::addApplicationFont(path);
     FONT_IDS[path] = result;
-  }
-  else {
+  } else {
     result = FONT_IDS[path];
   }
 
@@ -140,7 +143,7 @@ void TulipFont::setBold(bool b) {
   refreshFontFile();
 }
 
-void TulipFont::setFontName(const QString& n) {
+void TulipFont::setFontName(const QString &n) {
   _fontName = n;
   refreshFontFile();
 }

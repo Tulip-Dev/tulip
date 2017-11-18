@@ -25,17 +25,15 @@ using namespace std;
 using namespace tlp;
 
 //====================================================================
-NodeMetric::NodeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-}
+NodeMetric::NodeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
 // structure below is used to implement dfs loop
 struct dfsStruct {
   node current;
-  Iterator<node>* outNodes;
+  Iterator<node> *outNodes;
   double res;
 
-  dfsStruct(node n, Iterator<node>* nodes):
-    current(n), outNodes(nodes), res(1.0) {}
+  dfsStruct(node n, Iterator<node> *nodes) : current(n), outNodes(nodes), res(1.0) {}
 };
 //=======================================================================
 // original recursive algorithm
@@ -58,12 +56,12 @@ double NodeMetric::getNodeValue(tlp::node current) {
 
   // dfs loop
   stack<dfsStruct> dfsLevels;
-  Iterator<node>* outNodes = graph->getOutNodes(current);
+  Iterator<node> *outNodes = graph->getOutNodes(current);
   dfsStruct dfsParams(current, outNodes);
   double res = 1.0;
   dfsLevels.push(dfsParams);
 
-  while(!dfsLevels.empty()) {
+  while (!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
@@ -113,18 +111,16 @@ bool NodeMetric::run() {
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
   node _n;
-  forEach(_n, graph->getNodes())
-  result->setNodeValue(_n,getNodeValue(_n));
+  forEach(_n, graph->getNodes()) result->setNodeValue(_n, getNodeValue(_n));
   return true;
 }
 //====================================================================
 bool NodeMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph)) {
-    erreurMsg="";
+    erreurMsg = "";
     return true;
-  }
-  else  {
-    erreurMsg="The graph must be acyclic.";
+  } else {
+    erreurMsg = "The graph must be acyclic.";
     return false;
   }
 }

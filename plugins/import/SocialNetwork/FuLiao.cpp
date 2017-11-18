@@ -25,16 +25,15 @@
 using namespace std;
 using namespace tlp;
 
-const char * paramHelp[] = {
-  // n
-  "Number of nodes.",
+const char *paramHelp[] = {
+    // n
+    "Number of nodes.",
 
-  // m
-  "Number of nodes added at each time step.",
+    // m
+    "Number of nodes added at each time step.",
 
-  // m
-  "Delta coefficient must belong to [0, 1]"
-};
+    // m
+    "Delta coefficient must belong to [0, 1]"};
 
 /**
  *
@@ -45,21 +44,25 @@ const char * paramHelp[] = {
  * In ICARCV, pp. 1-4. IEEE, (2006).
  *
  */
-struct FuLiao:public ImportModule {
-  PLUGININFORMATION("Fu and Liao Model","Arnaud Sallaberry","21/02/2011","Randomly generates a scale-free graph using<br/>Peihua Fu and Kun Liao.<br/><b>An evolving scale-free network with large clustering coefficient.</b><br/>In ICARCV, pp. 1-4. IEEE, (2006).", "1.0", "Social network")
+struct FuLiao : public ImportModule {
+  PLUGININFORMATION("Fu and Liao Model", "Arnaud Sallaberry", "21/02/2011",
+                    "Randomly generates a scale-free graph using<br/>Peihua Fu and Kun "
+                    "Liao.<br/><b>An evolving scale-free network with large clustering "
+                    "coefficient.</b><br/>In ICARCV, pp. 1-4. IEEE, (2006).",
+                    "1.0", "Social network")
 
-  FuLiao(PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"300");
-    addInParameter<unsigned int>("m",paramHelp[1],"5");
-    addInParameter<double>("delta",paramHelp[2],"0.5");
+  FuLiao(PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "300");
+    addInParameter<unsigned int>("m", paramHelp[1], "5");
+    addInParameter<double>("delta", paramHelp[2], "0.5");
   }
 
   bool importGraph() {
-    unsigned int n  = 300;
-    unsigned int m  = 5;
-    double d  = 0.5;
+    unsigned int n = 300;
+    unsigned int m = 5;
+    double d = 0.5;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", n);
       dataSet->get("m", m);
       dataSet->get("delta", d);
@@ -79,21 +82,21 @@ struct FuLiao:public ImportModule {
      */
     unsigned int m0 = 3;
     graph->addNodes(n);
-    const vector<node>& nodes = graph->nodes();
+    const vector<node> &nodes = graph->nodes();
 
-    for (i=1; i<m0 ; ++i) {
-      graph->addEdge(nodes[i-1],nodes[i]);
+    for (i = 1; i < m0; ++i) {
+      graph->addEdge(nodes[i - 1], nodes[i]);
     }
 
-    graph->addEdge(nodes[m0-1],nodes[0]);
+    graph->addEdge(nodes[m0 - 1], nodes[0]);
 
     /*
      * Main loop
      */
-    for (i=m0; i<n ; ++i) {
+    for (i = m0; i < n; ++i) {
       double k_sum = 0;
 
-      for(j=0; j<i ; ++j) {
+      for (j = 0; j < i; ++j) {
         k_sum += graph->deg(nodes[j]);
       }
 
@@ -102,26 +105,26 @@ struct FuLiao:public ImportModule {
       unsigned int rn = 0;
       double pr = tlp::randomDouble();
 
-      while (pr_sum<pr && rn<(i-1)) {
-        if(!graph->hasEdge(nodes[i],nodes[rn])) {
-          pr_sum += double(graph->deg(nodes[rn]))/k_sum;
+      while (pr_sum < pr && rn < (i - 1)) {
+        if (!graph->hasEdge(nodes[i], nodes[rn])) {
+          pr_sum += double(graph->deg(nodes[rn])) / k_sum;
         }
 
         ++rn;
       }
 
-      graph->addEdge(nodes[i],nodes[rn]);
+      graph->addEdge(nodes[i], nodes[rn]);
 
       // add other edges
-      for(j=1; j<m ; ++j) {
+      for (j = 1; j < m; ++j) {
         rn = 0;
         double h_sum = 0;
 
-        while (rn<(i-1)) {
-          if(!graph->hasEdge(nodes[i],nodes[rn])) {
+        while (rn < (i - 1)) {
+          if (!graph->hasEdge(nodes[i], nodes[rn])) {
             node v;
             forEach(v, graph->getInOutNodes(nodes[rn])) {
-              if(graph->hasEdge(nodes[i],v)) {
+              if (graph->hasEdge(nodes[i], v)) {
                 h_sum++;
               }
             }
@@ -134,23 +137,23 @@ struct FuLiao:public ImportModule {
         rn = 0;
         pr = tlp::randomDouble();
 
-        while (pr_sum<pr && rn<(i-1)) {
-          if(!graph->hasEdge(nodes[i],nodes[rn])) {
+        while (pr_sum < pr && rn < (i - 1)) {
+          if (!graph->hasEdge(nodes[i], nodes[rn])) {
             double h = 0;
             node v;
             forEach(v, graph->getInOutNodes(nodes[rn])) {
-              if(graph->hasEdge(nodes[i],v)) {
+              if (graph->hasEdge(nodes[i], v)) {
                 h++;
               }
             }
-            pr_sum = pr_sum + (1.0-d)*graph->deg(nodes[rn])/(k_sum+j) + d*(h/h_sum);
+            pr_sum = pr_sum + (1.0 - d) * graph->deg(nodes[rn]) / (k_sum + j) + d * (h / h_sum);
           }
 
           ++rn;
         }
 
         --rn;
-        graph->addEdge(nodes[i],nodes[rn]);
+        graph->addEdge(nodes[i], nodes[rn]);
       }
     }
 

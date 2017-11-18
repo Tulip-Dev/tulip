@@ -41,12 +41,10 @@ class GlyphContext : public PluginContext {
 public:
   GlGraphInputData *glGraphInputData;
   ///
-  GlyphContext(Graph ** =NULL, GlGraphInputData *glGraphInputData=NULL, int =5, int =5):
-    glGraphInputData(glGraphInputData) {
-  }
+  GlyphContext(Graph ** = NULL, GlGraphInputData *glGraphInputData = NULL, int = 5, int = 5)
+      : glGraphInputData(glGraphInputData) {}
   ///
-  ~GlyphContext() {
-  }
+  ~GlyphContext() {}
 };
 //==========================================================
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
@@ -58,33 +56,34 @@ public:
     return ":/tulip/gui/icons/32/plugin_glyph.png";
   }
 
-  Glyph(const tlp::PluginContext* context);
+  Glyph(const tlp::PluginContext *context);
   virtual ~Glyph();
 
   virtual std::string getGroup() const {
     return "";
   }
 
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-    boundingBox[0] = Coord(-0.5,-0.5,-0.5);
-    boundingBox[1] = Coord(0.5,0.5,0.5);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node) {
+    boundingBox[0] = Coord(-0.5, -0.5, -0.5);
+    boundingBox[1] = Coord(0.5, 0.5, 0.5);
   }
 
-  virtual void getTextBoundingBox(BoundingBox &boundingBox,node n) {
-    getIncludeBoundingBox(boundingBox,n);
+  virtual void getTextBoundingBox(BoundingBox &boundingBox, node n) {
+    getIncludeBoundingBox(boundingBox, n);
   }
 
-  virtual void draw(node,float)=0;
+  virtual void draw(node, float) = 0;
   /*
    * return a point where an edge coming from "from" can be attached
    * by default, the point will be on the surface of the largest sphere contained
    * inside the unit cube (before scaling).
    */
-  virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from,
-                          const Size &scale, const double zRotation) const;
+  virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale,
+                          const double zRotation) const;
 
   /**
-   * Return if the Glyph render its label (return true) or if GlNode have to render label (return false)
+   * Return if the Glyph render its label (return true) or if GlNode have to render label (return
+   * false)
    */
   virtual bool renderLabel() {
     return false;
@@ -103,14 +102,15 @@ protected:
    */
   virtual Coord getAnchor(const Coord &vector) const;
 };
-
 }
 
-#define GLYPHINFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, ID) \
-PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")\
-int id() const { return ID; }
+#define GLYPHINFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, ID)                                    \
+  PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")                                         \
+  int id() const {                                                                                 \
+    return ID;                                                                                     \
+  }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 
-#endif //GLYPH_H
+#endif // GLYPH_H
 ///@endcond

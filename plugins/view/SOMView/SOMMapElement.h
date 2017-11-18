@@ -27,7 +27,8 @@
 
 /**
  * @brief GlComposite used to visualize a SOM.
- * GlComposite used to visualize a SOM. This object take a SOM and the the ColorProperty defining the color of each node of the map and print them.
+ * GlComposite used to visualize a SOM. This object take a SOM and the the ColorProperty defining
+ * the color of each node of the map and print them.
  * If the SOM is hexagonal kind print hexagonal glyph else print sqaure.
  */
 namespace tlp {
@@ -35,10 +36,9 @@ namespace tlp {
 class SOMMap;
 class ColorProperty;
 
-class SOMMapElement: public tlp::GlComposite {
+class SOMMapElement : public tlp::GlComposite {
 public:
-  SOMMapElement(Coord position, Size size, SOMMap *map,
-                ColorProperty *colorProperty);
+  SOMMapElement(Coord position, Size size, SOMMap *map, ColorProperty *colorProperty);
   virtual ~SOMMapElement();
 
   tlp::Coord getTopLeftPositionForElement(unsigned int x, unsigned int y);
@@ -49,8 +49,7 @@ public:
    * @param map the new SOM
    * @param cp the new color property
    */
-  void setData(SOMMap* map, ColorProperty* cp);
-
+  void setData(SOMMap *map, ColorProperty *cp);
 
   /**
    * Change the colors of the som representation with those in the given property;
@@ -59,18 +58,15 @@ public:
   void updateColors(ColorProperty *newColor);
 
 protected:
-
   void computeNodeAreaSize();
 
-  float computeMaximizedRadiusForHexagone(unsigned int width,
-                                          unsigned int height, Size& size);
+  float computeMaximizedRadiusForHexagone(unsigned int width, unsigned int height, Size &size);
 
-  void buildMainComposite(Coord topLeft, Size elementSize,
-                          SOMMap* map);
+  void buildMainComposite(Coord topLeft, Size elementSize, SOMMap *map);
 
-  SOMMap* som;
+  SOMMap *som;
 
-  std::map<node, GlSimpleEntity*> nodesMap;
+  std::map<node, GlSimpleEntity *> nodesMap;
 
   Coord position;
   Size size;

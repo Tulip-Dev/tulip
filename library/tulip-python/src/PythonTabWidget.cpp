@@ -26,17 +26,20 @@
 
 using namespace tlp;
 
-PythonTabWidget::PythonTabWidget(QWidget *parent) : QTabWidget(parent), _drawGradient(false), _textColor(QColor(100, 100, 100)) {}
+PythonTabWidget::PythonTabWidget(QWidget *parent)
+    : QTabWidget(parent), _drawGradient(false), _textColor(QColor(100, 100, 100)) {}
 
-void PythonTabWidget::paintEvent(QPaintEvent * event) {
+void PythonTabWidget::paintEvent(QPaintEvent *event) {
   QTabWidget::paintEvent(event);
   static QImage pythonLogoImg(":/tulip/python/icons/python.png");
   static QString pythonVersion(PythonInterpreter::getInstance()->getPythonVersionStr());
   QPainter painter(this);
-  painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+  painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing |
+                         QPainter::SmoothPixmapTransform);
 
   if (_drawGradient) {
-    QLinearGradient gradient(width()/2,tabBar()->pos().y(),width()/2,tabBar()->pos().y()+tabBar()->height());
+    QLinearGradient gradient(width() / 2, tabBar()->pos().y(), width() / 2,
+                             tabBar()->pos().y() + tabBar()->height());
     gradient.setColorAt(0.0, "#838383");
     gradient.setColorAt(0.4, "#707070");
     gradient.setColorAt(0.401, "#636363");
@@ -53,8 +56,9 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   int imageWidth = int(25 * tabBar()->height() / 27.0);
   int labelWidth = int(80 * tabBar()->height() / 27.0);
   int offset = tabBar()->height() - imageWidth;
-  QRectF rect(width()-(imageWidth+labelWidth), tabBar()->pos().y()+offset/2, imageWidth, imageWidth);
-  QRectF rect2(width()-labelWidth, tabBar()->pos().y(), labelWidth, tabBar()->height());
+  QRectF rect(width() - (imageWidth + labelWidth), tabBar()->pos().y() + offset / 2, imageWidth,
+              imageWidth);
+  QRectF rect2(width() - labelWidth, tabBar()->pos().y(), labelWidth, tabBar()->height());
   painter.drawImage(rect, pythonLogoImg);
-  painter.drawText(rect2,  Qt::AlignCenter, QString("Python ") + pythonVersion) ;
+  painter.drawText(rect2, Qt::AlignCenter, QString("Python ") + pythonVersion);
 }

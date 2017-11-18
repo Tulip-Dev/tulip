@@ -40,7 +40,6 @@
 #include "PixelOrientedOverview.h"
 #include "PixelOrientedOptionsWidget.h"
 
-
 namespace tlp {
 
 class ViewGraphPropertiesSelectionWidget;
@@ -50,11 +49,14 @@ class PixelOrientedViewQuickAccessBar;
 /** \file
  *  \brief  Tulip Pixel Oriented View
 
- * This view plugin allows to visualize graph properties using pixel oriented visualization techniques.
+ * This view plugin allows to visualize graph properties using pixel oriented visualization
+ techniques.
  * This type of visualization aims to use each pixel of the display to visualize one data value
  * and therefore allow the visualization of the largest amount of data possible.
- * Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.
- * The technique uses a linear order on data elements (graph nodes), inferred from a selected property,
+ * Pixels are mapped so that neighbor pixels in the data are placed close to each other on the
+ screen.
+ * The technique uses a linear order on data elements (graph nodes), inferred from a selected
+ property,
  * which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion
  * of the plane then uses a “space-filling curve”.
  *
@@ -68,29 +70,36 @@ class PixelOrientedView : public GlMainView {
   Q_OBJECT
 
   void registerTriggers();
-  PixelOrientedViewQuickAccessBar* _bar;
+  PixelOrientedViewQuickAccessBar *_bar;
 
-public :
-
+public:
   PLUGININFORMATION(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
-                    "<p>The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.</p>"
-                    "<p>This type of visualization aims to use each pixel of the display to visualize one data value and therefore allows the visualization of the largest amount of data possible. "
-                    "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.</p>"
-                    "<p>The technique uses a linear order on data elements (graph nodes), inferred from a selected property, which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion of the plane then uses a \"space-filling curve\"</p>", "1.0","View")
+                    "<p>The Pixel Oriented view allows to visualize graph properties using pixel "
+                    "oriented visualization techniques.</p>"
+                    "<p>This type of visualization aims to use each pixel of the display to "
+                    "visualize one data value and therefore allows the visualization of the "
+                    "largest amount of data possible. "
+                    "Pixels are mapped so that neighbor pixels in the data are placed close to "
+                    "each other on the screen.</p>"
+                    "<p>The technique uses a linear order on data elements (graph nodes), inferred "
+                    "from a selected property, which can be seen as a map from the data space onto "
+                    "a line segment. The mapping onto a 2D portion of the plane then uses a "
+                    "\"space-filling curve\"</p>",
+                    "1.0", "View")
 
   PixelOrientedView(const PluginContext *);
   ~PixelOrientedView();
   std::string icon() const {
     return ":/pixel_oriented_view.png";
   }
-  QuickAccessBar* getQuickAccessBarImpl();
+  QuickAccessBar *getQuickAccessBarImpl();
   void setState(const DataSet &dataSet);
   DataSet state() const;
   Graph *getPixelOrientedGraph() {
     return pixelOrientedGraph;
   }
   QList<QWidget *> configurationWidgets() const;
-  void interactorsInstalled(const QList<tlp::Interactor*>&);
+  void interactorsInstalled(const QList<tlp::Interactor *> &);
 
   void toggleInteractors(const bool activate);
   bool interactorsEnabled() const {
@@ -116,8 +125,7 @@ public slots:
   // inherited from GlMainView
   virtual void centerView(bool = false);
 
-private :
-
+private:
   void initPixelView();
   void destroyData();
   void destroyOverviewsIfNeeded();
@@ -184,6 +192,5 @@ private :
 
   bool isConstruct;
 };
-
 }
 #endif /* DATACUBEVIEW_H_ */

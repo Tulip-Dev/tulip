@@ -31,15 +31,16 @@ class StringPropertyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(simpleVectorTest);
   CPPUNIT_TEST(complexVectorTest);
   CPPUNIT_TEST_SUITE_END();
+
 private:
-  tlp::Graph* graph;
+  tlp::Graph *graph;
+
 public:
   void setUp();
   void tearDown();
 
   void simpleVectorTest();
   void complexVectorTest();
-
 };
 
 #endif // STRINGPROPERTYTEST_H

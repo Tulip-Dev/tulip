@@ -34,11 +34,12 @@ class MutableContainerTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testFindAll);
   CPPUNIT_TEST(testCompression);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::MutableContainer<bool> *mutBool;
   tlp::MutableContainer<double> *mutDouble;
   tlp::MutableContainer<std::string> *mutString;
-  static const unsigned int NBTEST=1000;
+  static const unsigned int NBTEST = 1000;
 
 public:
   void setUp();

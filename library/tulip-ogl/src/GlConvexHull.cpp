@@ -29,20 +29,14 @@ using namespace std;
 
 namespace tlp {
 
-GlConvexHull::GlConvexHull(const vector<Coord> &points,
-                           const vector<Color> &fcolors,
-                           const vector<Color> &ocolors,
-                           const bool filled,
-                           const bool outlined,
-                           const string &name,
-                           const bool computeHull):
+GlConvexHull::GlConvexHull(const vector<Coord> &points, const vector<Color> &fcolors,
+                           const vector<Color> &ocolors, const bool filled, const bool outlined,
+                           const string &name, const bool computeHull)
+    :
 
-  _points(points),
-  _fillColors(fcolors),
-  _outlineColors(ocolors),
-  _filled(filled),
-  _outlined(outlined),
-  _name(name) {
+      _points(points),
+      _fillColors(fcolors), _outlineColors(ocolors), _filled(filled), _outlined(outlined),
+      _name(name) {
 
   assert(points.size() >= 3);
 
@@ -53,8 +47,9 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points,
     // build new points
     vector<Coord> points;
 
-    for (vector<unsigned int>::const_iterator it = convexHullIdxs.begin(); it != convexHullIdxs.end(); ++it) {
-      unsigned i=*it;
+    for (vector<unsigned int>::const_iterator it = convexHullIdxs.begin();
+         it != convexHullIdxs.end(); ++it) {
+      unsigned i = *it;
       points.push_back(_points[i]);
       boundingBox.expand(_points[i]);
     }
@@ -63,7 +58,7 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points,
   }
 }
 
-void GlConvexHull::draw(float,Camera *) {
+void GlConvexHull::draw(float, Camera *) {
   glEnable(GL_BLEND);
 
   if (_filled) {
@@ -75,7 +70,7 @@ void GlConvexHull::draw(float,Camera *) {
     else
       glBegin(GL_POLYGON);
 
-    for(unsigned int i=0; i < _points.size(); ++i) {
+    for (unsigned int i = 0; i < _points.size(); ++i) {
       if (i < _fillColors.size()) {
         setMaterial(_fillColors[i]);
       }
@@ -90,7 +85,7 @@ void GlConvexHull::draw(float,Camera *) {
   if (_outlined) {
     glBegin(GL_LINE_LOOP);
 
-    for(unsigned int i=0; i < _points.size(); ++i) {
+    for (unsigned int i = 0; i < _points.size(); ++i) {
       if (i < _outlineColors.size()) {
         setColor(_outlineColors[i]);
       }
@@ -119,23 +114,22 @@ static Color darkerColor(Color c) {
   return dc;
 }
 
-ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
-    std::vector<Color> fColors,
-    std::vector<Color> oColors,
-    bool deducedFromChilds,
-    Graph *root,
-    unsigned int depth) {
-  //vector<GlConvexHull *> convexHulls;
+ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
+                                                            std::vector<Color> fColors,
+                                                            std::vector<Color> oColors,
+                                                            bool deducedFromChilds, Graph *root,
+                                                            unsigned int depth) {
+  // vector<GlConvexHull *> convexHulls;
   Graph *sg;
-  //vector<GlConvexHull *> sgConvexHulls;
-  ConvexHullItem *convexHullItem=new ConvexHullItem;
+  // vector<GlConvexHull *> sgConvexHulls;
+  ConvexHullItem *convexHullItem = new ConvexHullItem;
   convexHullItem->_graph = graph;
-  graph->getAttributes().get("name",convexHullItem->name);
+  graph->getAttributes().get("name", convexHullItem->name);
 
-  if(convexHullItem->name=="") {
+  if (convexHullItem->name == "") {
     std::stringstream s;
     s << graph->getId();
-    convexHullItem->name=s.str();
+    convexHullItem->name = s.str();
   }
 
   if (root == 0)
@@ -156,18 +150,15 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     oColors.push_back(Color(100, 100, 100, 120));
   }
 
-
-
   // build convex hulls from subgraphs
   forEach(sg, graph->getSubGraphs()) {
     ////
-    //if(sg->numberOfNodes() <= 1) continue;
+    // if(sg->numberOfNodes() <= 1) continue;
 
     ////
-    ConvexHullItem *child=
-      buildConvexHullsFromHierarchy(sg, fColors, oColors,
-                                    deducedFromChilds, root, depth + 1);
-    ///vector<GlConvexHull *>::const_iterator it = sgAllConvexHulls.begin();
+    ConvexHullItem *child =
+        buildConvexHullsFromHierarchy(sg, fColors, oColors, deducedFromChilds, root, depth + 1);
+    /// vector<GlConvexHull *>::const_iterator it = sgAllConvexHulls.begin();
 
     // first one (if any) is the direct subgraph convex hull
     // (others are for subgraphs of this subgraph)
@@ -181,22 +172,21 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     /*for (;it != sgAllConvexHulls.end(); it++) {
       convexHulls.push_back(*it);
       }*/
-
   }
 
   // filled and outline colors determination
-  Color fColor = fColors[depth%fColors.size()];
-  Color oColor = oColors[depth%oColors.size()];
-  unsigned int i = depth/fColors.size();
+  Color fColor = fColors[depth % fColors.size()];
+  Color oColor = oColors[depth % oColors.size()];
+  unsigned int i = depth / fColors.size();
 
-  while(i > 0) {
+  while (i > 0) {
     fColor = darkerColor(fColor);
     i--;
   }
 
-  i = depth/oColors.size();
+  i = depth / oColors.size();
 
-  while(i > 0) {
+  while (i > 0) {
     oColor = darkerColor(oColor);
     i--;
   }
@@ -243,7 +233,8 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       }
       // add a GlConvexHull for this graph in front of gConvexHulls
       convexHulls.insert(convexHulls.begin(), 1,
-       new GlConvexHull(gConvexHull, filledColors, outColors, true, true,graph->getAttribute<string>("name"),
+       new GlConvexHull(gConvexHull, filledColors, outColors, true,
+    true,graph->getAttribute<string>("name"),
                         // convex hull is already computed
             false));
     } else {*/
@@ -260,9 +251,9 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       float bendsl = FLT_MAX;
       forEach(n, graph->getNodes()) {
         // get node coordinates
-        const Coord& point = layout->getNodeValue(n);
+        const Coord &point = layout->getNodeValue(n);
         // get size of bounding box
-        const Size& box = size->getNodeValue(n);
+        const Size &box = size->getNodeValue(n);
         // get box rotation in degree
         double alpha = rot->getNodeValue(n);
         // convert in radian
@@ -274,10 +265,10 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
         // add 10%
         float hl;
 
-        if (hh/10. < hw/10.)
-          hl = hh/10.;
+        if (hh / 10. < hw / 10.)
+          hl = hh / 10.;
         else
-          hl = hw/10.;
+          hl = hw / 10.;
 
         hh += hl;
         hw += hl;
@@ -288,7 +279,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
         // add points of rotated bounding box
         float cosA = cos(alpha);
         float sinA = sin(alpha);
-        Coord vect(0,0,-0.01f);
+        Coord vect(0, 0, -0.01f);
         vect.setX(-hw * cosA + hh * sinA);
         vect.setY(-hw * sinA - hh * cosA);
         gConvexHull.push_back(point + vect);
@@ -326,7 +317,8 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       // add a GlConvexHull for this graph in front of convexHulls
       string name;
       graph->getAttribute("name", name);
-      convexHullItem->hull = new GlConvexHull(gConvexHull, filledColors, outColors, true, true, name);
+      convexHullItem->hull =
+          new GlConvexHull(gConvexHull, filledColors, outColors, true, true, name);
       convexHullItem->hull->_graph = graph;
     }
 
@@ -336,17 +328,17 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   return convexHullItem;
 }
 //====================================================
-void GlConvexHull::translate(const Coord& mouvement) {
+void GlConvexHull::translate(const Coord &mouvement) {
   boundingBox.translate(mouvement);
 
-  for(vector<Coord>::iterator it=_points.begin(); it!=_points.end(); ++it) {
-    (*it)+=mouvement;
+  for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it) {
+    (*it) += mouvement;
   }
 }
 //====================================================
 void GlConvexHull::getXML(string &outString) {
 
-  GlXMLTools::createProperty(outString,"type","GlConvexHull","GlEntity");
+  GlXMLTools::createProperty(outString, "type", "GlConvexHull", "GlEntity");
 
   GlXMLTools::getXML(outString, "points", _points);
   GlXMLTools::getXML(outString, "fillColors", _fillColors);
@@ -356,13 +348,10 @@ void GlConvexHull::getXML(string &outString) {
 }
 //====================================================
 void GlConvexHull::setWithXML(const string &inString, unsigned int &currentPosition) {
-  GlXMLTools::setWithXML(inString,currentPosition, "points",_points);
-  GlXMLTools::setWithXML(inString,currentPosition, "fillColors", _fillColors);
-  GlXMLTools::setWithXML(inString,currentPosition, "outlineColor", _outlineColors);
-  GlXMLTools::setWithXML(inString,currentPosition, "filled", _filled);
-  GlXMLTools::setWithXML(inString,currentPosition, "outlined", _outlined);
+  GlXMLTools::setWithXML(inString, currentPosition, "points", _points);
+  GlXMLTools::setWithXML(inString, currentPosition, "fillColors", _fillColors);
+  GlXMLTools::setWithXML(inString, currentPosition, "outlineColor", _outlineColors);
+  GlXMLTools::setWithXML(inString, currentPosition, "filled", _filled);
+  GlXMLTools::setWithXML(inString, currentPosition, "outlined", _outlined);
 }
-
 }
-
-

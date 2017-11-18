@@ -50,19 +50,18 @@ class BooleanProperty;
 class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer, public Observable {
 
 public:
-
   GlGraphLowDetailsRenderer(const GlGraphInputData *inputData);
 
   ~GlGraphLowDetailsRenderer();
 
-  virtual void draw(float lod,Camera* camera);
+  virtual void draw(float lod, Camera *camera);
 
-  void initSelectionRendering(RenderingEntitiesFlag ,std::map<unsigned int, SelectedEntity> &,unsigned int &) {
-    assert (false);
+  void initSelectionRendering(RenderingEntitiesFlag, std::map<unsigned int, SelectedEntity> &,
+                              unsigned int &) {
+    assert(false);
   }
 
 protected:
-
   void initEdgesArray();
   void initTexArray(unsigned int glyph, Vec2f tex[4]);
   void initNodesArray();
@@ -76,13 +75,13 @@ protected:
 
   bool buildVBO;
 
-  std::vector<Vec2f>   points;
-  std::vector<Color>   colors;
-  std::vector<GLuint>  indices;
+  std::vector<Vec2f> points;
+  std::vector<Color> colors;
+  std::vector<GLuint> indices;
 
-  std::vector<Vec2f>   quad_points;
-  std::vector<Color>   quad_colors;
-  std::vector<GLuint>  quad_indices;
+  std::vector<Vec2f> quad_points;
+  std::vector<Color> quad_colors;
+  std::vector<GLuint> quad_indices;
 
   Graph *observedGraph;
   LayoutProperty *observedLayoutProperty;

@@ -25,14 +25,14 @@ PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
 static const char *paramHelp[] = {
-  // Nodes
-  "Set of nodes from which the induced sub-graph is computed.",
-  // Use edges
-  "If true, source and target nodes of selected edges will also be added in the input set of nodes."
-};
+    // Nodes
+    "Set of nodes from which the induced sub-graph is computed.",
+    // Use edges
+    "If true, source and target nodes of selected edges will also be added in the input set of "
+    "nodes."};
 //=================================================================================
-InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* context):
-  BooleanAlgorithm(context) {
+InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context)
+    : BooleanAlgorithm(context) {
   addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
   addInParameter<bool>("Use edges", paramHelp[1], "false");
 }
@@ -41,7 +41,7 @@ bool InducedSubGraphSelection::run() {
   BooleanProperty *entrySelection = NULL;
   bool useEdges = false;
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("Nodes", entrySelection);
     dataSet->get("Use edges", useEdges);
   }
@@ -52,13 +52,13 @@ bool InducedSubGraphSelection::run() {
   // as the input selection property and the result property can be the same one,
   // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
   // of the result property are reseted to false below
-  //delete done by the forEach macro
-  Iterator<node>* itN = (result == entrySelection) ?
-                        new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) :
-                        entrySelection->getNodesEqualTo(true);
-  Iterator<edge>* itE = (result == entrySelection) ?
-                        new StableIterator<tlp::edge>(entrySelection->getEdgesEqualTo(true)) :
-                        entrySelection->getEdgesEqualTo(true);
+  // delete done by the forEach macro
+  Iterator<node> *itN = (result == entrySelection)
+                            ? new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true))
+                            : entrySelection->getNodesEqualTo(true);
+  Iterator<edge> *itE = (result == entrySelection)
+                            ? new StableIterator<tlp::edge>(entrySelection->getEdgesEqualTo(true))
+                            : entrySelection->getEdgesEqualTo(true);
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
@@ -75,13 +75,12 @@ bool InducedSubGraphSelection::run() {
       result->setNodeValue(graph->source(e), true);
       result->setNodeValue(graph->target(e), true);
     }
-  }
-  else {
+  } else {
     delete itE;
   }
 
   // now add edges whose extremities are selected to result selection
-  unsigned sel=0;
+  unsigned sel = 0;
   forEach(current, result->getNodesEqualTo(true)) {
     edge e;
     forEach(e, graph->getOutEdges(current)) {
@@ -92,8 +91,8 @@ bool InducedSubGraphSelection::run() {
     }
   }
 
-  //output some useful information
-  if (dataSet!=NULL) {
+  // output some useful information
+  if (dataSet != NULL) {
     dataSet->set("#Edges selected", sel);
   }
 

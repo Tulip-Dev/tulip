@@ -28,18 +28,22 @@ namespace tlp {
 class GlMainWidget;
 
 /**
- * @brief The GLInteractorComponent class is an InteractorComponent that can do OpenGL rendering on a GlMainWidget.
+ * @brief The GLInteractorComponent class is an InteractorComponent that can do OpenGL rendering on
+ * a GlMainWidget.
  *
- * @warning Only GLInteractorComponent that are stored into a GLInteractorComposite will be able to do OpenGL rendering. Storing them into an InteractorComposite will have no effect.
+ * @warning Only GLInteractorComponent that are stored into a GLInteractorComposite will be able to
+ * do OpenGL rendering. Storing them into an InteractorComposite will have no effect.
  *
  * GLInteractorComponent are meant to be stored into a GLInteractorComposite
  * When installed on a GlMainWidget, this interactor will have two new methods getting called:
  * @list
- * @li draw: Draws a visual feedback into the OpenGL scene. This is called after the scene was rendered
- * @li compute: Allows the interactor to do some pre-initialisation steps before the OpenGL scene is rendered.
+ * @li draw: Draws a visual feedback into the OpenGL scene. This is called after the scene was
+ * rendered
+ * @li compute: Allows the interactor to do some pre-initialisation steps before the OpenGL scene is
+ * rendered.
  * @endlist
  */
-class TLP_QT_SCOPE GLInteractorComponent: public tlp::InteractorComponent {
+class TLP_QT_SCOPE GLInteractorComponent : public tlp::InteractorComponent {
   Q_OBJECT
 public slots:
 
@@ -48,42 +52,45 @@ public slots:
    * This method is called after the scene was rendered.
    * @return true if the rendering completed sucessfully
    */
-  virtual bool draw(tlp::GlMainWidget*) {
+  virtual bool draw(tlp::GlMainWidget *) {
     return false;
   }
 
   /**
    * @brief Initializes the interactor before the scene in the given GlMainWidget is rendered
    */
-  virtual bool compute(tlp::GlMainWidget*) {
+  virtual bool compute(tlp::GlMainWidget *) {
     return false;
   }
 };
 
 /**
- * @brief The GLInteractorComposite class behaves like a InteractorComposite but is meant to store GLInteractorComponent.
- * @warning Only GLInteractorComponent that are stored into a GLInteractorComposite will be able to do OpenGL rendering. Storing them into an InteractorComposite will have no effect.
+ * @brief The GLInteractorComposite class behaves like a InteractorComposite but is meant to store
+ * GLInteractorComponent.
+ * @warning Only GLInteractorComponent that are stored into a GLInteractorComposite will be able to
+ * do OpenGL rendering. Storing them into an InteractorComposite will have no effect.
  */
-class TLP_QT_SCOPE GLInteractorComposite: public tlp::InteractorComposite {
+class TLP_QT_SCOPE GLInteractorComposite : public tlp::InteractorComposite {
   Q_OBJECT
 
 public:
-  GLInteractorComposite(const QIcon& icon, const QString& text="");
+  GLInteractorComposite(const QIcon &icon, const QString &text = "");
 
 public slots:
   /**
    * @brief Calls the compute method on every sub-components
-   * @note You can subclass this method to add custom behavior before or after components are called.
+   * @note You can subclass this method to add custom behavior before or after components are
+   * called.
    */
-  virtual void compute(tlp::GlMainWidget*);
+  virtual void compute(tlp::GlMainWidget *);
 
   /**
    * @brief Calls the draw method on every sub-components
-   * @note You can subclass this method to add custom behavior before or after components are called.
+   * @note You can subclass this method to add custom behavior before or after components are
+   * called.
    */
-  virtual void draw(tlp::GlMainWidget*);
+  virtual void draw(tlp::GlMainWidget *);
 };
-
 }
 
 #endif // GLINTERACTOR_H

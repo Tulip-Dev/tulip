@@ -22,35 +22,34 @@
 
 class PlanarityTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Planar", "Tulip team", "18/04/2012", "Tests whether a graph is planar or not.", "1.0", "Topological Test")
-  PlanarityTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
-  }
+  PLUGININFORMATION("Planar", "Tulip team", "18/04/2012", "Tests whether a graph is planar or not.",
+                    "1.0", "Topological Test")
+  PlanarityTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
   virtual bool test() {
     return tlp::PlanarityTest::isPlanar(graph);
   }
-
 };
 PLUGIN(PlanarityTest)
 
 class PlanarEmbeddingTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Planar Embedding", "Tulip team", "18/04/2012", "Tests whether a graph is a planar embedding or not.", "1.0", "Topological Test")
-  PlanarEmbeddingTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
-  }
+  PLUGININFORMATION("Planar Embedding", "Tulip team", "18/04/2012",
+                    "Tests whether a graph is a planar embedding or not.", "1.0",
+                    "Topological Test")
+  PlanarEmbeddingTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
   virtual bool test() {
     return tlp::PlanarityTest::isPlanarEmbedding(graph);
   }
-
 };
 PLUGIN(PlanarEmbeddingTest)
 
 class MakePlanarEmbedding : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Make Planar Embedding", "Tulip team", "18/04/2012", "Makes the graph a planar embedding if it is planar.", "1.0", "Topology Update")
-  MakePlanarEmbedding(const tlp::PluginContext* context) : tlp::Algorithm(context) {
-  }
+  PLUGININFORMATION("Make Planar Embedding", "Tulip team", "18/04/2012",
+                    "Makes the graph a planar embedding if it is planar.", "1.0", "Topology Update")
+  MakePlanarEmbedding(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
   virtual bool run() {
     return tlp::PlanarityTest::planarEmbedding(graph);

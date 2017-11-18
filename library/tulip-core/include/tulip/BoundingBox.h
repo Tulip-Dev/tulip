@@ -29,10 +29,13 @@ namespace tlp {
  * \brief This class represents the 3D bounding box of an object.
  * It is mostly used to determine whether or not two object are in a state of collision.
  *
- * It is defined by two 3d points, the first one (A) being the lowest point, the second (B) being the highest.
- * As a bounding box is a mathematical entity describing the lowest and highest points, whether these points are in the top-left corner or
+ * It is defined by two 3d points, the first one (A) being the lowest point, the second (B) being
+ the highest.
+ * As a bounding box is a mathematical entity describing the lowest and highest points, whether
+ these points are in the top-left corner or
  * lower-right corner depends on the axes we use.
- * Below is a crude ASCII-art description of the axes we use in our 3D world and the points where the min and max are thus positioned.
+ * Below is a crude ASCII-art description of the axes we use in our 3D world and the points where
+ the min and max are thus positioned.
  * Through the rest of this class's documentation, it will be assumed that this is the convention.
  *
  *
@@ -62,7 +65,6 @@ namespace tlp {
  */
 struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 
-
   /**
   * @brief Creates an invalid boundig box.
   * The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
@@ -77,7 +79,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param min The lower left closest point of the box.
   * @param max The higher right most farther point of the box.
   **/
-  BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
+  BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max);
 
   /**
   * @brief Returns the geometrical center of the bounding box.
@@ -108,7 +110,6 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   **/
   float depth() const;
 
-
   /**
   * @brief Expands the bounding box to one containing the vector passed as parameter.
   * If the parameter is inside the bounding box, it remains unchanged.
@@ -116,7 +117,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param coord A point in the 3D space we want the bounding box to encompass.
   * @return void
   **/
-  void expand(const tlp::Vec3f& coord);
+  void expand(const tlp::Vec3f &coord);
 
   /**
   * @brief Translates the bounding box by the displacement given by the vector passed as parameter.
@@ -124,7 +125,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param vec The displacement vector in 3D space to translate this bounding box by.
   * @return void
   **/
-  void translate(const tlp::Vec3f& vec);
+  void translate(const tlp::Vec3f &vec);
 
   /**
   * @brief Scales the bounding box, i.e. multiplying its components by a vector passed as parameter.
@@ -132,7 +133,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param factor The factor vector to scale this bounding box by.
   * @return void
   **/
-  void scale(const tlp::Vec3f& factor);
+  void scale(const tlp::Vec3f &factor);
 
   /**
   * @brief Checks whether the bounding box's lowest point is less than it's highest point.
@@ -143,34 +144,37 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   bool isValid() const;
 
   /**
-  * @brief Checks if the given vector is inside the current bounding box. If the bounding box is invalid the result is always false.
+  * @brief Checks if the given vector is inside the current bounding box. If the bounding box is
+  *invalid the result is always false.
   * @param coord A point in the 3D space.
   * @return bool Wether coord is in the bounding box.
   **/
-  bool contains(const tlp::Vec3f& coord) const;
+  bool contains(const tlp::Vec3f &coord) const;
 
   /**
-  * @brief Checks if the given bounding box is inside the current bounding box. If one of the bounding boxes is invalid the result is always false.
+  * @brief Checks if the given bounding box is inside the current bounding box. If one of the
+  *bounding boxes is invalid the result is always false.
   * @param boundingBox The bounding box to test inclusion
   * @return bool Wether boundingBox is in the bounding box.
   **/
-  bool contains(const tlp::BoundingBox& boundingBox) const;
+  bool contains(const tlp::BoundingBox &boundingBox) const;
 
   /**
-  * @brief Checks if the given bounding box intersect the current one. If one of the bounding box is invalid return false.
+  * @brief Checks if the given bounding box intersect the current one. If one of the bounding box is
+  *invalid return false.
   * @param boundingBox The bounding box to compare with.
   * @return bool Wether the bounding boxes intersect.
   **/
-  bool intersect(const tlp::BoundingBox& boundingBox) const;
+  bool intersect(const tlp::BoundingBox &boundingBox) const;
 
   /**
-  * @brief Checks if the bounding box intersects a given line segment. If the bounding box is invalid the result is always false.
+  * @brief Checks if the bounding box intersects a given line segment. If the bounding box is
+  *invalid the result is always false.
   * @param segStart the start point of the line segment on which to check intersection
   * @param segEnd the end point of the line segment on which to check intersection
   * @return bool Wether the line segment intersects the bounding box
   **/
-  bool intersect(const Vec3f& segStart, const Vec3f& segEnd) const;
-
+  bool intersect(const Vec3f &segStart, const Vec3f &segEnd) const;
 
   /**
   * @brief The vector passed as parameter is modified to contain the 8 points of the bounding box.
@@ -205,7 +209,6 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   **/
   void getCompleteBB(Vec3f bb[8]) const;
 };
-
 }
 
 #endif // Tulip_BOUNDINGBOX_H

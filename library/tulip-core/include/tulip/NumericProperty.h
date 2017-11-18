@@ -34,65 +34,65 @@ public:
    * @brief Returns the value associated with the node n in this property.
    * @param n The node for which we want to get the value of the property.
    **/
-  virtual double getNodeDoubleValue(const node n) const=0;
+  virtual double getNodeDoubleValue(const node n) const = 0;
 
   /**
    * @brief Gets the default node value of the property.
    * @return The default value of nodes.
    */
-  virtual double getNodeDoubleDefaultValue() const=0;
+  virtual double getNodeDoubleDefaultValue() const = 0;
 
   /**
    * @brief Gets the minimum value on the nodes.
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  virtual double getNodeDoubleMin(const Graph* graph = NULL)=0;
+  virtual double getNodeDoubleMin(const Graph *graph = NULL) = 0;
 
   /**
    * @brief Gets the maximum value on the nodes.
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  virtual double getNodeDoubleMax(const Graph* graph = NULL)=0;
+  virtual double getNodeDoubleMax(const Graph *graph = NULL) = 0;
 
   /**
    * @brief Returns the value associated with the edge e in this property.
    * @param e The edge for which we want to get the value of the property.
    **/
-  virtual double getEdgeDoubleValue(const edge e) const=0;
+  virtual double getEdgeDoubleValue(const edge e) const = 0;
 
   /**
    * @brief Gets the default edge value of the property.
    * @return The default value of edges.
    */
-  virtual double getEdgeDoubleDefaultValue() const=0;
+  virtual double getEdgeDoubleDefaultValue() const = 0;
 
   /**
    * @brief Gets the minimum value on the edges.
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  virtual double getEdgeDoubleMin(const Graph* graph = NULL)=0;
+  virtual double getEdgeDoubleMin(const Graph *graph = NULL) = 0;
 
   /**
    * @brief Gets the maximum value on the edges.
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  virtual double getEdgeDoubleMax(const Graph* graph = NULL)=0;
+  virtual double getEdgeDoubleMax(const Graph *graph = NULL) = 0;
 
   /**
    * @brief computes a uniform quantification for the nodes
    * associated values
    */
-  virtual void nodesUniformQuantification(unsigned int)=0;
+  virtual void nodesUniformQuantification(unsigned int) = 0;
 
   /**
    * @brief computes a uniform quantification for the edges
    * associated values
    */
-  virtual void edgesUniformQuantification(unsigned int)=0;
+  virtual void edgesUniformQuantification(unsigned int) = 0;
 
   /**
    * @brief computes a uniform quantification for the nodes/edges
@@ -110,7 +110,7 @@ public:
    * @param graph The Graph in which to create the new property.
    * @return The newly created property.
    */
-  virtual NumericProperty* copyProperty(Graph *graph) = 0;
+  virtual NumericProperty *copyProperty(Graph *graph) = 0;
 
   /**
    * @brief Gets an iterator sorting nodes according to their values in that numeric property.
@@ -118,7 +118,7 @@ public:
    * @param sg If provided, returns an iterator on the subset of nodes defined by that subgraph.
    * @return An iterator over graph nodes.
    **/
-  virtual Iterator<node>* getSortedNodes(const Graph *sg = NULL, bool ascendingOrder = true);
+  virtual Iterator<node> *getSortedNodes(const Graph *sg = NULL, bool ascendingOrder = true);
 
   /**
    * @brief Gets an iterator sorting edges according to their values in that numeric property.
@@ -127,38 +127,43 @@ public:
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge>* getSortedEdges(const Graph *sg = NULL, bool ascendingOrder = true);
+  virtual Iterator<edge> *getSortedEdges(const Graph *sg = NULL, bool ascendingOrder = true);
 
   /**
-   * @brief Gets an iterator sorting edges according to the values of their source nodes in that numeric property.
+   * @brief Gets an iterator sorting edges according to the values of their source nodes in that
+   *numeric property.
    * @since Tulip 4.8
    * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge>* getSortedEdgesBySourceValue(const Graph *sg = NULL, bool ascendingOrder = true);
+  virtual Iterator<edge> *getSortedEdgesBySourceValue(const Graph *sg = NULL,
+                                                      bool ascendingOrder = true);
 
   /**
-   * @brief Gets an iterator sorting edges according to the values of their target nodes in that numeric property.
+   * @brief Gets an iterator sorting edges according to the values of their target nodes in that
+   *numeric property.
    * @since Tulip 4.8
    * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge>* getSortedEdgesByTargetValue(const Graph *sg = NULL, bool ascendingOrder = true);
+  virtual Iterator<edge> *getSortedEdgesByTargetValue(const Graph *sg = NULL,
+                                                      bool ascendingOrder = true);
 
   /**
-   * @brief Gets an iterator sorting edges according to the values of their extremities in that numeric property.
-   * Vectors of two numbers (first element being the source node value, second one the target node value) are compared in that case.
+   * @brief Gets an iterator sorting edges according to the values of their extremities in that
+   *numeric property.
+   * Vectors of two numbers (first element being the source node value, second one the target node
+   *value) are compared in that case.
    * @since Tulip 4.8
    * @param sg If provided, returns an iterator on the subset of edges defined by that subgraph.
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge>* getSortedEdgesByExtremitiesValues(const Graph *sg = NULL, bool ascendingOrder = true);
-
+  virtual Iterator<edge> *getSortedEdgesByExtremitiesValues(const Graph *sg = NULL,
+                                                            bool ascendingOrder = true);
 };
-
 }
 
-#endif //NUMERICPROPERTY_H
+#endif // NUMERICPROPERTY_H

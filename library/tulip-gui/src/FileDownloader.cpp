@@ -5,10 +5,11 @@
 using namespace tlp;
 
 FileDownloader::FileDownloader() : QObject() {
-  connect(&_webCtrl, SIGNAL (finished(QNetworkReply*)),this, SLOT (fileDownloaded(QNetworkReply*)));
+  connect(&_webCtrl, SIGNAL(finished(QNetworkReply *)), this,
+          SLOT(fileDownloaded(QNetworkReply *)));
 }
 
-void FileDownloader::fileDownloaded(QNetworkReply* pReply) {
+void FileDownloader::fileDownloaded(QNetworkReply *pReply) {
   _downloadedData = pReply->readAll();
   pReply->deleteLater();
   emit downloaded();

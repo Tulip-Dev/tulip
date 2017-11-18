@@ -41,7 +41,8 @@ class WebDavManager : public QObject {
 public:
   /**
    * @brief Creates a new manager to create folders and upload files on a remote webdav server.
-   * All operations take the url as base for where the operations take place, e.g. calling mkdir("foo") will create
+   * All operations take the url as base for where the operations take place, e.g. calling
+   *mkdir("foo") will create
    * https://[host]/[url]/foo
    *
    * An easy way to encode your credentials in base64 is to fire up a python interpreter and type:
@@ -52,7 +53,7 @@ public:
    * @param url The base URL where to upload the files (e.g. perso/huet)
    * @param base64credentials The base64-encoded credentials : base64(username:password)
    **/
-  WebDavManager(const QString& host, const QString& url, const QString& base64credentials);
+  WebDavManager(const QString &host, const QString &url, const QString &base64credentials);
 
   /**
    * @brief Checks whether a folder already exists.
@@ -60,7 +61,7 @@ public:
    * @param folder The folder to check for presence on the remote server.
    * @return bool Whether the folder exists.
    **/
-  bool folderExists(const QString& folder);
+  bool folderExists(const QString &folder);
 
   /**
    * @brief Creates a folder on the remote server.
@@ -68,7 +69,7 @@ public:
    * @param folder The name of the folder to create.
    * @return bool Whether the operation was sucessfull.
    **/
-  bool mkdir(const QString& folder);
+  bool mkdir(const QString &folder);
 
   /**
    * @brief Uploads a file to the server.
@@ -77,9 +78,9 @@ public:
    * @param data The contents of the file to upload.
    * @return bool Whether the operation was successfull.
    **/
-  bool putFile(const QString& filename, QIODevice* data);
+  bool putFile(const QString &filename, QIODevice *data);
 
-  QDomDocument* getRemoteDescription();
+  QDomDocument *getRemoteDescription();
 
   /**
    * @brief Ensure that all operations are finished.
@@ -89,13 +90,13 @@ public:
   void finish();
 
 public slots:
-  void requestFinished(QNetworkReply* reply);
+  void requestFinished(QNetworkReply *reply);
 
 private:
+  QUrl initUrl(const QString &dest);
 
-  QUrl initUrl(const QString& dest);
-
-  QNetworkRequest initRequest(const QString & destination, QIODevice* data = NULL, QVariant mimetype = QVariant("binary/octet-stream"));
+  QNetworkRequest initRequest(const QString &destination, QIODevice *data = NULL,
+                              QVariant mimetype = QVariant("binary/octet-stream"));
 
   QString _host;
   QString _url;
@@ -106,4 +107,4 @@ private:
   bool _displayErrors;
 };
 
-#endif //WEBDAVMANAGER_H
+#endif // WEBDAVMANAGER_H

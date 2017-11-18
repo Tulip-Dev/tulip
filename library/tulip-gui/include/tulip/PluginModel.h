@@ -39,68 +39,68 @@ private:
   QList<std::string> _list;
 
 public:
-
-  SimplePluginListModel(const QList<std::string>& plugins,QObject *parent = NULL);
+  SimplePluginListModel(const QList<std::string> &plugins, QObject *parent = NULL);
   virtual ~SimplePluginListModel();
-  int columnCount ( const QModelIndex& = QModelIndex() ) const;
+  int columnCount(const QModelIndex & = QModelIndex()) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &) const;
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  QList<std::string> plugins()const;
-  std::string pluginName(const QModelIndex& index) const;
+  QList<std::string> plugins() const;
+  std::string pluginName(const QModelIndex &index) const;
 };
 
-template<typename PLUGIN>
+template <typename PLUGIN>
 class PluginModel : public tlp::TulipModel {
   struct TreeItem {
-    TreeItem(QString name, QString info = "",
-             TreeItem* parent = NULL): name(name), info(info), parent(parent) {}
+    TreeItem(QString name, QString info = "", TreeItem *parent = NULL)
+        : name(name), info(info), parent(parent) {}
     virtual ~TreeItem() {
       qDeleteAll(children);
     }
-    TreeItem* addChild(QString name, QString info = "") {
-      TreeItem* result = new TreeItem(name, info, this);
+    TreeItem *addChild(QString name, QString info = "") {
+      TreeItem *result = new TreeItem(name, info, this);
       children.push_back(result);
       return result;
     }
 
     QString name;
     QString info;
-    TreeItem* parent;
-    QList<TreeItem*> children;
+    TreeItem *parent;
+    QList<TreeItem *> children;
   };
-  TreeItem* _root;
+  TreeItem *_root;
 
   // FIXME: Non-optimized piece of crap, should be fixed
   void buildTree() {
     delete _root;
     _root = new TreeItem("root");
-    QMap<QString,QMap<QString,QStringList > > pluginTree;
+    QMap<QString, QMap<QString, QStringList> > pluginTree;
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PLUGIN>();
 
-    for(std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    for (std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
-      const Plugin& plugin = PluginLister::instance()->pluginInformation(name);
-      pluginTree[tlp::tlpStringToQString(plugin.category())][tlp::tlpStringToQString(plugin.group())].append(tlp::tlpStringToQString(name));
+      const Plugin &plugin = PluginLister::instance()->pluginInformation(name);
+      pluginTree[tlp::tlpStringToQString(plugin.category())]
+                [tlp::tlpStringToQString(plugin.group())]
+                    .append(tlp::tlpStringToQString(name));
     }
 
-    foreach(const QString& cat, pluginTree.keys()) {
-      TreeItem* catItem = _root->addChild(cat);
+    foreach (const QString &cat, pluginTree.keys()) {
+      TreeItem *catItem = _root->addChild(cat);
 
-      foreach(const QString& group, pluginTree[cat].keys()) {
-        TreeItem* groupItem = catItem;
+      foreach (const QString &group, pluginTree[cat].keys()) {
+        TreeItem *groupItem = catItem;
 
         if ((!group.isEmpty()) && (pluginTree[cat].keys().size() > 1))
           groupItem = catItem->addChild(group);
 
         // sort in case insensitive alphabetic order
-        qSort(pluginTree[cat][group].begin(),
-              pluginTree[cat][group].end(), QStringCaseCmp);
+        qSort(pluginTree[cat][group].begin(), pluginTree[cat][group].end(), QStringCaseCmp);
 
-        foreach(const QString& alg, pluginTree[cat][group]) {
-          const Plugin& plugin =
-            PluginLister::instance()->pluginInformation(tlp::QStringToTlpString(alg));
+        foreach (const QString &alg, pluginTree[cat][group]) {
+          const Plugin &plugin =
+              PluginLister::instance()->pluginInformation(tlp::QStringToTlpString(alg));
           std::string info = plugin.info();
 
           // set info only if they contain more than one word
@@ -113,10 +113,10 @@ class PluginModel : public tlp::TulipModel {
     }
   }
 
-  QList<int> indexHierarchy(TreeItem* item) const {
+  QList<int> indexHierarchy(TreeItem *item) const {
     QList<int> result;
-    TreeItem* parent = item->parent;
-    TreeItem* child = item;
+    TreeItem *parent = item->parent;
+    TreeItem *child = item;
 
     while (child != _root) {
       result.push_front(parent->children.indexOf(child));
@@ -128,7 +128,7 @@ class PluginModel : public tlp::TulipModel {
   }
 
 public:
-  explicit PluginModel(QObject *parent = NULL): TulipModel(parent), _root(NULL) {
+  explicit PluginModel(QObject *parent = NULL) : TulipModel(parent), _root(NULL) {
     buildTree();
   }
   virtual ~PluginModel() {
@@ -136,10 +136,10 @@ public:
   }
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const {
-    TreeItem* item = _root;
+    TreeItem *item = _root;
 
     if (parent.isValid())
-      item = static_cast<TreeItem*>(parent.internalPointer());
+      item = static_cast<TreeItem *>(parent.internalPointer());
 
     return item->children.size();
   }
@@ -152,31 +152,31 @@ public:
     if (!child.isValid())
       return QModelIndex();
 
-    TreeItem* childItem = static_cast<TreeItem*>(child.internalPointer());
+    TreeItem *childItem = static_cast<TreeItem *>(child.internalPointer());
 
     if (childItem->parent == _root)
       return QModelIndex();
 
     QList<int> indexes = indexHierarchy(childItem->parent);
-    int row = indexes[indexes.size()-1];
-    return createIndex(row,child.column(),childItem->parent);
+    int row = indexes[indexes.size() - 1];
+    return createIndex(row, child.column(), childItem->parent);
   }
 
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const {
-    TreeItem* parentItem = _root;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const {
+    TreeItem *parentItem = _root;
 
     if (parent.isValid()) {
-      parentItem = static_cast<TreeItem*>(parent.internalPointer());
+      parentItem = static_cast<TreeItem *>(parent.internalPointer());
     }
 
     if (row >= parentItem->children.size())
       return QModelIndex();
 
-    return createIndex(row,column,parentItem->children[row]);
+    return createIndex(row, column, parentItem->children[row]);
   }
 
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
-    TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *item = static_cast<TreeItem *>(index.internalPointer());
 
     if (role == Qt::DisplayRole)
       return item->name;
@@ -184,15 +184,17 @@ public:
       if (item->info.isEmpty())
         return item->name;
       else
-        return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>").arg(item->name + ":").arg(item->info);
-    }
-    else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
+        return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>")
+            .arg(item->name + ":")
+            .arg(item->info);
+    } else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
       QFont f;
       f.setBold(true);
       return f;
-    }
-    else if (role == Qt::DecorationRole && item->children.isEmpty() && tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
-      const tlp::Plugin& p = tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
+    } else if (role == Qt::DecorationRole && item->children.isEmpty() &&
+               tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
+      const tlp::Plugin &p =
+          tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
       QIcon icon(tlp::tlpStringToQString(p.icon()));
       return icon;
     }
@@ -200,11 +202,11 @@ public:
     return QVariant();
   }
 
-  virtual Qt::ItemFlags flags ( const QModelIndex& index ) const {
+  virtual Qt::ItemFlags flags(const QModelIndex &index) const {
     Qt::ItemFlags result(QAbstractItemModel::flags(index));
 
-    if(index.isValid()) {
-      TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
+    if (index.isValid()) {
+      TreeItem *item = static_cast<TreeItem *>(index.internalPointer());
 
       if (!PluginLister::instance()->pluginExists<PLUGIN>(tlp::QStringToTlpString(item->name)))
         result = Qt::ItemIsEnabled;

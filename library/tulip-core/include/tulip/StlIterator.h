@@ -26,20 +26,18 @@
 
 namespace tlp {
 
-template<typename VALUE, typename ITERATOR>
-struct StlIterator:public Iterator< VALUE  > {
-  StlIterator(const ITERATOR &startIt, const ITERATOR &endIt):
-    it(startIt),
-    itEnd(endIt) {
-  }
+template <typename VALUE, typename ITERATOR>
+struct StlIterator : public Iterator<VALUE> {
+  StlIterator(const ITERATOR &startIt, const ITERATOR &endIt) : it(startIt), itEnd(endIt) {}
   VALUE next() {
     VALUE tmp = *it;
     ++it;
     return tmp;
   }
   bool hasNext() {
-    return (itEnd!=it);
+    return (itEnd != it);
   }
+
 private:
   ITERATOR it, itEnd;
 };
@@ -51,46 +49,44 @@ private:
   * @warning never inherit from that class
   * @see StlIterator
   */
-template<typename VALUE, typename ITERATOR>
-struct MPStlIterator:public StlIterator< VALUE, ITERATOR >,
-  public MemoryPool<MPStlIterator<VALUE, ITERATOR> > {
-  MPStlIterator(const ITERATOR &startIt, const ITERATOR &endIt):
-    StlIterator<VALUE, ITERATOR>(startIt, endIt) {
-  }
+template <typename VALUE, typename ITERATOR>
+struct MPStlIterator : public StlIterator<VALUE, ITERATOR>,
+                       public MemoryPool<MPStlIterator<VALUE, ITERATOR> > {
+  MPStlIterator(const ITERATOR &startIt, const ITERATOR &endIt)
+      : StlIterator<VALUE, ITERATOR>(startIt, endIt) {}
 };
 //=================================================
-template<typename KEY, typename VALUE>
-struct StlHMapIterator:public Iterator< std::pair<KEY,VALUE> > {
-  StlHMapIterator(typename TLP_HASH_MAP<KEY,VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY,VALUE>::const_iterator endIt):
-    it(startIt),
-    itEnd(endIt) {
-  }
-  std::pair<KEY,VALUE> next();
+template <typename KEY, typename VALUE>
+struct StlHMapIterator : public Iterator<std::pair<KEY, VALUE> > {
+  StlHMapIterator(typename TLP_HASH_MAP<KEY, VALUE>::const_iterator startIt,
+                  typename TLP_HASH_MAP<KEY, VALUE>::const_iterator endIt)
+      : it(startIt), itEnd(endIt) {}
+  std::pair<KEY, VALUE> next();
   bool hasNext();
+
 private:
-  typename TLP_HASH_MAP<KEY,VALUE>::const_iterator it, itEnd;
+  typename TLP_HASH_MAP<KEY, VALUE>::const_iterator it, itEnd;
 };
 //=================================================
 ///  StlHMapIterator implemetation
-template<typename KEY, typename VALUE>
-std::pair<KEY,VALUE> StlHMapIterator<KEY,VALUE>::next() {
-  std::pair<KEY,VALUE> tmp=*it;
+template <typename KEY, typename VALUE>
+std::pair<KEY, VALUE> StlHMapIterator<KEY, VALUE>::next() {
+  std::pair<KEY, VALUE> tmp = *it;
   ++it;
   return tmp;
 }
-template<typename KEY, typename VALUE>
-bool StlHMapIterator<KEY,VALUE>::hasNext() {
-  return (itEnd!=it);
+template <typename KEY, typename VALUE>
+bool StlHMapIterator<KEY, VALUE>::hasNext() {
+  return (itEnd != it);
 }
 //=================================================
 }
 
-template<typename KEY, typename VALUE>
+template <typename KEY, typename VALUE>
 struct StlHMapKeyIterator : public tlp::Iterator<KEY> {
-  StlHMapKeyIterator(typename TLP_HASH_MAP<KEY,VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY,VALUE>::const_iterator endIt):
-    it(startIt),
-    itEnd(endIt) {
-  }
+  StlHMapKeyIterator(typename TLP_HASH_MAP<KEY, VALUE>::const_iterator startIt,
+                     typename TLP_HASH_MAP<KEY, VALUE>::const_iterator endIt)
+      : it(startIt), itEnd(endIt) {}
   KEY next() {
     const KEY tmp = it->first;
     ++it;
@@ -99,8 +95,9 @@ struct StlHMapKeyIterator : public tlp::Iterator<KEY> {
   bool hasNext() {
     return it != itEnd;
   }
+
 private:
-  typename TLP_HASH_MAP<KEY,VALUE>::const_iterator it, itEnd;
+  typename TLP_HASH_MAP<KEY, VALUE>::const_iterator it, itEnd;
 };
 
 #endif

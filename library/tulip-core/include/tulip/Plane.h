@@ -31,7 +31,6 @@ namespace tlp {
  */
 class TLP_SCOPE Plane {
 public:
-
   float a, b, c, d;
 
   /**
@@ -51,7 +50,8 @@ public:
   ~Plane();
 
   /**
-   * Static function used to determine the last coordinate of a point in order to have it on the plane
+   * Static function used to determine the last coordinate of a point in order to have it on the
+   * plane
    * It follows the equation : Z = (aX + bY + d) / c
    */
   static float planeValue(float a, float b, float c, float d, float x, float y);
@@ -67,7 +67,6 @@ public:
    */
   float planePointValue(const Coord &pos);
 };
-
 }
 #endif
 

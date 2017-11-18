@@ -472,7 +472,7 @@ static string curveFragmentShaderSrc =
 
 map<unsigned int, GLfloat *> AbstractGlCurve::curveVertexBuffersData;
 map<unsigned int, vector<GLushort *> > AbstractGlCurve::curveVertexBuffersIndices;
-map<unsigned int, GLuint* > AbstractGlCurve::curveVertexBuffersObject;
+map<unsigned int, GLuint *> AbstractGlCurve::curveVertexBuffersObject;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesShadersMap;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
 GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
@@ -480,30 +480,38 @@ GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
 GlShader *AbstractGlCurve::curveFragmentShader(NULL);
 bool AbstractGlCurve::canUseGeometryShader = false;
-std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > AbstractGlCurve::curvesGeometryShadersMap;
+std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> >
+    AbstractGlCurve::curvesGeometryShadersMap;
 GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(NULL);
-std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > AbstractGlCurve::curvesBillboardGeometryShadersMap;
+std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> >
+    AbstractGlCurve::curvesBillboardGeometryShadersMap;
 
-AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
-  curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-  outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false),
-  lookDir(Coord(0,0,1)), lineCurve(false), curveLineWidth(1.0f), curveQuadBordersWidth(1.0f),
-  outlineColorInterpolation(false) {
+AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName,
+                                 const string &curveSpecificShaderCode)
+    : curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
+      outlined(false), outlineColor(Color(0, 0, 0)), texture(""), texCoordFactor(1),
+      billboardCurve(false), lookDir(Coord(0, 0, 1)), lineCurve(false), curveLineWidth(1.0f),
+      curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 }
 
-AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode, const vector<Coord> &controlPoints,
-                                 const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) :
-  shaderProgramName(shaderProgramName), curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-  controlPoints(controlPoints), startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
-  outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)),
-  lineCurve(false), curveLineWidth(1.0f), curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
+AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName,
+                                 const string &curveSpecificShaderCode,
+                                 const vector<Coord> &controlPoints, const Color &startColor,
+                                 const Color &endColor, const float startSize, const float endSize,
+                                 const unsigned int nbCurvePoints)
+    : shaderProgramName(shaderProgramName), curveShaderProgramNormal(NULL),
+      curveShaderProgramBillboard(NULL), curveShaderProgram(NULL), controlPoints(controlPoints),
+      startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize),
+      nbCurvePoints(nbCurvePoints), outlined(false), outlineColor(Color(0, 0, 0)), texture(""),
+      texCoordFactor(1), billboardCurve(false), lookDir(Coord(0, 0, 1)), lineCurve(false),
+      curveLineWidth(1.0f), curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
 
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 
-  for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
+  for (size_t i = 0; i < controlPoints.size(); ++i) {
     boundingBox.expand(controlPoints[i]);
   }
 }
@@ -519,34 +527,39 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
   curveVertexBuffersIndices[nbCurvePoints][2] = new GLushort[nbCurvePoints];
   curveVertexBuffersIndices[nbCurvePoints][3] = new GLushort[nbCurvePoints];
 
-  for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-    float t =  i / float(nbCurvePoints - 1);
-    curveVertexBuffersData[nbCurvePoints][6*i] = t;
-    curveVertexBuffersData[nbCurvePoints][6*i+1] = 1.0f;
-    curveVertexBuffersData[nbCurvePoints][6*i+2] = t;
-    curveVertexBuffersData[nbCurvePoints][6*i+3] = 0.0f;
-    curveVertexBuffersData[nbCurvePoints][6*i+4] = t;
-    curveVertexBuffersData[nbCurvePoints][6*i+5] = -1.0f;
+  for (unsigned int i = 0; i < nbCurvePoints; ++i) {
+    float t = i / float(nbCurvePoints - 1);
+    curveVertexBuffersData[nbCurvePoints][6 * i] = t;
+    curveVertexBuffersData[nbCurvePoints][6 * i + 1] = 1.0f;
+    curveVertexBuffersData[nbCurvePoints][6 * i + 2] = t;
+    curveVertexBuffersData[nbCurvePoints][6 * i + 3] = 0.0f;
+    curveVertexBuffersData[nbCurvePoints][6 * i + 4] = t;
+    curveVertexBuffersData[nbCurvePoints][6 * i + 5] = -1.0f;
 
-    curveVertexBuffersIndices[nbCurvePoints][0][2*i] = 3*i;
-    curveVertexBuffersIndices[nbCurvePoints][0][2*i+1] = 3*i+2;
-    curveVertexBuffersIndices[nbCurvePoints][1][i] = 3*i+1;
-    curveVertexBuffersIndices[nbCurvePoints][2][i] = 3*i;
-    curveVertexBuffersIndices[nbCurvePoints][3][i] = 3*i+2;
+    curveVertexBuffersIndices[nbCurvePoints][0][2 * i] = 3 * i;
+    curveVertexBuffersIndices[nbCurvePoints][0][2 * i + 1] = 3 * i + 2;
+    curveVertexBuffersIndices[nbCurvePoints][1][i] = 3 * i + 1;
+    curveVertexBuffersIndices[nbCurvePoints][2][i] = 3 * i;
+    curveVertexBuffersIndices[nbCurvePoints][3][i] = 3 * i + 2;
   }
 
   if (vboOk) {
     glGenBuffers(5, curveVertexBuffersObject[nbCurvePoints]);
     glBindBuffer(GL_ARRAY_BUFFER, curveVertexBuffersObject[nbCurvePoints][0]);
-    glBufferData(GL_ARRAY_BUFFER, 6 * nbCurvePoints * sizeof(GLfloat), curveVertexBuffersData[nbCurvePoints], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 6 * nbCurvePoints * sizeof(GLfloat),
+                 curveVertexBuffersData[nbCurvePoints], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curveVertexBuffersObject[nbCurvePoints][1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * nbCurvePoints * sizeof(GLushort), curveVertexBuffersIndices[nbCurvePoints][0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * nbCurvePoints * sizeof(GLushort),
+                 curveVertexBuffersIndices[nbCurvePoints][0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curveVertexBuffersObject[nbCurvePoints][2]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), curveVertexBuffersIndices[nbCurvePoints][1], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort),
+                 curveVertexBuffersIndices[nbCurvePoints][1], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curveVertexBuffersObject[nbCurvePoints][3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), curveVertexBuffersIndices[nbCurvePoints][2], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort),
+                 curveVertexBuffersIndices[nbCurvePoints][2], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curveVertexBuffersObject[nbCurvePoints][4]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), curveVertexBuffersIndices[nbCurvePoints][3], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort),
+                 curveVertexBuffersIndices[nbCurvePoints][3], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   }
@@ -556,13 +569,14 @@ void AbstractGlCurve::draw(float, Camera *) {
   drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 }
 
-void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
+void AbstractGlCurve::initShader(const std::string &shaderProgramName,
+                                 const std::string &curveSpecificShaderCode) {
   // restrict shaders compilation on compatible hardware, crashs can happen
   // when using a software implementation of OpenGL
   static string glVendor = OpenGlConfigManager::getInst().getOpenGLVendor();
-  static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) ||
-                           (glVendor.find("ATI")!=string::npos) ||
-                           (glVendor.find("Intel")!=string::npos);
+  static bool glVendorOk = (glVendor.find("NVIDIA") != string::npos) ||
+                           (glVendor.find("ATI") != string::npos) ||
+                           (glVendor.find("Intel") != string::npos);
 
   if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
 
@@ -583,7 +597,8 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 
     if (curveVertexGeometryShaderNormalMain == NULL) {
       curveVertexGeometryShaderNormalMain = new GlShader(Vertex);
-      curveVertexGeometryShaderNormalMain->compileFromSourceCode(curveVertexShaderGeometryNormalMainSrc);
+      curveVertexGeometryShaderNormalMain->compileFromSourceCode(
+          curveVertexShaderGeometryNormalMainSrc);
     }
 
     if (curveFragmentShader == NULL) {
@@ -593,7 +608,8 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 
     if (curvesShadersMap.find(shaderProgramName) == curvesShadersMap.end()) {
       curvesShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
-      curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(
+          Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
       curvesShadersMap[shaderProgramName]->addShader(curveVertexShaderNormalMain);
       curvesShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
       curvesShadersMap[shaderProgramName]->addShader(curveFragmentShader);
@@ -601,11 +617,14 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       curvesShadersMap[shaderProgramName]->printInfoLog();
     }
 
-    if (canUseGeometryShader && curvesGeometryShadersMap.find(shaderProgramName) == curvesGeometryShadersMap.end()) {
+    if (canUseGeometryShader &&
+        curvesGeometryShadersMap.find(shaderProgramName) == curvesGeometryShadersMap.end()) {
       GlShaderProgram *polygonShader = new GlShaderProgram(shaderProgramName);
-      polygonShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      polygonShader->addShaderFromSourceCode(Vertex,
+                                             genCommonUniformVariables() + curveSpecificShaderCode);
       polygonShader->addShader(curveVertexGeometryShaderNormalMain);
-      polygonShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
+      polygonShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc,
+                                                     GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
       polygonShader->setMaxGeometryShaderOutputVertices(6);
       polygonShader->addShader(curveFragmentShader);
       polygonShader->link();
@@ -617,9 +636,11 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       }
 
       GlShaderProgram *lineShader = new GlShaderProgram(shaderProgramName);
-      lineShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      lineShader->addShaderFromSourceCode(Vertex,
+                                          genCommonUniformVariables() + curveSpecificShaderCode);
       lineShader->addShader(curveVertexGeometryShaderNormalMain);
-      lineShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
+      lineShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc,
+                                                  GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
       lineShader->setMaxGeometryShaderOutputVertices(6);
       lineShader->addShader(curveFragmentShader);
       lineShader->link();
@@ -635,7 +656,8 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 
     if (curvesBillboardShadersMap.find(shaderProgramName) == curvesBillboardShadersMap.end()) {
       curvesBillboardShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
-      curvesBillboardShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      curvesBillboardShadersMap[shaderProgramName]->addShaderFromSourceCode(
+          Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
 
       curvesBillboardShadersMap[shaderProgramName]->addShader(curveVertexShaderBillboardMain);
       curvesBillboardShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
@@ -644,11 +666,15 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
     }
 
-    if (canUseGeometryShader && curvesBillboardGeometryShadersMap.find(shaderProgramName) == curvesBillboardGeometryShadersMap.end()) {
+    if (canUseGeometryShader &&
+        curvesBillboardGeometryShadersMap.find(shaderProgramName) ==
+            curvesBillboardGeometryShadersMap.end()) {
       GlShaderProgram *polygonShader = new GlShaderProgram(shaderProgramName);
-      polygonShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      polygonShader->addShaderFromSourceCode(Vertex,
+                                             genCommonUniformVariables() + curveSpecificShaderCode);
       polygonShader->addShader(curveVertexGeometryShaderNormalMain);
-      polygonShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
+      polygonShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc,
+                                                     GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
       polygonShader->setMaxGeometryShaderOutputVertices(6);
       polygonShader->addShader(curveFragmentShader);
       polygonShader->link();
@@ -660,9 +686,11 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       }
 
       GlShaderProgram *lineShader = new GlShaderProgram(shaderProgramName);
-      lineShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      lineShader->addShaderFromSourceCode(Vertex,
+                                          genCommonUniformVariables() + curveSpecificShaderCode);
       lineShader->addShader(curveVertexGeometryShaderNormalMain);
-      lineShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
+      lineShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc,
+                                                  GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
       lineShader->setMaxGeometryShaderOutputVertices(6);
       lineShader->addShader(curveFragmentShader);
       lineShader->link();
@@ -686,7 +714,9 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
   }
 }
 
-void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor,
+                                const Color &endColor, const float startSize, const float endSize,
+                                const unsigned int nbCurvePoints) {
 
   GLint renderMode;
   glGetIntegerv(GL_RENDER_MODE, &renderMode);
@@ -700,28 +730,32 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
   if (texture != "") {
     unsigned int i = nbCurvePoints / 2;
     Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / float(nbCurvePoints - 1)));
-    Coord nexCurvePoint(computeCurvePointOnCPU(controlPoints, (i+1) / float(nbCurvePoints - 1)));
+    Coord nexCurvePoint(computeCurvePointOnCPU(controlPoints, (i + 1) / float(nbCurvePoints - 1)));
     float dist = firstCurvePoint.dist(nexCurvePoint);
     texCoordFactor = dist / (startSize * 2.0f);
   }
 
   if (billboardCurve) {
     curveShaderProgram = curveShaderProgramBillboard;
-  }
-  else {
+  } else {
     curveShaderProgram = curveShaderProgramNormal;
   }
 
-  static bool canUseFloatTextures = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
+  static bool canUseFloatTextures =
+      OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
 
   if (curveShaderProgram != NULL && canUseFloatTextures && renderMode != GL_SELECT) {
 
     static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
-    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
-    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
+    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders =
+        std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
+    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders =
+        std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
 
-    if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) != curvesGeometryShadersMap.end()) {
+    if (canUseGeometryShader &&
+        curvesGeometryShadersMap.find(curveShaderProgram->getName()) !=
+            curvesGeometryShadersMap.end()) {
       geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
       geometryBillboardShaders = curvesBillboardGeometryShadersMap[curveShaderProgram->getName()];
     }
@@ -732,11 +766,12 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
     GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
     GlShaderProgram *currentActiveShader = GlShaderProgram::getCurrentActiveShader();
-    bool fisheyeActivated = currentActiveShader != NULL && currentActiveShader->getName() == "fisheye";
+    bool fisheyeActivated =
+        currentActiveShader != NULL && currentActiveShader->getName() == "fisheye";
     GLfloat fisheyeCenter[4];
     GLfloat fisheyeRadius;
     GLfloat fisheyeHeight;
-    GLint   fisheyeType;
+    GLint fisheyeType;
 
     if (fisheyeActivated) {
       currentActiveShader->getUniformFloatVariableValue("center", fisheyeCenter);
@@ -757,7 +792,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F_ARB, controlPoints.size(), 0, GL_RGB, GL_FLOAT, &controlPoints[0][0]);
+    glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F_ARB, controlPoints.size(), 0, GL_RGB, GL_FLOAT,
+                 &controlPoints[0][0]);
     glBindTexture(GL_TEXTURE_1D, 0);
     glDisable(GL_TEXTURE_1D);
 
@@ -766,8 +802,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     if (canUseGeometryShader && nbCurvePoints > 3 && !lineCurve && geometryShaders.first) {
       if (!billboardCurve) {
         curveShaderProgram = geometryShaders.first;
-      }
-      else {
+      } else {
         curveShaderProgram = geometryBillboardShaders.first;
       }
 
@@ -787,11 +822,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     curveShaderProgram->setUniformBool("useTexture", texture != "" && !lineCurve);
     curveShaderProgram->setUniformBool("billboard", billboardCurve && !lineCurve);
 
-
     if (!geometryShaderActivated) {
       curveShaderProgram->setUniformFloat("step", 1.0f / (float(nbCurvePoints) - 1.0f));
-    }
-    else {
+    } else {
       curveShaderProgram->setUniformBool("topOutline", true);
       curveShaderProgram->setUniformBool("bottomOutline", true);
     }
@@ -805,7 +838,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     curveShaderProgram->setUniformBool("fisheye", fisheyeActivated);
 
     if (fisheyeActivated) {
-      curveShaderProgram->setUniformVec4Float("center", fisheyeCenter[0], fisheyeCenter[1], fisheyeCenter[2], fisheyeCenter[3]);
+      curveShaderProgram->setUniformVec4Float("center", fisheyeCenter[0], fisheyeCenter[1],
+                                              fisheyeCenter[2], fisheyeCenter[3]);
       curveShaderProgram->setUniformFloat("radius", fisheyeRadius);
       curveShaderProgram->setUniformFloat("height", fisheyeHeight);
       curveShaderProgram->setUniformInt("fisheyeType", fisheyeType);
@@ -818,8 +852,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     if (vboOk) {
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
       glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), 0);
-    }
-    else {
+    } else {
       glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), curveVertexBuffersData[nbCurvePoints]);
     }
 
@@ -832,13 +865,12 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       if (vboOk) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
         glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-      }
-      else {
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
+      } else {
+        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT,
+                       curveVertexBuffersIndices[nbCurvePoints][1]);
       }
 
-    }
-    else {
+    } else {
       if (texture != "") {
         glActiveTexture(GL_TEXTURE0);
         GlTextureManager::getInst().activateTexture(texture);
@@ -848,25 +880,24 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       if (billboardCurve) {
         glActiveTexture(GL_TEXTURE1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
+        GlTextureManager::getInst().activateTexture(TulipBitmapDir + "cylinderTexture.png");
       }
 
       if (vboOk) {
         if (geometryShaderActivated) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
           glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-        }
-        else {
+        } else {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
           glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
         }
-      }
-      else {
+      } else {
         if (geometryShaderActivated) {
-          glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
-        }
-        else {
-          glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
+          glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT,
+                         curveVertexBuffersIndices[nbCurvePoints][1]);
+        } else {
+          glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT,
+                         curveVertexBuffersIndices[nbCurvePoints][0]);
         }
       }
 
@@ -887,8 +918,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
           if (billboardCurve) {
             curveShaderProgram = geometryBillboardShaders.second;
-          }
-          else {
+          } else {
             curveShaderProgram = geometryShaders.second;
           }
 
@@ -909,7 +939,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
           curveShaderProgram->setUniformBool("fisheye", fisheyeActivated);
 
           if (fisheyeActivated) {
-            curveShaderProgram->setUniformVec4Float("center", fisheyeCenter[0], fisheyeCenter[1], fisheyeCenter[2], fisheyeCenter[3]);
+            curveShaderProgram->setUniformVec4Float("center", fisheyeCenter[0], fisheyeCenter[1],
+                                                    fisheyeCenter[2], fisheyeCenter[3]);
             curveShaderProgram->setUniformFloat("radius", fisheyeRadius);
             curveShaderProgram->setUniformFloat("height", fisheyeHeight);
             curveShaderProgram->setUniformInt("fisheyeType", fisheyeType);
@@ -921,8 +952,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         if (outlineColorInterpolation) {
           curveShaderProgram->setUniformColor("startColor", startColor);
           curveShaderProgram->setUniformColor("endColor", endColor);
-        }
-        else {
+        } else {
           curveShaderProgram->setUniformColor("startColor", outlineColor);
           curveShaderProgram->setUniformColor("endColor", outlineColor);
         }
@@ -934,17 +964,16 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
           if (geometryShaderActivated) {
             glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-          }
-          else {
+          } else {
             glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
           }
-        }
-        else {
+        } else {
           if (geometryShaderActivated) {
-            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
-          }
-          else {
-            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT,
+                           curveVertexBuffersIndices[nbCurvePoints][2]);
+          } else {
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT,
+                           curveVertexBuffersIndices[nbCurvePoints][2]);
           }
         }
 
@@ -958,22 +987,20 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
           if (geometryShaderActivated) {
             glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-          }
-          else {
+          } else {
             glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
           }
-        }
-        else {
+        } else {
           if (geometryShaderActivated) {
-            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
-          }
-          else {
-            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT,
+                           curveVertexBuffersIndices[nbCurvePoints][3]);
+          } else {
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT,
+                           curveVertexBuffersIndices[nbCurvePoints][3]);
           }
         }
       }
     }
-
 
     if (vboOk) {
       glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -995,21 +1022,25 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       currentActiveShader->activate();
     }
 
-  }
-  else {
+  } else {
     vector<Coord> curvePoints;
     computeCurvePointsOnCPU(controlPoints, curvePoints, nbCurvePoints);
 
     if (lineCurve) {
       glLineWidth(curveLineWidth);
       polyLine(curvePoints, startColor, endColor);
-    }
-    else if (!billboardCurve) {
-      polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),outlineColorInterpolation,outlineColor,texture,curveQuadBordersWidth);
-    }
-    else {
-      simpleQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]),
-                 Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]), lookDir, !outlined,outlineColor,texture);
+    } else if (!billboardCurve) {
+      polyQuad(
+          curvePoints, startColor, endColor, startSize, endSize,
+          Coord(2.f * curvePoints[0] - curvePoints[1]),
+          Coord(2.f * curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),
+          outlineColorInterpolation, outlineColor, texture, curveQuadBordersWidth);
+    } else {
+      simpleQuad(
+          curvePoints, startColor, endColor, startSize, endSize,
+          Coord(2.f * curvePoints[0] - curvePoints[1]),
+          Coord(2.f * curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),
+          lookDir, !outlined, outlineColor, texture);
     }
   }
 
@@ -1017,11 +1048,10 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
   glEnable(GL_LIGHTING);
   glEnable(GL_CULL_FACE);
-
 }
 
 void AbstractGlCurve::translate(const Coord &move) {
-  for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
+  for (size_t i = 0; i < controlPoints.size(); ++i) {
     controlPoints[i] += move;
   }
 
@@ -1030,6 +1060,5 @@ void AbstractGlCurve::translate(const Coord &move) {
 
 void AbstractGlCurve::getXML(string &) {}
 
-void AbstractGlCurve::setWithXML(const string &,unsigned int &) {}
-
+void AbstractGlCurve::setWithXML(const string &, unsigned int &) {}
 }

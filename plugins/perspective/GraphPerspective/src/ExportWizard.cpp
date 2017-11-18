@@ -34,16 +34,18 @@
 using namespace tlp;
 using namespace std;
 
-ExportWizard::ExportWizard(Graph *g, const QString& exportFile, QWidget *parent): QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
+ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
+    : QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 
-  PluginModel<tlp::ExportModule>* model = new PluginModel<tlp::ExportModule>(_ui->exportModules);
+  PluginModel<tlp::ExportModule> *model = new PluginModel<tlp::ExportModule>(_ui->exportModules);
 
   _ui->exportModules->setModel(model);
   _ui->exportModules->setRootIndex(model->index(0, 0));
   _ui->exportModules->expandAll();
-  connect(_ui->exportModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+          this, SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate(_ui->parametersList));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -51,7 +53,8 @@ ExportWizard::ExportWizard(Graph *g, const QString& exportFile, QWidget *parent)
 #else
   _ui->parametersList->verticalHeader()->setResizeMode(QHeaderView::Fixed);
 #endif
-  connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
+          SLOT(click()));
 
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
@@ -66,22 +69,21 @@ ExportWizard::~ExportWizard() {
   delete _ui;
 }
 
-void ExportWizard::algorithmSelected(const QModelIndex& index) {
+void ExportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   string algs(tlp::QStringToTlpString(alg));
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel* oldModel = _ui->parametersList->model();
-  QAbstractItemModel* newModel = NULL;
+  QAbstractItemModel *oldModel = _ui->parametersList->model();
+  QAbstractItemModel *newModel = NULL;
 
   if (PluginLister::pluginExists(algs)) {
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(algs),_graph);
+    newModel = new ParameterListModel(PluginLister::getPluginParameters(algs), _graph);
   }
 
   _ui->parametersList->setModel(newModel);
 
   QString parametersText("<b>Parameters</b>");
-  parametersText +=
-    "&nbsp;<font size=-2>[" + alg + "]</font>";
+  parametersText += "&nbsp;<font size=-2>[" + alg + "]</font>";
   _ui->parametersLabel->setText(parametersText);
 
   delete oldModel;
@@ -96,7 +98,7 @@ QString ExportWizard::algorithm() const {
 }
 
 tlp::DataSet ExportWizard::parameters() const {
-  ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parametersList->model());
 
   if (model == NULL)
     return DataSet();
@@ -117,15 +119,14 @@ void ExportWizard::pathChanged(QString s) {
   _ui->algFrame->setEnabled(!s.isEmpty());
   button(QWizard::FinishButton)->setEnabled(!s.isEmpty());
 
-  std::list<std::string> modules =
-    PluginLister::instance()->availablePlugins<ExportModule>();
+  std::list<std::string> modules = PluginLister::instance()->availablePlugins<ExportModule>();
 
-  for(std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
-    ExportModule* p =
-      PluginLister::instance()->getPluginObject<ExportModule>(*itm,NULL);
+  for (std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
+    ExportModule *p = PluginLister::instance()->getPluginObject<ExportModule>(*itm, NULL);
     std::list<std::string> extension = p->allFileExtensions();
 
-    for(list<string>::const_iterator extit=extension.begin(); extit!=extension.end(); ++extit) {
+    for (list<string>::const_iterator extit = extension.begin(); extit != extension.end();
+         ++extit) {
       if (s.endsWith((*extit).c_str())) {
         selectedExport = itm->c_str();
         delete p;
@@ -133,7 +134,7 @@ void ExportWizard::pathChanged(QString s) {
       }
     }
 
-    if(!selectedExport.isEmpty())
+    if (!selectedExport.isEmpty())
       break;
   }
 
@@ -142,8 +143,10 @@ void ExportWizard::pathChanged(QString s) {
     return;
   }
 
-  PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->exportModules->model());
-  QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
+  PluginModel<tlp::ExportModule> *model =
+      static_cast<PluginModel<tlp::ExportModule> *>(_ui->exportModules->model());
+  QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole,
+                                         selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
 
   if (results.empty())
     return;
@@ -153,36 +156,36 @@ void ExportWizard::pathChanged(QString s) {
 
 void ExportWizard::browseButtonClicked() {
   QString filter;
-  QString all="all supported formats (";
+  QString all = "all supported formats (";
   const std::list<std::string> modules = PluginLister::instance()->availablePlugins<ExportModule>();
 
-  for(std::list<std::string>::const_iterator itm = modules.begin(); itm != modules.end(); ++itm) {
-    ExportModule* p = PluginLister::instance()->getPluginObject<ExportModule>(*itm,NULL);
+  for (std::list<std::string>::const_iterator itm = modules.begin(); itm != modules.end(); ++itm) {
+    ExportModule *p = PluginLister::instance()->getPluginObject<ExportModule>(*itm, NULL);
     const std::list<std::string> extension = p->allFileExtensions();
-    filter += tlpStringToQString(p->name())+ " (";
+    filter += tlpStringToQString(p->name()) + " (";
 
-    for(list<string>::const_iterator it=extension.begin(); it!=extension.end(); ++it) {
+    for (list<string>::const_iterator it = extension.begin(); it != extension.end(); ++it) {
       filter += (*it).c_str() + QString(" ");
-      all +=  (*it).c_str() + QString(" ");
+      all += (*it).c_str() + QString(" ");
     }
 
-    filter.resize(filter.length()-1);
+    filter.resize(filter.length() - 1);
     filter += ");;";
     delete p;
   }
 
-  filter.resize(filter.length()-2);
-  all.resize(all.length()-1);
-  all = all + ");;"+filter;
-  QString exportFile = QFileDialog::getSaveFileName(this,
-                       "Export file",
-                       _ui->pathEdit->text(),all,NULL
-                       // on MacOSX selectedFilter is ignored by the
-                       // native dialog
+  filter.resize(filter.length() - 2);
+  all.resize(all.length() - 1);
+  all = all + ");;" + filter;
+  QString exportFile =
+      QFileDialog::getSaveFileName(this, "Export file", _ui->pathEdit->text(), all, NULL
+// on MacOSX selectedFilter is ignored by the
+// native dialog
 #ifdef __APPLE__
-                       , QFileDialog::DontUseNativeDialog
+                                   ,
+                                   QFileDialog::DontUseNativeDialog
 #endif
-                                                   );
+                                   );
 
   if (!exportFile.isEmpty()) {
     _ui->pathEdit->setText(exportFile);
@@ -192,35 +195,36 @@ void ExportWizard::browseButtonClicked() {
 bool ExportWizard::validateCurrentPage() {
   QString exportFile = outputFile();
 
-  //check correct extension
-  ExportModule* p = PluginLister::instance()->getPluginObject<ExportModule>(tlp::QStringToTlpString(algorithm()),NULL);
+  // check correct extension
+  ExportModule *p = PluginLister::instance()->getPluginObject<ExportModule>(
+      tlp::QStringToTlpString(algorithm()), NULL);
   std::list<std::string> extension;
 
-  if(p!=NULL)
+  if (p != NULL)
     extension = p->allFileExtensions();
 
   bool extok(false);
   QString ext;
 
-  for(list<string>::const_iterator it=extension.begin(); it!=extension.end(); ++it) {
-    ext += tlp::tlpStringToQString(*it)+", ";
+  for (list<string>::const_iterator it = extension.begin(); it != extension.end(); ++it) {
+    ext += tlp::tlpStringToQString(*it) + ", ";
 
-    if(exportFile.endsWith(tlp::tlpStringToQString(*it))) {
-      extok=true;
+    if (exportFile.endsWith(tlp::tlpStringToQString(*it))) {
+      extok = true;
     }
   }
 
   delete p;
 
-  if(!extok) {
-    if(extension.size()==1)
-      _ui->pathEdit->setText(exportFile+"."+tlp::tlpStringToQString(*extension.begin()));
+  if (!extok) {
+    if (extension.size() == 1)
+      _ui->pathEdit->setText(exportFile + "." + tlp::tlpStringToQString(*extension.begin()));
     else {
-      ext.resize(ext.length()-2);
+      ext.resize(ext.length() - 2);
       QString msg = "Filename does not terminate with a valid extension. ";
 
-      if(!algorithm().isEmpty())
-        msg += "Please add one.<br>Valid extensions for " + algorithm() +" are: "+ext;
+      if (!algorithm().isEmpty())
+        msg += "Please add one.<br>Valid extensions for " + algorithm() + " are: " + ext;
 
       QMessageBox::warning(parentWidget(), "Filename not valid", msg);
       return false;
@@ -230,10 +234,8 @@ bool ExportWizard::validateCurrentPage() {
   // if file exists and is valid, check if user wants to overwrite it
   return (!exportFile.isEmpty() &&
           (!QFile::exists(exportFile) ||
-           (QMessageBox::question(parentWidget(), "Overwriting an existing file",
-                                  "The export file already exists.<br/>Do you really want to overwrite it?",
-                                  QMessageBox::Yes|
-                                  QMessageBox::No) == QMessageBox::Yes)));
+           (QMessageBox::question(
+                parentWidget(), "Overwriting an existing file",
+                "The export file already exists.<br/>Do you really want to overwrite it?",
+                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)));
 }
-
-

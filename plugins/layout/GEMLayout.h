@@ -75,33 +75,32 @@
 
 class GEMLayout : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("GEM (Frick)","Tulip Team","16/10/2008",
+  PLUGININFORMATION("GEM (Frick)", "Tulip Team", "16/10/2008",
                     "Implements the GEM-2d layout algorithm first published as:<br/>"
-                    " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in Computer Science (1995).",
-                    "1.2","Force Directed")
-  GEMLayout(const tlp::PluginContext* context);
+                    " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. "
+                    "Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in "
+                    "Computer Science (1995).",
+                    "1.2", "Force Directed")
+  GEMLayout(const tlp::PluginContext *context);
   ~GEMLayout();
   bool run();
 
 private:
-  tlp::Coord computeForces(unsigned int v,
-                           float shake,
-                           float gravity,
-                           bool testPlaced);
+  tlp::Coord computeForces(unsigned int v, float shake, float gravity, bool testPlaced);
 
   struct GEMparticule {
     tlp::node n;
-    tlp::Coord pos;        // position
+    tlp::Coord pos; // position
     int in;
-    tlp::Coord imp;        // impulse
-    float dir;        // direction
-    float heat;        // heat
-    float mass;        // weight = nr incident edges
+    tlp::Coord imp; // impulse
+    float dir;      // direction
+    float heat;     // heat
+    float mass;     // weight = nr incident edges
     unsigned int id;
     GEMparticule(float m = 0) : in(0), id(UINT_MAX) {
       pos.fill(0);
       imp.fill(0);
-      dir  = 0.0;
+      dir = 0.0;
       heat = 0;
       mass = m;
     }
@@ -120,7 +119,7 @@ private:
   void updateLayout();
 
   std::vector<GEMparticule> _particules;
-  std::vector<int> _map; //for random selection
+  std::vector<int> _map; // for random selection
   tlp::MutableContainer<GEMparticule *> _nodeToParticules;
 
   /*
@@ -128,48 +127,46 @@ private:
    */
 
   unsigned long Iteration;
-  float         _temperature;
-  tlp::Coord    _center;
-  float         _maxtemp;
-  float         _oscillation, _rotation;
-
+  float _temperature;
+  tlp::Coord _center;
+  float _maxtemp;
+  float _oscillation, _rotation;
 
   /*
    * Following parameters can be initialised in the original GEM3D
    * from a configuration file.  Here they are hard-wired, but
    * this could be replaced by configuration from a file.
    */
-  const float    i_maxtemp;
-  const float    a_maxtemp;
+  const float i_maxtemp;
+  const float a_maxtemp;
 
-  const float    i_starttemp;
-  const float    a_starttemp;
+  const float i_starttemp;
+  const float a_starttemp;
 
-  const float    i_finaltemp;
-  const float    a_finaltemp;
+  const float i_finaltemp;
+  const float a_finaltemp;
 
-  const int      i_maxiter;
-  const int      a_maxiter;
+  const int i_maxiter;
+  const int a_maxiter;
 
-  const float    i_gravity;
-  const float    a_gravity;
+  const float i_gravity;
+  const float a_gravity;
 
-  const float    i_oscillation;
-  const float    a_oscillation;
+  const float i_oscillation;
+  const float a_oscillation;
 
-  const float    i_rotation;
-  const float    a_rotation;
+  const float i_rotation;
+  const float a_rotation;
 
-  const float    i_shake;
-  const float    a_shake;
+  const float i_shake;
+  const float a_shake;
 
-  unsigned int _dim; //2 or 3;
-  unsigned int _nbNodes; //number of nodes in the graph
-  bool _useLength; //if we manage edge length
-  tlp::NumericProperty* metric; //metric for edge length
-  tlp::BooleanProperty* fixedNodes; //selection of not movable nodes
-  unsigned int max_iter; // the max number of iterations
-
+  unsigned int _dim;                // 2 or 3;
+  unsigned int _nbNodes;            // number of nodes in the graph
+  bool _useLength;                  // if we manage edge length
+  tlp::NumericProperty *metric;     // metric for edge length
+  tlp::BooleanProperty *fixedNodes; // selection of not movable nodes
+  unsigned int max_iter;            // the max number of iterations
 };
 
 #endif

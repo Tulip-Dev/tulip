@@ -29,18 +29,15 @@ using namespace tlp;
 
 class GeographicViewInteractor : public GLInteractorComposite {
 
-public :
-
+public:
   GeographicViewInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
-
 };
 
 class GeographicViewNavigator : public MouseNKeysNavigator {
 
-public :
-
+public:
   GeographicViewNavigator();
   ~GeographicViewNavigator();
 
@@ -54,18 +51,16 @@ public :
   }
   void viewChanged(View *);
 
-protected :
-
-  int x,y;
+protected:
+  int x, y;
   bool inRotation;
-
 };
 
 class GeographicViewInteractorNavigation : public GeographicViewInteractor {
 
-public :
-
-  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009", "Geographic View Navigation Interactor", "1.0","Navigation")
+public:
+  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009",
+                    "Geographic View Navigation Interactor", "1.0", "Navigation")
 
   GeographicViewInteractorNavigation(const PluginContext *);
 
@@ -77,9 +72,9 @@ public :
 
 class GeographicViewInteractorAddEdges : public NodeLinkDiagramComponentInteractor {
 
-public :
-
-  PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team", "02/06/2017", "Geographic View Add Edges Interactor", "1.0","Modification")
+public:
+  PLUGININFORMATION("InteractorAddEdgesGeographicView", "Tulip Team", "02/06/2017",
+                    "Geographic View Add Edges Interactor", "1.0", "Modification")
 
   GeographicViewInteractorAddEdges(const PluginContext *);
 
@@ -92,9 +87,9 @@ public :
 
 class GeographicViewInteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
 
-public :
-
-  PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team", "02/06/2017", "Geographic View Edit Edge Bends Interactor", "1.0","Modification")
+public:
+  PLUGININFORMATION("InteractorEditEdgeBendsGeographicView", "Tulip Team", "02/06/2017",
+                    "Geographic View Edit Edge Bends Interactor", "1.0", "Modification")
 
   GeographicViewInteractorEditEdgeBends(const PluginContext *);
 

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLPROGRESSBAR_H_
 #define GLPROGRESSBAR_H_
 
@@ -35,8 +34,7 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlProgressBar : public GlComposite, public SimplePluginProgress {
 
-public :
-
+public:
   /**
    * GlProgressBar constructor
    * \param centerPosition the position of the center of the frame containing the progress bar
@@ -45,7 +43,8 @@ public :
    * \param progressBarColor the color of the progress bar
    * \param commentColor the color of the comment and the frame
    */
-  GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color& progressBarcolor, const Color& commentColor = Color(0, 0, 0));
+  GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height,
+                const Color &progressBarcolor, const Color &commentColor = Color(0, 0, 0));
 
   ~GlProgressBar();
 
@@ -53,14 +52,14 @@ public :
    * This method allow to set a comment message above the progress bar
    * \param msg the text of the comment to display
    */
-  void setComment(const std::string& msg) {
+  void setComment(const std::string &msg) {
     comment = msg;
   }
+
 protected:
   void progress_handler(int step, int max_step);
 
-private :
-
+private:
   Color progressBarColor, commentColor;
   float progressBarMaxWidth, progressBarHeight;
   float commentWidth, commentHeight;
@@ -70,7 +69,6 @@ private :
   unsigned int currentPercent;
   std::string comment;
 };
-
 }
 #endif /* GLPROGRESSBAR_H_ */
 ///@endcond

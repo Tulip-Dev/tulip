@@ -21,32 +21,33 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size, QGraphicsItem *parent)
-  : QGraphicsPixmapItem(parent), _currentFrame(0), _brush(Qt::transparent) {
-  for (int y=0; y<pixmap.height(); y+=size.height()) {
-    for (int x=0; x<pixmap.width(); x+=size.width()) {
-      _pixmaps.push_back(pixmap.copy(x,y,size.width(),size.height()));
+ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size,
+                                                 QGraphicsItem *parent)
+    : QGraphicsPixmapItem(parent), _currentFrame(0), _brush(Qt::transparent) {
+  for (int y = 0; y < pixmap.height(); y += size.height()) {
+    for (int x = 0; x < pixmap.width(); x += size.width()) {
+      _pixmaps.push_back(pixmap.copy(x, y, size.width(), size.height()));
     }
   }
 
   _animationTimer.setInterval(50);
   _animationTimer.setSingleShot(false);
-  connect(&_animationTimer,SIGNAL(timeout()),this,SLOT(animationTimeout()));
+  connect(&_animationTimer, SIGNAL(timeout()), this, SLOT(animationTimeout()));
   _animationTimer.start();
 }
 
-ProcessingAnimationItem::~ProcessingAnimationItem() {
-}
+ProcessingAnimationItem::~ProcessingAnimationItem() {}
 
 void ProcessingAnimationItem::animationTimeout() {
-  _currentFrame = (_currentFrame+1)%_pixmaps.size();
+  _currentFrame = (_currentFrame + 1) % _pixmaps.size();
   setPixmap(_pixmaps[_currentFrame]);
   update();
 }
 
-void ProcessingAnimationItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void ProcessingAnimationItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                                    QWidget *widget) {
   painter->setBrush(_brush);
   painter->setPen(Qt::transparent);
   painter->drawRect(boundingRect());
-  QGraphicsPixmapItem::paint(painter,option,widget);
+  QGraphicsPixmapItem::paint(painter, option, widget);
 }

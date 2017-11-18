@@ -29,16 +29,18 @@ namespace tlp {
 class ParallelCoordinatesView;
 
 class ParallelCoordsGlEntitiesSelector : public MouseSelector {
-public :
+public:
   ParallelCoordsGlEntitiesSelector(Qt::MouseButton button = Qt::LeftButton,
-                                   Qt::KeyboardModifier modifier = Qt::NoModifier) : MouseSelector(button, modifier) {}
+                                   Qt::KeyboardModifier modifier = Qt::NoModifier)
+      : MouseSelector(button, modifier) {}
   ~ParallelCoordsGlEntitiesSelector() {}
   bool eventFilter(QObject *, QEvent *);
   virtual void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) = 0;
-  virtual void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, bool addToSelection) = 0;
-  virtual void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection) = 0;
+  virtual void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y,
+                                       bool addToSelection) = 0;
+  virtual void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w,
+                                       int h, bool addToSelection) = 0;
 };
-
 }
 
 #endif /* PARALLELCOORDSGLENTITIESSELECTOR_H_ */

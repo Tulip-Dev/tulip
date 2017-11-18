@@ -39,17 +39,22 @@ class QuickAccessBar;
  *
  * @brief An abstract view that displays a GlMainWidget as its central widget.
  *
- * The GlMainView subclasses ViewWidget and always uses a GlMainWidget as the central widget of the panel. It also adds the following features:
+ * The GlMainView subclasses ViewWidget and always uses a GlMainWidget as the central widget of the
+ panel. It also adds the following features:
  * @list
  * @li An overview of the scene that can be toggled on or off.
  * @li Some configuration widgets that modify the rendering parameters.
- * @li A quick access bar widget that allows the user to quickly modify some of the most used rendering parameters and graph properties (nodes color, edges display, etc)
+ * @li A quick access bar widget that allows the user to quickly modify some of the most used
+ rendering parameters and graph properties (nodes color, edges display, etc)
  * @li The possibility to make snapshots of the current scene
  * @endlist
  *
- * Subclassing GlMainView means you will only want to display graphs in a single GlMainWidget. Switching the central widget can only be achieved from the ViewWidget class.
+ * Subclassing GlMainView means you will only want to display graphs in a single GlMainWidget.
+ Switching the central widget can only be achieved from the ViewWidget class.
  *
- * @warning It is strongly unadvised to re-implement methods already implemented into tlp::View or tlp::ViewWidget. If you have to add custom behavior to those method, make sure to call the upper-class methods first:
+ * @warning It is strongly unadvised to re-implement methods already implemented into tlp::View or
+ tlp::ViewWidget. If you have to add custom behavior to those method, make sure to call the
+ upper-class methods first:
  @code
  void MyView::setupWidget() { // Where MyView is a subclass of tlp::GlMainView
    GlMainView::setupWidget(); // call this first
@@ -59,38 +64,41 @@ class QuickAccessBar;
 
  * @see tlp::ViewWidget
  */
-class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
+class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
 
   Q_OBJECT
 
-  tlp::GlMainWidget* _glMainWidget;
-  tlp::GlOverviewGraphicsItem* _overviewItem;
+  tlp::GlMainWidget *_glMainWidget;
+  tlp::GlOverviewGraphicsItem *_overviewItem;
 
   QAction *_centerViewAction;
   QAction *_forceRedrawAction;
-  QAction* _advAntiAliasingAction;
-  QAction* _snapshotAction;
+  QAction *_advAntiAliasingAction;
+  QAction *_snapshotAction;
 
   QPushButton *_showOvButton, *_showQabButton;
 
-protected :
-
+protected:
   bool needQuickAccessBar;
-  QGraphicsProxyWidget* _quickAccessBarItem;
-  tlp::QuickAccessBar* _quickAccessBar;
-  tlp::SceneConfigWidget* _sceneConfigurationWidget;
-  tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
+  QGraphicsProxyWidget *_quickAccessBarItem;
+  tlp::QuickAccessBar *_quickAccessBar;
+  tlp::SceneConfigWidget *_sceneConfigurationWidget;
+  tlp::SceneLayersConfigWidget *_sceneLayersConfigurationWidget;
 
 public:
-
-  enum OverviewPosition {OVERVIEW_TOP_LEFT, OVERVIEW_TOP_RIGHT, OVERVIEW_BOTTOM_LEFT, OVERVIEW_BOTTOM_RIGHT};
+  enum OverviewPosition {
+    OVERVIEW_TOP_LEFT,
+    OVERVIEW_TOP_RIGHT,
+    OVERVIEW_BOTTOM_LEFT,
+    OVERVIEW_BOTTOM_RIGHT
+  };
 
   GlMainView();
   virtual ~GlMainView();
-  tlp::GlMainWidget* getGlMainWidget() const;
-  virtual QList<QWidget*> configurationWidgets() const;
+  tlp::GlMainWidget *getGlMainWidget() const;
+  virtual QList<QWidget *> configurationWidgets() const;
   bool overviewVisible() const;
-  QPixmap snapshot(const QSize &outputSize=QSize()) const;
+  QPixmap snapshot(const QSize &outputSize = QSize()) const;
 
   void setOverviewPosition(const OverviewPosition &position);
   OverviewPosition overviewPosition() const;
@@ -118,9 +126,10 @@ public slots:
   virtual void refresh();
 
   /**
-   * @brief Force the overview to be redrawn. Since GlMainView already detects graph's modifications, this method should not be called manually to avoid extra rendering.
+   * @brief Force the overview to be redrawn. Since GlMainView already detects graph's
+   * modifications, this method should not be called manually to avoid extra rendering.
    */
-  virtual void drawOverview(bool generatePixmap=true);
+  virtual void drawOverview(bool generatePixmap = true);
 
   /**
    * @brief Centers the scene's camera
@@ -153,30 +162,27 @@ public slots:
 
   void setAdvancedAntiAliasing(bool);
 
-
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
-  virtual void sceneRectChanged(const QRectF&);
+  virtual void sceneRectChanged(const QRectF &);
   void setQuickAccessBarVisible(bool);
-  void fillContextMenu(QMenu *menu,const QPointF &);
+  void fillContextMenu(QMenu *menu, const QPointF &);
   void delayedCenterView();
-
 
 protected:
   virtual void setupWidget();
   bool quickAccessBarVisible() const;
-  void assignNewGlMainWidget(GlMainWidget *glMainWidget,bool deleteOldGlMainWidget=true);
-  bool eventFilter(QObject* obj, QEvent* event);
+  void assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget = true);
+  bool eventFilter(QObject *obj, QEvent *event);
 
-  tlp::GlOverviewGraphicsItem* overviewItem() const;
+  tlp::GlOverviewGraphicsItem *overviewItem() const;
   void updateShowOverviewButton();
   void updateShowQuickAccessBarButton();
-  virtual QuickAccessBar* getQuickAccessBarImpl();
+  virtual QuickAccessBar *getQuickAccessBarImpl();
 
   OverviewPosition _overviewPosition;
 
   bool _updateOverview;
-
 };
 }
 

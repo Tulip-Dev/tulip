@@ -29,8 +29,7 @@ class HistogramView;
 
 class HistogramViewNavigator : public GLInteractorComponent {
 
-public :
-
+public:
   HistogramViewNavigator();
   ~HistogramViewNavigator();
 
@@ -43,15 +42,12 @@ public :
   }
   void viewChanged(View *view);
 
-
-private :
-
+private:
   Histogram *getOverviewUnderPointer(const Coord &sceneCoord) const;
 
   HistogramView *histoView;
   Histogram *selectedHistoOverview;
 };
-
 }
 
 #endif /* HISTOGRAMVIEWNAVIGATOR_H_ */

@@ -36,26 +36,28 @@ class PanelSelectionWizard;
 class PanelSelectionWizard : public QWizard {
   Q_OBJECT
 
-  QWizardPage* _placeHolder;
-  Ui::PanelSelectionWizard* _ui;
-  tlp::GraphHierarchiesModel* _model;
-  tlp::View* _view;
+  QWizardPage *_placeHolder;
+  Ui::PanelSelectionWizard *_ui;
+  tlp::GraphHierarchiesModel *_model;
+  tlp::View *_view;
   QString _currentItem;
 
   void createView();
   void clearView();
+
 public:
-  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = NULL);
+  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel *model, QWidget *parent = NULL);
   virtual ~PanelSelectionWizard();
 
-  tlp::Graph* graph() const;
+  tlp::Graph *graph() const;
   QString panelName() const;
-  tlp::View* panel() const;
-  void setSelectedGraph(tlp::Graph*);
+  tlp::View *panel() const;
+  void setSelectedGraph(tlp::Graph *);
 
 protected slots:
   void pageChanged(int);
-  void panelSelected (const QModelIndex& index);
+  void panelSelected(const QModelIndex &index);
+
 protected:
   void done(int result);
 };

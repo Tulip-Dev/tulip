@@ -33,11 +33,12 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : parallelView(NULL), selectedAxis(NULL), x(0), y(0), dragStarted(false) {}
+ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer()
+    : parallelView(NULL), selectedAxis(NULL), x(0), y(0), dragStarted(false) {}
 
 bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glWidget = static_cast<GlMainWidget*>(widget);
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
   QMouseEvent *me = static_cast<QMouseEvent *>(e);
 
   if (e->type() == QEvent::MouseMove) {
@@ -49,36 +50,34 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
       if (selectedAxis == allAxis[0] && allAxis.size() > 1) {
         if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 1], allAxis[1]);
-        }
-        else {
+        } else {
           neighborsAxis = make_pair(static_cast<ParallelAxis *>(NULL), allAxis[1]);
         }
-      }
-      else if (selectedAxis == allAxis[allAxis.size() - 1]) {
+      } else if (selectedAxis == allAxis[allAxis.size() - 1]) {
         if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 2], allAxis[0]);
-        }
-        else {
+        } else {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 2], static_cast<ParallelAxis *>(NULL));
         }
       }
 
-      for (unsigned int i = 1 ; i < allAxis.size() - 1 ; ++i) {
+      for (unsigned int i = 1; i < allAxis.size() - 1; ++i) {
         if (selectedAxis == allAxis[i]) {
-          neighborsAxis = make_pair(allAxis[i-1], allAxis[i+1]);
+          neighborsAxis = make_pair(allAxis[i - 1], allAxis[i + 1]);
         }
       }
 
       parallelView->refresh();
-    }
-    else if (selectedAxis != NULL) {
+    } else if (selectedAxis != NULL) {
       x = glWidget->width() - me->x();
       y = me->y();
       Coord screenCoords(x, y, 0.0f);
-      Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
+      Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(
+          glWidget->screenToViewport(screenCoords)));
 
       if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
-        float rotAngle = computeABACAngleWithAlKashi(Coord(0.0f,0.0f,0.0f), Coord(0.0f, 50.0f, 0.0f), sceneCoords);
+        float rotAngle = computeABACAngleWithAlKashi(Coord(0.0f, 0.0f, 0.0f),
+                                                     Coord(0.0f, 50.0f, 0.0f), sceneCoords);
         float rotAngleLeft = neighborsAxis.first->getRotationAngle();
 
         if (rotAngleLeft <= 0.0f) {
@@ -96,21 +95,23 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
               (rotAngle > rotAngleRight && rotAngle < rotAngleLeft)) {
             selectedAxis->setRotationAngle(rotAngle);
           }
-        }
-        else {
-          if (((rotAngleRight > rotAngleLeft) && (-rotAngle+360.0f) > rotAngleRight && (-rotAngle+360.0f) < 360.0f) ||
-              ((-rotAngle+360.0f) > rotAngleRight && (-rotAngle+360.0f) < rotAngleLeft)) {
+        } else {
+          if (((rotAngleRight > rotAngleLeft) && (-rotAngle + 360.0f) > rotAngleRight &&
+               (-rotAngle + 360.0f) < 360.0f) ||
+              ((-rotAngle + 360.0f) > rotAngleRight && (-rotAngle + 360.0f) < rotAngleLeft)) {
             selectedAxis->setRotationAngle(-rotAngle);
           }
         }
-      }
-      else {
-        Coord translationVector(sceneCoords.getX() - selectedAxis->getBaseCoord().getX(), 0.0f, 0.0f);
+      } else {
+        Coord translationVector(sceneCoords.getX() - selectedAxis->getBaseCoord().getX(), 0.0f,
+                                0.0f);
         BoundingBox axisBB(selectedAxis->getBoundingBox());
         axisBB.translate(translationVector);
 
-        if ((neighborsAxis.first == NULL || axisBB[0][0] > neighborsAxis.first->getBoundingBox()[1][0]) &&
-            (neighborsAxis.second == NULL || axisBB[1][0] < neighborsAxis.second->getBoundingBox()[0][0])) {
+        if ((neighborsAxis.first == NULL ||
+             axisBB[0][0] > neighborsAxis.first->getBoundingBox()[1][0]) &&
+            (neighborsAxis.second == NULL ||
+             axisBB[1][0] < neighborsAxis.second->getBoundingBox()[0][0])) {
           selectedAxis->translate(translationVector);
         }
       }
@@ -119,24 +120,21 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
     }
 
     return true;
-  }
-  else if (e->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
+  } else if (e->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
     if (selectedAxis != NULL && !dragStarted) {
       dragStarted = true;
     }
 
     return true;
 
-  }
-  else if (e->type() == QEvent::MouseButtonRelease && me->button() == Qt::LeftButton) {
+  } else if (e->type() == QEvent::MouseButtonRelease && me->button() == Qt::LeftButton) {
     if (selectedAxis != NULL && dragStarted) {
       dragStarted = false;
       selectedAxis = NULL;
       parallelView->draw();
       return true;
     }
-  }
-  else if (e->type() == QEvent::MouseButtonDblClick) {
+  } else if (e->type() == QEvent::MouseButtonDblClick) {
     parallelView->resetAxisLayoutNextUpdate();
     parallelView->draw();
     return true;
@@ -152,12 +150,12 @@ bool ParallelCoordsAxisSpacer::draw(GlMainWidget *glMainWidget) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     Array<Coord, 4> axisBP(selectedAxis->getBoundingPolygonCoords());
     GlLine line;
-    line.addPoint(axisBP[0], Color(255,0,0));
-    line.addPoint(axisBP[1], Color(255,0,0));
-    line.addPoint(axisBP[2], Color(255,0,0));
-    line.addPoint(axisBP[3], Color(255,0,0));
-    line.addPoint(axisBP[0], Color(255,0,0));
-    line.draw(0,0);
+    line.addPoint(axisBP[0], Color(255, 0, 0));
+    line.addPoint(axisBP[1], Color(255, 0, 0));
+    line.addPoint(axisBP[2], Color(255, 0, 0));
+    line.addPoint(axisBP[3], Color(255, 0, 0));
+    line.addPoint(axisBP[0], Color(255, 0, 0));
+    line.draw(0, 0);
     return true;
   }
 
@@ -167,6 +165,4 @@ bool ParallelCoordsAxisSpacer::draw(GlMainWidget *glMainWidget) {
 void ParallelCoordsAxisSpacer::viewChanged(View *view) {
   parallelView = static_cast<ParallelCoordinatesView *>(view);
 }
-
-
 }

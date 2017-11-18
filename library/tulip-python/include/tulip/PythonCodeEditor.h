@@ -47,22 +47,19 @@ class TLP_PYTHON_SCOPE AutoCompletionList : public QListWidget {
   bool _activated;
   bool _wasActivated;
 
-public :
+public:
+  explicit AutoCompletionList(tlp::PythonCodeEditor *parent = 0);
 
-  explicit AutoCompletionList(tlp::PythonCodeEditor *parent=0);
-
-protected :
-
+protected:
   void insertSelectedItem();
   void keyPressEvent(QKeyEvent *e);
-  void showEvent(QShowEvent * event);
-  void hideEvent(QHideEvent * event);
-  void mouseDoubleClickEvent(QMouseEvent * event);
-  bool eventFilter(QObject *obj, QEvent * event);
-
+  void showEvent(QShowEvent *event);
+  void hideEvent(QHideEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event);
 };
 
-class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog  {
+class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog {
 
   Q_OBJECT
 
@@ -73,15 +70,13 @@ class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog  {
 
   void setSearchResult(const bool result);
 
-public :
-
-  FindReplaceDialog(QPlainTextEdit *_editor, QWidget *parent=NULL);
+public:
+  FindReplaceDialog(QPlainTextEdit *_editor, QWidget *parent = NULL);
   ~FindReplaceDialog();
 
   void setFindMode(const bool findMode);
 
   void setTextToFind(const QString &text);
-
 
 public slots:
 
@@ -95,11 +90,8 @@ public slots:
   }
   void regexpToggled(bool toggled);
 
-
 protected:
-
-  void hideEvent(QHideEvent * event);
-
+  void hideEvent(QHideEvent *event);
 };
 
 class TLP_PYTHON_SCOPE PythonCodeEditor : public QPlainTextEdit {
@@ -109,9 +101,8 @@ class TLP_PYTHON_SCOPE PythonCodeEditor : public QPlainTextEdit {
   friend class LineNumberArea;
   friend class AutoCompletionList;
 
-public :
-
-  explicit PythonCodeEditor(QWidget *parent=0);
+public:
+  explicit PythonCodeEditor(QWidget *parent = 0);
   ~PythonCodeEditor();
 
   QString getCleanCode() const;
@@ -214,7 +205,7 @@ public :
     this->_moduleEditor = moduleEditor;
   }
 
-  void analyseScriptCode(const bool wholeText=false);
+  void analyseScriptCode(const bool wholeText = false);
 
   AutoCompletionDataBase *getAutoCompletionDb() const {
     return _autoCompletionDb;
@@ -227,19 +218,17 @@ public :
   }
 
 protected:
-
   void resizeEvent(QResizeEvent *event);
   void showEvent(QShowEvent *);
   void paintEvent(QPaintEvent *event);
-  void keyPressEvent (QKeyEvent * e);
-  void wheelEvent(QWheelEvent * event);
-  void mouseDoubleClickEvent(QMouseEvent * event);
-  void mouseMoveEvent(QMouseEvent * event);
-  void mousePressEvent(QMouseEvent * event);
-  void mouseReleaseEvent(QMouseEvent * event);
+  void keyPressEvent(QKeyEvent *e);
+  void wheelEvent(QWheelEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
   void lineNumberAreaPaintEvent(QPaintEvent *event);
-  void insertFromMimeData(const QMimeData * source);
-
+  void insertFromMimeData(const QMimeData *source);
 
 protected slots:
 
@@ -249,12 +238,11 @@ protected slots:
   void matchParens();
   virtual void highlightCurrentLine();
   void highlightErrors();
-  virtual void showAutoCompletionList(bool dotContext=false);
-  virtual void updateAutoCompletionList(bool dotContext=false);
+  virtual void showAutoCompletionList(bool dotContext = false);
+  virtual void updateAutoCompletionList(bool dotContext = false);
   void highlightSelection();
 
 protected:
-
   virtual void updateAutoCompletionListPosition();
 
   void createParenSelection(int pos);
@@ -300,9 +288,7 @@ protected:
   QMainWindow *_mainWindow;
 
   QString _indentPattern;
-
 };
-
 }
 
 #endif /* PYTHONCODEEDITOR2_H_ */

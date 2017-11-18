@@ -33,18 +33,19 @@
 using namespace std;
 using namespace tlp;
 
-void ZoomAndPanHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
+void ZoomAndPanHighlighter::highlight(const PathFinder *, GlMainWidget *glMainWidget,
+                                      BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   Graph *graph = glMainWidget->getScene()->getGlGraphComposite()->getGraph();
   LayoutProperty *layout = inputData->getElementLayout();
-  BoundingBox bbox(computeBoundingBox(graph, layout, inputData->getElementSize(), inputData->getElementRotation(), selection));
+  BoundingBox bbox(computeBoundingBox(graph, layout, inputData->getElementSize(),
+                                      inputData->getElementRotation(), selection));
 
   QtGlSceneZoomAndPanAnimator animator(glMainWidget, bbox);
   animator.animateZoomAndPan();
 }
 
-void ZoomAndPanHighlighter::draw(GlMainWidget*) {
-}
+void ZoomAndPanHighlighter::draw(GlMainWidget *) {}
 
 bool ZoomAndPanHighlighter::isConfigurable() const {
   return false;

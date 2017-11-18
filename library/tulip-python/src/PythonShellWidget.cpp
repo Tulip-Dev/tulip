@@ -37,13 +37,13 @@ static QString ps1 = ">>> ";
 static QString ps2 = "... ";
 
 static QString rtrim(const QString &s) {
-  int lastNonSpaceIdx = s.length() -1;
+  int lastNonSpaceIdx = s.length() - 1;
 
   while (s.at(lastNonSpaceIdx).isSpace()) {
     --lastNonSpaceIdx;
   }
 
-  return s.mid(0, lastNonSpaceIdx+1);
+  return s.mid(0, lastNonSpaceIdx + 1);
 }
 
 static QString ltrim(const QString &s) {
@@ -56,7 +56,6 @@ static QString ltrim(const QString &s) {
   return s.mid(firstNonSpaceIdx);
 }
 
-
 PythonShellWidget::PythonShellWidget(QWidget *parent) : PythonCodeEditor(parent) {
   setAutoIndentation(false);
   setIndentationGuides(false);
@@ -64,7 +63,7 @@ PythonShellWidget::PythonShellWidget(QWidget *parent) : PythonCodeEditor(parent)
   setFindReplaceActivated(false);
   setCommentShortcutsActivated(false);
   setIndentShortcutsActivated(false);
-  insert(PythonInterpreter::getInstance()->getPythonShellBanner()+ "\n");
+  insert(PythonInterpreter::getInstance()->getPythonShellBanner() + "\n");
   insert("# Use Ctrl + Space to show dynamic auto-completion dialog\n");
   insert(ps1);
   _currentPs = ps1;
@@ -91,7 +90,7 @@ void PythonShellWidget::insert(const QString &txt, const bool atEnd) {
   textCursor().insertText(txt, formt);
 }
 
-void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
+void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
 
   int key = e->key();
   QString txt = e->text();
@@ -105,12 +104,11 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
   int col = textCursor().position() - textCursor().block().position();
 #endif
 
-  if (key ==  Qt::Key_Backspace || key ==  Qt::Key_Left || key == Qt::Key_Right) {
+  if (key == Qt::Key_Backspace || key == Qt::Key_Left || key == Qt::Key_Right) {
     if (isCursorOnLastLine()) {
-      if (key ==  Qt::Key_Backspace && textCursor().selectedText() != "") {
+      if (key == Qt::Key_Backspace && textCursor().selectedText() != "") {
         textCursor().removeSelectedText();
-      }
-      else {
+      } else {
 
         if (col > _currentPs.length()) {
           PythonCodeEditor::keyPressEvent(e);
@@ -119,81 +117,66 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
         if (key == Qt::Key_Right && col == _currentPs.length()) {
           PythonCodeEditor::keyPressEvent(e);
         }
-
       }
-    }
-    else {
+    } else {
       setCursorPosition(lines() - 1, lineLength(lines() - 1));
     }
-  }
-  else if (key ==  Qt::Key_Up) {
+  } else if (key == Qt::Key_Up) {
     if (isCursorOnLastLine()) {
       if (_currentHistoryPos >= 0) {
 
-        setSelection(lines()-1, 0, lines()-1, lineLength(lines()-1));
+        setSelection(lines() - 1, 0, lines() - 1, lineLength(lines() - 1));
         removeSelectedText();
         insert(_currentPs + _history[_currentHistoryPos]);
 
         if (_currentHistoryPos != 0)
           --_currentHistoryPos;
       }
-    }
-    else {
+    } else {
       setCursorPosition(lines() - 1, lineLength(lines() - 1));
     }
-  }
-  else if (key ==  Qt::Key_Down) {
+  } else if (key == Qt::Key_Down) {
     if (isCursorOnLastLine()) {
-      setSelection(lines()-1, 0, lines()-1, lineLength(lines()-1));
+      setSelection(lines() - 1, 0, lines() - 1, lineLength(lines() - 1));
       removeSelectedText();
 
-      if (_currentHistoryPos < int(_history.size() -  1) && _history.size() > 0) {
+      if (_currentHistoryPos < int(_history.size() - 1) && _history.size() > 0) {
         ++_currentHistoryPos;
         insert(_currentPs + _history[_currentHistoryPos]);
-      }
-      else {
+      } else {
         insert(_currentPs);
       }
-    }
-    else {
+    } else {
       setCursorPosition(lines() - 1, lineLength(lines() - 1));
     }
-  }
-  else if (key ==  Qt::Key_Home) {
+  } else if (key == Qt::Key_Home) {
     if (isCursorOnLastLine()) {
 
       if (e->modifiers() == Qt::ShiftModifier) {
-        setSelection(lines()-1, _currentPs.length(), lines()-1, col);
+        setSelection(lines() - 1, _currentPs.length(), lines() - 1, col);
+      } else {
+        setCursorPosition(lines() - 1, _currentPs.length());
       }
-      else {
-        setCursorPosition(lines()-1, _currentPs.length());
-      }
-    }
-    else {
+    } else {
       setCursorPosition(lines() - 1, lineLength(lines() - 1));
     }
-  }
-  else if (key ==  Qt::Key_End) {
+  } else if (key == Qt::Key_End) {
     if (isCursorOnLastLine()) {
 
       if (e->modifiers() == Qt::ShiftModifier) {
-        setSelection(lines()-1, col, lines()-1, lineLength(lines()-1));
+        setSelection(lines() - 1, col, lines() - 1, lineLength(lines() - 1));
+      } else {
+        setCursorPosition(lines() - 1, lineLength(lines() - 1));
       }
-      else {
-        setCursorPosition(lines()-1, lineLength(lines() - 1));
-      }
-    }
-    else {
+    } else {
       setCursorPosition(lines() - 1, lineLength(lines() - 1));
     }
-  }
-  else if (key ==  Qt::Key_A && e->modifiers() == Qt::ControlModifier) {
+  } else if (key == Qt::Key_A && e->modifiers() == Qt::ControlModifier) {
     if (isCursorOnLastLine()) {
-      setSelection(lines()-1, _currentPs.length(), lines()-1, lineLength(lines()-1));
+      setSelection(lines() - 1, _currentPs.length(), lines() - 1, lineLength(lines() - 1));
     }
-  }
-  else if ((key ==  Qt::Key_Enter || key ==  Qt::Key_Return) && e->modifiers() == Qt::NoModifier) {
-    if  (isCursorOnLastLine()) {
+  } else if ((key == Qt::Key_Enter || key == Qt::Key_Return) && e->modifiers() == Qt::NoModifier) {
+    if (isCursorOnLastLine()) {
       if (line != "") {
         _currentCodeLines += (line + "\n");
         _history.push_back(line);
@@ -204,38 +187,35 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
       PythonCodeEditor::keyPressEvent(e);
 
       if (line != "") {
-        if(_currentPs == ps2 || line.endsWith(":")) {
+        if (_currentPs == ps2 || line.endsWith(":")) {
           _currentPs = ps2;
-          insert(ps2+"  ");
-        }
-        else {
+          insert(ps2 + "  ");
+        } else {
           executeCurrentLines();
           _currentPs = ps1;
           insert(ps1);
         }
-      }
-      else {
+      } else {
         executeCurrentLines();
         _currentPs = ps1;
         insert(ps1);
       }
     }
-  }
-  else if (txt.length() > 0 && txt >= " " && e->modifiers() == Qt::NoModifier && e->text() != "(" && e->text() != ")") {
+  } else if (txt.length() > 0 && txt >= " " && e->modifiers() == Qt::NoModifier &&
+             e->text() != "(" && e->text() != ")") {
     if (isCursorOnLastLine()) {
       insert(txt);
-    }
-    else {
+    } else {
       insert(txt, true);
     }
-  }
-  else {
+  } else {
     PythonCodeEditor::keyPressEvent(e);
   }
 }
 
 void PythonShellWidget::executeCurrentLines() {
-  if (_currentCodeLines.isEmpty()) return;
+  if (_currentCodeLines.isEmpty())
+    return;
 
   emit beginCurrentLinesExecution();
 
@@ -270,10 +250,11 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
   QString lineNotTrimmed = textCursor().block().text().mid(_currentPs.length());
   QString line = rtrim(textCursor().block().text()).mid(_currentPs.length());
 
-  if (!lineNotTrimmed.isEmpty() && lineNotTrimmed[lineNotTrimmed.length()-1] != ' ' && lineNotTrimmed[lineNotTrimmed.length()-1] != '\t') {
+  if (!lineNotTrimmed.isEmpty() && lineNotTrimmed[lineNotTrimmed.length() - 1] != ' ' &&
+      lineNotTrimmed[lineNotTrimmed.length() - 1] != '\t') {
     QStringList context = ltrim(line).split(".");
 
-    for (int i = 0 ; i < context.count() ; ++i) {
+    for (int i = 0; i < context.count(); ++i) {
       context[i].replace("=", " ");
       context[i].replace("+", " ");
       context[i].replace("-", " ");
@@ -292,9 +273,10 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
     QStringList autoCompletionResult;
 
     if (context.size() == 2) {
-      QVector<QString> dynamicAutoCompletionList = PythonInterpreter::getInstance()->getObjectDictEntries(context[0], context[1]);
+      QVector<QString> dynamicAutoCompletionList =
+          PythonInterpreter::getInstance()->getObjectDictEntries(context[0], context[1]);
 
-      for (int i = 0 ; i < dynamicAutoCompletionList.size() ; ++i) {
+      for (int i = 0; i < dynamicAutoCompletionList.size(); ++i) {
         QString entry = dynamicAutoCompletionList[i];
 
         if (_autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
@@ -304,9 +286,10 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
 
     if (autoCompletionResult.count() == 0) {
       if (context.size() == 1) {
-        QVector<QString> dynamicAutoCompletionList = PythonInterpreter::getInstance()->getGlobalDictEntries(context[0]);
+        QVector<QString> dynamicAutoCompletionList =
+            PythonInterpreter::getInstance()->getGlobalDictEntries(context[0]);
 
-        for (int i = 0 ; i < dynamicAutoCompletionList.size() ; ++i) {
+        for (int i = 0; i < dynamicAutoCompletionList.size(); ++i) {
           QString entry = dynamicAutoCompletionList[i];
 
           if (_autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
@@ -318,8 +301,7 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
 
   if (_autoCompletionList->count() == 0) {
     PythonCodeEditor::updateAutoCompletionList();
-  }
-  else {
+  } else {
     _autoCompletionList->sortItems();
   }
 

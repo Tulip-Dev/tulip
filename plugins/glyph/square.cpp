@@ -36,25 +36,21 @@ namespace tlp {
 
 static GlRect *rect = NULL;
 
-static void drawGlyph(const Color& glyphColor, const string& texture,
-                      const string& texturePath, double borderWidth,
-                      const Color& borderColor, float lod) {
+static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath,
+                      double borderWidth, const Color &borderColor, float lod) {
   rect->setFillColor(glyphColor);
-  rect->setTextureName(texturePath+texture);
+  rect->setTextureName(texturePath + texture);
 
   if (borderWidth > 0) {
     rect->setOutlineMode(true);
     rect->setOutlineColor(borderColor);
     rect->setOutlineSize(borderWidth);
-  }
-  else {
+  } else {
     rect->setOutlineMode(false);
   }
 
-  rect->draw(lod,NULL);
-
+  rect->draw(lod, NULL);
 }
-
 
 /** \addtogroup glyph */
 
@@ -64,29 +60,27 @@ static void drawGlyph(const Color& glyphColor, const string& texture,
  * property value. If this property has no value, the square
  * is then colored using the "viewColor" node property value.
  */
-class Square: public Glyph {
+class Square : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", NodeShape::Square)
+  GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0",
+                   NodeShape::Square)
   Square(const tlp::PluginContext *context = NULL);
   virtual ~Square();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 };
 PLUGIN(Square)
-Square::Square(const tlp::PluginContext* context) :
-  Glyph(context) {
-  if(!rect)
-    rect = new GlRect(Coord(0,0,0), 1., 1., Color(0,0,0,255),Color(0,0,0,255));
+Square::Square(const tlp::PluginContext *context) : Glyph(context) {
+  if (!rect)
+    rect = new GlRect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
 }
-Square::~Square() {
-}
+Square::~Square() {}
 void Square::draw(node n, float lod) {
   drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
             glGraphInputData->getElementTexture()->getNodeValue(n),
             glGraphInputData->parameters->getTexturePath(),
             glGraphInputData->getElementBorderWidth()->getNodeValue(n),
             glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
-
 }
 Coord Square::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -101,21 +95,20 @@ Coord Square::getAnchor(const Coord &vector) const {
     return v;
 }
 
-class EESquare: public EdgeExtremityGlyph {
+class EESquare : public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATION("2D - Square extremity", "David Auber", "09/07/2002", "Textured square for edge extremities", "1.0", EdgeExtremityShape::Square)
-  EESquare(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
-    if(!rect)
-      rect = new GlRect(Coord(0,0,0), 1., 1.,Color(0,0,0,255),Color(0,0,0,255));
+  GLYPHINFORMATION("2D - Square extremity", "David Auber", "09/07/2002",
+                   "Textured square for edge extremities", "1.0", EdgeExtremityShape::Square)
+  EESquare(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
+    if (!rect)
+      rect = new GlRect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   }
 
-  void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
     glDisable(GL_LIGHTING);
-    drawGlyph(glyphColor,
-              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+    drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath(),
-              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-              borderColor, lod);
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), borderColor, lod);
   }
 };
 PLUGIN(EESquare)

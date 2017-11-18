@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
 
@@ -36,7 +35,7 @@ static const std::string EEGLYPH_CATEGORY = "Edge extremity";
 typedef Matrix<float, 4> MatrixGL;
 class GlGraphInputData;
 
-class TLP_GL_SCOPE EdgeExtremityGlyph: public Plugin {
+class TLP_GL_SCOPE EdgeExtremityGlyph : public Plugin {
 public:
   virtual std::string category() const {
     return EEGLYPH_CATEGORY;
@@ -47,13 +46,16 @@ public:
 
   EdgeExtremityGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyph();
-  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
-  void get2DTransformationMatrix(const Coord &src, const Coord &dest,const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
-  void get3DTransformationMatrix(const Coord &src, const Coord &dest,const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
+  virtual void draw(edge e, node n, const Color &glyphColor, const Color &borderColor,
+                    float lod) = 0;
+  void get2DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize,
+                                 MatrixGL &transformationMatrix, MatrixGL &scalingMatrix);
+  void get3DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize,
+                                 MatrixGL &transformationMatrix, MatrixGL &scalingMatrix);
+
 protected:
   GlGraphInputData *edgeExtGlGraphInputData;
 };
-
 }
 
 #endif /* EDGEEXTREMITYGLYPH_H_ */

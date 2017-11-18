@@ -63,9 +63,9 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
   QWidget *_pluginEditorsWidget, *_pluginControlWidget;
   QWidget *_moduleEditorsWidget, *_moduleControlWidget;
 
-
-  bool loadPythonPlugin(const QString &fileName, bool clear=true);
-  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode, bool clear=true);
+  bool loadPythonPlugin(const QString &fileName, bool clear = true);
+  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
+                                   bool clear = true);
   void savePythonPlugin(int tabIdx);
   bool indicateErrors() const;
   void clearErrorIndicators() const;
@@ -74,22 +74,23 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
 
   bool reloadAllModules() const;
   void createTulipProjectPythonPaths();
-  void writeScriptsFilesList(int deleted=-1);
-  void writePluginsFilesList(int deleted=-1);
-  void writeModulesFilesList(int deleted=-1);
+  void writeScriptsFilesList(int deleted = -1);
+  void writePluginsFilesList(int deleted = -1);
+  void writeModulesFilesList(int deleted = -1);
   QString readProjectFile(const QString &filePath);
-  void writeScriptFileToProject(int idx, const QString &scriptFileName, const QString &scriptContent);
+  void writeScriptFileToProject(int idx, const QString &scriptFileName,
+                                const QString &scriptContent);
   void writeFileToProject(const QString &projectFile, const QString &fileContent);
-  void deleteFilesFromProjectIfRemoved(const QString &projectDir, const QStringList &existingFilenames);
+  void deleteFilesFromProjectIfRemoved(const QString &projectDir,
+                                       const QStringList &existingFilenames);
 
-public :
-
+public:
   explicit PythonIDE(QWidget *parent = 0);
   ~PythonIDE();
 
   void setProject(tlp::TulipProject *project);
   void savePythonFilesAndWriteToProject(bool notifyProjectModified = false);
-  void setGraphsModel(tlp::GraphHierarchiesModel* model);
+  void setGraphsModel(tlp::GraphHierarchiesModel *model);
   void clearPythonCodeEditors();
 
   void setScriptEditorsVisible(bool visible);
@@ -97,19 +98,17 @@ public :
   void setModuleEditorsVisible(bool visible);
 
 protected:
-
   void dragEnterEvent(QDragEnterEvent *);
   void dropEvent(QDropEvent *);
   bool eventFilter(QObject *obj, QEvent *event);
 
 private:
+  int addMainScriptEditor(const QString &fileName = "");
+  int addModuleEditor(const QString &fileName = "");
+  int addPluginEditor(const QString &fileName = "");
 
-  int addMainScriptEditor(const QString &fileName="");
-  int addModuleEditor(const QString &fileName="");
-  int addPluginEditor(const QString &fileName="");
-
-  bool loadScript(const QString &fileName, bool clear=true);
-  void saveScript(int tabIdx, bool clear=true, bool showFileDialog=false);
+  bool loadScript(const QString &fileName, bool clear = true);
+  void saveScript(int tabIdx, bool clear = true, bool showFileDialog = false);
 
   tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
   tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
@@ -130,7 +129,7 @@ private slots:
   void loadPythonPlugin();
   void savePythonPlugin();
   void saveAllPlugins();
-  void registerPythonPlugin(bool clear=true);
+  void registerPythonPlugin(bool clear = true);
   void removePythonPlugin();
   void newFileModule();
   void newStringModule();
@@ -159,9 +158,7 @@ private slots:
   void closePluginTabRequested(int index);
 
   tlp::Graph *getSelectedGraph() const;
-
 };
-
 }
 
 #endif // PYTHONPLUGINSIDE_H

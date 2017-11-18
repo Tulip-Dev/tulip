@@ -36,15 +36,16 @@ class GlScene;
  * This camera can be a 2D or 3D camera
  * After setup you can do some basic operation :
  *  - Move, rotate, strafeLeftRight and strafeUpDown to modify poitn of view
- *  - You can directly modify camera parameters with setSceneRadius, setZoomFactor, setEyes, setCenter and setUp
- *  - You can transform viewport coordinates to 3D world coordinates with viewportTo3DWorld() function and 3D world coordinates to viewport coordinates with worldTo2DViewport() function
+ *  - You can directly modify camera parameters with setSceneRadius, setZoomFactor, setEyes,
+ * setCenter and setUp
+ *  - You can transform viewport coordinates to 3D world coordinates with viewportTo3DWorld()
+ * function and 3D world coordinates to viewport coordinates with worldTo2DViewport() function
  * A camera is a main component of GlLayer and GlScene
  * @see GlLayer
  * @see GlScene
  */
 class TLP_GL_SCOPE Camera : public Observable {
 public:
-
   /**
    * @brief Constructor
    * @param scene A layer is attached to a scene so we have to specify it in the constructor
@@ -54,15 +55,14 @@ public:
    * @param zoomFactor level of zoom of the camera
    * @param sceneRadius scene radius of the camera
    */
-  Camera(GlScene* scene,Coord center=Coord(0,0,0),
-         Coord eyes=Coord(0,0,10), Coord up=Coord(0,-1,0),
-         double zoomFactor=0.5, double sceneRadius=10);
+  Camera(GlScene *scene, Coord center = Coord(0, 0, 0), Coord eyes = Coord(0, 0, 10),
+         Coord up = Coord(0, -1, 0), double zoomFactor = 0.5, double sceneRadius = 10);
   /**
    * @brief Constructor : used to create a 2D camera
    */
-  Camera(GlScene* scene,bool d3);
+  Camera(GlScene *scene, bool d3);
 
-  Camera& operator=(const Camera& camera);
+  Camera &operator=(const Camera &camera);
 
   /**
    * @brief Destructor
@@ -86,7 +86,7 @@ public:
    * @brief Load this camera parameters (eye, center, zoom factor) with an other camera parameters
    */
   void loadCameraParametersWith(const Camera &camera) {
-    *this=camera;
+    *this = camera;
   }
 
   /**
@@ -109,7 +109,8 @@ public:
    */
   void strafeUpDown(float speed);
   /**
-   * @brief This function rotates the camera's eyes around the center depending on the values passed in.
+   * @brief This function rotates the camera's eyes around the center depending on the values passed
+   * in.
    */
   void rotate(float angle, float x, float y, float z);
 
@@ -152,7 +153,7 @@ public:
    *
    * 3D position of the camera
    */
-  void setEyes(const Coord& eyes);
+  void setEyes(const Coord &eyes);
   /**
    * @brief Return the eyes
    *
@@ -167,7 +168,7 @@ public:
    *
    * 3D coordinates of point visualized by the camera
    */
-  void setCenter(const Coord& center);
+  void setCenter(const Coord &center);
   /**
    * @brief Return the center
    *
@@ -182,7 +183,7 @@ public:
    *
    * normalized up 3D coordinates of the camera
    */
-  void setUp(const Coord& up);
+  void setUp(const Coord &up);
   /**
    * @brief Return the up vector
    *
@@ -230,38 +231,39 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
-///@cond DOXYGEN_HIDDEN
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * Get the modelview matrix
    */
   void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) const {
-    modelviewMatrix=this->modelviewMatrix;
+    modelviewMatrix = this->modelviewMatrix;
   }
 
   /**
    * Get the projection matrix
    */
   void getProjectionMatrix(Matrix<float, 4> &projectionMatrix) const {
-    projectionMatrix=this->projectionMatrix;
+    projectionMatrix = this->projectionMatrix;
   }
 
   /**
    * Get the transform matrix : transformMatrix = projectionMatrix * modelviewMatrix
    */
   void getTransformMatrix(Matrix<float, 4> &transformMatrix) const {
-    transformMatrix=this->transformMatrix;
+    transformMatrix = this->transformMatrix;
   }
 
   /**
    * Get the projection and the modelview matrix generated with the given viewport
    */
-  void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const;
+  void getProjAndMVMatrix(const Vector<int, 4> &viewport, Matrix<float, 4> &projectionMatrix,
+                          Matrix<float, 4> &modelviewMatrix) const;
 
   /**
    * Get the transform matrix generated with the given viewport
    */
-  void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) const;
+  void getTransformMatrix(const Vector<int, 4> &viewport, Matrix<float, 4> &transformMatrix) const;
 
   /**
    * @brief Init Gl parameters
@@ -276,12 +278,12 @@ public:
   /**
    * @brief Init projection with the gived viewport. Load identity matrix if reset is set as true
    */
-  void initProjection(const Vector<int, 4>& viewport,bool reset=true);
+  void initProjection(const Vector<int, 4> &viewport, bool reset = true);
 
   /**
    * @brief Init projection with the scene viewport. Load identity matrix if reset is set as true
    */
-  void initProjection(bool reset=true);
+  void initProjection(bool reset = true);
 
   /**
    * @brief Init modelview
@@ -291,29 +293,26 @@ public:
   /**
    * @brief Set the scene radius
    */
-  void setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox=BoundingBox());
+  void setSceneRadius(double sceneRadius, const BoundingBox sceneBoundingBox = BoundingBox());
 
-///@endcond
+  ///@endcond
 
 private:
-
   bool matrixCoherent;
 
-  Coord center,eyes,up;
+  Coord center, eyes, up;
   double zoomFactor;
   double sceneRadius;
   BoundingBox sceneBoundingBox;
 
-  GlScene* scene;
+  GlScene *scene;
 
   Matrix<float, 4> modelviewMatrix;
   Matrix<float, 4> projectionMatrix;
   Matrix<float, 4> transformMatrix;
 
   bool d3;
-
 };
-
 }
 
 #endif

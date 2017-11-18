@@ -28,11 +28,12 @@ namespace pocore {
 class HilbertLayout : public LayoutFunction {
 public:
   HilbertLayout(unsigned char order);
-  Vec2i  project (const unsigned int id) const;
-  unsigned int unproject (const Vec2i& ) const;
+  Vec2i project(const unsigned int id) const;
+  unsigned int unproject(const Vec2i &) const;
+
 private:
   unsigned char order;
   int shift;
 };
 }
-#endif //HILBERTLAYOUT_H
+#endif // HILBERTLAYOUT_H

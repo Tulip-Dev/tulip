@@ -36,62 +36,58 @@ namespace tlp {
 
 class Triangle : public Glyph {
 public:
-  GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", NodeShape::Triangle)
-  Triangle(const tlp::PluginContext *context =NULL);
+  GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0",
+                   NodeShape::Triangle)
+  Triangle(const tlp::PluginContext *context = NULL);
   virtual ~Triangle();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual void draw(node n,float lod);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
+  virtual void draw(node n, float lod);
 
 protected:
-
   static GlTriangle *triangle;
-
 };
 
-GlTriangle* Triangle::triangle=NULL;
+GlTriangle *Triangle::triangle = NULL;
 
 //=====================================================
 PLUGIN(Triangle)
 //===================================================================================
-Triangle::Triangle(const tlp::PluginContext* context): Glyph(context) {
-  if(!triangle)
-    triangle = new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0));
+Triangle::Triangle(const tlp::PluginContext *context) : Glyph(context) {
+  if (!triangle)
+    triangle = new GlTriangle(Coord(0, 0, 0), Size(0.5, 0.5, 0));
 }
 //=====================================================
-Triangle::~Triangle() {
+Triangle::~Triangle() {}
+//=====================================================
+void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
+  boundingBox[0] = Coord(-0.25, -0.5, 0);
+  boundingBox[1] = Coord(0.25, 0, 0);
 }
 //=====================================================
-void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.25,-0.5,0);
-  boundingBox[1] = Coord(0.25,0,0);
-}
-//=====================================================
-void Triangle::draw(node n,float lod) {
+void Triangle::draw(node n, float lod) {
 
   triangle->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
-    string texturePath=glGraphInputData->parameters->getTexturePath();
-    triangle->setTextureName(texturePath+texFile);
-  }
-  else {
+    string texturePath = glGraphInputData->parameters->getTexturePath();
+    triangle->setTextureName(texturePath + texFile);
+  } else {
     triangle->setTextureName("");
   }
 
-  double lineWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+  double lineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
   if (lineWidth > 0) {
     triangle->setOutlineMode(true);
     triangle->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     triangle->setOutlineSize(lineWidth);
-  }
-  else {
+  } else {
     triangle->setOutlineMode(false);
   }
 
-  triangle->draw(lod,NULL);
+  triangle->draw(lod, NULL);
 }
 //=====================================================
 

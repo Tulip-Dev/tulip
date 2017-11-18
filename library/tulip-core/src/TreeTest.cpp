@@ -27,52 +27,50 @@
 
 using namespace std;
 using namespace tlp;
-TreeTest * TreeTest::instance=NULL;
+TreeTest *TreeTest::instance = NULL;
 
-TreeTest::TreeTest() {
-}
+TreeTest::TreeTest() {}
 
-bool TreeTest::isTree(const tlp::Graph* graph) {
-  if (instance==NULL)
-    instance=new TreeTest();
+bool TreeTest::isTree(const tlp::Graph *graph) {
+  if (instance == NULL)
+    instance = new TreeTest();
 
   return instance->compute(graph);
 }
 
 //====================================================================
-//Determines if a graph is a topological tree.  This means that
-//if the graph was undirected, there would be no cycle
-bool TreeTest::isFreeTree(const tlp::Graph* graph) {
-  if (instance==NULL) instance = new TreeTest();
+// Determines if a graph is a topological tree.  This means that
+// if the graph was undirected, there would be no cycle
+bool TreeTest::isFreeTree(const tlp::Graph *graph) {
+  if (instance == NULL)
+    instance = new TreeTest();
 
   node firstNode = graph->getOneNode();
-  return (firstNode.isValid() &&
-          instance->isFreeTree (graph, firstNode))
-         ? ConnectedTest::isConnected(graph)
-         : false;
-}//isFreeTree
+  return (firstNode.isValid() && instance->isFreeTree(graph, firstNode))
+             ? ConnectedTest::isConnected(graph)
+             : false;
+} // isFreeTree
 //====================================================================
 // simple structure to implement
 // the further isFreeTree dfs loop
 struct dfsFreeTreeStruct {
   node curRoot;
   node cameFrom;
-  Iterator<node>* neighbours;
+  Iterator<node> *neighbours;
 
-  dfsFreeTreeStruct(node root = node(), node from = node(),
-                    Iterator<node>* it = NULL):
-    curRoot(root), cameFrom(from), neighbours(it) {}
+  dfsFreeTreeStruct(node root = node(), node from = node(), Iterator<node> *it = NULL)
+      : curRoot(root), cameFrom(from), neighbours(it) {}
   ~dfsFreeTreeStruct() {
     if (neighbours)
       delete neighbours;
   }
 };
 
-//Determines if the given graph is topologically a tree
-bool TreeTest::isFreeTree (const Graph *graph, node curRoot) {
+// Determines if the given graph is topologically a tree
+bool TreeTest::isFreeTree(const Graph *graph, node curRoot) {
   // do a dfs traversal from curRoot;
   MutableContainer<bool> visited;
-  visited.setAll (false);
+  visited.setAll(false);
   stack<dfsFreeTreeStruct> dfsLevels;
   dfsFreeTreeStruct curParams(curRoot, curRoot, graph->getInOutNodes(curRoot));
   dfsLevels.push(curParams);
@@ -88,9 +86,8 @@ bool TreeTest::isFreeTree (const Graph *graph, node curRoot) {
 
     if (!neighbours->hasNext()) {
       dfsLevels.pop();
-    }
-    else {
-      visited.set (curRoot.id, true);
+    } else {
+      visited.set(curRoot.id, true);
 
       // loop on remaining neighbours
       while (neighbours->hasNext()) {
@@ -118,26 +115,24 @@ bool TreeTest::isFreeTree (const Graph *graph, node curRoot) {
   }
 
   return true;
-}//end isFreeTree
+} // end isFreeTree
 //====================================================================
 // simple structure to implement
 // the further makeRootedTree dfs loop
 struct dfsMakeRootedTreeStruct {
   node curRoot;
   node cameFrom;
-  Iterator<edge>* ioEdges;
+  Iterator<edge> *ioEdges;
 
-  dfsMakeRootedTreeStruct(node root, node from, Iterator<edge>* it):
-    curRoot(root), cameFrom(from), ioEdges(it) {}
+  dfsMakeRootedTreeStruct(node root, node from, Iterator<edge> *it)
+      : curRoot(root), cameFrom(from), ioEdges(it) {}
 };
 
-//given that a graph is topologically a tree, The function turns graph
-//into a directed tree.
-static void makeRootedTree (Graph *graph, node curRoot,
-                            vector<edge>* reversedEdges) {
+// given that a graph is topologically a tree, The function turns graph
+// into a directed tree.
+static void makeRootedTree(Graph *graph, node curRoot, vector<edge> *reversedEdges) {
   stack<dfsMakeRootedTreeStruct> dfsLevels;
-  dfsMakeRootedTreeStruct curParams(curRoot, curRoot,
-                                    graph->getInOutEdges(curRoot));
+  dfsMakeRootedTreeStruct curParams(curRoot, curRoot, graph->getInOutEdges(curRoot));
   dfsLevels.push(curParams);
 
   // dfs loop
@@ -150,15 +145,14 @@ static void makeRootedTree (Graph *graph, node curRoot,
     if (!ioEdges->hasNext()) {
       delete ioEdges;
       dfsLevels.pop();
-    }
-    else {
+    } else {
       // loop on remaining ioEdges
       while (ioEdges->hasNext()) {
         edge curEdge = ioEdges->next();
         node opposite = graph->opposite(curEdge, curRoot);
 
         if (opposite != cameFrom) {
-          if (graph->target (curEdge) == curRoot) {
+          if (graph->target(curEdge) == curRoot) {
             graph->reverse(curEdge);
 
             if (reversedEdges)
@@ -171,40 +165,41 @@ static void makeRootedTree (Graph *graph, node curRoot,
           curParams.ioEdges = graph->getInOutEdges(opposite);
           dfsLevels.push(curParams);
           break;
-        }//end if
-      }//end while
-    }//end else
-  }//end while
-}//end makeRootedTree
+        } // end if
+      }   // end while
+    }     // end else
+  }       // end while
+} // end makeRootedTree
 //====================================================================
-//Turns a topological tree graph into a directed tree starting at
-//the node root.
+// Turns a topological tree graph into a directed tree starting at
+// the node root.
 void TreeTest::makeRootedTree(Graph *graph, node root) {
-  if (instance==NULL) instance=new TreeTest();
+  if (instance == NULL)
+    instance = new TreeTest();
 
   graph->removeListener(instance);
   instance->resultsBuffer.erase(graph);
 
-  if (!graph->isElement (root)) {
+  if (!graph->isElement(root)) {
     tlp::warning() << "makeRootedTree:  Passed root is not element of graph" << endl;
     return;
-  }//end if
+  } // end if
 
-  if (!TreeTest::isFreeTree (graph)) {
+  if (!TreeTest::isFreeTree(graph)) {
     tlp::warning() << "makeRootedTree:  Graph is not topologically a tree, so rooted "
                    << "tree cannot be made." << endl;
     return;
-  }//end if
+  } // end if
 
   ::makeRootedTree(graph, root, NULL);
-  assert (TreeTest::isTree (graph));
-}//end makeRootedTree
+  assert(TreeTest::isTree(graph));
+} // end makeRootedTree
 
 //====================================================================
 // this function is for internal purpose only
-static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
+static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
                                   PluginProgress *pluginProgress,
-                                  vector<edge>* reversedEdges = NULL) {
+                                  vector<edge> *reversedEdges = NULL) {
   // nothing todo if the graph is already
   if (TreeTest::isTree(graph))
     return graph;
@@ -214,13 +209,13 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
   Graph *gClone = graph;
 
   if (!rGraph) {
-    // the graph attribute used to store the clone
+// the graph attribute used to store the clone
 #define CLONE_NAME "CloneForTree"
     rGraph = gClone = graph->addCloneSubGraph(CLONE_NAME);
-    // the graph attribute used to store added root node
+// the graph attribute used to store added root node
 #define CLONE_ROOT "CloneRoot"
     rGraph->setAttribute(CLONE_ROOT, node());
-    // the graph attribute used to store the reversed edge
+// the graph attribute used to store the reversed edge
 #define REVERSED_EDGES "ReversedEdges"
     reversedEdges = new vector<edge>;
     rGraph->setAttribute(REVERSED_EDGES, reversedEdges);
@@ -246,11 +241,10 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     BooleanProperty treeSelection(gClone);
     selectSpanningTree(gClone, &treeSelection, pluginProgress);
 
-    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+    if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return 0;
 
-    return computeTreeInternal(gClone->addSubGraph(&treeSelection),
-                               rGraph, true, pluginProgress,
+    return computeTreeInternal(gClone->addSubGraph(&treeSelection), rGraph, true, pluginProgress,
                                reversedEdges);
   }
 
@@ -279,10 +273,9 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     // to our main tree
     // and connect the main root to each
     // subtree root
-    Graph *sTree = computeTreeInternal(gConn, rGraph, true, pluginProgress,
-                                       reversedEdges);
+    Graph *sTree = computeTreeInternal(gConn, rGraph, true, pluginProgress, reversedEdges);
 
-    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+    if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return 0;
 
     node n;
@@ -293,15 +286,14 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
         tree->addEdge(root, n);
     }
     edge e;
-    forEach(e, sTree->getEdges())
-    tree->addEdge(e);
+    forEach(e, sTree->getEdges()) tree->addEdge(e);
   }
-  assert (TreeTest::isTree(tree));
+  assert(TreeTest::isTree(tree));
   return tree;
 }
 
 // the documented functions
-Graph* TreeTest::computeTree(tlp::Graph* graph, PluginProgress* pluginProgress) {
+Graph *TreeTest::computeTree(tlp::Graph *graph, PluginProgress *pluginProgress) {
   return computeTreeInternal(graph, NULL, false, pluginProgress);
 }
 
@@ -316,12 +308,12 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   string name;
   sg->getAttribute<string>(nameAtt, name);
 
-  while(name != CLONE_NAME) {
+  while (name != CLONE_NAME) {
     sg = sg->getSuperGraph();
     sg->getAttribute<string>(nameAtt, name);
   }
 
-  Graph* rg = graph->getRoot();
+  Graph *rg = graph->getRoot();
   // get its added root
   node root;
   sg->getAttribute<node>(CLONE_ROOT, root);
@@ -331,13 +323,12 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
     rg->delNode(root);
 
   // delete the reversed edges if any
-  vector<edge>* reversedEdges = NULL;
+  vector<edge> *reversedEdges = NULL;
 
-  if (sg->getAttribute<vector<edge>*>(REVERSED_EDGES, reversedEdges)) {
+  if (sg->getAttribute<vector<edge> *>(REVERSED_EDGES, reversedEdges)) {
     sg->removeAttribute(REVERSED_EDGES);
 
-    for(vector<edge>::iterator ite = reversedEdges->begin();
-        ite != reversedEdges->end(); ++ite) {
+    for (vector<edge>::iterator ite = reversedEdges->begin(); ite != reversedEdges->end(); ++ite) {
       rg->reverse(*ite);
     }
 
@@ -350,62 +341,60 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
 
 //====================================================================
 bool TreeTest::compute(const Graph *graph) {
-  if (resultsBuffer.find(graph)!=resultsBuffer.end()) {
+  if (resultsBuffer.find(graph) != resultsBuffer.end()) {
     return resultsBuffer[graph];
   }
 
-  if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
-    resultsBuffer[graph]=false;
+  if (graph->numberOfEdges() != graph->numberOfNodes() - 1) {
+    resultsBuffer[graph] = false;
     graph->addListener(this);
     return false;
   }
 
-  bool rootNodeFound=false;
-  Iterator<node> *it=graph->getNodes();
+  bool rootNodeFound = false;
+  Iterator<node> *it = graph->getNodes();
 
   while (it->hasNext()) {
-    node tmp=it->next();
+    node tmp = it->next();
 
-    if (graph->indeg(tmp)>1) {
+    if (graph->indeg(tmp) > 1) {
       delete it;
-      resultsBuffer[graph]=false;
+      resultsBuffer[graph] = false;
       graph->addListener(this);
       return false;
     }
 
-    if (graph->indeg(tmp)==0) {
+    if (graph->indeg(tmp) == 0) {
       if (rootNodeFound) {
         delete it;
-        resultsBuffer[graph]=false;
+        resultsBuffer[graph] = false;
         graph->addListener(this);
         return false;
-      }
-      else
-        rootNodeFound=true;
+      } else
+        rootNodeFound = true;
     }
   }
 
   delete it;
 
   if (AcyclicTest::isAcyclic(graph)) {
-    resultsBuffer[graph]=true;
+    resultsBuffer[graph] = true;
     graph->addListener(this);
     return true;
-  }
-  else {
-    resultsBuffer[graph]=false;
+  } else {
+    resultsBuffer[graph] = false;
     graph->addListener(this);
     return false;
   }
 }
 
-void TreeTest::treatEvent(const Event& evt) {
-  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+void TreeTest::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
-    Graph* graph = gEvt->getGraph();
+    Graph *graph = gEvt->getGraph();
 
-    switch(gEvt->getType()) {
+    switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -434,10 +423,9 @@ void TreeTest::treatEvent(const Event& evt) {
     default:
       break;
     }
-  }
-  else {
+  } else {
 
-    Graph* graph = static_cast<Graph *>(evt.sender());
+    Graph *graph = static_cast<Graph *>(evt.sender());
 
     if (evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);

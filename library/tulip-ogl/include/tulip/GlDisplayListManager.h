@@ -39,17 +39,16 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlDisplayListManager {
 
-  typedef std::map<std::string,GLuint> DisplayListMap;
+  typedef std::map<std::string, GLuint> DisplayListMap;
   typedef std::map<uintptr_t, DisplayListMap> ContextAndDisplayListMap;
 
 public:
-
   /**
    * Return the current instance. If instance doesn't exist, create it.
    */
   static GlDisplayListManager &getInst() {
-    if(!inst)
-      inst=new GlDisplayListManager();
+    if (!inst)
+      inst = new GlDisplayListManager();
 
     return *inst;
   }
@@ -67,7 +66,7 @@ public:
   /**
    * Begin to record a new display list with name : name
    */
-  bool beginNewDisplayList(const std::string& name);
+  bool beginNewDisplayList(const std::string &name);
   /**
    * End the current record of display list
    */
@@ -76,10 +75,9 @@ public:
   /**
    * Call display list with name : name
    */
-  bool callDisplayList(const std::string& name);
+  bool callDisplayList(const std::string &name);
 
 private:
-
   /**
    * Private constructor for singleton
    */
@@ -87,12 +85,10 @@ private:
 
   uintptr_t currentContext;
 
-  static GlDisplayListManager* inst;
+  static GlDisplayListManager *inst;
 
   ContextAndDisplayListMap displayListMap;
-
 };
-
 }
 
 #endif // Tulip_GLDISPLAYLISTMANAGER_H

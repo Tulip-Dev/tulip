@@ -25,16 +25,16 @@
 
 namespace tlp {
 
-PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget* opt, QWidget *parent):
-  QuickAccessBarImpl(NULL,QuickAccessBarImpl::QuickAccessButtons(QuickAccessBarImpl::SCREENSHOT|
-                     QuickAccessBarImpl::BACKGROUNDCOLOR|
-                     QuickAccessBarImpl::SHOWLABELS|
-                     QuickAccessBarImpl::NODEBORDERCOLOR|
-                     QuickAccessBarImpl::NODECOLOR
-                     | QuickAccessBarImpl::LABELSSCALED
-                     |QuickAccessBarImpl::LABELCOLOR), parent),_optionsWidget(opt) {
-
-}
+PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt,
+                                                                 QWidget *parent)
+    : QuickAccessBarImpl(NULL,
+                         QuickAccessBarImpl::QuickAccessButtons(
+                             QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                             QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::NODEBORDERCOLOR |
+                             QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::LABELSSCALED |
+                             QuickAccessBarImpl::LABELCOLOR),
+                         parent),
+      _optionsWidget(opt) {}
 
 void PixelOrientedViewQuickAccessBar::reset() {
   QuickAccessBarImpl::reset();
@@ -45,5 +45,4 @@ void PixelOrientedViewQuickAccessBar::setBackgroundColor(const QColor &col) {
   _optionsWidget->setBackgroundColor(tlp::QColorToColor(col));
   emit settingsChanged();
 }
-
 }

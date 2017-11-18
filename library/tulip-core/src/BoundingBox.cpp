@@ -22,10 +22,13 @@
 
 #include <tulip/BoundingBox.h>
 
-static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, const tlp::Vec3f &p2, tlp::Vec3f &hit) {
-  if ((fDst1 * fDst2) >= 0.0f) return false;
+static bool getIntersection(float fDst1, float fDst2, const tlp::Vec3f &p1, const tlp::Vec3f &p2,
+                            tlp::Vec3f &hit) {
+  if ((fDst1 * fDst2) >= 0.0f)
+    return false;
 
-  if (fDst1 == fDst2) return false;
+  if (fDst1 == fDst2)
+    return false;
 
   hit = p1 + (p2 - p1) * (-fDst1 / (fDst2 - fDst1));
   return true;
@@ -39,7 +42,7 @@ BoundingBox::BoundingBox() {
   assert(!isValid());
 }
 
-BoundingBox::BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max) {
+BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max) {
   (*this)[0] = min;
   (*this)[1] = max;
   assert(isValid());
@@ -65,23 +68,22 @@ float BoundingBox::depth() const {
   return ((*this)[1][2] - (*this)[0][2]);
 }
 
-void BoundingBox::expand(const tlp::Vec3f& coord) {
-  if(!isValid()) {
+void BoundingBox::expand(const tlp::Vec3f &coord) {
+  if (!isValid()) {
     (*this)[0] = coord;
     (*this)[1] = coord;
-  }
-  else {
+  } else {
     (*this)[0] = tlp::minVector((*this)[0], coord);
     (*this)[1] = tlp::maxVector((*this)[1], coord);
   }
 }
 
-void BoundingBox::translate(const tlp::Vec3f& vec) {
+void BoundingBox::translate(const tlp::Vec3f &vec) {
   (*this)[0] += vec;
   (*this)[1] += vec;
 }
 
-void BoundingBox::scale(const tlp::Vec3f& vec) {
+void BoundingBox::scale(const tlp::Vec3f &vec) {
   if (isValid()) {
     (*this)[0] *= vec;
     (*this)[1] *= vec;
@@ -89,75 +91,98 @@ void BoundingBox::scale(const tlp::Vec3f& vec) {
 }
 
 bool BoundingBox::isValid() const {
-  return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1] && (*this)[0][2] <= (*this)[1][2];
+  return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1] &&
+         (*this)[0][2] <= (*this)[1][2];
 }
 
-bool BoundingBox::contains(const tlp::Vec3f& coord) const {
-  if(isValid()) {
-    return (coord[0]>=(*this)[0][0] &&  coord[1]>=(*this)[0][1] && coord[2]>=(*this)[0][2] ) && (coord[0]<=(*this)[1][0] &&  coord[1]<=(*this)[1][1] && coord[2]<=(*this)[1][2]);
-  }
-  else {
+bool BoundingBox::contains(const tlp::Vec3f &coord) const {
+  if (isValid()) {
+    return (coord[0] >= (*this)[0][0] && coord[1] >= (*this)[0][1] && coord[2] >= (*this)[0][2]) &&
+           (coord[0] <= (*this)[1][0] && coord[1] <= (*this)[1][1] && coord[2] <= (*this)[1][2]);
+  } else {
     return false;
   }
 }
 
-bool BoundingBox::contains(const tlp::BoundingBox& boundingBox) const {
-  if(isValid() && boundingBox.isValid()) {
+bool BoundingBox::contains(const tlp::BoundingBox &boundingBox) const {
+  if (isValid() && boundingBox.isValid()) {
     return contains(boundingBox[0]) && contains(boundingBox[1]);
-  }
-  else {
+  } else {
     return false;
   }
 }
 
-bool BoundingBox::intersect(const tlp::BoundingBox& boundingBox)const {
-  if(!isValid() || !boundingBox.isValid())
+bool BoundingBox::intersect(const tlp::BoundingBox &boundingBox) const {
+  if (!isValid() || !boundingBox.isValid())
     return false;
 
-  if ((*this)[1][0] < boundingBox[0][0]) return false;
+  if ((*this)[1][0] < boundingBox[0][0])
+    return false;
 
-  if (boundingBox[1][0] < (*this)[0][0]) return false;
+  if (boundingBox[1][0] < (*this)[0][0])
+    return false;
 
-  if ((*this)[1][1] < boundingBox[0][1]) return false;
+  if ((*this)[1][1] < boundingBox[0][1])
+    return false;
 
-  if (boundingBox[1][1] < (*this)[0][1]) return false;
+  if (boundingBox[1][1] < (*this)[0][1])
+    return false;
 
-  if ((*this)[1][2] < boundingBox[0][2]) return false;
+  if ((*this)[1][2] < boundingBox[0][2])
+    return false;
 
-  if (boundingBox[1][2] < (*this)[0][2]) return false;
+  if (boundingBox[1][2] < (*this)[0][2])
+    return false;
 
   return true;
 }
 
-bool BoundingBox::intersect(const Vec3f& segStart, const Vec3f& segEnd)const {
-  if(!isValid())
+bool BoundingBox::intersect(const Vec3f &segStart, const Vec3f &segEnd) const {
+  if (!isValid())
     return false;
 
-  if (segEnd[0] < (*this)[0][0] && segStart[0] < (*this)[0][0]) return false;
+  if (segEnd[0] < (*this)[0][0] && segStart[0] < (*this)[0][0])
+    return false;
 
-  if (segEnd[0] > (*this)[1][0] && segStart[0] > (*this)[1][0]) return false;
+  if (segEnd[0] > (*this)[1][0] && segStart[0] > (*this)[1][0])
+    return false;
 
-  if (segEnd[1] < (*this)[0][1] && segStart[1] < (*this)[0][1]) return false;
+  if (segEnd[1] < (*this)[0][1] && segStart[1] < (*this)[0][1])
+    return false;
 
-  if (segEnd[1] > (*this)[1][1] && segStart[1] > (*this)[1][1]) return false;
+  if (segEnd[1] > (*this)[1][1] && segStart[1] > (*this)[1][1])
+    return false;
 
-  if (segEnd[2] <(*this)[0][2] && segStart[2] <(*this)[0][2]) return false;
+  if (segEnd[2] < (*this)[0][2] && segStart[2] < (*this)[0][2])
+    return false;
 
-  if (segEnd[2] > (*this)[1][2] && segStart[2] > (*this)[1][2]) return false;
+  if (segEnd[2] > (*this)[1][2] && segStart[2] > (*this)[1][2])
+    return false;
 
-  if (segStart[0] > (*this)[0][0] && segStart[0] < (*this)[1][0] &&
-      segStart[1] > (*this)[0][1] && segStart[1] < (*this)[1][1] &&
-      segStart[2] >(*this)[0][2] && segStart[2] < (*this)[1][2])
+  if (segStart[0] > (*this)[0][0] && segStart[0] < (*this)[1][0] && segStart[1] > (*this)[0][1] &&
+      segStart[1] < (*this)[1][1] && segStart[2] > (*this)[0][2] && segStart[2] < (*this)[1][2])
     return true;
 
   Vec3f hit;
 
-  if ((getIntersection(segStart[0] - (*this)[0][0], segEnd[0] - (*this)[0][0], segStart, segEnd, hit) && contains(hit))
-      || (getIntersection(segStart[1] - (*this)[0][1], segEnd[1] - (*this)[0][1], segStart, segEnd, hit) && contains(hit))
-      || (getIntersection(segStart[2] - (*this)[0][2], segEnd[2] - (*this)[0][2], segStart, segEnd, hit) && contains(hit))
-      || (getIntersection(segStart[0] - (*this)[1][0], segEnd[0] - (*this)[1][0], segStart, segEnd, hit) && contains(hit))
-      || (getIntersection(segStart[1] - (*this)[1][1], segEnd[1] - (*this)[1][1], segStart, segEnd, hit) && contains(hit))
-      || (getIntersection(segStart[2] - (*this)[1][2], segEnd[2] - (*this)[1][2], segStart, segEnd, hit) && contains(hit)))
+  if ((getIntersection(segStart[0] - (*this)[0][0], segEnd[0] - (*this)[0][0], segStart, segEnd,
+                       hit) &&
+       contains(hit)) ||
+      (getIntersection(segStart[1] - (*this)[0][1], segEnd[1] - (*this)[0][1], segStart, segEnd,
+                       hit) &&
+       contains(hit)) ||
+      (getIntersection(segStart[2] - (*this)[0][2], segEnd[2] - (*this)[0][2], segStart, segEnd,
+                       hit) &&
+       contains(hit)) ||
+      (getIntersection(segStart[0] - (*this)[1][0], segEnd[0] - (*this)[1][0], segStart, segEnd,
+                       hit) &&
+       contains(hit)) ||
+      (getIntersection(segStart[1] - (*this)[1][1], segEnd[1] - (*this)[1][1], segStart, segEnd,
+                       hit) &&
+       contains(hit)) ||
+      (getIntersection(segStart[2] - (*this)[1][2], segEnd[2] - (*this)[1][2], segStart, segEnd,
+                       hit) &&
+       contains(hit)))
     return true;
 
   return false;
@@ -180,7 +205,4 @@ void BoundingBox::getCompleteBB(Vec3f bb[8]) const {
   bb[7] = bb[3];
   bb[7][2] = (*this)[1][2];
 }
-
 }
-
-
