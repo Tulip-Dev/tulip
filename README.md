@@ -148,7 +148,7 @@ Hints on how to build Tulip for these three platforms can be found in the contin
 
 ## References
 
-Below are some scientific publications related to Tulip:
+Below are some scientific publications related to Tulip (see http://tulip.labri.fr/TulipDrupal/?q=tulip-biblio for more information):
 
   * David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert, Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. TULIP 4. Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016. https://hal.archives-ouvertes.fr/hal-01359308
 
