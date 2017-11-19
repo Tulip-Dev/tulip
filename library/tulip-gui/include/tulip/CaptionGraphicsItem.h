@@ -43,7 +43,7 @@ class CaptionGraphicsItem : public QObject {
 
 public:
   CaptionGraphicsItem(View *view);
-  ~CaptionGraphicsItem();
+  ~CaptionGraphicsItem() override;
 
   void setType(unsigned int type);
 

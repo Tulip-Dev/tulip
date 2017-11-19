@@ -71,13 +71,13 @@ public:
 
 #endif
   }
-  ~IdManagerIterator() {}
+  ~IdManagerIterator() override {}
 
-  bool hasNext() {
+  bool hasNext() override {
     return (current < last);
   }
 
-  TYPE next() {
+  TYPE next() override {
     unsigned int tmp = current;
     ++current;
 

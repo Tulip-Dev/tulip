@@ -43,8 +43,8 @@ private:
   tlp::BooleanProperty *selection;
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
   void testSetAll();
   void testSetAll(bool);
   void testSetGet();

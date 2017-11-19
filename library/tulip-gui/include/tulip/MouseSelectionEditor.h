@@ -38,11 +38,11 @@ class TLP_QT_SCOPE MouseSelectionEditor : public GLInteractorComponent {
 
 public:
   MouseSelectionEditor();
-  ~MouseSelectionEditor();
-  void clear();
-  bool compute(GlMainWidget *glMainWidget);
-  bool draw(GlMainWidget *);
-  bool eventFilter(QObject *, QEvent *);
+  ~MouseSelectionEditor() override;
+  void clear() override;
+  bool compute(GlMainWidget *glMainWidget) override;
+  bool draw(GlMainWidget *) override;
+  bool eventFilter(QObject *, QEvent *) override;
 
 private:
   enum EditOperation {

@@ -239,7 +239,7 @@ class TLP_SCOPE Graph : public Observable {
 
 public:
   Graph() : id(0) {}
-  virtual ~Graph() {}
+  ~Graph() override {}
 
   /**
    * @brief Applies an algorithm plugin, identified by its name.
@@ -1821,7 +1821,7 @@ public:
     vectInfos.addedNodes = nullptr;
   }
 
-  ~GraphEvent();
+  ~GraphEvent() override;
 
   Graph *getGraph() const {
     return static_cast<Graph *>(sender());

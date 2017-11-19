@@ -50,17 +50,17 @@ public:
   /**
    * Virtual function to accept GlSceneVisitor on this class
    */
-  virtual void acceptVisitor(GlSceneVisitor *visitor);
+  void acceptVisitor(GlSceneVisitor *visitor) override;
 
   /**
    * Return the edge bounding box
    */
-  virtual BoundingBox getBoundingBox(const GlGraphInputData *data);
+  BoundingBox getBoundingBox(const GlGraphInputData *data) override;
 
   /**
    * Draw the edge with level of detail : lod and Camera : camera
    */
-  virtual void draw(float lod, const GlGraphInputData *data, Camera *camera);
+  void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to
@@ -73,7 +73,7 @@ public:
    * Draw the label of the edge if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  void drawLabel(OcclusionTest *test, const GlGraphInputData *data);
+  void drawLabel(OcclusionTest *test, const GlGraphInputData *data) override;
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true

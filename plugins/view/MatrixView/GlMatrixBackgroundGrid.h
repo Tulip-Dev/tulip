@@ -27,11 +27,11 @@ class MatrixView;
 class GlMatrixBackgroundGrid : public tlp::GlSimpleEntity {
 public:
   GlMatrixBackgroundGrid(MatrixView *view);
-  virtual tlp::BoundingBox getBoundingBox();
-  virtual void draw(float lod, tlp::Camera *camera);
+  tlp::BoundingBox getBoundingBox() override;
+  void draw(float lod, tlp::Camera *camera) override;
 
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
 private:
   MatrixView *_view;

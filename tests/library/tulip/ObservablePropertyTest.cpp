@@ -58,7 +58,7 @@ public:
     return observables.find(obs) != observables.end();
   }
 
-  void treatEvents(const vector<Event> &events) {
+  void treatEvents(const vector<Event> &events) override {
     if (events[0].type() == Event::TLP_DELETE) {
       observables.insert(events[0].sender());
     } else {
@@ -122,7 +122,7 @@ public:
   virtual void destroy(PropertyInterface *prop) {
     properties.insert(prop);
   }
-  virtual void treatEvent(const Event &evt) {
+  void treatEvent(const Event &evt) override {
     const PropertyEvent *propEvt = dynamic_cast<const PropertyEvent *>(&evt);
 
     if (propEvt) {

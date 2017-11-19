@@ -40,7 +40,7 @@ public:
   DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,
                                   const std::vector<Color> &secondValues,
                                   QWidget *parent = nullptr);
-  ~DoubleStringsListRelationDialog();
+  ~DoubleStringsListRelationDialog() override;
   void getResult(std::vector<std::pair<std::string, Color>> &result);
 
 private slots:

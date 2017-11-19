@@ -56,7 +56,7 @@ void edgeAttributeError() {
 struct GMLGraphBuilder : public GMLTrue {
   Graph *_graph;
   map<int, node> nodeIndex;
-  virtual ~GMLGraphBuilder() {}
+  ~GMLGraphBuilder() override {}
   GMLGraphBuilder(Graph *graph) : _graph(graph) {
     // cer << "buil GraphBuilder" << endl;
   }
@@ -172,7 +172,7 @@ struct GMLGraphBuilder : public GMLTrue {
   bool setAllEdgeValue(const string &, const string &, string) {
     return true;
   }
-  bool addStruct(const string &structName, GMLBuilder *&newBuilder);
+  bool addStruct(const string &structName, GMLBuilder *&newBuilder) override;
 };
 //=================================================================================
 struct GMLNodeBuilder : public GMLBuilder {
@@ -181,7 +181,7 @@ struct GMLNodeBuilder : public GMLBuilder {
 
   GMLNodeBuilder(GMLGraphBuilder *graphBuilder) : graphBuilder(graphBuilder), idSet(-1) {}
 
-  bool addInt(const string &st, const int id) {
+  bool addInt(const string &st, const int id) override {
     if (st == ID) {
       bool result = graphBuilder->addNode(id);
 
@@ -198,7 +198,7 @@ struct GMLNodeBuilder : public GMLBuilder {
 
     return true;
   }
-  bool addDouble(const string &st, const double real) {
+  bool addDouble(const string &st, const double real) override {
     if (idSet != -1)
       graphBuilder->setNodeValue(idSet, st, real);
     else
@@ -206,7 +206,7 @@ struct GMLNodeBuilder : public GMLBuilder {
 
     return true;
   }
-  bool addString(const string &st, const string &str) {
+  bool addString(const string &st, const string &str) override {
     if (idSet != -1) {
       if (st == LABEL)
         graphBuilder->setNodeValue(idSet, "viewLabel", str);
@@ -217,7 +217,7 @@ struct GMLNodeBuilder : public GMLBuilder {
 
     return true;
   }
-  bool addBool(const string &st, const bool boolean) {
+  bool addBool(const string &st, const bool boolean) override {
     if (idSet != -1)
       graphBuilder->setNodeValue(idSet, st, boolean);
     else
@@ -234,8 +234,8 @@ struct GMLNodeBuilder : public GMLBuilder {
   void setCoord(const Coord &coord) {
     graphBuilder->setNodeCoordValue(idSet, "viewLayout", coord);
   }
-  bool addStruct(const string &structName, GMLBuilder *&newBuilder);
-  bool close() {
+  bool addStruct(const string &structName, GMLBuilder *&newBuilder) override;
+  bool close() override {
     return true;
   }
 };
@@ -251,7 +251,7 @@ struct GMLNodeGraphicsBuilder : public GMLTrue {
       : nodeBuilder(nodeBuilder), coord(Coord(0, 0, 0)), size(Size(1, 1, 1)),
         color(Color(0, 0, 0, 255)) {}
 
-  bool addInt(const string &st, const int integer) {
+  bool addInt(const string &st, const int integer) override {
     if (st == "x")
       coord.setX(integer);
 
@@ -272,7 +272,7 @@ struct GMLNodeGraphicsBuilder : public GMLTrue {
 
     return true;
   }
-  bool addDouble(const string &st, const double real) {
+  bool addDouble(const string &st, const double real) override {
     if (st == "x")
       coord.setX(real);
 
@@ -293,7 +293,7 @@ struct GMLNodeGraphicsBuilder : public GMLTrue {
 
     return true;
   }
-  bool addString(const string &st, const string &str) {
+  bool addString(const string &st, const string &str) override {
     if (st == "fill") {
       // parse color in format #rrggbb
       if (str[0] == '#' && str.length() == 7) {
@@ -332,7 +332,7 @@ struct GMLNodeGraphicsBuilder : public GMLTrue {
 
     return true;
   }
-  bool close() {
+  bool close() override {
     nodeBuilder->setCoord(coord);
     nodeBuilder->setColor(color);
     nodeBuilder->setSize(size);
@@ -363,7 +363,7 @@ struct GMLEdgeBuilder : public GMLTrue {
 
   GMLEdgeBuilder(GMLGraphBuilder *graphBuilder)
       : graphBuilder(graphBuilder), source(-1), target(-1), edgeOk(false) {}
-  bool addInt(const string &st, const int id) {
+  bool addInt(const string &st, const int id) override {
     bool result = true;
 
     if (st == SOURCE)
@@ -386,7 +386,7 @@ struct GMLEdgeBuilder : public GMLTrue {
 
     return result;
   }
-  bool addDouble(const string &st, const double real) {
+  bool addDouble(const string &st, const double real) override {
     if (edgeOk)
       graphBuilder->setEdgeValue(curEdge, st, real);
     else
@@ -394,7 +394,7 @@ struct GMLEdgeBuilder : public GMLTrue {
 
     return true;
   }
-  bool addString(const string &st, const string &str) {
+  bool addString(const string &st, const string &str) override {
     if (edgeOk)
       graphBuilder->setEdgeValue(curEdge, st, str);
     else
@@ -402,7 +402,7 @@ struct GMLEdgeBuilder : public GMLTrue {
 
     return true;
   }
-  bool addBool(const string &st, const bool boolean) {
+  bool addBool(const string &st, const bool boolean) override {
     if (edgeOk)
       graphBuilder->setEdgeValue(curEdge, st, boolean);
     else
@@ -413,8 +413,8 @@ struct GMLEdgeBuilder : public GMLTrue {
   void setEdgeValue(const LineType::RealType &lCoord) {
     graphBuilder->setEdgeValue(curEdge, lCoord);
   }
-  bool addStruct(const string &structName, GMLBuilder *&newBuilder);
-  bool close() {
+  bool addStruct(const string &structName, GMLBuilder *&newBuilder) override;
+  bool close() override {
     return true;
   }
 };
@@ -426,14 +426,14 @@ struct GMLEdgeGraphicsBuilder : public GMLTrue {
 
   GMLEdgeGraphicsBuilder(GMLEdgeBuilder *edgeBuilder)
       : edgeBuilder(edgeBuilder), size(Size(0, 0, 0)), color(Color(0, 0, 0, 0)) {}
-  bool addString(const string &, const string &) {
+  bool addString(const string &, const string &) override {
     return true;
   }
   void setLine(const LineType::RealType &lCoord) {
     edgeBuilder->setEdgeValue(lCoord);
   }
-  bool addStruct(const string &structName, GMLBuilder *&newBuilder);
-  bool close() {
+  bool addStruct(const string &structName, GMLBuilder *&newBuilder) override;
+  bool close() override {
     return true;
   }
 };
@@ -443,12 +443,12 @@ struct GMLEdgeGraphicsLineBuilder : public GMLTrue {
   LineType::RealType lCoord;
   GMLEdgeGraphicsLineBuilder(GMLEdgeGraphicsBuilder *edgeGraphicsBuilder)
       : edgeGraphicsBuilder(edgeGraphicsBuilder) {}
-  virtual ~GMLEdgeGraphicsLineBuilder() {}
-  bool addStruct(const string &structName, GMLBuilder *&newBuilder);
+  ~GMLEdgeGraphicsLineBuilder() override {}
+  bool addStruct(const string &structName, GMLBuilder *&newBuilder) override;
   void addPoint(const Coord &coord) {
     lCoord.push_back(coord);
   }
-  bool close() {
+  bool close() override {
     edgeGraphicsBuilder->setLine(lCoord);
     return true;
   }
@@ -459,7 +459,7 @@ struct GMLEdgeGraphicsLinePointBuilder : public GMLTrue {
   Coord coord;
   GMLEdgeGraphicsLinePointBuilder(GMLEdgeGraphicsLineBuilder *edgeGraphicsLineBuilder)
       : edgeGraphicsLineBuilder(edgeGraphicsLineBuilder), coord(0, 0, 0) {}
-  bool addInt(const string &st, const int integer) {
+  bool addInt(const string &st, const int integer) override {
     if (st == "x")
       coord.setX(integer);
 
@@ -471,7 +471,7 @@ struct GMLEdgeGraphicsLinePointBuilder : public GMLTrue {
 
     return true;
   }
-  bool addDouble(const string &st, const double real) {
+  bool addDouble(const string &st, const double real) override {
     if (st == "x")
       coord.setX(real);
 
@@ -483,7 +483,7 @@ struct GMLEdgeGraphicsLinePointBuilder : public GMLTrue {
 
     return true;
   }
-  bool close() {
+  bool close() override {
     edgeGraphicsLineBuilder->addPoint(coord);
     return true;
   }
@@ -555,7 +555,7 @@ public:
                     "the GML input format (used by Graphlet).<br/>See "
                     "<b>www.infosun.fmi.uni-passau.de/Graphlet/GML/</b> for details.</p>",
                     "1.1", "File")
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("gml");
     return l;
@@ -563,8 +563,8 @@ public:
   GMLImport(PluginContext *context) : ImportModule(context) {
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
-  ~GMLImport() {}
-  bool importGraph() {
+  ~GMLImport() override {}
+  bool importGraph() override {
     string filename;
 
     if (!dataSet->get<string>("file::filename", filename))

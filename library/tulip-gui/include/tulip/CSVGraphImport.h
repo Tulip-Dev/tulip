@@ -151,12 +151,12 @@ public:
   AbstractCSVToGraphDataMapping(tlp::Graph *graph, tlp::ElementType type,
                                 const std::vector<unsigned int> &columnIds,
                                 const std::vector<std::string> &propertyNames);
-  virtual ~AbstractCSVToGraphDataMapping() {}
+  ~AbstractCSVToGraphDataMapping() override {}
 
-  void init(unsigned int rowNumber);
+  void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props);
+                    const std::vector<PropertyInterface *> props) override;
 
 protected:
   /**
@@ -178,10 +178,10 @@ protected:
 class TLP_QT_SCOPE CSVToNewNodeIdMapping : public CSVToGraphDataMapping {
 public:
   CSVToNewNodeIdMapping(tlp::Graph *graph);
-  void init(unsigned int rowNumber);
+  void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props);
+                    const std::vector<PropertyInterface *> props) override;
 
 private:
   tlp::Graph *graph;
@@ -206,10 +206,10 @@ public:
     **/
   CSVToGraphNodeIdMapping(tlp::Graph *graph, const std::vector<unsigned int> &columnIds,
                           const std::vector<std::string> &propertyNames, bool createNode = false);
-  void init(unsigned int rowNumber);
+  void init(unsigned int rowNumber) override;
 
 protected:
-  unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys);
+  unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys) override;
 
 private:
   bool createMissingNodes;
@@ -233,7 +233,7 @@ public:
                           const std::vector<std::string> &propertyNames);
 
 protected:
-  unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys);
+  unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys) override;
 };
 
 /**
@@ -262,10 +262,10 @@ public:
                               const std::vector<std::string> &tgtPropNames,
                               bool createMissinElements = false);
   std::pair<tlp::ElementType, unsigned int> getElementForRow(unsigned int row);
-  void init(unsigned int lineNumbers);
+  void init(unsigned int lineNumbers) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props);
+                    const std::vector<PropertyInterface *> props) override;
 
 private:
   tlp::Graph *graph;
@@ -311,8 +311,9 @@ public:
   CSVImportColumnToGraphPropertyMappingProxy(tlp::Graph *graph,
                                              const CSVImportParameters &importParameters,
                                              QWidget *parent = nullptr);
-  virtual ~CSVImportColumnToGraphPropertyMappingProxy() {}
-  tlp::PropertyInterface *getPropertyInterface(unsigned int column, const std::string &token);
+  ~CSVImportColumnToGraphPropertyMappingProxy() override {}
+  tlp::PropertyInterface *getPropertyInterface(unsigned int column,
+                                               const std::string &token) override;
 
 private:
   tlp::Graph *graph;
@@ -332,10 +333,10 @@ public:
   CSVGraphImport(CSVToGraphDataMapping *mapping,
                  CSVImportColumnToGraphPropertyMapping *propertiesManager,
                  const CSVImportParameters &importParameters);
-  virtual ~CSVGraphImport();
-  bool begin();
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens);
-  bool end(unsigned int rowNumber, unsigned int columnNumber);
+  ~CSVGraphImport() override;
+  bool begin() override;
+  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool end(unsigned int rowNumber, unsigned int columnNumber) override;
 
 protected:
   CSVToGraphDataMapping *mapping;

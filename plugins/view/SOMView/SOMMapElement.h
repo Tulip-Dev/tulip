@@ -39,7 +39,7 @@ class ColorProperty;
 class SOMMapElement : public tlp::GlComposite {
 public:
   SOMMapElement(Coord position, Size size, SOMMap *map, ColorProperty *colorProperty);
-  virtual ~SOMMapElement();
+  ~SOMMapElement() override;
 
   tlp::Coord getTopLeftPositionForElement(unsigned int x, unsigned int y);
   tlp::Size getNodeAreaSize();

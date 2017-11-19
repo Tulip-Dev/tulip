@@ -69,7 +69,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~GlLabel();
+  ~GlLabel() override;
 
   /**
    * @brief Set the text of the label
@@ -125,7 +125,7 @@ public:
   /**
    * @brief Return the bounding box of the label
    */
-  virtual BoundingBox getBoundingBox();
+  BoundingBox getBoundingBox() override;
 
   /**
    * @brief Return the bounding box of the text of the label after transformations
@@ -200,12 +200,12 @@ public:
   /**
    * @brief Draw the Label
    */
-  virtual void draw(float, Camera *camera = nullptr);
+  void draw(float, Camera *camera = nullptr) override;
 
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * @brief Rotate Label
@@ -215,12 +215,12 @@ public:
   /**
    * @brief Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
   /**
    * @brief Switch to bold font

@@ -51,7 +51,7 @@ public:
 
   void clearErrorIndicators();
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
   void saveCurrentEditorContentToFile();
 

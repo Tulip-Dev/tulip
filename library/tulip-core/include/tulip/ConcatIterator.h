@@ -45,12 +45,12 @@ struct ConcatIterator : public Iterator<itType> {
   /**
   * @brief Deletes the two iterators it was given at construction.
   **/
-  ~ConcatIterator() {
+  ~ConcatIterator() override {
     delete itOne;
     delete itTwo;
   }
 
-  itType next() {
+  itType next() override {
     if (itOne->hasNext())
       return itOne->next();
     else {
@@ -58,7 +58,7 @@ struct ConcatIterator : public Iterator<itType> {
     }
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (itOne->hasNext() || itTwo->hasNext());
   }
 

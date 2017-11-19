@@ -80,9 +80,9 @@ public:
       "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext *context);
 
-  ~PolyominoPacking();
+  ~PolyominoPacking() override;
 
-  bool run();
+  bool run() override;
 
 private:
   int computeGridStep();

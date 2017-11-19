@@ -65,8 +65,8 @@ private:
 class IncSolver : public Solver {
 public:
   unsigned splitCnt;
-  void satisfy();
-  void solve();
+  void satisfy() override;
+  void solve() override;
   void moveBlocks();
   void splitBlocks();
   IncSolver(const unsigned n, Variable *const vs[], const unsigned m, Constraint *cs[]);

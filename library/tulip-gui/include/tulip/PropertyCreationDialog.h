@@ -59,13 +59,13 @@ public:
     **/
   explicit PropertyCreationDialog(tlp::Graph *graph, QWidget *parent = nullptr,
                                   const std::string &selectedType = "");
-  ~PropertyCreationDialog();
+  ~PropertyCreationDialog() override;
 
   /**
     * @brief Try to create a new property from the givent parameters.
     * To get the created property use the createdProperty() function.
     **/
-  void accept();
+  void accept() override;
 
   /**
     * @brief Change the graph to use as parent for the properties to create.

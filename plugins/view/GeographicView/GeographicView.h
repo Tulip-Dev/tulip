@@ -73,26 +73,26 @@ public:
   enum ViewType { GoogleRoadMap = 0, GoogleSatellite, GoogleTerrain, GoogleHybrid, Polygon, Globe };
 
   GeographicView(PluginContext *);
-  ~GeographicView();
+  ~GeographicView() override;
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/geographic_view.png";
   }
 
-  void setupUi();
+  void setupUi() override;
 
-  QPixmap snapshot(const QSize &) const;
+  QPixmap snapshot(const QSize &) const override;
 
-  void setState(const DataSet &dataSet);
-  DataSet state() const;
+  void setState(const DataSet &dataSet) override;
+  DataSet state() const override;
 
-  QGraphicsView *graphicsView() const {
+  QGraphicsView *graphicsView() const override {
     return geoViewGraphicsView;
   }
 
-  QList<QWidget *> configurationWidgets() const;
+  QList<QWidget *> configurationWidgets() const override;
 
-  QGraphicsItem *centralItem() const;
+  QGraphicsItem *centralItem() const override;
 
   GoogleMaps *getGoogleMap() {
     return geoViewGraphicsView->getGoogleMapsPage();
@@ -105,7 +105,7 @@ public:
   }
 
   // inherited from View
-  virtual void centerView(bool) {
+  void centerView(bool) override {
     // call the Qt slot declared below
     centerView();
   }
@@ -118,21 +118,21 @@ public slots:
 
   void computeGeoLayout();
 
-  void draw();
+  void draw() override;
 
-  void refresh();
+  void refresh() override;
 
-  void graphChanged(Graph *) {
+  void graphChanged(Graph *) override {
     setState(DataSet());
   }
 
-  void graphDeleted(tlp::Graph *) {}
+  void graphDeleted(tlp::Graph *) override {}
 
-  void applySettings();
+  void applySettings() override;
 
   void updateSharedProperties();
 
-  void currentInteractorChanged(tlp::Interactor *i) {
+  void currentInteractorChanged(tlp::Interactor *i) override {
     i->install(geoViewGraphicsView->getGlMainWidget());
   }
 
@@ -152,7 +152,7 @@ public slots:
 
 protected slots:
 
-  void fillContextMenu(QMenu *, const QPointF &);
+  void fillContextMenu(QMenu *, const QPointF &) override;
 
   void initMap();
 

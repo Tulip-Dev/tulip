@@ -34,20 +34,20 @@ class TulipGraphDimension : public DimensionBase {
 
 public:
   TulipGraphDimension(tlp::Graph *graph, const std::string &dimensionName);
-  ~TulipGraphDimension();
+  ~TulipGraphDimension() override;
 
-  unsigned int numberOfItems() const;
-  unsigned int numberOfValues() const;
-  std::string getItemLabelAtRank(const unsigned int rank) const;
-  std::string getItemLabel(const unsigned int itemId) const;
-  double getItemValue(const unsigned int itemId) const;
-  double getItemValueAtRank(const unsigned int rank) const;
-  unsigned int getItemIdAtRank(const unsigned int rank);
-  unsigned int getRankForItem(const unsigned int itemId);
-  double minValue() const;
-  double maxValue() const;
-  std::vector<unsigned int> links(const unsigned int itemId) const;
-  std::string getDimensionName() const {
+  unsigned int numberOfItems() const override;
+  unsigned int numberOfValues() const override;
+  std::string getItemLabelAtRank(const unsigned int rank) const override;
+  std::string getItemLabel(const unsigned int itemId) const override;
+  double getItemValue(const unsigned int itemId) const override;
+  double getItemValueAtRank(const unsigned int rank) const override;
+  unsigned int getItemIdAtRank(const unsigned int rank) override;
+  unsigned int getRankForItem(const unsigned int itemId) override;
+  double minValue() const override;
+  double maxValue() const override;
+  std::vector<unsigned int> links(const unsigned int itemId) const override;
+  std::string getDimensionName() const override {
     return dimName;
   }
   tlp::Graph *getTulipGraph() const {

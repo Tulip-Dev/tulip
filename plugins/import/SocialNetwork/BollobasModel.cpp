@@ -57,7 +57,7 @@ struct BollobasModel : public ImportModule {
     addInParameter<unsigned int>("minimum degree", paramHelp[1], "4");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int n = 2000;
     unsigned int d = 4;
 

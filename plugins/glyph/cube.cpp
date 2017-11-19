@@ -61,9 +61,9 @@ public:
   GLYPHINFORMATION("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0",
                    NodeShape::Cube)
   Cube(const tlp::PluginContext *context = nullptr);
-  virtual ~Cube();
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Cube() override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 
 protected:
 };
@@ -100,7 +100,7 @@ public:
       box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   }
 
-  void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float lod) override {
     glEnable(GL_LIGHTING);
     drawBox(glyphColor, borderColor,
             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),

@@ -44,19 +44,19 @@ public:
 
   MouseLassoNodesSelectorInteractor(const tlp::PluginContext *);
 
-  void construct();
+  void construct() override;
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class MouseLassoNodesSelectorInteractorComponent : public GLInteractorComponent {
 
 public:
   MouseLassoNodesSelectorInteractorComponent();
-  ~MouseLassoNodesSelectorInteractorComponent();
+  ~MouseLassoNodesSelectorInteractorComponent() override;
 
-  bool draw(GlMainWidget *glWidget);
-  bool eventFilter(QObject *obj, QEvent *e);
+  bool draw(GlMainWidget *glWidget) override;
+  bool eventFilter(QObject *obj, QEvent *e) override;
 
 private:
   void selectGraphElementsUnderPolygon(GlMainWidget *glWidget);

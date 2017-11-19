@@ -49,8 +49,8 @@ public:
       "1.3", "Misc")
 
   FastOverlapRemoval(const tlp::PluginContext *context);
-  inline ~FastOverlapRemoval() {}
-  bool run();
+  inline ~FastOverlapRemoval() override {}
+  bool run() override;
 };
 /*@}*/
 #endif

@@ -38,7 +38,7 @@ public:
     addInParameter<bool>("undirected", paramHelp[1], "true");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int nbNodes = 5;
     bool undirected = true;
 

@@ -34,9 +34,9 @@
 class TLP_OGDF_SCOPE OGDFLayoutPluginBase : public tlp::LayoutAlgorithm {
 public:
   OGDFLayoutPluginBase(const tlp::PluginContext *context, LayoutModule *ogdfLayoutAlgo);
-  virtual ~OGDFLayoutPluginBase();
+  ~OGDFLayoutPluginBase() override;
 
-  virtual bool run();
+  bool run() override;
 
 protected:
   virtual void beforeCall() {}

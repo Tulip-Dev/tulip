@@ -99,7 +99,7 @@ CsvExport::CsvExport(const PluginContext *context) : ExportModule(context) {
 // define a special facet to force the output
 // of a comma as decimal mark
 struct decimal_comma : std::numpunct<char> {
-  char do_decimal_point() const {
+  char do_decimal_point() const override {
     return ',';
   }
 };

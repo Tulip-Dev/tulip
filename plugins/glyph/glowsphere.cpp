@@ -49,9 +49,9 @@ public:
   GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
                    NodeShape::GlowSphere)
   GlowSphere(const tlp::PluginContext *context = nullptr) : Glyph(context) {}
-  virtual ~GlowSphere() {}
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~GlowSphere() override {}
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
   static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
                         const string &texturePath);
 };
@@ -122,9 +122,9 @@ public:
   GLYPHINFORMATION("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012",
                    "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
   EEGlowSphere(const tlp::PluginContext *context = nullptr) : EdgeExtremityGlyph(context) {}
-  virtual ~EEGlowSphere() {}
-  virtual void draw(edge e, node n, const Color &glyphColor, const Color & /* borderColor */,
-                    float /* lod */) {
+  ~EEGlowSphere() override {}
+  void draw(edge e, node n, const Color &glyphColor, const Color & /* borderColor */,
+            float /* lod */) override {
     glDisable(GL_LIGHTING);
     GlowSphere::drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
                           edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),

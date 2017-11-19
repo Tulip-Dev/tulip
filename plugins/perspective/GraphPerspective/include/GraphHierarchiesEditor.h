@@ -42,15 +42,15 @@ class CustomTreeView : public QTreeView {
 public:
   CustomTreeView(QWidget *parent = nullptr);
 
-  void setModel(QAbstractItemModel *model);
+  void setModel(QAbstractItemModel *model) override;
 
 public slots:
 
   void resizeFirstColumnToContent();
 
 protected:
-  int sizeHintForColumn(int col) const;
-  void scrollContentsBy(int dx, int dy);
+  int sizeHintForColumn(int col) const override;
+  void scrollContentsBy(int dx, int dy) override;
 };
 
 class GraphHierarchiesEditor : public QWidget {
@@ -63,7 +63,7 @@ class GraphHierarchiesEditor : public QWidget {
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = nullptr);
-  virtual ~GraphHierarchiesEditor();
+  ~GraphHierarchiesEditor() override;
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
 

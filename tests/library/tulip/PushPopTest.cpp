@@ -1122,7 +1122,7 @@ public:
     properties.insert(prop);
   }
 
-  virtual void treatEvent(const Event &evt) {
+  void treatEvent(const Event &evt) override {
     PropertyInterface *prop = dynamic_cast<PropertyInterface *>(evt.sender());
 
     if (prop && evt.type() == Event::TLP_DELETE)
@@ -1290,7 +1290,7 @@ public:
   vector<Graph *> deletedGraphs;
   vector<PropertyInterface *> deletedProperties;
 
-  void treatEvent(const Event &e) {
+  void treatEvent(const Event &e) override {
     if (e.type() == Event::TLP_DELETE) {
       Graph *graph = dynamic_cast<Graph *>(e.sender());
       if (graph) {

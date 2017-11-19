@@ -36,9 +36,9 @@ public:
   explicit ClearableLineEdit(QWidget *parent = nullptr);
 
 protected:
-  void paintEvent(QPaintEvent *);
-  void mouseMoveEvent(QMouseEvent *);
-  void mousePressEvent(QMouseEvent *);
+  void paintEvent(QPaintEvent *) override;
+  void mouseMoveEvent(QMouseEvent *) override;
+  void mousePressEvent(QMouseEvent *) override;
 };
 
 #endif // CLEARABLELINEEDIT_H

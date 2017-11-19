@@ -31,21 +31,21 @@ namespace tlp {
 class TLP_SCOPE SimplePluginProgress : public PluginProgress {
 public:
   SimplePluginProgress();
-  virtual ProgressState progress(int step, int max_step);
-  virtual void cancel();
-  virtual void stop();
-  virtual bool isPreviewMode() const;
-  virtual void setPreviewMode(bool);
-  virtual void showPreview(bool);
-  virtual ProgressState state() const;
-  virtual std::string getError() {
+  ProgressState progress(int step, int max_step) override;
+  void cancel() override;
+  void stop() override;
+  bool isPreviewMode() const override;
+  void setPreviewMode(bool) override;
+  void showPreview(bool) override;
+  ProgressState state() const override;
+  std::string getError() override {
     return _error;
   }
-  virtual void setError(const std::string &error) {
+  void setError(const std::string &error) override {
     _error = error;
   }
-  virtual void setComment(const std::string &) {}
-  virtual void setTitle(const std::string &) {}
+  void setComment(const std::string &) override {}
+  void setTitle(const std::string &) override {}
 
 protected:
   virtual void progress_handler(int step, int max_step);

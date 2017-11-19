@@ -38,7 +38,7 @@ public:
   GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
                const float thickness, Orientation orientation);
 
-  ~GlColorScale();
+  ~GlColorScale() override;
 
   /**
     * @brief Compute the color corresponding to the position in the color scale.
@@ -48,9 +48,9 @@ public:
     **/
   Color getColorAtPos(Coord pos);
 
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  void translate(const Coord &move);
+  void translate(const Coord &move) override;
 
   Coord getBaseCoord() const {
     return baseCoord;
@@ -74,12 +74,12 @@ public:
     return colorScale;
   }
 
-  void getXML(std::string &) {}
+  void getXML(std::string &) override {}
 
-  void setWithXML(const std::string &, unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
 protected:
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
 private:
   void updateDrawing();

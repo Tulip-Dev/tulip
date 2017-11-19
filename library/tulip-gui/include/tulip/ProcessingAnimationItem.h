@@ -37,7 +37,7 @@ class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
 public:
   explicit ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size,
                                    QGraphicsItem *parent = nullptr);
-  virtual ~ProcessingAnimationItem();
+  ~ProcessingAnimationItem() override;
 
   QBrush brush() const {
     return _brush;
@@ -48,7 +48,7 @@ public:
 
 protected slots:
   void animationTimeout();
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif // PROCESSINGANIMATIONITEM_H

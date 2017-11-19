@@ -50,16 +50,16 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct() {
+  void construct() override {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseBoxZoomer);
   }
 
-  QCursor cursor() const {
+  QCursor cursor() const override {
     return QCursor(Qt::CrossCursor);
   }
 
-  bool isCompatible(const std::string &viewName) const {
+  bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||
             (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
             (viewName == ViewName::ParallelCoordinatesViewName) ||

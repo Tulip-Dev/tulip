@@ -65,9 +65,9 @@ public:
   GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0",
                    NodeShape::Square)
   Square(const tlp::PluginContext *context = nullptr);
-  virtual ~Square();
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Square() override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(Square)
 Square::Square(const tlp::PluginContext *context) : Glyph(context) {
@@ -104,7 +104,7 @@ public:
       rect = new GlRect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     glDisable(GL_LIGHTING);
     drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath(),

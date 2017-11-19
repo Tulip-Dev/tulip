@@ -40,7 +40,7 @@ public:
   AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth,
              const float halfHeight, const Color &sliderColor, const Color &labelColor,
              const float rotationAngle = 0);
-  ~AxisSlider();
+  ~AxisSlider() override;
 
   void setSliderFillColor(const Color &color);
   void setSliderOutlineColor(const Color &color);
@@ -51,12 +51,12 @@ public:
     this->rotationAngle = rotationAngle;
   }
 
-  void draw(float lod, Camera *camera);
-  BoundingBox getBoundingBox();
+  void draw(float lod, Camera *camera) override;
+  BoundingBox getBoundingBox() override;
   Coord getSliderCoord() const {
     return sliderCoord;
   }
-  void translate(const Coord &move);
+  void translate(const Coord &move) override;
   void moveToCoord(const Coord &coord) {
     translate(coord - sliderCoord);
   }
@@ -67,8 +67,8 @@ public:
     return arrowPolygon->getFillColor(0);
   }
 
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
 private:
   sliderType type;
@@ -86,11 +86,11 @@ class ParallelCoordsAxisSliders : public GLInteractorComponent {
 
 public:
   ParallelCoordsAxisSliders();
-  ~ParallelCoordsAxisSliders();
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
-  bool compute(GlMainWidget *glMainWidget);
-  void viewChanged(View *view);
+  ~ParallelCoordsAxisSliders() override;
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
+  bool compute(GlMainWidget *glMainWidget) override;
+  void viewChanged(View *view) override;
 
 private:
   void initOrUpdateSliders();

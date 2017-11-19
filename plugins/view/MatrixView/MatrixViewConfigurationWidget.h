@@ -41,7 +41,7 @@ class MatrixViewConfigurationWidget : public QWidget {
 public:
   MatrixViewConfigurationWidget(QWidget *parent = nullptr);
   void setGraph(tlp::Graph *);
-  ~MatrixViewConfigurationWidget();
+  ~MatrixViewConfigurationWidget() override;
 
   GridDisplayMode gridDisplayMode() const;
   void setgridmode(int index);

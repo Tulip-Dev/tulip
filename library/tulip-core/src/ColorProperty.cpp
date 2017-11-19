@@ -26,13 +26,13 @@ const string ColorVectorProperty::propertyTypename = "vector<color>";
 
 class ViewColorCalculator : public AbstractColorProperty::MetaValueCalculator {
 public:
-  virtual void computeMetaValue(AbstractColorProperty *color, node mN, Graph *, Graph *) {
+  void computeMetaValue(AbstractColorProperty *color, node mN, Graph *, Graph *) override {
     // meta node color is half opaque white
     color->setNodeValue(mN, Color(255, 255, 255, 127));
   }
 
-  virtual void computeMetaValue(AbstractColorProperty *color, edge mE, Iterator<edge> *itE,
-                                Graph *) {
+  void computeMetaValue(AbstractColorProperty *color, edge mE, Iterator<edge> *itE,
+                        Graph *) override {
     // meta edge color is the color of the first underlying edge
     color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
   }

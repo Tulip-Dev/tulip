@@ -49,10 +49,10 @@ public:
     return _glowColor;
   }
 
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
 protected:
-  void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *) override;
 
 public slots:
   void setNumber(int number) {

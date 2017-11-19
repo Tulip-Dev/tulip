@@ -37,7 +37,7 @@ class SizeScaleConfigDialog : public QDialog {
 
 public:
   SizeScaleConfigDialog(QWidget *d = nullptr);
-  ~SizeScaleConfigDialog();
+  ~SizeScaleConfigDialog() override;
 
   bool doMappingOnViewSize() const;
 

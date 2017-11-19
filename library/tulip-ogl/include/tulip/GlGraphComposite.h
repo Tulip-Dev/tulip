@@ -71,7 +71,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~GlGraphComposite();
+  ~GlGraphComposite() override;
 
   /**
    * @brief Return a copy of rendering parameters use for rendering
@@ -110,13 +110,13 @@ public:
   /**
    * Function used to visit composite's children
    */
-  virtual void acceptVisitor(GlSceneVisitor *visitor);
+  void acceptVisitor(GlSceneVisitor *visitor) override;
   /**
    * You have to use this function if you want to visit nodes/edges of the graph composite
    */
   virtual void acceptVisitorOnGraph(GlSceneVisitor *visitor);
 
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   virtual void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w,
                               int h, std::vector<SelectedEntity> &selectedEntities);
@@ -161,17 +161,17 @@ public:
   /**
    * @brief Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   ///@cond DOXYGEN_HIDDEN
 
-  void treatEvent(const Event &evt);
+  void treatEvent(const Event &evt) override;
 
   ///@endcond
 

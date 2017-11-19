@@ -41,7 +41,7 @@ public:
    *
    * @warning Don't use this constructor
    */
-  virtual ~GlPentagon();
+  ~GlPentagon() override;
 };
 }
 #endif

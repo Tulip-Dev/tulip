@@ -96,7 +96,7 @@ public:
     parameters.setDirection("result", INOUT_PARAM);
   }
 
-  bool check(std::string &errorMsg) {
+  bool check(std::string &errorMsg) override {
     xaxis = yaxis = zaxis = true;
     min = 1;
     max = 10;
@@ -154,7 +154,7 @@ public:
     return true;
   }
 
-  bool run() {
+  bool run() override {
     NumericProperty *tmp = nullptr;
 
     if (!mappingType) {

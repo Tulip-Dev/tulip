@@ -37,10 +37,10 @@ class PlanarConMap;
 class FaceIterator : public Iterator<Face> {
 public:
   FaceIterator(PlanarConMap *m);
-  virtual ~FaceIterator() {}
+  ~FaceIterator() override {}
 
-  Face next();
-  bool hasNext();
+  Face next() override;
+  bool hasNext() override;
 
 private:
   unsigned int i;
@@ -52,10 +52,10 @@ private:
 class FaceAdjIterator : public Iterator<Face> {
 public:
   FaceAdjIterator(PlanarConMap *m, const node n);
-  virtual ~FaceAdjIterator() {}
+  ~FaceAdjIterator() override {}
 
-  Face next();
-  bool hasNext();
+  Face next() override;
+  bool hasNext() override;
 
 private:
   std::vector<Face> facesAdj;
@@ -67,10 +67,10 @@ private:
 class NodeFaceIterator : public Iterator<node> {
 public:
   NodeFaceIterator(PlanarConMap *m, const Face);
-  virtual ~NodeFaceIterator() {}
+  ~NodeFaceIterator() override {}
 
-  node next();
-  bool hasNext();
+  node next() override;
+  bool hasNext() override;
 
 private:
   /** contains the set of computed nodes */
@@ -83,10 +83,10 @@ private:
 class EdgeFaceIterator : public Iterator<edge> {
 public:
   EdgeFaceIterator(PlanarConMap *m, const Face);
-  virtual ~EdgeFaceIterator() {}
+  ~EdgeFaceIterator() override {}
 
-  edge next();
-  bool hasNext();
+  edge next() override;
+  bool hasNext() override;
 
 private:
   /** reference on the current face */

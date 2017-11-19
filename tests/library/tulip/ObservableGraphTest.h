@@ -46,8 +46,8 @@ public:
   static void setGraph(tlp::Graph *g) {
     graph = g;
   }
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
 
   void testAddDel();
   void testAddDelProperties();

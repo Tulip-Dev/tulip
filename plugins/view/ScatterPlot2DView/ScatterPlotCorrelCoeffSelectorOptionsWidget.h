@@ -39,14 +39,14 @@ class ScatterPlotCorrelCoeffSelectorOptionsWidget : public QWidget {
 
 public:
   ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent = nullptr);
-  ~ScatterPlotCorrelCoeffSelectorOptionsWidget();
+  ~ScatterPlotCorrelCoeffSelectorOptionsWidget() override;
 
   Color getMinusOneColor() const;
   Color getZeroColor() const;
   Color getOneColor() const;
 
 protected:
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 
 private slots:
   void updateColorScale();

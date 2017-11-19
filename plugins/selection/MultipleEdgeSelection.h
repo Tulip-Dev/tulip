@@ -42,7 +42,7 @@ public:
                     "If it exists n edges between two nodes, only n-1 edges will be selected.",
                     "1.0", "Selection")
   MultipleEdgeSelection(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 
 #endif

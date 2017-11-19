@@ -81,19 +81,19 @@ public:
                     "2.0", "View")
 
   MatrixView(const tlp::PluginContext *);
-  ~MatrixView();
-  std::string icon() const {
+  ~MatrixView() override;
+  std::string icon() const override {
     return ":/adjacency_matrix_view.png";
   }
-  QuickAccessBar *getQuickAccessBarImpl();
-  void setState(const tlp::DataSet &dataSet);
-  void graphChanged(tlp::Graph *graph);
+  QuickAccessBar *getQuickAccessBarImpl() override;
+  void setState(const tlp::DataSet &dataSet) override;
+  void graphChanged(tlp::Graph *graph) override;
 
-  tlp::DataSet state() const;
-  QList<QWidget *> configurationWidgets() const;
+  tlp::DataSet state() const override;
+  QList<QWidget *> configurationWidgets() const override;
 
-  void draw();
-  void refresh();
+  void draw() override;
+  void refresh() override;
 
   GridDisplayMode gridDisplayMode() const {
     return _configurationWidget->gridDisplayMode();
@@ -103,15 +103,15 @@ public:
   void addEdge(tlp::Graph *, const tlp::edge);
   void delNode(tlp::Graph *, const tlp::node);
   void delEdge(tlp::Graph *, const tlp::edge);
-  void treatEvent(const Event &message);
+  void treatEvent(const Event &message) override;
 
-  void fillContextMenu(QMenu *menu, const QPointF &point);
+  void fillContextMenu(QMenu *menu, const QPointF &point) override;
 
 private slots:
   void setBackgroundColor(QColor);
   void setOrderingMetric(const std::string &);
   void setGridDisplayMode();
-  void applySettings();
+  void applySettings() override;
   void showEdges(bool);
   void enableEdgeColorInterpolation(bool);
   void setOriented(bool);

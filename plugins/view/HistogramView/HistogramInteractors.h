@@ -34,7 +34,7 @@ class HistogramInteractor : public NodeLinkDiagramComponentInteractor {
 public:
   HistogramInteractor(const QString &iconPath, const QString &text);
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class HistogramInteractorNavigation : public HistogramInteractor {
@@ -45,7 +45,7 @@ public:
 
   HistogramInteractorNavigation(const PluginContext *);
 
-  void construct();
+  void construct() override;
 };
 
 class HistogramInteractorMetricMapping : public HistogramInteractor {
@@ -56,7 +56,7 @@ public:
 
   HistogramInteractorMetricMapping(const PluginContext *);
 
-  void construct();
+  void construct() override;
 };
 
 class HistogramInteractorStatistics : public HistogramInteractor {
@@ -66,11 +66,11 @@ public:
                     "Histogram Statistics Interactor", "1.0", "Information")
 
   HistogramInteractorStatistics(const PluginContext *);
-  ~HistogramInteractorStatistics();
+  ~HistogramInteractorStatistics() override;
 
-  void construct();
-  QWidget *configurationWidget() const;
-  void install(QObject *target);
+  void construct() override;
+  QWidget *configurationWidget() const override;
+  void install(QObject *target) override;
 
 private:
   HistoStatsConfigWidget *histoStatsConfigWidget;
@@ -92,9 +92,9 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 }
 

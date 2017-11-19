@@ -39,7 +39,7 @@ class TLP_QT_SCOPE VectorEditor : public QDialog {
 
 public:
   explicit VectorEditor(QWidget *parent = nullptr);
-  ~VectorEditor();
+  ~VectorEditor() override;
   void setVector(const QVector<QVariant> &d, int userType);
   const QVector<QVariant> &vector() const {
     return currentVector;
@@ -48,7 +48,7 @@ public:
 public slots:
   void add();
   void remove();
-  void done(int r);
+  void done(int r) override;
 };
 
 #endif // VECTOREDITIONWIDGET_H

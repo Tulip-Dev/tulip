@@ -14,6 +14,6 @@ public:
   PLUGININFORMATION("Random metric", "David Auber", "04/10/2001",
                     "Assigns random values to nodes and edges.", "1.1", "Misc")
   RandomMetric(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 #endif // RANDOMMETRIC_H

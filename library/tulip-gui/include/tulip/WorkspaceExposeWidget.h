@@ -47,16 +47,16 @@ class PreviewItem : public QGraphicsObject {
 public:
   explicit PreviewItem(const QPixmap &pixmap, WorkspacePanel *panel,
                        QGraphicsItem *parent = nullptr);
-  QRectF boundingRect() const;
-  void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+  QRectF boundingRect() const override;
+  void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *) override;
   WorkspacePanel *panel() const;
   bool shouldClose(const QPointF &);
 
 protected:
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *);
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
-  void hoverMoveEvent(QGraphicsSceneHoverEvent *);
-  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override;
+  void hoverMoveEvent(QGraphicsSceneHoverEvent *) override;
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
 signals:
   void opened();
 };
@@ -81,7 +81,7 @@ public:
   static QSize previewSize();
 
   explicit WorkspaceExposeWidget(QWidget *parent = nullptr);
-  ~WorkspaceExposeWidget();
+  ~WorkspaceExposeWidget() override;
   int currentPanelIndex() const;
   QVector<WorkspacePanel *> panels() const;
 
@@ -94,9 +94,9 @@ signals:
   void exposeFinished();
 
 protected:
-  void resizeEvent(QResizeEvent *event);
-  bool eventFilter(QObject *, QEvent *);
-  bool event(QEvent *);
+  void resizeEvent(QResizeEvent *event) override;
+  bool eventFilter(QObject *, QEvent *) override;
+  bool event(QEvent *) override;
 
 protected slots:
   void updatePositionsAnimationFinished();

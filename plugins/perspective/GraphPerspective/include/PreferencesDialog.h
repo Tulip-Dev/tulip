@@ -33,7 +33,7 @@ class PreferencesDialog : public QDialog {
 
 public:
   explicit PreferencesDialog(QWidget *parent = nullptr);
-  ~PreferencesDialog();
+  ~PreferencesDialog() override;
 
 public slots:
   void writeSettings();

@@ -45,15 +45,15 @@ public:
   FilterIterator(Iterator<TYPE> *it, FILTER filter) : _it(it), _filter(filter) {
     update();
   }
-  ~FilterIterator() {
+  ~FilterIterator() override {
     delete _it;
   }
-  inline TYPE next() {
+  inline TYPE next() override {
     TYPE tmp = _curVal;
     update();
     return tmp;
   }
-  inline bool hasNext() {
+  inline bool hasNext() override {
     return _hasNext;
   }
 

@@ -41,7 +41,7 @@ class ProgressWidget : public QWidget {
 
 public:
   ProgressWidget(QWidget *parent = nullptr);
-  ~ProgressWidget();
+  ~ProgressWidget() override;
 
   void setComment(const QString &comment);
 
@@ -52,7 +52,7 @@ public:
   }
 
 protected:
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 
 private slots:
 
@@ -79,7 +79,7 @@ public:
 
 protected:
   void paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget *widget = nullptr);
+                        QWidget *widget = nullptr) override;
 
 private:
   ProgressWidget *progressWidget;

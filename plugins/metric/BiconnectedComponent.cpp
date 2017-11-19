@@ -191,7 +191,7 @@ public:
                     "It assigns the same value to all the edges in the same component.",
                     "1.0", "Component")
   BiconnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
-  bool run() {
+  bool run() override {
     MutableContainer<int> compo;
     compo.setAll(-1);
     biconnectedComponents(*graph, compo);

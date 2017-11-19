@@ -65,7 +65,7 @@ protected:
 public:
   PropertyInterface();
 
-  virtual ~PropertyInterface();
+  ~PropertyInterface() override;
 
   /**
    * @brief Erases the value stored for the given node.
@@ -611,7 +611,7 @@ class TLP_SCOPE VectorPropertyInterface : public PropertyInterface {
 public:
   VectorPropertyInterface() : PropertyInterface() {}
 
-  ~VectorPropertyInterface() {}
+  ~VectorPropertyInterface() override {}
 
   /**
    * @brief Sets a new vector represented by the string parameter as the node value.

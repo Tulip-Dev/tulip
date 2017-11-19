@@ -46,19 +46,19 @@ public:
   /**
    * Visit a simple entity
    */
-  virtual void visit(GlSimpleEntity *entity);
+  void visit(GlSimpleEntity *entity) override;
   /**
    * Visit a node
    */
-  virtual void visit(GlNode *glNode);
+  void visit(GlNode *glNode) override;
   /**
    * Visit an edge
    */
-  virtual void visit(GlEdge *glEdge);
+  void visit(GlEdge *glEdge) override;
   /**
    * Visit a layer
    */
-  virtual void visit(GlLayer *layer);
+  void visit(GlLayer *layer) override;
 
 private:
   SelectionFlag selectionFlag;

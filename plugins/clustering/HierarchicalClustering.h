@@ -36,8 +36,8 @@ public:
                     "values above the threshold) until one sub-graph contains less than 10 nodes.",
                     "1.0", "Clustering")
   HierarchicalClustering(tlp::PluginContext *context);
-  ~HierarchicalClustering();
-  bool run();
+  ~HierarchicalClustering() override;
+  bool run() override;
 
 private:
   bool split(tlp::DoubleProperty *, std::list<tlp::node> &);

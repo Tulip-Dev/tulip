@@ -48,7 +48,7 @@ public:
                                 QObject *parent = nullptr);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph, bool checkable = false,
                                 QObject *parent = nullptr);
-  virtual ~GraphPropertiesModel() {
+  ~GraphPropertiesModel() override {
     if (_graph != nullptr)
       _graph->removeListener(this);
   }
@@ -80,16 +80,16 @@ public:
   }
 
   // Methods re-implemented from QAbstractItemModel
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-  QModelIndex parent(const QModelIndex &child) const;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  int columnCount(const QModelIndex &parent = QModelIndex()) const;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-  bool setData(const QModelIndex &quiindex, const QVariant &value, int role);
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex &child) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+  bool setData(const QModelIndex &quiindex, const QVariant &value, int role) override;
 
   // Methods inherited from the observable system
-  void treatEvent(const tlp::Event &evt) {
+  void treatEvent(const tlp::Event &evt) override {
     if (evt.type() == Event::TLP_DELETE) {
       // calls to *ResetModel() functions below
       // are not needed because they may cause a Free Memory Read.
@@ -149,7 +149,7 @@ public:
 
   int rowOf(const QString &pName) const;
 
-  Qt::ItemFlags flags(const QModelIndex &index) const {
+  Qt::ItemFlags flags(const QModelIndex &index) const override {
     Qt::ItemFlags result = QAbstractItemModel::flags(index);
 
     if (index.column() == 0 && _checkable)

@@ -105,7 +105,7 @@ public:
   /**
    * Virtual function used to draw the polyquad.
    */
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * Method to set the polyquad color (all edges share the same color)
@@ -136,17 +136,17 @@ public:
   /**
    *  Method to translate entity
    */
-  void translate(const Coord &move);
+  void translate(const Coord &move) override;
 
   /**
    * Function to export data in outString (in XML format)
    */
-  void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * Function to set data with inString (in XML format)
    */
-  void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 private:
   std::vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an edge being defined

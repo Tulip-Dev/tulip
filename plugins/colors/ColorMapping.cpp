@@ -125,7 +125,7 @@ public:
   }
 
   //=========================================================
-  ~ColorMapping() {}
+  ~ColorMapping() override {}
   //=========================================================
   Color getColor(double value, double range) {
     if (range == 0)
@@ -140,7 +140,7 @@ public:
     return colorScale.getColorAtPos(value / range);
   }
   //=========================================================
-  bool run() {
+  bool run() override {
 
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
@@ -295,7 +295,7 @@ public:
     return true;
   }
   //=========================================================
-  bool check(std::string &errorMsg) {
+  bool check(std::string &errorMsg) override {
 
     PropertyInterface *metric = nullptr;
 

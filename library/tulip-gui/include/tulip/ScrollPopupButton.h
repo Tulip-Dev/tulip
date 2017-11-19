@@ -53,7 +53,7 @@ signals:
   void valueChanged(int);
 
 protected:
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 };
 
 #endif // SCROLLPOPUPBUTTON_H

@@ -35,8 +35,8 @@ public:
                     "Selects a subgraph of a graph that is a forest (a set of trees).", "1.0",
                     "Selection")
   SpanningTreeSelection(const tlp::PluginContext *context);
-  ~SpanningTreeSelection();
-  bool run();
+  ~SpanningTreeSelection() override;
+  bool run() override;
 };
 
 #endif

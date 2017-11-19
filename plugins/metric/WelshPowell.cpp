@@ -87,7 +87,7 @@ public:
 
   WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
-  bool run() {
+  bool run() override {
     const std::vector<node> nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
     NodeStaticProperty<nodeInfo> nodesInfo(graph);

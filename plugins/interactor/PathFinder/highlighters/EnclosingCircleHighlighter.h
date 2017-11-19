@@ -41,7 +41,7 @@ class EnclosingCircleConfigurationWidget : public QWidget {
 
 public:
   EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent = nullptr);
-  ~EnclosingCircleConfigurationWidget();
+  ~EnclosingCircleConfigurationWidget() override;
 
   void circleColorBtnDisabled(const bool disabled);
   void inverseColorRadioCheck(const bool checked);
@@ -61,12 +61,12 @@ class EnclosingCircleHighlighter : public QObject, public PathHighlighter {
 
 public:
   EnclosingCircleHighlighter();
-  ~EnclosingCircleHighlighter();
+  ~EnclosingCircleHighlighter() override;
   void highlight(const PathFinder *parent, GlMainWidget *glMainWidget, BooleanProperty *selection,
-                 tlp::node src, tlp::node tgt);
-  void draw(GlMainWidget *glMainWidget);
-  bool isConfigurable() const;
-  QWidget *getConfigurationWidget();
+                 tlp::node src, tlp::node tgt) override;
+  void draw(GlMainWidget *glMainWidget) override;
+  bool isConfigurable() const override;
+  QWidget *getConfigurationWidget() override;
 
 public slots:
   void inverseColorRadioChecked(bool checked);

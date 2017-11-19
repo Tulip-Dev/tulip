@@ -27,7 +27,7 @@ namespace pocore {
 class LogarithmicMappingColor : public LinearMappingColor {
 public:
   LogarithmicMappingColor(const double &min, const double &max);
-  RGBA getColor(const double &value, const unsigned int) const;
+  RGBA getColor(const double &value, const unsigned int) const override;
 };
 }
 #endif // LOGARITHMICMAPPINGCOLOR_H

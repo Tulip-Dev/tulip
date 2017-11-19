@@ -50,7 +50,7 @@ struct WangEtAl : public ImportModule {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
 
     unsigned int n = 300;
 

@@ -30,43 +30,43 @@ namespace tlp {
 class TLP_SCOPE GraphDecorator : public Graph {
 public:
   GraphDecorator(Graph *s);
-  virtual ~GraphDecorator();
+  ~GraphDecorator() override;
 
-  virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection = nullptr,
-                             const std::string &name = "unnamed");
-  virtual void delSubGraph(Graph *s);
-  virtual void delAllSubGraphs(Graph *s);
-  virtual Graph *getSuperGraph() const;
-  virtual void setSuperGraph(Graph *s);
-  virtual Graph *getRoot() const;
-  virtual Iterator<Graph *> *getSubGraphs() const;
-  virtual bool isSubGraph(const Graph *sg) const;
-  virtual bool isDescendantGraph(const Graph *sg) const;
-  virtual Graph *getSubGraph(unsigned int id) const;
-  virtual Graph *getSubGraph(const std::string &name) const;
-  virtual Graph *getDescendantGraph(unsigned int id) const;
-  virtual Graph *getDescendantGraph(const std::string &name) const;
-  virtual unsigned int numberOfSubGraphs() const;
-  virtual unsigned int numberOfDescendantGraphs() const;
+  void clear() override;
+  Graph *addSubGraph(BooleanProperty *selection = nullptr,
+                     const std::string &name = "unnamed") override;
+  void delSubGraph(Graph *s) override;
+  void delAllSubGraphs(Graph *s) override;
+  Graph *getSuperGraph() const override;
+  void setSuperGraph(Graph *s) override;
+  Graph *getRoot() const override;
+  Iterator<Graph *> *getSubGraphs() const override;
+  bool isSubGraph(const Graph *sg) const override;
+  bool isDescendantGraph(const Graph *sg) const override;
+  Graph *getSubGraph(unsigned int id) const override;
+  Graph *getSubGraph(const std::string &name) const override;
+  Graph *getDescendantGraph(unsigned int id) const override;
+  Graph *getDescendantGraph(const std::string &name) const override;
+  unsigned int numberOfSubGraphs() const override;
+  unsigned int numberOfDescendantGraphs() const override;
 
   //============================================================
-  virtual node source(const edge e) const;
-  virtual void setSource(const edge, const node);
-  virtual node target(const edge e) const;
-  virtual void setTarget(const edge, const node);
-  virtual node opposite(const edge e, const node n) const;
-  virtual edge existEdge(const node n, const node m, bool directed = true) const;
-  virtual bool hasEdge(const node source, const node target, bool directed = true) const;
-  virtual std::vector<edge> getEdges(const node source, const node target,
-                                     bool directed = true) const;
-  virtual const std::pair<node, node> &ends(const edge e) const;
-  virtual void setEnds(const edge, const node, const node);
-  virtual void reverse(const edge e);
-  virtual unsigned int deg(const node n) const;
-  virtual unsigned int indeg(const node n) const;
-  virtual unsigned int outdeg(const node n) const;
-  virtual Graph *getNodeMetaInfo(const node n) const;
+  node source(const edge e) const override;
+  void setSource(const edge, const node) override;
+  node target(const edge e) const override;
+  void setTarget(const edge, const node) override;
+  node opposite(const edge e, const node n) const override;
+  edge existEdge(const node n, const node m, bool directed = true) const override;
+  bool hasEdge(const node source, const node target, bool directed = true) const override;
+  std::vector<edge> getEdges(const node source, const node target,
+                             bool directed = true) const override;
+  const std::pair<node, node> &ends(const edge e) const override;
+  void setEnds(const edge, const node, const node) override;
+  void reverse(const edge e) override;
+  unsigned int deg(const node n) const override;
+  unsigned int indeg(const node n) const override;
+  unsigned int outdeg(const node n) const override;
+  Graph *getNodeMetaInfo(const node n) const override;
 
   //============================================================
   virtual node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
@@ -76,107 +76,107 @@ public:
   virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
 
   //============================================================
-  virtual node getOneNode() const;
-  virtual node getRandomNode() const;
-  virtual node getInNode(const node n, unsigned int i) const;
-  virtual node getOutNode(const node n, unsigned int i) const;
-  virtual edge getOneEdge() const;
-  virtual edge getRandomEdge() const;
+  node getOneNode() const override;
+  node getRandomNode() const override;
+  node getInNode(const node n, unsigned int i) const override;
+  node getOutNode(const node n, unsigned int i) const override;
+  edge getOneEdge() const override;
+  edge getRandomEdge() const override;
 
-  virtual unsigned int numberOfNodes() const;
-  virtual unsigned int numberOfEdges() const;
+  unsigned int numberOfNodes() const override;
+  unsigned int numberOfEdges() const override;
 
   //=========================================================================
 
-  virtual void reserveNodes(unsigned int nbNodes);
-  virtual void reserveEdges(unsigned int nbEdges);
+  void reserveNodes(unsigned int nbNodes) override;
+  void reserveEdges(unsigned int nbEdges) override;
 
   //============================================================
-  virtual bool isElement(const node n) const;
-  virtual bool isMetaNode(const node n) const;
-  virtual bool isElement(const edge e) const;
-  virtual bool isMetaEdge(const edge e) const;
-  virtual node addNode();
-  virtual void addNodes(unsigned int nb);
-  virtual void addNodes(unsigned int nb, std::vector<node> &addedNodes);
-  virtual void addNode(const node);
-  virtual void addNodes(Iterator<node> *nodes);
-  virtual edge addEdge(const node n1, const node n2);
-  virtual void addEdges(const std::vector<std::pair<node, node>> &edges);
-  virtual void addEdges(const std::vector<std::pair<node, node>> &edges,
-                        std::vector<edge> &addedEdges);
-  virtual void addEdge(const edge);
-  virtual void addEdges(Iterator<edge> *edges);
-  virtual void delNode(const tlp::node n, bool deleteInAllGraphs = false);
-  virtual void delNodes(Iterator<node> *itN, bool deleteInAllGraphs);
-  virtual void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
-  virtual void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false);
-  virtual void setEdgeOrder(const node n, const std::vector<edge> &s);
-  virtual void swapEdgeOrder(const node n, const edge e1, const edge e2);
+  bool isElement(const node n) const override;
+  bool isMetaNode(const node n) const override;
+  bool isElement(const edge e) const override;
+  bool isMetaEdge(const edge e) const override;
+  node addNode() override;
+  void addNodes(unsigned int nb) override;
+  void addNodes(unsigned int nb, std::vector<node> &addedNodes) override;
+  void addNode(const node) override;
+  void addNodes(Iterator<node> *nodes) override;
+  edge addEdge(const node n1, const node n2) override;
+  void addEdges(const std::vector<std::pair<node, node>> &edges) override;
+  void addEdges(const std::vector<std::pair<node, node>> &edges,
+                std::vector<edge> &addedEdges) override;
+  void addEdge(const edge) override;
+  void addEdges(Iterator<edge> *edges) override;
+  void delNode(const tlp::node n, bool deleteInAllGraphs = false) override;
+  void delNodes(Iterator<node> *itN, bool deleteInAllGraphs) override;
+  void delEdge(const tlp::edge e, bool deleteInAllGraphs = false) override;
+  void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false) override;
+  void setEdgeOrder(const node n, const std::vector<edge> &s) override;
+  void swapEdgeOrder(const node n, const edge e1, const edge e2) override;
 
-  virtual const std::vector<node> &nodes() const;
-  virtual unsigned int nodePos(const node) const;
-  virtual Iterator<node> *getNodes() const;
-  virtual Iterator<node> *getInNodes(const node n) const;
-  virtual Iterator<node> *getOutNodes(const node n) const;
-  virtual Iterator<node> *getInOutNodes(const node n) const;
-  virtual Iterator<node> *bfs(const node root = node()) const;
-  virtual Iterator<node> *dfs(const node root = node()) const;
-  virtual const std::vector<edge> &edges() const;
-  virtual unsigned int edgePos(const edge) const;
-  virtual Iterator<edge> *getEdges() const;
-  virtual Iterator<edge> *getOutEdges(const node n) const;
-  virtual Iterator<edge> *getInOutEdges(const node n) const;
-  virtual Iterator<edge> *getInEdges(const node n) const;
-  virtual const std::vector<edge> &allEdges(const node n) const;
-  virtual Iterator<edge> *getEdgeMetaInfo(const edge) const;
-  virtual void sortElts();
+  const std::vector<node> &nodes() const override;
+  unsigned int nodePos(const node) const override;
+  Iterator<node> *getNodes() const override;
+  Iterator<node> *getInNodes(const node n) const override;
+  Iterator<node> *getOutNodes(const node n) const override;
+  Iterator<node> *getInOutNodes(const node n) const override;
+  Iterator<node> *bfs(const node root = node()) const override;
+  Iterator<node> *dfs(const node root = node()) const override;
+  const std::vector<edge> &edges() const override;
+  unsigned int edgePos(const edge) const override;
+  Iterator<edge> *getEdges() const override;
+  Iterator<edge> *getOutEdges(const node n) const override;
+  Iterator<edge> *getInOutEdges(const node n) const override;
+  Iterator<edge> *getInEdges(const node n) const override;
+  const std::vector<edge> &allEdges(const node n) const override;
+  Iterator<edge> *getEdgeMetaInfo(const edge) const override;
+  void sortElts() override;
   //============================================================
   template <typename PropertyType>
   PropertyType *getProperty(const std::string &name);
-  virtual PropertyInterface *getProperty(const std::string &name) const;
-  virtual bool existProperty(const std::string &name) const;
-  virtual bool existLocalProperty(const std::string &name) const;
-  virtual void delLocalProperty(const std::string &name);
-  virtual void addLocalProperty(const std::string &name, PropertyInterface *prop);
-  virtual Iterator<std::string> *getLocalProperties() const;
-  virtual Iterator<std::string> *getInheritedProperties() const;
-  virtual Iterator<std::string> *getProperties() const;
-  virtual Iterator<PropertyInterface *> *getLocalObjectProperties() const;
-  virtual Iterator<PropertyInterface *> *getInheritedObjectProperties() const;
-  virtual Iterator<PropertyInterface *> *getObjectProperties() const;
+  PropertyInterface *getProperty(const std::string &name) const override;
+  bool existProperty(const std::string &name) const override;
+  bool existLocalProperty(const std::string &name) const override;
+  void delLocalProperty(const std::string &name) override;
+  void addLocalProperty(const std::string &name, PropertyInterface *prop) override;
+  Iterator<std::string> *getLocalProperties() const override;
+  Iterator<std::string> *getInheritedProperties() const override;
+  Iterator<std::string> *getProperties() const override;
+  Iterator<PropertyInterface *> *getLocalObjectProperties() const override;
+  Iterator<PropertyInterface *> *getInheritedObjectProperties() const override;
+  Iterator<PropertyInterface *> *getObjectProperties() const override;
   // updates management
-  virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr);
-  virtual void pop(bool unpopAllowed = true);
-  virtual void popIfNoUpdates();
-  virtual void unpop();
-  virtual bool canPop();
-  virtual bool canUnpop();
-  virtual bool canPopThenUnpop();
+  void push(bool unpopAllowed = true,
+            std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr) override;
+  void pop(bool unpopAllowed = true) override;
+  void popIfNoUpdates() override;
+  void unpop() override;
+  bool canPop() override;
+  bool canUnpop() override;
+  bool canPopThenUnpop() override;
   //============================================================
 
-  virtual void setName(const std::string &name);
-  virtual std::string getName() const;
+  void setName(const std::string &name) override;
+  std::string getName() const override;
 
 protected:
-  virtual DataSet &getNonConstAttributes();
+  DataSet &getNonConstAttributes() override;
   Graph *graph_component;
   // designed to reassign an id to a previously deleted elt
   // called by GraphUpdatesRecorder
-  virtual void restoreNode(node);
-  virtual void restoreEdge(edge, node source, node target);
+  void restoreNode(node) override;
+  void restoreEdge(edge, node source, node target) override;
   // designed to only update own structures
   // used by GraphUpdatesRecorder
-  virtual void removeNode(const node);
-  virtual void removeEdge(const edge);
+  void removeNode(const node) override;
+  void removeEdge(const edge) override;
   // internally used to deal with sub graph deletion
-  virtual void removeSubGraph(Graph *);
-  virtual void clearSubGraphs();
-  virtual void restoreSubGraph(Graph *);
-  virtual void setSubGraphToKeep(Graph *);
+  void removeSubGraph(Graph *) override;
+  void clearSubGraphs() override;
+  void restoreSubGraph(Graph *) override;
+  void setSubGraphToKeep(Graph *) override;
   // internally used for property renaming
-  virtual bool renameLocalProperty(PropertyInterface *prop, const std::string &newName);
+  bool renameLocalProperty(PropertyInterface *prop, const std::string &newName) override;
 };
 
 //====================================================================================

@@ -46,7 +46,7 @@ struct TypedValueContainer : public DataMem {
   TYPE value;
   TypedValueContainer() {}
   TypedValueContainer(const TYPE &val) : value(val) {}
-  ~TypedValueContainer() {}
+  ~TypedValueContainer() override {}
 };
 ///@endcond
 
@@ -91,14 +91,14 @@ struct TLP_SCOPE DataType : public DataMem {
 template <typename T>
 struct TypedData : public DataType {
   TypedData(void *value) : DataType(value) {}
-  ~TypedData() {
+  ~TypedData() override {
     delete static_cast<T *>(value);
   }
-  DataType *clone() const {
+  DataType *clone() const override {
     return new TypedData<T>(new T(getValue()));
   }
 
-  std::string getTypeName() const {
+  std::string getTypeName() const override {
     return std::string(typeid(T).name());
   }
 
@@ -142,10 +142,10 @@ struct TypedDataSerializer : public DataTypeSerializer {
   // return true if the read of value succeeded, false if not
   virtual bool read(std::istream &is, T &value) = 0;
   // define virtually inherited functions using the previous ones
-  void writeData(std::ostream &os, const DataType *data) {
+  void writeData(std::ostream &os, const DataType *data) override {
     write(os, *(static_cast<T *>(data->value)));
   }
-  DataType *readData(std::istream &is) {
+  DataType *readData(std::istream &is) override {
     T value;
     bool ok = read(is, value);
 
@@ -155,7 +155,7 @@ struct TypedDataSerializer : public DataTypeSerializer {
     return nullptr;
   }
   // set a value into a DataSet
-  virtual bool setData(DataSet &ds, const std::string &prop, const std::string &value) = 0;
+  bool setData(DataSet &ds, const std::string &prop, const std::string &value) override = 0;
 };
 
 // This class is there to ensure the destruction of DataTypeSerializer objects

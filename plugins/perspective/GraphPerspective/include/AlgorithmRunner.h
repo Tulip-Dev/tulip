@@ -54,7 +54,7 @@ class AlgorithmRunner : public QWidget {
 
 public:
   explicit AlgorithmRunner(QWidget *parent = nullptr);
-  virtual ~AlgorithmRunner();
+  ~AlgorithmRunner() override;
 
 signals:
   void setStoreResultAsLocal(bool);
@@ -74,7 +74,7 @@ protected slots:
   void expanded(bool);
 
 protected:
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 };
 
 #endif // ALGORITHMRUNNER_H

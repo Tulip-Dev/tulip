@@ -191,7 +191,7 @@ const string CoordVectorProperty::propertyTypename = "vector<coord>";
 // define a specific MetaValueCalculator
 class LayoutMetaValueCalculator : public AbstractLayoutProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractLayoutProperty *layout, node mN, Graph *sg, Graph *) {
+  void computeMetaValue(AbstractLayoutProperty *layout, node mN, Graph *sg, Graph *) override {
     // nothing to do if the subgraph is not linked to the property graph
     if (sg != layout->getGraph() && !layout->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG

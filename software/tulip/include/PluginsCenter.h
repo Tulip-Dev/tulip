@@ -44,7 +44,7 @@ class PluginsCenter : public QWidget {
 
 public:
   explicit PluginsCenter(QWidget *parent = nullptr);
-  ~PluginsCenter();
+  ~PluginsCenter() override;
 
 public slots:
   void reportPluginErrors(const QMap<QString, QString> &errors);

@@ -37,27 +37,27 @@ public:
       : stream_out(std::stringstream::in | std::stringstream::out), inGlEntity(false),
         inGlGraph(false), inNode(false), inEdge(false) {}
 
-  virtual void begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize,
-                     GLfloat lineWidth);
-  virtual void colorInfo(GLfloat *data);
-  virtual void beginGlEntity(GLfloat data);
-  virtual void endGlEntity();
-  virtual void beginGlGraph(GLfloat data);
-  virtual void endGlGraph();
-  virtual void beginNode(GLfloat data);
-  virtual void endNode();
-  virtual void beginEdge(GLfloat data);
-  virtual void endEdge();
-  virtual void pointToken(GLfloat *data);
-  virtual void lineToken(GLfloat *data);
-  virtual void lineResetToken(GLfloat *data);
-  virtual void polygonToken(GLfloat *data);
-  virtual void bitmapToken(GLfloat *data);
-  virtual void drawPixelToken(GLfloat *data);
-  virtual void copyPixelToken(GLfloat *data);
-  virtual void end();
+  void begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize,
+             GLfloat lineWidth) override;
+  void colorInfo(GLfloat *data) override;
+  void beginGlEntity(GLfloat data) override;
+  void endGlEntity() override;
+  void beginGlGraph(GLfloat data) override;
+  void endGlGraph() override;
+  void beginNode(GLfloat data) override;
+  void endNode() override;
+  void beginEdge(GLfloat data) override;
+  void endEdge() override;
+  void pointToken(GLfloat *data) override;
+  void lineToken(GLfloat *data) override;
+  void lineResetToken(GLfloat *data) override;
+  void polygonToken(GLfloat *data) override;
+  void bitmapToken(GLfloat *data) override;
+  void drawPixelToken(GLfloat *data) override;
+  void copyPixelToken(GLfloat *data) override;
+  void end() override;
 
-  virtual void getResult(std::string *str);
+  void getResult(std::string *str) override;
 
 private:
   std::stringstream stream_out;

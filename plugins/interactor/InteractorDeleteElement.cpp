@@ -46,12 +46,12 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct() {
+  void construct() override {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseElementDeleter);
   }
 
-  bool isCompatible(const std::string &viewName) const {
+  bool isCompatible(const std::string &viewName) const override {
     return (viewName == NodeLinkDiagramComponent::viewName);
   }
 };

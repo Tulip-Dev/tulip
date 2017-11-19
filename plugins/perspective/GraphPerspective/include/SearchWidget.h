@@ -52,7 +52,7 @@ class SearchWidget : public QWidget {
 
 public:
   explicit SearchWidget(QWidget *parent = nullptr);
-  virtual ~SearchWidget();
+  ~SearchWidget() override;
 
 signals:
 
@@ -74,8 +74,8 @@ protected slots:
   void selectionModeChanged(int index);
 
 protected:
-  void dragEnterEvent(QDragEnterEvent *);
-  void dropEvent(QDropEvent *);
+  void dragEnterEvent(QDragEnterEvent *) override;
+  void dropEvent(QDropEvent *) override;
 };
 
 #endif // SEARCHWIDGET_H

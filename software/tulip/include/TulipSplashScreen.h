@@ -32,20 +32,20 @@
 class TulipSplashScreen : public tlp::PluginLoader, public QSplashScreen {
 public:
   TulipSplashScreen();
-  virtual ~TulipSplashScreen() {}
+  ~TulipSplashScreen() override {}
 
-  virtual void start(const std::string &path);
-  virtual void loading(const std::string &filename);
-  virtual void loaded(const tlp::Plugin *info, const std::list<tlp::Dependency> &deps);
-  virtual void numberOfFiles(int n) {
+  void start(const std::string &path) override;
+  void loading(const std::string &filename) override;
+  void loaded(const tlp::Plugin *info, const std::list<tlp::Dependency> &deps) override;
+  void numberOfFiles(int n) override {
     _numberOfFiles = n;
     _fileCounter = 0;
   }
-  virtual void aborted(const std::string &filename, const std::string &erreurmsg);
-  virtual void finished(bool state, const std::string &msg);
+  void aborted(const std::string &filename, const std::string &erreurmsg) override;
+  void finished(bool state, const std::string &msg) override;
 
 protected:
-  virtual void drawContents(QPainter *painter);
+  void drawContents(QPainter *painter) override;
 
 private:
   QString _title;

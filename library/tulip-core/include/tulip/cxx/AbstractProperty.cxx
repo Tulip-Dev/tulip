@@ -270,7 +270,7 @@ int tlp::AbstractProperty<Tnode, Tedge, Tprop>::compare(const edge e1, const edg
 template <typename ELT_TYPE>
 class GraphEltIterator : public tlp::Iterator<ELT_TYPE> {
 public:
-  ELT_TYPE next() {
+  ELT_TYPE next() override {
     ELT_TYPE tmp = curElt;
 
     if ((_hasnext = it->hasNext())) {
@@ -291,10 +291,10 @@ public:
     next();
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (_hasnext);
   }
-  ~GraphEltIterator() {
+  ~GraphEltIterator() override {
     delete it;
   }
 

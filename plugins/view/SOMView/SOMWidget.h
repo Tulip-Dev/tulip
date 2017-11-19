@@ -34,7 +34,7 @@ class SOMWidget : public QWidget {
 
 public:
   SOMWidget(QWidget *parent = nullptr);
-  ~SOMWidget();
+  ~SOMWidget() override;
 };
 }
 

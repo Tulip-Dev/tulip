@@ -39,7 +39,7 @@ class ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
 
 public:
   ViewGraphPropertiesSelectionWidget(QWidget *parent = nullptr);
-  ~ViewGraphPropertiesSelectionWidget();
+  ~ViewGraphPropertiesSelectionWidget() override;
 
   void setWidgetParameters(Graph *graph, std::vector<std::string> graphPropertiesTypesFilter);
   std::vector<std::string> getSelectedGraphProperties();
@@ -50,7 +50,7 @@ public:
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location);
   void enableEdgesButton(const bool enable);
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   bool configurationChanged();
 

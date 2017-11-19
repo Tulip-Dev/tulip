@@ -931,19 +931,19 @@ bool ColorType::fromString(RealType &v, const string &s) {
 struct DataSetTypeSerializer : public TypedDataSerializer<DataSet> {
   DataSetTypeSerializer() : TypedDataSerializer<DataSet>("DataSet") {}
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new DataSetTypeSerializer();
   }
 
-  void write(ostream &os, const DataSet &ds) {
+  void write(ostream &os, const DataSet &ds) override {
     DataSet::write(os, ds);
   }
 
-  bool read(istream &is, DataSet &ds) {
+  bool read(istream &is, DataSet &ds) override {
     return DataSet::read(is, ds);
   }
 
-  bool setData(tlp::DataSet &, const string &, const string &) {
+  bool setData(tlp::DataSet &, const string &, const string &) override {
     // no sense
     return false;
   }
@@ -958,23 +958,23 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
     uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
-  ~NodeTypeSerializer() {
+  ~NodeTypeSerializer() override {
     delete uintSerializer;
   }
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new NodeTypeSerializer();
   }
 
-  void write(ostream &os, const node &n) {
+  void write(ostream &os, const node &n) override {
     uintSerializer->write(os, n.id);
   }
 
-  bool read(istream &is, node &n) {
+  bool read(istream &is, node &n) override {
     return uintSerializer->read(is, n.id);
   }
 
-  bool setData(tlp::DataSet &, const string &, const string &) {
+  bool setData(tlp::DataSet &, const string &, const string &) override {
     // no sense
     return false;
   }
@@ -988,23 +988,23 @@ struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node>> {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
-  ~NodeVectorTypeSerializer() {
+  ~NodeVectorTypeSerializer() override {
     delete uintVecSerializer;
   }
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new NodeVectorTypeSerializer();
   }
 
-  void write(ostream &os, const vector<node> &vn) {
+  void write(ostream &os, const vector<node> &vn) override {
     uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(vn));
   }
 
-  bool read(istream &is, vector<node> &vn) {
+  bool read(istream &is, vector<node> &vn) override {
     return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(vn));
   }
 
-  bool setData(tlp::DataSet &, const string &, const string &) {
+  bool setData(tlp::DataSet &, const string &, const string &) override {
     // no sense
     return false;
   }
@@ -1018,23 +1018,23 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
     uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
-  ~EdgeTypeSerializer() {
+  ~EdgeTypeSerializer() override {
     delete uintSerializer;
   }
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new EdgeTypeSerializer();
   }
 
-  void write(ostream &os, const edge &e) {
+  void write(ostream &os, const edge &e) override {
     uintSerializer->write(os, e.id);
   }
 
-  bool read(istream &is, edge &e) {
+  bool read(istream &is, edge &e) override {
     return uintSerializer->read(is, e.id);
   }
 
-  bool setData(tlp::DataSet &, const string &, const string &) {
+  bool setData(tlp::DataSet &, const string &, const string &) override {
     // no sense
     return false;
   }
@@ -1048,23 +1048,23 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
-  ~EdgeVectorTypeSerializer() {
+  ~EdgeVectorTypeSerializer() override {
     delete uintVecSerializer;
   }
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new EdgeVectorTypeSerializer();
   }
 
-  void write(ostream &os, const vector<edge> &ve) {
+  void write(ostream &os, const vector<edge> &ve) override {
     uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(ve));
   }
 
-  bool read(istream &is, vector<edge> &ve) {
+  bool read(istream &is, vector<edge> &ve) override {
     return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(ve));
   }
 
-  bool setData(tlp::DataSet &, const string &, const string &) {
+  bool setData(tlp::DataSet &, const string &, const string &) override {
     // no sense
     return false;
   }
@@ -1073,11 +1073,11 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
 struct StringCollectionSerializer : public TypedDataSerializer<StringCollection> {
   StringCollectionSerializer() : TypedDataSerializer<StringCollection>("StringCollection") {}
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new StringCollectionSerializer();
   }
 
-  void write(ostream &os, const StringCollection &sc) {
+  void write(ostream &os, const StringCollection &sc) override {
     os << '"';
     std::vector<std::string> values = sc.getValues();
 
@@ -1091,7 +1091,7 @@ struct StringCollectionSerializer : public TypedDataSerializer<StringCollection>
     os << '"';
   }
 
-  bool read(istream &is, StringCollection &sc) {
+  bool read(istream &is, StringCollection &sc) override {
     char c = ' ';
 
     // go to first '"'
@@ -1120,13 +1120,13 @@ struct StringCollectionSerializer : public TypedDataSerializer<StringCollection>
     }
   }
 
-  std::string toString(const DataType *data) {
+  std::string toString(const DataType *data) override {
     return std::string("\"") + static_cast<StringCollection *>(data->value)->getCurrentString() +
            '"';
     ;
   }
 
-  bool setData(tlp::DataSet &dts, const string &prop, const string &val) {
+  bool setData(tlp::DataSet &dts, const string &prop, const string &val) override {
     StringCollection col(val);
     dts.set(prop, col);
     return true;

@@ -43,7 +43,7 @@ using namespace tlp;
 
 class GragKeyboardFocusEventFilter : public QObject {
 public:
-  bool eventFilter(QObject *, QEvent *event) {
+  bool eventFilter(QObject *, QEvent *event) override {
     if (event->type() == QEvent::ShortcutOverride) {
       event->accept();
       return true;
@@ -65,12 +65,12 @@ public:
     codeEditor = editor;
   }
 
-  QSize sizeHint() const {
+  QSize sizeHint() const override {
     return QSize(codeEditor->lineNumberAreaWidth(), 0);
   }
 
 protected:
-  void paintEvent(QPaintEvent *event) {
+  void paintEvent(QPaintEvent *event) override {
     codeEditor->lineNumberAreaPaintEvent(event);
   }
 

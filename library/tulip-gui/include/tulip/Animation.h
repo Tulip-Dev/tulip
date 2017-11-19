@@ -35,7 +35,7 @@ class TLP_QT_SCOPE Animation : public QPropertyAnimation {
 
 public:
   Animation(int frameCount = 0, QObject *parent = nullptr);
-  virtual ~Animation();
+  ~Animation() override;
 
   int currentFrame() const;
   int frameCount() const;

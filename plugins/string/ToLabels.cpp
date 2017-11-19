@@ -46,7 +46,7 @@ public:
     addInParameter<bool>("edges", paramHelp[3], "true");
   }
 
-  bool run() {
+  bool run() override {
     PropertyInterface *input = nullptr;
     BooleanProperty *selection = nullptr;
     bool onNodes = true;

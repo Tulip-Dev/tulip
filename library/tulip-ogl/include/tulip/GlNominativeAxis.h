@@ -69,7 +69,7 @@ public:
    * above has been used.
    * This method redraw the whole axis and the graduations.
    */
-  void updateAxis();
+  void updateAxis() override;
 
   /**
    * Method to get the axis point coordinates associated to string value
@@ -86,7 +86,7 @@ public:
    */
   std::string getValueAtAxisPoint(const Coord &axisPointCoord);
 
-  void translate(const Coord &c);
+  void translate(const Coord &c) override;
 
 private:
   void buildAxisGraduations();

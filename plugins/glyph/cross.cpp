@@ -86,10 +86,10 @@ public:
   GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0",
                    NodeShape::Cross)
   Cross(const tlp::PluginContext *context = nullptr);
-  virtual ~Cross();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Cross() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(Cross)
 /*
@@ -162,7 +162,7 @@ public:
     initCross();
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())

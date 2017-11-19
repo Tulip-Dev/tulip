@@ -58,8 +58,8 @@ public:
                     "and Guy Melancon, ICCVG, pages 633-641 (2004).",
                     "1.0", "Tree")
   BubbleTree(const tlp::PluginContext *context);
-  ~BubbleTree();
-  bool run();
+  ~BubbleTree() override;
+  bool run() override;
 
 private:
   double computeRelativePosition(tlp::node n,

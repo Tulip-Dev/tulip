@@ -313,51 +313,51 @@ struct TLPBuilder {
 };
 
 struct TLPTrue : public TLPBuilder {
-  bool addBool(const bool) {
+  bool addBool(const bool) override {
     return true;
   }
-  bool addInt(const int) {
+  bool addInt(const int) override {
     return true;
   }
-  bool addRange(int, int) {
+  bool addRange(int, int) override {
     return true;
   }
-  bool addDouble(const double) {
+  bool addDouble(const double) override {
     return true;
   }
-  bool addString(const std::string &) {
+  bool addString(const std::string &) override {
     return true;
   }
-  bool addStruct(const std::string & /*structName*/, TLPBuilder *&newBuilder) {
+  bool addStruct(const std::string & /*structName*/, TLPBuilder *&newBuilder) override {
     newBuilder = new TLPTrue();
     return true;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
 
 struct TLPFalse : public TLPBuilder {
-  bool addBool(const bool) {
+  bool addBool(const bool) override {
     return false;
   }
-  bool addInt(const int) {
+  bool addInt(const int) override {
     return false;
   }
-  bool addRange(int, int) {
+  bool addRange(int, int) override {
     return false;
   }
-  bool addDouble(const double) {
+  bool addDouble(const double) override {
     return false;
   }
-  bool addString(const std::string &) {
+  bool addString(const std::string &) override {
     return false;
   }
-  bool addStruct(const std::string & /*structName*/, TLPBuilder *&newBuilder) {
+  bool addStruct(const std::string & /*structName*/, TLPBuilder *&newBuilder) override {
     newBuilder = new TLPFalse();
     return false;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };

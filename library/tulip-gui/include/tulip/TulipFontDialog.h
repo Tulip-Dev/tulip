@@ -41,10 +41,10 @@ class TLP_QT_SCOPE TulipFontDialog : public QDialog {
 
 public:
   explicit TulipFontDialog(QWidget *parent = nullptr);
-  ~TulipFontDialog();
+  ~TulipFontDialog() override;
   TulipFont font() const;
   int fontSize() const;
-  void done(int res) {
+  void done(int res) override {
     ok = res;
     QDialog::done(res);
   }

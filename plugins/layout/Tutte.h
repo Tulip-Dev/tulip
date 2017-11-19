@@ -41,10 +41,10 @@ public:
       "<b>How to Draw a Graph</b>, W.T. Tutte, Proc. London Math. Soc. pages 743--768 (1963).",
       "1.0", "Planar")
   Tutte(const tlp::PluginContext *context);
-  ~Tutte();
+  ~Tutte() override;
 
-  bool run();
-  bool check(std::string &);
+  bool run() override;
+  bool check(std::string &) override;
 };
 
 #endif

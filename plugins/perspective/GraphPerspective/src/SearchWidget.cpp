@@ -74,10 +74,10 @@ public:
 class StringSearchOperator : public SearchOperator {
 public:
   virtual bool compareStrings(const QString &a, const QString &b) = 0;
-  bool compare(tlp::node n) {
+  bool compare(tlp::node n) override {
     return compareStrings(_a->getNodeStringValue(n).c_str(), _b->getNodeStringValue(n).c_str());
   }
-  bool compare(tlp::edge e) {
+  bool compare(tlp::edge e) override {
     return compareStrings(_a->getEdgeStringValue(e).c_str(), _b->getEdgeStringValue(e).c_str());
   }
 };
@@ -86,16 +86,16 @@ class NumericSearchOperator : public SearchOperator {
   tlp::NumericProperty *_numericB;
 
 public:
-  virtual void setProperties(PropertyInterface *a, PropertyInterface *b) {
+  void setProperties(PropertyInterface *a, PropertyInterface *b) override {
     SearchOperator::setProperties(a, b);
     _numericA = static_cast<NumericProperty *>(_a);
     _numericB = static_cast<NumericProperty *>(_b);
   }
   virtual bool compareDoubles(double a, double b) = 0;
-  bool compare(tlp::node n) {
+  bool compare(tlp::node n) override {
     return compareDoubles(_numericA->getNodeDoubleValue(n), _numericB->getNodeDoubleValue(n));
   }
-  bool compare(tlp::edge e) {
+  bool compare(tlp::edge e) override {
     return compareDoubles(_numericA->getEdgeDoubleValue(e), _numericB->getEdgeDoubleValue(e));
   }
 };
@@ -120,7 +120,7 @@ STRING_CMP(NoCaseContainsOperator, a.contains(b, Qt::CaseInsensitive))
 
 class MatchesOperator : public StringSearchOperator {
 public:
-  bool compareStrings(const QString &a, const QString &b) {
+  bool compareStrings(const QString &a, const QString &b) override {
     QRegExp regexp(b);
     return regexp.exactMatch(a);
   }
@@ -128,7 +128,7 @@ public:
 
 class NoCaseMatchesOperator : public StringSearchOperator {
 public:
-  bool compareStrings(const QString &a, const QString &b) {
+  bool compareStrings(const QString &a, const QString &b) override {
     QRegExp regexp(b, Qt::CaseInsensitive);
     return regexp.exactMatch(a);
   }

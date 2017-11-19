@@ -106,7 +106,7 @@ public:
   void setDefaultShape(tlp::ElementType elem, int shape);
 
   // in GlDefaultSelectionColorManager interface
-  tlp::Color defaultSelectionColor(bool tulipDefault = false);
+  tlp::Color defaultSelectionColor(bool tulipDefault = false) override;
 
   void setDefaultSelectionColor(const tlp::Color &color);
 
@@ -185,7 +185,7 @@ public:
   bool loggerAnchored() const;
   void setLoggerAnchored(bool);
 
-  void treatEvent(const Event &message);
+  void treatEvent(const Event &message) override;
 
 private:
   TulipSettings();

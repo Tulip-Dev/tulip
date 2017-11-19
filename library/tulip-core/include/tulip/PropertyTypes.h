@@ -210,17 +210,17 @@ struct KnownTypeSerializer : public TypedDataSerializer<typename T::RealType> {
   KnownTypeSerializer(const char *otn)
       : TypedDataSerializer<typename T::RealType>(std::string(otn)) {}
 
-  DataTypeSerializer *clone() const {
+  DataTypeSerializer *clone() const override {
     return new KnownTypeSerializer<T>(this->outputTypeName);
   }
 
-  void write(std::ostream &os, const typename T::RealType &v) {
+  void write(std::ostream &os, const typename T::RealType &v) override {
     T::write(os, v);
   }
-  bool read(std::istream &iss, typename T::RealType &v) {
+  bool read(std::istream &iss, typename T::RealType &v) override {
     return T::read(iss, v);
   }
-  bool setData(tlp::DataSet &ds, const std::string &prop, const std::string &value) {
+  bool setData(tlp::DataSet &ds, const std::string &prop, const std::string &value) override {
     bool result = true;
     typename T::RealType val;
 

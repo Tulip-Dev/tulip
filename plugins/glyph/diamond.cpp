@@ -65,10 +65,10 @@ public:
   GLYPHINFORMATION("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0",
                    NodeShape::Diamond)
   Diamond(const tlp::PluginContext *context = nullptr);
-  virtual ~Diamond();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Diamond() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(Diamond)
 Diamond::Diamond(const tlp::PluginContext *context) : Glyph(context) {
@@ -131,7 +131,7 @@ public:
       diamond = new GlRegularPolygon(Coord(0, 0, 0), Size(.5, .5, 0), 4);
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     diamond->setLightingMode(false);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 

@@ -54,7 +54,7 @@ public:
   /**
    * @brief Function to export data in XML
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 };
 }
 

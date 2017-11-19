@@ -42,8 +42,8 @@ private:
   static const unsigned int NBTEST = 1000;
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
   void testSetAll();
   void testSetGet();
   void testFindAll();

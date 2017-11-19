@@ -34,8 +34,8 @@ namespace tlp {
 class TLP_SCOPE TulipException : public std::exception {
 public:
   TulipException(const std::string &desc);
-  virtual ~TulipException() throw();
-  virtual const char *what() const throw();
+  ~TulipException() throw() override;
+  const char *what() const throw() override;
 
 private:
   std::string desc;

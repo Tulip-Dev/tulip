@@ -71,10 +71,10 @@ public:
                     "IEEE Press, pp. 33-42.",
                     "2.0", "Tree")
   SquarifiedTreeMap(const tlp::PluginContext *context);
-  ~SquarifiedTreeMap();
+  ~SquarifiedTreeMap() override;
 
-  bool check(std::string &);
-  bool run();
+  bool check(std::string &) override;
+  bool run() override;
 
 private:
   tlp::SizeProperty *sizeResult;

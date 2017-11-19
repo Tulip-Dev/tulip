@@ -29,7 +29,7 @@ public:
                     "edges having the same value for a given property.",
                     "1.1", "Clustering")
   EqualValueClustering(tlp::PluginContext *context);
-  bool run();
+  bool run() override;
   bool computeClusters(tlp::NumericProperty *prop, bool onNodes, bool connected);
   bool computeClusters(tlp::PropertyInterface *prop, bool onNodes, bool connected);
 };

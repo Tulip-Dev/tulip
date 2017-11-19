@@ -39,12 +39,12 @@ public:
    * Basic constructor with number of points
    */
   GlCurve(const unsigned int nbPoints = 3u);
-  virtual ~GlCurve();
+  ~GlCurve() override;
 
   /**
    * Draw the curve
    */
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * Set the texture of the curve (if you want texture)
@@ -68,17 +68,17 @@ public:
   /**
    * Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   std::vector<tlp::Coord> _points;

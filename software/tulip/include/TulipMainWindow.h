@@ -55,7 +55,7 @@ public:
     return _instance;
   }
 
-  virtual ~TulipMainWindow();
+  ~TulipMainWindow() override;
 
   PluginsCenter *pluginsCenter() const;
 
@@ -80,7 +80,7 @@ public slots:
   void showTrayMessage(const QString &message);
 
 protected:
-  void closeEvent(QCloseEvent *);
+  void closeEvent(QCloseEvent *) override;
 
 protected slots:
   void systemTrayRequest(QSystemTrayIcon::ActivationReason);

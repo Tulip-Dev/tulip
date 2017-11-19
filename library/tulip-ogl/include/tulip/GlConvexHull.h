@@ -50,12 +50,12 @@ public:
                const std::vector<Color> &outlineColors, const bool filled, const bool outlined,
                const std::string &name, bool computeHull = true);
 
-  virtual ~GlConvexHull() {}
+  ~GlConvexHull() override {}
 
   /**
    * Function used to visit composite's children
    */
-  virtual void acceptVisitor(GlSceneVisitor *visitor) {
+  void acceptVisitor(GlSceneVisitor *visitor) override {
     if (boundingBox.isValid()) {
       visitor->visit(this);
     }
@@ -76,7 +76,7 @@ public:
   /**
    * Draw the convexHull
    */
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * Static function who build a hierarchy of convexHull with the given graph
@@ -90,17 +90,17 @@ public:
   /**
    * Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
   tlp::Graph *_graph;
 

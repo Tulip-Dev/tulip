@@ -131,7 +131,7 @@ public:
     addInParameter<tlp::Color>("other color", paramHelp[4], "(85, 170, 255, 255)");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     if (dataSet == nullptr)
       return false;
 

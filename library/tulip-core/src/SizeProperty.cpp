@@ -30,7 +30,7 @@ using namespace tlp;
 
 class SizeMetaValueCalculator : public AbstractSizeProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractSizeProperty *prop, node mN, Graph *sg, Graph *) {
+  void computeMetaValue(AbstractSizeProperty *prop, node mN, Graph *sg, Graph *) override {
     // nothing to do if the subgraph is not linked to the property graph
     if (sg != prop->getGraph() && !prop->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG

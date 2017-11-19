@@ -44,11 +44,11 @@ public:
     isReversed = currentChild > endChild;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return currentChild != endChild;
   }
 
-  node next() {
+  node next() override {
     node tmp = graph->getOutNode(n, currentChild);
 
     if (isReversed)

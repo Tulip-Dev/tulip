@@ -41,7 +41,7 @@ class ComputeSOMWidget : public QWidget {
 
 public:
   ComputeSOMWidget(QWidget *parent = nullptr);
-  ~ComputeSOMWidget();
+  ~ComputeSOMWidget() override;
   unsigned number() const;
   void setNumber(unsigned uintValue);
   void clearLists();

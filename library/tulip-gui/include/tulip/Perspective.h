@@ -143,10 +143,10 @@ public:
   };
   Q_DECLARE_FLAGS(ProgressOptions, ProgressOption)
 
-  virtual std::string category() const {
+  std::string category() const override {
     return PERSPECTIVE_CATEGORY;
   }
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_controller.png";
   }
 
@@ -181,7 +181,7 @@ public:
    * start method instead.
    */
   Perspective(const tlp::PluginContext *c);
-  virtual ~Perspective();
+  ~Perspective() override;
 
   /**
    * @brief Build the main window GUI and starts the workflow.

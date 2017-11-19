@@ -41,69 +41,69 @@ public:
   /**
    * Begin new EPS document with viewport, clearColor, pointSize and lineWidth information
    */
-  virtual void begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize,
-                     GLfloat lineWidth);
+  void begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize,
+             GLfloat lineWidth) override;
   /**
    * Record a new color
    */
-  virtual void colorInfo(GLfloat *data);
+  void colorInfo(GLfloat *data) override;
   /**
    * Record a new GlEntity
    */
-  virtual void beginGlEntity(GLfloat data);
+  void beginGlEntity(GLfloat data) override;
   /**
    * End of a GlEntity
    */
-  virtual void endGlEntity();
+  void endGlEntity() override;
   /**
    * Record a new GlGraph
    */
-  virtual void beginGlGraph(GLfloat data);
+  void beginGlGraph(GLfloat data) override;
   /**
    * End of a GlGraph
    */
-  virtual void endGlGraph();
+  void endGlGraph() override;
   /**
    * Record a new Node
    */
-  virtual void beginNode(GLfloat data);
+  void beginNode(GLfloat data) override;
   /**
    * End of a Node
    */
-  virtual void endNode();
+  void endNode() override;
   /**
    * Record a new Edge
    */
-  virtual void beginEdge(GLfloat data);
+  void beginEdge(GLfloat data) override;
   /**
    * End of a Edge
    */
-  virtual void endEdge();
+  void endEdge() override;
   /**
    * Record a new pointToken
    */
-  virtual void pointToken(GLfloat *data);
+  void pointToken(GLfloat *data) override;
   /**
    * Record a new lineToken
    */
-  virtual void lineToken(GLfloat *data);
+  void lineToken(GLfloat *data) override;
   /**
    * Record a new lineResetToken
    */
-  virtual void lineResetToken(GLfloat *data);
+  void lineResetToken(GLfloat *data) override;
   /**
    * Record a new polygonToken
    */
-  virtual void polygonToken(GLfloat *data);
+  void polygonToken(GLfloat *data) override;
   /**
    * End of the EPS document
    */
-  virtual void end();
+  void end() override;
 
   /**
    * Put in str the built EPS document
    */
-  virtual void getResult(std::string *str);
+  void getResult(std::string *str) override;
 
 private:
   std::stringstream stream_out;

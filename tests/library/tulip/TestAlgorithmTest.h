@@ -40,8 +40,8 @@ private:
   tlp::Graph *graph;
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
   void testSimple();
   void testFreeTree();
   void testTree();

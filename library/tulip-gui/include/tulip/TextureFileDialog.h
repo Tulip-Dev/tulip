@@ -47,9 +47,9 @@ public:
   int ok;
   TextureFileDialog(QWidget *parent = nullptr);
 
-  ~TextureFileDialog();
+  ~TextureFileDialog() override;
 
-  void done(int res);
+  void done(int res) override;
 
   void setData(const TextureFile &tf);
 

@@ -47,13 +47,13 @@ signals:
   void endCurrentLinesExecution();
 
 protected:
-  void keyPressEvent(QKeyEvent *e);
+  void keyPressEvent(QKeyEvent *e) override;
 
   bool isCursorOnLastLine();
 
   void executeCurrentLines();
 
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 
 public slots:
 
@@ -61,7 +61,7 @@ public slots:
 
 protected slots:
 
-  void updateAutoCompletionList(bool dotContext = false);
+  void updateAutoCompletionList(bool dotContext = false) override;
 };
 }
 

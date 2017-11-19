@@ -57,15 +57,15 @@ public:
     parentScene->addItem(_animation);
   }
 
-  virtual ~ProgressItem() {
+  ~ProgressItem() override {
     delete _animation;
   }
 
-  QRectF boundingRect() const {
+  QRectF boundingRect() const override {
     return QRectF();
   }
 
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override {
     painter->setPen(QColor(255, 255, 255));
     painter->setBrush(QColor(255, 255, 255, 170));
     painter->drawRect(scene()->sceneRect());

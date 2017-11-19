@@ -177,12 +177,12 @@ public:
   GLYPHINFORMATION("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0",
                    NodeShape::Ring)
   Ring(const tlp::PluginContext *context = nullptr);
-  virtual ~Ring();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
+  ~Ring() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   virtual string getName() {
     return string("Ring");
   }
-  virtual void draw(node n, float lod);
+  void draw(node n, float lod) override;
 };
 PLUGIN(Ring)
 Ring::Ring(const tlp::PluginContext *context) : Glyph(context) {}
@@ -206,7 +206,7 @@ public:
 
   EERing(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     glDisable(GL_LIGHTING);
     drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath(),

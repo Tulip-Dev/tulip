@@ -45,15 +45,15 @@ public:
   /**
    * Method used for GlSimpleEntity
    */
-  virtual void visit(GlSimpleEntity *) {}
+  void visit(GlSimpleEntity *) override {}
   /**
    * Method used for GlNodes (and GlMetaNodes)
    */
-  virtual void visit(GlNode *glNode);
+  void visit(GlNode *glNode) override;
   /**
    * Method used for GlEdges
    */
-  virtual void visit(GlEdge *glEdge);
+  void visit(GlEdge *glEdge) override;
 
 private:
   const GlGraphInputData *inputData;

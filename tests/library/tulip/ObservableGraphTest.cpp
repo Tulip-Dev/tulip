@@ -53,7 +53,7 @@ public:
   }
 
   // Observable methods
-  void treatEvents(const vector<Event> &events) {
+  void treatEvents(const vector<Event> &events) override {
     if (events[0].type() == Event::TLP_DELETE) {
       observables.insert(events[0].sender());
     } else {
@@ -105,7 +105,7 @@ public:
     addInheritedPropertyCalledGraphs.push_back(g);
   }
 
-  virtual void treatEvent(const Event &evt) {
+  void treatEvent(const Event &evt) override {
 
     const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
@@ -168,7 +168,7 @@ public:
     obs = nullptr;
   }
 
-  ~GraphObserverTest() {
+  ~GraphObserverTest() override {
     delete obs;
   }
 
@@ -262,7 +262,7 @@ public:
   void afterDelInheritedProperty(Graph *g, const string &name) {
     sGraphs.push_back(g), spName = name;
   }
-  virtual void treatEvent(const Event &evt) {
+  void treatEvent(const Event &evt) override {
     const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
     if (gEvt) {
@@ -410,7 +410,7 @@ public:
       }
     }
   }
-  virtual void treatEvent(const Event &evt) {
+  void treatEvent(const Event &evt) override {
     const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
     if (gEvt) {

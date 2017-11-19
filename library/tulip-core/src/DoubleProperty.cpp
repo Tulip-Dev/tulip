@@ -223,14 +223,14 @@ public:
 
   void
   computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric,
-                   node mN, Graph *sg, Graph *) {
+                   node mN, Graph *sg, Graph *) override {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
   }
 
   void
   computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> *metric,
-                   edge mE, Iterator<edge> *itE, Graph *) {
+                   edge mE, Iterator<edge> *itE, Graph *) override {
     if (edgeCalc)
       edgeCalc(metric, mE, itE);
   }
@@ -241,8 +241,8 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 
 class ViewBorderWidthCalculator : public DoubleMinMaxProperty::MetaValueCalculator {
 public:
-  virtual void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty> *width,
-                                node mN, Graph *, Graph *) {
+  void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty> *width, node mN,
+                        Graph *, Graph *) override {
     // meta node border width is 1
     width->setNodeValue(mN, 1);
   }

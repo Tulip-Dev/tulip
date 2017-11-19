@@ -49,7 +49,7 @@ private:
 
   bool compute(tlp::Graph *graph);
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   /**
    * @brief Singleton instance of this class.

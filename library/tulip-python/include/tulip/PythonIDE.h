@@ -86,7 +86,7 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
 
 public:
   explicit PythonIDE(QWidget *parent = nullptr);
-  ~PythonIDE();
+  ~PythonIDE() override;
 
   void setProject(tlp::TulipProject *project);
   void savePythonFilesAndWriteToProject(bool notifyProjectModified = false);
@@ -98,9 +98,9 @@ public:
   void setModuleEditorsVisible(bool visible);
 
 protected:
-  void dragEnterEvent(QDragEnterEvent *);
-  void dropEvent(QDropEvent *);
-  bool eventFilter(QObject *obj, QEvent *event);
+  void dragEnterEvent(QDragEnterEvent *) override;
+  void dropEvent(QDropEvent *) override;
+  bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
   int addMainScriptEditor(const QString &fileName = "");

@@ -41,9 +41,9 @@ namespace tlp {
 class TLP_QT_SCOPE FloatValidator : public QValidator {
 
 public:
-  State validate(QString &input, int &pos) const;
+  State validate(QString &input, int &pos) const override;
 
-  void fixup(QString &text) const;
+  void fixup(QString &text) const override;
 };
 
 /**
@@ -56,15 +56,15 @@ class TLP_QT_SCOPE ScientificDoubleSpinBox : public QDoubleSpinBox {
 public:
   ScientificDoubleSpinBox(QWidget *parent = nullptr);
 
-  QValidator::State validate(QString &input, int &pos) const;
+  QValidator::State validate(QString &input, int &pos) const override;
 
-  void fixup(QString &input) const;
+  void fixup(QString &input) const override;
 
-  double valueFromText(const QString &text) const;
+  double valueFromText(const QString &text) const override;
 
-  QString textFromValue(double value) const;
+  QString textFromValue(double value) const override;
 
-  void stepBy(int steps);
+  void stepBy(int steps) override;
 };
 }
 

@@ -26,8 +26,8 @@
 namespace pocore {
 class SpiralLayout : public LayoutFunction {
 public:
-  Vec2i project(const unsigned int id) const;
-  unsigned int unproject(const Vec2i &) const;
+  Vec2i project(const unsigned int id) const override;
+  unsigned int unproject(const Vec2i &) const override;
 };
 }
 #endif // SPIRALLAYOUT_H

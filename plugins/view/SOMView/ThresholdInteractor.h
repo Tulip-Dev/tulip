@@ -55,8 +55,8 @@ public:
   enum SliderWay { ToLeft, ToRight };
   ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScale *colorScale,
                    const std::string &textureName);
-  ~ColorScaleSlider();
-  void draw(float lod, tlp::Camera *camera);
+  ~ColorScaleSlider() override;
+  void draw(float lod, tlp::Camera *camera) override;
   void setColor(Color c);
   Coord getBasePosition() {
     return position;
@@ -71,11 +71,11 @@ public:
   ColorScaleSlider *getLinkedSlider() {
     return linkedSlider;
   }
-  float getLeftBound();
-  float getRightBound();
-  void beginShift();
-  void shift(float shift);
-  void endShift();
+  float getLeftBound() override;
+  float getRightBound() override;
+  void beginShift() override;
+  void shift(float shift) override;
+  void endShift() override;
   double getValue();
   float getCurrentShift() const {
     return currentShift;
@@ -105,15 +105,15 @@ class SliderBar : public Slider, public tlp::GlSimpleEntity {
 
 public:
   SliderBar(ColorScaleSlider *left, ColorScaleSlider *right, const std::string &textureName);
-  ~SliderBar();
-  float getLeftBound();
-  float getRightBound();
-  void beginShift();
-  void shift(float shift);
-  void endShift();
-  void draw(float lod, tlp::Camera *camera);
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  ~SliderBar() override;
+  float getLeftBound() override;
+  float getRightBound() override;
+  void beginShift() override;
+  void shift(float shift) override;
+  void endShift() override;
+  void draw(float lod, tlp::Camera *camera) override;
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
 protected:
   ColorScaleSlider *left;
@@ -125,15 +125,15 @@ protected:
 class ThresholdInteractor : public EditColorScaleInteractor {
 public:
   ThresholdInteractor();
-  virtual ~ThresholdInteractor();
-  bool draw(tlp::GlMainWidget *glMainWidget);
-  bool eventFilter(QObject *, QEvent *);
+  ~ThresholdInteractor() override;
+  bool draw(tlp::GlMainWidget *glMainWidget) override;
+  bool eventFilter(QObject *, QEvent *) override;
   void setView(View *view);
 
 protected:
-  bool screenSizeChanged(SOMView *somView);
+  bool screenSizeChanged(SOMView *somView) override;
   void propertyChanged(SOMView *somView, const std::string &propertyName,
-                       tlp::NumericProperty *newProperty);
+                       tlp::NumericProperty *newProperty) override;
   void performSelection(SOMView *somView, Iterator<node> *it);
   void buildSliders(SOMView *somView);
   void clearSliders();

@@ -41,7 +41,7 @@ class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject, public QGraphicsRect
 
 public:
   GlOverviewGraphicsItem(GlMainView *view, GlScene &scene);
-  ~GlOverviewGraphicsItem();
+  ~GlOverviewGraphicsItem() override;
 
   void setSize(unsigned int width, unsigned int height);
   inline unsigned int getWidth() {
@@ -66,9 +66,9 @@ public slots:
   void draw(bool generatePixmap);
 
 private:
-  void mousePressEvent(QGraphicsSceneMouseEvent *event);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   void setScenePosition(QPointF pos);
 
   GlMainView *view;

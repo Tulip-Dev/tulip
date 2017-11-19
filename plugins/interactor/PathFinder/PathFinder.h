@@ -58,12 +58,12 @@ public:
                     "Information")
 
   PathFinder(const tlp::PluginContext *);
-  virtual ~PathFinder();
-  void construct();
-  unsigned int priority() const {
+  ~PathFinder() override;
+  void construct() override;
+  unsigned int priority() const override {
     return tlp::StandardInteractorPriority::PathSelection;
   }
-  virtual QWidget *configurationWidget() const;
+  QWidget *configurationWidget() const override;
 
   /**
    * @return The name of the property used to get the weight values over the edges.
@@ -115,7 +115,7 @@ public:
    */
   std::vector<std::string> getHighlighters();
 
-  virtual bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 
 public slots:
   void setSelectAllPaths(bool s);

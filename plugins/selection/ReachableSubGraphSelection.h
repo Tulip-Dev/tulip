@@ -44,8 +44,8 @@ public:
                     "1.1", "Selection")
 
   ReachableSubGraphSelection(const tlp::PluginContext *context);
-  ~ReachableSubGraphSelection();
-  bool run();
+  ~ReachableSubGraphSelection() override;
+  bool run() override;
 };
 
 #endif

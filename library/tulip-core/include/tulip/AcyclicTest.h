@@ -102,7 +102,7 @@ private:
   TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  virtual void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 };
 }
 

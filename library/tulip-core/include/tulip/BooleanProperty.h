@@ -37,9 +37,9 @@ public:
   BooleanProperty(Graph *g, const std::string &n = "")
       : AbstractProperty<BooleanType, BooleanType>(g, n) {}
   // PropertyInterface inherited methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 
@@ -68,9 +68,9 @@ public:
   BooleanVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
   // PropertyInterface inherited methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 };

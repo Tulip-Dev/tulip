@@ -31,7 +31,7 @@ class ScatterPlot2DInteractor : public NodeLinkDiagramComponentInteractor {
 public:
   ScatterPlot2DInteractor(const QString &iconPath, const QString &text);
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class ScatterPlot2DInteractorNavigation : public ScatterPlot2DInteractor {
@@ -42,7 +42,7 @@ public:
 
   ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);
 
-  void construct();
+  void construct() override;
 };
 
 class ScatterPlot2DInteractorTrendLine : public ScatterPlot2DInteractor {
@@ -53,7 +53,7 @@ public:
 
   ScatterPlot2DInteractorTrendLine(const tlp::PluginContext *);
 
-  void construct();
+  void construct() override;
 };
 
 class ScatterPlot2DInteractorCorrelCoeffSelector : public ScatterPlot2DInteractor {
@@ -63,11 +63,11 @@ public:
                     "Scatter Plot 2D Correlation Coefficient Interactor", "1.0", "Information")
 
   ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *);
-  ~ScatterPlot2DInteractorCorrelCoeffSelector();
+  ~ScatterPlot2DInteractorCorrelCoeffSelector() override;
 
-  void construct();
+  void construct() override;
 
-  QWidget *configurationWidget() const;
+  QWidget *configurationWidget() const override;
 
 private:
   ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
@@ -88,9 +88,9 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 }
 

@@ -42,7 +42,7 @@ namespace tlp {
 class IteratorValue : public Iterator<unsigned int> {
 public:
   IteratorValue() {}
-  virtual ~IteratorValue() {}
+  ~IteratorValue() override {}
   virtual unsigned int nextValue(DataMem &) = 0;
 };
 ///@endcond
@@ -139,10 +139,10 @@ public:
       ++_pos;
     }
   }
-  bool hasNext() {
+  bool hasNext() override {
     return (_pos < UINT_MAX && it != (*vData).end());
   }
-  unsigned int next() {
+  unsigned int next() override {
     unsigned int tmp = _pos;
 
     do {
@@ -152,7 +152,7 @@ public:
 
     return tmp;
   }
-  unsigned int nextValue(DataMem &val) {
+  unsigned int nextValue(DataMem &val) override {
     static_cast<TypedValueContainer<TYPE> &>(val).value = StoredType<TYPE>::get(*it);
     unsigned int pos = _pos;
 
@@ -185,10 +185,10 @@ public:
     while (it != (*hData).end() && StoredType<TYPE>::equal((*it).second, _value) != _equal)
       ++it;
   }
-  bool hasNext() {
+  bool hasNext() override {
     return (it != (*hData).end());
   }
-  unsigned int next() {
+  unsigned int next() override {
     unsigned int tmp = (*it).first;
 
     do {
@@ -197,7 +197,7 @@ public:
 
     return tmp;
   }
-  unsigned int nextValue(DataMem &val) {
+  unsigned int nextValue(DataMem &val) override {
     static_cast<TypedValueContainer<TYPE> &>(val).value = StoredType<TYPE>::get((*it).second);
     unsigned int pos = (*it).first;
 

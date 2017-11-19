@@ -29,12 +29,12 @@ namespace tlp {
 template <typename VALUE, typename ITERATOR>
 struct StlIterator : public Iterator<VALUE> {
   StlIterator(const ITERATOR &startIt, const ITERATOR &endIt) : it(startIt), itEnd(endIt) {}
-  VALUE next() {
+  VALUE next() override {
     VALUE tmp = *it;
     ++it;
     return tmp;
   }
-  bool hasNext() {
+  bool hasNext() override {
     return (itEnd != it);
   }
 

@@ -106,9 +106,9 @@ public:
     csl->setLayoutModule(fme);
   }
 
-  ~OGDFFastMultipoleEmbedder() {}
+  ~OGDFFastMultipoleEmbedder() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
 
     if (dataSet != nullptr) {
       double dval = 0;

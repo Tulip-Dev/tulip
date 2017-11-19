@@ -29,7 +29,7 @@ class PixelOrientedInteractor : public NodeLinkDiagramComponentInteractor {
 public:
   PixelOrientedInteractor(const QString &iconPath, const QString &text);
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class PixelOrientedInteractorNavigation : public PixelOrientedInteractor {
@@ -40,7 +40,7 @@ public:
 
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
 
-  void construct();
+  void construct() override;
 };
 }
 

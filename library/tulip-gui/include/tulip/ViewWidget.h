@@ -58,15 +58,15 @@ class TLP_QT_SCOPE ViewWidget : public tlp::View {
 
 public:
   ViewWidget();
-  virtual ~ViewWidget();
+  ~ViewWidget() override;
 
   /**
     @see View::graphicsView()
     @note This method should not be reimplemented as a subclass of ViewWidget
     */
-  virtual QGraphicsView *graphicsView() const;
+  QGraphicsView *graphicsView() const override;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  virtual void resetGraphicsScene() {}
+  void resetGraphicsScene() override {}
 #endif
 
 public slots:
@@ -74,14 +74,14 @@ public slots:
     @see View::setupUi
     @note This method should not be reimplemented as a subclass of ViewWidget
     */
-  virtual void setupUi();
+  void setupUi() override;
 
   /**
     @brief Reimplemented from View::draw()
     By default, this method does nothing. We assume the widget is automatically repainted by Qt's
     windowing manager
     */
-  virtual void draw() {}
+  void draw() override {}
 
 protected slots:
   /**
@@ -89,9 +89,9 @@ protected slots:
 
     @see View::currentInteractorChanged()
     */
-  virtual void currentInteractorChanged(tlp::Interactor *);
+  void currentInteractorChanged(tlp::Interactor *) override;
 
-  virtual void graphDeleted(Graph *parentGraph);
+  void graphDeleted(Graph *parentGraph) override;
 
 protected:
   /**
@@ -128,9 +128,9 @@ protected:
     @return The graphics item associated to the central widget
     @see setCentralWidget
     */
-  virtual QGraphicsItem *centralItem() const;
+  QGraphicsItem *centralItem() const override;
 
-  QPixmap snapshot(const QSize &outputSize = QSize()) const;
+  QPixmap snapshot(const QSize &outputSize = QSize()) const override;
 };
 }
 

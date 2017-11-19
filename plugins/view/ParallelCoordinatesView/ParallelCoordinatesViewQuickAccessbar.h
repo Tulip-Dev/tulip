@@ -34,10 +34,10 @@ public:
                                         QWidget *parent = nullptr);
 
 public slots:
-  void reset();
-  virtual void setNodesVisible(bool);
-  virtual void setBackgroundColor(const QColor &);
-  virtual void setLabelsVisible(bool);
+  void reset() override;
+  void setNodesVisible(bool) override;
+  void setBackgroundColor(const QColor &) override;
+  void setLabelsVisible(bool) override;
 };
 }
 #endif

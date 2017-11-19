@@ -57,13 +57,13 @@ public:
     }
   }
 
-  void draw(float, Camera *) {
+  void draw(float, Camera *) override {
     GlLines::glDrawCurve(start, bends, end, 10, 0, Color(127, 127, 127, 255),
                          Color(127, 127, 127, 255));
   }
 
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 };
 
 /// This interactor allows to move/add/delete EdgeBends
@@ -71,11 +71,11 @@ class TLP_QT_SCOPE MouseEdgeBendEditor : public GLInteractorComponent {
 
 public:
   MouseEdgeBendEditor();
-  ~MouseEdgeBendEditor();
-  bool compute(GlMainWidget *glMainWidget);
-  bool draw(GlMainWidget *);
-  void clear();
-  bool eventFilter(QObject *, QEvent *);
+  ~MouseEdgeBendEditor() override;
+  bool compute(GlMainWidget *glMainWidget) override;
+  bool draw(GlMainWidget *) override;
+  void clear() override;
+  bool eventFilter(QObject *, QEvent *) override;
 
 protected:
   enum EditOperation { NONE_OP = 0, TRANSLATE_OP, NEW_OP, DELETE_OP };

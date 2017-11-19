@@ -33,8 +33,8 @@ public:
   ParallelCoordsGlEntitiesSelector(Qt::MouseButton button = Qt::LeftButton,
                                    Qt::KeyboardModifier modifier = Qt::NoModifier)
       : MouseSelector(button, modifier) {}
-  ~ParallelCoordsGlEntitiesSelector() {}
-  bool eventFilter(QObject *, QEvent *);
+  ~ParallelCoordsGlEntitiesSelector() override {}
+  bool eventFilter(QObject *, QEvent *) override;
   virtual void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) = 0;
   virtual void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y,
                                        bool addToSelection) = 0;

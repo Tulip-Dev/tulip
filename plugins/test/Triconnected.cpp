@@ -26,7 +26,7 @@ public:
                     "Tests whether a graph is triconnected or not.", "1.0", "Topological Test")
   TriconnectedTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::TriconnectedTest::isTriconnected(graph);
   }
 };

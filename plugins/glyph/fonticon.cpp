@@ -285,9 +285,9 @@ public:
 
   FontIconGlyph(const tlp::PluginContext *context = nullptr) : Glyph(context) {}
 
-  ~FontIconGlyph() {}
+  ~FontIconGlyph() override {}
 
-  void draw(node n, float) {
+  void draw(node n, float) override {
 
     string iconName = getNodeIcon(n);
 
@@ -308,7 +308,7 @@ public:
     }
   }
 
-  void getIncludeBoundingBox(BoundingBox &boundingBox, node n) {
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node n) override {
     string iconName = getNodeIcon(n);
 
     if (fontIcons.find(iconName) != fontIcons.end()) {
@@ -340,7 +340,7 @@ public:
 
   EEFontIconGlyph(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float) override {
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
     string iconName = viewIcon->getEdgeValue(e);
 

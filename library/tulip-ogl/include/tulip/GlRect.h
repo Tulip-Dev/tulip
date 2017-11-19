@@ -56,7 +56,7 @@ public:
   /**
    * Destructor
    */
-  virtual ~GlRect();
+  ~GlRect() override;
 
   /**
    * Accessor in reading to the Top Left Corner of the rectangle
@@ -113,7 +113,7 @@ public:
    */
   bool inRect(double x, double y);
 
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 };
 }
 #endif

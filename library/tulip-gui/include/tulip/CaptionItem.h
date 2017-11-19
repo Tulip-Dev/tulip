@@ -51,7 +51,7 @@ public:
   };
 
   CaptionItem(View *view);
-  ~CaptionItem();
+  ~CaptionItem() override;
 
   void create(CaptionType captionType);
 
@@ -63,7 +63,7 @@ public:
 
   CaptionGraphicsBackgroundItem *captionGraphicsItem();
 
-  void treatEvents(const std::vector<Event> &ev);
+  void treatEvents(const std::vector<Event> &ev) override;
 
 signals:
 

@@ -37,15 +37,15 @@ class GlGraphInputData;
 
 class TLP_GL_SCOPE EdgeExtremityGlyph : public Plugin {
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return EEGLYPH_CATEGORY;
   }
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_glyph.png";
   }
 
   EdgeExtremityGlyph(const tlp::PluginContext *context);
-  virtual ~EdgeExtremityGlyph();
+  ~EdgeExtremityGlyph() override;
   virtual void draw(edge e, node n, const Color &glyphColor, const Color &borderColor,
                     float lod) = 0;
   void get2DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize,

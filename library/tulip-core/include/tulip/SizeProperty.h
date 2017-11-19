@@ -46,22 +46,22 @@ public:
   void scale(const tlp::Vector<float, 3> &, Iterator<node> *, Iterator<edge> *);
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v);
-  virtual void setValueToGraphNodes(tlp::StoredType<Size>::ReturnedConstValue v,
-                                    const Graph *graph);
+  void setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v) override;
+  void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v) override;
+  void setValueToGraphNodes(tlp::StoredType<Size>::ReturnedConstValue v,
+                            const Graph *graph) override;
 
-  int compare(const node n1, const node n2) const;
+  int compare(const node n1, const node n2) const override;
 
-  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v,
-                                           const Graph *graph);
+  _DEPRECATED void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v,
+                                   const Graph *graph) override;
 
 protected:
   void resetMinMax();
@@ -83,9 +83,9 @@ public:
       : AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 };

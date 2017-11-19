@@ -34,7 +34,7 @@ public:
   /**
    * return if this interactor is compatible with given View
    */
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 /** \brief Parallel coordinates interactor to select elements
@@ -54,7 +54,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 
 /** \brief Parallel coordinates interactor to highlite elements
@@ -74,7 +74,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 
 /** \brief Parallel coordinates interactor to swap axis
@@ -94,7 +94,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 
 /** \brief Parallel coordinates interactor to have sliders on axis
@@ -114,7 +114,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 
 /** \brief Parallel coordinates interactor to have boxplot
@@ -134,7 +134,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 
 /** \brief Parallel coordinates interactor to show element properties when clicking on it
@@ -154,7 +154,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 
 /** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the
@@ -175,7 +175,7 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct();
+  void construct() override;
 };
 }
 

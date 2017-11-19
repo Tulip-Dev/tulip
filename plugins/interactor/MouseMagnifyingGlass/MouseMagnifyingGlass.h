@@ -35,17 +35,17 @@ public:
   MouseMagnifyingGlassInteractorComponent();
   MouseMagnifyingGlassInteractorComponent(
       const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent);
-  ~MouseMagnifyingGlassInteractorComponent();
+  ~MouseMagnifyingGlassInteractorComponent() override;
 
-  bool eventFilter(QObject *widget, QEvent *e);
+  bool eventFilter(QObject *widget, QEvent *e) override;
 
-  bool compute(GlMainWidget *) {
+  bool compute(GlMainWidget *) override {
     return false;
   }
 
-  bool draw(GlMainWidget *glWidget);
+  bool draw(GlMainWidget *glWidget) override;
 
-  void viewChanged(View *view);
+  void viewChanged(View *view) override;
 
 private:
   void generateMagnifyingGlassTexture(const Coord &magnifyingGlassCenterScr);
@@ -79,16 +79,16 @@ public:
 
   MouseMagnifyingGlassInteractor(const tlp::PluginContext *);
 
-  void construct();
+  void construct() override;
 
-  unsigned int priority() const {
+  unsigned int priority() const override {
     return StandardInteractorPriority::MagnifyingGlass;
   }
-  QWidget *configurationWidget() const {
+  QWidget *configurationWidget() const override {
     return nullptr;
   }
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 }
 #endif /* MOUSEMAGNIFYINGGLASS_H_ */

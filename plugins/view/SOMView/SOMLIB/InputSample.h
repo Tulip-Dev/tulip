@@ -43,7 +43,7 @@ public:
 
   void setPropertiesToListen(const std::vector<std::string> &propertiesToListen);
   std::vector<std::string> getListenedProperties();
-  virtual ~InputSample();
+  ~InputSample() override;
 
   const DynamicVector<double> &getWeight(tlp::node n);
 

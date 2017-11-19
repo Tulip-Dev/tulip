@@ -28,7 +28,7 @@ class SOMViewInteractor : public tlp::NodeLinkDiagramComponentInteractor {
 public:
   SOMViewInteractor(const QString &iconPath, const QString &text);
 
-  virtual bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class SOMViewNavigation : public SOMViewInteractor {
@@ -39,7 +39,7 @@ class SOMViewNavigation : public SOMViewInteractor {
 public:
   SOMViewNavigation(tlp::PluginContext *);
 
-  virtual void construct();
+  void construct() override;
 };
 
 class SOMViewSelection : public SOMViewInteractor {
@@ -50,7 +50,7 @@ class SOMViewSelection : public SOMViewInteractor {
 public:
   SOMViewSelection(tlp::PluginContext *);
 
-  virtual void construct();
+  void construct() override;
 };
 
 class SOMViewProperties : public SOMViewInteractor {
@@ -61,7 +61,7 @@ class SOMViewProperties : public SOMViewInteractor {
 public:
   SOMViewProperties(tlp::PluginContext *);
 
-  virtual void construct();
+  void construct() override;
 };
 
 class SOMViewThreshold : public SOMViewInteractor {
@@ -72,7 +72,7 @@ class SOMViewThreshold : public SOMViewInteractor {
 public:
   SOMViewThreshold(tlp::PluginContext *);
 
-  virtual void construct();
+  void construct() override;
 };
 }
 #endif /* SOMVIEWINTERACTOR_H_ */

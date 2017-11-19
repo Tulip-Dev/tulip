@@ -57,9 +57,9 @@ public:
     addInParameter<unsigned int>("nodes", paramHelp[0], "500");
     addInParameter<unsigned int>("edges", paramHelp[1], "1000");
   }
-  ~RandomGraph() {}
+  ~RandomGraph() override {}
 
-  bool importGraph() {
+  bool importGraph() override {
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 

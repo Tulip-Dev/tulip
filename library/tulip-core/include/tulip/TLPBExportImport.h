@@ -76,11 +76,11 @@ public:
                     "(compressed)</p><p>Exports a graph in a file using the Tulip binary format.",
                     "1.2", "File")
 
-  std::string fileExtension() const {
+  std::string fileExtension() const override {
     return "tlpb";
   }
 
-  std::list<std::string> gzipFileExtensions() const {
+  std::list<std::string> gzipFileExtensions() const override {
     std::list<std::string> ext;
     ext.push_back("tlpb.gz");
     ext.push_back("tlpbz");
@@ -88,11 +88,11 @@ public:
   }
 
   TLPBExport(const tlp::PluginContext *context) : ExportModule(context) {}
-  ~TLPBExport() {}
+  ~TLPBExport() override {}
 
-  bool exportGraph(std::ostream &);
+  bool exportGraph(std::ostream &) override;
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/tlpb32x32.png";
   }
 
@@ -126,26 +126,26 @@ public:
                     "1.2", "File")
 
   TLPBImport(tlp::PluginContext *context);
-  ~TLPBImport() {}
+  ~TLPBImport() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/tlpb32x32.png";
   }
 
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("tlpb");
     return l;
   }
 
-  std::list<std::string> gzipFileExtensions() const {
+  std::list<std::string> gzipFileExtensions() const override {
     std::list<std::string> ext;
     ext.push_back("tlpb.gz");
     ext.push_back("tlpbz");
     return ext;
   }
 
-  bool importGraph();
+  bool importGraph() override;
 };
 
 /*@}*/

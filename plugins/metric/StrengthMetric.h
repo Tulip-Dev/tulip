@@ -39,10 +39,10 @@ public:
                     "(2002).",
                     "1.0", "Graph")
   StrengthMetric(const tlp::PluginContext *context);
-  ~StrengthMetric();
+  ~StrengthMetric() override;
   double getNodeValue(const tlp::node n);
   double getEdgeValue(const tlp::edge n);
-  bool run();
+  bool run() override;
 
 private:
   double e(const TLP_HASH_SET<tlp::node> &U);

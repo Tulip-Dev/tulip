@@ -87,19 +87,19 @@ public:
                     "1.0", "View")
 
   ScatterPlot2DView(const PluginContext *);
-  ~ScatterPlot2DView();
-  std::string icon() const {
+  ~ScatterPlot2DView() override;
+  std::string icon() const override {
     return ":/scatter_plot2d_view.png";
   }
 
-  QuickAccessBar *getQuickAccessBarImpl();
+  QuickAccessBar *getQuickAccessBarImpl() override;
 
-  void setState(const DataSet &dataSet);
-  DataSet state() const;
-  void graphChanged(Graph *graph);
+  void setState(const DataSet &dataSet) override;
+  DataSet state() const override;
+  void graphChanged(Graph *graph) override;
   Graph *getScatterPlotGraph();
 
-  QList<QWidget *> configurationWidgets() const;
+  QList<QWidget *> configurationWidgets() const override;
 
   std::vector<ScatterPlot2D *> getSelectedScatterPlots() const;
   bool matrixViewSet() const {
@@ -131,10 +131,10 @@ public:
   void computeNodeSizes();
   void buildScatterPlotsMatrix();
 
-  void draw();
-  void refresh();
+  void draw() override;
+  void refresh() override;
 
-  void treatEvent(const Event &message);
+  void treatEvent(const Event &message) override;
 
   void afterSetNodeValue(PropertyInterface *, const node);
   void afterSetEdgeValue(PropertyInterface *, const edge);
@@ -156,11 +156,11 @@ public slots:
   void viewConfigurationChanged();
 
   // inherited from GlMainView
-  void centerView(bool graphChanged = false);
-  void applySettings();
+  void centerView(bool graphChanged = false) override;
+  void applySettings() override;
 
 private:
-  void interactorsInstalled(const QList<tlp::Interactor *> &);
+  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
   void initGlWidget(Graph *graph);
   void generateScatterPlots();
 

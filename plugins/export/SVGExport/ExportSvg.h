@@ -46,45 +46,46 @@ class ExportSvg : public ExportInterface {
 
 public:
   ExportSvg(tlp::PluginProgress *pp, std::ostream &os, const bool autoformatting, const bool woff2);
-  bool writeHeader(const tlp::BoundingBox &bb);
-  bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color &background);
-  bool writeMetaGraph(const int transform_X, const int transform_Y, float scale);
-  bool writeEndGraph();
-  bool groupNode();
+  bool writeHeader(const tlp::BoundingBox &bb) override;
+  bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color &background) override;
+  bool writeMetaGraph(const int transform_X, const int transform_Y, float scale) override;
+  bool writeEndGraph() override;
+  bool groupNode() override;
   bool addShape(const tlp::NodeShape::NodeShapes &type, const tlp::Coord &coord,
                 const tlp::Size &size, const tlp::Color &bordercolor, const double borderwidth,
-                const tlp::Color &color, std::string iconName);
-  bool addRotation(const double rotation, const tlp::Coord &center);
-  bool endGroupNode();
-  bool groupEdge();
+                const tlp::Color &color, std::string iconName) override;
+  bool addRotation(const double rotation, const tlp::Coord &center) override;
+  bool endGroupNode() override;
+  bool groupEdge() override;
   bool exportEdge(const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends,
                   const tlp::Color &color, const double width,
                   const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
                   const unsigned id_src_shape,
                   tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
-                  const unsigned id_tgt_shape, const std::vector<tlp::Coord> &edgeVertice);
+                  const unsigned id_tgt_shape, const std::vector<tlp::Coord> &edgeVertice) override;
   bool exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type,
                   const std::vector<tlp::Coord> &bends, const tlp::Color &color1,
                   const tlp::Color &color2, const double width,
                   const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
                   const unsigned id_src_shape,
                   const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
-                  const unsigned id_tgt_shape, const std::vector<tlp::Coord> &edgeVertice);
+                  const unsigned id_tgt_shape, const std::vector<tlp::Coord> &edgeVertice) override;
   bool exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape,
                            const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
                            const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
                            const tlp::Color &color, const unsigned int id_src_gradient,
-                           const unsigned int id_tgt_gradient, const std::string &iconName);
+                           const unsigned int id_tgt_gradient,
+                           const std::string &iconName) override;
   bool addLabel(const std::string &type, const std::string &label, const tlp::Color &labelcolor,
-                const tlp::Coord &coord, const unsigned &fsize, const tlp::Size &size);
-  bool addBorder(const tlp::Color &borderColor, const double borderwidth);
-  bool startNode(const unsigned id);
-  bool endNode();
-  bool addColor(const tlp::Color &color);
-  bool startEdge(const unsigned id);
-  bool endEdge();
-  bool endGroupEdge();
-  bool writeEnd();
+                const tlp::Coord &coord, const unsigned &fsize, const tlp::Size &size) override;
+  bool addBorder(const tlp::Color &borderColor, const double borderwidth) override;
+  bool startNode(const unsigned id) override;
+  bool endNode() override;
+  bool addColor(const tlp::Color &color) override;
+  bool startEdge(const unsigned id) override;
+  bool endEdge() override;
+  bool endGroupEdge() override;
+  bool writeEnd() override;
 };
 
 #endif // EXPORTSVG_H

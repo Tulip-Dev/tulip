@@ -43,7 +43,7 @@ public:
    */
   GlSphere() {}
 
-  ~GlSphere();
+  ~GlSphere() override;
 
   /**
    * @brief Create a sphere with a position, a radius a fill color and multiple rotation (if you
@@ -62,12 +62,12 @@ public:
   /**
    * @brief Draw the sphere
    */
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * @brief Get absolute position
@@ -107,12 +107,12 @@ public:
   /**
    * @brief Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 private:
   void generateBuffers(int space);

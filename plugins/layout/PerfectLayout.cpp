@@ -36,7 +36,7 @@ public:
     addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout", false);
     addInParameter<bool>("Subgraph only", paramHelp[1], "false");
   }
-  bool run() {
+  bool run() override {
     tlp::LayoutProperty *layout = nullptr;
     bool subgraphOnly(false);
 

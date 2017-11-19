@@ -49,12 +49,12 @@ class HistogramStatistics : public GLInteractorComponent {
 public:
   HistogramStatistics(HistoStatsConfigWidget *ConfigWidget);
   HistogramStatistics(const HistogramStatistics &histoStats);
-  ~HistogramStatistics();
+  ~HistogramStatistics() override;
 
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
 
-  void viewChanged(View *view);
+  void viewChanged(View *view) override;
 
 private slots:
 

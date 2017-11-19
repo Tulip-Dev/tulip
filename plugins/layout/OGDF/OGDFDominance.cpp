@@ -85,9 +85,9 @@ public:
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
   }
-  ~OGDFDominance() {}
+  ~OGDFDominance() override {}
 
-  bool check(string &error) {
+  bool check(string &error) override {
     if (!tlp::ConnectedTest::isConnected(graph)) {
       error += "graph is not connected";
       return false;
@@ -96,7 +96,7 @@ public:
     return true;
   }
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::DominanceLayout *dominance = static_cast<ogdf::DominanceLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
@@ -107,7 +107,7 @@ public:
     }
   }
 
-  void afterCall() {
+  void afterCall() override {
     if (dataSet != nullptr) {
       bool bval = false;
 

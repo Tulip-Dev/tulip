@@ -72,14 +72,14 @@ protected:
 
 public:
   MouseEdgeBuilder();
-  bool draw(GlMainWidget *);
-  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *) override;
+  bool eventFilter(QObject *, QEvent *) override;
   void initObserver(Graph *);
   void clearObserver();
 
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
-  void clear();
+  void clear() override;
 };
 }
 #endif

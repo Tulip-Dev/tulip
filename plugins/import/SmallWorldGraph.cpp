@@ -57,9 +57,9 @@ public:
     addInParameter<unsigned int>("degree", paramHelp[1], "10");
     addInParameter<bool>("long edge", paramHelp[2], "false");
   }
-  ~SmallWorldGraph() {}
+  ~SmallWorldGraph() override {}
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int nbNodes = 200;
     unsigned int avgDegree = 10;
     bool enableLongEdge = false;

@@ -50,9 +50,9 @@ public:
                     "and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1998).",
                     "1.0", "Planar")
   MixedModel(const tlp::PluginContext *context);
-  ~MixedModel();
-  bool run();
-  bool check(std::string &);
+  ~MixedModel() override;
+  bool run() override;
+  bool check(std::string &) override;
 
 private:
   std::vector<tlp::edge> getPlanarSubGraph(tlp::PlanarConMap *graph,

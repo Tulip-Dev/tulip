@@ -199,7 +199,7 @@ public:
     return _line;
   }
 
-  bool eventFilter(QObject *, QEvent *event) {
+  bool eventFilter(QObject *, QEvent *event) override {
     QTextBrowser *textBrowser = dynamic_cast<QTextBrowser *>(_consoleWidget);
     QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit *>(_consoleWidget);
     QTextCursor curCursor;

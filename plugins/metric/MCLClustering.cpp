@@ -65,8 +65,8 @@ public:
       "1.0", "Clustering")
 
   MCLClustering(const tlp::PluginContext *);
-  ~MCLClustering();
-  bool run();
+  ~MCLClustering() override;
+  bool run() override;
   bool inflate(double r, unsigned int k, node n, bool equal /*, bool noprune*/);
   void prune(node n);
   // void pruneT(node n);

@@ -64,9 +64,9 @@ public:
   GLYPHINFORMATION("3D - Cube OutLined Transparent", "David Auber", "09/07/2002",
                    "Textured cubeOutLined", "1.0", NodeShape::CubeOutlinedTransparent)
   CubeOutLinedTransparent(const tlp::PluginContext *context = nullptr);
-  virtual ~CubeOutLinedTransparent();
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~CubeOutLinedTransparent() override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(CubeOutLinedTransparent)
 
@@ -111,7 +111,7 @@ public:
       box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   }
 
-  void draw(edge e, node, const Color &borderColor, const Color &, float lod) {
+  void draw(edge e, node, const Color &borderColor, const Color &, float lod) override {
     glEnable(GL_LIGHTING);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 

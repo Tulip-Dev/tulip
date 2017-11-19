@@ -34,11 +34,11 @@ class StlVectorIterator : public Iterator<T> {
 public:
   StlVectorIterator(const vector<T> &stlVector) : stlVector(stlVector), curIdx(0) {}
 
-  T next() {
+  T next() override {
     return stlVector[curIdx++];
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return curIdx < stlVector.size();
   }
 

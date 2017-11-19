@@ -75,10 +75,10 @@ QSize TulipItemEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 class TulipColorDialog : public QColorDialog {
 public:
   TulipColorDialog(QWidget *w) : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {}
-  ~TulipColorDialog() {}
+  ~TulipColorDialog() override {}
   tlp::Color previousColor;
   int ok;
-  void done(int res) {
+  void done(int res) override {
     ok = res;
     QColorDialog::done(res);
   }
@@ -316,11 +316,11 @@ class TulipFileDialog : public QFileDialog {
 
 public:
   TulipFileDialog(QWidget *w) : QFileDialog(w), ok(QDialog::Rejected) {}
-  ~TulipFileDialog() {}
+  ~TulipFileDialog() override {}
   int ok;
   TulipFileDescriptor previousFileDescriptor;
 
-  void done(int res) {
+  void done(int res) override {
     ok = res;
     QFileDialog::done(res);
   }

@@ -70,15 +70,15 @@ public:
                     "visualization in a SVG formatted file.</p>",
                     "1.9", "File")
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
   }
 
-  string fileExtension() const {
+  string fileExtension() const override {
     return "svg";
   }
 
-  list<string> gzipFileExtensions() const {
+  list<string> gzipFileExtensions() const override {
     list<string> ext;
     ext.push_back("svgz");
     return ext;
@@ -96,7 +96,7 @@ public:
     addInParameter<bool>("Use Web Open Font Format v2", paramHelp[8], "false");
   }
 
-  bool exportGraph(ostream &os) {
+  bool exportGraph(ostream &os) override {
     pluginProgress->showPreview(false);
     bool autoformatting(true), woff2(false);
 

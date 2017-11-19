@@ -54,8 +54,8 @@ public:
                     "Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
                     "1.0", "Hierarchical")
   HierarchicalGraph(const tlp::PluginContext *context);
-  ~HierarchicalGraph();
-  bool run();
+  ~HierarchicalGraph() override;
+  bool run() override;
 
 private:
   void DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty *embedding);

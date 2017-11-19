@@ -80,7 +80,7 @@ public:
                     "1.0", "Multilevel")
   OGDFMMMExampleFastLayout(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
-  ~OGDFMMMExampleFastLayout() {}
+  ~OGDFMMMExampleFastLayout() override {}
 };
 
 PLUGIN(OGDFMMMExampleFastLayout)

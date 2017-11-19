@@ -43,7 +43,7 @@ public:
                 const std::string &xDim, const std::string &yDim, const ElementType &dataLocation,
                 Coord blCorner, unsigned int size, const Color &backgroundColor,
                 const Color &foregroundColor);
-  ~ScatterPlot2D();
+  ~ScatterPlot2D() override;
 
   void setBLCorner(const Coord &blCorner);
   void setUniformBackgroundColor(const Color &backgroundColor);

@@ -60,8 +60,8 @@ public:
       "1.0", "Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
-  ~LinkCommunities();
-  bool run();
+  ~LinkCommunities() override;
+  bool run() override;
 
 private:
   /**

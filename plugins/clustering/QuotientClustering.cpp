@@ -73,7 +73,7 @@ public:
   QuotientLabelCalculator(StringProperty *label, bool useSgName)
       : AbstractStringProperty::MetaValueCalculator(), sgLabel(label), useSubGraphName(useSgName) {}
 
-  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) {
+  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) override {
     if (sgLabel)
       label->setNodeValue(mN, sgLabel->getNodeValue(sg->getOneNode()));
     else if (useSubGraphName) {
@@ -88,7 +88,7 @@ public:
 class EdgeCardinalityCalculator : public IntegerMinMaxProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractProperty<IntegerType, IntegerType, NumericProperty> *card, edge mE,
-                        Iterator<edge> *itE, Graph *) {
+                        Iterator<edge> *itE, Graph *) override {
     unsigned int nbEdges = 0;
 
     while (itE->hasNext()) {
@@ -125,7 +125,7 @@ public:
   }
 
   //===============================================================================
-  bool run() {
+  bool run() override {
     bool oriented = true, edgeCardinality = true, clustersLayout = false;
     bool recursive = false, quotientLayout = true, useSubGraphName = false;
     StringProperty *metaLabel = nullptr;

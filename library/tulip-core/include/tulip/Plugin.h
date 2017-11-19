@@ -211,25 +211,25 @@ public:
  * @see PLUGIN
  */
 #define PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)                                \
-  std::string name() const {                                                                       \
+  std::string name() const override {                                                              \
     return NAME;                                                                                   \
   }                                                                                                \
-  std::string author() const {                                                                     \
+  std::string author() const override {                                                            \
     return AUTHOR;                                                                                 \
   }                                                                                                \
-  std::string date() const {                                                                       \
+  std::string date() const override {                                                              \
     return DATE;                                                                                   \
   }                                                                                                \
-  std::string info() const {                                                                       \
+  std::string info() const override {                                                              \
     return INFO;                                                                                   \
   }                                                                                                \
-  std::string release() const {                                                                    \
+  std::string release() const override {                                                           \
     return RELEASE;                                                                                \
   }                                                                                                \
-  std::string tulipRelease() const {                                                               \
+  std::string tulipRelease() const override {                                                      \
     return TULIP_VERSION;                                                                          \
   }                                                                                                \
-  std::string group() const {                                                                      \
+  std::string group() const override {                                                             \
     return GROUP;                                                                                  \
   }
 }

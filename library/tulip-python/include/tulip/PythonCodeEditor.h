@@ -52,11 +52,11 @@ public:
 
 protected:
   void insertSelectedItem();
-  void keyPressEvent(QKeyEvent *e);
-  void showEvent(QShowEvent *event);
-  void hideEvent(QHideEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-  bool eventFilter(QObject *obj, QEvent *event);
+  void keyPressEvent(QKeyEvent *e) override;
+  void showEvent(QShowEvent *event) override;
+  void hideEvent(QHideEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog {
@@ -72,7 +72,7 @@ class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog {
 
 public:
   FindReplaceDialog(QPlainTextEdit *_editor, QWidget *parent = nullptr);
-  ~FindReplaceDialog();
+  ~FindReplaceDialog() override;
 
   void setFindMode(const bool findMode);
 
@@ -91,7 +91,7 @@ public slots:
   void regexpToggled(bool toggled);
 
 protected:
-  void hideEvent(QHideEvent *event);
+  void hideEvent(QHideEvent *event) override;
 };
 
 class TLP_PYTHON_SCOPE PythonCodeEditor : public QPlainTextEdit {
@@ -103,7 +103,7 @@ class TLP_PYTHON_SCOPE PythonCodeEditor : public QPlainTextEdit {
 
 public:
   explicit PythonCodeEditor(QWidget *parent = nullptr);
-  ~PythonCodeEditor();
+  ~PythonCodeEditor() override;
 
   QString getCleanCode() const;
 
@@ -218,17 +218,17 @@ public:
   }
 
 protected:
-  void resizeEvent(QResizeEvent *event);
-  void showEvent(QShowEvent *);
-  void paintEvent(QPaintEvent *event);
-  void keyPressEvent(QKeyEvent *e);
-  void wheelEvent(QWheelEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
+  void showEvent(QShowEvent *) override;
+  void paintEvent(QPaintEvent *event) override;
+  void keyPressEvent(QKeyEvent *e) override;
+  void wheelEvent(QWheelEvent *event) override;
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
   void lineNumberAreaPaintEvent(QPaintEvent *event);
-  void insertFromMimeData(const QMimeData *source);
+  void insertFromMimeData(const QMimeData *source) override;
 
 protected slots:
 

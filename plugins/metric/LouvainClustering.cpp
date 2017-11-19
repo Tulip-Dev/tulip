@@ -65,7 +65,7 @@ public:
       "Experiment, P10008 (2008).",
       "2.1", "Clustering")
   LouvainClustering(const tlp::PluginContext *);
-  bool run();
+  bool run() override;
 
 private:
   // the number of nodes of the original graph

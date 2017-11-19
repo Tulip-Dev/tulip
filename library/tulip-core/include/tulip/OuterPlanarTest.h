@@ -58,7 +58,7 @@ public:
 private:
   OuterPlanarTest() {}
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   bool compute(Graph *graph);
 

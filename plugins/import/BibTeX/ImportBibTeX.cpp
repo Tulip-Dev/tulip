@@ -1407,17 +1407,17 @@ public:
                                      NODES_TO_IMPORT);
   }
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_bibtex.png";
   }
 
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("bib");
     return l;
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     string filename;
     int toImport = IMPORT_AUTHORS;
 

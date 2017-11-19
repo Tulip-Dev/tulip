@@ -44,37 +44,37 @@ class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
 
 public:
   GraphProperty(Graph *, const std::string &n = "");
-  virtual ~GraphProperty();
+  ~GraphProperty() override;
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
-  bool setNodeStringValue(const node n, const std::string &v);
-  bool setAllNodeStringValue(const std::string &v);
-  bool setStringValueToGraphNodes(const std::string &v, const tlp::Graph *graph);
-  bool setEdgeStringValue(const edge e, const std::string &v);
-  bool setAllEdgeStringValue(const std::string &v);
-  bool setStringValueToGraphEdges(const std::string &v, const tlp::Graph *graph);
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
+  bool setNodeStringValue(const node n, const std::string &v) override;
+  bool setAllNodeStringValue(const std::string &v) override;
+  bool setStringValueToGraphNodes(const std::string &v, const tlp::Graph *graph) override;
+  bool setEdgeStringValue(const edge e, const std::string &v) override;
+  bool setAllEdgeStringValue(const std::string &v) override;
+  bool setStringValueToGraphEdges(const std::string &v, const tlp::Graph *graph) override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node n,
-                            tlp::StoredType<GraphType::RealType>::ReturnedConstValue g);
-  virtual void setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g);
-  virtual void setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g,
-                                    const Graph *graph);
-  virtual bool readNodeDefaultValue(std::istream &iss);
-  virtual bool readNodeValue(std::istream &iss, node n);
+  void setNodeValue(const node n,
+                    tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) override;
+  void setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) override;
+  void setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g,
+                            const Graph *graph) override;
+  bool readNodeDefaultValue(std::istream &iss) override;
+  bool readNodeValue(std::istream &iss, node n) override;
   // tlp::GraphType encapsulates a tlp::Graph pointer but that is the graph id
   // that gets serialized when using the TLPB format
-  virtual unsigned int nodeValueSize() const {
+  unsigned int nodeValueSize() const override {
     return sizeof(unsigned int);
   }
-  virtual unsigned int edgeValueSize() const {
+  unsigned int edgeValueSize() const override {
     return 0;
   }
 

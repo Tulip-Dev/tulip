@@ -53,18 +53,18 @@ public:
   tlp::Graph *graph() const;
 
   // Methods re-implemented from QAbstractItemModel
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  int columnCount(const QModelIndex &parent = QModelIndex()) const;
-  QModelIndex parent(const QModelIndex &child) const;
-  Qt::ItemFlags flags(const QModelIndex &index) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex &child) const override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  bool setData(const QModelIndex &index, const QVariant &value, int role);
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
-  void treatEvent(const tlp::Event &);
-  void treatEvents(const std::vector<tlp::Event> &);
+  void treatEvent(const tlp::Event &) override;
+  void treatEvents(const std::vector<tlp::Event> &) override;
 
   unsigned int elementAt(int) const;
   virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const = 0;
@@ -94,10 +94,10 @@ public:
   void setSelectedOnly(bool);
   void setProperties(QVector<PropertyInterface *>);
 
-  bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
-  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+  bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
-  void treatEvent(const tlp::Event &);
+  void treatEvent(const tlp::Event &) override;
 
   tlp::BooleanProperty *filterProperty() const;
 };
@@ -105,23 +105,23 @@ public:
 class TLP_QT_SCOPE NodesGraphModel : public GraphModel {
 public:
   NodesGraphModel(QObject *parent = nullptr);
-  void setGraph(Graph *);
+  void setGraph(Graph *) override;
 
-  void treatEvent(const tlp::Event &);
-  void treatEvents(const std::vector<tlp::Event> &);
-  virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const;
-  virtual QString stringValue(unsigned int, tlp::PropertyInterface *) const;
-  virtual QVariant value(unsigned int, tlp::PropertyInterface *) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  void treatEvent(const tlp::Event &) override;
+  void treatEvents(const std::vector<tlp::Event> &) override;
+  bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const override;
+  QString stringValue(unsigned int, tlp::PropertyInterface *) const override;
+  QVariant value(unsigned int, tlp::PropertyInterface *) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-  bool isNode() const {
+  bool isNode() const override {
     return true;
   }
 
   static QString getNodeTooltip(Graph *graph, node n);
 
 protected:
-  virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const;
+  bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const override;
 
 private:
   bool _nodesAdded;
@@ -131,22 +131,22 @@ private:
 class TLP_QT_SCOPE EdgesGraphModel : public GraphModel {
 public:
   EdgesGraphModel(QObject *parent = nullptr);
-  void setGraph(Graph *);
-  void treatEvent(const tlp::Event &);
-  void treatEvents(const std::vector<tlp::Event> &);
-  virtual bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const;
-  virtual QString stringValue(unsigned int, tlp::PropertyInterface *) const;
-  virtual QVariant value(unsigned int, tlp::PropertyInterface *) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  void setGraph(Graph *) override;
+  void treatEvent(const tlp::Event &) override;
+  void treatEvents(const std::vector<tlp::Event> &) override;
+  bool lessThan(unsigned int, unsigned int, tlp::PropertyInterface *) const override;
+  QString stringValue(unsigned int, tlp::PropertyInterface *) const override;
+  QVariant value(unsigned int, tlp::PropertyInterface *) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-  bool isNode() const {
+  bool isNode() const override {
     return false;
   }
 
   static QString getEdgeTooltip(Graph *graph, edge e);
 
 protected:
-  virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const;
+  bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const override;
 
 private:
   bool _edgesAdded;

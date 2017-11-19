@@ -46,12 +46,12 @@ public:
    */
   GlLine(const std::vector<Coord> &points, const std::vector<Color> &colors);
 
-  virtual ~GlLine();
+  ~GlLine() override;
 
   /**
    * Render the line
    */
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * Change number of points
@@ -93,17 +93,17 @@ public:
   /**
    * Translate entity
    */
-  virtual void translate(const Coord &vec);
+  void translate(const Coord &vec) override;
 
   /**
    * Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   std::vector<Coord> _points;

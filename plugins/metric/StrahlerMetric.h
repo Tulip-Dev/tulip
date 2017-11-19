@@ -68,7 +68,7 @@ public:
       "pages 56-69 (2002)",
       "1.0", "Graph")
   StrahlerMetric(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 
 private:
   Strahler topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP<tlp::node, int> &tofree,

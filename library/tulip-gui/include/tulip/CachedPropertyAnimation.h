@@ -36,9 +36,9 @@ public:
                           tlp::BooleanProperty *selection = nullptr, int frameCount = 1,
                           bool computeNodes = true, bool computeEdges = true,
                           QObject *parent = nullptr);
-  virtual ~CachedPropertyAnimation();
+  ~CachedPropertyAnimation() override;
 
-  virtual void frameChanged(int frame);
+  void frameChanged(int frame) override;
 
 protected:
   std::map<std::pair<NodeType, NodeType>, NodeType> computedNodeSteps;

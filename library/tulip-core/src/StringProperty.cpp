@@ -31,7 +31,7 @@ const string StringVectorProperty::propertyTypename = "vector<string>";
 class ViewLabelCalculator : public AbstractStringProperty::MetaValueCalculator {
 public:
   // set the meta node label to label of viewMetric max corresponding node
-  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) {
+  void computeMetaValue(AbstractStringProperty *label, node mN, Graph *sg, Graph *) override {
     // nothing to do if viewMetric does not exist
     if (!sg->existProperty("viewMetric"))
       return;

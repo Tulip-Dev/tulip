@@ -217,7 +217,7 @@ class GraphUpdatesRecorder : public Observable {
 public:
   GraphUpdatesRecorder(bool allowRestart = true,
                        const GraphStorageIdsMemento *prevIdsMemento = nullptr);
-  ~GraphUpdatesRecorder();
+  ~GraphUpdatesRecorder() override;
 
   // old GraphObserver interface
   // graphAddedNodes
@@ -277,7 +277,7 @@ public:
 
 protected:
   // override Observable::treatEvent
-  virtual void treatEvent(const Event &ev);
+  void treatEvent(const Event &ev) override;
 };
 }
 

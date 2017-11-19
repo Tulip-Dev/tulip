@@ -63,7 +63,7 @@ struct WattsStrotgatzModel : public ImportModule {
     addInParameter<bool>("original model", paramHelp[3], "false");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int nbNodes = 200;
     unsigned int k = 3;
     double p = 0.02;

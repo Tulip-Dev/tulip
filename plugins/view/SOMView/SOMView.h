@@ -71,20 +71,20 @@ class SOMView : public GlMainView {
       "1.1", "View")
 public:
   SOMView(PluginContext *);
-  virtual ~SOMView();
-  std::string icon() const {
+  ~SOMView() override;
+  std::string icon() const override {
     return ":/som_view.png";
   }
   void construct(QWidget *parent);
-  void setState(const DataSet &dataSet);
-  DataSet state() const;
-  void graphChanged(Graph *);
-  void draw();
+  void setState(const DataSet &dataSet) override;
+  DataSet state() const override;
+  void graphChanged(Graph *) override;
+  void draw() override;
   void drawMapWidget();
   void drawPreviewWidget();
   void init();
-  void refresh();
-  QList<QWidget *> configurationWidgets() const;
+  void refresh() override;
+  QList<QWidget *> configurationWidgets() const override;
 
   void createPicture(const std::string &pictureName, int width, int height);
 
@@ -94,7 +94,7 @@ public:
               std::set<tlp::Observable *>::iterator end);
   void observableDestroyed(tlp::Observable *);
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
   /**
    * Return all the previews.
@@ -223,11 +223,11 @@ public slots:
    */
   void invertMask();
 
-  void applySettings();
+  void applySettings() override;
 
 protected slots:
 
-  void fillContextMenu(QMenu *menu, const QPointF &);
+  void fillContextMenu(QMenu *menu, const QPointF &) override;
 
 private:
   void copyToGlMainWidget(GlMainWidget *widget);
@@ -324,7 +324,7 @@ private:
 
   void internalSwitchToPreviewMode(bool animation);
 
-  void interactorsInstalled(const QList<Interactor *> &interactors);
+  void interactorsInstalled(const QList<Interactor *> &interactors) override;
 
   bool checkGridValidity() const;
 

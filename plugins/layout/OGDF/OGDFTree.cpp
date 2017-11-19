@@ -136,9 +136,9 @@ public:
                                      rootSelectionValuesDescription);
   }
 
-  ~OGDFTree() {}
+  ~OGDFTree() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {

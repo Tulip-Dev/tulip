@@ -49,9 +49,9 @@ public:
                                 "variable orientation and variable node sizelayout.",
                     "1.0", "Tree")
   Dendrogram(const tlp::PluginContext *context);
-  ~Dendrogram();
+  ~Dendrogram() override;
 
-  bool run();
+  bool run() override;
 
 private:
   float spacing;

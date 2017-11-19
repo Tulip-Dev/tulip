@@ -67,7 +67,7 @@ struct PageRank : public DoubleAlgorithm {
     addInParameter<bool>("directed", paramHelp[1], "true");
   }
 
-  bool run() {
+  bool run() override {
     double d = 0.85;
     bool directed = true;
 

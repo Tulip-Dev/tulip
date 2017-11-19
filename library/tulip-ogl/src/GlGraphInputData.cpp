@@ -73,7 +73,7 @@ public:
     needGraphListener = true;
     graph->addListener(this);
   }
-  void treatEvent(const Event &evt) {
+  void treatEvent(const Event &evt) override {
     Graph *g = static_cast<Graph *>(evt.sender());
 
     if (graph == g && evt.type() == Event::TLP_DELETE) {

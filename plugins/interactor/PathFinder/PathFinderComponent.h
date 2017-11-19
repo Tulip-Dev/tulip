@@ -42,9 +42,9 @@ class PathFinder;
 class PathFinderComponent : public GLInteractorComponent {
 public:
   PathFinderComponent(PathFinder *parent);
-  ~PathFinderComponent();
-  bool eventFilter(QObject *, QEvent *);
-  void timerEvent(QTimerEvent *);
+  ~PathFinderComponent() override;
+  bool eventFilter(QObject *, QEvent *) override;
+  void timerEvent(QTimerEvent *) override;
 
   /**
    * Install a path highlighter. This highlighter is not always activated. The component will ask
@@ -58,7 +58,7 @@ public:
    */
   QSet<PathHighlighter *> getHighlighters();
 
-  void clear();
+  void clear() override;
 
 private:
   tlp::node src;

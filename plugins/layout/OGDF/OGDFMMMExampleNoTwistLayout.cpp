@@ -83,7 +83,7 @@ public:
                     "1.0", "Multilevel")
   OGDFMMMExampleNoTwistLayout(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
-  ~OGDFMMMExampleNoTwistLayout() {}
+  ~OGDFMMMExampleNoTwistLayout() override {}
 };
 
 PLUGIN(OGDFMMMExampleNoTwistLayout)

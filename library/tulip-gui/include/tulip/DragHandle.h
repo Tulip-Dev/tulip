@@ -31,9 +31,9 @@ class DragHandle : public QLabel {
   Q_OBJECT
 public:
   explicit DragHandle(QWidget *parent = nullptr, Qt::WindowFlags f = nullptr);
-  virtual void mousePressEvent(QMouseEvent *ev);
-  virtual void mouseReleaseEvent(QMouseEvent *ev);
-  virtual void mouseMoveEvent(QMouseEvent *ev);
+  void mousePressEvent(QMouseEvent *ev) override;
+  void mouseReleaseEvent(QMouseEvent *ev) override;
+  void mouseMoveEvent(QMouseEvent *ev) override;
 
   void setPanel(tlp::WorkspacePanel *panel);
 

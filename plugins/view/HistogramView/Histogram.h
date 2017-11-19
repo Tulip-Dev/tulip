@@ -37,7 +37,7 @@ public:
   Histogram(Graph *graph, Graph *edgeGraph, std::map<edge, node> &edgeMap,
             const std::string &propertyName, const ElementType &dataLocation, const Coord &blCorner,
             unsigned int size, const Color &backgroundColor, const Color &textColor);
-  ~Histogram();
+  ~Histogram() override;
 
   const std::string &getPropertyName() const {
     return propertyName;

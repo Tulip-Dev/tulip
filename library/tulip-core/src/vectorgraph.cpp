@@ -57,10 +57,10 @@ public:
         _elem(elem) {
     update();
   }
-  bool hasNext() {
+  bool hasNext() override {
     return its != its_end;
   }
-  node next() {
+  node next() override {
     node n = *itn;
     ++its;
     ++itn;
@@ -102,10 +102,10 @@ public:
         _elem(elem) {
     update();
   }
-  bool hasNext() {
+  bool hasNext() override {
     return its != its_end;
   }
-  edge next() {
+  edge next() override {
     edge e = *ite;
     ++its;
     ++ite;

@@ -44,7 +44,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~GlStar();
+  ~GlStar() override;
 
   /**
    * @brief Get the number of star points

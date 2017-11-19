@@ -36,15 +36,15 @@ public:
   FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
   FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
 
-  bool eventFilter(QObject *widget, QEvent *e);
+  bool eventFilter(QObject *widget, QEvent *e) override;
 
-  bool compute(GlMainWidget *) {
+  bool compute(GlMainWidget *) override {
     return false;
   }
 
-  void viewChanged(View *view);
+  void viewChanged(View *view) override;
 
-  bool draw(GlMainWidget *glMainWidget);
+  bool draw(GlMainWidget *glMainWidget) override;
 
 private:
   FishEyeConfigWidget *configWidget;
@@ -72,19 +72,19 @@ public:
                     "1.0", "Visualization")
 
   FishEyeInteractor(const PluginContext *);
-  ~FishEyeInteractor();
+  ~FishEyeInteractor() override;
 
-  void construct();
+  void construct() override;
 
-  void uninstall();
+  void uninstall() override;
 
-  QWidget *configurationWidget() const;
+  QWidget *configurationWidget() const override;
 
-  unsigned int priority() const {
+  unsigned int priority() const override {
     return StandardInteractorPriority::FishEye;
   }
 
-  virtual bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 
 private:
   FishEyeConfigWidget *fisheyeConfigWidget;

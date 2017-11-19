@@ -214,14 +214,14 @@ public:
     addInParameter<bool>("transpose vertically", paramHelp[14], "true");
   }
 
-  ~OGDFSugiyama() {}
+  ~OGDFSugiyama() override {}
 
   PLUGININFORMATION("Sugiyama (OGDF)", "Carsten Gutwenger", "12/11/2007",
                     "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It "
                     "is a layer-based approach for producing upward drawings.",
                     "1.7", "Hierarchical")
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
@@ -312,7 +312,7 @@ public:
     }
   }
 
-  void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
+  void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) override {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout *>(ogdfLayoutAlgo);
 
     if (sugiyama->alignBaseClasses() || sugiyama->alignSiblings())
@@ -321,7 +321,7 @@ public:
       ogdfLayoutAlgo->call(gAttributes);
   }
 
-  void afterCall() {
+  void afterCall() override {
     if (dataSet != nullptr) {
       bool bval = false;
 

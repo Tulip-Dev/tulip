@@ -26,7 +26,7 @@ public:
                     "Tests whether a graph is outer planar or not.", "1.0", "Topological Test")
   OuterplanarTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::OuterPlanarTest::isOuterPlanar(graph);
   }
 };

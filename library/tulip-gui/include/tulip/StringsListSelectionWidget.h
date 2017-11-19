@@ -80,23 +80,23 @@ public:
    * Method which sets the unselected strings list
    * \param unselectedStringsList a vector containing a set of strings to be unselected
    */
-  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
+  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) override;
 
   /**
    * Method which sets the selected strings list
    * \param selectedStringsList a vector containing a set of strings to be selected
    */
-  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
+  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList) override;
 
   /**
    * Method which empty the unselected strings list
    */
-  void clearUnselectedStringsList();
+  void clearUnselectedStringsList() override;
 
   /**
    * Method which empty the selected strings list
    */
-  void clearSelectedStringsList();
+  void clearSelectedStringsList() override;
 
   /**
    * Method which sets the label text value of the unselected strings list
@@ -113,17 +113,17 @@ public:
   /**
    * Method which sets the maximum size of the selected strings list
    */
-  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
+  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) override;
 
   /**
    * Method which returns the selected strings as a vector
    */
-  std::vector<std::string> getSelectedStringsList() const;
+  std::vector<std::string> getSelectedStringsList() const override;
 
   /**
    * Method which returns the unselected strings as a vector
    */
-  std::vector<std::string> getUnselectedStringsList() const;
+  std::vector<std::string> getUnselectedStringsList() const override;
 
   /**
    * Method which returns both of the selected and unselected strings as a vector
@@ -133,12 +133,12 @@ public:
   /**
    * Method which selects all strings
    */
-  void selectAllStrings();
+  void selectAllStrings() override;
 
   /**
    * Method which unselect all strings
    */
-  void unselectAllStrings();
+  void unselectAllStrings() override;
 
 private:
   ListType listType;

@@ -65,7 +65,7 @@ public:
   /**
    *  Remove all nodes, edges, faces and subgraphs of the map
    */
-  void clear();
+  void clear() override;
 
   /** Update the map : this recompute completely the map.
    * To do when an operation on one of the super-graphs of the map has been done.

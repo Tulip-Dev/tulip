@@ -50,7 +50,7 @@ public:
 
   explicit GraphHierarchiesModel(QObject *parent = nullptr);
   GraphHierarchiesModel(const GraphHierarchiesModel &);
-  virtual ~GraphHierarchiesModel();
+  ~GraphHierarchiesModel() override;
 
   // Allows the model to behave like a list and to be iterable
   typedef QList<tlp::Graph *>::iterator iterator;
@@ -86,23 +86,23 @@ public:
   }
 
   // Methods re-implemented from QAbstractItemModel
-  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-  QModelIndex parent(const QModelIndex &child) const;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  int columnCount(const QModelIndex &parent = QModelIndex()) const;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  bool setData(const QModelIndex &index, const QVariant &value, int role);
-  Qt::ItemFlags flags(const QModelIndex &index) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-  QMimeData *mimeData(const QModelIndexList &indexes) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex &child) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+  QMimeData *mimeData(const QModelIndexList &indexes) const override;
 
   QModelIndex indexOf(const Graph *);
   QModelIndex forceGraphIndex(Graph *);
 
   // Methods inherited from the observable system
-  void treatEvent(const tlp::Event &);
+  void treatEvent(const tlp::Event &) override;
 
-  void treatEvents(const std::vector<tlp::Event> &);
+  void treatEvents(const std::vector<tlp::Event> &) override;
 
   // active graph handling
   void setCurrentGraph(tlp::Graph *);

@@ -105,7 +105,7 @@ private:
   bool isFreeTree(const Graph *graph, node curRoot);
 
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   /**
    * @brief Singleton instance of this class.

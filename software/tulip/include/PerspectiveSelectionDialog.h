@@ -35,7 +35,7 @@ class PerspectiveSelectionDialog : public QDialog {
 
 public:
   explicit PerspectiveSelectionDialog(QWidget *parent = nullptr);
-  ~PerspectiveSelectionDialog();
+  ~PerspectiveSelectionDialog() override;
   QString perspectiveName() const;
 
 protected slots:

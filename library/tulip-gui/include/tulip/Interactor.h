@@ -66,10 +66,10 @@ class TLP_QT_SCOPE Interactor : public QObject, public Plugin {
   Q_PROPERTY(QCursor cursor READ cursor)
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return INTERACTOR_CATEGORY;
   }
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_interactor.png";
   }
   /**
@@ -156,7 +156,7 @@ protected:
     @brief Provides input filtering for the interactor
     @see QObject::eventFilter()
     */
-  inline virtual bool eventFilter(QObject *obj, QEvent *ev) {
+  inline bool eventFilter(QObject *obj, QEvent *ev) override {
     return QObject::eventFilter(obj, ev);
   }
 };

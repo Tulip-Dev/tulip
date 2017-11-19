@@ -34,13 +34,13 @@ class GlAxisBoxPlot : public GlSimpleEntity {
 
 public:
   GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor, const Color &outlineColor);
-  ~GlAxisBoxPlot() {}
+  ~GlAxisBoxPlot() override {}
 
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  void getXML(std::string &) {}
+  void getXML(std::string &) override {}
 
-  void setWithXML(const std::string &, unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
   void setHighlightRangeIfAny(Coord sceneCoords);
 
@@ -66,11 +66,11 @@ class ParallelCoordsAxisBoxPlot : public GLInteractorComponent {
 
 public:
   ParallelCoordsAxisBoxPlot();
-  ~ParallelCoordsAxisBoxPlot();
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
-  bool compute(GlMainWidget *glMainWidget);
-  void viewChanged(View *view);
+  ~ParallelCoordsAxisBoxPlot() override;
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
+  bool compute(GlMainWidget *glMainWidget) override;
+  void viewChanged(View *view) override;
 
 private:
   void buildGlAxisPlot(std::vector<ParallelAxis *> currentAxis);

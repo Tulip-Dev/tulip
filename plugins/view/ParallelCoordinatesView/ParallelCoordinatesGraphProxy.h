@@ -33,7 +33,7 @@ class ParallelCoordinatesGraphProxy : public GraphDecorator {
 
 public:
   ParallelCoordinatesGraphProxy(Graph *graph, const ElementType location = NODE);
-  ~ParallelCoordinatesGraphProxy();
+  ~ParallelCoordinatesGraphProxy() override;
 
   unsigned int getNumberOfSelectedProperties() const;
   bool selectedPropertiesisEmpty() const;
@@ -102,7 +102,7 @@ public:
     return graph_component->getProperty<Proxytype>(name);
   }
 
-  PropertyInterface *getProperty(const std::string &name) const {
+  PropertyInterface *getProperty(const std::string &name) const override {
     return graph_component->getProperty(name);
   }
 
@@ -173,11 +173,11 @@ public:
   ParallelCoordinatesDataIterator(Iterator<GraphDataSource> *graphDataSourceIterator)
       : graphDataSourceIt(graphDataSourceIterator) {}
 
-  unsigned int next() {
+  unsigned int next() override {
     return graphDataSourceIt.next().id;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return graphDataSourceIt.hasNext();
   }
 

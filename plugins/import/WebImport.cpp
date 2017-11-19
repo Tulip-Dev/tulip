@@ -709,7 +709,7 @@ struct WebImport : public ImportModule {
     return true;
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     string server = "www.labri.fr";
     string url;
     bool computelayout = true;

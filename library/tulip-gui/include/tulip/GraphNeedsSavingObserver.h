@@ -94,7 +94,7 @@ protected:
     *
     * @param events The events that happened since the last unHoldObservers().
     */
-  virtual void treatEvents(const std::vector<Event> &);
+  void treatEvents(const std::vector<Event> &) override;
 
 signals:
 

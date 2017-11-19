@@ -61,13 +61,13 @@ public:
                     "GML format (used by Graphlet).<br/>See "
                     "<b>www.infosun.fmi.uni-passau.de/Graphlet/GML/</b> for details.</p>",
                     "1.0", "File")
-  std::string fileExtension() const {
+  std::string fileExtension() const override {
     return "gml";
   }
 
   GMLExport(tlp::PluginContext *context) : tlp::ExportModule(context) {}
 
-  ~GMLExport() {}
+  ~GMLExport() override {}
 
   string convert(const string &tmp) {
     string newStr;
@@ -82,7 +82,7 @@ public:
     return newStr;
   }
 
-  bool exportGraph(ostream &os) {
+  bool exportGraph(ostream &os) override {
 
     os << "graph [" << endl;
     os << "directed 1" << endl;

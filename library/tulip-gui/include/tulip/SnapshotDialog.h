@@ -44,13 +44,13 @@ class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
 public:
   SnapshotDialog(const View *v, QWidget *parent = nullptr);
-  ~SnapshotDialog();
+  ~SnapshotDialog() override;
 
   void setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio);
 
 public slots:
 
-  void accept();
+  void accept() override;
 
 protected slots:
 
@@ -59,7 +59,7 @@ protected slots:
   void clicked(QAbstractButton *b);
 
 protected:
-  void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *) override;
 
   void sizeSpinBoxValueChanged();
 

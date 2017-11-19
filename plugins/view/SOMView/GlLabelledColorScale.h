@@ -31,7 +31,7 @@ public:
   GlLabelledColorScale(tlp::Coord position, tlp::Size size, tlp::ColorScale *colorScale,
                        double minValue = 0, double maxValue = 0, bool ColorScaleAtTop = true);
 
-  virtual ~GlLabelledColorScale();
+  ~GlLabelledColorScale() override;
 
   void setMinValue(double value);
   double getMinValue() const {
@@ -61,7 +61,7 @@ public:
 
   void setSize(tlp::Size nSize);
 
-  void addLayerParent(tlp::GlLayer *layer);
+  void addLayerParent(tlp::GlLayer *layer) override;
 
 protected:
   void buildComposite(tlp::ColorScale *colorScale);

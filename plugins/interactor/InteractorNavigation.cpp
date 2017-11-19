@@ -66,15 +66,15 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct() {
+  void construct() override {
     push_back(new MouseNKeysNavigator);
   }
 
-  QCursor cursor() const {
+  QCursor cursor() const override {
     return QCursor(Qt::OpenHandCursor);
   }
 
-  bool isCompatible(const std::string &viewName) const {
+  bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||
             (viewName == ViewName::MatrixViewName) ||
             (viewName == ViewName::ParallelCoordinatesViewName));

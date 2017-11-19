@@ -64,8 +64,8 @@ public:
   bool isVisible() const;
 
 protected:
-  virtual void treatEvents(const std::vector<Event> &events);
-  virtual void treatEvent(const Event &);
+  void treatEvents(const std::vector<Event> &events) override;
+  void treatEvent(const Event &) override;
 
 private:
   bool _shouldRecreate;
@@ -99,7 +99,7 @@ private:
 class GlHierarchyMainComposite : public GlComposite {
 public:
   GlHierarchyMainComposite(GlCompositeHierarchyManager *manager);
-  virtual void setVisible(bool visible);
+  void setVisible(bool visible) override;
 
 private:
   GlCompositeHierarchyManager *_manager;

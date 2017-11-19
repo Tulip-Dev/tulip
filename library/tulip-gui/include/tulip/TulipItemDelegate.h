@@ -42,7 +42,7 @@ public:
                                    unsigned int id = UINT_MAX);
 
   explicit TulipItemDelegate(QObject *parent = nullptr);
-  virtual ~TulipItemDelegate();
+  ~TulipItemDelegate() override;
 
   template <typename T>
   void registerCreator(tlp::TulipItemEditorCreator *);
@@ -58,14 +58,16 @@ public:
   tlp::TulipItemEditorCreator *creator(int) const;
 
   QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                        const QModelIndex &index) const;
-  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-  QString displayText(const QVariant &value, const QLocale &locale) const;
-  void setEditorData(QWidget *editor, const QModelIndex &index) const;
-  void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+                        const QModelIndex &index) const override;
+  void paint(QPainter *painter, const QStyleOptionViewItem &option,
+             const QModelIndex &index) const override;
+  QString displayText(const QVariant &value, const QLocale &locale) const override;
+  void setEditorData(QWidget *editor, const QModelIndex &index) const override;
+  void setModelData(QWidget *editor, QAbstractItemModel *model,
+                    const QModelIndex &index) const override;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-  bool eventFilter(QObject *object, QEvent *event);
+  bool eventFilter(QObject *object, QEvent *event) override;
 
 protected slots:
   void comboDataChanged();

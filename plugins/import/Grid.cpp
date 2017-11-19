@@ -62,7 +62,7 @@ public:
     addInParameter<bool>("oppositeNodesConnected", paramHelp[3], "false");
     addInParameter<double>("spacing", paramHelp[4], "1.0");
   }
-  ~Grid() {}
+  ~Grid() override {}
 
   void buildRow(const vector<node> &nodes, vector<pair<node, node>> &ends, unsigned int iRow,
                 unsigned width, int conn, bool isTore, double spacing) {
@@ -143,7 +143,7 @@ public:
     }
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int width = 10;
     unsigned int height = 10;
     bool isTore = false;

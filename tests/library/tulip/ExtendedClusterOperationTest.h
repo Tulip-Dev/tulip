@@ -41,8 +41,8 @@ private:
   std::vector<tlp::node> group;
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
   void testCreateMetaNode();
   void testBugCreateOpenMetaNode();
   void testBugOpenInSubgraph();

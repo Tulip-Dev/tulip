@@ -48,9 +48,9 @@ public:
   GLYPHINFORMATION("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0",
                    NodeShape::Billboard)
   Billboard(const tlp::PluginContext *context = nullptr);
-  virtual ~Billboard();
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Billboard() override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 
 protected:
   static GlRect *rect;

@@ -32,7 +32,7 @@ public:
   HSIColorMapping(const HSI &from = HSI(1.5, 1.0, 0.4), const HSI &to = HSI(1.0, 1.0, 1.0));
 
   // value must be normalized
-  RGBA getColor(const double &value, const unsigned int) const;
+  RGBA getColor(const double &value, const unsigned int) const override;
 
 private:
   HSIColorScale hsiColorScale;

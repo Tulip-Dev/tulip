@@ -36,7 +36,7 @@ struct FavoriteBox : public ExpandableGroupBox {
       : ExpandableGroupBox(parent, title), _droppingFavorite(false) {}
 
 protected:
-  void paintEvent(QPaintEvent *event) {
+  void paintEvent(QPaintEvent *event) override {
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
     QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png"

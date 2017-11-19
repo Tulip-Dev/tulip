@@ -39,7 +39,7 @@ public:
   /**
    * @brief Default empty destructor
    */
-  virtual ~GlHexagon();
+  ~GlHexagon() override;
 };
 }
 #endif

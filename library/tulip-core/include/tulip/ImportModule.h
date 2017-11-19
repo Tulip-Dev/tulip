@@ -86,11 +86,11 @@ public:
     return ext;
   }
 
-  virtual std::string category() const {
+  std::string category() const override {
     return IMPORT_CATEGORY;
   }
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/64/document-import.png";
   }
 

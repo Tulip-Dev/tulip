@@ -340,7 +340,7 @@ public:
     addSpacingParameters(this);
   }
 
-  bool run() {
+  bool run() override {
     if (pluginProgress)
       pluginProgress->showPreview(false);
 

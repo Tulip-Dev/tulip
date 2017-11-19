@@ -76,7 +76,7 @@ public:
   AlgorithmContext(tlp::Graph *graph = nullptr, tlp::DataSet *dataSet = nullptr,
                    tlp::PluginProgress *progress = nullptr)
       : graph(graph), dataSet(dataSet), pluginProgress(progress) {}
-  ~AlgorithmContext() {}
+  ~AlgorithmContext() override {}
 };
 }
 #endif

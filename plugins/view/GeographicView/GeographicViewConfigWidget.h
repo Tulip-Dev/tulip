@@ -39,7 +39,7 @@ public:
   enum PolyFileType { None = -1, Default = 0, CsvFile, PolyFile };
 
   GeographicViewConfigWidget(QWidget *parent = nullptr);
-  ~GeographicViewConfigWidget();
+  ~GeographicViewConfigWidget() override;
 
   bool useSharedLayoutProperty() const;
   bool useSharedSizeProperty() const;

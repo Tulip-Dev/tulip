@@ -49,13 +49,13 @@ public:
     }
   }
 
-  virtual ~ExportModule() {}
+  ~ExportModule() override {}
 
-  virtual std::string category() const {
+  std::string category() const override {
     return EXPORT_CATEGORY;
   }
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/64/document-export.png";
   }
 

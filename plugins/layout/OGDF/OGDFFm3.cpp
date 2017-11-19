@@ -267,9 +267,9 @@ public:
                     "force-directed layout algorithm that can be applied to very large graphs.",
                     "1.2", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
-  ~OGDFFm3();
-  void beforeCall();
-  void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes);
+  ~OGDFFm3() override;
+  void beforeCall() override;
+  void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) override;
 };
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de

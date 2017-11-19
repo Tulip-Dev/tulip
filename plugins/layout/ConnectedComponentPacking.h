@@ -29,7 +29,7 @@ public:
                     "minimizes the lost space (packing).",
                     "1.0", "Misc")
   ConnectedComponentPacking(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 
 #endif

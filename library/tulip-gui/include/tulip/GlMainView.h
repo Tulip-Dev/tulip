@@ -94,11 +94,11 @@ public:
   };
 
   GlMainView();
-  virtual ~GlMainView();
+  ~GlMainView() override;
   tlp::GlMainWidget *getGlMainWidget() const;
-  virtual QList<QWidget *> configurationWidgets() const;
+  QList<QWidget *> configurationWidgets() const override;
   bool overviewVisible() const;
-  QPixmap snapshot(const QSize &outputSize = QSize()) const;
+  QPixmap snapshot(const QSize &outputSize = QSize()) const override;
 
   void setOverviewPosition(const OverviewPosition &position);
   OverviewPosition overviewPosition() const;
@@ -106,14 +106,14 @@ public:
   void setUpdateOverview(bool updateOverview);
   bool updateOverview() const;
 
-  void setState(const tlp::DataSet &);
-  tlp::DataSet state() const;
+  void setState(const tlp::DataSet &) override;
+  tlp::DataSet state() const override;
 
 public slots:
   /**
    * @brief Calls GlMainWidget::draw();
    */
-  virtual void draw();
+  void draw() override;
 
   /**
    * @brief Calls GlMainWidget::redraw();
@@ -123,7 +123,7 @@ public slots:
   /**
    * @brief Calls GlMainWidget::redraw();
    */
-  virtual void refresh();
+  void refresh() override;
 
   /**
    * @brief Force the overview to be redrawn. Since GlMainView already detects graph's
@@ -134,7 +134,7 @@ public slots:
   /**
    * @brief Centers the scene's camera
    */
-  virtual void centerView(bool graphChanged = false);
+  void centerView(bool graphChanged = false) override;
 
   /**
    * @brief Toggles the overview on or off
@@ -149,14 +149,14 @@ public slots:
   /**
    * @brief Force the settings set in the configuration widgets to be re-applied.
    */
-  void applySettings();
+  void applySettings() override;
 
   /**
    * @brief Display a dialog that takes a snapshot of the current scene.
    */
   void openSnapshotDialog();
 
-  void undoCallback();
+  void undoCallback() override;
 
   void setAntiAliasing(bool);
 
@@ -166,14 +166,14 @@ protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF &);
   void setQuickAccessBarVisible(bool);
-  void fillContextMenu(QMenu *menu, const QPointF &);
+  void fillContextMenu(QMenu *menu, const QPointF &) override;
   void delayedCenterView();
 
 protected:
-  virtual void setupWidget();
+  void setupWidget() override;
   bool quickAccessBarVisible() const;
   void assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget = true);
-  bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event) override;
 
   tlp::GlOverviewGraphicsItem *overviewItem() const;
   void updateShowOverviewButton();

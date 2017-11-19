@@ -41,7 +41,7 @@ class GeographicViewGraphicsView : public QGraphicsView, public Observable {
 public:
   GeographicViewGraphicsView(GeographicView *_geoView, QGraphicsScene *graphicsScene,
                              QWidget *parent = nullptr);
-  ~GeographicViewGraphicsView();
+  ~GeographicViewGraphicsView() override;
 
   void setGraph(Graph *graph);
   void createLayoutWithAddresses(const std::string &addressPropertyName, bool createLatAndLngProps);
@@ -96,7 +96,7 @@ public:
 
   void setGeoShape(IntegerProperty *);
 
-  void treatEvent(const Event &ev);
+  void treatEvent(const Event &ev) override;
 
   void afterSetNodeValue(PropertyInterface *, const node);
 
@@ -142,8 +142,8 @@ public slots:
 protected:
   void cleanup();
 
-  void paintEvent(QPaintEvent *event);
-  void resizeEvent(QResizeEvent *event);
+  void paintEvent(QPaintEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
 
 private:
   GeographicView *_geoView;

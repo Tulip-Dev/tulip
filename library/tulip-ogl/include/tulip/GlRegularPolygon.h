@@ -46,7 +46,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~GlRegularPolygon();
+  ~GlRegularPolygon() override;
 
   /**
    * @brief Set the start angle in radian
@@ -63,7 +63,7 @@ public:
   /**
    * @brief Set the number of sides (use setNumberOfSides)
    */
-  void resizePoints(const unsigned int number);
+  void resizePoints(const unsigned int number) override;
 
   /**
    * @brief Set the number of sides

@@ -57,8 +57,8 @@ public:
                     "Transactions on Software Engineering pages 223--228 (1981).",
                     "1.1", "Tree")
   TreeReingoldAndTilfordExtended(const tlp::PluginContext *context);
-  ~TreeReingoldAndTilfordExtended();
-  bool run();
+  ~TreeReingoldAndTilfordExtended() override;
+  bool run() override;
 
 private:
   void calcLayout(tlp::node, TLP_HASH_MAP<tlp::node, double> *, double, double, int,

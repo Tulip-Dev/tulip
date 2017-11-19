@@ -175,10 +175,10 @@ Observable *Event::sender() const {
 // define a class for an empty Iterator of Observable *
 class NoObservableIterator : public Iterator<Observable *> {
 public:
-  Observable *next() {
+  Observable *next() override {
     return nullptr;
   }
-  bool hasNext() {
+  bool hasNext() override {
     return false;
   }
 };

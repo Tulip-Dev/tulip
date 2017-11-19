@@ -38,7 +38,7 @@ class ConvolutionClusteringSetup : public QDialog {
 
 public:
   ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin, QWidget *parent = nullptr);
-  ~ConvolutionClusteringSetup();
+  ~ConvolutionClusteringSetup() override;
 
   inline ConvolutionClustering *getPlugin() const {
     return convolPlugin;

@@ -122,7 +122,7 @@ public:
                     "defining the contours of these cells.",
                     "1.1", "Triangulation")
 
-  bool run() {
+  bool run() override {
     // no nodes. Nothing to do.
     if (graph->numberOfNodes() == 0)
       return true;

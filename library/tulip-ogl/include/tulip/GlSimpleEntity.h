@@ -70,7 +70,7 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~GlSimpleEntity();
+  ~GlSimpleEntity() override;
 
   /**
    * @brief Set if entity is visible
@@ -138,7 +138,7 @@ public:
   /**
    * @brief Accept visitor function
    */
-  virtual void acceptVisitor(GlSceneVisitor *visitor) {
+  void acceptVisitor(GlSceneVisitor *visitor) override {
     visitor->visit(this);
   }
 

@@ -34,16 +34,16 @@ class GlRect;
 class ParallelAxis : public GlSimpleEntity {
 
 public:
-  virtual ~ParallelAxis();
+  ~ParallelAxis() override;
 
-  BoundingBox getBoundingBox();
-  void setStencil(int stencil) {
+  BoundingBox getBoundingBox() override;
+  void setStencil(int stencil) override {
     glAxis->setStencil(stencil);
   }
-  void draw(float lod, Camera *camera);
-  void translate(const Coord &c);
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void draw(float lod, Camera *camera) override;
+  void translate(const Coord &c) override;
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
   virtual void redraw();
   virtual Coord getPointCoordOnAxisForData(const unsigned int dataIdx) = 0;

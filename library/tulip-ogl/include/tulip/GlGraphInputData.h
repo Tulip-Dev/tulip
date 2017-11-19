@@ -84,7 +84,7 @@ public:
   GlGraphInputData(Graph *graph, GlGraphRenderingParameters *parameters,
                    GlMetaNodeRenderer *renderer = nullptr);
 
-  ~GlGraphInputData();
+  ~GlGraphInputData() override;
 
   /**
    * Return the graph of this inputData
@@ -93,7 +93,7 @@ public:
     return graph;
   }
 
-  void treatEvent(const Event &ev);
+  void treatEvent(const Event &ev) override;
 
   /**
    * Set metaNode renderer

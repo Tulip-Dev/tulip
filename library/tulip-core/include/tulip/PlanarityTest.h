@@ -89,7 +89,7 @@ public:
 private:
   PlanarityTest() {}
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
   bool compute(Graph *graph);
 
   /**

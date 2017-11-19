@@ -29,7 +29,7 @@ class ImportExportTest : public CppUnit::TestFixture {
 
 public:
   ImportExportTest(const std::string &importAlgorithm, const std::string &exportAlgorithm);
-  void setUp();
+  void setUp() override;
   void testgridImportExport();
   void testSubGraphsImportExport();
   void testAttributes();
@@ -94,7 +94,7 @@ class TulipSaveLoadGraphFunctionsTest : public ImportExportTest {
 public:
   TulipSaveLoadGraphFunctionsTest();
 
-  void setUp();
+  void setUp() override;
   void testTulipSaveLoadGraphFunctions();
 };
 

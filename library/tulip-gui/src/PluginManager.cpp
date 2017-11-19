@@ -120,19 +120,19 @@ public:
     return _result;
   }
 
-  virtual void parseString(const std::string &value) {
+  void parseString(const std::string &value) override {
     _currentMap[_currentKey] = tlpStringToQString(value);
   }
 
-  virtual void parseMapKey(const std::string &value) {
+  void parseMapKey(const std::string &value) override {
     _currentKey = value.c_str();
   }
 
-  virtual void parseStartMap() {
+  void parseStartMap() override {
     _currentMap.clear();
   }
 
-  virtual void parseEndMap() {
+  void parseEndMap() override {
     PluginInformation info;
     info.name = _currentMap["name"];
     info.category = _currentMap["category"];

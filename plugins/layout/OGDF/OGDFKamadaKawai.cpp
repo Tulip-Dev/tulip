@@ -107,9 +107,9 @@ public:
     addInParameter<int>("global iterations", paramHelp[5], "50");
     addInParameter<int>("local iterations", paramHelp[6], "50");
   }
-  ~OGDFKamadaKawai() {}
+  ~OGDFKamadaKawai() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {

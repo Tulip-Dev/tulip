@@ -44,20 +44,20 @@ public:
   GlyphContext(Graph ** = nullptr, GlGraphInputData *glGraphInputData = nullptr, int = 5, int = 5)
       : glGraphInputData(glGraphInputData) {}
   ///
-  ~GlyphContext() {}
+  ~GlyphContext() override {}
 };
 //==========================================================
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
-  std::string category() const {
+  std::string category() const override {
     return GLYPH_CATEGORY;
   }
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_glyph.png";
   }
 
   Glyph(const tlp::PluginContext *context);
-  virtual ~Glyph();
+  ~Glyph() override;
 
   virtual std::string getGroup() const {
     return "";
@@ -106,7 +106,7 @@ protected:
 
 #define GLYPHINFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, ID)                                    \
   PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")                                         \
-  int id() const {                                                                                 \
+  int id() const override {                                                                        \
     return ID;                                                                                     \
   }
 

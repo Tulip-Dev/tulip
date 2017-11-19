@@ -39,7 +39,7 @@ public:
                     connected component they have the same value else they have a different value. Edges get the value of their source node.",
                     "1.0", "Component")
   ConnectedComponent(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 
 #endif

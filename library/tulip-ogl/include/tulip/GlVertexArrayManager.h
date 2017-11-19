@@ -56,7 +56,7 @@ public:
    */
   GlVertexArrayManager(GlGraphInputData *inputData);
 
-  ~GlVertexArrayManager();
+  ~GlVertexArrayManager() override;
 
   /**
    * Call this function when you want to change input data used by this GlVertexArrayManager
@@ -144,7 +144,7 @@ public:
 
 protected:
   void propertyValueChanged(tlp::PropertyInterface *property);
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   void clearLayoutData();
   void clearColorData();

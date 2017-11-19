@@ -61,11 +61,11 @@ public:
                     "JSON format.</p>",
                     "1.0", "File")
 
-  std::string fileExtension() const {
+  std::string fileExtension() const override {
     return "json";
   }
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
   }
 
@@ -80,7 +80,7 @@ public:
                          "false");
   }
 
-  virtual bool exportGraph(ostream &fileOut) {
+  bool exportGraph(ostream &fileOut) override {
 
     if (dataSet && dataSet->exist("Beautify JSON string")) {
       bool beautify = false;

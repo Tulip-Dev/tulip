@@ -31,8 +31,8 @@ public:
     addDependency("Test", "1.0");
     addInParameter<int>("testParameter", "no help for you :)", "0", false);
   }
-  ~Test() {}
-  bool run() {
+  ~Test() override {}
+  bool run() override {
     std::string name = "Test";
     std::string err = "Error";
     return graph->applyPropertyAlgorithm(name, result, err);
@@ -45,7 +45,7 @@ class Test3 : public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Test", "Jezequel", "03/11/2004", "0", "1.0", "")
   Test3(tlp::PluginContext *context) : tlp::BooleanAlgorithm(context) {}
-  bool run() {
+  bool run() override {
     return false;
   }
 };

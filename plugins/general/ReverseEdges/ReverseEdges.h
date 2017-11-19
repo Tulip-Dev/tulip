@@ -31,7 +31,7 @@ public:
 
   ReverseEdges(tlp::PluginContext *context);
 
-  bool run();
+  bool run() override;
 };
 
 #endif // REVERSEEDGES_H

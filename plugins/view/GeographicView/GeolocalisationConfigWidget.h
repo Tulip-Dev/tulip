@@ -37,7 +37,7 @@ class GeolocalisationConfigWidget : public QWidget {
 
 public:
   GeolocalisationConfigWidget(QWidget *parent = nullptr);
-  ~GeolocalisationConfigWidget();
+  ~GeolocalisationConfigWidget() override;
 
   void setGraph(Graph *graph);
 

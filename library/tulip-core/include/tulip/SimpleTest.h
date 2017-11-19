@@ -76,7 +76,7 @@ public:
 private:
   SimpleTest();
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
   void deleteResult(Graph *graph);
 
   /**

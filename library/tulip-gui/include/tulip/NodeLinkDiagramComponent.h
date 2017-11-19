@@ -60,15 +60,15 @@ public:
                     "1.0", "relational")
 
   NodeLinkDiagramComponent(const tlp::PluginContext *context = nullptr);
-  virtual ~NodeLinkDiagramComponent();
-  std::string icon() const {
+  ~NodeLinkDiagramComponent() override;
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/node_link_diagram_view.png";
   }
-  void setState(const tlp::DataSet &);
-  tlp::DataSet state() const;
+  void setState(const tlp::DataSet &) override;
+  tlp::DataSet state() const override;
 
 public slots:
-  void draw();
+  void draw() override;
   void requestChangeGraph(Graph *graph);
   const Camera &goInsideItem(node meta);
 
@@ -83,7 +83,7 @@ protected slots:
   void ungroupItem();
   void setZOrdering(bool);
   void showGridControl();
-  void fillContextMenu(QMenu *menu, const QPointF &point);
+  void fillContextMenu(QMenu *menu, const QPointF &point) override;
   void displayToolTips(bool display);
 
   void addRemoveItemToSelection(bool pushGraph = true, bool toggleSelection = true,
@@ -135,15 +135,15 @@ protected:
   bool isNode;
   unsigned int itemId;
 
-  void graphChanged(tlp::Graph *);
+  void graphChanged(tlp::Graph *) override;
 
   void createScene(Graph *graph, DataSet dataSet);
   DataSet sceneData() const;
   void loadGraphOnScene(Graph *graph);
   void useHulls(bool hasHulls);
   bool hasHulls() const;
-  void setupWidget();
-  bool eventFilter(QObject *, QEvent *e);
+  void setupWidget() override;
+  bool eventFilter(QObject *, QEvent *e) override;
   void editValue(PropertyInterface *pi);
 };
 }

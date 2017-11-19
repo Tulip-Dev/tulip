@@ -27,22 +27,22 @@ class OrientableLayout : public OrientableLayoutInterface {
 public:
   OrientableLayout(tlp::LayoutProperty *layout, orientationType mask = ORI_DEFAULT);
 
-  OrientableCoord createCoord(const float x = 0, const float y = 0, const float z = 0);
-  OrientableCoord createCoord(const tlp::Coord &v);
+  OrientableCoord createCoord(const float x = 0, const float y = 0, const float z = 0) override;
+  OrientableCoord createCoord(const tlp::Coord &v) override;
 
-  void setOrientation(orientationType mask);
+  void setOrientation(orientationType mask) override;
 
-  void setAllNodeValue(const PointType &v);
-  void setAllEdgeValue(const LineType &v);
+  void setAllNodeValue(const PointType &v) override;
+  void setAllEdgeValue(const LineType &v) override;
 
-  void setEdgeValue(const tlp::edge e, const LineType &v);
-  void setNodeValue(tlp::node n, const PointType &v);
+  void setEdgeValue(const tlp::edge e, const LineType &v) override;
+  void setNodeValue(tlp::node n, const PointType &v) override;
 
-  PointType getNodeValue(const tlp::node n);
-  LineType getEdgeValue(const tlp::edge e);
+  PointType getNodeValue(const tlp::node n) override;
+  LineType getEdgeValue(const tlp::edge e) override;
 
-  PointType getNodeDefaultValue();
-  LineType getEdgeDefaultValue();
+  PointType getNodeDefaultValue() override;
+  LineType getEdgeDefaultValue() override;
 
   void setOrthogonalEdge(const tlp::Graph *tree, float interNodeDistance);
 

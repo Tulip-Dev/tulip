@@ -49,9 +49,9 @@ public:
                     "F.Jourdan, an G.Melancon, IWPC (2002).",
                     "2.0", "Clustering")
   StrengthClustering(tlp::PluginContext *context);
-  ~StrengthClustering();
-  bool run();
-  bool check(std::string &);
+  ~StrengthClustering() override;
+  bool run() override;
+  bool check(std::string &) override;
 
 private:
   void computeNodePartition(double threshold, std::vector<std::set<tlp::node>> &);

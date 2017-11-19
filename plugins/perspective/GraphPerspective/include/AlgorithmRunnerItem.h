@@ -44,7 +44,7 @@ class AlgorithmRunnerItem : public QWidget {
 
 public:
   explicit AlgorithmRunnerItem(QString pluginName, QWidget *parent = nullptr);
-  virtual ~AlgorithmRunnerItem();
+  ~AlgorithmRunnerItem() override;
 
   QString name() const;
   tlp::Graph *graph() const;
@@ -53,8 +53,8 @@ public:
   void setFavorite(bool);
 
 protected:
-  virtual void mousePressEvent(QMouseEvent *ev);
-  virtual void mouseMoveEvent(QMouseEvent *ev);
+  void mousePressEvent(QMouseEvent *ev) override;
+  void mouseMoveEvent(QMouseEvent *ev) override;
 
 public slots:
   void setGraph(tlp::Graph *);

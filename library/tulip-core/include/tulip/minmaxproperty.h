@@ -53,7 +53,7 @@ public:
                  typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin,
                  typename edgeType::RealType EdgeMax);
 
-  virtual void treatEvent(const tlp::Event &ev);
+  void treatEvent(const tlp::Event &ev) override;
 
   /**
    * @brief Gets the minimum value on the nodes.

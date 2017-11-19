@@ -71,20 +71,20 @@ public:
     addInParameter<bool>("Curved edges", paramHelp[1], "false");
   }
 
-  ~GEXFImport() {}
+  ~GEXFImport() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_gephi.png";
   }
 
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("gexf");
     return l;
   }
 
   // import plugins must implement bool importGraph()
-  bool importGraph() {
+  bool importGraph() override {
     string filename;
     bool curvedEdges = false;
     // get the filename choosed by the user

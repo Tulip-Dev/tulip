@@ -168,7 +168,7 @@ public:
    */
   GlScene(GlLODCalculator *calculator = nullptr);
 
-  ~GlScene();
+  ~GlScene() override;
 
   /**
    * @brief Init scene's OpenGL parameters.

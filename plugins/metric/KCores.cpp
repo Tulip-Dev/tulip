@@ -74,8 +74,8 @@ public:
                     "2.0", "Graph")
 
   KCores(const tlp::PluginContext *context);
-  ~KCores();
-  bool run();
+  ~KCores() override;
+  bool run() override;
 };
 
 //========================================================================================

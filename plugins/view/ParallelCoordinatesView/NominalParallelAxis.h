@@ -41,11 +41,11 @@ public:
 
   Coord getLabelCoord(const std::string &label);
 
-  Coord getPointCoordOnAxisForData(const unsigned int dataIdx);
+  Coord getPointCoordOnAxisForData(const unsigned int dataIdx) override;
 
-  void showConfigDialog();
+  void showConfigDialog() override;
 
-  void redraw();
+  void redraw() override;
 
   void setLabels();
 
@@ -56,15 +56,15 @@ public:
     this->labelsOrder = labelsOrder;
   }
 
-  std::string getTopSliderTextValue() {
+  std::string getTopSliderTextValue() override {
     return " ";
   }
-  std::string getBottomSliderTextValue() {
+  std::string getBottomSliderTextValue() override {
     return " ";
   }
 
-  const std::set<unsigned int> &getDataInSlidersRange();
-  void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
+  const std::set<unsigned int> &getDataInSlidersRange() override;
+  void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) override;
 
 private:
   GlNominativeAxis *glNominativeAxis;

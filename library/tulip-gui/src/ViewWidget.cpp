@@ -38,11 +38,11 @@ struct MyGraphicsView : public QGraphicsView {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   }
 
-  ~MyGraphicsView() {
+  ~MyGraphicsView() override {
     delete scene();
   }
 
-  void resizeEvent(QResizeEvent *event) {
+  void resizeEvent(QResizeEvent *event) override {
     QGraphicsView::resizeEvent(event);
 
     if (scene()) {

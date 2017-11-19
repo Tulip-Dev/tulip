@@ -49,9 +49,9 @@ public:
     addInParameter<bool>("tree layout", paramHelp[2], "false");
     addDependency("Tree Leaf", "1.0");
   }
-  ~CompleteTree() {}
+  ~CompleteTree() override {}
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int degree = 2;
     unsigned int depth = 5;
     bool needLayout = false;

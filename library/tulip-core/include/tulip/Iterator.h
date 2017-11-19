@@ -71,13 +71,13 @@ template <typename TYPE>
 class UINTIterator : public Iterator<TYPE> {
 public:
   UINTIterator(Iterator<unsigned int> *it) : it(it) {}
-  ~UINTIterator() {
+  ~UINTIterator() override {
     delete it;
   }
-  bool hasNext() {
+  bool hasNext() override {
     return it->hasNext();
   }
-  TYPE next() {
+  TYPE next() override {
     return TYPE(it->next());
   }
 

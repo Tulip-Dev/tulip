@@ -96,19 +96,19 @@ public:
                     "1.2", "View")
 
   ParallelCoordinatesView(const tlp::PluginContext *);
-  ~ParallelCoordinatesView();
-  std::string icon() const {
+  ~ParallelCoordinatesView() override;
+  std::string icon() const override {
     return ":/parallel_coordinates_view.png";
   }
 
-  QuickAccessBar *getQuickAccessBarImpl();
+  QuickAccessBar *getQuickAccessBarImpl() override;
 
   // View methods
-  void setState(const DataSet &dataSet);
-  tlp::DataSet state() const;
-  bool eventFilter(QObject *object, QEvent *event);
-  void fillContextMenu(QMenu *menu, const QPointF &point);
-  QList<QWidget *> configurationWidgets() const;
+  void setState(const DataSet &dataSet) override;
+  tlp::DataSet state() const override;
+  bool eventFilter(QObject *object, QEvent *event) override;
+  void fillContextMenu(QMenu *menu, const QPointF &point) override;
+  QList<QWidget *> configurationWidgets() const override;
 
   // methods called by interactors
   void setDataUnderPointerSelectFlag(const int x, const int y, const bool selectFlag);
@@ -148,8 +148,8 @@ public:
 
 public slots:
 
-  void draw();
-  void refresh();
+  void draw() override;
+  void refresh() override;
   void init();
   ParallelCoordinatesGraphProxy *getGraphProxy() {
     return graphProxy;
@@ -162,11 +162,11 @@ public slots:
   void centerSetupAndDrawView();
   void setupAndDrawView();
 
-  void applySettings();
+  void applySettings() override;
 
 protected slots:
 
-  void graphChanged(tlp::Graph *);
+  void graphChanged(tlp::Graph *) override;
 
   void axisConfigurationSlot();
   void removeAxisSlot();

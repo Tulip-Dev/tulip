@@ -37,12 +37,12 @@ class PythonPanel : public QWidget {
 
 public:
   explicit PythonPanel(QWidget *parent = nullptr);
-  ~PythonPanel();
+  ~PythonPanel() override;
   void setModel(tlp::GraphHierarchiesModel *model);
 
 protected:
-  void dragEnterEvent(QDragEnterEvent *);
-  void dropEvent(QDropEvent *);
+  void dragEnterEvent(QDragEnterEvent *) override;
+  void dropEvent(QDropEvent *) override;
 
 private slots:
 

@@ -204,7 +204,7 @@ public:
                     "UCINET DL input format<br/>as it is described in the UCINET reference manual "
                     "(<b>http://www.analytictech.com/ucinet/documentation/reference.rtf</b></p>)",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("txt");
     return l;
@@ -217,9 +217,9 @@ public:
     addInParameter<string>("Default metric", paramHelp[1], "weight");
   }
 
-  ~ImportUCINET() {}
+  ~ImportUCINET() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_ucinet.png";
   }
 
@@ -924,7 +924,7 @@ public:
     return false;
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     string filename;
 
     dataSet->get<string>("file::filename", filename);

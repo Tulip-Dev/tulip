@@ -197,7 +197,7 @@ public:
   AlgorithmPreviewHandler(Graph *g, std::vector<OutPropertyParam> &opp)
       : graph(g), outPropParams(opp), inited(false) {}
 
-  ~AlgorithmPreviewHandler() {
+  ~AlgorithmPreviewHandler() override {
     if (!outPropsMap.empty()) {
       // build outPropsMap with initial properties
       std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
@@ -215,7 +215,7 @@ public:
     }
   }
 
-  void progressStateChanged(int, int) {
+  void progressStateChanged(int, int) override {
     if (!inited) {
       // build outPropsMap with temporary properties
       std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();

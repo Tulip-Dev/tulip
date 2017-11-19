@@ -43,7 +43,7 @@ class HeaderFrame : public QWidget {
 
 public:
   explicit HeaderFrame(QWidget *parent = nullptr);
-  virtual ~HeaderFrame();
+  ~HeaderFrame() override;
 
   QString title() const;
   QStringList menus() const;

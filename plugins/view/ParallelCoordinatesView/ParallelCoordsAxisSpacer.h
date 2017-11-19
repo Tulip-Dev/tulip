@@ -31,9 +31,9 @@ class ParallelCoordsAxisSpacer : public GLInteractorComponent {
 
 public:
   ParallelCoordsAxisSpacer();
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
-  void viewChanged(View *view);
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
+  void viewChanged(View *view) override;
 
 private:
   void determineAxisRegionAtPos(const Coord &pos);

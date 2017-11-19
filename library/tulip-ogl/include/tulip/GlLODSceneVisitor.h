@@ -46,29 +46,29 @@ public:
   /**
    * Visit a GlSimpleEntity
    */
-  virtual void visit(GlSimpleEntity *entity);
+  void visit(GlSimpleEntity *entity) override;
   /**
    * Visit a node
    */
-  virtual void visit(GlNode *glNode);
+  void visit(GlNode *glNode) override;
   /**
    * Visit an Edge
    */
-  virtual void visit(GlEdge *glEdge);
+  void visit(GlEdge *glEdge) override;
   /**
    * Visit a layer
    */
-  virtual void visit(GlLayer *layer);
+  void visit(GlLayer *layer) override;
 
   /**
    * Reserve memory to store nodes LOD
    */
-  virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
+  void reserveMemoryForNodes(unsigned int numberOfNodes) override;
 
   /**
    * Reserve memory to store edges LOD
    */
-  virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
+  void reserveMemoryForEdges(unsigned int numberOfEdges) override;
 
 private:
   GlLODCalculator *calculator;

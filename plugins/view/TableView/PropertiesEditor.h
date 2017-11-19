@@ -53,7 +53,7 @@ class PropertiesEditor : public QWidget {
 
 public:
   explicit PropertiesEditor(QWidget *parent = nullptr);
-  virtual ~PropertiesEditor();
+  ~PropertiesEditor() override;
 
   void setGraph(tlp::Graph *g);
   tlp::Graph *getGraph() {

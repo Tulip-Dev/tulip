@@ -64,9 +64,9 @@ public:
   GLYPHINFORMATION("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0",
                    NodeShape::Star)
   Star(const tlp::PluginContext *context = nullptr);
-  virtual ~Star();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~Star() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
 };
 PLUGIN(Star)
 Star::Star(const tlp::PluginContext *context) : Glyph(context) {
@@ -100,7 +100,7 @@ public:
       star = new GlStar(Coord(0, 0, 0), Size(.5, .5, 0), 5);
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     // star->setLightingMode(false);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 

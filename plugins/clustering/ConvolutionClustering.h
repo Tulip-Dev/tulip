@@ -44,8 +44,8 @@ public:
       "Discretization and filtering of the distribution of a node metric using a convolution.",
       "2.1", "Clustering")
   ConvolutionClustering(tlp::PluginContext *context);
-  bool run();
-  bool check(std::string &);
+  bool run() override;
+  bool check(std::string &) override;
   std::vector<double> *getHistogram();
   void setParameters(int histosize, int threshold, int width);
   void getParameters(int &histosize, int &threshold, int &width);

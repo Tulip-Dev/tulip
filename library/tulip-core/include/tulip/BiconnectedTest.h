@@ -79,7 +79,7 @@ private:
   bool compute(const Graph *graph);
 
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  virtual void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   /**
    * @brief Singleton instance of this class.

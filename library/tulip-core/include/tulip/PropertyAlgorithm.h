@@ -39,7 +39,7 @@ protected:
   BooleanAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return BOOLEAN_ALGORITHM_CATEGORY;
   }
 };
@@ -56,7 +56,7 @@ protected:
   ColorAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return COLOR_ALGORITHM_CATEGORY;
   }
 };
@@ -75,7 +75,7 @@ protected:
   DoubleAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return DOUBLE_ALGORITHM_CATEGORY;
   }
 };
@@ -93,7 +93,7 @@ protected:
   IntegerAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return INTEGER_ALGORITHM_CATEGORY;
   }
 };
@@ -112,7 +112,7 @@ protected:
   LayoutAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return LAYOUT_ALGORITHM_CATEGORY;
   }
 };
@@ -129,7 +129,7 @@ protected:
   SizeAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return SIZE_ALGORITHM_CATEGORY;
   }
 };
@@ -148,7 +148,7 @@ protected:
   StringAlgorithm(const tlp::PluginContext *);
 
 public:
-  virtual std::string category() const {
+  std::string category() const override {
     return STRING_ALGORITHM_CATEGORY;
   }
 };

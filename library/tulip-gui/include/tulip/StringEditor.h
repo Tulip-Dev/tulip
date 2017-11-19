@@ -42,11 +42,11 @@ public:
   void setString(const QString &qstr);
 
   // redefinition to ensure it is shown in the center of its parent
-  void showEvent(QShowEvent *ev);
+  void showEvent(QShowEvent *ev) override;
 
 public slots:
   // redefinition to ensure to catch the end of input
-  void done(int r);
+  void done(int r) override;
 };
 }
 

@@ -33,11 +33,11 @@ public:
   ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt, QWidget *parent = nullptr);
 
 public slots:
-  void reset();
-  virtual void setEdgesVisible(bool);
-  virtual void setBackgroundColor(const QColor &);
-  virtual void setLabelsVisible(bool);
-  virtual void setLabelsScaled(bool);
+  void reset() override;
+  void setEdgesVisible(bool) override;
+  void setBackgroundColor(const QColor &) override;
+  void setLabelsVisible(bool) override;
+  void setLabelsScaled(bool) override;
 };
 }
 #endif // SCATTERPLOTQUICKACCESSBAR_H

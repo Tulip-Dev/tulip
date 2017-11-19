@@ -46,18 +46,18 @@ public:
   GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height,
                 const Color &progressBarcolor, const Color &commentColor = Color(0, 0, 0));
 
-  ~GlProgressBar();
+  ~GlProgressBar() override;
 
   /**
    * This method allow to set a comment message above the progress bar
    * \param msg the text of the comment to display
    */
-  void setComment(const std::string &msg) {
+  void setComment(const std::string &msg) override {
     comment = msg;
   }
 
 protected:
-  void progress_handler(int step, int max_step);
+  void progress_handler(int step, int max_step) override;
 
 private:
   Color progressBarColor, commentColor;

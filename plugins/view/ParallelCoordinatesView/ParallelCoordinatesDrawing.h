@@ -53,7 +53,7 @@ public:
 
   ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 
-  ~ParallelCoordinatesDrawing();
+  ~ParallelCoordinatesDrawing() override;
 
   bool getDataIdFromGlEntity(GlEntity *glEntity, unsigned int &dataId);
   bool getDataIdFromAxisPoint(node axisPoint, unsigned int &dataId);
@@ -110,7 +110,7 @@ public:
 
   void delNode(Graph *, const node);
   void delEdge(Graph *, const edge);
-  void treatEvent(const tlp::Event &);
+  void treatEvent(const tlp::Event &) override;
 
 private:
   void computeResizeFactor();

@@ -47,30 +47,30 @@ class TLP_QT_SCOPE SimplePluginProgressWidget : public QWidget, public tlp::Plug
 
 public:
   explicit SimplePluginProgressWidget(QWidget *parent = nullptr, Qt::WindowFlags f = nullptr);
-  virtual ~SimplePluginProgressWidget();
+  ~SimplePluginProgressWidget() override;
 
-  void setComment(const std::string &);
+  void setComment(const std::string &) override;
   void setComment(const QString &);
   void setComment(const char *);
 
-  void setTitle(const std::string &) {}
+  void setTitle(const std::string &) override {}
 
-  tlp::ProgressState progress(int step, int max_step);
+  tlp::ProgressState progress(int step, int max_step) override;
 
-  void cancel();
-  void stop();
+  void cancel() override;
+  void stop() override;
 
-  bool isPreviewMode() const;
-  void setPreviewMode(bool drawPreview);
-  void showPreview(bool showPreview);
+  bool isPreviewMode() const override;
+  void setPreviewMode(bool drawPreview) override;
+  void showPreview(bool showPreview) override;
 
-  tlp::ProgressState state() const;
+  tlp::ProgressState state() const override;
 
-  std::string getError();
-  void setError(const std::string &error);
+  std::string getError() override;
+  void setError(const std::string &error) override;
 
 protected:
-  void closeEvent(QCloseEvent *);
+  void closeEvent(QCloseEvent *) override;
 
 public slots:
   void setCancelButtonVisible(bool);
@@ -85,30 +85,30 @@ class TLP_QT_SCOPE SimplePluginProgressDialog : public QDialog, public tlp::Plug
   Q_OBJECT
 public:
   explicit SimplePluginProgressDialog(QWidget *parent = nullptr);
-  virtual ~SimplePluginProgressDialog();
+  ~SimplePluginProgressDialog() override;
 
-  void setComment(const std::string &);
+  void setComment(const std::string &) override;
   void setComment(const QString &);
   void setComment(const char *);
 
-  void setTitle(const std::string &title);
+  void setTitle(const std::string &title) override;
 
-  tlp::ProgressState progress(int step, int max_step);
+  tlp::ProgressState progress(int step, int max_step) override;
 
-  void cancel();
-  void stop();
+  void cancel() override;
+  void stop() override;
 
-  bool isPreviewMode() const;
-  void setPreviewMode(bool drawPreview);
-  void showPreview(bool showPreview);
+  bool isPreviewMode() const override;
+  void setPreviewMode(bool drawPreview) override;
+  void showPreview(bool showPreview) override;
 
-  tlp::ProgressState state() const;
+  tlp::ProgressState state() const override;
 
-  std::string getError();
-  void setError(const std::string &error);
+  std::string getError() override;
+  void setError(const std::string &error) override;
 
 protected:
-  void closeEvent(QCloseEvent *);
+  void closeEvent(QCloseEvent *) override;
 
 public slots:
   void setCancelButtonVisible(bool v);

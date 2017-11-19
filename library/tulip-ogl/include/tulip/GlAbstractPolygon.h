@@ -47,7 +47,7 @@ public:
   /**
    * Default empty destructor
    */
-  virtual ~GlAbstractPolygon();
+  ~GlAbstractPolygon() override;
 
   enum PolygonMode { POLYGON = 0, QUAD_STRIP = 1 };
 
@@ -167,12 +167,12 @@ public:
   /**
    * Draw the polygon
    */
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * Scale entity
@@ -182,7 +182,7 @@ public:
   /**
    * Function to export data and type in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * Function to export data in outString (in XML format)
@@ -192,7 +192,7 @@ public:
   /**
    * Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &outString, unsigned int &currentPosition);
+  void setWithXML(const std::string &outString, unsigned int &currentPosition) override;
 
   ///@endcond
 

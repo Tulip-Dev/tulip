@@ -60,7 +60,7 @@ public:
   GLYPHINFORMATION("2D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0",
                    NodeShape::ChristmasTree)
   ChristmasTree(const tlp::PluginContext *context = nullptr);
-  virtual void draw(node n, float lod);
+  void draw(node n, float lod) override;
 };
 PLUGIN(ChristmasTree)
 

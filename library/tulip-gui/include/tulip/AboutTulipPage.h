@@ -40,7 +40,7 @@ class TLP_QT_SCOPE AboutTulipPage : public QWidget {
   Q_OBJECT
 public:
   explicit AboutTulipPage(QWidget *parent = nullptr);
-  ~AboutTulipPage();
+  ~AboutTulipPage() override;
 
 private slots:
 

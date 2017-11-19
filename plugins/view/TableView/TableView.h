@@ -50,14 +50,14 @@ public:
                     "4.0", "")
 
   TableView(tlp::PluginContext *);
-  virtual ~TableView();
-  std::string icon() const {
+  ~TableView() override;
+  std::string icon() const override {
     return ":/spreadsheet_view.png";
   }
-  tlp::DataSet state() const;
-  void setState(const tlp::DataSet &);
-  void setupWidget();
-  QList<QWidget *> configurationWidgets() const;
+  tlp::DataSet state() const override;
+  void setState(const tlp::DataSet &) override;
+  void setupWidget() override;
+  QList<QWidget *> configurationWidgets() const override;
 
 public slots:
   void readSettings();
@@ -67,9 +67,9 @@ public slots:
   bool hasEffectiveFiltering();
 
 protected:
-  void graphChanged(tlp::Graph *);
-  void graphDeleted(tlp::Graph *);
-  bool eventFilter(QObject *obj, QEvent *event);
+  void graphChanged(tlp::Graph *) override;
+  void graphDeleted(tlp::Graph *) override;
+  bool eventFilter(QObject *obj, QEvent *event) override;
 
 protected slots:
   void delHighlightedRows();

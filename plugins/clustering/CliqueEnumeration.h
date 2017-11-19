@@ -77,8 +77,8 @@ public:
       "1.0", "Clustering")
 
   CliqueEnumeration(tlp::PluginContext *);
-  bool run();
-  bool check(std::string &);
+  bool run() override;
+  bool check(std::string &) override;
 };
 /*@}*/
 #endif // CLIQUEENUMERATION_H

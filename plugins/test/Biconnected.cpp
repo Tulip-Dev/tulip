@@ -26,7 +26,7 @@ public:
                     "Tests whether a graph is biconnected or not.", "1.0", "Topological Test")
   BiconnectedTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::BiconnectedTest::isBiconnected(graph);
   }
 };
@@ -38,7 +38,7 @@ public:
                     "1.0", "Topology Update")
   MakeBiconnected(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
-  virtual bool run() {
+  bool run() override {
     std::vector<tlp::edge> edges;
     tlp::BiconnectedTest::makeBiconnected(graph, edges);
     return true;

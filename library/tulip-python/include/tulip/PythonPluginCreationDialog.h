@@ -37,7 +37,7 @@ class TLP_PYTHON_SCOPE PythonPluginCreationDialog : public QDialog {
 
 public:
   PythonPluginCreationDialog(QWidget *parent = nullptr);
-  ~PythonPluginCreationDialog();
+  ~PythonPluginCreationDialog() override;
   QString getPluginFileName() const;
 
   QString getPluginType() const;
@@ -58,7 +58,7 @@ public:
 
 protected slots:
 
-  void accept();
+  void accept() override;
 
   void selectPluginSourceFile();
 };

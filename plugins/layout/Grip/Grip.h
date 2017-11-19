@@ -54,9 +54,9 @@ public:
                     "1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);
-  ~Grip();
+  ~Grip() override;
 
-  bool run();
+  bool run() override;
 
 private:
   void computeCurrentGraphLayout();

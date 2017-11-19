@@ -46,7 +46,7 @@ public slots:
   void projectFileChanged(const QString &projectFile = QString(""));
 
 protected:
-  void closeEvent(QCloseEvent *);
+  void closeEvent(QCloseEvent *) override;
 };
 
 #endif // TULIPPERSPECTIVEPROCESSMAINWINDOW_H

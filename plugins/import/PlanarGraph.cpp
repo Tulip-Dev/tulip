@@ -47,9 +47,9 @@ public:
   PlanarGraph(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
-  ~PlanarGraph() {}
+  ~PlanarGraph() override {}
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int nbNodes = 30;
 
     if (dataSet != nullptr) {

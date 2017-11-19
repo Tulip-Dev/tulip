@@ -79,7 +79,7 @@ public:
 
   tlp::Workspace *tlpWorkspace();
 
-  void treatEvent(const tlp::Event &ev);
+  void treatEvent(const tlp::Event &ev) override;
 
 public slots:
 

@@ -402,7 +402,7 @@ public:
   PythonIDEDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags) {}
 
 protected:
-  virtual void showEvent(QShowEvent *e) {
+  void showEvent(QShowEvent *e) override {
     QDialog::showEvent(e);
 
     if (!_windowGeometry.isEmpty()) {
@@ -410,7 +410,7 @@ protected:
     }
   }
 
-  virtual void closeEvent(QCloseEvent *e) {
+  void closeEvent(QCloseEvent *e) override {
     _windowGeometry = saveGeometry();
     QDialog::closeEvent(e);
   }

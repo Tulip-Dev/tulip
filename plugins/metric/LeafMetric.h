@@ -34,8 +34,8 @@ public:
                     "<b>The graph must be acyclic</b>.",
                     "1.0", "Hierarchical")
   LeafMetric(const tlp::PluginContext *context);
-  bool check(std::string &);
-  bool run();
+  bool check(std::string &) override;
+  bool run() override;
 
 private:
   double getNodeValue(const tlp::node n);

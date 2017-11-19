@@ -36,13 +36,13 @@ public:
   NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text,
                                      unsigned int priority = 0);
 
-  virtual ~NodeLinkDiagramComponentInteractor();
+  ~NodeLinkDiagramComponentInteractor() override;
 
   void setConfigurationWidgetText(const QString &text);
 
-  virtual QWidget *configurationWidget() const;
+  QWidget *configurationWidget() const override;
 
-  virtual unsigned int priority() const;
+  unsigned int priority() const override;
 
   void setPriority(const unsigned int p);
 };

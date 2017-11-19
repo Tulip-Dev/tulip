@@ -41,10 +41,10 @@ public:
   GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0",
                    NodeShape::Window)
   Window(const tlp::PluginContext *context);
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void getTextBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void getTextBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 
 private:
   Color _rectColor;

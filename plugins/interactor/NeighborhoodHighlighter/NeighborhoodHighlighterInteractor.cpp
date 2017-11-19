@@ -54,12 +54,12 @@ namespace tlp {
 class GraphLayoutMorphing : public AdditionalGlSceneAnimation {
 
 public:
-  virtual ~GraphLayoutMorphing() {}
+  ~GraphLayoutMorphing() override {}
   GraphLayoutMorphing(Graph *graph, LayoutProperty *srcLayout, LayoutProperty *destLayout,
                       LayoutProperty *viewLayout)
       : graph(graph), srcLayout(srcLayout), destLayout(destLayout), viewLayout(viewLayout) {}
 
-  void animationStep(int animationStep) {
+  void animationStep(int animationStep) override {
     node n;
     forEach(n, graph->getNodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
@@ -111,7 +111,7 @@ private:
 class MouseEventDiscardFilter : public QObject {
 
 public:
-  bool eventFilter(QObject *, QEvent *event) {
+  bool eventFilter(QObject *, QEvent *event) override {
     if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonDblClick ||
         event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease) {
       return true;

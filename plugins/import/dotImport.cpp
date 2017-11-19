@@ -67,7 +67,7 @@ public:
                     "<p>Supported extensions: dot</p><p>Imports a new graph from a file in the dot "
                     "input format.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("dot");
     return l;
@@ -75,13 +75,13 @@ public:
   DotImport(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
-  ~DotImport() {}
+  ~DotImport() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_graphviz.png";
   }
 
-  bool importGraph() {
+  bool importGraph() override {
 
     // Open input stream
     string fn;

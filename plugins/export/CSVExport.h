@@ -68,16 +68,16 @@ public:
                     "properties associated to graph elements in a CSV file.</p>",
                     "1.0", "File")
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/spreadsheet.png";
   }
 
-  std::string fileExtension() const {
+  std::string fileExtension() const override {
     return "csv";
   }
 
   CsvExport(const tlp::PluginContext *context);
-  bool exportGraph(std::ostream &);
+  bool exportGraph(std::ostream &) override;
 
   std::string fieldSeparator;
   char stringDelimiter;

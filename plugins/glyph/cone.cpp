@@ -131,10 +131,10 @@ public:
   GLYPHINFORMATION("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0",
                    NodeShape::Cone)
   Cone(const tlp::PluginContext *context = nullptr);
-  virtual ~Cone();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Cone() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(Cone)
 
@@ -197,10 +197,10 @@ public:
                    "Textured cone for edge extremities", "1.0", EdgeExtremityShape::Cone)
 
   EECone(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
-  virtual ~EECone() {}
+  ~EECone() override {}
 
-  virtual void draw(edge e, node /*n*/, const Color &glyphColor, const Color & /*borderColor*/,
-                    float /*lod*/) {
+  void draw(edge e, node /*n*/, const Color &glyphColor, const Color & /*borderColor*/,
+            float /*lod*/) override {
     glEnable(GL_LIGHTING);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     setMaterial(glyphColor);

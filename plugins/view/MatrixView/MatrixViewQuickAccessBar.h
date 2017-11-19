@@ -33,10 +33,10 @@ public:
   MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget *parent = nullptr);
 
 public slots:
-  void reset();
-  virtual void setEdgesVisible(bool);
-  virtual void setBackgroundColor(const QColor &);
-  virtual void setColorInterpolation(bool);
+  void reset() override;
+  void setEdgesVisible(bool) override;
+  void setBackgroundColor(const QColor &) override;
+  void setColorInterpolation(bool) override;
 };
 }
 #endif // SCATTERPLOTQUICKACCESSBAR_H

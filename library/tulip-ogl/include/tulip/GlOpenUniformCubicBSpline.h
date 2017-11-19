@@ -60,19 +60,20 @@ public:
                             const Color &endColor, const float startSize, const float endSize,
                             const unsigned int nbCurvePoints = 200);
 
-  ~GlOpenUniformCubicBSpline();
+  ~GlOpenUniformCubicBSpline() override;
 
   void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
                  const float startSize, const float endSize,
-                 const unsigned int nbCurvePoints = 200);
+                 const unsigned int nbCurvePoints = 200) override;
 
 protected:
-  void setCurveVertexShaderRenderingSpecificParameters();
+  void setCurveVertexShaderRenderingSpecificParameters() override;
 
-  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
+  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) override;
 
   void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
-                               std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+                               std::vector<Coord> &curvePoints,
+                               unsigned int nbCurvePoints) override;
 
 private:
   unsigned nbKnots;

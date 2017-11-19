@@ -101,9 +101,9 @@ public:
     addInParameter<double>("page ratio", paramHelp[0], "1.1");
   }
 
-  ~OGDFPlanarizationGrid() {}
+  ~OGDFPlanarizationGrid() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::PlanarizationGridLayout *pgl =
         static_cast<ogdf::PlanarizationGridLayout *>(ogdfLayoutAlgo);
 

@@ -97,10 +97,10 @@ public:
 
   int getWorldWidth();
 
-  void wheelEvent(QWheelEvent *ev);
+  void wheelEvent(QWheelEvent *ev) override;
 
-  void mouseMoveEvent(QMouseEvent *ev);
-  void mousePressEvent(QMouseEvent *ev);
+  void mouseMoveEvent(QMouseEvent *ev) override;
+  void mousePressEvent(QMouseEvent *ev) override;
 
   void switchToSatelliteView();
   void switchToRoadMapView();

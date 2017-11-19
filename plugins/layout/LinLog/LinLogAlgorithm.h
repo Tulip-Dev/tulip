@@ -47,9 +47,9 @@ public:
 
   LinLogAlgorithm(const tlp::PluginContext *context);
 
-  ~LinLogAlgorithm();
+  ~LinLogAlgorithm() override;
 
-  bool run();
+  bool run() override;
 
 private:
   LinLogLayout *linlog;

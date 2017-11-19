@@ -65,11 +65,11 @@ TLP_SCOPE edge nextFaceEdge(Graph *g, edge source, node target);
 struct TLP_SCOPE NodeMapIterator : public Iterator<node> {
   ///
   NodeMapIterator(Graph *sg, node source, node target);
-  ~NodeMapIterator();
+  ~NodeMapIterator() override;
   /// Return the next element
-  node next();
+  node next() override;
   /// Return true if it exist a next element
-  bool hasNext();
+  bool hasNext() override;
 
 private:
   std::list<node> cloneIt;
@@ -100,9 +100,9 @@ struct TLP_SCOPE EdgeMapIterator : public Iterator<edge> {
   ///
   EdgeMapIterator(const Graph *sg, edge source, node target);
   /// Return the next element
-  edge next();
+  edge next() override;
   /// Return true if it exist a next element
-  bool hasNext();
+  bool hasNext() override;
 
 private:
   std::vector<edge> adj;

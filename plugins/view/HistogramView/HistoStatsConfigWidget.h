@@ -36,7 +36,7 @@ class HistoStatsConfigWidget : public QWidget {
 
 public:
   HistoStatsConfigWidget(QWidget *parent = nullptr);
-  ~HistoStatsConfigWidget();
+  ~HistoStatsConfigWidget() override;
 
   void setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation);
   bool densityEstimation() const;

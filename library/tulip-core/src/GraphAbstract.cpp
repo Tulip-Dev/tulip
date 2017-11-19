@@ -474,14 +474,14 @@ class EdgeSetIterator : public Iterator<edge> {
 
 public:
   EdgeSetIterator(const set<edge> &edges) : it(edges.begin()), itEnd(edges.end()) {}
-  ~EdgeSetIterator() {}
-  edge next() {
+  ~EdgeSetIterator() override {}
+  edge next() override {
     edge tmp = (*it);
     ++it;
     return tmp;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (it != itEnd);
   }
 };

@@ -40,14 +40,14 @@ class ColorScalePreview : public QLabel {
   Q_OBJECT
 public:
   ColorScalePreview(ColorScale *colorScale);
-  virtual ~ColorScalePreview();
+  ~ColorScalePreview() override;
   void setColorScale(ColorScale *colorScale);
   ColorScale *getColorScale() {
     return currentColorScale;
   }
 
-  void resizeEvent(QResizeEvent *event);
-  void mousePressEvent(QMouseEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
 
 protected:
   void fillLabel();

@@ -65,9 +65,9 @@ public:
   GLYPHINFORMATION("2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1",
                    NodeShape::Circle)
   Circle(const tlp::PluginContext *context = nullptr);
-  virtual ~Circle();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~Circle() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
 };
 PLUGIN(Circle)
 Circle::Circle(const tlp::PluginContext *context) : Glyph(context) {
@@ -102,7 +102,7 @@ public:
       eecircle = new GlCircle(Coord(0, 0, 0), 0.5, Color(0, 0, 0, 255), Color(0, 0, 0, 255), true,
                               true, 0., 30);
   }
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     eecircle->setLightingMode(false);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 

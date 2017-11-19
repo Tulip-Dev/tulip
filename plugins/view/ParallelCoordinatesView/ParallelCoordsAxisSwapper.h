@@ -32,10 +32,10 @@ class ParallelCoordsAxisSwapper : public GLInteractorComponent {
 
 public:
   ParallelCoordsAxisSwapper();
-  ~ParallelCoordsAxisSwapper();
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
-  void viewChanged(View *view);
+  ~ParallelCoordsAxisSwapper() override;
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
+  void viewChanged(View *view) override;
 
 private:
   ParallelCoordinatesView *parallelView;

@@ -40,7 +40,7 @@ class TLP_GL_SCOPE GlMetaNodeRenderer : public Observable {
 public:
   GlMetaNodeRenderer(GlGraphInputData *inputData);
 
-  virtual ~GlMetaNodeRenderer();
+  ~GlMetaNodeRenderer() override;
 
   virtual void render(node, float, Camera *);
 
@@ -53,7 +53,7 @@ public:
 protected:
   void clearScenes();
 
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   virtual GlScene *createScene(Graph *) const;
 

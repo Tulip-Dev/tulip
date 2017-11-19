@@ -66,9 +66,9 @@ public:
   GLYPHINFORMATION("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0",
                    NodeShape::Sphere)
   Sphere(const tlp::PluginContext *context = nullptr);
-  virtual ~Sphere();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~Sphere() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
 };
 
 PLUGIN(Sphere)
@@ -94,8 +94,8 @@ class EESphere : public EdgeExtremityGlyph {
                    "Textured sphere for edge extremities", "1.0", EdgeExtremityShape::Sphere)
 public:
   EESphere(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
-  virtual ~EESphere() {}
-  virtual void draw(edge e, node, const Color &glyphColor, const Color &, float lod) {
+  ~EESphere() override {}
+  void draw(edge e, node, const Color &glyphColor, const Color &, float lod) override {
     glEnable(GL_LIGHTING);
     drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
               edgeExtGlGraphInputData->parameters->getTexturePath(), lod);

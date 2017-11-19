@@ -33,8 +33,8 @@ public:
   PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget *parent = nullptr);
 
 public slots:
-  void reset();
-  virtual void setBackgroundColor(const QColor &);
+  void reset() override;
+  void setBackgroundColor(const QColor &) override;
 };
 }
 #endif

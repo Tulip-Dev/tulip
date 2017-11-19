@@ -34,11 +34,11 @@ class GlEditableComplexPolygon : public GlSimpleEntity {
 public:
   GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color);
 
-  void translate(const Coord &move);
-  void draw(float lod, Camera *camera);
-  BoundingBox getBoundingBox();
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void translate(const Coord &move) override;
+  void draw(float lod, Camera *camera) override;
+  BoundingBox getBoundingBox() override;
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
   unsigned int getNumberOfVertex() const {
     return polygonPoints.size();
@@ -82,12 +82,12 @@ public:
   ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget);
   ScatterPlotCorrelCoeffSelector(
       const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector);
-  ~ScatterPlotCorrelCoeffSelector();
+  ~ScatterPlotCorrelCoeffSelector() override;
 
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
-  bool compute(GlMainWidget *glMainWidget);
-  void viewChanged(View *view);
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
+  bool compute(GlMainWidget *glMainWidget) override;
+  void viewChanged(View *view) override;
 
 private:
   void getPolygonAndPointUnderPointerIfAny(const Coord &pointerSceneCoord, Camera *camera);

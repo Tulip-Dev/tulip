@@ -112,7 +112,7 @@ public:
    * above has been used.
    * This method redraw the whole axis and the graduations.
    */
-  void updateAxis();
+  void updateAxis() override;
 
   /**
    * Method to get the axis point coordinates for a given value

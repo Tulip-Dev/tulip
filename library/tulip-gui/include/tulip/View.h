@@ -110,12 +110,12 @@ public:
     overleying system. Thus, the View is not in charge of deleting its graphcis view.
     View's interactors are already deleted in the top class.
     */
-  virtual ~View();
+  ~View() override;
 
-  virtual std::string category() const {
+  std::string category() const override {
     return VIEW_CATEGORY;
   }
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_view.png";
   }
 
@@ -188,7 +188,7 @@ public:
     @brief reimplemented from tlp::Observable to provide the triggers mechanism.
     @see View::addRedrawTrigger()
     */
-  void treatEvents(const std::vector<Event> &events);
+  void treatEvents(const std::vector<Event> &events) override;
 
   /**
     @brief defines which item is considered as the central item in the view.
@@ -299,7 +299,7 @@ public slots:
     @warning When overriding this method. You MUST always make a call to View::treatEvent before
     doing anything in order to keep this callback working.
     */
-  virtual void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
   /**
     @brief Registers a new trigger for automatic view drawing.

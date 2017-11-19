@@ -112,9 +112,9 @@ public:
                     "21, Issue 11, pages 1129–1164, (1991)",
                     "1.1", "Force Directed")
   OGDFFrutchermanReingold(const tlp::PluginContext *context);
-  ~OGDFFrutchermanReingold();
+  ~OGDFFrutchermanReingold() override;
 
-  void beforeCall();
+  void beforeCall() override;
 };
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de

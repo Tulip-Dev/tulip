@@ -44,16 +44,16 @@ using namespace tlp;
 
 struct PluginInformationCollector : public PluginLoader {
 
-  virtual void loaded(const tlp::Plugin *info, const std::list<Dependency> &) {
+  void loaded(const tlp::Plugin *info, const std::list<Dependency> &) override {
     _directoryPlugins[_currentDirectory].push_back(tlp::tlpStringToQString(info->name()));
   }
 
-  virtual void aborted(const std::string &plugin, const std::string &message) {
+  void aborted(const std::string &plugin, const std::string &message) override {
     std::cout << "failed to load plugin " << plugin << ": " << message << std::endl;
   }
-  virtual void loading(const std::string &) {}
-  virtual void finished(bool, const std::string &) {}
-  virtual void start(const std::string &) {}
+  void loading(const std::string &) override {}
+  void finished(bool, const std::string &) override {}
+  void start(const std::string &) override {}
 
   QString _currentDirectory;
   QMap<QString, QStringList> _directoryPlugins;

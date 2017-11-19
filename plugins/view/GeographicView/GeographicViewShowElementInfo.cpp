@@ -46,19 +46,19 @@ public:
   GlComplexPolygonItemEditor(GlComplexPolygon *poly) : GlSimpleEntityItemEditor(poly) {}
 
   // redefined inherited methods from GlSimpleEntityItemEditor
-  QStringList propertiesNames() const {
+  QStringList propertiesNames() const override {
     return QStringList() << "fillColor"
                          << "outlineColor";
   }
 
-  QVariantList propertiesQVariant() const {
+  QVariantList propertiesQVariant() const override {
     return QVariantList() << QVariant::fromValue<Color>(
                                  static_cast<GlComplexPolygon *>(entity)->getFillColor())
                           << QVariant::fromValue<Color>(
                                  static_cast<GlComplexPolygon *>(entity)->getOutlineColor());
   }
 
-  void setProperty(const QString &name, const QVariant &value) {
+  void setProperty(const QString &name, const QVariant &value) override {
     if (name == "fillColor")
       static_cast<GlComplexPolygon *>(entity)->setFillColor(value.value<Color>());
     else if (name == "outlineColor")
@@ -85,12 +85,12 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct() {
+  void construct() override {
     push_back(new GeographicViewNavigator);
     push_back(new GeographicViewShowElementInfo);
   }
 
-  bool isCompatible(const string &viewName) const {
+  bool isCompatible(const string &viewName) const override {
     return (viewName == ViewName::GeographicViewName);
   }
 };

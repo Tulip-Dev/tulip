@@ -43,25 +43,25 @@ class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget,
 public:
   SimpleStringsListSelectionWidget(QWidget *parent = nullptr,
                                    const unsigned int maxSelectedStringsListSize = 0);
-  ~SimpleStringsListSelectionWidget();
+  ~SimpleStringsListSelectionWidget() override;
 
-  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
+  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) override;
 
-  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
+  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList) override;
 
-  void clearUnselectedStringsList();
+  void clearUnselectedStringsList() override;
 
-  void clearSelectedStringsList();
+  void clearSelectedStringsList() override;
 
-  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
+  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) override;
 
-  std::vector<std::string> getSelectedStringsList() const;
+  std::vector<std::string> getSelectedStringsList() const override;
 
-  std::vector<std::string> getUnselectedStringsList() const;
+  std::vector<std::string> getUnselectedStringsList() const override;
 
-  void selectAllStrings();
+  void selectAllStrings() override;
 
-  void unselectAllStrings();
+  void unselectAllStrings() override;
 
 private slots:
 

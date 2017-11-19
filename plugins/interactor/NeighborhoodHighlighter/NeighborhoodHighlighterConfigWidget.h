@@ -38,7 +38,7 @@ class NeighborhoodHighlighterConfigWidget : public QWidget {
 
 public:
   NeighborhoodHighlighterConfigWidget(QWidget *parent = nullptr);
-  ~NeighborhoodHighlighterConfigWidget();
+  ~NeighborhoodHighlighterConfigWidget() override;
 
   NodeNeighborhoodView::NeighborNodesType getNeighborsType() const;
   bool computeReachableSubGraph() const;

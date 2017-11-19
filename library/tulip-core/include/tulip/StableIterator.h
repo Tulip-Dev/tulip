@@ -84,15 +84,15 @@ struct StableIterator : public Iterator<itType> {
     copyIterator = sequenceCopy.begin();
   }
   //=============================
-  ~StableIterator() {}
+  ~StableIterator() override {}
   //=============================
-  itType next() {
+  itType next() override {
     itType tmp(*copyIterator);
     ++copyIterator;
     return tmp;
   }
   //=============================
-  bool hasNext() {
+  bool hasNext() override {
     return (copyIterator != sequenceCopy.end());
   }
   //=============================

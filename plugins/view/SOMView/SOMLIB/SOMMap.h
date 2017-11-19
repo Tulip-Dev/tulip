@@ -61,7 +61,7 @@ public:
    */
   SOMMap(unsigned int width, unsigned int height, SOMMapConnectivity connectivity = four,
          bool oppositeConnected = false);
-  virtual ~SOMMap();
+  ~SOMMap() override;
 
   /**
    * Get the weight linked to the node n.

@@ -313,7 +313,7 @@ public:
     return controlPoints;
   }
 
-  bool run() {
+  bool run() override {
 
     if (dataSet) {
       tlp::StringCollection curveTypeSc;

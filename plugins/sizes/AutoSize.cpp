@@ -39,7 +39,7 @@ public:
                     "1.0", "Size")
   AutoSize(const tlp::PluginContext *context) : SizeAlgorithm(context) {}
 
-  bool run() {
+  bool run() override {
     node n;
     forEach(n, graph->getNodes()) result->setNodeValue(n, getNodeValue(n));
     edge e;

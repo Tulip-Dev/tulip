@@ -79,7 +79,7 @@ public:
     addDependency("Tree Leaf", "1.0");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 

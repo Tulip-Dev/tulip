@@ -113,9 +113,9 @@ class ScatterPlot2DMouseShowElementInfo : public MouseShowElementInfo {
 
 public:
   ScatterPlot2DMouseShowElementInfo() : MouseShowElementInfo(), scp2DView(nullptr) {}
-  ~ScatterPlot2DMouseShowElementInfo() {}
+  ~ScatterPlot2DMouseShowElementInfo() override {}
 
-  void viewChanged(View *v) {
+  void viewChanged(View *v) override {
     scp2DView = static_cast<ScatterPlot2DView *>(v);
     MouseShowElementInfo::viewChanged(v);
   }
@@ -128,8 +128,8 @@ protected:
    * @param parent the parent for the model creation.
    * @return
    */
-  virtual QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId,
-                                         QObject *parent) const {
+  QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId,
+                                 QObject *parent) const override {
     if (scp2DView->getDataLocation() == EDGE) {
       elementId = scp2DView->getMappedId(elementId);
       return new GraphEdgeElementModel(scp2DView->graph(), elementId, parent);
@@ -144,7 +144,7 @@ protected:
    * @param elementId the id of the element
    * @return
    */
-  virtual QString elementName(ElementType elementType, unsigned int elementId) const {
+  QString elementName(ElementType elementType, unsigned int elementId) const override {
     if (scp2DView->getDataLocation() == EDGE) {
       elementId = scp2DView->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);

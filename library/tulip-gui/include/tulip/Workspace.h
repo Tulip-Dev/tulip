@@ -67,7 +67,7 @@ class TLP_QT_SCOPE Workspace : public QWidget {
 
 public:
   explicit Workspace(QWidget *parent = nullptr);
-  virtual ~Workspace();
+  ~Workspace() override;
 
   int addPanel(tlp::View *);
   QList<tlp::View *> panels() const;
@@ -140,13 +140,13 @@ protected slots:
   void changeFocusedPanelSynchronization(bool);
 
 protected:
-  virtual void dragEnterEvent(QDragEnterEvent *event);
-  virtual void dropEvent(QDropEvent *event);
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
 
   bool handleDragEnterEvent(QEvent *e, const QMimeData *mimedata);
   bool handleDropEvent(const QMimeData *mimedata);
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
   QWidget *currentModeWidget() const;
   QVector<PlaceHolderWidget *> currentModeSlots() const;

@@ -82,8 +82,8 @@ public:
                     "Computer Science (1995).",
                     "1.2", "Force Directed")
   GEMLayout(const tlp::PluginContext *context);
-  ~GEMLayout();
-  bool run();
+  ~GEMLayout() override;
+  bool run() override;
 
 private:
   tlp::Coord computeForces(unsigned int v, float shake, float gravity, bool testPlaced);

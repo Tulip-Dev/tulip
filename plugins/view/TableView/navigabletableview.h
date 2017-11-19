@@ -28,12 +28,12 @@ class NavigableTableView : public QTableView {
 
 public:
   explicit NavigableTableView(QWidget *parent = nullptr);
-  void keyPressEvent(QKeyEvent *event);
+  void keyPressEvent(QKeyEvent *event) override;
 
 protected:
-  int sizeHintForRow(int row) const;
-  int sizeHintForColumn(int col) const;
-  void paintEvent(QPaintEvent *event);
+  int sizeHintForRow(int row) const override;
+  int sizeHintForColumn(int col) const override;
+  void paintEvent(QPaintEvent *event) override;
 
 private:
   void resizeTableRows();

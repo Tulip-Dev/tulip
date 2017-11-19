@@ -55,7 +55,7 @@ public:
   explicit ParenMatcherHighlighter(QTextDocument *parent = nullptr);
 
 protected:
-  void highlightBlock(const QString &text);
+  void highlightBlock(const QString &text) override;
 };
 
 #endif /* PARENMATCHERHIGHLIGHTER_H_ */

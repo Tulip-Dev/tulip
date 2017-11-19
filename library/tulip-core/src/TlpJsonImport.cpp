@@ -70,7 +70,7 @@ public:
     }
   }
 
-  virtual void parseStartArray() {
+  void parseStartArray() override {
 
     if (!_parsingSubgraph.empty() && !_parsingNodesIds && !_parsingEdgesIds &&
         !_parsingAttributes) {
@@ -90,7 +90,7 @@ public:
     }
   }
 
-  virtual void parseEndArray() {
+  void parseEndArray() override {
 
     if (!_parsingSubgraph.empty() && !_parsingNodesIds && !_parsingEdgesIds &&
         !_parsingAttributes && !_parsingInterval) {
@@ -127,7 +127,7 @@ public:
     }
   }
 
-  virtual void parseMapKey(const std::string &value) {
+  void parseMapKey(const std::string &value) override {
     if (_parsingProperties && !_parsingPropertyNodeValues && !_parsingPropertyEdgeValues &&
         !_parsingPropertyDefaultEdgeValue && !_parsingPropertyDefaultNodeValue &&
         _propertyName.empty()) {
@@ -169,9 +169,9 @@ public:
     }
   }
 
-  virtual void parseStartMap() {}
+  void parseStartMap() override {}
 
-  virtual void parseEndMap() {
+  void parseEndMap() override {
 
     if (!_currentProperty && _propertyName.empty()) {
       _parsingProperties = false;
@@ -207,7 +207,7 @@ public:
     }
   }
 
-  virtual void parseInteger(long long integerVal) {
+  void parseInteger(long long integerVal) override {
     if (_waitingForGraphId) {
       if (integerVal > 0) {
         _graph = static_cast<GraphAbstract *>(_graph)->addSubGraph(integerVal);
@@ -290,7 +290,7 @@ public:
     }
   }
 
-  virtual void parseString(const std::string &value) {
+  void parseString(const std::string &value) override {
     if (_parsingProperties) {
       if (_parsingPropertyType && !_propertyName.empty()) {
         _parsingPropertyType = false;
@@ -467,40 +467,40 @@ private:
 class YajlProxy : public YajlParseFacade {
 public:
   YajlProxy(tlp::PluginProgress *progress = nullptr) : YajlParseFacade(progress), _proxy(nullptr) {}
-  virtual ~YajlProxy() {
+  ~YajlProxy() override {
     delete _proxy;
   }
-  virtual void parseBoolean(bool boolVal) {
+  void parseBoolean(bool boolVal) override {
     _proxy->parseBoolean(boolVal);
   }
-  virtual void parseDouble(double doubleVal) {
+  void parseDouble(double doubleVal) override {
     _proxy->parseDouble(doubleVal);
   }
-  virtual void parseEndArray() {
+  void parseEndArray() override {
     _proxy->parseEndArray();
   }
-  virtual void parseEndMap() {
+  void parseEndMap() override {
     _proxy->parseEndMap();
   }
-  virtual void parseInteger(long long integerVal) {
+  void parseInteger(long long integerVal) override {
     _proxy->parseInteger(integerVal);
   }
-  virtual void parseMapKey(const std::string &value) {
+  void parseMapKey(const std::string &value) override {
     _proxy->parseMapKey(value);
   }
-  virtual void parseNull() {
+  void parseNull() override {
     _proxy->parseNull();
   }
-  virtual void parseNumber(const char *numberVal, size_t numberLen) {
+  void parseNumber(const char *numberVal, size_t numberLen) override {
     _proxy->parseNumber(numberVal, numberLen);
   }
-  virtual void parseStartArray() {
+  void parseStartArray() override {
     _proxy->parseStartArray();
   }
-  virtual void parseStartMap() {
+  void parseStartMap() override {
     _proxy->parseStartMap();
   }
-  virtual void parseString(const std::string &value) {
+  void parseString(const std::string &value) override {
     _proxy->parseString(value);
   }
 
@@ -515,7 +515,7 @@ public:
                     "the Tulip JSON format.</p>",
                     "1.0", "File")
 
-  virtual std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("json");
     return l;
@@ -526,11 +526,11 @@ public:
                                 "");
   }
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/json32x32.png";
   }
 
-  virtual bool importGraph() {
+  bool importGraph() override {
     Observable::holdObservers();
     std::string filename;
 
@@ -556,7 +556,7 @@ public:
     return _parsingSucceeded;
   }
 
-  virtual void parseMapKey(const std::string &value) {
+  void parseMapKey(const std::string &value) override {
     if (value == GraphToken) {
       delete _proxy;
       _proxy = new TlpJsonGraphParser(graph, _progress);

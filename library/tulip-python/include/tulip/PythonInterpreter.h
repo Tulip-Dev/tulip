@@ -44,7 +44,7 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   Q_OBJECT
 
   PythonInterpreter();
-  ~PythonInterpreter();
+  ~PythonInterpreter() override;
 
   void holdGIL();
   void releaseGIL();

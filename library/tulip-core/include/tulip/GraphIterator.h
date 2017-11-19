@@ -120,13 +120,13 @@ public:
     // anticipate first iteration
     prepareNext();
   }
-  ~SGraphNodeIterator() {
+  ~SGraphNodeIterator() override {
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->removeListener(this);
 #endif
     delete it;
   }
-  node next() {
+  node next() override {
     assert(curNode.isValid());
     // we are already pointing to the next
     node tmp = curNode;
@@ -135,7 +135,7 @@ public:
     return tmp;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (curNode.isValid());
   }
 };
@@ -150,9 +150,9 @@ private:
 #endif
 public:
   OutNodesIterator(const GraphView *sG, node n);
-  ~OutNodesIterator();
-  node next();
-  bool hasNext();
+  ~OutNodesIterator() override;
+  node next() override;
+  bool hasNext() override;
 };
 //============================================================
 /// In node iterator for GraphView
@@ -164,9 +164,9 @@ private:
 #endif
 public:
   InNodesIterator(const GraphView *sG, node n);
-  ~InNodesIterator();
-  node next();
-  bool hasNext();
+  ~InNodesIterator() override;
+  node next() override;
+  bool hasNext() override;
 };
 //============================================================
 /// In Out node iterator for GraphView
@@ -180,9 +180,9 @@ private:
 #endif
 public:
   InOutNodesIterator(const GraphView *sG, node n);
-  ~InOutNodesIterator();
-  node next();
-  bool hasNext();
+  ~InOutNodesIterator() override;
+  node next() override;
+  bool hasNext() override;
 };
 //=============================================================
 /// Edge iterator for GraphView
@@ -221,14 +221,14 @@ public:
     prepareNext();
   }
 
-  ~SGraphEdgeIterator() {
+  ~SGraphEdgeIterator() override {
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->removeListener(this);
 #endif
     delete it;
   }
 
-  edge next() {
+  edge next() override {
     assert(curEdge.isValid());
     // we are already pointing to the next
     edge tmp = curEdge;
@@ -237,7 +237,7 @@ public:
     return tmp;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (curEdge.isValid());
   }
 };
@@ -251,9 +251,9 @@ private:
 
 public:
   OutEdgesIterator(const GraphView *sG, node n);
-  ~OutEdgesIterator();
-  edge next();
-  bool hasNext();
+  ~OutEdgesIterator() override;
+  edge next() override;
+  bool hasNext() override;
 
 protected:
   void prepareNext();
@@ -268,9 +268,9 @@ private:
 
 public:
   InEdgesIterator(const GraphView *sG, node n);
-  ~InEdgesIterator();
-  edge next();
-  bool hasNext();
+  ~InEdgesIterator() override;
+  edge next() override;
+  bool hasNext() override;
 
 protected:
   void prepareNext();
@@ -286,9 +286,9 @@ private:
 
 public:
   InOutEdgesIterator(const GraphView *sG, node n);
-  ~InOutEdgesIterator();
-  edge next();
-  bool hasNext();
+  ~InOutEdgesIterator() override;
+  edge next() override;
+  bool hasNext() override;
 
 protected:
   void prepareNext();
@@ -313,9 +313,9 @@ private:
 
 public:
   GraphNodeIterator(const Graph *g, Iterator<node> *it);
-  ~GraphNodeIterator();
-  node next();
-  bool hasNext();
+  ~GraphNodeIterator() override;
+  node next() override;
+  bool hasNext() override;
 };
 //=============================================================
 /// Edge iterator for data sg
@@ -335,9 +335,9 @@ private:
 
 public:
   GraphEdgeIterator(const Graph *g, Iterator<edge> *it);
-  ~GraphEdgeIterator();
-  edge next();
-  bool hasNext();
+  ~GraphEdgeIterator() override;
+  edge next() override;
+  bool hasNext() override;
 };
 //============================================================
 }

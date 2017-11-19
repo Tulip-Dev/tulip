@@ -29,8 +29,8 @@ class PropertiesIterator : public Iterator<PropertyInterface *> {
 public:
   PropertiesIterator(std::map<std::string, PropertyInterface *>::iterator,
                      std::map<std::string, PropertyInterface *>::iterator);
-  PropertyInterface *next();
-  bool hasNext();
+  PropertyInterface *next() override;
+  bool hasNext() override;
   std::map<std::string, PropertyInterface *>::iterator it, itEnd;
 };
 //==============================================================
@@ -51,13 +51,13 @@ public:
   PropertyNamesIterator(std::map<std::string, PropertyInterface *>::iterator itB,
                         std::map<std::string, PropertyInterface *>::iterator itE)
       : itProp(itB, itE) {}
-  std::string next() {
+  std::string next() override {
     std::string tmp = (*(itProp.it)).first;
     ++(itProp.it);
     return tmp;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return itProp.hasNext();
   }
   PropertiesIterator itProp;

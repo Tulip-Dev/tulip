@@ -47,7 +47,7 @@ class GlEditableCurve : public GlSimpleEntity {
 public:
   GlEditableCurve(const Coord &startPoint, const Coord &endPoint, const Color &curveColor);
   GlEditableCurve(const GlEditableCurve &curve);
-  ~GlEditableCurve() {}
+  ~GlEditableCurve() override {}
 
   void setXAxisScale(GlQuantitativeAxis *xAxis) {
     this->xAxis = xAxis;
@@ -61,9 +61,9 @@ public:
   void updateSize(const Coord &newMinPoint, const Coord &newMaxPoint);
   void resetCurve();
 
-  void draw(float lod, Camera *camera);
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void draw(float lod, Camera *camera) override;
+  void getXML(std::string &) override {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
   Coord getMinPoint() const {
     return minPoint;
@@ -118,17 +118,17 @@ public:
 
   GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length,
               const float thickness, const Color &color, Orientation orientation);
-  ~GlSizeScale();
+  ~GlSizeScale() override;
 
   float getSizeAtPos(const Coord &pos);
 
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  void translate(const Coord &move);
+  void translate(const Coord &move) override;
 
-  void getXML(std::string &) {}
+  void getXML(std::string &) override {}
 
-  void setWithXML(const std::string &, unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
   Coord getBaseCoord() const {
     return baseCoord;
@@ -176,19 +176,19 @@ public:
   enum Orientation { Horizontal, Vertical };
 
   GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation);
-  ~GlGlyphScale();
+  ~GlGlyphScale() override;
 
   void setGlyphsList(const std::vector<int> &glyphsList);
 
   int getGlyphAtPos(const Coord &pos);
 
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  void translate(const Coord &move);
+  void translate(const Coord &move) override;
 
-  void getXML(std::string &) {}
+  void getXML(std::string &) override {}
 
-  void setWithXML(const std::string &, unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) override {}
 
   Coord getBaseCoord() const {
     return baseCoord;
@@ -220,12 +220,12 @@ class HistogramMetricMapping : public GLInteractorComponent {
 public:
   HistogramMetricMapping();
   HistogramMetricMapping(const HistogramMetricMapping &histogramMetricMapping);
-  ~HistogramMetricMapping();
+  ~HistogramMetricMapping() override;
 
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *glMainWidget);
-  bool compute(GlMainWidget *glMainWidget);
-  void viewChanged(View *view);
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
+  bool compute(GlMainWidget *glMainWidget) override;
+  void viewChanged(View *view) override;
 
   bool pointerUnderScale(const Coord &sceneCoords);
   void updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout);

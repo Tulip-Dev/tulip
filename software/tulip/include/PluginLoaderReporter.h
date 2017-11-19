@@ -27,12 +27,12 @@ class PluginLoaderReporter : public tlp::PluginLoader {
 public:
   PluginLoaderReporter();
 
-  virtual void start(const std::string &) {}
-  virtual void numberOfFiles(int) {}
-  virtual void loading(const std::string &) {}
-  virtual void loaded(const tlp::Plugin *, const std::list<tlp::Dependency> &) {}
-  virtual void aborted(const std::string &, const std::string &);
-  virtual void finished(bool, const std::string &) {}
+  void start(const std::string &) override {}
+  void numberOfFiles(int) override {}
+  void loading(const std::string &) override {}
+  void loaded(const tlp::Plugin *, const std::list<tlp::Dependency> &) override {}
+  void aborted(const std::string &, const std::string &) override;
+  void finished(bool, const std::string &) override {}
 
   QMap<QString, QString> errors() {
     return _errors;

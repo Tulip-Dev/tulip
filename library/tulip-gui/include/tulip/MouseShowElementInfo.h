@@ -51,12 +51,12 @@ class TLP_QT_SCOPE MouseShowElementInfo : public InteractorComponent {
 
 public:
   MouseShowElementInfo(const bool showVisualPropButton = true);
-  ~MouseShowElementInfo();
-  virtual bool eventFilter(QObject *widget, QEvent *e);
+  ~MouseShowElementInfo() override;
+  bool eventFilter(QObject *widget, QEvent *e) override;
 
-  void viewChanged(View *);
+  void viewChanged(View *) override;
 
-  void clear();
+  void clear() override;
 
   virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
 

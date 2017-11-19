@@ -209,7 +209,7 @@ QString localPluginsPath() {
 class GlTextureFromQImageLoader : public GlTextureLoader {
 public:
   // redefine the inherited method
-  bool loadTexture(const std::string &filename, GlTexture &glTexture) {
+  bool loadTexture(const std::string &filename, GlTexture &glTexture) override {
 
     QImage image;
 
@@ -439,7 +439,7 @@ class QDebugOStream : public std::ostream {
   class QDebugStreamBuf : public std::streambuf {
   protected:
     string buf;
-    virtual int_type overflow(int c) {
+    int_type overflow(int c) override {
       if (c == '\n') {
         qDebug() << buf;
         buf.clear();
@@ -449,7 +449,7 @@ class QDebugOStream : public std::ostream {
       return c;
     }
 
-    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+    std::streamsize xsputn(const char *p, std::streamsize n) override {
       if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);
         qDebug() << buf.c_str();
@@ -481,7 +481,7 @@ class QWarningOStream : public std::ostream {
   class QWarningStreamBuf : public std::streambuf {
   protected:
     string buf;
-    virtual int_type overflow(int c) {
+    int_type overflow(int c) override {
       if (c == '\n') {
         qWarning() << buf.c_str();
         buf.clear();
@@ -491,7 +491,7 @@ class QWarningOStream : public std::ostream {
       return c;
     }
 
-    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+    std::streamsize xsputn(const char *p, std::streamsize n) override {
       if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);
         qWarning() << buf.c_str();
@@ -523,7 +523,7 @@ class QErrorOStream : public std::ostream {
   class QErrorStreamBuf : public std::streambuf {
   protected:
     string buf;
-    virtual int_type overflow(int c) {
+    int_type overflow(int c) override {
       if (c == '\n') {
         qCritical() << buf.c_str();
         buf.clear();
@@ -533,7 +533,7 @@ class QErrorOStream : public std::ostream {
       return c;
     }
 
-    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+    std::streamsize xsputn(const char *p, std::streamsize n) override {
       if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);
         qCritical() << buf.c_str();
@@ -562,7 +562,7 @@ void redirectErrorOutputToQCritical() {
 
 class NoQtUserInputFilter : public QObject {
 protected:
-  bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 bool NoQtUserInputFilter::eventFilter(QObject *, QEvent *event) {

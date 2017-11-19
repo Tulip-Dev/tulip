@@ -41,27 +41,27 @@ public:
 
   void updateWithDistance(const unsigned int dist);
 
-  bool isElement(const node n) const;
-  bool isElement(const edge e) const;
+  bool isElement(const node n) const override;
+  bool isElement(const edge e) const override;
 
-  Iterator<node> *getNodes() const;
-  Iterator<node> *getInNodes(const node n) const;
-  Iterator<node> *getOutNodes(const node n) const;
-  Iterator<node> *getInOutNodes(const node n) const;
-  Iterator<edge> *getEdges() const;
-  Iterator<edge> *getOutEdges(const node n) const;
-  Iterator<edge> *getInOutEdges(const node n) const;
-  Iterator<edge> *getInEdges(const node n) const;
+  Iterator<node> *getNodes() const override;
+  Iterator<node> *getInNodes(const node n) const override;
+  Iterator<node> *getOutNodes(const node n) const override;
+  Iterator<node> *getInOutNodes(const node n) const override;
+  Iterator<edge> *getEdges() const override;
+  Iterator<edge> *getOutEdges(const node n) const override;
+  Iterator<edge> *getInOutEdges(const node n) const override;
+  Iterator<edge> *getInEdges(const node n) const override;
 
-  const std::vector<node> &nodes() const {
+  const std::vector<node> &nodes() const override {
     return graphViewNodes;
   }
 
-  const std::vector<edge> &edges() const {
+  const std::vector<edge> &edges() const override {
     return graphViewEdges;
   }
 
-  Graph *getRoot() const {
+  Graph *getRoot() const override {
     return const_cast<NodeNeighborhoodView *>(this);
   }
 

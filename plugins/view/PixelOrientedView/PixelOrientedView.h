@@ -88,18 +88,18 @@ public:
                     "1.0", "View")
 
   PixelOrientedView(const PluginContext *);
-  ~PixelOrientedView();
-  std::string icon() const {
+  ~PixelOrientedView() override;
+  std::string icon() const override {
     return ":/pixel_oriented_view.png";
   }
-  QuickAccessBar *getQuickAccessBarImpl();
-  void setState(const DataSet &dataSet);
-  DataSet state() const;
+  QuickAccessBar *getQuickAccessBarImpl() override;
+  void setState(const DataSet &dataSet) override;
+  DataSet state() const override;
   Graph *getPixelOrientedGraph() {
     return pixelOrientedGraph;
   }
-  QList<QWidget *> configurationWidgets() const;
-  void interactorsInstalled(const QList<tlp::Interactor *> &);
+  QList<QWidget *> configurationWidgets() const override;
+  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
 
   void toggleInteractors(const bool activate);
   bool interactorsEnabled() const {
@@ -115,16 +115,16 @@ public:
   void generatePixelOverview(PixelOrientedOverview *pixelOverview,
                              GlMainWidget *glWidget = nullptr);
 
-  void draw();
-  void refresh();
+  void draw() override;
+  void refresh() override;
 
 public slots:
 
-  void graphChanged(Graph *graph);
+  void graphChanged(Graph *graph) override;
   void init();
-  void applySettings();
+  void applySettings() override;
   // inherited from GlMainView
-  virtual void centerView(bool = false);
+  void centerView(bool = false) override;
 
 private:
   void initPixelView();

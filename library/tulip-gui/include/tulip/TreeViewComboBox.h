@@ -39,12 +39,12 @@ public:
 
   void setModel(QAbstractItemModel *model);
 
-  virtual void showPopup();
-  virtual void hidePopup();
+  void showPopup() override;
+  void hidePopup() override;
 
   QModelIndex selectedIndex() const;
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
 public slots:
 

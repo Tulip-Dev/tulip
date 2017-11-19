@@ -92,9 +92,9 @@ public:
     csl->setLayoutModule(visibility);
   }
 
-  ~OGDFVisibility() {}
+  ~OGDFVisibility() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
 
     if (dataSet != nullptr) {
       int ival = 0;
@@ -104,7 +104,7 @@ public:
     }
   }
 
-  void afterCall() {
+  void afterCall() override {
     if (dataSet != nullptr) {
       bool bval = false;
 

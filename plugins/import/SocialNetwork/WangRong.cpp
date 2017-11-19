@@ -59,7 +59,7 @@ struct WangRong : public ImportModule {
     addInParameter<unsigned int>("m", paramHelp[2], "5");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int n = 300;
     unsigned int m0 = 5;
     unsigned int m = 5;

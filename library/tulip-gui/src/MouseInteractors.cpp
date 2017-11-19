@@ -192,9 +192,9 @@ void MouseElementDeleter::clear() {
 class MouseRotXRotY : public InteractorComponent {
 public:
   MouseRotXRotY() : x(INT_MAX), y(INT_MAX) {}
-  ~MouseRotXRotY() {}
+  ~MouseRotXRotY() override {}
   int x, y;
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 };
 
 bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
@@ -235,10 +235,10 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
 class MouseZoomRotZ : public InteractorComponent {
 public:
   MouseZoomRotZ() : x(INT_MAX), y(INT_MAX), inRotation(false), inZoom(false) {}
-  ~MouseZoomRotZ() {}
+  ~MouseZoomRotZ() override {}
   int x, y;
   bool inRotation, inZoom;
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 };
 
 bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
@@ -298,8 +298,8 @@ class MouseMove : public InteractorComponent {
 public:
   int x, y;
   MouseMove() : x(INT_MAX), y(INT_MAX) {}
-  ~MouseMove() {}
-  bool eventFilter(QObject *, QEvent *);
+  ~MouseMove() override {}
+  bool eventFilter(QObject *, QEvent *) override;
 };
 
 bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
@@ -344,7 +344,7 @@ public:
   }
 
 protected:
-  virtual void zoomAndPanAnimStepSlot(int animationStep);
+  void zoomAndPanAnimStepSlot(int animationStep) override;
 
 protected:
   tlp::View *view;

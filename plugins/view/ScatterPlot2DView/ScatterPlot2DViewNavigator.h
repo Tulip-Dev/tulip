@@ -32,16 +32,16 @@ class ScatterPlot2DViewNavigator : public GLInteractorComponent {
 
 public:
   ScatterPlot2DViewNavigator();
-  ~ScatterPlot2DViewNavigator();
+  ~ScatterPlot2DViewNavigator() override;
 
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *) {
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *) override {
     return false;
   }
-  bool compute(GlMainWidget *) {
+  bool compute(GlMainWidget *) override {
     return false;
   }
-  void viewChanged(View *view);
+  void viewChanged(View *view) override;
 
 private:
   ScatterPlot2D *getOverviewUnderPointer(const Coord &sceneCoord);

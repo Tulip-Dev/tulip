@@ -25,9 +25,9 @@
 class DifusionRateFunctionGaussian : public DiffusionRateFunction {
 public:
   DifusionRateFunctionGaussian(TimeDecreasingFunction *decreasingFunction);
-  virtual ~DifusionRateFunctionGaussian();
+  ~DifusionRateFunctionGaussian() override;
   double computeSpaceRate(unsigned int distance, unsigned int currentIteration,
-                          unsigned int maxIteration, unsigned int inputSampleSize);
+                          unsigned int maxIteration, unsigned int inputSampleSize) override;
 
 protected:
 };

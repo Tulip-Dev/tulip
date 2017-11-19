@@ -85,7 +85,7 @@ public:
                   const std::string &fileEncoding = std::string("UTF-8"),
                   unsigned int firstLine = 0, unsigned int lastLine = UINT_MAX);
 
-  virtual ~CSVSimpleParser();
+  ~CSVSimpleParser() override;
 
   inline std::string fileName() const {
     return _fileName;
@@ -98,7 +98,7 @@ public:
     return _textDelimiter;
   }
 
-  char decimalMark() const {
+  char decimalMark() const override {
     return _decimalMark;
   }
 
@@ -115,7 +115,7 @@ public:
   }
 
   bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
-             bool firstLineOnly = false);
+             bool firstLineOnly = false) override;
 
 protected:
   virtual std::string treatToken(const std::string &token, int row, int column);
@@ -148,18 +148,18 @@ private:
 class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser, public tlp::CSVContentHandler {
 public:
   CSVInvertMatrixParser(CSVParser *parser);
-  virtual ~CSVInvertMatrixParser();
+  ~CSVInvertMatrixParser() override;
 
-  char decimalMark() const {
+  char decimalMark() const override {
     return parser->decimalMark();
   }
 
   bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
-             bool firstLineOnly = false);
+             bool firstLineOnly = false) override;
 
-  bool begin();
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens);
-  bool end(unsigned int rowNumber, unsigned int columnNumber);
+  bool begin() override;
+  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool end(unsigned int rowNumber, unsigned int columnNumber) override;
 
 private:
   CSVParser *parser;

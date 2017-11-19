@@ -30,10 +30,10 @@ class ZoomAndPanHighlighter : public PathHighlighter, public QObject {
 public:
   inline ZoomAndPanHighlighter() : PathHighlighter("Zoom and pan") {}
   void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget,
-                 tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
-  void draw(tlp::GlMainWidget *glMainWidget);
-  bool isConfigurable() const;
-  QWidget *getConfigurationWidget();
+                 tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt) override;
+  void draw(tlp::GlMainWidget *glMainWidget) override;
+  bool isConfigurable() const override;
+  QWidget *getConfigurationWidget() override;
 };
 }
 #endif /* ZOOMANDPANHIGHLIGHTER_H_ */

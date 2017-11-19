@@ -54,7 +54,7 @@ public:
     return _graph;
   }
 
-  QStringList formats() const;
+  QStringList formats() const override;
 
 private:
   tlp::Graph *_graph;
@@ -77,7 +77,7 @@ public:
     return _params;
   }
 
-  QStringList formats() const;
+  QStringList formats() const override;
 
 signals:
   void mimeRun(tlp::Graph *) const;
@@ -93,7 +93,7 @@ public:
     return _panel;
   }
 
-  QStringList formats() const;
+  QStringList formats() const override;
 
 private:
   tlp::WorkspacePanel *_panel;

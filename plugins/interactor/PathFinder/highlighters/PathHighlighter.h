@@ -41,7 +41,7 @@ class PathFinder;
 class PathHighlighter : public Observable {
 public:
   PathHighlighter(const std::string &name);
-  virtual ~PathHighlighter();
+  ~PathHighlighter() override;
 
   inline std::string getName() const {
     return this->name;
@@ -58,7 +58,7 @@ protected:
   tlp::GlGraphInputData *getInputData(tlp::GlMainWidget *glMainWidget);
   void addGlEntity(tlp::GlScene *scene, tlp::GlSimpleEntity *entity, bool deleteOnExit = true,
                    const std::string &name = "");
-  void treatEvent(const Event &ev);
+  void treatEvent(const Event &ev) override;
 
 private:
   std::string name;

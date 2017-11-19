@@ -79,7 +79,7 @@ public:
                     "1.0", "Multilevel")
   OGDFMMMExampleNiceLayout(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::MMMExampleNiceLayout()) {}
-  ~OGDFMMMExampleNiceLayout() {}
+  ~OGDFMMMExampleNiceLayout() override {}
 };
 
 PLUGIN(OGDFMMMExampleNiceLayout)

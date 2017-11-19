@@ -45,7 +45,7 @@ class QuantitativeAxisConfigDialog : public QDialog {
 
 public:
   QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis);
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   void initAxisPartitionsTable();
@@ -67,7 +67,7 @@ class NominalAxisConfigDialog : public QDialog {
 
 public:
   NominalAxisConfigDialog(NominalParallelAxis *axis);
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
 
 public slots:
 

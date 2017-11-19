@@ -70,7 +70,7 @@ public:
   explicit ColorButton(QWidget *parent = nullptr) : ChooseColorButton(parent) {}
 
 protected:
-  void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *) override;
 };
 }
 

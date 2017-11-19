@@ -83,7 +83,7 @@ public:
       QString title, QWidget *parent = nullptr,
       const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST,
       const unsigned int maxSelectedStringsListSize = 0);
-  ~StringsListSelectionDialog();
+  ~StringsListSelectionDialog() override;
 
   /**
     * @brief This is a convenience static function that create a dialog

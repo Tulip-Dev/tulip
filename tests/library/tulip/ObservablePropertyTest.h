@@ -31,8 +31,8 @@ private:
   tlp::PropertyInterface *props[7];
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
 
   void testAddObserver();
   void testSynchronousSetNodeValue();

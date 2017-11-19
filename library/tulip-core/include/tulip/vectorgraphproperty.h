@@ -51,14 +51,14 @@ protected:
     _data.reserve(capacity);
     _data.resize(size);
   }
-  virtual ~ValArray() {}
-  void addElement(const unsigned int id) {
+  ~ValArray() override {}
+  void addElement(const unsigned int id) override {
     if (id >= _data.size()) {
       _data.resize(id);
       _data.push_back(TYPE());
     }
   }
-  void reserve(const size_t size) {
+  void reserve(const size_t size) override {
     _data.reserve(size);
   }
 

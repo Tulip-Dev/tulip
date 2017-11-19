@@ -69,7 +69,7 @@ public:
     addInParameter<double>("beta", paramHelp[3], "0.3");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int n = 750;
     unsigned int e = 3150;
 

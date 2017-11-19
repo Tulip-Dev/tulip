@@ -52,9 +52,9 @@ class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer, public Ob
 public:
   GlGraphLowDetailsRenderer(const GlGraphInputData *inputData);
 
-  ~GlGraphLowDetailsRenderer();
+  ~GlGraphLowDetailsRenderer() override;
 
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   void initSelectionRendering(RenderingEntitiesFlag, std::map<unsigned int, SelectedEntity> &,
                               unsigned int &) {
@@ -69,7 +69,7 @@ protected:
   void addObservers();
   void removeObservers();
   void updateObservers();
-  void treatEvent(const Event &ev);
+  void treatEvent(const Event &ev) override;
 
   GlScene *fakeScene;
 

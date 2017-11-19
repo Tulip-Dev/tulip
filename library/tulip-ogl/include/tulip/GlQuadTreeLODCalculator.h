@@ -45,41 +45,42 @@ class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, private 
 
 public:
   GlQuadTreeLODCalculator();
-  ~GlQuadTreeLODCalculator();
+  ~GlQuadTreeLODCalculator() override;
 
   /**
    * Set the SlScene used by this calculator
    */
-  void setScene(GlScene &scene);
+  void setScene(GlScene &scene) override;
 
   /**
    * To know if the calculator need to have entities returned by a visitor in GlScene
    */
-  bool needEntities();
+  bool needEntities() override;
   /**
    * Set if the calculator need to have entities
    */
-  void setNeedEntities(bool);
+  void setNeedEntities(bool) override;
 
   /**
    * This function is call by GlLODSceneVisitor when a simple entitie is found
    */
-  void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb);
+  void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) override;
   /**
    * This function is call by GlLODSceneVisitor when a node is found
    */
-  void addNodeBoundingBox(unsigned int id, const BoundingBox &bb);
+  void addNodeBoundingBox(unsigned int id, const BoundingBox &bb) override;
   /**
    * This function is call by GlLODSceneVisitor when an edge is found
    */
-  void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb);
+  void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb) override;
 
   /**
    * This function compute LOD
    * See compute function of GlCPULODCalculator for more details
    * This function do some computation and after call computeFor2DCamera() or computeFor3DCamera()
    */
-  void compute(const Vector<int, 4> &globalViewport, const Vector<int, 4> &currentViewport);
+  void compute(const Vector<int, 4> &globalViewport,
+               const Vector<int, 4> &currentViewport) override;
 
   /**
    * Specific function to compute LOD for 3D cameras
@@ -87,17 +88,17 @@ public:
   void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye,
                           const Matrix<float, 4> &transformMatrix,
                           const Vector<int, 4> &globalViewport,
-                          const Vector<int, 4> &currentViewport);
+                          const Vector<int, 4> &currentViewport) override;
 
   /**
    * Change the input data used by this LOD calculator
    */
-  void setInputData(const GlGraphInputData *newInputData);
+  void setInputData(const GlGraphInputData *newInputData) override;
 
   /**
    * Clone the calculator
    */
-  virtual GlLODCalculator *clone() {
+  GlLODCalculator *clone() override {
     GlQuadTreeLODCalculator *newCalculator = new GlQuadTreeLODCalculator();
     newCalculator->setScene(*glScene);
     newCalculator->setInputData(inputData);
@@ -106,7 +107,7 @@ public:
 
 protected:
   void update(PropertyInterface *property);
-  void treatEvent(const Event &ev);
+  void treatEvent(const Event &ev) override;
 
   void removeObservers();
   void addObservers();

@@ -54,7 +54,7 @@ public:
   }
 
 protected:
-  void highlightBlock(const QString &text);
+  void highlightBlock(const QString &text) override;
 
   bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState,
                                 const QTextCharFormat &style);

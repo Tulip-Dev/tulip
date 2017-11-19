@@ -92,9 +92,9 @@ public:
         static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
     csl->setLayoutModule(pivotMds);
   }
-  ~OGDFPivotMDS() {}
+  ~OGDFPivotMDS() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
 
     if (dataSet != nullptr) {
       bool bval = false;

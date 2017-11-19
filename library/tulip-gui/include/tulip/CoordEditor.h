@@ -43,17 +43,17 @@ class TLP_QT_SCOPE CoordEditor : public QDialog {
 
 public:
   explicit CoordEditor(QWidget *parent = nullptr, bool editSize = false);
-  ~CoordEditor();
+  ~CoordEditor() override;
 
   tlp::Coord coord() const;
 
   // redefinition to ensure it is shown in the center of its parent
-  void showEvent(QShowEvent *ev);
+  void showEvent(QShowEvent *ev) override;
 
 public slots:
   void setCoord(const tlp::Coord &s);
   // redefinition to ensure to catch the end of input
-  void done(int r);
+  void done(int r) override;
 
 signals:
   void coordChanged(tlp::Coord coord);

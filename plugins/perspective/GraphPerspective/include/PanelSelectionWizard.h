@@ -47,7 +47,7 @@ class PanelSelectionWizard : public QWizard {
 
 public:
   explicit PanelSelectionWizard(tlp::GraphHierarchiesModel *model, QWidget *parent = nullptr);
-  virtual ~PanelSelectionWizard();
+  ~PanelSelectionWizard() override;
 
   tlp::Graph *graph() const;
   QString panelName() const;
@@ -59,7 +59,7 @@ protected slots:
   void panelSelected(const QModelIndex &index);
 
 protected:
-  void done(int result);
+  void done(int result) override;
 };
 
 #endif // PANELSELECTIONWIZARD_H

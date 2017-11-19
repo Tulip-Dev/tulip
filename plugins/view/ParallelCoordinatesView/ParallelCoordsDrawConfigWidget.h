@@ -37,7 +37,7 @@ class ParallelCoordsDrawConfigWidget : public QWidget {
 
 public:
   ParallelCoordsDrawConfigWidget(QWidget *parent = nullptr);
-  ~ParallelCoordsDrawConfigWidget();
+  ~ParallelCoordsDrawConfigWidget() override;
 
   unsigned int getAxisHeight() const;
   void setAxisHeight(const unsigned int axisHeight);

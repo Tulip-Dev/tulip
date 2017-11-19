@@ -28,8 +28,8 @@ class FishEyesScreen : public ScreenFunction {
 
 public:
   FishEyesScreen();
-  Vec2f project(const Vec2f &) const;
-  Vec2f unproject(const Vec2f &) const;
+  Vec2f project(const Vec2f &) const override;
+  Vec2f unproject(const Vec2f &) const override;
   void setCenter(double x, double y);
   void setRadius(double r);
   double getRadius();

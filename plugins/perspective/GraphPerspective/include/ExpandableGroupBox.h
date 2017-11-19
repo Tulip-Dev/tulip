@@ -33,7 +33,7 @@ class ExpandableGroupBox : public QGroupBox {
 
 public:
   explicit ExpandableGroupBox(QWidget *parent = nullptr, const QString &title = QString());
-  virtual ~ExpandableGroupBox();
+  ~ExpandableGroupBox() override;
   bool expanded() const {
     return _expanded;
   }

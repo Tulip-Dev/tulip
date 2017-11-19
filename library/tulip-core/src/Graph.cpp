@@ -679,15 +679,15 @@ public:
         new StlIterator<Graph *, std::vector<tlp::Graph *>::iterator>(roots.begin(), roots.end());
   }
 
-  ~RootGraphsIterator() {
+  ~RootGraphsIterator() override {
     delete rootsIterator;
   }
 
-  Graph *next() {
+  Graph *next() override {
     return rootsIterator->next();
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return rootsIterator->hasNext();
   }
 };
@@ -1871,7 +1871,7 @@ struct DescendantGraphsIterator : public Iterator<Graph *> {
     }
   }
 
-  ~DescendantGraphsIterator() {
+  ~DescendantGraphsIterator() override {
     if (current)
       delete current;
 
@@ -1881,11 +1881,11 @@ struct DescendantGraphsIterator : public Iterator<Graph *> {
     }
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return current != nullptr;
   }
 
-  Graph *next() {
+  Graph *next() override {
     if (current) {
       Graph *g = current->next();
       Iterator<Graph *> *itg = g->getSubGraphs();

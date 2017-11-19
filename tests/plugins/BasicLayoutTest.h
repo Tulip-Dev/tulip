@@ -56,8 +56,8 @@ private:
                        PropType *prop = nullptr);
 
 public:
-  virtual void setUp();
-  virtual void tearDown();
+  void setUp() override;
+  void tearDown() override;
 
   void testBubbleTree();
   void testCircular();

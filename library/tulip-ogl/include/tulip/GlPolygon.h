@@ -56,7 +56,7 @@ public:
             const unsigned int nbOutlineColors, const bool filled = true,
             const bool outlined = true, const std::string &textureName = "",
             const float outlineSize = 1);
-  virtual ~GlPolygon();
+  ~GlPolygon() override;
 
   /**
    * @brief Change number of point of the polygon

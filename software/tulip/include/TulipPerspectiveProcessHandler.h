@@ -34,7 +34,7 @@
 class SelectionButton : public QPushButton {
 public:
   explicit SelectionButton(QWidget *parent = nullptr);
-  void paintEvent(QPaintEvent *e);
+  void paintEvent(QPaintEvent *e) override;
 };
 
 struct PerspectiveProcessInfo {

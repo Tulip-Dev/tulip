@@ -37,11 +37,11 @@ class SOMView;
 class EditColorScaleInteractor : public GLInteractorComponent {
 public:
   EditColorScaleInteractor();
-  virtual ~EditColorScaleInteractor();
-  bool eventFilter(QObject *, QEvent *);
-  void viewChanged(View *view);
-  bool compute(GlMainWidget *);
-  bool draw(GlMainWidget *glMainWidget);
+  ~EditColorScaleInteractor() override;
+  bool eventFilter(QObject *, QEvent *) override;
+  void viewChanged(View *view) override;
+  bool compute(GlMainWidget *) override;
+  bool draw(GlMainWidget *glMainWidget) override;
 
 protected:
   virtual void propertyChanged(SOMView *somView, const std::string &propertyName,

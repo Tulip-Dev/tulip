@@ -121,9 +121,9 @@ public:
                     "Computer Science (1995).",
                     "1.1", "Force Directed")
   OGDFGemFrick(const tlp::PluginContext *context);
-  ~OGDFGemFrick();
+  ~OGDFGemFrick() override;
 
-  void beforeCall();
+  void beforeCall() override;
 };
 
 OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context)

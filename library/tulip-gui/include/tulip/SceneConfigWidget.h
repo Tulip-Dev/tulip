@@ -42,7 +42,7 @@ class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
 
 public:
   explicit SceneConfigWidget(QWidget *parent = nullptr);
-  ~SceneConfigWidget();
+  ~SceneConfigWidget() override;
 
 signals:
   void settingsApplied();
@@ -54,7 +54,7 @@ public slots:
   void dynamicFontRBToggled(bool);
 
 protected:
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 };
 }
 

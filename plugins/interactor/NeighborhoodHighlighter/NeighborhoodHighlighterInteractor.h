@@ -51,19 +51,19 @@ public:
 
   NeighborhoodHighlighterInteractor(const PluginContext *);
 
-  virtual ~NeighborhoodHighlighterInteractor();
+  ~NeighborhoodHighlighterInteractor() override;
 
-  void construct();
+  void construct() override;
 
-  QWidget *configurationWidget() const {
+  QWidget *configurationWidget() const override {
     return configWidget;
   }
 
-  unsigned int priority() const {
+  unsigned int priority() const override {
     return StandardInteractorPriority::NeighborhoodHighlighter;
   }
 
-  virtual bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 
 private:
   NeighborhoodHighlighterConfigWidget *configWidget;
@@ -78,13 +78,13 @@ public:
 
   NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter);
 
-  ~NeighborhoodHighlighter();
+  ~NeighborhoodHighlighter() override;
 
-  bool eventFilter(QObject *widget, QEvent *e);
+  bool eventFilter(QObject *widget, QEvent *e) override;
 
-  bool draw(GlMainWidget *glMainWidget);
+  bool draw(GlMainWidget *glMainWidget) override;
 
-  void viewChanged(View *view);
+  void viewChanged(View *view) override;
 
   void setConfigWidget(NeighborhoodHighlighterConfigWidget *configWidget) {
     this->configWidget = configWidget;

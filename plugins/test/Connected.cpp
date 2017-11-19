@@ -26,7 +26,7 @@ public:
                     "Tests whether a graph is connected or not.", "1.0", "Topological Test")
   ConnectedTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::ConnectedTest::isConnected(graph);
   }
 };
@@ -38,7 +38,7 @@ public:
                     "Topology Update")
   MakeConnected(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
-  virtual bool run() {
+  bool run() override {
     std::vector<tlp::edge> edges;
     tlp::ConnectedTest::makeConnected(graph, edges);
     return true;

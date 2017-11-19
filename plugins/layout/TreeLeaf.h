@@ -51,8 +51,8 @@ public:
   PLUGININFORMATION("Tree Leaf", "David Auber", "01/12/1999",
                     "Implements a simple level-based tree layout.", "1.1", "Tree")
   TreeLeaf(const tlp::PluginContext *context);
-  ~TreeLeaf();
-  bool run();
+  ~TreeLeaf() override;
+  bool run() override;
 
 private:
   float minLayerSpacing;

@@ -61,9 +61,9 @@ public:
       dataSet = algorithmContext->dataSet;
     }
   }
-  virtual ~Algorithm() {}
+  ~Algorithm() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/32/plugin_algorithm.png";
   }
   /**
@@ -77,7 +77,7 @@ public:
    **/
   virtual bool run() = 0;
 
-  virtual std::string category() const {
+  std::string category() const override {
     return ALGORITHM_CATEGORY;
   }
   /**

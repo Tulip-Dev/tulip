@@ -53,17 +53,17 @@ public:
   /**
    * Construct chain of responsibility
    */
-  void construct() {
+  void construct() override {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseNodeBuilder);
     push_back(new MouseEdgeBuilder);
   }
 
-  QCursor cursor() const {
+  QCursor cursor() const override {
     return QCursor(Qt::PointingHandCursor);
   }
 
-  bool isCompatible(const std::string &viewName) const {
+  bool isCompatible(const std::string &viewName) const override {
     return (viewName == NodeLinkDiagramComponent::viewName);
   }
 };

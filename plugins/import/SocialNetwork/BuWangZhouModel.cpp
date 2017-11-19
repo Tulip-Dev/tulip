@@ -59,7 +59,7 @@ public:
     addInParameter<unsigned int>("m", paramHelp[2], "2");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int nb_nodes = 200;
     unsigned int types_of_nodes = 3;
     unsigned int m = 2;

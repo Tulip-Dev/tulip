@@ -38,7 +38,7 @@ public:
       "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.", "1.0",
       "Selection")
   LoopSelection(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 
 #endif

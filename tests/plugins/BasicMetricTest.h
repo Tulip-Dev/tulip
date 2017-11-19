@@ -52,8 +52,8 @@ private:
                        PropType *prop = nullptr);
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
 
   void testArityMetric();
   void testBetweennessCentrality();

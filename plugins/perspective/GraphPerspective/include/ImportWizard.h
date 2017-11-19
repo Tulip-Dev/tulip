@@ -38,7 +38,7 @@ class ImportWizard : public QWizard {
 
 public:
   explicit ImportWizard(QWidget *parent = nullptr);
-  virtual ~ImportWizard();
+  ~ImportWizard() override;
 
   QString algorithm() const;
   tlp::DataSet parameters() const;

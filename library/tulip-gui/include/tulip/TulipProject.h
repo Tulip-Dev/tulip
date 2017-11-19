@@ -86,7 +86,7 @@ class TLP_QT_SCOPE TulipProject : public QObject {
   TulipProject(const QString &);
 
 public:
-  virtual ~TulipProject();
+  ~TulipProject() override;
 
   /**
     @brief Starts a new TulipProject from scratch

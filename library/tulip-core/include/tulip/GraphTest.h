@@ -30,7 +30,7 @@ public:
     addOutParameter<bool>("result", "Whether the test succeeded or not.");
   }
 
-  virtual bool run() {
+  bool run() override {
     bool result = test();
 
     if (dataSet) {

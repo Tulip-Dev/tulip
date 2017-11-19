@@ -56,7 +56,7 @@ public:
   /**
    * @brief Virtual function used to draw the grid.
    */
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
   /**
    * @brief Accessor in reading to the dimensions to display.
    */
@@ -69,17 +69,17 @@ public:
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * @brief Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   bool displayDim[3];    /**< Which dimensions should be displayed ? Note that only one dimension at

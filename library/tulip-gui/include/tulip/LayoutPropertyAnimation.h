@@ -39,15 +39,15 @@ public:
                           int frameCount = 1, bool computeNodes = true, bool computeEdges = true,
                           QObject *parent = nullptr);
 
-  virtual ~LayoutPropertyAnimation() {}
+  ~LayoutPropertyAnimation() override {}
 
 protected:
-  virtual tlp::Coord getNodeFrameValue(const tlp::Coord &startValue, const tlp::Coord &endValue,
-                                       int frame);
-  virtual std::vector<tlp::Coord> getEdgeFrameValue(const std::vector<tlp::Coord> &startValue,
-                                                    const std::vector<tlp::Coord> &endValue,
-                                                    int frame);
-  bool equalEdges(const std::vector<tlp::Coord> &v1, const std::vector<tlp::Coord> &v2);
+  tlp::Coord getNodeFrameValue(const tlp::Coord &startValue, const tlp::Coord &endValue,
+                               int frame) override;
+  std::vector<tlp::Coord> getEdgeFrameValue(const std::vector<tlp::Coord> &startValue,
+                                            const std::vector<tlp::Coord> &endValue,
+                                            int frame) override;
+  bool equalEdges(const std::vector<tlp::Coord> &v1, const std::vector<tlp::Coord> &v2) override;
 
 private:
   std::map<std::pair<tlp::Coord, tlp::Coord>, tlp::Vector<double, 3>> steps;

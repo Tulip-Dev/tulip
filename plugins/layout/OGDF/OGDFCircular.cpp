@@ -94,9 +94,9 @@ public:
     addInParameter<double>("minDistCC", paramHelp[3], "20.0", false);
     addInParameter<double>("pageRatio", paramHelp[4], "1.0", false);
   }
-  ~OGDFCircular() {}
+  ~OGDFCircular() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {

@@ -41,7 +41,7 @@ public:
                     "All selected edges of the current graph will have their extremities selected "
                     "(no dangling edges).",
                     "1.0", "Selection")
-  bool run();
+  bool run() override;
 };
 
 class isGraphTest : public tlp::GraphTest {
@@ -51,7 +51,7 @@ class isGraphTest : public tlp::GraphTest {
                     "1.0", "Topological Test")
 public:
   isGraphTest(const tlp::PluginContext *context);
-  bool test();
+  bool test() override;
 };
 
 #endif // MAKESELECTIONGRAPH_H

@@ -72,7 +72,7 @@ struct GuillaumeLatapyModel : public ImportModule {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
 
     unsigned int nbNodes = 200;
 

@@ -48,7 +48,7 @@ class TLP_QT_SCOPE CSVGraphMappingConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
   CSVGraphMappingConfigurationWidget(QWidget *parent = nullptr);
-  ~CSVGraphMappingConfigurationWidget();
+  ~CSVGraphMappingConfigurationWidget() override;
 
   /**
     * @brief Configure the widget with the CSV import parameters.

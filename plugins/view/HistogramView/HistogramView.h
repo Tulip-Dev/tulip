@@ -81,27 +81,27 @@ public:
                     "1.1", "View")
 
   HistogramView(const PluginContext *);
-  ~HistogramView();
+  ~HistogramView() override;
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/histogram_view.png";
   }
 
-  void setState(const DataSet &dataSet);
-  DataSet state() const;
-  void graphChanged(Graph *graph);
+  void setState(const DataSet &dataSet) override;
+  DataSet state() const override;
+  void graphChanged(Graph *graph) override;
   Graph *histoGraph() {
     return _histoGraph;
   }
-  bool eventFilter(QObject *object, QEvent *event);
-  QList<QWidget *> configurationWidgets() const;
+  bool eventFilter(QObject *object, QEvent *event) override;
+  QList<QWidget *> configurationWidgets() const override;
 
   std::vector<Histogram *> getHistograms() const;
   bool smallMultiplesViewSet() const {
     return smallMultiplesView;
   }
 
-  QuickAccessBar *getQuickAccessBarImpl();
+  QuickAccessBar *getQuickAccessBarImpl() override;
 
   void switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail);
   void switchFromDetailedViewToSmallMultiples();
@@ -121,7 +121,7 @@ public:
 
   void updateHistograms(Histogram *detailOverview = nullptr);
 
-  void treatEvent(const Event &message);
+  void treatEvent(const Event &message) override;
 
   void afterSetNodeValue(PropertyInterface *, const node);
   void afterSetEdgeValue(PropertyInterface *, const edge);
@@ -141,14 +141,14 @@ public:
 public slots:
 
   void viewConfigurationChanged();
-  void draw();
-  void refresh();
-  void applySettings();
+  void draw() override;
+  void refresh() override;
+  void applySettings() override;
 
 protected slots:
 
 private:
-  void interactorsInstalled(const QList<tlp::Interactor *> &);
+  void interactorsInstalled(const QList<tlp::Interactor *> &) override;
   void registerTriggers();
   void initGlWidget(Graph *graph);
   void buildHistograms();

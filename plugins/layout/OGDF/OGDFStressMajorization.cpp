@@ -123,9 +123,9 @@ public:
     addInParameter<tlp::NumericProperty *>("edgeCostsProperty", paramHelp[8], "viewMetric");
   }
 
-  ~OGDFStressMajorization() {}
+  ~OGDFStressMajorization() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {

@@ -28,7 +28,7 @@ public:
                     "Tests whether a graph is a directed tree or not.", "1.0", "Topological Test")
   DirectedTreeTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::TreeTest::isTree(graph);
   }
 };
@@ -40,7 +40,7 @@ public:
                     "Tests whether a graph is a free tree or not.", "1.0", "Topological Test")
   FreeTreeTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::TreeTest::isFreeTree(graph);
   }
 };
@@ -54,7 +54,7 @@ public:
 
   tlp::node root;
 
-  virtual bool check(std::string &errorMsg) {
+  bool check(std::string &errorMsg) override {
     if (!tlp::TreeTest::isFreeTree(graph)) {
       errorMsg = "The graph is not topologically a tree";
       return false;
@@ -76,7 +76,7 @@ public:
     return true;
   }
 
-  virtual bool run() {
+  bool run() override {
     tlp::TreeTest::makeRootedTree(graph, root);
     return true;
   }

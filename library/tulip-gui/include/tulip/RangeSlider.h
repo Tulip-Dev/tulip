@@ -46,7 +46,7 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
 public:
   explicit RangeSlider(QWidget *parent = nullptr);
   explicit RangeSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
-  ~RangeSlider() {}
+  ~RangeSlider() override {}
 
   enum HandleMovementMode { FreeMovement, NoCrossing, NoOverlapping };
 
@@ -76,11 +76,11 @@ signals:
   void upperPositionChanged(int upper);
 
 protected:
-  virtual void keyPressEvent(QKeyEvent *event);
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual void paintEvent(QPaintEvent *event);
+  void keyPressEvent(QKeyEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
 
 private:
   enum RangeHandle { NoHandle, LowerHandle, UpperHandle };

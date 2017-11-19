@@ -38,8 +38,8 @@ public:
                     "<b>The graph must be acyclic</b>.",
                     "1.0", "Hierarchical")
   NodeMetric(const tlp::PluginContext *context);
-  bool run();
-  bool check(std::string &);
+  bool run() override;
+  bool check(std::string &) override;
 
 private:
   double getNodeValue(const tlp::node n);

@@ -25,9 +25,9 @@
 class DiffusionRateFunctionSimple : public DiffusionRateFunction {
 public:
   DiffusionRateFunctionSimple(TimeDecreasingFunction *timeFunction, unsigned int neighborhood);
-  virtual ~DiffusionRateFunctionSimple();
+  ~DiffusionRateFunctionSimple() override;
   double computeSpaceRate(unsigned int distance, unsigned int currentIteration,
-                          unsigned int maxIteration, unsigned int inputSampleSize);
+                          unsigned int maxIteration, unsigned int inputSampleSize) override;
 
 protected:
   unsigned int neighborhoodMax;

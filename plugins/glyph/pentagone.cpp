@@ -65,9 +65,9 @@ public:
   GLYPHINFORMATION("2D - Pentagon", "David Auber", "09/07/2002", "Textured Pentagon", "1.0",
                    NodeShape::Pentagon)
   Pentagon(const tlp::PluginContext *context = nullptr);
-  virtual ~Pentagon();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~Pentagon() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
 };
 PLUGIN(Pentagon)
 Pentagon::Pentagon(const tlp::PluginContext *context) : Glyph(context) {
@@ -101,7 +101,7 @@ public:
       pentagon = new GlPentagon(Coord(0, 0, 0), Size(.5, .5, 0));
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     pentagon->setLightingMode(false);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 

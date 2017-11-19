@@ -56,7 +56,7 @@ public:
     addInParameter<bool>("self loop", paramHelp[2], "false");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     // initialize a random sequence according to the given seed
     tlp::initRandomSequence();
 

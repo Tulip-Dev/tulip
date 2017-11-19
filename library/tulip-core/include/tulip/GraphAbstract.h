@@ -50,87 +50,87 @@ protected:
   GraphAbstract(Graph *supergraph, unsigned int id = 0);
 
 public:
-  virtual ~GraphAbstract();
-  virtual void clear();
+  ~GraphAbstract() override;
+  void clear() override;
   // use to enforce subgraph id
   Graph *addSubGraph(unsigned int id, BooleanProperty *selection = nullptr,
                      const std::string &name = "unnamed");
-  virtual Graph *addSubGraph(BooleanProperty *selection = nullptr,
-                             const std::string &name = "unnamed") {
+  Graph *addSubGraph(BooleanProperty *selection = nullptr,
+                     const std::string &name = "unnamed") override {
     return addSubGraph(0, selection, name);
   }
-  virtual void delSubGraph(Graph *);
-  virtual void delAllSubGraphs(Graph *);
-  inline Graph *getSuperGraph() const {
+  void delSubGraph(Graph *) override;
+  void delAllSubGraphs(Graph *) override;
+  inline Graph *getSuperGraph() const override {
     return supergraph;
   }
-  inline Graph *getRoot() const {
+  inline Graph *getRoot() const override {
     return root;
   }
-  virtual Iterator<Graph *> *getSubGraphs() const;
-  virtual bool isSubGraph(const Graph *sg) const;
-  virtual bool isDescendantGraph(const Graph *sg) const;
-  virtual Graph *getSubGraph(unsigned int id) const;
-  virtual Graph *getSubGraph(const std::string &name) const;
-  virtual Graph *getDescendantGraph(unsigned int id) const;
-  virtual Graph *getDescendantGraph(const std::string &name) const;
-  virtual Graph *getNthSubGraph(unsigned int n) const;
-  inline unsigned int numberOfSubGraphs() const {
+  Iterator<Graph *> *getSubGraphs() const override;
+  bool isSubGraph(const Graph *sg) const override;
+  bool isDescendantGraph(const Graph *sg) const override;
+  Graph *getSubGraph(unsigned int id) const override;
+  Graph *getSubGraph(const std::string &name) const override;
+  Graph *getDescendantGraph(unsigned int id) const override;
+  Graph *getDescendantGraph(const std::string &name) const override;
+  Graph *getNthSubGraph(unsigned int n) const override;
+  inline unsigned int numberOfSubGraphs() const override {
     return subgraphs.size();
   }
-  virtual unsigned int numberOfDescendantGraphs() const;
+  unsigned int numberOfDescendantGraphs() const override;
 
   //=======================================
-  virtual bool isMetaNode(const node) const;
-  virtual Graph *getNodeMetaInfo(const node) const;
-  virtual void delNodes(Iterator<node> *itN, bool deleteInAllGraphs);
-  virtual bool isMetaEdge(const edge) const;
-  virtual Iterator<edge> *getEdgeMetaInfo(const edge) const;
-  virtual void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false);
+  bool isMetaNode(const node) const override;
+  Graph *getNodeMetaInfo(const node) const override;
+  void delNodes(Iterator<node> *itN, bool deleteInAllGraphs) override;
+  bool isMetaEdge(const edge) const override;
+  Iterator<edge> *getEdgeMetaInfo(const edge) const override;
+  void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false) override;
   //=======================================
-  virtual node getOneNode() const;
-  virtual node getRandomNode() const;
-  virtual node getInNode(const node, unsigned int) const;
-  virtual node getOutNode(const node, unsigned int) const;
-  virtual edge getOneEdge() const;
-  virtual edge getRandomEdge() const;
+  node getOneNode() const override;
+  node getRandomNode() const override;
+  node getInNode(const node, unsigned int) const override;
+  node getOutNode(const node, unsigned int) const override;
+  edge getOneEdge() const override;
+  edge getRandomEdge() const override;
   //========================================
-  bool existProperty(const std::string &) const;
-  bool existLocalProperty(const std::string &) const;
-  void delLocalProperty(const std::string &);
-  void addLocalProperty(const std::string &name, PropertyInterface *prop);
-  Iterator<std::string> *getLocalProperties() const;
-  Iterator<std::string> *getInheritedProperties() const;
-  Iterator<std::string> *getProperties() const;
-  Iterator<PropertyInterface *> *getLocalObjectProperties() const;
-  Iterator<PropertyInterface *> *getInheritedObjectProperties() const;
-  Iterator<PropertyInterface *> *getObjectProperties() const;
-  PropertyInterface *getProperty(const std::string &) const;
+  bool existProperty(const std::string &) const override;
+  bool existLocalProperty(const std::string &) const override;
+  void delLocalProperty(const std::string &) override;
+  void addLocalProperty(const std::string &name, PropertyInterface *prop) override;
+  Iterator<std::string> *getLocalProperties() const override;
+  Iterator<std::string> *getInheritedProperties() const override;
+  Iterator<std::string> *getProperties() const override;
+  Iterator<PropertyInterface *> *getLocalObjectProperties() const override;
+  Iterator<PropertyInterface *> *getInheritedObjectProperties() const override;
+  Iterator<PropertyInterface *> *getObjectProperties() const override;
+  PropertyInterface *getProperty(const std::string &) const override;
 
   // to get viewMetaGraph property
   GraphProperty *getMetaGraphProperty();
 
-  virtual void setName(const std::string &name);
-  virtual std::string getName() const;
+  void setName(const std::string &name) override;
+  std::string getName() const override;
 
-  virtual Iterator<node> *bfs(const node root = node()) const;
-  virtual Iterator<node> *dfs(const node root = node()) const;
+  Iterator<node> *bfs(const node root = node()) const override;
+  Iterator<node> *dfs(const node root = node()) const override;
 
 protected:
-  DataSet &getNonConstAttributes() {
+  DataSet &getNonConstAttributes() override {
     return attributes;
   }
-  void setSuperGraph(Graph *);
+  void setSuperGraph(Graph *) override;
   PropertyManager *propertyContainer;
   const std::set<edge> &getReferencedEdges(const edge) const;
 
-  virtual bool renameLocalProperty(PropertyInterface *prop, const std::string &newName);
+  bool renameLocalProperty(PropertyInterface *prop, const std::string &newName) override;
 
   // internally used to deal with sub graph deletion
-  virtual void clearSubGraphs();
-  virtual void removeSubGraph(Graph *);
-  virtual void restoreSubGraph(Graph *);
-  virtual void setSubGraphToKeep(Graph *);
+  void clearSubGraphs() override;
+  void removeSubGraph(Graph *) override;
+  void restoreSubGraph(Graph *) override;
+  void setSubGraphToKeep(Graph *) override;
 
 private:
   // notification of addition/deletion of inherited properties

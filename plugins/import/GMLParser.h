@@ -217,77 +217,77 @@ struct GMLBuilder {
 };
 
 struct GMLTrue : public GMLBuilder {
-  bool addBool(const std::string &, const bool) {
+  bool addBool(const std::string &, const bool) override {
     return true;
   }
-  bool addInt(const std::string &, const int) {
+  bool addInt(const std::string &, const int) override {
     return true;
   }
-  bool addDouble(const std::string &, const double) {
+  bool addDouble(const std::string &, const double) override {
     return true;
   }
-  bool addString(const std::string &, const std::string &) {
+  bool addString(const std::string &, const std::string &) override {
     return true;
   }
-  bool addStruct(const std::string &, GMLBuilder *&newBuilder) {
+  bool addStruct(const std::string &, GMLBuilder *&newBuilder) override {
     newBuilder = new GMLTrue();
     return true;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
 
 struct GMLFalse : public GMLBuilder {
-  bool addBool(const std::string &, const bool) {
+  bool addBool(const std::string &, const bool) override {
     return false;
   }
-  bool addInt(const std::string &, const int) {
+  bool addInt(const std::string &, const int) override {
     return false;
   }
-  bool addDouble(const std::string &, const double) {
+  bool addDouble(const std::string &, const double) override {
     return false;
   }
-  bool addString(const std::string &, const std::string &) {
+  bool addString(const std::string &, const std::string &) override {
     return false;
   }
-  bool addStruct(const std::string &, GMLBuilder *&newBuilder) {
+  bool addStruct(const std::string &, GMLBuilder *&newBuilder) override {
     newBuilder = new GMLFalse();
     return false;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
 
 struct GMLWriter : public GMLBuilder {
-  bool addBool(const std::string &st, const bool boolean) {
+  bool addBool(const std::string &st, const bool boolean) override {
     std::cout << st << " ==> "
               << "bool::" << boolean << std::endl;
     return true;
   }
-  bool addInt(const std::string &st, const int integer) {
+  bool addInt(const std::string &st, const int integer) override {
     std::cout << st << " ==> "
               << "int::" << integer << std::endl;
     return true;
   }
-  bool addDouble(const std::string &st, const double real) {
+  bool addDouble(const std::string &st, const double real) override {
     std::cout.flags(std::ios::scientific);
     std::cout << st << " ==> "
               << "real::" << real << std::endl;
     return true;
   }
-  bool addString(const std::string &st, const std::string &str) {
+  bool addString(const std::string &st, const std::string &str) override {
     std::cout << st << " ==> "
               << "string::" << str << std::endl;
     return true;
   }
-  bool addStruct(const std::string &structName, GMLBuilder *&newBuilder) {
+  bool addStruct(const std::string &structName, GMLBuilder *&newBuilder) override {
     std::cout << "struct::" << structName << std::endl;
     newBuilder = new GMLWriter();
     return true;
   }
-  bool close() {
+  bool close() override {
     std::cout << "EndStruct::" << std::endl;
     return true;
   }

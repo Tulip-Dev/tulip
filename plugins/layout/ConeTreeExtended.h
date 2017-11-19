@@ -56,8 +56,8 @@ public:
       "Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995).",
       "1.0", "Tree")
   ConeTreeExtended(const tlp::PluginContext *context);
-  ~ConeTreeExtended();
-  bool run();
+  ~ConeTreeExtended() override;
+  bool run() override;
 
 private:
   double treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double> *posRelX,

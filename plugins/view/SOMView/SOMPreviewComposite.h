@@ -48,7 +48,7 @@ public:
   SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string &propertyName,
                       tlp::ColorProperty *colorProperty, SOMMap *map, tlp::ColorScale *colorScale,
                       double minValue, double maxValue);
-  virtual ~SOMPreviewComposite();
+  ~SOMPreviewComposite() override;
 
   inline std::string getPropertyName() const {
     return propertyName;

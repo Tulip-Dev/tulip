@@ -36,9 +36,9 @@ private:
 
 public:
   MouseEdgeSelector();
-  ~MouseEdgeSelector() {}
+  ~MouseEdgeSelector() override {}
   bool draw(GlMainWidget *);
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 };
 }
 #endif

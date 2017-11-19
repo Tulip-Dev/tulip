@@ -57,7 +57,7 @@ struct FuLiao : public ImportModule {
     addInParameter<double>("delta", paramHelp[2], "0.5");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int n = 300;
     unsigned int m = 5;
     double d = 0.5;

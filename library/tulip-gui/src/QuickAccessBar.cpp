@@ -52,7 +52,7 @@ class TopPopupComboBox : public QComboBox {
 public:
   TopPopupComboBox(QWidget *parent = nullptr) : QComboBox(parent), _view(nullptr) {}
 
-  bool eventFilter(QObject *, QEvent *ev) {
+  bool eventFilter(QObject *, QEvent *ev) override {
     if (ev->type() == QEvent::MouseButtonPress) {
       QMouseEvent *mouseEv = static_cast<QMouseEvent *>(ev);
 
@@ -67,7 +67,7 @@ public:
     return false;
   }
 
-  virtual void showPopup() {
+  void showPopup() override {
     QPoint mainWindowPos = tlp::Perspective::instance()->mainWindow()->pos();
 
     if (_view == nullptr) {
@@ -86,7 +86,7 @@ public:
     _view->show();
   }
 
-  virtual void hidePopup() {
+  void hidePopup() override {
     if (_view != nullptr)
       _view->close();
   }

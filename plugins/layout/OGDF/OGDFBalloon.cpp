@@ -90,9 +90,9 @@ public:
     // ComponentSplitterLayout takes ownership of the BalloonLayout instance
     csl->setLayoutModule(balloon);
   }
-  ~OGDFBalloon() {}
+  ~OGDFBalloon() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
 
     if (dataSet != nullptr) {
       bool val = false;

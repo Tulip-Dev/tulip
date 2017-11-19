@@ -31,16 +31,16 @@ class HistogramViewNavigator : public GLInteractorComponent {
 
 public:
   HistogramViewNavigator();
-  ~HistogramViewNavigator();
+  ~HistogramViewNavigator() override;
 
-  bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *) {
+  bool eventFilter(QObject *, QEvent *) override;
+  bool draw(GlMainWidget *) override {
     return false;
   }
-  bool compute(GlMainWidget *) {
+  bool compute(GlMainWidget *) override {
     return false;
   }
-  void viewChanged(View *view);
+  void viewChanged(View *view) override;
 
 private:
   Histogram *getOverviewUnderPointer(const Coord &sceneCoord) const;

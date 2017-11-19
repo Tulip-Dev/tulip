@@ -57,7 +57,7 @@ struct HolmeKim : public ImportModule {
     addInParameter<double>("p", paramHelp[2], "0.5");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int n = 300;
     unsigned int m = 5;
     double mu = 0.5;

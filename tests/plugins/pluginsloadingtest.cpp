@@ -33,7 +33,7 @@ class PluginLoaderTest : public tlp::PluginLoaderTxt {
 public:
   PluginLoaderTest() : allPluginsLoaded(true) {}
 
-  void aborted(const std::string &filename, const std::string &errormsg) {
+  void aborted(const std::string &filename, const std::string &errormsg) override {
     const std::string &libName = tlp::PluginLibraryLoader::getCurrentPluginFileName();
     // plugins may be loaded twice because it may exist an other version
     // of the plugins in a CMakeFiles sub dir (/CMakeRelink.dir)

@@ -172,10 +172,10 @@ public:
   GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0",
                    NodeShape::Cylinder)
   Cylinder(const tlp::PluginContext *context = nullptr);
-  virtual ~Cylinder();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~Cylinder() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(Cylinder)
 
@@ -238,10 +238,10 @@ public:
   GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder",
                    "1.0", NodeShape::HalfCylinder)
   HalfCylinder(const tlp::PluginContext *context = nullptr);
-  virtual ~HalfCylinder();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~HalfCylinder() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 
 private:
 };
@@ -302,7 +302,7 @@ public:
 
   EECylinder(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge, node n, const Color &glyphColor, const Color &, float) {
+  void draw(edge, node n, const Color &glyphColor, const Color &, float) override {
     glEnable(GL_LIGHTING);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 

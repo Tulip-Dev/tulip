@@ -53,7 +53,7 @@ public:
    * See QObject::eventFilter for details.
    * @note The target object is the one on which the InteractorComponent has been installed.
    */
-  virtual bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
   /**
    * @brief This method is called after the component is uninstalled from its target.
@@ -129,11 +129,11 @@ public:
     @param text The text set on the interactor's action
     */
   InteractorComposite(const QIcon &icon, const QString &text = "");
-  virtual ~InteractorComposite();
+  ~InteractorComposite() override;
 
-  virtual tlp::View *view() const;
-  virtual QAction *action() const;
-  virtual QCursor cursor() const;
+  tlp::View *view() const override;
+  QAction *action() const override;
+  QCursor cursor() const override;
 
   /**
     @brief Since InteractorComposte behaves like a list of InteractorComponent, this method is here
@@ -167,10 +167,10 @@ public:
   void push_front(InteractorComponent *component);
 
 public slots:
-  virtual void undoIsDone();
-  virtual void setView(tlp::View *view);
-  virtual void install(QObject *target);
-  virtual void uninstall();
+  void undoIsDone() override;
+  void setView(tlp::View *view) override;
+  void install(QObject *target) override;
+  void uninstall() override;
 };
 }
 #endif // INTERACTORCOMPOSITE_H

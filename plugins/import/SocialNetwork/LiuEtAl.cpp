@@ -50,9 +50,9 @@ struct LiuEtAl : public ImportModule {
     addInParameter<unsigned int>("nodes", paramHelp[0], "300");
   }
 
-  ~LiuEtAl() {}
+  ~LiuEtAl() override {}
 
-  bool importGraph() {
+  bool importGraph() override {
     unsigned int n = 300;
     unsigned int m = 5;
 

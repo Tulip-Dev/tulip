@@ -131,7 +131,7 @@ namespace tlp {
 class UniformKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     if (fabs(val) < 1) {
       return 1. / 2.;
     } else {
@@ -143,7 +143,7 @@ public:
 class GaussianKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     return (1. / M_PI) * exp(-square(val) / 2.);
   }
 };
@@ -151,7 +151,7 @@ public:
 class TriangleKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
@@ -165,7 +165,7 @@ public:
 class EpanechnikovKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
@@ -179,7 +179,7 @@ public:
 class QuarticKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {
@@ -193,7 +193,7 @@ public:
 class CubicKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     double valAbs = fabs(val);
 
     if (valAbs < 1.) {
@@ -208,7 +208,7 @@ public:
 class CosineKernel : public KernelFunction {
 
 public:
-  double operator()(double val) {
+  double operator()(double val) override {
     double valAbs = fabs(val);
 
     if (valAbs < 1) {

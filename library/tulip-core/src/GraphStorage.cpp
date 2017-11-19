@@ -88,7 +88,7 @@ void GraphStorage::restoreAdj(const node n, const std::vector<edge> &edges) {
 struct IdsMemento : public GraphStorageIdsMemento {
   IdContainer<node> nodeIds;
   IdContainer<edge> edgeIds;
-  ~IdsMemento() {}
+  ~IdsMemento() override {}
 };
 //=======================================================
 /**
@@ -118,11 +118,11 @@ void GraphStorage::restoreIdsMemento(const GraphStorageIdsMemento *memento) {
 struct EdgeContainerIterator : public Iterator<edge>, public MemoryPool<EdgeContainerIterator> {
   std::vector<edge>::iterator it, itEnd;
   EdgeContainerIterator(std::vector<edge> &v) : it(v.begin()), itEnd(v.end()) {}
-  ~EdgeContainerIterator() {}
-  bool hasNext() {
+  ~EdgeContainerIterator() override {}
+  bool hasNext() override {
     return (it != itEnd);
   }
-  edge next() {
+  edge next() override {
     assert(hasNext());
     edge tmp = (*it);
     ++it;
@@ -183,9 +183,9 @@ struct IOEdgeContainerIterator : public Iterator<edge>,
     prepareNext();
   }
 
-  ~IOEdgeContainerIterator() {}
+  ~IOEdgeContainerIterator() override {}
 
-  edge next() {
+  edge next() override {
     // check hasNext()
     assert(curEdge.isValid());
     // we are already pointing to the next
@@ -195,7 +195,7 @@ struct IOEdgeContainerIterator : public Iterator<edge>,
     return tmp;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (curEdge.isValid());
   }
 };
@@ -216,15 +216,15 @@ struct IONodesIterator : public Iterator<node>, public MemoryPool<IONodesIterato
       it = new IOEdgeContainerIterator<io_type>(n, nEdges, edges);
   }
 
-  ~IONodesIterator() {
+  ~IONodesIterator() override {
     delete it;
   }
 
-  bool hasNext() {
+  bool hasNext() override {
     return (it->hasNext());
   }
 
-  node next() {
+  node next() override {
     // check hasNext()
     assert(it->hasNext());
     const std::pair<node, node> &ends = edges[it->next()];

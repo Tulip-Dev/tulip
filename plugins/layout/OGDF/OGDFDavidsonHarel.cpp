@@ -123,7 +123,7 @@ public:
     addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
   }
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {
@@ -161,7 +161,7 @@ public:
     }
   }
 
-  ~OGDFDavidsonHarel() {}
+  ~OGDFDavidsonHarel() override {}
 };
 
 PLUGIN(OGDFDavidsonHarel)

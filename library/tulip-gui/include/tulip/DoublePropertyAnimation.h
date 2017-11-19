@@ -33,11 +33,11 @@ public:
                           tlp::DoubleProperty *out, tlp::BooleanProperty *selection = nullptr,
                           int frameCount = 1, bool computeNodes = true, bool computeEdges = false,
                           QObject *parent = nullptr);
-  ~DoublePropertyAnimation() {}
+  ~DoublePropertyAnimation() override {}
 
 protected:
-  double getNodeFrameValue(const double &startValue, const double &endValue, int frame);
-  double getEdgeFrameValue(const double &startValue, const double &endValue, int frame);
+  double getNodeFrameValue(const double &startValue, const double &endValue, int frame) override;
+  double getEdgeFrameValue(const double &startValue, const double &endValue, int frame) override;
 };
 }
 

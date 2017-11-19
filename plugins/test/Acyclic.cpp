@@ -26,7 +26,7 @@ public:
                     "Tests whether a graph is acyclic or not.", "1.0", "Topological Test")
   AcyclicTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::AcyclicTest::isAcyclic(graph);
   }
 };
@@ -38,7 +38,7 @@ public:
                     "Topology Update")
   MakeAcyclic(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
-  virtual bool run() {
+  bool run() override {
     std::vector<tlp::edge> edges;
     std::vector<tlp::SelfLoops> selfLoops;
     tlp::AcyclicTest::makeAcyclic(graph, edges, selfLoops);

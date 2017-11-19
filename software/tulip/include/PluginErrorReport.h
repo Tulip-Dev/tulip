@@ -39,11 +39,11 @@ class PluginErrorReport : public QWidget {
 public:
   explicit PluginErrorReport(const QString &fileName, const QString &errorMsg,
                              QWidget *parent = nullptr);
-  ~PluginErrorReport();
+  ~PluginErrorReport() override;
 
 protected:
-  virtual void focusInEvent(QFocusEvent *);
-  virtual void focusOutEvent(QFocusEvent *);
+  void focusInEvent(QFocusEvent *) override;
+  void focusOutEvent(QFocusEvent *) override;
 
 private:
   Ui::PluginErrorReportData *_ui;

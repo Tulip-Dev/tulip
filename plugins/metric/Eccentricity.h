@@ -60,8 +60,8 @@ public:
                     "of these distances.",
                     "2.0", "Graph")
   EccentricityMetric(const tlp::PluginContext *context);
-  ~EccentricityMetric();
-  bool run();
+  ~EccentricityMetric() override;
+  bool run() override;
   double compute(unsigned int nPos, const std::vector<tlp::node> &nodes);
 
 private:

@@ -30,8 +30,8 @@ public:
   GLYPHINFORMATION("2D - Arrow", "Jonathan Dubois", "09/04/09", "Edge Extremity with 2D arrow",
                    "1.0", EdgeExtremityShape::Arrow)
   GlArrow2DEdgeExtremity(tlp::PluginContext *gc);
-  virtual ~GlArrow2DEdgeExtremity();
-  void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float lod);
+  ~GlArrow2DEdgeExtremity() override;
+  void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float lod) override;
 
 protected:
   static GlTriangle *triangle;

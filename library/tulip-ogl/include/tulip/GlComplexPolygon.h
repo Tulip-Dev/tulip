@@ -113,12 +113,12 @@ public:
   GlComplexPolygon(const std::vector<std::vector<Coord>> &coords, Color fcolor, Color ocolor,
                    int polygonEdgesType = 0, const std::string &textureName = "");
 
-  virtual ~GlComplexPolygon() {}
+  ~GlComplexPolygon() override {}
 
   /**
    * @brief Draw the complex polygon
    */
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
   /**
    * @brief Set if the polygon is outlined or not
@@ -214,12 +214,12 @@ public:
   /**
    * @brief Translate entity
    */
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * @brief Function to export data and type outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * @brief Function to export data in outString (in XML format)
@@ -229,7 +229,7 @@ public:
   /**
    * @brief Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
   const std::vector<std::vector<Coord>> &getPolygonSides() const {
     return points;

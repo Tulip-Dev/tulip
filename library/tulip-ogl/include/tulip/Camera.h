@@ -67,7 +67,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~Camera();
+  ~Camera() override;
 
   /**
    * @brief Set the camera's scene

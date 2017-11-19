@@ -42,11 +42,11 @@ public:
                   const Color &endColor, const float startSize, const float endSize,
                   const unsigned int nbCurvePoints);
 
-  virtual ~AbstractGlCurve();
+  ~AbstractGlCurve() override;
 
-  void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  void translate(const Coord &move);
+  void translate(const Coord &move) override;
 
   virtual void setTexture(const std::string &texture) {
     this->texture = texture;
@@ -91,9 +91,9 @@ public:
     this->lookDir = lookDir;
   }
 
-  void getXML(std::string &);
+  void getXML(std::string &) override;
 
-  void setWithXML(const std::string &, unsigned int &);
+  void setWithXML(const std::string &, unsigned int &) override;
 
   virtual void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor,
                          const Color &endColor, const float startSize, const float endSize,

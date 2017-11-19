@@ -41,8 +41,8 @@ class TLP_GL_SCOPE GlCPULODCalculator : public GlLODCalculator {
 
 public:
   GlCPULODCalculator();
-  virtual ~GlCPULODCalculator();
-  virtual GlLODCalculator *clone() {
+  ~GlCPULODCalculator() override;
+  GlLODCalculator *clone() override {
     GlCPULODCalculator *calculator = new GlCPULODCalculator();
     calculator->setComputeOutScreenLOD(computeOutScreenLOD);
     return calculator;
@@ -51,29 +51,29 @@ public:
   /**
    * Begin a new camera (use to render next entities)
    */
-  virtual void beginNewCamera(Camera *camera);
+  void beginNewCamera(Camera *camera) override;
   /**
    * This function is called by GlLODSceneVisitor when a simple entity is found
    */
-  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb);
+  void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) override;
   /**
    * This function is called by GlLODSceneVisitor when a node is found
    */
-  virtual void addNodeBoundingBox(unsigned int id, const BoundingBox &bb);
+  void addNodeBoundingBox(unsigned int id, const BoundingBox &bb) override;
   /**
    * This function is called by GlLODSceneVisitor when an edge is found
    */
-  virtual void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb);
+  void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb) override;
 
   /**
    * Reserve memory to store nodes LOD, this function is an optimisation function
    */
-  virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
+  void reserveMemoryForNodes(unsigned int numberOfNodes) override;
 
   /**
    * Reserve memory to store edges LOD, this function is an optimisation function
    */
-  virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
+  void reserveMemoryForEdges(unsigned int numberOfEdges) override;
 
   /**
    * Compute all bounding boxes
@@ -85,12 +85,13 @@ public:
    * \param globalViewport is used to compute LOD
    * \param currentViewport return -1 for all entities outside this viewport
    */
-  virtual void compute(const Vector<int, 4> &globalViewport, const Vector<int, 4> &currentViewport);
+  void compute(const Vector<int, 4> &globalViewport,
+               const Vector<int, 4> &currentViewport) override;
 
   /**
    * This function return the scene bounding box
    */
-  virtual BoundingBox getSceneBoundingBox() {
+  BoundingBox getSceneBoundingBox() override {
     return sceneBoundingBox;
   }
 

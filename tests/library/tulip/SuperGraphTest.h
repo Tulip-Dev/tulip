@@ -44,8 +44,8 @@ private:
   tlp::Graph *graph;
 
 public:
-  void setUp();
-  void tearDown();
+  void setUp() override;
+  void tearDown() override;
 
   void testAddDel();
   void testClear();

@@ -84,9 +84,9 @@ public:
     csl->setLayoutModule(new ogdf::UpwardPlanarizationLayout());
   }
 
-  ~OGDFUpwardPlanarization() {}
+  ~OGDFUpwardPlanarization() override {}
 
-  void afterCall() {
+  void afterCall() override {
     if (dataSet != nullptr) {
       bool bval = false;
 

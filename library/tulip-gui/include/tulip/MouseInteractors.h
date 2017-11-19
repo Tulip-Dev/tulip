@@ -34,8 +34,8 @@ class NodeLinkDiagramComponent;
 class TLP_QT_SCOPE MousePanNZoomNavigator : public InteractorComponent {
 public:
   MousePanNZoomNavigator() : cameraScaleFactor(1), isGesturing(false) {}
-  ~MousePanNZoomNavigator() {}
-  bool eventFilter(QObject *, QEvent *);
+  ~MousePanNZoomNavigator() override {}
+  bool eventFilter(QObject *, QEvent *) override;
 
 protected:
   float cameraScaleFactor;
@@ -47,9 +47,9 @@ protected:
 class TLP_QT_SCOPE MouseElementDeleter : public InteractorComponent {
 public:
   MouseElementDeleter() : glMainWidget(nullptr) {}
-  ~MouseElementDeleter() {}
-  bool eventFilter(QObject *, QEvent *);
-  void clear();
+  ~MouseElementDeleter() override {}
+  bool eventFilter(QObject *, QEvent *) override;
+  void clear() override;
   virtual void delElement(tlp::Graph *graph, tlp::SelectedEntity &selectedEntity);
 
 private:
@@ -67,10 +67,10 @@ private:
 
 public:
   MouseNKeysNavigator() : currentSpecInteractorComponent(nullptr), nldc(nullptr) {}
-  ~MouseNKeysNavigator() {}
-  bool eventFilter(QObject *, QEvent *);
-  void clear();
-  void viewChanged(tlp::View *view);
+  ~MouseNKeysNavigator() override {}
+  bool eventFilter(QObject *, QEvent *) override;
+  void clear() override;
+  void viewChanged(tlp::View *view) override;
 
 private:
   // member below are to manage meta node navigation

@@ -102,7 +102,7 @@ struct TLPGraphBuilder : public TLPTrue {
     version = 0.0;
   }
 
-  virtual ~TLPGraphBuilder() {}
+  ~TLPGraphBuilder() override {}
 
   Graph *getSubGraph(int id) {
     std::map<int, Graph *>::const_iterator it = clusterIndex.find(id);
@@ -114,7 +114,7 @@ struct TLPGraphBuilder : public TLPTrue {
     return nullptr;
   }
 
-  bool addString(const std::string &str) {
+  bool addString(const std::string &str) override {
     // only used to handle the version of tlp file format
     if (!version) {
       const char *cptr = str.c_str();
@@ -448,19 +448,19 @@ struct TLPGraphBuilder : public TLPTrue {
 
     return false;
   }
-  bool addStruct(const std::string &structName, TLPBuilder *&newBuilder);
+  bool addStruct(const std::string &structName, TLPBuilder *&newBuilder) override;
 };
 //=================================================================================
 struct TLPNodeBuilder : public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   TLPNodeBuilder(TLPGraphBuilder *graphBuilder) : graphBuilder(graphBuilder) {}
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     return graphBuilder->addNode(id);
   }
-  bool addRange(int first, int second) {
+  bool addRange(int first, int second) override {
     return graphBuilder->addNodes(first, second);
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -468,10 +468,10 @@ struct TLPNodeBuilder : public TLPFalse {
 struct TLPNodesBuilder : public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   TLPNodesBuilder(TLPGraphBuilder *graphBuilder) : graphBuilder(graphBuilder) {}
-  bool addInt(const int nbNodes) {
+  bool addInt(const int nbNodes) override {
     return graphBuilder->reserveNodes(nbNodes);
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -481,7 +481,7 @@ struct TLPEdgeBuilder : public TLPFalse {
   int nbParameter;
   std::vector<int> parameters;
   TLPEdgeBuilder(TLPGraphBuilder *graphBuilder) : graphBuilder(graphBuilder), nbParameter(0) {}
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     if (nbParameter < 3) {
       parameters.push_back(id);
       nbParameter++;
@@ -489,7 +489,7 @@ struct TLPEdgeBuilder : public TLPFalse {
     } else
       return false;
   }
-  bool close() {
+  bool close() override {
     if (nbParameter == 3) {
       return graphBuilder->addEdge(parameters[0], parameters[1], parameters[2]);
     } else
@@ -500,10 +500,10 @@ struct TLPEdgeBuilder : public TLPFalse {
 struct TLPEdgesBuilder : public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   TLPEdgesBuilder(TLPGraphBuilder *graphBuilder) : graphBuilder(graphBuilder) {}
-  bool addInt(const int nbEdges) {
+  bool addInt(const int nbEdges) override {
     return graphBuilder->reserveEdges(nbEdges);
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -513,7 +513,7 @@ struct TLPClusterBuilder : public TLPFalse {
   int clusterId, supergraphId;
   TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph = 0)
       : graphBuilder(graphBuilder), clusterId(INT_MAX), supergraphId(supergraph) {}
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     clusterId = id;
 
     if (graphBuilder->version > 2.2)
@@ -521,20 +521,20 @@ struct TLPClusterBuilder : public TLPFalse {
 
     return true;
   }
-  bool addString(const std::string &str) {
+  bool addString(const std::string &str) override {
     if (graphBuilder->version < 2.3)
       return graphBuilder->addCluster(clusterId, str, supergraphId);
 
     return true;
   }
-  bool addStruct(const std::string &structName, TLPBuilder *&newBuilder);
+  bool addStruct(const std::string &structName, TLPBuilder *&newBuilder) override;
   inline bool addNode(int nodeId) {
     return graphBuilder->addClusterNode(nodeId);
   }
   inline bool addEdge(int edgeId) {
     return graphBuilder->addClusterEdge(edgeId);
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -542,10 +542,10 @@ struct TLPClusterBuilder : public TLPFalse {
 struct TLPClusterNodeBuilder : public TLPFalse {
   TLPClusterBuilder *clusterBuilder;
   TLPClusterNodeBuilder(TLPClusterBuilder *clusterBuilder) : clusterBuilder(clusterBuilder) {}
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     return clusterBuilder->addNode(id);
   }
-  bool addRange(int first, int second) {
+  bool addRange(int first, int second) override {
     while (first <= second) {
       clusterBuilder->addNode(first);
       ++first;
@@ -553,7 +553,7 @@ struct TLPClusterNodeBuilder : public TLPFalse {
 
     return true;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -561,10 +561,10 @@ struct TLPClusterNodeBuilder : public TLPFalse {
 struct TLPClusterEdgeBuilder : public TLPFalse {
   TLPClusterBuilder *clusterBuilder;
   TLPClusterEdgeBuilder(TLPClusterBuilder *clusterBuilder) : clusterBuilder(clusterBuilder) {}
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     return clusterBuilder->addEdge(id);
   }
-  bool addRange(int first, int second) {
+  bool addRange(int first, int second) override {
     while (first <= second) {
       clusterBuilder->addEdge(first);
       ++first;
@@ -572,7 +572,7 @@ struct TLPClusterEdgeBuilder : public TLPFalse {
 
     return true;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -581,14 +581,14 @@ struct TLPAttributesBuilder : public TLPFalse {
   TLPGraphBuilder *graphBuilder;
 
   TLPAttributesBuilder(TLPGraphBuilder *graphBuilder) : graphBuilder(graphBuilder) {}
-  virtual ~TLPAttributesBuilder() {}
-  bool close() {
+  ~TLPAttributesBuilder() override {}
+  bool close() override {
     return true;
   }
-  bool canRead() {
+  bool canRead() override {
     return true;
   }
-  bool read(std::istream &is) {
+  bool read(std::istream &is) override {
     char c = ' ';
 
     // go to the first non space char
@@ -628,14 +628,14 @@ struct TLPDataSetBuilder : public TLPFalse {
   }
   TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, DataSet *currentDataSet)
       : graphBuilder(graphBuilder), currentDataSet(currentDataSet), dataSetName(nullptr) {}
-  virtual ~TLPDataSetBuilder() {}
-  bool close() {
+  ~TLPDataSetBuilder() override {}
+  bool close() override {
     return true;
   }
-  bool canRead() {
+  bool canRead() override {
     return true;
   }
-  bool read(std::istream &is) {
+  bool read(std::istream &is) override {
     return DataSet::read(is, *currentDataSet);
   }
 };
@@ -646,9 +646,9 @@ struct TLPFileInfoBuilder : public TLPFalse {
 
   TLPFileInfoBuilder(TLPGraphBuilder *graphBuilder, const std::string &infoName)
       : graphBuilder(graphBuilder), name(infoName) {}
-  virtual ~TLPFileInfoBuilder() {}
+  ~TLPFileInfoBuilder() override {}
 
-  bool addString(const std::string &str) {
+  bool addString(const std::string &str) override {
     std::string theStr(str);
 
     if (name == AUTHOR)
@@ -658,7 +658,7 @@ struct TLPFileInfoBuilder : public TLPFalse {
 
     return true;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -667,13 +667,13 @@ struct TLPSceneBuilder : public TLPFalse {
   TLPGraphBuilder *graphBuilder;
 
   TLPSceneBuilder(TLPGraphBuilder *graphBuilder) : graphBuilder(graphBuilder) {}
-  virtual ~TLPSceneBuilder() {}
+  ~TLPSceneBuilder() override {}
 
-  bool addString(const std::string &str) {
+  bool addString(const std::string &str) override {
     graphBuilder->dataSet->set(SCENE, str);
     return true;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -701,7 +701,7 @@ struct TLPPropertyBuilder : public TLPFalse {
   bool isGraphProperty;
   bool isPathViewProperty;
 
-  virtual ~TLPPropertyBuilder() {}
+  ~TLPPropertyBuilder() override {}
   TLPPropertyBuilder(TLPGraphBuilder *graphBuilder)
       : graphBuilder(graphBuilder), clusterId(INT_MAX), propertyType(std::string()),
         propertyName(std::string()), property(nullptr), isGraphProperty(false),
@@ -712,7 +712,7 @@ struct TLPPropertyBuilder : public TLPFalse {
                                             isPathViewProperty);
     return property != nullptr;
   }
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     assert(id != INT_MAX);
     clusterId = id;
 
@@ -721,7 +721,7 @@ struct TLPPropertyBuilder : public TLPFalse {
 
     return true;
   }
-  bool addString(const std::string &str) {
+  bool addString(const std::string &str) override {
     if (propertyType.empty()) {
       propertyType = str;
     } else if (propertyName.empty()) {
@@ -758,8 +758,8 @@ struct TLPPropertyBuilder : public TLPFalse {
                                                isGraphProperty, isPathViewProperty)
                : false;
   }
-  bool addStruct(const std::string &structName, TLPBuilder *&newBuilder);
-  bool close() {
+  bool addStruct(const std::string &structName, TLPBuilder *&newBuilder) override;
+  bool close() override {
     return property != nullptr;
   }
 };
@@ -769,14 +769,14 @@ struct TLPNodePropertyBuilder : public TLPFalse {
   int nodeId;
   TLPNodePropertyBuilder(TLPPropertyBuilder *propertyBuilder)
       : propertyBuilder(propertyBuilder), nodeId(INT_MAX) {}
-  bool addInt(const int id) {
+  bool addInt(const int id) override {
     nodeId = id;
     return true;
   }
-  bool addString(const std::string &val) {
+  bool addString(const std::string &val) override {
     return propertyBuilder->setNodeValue(nodeId, val);
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -787,15 +787,15 @@ struct TLPEdgePropertyBuilder : public TLPFalse {
   std::string nodeValue;
   TLPEdgePropertyBuilder(TLPPropertyBuilder *propertyBuilder)
       : propertyBuilder(propertyBuilder), edgeId(INT_MAX) {}
-  virtual ~TLPEdgePropertyBuilder() {}
-  bool addInt(const int id) {
+  ~TLPEdgePropertyBuilder() override {}
+  bool addInt(const int id) override {
     edgeId = id;
     return true;
   }
-  bool addString(const std::string &val) {
+  bool addString(const std::string &val) override {
     return propertyBuilder->setEdgeValue(edgeId, val);
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -806,8 +806,8 @@ struct TLPDefaultPropertyBuilder : public TLPFalse {
   int i;
   TLPDefaultPropertyBuilder(TLPPropertyBuilder *propertyBuilder)
       : propertyBuilder(propertyBuilder), edgeId(INT_MAX), i(0) {}
-  virtual ~TLPDefaultPropertyBuilder() {}
-  bool addString(const std::string &val) {
+  ~TLPDefaultPropertyBuilder() override {}
+  bool addString(const std::string &val) override {
     if (i == 0) {
       i++;
       return propertyBuilder->setAllNodeValue(val);
@@ -820,7 +820,7 @@ struct TLPDefaultPropertyBuilder : public TLPFalse {
 
     return false;
   }
-  bool close() {
+  bool close() override {
     return true;
   }
 };
@@ -914,13 +914,13 @@ public:
                     "interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as "
                     "using <b>File->Open</b> menu item.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("tlp");
     return l;
   }
 
-  std::list<std::string> gzipFileExtensions() const {
+  std::list<std::string> gzipFileExtensions() const override {
     std::list<std::string> ext;
     ext.push_back("tlp.gz");
     ext.push_back("tlpz");
@@ -930,13 +930,13 @@ public:
   TLPImport(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<std::string>("file::filename", "The pathname of the TLP file to import.", "");
   }
-  ~TLPImport() {}
+  ~TLPImport() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/gui/icons/logo32x32.png";
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     std::string filename;
     std::string data;
     std::stringstream *tmpss = nullptr;

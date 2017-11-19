@@ -48,7 +48,7 @@ public:
       : inGlEntity(false), inGlGraph(false), inNode(false), inEdge(false), inColorInfo(false),
         needData(false) {}
 
-  virtual ~GlTLPFeedBackBuilder() {}
+  ~GlTLPFeedBackBuilder() override {}
 
   virtual void colorInfo(GLfloat *) {}
   virtual void beginGlEntity(GLfloat) {}
@@ -59,15 +59,15 @@ public:
   virtual void endNode() {}
   virtual void beginEdge(GLfloat) {}
   virtual void endEdge() {}
-  virtual void passThroughToken(GLfloat *);
-  virtual void pointToken(GLfloat *) {}
-  virtual void lineToken(GLfloat *) {}
-  virtual void lineResetToken(GLfloat *) {}
-  virtual void polygonToken(GLfloat *) {}
-  virtual void bitmapToken(GLfloat *) {}
-  virtual void drawPixelToken(GLfloat *) {}
-  virtual void copyPixelToken(GLfloat *) {}
-  virtual void end() {}
+  void passThroughToken(GLfloat *) override;
+  void pointToken(GLfloat *) override {}
+  void lineToken(GLfloat *) override {}
+  void lineResetToken(GLfloat *) override {}
+  void polygonToken(GLfloat *) override {}
+  void bitmapToken(GLfloat *) override {}
+  void drawPixelToken(GLfloat *) override {}
+  void copyPixelToken(GLfloat *) override {}
+  void end() override {}
 
 private:
   bool inGlEntity;

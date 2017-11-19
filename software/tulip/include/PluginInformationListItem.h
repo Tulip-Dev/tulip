@@ -35,7 +35,7 @@ class PluginInformationListItem : public QWidget {
 
 public:
   explicit PluginInformationListItem(tlp::PluginInformation, QWidget *parent = nullptr);
-  virtual ~PluginInformationListItem();
+  ~PluginInformationListItem() override;
   QWidget *description();
 
 public slots:
@@ -51,7 +51,7 @@ protected slots:
   void downloadProgress(qint64, qint64);
 
 protected:
-  void enterEvent(QEvent *);
+  void enterEvent(QEvent *) override;
 };
 
 #endif // PLUGININFORMATIONLISTITEM_H

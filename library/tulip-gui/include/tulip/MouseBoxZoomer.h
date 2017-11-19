@@ -38,9 +38,9 @@ private:
 public:
   MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
                  Qt::KeyboardModifier modifier = Qt::NoModifier);
-  ~MouseBoxZoomer();
-  bool draw(GlMainWidget *);
-  bool eventFilter(QObject *, QEvent *);
+  ~MouseBoxZoomer() override;
+  bool draw(GlMainWidget *) override;
+  bool eventFilter(QObject *, QEvent *) override;
 
 private:
   unsigned int x, y;

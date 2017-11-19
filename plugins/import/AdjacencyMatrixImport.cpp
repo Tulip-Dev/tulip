@@ -108,10 +108,10 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
   AdjacencyMatrixImport(tlp::PluginContext *context) : ImportModule(context) {
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
-  ~AdjacencyMatrixImport() {}
+  ~AdjacencyMatrixImport() override {}
   vector<node> nodes;
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_adj_mat.png";
   }
 
@@ -123,7 +123,7 @@ Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E an
     return false;
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     string name2;
 
     if (!(dataSet->get("file::filename", name2) ||

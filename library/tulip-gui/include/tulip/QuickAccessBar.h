@@ -107,7 +107,7 @@ public:
 
   explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem = nullptr,
                               QuickAccessButtons button = ALLBUTTONS, QWidget *parent = nullptr);
-  virtual ~QuickAccessBarImpl();
+  ~QuickAccessBarImpl() override;
 
   QPushButton *showEdgesButton();
   QPushButton *showNodesButton();
@@ -126,7 +126,7 @@ protected:
   void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
 
 public slots:
-  void reset();
+  void reset() override;
 
   virtual void setBackgroundColor(const QColor &);
   virtual void setColorInterpolation(bool);

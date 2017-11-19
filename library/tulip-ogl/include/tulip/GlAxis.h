@@ -65,7 +65,7 @@ public:
   /**
    * @brief GlAxis destructor
    */
-  virtual ~GlAxis();
+  ~GlAxis() override;
 
   /**
    * @brief Method which returns the base coordinates of the axis
@@ -211,7 +211,7 @@ public:
    */
   void setGradsLabelsHeight(float height);
 
-  void translate(const Coord &c);
+  void translate(const Coord &c) override;
 
   float getCaptionHeight() const;
 

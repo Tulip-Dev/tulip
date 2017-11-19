@@ -72,18 +72,18 @@ public:
                     "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore "
                     "data from various graph or csv file formats)",
                     "1.0", "")
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
 
   GraphPerspective(const tlp::PluginContext *c);
-  virtual ~GraphPerspective();
-  virtual void start(tlp::PluginProgress *);
+  ~GraphPerspective() override;
+  void start(tlp::PluginProgress *) override;
   tlp::GraphHierarchiesModel *model() const;
   void copy(tlp::Graph *, bool deleteAfter = false);
   tlp::Graph *createSubGraph(tlp::Graph *);
 
-  void treatEvent(const tlp::Event &);
+  void treatEvent(const tlp::Event &) override;
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
@@ -91,7 +91,7 @@ public:
   void log(QtMsgType, const char *);
 #endif
 
-  virtual bool terminated();
+  bool terminated() override;
 
 public slots:
   void importGraph();
@@ -101,7 +101,7 @@ public slots:
   bool save();
   bool saveAs(const QString &path = "");
   void open(QString fileName = "");
-  virtual void openProjectFile(const QString &path);
+  void openProjectFile(const QString &path) override;
 
   void showLogger();
   void showAPIDocumentation();
@@ -109,9 +109,9 @@ public slots:
   void showDevelDocumentation();
   void showPythonDocumentation();
 
-  virtual void redrawPanels(bool center = false);
+  void redrawPanels(bool center = false) override;
   void centerPanelsForGraph(tlp::Graph *, bool graphChanged, bool onlyGlMainView);
-  void centerPanelsForGraph(tlp::Graph *g) {
+  void centerPanelsForGraph(tlp::Graph *g) override {
     centerPanelsForGraph(g, false, false);
   }
   void closePanelsForGraph(tlp::Graph *g = nullptr);
@@ -176,7 +176,7 @@ protected slots:
 #endif
 
 protected:
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
   void importGraph(const std::string &module, tlp::DataSet &data);
   void updateLogIconsAndCounters();
 

@@ -73,13 +73,13 @@ public:
   /**
    * @brief Destructor
    */
-  virtual ~Gl2DRect() {}
+  ~Gl2DRect() override {}
 
-  virtual BoundingBox getBoundingBox();
+  BoundingBox getBoundingBox() override;
 
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  virtual void translate(const Coord &mouvement);
+  void translate(const Coord &mouvement) override;
 
   /**
    * @brief Set texture
@@ -96,9 +96,9 @@ public:
    */
   virtual void setCoordinates(float bottom, float left, float width, float height);
 
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 
 protected:
   float top;

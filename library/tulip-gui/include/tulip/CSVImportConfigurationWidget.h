@@ -104,12 +104,12 @@ public:
   PropertyNameValidator(const std::vector<PropertyConfigurationWidget *> &widgets,
                         QObject *parent = nullptr)
       : QValidator(parent), widgets(widgets) {}
-  virtual ~PropertyNameValidator() {}
+  ~PropertyNameValidator() override {}
 
   /**
    * Validate the new property name. Check if any property does not have the same name
    */
-  QValidator::State validate(QString &input, int &pos) const;
+  QValidator::State validate(QString &input, int &pos) const override;
 
 private:
   const std::vector<PropertyConfigurationWidget *> &widgets;
@@ -122,9 +122,9 @@ private:
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:
   CSVTableWidget(QWidget *parent = nullptr);
-  bool begin();
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens);
-  bool end(unsigned int rowNumber, unsigned int columnNumber);
+  bool begin() override;
+  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   /**
     * @brief Limit the line number of the preview. Need to parse the file again to take this limit
     *in account.
@@ -169,10 +169,10 @@ class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public CSVCont
   Q_OBJECT
 public:
   CSVImportConfigurationWidget(QWidget *parent = nullptr);
-  ~CSVImportConfigurationWidget();
-  bool begin();
-  bool line(unsigned int row, const std::vector<std::string> &lineTokens);
-  bool end(unsigned int rowNumber, unsigned int columnNumber);
+  ~CSVImportConfigurationWidget() override;
+  bool begin() override;
+  bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
+  bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   void setFirstLineIndex(int firstLine);
 
   /**
@@ -187,7 +187,7 @@ public:
   **/
   CSVImportParameters getImportParameters() const;
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
 protected:
   void updateWidget(const std::string &title = "Generating preview");

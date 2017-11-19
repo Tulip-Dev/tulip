@@ -42,7 +42,7 @@ public:
    *
    * @warning Don't use this constructor
    */
-  virtual ~GlTriangle();
+  ~GlTriangle() override;
 };
 }
 #endif

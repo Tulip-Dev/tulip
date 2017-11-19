@@ -85,9 +85,9 @@ public:
     addInParameter<int>("iterno", paramHelp[1], "20", false);
     addInParameter<double>("reqlength", paramHelp[2], "0.0", false);
   }
-  ~OGDFBertaultLayout() {}
+  ~OGDFBertaultLayout() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::BertaultLayout *bertault = static_cast<ogdf::BertaultLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {

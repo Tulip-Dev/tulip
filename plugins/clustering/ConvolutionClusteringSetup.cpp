@@ -32,7 +32,7 @@ public:
   HistogramWidget(ConvolutionClusteringSetup *dialog, QWidget *parent)
       : QWidget(parent), setupDialog(dialog) {}
 
-  void paintEvent(QPaintEvent *) {
+  void paintEvent(QPaintEvent *) override {
     QPainter painter(this);
     vector<double> &histogram = *(setupDialog->getPlugin()->getHistogram());
 

@@ -53,9 +53,9 @@ public:
   LayoutProperty(Graph *graph, const std::string &name = "" /*, bool updateOnEdgeReversal=true*/);
 
   // override some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 
@@ -293,28 +293,28 @@ public:
   // unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node, tlp::StoredType<Coord>::ReturnedConstValue v);
-  virtual void setEdgeValue(const edge, tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v);
-  virtual void setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstValue v,
-                                    const Graph *graph);
-  virtual void setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v);
-  virtual void setValueToGraphEdges(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
-                                    const Graph *graph);
+  void setNodeValue(const node, tlp::StoredType<Coord>::ReturnedConstValue v) override;
+  void setEdgeValue(const edge, tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) override;
+  void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v) override;
+  void setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstValue v,
+                            const Graph *graph) override;
+  void setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) override;
+  void setValueToGraphEdges(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
+                            const Graph *graph) override;
 
-  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
-                                           const Graph *graph);
-  _DEPRECATED virtual void
-  setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v, const Graph *graph);
+  _DEPRECATED void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
+                                   const Graph *graph) override;
+  _DEPRECATED void setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
+                                   const Graph *graph) override;
 
 protected:
-  virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);
+  void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &) override;
 
 private:
   void resetBoundingBox();
   void rotate(const double &alpha, int rot, Iterator<node> *, Iterator<edge> *);
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 
 public:
   // the number of edges with bends
@@ -331,9 +331,9 @@ public:
   CoordVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 };

@@ -29,12 +29,12 @@ public:
   ParallelCoordsElementHighlighter(Qt::MouseButton button = Qt::LeftButton,
                                    Qt::KeyboardModifier modifier = Qt::NoModifier)
       : ParallelCoordsGlEntitiesSelector(button, modifier) {}
-  ~ParallelCoordsElementHighlighter();
-  void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView);
+  ~ParallelCoordsElementHighlighter() override;
+  void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) override;
   void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y,
-                               bool addToSelection);
+                               bool addToSelection) override;
   void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h,
-                               bool addToSelection);
+                               bool addToSelection) override;
 };
 }
 

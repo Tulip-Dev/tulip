@@ -183,9 +183,9 @@ class HistogramMouseShowElementInfo : public MouseShowElementInfo {
 
 public:
   HistogramMouseShowElementInfo() : MouseShowElementInfo(), hView(nullptr) {}
-  ~HistogramMouseShowElementInfo() {}
+  ~HistogramMouseShowElementInfo() override {}
 
-  void viewChanged(View *v) {
+  void viewChanged(View *v) override {
     hView = static_cast<HistogramView *>(v);
     MouseShowElementInfo::viewChanged(v);
   }
@@ -198,8 +198,8 @@ protected:
    * @param parent the parent for the model creation.
    * @return
    */
-  virtual QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId,
-                                         QObject *parent) const {
+  QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId,
+                                 QObject *parent) const override {
     if (hView->getDataLocation() == EDGE) {
       elementId = hView->getMappedId(elementId);
       return new GraphEdgeElementModel(hView->graph(), elementId, parent);
@@ -214,7 +214,7 @@ protected:
    * @param elementId the id of the element
    * @return
    */
-  virtual QString elementName(ElementType elementType, unsigned int elementId) const {
+  QString elementName(ElementType elementType, unsigned int elementId) const override {
     if (hView->getDataLocation() == EDGE) {
       elementId = hView->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);

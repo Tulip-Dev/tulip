@@ -61,9 +61,9 @@ class TLP_QT_SCOPE WorkspacePanel : public QFrame {
 
 public:
   explicit WorkspacePanel(tlp::View *view, QWidget *parent = nullptr);
-  virtual ~WorkspacePanel();
+  ~WorkspacePanel() override;
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
   tlp::View *view() const;
   QString viewName() const;
@@ -97,18 +97,18 @@ protected slots:
   void toggleSynchronization(bool);
 
 protected:
-  void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *) override;
 
-  void dragEnterEvent(QDragEnterEvent *);
-  void dropEvent(QDropEvent *);
-  void dragLeaveEvent(QDragLeaveEvent *);
+  void dragEnterEvent(QDragEnterEvent *) override;
+  void dropEvent(QDropEvent *) override;
+  void dragLeaveEvent(QDragLeaveEvent *) override;
 
   bool handleDragEnterEvent(QEvent *e, const QMimeData *mimedata);
   bool handleDropEvent(const QMimeData *mimedata);
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 #endif
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
 };
 }
 

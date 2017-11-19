@@ -39,9 +39,9 @@ public:
   GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0",
                    NodeShape::Triangle)
   Triangle(const tlp::PluginContext *context = nullptr);
-  virtual ~Triangle();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~Triangle() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
 
 protected:
   static GlTriangle *triangle;

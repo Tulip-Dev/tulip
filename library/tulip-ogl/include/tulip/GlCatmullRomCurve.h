@@ -65,7 +65,7 @@ public:
                     const bool closedCurve = false, const unsigned int nbCurvePoints = 200,
                     const ParameterizationType paramType = CENTRIPETAL);
 
-  ~GlCatmullRomCurve();
+  ~GlCatmullRomCurve() override;
 
   void setParameterizationType(const ParameterizationType paramType) {
     this->paramType = paramType;
@@ -73,19 +73,20 @@ public:
 
   void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
                  const float startSize, const float endSize,
-                 const unsigned int nbCurvePoints = 200);
+                 const unsigned int nbCurvePoints = 200) override;
 
   void setClosedCurve(const bool closedCurve) {
     this->closedCurve = closedCurve;
   }
 
 protected:
-  void setCurveVertexShaderRenderingSpecificParameters();
+  void setCurveVertexShaderRenderingSpecificParameters() override;
 
-  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
+  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) override;
 
   void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints,
-                               std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+                               std::vector<Coord> &curvePoints,
+                               unsigned int nbCurvePoints) override;
 
 private:
   bool closedCurve;

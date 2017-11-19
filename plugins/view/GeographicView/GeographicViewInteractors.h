@@ -32,16 +32,16 @@ class GeographicViewInteractor : public GLInteractorComposite {
 public:
   GeographicViewInteractor(const QString &iconPath, const QString &text);
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class GeographicViewNavigator : public MouseNKeysNavigator {
 
 public:
   GeographicViewNavigator();
-  ~GeographicViewNavigator();
+  ~GeographicViewNavigator() override;
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
   bool draw(GlMainWidget *) {
     return false;
   }
@@ -49,7 +49,7 @@ public:
   bool compute(GlMainWidget *) {
     return false;
   }
-  void viewChanged(View *);
+  void viewChanged(View *) override;
 
 protected:
   int x, y;
@@ -64,10 +64,10 @@ public:
 
   GeographicViewInteractorNavigation(const PluginContext *);
 
-  void construct();
+  void construct() override;
 
-  QWidget *configurationWidget() const;
-  virtual unsigned int priority() const;
+  QWidget *configurationWidget() const override;
+  unsigned int priority() const override;
 };
 
 class GeographicViewInteractorAddEdges : public NodeLinkDiagramComponentInteractor {
@@ -78,11 +78,11 @@ public:
 
   GeographicViewInteractorAddEdges(const PluginContext *);
 
-  void construct();
+  void construct() override;
 
-  QCursor cursor() const;
+  QCursor cursor() const override;
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 class GeographicViewInteractorEditEdgeBends : public NodeLinkDiagramComponentInteractor {
@@ -93,9 +93,9 @@ public:
 
   GeographicViewInteractorEditEdgeBends(const PluginContext *);
 
-  void construct();
+  void construct() override;
 
-  bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const override;
 };
 
 #endif /* GOOGLEMAPSVIEWINTERACTORS_H_ */

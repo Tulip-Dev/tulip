@@ -115,9 +115,9 @@ public:
                                      embedderValuesDescription);
   }
 
-  ~OGDFPlanarizationLayout() {}
+  ~OGDFPlanarizationLayout() override {}
 
-  void beforeCall() {
+  void beforeCall() override {
     ogdf::PlanarizationLayout *pl = static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo);
 
     if (dataSet != nullptr) {

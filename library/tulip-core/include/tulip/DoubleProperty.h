@@ -41,24 +41,24 @@ class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public:
   DoubleProperty(Graph *, const std::string &n = "");
 
-  virtual void
-  clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &);
+  void clone_handler(
+      AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &) override;
 
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 
-  virtual void setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v);
-  virtual void setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v);
-  virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v);
+  void setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v) override;
+  void setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v) override;
+  void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v) override;
 
-  virtual void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,
-                                    const Graph *graph);
-  virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v);
-  virtual void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,
-                                    const Graph *graph);
+  void setValueToGraphNodes(tlp::StoredType<double>::ReturnedConstValue v,
+                            const Graph *graph) override;
+  void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v) override;
+  void setValueToGraphEdges(tlp::StoredType<double>::ReturnedConstValue v,
+                            const Graph *graph) override;
 
   enum PredefinedMetaValueCalculator {
     NO_CALC = 0,
@@ -69,55 +69,55 @@ public:
   };
 
   // setMetaValueCalculator overloading
-  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc);
+  void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc) override;
   void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
                               PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
   // NumericProperty interface
-  virtual double getNodeDoubleValue(const node n) const {
+  double getNodeDoubleValue(const node n) const override {
     return getNodeValue(n);
   }
-  virtual double getNodeDoubleDefaultValue() const {
+  double getNodeDoubleDefaultValue() const override {
     return getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(const Graph *g = nullptr) {
+  double getNodeDoubleMin(const Graph *g = nullptr) override {
     return getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(const Graph *g = nullptr) {
+  double getNodeDoubleMax(const Graph *g = nullptr) override {
     return getNodeMax(g);
   }
-  virtual double getEdgeDoubleValue(const edge e) const {
+  double getEdgeDoubleValue(const edge e) const override {
     return getEdgeValue(e);
   }
-  virtual double getEdgeDoubleDefaultValue() const {
+  double getEdgeDoubleDefaultValue() const override {
     return getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(const Graph *g = nullptr) {
+  double getEdgeDoubleMin(const Graph *g = nullptr) override {
     return getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(const Graph *g = nullptr) {
+  double getEdgeDoubleMax(const Graph *g = nullptr) override {
     return getEdgeMax(g);
   }
 
-  void nodesUniformQuantification(unsigned int);
+  void nodesUniformQuantification(unsigned int) override;
 
-  void edgesUniformQuantification(unsigned int);
+  void edgesUniformQuantification(unsigned int) override;
 
-  NumericProperty *copyProperty(Graph *g) {
+  NumericProperty *copyProperty(Graph *g) override {
     DoubleProperty *newProp = new DoubleProperty(g);
     newProp->copy(this);
 
     return newProp;
   }
 
-  _DEPRECATED virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                                           const Graph *graph);
-  _DEPRECATED virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
-                                           const Graph *graph);
+  _DEPRECATED void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
+                                   const Graph *graph) override;
+  _DEPRECATED void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
+                                   const Graph *graph) override;
 
 private:
   // override Observable::treatEvent
-  void treatEvent(const Event &);
+  void treatEvent(const Event &) override;
 };
 
 /**
@@ -131,9 +131,9 @@ public:
   DoubleVectorProperty(Graph *g, const std::string &n = "")
       : AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const override;
   static const std::string propertyTypename;
-  const std::string &getTypename() const {
+  const std::string &getTypename() const override {
     return propertyTypename;
   }
 };

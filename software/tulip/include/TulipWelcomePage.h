@@ -39,7 +39,7 @@ class TulipWelcomePage : public QWidget {
   Q_OBJECT
 public:
   explicit TulipWelcomePage(QWidget *parent = nullptr);
-  virtual ~TulipWelcomePage();
+  ~TulipWelcomePage() override;
 
 signals:
   void openPerspective(QString);

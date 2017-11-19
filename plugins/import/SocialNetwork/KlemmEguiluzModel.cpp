@@ -58,7 +58,7 @@ struct KlemmEguiluzModel : public ImportModule {
     addInParameter<double>("mu", paramHelp[2], "0.5");
   }
 
-  bool importGraph() {
+  bool importGraph() override {
 
     unsigned int n = 200;
     unsigned int m = 10;

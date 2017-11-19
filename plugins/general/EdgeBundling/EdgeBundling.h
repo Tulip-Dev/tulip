@@ -57,7 +57,7 @@ public:
                     "Bourqui and David Auber, Computer Graphics Forum special issue on 12th "
                     "Eurographics/IEEE-VGTC Symposium on Visualization, pages 853-862 (2010).",
                     "1.3", "")
-  bool run();
+  bool run() override;
 
 private:
   // tlp::DoubleProperty* computeWeights(tlp::Graph *);

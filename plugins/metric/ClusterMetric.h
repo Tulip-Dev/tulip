@@ -44,7 +44,7 @@ public:
                     "F.Jourdan, an G.Melancon, IWPC (2002).",
                     "1.0", "Graph")
   ClusterMetric(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 
 #endif

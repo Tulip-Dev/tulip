@@ -42,9 +42,9 @@ public:
   };
 
   explicit TulipModel(QObject *parent = nullptr);
-  virtual ~TulipModel();
+  ~TulipModel() override;
 
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
 signals:
   void checkStateChanged(QModelIndex, Qt::CheckState);

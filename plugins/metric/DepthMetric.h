@@ -37,8 +37,8 @@ public:
                     "<br><b>The graph must be acyclic</b>.",
                     "1.1", "Hierarchical")
   DepthMetric(const tlp::PluginContext *context);
-  bool run();
-  bool check(std::string &);
+  bool run() override;
+  bool check(std::string &) override;
 
 private:
   double getNodeValue(const tlp::node n);

@@ -40,7 +40,7 @@ signals:
   void configurationIconPressed();
 
 protected:
-  void mousePressEvent(QGraphicsSceneMouseEvent *) {
+  void mousePressEvent(QGraphicsSceneMouseEvent *) override {
     emit configurationIconPressed();
   }
 };
@@ -52,7 +52,7 @@ class SelectionArrowItem : public QObject, public QGraphicsPathItem {
 public:
   SelectionArrowItem(float initRangePos, const QPoint &initPos);
 
-  bool sceneEvent(QEvent *event);
+  bool sceneEvent(QEvent *event) override;
 
 signals:
 
@@ -69,7 +69,7 @@ public:
   SelectionTextItem();
 
 protected:
-  bool sceneEvent(QEvent *event) {
+  bool sceneEvent(QEvent *event) override {
     return static_cast<SelectionArrowItem *>(parentItem())->sceneEvent(event);
   }
 };
@@ -90,7 +90,7 @@ signals:
   void moved(float begin, float end);
 
 protected:
-  bool sceneEvent(QEvent *event);
+  bool sceneEvent(QEvent *event) override;
 
   QRectF _currentRect;
   QPoint _initPos;
@@ -120,7 +120,7 @@ signals:
 protected:
   void updatePath();
 
-  bool sceneEvent(QEvent *event);
+  bool sceneEvent(QEvent *event) override;
 
   std::vector<std::pair<double, float>> _metricToSizeFilteredList;
   double _minMetric;
@@ -167,7 +167,7 @@ signals:
 protected:
   void activateInteractions(bool);
 
-  bool sceneEvent(QEvent *event);
+  bool sceneEvent(QEvent *event) override;
   void updateSelectionText(float begin, float end);
 
   bool _interactionsActivated;

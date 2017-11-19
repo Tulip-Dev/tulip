@@ -46,12 +46,12 @@ public:
   GlGraphHighDetailsRenderer(const GlGraphInputData *inputData);
   GlGraphHighDetailsRenderer(const GlGraphInputData *inputData, GlScene *scene);
 
-  ~GlGraphHighDetailsRenderer();
+  ~GlGraphHighDetailsRenderer() override;
 
-  virtual void draw(float lod, Camera *camera);
+  void draw(float lod, Camera *camera) override;
 
-  virtual void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w,
-                              int h, std::vector<SelectedEntity> &selectedEntities);
+  void selectEntities(Camera *camera, RenderingEntitiesFlag type, int x, int y, int w, int h,
+                      std::vector<SelectedEntity> &selectedEntities) override;
 
 protected:
   void initSelectionRendering(RenderingEntitiesFlag type, int x, int y, int w, int h,

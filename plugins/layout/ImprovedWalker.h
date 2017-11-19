@@ -59,9 +59,9 @@ public:
                     "and Michael Junger and Sebastian Leipert (2002).",
                     "1.0", "Tree")
   ImprovedWalker(const tlp::PluginContext *context);
-  ~ImprovedWalker();
+  ~ImprovedWalker() override;
 
-  bool run();
+  bool run() override;
 
 private:
   typedef std::vector<float> levelToFloatType;

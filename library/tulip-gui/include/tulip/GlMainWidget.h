@@ -90,7 +90,7 @@ public:
    * @param view if you want to link this GlMainWidget to a view : use this parameter
    */
   GlMainWidget(QWidget *parent = nullptr, View *view = nullptr);
-  ~GlMainWidget();
+  ~GlMainWidget() override;
 
   /**
    * @brief Get the GlScene of this GlMainWidget
@@ -329,7 +329,7 @@ public:
   /**
    * Resize openGL view
    */
-  void resizeGL(int w, int h);
+  void resizeGL(int w, int h) override;
 
   /**
    * Compute interactors before drawing
@@ -417,7 +417,7 @@ public slots:
    */
   void redraw();
 
-  void closeEvent(QCloseEvent *e);
+  void closeEvent(QCloseEvent *e) override;
 
   /**
    * @brief Convenience function that call center function on the current scene, apply a zoom (if
@@ -434,7 +434,7 @@ public slots:
   void emitGraphChanged();
 
 protected slots:
-  void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *) override;
 
 signals:
   /**

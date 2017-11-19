@@ -32,9 +32,9 @@ public:
 
   MouseSelector(Qt::MouseButton button = Qt::LeftButton,
                 Qt::KeyboardModifier modifier = Qt::NoModifier, SelectionMode mode = EdgesAndNodes);
-  ~MouseSelector() {}
-  bool draw(GlMainWidget *);
-  bool eventFilter(QObject *, QEvent *);
+  ~MouseSelector() override {}
+  bool draw(GlMainWidget *) override;
+  bool eventFilter(QObject *, QEvent *) override;
 
 protected:
   Qt::MouseButton mButton;

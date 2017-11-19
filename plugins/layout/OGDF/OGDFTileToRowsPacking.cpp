@@ -58,7 +58,7 @@
 class SameLayout : public ogdf::LayoutModule {
 
 public:
-  virtual void call(GraphAttributes &GA) {}
+  void call(GraphAttributes &GA) override {}
 };
 
 class OGDFTileToRowsPacking : public OGDFLayoutPluginBase {

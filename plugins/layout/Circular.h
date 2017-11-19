@@ -55,7 +55,7 @@ public:
                     "the maximum length cycle.",
                     "1.1", "Basic")
   Circular(const tlp::PluginContext *context);
-  bool run();
+  bool run() override;
 };
 
 #endif

@@ -92,7 +92,7 @@ public:
                     "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
                     "1.1", "Triangulation")
 
-  bool run() {
+  bool run() override {
     if (graph->numberOfNodes() == 0)
       return true;
 

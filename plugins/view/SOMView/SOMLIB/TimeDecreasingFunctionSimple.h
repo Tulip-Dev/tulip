@@ -25,9 +25,9 @@
 class TimeDecreasingFunctionSimple : public TimeDecreasingFunction {
 public:
   TimeDecreasingFunctionSimple(double initialCoef);
-  virtual ~TimeDecreasingFunctionSimple();
+  ~TimeDecreasingFunctionSimple() override;
   double computeCurrentTimeRate(unsigned int currentIteration, unsigned int maxIteration,
-                                unsigned int inputSampleSize);
+                                unsigned int inputSampleSize) override;
 
   double getInitialCoefficient() {
     return initialCoef;

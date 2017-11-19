@@ -38,11 +38,11 @@ class GlyphScaleConfigDialog : public QDialog {
 
 public:
   GlyphScaleConfigDialog(QWidget *parent = nullptr);
-  ~GlyphScaleConfigDialog();
+  ~GlyphScaleConfigDialog() override;
 
   std::vector<int> getSelectedGlyphsId() const;
 
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 
 private slots:
 

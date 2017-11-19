@@ -41,19 +41,19 @@ class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
 
 public:
   ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = nullptr);
-  ~ColorScaleConfigDialog();
+  ~ColorScaleConfigDialog() override;
   void setColorScale(const ColorScale &colorScale);
   const ColorScale &getColorScale() const;
   static ColorScale getColorScaleFromImageFile(const std::string &imageFilePath,
                                                bool gradient = true);
 
 protected:
-  void resizeEvent(QResizeEvent *event);
-  void showEvent(QShowEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
+  void showEvent(QShowEvent *event) override;
 
 private slots:
 
-  void accept();
+  void accept() override;
   void pressButtonBrowse();
   void nbColorsValueChanged(int value);
   void colorTableItemDoubleClicked(QTableWidgetItem *item);

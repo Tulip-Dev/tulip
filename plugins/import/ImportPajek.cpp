@@ -118,7 +118,7 @@ public:
                     "description of the edges with Matrix (adjacency lists)<br/>is not yet "
                     "supported.</p>",
                     "1.0", "File")
-  std::list<std::string> fileExtensions() const {
+  std::list<std::string> fileExtensions() const override {
     std::list<std::string> l;
     l.push_back("net");
     l.push_back("paj");
@@ -132,9 +132,9 @@ public:
     addInParameter<string>("file::filename", paramHelp[0], "");
   }
 
-  ~ImportPajek() {}
+  ~ImportPajek() override {}
 
-  std::string icon() const {
+  std::string icon() const override {
     return ":/tulip/graphperspective/icons/32/import_pajek.png";
   }
 
@@ -482,7 +482,7 @@ public:
     return true;
   }
 
-  bool importGraph() {
+  bool importGraph() override {
     string filename;
 
     dataSet->get<string>("file::filename", filename);

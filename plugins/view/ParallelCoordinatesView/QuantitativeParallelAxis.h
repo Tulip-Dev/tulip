@@ -59,12 +59,12 @@ public:
     return nbAxisGrad;
   }
 
-  Coord getPointCoordOnAxisForData(const unsigned int dataIdx);
+  Coord getPointCoordOnAxisForData(const unsigned int dataIdx) override;
 
-  void translate(const Coord &c);
-  void redraw();
+  void translate(const Coord &c) override;
+  void redraw() override;
 
-  void showConfigDialog();
+  void showConfigDialog() override;
 
   std::string getAxisDataTypeName() const;
 
@@ -93,11 +93,11 @@ public:
   double getValueForAxisCoord(const Coord &axisCoord);
   Coord getAxisCoordForValue(double value);
 
-  std::string getTopSliderTextValue();
-  std::string getBottomSliderTextValue();
+  std::string getTopSliderTextValue() override;
+  std::string getBottomSliderTextValue() override;
 
-  const std::set<unsigned int> &getDataInSlidersRange();
-  void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
+  const std::set<unsigned int> &getDataInSlidersRange() override;
+  void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) override;
 
   void setBoxPlotHighlightBounds(BoxPlotValue lowBound, BoxPlotValue highBound) {
     boxPlotLowBound = lowBound;

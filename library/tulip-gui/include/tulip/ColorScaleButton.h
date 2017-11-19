@@ -41,7 +41,7 @@ public:
 
   const ColorScale &colorScale() const;
   void setColorScale(const ColorScale &) const;
-  void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event) override;
   void editColorScale(const ColorScale &colorScale);
 
 public slots:

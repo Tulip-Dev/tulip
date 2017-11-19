@@ -47,7 +47,7 @@ public:
   enum LogType { Info, Warning, Error, Python };
 
   GraphPerspectiveLogger(QWidget *parent = nullptr);
-  ~GraphPerspectiveLogger();
+  ~GraphPerspectiveLogger() override;
   QPixmap icon(LogType logType) const;
   int count() const;
   int countByType(LogType logType) const;
@@ -58,10 +58,10 @@ public:
   void log(QtMsgType, const char *);
 #endif
 
-  bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *) override;
 
-  void showEvent(QShowEvent *);
-  void hideEvent(QHideEvent *);
+  void showEvent(QShowEvent *) override;
+  void hideEvent(QHideEvent *) override;
 
   bool anchored() const {
     return _anchored;

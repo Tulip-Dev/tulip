@@ -39,7 +39,7 @@ class ExportWizard : public QWizard {
 
 public:
   explicit ExportWizard(tlp::Graph *g, const QString &exportFile, QWidget *parent = nullptr);
-  virtual ~ExportWizard();
+  ~ExportWizard() override;
 
   QString algorithm() const;
   tlp::DataSet parameters() const;
@@ -51,7 +51,7 @@ protected slots:
 
   void pathChanged(QString s);
   void browseButtonClicked();
-  bool validateCurrentPage();
+  bool validateCurrentPage() override;
 };
 
 #endif // EXPORTWIZARD_H

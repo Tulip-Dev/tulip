@@ -37,9 +37,9 @@ public:
   GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined",
                    "1.0", NodeShape::CubeOutlined)
   CubeOutLined(tlp::PluginContext *context);
-  virtual ~CubeOutLined();
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
+  ~CubeOutLined() override;
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
 
 protected:
   static GlBox *box;

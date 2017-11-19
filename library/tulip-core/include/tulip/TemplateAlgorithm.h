@@ -37,7 +37,7 @@ static const std::string PROPERTY_ALGORITHM_CATEGORY = "Property";
 class TLP_SCOPE PropertyAlgorithm : public tlp::Algorithm {
 public:
   PropertyAlgorithm(const tlp::PluginContext *context) : Algorithm(context) {}
-  virtual std::string category() const {
+  std::string category() const override {
     return PROPERTY_ALGORITHM_CATEGORY;
   }
 };

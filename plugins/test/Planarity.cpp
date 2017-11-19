@@ -26,7 +26,7 @@ public:
                     "1.0", "Topological Test")
   PlanarityTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::PlanarityTest::isPlanar(graph);
   }
 };
@@ -39,7 +39,7 @@ public:
                     "Topological Test")
   PlanarEmbeddingTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {}
 
-  virtual bool test() {
+  bool test() override {
     return tlp::PlanarityTest::isPlanarEmbedding(graph);
   }
 };
@@ -51,11 +51,11 @@ public:
                     "Makes the graph a planar embedding if it is planar.", "1.0", "Topology Update")
   MakePlanarEmbedding(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
-  virtual bool run() {
+  bool run() override {
     return tlp::PlanarityTest::planarEmbedding(graph);
   }
 
-  virtual bool check(std::string &) {
+  bool check(std::string &) override {
     return tlp::PlanarityTest::isPlanar(graph);
   }
 };

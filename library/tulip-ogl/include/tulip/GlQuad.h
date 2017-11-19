@@ -74,7 +74,7 @@ public:
   /**
    * Destructor
    */
-  virtual ~GlQuad();
+  ~GlQuad() override;
 
   /**
    * Accessor in writing to the position.
@@ -108,12 +108,12 @@ public:
   /**
    * Function to export data in outString (in XML format)
    */
-  virtual void getXML(std::string &outString);
+  void getXML(std::string &outString) override;
 
   /**
    * Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 };
 }
 #endif

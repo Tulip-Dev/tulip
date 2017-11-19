@@ -28,8 +28,8 @@ class Test2 : public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Test2", "Jezequel", "03/11/2004", "0", "1.0", "")
   Test2(tlp::PluginContext *context) : tlp::BooleanAlgorithm(context) {}
-  ~Test2() {}
-  bool run() {
+  ~Test2() override {}
+  bool run() override {
     return true;
   }
 };

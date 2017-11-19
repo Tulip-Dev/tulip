@@ -37,7 +37,7 @@ class PerspectiveItemWidget : public QWidget {
 
 public:
   explicit PerspectiveItemWidget(const QString &perspectiveName, QWidget *parent = nullptr);
-  ~PerspectiveItemWidget();
+  ~PerspectiveItemWidget() override;
 
 public slots:
   void run();
@@ -46,9 +46,9 @@ signals:
   void selected();
 
 protected:
-  void mouseDoubleClickEvent(QMouseEvent *);
-  void focusInEvent(QFocusEvent *);
-  void focusOutEvent(QFocusEvent *);
+  void mouseDoubleClickEvent(QMouseEvent *) override;
+  void focusInEvent(QFocusEvent *) override;
+  void focusOutEvent(QFocusEvent *) override;
 };
 
 #endif // PERSPECTIVEITEMWIDGET_H

@@ -38,7 +38,7 @@ public:
 
   OrthoTree(const tlp::PluginContext *context);
 
-  bool run();
+  bool run() override;
 };
 
 PLUGIN(OrthoTree)

@@ -27,9 +27,9 @@ public:
 
   void setSelectedIconName(const QString &iconName);
 
-  void accept();
+  void accept() override;
 
-  void showEvent(QShowEvent *);
+  void showEvent(QShowEvent *) override;
 
   static QIcon getFontAwesomeIcon(const QString &iconName);
 

@@ -94,9 +94,9 @@ class StackWalkerGCC : public StackWalker {
 public:
   StackWalkerGCC();
 
-  ~StackWalkerGCC();
+  ~StackWalkerGCC() override;
 
-  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+  void printCallStack(std::ostream &os, unsigned int maxDepth = 50) override;
 
   void setCallerAddress(void *callerAddress) {
     this->callerAddress = callerAddress;

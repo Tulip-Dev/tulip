@@ -173,10 +173,10 @@ public:
   GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0",
                    NodeShape::RoundedBox)
   RoundedBox(const tlp::PluginContext *context = nullptr);
-  ~RoundedBox() {}
-  void draw(node n, float lod);
-  Coord getAnchor(const Coord &vector) const;
-  void getIncludeBoundingBox(BoundingBox &boundingBox, node);
+  ~RoundedBox() override {}
+  void draw(node n, float lod) override;
+  Coord getAnchor(const Coord &vector) const override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
 
 private:
   void initRoundedSquare();

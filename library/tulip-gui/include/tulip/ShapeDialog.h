@@ -23,15 +23,15 @@ class TLP_QT_SCOPE ShapeDialog : public QDialog {
 
 public:
   ShapeDialog(std::list<std::pair<QString, QPixmap>> &nodeShapes, QWidget *parent = nullptr);
-  ~ShapeDialog();
+  ~ShapeDialog() override;
 
   QString getSelectedShapeName() const;
 
   void setSelectedShapeName(const QString &shapeName);
 
-  void accept();
+  void accept() override;
 
-  void showEvent(QShowEvent *);
+  void showEvent(QShowEvent *) override;
 
 protected slots:
   void updateShapeList();

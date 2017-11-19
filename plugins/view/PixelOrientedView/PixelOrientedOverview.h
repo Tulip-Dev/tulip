@@ -45,7 +45,7 @@ public:
                         const std::string &dimName, const Color &backgroundColor,
                         const Color &textColor);
 
-  ~PixelOrientedOverview();
+  ~PixelOrientedOverview() override;
 
   pocore::TulipGraphDimension *getData() const {
     return data;

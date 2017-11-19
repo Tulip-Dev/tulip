@@ -33,8 +33,8 @@ public:
                     tlp::BooleanProperty *selection = nullptr, int frameCount = 1,
                     bool computeNodes = true, bool computeEdges = true, QObject *parent = nullptr);
 
-  virtual ~PropertyAnimation();
-  virtual void frameChanged(int f);
+  ~PropertyAnimation() override;
+  void frameChanged(int f) override;
 
 protected:
   tlp::Graph *_graph;

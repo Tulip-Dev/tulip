@@ -72,30 +72,30 @@ struct PluginLoaderToProgress : public PluginLoader {
   int max_step;
   int step;
 
-  virtual void start(const std::string &path) {
+  void start(const std::string &path) override {
     step = 0;
     _progress->setComment("Entering " + path);
   }
 
-  virtual void finished(bool state, const std::string &msg) {
+  void finished(bool state, const std::string &msg) override {
     if (state)
       _progress->setComment("Plugin successfully loaded");
     else
       _progress->setComment(msg);
   }
 
-  virtual void numberOfFiles(int n) {
+  void numberOfFiles(int n) override {
     max_step = n;
   }
 
-  virtual void loading(const std::string &filename) {
+  void loading(const std::string &filename) override {
     step++;
     _progress->progress(step, max_step);
     _progress->setComment("Loading " + filename);
   }
 
-  virtual void loaded(const tlp::Plugin *, const std::list<tlp::Dependency> &) {}
-  virtual void aborted(const std::string &fileName, const std::string &errorMsg) {
+  void loaded(const tlp::Plugin *, const std::list<tlp::Dependency> &) override {}
+  void aborted(const std::string &fileName, const std::string &errorMsg) override {
     std::cerr << "[Warning] Failed to import " << fileName << ": " << errorMsg << std::endl;
   }
 };

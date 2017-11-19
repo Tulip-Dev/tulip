@@ -66,9 +66,9 @@ public:
   GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0",
                    NodeShape::Hexagon)
   Hexagon(const tlp::PluginContext *context = nullptr);
-  virtual ~Hexagon();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
-  virtual void draw(node n, float lod);
+  ~Hexagon() override;
+  void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
+  void draw(node n, float lod) override;
 };
 PLUGIN(Hexagon)
 Hexagon::Hexagon(const tlp::PluginContext *context) : Glyph(context) {
@@ -102,7 +102,7 @@ public:
       hexagon = new GlHexagon(Coord(0, 0, 0), Size(.5, .5, 0));
   }
 
-  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) {
+  void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     hexagon->setLightingMode(false);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 

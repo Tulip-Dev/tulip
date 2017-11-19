@@ -65,10 +65,10 @@ struct BmdListIt : public Iterator<TYPE> {
     pos = bmdList.firstItem();
     pred = nullptr;
   }
-  bool hasNext() {
+  bool hasNext() override {
     return pos != nullptr;
   }
-  TYPE next() {
+  TYPE next() override {
     TYPE val = pos->getData();
     tlp::BmdLink<TYPE> *tmp = pos;
     pos = bmdList.nextItem(pos, pred);
@@ -88,10 +88,10 @@ struct BmdListRevIt : public Iterator<TYPE> {
     pos = bmdList.lastItem();
     suc = nullptr;
   }
-  bool hasNext() {
+  bool hasNext() override {
     return pos != nullptr;
   }
-  TYPE next() {
+  TYPE next() override {
     TYPE val = pos->getData();
     tlp::BmdLink<TYPE> *tmp = pos;
     pos = bmdList.predItem(pos, suc);

@@ -91,7 +91,7 @@ public:
 
   ColorScale &operator=(const ColorScale &scale);
 
-  virtual ~ColorScale();
+  ~ColorScale() override;
 
   /**
    * @brief Clears the color scale.

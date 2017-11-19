@@ -41,7 +41,7 @@ class ScatterPlot2DOptionsWidget : public QWidget {
 
 public:
   ScatterPlot2DOptionsWidget(QWidget *parent = nullptr);
-  ~ScatterPlot2DOptionsWidget();
+  ~ScatterPlot2DOptionsWidget() override;
 
   void setWidgetEnabled(const bool enabled);
   bool uniformBackground() const;
@@ -84,7 +84,7 @@ public:
   bool configurationChanged();
 
 protected:
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 
 private slots:
   void setButtonColor(tlp::ColorButton *button, const Color &color);
