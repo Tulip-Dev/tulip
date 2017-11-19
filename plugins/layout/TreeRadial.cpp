@@ -43,7 +43,7 @@ public:
   Graph *tree;
   vector<float> nRadii;
   vector<float> lRadii;
-  vector<vector<node> > bfs;
+  vector<vector<node>> bfs;
 
   /* the original code using dfs recursive calls
      is easier to understand but may result in stack overflow

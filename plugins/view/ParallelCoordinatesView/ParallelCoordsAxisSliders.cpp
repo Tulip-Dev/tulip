@@ -242,7 +242,7 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
   lastNbAxis = allAxis.size();
   currentGraph = parallelView->getGraphProxy()->getGraph();
 
-  map<ParallelAxis *, vector<AxisSlider *> >::iterator it;
+  map<ParallelAxis *, vector<AxisSlider *>>::iterator it;
 
   for (it = axisSlidersMap.begin(); it != axisSlidersMap.end(); ++it) {
     ParallelAxis *axis = it->first;
@@ -456,7 +456,7 @@ void ParallelCoordsAxisSliders::buildGlSliders(vector<ParallelAxis *> axis) {
 }
 
 void ParallelCoordsAxisSliders::deleteGlSliders() {
-  map<ParallelAxis *, vector<AxisSlider *> >::iterator it;
+  map<ParallelAxis *, vector<AxisSlider *>>::iterator it;
 
   for (it = axisSlidersMap.begin(); it != axisSlidersMap.end(); ++it) {
     ParallelAxis *axis = it->first;
@@ -489,7 +489,7 @@ AxisSlider *ParallelCoordsAxisSliders::getSliderUnderPointer(GlMainWidget *glWid
 }
 
 void ParallelCoordsAxisSliders::updateOtherAxisSliders() {
-  map<ParallelAxis *, vector<AxisSlider *> >::iterator it;
+  map<ParallelAxis *, vector<AxisSlider *>>::iterator it;
 
   for (it = axisSlidersMap.begin(); it != axisSlidersMap.end(); ++it) {
     ParallelAxis *axis = it->first;
@@ -508,7 +508,7 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
   Camera &camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
   camera.initGl();
 
-  map<ParallelAxis *, vector<AxisSlider *> >::iterator it;
+  map<ParallelAxis *, vector<AxisSlider *>>::iterator it;
   vector<AxisSlider *>::iterator it2;
 
   for (it = axisSlidersMap.begin(); it != axisSlidersMap.end(); ++it) {
@@ -597,7 +597,7 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
 
 void ParallelCoordsAxisSliders::updateSlidersYBoundaries() {
   slidersYBoundaries.clear();
-  map<ParallelAxis *, vector<AxisSlider *> >::iterator it;
+  map<ParallelAxis *, vector<AxisSlider *>>::iterator it;
 
   for (it = axisSlidersMap.begin(); it != axisSlidersMap.end(); ++it) {
     ParallelAxis *axis = it->first;

@@ -47,7 +47,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   int nbOfNodes = sg->numberOfNodes();
   preProcessing(sg);
   // list of terminal nodes for each component in T[V_G-L];
-  map<node, list<node> > terminalNodes;
+  map<node, list<node>> terminalNodes;
   bool planar = true;
 
   for (int i = 1; i < nbOfNodes && planar; i++) {
@@ -169,7 +169,7 @@ void PlanarityTestImpl::init() {
 }
 //=================================================================
 void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfComponents,
-                                          map<node, list<node> > &terminalNodes) {
+                                          map<node, list<node>> &terminalNodes) {
   // to remove an element from list terminal_nodes in constant time;
   // map<node, list_item> terminal_nodes_item;
   map<node, node> terminalNodesItem; //!!!! attention normalement list item pour l'efficacite

@@ -83,12 +83,12 @@ bool ConnectedComponentPacking::run() {
     complexity = "auto";
 
   // compute the connected components
-  std::vector<std::vector<node> > ccNodes;
+  std::vector<std::vector<node>> ccNodes;
   ConnectedTest::computeConnectedComponents(graph, ccNodes);
 
-  vector<Rectangle<float> > rectangles;
+  vector<Rectangle<float>> rectangles;
   rectangles.resize(ccNodes.size());
-  std::vector<std::vector<edge> > ccEdges;
+  std::vector<std::vector<edge>> ccEdges;
   ccEdges.resize(ccNodes.size());
 
   for (unsigned int i = 0; i < ccNodes.size(); ++i) {
@@ -138,7 +138,7 @@ bool ConnectedComponentPacking::run() {
       complexity = "n";
   }
 
-  vector<Rectangle<float> > rectanglesBackup(rectangles);
+  vector<Rectangle<float>> rectanglesBackup(rectangles);
   RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress);
   Iterator<node> *itN = graph->getNodes();
 

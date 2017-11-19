@@ -264,7 +264,7 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords, Color fcolor, Co
   }
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> > &coords, Color fcolor,
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor,
                                    int polygonEdgesType, const string &textureName)
     : currentVector(-1), outlined(false), fillColor(fcolor), outlineSize(1),
       textureName(textureName), textureZoom(1.) {
@@ -275,7 +275,7 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> > &coords, Color f
   runTesselation();
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> > &coords, Color fcolor, Color ocolor,
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord>> &coords, Color fcolor, Color ocolor,
                                    int polygonEdgesType, const string &textureName)
     : currentVector(-1), outlined(true), fillColor(fcolor), outlineColor(ocolor), outlineSize(1),
       textureName(textureName), textureZoom(1.) {
@@ -550,7 +550,7 @@ void GlComplexPolygon::draw(float, Camera *) {
 void GlComplexPolygon::translate(const Coord &vec) {
   boundingBox.translate(vec);
 
-  for (vector<vector<Coord> >::iterator it = points.begin(); it != points.end(); ++it) {
+  for (vector<vector<Coord>>::iterator it = points.begin(); it != points.end(); ++it) {
     for (vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
       (*it2) += vec;
     }
@@ -606,7 +606,7 @@ void GlComplexPolygon::setWithXML(const string &inString, unsigned int &currentP
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 
-  for (vector<vector<Coord> >::iterator it = points.begin(); it != points.end(); ++it) {
+  for (vector<vector<Coord>>::iterator it = points.begin(); it != points.end(); ++it) {
     for (vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
       boundingBox.expand(*it2);
     }

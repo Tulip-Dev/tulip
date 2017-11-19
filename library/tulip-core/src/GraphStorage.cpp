@@ -141,11 +141,11 @@ enum IO_TYPE { IO_IN = 0, IO_OUT = 1, IO_INOUT = 2 };
 // define a template class to iterate on in or out edges of a given node
 template <IO_TYPE io_type>
 struct IOEdgeContainerIterator : public Iterator<edge>,
-                                 public MemoryPool<IOEdgeContainerIterator<io_type> > {
+                                 public MemoryPool<IOEdgeContainerIterator<io_type>> {
   node n;
   edge curEdge;
   MutableContainer<bool> loops;
-  const std::vector<std::pair<node, node> > &edges;
+  const std::vector<std::pair<node, node>> &edges;
   std::vector<edge>::iterator it, itEnd;
 
   void prepareNext() {
@@ -177,7 +177,7 @@ struct IOEdgeContainerIterator : public Iterator<edge>,
   }
 
   IOEdgeContainerIterator(node n, std::vector<edge> &v,
-                          const std::vector<std::pair<node, node> > &edges)
+                          const std::vector<std::pair<node, node>> &edges)
       : n(n), edges(edges), it(v.begin()), itEnd(v.end()) {
     loops.setAll(false);
     prepareNext();
@@ -202,13 +202,13 @@ struct IOEdgeContainerIterator : public Iterator<edge>,
 
 // define a class to iterate on in or out nodes of a given node
 template <IO_TYPE io_type>
-struct IONodesIterator : public Iterator<node>, public MemoryPool<IONodesIterator<io_type> > {
+struct IONodesIterator : public Iterator<node>, public MemoryPool<IONodesIterator<io_type>> {
   node n;
-  const std::vector<std::pair<node, node> > &edges;
+  const std::vector<std::pair<node, node>> &edges;
   Iterator<edge> *it;
 
   IONodesIterator(node n, std::vector<edge> &nEdges,
-                  const std::vector<std::pair<node, node> > &edges)
+                  const std::vector<std::pair<node, node>> &edges)
       : n(n), edges(edges) {
     if (io_type == IO_INOUT)
       it = new EdgeContainerIterator(nEdges);
@@ -544,7 +544,7 @@ edge GraphStorage::addEdge(const node src, const node tgt) {
  * @brief Add edges in the structure and returns them
  * in the addedEdges vector
  */
-void GraphStorage::addEdges(const std::vector<std::pair<node, node> > &ends,
+void GraphStorage::addEdges(const std::vector<std::pair<node, node>> &ends,
                             std::vector<edge> *addedEdges) {
   unsigned int nb = ends.size();
 

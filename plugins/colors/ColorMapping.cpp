@@ -89,8 +89,8 @@ private:
   StringCollection targetType;
   ColorScale colorScale;
   Vector<float, 4> deltaRGBA;
-  std::vector<std::pair<std::string, Color> > enumeratedMappingResultVector;
-  std::map<std::string, std::vector<unsigned int> > mapMetricElements;
+  std::vector<std::pair<std::string, Color>> enumeratedMappingResultVector;
+  std::map<std::string, std::vector<unsigned int>> mapMetricElements;
   double maxInput;
   double minInput;
   bool overrideMaxInput;
@@ -271,7 +271,7 @@ public:
                                                                        : graph->numberOfEdges();
       unsigned int iter = 0;
 
-      for (std::vector<std::pair<std::string, Color> >::iterator it =
+      for (std::vector<std::pair<std::string, Color>>::iterator it =
                enumeratedMappingResultVector.begin();
            it != enumeratedMappingResultVector.end(); ++it) {
         std::vector<unsigned int> *elements = &mapMetricElements[(*it).first];
@@ -347,7 +347,7 @@ public:
 
       std::vector<std::string> enumeratedValues;
 
-      for (std::map<std::string, std::vector<unsigned int> >::iterator it =
+      for (std::map<std::string, std::vector<unsigned int>>::iterator it =
                mapMetricElements.begin();
            it != mapMetricElements.end(); ++it) {
         enumeratedValues.push_back(it->first);

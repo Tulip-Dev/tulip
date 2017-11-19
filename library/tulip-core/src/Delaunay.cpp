@@ -47,8 +47,8 @@ typedef Matrix<long double, 3> Mat3ld;
 typedef Vector<long double, 3> Vec3ld;
 
 static bool runQHull(int dim, vector<double> &points,
-                     vector<pair<unsigned int, unsigned int> > &edges,
-                     vector<vector<unsigned int> > &simplices) {
+                     vector<pair<unsigned int, unsigned int>> &edges,
+                     vector<vector<unsigned int>> &simplices) {
 
   // Set default options for qhull delaunay triangulation
   // - Qt : triangulated output
@@ -74,7 +74,7 @@ static bool runQHull(int dim, vector<double> &points,
 
   if (!qhullKo) {
 
-    set<pair<unsigned int, unsigned int> > placedEdges;
+    set<pair<unsigned int, unsigned int>> placedEdges;
 
 // call qhull delaunay triangulation
 #ifdef HAVE_REENTRANT_QHULL
@@ -343,8 +343,8 @@ TLP_END_HASH_NAMESPACE
 //================================================================================================
 
 bool tlp::delaunayTriangulation(vector<Coord> &points,
-                                vector<pair<unsigned int, unsigned int> > &edges,
-                                vector<vector<unsigned int> > &simplices, bool voronoiMode) {
+                                vector<pair<unsigned int, unsigned int>> &edges,
+                                vector<vector<unsigned int>> &simplices, bool voronoiMode) {
 
   vector<double> pointsQHull;
   BoundingBox bb;
@@ -504,8 +504,8 @@ static void addVoronoiEdge(VoronoiDiagram &voronoiDiagram, const Face &face,
 
 bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
 
-  vector<pair<unsigned int, unsigned int> > edges;
-  vector<vector<unsigned int> > simplices;
+  vector<pair<unsigned int, unsigned int>> edges;
+  vector<vector<unsigned int>> simplices;
   voronoiDiagram.sites = sites;
   unsigned int nbSites = sites.size();
 

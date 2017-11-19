@@ -197,7 +197,7 @@ private:
   Coord blCorner;
   unsigned int size;
   unsigned int nbHistogramBins;
-  std::vector<std::vector<unsigned int> > histogramBins;
+  std::vector<std::vector<unsigned int>> histogramBins;
   double binWidth;
   unsigned int maxBinSize;
   GlQuantitativeAxis *xAxis, *yAxis;
@@ -212,7 +212,7 @@ private:
   std::vector<std::string> uniformQuantificationAxisLabels;
   bool uniformQuantification;
   bool cumulativeFreqHisto, lastCumulHisto;
-  std::map<unsigned int, std::pair<double, double> > binMinMaxMap;
+  std::map<unsigned int, std::pair<double, double>> binMinMaxMap;
   std::string textureName;
   GlGraphComposite *graphComposite;
   Graph *edgeAsNodeGraph;

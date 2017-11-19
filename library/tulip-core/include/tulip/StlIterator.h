@@ -51,13 +51,13 @@ private:
   */
 template <typename VALUE, typename ITERATOR>
 struct MPStlIterator : public StlIterator<VALUE, ITERATOR>,
-                       public MemoryPool<MPStlIterator<VALUE, ITERATOR> > {
+                       public MemoryPool<MPStlIterator<VALUE, ITERATOR>> {
   MPStlIterator(const ITERATOR &startIt, const ITERATOR &endIt)
       : StlIterator<VALUE, ITERATOR>(startIt, endIt) {}
 };
 //=================================================
 template <typename KEY, typename VALUE>
-struct StlHMapIterator : public Iterator<std::pair<KEY, VALUE> > {
+struct StlHMapIterator : public Iterator<std::pair<KEY, VALUE>> {
   StlHMapIterator(typename TLP_HASH_MAP<KEY, VALUE>::const_iterator startIt,
                   typename TLP_HASH_MAP<KEY, VALUE>::const_iterator endIt)
       : it(startIt), itEnd(endIt) {}

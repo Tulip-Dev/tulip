@@ -26,7 +26,7 @@ using namespace std;
 using namespace tlp;
 
 void sortEdges(Graph *graph, const vector<edge> &order, map<edge, edge> &rev) {
-  map<node, vector<edge> > graphMap;
+  map<node, vector<edge>> graphMap;
   vector<edge>::const_iterator it = order.begin();
 
   for (; it != order.end(); ++it) {
@@ -34,7 +34,7 @@ void sortEdges(Graph *graph, const vector<edge> &order, map<edge, edge> &rev) {
     graphMap[graph->source(*it)].push_back(rev[*it]);
   }
 
-  map<node, vector<edge> >::const_iterator itM = graphMap.begin();
+  map<node, vector<edge>>::const_iterator itM = graphMap.begin();
 
   for (; itM != graphMap.end(); ++itM) {
     assert(graph->deg(itM->first) == itM->second.size());
@@ -203,7 +203,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
     // marks as VISITED all nodes in the boundary cycle;
     markPathInT(term, w, backEdgeRepresentant, traversedNodes);
     // map<node, list<edge> > bEdgesRepres;
-    map<node, list<edge> > bEdgesRepres;
+    map<node, list<edge>> bEdgesRepres;
 
     bEdgesRepres = groupBackEdgesByRepr(sG, listBackEdges, backEdgeRepresentant, traversedNodes,
                                         listRepresentants);
@@ -257,7 +257,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
     markPathInT(term1, t1, backEdgeRepresentant, traversedNodes);
 
     // MutableContainer<list<edge>* > *bEdgesRepres;
-    map<node, list<edge> > bEdgesRepres;
+    map<node, list<edge>> bEdgesRepres;
     bEdgesRepres = groupBackEdgesByRepr(sG, listBackEdges, backEdgeRepresentant, traversedNodes,
                                         listRepresentants);
     list<node> toEmbedLater;
@@ -331,10 +331,10 @@ void PlanarityTestImpl::markPathInT(node t, node w, map<node, node> &backEdgeRep
  * Precondition:
  * - for all nodes u in T_w, has_back_edge[u] == false.
 */
-map<node, list<edge> >
-PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<edge> &listBackEdges,
-                                        map<node, node> &backEdgeRepresentant,
-                                        list<node> &traversedNodes, list<node> &listRepresentants) {
+map<node, list<edge>> PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<edge> &listBackEdges,
+                                                              map<node, node> &backEdgeRepresentant,
+                                                              list<node> &traversedNodes,
+                                                              list<node> &listRepresentants) {
   list<node> nl;
 
   // forall(e, listBackEdges)
@@ -382,7 +382,7 @@ PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<edge> &listBackEdges,
   }
 
   // map<node, list<edge> > listEdges;
-  map<node, list<edge> > listEdges; // = new MutableContainer<list<edge>* >();
+  map<node, list<edge>> listEdges; // = new MutableContainer<list<edge>* >();
 
   // forall(e, listBackEdges)
   for (list<edge>::iterator it = listBackEdges.begin(); it != listBackEdges.end(); ++it) {
@@ -415,7 +415,7 @@ PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<edge> &listBackEdges,
  *   b_edges_repres[u].
  */
 list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1, node t2, Graph *sG,
-                                           node w, map<node, list<edge> > &bEdgesRepres,
+                                           node w, map<node, list<edge>> &bEdgesRepres,
                                            list<node> &traversedNodes,
                                            tlp::BmdList<edge> &embList) {
   list<node> toEmbedLater;
@@ -469,7 +469,7 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW, node t1, node 
  */
 void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w,
                                                node oldCNode, node u,
-                                               map<node, list<edge> > &bEdgesRepres,
+                                               map<node, list<edge>> &bEdgesRepres,
                                                list<node> &traversedNodes, list<node> &toEmbedLater,
                                                tlp::BmdList<edge> &embList) {
 

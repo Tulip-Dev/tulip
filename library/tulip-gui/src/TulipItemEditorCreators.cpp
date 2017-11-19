@@ -644,7 +644,7 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
   // dialog with a QListWidget inside
-  std::list<std::pair<QString, QPixmap> > shapes;
+  std::list<std::pair<QString, QPixmap>> shapes;
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
 
   for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
@@ -713,7 +713,7 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
   // dialog with a QListWidget inside
-  std::list<std::pair<QString, QPixmap> > shapes;
+  std::list<std::pair<QString, QPixmap>> shapes;
   shapes.push_back(std::make_pair(QString("NONE"), QPixmap()));
 
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
@@ -905,7 +905,7 @@ QWidget *EdgeSetEditorCreator::createWidget(QWidget *parent) const {
 }
 
 void EdgeSetEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) {
-  std::set<tlp::edge> eset = var.value<std::set<tlp::edge> >();
+  std::set<tlp::edge> eset = var.value<std::set<tlp::edge>>();
 
   std::stringstream ss;
   tlp::EdgeSetType::write(ss, eset);
@@ -917,7 +917,7 @@ QVariant EdgeSetEditorCreator::editorData(QWidget *, tlp::Graph *) {
 }
 
 QString EdgeSetEditorCreator::displayText(const QVariant &var) const {
-  std::set<tlp::edge> eset = var.value<std::set<tlp::edge> >();
+  std::set<tlp::edge> eset = var.value<std::set<tlp::edge>>();
 
   std::stringstream ss;
   tlp::EdgeSetType::write(ss, eset);
@@ -936,7 +936,7 @@ QWidget *QVectorBoolEditorCreator::createWidget(QWidget *parent) const {
 void QVectorBoolEditorCreator::setEditorData(QWidget *editor, const QVariant &v, bool,
                                              tlp::Graph *) {
   QVector<QVariant> editorData;
-  QVector<bool> vect = v.value<QVector<bool> >();
+  QVector<bool> vect = v.value<QVector<bool>>();
 
   for (int i = 0; i < vect.size(); ++i) {
     editorData.push_back(QVariant::fromValue<bool>(vect[i]));
@@ -954,11 +954,11 @@ QVariant QVectorBoolEditorCreator::editorData(QWidget *editor, tlp::Graph *) {
   foreach (const QVariant &v, editorData)
     result.push_back(v.value<bool>());
 
-  return QVariant::fromValue<QVector<bool> >(result);
+  return QVariant::fromValue<QVector<bool>>(result);
 }
 
 QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
-  std::vector<bool> v = data.value<QVector<bool> >().toStdVector();
+  std::vector<bool> v = data.value<QVector<bool>>().toStdVector();
 
   if (v.empty())
     return QString();

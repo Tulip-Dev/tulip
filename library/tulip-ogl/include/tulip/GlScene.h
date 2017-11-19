@@ -408,7 +408,7 @@ public:
   /**
    * @brief Return the layer list
    */
-  const std::vector<std::pair<std::string, GlLayer *> > &getLayersList() {
+  const std::vector<std::pair<std::string, GlLayer *>> &getLayersList() {
     return layersList;
   }
 
@@ -417,7 +417,7 @@ public:
    * Layers will not be deleted in this function
    */
   void clearLayersList() {
-    for (std::vector<std::pair<std::string, GlLayer *> >::iterator it = layersList.begin();
+    for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layersList.begin();
          it != layersList.end(); ++it)
       delete it->second;
 
@@ -536,7 +536,7 @@ public:
   }
 
 private:
-  std::vector<std::pair<std::string, GlLayer *> > layersList;
+  std::vector<std::pair<std::string, GlLayer *>> layersList;
   GlLODCalculator *lodCalculator;
   Vector<int, 4> viewport;
   Color backgroundColor;

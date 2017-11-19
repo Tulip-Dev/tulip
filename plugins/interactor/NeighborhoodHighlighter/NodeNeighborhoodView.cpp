@@ -81,7 +81,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
       if (property == NULL) {
         graphViewNodes.erase(graphViewNodes.begin() + nbNodes + 1, graphViewNodes.end());
       } else {
-        map<double, vector<node> > nodesTokeep;
+        map<double, vector<node>> nodesTokeep;
         nodesAtDist[currentDist].clear();
 
         for (vector<node>::const_iterator it = graphViewNodes.begin(); it != graphViewNodes.end();
@@ -93,7 +93,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
         graphViewNodes.push_back(n);
         int count = 0;
 
-        for (std::map<double, vector<node> >::const_iterator it = nodesTokeep.begin();
+        for (std::map<double, vector<node>>::const_iterator it = nodesTokeep.begin();
              it != nodesTokeep.end(); ++it) {
           for (vector<node>::const_iterator nodeIt = it->second.begin(); nodeIt != it->second.end();
                ++nodeIt) {

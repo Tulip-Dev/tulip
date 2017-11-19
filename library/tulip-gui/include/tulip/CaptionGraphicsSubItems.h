@@ -107,7 +107,7 @@ public:
                   QGraphicsPathItem *bottomPathItem, SelectionArrowItem *topCircle,
                   SelectionArrowItem *bottomCircle);
 
-  void setDataToPath(const std::vector<std::pair<double, float> > &metricToSizeFilteredList,
+  void setDataToPath(const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
                      double minMetric, double maxMetric);
 
   void setRect(const QRectF &rect);
@@ -122,7 +122,7 @@ protected:
 
   bool sceneEvent(QEvent *event);
 
-  std::vector<std::pair<double, float> > _metricToSizeFilteredList;
+  std::vector<std::pair<double, float>> _metricToSizeFilteredList;
   double _minMetric;
   double _maxMetric;
 
@@ -143,7 +143,7 @@ public:
   void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient,
                             const std::string &propertyName, double minValue, double maxValue);
 
-  void generateSizeCaption(const std::vector<std::pair<double, float> > &metricToSizeFilteredList,
+  void generateSizeCaption(const std::vector<std::pair<double, float>> &metricToSizeFilteredList,
                            const std::string &propertyName, double minValue, double maxValue);
 
 public slots:

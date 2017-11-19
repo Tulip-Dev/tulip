@@ -74,7 +74,7 @@ void GlPolyQuad::draw(float, Camera *) {
 
   vector<Coord> vertexArray;
   vector<float> texCoordsArray;
-  vector<Vector<float, 4> > colorsArray;
+  vector<Vector<float, 4>> colorsArray;
   vector<unsigned short> quadIndices;
   vector<unsigned short> outlineIndices;
 

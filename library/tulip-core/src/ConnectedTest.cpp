@@ -73,7 +73,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const 
 }
 //======================================================================
 void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
-                                               vector<vector<node> > &components) {
+                                               vector<vector<node>> &components) {
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   // do a bfs traversal for each node
@@ -124,8 +124,8 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
 
 //======================================================================
 void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
-                                               vector<set<node> > &components) {
-  std::vector<std::vector<node> > vComponents;
+                                               vector<set<node>> &components) {
+  std::vector<std::vector<node>> vComponents;
   computeConnectedComponents(graph, vComponents);
   unsigned int nbComp = vComponents.size();
   components.resize(nbComp);

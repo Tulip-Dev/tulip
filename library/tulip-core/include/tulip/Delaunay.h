@@ -40,8 +40,8 @@ namespace tlp {
  * set of points.
  */
 TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
-                                     std::vector<std::pair<unsigned int, unsigned int> > &edges,
-                                     std::vector<std::vector<unsigned int> > &simplices,
+                                     std::vector<std::pair<unsigned int, unsigned int>> &edges,
+                                     std::vector<std::vector<unsigned int>> &simplices,
                                      bool voronoiMode = false);
 
 /**
@@ -123,7 +123,7 @@ public:
   std::vector<Vertex> vertices;
   std::vector<Edge> edges;
   std::vector<Cell> cells;
-  TLP_HASH_MAP<unsigned int, std::vector<unsigned int> > siteToCellEdges;
+  TLP_HASH_MAP<unsigned int, std::vector<unsigned int>> siteToCellEdges;
   TLP_HASH_MAP<unsigned int, unsigned int> siteToCell;
   TLP_HASH_MAP<unsigned int, unsigned int> verticesDegree;
 };

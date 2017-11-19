@@ -47,7 +47,7 @@ public:
 
   PythonCodeEditor *getEditor(int) const;
 
-  void indicateErrors(const QMap<QString, QVector<int> > &errorLines);
+  void indicateErrors(const QMap<QString, QVector<int>> &errorLines);
 
   void clearErrorIndicators();
 

@@ -47,7 +47,7 @@ class PluginProgress;
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n
  */
-TLP_SCOPE std::vector<std::vector<node> >
+TLP_SCOPE std::vector<std::vector<node>>
 computeCanonicalOrdering(PlanarConMap *, std::vector<edge> *dummyEdges = NULL,
                          PluginProgress *pluginProgress = NULL);
 /**

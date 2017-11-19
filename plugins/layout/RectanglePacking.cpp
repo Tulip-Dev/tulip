@@ -38,8 +38,7 @@ RectanglePacking::~RectanglePacking() {
   delete[] placesOfRectanglesInSecondSequence;
 }
 
-void RectanglePacking::optimalPositionOfNewRectangle(
-    vector<Rectangle<float> >::iterator itNewRect) {
+void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float>>::iterator itNewRect) {
   float ratio;
   Number bestRatio(Number::infini);
   float perimeterOfBoundingRectangle;
@@ -159,7 +158,7 @@ void RectanglePacking::repositionOfRectanglesRightOrAboveNewRectangle(
 }
 
 void RectanglePacking::modificationOfSequencePair(
-    vector<Rectangle<float> >::iterator itNewRect,
+    vector<Rectangle<float>>::iterator itNewRect,
     list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence) {
 
   list<RectangleRelativePosition>::iterator itRectToReposition;
@@ -355,10 +354,10 @@ int RectanglePacking::calculOfNumberOptimalRepositionnedRectangles(const char *q
   return 0;
 }
 
-void RectanglePacking::defaultPositionRestOfRectangles(vector<Rectangle<float> >::iterator itlim,
-                                                       vector<Rectangle<float> >::iterator itend) {
+void RectanglePacking::defaultPositionRestOfRectangles(vector<Rectangle<float>>::iterator itlim,
+                                                       vector<Rectangle<float>>::iterator itend) {
 
-  vector<Rectangle<float> >::iterator itr;
+  vector<Rectangle<float>>::iterator itr;
   bool boolWidth = false;
   bool boolHeight = false;
   float heightTemp = 0;
@@ -473,7 +472,7 @@ void RectanglePacking::endOfColumn(float &widthTemp, float &heightTemp, bool &bo
   }
 }
 
-void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, float &widthTemp,
+void RectanglePacking::continueLine(vector<Rectangle<float>>::iterator itr, float &widthTemp,
                                     float &heightTemp, bool &boolWidth, bool &boolHeight) {
   if ((widthTemp == 0) && (newRectangleWidth > bestWidthOfBoundingBox)) {
     (*itr)[0][0] = 0;
@@ -511,7 +510,7 @@ void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, flo
   }
 }
 
-void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, float &widthTemp,
+void RectanglePacking::continueColumn(vector<Rectangle<float>>::iterator itr, float &widthTemp,
                                       float &heightTemp, bool &boolWidth, bool &boolHeight) {
   if ((heightTemp == 0) && (newRectangleHeight > bestHeightOfBoundingBox)) {
     (*itr)[0][0] = bestWidthOfBoundingBox;
@@ -548,7 +547,7 @@ void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, f
 }
 
 void RectanglePacking::optimalPositionOfNewRectangleLimPos(
-    vector<Rectangle<float> >::iterator itNewRect, int numberTestedPositions) {
+    vector<Rectangle<float>>::iterator itNewRect, int numberTestedPositions) {
   float ratio;
   Number bestRatio(Number::infini);
   float perimeterOfBoundingRectangle;

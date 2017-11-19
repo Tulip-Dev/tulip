@@ -164,7 +164,7 @@ public:
 private:
   CSVParser *parser;
   CSVContentHandler *handler;
-  std::vector<std::vector<std::string> > columns;
+  std::vector<std::vector<std::string>> columns;
   unsigned int maxLineSize;
 };
 }

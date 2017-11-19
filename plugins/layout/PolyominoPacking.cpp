@@ -149,7 +149,7 @@ bool PolyominoPacking::run() {
     pluginProgress->setComment("Computing connected components ...");
   }
 
-  vector<vector<node> > connectedComponents;
+  vector<vector<node>> connectedComponents;
   tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
 
   if (connectedComponents.size() <= 1) {

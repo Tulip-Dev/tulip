@@ -27,8 +27,8 @@
 using namespace std;
 using namespace tlp;
 
-QMap<std::string, QList<std::string> > InteractorLister::_compatibilityMap =
-    QMap<std::string, QList<std::string> >();
+QMap<std::string, QList<std::string>> InteractorLister::_compatibilityMap =
+    QMap<std::string, QList<std::string>>();
 
 bool interactorLessThan(Interactor *a, Interactor *b) {
   return a->priority() > b->priority();

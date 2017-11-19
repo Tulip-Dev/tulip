@@ -54,7 +54,7 @@ GlComposite *readPolyFile(QString fileName) {
   }
 
   string polygonName = "";
-  vector<vector<Coord> > datas;
+  vector<vector<Coord>> datas;
   vector<Coord> currentVector;
   bool ok;
   QString line;
@@ -155,7 +155,7 @@ GlComposite *readCsvFile(QString fileName) {
   if (!file.open(QIODevice::ReadOnly))
     return NULL;
 
-  vector<vector<Coord> > datas;
+  vector<vector<Coord>> datas;
   vector<Coord> currentVector;
   int lastIndex = 0;
 
@@ -201,7 +201,7 @@ GlComposite *readCsvFile(QString fileName) {
 
 void simplifyPolyFile(QString fileName, float definition) {
 
-  map<string, vector<vector<Coord> > > clearPolygons;
+  map<string, vector<vector<Coord>>> clearPolygons;
 
   QFile file(fileName);
 
@@ -210,7 +210,7 @@ void simplifyPolyFile(QString fileName, float definition) {
   }
 
   string polygonName = "";
-  vector<vector<Coord> > datas;
+  vector<vector<Coord>> datas;
   vector<Coord> currentVector;
   bool ok;
 
@@ -305,13 +305,13 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   Coord *lastCoord = NULL;
 
-  for (map<string, vector<vector<Coord> > >::iterator it1 = clearPolygons.begin();
+  for (map<string, vector<vector<Coord>>>::iterator it1 = clearPolygons.begin();
        it1 != clearPolygons.end(); ++it1) {
     out << (*it1).first.c_str();
 
     unsigned int i = 1;
 
-    for (vector<vector<Coord> >::iterator it2 = (*it1).second.begin(); it2 != (*it1).second.end();
+    for (vector<vector<Coord>>::iterator it2 = (*it1).second.begin(); it2 != (*it1).second.end();
          ++it2) {
       out << i << "\n";
 
@@ -681,9 +681,9 @@ void GeographicViewGraphicsView::mapToPolygon() {
       if ((*it).second->getBoundingBox().contains(nodePos)) {
         GlComplexPolygon *polygon = static_cast<GlComplexPolygon *>((*it).second);
 
-        const vector<vector<Coord> > polygonSides = polygon->getPolygonSides();
+        const vector<vector<Coord>> polygonSides = polygon->getPolygonSides();
 
-        for (vector<vector<Coord> >::const_iterator it2 = polygonSides.begin();
+        for (vector<vector<Coord>>::const_iterator it2 = polygonSides.begin();
              it2 != polygonSides.end(); ++it2) {
           vector<Coord> polygonSide = (*it2);
           bool oddNodes = false;
@@ -768,8 +768,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     progressWidget->show();
 
     pair<double, double> latLng;
-    vector<pair<node, string> > multipleResultsAddresses;
-    map<string, pair<double, double> > addressesLatLngMap;
+    vector<pair<node, string>> multipleResultsAddresses;
+    map<string, pair<double, double>> addressesLatLngMap;
 
     Iterator<node> *nodesIt = graph->getNodes();
     node n;
@@ -937,7 +937,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
     edge e;
     forEach(e, graph->getEdges()) {
       const std::vector<double> &edgePath = edgesPathsProperty->getEdgeValue(e);
-      std::vector<std::pair<double, double> > latLngs;
+      std::vector<std::pair<double, double>> latLngs;
 
       for (size_t i = 0; i < edgePath.size(); i += 2) {
         latLngs.push_back(make_pair(edgePath[i], edgePath[i + 1]));

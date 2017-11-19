@@ -1112,7 +1112,7 @@ bool PythonIDE::indicateErrors() const {
   QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
   QRegExp rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
 
-  QMap<QString, QVector<int> > errorLines;
+  QMap<QString, QVector<int>> errorLines;
   QString consoleOutput = _pythonInterpreter->getStandardErrorOutput();
   QStringList outputLines = consoleOutput.split("\n");
 

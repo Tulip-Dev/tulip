@@ -75,7 +75,7 @@ void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient,
 }
 
 void CaptionGraphicsItem::generateSizeCaption(
-    const vector<pair<double, float> > &metricToSizeFilteredList, const string &propertyName,
+    const vector<pair<double, float>> &metricToSizeFilteredList, const string &propertyName,
     double minValue, double maxValue) {
   _rondedRectItem->generateSizeCaption(metricToSizeFilteredList, propertyName, minValue, maxValue);
 }

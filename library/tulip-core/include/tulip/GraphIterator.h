@@ -88,7 +88,7 @@ public:
 /// Node iterator for GraphView
 template <typename VALUE_TYPE>
 class SGraphNodeIterator : public FactorNodeIterator,
-                           public MemoryPool<SGraphNodeIterator<VALUE_TYPE> > {
+                           public MemoryPool<SGraphNodeIterator<VALUE_TYPE>> {
 private:
   const Graph *sg;
   Iterator<node> *it;
@@ -188,7 +188,7 @@ public:
 /// Edge iterator for GraphView
 template <typename VALUE_TYPE>
 class SGraphEdgeIterator : public FactorEdgeIterator,
-                           public MemoryPool<SGraphEdgeIterator<VALUE_TYPE> > {
+                           public MemoryPool<SGraphEdgeIterator<VALUE_TYPE>> {
 private:
   const Graph *sg;
   Iterator<edge> *it;

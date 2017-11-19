@@ -22,12 +22,12 @@
 using namespace std;
 using namespace tlp;
 
-vector<Rectangle<float> > &RectanglePackingLimitRectangles(vector<Rectangle<float> > &v,
-                                                           const char *quality,
-                                                           PluginProgress *progress) {
+vector<Rectangle<float>> &RectanglePackingLimitRectangles(vector<Rectangle<float>> &v,
+                                                          const char *quality,
+                                                          PluginProgress *progress) {
 
   int numberOfPackedRectangles;
-  vector<Rectangle<float> >::iterator itNewRect;
+  vector<Rectangle<float>>::iterator itNewRect;
   int numberNewRect;
 
   RectanglePacking *rectPack = new RectanglePacking(v.size());
@@ -72,16 +72,16 @@ vector<Rectangle<float> > &RectanglePackingLimitRectangles(vector<Rectangle<floa
   return v;
 }
 
-vector<Rectangle<float> > &RectanglePackingLimitPositions(vector<Rectangle<float> > &v,
-                                                          const char *quality,
-                                                          PluginProgress *progress) {
+vector<Rectangle<float>> &RectanglePackingLimitPositions(vector<Rectangle<float>> &v,
+                                                         const char *quality,
+                                                         PluginProgress *progress) {
 
   /*useful variables for the PluginProgress*/
   int counter = 1;
   int entrySize = v.size();
 
   unsigned int numberTestedPositions;
-  vector<Rectangle<float> >::iterator itNewRect;
+  vector<Rectangle<float>>::iterator itNewRect;
 
   RectanglePacking *rectPack = new RectanglePacking(entrySize);
 

@@ -37,7 +37,7 @@ namespace tlp {
  * expanded to store the new rows.
  */
 TLP_SCOPE void buildPascalTriangle(unsigned int n,
-                                   std::vector<std::vector<double> > &pascalTriangle);
+                                   std::vector<std::vector<double>> &pascalTriangle);
 
 /**
  * Compute the position of a point 'p' at t (0 <= t <= 1)

@@ -58,7 +58,7 @@ public:
 };
 
 template <typename ELT_TYPE, typename ELT_READER, int openParen>
-class TLP_SCOPE SerializableVectorType : public TypeInterface<std::vector<ELT_TYPE> > {
+class TLP_SCOPE SerializableVectorType : public TypeInterface<std::vector<ELT_TYPE>> {
   static bool readVector(std::istream &is, std::vector<ELT_TYPE> &v, char openChar, char sepChar,
                          char closeChar) {
     v.clear();
@@ -130,21 +130,20 @@ class TLP_SCOPE SerializableVectorType : public TypeInterface<std::vector<ELT_TY
 
 public:
   static void write(std::ostream &oss,
-                    const typename TypeInterface<std::vector<ELT_TYPE> >::RealType &v) {
+                    const typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     writeVector(oss, v);
   }
   static void writeb(std::ostream &oss,
-                     const typename TypeInterface<std::vector<ELT_TYPE> >::RealType &v) {
+                     const typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     unsigned int vSize = v.size();
     oss.write(reinterpret_cast<const char *>(&vSize), sizeof(vSize));
     oss.write(reinterpret_cast<const char *>(v.data()), vSize * sizeof(ELT_TYPE));
   }
-  static bool read(std::istream &iss, typename TypeInterface<std::vector<ELT_TYPE> >::RealType &v,
+  static bool read(std::istream &iss, typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v,
                    char openChar = '(', char sepChar = ',', char closeChar = ')') {
     return readVector(iss, v, openChar, sepChar, closeChar);
   }
-  static bool readb(std::istream &iss,
-                    typename TypeInterface<std::vector<ELT_TYPE> >::RealType &v) {
+  static bool readb(std::istream &iss, typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     unsigned int vSize;
 
     if (bool(iss.read(reinterpret_cast<char *>(&vSize), sizeof(vSize)))) {
@@ -157,7 +156,7 @@ public:
   static unsigned int valueSize() {
     return 0; // means is not fixed
   }
-  FORWARD_STRING_METHODS(typename TypeInterface<std::vector<ELT_TYPE> >)
+  FORWARD_STRING_METHODS(typename TypeInterface<std::vector<ELT_TYPE>>)
 };
 }
 

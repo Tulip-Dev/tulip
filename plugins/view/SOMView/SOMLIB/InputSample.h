@@ -122,7 +122,7 @@ protected:
 
   // Cache for data avoid to create a somVector each time we need
   // tlp::MutableContainer<DynamicVector<double> > mWeightTab;
-  std::map<unsigned int, DynamicVector<double> > mWeightTab;
+  std::map<unsigned int, DynamicVector<double>> mWeightTab;
 
   // Container used to store random list
   std::vector<tlp::node> randomVector;

@@ -413,7 +413,7 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  void addEdges(const std::vector<std::pair<node, node> > &edges,
+  void addEdges(const std::vector<std::pair<node, node>> &edges,
                 std::vector<edge> *addedEdges = NULL);
   //=======================================================
   /**
@@ -461,7 +461,7 @@ private:
   };
 
   // data members
-  mutable std::vector<std::pair<node, node> > edgeEnds;
+  mutable std::vector<std::pair<node, node>> edgeEnds;
   mutable std::vector<NodeData> nodeData;
   IdContainer<node> nodeIds;
   IdContainer<edge> edgeIds;

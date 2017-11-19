@@ -133,7 +133,7 @@ private:
 class TLP_QT_SCOPE CSVToGraphDataMapping {
 public:
   virtual ~CSVToGraphDataMapping() {}
-  virtual std::pair<tlp::ElementType, std::vector<unsigned int> >
+  virtual std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
                     const std::vector<PropertyInterface *> props) = 0;
   virtual void init(unsigned int rowNumber) = 0;
@@ -154,7 +154,7 @@ public:
   virtual ~AbstractCSVToGraphDataMapping() {}
 
   void init(unsigned int rowNumber);
-  std::pair<tlp::ElementType, std::vector<unsigned int> >
+  std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
                     const std::vector<PropertyInterface *> props);
 
@@ -179,7 +179,7 @@ class TLP_QT_SCOPE CSVToNewNodeIdMapping : public CSVToGraphDataMapping {
 public:
   CSVToNewNodeIdMapping(tlp::Graph *graph);
   void init(unsigned int rowNumber);
-  std::pair<tlp::ElementType, std::vector<unsigned int> >
+  std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
                     const std::vector<PropertyInterface *> props);
 
@@ -263,7 +263,7 @@ public:
                               bool createMissinElements = false);
   std::pair<tlp::ElementType, unsigned int> getElementForRow(unsigned int row);
   void init(unsigned int lineNumbers);
-  std::pair<tlp::ElementType, std::vector<unsigned int> >
+  std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
                     const std::vector<PropertyInterface *> props);
 

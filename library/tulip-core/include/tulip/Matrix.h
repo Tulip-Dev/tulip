@@ -53,7 +53,7 @@ public:
   Matrix(const Array<Vector<Obj, SIZE>, SIZE> &a) : Array<Vector<Obj, SIZE>, SIZE>(a) {}
 
   // Builds a correlation matrix from a covariance matrix !
-  Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix);
+  Matrix(const std::vector<std::vector<Obj>> &covarianceMatrix);
 
   /**
    * Fill the matrix with the value of obj

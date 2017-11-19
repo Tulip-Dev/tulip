@@ -42,8 +42,8 @@ using namespace tlp;
 
 //================================================================================
 
-static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int> > &facets,
-                     vector<vector<unsigned int> > &neighbors) {
+static bool runQHull(int dim, vector<double> &points, vector<vector<unsigned int>> &facets,
+                     vector<vector<unsigned int>> &neighbors) {
 
   // Set default options for qhull convex hull
   // - Qt : triangulated output
@@ -114,8 +114,8 @@ void tlp::convexHull(const std::vector<Coord> &points, std::vector<unsigned int>
   hull.clear();
 
   vector<double> pointsQHull;
-  vector<vector<unsigned int> > facets;
-  vector<vector<unsigned int> > neighbors;
+  vector<vector<unsigned int>> facets;
+  vector<vector<unsigned int>> neighbors;
 
   for (size_t i = 0; i < points.size(); ++i) {
     pointsQHull.push_back(points[i][0]);
@@ -179,8 +179,8 @@ void tlp::convexHull(const std::vector<Coord> &points, std::vector<unsigned int>
 //================================================================================
 
 void tlp::convexHull(const std::vector<Coord> &points,
-                     std::vector<std::vector<unsigned int> > &convexHullFacets,
-                     std::vector<std::vector<unsigned int> > &facetNeighbors) {
+                     std::vector<std::vector<unsigned int>> &convexHullFacets,
+                     std::vector<std::vector<unsigned int>> &facetNeighbors) {
 
   convexHullFacets.clear();
   facetNeighbors.clear();

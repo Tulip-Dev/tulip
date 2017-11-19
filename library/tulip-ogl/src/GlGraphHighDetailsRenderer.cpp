@@ -278,8 +278,8 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   if (!inputData->parameters->isElementZOrdered()) {
 
-    vector<pair<node, float> > nodesMetricOrdered;
-    vector<pair<edge, float> > edgesMetricOrdered;
+    vector<pair<node, float>> nodesMetricOrdered;
+    vector<pair<edge, float>> edgesMetricOrdered;
 
     // draw nodes and metanodes
     for (vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].nodesLODVector.begin();
@@ -329,7 +329,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
         std::reverse(nodesMetricOrdered.begin(), nodesMetricOrdered.end());
       }
 
-      for (vector<pair<node, float> >::iterator it = nodesMetricOrdered.begin();
+      for (vector<pair<node, float>>::iterator it = nodesMetricOrdered.begin();
            it != nodesMetricOrdered.end(); ++it) {
         if (selectionDrawActivate) {
           if ((selectionType & RenderingNodes) == 0)
@@ -390,7 +390,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
           reverse(edgesMetricOrdered.begin(), edgesMetricOrdered.end());
         }
 
-        for (vector<pair<edge, float> >::iterator it = edgesMetricOrdered.begin();
+        for (vector<pair<edge, float>>::iterator it = edgesMetricOrdered.begin();
              it != edgesMetricOrdered.end(); ++it) {
           if (selectionDrawActivate) {
             if ((selectionType & RenderingEdges) == 0)
@@ -617,8 +617,8 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
   NumericProperty *metric = inputData->parameters->getElementOrderingProperty();
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
 
-  vector<pair<node, float> > nodesMetricOrdered;
-  vector<pair<edge, float> > edgesMetricOrdered;
+  vector<pair<node, float>> nodesMetricOrdered;
+  vector<pair<edge, float>> edgesMetricOrdered;
   GlNode glNode(0);
   GlEdge glEdge(0);
 
@@ -682,7 +682,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       ltn.metric = metric;
       sort(nodesMetricOrdered.begin(), nodesMetricOrdered.end(), ltn);
 
-      for (vector<pair<node, float> >::iterator it = nodesMetricOrdered.begin();
+      for (vector<pair<node, float>>::iterator it = nodesMetricOrdered.begin();
            it != nodesMetricOrdered.end(); ++it) {
         glNode.id = it->first.id;
         glNode.drawLabel(occlusionTest, inputData, it->second, layerLODUnit.camera);
@@ -728,7 +728,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       lte.metric = metric;
       sort(edgesMetricOrdered.begin(), edgesMetricOrdered.end(), lte);
 
-      for (vector<pair<edge, float> >::iterator it = edgesMetricOrdered.begin();
+      for (vector<pair<edge, float>>::iterator it = edgesMetricOrdered.begin();
            it != edgesMetricOrdered.end(); ++it) {
         glEdge.id = it->first.id;
         glEdge.drawLabel(occlusionTest, inputData, it->second, layerLODUnit.camera);

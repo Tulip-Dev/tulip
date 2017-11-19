@@ -56,16 +56,14 @@ public:
   float bestRectangleLowOrdinate;  /**< Best low ordinate of a new rectangle to pack since the
                                       beginning of the position tests. */
 
-  float
-      maxWidthOfBoundingBox; /**< Width of the rectangle including all the packed rectangles and a
-                                new rectangle to pack, for a tested position. */
+  float maxWidthOfBoundingBox; /**< Width of the rectangle including all the packed rectangles and a
+                                  new rectangle to pack, for a tested position. */
   float maxHeightOfBoundingBox; /**< Width of the rectangle including all the packed rectangles and
                                    a new rectangle to pack, for a tested position. */
 
-  float
-      bestWidthOfBoundingBox; /**< Best width of the rectangle including all the packed rectangles
-                                 and a new rectangle to pack since the beginning of the position
-                                 tests. */
+  float bestWidthOfBoundingBox; /**< Best width of the rectangle including all the packed rectangles
+                                   and a new rectangle to pack since the beginning of the position
+                                   tests. */
   float bestHeightOfBoundingBox; /**< Best height of the rectangle including all the packed
                                     rectangles and a new rectangle to pack since the beginning of
                                     the position tests. */
@@ -85,15 +83,15 @@ public:
    *Place the rectangles not packed in an optimal way around the rectangle
    *including the rectangles packed in an optimal way.
    */
-  void defaultPositionRestOfRectangles(std::vector<tlp::Rectangle<float> >::iterator itlim,
-                                       std::vector<tlp::Rectangle<float> >::iterator itend);
+  void defaultPositionRestOfRectangles(std::vector<tlp::Rectangle<float>>::iterator itlim,
+                                       std::vector<tlp::Rectangle<float>>::iterator itend);
 
   /**
    *Search the best co-ordinates of a rectangle in order to pack it in the
    *best way. Test the results obtained with all the possible positions in
    * the even sequence.
    */
-  void optimalPositionOfNewRectangle(std::vector<tlp::Rectangle<float> >::iterator itNewRect);
+  void optimalPositionOfNewRectangle(std::vector<tlp::Rectangle<float>>::iterator itNewRect);
 
   /**
    *Search the co-ordinates of a rectangle for the positions tested in the
@@ -195,7 +193,7 @@ public:
    * to pack, have been made.
    */
   void modificationOfSequencePair(
-      std::vector<tlp::Rectangle<float> >::iterator itNewRect,
+      std::vector<tlp::Rectangle<float>>::iterator itNewRect,
       std::list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence);
 
   /**
@@ -234,7 +232,7 @@ public:
    * added to the width of the current line, is strictly lower to the width of
    * the including rectangle.
    */
-  void continueLine(std::vector<tlp::Rectangle<float> >::iterator itr, float &widthTemp,
+  void continueLine(std::vector<tlp::Rectangle<float>>::iterator itr, float &widthTemp,
                     float &heightTemp, bool &boolWidth, bool &boolHeight);
 
   /**
@@ -242,10 +240,10 @@ public:
   *pack, added to the height of the current column, is strictly lower to the
   *height of the including rectangle.
   */
-  void continueColumn(std::vector<tlp::Rectangle<float> >::iterator itr, float &widthTemp,
+  void continueColumn(std::vector<tlp::Rectangle<float>>::iterator itr, float &widthTemp,
                       float &heightTemp, bool &boolWidth, bool &boolHeight);
 
-  void optimalPositionOfNewRectangleLimPos(std::vector<tlp::Rectangle<float> >::iterator itNewRect,
+  void optimalPositionOfNewRectangleLimPos(std::vector<tlp::Rectangle<float>>::iterator itNewRect,
                                            int numberTestedPositions);
 
   /**

@@ -222,10 +222,10 @@ public:
    */
   unsigned int getSent() const;
 
-      /**
-       * @brief get the number of received events.
-       * @return the number of received events (0 when compiling with -DNDEBUG).
-       */
+  /**
+   * @brief get the number of received events.
+   * @return the number of received events (0 when compiling with -DNDEBUG).
+   */
   unsigned int getReceived() const;
 
   /**
@@ -488,7 +488,7 @@ private:
    */
   static std::vector<tlp::node> _oDelayedDelNode;
 
-  static std::set<std::pair<tlp::node, tlp::node> > _oDelayedEvents;
+  static std::set<std::pair<tlp::node, tlp::node>> _oDelayedEvents;
 
   /**
    * @brief _oNotifying counter of nested notify calls

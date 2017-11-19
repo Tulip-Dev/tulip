@@ -104,7 +104,7 @@ private:
   Coord *selectedPolygonPoint;
   bool dragStarted;
   int x, y;
-  std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double> >
+  std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double>>
       polygonsToNodesSubsetAndCorrelCoeff;
 };
 }

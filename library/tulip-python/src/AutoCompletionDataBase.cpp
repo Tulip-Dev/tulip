@@ -371,7 +371,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
             if (tlpPluginExists(pluginName)) {
               if (_pluginParametersDataSet.find(fullName) == _pluginParametersDataSet.end()) {
-                _pluginParametersDataSet[fullName] = QHash<QString, QSet<QString> >();
+                _pluginParametersDataSet[fullName] = QHash<QString, QSet<QString>>();
                 _varToPluginName[fullName] = QHash<QString, QString>();
               }
 
@@ -984,7 +984,7 @@ AutoCompletionDataBase::getSubGraphsListIfContext(const QString &context,
 
 static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QString &prefix) {
   QSet<QString> ret;
-  tlp::Iterator<std::pair<std::string, tlp::DataType *> > *it =
+  tlp::Iterator<std::pair<std::string, tlp::DataType *>> *it =
       rootGraph->getAttributes().getValues();
 
   while (it->hasNext()) {
@@ -1497,11 +1497,11 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
   return ret;
 }
 
-QVector<QVector<QString> >
+QVector<QVector<QString>>
 AutoCompletionDataBase::getParamTypesForMethodOrFunction(const QString &type,
                                                          const QString &funcName) const {
   QString fullName = type + "." + funcName;
-  QVector<QVector<QString> > ret = _apiDb->getParamTypesForMethodOrFunction(fullName);
+  QVector<QVector<QString>> ret = _apiDb->getParamTypesForMethodOrFunction(fullName);
   QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
 
   for (int i = 0; i < baseTypes.size(); ++i) {

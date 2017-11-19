@@ -39,7 +39,7 @@ using namespace std;
 
 namespace tlp {
 
-map<QString, vector<Color> > ColorScaleConfigDialog::tulipImageColorScales;
+map<QString, vector<Color>> ColorScaleConfigDialog::tulipImageColorScales;
 
 ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale &colorScale, QWidget *parent)
     : QDialog(parent), _ui(new Ui::ColorScaleDialog), colorScale(colorScale) {
@@ -402,7 +402,7 @@ void ColorScaleConfigDialog::deleteSavedColorScale() {
 void ColorScaleConfigDialog::loadUserSavedColorScales() {
   _ui->savedColorScalesList->clear();
 
-  map<QString, vector<Color> >::const_iterator it = tulipImageColorScales.begin();
+  map<QString, vector<Color>>::const_iterator it = tulipImageColorScales.begin();
 
   for (; it != tulipImageColorScales.end(); ++it) {
     _ui->savedColorScalesList->addItem(it->first);

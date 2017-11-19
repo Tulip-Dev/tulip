@@ -19,10 +19,10 @@ class TLP_QT_SCOPE ShapeDialog : public QDialog {
 
   Ui::ShapeDialog *_ui;
   QString _selectedShapeName;
-  std::list<std::pair<QString, QPixmap> > shapes;
+  std::list<std::pair<QString, QPixmap>> shapes;
 
 public:
-  ShapeDialog(std::list<std::pair<QString, QPixmap> > &nodeShapes, QWidget *parent = NULL);
+  ShapeDialog(std::list<std::pair<QString, QPixmap>> &nodeShapes, QWidget *parent = NULL);
   ~ShapeDialog();
 
   QString getSelectedShapeName() const;

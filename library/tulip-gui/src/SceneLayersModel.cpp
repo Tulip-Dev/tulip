@@ -84,9 +84,9 @@ QModelIndex SceneLayersModel::index(int row, int column, const QModelIndex &pare
 }
 
 QModelIndex SceneLayersModel::graphCompositeIndex() const {
-  std::vector<std::pair<std::string, GlLayer *> > layers = _scene->getLayersList();
+  std::vector<std::pair<std::string, GlLayer *>> layers = _scene->getLayersList();
 
-  for (std::vector<std::pair<std::string, GlLayer *> >::iterator it = layers.begin();
+  for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layers.begin();
        it != layers.end(); ++it) {
     GlComposite *composite = it->second->getComposite();
     int row = 0;
@@ -111,9 +111,9 @@ QModelIndex SceneLayersModel::parent(const QModelIndex &child) const {
   if (GRAPH_COMPOSITE_IDS.contains(child.internalId()))
     return graphCompositeIndex();
 
-  std::vector<std::pair<std::string, GlLayer *> > layers = _scene->getLayersList();
+  std::vector<std::pair<std::string, GlLayer *>> layers = _scene->getLayersList();
 
-  for (std::vector<std::pair<std::string, GlLayer *> >::iterator it = layers.begin();
+  for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layers.begin();
        it != layers.end(); ++it) {
     if (it->second == child.internalPointer())
       return QModelIndex(); // Item was a layer, aka. a top level item.
@@ -130,7 +130,7 @@ QModelIndex SceneLayersModel::parent(const QModelIndex &child) const {
   if (ancestor == NULL) { // Parent is a layer composite
     int row = 0;
 
-    for (std::vector<std::pair<std::string, GlLayer *> >::iterator it = layers.begin();
+    for (std::vector<std::pair<std::string, GlLayer *>>::iterator it = layers.begin();
          it != layers.end(); ++it) {
       if (it->second->getComposite() == parent)
         return createIndex(row, 0, it->second); // Item was a layer, aka. a top level item.

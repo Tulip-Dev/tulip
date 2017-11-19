@@ -440,9 +440,9 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
                           sipFindType((std::string("std::vector<") + SIP_TYPE_STR + ">").c_str()), \
                           SIP_NOT_NONE)) {                                                         \
     if (dataType && dataType->getTypeName() == std::string(typeid(std::list<CPP_TYPE>).name())) {  \
-      valSetter.setValue(getCppObjectFromPyObject<std::list<CPP_TYPE> >(pyObj));                   \
+      valSetter.setValue(getCppObjectFromPyObject<std::list<CPP_TYPE>>(pyObj));                    \
     } else {                                                                                       \
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<CPP_TYPE> >(pyObj));                 \
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<CPP_TYPE>>(pyObj));                  \
     }                                                                                              \
     return true;                                                                                   \
   }
@@ -518,41 +518,41 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::vector<long>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<int>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::vector<unsigned int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned int>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::vector<long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<long> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<long>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::vector<unsigned long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned long> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned long>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::vector<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<float> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<float>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::vector<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<double>>(pyObj));
 
     } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<int>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::list<unsigned int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned int>>(pyObj));
     } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<long> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<long>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::list<unsigned long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned long> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned long>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::list<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<float> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<float>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::list<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<double>>(pyObj));
     } else {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<int>>(pyObj));
     }
 
     return true;
@@ -560,15 +560,15 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::vector<double>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<float> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<float>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::list<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<float> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<float>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::list<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::list<double>>(pyObj));
     } else {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<double>>(pyObj));
     }
 
     return true;
@@ -576,22 +576,22 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::set<long>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::set<int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<int>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::set<unsigned int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned int>>(pyObj));
     } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<long> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<long>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::set<unsigned long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned long> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned long>>(pyObj));
     } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<float> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<float>>(pyObj));
     } else if (dataType &&
                dataType->getTypeName() == std::string(typeid(std::set<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<double>>(pyObj));
     } else {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<int>>(pyObj));
     }
 
     return true;
@@ -599,9 +599,9 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::set<double>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::set<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<float> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<float>>(pyObj));
     } else {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<double>>(pyObj));
     }
 
     return true;

@@ -43,7 +43,7 @@ private:
   tlp::MutableContainer<bool> removed;
   std::vector<unsigned int> v_dist;
 
-  TLP_HASH_MAP<unsigned int, TLP_HASH_SET<tlp::node> > levelToNodes;
+  TLP_HASH_MAP<unsigned int, TLP_HASH_SET<tlp::node>> levelToNodes;
 
   void bfsDepth(tlp::node, unsigned int);
   void updateVectors();

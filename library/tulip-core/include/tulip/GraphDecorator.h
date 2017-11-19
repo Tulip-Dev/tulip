@@ -101,8 +101,8 @@ public:
   virtual void addNode(const node);
   virtual void addNodes(Iterator<node> *nodes);
   virtual edge addEdge(const node n1, const node n2);
-  virtual void addEdges(const std::vector<std::pair<node, node> > &edges);
-  virtual void addEdges(const std::vector<std::pair<node, node> > &edges,
+  virtual void addEdges(const std::vector<std::pair<node, node>> &edges);
+  virtual void addEdges(const std::vector<std::pair<node, node>> &edges,
                         std::vector<edge> &addedEdges);
   virtual void addEdge(const edge);
   virtual void addEdges(Iterator<edge> *edges);

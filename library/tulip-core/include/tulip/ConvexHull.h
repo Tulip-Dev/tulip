@@ -51,8 +51,8 @@ TLP_SCOPE void convexHull(const std::vector<Coord> &points, std::vector<unsigned
  * The convexHullFacets and facetNeighbors vectors are automatically cleared.
  */
 TLP_SCOPE void convexHull(const std::vector<Coord> &points,
-                          std::vector<std::vector<unsigned int> > &convexHullFacets,
-                          std::vector<std::vector<unsigned int> > &facetNeighbors);
+                          std::vector<std::vector<unsigned int>> &convexHullFacets,
+                          std::vector<std::vector<unsigned int>> &facetNeighbors);
 
 /*@}*/
 }

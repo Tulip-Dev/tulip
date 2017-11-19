@@ -103,7 +103,7 @@ public:
 
       node s = it->next();
       stack<node> S;
-      TLP_HASH_MAP<node, list<node> > P;
+      TLP_HASH_MAP<node, list<node>> P;
       MutableContainer<int> sigma;
       sigma.setAll(0);
       sigma.set(s.id, 1);

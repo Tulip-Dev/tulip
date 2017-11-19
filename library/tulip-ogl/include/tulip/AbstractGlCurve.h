@@ -115,7 +115,7 @@ protected:
   void initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode);
 
   static std::map<unsigned int, GLfloat *> curveVertexBuffersData;
-  static std::map<unsigned int, std::vector<GLushort *> > curveVertexBuffersIndices;
+  static std::map<unsigned int, std::vector<GLushort *>> curveVertexBuffersIndices;
   static std::map<unsigned int, GLuint *> curveVertexBuffersObject;
   static std::map<std::string, GlShaderProgram *> curvesShadersMap;
   static std::map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
@@ -124,10 +124,10 @@ protected:
   static GlShader *fisheyeDistortionVertexShader;
   static GlShader *curveFragmentShader;
   static bool canUseGeometryShader;
-  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> >
+  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
       curvesGeometryShadersMap;
   static GlShader *curveVertexGeometryShaderNormalMain;
-  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> >
+  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
       curvesBillboardGeometryShadersMap;
 
   std::string shaderProgramName;

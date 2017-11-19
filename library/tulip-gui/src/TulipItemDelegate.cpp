@@ -76,16 +76,16 @@ TulipItemDelegate::TulipItemDelegate(QObject *parent)
   registerCreator<EdgeShape::EdgeShapes>(new EdgeShapeEditorCreator);
   registerCreator<EdgeExtremityShape::EdgeExtremityShapes>(new EdgeExtremityShapeEditorCreator);
   // registerCreator<std::vector<bool> >(new VectorEditorCreator<bool>);
-  registerCreator<QVector<bool> >(new QVectorBoolEditorCreator);
-  registerCreator<std::vector<Color> >(new VectorEditorCreator<Color>);
-  registerCreator<std::vector<Coord> >(new VectorEditorCreator<Coord>);
-  registerCreator<std::vector<double> >(new VectorEditorCreator<double>);
-  registerCreator<std::vector<int> >(new VectorEditorCreator<int>);
-  registerCreator<std::vector<std::string> >(new VectorEditorCreator<std::string>);
+  registerCreator<QVector<bool>>(new QVectorBoolEditorCreator);
+  registerCreator<std::vector<Color>>(new VectorEditorCreator<Color>);
+  registerCreator<std::vector<Coord>>(new VectorEditorCreator<Coord>);
+  registerCreator<std::vector<double>>(new VectorEditorCreator<double>);
+  registerCreator<std::vector<int>>(new VectorEditorCreator<int>);
+  registerCreator<std::vector<std::string>>(new VectorEditorCreator<std::string>);
   registerCreator<TulipFont>(new TulipFontEditorCreator);
   registerCreator<LabelPosition::LabelPositions>(new TulipLabelPositionEditorCreator);
   registerCreator<Graph *>(new GraphEditorCreator);
-  registerCreator<std::set<tlp::edge> >(new EdgeSetEditorCreator);
+  registerCreator<std::set<tlp::edge>>(new EdgeSetEditorCreator);
   registerCreator<TulipFontIcon>(new TulipFontIconCreator);
 }
 

@@ -188,7 +188,7 @@ public:
     if (!rootInfo.isDir())
       return true;
 
-    QStack<QPair<QString, tlp::node> > fsStack;
+    QStack<QPair<QString, tlp::node>> fsStack;
     fsStack.push(QPair<QString, tlp::node>(rootInfo.absoluteFilePath(), rootNode));
 
     while (!fsStack.empty()) {

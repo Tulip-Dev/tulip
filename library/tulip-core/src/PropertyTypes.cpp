@@ -980,11 +980,11 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
   }
 };
 
-struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> > {
+struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node>> {
 
   KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
 
-  NodeVectorTypeSerializer() : TypedDataSerializer<vector<node> >("nodes") {
+  NodeVectorTypeSerializer() : TypedDataSerializer<vector<node>>("nodes") {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
@@ -1040,11 +1040,11 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
   }
 };
 
-struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> > {
+struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
 
   KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
 
-  EdgeVectorTypeSerializer() : TypedDataSerializer<vector<edge> >("edges") {
+  EdgeVectorTypeSerializer() : TypedDataSerializer<vector<edge>>("edges") {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
@@ -1182,11 +1182,11 @@ void tlp::initTypeSerializers() {
 
   DataSet::registerDataTypeSerializer<node>(NodeTypeSerializer());
 
-  DataSet::registerDataTypeSerializer<vector<node> >(NodeVectorTypeSerializer());
+  DataSet::registerDataTypeSerializer<vector<node>>(NodeVectorTypeSerializer());
 
   DataSet::registerDataTypeSerializer<edge>(EdgeTypeSerializer());
 
-  DataSet::registerDataTypeSerializer<vector<edge> >(EdgeVectorTypeSerializer());
+  DataSet::registerDataTypeSerializer<vector<edge>>(EdgeVectorTypeSerializer());
 
   DataSet::registerDataTypeSerializer<StringCollection>(StringCollectionSerializer());
 }

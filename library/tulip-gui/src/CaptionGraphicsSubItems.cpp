@@ -161,7 +161,7 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
 }
 
 void CaptionGraphicsBackgroundItem::generateSizeCaption(
-    const vector<pair<double, float> > &metricToSizeFilteredList, const string & /*propertyName*/,
+    const vector<pair<double, float>> &metricToSizeFilteredList, const string & /*propertyName*/,
     double minValue, double maxValue) {
   _minValue = minValue;
   _maxValue = maxValue;
@@ -420,7 +420,7 @@ MovablePathItem::MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathI
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
-void MovablePathItem::setDataToPath(const vector<pair<double, float> > &metricToSizeFilteredList,
+void MovablePathItem::setDataToPath(const vector<pair<double, float>> &metricToSizeFilteredList,
                                     double minMetric, double maxMetric) {
   _metricToSizeFilteredList = metricToSizeFilteredList;
   _minMetric = minMetric;
@@ -443,7 +443,7 @@ void MovablePathItem::updatePath() {
 
   vector<QPainterPath> paths;
   paths.resize(3);
-  vector<vector<QPoint> > pathsPoints;
+  vector<vector<QPoint>> pathsPoints;
   pathsPoints.resize(3);
 
   double secondLimit = _minMetric + (1. - _currentRect.y()) * (_maxMetric - _minMetric);
@@ -453,7 +453,7 @@ void MovablePathItem::updatePath() {
   pair<double, float> lastValue = *_metricToSizeFilteredList.begin();
   int state = 0;
 
-  for (vector<pair<double, float> >::iterator it = _metricToSizeFilteredList.begin();
+  for (vector<pair<double, float>>::iterator it = _metricToSizeFilteredList.begin();
        it != _metricToSizeFilteredList.end(); ++it) {
     if ((*it).first < firstLimit) {
       if (state == 0) {

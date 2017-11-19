@@ -149,7 +149,7 @@ public:
    */
   void setColorToMap(tlp::ColorProperty *newColor);
 
-  std::map<tlp::node, std::set<tlp::node> > &getMappingTab() {
+  std::map<tlp::node, std::set<tlp::node>> &getMappingTab() {
     return mappingTab;
   }
 
@@ -344,7 +344,7 @@ private:
   SOMMap *som;
   InputSample inputSample;
 
-  std::map<tlp::node, std::set<tlp::node> > mappingTab;
+  std::map<tlp::node, std::set<tlp::node>> mappingTab;
 
   std::string selection;
 

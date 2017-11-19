@@ -693,7 +693,7 @@ void SOMView::computeMapping() {
   Coord nodeCoord;
   Size nodeSize;
 
-  for (map<node, set<node> >::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
+  for (map<node, set<node>>::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
     som->getPosForNode(it->first, x, y);
     nodeDisplayAreaTopLeft = marginShift + mapCompositeElements->getTopLeftPositionForElement(x, y);
     unsigned int num = 0;
@@ -911,7 +911,7 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
     Observable::holdObservers();
     graph()->push();
 
-    for (map<node, set<node> >::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
+    for (map<node, set<node>>::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
       Color currentNodeColor = somColorProperty->getNodeValue(it->first);
 
       for (set<node>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
@@ -1005,7 +1005,7 @@ void SOMView::copySelectionToMask() {
     BooleanProperty *selection = graph()->getProperty<BooleanProperty>("viewSelection");
     node n;
     forEach(n, selection->getNodesEqualTo(true, graph())) {
-      for (map<tlp::node, std::set<tlp::node> >::iterator it = mappingTab.begin();
+      for (map<tlp::node, std::set<tlp::node>>::iterator it = mappingTab.begin();
            it != mappingTab.end(); ++it) {
         if (it->second.find(n) != it->second.end())
           somNodes.insert(it->first);

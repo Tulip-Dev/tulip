@@ -103,14 +103,14 @@ public:
    * and others vectors are holes in polygon), a fill color, a polygon edges type(0 -> straight
    * lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
-  GlComplexPolygon(const std::vector<std::vector<Coord> > &coords, Color fcolor,
+  GlComplexPolygon(const std::vector<std::vector<Coord>> &coords, Color fcolor,
                    int polygonEdgesType = 0, const std::string &textureName = "");
   /**
    * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon
    * and others vectors are holes in polygon), a fill color, an outline color a polygon edges type(0
    * -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
-  GlComplexPolygon(const std::vector<std::vector<Coord> > &coords, Color fcolor, Color ocolor,
+  GlComplexPolygon(const std::vector<std::vector<Coord>> &coords, Color fcolor, Color ocolor,
                    int polygonEdgesType = 0, const std::string &textureName = "");
 
   virtual ~GlComplexPolygon() {}
@@ -231,7 +231,7 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
-  const std::vector<std::vector<Coord> > &getPolygonSides() const {
+  const std::vector<std::vector<Coord>> &getPolygonSides() const {
     return points;
   }
 
@@ -248,8 +248,8 @@ protected:
   void runTesselation();
   void createPolygon(const std::vector<Coord> &coords, int polygonEdgesType);
 
-  std::vector<std::vector<Coord> > points;
-  std::vector<std::vector<float> > pointsIdx;
+  std::vector<std::vector<Coord>> points;
+  std::vector<std::vector<float>> pointsIdx;
   std::vector<float> verticesData;
   std::vector<unsigned int> verticesIndices;
   int currentVector;

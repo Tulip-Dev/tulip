@@ -49,7 +49,7 @@ namespace {
   * \see VectorGraph
   */
 template <bool SENS>
-class bInOutNodeIterator : public Iterator<node>, public MemoryPool<bInOutNodeIterator<SENS> > {
+class bInOutNodeIterator : public Iterator<node>, public MemoryPool<bInOutNodeIterator<SENS>> {
 public:
   bInOutNodeIterator(const std::vector<node> &nodes, const std::vector<bool> &sens,
                      unsigned int elem)
@@ -94,7 +94,7 @@ private:
   * \see VectorGraph
   */
 template <bool SENS>
-class bInOutEdgeIterator : public Iterator<edge>, public MemoryPool<bInOutEdgeIterator<SENS> > {
+class bInOutEdgeIterator : public Iterator<edge>, public MemoryPool<bInOutEdgeIterator<SENS>> {
 public:
   bInOutEdgeIterator(const std::vector<edge> &edges, const std::vector<bool> &sens,
                      unsigned int elem)
@@ -390,7 +390,7 @@ edge VectorGraph::addEdge(const node src, const node tgt) {
   return newEdge;
 }
 //=======================================================
-void VectorGraph::addEdges(const std::vector<std::pair<node, node> > &ends,
+void VectorGraph::addEdges(const std::vector<std::pair<node, node>> &ends,
                            std::vector<edge> *addedEdges) {
   unsigned int nb = ends.size();
 

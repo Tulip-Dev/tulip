@@ -250,7 +250,7 @@ template <typename ElementType>
 void VectorEditorCreator<ElementType>::setEditorData(QWidget *editor, const QVariant &v, bool,
                                                      tlp::Graph *) {
   QVector<QVariant> editorData;
-  std::vector<ElementType> vect = v.value<std::vector<ElementType> >();
+  std::vector<ElementType> vect = v.value<std::vector<ElementType>>();
 
   for (size_t i = 0; i < vect.size(); ++i) {
     editorData.push_back(QVariant::fromValue<ElementType>(vect[i]));
@@ -269,7 +269,7 @@ QVariant VectorEditorCreator<ElementType>::editorData(QWidget *editor, tlp::Grap
   foreach (QVariant v, editorData)
     result.push_back(v.value<ElementType>());
 
-  return QVariant::fromValue<std::vector<ElementType> >(result);
+  return QVariant::fromValue<std::vector<ElementType>>(result);
 }
 
 // the template below is only used for displayText method implementation
@@ -288,7 +288,7 @@ struct DisplayVectorDataType : public DataType {
 
 template <typename ElementType>
 QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
-  std::vector<ElementType> v = data.value<std::vector<ElementType> >();
+  std::vector<ElementType> v = data.value<std::vector<ElementType>>();
 
   if (v.empty())
     return QString();

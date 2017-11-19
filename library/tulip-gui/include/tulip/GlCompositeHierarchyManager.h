@@ -93,7 +93,7 @@ private:
   /**
    * This map contains the composite that contains the associated graph's hull.
    */
-  std::map<tlp::Graph *, std::pair<tlp::GlComposite *, GlConvexGraphHull *> > _graphsComposites;
+  std::map<tlp::Graph *, std::pair<tlp::GlComposite *, GlConvexGraphHull *>> _graphsComposites;
 };
 
 class GlHierarchyMainComposite : public GlComposite {

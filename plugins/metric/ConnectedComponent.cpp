@@ -27,7 +27,7 @@ ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context)
     : DoubleAlgorithm(context) {}
 //======================================================
 bool ConnectedComponent::run() {
-  std::vector<std::vector<node> > components;
+  std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(graph, components);
 
   // assign the index of each component as value for its nodes

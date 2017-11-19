@@ -296,7 +296,7 @@ void GraphView::restoreEdge(edge e, const node, const node) {
 }
 //----------------------------------------------------------------
 void GraphView::addEdgesInternal(unsigned int nbAdded, const std::vector<edge> *ee,
-                                 const std::vector<std::pair<node, node> > &ends) {
+                                 const std::vector<std::pair<node, node>> &ends) {
   _edges.reserve(_edges.size() + nbAdded);
 
   bool hasEnds = !ends.empty();
@@ -347,12 +347,12 @@ void GraphView::addEdge(const edge e) {
   }
 }
 //----------------------------------------------------------------
-void GraphView::addEdges(const std::vector<std::pair<node, node> > &ends) {
+void GraphView::addEdges(const std::vector<std::pair<node, node>> &ends) {
   getSuperGraph()->addEdges(ends);
   addEdgesInternal(ends.size(), NULL, ends);
 }
 //----------------------------------------------------------------
-void GraphView::addEdges(const std::vector<std::pair<node, node> > &ends,
+void GraphView::addEdges(const std::vector<std::pair<node, node>> &ends,
                          std::vector<edge> &addedEdges) {
   getSuperGraph()->addEdges(ends, addedEdges);
   addEdgesInternal(ends.size(), &addedEdges, ends);
@@ -384,7 +384,7 @@ void GraphView::addEdges(Iterator<edge> *addedEdges) {
   }
 
   if (!ee.empty())
-    addEdgesInternal(ee.size(), &ee, std::vector<pair<node, node> >());
+    addEdgesInternal(ee.size(), &ee, std::vector<pair<node, node>>());
 }
 //----------------------------------------------------------------
 void GraphView::removeNode(const node n) {

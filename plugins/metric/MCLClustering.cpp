@@ -142,7 +142,7 @@ void MCLClustering::prune(node n) {
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
   // - avoid a costly stableForEach when deleting edges
-  std::vector<pair<double, edge> > pvect;
+  std::vector<pair<double, edge>> pvect;
   pvect.reserve(outdeg);
   edge e;
   forEach(e, g.getOutEdges(n)) {
@@ -168,7 +168,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
   // - avoid a costly stableForEach when deleting edges
-  std::vector<pair<double, edge> > pvect;
+  std::vector<pair<double, edge>> pvect;
   pvect.reserve(sz);
 
   edge e;

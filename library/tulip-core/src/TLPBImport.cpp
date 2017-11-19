@@ -119,7 +119,7 @@ bool TLPBImport::importGraph() {
   // loop to read edges
   {
     // we can use a buffer to limit the disk reads
-    std::vector<std::pair<node, node> > vEdges(MAX_EDGES_TO_READ);
+    std::vector<std::pair<node, node>> vEdges(MAX_EDGES_TO_READ);
     unsigned int nbEdges = header.numEdges;
     pluginProgress->setComment(filename + ": reading edges...");
 
@@ -173,7 +173,7 @@ bool TLPBImport::importGraph() {
           return (delete is, errorTrap());
 
         // we can use a buffer to limit the disk reads
-        std::vector<std::pair<node, node> > vRanges(MAX_RANGES_TO_READ);
+        std::vector<std::pair<node, node>> vRanges(MAX_RANGES_TO_READ);
 
         // loop to read ranges
         while (numRanges) {
@@ -205,7 +205,7 @@ bool TLPBImport::importGraph() {
           return (delete is, errorTrap());
 
         // loop to read ranges
-        std::vector<std::pair<edge, edge> > vRanges(MAX_RANGES_TO_READ);
+        std::vector<std::pair<edge, edge>> vRanges(MAX_RANGES_TO_READ);
 
         while (numRanges) {
           unsigned int rangesToRead =

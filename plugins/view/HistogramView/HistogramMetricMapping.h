@@ -264,7 +264,7 @@ protected:
   QAction *sizeMapping;
   QAction *glyphMapping;
 
-  std::map<MappingType, std::vector<Coord> > curveShapeForMapping;
+  std::map<MappingType, std::vector<Coord>> curveShapeForMapping;
 };
 }
 

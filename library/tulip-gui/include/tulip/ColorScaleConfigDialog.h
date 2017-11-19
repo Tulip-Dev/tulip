@@ -81,7 +81,7 @@ private:
   ColorScale latestColorScale;
   std::string gradientsImageDirectory;
 
-  static std::map<QString, std::vector<Color> > tulipImageColorScales;
+  static std::map<QString, std::vector<Color>> tulipImageColorScales;
   static void loadTulipImageColorScales();
   static void loadImageColorScalesFromDir(const QString &colorScalesDir);
   static std::vector<Color> getColorScaleFromImageFile(const QString &imageFilePath);

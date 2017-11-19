@@ -75,7 +75,7 @@ class PluginModel : public tlp::TulipModel {
   void buildTree() {
     delete _root;
     _root = new TreeItem("root");
-    QMap<QString, QMap<QString, QStringList> > pluginTree;
+    QMap<QString, QMap<QString, QStringList>> pluginTree;
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PLUGIN>();
 
     for (std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {

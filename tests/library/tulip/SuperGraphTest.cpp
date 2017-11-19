@@ -342,7 +342,7 @@ void SuperGraphTest::testAddDel() {
 
   CPPUNIT_ASSERT_EQUAL(0u, graph->numberOfEdges());
 
-  vector<pair<node, node> > ends;
+  vector<pair<node, node>> ends;
 
   for (unsigned int i = 0; i < NB_EDGES; ++i) {
     ends.push_back(pair<node, node>(nodes[randomUnsignedInteger(NB_ADD - 1)],

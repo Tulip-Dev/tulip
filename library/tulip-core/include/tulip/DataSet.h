@@ -188,7 +188,7 @@ public:
  **/
 class TLP_SCOPE DataSet {
   // Internal list of key-value pairs.
-  std::list<std::pair<std::string, DataType *> > data;
+  std::list<std::pair<std::string, DataType *>> data;
   /* management of data serialization
       two hashmap to retrieve data serializer from their
       type names and output type names
@@ -297,7 +297,7 @@ public:
   /**
    * @return An iterator over stored values as a std::pair name => untyped value
    */
-  tlp::Iterator<std::pair<std::string, DataType *> > *getValues() const;
+  tlp::Iterator<std::pair<std::string, DataType *>> *getValues() const;
 
   /**
    * @brief Returns the number of registered values

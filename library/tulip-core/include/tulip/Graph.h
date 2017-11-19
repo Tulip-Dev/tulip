@@ -672,7 +672,7 @@ public:
    * The first element of the pair is the source, the second is the destination.
    *
    */
-  virtual void addEdges(const std::vector<std::pair<node, node> > &edges) = 0;
+  virtual void addEdges(const std::vector<std::pair<node, node>> &edges) = 0;
 
   /**
    * @brief Adds new edges in the graph and returns them in the addedEdges vector.
@@ -685,7 +685,7 @@ public:
    * @param addedEdges The newly added edges. This vector is cleared before being filled.
    *
    */
-  virtual void addEdges(const std::vector<std::pair<node, node> > &edges,
+  virtual void addEdges(const std::vector<std::pair<node, node>> &edges,
                         std::vector<edge> &addedEdges) = 0;
 
   /**

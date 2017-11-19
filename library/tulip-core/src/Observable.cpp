@@ -77,8 +77,8 @@ NodeProperty<Observable *> Observable::_oPointer;
 NodeProperty<bool> Observable::_oAlive;
 NodeProperty<unsigned int> Observable::_oEventsToTreat;
 EdgeProperty<unsigned char> Observable::_oType;
-std::set<std::pair<tlp::node, tlp::node> > Observable::_oDelayedEvents =
-    std::set<std::pair<tlp::node, tlp::node> >();
+std::set<std::pair<tlp::node, tlp::node>> Observable::_oDelayedEvents =
+    std::set<std::pair<tlp::node, tlp::node>>();
 vector<node> Observable::_oDelayedDelNode;
 bool Observable::_oInitialized = Observable::init();
 
@@ -304,9 +304,9 @@ void Observable::unholdObservers() {
       ++_oUnholding;
       ++_oHoldCounter; /** rehold the observer to buffer message sent during unholding */
 
-      set<pair<node, node> > backupEvents;
+      set<pair<node, node>> backupEvents;
       backupEvents.swap(_oDelayedEvents);
-      set<pair<node, node> >::const_iterator it;
+      set<pair<node, node>>::const_iterator it;
 
       for (it = backupEvents.begin(); it != backupEvents.end(); ++it) {
         if (Observable::_oAlive[it->first]) {
@@ -315,7 +315,7 @@ void Observable::unholdObservers() {
         }
       }
 
-      map<node, vector<Event> > preparedEvents;
+      map<node, vector<Event>> preparedEvents;
 
       for (it = backupEvents.begin(); it != backupEvents.end(); ++it) {
         if (Observable::_oAlive[it->first] && Observable::_oAlive[it->second]) {
@@ -327,7 +327,7 @@ void Observable::unholdObservers() {
       }
 
       {
-        map<node, vector<Event> >::const_iterator it;
+        map<node, vector<Event>>::const_iterator it;
 
         for (it = preparedEvents.begin(); it != preparedEvents.end(); ++it) {
           // treat scheduled events
@@ -462,8 +462,8 @@ void Observable::sendEvent(const Event &message) {
 
   // create two separate list of observer & listeners
   // could be extended if we need recorders
-  vector<pair<Observable *, node> > observerTonotify;
-  vector<pair<Observable *, node> > listenerTonotify;
+  vector<pair<Observable *, node>> observerTonotify;
+  vector<pair<Observable *, node>> listenerTonotify;
   edge e;
   bool delayedEventAdded = false;
   forEach(e, _oGraph.getInEdges(_n)) {
@@ -503,7 +503,7 @@ void Observable::sendEvent(const Event &message) {
 
   // send message to listeners
   if (!listenerTonotify.empty()) {
-    vector<pair<Observable *, node> >::const_iterator itobs;
+    vector<pair<Observable *, node>>::const_iterator itobs;
 
     for (itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
       if (itobs->second == backn && message.type() == Event::TLP_DELETE) {
@@ -543,7 +543,7 @@ void Observable::sendEvent(const Event &message) {
   // send simple event to observers
   if (!observerTonotify.empty()) {
     vector<Event> tmp(1, message);
-    vector<pair<Observable *, node> >::const_iterator itobs;
+    vector<pair<Observable *, node>>::const_iterator itobs;
 
     for (itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
       if (itobs->second == backn && message.type() == Event::TLP_DELETE) {
@@ -678,7 +678,7 @@ unsigned int Observable::countListeners() const {
 
   unsigned int result = 0;
   node n;
-  forEach(n, (new FilterIterator<node, LinkFilter<LISTENER> >(
+  forEach(n, (new FilterIterator<node, LinkFilter<LISTENER>>(
                  _oGraph.getInNodes(getNode()),
                  LinkFilter<LISTENER>(_oGraph, _oType, getNode()))))++ result;
   return result;
@@ -690,7 +690,7 @@ unsigned int Observable::countObservers() const {
 
   unsigned int result = 0;
   node n;
-  forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER> >(
+  forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER>>(
                  _oGraph.getInNodes(getNode()),
                  LinkFilter<OBSERVER>(_oGraph, _oType, getNode()))))++ result;
   return result;

@@ -32,8 +32,8 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
   tlp::NodeStaticProperty<tlp::Coord> points(graph);
   points.copyFromProperty(graph->getProperty<tlp::LayoutProperty>("viewLayout"));
 
-  vector<pair<unsigned int, unsigned int> > edges;
-  vector<vector<unsigned int> > simplices;
+  vector<pair<unsigned int, unsigned int>> edges;
+  vector<vector<unsigned int>> simplices;
   bool ret = tlp::delaunayTriangulation(points, edges, simplices);
 
   if (ret) {

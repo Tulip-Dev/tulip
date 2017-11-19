@@ -103,7 +103,7 @@ private:
 
   ParallelCoordinatesView *parallelView;
   Graph *currentGraph;
-  std::map<ParallelAxis *, std::vector<AxisSlider *> > axisSlidersMap;
+  std::map<ParallelAxis *, std::vector<AxisSlider *>> axisSlidersMap;
   ParallelAxis *selectedAxis;
   std::vector<ParallelAxis *> lastSelectedAxis;
   AxisSlider *selectedSlider;
@@ -115,7 +115,7 @@ private:
   float lastAxisHeight;
   unsigned int lastNbAxis;
   ParallelCoordinatesDrawing::HighlightedEltsSetOp highlightedEltsSetOperation;
-  std::map<ParallelAxis *, std::pair<float, float> > slidersYBoundaries;
+  std::map<ParallelAxis *, std::pair<float, float>> slidersYBoundaries;
   GlLayer *selectionLayer;
 };
 }

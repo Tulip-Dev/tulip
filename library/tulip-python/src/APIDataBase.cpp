@@ -172,7 +172,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
         QString wholeFuncName = type + "." + dictEntry;
 
         if (_paramTypes.find(wholeFuncName) == _paramTypes.end()) {
-          _paramTypes[wholeFuncName] = QVector<QVector<QString> >();
+          _paramTypes[wholeFuncName] = QVector<QVector<QString>>();
         }
 
         _paramTypes[wholeFuncName].append(params);
@@ -224,9 +224,9 @@ QString APIDataBase::getReturnTypeForMethodOrFunction(const QString &funcName) c
   return ret;
 }
 
-QVector<QVector<QString> >
+QVector<QVector<QString>>
 APIDataBase::getParamTypesForMethodOrFunction(const QString &funcName) const {
-  QVector<QVector<QString> > ret;
+  QVector<QVector<QString>> ret;
 
   if (_paramTypes.find(funcName) != _paramTypes.end()) {
     ret = _paramTypes[funcName];
@@ -241,7 +241,7 @@ bool APIDataBase::functionExists(const QString &funcName) const {
 
 QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {
   QVector<QString> ret;
-  QHashIterator<QString, QSet<QString> > i(_dictContent);
+  QHashIterator<QString, QSet<QString>> i(_dictContent);
 
   while (i.hasNext()) {
     i.next();
@@ -259,7 +259,7 @@ QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEn
 
 QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &prefix) const {
   QSet<QString> ret;
-  QHashIterator<QString, QSet<QString> > i(_dictContent);
+  QHashIterator<QString, QSet<QString>> i(_dictContent);
 
   while (i.hasNext()) {
     i.next();

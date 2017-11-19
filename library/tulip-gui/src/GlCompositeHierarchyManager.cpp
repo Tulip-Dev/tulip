@@ -75,7 +75,7 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *co
   GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming.str(), getColor(), current,
                                                   _layout, _size, _rotation);
 
-  _graphsComposites.insert(std::pair<Graph *, std::pair<GlComposite *, GlConvexGraphHull *> >(
+  _graphsComposites.insert(std::pair<Graph *, std::pair<GlComposite *, GlConvexGraphHull *>>(
       current, std::pair<GlComposite *, GlConvexGraphHull *>(composite, hull)));
 
   GlComposite *newComposite = new GlComposite();
@@ -161,7 +161,7 @@ void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
     createComposite();
   } else {
     for (std::map<tlp::Graph *,
-                  std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *> >::const_iterator it =
+                  std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
              _graphsComposites.begin();
          it != _graphsComposites.end(); ++it) {
       if (it->first->numberOfNodes() != 0) {
@@ -212,7 +212,7 @@ DataSet GlCompositeHierarchyManager::getData() {
   DataSet set;
 
   for (std::map<tlp::Graph *,
-                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *> >::const_iterator it =
+                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
            _graphsComposites.begin();
        it != _graphsComposites.end(); ++it) {
     unsigned int graphId = it->first->getId();
@@ -228,7 +228,7 @@ DataSet GlCompositeHierarchyManager::getData() {
 
 void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
   for (std::map<tlp::Graph *,
-                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *> >::const_iterator it =
+                std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
            _graphsComposites.begin();
        it != _graphsComposites.end(); ++it) {
     stringstream graph;

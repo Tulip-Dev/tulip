@@ -92,7 +92,7 @@ void PythonEditorsTabWidget::scriptTextChanged() {
   }
 }
 
-void PythonEditorsTabWidget::indicateErrors(const QMap<QString, QVector<int> > &errorLines) {
+void PythonEditorsTabWidget::indicateErrors(const QMap<QString, QVector<int>> &errorLines) {
   for (int i = 0; i < count(); ++i) {
     QString moduleFile = getEditor(i)->getFileName();
 

@@ -64,7 +64,7 @@ public:
   }
   ~Grid() {}
 
-  void buildRow(const vector<node> &nodes, vector<pair<node, node> > &ends, unsigned int iRow,
+  void buildRow(const vector<node> &nodes, vector<pair<node, node>> &ends, unsigned int iRow,
                 unsigned width, int conn, bool isTore, double spacing) {
     LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
 
@@ -103,7 +103,7 @@ public:
       ends.push_back(pair<node, node>(current, nodes[iBegin]));
   }
 
-  void connectRow(const vector<node> &nodes, vector<pair<node, node> > &ends, unsigned int row1,
+  void connectRow(const vector<node> &nodes, vector<pair<node, node>> &ends, unsigned int row1,
                   unsigned int row2, unsigned int width, int conn, bool isTore) {
     unsigned int row1Begin = row1 * width;
     unsigned int row2Begin = row2 * width;
@@ -228,7 +228,7 @@ public:
         nbEdges += height - 1;
     }
 
-    vector<pair<node, node> > ends;
+    vector<pair<node, node>> ends;
     ends.reserve(nbEdges);
     graph->reserveEdges(nbEdges);
 

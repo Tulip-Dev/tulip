@@ -108,7 +108,7 @@ bool MixedModel::run() {
 
   Pere = graph->addCloneSubGraph("Father");
   // compute the connected components's subgraphs
-  std::vector<std::vector<node> > components;
+  std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(Pere, components);
 
   for (unsigned int i = 0; i < components.size(); ++i) {

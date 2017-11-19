@@ -164,11 +164,11 @@ private:
    */
   void delEdgeMap(edge, Face = Face());
 
-  typedef TLP_HASH_MAP<Face, std::vector<edge> > faceMap;
+  typedef TLP_HASH_MAP<Face, std::vector<edge>> faceMap;
   typedef faceMap::value_type faceMapEntry;
-  typedef TLP_HASH_MAP<edge, std::vector<Face> > edgeMap;
+  typedef TLP_HASH_MAP<edge, std::vector<Face>> edgeMap;
   typedef edgeMap::value_type edgeMapEntry;
-  typedef TLP_HASH_MAP<node, std::vector<Face> > nodeMap;
+  typedef TLP_HASH_MAP<node, std::vector<Face>> nodeMap;
   typedef nodeMap::value_type nodeMapEntry;
 
   /** storage of faces */

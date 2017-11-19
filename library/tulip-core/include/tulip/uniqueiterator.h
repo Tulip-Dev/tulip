@@ -58,7 +58,7 @@ class CheckAllFunctor {
   * checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when
  * not necessary.
   */
-template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
+template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE>>
 class UniqueIterator : public Iterator<TYPE> {
 public:
   UniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR())
@@ -113,9 +113,9 @@ private:
   * @warning never inherit from that class
   * @see UniqueIterator
   */
-template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
+template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE>>
 class MPUniqueIterator : public UniqueIterator<TYPE, TOCHECKFUNCTOR>,
-                         public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR> > {
+                         public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR>> {
 public:
   MPUniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR())
       : UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {}

@@ -589,7 +589,7 @@ private:
   map<string, node> nodesMap;
 
   // vector to store edge information in case edges are declared before nodes in GEXF file
-  vector<pair<string, string> > edgesTmp;
+  vector<pair<string, string>> edgesTmp;
 
   // Visual attributes properties pointers to the graph we are building
   LayoutProperty *viewLayout;

@@ -70,7 +70,7 @@ private:
 template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
 class MPConversionIterator
     : public ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>,
-      public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR> > {
+      public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>> {
 public:
   MPConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor)
       : ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {}

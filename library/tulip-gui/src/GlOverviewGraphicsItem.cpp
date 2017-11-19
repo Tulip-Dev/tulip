@@ -120,9 +120,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   // Backup initial cameras
   vector<Camera> cameras;
-  const vector<pair<string, GlLayer *> > &layerList = baseScene.getLayersList();
+  const vector<pair<string, GlLayer *>> &layerList = baseScene.getLayersList();
 
-  for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+  for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
        it != layerList.end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
@@ -157,14 +157,14 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     baseScene.centerScene();
     _oldCameras.clear();
 
-    for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+    for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
          it != layerList.end(); ++it) {
       _oldCameras.push_back(it->second->getCamera());
     }
   } else {
     unsigned int i = 0;
 
-    for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+    for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
          it != layerList.end(); ++it) {
       it->second->getCamera().loadCameraParametersWith(_oldCameras[i]);
       ++i;
@@ -208,9 +208,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
     vector<bool> layersVisibility;
 
-    const vector<pair<string, GlLayer *> > &layersList = baseScene.getLayersList();
+    const vector<pair<string, GlLayer *>> &layersList = baseScene.getLayersList();
 
-    for (vector<pair<string, GlLayer *> >::const_iterator it = layersList.begin();
+    for (vector<pair<string, GlLayer *>>::const_iterator it = layersList.begin();
          it != layersList.end(); ++it) {
       layersVisibility.push_back(it->second->isVisible());
 
@@ -228,7 +228,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
     vector<bool>::iterator itTmp = layersVisibility.begin();
 
-    for (vector<pair<string, GlLayer *> >::const_iterator it = layersList.begin();
+    for (vector<pair<string, GlLayer *>>::const_iterator it = layersList.begin();
          it != layersList.end(); ++it) {
       if ((*itTmp) == true)
         it->second->setVisible(true);
@@ -246,7 +246,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   // invert applied camera transformations
   unsigned int i = 0;
 
-  for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+  for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
        it != layerList.end(); ++it) {
     it->second->getCamera() = cameras[i];
     ++i;
@@ -331,9 +331,9 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   baseScene.setViewport(0, 0, width, height);
 
   vector<Camera> cameras;
-  const vector<pair<string, GlLayer *> > &layerList = baseScene.getLayersList();
+  const vector<pair<string, GlLayer *>> &layerList = baseScene.getLayersList();
 
-  for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+  for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
        it != layerList.end(); ++it) {
     cameras.push_back(it->second->getCamera());
   }
@@ -342,14 +342,14 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   vector<Coord> centerPos;
 
-  for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+  for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
        it != layerList.end(); ++it) {
     centerPos.push_back(it->second->getCamera().viewportTo3DWorld(position));
   }
 
   unsigned int i = 0;
 
-  for (vector<pair<string, GlLayer *> >::const_iterator it = layerList.begin();
+  for (vector<pair<string, GlLayer *>>::const_iterator it = layerList.begin();
        it != layerList.end(); ++it) {
     Coord eyesVector = cameras[i].getEyes() - cameras[i].getCenter();
     Camera &camera = (*it).second->getCamera();

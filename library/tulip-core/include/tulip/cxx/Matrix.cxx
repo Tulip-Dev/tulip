@@ -48,7 +48,7 @@ public:
 
 //===================================================================
 template <typename Obj, unsigned int SIZE>
-MATRIX::Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix) {
+MATRIX::Matrix(const std::vector<std::vector<Obj>> &covarianceMatrix) {
   for (unsigned int i = 0; i < SIZE; i++)
     for (unsigned int j = 0; j < SIZE; j++)
       (*this)[i][j] =

@@ -198,14 +198,14 @@ protected:
   std::vector<Color> quadsOutlineColorsArray;
   std::vector<GLuint> quadsIndexArray;
   std::vector<GLsizei> quadsIndexCountArray;
-  std::vector<std::vector<GLuint> > quadsBottomOutlineIndexArray;
-  std::vector<std::vector<GLuint> > quadsTopOutlineIndexArray;
+  std::vector<std::vector<GLuint>> quadsBottomOutlineIndexArray;
+  std::vector<std::vector<GLuint>> quadsTopOutlineIndexArray;
 
   std::vector<GLuint> quadsRenderingIndicesArray;
   std::vector<GLuint> quadsSelectedRenderingIndicesArray;
 
-  std::map<float, std::vector<GLuint> > quadsOutlineRenderingIndicesArray;
-  std::map<float, std::vector<GLuint> > quadsSelectedOutlineRenderingIndicesArray;
+  std::map<float, std::vector<GLuint>> quadsOutlineRenderingIndicesArray;
+  std::map<float, std::vector<GLuint>> quadsSelectedOutlineRenderingIndicesArray;
 
   std::vector<Coord> pointsCoordsArray;
   std::vector<Color> pointsColorsArray;
@@ -215,8 +215,8 @@ protected:
   std::vector<GLuint> pointsEdgesRenderingIndexArray;
   std::vector<GLuint> pointsEdgesSelectedRenderingIndexArray;
 
-  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int> > edgeToLineIndexVector;
-  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int> > edgeToQuadIndexVector;
+  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int>> edgeToLineIndexVector;
+  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int>> edgeToQuadIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToBottomOulineIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToTopOutlineIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToPointIndexVector;

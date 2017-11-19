@@ -24,7 +24,7 @@ void GraphTableModel::removeFromVector(const std::set<T> &objects, std::vector<T
                                        TLP_HASH_MAP<T, int> &objToIndexes, bool deleteRows) {
   // Sort from the greatest to the smallest to ensure index are not invalidate during the
   // destruction process
-  std::set<int, std::greater<int> > indexes;
+  std::set<int, std::greater<int>> indexes;
 
   for (typename std::set<T>::const_iterator it = objects.begin(); it != objects.end(); ++it) {
     assert(objToIndexes.find(*it) != objToIndexes.end());
@@ -34,10 +34,10 @@ void GraphTableModel::removeFromVector(const std::set<T> &objects, std::vector<T
 
   while (!indexes.empty()) {
     // Compute the greatest range of successive indexes.
-    std::set<int, std::greater<int> >::const_iterator from = indexes.begin();
+    std::set<int, std::greater<int>>::const_iterator from = indexes.begin();
 
-    std::set<int, std::greater<int> >::const_iterator current = from;
-    std::set<int, std::greater<int> >::const_iterator to = from;
+    std::set<int, std::greater<int>>::const_iterator current = from;
+    std::set<int, std::greater<int>>::const_iterator to = from;
     ++to;
 
     // If the indexes are successive delete them at the same time.

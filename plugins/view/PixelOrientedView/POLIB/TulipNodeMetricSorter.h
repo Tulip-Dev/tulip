@@ -65,7 +65,7 @@ private:
   void reset();
 
   tlp::Graph *graph;
-  std::map<std::string, std::vector<tlp::node> > nodeSortingMap;
+  std::map<std::string, std::vector<tlp::node>> nodeSortingMap;
   std::map<std::string, unsigned int> nbValuesPropertyMap;
 
   static std::map<tlp::Graph *, TulipNodeMetricSorter *> instances;

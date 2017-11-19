@@ -29,13 +29,13 @@ LayoutPropertyAnimation::LayoutPropertyAnimation(Graph *g, LayoutProperty *start
                                                  BooleanProperty *selection, int frameCount,
                                                  bool computeNodes, bool computeEdges,
                                                  QObject *parent)
-    : CachedPropertyAnimation<LayoutProperty, Coord, vector<Coord> >(
+    : CachedPropertyAnimation<LayoutProperty, Coord, vector<Coord>>(
           g, start, end, out, selection, frameCount, computeNodes, computeEdges, parent) {}
 
 Coord LayoutPropertyAnimation::getNodeFrameValue(const Coord &startValue, const Coord &endValue,
                                                  int frame) {
   pair<Coord, Coord> values(startValue, endValue);
-  map<pair<Coord, Coord>, Vector<double, 3> >::iterator it = steps.find(values);
+  map<pair<Coord, Coord>, Vector<double, 3>>::iterator it = steps.find(values);
   Vector<double, 3> stepVal;
 
   if (it != steps.end())

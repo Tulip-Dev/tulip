@@ -192,7 +192,7 @@ void AutoCompletionList::insertSelectedItem() {
         QString funcName = types[i] + "." + textToInsert;
 
         if (APIDataBase::getInstance()->functionExists(funcName)) {
-          QVector<QVector<QString> > params =
+          QVector<QVector<QString>> params =
               APIDataBase::getInstance()->getParamTypesForMethodOrFunction(funcName);
 
           if (params.count() > 1 || params[0].count() > 0) {
@@ -1123,7 +1123,7 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
       if (type != "") {
 
-        QVector<QVector<QString> > params =
+        QVector<QVector<QString>> params =
             _autoCompletionDb->getParamTypesForMethodOrFunction(type, funcName);
         QString retType = _autoCompletionDb->getReturnTypeForMethodOrFunction(type, funcName);
 

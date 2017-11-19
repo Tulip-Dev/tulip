@@ -79,7 +79,7 @@ private:
   //=====================================
   void recQuad(const tlp::Coord fr[4], const tlp::Coord ba[4], const std::vector<tlp::node> &input);
   tlp::node addNode(const tlp::Coord &pos);
-  std::vector<std::pair<tlp::node, tlp::node> > unvalidEdges;
+  std::vector<std::pair<tlp::node, tlp::node>> unvalidEdges;
 };
 
 #endif // OCTREEBUNDLE_H

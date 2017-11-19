@@ -29,7 +29,7 @@
  *rectangleIterator.
  */
 struct RectangleRelativePosition {
-  std::vector<tlp::Rectangle<float> >::iterator
+  std::vector<tlp::Rectangle<float>>::iterator
       rectangleIterator; /**< pointer towards the rectangle whose position optimal is searched.*/
   int rectangleNumber;   /**< the number which identifies the rectangle. */
   float rectangleWidth;  /**< the width of the rectangle. */
@@ -60,7 +60,7 @@ public:
    *Add a structure RectangleRelativePosition to the list.
    */
   void addRectangleRelativePosition(
-      std::vector<tlp::Rectangle<float> >::iterator itr, int numRect, float wdth, float hght,
+      std::vector<tlp::Rectangle<float>>::iterator itr, int numRect, float wdth, float hght,
       float x, float y, std::list<RectangleRelativePosition>::iterator itRectangleRelativePosition);
 
   /**

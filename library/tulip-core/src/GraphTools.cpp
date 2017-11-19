@@ -115,14 +115,14 @@ node makeSimpleSource(Graph *graph) {
   return startNode;
 }
 //======================================================================
-vector<vector<node> > computeCanonicalOrdering(PlanarConMap *carte, std::vector<edge> *dummyEdges,
-                                               PluginProgress *pluginProgress) {
+vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte, std::vector<edge> *dummyEdges,
+                                              PluginProgress *pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
   if (dummyEdges != NULL)
     *dummyEdges = o.getDummyEdges();
 
-  vector<vector<node> > res;
+  vector<vector<node>> res;
   unsigned int nbMax = o.size();
 
   if (nbMax) {

@@ -447,7 +447,7 @@ void VectorGraphTest::testAddDelEdges() {
   checkCreatedGraph(true);
 
   // add direct edges to nodes[0]
-  std::vector<std::pair<node, node> > ends;
+  std::vector<std::pair<node, node>> ends;
   ends.reserve(NB_NODES - 1);
   for (unsigned int i = 1; i < NB_NODES; ++i)
     ends.push_back(std::make_pair(nodes[0], nodes[i]));

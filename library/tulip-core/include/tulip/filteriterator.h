@@ -85,7 +85,7 @@ private:
   */
 template <typename TYPE, typename FILTER>
 class MPFilterIterator : public FilterIterator<TYPE, FILTER>,
-                         public MemoryPool<MPFilterIterator<TYPE, FILTER> > {
+                         public MemoryPool<MPFilterIterator<TYPE, FILTER>> {
 public:
   MPFilterIterator(Iterator<TYPE> *it, FILTER filter) : FilterIterator<TYPE, FILTER>(it, filter) {}
 };

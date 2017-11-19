@@ -62,12 +62,11 @@ public:
   bool run();
 
 private:
-  double
-  computeRelativePosition(tlp::node n,
-                          TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition);
-  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition);
+  double computeRelativePosition(tlp::node n,
+                                 TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition);
+  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition);
   void calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
-                   TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition,
+                   TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition,
                    const tlp::Vector<double, 3> &, const tlp::Vector<double, 3> &);
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;

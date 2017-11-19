@@ -81,9 +81,9 @@ private:
   static QGlBufferManager *inst;
 
   std::map<std::pair<int, int>, QGLPixelBuffer *> widthHeightToBuffer;
-  std::map<QGLPixelBuffer *, std::pair<int, int> > bufferToWidthHeight;
+  std::map<QGLPixelBuffer *, std::pair<int, int>> bufferToWidthHeight;
   std::map<std::pair<int, int>, QGLFramebufferObject *> widthHeightToFramebuffer;
-  std::map<QGLFramebufferObject *, std::pair<int, int> > framebufferToWidthHeight;
+  std::map<QGLFramebufferObject *, std::pair<int, int>> framebufferToWidthHeight;
 
   bool pixelBufferWork;
   bool framebufferObjectWork;

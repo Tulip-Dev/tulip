@@ -113,7 +113,7 @@ void PlanarConMapTest::testAddEdgeMap() {
   f2 = carte->faces[1];
   edge e = carte->addEdgeMap(nodes[0], nodes[2], f1, edges[0], edges[2]);
   Face f3 = carte->faces[2];
-  vector<vector<edge> > cycles(5);
+  vector<vector<edge>> cycles(5);
   cycles[0].push_back(edges[1]);
   cycles[1].push_back(edges[2]);
   cycles[0].push_back(edges[0]);
@@ -155,7 +155,7 @@ void PlanarConMapTest::testAddEdgeMap() {
   f1 = carte->faces[0];
   e = carte->addEdgeMap(nodes[1], nodes[3], f1, edges[0], edges[2]);
   f2 = carte->faces[1];
-  vector<vector<edge> > cycles2(2);
+  vector<vector<edge>> cycles2(2);
   cycles2[0].push_back(edges[2]);
   cycles2[0].push_back(edges[3]);
   cycles2[0].push_back(edges[3]);
@@ -204,7 +204,7 @@ void PlanarConMapTest::testAddEdgeMap() {
   e = carte->addEdgeMap(nodes[1], nodes[4], f2, edges[0], edges[3]);
   Face f4 = carte->faces[3];
   edges.push_back(e);
-  vector<vector<edge> > cycles3(4);
+  vector<vector<edge>> cycles3(4);
   cycles3[0].push_back(edges[4]);
   cycles3[0].push_back(edges[9]);
   cycles3[0].push_back(edges[6]);
@@ -275,7 +275,7 @@ void PlanarConMapTest::testDelEdgeMap() {
   f1 = carte->faces[0];
   f2 = carte->faces[1];
 
-  vector<vector<edge> > cycles(2);
+  vector<vector<edge>> cycles(2);
   cycles[1].push_back(edges[3]);
   cycles[0].push_back(edges[2]);
   cycles[1].push_back(edges[2]);
@@ -340,7 +340,7 @@ void PlanarConMapTest::testMergeFaces() {
   f1 = carte->faces[0];
   f2 = carte->faces[1];
 
-  vector<vector<edge> > cycles(2);
+  vector<vector<edge>> cycles(2);
   cycles[1].push_back(edges[3]);
   cycles[0].push_back(edges[2]);
   cycles[1].push_back(edges[2]);
@@ -384,7 +384,7 @@ void PlanarConMapTest::testSplitFace() {
   Face f3 = carte->splitFace(f1, nodes[0], nodes[2]);
   edge e = carte->existEdge(nodes[0], nodes[2]).isValid() ? carte->existEdge(nodes[0], nodes[2])
                                                           : carte->existEdge(nodes[2], nodes[0]);
-  vector<vector<edge> > cycles(5);
+  vector<vector<edge>> cycles(5);
   cycles[0].push_back(edges[1]);
   cycles[1].push_back(edges[2]);
   cycles[0].push_back(edges[0]);
@@ -440,7 +440,7 @@ void PlanarConMapTest::testSplitFace() {
                                                      : carte->existEdge(nodes[4], nodes[1]);
   edges.push_back(e);
   //  qDebug() << carte<< endl;
-  vector<vector<edge> > cycles3(4);
+  vector<vector<edge>> cycles3(4);
   cycles3[0].push_back(edges[4]);
   cycles3[0].push_back(edges[9]);
   cycles3[0].push_back(edges[6]);

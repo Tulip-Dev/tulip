@@ -32,7 +32,7 @@ class Graph;
 class BooleanProperty;
 
 class TLP_QT_SCOPE LayoutPropertyAnimation
-    : public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord> > {
+    : public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord>> {
 public:
   LayoutPropertyAnimation(tlp::Graph *g, tlp::LayoutProperty *start, tlp::LayoutProperty *end,
                           tlp::LayoutProperty *out, tlp::BooleanProperty *selection = NULL,
@@ -50,7 +50,7 @@ protected:
   bool equalEdges(const std::vector<tlp::Coord> &v1, const std::vector<tlp::Coord> &v2);
 
 private:
-  std::map<std::pair<tlp::Coord, tlp::Coord>, tlp::Vector<double, 3> > steps;
+  std::map<std::pair<tlp::Coord, tlp::Coord>, tlp::Vector<double, 3>> steps;
 };
 }
 

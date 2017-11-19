@@ -338,7 +338,7 @@ edge GraphDecorator::addEdge(const node n, const node n2) {
 }
 
 //============================================================
-void GraphDecorator::addEdges(const std::vector<std::pair<node, node> > &edges) {
+void GraphDecorator::addEdges(const std::vector<std::pair<node, node>> &edges) {
   graph_component->addEdges(edges);
 
   if (hasOnlookers())
@@ -346,7 +346,7 @@ void GraphDecorator::addEdges(const std::vector<std::pair<node, node> > &edges) 
 }
 
 //============================================================
-void GraphDecorator::addEdges(const std::vector<std::pair<node, node> > &edges,
+void GraphDecorator::addEdges(const std::vector<std::pair<node, node>> &edges,
                               std::vector<edge> &addedEdges) {
   graph_component->addEdges(edges, addedEdges);
 

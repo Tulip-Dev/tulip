@@ -22,7 +22,7 @@ using namespace std;
 using namespace tlp;
 
 void RectangleRelativePositionList::addRectangleRelativePosition(
-    vector<Rectangle<float> >::iterator itr, int numRect, float wdth, float hght, float x, float y,
+    vector<Rectangle<float>>::iterator itr, int numRect, float wdth, float hght, float x, float y,
     list<RectangleRelativePosition>::iterator itRectangleRelativePosition) {
 
   RectangleRelativePosition newRectangleRelativePosition;

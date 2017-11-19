@@ -65,7 +65,7 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(!graph->isElement(e0));
 
   vector<node> nodes;
-  vector<pair<node, node> > ends;
+  vector<pair<node, node>> ends;
   vector<edge> edges;
 
   graph->addNodes(3, nodes);

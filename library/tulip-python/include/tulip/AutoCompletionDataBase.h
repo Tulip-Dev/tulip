@@ -44,14 +44,14 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
   tlp::Graph *_graph;
   APIDataBase *_apiDb;
   QSet<QString> _globalAutoCompletionList;
-  QHash<QString, QSet<QString> > _functionAutoCompletionList;
-  QHash<QString, QHash<QString, QString> > _varToType;
-  QHash<QString, QHash<QString, QString> > _classAttributeToType;
-  QHash<QString, QHash<QString, QString> > _varToPluginName;
-  QHash<QString, QHash<QString, QSet<QString> > > _pluginParametersDataSet;
+  QHash<QString, QSet<QString>> _functionAutoCompletionList;
+  QHash<QString, QHash<QString, QString>> _varToType;
+  QHash<QString, QHash<QString, QString>> _classAttributeToType;
+  QHash<QString, QHash<QString, QString>> _varToPluginName;
+  QHash<QString, QHash<QString, QSet<QString>>> _pluginParametersDataSet;
   QHash<QString, QString> _iteratorType;
-  QHash<QString, QSet<QString> > _classContents;
-  QHash<QString, QSet<QString> > _classBases;
+  QHash<QString, QSet<QString>> _classContents;
+  QHash<QString, QSet<QString>> _classBases;
   QString _lastFoundType;
 
 public:
@@ -75,8 +75,8 @@ public:
 
   QString findTypeForExpr(const QString &expr, const QString &funcName) const;
 
-  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &type,
-                                                              const QString &funcName) const;
+  QVector<QVector<QString>> getParamTypesForMethodOrFunction(const QString &type,
+                                                             const QString &funcName) const;
 
   QString getReturnTypeForMethodOrFunction(const QString &type, const QString &funcName) const;
 

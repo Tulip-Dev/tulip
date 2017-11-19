@@ -59,7 +59,7 @@ public:
 
 private:
   void DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty *embedding);
-  std::vector<std::vector<tlp::node> > grid;
+  std::vector<std::vector<tlp::node>> grid;
   tlp::DoubleProperty *embedding;
   void twoLayerCrossReduction(tlp::Graph *sg, unsigned int freeLayer);
   void crossReduction(tlp::Graph *sg);

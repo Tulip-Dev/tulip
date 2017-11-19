@@ -65,7 +65,7 @@ DataSet &DataSet::operator=(const DataSet &set) {
   if (this != &set) {
     data.clear();
 
-    for (std::list<std::pair<std::string, tlp::DataType *> >::const_iterator it = set.data.begin();
+    for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = set.data.begin();
          it != set.data.end(); ++it) {
       data.push_back(std::pair<std::string, tlp::DataType *>((*it).first, (*it).second->clone()));
     }
@@ -75,7 +75,7 @@ DataSet &DataSet::operator=(const DataSet &set) {
 }
 
 DataSet::~DataSet() {
-  for (std::list<std::pair<std::string, tlp::DataType *> >::iterator it = data.begin();
+  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
        it != data.end(); ++it) {
     if (it->second)
       delete it->second;
@@ -83,7 +83,7 @@ DataSet::~DataSet() {
 }
 
 bool DataSet::exist(const string &str) const {
-  for (std::list<std::pair<std::string, tlp::DataType *> >::const_iterator it = data.begin();
+  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
        it != data.end(); ++it) {
     if ((*it).first == str)
       return true;
@@ -93,7 +93,7 @@ bool DataSet::exist(const string &str) const {
 }
 
 void DataSet::remove(const string &str) {
-  for (std::list<std::pair<std::string, tlp::DataType *> >::iterator it = data.begin();
+  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
        it != data.end(); ++it) {
     if ((*it).first == str) {
       if (it->second)
@@ -106,7 +106,7 @@ void DataSet::remove(const string &str) {
 }
 
 DataType *DataSet::getData(const string &str) const {
-  for (std::list<std::pair<std::string, tlp::DataType *> >::const_iterator it = data.begin();
+  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
        it != data.end(); ++it) {
     if ((*it).first == str)
       return it->second ? it->second->clone() : NULL;
@@ -118,7 +118,7 @@ DataType *DataSet::getData(const string &str) const {
 void DataSet::setData(const std::string &str, const DataType *value) {
   DataType *val = value ? value->clone() : NULL;
 
-  for (std::list<std::pair<std::string, tlp::DataType *> >::iterator it = data.begin();
+  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
        it != data.end(); ++it) {
     std::pair<std::string, tlp::DataType *> &p = *it;
 
@@ -142,11 +142,11 @@ bool DataSet::empty() const {
   return data.empty();
 }
 
-Iterator<pair<string, DataType *> > *DataSet::getValues() const {
-  list<pair<string, DataType *> >::const_iterator begin = data.begin();
-  list<pair<string, DataType *> >::const_iterator end = data.end();
+Iterator<pair<string, DataType *>> *DataSet::getValues() const {
+  list<pair<string, DataType *>>::const_iterator begin = data.begin();
+  list<pair<string, DataType *>>::const_iterator end = data.end();
 
-  return new StlIterator<pair<string, DataType *>, list<pair<string, DataType *> >::const_iterator>(
+  return new StlIterator<pair<string, DataType *>, list<pair<string, DataType *>>::const_iterator>(
       begin, end);
 }
 
@@ -199,7 +199,7 @@ void DataSet::writeData(std::ostream &os, const std::string &prop, const DataTyp
 void DataSet::write(std::ostream &os, const DataSet &ds) {
   os << endl;
   // get iterator over pair attribute/value
-  Iterator<pair<string, DataType *> > *it = ds.getValues();
+  Iterator<pair<string, DataType *>> *it = ds.getValues();
 
   while (it->hasNext()) {
     pair<string, DataType *> p = it->next();
@@ -226,7 +226,7 @@ bool DataSet::readData(std::istream &is, const std::string &prop,
 
   if (dt) {
     // replace any prexisting value associated to prop
-    for (std::list<std::pair<std::string, tlp::DataType *> >::iterator it = data.begin();
+    for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
          it != data.end(); ++it) {
       std::pair<std::string, tlp::DataType *> &p = *it;
 

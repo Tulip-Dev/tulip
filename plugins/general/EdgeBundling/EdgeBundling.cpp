@@ -286,7 +286,7 @@ bool EdgeBundling::run() {
 
   // we need to registered the graph nodes having the same position
   // in the same vector
-  std::vector<std::vector<tlp::node> > samePositionNodes;
+  std::vector<std::vector<tlp::node>> samePositionNodes;
 
   try {
     // Grid graph computation first step : generate quad-tree/octree
@@ -312,7 +312,7 @@ bool EdgeBundling::run() {
       Graph *workGraph = graph->addCloneSubGraph();
       // we use a hash map to ease the retrieve of the vector of the nodes
       // having the same position
-      TLP_HASH_MAP<std::string, std::pair<node, unsigned int> > clusters;
+      TLP_HASH_MAP<std::string, std::pair<node, unsigned int>> clusters;
 
       // iterate on graph nodes
       node n;
@@ -324,7 +324,7 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        TLP_HASH_MAP<std::string, std::pair<node, unsigned int> >::iterator it = clusters.find(key);
+        TLP_HASH_MAP<std::string, std::pair<node, unsigned int>>::iterator it = clusters.find(key);
 
         if (it == clusters.end())
           // register the first node at position represented by key

@@ -154,7 +154,7 @@ public:
   TypeOfLine expectedLine;
   Graph *partition;
   unsigned int curNodeId;
-  map<string, vector<node> > parts;
+  map<string, vector<node>> parts;
   DoubleProperty *vectorProp;
 
   bool getUnsignedInt(unsigned int &i, const string &str) {
@@ -314,7 +314,7 @@ public:
       parts[tokens[0]].push_back(nodes[curNodeId++]);
 
       if (curNodeId == graph->numberOfNodes()) {
-        map<string, vector<node> >::iterator it = parts.begin();
+        map<string, vector<node>>::iterator it = parts.begin();
 
         for (; it != parts.end(); ++it) {
           Graph *part = partition->inducedSubGraph(it->second);

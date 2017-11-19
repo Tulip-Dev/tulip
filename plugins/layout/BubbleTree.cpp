@@ -35,7 +35,7 @@ struct greaterRadius {
 };
 
 double BubbleTree::computeRelativePosition(
-    tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition) {
+    tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition) {
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0.; // remove z-coordiantes because the drawing is 2D
@@ -201,7 +201,7 @@ double BubbleTree::computeRelativePosition(
 }
 
 void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
-                             TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition,
+                             TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition,
                              const tlp::Vector<double, 3> &enclosingCircleCenter,
                              const tlp::Vector<double, 3> &originNodePosition) {
   /*
@@ -282,7 +282,7 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
 }
 
 void BubbleTree::calcLayout(tlp::node n,
-                            TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5> > *relativePosition) {
+                            TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -326,7 +326,7 @@ bool BubbleTree::run() {
 
   if (!ConnectedTest::isConnected(graph)) {
     // for each component draw
-    std::vector<std::vector<node> > components;
+    std::vector<std::vector<node>> components;
     string err;
     // push a temporary graph state (not redoable)
     graph->push(false);
@@ -385,7 +385,7 @@ bool BubbleTree::run() {
 
   node startNode = tree->getSource();
   assert(startNode.isValid());
-  TLP_HASH_MAP<node, Vector<double, 5> > relativePosition;
+  TLP_HASH_MAP<node, Vector<double, 5>> relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);
 

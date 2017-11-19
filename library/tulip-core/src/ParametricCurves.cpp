@@ -117,7 +117,7 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
   curvePoints[nbCurvePoints - 1] = p3;
 }
 
-void buildPascalTriangle(unsigned int n, vector<vector<double> > &pascalTriangle) {
+void buildPascalTriangle(unsigned int n, vector<vector<double>> &pascalTriangle) {
   size_t curSize = pascalTriangle.size();
 
   if (curSize >= n)
@@ -139,8 +139,8 @@ void buildPascalTriangle(unsigned int n, vector<vector<double> > &pascalTriangle
   }
 }
 
-static map<double, vector<double> > tCoeffs;
-static map<double, vector<double> > sCoeffs;
+static map<double, vector<double>> tCoeffs;
+static map<double, vector<double>> sCoeffs;
 static map<unsigned int, unsigned int> computedCoefficients;
 
 static void computeCoefficients(double t, unsigned int nbControlPoints) {

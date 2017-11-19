@@ -57,7 +57,7 @@ class TLP_QT_SCOPE Workspace : public QWidget {
   WorkspacePanel *_focusedPanel;
   bool _focusedPanelHighlighting;
 
-  QMap<QWidget *, QVector<PlaceHolderWidget *> > _modeToSlots;
+  QMap<QWidget *, QVector<PlaceHolderWidget *>> _modeToSlots;
   QMap<QWidget *, QWidget *> _modeSwitches;
   GraphHierarchiesModel *_model;
 

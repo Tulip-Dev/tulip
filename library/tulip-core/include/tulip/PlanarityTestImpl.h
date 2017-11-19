@@ -53,7 +53,7 @@ private:
   void makeBidirected(Graph *sG);
   void swapNode(node &n1, node &n2);
   void findTerminalNodes(Graph *sG, node n, std::list<node> &listOfComponents,
-                         std::map<node, std::list<node> > &terminalNodes);
+                         std::map<node, std::list<node>> &terminalNodes);
   bool findObstruction(Graph *sG, node n, std::list<node> &terminalNodes);
   void setInfoForNewCNode(Graph *sG, node n, node newCNode, std::list<node> &terminalNodes);
   node findActiveCNode(node, node, std::list<node> &);
@@ -102,15 +102,15 @@ private:
                                  std::list<node> &terminalNodes);
   void markPathInT(node t, node w, std::map<node, node> &backEdgeRepresentant,
                    std::list<node> &traversedNodes);
-  std::map<node, std::list<edge> > groupBackEdgesByRepr(Graph *sG, std::list<edge> &listBackEdges,
-                                                        std::map<node, node> &backEdgeRepresentant,
-                                                        std::list<node> &traversedNodes,
-                                                        std::list<node> &listRepresentants);
+  std::map<node, std::list<edge>> groupBackEdgesByRepr(Graph *sG, std::list<edge> &listBackEdges,
+                                                       std::map<node, node> &backEdgeRepresentant,
+                                                       std::list<node> &traversedNodes,
+                                                       std::list<node> &listRepresentants);
   std::list<node> embedUpwardT(bool embBackEdgesOutW, node t1, node t2, Graph *sG, node w,
-                               std::map<node, std::list<edge> > &bEdgesRepres,
+                               std::map<node, std::list<edge>> &bEdgesRepres,
                                std::list<node> &traversedNodes, BmdList<edge> &embList);
   void addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w, node oldCNode, node u,
-                              std::map<node, std::list<edge> > &bEdgesRepres,
+                              std::map<node, std::list<edge>> &bEdgesRepres,
                               std::list<node> &traversedNodes, std::list<node> &toEmbedLater,
                               BmdList<edge> &embList);
   void embedBackEdges(bool embBackEdgesOutW, Graph *sG, node repr, std::list<node> &traversedNodes,
@@ -135,23 +135,23 @@ private:
   //   // (it helps to update label_b's in constant time);
   //   //node_array<list<node>> childrenInT0;
   //   //std::map<node, std::list<node>* > childrenInT0;
-  std::map<node, std::list<node> > childrenInT0;
+  std::map<node, std::list<node>> childrenInT0;
 
   //   // for each 2-connected component represented by r,
   //   // list_back_edges[r] is the list of all back-edges in component r
   //   // (it helps to calculate an embedding of G, if G is planar);
   //   //node_array<list<edge> > listBackEdges;
   //   //std::map<node, std::list<edge>* > listBackEdges;
-  std::map<node, std::list<edge> > listBackEdges;
+  std::map<node, std::list<edge>> listBackEdges;
 
   //   // the Representative Boundary Cycle for each c-node;
   //   //std::map<node, BmdList<node> > RBC;
-  std::map<node, BmdList<node> > RBC;
+  std::map<node, BmdList<node>> RBC;
 
   //   // for each node u in G, the algorithm calculates the
   //   // clockwise ordering of edges with source u around u, such that
   //   // G.sort_edges(embed_list) is a plane map, if it exists
-  std::map<node, BmdList<edge> > embedList;
+  std::map<node, BmdList<edge>> embedList;
 
   //   // to avoid path compression of c-nodes;
   std::map<tlp::BmdLink<node> *, node> activeCNode;

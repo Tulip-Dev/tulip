@@ -75,8 +75,8 @@ private:
   std::vector<node> graphViewNodes;
   std::vector<edge> graphViewEdges;
 
-  std::map<unsigned int, std::vector<node> > nodesAtDist;
-  std::map<unsigned int, std::vector<edge> > edgesAtDist;
+  std::map<unsigned int, std::vector<node>> nodesAtDist;
+  std::map<unsigned int, std::vector<edge>> edgesAtDist;
 
   NeighborNodesType neighborsType;
   unsigned int currentDist;

@@ -416,10 +416,10 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     }
 
     bool layerInScene = false;
-    const vector<pair<std::string, GlLayer *> > &layersList =
+    const vector<pair<std::string, GlLayer *>> &layersList =
         glMainWidget->getScene()->getLayersList();
 
-    for (vector<pair<std::string, GlLayer *> >::const_iterator it = layersList.begin();
+    for (vector<pair<std::string, GlLayer *>>::const_iterator it = layersList.begin();
          it != layersList.end(); ++it) {
       if ((*it).second == layer) {
         layerInScene = true;

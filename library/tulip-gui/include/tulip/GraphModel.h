@@ -75,7 +75,7 @@ public:
 protected:
   tlp::Graph *_graph;
   QVector<unsigned int> _elements;
-  QVector<QPair<unsigned int, bool> > _elementsToModify;
+  QVector<QPair<unsigned int, bool>> _elementsToModify;
   QVector<PropertyInterface *> _properties;
   QSet<PropertyInterface *> _propertiesModified;
 

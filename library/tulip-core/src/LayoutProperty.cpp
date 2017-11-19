@@ -107,7 +107,7 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(
     tlp::edge e, tlp::LineType::RealType newValue) {
-  TLP_HASH_MAP<unsigned int, std::pair<tlp::Coord, tlp::Coord> >::const_iterator it =
+  TLP_HASH_MAP<unsigned int, std::pair<tlp::Coord, tlp::Coord>>::const_iterator it =
       minMaxNode.begin();
 
   const std::vector<Coord> &oldV = this->getEdgeValue(e);
@@ -585,7 +585,7 @@ void LayoutProperty::setNodeValue(const node n, tlp::StoredType<Coord>::Returned
 }
 //================================================================================
 void LayoutProperty::setEdgeValue(const edge e,
-                                  tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v) {
+                                  tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
   LayoutMinMaxProperty::updateEdgeValue(e, v);
   LayoutMinMaxProperty::setEdgeValue(e, v);
 }
@@ -606,18 +606,18 @@ void LayoutProperty::setValueToGraphNodes(tlp::StoredType<Coord>::ReturnedConstV
   LayoutMinMaxProperty::setValueToGraphNodes(v, graph);
 }
 //=================================================================================
-void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v) {
+void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
-void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v,
+void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
                                      const Graph *graph) {
   setValueToGraphEdges(v, graph);
 }
 //=================================================================================
-void LayoutProperty::setValueToGraphEdges(
-    tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph) {
+void LayoutProperty::setValueToGraphEdges(tlp::StoredType<std::vector<Coord>>::ReturnedConstValue v,
+                                          const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setValueToGraphEdges(v, graph);
 }

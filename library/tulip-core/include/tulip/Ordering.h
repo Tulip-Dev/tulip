@@ -60,7 +60,7 @@ public:
   }
 
 private:
-  std::vector<std::vector<node> > _data;
+  std::vector<std::vector<node>> _data;
   PlanarConMap *Gp;
   MutableContainer<int> oute;
   MutableContainer<int> outv;

@@ -54,7 +54,7 @@ public:
   FORWARD_STRING_METHODS(GraphType)
 };
 
-class TLP_SCOPE EdgeSetType : public TypeInterface<std::set<tlp::edge> > {
+class TLP_SCOPE EdgeSetType : public TypeInterface<std::set<tlp::edge>> {
 public:
   static void write(std::ostream &oss, const RealType &v);
   static void writeb(std::ostream &oss, const RealType &v);
@@ -115,7 +115,7 @@ public:
   FORWARD_TOSTRING(BooleanType)
 };
 
-class TLP_SCOPE BooleanVectorType : public TypeInterface<std::vector<bool> > {
+class TLP_SCOPE BooleanVectorType : public TypeInterface<std::vector<bool>> {
 public:
   static void write(std::ostream &, const RealType &);
   static void writeb(std::ostream &, const RealType &);
@@ -166,7 +166,7 @@ public:
   static bool fromString(RealType &v, const std::string &s);
 };
 
-class TLP_SCOPE StringVectorType : public TypeInterface<std::vector<std::string> > {
+class TLP_SCOPE StringVectorType : public TypeInterface<std::vector<std::string>> {
 public:
   static void write(std::ostream &, const RealType &);
   static void writeb(std::ostream &oss, const RealType &vStr);
@@ -251,10 +251,10 @@ template class SerializableVectorType<tlp::Size, SizeType, true>;
 template class SerializableVectorType<tlp::Color, ColorType, true>;
 template class SerializableVectorType<tlp::Coord, PointType, true>;
 template class TypeInterface<tlp::Graph *>;
-template class TypeInterface<std::set<tlp::edge> >;
+template class TypeInterface<std::set<tlp::edge>>;
 template class TypeInterface<bool>;
-template class TypeInterface<std::vector<bool> >;
-template class TypeInterface<std::vector<std::string> >;
+template class TypeInterface<std::vector<bool>>;
+template class TypeInterface<std::vector<std::string>>;
 template class TypeInterface<tlp::Color>;
 template class TypeInterface<std::string>;
 

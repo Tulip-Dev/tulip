@@ -31,8 +31,8 @@
  *@param progress pointer on an instance of the PluginProgress class.
  *@return the vector v whose rectangles have had their co-ordinates changed.
  */
-std::vector<tlp::Rectangle<float> > &
-RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float> > &v, const char *quality,
+std::vector<tlp::Rectangle<float>> &
+RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float>> &v, const char *quality,
                                 tlp::PluginProgress *progress);
 
 /**
@@ -44,8 +44,8 @@ RectanglePackingLimitRectangles(std::vector<tlp::Rectangle<float> > &v, const ch
  *@param progress pointer on an instance of the PluginProgress class.
  *@return the vector v whose rectangles have had their co-ordinates changed.
  */
-std::vector<tlp::Rectangle<float> > &
-RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float> > &v, const char *quality,
+std::vector<tlp::Rectangle<float>> &
+RectanglePackingLimitPositions(std::vector<tlp::Rectangle<float>> &v, const char *quality,
                                tlp::PluginProgress *progress);
 
 #endif

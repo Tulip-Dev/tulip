@@ -72,7 +72,7 @@ private:
   int next_left(unsigned int k, const tlp::node v);
 
   tlp::PlanarConMap *carte;
-  std::vector<std::vector<tlp::node> > V;
+  std::vector<std::vector<tlp::node>> V;
   std::map<tlp::node, tlp::Coord> NodeCoords;
 
   std::map<tlp::node, int> outl;
@@ -81,17 +81,17 @@ private:
   std::map<tlp::node, int> inr;
 
   std::map<tlp::node, unsigned int> rank;
-  std::map<tlp::node, std::vector<tlp::edge> > EdgesIN;
-  std::map<tlp::node, std::vector<tlp::edge> > EdgesOUT;
+  std::map<tlp::node, std::vector<tlp::edge>> EdgesIN;
+  std::map<tlp::node, std::vector<tlp::edge>> EdgesOUT;
 
-  std::map<tlp::edge, std::vector<tlp::Coord> > InPoints;
+  std::map<tlp::edge, std::vector<tlp::Coord>> InPoints;
   std::map<tlp::edge, tlp::Coord> OutPoints;
 
   tlp::Graph *Pere;
   tlp::PlanarConMap *graphMap;
   tlp::Graph *currentGraph;
   std::vector<tlp::edge> dummy;
-  std::map<tlp::node, std::vector<tlp::Coord> > out_points;
+  std::map<tlp::node, std::vector<tlp::Coord>> out_points;
   tlp::MutableContainer<tlp::Coord> nodeSize;
   std::vector<tlp::edge> unplanar_edges;
   bool planar;

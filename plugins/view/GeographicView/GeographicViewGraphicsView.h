@@ -59,7 +59,7 @@ public:
     nodeLatLng[n] = latLng;
   }
 
-  void setEdgeBendsLatLng(edge e, const std::vector<std::pair<double, double> > &bendsLatLng) {
+  void setEdgeBendsLatLng(edge e, const std::vector<std::pair<double, double>> &bendsLatLng) {
     edgeBendsLatLng[e] = bendsLatLng;
   }
 
@@ -150,9 +150,9 @@ private:
   GlMainWidget *glWidget;
   Graph *graph;
   GoogleMaps *googleMaps;
-  std::map<node, std::pair<double, double> > nodeLatLng;
-  std::map<node, std::pair<double, double> > nodeLatLngFOR;
-  std::map<edge, std::vector<std::pair<double, double> > > edgeBendsLatLng;
+  std::map<node, std::pair<double, double>> nodeLatLng;
+  std::map<node, std::pair<double, double>> nodeLatLngFOR;
+  std::map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   std::pair<double, double> currentMapCenter;
   unsigned int currentMapZoom;
   Camera globeCameraBackup;

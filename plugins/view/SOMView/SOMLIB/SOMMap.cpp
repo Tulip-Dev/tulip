@@ -113,7 +113,7 @@ DynamicVector<double> &SOMMap::getWeight(tlp::node n) {
 }
 const DynamicVector<double> SOMMap::getWeight(const tlp::node &n) const {
 
-  std::map<tlp::node, DynamicVector<double> >::const_iterator it = nodeToNodeVec.find(n);
+  std::map<tlp::node, DynamicVector<double>>::const_iterator it = nodeToNodeVec.find(n);
 
   if (it != nodeToNodeVec.end()) {
     return (*it).second;

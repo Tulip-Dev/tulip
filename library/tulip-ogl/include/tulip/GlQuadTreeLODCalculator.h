@@ -119,7 +119,7 @@ protected:
   std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
   std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
   std::vector<QuadTreeNode<GlSimpleEntity *> *> entitiesQuadTree;
-  std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
+  std::vector<std::vector<SimpleEntityLODUnit>> simpleEntities;
 
   bool haveToCompute;
   bool haveToInitObservers;

@@ -202,7 +202,7 @@ edge GraphImpl::addEdge(const node src, const node tgt) {
   return newEdge;
 }
 //----------------------------------------------------------------
-void GraphImpl::addEdges(const std::vector<std::pair<node, node> > &edges,
+void GraphImpl::addEdges(const std::vector<std::pair<node, node>> &edges,
                          std::vector<edge> &addedEdges) {
   if (!edges.empty()) {
     storage.addEdges(edges, &addedEdges);
@@ -212,7 +212,7 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node> > &edges,
   }
 }
 //----------------------------------------------------------------
-void GraphImpl::addEdges(const std::vector<std::pair<node, node> > &edges) {
+void GraphImpl::addEdges(const std::vector<std::pair<node, node>> &edges) {
   if (!edges.empty()) {
     storage.addEdges(edges);
 

@@ -79,11 +79,11 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const tlp::Circle<Obj, OTYPE> &c1,
 
 template <typename Obj, typename OTYPE>
 tlp::Circle<Obj, OTYPE>
-tlp::lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE> > &circles) {
+tlp::lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles) {
   // compute bounding box of a
   tlp::Vector<Obj, 4, OTYPE> boundingBox;
   //  for (int i=0;i<4;++i) boundingBox[i]=0;
-  typename std::vector<tlp::Circle<Obj, OTYPE> >::const_iterator it = circles.begin();
+  typename std::vector<tlp::Circle<Obj, OTYPE>>::const_iterator it = circles.begin();
   boundingBox[0] = (*it)[0] - (*it).radius;
   boundingBox[1] = (*it)[1] - (*it).radius;
   boundingBox[2] = (*it)[0] + (*it).radius;
@@ -105,7 +105,7 @@ tlp::lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE> > &circles) {
   tlp::Circle<Obj, OTYPE> result(center, radius);
 
   // compute circle hull
-  for (typename std::vector<tlp::Circle<Obj, OTYPE> >::const_iterator it = circles.begin();
+  for (typename std::vector<tlp::Circle<Obj, OTYPE>>::const_iterator it = circles.begin();
        it != circles.end(); ++it)
     result.merge(*it);
 
@@ -113,9 +113,9 @@ tlp::lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE> > &circles) {
 }
 
 template <typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE> > &circles) {
+tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles) {
   class OptimumCircleHull {
-    const std::vector<tlp::Circle<Obj, OTYPE> > *circles;
+    const std::vector<tlp::Circle<Obj, OTYPE>> *circles;
     std::vector<unsigned> enclosedCircles;
     unsigned first, last;
     unsigned b1, b2;
@@ -315,7 +315,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
   public:
     OptimumCircleHull() : circles(NULL), first(0), last(0), b1(0), b2(0) {}
 
-    tlp::Circle<Obj, OTYPE> operator()(const std::vector<tlp::Circle<Obj, OTYPE> > &circlesSet) {
+    tlp::Circle<Obj, OTYPE> operator()(const std::vector<tlp::Circle<Obj, OTYPE>> &circlesSet) {
       circles = &circlesSet;
       enclosedCircles.resize(circlesSet.size() + 1);
       first = 0;

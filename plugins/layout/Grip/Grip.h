@@ -81,8 +81,8 @@ private:
   MISFiltering *misf;
   float edgeLength;
   int level;
-  TLP_HASH_MAP<tlp::node, std::vector<unsigned int> > neighbors_dist;
-  TLP_HASH_MAP<tlp::node, std::vector<tlp::node> > neighbors;
+  TLP_HASH_MAP<tlp::node, std::vector<unsigned int>> neighbors_dist;
+  TLP_HASH_MAP<tlp::node, std::vector<tlp::node>> neighbors;
   TLP_HASH_MAP<unsigned int, unsigned int> levelToNbNeighbors;
   TLP_HASH_MAP<tlp::node, tlp::Coord> disp;
   TLP_HASH_MAP<tlp::node, tlp::Coord> oldDisp;

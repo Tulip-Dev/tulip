@@ -59,8 +59,8 @@ public:
   void addNode(const node);
   void addNodes(Iterator<node> *nodes);
   edge addEdge(const node, const node);
-  void addEdges(const std::vector<std::pair<node, node> > &edges);
-  void addEdges(const std::vector<std::pair<node, node> > &edges, std::vector<edge> &addedEdges);
+  void addEdges(const std::vector<std::pair<node, node>> &edges);
+  void addEdges(const std::vector<std::pair<node, node>> &edges, std::vector<edge> &addedEdges);
   void addEdge(const edge);
   void addEdges(Iterator<edge> *edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);

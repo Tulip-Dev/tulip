@@ -114,14 +114,14 @@ tlp::Circle<Obj, OTYPE> enclosingCircle(const tlp::Circle<Obj, OTYPE> &,
  * Compute the optimum enclosing circle of a set of circles.
  */
 template <typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE> enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE> > &circles);
+tlp::Circle<Obj, OTYPE> enclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
 /**
  * Compute an enclosing circle of a set of circles,
  * this algorithm is an aproximation of the smallest
  * enclosing circle.
  */
 template <typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE> lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE> > &circles);
+tlp::Circle<Obj, OTYPE> lazyEnclosingCircle(const std::vector<tlp::Circle<Obj, OTYPE>> &circles);
 /**
  * Write circle in a stream
  */

@@ -354,7 +354,7 @@ void GEMLayout::arrange() {
 bool GEMLayout::run() {
   if (!ConnectedTest::isConnected(graph)) {
     // for each component draw
-    std::vector<std::vector<node> > components;
+    std::vector<std::vector<node>> components;
     string err;
     // push a temporary graph state (not redoable)
     graph->push(false);

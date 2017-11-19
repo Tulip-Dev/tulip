@@ -80,7 +80,7 @@ public:
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    vector<vector<node> > nodes(types_of_nodes);
+    vector<vector<node>> nodes(types_of_nodes);
     graph->reserveNodes(nb_nodes);
 
     // In the paper, there are 3 types starting from a triangle without telling if the whole graph

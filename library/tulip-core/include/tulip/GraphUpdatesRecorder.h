@@ -117,9 +117,9 @@ class GraphUpdatesRecorder : public Observable {
   // one set of reverted edges
   std::set<edge> revertedEdges;
   // source + target per updated edge
-  TLP_HASH_MAP<edge, std::pair<node, node> > oldEdgesEnds;
+  TLP_HASH_MAP<edge, std::pair<node, node>> oldEdgesEnds;
   // source + target per updated edge
-  TLP_HASH_MAP<edge, std::pair<node, node> > newEdgesEnds;
+  TLP_HASH_MAP<edge, std::pair<node, node>> newEdgesEnds;
   // one set for old edge containers
   MutableContainer<EdgeVectPtr> oldContainers;
   // one set for new edge containers
@@ -131,24 +131,24 @@ class GraphUpdatesRecorder : public Observable {
   const GraphStorageIdsMemento *newIdsState;
 
   // one list of (parent graph, added sub-graph)
-  std::list<std::pair<Graph *, Graph *> > addedSubGraphs;
+  std::list<std::pair<Graph *, Graph *>> addedSubGraphs;
   // one list of (parent graph, deleted sub-graph)
-  std::list<std::pair<Graph *, Graph *> > deletedSubGraphs;
+  std::list<std::pair<Graph *, Graph *>> deletedSubGraphs;
 
   // one set of added properties per graph
-  TLP_HASH_MAP<Graph *, std::set<PropertyInterface *> > addedProperties;
+  TLP_HASH_MAP<Graph *, std::set<PropertyInterface *>> addedProperties;
   // one set of deleted properties per graph
-  TLP_HASH_MAP<Graph *, std::set<PropertyInterface *> > deletedProperties;
+  TLP_HASH_MAP<Graph *, std::set<PropertyInterface *>> deletedProperties;
   // one set of old attribute values per graph
   TLP_HASH_MAP<Graph *, DataSet> oldAttributeValues;
   // one set of new attribute values per graph
   TLP_HASH_MAP<Graph *, DataSet> newAttributeValues;
 
   // one set of updated addNodes per property
-  TLP_HASH_MAP<PropertyInterface *, std::set<node> > updatedPropsAddedNodes;
+  TLP_HASH_MAP<PropertyInterface *, std::set<node>> updatedPropsAddedNodes;
 
   // one set of updated addEdges per property
-  TLP_HASH_MAP<PropertyInterface *, std::set<edge> > updatedPropsAddedEdges;
+  TLP_HASH_MAP<PropertyInterface *, std::set<edge>> updatedPropsAddedEdges;
 
   // the old default node value for each updated property
   TLP_HASH_MAP<PropertyInterface *, DataMem *> oldNodeDefaultValues;

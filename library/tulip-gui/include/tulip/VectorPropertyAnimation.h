@@ -44,8 +44,8 @@ protected:
 private:
   typedef tlp::Vector<VectorType, SIZE> PropVector;
 
-  std::map<std::pair<tlp::Vector<VectorType, SIZE>, tlp::Vector<VectorType, SIZE> >,
-           tlp::Vector<double, SIZE> >
+  std::map<std::pair<tlp::Vector<VectorType, SIZE>, tlp::Vector<VectorType, SIZE>>,
+           tlp::Vector<double, SIZE>>
       steps;
 };
 

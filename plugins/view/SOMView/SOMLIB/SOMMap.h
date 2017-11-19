@@ -128,7 +128,7 @@ protected:
   unsigned int width;
   unsigned int height;
 
-  std::map<tlp::node, DynamicVector<double> > nodeToNodeVec;
+  std::map<tlp::node, DynamicVector<double>> nodeToNodeVec;
 
   SOMMapConnectivity connectivity;
   bool oppositeConnected;

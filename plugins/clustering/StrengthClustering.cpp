@@ -27,7 +27,7 @@ PLUGIN(StrengthClustering)
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
 //==============================================================================
-double StrengthClustering::computeMQValue(const vector<set<node> > &partition, Graph *sg) {
+double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Graph *sg) {
 
   vector<unsigned int> nbIntraEdges(partition.size());
 
@@ -37,7 +37,7 @@ double StrengthClustering::computeMQValue(const vector<set<node> > &partition, G
   map<pair<unsigned int, unsigned int>, unsigned int> nbExtraEdges;
 
   MutableContainer<unsigned int> clusterId;
-  vector<set<node> >::const_iterator itPart = partition.begin();
+  vector<set<node>>::const_iterator itPart = partition.begin();
 
   for (unsigned int i = 0; itPart != partition.end(); ++itPart, ++i) {
     set<node>::const_iterator itSet = itPart->begin();
@@ -107,7 +107,7 @@ double StrengthClustering::computeMQValue(const vector<set<node> > &partition, G
 }
 
 //==============================================================================
-void StrengthClustering::computeNodePartition(double threshold, vector<set<node> > &result) {
+void StrengthClustering::computeNodePartition(double threshold, vector<set<node>> &result) {
   // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   Graph *tmpGraph = graph->addCloneSubGraph();
   StableIterator<edge> itE(graph->getEdges());
@@ -199,7 +199,7 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped) {
   int steps = 0;
 
   for (double i = values->getEdgeMin(graph); i < values->getEdgeMax(graph); i += deltaThreshold) {
-    vector<set<node> > tmp;
+    vector<set<node>> tmp;
     computeNodePartition(i, tmp);
 
     if (pluginProgress && ((++steps % (numberOfSteps / 10)) == 0)) {
@@ -389,7 +389,7 @@ bool StrengthClustering::run() {
   if (stopped)
     return pluginProgress->state() != TLP_CANCEL;
 
-  vector<set<node> > tmp;
+  vector<set<node>> tmp;
   computeNodePartition(threshold, tmp);
 
   for (unsigned int i = 0; i < tmp.size(); ++i) {

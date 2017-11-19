@@ -136,7 +136,7 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
 
   clearObservers();
 
-  vector<pair<double, Color> > metricToColorFiltered;
+  vector<pair<double, Color>> metricToColorFiltered;
   double minProp = 0;
   double maxProp = 1;
   QLinearGradient activeGradient(QPointF(0, 0), QPointF(0, 160.));
@@ -204,7 +204,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   clearObservers();
 
   if (!_metricProperty) {
-    vector<pair<double, float> > metricToSizeFiltered;
+    vector<pair<double, float>> metricToSizeFiltered;
     metricToSizeFiltered.push_back(pair<double, float>(0., 1.));
     metricToSizeFiltered.push_back(pair<double, float>(1., 1.));
     _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered, "empty", 0., 1.);
@@ -216,7 +216,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   float maxSize = 0;
 
   map<double, float> metricToSizeMap;
-  vector<pair<double, float> > metricToSizeFiltered;
+  vector<pair<double, float>> metricToSizeFiltered;
 
   if (captionType == NodesSizeCaption) {
     Iterator<node> *itN = view->graph()->getNodes();
@@ -276,14 +276,14 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
                                             _captionGraphicsItem->usedProperty(), minProp, maxProp);
 }
 
-void CaptionItem::generateGradients(const vector<pair<double, Color> > &metricToColorFiltered,
+void CaptionItem::generateGradients(const vector<pair<double, Color>> &metricToColorFiltered,
                                     QGradient &activeGradient, QGradient &hideGradient) {
   double minProp = (*metricToColorFiltered.begin()).first;
   double maxProp = (*(--metricToColorFiltered.end())).first;
 
   Color color;
 
-  for (vector<pair<double, Color> >::const_iterator it = metricToColorFiltered.begin();
+  for (vector<pair<double, Color>>::const_iterator it = metricToColorFiltered.begin();
        it != metricToColorFiltered.end(); ++it) {
     float position =
         (maxProp - minProp) ? (1. - ((*it).first - minProp) / (maxProp - minProp)) : 0.0;
