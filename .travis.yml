@@ -343,14 +343,8 @@ jobs:
         - sudo port -N install automake
         - sudo port -N install libtool
         - sudo port -N install pkgconfig
-        # MacPorts offers cppunit 1.14 in its repositories
-        # but cppunit 1.13.2 is the last version supporting C++98, so grab it, compile and install it
-        - wget http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz
-        - tar -xvzf cppunit-1.13.2.tar.gz
-        - cd cppunit-1.13.2
-        - CC=clang CXX=clang++ CXXFLAGS=-stdlib=libstdc++ LIBS=-lstdc++.6 ./configure --prefix=/opt/local
-        - sudo make -j4 install
-        - cd ..
+        - sudo port -N install cppunit
+
       env:
         # use system Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
@@ -434,15 +428,9 @@ jobs:
         - sudo port -N install automake
         - sudo port -N install libtool
         - sudo port -N install pkgconfig
+        - sudo port -N install cppunit
         - sudo pip install sphinx
-        # MacPorts offers cppunit 1.14 in its repositories 
-        # but cppunit 1.13.2 is the last version supporting C++98, so grab it, compile and install it
-        - wget http://dev-www.libreoffice.org/src/cppunit-1.13.2.tar.gz
-        - tar -xvzf cppunit-1.13.2.tar.gz
-        - cd cppunit-1.13.2
-        - CC=clang CXX=clang++ CXXFLAGS=-stdlib=libstdc++ LIBS=-lstdc++.6 ./configure --prefix=/opt/local
-        - sudo make -j4 install
-        - cd ..
+
       env:
         # use system Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
