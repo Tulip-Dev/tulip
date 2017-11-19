@@ -275,7 +275,7 @@ jobs:
       # deploy Tulip AppImage to bintray
       deploy:
         on:
-          branch: master
+          branch: tulip_5_1_maint
           repo: Tulip-Dev/tulip
         provider: bintray
         file: "build/deploy/TulipPackagesToBintray.json"
@@ -313,7 +313,7 @@ jobs:
       # deploy Tulip AppImage to bintray
       deploy:
         on:
-          branch: master
+          branch: tulip_5_1_maint
           repo: Tulip-Dev/tulip
         provider: bintray
         file: "build/deploy/TulipPackagesToBintray.json"
