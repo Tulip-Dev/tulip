@@ -221,6 +221,14 @@ void tlp::initTulipLib(const char *appDirPath) {
   pos = TulipLibDir.rfind("/", pos);
   TulipShareDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
 
+  // special case for Debian when Tulip install prefix is /usr
+  // as libraries are installed in <prefix>/lib/<arch>
+  tlp_stat_t statInfo;
+  if (statPath(TulipShareDir, &statInfo) != 0) {
+    pos = TulipLibDir.rfind("/", pos - 1);
+    TulipShareDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
+  }
+
   // check it exists
   if (tlpDirSet)
     checkDirectory(TulipShareDir);
