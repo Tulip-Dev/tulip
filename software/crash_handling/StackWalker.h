@@ -23,7 +23,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <stdint.h>
+#include <cstdint>
 
 #include <tulip/ConsoleUtils.h>
 

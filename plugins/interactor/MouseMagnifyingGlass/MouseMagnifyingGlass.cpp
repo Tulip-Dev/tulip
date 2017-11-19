@@ -37,7 +37,7 @@
 
 #include <sstream>
 
-#include <stdint.h>
+#include <cstdint>
 
 using namespace std;
 using namespace tlp;

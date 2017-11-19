@@ -17,7 +17,7 @@
  *
  */
 #include <cmath>
-#include <float.h>
+#include <cfloat>
 #include <tulip/LayoutProperty.h>
 #include <tulip/Coord.h>
 #include <tulip/ForEach.h>

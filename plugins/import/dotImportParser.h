@@ -723,7 +723,7 @@ typedef int YYSTYPE;
   } while (0)
 #else
 #if defined(__STDC__) || defined(__cplusplus)
-#include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
+#include <cstdlib> /* INFRINGES ON USER NAME SPACE */
 #define YYSIZE_T size_t
 #endif
 #define YYSTACK_ALLOC YYMALLOC

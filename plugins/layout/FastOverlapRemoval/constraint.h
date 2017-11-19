@@ -35,7 +35,7 @@ public:
   bool visited;
   bool equality;
 };
-#include <float.h>
+#include <cfloat>
 #include "block.h"
 static inline bool compareConstraints(Constraint *const &l, Constraint *const &r) {
   double const sl = l->left->block->timeStamp > l->timeStamp || l->left->block == l->right->block

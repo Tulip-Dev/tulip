@@ -34,7 +34,7 @@
 #include <cstdlib>
 #include <dlfcn.h>
 #include <dirent.h>
-#include <errno.h>
+#include <cerrno>
 #endif
 
 using namespace tlp;

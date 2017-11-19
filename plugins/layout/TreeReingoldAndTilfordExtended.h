@@ -19,7 +19,7 @@
 #ifndef _TreeReingoldAndTilfordExtended_H
 #define _TreeReingoldAndTilfordExtended_H
 #include <string>
-#include <math.h>
+#include <cmath>
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 

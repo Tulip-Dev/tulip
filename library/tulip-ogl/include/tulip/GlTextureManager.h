@@ -29,7 +29,7 @@
 #include <map>
 #include <string>
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace tlp {
 

@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <tulip/tulipconf.h>
 

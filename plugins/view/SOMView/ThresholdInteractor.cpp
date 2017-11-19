@@ -39,7 +39,7 @@
 #include <QGLPixelBuffer>
 #include <QPicture>
 
-#include <stdint.h>
+#include <cstdint>
 
 using namespace tlp;
 using namespace std;

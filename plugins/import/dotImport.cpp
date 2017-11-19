@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 #include "dotImportCLUT.h"

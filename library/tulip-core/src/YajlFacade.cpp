@@ -24,7 +24,7 @@ extern "C" {
 #include <yajl/yajl_parse.h>
 #include <yajl/yajl_gen.h>
 }
-#include <errno.h>
+#include <cerrno>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>

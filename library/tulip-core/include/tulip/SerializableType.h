@@ -27,7 +27,7 @@
 #include <list>
 #include <iostream>
 #include <sstream>
-#include <float.h>
+#include <cfloat>
 
 #include <tulip/TypeInterface.h>
 

@@ -19,7 +19,7 @@
 #include "MISFiltering.h"
 #include "Distances.h"
 #include <ctime>
-#include <math.h>
+#include <cmath>
 #include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>

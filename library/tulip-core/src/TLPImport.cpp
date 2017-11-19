@@ -19,7 +19,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <errno.h>
+#include <cerrno>
 
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>

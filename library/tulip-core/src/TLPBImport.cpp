@@ -17,7 +17,7 @@
  *
  */
 #include <fstream>
-#include <errno.h>
+#include <cerrno>
 #include <sys/stat.h>
 #include <tulip/TLPBExportImport.h>
 #include <tulip/TlpTools.h>

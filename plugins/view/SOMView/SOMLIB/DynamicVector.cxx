@@ -17,7 +17,7 @@
  *
  */
 
-#include <math.h>
+#include <cmath>
 
 template <class T>
 DynamicVector<T> &DynamicVector<T>::operator=(const DynamicVector<T> &vec) {

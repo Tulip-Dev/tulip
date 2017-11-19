@@ -21,7 +21,7 @@
 #include <tulip/Graph.h>
 #include <tulip/StringCollection.h>
 
-#include <stdint.h>
+#include <cstdint>
 #include <limits>
 
 using namespace std;
