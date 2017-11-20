@@ -69,7 +69,7 @@ struct SelectedEntity {
   }
 
   unsigned int getComplexEntityId() const {
-    assert(complexEntityId != (unsigned int)(-1));
+    assert(complexEntityId != uint(-1));
     return complexEntityId;
   }
 
