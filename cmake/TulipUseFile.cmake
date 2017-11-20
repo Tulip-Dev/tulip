@@ -28,8 +28,9 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
   STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
 
   # enable C++11 (not required for GCC >= 6.1 as the standard is enabled by default)
-  # set -std=c++11 only if no other standard (eg. c++14, c++17) has already been manually specified
-  STRING(FIND "${CMAKE_CXX_FLAGS}" "-std=c++" STD_POS)
+  # set -std=c++11 only if no other standard (eg. c++14, c++17, gnu++11, gnu++14, gnu++1z)
+  # has already been manually specified
+  STRING(FIND "${CMAKE_CXX_FLAGS}" "-std=" STD_POS)
   IF(${STD_POS} EQUAL -1)
     IF(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
       TULIP_SET_CXX_COMPILER_FLAG("-std=c++0x")
