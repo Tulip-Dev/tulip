@@ -94,7 +94,7 @@ Qt::ItemFlags GraphModel::flags(const QModelIndex &index) const {
   return iflags | Qt::ItemIsEditable;
 #else
 
-  if (((PropertyInterface *)(index.internalPointer()))->getName() == "viewMetaGraph")
+  if (static_cast<PropertyInterface *>(index.internalPointer())->getName() == "viewMetaGraph")
     return iflags;
 
   return iflags | Qt::ItemIsEditable;
