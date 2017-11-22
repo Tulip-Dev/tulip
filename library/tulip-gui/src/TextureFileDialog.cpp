@@ -69,3 +69,11 @@ void TextureFileDialog::browse() {
   if (!result.isEmpty())
     ui->fileOrDirLineEdit->setText(result);
 }
+
+void TextureFileDialog::showEvent(QShowEvent *ev) {
+  QDialog::showEvent(ev);
+
+  if (parentWidget())
+    move(parentWidget()->window()->frameGeometry().topLeft() +
+         parentWidget()->window()->rect().center() - rect().center());
+}

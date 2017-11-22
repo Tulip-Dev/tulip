@@ -56,6 +56,9 @@ public:
   const TextureFile &data() {
     return _data;
   }
+
+  void showEvent(QShowEvent *ev);
+
 public slots:
   void browse();
 };

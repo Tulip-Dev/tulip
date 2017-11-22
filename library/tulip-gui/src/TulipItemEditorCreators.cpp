@@ -82,6 +82,13 @@ public:
     ok = res;
     QColorDialog::done(res);
   }
+  void showEvent(QShowEvent *ev) {
+    QDialog::showEvent(ev);
+
+    if (parentWidget())
+      move(parentWidget()->window()->frameGeometry().topLeft() +
+           parentWidget()->window()->rect().center() - rect().center());
+  }
 };
 
 /*
@@ -323,6 +330,14 @@ public:
   void done(int res) {
     ok = res;
     QFileDialog::done(res);
+  }
+
+  void showEvent(QShowEvent *ev) {
+    QDialog::showEvent(ev);
+
+    if (parentWidget())
+      move(parentWidget()->window()->frameGeometry().topLeft() +
+           parentWidget()->window()->rect().center() - rect().center());
   }
 };
 

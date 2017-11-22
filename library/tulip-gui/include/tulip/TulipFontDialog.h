@@ -51,6 +51,7 @@ public:
   TulipFont getSelectedFont() const {
     return ok == QDialog::Accepted ? font() : previousFont;
   }
+  void showEvent(QShowEvent *ev);
 
   static TulipFont getFont(QWidget *parent = NULL, const TulipFont &selectedFont = TulipFont());
 

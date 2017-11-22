@@ -6,22 +6,37 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>471</width>
-    <height>363</height>
+    <width>500</width>
+    <height>350</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>350</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Select a font</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/20/labels.png</normaloff>:/tulip/gui/icons/20/labels.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QWidget" name="settingsWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_5">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -324,7 +339,16 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -426,11 +450,4 @@
  <slots>
   <slot>fontChanged()</slot>
  </slots>
- <customwidgets>
-  <customwidget>
-   <class>tlp::TulipLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/TulipLineEdit.h</header>
-  </customwidget>
- </customwidgets>
 </ui>
