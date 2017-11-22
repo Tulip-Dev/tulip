@@ -36,15 +36,13 @@ CoordEditor::CoordEditor(QWidget *parent, bool editSize)
     ui->zLabel->setText("D");
   }
 
-  QDoubleValidator *validator = new QDoubleValidator(this);
-  validator->setRange(-FLT_MAX, FLT_MAX, 1000);
-  ui->xLineEdit->setValidator(validator);
-  ui->yLineEdit->setValidator(validator);
-  ui->zLineEdit->setValidator(validator);
+  ui->xSP->setRange(-FLT_MAX, FLT_MAX);
+  ui->ySP->setRange(-FLT_MAX, FLT_MAX);
+  ui->zSP->setRange(-FLT_MAX, FLT_MAX);
   setCoord(Coord());
-  connect(ui->xLineEdit, SIGNAL(textChanged(QString)), this, SLOT(coordUpdated()));
-  connect(ui->yLineEdit, SIGNAL(textChanged(QString)), this, SLOT(coordUpdated()));
-  connect(ui->zLineEdit, SIGNAL(textChanged(QString)), this, SLOT(coordUpdated()));
+  connect(ui->xSP, SIGNAL(valueChanged(double)), this, SLOT(coordUpdated()));
+  connect(ui->ySP, SIGNAL(valueChanged(double)), this, SLOT(coordUpdated()));
+  connect(ui->zSP, SIGNAL(valueChanged(double)), this, SLOT(coordUpdated()));
   setModal(true);
 }
 
@@ -58,21 +56,21 @@ Coord CoordEditor::coord() const {
 void CoordEditor::setCoord(const Coord &coord) {
   currentCoord = coord;
   blockSignals(true);
-  ui->xLineEdit->setText(QString::number(coord[0]));
-  ui->yLineEdit->setText(QString::number(coord[1]));
-  ui->zLineEdit->setText(QString::number(coord[2]));
+  ui->xSP->setValue(coord[0]);
+  ui->ySP->setValue(coord[1]);
+  ui->zSP->setValue(coord[2]);
   blockSignals(false);
   coordUpdated();
 }
 
 void CoordEditor::coordUpdated() {
+  currentCoord = Coord(float(ui->xSP->value()), float(ui->ySP->value()), float(ui->zSP->value()));
   emit(coordChanged(coord()));
 }
 
 void CoordEditor::done(int r) {
   if (r == QDialog::Accepted)
-    currentCoord = Coord(ui->xLineEdit->text().toFloat(), ui->yLineEdit->text().toFloat(),
-                         ui->zLineEdit->text().toFloat());
+    currentCoord = Coord(float(ui->xSP->value()), float(ui->ySP->value()), float(ui->zSP->value()));
 
   QDialog::done(r);
 }
