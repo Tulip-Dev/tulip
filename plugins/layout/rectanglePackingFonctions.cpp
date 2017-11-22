@@ -49,7 +49,7 @@ vector<Rectangle<float>> &RectanglePackingLimitRectangles(vector<Rectangle<float
     ++itNewRect;
 
     /* to follow the algorithm progression on through the PluginProgress*/
-    if (progress != NULL)
+    if (progress != nullptr)
       if (progress->progress(numberNewRect, numberOfPackedRectangles + 1) != TLP_CONTINUE) {
         return v;
       }
@@ -65,7 +65,7 @@ vector<Rectangle<float>> &RectanglePackingLimitRectangles(vector<Rectangle<float
   delete rectPack;
 
   /*added to enable the synchronisation of the PluginProgress closing and the end of the algorithm*/
-  if (progress != NULL)
+  if (progress != nullptr)
     if (progress->progress(numberNewRect, numberOfPackedRectangles + 1) != TLP_CONTINUE)
       return v;
 
@@ -97,7 +97,7 @@ vector<Rectangle<float>> &RectanglePackingLimitPositions(vector<Rectangle<float>
     rectPack->optimalPositionOfNewRectangleLimPos(itNewRect, numberTestedPositions);
 
     /* to follow the algorithm progression on through the PluginProgress*/
-    if (progress != NULL)
+    if (progress != nullptr)
       if (progress->progress(counter, entrySize + 1) != false)
         exit(1);
 
@@ -111,7 +111,7 @@ vector<Rectangle<float>> &RectanglePackingLimitPositions(vector<Rectangle<float>
   delete rectPack;
 
   /*added to enable the synchronisation of the PluginProgress closing and the end of the algorithm*/
-  if (progress != NULL)
+  if (progress != nullptr)
     if (progress->progress(counter, entrySize + 1) != false)
       exit(1);
 

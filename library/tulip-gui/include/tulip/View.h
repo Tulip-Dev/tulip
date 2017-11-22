@@ -142,7 +142,7 @@ public:
     @return The currently active interactor.
     The active interactor is the one that currently recieve user inputs.
     @see setCurrentInteractor();
-    @warning This method may return a NULL pointer if no interactor is currently active.
+    @warning This method may return a nullptr pointer if no interactor is currently active.
     */
   tlp::Interactor *currentInteractor() const;
 
@@ -194,7 +194,7 @@ public:
     @brief defines which item is considered as the central item in the view.
     The central item is considered to be a background item that will be set as parent of every
     graphics item added by the workspace into the view.
-    By default, this method returns NULL, which means that no central item is defined.
+    By default, this method returns nullptr, which means that no central item is defined.
     */
   virtual QGraphicsItem *centralItem() const;
 
@@ -251,7 +251,8 @@ public slots:
     Interactor::uninstall()
     @note Calling this will trigger the View::currentInteractorChanged() callback for custom
     handling.
-    @note Calling View::setCurrentInteractor(NULL) will only remove the previous current interactor.
+    @note Calling View::setCurrentInteractor(nullptr) will only remove the previous current
+    interactor.
   */
   void setCurrentInteractor(tlp::Interactor *currentInteractor);
 
@@ -370,7 +371,7 @@ protected slots:
     @brief Callback method after setCurrentInteractor() was called.
     At this point, a call to View::currentInteractor() is considered valid and return the newly
     active interactor.
-    @warning The interactor passed down to this method MAY BE a NULL pointer ! This means that no
+    @warning The interactor passed down to this method MAY BE a nullptr pointer ! This means that no
     current interactor should be set.
     */
   virtual void currentInteractorChanged(tlp::Interactor *);
@@ -383,9 +384,9 @@ protected slots:
 
   /**
     @brief Called when the graph associated to the view gets deleted.
-    This method should call setGraph to input a new graph pointer (NULL or valid)
+    This method should call setGraph to input a new graph pointer (nullptr or valid)
     @param parentGraph The parent of the graph that was just deleted. If there is no parent
-    available (eg. the graph was root), parentGraph is NULL
+    available (eg. the graph was root), parentGraph is nullptr
     */
   virtual void graphDeleted(tlp::Graph *parentGraph) = 0;
 

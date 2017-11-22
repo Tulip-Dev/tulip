@@ -53,7 +53,7 @@ static const char *paramHelp[] = {
     "given the initial position will be computed by the algorithm."};
 
 LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context), linlog(NULL) {
+    : LayoutAlgorithm(context), linlog(nullptr) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<bool>("octtree", paramHelp[1], "true");
   addInParameter<NumericProperty *>("edge weight", paramHelp[2], "", false);
@@ -72,14 +72,14 @@ bool LinLogAlgorithm::run() {
   bool useOctTree = false;
 
   unsigned int max_iter = 100;
-  tlp::NumericProperty *edgeWeight = NULL;
-  tlp::BooleanProperty *skipNodes = NULL;
+  tlp::NumericProperty *edgeWeight = nullptr;
+  tlp::BooleanProperty *skipNodes = nullptr;
   float aExp = 1.0;
   float rExp = 0.0;
   float gFac = 0.9f;
-  LayoutProperty *layout = NULL;
+  LayoutProperty *layout = nullptr;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("3D layout", is3D);
     dataSet->get("octtree", useOctTree);
     dataSet->get("edge weight", edgeWeight);

@@ -1026,5 +1026,5 @@ ostream &operator<<(ostream &os, PlanarConMap *sp) {
 }
 
 tlp::PlanarConMap *tlp::computePlanarConMap(tlp::Graph *graph) {
-  return (graph && ConnectedTest::isConnected(graph)) ? new PlanarConMap(graph) : NULL;
+  return (graph && ConnectedTest::isConnected(graph)) ? new PlanarConMap(graph) : nullptr;
 }

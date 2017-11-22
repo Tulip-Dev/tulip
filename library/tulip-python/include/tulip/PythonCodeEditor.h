@@ -71,7 +71,7 @@ class TLP_PYTHON_SCOPE FindReplaceDialog : public QDialog {
   void setSearchResult(const bool result);
 
 public:
-  FindReplaceDialog(QPlainTextEdit *_editor, QWidget *parent = NULL);
+  FindReplaceDialog(QPlainTextEdit *_editor, QWidget *parent = nullptr);
   ~FindReplaceDialog();
 
   void setFindMode(const bool findMode);

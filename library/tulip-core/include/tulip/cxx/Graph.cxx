@@ -37,7 +37,7 @@ template <typename PropertyType>
 PropertyType *tlp::Graph::getLocalProperty(const std::string &name) {
   if (existLocalProperty(name)) {
     PropertyInterface *prop = getProperty(name);
-    assert(dynamic_cast<PropertyType *>(prop) != NULL);
+    assert(dynamic_cast<PropertyType *>(prop) != nullptr);
     return dynamic_cast<PropertyType *>(prop);
   } else {
     PropertyType *prop = new PropertyType(this, name);
@@ -50,7 +50,7 @@ template <typename PropertyType>
 PropertyType *tlp::Graph::getProperty(const std::string &name) {
   if (existProperty(name)) {
     tlp::PropertyInterface *prop = getProperty(name);
-    assert(dynamic_cast<PropertyType *>(prop) != NULL);
+    assert(dynamic_cast<PropertyType *>(prop) != nullptr);
     return dynamic_cast<PropertyType *>(prop);
   } else {
     return getLocalProperty<PropertyType>(name);

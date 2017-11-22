@@ -54,7 +54,7 @@ bool SpanningTreeSelection::run() {
   selectSpanningForest(graph, result, pluginProgress);
 
   // output some useful information
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
 
   return true;

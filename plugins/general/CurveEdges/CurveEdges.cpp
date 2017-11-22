@@ -95,7 +95,7 @@ public:
                     "Computes quadratic or cubic bezier paths for edges", "1.0", "")
 
   CurveEdges(tlp::PluginContext *context)
-      : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(NULL),
+      : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(nullptr),
         bezierEdges(true) {
     addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout");
     addInParameter<float>("curve roundness", paramHelp[1], "0.5");
@@ -327,7 +327,7 @@ public:
       dataSet->get("bezier edges", bezierEdges);
     }
 
-    if (layout == NULL) {
+    if (layout == nullptr) {
       layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
     }
 

@@ -112,7 +112,7 @@ public:
   void beforeCall() {
     ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK *>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       double dval = 0;
       int ival = 0;
       bool bval = false;

@@ -325,7 +325,8 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
 
   for (list<string>::iterator it = exportPlugins.begin(); it != exportPlugins.end(); ++it) {
-    ExportModule *exportPlugin = PluginLister::instance()->getPluginObject<ExportModule>(*it, NULL);
+    ExportModule *exportPlugin =
+        PluginLister::instance()->getPluginObject<ExportModule>(*it, nullptr);
     string ext(exportPlugin->fileExtension());
 
     if (filename.rfind(ext) != string::npos &&
@@ -375,7 +376,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   bool result;
   DataSet ds;
 
-  if (data != NULL)
+  if (data != nullptr)
     ds = *data;
 
   ds.set("file", filename);
@@ -390,12 +391,12 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   if (!PluginLister::pluginExists(format)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
                    << "\" does not exist (or is not loaded)" << endl;
-    return NULL;
+    return nullptr;
   }
 
   bool newGraphP = false;
 
-  if (graph == NULL) {
+  if (graph == nullptr) {
     graph = tlp::newGraph();
     newGraphP = true;
   }
@@ -403,7 +404,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   PluginProgress *tmpProgress;
   bool deletePluginProgress = false;
 
-  if (progress == NULL) {
+  if (progress == nullptr) {
     tmpProgress = new SimplePluginProgress();
     deletePluginProgress = true;
   } else
@@ -412,7 +413,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
   AlgorithmContext *tmp = new AlgorithmContext(graph, &dataSet, tmpProgress);
   ImportModule *newImportModule =
       PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
-  assert(newImportModule != NULL);
+  assert(newImportModule != nullptr);
 
   // ensure that the parsing of float or double does not depend on locale
   setlocale(LC_NUMERIC, "C");
@@ -422,7 +423,7 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
     if (newGraphP)
       delete graph;
 
-    graph = NULL;
+    graph = nullptr;
   } else {
     std::string filename;
 
@@ -453,9 +454,9 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
 
   bool result;
   bool deletePluginProgress = false;
-  PluginProgress *tmpProgress = NULL;
+  PluginProgress *tmpProgress = nullptr;
 
-  if (progress == NULL) {
+  if (progress == nullptr) {
     tmpProgress = new SimplePluginProgress();
     deletePluginProgress = true;
   } else
@@ -464,7 +465,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
   AlgorithmContext *context = new AlgorithmContext(graph, &dataSet, tmpProgress);
   ExportModule *newExportModule =
       PluginLister::instance()->getPluginObject<ExportModule>(format, context);
-  assert(newExportModule != NULL);
+  assert(newExportModule != nullptr);
   std::string filename;
 
   if (dataSet.get("file", filename)) {
@@ -574,7 +575,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   MutableContainer<node> nodeTrl;
   nodeTrl.setAll(node());
   // get selected nodes
-  Iterator<node> *nodeIt = NULL;
+  Iterator<node> *nodeIt = nullptr;
 
   if (inSel) {
     nodeIt = inSel->getNonDefaultValuatedNodes(inG);
@@ -591,9 +592,9 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
   // get properties
   std::vector<std::pair<PropertyInterface *, PropertyInterface *>> properties;
-  PropertyInterface *src = NULL;
+  PropertyInterface *src = nullptr;
   forEach(src, inG->getObjectProperties()) {
-    if (dynamic_cast<GraphProperty *>(src) == NULL) {
+    if (dynamic_cast<GraphProperty *>(src) == nullptr) {
       const std::string &pName = src->getName();
       PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName) : src->clonePrototype(outG, pName);
@@ -623,7 +624,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   }
 
   // get selected edges
-  Iterator<edge> *edgeIt = NULL;
+  Iterator<edge> *edgeIt = nullptr;
 
   if (inSel) {
     edgeIt = inSel->getNonDefaultValuatedEdges(inG);
@@ -707,7 +708,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessa
   bool deletePluginProgress = false;
   PluginProgress *tmpProgress;
 
-  if (progress == NULL) {
+  if (progress == nullptr) {
     tmpProgress = new SimplePluginProgress();
     deletePluginProgress = true;
   } else
@@ -777,12 +778,12 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
 
   tlp::PluginProgress *tmpProgress;
 
-  if (progress == NULL)
+  if (progress == nullptr)
     tmpProgress = new tlp::SimplePluginProgress();
   else
     tmpProgress = progress;
 
-  bool hasData = parameters != NULL;
+  bool hasData = parameters != nullptr;
 
   if (!hasData)
     parameters = new tlp::DataSet();
@@ -799,7 +800,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
   Algorithm *tmpAlgo =
       tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
-  if (tmpAlgo != NULL) {
+  if (tmpAlgo != nullptr) {
     result = tmpAlgo->check(errorMessage);
 
     if (result) {
@@ -821,7 +822,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
   circularCalls.erase(algorithm);
   tlp::Observable::unholdObservers();
 
-  if (progress == NULL)
+  if (progress == nullptr)
     delete tmpProgress;
 
   if (hasData)
@@ -1057,7 +1058,7 @@ PropertyInterface *Graph::getLocalProperty(const std::string &propertyName,
   } else if (propertyType.compare(GraphProperty::propertyTypename) == 0) {
     return getLocalProperty<GraphProperty>(propertyName);
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -1094,7 +1095,7 @@ PropertyInterface *Graph::getProperty(const std::string &propertyName,
   } else if (propertyType.compare(GraphProperty::propertyTypename) == 0) {
     return getProperty<GraphProperty>(propertyName);
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -1115,7 +1116,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping,
 
     Graph *meta = metaInfo->getNodeValue(n);
 
-    if (meta != NULL)
+    if (meta != nullptr)
       buildMapping(meta->getNodes(), mapping, metaInfo, mapping.get(n.id));
   }
 
@@ -1123,7 +1124,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping,
 }
 //====================================================================================
 void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *clusterInfo) {
-  if (clusterInfo->getNodeValue(metanode) == NULL)
+  if (clusterInfo->getNodeValue(metanode) == nullptr)
     return; // The metanode is not a metanode.
 
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
@@ -1192,7 +1193,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
     if (property == graphLayout || property == graphSize || property == graphRot)
       continue;
 
-    PropertyInterface *graphProp = NULL;
+    PropertyInterface *graphProp = nullptr;
 
     if (graph->existProperty(property->getName()) &&
         graph->getProperty(property->getName())->getTypename() == property->getTypename())
@@ -1213,7 +1214,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
 }
 //=========================================================
 Graph *Graph::addSubGraph(const std::string &name) {
-  Graph *g = addSubGraph(NULL, name);
+  Graph *g = addSubGraph(nullptr, name);
   return g;
 }
 //=========================================================
@@ -1229,13 +1230,13 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
 
     if (this == parentSubGraph)
       // cannot add sibling of root graph
-      return NULL;
+      return nullptr;
   }
 
   Graph *clone = parentSubGraph->addSubGraph(&selection, name);
 
   if (addSibling && addSiblingProperties) {
-    PropertyInterface *prop = NULL;
+    PropertyInterface *prop = nullptr;
     forEach(prop, getLocalObjectProperties()) {
       PropertyInterface *cloneProp = prop->clonePrototype(clone, prop->getName());
       tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
@@ -1248,7 +1249,7 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
 //=========================================================
 Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph,
                               const string &name) {
-  if (parentSubGraph == NULL)
+  if (parentSubGraph == nullptr)
     parentSubGraph = this;
 
   // create subgraph and add nodes
@@ -1413,7 +1414,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
         edges[src].insert(tgt);
 
-        if (((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) &&
+        if (((metaInfo->getNodeValue(src) != nullptr) ||
+             (metaInfo->getNodeValue(tgt) != nullptr)) &&
             existEdge(src, tgt).isValid()) {
           toDelete = NEED_TODEL;
           delEdge(e, edgeDelAll);
@@ -1444,9 +1446,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
         edges[tgt].insert(src);
 
         if (toDelete == CHECK_TODEL)
-          toDelete =
-              ((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) &&
-              existEdge(src, tgt).isValid();
+          toDelete = ((metaInfo->getNodeValue(src) != nullptr) ||
+                      (metaInfo->getNodeValue(tgt) != nullptr)) &&
+                     existEdge(src, tgt).isValid();
 
         if (toDelete) {
           delEdge(e, edgeDelAll);
@@ -1498,7 +1500,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
 
-  if (metaGraph == NULL)
+  if (metaGraph == nullptr)
     return;
 
   Observable::holdObservers();
@@ -1550,7 +1552,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
-      if (mnGraph != NULL) {
+      if (mnGraph != nullptr) {
         node mnn;
         forEach(mnn, mnGraph->getNodes()) {
           mappingM.set(mnn.id, mn);
@@ -1682,7 +1684,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           continue;
       }
 
-      if (metaInfo->getNodeValue(src) == NULL && metaInfo->getNodeValue(tgt) == NULL) {
+      if (metaInfo->getNodeValue(src) == nullptr && metaInfo->getNodeValue(tgt) == nullptr) {
         addEdge(e);
         continue;
       }
@@ -1815,13 +1817,13 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
 
 Graph *Graph::getNthSubGraph(unsigned int n) const {
   unsigned int i = 0;
-  tlp::Graph *sg = NULL;
+  tlp::Graph *sg = nullptr;
   forEach(sg, getSubGraphs()) {
     if (i++ == n) {
       return sg;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 const std::string &GraphEvent::getPropertyName() const {
@@ -1865,7 +1867,7 @@ struct DescendantGraphsIterator : public Iterator<Graph *> {
 
     if (!current->hasNext()) {
       delete current;
-      current = NULL;
+      current = nullptr;
     }
   }
 
@@ -1880,7 +1882,7 @@ struct DescendantGraphsIterator : public Iterator<Graph *> {
   }
 
   bool hasNext() {
-    return current != NULL;
+    return current != nullptr;
   }
 
   Graph *next() {
@@ -1906,14 +1908,14 @@ struct DescendantGraphsIterator : public Iterator<Graph *> {
             current = iterators.top();
             iterators.pop();
           } else
-            current = NULL;
+            current = nullptr;
         }
       }
 
       return g;
     }
 
-    return NULL;
+    return nullptr;
   }
 };
 
@@ -1941,7 +1943,7 @@ GraphEvent::~GraphEvent() {
 const std::vector<node> &GraphEvent::getNodes() const {
   assert(evtType == TLP_ADD_NODES);
 
-  if (vectInfos.addedNodes == NULL) {
+  if (vectInfos.addedNodes == nullptr) {
     unsigned int nbElts = info.nbElts;
     std::vector<node> *addedNodes = new std::vector<node>();
     addedNodes->reserve(nbElts);
@@ -1961,7 +1963,7 @@ const std::vector<node> &GraphEvent::getNodes() const {
 const std::vector<edge> &GraphEvent::getEdges() const {
   assert(evtType == TLP_ADD_EDGES);
 
-  if (vectInfos.addedEdges == NULL) {
+  if (vectInfos.addedEdges == nullptr) {
     unsigned int nbElts = info.nbElts;
     std::vector<edge> *addedEdges = new std::vector<edge>();
     addedEdges->reserve(nbElts);

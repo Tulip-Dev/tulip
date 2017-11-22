@@ -40,7 +40,7 @@ class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
   Q_OBJECT
 
 public:
-  ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = NULL);
+  ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = nullptr);
   ~ColorScaleConfigDialog();
   void setColorScale(const ColorScale &colorScale);
   const ColorScale &getColorScale() const;

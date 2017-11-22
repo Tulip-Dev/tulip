@@ -46,7 +46,7 @@ public:
     *
     * @param toRenameProp The property to rename.
     **/
-  static bool renameProperty(tlp::PropertyInterface *toRenameProp, QWidget *parent = NULL);
+  static bool renameProperty(tlp::PropertyInterface *toRenameProp, QWidget *parent = nullptr);
 };
 }
 #endif // RENAMEPROPERTYDIALOG_H

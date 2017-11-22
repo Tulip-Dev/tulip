@@ -45,7 +45,7 @@ void BasicPluginsTest::tearDown() {
 //==========================================================
 void BasicPluginsTest::initializeGraph(const string &type) {
   DataSet ds;
-  Graph *g = importGraph(type, ds, NULL, graph);
+  Graph *g = importGraph(type, ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
@@ -53,9 +53,9 @@ template <typename PropType>
 bool BasicPluginsTest::computeProperty(const std::string &algorithm, const std::string &graphType,
                                        PropType *prop) {
   initializeGraph(graphType);
-  bool deleteProp = (prop == NULL);
+  bool deleteProp = (prop == nullptr);
 
-  if (prop == NULL)
+  if (prop == nullptr)
     prop = new PropType(graph);
 
   string errorMsg;
@@ -70,172 +70,172 @@ bool BasicPluginsTest::computeProperty(const std::string &algorithm, const std::
 //==========================================================
 void BasicPluginsTest::testImportCompleteGraph() {
   DataSet ds;
-  Graph *g = importGraph("Complete General Graph", ds, NULL, graph);
+  Graph *g = importGraph("Complete General Graph", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportCompleteTree() {
   DataSet ds;
-  Graph *g = importGraph("Complete Tree", ds, NULL, graph);
+  Graph *g = importGraph("Complete Tree", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportRandomGraph() {
   DataSet ds;
-  Graph *g = importGraph("Random General Graph", ds, NULL, graph);
+  Graph *g = importGraph("Random General Graph", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportRandomTree() {
   DataSet ds;
-  Graph *g = importGraph("Uniform Random Binary Tree", ds, NULL, graph);
+  Graph *g = importGraph("Uniform Random Binary Tree", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportRandomTreeGeneral() {
   DataSet ds;
-  Graph *g = importGraph("Random General Tree", ds, NULL, graph);
+  Graph *g = importGraph("Random General Tree", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportRandomSimpleGraph() {
   DataSet ds;
-  Graph *g = importGraph("Random Simple Graph", ds, NULL, graph);
+  Graph *g = importGraph("Random Simple Graph", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportPlanarGraph() {
   DataSet ds;
-  Graph *g = importGraph("Planar Graph", ds, NULL, graph);
+  Graph *g = importGraph("Planar Graph", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportGrid() {
   DataSet ds;
-  Graph *g = importGraph("Grid", ds, NULL, graph);
+  Graph *g = importGraph("Grid", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportGridApproximation() {
   DataSet ds;
-  Graph *g = importGraph("Grid Approximation", ds, NULL, graph);
+  Graph *g = importGraph("Grid Approximation", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportDot() {
   DataSet ds;
   ds.set("file::filename", string("data/toto.dot"));
-  Graph *g = importGraph("graphviz", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  Graph *g = importGraph("graphviz", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("file::filename", string("data/graph.dot"));
-  g = importGraph("graphviz", ds, NULL, graph);
+  g = importGraph("graphviz", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportGml() {
   DataSet ds;
   ds.set("file::filename", string("data/toto.gml"));
-  Graph *g = importGraph("GML", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  Graph *g = importGraph("GML", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("file::filename", string("data/CMPb.gml"));
-  g = importGraph("GML", ds, NULL, graph);
+  g = importGraph("GML", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testExportGml() {
   DataSet ds;
-  Graph *g = importGraph("Planar Graph", ds, NULL, graph);
+  Graph *g = importGraph("Planar Graph", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
   std::stringstream os;
-  CPPUNIT_ASSERT(exportGraph(graph, os, "GML Export", ds, NULL));
+  CPPUNIT_ASSERT(exportGraph(graph, os, "GML Export", ds, nullptr));
 }
 //==========================================================
 void BasicPluginsTest::testImportTLP() {
   DataSet ds;
   ds.set("file::filename", string("data/toto.tlp"));
-  Graph *g = importGraph("TLP Import", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  Graph *g = importGraph("TLP Import", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
-  g = importGraph("TLP Import", ds, NULL, graph);
+  g = importGraph("TLP Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testExportTLP() {
   DataSet ds;
   ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
-  Graph *g = importGraph("TLP Import", ds, NULL, graph);
+  Graph *g = importGraph("TLP Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
   std::stringstream os;
-  CPPUNIT_ASSERT(exportGraph(graph, os, "TLP Export", ds, NULL));
+  CPPUNIT_ASSERT(exportGraph(graph, os, "TLP Export", ds, nullptr));
 }
 //==========================================================
 void BasicPluginsTest::testExportImportTLPB() {
   DataSet ds;
   ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
-  Graph *g = importGraph("TLP Import", ds, NULL, graph);
+  Graph *g = importGraph("TLP Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
   std::ostream *os =
       tlp::getOutputFileStream("tlpb_importexport_test.tlpb", std::ios::out | std::ios::binary);
-  CPPUNIT_ASSERT(exportGraph(graph, *os, "TLPB Export", ds, NULL));
+  CPPUNIT_ASSERT(exportGraph(graph, *os, "TLPB Export", ds, nullptr));
   delete os;
   tearDown();
   setUp();
   ds.set("file::filename", string("data/toto.tlpb"));
-  g = importGraph("TLPB Import", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  g = importGraph("TLPB Import", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("file::filename", string("tlpb_importexport_test.tlpb"));
-  g = importGraph("TLPB Import", ds, NULL, graph);
+  g = importGraph("TLPB Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testExportImportJSON() {
   DataSet ds;
   ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
-  Graph *g = importGraph("TLP Import", ds, NULL, graph);
+  Graph *g = importGraph("TLP Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
   std::ofstream os("json_importexport_test.json");
-  CPPUNIT_ASSERT(exportGraph(graph, os, "JSON Export", ds, NULL));
+  CPPUNIT_ASSERT(exportGraph(graph, os, "JSON Export", ds, nullptr));
   os.close();
   tearDown();
   setUp();
   ds.set("file::filename", string("data/toto.json"));
-  g = importGraph("JSON Import", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  g = importGraph("JSON Import", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("file::filename", string("json_importexport_test.json"));
-  g = importGraph("JSON Import", ds, NULL, graph);
+  g = importGraph("JSON Import", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportFileSystem() {
   DataSet ds;
   ds.set("dir::directory", string("toto"));
-  Graph *g = importGraph("File System Directory", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  Graph *g = importGraph("File System Directory", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("dir::directory", string(".."));
-  g = importGraph("File System Directory", ds, NULL, graph);
+  g = importGraph("File System Directory", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
   ds.set("file::name", string("data/toto.txt"));
-  Graph *g = importGraph("Adjacency Matrix", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);
+  Graph *g = importGraph("Adjacency Matrix", ds, nullptr, graph);
+  CPPUNIT_ASSERT(g == nullptr);
   ds.set("file::name", string("data/adj_mat.txt"));
-  g = importGraph("Adjacency Matrix", ds, NULL, graph);
+  g = importGraph("Adjacency Matrix", ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportPajek() {
   // test all data/*.net files
-  const char *net_files[] = {"data/NDActors.net", "data/NDwww.net", "data/netscience.net", NULL};
+  const char *net_files[] = {"data/NDActors.net", "data/NDwww.net", "data/netscience.net", nullptr};
   const char **files = &net_files[0];
 
   while (files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
     std::cout << "importing Pajek file: " << files[0] << "...";
-    Graph *g = importGraph("Pajek", ds, NULL, graph);
+    Graph *g = importGraph("Pajek", ds, nullptr, graph);
     CPPUNIT_ASSERT(g == graph);
     std::cout << " OK" << std::endl;
     g->clear();
@@ -267,14 +267,14 @@ void BasicPluginsTest::testImportUCINET() {
                             "data/dl_nl1_test_labels_embedded.txt",
                             "data/dl_nl1_test_labels.txt",
                             "data/dl_nl2_test_row_col_labels_embedded.txt",
-                            NULL};
+                            nullptr};
   const char **files = &dl_files[0];
 
   while (files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
     std::cout << "importing UCINET file: " << files[0] << "...";
-    Graph *g = importGraph("UCINET", ds, NULL, graph);
+    Graph *g = importGraph("UCINET", ds, nullptr, graph);
     CPPUNIT_ASSERT(g == graph);
     std::cout << " OK" << std::endl;
     g->clear();
@@ -293,14 +293,14 @@ void BasicPluginsTest::testImportGEXF() {
                               "data/phylogeny.gexf",
                               "data/viz.gexf",
                               "data/WebAtlas_EuroSiS.gexf",
-                              NULL};
+                              nullptr};
   const char **files = &gexf_files[0];
 
   while (files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
     std::cout << "importing GEXF file: " << files[0] << "...";
-    Graph *g = importGraph("GEXF", ds, NULL, graph);
+    Graph *g = importGraph("GEXF", ds, nullptr, graph);
     CPPUNIT_ASSERT(g == graph);
     std::cout << " OK" << std::endl;
     g->clear();
@@ -318,7 +318,7 @@ void BasicPluginsTest::testMetricColorMapping() {
   DataSet ds;
   ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, nullptr, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -383,7 +383,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
 
   SizeProperty size(graph);
   ds.set("property", &metric);
-  result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, nullptr, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

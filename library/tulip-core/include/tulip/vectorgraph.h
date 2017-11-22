@@ -288,7 +288,7 @@ public:
    * is cleared before adding nodes
    * @complexity: o(1)
    */
-  void addNodes(unsigned int nb, std::vector<node> *addedNodes = NULL);
+  void addNodes(unsigned int nb, std::vector<node> *addedNodes = nullptr);
   //=======================================================
   /**
         * @brief Delete a node and all its adjacent edges in the graph
@@ -319,7 +319,7 @@ public:
    * these structures will be devalidated.
    */
   void addEdges(const std::vector<std::pair<node, node>> &edges,
-                std::vector<edge> *addedEdges = NULL);
+                std::vector<edge> *addedEdges = nullptr);
   //=======================================================
   /**
         * @brief Delete an edge in the graph

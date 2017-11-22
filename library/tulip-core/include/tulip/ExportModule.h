@@ -40,7 +40,7 @@ class PluginProgress;
 class ExportModule : public tlp::Plugin {
 public:
   ExportModule(const tlp::PluginContext *context) {
-    if (context != NULL) {
+    if (context != nullptr) {
       const tlp::AlgorithmContext *algoritmContext =
           static_cast<const tlp::AlgorithmContext *>(context);
       graph = algoritmContext->graph;

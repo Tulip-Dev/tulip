@@ -27,7 +27,7 @@ namespace tlp {
 
 class TulipLineEdit : public QLineEdit {
 public:
-  TulipLineEdit(QWidget *parent = NULL) : QLineEdit(parent) {}
+  TulipLineEdit(QWidget *parent = nullptr) : QLineEdit(parent) {}
 
 #if (QT_VERSION < QT_VERSION_CHECK(4, 7, 0))
   // the method below exists only since Qt 4.7

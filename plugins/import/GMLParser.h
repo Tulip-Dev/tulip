@@ -173,7 +173,7 @@ struct GMLTokenParser {
     if (!started && !endOfStream)
       return ENDOFSTREAM;
 
-    char *endPtr = NULL;
+    char *endPtr = nullptr;
     long resultl = strtol(val.str.c_str(), &endPtr, 10);
 
     if (endPtr == (val.str.c_str() + val.str.length())) {
@@ -181,7 +181,7 @@ struct GMLTokenParser {
       return INTTOKEN;
     }
 
-    endPtr = NULL;
+    endPtr = nullptr;
     double resultd = strtod(val.str.c_str(), &endPtr);
 
     if (endPtr == (val.str.c_str() + val.str.length())) {

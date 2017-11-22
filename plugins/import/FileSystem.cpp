@@ -116,11 +116,12 @@ public:
   PLUGININFORMATION("File System Directory", "Auber", "16/12/2002",
                     "Imports a tree representation of a file system directory.", "2.2", "Misc")
   FileSystem(tlp::PluginContext *context)
-      : ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
-        _fileNames(NULL), _isDir(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL),
-        _isWritable(NULL), _lastModifiedDates(NULL), _lastReadDates(NULL), _owners(NULL),
-        _permissions(NULL), _suffixes(NULL), _sizes(NULL), _fontIcon(NULL), _useIcons(true),
-        _treeLayout(true), dirColor(255, 255, 127, 128) {
+      : ImportModule(context), _absolutePaths(nullptr), _baseNames(nullptr), _createdDates(nullptr),
+        _fileNames(nullptr), _isDir(nullptr), _isExecutable(nullptr), _isReadable(nullptr),
+        _isSymlink(nullptr), _isWritable(nullptr), _lastModifiedDates(nullptr),
+        _lastReadDates(nullptr), _owners(nullptr), _permissions(nullptr), _suffixes(nullptr),
+        _sizes(nullptr), _fontIcon(nullptr), _useIcons(true), _treeLayout(true),
+        dirColor(255, 255, 127, 128) {
     addInParameter<std::string>("dir::directory", paramHelp[0], "");
     addInParameter<bool>("include hidden files", paramHelp[5], "true");
     addInParameter<bool>("follow symlinks", paramHelp[6], "true");
@@ -131,7 +132,7 @@ public:
   }
 
   bool importGraph() {
-    if (dataSet == NULL)
+    if (dataSet == nullptr)
       return false;
 
     std::string rootPathStr;

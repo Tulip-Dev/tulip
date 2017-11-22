@@ -46,7 +46,7 @@ class CSVImportParameters;
 class CSVParsingConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
-  CSVParsingConfigurationQWizardPage(QWidget *parent = NULL);
+  CSVParsingConfigurationQWizardPage(QWidget *parent = nullptr);
   bool isComplete() const;
   CSVParser *buildParser(int firstLine = 0) const;
   int getFirstLineIndex() const;
@@ -64,7 +64,7 @@ private slots:
 class CSVImportConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
-  CSVImportConfigurationQWizardPage(QWidget *parent = NULL);
+  CSVImportConfigurationQWizardPage(QWidget *parent = nullptr);
   void initializePage();
   CSVImportParameters getImportParameters() const;
 
@@ -75,7 +75,7 @@ private:
 class CSVGraphMappingConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
-  CSVGraphMappingConfigurationQWizardPage(QWidget *parent = NULL);
+  CSVGraphMappingConfigurationQWizardPage(QWidget *parent = nullptr);
   void initializePage();
   bool isComplete() const;
   CSVToGraphDataMapping *buildMappingObject() const;
@@ -88,7 +88,7 @@ class TLP_QT_SCOPE CSVImportWizard : public QWizard {
   Q_OBJECT
 
 public:
-  explicit CSVImportWizard(QWidget *parent = NULL);
+  explicit CSVImportWizard(QWidget *parent = nullptr);
   ~CSVImportWizard();
 
   CSVParsingConfigurationQWizardPage *getParsingConfigurationPage() const;

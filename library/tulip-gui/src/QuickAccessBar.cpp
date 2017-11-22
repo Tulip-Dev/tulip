@@ -50,7 +50,7 @@ class TopPopupComboBox : public QComboBox {
   QListView *_view;
 
 public:
-  TopPopupComboBox(QWidget *parent = NULL) : QComboBox(parent), _view(NULL) {}
+  TopPopupComboBox(QWidget *parent = nullptr) : QComboBox(parent), _view(nullptr) {}
 
   bool eventFilter(QObject *, QEvent *ev) {
     if (ev->type() == QEvent::MouseButtonPress) {
@@ -70,11 +70,11 @@ public:
   virtual void showPopup() {
     QPoint mainWindowPos = tlp::Perspective::instance()->mainWindow()->pos();
 
-    if (_view == NULL) {
+    if (_view == nullptr) {
       _view = findChild<QListView *>();
       _view->installEventFilter(this);
       _view->viewport()->installEventFilter(this);
-      _view->setParent(NULL);
+      _view->setParent(nullptr);
       _view->setMouseTracking(true);
     }
 
@@ -87,12 +87,12 @@ public:
   }
 
   virtual void hidePopup() {
-    if (_view != NULL)
+    if (_view != nullptr)
       _view->close();
   }
 };
 
-QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(NULL) {}
+QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(nullptr) {}
 
 #include "ui_QuickAccessBar.h"
 

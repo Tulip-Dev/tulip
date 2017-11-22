@@ -80,7 +80,7 @@ public:
   }
   //=========================================================================
   inline bool isElement(const node n) const {
-    return _nodeData.get(n.id) != NULL;
+    return _nodeData.get(n.id) != nullptr;
   }
   inline bool isElement(const edge e) const {
     return _edges.isElement(e);
@@ -175,7 +175,7 @@ public:
   //=========================================================================
   // updates management
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = NULL);
+                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr);
   virtual void pop(bool unpopAllowed = true);
   virtual void popIfNoUpdates();
   virtual void unpop();

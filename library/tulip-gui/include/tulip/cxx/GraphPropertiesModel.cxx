@@ -26,7 +26,7 @@ template <typename PROPTYPE>
 void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   _properties.clear();
 
-  if (_graph == NULL)
+  if (_graph == nullptr)
     return;
 
   std::string propName;
@@ -39,7 +39,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
 #endif
     PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(propName));
 
-    if (prop != NULL) {
+    if (prop != nullptr) {
       _properties += prop;
     }
   }
@@ -52,7 +52,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
 #endif
     PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(propName));
 
-    if (prop != NULL) {
+    if (prop != nullptr) {
       _properties += prop;
     }
   }
@@ -63,7 +63,7 @@ GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph *graph, bool che
                                                      QObject *parent)
     : tlp::TulipModel(parent), _graph(graph), _checkable(checkable), _removingRows(false),
       forcingRedraw(false) {
-  if (_graph != NULL) {
+  if (_graph != nullptr) {
     _graph->addListener(this);
     rebuildCache();
   }
@@ -74,7 +74,7 @@ GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::G
                                                      bool checkable, QObject *parent)
     : tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable),
       _removingRows(false), forcingRedraw(false) {
-  if (_graph != NULL) {
+  if (_graph != nullptr) {
     _graph->addListener(this);
     rebuildCache();
   }
@@ -83,7 +83,7 @@ GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::G
 template <typename PROPTYPE>
 QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,
                                                   const QModelIndex &parent) const {
-  if (_graph == NULL || !hasIndex(row, column, parent))
+  if (_graph == nullptr || !hasIndex(row, column, parent))
     return QModelIndex();
 
   int vectorIndex = row;
@@ -105,7 +105,7 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::parent(const QModelIndex &) const {
 
 template <typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
-  if (parent.isValid() || _graph == NULL || forcingRedraw)
+  if (parent.isValid() || _graph == nullptr || forcingRedraw)
     return 0;
 
   int result = _properties.size();
@@ -123,7 +123,7 @@ int GraphPropertiesModel<PROPTYPE>::columnCount(const QModelIndex &) const {
 
 template <typename PROPTYPE>
 QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role) const {
-  if (_graph == NULL || (index.internalPointer() == NULL && index.row() != 0))
+  if (_graph == nullptr || (index.internalPointer() == nullptr && index.row() != 0))
     return QVariant();
 
   PropertyInterface *pi = static_cast<PropertyInterface *>(index.internalPointer());
@@ -132,7 +132,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
     if (!_placeholder.isEmpty() && index.row() == 0)
       return _placeholder;
 
-    if (pi == NULL)
+    if (pi == nullptr)
       return QString();
 
     if (index.column() == 0)
@@ -146,7 +146,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
                         tlpStringToQString(pi->getGraph()->getName()) + ')');
   }
 
-  else if (role == Qt::DecorationRole && index.column() == 0 && pi != NULL &&
+  else if (role == Qt::DecorationRole && index.column() == 0 && pi != nullptr &&
            !_graph->existLocalProperty(pi->getName()))
     return QIcon(":/tulip/gui/ui/inherited_properties.png");
 
@@ -206,7 +206,7 @@ QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orient
 template <typename PROPTYPE>
 bool tlp::GraphPropertiesModel<PROPTYPE>::setData(const QModelIndex &index, const QVariant &value,
                                                   int role) {
-  if (_graph == NULL)
+  if (_graph == nullptr)
     return false;
 
   if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {

@@ -50,7 +50,7 @@ bool SpanningDagSelection::run() {
   edgeprop.copyToProperty(result);
 
   // output some useful information
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->set("#Edges selected", uint(graph->numberOfEdges() - obstructions.size()));
   }
 

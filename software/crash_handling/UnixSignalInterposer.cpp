@@ -50,9 +50,9 @@ using namespace std;
 typedef SignalHandlerFunc *SignalFunc(int, SignalHandlerFunc *);
 typedef int SigactionFunc(int, const struct sigaction *, struct sigaction *);
 
-static SigactionFunc *real_sigaction = NULL;
-static SignalFunc *real_signal = NULL;
-static SignalFunc *real_sigset = NULL;
+static SigactionFunc *real_sigaction = nullptr;
+static SignalFunc *real_signal = nullptr;
+static SignalFunc *real_sigset = nullptr;
 
 static set<int> handledSignals;
 
@@ -88,7 +88,7 @@ void installSignalHandler(int sig, SignalHandlerFunc *handler) {
   sigemptyset(&action.sa_mask);
   action.sa_handler = handler;
 
-  real_sigaction(sig, &action, NULL);
+  real_sigaction(sig, &action, nullptr);
 }
 
 void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
@@ -102,7 +102,7 @@ void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
   action.sa_flags = SA_RESTART | SA_SIGINFO;
   action.sa_sigaction = handler;
 
-  real_sigaction(sig, &action, NULL);
+  real_sigaction(sig, &action, nullptr);
 }
 
 // redefinition of the signal function
@@ -115,7 +115,7 @@ SignalHandlerFunc *signal(int sig, SignalHandlerFunc *handler) __THROW {
     return SIG_DFL;
   } else {
     // Init function if needed
-    if (real_signal == NULL) {
+    if (real_signal == nullptr) {
       initSignalInterposer();
     }
 
@@ -133,7 +133,7 @@ SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
     return SIG_DFL;
   } else {
     // Init function if needed
-    if (real_sigset == NULL) {
+    if (real_sigset == nullptr) {
       initSignalInterposer();
     }
 
@@ -151,7 +151,7 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __TH
     return 0;
   } else {
     // Init function if needed
-    if (real_sigaction == NULL) {
+    if (real_sigaction == nullptr) {
       initSignalInterposer();
     }
 

@@ -63,19 +63,20 @@ GLuint HistogramView::binTextureId(0);
 unsigned int HistogramView::histoViewInstancesCount(0);
 
 HistogramView::HistogramView(const PluginContext *)
-    : _bar(NULL), propertiesSelectionWidget(NULL), histoOptionsWidget(NULL), xAxisDetail(NULL),
-      yAxisDetail(NULL), _histoGraph(NULL), emptyGraph(NULL), emptyGlGraphComposite(NULL),
-      histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL),
-      smallMultiplesView(true), mainLayer(NULL), detailedHistogram(NULL), sceneRadiusBak(0),
-      zoomFactorBak(0), noDimsLabel(NULL), noDimsLabel1(NULL), noDimsLabel2(NULL), emptyRect(NULL),
-      emptyRect2(NULL), interactorsActivated(false), isConstruct(false), lastNbHistograms(0),
-      dataLocation(NODE), needUpdateHistogram(false), edgeAsNodeGraph(NULL) {
+    : _bar(nullptr), propertiesSelectionWidget(nullptr), histoOptionsWidget(nullptr),
+      xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr), emptyGraph(nullptr),
+      emptyGlGraphComposite(nullptr), histogramsComposite(nullptr), labelsComposite(nullptr),
+      axisComposite(nullptr), smallMultiplesView(true), mainLayer(nullptr),
+      detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0), noDimsLabel(nullptr),
+      noDimsLabel1(nullptr), noDimsLabel2(nullptr), emptyRect(nullptr), emptyRect2(nullptr),
+      interactorsActivated(false), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),
+      needUpdateHistogram(false), edgeAsNodeGraph(nullptr) {
   ++histoViewInstancesCount;
 }
 
 HistogramView::~HistogramView() {
   if (isConstruct) {
-    if (currentInteractor() != NULL)
+    if (currentInteractor() != nullptr)
       currentInteractor()->uninstall();
 
     --histoViewInstancesCount;
@@ -102,7 +103,7 @@ QList<QWidget *> HistogramView::configurationWidgets() const {
 void HistogramView::initGlWidget(Graph *) {
   GlLayer *layer = getGlMainWidget()->getScene()->getLayer("Main");
 
-  if (layer == NULL) {
+  if (layer == nullptr) {
     layer = new GlLayer("Main");
     getGlMainWidget()->getScene()->addExistingLayer(layer);
   }
@@ -111,42 +112,42 @@ void HistogramView::initGlWidget(Graph *) {
 
   cleanupGlScene();
 
-  if (emptyGlGraphComposite == NULL) {
+  if (emptyGlGraphComposite == nullptr) {
     emptyGraph = newGraph();
     emptyGlGraphComposite = new GlGraphComposite(emptyGraph);
   }
 
   mainLayer->addGlEntity(emptyGlGraphComposite, "graph");
 
-  if (histogramsComposite == NULL) {
+  if (histogramsComposite == nullptr) {
     histogramsComposite = new GlComposite();
     mainLayer->addGlEntity(histogramsComposite, "overviews composite");
   }
 
-  if (labelsComposite == NULL) {
+  if (labelsComposite == nullptr) {
     labelsComposite = new GlComposite();
     mainLayer->addGlEntity(labelsComposite, "labels composite");
   }
 
-  if (axisComposite == NULL) {
+  if (axisComposite == nullptr) {
     axisComposite = new GlComposite();
   }
 }
 
 void HistogramView::cleanupGlScene() {
-  if (!smallMultiplesView && detailedHistogram != NULL) {
+  if (!smallMultiplesView && detailedHistogram != nullptr) {
     mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
   }
 
-  if (axisComposite != NULL) {
+  if (axisComposite != nullptr) {
     axisComposite->reset(false);
   }
 
-  if (labelsComposite != NULL) {
+  if (labelsComposite != nullptr) {
     labelsComposite->reset(true);
   }
 
-  if (histogramsComposite != NULL) {
+  if (histogramsComposite != nullptr) {
     histogramsComposite->reset(true);
     histogramsMap.clear();
   }
@@ -154,12 +155,12 @@ void HistogramView::cleanupGlScene() {
 
 QuickAccessBar *HistogramView::getQuickAccessBarImpl() {
   _bar = new QuickAccessBarImpl(
-      NULL, QuickAccessBarImpl::QuickAccessButtons(
-                QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-                QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::LABELSSCALED |
-                QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::NODECOLOR |
-                QuickAccessBarImpl::EDGECOLOR | QuickAccessBarImpl::NODEBORDERCOLOR |
-                QuickAccessBarImpl::LABELCOLOR));
+      nullptr, QuickAccessBarImpl::QuickAccessButtons(
+                   QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                   QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::LABELSSCALED |
+                   QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::NODECOLOR |
+                   QuickAccessBarImpl::EDGECOLOR | QuickAccessBarImpl::NODEBORDERCOLOR |
+                   QuickAccessBarImpl::LABELCOLOR));
   return _bar;
 }
 
@@ -191,7 +192,7 @@ void HistogramView::setState(const DataSet &dataSet) {
   _histoGraph = graph();
   destroyHistogramsIfNeeded();
 
-  if (lastGraph == NULL || lastGraph != _histoGraph) {
+  if (lastGraph == nullptr || lastGraph != _histoGraph) {
     if (lastGraph) {
       lastGraph->removeListener(this);
       lastGraph->getProperty("viewColor")->removeListener(this);
@@ -203,7 +204,7 @@ void HistogramView::setState(const DataSet &dataSet) {
     }
 
     initGlWidget(graph());
-    detailedHistogram = NULL;
+    detailedHistogram = nullptr;
 
     if (edgeAsNodeGraph)
       delete edgeAsNodeGraph;
@@ -433,7 +434,7 @@ DataSet HistogramView::state() const {
   dataSet.set("backgroundColor", getGlMainWidget()->getScene()->getBackgroundColor());
   string histoDetailedNamed = "";
 
-  if (detailedHistogram != NULL) {
+  if (detailedHistogram != nullptr) {
     histoDetailedNamed = detailedHistogram->getPropertyName();
   }
 
@@ -446,7 +447,7 @@ DataSet HistogramView::state() const {
 }
 
 bool HistogramView::eventFilter(QObject *object, QEvent *event) {
-  if (xAxisDetail != NULL && event->type() == QEvent::ToolTip &&
+  if (xAxisDetail != nullptr && event->type() == QEvent::ToolTip &&
       !detailedHistogram->uniformQuantificationHistogram()) {
     GlMainWidget *glw = getGlMainWidget();
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
@@ -484,7 +485,7 @@ void HistogramView::addEmptyViewLabel() {
     foregroundColor = Color(0, 0, 0);
   }
 
-  if (noDimsLabel == NULL) {
+  if (noDimsLabel == nullptr) {
     noDimsLabel = new GlLabel(Coord(0, 0, 0), Size(200, 200), foregroundColor);
     noDimsLabel->setText(ViewName::HistogramViewName);
     noDimsLabel1 = new GlLabel(Coord(0, -50, 0), Size(400, 200), foregroundColor);
@@ -503,16 +504,16 @@ void HistogramView::addEmptyViewLabel() {
 }
 
 void HistogramView::removeEmptyViewLabel() {
-  if (noDimsLabel != NULL) {
+  if (noDimsLabel != nullptr) {
     mainLayer->deleteGlEntity(noDimsLabel);
     delete noDimsLabel;
-    noDimsLabel = NULL;
+    noDimsLabel = nullptr;
     mainLayer->deleteGlEntity(noDimsLabel1);
     delete noDimsLabel1;
-    noDimsLabel1 = NULL;
+    noDimsLabel1 = nullptr;
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
-    noDimsLabel2 = NULL;
+    noDimsLabel2 = nullptr;
   }
 }
 
@@ -524,12 +525,12 @@ void HistogramView::viewConfigurationChanged() {
     histogramsComposite->reset(true);
     axisComposite->reset(false);
     histogramsMap.clear();
-    detailedHistogram = NULL;
+    detailedHistogram = nullptr;
   }
 
   buildHistograms();
 
-  if (detailedHistogram != NULL && lastNbHistograms != 0 && !dataLocationChanged) {
+  if (detailedHistogram != nullptr && lastNbHistograms != 0 && !dataLocationChanged) {
 
     detailedHistogram->setNbHistogramBins(histoOptionsWidget->getNbOfHistogramBins());
     detailedHistogram->setNbXGraduations(histoOptionsWidget->getNbXGraduations());
@@ -579,7 +580,7 @@ void HistogramView::draw() {
   if (_bar)
     _bar->setEnabled(true);
 
-  if (detailedHistogram != NULL) {
+  if (detailedHistogram != nullptr) {
     needUpdateHistogram = true;
     detailedHistogram->update();
     updateDetailedHistogramAxis();
@@ -587,7 +588,7 @@ void HistogramView::draw() {
     updateHistograms();
   }
 
-  if (!smallMultiplesView && detailedHistogram != NULL) {
+  if (!smallMultiplesView && detailedHistogram != nullptr) {
     switchFromSmallMultiplesToDetailedView(detailedHistogram);
   }
 
@@ -596,7 +597,7 @@ void HistogramView::draw() {
   }
 
   if (!smallMultiplesView &&
-      (detailedHistogram == NULL || (selectedProperties.size() > 1 && lastNbHistograms == 1))) {
+      (detailedHistogram == nullptr || (selectedProperties.size() > 1 && lastNbHistograms == 1))) {
     switchFromDetailedViewToSmallMultiples();
   }
 
@@ -763,7 +764,7 @@ void HistogramView::destroyHistogramsIfNeeded() {
           mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
         }
 
-        detailedHistogram = NULL;
+        detailedHistogram = nullptr;
       }
 
       propertiesToRemove.push_back(selectedProperties[i]);
@@ -872,15 +873,15 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
   delete emptyRect;
   delete emptyRect2;
 
-  if (detailedHistogram != NULL) {
+  if (detailedHistogram != nullptr) {
     mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
   }
 
-  detailedHistogram = NULL;
+  detailedHistogram = nullptr;
   detailedHistogramPropertyName = "";
   GlMainWidget *gl = getGlMainWidget();
-  xAxisDetail = NULL;
-  yAxisDetail = NULL;
+  xAxisDetail = nullptr;
+  yAxisDetail = nullptr;
   mainLayer->addGlEntity(histogramsComposite, "overviews composite");
   mainLayer->addGlEntity(labelsComposite, "labels composite");
   Camera &cam = gl->getScene()->getGraphCamera();
@@ -926,7 +927,7 @@ void HistogramView::updateDetailedHistogramAxis() {
 }
 
 BoundingBox HistogramView::getSmallMultiplesBoundingBox() const {
-  GlBoundingBoxSceneVisitor glBBSV(NULL);
+  GlBoundingBoxSceneVisitor glBBSV(nullptr);
   histogramsComposite->acceptVisitor(&glBBSV);
   labelsComposite->acceptVisitor(&glBBSV);
   return glBBSV.getBoundingBox();

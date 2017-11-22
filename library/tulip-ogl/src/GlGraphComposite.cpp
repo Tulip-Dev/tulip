@@ -36,12 +36,12 @@ namespace tlp {
 
 GlGraphComposite::GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer)
     : inputData(graph, &parameters), graphRenderer(graphRenderer), nodesModified(true) {
-  if (graphRenderer == NULL) {
+  if (graphRenderer == nullptr) {
     this->graphRenderer = new GlGraphHighDetailsRenderer(&inputData);
   }
 
   if (!graph) {
-    rootGraph = NULL;
+    rootGraph = nullptr;
   } else {
     rootGraph = graph->getRoot();
     graph->addListener(this);
@@ -65,7 +65,7 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlScene *scene)
   this->graphRenderer = new GlGraphHighDetailsRenderer(&inputData, scene);
 
   if (!graph) {
-    rootGraph = NULL;
+    rootGraph = nullptr;
   } else {
     rootGraph = graph->getRoot();
     graph->addListener(this);
@@ -164,7 +164,7 @@ void GlGraphComposite::treatEvent(const Event &evt) {
     Graph *g = dynamic_cast<Graph *>(evt.sender());
 
     if (g && inputData.getGraph() == g) {
-      inputData.graph = NULL;
+      inputData.graph = nullptr;
     }
   } else {
     const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&evt);
@@ -178,7 +178,7 @@ void GlGraphComposite::treatEvent(const Event &evt) {
 void GlGraphComposite::setRenderer(tlp::GlGraphRenderer *renderer) {
   delete graphRenderer;
 
-  if (renderer == NULL) {
+  if (renderer == nullptr) {
     graphRenderer = new GlGraphHighDetailsRenderer(&inputData);
   } else {
     graphRenderer = renderer;

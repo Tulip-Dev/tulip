@@ -55,7 +55,7 @@ public:
     return backgroundColor;
   }
 
-  void generateOverview(GlMainWidget *glWidget = NULL, LayoutProperty *reverseLayout = NULL);
+  void generateOverview(GlMainWidget *glWidget = nullptr, LayoutProperty *reverseLayout = nullptr);
   bool overviewGenerated() const {
     return overviewGen;
   }
@@ -141,7 +141,7 @@ public:
 
 private:
   void computeBoundingBox() {
-    GlBoundingBoxSceneVisitor glBBSV(NULL);
+    GlBoundingBoxSceneVisitor glBBSV(nullptr);
     acceptVisitor(&glBBSV);
     boundingBox = glBBSV.getBoundingBox();
   }

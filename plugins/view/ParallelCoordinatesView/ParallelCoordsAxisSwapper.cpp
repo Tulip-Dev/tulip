@@ -41,8 +41,9 @@ static Color axisHighlight(14, 241, 212, 127);
 static Color axisToSwapHighlight(0, 255, 0, 127);
 
 ParallelCoordsAxisSwapper::ParallelCoordsAxisSwapper()
-    : parallelView(NULL), selectedAxis(NULL), otherAxisToSwap(NULL), initialSelectedAxisRotAngle(0),
-      dragStarted(false), x(0), y(0), mouseMove(false), axisSwapStarted(false) {}
+    : parallelView(nullptr), selectedAxis(nullptr), otherAxisToSwap(nullptr),
+      initialSelectedAxisRotAngle(0), dragStarted(false), x(0), y(0), mouseMove(false),
+      axisSwapStarted(false) {}
 
 ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {}
 
@@ -92,7 +93,7 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
     return true;
 
   } else if (e->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
-    if (selectedAxis != NULL && !dragStarted) {
+    if (selectedAxis != nullptr && !dragStarted) {
       dragStarted = true;
       parallelView->removeAxis(selectedAxis);
       initialSelectedAxisRotAngle = selectedAxis->getRotationAngle();
@@ -105,21 +106,21 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 
   } else if (e->type() == QEvent::MouseButtonRelease && me->button() == Qt::LeftButton) {
 
-    if (selectedAxis != NULL && dragStarted) {
+    if (selectedAxis != nullptr && dragStarted) {
       selectedAxis->setRotationAngle(0.0f);
       Coord translationVector(initialSelectedAxisCoord - selectedAxis->getBaseCoord());
       selectedAxis->translate(Coord(translationVector.getX(), translationVector.getY(), 0.0f));
       selectedAxis->setRotationAngle(initialSelectedAxisRotAngle);
       parallelView->addAxis(selectedAxis);
 
-      if (otherAxisToSwap != NULL && otherAxisToSwap != selectedAxis) {
+      if (otherAxisToSwap != nullptr && otherAxisToSwap != selectedAxis) {
         axisSwapStarted = true;
         parallelView->swapAxis(selectedAxis, otherAxisToSwap);
         axisSwapStarted = false;
-        otherAxisToSwap = NULL;
+        otherAxisToSwap = nullptr;
       }
 
-      selectedAxis = NULL;
+      selectedAxis = nullptr;
       dragStarted = false;
       parallelView->draw();
     }
@@ -127,17 +128,17 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
 
-  selectedAxis = NULL;
+  selectedAxis = nullptr;
   return false;
 }
 
 bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
 
-  if (selectedAxis != NULL) {
+  if (selectedAxis != nullptr) {
 
     glMainWidget->getScene()->getLayer("Main")->getCamera().initGl();
 
-    GlQuad *axisHighlightRect = NULL;
+    GlQuad *axisHighlightRect = nullptr;
     BoundingBox axisBB;
 
     if (!dragStarted) {
@@ -145,14 +146,14 @@ bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
       axisHighlightRect = new GlQuad(axisBP[0], axisBP[1], axisBP[2], axisBP[3], axisHighlight);
 
     } else {
-      if (otherAxisToSwap != NULL && otherAxisToSwap != selectedAxis) {
+      if (otherAxisToSwap != nullptr && otherAxisToSwap != selectedAxis) {
         Array<Coord, 4> axisBP(otherAxisToSwap->getBoundingPolygonCoords());
         axisHighlightRect =
             new GlQuad(axisBP[0], axisBP[1], axisBP[2], axisBP[3], axisToSwapHighlight);
       }
     }
 
-    if (axisHighlightRect != NULL) {
+    if (axisHighlightRect != nullptr) {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
       glEnable(GL_LIGHTING);

@@ -63,7 +63,7 @@ public:
     */
     QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-    if (qMouseEv != NULL) {
+    if (qMouseEv != nullptr) {
       GlMainView *glMainView = static_cast<GlMainView *>(view());
 
       /*

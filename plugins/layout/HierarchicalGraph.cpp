@@ -277,9 +277,9 @@ bool HierarchicalGraph::run() {
   orientation = "horizontal";
   spacing = 64.0;
   nodeSpacing = 18;
-  SizeProperty *nodeSize = NULL;
+  SizeProperty *nodeSize = nullptr;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
     getSpacingParameters(dataSet, nodeSpacing, spacing);
     StringCollection tmp;
@@ -289,7 +289,7 @@ bool HierarchicalGraph::run() {
     }
   }
 
-  if (nodeSize == NULL)
+  if (nodeSize == nullptr)
     nodeSize = graph->getProperty<SizeProperty>("viewSize");
 
   //=========================================================
@@ -326,7 +326,7 @@ bool HierarchicalGraph::run() {
   //========================================================================
   list<node> properAddedNodes;
   TLP_HASH_MAP<edge, edge> replacedEdges;
-  IntegerProperty *edgeLength = NULL;
+  IntegerProperty *edgeLength = nullptr;
 
   if (!TreeTest::isTree(mySGraph)) {
     // We transform the dag in a proper dag
@@ -366,7 +366,7 @@ bool HierarchicalGraph::run() {
   tmp.set("layer spacing", spacing);
   tmp.set("node spacing", nodeSpacing);
 
-  if (edgeLength != NULL)
+  if (edgeLength != nullptr)
     tmp.set("edge length", edgeLength);
 
   tmp.set("orthogonal", true);

@@ -524,8 +524,8 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT_EQUAL(g2, g4->getSuperGraph());
   CPPUNIT_ASSERT_EQUAL(g1, graph->getSubGraph(g1->getId()));
   CPPUNIT_ASSERT_EQUAL(g2, graph->getSubGraph(g2->getId()));
-  CPPUNIT_ASSERT(graph->getSubGraph(g3->getId()) == NULL);
-  CPPUNIT_ASSERT(graph->getSubGraph(g4->getId()) == NULL);
+  CPPUNIT_ASSERT(graph->getSubGraph(g3->getId()) == nullptr);
+  CPPUNIT_ASSERT(graph->getSubGraph(g4->getId()) == nullptr);
   CPPUNIT_ASSERT_EQUAL(g3, g2->getSubGraph(g3->getId()));
   CPPUNIT_ASSERT_EQUAL(g4, g2->getSubGraph(g4->getId()));
   CPPUNIT_ASSERT(graph->isSubGraph(g1));
@@ -811,7 +811,7 @@ void SuperGraphTest::testAttributes() {
   CPPUNIT_ASSERT(graph->getAttribute("name", name));
   CPPUNIT_ASSERT_EQUAL(string("The Graph"), name);
   DataType *dt = graph->getAttribute("name");
-  CPPUNIT_ASSERT(dt != NULL);
+  CPPUNIT_ASSERT(dt != nullptr);
   delete dt;
   TypedData<string> dtc(new string("test"));
   graph->setAttribute("name", static_cast<const DataType *>(&dtc));

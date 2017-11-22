@@ -131,13 +131,13 @@ PolyominoPacking::~PolyominoPacking() {}
 
 bool PolyominoPacking::run() {
 
-  LayoutProperty *layout = NULL;
-  SizeProperty *size = NULL;
-  DoubleProperty *rotation = NULL;
+  LayoutProperty *layout = nullptr;
+  SizeProperty *size = nullptr;
+  DoubleProperty *rotation = nullptr;
   margin = 1;
   bndIncrement = 1;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("coordinates", layout);
     getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);

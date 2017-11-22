@@ -16,7 +16,7 @@ static TulipViewSettings::labelmap map_init() {
 
 TulipViewSettings::labelmap TulipViewSettings::POSITION_LABEL_MAP = map_init();
 
-TulipViewSettings *TulipViewSettings::_instance(NULL);
+TulipViewSettings *TulipViewSettings::_instance(nullptr);
 
 TulipViewSettings::TulipViewSettings()
     : _defaultNodeColor(Color::Red), _defaultEdgeColor(Color::Black),

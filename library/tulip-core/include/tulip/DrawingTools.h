@@ -50,7 +50,7 @@ typedef Matrix<float, 3> Mat3f;
   */
 TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph, const LayoutProperty *layout,
                                          const SizeProperty *size, const DoubleProperty *rotation,
-                                         const BooleanProperty *selection = NULL);
+                                         const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -64,7 +64,7 @@ TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph, const LayoutPropert
 TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE,
                                          const LayoutProperty *layout, const SizeProperty *size,
                                          const DoubleProperty *rotation,
-                                         const BooleanProperty *selection = NULL);
+                                         const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -78,7 +78,7 @@ TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node> &nodes,
                                          const std::vector<edge> &edges,
                                          const LayoutProperty *layout, const SizeProperty *size,
                                          const DoubleProperty *rotation,
-                                         const BooleanProperty *selection = NULL);
+                                         const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -99,7 +99,7 @@ TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node> &nodes,
 
 TLP_SCOPE std::pair<Coord, Coord>
 computeBoundingRadius(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size,
-                      const DoubleProperty *rotation, const BooleanProperty *selection = NULL);
+                      const DoubleProperty *rotation, const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -115,7 +115,7 @@ computeBoundingRadius(const Graph *graph, const LayoutProperty *layout, const Si
 TLP_SCOPE std::vector<Coord> computeConvexHull(const Graph *graph, const LayoutProperty *layout,
                                                const SizeProperty *size,
                                                const DoubleProperty *rotation,
-                                               const BooleanProperty *selection = NULL);
+                                               const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 

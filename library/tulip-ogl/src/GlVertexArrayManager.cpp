@@ -1125,37 +1125,37 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       const PropertyInterface *property = graph->getProperty(graphEvent->getPropertyName());
 
       if (property == colorProperty) { // Color property changed
-        colorProperty = NULL;
+        colorProperty = nullptr;
         clearColorData();
       } else if (property == layoutProperty) {
-        layoutProperty = NULL;
+        layoutProperty = nullptr;
         clearData();
       } else if (property == sizeProperty) {
-        sizeProperty = NULL;
+        sizeProperty = nullptr;
         clearData();
       } else if (property == shapeProperty) {
-        shapeProperty = NULL;
+        shapeProperty = nullptr;
         clearData();
       } else if (property == rotationProperty) {
-        rotationProperty = NULL;
+        rotationProperty = nullptr;
         clearData();
       } else if (property == borderColorProperty) {
-        borderColorProperty = NULL;
+        borderColorProperty = nullptr;
         clearColorData();
       } else if (property == borderWidthProperty) {
-        borderWidthProperty = NULL;
+        borderWidthProperty = nullptr;
         clearColorData();
       } else if (property == srcAnchorShapeProperty) {
-        srcAnchorShapeProperty = NULL;
+        srcAnchorShapeProperty = nullptr;
         clearData();
       } else if (property == tgtAnchorShapeProperty) {
-        tgtAnchorShapeProperty = NULL;
+        tgtAnchorShapeProperty = nullptr;
         clearData();
       } else if (property == srcAnchorSizeProperty) {
-        srcAnchorSizeProperty = NULL;
+        srcAnchorSizeProperty = nullptr;
         clearData();
       } else if (property == tgtAnchorSizeProperty) {
-        tgtAnchorSizeProperty = NULL;
+        tgtAnchorSizeProperty = nullptr;
         clearData();
       }
 
@@ -1166,7 +1166,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       break;
     }
   } else if (evt.type() == Event::TLP_DELETE) {
-    PropertyInterface *property = NULL;
+    PropertyInterface *property = nullptr;
     const PropertyEvent *propertyEvent = dynamic_cast<const PropertyEvent *>(&evt);
 
     if (propertyEvent)

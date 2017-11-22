@@ -96,7 +96,8 @@ void CustomTreeView::resizeFirstColumnToContent() {
 }
 
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(NULL), _model(NULL) {
+    : QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(nullptr),
+      _model(nullptr) {
   _ui->setupUi(this);
   _ui->hierarchiesTree->addAction(_ui->actionDelete_All);
   _ui->actionDelete_All->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -179,27 +180,27 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
     menu.addAction(_ui->actionDelete_All);
     menu.exec(_ui->hierarchiesTree->viewport()->mapToGlobal(p));
     _contextIndex = QModelIndex();
-    _contextGraph = NULL;
+    _contextGraph = nullptr;
   }
 }
 
 void GraphHierarchiesEditor::clicked(const QModelIndex &index) {
-  if (!index.isValid() || index.internalPointer() == NULL)
+  if (!index.isValid() || index.internalPointer() == nullptr)
     return;
 
   _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   _model->setCurrentGraph(_contextGraph);
-  _contextGraph = NULL;
+  _contextGraph = nullptr;
 }
 
 void GraphHierarchiesEditor::doubleClicked(const QModelIndex &index) {
-  if (!index.isValid() || index.internalPointer() == NULL)
+  if (!index.isValid() || index.internalPointer() == nullptr)
     return;
 
   _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   _model->setCurrentGraph(_contextGraph);
   createPanel();
-  _contextGraph = NULL;
+  _contextGraph = nullptr;
 }
 
 void GraphHierarchiesEditor::currentChanged(const QModelIndex &index, const QModelIndex &previous) {
@@ -215,12 +216,12 @@ void GraphHierarchiesEditor::currentChanged(const QModelIndex &index, const QMod
     connect(_ui->hierarchiesTree->selectionModel(),
             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
             SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
-    _contextGraph = NULL;
+    _contextGraph = nullptr;
   }
 }
 
 void GraphHierarchiesEditor::addSubGraph() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   _contextGraph->push();
@@ -228,7 +229,7 @@ void GraphHierarchiesEditor::addSubGraph() {
 }
 
 void GraphHierarchiesEditor::cloneSubGraph() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   _contextGraph->push();
@@ -237,7 +238,7 @@ void GraphHierarchiesEditor::cloneSubGraph() {
 }
 
 void GraphHierarchiesEditor::cloneSibling() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   _contextGraph->push();
@@ -246,7 +247,7 @@ void GraphHierarchiesEditor::cloneSibling() {
 }
 
 void GraphHierarchiesEditor::cloneSiblingWithProperties() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   _contextGraph->push();
@@ -255,7 +256,7 @@ void GraphHierarchiesEditor::cloneSiblingWithProperties() {
 }
 
 void GraphHierarchiesEditor::addInducedSubGraph() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   GraphPerspective *persp = GraphPerspective::typedInstance<GraphPerspective>();
@@ -263,14 +264,15 @@ void GraphHierarchiesEditor::addInducedSubGraph() {
 }
 
 void GraphHierarchiesEditor::delGraph() {
-  if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
+  if (_contextGraph == nullptr &&
+      !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()
                         ->selectedRows(0)[0]
                         .data(tlp::TulipModel::GraphRole)
                         .value<tlp::Graph *>();
   }
 
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
@@ -278,25 +280,26 @@ void GraphHierarchiesEditor::delGraph() {
 
   if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
-    _model->setCurrentGraph(NULL);
+    _model->setCurrentGraph(nullptr);
   } else {
     tlp::Graph *sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
     _model->setCurrentGraph(sg);
   }
 
-  _contextGraph = NULL;
+  _contextGraph = nullptr;
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
-  if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
+  if (_contextGraph == nullptr &&
+      !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()
                         ->selectedRows(0)[0]
                         .data(tlp::TulipModel::GraphRole)
                         .value<tlp::Graph *>();
   }
 
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   if (_contextGraph->getRoot() == _contextGraph) {
@@ -308,7 +311,7 @@ void GraphHierarchiesEditor::delAllGraph() {
                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
       perspective->closePanelsForGraph(_contextGraph);
       delete _contextGraph;
-      _model->setCurrentGraph(NULL);
+      _model->setCurrentGraph(nullptr);
 
       if (_model->empty()) {
         perspective->mainWindow()->setWindowModified(false);
@@ -323,16 +326,16 @@ void GraphHierarchiesEditor::delAllGraph() {
     _model->setCurrentGraph(sg);
   }
 
-  _contextGraph = NULL;
+  _contextGraph = nullptr;
 }
 
 void GraphHierarchiesEditor::createPanel() {
   tlp::Graph *g = _contextGraph;
 
-  if (g == NULL) {
+  if (g == nullptr) {
     g = _model->currentGraph();
 
-    if (g == NULL)
+    if (g == nullptr)
       return;
   }
 

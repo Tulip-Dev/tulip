@@ -47,12 +47,12 @@ public:
   }
 
   bool run() {
-    PropertyInterface *input = NULL;
-    BooleanProperty *selection = NULL;
+    PropertyInterface *input = nullptr;
+    BooleanProperty *selection = nullptr;
     bool onNodes = true;
     bool onEdges = true;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("input", input);
       dataSet->get("selection", selection);
       dataSet->get("nodes", onNodes);

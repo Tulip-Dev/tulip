@@ -128,7 +128,7 @@ public:
   void beforeCall() {
     ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization *>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       double dval = 0;
       int ival = 0;
       bool bval = false;

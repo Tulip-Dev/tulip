@@ -21,7 +21,7 @@
 
 using namespace tlp;
 
-PluginProgress::PluginProgress() : _previewHandler(NULL) {}
+PluginProgress::PluginProgress() : _previewHandler(nullptr) {}
 
 PluginProgress::~PluginProgress() {
   delete _previewHandler;
@@ -32,7 +32,7 @@ void PluginProgress::setPreviewHandler(ProgressPreviewHandler *handler) {
   _previewHandler = handler;
 }
 ProgressState PluginProgress::progress(int step, int max_step) {
-  if (_previewHandler != NULL && isPreviewMode())
+  if (_previewHandler != nullptr && isPreviewMode())
     _previewHandler->progressStateChanged(step, max_step);
 
   return TLP_CONTINUE;

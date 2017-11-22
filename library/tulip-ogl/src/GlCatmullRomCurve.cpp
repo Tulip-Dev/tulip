@@ -161,13 +161,13 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &sta
     alpha = 1.0f;
   }
 
-  if (closedCurve && renderMode != GL_SELECT && curveShaderProgramNormal != NULL) {
+  if (closedCurve && renderMode != GL_SELECT && curveShaderProgramNormal != nullptr) {
     controlPointsCp = controlPoints;
     controlPointsCp.push_back(controlPointsCp[0]);
     controlPointsP = &controlPointsCp;
   }
 
-  if (curveShaderProgramNormal != NULL) {
+  if (curveShaderProgramNormal != nullptr) {
     totalLength = 0.0f;
 
     for (size_t i = 1; i < controlPointsP->size(); ++i) {

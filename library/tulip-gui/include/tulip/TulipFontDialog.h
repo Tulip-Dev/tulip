@@ -40,7 +40,7 @@ class TLP_QT_SCOPE TulipFontDialog : public QDialog {
   int ok;
 
 public:
-  explicit TulipFontDialog(QWidget *parent = NULL);
+  explicit TulipFontDialog(QWidget *parent = nullptr);
   ~TulipFontDialog();
   TulipFont font() const;
   int fontSize() const;
@@ -52,7 +52,7 @@ public:
     return ok == QDialog::Accepted ? font() : previousFont;
   }
 
-  static TulipFont getFont(QWidget *parent = NULL, const TulipFont &selectedFont = TulipFont());
+  static TulipFont getFont(QWidget *parent = nullptr, const TulipFont &selectedFont = TulipFont());
 
 public slots:
   void selectFont(const TulipFont &);

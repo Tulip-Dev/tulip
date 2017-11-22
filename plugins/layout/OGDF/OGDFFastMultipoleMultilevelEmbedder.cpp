@@ -98,7 +98,7 @@ public:
 
   void beforeCall() {
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       int ival = 0;
 
       if (dataSet->get("number of threads", ival))

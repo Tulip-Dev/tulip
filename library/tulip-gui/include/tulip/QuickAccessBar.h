@@ -105,7 +105,7 @@ public:
   };
   Q_DECLARE_FLAGS(QuickAccessButtons, QuickAccessButton)
 
-  explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem = NULL,
+  explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem = nullptr,
                               QuickAccessButtons button = ALLBUTTONS, QWidget *parent = 0);
   virtual ~QuickAccessBarImpl();
 

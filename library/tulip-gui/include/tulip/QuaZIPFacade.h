@@ -48,7 +48,7 @@ public:
     @return true if compression process went sucessfuly
     */
   static bool zipDir(const QString &rootPath, const QString &archivePath,
-                     tlp::PluginProgress *progress = NULL);
+                     tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Uncompress (un-ZIPs) an archive into a directory.
@@ -61,7 +61,7 @@ public:
     @return true if uncompression process went sucessfuly
     */
   static bool unzip(const QString &rootPath, const QString &archivePath,
-                    tlp::PluginProgress *progress = NULL);
+                    tlp::PluginProgress *progress = nullptr);
 };
 
 #endif // QUAZIPFACADE_H

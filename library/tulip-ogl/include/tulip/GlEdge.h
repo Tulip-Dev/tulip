@@ -80,7 +80,7 @@ public:
    * Use TextRenderer : renderer to draw the label
    */
   void drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
-                 Camera *camera = NULL);
+                 Camera *camera = nullptr);
 
   /**
    * This function is used by the engine to get line coordinates of the edge
@@ -159,7 +159,8 @@ private:
                                    int tgtEdgeGlyph, bool hasBends, const Coord &anchor,
                                    const Coord &tgtCoord, const Coord &srcAnchor,
                                    const Coord &tgtAnchor, Coord &lineAnchor,
-                                   EdgeExtremityGlyph *srcEdgeGlyph = NULL, Camera *camera = NULL);
+                                   EdgeExtremityGlyph *srcEdgeGlyph = nullptr,
+                                   Camera *camera = nullptr);
 };
 }
 

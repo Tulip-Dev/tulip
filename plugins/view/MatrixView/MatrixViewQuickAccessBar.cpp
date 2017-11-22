@@ -28,11 +28,11 @@ namespace tlp {
 MatrixViewQuickAccessBar::MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt,
                                                    QWidget *parent)
     : QuickAccessBarImpl(
-          NULL, QuickAccessBarImpl::QuickAccessButtons(
-                    QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-                    QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
-                    QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
-                    QuickAccessBarImpl::LABELCOLOR),
+          nullptr, QuickAccessBarImpl::QuickAccessButtons(
+                       QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                       QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
+                       QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
+                       QuickAccessBarImpl::LABELCOLOR),
           parent),
       _optionsWidget(opt) {}
 

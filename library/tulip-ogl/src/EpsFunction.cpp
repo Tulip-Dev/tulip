@@ -70,7 +70,7 @@ static const char *gouraudtriangleEPS[] = {
     "roll aload pop 9 3 roll 4 index 6 index 4 index add add 3 div 10 1 roll 7",
     "index 5 index 3 index add add 3 div 10 1 roll 6 index 4 index 2 index add",
     "add 3 div 10 1 roll 9 {pop} repeat 3 array astore triangle } ifelse } bd",
-    NULL};
+    nullptr};
 //====================================================
 typedef struct _Feedback3Dcolor {
   GLfloat x;

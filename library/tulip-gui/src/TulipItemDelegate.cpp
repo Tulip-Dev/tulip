@@ -36,7 +36,8 @@
 using namespace tlp;
 
 TulipItemDelegate::TulipItemDelegate(QObject *parent)
-    : QStyledItemDelegate(parent), _currentMonitoredChild(NULL), _currentMonitoredCombo(NULL) {
+    : QStyledItemDelegate(parent), _currentMonitoredChild(nullptr),
+      _currentMonitoredCombo(nullptr) {
   registerCreator<bool>(new BooleanEditorCreator);
   registerCreator<int>(new NumberEditorCreator<tlp::IntegerType>);
   registerCreator<unsigned int>(new NumberEditorCreator<tlp::UnsignedIntegerType>);
@@ -110,7 +111,7 @@ QWidget *TulipItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
   QVariant v = index.model()->data(index);
   TulipItemEditorCreator *c = creator(v.userType());
 
-  if (c == NULL) {
+  if (c == nullptr) {
     return QStyledItemDelegate::createEditor(parent, option, index);
   }
 
@@ -126,7 +127,7 @@ QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &loc
 
   TulipItemEditorCreator *c = creator(value.userType());
 
-  if (c != NULL) {
+  if (c != nullptr) {
     return c->displayText(value);
   }
 
@@ -137,11 +138,11 @@ QSize TulipItemDelegate::sizeHint(const QStyleOptionViewItem &option,
                                   const QModelIndex &index) const {
   const QAbstractItemModel *model = index.model();
 
-  if (model != NULL) {
+  if (model != nullptr) {
     QVariant value = model->data(index);
     TulipItemEditorCreator *c = creator(value.userType());
 
-    if (c != NULL) {
+    if (c != nullptr) {
       QSize s = c->sizeHint(option, index);
 
       if (s.isValid()) {
@@ -187,7 +188,7 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
   TulipItemEditorCreator *c = creator(v.userType());
 
-  if (c == NULL)
+  if (c == nullptr)
     return;
 
   if (c->paint(painter, option, v, index) == false)
@@ -224,12 +225,12 @@ void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
-  if (event->type() == QEvent::FocusOut && dynamic_cast<QComboBox *>(object) != NULL) {
+  if (event->type() == QEvent::FocusOut && dynamic_cast<QComboBox *>(object) != nullptr) {
     return true;
   } else if (event->type() == QEvent::ChildAdded) {
     QChildEvent *childEv = static_cast<QChildEvent *>(event);
 
-    if (dynamic_cast<QComboBox *>(object) != NULL) {
+    if (dynamic_cast<QComboBox *>(object) != nullptr) {
       _currentMonitoredChild = childEv->child();
       _currentMonitoredCombo = static_cast<QComboBox *>(object);
       _currentMonitoredChild->installEventFilter(this);
@@ -239,10 +240,10 @@ bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
     }
   } else if (object == _currentMonitoredChild && event->type() == QEvent::Hide) {
     _currentMonitoredChild->removeEventFilter(this);
-    _currentMonitoredChild = NULL;
+    _currentMonitoredChild = nullptr;
     emit commitData(_currentMonitoredCombo);
     _currentMonitoredCombo->deleteLater();
-    _currentMonitoredCombo = NULL;
+    _currentMonitoredCombo = nullptr;
     return true;
   }
 
@@ -286,7 +287,7 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
 
   QDialog *dlg = dynamic_cast<QDialog *>(w);
 
-  if (dlg == NULL) {
+  if (dlg == nullptr) {
     // create a dialog on the fly
     dlg = new QDialog(dialogParent);
     dlg->setWindowTitle(elType == NODE ? "Set node values" : "Set edge values");

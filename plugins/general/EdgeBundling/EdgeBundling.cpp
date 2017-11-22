@@ -114,7 +114,7 @@ public:
     return da > db;
   }
 };
-DoubleProperty *SortNodes::dist = NULL;
+DoubleProperty *SortNodes::dist = nullptr;
 //============================================
 /*DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
@@ -252,7 +252,7 @@ bool EdgeBundling::run() {
   SizeProperty *size = graph->getProperty<SizeProperty>("viewSize");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("long_edges", longEdges);
     dataSet->get("split_ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);

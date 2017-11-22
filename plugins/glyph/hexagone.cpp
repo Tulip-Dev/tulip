@@ -34,7 +34,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlHexagon *hexagon = NULL;
+static GlHexagon *hexagon = nullptr;
 
 static void drawHexagon(const Color &fillColor, const Color &borderColor, float borderWidth,
                         const std::string &textureName, float lod) {
@@ -50,7 +50,7 @@ static void drawHexagon(const Color &fillColor, const Color &borderColor, float 
   }
 
   hexagon->setTextureName(textureName);
-  hexagon->draw(lod, NULL);
+  hexagon->draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -65,7 +65,7 @@ class Hexagon : public Glyph {
 public:
   GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0",
                    NodeShape::Hexagon)
-  Hexagon(const tlp::PluginContext *context = NULL);
+  Hexagon(const tlp::PluginContext *context = nullptr);
   virtual ~Hexagon();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
@@ -98,7 +98,7 @@ public:
                    "Textured Hexagon for edge extremities", "1.0", EdgeExtremityShape::Hexagon)
 
   EEHexagon(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
-    if (hexagon == NULL)
+    if (hexagon == nullptr)
       hexagon = new GlHexagon(Coord(0, 0, 0), Size(.5, .5, 0));
   }
 

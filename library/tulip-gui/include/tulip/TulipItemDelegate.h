@@ -38,10 +38,10 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
 
 public:
   static QVariant showEditorDialog(tlp::ElementType, tlp::PropertyInterface *, tlp::Graph *,
-                                   TulipItemDelegate *, QWidget *dialogParent = NULL,
+                                   TulipItemDelegate *, QWidget *dialogParent = nullptr,
                                    unsigned int id = UINT_MAX);
 
-  explicit TulipItemDelegate(QObject *parent = NULL);
+  explicit TulipItemDelegate(QObject *parent = nullptr);
   virtual ~TulipItemDelegate();
 
   template <typename T>

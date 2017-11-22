@@ -56,10 +56,10 @@ DegreeMetric::DegreeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(
 bool DegreeMetric::run() {
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
-  NumericProperty *weights = NULL;
+  NumericProperty *weights = nullptr;
   bool norm = false;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", weights);
     dataSet->get("norm", norm);
@@ -74,9 +74,9 @@ bool DegreeMetric::run() {
 //==================================================================
 bool DegreeMetric::check(std::string &errorMsg) {
   // check weights validity if it exists
-  DoubleProperty *weights = NULL;
+  DoubleProperty *weights = nullptr;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("metric", weights);
 
     if (weights && !weights->getEdgeDefaultValue()) {

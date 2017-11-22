@@ -64,7 +64,7 @@ struct KlemmEguiluzModel : public ImportModule {
     unsigned int m = 10;
     double mu = 0.5;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
       dataSet->get("m", m);
       dataSet->get("mu", mu);

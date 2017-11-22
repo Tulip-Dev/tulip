@@ -104,17 +104,17 @@ void GlProgressBar::progress_handler(int step, int max_step) {
   GlSimpleEntity *previousComment = findGlEntity(COMMENT_ID);
   GlSimpleEntity *previousPercent = findGlEntity(PERCENT_ID);
 
-  if (previousBar != NULL) {
+  if (previousBar != nullptr) {
     deleteGlEntity(previousBar);
     delete previousBar;
   }
 
-  if (previousComment != NULL) {
+  if (previousComment != nullptr) {
     deleteGlEntity(previousComment);
     delete previousComment;
   }
 
-  if (previousPercent != NULL) {
+  if (previousPercent != nullptr) {
     deleteGlEntity(previousPercent);
     delete previousPercent;
   }

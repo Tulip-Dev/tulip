@@ -55,7 +55,7 @@ tlp::Workspace *TulipViewsManager::tlpWorkspace() {
     return perspective->mainWindow()->findChild<tlp::Workspace *>();
   }
 
-  return NULL;
+  return nullptr;
 }
 
 TulipViewsManager::TulipViewsManager() {
@@ -89,11 +89,11 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::st
 tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *graph,
                                       const DataSet &dataSet, bool show) {
   tlp::Workspace *workspace = tlpWorkspace();
-  tlp::View *view = NULL;
+  tlp::View *view = nullptr;
 
   if (workspace) {
     workspace->graphModel()->addGraph(graph);
-    view = PluginLister::instance()->getPluginObject<View>(viewName, NULL);
+    view = PluginLister::instance()->getPluginObject<View>(viewName, nullptr);
     view->setupUi();
     view->setGraph(graph);
     view->setState(dataSet);
@@ -104,7 +104,7 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
 
     model->addGraph(graph);
 
-    view = PluginLister::instance()->getPluginObject<View>(viewName, NULL);
+    view = PluginLister::instance()->getPluginObject<View>(viewName, nullptr);
     view->setupUi();
     view->setGraph(graph);
     view->setState(dataSet);
@@ -235,7 +235,7 @@ void TulipViewsManager::setViewVisible(tlp::View *view, const bool visible) {
       viewToWindow[view]->setCentralWidget(viewToPanel[view]);
       viewToWindow[view]->setVisible(true);
     } else {
-      viewToPanel[view]->setParent(NULL);
+      viewToPanel[view]->setParent(nullptr);
 
       if (viewToWindow.find(view) != viewToWindow.end()) {
         delete viewToWindow[view];

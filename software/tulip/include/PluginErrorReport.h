@@ -38,7 +38,7 @@ class PluginErrorReport : public QWidget {
   Q_OBJECT
 public:
   explicit PluginErrorReport(const QString &fileName, const QString &errorMsg,
-                             QWidget *parent = NULL);
+                             QWidget *parent = nullptr);
   ~PluginErrorReport();
 
 protected:

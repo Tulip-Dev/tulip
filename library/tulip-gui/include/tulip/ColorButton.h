@@ -35,7 +35,7 @@ class TLP_QT_SCOPE ChooseColorButton : public QPushButton {
   Q_PROPERTY(Color tulipColor READ tulipColor WRITE setTulipColor)
 
 public:
-  explicit ChooseColorButton(QWidget *parent = NULL);
+  explicit ChooseColorButton(QWidget *parent = nullptr);
 
   QColor color() const;
   QString text() const;
@@ -67,7 +67,7 @@ class TLP_QT_SCOPE ColorButton : public ChooseColorButton {
   Q_OBJECT
 
 public:
-  explicit ColorButton(QWidget *parent = NULL) : ChooseColorButton(parent) {}
+  explicit ColorButton(QWidget *parent = nullptr) : ChooseColorButton(parent) {}
 
 protected:
   void paintEvent(QPaintEvent *);

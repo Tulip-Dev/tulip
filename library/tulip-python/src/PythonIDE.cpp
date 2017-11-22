@@ -453,7 +453,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName,
 
 PythonIDE::PythonIDE(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
-      _dontTreatFocusIn(false), _project(NULL), _graphsModel(NULL), _scriptStopped(false),
+      _dontTreatFocusIn(false), _project(nullptr), _graphsModel(nullptr), _scriptStopped(false),
       _saveFilesToProject(true), _notifyProjectModified(false) {
   _ui->setupUi(this);
   _ui->tabWidget->setDrawTabBarBgGradient(true);
@@ -1691,7 +1691,7 @@ void PythonIDE::newScript() {
 
 void PythonIDE::loadScript() {
   QString fileName =
-      QFileDialog::getOpenFileName(NULL, "Open main script", "", "Python script (*.py)");
+      QFileDialog::getOpenFileName(nullptr, "Open main script", "", "Python script (*.py)");
   loadScript(fileName);
 }
 
@@ -1814,7 +1814,7 @@ void PythonIDE::setGraphsModel(tlp::GraphHierarchiesModel *model) {
 void PythonIDE::dragEnterEvent(QDragEnterEvent *dragEv) {
   const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dragEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     dragEv->accept();
   }
 }
@@ -1822,7 +1822,7 @@ void PythonIDE::dragEnterEvent(QDragEnterEvent *dragEv) {
 void PythonIDE::dropEvent(QDropEvent *dropEv) {
   const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dropEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     tlp::GraphHierarchiesModel *model =
         static_cast<tlp::GraphHierarchiesModel *>(_ui->graphComboBox->model());
     QModelIndex graphIndex = model->indexOf(mimeType->graph());

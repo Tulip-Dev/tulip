@@ -82,7 +82,7 @@ public:
     bool directed = false;
     bool norm = false;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("directed", directed);
       dataSet->get("norm", norm);
     }

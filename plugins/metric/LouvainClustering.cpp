@@ -226,7 +226,7 @@ private:
       double weight = (*weights)[e];
       edge e_comm = new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
       total_weight += weight;
-      double *weight_comm = NULL;
+      double *weight_comm = nullptr;
 
       if (!e_comm.isValid()) {
         ends = make_pair(node(src_comm), node(tgt_comm));
@@ -368,10 +368,10 @@ LouvainClustering::LouvainClustering(const tlp::PluginContext *context)
 }
 //========================================================================================
 bool LouvainClustering::run() {
-  NumericProperty *metric = NULL;
+  NumericProperty *metric = nullptr;
   min_modularity = DEFAULT_PRECISION;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("metric", metric);
     dataSet->get("precision", min_modularity);
   }
@@ -470,7 +470,7 @@ bool LouvainClustering::run() {
     }
   }
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->set("Modularity", new_mod);
     dataSet->set("#Communities", result->getNodeMax() + 1);
   }

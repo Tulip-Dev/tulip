@@ -96,7 +96,7 @@ void SizeProperty::scale(const tlp::Vector<float, 3> &v, Iterator<node> *itN, It
 }
 //=============================================================================
 void SizeProperty::scale(const tlp::Vector<float, 3> &v, const Graph *sg) {
-  if (sg == NULL)
+  if (sg == nullptr)
     sg = graph;
 
   if (sg->numberOfNodes() == 0)
@@ -110,7 +110,7 @@ void SizeProperty::scale(const tlp::Vector<float, 3> &v, const Graph *sg) {
 }
 //=============================================================================
 Size SizeProperty::getMax(const Graph *sg) {
-  if (sg == NULL)
+  if (sg == nullptr)
     sg = graph;
 
   unsigned int sgi = sg->getId();
@@ -125,7 +125,7 @@ Size SizeProperty::getMax(const Graph *sg) {
 }
 //=============================================================================
 Size SizeProperty::getMin(const Graph *sg) {
-  if (sg == NULL)
+  if (sg == nullptr)
     sg = graph;
 
   unsigned int sgi = sg->getId();

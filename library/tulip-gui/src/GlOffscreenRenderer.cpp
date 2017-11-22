@@ -45,7 +45,7 @@ GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-    : vPWidth(512), vPHeight(512), glFrameBuf(NULL), glFrameBuf2(NULL),
+    : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
       mainLayer(new GlLayer("Main")), entitiesCpt(0), zoomFactor(DBL_MAX),
       cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
   GlLayer *backgroundLayer = new GlLayer("Background");
@@ -97,7 +97,7 @@ void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphCompos
   // Delete old composite if it exist
   GlSimpleEntity *oldComposite = mainLayer->findGlEntity("graph");
 
-  if (oldComposite != NULL) {
+  if (oldComposite != nullptr) {
     mainLayer->deleteGlEntity(oldComposite);
   }
 
@@ -129,15 +129,15 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
-  if (glFrameBuf != NULL &&
+  if (glFrameBuf != nullptr &&
       (vPWidth != uint(glFrameBuf->width()) || vPHeight != uint(glFrameBuf->height()))) {
     delete glFrameBuf;
-    glFrameBuf = NULL;
+    glFrameBuf = nullptr;
     delete glFrameBuf2;
-    glFrameBuf2 = NULL;
+    glFrameBuf2 = nullptr;
   }
 
-  if (glFrameBuf == NULL) {
+  if (glFrameBuf == nullptr) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                   \
     (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) ||   \
                                                     defined(QT_MAC_USE_COCOA))))
@@ -150,7 +150,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
 
-  if (antialiasedFbo && glFrameBuf2 == NULL) {
+  if (antialiasedFbo && glFrameBuf2 == nullptr) {
     glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
   }
 

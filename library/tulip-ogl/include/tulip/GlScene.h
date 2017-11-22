@@ -55,16 +55,16 @@ struct SelectedEntity {
   };
 
   SelectedEntity()
-      : simpleEntity(NULL), complexEntityId(uint(-1)), entityType(UNKNOW_SELECTED),
-        complexEntityGraph(NULL) {}
+      : simpleEntity(nullptr), complexEntityId(uint(-1)), entityType(UNKNOW_SELECTED),
+        complexEntityGraph(nullptr) {}
   SelectedEntity(GlSimpleEntity *entity)
       : simpleEntity(entity), complexEntityId(uint(-1)), entityType(SIMPLE_ENTITY_SELECTED),
-        complexEntityGraph(NULL) {}
+        complexEntityGraph(nullptr) {}
   SelectedEntity(Graph *graph, unsigned int id, SelectedEntityType type)
-      : simpleEntity(NULL), complexEntityId(id), entityType(type), complexEntityGraph(graph) {}
+      : simpleEntity(nullptr), complexEntityId(id), entityType(type), complexEntityGraph(graph) {}
 
   GlSimpleEntity *getSimpleEntity() const {
-    assert(simpleEntity != NULL);
+    assert(simpleEntity != nullptr);
     return simpleEntity;
   }
 
@@ -74,7 +74,7 @@ struct SelectedEntity {
   }
 
   Graph *getComplexEntityGraph() const {
-    assert(complexEntityGraph != NULL);
+    assert(complexEntityGraph != nullptr);
     return complexEntityGraph;
   }
 
@@ -166,7 +166,7 @@ public:
    * this default lod calculator, to do that : put your calculator in constructor parameters
    * Available calculators are : GlCPULODCalculator and GlQuadTreeLODCalculator
    */
-  GlScene(GlLODCalculator *calculator = NULL);
+  GlScene(GlLODCalculator *calculator = nullptr);
 
   ~GlScene();
 
@@ -193,19 +193,20 @@ public:
    * Compute information for ajustSceneToSize
    * \param width : request width
    * \param height : request height
-   * \param center : the result center will be stored in (if center != NULL)
-   * \param eye : the result eye will be stored in (if eye != NULL)
-   * \param sceneRadius : the result sceneRadius will be stored in (if sceneRadius != NULL)
+   * \param center : the result center will be stored in (if center != nullptr)
+   * \param eye : the result eye will be stored in (if eye != nullptr)
+   * \param sceneRadius : the result sceneRadius will be stored in (if sceneRadius != nullptr)
    * \param xWhiteFactor : xWhiteFactor is the white part on x borders (left and right), the result
-   * xWhiteFactor will be stored in (if xWhiteFactor != NULL)
+   * xWhiteFactor will be stored in (if xWhiteFactor != nullptr)
    * \param yWhiteFactor : yWhiteFactor is the white part on y borders (top and bottom), the result
-   * yWhiteFactor will be stored in (if yWhiteFactor != NULL)
+   * yWhiteFactor will be stored in (if yWhiteFactor != nullptr)
    * \param sceneBoundingBox : the result sceneBoundingBox will be stored in (if sceneBoundingBox !=
-   * NULL)
+   * nullptr)
    */
   void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius,
                                float *xWhiteFactor, float *yWhiteFactor,
-                               BoundingBox *sceneBoundingBox = NULL, float *zoomFactor = NULL);
+                               BoundingBox *sceneBoundingBox = nullptr,
+                               float *zoomFactor = nullptr);
 
   /**
    * Ajust camera to have entities near borders
@@ -345,7 +346,7 @@ public:
   /**
    * @brief Create a layer with the given name in the scene just before layer with given name
    * This layer is added to the layers list
-   * Return NULL if the layer with beforeLayerWithName is not find
+   * Return nullptr if the layer with beforeLayerWithName is not find
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
    */
@@ -354,7 +355,7 @@ public:
   /**
    * @brief Create a layer with the given name in the scene just after layer with given name
    * This layer is added to the layers list
-   * Return NULL if the layer with beforeLayerWithName is not find
+   * Return nullptr if the layer with beforeLayerWithName is not find
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
    */
@@ -385,7 +386,7 @@ public:
 
   /**
    * @brief Return the layer with name : name
-   * Return NULL if the layer doesn't exist in the scene
+   * Return nullptr if the layer doesn't exist in the scene
    */
   GlLayer *getLayer(const std::string &name);
 
@@ -480,7 +481,7 @@ public:
    * This function return the camera of this layer
    */
   Camera &getGraphCamera() {
-    assert(graphLayer != NULL);
+    assert(graphLayer != nullptr);
     return graphLayer->getCamera();
   }
 
@@ -489,7 +490,7 @@ public:
    * This function set the camera of this layer
    */
   void setGraphCamera(Camera *camera) {
-    assert(graphLayer != NULL);
+    assert(graphLayer != nullptr);
     graphLayer->setCamera(camera);
   }
 

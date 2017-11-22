@@ -83,7 +83,7 @@ void GlPolyQuad::draw(float, Camera *) {
   vector<Coord> *vertices = &polyQuadEdges;
   GlShaderProgram *currentShader = GlShaderProgram::getCurrentActiveShader();
 
-  if (currentShader != NULL && currentShader->getName() == "fisheye") {
+  if (currentShader != nullptr && currentShader->getName() == "fisheye") {
     nbSubdivisionsPerSegment = 20;
     vertices = &vertexArray;
     nbVertices = ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2;

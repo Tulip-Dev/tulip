@@ -61,7 +61,7 @@ struct BollobasModel : public ImportModule {
     unsigned int n = 2000;
     unsigned int d = 4;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
       dataSet->get("minimum degree", d);
     }

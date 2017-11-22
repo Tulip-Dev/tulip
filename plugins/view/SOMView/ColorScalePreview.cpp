@@ -34,7 +34,7 @@ ColorScalePreview::~ColorScalePreview() {
 
 void ColorScalePreview::fillLabel() {
 
-  if (currentColorScale != NULL && width() != 0 && height() != 0) {
+  if (currentColorScale != nullptr && width() != 0 && height() != 0) {
 
     std::map<float, tlp::Color> colorMap = currentColorScale->getColorMap();
     QPalette p = this->palette();

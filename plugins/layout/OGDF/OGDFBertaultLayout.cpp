@@ -90,7 +90,7 @@ public:
   void beforeCall() {
     ogdf::BertaultLayout *bertault = static_cast<ogdf::BertaultLayout *>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       bool bval = false;
       int ival = 20;
       double val = 0;

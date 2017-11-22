@@ -76,7 +76,7 @@ public:
     double alpha = 0.9;
     double beta = 0.3;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
       dataSet->get("edges", e);
       dataSet->get("alpha", alpha);

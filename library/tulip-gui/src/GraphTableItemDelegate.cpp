@@ -33,7 +33,7 @@ void GraphTableItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
                                    const QModelIndex &index) const {
   PropertyInterface *pi = index.data(TulipModel::PropertyRole).value<PropertyInterface *>();
 
-  if (index.data().type() == QVariant::Double && dynamic_cast<DoubleProperty *>(pi) != NULL) {
+  if (index.data().type() == QVariant::Double && dynamic_cast<DoubleProperty *>(pi) != nullptr) {
     DoubleProperty *prop = static_cast<DoubleProperty *>(pi);
     double value = index.data().value<double>();
     double min = 0, max = 0;

@@ -164,7 +164,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
 
 //================================================================================
 bool CliqueEnumeration::run() {
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("minimum size", minsize);
 
   vector<node> ordering;
@@ -188,7 +188,7 @@ bool CliqueEnumeration::run() {
     maxCliquePivot(P, R, X);
   }
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->set("#cliques created", cliqueid + 1);
 
   return true;

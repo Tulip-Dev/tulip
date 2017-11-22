@@ -29,7 +29,7 @@ namespace tlp {
 class TLP_QT_SCOPE GraphElementModel : public TulipModel {
 
 public:
-  GraphElementModel(Graph *graph, unsigned int id, QObject *parent = NULL,
+  GraphElementModel(Graph *graph, unsigned int id, QObject *parent = nullptr,
                     bool displayvisual = true);
 
   void setShowVisualProp(bool show);
@@ -56,7 +56,7 @@ protected:
 class TLP_QT_SCOPE GraphNodeElementModel : public GraphElementModel {
 
 public:
-  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent = NULL,
+  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent = nullptr,
                         bool displayvisual = true)
       : GraphElementModel(graph, id, parent, displayvisual) {}
 
@@ -74,7 +74,7 @@ public:
 class TLP_QT_SCOPE GraphEdgeElementModel : public GraphElementModel {
 
 public:
-  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent = NULL,
+  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent = nullptr,
                         bool displayvisual = true)
       : GraphElementModel(graph, id, parent, displayvisual) {}
 

@@ -61,7 +61,7 @@ bool ReachableSubGraphSelection::run() {
   EDGE_TYPE edgeDirection = DIRECTED;
   BooleanProperty *startNodes = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("distance", maxDistance);
 
     // Get the edge orientation
@@ -156,7 +156,7 @@ bool ReachableSubGraphSelection::run() {
   }
 
   // output some useful information
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->set("#Edges added to the selection", num_edges);
     dataSet->set("#Nodes added to the selection", num_nodes);
   }

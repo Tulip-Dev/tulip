@@ -19,10 +19,10 @@
 #include "LinLogLayout.h"
 
 LinLogLayout::LinLogLayout(tlp::Graph *_graph, tlp::PluginProgress *_pluginProgress)
-    : edgeWeight(NULL), layoutResult(NULL), linLogWeight(NULL), skipNodes(NULL), graph(_graph),
-      pluginProgress(_pluginProgress), _dim(2), _nbNodes(0) {
+    : edgeWeight(nullptr), layoutResult(nullptr), linLogWeight(nullptr), skipNodes(nullptr),
+      graph(_graph), pluginProgress(_pluginProgress), _dim(2), _nbNodes(0) {
 
-  if (_graph == NULL)
+  if (_graph == nullptr)
     std::cerr << "graph is Null\n";
 
   useOctTree = true;
@@ -71,7 +71,7 @@ bool LinLogLayout::initAlgo(tlp::LayoutProperty *_layout, tlp::NumericProperty *
 
   _nbNodes = graph->numberOfNodes();
 
-  if (layoutResult == NULL) {
+  if (layoutResult == nullptr) {
     std::cerr << "layout result is null\n";
     return false;
   }
@@ -165,7 +165,7 @@ double LinLogLayout::getRepulsionEnergy(node u) {
 }
 
 double LinLogLayout::getRepulsionEnergy(node u, OctTree *tree) {
-  if (tree == NULL)
+  if (tree == nullptr)
     return 0.0;
 
   node treeNode = tree->getNode();
@@ -305,7 +305,7 @@ double LinLogLayout::addRepulsionDir(node u, double *dir) {
 }
 
 double LinLogLayout::addRepulsionDir(node u, double *dir, OctTree *tree) {
-  if (tree == NULL || u == (tree->node))
+  if (tree == nullptr || u == (tree->node))
     return 0.0;
 
   double u_weight = linLogWeight->getNodeValue(u);
@@ -757,7 +757,7 @@ void LinLogLayout::initWeights() {
 
   node u;
 
-  if (edgeWeight == NULL) {
+  if (edgeWeight == nullptr) {
     linLogWeight->setAllEdgeValue(1.0);
     edge e;
     forEach(e, graph->getEdges()) {

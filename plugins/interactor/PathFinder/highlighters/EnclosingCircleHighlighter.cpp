@@ -80,7 +80,7 @@ Color getInverseColor(const Color &c) {
 //******************************************************
 EnclosingCircleHighlighter::EnclosingCircleHighlighter()
     : PathHighlighter("Enclosing circle"), circleColor(200, 200, 200), outlineColor(0, 0, 0),
-      alpha(128), inversedColor(false), configurationWidget(NULL) {}
+      alpha(128), inversedColor(false), configurationWidget(nullptr) {}
 
 void EnclosingCircleHighlighter::highlight(const PathFinder *, GlMainWidget *glMainWidget,
                                            BooleanProperty *selection, node, node) {

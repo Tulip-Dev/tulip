@@ -84,7 +84,7 @@ void ImportWizard::algorithmSelected(const QModelIndex &index) {
   string algs = tlp::QStringToTlpString(alg);
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel *oldModel = _ui->parametersList->model();
-  QAbstractItemModel *newModel = NULL;
+  QAbstractItemModel *newModel = nullptr;
   bool isGroup = index.child(0, index.column()).isValid();
 
   QString categoryText("<b>Category</b>");
@@ -119,12 +119,12 @@ QString ImportWizard::algorithm() const {
 tlp::DataSet ImportWizard::parameters() const {
   ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parametersList->model());
 
-  if (model == NULL)
+  if (model == nullptr)
     return DataSet();
 
   return model->parametersValues();
 }
 
 void ImportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != NULL);
+  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != nullptr);
 }

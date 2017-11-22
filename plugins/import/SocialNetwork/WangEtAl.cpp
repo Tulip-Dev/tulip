@@ -54,7 +54,7 @@ struct WangEtAl : public ImportModule {
 
     unsigned int n = 300;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
     }
 

@@ -39,7 +39,7 @@
 
 using namespace tlp;
 
-PluginLibraryLoader *PluginLibraryLoader::_instance = NULL;
+PluginLibraryLoader *PluginLibraryLoader::_instance = nullptr;
 
 #ifndef EMSCRIPTEN
 void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &folder) {
@@ -59,7 +59,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
   for (std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
     std::string dir = (*it) + "/" + folder;
 
-    if (loader != NULL)
+    if (loader != nullptr)
       loader->start(dir.c_str());
 
     PluginLister::currentLoader = loader;
@@ -79,7 +79,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
 
 #endif
 
-    PluginLister::currentLoader = NULL;
+    PluginLister::currentLoader = nullptr;
   }
 
   // restore original pluginPath value
@@ -91,7 +91,7 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
 
-  if (loader != NULL)
+  if (loader != nullptr)
     loader->start(rootPath.c_str());
 
   PluginLister::currentLoader = loader;
@@ -111,7 +111,7 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
 
 #endif
 
-  PluginLister::currentLoader = NULL;
+  PluginLister::currentLoader = nullptr;
 
   // restore original pluginPath value
   getInstance()->pluginPath = currentPluginPath;
@@ -121,17 +121,17 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
 bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginLoader *loader) {
   HINSTANCE hDLL = LoadLibrary(filename.c_str());
 
-  if (hDLL == NULL) {
-    if (loader != NULL) {
+  if (hDLL == nullptr) {
+    if (loader != nullptr) {
       char *msg;
       DWORD dwErrCode = GetLastError();
       FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                    NULL,      // no source buffer needed
+                    nullptr,   // no source buffer needed
                     dwErrCode, // error code for this message
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                     (LPTSTR)&msg, // allocated by fcn
                     0,            // minimum size of buffer
-                    NULL);        // no inserts
+                    nullptr);     // no inserts
 
       if (!msg) {
         char scode[128];
@@ -155,7 +155,7 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
   void *handle = dlopen(filename.c_str(), RTLD_NOW);
 
   if (!handle) {
-    if (loader != NULL)
+    if (loader != nullptr)
       loader->aborted(filename, std::string(dlerror()));
 
     return false;
@@ -245,7 +245,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     SetCurrentDirectory(pluginPath.c_str());
     hFind = FindFirstFile("*.dll", &findData);
 
-    if (loader != NULL) {
+    if (loader != nullptr) {
       // count files loop
       unsigned long nbFiles = 0;
 
@@ -336,7 +336,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 #endif
                   alphasort);
 
-  if (loader != NULL)
+  if (loader != nullptr)
     loader->numberOfFiles(n);
 
   if (n < 0) {
@@ -364,7 +364,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
     if (idx != std::string::npos) {
       if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
-        if (loader != NULL)
+        if (loader != nullptr)
           loader->loading(lib);
 
         loadPluginLibrary(currentPluginLibrary, loader);

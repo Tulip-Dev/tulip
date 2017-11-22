@@ -37,13 +37,13 @@
 using namespace tlp;
 
 // Helper classes
-QPixmap *PreviewItem::_closeButtonPixmap = NULL;
+QPixmap *PreviewItem::_closeButtonPixmap = nullptr;
 QRect PreviewItem::_closePixmapRect = QRect();
 
 PreviewItem::PreviewItem(const QPixmap &pixmap, WorkspacePanel *panel, QGraphicsItem *parent)
     : QGraphicsObject(parent), _pixmap(pixmap), _panel(panel), _hovered(false),
       _closeButtonHovered(false) {
-  if (_closeButtonPixmap == NULL) {
+  if (_closeButtonPixmap == nullptr) {
     _closeButtonPixmap = new QPixmap(":/tulip/gui/ui/darkclosebutton.png");
     _closePixmapRect = QRect(boundingRect().width() - _closeButtonPixmap->width() - 5,
                              -0.5 * _closeButtonPixmap->height(), _closeButtonPixmap->width(),
@@ -125,8 +125,8 @@ QSize WorkspaceExposeWidget::previewSize() {
 const int WorkspaceExposeWidget::MARGIN = 50;
 
 WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent)
-    : QGraphicsView(parent), _positionAnimation(NULL), _selectedItem(NULL), _placeholderItem(NULL),
-      _switchToSingleMode(false) {
+    : QGraphicsView(parent), _positionAnimation(nullptr), _selectedItem(nullptr),
+      _placeholderItem(nullptr), _switchToSingleMode(false) {
   setScene(new QGraphicsScene);
   setSceneRect(0, 0, width(), height());
   setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -201,8 +201,8 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
       moveAnim->setStartValue(startPoint);
       moveAnim->setEndValue(endPoint);
       group->addAnimation(moveAnim);
-    } else if (_selectedItem != NULL) {
-      if (_placeholderItem == NULL) {
+    } else if (_selectedItem != nullptr) {
+      if (_placeholderItem == nullptr) {
         _placeholderItem =
             new QGraphicsRectItem(0, 0, previewSize().width(), previewSize().height());
         _placeholderItem->setBrush(QColor(220, 220, 220));
@@ -232,7 +232,7 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
 }
 
 void WorkspaceExposeWidget::updatePositionsAnimationFinished() {
-  _positionAnimation = NULL;
+  _positionAnimation = nullptr;
 }
 
 void WorkspaceExposeWidget::resetSceneRect() {
@@ -287,10 +287,10 @@ bool WorkspaceExposeWidget::eventFilter(QObject *obj, QEvent *ev) {
       }
     } else if (ev->type() == QEvent::GraphicsSceneMouseRelease) {
       _selectedItem->setZValue(0);
-      _selectedItem = NULL;
+      _selectedItem = nullptr;
       updatePositions();
       delete _placeholderItem;
-      _placeholderItem = NULL;
+      _placeholderItem = nullptr;
     }
   }
 

@@ -82,7 +82,7 @@ void CaptionGraphicsItem::generateSizeCaption(
 
 void CaptionGraphicsItem::constructConfigWidget() {
 
-  if (_view->graph() == NULL) {
+  if (_view->graph() == nullptr) {
     _confPropertySelectionWidget->setText("");
     _confPropertySelectionWidget->setToolTip("");
     return;
@@ -129,7 +129,7 @@ void CaptionGraphicsItem::filterChangedSlot(float begin, float end) {
 }
 
 void CaptionGraphicsItem::selectPropertyButtonClicked() {
-  if (_view->graph() == NULL)
+  if (_view->graph() == nullptr)
     return;
 
   QMenu menu;

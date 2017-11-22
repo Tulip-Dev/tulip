@@ -27,7 +27,7 @@ void GLInteractorComposite::draw(tlp::GlMainWidget *w) {
   foreach (tlp::InteractorComponent *i, _components) {
     GLInteractorComponent *cmp = dynamic_cast<GLInteractorComponent *>(i);
 
-    if (cmp != NULL)
+    if (cmp != nullptr)
       cmp->draw(w);
   }
 }
@@ -36,7 +36,7 @@ void GLInteractorComposite::compute(tlp::GlMainWidget *w) {
   foreach (tlp::InteractorComponent *i, _components) {
     GLInteractorComponent *cmp = dynamic_cast<GLInteractorComponent *>(i);
 
-    if (cmp != NULL)
+    if (cmp != nullptr)
       cmp->compute(w);
   }
 }

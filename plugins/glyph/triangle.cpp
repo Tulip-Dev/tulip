@@ -38,7 +38,7 @@ class Triangle : public Glyph {
 public:
   GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0",
                    NodeShape::Triangle)
-  Triangle(const tlp::PluginContext *context = NULL);
+  Triangle(const tlp::PluginContext *context = nullptr);
   virtual ~Triangle();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
@@ -47,7 +47,7 @@ protected:
   static GlTriangle *triangle;
 };
 
-GlTriangle *Triangle::triangle = NULL;
+GlTriangle *Triangle::triangle = nullptr;
 
 //=====================================================
 PLUGIN(Triangle)
@@ -87,7 +87,7 @@ void Triangle::draw(node n, float lod) {
     triangle->setOutlineMode(false);
   }
 
-  triangle->draw(lod, NULL);
+  triangle->draw(lod, nullptr);
 }
 //=====================================================
 

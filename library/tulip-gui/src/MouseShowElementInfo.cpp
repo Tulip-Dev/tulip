@@ -38,7 +38,7 @@ using namespace tlp;
 
 MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
     : _ui(new Ui::ElementInformationWidget), _informationWidget(new QWidget()),
-      _informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(NULL), _show(true) {
+      _informationWidgetItem(new QGraphicsProxyWidget()), glMainWidget(nullptr), _show(true) {
   _informationWidget->installEventFilter(this);
   _ui->setupUi(_informationWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
@@ -92,8 +92,8 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if (qMouseEv != NULL) {
-    if (glMainWidget == NULL)
+  if (qMouseEv != nullptr) {
+    if (glMainWidget == nullptr)
       glMainWidget = dynamic_cast<GlMainWidget *>(widget);
 
     assert(glMainWidget);
@@ -170,8 +170,8 @@ bool MouseShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
 }
 
 void MouseShowElementInfo::viewChanged(View *view) {
-  if (view == NULL) {
-    _view = NULL;
+  if (view == nullptr) {
+    _view = nullptr;
     return;
   }
 

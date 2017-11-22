@@ -87,7 +87,7 @@ public:
    *cyclic. Defaults to 0.
    * @return bool
    **/
-  static bool acyclicTest(const Graph *graph, std::vector<edge> *obstructionEdges = NULL);
+  static bool acyclicTest(const Graph *graph, std::vector<edge> *obstructionEdges = nullptr);
 
 private:
   AcyclicTest();

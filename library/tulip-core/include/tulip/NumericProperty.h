@@ -47,14 +47,14 @@ public:
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  virtual double getNodeDoubleMin(const Graph *graph = NULL) = 0;
+  virtual double getNodeDoubleMin(const Graph *graph = nullptr) = 0;
 
   /**
    * @brief Gets the maximum value on the nodes.
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  virtual double getNodeDoubleMax(const Graph *graph = NULL) = 0;
+  virtual double getNodeDoubleMax(const Graph *graph = nullptr) = 0;
 
   /**
    * @brief Returns the value associated with the edge e in this property.
@@ -73,14 +73,14 @@ public:
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  virtual double getEdgeDoubleMin(const Graph *graph = NULL) = 0;
+  virtual double getEdgeDoubleMin(const Graph *graph = nullptr) = 0;
 
   /**
    * @brief Gets the maximum value on the edges.
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  virtual double getEdgeDoubleMax(const Graph *graph = NULL) = 0;
+  virtual double getEdgeDoubleMax(const Graph *graph = nullptr) = 0;
 
   /**
    * @brief computes a uniform quantification for the nodes
@@ -118,7 +118,7 @@ public:
    * @param sg If provided, returns an iterator on the subset of nodes defined by that subgraph.
    * @return An iterator over graph nodes.
    **/
-  virtual Iterator<node> *getSortedNodes(const Graph *sg = NULL, bool ascendingOrder = true);
+  virtual Iterator<node> *getSortedNodes(const Graph *sg = nullptr, bool ascendingOrder = true);
 
   /**
    * @brief Gets an iterator sorting edges according to their values in that numeric property.
@@ -127,7 +127,7 @@ public:
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdges(const Graph *sg = NULL, bool ascendingOrder = true);
+  virtual Iterator<edge> *getSortedEdges(const Graph *sg = nullptr, bool ascendingOrder = true);
 
   /**
    * @brief Gets an iterator sorting edges according to the values of their source nodes in that
@@ -137,7 +137,7 @@ public:
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdgesBySourceValue(const Graph *sg = NULL,
+  virtual Iterator<edge> *getSortedEdgesBySourceValue(const Graph *sg = nullptr,
                                                       bool ascendingOrder = true);
 
   /**
@@ -148,7 +148,7 @@ public:
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdgesByTargetValue(const Graph *sg = NULL,
+  virtual Iterator<edge> *getSortedEdgesByTargetValue(const Graph *sg = nullptr,
                                                       bool ascendingOrder = true);
 
   /**
@@ -161,7 +161,7 @@ public:
    * @param ascendingOrder defines the sort ordering (ascending or descending).
    * @return An iterator over graph edges.
    **/
-  virtual Iterator<edge> *getSortedEdgesByExtremitiesValues(const Graph *sg = NULL,
+  virtual Iterator<edge> *getSortedEdgesByExtremitiesValues(const Graph *sg = nullptr,
                                                             bool ascendingOrder = true);
 };
 }

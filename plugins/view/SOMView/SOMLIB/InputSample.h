@@ -35,7 +35,7 @@
 namespace tlp {
 class InputSample : public tlp::Observable {
 public:
-  InputSample(tlp::Graph *graph = NULL);
+  InputSample(tlp::Graph *graph = nullptr);
   InputSample(tlp::Graph *graph, const std::vector<std::string> &propertiesToListen);
 
   void setGraph(tlp::Graph *graph);

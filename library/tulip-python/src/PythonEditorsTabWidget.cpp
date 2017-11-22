@@ -69,7 +69,7 @@ PythonCodeEditor *PythonEditorsTabWidget::getEditor(int editorIdx) const {
   if (editorIdx >= 0 && editorIdx < count()) {
     return static_cast<PythonCodeEditor *>(widget(editorIdx));
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 

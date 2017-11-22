@@ -27,7 +27,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-BiconnectedTest *BiconnectedTest::instance = NULL;
+BiconnectedTest *BiconnectedTest::instance = nullptr;
 //=================================================================
 // structure below is used to implement dfs loop
 struct dfsBiconnectStruct {
@@ -173,7 +173,7 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> 
 BiconnectedTest::BiconnectedTest() {}
 //=================================================================
 bool BiconnectedTest::isBiconnected(const tlp::Graph *graph) {
-  if (instance == NULL) {
+  if (instance == nullptr) {
     instance = new BiconnectedTest();
   }
 
@@ -181,7 +181,7 @@ bool BiconnectedTest::isBiconnected(const tlp::Graph *graph) {
 }
 //=================================================================
 void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
-  if (instance == NULL) {
+  if (instance == nullptr) {
     instance = new BiconnectedTest();
   }
 

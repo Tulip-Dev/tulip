@@ -119,7 +119,7 @@ vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte, std::vector<e
                                               PluginProgress *pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
-  if (dummyEdges != NULL)
+  if (dummyEdges != nullptr)
     *dummyEdges = o.getDummyEdges();
 
   vector<vector<node>> res;
@@ -497,7 +497,7 @@ struct visitedElt {
   tlp::node n;
   visitedElt *next;
 
-  visitedElt(tlp::node _n) : n(_n), next(NULL) {}
+  visitedElt(tlp::node _n) : n(_n), next(nullptr) {}
 };
 
 static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes,

@@ -25,15 +25,15 @@
 
 class OctreeBundle {
 public:
-  static void compute(tlp::Graph *graph, double splitRatio, tlp::LayoutProperty *layout = NULL,
-                      tlp::SizeProperty *size = NULL);
+  static void compute(tlp::Graph *graph, double splitRatio, tlp::LayoutProperty *layout = nullptr,
+                      tlp::SizeProperty *size = nullptr);
   //=====================================
   static bool isIn(const tlp::Coord &p, const tlp::Coord &a, const tlp::Coord &b,
                    const tlp::Coord &c, const tlp::Coord &d);
 
 protected:
-  void createOctree(tlp::Graph *graph, tlp::LayoutProperty *layout = NULL,
-                    tlp::SizeProperty *size = NULL);
+  void createOctree(tlp::Graph *graph, tlp::LayoutProperty *layout = nullptr,
+                    tlp::SizeProperty *size = nullptr);
 
 private:
   double minSize;

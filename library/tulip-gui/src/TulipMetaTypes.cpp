@@ -134,7 +134,7 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
     return new TypedData<std::string>(
         new std::string(QStringToTlpString(v.value<TulipFontIcon>().iconName)));
 
-  return NULL;
+  return nullptr;
 }
 
 #define CHECK_DATATYPE(TYPE)                                                                       \

@@ -32,7 +32,7 @@
 
 #include <cstdio>
 
-DownloadManager *DownloadManager::_instance = NULL;
+DownloadManager *DownloadManager::_instance = nullptr;
 
 DownloadManager *DownloadManager::getInstance() {
   if (!_instance) {

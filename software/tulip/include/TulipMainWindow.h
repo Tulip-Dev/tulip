@@ -43,7 +43,7 @@ class TulipMainWindow : public QMainWindow {
   Q_OBJECT
 
   static TulipMainWindow *_instance;
-  TulipMainWindow(QWidget *parent = NULL);
+  TulipMainWindow(QWidget *parent = nullptr);
 
   QLabel *_errorMessage;
 

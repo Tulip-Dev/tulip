@@ -30,7 +30,8 @@ using namespace std;
 
 namespace tlp {
 
-HistogramViewNavigator::HistogramViewNavigator() : histoView(NULL), selectedHistoOverview(NULL) {}
+HistogramViewNavigator::HistogramViewNavigator()
+    : histoView(nullptr), selectedHistoOverview(nullptr) {}
 
 HistogramViewNavigator::~HistogramViewNavigator() {}
 
@@ -64,12 +65,12 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
-    if (selectedHistoOverview != NULL && histoView->smallMultiplesViewSet()) {
+    if (selectedHistoOverview != nullptr && histoView->smallMultiplesViewSet()) {
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
                                                      selectedHistoOverview->getBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
       histoView->switchFromSmallMultiplesToDetailedView(selectedHistoOverview);
-      selectedHistoOverview = NULL;
+      selectedHistoOverview = nullptr;
     } else if (!histoView->smallMultiplesViewSet()) {
       histoView->switchFromDetailedViewToSmallMultiples();
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
@@ -84,7 +85,7 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) const {
-  Histogram *ret = NULL;
+  Histogram *ret = nullptr;
   vector<Histogram *> overviews = histoView->getHistograms();
 
   for (vector<Histogram *>::const_iterator it = overviews.begin(); it != overviews.end(); ++it) {

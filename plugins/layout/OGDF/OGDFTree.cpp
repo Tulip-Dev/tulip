@@ -141,7 +141,7 @@ public:
   void beforeCall() {
     ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout *>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       double dval = 0;
       bool bval = false;
       StringCollection sc;

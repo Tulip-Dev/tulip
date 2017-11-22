@@ -25,8 +25,8 @@
 #include <tulip/Graph.h>
 
 bool tlp::RenamePropertyDialog::renameProperty(tlp::PropertyInterface *prop, QWidget *parent) {
-  if (prop == NULL) {
-    QMessageBox::critical(parent, "Renaming error", "The property is NULL");
+  if (prop == nullptr) {
+    QMessageBox::critical(parent, "Renaming error", "The property is nullptr");
     return false;
   }
 

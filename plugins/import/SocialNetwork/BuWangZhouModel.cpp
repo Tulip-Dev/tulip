@@ -64,7 +64,7 @@ public:
     unsigned int types_of_nodes = 3;
     unsigned int m = 2;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nb_nodes);
       dataSet->get("types of nodes", types_of_nodes);
       dataSet->get("m", m);

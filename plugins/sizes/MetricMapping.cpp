@@ -74,7 +74,7 @@ public:
       "Maps the sizes of the graph elements onto the values of a given numeric property.", "2.0",
       "Size")
   MetricSizeMapping(const PluginContext *context)
-      : SizeAlgorithm(context), entryMetric(NULL), entrySize(NULL), xaxis(true), yaxis(true),
+      : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
         zaxis(true), mappingType(true), min(1), max(10), range(0), shift(0), nodeoredge(true) {
     addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
@@ -102,12 +102,12 @@ public:
     max = 10;
     nodeoredge = true;
     proportional = "Area Proportional";
-    entryMetric = NULL;
-    entrySize = NULL;
+    entryMetric = nullptr;
+    entrySize = nullptr;
     mappingType = true;
     StringCollection proportionalType;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("property", entryMetric);
       dataSet->get("input", entrySize);
       dataSet->get("width", xaxis);
@@ -155,7 +155,7 @@ public:
   }
 
   bool run() {
-    NumericProperty *tmp = NULL;
+    NumericProperty *tmp = nullptr;
 
     if (!mappingType) {
       tmp = entryMetric->copyProperty(graph);

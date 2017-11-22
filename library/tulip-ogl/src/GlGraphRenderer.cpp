@@ -36,8 +36,8 @@ using namespace std;
 namespace tlp {
 
 GlGraphRenderer::GlGraphRenderer(const GlGraphInputData *inputData)
-    : inputData(inputData), graphModified(true), selectionDrawActivate(false), selectionIdMap(NULL),
-      selectionCurrentId(NULL) {}
+    : inputData(inputData), graphModified(true), selectionDrawActivate(false),
+      selectionIdMap(nullptr), selectionCurrentId(nullptr) {}
 
 void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
   Graph *graph = inputData->getGraph();

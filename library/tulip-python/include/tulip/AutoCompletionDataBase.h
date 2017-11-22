@@ -55,7 +55,7 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
   QString _lastFoundType;
 
 public:
-  AutoCompletionDataBase(APIDataBase *_apiDb = NULL);
+  AutoCompletionDataBase(APIDataBase *_apiDb = nullptr);
 
   void setGraph(tlp::Graph *graph) {
     _graph = graph;

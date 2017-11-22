@@ -29,7 +29,7 @@ const string BooleanVectorProperty::propertyTypename = "vector<bool>";
 
 //=================================================================================
 void BooleanProperty::reverse(const Graph *sg) {
-  if (sg == NULL)
+  if (sg == nullptr)
     sg = graph;
 
   const vector<node> &nodes = sg->nodes();
@@ -50,7 +50,7 @@ void BooleanProperty::reverse(const Graph *sg) {
 
 //=================================================================================
 void BooleanProperty::reverseEdgeDirection(Graph *sg) {
-  if (sg == NULL)
+  if (sg == nullptr)
     sg = graph;
 
   const vector<edge> &edges = sg->edges();
@@ -66,8 +66,8 @@ void BooleanProperty::reverseEdgeDirection(Graph *sg) {
 
 //=================================================================================
 PropertyInterface *BooleanProperty::clonePrototype(Graph *g, const std::string &n) const {
-  if (g == NULL)
-    return NULL;
+  if (g == nullptr)
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   BooleanProperty *p = n.empty() ? new BooleanProperty(g) : g->getLocalProperty<BooleanProperty>(n);

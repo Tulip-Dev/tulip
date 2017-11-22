@@ -120,7 +120,7 @@ public:
    * @return void
    **/
   void saveMetaData_V4() {
-    time_t ostime = time(NULL);
+    time_t ostime = time(nullptr);
     // get local time
     struct tm *currTime = localtime(&ostime);
     // format date
@@ -203,7 +203,7 @@ public:
     _writer.writeString(PropertiesToken);
     _writer.writeMapOpen();
     // saving properties
-    Iterator<PropertyInterface *> *itP = NULL;
+    Iterator<PropertyInterface *> *itP = nullptr;
 
     if (g->getSuperGraph() == g) {
       itP = g->getObjectProperties();

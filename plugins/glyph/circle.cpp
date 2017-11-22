@@ -34,7 +34,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlCircle *circle = NULL;
+static GlCircle *circle = nullptr;
 
 static void drawCircle(const Color &fillColor, const Color &borderColor, float borderWidth,
                        const std::string &textureName, float lod) {
@@ -49,7 +49,7 @@ static void drawCircle(const Color &fillColor, const Color &borderColor, float b
   }
 
   circle->setTextureName(textureName);
-  circle->draw(lod, NULL);
+  circle->draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -64,7 +64,7 @@ class Circle : public Glyph {
 public:
   GLYPHINFORMATION("2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1",
                    NodeShape::Circle)
-  Circle(const tlp::PluginContext *context = NULL);
+  Circle(const tlp::PluginContext *context = nullptr);
   virtual ~Circle();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
@@ -92,7 +92,7 @@ void Circle::draw(node n, float lod) {
              Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 
-static GlCircle *eecircle = NULL;
+static GlCircle *eecircle = nullptr;
 class EECircle : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Circle extremity", "David Auber", "09/07/2002",

@@ -110,7 +110,7 @@ public:
 
   void beforeCall() {
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       double dval = 0;
       int ival = 0;
       bool bval = 0;

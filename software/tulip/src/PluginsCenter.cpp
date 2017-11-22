@@ -49,7 +49,7 @@ static const int ERRORS_ROW = 8;
 using namespace tlp;
 
 PluginsCenter::PluginsCenter(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PluginsCenterData()), _currentItem(NULL) {
+    : QWidget(parent), _ui(new Ui::PluginsCenterData()), _currentItem(nullptr) {
   _ui->setupUi(this);
 
   QStringList remoteLocs = TulipSettings::instance().remoteLocations();
@@ -141,7 +141,7 @@ void PluginsCenter::setNameFilter(const QString &filter) {
 }
 
 void PluginsCenter::refreshFilter() {
-  _currentItem = NULL;
+  _currentItem = nullptr;
 
   if (_categoryFilters.isEmpty())
     _categoryFilters.push_back("");
@@ -161,7 +161,7 @@ void PluginsCenter::refreshFilter() {
   lyt->addItem(new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::Expanding));
 
   QString oldObjName = _ui->pluginsSearchListContent->objectName();
-  _ui->pluginsSearchList->setWidget(NULL);
+  _ui->pluginsSearchList->setWidget(nullptr);
   _ui->pluginsSearchListContent = new QWidget();
   _ui->pluginsSearchListContent->setObjectName(oldObjName);
   _ui->pluginsSearchListContent->setLayout(lyt);
@@ -206,7 +206,7 @@ void PluginsCenter::sideListRowChanged(int i) {
 }
 
 void PluginsCenter::itemFocused() {
-  if (_currentItem != NULL) {
+  if (_currentItem != nullptr) {
     _currentItem->focusOut();
   }
 

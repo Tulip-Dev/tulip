@@ -27,7 +27,7 @@ namespace tlp {
 
 PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt,
                                                                  QWidget *parent)
-    : QuickAccessBarImpl(NULL,
+    : QuickAccessBarImpl(nullptr,
                          QuickAccessBarImpl::QuickAccessButtons(
                              QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
                              QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::NODEBORDERCOLOR |

@@ -51,7 +51,7 @@ static const char *paramHelp[] = {
     "Define the spacing between two nodes"};
 
 OrthoTree::OrthoTree(const tlp::PluginContext *context)
-    : tlp::LayoutAlgorithm(context), nodeSpacing(4), layerSpacing(10), size(NULL) {
+    : tlp::LayoutAlgorithm(context), nodeSpacing(4), layerSpacing(10), size(nullptr) {
   addInParameter<unsigned int>("Layer spacing", paramHelp[0], "10", true);
   addInParameter<unsigned int>("Node spacing", paramHelp[1], "4", true);
 }
@@ -102,7 +102,7 @@ bool OrthoTree::run() {
   layerSpacing = 10;
   nodeSpacing = 4;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("Layer spacing", layerSpacing);
     dataSet->get("Node spacing", nodeSpacing);
   }

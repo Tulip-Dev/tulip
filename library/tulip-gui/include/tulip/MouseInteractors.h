@@ -46,7 +46,7 @@ protected:
  */
 class TLP_QT_SCOPE MouseElementDeleter : public InteractorComponent {
 public:
-  MouseElementDeleter() : glMainWidget(NULL) {}
+  MouseElementDeleter() : glMainWidget(nullptr) {}
   ~MouseElementDeleter() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();
@@ -66,7 +66,7 @@ private:
   QCursor oldCursor;
 
 public:
-  MouseNKeysNavigator() : currentSpecInteractorComponent(NULL), nldc(NULL) {}
+  MouseNKeysNavigator() : currentSpecInteractorComponent(nullptr), nldc(nullptr) {}
   ~MouseNKeysNavigator() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();

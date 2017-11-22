@@ -64,7 +64,7 @@ public:
     double proba = 0.5;
     bool self_loop = false;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("probability", proba);
       dataSet->get("self loop", self_loop);

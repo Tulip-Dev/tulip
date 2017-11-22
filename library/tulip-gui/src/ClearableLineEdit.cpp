@@ -22,10 +22,10 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-QPixmap *ClearableLineEdit::CLEAR_PIXMAP = NULL;
+QPixmap *ClearableLineEdit::CLEAR_PIXMAP = nullptr;
 
 void ClearableLineEdit::initPixmap() {
-  if (CLEAR_PIXMAP == NULL) {
+  if (CLEAR_PIXMAP == nullptr) {
     CLEAR_PIXMAP = new QPixmap(":/tulip/gui/ui/clearbutton.png");
   }
 }

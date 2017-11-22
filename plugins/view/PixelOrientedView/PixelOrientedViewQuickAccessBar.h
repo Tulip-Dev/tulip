@@ -30,7 +30,7 @@ class PixelOrientedViewQuickAccessBar : public tlp::QuickAccessBarImpl {
   PixelOrientedOptionsWidget *_optionsWidget;
 
 public:
-  PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget *parent = NULL);
+  PixelOrientedViewQuickAccessBar(PixelOrientedOptionsWidget *opt, QWidget *parent = nullptr);
 
 public slots:
   void reset();

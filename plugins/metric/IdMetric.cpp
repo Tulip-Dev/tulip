@@ -50,7 +50,7 @@ IdMetric::IdMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context)
 bool IdMetric::run() {
   bool nodes(true), edges(true);
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     StringCollection targetType;
     dataSet->get(TARGET_TYPE, targetType);
 

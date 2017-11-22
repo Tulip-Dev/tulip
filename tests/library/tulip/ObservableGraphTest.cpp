@@ -28,7 +28,7 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ObservableGraphTest);
 
-tlp::Graph *ObservableGraphTest::graph = NULL;
+tlp::Graph *ObservableGraphTest::graph = nullptr;
 
 // these classes will capture
 // everything that will happen to our properties
@@ -165,7 +165,7 @@ public:
 
   GraphObserverTest() {
     deleteBug747 = false;
-    obs = NULL;
+    obs = nullptr;
   }
 
   ~GraphObserverTest() {
@@ -379,8 +379,8 @@ removeAttribute(graph, gEvt->getAttributeName());
           delete observer;
           obs = new GraphObserverTest();
           addListener(obs);
-          observer = NULL;
-          ObservableGraphTest::setGraph(NULL);
+          observer = nullptr;
+          ObservableGraphTest::setGraph(nullptr);
         } else
           destroy(graph);
       }
@@ -403,7 +403,7 @@ public:
 
       initialized = true;
     } else {
-      inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name) != NULL);
+      inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name) != nullptr);
 
       if (inheritedPropertyExist) {
         g->getProperty(name)->getName();
@@ -1017,14 +1017,14 @@ void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyI
 }
 
 void ObservableGraphTest::testDeleteBug747() {
-  CPPUNIT_ASSERT(observer != NULL);
-  CPPUNIT_ASSERT(graph != NULL);
+  CPPUNIT_ASSERT(observer != nullptr);
+  CPPUNIT_ASSERT(graph != nullptr);
 
   gObserver->deleteBug747 = true;
   delete graph;
 
-  CPPUNIT_ASSERT(observer == NULL);
-  CPPUNIT_ASSERT(graph == NULL);
+  CPPUNIT_ASSERT(observer == nullptr);
+  CPPUNIT_ASSERT(graph == nullptr);
 }
 
 void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
@@ -1039,7 +1039,7 @@ void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
   // import the previously saved graph by populating the already created empty graph
   DataSet params;
   params.set("file::filename", tlpbFile);
-  importGraph("TLPB Import", params, NULL, graph);
+  importGraph("TLPB Import", params, nullptr, graph);
   // check that the graph event TLP_ADD_EDGES has been correctly received
   CPPUNIT_ASSERT(!gObserver->edges.empty());
   delete testGraph;

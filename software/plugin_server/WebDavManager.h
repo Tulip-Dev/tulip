@@ -95,7 +95,7 @@ public slots:
 private:
   QUrl initUrl(const QString &dest);
 
-  QNetworkRequest initRequest(const QString &destination, QIODevice *data = NULL,
+  QNetworkRequest initRequest(const QString &destination, QIODevice *data = nullptr,
                               QVariant mimetype = QVariant("binary/octet-stream"));
 
   QString _host;

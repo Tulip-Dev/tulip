@@ -39,7 +39,7 @@ class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget,
   Ui::DoubleStringsListSelectionData *_ui;
 
 public:
-  DoubleStringsListSelectionWidget(QWidget *parent = NULL,
+  DoubleStringsListSelectionWidget(QWidget *parent = nullptr,
                                    const unsigned int maxSelectedStringsListSize = 0);
   ~DoubleStringsListSelectionWidget();
 

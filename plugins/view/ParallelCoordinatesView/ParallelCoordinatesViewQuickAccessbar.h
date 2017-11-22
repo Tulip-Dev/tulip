@@ -31,7 +31,7 @@ class ParallelCoordinatesViewQuickAccessBar : public tlp::QuickAccessBarImpl {
 
 public:
   ParallelCoordinatesViewQuickAccessBar(ParallelCoordsDrawConfigWidget *opt,
-                                        QWidget *parent = NULL);
+                                        QWidget *parent = nullptr);
 
 public slots:
   void reset();

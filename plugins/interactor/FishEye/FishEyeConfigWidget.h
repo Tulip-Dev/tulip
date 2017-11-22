@@ -33,7 +33,7 @@ class FishEyeConfigWidget : public QWidget {
   Ui::FishEyeConfigWidget *_ui;
 
 public:
-  FishEyeConfigWidget(QWidget *parent = NULL);
+  FishEyeConfigWidget(QWidget *parent = nullptr);
   ~FishEyeConfigWidget();
 
   int getFishEyeType() const;

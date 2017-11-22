@@ -40,7 +40,7 @@ class ComputeSOMWidget : public QWidget {
   Ui::SOMComputeWidget *_ui;
 
 public:
-  ComputeSOMWidget(QWidget *parent = NULL);
+  ComputeSOMWidget(QWidget *parent = nullptr);
   ~ComputeSOMWidget();
   unsigned number() const;
   void setNumber(unsigned uintValue);

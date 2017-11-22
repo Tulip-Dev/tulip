@@ -235,13 +235,13 @@ private:
 
     glBindBuffer(GL_ARRAY_BUFFER, renderingDataBuffer);
     glBufferData(GL_ARRAY_BUFFER, (vertices.size() * 3 + texCoords.size() * 2) * sizeof(float),
-                 NULL, GL_STATIC_DRAW);
+                 nullptr, GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * 3 * sizeof(float), &vertices[0]);
     glBufferSubData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float),
                     texCoords.size() * 2 * sizeof(float), &texCoords[0]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                 (indices.size() + outlineIndices.size()) * sizeof(unsigned short), NULL,
+                 (indices.size() + outlineIndices.size()) * sizeof(unsigned short), nullptr,
                  GL_STATIC_DRAW);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned short),
                     &indices[0]);
@@ -283,7 +283,7 @@ class FontIconGlyph : public Glyph {
 public:
   GLYPHINFORMATION("2D - Icon", "Antoine Lambert", "26/02/2015", "Icon", "2.0", NodeShape::Icon)
 
-  FontIconGlyph(const tlp::PluginContext *context = NULL) : Glyph(context) {}
+  FontIconGlyph(const tlp::PluginContext *context = nullptr) : Glyph(context) {}
 
   ~FontIconGlyph() {}
 

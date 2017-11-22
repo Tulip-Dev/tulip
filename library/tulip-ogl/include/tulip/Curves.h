@@ -84,7 +84,7 @@ TLP_GL_SCOPE void getSizes(const std::vector<Coord> &line, float s1, float s2,
 TLP_GL_SCOPE GLfloat *buildCurvePoints(const std::vector<Coord> &vertices,
                                        const std::vector<float> &sizes, const Coord &startN,
                                        const Coord &endN, unsigned int &resultSize,
-                                       std::vector<unsigned int> *dec = NULL);
+                                       std::vector<unsigned int> *dec = nullptr);
 TLP_GL_SCOPE void buildCurvePoints(const std::vector<Coord> &vertices,
                                    const std::vector<float> &sizes, const Coord &startN,
                                    const Coord &endN, std::vector<Coord> &result);

@@ -92,7 +92,7 @@ PropertyManager::~PropertyManager() {
 
   for (itP = localProperties.begin(); itP != localProperties.end(); ++itP) {
     PropertyInterface *prop = (*itP).second;
-    prop->graph = NULL;
+    prop->graph = nullptr;
     delete prop;
   }
 }
@@ -164,7 +164,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop, const string 
 
   // loop in the ascendant hierarchy to get
   // an inherited property
-  PropertyInterface *newProp = NULL;
+  PropertyInterface *newProp = nullptr;
   Graph *g = graph;
 
   while (g != g->getSuperGraph()) {
@@ -225,7 +225,7 @@ void PropertyManager::setInheritedProperty(const string &str, PropertyInterface 
   if (!existLocalProperty(str)) {
     bool hasInheritedProperty = inheritedProperties.find(str) != inheritedProperties.end();
 
-    if (p != NULL) {
+    if (p != nullptr) {
       static_cast<GraphAbstract *>(graph)->notifyBeforeAddInheritedProperty(str);
       inheritedProperties[str] = p;
 
@@ -243,7 +243,7 @@ void PropertyManager::setInheritedProperty(const string &str, PropertyInterface 
     }
 
     // graph observers notification
-    if (p != NULL) {
+    if (p != nullptr) {
       static_cast<GraphAbstract *>(graph)->notifyAddInheritedProperty(str);
     }
 
@@ -265,7 +265,7 @@ PropertyInterface *PropertyManager::getProperty(const string &str) const {
   if (existInheritedProperty(str))
     return getInheritedProperty(str);
 
-  return NULL;
+  return nullptr;
 }
 //==============================================================
 PropertyInterface *PropertyManager::getLocalProperty(const string &str) const {
@@ -288,7 +288,7 @@ void PropertyManager::delLocalProperty(const string &str) {
 
     // loop in the ascendant hierarchy to get
     // an inherited property
-    PropertyInterface *newProp = NULL;
+    PropertyInterface *newProp = nullptr;
     Graph *g = graph;
 
     while (g != g->getSuperGraph()) {

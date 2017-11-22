@@ -303,14 +303,14 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent)
-    : TulipModel(parent), _currentGraph(NULL) {}
+    : TulipModel(parent), _currentGraph(nullptr) {}
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy)
     : TulipModel(copy.QObject::parent()), tlp::Observable() {
   for (int i = 0; i < copy.size(); ++i)
     addGraph(copy[i]);
 
-  _currentGraph = NULL;
+  _currentGraph = nullptr;
 }
 
 GraphHierarchiesModel::~GraphHierarchiesModel() {
@@ -319,7 +319,7 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 
 // Cache related methods
 QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph *g) {
-  if (g == NULL)
+  if (g == nullptr)
     return QModelIndex();
 
   QModelIndex result = _indexCache[g];
@@ -332,7 +332,7 @@ QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph *g) {
 }
 
 QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph *g) {
-  if (g == NULL)
+  if (g == nullptr)
     return QModelIndex();
 
   QModelIndex result;
@@ -440,14 +440,14 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
   if (row < 0)
     return QModelIndex();
 
-  Graph *g = NULL;
+  Graph *g = nullptr;
 
   if (parent.isValid())
     g = static_cast<Graph *>(parent.internalPointer())->getNthSubGraph(row);
   else if (row < _graphs.size())
     g = _graphs[row];
 
-  if (g == NULL) {
+  if (g == nullptr) {
     return QModelIndex();
   }
 
@@ -460,7 +460,7 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 
   Graph *childGraph = static_cast<Graph *>(child.internalPointer());
 
-  if (childGraph == NULL || _graphs.contains(childGraph) ||
+  if (childGraph == nullptr || _graphs.contains(childGraph) ||
       childGraph->getSuperGraph() == childGraph) {
     return QModelIndex();
   }
@@ -593,7 +593,7 @@ QMimeData *GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
   foreach (const QModelIndex &index, indexes) {
     Graph *g = data(index, GraphRole).value<Graph *>();
 
-    if (g != NULL)
+    if (g != nullptr)
       graphs.insert(g);
   }
 
@@ -637,13 +637,13 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
   Graph *oldGraph = _currentGraph;
   _currentGraph = g;
 
-  if (oldGraph != NULL && oldGraph != _currentGraph) {
+  if (oldGraph != nullptr && oldGraph != _currentGraph) {
     QModelIndex oldRow1 = indexOf(oldGraph);
     QModelIndex oldRow2 = createIndex(oldRow1.row(), columnCount() - 1);
     emit dataChanged(oldRow1, oldRow2);
   }
 
-  if (_currentGraph != NULL) {
+  if (_currentGraph != nullptr) {
     QModelIndex newRow1 = indexOf(_currentGraph);
     QModelIndex newRow2 = createIndex(newRow1.row(), columnCount() - 1);
     emit dataChanged(newRow1, newRow2);
@@ -657,7 +657,7 @@ Graph *GraphHierarchiesModel::currentGraph() const {
 }
 
 void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
-  Graph *sg = NULL;
+  Graph *sg = nullptr;
   int i = 0;
   forEach(sg, root->getSubGraphs()) {
     _indexCache[sg] = createIndex(i++, 0, sg);
@@ -666,7 +666,7 @@ void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
 }
 
 static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) {
-  Graph *sg = NULL;
+  Graph *sg = nullptr;
   forEach(sg, root->getSubGraphs()) {
     addListenerToWholeGraphHierarchy(sg, listener);
   }
@@ -675,7 +675,7 @@ static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) 
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
-  if (_graphs.contains(g) || g == NULL)
+  if (_graphs.contains(g) || g == nullptr)
     return;
 
   foreach (Graph *i, _graphs) {
@@ -686,7 +686,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
   _saveNeeded[g] = new GraphNeedsSavingObserver(
-      g, Perspective::instance() ? Perspective::instance()->mainWindow() : NULL);
+      g, Perspective::instance() ? Perspective::instance()->mainWindow() : nullptr);
 
   _graphs.push_back(g);
 
@@ -714,7 +714,7 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
 
     if (_currentGraph == g) {
       if (_graphs.empty()) {
-        _currentGraph = NULL;
+        _currentGraph = nullptr;
         emit currentGraphChanged(_currentGraph);
       } else
         setCurrentGraph(_graphs[0]);
@@ -736,7 +736,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
     if (_currentGraph == g) {
       if (_graphs.empty())
-        _currentGraph = NULL;
+        _currentGraph = nullptr;
       else
         _currentGraph = _graphs[0];
 
@@ -769,7 +769,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 #endif
 
         // update index cache for subgraphs of parent graph and added sub-graphs
-        Graph *sg2 = NULL;
+        Graph *sg2 = nullptr;
 
         int i = 0;
 
@@ -811,7 +811,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 #endif
 
         // update index cache for subgraphs of parent graph
-        Graph *sg2 = NULL;
+        Graph *sg2 = nullptr;
 
         int i = 0;
 

@@ -162,7 +162,7 @@ QVariant CoordEditorCreator::editorData(QWidget *w, tlp::Graph *) {
 }
 
 void CoordEditorCreator::setPropertyToEdit(tlp::PropertyInterface *prop) {
-  editSize = (dynamic_cast<tlp::SizeProperty *>(prop) != NULL);
+  editSize = (dynamic_cast<tlp::SizeProperty *>(prop) != nullptr);
 }
 
 /*
@@ -174,14 +174,14 @@ QWidget *PropertyInterfaceEditorCreator::createWidget(QWidget *parent) const {
 
 void PropertyInterfaceEditorCreator::setEditorData(QWidget *w, const QVariant &val,
                                                    bool isMandatory, tlp::Graph *g) {
-  if (g == NULL) {
+  if (g == nullptr) {
     w->setEnabled(false);
     return;
   }
 
   PropertyInterface *prop = val.value<PropertyInterface *>();
   QComboBox *combo = static_cast<QComboBox *>(w);
-  GraphPropertiesModel<PropertyInterface> *model = NULL;
+  GraphPropertiesModel<PropertyInterface> *model = nullptr;
 
   if (isMandatory)
     model = new GraphPropertiesModel<PropertyInterface>(g, false, combo);
@@ -203,7 +203,7 @@ QVariant PropertyInterfaceEditorCreator::editorData(QWidget *w, tlp::Graph *) {
 QString PropertyInterfaceEditorCreator::displayText(const QVariant &v) const {
   PropertyInterface *prop = v.value<PropertyInterface *>();
 
-  if (prop == NULL)
+  if (prop == nullptr)
     return "";
 
   return prop->getName().c_str();
@@ -218,14 +218,14 @@ QWidget *NumericPropertyEditorCreator::createWidget(QWidget *parent) const {
 
 void NumericPropertyEditorCreator::setEditorData(QWidget *w, const QVariant &val, bool isMandatory,
                                                  tlp::Graph *g) {
-  if (g == NULL) {
+  if (g == nullptr) {
     w->setEnabled(false);
     return;
   }
 
   NumericProperty *prop = val.value<NumericProperty *>();
   QComboBox *combo = static_cast<QComboBox *>(w);
-  GraphPropertiesModel<NumericProperty> *model = NULL;
+  GraphPropertiesModel<NumericProperty> *model = nullptr;
 
   if (isMandatory)
     model = new GraphPropertiesModel<NumericProperty>(g, false, combo);
@@ -247,7 +247,7 @@ QVariant NumericPropertyEditorCreator::editorData(QWidget *w, tlp::Graph *) {
 QString NumericPropertyEditorCreator::displayText(const QVariant &v) const {
   NumericProperty *prop = v.value<NumericProperty *>();
 
-  if (prop == NULL)
+  if (prop == nullptr)
     return "";
 
   return prop->getName().c_str();
@@ -625,7 +625,7 @@ bool TulipFontIconCreator::paint(QPainter *painter, const QStyleOptionViewItem &
   opt.text = displayText(v);
 
   QStyle *style = QApplication::style();
-  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
   return true;
 }
 
@@ -703,7 +703,7 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
   opt.text = displayText(data);
 
   QStyle *style = QApplication::style();
-  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
   return true;
 }
 
@@ -771,7 +771,7 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter, const QStyleOptio
   opt.text = displayText(data);
 
   QStyle *style = QApplication::style();
-  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
   return true;
 }
 
@@ -877,7 +877,7 @@ QWidget *GraphEditorCreator::createWidget(QWidget *parent) const {
 void GraphEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, tlp::Graph *) {
   Graph *g = var.value<Graph *>();
 
-  if (g != NULL) {
+  if (g != nullptr) {
     std::string name;
     g->getAttribute<std::string>("name", name);
     static_cast<QLabel *>(w)->setText(name.c_str());
@@ -891,7 +891,7 @@ QVariant GraphEditorCreator::editorData(QWidget *, tlp::Graph *) {
 QString GraphEditorCreator::displayText(const QVariant &var) const {
   Graph *g = var.value<Graph *>();
 
-  if (g == NULL)
+  if (g == nullptr)
     return QString::null;
 
   std::string name;

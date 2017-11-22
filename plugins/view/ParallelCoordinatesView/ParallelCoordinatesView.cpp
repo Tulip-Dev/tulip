@@ -73,11 +73,12 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 PLUGIN(ParallelCoordinatesView)
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
-    : _bar(NULL), showToolTips(NULL), mainLayer(NULL), axisSelectionLayer(NULL),
-      glGraphComposite(NULL), axisPointsGraph(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL),
-      dataConfigWidget(NULL), drawConfigWidget(NULL), firstSet(true), lastNbSelectedProperties(0),
-      center(false), lastViewWindowWidth(0), lastViewWindowHeight(0), isConstruct(false),
-      dontCenterViewAfterConfLoaded(false), needDraw(false) {
+    : _bar(nullptr), showToolTips(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
+      glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr),
+      parallelCoordsDrawing(nullptr), dataConfigWidget(nullptr), drawConfigWidget(nullptr),
+      firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0),
+      lastViewWindowHeight(0), isConstruct(false), dontCenterViewAfterConfLoaded(false),
+      needDraw(false) {
   ++parallelViewInstancesCount;
 }
 
@@ -95,7 +96,7 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
 
   delete axisPointsGraph;
   delete graphProxy;
-  graphProxy = NULL;
+  graphProxy = nullptr;
   delete dataConfigWidget;
   delete drawConfigWidget;
 }
@@ -171,26 +172,26 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
   bool sameGraphRoot = false;
 
   if (graph()) {
-    if (graphProxy != NULL && (graph()->getRoot() == graphProxy->getRoot())) {
+    if (graphProxy != nullptr && (graph()->getRoot() == graphProxy->getRoot())) {
       sameGraphRoot = true;
       selectedPropertiesBak = graphProxy->getSelectedProperties();
     }
   }
 
-  if (parallelCoordsDrawing != NULL && graphProxy->getGraph() != graph()) {
+  if (parallelCoordsDrawing != nullptr && graphProxy->getGraph() != graph()) {
     mainLayer->deleteGlEntity(parallelCoordsDrawing);
     graphProxy->removeListener(parallelCoordsDrawing);
     delete parallelCoordsDrawing;
-    parallelCoordsDrawing = NULL;
+    parallelCoordsDrawing = nullptr;
   }
 
-  if (graphProxy != NULL && graphProxy->getGraph() != graph()) {
+  if (graphProxy != nullptr && graphProxy->getGraph() != graph()) {
     delete graphProxy;
-    graphProxy = NULL;
+    graphProxy = nullptr;
   }
 
-  if (graph() != NULL) {
-    if (graphProxy == NULL) {
+  if (graph() != nullptr) {
+    if (graphProxy == nullptr) {
       graphProxy = new ParallelCoordinatesGraphProxy(graph());
     }
 
@@ -221,7 +222,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     dataConfigWidget->setWidgetParameters(graph(), propertiesTypesFilter);
     dataConfigWidget->setSelectedProperties(graphProxy->getSelectedProperties());
 
-    if (parallelCoordsDrawing == NULL) {
+    if (parallelCoordsDrawing == nullptr) {
       parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy, axisPointsGraph);
       graphProxy->addListener(parallelCoordsDrawing);
       mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
@@ -323,12 +324,12 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     if (dataSet.exist("scene")) {
       string sceneXML;
       dataSet.get("scene", sceneXML);
-      getGlMainWidget()->getScene()->setWithXML(sceneXML, NULL);
+      getGlMainWidget()->getScene()->setWithXML(sceneXML, nullptr);
       dontCenterViewAfterConfLoaded = true;
     }
 
   } else {
-    dataConfigWidget->setWidgetParameters(NULL, propertiesTypesFilter);
+    dataConfigWidget->setWidgetParameters(nullptr, propertiesTypesFilter);
   }
 
   bool quickAccessBarVisible = false;
@@ -389,7 +390,7 @@ DataSet ParallelCoordinatesView::state() const {
 void ParallelCoordinatesView::graphChanged(tlp::Graph *) {
   if (isConstruct)
     setState(DataSet());
-  else if (_bar != NULL) {
+  else if (_bar != nullptr) {
     _bar->setEnabled(false);
   }
 }
@@ -445,7 +446,7 @@ void ParallelCoordinatesView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
   GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
 
-  if (noDimsLabel != NULL) {
+  if (noDimsLabel != nullptr) {
     mainLayer->deleteGlEntity(noDimsLabel);
     delete noDimsLabel;
     mainLayer->deleteGlEntity(noDimsLabel1);
@@ -527,7 +528,7 @@ bool ParallelCoordinatesView::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::ToolTip && showToolTips->isChecked()) {
     QHelpEvent *he = dynamic_cast<QHelpEvent *>(event);
 
-    if (parallelCoordsDrawing != NULL) {
+    if (parallelCoordsDrawing != nullptr) {
       const set<unsigned int> &dataUnderPointer(
           mapGlEntitiesInRegionToData(he->x(), he->y(), 1, 1));
 
@@ -538,7 +539,7 @@ bool ParallelCoordinatesView::eventFilter(QObject *obj, QEvent *event) {
     }
   }
 
-  if (graphProxy != NULL && graphProxy->graphColorsModified()) {
+  if (graphProxy != nullptr && graphProxy->graphColorsModified()) {
     Observable::holdObservers();
     graphProxy->colorDataAccordingToHighlightedElts();
     Observable::unholdObservers();
@@ -603,39 +604,39 @@ void ParallelCoordinatesView::buildContextMenu() {
   thinLines->setCheckable(true);
   lineActionGroup->addAction(thinLines);
 
-  showToolTips = new QAction(QString("Tooltips"), NULL);
+  showToolTips = new QAction(QString("Tooltips"), nullptr);
   showToolTips->setToolTip(QString(
       "Enable to display a tooltip indicating the graph element located under the mouse pointer"));
   showToolTips->setCheckable(true);
   showToolTips->setChecked(false);
 
-  axisMenuSeparator = new QAction(NULL);
+  axisMenuSeparator = new QAction(nullptr);
   axisMenuSeparator->setSeparator(true);
-  axisConfiguration = new QAction(tr("Axis configuration"), NULL);
+  axisConfiguration = new QAction(tr("Axis configuration"), nullptr);
   connect(axisConfiguration, SIGNAL(triggered()), this, SLOT(axisConfigurationSlot()));
-  removeAxisAction = new QAction(tr("Remove axis"), NULL);
+  removeAxisAction = new QAction(tr("Remove axis"), nullptr);
   connect(removeAxisAction, SIGNAL(triggered()), this, SLOT(removeAxisSlot()));
-  highlightMenuSeparator = new QAction(NULL);
+  highlightMenuSeparator = new QAction(nullptr);
   highlightMenuSeparator->setSeparator(true);
-  selectHighlightedElements = new QAction(tr("Select highlighted elements"), NULL);
+  selectHighlightedElements = new QAction(tr("Select highlighted elements"), nullptr);
   selectHighlightedElements->setToolTip(
       QString("Select the graph elements corresponding to the currently highlighted curves"));
   connect(selectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(selectHighlightedElementsSlot()));
-  addSelectHighlightedElements = new QAction(tr("Add highlighted elements to selection"), NULL);
+  addSelectHighlightedElements = new QAction(tr("Add highlighted elements to selection"), nullptr);
   addSelectHighlightedElements->setToolTip(
       QString("Add the graph elements corresponding to the currently highlighted curves to the "
               "current selection"));
   connect(addSelectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(addSelectHighlightedElementsSlot()));
   removeSelectHighlightedElements =
-      new QAction(tr("Remove highlighted elements to selection"), NULL);
+      new QAction(tr("Remove highlighted elements to selection"), nullptr);
   removeSelectHighlightedElements->setToolTip(
       QString("Remove the graph elements corresponding to the currently highlighted curves from "
               "the current selection"));
   connect(removeSelectHighlightedElements, SIGNAL(triggered()), this,
           SLOT(removeSelectHighlightedElementsSlot()));
-  resetHightlightedElements = new QAction(tr("Reset highlighting of elements"), NULL);
+  resetHightlightedElements = new QAction(tr("Reset highlighting of elements"), nullptr);
   resetHightlightedElements->setToolTip(QString("Unhighlight all the elements"));
   connect(resetHightlightedElements, SIGNAL(triggered()), this,
           SLOT(resetHightlightedElementsSlot()));
@@ -649,7 +650,7 @@ void ParallelCoordinatesView::fillContextMenu(QMenu *menu, const QPointF &point)
 
   axisUnderPointer = getAxisUnderPointer(point.x(), point.y());
 
-  if (axisUnderPointer != NULL) {
+  if (axisUnderPointer != nullptr) {
     menu->addAction(axisMenuSeparator);
     menu->addAction(axisConfiguration);
     axisConfiguration->setToolTip(QString("Configure the axis '") +
@@ -935,7 +936,7 @@ ParallelAxis *ParallelCoordinatesView::getAxisUnderPointer(const int x, const in
   }
 
   axisSelectionLayer->getComposite()->reset(false);
-  return NULL;
+  return nullptr;
 }
 
 void ParallelCoordinatesView::swapAxis(ParallelAxis *firstAxis, ParallelAxis *secondAxis) {

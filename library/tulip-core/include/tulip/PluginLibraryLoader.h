@@ -64,11 +64,11 @@ public:
   * -> libCompleteGraph-4.0.0.so
   *
   *
-  * @param loader A PluginLoader to output what is going on. Defaults to NULL.
+  * @param loader A PluginLoader to output what is going on. Defaults to nullptr.
   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
-  static void loadPlugins(PluginLoader *loader = NULL, const std::string &pluginPath = "");
+  static void loadPlugins(PluginLoader *loader = nullptr, const std::string &pluginPath = "");
 
   /**
   * @brief Recursively loads plugins from a root directory.
@@ -81,21 +81,21 @@ public:
   *
   *
   * @param rootPath The root directory from which to look for plugins to load.
-  * @param loader A PluginLoader to output what is going on. Defaults to NULL.
+  * @param loader A PluginLoader to output what is going on. Defaults to nullptr.
 
   *
   **/
-  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = NULL);
+  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = nullptr);
 
   /**
    * @brief Loads a single plugin library.
    *
    * @param filename The name of the plugin file to load.
    * @param loader A loader to report what is going on (only its loaded or aborted functions will be
-   *called) Defaults to NULL.
+   *called) Defaults to nullptr.
    * @return bool Whether the plugin was sucessfully loaded.
    **/
-  static bool loadPluginLibrary(const std::string &filename, PluginLoader *loader = NULL);
+  static bool loadPluginLibrary(const std::string &filename, PluginLoader *loader = nullptr);
 #endif // EMSCRIPTEN
 
   /**
@@ -115,7 +115,7 @@ private:
 #endif
 
   static PluginLibraryLoader *getInstance() {
-    if (_instance == NULL) {
+    if (_instance == nullptr) {
       _instance = new PluginLibraryLoader();
     }
 

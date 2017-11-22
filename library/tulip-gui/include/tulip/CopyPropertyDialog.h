@@ -50,7 +50,7 @@ class PropertyInterface;
 class TLP_QT_SCOPE CopyPropertyDialog : public QDialog {
   Q_OBJECT
 public:
-  CopyPropertyDialog(QWidget *parent = NULL);
+  CopyPropertyDialog(QWidget *parent = nullptr);
   ~CopyPropertyDialog();
 
   /**
@@ -95,7 +95,7 @@ public:
     **/
   static PropertyInterface *copyProperty(tlp::Graph *graph, tlp::PropertyInterface *source,
                                          bool askBeforePropertyOverwriting = false,
-                                         QWidget *parent = NULL);
+                                         QWidget *parent = nullptr);
 
 private:
   Ui::CopyPropertyDialogData *ui;

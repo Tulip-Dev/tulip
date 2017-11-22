@@ -43,7 +43,7 @@ class AlgorithmRunnerItem : public QWidget {
   static tlp::ParameterListModel *colorMappingModel;
 
 public:
-  explicit AlgorithmRunnerItem(QString pluginName, QWidget *parent = NULL);
+  explicit AlgorithmRunnerItem(QString pluginName, QWidget *parent = nullptr);
   virtual ~AlgorithmRunnerItem();
 
   QString name() const;
@@ -62,7 +62,7 @@ public slots:
   void setStoreResultAsLocal(bool);
   void favoriteChanged(int state);
 
-  void run(tlp::Graph *g = NULL);
+  void run(tlp::Graph *g = nullptr);
 
 signals:
   void favorized(bool);

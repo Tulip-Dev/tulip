@@ -32,7 +32,7 @@ using namespace std;
 namespace tlp {
 
 ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator()
-    : scatterPlot2dView(NULL), selectedScatterPlotOverview(NULL), glWidget(NULL) {}
+    : scatterPlot2dView(nullptr), selectedScatterPlotOverview(nullptr), glWidget(nullptr) {}
 
 ScatterPlot2DViewNavigator::~ScatterPlot2DViewNavigator() {}
 
@@ -42,11 +42,11 @@ void ScatterPlot2DViewNavigator::viewChanged(View *view) {
 
 bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
-  if (glWidget == NULL) {
+  if (glWidget == nullptr) {
     glWidget = static_cast<GlMainWidget *>(widget);
   }
 
-  if (glWidget != NULL) {
+  if (glWidget != nullptr) {
     if (!glWidget->hasMouseTracking()) {
       glWidget->setMouseTracking(true);
     }
@@ -65,16 +65,16 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       selectedScatterPlotOverview = getOverviewUnderPointer(sceneCoords);
       return true;
     } else if (e->type() == QEvent::MouseButtonDblClick) {
-      if (selectedScatterPlotOverview != NULL &&
+      if (selectedScatterPlotOverview != nullptr &&
           !selectedScatterPlotOverview->overviewGenerated()) {
         scatterPlot2dView->generateScatterPlot(selectedScatterPlotOverview, glWidget);
         glWidget->draw();
-      } else if (selectedScatterPlotOverview != NULL && scatterPlot2dView->matrixViewSet()) {
+      } else if (selectedScatterPlotOverview != nullptr && scatterPlot2dView->matrixViewSet()) {
         QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(
             glWidget, selectedScatterPlotOverview->getBoundingBox());
         zoomAndPanAnimator.animateZoomAndPan();
         scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
-        selectedScatterPlotOverview = NULL;
+        selectedScatterPlotOverview = nullptr;
       } else if (!scatterPlot2dView->matrixViewSet()) {
         scatterPlot2dView->switchFromDetailViewToMatrixView();
         QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
@@ -90,7 +90,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
-  ScatterPlot2D *ret = NULL;
+  ScatterPlot2D *ret = nullptr;
   vector<ScatterPlot2D *> overviews = scatterPlot2dView->getSelectedScatterPlots();
   vector<ScatterPlot2D *>::iterator it;
 

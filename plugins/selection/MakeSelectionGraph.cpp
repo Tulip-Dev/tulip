@@ -34,14 +34,14 @@ MakeSelectionGraph::MakeSelectionGraph(const tlp::PluginContext *context)
 bool MakeSelectionGraph::run() {
   BooleanProperty *sel = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("selection", sel);
 
   result->copy(sel);
   unsigned added = makeSelectionGraph(graph, result);
 
   // output some useful information
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->set("#elements added to the selection", added);
 
   return true;
@@ -54,7 +54,7 @@ isGraphTest::isGraphTest(const tlp::PluginContext *context) : tlp::GraphTest(con
 bool isGraphTest::test() {
   BooleanProperty *sel = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("selection", sel);
 
   bool test;

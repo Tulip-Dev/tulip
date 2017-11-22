@@ -76,7 +76,7 @@ void addNodeSizePropertyParameter(LayoutAlgorithm *pLayout, bool inout) {
 }
 
 bool getNodeSizePropertyParameter(DataSet *dataSet, SizeProperty *&sizes) {
-  return (dataSet != NULL) && dataSet->get("node size", sizes) && sizes;
+  return (dataSet != nullptr) && dataSet->get("node size", sizes) && sizes;
 }
 
 //====================================================================
@@ -94,7 +94,7 @@ orientationType getMask(DataSet *dataSet) {
   orientation.setCurrent(0);
   int current = 0;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     StringCollection dataSetOrientation;
 
     if (dataSet->get(ORIENTATION_ID, dataSetOrientation)) {
@@ -131,7 +131,7 @@ orientationType getMask(DataSet *dataSet) {
 bool hasOrthogonalEdge(DataSet *dataSet) {
   bool orthogonalEdge = false;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get(ORTHOGONAL, orthogonalEdge);
   }
 

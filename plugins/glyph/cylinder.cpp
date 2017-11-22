@@ -171,7 +171,7 @@ class Cylinder : public Glyph, public CylinderBase {
 public:
   GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0",
                    NodeShape::Cylinder)
-  Cylinder(const tlp::PluginContext *context = NULL);
+  Cylinder(const tlp::PluginContext *context = nullptr);
   virtual ~Cylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);
@@ -237,7 +237,7 @@ class HalfCylinder : public Glyph, public CylinderBase {
 public:
   GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder",
                    "1.0", NodeShape::HalfCylinder)
-  HalfCylinder(const tlp::PluginContext *context = NULL);
+  HalfCylinder(const tlp::PluginContext *context = nullptr);
   virtual ~HalfCylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);

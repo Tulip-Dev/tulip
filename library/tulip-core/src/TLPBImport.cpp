@@ -49,7 +49,7 @@ struct RangeIterator : public Iterator<T> {
   }
 };
 
-bool errorTrap(void *buf = NULL) {
+bool errorTrap(void *buf = nullptr) {
   if (buf)
     free(buf);
 
@@ -63,7 +63,7 @@ TLPBImport::TLPBImport(tlp::PluginContext *context) : ImportModule(context) {
 //================================================================================
 bool TLPBImport::importGraph() {
   std::string filename;
-  std::istream *is = NULL;
+  std::istream *is = nullptr;
 
   if (dataSet->exist("file::filename")) {
     dataSet->get<std::string>("file::filename", filename);
@@ -270,7 +270,7 @@ bool TLPBImport::importGraph() {
       Graph *g = subgraphs.get(size);
       assert(g);
 
-      if (g == NULL)
+      if (g == nullptr)
         return (delete is, errorTrap());
 
       // read type length
@@ -285,7 +285,7 @@ bool TLPBImport::importGraph() {
         return (delete is, errorTrap());
 
       propType.resize(size);
-      PropertyInterface *prop = NULL;
+      PropertyInterface *prop = nullptr;
 
       // create property
       if (propType == GraphProperty::propertyTypename)
@@ -321,7 +321,7 @@ bool TLPBImport::importGraph() {
 
       assert(prop);
 
-      if (prop == NULL)
+      if (prop == nullptr)
         return (delete is, errorTrap());
 
       if (pnViewProp) {
@@ -563,7 +563,7 @@ bool TLPBImport::importGraph() {
     Graph *g = id ? subgraphs.get(id) : graph;
     assert(g);
 
-    if (g == NULL)
+    if (g == nullptr)
       return (delete is, errorTrap());
 
     // read graph attributes

@@ -128,13 +128,13 @@ public:
   bool run() {
     bool oriented = true, edgeCardinality = true, clustersLayout = false;
     bool recursive = false, quotientLayout = true, useSubGraphName = false;
-    StringProperty *metaLabel = NULL;
+    StringProperty *metaLabel = nullptr;
     StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
     nodeFunctions.setCurrent(0);
     StringCollection edgeFunctions(AGGREGATION_FUNCTIONS);
     edgeFunctions.setCurrent(0);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("oriented", oriented);
       dataSet->get("node function", nodeFunctions);
       dataSet->get("edge function", edgeFunctions);
@@ -162,7 +162,7 @@ public:
     DataSet layoutParams;
 
     if (clustersLayout) {
-      tlp::Graph *cluster = NULL;
+      tlp::Graph *cluster = nullptr;
       forEach(cluster, graph->getSubGraphs()) {
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
@@ -170,17 +170,17 @@ public:
         layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
         cluster->applyPropertyAlgorithm(layoutName,
                                         cluster->getLocalProperty<LayoutProperty>("viewLayout"),
-                                        errMsg, NULL, &layoutParams);
+                                        errMsg, nullptr, &layoutParams);
         double border = std::min(minSize[0], minSize[1]);
         layoutParams.set("x border", border);
         layoutParams.set("y border", border);
         cluster->applyPropertyAlgorithm("Fast Overlap Removal",
                                         cluster->getLocalProperty<LayoutProperty>("viewLayout"),
-                                        errMsg, NULL, &layoutParams);
+                                        errMsg, nullptr, &layoutParams);
       }
     }
 
-    IntegerProperty *opProp = NULL, *cardProp = NULL;
+    IntegerProperty *opProp = nullptr, *cardProp = nullptr;
     Graph *quotientGraph = graph->getRoot()->addSubGraph();
     stringstream sstr;
     sstr << "quotient of ";
@@ -375,7 +375,7 @@ public:
     if (opProp)
       delete opProp;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->set("quotientGraph", quotientGraph);
     }
 
@@ -386,14 +386,14 @@ public:
       Size maxSize = viewSize->getMax(quotientGraph);
       layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
       quotientGraph->applyPropertyAlgorithm(
-          layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL,
-          &layoutParams);
+          layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg,
+          nullptr, &layoutParams);
       double border = std::min(minSize[0], minSize[1]);
       layoutParams.set("x border", border);
       layoutParams.set("y border", border);
       quotientGraph->applyPropertyAlgorithm(
           "Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"),
-          errMsg, NULL, &layoutParams);
+          errMsg, nullptr, &layoutParams);
     }
 
     // recursive call if needed

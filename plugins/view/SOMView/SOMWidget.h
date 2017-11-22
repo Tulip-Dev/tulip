@@ -33,7 +33,7 @@ class SOMWidget : public QWidget {
   Ui::SOMWidget *_ui;
 
 public:
-  SOMWidget(QWidget *parent = NULL);
+  SOMWidget(QWidget *parent = nullptr);
   ~SOMWidget();
 };
 }

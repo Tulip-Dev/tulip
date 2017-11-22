@@ -47,7 +47,7 @@ void ColorScaleButton::paintScale(QPainter *painter, const QRect &baseRect,
 }
 
 ColorScaleButton::ColorScaleButton(ColorScale colorScale, QWidget *parent)
-    : QPushButton(parent), _colorScale(colorScale), dlg(NULL) {
+    : QPushButton(parent), _colorScale(colorScale), dlg(nullptr) {
   connect(this, SIGNAL(clicked()), this, SLOT(editColorScale()));
 }
 

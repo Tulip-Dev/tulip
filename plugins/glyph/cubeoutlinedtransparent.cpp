@@ -32,7 +32,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlBox *box = NULL;
+static GlBox *box = nullptr;
 static void drawBox(const Color &borderColor, float borderWidth, const std::string &textureName,
                     float lod, GlGraphInputData *glGraphInputData) {
   if (textureName.size() != 0) {
@@ -50,7 +50,7 @@ static void drawBox(const Color &borderColor, float borderWidth, const std::stri
 
   box->setOutlineSize(lineWidth);
 
-  box->draw(lod, NULL);
+  box->draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -63,7 +63,7 @@ class CubeOutLinedTransparent : public Glyph {
 public:
   GLYPHINFORMATION("3D - Cube OutLined Transparent", "David Auber", "09/07/2002",
                    "Textured cubeOutLined", "1.0", NodeShape::CubeOutlinedTransparent)
-  CubeOutLinedTransparent(const tlp::PluginContext *context = NULL);
+  CubeOutLinedTransparent(const tlp::PluginContext *context = nullptr);
   virtual ~CubeOutLinedTransparent();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;

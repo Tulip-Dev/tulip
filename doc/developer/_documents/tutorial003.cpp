@@ -34,7 +34,7 @@ void buildGraph(Graph *graph) {
 
 int main() {
   //initialize the Tulip libs
-  initTulipLib(NULL);
+  initTulipLib(nullptr);
 
   //create an empty graph
   Graph *graph = newGraph();

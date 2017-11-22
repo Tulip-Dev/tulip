@@ -59,7 +59,7 @@ void rotateVector(Coord &vec, float alpha, int rot) {
 
 Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]) {
 
-  Coord *intersectionPoint = NULL;
+  Coord *intersectionPoint = nullptr;
   bool line1ParallelToXaxis = false;
   bool line1ParallelToYaxis = false;
   bool line2ParallelToXaxis = false;

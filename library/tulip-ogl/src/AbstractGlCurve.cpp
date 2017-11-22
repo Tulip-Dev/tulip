@@ -475,23 +475,23 @@ map<unsigned int, vector<GLushort *>> AbstractGlCurve::curveVertexBuffersIndices
 map<unsigned int, GLuint *> AbstractGlCurve::curveVertexBuffersObject;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesShadersMap;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
-GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
-GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
-GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
-GlShader *AbstractGlCurve::curveFragmentShader(NULL);
+GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(nullptr);
+GlShader *AbstractGlCurve::curveVertexShaderNormalMain(nullptr);
+GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(nullptr);
+GlShader *AbstractGlCurve::curveFragmentShader(nullptr);
 bool AbstractGlCurve::canUseGeometryShader = false;
 std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
     AbstractGlCurve::curvesGeometryShadersMap;
-GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(NULL);
+GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(nullptr);
 std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *>>
     AbstractGlCurve::curvesBillboardGeometryShadersMap;
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName,
                                  const string &curveSpecificShaderCode)
-    : curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-      outlined(false), outlineColor(Color(0, 0, 0)), texture(""), texCoordFactor(1),
-      billboardCurve(false), lookDir(Coord(0, 0, 1)), lineCurve(false), curveLineWidth(1.0f),
-      curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
+    : curveShaderProgramNormal(nullptr), curveShaderProgramBillboard(nullptr),
+      curveShaderProgram(nullptr), outlined(false), outlineColor(Color(0, 0, 0)), texture(""),
+      texCoordFactor(1), billboardCurve(false), lookDir(Coord(0, 0, 1)), lineCurve(false),
+      curveLineWidth(1.0f), curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 }
@@ -501,12 +501,13 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName,
                                  const vector<Coord> &controlPoints, const Color &startColor,
                                  const Color &endColor, const float startSize, const float endSize,
                                  const unsigned int nbCurvePoints)
-    : shaderProgramName(shaderProgramName), curveShaderProgramNormal(NULL),
-      curveShaderProgramBillboard(NULL), curveShaderProgram(NULL), controlPoints(controlPoints),
-      startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize),
-      nbCurvePoints(nbCurvePoints), outlined(false), outlineColor(Color(0, 0, 0)), texture(""),
-      texCoordFactor(1), billboardCurve(false), lookDir(Coord(0, 0, 1)), lineCurve(false),
-      curveLineWidth(1.0f), curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
+    : shaderProgramName(shaderProgramName), curveShaderProgramNormal(nullptr),
+      curveShaderProgramBillboard(nullptr), curveShaderProgram(nullptr),
+      controlPoints(controlPoints), startColor(startColor), endColor(endColor),
+      startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints), outlined(false),
+      outlineColor(Color(0, 0, 0)), texture(""), texCoordFactor(1), billboardCurve(false),
+      lookDir(Coord(0, 0, 1)), lineCurve(false), curveLineWidth(1.0f), curveQuadBordersWidth(1.0f),
+      outlineColorInterpolation(false) {
 
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
@@ -580,28 +581,28 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
 
   if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
 
-    if (curveVertexShaderNormalMain == NULL) {
+    if (curveVertexShaderNormalMain == nullptr) {
       curveVertexShaderNormalMain = new GlShader(Vertex);
       curveVertexShaderNormalMain->compileFromSourceCode(curveVertexShaderNormalMainSrc);
     }
 
-    if (curveVertexShaderBillboardMain == NULL) {
+    if (curveVertexShaderBillboardMain == nullptr) {
       curveVertexShaderBillboardMain = new GlShader(Vertex);
       curveVertexShaderBillboardMain->compileFromSourceCode(curveVertexShaderBillboardMainSrc);
     }
 
-    if (fisheyeDistortionVertexShader == NULL) {
+    if (fisheyeDistortionVertexShader == nullptr) {
       fisheyeDistortionVertexShader = new GlShader(Vertex);
       fisheyeDistortionVertexShader->compileFromSourceCode(fisheyeDistortionVertexShaderSrc);
     }
 
-    if (curveVertexGeometryShaderNormalMain == NULL) {
+    if (curveVertexGeometryShaderNormalMain == nullptr) {
       curveVertexGeometryShaderNormalMain = new GlShader(Vertex);
       curveVertexGeometryShaderNormalMain->compileFromSourceCode(
           curveVertexShaderGeometryNormalMainSrc);
     }
 
-    if (curveFragmentShader == NULL) {
+    if (curveFragmentShader == nullptr) {
       curveFragmentShader = new GlShader(Fragment);
       curveFragmentShader->compileFromSourceCode(curveFragmentShaderSrc);
     }
@@ -632,7 +633,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
 
       if (!polygonShader->isLinked()) {
         delete polygonShader;
-        polygonShader = NULL;
+        polygonShader = nullptr;
       }
 
       GlShaderProgram *lineShader = new GlShaderProgram(shaderProgramName);
@@ -648,7 +649,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
 
       if (!lineShader->isLinked()) {
         delete lineShader;
-        lineShader = NULL;
+        lineShader = nullptr;
       }
 
       curvesGeometryShadersMap[shaderProgramName] = make_pair(polygonShader, lineShader);
@@ -682,7 +683,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
 
       if (!polygonShader->isLinked()) {
         delete polygonShader;
-        polygonShader = NULL;
+        polygonShader = nullptr;
       }
 
       GlShaderProgram *lineShader = new GlShaderProgram(shaderProgramName);
@@ -698,7 +699,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
 
       if (!lineShader->isLinked()) {
         delete lineShader;
-        lineShader = NULL;
+        lineShader = nullptr;
       }
 
       curvesBillboardGeometryShadersMap[shaderProgramName] = make_pair(polygonShader, lineShader);
@@ -744,14 +745,14 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
   static bool canUseFloatTextures =
       OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
 
-  if (curveShaderProgram != NULL && canUseFloatTextures && renderMode != GL_SELECT) {
+  if (curveShaderProgram != nullptr && canUseFloatTextures && renderMode != GL_SELECT) {
 
     static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
-    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders =
-        std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
-    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders =
-        std::make_pair(static_cast<GlShaderProgram *>(NULL), static_cast<GlShaderProgram *>(NULL));
+    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair(
+        static_cast<GlShaderProgram *>(nullptr), static_cast<GlShaderProgram *>(nullptr));
+    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair(
+        static_cast<GlShaderProgram *>(nullptr), static_cast<GlShaderProgram *>(nullptr));
 
     if (canUseGeometryShader &&
         curvesGeometryShadersMap.find(curveShaderProgram->getName()) !=
@@ -767,7 +768,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
     GlShaderProgram *currentActiveShader = GlShaderProgram::getCurrentActiveShader();
     bool fisheyeActivated =
-        currentActiveShader != NULL && currentActiveShader->getName() == "fisheye";
+        currentActiveShader != nullptr && currentActiveShader->getName() == "fisheye";
     GLfloat fisheyeCenter[4];
     GLfloat fisheyeRadius;
     GLfloat fisheyeHeight;

@@ -140,7 +140,7 @@ bool Circular::run() {
     }
   }
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("search cycle", searchCycle);
 
   // compute the sum of radii and the max radius of the graph

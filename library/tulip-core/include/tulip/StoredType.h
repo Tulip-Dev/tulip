@@ -81,7 +81,7 @@ struct StoredType {
       delete val;                                                                                  \
     }                                                                                              \
     inline static T defaultValue() {                                                               \
-      return NULL;                                                                                 \
+      return nullptr;                                                                              \
     }                                                                                              \
   }
 

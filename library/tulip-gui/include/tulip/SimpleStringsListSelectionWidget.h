@@ -41,7 +41,7 @@ class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget,
   Ui::SimpleStringsListSelectionData *_ui;
 
 public:
-  SimpleStringsListSelectionWidget(QWidget *parent = NULL,
+  SimpleStringsListSelectionWidget(QWidget *parent = nullptr,
                                    const unsigned int maxSelectedStringsListSize = 0);
   ~SimpleStringsListSelectionWidget();
 

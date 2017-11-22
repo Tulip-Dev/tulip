@@ -45,7 +45,7 @@ public:
   Ui::TextureFileDialogData *ui;
   TextureFile _data;
   int ok;
-  TextureFileDialog(QWidget *parent = NULL);
+  TextureFileDialog(QWidget *parent = nullptr);
 
   ~TextureFileDialog();
 

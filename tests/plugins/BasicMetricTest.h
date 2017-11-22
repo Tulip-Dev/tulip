@@ -49,7 +49,7 @@ private:
   tlp::Graph *graph;
   template <typename PropType>
   bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph",
-                       PropType *prop = NULL);
+                       PropType *prop = nullptr);
 
 public:
   void setUp();

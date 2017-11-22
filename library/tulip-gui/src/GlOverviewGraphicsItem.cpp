@@ -38,7 +38,7 @@ GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view, GlScene &scene)
       mouseClicked(false), _frameColor(Color::Gray), _frameWidth(2) {}
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
-  overview.setParentItem(NULL);
+  overview.setParentItem(nullptr);
 }
 
 void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {

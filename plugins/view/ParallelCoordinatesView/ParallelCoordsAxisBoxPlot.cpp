@@ -42,7 +42,8 @@ const Color darkBlue(0, 0, 255, 255);
 GlAxisBoxPlot::GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor,
                              const Color &outlineColor)
     : axis(axis), boxWidth(5 * axis->getAxisGradsWidth()), fillColor(fillColor),
-      outlineColor(outlineColor), highlightRangeLowBound(NULL), highlightRangeHighBound(NULL) {}
+      outlineColor(outlineColor), highlightRangeLowBound(nullptr),
+      highlightRangeHighBound(nullptr) {}
 
 void GlAxisBoxPlot::draw(float lod, Camera *camera) {
 
@@ -134,7 +135,7 @@ void GlAxisBoxPlot::draw(float lod, Camera *camera) {
   drawLabel(thirdQuartileCoord, axis->getThirdQuartileStringValue(), camera);
   drawLabel(topOutlierCoord, axis->getTopOutlierStringValue(), camera);
 
-  if (highlightRangeLowBound != NULL && highlightRangeHighBound != NULL) {
+  if (highlightRangeLowBound != nullptr && highlightRangeHighBound != nullptr) {
     Coord highlightBoxCoords[4] = {Coord(highlightRangeHighBound->getX() - boxWidth / 2.0f,
                                          highlightRangeHighBound->getY(), 0.0f),
                                    Coord(highlightRangeHighBound->getX() + boxWidth / 2.0f,
@@ -153,8 +154,8 @@ void GlAxisBoxPlot::draw(float lod, Camera *camera) {
     highlightBox.draw(lod, camera);
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
-    highlightRangeLowBound = NULL;
-    highlightRangeHighBound = NULL;
+    highlightRangeLowBound = nullptr;
+    highlightRangeHighBound = nullptr;
   }
 
   if (rotationAngle != 0.0f) {
@@ -216,8 +217,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
       axis->setBoxPlotHighlightBounds(BOTTOM_OUTLIER, FIRST_QUARTILE);
 
     } else {
-      highlightRangeLowBound = NULL;
-      highlightRangeHighBound = NULL;
+      highlightRangeLowBound = nullptr;
+      highlightRangeHighBound = nullptr;
       axis->setBoxPlotHighlightBounds(NO_VALUE, NO_VALUE);
     }
   } else {
@@ -275,8 +276,8 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
       axis->setBoxPlotHighlightBounds(FIRST_QUARTILE, BOTTOM_OUTLIER);
 
     } else {
-      highlightRangeLowBound = NULL;
-      highlightRangeHighBound = NULL;
+      highlightRangeLowBound = nullptr;
+      highlightRangeHighBound = nullptr;
       axis->setBoxPlotHighlightBounds(NO_VALUE, NO_VALUE);
     }
   }
@@ -311,15 +312,15 @@ void GlAxisBoxPlot::drawLabel(const Coord &position, const string &labelName, Ca
 }
 
 ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot()
-    : parallelView(NULL), currentGraph(NULL), selectedAxis(NULL), lastNbAxis(0) {}
+    : parallelView(nullptr), currentGraph(nullptr), selectedAxis(nullptr), lastNbAxis(0) {}
 
 ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() {
   deleteGlAxisPlot();
 }
 
 void ParallelCoordsAxisBoxPlot::viewChanged(View *view) {
-  if (view == NULL) {
-    parallelView = NULL;
+  if (view == nullptr) {
+    parallelView = nullptr;
     return;
   }
 
@@ -346,7 +347,7 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
       (currentGraph != parallelView->getGraphProxy()->getGraph())) {
     deleteGlAxisPlot();
     buildGlAxisPlot(allAxis);
-    selectedAxis = NULL;
+    selectedAxis = nullptr;
     parallelView->refresh();
   }
 
@@ -394,7 +395,7 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
         glWidget->screenToViewport(screenCoords)));
     selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
-    if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
+    if (selectedAxis != nullptr && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
       if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(selectedAxis)) !=
           axisBoxPlotMap.end())
         if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
@@ -414,7 +415,7 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonRelease) {
-    if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
+    if (selectedAxis != nullptr && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
       Observable::holdObservers();
 
       if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(selectedAxis)) !=
@@ -423,7 +424,7 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
             static_cast<QuantitativeParallelAxis *>(selectedAxis));
 
       Observable::unholdObservers();
-      selectedAxis = NULL;
+      selectedAxis = nullptr;
       parallelView->refresh();
       return true;
     }

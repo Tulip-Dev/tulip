@@ -65,7 +65,7 @@ struct Catanzaro : public ImportModule {
     unsigned int m = 5;
     double p = 0.5;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
       dataSet->get("m", m);
       dataSet->get("p", p);

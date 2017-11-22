@@ -48,8 +48,8 @@ class PluginProgress;
  *  But the implementation of the canonical ordering has not been made in O(n).\n
  */
 TLP_SCOPE std::vector<std::vector<node>>
-computeCanonicalOrdering(PlanarConMap *, std::vector<edge> *dummyEdges = NULL,
-                         PluginProgress *pluginProgress = NULL);
+computeCanonicalOrdering(PlanarConMap *, std::vector<edge> *dummyEdges = nullptr,
+                         PluginProgress *pluginProgress = nullptr);
 /**
  * Find all the graph centers, that version does not manage edge weight.
  * complexity O(n * m). Only works on connected graphs.
@@ -60,7 +60,7 @@ TLP_SCOPE std::vector<node> computeGraphCenters(Graph *graph);
  * It is an heuristic, thus it is not absolutely sure that this
  * node is a graph center. Only works on connected graphs.
  */
-TLP_SCOPE node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress = NULL);
+TLP_SCOPE node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress = nullptr);
 /**
  * return a new node connected to all previously
  * existing nodes which had a null indegree
@@ -69,7 +69,7 @@ TLP_SCOPE node makeSimpleSource(Graph *graph);
 
 TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes,
                              TLP_HASH_MAP<edge, edge> &replacedEdges,
-                             IntegerProperty *edgeLength = NULL);
+                             IntegerProperty *edgeLength = nullptr);
 
 /**
    * Select a spanning forest of the graph,
@@ -78,7 +78,7 @@ TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes,
    * for the other elements
    */
 TLP_SCOPE void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
-                                    PluginProgress *pluginProgress = NULL);
+                                    PluginProgress *pluginProgress = nullptr);
 
 /**
  * Select a spanning tree of a graph assuming it is connected;
@@ -87,7 +87,7 @@ TLP_SCOPE void selectSpanningForest(Graph *graph, BooleanProperty *selectionProp
  * for the other elements
  */
 TLP_SCOPE void selectSpanningTree(Graph *graph, BooleanProperty *selection,
-                                  PluginProgress *pluginProgress = NULL);
+                                  PluginProgress *pluginProgress = nullptr);
 
 /**
  * Select the minimum spanning tree (Kruskal algorithm) of a weighted graph,
@@ -96,8 +96,8 @@ TLP_SCOPE void selectSpanningTree(Graph *graph, BooleanProperty *selection,
  * for the other elements
  */
 TLP_SCOPE void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selectionProperty,
-                                         NumericProperty *weight = NULL,
-                                         PluginProgress *pluginProgress = NULL);
+                                         NumericProperty *weight = nullptr,
+                                         PluginProgress *pluginProgress = nullptr);
 
 /**
  * @brief Performs a breadth-first search on a graph.
@@ -173,7 +173,7 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const Numeric
  * @return The number of element added to the selection property.
  */
 TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection,
-                                      bool *test = NULL);
+                                      bool *test = nullptr);
 }
 #endif
 ///@endcond

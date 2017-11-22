@@ -36,7 +36,7 @@ void drawComposite(GlComposite *composite, float lod, Camera *camera) {
     GlSimpleEntity *entity = it2->second;
     GlComposite *compositeEntity = dynamic_cast<GlComposite *>(entity);
 
-    if (compositeEntity != NULL) {
+    if (compositeEntity != nullptr) {
       drawComposite(compositeEntity, lod, camera);
     } else {
       entity->draw(lod, camera);
@@ -99,16 +99,16 @@ void ParallelAxis::draw(float lod, Camera *camera) {
   if (rotationAngle != 0.0f) {
     glPushMatrix();
     glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);
-    GlLabel *captionLabel = NULL;
+    GlLabel *captionLabel = nullptr;
     GlComposite *axisCaptionComposite =
         dynamic_cast<GlComposite *>(glAxis->findGlEntity("caption composite"));
 
-    if (axisCaptionComposite != NULL) {
+    if (axisCaptionComposite != nullptr) {
       string captionLabelId = glAxis->getAxisName() + " axis caption";
       captionLabel = dynamic_cast<GlLabel *>(axisCaptionComposite->findGlEntity(captionLabelId));
     }
 
-    if (captionLabel != NULL) {
+    if (captionLabel != nullptr) {
       if (rotationAngle > -270.0f && rotationAngle < -90.0f) {
         captionLabel->rotate(0.0f, 0.0f, -180.0f);
       } else {

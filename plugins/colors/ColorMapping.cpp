@@ -102,7 +102,7 @@ public:
       "Colorizes the nodes or edges of a graph according to the values of a given property.", "2.2",
       "")
   ColorMapping(const tlp::PluginContext *context)
-      : ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES),
+      : ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES),
         maxInput(std::numeric_limits<double>::quiet_NaN()),
         minInput(std::numeric_limits<double>::quiet_NaN()), overrideMaxInput(false),
         overrideMinInput(false) {
@@ -144,10 +144,10 @@ public:
 
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
-    NumericProperty *metricS = NULL;
-    PropertyInterface *metric = NULL;
+    NumericProperty *metricS = nullptr;
+    PropertyInterface *metric = nullptr;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
@@ -185,7 +185,7 @@ public:
       }
     }
 
-    if (metric == NULL)
+    if (metric == nullptr)
       metricS = graph->getProperty<DoubleProperty>("viewMetric");
     else
       metricS = dynamic_cast<NumericProperty *>(metric);
@@ -297,9 +297,9 @@ public:
   //=========================================================
   bool check(std::string &errorMsg) {
 
-    PropertyInterface *metric = NULL;
+    PropertyInterface *metric = nullptr;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
@@ -315,7 +315,7 @@ public:
       dataSet->get("minimum value", minInput);
     }
 
-    if (metric == NULL)
+    if (metric == nullptr)
       metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {

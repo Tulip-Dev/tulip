@@ -340,7 +340,8 @@ public:
   void setElementOrderingProperty(tlp::NumericProperty *property);
 
   /**
-   * @brief Gets the property used for element ordering. Setting it to NULL will use viewMetric if
+   * @brief Gets the property used for element ordering. Setting it to nullptr will use viewMetric
+   *if
    *the ordering is enabled.
    *
    * @return :NumericProperty* The Property currently used.

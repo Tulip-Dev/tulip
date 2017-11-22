@@ -41,7 +41,7 @@ public:
     ElementIdRole = Qt::UserRole + 6
   };
 
-  explicit TulipModel(QObject *parent = NULL);
+  explicit TulipModel(QObject *parent = nullptr);
   virtual ~TulipModel();
 
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;

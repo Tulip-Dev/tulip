@@ -46,7 +46,7 @@ class GraphPerspectiveLogger : public QDialog {
 public:
   enum LogType { Info, Warning, Error, Python };
 
-  GraphPerspectiveLogger(QWidget *parent = NULL);
+  GraphPerspectiveLogger(QWidget *parent = nullptr);
   ~GraphPerspectiveLogger();
   QPixmap icon(LogType logType) const;
   int count() const;

@@ -120,7 +120,7 @@ public:
   void beforeCall() {
     ogdf::PlanarizationLayout *pl = static_cast<ogdf::PlanarizationLayout *>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       double dval = 0;
       StringCollection sc;
 

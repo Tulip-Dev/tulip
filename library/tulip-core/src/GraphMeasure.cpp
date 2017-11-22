@@ -46,7 +46,7 @@ inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
     return 0;
   }
 
-  return NULL;
+  return nullptr;
 }
 }
 //================================================================

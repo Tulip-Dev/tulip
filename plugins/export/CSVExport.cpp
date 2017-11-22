@@ -130,7 +130,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   decimalMarks.setCurrent(0);
 
   // get choosen values of plugin parameters
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     if (dataSet->get(ELT_TYPE, eltTypes))
       eltType = eltTypes.getCurrent();
 
@@ -219,7 +219,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   // export nodes
   BooleanProperty *prop = graph->getProperty<BooleanProperty>("viewSelection");
 
-  if (exportSelection && dataSet != NULL) {
+  if (exportSelection && dataSet != nullptr) {
     dataSet->get("Export selection property", prop);
   }
 

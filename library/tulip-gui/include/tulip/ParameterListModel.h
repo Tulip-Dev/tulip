@@ -35,8 +35,8 @@ class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   tlp::Graph *_graph;
 
 public:
-  explicit ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph = NULL,
-                              QObject *parent = NULL);
+  explicit ParameterListModel(const tlp::ParameterDescriptionList &params,
+                              tlp::Graph *graph = nullptr, QObject *parent = nullptr);
   tlp::DataSet parametersValues() const;
   void setParametersValues(const tlp::DataSet &data);
 

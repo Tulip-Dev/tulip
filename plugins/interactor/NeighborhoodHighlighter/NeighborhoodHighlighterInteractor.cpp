@@ -128,7 +128,7 @@ PLUGIN(NeighborhoodHighlighterInteractor)
 NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *)
     : GLInteractorComposite(QIcon(":/i_neighborhood_highlighter.png"),
                             "Highlight node neighborhood"),
-      configWidget(NULL) {}
+      configWidget(nullptr) {}
 
 NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
   delete configWidget;
@@ -152,19 +152,21 @@ void NeighborhoodHighlighterInteractor::construct() {
 }
 
 NeighborhoodHighlighter::NeighborhoodHighlighter()
-    : originalGraph(NULL), originalGlGraphComposite(NULL), neighborhoodGraph(NULL),
-      glNeighborhoodGraph(NULL), neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
-      neighborhoodGraphOriginalLayout(NULL), neighborhoodGraphColors(NULL),
-      neighborhoodGraphBackupColors(NULL), centralNodeLocked(false), circleLayoutSet(false),
-      glWidget(NULL), neighborhoodDist(1), configWidget(NULL),
-      circleAlphaValue(maxCircleAlphaValue), startAlpha(0), endAlpha(255), nbAnimSteps(0) {}
+    : originalGraph(nullptr), originalGlGraphComposite(nullptr), neighborhoodGraph(nullptr),
+      glNeighborhoodGraph(nullptr), neighborhoodGraphLayout(nullptr),
+      neighborhoodGraphCircleLayout(nullptr), neighborhoodGraphOriginalLayout(nullptr),
+      neighborhoodGraphColors(nullptr), neighborhoodGraphBackupColors(nullptr),
+      centralNodeLocked(false), circleLayoutSet(false), glWidget(nullptr), neighborhoodDist(1),
+      configWidget(nullptr), circleAlphaValue(maxCircleAlphaValue), startAlpha(0), endAlpha(255),
+      nbAnimSteps(0) {}
 
 NeighborhoodHighlighter::NeighborhoodHighlighter(
     const NeighborhoodHighlighter &neighborhoodHighlighter)
-    : neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), neighborhoodGraphLayout(NULL),
-      neighborhoodGraphCircleLayout(NULL), neighborhoodGraphOriginalLayout(NULL),
-      neighborhoodGraphColors(NULL), neighborhoodGraphBackupColors(NULL), centralNodeLocked(false),
-      circleLayoutSet(false), neighborhoodDist(1), circleAlphaValue(maxCircleAlphaValue) {
+    : neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), neighborhoodGraphLayout(nullptr),
+      neighborhoodGraphCircleLayout(nullptr), neighborhoodGraphOriginalLayout(nullptr),
+      neighborhoodGraphColors(nullptr), neighborhoodGraphBackupColors(nullptr),
+      centralNodeLocked(false), circleLayoutSet(false), neighborhoodDist(1),
+      circleAlphaValue(maxCircleAlphaValue) {
   configWidget = neighborhoodHighlighter.configWidget;
   connect(configWidget, SIGNAL(updateNeighborhoodGraph()), this, SLOT(updateNeighborhoodGraph()));
 }
@@ -174,10 +176,10 @@ NeighborhoodHighlighter::~NeighborhoodHighlighter() {
 }
 
 void NeighborhoodHighlighter::viewChanged(View *view) {
-  originalGraph = NULL;
+  originalGraph = nullptr;
 
-  if (view == NULL) {
-    glWidget = NULL;
+  if (view == nullptr) {
+    glWidget = nullptr;
     return;
   }
 
@@ -189,7 +191,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
 
   checkIfGraphHasChanged();
 
-  if (originalGraph == NULL) {
+  if (originalGraph == nullptr) {
     originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
     originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
 
@@ -368,7 +370,7 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
   glWidget->getScene()->selectEntities(
       static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
       glWidget->screenToViewport(x - 1), glWidget->screenToViewport(y - 1),
-      glWidget->screenToViewport(3), glWidget->screenToViewport(3), NULL, selectedElements);
+      glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
 
   if (!selectedElements.empty()) {
     n = node(selectedElements[0].getComplexEntityId());
@@ -395,7 +397,7 @@ void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB,
   glWidget->installEventFilter(&medf);
   QtGlSceneZoomAndPanAnimator sceneZoomAndPan(glWidget, destBB);
 
-  if (additionalAnimation != NULL) {
+  if (additionalAnimation != nullptr) {
     sceneZoomAndPan.setAdditionalGlSceneAnimation(additionalAnimation);
   }
 
@@ -405,19 +407,19 @@ void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB,
 
 void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   delete glNeighborhoodGraph;
-  glNeighborhoodGraph = NULL;
+  glNeighborhoodGraph = nullptr;
   delete neighborhoodGraph;
-  neighborhoodGraph = NULL;
+  neighborhoodGraph = nullptr;
   delete neighborhoodGraphLayout;
-  neighborhoodGraphLayout = NULL;
+  neighborhoodGraphLayout = nullptr;
   delete neighborhoodGraphCircleLayout;
-  neighborhoodGraphCircleLayout = NULL;
+  neighborhoodGraphCircleLayout = nullptr;
   delete neighborhoodGraphOriginalLayout;
-  neighborhoodGraphOriginalLayout = NULL;
+  neighborhoodGraphOriginalLayout = nullptr;
   delete neighborhoodGraphColors;
-  neighborhoodGraphColors = NULL;
+  neighborhoodGraphColors = nullptr;
   delete neighborhoodGraphBackupColors;
-  neighborhoodGraphBackupColors = NULL;
+  neighborhoodGraphBackupColors = nullptr;
 }
 
 void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
@@ -449,7 +451,7 @@ void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
 }
 
 void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
-  if (originalGlGraphComposite != NULL) {
+  if (originalGlGraphComposite != nullptr) {
     GlGraphInputData *originalInputData = originalGlGraphComposite->getInputData();
     LayoutProperty *origGraphLayout = originalInputData->getElementLayout();
     ColorProperty *origGraphColors = originalInputData->getElementColor();
@@ -660,7 +662,7 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
 
   checkIfGraphHasChanged();
 
-  if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != NULL) {
+  if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != nullptr) {
 
     Camera *camera = &(glMainWidget->getScene()->getLayer("Main")->getCamera());
     camera->initGl();

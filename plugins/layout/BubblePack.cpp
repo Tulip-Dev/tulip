@@ -312,7 +312,7 @@ bool BubblePack::run() {
     return true;
   }
 
-  if (!((dataSet != NULL) && dataSet->get("node size", nodeSize))) {
+  if (!((dataSet != nullptr) && dataSet->get("node size", nodeSize))) {
     if (graph->existProperty("viewSize")) {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");
     } else {

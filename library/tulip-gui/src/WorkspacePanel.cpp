@@ -103,9 +103,9 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
-    : QFrame(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _overlayRect(NULL),
-      _viewConfigurationWidgets(NULL), _viewConfigurationExpanded(false),
-      _currentInteractorConfigurationItem(NULL) {
+    : QFrame(parent), _ui(new Ui::WorkspacePanel), _view(nullptr), _overlayRect(nullptr),
+      _viewConfigurationWidgets(nullptr), _viewConfigurationExpanded(false),
+      _currentInteractorConfigurationItem(nullptr) {
   _ui->setupUi(this);
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
@@ -121,27 +121,27 @@ WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
 WorkspacePanel::~WorkspacePanel() {
   // Ensure the current interactor configuration widget is not deleted by the scrool area.
   // It is up to the interactor developer to delete its configuration widget.
-  if (_currentInteractorConfigurationItem != NULL) {
+  if (_currentInteractorConfigurationItem != nullptr) {
     static_cast<QScrollArea *>(_currentInteractorConfigurationItem->widget())->takeWidget();
   }
 
   delete _ui;
   // because of possible mis-synchronization of Qt events
-  // set it to NULL
+  // set it to nullptr
   // to avoid any invalid read in the eventFilter method
-  _ui = NULL;
+  _ui = nullptr;
 
-  if (_view != NULL) {
+  if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
     delete _view;
     // same as above
-    _view = NULL;
+    _view = nullptr;
   }
 }
 void WorkspacePanel::viewDestroyed() {
-  if (_view != NULL) {
+  if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-    _view = NULL;
+    _view = nullptr;
   }
 
   deleteLater();
@@ -156,10 +156,10 @@ QString WorkspacePanel::viewName() const {
 }
 
 void WorkspacePanel::setView(tlp::View *view) {
-  assert(view != NULL);
+  assert(view != nullptr);
   _ui->currentInteractorButton->setChecked(false);
 
-  if (_view != NULL) {
+  if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
     disconnect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
     disconnect(_view, SIGNAL(drawNeeded()), this, SIGNAL(drawNeeded()));
@@ -175,7 +175,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
 
   foreach (const std::string &name, interactorNames) {
-    compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, NULL);
+    compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, nullptr);
   }
 
   _view->setInteractors(compatibleInteractors);
@@ -285,18 +285,18 @@ void WorkspacePanel::closeEvent(QCloseEvent *event) {
 }
 
 bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
-  if (_view != NULL) {
+  if (_view != nullptr) {
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
       _view->showContextMenu(QCursor::pos(),
                              static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
-    } else if (_viewConfigurationWidgets != NULL &&
+    } else if (_viewConfigurationWidgets != nullptr &&
                _view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
       return true;
 
     else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded &&
-             qobject_cast<QTabBar *>(obj) != NULL) {
+             qobject_cast<QTabBar *>(obj) != nullptr) {
       setConfigurationTabExpanded(true);
-    } else if (ev->type() == QEvent::Wheel && qobject_cast<QTabBar *>(obj) != NULL) {
+    } else if (ev->type() == QEvent::Wheel && qobject_cast<QTabBar *>(obj) != nullptr) {
       return true;
     }
   }
@@ -331,7 +331,7 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
 }
 
 void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
-  if (_currentInteractorConfigurationItem != NULL) {
+  if (_currentInteractorConfigurationItem != nullptr) {
     if (!toggle)
       _currentInteractorConfigurationItem->hide();
     else {
@@ -368,8 +368,8 @@ void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
     return;
   }
 
-  if (!toggle || _view->currentInteractor() == NULL ||
-      _view->currentInteractor()->configurationWidget() == NULL)
+  if (!toggle || _view->currentInteractor() == nullptr ||
+      _view->currentInteractor()->configurationWidget() == nullptr)
     return;
 
   _currentInteractorConfigurationItem = new QGraphicsProxyWidget();
@@ -520,13 +520,13 @@ void WorkspacePanel::graphComboIndexChanged() {
                       .value<tlp::Graph *>();
 #ifndef NDEBUG
 
-  if (g != NULL) {
+  if (g != nullptr) {
     qDebug() << "selecting graph " << tlp::tlpStringToQString(g->getName()) << " in view";
   }
 
 #endif /* NDEBUG */
 
-  if (g != NULL && _view != NULL && g != _view->graph()) {
+  if (g != nullptr && _view != nullptr && g != _view->graph()) {
     _view->setGraph(g);
   }
 }
@@ -543,7 +543,7 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
 
 void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
 
-  if (_view != NULL) {
+  if (_view != nullptr) {
     _viewConfigurationWidgets->setMinimumHeight(_view->graphicsView()->height());
     _viewConfigurationWidgets->setMaximumHeight(_view->graphicsView()->height());
     _viewConfigurationWidgets->setMaximumWidth(_view->graphicsView()->width());
@@ -579,7 +579,7 @@ QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
     return QPointF(width() - _viewConfigurationWidgets->size().width(), 10);
   else {
     QTabWidget *tabWidget = static_cast<QTabWidget *>(_viewConfigurationWidgets->widget());
-    int tabWidth = (tabWidget != NULL)
+    int tabWidth = (tabWidget != nullptr)
                        ? (_viewConfigurationWidgets->size().width() - tabWidget->widget(0)->width())
                        : 0;
     return QPointF(width() - tabWidth, 10);
@@ -587,7 +587,7 @@ QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
 }
 
 void WorkspacePanel::setOverlayMode(bool m) {
-  if (m && _overlayRect == NULL) {
+  if (m && _overlayRect == nullptr) {
     _overlayRect = new QGraphicsRectItem(_view->graphicsView()->sceneRect());
     _overlayRect->setBrush(QColor::fromHsv(0, 0, 0, 50));
     _overlayRect->setPen(QColor(67, 86, 108));
@@ -595,9 +595,9 @@ void WorkspacePanel::setOverlayMode(bool m) {
     _overlayRect->setZValue(30);
   }
 
-  if (!m && _overlayRect != NULL) {
+  if (!m && _overlayRect != nullptr) {
     delete _overlayRect;
-    _overlayRect = NULL;
+    _overlayRect = nullptr;
   }
 }
 
@@ -640,9 +640,9 @@ void WorkspacePanel::dragLeaveEvent(QDragLeaveEvent *) {
 }
 
 bool WorkspacePanel::handleDragEnterEvent(QEvent *e, const QMimeData *mimedata) {
-  if (dynamic_cast<const GraphMimeType *>(mimedata) != NULL ||
-      dynamic_cast<const PanelMimeType *>(mimedata) != NULL ||
-      dynamic_cast<const AlgorithmMimeType *>(mimedata) != NULL) {
+  if (dynamic_cast<const GraphMimeType *>(mimedata) != nullptr ||
+      dynamic_cast<const PanelMimeType *>(mimedata) != nullptr ||
+      dynamic_cast<const AlgorithmMimeType *>(mimedata) != nullptr) {
     setOverlayMode(true);
     e->accept();
     return true;
@@ -656,7 +656,7 @@ bool WorkspacePanel::handleDropEvent(const QMimeData *mimedata) {
   const PanelMimeType *panelMime = dynamic_cast<const PanelMimeType *>(mimedata);
   const AlgorithmMimeType *algorithmMime = dynamic_cast<const AlgorithmMimeType *>(mimedata);
 
-  if (graphMime != NULL && graphMime->graph()) {
+  if (graphMime != nullptr && graphMime->graph()) {
     viewGraphSet(graphMime->graph());
   } else if (panelMime) {
     // Emit swap panels
@@ -668,7 +668,7 @@ bool WorkspacePanel::handleDropEvent(const QMimeData *mimedata) {
   }
 
   setOverlayMode(false);
-  return graphMime != NULL || panelMime != NULL || algorithmMime != NULL;
+  return graphMime != nullptr || panelMime != nullptr || algorithmMime != nullptr;
 }
 
 bool WorkspacePanel::isGraphSynchronized() const {

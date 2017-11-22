@@ -33,7 +33,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlBox *box = NULL;
+static GlBox *box = nullptr;
 static void drawBox(const Color &fillColor, const Color &outlineColor, const float outlineSize,
                     const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
   if (textureName.size() != 0) {
@@ -46,7 +46,7 @@ static void drawBox(const Color &fillColor, const Color &outlineColor, const flo
   box->setOutlineSize(outlineSize);
   box->setOutlineColor(outlineColor);
 
-  box->draw(lod, NULL);
+  box->draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -60,7 +60,7 @@ class Cube : public Glyph {
 public:
   GLYPHINFORMATION("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0",
                    NodeShape::Cube)
-  Cube(const tlp::PluginContext *context = NULL);
+  Cube(const tlp::PluginContext *context = nullptr);
   virtual ~Cube();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;

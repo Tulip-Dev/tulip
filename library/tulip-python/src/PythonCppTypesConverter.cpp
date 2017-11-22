@@ -128,7 +128,7 @@ void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTyp
     if (!transferTo) {
       return sipConvertToType(pyObject, kTypeDef, Py_None, SIP_NOT_NONE, &state, &err);
     } else {
-      void *p = sipConvertToType(pyObject, kTypeDef, NULL, 0, &state, &err);
+      void *p = sipConvertToType(pyObject, kTypeDef, nullptr, 0, &state, &err);
       sipTransferTo(pyObject, pyObject);
       return p;
     }
@@ -141,14 +141,14 @@ void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTyp
       if (!transferTo) {
         return sipConvertToType(pyObject, kTypeDef, Py_None, SIP_NOT_NONE, &state, &err);
       } else {
-        void *p = sipConvertToType(pyObject, kTypeDef, NULL, 0, &state, &err);
+        void *p = sipConvertToType(pyObject, kTypeDef, nullptr, 0, &state, &err);
         sipTransferTo(pyObject, pyObject);
         return p;
       }
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypename, bool fromNew) {
@@ -156,23 +156,23 @@ PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypenam
 
   if (kTypeDef) {
     if (fromNew) {
-      return sipConvertFromNewType(cppObj, kTypeDef, NULL);
+      return sipConvertFromNewType(cppObj, kTypeDef, nullptr);
     } else {
-      return sipConvertFromType(cppObj, kTypeDef, NULL);
+      return sipConvertFromType(cppObj, kTypeDef, nullptr);
     }
   } else if (cppTypenameToSipTypename.find(cppTypename) != cppTypenameToSipTypename.end()) {
     kTypeDef = sipFindType(cppTypenameToSipTypename[cppTypename].c_str());
 
     if (kTypeDef) {
       if (fromNew) {
-        return sipConvertFromNewType(cppObj, kTypeDef, NULL);
+        return sipConvertFromNewType(cppObj, kTypeDef, nullptr);
       } else {
-        return sipConvertFromType(cppObj, kTypeDef, NULL);
+        return sipConvertFromType(cppObj, kTypeDef, nullptr);
       }
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 bool convertPyObjectToBool(PyObject *pyObject, bool &cppObject) {
@@ -257,7 +257,7 @@ PyObject *convertDoubleToPyObject(double cppObject) {
 
 template <typename T>
 PyObject *getPyObjectFromCppObject(const T &cppObject) {
-  PyObject *pyObj = NULL;
+  PyObject *pyObj = nullptr;
   CppObjectToPyObjectConvertor<T> convertor;
   convertor.convert(cppObject, pyObj);
   return pyObj;
@@ -293,7 +293,7 @@ long getCppObjectFromPyObject(PyObject *pyObj) {
 
 template <typename T>
 T *getCppPointerFromPyObject(PyObject *pyObj) {
-  T *v = NULL;
+  T *v = nullptr;
   PyObjectToCppObjectConvertor<T *> convertor;
   convertor.convert(pyObj, v);
   return v;
@@ -314,7 +314,7 @@ T *getCppPointerFromPyObject(PyObject *pyObj) {
   }
 
 PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
-  PyObject *pyObj = NULL;
+  PyObject *pyObj = nullptr;
   CHECK_BASE_CPP_TYPE_CONVERSION(bool)
   CHECK_BASE_CPP_TYPE_CONVERSION(int)
   CHECK_BASE_CPP_TYPE_CONVERSION(long)

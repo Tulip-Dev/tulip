@@ -69,7 +69,7 @@ struct WattsStrotgatzModel : public ImportModule {
     double p = 0.02;
     bool original_model = false;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("k", k);
       dataSet->get("p", p);

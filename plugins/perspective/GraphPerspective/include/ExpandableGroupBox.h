@@ -32,7 +32,7 @@ class ExpandableGroupBox : public QGroupBox {
   QWidget *_widget;
 
 public:
-  explicit ExpandableGroupBox(QWidget *parent = NULL, const QString &title = QString());
+  explicit ExpandableGroupBox(QWidget *parent = nullptr, const QString &title = QString());
   virtual ~ExpandableGroupBox();
   bool expanded() const {
     return _expanded;

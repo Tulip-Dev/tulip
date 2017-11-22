@@ -95,9 +95,9 @@ public:
 
 public slots:
   void importGraph();
-  void exportGraph(tlp::Graph *g = NULL);
-  void saveGraphHierarchyInTlpFile(tlp::Graph *g = NULL);
-  void createPanel(tlp::Graph *g = NULL);
+  void exportGraph(tlp::Graph *g = nullptr);
+  void saveGraphHierarchyInTlpFile(tlp::Graph *g = nullptr);
+  void createPanel(tlp::Graph *g = nullptr);
   bool save();
   bool saveAs(const QString &path = "");
   void open(QString fileName = "");
@@ -114,7 +114,7 @@ public slots:
   void centerPanelsForGraph(tlp::Graph *g) {
     centerPanelsForGraph(g, false, false);
   }
-  void closePanelsForGraph(tlp::Graph *g = NULL);
+  void closePanelsForGraph(tlp::Graph *g = nullptr);
   bool
   setGlMainViewPropertiesForGraph(tlp::Graph *g,
                                   const std::map<std::string, tlp::PropertyInterface *> &propsMap);

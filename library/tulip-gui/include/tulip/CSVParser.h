@@ -52,7 +52,7 @@ public:
     *
     * Notify the progression of the parsing with the progress object.
     **/
-  virtual bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = NULL,
+  virtual bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
                      bool firstLineOnly = false) = 0;
 };
 
@@ -114,7 +114,7 @@ public:
     _fileEncoding = fileEncoding;
   }
 
-  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = NULL,
+  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
              bool firstLineOnly = false);
 
 protected:
@@ -154,7 +154,7 @@ public:
     return parser->decimalMark();
   }
 
-  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = NULL,
+  bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
              bool firstLineOnly = false);
 
   bool begin();

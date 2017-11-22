@@ -23,11 +23,11 @@
 using namespace tlp;
 using namespace std;
 
-PluginLoader *PluginLister::currentLoader = NULL;
-PluginLister *PluginLister::_instance = NULL;
+PluginLoader *PluginLister::currentLoader = nullptr;
+PluginLister *PluginLister::_instance = nullptr;
 
 tlp::PluginLister *PluginLister::instance() {
-  if (_instance == NULL) {
+  if (_instance == nullptr) {
     _instance = new PluginLister();
   }
 
@@ -101,7 +101,7 @@ const tlp::Plugin &tlp::PluginLister::pluginInformation(const std::string &name)
 }
 
 void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
-  tlp::Plugin *information = objectFactory->createPluginObject(NULL);
+  tlp::Plugin *information = objectFactory->createPluginObject(nullptr);
   std::string pluginName = information->name();
 
   if (!pluginExists(pluginName)) {
@@ -110,14 +110,14 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
     description.info = information;
 
-    if (currentLoader != NULL) {
+    if (currentLoader != nullptr) {
       currentLoader->loaded(information, information->dependencies());
     }
 
     instance()->sendPluginAddedEvent(pluginName);
 
   } else {
-    if (currentLoader != NULL) {
+    if (currentLoader != nullptr) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' plugin";
       currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
@@ -147,7 +147,7 @@ tlp::Plugin *tlp::PluginLister::getPluginObject(const std::string &name, PluginC
     return (*it).second.factory->createPluginObject(context);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 const tlp::ParameterDescriptionList &

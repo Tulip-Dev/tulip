@@ -944,7 +944,7 @@ public:
       pluginProgress->showPreview(false);
 
     // the current metric
-    DoubleProperty *metric = NULL;
+    DoubleProperty *metric = nullptr;
 
     // index of row, column and metric when reading data
     unsigned int ic, ir, im;

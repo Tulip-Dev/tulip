@@ -37,7 +37,7 @@ struct yajl_gen_t;
  **/
 class TLP_SCOPE YajlParseFacade {
 public:
-  YajlParseFacade(tlp::PluginProgress *progress = NULL);
+  YajlParseFacade(tlp::PluginProgress *progress = nullptr);
 
   virtual ~YajlParseFacade() {}
   /**

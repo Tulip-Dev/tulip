@@ -27,7 +27,7 @@ namespace tlp {
 
 ParallelCoordinatesViewQuickAccessBar::ParallelCoordinatesViewQuickAccessBar(
     ParallelCoordsDrawConfigWidget *opt, QWidget *parent)
-    : QuickAccessBarImpl(NULL,
+    : QuickAccessBarImpl(nullptr,
                          QuickAccessBarImpl::QuickAccessButtons(
                              QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
                              QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::SHOWNODES |

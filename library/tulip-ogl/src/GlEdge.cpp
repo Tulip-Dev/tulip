@@ -292,7 +292,7 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
       glPopMatrix();
     }
 
-    if (startEdgeGlyph != NULL) {
+    if (startEdgeGlyph != nullptr) {
       displayArrowAndAdjustAnchor(data, e, source, data->getElementSrcAnchorSize()->getEdgeValue(e),
                                   std::min(srcSize[0], srcSize[1]), srcCol, maxSrcSize, selected,
                                   selectionOutlineSize,
@@ -303,7 +303,7 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
       beginLineAnchor = srcAnchor;
     }
 
-    if (endEdgeGlyph != NULL) {
+    if (endEdgeGlyph != nullptr) {
       displayArrowAndAdjustAnchor(data, e, target, data->getElementTgtAnchorSize()->getEdgeValue(e),
                                   std::min(tgtSize[0], tgtSize[1]), tgtCol, maxTgtSize, selected,
                                   selectionOutlineSize,
@@ -398,7 +398,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     static GlBezierCurve bezier;
     static GlCatmullRomCurve catmull;
     static GlOpenUniformCubicBSpline bspline;
-    AbstractGlCurve *curve = NULL;
+    AbstractGlCurve *curve = nullptr;
     unsigned int nbCurvePoints = 200;
 
     if (shape == EdgeShape::BezierCurve || shape == EdgeShape::BezierCurve + L3D_BIT) {
@@ -595,7 +595,7 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
   if (!(data->parameters->getLabelsDensity() == 100)) // labels overlap
     label->setOcclusionTester(test);
   else
-    label->setOcclusionTester(NULL);
+    label->setOcclusionTester(nullptr);
 
   label->setPosition(position);
 
@@ -664,7 +664,7 @@ void GlEdge::getVertices(const GlGraphInputData *data, std::vector<Coord> &lines
 
   Coord beginLineAnchor;
 
-  if (data->parameters->isViewArrow() && startEdgeGlyph != NULL) {
+  if (data->parameters->isViewArrow() && startEdgeGlyph != nullptr) {
     displayArrowAndAdjustAnchor(data, e, source, data->getElementSrcAnchorSize()->getEdgeValue(e),
                                 std::min(srcSize[0], srcSize[1]), Color(), maxSrcSize, selected, 0,
                                 endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX, hasBends,
@@ -676,7 +676,7 @@ void GlEdge::getVertices(const GlGraphInputData *data, std::vector<Coord> &lines
 
   Coord endLineAnchor;
 
-  if (data->parameters->isViewArrow() && endEdgeGlyph != NULL) {
+  if (data->parameters->isViewArrow() && endEdgeGlyph != nullptr) {
     displayArrowAndAdjustAnchor(data, e, target, data->getElementTgtAnchorSize()->getEdgeValue(e),
                                 std::min(tgtSize[0], tgtSize[1]), Color(), maxTgtSize, selected, 0,
                                 startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX, hasBends,

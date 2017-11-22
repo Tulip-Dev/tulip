@@ -222,7 +222,7 @@ std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::op
 
   if (!result->is_open()) {
     delete result;
-    result = NULL;
+    result = nullptr;
   }
 
   return result;

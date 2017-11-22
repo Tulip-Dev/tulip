@@ -94,7 +94,7 @@ public:
 
   void beforeCall() {
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       bool val = false;
 
       if (dataSet->get("Even angles", val))

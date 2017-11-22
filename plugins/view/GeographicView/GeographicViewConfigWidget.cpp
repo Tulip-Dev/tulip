@@ -41,24 +41,24 @@ GeographicViewConfigWidget::~GeographicViewConfigWidget() {
 
 void GeographicViewConfigWidget::openCsvFileBrowser() {
   _ui->csvFile->setText(
-      QFileDialog::getOpenFileName(NULL, tr("Open csv file"), "./", tr("cvs file (*.*)")));
+      QFileDialog::getOpenFileName(nullptr, tr("Open csv file"), "./", tr("cvs file (*.*)")));
 }
 
 void GeographicViewConfigWidget::openPolyFileBrowser() {
   _ui->polyFile->setText(
-      QFileDialog::getOpenFileName(NULL, tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
+      QFileDialog::getOpenFileName(nullptr, tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
 }
 
 void GeographicViewConfigWidget::openCsvHelp() {
-  QMessageBox::about(NULL, "Map csv file format",
+  QMessageBox::about(nullptr, "Map csv file format",
                      "If you want to import a csv file into this view, your file must be in the "
                      "format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox::about(NULL, "Map poly files", ".poly files format are an open street map "
-                                             "format.\nYou can donwload .poly file on "
-                                             ":\nhttp://downloads.cloudmade.com/");
+  QMessageBox::about(nullptr, "Map poly files", ".poly files format are an open street map "
+                                                "format.\nYou can donwload .poly file on "
+                                                ":\nhttp://downloads.cloudmade.com/");
 }
 
 bool GeographicViewConfigWidget::useSharedLayoutProperty() const {

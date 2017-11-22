@@ -77,7 +77,7 @@ typedef std::vector<LayerLODUnit> LayersLODVector;
 class TLP_GL_SCOPE GlLODCalculator {
 
 public:
-  GlLODCalculator() : glScene(NULL), inputData(NULL), attachedLODCalculator(NULL) {}
+  GlLODCalculator() : glScene(nullptr), inputData(nullptr), attachedLODCalculator(nullptr) {}
   virtual ~GlLODCalculator() {}
   virtual GlLODCalculator *clone() = 0;
 

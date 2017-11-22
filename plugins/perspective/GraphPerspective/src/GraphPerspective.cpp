@@ -92,7 +92,7 @@ static bool tulipCanOpenFile(const QString &path) {
   std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
 
   for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
     std::list<std::string> fileExtensions(m->allFileExtensions());
 
     for (std::list<std::string>::const_iterator itExt = fileExtensions.begin();
@@ -110,8 +110,8 @@ static bool tulipCanOpenFile(const QString &path) {
 }
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
-    : Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)),
-      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
+    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)),
+      _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && static_cast<const PerspectiveContext *>(c)->parameters.contains("gui_testing")) {
@@ -123,8 +123,8 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
   }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  _pythonIDE = NULL;
-  _pythonIDEDialog = NULL;
+  _pythonIDE = nullptr;
+  _pythonIDEDialog = nullptr;
 #endif
 }
 
@@ -219,9 +219,9 @@ static void logMsgToStdErr(const QString &msg) {
   a->setStatusTip(a->toolTip())
 void GraphPerspective::updateLogIconsAndCounters() {
   GraphPerspectiveLogger::LogType logType = _logger->getLastLogType();
-  QFrame *logIconCounterFrame = NULL;
-  QLabel *logIconLabel = NULL;
-  QLabel *logCounterLabel = NULL;
+  QFrame *logIconCounterFrame = nullptr;
+  QLabel *logIconLabel = nullptr;
+  QLabel *logCounterLabel = nullptr;
 
   if (logType == GraphPerspectiveLogger::Info) {
     logIconCounterFrame = _ui->loggerFrameInfo;
@@ -290,7 +290,7 @@ GraphPerspective::~GraphPerspective() {
     _ui->workspace->closeAll();
 
   // ensure all loaded graphs are deleted
-  tlp::Graph *graph = NULL;
+  tlp::Graph *graph = nullptr;
 
   foreach (graph, _graphs->graphs()) { delete graph; }
 
@@ -433,7 +433,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   QVBoxLayout *dialogLayout = new QVBoxLayout();
   dialogLayout->addWidget(_pythonIDE);
   dialogLayout->setContentsMargins(0, 0, 0, 0);
-  _pythonIDEDialog = new PythonIDEDialog(NULL, Qt::Window);
+  _pythonIDEDialog = new PythonIDEDialog(nullptr, Qt::Window);
   _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
   _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
   _pythonIDEDialog->setLayout(dialogLayout);
@@ -444,7 +444,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->developButton->setVisible(false);
   _ui->actionPython_IDE->setVisible(false);
 #endif
-  currentGraphChanged(NULL);
+  currentGraphChanged(nullptr);
   // set win/Mac dependent tooltips with ctrl shortcut
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->exposeModeButton, "Toggle the Expose mode", "E");
   SET_TIPS_WITH_CTRL_SHORTCUT(_ui->searchButton, "Show/hide the graph's elements search panel",
@@ -817,10 +817,10 @@ void GraphPerspective::refreshDockExpandControls() {
 }
 
 void GraphPerspective::exportGraph(Graph *g) {
-  if (g == NULL)
+  if (g == nullptr)
     g = _graphs->currentGraph();
 
-  if (g == NULL)
+  if (g == nullptr)
     return;
 
   static QString exportFile;
@@ -865,10 +865,10 @@ void GraphPerspective::exportGraph(Graph *g) {
 }
 
 void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
-  if (g == NULL)
+  if (g == nullptr)
     g = _graphs->currentGraph();
 
-  if (g == NULL)
+  if (g == nullptr)
     return;
 
   static QString savedFile;
@@ -899,7 +899,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     QTime start = QTime::currentTime();
     g = tlp::importGraph(module, data, prg);
 
-    if (g == NULL) {
+    if (g == nullptr) {
       QMessageBox::critical(_mainWindow, trUtf8("Import error"),
                             QString("<i>") + tlp::tlpStringToQString(module) +
                                 trUtf8("</i> failed to import data.<br/><br/><b>") +
@@ -958,14 +958,14 @@ void GraphPerspective::createPanel(tlp::Graph *g) {
 
   PanelSelectionWizard wizard(_graphs, _mainWindow);
 
-  if (g != NULL)
+  if (g != nullptr)
     wizard.setSelectedGraph(g);
   else
     wizard.setSelectedGraph(_graphs->currentGraph());
 
   int result = wizard.exec();
 
-  if (result == QDialog::Accepted && wizard.panel() != NULL) {
+  if (result == QDialog::Accepted && wizard.panel() != nullptr) {
     // expose mode is not safe to add a new panel
     // so hide it if needed
     _ui->workspace->hideExposeMode();
@@ -1044,7 +1044,7 @@ void GraphPerspective::open(QString fileName) {
   std::string filterAny("Any supported format (");
 
   for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
     std::list<std::string> fileExtension(m->allFileExtensions());
 
     std::string currentFilter;
@@ -1230,7 +1230,7 @@ void GraphPerspective::undo() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
 
-  if (graph != NULL)
+  if (graph != nullptr)
     graph->pop();
 
   Observable::unholdObservers();
@@ -1245,7 +1245,7 @@ void GraphPerspective::redo() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
 
-  if (graph != NULL)
+  if (graph != nullptr)
     graph->unpop();
 
   Observable::unholdObservers();
@@ -1261,7 +1261,7 @@ void GraphPerspective::cut() {
 }
 
 void GraphPerspective::paste() {
-  if (_graphs->currentGraph() == NULL)
+  if (_graphs->currentGraph() == nullptr)
     return;
 
   Graph *outGraph = _graphs->currentGraph();
@@ -1285,7 +1285,7 @@ void GraphPerspective::copy() {
 }
 
 void GraphPerspective::copy(Graph *g, bool deleteAfter) {
-  if (g == NULL)
+  if (g == nullptr)
     return;
 
   Observable::holdObservers();
@@ -1367,8 +1367,8 @@ void GraphPerspective::make_graph() {
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
-  if (graph == NULL)
-    return NULL;
+  if (graph == nullptr)
+    return nullptr;
 
   graph->push();
   Observable::holdObservers();
@@ -1384,7 +1384,7 @@ void GraphPerspective::createSubGraph() {
 }
 
 void GraphPerspective::cloneSubGraph() {
-  if (_graphs->currentGraph() == NULL)
+  if (_graphs->currentGraph() == nullptr)
     return;
 
   tlp::BooleanProperty prop(_graphs->currentGraph());
@@ -1395,15 +1395,15 @@ void GraphPerspective::cloneSubGraph() {
 }
 
 void GraphPerspective::addEmptySubGraph() {
-  if (_graphs->currentGraph() == NULL)
+  if (_graphs->currentGraph() == nullptr)
     return;
 
   _graphs->currentGraph()->push();
-  _graphs->currentGraph()->addSubGraph(NULL, "empty sub-graph");
+  _graphs->currentGraph()->addSubGraph(nullptr, "empty sub-graph");
 }
 
 void GraphPerspective::currentGraphChanged(Graph *graph) {
-  bool enabled(graph != NULL);
+  bool enabled(graph != nullptr);
   _ui->actionUndo->setEnabled(enabled);
   _ui->actionRedo->setEnabled(enabled);
   _ui->actionCut->setEnabled(enabled);
@@ -1442,7 +1442,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionSave_Project->setEnabled(enabled);
   _ui->actionSave_Project_as->setEnabled(enabled);
 
-  if (graph == NULL) {
+  if (graph == nullptr) {
     _ui->workspace->switchToStartupMode();
     _ui->exposeModeButton->setChecked(false);
     _ui->searchButton->setChecked(false);
@@ -1479,7 +1479,7 @@ void GraphPerspective::CSVImport() {
 
   Graph *g = _graphs->currentGraph();
 
-  if (g == NULL)
+  if (g == nullptr)
     return;
 
   CSVImportWizard wizard(_mainWindow);
@@ -1549,15 +1549,15 @@ void GraphPerspective::showStartPanels(Graph *g) {
   // expose mode is not safe to add a new panel
   // so hide it if needed
   _ui->workspace->hideExposeMode();
-  View *firstPanel = NULL;
-  View *secondPanel = NULL;
+  View *firstPanel = nullptr;
+  View *secondPanel = nullptr;
 
   foreach (const QString &panelName, QStringList() << "Spreadsheet view"
                                                    << "Node Link Diagram view") {
     View *view =
-        PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
+        PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
 
-    if (firstPanel == NULL)
+    if (firstPanel == nullptr)
       firstPanel = view;
     else
       secondPanel = view;
@@ -1615,7 +1615,7 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
   foreach (View *v, _ui->workspace->panels()) {
     GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
 
-    if (v->graph() == g && glMainView != NULL) {
+    if (v->graph() == g && glMainView != nullptr) {
       if (glMainView->getGlMainWidget()
               ->getScene()
               ->getGlGraphComposite()
@@ -1656,8 +1656,8 @@ void GraphPerspective::openPreferences() {
     foreach (tlp::View *v, _ui->workspace->panels()) {
       GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
 
-      if (glMainView != NULL) {
-        if (glMainView->getGlMainWidget() != NULL) {
+      if (glMainView != nullptr) {
+        if (glMainView->getGlMainWidget() != nullptr) {
           glMainView->getGlMainWidget()
               ->getScene()
               ->getGlGraphComposite()

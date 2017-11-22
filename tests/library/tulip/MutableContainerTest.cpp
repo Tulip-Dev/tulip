@@ -155,7 +155,7 @@ void MutableContainerTest::testFindAll() {
   delete itD;
   delete itS;
 
-  Iterator<unsigned int> *nullIterator = NULL;
+  Iterator<unsigned int> *nullIterator = nullptr;
 
   itB = mutBool->findAll(false);
   CPPUNIT_ASSERT_EQUAL(nullIterator, itB);

@@ -188,7 +188,7 @@ public:
    * @return true if an edge has been bound
    */
   bool getEdges(const node src, const node tgt, bool directed, std::vector<edge> &edges,
-                const Graph *sg = NULL, bool onlyFirst = false) const;
+                const Graph *sg = nullptr, bool onlyFirst = false) const;
 
   //=======================================================
   /**
@@ -367,7 +367,7 @@ public:
    * is cleared before adding nodes
    * @complexity: o(1)
    */
-  void addNodes(unsigned int nb, std::vector<node> *addedNodes = NULL);
+  void addNodes(unsigned int nb, std::vector<node> *addedNodes = nullptr);
   //=======================================================
   /**
    * @brief remove a node from the nodes structure only
@@ -414,7 +414,7 @@ public:
    * these structures will be devalidated.
    */
   void addEdges(const std::vector<std::pair<node, node>> &edges,
-                std::vector<edge> *addedEdges = NULL);
+                std::vector<edge> *addedEdges = nullptr);
   //=======================================================
   /**
    * @brief Delete an edge in the graph

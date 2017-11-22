@@ -54,7 +54,7 @@ NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n,
                                            const std::string &propertyName, int nbNodes)
     : GraphDecorator(graph), centralNode(n), neighborsType(neighborsNodesType),
       currentDist(neighborhoodDist), computeReachableSubGraph(computeReachableSubGraph),
-      nbNodes(nbNodes), property(NULL) {
+      nbNodes(nbNodes), property(nullptr) {
   if (!propertyName.empty()) {
     property = graph->getProperty<DoubleProperty>(propertyName);
   }
@@ -78,7 +78,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
 
     if (nbNodes > 0) {
       // filtering nodes
-      if (property == NULL) {
+      if (property == nullptr) {
         graphViewNodes.erase(graphViewNodes.begin() + nbNodes + 1, graphViewNodes.end());
       } else {
         map<double, vector<node>> nodesTokeep;
@@ -132,7 +132,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
     BooleanProperty result(graph_component);
     string errorMsg;
     graph_component->applyPropertyAlgorithm(tlp::SelectionAlgorithm::ReachableSubGraphSelection,
-                                            &result, errorMsg, NULL, &dataSet);
+                                            &result, errorMsg, nullptr, &dataSet);
 
     graphViewNodes.clear();
     graphViewEdges.clear();

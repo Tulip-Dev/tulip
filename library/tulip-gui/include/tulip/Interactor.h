@@ -223,7 +223,7 @@ public:
     std::string group() const {                                                                    \
       return getComponent()->group();                                                              \
     }                                                                                              \
-    CLASS_NAME(const PluginContext *) : _component(NULL) {}                                        \
+    CLASS_NAME(const PluginContext *) : _component(nullptr) {}                                     \
     bool isCompatible(const std::string &viewName) const {                                         \
       return viewName == VIEW_STRING_NAME;                                                         \
     }                                                                                              \
@@ -260,8 +260,8 @@ public:
     tlp::Interactor *getComponent() const {                                                        \
       if (!_component) {                                                                           \
         _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(                   \
-            BASE_INTERACTOR_STRING_NAME, NULL);                                                    \
-        assert(_component != NULL);                                                                \
+            BASE_INTERACTOR_STRING_NAME, nullptr);                                                 \
+        assert(_component != nullptr);                                                             \
       }                                                                                            \
       return _component;                                                                           \
     }                                                                                              \
@@ -305,7 +305,7 @@ public:
     std::string group() const {                                                                    \
       return getComponent()->group();                                                              \
     }                                                                                              \
-    CLASS_NAME(const PluginContext *) : _component(NULL) {}                                        \
+    CLASS_NAME(const PluginContext *) : _component(nullptr) {}                                     \
     bool isCompatible(const std::string &viewName) const {                                         \
       return viewName == VIEW_STRING_NAME;                                                         \
     }                                                                                              \
@@ -342,8 +342,8 @@ public:
     tlp::Interactor *getComponent() const {                                                        \
       if (!_component) {                                                                           \
         _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(                   \
-            BASE_INTERACTOR_STRING_NAME, NULL);                                                    \
-        assert(_component != NULL);                                                                \
+            BASE_INTERACTOR_STRING_NAME, nullptr);                                                 \
+        assert(_component != nullptr);                                                             \
       }                                                                                            \
       return _component;                                                                           \
     }                                                                                              \

@@ -49,7 +49,7 @@ bool ConnectedComponent::run() {
     result->setEdgeValue(e, result->getNodeValue(graph->source(e)));
   }
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->set<unsigned>("#connected components", components.size());
 
   return true;

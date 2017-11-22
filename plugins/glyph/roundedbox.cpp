@@ -172,7 +172,7 @@ class RoundedBox : public Glyph {
 public:
   GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0",
                    NodeShape::RoundedBox)
-  RoundedBox(const tlp::PluginContext *context = NULL);
+  RoundedBox(const tlp::PluginContext *context = nullptr);
   ~RoundedBox() {}
   void draw(node n, float lod);
   Coord getAnchor(const Coord &vector) const;
@@ -193,7 +193,7 @@ static Coord computeCircleArcMidPoint(const Coord &start, const Coord &end, cons
   return Coord(center.x() + radius * cos(c), center.y() + radius * sin(c));
 }
 
-GlPolygon *RoundedBox::roundedSquare = NULL;
+GlPolygon *RoundedBox::roundedSquare = nullptr;
 Coord RoundedBox::minIncludeBBSquare;
 Coord RoundedBox::maxIncludeBBSquare;
 
@@ -297,8 +297,8 @@ const float outlineVeticesData[8] = {-0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f
 
 void RoundedBox::draw(node n, float lod) {
 
-  static GlShaderProgram *roundedBoxShader = NULL;
-  static GlShaderProgram *roundedBoxOutlineShader = NULL;
+  static GlShaderProgram *roundedBoxShader = nullptr;
+  static GlShaderProgram *roundedBoxOutlineShader = nullptr;
 
 // don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
 #ifndef __APPLE__
@@ -306,7 +306,7 @@ void RoundedBox::draw(node n, float lod) {
   static bool glVendorOk =
       (glVendor.find("NVIDIA") != string::npos) || (glVendor.find("ATI") != string::npos);
 
-  if (roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() &&
+  if (roundedBoxShader == nullptr && glVendorOk && GlShaderProgram::shaderProgramsSupported() &&
       GlShaderProgram::geometryShaderSupported()) {
     roundedBoxShader = new GlShaderProgram();
     roundedBoxShader->addShaderFromSourceCode(Fragment, roundedBoxFragmentShaderSrc);
@@ -329,9 +329,9 @@ void RoundedBox::draw(node n, float lod) {
 
   const string &texture = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() ||
+  if (roundedBoxShader == nullptr || !roundedBoxShader->isLinked() ||
       !roundedBoxOutlineShader->isLinked() || GlShaderProgram::getCurrentActiveShader()) {
-    if (roundedSquare == NULL)
+    if (roundedSquare == nullptr)
       initRoundedSquare();
 
     GlPolygon *polygon = roundedSquare;
@@ -344,7 +344,7 @@ void RoundedBox::draw(node n, float lod) {
     polygon->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     polygon->setOutlineSize(outlineWidth);
     polygon->setTextureName(texture);
-    polygon->draw(lod, NULL);
+    polygon->draw(lod, nullptr);
 
     if (polygon != roundedSquare)
       // because createRoundedRect() creates a new GlPolygon

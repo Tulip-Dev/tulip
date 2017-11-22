@@ -53,11 +53,11 @@ public:
   /**
     * @brief Constructs a property creation dialog with the given parent.
     **/
-  explicit PropertyCreationDialog(QWidget *parent = NULL);
+  explicit PropertyCreationDialog(QWidget *parent = nullptr);
   /**
     * @brief Constructs a property creation dialog with the given parent graph and parent widget.
     **/
-  explicit PropertyCreationDialog(tlp::Graph *graph, QWidget *parent = NULL,
+  explicit PropertyCreationDialog(tlp::Graph *graph, QWidget *parent = nullptr,
                                   const std::string &selectedType = "");
   ~PropertyCreationDialog();
 
@@ -80,7 +80,8 @@ public:
     * @brief Return the property created. You need to call this function after the accept()
     *function.
     *
-    * @return The last created property or NULL if no property there is an error during the property
+    * @return The last created property or nullptr if no property there is an error during the
+    *property
     *creation.
     **/
   tlp::PropertyInterface *createdProperty() const {
@@ -95,7 +96,7 @@ public:
     *
     * @param graph The graph to use as parent for the properties to create.
     **/
-  static PropertyInterface *createNewProperty(tlp::Graph *graph, QWidget *parent = NULL,
+  static PropertyInterface *createNewProperty(tlp::Graph *graph, QWidget *parent = nullptr,
                                               const std::string &selectedType = "");
 private slots:
   void checkValidity();

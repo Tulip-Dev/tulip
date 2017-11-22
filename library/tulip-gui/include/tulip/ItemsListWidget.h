@@ -40,7 +40,7 @@ class TLP_QT_SCOPE ItemsListWidget : public QListWidget {
   Q_OBJECT
 
 public:
-  ItemsListWidget(QWidget *parent = NULL, const unsigned int maxListSize = 0);
+  ItemsListWidget(QWidget *parent = nullptr, const unsigned int maxListSize = 0);
 
   // Method which adds an item in the list
   // return true if the item has been added, false if the maximum size of the list is already

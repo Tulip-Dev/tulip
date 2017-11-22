@@ -27,7 +27,7 @@
 using namespace tlp;
 
 SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(NULL) {
+    : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
   _ui->setupUi(this);
 }
 

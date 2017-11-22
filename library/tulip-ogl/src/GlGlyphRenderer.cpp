@@ -61,8 +61,8 @@ static string glyphShaderSrc =
 
 namespace tlp {
 
-GlShaderProgram *GlGlyphRenderer::_glyphShader(NULL);
-GlBox *GlGlyphRenderer::_selectionBox(NULL);
+GlShaderProgram *GlGlyphRenderer::_glyphShader(nullptr);
+GlBox *GlGlyphRenderer::_selectionBox(nullptr);
 
 void GlGlyphRenderer::startRendering() {
   _nodeGlyphsToRender.clear();
@@ -70,7 +70,7 @@ void GlGlyphRenderer::startRendering() {
   _nodeGlyphsToRender.reserve(_inputData->getGraph()->numberOfNodes());
   _edgeExtremityGlyphsToRender.reserve(_inputData->getGraph()->numberOfEdges());
 
-  if (GlShaderProgram::shaderProgramsSupported() && _glyphShader == NULL) {
+  if (GlShaderProgram::shaderProgramsSupported() && _glyphShader == nullptr) {
     _glyphShader = new GlShaderProgram();
     _glyphShader->addShaderFromSourceCode(Vertex, glyphShaderSrc);
     _glyphShader->link();
@@ -131,7 +131,7 @@ void GlGlyphRenderer::endRendering() {
     if (glyphData.selected) {
       _selectionBox->setStencil(_inputData->parameters->getSelectedNodesStencil() - 1);
       _selectionBox->setOutlineColor(colorSelect);
-      _selectionBox->draw(10, NULL);
+      _selectionBox->draw(10, nullptr);
     }
 
     glyphData.glyph->draw(glyphData.n, glyphData.lod);

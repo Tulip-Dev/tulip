@@ -64,7 +64,7 @@ void VectorEditor::add() {
     // because the height of the line if very small with an empty string
     i->setData(Qt::DisplayRole, QVariant::fromValue(QString("edit this string")));
   } else
-    i->setData(Qt::DisplayRole, QVariant(_userType, static_cast<const void *>(NULL)));
+    i->setData(Qt::DisplayRole, QVariant(_userType, static_cast<const void *>(nullptr)));
 
   // needed for color
   i->setSizeHint(QSize(i->sizeHint().width(), 15));

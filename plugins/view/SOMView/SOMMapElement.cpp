@@ -116,7 +116,7 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize, S
                           0);
 
         assert(topLeft.getX() < bottomRight.getX() && topLeft.getY() > bottomRight.getY());
-        tlp::GlRect *rec = NULL;
+        tlp::GlRect *rec = nullptr;
         n = map->getNodeAt(j, i);
         Color c = Color(255, 255, 255, 0);
         rec = new tlp::GlRect(topLeft, bottomRight, c, c);

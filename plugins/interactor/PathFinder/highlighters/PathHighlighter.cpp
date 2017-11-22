@@ -94,7 +94,7 @@ void PathHighlighter::treatEvent(const Event &ev) {
     if (ev.sender() == backupScene) {
       // reset backupScene to avoid segfault
       // on destructor invocation
-      backupScene = NULL;
+      backupScene = nullptr;
     }
   }
 }

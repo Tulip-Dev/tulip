@@ -73,8 +73,8 @@ public:
    */
   PluginProgress *pluginProgress;
 
-  AlgorithmContext(tlp::Graph *graph = NULL, tlp::DataSet *dataSet = NULL,
-                   tlp::PluginProgress *progress = NULL)
+  AlgorithmContext(tlp::Graph *graph = nullptr, tlp::DataSet *dataSet = nullptr,
+                   tlp::PluginProgress *progress = nullptr)
       : graph(graph), dataSet(dataSet), pluginProgress(progress) {}
   ~AlgorithmContext() {}
 };

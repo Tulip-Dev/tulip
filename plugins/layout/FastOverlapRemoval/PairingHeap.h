@@ -52,7 +52,7 @@ class PairNode {
   PairNode *prev;
 
   PairNode(const T &theElement)
-      : element(theElement), leftChild(NULL), nextSibling(NULL), prev(NULL) {}
+      : element(theElement), leftChild(nullptr), nextSibling(nullptr), prev(nullptr) {}
   friend class PairingHeap<T>;
 };
 
@@ -88,8 +88,8 @@ public:
   void merge(PairingHeap<T> *rhs) {
     PairNode<T> *broot = rhs->getRoot();
 
-    if (root == NULL) {
-      if (broot != NULL) {
+    if (root == nullptr) {
+      if (broot != nullptr) {
         root = broot;
       }
     } else {
@@ -104,7 +104,7 @@ public:
 protected:
   PairNode<T> *getRoot() {
     PairNode<T> *r = root;
-    root = NULL;
+    root = nullptr;
     return r;
   }
 

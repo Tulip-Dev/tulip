@@ -51,8 +51,8 @@ public:
   virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 
   virtual void setEditorData(QWidget *, const QVariant &, bool isMandatory,
-                             tlp::Graph *g = NULL) = 0;
-  virtual QVariant editorData(QWidget *, tlp::Graph *g = NULL) = 0;
+                             tlp::Graph *g = nullptr) = 0;
+  virtual QVariant editorData(QWidget *, tlp::Graph *g = nullptr) = 0;
   virtual void setPropertyToEdit(tlp::PropertyInterface *) {}
 };
 

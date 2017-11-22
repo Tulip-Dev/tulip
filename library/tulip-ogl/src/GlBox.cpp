@@ -151,7 +151,7 @@ GlBox::GlBox(const Coord &position, const Size &size, const Color &fillColor,
              const Color &outlineColor, bool filled, bool outlined, const string &textureName,
              float outlineSize)
     : position(position), size(size), filled(filled), outlined(outlined), textureName(textureName),
-      outlineSize(outlineSize), newCubeCoordArrays(NULL), generated(false) {
+      outlineSize(outlineSize), newCubeCoordArrays(nullptr), generated(false) {
   if (filled)
     fillColors.push_back(fillColor);
 
@@ -385,7 +385,7 @@ void GlBox::setWithXML(const string &inString, unsigned int &currentPosition) {
 //============================================================
 void GlBox::clearGenerated() {
   delete[] newCubeCoordArrays;
-  newCubeCoordArrays = NULL;
+  newCubeCoordArrays = nullptr;
 
   if (OpenGlConfigManager::getInst().hasVertexBufferObject()) {
     if (generated)

@@ -31,9 +31,9 @@ namespace tlp {
 //----------------------------------------------------------------
 GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sgId)
     : GraphAbstract(supergraph, sgId) {
-  _nodeData.setAll(NULL);
+  _nodeData.setAll(nullptr);
 
-  if (filter == NULL)
+  if (filter == nullptr)
     return;
 
   if ((filter->getGraph() == supergraph) && (filter->getNodeDefaultValue() == true) &&
@@ -45,15 +45,15 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
     for (unsigned int i = 0; i < nbNodes; ++i)
       _nodeData.set(_nodes[i], new SGraphNodeData());
   } else {
-    Iterator<unsigned int> *it = NULL;
+    Iterator<unsigned int> *it = nullptr;
     it = filter->nodeProperties.findAll(true);
 
     Iterator<node> *iteN;
 
-    if (it == NULL) {
+    if (it == nullptr) {
       Graph *graphToFilter = filter->getGraph();
 
-      if (graphToFilter == NULL)
+      if (graphToFilter == nullptr)
         graphToFilter = supergraph;
 
       iteN = graphToFilter->getNodes();
@@ -84,15 +84,15 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
       nData->inDegree = supergraph->indeg(n);
     }
   } else {
-    Iterator<unsigned int> *it = NULL;
+    Iterator<unsigned int> *it = nullptr;
     it = filter->edgeProperties.findAll(true);
 
     Iterator<edge> *iteE;
 
-    if (it == NULL) {
+    if (it == nullptr) {
       Graph *graphToFilter = filter->getGraph();
 
-      if (graphToFilter == NULL)
+      if (graphToFilter == nullptr)
         graphToFilter = supergraph;
 
       iteE = graphToFilter->getEdges();
@@ -204,7 +204,7 @@ node GraphView::addNode() {
 //----------------------------------------------------------------
 void GraphView::addNodes(unsigned int nb) {
   getSuperGraph()->addNodes(nb);
-  addNodesInternal(nb, NULL);
+  addNodesInternal(nb, nullptr);
 }
 //----------------------------------------------------------------
 void GraphView::addNodes(unsigned int nb, std::vector<node> &addedNodes) {
@@ -349,7 +349,7 @@ void GraphView::addEdge(const edge e) {
 //----------------------------------------------------------------
 void GraphView::addEdges(const std::vector<std::pair<node, node>> &ends) {
   getSuperGraph()->addEdges(ends);
-  addEdgesInternal(ends.size(), NULL, ends);
+  addEdgesInternal(ends.size(), nullptr, ends);
 }
 //----------------------------------------------------------------
 void GraphView::addEdges(const std::vector<std::pair<node, node>> &ends,
@@ -390,7 +390,7 @@ void GraphView::addEdges(Iterator<edge> *addedEdges) {
 void GraphView::removeNode(const node n) {
   assert(isElement(n));
   notifyDelNode(n);
-  _nodeData.set(n.id, NULL);
+  _nodeData.set(n.id, nullptr);
   _nodes.remove(n);
   propertyContainer->erase(n);
 }

@@ -40,14 +40,14 @@ public:
   static QVariant nodeDefaultValue(tlp::PropertyInterface *);
   static bool setNodeValue(unsigned int, tlp::PropertyInterface *, QVariant);
   static bool setNodeDefaultValue(tlp::PropertyInterface *, QVariant);
-  static bool setAllNodeValue(tlp::PropertyInterface *, QVariant, Graph *graph = NULL);
+  static bool setAllNodeValue(tlp::PropertyInterface *, QVariant, Graph *graph = nullptr);
   static QVariant edgeValue(unsigned int, tlp::PropertyInterface *);
   static QVariant edgeDefaultValue(tlp::PropertyInterface *);
   static bool setEdgeValue(unsigned int, tlp::PropertyInterface *, QVariant);
   static bool setEdgeDefaultValue(tlp::PropertyInterface *, QVariant);
-  static bool setAllEdgeValue(tlp::PropertyInterface *, QVariant, Graph *graph = NULL);
+  static bool setAllEdgeValue(tlp::PropertyInterface *, QVariant, Graph *graph = nullptr);
 
-  explicit GraphModel(QObject *parent = NULL);
+  explicit GraphModel(QObject *parent = nullptr);
 
   virtual void setGraph(tlp::Graph *);
   tlp::Graph *graph() const;
@@ -88,7 +88,7 @@ class TLP_QT_SCOPE GraphSortFilterProxyModel : public QSortFilterProxyModel, pub
   BooleanProperty *_filterProperty;
 
 public:
-  GraphSortFilterProxyModel(QObject *parent = NULL);
+  GraphSortFilterProxyModel(QObject *parent = nullptr);
 
   void setFilterProperty(tlp::BooleanProperty *);
   void setSelectedOnly(bool);
@@ -104,7 +104,7 @@ public:
 
 class TLP_QT_SCOPE NodesGraphModel : public GraphModel {
 public:
-  NodesGraphModel(QObject *parent = NULL);
+  NodesGraphModel(QObject *parent = nullptr);
   void setGraph(Graph *);
 
   void treatEvent(const tlp::Event &);
@@ -130,7 +130,7 @@ private:
 
 class TLP_QT_SCOPE EdgesGraphModel : public GraphModel {
 public:
-  EdgesGraphModel(QObject *parent = NULL);
+  EdgesGraphModel(QObject *parent = nullptr);
   void setGraph(Graph *);
   void treatEvent(const tlp::Event &);
   void treatEvents(const std::vector<tlp::Event> &);

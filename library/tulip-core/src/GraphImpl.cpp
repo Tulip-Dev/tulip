@@ -132,7 +132,7 @@ void GraphImpl::clear() {
 //----------------------------------------------------------------
 edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
-  return storage.getEdges(src, tgt, directed, edges, NULL, true) ? edges[0] : edge();
+  return storage.getEdges(src, tgt, directed, edges, nullptr, true) ? edges[0] : edge();
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::getSubGraphId(unsigned int id) {
@@ -516,7 +516,7 @@ void GraphImpl::push(bool unpopAllowed, std::vector<PropertyInterface *> *propsT
     recorders.front()->stopRecording(this);
 
   const GraphStorageIdsMemento *prevIdsMemento =
-      hasRecorders ? recorders.front()->newIdsState : NULL;
+      hasRecorders ? recorders.front()->newIdsState : nullptr;
 
   GraphUpdatesRecorder *recorder = new GraphUpdatesRecorder(unpopAllowed, prevIdsMemento);
   recorder->startRecording(this);

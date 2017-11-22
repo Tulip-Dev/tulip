@@ -96,7 +96,7 @@ struct TLPGraphBuilder : public TLPTrue {
   double version;
 
   TLPGraphBuilder(Graph *graph, DataSet *dataSet)
-      : _graph(static_cast<GraphImpl *>(graph)), _cluster(NULL), dataSet(dataSet) {
+      : _graph(static_cast<GraphImpl *>(graph)), _cluster(nullptr), dataSet(dataSet) {
     clusterIndex[0] = graph;
     inTLP = false;
     version = 0.0;
@@ -111,7 +111,7 @@ struct TLPGraphBuilder : public TLPTrue {
       return it->second;
     }
 
-    return NULL;
+    return nullptr;
   }
 
   bool addString(const std::string &str) {
@@ -202,8 +202,8 @@ struct TLPGraphBuilder : public TLPTrue {
                                     bool &isPathViewProperty) {
     Graph *g = clusterId ? getSubGraph(clusterId) : _graph;
 
-    if (g == NULL)
-      return NULL;
+    if (g == nullptr)
+      return nullptr;
 
     if (propertyType == GRAPH || propertyType == METAGRAPH) {
       // METAGRAPH was used in Tulip 2
@@ -256,7 +256,7 @@ struct TLPGraphBuilder : public TLPTrue {
     if (propertyType == STRING_VECTOR)
       return g->getLocalProperty<StringVectorProperty>(propertyName);
 
-    return NULL;
+    return nullptr;
   }
   bool setNodeValue(int nodeId, PropertyInterface *prop, std::string &value, bool isGraphProperty,
                     bool isPathViewProperty) {
@@ -276,7 +276,7 @@ struct TLPGraphBuilder : public TLPTrue {
     } else {
       if (isGraphProperty) {
         GraphProperty *gProp = static_cast<GraphProperty *>(prop);
-        char *endPtr = NULL;
+        char *endPtr = nullptr;
         const char *startPtr = value.c_str();
         int result = strtol(startPtr, &endPtr, 10);
 
@@ -374,7 +374,7 @@ struct TLPGraphBuilder : public TLPTrue {
                        bool isPathViewProperty) {
     if (isGraphProperty) {
       GraphProperty *gProp = static_cast<GraphProperty *>(prop);
-      char *endPtr = NULL;
+      char *endPtr = nullptr;
       const char *startPtr = value.c_str();
       int result = strtol(startPtr, &endPtr, 10);
 
@@ -604,7 +604,7 @@ struct TLPAttributesBuilder : public TLPFalse {
 
     Graph *subgraph = id ? graphBuilder->getSubGraph(id) : graphBuilder->_graph;
 
-    if (subgraph == NULL)
+    if (subgraph == nullptr)
       return false;
 
     return DataSet::read(is, const_cast<DataSet &>(subgraph->getAttributes()));
@@ -620,14 +620,14 @@ struct TLPDataSetBuilder : public TLPFalse {
   TLPDataSetBuilder(TLPGraphBuilder *graphBuilder)
       : graphBuilder(graphBuilder),
         currentDataSet(const_cast<DataSet *>(&(graphBuilder->_graph->getAttributes()))),
-        dataSetName(NULL) {}
+        dataSetName(nullptr) {}
   TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char *name)
       : graphBuilder(graphBuilder), currentDataSet(graphBuilder->dataSet), dataSetName(name) {
     graphBuilder->dataSet->get(dataSetName, dataSet);
     currentDataSet = &dataSet;
   }
   TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, DataSet *currentDataSet)
-      : graphBuilder(graphBuilder), currentDataSet(currentDataSet), dataSetName(NULL) {}
+      : graphBuilder(graphBuilder), currentDataSet(currentDataSet), dataSetName(nullptr) {}
   virtual ~TLPDataSetBuilder() {}
   bool close() {
     return true;
@@ -704,13 +704,13 @@ struct TLPPropertyBuilder : public TLPFalse {
   virtual ~TLPPropertyBuilder() {}
   TLPPropertyBuilder(TLPGraphBuilder *graphBuilder)
       : graphBuilder(graphBuilder), clusterId(INT_MAX), propertyType(std::string()),
-        propertyName(std::string()), property(NULL), isGraphProperty(false),
+        propertyName(std::string()), property(nullptr), isGraphProperty(false),
         isPathViewProperty(false) {}
   bool getProperty() {
-    assert(property == NULL);
+    assert(property == nullptr);
     property = graphBuilder->createProperty(clusterId, propertyType, propertyName, isGraphProperty,
                                             isPathViewProperty);
-    return property != NULL;
+    return property != nullptr;
   }
   bool addInt(const int id) {
     assert(id != INT_MAX);
@@ -760,7 +760,7 @@ struct TLPPropertyBuilder : public TLPFalse {
   }
   bool addStruct(const std::string &structName, TLPBuilder *&newBuilder);
   bool close() {
-    return property != NULL;
+    return property != nullptr;
   }
 };
 //=================================================================================
@@ -939,7 +939,7 @@ public:
   bool importGraph() {
     std::string filename;
     std::string data;
-    std::stringstream *tmpss = NULL;
+    std::stringstream *tmpss = nullptr;
     int size;
     std::istream *input;
     bool result;

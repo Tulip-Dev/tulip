@@ -149,8 +149,8 @@ void HistogramInteractorMetricMapping::construct() {
 }
 
 HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *)
-    : HistogramInteractor(":/i_histo_statistics.png", "Statistics"), histoStatsConfigWidget(NULL),
-      histoStatistics(NULL) {
+    : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),
+      histoStatsConfigWidget(nullptr), histoStatistics(nullptr) {
   setPriority(StandardInteractorPriority::ViewInteractor2);
 }
 
@@ -170,7 +170,7 @@ QWidget *HistogramInteractorStatistics::configurationWidget() const {
 }
 
 void HistogramInteractorStatistics::install(QObject *target) {
-  if (target != NULL) {
+  if (target != nullptr) {
     histoStatistics->computeInteractor();
   }
 }
@@ -182,7 +182,7 @@ class HistogramMouseShowElementInfo : public MouseShowElementInfo {
   HistogramView *hView;
 
 public:
-  HistogramMouseShowElementInfo() : MouseShowElementInfo(), hView(NULL) {}
+  HistogramMouseShowElementInfo() : MouseShowElementInfo(), hView(nullptr) {}
   ~HistogramMouseShowElementInfo() {}
 
   void viewChanged(View *v) {

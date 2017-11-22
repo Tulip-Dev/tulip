@@ -353,7 +353,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write nodes values
       {
         // write nb of non default values
-        size = prop->numberOfNonDefaultValuatedNodes(propGraphId ? NULL : graph);
+        size = prop->numberOfNonDefaultValuatedNodes(propGraphId ? nullptr : graph);
         os.write(reinterpret_cast<const char *>(&size), sizeof(size));
         // prepare ouput stream
         stringstream vs;
@@ -370,7 +370,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 #else
         std::ostream &s = vs;
 #endif
-        char *vBuf = NULL;
+        char *vBuf = nullptr;
         unsigned int valueSize = prop->nodeValueSize();
 
         if (valueSize && canUsePubSetBuf) {
@@ -384,7 +384,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // loop on nodes
         node n;
         unsigned int nbValues = 0;
-        forEach(n, prop->getNonDefaultValuatedNodes(propGraphId ? NULL : graph)) {
+        forEach(n, prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
           size = getNode(n).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
@@ -400,7 +400,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (propGraphId && // if it is not the real root graph
                 prop->getTypename() == GraphProperty::propertyTypename) {
               string tmp = prop->getNodeStringValue(n);
-              unsigned int id = strtoul(tmp.c_str(), NULL, 10);
+              unsigned int id = strtoul(tmp.c_str(), nullptr, 10);
 
               // we must check if the pointed subgraph
               // is a descendant of the currently export graph
@@ -450,7 +450,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write edges values
       {
         // write nb of non default values
-        size = prop->numberOfNonDefaultValuatedEdges(propGraphId ? NULL : graph);
+        size = prop->numberOfNonDefaultValuatedEdges(propGraphId ? nullptr : graph);
         os.write(reinterpret_cast<const char *>(&size), sizeof(size));
         // prepare ouput stream
         stringstream vs;
@@ -467,7 +467,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 #else
         ostream &s = vs;
 #endif
-        char *vBuf = NULL;
+        char *vBuf = nullptr;
         unsigned int valueSize = prop->edgeValueSize();
         bool isGraphProperty = false;
 
@@ -485,7 +485,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // loop on edges
         edge e;
         unsigned int nbValues = 0;
-        forEach(e, prop->getNonDefaultValuatedEdges(propGraphId ? NULL : graph)) {
+        forEach(e, prop->getNonDefaultValuatedEdges(propGraphId ? nullptr : graph)) {
           size = getEdge(e).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 

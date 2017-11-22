@@ -51,8 +51,8 @@
 
 using namespace tlp;
 
-static ConsoleOutputHandler *consoleOuputHandler = NULL;
-static ConsoleOutputEmitter *consoleOuputEmitter = NULL;
+static ConsoleOutputHandler *consoleOuputHandler = nullptr;
+static ConsoleOutputEmitter *consoleOuputEmitter = nullptr;
 
 extern QString consoleOuputString;
 extern QString consoleErrorOuputString;
@@ -204,7 +204,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 #endif
 
 PythonInterpreter::PythonInterpreter()
-    : _wasInit(false), _runningScript(false), _defaultConsoleWidget(NULL), _outputEnabled(true),
+    : _wasInit(false), _runningScript(false), _defaultConsoleWidget(nullptr), _outputEnabled(true),
       _errorOutputEnabled(true) {
 
   if (Py_IsInitialized()) {
@@ -256,7 +256,7 @@ PythonInterpreter::PythonInterpreter()
     mainThreadState = PyEval_SaveThread();
 #else
     PyThreadState *tcur = PyThreadState_Get();
-    PyThreadState_Swap(NULL);
+    PyThreadState_Swap(nullptr);
 #if PY_MAJOR_VERSION != 3 && PY_MINOR_VERSION != 3
     PyThreadState_Clear(tcur);
 #endif
@@ -381,7 +381,7 @@ PythonInterpreter::PythonInterpreter()
                 "sys.stdin = consoleutils.ConsoleInput()\n");
     }
 
-    PyEval_SetTrace(tracefunc, NULL);
+    PyEval_SetTrace(tracefunc, nullptr);
 
 // disable exit and quit functions
 #if PY_MAJOR_VERSION >= 3
@@ -415,7 +415,7 @@ PythonInterpreter::~PythonInterpreter() {
       // during the Python session. Seems there is some garbage collection issue
       // on Qt objects wrapped by SIP. After looking at the SIP source code, the
       // segfault is raised when the sipQtSupport->qt_find_sipslot function is called.
-      // So reset the sipQtSupport pointer to NULL, this way the problematic function will no
+      // So reset the sipQtSupport pointer to nullptr, this way the problematic function will no
       // more be called when the Python interpreter is finalized.
       setOutputEnabled(false);
       setErrorOutputEnabled(false);
@@ -429,7 +429,7 @@ PythonInterpreter::~PythonInterpreter() {
           static_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
 
       if (sipQtSupport)
-        *sipQtSupport = NULL;
+        *sipQtSupport = nullptr;
     }
 
 #endif
@@ -446,9 +446,9 @@ PythonInterpreter::~PythonInterpreter() {
   }
 
   delete consoleOuputEmitter;
-  consoleOuputEmitter = NULL;
+  consoleOuputEmitter = nullptr;
   delete consoleOuputHandler;
-  consoleOuputHandler = NULL;
+  consoleOuputHandler = nullptr;
 }
 
 PythonInterpreter *PythonInterpreter::getInstance() {
@@ -482,7 +482,7 @@ bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName,
       Py_CompileString(QStringToTlpString(moduleSrcCode).c_str(),
                        QStringToTlpString(moduleName + ".py").c_str(), Py_file_input);
 
-  if (pycomp == NULL) {
+  if (pycomp == nullptr) {
     PyErr_Print();
     PyErr_Clear();
     ret = false;
@@ -491,7 +491,7 @@ bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName,
     PyObject *pmod =
         PyImport_ExecCodeModule(const_cast<char *>(QStringToTlpString(moduleName).c_str()), pycomp);
 
-    if (pmod == NULL) {
+    if (pmod == nullptr) {
       PyErr_Print();
       PyErr_Clear();
       ret = false;
@@ -513,7 +513,7 @@ bool PythonInterpreter::functionExists(const QString &moduleName, const QString 
   decrefPyObject(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
   PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(functionName).c_str());
-  bool ret = (pFunc != NULL && PyCallable_Check(pFunc));
+  bool ret = (pFunc != nullptr && PyCallable_Check(pFunc));
   releaseGIL();
   return ret;
 }
@@ -567,7 +567,7 @@ PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement,
 PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QString &function,
                                                 const tlp::DataSet &parameters) {
   holdGIL();
-  PyObject *ret = NULL;
+  PyObject *ret = nullptr;
 #if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
 #else
@@ -660,7 +660,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
   // ensure to reset the trace function in order to be able to pause a script (need that call for
   // that feature to work on windows platform)
-  PyEval_SetTrace(tracefunc, NULL);
+  PyEval_SetTrace(tracefunc, nullptr);
 
   bool ret = true;
   scriptPaused = false;
@@ -692,8 +692,8 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
   if (PyCallable_Check(pFunc)) {
 
-    if (sipAPI() == NULL) {
-      QMessageBox::critical(NULL, QObject::trUtf8("failed to initalize Python"),
+    if (sipAPI() == nullptr) {
+      QMessageBox::critical(nullptr, QObject::trUtf8("failed to initalize Python"),
                             QObject::trUtf8("SIP could not be initialized (sipApi is null)"));
       return false;
     }
@@ -706,7 +706,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
     }
 
     // Wrapping up C++ instance
-    PyObject *pArgs = sipConvertFromType(graph, kpTypeDef, NULL);
+    PyObject *pArgs = sipConvertFromType(graph, kpTypeDef, nullptr);
 
     // Finally calling 'process'
     PyObject *argTup = Py_BuildValue("(O)", pArgs);
@@ -756,7 +756,7 @@ int stopScript(void *) {
 void PythonInterpreter::stopCurrentScript() {
   if (_runningScript) {
     holdGIL();
-    Py_AddPendingCall(&stopScript, NULL);
+    Py_AddPendingCall(&stopScript, nullptr);
     releaseGIL();
     scriptPaused = false;
   }
@@ -816,7 +816,7 @@ void PythonInterpreter::resetConsoleWidget() {
   setErrorOutputEnabled(true);
 
   if (consoleOuputEmitter) {
-    consoleOuputEmitter->setConsoleWidget(NULL);
+    consoleOuputEmitter->setConsoleWidget(nullptr);
   }
 }
 

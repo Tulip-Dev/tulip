@@ -130,7 +130,7 @@ struct entityWithDistanceCompare {
   }
 };
 
-const GlGraphInputData *entityWithDistanceCompare::inputData = NULL;
+const GlGraphInputData *entityWithDistanceCompare::inputData = nullptr;
 
 /** \brief Comparator to order entities with metric to display labels with metric ordering
  * Comparator to order entities with metric to display labels with metric ordering
@@ -160,19 +160,20 @@ public:
 //===================================================================
 
 GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData)
-    : GlGraphRenderer(inputData), lodCalculator(NULL), baseScene(NULL), fakeScene(new GlScene) {
+    : GlGraphRenderer(inputData), lodCalculator(nullptr), baseScene(nullptr),
+      fakeScene(new GlScene) {
   fakeScene->createLayer("fakeLayer");
 }
 //===================================================================
 GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,
                                                        GlScene *scene)
-    : GlGraphRenderer(inputData), lodCalculator(NULL), baseScene(scene), fakeScene(new GlScene) {
+    : GlGraphRenderer(inputData), lodCalculator(nullptr), baseScene(scene), fakeScene(new GlScene) {
   fakeScene->createLayer("fakeLayer");
 }
 //===================================================================
 GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
   if (lodCalculator)
-    lodCalculator->setAttachedLODCalculator(NULL);
+    lodCalculator->setAttachedLODCalculator(nullptr);
 
   delete lodCalculator;
 

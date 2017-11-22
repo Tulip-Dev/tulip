@@ -139,9 +139,9 @@ void Window::draw(node n, float lod) {
 
   _center.setFillColor(color->getNodeValue(n));
   _center.setTextureName(textureName);
-  _center.draw(lod, NULL);
-  _titleRec.draw(lod, NULL);
-  _border.draw(lod, NULL);
+  _center.draw(lod, nullptr);
+  _titleRec.draw(lod, nullptr);
+  _border.draw(lod, nullptr);
 }
 //=====================================================
 Coord Window::getAnchor(const Coord &vector) const {

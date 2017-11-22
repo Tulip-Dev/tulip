@@ -370,7 +370,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
   bool edge_labels(false), node_labels(true), metanode_labels(false);
   Color background = Color::White;
 
-  if (ds != NULL) {
+  if (ds != nullptr) {
     ds->get("Edge color interpolation", edge_color_interpolation);
     ds->get("Edge size interpolation", edge_size_interpolation);
     ds->get("Edge extremities", edge_extremities);

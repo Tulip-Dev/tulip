@@ -35,10 +35,10 @@ using namespace std;
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if (qMouseEv != NULL) {
+  if (qMouseEv != nullptr) {
     SelectedEntity selectedEntity;
 
-    if (glMainWidget == NULL)
+    if (glMainWidget == nullptr)
       glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (e->type() == QEvent::MouseMove) {

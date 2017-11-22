@@ -84,7 +84,7 @@ QModelIndex GlSimpleEntityItemModel::index(int row, int column, const QModelInde
   if (!hasIndex(row, column, parent))
     return QModelIndex();
 
-  return QAbstractItemModel::createIndex(row, column, static_cast<void *>(NULL));
+  return QAbstractItemModel::createIndex(row, column, static_cast<void *>(nullptr));
 }
 
 QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const {

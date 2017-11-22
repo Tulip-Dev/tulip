@@ -46,7 +46,7 @@ ParallelCoordinatesGraphProxy::~ParallelCoordinatesGraphProxy() {
   Observable::holdObservers();
   *dataColors = *originalDataColors;
   delete originalDataColors;
-  originalDataColors = NULL;
+  originalDataColors = nullptr;
   Observable::unholdObservers();
 }
 
@@ -242,7 +242,7 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
 
   static bool lastHighlightedElementsSet = false;
 
-  if (originalDataColors == NULL) {
+  if (originalDataColors == nullptr) {
     return;
   }
 

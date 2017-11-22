@@ -100,11 +100,11 @@ KCores::KCores(const PluginContext *context) : DoubleAlgorithm(context) {
 KCores::~KCores() {}
 //========================================================================================
 bool KCores::run() {
-  NumericProperty *metric = NULL;
+  NumericProperty *metric = nullptr;
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", metric);
   }

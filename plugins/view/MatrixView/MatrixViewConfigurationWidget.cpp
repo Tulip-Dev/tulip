@@ -92,7 +92,7 @@ void MatrixViewConfigurationWidget::setOriented(const bool state) {
 }
 
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
-  if (g == NULL)
+  if (g == nullptr)
     return;
 
   QString firstString = _ui->orderingMetricCombo->itemText(0);

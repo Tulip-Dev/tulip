@@ -44,11 +44,12 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   void rebuildCache();
 
 public:
-  explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false, QObject *parent = NULL);
+  explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false,
+                                QObject *parent = nullptr);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph, bool checkable = false,
-                                QObject *parent = NULL);
+                                QObject *parent = nullptr);
   virtual ~GraphPropertiesModel() {
-    if (_graph != NULL)
+    if (_graph != nullptr)
       _graph->removeListener(this);
   }
 
@@ -62,12 +63,12 @@ public:
 
     beginResetModel();
 
-    if (_graph != NULL)
+    if (_graph != nullptr)
       _graph->removeListener(this);
 
     _graph = graph;
 
-    if (_graph != NULL)
+    if (_graph != nullptr)
       _graph->addListener(this);
 
     rebuildCache();
@@ -94,7 +95,7 @@ public:
       // are not needed because they may cause a Free Memory Read.
       // However the current model will be soon deleted
       // beginResetModel();
-      _graph = NULL;
+      _graph = nullptr;
       _properties.clear();
       // endResetModel();
       return;
@@ -102,7 +103,7 @@ public:
 
     const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
-    if (graphEvent == NULL)
+    if (graphEvent == nullptr)
       return;
 
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY ||
@@ -110,7 +111,7 @@ public:
 
       PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
 
-      if (prop != NULL) {
+      if (prop != nullptr) {
         int row = rowOf(prop);
         beginRemoveRows(QModelIndex(), row, row);
         _properties.remove(_properties.indexOf(prop));
@@ -127,7 +128,7 @@ public:
                graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
       PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
 
-      if (prop != NULL) {
+      if (prop != nullptr) {
         rebuildCache();
         int row = rowOf(prop);
 

@@ -61,7 +61,7 @@ PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data,
                                              Coord blCornerPos, const std::string &dimName,
                                              const Color &backgroundColor, const Color &textColor)
     : data(data), pixelOrientedMediator(pixelOrientedMediator), blCornerPos(blCornerPos),
-      dimName(dimName), frame(NULL), frame2(NULL), overviewGen(false),
+      dimName(dimName), frame(nullptr), frame2(nullptr), overviewGen(false),
       backgroundColor(backgroundColor), textColor(textColor) {
 
   if (this->dimName == "") {
@@ -134,24 +134,24 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
 
   reset(false);
 
-  if (clickLabel != NULL) {
+  if (clickLabel != nullptr) {
     delete clickLabel;
-    clickLabel = NULL;
+    clickLabel = nullptr;
   }
 
-  if (backgroundRect != NULL) {
+  if (backgroundRect != nullptr) {
     delete backgroundRect;
-    backgroundRect = NULL;
+    backgroundRect = nullptr;
   }
 
-  if (frame != NULL) {
+  if (frame != nullptr) {
     delete frame;
-    frame = NULL;
+    frame = nullptr;
   }
 
-  if (frame2 != NULL) {
+  if (frame2 != nullptr) {
     delete frame2;
-    frame2 = NULL;
+    frame2 = nullptr;
   }
 
   Graph *graph = data->getTulipGraph();
@@ -159,9 +159,9 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   unsigned int width = pixelOrientedMediator->getImageWidth();
   unsigned int height = pixelOrientedMediator->getImageHeight();
 
-  GlProgressBar *glProgressBar = NULL;
+  GlProgressBar *glProgressBar = nullptr;
 
-  if (glWidget != NULL) {
+  if (glWidget != nullptr) {
     glProgressBar =
         new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2),
                           width, height, Color(0, 0, 255));
@@ -183,7 +183,7 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
     pixelLayout->setNodeValue(n, nodeCoord);
     ++currentStep;
 
-    if (glWidget != NULL && currentStep % drawStep == 0) {
+    if (glWidget != nullptr && currentStep % drawStep == 0) {
       glProgressBar->progress(currentStep, maxStep);
       glWidget->draw();
     }
@@ -209,7 +209,7 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   glOffscreenRenderer->addGraphCompositeToScene(graphComposite);
   glOffscreenRenderer->renderScene(true);
 
-  if (glWidget != NULL) {
+  if (glWidget != nullptr) {
     glProgressBar->progress(maxStep, maxStep);
     glWidget->draw();
 
@@ -221,7 +221,7 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   GlTextureManager::getInst().deleteTexture(textureName);
   GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
 
-  if (findGlEntity(dimName) == NULL) {
+  if (findGlEntity(dimName) == nullptr) {
     addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight(),
                              blCornerPos.getY(), blCornerPos.getX(),
                              blCornerPos.getX() + pixelOrientedMediator->getImageWidth(),

@@ -121,7 +121,7 @@ static const char *paramHelp[] = {
     "This parameter indicates the number of thresholds to be compared."};
 //==============================================================================================================
 LinkCommunities::LinkCommunities(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context), metric(NULL) {
+    : DoubleAlgorithm(context), metric(nullptr) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
   addInParameter<bool>("Group isthmus", paramHelp[1], "true", true);
   addInParameter<unsigned int>("Number of steps", paramHelp[2], "200", true);
@@ -130,7 +130,7 @@ LinkCommunities::LinkCommunities(const tlp::PluginContext *context)
 LinkCommunities::~LinkCommunities() {}
 //==============================================================================================================
 bool LinkCommunities::run() {
-  metric = NULL;
+  metric = nullptr;
   bool group_isthmus = true;
   unsigned int nb_steps = 200;
 
@@ -208,7 +208,7 @@ void LinkCommunities::createDualGraph(const std::vector<edge> &edges) {
 }
 //==============================================================================================================
 void LinkCommunities::computeSimilarities(const std::vector<edge> &edges) {
-  if (metric == NULL) {
+  if (metric == nullptr) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif

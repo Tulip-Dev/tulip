@@ -94,7 +94,7 @@ public:
   Iterator<edge> *getInOutEdges(const node) const;
   std::vector<edge> getEdges(const node source, const node target, bool directed = true) const;
   bool getEdges(const node source, const node target, bool directed, std::vector<edge> &edges,
-                const Graph *sg = NULL, bool onlyFirst = false) const {
+                const Graph *sg = nullptr, bool onlyFirst = false) const {
     return storage.getEdges(source, target, directed, edges, sg, onlyFirst);
   }
   inline const std::vector<edge> &allEdges(const node n) const {
@@ -152,7 +152,7 @@ public:
   //=======================================================================
   // updates management
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = NULL);
+                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr);
   virtual void pop(bool unpopAllowed = true);
   virtual void popIfNoUpdates();
   virtual void unpop();

@@ -45,7 +45,7 @@ const QString DATASET_MIME_TYPE = QString("application/x-tulip-mime;value=\"data
  */
 class TLP_QT_SCOPE GraphMimeType : public QMimeData {
 public:
-  GraphMimeType() : QMimeData(), _graph(NULL) {}
+  GraphMimeType() : QMimeData(), _graph(nullptr) {}
   void setGraph(tlp::Graph *graph) {
     _graph = graph;
   }

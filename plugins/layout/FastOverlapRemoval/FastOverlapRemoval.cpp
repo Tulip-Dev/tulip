@@ -81,14 +81,14 @@ FastOverlapRemoval::FastOverlapRemoval(const tlp::PluginContext *context)
 bool FastOverlapRemoval::run() {
   tlp::StringCollection stringCollection(OVERLAP_TYPE);
   stringCollection.setCurrent(0);
-  LayoutProperty *viewLayout = NULL;
-  SizeProperty *viewSize = NULL;
-  DoubleProperty *viewRot = NULL;
+  LayoutProperty *viewLayout = nullptr;
+  SizeProperty *viewSize = nullptr;
+  DoubleProperty *viewRot = nullptr;
   double xBorder = 0.;
   double yBorder = 0.;
   int nbPasses = 5;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
 
     if (dataSet->exist("overlaps removal type"))
       dataSet->get("overlaps removal type", stringCollection);
@@ -107,13 +107,13 @@ bool FastOverlapRemoval::run() {
     dataSet->get("y border", yBorder);
   }
 
-  if (viewLayout == NULL)
+  if (viewLayout == nullptr)
     viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
 
-  if (viewSize == NULL)
+  if (viewSize == nullptr)
     viewSize = graph->getProperty<SizeProperty>("viewSize");
 
-  if (viewRot == NULL)
+  if (viewRot == nullptr)
     viewRot = graph->getProperty<DoubleProperty>("viewRotation");
 
   // initialize result for edges

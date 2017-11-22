@@ -24,12 +24,12 @@
 using namespace std;
 using namespace tlp;
 
-AcyclicTest *AcyclicTest::instance = NULL;
+AcyclicTest *AcyclicTest::instance = nullptr;
 //**********************************************************************
 AcyclicTest::AcyclicTest() {}
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
-  if (instance == NULL)
+  if (instance == nullptr)
     instance = new AcyclicTest();
 
   if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
@@ -125,7 +125,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
                 // found a cycle
                 result = false;
 
-                if (obstructionEdges != NULL)
+                if (obstructionEdges != nullptr)
                   obstructionEdges->push_back(tmp);
                 else {
                   // it is finished if we don't need
@@ -144,14 +144,14 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
 
           // it may be finished if we don't need
           // to collect obstruction edges
-          if ((!result) && (obstructionEdges == NULL))
+          if ((!result) && (obstructionEdges == nullptr))
             break;
         }
       }
 
       // it may be finished if we don't need
       // to collect obstruction edges
-      if ((!result) && (obstructionEdges == NULL)) {
+      if ((!result) && (obstructionEdges == nullptr)) {
         // don't froget to delete remaining iterators
         while (!neighboursToVisit.empty()) {
           delete neighboursToVisit.top();

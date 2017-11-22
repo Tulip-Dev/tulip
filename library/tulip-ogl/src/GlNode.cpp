@@ -45,8 +45,8 @@
 #include <tulip/TulipViewSettings.h>
 
 //====================================================
-tlp::GlLabel *tlp::GlNode::label = NULL;
-tlp::GlBox *tlp::GlNode::selectionBox = NULL;
+tlp::GlLabel *tlp::GlNode::label = nullptr;
+tlp::GlBox *tlp::GlNode::selectionBox = nullptr;
 
 #define LOD_MIN_TRESHOLD 10.0
 
@@ -224,7 +224,7 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     if (selected) {
       selectionBox->setStencil(data->parameters->getSelectedNodesStencil() - 1);
       selectionBox->setOutlineColor(colorSelect2);
-      selectionBox->draw(10, NULL);
+      selectionBox->draw(10, nullptr);
     }
 
     data->glyphs.get(glyph)->draw(n, lod);

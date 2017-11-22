@@ -84,7 +84,8 @@ public:
   static ConvexHullItem *buildConvexHullsFromHierarchy(Graph *graph, std::vector<Color> fColors,
                                                        std::vector<Color> oColors,
                                                        bool deduceFromChilds = true,
-                                                       Graph *root = NULL, unsigned int depth = 0);
+                                                       Graph *root = nullptr,
+                                                       unsigned int depth = 0);
 
   /**
    * Translate entity

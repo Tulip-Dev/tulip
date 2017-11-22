@@ -72,7 +72,7 @@ CSVParserConfigurationWidget::~CSVParserConfigurationWidget() {
 
 CSVParser *CSVParserConfigurationWidget::buildParser(unsigned int firstLine,
                                                      unsigned int lastLine) const {
-  CSVParser *parser = NULL;
+  CSVParser *parser = nullptr;
 
   if (isValid()) {
     parser = new CSVSimpleParser(getFile(), getSeparator(), getMergeSeparator(), getTextSeparator(),

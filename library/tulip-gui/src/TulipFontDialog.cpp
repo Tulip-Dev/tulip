@@ -58,7 +58,7 @@ TulipFont TulipFontDialog::font() const {
 }
 
 void TulipFontDialog::fontChanged() {
-  if (_ui->nameList->currentItem() == NULL || _ui->styleList->currentItem() == NULL)
+  if (_ui->nameList->currentItem() == nullptr || _ui->styleList->currentItem() == nullptr)
     return;
 
   if (sender() == _ui->sizeList) {

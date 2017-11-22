@@ -4,12 +4,12 @@
 using namespace std;
 using namespace tlp;
 
-ListenerClass * ListenerClass::instance = NULL;
+ListenerClass * ListenerClass::instance = nullptr;
 
 ListenerClass::ListenerClass() {}
 
 void ListenerClass::launchListenerClass(const tlp::Graph* graph) {
-  if (instance == NULL) {
+  if (instance == nullptr) {
     instance = new ListenerClass();
   }
 	graph->addListener(instance);

@@ -73,7 +73,7 @@ public:
   void fetch(const QString &name, QObject *recv, const char *progressSlot) {
     QNetworkAccessManager mgr;
 
-    QNetworkReply *reply = NULL;
+    QNetworkReply *reply = nullptr;
     QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" +
              TULIP_MM_VERSION + "&name=" + name);
 

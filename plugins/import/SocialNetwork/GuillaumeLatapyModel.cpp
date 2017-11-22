@@ -76,7 +76,7 @@ struct GuillaumeLatapyModel : public ImportModule {
 
     unsigned int nbNodes = 200;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
     }
 

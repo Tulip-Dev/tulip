@@ -34,7 +34,7 @@ using namespace tlp;
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button, Qt::KeyboardModifier modifier,
                              SelectionMode mode)
-    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(NULL),
+    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(nullptr),
       _mode(mode) {}
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
@@ -56,7 +56,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         mousePressModifier = qMouseEv->modifiers();
       } else {
         if (g != graph) {
-          graph = NULL;
+          graph = nullptr;
           started = false;
           return false;
         }
@@ -77,7 +77,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
        (kModifier == Qt::NoModifier || qMouseEv->modifiers() & kModifier))) {
 
     if (g != graph) {
-      graph = NULL;
+      graph = nullptr;
       started = false;
     }
 
@@ -109,7 +109,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease) {
 
     if (g != graph) {
-      graph = NULL;
+      graph = nullptr;
       started = false;
       return false;
     }
@@ -270,7 +270,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
     return false;
 
   if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
-    graph = NULL;
+    graph = nullptr;
     started = false;
   }
 

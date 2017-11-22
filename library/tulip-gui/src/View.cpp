@@ -32,7 +32,7 @@
 
 using namespace tlp;
 
-View::View() : _currentInteractor(NULL), _graph(NULL) {}
+View::View() : _currentInteractor(nullptr), _graph(nullptr) {}
 
 View::~View() {
   foreach (Interactor *i, _interactors) { delete i; }
@@ -56,7 +56,7 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor) {
     _currentInteractor->uninstall();
 
-    if (graphicsView() != NULL)
+    if (graphicsView() != nullptr)
       graphicsView()->setCursor(QCursor()); // Force reset cursor when interactor is changed
   }
 
@@ -92,15 +92,15 @@ Graph *View::graph() const {
   return _graph;
 }
 void View::setGraph(tlp::Graph *g) {
-  if (_graph != NULL)
+  if (_graph != nullptr)
     _graph->removeListener(this);
 
   bool center = false;
 
   if (g != _graph) {
-    if (g == NULL)
+    if (g == nullptr)
       center = true;
-    else if (_graph != NULL && g->getRoot() != _graph->getRoot())
+    else if (_graph != nullptr && g->getRoot() != _graph->getRoot())
       center = true;
   }
 
@@ -108,7 +108,7 @@ void View::setGraph(tlp::Graph *g) {
 
   graphChanged(g);
 
-  if (_graph != NULL)
+  if (_graph != nullptr)
     _graph->addListener(this);
 
   emit graphSet(g);
@@ -126,7 +126,7 @@ void View::treatEvent(const Event &ev) {
 #endif // NDEBUG
 
     if (_graph->getRoot() == _graph)
-      graphDeleted(NULL);
+      graphDeleted(nullptr);
     else
       graphDeleted(_graph->getSuperGraph());
 
@@ -183,7 +183,7 @@ void View::emitDrawNeededSignal() {
 }
 
 void View::addRedrawTrigger(tlp::Observable *obs) {
-  if (_triggers.contains(obs) || obs == NULL)
+  if (_triggers.contains(obs) || obs == nullptr)
     return;
 
   _triggers.insert(obs);
@@ -207,7 +207,7 @@ void View::treatEvents(const std::vector<Event> &events) {
 }
 
 QGraphicsItem *View::centralItem() const {
-  return NULL;
+  return nullptr;
 }
 
 void View::clearRedrawTriggers() {

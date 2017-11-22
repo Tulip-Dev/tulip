@@ -310,7 +310,7 @@ class TLP_QT_SCOPE CSVImportColumnToGraphPropertyMappingProxy
 public:
   CSVImportColumnToGraphPropertyMappingProxy(tlp::Graph *graph,
                                              const CSVImportParameters &importParameters,
-                                             QWidget *parent = NULL);
+                                             QWidget *parent = nullptr);
   virtual ~CSVImportColumnToGraphPropertyMappingProxy() {}
   tlp::PropertyInterface *getPropertyInterface(unsigned int column, const std::string &token);
 

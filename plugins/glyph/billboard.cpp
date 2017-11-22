@@ -47,7 +47,7 @@ class Billboard : public Glyph {
 public:
   GLYPHINFORMATION("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0",
                    NodeShape::Billboard)
-  Billboard(const tlp::PluginContext *context = NULL);
+  Billboard(const tlp::PluginContext *context = nullptr);
   virtual ~Billboard();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
@@ -56,7 +56,7 @@ protected:
   static GlRect *rect;
 };
 
-GlRect *Billboard::rect = NULL;
+GlRect *Billboard::rect = nullptr;
 
 PLUGIN(Billboard)
 
@@ -111,7 +111,7 @@ void Billboard::draw(node n, float lod) {
   mdlM[4] = mdlM[6] = 0.0f;
   mdlM[8] = mdlM[9] = 0.0f;
   glLoadMatrixf(mdlM);
-  rect->draw(lod, NULL);
+  rect->draw(lod, nullptr);
   glPopMatrix();
 }
 //========================================================

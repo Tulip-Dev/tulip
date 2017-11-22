@@ -37,7 +37,7 @@ class ConvolutionClusteringSetup : public QDialog {
   Ui::ConvolutionClusteringSetupData *_ui;
 
 public:
-  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin, QWidget *parent = NULL);
+  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin, QWidget *parent = nullptr);
   ~ConvolutionClusteringSetup();
 
   inline ConvolutionClustering *getPlugin() const {

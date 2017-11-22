@@ -31,7 +31,7 @@ static const char *paramHelp[] = {
 namespace tlp {
 
 ConvolutionClustering::ConvolutionClustering(PluginContext *context)
-    : DoubleAlgorithm(context), metric(NULL) {
+    : DoubleAlgorithm(context), metric(nullptr) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric", false);
 }
 
@@ -243,10 +243,10 @@ void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
 bool ConvolutionClustering::run() {
   histosize = 128;
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("metric", metric);
 
-  if (metric == NULL)
+  if (metric == nullptr)
     metric = graph->getProperty<DoubleProperty>("viewMetric");
 
   autoSetParameter();
@@ -276,10 +276,10 @@ bool ConvolutionClustering::run() {
 }
 
 bool ConvolutionClustering::check(std::string &errorMsg) {
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("metric", metric);
 
-  if (metric == NULL)
+  if (metric == nullptr)
     metric = graph->getProperty<DoubleProperty>("viewMetric");
 
   if (metric->getNodeDoubleMax() == metric->getNodeDoubleMin()) {

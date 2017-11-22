@@ -84,7 +84,7 @@ GEMLayout::GEMLayout(const tlp::PluginContext *context)
       i_maxiter(IMAXITERDEF), a_maxiter(AMAXITERDEF), i_gravity(IGRAVITYDEF),
       a_gravity(AGRAVITYDEF), i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF),
       i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF), a_shake(ASHAKEDEF),
-      _dim(2), _nbNodes(0), _useLength(false), metric(NULL), fixedNodes(NULL), max_iter(0) {
+      _dim(2), _nbNodes(0), _useLength(false), metric(nullptr), fixedNodes(nullptr), max_iter(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<NumericProperty *>("edge length", paramHelp[1], "", false);
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
@@ -378,7 +378,7 @@ bool GEMLayout::run() {
   }
 
   /* Handle parameters */
-  metric = NULL;
+  metric = nullptr;
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
 
   bool is3D = false;
@@ -386,9 +386,9 @@ bool GEMLayout::run() {
   _useLength = false;
   max_iter = 0;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("3D layout", is3D);
-    _useLength = dataSet->get("edge length", metric) && metric != NULL;
+    _useLength = dataSet->get("edge length", metric) && metric != nullptr;
     dataSet->get("max iterations", max_iter);
     initLayout = !dataSet->get("initial layout", layout);
 
@@ -421,7 +421,7 @@ bool GEMLayout::run() {
     _particules[i].n = n;
     _particules[i].id = i;
 
-    if (!initLayout && layout != NULL)
+    if (!initLayout && layout != nullptr)
       _particules[i].pos = layout->getNodeValue(n);
     else
       _particules[i].pos.fill(0);
@@ -430,7 +430,7 @@ bool GEMLayout::run() {
     ++i;
   }
 
-  if (initLayout && layout != NULL) {
+  if (initLayout && layout != nullptr) {
     if (i_finaltemp < i_starttemp)
       this->insert();
   }

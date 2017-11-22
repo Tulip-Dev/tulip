@@ -39,7 +39,7 @@ namespace tlp {
 
 template <typename T>
 QWidget *NumberEditorCreator<T>::createWidget(QWidget *parent) const {
-  QDoubleSpinBox *dsb = NULL;
+  QDoubleSpinBox *dsb = nullptr;
 
   // emulate a QSpinBox for integer types
   if (typeid(T).name() == typeid(tlp::IntegerType).name() ||
@@ -195,14 +195,14 @@ QWidget *PropertyEditorCreator<PROPTYPE>::createWidget(QWidget *parent) const {
 template <typename PROPTYPE>
 void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget *w, const QVariant &val,
                                                     bool isMandatory, tlp::Graph *g) {
-  if (g == NULL) {
+  if (g == nullptr) {
     w->setEnabled(false);
     return;
   }
 
   PROPTYPE *prop = val.value<PROPTYPE *>();
   QComboBox *combo = static_cast<QComboBox *>(w);
-  GraphPropertiesModel<PROPTYPE> *model = NULL;
+  GraphPropertiesModel<PROPTYPE> *model = nullptr;
 
   if (isMandatory)
     model = new GraphPropertiesModel<PROPTYPE>(g, false, combo);
@@ -216,7 +216,7 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget *w, const QVariant &
 
 template <typename PROPTYPE>
 QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget *w, tlp::Graph *g) {
-  if (g == NULL)
+  if (g == nullptr)
     return QVariant();
 
   QComboBox *combo = static_cast<QComboBox *>(w);
@@ -232,7 +232,7 @@ template <typename PROPTYPE>
 QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant &v) const {
   PROPTYPE *prop = v.value<PROPTYPE *>();
 
-  if (prop == NULL)
+  if (prop == nullptr)
     return QObject::trUtf8("Select a property");
 
   return tlpStringToQString(prop->getName());
@@ -240,7 +240,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant &v) const {
 
 template <typename ElementType>
 QWidget *VectorEditorCreator<ElementType>::createWidget(QWidget *) const {
-  VectorEditor *w = new VectorEditor(NULL);
+  VectorEditor *w = new VectorEditor(nullptr);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -278,7 +278,7 @@ struct DisplayVectorDataType : public DataType {
   DisplayVectorDataType(void *value) : DataType(value) {}
   ~DisplayVectorDataType() {}
   DataType *clone() const {
-    return NULL;
+    return nullptr;
   }
 
   std::string getTypeName() const {

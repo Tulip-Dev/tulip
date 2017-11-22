@@ -84,7 +84,7 @@ public:
    * Use TextRenderer : renderer to draw the label
    */
   virtual void drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
-                         Camera *camera = NULL);
+                         Camera *camera = nullptr);
 
   unsigned int id;
 

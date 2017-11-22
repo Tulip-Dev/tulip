@@ -28,12 +28,12 @@ namespace tlp {
 ScatterPlotQuickAccessBar::ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt,
                                                      QWidget *parent)
     : QuickAccessBarImpl(
-          NULL, QuickAccessBarImpl::QuickAccessButtons(
-                    QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-                    QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
-                    QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
-                    QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::EDGECOLOR |
-                    QuickAccessBarImpl::NODEBORDERCOLOR | QuickAccessBarImpl::LABELCOLOR),
+          nullptr, QuickAccessBarImpl::QuickAccessButtons(
+                       QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                       QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
+                       QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
+                       QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::EDGECOLOR |
+                       QuickAccessBarImpl::NODEBORDERCOLOR | QuickAccessBarImpl::LABELCOLOR),
           parent),
       _optionsWidget(opt) {}
 

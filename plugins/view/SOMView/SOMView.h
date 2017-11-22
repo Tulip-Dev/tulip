@@ -111,14 +111,14 @@ public:
   }
 
   /**
-   * Get the DoubleProperty pointer on the the current selected property. Return NULL if no
+   * Get the DoubleProperty pointer on the the current selected property. Return nullptr if no
    * properties are selected.
    * @return
    */
   NumericProperty *getSelectedPropertyValues();
 
   /**
-   * Return the ColorProperty pointer for the selected property. Return NULL if no properties are
+   * Return the ColorProperty pointer for the selected property. Return nullptr if no properties are
    * selected.
    * @return
    */
@@ -162,7 +162,7 @@ public:
 
   /**
    * Get the current mask on the data.
-   * @return The pointer on the som mask or NULL if there is no mask.
+   * @return The pointer on the som mask or nullptr if there is no mask.
    */
   BooleanProperty *getMask() {
     return mask;
@@ -403,7 +403,7 @@ private slots:
   /**
    * Set it's SOM bmu node color for each node of the input sample.
    */
-  void updateNodeColorMapping(tlp::ColorProperty *cp = NULL);
+  void updateNodeColorMapping(tlp::ColorProperty *cp = nullptr);
 
   /**
    * Slot called when the grid structure properties are updated.

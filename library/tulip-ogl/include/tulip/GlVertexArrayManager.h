@@ -150,7 +150,7 @@ protected:
   void clearColorData();
   void clearData();
   void initObservers();
-  void clearObservers(PropertyInterface *deletedProperty = NULL);
+  void clearObservers(PropertyInterface *deletedProperty = nullptr);
 
   GlGraphInputData *inputData;
   Graph *graph;

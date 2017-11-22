@@ -82,7 +82,7 @@ public:
     unsigned int maxSize = 1000;
     bool needLayout = false;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       if (dataSet->exist("Minimum size"))
         dataSet->get("Minimum size", minSize);
       else

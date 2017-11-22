@@ -60,7 +60,7 @@ void PythonPanel::graphComboIndexChanged() {
 void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
   const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dragEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     dragEv->accept();
   }
 }
@@ -68,7 +68,7 @@ void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
 void PythonPanel::dropEvent(QDropEvent *dropEv) {
   const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dropEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     tlp::GraphHierarchiesModel *model =
         static_cast<tlp::GraphHierarchiesModel *>(_ui->graphCombo->model());
     QModelIndex graphIndex = model->indexOf(mimeType->graph());

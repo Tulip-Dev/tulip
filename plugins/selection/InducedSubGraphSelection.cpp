@@ -38,15 +38,15 @@ InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *con
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
-  BooleanProperty *entrySelection = NULL;
+  BooleanProperty *entrySelection = nullptr;
   bool useEdges = false;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("Nodes", entrySelection);
     dataSet->get("Use edges", useEdges);
   }
 
-  if (entrySelection == NULL)
+  if (entrySelection == nullptr)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
   // as the input selection property and the result property can be the same one,
@@ -92,7 +92,7 @@ bool InducedSubGraphSelection::run() {
   }
 
   // output some useful information
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->set("#Edges selected", sel);
   }
 

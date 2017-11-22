@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 	tlp::initTulipLib("/home/tulip/Documents/tulip/install-release/");
 
 	// Create the main widget that will display our graph
-	GlMainWidget* mainWidget = new GlMainWidget(NULL);
+	GlMainWidget* mainWidget = new GlMainWidget(nullptr);
 
 	// Add a layer to the scene
 	GlLayer* mainLayer = mainWidget->getScene()->createLayer("Main");

@@ -32,7 +32,7 @@ using namespace std;
 namespace tlp {
 
 PixelOrientedViewNavigator::PixelOrientedViewNavigator()
-    : pixelView(NULL), selectedOverview(NULL) {}
+    : pixelView(nullptr), selectedOverview(nullptr) {}
 
 PixelOrientedViewNavigator::~PixelOrientedViewNavigator() {}
 
@@ -68,20 +68,20 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
         glWidget->screenToViewport(screenCoords));
     PixelOrientedOverview *overviewUnderPointer = getOverviewUnderPointer(sceneCoords);
 
-    if (overviewUnderPointer != NULL && overviewUnderPointer != selectedOverview) {
+    if (overviewUnderPointer != nullptr && overviewUnderPointer != selectedOverview) {
       selectedOverview = overviewUnderPointer;
     }
 
     return true;
   } else if (e->type() == QEvent::MouseButtonDblClick) {
-    if (selectedOverview != NULL && !selectedOverview->overviewGenerated()) {
+    if (selectedOverview != nullptr && !selectedOverview->overviewGenerated()) {
       pixelView->generatePixelOverview(selectedOverview, glWidget);
       glWidget->draw();
-    } else if (selectedOverview != NULL && pixelView->smallMultiplesViewSet()) {
+    } else if (selectedOverview != nullptr && pixelView->smallMultiplesViewSet()) {
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedOverview->getBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
       pixelView->switchFromSmallMultiplesToDetailView(selectedOverview);
-      selectedOverview = NULL;
+      selectedOverview = nullptr;
     } else if (!pixelView->smallMultiplesViewSet() && pixelView->getOverviews().size() > 1) {
       pixelView->switchFromDetailViewToSmallMultiples();
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget,
@@ -97,7 +97,7 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord &sceneCoords) {
-  PixelOrientedOverview *ret = NULL;
+  PixelOrientedOverview *ret = nullptr;
   vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
 
   for (vector<PixelOrientedOverview *>::const_iterator it = overviews.begin();

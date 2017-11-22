@@ -57,13 +57,13 @@ using namespace tlp;
 PLUGIN(SOMView)
 
 SOMView::SOMView(PluginContext *)
-    : graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL),
-      somMask(NULL), mapCompositeElements(NULL), som(NULL), previewWidget(NULL), mapWidget(NULL),
-      isDetailledMode(false), mappingIsVisible(false), hideMappingAction(NULL),
-      showMappingAction(NULL), computeMappingAction(NULL), updateNodesColorAction(NULL),
-      addSelectionToMaskAction(NULL), clearMaskAction(NULL), invertMaskAction(NULL),
-      selectNodesInMaskAction(NULL), properties(NULL), destruct(false), somMapIsBuild(false),
-      isConstruct(false) {
+    : graphComposite(nullptr), graphLayoutProperty(nullptr), graphSizeProperty(nullptr),
+      mask(nullptr), somMask(nullptr), mapCompositeElements(nullptr), som(nullptr),
+      previewWidget(nullptr), mapWidget(nullptr), isDetailledMode(false), mappingIsVisible(false),
+      hideMappingAction(nullptr), showMappingAction(nullptr), computeMappingAction(nullptr),
+      updateNodesColorAction(nullptr), addSelectionToMaskAction(nullptr), clearMaskAction(nullptr),
+      invertMaskAction(nullptr), selectNodesInMaskAction(nullptr), properties(nullptr),
+      destruct(false), somMapIsBuild(false), isConstruct(false) {
   addDependency("Grid", "2.0");
 }
 
@@ -75,7 +75,7 @@ SOMView::~SOMView() {
 
   if (somMapIsBuild) {
     delete mask;
-    mask = NULL;
+    mask = nullptr;
 
     // Clear the color properties
     for (map<string, ColorProperty *>::iterator it = propertyToColorProperty.begin();
@@ -87,7 +87,7 @@ SOMView::~SOMView() {
 
     // Destroy the map
     delete som;
-    som = NULL;
+    som = nullptr;
   }
 
   delete graphLayoutProperty;
@@ -112,12 +112,12 @@ void SOMView::construct(QWidget *) {
   inputSample.addObserver(this);
 
   // Properties initialiaztion
-  properties = new SOMPropertiesWidget(this, NULL);
+  properties = new SOMPropertiesWidget(this, nullptr);
 
-  previewWidget = new GlMainWidget(NULL, NULL);
+  previewWidget = new GlMainWidget(nullptr, nullptr);
   previewWidget->installEventFilter(this);
 
-  mapWidget = new GlMainWidget(NULL, this);
+  mapWidget = new GlMainWidget(nullptr, this);
   mapWidget->installEventFilter(this);
 
   initGlMainViews();
@@ -130,16 +130,16 @@ void SOMView::construct(QWidget *) {
   previewWidget->installEventFilter(this);
 
   // Init var
-  graphLayoutProperty = NULL;
-  graphSizeProperty = NULL;
-  mask = NULL;
+  graphLayoutProperty = nullptr;
+  graphSizeProperty = nullptr;
+  mask = nullptr;
   mappingIsVisible = true;
 
   // menu initialization
   initMenu();
 
-  // Init the map to NULL
-  som = NULL;
+  // Init the map to nullptr
+  som = nullptr;
 }
 
 void SOMView::initGlMainViews() {
@@ -149,7 +149,7 @@ void SOMView::initGlMainViews() {
 
   GlLayer *mainLayer = previewWidget->getScene()->getLayer("Main");
 
-  if (mainLayer == NULL) {
+  if (mainLayer == nullptr) {
     mainLayer = new GlLayer("Main");
     previewWidget->getScene()->addExistingLayer(mainLayer);
   }
@@ -161,7 +161,7 @@ void SOMView::initGlMainViews() {
 
   mainLayer = mapWidget->getScene()->getLayer("Main");
 
-  if (mainLayer == NULL) {
+  if (mainLayer == nullptr) {
     mainLayer = new GlLayer("Main");
     mapWidget->getScene()->addExistingLayer(mainLayer);
   }
@@ -207,7 +207,7 @@ void SOMView::initMenu() {
 void SOMView::setState(const DataSet &dataSet) {
 
   if (!isConstruct)
-    construct(NULL);
+    construct(nullptr);
 
   isDetailledMode = false;
   assignNewGlMainWidget(previewWidget, false);
@@ -217,7 +217,7 @@ void SOMView::setState(const DataSet &dataSet) {
   //  clearObservers();
   cleanSOMMap();
 
-  if (graph() == NULL)
+  if (graph() == nullptr)
     return;
 
   changeMapViewGraph(graph());
@@ -239,7 +239,7 @@ void SOMView::setState(const DataSet &dataSet) {
   properties->graphChanged(graph());
 
   // If there is no currentSOMMap build them
-  if (som == NULL) {
+  if (som == nullptr) {
     buildSOMMap();
   }
 
@@ -399,7 +399,7 @@ void SOMView::clearPreviews() {
   GlLayer *main;
 
   if (destruct)
-    main = NULL;
+    main = nullptr;
   else
     main = previewWidget->getScene()->getLayer("Main");
 
@@ -410,7 +410,7 @@ void SOMView::clearPreviews() {
 
 void SOMView::setColorToMap(tlp::ColorProperty *newColor) {
 
-  ColorProperty *cp = NULL;
+  ColorProperty *cp = nullptr;
   bool deleteAfter;
 
   if (mask) {
@@ -554,7 +554,7 @@ void SOMView::buildSOMMap() {
   mapCompositeElements =
       new SOMMapElement(Coord(0 + ((somMawWidth - somSize.getW()) / 2),
                               (scaleHeight + spacing) + ((somMaxHeight - somSize.getH()) / 2), 0),
-                        somSize, som, NULL);
+                        somSize, som, nullptr);
 
   GlLayer *somLayer = mapWidget->getScene()->getLayer("Main");
 
@@ -575,7 +575,7 @@ void SOMView::cleanSOMMap() {
   GlLayer *somLayer;
 
   if (destruct)
-    somLayer = NULL;
+    somLayer = nullptr;
   else
     somLayer = mapWidget->getScene()->getLayer("Main");
 
@@ -584,12 +584,12 @@ void SOMView::cleanSOMMap() {
 
   if (mapCompositeElements) {
     delete mapCompositeElements;
-    mapCompositeElements = NULL;
+    mapCompositeElements = nullptr;
   }
 
   if (mask) {
     delete mask;
-    mask = NULL;
+    mask = nullptr;
   }
 
   // Clear the color properties
@@ -602,7 +602,7 @@ void SOMView::cleanSOMMap() {
 
   // Destroy the map
   delete som;
-  som = NULL;
+  som = nullptr;
 }
 
 void SOMView::updateInputSample() {
@@ -629,7 +629,7 @@ void SOMView::computeSOMMap() {
     return;
   }
 
-  algorithm.run(som, inputSample, properties->getIterationNumber(), NULL);
+  algorithm.run(som, inputSample, properties->getIterationNumber(), nullptr);
 
   // Update somMap representation
   drawPreviews();
@@ -762,7 +762,7 @@ NumericProperty *SOMView::getSelectedPropertyValues() {
   if (som && !selection.empty() && som->existProperty(selection)) {
     return static_cast<NumericProperty *>(som->getProperty(selection));
   } else
-    return NULL;
+    return nullptr;
 }
 
 ColorProperty *SOMView::getSelectedBaseSOMColors() {
@@ -770,7 +770,7 @@ ColorProperty *SOMView::getSelectedBaseSOMColors() {
       propertyToColorProperty.find(selection) != propertyToColorProperty.end()) {
     return propertyToColorProperty[selection];
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -787,7 +787,7 @@ vector<SOMPreviewComposite *> SOMView::getPreviews() {
 
 void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewComposite *> &result) {
   vector<SelectedEntity> selectedEntities;
-  previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, NULL,
+  previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, nullptr,
                                             selectedEntities);
 
   for (vector<SelectedEntity>::iterator itEntities = selectedEntities.begin();
@@ -886,7 +886,7 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
     ColorProperty *somColorProperty;
     bool deleteAfter;
 
-    if (cp == NULL) {
+    if (cp == nullptr) {
       ColorProperty *origColor = propertyToColorProperty.find(selection)->second;
 
       if (mask) {
@@ -941,7 +941,7 @@ void SOMView::updateDefaultColorProperty() {
 }
 
 void SOMView::refreshPreviews() {
-  ColorProperty *maskedColor = NULL;
+  ColorProperty *maskedColor = nullptr;
 
   if (mask) {
     maskedColor = new ColorProperty(som);
@@ -988,7 +988,7 @@ void SOMView::setMask(const std::set<node> &maskSet) {
 void SOMView::clearMask() {
   if (mask) {
     delete mask;
-    mask = NULL;
+    mask = nullptr;
 
     refreshPreviews();
     refreshSOMMap();
@@ -1059,7 +1059,7 @@ QList<QWidget *> SOMView::configurationWidgets() const {
 void SOMView::gridStructurePropertiesUpdated() {
 
   if (!checkGridValidity()) {
-    QMessageBox::critical(NULL, tr("Bad grid"),
+    QMessageBox::critical(nullptr, tr("Bad grid"),
                           tr("Cannot connect opposite nodes in an hexagonal grid with odd height"));
     return;
   }

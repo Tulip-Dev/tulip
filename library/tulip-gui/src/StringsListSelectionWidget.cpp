@@ -30,7 +30,7 @@ namespace tlp {
 
 StringsListSelectionWidget::StringsListSelectionWidget(
     QWidget *parent, const ListType listType, const unsigned int maxSelectedStringsListSize)
-    : QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
+    : QWidget(parent), listType(listType), stringsListSelectionWidget(nullptr) {
   setListType(listType);
   stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
 }
@@ -38,7 +38,7 @@ StringsListSelectionWidget::StringsListSelectionWidget(
 StringsListSelectionWidget::StringsListSelectionWidget(
     const vector<string> &unselectedStringsList, QWidget *parent, const ListType listType,
     const unsigned int maxSelectedStringsListSize)
-    : QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
+    : QWidget(parent), listType(listType), stringsListSelectionWidget(nullptr) {
   setListType(listType);
   stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
   stringsListSelectionWidget->setUnselectedStringsList(unselectedStringsList);
@@ -48,7 +48,7 @@ void StringsListSelectionWidget::setListType(const ListType listType) {
   QLayout *currentLayout = layout();
   delete currentLayout;
 
-  if (stringsListSelectionWidget != NULL) {
+  if (stringsListSelectionWidget != nullptr) {
     QWidget *widget = dynamic_cast<QWidget *>(stringsListSelectionWidget);
     delete widget;
   }

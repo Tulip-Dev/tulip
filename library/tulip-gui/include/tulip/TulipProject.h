@@ -106,7 +106,7 @@ public:
     @param progress A progress handler.
     @return a pointer to a TulipProject object.
     */
-  static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress = NULL);
+  static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Opens a previously saved tulip project file
@@ -118,7 +118,7 @@ public:
     @param progress A progress handler.
     @return true if the file has been successfully opened
     */
-  bool openProjectFile(const QString &file, tlp::PluginProgress *progress = NULL);
+  bool openProjectFile(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Restores a project which has already been extracted into path
@@ -155,7 +155,7 @@ public:
     @param progress A progress handler
     @return False if method failed
     */
-  bool write(const QString &file, tlp::PluginProgress *progress = NULL);
+  bool write(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Lists entries in a directory

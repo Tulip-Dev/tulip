@@ -101,14 +101,14 @@ void Blocks::mergeLeft(Block *r) {
   r->setUpInConstraints();
   Constraint *c = r->findMinInConstraint();
 
-  while (c != NULL && c->slack() < 0) {
+  while (c != nullptr && c->slack() < 0) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f << "mergeLeft on constraint: " << *c << endl;
 #endif
     r->deleteMinInConstraint();
     Block *l = c->left->block;
 
-    if (l->in == NULL)
+    if (l->in == nullptr)
       l->setUpInConstraints();
 
     double dist = c->right->offset - c->left->offset - c->gap;
@@ -141,7 +141,7 @@ void Blocks::mergeRight(Block *l) {
   l->setUpOutConstraints();
   Constraint *c = l->findMinOutConstraint();
 
-  while (c != NULL && c->slack() < 0) {
+  while (c != nullptr && c->slack() < 0) {
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f << "mergeRight on constraint: " << *c << endl;
 #endif

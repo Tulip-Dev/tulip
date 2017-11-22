@@ -126,7 +126,7 @@ public:
   void beforeCall() {
     ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout *>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       settings.setCurrent(0);
 
       if (dataSet->get(ELT_SETTINGS, settings)) {

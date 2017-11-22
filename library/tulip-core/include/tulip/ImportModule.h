@@ -41,7 +41,7 @@ class DataSet;
 class ImportModule : public tlp::Plugin {
 public:
   ImportModule(const tlp::PluginContext *context) {
-    if (context != NULL) {
+    if (context != nullptr) {
       const tlp::AlgorithmContext *algoritmContext =
           static_cast<const tlp::AlgorithmContext *>(context);
       graph = algoritmContext->graph;

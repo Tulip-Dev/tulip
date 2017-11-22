@@ -59,9 +59,10 @@ class TLP_PYTHON_SCOPE ValueSetter {
 
 public:
   ValueSetter(tlp::DataSet *dataSet, const std::string &key)
-      : dataSet(dataSet), graph(NULL), key(key) {}
+      : dataSet(dataSet), graph(nullptr), key(key) {}
 
-  ValueSetter(tlp::Graph *graph, const std::string &key) : dataSet(NULL), graph(graph), key(key) {}
+  ValueSetter(tlp::Graph *graph, const std::string &key)
+      : dataSet(nullptr), graph(graph), key(key) {}
 
   template <typename T>
   void setValue(const T &value) {
@@ -82,7 +83,7 @@ TLP_PYTHON_SCOPE PyObject *getPyObjectFromDataType(const tlp::DataType *dataType
                                                    bool noCopy = false);
 
 TLP_PYTHON_SCOPE bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter,
-                                              tlp::DataType *dataType = NULL);
+                                              tlp::DataType *dataType = nullptr);
 
 template <typename T>
 class PyObjectToCppObjectConvertor {

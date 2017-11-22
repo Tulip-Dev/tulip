@@ -32,7 +32,7 @@
 using namespace tlp;
 
 DragHandle::DragHandle(QWidget *parent, Qt::WindowFlags f)
-    : QLabel(parent, f), _panel(NULL), _pressed(false) {}
+    : QLabel(parent, f), _panel(nullptr), _pressed(false) {}
 
 void DragHandle::mousePressEvent(QMouseEvent *ev) {
   _pressed = true;
@@ -44,7 +44,7 @@ void DragHandle::mouseReleaseEvent(QMouseEvent *) {
 }
 
 void DragHandle::mouseMoveEvent(QMouseEvent *ev) {
-  assert(_panel != NULL);
+  assert(_panel != nullptr);
 
   if (!_panel || !_pressed ||
       (ev->pos() - _clickPosition).manhattanLength() < QApplication::startDragDistance())

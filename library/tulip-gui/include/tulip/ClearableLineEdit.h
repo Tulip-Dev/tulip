@@ -33,7 +33,7 @@ class TLP_QT_SCOPE ClearableLineEdit : public tlp::TulipLineEdit {
   QRect pixmapRect();
 
 public:
-  explicit ClearableLineEdit(QWidget *parent = NULL);
+  explicit ClearableLineEdit(QWidget *parent = nullptr);
 
 protected:
   void paintEvent(QPaintEvent *);

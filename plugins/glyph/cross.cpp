@@ -36,7 +36,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlComplexPolygon *cross = NULL;
+static GlComplexPolygon *cross = nullptr;
 static void initCross() {
   if (!cross) {
     float bWidth = 0.1f;
@@ -70,7 +70,7 @@ void drawCross(const Color &fillColor, const Color &borderColor, float borderWid
   }
 
   cross->setTextureName(textureName);
-  cross->draw(lod, NULL);
+  cross->draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -85,7 +85,7 @@ class Cross : public Glyph {
 public:
   GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0",
                    NodeShape::Cross)
-  Cross(const tlp::PluginContext *context = NULL);
+  Cross(const tlp::PluginContext *context = nullptr);
   virtual ~Cross();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);

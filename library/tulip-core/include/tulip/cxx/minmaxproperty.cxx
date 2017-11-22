@@ -202,7 +202,7 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::removeListenersAndClearN
     if (itg == minMaxEdge.end()) {
       // no computation in the other map
       // we can stop observing the current graph
-      Graph *g = (propType::graph->getId() == gi) ? (needGraphListener ? NULL : propType::graph)
+      Graph *g = (propType::graph->getId() == gi) ? (needGraphListener ? nullptr : propType::graph)
                                                   : propType::graph->getDescendantGraph(gi);
 
       if (g)
@@ -235,7 +235,7 @@ void tlp::MinMaxProperty<nodeType, edgeType, propType>::removeListenersAndClearE
     if (itg == minMaxNode.end()) {
       // no computation in the other map
       // we can stop observing the current graph
-      Graph *g = (propType::graph->getId() == gi) ? (needGraphListener ? NULL : propType::graph)
+      Graph *g = (propType::graph->getId() == gi) ? (needGraphListener ? nullptr : propType::graph)
                                                   : propType::graph->getDescendantGraph(gi);
 
       if (g)

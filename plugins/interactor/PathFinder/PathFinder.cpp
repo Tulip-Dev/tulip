@@ -47,8 +47,8 @@ PathFinder::PathFinder(const tlp::PluginContext *)
     : GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the path(s) between two nodes"),
       weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
       pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION),
-      tolerance(DEFAULT_TOLERANCE), _configurationWidget(NULL), highlightersListWidget(NULL),
-      configureHighlighterBtn(NULL) {
+      tolerance(DEFAULT_TOLERANCE), _configurationWidget(nullptr), highlightersListWidget(nullptr),
+      configureHighlighterBtn(nullptr) {
 
   edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
   edgeOrientationLabels[PathAlgorithm::NonOriented] = "Consider edges as non-oriented";
@@ -67,7 +67,7 @@ bool PathFinder::isCompatible(const std::string &viewName) const {
 }
 
 void PathFinder::construct() {
-  if (view() == NULL)
+  if (view() == nullptr)
     return;
 
   push_back(new MousePanNZoomNavigator);
@@ -226,7 +226,7 @@ void PathFinder::configureHighlighterButtonPressed() {
     text = QStringToTlpString((*it)->text());
 
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
-  PathHighlighter *hler = NULL;
+  PathHighlighter *hler = nullptr;
 
   foreach (PathHighlighter *h, highlighters) {
     if (h->getName() == text) {
@@ -235,7 +235,7 @@ void PathFinder::configureHighlighterButtonPressed() {
     }
   }
 
-  if (hler == NULL) {
+  if (hler == nullptr) {
     QMessageBox::warning(0, "Nothing selected", "No highlighter selected");
     return;
   }

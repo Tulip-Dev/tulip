@@ -26,10 +26,10 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-PlanarityTest *PlanarityTest::instance = NULL;
+PlanarityTest *PlanarityTest::instance = nullptr;
 //=================================================================
 bool PlanarityTest::isPlanar(Graph *graph) {
-  if (instance == NULL)
+  if (instance == nullptr)
     instance = new PlanarityTest();
 
   Observable::holdObservers();

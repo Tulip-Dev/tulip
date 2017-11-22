@@ -59,7 +59,7 @@ public:
                     "direction of the relationship.",
                     "1.0", "relational")
 
-  NodeLinkDiagramComponent(const tlp::PluginContext *context = NULL);
+  NodeLinkDiagramComponent(const tlp::PluginContext *context = nullptr);
   virtual ~NodeLinkDiagramComponent();
   std::string icon() const {
     return ":/tulip/gui/icons/32/node_link_diagram_view.png";

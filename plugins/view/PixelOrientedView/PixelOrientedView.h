@@ -112,7 +112,8 @@ public:
   void switchFromSmallMultiplesToDetailView(PixelOrientedOverview *scatterPlot);
   void switchFromDetailViewToSmallMultiples();
   BoundingBox getSmallMultiplesViewBoundingBox();
-  void generatePixelOverview(PixelOrientedOverview *pixelOverview, GlMainWidget *glWidget = NULL);
+  void generatePixelOverview(PixelOrientedOverview *pixelOverview,
+                             GlMainWidget *glWidget = nullptr);
 
   void draw();
   void refresh();

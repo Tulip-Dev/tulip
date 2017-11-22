@@ -205,7 +205,7 @@ public:
       result->setEdgeValue(e, compo.get(e.id));
     }
 
-    if (dataSet != NULL)
+    if (dataSet != nullptr)
       dataSet->set("#biconnected components", result->getEdgeDoubleMax() + 1);
 
     return true;

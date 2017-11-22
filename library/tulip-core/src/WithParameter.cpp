@@ -149,7 +149,7 @@ ParameterDescription *ParameterDescriptionList::getParameter(const string &name)
   tlp::warning() << __PRETTY_FUNCTION__ << name << " does not exists";
 #endif
 
-  return NULL;
+  return nullptr;
 }
 
 const string &ParameterDescriptionList::getDefaultValue(const string &name) const {
@@ -171,7 +171,7 @@ bool ParameterDescriptionList::isMandatory(const string &name) const {
 #define CHECK_PROPERTY(T)                                                                          \
   if (type.compare(typeid(T).name()) == 0) {                                                       \
     if (!g || defaultValue.empty() || !g->existProperty(defaultValue))                             \
-      dataSet.set(name, static_cast<T *>(NULL));                                                   \
+      dataSet.set(name, static_cast<T *>(nullptr));                                                \
     else                                                                                           \
       dataSet.set(name, static_cast<T *>(g->getProperty<T>(defaultValue)));                        \
     continue;                                                                                      \
@@ -221,14 +221,14 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
     if (type.compare(typeid(NumericProperty *).name()) == 0) {
       if (!g || defaultValue.empty())
-        dataSet.set(name, static_cast<NumericProperty *>(NULL));
+        dataSet.set(name, static_cast<NumericProperty *>(nullptr));
       else {
         PropertyInterface *prop = g->getProperty(defaultValue);
 
         if (!dynamic_cast<NumericProperty *>(prop)) {
           tlp::error() << "NumericProperty '" << defaultValue.c_str()
                        << "' not found for parameter '" << name.c_str() << endl;
-          prop = NULL;
+          prop = nullptr;
         }
 
         dataSet.set(name, static_cast<NumericProperty *>(prop));
@@ -239,12 +239,12 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
     if (type.compare(typeid(PropertyInterface *).name()) == 0) {
       if (!g || defaultValue.empty())
-        dataSet.set(name, static_cast<PropertyInterface *>(NULL));
+        dataSet.set(name, static_cast<PropertyInterface *>(nullptr));
       else {
         if (!g->existProperty(defaultValue)) {
           tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '"
                        << name.c_str() << endl;
-          dataSet.set(name, static_cast<PropertyInterface *>(NULL));
+          dataSet.set(name, static_cast<PropertyInterface *>(nullptr));
         } else
           dataSet.set(name, g->getProperty(defaultValue));
       }

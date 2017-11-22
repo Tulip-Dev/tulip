@@ -59,7 +59,7 @@ public:
    * @param graph The graph which needs to be observed for modifications
    * @param mainWindow The Qt QMainWindow object behin the perspective
    */
-  GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow = NULL);
+  GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow = nullptr);
 
   /**
     * @brief saved If the graph has been saved, one has to call this method to reset the status of

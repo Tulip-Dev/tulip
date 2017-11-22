@@ -116,7 +116,7 @@ private:
   void computeNeighborhoodGraphBoundingBoxes();
 
   void performZoomAndPan(const BoundingBox &destBB,
-                         AdditionalGlSceneAnimation *additionalAnimation = NULL);
+                         AdditionalGlSceneAnimation *additionalAnimation = nullptr);
 
   void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps = 40);
 

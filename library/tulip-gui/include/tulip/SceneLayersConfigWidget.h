@@ -40,7 +40,7 @@ class TLP_QT_SCOPE SceneLayersConfigWidget : public QWidget {
   tlp::GlMainWidget *_glMainWidget;
 
 public:
-  explicit SceneLayersConfigWidget(QWidget *parent = NULL);
+  explicit SceneLayersConfigWidget(QWidget *parent = nullptr);
   virtual ~SceneLayersConfigWidget();
 
   void setGlMainWidget(tlp::GlMainWidget *glMainWidget);

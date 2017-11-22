@@ -30,7 +30,7 @@ class MatrixViewQuickAccessBar : public tlp::QuickAccessBarImpl {
   MatrixViewConfigurationWidget *_optionsWidget;
 
 public:
-  MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget *parent = NULL);
+  MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt, QWidget *parent = nullptr);
 
 public slots:
   void reset();

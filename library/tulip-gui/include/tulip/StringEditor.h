@@ -36,7 +36,7 @@ class TLP_QT_SCOPE StringEditor : public QDialog {
   QTextEdit *edit;
 
 public:
-  explicit StringEditor(QWidget *parent = NULL);
+  explicit StringEditor(QWidget *parent = nullptr);
 
   QString getString() const;
   void setString(const QString &qstr);

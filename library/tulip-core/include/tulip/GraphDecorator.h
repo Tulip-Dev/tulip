@@ -146,7 +146,7 @@ public:
   virtual Iterator<PropertyInterface *> *getObjectProperties() const;
   // updates management
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = NULL);
+                    std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr);
   virtual void pop(bool unpopAllowed = true);
   virtual void popIfNoUpdates();
   virtual void unpop();
@@ -183,7 +183,7 @@ template <typename PropertyType>
 PropertyType *GraphDecorator::getProperty(const std::string &name) {
   if (graph_component->existProperty(name)) {
     tlp::PropertyInterface *prop = graph_component->getProperty(name);
-    assert(dynamic_cast<PropertyType *>(prop) != NULL);
+    assert(dynamic_cast<PropertyType *>(prop) != nullptr);
     return dynamic_cast<PropertyType *>(prop);
   } else {
     return graph_component->getLocalProperty<PropertyType>(name);

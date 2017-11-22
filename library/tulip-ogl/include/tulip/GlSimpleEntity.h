@@ -159,7 +159,7 @@ public:
 
   GlComposite *getParent() const {
     if (parents.empty())
-      return NULL;
+      return nullptr;
 
     return parents[0];
   }

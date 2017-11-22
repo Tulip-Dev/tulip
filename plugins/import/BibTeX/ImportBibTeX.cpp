@@ -52,14 +52,14 @@
 static char *strtok_r(char *str, const char *delim, char **nextp) {
   char *ret;
 
-  if (str == NULL) {
+  if (str == nullptr) {
     str = *nextp;
   }
 
   str += strspn(str, delim);
 
   if (*str == '\0') {
-    return NULL;
+    return nullptr;
   }
 
   ret = str;
@@ -1443,19 +1443,19 @@ public:
     StringProperty *typeProp = graph->getProperty<StringProperty>("type");
     IntegerProperty *yearProp = graph->getProperty<IntegerProperty>("year");
     BooleanProperty *fromLabriProp =
-        createAuthNodes ? graph->getProperty<BooleanProperty>("from LaBRI") : NULL;
+        createAuthNodes ? graph->getProperty<BooleanProperty>("from LaBRI") : nullptr;
     IntegerVectorProperty *labriAuthorsProp =
-        createPubliNodes ? graph->getProperty<IntegerVectorProperty>("LaBRI authors") : NULL;
+        createPubliNodes ? graph->getProperty<IntegerVectorProperty>("LaBRI authors") : nullptr;
     StringVectorProperty *labriTeamsProp =
-        createPubliNodes ? graph->getProperty<StringVectorProperty>("LaBRI teams") : NULL;
+        createPubliNodes ? graph->getProperty<StringVectorProperty>("LaBRI teams") : nullptr;
     StringVectorProperty *authProp =
-        createPubliNodes ? graph->getProperty<StringVectorProperty>("authors") : NULL;
+        createPubliNodes ? graph->getProperty<StringVectorProperty>("authors") : nullptr;
     StringProperty *authNameProp =
-        createAuthNodes ? graph->getProperty<StringProperty>("name") : NULL;
+        createAuthNodes ? graph->getProperty<StringProperty>("name") : nullptr;
     StringProperty *labriTeamProp =
-        createAuthNodes ? graph->getProperty<StringProperty>("LaBRI team") : NULL;
+        createAuthNodes ? graph->getProperty<StringProperty>("LaBRI team") : nullptr;
     IntegerProperty *countProp =
-        createAuthNodes ? graph->getProperty<IntegerProperty>("nbPublications") : NULL;
+        createAuthNodes ? graph->getProperty<IntegerProperty>("nbPublications") : nullptr;
 
     // rendering properties
     ColorProperty *color = graph->getProperty<ColorProperty>("viewColor");
@@ -1535,7 +1535,7 @@ public:
           bool isNumber =
               !field.valueParts().empty() && (field.valueParts()[0].type() == xdkbib::Number);
           bool isAuthor = (pName == "author");
-          PropertyInterface *prop = NULL;
+          PropertyInterface *prop = nullptr;
 
           if (createPubliNodes) {
             if (isNumber && (pName != "volume") && (pName != "number"))
@@ -1563,8 +1563,8 @@ public:
 
           if (isAuthor) {
             // author
-            char *labriAuthors = NULL;
-            char *labriTeams = NULL;
+            char *labriAuthors = nullptr;
+            char *labriTeams = nullptr;
             std::string authorsComments;
             std::string teamsComments;
             vector<int> indices;
@@ -1591,7 +1591,7 @@ public:
 
               while (token) {
                 teams.push_back(string(token));
-                token = strtok_r(NULL, " \n", &teamsPtr);
+                token = strtok_r(nullptr, " \n", &teamsPtr);
               }
 
               if (createPubliNodes)
@@ -1613,7 +1613,7 @@ public:
 
               if (labriAuthor) {
                 indices.push_back(int(labriIndex));
-                char *token = strtok_r(NULL, " \n", &authorsPtr);
+                char *token = strtok_r(nullptr, " \n", &authorsPtr);
                 labriIndex = token ? (atoi(token) - 1) : 0;
               }
 

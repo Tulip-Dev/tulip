@@ -97,20 +97,20 @@ public:
   /**
    * Returns an iterator through all nodes belonging to g
    * whose associated value is equal to val.
-   * If g is NULL, the graph given when creating the property is considered.
+   * If g is nullptr, the graph given when creating the property is considered.
    */
   virtual tlp::Iterator<node> *
   getNodesEqualTo(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v,
-                  const Graph *g = NULL) const;
+                  const Graph *g = nullptr) const;
 
   /**
    * Returns an iterator through all edges belonging to g
    * whose associated value is equal to val.
-   * If g is NULL, the graph given when creating the property is considered.
+   * If g is nullptr, the graph given when creating the property is considered.
    */
   virtual tlp::Iterator<edge> *
   getEdgesEqualTo(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v,
-                  const Graph *g = NULL) const;
+                  const Graph *g = nullptr) const;
 
   /**
    * @brief Sets the value of a node and notify the observers of a modification.
@@ -302,7 +302,7 @@ public:
   virtual AbstractProperty<Tnode, Tedge, Tprop> &
   operator=(AbstractProperty<Tnode, Tedge, Tprop> &prop) {
     if (this != &prop) {
-      if (Tprop::graph == NULL)
+      if (Tprop::graph == nullptr)
         Tprop::graph = prop.Tprop::graph;
 
       if (Tprop::graph == prop.Tprop::graph) {
@@ -448,15 +448,15 @@ public:
     setValueToGraphEdges(v, graph);
     return true;
   }
-  virtual tlp::Iterator<node> *getNonDefaultValuatedNodes(const Graph *g = NULL) const;
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const Graph *g = NULL) const;
+  virtual tlp::Iterator<node> *getNonDefaultValuatedNodes(const Graph *g = nullptr) const;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const Graph *g = nullptr) const;
   virtual unsigned int nodeValueSize() const;
   virtual void writeNodeDefaultValue(std::ostream &) const;
   virtual void writeNodeValue(std::ostream &, node) const;
   virtual bool readNodeDefaultValue(std::istream &);
   virtual bool readNodeValue(std::istream &, node);
-  virtual tlp::Iterator<edge> *getNonDefaultValuatedEdges(const Graph *g = NULL) const;
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const Graph * = NULL) const;
+  virtual tlp::Iterator<edge> *getNonDefaultValuatedEdges(const Graph *g = nullptr) const;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const Graph * = nullptr) const;
   virtual unsigned int edgeValueSize() const;
   virtual void writeEdgeDefaultValue(std::ostream &) const;
   virtual void writeEdgeValue(std::ostream &, edge) const;
@@ -464,7 +464,7 @@ public:
   virtual bool readEdgeValue(std::istream &, edge);
   virtual bool copy(const node destination, const node source, PropertyInterface *property,
                     bool ifNotDefault = false) {
-    if (property == NULL)
+    if (property == nullptr)
       return false;
 
     tlp::AbstractProperty<Tnode, Tedge, Tprop> *tp =
@@ -482,7 +482,7 @@ public:
   }
   virtual bool copy(const edge destination, const edge source, PropertyInterface *property,
                     bool ifNotDefault = false) {
-    if (property == NULL)
+    if (property == nullptr)
       return false;
 
     tlp::AbstractProperty<Tnode, Tedge, Tprop> *tp =
@@ -501,7 +501,7 @@ public:
   virtual void copy(PropertyInterface *property) {
     tlp::AbstractProperty<Tnode, Tedge, Tprop> *prop =
         dynamic_cast<typename tlp::AbstractProperty<Tnode, Tedge, Tprop> *>(property);
-    assert(prop != NULL);
+    assert(prop != nullptr);
     *this = *prop;
   }
   // for performance reason and use in GraphUpdatesRecorder
@@ -525,7 +525,7 @@ public:
     if (notDefault)
       return new TypedValueContainer<typename Tnode::RealType>(value);
 
-    return NULL;
+    return nullptr;
   }
   virtual DataMem *getNonDefaultDataMemValue(const edge e) const {
     bool notDefault;
@@ -535,7 +535,7 @@ public:
     if (notDefault)
       return new TypedValueContainer<typename Tedge::RealType>(value);
 
-    return NULL;
+    return nullptr;
   }
   virtual void setNodeDataMemValue(const node n, const DataMem *v) {
     setNodeValue(n, static_cast<const TypedValueContainer<typename Tnode::RealType> *>(v)->value);

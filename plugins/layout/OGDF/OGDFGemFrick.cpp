@@ -149,7 +149,7 @@ OGDFGemFrick::~OGDFGemFrick() {}
 void OGDFGemFrick::beforeCall() {
   ogdf::GEMLayout *gem = static_cast<ogdf::GEMLayout *>(ogdfLayoutAlgo);
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     int ival = 0;
     double dval = 0;
     StringCollection sc;

@@ -781,7 +781,7 @@ bool PlanarityTestImpl::testCNodeCounter(Graph *, node cNode, node n, node n1, n
   int count = 0;
 
   // goes to the left;
-  BmdLink<node> *a = NULL, *s = it1;
+  BmdLink<node> *a = nullptr, *s = it1;
 
   while (labelB.get(jl.id) <= dfsPosNum.get(n.id)) {
     if (labelB.get(jl.id) == dfsPosNum.get(n.id)) {
@@ -872,7 +872,7 @@ bool PlanarityTestImpl::testObstructionFromTerminalNode(Graph *sG, node w, node 
 //=================================================================
 BmdLink<node> *PlanarityTestImpl::searchRBC(int dir, BmdLink<node> *it, node n,
                                             list<node> &traversedNodesInRBC) {
-  if (it != NULL && (it->prev() == NULL || it->succ() == NULL)) // 1st or last item in RBC;
+  if (it != nullptr && (it->prev() == nullptr || it->succ() == nullptr)) // 1st or last item in RBC;
     return it;
 
   BmdLink<node> *prev = it;
@@ -890,7 +890,8 @@ BmdLink<node> *PlanarityTestImpl::searchRBC(int dir, BmdLink<node> *it, node n,
   node u = it->getData();
   int b = labelB.get(u.id);
 
-  while (it != NULL && (b <= dfsPosNum.get(n.id) || dir != 1) && state.get(u.id) == NOT_VISITED) {
+  while (it != nullptr && (b <= dfsPosNum.get(n.id) || dir != 1) &&
+         state.get(u.id) == NOT_VISITED) {
     aux1 = it->prev();
 
     if (aux1 == prev)
@@ -902,18 +903,18 @@ BmdLink<node> *PlanarityTestImpl::searchRBC(int dir, BmdLink<node> *it, node n,
     state.set(u.id, VISITED_IN_RBC);
     traversedNodesInRBC.push_back(u);
 
-    if (it != NULL) {
+    if (it != nullptr) {
       u = it->getData();
       b = labelB.get(u.id);
     }
   }
 
-  if (it == NULL)
+  if (it == nullptr)
     return prev;
-  else if (state.get(u.id) != NOT_VISITED || (it->prev() == NULL || it->succ() == NULL))
+  else if (state.get(u.id) != NOT_VISITED || (it->prev() == nullptr || it->succ() == nullptr))
     return it;
   else
-    return NULL;
+    return nullptr;
 }
 //=================================================================
 /*
@@ -939,16 +940,16 @@ node PlanarityTestImpl::findActiveCNode(node u, node w, list<node> &nl) {
   }
 
   BmdLink<node> *it1 = ptrItem.get(u.id); // ptrItem[u];
-  assert(it1 != NULL);
+  assert(it1 != nullptr);
 
   state.set(u.id, VISITED_IN_RBC);
   traversedNodesInRBC.push_back(u);
   BmdLink<node> *it = searchRBC(1, it1, w, traversedNodesInRBC);
 
-  if (it == NULL)
+  if (it == nullptr)
     it = searchRBC(0, it1, w, traversedNodesInRBC);
 
-  assert(it != NULL);
+  assert(it != nullptr);
 
   node v = it->getData();
   node cNode;

@@ -132,7 +132,7 @@ void DoubleStringsListSelectionWidget::qtWidgetsConnection() {
 }
 
 void DoubleStringsListSelectionWidget::pressButtonAdd() {
-  if (_ui->inputList->currentItem() != NULL) {
+  if (_ui->inputList->currentItem() != nullptr) {
     if (_ui->outputList->addItemList(_ui->inputList->currentItem()->text())) {
       _ui->inputList->deleteItemList(_ui->inputList->currentItem());
     }
@@ -140,7 +140,7 @@ void DoubleStringsListSelectionWidget::pressButtonAdd() {
 }
 
 void DoubleStringsListSelectionWidget::pressButtonRem() {
-  if (_ui->outputList->currentItem() != NULL) {
+  if (_ui->outputList->currentItem() != nullptr) {
     _ui->inputList->addItemList(_ui->outputList->currentItem()->text());
     _ui->outputList->deleteItemList(_ui->outputList->currentItem());
   }

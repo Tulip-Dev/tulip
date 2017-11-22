@@ -229,7 +229,7 @@ struct TLPTokenParser {
     if (!started && !endOfStream)
       return ENDOFSTREAM;
 
-    char *endPtr = NULL;
+    char *endPtr = nullptr;
     const char *cstr = val.str.c_str();
     errno = 0;
     long resultl = strtol(cstr, &endPtr, 10);
@@ -266,7 +266,7 @@ struct TLPTokenParser {
       }
     }
 
-    endPtr = NULL;
+    endPtr = nullptr;
 
     double resultd = strtod(cstr, &endPtr);
 

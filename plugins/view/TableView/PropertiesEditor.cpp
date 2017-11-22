@@ -45,8 +45,8 @@ Q_DECLARE_METATYPE(Qt::CheckState)
 using namespace tlp;
 
 PropertiesEditor::PropertiesEditor(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(NULL), _graph(NULL),
-      _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL), filteringProperties(false),
+    : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr),
+      _delegate(new tlp::TulipItemDelegate), _sourceModel(nullptr), filteringProperties(false),
       editorParent(parent) {
   _ui->setupUi(this);
   connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
@@ -100,7 +100,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   }
 
-  if (_contextProperty == NULL)
+  if (_contextProperty == nullptr)
     return;
 
   QString pname = tlpStringToQString(_contextProperty->getName());
@@ -171,7 +171,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
       connect(action, SIGNAL(triggered()), this, SLOT(delProperty()));
     }
 
-    QAction *rename = NULL;
+    QAction *rename = nullptr;
 
     if (!Perspective::instance()->isReservedPropertyName(propName.c_str())) {
       rename = menu.addAction("Rename");
@@ -246,7 +246,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
       setDefaultValue(_contextProperty, action == nodesSetDefault);
     }
 
-    else*/ if (action != NULL) {
+    else*/ if (action != nullptr) {
       bool result = false;
 
       _graph->push();
@@ -278,7 +278,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     }
   }
 
-  _contextProperty = NULL;
+  _contextProperty = nullptr;
 }
 
 void PropertiesEditor::setPropsVisibility(int state) {
@@ -391,9 +391,9 @@ bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool se
     Observable::holdObservers();
 
     if (nodes)
-      GraphModel::setAllNodeValue(prop, val, graphOnly ? _graph : NULL);
+      GraphModel::setAllNodeValue(prop, val, graphOnly ? _graph : nullptr);
     else
-      GraphModel::setAllEdgeValue(prop, val, graphOnly ? _graph : NULL);
+      GraphModel::setAllEdgeValue(prop, val, graphOnly ? _graph : nullptr);
 
     Observable::unholdObservers();
   }
@@ -420,7 +420,7 @@ void PropertiesEditor::copyProperty() {
   _graph->push();
 
   if (CopyPropertyDialog::copyProperty(_graph, _contextProperty, true,
-                                       Perspective::instance()->mainWindow()) == NULL)
+                                       Perspective::instance()->mainWindow()) == nullptr)
     // copy has been cancelled
     _graph->pop();
 }
@@ -430,7 +430,7 @@ void PropertiesEditor::newProperty() {
 
   if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow(),
                                                 _contextProperty ? _contextProperty->getTypename()
-                                                                 : std::string()) == NULL)
+                                                                 : std::string()) == nullptr)
     // creation has been cancelled
     _graph->pop();
 }
@@ -495,7 +495,7 @@ void PropertiesEditor::toLabels(PropertyInterface *prop, bool nodes, bool edges,
   // _graph->push() must be done outside of this method
   // to allow call from TabelView.cpp
   StringProperty *result = _graph->getProperty<StringProperty>("viewLabel");
-  _graph->applyPropertyAlgorithm("To labels", result, msg, NULL, &data);
+  _graph->applyPropertyAlgorithm("To labels", result, msg, nullptr, &data);
 }
 
 void PropertiesEditor::checkStateChanged(QModelIndex index, Qt::CheckState state) {
@@ -505,7 +505,7 @@ void PropertiesEditor::checkStateChanged(QModelIndex index, Qt::CheckState state
 }
 
 QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
-  if (_sourceModel != NULL)
+  if (_sourceModel != nullptr)
     return _sourceModel->checkedProperties();
 
   return QSet<tlp::PropertyInterface *>();

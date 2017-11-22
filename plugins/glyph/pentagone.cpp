@@ -34,7 +34,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlPentagon *pentagon = NULL;
+static GlPentagon *pentagon = nullptr;
 static void drawPentagon(const Color &fillColor, const Color &borderColor, float borderWidth,
                          const std::string &textureName, float lod) {
 
@@ -49,7 +49,7 @@ static void drawPentagon(const Color &fillColor, const Color &borderColor, float
   }
 
   pentagon->setTextureName(textureName);
-  pentagon->draw(lod, NULL);
+  pentagon->draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -64,7 +64,7 @@ class Pentagon : public Glyph {
 public:
   GLYPHINFORMATION("2D - Pentagon", "David Auber", "09/07/2002", "Textured Pentagon", "1.0",
                    NodeShape::Pentagon)
-  Pentagon(const tlp::PluginContext *context = NULL);
+  Pentagon(const tlp::PluginContext *context = nullptr);
   virtual ~Pentagon();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);

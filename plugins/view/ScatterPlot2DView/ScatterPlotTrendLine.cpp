@@ -65,7 +65,7 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
   b = (syk / n) - a * (sxk / n);
 }
 
-ScatterPlotTrendLine::ScatterPlotTrendLine() : scatterView(NULL), a(0.0f), b(0.0f) {}
+ScatterPlotTrendLine::ScatterPlotTrendLine() : scatterView(nullptr), a(0.0f), b(0.0f) {}
 
 ScatterPlotTrendLine::~ScatterPlotTrendLine() {}
 
@@ -82,7 +82,7 @@ bool ScatterPlotTrendLine::draw(GlMainWidget *glMainWidget) {
 
   ScatterPlot2D *currentScatterPlot = scatterView->getDetailedScatterPlot();
 
-  if (currentScatterPlot == NULL || (a == 0.0f && b == 0.0f)) {
+  if (currentScatterPlot == nullptr || (a == 0.0f && b == 0.0f)) {
     return false;
   }
 
@@ -129,7 +129,7 @@ bool ScatterPlotTrendLine::draw(GlMainWidget *glMainWidget) {
 bool ScatterPlotTrendLine::compute(GlMainWidget *) {
   ScatterPlot2D *currentScatterPlot = scatterView->getDetailedScatterPlot();
 
-  if (currentScatterPlot == NULL) {
+  if (currentScatterPlot == nullptr) {
     return false;
   }
 
@@ -176,8 +176,8 @@ bool ScatterPlotTrendLine::compute(GlMainWidget *) {
 }
 
 void ScatterPlotTrendLine::viewChanged(View *view) {
-  if (view == NULL) {
-    scatterView = NULL;
+  if (view == nullptr) {
+    scatterView = nullptr;
     return;
   }
 

@@ -313,7 +313,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
     }
 
   public:
-    OptimumCircleHull() : circles(NULL), first(0), last(0), b1(0), b2(0) {}
+    OptimumCircleHull() : circles(nullptr), first(0), last(0), b1(0), b2(0) {}
 
     tlp::Circle<Obj, OTYPE> operator()(const std::vector<tlp::Circle<Obj, OTYPE>> &circlesSet) {
       circles = &circlesSet;

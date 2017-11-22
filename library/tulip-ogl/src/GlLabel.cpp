@@ -95,12 +95,12 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutli
 
 static const int SpaceBetweenLine = 5;
 
-GlLabel::GlLabel() : leftAlign(false), oldCamera(NULL) {
+GlLabel::GlLabel() : leftAlign(false), oldCamera(nullptr) {
   init();
 }
 GlLabel::GlLabel(Coord centerPosition, Size size, Color fontColor, bool leftAlign)
     : centerPosition(centerPosition), size(size), color(fontColor), leftAlign(leftAlign),
-      oldCamera(NULL) {
+      oldCamera(nullptr) {
   init();
 }
 
@@ -119,7 +119,7 @@ void GlLabel::init() {
   minSize = 10;
   maxSize = 30;
   depthTestEnabled = true;
-  occlusionTester = NULL;
+  occlusionTester = nullptr;
   xRot = 0;
   yRot = 0;
   zRot = 0;

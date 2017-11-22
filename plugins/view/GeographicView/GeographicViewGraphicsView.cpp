@@ -50,7 +50,7 @@ GlComposite *readPolyFile(QString fileName) {
   QFile file(fileName);
 
   if (!file.open(QIODevice::ReadOnly)) {
-    return NULL;
+    return nullptr;
   }
 
   string polygonName = "";
@@ -153,7 +153,7 @@ GlComposite *readCsvFile(QString fileName) {
   QFile file(fileName);
 
   if (!file.open(QIODevice::ReadOnly))
-    return NULL;
+    return nullptr;
 
   vector<vector<Coord>> datas;
   vector<Coord> currentVector;
@@ -191,7 +191,7 @@ GlComposite *readCsvFile(QString fileName) {
   }
 
   if (datas.empty())
-    return NULL;
+    return nullptr;
 
   composite->addGlEntity(new GlComplexPolygon(datas, Color(0, 0, 0, 50), Color(0, 0, 0, 255)),
                          "polygon");
@@ -303,7 +303,7 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   QTextStream out(&fileW);
 
-  Coord *lastCoord = NULL;
+  Coord *lastCoord = nullptr;
 
   for (map<string, vector<vector<Coord>>>::iterator it1 = clearPolygons.begin();
        it1 != clearPolygons.end(); ++it1) {
@@ -316,7 +316,7 @@ void simplifyPolyFile(QString fileName, float definition) {
       out << i << "\n";
 
       for (vector<Coord>::iterator it3 = (*it2).begin(); it3 != (*it2).end(); ++it3) {
-        if (lastCoord == NULL) {
+        if (lastCoord == nullptr) {
           out << (*it3)[0] << " " << (*it3)[1] << "\n";
           lastCoord = &(*it3);
         } else {
@@ -357,19 +357,19 @@ double mercatorToLatitude(double mercator) {
   return atan(sinh(mercator / 360. * M_PI)) / M_PI * 360.;
 }
 
-QGraphicsProxyWidget *proxyGM = NULL;
+QGraphicsProxyWidget *proxyGM = nullptr;
 
 unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
-    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(NULL), googleMaps(NULL),
-      currentMapZoom(0), globeCameraBackup(NULL, true), mapCameraBackup(NULL, true),
-      geoLayout(NULL), geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
+    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), googleMaps(nullptr),
+      currentMapZoom(0), globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
+      geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
-      polygonEntity(NULL), planisphereEntity(NULL), noLayoutMsgBox(NULL), firstGlobeSwitch(true),
-      firstMapSwitch(true), geoLayoutComputed(false) {
+      polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
+      firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
@@ -549,9 +549,9 @@ void GeographicViewGraphicsView::cleanup() {
       delete geoViewShape;
 
     // those entities have been deleted by the prior call to GlScene::clearLayersList,
-    // so reset the pointers to NULL value
-    polygonEntity = NULL;
-    planisphereEntity = NULL;
+    // so reset the pointers to nullptr value
+    polygonEntity = nullptr;
+    planisphereEntity = nullptr;
   }
 }
 
@@ -582,7 +582,7 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
     geoViewSize = graph->getProperty<SizeProperty>("viewSize");
     geoViewShape = graph->getProperty<IntegerProperty>("viewShape");
     currentMapZoom = 0;
-    polygonEntity = NULL;
+    polygonEntity = nullptr;
 
     draw();
   }
@@ -599,7 +599,7 @@ static string removeQuotesIfAny(const string &s) {
 void GeographicViewGraphicsView::loadDefaultMap() {
   bool oldPolyVisible = false;
 
-  if (polygonEntity != NULL) {
+  if (polygonEntity != nullptr) {
     oldPolyVisible = polygonEntity->isVisible();
     delete polygonEntity;
   }
@@ -615,7 +615,7 @@ void GeographicViewGraphicsView::loadDefaultMap() {
 void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
   bool oldPolyVisible = false;
 
-  if (polygonEntity != NULL) {
+  if (polygonEntity != nullptr) {
     oldPolyVisible = polygonEntity->isVisible();
     delete polygonEntity;
   }
@@ -623,7 +623,7 @@ void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
   polygonEntity = readCsvFile(fileName);
 
   if (!polygonEntity) {
-    QMessageBox::critical(NULL, "Can't read .poly file",
+    QMessageBox::critical(nullptr, "Can't read .poly file",
                           "We can't read csv file : " + fileName + "\nVerify the file.");
     return;
   }
@@ -638,7 +638,7 @@ void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
 void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
   bool oldPolyVisible = false;
 
-  if (polygonEntity != NULL) {
+  if (polygonEntity != nullptr) {
     oldPolyVisible = polygonEntity->isVisible();
     delete polygonEntity;
   }
@@ -648,7 +648,7 @@ void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
   // simplifyPolyFile(fileName,0.025);
   // simplifyPolyFile(fileName,0.05);
   if (!polygonEntity) {
-    QMessageBox::critical(NULL, "Can't read .poly file",
+    QMessageBox::critical(nullptr, "Can't read .poly file",
                           "We can't read .poly file : " + fileName + "\nVerify the file.");
     return;
   }
@@ -751,8 +751,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
 
   if (graph->existProperty(addressPropertyName)) {
     StringProperty *addressProperty = graph->getProperty<StringProperty>(addressPropertyName);
-    DoubleProperty *latitudeProperty = NULL;
-    DoubleProperty *longitudeProperty = NULL;
+    DoubleProperty *latitudeProperty = nullptr;
+    DoubleProperty *longitudeProperty = nullptr;
 
     if (createLatAndLngProps) {
       latitudeProperty = graph->getProperty<DoubleProperty>("latitude");
@@ -845,7 +845,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             grabNextNode = false;
           } else {
             progressWidget->hide();
-            QMessageBox::warning(NULL, "Geolocation failed",
+            QMessageBox::warning(nullptr, "Geolocation failed",
                                  "No results were found for address : \n" +
                                      tlpStringToQString(addr));
             progressWidget->show();
@@ -1083,7 +1083,7 @@ void GeographicViewGraphicsView::setGeoShape(IntegerProperty *property) {
 }
 
 void GeographicViewGraphicsView::afterSetNodeValue(PropertyInterface *prop, const node n) {
-  if (geoViewSize != NULL) {
+  if (geoViewSize != nullptr) {
     SizeProperty *viewSize = static_cast<SizeProperty *>(prop);
     const Size &nodeSize = viewSize->getNodeValue(n);
     float sizeFactor = pow(1.3f, float(currentMapZoom));
@@ -1093,7 +1093,7 @@ void GeographicViewGraphicsView::afterSetNodeValue(PropertyInterface *prop, cons
 }
 
 void GeographicViewGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
-  if (geoViewSize != NULL) {
+  if (geoViewSize != nullptr) {
     SizeProperty *viewSize = static_cast<SizeProperty *>(prop);
     const Size &nodeSize = viewSize->getNodeValue(graph->getOneNode());
     float sizeFactor = pow(1.3f, float(currentMapZoom));
@@ -1190,10 +1190,10 @@ void GeographicViewGraphicsView::switchViewType() {
     mapCameraBackup = glMainWidget->getScene()->getGraphCamera();
   }
 
-  if (geoLayoutBackup != NULL && geoLayoutComputed) {
+  if (geoLayoutBackup != nullptr && geoLayoutComputed) {
     *geoLayout = *geoLayoutBackup;
     delete geoLayoutBackup;
-    geoLayoutBackup = NULL;
+    geoLayoutBackup = nullptr;
   }
 
   GlLayer *layer = glMainWidget->getScene()->getLayer("Main");
@@ -1292,7 +1292,7 @@ void GeographicViewGraphicsView::switchViewType() {
       node n;
       edge e;
 
-      assert(geoLayoutBackup == NULL);
+      assert(geoLayoutBackup == nullptr);
       geoLayoutBackup = new LayoutProperty(graph);
       *geoLayoutBackup = *geoLayout;
 

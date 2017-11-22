@@ -76,7 +76,7 @@ string fisheyeVertexProgram =
 // clang-format on
 
 FishEyeInteractor::FishEyeInteractor(const PluginContext *)
-    : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"), fisheyeConfigWidget(NULL) {}
+    : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"), fisheyeConfigWidget(nullptr) {}
 
 void FishEyeInteractor::construct() {
   fisheyeConfigWidget = new FishEyeConfigWidget();
@@ -108,7 +108,7 @@ QWidget *FishEyeInteractor::configurationWidget() const {
 
 PLUGIN(FishEyeInteractor)
 
-GlShaderProgram *FishEyeInteractorComponent::fisheyeShader(NULL);
+GlShaderProgram *FishEyeInteractorComponent::fisheyeShader(nullptr);
 
 FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget)
     : configWidget(configWidget), activateFishEye(false) {}
@@ -121,7 +121,7 @@ FishEyeInteractorComponent::FishEyeInteractorComponent(
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {
-  if (view == NULL) {
+  if (view == nullptr) {
     return;
   }
 
@@ -197,7 +197,7 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     fisheyeShader->link();
   }
 
-  if (activateFishEye && fisheyeShader != NULL && fisheyeShader->isLinked()) {
+  if (activateFishEye && fisheyeShader != nullptr && fisheyeShader->isLinked()) {
     fisheyeShader->activate();
 
     Matrix<float, 4> modelViewMatrix;

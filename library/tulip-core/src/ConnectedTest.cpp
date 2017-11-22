@@ -26,17 +26,17 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-ConnectedTest *ConnectedTest::instance = NULL;
+ConnectedTest *ConnectedTest::instance = nullptr;
 //=================================================================
 bool ConnectedTest::isConnected(const tlp::Graph *const graph) {
-  if (instance == NULL)
+  if (instance == nullptr)
     instance = new ConnectedTest();
 
   return instance->compute(graph);
 }
 //=================================================================
 void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
-  if (instance == NULL)
+  if (instance == nullptr)
     instance = new ConnectedTest();
 
   graph->removeListener(instance);
@@ -54,7 +54,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const 
   if (graph->numberOfNodes() == 0)
     return 0u;
 
-  if (instance == NULL)
+  if (instance == nullptr)
     instance = new ConnectedTest();
 
   graph->removeListener(instance);

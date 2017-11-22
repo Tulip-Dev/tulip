@@ -176,7 +176,7 @@ class Ring : public Glyph {
 public:
   GLYPHINFORMATION("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0",
                    NodeShape::Ring)
-  Ring(const tlp::PluginContext *context = NULL);
+  Ring(const tlp::PluginContext *context = nullptr);
   virtual ~Ring();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual string getName() {

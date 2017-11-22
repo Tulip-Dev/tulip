@@ -72,7 +72,7 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::map<node, edge
                              const Color &backgroundColor, const Color &foregroundColor)
     : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph),
       scatterLayout(new LayoutProperty(graph)), scatterEdgeLayout(new LayoutProperty(graph)),
-      xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
+      xAxis(nullptr), yAxis(nullptr), overviewGen(false), backgroundColor(backgroundColor),
       foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false),
       edgeAsNodeGraph(edgeGraph), nodeToEdge(nodeMap), dataLocation(dataLocation),
       xAxisScaleDefined(false), yAxisScaleDefined(false), xAxisScale(make_pair(0, 0)),
@@ -144,8 +144,8 @@ void ScatterPlot2D::setDataLocation(const ElementType &dataLocation) {
 
 void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *reverseLayout) {
   clean();
-  clickLabel = NULL;
-  backgroundRect = NULL;
+  clickLabel = nullptr;
+  backgroundRect = nullptr;
   createAxis();
   glProgressBar =
       new GlProgressBar(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), size,
@@ -215,9 +215,9 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
 
 void ScatterPlot2D::clean() {
   delete xAxis;
-  xAxis = NULL;
+  xAxis = nullptr;
   delete yAxis;
-  yAxis = NULL;
+  yAxis = nullptr;
   reset(true);
 }
 
@@ -345,7 +345,7 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget,
     sumyi2 += (yValue * yValue);
     sumxiyi += (xValue * yValue);
 
-    if (reverseLayout == NULL || dataLocation != NODE) {
+    if (reverseLayout == nullptr || dataLocation != NODE) {
       Coord xValueAxisCoord = xAxis->getAxisPointCoordForValue(xValue);
       Coord yValueAxisCoord = yAxis->getAxisPointCoordForValue(yValue);
       nodeCoord = Coord(xValueAxisCoord.getX(), yValueAxisCoord.getY(), 0.0f);
@@ -362,7 +362,7 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget,
 
     ++currentStep;
 
-    if (glWidget != NULL && currentStep % drawStep == 0) {
+    if (glWidget != nullptr && currentStep % drawStep == 0) {
       glProgressBar->progress(currentStep, maxStep);
       glWidget->draw();
     }
@@ -387,7 +387,7 @@ void ScatterPlot2D::setUniformBackgroundColor(const Color &backgroundColor) {
   this->backgroundColor = backgroundColor;
   mapBackgroundColorToCoeff = false;
 
-  if (backgroundRect != NULL) {
+  if (backgroundRect != nullptr) {
     backgroundRect->setTopLeftColor(backgroundColor);
     backgroundRect->setBottomRightColor(backgroundColor);
   }
@@ -405,7 +405,7 @@ void ScatterPlot2D::mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColo
 void ScatterPlot2D::setForegroundColor(const Color &foregroundColor) {
   this->foregroundColor = foregroundColor;
 
-  if (clickLabel != NULL) {
+  if (clickLabel != nullptr) {
     clickLabel->setColor(foregroundColor);
   }
 }

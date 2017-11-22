@@ -43,7 +43,7 @@ class PluginsCenter : public QWidget {
   PluginInformationListItem *_currentItem;
 
 public:
-  explicit PluginsCenter(QWidget *parent = NULL);
+  explicit PluginsCenter(QWidget *parent = nullptr);
   ~PluginsCenter();
 
 public slots:

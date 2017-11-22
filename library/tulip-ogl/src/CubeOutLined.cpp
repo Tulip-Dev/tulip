@@ -45,7 +45,7 @@ protected:
   static GlBox *box;
 };
 }
-tlp::GlBox *tlp::CubeOutLined::box = NULL;
+tlp::GlBox *tlp::CubeOutLined::box = nullptr;
 
 namespace tlp {
 PLUGIN(CubeOutLined)
@@ -77,7 +77,7 @@ void CubeOutLined::draw(node n, float lod) {
 
   box->setOutlineSize(lineWidth);
 
-  box->draw(lod, NULL);
+  box->draw(lod, nullptr);
 }
 
 Coord CubeOutLined::getAnchor(const Coord &vector) const {

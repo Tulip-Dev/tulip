@@ -25,7 +25,7 @@
 #include <tulip/TulipProject.h>
 
 TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
-    : QMainWindow(parent), _project(NULL), _title(title) {}
+    : QMainWindow(parent), _project(nullptr), _title(title) {}
 
 void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent *event) {
   if (tlp::Perspective::instance()->terminated()) {

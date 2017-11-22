@@ -141,7 +141,7 @@ OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 void OGDFFrutchermanReingold::beforeCall() {
   ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact *>(ogdfLayoutAlgo);
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     int ival = 0;
     double dval = 0;
     bool bval = false;
@@ -170,7 +170,7 @@ void OGDFFrutchermanReingold::beforeCall() {
     if (dataSet->get("use node weights", bval)) {
       sefr->nodeWeights(bval);
 
-      NumericProperty *metric = NULL;
+      NumericProperty *metric = nullptr;
 
       if (bval && dataSet->get("node weights", metric)) {
         tlpToOGDF->copyTlpNumericPropertyToOGDFNodeWeight(metric);

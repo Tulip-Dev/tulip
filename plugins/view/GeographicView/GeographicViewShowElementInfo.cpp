@@ -97,7 +97,7 @@ public:
 
 PLUGIN(GeographicViewInteractorGetInformation)
 
-GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(NULL) {
+GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr) {
   Ui::ElementInformationWidget ui;
   _informationWidget = new QWidget();
   _informationWidget->installEventFilter(this);
@@ -136,7 +136,7 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if (qMouseEv != NULL) {
+  if (qMouseEv != nullptr) {
     GeographicView *geoView = static_cast<GeographicView *>(view());
     SelectedEntity selectedEntity;
 
@@ -269,8 +269,8 @@ bool GeographicViewShowElementInfo::pick(int x, int y, SelectedEntity &selectedE
 }
 
 void GeographicViewShowElementInfo::viewChanged(View *view) {
-  if (view == NULL) {
-    _view = NULL;
+  if (view == nullptr) {
+    _view = nullptr;
     return;
   }
 

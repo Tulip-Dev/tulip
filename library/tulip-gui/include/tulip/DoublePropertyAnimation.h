@@ -30,9 +30,9 @@ class TLP_QT_SCOPE DoublePropertyAnimation
     : public CachedPropertyAnimation<tlp::DoubleProperty, double, double> {
 public:
   DoublePropertyAnimation(tlp::Graph *graph, tlp::DoubleProperty *start, tlp::DoubleProperty *end,
-                          tlp::DoubleProperty *out, tlp::BooleanProperty *selection = NULL,
+                          tlp::DoubleProperty *out, tlp::BooleanProperty *selection = nullptr,
                           int frameCount = 1, bool computeNodes = true, bool computeEdges = false,
-                          QObject *parent = NULL);
+                          QObject *parent = nullptr);
   ~DoublePropertyAnimation() {}
 
 protected:

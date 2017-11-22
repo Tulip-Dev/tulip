@@ -71,13 +71,13 @@ Histogram::Histogram(Graph *graph, Graph *edgeGraph, std::map<edge, node> &edgeM
                      const Coord &blCorner, unsigned int size, const Color &backgroundColor,
                      const Color &textColor)
     : graph(graph), propertyName(propertyName), blCorner(blCorner), size(size),
-      nbHistogramBins(100), xAxis(NULL), yAxis(NULL), xAxisLogScale(false), yAxisLogScale(false),
-      nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)),
-      histogramEdgeLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)),
-      histoBinsComposite(new GlComposite()), uniformQuantification(false),
-      cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(edgeGraph),
-      edgeToNode(edgeMap), backgroundColor(backgroundColor), textColor(textColor),
-      integerScale(false), dataLocation(dataLocation), displayEdges(false),
+      nbHistogramBins(100), xAxis(nullptr), yAxis(nullptr), xAxisLogScale(false),
+      yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0),
+      histogramLayout(new LayoutProperty(graph)), histogramEdgeLayout(new LayoutProperty(graph)),
+      histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()),
+      uniformQuantification(false), cumulativeFreqHisto(false), lastCumulHisto(false),
+      edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), backgroundColor(backgroundColor),
+      textColor(textColor), integerScale(false), dataLocation(dataLocation), displayEdges(false),
       layoutUpdateNeeded(true), sizesUpdateNeeded(true), textureUpdateNeeded(true),
       xAxisScaleDefined(false), yAxisScaleDefined(false), xAxisScale(make_pair(0, 0)),
       yAxisScale(make_pair(0, 0)), initXAxisScale(make_pair(0, 0)),
@@ -373,11 +373,11 @@ void Histogram::computeHistogram() {
 
 void Histogram::createAxis() {
 
-  if (xAxis != NULL && yAxis != NULL) {
+  if (xAxis != nullptr && yAxis != nullptr) {
     delete xAxis;
     delete yAxis;
-    xAxis = NULL;
-    yAxis = NULL;
+    xAxis = nullptr;
+    yAxis = nullptr;
   }
 
   const float axisLength = DEFAULT_AXIS_LENGTH;
@@ -754,11 +754,11 @@ void Histogram::setBLCorner(const Coord &blCorner) {
 }
 
 void Histogram::setTextColor(const Color &color) {
-  if (xAxis != NULL) {
+  if (xAxis != nullptr) {
     xAxis->setAxisColor(color);
   }
 
-  if (yAxis != NULL) {
+  if (yAxis != nullptr) {
     yAxis->setAxisColor(color);
   }
 

@@ -56,7 +56,7 @@ struct LiuEtAl : public ImportModule {
     unsigned int n = 300;
     unsigned int m = 5;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
     }
 

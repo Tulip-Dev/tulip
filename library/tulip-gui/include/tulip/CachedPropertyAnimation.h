@@ -33,9 +33,9 @@ template <typename PropType, typename NodeType, typename EdgeType>
 class CachedPropertyAnimation : public PropertyAnimation<PropType, NodeType, EdgeType> {
 public:
   CachedPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-                          tlp::BooleanProperty *selection = NULL, int frameCount = 1,
+                          tlp::BooleanProperty *selection = nullptr, int frameCount = 1,
                           bool computeNodes = true, bool computeEdges = true,
-                          QObject *parent = NULL);
+                          QObject *parent = nullptr);
   virtual ~CachedPropertyAnimation();
 
   virtual void frameChanged(int frame);

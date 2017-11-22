@@ -39,7 +39,7 @@ bool LoopSelection::run() {
   }
 
   // output some useful information
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->set("#Edges selected", cpt);
   }
 

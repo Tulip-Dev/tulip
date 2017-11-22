@@ -83,7 +83,7 @@ public:
     unsigned int nbNodes = 5;
     unsigned int nbEdges = 9;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
     }

@@ -32,7 +32,7 @@
 #include <tulip/PluginLibraryLoader.h>
 
 static void loadTulipPluginsFromDir(const std::string &pluginsDir,
-                                    tlp::PluginLoader *pluginLoader = NULL) {
+                                    tlp::PluginLoader *pluginLoader = nullptr) {
   std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
   tlp::TulipPluginsPath = pluginsDir;
   tlp::PluginLibraryLoader::loadPlugins(pluginLoader);
@@ -44,7 +44,7 @@ int main(int /* arg */, char ** /* argv */) {
   std::string tulipBuildDir = TULIP_BUILD_DIR;
 
   tlp::initTulipLib();
-  tlp::PluginLoader *pLoader = NULL;
+  tlp::PluginLoader *pLoader = nullptr;
 #ifndef NDEBUG
   tlp::PluginLoaderTxt loader;
   pLoader = &loader;

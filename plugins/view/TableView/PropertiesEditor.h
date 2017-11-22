@@ -52,7 +52,7 @@ class PropertiesEditor : public QWidget {
   QWidget *editorParent;
 
 public:
-  explicit PropertiesEditor(QWidget *parent = NULL);
+  explicit PropertiesEditor(QWidget *parent = nullptr);
   virtual ~PropertiesEditor();
 
   void setGraph(tlp::Graph *g);

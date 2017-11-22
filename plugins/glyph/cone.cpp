@@ -130,7 +130,7 @@ class Cone : public Glyph {
 public:
   GLYPHINFORMATION("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0",
                    NodeShape::Cone)
-  Cone(const tlp::PluginContext *context = NULL);
+  Cone(const tlp::PluginContext *context = nullptr);
   virtual ~Cone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox, node);
   virtual void draw(node n, float lod);

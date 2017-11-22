@@ -52,7 +52,7 @@ class SOMPropertiesWidget : public QWidget, public tlp::Observable {
 
 public:
   enum SizeMappingType { NoSizeMapping, RealNodeSizeMapping, DistanceMapping };
-  SOMPropertiesWidget(SOMView *view, QWidget *parent = NULL);
+  SOMPropertiesWidget(SOMView *view, QWidget *parent = nullptr);
   ~SOMPropertiesWidget();
 
   unsigned int getGridWidth() const;

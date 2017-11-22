@@ -238,7 +238,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    *Defaults to 0.
    * @return void
    **/
-  void buildDefaultDataSet(DataSet &ioDataSet, Graph *inG = NULL) const;
+  void buildDefaultDataSet(DataSet &ioDataSet, Graph *inG = nullptr) const;
 
   /**
    * @brief Returns the number of parameters.

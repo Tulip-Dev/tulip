@@ -53,7 +53,7 @@ class AlgorithmRunner : public QWidget {
   void insertItem(QWidget *w, const QString &name);
 
 public:
-  explicit AlgorithmRunner(QWidget *parent = NULL);
+  explicit AlgorithmRunner(QWidget *parent = nullptr);
   virtual ~AlgorithmRunner();
 
 signals:

@@ -37,7 +37,7 @@ using namespace tlp;
 using namespace std;
 
 CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *parent)
-    : QWidget(parent), graph(NULL), ui(new Ui::CSVGraphMappingConfigurationWidget) {
+    : QWidget(parent), graph(nullptr), ui(new Ui::CSVGraphMappingConfigurationWidget) {
   ui->setupUi(this);
   connect(ui->mappingConfigurationStackedWidget, SIGNAL(currentChanged(int)), this,
           SIGNAL(mappingChanged()));
@@ -142,14 +142,14 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     return new CSVToNewNodeIdMapping(graph);
   } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importNodesPage) {
     if (nodeProperties.empty() || nodeColumnIds.empty()) {
-      return NULL;
+      return nullptr;
     }
 
     bool createMissingElement = ui->createMissingNodesCheckBox->isChecked();
     return new CSVToGraphNodeIdMapping(graph, nodeColumnIds, nodeProperties, createMissingElement);
   } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesPages) {
     if (edgeProperties.empty() || edgeColumnIds.empty()) {
-      return NULL;
+      return nullptr;
     }
 
     return new CSVToGraphEdgeIdMapping(graph, edgeColumnIds, edgeProperties);
@@ -161,7 +161,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
         if (srcColumnIds[i] == tgtColumnIds[j]) {
           QMessageBox::critical(parentWidget(), "Import of new relations failed",
                                 "Source columns and destination columns are not different.");
-          return NULL;
+          return nullptr;
         }
       }
     }
@@ -170,7 +170,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     return new CSVToGraphEdgeSrcTgtMapping(graph, srcColumnIds, tgtColumnIds, srcProperties,
                                            tgtProperties, createMissingElement);
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 

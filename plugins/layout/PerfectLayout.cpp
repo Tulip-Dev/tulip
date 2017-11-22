@@ -37,10 +37,10 @@ public:
     addInParameter<bool>("Subgraph only", paramHelp[1], "false");
   }
   bool run() {
-    tlp::LayoutProperty *layout = NULL;
+    tlp::LayoutProperty *layout = nullptr;
     bool subgraphOnly(false);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("layout", layout);
       dataSet->get("Subgraph only", subgraphOnly);
     }
@@ -49,7 +49,7 @@ public:
       layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
 
     result->copy(layout);
-    result->perfectAspectRatio(subgraphOnly ? graph : NULL);
+    result->perfectAspectRatio(subgraphOnly ? graph : nullptr);
     return true;
   }
 };

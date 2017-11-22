@@ -91,7 +91,7 @@ char *getTulipLibDir(char *buf) {
 #endif
   HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
-  if (hmod != NULL) {
+  if (hmod != nullptr) {
     TCHAR szPath[512 + 1];
     DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
 
@@ -114,10 +114,10 @@ char *getTulipLibDir(char *buf) {
 
   ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
-  if (ptr != NULL) {
+  if (ptr != nullptr) {
     void *symbol = dlsym(ptr, "getTulipLibDir");
 
-    if (symbol != NULL) {
+    if (symbol != nullptr) {
       if (dladdr(symbol, &info)) {
         std::string tmp = info.dli_fname;
         tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1);
@@ -193,14 +193,14 @@ void tlp::initTulipLib(const char *appDirPath) {
     TulipLibDir += '/';
 
   // check TulipLibDir exists
-  bool tlpDirSet = (getEnvTlp != NULL);
+  bool tlpDirSet = (getEnvTlp != nullptr);
 
   if (tlpDirSet)
     checkDirectory(TulipLibDir);
 
   getEnvTlp = getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
-  if (getEnvTlp != NULL) {
+  if (getEnvTlp != nullptr) {
     TulipPluginsPath = string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
@@ -351,7 +351,7 @@ void tlp::initRandomSequence() {
 #else
 
   if (randomSeed == UINT_MAX) {
-    unsigned int seed = uint(time(NULL));
+    unsigned int seed = uint(time(nullptr));
     // init a sequence of rand() calls
     srand(seed);
 #ifndef WIN32
@@ -479,7 +479,7 @@ static std::wstring openmodeToWString(std::ios_base::openmode mode) {
 class wifilestream : public std::istream {
 public:
   wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode)
-      : fp(NULL), buffer(NULL) {
+      : fp(nullptr), buffer(nullptr) {
     fp = _wfopen(wfilename.c_str(), openmodeToWString(mode).c_str());
 
     if (fp) {
@@ -505,7 +505,7 @@ private:
 class wofilestream : public std::ostream {
 public:
   wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode)
-      : fp(NULL), buffer(NULL) {
+      : fp(nullptr), buffer(nullptr) {
     fp = _wfopen(wfilename.c_str(), openmodeToWString(open_mode).c_str());
 
     if (fp) {

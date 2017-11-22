@@ -37,7 +37,7 @@ public:
   /**
    * Default Constructor (usefull for qt designer)
    */
-  GraphPropertiesSelectionWidget(QWidget *parent = NULL,
+  GraphPropertiesSelectionWidget(QWidget *parent = nullptr,
                                  const StringsListSelectionWidget::ListType &listType =
                                      StringsListSelectionWidget::SIMPLE_LIST,
                                  const unsigned int maxNbSelectedProperties = 0);
@@ -55,8 +55,9 @@ public:
    * will be selectable
    */
   GraphPropertiesSelectionWidget(
-      Graph *graph, QWidget *parent = NULL, const StringsListSelectionWidget::ListType &listType =
-                                                StringsListSelectionWidget::SIMPLE_LIST,
+      Graph *graph, QWidget *parent = nullptr,
+      const StringsListSelectionWidget::ListType &listType =
+          StringsListSelectionWidget::SIMPLE_LIST,
       const unsigned int maxNbSelectedProperties = 0,
       const std::vector<std::string> &propertiesTypes = std::vector<std::string>(),
       const bool includeViewProperties = false);

@@ -100,7 +100,7 @@ public:
     pluginProgress->showPreview(false);
     bool autoformatting(true), woff2(false);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("Makes SVG output human readable", autoformatting);
       dataSet->get("Use Web Open Font Format v2", woff2);
     }

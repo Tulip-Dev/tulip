@@ -43,7 +43,7 @@ class TLP_QT_SCOPE SnapshotDialog : public QDialog {
   Q_OBJECT
 
 public:
-  SnapshotDialog(const View *v, QWidget *parent = NULL);
+  SnapshotDialog(const View *v, QWidget *parent = nullptr);
   ~SnapshotDialog();
 
   void setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio);

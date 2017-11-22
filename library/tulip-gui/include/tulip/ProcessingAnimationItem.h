@@ -36,7 +36,7 @@ class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
 
 public:
   explicit ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size,
-                                   QGraphicsItem *parent = NULL);
+                                   QGraphicsItem *parent = nullptr);
   virtual ~ProcessingAnimationItem();
 
   QBrush brush() const {
