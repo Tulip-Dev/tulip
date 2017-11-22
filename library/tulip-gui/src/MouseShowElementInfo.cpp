@@ -23,7 +23,6 @@
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QGraphicsProxyWidget>
-#include <QCursor>
 
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
@@ -78,16 +77,24 @@ QTableView *MouseShowElementInfo::tableView() const {
 }
 
 bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
+
   if (widget == _informationWidget &&
-      (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
+      (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
     return true;
+  }
 
   // ensure the info window stays visible while using the wheel or clicking in it
   if (_informationWidget->isVisible() &&
       (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress)) {
     QRect widgetRect = _informationWidget->geometry();
+    QPoint cursorPos;
+    if (e->type() == QEvent::Wheel) {
+      cursorPos = static_cast<QWheelEvent *>(e)->pos();
+    } else {
+      cursorPos = static_cast<QMouseEvent *>(e)->pos();
+    }
 
-    if (!widgetRect.contains(QCursor::pos())) {
+    if (!widgetRect.contains(cursorPos)) {
       _informationWidgetItem->setVisible(false);
       return false;
     } else {
