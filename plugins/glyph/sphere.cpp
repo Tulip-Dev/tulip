@@ -50,7 +50,7 @@ static void drawGlyph(const Color &glyphColor, const string &texture, const stri
   sphere->setColor(glyphColor);
   sphere->setTexture(texturePath + texture);
 
-  sphere->draw(0, 0);
+  sphere->draw(0, nullptr);
 }
 
 /** \addtogroup glyph */

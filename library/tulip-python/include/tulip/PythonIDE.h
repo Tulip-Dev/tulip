@@ -85,7 +85,7 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
                                        const QStringList &existingFilenames);
 
 public:
-  explicit PythonIDE(QWidget *parent = 0);
+  explicit PythonIDE(QWidget *parent = nullptr);
   ~PythonIDE();
 
   void setProject(tlp::TulipProject *project);

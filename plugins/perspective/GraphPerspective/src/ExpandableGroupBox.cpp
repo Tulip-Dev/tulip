@@ -22,7 +22,7 @@
 #include <QDebug>
 
 ExpandableGroupBox::ExpandableGroupBox(QWidget *parent, const QString &title)
-    : QGroupBox(title, parent), _expanded(true), _widget(0) {
+    : QGroupBox(title, parent), _expanded(true), _widget(nullptr) {
   setCheckable(true);
   setChecked(true);
   setExpanded(_expanded);

@@ -36,7 +36,7 @@ class TLP_PYTHON_SCOPE PythonPluginCreationDialog : public QDialog {
   Ui::PythonPluginCreationDialog *_ui;
 
 public:
-  PythonPluginCreationDialog(QWidget *parent = 0);
+  PythonPluginCreationDialog(QWidget *parent = nullptr);
   ~PythonPluginCreationDialog();
   QString getPluginFileName() const;
 

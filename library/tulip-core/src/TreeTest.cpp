@@ -242,7 +242,7 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     selectSpanningTree(gClone, &treeSelection, pluginProgress);
 
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
-      return 0;
+      return nullptr;
 
     return computeTreeInternal(gClone->addSubGraph(&treeSelection), rGraph, true, pluginProgress,
                                reversedEdges);
@@ -276,7 +276,7 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     Graph *sTree = computeTreeInternal(gConn, rGraph, true, pluginProgress, reversedEdges);
 
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
-      return 0;
+      return nullptr;
 
     node n;
     forEach(n, sTree->getNodes()) {

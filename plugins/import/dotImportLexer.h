@@ -355,7 +355,7 @@ void *yyrealloc(void *, yy_size_t);
 
 typedef unsigned char YY_CHAR;
 
-FILE *yyin = (FILE *)0, *yyout = (FILE *)0;
+FILE *yyin = (FILE *)nullptr, *yyout = (FILE *)nullptr;
 
 typedef int yy_state_type;
 
@@ -1183,7 +1183,7 @@ static int yy_get_next_buffer(void) {
             yyrealloc((void *)b->yy_ch_buf, b->yy_buf_size + 2);
       } else
         /* Can't grow it, we don't own it. */
-        b->yy_ch_buf = 0;
+        b->yy_ch_buf = nullptr;
 
       if (!b->yy_ch_buf)
         YY_FATAL_ERROR("fatal error - scanner input buffer overflow");

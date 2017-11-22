@@ -37,7 +37,7 @@ class NeighborhoodHighlighterConfigWidget : public QWidget {
   Ui::NeighborhoodHighlighterConfigWidgetData *_ui;
 
 public:
-  NeighborhoodHighlighterConfigWidget(QWidget *parent = 0);
+  NeighborhoodHighlighterConfigWidget(QWidget *parent = nullptr);
   ~NeighborhoodHighlighterConfigWidget();
 
   NodeNeighborhoodView::NeighborNodesType getNeighborsType() const;

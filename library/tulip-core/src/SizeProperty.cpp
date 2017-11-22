@@ -219,7 +219,7 @@ void SizeProperty::setValueToGraphNodes(tlp::StoredType<Size>::ReturnedConstValu
 //=============================================================================
 PropertyInterface *SizeProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   SizeProperty *p = n.empty() ? new SizeProperty(g) : g->getLocalProperty<SizeProperty>(n);
@@ -239,7 +239,7 @@ int SizeProperty::compare(const node n1, const node n2) const {
 //=============================================================================
 PropertyInterface *SizeVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   SizeVectorProperty *p =

@@ -42,7 +42,7 @@ class TLP_QT_SCOPE CoordEditor : public QDialog {
   Coord currentCoord;
 
 public:
-  explicit CoordEditor(QWidget *parent = 0, bool editSize = false);
+  explicit CoordEditor(QWidget *parent = nullptr, bool editSize = false);
   ~CoordEditor();
 
   tlp::Coord coord() const;

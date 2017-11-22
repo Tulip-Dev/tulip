@@ -73,7 +73,7 @@ void GlowSphere::drawGlyph(const Color &glyphColor, const Size &glyphSize, const
 
   sphere->setColor(glyphColor);
   sphere->setTexture(texturePath + texture);
-  sphere->draw(0, 0);
+  sphere->draw(0, nullptr);
 
   // draw a glow ring around
   // setup its orientation to ensure it is drawn is the screen's plane
@@ -104,7 +104,7 @@ void GlowSphere::drawGlyph(const Color &glyphColor, const Size &glyphSize, const
   glLoadMatrixf(mdlM);
   glStencilMask(0x00);
   glDepthMask(GL_FALSE);
-  rect->draw(0, 0);
+  rect->draw(0, nullptr);
   glStencilMask(0xFF);
   glDepthMask(GL_TRUE);
   glPopMatrix();

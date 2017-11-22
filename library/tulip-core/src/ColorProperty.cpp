@@ -55,7 +55,7 @@ ColorProperty::ColorProperty(Graph *g, const std::string &n) : AbstractColorProp
 //=================================================================================
 PropertyInterface *ColorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   ColorProperty *p = n.empty() ? new ColorProperty(g) : g->getLocalProperty<ColorProperty>(n);
@@ -66,7 +66,7 @@ PropertyInterface *ColorProperty::clonePrototype(Graph *g, const std::string &n)
 //=================================================================================
 PropertyInterface *ColorVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   ColorVectorProperty *p =

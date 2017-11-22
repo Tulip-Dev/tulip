@@ -157,7 +157,7 @@ bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
       glEnable(GL_LIGHTING);
-      axisHighlightRect->draw(0, 0);
+      axisHighlightRect->draw(0, nullptr);
       glDisable(GL_LIGHTING);
       glDisable(GL_BLEND);
       delete axisHighlightRect;

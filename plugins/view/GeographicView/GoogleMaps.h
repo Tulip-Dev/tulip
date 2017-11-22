@@ -61,7 +61,7 @@ class GoogleMaps : public QWebEngineView {
   Q_OBJECT
 
 public:
-  GoogleMaps(QWidget *parent = 0);
+  GoogleMaps(QWidget *parent = nullptr);
 
   void setMapCenter(double latitude, double longitude);
 

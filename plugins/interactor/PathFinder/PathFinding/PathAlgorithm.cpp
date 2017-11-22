@@ -81,7 +81,7 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
   vector<node> vNodes;
   DoubleProperty *depth = new DoubleProperty(graph);
   Dikjstra dikjstra;
-  dikjstra.initDikjstra(graph, 0, src, edgesOrientation, weightsContainer, 0, focus);
+  dikjstra.initDikjstra(graph, nullptr, src, edgesOrientation, weightsContainer, 0, focus);
 
   bool retVal = false;
 

@@ -417,7 +417,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   proxyGM->setPos(0, 0);
   proxyGM->setParentItem(_placeholderItem);
 
-  glMainWidget = new GlMainWidget(0, geoView);
+  glMainWidget = new GlMainWidget(nullptr, geoView);
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setBackgroundColor(Color(255, 255, 255, 0));
   glMainWidget->getScene()->setClearBufferAtDraw(false);

@@ -35,7 +35,7 @@ class HistoOptionsWidget : public QWidget {
   Q_OBJECT
 
 public:
-  HistoOptionsWidget(QWidget *parent = 0);
+  HistoOptionsWidget(QWidget *parent = nullptr);
   ~HistoOptionsWidget();
 
   void setWidgetEnabled(const bool enabled);

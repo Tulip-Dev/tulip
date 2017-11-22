@@ -30,7 +30,7 @@ SimpleTest *SimpleTest::instance = nullptr;
 SimpleTest::SimpleTest() {}
 //=================================================================
 bool SimpleTest::isSimple(const tlp::Graph *graph) {
-  if (instance == 0)
+  if (instance == nullptr)
     instance = new SimpleTest();
 
   if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {

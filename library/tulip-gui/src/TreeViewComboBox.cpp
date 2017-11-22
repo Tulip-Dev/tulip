@@ -28,7 +28,7 @@
 
 class TreeViewDelegate : public QStyledItemDelegate {
 public:
-  TreeViewDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {}
+  TreeViewDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
 
   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
     QSize result = QStyledItemDelegate::sizeHint(option, index);

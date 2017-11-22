@@ -176,7 +176,7 @@ void SnapshotDialog::accept() {
 
   QImage image(pixmap.toImage());
 
-  if (!image.save(fileName, 0, ui->qualitySpinBox->value())) {
+  if (!image.save(fileName, nullptr, ui->qualitySpinBox->value())) {
     QMessageBox::critical(this, "Snapshot cannot be saved",
                           "Snapshot cannot be saved in file: " + fileName);
     this->setEnabled(true);

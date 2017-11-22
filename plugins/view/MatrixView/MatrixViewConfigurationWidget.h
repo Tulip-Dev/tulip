@@ -39,7 +39,7 @@ class MatrixViewConfigurationWidget : public QWidget {
   Ui::MatrixViewConfigurationWidget *_ui;
 
 public:
-  MatrixViewConfigurationWidget(QWidget *parent = 0);
+  MatrixViewConfigurationWidget(QWidget *parent = nullptr);
   void setGraph(tlp::Graph *);
   ~MatrixViewConfigurationWidget();
 

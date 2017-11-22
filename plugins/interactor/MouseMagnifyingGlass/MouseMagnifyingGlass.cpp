@@ -270,7 +270,7 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
   GlCircle circle(Coord(0, 0, 0), radius, outlineColor, Color::White, true, true, 0.0, 60);
   circle.setOutlineSize(3);
   circle.setTextureName(textureName);
-  circle.draw(0, 0);
+  circle.draw(0, nullptr);
 
   glPopMatrix();
   drawInteractor = false;

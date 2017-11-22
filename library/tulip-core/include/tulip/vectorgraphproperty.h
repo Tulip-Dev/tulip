@@ -134,7 +134,7 @@ public:
 #endif
 
 protected:
-  VectorGraphProperty() : _array(0), _graph(0) {}
+  VectorGraphProperty() : _array(nullptr), _graph(nullptr) {}
   VectorGraphProperty(const VectorGraphProperty &obj) : _array(obj._array), _graph(obj._graph) {}
   VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph) : _array(array), _graph(graph) {}
 

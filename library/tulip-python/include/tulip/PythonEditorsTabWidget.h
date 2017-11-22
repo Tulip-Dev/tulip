@@ -39,7 +39,7 @@ class TLP_PYTHON_SCOPE PythonEditorsTabWidget : public QTabWidget {
   bool reloadCodeInEditorIfNeeded(int index);
 
 public:
-  explicit PythonEditorsTabWidget(QWidget *parent = 0);
+  explicit PythonEditorsTabWidget(QWidget *parent = nullptr);
 
   int addEditor(const QString &fileName = "");
 

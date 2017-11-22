@@ -39,7 +39,7 @@ namespace tlp {
 class TLP_QT_SCOPE AboutTulipPage : public QWidget {
   Q_OBJECT
 public:
-  explicit AboutTulipPage(QWidget *parent = 0);
+  explicit AboutTulipPage(QWidget *parent = nullptr);
   ~AboutTulipPage();
 
 private slots:

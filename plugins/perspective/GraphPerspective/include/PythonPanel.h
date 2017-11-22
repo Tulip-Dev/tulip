@@ -36,7 +36,7 @@ class PythonPanel : public QWidget {
   Ui::PythonPanel *_ui;
 
 public:
-  explicit PythonPanel(QWidget *parent = 0);
+  explicit PythonPanel(QWidget *parent = nullptr);
   ~PythonPanel();
   void setModel(tlp::GraphHierarchiesModel *model);
 

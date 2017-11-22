@@ -40,7 +40,7 @@ class CustomTreeView : public QTreeView {
   Q_OBJECT
 
 public:
-  CustomTreeView(QWidget *parent = 0);
+  CustomTreeView(QWidget *parent = nullptr);
 
   void setModel(QAbstractItemModel *model);
 

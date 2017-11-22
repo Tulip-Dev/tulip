@@ -104,7 +104,7 @@ void usage(const QString &error) {
   int returnCode = 0;
 
   if (!error.isEmpty()) {
-    QMessageBox::warning(0, "Error", error);
+    QMessageBox::warning(nullptr, "Error", error);
     returnCode = 1;
   }
 
@@ -265,7 +265,7 @@ int main(int argc, char **argv) {
   try {
     tlp::initTulipSoftware(loader);
   } catch (tlp::TulipException &e) {
-    QMessageBox::warning(0, "Error", e.what());
+    QMessageBox::warning(nullptr, "Error", e.what());
     exit(1);
   }
 

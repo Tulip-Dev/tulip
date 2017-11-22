@@ -236,7 +236,7 @@ void PathFinder::configureHighlighterButtonPressed() {
   }
 
   if (hler == nullptr) {
-    QMessageBox::warning(0, "Nothing selected", "No highlighter selected");
+    QMessageBox::warning(nullptr, "Nothing selected", "No highlighter selected");
     return;
   }
 
@@ -264,7 +264,7 @@ void PathFinder::configureHighlighterButtonPressed() {
     dialog->exec();
     delete dialog;
   } else
-    QMessageBox::warning(0, tlpStringToQString(hler->getName()),
+    QMessageBox::warning(nullptr, tlpStringToQString(hler->getName()),
                          "No configuration available for this highlighter");
 }
 
@@ -278,5 +278,5 @@ PathFinderComponent *PathFinder::getPathFinderComponent() {
       return c;
   }
 
-  return 0;
+  return nullptr;
 }

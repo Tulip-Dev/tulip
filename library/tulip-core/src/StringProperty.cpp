@@ -70,7 +70,7 @@ StringProperty::StringProperty(Graph *g, const std::string &n) : AbstractStringP
 //=================================================================================
 PropertyInterface *StringProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   StringProperty *p = n.empty() ? new StringProperty(g) : g->getLocalProperty<StringProperty>(n);
@@ -89,7 +89,7 @@ int StringProperty::compare(const edge e1, const edge e2) const {
 //=================================================================================
 PropertyInterface *StringVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   StringVectorProperty *p =

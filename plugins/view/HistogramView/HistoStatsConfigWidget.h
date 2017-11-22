@@ -35,7 +35,7 @@ class HistoStatsConfigWidget : public QWidget {
   Ui::HistoStatsConfigWidget *_ui;
 
 public:
-  HistoStatsConfigWidget(QWidget *parent = 0);
+  HistoStatsConfigWidget(QWidget *parent = nullptr);
   ~HistoStatsConfigWidget();
 
   void setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation);

@@ -53,7 +53,7 @@ TulipMainWindow *TulipMainWindow::_instance = nullptr;
 
 TulipMainWindow::TulipMainWindow(QWidget *parent)
     : QMainWindow(parent), _errorMessage(new QLabel()), _ui(new Ui::TulipMainWindowData()),
-      _systemTrayIcon(0) {
+      _systemTrayIcon(nullptr) {
   _ui->setupUi(this);
 
   QLabel *errorIcon = new QLabel();

@@ -345,7 +345,7 @@ void DoubleProperty::setValueToGraphEdges(tlp::StoredType<double>::ReturnedConst
 //=================================================================================
 PropertyInterface *DoubleProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   DoubleProperty *p = n.empty() ? new DoubleProperty(g) : g->getLocalProperty<DoubleProperty>(n);
@@ -356,7 +356,7 @@ PropertyInterface *DoubleProperty::clonePrototype(Graph *g, const std::string &n
 //=================================================================================
 PropertyInterface *DoubleVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   DoubleVectorProperty *p =

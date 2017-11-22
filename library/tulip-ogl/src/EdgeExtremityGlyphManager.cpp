@@ -76,7 +76,7 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
 void EdgeExtremityGlyphManager::initGlyphList(Graph **graph, GlGraphInputData *glGraphInputData,
                                               MutableContainer<EdgeExtremityGlyph *> &glyphs) {
   GlyphContext gc = GlyphContext(graph, glGraphInputData);
-  glyphs.setAll(0);
+  glyphs.setAll(nullptr);
 
   for (std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;

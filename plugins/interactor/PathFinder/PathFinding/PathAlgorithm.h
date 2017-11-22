@@ -66,7 +66,7 @@ public:
    */
   static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,
                           tlp::node src, tlp::node tgt, tlp::BooleanProperty *result,
-                          tlp::DoubleProperty *weights = 0, double tolerance = DBL_MAX);
+                          tlp::DoubleProperty *weights = nullptr, double tolerance = DBL_MAX);
 };
 }
 #endif /* PATHALGORITHM_H_ */

@@ -49,7 +49,7 @@ public:
     assert(_box.isValid());
 
     for (int i = 0; i < 4; ++i)
-      children[i] = 0;
+      children[i] = nullptr;
   }
   /**
    * Basic destructor
@@ -180,7 +180,7 @@ public:
 private:
   //======================================
   QuadTreeNode *getChild(int i) {
-    if (children[i] == 0) {
+    if (children[i] == nullptr) {
       Rectangle<float> box(getChildBox(i));
 
       if (box[0] == _box[0] && box[1] == _box[1])

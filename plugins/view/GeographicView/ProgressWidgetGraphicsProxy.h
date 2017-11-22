@@ -40,7 +40,7 @@ class ProgressWidget : public QWidget {
   Ui::ProgressWidgetData *_ui;
 
 public:
-  ProgressWidget(QWidget *parent = 0);
+  ProgressWidget(QWidget *parent = nullptr);
   ~ProgressWidget();
 
   void setComment(const QString &comment);
@@ -79,7 +79,7 @@ public:
 
 protected:
   void paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget *widget = 0);
+                        QWidget *widget = nullptr);
 
 private:
   ProgressWidget *progressWidget;

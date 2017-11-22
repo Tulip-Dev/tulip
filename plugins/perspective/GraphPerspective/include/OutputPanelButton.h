@@ -35,7 +35,7 @@ class OutputPanelButton : public QPushButton {
   QColor _glowColor;
 
 public:
-  explicit OutputPanelButton(QWidget *parent = 0);
+  explicit OutputPanelButton(QWidget *parent = nullptr);
 
   int number() const {
     return _number;

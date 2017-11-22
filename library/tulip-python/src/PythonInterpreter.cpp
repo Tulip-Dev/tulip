@@ -174,7 +174,7 @@ const char *PythonInterpreter::pythonKeywords[] = {
     "with",    "assert",   "for",   "while",  "if",   "elif",  "import", "True",
     "False",   "pass",     "exec",  "else",   "None", "print", "global", "return",
     "break",   "continue", "as",    "lambda", "del",  "try",   "except", "raise",
-    "finally", "yield",    "async", "await",  0};
+    "finally", "yield",    "async", "await",  nullptr};
 
 PythonInterpreter PythonInterpreter::_instance;
 

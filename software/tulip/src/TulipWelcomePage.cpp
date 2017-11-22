@@ -116,7 +116,7 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
 
         QString text("<p><span style=\"color:#626262; font-size:large;\">");
         text += title + "</span></p><p><span>" + description + "</span></p>";
-        QLabel *label = new QLabel(text, 0);
+        QLabel *label = new QLabel(text, nullptr);
         label->setMinimumWidth(1);
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);

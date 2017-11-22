@@ -27,7 +27,7 @@
 class TLP_PYTHON_SCOPE PythonTabWidget : public QTabWidget {
 
 public:
-  explicit PythonTabWidget(QWidget *parent = 0);
+  explicit PythonTabWidget(QWidget *parent = nullptr);
 
   void setDrawTabBarBgGradient(const bool drawGradient) {
     _drawGradient = drawGradient;

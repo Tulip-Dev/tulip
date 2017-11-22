@@ -40,7 +40,7 @@ class EnclosingCircleConfigurationWidget : public QWidget {
   Ui::EnclosingCircleConfigurationData *_ui;
 
 public:
-  EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent = 0);
+  EnclosingCircleConfigurationWidget(Color &circleColor, QWidget *parent = nullptr);
   ~EnclosingCircleConfigurationWidget();
 
   void circleColorBtnDisabled(const bool disabled);

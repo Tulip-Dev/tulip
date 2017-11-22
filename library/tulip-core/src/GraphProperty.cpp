@@ -32,7 +32,7 @@ const string GraphProperty::propertyTypename = "graph";
 //==============================
 GraphProperty::GraphProperty(Graph *sg, const std::string &n)
     : AbstractProperty<GraphType, EdgeSetType>(sg, n) {
-  setAllNodeValue(0);
+  setAllNodeValue(nullptr);
 }
 //==============================
 GraphProperty::~GraphProperty() {
@@ -203,7 +203,7 @@ void GraphProperty::treatEvent(const Event &evt) {
     if (getNodeDefaultValue() == sg) {
       // we must backup old value
       MutableContainer<Graph *> backup;
-      backup.setAll(0);
+      backup.setAll(nullptr);
       Iterator<node> *it = graph->getNodes();
 
       while (it->hasNext()) {
@@ -214,7 +214,7 @@ void GraphProperty::treatEvent(const Event &evt) {
       }
 
       delete it;
-      setAllNodeValue(0);
+      setAllNodeValue(nullptr);
       // restore values
       it = graph->getNodes();
 
@@ -234,7 +234,7 @@ void GraphProperty::treatEvent(const Event &evt) {
       // don't change values if this non longer exists (when undoing)
       if (graph->existProperty(name)) {
         for (; it != refs.end(); ++it) {
-          AbstractGraphProperty::setNodeValue((*it), 0);
+          AbstractGraphProperty::setNodeValue((*it), nullptr);
         }
       }
 

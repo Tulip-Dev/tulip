@@ -52,7 +52,7 @@ class ParenMatcherHighlighter : public QSyntaxHighlighter {
   QVector<char> _rightParensToMatch;
 
 public:
-  explicit ParenMatcherHighlighter(QTextDocument *parent = 0);
+  explicit ParenMatcherHighlighter(QTextDocument *parent = nullptr);
 
 protected:
   void highlightBlock(const QString &text);

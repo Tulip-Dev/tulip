@@ -46,7 +46,7 @@ static const char *paramHelp[] = {
 #define ORIENTATION "vertical;horizontal;"
 //=============================================================================
 TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::PluginContext *context)
-    : LayoutAlgorithm(context), lengthMetric(0) {
+    : LayoutAlgorithm(context), lengthMetric(nullptr) {
   addNodeSizePropertyParameter(this);
   addInParameter<IntegerProperty>("edge length", paramHelp[0], "", false);
   addInParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION, true,

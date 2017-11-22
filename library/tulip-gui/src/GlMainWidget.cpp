@@ -273,7 +273,7 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
     glDisable(GL_LIGHTING);
 
     if (useFramebufferObject) {
-      QGLFramebufferObject::blitFramebuffer(0, QRect(0, 0, width, height), glFrameBuf2,
+      QGLFramebufferObject::blitFramebuffer(nullptr, QRect(0, 0, width, height), glFrameBuf2,
                                             QRect(0, 0, width, height));
     } else {
       if (options.testFlag(RenderScene)) {

@@ -29,11 +29,11 @@ using namespace tlp;
 
 // GraphType
 GraphType::RealType GraphType::undefinedValue() {
-  return 0;
+  return nullptr;
 }
 
 GraphType::RealType GraphType::defaultValue() {
-  return 0;
+  return nullptr;
 }
 
 void GraphType::write(ostream &oss, const RealType &v) {
@@ -53,7 +53,7 @@ bool GraphType::read(istream &iss, RealType &v) {
   if (ok)
     v = reinterpret_cast<RealType>(lv);
   else
-    v = 0;
+    v = nullptr;
 
   return ok;
 }

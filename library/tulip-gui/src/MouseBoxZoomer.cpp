@@ -35,7 +35,8 @@ using namespace std;
 using namespace tlp;
 
 MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button, Qt::KeyboardModifier modifier)
-    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(0) {}
+    : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(nullptr) {
+}
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {

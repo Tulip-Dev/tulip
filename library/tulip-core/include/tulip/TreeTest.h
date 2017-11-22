@@ -83,7 +83,7 @@ public:
    * @return :Graph* If the input graph is a rooted tree, returns it as is, otherwise a clone
    *subgraph transformed into a rooted tree.
    **/
-  static Graph *computeTree(Graph *graph, PluginProgress *pluginProgress = 0);
+  static Graph *computeTree(Graph *graph, PluginProgress *pluginProgress = nullptr);
 
   /**
    * @brief Removes subgraphs created during tree computation.

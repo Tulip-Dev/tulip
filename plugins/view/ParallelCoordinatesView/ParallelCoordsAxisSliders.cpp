@@ -582,7 +582,7 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
       glRotatef(rotAngle, 0.0f, 0.0f, 1.0f);
     }
 
-    quad.draw(0, 0);
+    quad.draw(0, nullptr);
 
     if (rotAngle != 0.0f) {
       glPopMatrix();

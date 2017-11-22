@@ -64,7 +64,7 @@ struct WangRong : public ImportModule {
     unsigned int m0 = 5;
     unsigned int m = 5;
 
-    if (dataSet != 0) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", n);
       dataSet->get("m0", m0);
       dataSet->get("m", m);

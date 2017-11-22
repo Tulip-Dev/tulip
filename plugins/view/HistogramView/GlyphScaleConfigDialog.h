@@ -37,7 +37,7 @@ class GlyphScaleConfigDialog : public QDialog {
   Q_OBJECT
 
 public:
-  GlyphScaleConfigDialog(QWidget *parent = 0);
+  GlyphScaleConfigDialog(QWidget *parent = nullptr);
   ~GlyphScaleConfigDialog();
 
   std::vector<int> getSelectedGlyphsId() const;

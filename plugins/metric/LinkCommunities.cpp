@@ -134,7 +134,7 @@ bool LinkCommunities::run() {
   bool group_isthmus = true;
   unsigned int nb_steps = 200;
 
-  if (dataSet != 0) {
+  if (dataSet != nullptr) {
     dataSet->get("metric", metric);
     dataSet->get("Group isthmus", group_isthmus);
     dataSet->get("Number of steps", nb_steps);

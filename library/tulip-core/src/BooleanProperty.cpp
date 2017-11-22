@@ -78,7 +78,7 @@ PropertyInterface *BooleanProperty::clonePrototype(Graph *g, const std::string &
 //=================================================================================
 PropertyInterface *BooleanVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   BooleanVectorProperty *p =

@@ -38,7 +38,7 @@ class TLP_QT_SCOPE VectorEditor : public QDialog {
   QVector<QVariant> currentVector;
 
 public:
-  explicit VectorEditor(QWidget *parent = 0);
+  explicit VectorEditor(QWidget *parent = nullptr);
   ~VectorEditor();
   void setVector(const QVector<QVariant> &d, int userType);
   const QVector<QVariant> &vector() const {

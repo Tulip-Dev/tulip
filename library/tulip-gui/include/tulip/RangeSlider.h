@@ -44,8 +44,8 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   Q_ENUMS(HandleMovementMode)
 
 public:
-  explicit RangeSlider(QWidget *parent = 0);
-  explicit RangeSlider(Qt::Orientation orientation, QWidget *parent = 0);
+  explicit RangeSlider(QWidget *parent = nullptr);
+  explicit RangeSlider(Qt::Orientation orientation, QWidget *parent = nullptr);
   ~RangeSlider() {}
 
   enum HandleMovementMode { FreeMovement, NoCrossing, NoOverlapping };

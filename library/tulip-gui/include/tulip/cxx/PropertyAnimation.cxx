@@ -26,7 +26,7 @@ PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(
     :
 
       Animation(frameCount, parent),
-      _graph(graph), _start(0), _end(0), _out(out), _computeNodes(computeNodes),
+      _graph(graph), _start(nullptr), _end(nullptr), _out(out), _computeNodes(computeNodes),
       _computeEdges(computeEdges) {
 
   assert(out);

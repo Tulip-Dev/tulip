@@ -36,7 +36,7 @@ class GeolocalisationConfigWidget : public QWidget {
   Ui::GeolocalisationConfigWidgetData *_ui;
 
 public:
-  GeolocalisationConfigWidget(QWidget *parent = 0);
+  GeolocalisationConfigWidget(QWidget *parent = nullptr);
   ~GeolocalisationConfigWidget();
 
   void setGraph(Graph *graph);

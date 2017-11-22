@@ -152,7 +152,7 @@ bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   vector<Color> lineColors;
   lineColors.resize(lineVertices.size(), Color(255, 0, 0, 255));
   GlLine editedEdge(lineVertices, lineColors);
-  editedEdge.draw(0, 0);
+  editedEdge.draw(0, nullptr);
   return true;
 }
 

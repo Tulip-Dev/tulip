@@ -156,7 +156,7 @@ bool ParallelCoordsAxisSpacer::draw(GlMainWidget *glMainWidget) {
     line.addPoint(axisBP[2], Color(255, 0, 0));
     line.addPoint(axisBP[3], Color(255, 0, 0));
     line.addPoint(axisBP[0], Color(255, 0, 0));
-    line.draw(0, 0);
+    line.draw(0, nullptr);
     return true;
   }
 

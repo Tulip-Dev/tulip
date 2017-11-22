@@ -51,7 +51,7 @@ class SearchWidget : public QWidget {
   bool isNumericComparison();
 
 public:
-  explicit SearchWidget(QWidget *parent = 0);
+  explicit SearchWidget(QWidget *parent = nullptr);
   virtual ~SearchWidget();
 
 signals:

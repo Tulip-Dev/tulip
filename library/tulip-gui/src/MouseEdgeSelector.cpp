@@ -32,7 +32,7 @@ using namespace std;
 using namespace tlp;
 
 //==================================================================
-MouseEdgeSelector::MouseEdgeSelector() : x(0), y(0), w(0), h(0), started(false), graph(0) {}
+MouseEdgeSelector::MouseEdgeSelector() : x(0), y(0), w(0), h(0), started(false), graph(nullptr) {}
 //==================================================================
 bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -70,7 +70,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
-      graph = 0;
+      graph = nullptr;
       started = false;
     }
 
@@ -92,7 +92,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
-      graph = 0;
+      graph = nullptr;
       started = false;
       return false;
     }

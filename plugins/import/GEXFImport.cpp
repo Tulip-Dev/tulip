@@ -538,7 +538,7 @@ public:
           // remove fake meta node
           graph->delNode(n);
           msg->removeAttribute("meta-node");
-          nodeToSubgraph.set(n.id, 0);
+          nodeToSubgraph.set(n.id, nullptr);
         }
       }
     }

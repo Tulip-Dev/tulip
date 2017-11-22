@@ -63,10 +63,10 @@ struct BmdListIt : public Iterator<TYPE> {
 
   BmdListIt(BmdList<TYPE> &bmdList) : bmdList(bmdList) {
     pos = bmdList.firstItem();
-    pred = 0;
+    pred = nullptr;
   }
   bool hasNext() {
-    return pos != 0;
+    return pos != nullptr;
   }
   TYPE next() {
     TYPE val = pos->getData();
@@ -86,10 +86,10 @@ template <typename TYPE>
 struct BmdListRevIt : public Iterator<TYPE> {
   BmdListRevIt(BmdList<TYPE> &bmdList) : bmdList(bmdList) {
     pos = bmdList.lastItem();
-    suc = 0;
+    suc = nullptr;
   }
   bool hasNext() {
-    return pos != 0;
+    return pos != nullptr;
   }
   TYPE next() {
     TYPE val = pos->getData();

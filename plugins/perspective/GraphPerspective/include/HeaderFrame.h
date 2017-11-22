@@ -42,7 +42,7 @@ class HeaderFrame : public QWidget {
   Q_PROPERTY(QStringList menus READ menus WRITE setMenus)
 
 public:
-  explicit HeaderFrame(QWidget *parent = 0);
+  explicit HeaderFrame(QWidget *parent = nullptr);
   virtual ~HeaderFrame();
 
   QString title() const;

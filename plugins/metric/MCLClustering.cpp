@@ -304,7 +304,7 @@ bool MCLClustering::run() {
   _r = 2.;
   _k = 5;
 
-  if (dataSet != 0) {
+  if (dataSet != nullptr) {
     dataSet->get("weights", weights);
     dataSet->get("inflate", _r);
     dataSet->get("pruning", _k);
@@ -342,7 +342,7 @@ bool MCLClustering::run() {
     double sum = 0.;
     outW[tmp] = 0.;
 
-    if (weights != 0) {
+    if (weights != nullptr) {
       double tmpVal = inW[tmp] = 0.;
       forEach(e, g.getOutEdges(n)) {
         double eVal = inW[e];

@@ -852,7 +852,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
     if (vboOk) {
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-      glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), 0);
+      glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), nullptr);
     } else {
       glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), curveVertexBuffersData[nbCurvePoints]);
     }
@@ -865,7 +865,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
       if (vboOk) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, nullptr);
       } else {
         glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT,
                        curveVertexBuffersIndices[nbCurvePoints][1]);
@@ -887,10 +887,10 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       if (vboOk) {
         if (geometryShaderActivated) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
-          glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+          glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, nullptr);
         } else {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
-          glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
+          glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, nullptr);
         }
       } else {
         if (geometryShaderActivated) {
@@ -964,9 +964,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 
           if (geometryShaderActivated) {
-            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, nullptr);
           } else {
-            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, nullptr);
           }
         } else {
           if (geometryShaderActivated) {
@@ -987,9 +987,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
 
           if (geometryShaderActivated) {
-            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, nullptr);
           } else {
-            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, nullptr);
           }
         } else {
           if (geometryShaderActivated) {

@@ -28,12 +28,13 @@ using namespace std;
 namespace tlp {
 
 GlLayer::GlLayer(const std::string &name, bool workingLayer)
-    : name(name), scene(0), camera(new Camera(0)), sharedCamera(false), workingLayer(workingLayer) {
+    : name(name), scene(nullptr), camera(new Camera(nullptr)), sharedCamera(false),
+      workingLayer(workingLayer) {
   composite.addLayerParent(this);
 }
 
 GlLayer::GlLayer(const std::string &name, Camera *camera, bool workingLayer)
-    : name(name), scene(0), camera(camera), sharedCamera(true), workingLayer(workingLayer) {
+    : name(name), scene(nullptr), camera(camera), sharedCamera(true), workingLayer(workingLayer) {
   composite.addLayerParent(this);
 }
 

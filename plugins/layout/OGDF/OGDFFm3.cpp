@@ -324,7 +324,7 @@ OGDFFm3::~OGDFFm3() {}
 void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
 
-  if (dataSet != 0) {
+  if (dataSet != nullptr) {
     fmmm->useHighLevelOptions(true);
     SizeProperty *size = nullptr;
 

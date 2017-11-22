@@ -216,8 +216,8 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   int offset = i;
 
   for (; i < size; ++i) {
-    char *mangled_name = 0, *runtime_offset = 0, *offset_end = 0, *runtime_addr = 0,
-         *runtime_addr_end = 0, *dsoName = 0;
+    char *mangled_name = nullptr, *runtime_offset = nullptr, *offset_end = nullptr,
+         *runtime_addr = nullptr, *runtime_addr_end = nullptr, *dsoName = nullptr;
 
     if (uint(i) > maxDepth)
       return;
@@ -253,7 +253,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       std::string dsoNameStr(dsoName);
 
       int status = 0;
-      char *real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
+      char *real_name = abi::__cxa_demangle(mangled_name, nullptr, nullptr, &status);
 
       char *end;
       int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));

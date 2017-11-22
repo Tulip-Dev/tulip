@@ -21,7 +21,7 @@
 #include <cassert>
 
 //====================================================
-tlp::GlDisplayListManager *tlp::GlDisplayListManager::inst = 0;
+tlp::GlDisplayListManager *tlp::GlDisplayListManager::inst = nullptr;
 
 using namespace std;
 

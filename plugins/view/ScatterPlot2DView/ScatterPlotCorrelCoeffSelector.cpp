@@ -459,7 +459,7 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
     Coord pointCoord(camera.worldTo2DViewport(polygonEdit[i]));
     camera2D.initGl();
     basicCircle.set(pointCoord, POINT_RADIUS, 0.);
-    basicCircle.draw(0, 0);
+    basicCircle.draw(0, nullptr);
   }
 
   return true;

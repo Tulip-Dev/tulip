@@ -38,7 +38,7 @@ class ScatterPlotCorrelCoeffSelectorOptionsWidget : public QWidget {
   Q_OBJECT
 
 public:
-  ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent = 0);
+  ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent = nullptr);
   ~ScatterPlotCorrelCoeffSelectorOptionsWidget();
 
   Color getMinusOneColor() const;

@@ -39,7 +39,7 @@ class TLP_PYTHON_SCOPE PythonShellWidget : public PythonCodeEditor {
   int _currentHistoryPos;
 
 public:
-  explicit PythonShellWidget(QWidget *parent = 0);
+  explicit PythonShellWidget(QWidget *parent = nullptr);
 
 signals:
 

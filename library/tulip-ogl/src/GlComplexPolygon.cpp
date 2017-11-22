@@ -372,7 +372,7 @@ void GlComplexPolygon::runTesselation() {
   const int nvp = 6;
 
   // run tesselation with the same default winding rule as in the GLU tesselator
-  if (tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, nvp, 3, 0)) {
+  if (tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, nvp, 3, nullptr)) {
     const float *verts = tessGetVertices(tess);
     const int *elems = tessGetElements(tess);
     const int nelems = tessGetElementCount(tess);

@@ -145,7 +145,7 @@ void PlanarityTestImpl::init() {
   embedList.clear();
   activeCNode.clear();
   listBackEdgesOutW.clear();
-  ptrItem.setAll(0);
+  ptrItem.setAll(nullptr);
   dfsPosNum.setAll(0);
   nodeWithDfsPos.setAll(NULL_NODE);
   parent.setAll(NULL_NODE);

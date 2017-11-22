@@ -21,7 +21,7 @@ class TLP_QT_SCOPE TulipFontIconDialog : public QDialog {
   QString _selectedIconName;
 
 public:
-  TulipFontIconDialog(QWidget *parent = 0);
+  TulipFontIconDialog(QWidget *parent = nullptr);
 
   QString getSelectedIconName() const;
 

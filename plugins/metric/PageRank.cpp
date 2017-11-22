@@ -71,7 +71,7 @@ struct PageRank : public DoubleAlgorithm {
     double d = 0.85;
     bool directed = true;
 
-    if (dataSet != 0) {
+    if (dataSet != nullptr) {
       dataSet->get("d", d);
       dataSet->get("directed", directed);
     }

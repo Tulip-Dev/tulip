@@ -140,7 +140,7 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
 
   if (src.isValid() && tgt.isValid()) { // We only select a path if source and target are valid
     Observable::holdObservers();
-    DoubleProperty *weights = 0;
+    DoubleProperty *weights = nullptr;
     string weightsMetricName = parent->getWeightMetricName();
 
     if (weightsMetricName.compare(NO_METRIC) != 0 && graph->existProperty(weightsMetricName)) {
@@ -159,7 +159,8 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
       selection->setAllNodeValue(false);
       selection->setAllEdgeValue(false);
       selection->setNodeValue(src, true);
-      QMessageBox::warning(0, "Path finder", "A path between the selected nodes cannot be found.");
+      QMessageBox::warning(nullptr, "Path finder",
+                           "A path between the selected nodes cannot be found.");
 
     } else
       // A path has been found: highlight it

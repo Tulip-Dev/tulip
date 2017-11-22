@@ -25,7 +25,8 @@
 using namespace tlp;
 using namespace std;
 
-PathHighlighter::PathHighlighter(const string &name) : name(name), backupScene(0), entityId(0) {}
+PathHighlighter::PathHighlighter(const string &name)
+    : name(name), backupScene(nullptr), entityId(0) {}
 
 PathHighlighter::~PathHighlighter() {
   if (backupScene)

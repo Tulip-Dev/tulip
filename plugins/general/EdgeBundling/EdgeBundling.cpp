@@ -559,7 +559,7 @@ bool EdgeBundling::run() {
           Dijkstra dijkstra;
 
           if (edgeNodeOverlap)
-            computeDik(dijkstra, vertexCoverGraph, 0, n, mWeights, optimizationLevel);
+            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
           else
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
@@ -600,7 +600,7 @@ bool EdgeBundling::run() {
           Dijkstra dijkstra;
 
           if (edgeNodeOverlap)
-            computeDik(dijkstra, vertexCoverGraph, 0, n, mWeights, optimizationLevel);
+            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
           else
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 

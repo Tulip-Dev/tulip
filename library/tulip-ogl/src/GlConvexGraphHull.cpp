@@ -36,8 +36,8 @@ GlConvexGraphHull::GlConvexGraphHull(GlComposite *parent, const std::string &nam
   assert(graph);
 
   if (graph->numberOfNodes() > 0) {
-    _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor,
-                                    GlConvexGraphHull::bezierValue);
+    _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, nullptr),
+                                    fcolor, GlConvexGraphHull::bezierValue);
     _parent->addGlEntity(_polygon, _name);
   }
 }
@@ -56,8 +56,8 @@ void GlConvexGraphHull::updateHull() {
     delete _polygon;
   }
 
-  _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), _fcolor,
-                                  GlConvexGraphHull::bezierValue);
+  _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, nullptr),
+                                  _fcolor, GlConvexGraphHull::bezierValue);
   _parent->addGlEntity(_polygon, _name);
 }
 

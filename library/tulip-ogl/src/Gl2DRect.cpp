@@ -108,7 +108,7 @@ void Gl2DRect::draw(float lod, Camera *camera) {
   glTranslatef(center[0], center[1], center[2]);
   glScalef(size[0], size[1], 1);
 
-  GlRect::draw(lod, 0);
+  GlRect::draw(lod, nullptr);
 
   glPopMatrix();
 }

@@ -110,7 +110,7 @@ bool ScatterPlotTrendLine::draw(GlMainWidget *glMainWidget) {
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  trendLine.draw(0, 0);
+  trendLine.draw(0, nullptr);
   glDisable(GL_BLEND);
 
   GlLabel lineEquationLabel(Coord(xAxis->getAxisBaseCoord().getX() + xAxis->getAxisLength() +
@@ -182,7 +182,7 @@ void ScatterPlotTrendLine::viewChanged(View *view) {
   }
 
   scatterView = static_cast<ScatterPlot2DView *>(view);
-  compute(0);
+  compute(nullptr);
   scatterView->refresh();
 }
 }

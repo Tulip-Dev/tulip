@@ -99,7 +99,7 @@ void GraphPropertyTest::testSetAll() {
   CPPUNIT_ASSERT_EQUAL(g1, proxy.getNodeValue(mnode1));
   CPPUNIT_ASSERT_EQUAL(g2, proxy.getNodeValue(mnode2));
   CPPUNIT_ASSERT_EQUAL(nullGraph, proxy.getNodeValue(mnode3));
-  proxy.setAllNodeValue(0);
+  proxy.setAllNodeValue(nullptr);
   graph->delSubGraph(g1);
   graph->delSubGraph(g2);
 }

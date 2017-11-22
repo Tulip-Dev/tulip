@@ -27,7 +27,7 @@ class NavigableTableView : public QTableView {
   Q_OBJECT
 
 public:
-  explicit NavigableTableView(QWidget *parent = 0);
+  explicit NavigableTableView(QWidget *parent = nullptr);
   void keyPressEvent(QKeyEvent *event);
 
 protected:

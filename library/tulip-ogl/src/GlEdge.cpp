@@ -52,7 +52,7 @@
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/TulipViewSettings.h>
 
-tlp::GlLabel *tlp::GlEdge::label = 0;
+tlp::GlLabel *tlp::GlEdge::label = nullptr;
 
 using namespace std;
 

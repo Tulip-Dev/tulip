@@ -184,7 +184,7 @@ void HttpContext::setTimer(QTimer *timer) {
   connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 }
 
-UrlElement::UrlElement() : http_prefix("http://"), data(""), context(0) {}
+UrlElement::UrlElement() : http_prefix("http://"), data(""), context(nullptr) {}
 UrlElement::UrlElement(const UrlElement &c)
     : http_prefix(c.http_prefix), data(""), server(c.server), url(c.url), clean_url(c.clean_url),
       context(nullptr) {}
@@ -222,7 +222,7 @@ bool UrlElement::load() {
 
 static const char *not_html_extensions[] = {
     ".bmp", ".css", ".doc", ".ico", ".exe", ".gif", ".gz",  ".js", ".jpeg", ".jpg", ".pdf",
-    ".png", ".ps",  ".rss", ".tar", ".tgz", ".wav", ".zip", ".z",  0 /* must be the last */
+    ".png", ".ps",  ".rss", ".tar", ".tgz", ".wav", ".zip", ".z",  nullptr /* must be the last */
 };
 
 bool UrlElement::isHtmlPage() {
@@ -280,7 +280,7 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
 } /* end, siteconnect */
 
 static const char *rejected_protocols[] = {
-    "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:", 0 /* must be the last */
+    "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:", nullptr /* must be the last */
 };
 
 UrlElement UrlElement::parseUrl(const std::string &href) {
@@ -291,7 +291,7 @@ UrlElement UrlElement::parseUrl(const std::string &href) {
   for (i = 0; i < len; ++i)
     lowercase[i] = tolower(lowercase[i]);
 
-  for (i = 0; rejected_protocols[i] != 0; i++) {
+  for (i = 0; rejected_protocols[i] != nullptr; i++) {
     if (lowercase.find(rejected_protocols[i]) != string::npos)
       break;
   }
@@ -652,7 +652,8 @@ struct WebImport : public ImportModule {
   void parseUrl(const string &href, UrlElement &starturl) {
     UrlElement newUrl = starturl.parseUrl(href);
 
-    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http()) && addEdge(starturl, newUrl, 0, 0))
+    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http()) &&
+        addEdge(starturl, newUrl, nullptr, nullptr))
       addUrl(newUrl, visitOther || (newUrl.server == starturl.server));
   }
   //========================================================

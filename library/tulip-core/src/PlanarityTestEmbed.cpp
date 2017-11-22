@@ -474,8 +474,8 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG,
                                                tlp::BmdList<edge> &embList) {
 
   BmdLink<node> *it = RBC[oldCNode].firstItem();
-  BmdLink<node> *itl = RBC[oldCNode].cyclicPred(it, 0);
-  BmdLink<node> *itr = RBC[oldCNode].cyclicSucc(it, 0);
+  BmdLink<node> *itl = RBC[oldCNode].cyclicPred(it, nullptr);
+  BmdLink<node> *itr = RBC[oldCNode].cyclicSucc(it, nullptr);
   node jl = itl->getData();
   node jr = itr->getData();
 

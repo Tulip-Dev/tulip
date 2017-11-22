@@ -38,7 +38,8 @@ class DoubleStringsListRelationDialog : public QDialog {
 
 public:
   DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,
-                                  const std::vector<Color> &secondValues, QWidget *parent = 0);
+                                  const std::vector<Color> &secondValues,
+                                  QWidget *parent = nullptr);
   ~DoubleStringsListRelationDialog();
   void getResult(std::vector<std::pair<std::string, Color>> &result);
 

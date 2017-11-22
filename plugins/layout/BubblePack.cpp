@@ -321,7 +321,7 @@ bool BubblePack::run() {
     }
   }
 
-  if (dataSet == 0 || !dataSet->get("complexity", nAlgo))
+  if (dataSet == nullptr || !dataSet->get("complexity", nAlgo))
     nAlgo = true;
 
   result->setAllEdgeValue(vector<Coord>(0));

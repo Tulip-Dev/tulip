@@ -876,7 +876,7 @@ double LayoutProperty::averageEdgeLength(const Graph *sg) const {
 //=================================================================================
 PropertyInterface *LayoutProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   LayoutProperty *p = n.empty() ? new LayoutProperty(g) : g->getLocalProperty<LayoutProperty>(n);
@@ -921,7 +921,7 @@ void LayoutProperty::treatEvent(const Event &evt) {
 //=================================================================================
 PropertyInterface *CoordVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   CoordVectorProperty *p =

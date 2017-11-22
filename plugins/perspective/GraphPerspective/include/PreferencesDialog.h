@@ -32,7 +32,7 @@ class PreferencesDialog : public QDialog {
   Ui::PreferencesDialog *_ui;
 
 public:
-  explicit PreferencesDialog(QWidget *parent = 0);
+  explicit PreferencesDialog(QWidget *parent = nullptr);
   ~PreferencesDialog();
 
 public slots:

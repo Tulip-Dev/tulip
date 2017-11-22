@@ -50,7 +50,7 @@ void SelectionButton::paintEvent(QPaintEvent *e) {
   p.drawPixmap(10, height() / 2 - pixmap.height() / 2, pixmap);
 }
 
-TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance = 0;
+TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance = nullptr;
 
 TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
   listen(QHostAddress::LocalHost);

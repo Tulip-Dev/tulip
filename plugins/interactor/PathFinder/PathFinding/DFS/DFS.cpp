@@ -83,7 +83,7 @@ bool DFS::searchPaths(node src) {
   visitable->setNodeValue(src, false);
   edge e;
 
-  Iterator<edge> *edgeIt = 0;
+  Iterator<edge> *edgeIt = nullptr;
 
   switch (edgesOrientation) {
   case NonOriented:

@@ -38,7 +38,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   set<DikjstraElement *, LessDikjstraElement> dikjstraTable;
   set<DikjstraElement *, LessDikjstraElement> focusTable;
   MutableContainer<DikjstraElement *> mapDik;
-  mapDik.setAll(0);
+  mapDik.setAll(nullptr);
 
   node n;
   forEach(n, graph->getNodes()) {
@@ -85,13 +85,13 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
       // if ((u.dist > maxDist) break;
     }
 
-    if (forbiddenNodes != 0)
+    if (forbiddenNodes != nullptr)
       if (forbiddenNodes->isElement(u.n) && u.n != this->src)
         continue;
 
     edge e;
 
-    Iterator<edge> *iter = 0;
+    Iterator<edge> *iter = nullptr;
 
     switch (directed) {
     case Oriented:

@@ -132,7 +132,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     convexHullItem->name = s.str();
   }
 
-  if (root == 0)
+  if (root == nullptr)
     root = graph;
 
   if (fColors.size() == 0) {

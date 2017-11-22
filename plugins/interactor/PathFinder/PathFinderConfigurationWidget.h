@@ -37,7 +37,7 @@ class PathFinderConfigurationWidget : public QWidget {
   Ui::PathFinderConfigurationData *_ui;
 
 public:
-  PathFinderConfigurationWidget(QWidget *parent = 0);
+  PathFinderConfigurationWidget(QWidget *parent = nullptr);
   ~PathFinderConfigurationWidget();
 
   void addweightComboItem(const QString &s);

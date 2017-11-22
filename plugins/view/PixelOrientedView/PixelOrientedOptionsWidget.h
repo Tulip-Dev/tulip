@@ -37,7 +37,7 @@ class PixelOrientedOptionsWidget : public QWidget {
   Ui::PixelOrientedOptionsWidgetData *_ui;
 
 public:
-  PixelOrientedOptionsWidget(QWidget *parent = 0);
+  PixelOrientedOptionsWidget(QWidget *parent = nullptr);
   ~PixelOrientedOptionsWidget();
 
   Color getBackgroundColor() const;

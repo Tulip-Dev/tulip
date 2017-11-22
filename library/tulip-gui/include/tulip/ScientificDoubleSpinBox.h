@@ -54,7 +54,7 @@ public:
 class TLP_QT_SCOPE ScientificDoubleSpinBox : public QDoubleSpinBox {
 
 public:
-  ScientificDoubleSpinBox(QWidget *parent = 0);
+  ScientificDoubleSpinBox(QWidget *parent = nullptr);
 
   QValidator::State validate(QString &input, int &pos) const;
 

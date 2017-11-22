@@ -38,7 +38,7 @@ class ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
   Q_OBJECT
 
 public:
-  ViewGraphPropertiesSelectionWidget(QWidget *parent = 0);
+  ViewGraphPropertiesSelectionWidget(QWidget *parent = nullptr);
   ~ViewGraphPropertiesSelectionWidget();
 
   void setWidgetParameters(Graph *graph, std::vector<std::string> graphPropertiesTypesFilter);

@@ -45,7 +45,7 @@ public:
     return dummy_edge;
   }
 
-  Ordering(PlanarConMap *G, PluginProgress *pluginProgress = 0, int minProgress = 0,
+  Ordering(PlanarConMap *G, PluginProgress *pluginProgress = nullptr, int minProgress = 0,
            int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
   //   inline void push_back(std::vector<node> nodeVector) {

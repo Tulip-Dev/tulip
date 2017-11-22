@@ -349,8 +349,8 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode, node, node n, node
   // or v = parent[oldCNode].
 
   BmdLink<node> *firstItem = RBC[oldCNode].firstItem();
-  BmdLink<node> *predItem = RBC[oldCNode].cyclicPred(firstItem, 0);
-  BmdLink<node> *succItem = RBC[oldCNode].cyclicSucc(firstItem, 0);
+  BmdLink<node> *predItem = RBC[oldCNode].cyclicPred(firstItem, nullptr);
+  BmdLink<node> *succItem = RBC[oldCNode].cyclicSucc(firstItem, nullptr);
 
   node predNode = predItem->getData();
   node succNode = succItem->getData();
@@ -771,8 +771,8 @@ bool PlanarityTestImpl::testCNodeCounter(Graph *, node cNode, node n, node n1, n
     return false;
 
   BmdLink<node> *it1 = RBC[cNode].firstItem();
-  BmdLink<node> *it1l = RBC[cNode].cyclicPred(it1, 0);
-  BmdLink<node> *it1r = RBC[cNode].cyclicSucc(it1, 0);
+  BmdLink<node> *it1l = RBC[cNode].cyclicPred(it1, nullptr);
+  BmdLink<node> *it1r = RBC[cNode].cyclicSucc(it1, nullptr);
 
   jl = it1l->getData();
   jr = it1r->getData();
@@ -954,7 +954,7 @@ node PlanarityTestImpl::findActiveCNode(node u, node w, list<node> &nl) {
   node v = it->getData();
   node cNode;
 
-  if (it->prev() != 0 && it->succ() != 0)
+  if (it->prev() != nullptr && it->succ() != nullptr)
     cNode = parent.get(v.id); // path compressed;
   else
     cNode = activeCNode[it];

@@ -36,7 +36,7 @@ class TLP_QT_SCOPE ScrollPopupButton : public QPushButton {
   QSlider *_slider;
 
 public:
-  explicit ScrollPopupButton(QWidget *parent = 0);
+  explicit ScrollPopupButton(QWidget *parent = nullptr);
   int value() const;
   int maximum() const;
   int minimum() const;

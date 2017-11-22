@@ -278,7 +278,7 @@ GraphPerspective::~GraphPerspective() {
   // uninstall Qt message handler only if it is the current active perspective
   if (Perspective::instance() == this) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    qInstallMessageHandler(0);
+    qInstallMessageHandler(nullptr);
 #else
     qInstallMsgHandler(0);
 #endif

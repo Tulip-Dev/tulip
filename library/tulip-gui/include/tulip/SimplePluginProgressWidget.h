@@ -46,7 +46,7 @@ class TLP_QT_SCOPE SimplePluginProgressWidget : public QWidget, public tlp::Plug
   tlp::ProgressState _state;
 
 public:
-  explicit SimplePluginProgressWidget(QWidget *parent = nullptr, Qt::WindowFlags f = 0);
+  explicit SimplePluginProgressWidget(QWidget *parent = nullptr, Qt::WindowFlags f = nullptr);
   virtual ~SimplePluginProgressWidget();
 
   void setComment(const std::string &);

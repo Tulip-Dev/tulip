@@ -38,7 +38,7 @@ class GeographicViewConfigWidget : public QWidget {
 public:
   enum PolyFileType { None = -1, Default = 0, CsvFile, PolyFile };
 
-  GeographicViewConfigWidget(QWidget *parent = 0);
+  GeographicViewConfigWidget(QWidget *parent = nullptr);
   ~GeographicViewConfigWidget();
 
   bool useSharedLayoutProperty() const;

@@ -47,7 +47,7 @@ static const std::string PERSPECTIVE_CATEGORY = "Perspective";
  */
 class TLP_QT_SCOPE PerspectiveContext : public tlp::PluginContext {
 public:
-  PerspectiveContext() : mainWindow(0), project(0), tulipPort(0) {}
+  PerspectiveContext() : mainWindow(nullptr), project(nullptr), tulipPort(0) {}
   QMainWindow *mainWindow;
   TulipProject *project;
   QString externalFile;

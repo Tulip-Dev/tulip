@@ -159,7 +159,7 @@ void tlp::initTulipLib(const char *appDirPath) {
 
   getEnvTlp = getenv("TLP_DIR");
 
-  if (getEnvTlp == 0) {
+  if (getEnvTlp == nullptr) {
     if (appDirPath) {
 #ifdef _WIN32
       TulipLibDir = std::string(appDirPath) + "/../" + TULIP_INSTALL_LIBDIR_STR;

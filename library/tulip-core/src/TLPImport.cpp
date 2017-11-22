@@ -286,7 +286,7 @@ struct TLPGraphBuilder : public TLPTrue {
         if (clusterIndex.find(result) == clusterIndex.end())
           return false;
 
-        gProp->setNodeValue(n, result ? clusterIndex[result] : 0);
+        gProp->setNodeValue(n, result ? clusterIndex[result] : nullptr);
 
         return true;
       }
@@ -384,7 +384,7 @@ struct TLPGraphBuilder : public TLPTrue {
       if (clusterIndex.find(result) == clusterIndex.end())
         return false;
 
-      gProp->setAllNodeValue(result ? clusterIndex[result] : 0);
+      gProp->setAllNodeValue(result ? clusterIndex[result] : nullptr);
 
       return true;
     }

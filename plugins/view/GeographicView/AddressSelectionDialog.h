@@ -35,7 +35,7 @@ class AddressSelectionDialog : public QDialog {
   Ui::AddressSelectionDialogData *_ui;
 
 public:
-  AddressSelectionDialog(QWidget *parent = 0);
+  AddressSelectionDialog(QWidget *parent = nullptr);
   ~AddressSelectionDialog();
 
   void setBaseAddress(const QString &address);

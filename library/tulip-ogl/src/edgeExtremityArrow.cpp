@@ -39,7 +39,7 @@ protected:
 
 PLUGIN(GlArrow2DEdgeExtremity)
 
-GlTriangle *GlArrow2DEdgeExtremity::triangle = 0;
+GlTriangle *GlArrow2DEdgeExtremity::triangle = nullptr;
 
 GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(tlp::PluginContext *gc) : EdgeExtremityGlyph(gc) {
   if (!triangle) {

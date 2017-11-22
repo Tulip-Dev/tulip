@@ -43,7 +43,7 @@ void IntegerProperty::clone_handler(
 //=================================================================================
 PropertyInterface *IntegerProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   IntegerProperty *p = n.empty() ? new IntegerProperty(g) : g->getLocalProperty<IntegerProperty>(n);
@@ -108,7 +108,7 @@ int IntegerProperty::compare(const edge e1, const edge e2) const {
 //=================================================================================
 PropertyInterface *IntegerVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
   if (!g)
-    return 0;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   IntegerVectorProperty *p =

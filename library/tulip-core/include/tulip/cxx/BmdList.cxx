@@ -19,7 +19,7 @@
 
 //=================================================================
 template <typename TYPE>
-tlp::BmdList<TYPE>::BmdList() : head(0), tail(0), count(0) {}
+tlp::BmdList<TYPE>::BmdList() : head(nullptr), tail(nullptr), count(0) {}
 //=================================================================
 template <typename TYPE>
 tlp::BmdList<TYPE>::~BmdList() {

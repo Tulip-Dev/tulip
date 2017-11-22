@@ -163,7 +163,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   tlp::warning() << __PRETTY_FUNCTION__ << endl;
   Graph *graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
   // take the quotient graph
-  Graph *subgraph = 0;
+  Graph *subgraph = nullptr;
   bool find = false;
   forEach(subgraph, graph->getSubGraphs()) {
     string name;

@@ -40,7 +40,7 @@ class ScatterPlot2DOptionsWidget : public QWidget {
   Q_OBJECT
 
 public:
-  ScatterPlot2DOptionsWidget(QWidget *parent = 0);
+  ScatterPlot2DOptionsWidget(QWidget *parent = nullptr);
   ~ScatterPlot2DOptionsWidget();
 
   void setWidgetEnabled(const bool enabled);

@@ -687,7 +687,7 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
     GlCircle circle(circleCenter, computeNeighborhoodGraphRadius(neighborhoodGraphLayout),
                     Color(0, 0, 0, circleAlphaValue), Color(255, 255, 255, circleAlphaValue), true,
                     true, 0.0, 60);
-    circle.draw(0, 0);
+    circle.draw(0, nullptr);
 
     GlGraphRenderingParameters renderingParameters =
         glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();

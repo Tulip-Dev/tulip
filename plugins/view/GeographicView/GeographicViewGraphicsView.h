@@ -40,7 +40,7 @@ class GeographicViewGraphicsView : public QGraphicsView, public Observable {
 
 public:
   GeographicViewGraphicsView(GeographicView *_geoView, QGraphicsScene *graphicsScene,
-                             QWidget *parent = 0);
+                             QWidget *parent = nullptr);
   ~GeographicViewGraphicsView();
 
   void setGraph(Graph *graph);
