@@ -82,6 +82,13 @@ public:
     ok = res;
     QColorDialog::done(res);
   }
+  void showEvent(QShowEvent *ev) override {
+    QDialog::showEvent(ev);
+
+    if (parentWidget())
+      move(parentWidget()->window()->frameGeometry().topLeft() +
+           parentWidget()->window()->rect().center() - rect().center());
+  }
 };
 
 /*
@@ -323,6 +330,14 @@ public:
   void done(int res) override {
     ok = res;
     QFileDialog::done(res);
+  }
+
+  void showEvent(QShowEvent *ev) override {
+    QDialog::showEvent(ev);
+
+    if (parentWidget())
+      move(parentWidget()->window()->frameGeometry().topLeft() +
+           parentWidget()->window()->rect().center() - rect().center());
   }
 };
 

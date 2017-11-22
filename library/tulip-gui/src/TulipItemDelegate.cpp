@@ -293,6 +293,7 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
     dlg->setWindowTitle(elType == NODE ? "Set node values" : "Set edge values");
     QVBoxLayout *layout = new QVBoxLayout;
     dlg->setLayout(layout);
+    dlg->setMinimumWidth(250);
     layout->addWidget(new QLabel(pi->getName().c_str()));
     layout->addWidget(w);
     QDialogButtonBox *buttonBox =

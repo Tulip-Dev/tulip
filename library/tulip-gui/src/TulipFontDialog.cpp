@@ -106,3 +106,11 @@ TulipFont TulipFontDialog::getFont(QWidget * /*parent*/, const TulipFont &select
   else
     return dlg.font();
 }
+
+void TulipFontDialog::showEvent(QShowEvent *ev) {
+  QDialog::showEvent(ev);
+
+  if (parentWidget())
+    move(parentWidget()->window()->frameGeometry().topLeft() +
+         parentWidget()->window()->rect().center() - rect().center());
+}
