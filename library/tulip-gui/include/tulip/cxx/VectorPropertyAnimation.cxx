@@ -42,7 +42,7 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
 
         for (unsigned int i = 0; i < SIZE; ++i)
           stepsVector[i] =
-              ((double)values.second[i] - (double)values.first[i]) * 1. / (frameCount - 1);
+              (double(values.second[i]) - double(values.first[i])) * 1. / (frameCount - 1);
 
         steps[values] = stepsVector;
       }
@@ -63,7 +63,7 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
 
         for (unsigned int i = 0; i < SIZE; ++i)
           stepsVector[i] =
-              ((double)(values.second[i] - (double)values.first[i])) * 1. / (frameCount - 1);
+              (double((values.second[i]) - double(values.first[i]))) * 1. / (frameCount - 1);
 
         steps[values] = stepsVector;
       }
@@ -74,8 +74,8 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
 template <typename PropType, typename RealType, typename VectorType, unsigned int SIZE>
 RealType VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::getNodeFrameValue(
     const RealType &startValue, const RealType &endValue, int frame) {
-  PropVector result((PropVector)startValue);
-  std::pair<PropVector, PropVector> values(result, (PropVector)endValue);
+  PropVector result(static_cast<PropVector>(startValue));
+  std::pair<PropVector, PropVector> values(result, static_cast<PropVector>(endValue));
   tlp::Vector<double, SIZE> stepVal(steps[values]);
 
   for (unsigned i = 0; i < SIZE; ++i)
