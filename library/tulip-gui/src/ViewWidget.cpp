@@ -98,7 +98,8 @@ void ViewWidget::setupUi() {
 }
 
 void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
-  i->install(_centralWidget);
+  if (i)
+    i->install(_centralWidget);
 }
 
 void ViewWidget::graphDeleted(Graph *parentGraph) {
