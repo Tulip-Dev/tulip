@@ -18,6 +18,7 @@
  */
 #include <QFileDialog>
 
+#include <tulip/TlpTools.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
@@ -73,7 +74,7 @@ void TextureFileDialog::browse() {
 void TextureFileDialog::showEvent(QShowEvent *ev) {
   QDialog::showEvent(ev);
 
-  if (parentWidget())
+  if (!inGuiTestingMode() && parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() - rect().center());
 }
