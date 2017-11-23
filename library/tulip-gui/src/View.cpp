@@ -35,7 +35,13 @@ using namespace tlp;
 View::View() : _currentInteractor(nullptr), _graph(nullptr) {}
 
 View::~View() {
-  foreach (Interactor *i, _interactors) { delete i; }
+  foreach (Interactor *i, _interactors) {
+    // as the current view is being deleted
+    // we must detach it from the interactors before
+    // deleting them
+    i->setView(nullptr);
+    delete i;
+  }
 }
 
 QList<Interactor *> View::interactors() const {
@@ -55,6 +61,9 @@ Interactor *View::currentInteractor() const {
 void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor) {
     _currentInteractor->uninstall();
+    // detach the current view from
+    // from its old current interactor
+    _currentInteractor->setView(nullptr);
 
     if (graphicsView() != nullptr)
       graphicsView()->setCursor(QCursor()); // Force reset cursor when interactor is changed
@@ -67,7 +76,8 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   refresh();
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
-  i->install(graphicsView());
+  if (i)
+    i->install(graphicsView());
 }
 
 void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
