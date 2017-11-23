@@ -85,7 +85,7 @@ public:
   void showEvent(QShowEvent *ev) {
     QDialog::showEvent(ev);
 
-    if (parentWidget())
+    if (!inGuiTestingMode() && parentWidget())
       move(parentWidget()->window()->frameGeometry().topLeft() +
            parentWidget()->window()->rect().center() - rect().center());
   }
@@ -335,7 +335,7 @@ public:
   void showEvent(QShowEvent *ev) {
     QDialog::showEvent(ev);
 
-    if (parentWidget())
+    if (!inGuiTestingMode() && parentWidget())
       move(parentWidget()->window()->frameGeometry().topLeft() +
            parentWidget()->window()->rect().center() - rect().center());
   }

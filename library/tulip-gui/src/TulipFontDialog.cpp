@@ -17,7 +17,8 @@
  *
  */
 
-#include "tulip/TulipFontDialog.h"
+#include <tulip/TlpTools.h>
+#include <tulip/TulipFontDialog.h>
 #include "ui_TulipFontDialog.h"
 
 #include <QFontDatabase>
@@ -110,7 +111,7 @@ TulipFont TulipFontDialog::getFont(QWidget * /*parent*/, const TulipFont &select
 void TulipFontDialog::showEvent(QShowEvent *ev) {
   QDialog::showEvent(ev);
 
-  if (parentWidget())
+  if (!inGuiTestingMode() && parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() - rect().center());
 }
