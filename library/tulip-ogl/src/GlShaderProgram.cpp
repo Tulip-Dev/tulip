@@ -346,12 +346,12 @@ void GlShaderProgram::setUniformVec4Float(const std::string &variableName, const
   glUniform4f(loc, f1, f2, f3, f4);
 }
 
-template <unsigned int SIZE>
+template <size_t SIZE>
 float *getMatrixData(const Matrix<float, SIZE> &matrix) {
   float *matrixData = new float[SIZE * SIZE];
 
-  for (unsigned int i = 0; i < SIZE; ++i) {
-    for (unsigned int j = 0; j < SIZE; ++j) {
+  for (size_t i = 0; i < SIZE; ++i) {
+    for (size_t j = 0; j < SIZE; ++j) {
       matrixData[i * SIZE + j] = matrix[i][j];
     }
   }

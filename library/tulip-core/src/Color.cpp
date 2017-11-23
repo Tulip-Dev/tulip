@@ -145,7 +145,7 @@ std::istream &tlp::operator>>(std::istream &is, tlp::Color &outA) {
 
     unsigned int vi = 0;
     bool done = bool(is >> vi);
-    outA.array[i] = vi;
+    outA[i] = vi;
 
     if (!done) {
       is.seekg(pos);
@@ -167,7 +167,7 @@ std::istream &tlp::operator>>(std::istream &is, tlp::Color &outA) {
 long tlp::Color::getTrueColor() {
   long ret = 0;
   long tmp;
-  unsigned int RR = array[0], BB = array[1], GG = array[2];
+  unsigned int RR = (*this)[0], BB = (*this)[1], GG = (*this)[2];
   tmp = RR << 16;
   ret = tmp;
   tmp = GG << 8;
@@ -176,31 +176,34 @@ long tlp::Color::getTrueColor() {
   return ret;
 }
 
+// clang-format off
+
 // HSV accessors
 #define HSVGet(P)                                                                                  \
-  int tlp::Color::get##P() const {                                                                 \
-    int H, S, V;                                                                                   \
-    RGBtoHSV(array[0], array[1], array[2], H, S, V);                                               \
-    return P;                                                                                      \
-  }
+int tlp::Color::get##P() const {                                                                 \
+  int H, S, V;                                                                                   \
+  RGBtoHSV((*this)[0], (*this)[1], (*this)[2], H, S, V);                                         \
+  return P;                                                                                      \
+}
 
 HSVGet(H) HSVGet(S) HSVGet(V)
 #undef HSVGet
 
 #define HSVSet(P)                                                                                  \
-  void tlp::Color::set##P(int val) {                                                               \
-    int H, S, V;                                                                                   \
-    RGBtoHSV(array[0], array[1], array[2], H, S, V);                                               \
-    P = val;                                                                                       \
-    HSVtoRGB(H, S, V, array[0], array[1], array[2]);                                               \
-  }
+void tlp::Color::set##P(int val) {                                                               \
+  int H, S, V;                                                                                   \
+  RGBtoHSV((*this)[0], (*this)[1], (*this)[2], H, S, V);                                         \
+  P = val;                                                                                       \
+  HSVtoRGB(H, S, V, (*this)[0], (*this)[1], (*this)[2]);                                         \
+}
 
-    HSVSet(H) HSVSet(S) HSVSet(V)
+HSVSet(H) HSVSet(S) HSVSet(V)
 #undef HSVSet
 
-    //=================================================================
-    //// static RGB<->HSV conversion functions
-    void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s, int &v) {
+//=================================================================
+
+// static RGB<->HSV conversion functions
+void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s, int &v) {
   int theMin, theMax, delta;
   theMin = std::min(std::min(r, g), b); //  r <? g <? b
   theMax = std::max(std::max(r, g), b); //  r >? g >? b
@@ -297,3 +300,5 @@ void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned 
   }
 }
 //=================================================================
+
+// clang-format on

@@ -16,25 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-
 //=================================================================
-template <typename Obj, unsigned int SIZE>
-Obj tlp::Array<Obj, SIZE>::operator[](const unsigned int i) const {
-  assert(i < SIZE);
-  return array[i];
-}
-//=================================================================
-template <typename Obj, unsigned int SIZE>
-Obj &tlp::Array<Obj, SIZE>::operator[](const unsigned int i) {
-  assert(i < SIZE);
-  return array[i];
-}
-//=================================================================
-template <typename Obj, unsigned int SIZE>
-std::ostream &tlp::operator<<(std::ostream &os, const tlp::Array<Obj, SIZE> &a) {
+template <typename T, size_t N>
+std::ostream &tlp::operator<<(std::ostream &os, const tlp::Array<T, N> &a) {
   os << "(";
 
-  for (unsigned int i = 0; i < SIZE; ++i) {
+  for (unsigned int i = 0; i < N; ++i) {
     if (i > 0)
       os << ",";
 
@@ -44,18 +31,9 @@ std::ostream &tlp::operator<<(std::ostream &os, const tlp::Array<Obj, SIZE> &a) 
   os << ")";
   return os;
 }
-//#include <sstream>
-//=================================================================
-// template <typename Obj,unsigned int SIZE>
-// QDebug operator<<(QDebug dbg,const tlp::Array<Obj,SIZE>& s) {
-//  std::stringstream ss;
-//  ss << s;
-//  dbg.nospace() << ss.str().c_str();
-//  return dbg.space();
-//}
 
-template <typename Obj, unsigned int SIZE>
-std::istream &tlp::operator>>(std::istream &is, tlp::Array<Obj, SIZE> &outA) {
+template <typename T, size_t N>
+std::istream &tlp::operator>>(std::istream &is, tlp::Array<T, N> &outA) {
   char c;
   int pos = is.tellg();
   is.clear();
@@ -70,7 +48,7 @@ std::istream &tlp::operator>>(std::istream &is, tlp::Array<Obj, SIZE> &outA) {
     return is;
   }
 
-  for (unsigned int i = 0; i < SIZE; ++i) {
+  for (unsigned int i = 0; i < N; ++i) {
     bool ok;
 
     if (i > 0) {
@@ -90,7 +68,7 @@ std::istream &tlp::operator>>(std::istream &is, tlp::Array<Obj, SIZE> &outA) {
     }
 
     is.unget();
-    bool done = bool(is >> outA.array[i]);
+    bool done = bool(is >> outA[i]);
 
     if (!done) {
       is.seekg(pos);

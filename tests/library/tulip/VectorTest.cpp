@@ -29,22 +29,21 @@ CPPUNIT_TEST_SUITE_REGISTRATION(VectorTest);
 void VectorTest::testExternalOperation() {}
 //==========================================================
 void VectorTest::testInternalOperation() {
-  const unsigned int SIZE = 4;
-  Vector<double, SIZE> vect1, vectnull;
-  vectnull.fill(0.0);
+  const size_t SIZE = 4;
+  Vec4d vect1 = {0, 1, 2, 3};
+  Vec4d vectnull = {0};
 
-  for (unsigned int i = 0; i < SIZE; ++i) {
-    vect1[i] = i;
+  for (size_t i = 0; i < SIZE; ++i) {
     CPPUNIT_ASSERT_EQUAL(0.0, vectnull[i]);
     CPPUNIT_ASSERT_EQUAL(double(i), vect1[i]);
   }
 
-  Vector<double, SIZE> vect2(vect1);
+  Vec4d vect2(vect1);
   CPPUNIT_ASSERT_EQUAL(vect2, vect1);
   vect1 += 3;
   CPPUNIT_ASSERT(vect1 != vect2);
 
-  for (unsigned int i = 0; i < SIZE; ++i)
+  for (size_t i = 0; i < SIZE; ++i)
     CPPUNIT_ASSERT_EQUAL(double(i + 3), vect1[i]);
 
   vect1 -= 3;
@@ -57,7 +56,7 @@ void VectorTest::testInternalOperation() {
   vect1 = vect2;
   CPPUNIT_ASSERT_EQUAL(vect2, vect1);
 
-  for (unsigned int i = 0; i < SIZE; ++i) {
+  for (size_t i = 0; i < SIZE; ++i) {
     vect1[i] = i;
     vect2[i] = i;
   }

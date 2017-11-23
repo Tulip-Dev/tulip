@@ -32,7 +32,7 @@
 
 namespace tlp {
 
-template <typename T, unsigned int N>
+template <typename T, size_t N>
 class Matrix;
 //====================================================================
 // return vertices, update startN and endN to prevent bad edge drawing

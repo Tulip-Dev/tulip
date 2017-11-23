@@ -46,7 +46,7 @@ namespace tlp {
  * \author Contributor : Maxime Delorme
  * \version 0.0.2 27/04/2005
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 class Matrix : public Array<Vector<Obj, SIZE>, SIZE> {
 public:
   Matrix() {}
@@ -147,36 +147,36 @@ typedef Matrix<double, 4> Mat4d;
 /**
  * Returns a new matrix equal to the sum of 2 matrices
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 inline MATRIX operator+(const MATRIX &mat1, const MATRIX &mat2);
 /**
  * Returns a new matrix equal to the difference of 2 matrices
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 inline MATRIX operator-(const MATRIX &mat1, const MATRIX &mat2);
 /**
  * Returns a new matrix equal to the multiplication of the matrix by
  * obj
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 inline MATRIX operator*(const MATRIX &mat, const Obj &obj);
 /**
  * Returns a new matrix equal to the multiplication of the matrix by
  * another matrix
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 inline MATRIX operator*(const MATRIX &mat1, const MATRIX &mat2);
 /**
  * Returns a new vector equal to the multiplication of the vector by
  * a matrix,(the vector is automatically transposed to do the multiplication)
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 inline Vector<Obj, SIZE> operator*(const Vector<Obj, SIZE> &vec, const tlp::Matrix<Obj, SIZE> &);
 /**
  * Returns a new vector equal to the multiplication of the matrix by
  * a vector
  */
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 inline Vector<Obj, SIZE> operator*(const Matrix<Obj, SIZE> &, const Vector<Obj, SIZE> &vec);
 }
 

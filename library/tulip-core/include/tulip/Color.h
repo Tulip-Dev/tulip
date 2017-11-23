@@ -165,43 +165,41 @@ tlp::Color::Color(const tlp::Vector<unsigned char, 4> &v) : tlp::Vector<unsigned
 
 tlp::Color::Color(const unsigned char red, const unsigned char green, const unsigned char blue,
                   const unsigned char alpha) {
-  array[0] = red;
-  array[1] = green;
-  array[2] = blue;
-  array[3] = alpha;
+  set(red, green, blue, alpha);
 }
+
 void tlp::Color::set(unsigned char red, unsigned char green, unsigned char blue,
                      unsigned char alpha) {
-  array[0] = red;
-  array[1] = green;
-  array[2] = blue;
-  array[3] = alpha;
+  (*this)[0] = red;
+  (*this)[1] = green;
+  (*this)[2] = blue;
+  (*this)[3] = alpha;
 }
 
 unsigned char tlp::Color::getR() const {
-  return array[0];
+  return (*this)[0];
 }
 unsigned char tlp::Color::getG() const {
-  return array[1];
+  return (*this)[1];
 }
 unsigned char tlp::Color::getB() const {
-  return array[2];
+  return (*this)[2];
 }
 unsigned char tlp::Color::getA() const {
-  return array[3];
+  return (*this)[3];
 }
 
 float tlp::Color::getRGL() const {
-  return float(array[0] / 255.0);
+  return float((*this)[0] / 255.0);
 }
 float tlp::Color::getGGL() const {
-  return float(array[1] / 255.0);
+  return float((*this)[1] / 255.0);
 }
 float tlp::Color::getBGL() const {
-  return float(array[2] / 255.0);
+  return float((*this)[2] / 255.0);
 }
 float tlp::Color::getAGL() const {
-  return float(array[3] / 255.0);
+  return float((*this)[3] / 255.0);
 }
 float *tlp::Color::getGL() const {
   float *result = new float[4];
@@ -213,16 +211,16 @@ float *tlp::Color::getGL() const {
 }
 
 void tlp::Color::setR(unsigned char red) {
-  array[0] = red;
+  (*this)[0] = red;
 }
 void tlp::Color::setG(unsigned char green) {
-  array[1] = green;
+  (*this)[1] = green;
 }
 void tlp::Color::setB(unsigned char blue) {
-  array[2] = blue;
+  (*this)[2] = blue;
 }
 void tlp::Color::setA(unsigned char alpha) {
-  array[3] = alpha;
+  (*this)[3] = alpha;
 }
 
 TLP_BEGIN_HASH_NAMESPACE {

@@ -47,42 +47,42 @@ public:
 }
 
 //===================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX::Matrix(const std::vector<std::vector<Obj>> &covarianceMatrix) {
-  for (unsigned int i = 0; i < SIZE; i++)
-    for (unsigned int j = 0; j < SIZE; j++)
+  for (size_t i = 0; i < SIZE; i++)
+    for (size_t j = 0; j < SIZE; j++)
       (*this)[i][j] =
           covarianceMatrix[i][j] / (sqrt(covarianceMatrix[i][i] * covarianceMatrix[j][j]));
 }
 
 //===================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::fill(Obj obj) {
-  for (unsigned int i = 0; i < SIZE; ++i)
+  for (size_t i = 0; i < SIZE; ++i)
     (*this)[i].fill(obj);
 
   return (*this);
 }
 //======================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::operator+=(const MATRIX &mat) {
-  for (unsigned int i = 0; i < SIZE; ++i)
+  for (size_t i = 0; i < SIZE; ++i)
     (*this)[i] += mat[i];
 
   return (*this);
 }
 //======================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::operator-=(const MATRIX &mat) {
-  for (unsigned int i = 0; i < SIZE; ++i)
+  for (size_t i = 0; i < SIZE; ++i)
     (*this)[i] -= mat[i];
 
   return (*this);
 }
 //======================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 bool MATRIX::operator==(const MATRIX &mat) const {
-  for (unsigned int i = 0; i < SIZE; ++i) {
+  for (size_t i = 0; i < SIZE; ++i) {
     if (((*this)[i] != mat[i]))
       return false;
   }
@@ -90,9 +90,9 @@ bool MATRIX::operator==(const MATRIX &mat) const {
   return true;
 }
 //======================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 bool MATRIX::operator!=(const MATRIX &mat) const {
-  for (unsigned int i = 0; i < SIZE; ++i) {
+  for (size_t i = 0; i < SIZE; ++i) {
     if (((*this)[i] != mat[i]))
       return true;
   }
@@ -100,21 +100,21 @@ bool MATRIX::operator!=(const MATRIX &mat) const {
   return false;
 }
 //===================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::operator*=(const MATRIX &mat) {
   (*this) = (*this) * mat;
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::operator*=(const Obj &obj) {
-  for (unsigned int i = 0; i < SIZE; ++i)
+  for (size_t i = 0; i < SIZE; ++i)
     (*this)[i] *= obj;
 
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::operator/=(const MATRIX &mat) {
   MATRIX tmpMat(mat);
   tmpMat.inverse();
@@ -122,15 +122,15 @@ MATRIX &MATRIX::operator/=(const MATRIX &mat) {
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::operator/=(const Obj &obj) {
-  for (unsigned int i = 0; i < SIZE; ++i)
+  for (size_t i = 0; i < SIZE; ++i)
     (*this)[i] /= obj;
 
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 Obj MATRIX::determinant() const {
   switch (SIZE) {
   case 2:
@@ -147,13 +147,13 @@ Obj MATRIX::determinant() const {
     int j2;
     Obj det = 0;
 
-    for (unsigned int j1 = 0; j1 < SIZE; ++j1) {
+    for (size_t j1 = 0; j1 < SIZE; ++j1) {
       tlp::Matrix<Obj, SIZE - 1> m;
 
-      for (unsigned int i = 1; i < SIZE; i++) {
+      for (size_t i = 1; i < SIZE; i++) {
         j2 = 0;
 
-        for (unsigned int j = 0; j < SIZE; ++j) {
+        for (size_t j = 0; j < SIZE; ++j) {
           if (j == j1)
             continue;
 
@@ -172,7 +172,7 @@ Obj MATRIX::determinant() const {
   }
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX MATRIX::cofactor() const {
   MATRIX result;
 
@@ -200,17 +200,17 @@ MATRIX MATRIX::cofactor() const {
     int i1, j1;
     tlp::Matrix<Obj, SIZE - 1> c;
 
-    for (unsigned int j = 0; j < SIZE; ++j) {
-      for (unsigned int i = 0; i < SIZE; ++i) {
+    for (size_t j = 0; j < SIZE; ++j) {
+      for (size_t i = 0; i < SIZE; ++i) {
         i1 = 0;
 
-        for (unsigned int ii = 0; ii < SIZE; ++ii) {
+        for (size_t ii = 0; ii < SIZE; ++ii) {
           if (ii == i)
             continue;
 
           j1 = 0;
 
-          for (unsigned int jj = 0; jj < SIZE; jj++) {
+          for (size_t jj = 0; jj < SIZE; jj++) {
             if (jj == j)
               continue;
 
@@ -234,12 +234,12 @@ MATRIX MATRIX::cofactor() const {
   return result;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::transpose() {
   Obj tmp;
 
-  for (unsigned int i = 1; i < SIZE; ++i) {
-    for (unsigned int j = 0; j < i; ++j) {
+  for (size_t i = 1; i < SIZE; ++i) {
+    for (size_t j = 0; j < i; ++j) {
       tmp = (*this)[i][j];
       (*this)[i][j] = (*this)[j][i];
       (*this)[j][i] = tmp;
@@ -249,62 +249,62 @@ MATRIX &MATRIX::transpose() {
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX &MATRIX::inverse() {
   (*this) = (*this).cofactor().transpose() /= (*this).determinant();
   return (*this);
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX tlp::operator+(const MATRIX &mat1, const MATRIX &mat2) {
   return MATRIX(mat1) += mat2;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX tlp::operator-(const MATRIX &mat1, const MATRIX &mat2) {
   return MATRIX(mat1) -= mat2;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX tlp::operator*(const MATRIX &mat1, const MATRIX &mat2) {
   MATRIX result;
 
-  for (unsigned int i = 0; i < SIZE; ++i)
-    for (unsigned int j = 0; j < SIZE; ++j) {
+  for (size_t i = 0; i < SIZE; ++i)
+    for (size_t j = 0; j < SIZE; ++j) {
       result[i][j] = mat1[i][0] * mat2[0][j];
 
-      for (unsigned int k = 1; k < SIZE; ++k)
+      for (size_t k = 1; k < SIZE; ++k)
         result[i][j] += mat1[i][k] * mat2[k][j];
     }
 
   return result;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX MATRIX::operator/(const MATRIX &mat2) const {
   return MATRIX(*this) /= mat2;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX MATRIX::operator/(const Obj &obj) const {
   return MATRIX(*this) /= obj;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 MATRIX tlp::operator*(const MATRIX &mat, const Obj &obj) {
   return MATRIX(mat) *= obj;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 tlp::Vector<Obj, SIZE> tlp::operator*(const MATRIX &mat, const tlp::Vector<Obj, SIZE> &vec) {
   tlp::Vector<Obj, SIZE> result;
 
-  for (unsigned int row = 0; row < SIZE; ++row) {
+  for (size_t row = 0; row < SIZE; ++row) {
     result[row] = mat[row][0] * vec[0];
   }
 
-  for (unsigned int col = 1; col < SIZE; ++col) {
-    for (unsigned int row = 0; row < SIZE; ++row) {
+  for (size_t col = 1; col < SIZE; ++col) {
+    for (size_t row = 0; row < SIZE; ++row) {
       result[row] += mat[row][col] * vec[col];
     }
   }
@@ -312,16 +312,16 @@ tlp::Vector<Obj, SIZE> tlp::operator*(const MATRIX &mat, const tlp::Vector<Obj, 
   return result;
 }
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 tlp::Vector<Obj, SIZE> tlp::operator*(const tlp::Vector<Obj, SIZE> &vec, const MATRIX &mat) {
   tlp::Vector<Obj, SIZE> result;
 
-  for (unsigned int row = 0; row < SIZE; ++row) {
+  for (size_t row = 0; row < SIZE; ++row) {
     result[row] = mat[0][row] * vec[0];
   }
 
-  for (unsigned int col = 1; col < SIZE; ++col) {
-    for (unsigned int row = 0; row < SIZE; ++row) {
+  for (size_t col = 1; col < SIZE; ++col) {
+    for (size_t row = 0; row < SIZE; ++row) {
       result[row] += mat[col][row] * vec[col];
     }
   }
@@ -330,11 +330,11 @@ tlp::Vector<Obj, SIZE> tlp::operator*(const tlp::Vector<Obj, SIZE> &vec, const M
 }
 
 //=====================================================================================
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 tlp::Vector<Obj, SIZE> MATRIX::powerIteration(const unsigned int nIterations) const {
   tlp::Vector<Obj, SIZE> iteration;
 
-  for (unsigned int i = 0; i < SIZE; i++)
+  for (size_t i = 0; i < SIZE; i++)
     iteration[i] = 1;
 
   for (unsigned int i = 0; i < nIterations; i++) {
@@ -348,7 +348,7 @@ tlp::Vector<Obj, SIZE> MATRIX::powerIteration(const unsigned int nIterations) co
 
 //=====================================================================================
 
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
   if (SIZE != 3) {
     tlp::warning() << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x"
@@ -407,7 +407,7 @@ bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
 
 //=====================================================================================
 
-template <typename Obj, unsigned int SIZE>
+template <typename Obj, size_t SIZE>
 bool MATRIX::computeEigenVector(const float x, tlp::Vector<Obj, 3> &eigenVector) const {
   if (SIZE != 2) {
     tlp::warning() << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE << "x"
