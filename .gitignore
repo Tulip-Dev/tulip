@@ -40,6 +40,7 @@ build*/
 *.includes
 *.creator
 *.user
+*.autosave
 
 # VScode
 .vscode
@@ -48,4 +49,8 @@ build*/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# KDE desktop stuffs
+.directory
+
 
