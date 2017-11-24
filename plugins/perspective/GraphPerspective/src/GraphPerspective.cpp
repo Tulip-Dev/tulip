@@ -519,7 +519,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TIPS(_ui->importButton, "Display the Graph importing wizard");
   SET_TIPS(_ui->pluginsButton, "Display the Plugin center");
   SET_TIPS(_ui->sidebarButton, "Hide Sidebar");
-  SET_TIPS(_ui->statusbarButton, "Hide Status bar");
+  SET_TIPS(_ui->menubarButton, "Hide Menubar");
+  SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
   SET_TIPS(_ui->addPanelButton, "Open a new visualization panel on the current graph");
   SET_TIPS(_ui->singleModeButton, "Switch to 1-panel mode");
   SET_TIPS(_ui->splitModeButton, "Switch to 2-panels mode");
@@ -534,6 +535,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
       QString("Choose a file to open among the recently opened/saved graphs or projects"));
   SET_TOOLTIP(_ui->actionDelete, "Delete the selected elements from the current graph [Del]");
   SET_TOOLTIP(_ui->actionFull_screen, "Display the Tulip perspective in full screen [F11]");
+  SET_TOOLTIP(_ui->actionShow_Menubar, "Show/Hide the main menu bar [Ctrl+Shift+M]");
   SET_TOOLTIP(_ui->actionAbout_us, "Display the 'About Tulip' information dialog [F1]");
   SET_TOOLTIP(_ui->actionPlugins_Center, _ui->pluginsButton->toolTip());
   SET_TOOLTIP(_ui->actionImport_CSV, _ui->csvImportButton->toolTip());
@@ -752,6 +754,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
+  connect(_ui->menubarButton, SIGNAL(clicked()), this, SLOT(showHideMenuBar()));
   connect(_ui->statusbarButton, SIGNAL(clicked()), this, SLOT(showHideStatusBar()));
 
 #if !defined(__APPLE__) && !defined(_WIN32)
@@ -1740,15 +1743,25 @@ void GraphPerspective::showHideSideBar() {
   }
 }
 
+void GraphPerspective::showHideMenuBar() {
+  if (_mainWindow->menuBar()->isVisible()) {
+    _mainWindow->menuBar()->setVisible(false);
+    SET_TIPS(_ui->menubarButton, "Show Menubar");
+  } else {
+    _mainWindow->menuBar()->setVisible(true);
+    SET_TIPS(_ui->menubarButton, "Hide Menubar");
+  }
+}
+
 void GraphPerspective::showHideStatusBar() {
   QStatusBar *stsBar = _mainWindow->statusBar();
 
   if (stsBar->isVisible()) {
     stsBar->setVisible(false);
-    SET_TIPS(_ui->statusbarButton, "Show Status bar");
+    SET_TIPS(_ui->statusbarButton, "Show Statusbar");
   } else {
     stsBar->setVisible(true);
-    SET_TIPS(_ui->statusbarButton, "Hide Status bar");
+    SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
   }
 
   TulipSettings::instance().setShowStatusBar(stsBar->isVisible());

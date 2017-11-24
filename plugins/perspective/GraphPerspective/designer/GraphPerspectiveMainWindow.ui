@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>695</height>
+    <height>710</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -277,7 +277,7 @@ QToolButton:pressed {
           <string>Undo</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
+          <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/undo.png</normaloff>:/tulip/graphperspective/icons/32/undo.png</iconset>
          </property>
          <property name="iconSize">
@@ -309,7 +309,7 @@ QToolButton:pressed {
           <string>Redo</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
+          <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/redo.png</normaloff>:/tulip/graphperspective/icons/32/redo.png</iconset>
          </property>
          <property name="iconSize">
@@ -361,7 +361,7 @@ QToolButton:pressed {
           <string>Workspace</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
+          <iconset>
            <normaloff>:/tulip/graphperspective/icons/48/desktop.png</normaloff>:/tulip/graphperspective/icons/48/desktop.png</iconset>
          </property>
          <property name="iconSize">
@@ -402,7 +402,7 @@ QToolButton:pressed {
           <string>Python IDE</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
+          <iconset>
            <normaloff>:/tulip/graphperspective/icons/48/python.png</normaloff>:/tulip/graphperspective/icons/48/python.png</iconset>
          </property>
          <property name="iconSize">
@@ -766,7 +766,7 @@ color: white;
           <string>CSV</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
+          <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
          </property>
          <property name="iconSize">
@@ -830,7 +830,7 @@ color: white;
           <string>Plugins</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
+          <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</iconset>
          </property>
          <property name="iconSize">
@@ -1105,6 +1105,32 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    </property>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QPushButton" name="menubarButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>21</width>
+                     <height>21</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>21</width>
+                     <height>21</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                     <normaloff>:/tulip/gui/ui/menubar.png</normaloff>:/tulip/gui/ui/menubar.png</iconset>
+                   </property>
+                   <property name="flat">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </item>
                <item>
@@ -1113,7 +1139,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Add panel</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../resources/GraphPerspective.qrc">
+                  <iconset>
                    <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
                  </property>
                 </widget>
@@ -1448,7 +1474,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>19</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -1469,10 +1495,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     </widget>
     <widget class="QMenu" name="menuSelect">
      <property name="title">
-      <string>Select</string>
+      <string>&amp;Select</string>
      </property>
      <property name="icon">
-      <iconset resource="../resources/GraphPerspective.qrc">
+      <iconset>
        <normaloff>:/tulip/graphperspective/icons/16/select-all.png</normaloff>:/tulip/graphperspective/icons/16/select-all.png</iconset>
      </property>
      <addaction name="actionSelect_All"/>
@@ -1533,7 +1559,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
       <string>Open &amp;recent</string>
      </property>
      <property name="icon">
-      <iconset resource="../resources/GraphPerspective.qrc">
+      <iconset>
        <normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</iconset>
      </property>
     </widget>
@@ -1556,7 +1582,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </widget>
   <action name="actionNewProject">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/archive-new.png</normaloff>:/tulip/graphperspective/icons/16/archive-new.png</iconset>
    </property>
    <property name="text">
@@ -1568,7 +1594,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionSave_Project">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
@@ -1580,7 +1606,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionSave_Project_as">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
    </property>
    <property name="text">
@@ -1604,7 +1630,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
    </property>
    <property name="text">
@@ -1619,7 +1645,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</iconset>
    </property>
    <property name="text">
@@ -1634,7 +1660,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</iconset>
    </property>
    <property name="text">
@@ -1649,7 +1675,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/cut.png</normaloff>:/tulip/graphperspective/icons/16/cut.png</iconset>
    </property>
    <property name="text">
@@ -1664,7 +1690,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/copy.png</normaloff>:/tulip/graphperspective/icons/16/copy.png</iconset>
    </property>
    <property name="text">
@@ -1679,7 +1705,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/paste.png</normaloff>:/tulip/graphperspective/icons/16/paste.png</iconset>
    </property>
    <property name="text">
@@ -1709,7 +1735,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/select-all.png</normaloff>:/tulip/graphperspective/icons/16/select-all.png</iconset>
    </property>
    <property name="text">
@@ -1724,7 +1750,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/invert-select.png</normaloff>:/tulip/graphperspective/icons/16/invert-select.png</iconset>
    </property>
    <property name="text">
@@ -1739,7 +1765,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/cancel-select.png</normaloff>:/tulip/graphperspective/icons/16/cancel-select.png</iconset>
    </property>
    <property name="text">
@@ -1754,7 +1780,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
    </property>
    <property name="text">
@@ -1769,7 +1795,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</iconset>
    </property>
    <property name="text">
@@ -1781,7 +1807,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionPreferences">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</iconset>
    </property>
    <property name="text">
@@ -1796,7 +1822,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/full-screen.png</normaloff>:/tulip/graphperspective/icons/16/full-screen.png</iconset>
    </property>
    <property name="text">
@@ -1820,7 +1846,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionShowDevelDocumentation">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/cpp.png</normaloff>:/tulip/graphperspective/icons/16/cpp.png</iconset>
    </property>
    <property name="text">
@@ -1832,7 +1858,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionShowPythonDocumentation">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/python.png</normaloff>:/tulip/graphperspective/icons/16/python.png</iconset>
    </property>
    <property name="text">
@@ -1844,7 +1870,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionAbout_us">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/logger-info.png</normaloff>:/tulip/graphperspective/icons/16/logger-info.png</iconset>
    </property>
    <property name="text">
@@ -1861,7 +1887,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionImport_CSV">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
    </property>
    <property name="text">
@@ -1870,7 +1896,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionMessages_log">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/logger-info.png</normaloff>:/tulip/graphperspective/icons/16/logger-info.png</iconset>
    </property>
    <property name="text">
@@ -1894,7 +1920,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionOpen_Project">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
    </property>
    <property name="text">
@@ -1906,7 +1932,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionFind_plugins">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/32/magnifying-glass.png</normaloff>:/tulip/graphperspective/icons/32/magnifying-glass.png</iconset>
    </property>
    <property name="text">
@@ -1918,7 +1944,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionSave_graph_to_file">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
@@ -1932,7 +1958,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionClone_sub_graph">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
@@ -1941,7 +1967,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionNew_graph">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
    </property>
    <property name="text">
@@ -1962,7 +1988,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionColor_scales_management">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/color-scale.png</normaloff>:/tulip/graphperspective/icons/16/color-scale.png</iconset>
    </property>
    <property name="text">
@@ -2004,17 +2030,17 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionSelect_All_Nodes">
    <property name="text">
-    <string>Select all nodes</string>
+    <string>Select all &amp;nodes</string>
    </property>
   </action>
   <action name="actionSelect_All_Edges">
    <property name="text">
-    <string>Select all edges</string>
+    <string>Select all &amp;edges</string>
    </property>
   </action>
   <action name="actionPython_IDE">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/48/python.png</normaloff>:/tulip/graphperspective/icons/48/python.png</iconset>
    </property>
    <property name="text">
@@ -2026,11 +2052,25 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionShowAPIDocumentation">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/cpp.png</normaloff>:/tulip/graphperspective/icons/16/cpp.png</iconset>
    </property>
    <property name="text">
-    <string>API Documentation</string>
+    <string>AP&amp;I Documentation</string>
+   </property>
+  </action>
+  <action name="actionShow_Menubar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Menubar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+M</string>
    </property>
   </action>
  </widget>
@@ -2087,7 +2127,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
  </customwidgets>
  <resources>
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
-  <include location="../resources/GraphPerspective.qrc"/>
  </resources>
  <connections>
   <connection>
