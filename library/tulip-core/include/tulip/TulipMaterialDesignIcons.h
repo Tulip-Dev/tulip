@@ -93,7 +93,7 @@ public:
    */
   static std::string getMaterialDesignIconUtf8String(const std::string &iconName);
 
-  // Based on Material Design Icons 1.9.32
+  // Based on Material Design Icons 2.0.46
   static const char *AccessPoint;
   static const char *AccessPointNetwork;
   static const char *Account;
@@ -131,7 +131,9 @@ public:
   static const char *AirplaneTakeoff;
   static const char *Airplay;
   static const char *Alarm;
+  static const char *AlarmBell;
   static const char *AlarmCheck;
+  static const char *AlarmLight;
   static const char *AlarmMultiple;
   static const char *AlarmOff;
   static const char *AlarmPlus;
@@ -156,6 +158,7 @@ public:
   static const char *Anchor;
   static const char *Android;
   static const char *AndroidDebugBridge;
+  static const char *AndroidHead;
   static const char *AndroidStudio;
   static const char *Angular;
   static const char *Angularjs;
@@ -171,6 +174,7 @@ public:
   static const char *AppleMobileme;
   static const char *AppleSafari;
   static const char *Application;
+  static const char *Approval;
   static const char *Apps;
   static const char *Archive;
   static const char *ArrangeBringForward;
@@ -180,8 +184,12 @@ public:
   static const char *ArrowAll;
   static const char *ArrowBottomLeft;
   static const char *ArrowBottomRight;
-  static const char *ArrowCompress;
-  static const char *ArrowCompressAll;
+  static const char *ArrowCollapse;
+  static const char *ArrowCollapseAll;
+  static const char *ArrowCollapseDown;
+  static const char *ArrowCollapseLeft;
+  static const char *ArrowCollapseRight;
+  static const char *ArrowCollapseUp;
   static const char *ArrowDown;
   static const char *ArrowDownBold;
   static const char *ArrowDownBoldBox;
@@ -195,6 +203,10 @@ public:
   static const char *ArrowDownThick;
   static const char *ArrowExpand;
   static const char *ArrowExpandAll;
+  static const char *ArrowExpandDown;
+  static const char *ArrowExpandLeft;
+  static const char *ArrowExpandRight;
+  static const char *ArrowExpandUp;
   static const char *ArrowLeft;
   static const char *ArrowLeftBold;
   static const char *ArrowLeftBoldBox;
@@ -327,6 +339,8 @@ public:
   static const char *BookOpenPageVariant;
   static const char *BookOpenVariant;
   static const char *BookPlus;
+  static const char *BookSecure;
+  static const char *BookUnsecure;
   static const char *BookVariant;
   static const char *Bookmark;
   static const char *BookmarkCheck;
@@ -377,6 +391,11 @@ public:
   static const char *Bullseye;
   static const char *BurstMode;
   static const char *Bus;
+  static const char *BusArticulatedEnd;
+  static const char *BusArticulatedFront;
+  static const char *BusDoubleDecker;
+  static const char *BusSchool;
+  static const char *BusSide;
   static const char *Cached;
   static const char *Cake;
   static const char *CakeLayered;
@@ -408,7 +427,12 @@ public:
   static const char *CameraEnhance;
   static const char *CameraFront;
   static const char *CameraFrontVariant;
+  static const char *CameraGopro;
   static const char *CameraIris;
+  static const char *CameraMeteringCenter;
+  static const char *CameraMeteringMatrix;
+  static const char *CameraMeteringPartial;
+  static const char *CameraMeteringSpot;
   static const char *CameraOff;
   static const char *CameraPartyMode;
   static const char *CameraRear;
@@ -418,10 +442,18 @@ public:
   static const char *Cancel;
   static const char *Candle;
   static const char *Candycane;
+  static const char *Cannabis;
   static const char *Car;
   static const char *CarBattery;
   static const char *CarConnected;
+  static const char *CarConvertable;
+  static const char *CarEstate;
+  static const char *CarHatchback;
+  static const char *CarPickup;
+  static const char *CarSide;
+  static const char *CarSports;
   static const char *CarWash;
+  static const char *Caravan;
   static const char *Cards;
   static const char *CardsOutline;
   static const char *CardsPlayingOutline;
@@ -441,6 +473,7 @@ public:
   static const char *CastOff;
   static const char *Castle;
   static const char *Cat;
+  static const char *Cctv;
   static const char *CeilingLight;
   static const char *Cellphone;
   static const char *CellphoneAndroid;
@@ -457,10 +490,13 @@ public:
   static const char *ChartBar;
   static const char *ChartBarStacked;
   static const char *ChartBubble;
+  static const char *ChartDonut;
+  static const char *ChartDonutVariant;
   static const char *ChartGantt;
   static const char *ChartHistogram;
   static const char *ChartLine;
   static const char *ChartLineStacked;
+  static const char *ChartLineVariant;
   static const char *ChartPie;
   static const char *ChartScatterplotHexbin;
   static const char *ChartTimeline;
@@ -494,6 +530,9 @@ public:
   static const char *ChevronLeft;
   static const char *ChevronRight;
   static const char *ChevronUp;
+  static const char *ChiliHot;
+  static const char *ChiliMedium;
+  static const char *ChiliMild;
   static const char *Chip;
   static const char *Church;
   static const char *Circle;
@@ -529,6 +568,7 @@ public:
   static const char *CloseOutline;
   static const char *ClosedCaption;
   static const char *Cloud;
+  static const char *CloudBraces;
   static const char *CloudCheck;
   static const char *CloudCircle;
   static const char *CloudDownload;
@@ -537,6 +577,7 @@ public:
   static const char *CloudPrint;
   static const char *CloudPrintOutline;
   static const char *CloudSync;
+  static const char *CloudTags;
   static const char *CloudUpload;
   static const char *CodeArray;
   static const char *CodeBraces;
@@ -580,6 +621,7 @@ public:
   static const char *Compass;
   static const char *CompassOutline;
   static const char *Console;
+  static const char *ConsoleLine;
   static const char *ContactMail;
   static const char *Contacts;
   static const char *ContentCopy;
@@ -594,6 +636,7 @@ public:
   static const char *ContrastCircle;
   static const char *Cookie;
   static const char *Copyright;
+  static const char *Corn;
   static const char *Counter;
   static const char *Cow;
   static const char *Creation;
@@ -619,12 +662,19 @@ public:
   static const char *CupOff;
   static const char *CupWater;
   static const char *CurrencyBtc;
+  static const char *CurrencyChf;
+  static const char *CurrencyCny;
+  static const char *CurrencyEth;
   static const char *CurrencyEur;
   static const char *CurrencyGbp;
   static const char *CurrencyInr;
+  static const char *CurrencyJpy;
+  static const char *CurrencyKrw;
   static const char *CurrencyNgn;
   static const char *CurrencyRub;
+  static const char *CurrencySign;
   static const char *CurrencyTry;
+  static const char *CurrencyTwd;
   static const char *CurrencyUsd;
   static const char *CurrencyUsdOff;
   static const char *CursorDefault;
@@ -650,6 +700,7 @@ public:
   static const char *DeleteVariant;
   static const char *Delta;
   static const char *Deskphone;
+  static const char *DesktopClassic;
   static const char *DesktopMac;
   static const char *DesktopTower;
   static const char *Details;
@@ -670,6 +721,7 @@ public:
   static const char *DiceD8;
   static const char *DiceMultiple;
   static const char *Dictionary;
+  static const char *DipSwitch;
   static const char *Directions;
   static const char *DirectionsFork;
   static const char *Discord;
@@ -685,8 +737,11 @@ public:
   static const char *DoNotDisturbOff;
   static const char *Dolby;
   static const char *Domain;
+  static const char *Donkey;
   static const char *DotsHorizontal;
+  static const char *DotsHorizontalCircle;
   static const char *DotsVertical;
+  static const char *DotsVerticalCircle;
   static const char *Douban;
   static const char *Download;
   static const char *DownloadNetwork;
@@ -702,12 +757,14 @@ public:
   static const char *Drupal;
   static const char *Duck;
   static const char *Dumbbell;
+  static const char *EarHearing;
   static const char *Earth;
   static const char *EarthBox;
   static const char *EarthBoxOff;
   static const char *EarthOff;
   static const char *Edge;
   static const char *Eject;
+  static const char *Elephant;
   static const char *ElevationDecline;
   static const char *ElevationRise;
   static const char *Elevator;
@@ -741,6 +798,7 @@ public:
   static const char *EthernetCableOff;
   static const char *Etsy;
   static const char *EvStation;
+  static const char *Eventbrite;
   static const char *Evernote;
   static const char *Exclamation;
   static const char *ExitToApp;
@@ -850,12 +908,14 @@ public:
   static const char *FontAwesome;
   static const char *Food;
   static const char *FoodApple;
+  static const char *FoodCroissant;
   static const char *FoodForkDrink;
   static const char *FoodOff;
   static const char *FoodVariant;
   static const char *Football;
   static const char *FootballAustralian;
   static const char *FootballHelmet;
+  static const char *Forklift;
   static const char *FormatAlignBottom;
   static const char *FormatAlignCenter;
   static const char *FormatAlignJustify;
@@ -928,6 +988,7 @@ public:
   static const char *FridgeFilled;
   static const char *FridgeFilledBottom;
   static const char *FridgeFilledTop;
+  static const char *Fuel;
   static const char *Fullscreen;
   static const char *FullscreenExit;
   static const char *Function;
@@ -944,6 +1005,7 @@ public:
   static const char *GenderMale;
   static const char *GenderMaleFemale;
   static const char *GenderTransgender;
+  static const char *Gesture;
   static const char *GestureDoubleTap;
   static const char *GestureSwipeDown;
   static const char *GestureSwipeLeft;
@@ -968,6 +1030,8 @@ public:
   static const char *Gnome;
   static const char *Gondola;
   static const char *Google;
+  static const char *GoogleAnalytics;
+  static const char *GoogleAssistant;
   static const char *GoogleCardboard;
   static const char *GoogleChrome;
   static const char *GoogleCircles;
@@ -1008,6 +1072,7 @@ public:
   static const char *Harddisk;
   static const char *Headphones;
   static const char *HeadphonesBox;
+  static const char *HeadphonesOff;
   static const char *HeadphonesSettings;
   static const char *Headset;
   static const char *HeadsetDock;
@@ -1030,10 +1095,14 @@ public:
   static const char *Hexagon;
   static const char *HexagonMultiple;
   static const char *HexagonOutline;
+  static const char *HighDefinition;
   static const char *Highway;
   static const char *History;
   static const char *Hololens;
   static const char *Home;
+  static const char *HomeAssistant;
+  static const char *HomeAutomation;
+  static const char *HomeCircle;
   static const char *HomeMapMarker;
   static const char *HomeModern;
   static const char *HomeOutline;
@@ -1122,11 +1191,13 @@ public:
   static const char *LanguageCpp;
   static const char *LanguageCsharp;
   static const char *LanguageCss3;
+  static const char *LanguageGo;
   static const char *LanguageHtml5;
   static const char *LanguageJavascript;
   static const char *LanguagePhp;
   static const char *LanguagePython;
   static const char *LanguagePythonText;
+  static const char *LanguageR;
   static const char *LanguageSwift;
   static const char *LanguageTypescript;
   static const char *Laptop;
@@ -1136,6 +1207,7 @@ public:
   static const char *LaptopWindows;
   static const char *Lastfm;
   static const char *Launch;
+  static const char *LavaLamp;
   static const char *Layers;
   static const char *LayersOff;
   static const char *LeadPencil;
@@ -1143,6 +1215,7 @@ public:
   static const char *LedOff;
   static const char *LedOn;
   static const char *LedOutline;
+  static const char *LedStrip;
   static const char *LedVariantOff;
   static const char *LedVariantOn;
   static const char *LedVariantOutline;
@@ -1169,6 +1242,8 @@ public:
   static const char *LockPattern;
   static const char *LockPlus;
   static const char *LockReset;
+  static const char *Locker;
+  static const char *LockerMultiple;
   static const char *Login;
   static const char *LoginVariant;
   static const char *Logout;
@@ -1192,6 +1267,7 @@ public:
   static const char *MapMarkerMinus;
   static const char *MapMarkerMultiple;
   static const char *MapMarkerOff;
+  static const char *MapMarkerOutline;
   static const char *MapMarkerPlus;
   static const char *MapMarkerRadius;
   static const char *Margin;
@@ -1230,6 +1306,9 @@ public:
   static const char *MessageTextOutline;
   static const char *MessageVideo;
   static const char *Meteor;
+  static const char *Metronome;
+  static const char *MetronomeTick;
+  static const char *MicroSd;
   static const char *Microphone;
   static const char *MicrophoneOff;
   static const char *MicrophoneOutline;
@@ -1246,6 +1325,7 @@ public:
   static const char *MinusCircleOutline;
   static const char *MinusNetwork;
   static const char *Mixcloud;
+  static const char *Mixer;
   static const char *Monitor;
   static const char *MonitorMultiple;
   static const char *More;
@@ -1257,8 +1337,11 @@ public:
   static const char *MoveResize;
   static const char *MoveResizeVariant;
   static const char *Movie;
+  static const char *MovieRoll;
   static const char *Multiplication;
   static const char *MultiplicationBox;
+  static const char *Mushroom;
+  static const char *MushroomOutline;
   static const char *Music;
   static const char *MusicBox;
   static const char *MusicBoxOutline;
@@ -1288,6 +1371,7 @@ public:
   static const char *NfcTap;
   static const char *NfcVariant;
   static const char *Ninja;
+  static const char *NintendoSwitch;
   static const char *Nodejs;
   static const char *Note;
   static const char *NoteMultiple;
@@ -1299,6 +1383,7 @@ public:
   static const char *NotificationClearAll;
   static const char *Npm;
   static const char *Nuke;
+  static const char *Null;
   static const char *Numeric;
   static const char *Numeric0Box;
   static const char *Numeric0BoxMultipleOutline;
@@ -1380,6 +1465,7 @@ public:
   static const char *PaperCutVertical;
   static const char *Paperclip;
   static const char *Parking;
+  static const char *Passport;
   static const char *Pause;
   static const char *PauseCircle;
   static const char *PauseCircleOutline;
@@ -1398,6 +1484,7 @@ public:
   static const char *Pentagon;
   static const char *PentagonOutline;
   static const char *Percent;
+  static const char *PeriodicTableCo2;
   static const char *Periscope;
   static const char *Pharmacy;
   static const char *Phone;
@@ -1428,6 +1515,8 @@ public:
   static const char *PineTreeBox;
   static const char *Pinterest;
   static const char *PinterestBox;
+  static const char *Pipe;
+  static const char *PipeDisconnected;
   static const char *Pistol;
   static const char *Pizza;
   static const char *PlaneShield;
@@ -1470,6 +1559,9 @@ public:
   static const char *PowerPlugOff;
   static const char *PowerSettings;
   static const char *PowerSocket;
+  static const char *PowerSocketEu;
+  static const char *PowerSocketUk;
+  static const char *PowerSocketUs;
   static const char *Prescription;
   static const char *Presentation;
   static const char *PresentationPlay;
@@ -1541,6 +1633,8 @@ public:
   static const char *Rhombus;
   static const char *RhombusOutline;
   static const char *Ribbon;
+  static const char *Rice;
+  static const char *Ring;
   static const char *Road;
   static const char *RoadVariant;
   static const char *Robot;
@@ -1561,6 +1655,7 @@ public:
   static const char *Run;
   static const char *RunFast;
   static const char *Sale;
+  static const char *Sass;
   static const char *Satellite;
   static const char *SatelliteVariant;
   static const char *Saxophone;
@@ -1594,6 +1689,7 @@ public:
   static const char *Selection;
   static const char *SelectionOff;
   static const char *Send;
+  static const char *SendSecure;
   static const char *SerialPort;
   static const char *Server;
   static const char *ServerMinus;
@@ -1692,6 +1788,7 @@ public:
   static const char *SourceFork;
   static const char *SourceMerge;
   static const char *SourcePull;
+  static const char *SoySauce;
   static const char *Speaker;
   static const char *SpeakerOff;
   static const char *SpeakerWireless;
@@ -1710,6 +1807,7 @@ public:
   static const char *Stackoverflow;
   static const char *Stadium;
   static const char *Stairs;
+  static const char *StandardDefinition;
   static const char *Star;
   static const char *StarCircle;
   static const char *StarHalf;
@@ -1738,6 +1836,10 @@ public:
   static const char *Summit;
   static const char *Sunglasses;
   static const char *SurroundSound;
+  static const char *SurroundSound20;
+  static const char *SurroundSound31;
+  static const char *SurroundSound51;
+  static const char *SurroundSound71;
   static const char *Svg;
   static const char *SwapHorizontal;
   static const char *SwapVertical;
@@ -1779,6 +1881,7 @@ public:
   static const char *Teamviewer;
   static const char *Telegram;
   static const char *Television;
+  static const char *TelevisionClassic;
   static const char *TelevisionGuide;
   static const char *TemperatureCelsius;
   static const char *TemperatureFahrenheit;
@@ -1791,11 +1894,14 @@ public:
   static const char *TextToSpeech;
   static const char *TextToSpeechOff;
   static const char *Textbox;
+  static const char *TextboxPassword;
   static const char *Texture;
   static const char *Theater;
   static const char *ThemeLightDark;
   static const char *Thermometer;
   static const char *ThermometerLines;
+  static const char *ThoughtBubble;
+  static const char *ThoughtBubbleOutline;
   static const char *ThumbDown;
   static const char *ThumbDownOutline;
   static const char *ThumbUp;
@@ -1828,6 +1934,7 @@ public:
   static const char *Tor;
   static const char *TowerBeach;
   static const char *TowerFire;
+  static const char *Trackpad;
   static const char *TrafficLight;
   static const char *Train;
   static const char *Tram;
@@ -1866,6 +1973,7 @@ public:
   static const char *TwitterRetweet;
   static const char *Uber;
   static const char *Ubuntu;
+  static const char *UltraHighDefinition;
   static const char *Umbraco;
   static const char *Umbrella;
   static const char *UmbrellaOutline;
@@ -1882,6 +1990,9 @@ public:
   static const char *Upload;
   static const char *UploadNetwork;
   static const char *Usb;
+  static const char *VanPassenger;
+  static const char *VanUtility;
+  static const char *Vanish;
   static const char *VectorArrangeAbove;
   static const char *VectorArrangeBelow;
   static const char *VectorCircle;
@@ -1905,6 +2016,7 @@ public:
   static const char *Verified;
   static const char *Vibrate;
   static const char *Video;
+  static const char *Video3d;
   static const char *VideoOff;
   static const char *VideoSwitch;
   static const char *ViewAgenda;
@@ -1941,6 +2053,7 @@ public:
   static const char *VolumePlus;
   static const char *Vpn;
   static const char *Walk;
+  static const char *Wall;
   static const char *Wallet;
   static const char *WalletGiftcard;
   static const char *WalletMembership;
@@ -2020,6 +2133,7 @@ public:
   static const char *XingBox;
   static const char *XingCircle;
   static const char *Xml;
+  static const char *Xmpp;
   static const char *Yammer;
   static const char *Yeast;
   static const char *Yelp;
