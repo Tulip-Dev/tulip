@@ -28,11 +28,9 @@
 #include "HistoStatsConfigWidget.h"
 #include "HistogramView.h"
 
-#if defined(_MSC_VER) || defined(_LIBCPP_VERSION) || defined(__FreeBSD__)
-
 #include <functional>
 
-// when compose2 is missing, use implementation from boost
+// use compose2 implementation from boost
 
 /* class for the compose_f_gx_hx adapter
  */
@@ -63,13 +61,6 @@ inline compose_f_gx_hx_t<OP1, OP2, OP3> compose_f_gx_hx(const OP1 &o1, const OP2
 }
 
 #define compose_fn compose_f_gx_hx
-
-#else
-
-#include <ext/functional>
-#define compose_fn stdext::compose2
-
-#endif
 
 #include "HistogramStatistics.h"
 

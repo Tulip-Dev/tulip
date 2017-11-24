@@ -21,9 +21,6 @@
 #ifndef TLP_HASH_H
 #define TLP_HASH_H
 
-// to search for _LIBCPP_VERSION
-#include <ciso646>
-
 /**
  * @brief This file defines what class is used to provide a hashmap.
  * The TLP_HASH_MAP macro defines which implementation is used for hash maps.
@@ -31,18 +28,10 @@
  *
  * TLP_BEGIN_HASH_NAMESPACE is defined to open the namespace in which the hash classes are defined,
  * to define new hashes (e.g. for Edge).
- * TLP_END_HASH_NAMESPACE is definde to close the namespace (only used when using std::tr1)
+ * TLP_END_HASH_NAMESPACE is defined to close the namespace
  * TLP_HASH_NAMESPACE allows to use a specific hasher class when declaring a hash set or a hash map.
  */
 
-// VS2010 and later can use C++0x's unordered_map; vs2008 uses boost's tr1 implementation
-#if defined(_MSC_VER) && (_MSC_VER > 1500)
-#define TLP_USE_UNORDERED_MAP
-#elif defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L || defined(_LIBCPP_VERSION)
-#define TLP_USE_UNORDERED_MAP
-#endif
-
-#ifdef TLP_USE_UNORDERED_MAP
 #include <unordered_map>
 #include <unordered_set>
 #define TLP_HASH_MAP std::unordered_map
@@ -50,62 +39,6 @@
 #define TLP_HASH_NAMESPACE std
 #define TLP_BEGIN_HASH_NAMESPACE namespace std
 #define TLP_END_HASH_NAMESPACE
-// clang, and GCC versions prior to the 4.x series do not have tr1; using ext
-#elif (!defined _MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1))
-#include <tulip/tulipconf.h>
-#if (__GNUC__ < 3)
-#include <hash_map>
-#include <hash_set>
-#else
-#include <ext/hash_map>
-#include <ext/hash_set>
-#endif
-#define TLP_HASH_MAP stdext::hash_map
-#define TLP_HASH_SET stdext::hash_set
-#define TLP_HASH_NAMESPACE stdext
-#define TLP_BEGIN_HASH_NAMESPACE namespace stdext
-#define TLP_END_HASH_NAMESPACE
-
-#include <string>
-
-namespace stdext {
-template <>
-struct hash<const std::string> {
-  size_t operator()(const std::string &s) const {
-    return hash<const char *>()(s.c_str());
-  }
-};
-template <>
-struct hash<std::string> {
-  size_t operator()(const std::string &s) const {
-    return hash<const char *>()(s.c_str());
-  }
-};
-template <>
-struct hash<double> {
-  size_t operator()(const double s) const {
-    return (size_t)s;
-  }
-};
-template <>
-struct hash<float> {
-  size_t operator()(const float s) const {
-    return hash<unsigned int>()(*((unsigned int *)&s));
-  }
-};
-}
-// MSVC < 2010 use tr1 from boost, and GCC 4.X provides tr1 too.
-#else
-#include <tr1/unordered_map>
-#include <tr1/unordered_set>
-#define TLP_HASH_MAP std::tr1::unordered_map
-#define TLP_HASH_SET std::tr1::unordered_set
-#define TLP_HASH_NAMESPACE std::tr1
-#define TLP_BEGIN_HASH_NAMESPACE                                                                   \
-  namespace std {                                                                                  \
-  namespace tr1
-#define TLP_END_HASH_NAMESPACE }
-#endif
 
 // The hash_combine function from the boost library
 // Call it repeatedly to incrementally create a hash value from several variables.

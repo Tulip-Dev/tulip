@@ -30,15 +30,6 @@
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
-// MSVC and GCC in c++11 mode use decltype instead of typeof
-#if !defined(_MSC_VER)
-#if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
-#define TLP_TYPEOF decltype
-#else
-#define TLP_TYPEOF typeof
-#endif
-#endif
-
 // some usefull typedefs
 typedef unsigned int uint;
 typedef unsigned char uchar;
@@ -62,16 +53,8 @@ typedef unsigned char uchar;
 #pragma warning(disable : 4996) // deprecated functions
 #endif
 
-// MSVC 2010 has a different keyword for typeof, and deprecated
-#if _MSC_VER >= 1600
 #define _DEPRECATED __declspec(deprecated)
 #define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef _DEPRECATED type deprecated_type
-#define TLP_TYPEOF decltype
-#else
-// MSVC 2008 must use Boost's typeof
-#include "boost/typeof/typeof.hpp"
-#define TLP_TYPEOF BOOST_TYPEOF
-#endif
 
 #define __PRETTY_FUNCTION__ __FUNCTION__ // MSVC has a different name for pretty_function
 #define strcasecmp stricmp               // strcasecmp does not exists for VC, workaround
@@ -82,11 +65,11 @@ inline double fabs(int i) {
   return std::fabs(double(i));
 }
 
-#if _MSC_VER <                                                                                     \
-    1800 // Visual Studio 2013 improved C99 support, no need to redefine some cmath functions
+// Visual Studio 2013 improved C99 support, no need to redefine some cmath functions
+#if _MSC_VER < 1800
 
-// MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does
-// not.
+// MSVC needs explicit casting of ints ot double, float or long double.
+// Let's just pretend he does not.
 #include <cstdlib>
 
 inline double sqrt(int i) {
@@ -121,11 +104,9 @@ inline float strtof(const char *cptr, char **endptr) {
   return std::strtod(cptr, endptr);
 }
 
-#define isnan(x)                                                                                   \
-  ((x) !=                                                                                          \
-   (x)) // you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
-#define rint(arg)                                                                                  \
-  arg > 0 ? int(std::floor(double(arg))) : int(std::ceil(double(arg))) // Hey, nother C99 feature !
+// C99 features, and VC++ does not support C99. workaround this.
+#define isnan(x) ((x) != (x))
+#define rint(arg) arg > 0 ? int(std::floor(double(arg))) : int(std::ceil(double(arg)))
 
 #if _MSC_VER <= 1600
 inline double log1p(double x) {
@@ -145,25 +126,11 @@ inline double log1p(double x) {
 #elif __clang__
 #define _DEPRECATED __attribute__((deprecated))
 #define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
-#define stdext __gnu_cxx
-
-// disable some specific C++11 warnings with clang
-#if __clang_major__ >= 3 && __clang_minor__ >= 4
-#pragma clang diagnostic ignored "-Wdeprecated-register"
-#endif
 
 // for GCC 4.X
 #else
 #define _DEPRECATED __attribute__((deprecated))
 #define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
-#define stdext __gnu_cxx
-#if (__GNUC_MINOR__ < 4 && __GNUC__ < 4)
-#include <ext/stl_hash_fun.h>
-#elif (__GNUC_MINOR__ < 3 && __GNUC__ <= 4)
-#include <ext/hash_fun.h>
-#elif (__GNUC_MINOR__ > 3 && __GNUC__ >= 4)
-#include <backward/hash_fun.h>
-#endif
 #endif
 
 #ifdef _OPENMP

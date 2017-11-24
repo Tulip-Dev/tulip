@@ -132,7 +132,6 @@ bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(
   return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
 }
 
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
 // use c++11 variadic template for more convenience
 template <typename RETURN_TYPE, typename... Param>
 bool PythonInterpreter::callFunctionWithParamsAndGetReturnValue(const QString &module,
@@ -169,8 +168,6 @@ void PythonInterpreter::addParameter(DataSet *ds, T a) {
   st += std::to_string(ds->size() + 1);
   ds->set(st, a);
 }
-
-#endif
 
 template <typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module,

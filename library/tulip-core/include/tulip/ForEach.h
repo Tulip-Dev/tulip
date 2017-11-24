@@ -75,7 +75,7 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
  * and hasNext() methods
  */
 #define forEach(A, B)                                                                              \
-  for (tlp::_TLP_IT<TLP_TYPEOF(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
+  for (tlp::_TLP_IT<decltype(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
 /**
  * @brief Allows to iterate the nodes or edges of a copy of a Graph in a clear and concise way.
@@ -84,10 +84,9 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
  */
 #define stableForEach(A, B)                                                                        \
-  for (tlp::_TLP_IT<TLP_TYPEOF(A)> _it_foreach(new tlp::StableIterator<TLP_TYPEOF(A)>(B));         \
+  for (tlp::_TLP_IT<decltype(A)> _it_foreach(new tlp::StableIterator<decltype(A)>(B));             \
        tlp::_tlp_if_test(A, _it_foreach);)
 
-#if defined(__GXX_EXPERIMENTAL_CXX0X__)
 namespace tlp {
 
 template <typename T>
@@ -146,6 +145,5 @@ iterator_t<T> end(tlp::Iterator<T> *it) {
   return iterator_t<T>(it);
 }
 }
-#endif //__GXX_EXPERIMENTAL_CXX0X__
 
 #endif

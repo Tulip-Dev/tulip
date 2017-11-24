@@ -23,10 +23,8 @@
 #include <sstream>
 #include <clocale>
 #include <cerrno>
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
 #include <random>
 #include <chrono>
-#endif
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -316,13 +314,11 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 //=========================================================
 
 static unsigned int randomSeed = UINT_MAX;
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
 // uniformly-distributed integer random number generator that produces non-deterministic random
 // numbers
 static std::random_device rd;
 // Mersenne Twister pseudo-random generator of 32-bit numbers
 static std::mt19937 mt;
-#endif
 
 void tlp::setSeedOfRandomSequence(unsigned int seed) {
   randomSeed = seed;
@@ -333,8 +329,6 @@ unsigned int tlp::getSeedOfRandomSequence() {
 }
 
 void tlp::initRandomSequence() {
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
-
   // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
 #ifndef __MINGW32__
@@ -347,30 +341,9 @@ void tlp::initRandomSequence() {
   } else {
     mt.seed(randomSeed);
   }
-
-#else
-
-  if (randomSeed == UINT_MAX) {
-    unsigned int seed = uint(time(nullptr));
-    // init a sequence of rand() calls
-    srand(seed);
-#ifndef WIN32
-    // init a sequence of random() calls
-    srandom(seed);
-#endif
-  } else {
-    srand(randomSeed);
-#ifndef WIN32
-    srandom(randomSeed);
-#endif
-  }
-
-#endif
 }
 
 int tlp::randomInteger(int max) {
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
-
   if (max == 0) {
     return 0;
   } else if (max > 0) {
@@ -380,50 +353,20 @@ int tlp::randomInteger(int max) {
     std::uniform_int_distribution<int> dist(max, 0);
     return dist(mt);
   }
-
-#else
-
-  if (max == 0)
-    return 0;
-
-  int x = rand();
-
-  if (max >= RAND_MAX)
-    return x;
-
-  // keep searching for an x in a range divisible by n
-  // see
-  // http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
-  while (x >= RAND_MAX - (RAND_MAX % (max + 1))) {
-    x = rand();
-  }
-
-  return x % (max + 1);
-#endif
 }
 
 unsigned int tlp::randomUnsignedInteger(unsigned int max) {
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
-
   if (max == 0) {
     return 0;
   } else {
     std::uniform_int_distribution<unsigned int> dist(0, max);
     return dist(mt);
   }
-
-#else
-  return uint(randomInteger(int(max)));
-#endif
 }
 
 double tlp::randomDouble(double max) {
-#if __cplusplus >= 201103L || _MSC_VER >= 1800
   std::uniform_real_distribution<double> dist(0, std::nextafter(max, DBL_MAX));
   return dist(mt);
-#else
-  return max * rand() / double(RAND_MAX);
-#endif
 }
 
 //=========================================================
