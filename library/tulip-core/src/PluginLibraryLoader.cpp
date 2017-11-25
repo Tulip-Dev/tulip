@@ -129,13 +129,13 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
                     nullptr,   // no source buffer needed
                     dwErrCode, // error code for this message
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                    (LPTSTR)&msg, // allocated by fcn
-                    0,            // minimum size of buffer
-                    nullptr);     // no inserts
+                    reinterpret_cast<LPTSTR>(&msg), // allocated by fcn
+                    0,                              // minimum size of buffer
+                    nullptr);                       // no inserts
 
       if (!msg) {
         char scode[128];
-        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), (int)dwErrCode);
+        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), int(dwErrCode));
         loader->aborted(filename, std::string(scode));
       } else {
         loader->aborted(filename, filename + ": " + msg);
