@@ -861,11 +861,9 @@ QString TulipFontEditorCreator::displayText(const QVariant &data) const {
 QWidget *TulipLabelPositionEditorCreator::createWidget(QWidget *parent) const {
   QComboBox *result = new QComboBox(parent);
 
-  for (TulipViewSettings::labelmap::const_iterator i =
-           TulipViewSettings::POSITION_LABEL_MAP.begin();
-       i != TulipViewSettings::POSITION_LABEL_MAP.end(); ++i) {
-    result->addItem(tlp::tlpStringToQString(i->second),
-                    QVariant::fromValue<LabelPosition::LabelPositions>(i->first));
+  for (const auto &i : TulipViewSettings::POSITION_LABEL_MAP) {
+    result->addItem(tlp::tlpStringToQString(i.second),
+                    QVariant::fromValue<LabelPosition::LabelPositions>(i.first));
   }
 
   return result;
