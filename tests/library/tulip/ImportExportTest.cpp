@@ -90,15 +90,15 @@ void ImportExportTest::testAttributes() {
   set<edge> setEdge;
   vector<edge> vectorEdge;
   vector<node> vectorNode;
-  node n;
-  edge e;
-  forEach (n, original->getNodes()) { vectorNode.push_back(n); }
-  forEach (e, original->getEdges()) {
+  for (const node &n : original->nodes()) {
+    vectorNode.push_back(n);
+  }
+  for (const edge &e : original->edges()) {
     vectorEdge.push_back(e);
     setEdge.insert(e);
   }
-  n = original->getOneNode();
-  e = original->getOneEdge();
+  node n = original->getOneNode();
+  edge e = original->getOneEdge();
   StringCollection sc;
   sc.push_back("foo");
   sc.push_back("bar");
@@ -169,8 +169,7 @@ void ImportExportTest::testSubGraphsImportExport() {
   int subsublowerBound = 75;
   int subsubhigherBound = 125;
   int i = 0;
-  node n;
-  forEach (n, original->getNodes()) {
+  for (const node &n : original->nodes()) {
     if (i >= sub1lowerBound && i <= sub1higherBound) {
       sub1nodes.push_back(n);
     }
@@ -200,15 +199,21 @@ void ImportExportTest::testSubGraphsImportExport() {
 
   i = 0;
   IntegerProperty *sub1id = sub1->getLocalProperty<IntegerProperty>("sub1id");
-  forEach (n, sub1->getNodes()) { sub1id->setNodeValue(n, i++); }
+  for (const node &n : sub1->nodes()) {
+    sub1id->setNodeValue(n, i++);
+  }
 
   i = 0;
   IntegerProperty *sub2id = sub2->getLocalProperty<IntegerProperty>("sub2id");
-  forEach (n, sub2->getNodes()) { sub2id->setNodeValue(n, i++); }
+  for (const node &n : sub2->nodes()) {
+    sub2id->setNodeValue(n, i++);
+  }
 
   i = 0;
   IntegerProperty *subsubid = subsub->getLocalProperty<IntegerProperty>("subsubid");
-  forEach (n, subsub->getNodes()) { subsubid->setNodeValue(n, i++); }
+  for (const node &n : subsub->nodes()) {
+    subsubid->setNodeValue(n, i++);
+  }
 
   importExportGraph(original);
   importExportGraph(sub1);
@@ -258,10 +263,12 @@ Graph *ImportExportTest::createSimpleGraph() const {
   }
 
   IntegerProperty *id = original->getProperty<IntegerProperty>("id");
-  node n;
-  forEach (n, original->getNodes()) { id->setNodeValue(n, n.id); }
-  edge e;
-  forEach (e, original->getEdges()) { id->setEdgeValue(e, e.id); }
+  for (const node &n : original->nodes()) {
+    id->setNodeValue(n, n.id);
+  }
+  for (const edge &e : original->edges()) {
+    id->setEdgeValue(e, e.id);
+  }
 
   // create and populate any supported graph properties types in Tulip
   // to check that their serialization/deserialization is correct
@@ -287,7 +294,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
       original->getProperty<StringVectorProperty>("stringVecProp");
 
   std::ostringstream oss;
-  forEach (n, original->getNodes()) {
+  for (const node &n : original->nodes()) {
 
     unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
     vector<bool> boolVec;
@@ -328,7 +335,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
     stringVecProp->setNodeValue(n, stringVec);
   }
 
-  forEach (e, original->getEdges()) {
+  for (const edge &e : original->edges()) {
 
     unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
     vector<bool> boolVec;
@@ -340,7 +347,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
     vector<string> stringVec;
 
     for (unsigned int i = 0; i < vecSize; ++i) {
-      boolVec.push_back((n.id + i) % 2 == 0);
+      boolVec.push_back((e.id + i) % 2 == 0);
       coordVec.push_back(genRandomCoord());
       colorVec.push_back(genRandomColor());
       doubleVec.push_back(tlp::randomDouble(DBL_MAX));
@@ -378,8 +385,7 @@ void ImportExportTest::testNanInfValuesImportExport() {
   DoubleProperty *doubleProp = original->getProperty<DoubleProperty>("doubleProp");
   DoubleVectorProperty *doubleVecProp =
       original->getProperty<DoubleVectorProperty>("doubleVecProp");
-  node n;
-  forEach (n, original->getNodes()) {
+  for (const node &n : original->nodes()) {
     if (n.id % 3 == 0) {
       doubleProp->setNodeValue(n, std::numeric_limits<double>::quiet_NaN());
     } else if (n.id % 3 == 1) {

@@ -76,8 +76,9 @@ int main(int, char **) {
     }
   } else {
     std::cout << "could not find the plugin, computing" << std::endl;
-    node n;
-    forEach (n, myGraph->getNodes()) { metric->setNodeValue(n, myGraph->deg(n)); }
+    for (const node &n : myGraph->nodes()) {
+      metric->setNodeValue(n, myGraph->deg(n));
+    }
   }
 
   // output the degree of node a;

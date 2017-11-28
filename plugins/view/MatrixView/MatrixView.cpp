@@ -144,8 +144,7 @@ void MatrixView::setOriented(bool flag) {
     Observable::holdObservers();
 
     if (_isOriented) {
-      edge e;
-      forEach (e, graph()->getEdges()) {
+      for (const edge &e : graph()->edges()) {
         // delete the second node mapping the current edge
         vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         _matrixGraph->delNode(node(edgeNodes[1]));
@@ -153,8 +152,7 @@ void MatrixView::setOriented(bool flag) {
         _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
       }
     } else {
-      edge e;
-      forEach (e, graph()->getEdges()) {
+      for (const edge &e : graph()->edges()) {
         // must add the symetric node
         vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         edgeNodes.push_back(_matrixGraph->addNode().id);
@@ -298,12 +296,10 @@ void MatrixView::initDisplayedGraph() {
   createScene(_matrixGraph, DataSet());
 
   Observable::holdObservers();
-  node n;
-  forEach (n, graph()->getNodes())
+  for (const node &n : graph()->nodes())
     addNode(graph(), n);
 
-  edge e;
-  forEach (e, graph()->getEdges())
+  for (const edge &e : graph()->edges())
     addEdge(graph(), e);
   Observable::unholdObservers();
 
@@ -359,15 +355,14 @@ void MatrixView::normalizeSizes(double maxVal) {
   SizeProperty *matrixSizes =
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize();
 
-  node n;
-  forEach (n, graph()->getNodes()) {
+  for (const node &n : graph()->nodes()) {
     Size s(originalSizes->getNodeValue(n));
     maxWidth = max<float>(maxWidth, s[0]);
     maxHeight = max<float>(maxHeight, s[1]);
   }
 
   Observable::holdObservers();
-  forEach (n, _matrixGraph->getNodes()) {
+  for (const node &n : _matrixGraph->nodes()) {
     if (!_displayedNodesAreNodes->getNodeValue(n))
       continue;
 
@@ -495,8 +490,7 @@ void MatrixView::updateNodesOrder() {
   _orderedNodes.clear();
   _orderedNodes.resize(graph()->numberOfNodes());
   int i = 0;
-  node n;
-  forEach (n, graph()->getNodes())
+  for (const node &n : graph()->nodes())
     _orderedNodes[i++] = n;
 
   if (graph()->existProperty(_orderingMetricName)) {
@@ -558,8 +552,7 @@ void MatrixView::updateLayout() {
   IntegerProperty *shapes =
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementShape();
   int shape = GlyphManager::getInst().glyphId("2D - Square");
-  edge e;
-  forEach (e, graph()->getEdges()) {
+  for (const edge &e : graph()->edges()) {
     const std::pair<node, node> eEnds = graph()->ends(e);
     vector<int> srcNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first),
                 tgtNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second),
@@ -580,7 +573,7 @@ void MatrixView::updateLayout() {
     }
   }
 
-  forEach (e, _matrixGraph->getEdges()) {
+  for (const edge &e : _matrixGraph->edges()) {
     const std::pair<node, node> eEnds = _matrixGraph->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;

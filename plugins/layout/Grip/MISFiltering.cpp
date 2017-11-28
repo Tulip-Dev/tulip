@@ -42,8 +42,7 @@ void MISFiltering::computeFiltering() {
 
   inLastVi.setAll(true);
 
-  node n;
-  forEach (n, g_copy->getNodes())
+  for (const node &n : g_copy->nodes())
     levelToNodes[0].insert(n);
 
   level = 1;
@@ -139,8 +138,7 @@ void MISFiltering::updateVectors() {
 
   if (level == 1) {
     unsigned int curPos = 0;
-    node n;
-    forEach (n, g_copy->getNodes())
+    for (const node &n : g_copy->nodes())
       ordering[curPos++] = n;
     return;
   }

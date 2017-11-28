@@ -357,13 +357,12 @@ bool StrengthClustering::run() {
       pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
 
     mult->uniformQuantification(100);
-    edge e;
     unsigned int steps = 0, maxSteps = graph->numberOfEdges();
 
     if (maxSteps < 10)
       maxSteps = 10;
 
-    forEach (e, graph->getEdges()) {
+    for (const edge &e : graph->edges()) {
       values->setEdgeValue(e, values->getEdgeValue(e) * (mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {

@@ -390,9 +390,8 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   // use bounding circles if specified
   if (boundingCircles) {
-    node n;
     SizeProperty *circleSizes = new SizeProperty(graph);
-    forEach (n, graph->getNodes()) {
+    for (const node &n : graph->nodes()) {
       const Size &boundCircle = sizes->getNodeValue(n);
       double diam = 2 * sqrt(boundCircle.getW() * boundCircle.getW() / 4.0 +
                              boundCircle.getH() * boundCircle.getH() / 4.0);
@@ -452,8 +451,7 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   if (ortho) {
     // Edge bends
-    edge e;
-    forEach (e, tree->getEdges()) {
+    for (const edge &e : tree->edges()) {
       LineType::RealType tmp;
       node src = tree->source(e);
       node tgt = tree->target(e);
@@ -467,7 +465,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
 
     if (orientation == "horizontal") {
-      forEach (e, tree->getEdges()) {
+      for (const edge &e : tree->edges()) {
         LineType::RealType tmp = result->getEdgeValue(e);
         LineType::RealType tmp2;
 
@@ -481,8 +479,7 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   // rotate layout and size
   if (orientation == "horizontal") {
-    node n;
-    forEach (n, tree->getNodes()) {
+    for (const node &n : tree->nodes()) {
       const Coord &tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }

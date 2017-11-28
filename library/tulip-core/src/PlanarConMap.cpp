@@ -545,8 +545,7 @@ void PlanarConMap::computeFaces() {
     v_faces.push_back(f);
 
     // Compute the list of adjacent faces of each edge
-    edge e;
-    forEach (e, getEdges()) {
+    for (const edge &e : edges()) {
       edgesFaces.insert(edgeMapEntry(e, v_faces));
       faceMap::iterator itf = facesEdges.find(f);
 
@@ -559,8 +558,7 @@ void PlanarConMap::computeFaces() {
     }
 
     // Compute the list of adjacent faces of each node
-    node n;
-    forEach (n, getNodes())
+    for (const node &n : nodes())
       nodesFaces.insert(nodeMapEntry(n, v_faces));
 
     if (facesEdges.size() == 0) {
@@ -572,7 +570,6 @@ void PlanarConMap::computeFaces() {
   else {
     MutableContainer<int> considered;
     MutableContainer<bool> sens;
-    Face tmp;
 
     considered.setAll(0);
     sens.setAll(false);
@@ -580,8 +577,7 @@ void PlanarConMap::computeFaces() {
     // Each edge must be considered two times
     for (int k = 0; k < 2; k++) {
       vector<edge> edges;
-      edge e;
-      forEach (e, getEdges()) {
+      for (const edge &e : this->edges()) {
         edges.clear();
 
         if (considered.get(e.id) < 2) {

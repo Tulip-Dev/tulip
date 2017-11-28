@@ -416,8 +416,7 @@ void SOMView::setColorToMap(tlp::ColorProperty *newColor) {
   if (mask) {
     cp = new ColorProperty(som);
     deleteAfter = true;
-    node n;
-    forEach (n, som->getNodes()) {
+    for (const node &n : som->getNodes()) {
       if (mask->getNodeValue(n))
         cp->setNodeValue(n, newColor->getNodeValue(n));
       else
@@ -807,8 +806,7 @@ void SOMView::computeColor(SOMMap *som, tlp::NumericProperty *property, tlp::Col
   double min = property->getNodeDoubleMin(som);
   double max = property->getNodeDoubleMax(som);
 
-  node n;
-  forEach (n, som->getNodes()) {
+  for (const node &n : som->nodes()) {
     double curentValue = property->getNodeDoubleValue(n);
     float pos = 0;
 
@@ -892,8 +890,7 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
       if (mask) {
         somColorProperty = new ColorProperty(som);
         deleteAfter = true;
-        node n;
-        forEach (n, som->getNodes()) {
+        for (const node &n : som->nodes()) {
           if (mask->getNodeValue(n))
             somColorProperty->setNodeValue(n, origColor->getNodeValue(n));
           else
@@ -952,8 +949,7 @@ void SOMView::refreshPreviews() {
     ColorProperty *color = propertyToColorProperty[itPC->first];
 
     if (mask) {
-      node n;
-      forEach (n, som->getNodes()) {
+      for (const node &n : som->getNodes()) {
         if (mask->getNodeValue(n))
           maskedColor->setNodeValue(n, color->getNodeValue(n));
         else
@@ -1021,9 +1017,8 @@ void SOMView::copySelectionToMask() {
 
 void SOMView::invertMask() {
   if (mask) {
-    node n;
     set<node> somNodes;
-    forEach (n, som->getNodes()) {
+    for (const node &n : som->nodes()) {
       if (!mask->getNodeValue(n))
         somNodes.insert(n);
     }

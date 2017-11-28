@@ -40,8 +40,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   MutableContainer<DikjstraElement *> mapDik;
   mapDik.setAll(nullptr);
 
-  node n;
-  forEach (n, graph->getNodes()) {
+  for (const node &n : graph->nodes()) {
     if (n != src) { // init all nodes to +inf
       DikjstraElement *tmp = new DikjstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
@@ -151,8 +150,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   }
 
   usedEdges.setAll(false);
-  node tmpN;
-  forEach (tmpN, graph->getNodes()) {
+  for (const node &tmpN : graph->nodes()) {
     DikjstraElement *dEle = mapDik.get(tmpN.id);
     nodeDistance.set(tmpN.id, dEle->dist);
 

@@ -39,8 +39,7 @@ int main() {
   
   //===========================
   //go through all nodes and display the structure
-	node n;
-	forEach(n, graph->getNodes()) {
+  for(const node &n : graph->nodes()) {
     cout << "node: " <<  n.id << endl;
     cout << " degree: " << graph->deg(n) << endl;
     cout << " in-degree: " << graph->indeg(n) << endl;
@@ -115,8 +114,7 @@ int main() {
 
   //===========================
   //go through all edges
-	edge e;
-  forEach(e, graph->getEdges()) {
+  for(const edge &e : graph->edges()) {
     cout << "edge: " << e.id;
     cout << " source: " << graph->source(e).id;
     cout << " target: " << graph->target(e).id;

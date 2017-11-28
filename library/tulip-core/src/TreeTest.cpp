@@ -278,16 +278,13 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return nullptr;
 
-    node n;
-    forEach (n, sTree->getNodes()) {
+    for (const node &n : sTree->nodes()) {
       tree->addNode(n);
 
       if (sTree->indeg(n) == 0)
         tree->addEdge(root, n);
     }
-    edge e;
-    forEach (e, sTree->getEdges())
-      tree->addEdge(e);
+    tree->addEdges(sTree->edges());
   }
   assert(TreeTest::isTree(tree));
   return tree;

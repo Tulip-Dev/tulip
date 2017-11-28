@@ -137,15 +137,13 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
     graphViewNodes.clear();
     graphViewEdges.clear();
 
-    node n2;
-    forEach (n2, graph_component->getNodes()) {
+    for (const node &n2 : graph_component->nodes()) {
       if (result.getNodeValue(n2)) {
         graphViewNodes.push_back(n2);
       }
     }
 
-    edge e;
-    forEach (e, graph_component->getEdges()) {
+    for (const edge &e : graph_component->edges()) {
       if (result.getEdgeValue(e)) {
         graphViewEdges.push_back(e);
       }

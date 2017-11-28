@@ -40,11 +40,11 @@ public:
   AutoSize(const tlp::PluginContext *context) : SizeAlgorithm(context) {}
 
   bool run() override {
-    node n;
-    forEach (n, graph->getNodes())
+
+    for (const node &n : graph->nodes())
       result->setNodeValue(n, getNodeValue(n));
-    edge e;
-    forEach (e, graph->getEdges())
+
+    for (const edge &e : graph->edges())
       result->setEdgeValue(e, getEdgeValue(e));
     return true;
   }

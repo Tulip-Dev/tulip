@@ -110,9 +110,8 @@ double NodeMetric::getNodeValue(tlp::node current) {
 bool NodeMetric::run() {
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
-  node _n;
-  forEach (_n, graph->getNodes())
-    result->setNodeValue(_n, getNodeValue(_n));
+  for (const node &n : graph->nodes())
+    result->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //====================================================================

@@ -182,8 +182,9 @@ void BasicLayoutTest::testKruskal() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Kruskal", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT(selection.getNodeValue(n)); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT(selection.getNodeValue(n));
+  }
 }
 //==========================================================
 void BasicLayoutTest::testFastOverlapRemoval() {

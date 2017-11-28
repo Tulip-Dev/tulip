@@ -414,9 +414,8 @@ bool GEMLayout::run() {
 
   _particules.resize(_nbNodes);
   /* Max Edge to scale actual edges lentgh to preferres lentgh */
-  node n;
   unsigned int i = 0;
-  forEach (n, graph->getNodes()) {
+  for (const node &n : graph->nodes()) {
     _particules[i] = GEMparticule(float(graph->deg(n)));
     _particules[i].n = n;
     _particules[i].id = i;

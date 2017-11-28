@@ -3852,16 +3852,14 @@ point to an empty sub-graph.
     oss << "\"" << sipCpp->getName() << "\" (id " << sipCpp->getId() << ")";
     PyErr_SetString(PyExc_Exception, oss.str().c_str());
   } else {
-    tlp::node n;
-    forEach(n, a0->getNodes()) {
+    for(const tlp::node &n : a0->nodes()) {
       if (!sipCpp->isElement(n)) {
         sipIsErr = throwInvalidNodeException(sipCpp, n);
         break;
       }
     }
     if (sipIsErr != -1) {
-      tlp::edge e;
-      forEach(e, a0->getEdges()) {
+      for(const tlp::edge &e : a0->edges()) {
         if (!sipCpp->isElement(e)) {
           sipIsErr = throwInvalidEdgeException(sipCpp, e);
           break;

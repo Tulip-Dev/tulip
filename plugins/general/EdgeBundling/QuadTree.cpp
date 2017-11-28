@@ -243,10 +243,6 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay,
     bb[0][0] = (bb[0][0] - center) * ratio + center;
   }
 
-  vector<node> input;
-  node k;
-  forEach (k, graph->getNodes()) { input.push_back(k); }
-
   node a = graph->addNode();
   node b = graph->addNode();
   node c = graph->addNode();
@@ -275,7 +271,7 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay,
   layout->setNodeValue(b, cB);
   layout->setNodeValue(d, cD);
 
-  recQuad(a, b, c, d, input);
+  recQuad(a, b, c, d, graph->nodes());
 
   for (size_t i = 0; i < resultNode.size(); ++i) {
     graph->delNode(resultNode[i], true);

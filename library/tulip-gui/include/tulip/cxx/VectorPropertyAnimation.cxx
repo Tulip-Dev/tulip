@@ -29,8 +29,7 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
   assert(frameCount > 1);
 
   if (this->_computeNodes) {
-    tlp::node n;
-    forEach (n, this->_graph->getNodes()) {
+    for (const tlp::node &n : this->_graph->nodes()) {
       if (this->_selection && !this->_selection->getNodeValue(n))
         continue;
 
@@ -50,8 +49,7 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
   }
 
   if (this->_computeEdges) {
-    tlp::edge e;
-    forEach (e, this->_graph->getEdges()) {
+    for (const tlp::edge &e : this->_graph->edges()) {
       if (this->_selection && !this->_selection->getEdgeValue(e))
         continue;
 

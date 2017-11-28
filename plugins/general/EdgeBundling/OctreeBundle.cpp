@@ -302,9 +302,6 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
     }
 
   */
-  vector<node> input;
-  node k;
-  forEach (k, graph->getNodes()) { input.push_back(k); }
 
   Coord fr[4];
   Coord ba[4];
@@ -318,7 +315,7 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
   ba[2] = Coord(bb[1][0], bb[1][1], bb[1][2]);
   ba[3] = Coord(bb[0][0], bb[1][1], bb[1][2]);
 
-  recQuad(fr, ba, input);
+  recQuad(fr, ba, graph->nodes());
 
   for (size_t i = 0; i < unvalidEdges.size(); ++i) {
     node src = unvalidEdges[i].first;
@@ -334,11 +331,4 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
 
   vector<edge> tmpE;
   SimpleTest::makeSimple(graph, tmpE);
-  /*
-    for(size_t i = 0; i<resultNode.size(); ++i) {
-        if (!graph->isElement(resultNode[i]))
-            cout << "bugossss" << endl;
-        graph->delAllNode(resultNode[i]);
-    }
-    */
 }

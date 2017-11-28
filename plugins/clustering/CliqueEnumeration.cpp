@@ -137,8 +137,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
   tlp::Graph *sub = graph->addCloneSubGraph();
   std::map<tlp::node, DegreeOrderingElem *> degrees;
   set<DegreeOrderingElem *, LessDegreeOrdering> sortednodes;
-  node n;
-  forEach (n, sub->getNodes()) {
+  for (const node &n : sub->nodes()) {
     DegreeOrderingElem *elem = new DegreeOrderingElem(n, sub->deg(n));
     degrees.insert(make_pair(n, elem));
     sortednodes.insert(elem);

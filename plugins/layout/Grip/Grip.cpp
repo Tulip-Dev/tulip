@@ -463,8 +463,7 @@ void Grip::init() {
   level = 0;
 
   double diam = sqrt(currentGraph->numberOfNodes());
-  node n;
-  forEach (n, currentGraph->getNodes()) {
+  for (const node &n : currentGraph->nodes()) {
     Coord alea = Coord(diam - (2. * diam * randomInteger(1)), diam - (2. * diam * randomInteger(1)),
                        diam - (2. * diam * randomInteger(1)));
 
@@ -489,8 +488,7 @@ void Grip::set_nbr_size() {
   int initCxty = 10000;
   unsigned int maxLevel = 0;
 
-  node n;
-  forEach (n, currentGraph->getNodes())
+  for (const node &n : currentGraph->nodes())
     maxCxty += currentGraph->deg(n);
 
   if (maxCxty < uint(initCxty))

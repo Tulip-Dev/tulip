@@ -145,8 +145,7 @@ bool Circular::run() {
   double sumOfRad = 0;
   double maxRad = 0;
   node maxRadNode;
-  node itn;
-  forEach (itn, graph->getNodes()) {
+  for (const node &itn : graph->nodes()) {
     double rad = computeRadius(nodeSize->getNodeValue(itn));
     sumOfRad += rad;
 
@@ -160,8 +159,7 @@ bool Circular::run() {
   if (graph->numberOfNodes() <= 2) {
     // set the (max 2) nodes maxRad appart
     double xcoord = maxRad / 2.0;
-    node itn;
-    forEach (itn, graph->getNodes()) {
+    for (const node &itn : graph->nodes()) {
       result->setNodeValue(itn, Coord(xcoord, 0, 0));
       xcoord *= -1;
     }

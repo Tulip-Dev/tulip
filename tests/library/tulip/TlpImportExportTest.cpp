@@ -67,10 +67,12 @@ void TlpImportExportTest::testSave() {
   graph = nullptr;
   graph = loadGraph("save_test.tlp");
   CPPUNIT_ASSERT(graph != nullptr);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT((n == n1) || (n == n2)); }
-  edge e;
-  forEach (e, graph->getEdges()) { CPPUNIT_ASSERT(e == e1); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT((n == n1) || (n == n2));
+  }
+  for (const edge &e : graph->edges()) {
+    CPPUNIT_ASSERT(e == e1);
+  }
   delete graph;
 }
 //==========================================================
@@ -92,10 +94,12 @@ void TlpImportExportTest::testExport() {
   graph = nullptr;
   graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != nullptr);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT((n == node(n1.id)) || (n == node(n2.id))); }
-  edge e;
-  forEach (e, graph->getEdges()) { CPPUNIT_ASSERT_EQUAL(e1, e); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT((n == node(n1.id)) || (n == node(n2.id)));
+  }
+  for (const edge &e : graph->edges()) {
+    CPPUNIT_ASSERT_EQUAL(e1, e);
+  }
   delete graph;
 }
 //==========================================================
@@ -117,16 +121,20 @@ void TlpImportExportTest::testExportCluster() {
   graph = nullptr;
   graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != nullptr);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT((n == n1) || (n == n2)); }
-  edge e;
-  forEach (e, graph->getEdges()) { CPPUNIT_ASSERT_EQUAL(e1, e); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT((n == n1) || (n == n2));
+  }
+  for (const edge &e : graph->edges()) {
+    CPPUNIT_ASSERT_EQUAL(e1, e);
+  }
   Graph *g;
   forEach (g, graph->getSubGraphs()) {
     string name;
     g->getAttribute(string("name"), name);
     CPPUNIT_ASSERT_EQUAL(string("\"name with double quotes \""), name);
-    forEach (n, g->getNodes()) { CPPUNIT_ASSERT((n == n1) || (n == n2)); }
+    for (const node &n : g->nodes()) {
+      CPPUNIT_ASSERT((n == n1) || (n == n2));
+    }
   }
   delete graph;
 }

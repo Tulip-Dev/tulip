@@ -744,8 +744,7 @@ void NodesGraphModel::setGraph(Graph *g) {
 
   _elements.resize(graph()->numberOfNodes());
   int i = 0;
-  node n;
-  forEach (n, graph()->getNodes())
+  for (const tlp::node &n : graph()->nodes())
     _elements[i++] = n.id;
   // we ensure the ids are ascendingly sorted
   // to ease the display of nodes/edges
@@ -788,8 +787,7 @@ void EdgesGraphModel::setGraph(Graph *g) {
 
   _elements.resize(graph()->numberOfEdges());
   int i = 0;
-  edge e;
-  forEach (e, graph()->getEdges())
+  for (const edge &e : graph()->edges())
     _elements[i++] = e.id;
   // reset();
 }

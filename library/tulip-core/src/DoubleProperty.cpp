@@ -56,8 +56,7 @@ static void computeNodeAvgValue(
 
   double value = 0;
   unsigned int nbNodes = 0;
-  node n;
-  forEach (n, sg->getNodes()) {
+  for (const node &n : sg->nodes()) {
     ++nbNodes;
     value += metric->getNodeValue(n);
   }
@@ -98,8 +97,9 @@ static void computeNodeSumValue(
   }
 
   double value = 0;
-  node n;
-  forEach (n, sg->getNodes()) { value += metric->getNodeValue(n); }
+  for (const node &n : sg->nodes()) {
+    value += metric->getNodeValue(n);
+  }
   metric->setNodeValue(mN, value);
 }
 
@@ -132,9 +132,8 @@ static void computeNodeMaxValue(
   }
 
   double value = -DBL_MAX;
-  node n;
-  forEach (n, sg->getNodes()) {
-    const double &nVal = metric->getNodeValue(n);
+  for (const node &n : sg->nodes()) {
+    double nVal = metric->getNodeValue(n);
 
     if (nVal > value)
       value = nVal;
@@ -173,9 +172,8 @@ static void computeNodeMinValue(
   }
 
   double value = DBL_MAX;
-  node n;
-  forEach (n, sg->getNodes()) {
-    const double &nVal = metric->getNodeValue(n);
+  for (const node &n : sg->nodes()) {
+    double nVal = metric->getNodeValue(n);
 
     if (nVal < value)
       value = nVal;

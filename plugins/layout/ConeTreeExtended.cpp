@@ -194,8 +194,7 @@ bool ConeTreeExtended::run() {
   // rotate size if needed
   // will be undone at then end
   if (orientation == "horizontal") {
-    node n;
-    forEach (n, graph->getNodes()) {
+    for (const node &n : graph->nodes()) {
       const Size &tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -234,8 +233,7 @@ bool ConeTreeExtended::run() {
 
   // rotate layout and size
   if (orientation == "horizontal") {
-    node n;
-    forEach (n, graph->getNodes()) {
+    for (const node &n : graph->nodes()) {
       // if not in tulip gui, ensure cleanup
       LayoutProperty *elementLayout;
 

@@ -118,8 +118,7 @@ DoubleProperty *SortNodes::dist = nullptr;
 //============================================
 /*DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
-  edge e;
-  forEach(e, graph->getEdges()) {
+  forEach(const edge &e : graph->edges()) {
     const pair<node, node>& ends = graph->ends(e);
     const Coord& a = layout->getNodeValue(ends.first);
     const Coord& b = layout->getNodeValue(ends.second);
@@ -176,10 +175,8 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
 //============================================
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
 void EdgeBundling::fixEdgeType(IntegerProperty *ntype) {
-  node n;
   ntype->setAllEdgeValue(0);
-  edge e;
-  forEach (e, graph->getEdges()) {
+  for (const edge &e : graph->edges()) {
     if (oriGraph->isElement(e)) {
       ntype->setEdgeValue(e, 1);
       continue;
@@ -214,8 +211,9 @@ void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
 }
 //==========================================================================
 void EdgeBundling::computeDistances() {
-  node n;
-  forEach (n, oriGraph->getNodes()) { computeDistance(n); }
+  for (const node &n : oriGraph->nodes()) {
+    computeDistance(n);
+  }
 }
 //==========================================================================
 void EdgeBundling::computeDistance(node n) {
@@ -314,8 +312,7 @@ bool EdgeBundling::run() {
       TLP_HASH_MAP<std::string, std::pair<node, unsigned int>> clusters;
 
       // iterate on graph nodes
-      node n;
-      forEach (n, graph->getNodes()) {
+      for (const node &n : graph->nodes()) {
         // get position
         const Coord &coord = layout->getNodeValue(n);
         // compute a key for coord (convert point to string representation)
@@ -436,8 +433,7 @@ bool EdgeBundling::run() {
   MutableContainer<double> mWeights;
   MutableContainer<double> mWeightsInit;
   {
-    edge e;
-    forEach (e, graph->getEdges()) {
+    for (const edge &e : graph->edges()) {
       pair<node, node> ends = graph->ends(e);
       const Coord &a = layout->getNodeValue(ends.first);
       const Coord &b = layout->getNodeValue(ends.second);
@@ -480,8 +476,7 @@ bool EdgeBundling::run() {
     set<node, SortNodes> orderedNodes;
     computeDistances();
     {
-      node n;
-      forEach (n, vertexCoverGraph->getNodes())
+      for (const node &n : vertexCoverGraph->nodes())
         orderedNodes.insert(n);
     }
 
@@ -671,7 +666,7 @@ bool EdgeBundling::run() {
 
     // Adjust weights of routing grid.
     if (iteration < MAX_ITER - 1) {
-      forEach (e, gridGraph->getEdges()) {
+      for (const edge &e : gridGraph->edges()) {
         mWeights.set(e.id, mWeightsInit.get(e.id));
 
         if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap) {

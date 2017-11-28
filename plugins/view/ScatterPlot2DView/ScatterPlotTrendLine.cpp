@@ -145,8 +145,9 @@ bool ScatterPlotTrendLine::compute(GlMainWidget *) {
   } else {
     IntegerProperty *xDimInt = graph->getProperty<IntegerProperty>(xDimName);
     xDim = new DoubleProperty(graph);
-    node n;
-    forEach (n, graph->getNodes()) { xDim->setNodeValue(n, double(xDimInt->getNodeValue(n))); }
+    for (const node &n : graph->nodes()) {
+      xDim->setNodeValue(n, double(xDimInt->getNodeValue(n)));
+    }
   }
 
   if (yDimType == "double") {
@@ -154,8 +155,9 @@ bool ScatterPlotTrendLine::compute(GlMainWidget *) {
   } else {
     IntegerProperty *yDimInt = graph->getProperty<IntegerProperty>(yDimName);
     yDim = new DoubleProperty(graph);
-    node n;
-    forEach (n, graph->getNodes()) { yDim->setNodeValue(n, double(yDimInt->getNodeValue(n))); }
+    for (const node &n : graph->nodes()) {
+      yDim->setNodeValue(n, double(yDimInt->getNodeValue(n)));
+    }
   }
 
   computeLinearRegressionFunction(graph, xDim, yDim, a, b);

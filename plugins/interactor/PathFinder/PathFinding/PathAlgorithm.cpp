@@ -36,8 +36,7 @@ using namespace std;
 double computePathLength(BooleanProperty *result, MutableContainer<double> &weights) {
   double retVal(0);
   Graph *graph(result->getGraph());
-  edge e;
-  forEach (e, graph->getEdges()) {
+  for (const edge &e : graph->edges()) {
     if (result->getEdgeValue(e))
       retVal += weights.get(e.id);
   }
@@ -63,12 +62,10 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
   MutableContainer<double> weightsContainer;
 
   if (!weights) {
-    edge e;
-    forEach (e, graph->getEdges())
+    for (const edge &e : graph->edges())
       weightsContainer.set(e.id, SMALLEST_WEIGHT);
   } else {
-    edge e;
-    forEach (e, graph->getEdges()) {
+    for (const edge &e : graph->edges()) {
       double val(weights->getEdgeValue(e));
 
       if (val == 0)

@@ -117,8 +117,7 @@ double LeafMetric::getNodeValue(tlp::node current) {
 bool LeafMetric::run() {
   result->setAllNodeValue(0);
   result->setAllEdgeValue(0);
-  node n;
-  forEach (n, graph->getNodes())
+  for (const node &n : graph->nodes())
     result->setNodeValue(n, getNodeValue(n));
   return true;
 }

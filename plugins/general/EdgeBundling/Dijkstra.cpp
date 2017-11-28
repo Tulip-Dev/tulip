@@ -37,12 +37,11 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
 
   assert(srcTlp.isValid());
   src = ntlp2dik.get(srcTlp);
-  node n;
 
   forbiddenNodes.setAll(false);
 
   if (forbidden) {
-    forEach (n, forbidden->getNodes()) {
+    for (const node &n : forbidden->nodes()) {
       node ndik = ntlp2dik.get(n);
       forbiddenNodes[ndik] = true;
     }
@@ -55,16 +54,11 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
 
   mapDik.setAll(0);
   vector<bool> focus(graph.numberOfNodes(), false);
-  set<node>::const_iterator it = fous.begin();
 
-  for (; it != fous.end(); ++it)
-    focus[ntlp2dik.get(*it)] = true;
+  for (const node &n : fous)
+    focus[ntlp2dik.get(n)] = true;
 
-  const vector<node> &bNodes = graph.nodes();
-
-  for (size_t i = 0; i < bNodes.size(); ++i) {
-    n = bNodes[i];
-
+  for (const node &n : graph.nodes()) {
     if (n != src) { // init all nodes to +inf
       DijkstraElement *tmp = new DijkstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
@@ -101,11 +95,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
     if (forbiddenNodes[u.n] && u.n != src)
       continue;
 
-    edge e;
-    const vector<edge> &adjEdges = graph.star(u.n);
-
-    for (size_t i = 0; i < adjEdges.size(); ++i) {
-      e = adjEdges[i];
+    for (const edge &e : graph.star(u.n)) {
       node v = graph.opposite(e, u.n);
       DijkstraElement &dEle = *mapDik[v];
       // assert(weights.get(edik2tlp[e]) > 0);
@@ -136,10 +126,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
     }
   }
 
-  node tmpN;
-
-  for (size_t i = 0; i < bNodes.size(); ++i) {
-    tmpN = bNodes[i];
+  for (const node &tmpN : graph.nodes()) {
     DijkstraElement *dEle = mapDik[tmpN];
     nodeDistance[tmpN.id] = dEle->dist;
 
@@ -162,11 +149,8 @@ void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
     return;
 
   resultNodes[n] = true;
-  edge e;
-  const vector<edge> &adjEdges = graph.star(n);
 
-  for (size_t i = 0; i < adjEdges.size(); ++i) {
-    e = adjEdges[i];
+  for (const edge &e : graph.star(n)) {
 
     if (!usedEdges[e])
       continue;

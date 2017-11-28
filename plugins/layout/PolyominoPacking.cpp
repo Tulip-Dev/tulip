@@ -153,10 +153,12 @@ bool PolyominoPacking::run() {
   tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
 
   if (connectedComponents.size() <= 1) {
-    node n;
-    forEach (n, graph->getNodes()) { result->setNodeValue(n, layout->getNodeValue(n)); }
-    edge e;
-    forEach (e, graph->getEdges()) { result->setEdgeValue(e, layout->getEdgeValue(e)); }
+    for (const node &n : graph->nodes()) {
+      result->setNodeValue(n, layout->getNodeValue(n));
+    }
+    for (const edge &e : graph->edges()) {
+      result->setEdgeValue(e, layout->getEdgeValue(e));
+    }
     return true;
   }
 

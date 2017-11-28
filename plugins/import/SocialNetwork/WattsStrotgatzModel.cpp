@@ -125,11 +125,10 @@ struct WattsStrotgatzModel : public ImportModule {
       }
     }
 
-    edge e;
     node n1, n2;
 
     if (original_model) {
-      forEach (e, graph->getEdges()) {
+      for (const edge &e : graph->edges()) {
         if (tlp::randomDouble() < p) {
           n1 = graph->source(e);
 
@@ -142,7 +141,7 @@ struct WattsStrotgatzModel : public ImportModule {
         }
       }
     } else {
-      forEach (e, graph->getEdges()) {
+      for (const edge &e : graph->edges()) {
         if (tlp::randomDouble() < p) {
           do {
             n1 = nodes[tlp::randomInteger(nbNodes - 1)];

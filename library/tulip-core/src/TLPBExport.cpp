@@ -92,9 +92,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     pluginProgress->setComment("writing edges...");
     // use a vector as buffer
     std::vector<std::pair<node, node>> vEdges(MAX_EDGES_TO_WRITE);
-    edge e;
     unsigned int edgesToWrite = 0, nbWrittenEdges = 0;
-    forEach (e, graph->getEdges()) {
+    for (const edge &e : graph->edges()) {
       std::pair<node, node> ends = graph->ends(e);
       ends.first = getNode(ends.first);
       ends.second = getNode(ends.second);

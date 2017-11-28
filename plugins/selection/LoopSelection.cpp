@@ -27,9 +27,8 @@ LoopSelection::LoopSelection(const tlp::PluginContext *context) : BooleanAlgorit
 //============================================
 bool LoopSelection::run() {
   result->setAllNodeValue(false);
-  edge e;
   unsigned cpt = 0;
-  forEach (e, graph->getEdges()) {
+  for (const edge &e : graph->edges()) {
     const std::pair<node, node> &eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {

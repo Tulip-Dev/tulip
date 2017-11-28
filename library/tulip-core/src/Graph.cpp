@@ -663,9 +663,8 @@ public:
     const VectorGraph &ovg = tlp::Observable::getObservableGraph();
 
     // we iterate the observable graph nodes
-    node n;
-    forEach (n, ovg.getNodes()) {
-      Graph *g;
+    for (const node &n : ovg.nodes()) {
+      Graph *g = nullptr;
 
       if (tlp::Observable::isAlive(n) &&
           (g = dynamic_cast<Graph *>(tlp::Observable::getObject(n)))) {
@@ -1364,8 +1363,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   MutableContainer<bool> graphEdges;
   graphEdges.setAll(false);
 
-  edge e;
-  forEach (e, getEdges())
+  for (const edge &e : edges())
     graphEdges.set(e.id, true);
 
   // we can now remove nodes from graph
@@ -1479,8 +1477,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 // of a subgraph to metaNode
 static void mapSubGraphNodes(Graph *sg, node metaNode, MutableContainer<node> &mappingM,
                              GraphProperty *metaInfo) {
-  node n;
-  forEach (n, sg->getNodes()) {
+  for (const node &n : sg->nodes()) {
     mappingM.set(n.id, metaNode);
     Graph *ssg = metaInfo->getNodeValue(n);
 
@@ -1552,8 +1549,9 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
       if (mnGraph != nullptr) {
-        node mnn;
-        forEach (mnn, mnGraph->getNodes()) { mappingM.set(mnn.id, mn); }
+        for (const node &mnn : mnGraph->nodes()) {
+          mappingM.set(mnn.id, mn);
+        }
       }
     }
 
@@ -1740,8 +1738,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
         forEach (property, quotientGraph->getObjectProperties()) {
           property->computeMetaValue(metaN, its, quotientGraph);
         }
-        node n;
-        forEach (n, its->getNodes()) {
+        for (const node &n : its->nodes()) {
           // map each subgraph's node to a set of meta nodes
           // in order to deal consistently with overlapping clusters
           nMapping[n].insert(metaN);

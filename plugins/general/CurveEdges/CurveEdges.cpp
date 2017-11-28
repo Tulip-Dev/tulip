@@ -331,8 +331,7 @@ public:
       layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
     }
 
-    tlp::edge e;
-    forEach (e, graph->getEdges()) {
+    for (const tlp::edge &e : graph->edges()) {
       if (curveType >= CURVE_TYPE_CUBIC_CONTINUOUS) {
         layout->setEdgeValue(e, computeCubicBezierControlPoints(e));
       } else {

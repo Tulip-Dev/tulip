@@ -551,22 +551,19 @@ int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
   return 0;
 }
 
-void GlGlyphScale::draw(float lod, Camera *camera) {
-  (void)lod;
-  node n;
+void GlGlyphScale::draw(float, Camera *camera) {
   GlNode glNode(0);
   glEnable(GL_LIGHTING);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  forEach (n, glyphGraph->getNodes()) {
+  for (const node &n : glyphGraph->nodes()) {
     glNode.id = n.id;
     glNode.draw(30, glyphGraphInputData, camera);
   }
 }
 
 void GlGlyphScale::translate(const Coord &move) {
-  node n;
-  forEach (n, glyphGraph->getNodes()) {
+  for (const node &n : glyphGraph->nodes()) {
     Coord currentNodeCoord(glyphGraphLayout->getNodeValue(n));
     glyphGraphLayout->setNodeValue(n, currentNodeCoord + move);
   }
@@ -988,8 +985,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
     } else {
       glGlyphScale->draw(0, &camera);
       GlNode glNode(0);
-      node n;
-      forEach (n, glyphMappingGraph->getNodes()) {
+      for (const node &n : glyphMappingGraph->nodes()) {
         glNode.id = n.id;
         glNode.draw(30, glyphMappingGraphInputData, &camera);
       }

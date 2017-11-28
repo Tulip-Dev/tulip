@@ -88,8 +88,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
       pluginProgress->setComment("Partitioning nodes...");
 
     // do a bfs traversal for each node
-    node curNode;
-    forEach (curNode, graph->getNodes()) {
+    for (const node &curNode : graph->nodes()) {
       // check if curNode has been already visited
       if (!visited.get(curNode.id)) {
         // get the value of the node
@@ -137,7 +136,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
         nodesToVisit.push_front(curNode);
 
         while (!nodesToVisit.empty()) {
-          curNode = nodesToVisit.front();
+          node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
           edge curEdge;
           forEach (curEdge, graph->getInOutEdges(curNode)) {
@@ -184,8 +183,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
       pluginProgress->setComment("Partitioning edges...");
 
     // do a bfs traversal for each edge
-    edge curEdge;
-    forEach (curEdge, graph->getEdges()) {
+    for (const edge &curEdge : graph->edges()) {
       // check if curEdge has been already visited
       if (!visited.get(curEdge.id)) {
         // get the value of the edge
@@ -239,6 +237,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
         while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
+          edge curEdge;
           forEach (curEdge, graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value

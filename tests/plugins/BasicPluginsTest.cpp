@@ -326,8 +326,9 @@ void BasicPluginsTest::testLoopSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Loop Selection", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT(selection.getNodeValue(n) == false); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
+  }
 }
 //==========================================================
 void BasicPluginsTest::testMultipleEdgeSelection() {
@@ -335,8 +336,9 @@ void BasicPluginsTest::testMultipleEdgeSelection() {
   bool result =
       computeProperty<BooleanProperty>("Multiple Edges Selection", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT(selection.getNodeValue(n) == false); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
+  }
 }
 //==========================================================
 void BasicPluginsTest::testReachableSubGraphSelection() {
@@ -348,16 +350,18 @@ void BasicPluginsTest::testSpanningDagSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Spanning Dag", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT(selection.getNodeValue(n)); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT(selection.getNodeValue(n));
+  }
 }
 //==========================================================
 void BasicPluginsTest::testSpanningTreeSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Spanning Forest", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT(selection.getNodeValue(n)); }
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT(selection.getNodeValue(n));
+  }
 }
 //==========================================================
 void BasicPluginsTest::testAutoSize() {

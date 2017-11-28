@@ -44,10 +44,8 @@ bool CliqueImport::importGraph() {
    */
 
   // double iteration over the graph's nodes.
-  node current;
-  node other;
-  forEach (current, graph->getNodes()) {
-    forEach (other, graph->getNodes()) {
+  for (const node &current : graph->nodes()) {
+    for (const node &other : graph->nodes()) {
       if (current != other) {
         graph->addEdge(current, other);
       }

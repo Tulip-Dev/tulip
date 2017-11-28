@@ -263,8 +263,7 @@ public:
     if (!oriented) {
       // for each edge
       // store opposite edge in opProp
-      edge mE;
-      forEach (mE, quotientGraph->getEdges()) {
+      for (const edge &mE : quotientGraph->edges()) {
         const std::pair<node, node> &eEnds = quotientGraph->ends(mE);
         edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 

@@ -657,8 +657,9 @@ void LayoutProperty::computeEmbedding(Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  node n;
-  forEach (n, sg->getNodes()) { computeEmbedding(n, sg); }
+  for (const node &n : sg->nodes()) {
+    computeEmbedding(n, sg);
+  }
 }
 
 void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
@@ -858,8 +859,9 @@ double LayoutProperty::averageEdgeLength(const Graph *sg) const {
   assert(sg == graph || graph->isDescendantGraph(sg));
 
   double ret = 0;
-  edge e;
-  forEach (e, sg->getEdges()) { ret += edgeLength(e); }
+  for (const edge &e : sg->edges()) {
+    ret += edgeLength(e);
+  }
   return (ret / sg->numberOfEdges());
 }
 //=================================================================================

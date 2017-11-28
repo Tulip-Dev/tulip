@@ -147,8 +147,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
   result.first = result.second = centre;
 
   double maxRad = 0;
-  node itn;
-  forEach (itn, graph->getNodes()) {
+  for (const node &itn : graph->nodes()) {
     const Coord &curCoord = layout->getNodeValue(itn);
     Size curSize(size->getNodeValue(itn) / 2.0f);
 
@@ -168,12 +167,11 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
         radDir *= curRad;
         result.second = radDir + centre;
       }
-    } // end if
+    }
   }
 
   if (layout->numberOfNonDefaultValuatedEdges()) {
-    edge ite;
-    forEach (ite, graph->getEdges()) {
+    for (const edge &ite : graph->edges()) {
       if (selection == nullptr || selection->getEdgeValue(ite)) {
         LineType::RealType::const_iterator itCoord;
         const LineType::RealType &bends = layout->getEdgeValue(ite);
@@ -184,9 +182,9 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
           if (curRad > maxRad) {
             maxRad = curRad;
             result.second = *itCoord;
-          } // end if
-        }   // end for
-      }     // end if
+          }
+        }
+      }
     }
   }
 

@@ -59,14 +59,12 @@ public:
     tlp::BooleanProperty *prop = new BooleanProperty(g);
 
     if (onNodes) {
-      node n;
-      forEach (n, g->getNodes())
+      for (const node &n : g->nodes())
         prop->setNodeValue(n, compare(n));
     }
 
     if (onEdges) {
-      edge e;
-      forEach (e, g->getEdges())
+      for (const edge &e : g->edges())
         prop->setEdgeValue(e, compare(e));
     }
 

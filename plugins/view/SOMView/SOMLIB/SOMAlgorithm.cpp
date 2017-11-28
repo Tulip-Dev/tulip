@@ -79,11 +79,10 @@ void SOMAlgorithm::initMap(SOMMap *map, InputSample &inputSample,
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
-  node n;
   int numberOfNode = map->numberOfNodes();
   int currentNumberOfNode = 0;
   Iterator<node> *nodeIterator = inputSample.getRandomNodeOrder();
-  forEach (n, map->getNodes()) {
+  for (const node &n : map->nodes()) {
     if (!nodeIterator->hasNext()) {
       delete nodeIterator;
       nodeIterator = inputSample.getRandomNodeOrder();
@@ -247,9 +246,7 @@ void SOMAlgorithm::computeMapping(SOMMap *map, InputSample &inputSample,
   double dist;
   maxElement = 0;
 
-  node n;
-
-  forEach (n, inputSample.getNodes()) {
+  for (const node &n : inputSample.getNodes()) {
     node somNode = findBMU(map, inputSample.getWeight(n), dist);
     cumDist += dist;
     mappingTab[somNode].insert(n);

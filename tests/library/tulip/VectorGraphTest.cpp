@@ -244,8 +244,7 @@ static void checkGraphAfterDelEdge() {
 
   // check nodes
   OMP_ITER_TYPE i = 0;
-  node n;
-  forEach (n, graph.getNodes()) {
+  for (const node &n : graph.nodes()) {
     CPPUNIT_ASSERT(n == nodes[i]);
     ++i;
   }
@@ -259,9 +258,10 @@ static void checkGraphAfterDelEdge() {
     CPPUNIT_ASSERT(graph.isElement(edges[i]) == ((i % 2) == 0));
 
   i = 0;
-  edge e;
-  forEach (e, graph.getEdges())
+  for (const edge &e : graph.edges()) {
+    std::ignore = e;
     ++i;
+  }
   CPPUNIT_ASSERT(i == NB_NODES / 2);
 
 // check neighbours per node
@@ -309,17 +309,19 @@ static void checkGraphAfterDelNode() {
   // check number of nodes
   CPPUNIT_ASSERT(graph.numberOfNodes() == 3 * NB_NODES / 4);
   OMP_ITER_TYPE i = 0;
-  node n;
-  forEach (n, graph.getNodes())
+  for (const node &n : graph.nodes()) {
+    std::ignore = n;
     ++i;
+  }
   CPPUNIT_ASSERT(i == 3 * NB_NODES / 4);
 
   // check number of edges
   CPPUNIT_ASSERT(graph.numberOfEdges() == NB_NODES / 4);
   i = 0;
-  edge e;
-  forEach (e, graph.getEdges())
+  for (const edge &e : graph.edges()) {
+    std::ignore = e;
     ++i;
+  }
   CPPUNIT_ASSERT(i == NB_NODES / 4);
 
 // check nodes
@@ -386,9 +388,10 @@ void checkGraphAfterDelEdges() {
   // check number of edges
   CPPUNIT_ASSERT(graph.numberOfEdges() == 0);
   OMP_ITER_TYPE i = 0;
-  edge e;
-  forEach (e, graph.getEdges())
+  for (const edge &e : graph.edges()) {
+    std::ignore = e;
     ++i;
+  }
   CPPUNIT_ASSERT(i == 0);
 
 // check neighbours per node
@@ -414,8 +417,7 @@ void VectorGraphTest::testDelEdges() {
   checkGraphAfterDelNode();
 
   // delete all edges
-  node n;
-  forEach (n, graph.getNodes())
+  for (const node &n : graph.nodes())
     graph.delEdges(n);
 
   // check remaining nodes and edges

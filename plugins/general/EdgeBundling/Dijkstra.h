@@ -77,16 +77,14 @@ public:
     ntlp2dik.setAll(tlp::node());
     etlp2dik.setAll(tlp::edge());
 
-    tlp::node n;
-    forEach (n, src->getNodes()) {
+    for (const tlp::node &n : src->nodes()) {
       tlp::node newNode = graph.addNode();
       ntlp2dik.set(n, newNode);
       ndik2tlp[newNode] = n;
       graph.reserveAdj(newNode, src->deg(n));
     }
 
-    tlp::edge e;
-    forEach (e, src->getEdges()) {
+    for (const tlp::edge &e : src->edges()) {
       const std::pair<tlp::node, tlp::node> &eEnds = src->ends(e);
       tlp::edge tmp = graph.addEdge(ntlp2dik.get(eEnds.first), ntlp2dik.get(eEnds.second));
       etlp2dik.set(e, tmp);

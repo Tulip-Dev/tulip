@@ -140,8 +140,7 @@ bool ReachableSubGraphSelection::run() {
     }
 
     // select corresponding edges
-    edge e;
-    forEach (e, graph->getEdges()) {
+    for (const edge &e : graph->edges()) {
       const std::pair<node, node> &ends = graph->ends(e);
 
       if ((reachables.find(ends.first) != ite) && (reachables.find(ends.second) != ite)) {

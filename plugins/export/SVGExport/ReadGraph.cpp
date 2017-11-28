@@ -50,14 +50,13 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     return false;
   }
 
-  edge e;
   unsigned int id_src_shape = 0;
   unsigned int id_tgt_shape = 0;
   unsigned int id_src_grad = 0;
   unsigned int id_tgt_grad = 0;
   GlGraphRenderingParameters rp;
   GlGraphInputData inputData(graph, &rp);
-  forEach (e, graph->getEdges()) {
+  for (const edge &e : graph->edges()) {
     if ((++i % 100) == 0)
       pp->progress(i, nb_elements);
 

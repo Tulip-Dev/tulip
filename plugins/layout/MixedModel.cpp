@@ -94,8 +94,7 @@ bool MixedModel::run() {
   //=========================================================
   // rotate size if necessary
   if (orientation == "horizontal") {
-    node n;
-    forEach (n, graph->getNodes()) {
+    for (const node &n : graph->nodes()) {
       const Size &tmp = sizeResult->getNodeValue(n);
       sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -171,8 +170,7 @@ bool MixedModel::run() {
       }
 
       delete itn;
-      edge e;
-      forEach (e, currentGraph->getEdges())
+      for (const edge &e : currentGraph->edges())
         edge_planar.push_back(e);
       continue;
     }
@@ -221,8 +219,7 @@ bool MixedModel::run() {
       // tlp::debug() << "... Planar subGraph computed" << endl;
     } else {
       G = currentGraph->addCloneSubGraph();
-      edge e;
-      forEach (e, currentGraph->getEdges())
+      for (const edge &e : currentGraph->edges())
         edge_planar.push_back(e);
     }
 
@@ -333,15 +330,13 @@ bool MixedModel::run() {
 
   // rotate layout and size
   if (orientation == "horizontal") {
-    node n;
-    forEach (n, graph->getNodes()) {
+    for (const node &n : graph->nodes()) {
       const Size &tmp = sizeResult->getNodeValue(n);
       sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord &tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
-    edge e;
-    forEach (e, graph->getEdges()) {
+    for (const edge &e : graph->edges()) {
       LineType::RealType tmp = result->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;

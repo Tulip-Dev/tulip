@@ -117,8 +117,7 @@ bool SquarifiedTreeMap::run() {
 
   {
     // change the glyph of all internal node to be a window
-    node n;
-    forEach (n, graph->getNodes()) {
+    for (const node &n : graph->nodes()) {
       if (graph->outdeg(n) != 0)
         glyphResult->setNodeValue(n, NodeShape::Window);
     }

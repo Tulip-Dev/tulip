@@ -573,17 +573,15 @@ void VectorGraph::swap(const edge a, const edge b) {
 //=======================================================
 void VectorGraph::dump() const {
   tlp::debug() << "nodes : ";
-  node n;
-  forEach (n, getNodes())
+  for (const node &n : nodes())
     tlp::debug() << n.id << " ";
   tlp::debug() << endl;
   tlp::debug() << "edges: ";
-  edge e;
-  forEach (e, getEdges())
+  for (const edge &e : edges())
     tlp::debug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
   tlp::debug() << endl;
 
-  forEach (n, getNodes()) {
+  for (const node &n : nodes()) {
     tlp::debug() << "n_" << n << "{";
     edge e;
     forEach (e, getInOutEdges(n)) { tlp::debug() << "e_" << e.id << " "; }
