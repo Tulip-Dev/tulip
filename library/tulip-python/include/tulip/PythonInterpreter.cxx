@@ -38,60 +38,50 @@ bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStat
   return ok;
 }
 
+// deprecated
 template <typename PARAM_TYPE>
 bool PythonInterpreter::callFunctionOneParam(const QString &module, const QString &function,
                                              const PARAM_TYPE &parameter) {
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter);
-  return callFunction(module, function, parameters);
+  return callFunctionWithParams(module, function, parameter);
 }
 
+// deprecated
 template <typename PARAM1_TYPE, typename PARAM2_TYPE>
 bool PythonInterpreter::callFunctionTwoParams(const QString &module, const QString &function,
                                               const PARAM1_TYPE &parameter1,
                                               const PARAM2_TYPE &parameter2) {
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter1);
-  parameters.set("param2", parameter2);
-  return callFunction(module, function, parameters);
+  return callFunctionWithParams(module, function, parameter1, parameter2);
 }
 
+// deprecated
 template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE>
 bool PythonInterpreter::callFunctionThreeParams(const QString &module, const QString &function,
                                                 const PARAM1_TYPE &parameter1,
                                                 const PARAM2_TYPE &parameter2,
                                                 const PARAM3_TYPE &parameter3) {
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter1);
-  parameters.set("param2", parameter2);
-  parameters.set("param3", parameter3);
-  return callFunction(module, function, parameters);
+  return callFunctionWithParams(module, function, parameter1, parameter2, parameter3);
 }
 
+// deprecated
 template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE>
 bool PythonInterpreter::callFunctionFourParams(const QString &module, const QString &function,
                                                const PARAM1_TYPE &parameter1,
                                                const PARAM2_TYPE &parameter2,
                                                const PARAM3_TYPE &parameter3,
                                                const PARAM4_TYPE &parameter4) {
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter1);
-  parameters.set("param2", parameter2);
-  parameters.set("param3", parameter3);
-  parameters.set("param4", parameter4);
-  return callFunction(module, function, parameters);
+  return callFunctionWithParams(module, function, parameter1, parameter2, parameter3, parameter4);
 }
 
+// deprecated
 template <typename PARAM_TYPE, typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionOneParamAndGetReturnValue(const QString &module,
                                                               const QString &function,
                                                               const PARAM_TYPE &parameter,
                                                               RETURN_TYPE &returnValue) {
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter);
-  return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
+  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter);
 }
 
+// deprecated
 template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionTwoParamsAndGetReturnValue(const QString &module,
                                                                const QString &function,
@@ -99,24 +89,21 @@ bool PythonInterpreter::callFunctionTwoParamsAndGetReturnValue(const QString &mo
                                                                const PARAM2_TYPE &parameter2,
                                                                RETURN_TYPE &returnValue) {
 
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter1);
-  parameters.set("param2", parameter2);
-  return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
+  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter1,
+                                                 parameter2);
 }
 
+// deprecated
 template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionThreeParamsAndGetReturnValue(
     const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
     const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, RETURN_TYPE &returnValue) {
 
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter1);
-  parameters.set("param2", parameter2);
-  parameters.set("param3", parameter3);
-  return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
+  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter1,
+                                                 parameter2, parameter3);
 }
 
+// deprecated
 template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE,
           typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(
@@ -124,12 +111,8 @@ bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(
     const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4,
     RETURN_TYPE &returnValue) {
 
-  tlp::DataSet parameters;
-  parameters.set("param1", parameter1);
-  parameters.set("param2", parameter2);
-  parameters.set("param3", parameter3);
-  parameters.set("param4", parameter4);
-  return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
+  return callFunctionWithParamsAndGetReturnValue(module, function, returnValue, parameter1,
+                                                 parameter2, parameter3, parameter4);
 }
 
 // use c++11 variadic template for more convenience
