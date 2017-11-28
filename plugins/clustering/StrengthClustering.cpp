@@ -363,7 +363,7 @@ bool StrengthClustering::run() {
     if (maxSteps < 10)
       maxSteps = 10;
 
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       values->setEdgeValue(e, values->getEdgeValue(e) * (mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {

@@ -86,7 +86,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
   // Fill map with graph values.
   if (type == NODE) {
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       string key;
 
       for (unsigned int i = 0; i < keyProperties.size(); ++i)
@@ -96,7 +96,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
     }
   } else {
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       string key;
 
       for (unsigned int i = 0; i < keyProperties.size(); ++i)
@@ -225,7 +225,7 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(
 void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
   srcValueToId.clear();
   node n;
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     string key;
 
     for (unsigned int i = 0; i < srcProperties.size(); ++i)

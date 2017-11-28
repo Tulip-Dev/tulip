@@ -1191,13 +1191,9 @@ void GraphPerspective::cancelSelection() {
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
   node n;
-  forEach(n, selection->getNodesEqualTo(true, graph)) {
-    selection->setNodeValue(n, false);
-  }
+  forEach (n, selection->getNodesEqualTo(true, graph)) { selection->setNodeValue(n, false); }
   edge e;
-  forEach(e, selection->getEdgesEqualTo(true, graph)) {
-    selection->setEdgeValue(e, false);
-  }
+  forEach (e, selection->getEdgesEqualTo(true, graph)) { selection->setEdgeValue(e, false); }
   graph->popIfNoUpdates();
   Observable::unholdObservers();
 }
@@ -1322,7 +1318,7 @@ void GraphPerspective::group() {
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::vector<node> groupedNodes;
   node n;
-  forEach(n, selection->getNodesEqualTo(true)) {
+  forEach (n, selection->getNodesEqualTo(true)) {
     if (graph->isElement(n))
       groupedNodes.push_back(n);
   }

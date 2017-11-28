@@ -119,23 +119,23 @@ bool FastOverlapRemoval::run() {
   // initialize result for edges
   result->setAllEdgeValue(viewLayout->getEdgeDefaultValue());
   edge e;
-  forEach(e, viewLayout->getNonDefaultValuatedEdges())
-      result->setEdgeValue(e, viewLayout->getEdgeValue(e));
+  forEach (e, viewLayout->getNonDefaultValuatedEdges())
+    result->setEdgeValue(e, viewLayout->getEdgeValue(e));
 
   SizeProperty size(graph);
 
   for (float passIndex = 1.; passIndex <= nbPasses; ++passIndex) {
     node n;
     // size initialization
-    forEach(n, graph->getNodes())
-        size.setNodeValue(n, viewSize->getNodeValue(n) * passIndex / float(nbPasses));
+    forEach (n, graph->getNodes())
+      size.setNodeValue(n, viewSize->getNodeValue(n) * passIndex / float(nbPasses));
 
     // actually apply fast overlap removal
     vector<vpsc::Rectangle *> nodeRectangles(graph->numberOfNodes());
     node curNode;
     unsigned int nodeCounter = 0;
     vector<node> nodeOrder(graph->numberOfNodes());
-    forEach(curNode, graph->getNodes()) {
+    forEach (curNode, graph->getNodes()) {
       const Coord &pos = viewLayout->getNodeValue(curNode);
       const Size &sz = size.getNodeValue(curNode);
       double curRot = viewRot->getNodeValue(curNode);

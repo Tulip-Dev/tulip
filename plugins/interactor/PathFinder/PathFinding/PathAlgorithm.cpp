@@ -37,7 +37,7 @@ double computePathLength(BooleanProperty *result, MutableContainer<double> &weig
   double retVal(0);
   Graph *graph(result->getGraph());
   edge e;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     if (result->getEdgeValue(e))
       retVal += weights.get(e.id);
   }
@@ -64,10 +64,11 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
 
   if (!weights) {
     edge e;
-    forEach(e, graph->getEdges()) weightsContainer.set(e.id, SMALLEST_WEIGHT);
+    forEach (e, graph->getEdges())
+      weightsContainer.set(e.id, SMALLEST_WEIGHT);
   } else {
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       double val(weights->getEdgeValue(e));
 
       if (val == 0)

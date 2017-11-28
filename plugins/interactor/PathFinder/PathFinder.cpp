@@ -83,7 +83,7 @@ void PathFinder::construct() {
   string s;
 
   _configurationWidget->addweightComboItem(NO_METRIC);
-  forEach(s, g->getProperties()) {
+  forEach (s, g->getProperties()) {
     if (g->getProperty(s)->getTypename().compare("double") == 0)
       _configurationWidget->addweightComboItem(s.c_str());
   }

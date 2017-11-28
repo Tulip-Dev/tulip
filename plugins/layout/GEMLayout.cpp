@@ -162,7 +162,7 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
 
   // attractive forces
   edge e;
-  forEach(e, graph->getInOutEdges(vNode)) {
+  forEach (e, graph->getInOutEdges(vNode)) {
     node uNode = graph->opposite(e, vNode);
 
     if (uNode == vNode)
@@ -234,7 +234,7 @@ void GEMLayout::insert() {
 
     node uNode;
     // remove one to non-visited nodes
-    forEach(uNode, graph->getInOutNodes(vNode)) {
+    forEach (uNode, graph->getInOutNodes(vNode)) {
       if (uNode == vNode)
         // nothing to do if it is a self loop
         continue;
@@ -249,7 +249,7 @@ void GEMLayout::insert() {
     if (startNode >= 0) {
       int d = 0;
       node uNode;
-      forEach(uNode, graph->getInOutNodes(vNode)) {
+      forEach (uNode, graph->getInOutNodes(vNode)) {
         if (uNode == vNode)
           // nothing to do if it a self loop
           continue;
@@ -416,7 +416,7 @@ bool GEMLayout::run() {
   /* Max Edge to scale actual edges lentgh to preferres lentgh */
   node n;
   unsigned int i = 0;
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     _particules[i] = GEMparticule(float(graph->deg(n)));
     _particules[i].n = n;
     _particules[i].id = i;

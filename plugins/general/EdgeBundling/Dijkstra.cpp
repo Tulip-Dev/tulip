@@ -42,7 +42,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   forbiddenNodes.setAll(false);
 
   if (forbidden) {
-    forEach(n, forbidden->getNodes()) {
+    forEach (n, forbidden->getNodes()) {
       node ndik = ntlp2dik.get(n);
       forbiddenNodes[ndik] = true;
     }

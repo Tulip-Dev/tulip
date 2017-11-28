@@ -89,7 +89,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
 
     // do a bfs traversal for each node
     node curNode;
-    forEach(curNode, graph->getNodes()) {
+    forEach (curNode, graph->getNodes()) {
       // check if curNode has been already visited
       if (!visited.get(curNode.id)) {
         // get the value of the node
@@ -140,7 +140,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
           curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
           edge curEdge;
-          forEach(curEdge, graph->getInOutEdges(curNode)) {
+          forEach (curEdge, graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
 
             if (neighbour == curNode) {
@@ -185,7 +185,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
 
     // do a bfs traversal for each edge
     edge curEdge;
-    forEach(curEdge, graph->getEdges()) {
+    forEach (curEdge, graph->getEdges()) {
       // check if curEdge has been already visited
       if (!visited.get(curEdge.id)) {
         // get the value of the edge
@@ -239,7 +239,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
         while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          forEach(curEdge, graph->getInOutEdges(curNode)) {
+          forEach (curEdge, graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
             if (!visited.get(curEdge.id) && curValue == prop->getEdgeDoubleValue(curEdge)) {
@@ -340,7 +340,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
           curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
           edge curEdge;
-          forEach(curEdge, graph->getInOutEdges(curNode)) {
+          forEach (curEdge, graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
 
             if (neighbour == curNode) {
@@ -440,7 +440,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
         while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          forEach(curEdge, graph->getInOutEdges(curNode)) {
+          forEach (curEdge, graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
             if (!visited.get(curEdge.id) && curValue == prop->getEdgeStringValue(curEdge)) {

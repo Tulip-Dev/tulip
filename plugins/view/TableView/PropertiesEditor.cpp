@@ -378,12 +378,12 @@ bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool se
 
     if (nodes) {
       node n;
-      forEach(n, selection->getNonDefaultValuatedNodes(_graph)) {
+      forEach (n, selection->getNonDefaultValuatedNodes(_graph)) {
         GraphModel::setNodeValue(n.id, prop, val);
       }
     } else {
       edge e;
-      forEach(e, selection->getNonDefaultValuatedEdges(_graph)) {
+      forEach (e, selection->getNonDefaultValuatedEdges(_graph)) {
         GraphModel::setEdgeValue(e.id, prop, val);
       }
     }

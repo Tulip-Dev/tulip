@@ -332,7 +332,7 @@ public:
     }
 
     tlp::edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       if (curveType >= CURVE_TYPE_CUBIC_CONTINUOUS) {
         layout->setEdgeValue(e, computeCubicBezierControlPoints(e));
       } else {

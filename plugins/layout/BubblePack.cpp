@@ -90,7 +90,7 @@ double BubblePack::computeRelativePosition(tlp::node n,
 
   node ni;
   int i = 0;
-  forEach(ni, tree->getOutNodes(n)) {
+  forEach (ni, tree->getOutNodes(n)) {
     realCircleRadius[i] = computeRelativePosition(ni, relativePosition);
     ++i;
   }
@@ -260,7 +260,7 @@ void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f> &r
   Vec2f shift(relPos[2], relPos[3]);
   result->setNodeValue(n, Coord(pos + shift, 0));
   node ni;
-  forEach(ni, tree->getOutNodes(n)) {
+  forEach (ni, tree->getOutNodes(n)) {
     Vec4f &relPos = relativePosition[graph->nodePos(ni)];
     Vec2f relat(relPos[0], relPos[1]);
     calcLayout(ni, pos + relat, relativePosition);

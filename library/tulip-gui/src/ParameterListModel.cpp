@@ -33,7 +33,7 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
   ParameterDescription param;
   std::vector<ParameterDescription> outParams;
   // first add in parameters
-  forEach(param, params.getParameters()) {
+  forEach (param, params.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
       _params.push_back(param);
     else

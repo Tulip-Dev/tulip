@@ -111,7 +111,8 @@ bool NodeMetric::run() {
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
   node _n;
-  forEach(_n, graph->getNodes()) result->setNodeValue(_n, getNodeValue(_n));
+  forEach (_n, graph->getNodes())
+    result->setNodeValue(_n, getNodeValue(_n));
   return true;
 }
 //====================================================================

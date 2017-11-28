@@ -55,9 +55,7 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t nbBends = 0;
   {
     edge e;
-    forEach(e, graph->getEdges()) {
-      nbBends += layout->getEdgeValue(e).size();
-    }
+    forEach (e, graph->getEdges()) { nbBends += layout->getEdgeValue(e).size(); }
   }
   points.resize(nbEdges * 2 + nbBends); // todo: should be #|V| !!!
   indices.resize(nbEdges * 2 + nbBends * 2);
@@ -67,7 +65,7 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t i_indices = 0;
   size_t i_col = 0;
   edge e;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     const pair<node, node> &ends = graph->ends(e);
     Color a = color->getEdgeValue(e);
     Color b = color->getEdgeValue(e);
@@ -123,7 +121,7 @@ void GlGraphLowDetailsRenderer::initNodesArray() {
   size_t i_indices = 0;
 
   node n;
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     Coord p(layout->getNodeValue(n));
     Size s(size->getNodeValue(n) / 2.f);
     Color c(color->getNodeValue(n));

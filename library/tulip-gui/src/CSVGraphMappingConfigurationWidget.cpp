@@ -207,9 +207,7 @@ void CSVGraphMappingConfigurationWidget::selectProperties(const QString &title,
                                                           QPushButton *button) {
   vector<string> graphProperties;
   string propertyName;
-  forEach(propertyName, graph->getProperties()) {
-    graphProperties.push_back(propertyName);
-  }
+  forEach (propertyName, graph->getProperties()) { graphProperties.push_back(propertyName); }
 
   if (StringsListSelectionDialog::choose(title, graphProperties, selProperties, this)) {
     if (selProperties.size() == 0) {

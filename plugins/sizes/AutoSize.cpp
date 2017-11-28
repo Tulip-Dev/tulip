@@ -41,9 +41,11 @@ public:
 
   bool run() {
     node n;
-    forEach(n, graph->getNodes()) result->setNodeValue(n, getNodeValue(n));
+    forEach (n, graph->getNodes())
+      result->setNodeValue(n, getNodeValue(n));
     edge e;
-    forEach(e, graph->getEdges()) result->setEdgeValue(e, getEdgeValue(e));
+    forEach (e, graph->getEdges())
+      result->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
 

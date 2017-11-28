@@ -68,12 +68,14 @@ bool IdMetric::run() {
 
   if (nodes) {
     node n;
-    forEach(n, graph->getNodes()) result->setNodeValue(n, n.id);
+    forEach (n, graph->getNodes())
+      result->setNodeValue(n, n.id);
   }
 
   if (edges) {
     edge e;
-    forEach(e, graph->getEdges()) result->setEdgeValue(e, e.id);
+    forEach (e, graph->getEdges())
+      result->setEdgeValue(e, e.id);
   }
 
   return true;

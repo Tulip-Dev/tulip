@@ -92,10 +92,8 @@ void ImportExportTest::testAttributes() {
   vector<node> vectorNode;
   node n;
   edge e;
-  forEach(n, original->getNodes()) {
-    vectorNode.push_back(n);
-  }
-  forEach(e, original->getEdges()) {
+  forEach (n, original->getNodes()) { vectorNode.push_back(n); }
+  forEach (e, original->getEdges()) {
     vectorEdge.push_back(e);
     setEdge.insert(e);
   }
@@ -172,7 +170,7 @@ void ImportExportTest::testSubGraphsImportExport() {
   int subsubhigherBound = 125;
   int i = 0;
   node n;
-  forEach(n, original->getNodes()) {
+  forEach (n, original->getNodes()) {
     if (i >= sub1lowerBound && i <= sub1higherBound) {
       sub1nodes.push_back(n);
     }
@@ -202,21 +200,15 @@ void ImportExportTest::testSubGraphsImportExport() {
 
   i = 0;
   IntegerProperty *sub1id = sub1->getLocalProperty<IntegerProperty>("sub1id");
-  forEach(n, sub1->getNodes()) {
-    sub1id->setNodeValue(n, i++);
-  }
+  forEach (n, sub1->getNodes()) { sub1id->setNodeValue(n, i++); }
 
   i = 0;
   IntegerProperty *sub2id = sub2->getLocalProperty<IntegerProperty>("sub2id");
-  forEach(n, sub2->getNodes()) {
-    sub2id->setNodeValue(n, i++);
-  }
+  forEach (n, sub2->getNodes()) { sub2id->setNodeValue(n, i++); }
 
   i = 0;
   IntegerProperty *subsubid = subsub->getLocalProperty<IntegerProperty>("subsubid");
-  forEach(n, subsub->getNodes()) {
-    subsubid->setNodeValue(n, i++);
-  }
+  forEach (n, subsub->getNodes()) { subsubid->setNodeValue(n, i++); }
 
   importExportGraph(original);
   importExportGraph(sub1);
@@ -267,13 +259,9 @@ Graph *ImportExportTest::createSimpleGraph() const {
 
   IntegerProperty *id = original->getProperty<IntegerProperty>("id");
   node n;
-  forEach(n, original->getNodes()) {
-    id->setNodeValue(n, n.id);
-  }
+  forEach (n, original->getNodes()) { id->setNodeValue(n, n.id); }
   edge e;
-  forEach(e, original->getEdges()) {
-    id->setEdgeValue(e, e.id);
-  }
+  forEach (e, original->getEdges()) { id->setEdgeValue(e, e.id); }
 
   // create and populate any supported graph properties types in Tulip
   // to check that their serialization/deserialization is correct
@@ -299,7 +287,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
       original->getProperty<StringVectorProperty>("stringVecProp");
 
   std::ostringstream oss;
-  forEach(n, original->getNodes()) {
+  forEach (n, original->getNodes()) {
 
     unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
     vector<bool> boolVec;
@@ -340,7 +328,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
     stringVecProp->setNodeValue(n, stringVec);
   }
 
-  forEach(e, original->getEdges()) {
+  forEach (e, original->getEdges()) {
 
     unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
     vector<bool> boolVec;
@@ -391,7 +379,7 @@ void ImportExportTest::testNanInfValuesImportExport() {
   DoubleVectorProperty *doubleVecProp =
       original->getProperty<DoubleVectorProperty>("doubleVecProp");
   node n;
-  forEach(n, original->getNodes()) {
+  forEach (n, original->getNodes()) {
     if (n.id % 3 == 0) {
       doubleProp->setNodeValue(n, std::numeric_limits<double>::quiet_NaN());
     } else if (n.id % 3 == 1) {
@@ -474,7 +462,7 @@ void ImportExportTest::testGraphsAreEqual(Graph *first, Graph *second) {
 
 void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph *first, tlp::Graph *second) {
   std::pair<std::string, tlp::DataType *> attribute;
-  forEach(attribute, first->getAttributes().getValues()) {
+  forEach (attribute, first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
 
     attributeNameMessage << "attribute \"" << attribute.first
@@ -509,12 +497,8 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph *first, Graph *second) 
 
   PropertyInterface *firstProperty;
   PropertyInterface *secondProperty;
-  forEach(firstProperty, first->getObjectProperties()) {
-    ++firstPropertiesCount;
-  }
-  forEach(secondProperty, second->getObjectProperties()) {
-    ++secondPropertiesCount;
-  }
+  forEach (firstProperty, first->getObjectProperties()) { ++firstPropertiesCount; }
+  forEach (secondProperty, second->getObjectProperties()) { ++secondPropertiesCount; }
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of properties", firstPropertiesCount,
                                secondPropertiesCount);

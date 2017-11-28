@@ -211,7 +211,7 @@ public:
         }
 
         node n;
-        forEach(n, graph->getNodes()) {
+        forEach (n, graph->getNodes()) {
           double dd = entryMetric->getNodeDoubleValue(n);
 
           if (eltTypes.getCurrent() == LOGARITHMIC_ELT) {
@@ -244,7 +244,7 @@ public:
         }
 
         edge e;
-        forEach(e, graph->getEdges()) {
+        forEach (e, graph->getEdges()) {
           double dd = entryMetric->getEdgeDoubleValue(e);
 
           if (eltTypes.getCurrent() == LOGARITHMIC_ELT) {
@@ -324,7 +324,7 @@ public:
       if (targetType.getCurrent() == NODES_TARGET) {
 
         node n;
-        forEach(n, graph->getNodes()) {
+        forEach (n, graph->getNodes()) {
           std::string tmp = metric->getNodeStringValue(n);
 
           if (mapMetricElements.count(tmp) == 0)
@@ -335,7 +335,7 @@ public:
       } else {
 
         edge e;
-        forEach(e, graph->getEdges()) {
+        forEach (e, graph->getEdges()) {
           std::string tmp = metric->getEdgeStringValue(e);
 
           if (mapMetricElements.count(tmp) == 0)

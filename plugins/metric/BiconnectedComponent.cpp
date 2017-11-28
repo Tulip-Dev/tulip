@@ -156,7 +156,7 @@ int biconnectedComponents(const Graph &graph, MutableContainer<int> &compnum) {
       bool is_isolated = true;
 
       edge e;
-      forEach(e, graph.getInOutEdges(v)) {
+      forEach (e, graph.getInOutEdges(v)) {
         if (graph.opposite(e, v) != v) {
           is_isolated = false;
           break;

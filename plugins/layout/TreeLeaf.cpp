@@ -42,7 +42,8 @@ void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int d
     levelHeights[depth] = nodeHeight;
 
   node on;
-  forEach(on, tree->getOutNodes(n)) computeLevelHeights(tree, on, depth + 1, oriSize);
+  forEach (on, tree->getOutNodes(n))
+    computeLevelHeights(tree, on, depth + 1, oriSize);
 }
 
 float TreeLeaf::dfsPlacement(tlp::Graph *tree, tlp::node n, float x, float y, unsigned int depth,

@@ -41,7 +41,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   mapDik.setAll(0);
 
   node n;
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     if (n != src) { // init all nodes to +inf
       DikjstraElement *tmp = new DikjstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
@@ -107,7 +107,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
       break;
     }
 
-    forEach(e, iter) {
+    forEach (e, iter) {
       node v = graph->opposite(e, u.n);
       DikjstraElement &dEle = *mapDik.get(v.id);
       assert(weights.get(e.id) > 0);
@@ -152,7 +152,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
 
   usedEdges.setAll(false);
   node tmpN;
-  forEach(tmpN, graph->getNodes()) {
+  forEach (tmpN, graph->getNodes()) {
     DikjstraElement *dEle = mapDik.get(tmpN.id);
     nodeDistance.set(tmpN.id, dEle->dist);
 
@@ -170,7 +170,7 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProper
 
   result->setNodeValue(n, true);
   edge e;
-  forEach(e, graph->getInOutEdges(n)) {
+  forEach (e, graph->getInOutEdges(n)) {
     if (!usedEdges.get(e.id))
       continue;
 
@@ -202,7 +202,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
     // set<edge> validEdge;
     map<double, edge> validEdge;
     edge e;
-    forEach(e, graph->getInOutEdges(n)) {
+    forEach (e, graph->getInOutEdges(n)) {
       if (!usedEdges.get(e.id))
         continue; // edge does not belong to the shortest path
 

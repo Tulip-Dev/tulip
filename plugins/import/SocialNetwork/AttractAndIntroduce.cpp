@@ -143,7 +143,7 @@ public:
 
         if (pIntroduceProperty[i] > randomDouble(1.0)) {
           node fd;
-          forEach(fd, graph->getInOutNodes(ni)) {
+          forEach (fd, graph->getInOutNodes(ni)) {
             if (fd == nj || graph->hasEdge(fd, nj, false))
               continue;
 

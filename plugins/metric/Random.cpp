@@ -71,12 +71,14 @@ bool RandomMetric::run() {
 
   if (nodes) {
     node n;
-    forEach(n, graph->getNodes()) result->setNodeValue(n, randomDouble());
+    forEach (n, graph->getNodes())
+      result->setNodeValue(n, randomDouble());
   }
 
   if (edges) {
     edge e;
-    forEach(e, graph->getEdges()) result->setEdgeValue(e, randomDouble());
+    forEach (e, graph->getEdges())
+      result->setEdgeValue(e, randomDouble());
   }
 
   return true;

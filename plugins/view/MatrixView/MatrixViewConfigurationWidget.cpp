@@ -103,7 +103,7 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   int currentIndex = 0;
   int i = 0;
   string s;
-  forEach(s, g->getProperties()) {
+  forEach (s, g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
     if (type != DoubleProperty::propertyTypename && type != IntegerProperty::propertyTypename &&

@@ -77,9 +77,7 @@ void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
   st.push_back(n);
   flag.set(n.id, true);
   node n2;
-  forEach(n2, sg->getInOutNodes(n)) {
-    dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
-  }
+  forEach (n2, sg->getInOutNodes(n)) { dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress); }
   flag.set(n.id, false);
   st.pop_back();
 }
@@ -104,7 +102,7 @@ vector<node> findMaxCycle(Graph *sg, PluginProgress *pluginProgress) {
   vector<node> res;
   vector<node> max;
   unsigned int nbCalls = 0;
-  forEach(g_tmp, g->getSubGraphs()) {
+  forEach (g_tmp, g->getSubGraphs()) {
     if (g_tmp->numberOfNodes() == 1)
       continue;
 
@@ -148,7 +146,7 @@ bool Circular::run() {
   double maxRad = 0;
   node maxRadNode;
   node itn;
-  forEach(itn, graph->getNodes()) {
+  forEach (itn, graph->getNodes()) {
     double rad = computeRadius(nodeSize->getNodeValue(itn));
     sumOfRad += rad;
 
@@ -163,7 +161,7 @@ bool Circular::run() {
     // set the (max 2) nodes maxRad appart
     double xcoord = maxRad / 2.0;
     node itn;
-    forEach(itn, graph->getNodes()) {
+    forEach (itn, graph->getNodes()) {
       result->setNodeValue(itn, Coord(xcoord, 0, 0));
       xcoord *= -1;
     }

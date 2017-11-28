@@ -93,7 +93,7 @@ void CaptionGraphicsItem::constructConfigWidget() {
   std::string piName;
   bool findViewMetric = false;
   QString firstDoubleMetricName;
-  forEach(piName, _view->graph()->getProperties()) {
+  forEach (piName, _view->graph()->getProperties()) {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 
@@ -134,7 +134,7 @@ void CaptionGraphicsItem::selectPropertyButtonClicked() {
 
   QMenu menu;
   std::string piName;
-  forEach(piName, _view->graph()->getProperties()) {
+  forEach (piName, _view->graph()->getProperties()) {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 

@@ -116,9 +116,7 @@ struct LiuEtAl : public ImportModule {
          */
         double k2_sum = 0;
         node n;
-        forEach(n, graph->getInOutNodes(nodes[rn])) {
-          k2_sum += graph->deg(n);
-        }
+        forEach (n, graph->getInOutNodes(nodes[rn])) { k2_sum += graph->deg(n); }
         pr = tlp::randomDouble();
         pr_sum = 0;
         node v;

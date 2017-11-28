@@ -41,7 +41,8 @@ void GraphModel::setGraph(Graph *g) {
     _graph->removeListener(this);
     _graph->removeObserver(this);
     PropertyInterface *pi;
-    forEach(pi, _graph->getObjectProperties()) pi->removeListener(this);
+    forEach (pi, _graph->getObjectProperties())
+      pi->removeListener(this);
   }
 
   _graph = g;
@@ -52,7 +53,7 @@ void GraphModel::setGraph(Graph *g) {
     _graph->addListener(this);
     _graph->addObserver(this);
     PropertyInterface *pi;
-    forEach(pi, _graph->getObjectProperties()) {
+    forEach (pi, _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
       if (pi->getName() == "viewMetaGraph")
@@ -744,7 +745,8 @@ void NodesGraphModel::setGraph(Graph *g) {
   _elements.resize(graph()->numberOfNodes());
   int i = 0;
   node n;
-  forEach(n, graph()->getNodes()) _elements[i++] = n.id;
+  forEach (n, graph()->getNodes())
+    _elements[i++] = n.id;
   // we ensure the ids are ascendingly sorted
   // to ease the display of nodes/edges
   qSort(_elements);
@@ -787,7 +789,8 @@ void EdgesGraphModel::setGraph(Graph *g) {
   _elements.resize(graph()->numberOfEdges());
   int i = 0;
   edge e;
-  forEach(e, graph()->getEdges()) _elements[i++] = e.id;
+  forEach (e, graph()->getEdges())
+    _elements[i++] = e.id;
   // reset();
 }
 

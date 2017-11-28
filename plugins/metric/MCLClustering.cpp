@@ -90,12 +90,12 @@ void MCLClustering::power(node n) {
   TLP_HASH_MAP<node, double> newTargets;
   edge e1;
 
-  forEach(e1, g.getOutEdges(n)) {
+  forEach (e1, g.getOutEdges(n)) {
     double v1 = inW[e1];
 
     if (v1 > epsilon) {
       edge e2;
-      forEach(e2, g.getOutEdges(g.target(e1))) {
+      forEach (e2, g.getOutEdges(g.target(e1))) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
@@ -145,9 +145,7 @@ void MCLClustering::prune(node n) {
   std::vector<pair<double, edge> > pvect;
   pvect.reserve(outdeg);
   edge e;
-  forEach(e, g.getOutEdges(n)) {
-    pvect.push_back(pair<double, edge>(outW[e], e));
-  }
+  forEach (e, g.getOutEdges(n)) { pvect.push_back(pair<double, edge>(outW[e], e)); }
 
   std::sort(pvect.begin(), pvect.end(), pvectCmp());
   double t = pvect[outdeg - 1].first;
@@ -173,7 +171,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 
   edge e;
   double sum = 0.;
-  forEach(e, g.getOutEdges(n)) {
+  forEach (e, g.getOutEdges(n)) {
     double outVal = outW[e];
     sum += pow(outVal, r);
     pvect.push_back(pair<double, edge>(outVal, e));
@@ -320,7 +318,7 @@ bool MCLClustering::run() {
     g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(tlpNodes[i]) + 1);
 
   edge e;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     std::pair<node, node> eEnds = graph->ends(e);
     node src = nodeMapping.getNodeValue(eEnds.first);
     node tgt = nodeMapping.getNodeValue(eEnds.second);
@@ -344,7 +342,7 @@ bool MCLClustering::run() {
 
     if (weights != 0) {
       double tmpVal = inW[tmp] = 0.;
-      forEach(e, g.getOutEdges(n)) {
+      forEach (e, g.getOutEdges(n)) {
         double eVal = inW[e];
         sum += eVal;
 
@@ -358,7 +356,8 @@ bool MCLClustering::run() {
     }
 
     double oos = 1. / sum;
-    forEach(e, g.getOutEdges(n)) inW[e] *= oos;
+    forEach (e, g.getOutEdges(n))
+      inW[e] *= oos;
   }
 
   // output for mcl

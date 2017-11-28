@@ -650,7 +650,7 @@ void NodeLinkDiagramComponent::addRemoveInNodesToSelection(bool pushGraph, bool 
 
   node neigh;
   MutableContainer<bool> inNodes;
-  forEach(neigh, graph()->getInNodes(node(itemId))) {
+  forEach (neigh, graph()->getInNodes(node(itemId))) {
     if (inNodes.get(neigh.id) == false) {
       elementSelected->setNodeValue(neigh, toggleSelection ? !elementSelected->getNodeValue(neigh)
                                                            : selectValue);
@@ -674,7 +674,7 @@ void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(bool pushGraph, bool
 
   node neigh;
   MutableContainer<bool> outNodes;
-  forEach(neigh, graph()->getOutNodes(node(itemId))) {
+  forEach (neigh, graph()->getOutNodes(node(itemId))) {
     if (outNodes.get(neigh.id) == false) {
       elementSelected->setNodeValue(neigh, toggleSelection ? !elementSelected->getNodeValue(neigh)
                                                            : selectValue);
@@ -697,7 +697,7 @@ void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(bool pushGraph, bool 
   }
 
   edge e;
-  forEach(e, graph()->getInEdges(node(itemId))) {
+  forEach (e, graph()->getInEdges(node(itemId))) {
     elementSelected->setEdgeValue(e, toggleSelection ? !elementSelected->getEdgeValue(e)
                                                      : selectValue);
   }
@@ -717,7 +717,7 @@ void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection(bool pushGraph, bool
   }
 
   edge e;
-  forEach(e, graph()->getOutEdges(node(itemId))) {
+  forEach (e, graph()->getOutEdges(node(itemId))) {
     elementSelected->setEdgeValue(e, toggleSelection ? !elementSelected->getEdgeValue(e)
                                                      : selectValue);
   }

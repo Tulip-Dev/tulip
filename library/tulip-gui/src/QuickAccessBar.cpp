@@ -416,7 +416,7 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
   Color color = QColorToColor(c);
 
   node n;
-  forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+  forEach (n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
     labelColors->setNodeValue(n, color);
     labelBorderColors->setNodeValue(n, color);
     hasSelected = true;
@@ -428,7 +428,7 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
   }
 
   edge e;
-  forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+  forEach (e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
     labelColors->setEdgeValue(e, color);
     labelBorderColors->setEdgeValue(e, color);
     hasSelected = true;
@@ -455,7 +455,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType, ColorProperty *
 
   if (eltType == NODE) {
     node n;
-    forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+    forEach (n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
       prop->setNodeValue(n, color);
       hasSelected = true;
     }
@@ -464,7 +464,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType, ColorProperty *
       prop->setAllNodeValue(color);
   } else {
     edge e;
-    forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+    forEach (e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
       prop->setEdgeValue(e, color);
       hasSelected = true;
     }
@@ -512,7 +512,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
 
   if (eltType == NODE) {
     node n;
-    forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+    forEach (n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
       GraphModel::setNodeValue(n.id, prop, val);
       hasSelected = true;
     }
@@ -521,7 +521,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
       GraphModel::setAllNodeValue(prop, val);
   } else {
     edge e;
-    forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+    forEach (e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
       GraphModel::setEdgeValue(e.id, prop, val);
       hasSelected = true;
     }

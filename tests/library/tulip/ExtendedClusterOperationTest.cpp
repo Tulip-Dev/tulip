@@ -165,7 +165,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   // take the quotient graph
   Graph *subgraph = 0;
   bool find = false;
-  forEach(subgraph, graph->getSubGraphs()) {
+  forEach (subgraph, graph->getSubGraphs()) {
     string name;
     subgraph->getAttribute("name", name);
 

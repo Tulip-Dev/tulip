@@ -457,7 +457,7 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
                                    : lSlider->getValue();
 
   node n;
-  forEach(n, it) {
+  forEach (n, it) {
     double nodeValue = currentProperty->getNodeDoubleValue(n);
 
     if (nodeValue <= rightSliderRealValue && nodeValue >= leftSliderRealValue) {
@@ -513,7 +513,7 @@ void ThresholdInteractor::buildSliders(SOMView *somView) {
     intervalMinValue = maxValue;
     intervalMaxValue = minValue;
     node n;
-    forEach(n, mask->getNodesEqualTo(true, som)) {
+    forEach (n, mask->getNodesEqualTo(true, som)) {
       double nodeValue = currentProperty->getNodeDoubleValue(n);
 
       if (nodeValue < intervalMinValue)

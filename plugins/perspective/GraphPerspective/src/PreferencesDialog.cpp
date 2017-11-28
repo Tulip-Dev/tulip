@@ -77,7 +77,7 @@ template <typename PROP, typename TYPE>
 inline void setDefaultNodeValueInProperty(const std::string &propertyName, const TYPE &value,
                                           bool &graphPush) {
   Graph *root = NULL;
-  forEach(root, getRootGraphs()) {
+  forEach (root, getRootGraphs()) {
     if (root->existLocalProperty(propertyName)) {
       PROP *prop = dynamic_cast<PROP *>(root->getProperty(propertyName));
 
@@ -90,7 +90,7 @@ inline void setDefaultNodeValueInProperty(const std::string &propertyName, const
     }
 
     Graph *sg = NULL;
-    forEach(sg, root->getDescendantGraphs()) {
+    forEach (sg, root->getDescendantGraphs()) {
       if (sg->existLocalProperty(propertyName)) {
         PROP *prop = dynamic_cast<PROP *>(sg->getProperty(propertyName));
 
@@ -107,7 +107,7 @@ template <typename PROP, typename TYPE>
 inline void setDefaultEdgeValueInProperty(const std::string &propertyName, const TYPE &value,
                                           bool &graphPush) {
   Graph *root = NULL;
-  forEach(root, getRootGraphs()) {
+  forEach (root, getRootGraphs()) {
     if (root->existLocalProperty(propertyName)) {
       PROP *prop = dynamic_cast<PROP *>(root->getProperty(propertyName));
 
@@ -120,7 +120,7 @@ inline void setDefaultEdgeValueInProperty(const std::string &propertyName, const
     }
 
     Graph *sg = NULL;
-    forEach(sg, root->getDescendantGraphs()) {
+    forEach (sg, root->getDescendantGraphs()) {
       if (sg->existLocalProperty(propertyName)) {
         PROP *prop = dynamic_cast<PROP *>(sg->getProperty(propertyName));
 

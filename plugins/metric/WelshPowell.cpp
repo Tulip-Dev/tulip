@@ -138,7 +138,7 @@ public:
         if (nInfo.val == -1) {
           bool sameColor = false;
           node u;
-          forEach(u, graph->getInOutNodes(nInfo.n)) {
+          forEach (u, graph->getInOutNodes(nInfo.n)) {
             if (nodesInfo[toNodesInfo.getNodeValue(u)].val == currentColor) {
               sameColor = true;
               break;

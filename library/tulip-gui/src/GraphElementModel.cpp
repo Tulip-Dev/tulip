@@ -43,7 +43,7 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
 
   PropertyInterface *prop;
   int result = 0;
-  forEach(prop, _graph->getObjectProperties()) {
+  forEach (prop, _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
     if (prop->getName() == "viewMetaGraph")
@@ -79,7 +79,7 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
   } else if (role == Qt::DisplayRole) {
     string propertyName;
     int result = 0;
-    forEach(propertyName, _graph->getProperties()) {
+    forEach (propertyName, _graph->getProperties()) {
 #ifdef NDEBUG
 
       if (propertyName == "viewMetaGraph")
@@ -106,7 +106,7 @@ QModelIndex GraphElementModel::index(int row, int column, const QModelIndex &par
 
   PropertyInterface *prop = NULL;
   int result = 0;
-  forEach(prop, _graph->getObjectProperties()) {
+  forEach (prop, _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
     if (prop->getName() == "viewMetaGraph")
@@ -152,7 +152,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
   if (role == Qt::EditRole) {
     PropertyInterface *prop = NULL;
     int result = 0;
-    forEach(prop, _graph->getObjectProperties()) {
+    forEach (prop, _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
       if (prop->getName() == "viewMetaGraph")
@@ -181,7 +181,7 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
   if (role == Qt::EditRole) {
     PropertyInterface *prop = NULL;
     int result = 0;
-    forEach(prop, _graph->getObjectProperties()) {
+    forEach (prop, _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
       if (prop->getName() == "viewMetaGraph")

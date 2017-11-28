@@ -212,7 +212,7 @@ public:
     }
 
     PropertyInterface *property;
-    forEach(property, itP) {
+    forEach (property, itP) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
@@ -249,7 +249,7 @@ public:
       if (property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        forEach(n, property->getNonDefaultValuatedNodes(g)) {
+        forEach (n, property->getNonDefaultValuatedNodes(g)) {
           stringstream temp;
           temp << graph->nodePos(n);
           _writer.writeString(temp.str());
@@ -270,7 +270,7 @@ public:
       if (property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        forEach(e, property->getNonDefaultValuatedEdges(g)) {
+        forEach (e, property->getNonDefaultValuatedEdges(g)) {
           stringstream temp;
           temp << graph->edgePos(e);
           _writer.writeString(temp.str());
@@ -297,7 +297,7 @@ public:
     // saving attributes
     DataSet attributes = g->getAttributes();
     pair<string, DataType *> attribute;
-    forEach(attribute, attributes.getValues()) {
+    forEach (attribute, attributes.getValues()) {
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
@@ -338,7 +338,7 @@ public:
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
     Graph *sub;
-    forEach(sub, g->getSubGraphs()) {
+    forEach (sub, g->getSubGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
       _writer.writeMapClose();

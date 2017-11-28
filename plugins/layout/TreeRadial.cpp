@@ -370,7 +370,7 @@ public:
 
     node n;
     SizeProperty *circleSizes = new SizeProperty(graph);
-    forEach(n, tree->getNodes()) {
+    forEach (n, tree->getNodes()) {
       const Size &boundingBox = sizes->getNodeValue(n);
       double diam = 2. * sqrt(boundingBox.getW() * boundingBox.getW() / 4.0 +
                               boundingBox.getH() * boundingBox.getH() / 4.0);
