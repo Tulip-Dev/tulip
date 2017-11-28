@@ -84,6 +84,54 @@ public:
 private:
   Iterator<unsigned int> *it;
 };
+
+template <typename T>
+class iterator_t {
+public:
+  enum IteratorType { Begin = 0, End = 1 };
+
+  iterator_t(tlp::Iterator<T> *it, IteratorType iteratorType = End)
+      : _finished(true), _iteratorType(iteratorType), _it(it) {
+    if (_iteratorType == Begin) {
+      _finished = !_it->hasNext();
+    }
+  }
+
+  ~iterator_t() {
+    if (_iteratorType == Begin) {
+      delete _it;
+    }
+  }
+
+  inline bool operator!=(const iterator_t &it) const {
+    return _finished != it._finished;
+  }
+
+  inline const iterator_t &operator++() {
+    _finished = !_it->hasNext();
+    return *this;
+  }
+
+  inline T operator*() const {
+    return _it->next();
+  }
+
+protected:
+  bool _finished;
+  IteratorType _iteratorType;
+  tlp::Iterator<T> *_it;
+};
+
+template <typename T>
+inline iterator_t<T> begin(tlp::Iterator<T> *it) {
+  return iterator_t<T>(it, iterator_t<T>::Begin);
+}
+
+template <typename T>
+inline iterator_t<T> end(tlp::Iterator<T> *it) {
+  return iterator_t<T>(it);
+}
+
 #endif // DOXYGEN_NOTFOR_DEVEL
 }
 
