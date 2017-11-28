@@ -83,7 +83,7 @@ void SOMAlgorithm::initMap(SOMMap *map, InputSample &inputSample,
   int numberOfNode = map->numberOfNodes();
   int currentNumberOfNode = 0;
   Iterator<node> *nodeIterator = inputSample.getRandomNodeOrder();
-  forEach(n, map->getNodes()) {
+  forEach (n, map->getNodes()) {
     if (!nodeIterator->hasNext()) {
       delete nodeIterator;
       nodeIterator = inputSample.getRandomNodeOrder();
@@ -227,7 +227,7 @@ void SOMAlgorithm::propagateModification(SOMMap *map, const DynamicVector<double
     // If the diffusion rate is equal to 0 no need to propagate modification
     if (diffusionRate > 0) {
       node neighbor;
-      forEach(neighbor, map->getInOutNodes(current)) {
+      forEach (neighbor, map->getInOutNodes(current)) {
         // not already treated
         if (!seen.get(neighbor.id)) {
           seen.set(neighbor.id, true);
@@ -249,7 +249,7 @@ void SOMAlgorithm::computeMapping(SOMMap *map, InputSample &inputSample,
 
   node n;
 
-  forEach(n, inputSample.getNodes()) {
+  forEach (n, inputSample.getNodes()) {
     node somNode = findBMU(map, inputSample.getWeight(n), dist);
     cumDist += dist;
     mappingTab[somNode].insert(n);

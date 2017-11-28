@@ -151,7 +151,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   }
 
   // build convex hulls from subgraphs
-  forEach(sg, graph->getSubGraphs()) {
+  forEach (sg, graph->getSubGraphs()) {
     ////
     // if(sg->numberOfNodes() <= 1) continue;
 
@@ -249,7 +249,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       // the variable below will be used to compute
       // the box around the bends of edges
       float bendsl = FLT_MAX;
-      forEach(n, graph->getNodes()) {
+      forEach (n, graph->getNodes()) {
         // get node coordinates
         const Coord &point = layout->getNodeValue(n);
         // get size of bounding box
@@ -295,7 +295,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       }
       // add bends of edges
       edge e;
-      forEach(e, graph->getEdges()) {
+      forEach (e, graph->getEdges()) {
         // get bends of the edge
         std::vector<Coord> bends = layout->getEdgeValue(e);
         unsigned int nbBends = bends.size();

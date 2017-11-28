@@ -250,7 +250,7 @@ static void setViewPropertiesDefaults(Graph *g) {
     if (!itIcons->hasNext()) {
       iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
       node n;
-      forEach(n, faiProp->getNonDefaultValuatedNodes()) {
+      forEach (n, faiProp->getNonDefaultValuatedNodes()) {
         const string &faIconName = faiProp->getNodeValue(n);
 
         if (!faIconName.empty()) {
@@ -259,7 +259,7 @@ static void setViewPropertiesDefaults(Graph *g) {
       }
       iProp->setAllEdgeValue("fa-" + faiProp->getEdgeDefaultValue());
       edge e;
-      forEach(e, faiProp->getNonDefaultValuatedEdges()) {
+      forEach (e, faiProp->getNonDefaultValuatedEdges()) {
         const string &faIconName = faiProp->getEdgeValue(e);
 
         if (!faIconName.empty()) {
@@ -488,7 +488,7 @@ static void removeFromGraph(Graph *g, const vector<node> &nodes, const std::vect
 
   // Clean properties
   std::string prop;
-  forEach(prop, g->getProperties()) {
+  forEach (prop, g->getProperties()) {
     PropertyInterface *p = g->getProperty(prop);
 
     for (unsigned int i = 0; i < nbNodes; i++)
@@ -565,7 +565,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   // extend the selection to edge ends
   if (inSel) {
     edge e;
-    forEach(e, inSel->getNonDefaultValuatedEdges(inG)) {
+    forEach (e, inSel->getNonDefaultValuatedEdges(inG)) {
       const pair<node, node> eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
@@ -593,7 +593,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   // get properties
   std::vector<std::pair<PropertyInterface *, PropertyInterface *>> properties;
   PropertyInterface *src = nullptr;
-  forEach(src, inG->getObjectProperties()) {
+  forEach (src, inG->getObjectProperties()) {
     if (dynamic_cast<GraphProperty *>(src) == nullptr) {
       const std::string &pName = src->getName();
       PropertyInterface *dst =
@@ -605,7 +605,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
   // loop on nodes
   node nIn;
-  forEach(nIn, nodeIt) {
+  forEach (nIn, nodeIt) {
     // add outG corresponding node
     node nOut = outG->addNode();
 
@@ -636,7 +636,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
   // loop on edges
   edge eIn;
-  forEach(eIn, edgeIt) {
+  forEach (eIn, edgeIt) {
     const pair<node, node> eEnds = inG->ends(eIn);
     // add outG correponding edge
     edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id), nodeTrl.get(eEnds.second.id));
@@ -664,7 +664,7 @@ public:
 
     // we iterate the observable graph nodes
     node n;
-    forEach(n, ovg.getNodes()) {
+    forEach (n, ovg.getNodes()) {
       Graph *g;
 
       if (tlp::Observable::isAlive(n) &&
@@ -1189,7 +1189,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
 
   // propagate all cluster local properties
   PropertyInterface *property;
-  forEach(property, cluster->getLocalObjectProperties()) {
+  forEach (property, cluster->getLocalObjectProperties()) {
     if (property == graphLayout || property == graphSize || property == graphRot)
       continue;
 
@@ -1237,7 +1237,7 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
 
   if (addSibling && addSiblingProperties) {
     PropertyInterface *prop = nullptr;
-    forEach(prop, getLocalObjectProperties()) {
+    forEach (prop, getLocalObjectProperties()) {
       PropertyInterface *cloneProp = prop->clonePrototype(clone, prop->getName());
       tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
       cloneProp->copy(prop);
@@ -1260,7 +1260,7 @@ Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGr
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
     edge ite;
-    forEach(ite, getOutEdges(nodes[i])) {
+    forEach (ite, getOutEdges(nodes[i])) {
       if (result->isElement(target(ite)))
         result->addEdge(ite);
     }
@@ -1284,11 +1284,9 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
                               const string &name) {
   vector<node> nodes;
   node n;
-  forEach(n, selection->getNodesEqualTo(true, parentSubGraph)) {
-    nodes.push_back(n);
-  }
+  forEach (n, selection->getNodesEqualTo(true, parentSubGraph)) { nodes.push_back(n); }
   edge e;
-  forEach(e, selection->getEdgesEqualTo(true, parentSubGraph)) {
+  forEach (e, selection->getEdgesEqualTo(true, parentSubGraph)) {
     const pair<node, node> &ext = ends(e);
     nodes.push_back(ext.first);
     nodes.push_back(ext.second);
@@ -1313,7 +1311,7 @@ node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool
   // all local properties
   // must be cloned in subgraph
   PropertyInterface *prop;
-  forEach(prop, getLocalObjectProperties()) {
+  forEach (prop, getLocalObjectProperties()) {
     PropertyInterface *sgProp = prop->clonePrototype(subGraph, prop->getName());
     vector<node>::const_iterator itNode = nodes.begin();
 
@@ -1358,7 +1356,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   // updateGroupLayout(this, subGraph, metaNode);
   // compute meta node values
   PropertyInterface *property;
-  forEach(property, getObjectProperties()) {
+  forEach (property, getObjectProperties()) {
     property->computeMetaValue(metaNode, subGraph, this);
   }
 
@@ -1367,7 +1365,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   graphEdges.setAll(false);
 
   edge e;
-  forEach(e, getEdges()) graphEdges.set(e.id, true);
+  forEach (e, getEdges())
+    graphEdges.set(e.id, true);
 
   // we can now remove nodes from graph
   const std::vector<node> &sgNodes = subGraph->nodes();
@@ -1385,7 +1384,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = sgNodes[i];
     edge e;
-    forEach(e, getSuperGraph()->getInOutEdges(n)) {
+    forEach (e, getSuperGraph()->getInOutEdges(n)) {
       pair<node, node> eEnds = ends(e);
       node src = eEnds.first;
       node tgt = eEnds.second;
@@ -1464,7 +1463,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     edge mE = (*it).first;
     metaInfo->setEdgeValue(mE, (*it).second);
     // compute meta edge values
-    forEach(property, getObjectProperties()) {
+    forEach (property, getObjectProperties()) {
       Iterator<edge> *itE = getEdgeMetaInfo(mE);
       assert(itE->hasNext());
       property->computeMetaValue(mE, itE, this);
@@ -1481,7 +1480,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 static void mapSubGraphNodes(Graph *sg, node metaNode, MutableContainer<node> &mappingM,
                              GraphProperty *metaInfo) {
   node n;
-  forEach(n, sg->getNodes()) {
+  forEach (n, sg->getNodes()) {
     mappingM.set(n.id, metaNode);
     Graph *ssg = metaInfo->getNodeValue(n);
 
@@ -1548,15 +1547,13 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     node mn;
     // compute mapping for neighbour nodes
     // and their sub nodes
-    forEach(mn, super->getInOutNodes(metaNode)) {
+    forEach (mn, super->getInOutNodes(metaNode)) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
       if (mnGraph != nullptr) {
         node mnn;
-        forEach(mnn, mnGraph->getNodes()) {
-          mappingM.set(mnn.id, mn);
-        }
+        forEach (mnn, mnGraph->getNodes()) { mappingM.set(mnn.id, mn); }
       }
     }
 
@@ -1566,7 +1563,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>> newMetaEdges;
 
       edge e;
-      forEach(e, getEdgeMetaInfo(metaEdge)) {
+      forEach (e, getEdgeMetaInfo(metaEdge)) {
         const std::pair<node, node> &eEnds = super->ends(e);
 
         if (isElement(eEnds.first)) {
@@ -1621,7 +1618,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           metaInfo->setEdgeValue(mE, itnme->second);
           // compute meta edge values
           PropertyInterface *property;
-          forEach(property, graph->getObjectProperties()) {
+          forEach (property, graph->getObjectProperties()) {
             Iterator<edge> *itE = getEdgeMetaInfo(mE);
             assert(itE->hasNext());
             property->computeMetaValue(mE, itE, graph);
@@ -1647,7 +1644,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     TLP_HASH_MAP<node, Color> metaEdgeToColor;
 
     edge metaEdge;
-    forEach(metaEdge, super->getInOutEdges(metaNode)) {
+    forEach (metaEdge, super->getInOutEdges(metaNode)) {
       metaEdgeToColor[opposite(metaEdge, metaNode)] = graphColors->getEdgeValue(metaEdge);
     }
 
@@ -1740,11 +1737,11 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
         metaInfo->setNodeValue(metaN, its);
         // compute meta node values
         PropertyInterface *property;
-        forEach(property, quotientGraph->getObjectProperties()) {
+        forEach (property, quotientGraph->getObjectProperties()) {
           property->computeMetaValue(metaN, its, quotientGraph);
         }
         node n;
-        forEach(n, its->getNodes()) {
+        forEach (n, its->getNodes()) {
           // map each subgraph's node to a set of meta nodes
           // in order to deal consistently with overlapping clusters
           nMapping[n].insert(metaN);
@@ -1803,7 +1800,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
     metaInfo->setEdgeValue(mE, itm->second);
     // compute meta edge values
     string pName;
-    forEach(pName, quotientGraph->getProperties()) {
+    forEach (pName, quotientGraph->getProperties()) {
       Iterator<edge> *itE = getRoot()->getEdgeMetaInfo(mE);
       PropertyInterface *property = quotientGraph->getProperty(pName);
       property->computeMetaValue(mE, itE, quotientGraph);
@@ -1818,7 +1815,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
 Graph *Graph::getNthSubGraph(unsigned int n) const {
   unsigned int i = 0;
   tlp::Graph *sg = nullptr;
-  forEach(sg, getSubGraphs()) {
+  forEach (sg, getSubGraphs()) {
     if (i++ == n) {
       return sg;
     }

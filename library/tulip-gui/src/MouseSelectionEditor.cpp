@@ -196,14 +196,14 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       // first ensure that something is selected
       bool hasSelection = false;
       node no;
-      forEach(no, _selection->getNodesEqualTo(true, _graph)) {
+      forEach (no, _selection->getNodesEqualTo(true, _graph)) {
         hasSelection = true;
         break;
       }
 
       if (!hasSelection) {
         edge ed;
-        forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
+        forEach (ed, _selection->getEdgesEqualTo(true, _graph)) {
           hasSelection = true;
           break;
         }
@@ -337,14 +337,14 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     // first ensure that something is selected
     bool hasSelection = false;
     node no;
-    forEach(no, _selection->getNodesEqualTo(true, _graph)) {
+    forEach (no, _selection->getNodesEqualTo(true, _graph)) {
       hasSelection = true;
       break;
     }
 
     if (!hasSelection) {
       edge ed;
-      forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
+      forEach (ed, _selection->getEdgesEqualTo(true, _graph)) {
         hasSelection = true;
         break;
       }

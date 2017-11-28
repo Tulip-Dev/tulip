@@ -47,7 +47,7 @@ static void dfsAux(Graph *sG, node n, MutableContainer<int> &dfsPre, MutableCont
                    list<edge> &dfsEdges, unsigned int &preCount, unsigned int &postCount) {
   dfsPre.set(n.id, ++preCount);
   edge e;
-  forEach(e, sG->getOutEdges(n)) {
+  forEach (e, sG->getOutEdges(n)) {
     node target = sG->target(e);
 
     if (dfsPre.get(target.id) == 0) {
@@ -66,7 +66,7 @@ list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos) {
   unsigned int preCount = 0;
   unsigned int postCount = 0;
   node n;
-  forEach(n, sG->getNodes()) {
+  forEach (n, sG->getNodes()) {
     if (dfsPre.get(n.id) == 0)
       dfsAux(sG, n, dfsPre, dfsPos, dfsEdges, preCount, postCount);
   }

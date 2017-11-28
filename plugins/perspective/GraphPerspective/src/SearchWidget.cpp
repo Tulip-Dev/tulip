@@ -60,12 +60,14 @@ public:
 
     if (onNodes) {
       node n;
-      forEach(n, g->getNodes()) prop->setNodeValue(n, compare(n));
+      forEach (n, g->getNodes())
+        prop->setNodeValue(n, compare(n));
     }
 
     if (onEdges) {
       edge e;
-      forEach(e, g->getEdges()) prop->setEdgeValue(e, compare(e));
+      forEach (e, g->getEdges())
+        prop->setEdgeValue(e, compare(e));
     }
 
     return prop;
@@ -358,22 +360,18 @@ void SearchWidget::search() {
   if (_ui->selectionModeCombo->currentIndex() == 0) { // replace current selection
     output->copy(result);
     searchOpDescription = "found";
-    forEach(n, result->getNodesEqualTo(true)) {
-      resultsCountNodes++;
-    }
-    forEach(e, result->getEdgesEqualTo(true)) {
-      resultsCountEdges++;
-    }
+    forEach (n, result->getNodesEqualTo(true)) { resultsCountNodes++; }
+    forEach (e, result->getEdgesEqualTo(true)) { resultsCountEdges++; }
   } else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
     if (onNodes) {
-      forEach(n, result->getNodesEqualTo(true)) {
+      forEach (n, result->getNodesEqualTo(true)) {
         output->setNodeValue(n, true);
         resultsCountNodes++;
       }
     }
 
     if (onEdges) {
-      forEach(e, result->getEdgesEqualTo(true)) {
+      forEach (e, result->getEdgesEqualTo(true)) {
         output->setEdgeValue(e, true);
         resultsCountEdges++;
       }
@@ -382,7 +380,7 @@ void SearchWidget::search() {
     searchOpDescription = "added to selection";
   } else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      forEach(n, output->getNodesEqualTo(true)) {
+      forEach (n, output->getNodesEqualTo(true)) {
         if (result->getNodeValue(n)) {
           output->setNodeValue(n, false);
           resultsCountNodes++;
@@ -391,7 +389,7 @@ void SearchWidget::search() {
     }
 
     if (onEdges) {
-      forEach(e, output->getEdgesEqualTo(true)) {
+      forEach (e, output->getEdgesEqualTo(true)) {
         if (result->getEdgeValue(e)) {
           output->setEdgeValue(e, false);
           resultsCountEdges++;
@@ -403,12 +401,8 @@ void SearchWidget::search() {
   } else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
     output = result;
     searchOpDescription = "found but not added to selection";
-    forEach(n, result->getNodesEqualTo(true)) {
-      resultsCountNodes++;
-    }
-    forEach(e, result->getEdgesEqualTo(true)) {
-      resultsCountEdges++;
-    }
+    forEach (n, result->getNodesEqualTo(true)) { resultsCountNodes++; }
+    forEach (e, result->getEdgesEqualTo(true)) { resultsCountEdges++; }
   }
 
   Observable::unholdObservers();

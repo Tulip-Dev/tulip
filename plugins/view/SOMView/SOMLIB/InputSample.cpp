@@ -324,7 +324,7 @@ tlp::Iterator<tlp::node> *InputSample::getRandomNodeOrder() {
   if (rootGraph) {
     randomVector.clear();
     node n;
-    forEach(n, rootGraph->getNodes()) {
+    forEach (n, rootGraph->getNodes()) {
       // Random placing nodes
       randomVector.push_back(n);
     }
@@ -340,9 +340,7 @@ void InputSample::updateMeanValue(unsigned int propNum) {
   NumericProperty *property = propertiesList[propNum];
   double mean = 0.0;
   node n;
-  forEach(n, rootGraph->getNodes()) {
-    mean += property->getNodeDoubleValue(n);
-  }
+  forEach (n, rootGraph->getNodes()) { mean += property->getNodeDoubleValue(n); }
   meanProperties[propNum] = mean / double(rootGraph->numberOfNodes());
 }
 
@@ -357,8 +355,8 @@ void InputSample::updateSDValue(unsigned int propNum) {
   NumericProperty *property = propertiesList[propNum];
   double sd = 0.0;
   node n;
-  forEach(n, rootGraph->getNodes()) sd +=
-      pow(property->getNodeDoubleValue(n) - meanProperties[propNum], 2.0);
+  forEach (n, rootGraph->getNodes())
+    sd += pow(property->getNodeDoubleValue(n) - meanProperties[propNum], 2.0);
 
   if (sd <= 0.0) {
     sdProperties[propNum] = 1.0;

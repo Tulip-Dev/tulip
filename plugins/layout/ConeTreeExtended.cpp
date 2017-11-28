@@ -43,9 +43,7 @@ void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
 
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]);
   node i;
-  forEach(i, tree->getOutNodes(n)) {
-    computeLayerSize(i, level + 1);
-  }
+  forEach (i, tree->getOutNodes(n)) { computeLayerSize(i, level + 1); }
 }
 //===============================================================
 void ConeTreeExtended::computeYCoodinates(tlp::node root) {
@@ -149,7 +147,7 @@ void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *
   result->setNodeValue(
       n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
   node itn;
-  forEach(itn, tree->getOutNodes(n)) {
+  forEach (itn, tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x + (*px)[n], y + (*py)[n], level + 1);
   }
 }
@@ -197,7 +195,7 @@ bool ConeTreeExtended::run() {
   // will be undone at then end
   if (orientation == "horizontal") {
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       const Size &tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -237,7 +235,7 @@ bool ConeTreeExtended::run() {
   // rotate layout and size
   if (orientation == "horizontal") {
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       // if not in tulip gui, ensure cleanup
       LayoutProperty *elementLayout;
 

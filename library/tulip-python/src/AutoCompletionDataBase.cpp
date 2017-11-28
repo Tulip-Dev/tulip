@@ -173,7 +173,7 @@ static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QStrin
   QString ret = "";
 
   Graph *sg = nullptr;
-  forEach(sg, graph->getSubGraphs()) {
+  forEach (sg, graph->getSubGraphs()) {
     ret = getPythonTypeNameForGraphProperty(sg, propName);
 
     if (ret != "") {
@@ -845,20 +845,16 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
 static QVector<PropertyInterface *> getAllGraphPropertiesFromRoot(Graph *root) {
   QVector<PropertyInterface *> ret;
   string prop;
-  forEach(prop, root->getLocalProperties()) {
-    ret.append(root->getProperty(prop));
-  }
+  forEach (prop, root->getLocalProperties()) { ret.append(root->getProperty(prop)); }
   Graph *sg = nullptr;
-  forEach(sg, root->getSubGraphs()) {
-    ret += getAllGraphPropertiesFromRoot(sg);
-  }
+  forEach (sg, root->getSubGraphs()) { ret += getAllGraphPropertiesFromRoot(sg); }
   return ret;
 }
 
 static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &prefix) {
   QSet<QString> ret;
   tlp::Graph *sg = nullptr;
-  forEach(sg, root->getSubGraphs()) {
+  forEach (sg, root->getSubGraphs()) {
     QString sgName = "\"" + tlpStringToQString(sg->getName()) + "\"";
 
     if (sgName.startsWith(prefix))
@@ -869,9 +865,7 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
   }
-  forEach(sg, root->getSubGraphs()) {
-    ret += getAllSubGraphsNamesFromRoot(sg, prefix);
-  }
+  forEach (sg, root->getSubGraphs()) { ret += getAllSubGraphsNamesFromRoot(sg, prefix); }
   return ret;
 }
 
@@ -1002,9 +996,7 @@ static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QStr
 
   delete it;
   tlp::Graph *sg = nullptr;
-  forEach(sg, rootGraph->getSubGraphs()) {
-    ret += getAllGraphsAttributesFromRoot(sg, prefix);
-  }
+  forEach (sg, rootGraph->getSubGraphs()) { ret += getAllGraphsAttributesFromRoot(sg, prefix); }
   return ret;
 }
 

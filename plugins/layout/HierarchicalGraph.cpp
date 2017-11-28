@@ -90,7 +90,7 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int free
     double sum = embedding->getNodeValue(n);
     unsigned int deg = 1;
     node itn;
-    forEach(itn, sg->getInOutNodes(n)) {
+    forEach (itn, sg->getInOutNodes(n)) {
       sum += embedding->getNodeValue(itn);
       ++deg;
     }
@@ -107,9 +107,7 @@ void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableConta
   visited.set(n.id, true);
   embedding->setNodeValue(n, id);
   node it;
-  forEach(it, sg->getOutNodes(n)) {
-    initCross(sg, it, visited, id + 1);
-  }
+  forEach (it, sg->getOutNodes(n)) { initCross(sg, it, visited, id + 1); }
 }
 //================================================================================
 // Do layer by layer sweep to reduce crossings in K-Layer graph
@@ -118,7 +116,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   node tmp = sg->addNode();
   embedding->setNodeValue(tmp, 0);
   node it;
-  forEach(it, sg->getNodes()) {
+  forEach (it, sg->getNodes()) {
     if (sg->outdeg(it) == 0)
       sg->addEdge(it, tmp);
   }
@@ -170,11 +168,12 @@ void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty
   tmpL.metric = embedding;
   tmpL.sg = sg;
   node n;
-  forEach(n, sg->getNodes()) {
+  forEach (n, sg->getNodes()) {
     if (sg->indeg(n) > 1) {
       vector<edge> tmpVect;
       edge e;
-      forEach(e, sg->getInEdges(n)) tmpVect.push_back(e);
+      forEach (e, sg->getInEdges(n))
+        tmpVect.push_back(e);
       sort(tmpVect.begin(), tmpVect.end(), tmpL);
       int toKeep = tmpVect.size() / 2;
       vector<edge>::const_iterator it;
@@ -299,7 +298,7 @@ bool HierarchicalGraph::run() {
 
     tmpSize->copy(nodeSize);
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       const Size &tmp = tmpSize->getNodeValue(n);
       tmpSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -339,10 +338,10 @@ bool HierarchicalGraph::run() {
     buildGrid(mySGraph);
     crossReduction(mySGraph);
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       vector<edge> order;
       edge e;
-      forEach(e, new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding)) {
+      forEach (e, new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding)) {
         order.push_back(e);
       }
       mySGraph->setEdgeOrder(n, order);
@@ -385,9 +384,7 @@ bool HierarchicalGraph::run() {
   assert(resultBool);
 
   node n;
-  forEach(n, graph->getNodes()) {
-    result->setNodeValue(n, tmpLayout.getNodeValue(n));
-  }
+  forEach (n, graph->getNodes()) { result->setNodeValue(n, tmpLayout.getNodeValue(n)); }
 
   computeEdgeBends(graph, tmpLayout, replacedEdges, reversedEdges);
   computeSelfLoops(graph, tmpLayout, listSelfLoops);
@@ -419,7 +416,7 @@ bool HierarchicalGraph::run() {
 
   edge e;
   float spacing_4 = spacing / 4.f;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     std::pair<node, node> eEnds(graph->ends(e));
     node src = eEnds.first;
     node tgt = eEnds.second;
@@ -466,7 +463,7 @@ bool HierarchicalGraph::run() {
   }
 
   // post processing align nodes
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     Coord tmp = result->getNodeValue(n);
     const Size &tmpS = nodeSize->getNodeValue(n);
     tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.f;
@@ -478,12 +475,12 @@ bool HierarchicalGraph::run() {
     // delete the temporary allocated SizeProperty (see above)
     delete nodeSize;
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       const Coord &tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       LineType::RealType tmp = result->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;

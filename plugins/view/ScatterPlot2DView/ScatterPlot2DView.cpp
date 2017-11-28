@@ -212,7 +212,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       edgeToNode.clear();
       nodeToEdge.clear();
       edge e;
-      forEach(e, scatterPlotGraph->getEdges()) {
+      forEach (e, scatterPlotGraph->getEdges()) {
         node n = edgeToNode[e] = edgeAsNodeGraph->addNode();
         nodeToEdge[n] = e;
         edgeAsNodeGraphColor->setNodeValue(n, graphColor->getEdgeValue(e));
@@ -447,7 +447,7 @@ void ScatterPlot2DView::computeNodeSizes() {
   }
 
   node n;
-  forEach(n, scatterPlotGraph->getNodes()) {
+  forEach (n, scatterPlotGraph->getNodes()) {
     const Size &nodeSize = viewSize->getNodeValue(n);
     Size adjustedNodeSize(pointMinSize + resizeFactor * (nodeSize + Size(-1.0f, -1.0f, -1.0f)));
     scatterPlotSize->setNodeValue(n, adjustedNodeSize);
@@ -1150,7 +1150,7 @@ void ScatterPlot2DView::afterSetAllEdgeValue(PropertyInterface *p) {
         edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty *>(p);
     edge e;
-    forEach(e, scatterPlotGraph->getEdges()) {
+    forEach (e, scatterPlotGraph->getEdges()) {
       if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
         edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
       }

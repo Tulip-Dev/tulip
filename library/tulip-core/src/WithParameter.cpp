@@ -179,7 +179,7 @@ bool ParameterDescriptionList::isMandatory(const string &name) const {
 
 void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
   ParameterDescription param;
-  forEach(param, getParameters()) {
+  forEach (param, getParameters()) {
     const string &name = param.getName();
     const string &type = param.getTypeName();
     const string &defaultValue = param.getDefaultValue();
@@ -254,7 +254,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
 bool WithParameter::inputRequired() const {
   ParameterDescription param;
-  forEach(param, parameters.getParameters()) {
+  forEach (param, parameters.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
       return true;
 

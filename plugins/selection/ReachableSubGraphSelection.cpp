@@ -124,7 +124,7 @@ bool ReachableSubGraphSelection::run() {
 
     // iterate on startNodes add them and their reachables
     node current;
-    forEach(current, itN) {
+    forEach (current, itN) {
       reachables[current] = true;
       markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }
@@ -141,7 +141,7 @@ bool ReachableSubGraphSelection::run() {
 
     // select corresponding edges
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       const std::pair<node, node> &ends = graph->ends(e);
 
       if ((reachables.find(ends.first) != ite) && (reachables.find(ends.second) != ite)) {

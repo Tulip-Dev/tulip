@@ -513,7 +513,7 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes,
 
   while (current) {
     node neigh;
-    forEach(neigh, graph->getInOutNodes(current->n)) {
+    forEach (neigh, graph->getInOutNodes(current->n)) {
       if (!visited.get(neigh)) {
         visited.set(neigh, true);
         last = last->next = new visitedElt(neigh);
@@ -710,7 +710,7 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
   Observable::holdObservers();
   edge e;
   unsigned added = 0;
-  forEach(e, selection->getEdgesEqualTo(true, graph)) {
+  forEach (e, selection->getEdgesEqualTo(true, graph)) {
     const pair<node, node> ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {

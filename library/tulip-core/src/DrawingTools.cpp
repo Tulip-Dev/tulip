@@ -51,7 +51,7 @@ static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
                                BUILDER &builder) {
   if (itN != nullptr) {
     node itn;
-    forEach(itn, itN) {
+    forEach (itn, itN) {
       if ((selection == nullptr) || selection->getNodeValue(itn)) {
         Vec3f nSize(size->getNodeValue(itn));
         Vec3f point(layout->getNodeValue(itn));
@@ -75,7 +75,7 @@ static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
 
   if ((itE != nullptr) && layout->numberOfNonDefaultValuatedEdges()) {
     edge ite;
-    forEach(ite, itE) {
+    forEach (ite, itE) {
       if ((selection == nullptr) || selection->getEdgeValue(ite)) {
         LineType::RealType::const_iterator itCoord;
         const LineType::RealType &bends = layout->getEdgeValue(ite);
@@ -148,7 +148,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
 
   double maxRad = 0;
   node itn;
-  forEach(itn, graph->getNodes()) {
+  forEach (itn, graph->getNodes()) {
     const Coord &curCoord = layout->getNodeValue(itn);
     Size curSize(size->getNodeValue(itn) / 2.0f);
 
@@ -173,7 +173,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
 
   if (layout->numberOfNonDefaultValuatedEdges()) {
     edge ite;
-    forEach(ite, graph->getEdges()) {
+    forEach (ite, graph->getEdges()) {
       if (selection == nullptr || selection->getEdgeValue(ite)) {
         LineType::RealType::const_iterator itCoord;
         const LineType::RealType &bends = layout->getEdgeValue(ite);

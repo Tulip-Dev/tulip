@@ -65,13 +65,11 @@ bool InducedSubGraphSelection::run() {
 
   // add input selected nodes to result selection
   node current;
-  forEach(current, itN) {
-    result->setNodeValue(current, true);
-  }
+  forEach (current, itN) { result->setNodeValue(current, true); }
 
   if (useEdges) {
     edge e;
-    forEach(e, itE) {
+    forEach (e, itE) {
       result->setNodeValue(graph->source(e), true);
       result->setNodeValue(graph->target(e), true);
     }
@@ -81,9 +79,9 @@ bool InducedSubGraphSelection::run() {
 
   // now add edges whose extremities are selected to result selection
   unsigned sel = 0;
-  forEach(current, result->getNodesEqualTo(true)) {
+  forEach (current, result->getNodesEqualTo(true)) {
     edge e;
-    forEach(e, graph->getOutEdges(current)) {
+    forEach (e, graph->getOutEdges(current)) {
       if (result->getNodeValue(graph->target(e))) {
         result->setEdgeValue(e, true);
         ++sel;

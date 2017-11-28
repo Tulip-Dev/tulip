@@ -304,9 +304,7 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
   */
   vector<node> input;
   node k;
-  forEach(k, graph->getNodes()) {
-    input.push_back(k);
-  }
+  forEach (k, graph->getNodes()) { input.push_back(k); }
 
   Coord fr[4];
   Coord ba[4];

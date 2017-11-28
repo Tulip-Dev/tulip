@@ -245,9 +245,7 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay,
 
   vector<node> input;
   node k;
-  forEach(k, graph->getNodes()) {
-    input.push_back(k);
-  }
+  forEach (k, graph->getNodes()) { input.push_back(k); }
 
   node a = graph->addNode();
   node b = graph->addNode();

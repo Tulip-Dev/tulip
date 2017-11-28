@@ -257,7 +257,7 @@ Observable::~Observable() {
       // then its deletion is delayed until the observers are unhold
       noDelay = true;
       edge e;
-      forEach(e, _oGraph.getInEdges(_n)) {
+      forEach (e, _oGraph.getInEdges(_n)) {
         if (_oType[e] & OBSERVER) {
           noDelay = false;
           break;
@@ -466,7 +466,7 @@ void Observable::sendEvent(const Event &message) {
   vector<pair<Observable *, node>> listenerTonotify;
   edge e;
   bool delayedEventAdded = false;
-  forEach(e, _oGraph.getInEdges(_n)) {
+  forEach (e, _oGraph.getInEdges(_n)) {
     node src(_oGraph.source(e));
 
     if (_oAlive[src]) {
@@ -678,9 +678,9 @@ unsigned int Observable::countListeners() const {
 
   unsigned int result = 0;
   node n;
-  forEach(n, (new FilterIterator<node, LinkFilter<LISTENER>>(
-                 _oGraph.getInNodes(getNode()),
-                 LinkFilter<LISTENER>(_oGraph, _oType, getNode()))))++ result;
+  forEach (n, (new FilterIterator<node, LinkFilter<LISTENER>>(
+                  _oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(_oGraph, _oType, getNode()))))
+    ++result;
   return result;
 }
 //----------------------------------------
@@ -690,9 +690,9 @@ unsigned int Observable::countObservers() const {
 
   unsigned int result = 0;
   node n;
-  forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER>>(
-                 _oGraph.getInNodes(getNode()),
-                 LinkFilter<OBSERVER>(_oGraph, _oType, getNode()))))++ result;
+  forEach (n, (new FilterIterator<node, LinkFilter<OBSERVER>>(
+                  _oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(_oGraph, _oType, getNode()))))
+    ++result;
   return result;
 }
 }

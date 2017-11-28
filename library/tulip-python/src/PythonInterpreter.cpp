@@ -587,7 +587,7 @@ PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QSt
     int idx = 0;
     bool paramError = false;
     std::pair<std::string, DataType *> param;
-    forEach(param, parameters.getValues()) {
+    forEach (param, parameters.getValues()) {
       PyObject *pyParam = getPyObjectFromDataType(param.second);
 
       if (!pyParam) {

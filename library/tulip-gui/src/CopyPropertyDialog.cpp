@@ -74,7 +74,7 @@ void CopyPropertyDialog::init(Graph *graph, PropertyInterface *source) {
       parent = nullptr;
     }
 
-    forEach(property, _graph->getObjectProperties()) {
+    forEach (property, _graph->getObjectProperties()) {
       // type must be the same
       if (property->getTypename() == source->getTypename()) {
         // Check if name is different

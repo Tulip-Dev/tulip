@@ -106,7 +106,8 @@ struct PageRank : public DoubleAlgorithm {
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
-          forEach(n, graph->getInNodes(nodes[i])) n_sum += pr.getNodeValue(n) / graph->outdeg(n);
+          forEach (n, graph->getInNodes(nodes[i]))
+            n_sum += pr.getNodeValue(n) / graph->outdeg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       } else {
@@ -117,7 +118,8 @@ struct PageRank : public DoubleAlgorithm {
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
-          forEach(n, graph->getInOutNodes(nodes[i])) n_sum += pr.getNodeValue(n) / graph->deg(n);
+          forEach (n, graph->getInOutNodes(nodes[i]))
+            n_sum += pr.getNodeValue(n) / graph->deg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       }

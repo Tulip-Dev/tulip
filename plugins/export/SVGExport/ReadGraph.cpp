@@ -57,7 +57,7 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
   unsigned int id_tgt_grad = 0;
   GlGraphRenderingParameters rp;
   GlGraphInputData inputData(graph, &rp);
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     if ((++i % 100) == 0)
       pp->progress(i, nb_elements);
 

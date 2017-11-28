@@ -61,7 +61,7 @@ public:
 
   void animationStep(int animationStep) override {
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
       const Coord &endPos = destLayout->getNodeValue(n);
       viewLayout->setNodeValue(
@@ -69,7 +69,7 @@ public:
     }
 
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       const vector<Coord> &srcBends = srcLayout->getEdgeValue(e);
       const vector<Coord> &destBends = destLayout->getEdgeValue(e);
       vector<Coord> newBends;
@@ -457,13 +457,13 @@ void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
     ColorProperty *origGraphColors = originalInputData->getElementColor();
 
     node n2;
-    forEach(n2, neighborhoodGraph->getNodes()) {
+    forEach (n2, neighborhoodGraph->getNodes()) {
       neighborhoodGraphOriginalLayout->setNodeValue(n2, origGraphLayout->getNodeValue(n2));
       neighborhoodGraphBackupColors->setNodeValue(n2, origGraphColors->getNodeValue(n2));
     }
 
     edge e;
-    forEach(e, neighborhoodGraph->getEdges()) {
+    forEach (e, neighborhoodGraph->getEdges()) {
       neighborhoodGraphOriginalLayout->setEdgeValue(e, origGraphLayout->getEdgeValue(e));
       neighborhoodGraphBackupColors->setEdgeValue(e, origGraphColors->getEdgeValue(e));
     }
@@ -535,7 +535,7 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
   vector<node> neighborsNodes;
   node n;
-  forEach(n, neighborhoodGraph->getNodes()) {
+  forEach (n, neighborhoodGraph->getNodes()) {
     if (n != neighborhoodGraphCentralNode) {
       neighborsNodes.push_back(n);
     }
@@ -586,7 +586,7 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
   }
 
   edge e;
-  forEach(e, neighborhoodGraph->getEdges()) {
+  forEach (e, neighborhoodGraph->getEdges()) {
     const std::pair<node, node> &eEnds = neighborhoodGraph->ends(e);
     node srcNode = eEnds.first;
     node tgtNode = eEnds.second;
@@ -635,7 +635,7 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(
   float radius = 0;
   node n;
   Coord centralNodeCoord = neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
-  forEach(n, neighborhoodGraph->getNodes()) {
+  forEach (n, neighborhoodGraph->getNodes()) {
     Coord nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
     Size nodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();

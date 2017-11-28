@@ -46,7 +46,8 @@ void CliqueEnumeration::addClique(const vector<node> &clique) {
 void CliqueEnumeration::getNeighborhood(const node u, set<node> &neigh) {
   neigh.clear();
   node v;
-  forEach(v, graph->getInOutNodes(u)) neigh.insert(v);
+  forEach (v, graph->getInOutNodes(u))
+    neigh.insert(v);
 }
 //================================================================================
 tlp::node CliqueEnumeration::choosePivot(const set<node> &C) {
@@ -56,7 +57,7 @@ tlp::node CliqueEnumeration::choosePivot(const set<node> &C) {
   for (set<node>::const_iterator its = C.begin(); its != C.end(); ++its) {
     unsigned int inter = 0;
     node v;
-    forEach(v, graph->getInOutNodes(*its)) {
+    forEach (v, graph->getInOutNodes(*its)) {
       if (C.find(v) != C.end())
         inter++;
     }
@@ -137,7 +138,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
   std::map<tlp::node, DegreeOrderingElem *> degrees;
   set<DegreeOrderingElem *, LessDegreeOrdering> sortednodes;
   node n;
-  forEach(n, sub->getNodes()) {
+  forEach (n, sub->getNodes()) {
     DegreeOrderingElem *elem = new DegreeOrderingElem(n, sub->deg(n));
     degrees.insert(make_pair(n, elem));
     sortednodes.insert(elem);
@@ -151,7 +152,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
     sortednodes.erase(it);
     sub->delNode(n);
     node v;
-    forEach(v, sub->getInOutNodes(n)) {
+    forEach (v, sub->getInOutNodes(n)) {
       DegreeOrderingElem *elem = degrees.find(v)->second;
       sortednodes.erase(elem);
       elem->deg = elem->deg - 1;

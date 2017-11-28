@@ -145,7 +145,7 @@ void MatrixView::setOriented(bool flag) {
 
     if (_isOriented) {
       edge e;
-      forEach(e, graph()->getEdges()) {
+      forEach (e, graph()->getEdges()) {
         // delete the second node mapping the current edge
         vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         _matrixGraph->delNode(node(edgeNodes[1]));
@@ -154,7 +154,7 @@ void MatrixView::setOriented(bool flag) {
       }
     } else {
       edge e;
-      forEach(e, graph()->getEdges()) {
+      forEach (e, graph()->getEdges()) {
         // must add the symetric node
         vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
         edgeNodes.push_back(_matrixGraph->addNode().id);
@@ -299,10 +299,12 @@ void MatrixView::initDisplayedGraph() {
 
   Observable::holdObservers();
   node n;
-  forEach(n, graph()->getNodes()) addNode(graph(), n);
+  forEach (n, graph()->getNodes())
+    addNode(graph(), n);
 
   edge e;
-  forEach(e, graph()->getEdges()) addEdge(graph(), e);
+  forEach (e, graph()->getEdges())
+    addEdge(graph(), e);
   Observable::unholdObservers();
 
   GlGraphInputData *inputData =
@@ -358,14 +360,14 @@ void MatrixView::normalizeSizes(double maxVal) {
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize();
 
   node n;
-  forEach(n, graph()->getNodes()) {
+  forEach (n, graph()->getNodes()) {
     Size s(originalSizes->getNodeValue(n));
     maxWidth = max<float>(maxWidth, s[0]);
     maxHeight = max<float>(maxHeight, s[1]);
   }
 
   Observable::holdObservers();
-  forEach(n, _matrixGraph->getNodes()) {
+  forEach (n, _matrixGraph->getNodes()) {
     if (!_displayedNodesAreNodes->getNodeValue(n))
       continue;
 
@@ -494,7 +496,8 @@ void MatrixView::updateNodesOrder() {
   _orderedNodes.resize(graph()->numberOfNodes());
   int i = 0;
   node n;
-  forEach(n, graph()->getNodes()) _orderedNodes[i++] = n;
+  forEach (n, graph()->getNodes())
+    _orderedNodes[i++] = n;
 
   if (graph()->existProperty(_orderingMetricName)) {
     PropertyInterface *pi = graph()->getProperty(_orderingMetricName);
@@ -556,7 +559,7 @@ void MatrixView::updateLayout() {
       getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementShape();
   int shape = GlyphManager::getInst().glyphId("2D - Square");
   edge e;
-  forEach(e, graph()->getEdges()) {
+  forEach (e, graph()->getEdges()) {
     const std::pair<node, node> eEnds = graph()->ends(e);
     vector<int> srcNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first),
                 tgtNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second),
@@ -577,7 +580,7 @@ void MatrixView::updateLayout() {
     }
   }
 
-  forEach(e, _matrixGraph->getEdges()) {
+  forEach (e, _matrixGraph->getEdges()) {
     const std::pair<node, node> eEnds = _matrixGraph->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;

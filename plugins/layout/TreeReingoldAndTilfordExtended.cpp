@@ -269,7 +269,7 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
     leftTree->push_front(tmpLR);
 
     list<double>::const_iterator itI = childPos.begin();
-    forEach(ite, tree->getOutEdges(n)) {
+    forEach (ite, tree->getOutEdges(n)) {
       itn = tree->target(ite);
       (*p)[itn] = *itI - posFather;
       ++itI;
@@ -293,15 +293,13 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int, 
 
   if (useLength) {
     edge ite;
-    forEach(ite, tree->getOutEdges(n)) {
+    forEach (ite, tree->getOutEdges(n)) {
       node itn = tree->target(ite);
       TreeLevelSizing(itn, maxSize, level + (lengthMetric->getEdgeValue(ite)), levels);
     }
   } else {
     node itn;
-    forEach(itn, tree->getOutNodes(n)) {
-      TreeLevelSizing(itn, maxSize, level + 1, levels);
-    }
+    forEach (itn, tree->getOutNodes(n)) { TreeLevelSizing(itn, maxSize, level + 1, levels); }
   }
 }
 //=============================================================================
@@ -320,7 +318,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
 
   if (useLength) {
     edge ite;
-    forEach(ite, tree->getOutEdges(n)) {
+    forEach (ite, tree->getOutEdges(n)) {
       node itn = tree->target(ite);
       double decalY = y;
       int decalLevel = level;
@@ -340,7 +338,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
     }
   } else {
     node itn;
-    forEach(itn, tree->getOutNodes(n)) {
+    forEach (itn, tree->getOutNodes(n)) {
       if (!compactLayout)
         calcLayout(itn, p, x + (*p)[n], y + spacing, level + 1, maxLevelSize);
       else
@@ -394,7 +392,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles) {
     node n;
     SizeProperty *circleSizes = new SizeProperty(graph);
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       const Size &boundCircle = sizes->getNodeValue(n);
       double diam = 2 * sqrt(boundCircle.getW() * boundCircle.getW() / 4.0 +
                              boundCircle.getH() * boundCircle.getH() / 4.0);
@@ -455,7 +453,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (ortho) {
     // Edge bends
     edge e;
-    forEach(e, tree->getEdges()) {
+    forEach (e, tree->getEdges()) {
       LineType::RealType tmp;
       node src = tree->source(e);
       node tgt = tree->target(e);
@@ -469,7 +467,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
 
     if (orientation == "horizontal") {
-      forEach(e, tree->getEdges()) {
+      forEach (e, tree->getEdges()) {
         LineType::RealType tmp = result->getEdgeValue(e);
         LineType::RealType tmp2;
 
@@ -484,7 +482,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   // rotate layout and size
   if (orientation == "horizontal") {
     node n;
-    forEach(n, tree->getNodes()) {
+    forEach (n, tree->getNodes()) {
       const Coord &tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }

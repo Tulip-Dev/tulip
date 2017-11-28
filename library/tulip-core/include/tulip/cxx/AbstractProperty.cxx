@@ -330,9 +330,7 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::numberOfNonDefaultValuatedNodes(cons
   } else {
     unsigned int ret = 0;
     node n;
-    forEach(n, getNonDefaultValuatedNodes(g)) {
-      ++ret;
-    }
+    forEach (n, getNonDefaultValuatedNodes(g)) { ++ret; }
     return ret;
   }
 }
@@ -398,9 +396,7 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::numberOfNonDefaultValuatedEdges(cons
   } else {
     unsigned int ret = 0;
     edge e;
-    forEach(e, getNonDefaultValuatedEdges(g)) {
-      ++ret;
-    }
+    forEach (e, getNonDefaultValuatedEdges(g)) { ++ret; }
     return ret;
   }
 }

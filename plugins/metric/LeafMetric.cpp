@@ -118,7 +118,8 @@ bool LeafMetric::run() {
   result->setAllNodeValue(0);
   result->setAllEdgeValue(0);
   node n;
-  forEach(n, graph->getNodes()) result->setNodeValue(n, getNodeValue(n));
+  forEach (n, graph->getNodes())
+    result->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=======================================================================

@@ -163,7 +163,7 @@ public:
 
     if (clustersLayout) {
       tlp::Graph *cluster = nullptr;
-      forEach(cluster, graph->getSubGraphs()) {
+      forEach (cluster, graph->getSubGraphs()) {
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
         Size maxSize = viewSize->getMax(cluster);
@@ -219,7 +219,7 @@ public:
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
     TLP_HASH_MAP<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
     string pName;
-    forEach(pName, quotientGraph->getProperties()) {
+    forEach (pName, quotientGraph->getProperties()) {
       PropertyInterface *prop = quotientGraph->getProperty(pName);
 
       // do nothing for viewBorderWidth
@@ -268,7 +268,7 @@ public:
       // for each edge
       // store opposite edge in opProp
       edge mE;
-      forEach(mE, quotientGraph->getEdges()) {
+      forEach (mE, quotientGraph->getEdges()) {
         const std::pair<node, node> &eEnds = quotientGraph->ends(mE);
         edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 
@@ -292,7 +292,7 @@ public:
           bool opOK = viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
 
           if (edgeFn != DoubleProperty::NO_CALC) {
-            forEach(pName, graph->getProperties()) {
+            forEach (pName, graph->getProperties()) {
               PropertyInterface *property = graph->getProperty(pName);
 
               if (dynamic_cast<DoubleProperty *>(property) &&

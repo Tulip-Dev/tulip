@@ -613,7 +613,7 @@ void GraphUpdatesRecorder::restartRecording(Graph *g) {
       (itp == addedProperties.end()) ? nullptr : &(itp->second);
 
   PropertyInterface *prop;
-  forEach(prop, g->getLocalObjectProperties()) {
+  forEach (prop, g->getLocalObjectProperties()) {
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
 
@@ -637,7 +637,7 @@ void GraphUpdatesRecorder::restartRecording(Graph *g) {
   }
 
   Graph *sg;
-  forEach(sg, g->getSubGraphs()) {
+  forEach (sg, g->getSubGraphs()) {
     if (!newSubGraphs || newSubGraphs->find(sg) == newSubGraphs->end())
       restartRecording(sg);
   }
@@ -654,9 +654,11 @@ void GraphUpdatesRecorder::stopRecording(Graph *g) {
 #endif
   g->removeListener(this);
   PropertyInterface *prop;
-  forEach(prop, g->getLocalObjectProperties()) prop->removeListener(this);
+  forEach (prop, g->getLocalObjectProperties())
+    prop->removeListener(this);
   Graph *sg;
-  forEach(sg, g->getSubGraphs()) stopRecording(sg);
+  forEach (sg, g->getSubGraphs())
+    stopRecording(sg);
 }
 
 void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
@@ -1175,9 +1177,7 @@ void GraphUpdatesRecorder::addNode(Graph *g, node n) {
   // in order to restore them when readding the node through the tlp::Graph::unpop() method
   // as the default properties values might change
   PropertyInterface *prop = nullptr;
-  forEach(prop, g->getLocalObjectProperties()) {
-    beforeSetNodeValue(prop, n);
-  }
+  forEach (prop, g->getLocalObjectProperties()) { beforeSetNodeValue(prop, n); }
 }
 
 void GraphUpdatesRecorder::addEdge(Graph *g, edge e) {
@@ -1198,9 +1198,7 @@ void GraphUpdatesRecorder::addEdge(Graph *g, edge e) {
   // in order to restore them when readding the node through the tlp::Graph::unpop() method
   // as the default properties values can change
   PropertyInterface *prop = nullptr;
-  forEach(prop, g->getLocalObjectProperties()) {
-    beforeSetEdgeValue(prop, e);
-  }
+  forEach (prop, g->getLocalObjectProperties()) { beforeSetEdgeValue(prop, e); }
 }
 
 void GraphUpdatesRecorder::delNode(Graph *g, node n) {
@@ -1231,7 +1229,7 @@ void GraphUpdatesRecorder::delNode(Graph *g, node n) {
       (itp == addedProperties.end()) ? nullptr : &(itp->second);
 
   PropertyInterface *prop;
-  forEach(prop, g->getLocalObjectProperties()) {
+  forEach (prop, g->getLocalObjectProperties()) {
     // nothing to record for newly added properties
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
@@ -1316,7 +1314,7 @@ void GraphUpdatesRecorder::delEdge(Graph *g, edge e) {
 
   PropertyInterface *prop;
   // loop on properties to save the edge's associated values
-  forEach(prop, g->getLocalObjectProperties()) {
+  forEach (prop, g->getLocalObjectProperties()) {
     // nothing to record for newly added properties
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
@@ -1476,7 +1474,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph *g, Graph *sg) {
 
 void GraphUpdatesRecorder::removeGraphData(Graph *g) {
   Graph *sg = nullptr;
-  forEach(sg, g->getSubGraphs()) {
+  forEach (sg, g->getSubGraphs()) {
     std::pair<Graph *, Graph *> p = std::make_pair(g, sg);
     std::list<std::pair<Graph *, Graph *>>::iterator it =
         std::find(addedSubGraphs.begin(), addedSubGraphs.end(), p);
@@ -1604,7 +1602,8 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface *p) {
   if (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()) {
     // first save the already existing value for all non default valuated nodes
     node n;
-    forEach(n, p->getNonDefaultValuatedNodes()) beforeSetNodeValue(p, n);
+    forEach (n, p->getNonDefaultValuatedNodes())
+      beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
     oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
@@ -1658,7 +1657,8 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface *p) {
   if (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()) {
     // first save the already existing value for all non default valuated edges
     edge e;
-    forEach(e, p->getNonDefaultValuatedEdges()) beforeSetEdgeValue(p, e);
+    forEach (e, p->getNonDefaultValuatedEdges())
+      beforeSetEdgeValue(p, e);
     // then record the old default value
     // because beforeSetEdgeValue does nothing if it has already been changed
     oldEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();

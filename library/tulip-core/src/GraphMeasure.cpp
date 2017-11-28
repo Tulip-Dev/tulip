@@ -333,7 +333,7 @@ void tlp::dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &le
     fifo.pop_front();
     node child;
     unsigned int curLevel = level.getNodeValue(current) + 1;
-    forEach(child, graph->getOutNodes(current)) {
+    forEach (child, graph->getOutNodes(current)) {
       unsigned int childPos = graph->nodePos(child);
       unsigned int childLevel = totreat[childPos];
 
@@ -428,9 +428,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
-          forEach(e, graph->getInOutEdges(nodes[i])) {
-            nWeight += weights->getEdgeDoubleValue(e);
-          }
+          forEach (e, graph->getInOutEdges(nodes[i])) { nWeight += weights->getEdgeDoubleValue(e); }
           deg[i] = nWeight;
         }
 
@@ -443,9 +441,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
-          forEach(e, graph->getInEdges(nodes[i])) {
-            nWeight += weights->getEdgeDoubleValue(e);
-          }
+          forEach (e, graph->getInEdges(nodes[i])) { nWeight += weights->getEdgeDoubleValue(e); }
           deg[i] = nWeight;
         }
 
@@ -458,9 +454,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
-          forEach(e, graph->getInEdges(nodes[i])) {
-            nWeight += weights->getEdgeDoubleValue(e);
-          }
+          forEach (e, graph->getInEdges(nodes[i])) { nWeight += weights->getEdgeDoubleValue(e); }
           deg[i] = nWeight;
         }
 
@@ -493,9 +487,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
-          forEach(e, graph->getInOutEdges(nodes[i])) {
-            nWeight += weights->getEdgeDoubleValue(e);
-          }
+          forEach (e, graph->getInOutEdges(nodes[i])) { nWeight += weights->getEdgeDoubleValue(e); }
           deg[i] = nWeight * normalization;
         }
 
@@ -508,9 +500,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
-          forEach(e, graph->getInEdges(nodes[i])) {
-            nWeight += weights->getEdgeDoubleValue(e);
-          }
+          forEach (e, graph->getInEdges(nodes[i])) { nWeight += weights->getEdgeDoubleValue(e); }
           deg[i] = nWeight * normalization;
         }
 
@@ -523,9 +513,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
         for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
           edge e;
           double nWeight = 0.0;
-          forEach(e, graph->getInEdges(nodes[i])) {
-            nWeight += weights->getEdgeDoubleValue(e);
-          }
+          forEach (e, graph->getInEdges(nodes[i])) { nWeight += weights->getEdgeDoubleValue(e); }
           deg[i] = nWeight * normalization;
         }
 

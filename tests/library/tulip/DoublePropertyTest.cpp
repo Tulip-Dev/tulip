@@ -208,17 +208,13 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
 
   // check that each node has the correct value
   node n;
-  forEach(n, graph->getNodes()) {
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
-  }
+  forEach (n, graph->getNodes()) { CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6); }
   // check that the default node value has been changed
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
 
   // check that each edge has the correct value
   edge e;
-  forEach(e, graph->getEdges()) {
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
-  }
+  forEach (e, graph->getEdges()) { CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6); }
   // check that the default edge value has been changed
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
 
@@ -231,7 +227,7 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
 
   // check that the nodes have expected values
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     if (sg->isElement(n)) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v2, 1e-6);
     } else {
@@ -242,7 +238,7 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
 
   // check that the edges have expected values
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     if (sg->isElement(e)) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v1, 1e-6);
     } else {
@@ -296,13 +292,13 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   // check that original nodes and edges still have the same value
   // as before modifying the default property value
   node n;
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     if (n != nNew) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
     }
   }
   edge e;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     if (e != eNew) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
     }

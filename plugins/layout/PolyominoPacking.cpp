@@ -154,13 +154,9 @@ bool PolyominoPacking::run() {
 
   if (connectedComponents.size() <= 1) {
     node n;
-    forEach(n, graph->getNodes()) {
-      result->setNodeValue(n, layout->getNodeValue(n));
-    }
+    forEach (n, graph->getNodes()) { result->setNodeValue(n, layout->getNodeValue(n)); }
     edge e;
-    forEach(e, graph->getEdges()) {
-      result->setEdgeValue(e, layout->getEdgeValue(e));
-    }
+    forEach (e, graph->getEdges()) { result->setEdgeValue(e, layout->getEdgeValue(e)); }
     return true;
   }
 
@@ -176,9 +172,7 @@ bool PolyominoPacking::run() {
     // get edges of current connected component
     for (unsigned int j = 0; j < nbNodes; ++j) {
       edge e;
-      forEach(e, graph->getOutEdges(ccNodes[j])) {
-        ccEdges.push_back(e);
-      }
+      forEach (e, graph->getOutEdges(ccNodes[j])) { ccEdges.push_back(e); }
     }
 
     BoundingBox ccBB = tlp::computeBoundingBox(ccNodes, ccEdges, layout, size, rotation);
@@ -235,7 +229,7 @@ bool PolyominoPacking::run() {
       node n = ccNodes[j];
       result->setNodeValue(n, layout->getNodeValue(n) + move);
       edge e;
-      forEach(e, graph->getOutEdges(n)) {
+      forEach (e, graph->getOutEdges(n)) {
         vector<Coord> bends = layout->getEdgeValue(e);
 
         if (bends.size()) {
@@ -342,9 +336,7 @@ void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty *layout, Siz
 
     point = cell(point, gridStepSize);
     edge e;
-    forEach(e, graph->getOutEdges(n)) {
-      fillEdge(e, point, poly.cells, dx, dy, layout);
-    }
+    forEach (e, graph->getOutEdges(n)) { fillEdge(e, point, poly.cells, dx, dy, layout); }
   }
 
   int W = grid(ccBB[1][0] - ccBB[0][0] + 2 * margin, gridStepSize);

@@ -343,7 +343,7 @@ void HistogramStatistics::computeInteractor() {
   if (histoView->getDataLocation() == NODE) {
     nbElements = graph->numberOfNodes();
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       double nodeVal;
 
       if (propertyType == "double") {
@@ -359,7 +359,7 @@ void HistogramStatistics::computeInteractor() {
   } else {
     nbElements = graph->numberOfEdges();
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       double edgeVal;
 
       if (propertyType == "double") {

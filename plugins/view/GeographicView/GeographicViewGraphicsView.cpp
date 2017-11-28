@@ -919,7 +919,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
     DoubleProperty *latitudeProperty = graph->getProperty<DoubleProperty>(latitudePropertyName);
     DoubleProperty *longitudeProperty = graph->getProperty<DoubleProperty>(longitudePropertyName);
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       latLng.first = latitudeProperty->getNodeValue(n);
       latLng.second = longitudeProperty->getNodeValue(n);
       nodeLatLng[n] = latLng;
@@ -930,7 +930,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
     DoubleVectorProperty *edgesPathsProperty =
         graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       const std::vector<double> &edgePath = edgesPathsProperty->getEdgeValue(e);
       std::vector<std::pair<double, double>> latLngs;
 
@@ -1209,7 +1209,7 @@ void GeographicViewGraphicsView::switchViewType() {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
 
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       if (viewSize != geoViewSize) {
         const Size &nodeSize = viewSize->getNodeValue(n);
         geoViewSize->setNodeValue(n, nodeSize);
@@ -1223,7 +1223,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
     if (!edgeBendsLatLng.empty()) {
       edge e;
-      forEach(e, graph->getEdges()) {
+      forEach (e, graph->getEdges()) {
         vector<Coord> edgeBendsCoords;
 
         for (unsigned int i = 0; i < edgeBendsLatLng[e].size(); ++i) {
@@ -1294,7 +1294,7 @@ void GeographicViewGraphicsView::switchViewType() {
       geoViewShape->setAllNodeValue(NodeShape::Sphere);
       geoViewShape->setAllEdgeValue(EdgeShape::CubicBSplineCurve);
 
-      forEach(n, graph->getNodes()) {
+      forEach (n, graph->getNodes()) {
         if (viewSize != geoViewSize) {
           const Size &nodeSize = viewSize->getNodeValue(n);
           geoViewSize->setNodeValue(n, nodeSize);
@@ -1319,7 +1319,7 @@ void GeographicViewGraphicsView::switchViewType() {
         }
       }
 
-      forEach(e, graph->getEdges()) {
+      forEach (e, graph->getEdges()) {
         const std::pair<node, node> &eEnds = graph->ends(e);
         node src = eEnds.first;
         node tgt = eEnds.second;

@@ -432,7 +432,7 @@ public:
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
       pair<string, DataType *> attribute;
-      forEach(attribute, attributes.getValues()) {
+      forEach (attribute, attributes.getValues()) {
         if (attribute.second->getTypeName() == string(typeid(node).name())) {
           node *n = static_cast<node *>(attribute.second->value);
           n->id = getNode(*n).id;

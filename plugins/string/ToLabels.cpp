@@ -65,7 +65,7 @@ public:
       pluginProgress->setComment("Copying nodes values");
       int step = 0, max_step = graph->numberOfNodes();
       node n;
-      forEach(n, selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
+      forEach (n, selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 
@@ -77,7 +77,7 @@ public:
       pluginProgress->setComment("Copying edges values");
       int step = 0, max_step = graph->numberOfEdges();
       edge e;
-      forEach(e, selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
+      forEach (e, selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 

@@ -44,7 +44,7 @@ bool ReverseEdges::run() {
 
   int step = 0, max_step = graph->numberOfEdges();
   edge e;
-  forEach(e, ite) {
+  forEach (e, ite) {
     if ((++step % 100) == 0) {
       ProgressState state = pluginProgress->progress(step, max_step);
 

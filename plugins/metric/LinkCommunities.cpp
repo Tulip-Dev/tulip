@@ -162,7 +162,7 @@ bool LinkCommunities::run() {
     node n = nodes[i];
     std::set<double> around;
     edge e;
-    forEach(e, graph->getInOutEdges(n)) {
+    forEach (e, graph->getInOutEdges(n)) {
       double val = result->getEdgeValue(e);
 
       if (val)
@@ -184,7 +184,7 @@ void LinkCommunities::createDualGraph(const std::vector<edge> &edges) {
     node src = eEnds.first;
     node tgt = eEnds.second;
     edge ee;
-    forEach(ee, graph->getInOutEdges(src)) {
+    forEach (ee, graph->getInOutEdges(src)) {
       unsigned int eePos = graph->edgePos(ee);
 
       if (eePos < i) {
@@ -194,7 +194,7 @@ void LinkCommunities::createDualGraph(const std::vector<edge> &edges) {
         }
       }
     }
-    forEach(ee, graph->getInOutEdges(tgt)) {
+    forEach (ee, graph->getInOutEdges(tgt)) {
       unsigned int eePos = graph->edgePos(ee);
 
       if (eePos < i) {
@@ -238,7 +238,7 @@ double LinkCommunities::getSimilarity(edge ee, const std::vector<edge> &edges) {
   node n2 = (e2Ends.first != key) ? e2Ends.first : e2Ends.second;
   unsigned int wuv = 0, m = 0;
   node n;
-  forEach(n, graph->getInOutNodes(n1)) {
+  forEach (n, graph->getInOutNodes(n1)) {
     if (graph->existEdge(n2, n, true).isValid())
       wuv += 1;
 
@@ -248,7 +248,7 @@ double LinkCommunities::getSimilarity(edge ee, const std::vector<edge> &edges) {
     m += 1.0;
   }
 
-  forEach(n, graph->getInOutNodes(n2)) {
+  forEach (n, graph->getInOutNodes(n2)) {
     if (!graph->existEdge(n1, n, false).isValid())
       m += 1;
   }
@@ -282,7 +282,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<ed
   double a1 = 0.0, a2 = 0.0;
   double a11 = 0.0, a22 = 0.0;
   edge e;
-  forEach(e, graph->getInEdges(n1)) {
+  forEach (e, graph->getInEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
     node n = graph->source(e);
     edge me = graph->existEdge(n2, n, true);
@@ -299,7 +299,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<ed
     a11 += val * val;
   }
 
-  forEach(e, graph->getOutEdges(n1)) {
+  forEach (e, graph->getOutEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
     node n = graph->target(e);
     edge me = graph->existEdge(n2, n, true);
@@ -316,7 +316,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<ed
     a11 += val * val;
   }
 
-  forEach(e, graph->getInOutEdges(n2)) {
+  forEach (e, graph->getInOutEdges(n2)) {
     double val = metric->getEdgeDoubleValue(e);
     a2 += val;
     a22 += val * val;

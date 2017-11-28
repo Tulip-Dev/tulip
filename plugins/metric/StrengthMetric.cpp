@@ -201,7 +201,7 @@ bool StrengthMetric::run() {
   pluginProgress->showPreview(false);
   pluginProgress->setComment("Computing Strength metric on edges...");
 
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     result->setEdgeValue(e, getEdgeValue(e));
 
     if ((++steps % (maxSteps / 10)) == 0) {
@@ -219,7 +219,7 @@ bool StrengthMetric::run() {
     maxSteps = 10;
 
   pluginProgress->setComment("Computing Strength metric on nodes...");
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     result->setNodeValue(n, getNodeValue(n));
 
     if ((++steps % (maxSteps / 10)) == 0) {

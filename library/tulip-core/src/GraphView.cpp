@@ -137,9 +137,7 @@ void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
 
     // propagate edge reversal on subgraphs
     Graph *sg;
-    forEach(sg, getSubGraphs()) {
-      static_cast<GraphView *>(sg)->reverseInternal(e, src, tgt);
-    }
+    forEach (sg, getSubGraphs()) { static_cast<GraphView *>(sg)->reverseInternal(e, src, tgt); }
   }
 }
 //----------------------------------------------------------------
@@ -176,14 +174,14 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt, const node new
 
       // propagate edge ends update on subgraphs
       Graph *sg;
-      forEach(sg, getSubGraphs()) {
+      forEach (sg, getSubGraphs()) {
         static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
     } else {
       // delete e if its new ends do no belong to the graph
       // propagate edge ends update on subgraphs
       Graph *sg;
-      forEach(sg, getSubGraphs()) {
+      forEach (sg, getSubGraphs()) {
         static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
       notifyDelEdge(e);

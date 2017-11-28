@@ -446,7 +446,7 @@ public:
           // if the current node is a fake meta node
           // add the nodes of the pointed subgraph
           node msn;
-          forEach(msn, msg->getNodes()) {
+          forEach (msn, msg->getNodes()) {
             sg->addNode(msn);
             // the nodes in a pointed subgraph have to be removed
             // from quotientGraph
@@ -468,10 +468,10 @@ public:
       Graph *sg = itg->next();
       node n;
       // iterate on nodes
-      forEach(n, sg->getNodes()) {
+      forEach (n, sg->getNodes()) {
         // add its out edges
         edge e;
-        forEach(e, graph->getOutEdges(n)) {
+        forEach (e, graph->getOutEdges(n)) {
           if (sg->isElement(graph->target(e)))
             sg->addEdge(e);
         }
@@ -510,9 +510,7 @@ public:
           // set meta node properties values to the ones
           // of the fake meta node
           PropertyInterface *prop;
-          forEach(prop, graph->getObjectProperties()) {
-            prop->copy(mn, n, prop, true);
-          }
+          forEach (prop, graph->getObjectProperties()) { prop->copy(mn, n, prop, true); }
 
           // add it to quotient graph if needed
           if (sg != quotientGraph)
@@ -520,7 +518,7 @@ public:
 
           // replace n by mn
           edge e;
-          forEach(e, graph->getInOutEdges(n)) {
+          forEach (e, graph->getInOutEdges(n)) {
             pair<node, node> eEnds = graph->ends(e);
 
             if (eEnds.first == n) {
@@ -549,7 +547,7 @@ public:
   // Methods which compute Cubic Bézier control points for each edge
   void curveGraphEdges() {
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach (e, graph->getEdges()) {
       node src = graph->source(e);
       node tgt = graph->target(e);
       Coord srcCoord = viewLayout->getNodeValue(src);

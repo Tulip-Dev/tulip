@@ -79,7 +79,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(
 
     stringList.clear();
     string propertyName;
-    forEach(propertyName, graph->getProperties()) {
+    forEach (propertyName, graph->getProperties()) {
       if (graph->existProperty(propertyName) &&
           std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) ==
               lastSelectedProperties.end()) {

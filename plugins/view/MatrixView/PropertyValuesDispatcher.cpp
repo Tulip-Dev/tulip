@@ -51,9 +51,11 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(
 
   Observable::holdObservers();
   string s;
-  forEach(s, source->getProperties()) addLocalProperty(source, s);
+  forEach (s, source->getProperties())
+    addLocalProperty(source, s);
 
-  forEach(s, target->getProperties()) addLocalProperty(target, s);
+  forEach (s, target->getProperties())
+    addLocalProperty(target, s);
 
   Observable::unholdObservers();
 
@@ -149,8 +151,8 @@ void PropertyValuesDispatcher::afterSetAllNodeValue(tlp::PropertyInterface *sour
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     string val = sourceProp->getNodeDefaultStringValue();
     node n;
-    forEach(n, _displayedNodesAreNodes->getNodesEqualTo(true))
-        targetProp->setNodeStringValue(n, val);
+    forEach (n, _displayedNodesAreNodes->getNodesEqualTo(true))
+      targetProp->setNodeStringValue(n, val);
   } else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
     targetProp->setAllNodeStringValue(sourceProp->getNodeDefaultStringValue());
@@ -163,8 +165,8 @@ void PropertyValuesDispatcher::afterSetAllEdgeValue(tlp::PropertyInterface *sour
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     string val = sourceProp->getEdgeDefaultStringValue();
     node n;
-    forEach(n, _displayedNodesAreNodes->getNodesEqualTo(false))
-        targetProp->setNodeStringValue(n, val);
+    forEach (n, _displayedNodesAreNodes->getNodesEqualTo(false))
+      targetProp->setNodeStringValue(n, val);
   } else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
     targetProp->setAllEdgeStringValue(sourceProp->getNodeDefaultStringValue());
@@ -179,10 +181,12 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
     afterSetAllNodeValue(sourceProp);
     afterSetAllEdgeValue(sourceProp);
     node n;
-    forEach(n, sourceProp->getNonDefaultValuatedNodes()) afterSetNodeValue(sourceProp, n);
+    forEach (n, sourceProp->getNonDefaultValuatedNodes())
+      afterSetNodeValue(sourceProp, n);
 
     edge e;
-    forEach(e, sourceProp->getNonDefaultValuatedEdges()) afterSetEdgeValue(sourceProp, e);
+    forEach (e, sourceProp->getNonDefaultValuatedEdges())
+      afterSetEdgeValue(sourceProp, e);
     Observable::unholdObservers();
 
     sourceProp->addListener(this);

@@ -118,7 +118,7 @@ bool SquarifiedTreeMap::run() {
   {
     // change the glyph of all internal node to be a window
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach (n, graph->getNodes()) {
       if (graph->outdeg(n) != 0)
         glyphResult->setNodeValue(n, NodeShape::Window);
     }
@@ -214,9 +214,7 @@ vector<node> SquarifiedTreeMap::orderedChildren(const tlp::node n) const {
   // build a list of pair <node, size>
   size_t i = 0;
   node child;
-  forEach(child, graph->getOutNodes(n)) {
-    result[i++] = child;
-  }
+  forEach (child, graph->getOutNodes(n)) { result[i++] = child; }
   IsGreater sortFunctor(nodesSize);
   sort(result.begin(), result.end(), sortFunctor);
   return result;
@@ -357,7 +355,7 @@ void SquarifiedTreeMap::computeNodesSize(const tlp::node n) {
 
   double internalNodeValue = 0.;
   node child;
-  forEach(child, graph->getOutNodes(n)) {
+  forEach (child, graph->getOutNodes(n)) {
     computeNodesSize(child);
     internalNodeValue += nodesSize.get(child.id);
   }

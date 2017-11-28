@@ -326,7 +326,7 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget,
   NumericProperty *xProp = static_cast<NumericProperty *>(graph->getProperty(xDim));
   NumericProperty *yProp = static_cast<NumericProperty *>(graph->getProperty(yDim));
 
-  forEach(n, _graph->getNodes()) {
+  forEach (n, _graph->getNodes()) {
     Coord nodeCoord;
     double xValue, yValue;
 

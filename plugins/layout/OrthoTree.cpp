@@ -64,7 +64,7 @@ void OrthoTree::computeVerticalSize(const node n, NodeStaticProperty<double> &ve
   } else {
     double s = 0.;
     node u;
-    forEach(u, graph->getOutNodes(n)) {
+    forEach (u, graph->getOutNodes(n)) {
       computeVerticalSize(u, verticalSize);
       s += verticalSize[graph->nodePos(u)];
     }
@@ -81,7 +81,7 @@ void OrthoTree::computeLayout(const node n, NodeStaticProperty<double> &vertical
   Coord cn = result->getNodeValue(n);
   double prev = 0.;
   edge e;
-  forEach(e, graph->getOutEdges(n)) {
+  forEach (e, graph->getOutEdges(n)) {
     node u = graph->opposite(e, n);
     Coord c(cn);
     c[0] += layerSpacing;

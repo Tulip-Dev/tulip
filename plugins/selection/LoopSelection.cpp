@@ -29,7 +29,7 @@ bool LoopSelection::run() {
   result->setAllNodeValue(false);
   edge e;
   unsigned cpt = 0;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     const std::pair<node, node> &eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {

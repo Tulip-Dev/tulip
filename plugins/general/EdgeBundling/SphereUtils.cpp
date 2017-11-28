@@ -43,7 +43,7 @@ float centerOnOriginAndScale(Graph *graph, LayoutProperty *layout, float dist) {
 
 void moveBendsToSphere(Graph *graph, float ray, LayoutProperty *layout) {
   edge e;
-  forEach(e, graph->getEdges()) {
+  forEach (e, graph->getEdges()) {
     vector<Coord> bends;
     bends = layout->getEdgeValue(e);
 
@@ -59,7 +59,7 @@ void moveBendsToSphere(Graph *graph, float ray, LayoutProperty *layout) {
   }
 
   node n;
-  forEach(n, graph->getNodes()) {
+  forEach (n, graph->getNodes()) {
     Coord c = layout->getNodeValue(n);
     c /= c.norm();
     c *= ray;
