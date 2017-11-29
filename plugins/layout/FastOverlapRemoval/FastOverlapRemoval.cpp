@@ -138,7 +138,7 @@ bool FastOverlapRemoval::run() {
 #pragma omp parallel for
 #endif
     for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i)
-      size[i] = viewSize->getNodeValue(nodes[i]) * passIndex / float(nbPasses);
+      size[nodes[i]] = viewSize->getNodeValue(nodes[i]) * passIndex / float(nbPasses);
 
 // actually apply fast overlap removal
 #ifdef _OPENMP
@@ -147,7 +147,7 @@ bool FastOverlapRemoval::run() {
     for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
       node curNode = nodes[i];
       const Coord &pos = viewLayout->getNodeValue(curNode);
-      const Size &sz = size[i];
+      const Size &sz = size[curNode];
       double curRot = viewRot->getNodeValue(curNode);
       Size rotSize = Size(sz.getW() * fabs(cos(curRot * M_PI / 180.0)) +
                               sz.getH() * fabs(sin(curRot * M_PI / 180.0)),

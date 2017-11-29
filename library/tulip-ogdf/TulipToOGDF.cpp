@@ -46,17 +46,15 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
 
   ogdfAttributes = ogdf::GraphAttributes(ogdfGraph, attributes);
   ogdfNodes = new tlp::NodeStaticProperty<ogdf::node>(g);
+  ogdfEdges = new tlp::EdgeStaticProperty<ogdf::edge>(g);
 
   tlp::SizeProperty *sizeProp = tulipGraph->getProperty<tlp::SizeProperty>("viewSize");
   tlp::LayoutProperty *layoutProp = tulipGraph->getProperty<tlp::LayoutProperty>("viewLayout");
 
-  const std::vector<tlp::node> &nodes = tulipGraph->nodes();
-  unsigned int nbElts = nodes.size();
-
-  for (unsigned int i = 0; i < nbElts; ++i) {
-    ogdf::node nOGDF = ogdfGraph.newNode(i);
-    (*ogdfNodes)[i] = nOGDF;
-    tlp::node nTlp = nodes[i];
+  unsigned int i = 0;
+  for (const tlp::node &nTlp : tulipGraph->nodes()) {
+    ogdf::node nOGDF = ogdfGraph.newNode(i++);
+    (*ogdfNodes)[nTlp] = nOGDF;
     const tlp::Coord &c = layoutProp->getNodeValue(nTlp);
     ogdfAttributes.x(nOGDF) = c.getX();
     ogdfAttributes.y(nOGDF) = c.getY();
@@ -66,16 +64,12 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
     ogdfAttributes.height(nOGDF) = s.getH();
   }
 
-  const std::vector<tlp::edge> &edges = tulipGraph->edges();
-  nbElts = edges.size();
-  ogdfEdges.reserve(nbElts);
-
-  for (unsigned int i = 0; i < nbElts; ++i) {
-    tlp::edge eTlp = edges[i];
+  i = 0;
+  for (const tlp::edge &eTlp : tulipGraph->edges()) {
     std::pair<tlp::node, tlp::node> ends = tulipGraph->ends(eTlp);
     ogdf::edge eogdf = ogdfGraph.newEdge(ogdfNodes->getNodeValue(ends.first),
-                                         ogdfNodes->getNodeValue(ends.second), i);
-    ogdfEdges.push_back(eogdf);
+                                         ogdfNodes->getNodeValue(ends.second), i++);
+    (*ogdfEdges)[eTlp] = eogdf;
 
     if (importEdgeBends) {
 
@@ -107,22 +101,23 @@ ogdf::GraphAttributes &TulipToOGDF::getOGDFGraphAttr() {
 
 TulipToOGDF::~TulipToOGDF() {
   delete ogdfNodes;
+  delete ogdfEdges;
 }
 
 ogdf::Graph &TulipToOGDF::getOGDFGraph() {
   return ogdfGraph;
 }
 
-ogdf::node TulipToOGDF::getOGDFGraphNode(unsigned int nodeIndex) {
-  return (*ogdfNodes)[nodeIndex];
+ogdf::node TulipToOGDF::getOGDFGraphNode(const tlp::node &nTlp) {
+  return (*ogdfNodes)[nTlp];
 }
 
-ogdf::edge TulipToOGDF::getOGDFGraphEdge(unsigned int edgeIndex) {
-  return ogdfEdges[edgeIndex];
+ogdf::edge TulipToOGDF::getOGDFGraphEdge(const tlp::edge &eTlp) {
+  return (*ogdfEdges)[eTlp];
 }
 
-tlp::Coord TulipToOGDF::getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex) {
-  ogdf::node n = (*ogdfNodes)[nodeIndex];
+tlp::Coord TulipToOGDF::getNodeCoordFromOGDFGraphAttr(const tlp::node &nTlp) {
+  ogdf::node n = (*ogdfNodes)[nTlp];
 
   double x = ogdfAttributes.x(n);
   double y = ogdfAttributes.y(n);
@@ -131,8 +126,8 @@ tlp::Coord TulipToOGDF::getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex) {
   return tlp::Coord(x, y, z);
 }
 
-vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex) {
-  ogdf::edge e = ogdfEdges[edgeIndex];
+vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(const tlp::edge &eTlp) {
+  ogdf::edge e = (*ogdfEdges)[eTlp];
   ogdf::DPolyline line = ogdfAttributes.bends(e);
   vector<tlp::Coord> v;
 
@@ -147,11 +142,8 @@ void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *m
   if (!metric)
     return;
 
-  const std::vector<tlp::edge> &edges = tulipGraph->edges();
-  unsigned int nbEdges = edges.size();
-
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    ogdfAttributes.doubleWeight(ogdfEdges[i]) = metric->getEdgeDoubleValue(edges[i]);
+  for (const tlp::edge &e : tulipGraph->edges()) {
+    ogdfAttributes.doubleWeight((*ogdfEdges)[e]) = metric->getEdgeDoubleValue(e);
   }
 }
 
@@ -159,11 +151,8 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
   if (!size)
     return;
 
-  const std::vector<tlp::edge> &edges = tulipGraph->edges();
-  unsigned int nbEdges = edges.size();
-
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    std::pair<tlp::node, tlp::node> ends = tulipGraph->ends(edges[i]);
+  for (const tlp::edge &e : tulipGraph->edges()) {
+    std::pair<tlp::node, tlp::node> ends = tulipGraph->ends(e);
     ogdf::node srcOgdf = ogdfNodes->getNodeValue(ends.first);
     tlp::Size s = size->getNodeValue(ends.first);
     ogdf::node tgtOgdf = ogdfNodes->getNodeValue(ends.second);
@@ -174,7 +163,7 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
     ogdfAttributes.width(tgtOgdf) = s2.getW();
     ogdfAttributes.height(tgtOgdf) = s2.getH();
 
-    ogdf::edge eOgdf = ogdfEdges[i];
+    ogdf::edge eOgdf = (*ogdfEdges)[e];
     ogdfAttributes.doubleWeight(eOgdf) =
         ogdfAttributes.doubleWeight(eOgdf) + s.getW() / 2. + s2.getW() / 2. - 1.;
   }
@@ -184,10 +173,7 @@ void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *m
   if (!metric)
     return;
 
-  const std::vector<tlp::node> &nodes = tulipGraph->nodes();
-  unsigned int nbNodes = nodes.size();
-
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    ogdfAttributes.weight((*ogdfNodes)[i]) = int(metric->getNodeDoubleValue(nodes[i]));
+  for (const tlp::node &n : tulipGraph->nodes()) {
+    ogdfAttributes.weight((*ogdfNodes)[n]) = int(metric->getNodeDoubleValue(n));
   }
 }

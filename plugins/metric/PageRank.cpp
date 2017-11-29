@@ -87,12 +87,8 @@ struct PageRank : public DoubleAlgorithm {
     NodeStaticProperty<double> next_pr(graph);
 
     double oon = 1. / nbNodes;
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
 
-    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
-      pr[i] = oon;
+    pr.setAll(oon);
 
     const double one_minus_d = (1 - d) / nbNodes;
     const unsigned int kMax = uint(15 * log(nbNodes));
@@ -108,7 +104,7 @@ struct PageRank : public DoubleAlgorithm {
           node n;
           forEach (n, graph->getInNodes(nodes[i]))
             n_sum += pr.getNodeValue(n) / graph->outdeg(n);
-          next_pr[i] = one_minus_d + d * n_sum;
+          next_pr[nodes[i]] = one_minus_d + d * n_sum;
         }
       } else {
 #ifdef _OPENMP
@@ -120,7 +116,7 @@ struct PageRank : public DoubleAlgorithm {
           node n;
           forEach (n, graph->getInOutNodes(nodes[i]))
             n_sum += pr.getNodeValue(n) / graph->deg(n);
-          next_pr[i] = one_minus_d + d * n_sum;
+          next_pr[nodes[i]] = one_minus_d + d * n_sum;
         }
       }
 

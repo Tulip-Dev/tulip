@@ -122,7 +122,7 @@ TLP_SCOPE _DEPRECATED unsigned int maxDistance(const Graph *graph, const node n,
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
-TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos,
+TLP_SCOPE unsigned int maxDistance(const Graph *graph, const node n,
                                    tlp::NodeStaticProperty<unsigned int> &distance,
                                    EDGE_TYPE direction = UNDIRECTED);
 /*

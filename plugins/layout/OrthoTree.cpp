@@ -57,23 +57,21 @@ OrthoTree::OrthoTree(const tlp::PluginContext *context)
 }
 
 void OrthoTree::computeVerticalSize(const node n, NodeStaticProperty<double> &verticalSize) {
-  unsigned pos_n = graph->nodePos(n);
-
   if (graph->outdeg(n) == 0) {
-    verticalSize[pos_n] = size->getNodeValue(n)[1];
+    verticalSize[n] = size->getNodeValue(n)[1];
   } else {
     double s = 0.;
     node u;
     forEach (u, graph->getOutNodes(n)) {
       computeVerticalSize(u, verticalSize);
-      s += verticalSize[graph->nodePos(u)];
+      s += verticalSize[u];
     }
 
     if (graph->outdeg(n) > 1) {
       s += nodeSpacing * (graph->outdeg(n) - 1);
     }
 
-    verticalSize[pos_n] = s;
+    verticalSize[n] = s;
   }
 }
 
@@ -87,7 +85,7 @@ void OrthoTree::computeLayout(const node n, NodeStaticProperty<double> &vertical
     c[0] += layerSpacing;
     c[1] -= prev;
 
-    prev += verticalSize[graph->nodePos(u)] + nodeSpacing;
+    prev += verticalSize[u] + nodeSpacing;
     result->setNodeValue(u, c);
 
     Coord bend(cn[0], c[1], 0);

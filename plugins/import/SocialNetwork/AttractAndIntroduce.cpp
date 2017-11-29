@@ -103,10 +103,10 @@ public:
     NodeStaticProperty<double> pAttractProperty(graph);
     NodeStaticProperty<double> pIntroduceProperty(graph);
 
-    unsigned int i, j;
     double pIAttract, pIIntroduce;
 
-    for (i = 0; i < n; ++i) {
+    unsigned int i = 0;
+    for (const node &n : graph->nodes()) {
       if ((1 - alpha) > randomDouble(1.0))
         pIAttract = 0;
       else
@@ -117,51 +117,48 @@ public:
       else
         pIIntroduce = 0;
 
-      pAttractProperty[i] = pIAttract;
-      pIntroduceProperty[i] = pIIntroduce;
+      pAttractProperty[n] = pIAttract;
+      pIntroduceProperty[n] = pIIntroduce;
 
-      if (i % 1000 == 0) {
+      if (i++ % 1000 == 0) {
         if (pluginProgress->progress(i, iterations) != TLP_CONTINUE)
           return pluginProgress->state() != TLP_CANCEL;
       }
     }
 
     unsigned int tmpE = 0;
-    const vector<node> &nodes = graph->nodes();
 
     while (tmpE < e) {
-      i = randomInteger(n - 1);
+      node n = graph->getRandomNode();
+      node n2;
 
       do {
-        j = randomInteger(n - 1);
-      } while (i == j);
+        n2 = graph->getRandomNode();
+      } while (n == n2);
 
-      node nj = nodes[j];
+      if (pAttractProperty[n2] > randomDouble(1.0)) {
 
-      if (pAttractProperty[j] > randomDouble(1.0)) {
-        node ni = nodes[i];
-
-        if (pIntroduceProperty[i] > randomDouble(1.0)) {
+        if (pIntroduceProperty[n] > randomDouble(1.0)) {
           node fd;
-          forEach (fd, graph->getInOutNodes(ni)) {
-            if (fd == nj || graph->hasEdge(fd, nj, false))
+          forEach (fd, graph->getInOutNodes(n)) {
+            if (fd == n2 || graph->hasEdge(fd, n2, false))
               continue;
 
-            if (pAttractProperty[j] > randomDouble(1.0)) {
-              graph->addEdge(fd, nj);
+            if (pAttractProperty[n2] > randomDouble(1.0)) {
+              graph->addEdge(fd, n2);
               ++tmpE;
               continue;
             }
 
-            if (pAttractProperty.getNodeValue(fd) > randomDouble(1.0)) {
-              graph->addEdge(nj, fd);
+            if (pAttractProperty[fd] > randomDouble(1.0)) {
+              graph->addEdge(n2, fd);
               ++tmpE;
             }
           }
         }
 
-        if (!graph->hasEdge(ni, nj, false)) {
-          graph->addEdge(ni, nj);
+        if (!graph->hasEdge(n, n2, false)) {
+          graph->addEdge(n, n2);
           ++tmpE;
         }
 

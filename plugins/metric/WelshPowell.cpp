@@ -90,14 +90,12 @@ public:
   bool run() override {
     const std::vector<node> nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
-    NodeStaticProperty<nodeInfo> nodesInfo(graph);
-    node n;
-    OMP_ITER_TYPE i = 0;
+    std::vector<nodeInfo> nodesInfo(nbNodes);
+
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (i = 0; i < nbNodes; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
       node n = nodes[i];
       nodeInfo &nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
@@ -107,15 +105,15 @@ public:
     sort(nodesInfo.begin(), nodesInfo.end(), nodesInfoCmp());
     // build a map
     NodeStaticProperty<unsigned int> toNodesInfo(graph);
+
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (i = 0; i < nbNodes; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
       nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;
-      toNodesInfo.setNodeValue(nInfo.n, i);
+      toNodesInfo[nInfo.n] = i;
     }
 
     int currentColor = 0;
@@ -129,7 +127,7 @@ public:
 #endif
       unsigned int nextMaxIndex = minIndex;
 
-      for (i = minIndex; i < maxIndex; ++i) {
+      for (unsigned int i = minIndex; i < maxIndex; ++i) {
 #ifndef NDEBUG
         cout << "i:" << i << endl;
 #endif
@@ -139,7 +137,7 @@ public:
           bool sameColor = false;
           node u;
           forEach (u, graph->getInOutNodes(nInfo.n)) {
-            if (nodesInfo[toNodesInfo.getNodeValue(u)].val == currentColor) {
+            if (nodesInfo[toNodesInfo[u]].val == currentColor) {
               sameColor = true;
               break;
             }
@@ -165,7 +163,7 @@ public:
     }
 
     // finally set the values
-    for (i = 0; i < nbNodes; ++i) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
       nodeInfo &nInfo = nodesInfo[i];
       result->setNodeValue(nInfo.n, nInfo.val);
     }

@@ -44,7 +44,7 @@ bool SpanningDagSelection::run() {
   AcyclicTest::acyclicTest(graph, &obstructions);
 
   for (vector<edge>::const_iterator it = obstructions.begin(); it != obstructions.end(); ++it) {
-    edgeprop[graph->edgePos(*it)] = false;
+    edgeprop[*it] = false;
   }
 
   edgeprop.copyToProperty(result);

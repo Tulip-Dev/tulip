@@ -62,7 +62,7 @@ public:
   EccentricityMetric(const tlp::PluginContext *context);
   ~EccentricityMetric() override;
   bool run() override;
-  double compute(unsigned int nPos, const std::vector<tlp::node> &nodes);
+  double compute(const tlp::node &n);
 
 private:
   bool allPaths;

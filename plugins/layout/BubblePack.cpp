@@ -237,7 +237,7 @@ double BubblePack::computeRelativePosition(tlp::node n,
   Iterator<node> *itN = tree->getOutNodes(n);
 
   for (unsigned int i = 0; i < outdeg; ++i) {
-    Vec4f &relPos = relativePosition[graph->nodePos(itN->next())];
+    Vec4f &relPos = relativePosition[itN->next()];
     Circled &circle = circles[i];
     relPos[0] = circle[0] - circleH[0];
     relPos[1] = circle[1] - circleH[1];
@@ -245,7 +245,7 @@ double BubblePack::computeRelativePosition(tlp::node n,
 
   delete itN;
 
-  Vec4f &relPos = relativePosition[graph->nodePos(n)];
+  Vec4f &relPos = relativePosition[n];
   relPos[2] = -circleH[0];
   relPos[3] = -circleH[1];
 
@@ -256,12 +256,12 @@ void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f> &r
   /*
    * Make the recursive call, to place the children of n.
    */
-  Vec4f &relPos = relativePosition[graph->nodePos(n)];
+  Vec4f &relPos = relativePosition[n];
   Vec2f shift(relPos[2], relPos[3]);
   result->setNodeValue(n, Coord(pos + shift, 0));
   node ni;
   forEach (ni, tree->getOutNodes(n)) {
-    Vec4f &relPos = relativePosition[graph->nodePos(ni)];
+    Vec4f &relPos = relativePosition[ni];
     Vec2f relat(relPos[0], relPos[1]);
     calcLayout(ni, pos + relat, relativePosition);
   }

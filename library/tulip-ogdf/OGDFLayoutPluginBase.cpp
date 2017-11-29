@@ -154,21 +154,15 @@ bool OGDFLayoutPluginBase::run() {
 
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
   // and store them in the Tulip Layout Property
-  const std::vector<tlp::node> &nodes = graph->nodes();
-  unsigned int nbElts = nodes.size();
-
-  for (unsigned int i = 0; i < nbElts; ++i) {
-    tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(i);
-    result->setNodeValue(nodes[i], nodeCoord);
+  for (const tlp::node &n : graph->nodes()) {
+    tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(n);
+    result->setNodeValue(n, nodeCoord);
   }
 
   // same operation as above but with edges
-  const std::vector<tlp::edge> &edges = graph->edges();
-  nbElts = edges.size();
-
-  for (unsigned int i = 0; i < nbElts; ++i) {
-    vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(i);
-    result->setEdgeValue(edges[i], edgeCoord);
+  for (const tlp::edge &e : graph->edges()) {
+    vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(e);
+    result->setEdgeValue(e, edgeCoord);
   }
 
   afterCall();

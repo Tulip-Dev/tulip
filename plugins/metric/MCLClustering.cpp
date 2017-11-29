@@ -314,13 +314,13 @@ bool MCLClustering::run() {
   g.reserveNodes(nbNodes);
 
   // add nodes to g
-  for (unsigned int i = 0; i < nbNodes; ++i)
-    g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(tlpNodes[i]) + 1);
+  for (const node &n : graph->nodes())
+    g.reserveAdj(nodeMapping[n] = g.addNode(), 2 * graph->deg(n) + 1);
 
   for (const edge &e : graph->edges()) {
     std::pair<node, node> eEnds = graph->ends(e);
-    node src = nodeMapping.getNodeValue(eEnds.first);
-    node tgt = nodeMapping.getNodeValue(eEnds.second);
+    node src = nodeMapping[eEnds.first];
+    node tgt = nodeMapping[eEnds.second];
     edge tmp = g.addEdge(src, tgt);
 
     double weight = (weights != nullptr) ? weights->getEdgeDoubleValue(e) : 1.0;

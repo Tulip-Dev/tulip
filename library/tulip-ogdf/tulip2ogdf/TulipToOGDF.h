@@ -57,23 +57,23 @@ public:
   ogdf::GraphAttributes &getOGDFGraphAttr();
   ogdf::Graph &getOGDFGraph();
 
-  ogdf::node getOGDFGraphNode(unsigned int nodeIndex);
-  ogdf::edge getOGDFGraphEdge(unsigned int edgeIndex);
+  ogdf::node getOGDFGraphNode(const tlp::node &nTlp);
+  ogdf::edge getOGDFGraphEdge(const tlp::edge &eTlp);
 
-  tlp::Coord getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex);
+  tlp::Coord getNodeCoordFromOGDFGraphAttr(const tlp::node &nTlp);
 
   void copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *);
   void copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *);
   void copyTlpNodeSizeToOGDF(tlp::SizeProperty *);
 
-  vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);
+  vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(const tlp::edge &eTlp);
 
 private:
   tlp::Graph *tulipGraph;
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
   tlp::NodeStaticProperty<ogdf::node> *ogdfNodes;
-  std::vector<ogdf::edge> ogdfEdges;
+  tlp::EdgeStaticProperty<ogdf::edge> *ogdfEdges;
 };
 
 #endif /* !TULIPTOOGDF_H_ */

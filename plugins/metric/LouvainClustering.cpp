@@ -188,11 +188,7 @@ private:
     // Renumber communities
     vector<int> renumber(nb_qnodes, -1);
 
-#if defined(_OPENMP)
-#pragma omp parallel for
-#endif
-
-    for (OMP_ITER_TYPE n = 0; n < nb_qnodes; n++) {
+    for (unsigned int n = 0; n < nb_qnodes; n++) {
       renumber[n2c[n]] = 0;
     }
 
@@ -202,13 +198,9 @@ private:
       if (renumber[i] != -1)
         renumber[i] = final++;
 
-// update clustering
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-
-    for (OMP_ITER_TYPE i = 0; i < nb_nodes; ++i)
-      (*clusters)[i] = renumber[n2c[(*clusters)[i]]];
+    // update clustering
+    for (const node &n : graph->nodes())
+      (*clusters)[n] = renumber[n2c[(*clusters)[n]]];
 
     // Compute weighted graph
     new_quotient->addNodes(final);
@@ -386,12 +378,10 @@ bool LouvainClustering::run() {
   quotient->addNodes(nb_nodes);
 
   clusters = new NodeStaticProperty<int>(graph);
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
 
-  for (OMP_ITER_TYPE i = 0; i < nb_nodes; ++i) {
-    (*clusters)[i] = i;
+  int i = 0;
+  for (const node &n : graph->nodes()) {
+    (*clusters)[n] = i++;
   }
 
   weights = new EdgeProperty<double>();
@@ -444,11 +434,7 @@ bool LouvainClustering::run() {
       // Renumber communities
       vector<int> renumber(nb_qnodes, -1);
 
-#if defined(_OPENMP)
-#pragma omp parallel for
-#endif
-
-      for (OMP_ITER_TYPE n = 0; n < nb_qnodes; n++) {
+      for (unsigned int n = 0; n < nb_qnodes; n++) {
         renumber[n2c[n]] = 0;
       }
 
@@ -459,8 +445,8 @@ bool LouvainClustering::run() {
           renumber[i] = final++;
 
       // then set measure values
-      for (unsigned int i = 0; i < nb_nodes; ++i) {
-        result->setNodeValue(nodes[i], renumber[n2c[(*clusters)[i]]]);
+      for (const node &n : graph->nodes()) {
+        result->setNodeValue(n, renumber[n2c[(*clusters)[n]]]);
       }
 
       delete quotient;

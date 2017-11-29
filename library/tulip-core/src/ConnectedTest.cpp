@@ -76,39 +76,35 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
                                                vector<vector<node>> &components) {
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
-  // do a bfs traversal for each node
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    node curNode = nodes[i];
+  // do a bfs traversal for each node
+  for (const node &n : graph->nodes()) {
 
     // check if curNode has been already visited
-    if (!visited[i]) {
+    if (!visited[n]) {
       // add a new component
       components.push_back(std::vector<node>());
       std::vector<node> &component = components.back();
       // and initialize it with current node
-      component.push_back(curNode);
+      component.push_back(n);
       // do a bfs traversal this node
       list<node> nodesToVisit;
-      visited[i] = true;
-      nodesToVisit.push_front(curNode);
+      visited[n] = true;
+      nodesToVisit.push_front(n);
 
       while (!nodesToVisit.empty()) {
-        curNode = nodesToVisit.front();
+        node curNode = nodesToVisit.front();
         nodesToVisit.pop_front();
         // loop on all neighbours
         Iterator<node> *itn = graph->getInOutNodes(curNode);
 
         while (itn->hasNext()) {
           node neighbour = itn->next();
-          unsigned int nPos = graph->nodePos(neighbour);
 
           // check if neighbour has been visited
-          if (!visited[nPos]) {
+          if (!visited[neighbour]) {
             // mark neighbour as already visited
-            visited[nPos] = true;
+            visited[neighbour] = true;
             // insert it in current component
             component.push_back(neighbour);
             // push it for further deeper exploration
@@ -145,7 +141,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
 static unsigned int connectedTest(const Graph *const graph, node n,
                                   NodeStaticProperty<bool> &visited) {
   list<node> nodesToVisit;
-  visited.setNodeValue(n, true);
+  visited[n] = true;
   nodesToVisit.push_front(n);
   unsigned int count = 1;
 
@@ -156,15 +152,14 @@ static unsigned int connectedTest(const Graph *const graph, node n,
     Iterator<node> *itn = graph->getInOutNodes(r);
 
     while (itn->hasNext()) {
-      n = itn->next();
-      unsigned int nPos = graph->nodePos(n);
+      node neighbour = itn->next();
 
       // check if neighbour has been visited
-      if (!visited[nPos]) {
+      if (!visited[neighbour]) {
         // mark neighbour as already visited
-        visited[nPos] = true;
+        visited[neighbour] = true;
         // push it for further deeper exploration
-        nodesToVisit.push_back(n);
+        nodesToVisit.push_back(neighbour);
         ++count;
       }
     }
@@ -199,19 +194,15 @@ void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink)
       return;
   }
 
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-
-  if (nbNodes == 0)
+  if (graph->numberOfNodes() == 0)
     return;
 
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n = nodes[i];
+  for (const node &n : graph->nodes()) {
 
-    if (!visited[i]) {
+    if (!visited[n]) {
       toLink.push_back(n);
       connectedTest(graph, n, visited);
     }

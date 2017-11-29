@@ -55,27 +55,27 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {}
 //====================================================================
-double EccentricityMetric::compute(unsigned int nPos, const std::vector<node> &nodes) {
+double EccentricityMetric::compute(const node &n) {
 
   NodeStaticProperty<unsigned int> distance(graph);
   distance.setAll(0);
-  double val = directed ? tlp::maxDistance(graph, nPos, distance, DIRECTED)
-                        : tlp::maxDistance(graph, nPos, distance, UNDIRECTED);
+  double val = directed ? tlp::maxDistance(graph, n, distance, DIRECTED)
+                        : tlp::maxDistance(graph, n, distance, UNDIRECTED);
 
   if (!allPaths)
     return val;
 
   double nbAcc = 0.;
   val = 0.;
-  unsigned int nbNodes = nodes.size();
+  unsigned int nbNodes = graph->numberOfNodes();
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    unsigned int d = distance[i];
+  for (const node &n2 : graph->nodes()) {
+    unsigned int d = distance[n];
 
     if (d < nbNodes) {
       nbAcc += 1.;
 
-      if (i != nPos)
+      if (n2 != n)
         val += d;
     }
   }
@@ -120,7 +120,7 @@ bool EccentricityMetric::run() {
 #pragma omp parallel for
 #endif
 
-  for (OMP_ITER_TYPE ni = 0; ni < static_cast<OMP_ITER_TYPE>(nbNodes); ++ni) {
+  for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
     if (stopfor)
       continue;
 
@@ -129,7 +129,7 @@ bool EccentricityMetric::run() {
     if (omp_get_thread_num() == 0) {
 #endif
 
-      if (pluginProgress->progress(ni, graph->numberOfNodes() / nbThreads) != TLP_CONTINUE) {
+      if (pluginProgress->progress(i, graph->numberOfNodes() / nbThreads) != TLP_CONTINUE) {
 #ifdef _OPENMP
 #pragma omp critical(STOPFOR)
 #endif
@@ -140,23 +140,23 @@ bool EccentricityMetric::run() {
     }
 
 #endif
-    res[ni] = compute(ni, nodes);
+    res[nodes[i]] = compute(nodes[i]);
 
     if (!allPaths && norm)
 #ifdef _OPENMP
 #pragma omp critical(DIAMETER)
 #endif
     {
-      if (diameter < res[ni])
-        diameter = res[ni];
+      if (diameter < res[nodes[i]])
+        diameter = res[nodes[i]];
     }
   }
 
-  for (size_t ni = 0; ni < nbNodes; ++ni) {
+  for (const node &n : nodes) {
     if (!allPaths && norm)
-      result->setNodeValue(nodes[ni], res[ni] / diameter);
+      result->setNodeValue(n, res[n] / diameter);
     else
-      result->setNodeValue(nodes[ni], res[ni]);
+      result->setNodeValue(n, res[n]);
   }
 
   if (!allPaths && norm)
