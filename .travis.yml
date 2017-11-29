@@ -326,6 +326,7 @@ jobs:
     - stage: Tulip core build (Mac OS)
     # legacy Tulip core build on Mac OS
       os: osx
+      osx_image: xcode7.3
       compiler: clang
       cache: ccache
       install:
@@ -414,6 +415,7 @@ jobs:
     - stage: Tulip complete build (Mac OS)
     # legacy Tulip complete build on Mac OS
       os: osx
+      osx_image: xcode7.3
       compiler: clang
       cache: ccache
       install:
