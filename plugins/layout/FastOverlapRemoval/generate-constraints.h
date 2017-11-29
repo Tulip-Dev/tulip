@@ -18,7 +18,7 @@ class Rectangle {
   friend std::ostream &operator<<(std::ostream &os, const Rectangle &r);
 
 public:
-  Rectangle(double x, double X, double y, double Y, const double &xBorder, const double &yBorder);
+  Rectangle(double x, double X, double y, double Y, double xBorder, double yBorder);
   double getMaxX() const {
     return maxX + xBorder;
   }
@@ -84,8 +84,7 @@ public:
 
 private:
   double minX, maxX, minY, maxY;
-  const double &xBorder;
-  const double &yBorder;
+  double xBorder, yBorder;
 };
 
 class Variable;

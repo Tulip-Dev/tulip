@@ -20,6 +20,10 @@
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "FastOverlapRemoval.h"
 #include "generate-constraints.h"
 #include "remove_rectangle_overlap.h"
@@ -122,22 +126,28 @@ bool FastOverlapRemoval::run() {
   forEach (e, viewLayout->getNonDefaultValuatedEdges())
     result->setEdgeValue(e, viewLayout->getEdgeValue(e));
 
-  SizeProperty size(graph);
+  size_t nbNodes = graph->numberOfNodes();
+  const std::vector<node> &nodes = graph->nodes();
+  NodeStaticProperty<tlp::Size> size(graph);
 
-  for (float passIndex = 1.; passIndex <= nbPasses; ++passIndex) {
-    node n;
-    // size initialization
-    forEach (n, graph->getNodes())
-      size.setNodeValue(n, viewSize->getNodeValue(n) * passIndex / float(nbPasses));
+  vector<vpsc::Rectangle *> nodeRectangles(nbNodes);
+  
+  for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
+  // size initialization
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
+      size[i] = viewSize->getNodeValue(nodes[i]) * passIndex / float(nbPasses);
 
     // actually apply fast overlap removal
-    vector<vpsc::Rectangle *> nodeRectangles(graph->numberOfNodes());
-    node curNode;
-    unsigned int nodeCounter = 0;
-    vector<node> nodeOrder(graph->numberOfNodes());
-    forEach (curNode, graph->getNodes()) {
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+      node curNode = nodes[i];
       const Coord &pos = viewLayout->getNodeValue(curNode);
-      const Size &sz = size.getNodeValue(curNode);
+      const Size &sz = size[i];
       double curRot = viewRot->getNodeValue(curNode);
       Size rotSize = Size(sz.getW() * fabs(cos(curRot * M_PI / 180.0)) +
                               sz.getH() * fabs(sin(curRot * M_PI / 180.0)),
@@ -149,13 +159,11 @@ bool FastOverlapRemoval::run() {
       double minX = pos.getX() - rotSize.getW() / 2.0;
       double minY = pos.getY() - rotSize.getH() / 2.0;
 
-      nodeRectangles[nodeCounter] = new vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
-      nodeOrder[nodeCounter] = curNode;
-      ++nodeCounter;
-    } // end forEach
+      nodeRectangles[i] = new vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
+    }
 
     if (stringCollection.getCurrentString() == "X-Y") {
-      removeRectangleOverlap(graph->numberOfNodes(),
+      removeRectangleOverlap(nbNodes,
 #if defined(__APPLE__)
                              &(nodeRectangles[0]),
 #else
@@ -163,7 +171,7 @@ bool FastOverlapRemoval::run() {
 #endif
                              xBorder, yBorder);
     } else if (stringCollection.getCurrentString() == "X") {
-      removeRectangleOverlapX(graph->numberOfNodes(),
+      removeRectangleOverlapX(nbNodes,
 #if defined(__APPLE__)
                               &(nodeRectangles[0]),
 #else
@@ -171,7 +179,7 @@ bool FastOverlapRemoval::run() {
 #endif
                               xBorder, yBorder);
     } else {
-      removeRectangleOverlapY(graph->numberOfNodes(),
+      removeRectangleOverlapY(nbNodes,
 #if defined(__APPLE__)
                               &(nodeRectangles[0]),
 #else
@@ -180,12 +188,15 @@ bool FastOverlapRemoval::run() {
                               yBorder);
     }
 
-    for (unsigned int i = 0; i < graph->numberOfNodes(); ++i) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
       Coord newPos(nodeRectangles[i]->getCentreX(), nodeRectangles[i]->getCentreY(), 0.0);
-      LayoutAlgorithm::result->setNodeValue(nodeOrder[i], newPos);
-    } // end for
+      LayoutAlgorithm::result->setNodeValue(nodes[i], newPos);
+    }
 
-    for (unsigned int i = 0; i < graph->numberOfNodes(); ++i)
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nbNodes; ++i)
       delete nodeRectangles[i];
   }
 

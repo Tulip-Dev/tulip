@@ -27,7 +27,7 @@ std::ostream &operator<<(std::ostream &os, const Rectangle &r) {
   return os;
 }
 
-Rectangle::Rectangle(double x, double X, double y, double Y, const double &xb, const double &yb)
+Rectangle::Rectangle(double x, double X, double y, double Y, double xb, double yb)
     : minX(x), maxX(X), minY(y), maxY(Y), xBorder(xb), yBorder(yb) {
   assert(x <= X);
   assert(y <= Y);
