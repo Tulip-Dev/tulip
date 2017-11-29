@@ -131,20 +131,20 @@ bool FastOverlapRemoval::run() {
   NodeStaticProperty<tlp::Size> size(graph);
 
   vector<vpsc::Rectangle *> nodeRectangles(nbNodes);
-  
+
   for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
-  // size initialization
+// size initialization
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i)
       size[i] = viewSize->getNodeValue(nodes[i]) * passIndex / float(nbPasses);
 
-    // actually apply fast overlap removal
+// actually apply fast overlap removal
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
       node curNode = nodes[i];
       const Coord &pos = viewLayout->getNodeValue(curNode);
       const Size &sz = size[i];
@@ -196,7 +196,7 @@ bool FastOverlapRemoval::run() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (unsigned int i = 0; i < nbNodes; ++i)
+    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i)
       delete nodeRectangles[i];
   }
 
