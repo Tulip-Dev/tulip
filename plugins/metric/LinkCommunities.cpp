@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+
 #include <set>
 #include <tulip/DoubleProperty.h>
 #include <tulip/vectorgraph.h>
@@ -212,8 +210,7 @@ void LinkCommunities::computeSimilarities(const std::vector<edge> &edges) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < dual.numberOfEdges(); ++i) { // use int for MSVS2010 compilation
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(dual.numberOfEdges()); ++i) {
       edge e = dual(i);
       similarity[e] = getSimilarity(e, edges);
     }
@@ -221,7 +218,7 @@ void LinkCommunities::computeSimilarities(const std::vector<edge> &edges) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < dual.numberOfEdges(); ++i) { // use int for MSVS2010 compilation
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(dual.numberOfEdges()); ++i) {
       edge e = dual(i);
       similarity[e] = getWeightedSimilarity(e, edges);
     }
@@ -501,8 +498,7 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps,
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-  for (OMP_ITER_TYPE i = 0; i < numberOfSteps; i++) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(numberOfSteps); i++) {
     double step = min + i * deltaThreshold;
     double d = computeAverageDensity(step, edges);
 #ifdef _OPENMP

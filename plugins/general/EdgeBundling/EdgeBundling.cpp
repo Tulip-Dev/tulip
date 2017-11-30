@@ -549,7 +549,6 @@ bool EdgeBundling::run() {
 #pragma omp parallel for default(none) shared(nbThread, depth, toTreatByThreads, mWeights,         \
                                               edgeTreated) schedule(dynamic, 1)
 #endif
-
         for (int j = 0; j < nbThread; j++) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
@@ -590,7 +589,6 @@ bool EdgeBundling::run() {
 #pragma omp parallel for default(none) shared(nbThread, toTreatByThreads, mWeights, preference,    \
                                               edgeTreated) schedule(dynamic, 1)
 #endif
-
         for (int j = 0; j < nbThread; j++) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;

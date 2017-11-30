@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+
 #include <tulip/tuliphash.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
@@ -329,8 +327,7 @@ private:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nb_qnodes; i++) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nb_qnodes); i++) {
       n2c[i] = i;
       double wdg, nsl;
       get_weighted_degree_and_selfloops(i, wdg, nsl);

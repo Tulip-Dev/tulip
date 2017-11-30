@@ -116,8 +116,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nb; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nb); ++i) {
       layerLODUnit->simpleEntitiesLODVector[i].lod =
           calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox, eye,
                             transformMatrix, globalViewport, currentViewport);
@@ -129,8 +128,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nb; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nb); ++i) {
       layerLODUnit->nodesLODVector[i].lod =
           calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox, eye, transformMatrix,
                             globalViewport, currentViewport);
@@ -144,8 +142,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-      for (OMP_ITER_TYPE i = 0; i < nb; ++i) {
+      for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nb); ++i) {
         layerLODUnit->edgesLODVector[i].lod =
             calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox, eye, transformMatrix,
                               globalViewport, currentViewport);
@@ -154,8 +151,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-      for (OMP_ITER_TYPE i = 0; i < nb; ++i) {
+      for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nb); ++i) {
         layerLODUnit->edgesLODVector[i].lod = 10;
       }
     }

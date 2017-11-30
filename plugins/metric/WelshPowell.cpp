@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+
 #include <algorithm>
 #include <tulip/TulipPluginHeaders.h>
 
@@ -95,7 +93,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
       node n = nodes[i];
       nodeInfo &nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
@@ -109,7 +107,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
       nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;

@@ -20,10 +20,6 @@
 
 #include <tulip/GlQuadTreeLODCalculator.h>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 #include <tulip/Matrix.h>
 #include <tulip/QuadTree.h>
 #include <tulip/GlGraphInputData.h>

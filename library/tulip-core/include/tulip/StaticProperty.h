@@ -19,10 +19,6 @@
 #ifndef STATICPROPERTY_H
 #define STATICPROPERTY_H
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 #include <tulip/Graph.h>
 
 namespace tlp {
@@ -62,7 +58,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(graph->numberOfNodes()); ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfNodes()); ++i) {
       (*this)[nodes[i]] = val;
     }
   }
@@ -84,7 +80,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(graph->numberOfNodes()); ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfNodes()); ++i) {
       (*this)[nodes[i]] = prop->getNodeValue(nodes[i]);
     }
   }
@@ -141,7 +137,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(graph->numberOfEdges()); ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfEdges()); ++i) {
       (*this)[edges[i]] = val;
     }
   }
@@ -163,7 +159,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(graph->numberOfEdges()); ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfEdges()); ++i) {
       (*this)[edges[i]] = prop->getNodeValue(edges[i]);
     }
   }

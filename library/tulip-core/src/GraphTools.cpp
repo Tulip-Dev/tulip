@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+
 #include <tulip/tuliphash.h>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
@@ -146,8 +144,7 @@ std::vector<node> computeGraphCenters(Graph *graph) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-  for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
     unsigned int maxD = maxDistance(graph, nodes[i], tmp, UNDIRECTED);
     dist[i] = maxD;
@@ -431,8 +428,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-  for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
     classes[nodes[i]] = i;
   }
 
@@ -474,8 +470,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
       if (classes[nodes[i]] == tgtClass)
         classes[nodes[i]] = srcClass;
     }

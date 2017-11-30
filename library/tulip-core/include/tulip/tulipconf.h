@@ -21,6 +21,8 @@
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
 
+#include <cstddef>
+
 /**
  * @brief this file contains various helper macros and functions to have a true cross-platform
  * compilation.
@@ -140,12 +142,12 @@ inline double log1p(double x) {
 #if _OPENMP < 200805
 // only signed integer types are supported
 // for OpenMP < 3.0
-#define OMP_ITER_TYPE long long
+typedef long long OMP_ITER_TYPE;
 #else
-#define OMP_ITER_TYPE size_t
+typedef size_t OMP_ITER_TYPE;
 #endif
 #else
-#define OMP_ITER_TYPE size_t
+typedef size_t OMP_ITER_TYPE;
 #endif
 
 // WIN32 specific defines: dllimport and dllexport stuff

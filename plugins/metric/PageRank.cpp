@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+
 #include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 
@@ -98,8 +96,7 @@ struct PageRank : public DoubleAlgorithm {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
           double n_sum = 0;
           node n;
           forEach (n, graph->getInNodes(nodes[i]))
@@ -110,8 +107,7 @@ struct PageRank : public DoubleAlgorithm {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-        for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+        for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
           double n_sum = 0;
           node n;
           forEach (n, graph->getInOutNodes(nodes[i]))
