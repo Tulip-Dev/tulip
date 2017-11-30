@@ -1476,6 +1476,10 @@ can not be undone but performance of the script execution will be better
 QLabel {
 	color: white;
 	font:bold;
+}
+
+QToolButton {
+	color: white;
 }</string>
          </property>
          <property name="frameShape">
@@ -1564,6 +1568,9 @@ font-size: 10px;</string>
               <height>19</height>
              </size>
             </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1576,6 +1583,9 @@ font-size: 10px;</string>
               <width>14</width>
               <height>14</height>
              </size>
+            </property>
+            <property name="autoRaise">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -1626,6 +1636,10 @@ font-size: 10px;</string>
 QLabel {
 	color: white;
 	font: bold
+}
+
+QToolButton {
+	color: white;
 }
 </string>
       </property>
