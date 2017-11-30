@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 #include <tulip/Algorithm.h>
 #include <tulip/TulipPluginHeaders.h>
@@ -55,8 +52,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-        for (OMP_ITER_TYPE j = 0; j < static_cast<OMP_ITER_TYPE>(simplices[i].size()); ++j) {
+        for (OMP_ITER_TYPE j = 0; j < OMP_ITER_TYPE(simplices[i].size()); ++j) {
           sNodes[j] = nodes[simplices[i][j]];
         }
 

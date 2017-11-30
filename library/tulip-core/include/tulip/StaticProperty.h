@@ -19,9 +19,6 @@
 #ifndef STATICPROPERTY_H
 #define STATICPROPERTY_H
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 #include <tulip/Graph.h>
 
 namespace tlp {
@@ -52,9 +49,9 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(this->size()); ++i)
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfNodes()); ++i) {
       (*this)[i] = val;
+    }
   }
 
   // add a value for a newly created node
@@ -75,9 +72,9 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i)
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
       (*this)[i] = prop->getNodeValue(nodes[i]);
+    }
   }
 
   // copy values into a typed typed instance of PropertyInterface
@@ -129,9 +126,9 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(this->size()); ++i)
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfEdges()); ++i) {
       (*this)[i] = val;
+    }
   }
 
   // add a value for a newly created edge
@@ -152,9 +149,9 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nbEdges; ++i)
-      (*this)[i] = prop->getEdgeValue(edges[i]);
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfEdges()); ++i) {
+      (*this)[i] = prop->getNodeValue(edges[i]);
+    }
   }
 
   // copy values into a typed typed instance of PropertyInterface

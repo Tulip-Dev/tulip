@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 #include <tulip/ConnectedTest.h>
 #include <tulip/StaticProperty.h>
@@ -119,17 +116,15 @@ bool EccentricityMetric::run() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-  for (OMP_ITER_TYPE ni = 0; ni < static_cast<OMP_ITER_TYPE>(nbNodes); ++ni) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
     if (stopfor)
       continue;
 
 #ifdef _OPENMP
-
     if (omp_get_thread_num() == 0) {
 #endif
 
-      if (pluginProgress->progress(ni, graph->numberOfNodes() / nbThreads) != TLP_CONTINUE) {
+      if (pluginProgress->progress(i, graph->numberOfNodes() / nbThreads) != TLP_CONTINUE) {
 #ifdef _OPENMP
 #pragma omp critical(STOPFOR)
 #endif
@@ -140,15 +135,15 @@ bool EccentricityMetric::run() {
     }
 
 #endif
-    res[ni] = compute(ni, nodes);
+    res[i] = compute(i, nodes);
 
     if (!allPaths && norm)
 #ifdef _OPENMP
 #pragma omp critical(DIAMETER)
 #endif
     {
-      if (diameter < res[ni])
-        diameter = res[ni];
+      if (diameter < res[i])
+        diameter = res[i];
     }
   }
 

@@ -21,9 +21,6 @@
 #ifndef _TULIPIDMANAGER_H
 #define _TULIPIDMANAGER_H
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 #include <algorithm>
 #include <climits>
 #include <set>
@@ -335,8 +332,7 @@ public:
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nbElts; ++i)
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbElts); ++i)
       pos[(*this)[i]] = i;
   }
 

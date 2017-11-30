@@ -21,10 +21,6 @@
 #include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 class BubblePack : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Bubble Pack", "D.Auber", "01/10/2012", "Stable", "1.0", "Tree")
@@ -177,7 +173,6 @@ double BubblePack::computeRelativePosition(tlp::node n,
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
         for (int j = 0; j < discret; ++j) {
           float _angle = float(j) * 2. * M_PI / float(discret) + angle;
           double spiralRadius = sizeFather + radius + 1E-3;

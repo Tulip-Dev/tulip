@@ -226,8 +226,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 #if defined(_OPENMP) && !defined(_MSC_VER)
 #pragma omp parallel for
 #endif
-
-    for (OMP_ITER_TYPE i = 0; i < nbCurvePoints; ++i) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbCurvePoints); ++i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
     }
@@ -375,8 +374,7 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-  for (OMP_ITER_TYPE i = 0; i < nbCurvePoints; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbCurvePoints); ++i) {
     curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / float(nbCurvePoints - 1),
                                                 globalParameter, closedCurve, alpha);
   }
@@ -452,8 +450,7 @@ void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
-  for (OMP_ITER_TYPE i = 0; i < nbCurvePoints; ++i) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbCurvePoints); ++i) {
     curvePoints[i] =
         computeOpenUniformBsplinePoint(controlPoints, i / float(nbCurvePoints - 1), curveDegree);
   }

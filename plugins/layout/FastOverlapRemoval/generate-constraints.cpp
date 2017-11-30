@@ -15,10 +15,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 #include "generate-constraints.h"
 #include "constraint.h"
 #include <tulip/tulipconf.h>
@@ -197,7 +193,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (OMP_ITER_TYPE i = 0; i < n; i++) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
     vars[i].desiredPosition = rs[i].getCentreX();
     Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreX());
     events[2 * i] = new Event(Open, v, rs[i].getMinY());
@@ -290,7 +286,7 @@ int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[], 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (OMP_ITER_TYPE i = 0; i < n; i++) {
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
     vars[i].desiredPosition = rs[i].getCentreY();
     Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreY());
     events[2 * i] = new Event(Open, v, rs[i].getMinX());

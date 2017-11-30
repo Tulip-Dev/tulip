@@ -43,7 +43,7 @@ public:
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphTest);
 
 // nb nodes must be a multiple of 10
-#define NB_NODES 10
+const OMP_ITER_TYPE NB_NODES = 10;
 std::vector<node> nodes;
 std::vector<edge> edges;
 VectorGraph graph;

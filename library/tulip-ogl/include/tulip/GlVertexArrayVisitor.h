@@ -38,9 +38,7 @@ public:
   /**
    * Constructor
    */
-  GlVertexArrayVisitor(const GlGraphInputData *inputData) : inputData(inputData) {
-    threadSafe = true;
-  }
+  GlVertexArrayVisitor(const GlGraphInputData *inputData) : inputData(inputData) {}
 
   /**
    * Method used for GlSimpleEntity

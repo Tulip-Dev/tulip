@@ -245,7 +245,6 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
   for (int i = 0; i < steps; ++i) {
     float w = delta + i * delta;
     float x = -cos(w);

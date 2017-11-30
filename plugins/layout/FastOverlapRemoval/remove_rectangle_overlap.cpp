@@ -13,10 +13,6 @@
 #include <cassert>
 #include <vector>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
@@ -59,7 +55,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
       oldX[i] = vs[i].desiredPosition;
     }
 
@@ -74,7 +70,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
       rs[i].moveCentreX(vs[i].position());
     }
 
@@ -98,7 +94,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
       rs[i].moveCentreY(vs[i].position());
       rs[i].moveCentreX(oldX[i]);
     }
@@ -129,7 +125,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
       rs[i].moveCentreX(vs[i].position());
     }
 
@@ -199,7 +195,7 @@ void removeRectangleOverlapY(unsigned n, Rectangle rs[], double &yBorder) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
       rs[i].moveCentreY(vs[i].position());
     }
 
