@@ -174,23 +174,15 @@ double tlp::averageClusteringCoefficient(const Graph *graph, PluginProgress *plu
 //================================================================
 unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
-  unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node> &nodes = graph->nodes();
-
-  for (unsigned int i = 0; i < nbNodes; ++i)
-    maxdeg = std::max(maxdeg, graph->deg(nodes[i]));
-
+  for (const node &n : graph->nodes())
+    maxdeg = std::max(maxdeg, graph->deg(n));
   return maxdeg;
 }
 //================================================================
 unsigned int tlp::minDegree(const Graph *graph) {
-  unsigned int nbNodes = graph->numberOfNodes();
-  unsigned int mindeg = nbNodes;
-  const std::vector<node> &nodes = graph->nodes();
-
-  for (unsigned int i = 0; i < nbNodes; ++i)
-    mindeg = std::min(mindeg, graph->deg(nodes[i]));
-
+  unsigned int mindeg = graph->numberOfNodes();
+  for (const node &n : graph->nodes())
+    mindeg = std::min(mindeg, graph->deg(n));
   return mindeg;
 }
 //================================================================
@@ -450,10 +442,9 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
 
       if (nbNodes > 1 && nbEdges > 0) {
         double sum = 0;
-        const std::vector<edge> &edges = graph->edges();
 
-        for (unsigned int i = 0; i < nbEdges; ++i)
-          sum += fabs(weights->getEdgeDoubleValue(edges[i]));
+        for (const edge &e : graph->edges())
+          sum += fabs(weights->getEdgeDoubleValue(e));
 
         normalization = (sum / nbEdges) * (nbNodes - 1);
 

@@ -162,15 +162,13 @@ public:
       // because the space needed to store the edges will be
       // allocated in one call
       _writer.writeString(EdgesNumberToken);
-      const std::vector<edge> &edges = g->edges();
-      unsigned int nbEdges = edges.size();
-      _writer.writeInteger(nbEdges);
+      _writer.writeInteger(g->numberOfEdges());
       // saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
 
-      for (unsigned int i = 0; i < nbEdges; ++i) {
-        std::pair<node, node> ends = g->ends(edges[i]);
+      for (const edge &e : g->edges()) {
+        std::pair<node, node> ends = g->ends(e);
         _writer.writeArrayOpen();
         _writer.writeInteger(graph->nodePos(ends.first));
         _writer.writeInteger(graph->nodePos(ends.second));

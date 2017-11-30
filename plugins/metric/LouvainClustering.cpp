@@ -368,8 +368,7 @@ bool LouvainClustering::run() {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
-  const std::vector<node> &nodes = graph->nodes();
-  nb_nodes = nodes.size();
+  nb_nodes = graph->numberOfNodes();
 
   quotient = new VectorGraph();
   quotient->addNodes(nb_nodes);

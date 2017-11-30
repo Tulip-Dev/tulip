@@ -153,11 +153,7 @@ bool LinkCommunities::run() {
   dual.free(similarity);
   dual.clear();
 
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n = nodes[i];
+  for (const node &n : graph->nodes()) {
     std::set<double> around;
     edge e;
     forEach (e, graph->getInOutEdges(n)) {

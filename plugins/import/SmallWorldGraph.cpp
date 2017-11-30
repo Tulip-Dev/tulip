@@ -98,8 +98,8 @@ public:
 
     const vector<node> &nodes = graph->nodes();
 
-    for (unsigned int i = 0; i < nbNodes; ++i) {
-      newLayout->setNodeValue(nodes[i],
+    for (const node &n : nodes) {
+      newLayout->setNodeValue(n,
                               Coord(float(randomInteger(WIDTH)), float(randomInteger(HEIGHT)), 0));
     }
 

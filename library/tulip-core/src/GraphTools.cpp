@@ -58,7 +58,6 @@ void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge
   // must have a difference of one of dag level metric.
   const vector<edge> &edges = graph->edges();
   unsigned int nbEdges = edges.size();
-
   for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
     pair<node, node> eEnds = graph->ends(e);
@@ -97,14 +96,11 @@ void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge
 //======================================================================
 node makeSimpleSource(Graph *graph) {
   assert(AcyclicTest::isAcyclic(graph));
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
+
   node startNode = graph->addNode();
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n = nodes[i];
-
-    if (graph->indeg(n) == 0) {
+  for (const node &n : graph->nodes()) {
+    if (n != startNode && graph->indeg(n) == 0) {
       graph->addEdge(startNode, n);
     }
   }
@@ -175,7 +171,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
   tlp::NodeStaticProperty<unsigned int> dist(graph);
   unsigned int i = 0;
   node n = graph->getOneNode();
-  node result;
+  node result = graph->getOneNode();
   unsigned int cDist = UINT_MAX - 2;
   unsigned int nbTry = 2 + sqrt(graph->numberOfNodes());
   unsigned int maxTries = nbTry;
@@ -664,11 +660,8 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
                                      unsigned int k, std::map<double, int> &edgeMapping) {
   // build the histogram of edges values
   map<double, int> histogram;
-  const std::vector<edge> edges = graph->edges();
-  unsigned int nbEdges = edges.size();
-
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    double value = prop->getEdgeDoubleValue(edges[i]);
+  for (const edge &e : graph->edges()) {
+    double value = prop->getEdgeDoubleValue(e);
     map<double, int>::iterator it = histogram.find(value);
 
     if (it == histogram.end())
@@ -679,7 +672,7 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
 
   // Build the color map
   double sum = 0;
-  double cK = double(nbEdges) / double(k);
+  double cK = double(graph->numberOfEdges()) / double(k);
   int k2 = 0;
   map<double, int>::iterator it = histogram.begin(), ite = histogram.end();
 

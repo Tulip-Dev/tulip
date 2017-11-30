@@ -326,22 +326,12 @@ public:
         delete itE;
       } else {
         //==============================================================*
-        const std::vector<node> &nodes = Tprop::graph->nodes();
-        unsigned int nbElts = nodes.size();
-
-        for (unsigned int i = 0; i < nbElts; ++i) {
-          node n = nodes[i];
-
+        for (const node &n : Tprop::graph->nodes()) {
           if (prop.Tprop::graph->isElement(n))
             setNodeValue(n, prop.getNodeValue(n));
         }
 
-        const std::vector<edge> &edges = Tprop::graph->edges();
-        nbElts = edges.size();
-
-        for (unsigned int i = 0; i < nbElts; ++i) {
-          edge e = edges[i];
-
+        for (const edge &e : Tprop::graph->edges()) {
           if (prop.Tprop::graph->isElement(e))
             setEdgeValue(e, prop.getEdgeValue(e));
         }

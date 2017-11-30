@@ -242,10 +242,8 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
   vector<node> nodes = graph->nodes();
   sortNodes srt(layout);
   std::sort(nodes.begin(), nodes.end(), srt);
-  unsigned nb_nodes = nodes.size();
 
-  for (unsigned nb = 0; nb < nb_nodes; ++nb) {
-    node n(nodes[nb]);
+  for (const node &n : nodes) {
 
     if (graph->isMetaNode(n))
       metanodeVertices.push_back(n);

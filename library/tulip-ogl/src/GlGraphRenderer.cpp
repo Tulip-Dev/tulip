@@ -52,11 +52,9 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
 void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities) {
   if (inputData->parameters->isDisplayNodes() || inputData->parameters->isViewNodeLabel() ||
       inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    const std::vector<node> &nodes = graph->nodes();
-    unsigned int nbNodes = nodes.size();
-    visitor->reserveMemoryForNodes(nbNodes);
-    for (unsigned int i = 0; i < nbNodes; ++i) {
-      GlNode glNode(nodes[i].id);
+    visitor->reserveMemoryForNodes(graph->numberOfNodes());
+    for (const node &n : graph->nodes()) {
+      GlNode glNode(n.id);
       glNode.acceptVisitor(visitor);
     }
   }
@@ -65,11 +63,9 @@ void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor, bool vis
 void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities) {
   if (inputData->parameters->isDisplayEdges() || inputData->parameters->isViewEdgeLabel() ||
       inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    const std::vector<edge> &edges = graph->edges();
-    unsigned int nbEdges = edges.size();
-    visitor->reserveMemoryForEdges(nbEdges);
-    for (unsigned int i = 0; i < nbEdges; ++i) {
-      GlEdge glEdge(edges[i].id);
+    visitor->reserveMemoryForEdges(graph->numberOfEdges());
+    for (const edge &e : graph->edges()) {
+      GlEdge glEdge(e.id);
       glEdge.acceptVisitor(visitor);
     }
   }

@@ -32,10 +32,8 @@ SpanningDagSelection::SpanningDagSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {}
 //=================================================================
 bool SpanningDagSelection::run() {
-  const vector<node> &nodes = graph->nodes();
-
-  for (unsigned i = 0; i < nodes.size(); ++i)
-    result->setNodeValue(nodes[i], true);
+  for (const node &n : graph->nodes())
+    result->setNodeValue(n, true);
 
   EdgeStaticProperty<bool> edgeprop(graph);
   edgeprop.setAll(true);

@@ -175,31 +175,30 @@ void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttri
 }
 
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
-  const std::vector<tlp::node> &nodes = graph->nodes();
-  const std::vector<tlp::edge> &edges = graph->edges();
+
+  const vector<tlp::node> &nodes = graph->nodes();
+  const vector<tlp::edge> &edges = graph->edges();
+
   tlp::BoundingBox graphBB =
       tlp::computeBoundingBox(nodes, edges, result, graph->getProperty<SizeProperty>("viewSize"),
                               graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
-  unsigned int nbElts = nodes.size();
 
-  for (unsigned int i = 0; i < nbElts; ++i) {
-    tlp::Coord nodeCoord = result->getNodeValue(nodes[i]);
+  for (const tlp::node &n : nodes) {
+    tlp::Coord nodeCoord = result->getNodeValue(n);
     nodeCoord[1] = midY - (nodeCoord[1] - midY);
-    result->setNodeValue(nodes[i], nodeCoord);
+    result->setNodeValue(n, nodeCoord);
   }
 
-  nbElts = edges.size();
-
-  for (unsigned int i = 0; i < nbElts; ++i) {
-    std::vector<tlp::Coord> bends = result->getEdgeValue(edges[i]);
+  for (const tlp::edge &e : edges) {
+    std::vector<tlp::Coord> bends = result->getEdgeValue(e);
 
     if (bends.size()) {
       for (size_t i = 0; i < bends.size(); ++i) {
         bends[i][1] = midY - (bends[i][1] - midY);
       }
 
-      result->setEdgeValue(edges[i], bends);
+      result->setEdgeValue(e, bends);
     }
   }
 }
