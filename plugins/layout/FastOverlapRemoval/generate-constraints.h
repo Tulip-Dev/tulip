@@ -12,13 +12,15 @@
 #ifndef SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
 #define SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H
 #include <iostream>
+#include <vector>
 
 namespace vpsc {
 class Rectangle {
   friend std::ostream &operator<<(std::ostream &os, const Rectangle &r);
 
 public:
-  Rectangle(double x, double X, double y, double Y, double xBorder, double yBorder);
+  Rectangle(double x = 0, double X = 0, double y = 0, double Y = 0, double xBorder = 0,
+            double yBorder = 0);
   double getMaxX() const {
     return maxX + xBorder;
   }
@@ -118,9 +120,9 @@ public:
   }
 
   // returns number of constraints generated
-  int generateXConstraints(Rectangle **rs, Variable **vars, Constraint **&cs,
+  int generateXConstraints(Rectangle rs[], Variable vars[], Constraint **&cs,
                            const bool useNeighbourLists);
-  int generateYConstraints(Rectangle **rs, Variable **vars, Constraint **&cs);
+  int generateYConstraints(Rectangle rs[], Variable vars[], Constraint **&cs);
 };
 }
 

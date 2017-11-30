@@ -130,7 +130,7 @@ bool FastOverlapRemoval::run() {
   const std::vector<node> &nodes = graph->nodes();
   NodeStaticProperty<tlp::Size> size(graph);
 
-  vector<vpsc::Rectangle *> nodeRectangles(nbNodes);
+  vector<vpsc::Rectangle> nodeRectangles(nbNodes);
 
   for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
 // size initialization
@@ -159,7 +159,7 @@ bool FastOverlapRemoval::run() {
       double minX = pos.getX() - rotSize.getW() / 2.0;
       double minY = pos.getY() - rotSize.getH() / 2.0;
 
-      nodeRectangles[i] = new vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
+      nodeRectangles[i] = vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
     }
 
     if (stringCollection.getCurrentString() == "X-Y") {
@@ -189,15 +189,9 @@ bool FastOverlapRemoval::run() {
     }
 
     for (unsigned int i = 0; i < nbNodes; ++i) {
-      Coord newPos(nodeRectangles[i]->getCentreX(), nodeRectangles[i]->getCentreY(), 0.0);
+      Coord newPos(nodeRectangles[i].getCentreX(), nodeRectangles[i].getCentreY(), 0.0);
       LayoutAlgorithm::result->setNodeValue(nodes[i], newPos);
     }
-
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < static_cast<OMP_ITER_TYPE>(nbNodes); ++i)
-      delete nodeRectangles[i];
   }
 
   return true;

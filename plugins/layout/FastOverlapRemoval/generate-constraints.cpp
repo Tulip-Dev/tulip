@@ -13,8 +13,15 @@
 #include <set>
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "generate-constraints.h"
 #include "constraint.h"
+#include <tulip/tulipconf.h>
 
 #include "isnan.h" /* Include last */
 
@@ -185,15 +192,16 @@ int compare_events(const void *a, const void *b) {
  * useNeighbourLists determines whether or not a heuristic is used to deciding whether to resolve
  * all overlap in the x pass, or leave some overlaps for the y pass.
  */
-int ConstraintsGenerator::generateXConstraints(Rectangle **rs, Variable **vars, Constraint **&cs,
+int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], Constraint **&cs,
                                                const bool useNeighbourLists) {
-  unsigned int i, m, ctr = 0;
-
-  for (i = 0; i < n; i++) {
-    vars[i]->desiredPosition = rs[i]->getCentreX();
-    Node *v = new Node(vars[i], rs[i], rs[i]->getCentreX());
-    events[ctr++] = new Event(Open, v, rs[i]->getMinY());
-    events[ctr++] = new Event(Close, v, rs[i]->getMaxY());
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+  for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    vars[i].desiredPosition = rs[i].getCentreX();
+    Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreX());
+    events[2 * i] = new Event(Open, v, rs[i].getMinY());
+    events[2 * i + 1] = new Event(Close, v, rs[i].getMaxY());
   }
 
   qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n), sizeof(Event *),
@@ -202,7 +210,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle **rs, Variable **vars, 
   NodeSet scanline;
   vector<Constraint *> constraints;
 
-  for (i = 0; i < 2 * n; i++) {
+  for (unsigned int i = 0; i < 2 * n; i++) {
     Event *e = events[i];
     Node *v = e->v;
 
@@ -268,25 +276,25 @@ int ConstraintsGenerator::generateXConstraints(Rectangle **rs, Variable **vars, 
     delete e;
   }
 
-  cs = new Constraint *[m = constraints.size()];
+  cs = new Constraint *[constraints.size()];
+  memcpy(cs, constraints.data(), constraints.size() * sizeof(Constraint *));
 
-  for (i = 0; i < m; i++)
-    cs[i] = constraints[i];
-
-  return m;
+  return constraints.size();
 }
 
 /**
  * Prepares constraints in order to apply VPSC vertically to remove ALL overlap.
  */
-int ConstraintsGenerator::generateYConstraints(Rectangle **rs, Variable **vars, Constraint **&cs) {
-  unsigned int ctr = 0, i, m;
+int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[], Constraint **&cs) {
 
-  for (i = 0; i < n; i++) {
-    vars[i]->desiredPosition = rs[i]->getCentreY();
-    Node *v = new Node(vars[i], rs[i], rs[i]->getCentreY());
-    events[ctr++] = new Event(Open, v, rs[i]->getMinX());
-    events[ctr++] = new Event(Close, v, rs[i]->getMaxX());
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+  for (OMP_ITER_TYPE i = 0; i < n; i++) {
+    vars[i].desiredPosition = rs[i].getCentreY();
+    Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreY());
+    events[2 * i] = new Event(Open, v, rs[i].getMinX());
+    events[2 * i + 1] = new Event(Close, v, rs[i].getMaxX());
   }
 
   qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n), sizeof(Event *),
@@ -294,7 +302,7 @@ int ConstraintsGenerator::generateYConstraints(Rectangle **rs, Variable **vars, 
   NodeSet scanline;
   vector<Constraint *> constraints;
 
-  for (i = 0; i < 2 * n; i++) {
+  for (unsigned int i = 0; i < 2 * n; i++) {
     Event *e = events[i];
     Node *v = e->v;
 
@@ -338,11 +346,9 @@ int ConstraintsGenerator::generateYConstraints(Rectangle **rs, Variable **vars, 
     delete e;
   }
 
-  cs = new Constraint *[m = constraints.size()];
+  cs = new Constraint *[constraints.size()];
+  memcpy(cs, constraints.data(), constraints.size() * sizeof(Constraint *));
 
-  for (i = 0; i < m; i++)
-    cs[i] = constraints[i];
-
-  return m;
+  return constraints.size();
 }
 }
