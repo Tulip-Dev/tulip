@@ -28,7 +28,7 @@ namespace vpsc {
 
 static const double ZERO_UPPERBOUND = -0.0000001;
 
-IncSolver::IncSolver(const unsigned n, Variable *const vs[], const unsigned m, Constraint *cs[])
+IncSolver::IncSolver(const unsigned n, Variable *const vs, const unsigned m, Constraint *cs[])
     : Solver(n, vs, m, cs), splitCnt(0) {
   inactive.assign(cs, cs + m);
 
@@ -36,7 +36,8 @@ IncSolver::IncSolver(const unsigned n, Variable *const vs[], const unsigned m, C
     (*i)->active = false;
   }
 }
-Solver::Solver(const unsigned n, Variable *const vs[], const unsigned m, Constraint *cs[])
+
+Solver::Solver(const unsigned n, Variable *const vs, const unsigned m, Constraint *cs[])
     : m(m), cs(cs), n(n), vs(vs) {
   bs = new Blocks(n, vs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
@@ -347,25 +348,25 @@ struct node {
   set<node *> out;
 };
 // useful in debugging - cycles would be BAD
-bool Solver::constraintGraphIsCyclic(const unsigned n, Variable *const vs[]) {
-  map<Variable *, node *> varmap;
+bool Solver::constraintGraphIsCyclic(const unsigned n, Variable *const vs) {
+  map<const Variable *, node *> varmap;
   vector<node *> localGraph;
 
   for (unsigned i = 0; i < n; i++) {
     node *u = new node;
     localGraph.push_back(u);
-    varmap[vs[i]] = u;
+    varmap[&vs[i]] = u;
   }
 
   for (unsigned i = 0; i < n; i++) {
-    for (vector<Constraint *>::iterator c = vs[i]->in.begin(); c != vs[i]->in.end(); ++c) {
+    for (vector<Constraint *>::const_iterator c = vs[i].in.begin(); c != vs[i].in.end(); ++c) {
       Variable *l = (*c)->left;
-      varmap[vs[i]]->in.insert(varmap[l]);
+      varmap[&vs[i]]->in.insert(varmap[l]);
     }
 
-    for (vector<Constraint *>::iterator c = vs[i]->out.begin(); c != vs[i]->out.end(); ++c) {
+    for (vector<Constraint *>::const_iterator c = vs[i].out.begin(); c != vs[i].out.end(); ++c) {
       Variable *r = (*c)->right;
-      varmap[vs[i]]->out.insert(varmap[r]);
+      varmap[&vs[i]]->out.insert(varmap[r]);
     }
   }
 

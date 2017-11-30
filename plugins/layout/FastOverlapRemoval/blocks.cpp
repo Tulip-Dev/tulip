@@ -32,11 +32,11 @@ namespace vpsc {
 
 long blockTimeCtr;
 
-Blocks::Blocks(const int n, Variable *const vs[]) : vs(vs), nvs(n) {
+Blocks::Blocks(const int n, Variable *const vs) : vs(vs), nvs(n) {
   blockTimeCtr = 0;
 
   for (int i = 0; i < nvs; i++) {
-    insert(new Block(vs[i]));
+    insert(new Block(&vs[i]));
   }
 }
 Blocks::~Blocks(void) {
@@ -57,12 +57,12 @@ list<Variable *> *Blocks::totalOrder() {
   list<Variable *> *order = new list<Variable *>;
 
   for (int i = 0; i < nvs; i++) {
-    vs[i]->visited = false;
+    vs[i].visited = false;
   }
 
   for (int i = 0; i < nvs; i++) {
-    if (vs[i]->in.empty()) {
-      dfsVisit(vs[i], order);
+    if (vs[i].in.empty()) {
+      dfsVisit(&vs[i], order);
     }
   }
 

@@ -34,7 +34,7 @@ class Constraint;
  */
 class Blocks : public std::set<Block *> {
 public:
-  Blocks(const int n, Variable *const vs[]);
+  Blocks(const int n, Variable *const vs);
   ~Blocks(void);
   void mergeLeft(Block *r);
   void mergeRight(Block *l);
@@ -46,7 +46,7 @@ public:
 private:
   void dfsVisit(Variable *v, std::list<Variable *> *order);
   void removeBlock(Block *doomed);
-  Variable *const *vs;
+  Variable *const vs;
   int nvs;
 };
 

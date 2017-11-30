@@ -11,10 +11,17 @@
 
 #include <iostream>
 #include <cassert>
+#include <vector>
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
 #include "constraint.h"
+#include <tulip/tulipconf.h>
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
 #include "blocks.h"
@@ -38,26 +45,25 @@ using namespace vpsc;
  *    x-positions - this corrects the case where rectangles were moved
  *    too much in the first pass.
  */
-void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double &yBorder) {
+void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
     xBorder += EXTRA_GAP;
     yBorder += EXTRA_GAP;
-    Variable **vs = new Variable *[n];
-
-    for (unsigned i = 0; i < n; i++) {
-      vs[i] = new Variable(0, 1);
-    }
+    std::vector<Variable> vs(n);
 
     Constraint **cs;
     double *oldX = new double[n];
-    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs, cs, true);
+    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, true);
 
-    for (unsigned i = 0; i < n; i++) {
-      oldX[i] = vs[i]->desiredPosition;
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+      oldX[i] = vs[i].desiredPosition;
     }
 
-    Solver vpsc_x(n, vs, m, cs);
+    Solver vpsc_x(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     ofstream f(LOGFILE, ios::app);
     f << "Calling VPSC: Horizontal pass 1" << endl;
@@ -65,8 +71,11 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double
 #endif
     vpsc_x.solve();
 
-    for (unsigned i = 0; i < n; i++) {
-      rs[i]->moveCentreX(vs[i]->position());
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+      rs[i].moveCentreX(vs[i].position());
     }
 
     for (unsigned i = 0; i < m; ++i) {
@@ -77,8 +86,8 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double
     // Removing the extra gap here ensures things that were moved to be adjacent to
     // one another above are not considered overlapping
     xBorder -= EXTRA_GAP;
-    m = ConstraintsGenerator(n).generateYConstraints(rs, vs, cs);
-    Solver vpsc_y(n, vs, m, cs);
+    m = ConstraintsGenerator(n).generateYConstraints(rs, vs.data(), cs);
+    Solver vpsc_y(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE, ios::app);
     f << "Calling VPSC: Vertical pass" << endl;
@@ -86,9 +95,12 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double
 #endif
     vpsc_y.solve();
 
-    for (unsigned i = 0; i < n; i++) {
-      rs[i]->moveCentreY(vs[i]->position());
-      rs[i]->moveCentreX(oldX[i]);
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+      rs[i].moveCentreY(vs[i].position());
+      rs[i].moveCentreX(oldX[i]);
     }
 
     delete[] oldX;
@@ -99,8 +111,8 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double
 
     delete[] cs;
     yBorder -= EXTRA_GAP;
-    m = ConstraintsGenerator(n).generateXConstraints(rs, vs, cs, false);
-    Solver vpsc_x2(n, vs, m, cs);
+    m = ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, false);
+    Solver vpsc_x2(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE, ios::app);
     f << "Calling VPSC: Horizontal pass 2" << endl;
@@ -114,34 +126,31 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double
 
     delete[] cs;
 
-    for (unsigned i = 0; i < n; i++) {
-      rs[i]->moveCentreX(vs[i]->position());
-      delete vs[i];
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+      rs[i].moveCentreX(vs[i].position());
     }
 
-    delete[] vs;
   } catch (char const *str) {
     std::cerr << str << std::endl;
 
     for (unsigned i = 0; i < n; i++) {
-      std::cerr << *rs[i] << std::endl;
+      std::cerr << rs[i] << std::endl;
     }
   }
 }
 
-void removeRectangleOverlapX(unsigned n, Rectangle *rs[], double &xBorder, double &yBorder) {
+void removeRectangleOverlapX(unsigned n, Rectangle rs[], double &xBorder, double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
     yBorder = (xBorder += EXTRA_GAP);
-    Variable **vs = new Variable *[n];
-
-    for (unsigned i = 0; i < n; i++) {
-      vs[i] = new Variable(0, 1);
-    }
+    std::vector<Variable> vs(n);
 
     Constraint **cs;
-    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs, cs, false);
-    Solver vpsc_x(n, vs, m, cs);
+    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, false);
+    Solver vpsc_x(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     ofstream f(LOGFILE, ios::app);
     f << "Calling VPSC: Horizontal pass 1" << endl;
@@ -149,8 +158,11 @@ void removeRectangleOverlapX(unsigned n, Rectangle *rs[], double &xBorder, doubl
 #endif
     vpsc_x.solve();
 
-    for (unsigned i = 0; i < n; i++) {
-      rs[i]->moveCentreX(vs[i]->position());
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+      rs[i].moveCentreX(vs[i].position());
     }
 
     for (unsigned i = 0; i < m; ++i) {
@@ -163,24 +175,20 @@ void removeRectangleOverlapX(unsigned n, Rectangle *rs[], double &xBorder, doubl
     std::cerr << str << std::endl;
 
     for (unsigned i = 0; i < n; i++) {
-      std::cerr << *rs[i] << std::endl;
+      std::cerr << rs[i] << std::endl;
     }
   }
 }
 
-void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double &yBorder) {
+void removeRectangleOverlapY(unsigned n, Rectangle rs[], double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
     yBorder += EXTRA_GAP;
-    Variable **vs = new Variable *[n];
-
-    for (unsigned i = 0; i < n; i++) {
-      vs[i] = new Variable(0, 1);
-    }
+    std::vector<Variable> vs(n);
 
     Constraint **cs;
-    unsigned int m = ConstraintsGenerator(n).generateYConstraints(rs, vs, cs);
-    Solver vpsc_y(n, vs, m, cs);
+    unsigned int m = ConstraintsGenerator(n).generateYConstraints(rs, vs.data(), cs);
+    Solver vpsc_y(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE, ios::app);
     f << "Calling VPSC: Vertical pass" << endl;
@@ -188,8 +196,11 @@ void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double &yBorder) {
 #endif
     vpsc_y.solve();
 
-    for (unsigned i = 0; i < n; i++) {
-      rs[i]->moveCentreY(vs[i]->position());
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (OMP_ITER_TYPE i = 0; i < n; i++) {
+      rs[i].moveCentreY(vs[i].position());
     }
 
     for (unsigned i = 0; i < m; ++i) {
@@ -201,7 +212,7 @@ void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double &yBorder) {
     std::cerr << str << std::endl;
 
     for (unsigned i = 0; i < n; i++) {
-      std::cerr << *rs[i] << std::endl;
+      std::cerr << rs[i] << std::endl;
     }
   }
 }
