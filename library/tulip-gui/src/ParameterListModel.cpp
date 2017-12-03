@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/ParameterListModel.h>
-#include <tulip/ForEach.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
 
@@ -30,10 +29,9 @@ namespace tlp {
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params,
                                        tlp::Graph *graph, QObject *parent)
     : TulipModel(parent), _graph(graph) {
-  ParameterDescription param;
   std::vector<ParameterDescription> outParams;
   // first add in parameters
-  forEach (param, params.getParameters()) {
+  for (const ParameterDescription &param : params.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
       _params.push_back(param);
     else

@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/ConvexHull.h>
-#include <tulip/ForEach.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -120,7 +119,6 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
                                                             bool deducedFromChilds, Graph *root,
                                                             unsigned int depth) {
   // vector<GlConvexHull *> convexHulls;
-  Graph *sg;
   // vector<GlConvexHull *> sgConvexHulls;
   ConvexHullItem *convexHullItem = new ConvexHullItem;
   convexHullItem->_graph = graph;
@@ -151,7 +149,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   }
 
   // build convex hulls from subgraphs
-  forEach (sg, graph->getSubGraphs()) {
+  for (Graph *sg : graph->getSubGraphs()) {
     ////
     // if(sg->numberOfNodes() <= 1) continue;
 

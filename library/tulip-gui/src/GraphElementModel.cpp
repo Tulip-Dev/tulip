@@ -21,8 +21,8 @@
 #include <tulip/TulipMetaTypes.h>
 #include <QFont>
 
-#include <tulip/ForEach.h>
 #include <tulip/Graph.h>
+#include <tulip/FilterIterator.h>
 
 using namespace tlp;
 using namespace std;
@@ -93,8 +93,7 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
 
 QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
   QVector<PropertyInterface *> properties;
-  PropertyInterface *prop = nullptr;
-  forEach (prop, _graph->getObjectProperties()) {
+  for (PropertyInterface *prop : _graph->getObjectProperties()) {
 #ifdef NDEBUG
     if (prop->getName() == "viewMetaGraph")
       continue;

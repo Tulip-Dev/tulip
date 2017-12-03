@@ -46,8 +46,7 @@ void Dendrogram::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int
   if (nodeHeight > levelHeights[depth])
     levelHeights[depth] = nodeHeight;
 
-  node on;
-  forEach (on, tree->getOutNodes(n))
+  for (const node &on : tree->getOutNodes(n))
     computeLevelHeights(tree, on, depth + 1, oriSize);
 }
 //====================================================================

@@ -23,7 +23,6 @@
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>
-#include <tulip/ForEach.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
 
@@ -40,8 +39,7 @@ void GraphModel::setGraph(Graph *g) {
   if (_graph != nullptr) {
     _graph->removeListener(this);
     _graph->removeObserver(this);
-    PropertyInterface *pi;
-    forEach (pi, _graph->getObjectProperties())
+    for (PropertyInterface *pi : _graph->getObjectProperties())
       pi->removeListener(this);
   }
 
@@ -52,8 +50,7 @@ void GraphModel::setGraph(Graph *g) {
   if (_graph != nullptr) {
     _graph->addListener(this);
     _graph->addObserver(this);
-    PropertyInterface *pi;
-    forEach (pi, _graph->getObjectProperties()) {
+    for (PropertyInterface *pi : _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
       if (pi->getName() == "viewMetaGraph")

@@ -99,8 +99,7 @@ bool ConnectedComponentPacking::run() {
     unsigned int nbNodes = nodes.size();
 
     for (unsigned int j = 0; j < nbNodes; ++j) {
-      edge e;
-      forEach (e, graph->getInOutEdges(nodes[j])) {
+      for (const edge &e : graph->getInOutEdges(nodes[j])) {
         if (!visited.get(e.id)) {
           visited.set(e.id, false);
           edges.push_back(e);

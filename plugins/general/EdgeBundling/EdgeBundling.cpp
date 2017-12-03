@@ -118,7 +118,7 @@ DoubleProperty *SortNodes::dist = nullptr;
 //============================================
 /*DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
-  forEach(const edge &e : graph->edges()) {
+  for(const edge &e : graph->edges()) {
     const pair<node, node>& ends = graph->ends(e);
     const Coord& a = layout->getNodeValue(ends.first);
     const Coord& b = layout->getNodeValue(ends.second);
@@ -201,8 +201,7 @@ void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
 #pragma omp critical(FOCUS)
 #endif
     {
-      node ni;
-      forEach (ni, vertexCoverGraph->getInOutNodes(n))
+      for (const node &ni : vertexCoverGraph->getInOutNodes(n))
         focus.insert(ni);
     }
   }
@@ -219,8 +218,7 @@ void EdgeBundling::computeDistances() {
 void EdgeBundling::computeDistance(node n) {
   double maxDist = 0;
   Coord nPos = layout->getNodeValue(n);
-  node n2;
-  forEach (n2, vertexCoverGraph->getInOutNodes(n)) {
+  for (const node &n2 : vertexCoverGraph->getInOutNodes(n)) {
     const Coord &n2Pos = layout->getNodeValue(n2);
     double dist = (nPos - n2Pos).norm();
     maxDist += dist;
@@ -289,8 +287,7 @@ bool EdgeBundling::run() {
     // Grid graph computation first step : generate quad-tree/octree
     if (layout3D) {
       OctreeBundle::compute(graph, splitRatio, layout, size);
-      edge e;
-      stableForEach(e, graph->getEdges()) {
+      for (const edge &e : stableIterator(graph->getEdges())) {
         if (oriGraph->isElement(e))
           continue;
 
@@ -370,8 +367,7 @@ bool EdgeBundling::run() {
   // If sphere mode, remove the grid nodes inside the sphere
   // as we only want to route on the sphere surface
   if (sphereLayout) {
-    node n;
-    stableForEach(n, graph->getNodes()) {
+    for (const node &n : stableIterator(graph->getNodes())) {
       if (oriGraph->isElement(n))
         continue;
 
@@ -390,8 +386,7 @@ bool EdgeBundling::run() {
   //==========================================================
   gridGraph = graph->getSubGraph("Voronoi");
   gridGraph->setName("Grid Graph");
-  edge e;
-  stableForEach(e, gridGraph->getEdges()) {
+  for (const edge &e : stableIterator(gridGraph->getEdges())) {
     if (ntype.getEdgeValue(e) == 1) {
       gridGraph->delEdge(e);
     }
@@ -415,9 +410,8 @@ bool EdgeBundling::run() {
 
     // connect the other nodes to the enclosing voronoi cell vertices
     // Warning: because no edge is added to the current node
-    // we can use forEach instead of stableForEach
-    tlp::node n;
-    forEach (n, gridGraph->getOutNodes(rep)) {
+    // we can use a basic iteration instead of a stable one
+    for (const node &n : gridGraph->getOutNodes(rep)) {
       for (size_t j = 0; j < samePositionNodes[i].size(); ++j) {
         if (samePositionNodes[i][j] == rep)
           continue;
@@ -518,8 +512,7 @@ bool EdgeBundling::run() {
             toTreatByThreads.push_back(n);
 
             if ((optimizationLevel == 3) && (toTreatByThreads.size() < MAX_THREADS)) {
-              node tmp;
-              forEach (tmp, vertexCoverGraph->getInOutNodes(n))
+              for (const node &tmp : vertexCoverGraph->getInOutNodes(n))
                 blockNodes.insert(tmp);
             }
           }
@@ -559,8 +552,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-          edge e;
-          forEach (e, vertexCoverGraph->getInOutEdges(n)) {
+          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
             node n2 = graph->opposite(e, n);
 
             if (optimizationLevel < 3 || forceEdgeTest) {
@@ -599,8 +591,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-          edge e;
-          forEach (e, vertexCoverGraph->getInOutEdges(n)) {
+          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
 #ifdef _OPENMP
@@ -645,8 +636,7 @@ bool EdgeBundling::run() {
       for (size_t j = 0; j < toTreatByThreads.size(); ++j) {
         node n = toTreatByThreads[j];
         vector<node> neigbors;
-        node n2;
-        forEach (n2, vertexCoverGraph->getInOutNodes(n)) {
+        for (const node &n2 : vertexCoverGraph->getInOutNodes(n)) {
           neigbors.push_back(n2);
           orderedNodes.erase(n2);
         }
@@ -709,8 +699,7 @@ bool EdgeBundling::run() {
   }
 
   if (!keepGrid) {
-    node n;
-    stableForEach(n, graph->getNodes()) {
+    for (const node &n : stableIterator(graph->getNodes())) {
       if (!oriGraph->isElement(n))
         graph->delNode(n, true);
     }

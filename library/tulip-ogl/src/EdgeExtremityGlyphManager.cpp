@@ -19,7 +19,6 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/tuliphash.h>
-#include <tulip/ForEach.h>
 #include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 

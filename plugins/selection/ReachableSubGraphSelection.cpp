@@ -112,7 +112,7 @@ bool ReachableSubGraphSelection::run() {
     // as the input selection property and the result property can be the same one,
     // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
     // of the result property are reseted to false below
-    // delete done by the forEach macro
+    // delete done by the for loop
     Iterator<node> *itN = (result == startNodes)
                               ? new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true))
                               : startNodes->getNodesEqualTo(true);
@@ -123,8 +123,7 @@ bool ReachableSubGraphSelection::run() {
     result->setAllNodeValue(false);
 
     // iterate on startNodes add them and their reachables
-    node current;
-    forEach (current, itN) {
+    for (const node &current : itN) {
       reachables[current] = true;
       markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }

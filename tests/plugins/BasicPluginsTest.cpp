@@ -20,7 +20,6 @@
 
 #include "BasicPluginsTest.h"
 #include <tulip/TlpTools.h>
-#include <tulip/ForEach.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>

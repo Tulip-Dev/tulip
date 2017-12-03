@@ -27,7 +27,6 @@
 #include <tulip/FaceIterator.h>
 #include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
-#include <tulip/ForEach.h>
 #include <tulip/TreeTest.h>
 
 using namespace std;
@@ -103,8 +102,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // Compute the cycle around v
   vector<edge> v_order(deg(v));
   unsigned int cpt = 0;
-  edge e_order;
-  forEach (e_order, getInOutEdges(v)) {
+  for (const edge &e_order : getInOutEdges(v)) {
     if (e_order == e)
       continue;
 
@@ -122,7 +120,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // Compute the cycle around w
   vector<edge> v_order2(deg(w));
   cpt = 0;
-  forEach (e_order, getInOutEdges(w)) {
+  for (const edge &e_order : getInOutEdges(w)) {
     if (e_order == e)
       continue;
 
@@ -948,8 +946,7 @@ Face PlanarConMap::getFaceContaining(node v, node w) {
 
 //=================================================================
 Face PlanarConMap::sameFace(node v, node n) {
-  Face f;
-  forEach (f, getFacesAdj(v)) {
+  for (const Face &f : getFacesAdj(v)) {
     if (containNode(f, n))
       return f;
   }

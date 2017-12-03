@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include <QThread>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/Gl2DRect.h>

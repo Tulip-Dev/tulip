@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Interactor.h>

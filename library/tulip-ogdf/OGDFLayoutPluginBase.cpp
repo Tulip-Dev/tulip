@@ -20,7 +20,6 @@
 
 #include <vector>
 #include <tulip/DrawingTools.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
 

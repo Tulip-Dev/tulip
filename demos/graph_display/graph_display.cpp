@@ -11,7 +11,6 @@
 #include <tulip/TulipViewSettings.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/ForEach.h>
 
 #include <QApplication>
 #include <QString>

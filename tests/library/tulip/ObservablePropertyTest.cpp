@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include "ObservablePropertyTest.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>

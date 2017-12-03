@@ -20,8 +20,6 @@
 #include "ConvolutionClustering.h"
 #include "ConvolutionClusteringSetup.h"
 
-#include <tulip/ForEach.h>
-
 using namespace std;
 
 static const char *paramHelp[] = {

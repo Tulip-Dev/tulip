@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
@@ -98,8 +97,7 @@ struct PageRank : public DoubleAlgorithm {
 #endif
         for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
           double n_sum = 0;
-          node n;
-          forEach (n, graph->getInNodes(nodes[i]))
+          for (const node &n : graph->getInNodes(nodes[i]))
             n_sum += pr.getNodeValue(n) / graph->outdeg(n);
           next_pr[nodes[i]] = one_minus_d + d * n_sum;
         }
@@ -109,8 +107,7 @@ struct PageRank : public DoubleAlgorithm {
 #endif
         for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
           double n_sum = 0;
-          node n;
-          forEach (n, graph->getInOutNodes(nodes[i]))
+          for (const node &n : graph->getInOutNodes(nodes[i]))
             n_sum += pr.getNodeValue(n) / graph->deg(n);
           next_pr[nodes[i]] = one_minus_d + d * n_sum;
         }

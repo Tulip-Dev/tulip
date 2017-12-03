@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/GlGraphRenderer.h>
-#include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>

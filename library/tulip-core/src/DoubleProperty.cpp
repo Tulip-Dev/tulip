@@ -18,7 +18,6 @@
  */
 
 #include <climits>
-#include <tulip/ForEach.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/GraphTools.h>
 

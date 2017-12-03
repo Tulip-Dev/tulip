@@ -76,8 +76,7 @@ void PreferencesDialog::usetlpbformat(int state) {
 template <typename PROP, typename TYPE>
 inline void setDefaultNodeValueInProperty(const std::string &propertyName, const TYPE &value,
                                           bool &graphPush) {
-  Graph *root = nullptr;
-  forEach (root, getRootGraphs()) {
+  for (Graph *root : getRootGraphs()) {
     if (root->existLocalProperty(propertyName)) {
       PROP *prop = dynamic_cast<PROP *>(root->getProperty(propertyName));
 
@@ -89,8 +88,7 @@ inline void setDefaultNodeValueInProperty(const std::string &propertyName, const
       }
     }
 
-    Graph *sg = nullptr;
-    forEach (sg, root->getDescendantGraphs()) {
+    for (Graph *sg : root->getDescendantGraphs()) {
       if (sg->existLocalProperty(propertyName)) {
         PROP *prop = dynamic_cast<PROP *>(sg->getProperty(propertyName));
 
@@ -106,8 +104,7 @@ inline void setDefaultNodeValueInProperty(const std::string &propertyName, const
 template <typename PROP, typename TYPE>
 inline void setDefaultEdgeValueInProperty(const std::string &propertyName, const TYPE &value,
                                           bool &graphPush) {
-  Graph *root = nullptr;
-  forEach (root, getRootGraphs()) {
+  for (Graph *root : getRootGraphs()) {
     if (root->existLocalProperty(propertyName)) {
       PROP *prop = dynamic_cast<PROP *>(root->getProperty(propertyName));
 
@@ -119,8 +116,7 @@ inline void setDefaultEdgeValueInProperty(const std::string &propertyName, const
       }
     }
 
-    Graph *sg = nullptr;
-    forEach (sg, root->getDescendantGraphs()) {
+    for (Graph *sg : root->getDescendantGraphs()) {
       if (sg->existLocalProperty(propertyName)) {
         PROP *prop = dynamic_cast<PROP *>(sg->getProperty(propertyName));
 

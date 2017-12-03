@@ -28,7 +28,6 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
-#include <tulip/ForEach.h>
 #include <tulip/GlCircle.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>

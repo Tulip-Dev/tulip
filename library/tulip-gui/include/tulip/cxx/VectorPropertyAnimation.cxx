@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/ForEach.h>
 
 template <typename PropType, typename RealType, typename VectorType, unsigned int SIZE>
 VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAnimation(

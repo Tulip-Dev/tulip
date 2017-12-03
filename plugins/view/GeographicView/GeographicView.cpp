@@ -21,7 +21,6 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/ForEach.h>
 #include <tulip/Camera.h>
 #include <tulip/GlTools.h>
 #include <tulip/Interactor.h>

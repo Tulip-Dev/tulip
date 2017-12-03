@@ -24,7 +24,6 @@
 
 #include <tulip/GlLabel.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/ForEach.h>
 #include <tulip/QGlPixelBufferManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/ColorScale.h>
@@ -456,8 +455,7 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
                                    ? inputSample.normalize(lSlider->getValue(), propertyIndex)
                                    : lSlider->getValue();
 
-  node n;
-  forEach (n, it) {
+  for (const node &n : it) {
     double nodeValue = currentProperty->getNodeDoubleValue(n);
 
     if (nodeValue <= rightSliderRealValue && nodeValue >= leftSliderRealValue) {
@@ -512,8 +510,7 @@ void ThresholdInteractor::buildSliders(SOMView *somView) {
   if (mask) {
     intervalMinValue = maxValue;
     intervalMaxValue = minValue;
-    node n;
-    forEach (n, mask->getNodesEqualTo(true, som)) {
+    for (const node &n : mask->getNodesEqualTo(true, som)) {
       double nodeValue = currentProperty->getNodeDoubleValue(n);
 
       if (nodeValue < intervalMinValue)

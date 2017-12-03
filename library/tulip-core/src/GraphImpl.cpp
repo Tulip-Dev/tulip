@@ -24,7 +24,6 @@
 #include <tulip/PropertyManager.h>
 #include <tulip/GraphView.h>
 #include <tulip/GraphIterator.h>
-#include <tulip/ForEach.h>
 #include <tulip/GraphUpdatesRecorder.h>
 
 using namespace std;
@@ -374,8 +373,7 @@ void GraphImpl::reverse(const edge e) {
   storage.reverse(e);
 
   // propagate edge reversal on subgraphs
-  Graph *sg;
-  forEach (sg, getSubGraphs()) {
+  for (Graph *sg : getSubGraphs()) {
     static_cast<GraphView *>(sg)->reverseInternal(e, eEnds.first, eEnds.second);
   }
 }
@@ -408,12 +406,11 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   notifyAfterSetEnds(e);
 
   // propagate edge reversal on subgraphs
-  Graph *sg;
   eEnds = storage.ends(e);
   node nSrc = eEnds.first;
   node nTgt = eEnds.second;
 
-  forEach (sg, getSubGraphs()) {
+  for (Graph *sg : getSubGraphs()) {
     static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
 }
@@ -465,15 +462,15 @@ void GraphImpl::observeUpdates(Graph *g) {
   observedGraphs.push_front(g);
 
   // loop on local properties
-  PropertyInterface *prop;
-  forEach (prop, g->getLocalObjectProperties()) {
+  for (PropertyInterface *prop : g->getLocalObjectProperties()) {
     prop->addObserver(this);
     observedProps.push_front(prop);
   }
 
   // loop on subgraphs
-  Graph *sg;
-  forEach (sg, g->getSubGraphs()) { observeUpdates(sg); }
+  for (Graph *sg : g->getSubGraphs()) {
+    observeUpdates(sg);
+  }
 }
 //----------------------------------------------------------------
 void GraphImpl::unobserveUpdates() {

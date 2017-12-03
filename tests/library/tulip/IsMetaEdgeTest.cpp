@@ -18,7 +18,6 @@
  */
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/ForEach.h>
 
 #include "IsMetaEdgeTest.h"
 

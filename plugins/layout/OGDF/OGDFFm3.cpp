@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"

@@ -21,7 +21,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/ForEach.h>
 #include <tulip/tulipconf.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipViewSettings.h>

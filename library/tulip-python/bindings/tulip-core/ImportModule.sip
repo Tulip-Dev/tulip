@@ -124,8 +124,8 @@ to indicate if the import was successful.
   filesPrefixes.push_back("file::");
   filesPrefixes.push_back("anyfile::");
   filesPrefixes.push_back("dir::");
-  std::pair<std::string, tlp::DataType*> entry;
-  stableForEach(entry, sipCpp->dataSet->getValues()) {
+  for(const std::pair<std::string, tlp::DataType*> &entry :
+      tlp::stableIterator(sipCpp->dataSet->getValues())) {
     for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
       if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
         std::string paramName = entry.first.substr(filesPrefixes[i].length());

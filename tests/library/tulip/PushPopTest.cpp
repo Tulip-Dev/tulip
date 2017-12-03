@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include "PushPopTest.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>

@@ -40,6 +40,7 @@
 #include <tulip/GraphNeedsSavingObserver.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
+#include <tulip/StableIterator.h>
 
 #include <fstream>
 
@@ -124,8 +125,7 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
                              projectTexturesFolders, projectTexturesFiles);
 
     // Process the non default valuated nodes in the viewTexture property
-    node n;
-    forEach (n, viewTexture->getNonDefaultValuatedNodes()) {
+    for (const node &n : viewTexture->getNonDefaultValuatedNodes()) {
       copyTextureFileInProject(tlpStringToQString(viewTexture->getNodeValue(n)), project,
                                projectTexturesFolders, projectTexturesFiles);
     }
@@ -135,8 +135,7 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
                              projectTexturesFolders, projectTexturesFiles);
 
     // Process the non default valuated nodes in the viewTexture property
-    edge e;
-    forEach (e, viewTexture->getNonDefaultValuatedEdges()) {
+    for (const edge &e : viewTexture->getNonDefaultValuatedEdges()) {
       copyTextureFileInProject(tlpStringToQString(viewTexture->getEdgeValue(e)), project,
                                projectTexturesFolders, projectTexturesFiles);
     }
@@ -657,17 +656,17 @@ Graph *GraphHierarchiesModel::currentGraph() const {
 }
 
 void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
-  Graph *sg = nullptr;
   int i = 0;
-  forEach (sg, root->getSubGraphs()) {
+  for (Graph *sg : root->getSubGraphs()) {
     _indexCache[sg] = createIndex(i++, 0, sg);
     initIndexCache(sg);
   }
 }
 
 static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) {
-  Graph *sg = nullptr;
-  forEach (sg, root->getSubGraphs()) { addListenerToWholeGraphHierarchy(sg, listener); }
+  for (Graph *sg : root->getSubGraphs()) {
+    addListenerToWholeGraphHierarchy(sg, listener);
+  }
   root->addListener(listener);
   root->addObserver(listener);
 }
@@ -767,14 +766,15 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 #endif
 
         // update index cache for subgraphs of parent graph and added sub-graphs
-        Graph *sg2 = nullptr;
-
         int i = 0;
-
-        forEach (sg2, parentGraph->getSubGraphs()) { _indexCache[sg2] = createIndex(i++, 0, sg2); }
+        for (Graph *sg2 : parentGraph->getSubGraphs()) {
+          _indexCache[sg2] = createIndex(i++, 0, sg2);
+        }
 
         i = 0;
-        forEach (sg2, sg->getSubGraphs()) { _indexCache[sg2] = createIndex(i++, 0, sg2); }
+        for (Graph *sg2 : sg->getSubGraphs()) {
+          _indexCache[sg2] = createIndex(i++, 0, sg2);
+        }
 
         sg->addListener(this);
         sg->addObserver(this);
@@ -805,11 +805,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 #endif
 
         // update index cache for subgraphs of parent graph
-        Graph *sg2 = nullptr;
-
         int i = 0;
-
-        forEach (sg2, parentGraph->getSubGraphs()) { _indexCache[sg2] = createIndex(i++, 0, sg2); }
+        for (Graph *sg2 : parentGraph->getSubGraphs()) {
+          _indexCache[sg2] = createIndex(i++, 0, sg2);
+        }
 
         // prevent dangling pointer to remain in the persistent indexes
         _indexCache.remove(sg);

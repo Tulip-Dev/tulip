@@ -30,6 +30,7 @@
 #include <tulip/StringCollection.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/StableIterator.h>
 
 #define TLP_FILE_VERSION "2.3"
 
@@ -431,8 +432,7 @@ public:
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
-      pair<string, DataType *> attribute;
-      forEach (attribute, attributes.getValues()) {
+      for (const pair<string, DataType *> &attribute : attributes.getValues()) {
         if (attribute.second->getTypeName() == string(typeid(node).name())) {
           node *n = static_cast<node *>(attribute.second->value);
           n->id = getNode(*n).id;

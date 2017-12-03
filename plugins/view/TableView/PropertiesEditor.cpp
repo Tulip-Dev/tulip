@@ -377,13 +377,11 @@ bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool se
     BooleanProperty *selection = _graph->getProperty<BooleanProperty>("viewSelection");
 
     if (nodes) {
-      node n;
-      forEach (n, selection->getNonDefaultValuatedNodes(_graph)) {
+      for (const node &n : selection->getNonDefaultValuatedNodes(_graph)) {
         GraphModel::setNodeValue(n.id, prop, val);
       }
     } else {
-      edge e;
-      forEach (e, selection->getNonDefaultValuatedEdges(_graph)) {
+      for (const edge &e : selection->getNonDefaultValuatedEdges(_graph)) {
         GraphModel::setEdgeValue(e.id, prop, val);
       }
     }

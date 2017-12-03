@@ -21,7 +21,6 @@
 #define OBSERVABLE_H
 
 #include <tulip/TulipException.h>
-#include <tulip/ForEach.h>
 #include <tulip/vectorgraph.h>
 #include <set>
 
@@ -391,8 +390,6 @@ private:
   * @brief return an Iterator on all Onlookers
   * @warning adding or removing Onlooker to that Observable will devalidate the iterator
   * @see StableIterator
-  * @see forEach
-  * @see stableForEach
   */
   tlp::Iterator<Observable *> *getOnlookers() const;
 

@@ -19,7 +19,6 @@
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
-#include <tulip/ForEach.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlProgressBar.h>
 #include <tulip/GlMainWidget.h>

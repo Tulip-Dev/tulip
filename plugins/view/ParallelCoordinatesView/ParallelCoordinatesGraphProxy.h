@@ -24,6 +24,7 @@
 
 #include <tulip/GraphDecorator.h>
 #include <tulip/Size.h>
+#include <tulip/StableIterator.h>
 
 namespace tlp {
 

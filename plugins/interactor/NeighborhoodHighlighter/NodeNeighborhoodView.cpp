@@ -19,7 +19,6 @@
 
 #include "NodeNeighborhoodView.h"
 
-#include <tulip/ForEach.h>
 #include <tulip/Iterator.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -153,8 +152,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
 
 void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecursion) {
 
-  node inNode;
-  forEach (inNode, graph_component->getInNodes(n)) {
+  for (const node &inNode : graph_component->getInNodes(n)) {
     if (find(graphViewNodes.begin(), graphViewNodes.end(), inNode) == graphViewNodes.end()) {
       graphViewNodes.push_back(inNode);
       nodesAtDist[dist].push_back(inNode);
@@ -169,14 +167,15 @@ void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecu
   }
 
   if (dist > 1 && !noRecursion) {
-    forEach (inNode, graph_component->getInNodes(n)) { getInNeighbors(inNode, dist - 1); }
+    for (const node &inNode : graph_component->getInNodes(n)) {
+      getInNeighbors(inNode, dist - 1);
+    }
   }
 }
 
 void NodeNeighborhoodView::getOutNeighbors(node n, unsigned int dist, bool noRecursion) {
 
-  node outNode;
-  forEach (outNode, graph_component->getOutNodes(n)) {
+  for (const node &outNode : graph_component->getOutNodes(n)) {
     if (find(graphViewNodes.begin(), graphViewNodes.end(), outNode) == graphViewNodes.end()) {
       graphViewNodes.push_back(outNode);
       nodesAtDist[dist].push_back(outNode);
@@ -191,7 +190,9 @@ void NodeNeighborhoodView::getOutNeighbors(node n, unsigned int dist, bool noRec
   }
 
   if (dist > 1 && !noRecursion) {
-    forEach (outNode, graph_component->getOutNodes(n)) { getOutNeighbors(outNode, dist - 1); }
+    for (const node &outNode : graph_component->getOutNodes(n)) {
+      getOutNeighbors(outNode, dist - 1);
+    }
   }
 }
 

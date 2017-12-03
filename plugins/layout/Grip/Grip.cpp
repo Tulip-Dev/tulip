@@ -21,7 +21,6 @@
 #include "Distances.h"
 
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/ForEach.h>
 #include <tulip/TreeTest.h>
 #include <tulip/Graph.h>
 
@@ -364,8 +363,7 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
       disp[currNode] = Coord(0, 0, 0);
 
       // attractive force calculation
-      node n;
-      forEach (n, currentGraph->getInOutNodes(currNode)) {
+      for (const node &n : currentGraph->getInOutNodes(currNode)) {
         const Coord &c_n = result->getNodeValue(n);
         Coord c_tmp = c_n - curCoord;
         float euclidian_dist_sqr = c_tmp[0] * c_tmp[0] + c_tmp[1] * c_tmp[1];

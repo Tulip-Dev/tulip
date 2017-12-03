@@ -34,7 +34,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/ForEach.h>
 #include <tulip/tulipconf.h>
 #include <tulip/TlpQtTools.h>
 

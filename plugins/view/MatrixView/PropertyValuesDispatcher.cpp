@@ -18,7 +18,6 @@
  */
 #include "PropertyValuesDispatcher.h"
 
-#include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/BooleanProperty.h>
@@ -50,11 +49,10 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(
   assert(displayedNodesToGraphEntities);
 
   Observable::holdObservers();
-  string s;
-  forEach (s, source->getProperties())
+  for (const string &s : source->getProperties())
     addLocalProperty(source, s);
 
-  forEach (s, target->getProperties())
+  for (const string &s : target->getProperties())
     addLocalProperty(target, s);
 
   Observable::unholdObservers();
@@ -150,8 +148,7 @@ void PropertyValuesDispatcher::afterSetAllNodeValue(tlp::PropertyInterface *sour
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     string val = sourceProp->getNodeDefaultStringValue();
-    node n;
-    forEach (n, _displayedNodesAreNodes->getNodesEqualTo(true))
+    for (const node &n : _displayedNodesAreNodes->getNodesEqualTo(true))
       targetProp->setNodeStringValue(n, val);
   } else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
@@ -164,8 +161,7 @@ void PropertyValuesDispatcher::afterSetAllEdgeValue(tlp::PropertyInterface *sour
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     string val = sourceProp->getEdgeDefaultStringValue();
-    node n;
-    forEach (n, _displayedNodesAreNodes->getNodesEqualTo(false))
+    for (const node &n : _displayedNodesAreNodes->getNodesEqualTo(false))
       targetProp->setNodeStringValue(n, val);
   } else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
@@ -180,12 +176,10 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
     PropertyInterface *sourceProp = g->getProperty(name);
     afterSetAllNodeValue(sourceProp);
     afterSetAllEdgeValue(sourceProp);
-    node n;
-    forEach (n, sourceProp->getNonDefaultValuatedNodes())
+    for (const node &n : sourceProp->getNonDefaultValuatedNodes())
       afterSetNodeValue(sourceProp, n);
 
-    edge e;
-    forEach (e, sourceProp->getNonDefaultValuatedEdges())
+    for (const edge &e : sourceProp->getNonDefaultValuatedEdges())
       afterSetEdgeValue(sourceProp, e);
     Observable::unholdObservers();
 

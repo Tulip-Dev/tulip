@@ -20,7 +20,6 @@
 #include <vector>
 #include "TlpImportExportTest.h"
 #include <tulip/Graph.h>
-#include <tulip/ForEach.h>
 #include <tulip/DataSet.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
@@ -127,8 +126,7 @@ void TlpImportExportTest::testExportCluster() {
   for (const edge &e : graph->edges()) {
     CPPUNIT_ASSERT_EQUAL(e1, e);
   }
-  Graph *g;
-  forEach (g, graph->getSubGraphs()) {
+  for (Graph *g : graph->getSubGraphs()) {
     string name;
     g->getAttribute(string("name"), name);
     CPPUNIT_ASSERT_EQUAL(string("\"name with double quotes \""), name);

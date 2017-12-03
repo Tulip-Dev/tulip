@@ -1190,10 +1190,12 @@ void GraphPerspective::cancelSelection() {
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  node n;
-  forEach (n, selection->getNodesEqualTo(true, graph)) { selection->setNodeValue(n, false); }
-  edge e;
-  forEach (e, selection->getEdgesEqualTo(true, graph)) { selection->setEdgeValue(e, false); }
+  for (const node &n : selection->getNodesEqualTo(true, graph)) {
+    selection->setNodeValue(n, false);
+  }
+  for (const edge &e : selection->getEdgesEqualTo(true, graph)) {
+    selection->setEdgeValue(e, false);
+  }
   graph->popIfNoUpdates();
   Observable::unholdObservers();
 }
@@ -1301,8 +1303,9 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
   QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
 
   if (deleteAfter) {
-    tlp::node n;
-    stableForEach(n, selection->getNodesEqualTo(true)) g->delNode(n);
+    for (const node &n : stableIterator(selection->getNodesEqualTo(true))) {
+      g->delNode(n);
+    }
   }
 
   g->popIfNoUpdates();
@@ -1317,8 +1320,7 @@ void GraphPerspective::group() {
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::vector<node> groupedNodes;
-  node n;
-  forEach (n, selection->getNodesEqualTo(true)) {
+  for (const node &n : selection->getNodesEqualTo(true)) {
     if (graph->isElement(n))
       groupedNodes.push_back(n);
   }

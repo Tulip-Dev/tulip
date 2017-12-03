@@ -76,8 +76,9 @@ void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
 
   st.push_back(n);
   flag.set(n.id, true);
-  node n2;
-  forEach (n2, sg->getInOutNodes(n)) { dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress); }
+  for (const node &n2 : sg->getInOutNodes(n)) {
+    dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
+  }
   flag.set(n.id, false);
   st.pop_back();
 }
@@ -95,14 +96,12 @@ vector<node> findMaxCycle(Graph *sg, PluginProgress *pluginProgress) {
     g->inducedSubGraph(components[i]);
   }
 
-  Graph *g_tmp;
-
   MutableContainer<bool> flag;
   deque<node> st;
   vector<node> res;
   vector<node> max;
   unsigned int nbCalls = 0;
-  forEach (g_tmp, g->getSubGraphs()) {
+  for (Graph *g_tmp : g->getSubGraphs()) {
     if (g_tmp->numberOfNodes() == 1)
       continue;
 

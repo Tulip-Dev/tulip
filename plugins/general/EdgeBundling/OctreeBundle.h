@@ -21,7 +21,6 @@
 #define OCTREEBUNDLE_H
 #include <tulip/Vector.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/ForEach.h>
 
 class OctreeBundle {
 public:

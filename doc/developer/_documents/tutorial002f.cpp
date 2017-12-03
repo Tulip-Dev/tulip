@@ -7,7 +7,7 @@
  * Tutorial 002
  *
  * Create a graph 
- * display all the structure using forEach
+ * display all the structure using for loops
  *
  */
 
@@ -48,8 +48,7 @@ int main() {
     //===========================
     //go through all ancestors of a node
     cout << " predecessors: {";
-		node in_node;
-    forEach(in_node, graph->getInNodes(n)) {
+    for(const node &in_node : graph->getInNodes(n)) {
       if (!first) {cout << ",";} else {first = false;}
       cout << in_node.id;
     }

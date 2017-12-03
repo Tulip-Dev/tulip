@@ -26,7 +26,6 @@
 #include <tulip/GraphMeasure.h>
 #include <tulip/StableIterator.h>
 #include <tulip/SimpleTest.h>
-#include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/StableIterator.h>
 
@@ -88,14 +87,12 @@ const double epsilon = 1E-9;
 //=================================================
 void MCLClustering::power(node n) {
   TLP_HASH_MAP<node, double> newTargets;
-  edge e1;
 
-  forEach (e1, g.getOutEdges(n)) {
+  for (const edge &e1 : g.getOutEdges(n)) {
     double v1 = inW[e1];
 
     if (v1 > epsilon) {
-      edge e2;
-      forEach (e2, g.getOutEdges(g.target(e1))) {
+      for (const edge &e2 : g.getOutEdges(g.target(e1))) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
@@ -141,11 +138,12 @@ void MCLClustering::prune(node n) {
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
-  // - avoid a costly stableForEach when deleting edges
+  // - avoid a costly stable iteration when deleting edges
   std::vector<pair<double, edge>> pvect;
   pvect.reserve(outdeg);
-  edge e;
-  forEach (e, g.getOutEdges(n)) { pvect.push_back(pair<double, edge>(outW[e], e)); }
+  for (const edge &e : g.getOutEdges(n)) {
+    pvect.push_back(pair<double, edge>(outW[e], e));
+  }
 
   std::sort(pvect.begin(), pvect.end(), pvectCmp());
   double t = pvect[outdeg - 1].first;
@@ -165,13 +163,12 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
-  // - avoid a costly stableForEach when deleting edges
+  // - avoid a costly stable iteration when deleting edges
   std::vector<pair<double, edge>> pvect;
   pvect.reserve(sz);
 
-  edge e;
   double sum = 0.;
-  forEach (e, g.getOutEdges(n)) {
+  for (const edge &e : g.getOutEdges(n)) {
     double outVal = outW[e];
     sum += pow(outVal, r);
     pvect.push_back(pair<double, edge>(outVal, e));
@@ -204,7 +201,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
         t = p.first;
       }
     } else if (p.first < t) {
-      e = p.second;
+      edge e = p.second;
       inW[e] = 0.;
       outW[e] = 0.;
       g.delEdge(e);
@@ -231,7 +228,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge> &p = pvect[i];
-      e = p.second;
+      edge e = p.second;
 
       if (e.isValid()) {
         double outVal = outW[e] = p.first * oos;
@@ -246,7 +243,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge> &p = pvect[i];
-      e = p.second;
+      edge e = p.second;
 
       if (e.isValid()) {
         double outVal = outW[e] = ood;
@@ -341,8 +338,7 @@ bool MCLClustering::run() {
 
     if (weights != nullptr) {
       double tmpVal = inW[tmp] = 0.;
-      edge e;
-      forEach (e, g.getOutEdges(n)) {
+      for (const edge &e : g.getOutEdges(n)) {
         double eVal = inW[e];
         sum += eVal;
 
@@ -356,8 +352,7 @@ bool MCLClustering::run() {
     }
 
     double oos = 1. / sum;
-    edge e;
-    forEach (e, g.getOutEdges(n))
+    for (const edge &e : g.getOutEdges(n))
       inW[e] *= oos;
   }
 

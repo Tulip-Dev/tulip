@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/GlGraphHighDetailsRenderer.h>
-#include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/GlTools.h>

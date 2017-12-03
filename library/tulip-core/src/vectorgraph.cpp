@@ -26,7 +26,6 @@
 #include <tulip/vectorgraph.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include <tulip/ForEach.h>
 #include <tulip/StlIterator.h>
 
 using namespace std;
@@ -583,8 +582,9 @@ void VectorGraph::dump() const {
 
   for (const node &n : nodes()) {
     tlp::debug() << "n_" << n << "{";
-    edge e;
-    forEach (e, getInOutEdges(n)) { tlp::debug() << "e_" << e.id << " "; }
+    for (const edge &e : getInOutEdges(n)) {
+      tlp::debug() << "e_" << e.id << " ";
+    }
     tlp::debug() << "}";
     tlp::debug() << endl;
   }

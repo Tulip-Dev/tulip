@@ -24,7 +24,6 @@
 
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
 
@@ -53,8 +52,7 @@ void QuantitativeParallelAxis::setAxisLabels() {
 
   if (propertyMin >= INT_MIN && propertyMax <= INT_MAX) {
     if (getAxisDataTypeName() == "double") {
-      unsigned int n;
-      forEach (n, graphProxy->getDataIterator()) {
+      for (unsigned int n : graphProxy->getDataIterator()) {
         double val =
             graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), n);
         double intpart, fracpart;

@@ -18,7 +18,6 @@
  */
 #include <algorithm>
 #include <tulip/Circle.h>
-#include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 
 class BubblePack : public tlp::LayoutAlgorithm {
@@ -84,9 +83,8 @@ double BubblePack::computeRelativePosition(tlp::node n,
    */
   std::vector<double> realCircleRadius(outdeg);
 
-  node ni;
   int i = 0;
-  forEach (ni, tree->getOutNodes(n)) {
+  for (const node &ni : tree->getOutNodes(n)) {
     realCircleRadius[i] = computeRelativePosition(ni, relativePosition);
     ++i;
   }
@@ -254,8 +252,7 @@ void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f> &r
   Vec4f &relPos = relativePosition[n];
   Vec2f shift(relPos[2], relPos[3]);
   result->setNodeValue(n, Coord(pos + shift, 0));
-  node ni;
-  forEach (ni, tree->getOutNodes(n)) {
+  for (const node &ni : tree->getOutNodes(n)) {
     Vec4f &relPos = relativePosition[ni];
     Vec2f relat(relPos[0], relPos[1]);
     calcLayout(ni, pos + relat, relativePosition);

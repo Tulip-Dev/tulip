@@ -27,7 +27,6 @@
 #include <QPainter>
 #include <QDoubleSpinBox>
 
-#include <tulip/ForEach.h>
 #include <tulip/DataSet.h>
 #include <tulip/VectorEditor.h>
 #include <tulip/GraphPropertiesModel.h>

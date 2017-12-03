@@ -32,7 +32,6 @@
 #include <tulip/NumericProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/ForEach.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/Interactor.h>
 #include <tulip/ImportModule.h>
@@ -999,8 +998,7 @@ void SOMView::copySelectionToMask() {
   if (graph()) {
     set<node> somNodes;
     BooleanProperty *selection = graph()->getProperty<BooleanProperty>("viewSelection");
-    node n;
-    forEach (n, selection->getNodesEqualTo(true, graph())) {
+    for (const node &n : selection->getNodesEqualTo(true, graph())) {
       for (map<tlp::node, std::set<tlp::node>>::iterator it = mappingTab.begin();
            it != mappingTab.end(); ++it) {
         if (it->second.find(n) != it->second.end())
@@ -1033,10 +1031,9 @@ void SOMView::invertMask() {
 void SOMView::selectAllNodesInMask() {
   if (mask) {
     BooleanProperty *selection = graph()->getProperty<BooleanProperty>("viewSelection");
-    node n;
     Observable::holdObservers();
     selection->setAllNodeValue(false);
-    forEach (n, mask->getNodesEqualTo(true, som)) {
+    for (const node &n : mask->getNodesEqualTo(true, som)) {
       if (mappingTab.find(n) != mappingTab.end()) {
         for (set<node>::iterator it = mappingTab[n].begin(); it != mappingTab[n].end(); ++it) {
           selection->setNodeValue(*it, true);

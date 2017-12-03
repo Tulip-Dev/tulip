@@ -24,7 +24,6 @@
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
 #include <tulip/ImportModule.h>
-#include <tulip/ForEach.h>
 
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/PluginModel.h>

@@ -28,12 +28,12 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/ForEach.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TlpQtTools.h>
 
 #include <cmath>
 #include <climits>
+#include <memory>
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50
@@ -194,20 +194,9 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     switch (qMouseEv->buttons()) {
     case Qt::LeftButton: {
       // first ensure that something is selected
-      bool hasSelection = false;
-      node no;
-      forEach (no, _selection->getNodesEqualTo(true, _graph)) {
-        hasSelection = true;
-        break;
-      }
-
-      if (!hasSelection) {
-        edge ed;
-        forEach (ed, _selection->getEdgesEqualTo(true, _graph)) {
-          hasSelection = true;
-          break;
-        }
-      }
+      bool hasSelection =
+          unique_ptr<Iterator<node>>(_selection->getNodesEqualTo(true, _graph))->hasNext() ||
+          unique_ptr<Iterator<edge>>(_selection->getEdgesEqualTo(true, _graph))->hasNext();
 
       if (!hasSelection ||
           (!glMainWidget->pickGlEntities(int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6,
@@ -335,20 +324,9 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::KeyPress) {
     // first ensure that something is selected
-    bool hasSelection = false;
-    node no;
-    forEach (no, _selection->getNodesEqualTo(true, _graph)) {
-      hasSelection = true;
-      break;
-    }
-
-    if (!hasSelection) {
-      edge ed;
-      forEach (ed, _selection->getEdgesEqualTo(true, _graph)) {
-        hasSelection = true;
-        break;
-      }
-    }
+    bool hasSelection =
+        unique_ptr<Iterator<node>>(_selection->getNodesEqualTo(true, _graph))->hasNext() ||
+        unique_ptr<Iterator<edge>>(_selection->getEdgesEqualTo(true, _graph))->hasNext();
 
     if (hasSelection) {
       switch (static_cast<QKeyEvent *>(e)->key()) {

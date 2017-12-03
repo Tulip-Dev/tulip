@@ -19,7 +19,6 @@
 
 #include "WithParameterTest.h"
 
-#include <tulip/ForEach.h>
 #include <tulip/WithParameter.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>

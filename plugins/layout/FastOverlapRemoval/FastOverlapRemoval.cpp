@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/SizeProperty.h>
-#include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 
 #include "FastOverlapRemoval.h"
@@ -118,8 +117,7 @@ bool FastOverlapRemoval::run() {
 
   // initialize result for edges
   result->setAllEdgeValue(viewLayout->getEdgeDefaultValue());
-  edge e;
-  forEach (e, viewLayout->getNonDefaultValuatedEdges())
+  for (const edge &e : viewLayout->getNonDefaultValuatedEdges())
     result->setEdgeValue(e, viewLayout->getEdgeValue(e));
 
   size_t nbNodes = graph->numberOfNodes();

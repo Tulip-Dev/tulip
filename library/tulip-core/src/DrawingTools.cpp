@@ -23,7 +23,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ConvexHull.h>
-#include <tulip/ForEach.h>
 
 #include <climits>
 
@@ -50,8 +49,7 @@ static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
                                const DoubleProperty *rotation, const BooleanProperty *selection,
                                BUILDER &builder) {
   if (itN != nullptr) {
-    node itn;
-    forEach (itn, itN) {
+    for (const node &itn : itN) {
       if ((selection == nullptr) || selection->getNodeValue(itn)) {
         Vec3f nSize(size->getNodeValue(itn));
         Vec3f point(layout->getNodeValue(itn));
@@ -74,8 +72,7 @@ static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
   }
 
   if ((itE != nullptr) && layout->numberOfNonDefaultValuatedEdges()) {
-    edge ite;
-    forEach (ite, itE) {
+    for (const edge &ite : itE) {
       if ((selection == nullptr) || selection->getEdgeValue(ite)) {
         LineType::RealType::const_iterator itCoord;
         const LineType::RealType &bends = layout->getEdgeValue(ite);

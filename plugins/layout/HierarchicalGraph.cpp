@@ -86,8 +86,7 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int free
     node n = *it;
     double sum = embedding->getNodeValue(n);
     unsigned int deg = 1;
-    node itn;
-    forEach (itn, sg->getInOutNodes(n)) {
+    for (const node &itn : sg->getInOutNodes(n)) {
       sum += embedding->getNodeValue(itn);
       ++deg;
     }
@@ -103,8 +102,9 @@ void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableConta
 
   visited.set(n.id, true);
   embedding->setNodeValue(n, id);
-  node it;
-  forEach (it, sg->getOutNodes(n)) { initCross(sg, it, visited, id + 1); }
+  for (const node &it : sg->getOutNodes(n)) {
+    initCross(sg, it, visited, id + 1);
+  }
 }
 //================================================================================
 // Do layer by layer sweep to reduce crossings in K-Layer graph
@@ -166,8 +166,7 @@ void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph *sg, tlp::DoubleProperty
   for (const node &n : sg->nodes()) {
     if (sg->indeg(n) > 1) {
       vector<edge> tmpVect;
-      edge e;
-      forEach (e, sg->getInEdges(n))
+      for (const edge &e : sg->getInEdges(n))
         tmpVect.push_back(e);
       sort(tmpVect.begin(), tmpVect.end(), tmpL);
       int toKeep = tmpVect.size() / 2;
@@ -333,8 +332,8 @@ bool HierarchicalGraph::run() {
     crossReduction(mySGraph);
     for (const node &n : graph->nodes()) {
       vector<edge> order;
-      edge e;
-      forEach (e, new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding)) {
+      for (const edge &e :
+           new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding)) {
         order.push_back(e);
       }
       mySGraph->setEdgeOrder(n, order);

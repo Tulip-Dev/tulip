@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <fstream>
 #include <tulip/vectorgraph.h>
-#include <tulip/ForEach.h>
 #include <tulip/Iterator.h>
 
 #include "CppUnitIncludes.h"

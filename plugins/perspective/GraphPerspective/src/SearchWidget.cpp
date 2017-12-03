@@ -358,18 +358,18 @@ void SearchWidget::search() {
   if (_ui->selectionModeCombo->currentIndex() == 0) { // replace current selection
     output->copy(result);
     searchOpDescription = "found";
-    forEach (n, result->getNodesEqualTo(true)) { resultsCountNodes++; }
-    forEach (e, result->getEdgesEqualTo(true)) { resultsCountEdges++; }
+    resultsCountNodes = iteratorCount(result->getNodesEqualTo(true));
+    resultsCountEdges = iteratorCount(result->getEdgesEqualTo(true));
   } else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
     if (onNodes) {
-      forEach (n, result->getNodesEqualTo(true)) {
+      for (const node &n : result->getNodesEqualTo(true)) {
         output->setNodeValue(n, true);
         resultsCountNodes++;
       }
     }
 
     if (onEdges) {
-      forEach (e, result->getEdgesEqualTo(true)) {
+      for (const edge &e : result->getEdgesEqualTo(true)) {
         output->setEdgeValue(e, true);
         resultsCountEdges++;
       }
@@ -378,7 +378,7 @@ void SearchWidget::search() {
     searchOpDescription = "added to selection";
   } else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      forEach (n, output->getNodesEqualTo(true)) {
+      for (const node &n : output->getNodesEqualTo(true)) {
         if (result->getNodeValue(n)) {
           output->setNodeValue(n, false);
           resultsCountNodes++;
@@ -387,7 +387,7 @@ void SearchWidget::search() {
     }
 
     if (onEdges) {
-      forEach (e, output->getEdgesEqualTo(true)) {
+      for (const edge &e : output->getEdgesEqualTo(true)) {
         if (result->getEdgeValue(e)) {
           output->setEdgeValue(e, false);
           resultsCountEdges++;
@@ -399,8 +399,8 @@ void SearchWidget::search() {
   } else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
     output = result;
     searchOpDescription = "found but not added to selection";
-    forEach (n, result->getNodesEqualTo(true)) { resultsCountNodes++; }
-    forEach (e, result->getEdgesEqualTo(true)) { resultsCountEdges++; }
+    resultsCountNodes = iteratorCount(result->getNodesEqualTo(true));
+    resultsCountEdges = iteratorCount(result->getEdgesEqualTo(true));
   }
 
   Observable::unholdObservers();

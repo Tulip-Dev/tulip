@@ -103,8 +103,7 @@ void LinLogLayout::initEnergyFactors() {
   for (const node &u : graph->nodes()) {
     double u_weight = linLogWeight->getNodeValue(u);
     repuSum += u_weight;
-    edge e;
-    forEach (e, graph->getInOutEdges(u)) {
+    for (const edge &e : graph->getInOutEdges(u)) {
       double edgeweight = linLogWeight->getEdgeValue(e);
       attrSum += edgeweight;
     }
@@ -206,8 +205,7 @@ double LinLogLayout::getRepulsionEnergy(node u, OctTree *tree) {
 double LinLogLayout::getAttractionEnergy(node u) {
   double energy = 0.0;
   const Coord &u_layout = layoutResult->getNodeValue(u);
-  edge e;
-  forEach (e, graph->getInOutEdges(u)) {
+  for (const edge &e : graph->getInOutEdges(u)) {
     node v = graph->opposite(e, u);
     double dist = getDist(u_layout, layoutResult->getNodeValue(v));
     double edgeweight = linLogWeight->getEdgeValue(e);
@@ -349,8 +347,7 @@ double LinLogLayout::addAttractionDir(node u, double *dir) {
 
   const Coord &position = layoutResult->getNodeValue(u);
 
-  edge e;
-  forEach (e, graph->getInOutEdges(u)) {
+  for (const edge &e : graph->getInOutEdges(u)) {
     node v = graph->opposite(e, u);
     const Coord &position2 = layoutResult->getNodeValue(v);
     double dist = getDist(position, position2);
@@ -774,8 +771,9 @@ void LinLogLayout::initWeights() {
 
     for (const node &u : graph->nodes()) {
       double weight = 0.0;
-      edge e;
-      forEach (e, graph->getInOutEdges(u)) { weight += linLogWeight->getEdgeValue(e); }
+      for (const edge &e : graph->getInOutEdges(u)) {
+        weight += linLogWeight->getEdgeValue(e);
+      }
 
       linLogWeight->setNodeValue(u, weight);
     }
@@ -788,14 +786,15 @@ OctTree *LinLogLayout::buildOctTree() {
   Coord maxPos(-100000, -100000, -100000);
   Coord zero(0, 0, 0);
 
-  node u;
-  forEach (u, linLogWeight->getNonDefaultValuatedNodes()) {
+  node n;
+  for (const node &u : linLogWeight->getNonDefaultValuatedNodes()) {
     const Coord &position = layoutResult->getNodeValue(u);
 
     for (unsigned int d = 0; d < _dim; ++d) {
       minPos[d] = std::min(position[d], minPos[d]);
       maxPos[d] = std::max(position[d], maxPos[d]);
     }
+    n = u;
   }
 
   // provide additional space for moving nodes
@@ -805,11 +804,10 @@ OctTree *LinLogLayout::buildOctTree() {
     minPos[d] -= posDiff / 2;
   }
 
-  node n;
   // add nodes with non-zero weight to the octtree
-  OctTree *result = new OctTree(u, zero, minPos, maxPos, linLogWeight, true);
+  OctTree *result = new OctTree(n, zero, minPos, maxPos, linLogWeight, true);
 
-  forEach (u, linLogWeight->getNonDefaultValuatedNodes()) {
+  for (const node &u : linLogWeight->getNonDefaultValuatedNodes()) {
     result->addNode(u, layoutResult->getNodeValue(u), 0);
   }
   return result;

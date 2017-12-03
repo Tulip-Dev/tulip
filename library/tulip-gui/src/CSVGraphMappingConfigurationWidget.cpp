@@ -29,7 +29,6 @@
 #include <tulip/CSVGraphImport.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/Graph.h>
-#include <tulip/ForEach.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/StringsListSelectionDialog.h>
 
@@ -206,8 +205,9 @@ void CSVGraphMappingConfigurationWidget::selectProperties(const QString &title,
                                                           std::vector<std::string> &selProperties,
                                                           QPushButton *button) {
   vector<string> graphProperties;
-  string propertyName;
-  forEach (propertyName, graph->getProperties()) { graphProperties.push_back(propertyName); }
+  for (const string &propertyName : graph->getProperties()) {
+    graphProperties.push_back(propertyName);
+  }
 
   if (StringsListSelectionDialog::choose(title, graphProperties, selProperties, this)) {
     if (selProperties.size() == 0) {

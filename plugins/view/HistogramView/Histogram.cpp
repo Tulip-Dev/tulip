@@ -21,7 +21,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlPolyQuad.h>
 #include <tulip/Gl2DRect.h>
-#include <tulip/ForEach.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/TlpTools.h>

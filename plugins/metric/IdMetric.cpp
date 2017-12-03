@@ -18,7 +18,6 @@
  */
 #include "IdMetric.h"
 
-#include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 
 PLUGIN(IdMetric)

@@ -20,7 +20,6 @@
 #include "Dikjstra.h"
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/ForEach.h>
 
 using namespace tlp;
 using namespace std;
@@ -106,7 +105,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
       break;
     }
 
-    forEach (e, iter) {
+    for (const edge &e : iter) {
       node v = graph->opposite(e, u.n);
       DikjstraElement &dEle = *mapDik.get(v.id);
       assert(weights.get(e.id) > 0);
@@ -167,8 +166,7 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProper
     return;
 
   result->setNodeValue(n, true);
-  edge e;
-  forEach (e, graph->getInOutEdges(n)) {
+  for (const edge &e : graph->getInOutEdges(n)) {
     if (!usedEdges.get(e.id))
       continue;
 
@@ -197,10 +195,8 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
     result->setNodeValue(n, true);
     vNodes.push_back(n);
     ok = false;
-    // set<edge> validEdge;
     map<double, edge> validEdge;
-    edge e;
-    forEach (e, graph->getInOutEdges(n)) {
+    for (const edge &e : graph->getInOutEdges(n)) {
       if (!usedEdges.get(e.id))
         continue; // edge does not belong to the shortest path
 
@@ -217,7 +213,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
 
     if (!validEdge.empty()) {
       ok = true;
-      e = validEdge.rbegin()->second;
+      edge e = validEdge.rbegin()->second;
       n = graph->opposite(e, n); // validEdge.begin()->first;
       result->setEdgeValue(e, true);
     }

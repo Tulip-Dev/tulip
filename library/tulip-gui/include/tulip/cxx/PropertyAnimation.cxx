@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/ForEach.h>
 
 template <typename PropType, typename NodeType, typename EdgeType>
 PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(

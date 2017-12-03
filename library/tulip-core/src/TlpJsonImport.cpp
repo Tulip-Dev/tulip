@@ -26,7 +26,6 @@
 #include <tulip/GraphAbstract.h>
 #include <tulip/ImportModule.h>
 #include <tulip/PropertyInterface.h>
-#include <tulip/ForEach.h>
 #include <tulip/TlpTools.h>
 #include <tulip/JsonTokens.h>
 #include <tulip/YajlFacade.h>

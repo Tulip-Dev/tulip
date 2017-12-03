@@ -41,6 +41,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ColorScalesManager.h>
+#include <tulip/StableIterator.h>
 
 using namespace tlp;
 
@@ -114,8 +115,7 @@ void AlgorithmRunnerItem::setGraph(Graph *g) {
   if (_ui->parameters->model() != nullptr) {
     ParameterListModel *model = static_cast<ParameterListModel *>(_ui->parameters->model());
     DataSet dataSet = model->parametersValues();
-    std::pair<std::string, tlp::DataType *> it;
-    stableForEach(it, dataSet.getValues()) {
+    for (const std::pair<std::string, tlp::DataType *> &it : stableIterator(dataSet.getValues())) {
       if (it.second->isTulipProperty()) {
         dataSet.remove(it.first);
       }
@@ -267,8 +267,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   // is a local one when it exits
   std::string algorithm = QStringToTlpString(_pluginName);
   ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
-  ParameterDescription desc;
-  forEach (desc, paramList.getParameters()) {
+  for (const ParameterDescription &desc : paramList.getParameters()) {
     if (desc.getDirection() == IN_PARAM) {
 
       std::string typeName(desc.getTypeName());
@@ -296,7 +295,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   // use temporary output properties
   // to ease the undo in case of failure
   std::vector<OutPropertyParam> outPropertyParams;
-  forEach (desc, paramList.getParameters()) {
+  for (const ParameterDescription &desc : paramList.getParameters()) {
     std::string typeName(desc.getTypeName());
 
     // forget non property out param
@@ -609,8 +608,9 @@ void AlgorithmRunnerItem::initModel() {
 
   if (!_initData.empty()) {
     DataSet dataSet = model->parametersValues();
-    std::pair<std::string, tlp::DataType *> it;
-    forEach (it, _initData.getValues()) { dataSet.setData(it.first, it.second); }
+    for (const std::pair<std::string, tlp::DataType *> &it : _initData.getValues()) {
+      dataSet.setData(it.first, it.second);
+    }
     model->setParametersValues(dataSet);
   }
 }

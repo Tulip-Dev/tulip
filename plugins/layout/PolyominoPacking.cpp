@@ -35,7 +35,6 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/ConnectedTest.h>
-#include <tulip/ForEach.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/TulipViewSettings.h>
 
@@ -173,8 +172,9 @@ bool PolyominoPacking::run() {
 
     // get edges of current connected component
     for (unsigned int j = 0; j < nbNodes; ++j) {
-      edge e;
-      forEach (e, graph->getOutEdges(ccNodes[j])) { ccEdges.push_back(e); }
+      for (const edge &e : graph->getOutEdges(ccNodes[j])) {
+        ccEdges.push_back(e);
+      }
     }
 
     BoundingBox ccBB = tlp::computeBoundingBox(ccNodes, ccEdges, layout, size, rotation);
@@ -230,8 +230,7 @@ bool PolyominoPacking::run() {
     for (unsigned int j = 0; j < nbNodes; ++j) {
       node n = ccNodes[j];
       result->setNodeValue(n, layout->getNodeValue(n) + move);
-      edge e;
-      forEach (e, graph->getOutEdges(n)) {
+      for (const edge &e : graph->getOutEdges(n)) {
         vector<Coord> bends = layout->getEdgeValue(e);
 
         if (bends.size()) {
@@ -337,8 +336,9 @@ void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty *layout, Siz
     }
 
     point = cell(point, gridStepSize);
-    edge e;
-    forEach (e, graph->getOutEdges(n)) { fillEdge(e, point, poly.cells, dx, dy, layout); }
+    for (const edge &e : graph->getOutEdges(n)) {
+      fillEdge(e, point, poly.cells, dx, dy, layout);
+    }
   }
 
   int W = grid(ccBB[1][0] - ccBB[0][0] + 2 * margin, gridStepSize);

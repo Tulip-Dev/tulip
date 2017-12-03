@@ -269,7 +269,7 @@ list<LR> *TreeReingoldAndTilfordExtended::TreePlace(tlp::node n,
     leftTree->push_front(tmpLR);
 
     list<double>::const_iterator itI = childPos.begin();
-    forEach (ite, tree->getOutEdges(n)) {
+    for (const edge &ite : tree->getOutEdges(n)) {
       itn = tree->target(ite);
       (*p)[itn] = *itI - posFather;
       ++itI;
@@ -292,14 +292,14 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int, 
     maxSize[level] = sizes->getNodeValue(n).getH();
 
   if (useLength) {
-    edge ite;
-    forEach (ite, tree->getOutEdges(n)) {
+    for (const edge &ite : tree->getOutEdges(n)) {
       node itn = tree->target(ite);
       TreeLevelSizing(itn, maxSize, level + (lengthMetric->getEdgeValue(ite)), levels);
     }
   } else {
-    node itn;
-    forEach (itn, tree->getOutNodes(n)) { TreeLevelSizing(itn, maxSize, level + 1, levels); }
+    for (const node &itn : tree->getOutNodes(n)) {
+      TreeLevelSizing(itn, maxSize, level + 1, levels);
+    }
   }
 }
 //=============================================================================
@@ -317,8 +317,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
   result->setNodeValue(n, tmpCoord);
 
   if (useLength) {
-    edge ite;
-    forEach (ite, tree->getOutEdges(n)) {
+    for (const edge &ite : tree->getOutEdges(n)) {
       node itn = tree->target(ite);
       double decalY = y;
       int decalLevel = level;
@@ -337,8 +336,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
       calcLayout(itn, p, x + (*p)[n], decalY, decalLevel, maxLevelSize);
     }
   } else {
-    node itn;
-    forEach (itn, tree->getOutNodes(n)) {
+    for (const node &itn : tree->getOutNodes(n)) {
       if (!compactLayout)
         calcLayout(itn, p, x + (*p)[n], y + spacing, level + 1, maxLevelSize);
       else
@@ -396,9 +394,9 @@ bool TreeReingoldAndTilfordExtended::run() {
       double diam = 2 * sqrt(boundCircle.getW() * boundCircle.getW() / 4.0 +
                              boundCircle.getH() * boundCircle.getH() / 4.0);
       circleSizes->setNodeValue(n, Size(float(diam), float(diam), 1.0f));
-    } // end forEach
+    }
     sizes = circleSizes;
-  } // end if
+  }
 
   //===========================================================
 

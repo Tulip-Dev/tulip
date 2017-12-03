@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/GlGraphLowDetailsRenderer.h>
-#include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>

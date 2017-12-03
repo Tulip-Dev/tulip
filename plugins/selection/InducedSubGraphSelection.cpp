@@ -52,7 +52,7 @@ bool InducedSubGraphSelection::run() {
   // as the input selection property and the result property can be the same one,
   // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
   // of the result property are reseted to false below
-  // delete done by the forEach macro
+  // delete done by the for loop
   Iterator<node> *itN = (result == entrySelection)
                             ? new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true))
                             : entrySelection->getNodesEqualTo(true);
@@ -64,12 +64,12 @@ bool InducedSubGraphSelection::run() {
   result->setAllEdgeValue(false);
 
   // add input selected nodes to result selection
-  node current;
-  forEach (current, itN) { result->setNodeValue(current, true); }
+  for (const node &current : itN) {
+    result->setNodeValue(current, true);
+  }
 
   if (useEdges) {
-    edge e;
-    forEach (e, itE) {
+    for (const edge &e : itE) {
       result->setNodeValue(graph->source(e), true);
       result->setNodeValue(graph->target(e), true);
     }
@@ -79,9 +79,8 @@ bool InducedSubGraphSelection::run() {
 
   // now add edges whose extremities are selected to result selection
   unsigned sel = 0;
-  forEach (current, result->getNodesEqualTo(true)) {
-    edge e;
-    forEach (e, graph->getOutEdges(current)) {
+  for (const node &current : result->getNodesEqualTo(true)) {
+    for (const edge &e : graph->getOutEdges(current)) {
       if (result->getNodeValue(graph->target(e))) {
         result->setEdgeValue(e, true);
         ++sel;

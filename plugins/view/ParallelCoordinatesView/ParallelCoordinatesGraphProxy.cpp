@@ -21,7 +21,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/ForEach.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
 

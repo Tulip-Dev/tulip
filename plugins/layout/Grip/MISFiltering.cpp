@@ -22,7 +22,6 @@
 #include <cmath>
 #include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
-#include <tulip/ForEach.h>
 
 using namespace tlp;
 using namespace std;
@@ -103,8 +102,7 @@ void MISFiltering::bfsDepth(node n, unsigned int depth) {
 
   for (unsigned int i = 0; i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
-    node v;
-    forEach (v, g_copy->getInOutNodes(current)) {
+    for (const node &v : g_copy->getInOutNodes(current)) {
       if (visited.get(v.id) || inNext.get(v.id))
         continue;
 

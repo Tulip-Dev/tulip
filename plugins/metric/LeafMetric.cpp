@@ -41,15 +41,14 @@ struct dfsLeafStruct {
 //=======================================================================
 // original recursive algorithm
 /*double LeafMetric::getNodeValue(const tlp::node n) {
-  if (result->getNodeValue(n) != 0)
-    return result->getNodeValue(n);
-  double res=0;
-  node _n;
-  forEach(_n, graph->getOutNodes(n))
-    res += getNodeValue(_n);
-  if (res==0) res=1.0;
-  result->setNodeValue(n, res);
-  return res;
+    if (result->getNodeValue(n) != 0)
+      return result->getNodeValue(n);
+    double res=0;
+    for (const node &n : graph->getOutNodes(n))
+      res += getNodeValue(n);
+    if (res==0) res=1.0;
+    result->setNodeValue(n, res);
+    return res;
   }*/
 //=======================================================================
 double LeafMetric::getNodeValue(tlp::node current) {

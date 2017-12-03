@@ -138,8 +138,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
         while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          edge curEdge;
-          forEach (curEdge, graph->getInOutEdges(curNode)) {
+          for (const edge &curEdge : graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
 
             if (neighbour == curNode) {
@@ -237,8 +236,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
         while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          edge curEdge;
-          forEach (curEdge, graph->getInOutEdges(curNode)) {
+          for (const edge &curEdge : graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
             if (!visited.get(curEdge.id) && curValue == prop->getEdgeDoubleValue(curEdge)) {
@@ -338,8 +336,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
         while (!nodesToVisit.empty()) {
           curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          edge curEdge;
-          forEach (curEdge, graph->getInOutEdges(curNode)) {
+          for (const edge &curEdge : graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
 
             if (neighbour == curNode) {
@@ -439,7 +436,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
         while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          forEach (curEdge, graph->getInOutEdges(curNode)) {
+          for (const edge &curEdge : graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
             if (!visited.get(curEdge.id) && curValue == prop->getEdgeStringValue(curEdge)) {

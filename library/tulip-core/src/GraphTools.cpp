@@ -26,7 +26,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/NumericProperty.h>
-#include <tulip/ForEach.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Ordering.h>
@@ -494,8 +493,7 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes,
   unsigned nbNodes = 1;
 
   while (current) {
-    node neigh;
-    forEach (neigh, graph->getInOutNodes(current->n)) {
+    for (const node &neigh : graph->getInOutNodes(current->n)) {
       if (!visited.get(neigh)) {
         visited.set(neigh, true);
         last = last->next = new visitedElt(neigh);
@@ -687,9 +685,8 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
 
 unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test) {
   Observable::holdObservers();
-  edge e;
   unsigned added = 0;
-  forEach (e, selection->getEdgesEqualTo(true, graph)) {
+  for (const edge &e : selection->getEdgesEqualTo(true, graph)) {
     const pair<node, node> ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {

@@ -18,7 +18,6 @@
  */
 
 #include <tulip/IntegerProperty.h>
-#include <tulip/ForEach.h>
 #include <tulip/GlLine.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/GlQuantitativeAxis.h>

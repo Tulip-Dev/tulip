@@ -18,7 +18,6 @@
  */
 #include "tulip/LayoutPropertyAnimation.h"
 
-#include <tulip/ForEach.h>
 #include <tulip/LayoutProperty.h>
 
 using namespace std;

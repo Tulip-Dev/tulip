@@ -212,8 +212,9 @@ vector<node> SquarifiedTreeMap::orderedChildren(const tlp::node n) const {
   vector<node> result(graph->outdeg(n));
   // build a list of pair <node, size>
   size_t i = 0;
-  node child;
-  forEach (child, graph->getOutNodes(n)) { result[i++] = child; }
+  for (const node &child : graph->getOutNodes(n)) {
+    result[i++] = child;
+  }
   IsGreater sortFunctor(nodesSize);
   sort(result.begin(), result.end(), sortFunctor);
   return result;
@@ -353,8 +354,7 @@ void SquarifiedTreeMap::computeNodesSize(const tlp::node n) {
   }
 
   double internalNodeValue = 0.;
-  node child;
-  forEach (child, graph->getOutNodes(n)) {
+  for (const node &child : graph->getOutNodes(n)) {
     computeNodesSize(child);
     internalNodeValue += nodesSize.get(child.id);
   }

@@ -27,7 +27,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/ForEach.h>
 #include <tulip/TlpTools.h>
 
 using namespace tlp;
@@ -225,8 +224,7 @@ void SOMAlgorithm::propagateModification(SOMMap *map, const DynamicVector<double
     // Mark neighborhood
     // If the diffusion rate is equal to 0 no need to propagate modification
     if (diffusionRate > 0) {
-      node neighbor;
-      forEach (neighbor, map->getInOutNodes(current)) {
+      for (const node &neighbor : map->getInOutNodes(current)) {
         // not already treated
         if (!seen.get(neighbor.id)) {
           seen.set(neighbor.id, true);

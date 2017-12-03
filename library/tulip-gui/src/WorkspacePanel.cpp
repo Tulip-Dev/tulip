@@ -36,7 +36,6 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
 #include <tulip/Interactor.h>
-#include <tulip/ForEach.h>
 #include <tulip/View.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphHierarchiesModel.h>

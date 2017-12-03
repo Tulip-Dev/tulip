@@ -22,7 +22,6 @@
 #include <stack>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/ForEach.h>
 
 using namespace tlp;
 using namespace std;

@@ -28,7 +28,6 @@
 #include <tulip/Graph.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/ForEach.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlGraphComposite.h>

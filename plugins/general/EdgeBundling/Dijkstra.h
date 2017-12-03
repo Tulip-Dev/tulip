@@ -25,7 +25,6 @@
 #include <tulip/Graph.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Vector.h>
-#include <tulip/ForEach.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/IntegerProperty.h>
 

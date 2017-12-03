@@ -139,8 +139,7 @@ public:
       if (pAttractProperty[n2] > randomDouble(1.0)) {
 
         if (pIntroduceProperty[n] > randomDouble(1.0)) {
-          node fd;
-          forEach (fd, graph->getInOutNodes(n)) {
+          for (const node &fd : graph->getInOutNodes(n)) {
             if (fd == n2 || graph->hasEdge(fd, n2, false))
               continue;
 

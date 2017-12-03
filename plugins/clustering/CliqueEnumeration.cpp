@@ -18,7 +18,6 @@
  */
 #include "CliqueEnumeration.h"
 
-#include <tulip/ForEach.h>
 #include <tulip/SimpleTest.h>
 
 #include <sstream>
@@ -45,19 +44,17 @@ void CliqueEnumeration::addClique(const vector<node> &clique) {
 //================================================================================
 void CliqueEnumeration::getNeighborhood(const node u, set<node> &neigh) {
   neigh.clear();
-  node v;
-  forEach (v, graph->getInOutNodes(u))
+  for (const node &v : graph->getInOutNodes(u))
     neigh.insert(v);
 }
 //================================================================================
-tlp::node CliqueEnumeration::choosePivot(const set<node> &C) {
+node CliqueEnumeration::choosePivot(const set<node> &C) {
   node pivot;
   unsigned int maxinter = 0;
 
   for (set<node>::const_iterator its = C.begin(); its != C.end(); ++its) {
     unsigned int inter = 0;
-    node v;
-    forEach (v, graph->getInOutNodes(*its)) {
+    for (const node &v : graph->getInOutNodes(*its)) {
       if (C.find(v) != C.end())
         inter++;
     }
@@ -150,8 +147,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
     delete (*it);
     sortednodes.erase(it);
     sub->delNode(n);
-    node v;
-    forEach (v, sub->getInOutNodes(n)) {
+    for (const node &v : sub->getInOutNodes(n)) {
       DegreeOrderingElem *elem = degrees.find(v)->second;
       sortednodes.erase(elem);
       elem->deg = elem->deg - 1;

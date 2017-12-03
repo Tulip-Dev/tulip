@@ -46,8 +46,7 @@ edge PlanarityTestImpl::edgeReversal(edge e) {
 static void dfsAux(Graph *sG, node n, MutableContainer<int> &dfsPre, MutableContainer<int> &dfsPos,
                    list<edge> &dfsEdges, unsigned int &preCount, unsigned int &postCount) {
   dfsPre.set(n.id, ++preCount);
-  edge e;
-  forEach (e, sG->getOutEdges(n)) {
+  for (const edge &e : sG->getOutEdges(n)) {
     node target = sG->target(e);
 
     if (dfsPre.get(target.id) == 0) {

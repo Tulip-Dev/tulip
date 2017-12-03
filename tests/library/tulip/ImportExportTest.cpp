@@ -467,8 +467,8 @@ void ImportExportTest::testGraphsAreEqual(Graph *first, Graph *second) {
 }
 
 void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph *first, tlp::Graph *second) {
-  std::pair<std::string, tlp::DataType *> attribute;
-  forEach (attribute, first->getAttributes().getValues()) {
+  for (const std::pair<std::string, tlp::DataType *> &attribute :
+       first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
 
     attributeNameMessage << "attribute \"" << attribute.first
@@ -497,58 +497,43 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph *first, tlp::Graph
 }
 
 void ImportExportTest::testGraphPropertiesAreEqual(Graph *first, Graph *second) {
-  unsigned int firstPropertiesCount = 0;
-  unsigned int secondPropertiesCount = 0;
+  unsigned int firstPropertiesCount = iteratorCount(first->getObjectProperties());
+  unsigned int secondPropertiesCount = iteratorCount(second->getObjectProperties());
   IntegerProperty *secondIdProperty = second->getProperty<IntegerProperty>("id");
-
-  PropertyInterface *firstProperty;
-  PropertyInterface *secondProperty;
-  forEach (firstProperty, first->getObjectProperties()) { ++firstPropertiesCount; }
-  forEach (secondProperty, second->getObjectProperties()) { ++secondPropertiesCount; }
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of properties", firstPropertiesCount,
                                secondPropertiesCount);
 
-  Iterator<string> *firstPropIt = first->getProperties();
-
-  while (firstPropIt->hasNext()) {
-    string firstPropertyName = firstPropIt->next();
-    firstProperty = first->getProperty(firstPropertyName);
+  for (const string &firstPropertyName : first->getProperties()) {
+    PropertyInterface *firstProperty = first->getProperty(firstPropertyName);
 
     stringstream message;
     message << "the property " << firstPropertyName << " does not exist in the second graph !";
     CPPUNIT_ASSERT_MESSAGE(message.str(), second->existProperty(firstPropertyName));
 
-    secondProperty = second->getProperty(firstPropertyName);
+    PropertyInterface *secondProperty = second->getProperty(firstPropertyName);
 
     message.str("");
     message << "a node value for property " << firstPropertyName
             << " in the first graph is not equal to the one in the second graph";
 
-    Iterator<node> *secondNodeIt = second->getNodes();
-    while (secondNodeIt->hasNext()) {
-      node n2 = secondNodeIt->next();
+    for (const node &n2 : second->nodes()) {
       node n1(secondIdProperty->getNodeValue(n2));
       CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getNodeStringValue(n1),
                                    secondProperty->getNodeStringValue(n2));
     }
-    delete secondNodeIt;
 
     message.str("");
     message << "an edge value for property " << firstPropertyName
             << " in the first graph is not equal to the one in the second graph";
 
-    Iterator<edge> *secondEdgeIt = second->getEdges();
-    while (secondEdgeIt->hasNext()) {
-      edge e2 = secondEdgeIt->next();
+    for (const edge &e2 : second->edges()) {
       edge e1(secondIdProperty->getEdgeValue(e2));
 
       CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getEdgeStringValue(e1),
                                    secondProperty->getEdgeStringValue(e2));
     }
-    delete secondEdgeIt;
   }
-  delete firstPropIt;
 }
 
 void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Graph *second) {

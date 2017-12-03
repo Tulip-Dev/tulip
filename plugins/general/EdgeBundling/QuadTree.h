@@ -24,11 +24,6 @@
 #include <tulip/Graph.h>
 #include <tulip/Vector.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/ForEach.h>
-
-// class tlp::LayoutProperty;
-// class tlp::SizeProperty;
-// class tlp::DoubleProperty;
 
 class QuadTreeBundle {
 public:

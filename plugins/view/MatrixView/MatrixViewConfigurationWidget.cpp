@@ -21,7 +21,6 @@
 #include "ui_MatrixViewConfigurationWidget.h"
 
 #include <tulip/Graph.h>
-#include <tulip/ForEach.h>
 #include <tulip/Perspective.h>
 #include <tulip/ColorButton.h>
 #include <tulip/TlpQtTools.h>
@@ -102,8 +101,7 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   _ui->orderingMetricCombo->addItem(firstString);
   int currentIndex = 0;
   int i = 0;
-  string s;
-  forEach (s, g->getProperties()) {
+  for (const string &s : g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
     if (type != DoubleProperty::propertyTypename && type != IntegerProperty::propertyTypename &&

@@ -18,9 +18,10 @@
  */
 #include <cassert>
 #include <vector>
-#include <tulip/ForEach.h>
 
 #include "ExtendedClusterOperationTest.h"
+
+#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;
@@ -35,7 +36,6 @@ static Graph *tlp_loadGraph(const std::string &filename) {
 CPPUNIT_TEST_SUITE_REGISTRATION(ExtendedClusterOperationTest);
 //==========================================================
 void ExtendedClusterOperationTest::setUp() {
-  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   graph = tlp::newGraph();
 
   for (unsigned int i = 0; i < 5; ++i) {
@@ -57,7 +57,6 @@ void ExtendedClusterOperationTest::setUp() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::tearDown() {
-  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   delete graph;
   nodes.clear();
   edges.clear();
@@ -160,17 +159,17 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
-  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   Graph *graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
   // take the quotient graph
-  Graph *subgraph = nullptr;
   bool find = false;
-  forEach (subgraph, graph->getSubGraphs()) {
+  Graph *subgraph = nullptr;
+  for (Graph *sg : graph->getSubGraphs()) {
     string name;
-    subgraph->getAttribute("name", name);
+    sg->getAttribute("name", name);
 
     if (name == "unnamed") {
       find = true;
+      subgraph = sg;
       break;
     }
   }
@@ -178,8 +177,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
   // open all meta nodes
-  node n;
-  stableForEach(n, subgraph->getNodes()) {
+  for (const node &n : stableIterator(subgraph->getNodes())) {
     subgraph->openMetaNode(n);
   }
   CPPUNIT_ASSERT_EQUAL(6u, subgraph->numberOfNodes());

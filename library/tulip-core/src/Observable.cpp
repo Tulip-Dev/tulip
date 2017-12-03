@@ -34,38 +34,6 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-//======================================================================
-struct Node2Observable {
-  Observable *operator()(tlp::node n) {
-    return object[n];
-  }
-  tlp::NodeProperty<Observable *> object;
-} node2Observable;
-//======================================================================
-struct AliveFilter {
-  bool operator()(tlp::node n) {
-    return alive[n];
-  }
-  tlp::NodeProperty<bool> alive;
-} objectAlive;
-//======================================================================
-template <unsigned int linkType>
-struct LinkFilter {
-  bool operator()(tlp::node n) {
-    edge link(oGraph.existEdge(n, oNode));
-    return (link.isValid() && (oType[link] & linkType));
-  }
-
-  LinkFilter(const VectorGraph &graph, const EdgeProperty<unsigned char> &type, node n)
-      : oGraph(graph), oType(type), oNode(n) {}
-
-  const VectorGraph &oGraph;
-  const EdgeProperty<unsigned char> &oType;
-  node oNode;
-};
-}
-
 namespace tlp {
 
 //=================================
@@ -85,12 +53,12 @@ bool Observable::_oInitialized = Observable::init();
 //----------------------------------
 Iterator<node> *Observable::getInObjects() const {
   assert(_n.isValid());
-  return new FilterIterator<node, AliveFilter>(_oGraph.getInNodes(_n), objectAlive);
+  return filterIterator(_oGraph.getInNodes(_n), [&](const node &n) { return _oAlive[n]; });
 }
 //----------------------------------
 Iterator<node> *Observable::getOutObjects() const {
   assert(_n.isValid());
-  return new FilterIterator<node, AliveFilter>(_oGraph.getOutNodes(_n), objectAlive);
+  return filterIterator(_oGraph.getOutNodes(_n), [&](const node &n) { return _oAlive[n]; });
 }
 //----------------------------------
 node Observable::getNode() const {
@@ -148,9 +116,6 @@ bool Observable::init() {
   Observable::_oGraph.alloc(Observable::_oAlive);
   Observable::_oGraph.alloc(Observable::_oEventsToTreat);
   Observable::_oGraph.alloc(Observable::_oType);
-
-  objectAlive.alive = Observable::_oAlive;
-  node2Observable.object = Observable::_oPointer;
   return true;
 }
 //----------------------------------
@@ -248,8 +213,7 @@ Observable::~Observable() {
       // _n cannot be deleted only if it is observed
       // then its deletion is delayed until the observers are unhold
       noDelay = true;
-      edge e;
-      forEach (e, _oGraph.getInEdges(_n)) {
+      for (const edge &e : _oGraph.getInEdges(_n)) {
         if (_oType[e] & OBSERVER) {
           noDelay = false;
           break;
@@ -355,8 +319,8 @@ Iterator<Observable *> *Observable::getOnlookers() const {
       throw ObservableException("getObservers called on a deleted Observable");
     }
 
-    return new ConversionIterator<node, Observable *, Node2Observable>(getInObjects(),
-                                                                       node2Observable);
+    return conversionIterator<Observable *>(getInObjects(),
+                                            [&](const node &n) { return _oPointer[n]; });
   }
 
   return new NoObservableIterator();
@@ -456,9 +420,8 @@ void Observable::sendEvent(const Event &message) {
   // could be extended if we need recorders
   vector<pair<Observable *, node>> observerTonotify;
   vector<pair<Observable *, node>> listenerTonotify;
-  edge e;
   bool delayedEventAdded = false;
-  forEach (e, _oGraph.getInEdges(_n)) {
+  for (const edge &e : _oGraph.getInEdges(_n)) {
     node src(_oGraph.source(e));
 
     if (_oAlive[src]) {
@@ -654,23 +617,23 @@ unsigned int Observable::countListeners() const {
   if (!hasOnlookers())
     return 0;
 
-  unsigned int result = 0;
-  node n;
-  forEach (n, (new FilterIterator<node, LinkFilter<LISTENER>>(
-                  _oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(_oGraph, _oType, getNode()))))
-    ++result;
-  return result;
+  auto linkFilterListener = [this](node n) {
+    edge link(_oGraph.existEdge(n, getNode()));
+    return (link.isValid() && (_oType[link] & LISTENER));
+  };
+
+  return iteratorCount(filterIterator(_oGraph.getInNodes(getNode()), linkFilterListener));
 }
 //----------------------------------------
 unsigned int Observable::countObservers() const {
   if (!hasOnlookers())
     return 0;
 
-  unsigned int result = 0;
-  node n;
-  forEach (n, (new FilterIterator<node, LinkFilter<OBSERVER>>(
-                  _oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(_oGraph, _oType, getNode()))))
-    ++result;
-  return result;
+  auto linkFilterObserver = [this](node n) {
+    edge link(_oGraph.existEdge(n, getNode()));
+    return (link.isValid() && (_oType[link] & OBSERVER));
+  };
+
+  return iteratorCount(filterIterator(_oGraph.getInNodes(getNode()), linkFilterObserver));
 }
 }

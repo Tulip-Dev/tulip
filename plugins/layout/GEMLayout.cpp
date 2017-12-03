@@ -161,8 +161,7 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
   }
 
   // attractive forces
-  edge e;
-  forEach (e, graph->getInOutEdges(vNode)) {
+  for (const edge &e : graph->getInOutEdges(vNode)) {
     node uNode = graph->opposite(e, vNode);
 
     if (uNode == vNode)
@@ -232,9 +231,8 @@ void GEMLayout::insert() {
     if (fixedNodes && fixedNodes->getNodeValue(vNode))
       continue;
 
-    node uNode;
     // remove one to non-visited nodes
-    forEach (uNode, graph->getInOutNodes(vNode)) {
+    for (const node &uNode : graph->getInOutNodes(vNode)) {
       if (uNode == vNode)
         // nothing to do if it is a self loop
         continue;
@@ -248,8 +246,7 @@ void GEMLayout::insert() {
 
     if (startNode >= 0) {
       int d = 0;
-      node uNode;
-      forEach (uNode, graph->getInOutNodes(vNode)) {
+      for (const node &uNode : graph->getInOutNodes(vNode)) {
         if (uNode == vNode)
           // nothing to do if it a self loop
           continue;

@@ -19,7 +19,6 @@
 #include <tulip/OuterPlanarTest.h>
 #include <tulip/Graph.h>
 #include <tulip/PlanarityTestImpl.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;

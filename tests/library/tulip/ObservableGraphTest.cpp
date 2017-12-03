@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include "ObservableGraphTest.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>

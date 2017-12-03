@@ -23,7 +23,6 @@
 
 #include <tulip/ImportModule.h>
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/ForEach.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpQtTools.h>
 
@@ -461,22 +460,16 @@ public:
   void addSubGraphsEdges() {
     // iterate on each subgraph of graph
     // and add needed edges
-    Iterator<Graph *> *itg = graph->getSubGraphs();
-
-    while (itg->hasNext()) {
-      Graph *sg = itg->next();
+    for (Graph *sg : graph->getSubGraphs()) {
       // iterate on nodes
       for (const node &n : sg->nodes()) {
         // add its out edges
-        edge e;
-        forEach (e, graph->getOutEdges(n)) {
+        for (const edge &e : graph->getOutEdges(n)) {
           if (sg->isElement(graph->target(e)))
             sg->addEdge(e);
         }
       }
     }
-
-    delete itg;
   }
 
   void computeMetaNodes(Graph *quotientGraph) {
@@ -507,17 +500,17 @@ public:
 
           // set meta node properties values to the ones
           // of the fake meta node
-          PropertyInterface *prop;
-          forEach (prop, graph->getObjectProperties()) { prop->copy(mn, n, prop, true); }
+          for (PropertyInterface *prop : graph->getObjectProperties()) {
+            prop->copy(mn, n, prop, true);
+          }
 
           // add it to quotient graph if needed
           if (sg != quotientGraph)
             quotientGraph->addNode(mn);
 
           // replace n by mn
-          edge e;
-          forEach (e, graph->getInOutEdges(n)) {
-            pair<node, node> eEnds = graph->ends(e);
+          for (const edge &e : graph->getInOutEdges(n)) {
+            const pair<node, node> &eEnds = graph->ends(e);
 
             if (eEnds.first == n) {
               graph->setEnds(e, mn, eEnds.second);

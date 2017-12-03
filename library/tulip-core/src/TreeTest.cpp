@@ -21,7 +21,6 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/TreeTest.h>
 #include <tulip/AcyclicTest.h>
-#include <tulip/ForEach.h>
 #include <tulip/GraphTools.h>
 #include <tulip/BooleanProperty.h>
 
@@ -261,10 +260,9 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
   Graph *tree = rGraph->addSubGraph();
   node root = tree->addNode();
   rGraph->setAttribute(CLONE_ROOT, root);
-  Graph *gConn;
 
   // connected components subgraphs loop
-  forEach (gConn, rGraph->getSubGraphs()) {
+  for (Graph *gConn : rGraph->getSubGraphs()) {
     if (gConn == tree)
       continue;
 

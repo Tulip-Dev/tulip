@@ -30,7 +30,6 @@
 
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -67,14 +66,13 @@ void CopyPropertyDialog::init(Graph *graph, PropertyInterface *source) {
   ui->newPropertyRadioButton->setChecked(true);
 
   if (_graph != nullptr) {
-    PropertyInterface *property;
     Graph *parent = _graph->getSuperGraph();
 
     if (parent == graph) {
       parent = nullptr;
     }
 
-    forEach (property, _graph->getObjectProperties()) {
+    for (PropertyInterface *property : _graph->getObjectProperties()) {
       // type must be the same
       if (property->getTypename() == source->getTypename()) {
         // Check if name is different

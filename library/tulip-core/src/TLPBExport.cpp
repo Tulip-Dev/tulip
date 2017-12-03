@@ -29,8 +29,7 @@ using namespace std;
 //================================================================================
 void TLPBExport::getSubGraphs(Graph *g, vector<Graph *> &vsg) {
   // get subgraphs in a vector
-  Graph *sg;
-  forEach (sg, g->getSubGraphs()) {
+  for (Graph *sg : g->getSubGraphs()) {
     vsg.push_back(sg);
     getSubGraphs(sg, vsg);
   }
@@ -43,8 +42,8 @@ void TLPBExport::writeAttributes(ostream &os, Graph *g) {
     // If nodes and edges are stored as graph attributes
     // we need to update their ids before serializing them
     // as nodes and edges have been reindexed
-    pair<string, DataType *> attribute;
-    forEach (attribute, attributes.getValues()) {
+
+    for (const pair<string, DataType *> &attribute : attributes.getValues()) {
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
         node *n = static_cast<node *>(attribute.second->value);
         n->id = getNode(*n).id;
@@ -283,9 +282,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     unsigned int numGraphProperties = 0;
     unsigned int numProperties = 0;
     std::vector<PropertyInterface *> props;
-    PropertyInterface *prop;
     // get local properties in a vector
-    forEach (prop, graph->getObjectProperties()) {
+    for (PropertyInterface *prop : graph->getObjectProperties()) {
       props.push_back(prop);
       ++numProperties;
       ++numGraphProperties;
@@ -294,7 +292,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     // get subgraphs local properties too
     for (unsigned int i = 0; i < numSubGraphs; ++i) {
       Graph *sg = vSubGraphs[i];
-      forEach (prop, sg->getLocalObjectProperties()) {
+      for (PropertyInterface *prop : sg->getLocalObjectProperties()) {
         props.push_back(prop);
         ++numProperties;
       }
@@ -305,7 +303,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
     // loop on properties
     for (unsigned int i = 0; i < numProperties; ++i) {
-      prop = props[i];
+      PropertyInterface *prop = props[i];
       std::string nameOrType = prop->getName();
       unsigned int size = nameOrType.size();
       // write property name
@@ -381,9 +379,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         }
 
         // loop on nodes
-        node n;
         unsigned int nbValues = 0;
-        forEach (n, prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
+        for (const node &n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
           size = getNode(n).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
@@ -482,9 +479,8 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         }
 
         // loop on edges
-        edge e;
         unsigned int nbValues = 0;
-        forEach (e, prop->getNonDefaultValuatedEdges(propGraphId ? nullptr : graph)) {
+        for (const edge &e : prop->getNonDefaultValuatedEdges(propGraphId ? nullptr : graph)) {
           size = getEdge(e).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 

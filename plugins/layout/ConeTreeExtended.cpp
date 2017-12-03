@@ -42,8 +42,9 @@ void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
     levelSize.push_back(0);
 
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]);
-  node i;
-  forEach (i, tree->getOutNodes(n)) { computeLayerSize(i, level + 1); }
+  for (const node &i : tree->getOutNodes(n)) {
+    computeLayerSize(i, level + 1);
+  }
 }
 //===============================================================
 void ConeTreeExtended::computeYCoodinates(tlp::node root) {
@@ -146,8 +147,7 @@ void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *
                                   int level) {
   result->setNodeValue(
       n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
-  node itn;
-  forEach (itn, tree->getOutNodes(n)) {
+  for (const node &itn : tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x + (*px)[n], y + (*py)[n], level + 1);
   }
 }

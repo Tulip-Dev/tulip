@@ -23,7 +23,6 @@
 
 #include <sstream>
 
-#include <tulip/ForEach.h>
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
@@ -209,8 +208,7 @@ public:
       itP = g->getLocalObjectProperties();
     }
 
-    PropertyInterface *property;
-    forEach (property, itP) {
+    for (PropertyInterface *property : itP) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
@@ -247,7 +245,7 @@ public:
       if (property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        forEach (n, property->getNonDefaultValuatedNodes(g)) {
+        for (const node &n : property->getNonDefaultValuatedNodes(g)) {
           stringstream temp;
           temp << graph->nodePos(n);
           _writer.writeString(temp.str());
@@ -268,7 +266,7 @@ public:
       if (property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        forEach (e, property->getNonDefaultValuatedEdges(g)) {
+        for (const edge &e : property->getNonDefaultValuatedEdges(g)) {
           stringstream temp;
           temp << graph->edgePos(e);
           _writer.writeString(temp.str());
@@ -294,8 +292,7 @@ public:
     _writer.writeMapOpen();
     // saving attributes
     DataSet attributes = g->getAttributes();
-    pair<string, DataType *> attribute;
-    forEach (attribute, attributes.getValues()) {
+    for (const pair<string, DataType *> &attribute : attributes.getValues()) {
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
@@ -335,8 +332,7 @@ public:
     // saving subgraphs
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
-    Graph *sub;
-    forEach (sub, g->getSubGraphs()) {
+    for (Graph *sub : g->getSubGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
       _writer.writeMapClose();

@@ -20,7 +20,6 @@
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/PropertyTypes.h>
-#include <tulip/ForEach.h>
 #include <tulip/TlpQtTools.h>
 
 using namespace tlp;

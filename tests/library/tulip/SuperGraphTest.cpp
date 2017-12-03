@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/ForEach.h>
 #include "SuperGraphTest.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -493,9 +492,8 @@ void SuperGraphTest::testSubgraphId() {
     CPPUNIT_ASSERT_EQUAL(g1, graph->getSubGraph(id + i));
   }
 
-  Graph *g;
   unsigned int i = 0; // if the graph are not ordered that test can fail.
-  forEach (g, graph->getSubGraphs()) {
+  for (Graph *g : graph->getSubGraphs()) {
     CPPUNIT_ASSERT_EQUAL(id + i, g->getId());
     CPPUNIT_ASSERT_EQUAL(g, graph->getSubGraph(id + i));
     ++i;

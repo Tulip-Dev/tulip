@@ -22,7 +22,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 
 #include "Dikjstra/Dikjstra.h"

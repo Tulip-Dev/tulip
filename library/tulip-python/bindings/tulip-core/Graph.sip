@@ -51,15 +51,13 @@ inline void releasePropertyWrapper(tlp::PropertyInterface *prop) {
 
 inline void releaseGraphWrapper(tlp::Graph *graph) {
   releaseSIPWrapper(graph, sipFindType("tlp::Graph"));
-  tlp::PropertyInterface *prop = NULL;
-  forEach(prop, graph->getLocalObjectProperties()) {
+  for(tlp::PropertyInterface *prop : graph->getLocalObjectProperties()) {
     releasePropertyWrapper(prop);
   }
 }
 
 inline void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
-  tlp::Graph *sg = NULL;
-  forEach(sg, graph->getSubGraphs()) {
+  for(tlp::Graph *sg : graph->getSubGraphs()) {
     releaseGraphHierarchyWrappers(sg);
   }
   releaseGraphWrapper(graph);
@@ -111,8 +109,7 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
   } else {
     params = new tlp::DataSet(algoParams);
     if (inputParams) {
-      std::pair<std::string, tlp::DataType*> entry;
-      forEach(entry, inputParams->getValues()) {
+      for(const std::pair<std::string, tlp::DataType*> &entry : inputParams->getValues()) {
         params->setData(entry.first, entry.second);
       }
     }
@@ -124,8 +121,8 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
     filesPrefixes.push_back("file::");
     filesPrefixes.push_back("anyfile::");
     filesPrefixes.push_back("dir::");
-    std::pair<std::string, tlp::DataType*> entry;
-    stableForEach(entry, params->getValues()) {
+    for(const std::pair<std::string, tlp::DataType*> &entry :
+        tlp::stableIterator(params->getValues())) {
       for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
         std::string fileParamTlpName = filesPrefixes[i] + entry.first;
         if (algoParams.exist(fileParamTlpName)) {
@@ -151,8 +148,7 @@ void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset
     convertTlpDataSetToPyDict(*algorithmOutputDataset, inputDataSetWrapper);
   } else if (inputDataSetWrapper) {
     tlp::DataSet *wrappedDs = static_cast<tlp::DataSet*>(sipGetAddress(reinterpret_cast<sipSimpleWrapper *>(inputDataSetWrapper)));
-    std::pair<std::string, tlp::DataType*> entry;
-    forEach(entry, algorithmOutputDataset->getValues()) {
+    for (const std::pair<std::string, tlp::DataType*> &entry : algorithmOutputDataset->getValues()) {
       wrappedDs->setData(entry.first, entry.second);
     }
   }
@@ -160,8 +156,7 @@ void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset
 
 tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned int eltId, bool nodeValues) {
   tlp::DataSet *ret = new tlp::DataSet();
-  tlp::PropertyInterface *prop = NULL;
-  forEach(prop, graph->getObjectProperties()) {
+  for(tlp::PropertyInterface *prop : graph->getObjectProperties()) {
     tlp::BooleanProperty *booleanProp = dynamic_cast<tlp::BooleanProperty*>(prop);
     tlp::ColorProperty *colorProp = dynamic_cast<tlp::ColorProperty*>(prop);
     tlp::DoubleProperty *doubleProp = dynamic_cast<tlp::DoubleProperty*>(prop);
@@ -227,9 +222,7 @@ bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataS
   bool ok = true;
 
   tlp::Observable::holdObservers();
-  std::pair<std::string, tlp::DataType*> entry;
-  forEach(entry, dataSet->getValues()) {
-
+  for(const std::pair<std::string, tlp::DataType*> &entry : dataSet->getValues()) {
 #if PY_MAJOR_VERSION >= 3
     PyObject *pPropName = PyUnicode_FromString(entry.first.c_str());
 #else

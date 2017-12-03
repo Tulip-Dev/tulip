@@ -30,7 +30,6 @@
 #include <tulip/StringProperty.h>
 #include <tulip/NumericProperty.h>
 #include <tulip/StaticProperty.h>
-#include <tulip/ForEach.h>
 
 #include <exception>
 #include <string>

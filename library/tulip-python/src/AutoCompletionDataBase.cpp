@@ -54,7 +54,7 @@ AutoCompletionDataBase::AutoCompletionDataBase(APIDataBase *apiDb)
 
 static bool tlpPluginExists(const QString &pluginName) {
 
-  return tlp::PluginLister::pluginExists(QStringToTlpString(pluginName));
+  return PluginLister::pluginExists(QStringToTlpString(pluginName));
 }
 
 static QString getPythonTypeName(const QString &cppTypeName) {
@@ -64,10 +64,10 @@ static QString getPythonTypeName(const QString &cppTypeName) {
     return "integer";
   } else if (cppTypeName == "d") {
     return "float";
-  } else if (cppTypeName == typeid(std::string).name()) {
+  } else if (cppTypeName == typeid(string).name()) {
     return "string";
   } else {
-    QString typeName = tlp::demangleTlpClassName(QStringToTlpString(cppTypeName).c_str()).c_str();
+    QString typeName = demangleTlpClassName(QStringToTlpString(cppTypeName).c_str()).c_str();
     typeName.replace("*", "");
     return "tlp." + typeName;
   }
@@ -77,11 +77,11 @@ static QSet<QString> getParametersListForPlugin(const QString &pluginName,
                                                 const QString &prefix = "") {
   QSet<QString> ret;
 
-  if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
+  if (PluginLister::pluginExists(QStringToTlpString(pluginName))) {
 
-    const tlp::ParameterDescriptionList &parameters =
-        tlp::PluginLister::getPluginParameters(QStringToTlpString(pluginName));
-    tlp::Iterator<ParameterDescription> *it = parameters.getParameters();
+    const ParameterDescriptionList &parameters =
+        PluginLister::getPluginParameters(QStringToTlpString(pluginName));
+    Iterator<ParameterDescription> *it = parameters.getParameters();
 
     while (it->hasNext()) {
       ParameterDescription pd = it->next();
@@ -114,12 +114,12 @@ static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginNa
                                                          const QString &prefix = "") {
   QSet<QString> ret;
 
-  if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
-    const tlp::ParameterDescriptionList &parameters =
-        tlp::PluginLister::getPluginParameters(QStringToTlpString(pluginName));
-    tlp::DataSet dataSet;
+  if (PluginLister::pluginExists(QStringToTlpString(pluginName))) {
+    const ParameterDescriptionList &parameters =
+        PluginLister::getPluginParameters(QStringToTlpString(pluginName));
+    DataSet dataSet;
     parameters.buildDefaultDataSet(dataSet);
-    tlp::StringCollection sc;
+    StringCollection sc;
     dataSet.get(QStringToTlpString(strCollectionName), sc);
 
     for (size_t i = 0; i < sc.size(); ++i) {
@@ -133,7 +133,7 @@ static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginNa
   return ret;
 }
 
-static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QString &propName) {
+static QString getPythonTypeNameForGraphProperty(Graph *graph, const QString &propName) {
   if (graph->existLocalProperty(QStringToTlpString(propName))) {
     PropertyInterface *prop = graph->getProperty(QStringToTlpString(propName));
 
@@ -171,9 +171,7 @@ static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QStrin
   }
 
   QString ret = "";
-
-  Graph *sg = nullptr;
-  forEach (sg, graph->getSubGraphs()) {
+  for (Graph *sg : graph->getSubGraphs()) {
     ret = getPythonTypeNameForGraphProperty(sg, propName);
 
     if (ret != "") {
@@ -844,17 +842,18 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
 
 static QVector<PropertyInterface *> getAllGraphPropertiesFromRoot(Graph *root) {
   QVector<PropertyInterface *> ret;
-  string prop;
-  forEach (prop, root->getLocalProperties()) { ret.append(root->getProperty(prop)); }
-  Graph *sg = nullptr;
-  forEach (sg, root->getSubGraphs()) { ret += getAllGraphPropertiesFromRoot(sg); }
+  for (const string &prop : root->getLocalProperties()) {
+    ret.append(root->getProperty(prop));
+  }
+  for (Graph *sg : root->getSubGraphs()) {
+    ret += getAllGraphPropertiesFromRoot(sg);
+  }
   return ret;
 }
 
 static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &prefix) {
   QSet<QString> ret;
-  tlp::Graph *sg = nullptr;
-  forEach (sg, root->getSubGraphs()) {
+  for (Graph *sg : root->getSubGraphs()) {
     QString sgName = "\"" + tlpStringToQString(sg->getName()) + "\"";
 
     if (sgName.startsWith(prefix))
@@ -865,7 +864,9 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
   }
-  forEach (sg, root->getSubGraphs()) { ret += getAllSubGraphsNamesFromRoot(sg, prefix); }
+  for (Graph *sg : root->getSubGraphs()) {
+    ret += getAllSubGraphsNamesFromRoot(sg, prefix);
+  }
   return ret;
 }
 
@@ -979,24 +980,22 @@ AutoCompletionDataBase::getSubGraphsListIfContext(const QString &context,
 
 static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QString &prefix) {
   QSet<QString> ret;
-  tlp::Iterator<std::pair<std::string, tlp::DataType *>> *it =
-      rootGraph->getAttributes().getValues();
 
-  while (it->hasNext()) {
-    QString attrName = "\"" + tlpStringToQString(it->next().first) + "\"";
+  for (const pair<string, DataType *> &entry : rootGraph->getAttributes().getValues()) {
+    QString attrName = "\"" + tlpStringToQString(entry.first) + "\"";
 
     if (attrName.startsWith(prefix))
       ret.insert(attrName);
 
-    attrName = "'" + tlpStringToQString(it->next().first) + "'";
+    attrName = "'" + tlpStringToQString(entry.first) + "'";
 
     if (attrName.startsWith(prefix))
       ret.insert(attrName);
   }
 
-  delete it;
-  tlp::Graph *sg = nullptr;
-  forEach (sg, rootGraph->getSubGraphs()) { ret += getAllGraphsAttributesFromRoot(sg, prefix); }
+  for (Graph *sg : rootGraph->getSubGraphs()) {
+    ret += getAllGraphsAttributesFromRoot(sg, prefix);
+  }
   return ret;
 }
 
@@ -1145,15 +1144,14 @@ AutoCompletionDataBase::getGraphPropertiesListIfContext(const QString &context,
 
 static QSet<QString> getAlgorithmPluginsListOfType(const QString &type, const QString &prefix) {
   QSet<QString> ret;
-  std::list<std::string> pluginNames = tlp::PluginLister::availablePlugins();
+  list<string> pluginNames = PluginLister::availablePlugins();
 
-  for (std::list<std::string>::iterator it = pluginNames.begin(); it != pluginNames.end(); ++it) {
-    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, nullptr);
+  for (list<string>::iterator it = pluginNames.begin(); it != pluginNames.end(); ++it) {
+    Plugin *plugin = PluginLister::instance()->getPluginObject(*it, nullptr);
 
-    if (plugin->category() != tlp::GLYPH_CATEGORY && plugin->category() != EEGLYPH_CATEGORY &&
-        plugin->category() != tlp::INTERACTOR_CATEGORY &&
-        plugin->category() != tlp::VIEW_CATEGORY &&
-        plugin->category() != tlp::PERSPECTIVE_CATEGORY) {
+    if (plugin->category() != GLYPH_CATEGORY && plugin->category() != EEGLYPH_CATEGORY &&
+        plugin->category() != INTERACTOR_CATEGORY && plugin->category() != VIEW_CATEGORY &&
+        plugin->category() != PERSPECTIVE_CATEGORY) {
 
       if (type.isEmpty() || plugin->category() == QStringToTlpString(type)) {
         QString pluginName = "\"" + tlpStringToQString(*it) + "\"";
@@ -1195,19 +1193,19 @@ static QSet<QString> tryAlgorithmContext(const QString &context, const QString &
 
 static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
   QSet<QString> ret;
-  ret = tryAlgorithmContext(context, ".applyAlgorithm(", tlp::ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".applyAlgorithm(", ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".importGraph(", tlp::IMPORT_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".importGraph(", IMPORT_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".exportGraph(", tlp::EXPORT_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".exportGraph(", EXPORT_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
@@ -1219,97 +1217,87 @@ static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeBooleanProperty(",
-                            tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str());
+  ret =
+      tryAlgorithmContext(context, ".computeBooleanProperty(", BOOLEAN_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".applyBooleanAlgorithm(",
-                            tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".applyBooleanAlgorithm(", BOOLEAN_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".computeColorProperty(", COLOR_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyColorAlgorithm(", COLOR_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".computeDoubleProperty(", DOUBLE_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyDoubleAlgorithm(", DOUBLE_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
   ret =
-      tryAlgorithmContext(context, ".computeColorProperty(", tlp::COLOR_ALGORITHM_CATEGORY.c_str());
+      tryAlgorithmContext(context, ".computeIntegerProperty(", INTEGER_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret =
-      tryAlgorithmContext(context, ".applyColorAlgorithm(", tlp::COLOR_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".applyIntegerAlgorithm(", INTEGER_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeDoubleProperty(",
-                            tlp::DOUBLE_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".computeLayoutProperty(", LAYOUT_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".applyDoubleAlgorithm(",
-                            tlp::DOUBLE_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".applyLayoutAlgorithm(", LAYOUT_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeIntegerProperty(",
-                            tlp::INTEGER_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".computeSizeProperty(", SIZE_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".applyIntegerAlgorithm(",
-                            tlp::INTEGER_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".applySizeAlgorithm(", SIZE_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeLayoutProperty(",
-                            tlp::LAYOUT_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".computeStringProperty(", STRING_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".applyLayoutAlgorithm(",
-                            tlp::LAYOUT_ALGORITHM_CATEGORY.c_str());
-
-  if (!ret.empty()) {
-    return ret;
-  }
-
-  ret = tryAlgorithmContext(context, ".computeSizeProperty(", tlp::SIZE_ALGORITHM_CATEGORY.c_str());
-
-  if (!ret.empty()) {
-    return ret;
-  }
-
-  ret = tryAlgorithmContext(context, ".applySizeAlgorithm(", tlp::SIZE_ALGORITHM_CATEGORY.c_str());
-
-  if (!ret.empty()) {
-    return ret;
-  }
-
-  ret = tryAlgorithmContext(context, ".computeStringProperty(",
-                            tlp::STRING_ALGORITHM_CATEGORY.c_str());
-
-  if (!ret.empty()) {
-    return ret;
-  }
-
-  ret = tryAlgorithmContext(context, ".applyStringAlgorithm(",
-                            tlp::STRING_ALGORITHM_CATEGORY.c_str());
+  ret = tryAlgorithmContext(context, ".applyStringAlgorithm(", STRING_ALGORITHM_CATEGORY.c_str());
 
   return ret;
 }
