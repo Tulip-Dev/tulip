@@ -16,25 +16,39 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_STLITERATOR_H
 #define TULIP_STLITERATOR_H
-#include <tulip/tuliphash.h>
+
+#include <map>
+#include <type_traits>
+
 #include <tulip/Iterator.h>
 #include <tulip/memorypool.h>
 
 namespace tlp {
 
-template <typename VALUE, typename ITERATOR>
-struct StlIterator : public Iterator<VALUE> {
+/**
+* @class StlIterator
+* @ingroup Iterators
+*
+* @brief StlIterator wraps a stl iterator.
+*
+* Creates a Tulip Iterator from two stl iterators.
+*
+* @param startIt a stl iterator from which to begin the iteration
+* @param endIt a stl iterator on which to end the iteration
+*
+**/
+template <typename T, typename ITERATOR>
+struct StlIterator : public Iterator<T> {
   StlIterator(const ITERATOR &startIt, const ITERATOR &endIt) : it(startIt), itEnd(endIt) {}
-  VALUE next() override {
-    VALUE tmp = *it;
+  T next() {
+    T tmp = *it;
     ++it;
     return tmp;
   }
-  bool hasNext() override {
+  bool hasNext() {
     return (itEnd != it);
   }
 
@@ -42,63 +56,87 @@ private:
   ITERATOR it, itEnd;
 };
 //=================================================
-/**
-  * @class MPStlIterator
-  * @ingroup Iterators
-  * @brief MPStlIterator implements memory pool for StlIterator
-  * @warning never inherit from that class
-  * @see StlIterator
-  */
-template <typename VALUE, typename ITERATOR>
-struct MPStlIterator : public StlIterator<VALUE, ITERATOR>,
-                       public MemoryPool<MPStlIterator<VALUE, ITERATOR>> {
+template <typename T, typename ITERATOR>
+struct MPStlIterator : public StlIterator<T, ITERATOR>,
+                       public MemoryPool<MPStlIterator<T, ITERATOR>> {
   MPStlIterator(const ITERATOR &startIt, const ITERATOR &endIt)
-      : StlIterator<VALUE, ITERATOR>(startIt, endIt) {}
+      : StlIterator<T, ITERATOR>(startIt, endIt) {}
 };
 //=================================================
+
+// Helper to determine whether there's a const_iterator for T.
+template <typename T>
+struct has_const_iterator {
+private:
+  template <typename C>
+  static char test(typename C::const_iterator *);
+  template <typename C>
+  static int test(...);
+
+public:
+  enum { value = sizeof(test<T>(0)) == sizeof(char) };
+};
+
+/**
+* @brief Convenient function for creating a StlIterator from a stl container.
+* @ingroup Iterators
+*
+* @since Tulip 5.2
+*
+* Creates a StlIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
+*
+* @param stlContainer any STL container
+* @return a StlIterator
+**/
+template <typename Container>
+typename std::enable_if<
+    has_const_iterator<Container>::value,
+    StlIterator<typename Container::value_type, typename Container::const_iterator>
+        *>::type inline stlIterator(const Container &stlContainer) {
+  return new MPStlIterator<typename Container::value_type, typename Container::const_iterator>(
+      stlContainer.begin(), stlContainer.end());
+}
+
+//=================================================
 template <typename KEY, typename VALUE>
-struct StlHMapIterator : public Iterator<std::pair<KEY, VALUE>> {
-  StlHMapIterator(typename TLP_HASH_MAP<KEY, VALUE>::const_iterator startIt,
-                  typename TLP_HASH_MAP<KEY, VALUE>::const_iterator endIt)
+struct StlMapIterator : public Iterator<std::pair<KEY, VALUE>> {
+  StlMapIterator(typename std::map<KEY, VALUE>::const_iterator startIt,
+                 typename std::map<KEY, VALUE>::const_iterator endIt)
       : it(startIt), itEnd(endIt) {}
-  std::pair<KEY, VALUE> next();
-  bool hasNext();
+
+  std::pair<KEY, VALUE> next() {
+    std::pair<KEY, VALUE> tmp = *it;
+    ++it;
+    return tmp;
+  }
+
+  bool hasNext() {
+    return (itEnd != it);
+  }
 
 private:
-  typename TLP_HASH_MAP<KEY, VALUE>::const_iterator it, itEnd;
+  typename std::map<KEY, VALUE>::const_iterator it, itEnd;
 };
 //=================================================
-///  StlHMapIterator implemetation
 template <typename KEY, typename VALUE>
-std::pair<KEY, VALUE> StlHMapIterator<KEY, VALUE>::next() {
-  std::pair<KEY, VALUE> tmp = *it;
-  ++it;
-  return tmp;
-}
-template <typename KEY, typename VALUE>
-bool StlHMapIterator<KEY, VALUE>::hasNext() {
-  return (itEnd != it);
-}
-//=================================================
-}
-
-template <typename KEY, typename VALUE>
-struct StlHMapKeyIterator : public tlp::Iterator<KEY> {
-  StlHMapKeyIterator(typename TLP_HASH_MAP<KEY, VALUE>::const_iterator startIt,
-                     typename TLP_HASH_MAP<KEY, VALUE>::const_iterator endIt)
+struct StlMapKeyIterator : public tlp::Iterator<KEY> {
+  StlMapKeyIterator(typename std::map<KEY, VALUE>::const_iterator startIt,
+                    typename std::map<KEY, VALUE>::const_iterator endIt)
       : it(startIt), itEnd(endIt) {}
+
   KEY next() {
     const KEY tmp = it->first;
     ++it;
     return tmp;
   }
+
   bool hasNext() {
     return it != itEnd;
   }
 
 private:
-  typename TLP_HASH_MAP<KEY, VALUE>::const_iterator it, itEnd;
+  typename std::map<KEY, VALUE>::const_iterator it, itEnd;
 };
+}
 
 #endif
-///@endcond

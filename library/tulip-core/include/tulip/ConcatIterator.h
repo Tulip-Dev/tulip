@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_CONCATITERATOR_H
 #define TULIP_CONCATITERATOR_H
+
 #include <tulip/Iterator.h>
 
 namespace tlp {
@@ -29,8 +29,8 @@ namespace tlp {
 *given.
 * @warning This class takes ownership of the Iterators it is given.
 **/
-template <class itType>
-struct ConcatIterator : public Iterator<itType> {
+template <class T>
+struct ConcatIterator : public Iterator<T> {
 
   /**
   * @brief Creates an Iterator that iterates over the concatenation of the two sequences it is
@@ -40,7 +40,7 @@ struct ConcatIterator : public Iterator<itType> {
   * @param itTwo The second sequence, which will be iterated upon after the first sequence has been
   *completely iterated upon.
   **/
-  ConcatIterator(Iterator<itType> *itOne, Iterator<itType> *itTwo) : itOne(itOne), itTwo(itTwo) {}
+  ConcatIterator(Iterator<T> *itOne, Iterator<T> *itTwo) : itOne(itOne), itTwo(itTwo) {}
 
   /**
   * @brief Deletes the two iterators it was given at construction.
@@ -50,7 +50,7 @@ struct ConcatIterator : public Iterator<itType> {
     delete itTwo;
   }
 
-  itType next() override {
+  T next() override {
     if (itOne->hasNext())
       return itOne->next();
     else {
@@ -63,9 +63,26 @@ struct ConcatIterator : public Iterator<itType> {
   }
 
 private:
-  Iterator<itType> *itOne;
-  Iterator<itType> *itTwo;
+  Iterator<T> *itOne;
+  Iterator<T> *itTwo;
 };
+
+/**
+* @brief Convenient function for creating a ConcatIterator.
+* @ingroup Iterators
+*
+* @since Tulip 5.2
+*
+* Creates a ConcatIterator from two other Iterators.
+* The returned Iterator takes ownership of the one provided as parameter.
+*
+* @param itOne the first input Iterator
+* @param itTwo the second input Iterator
+* @return a ConcatIterator
+**/
+template <class T>
+Iterator<T> *concatIterator(Iterator<T> *itOne, Iterator<T> *itTwo) {
+  return new ConcatIterator<T>(itOne, itTwo);
+}
 }
 #endif
-///@endcond

@@ -28,8 +28,8 @@
 #include <map>
 
 #include <tulip/Observable.h>
-#include <tulip/conversioniterator.h>
-#include <tulip/filteriterator.h>
+#include <tulip/ConversionIterator.h>
+#include <tulip/FilterIterator.h>
 
 using namespace std;
 using namespace tlp;

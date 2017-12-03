@@ -19,8 +19,10 @@
 
 #ifndef TULIP_SORTITERATOR_H
 #define TULIP_SORTITERATOR_H
+
 #include <vector>
 #include <algorithm>
+
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
 #include <tulip/NumericProperty.h>
@@ -89,7 +91,7 @@ private:
 * @brief This Iterator sorts the nodes in a sequence based on their values in a NumericProperty.
 **/
 struct SortNodeIterator : public StableIterator<tlp::node> {
-  ///
+
   SortNodeIterator(Iterator<tlp::node> *itIn, const tlp::NumericProperty *metric,
                    bool ascendingOrder = true)
       : StableIterator<tlp::node>(itIn) {
@@ -102,7 +104,7 @@ struct SortNodeIterator : public StableIterator<tlp::node> {
 
     copyIterator = sequenceCopy.begin();
   }
-  ///
+
   ~SortNodeIterator() override {}
 };
 
@@ -110,7 +112,7 @@ struct SortNodeIterator : public StableIterator<tlp::node> {
 * @brief This Iterator sorts the edges in a sequence based on their values in a NumericProperty.
 **/
 struct SortEdgeIterator : public StableIterator<tlp::edge> {
-  ///
+
   SortEdgeIterator(Iterator<tlp::edge> *itIn, const tlp::NumericProperty *metric,
                    bool ascendingOrder = true)
       : StableIterator<tlp::edge>(itIn) {
@@ -123,7 +125,7 @@ struct SortEdgeIterator : public StableIterator<tlp::edge> {
 
     copyIterator = sequenceCopy.begin();
   }
-  ///
+
   ~SortEdgeIterator() override {}
 };
 
@@ -132,7 +134,7 @@ struct SortEdgeIterator : public StableIterator<tlp::edge> {
 *NumericProperty.
 **/
 struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
-  ///
+
   SortTargetEdgeIterator(Iterator<tlp::edge> *itIn, const Graph *sg,
                          const tlp::NumericProperty *metric, bool ascendingOrder = true)
       : StableIterator<tlp::edge>(itIn) {
@@ -145,7 +147,7 @@ struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
 
     copyIterator = sequenceCopy.begin();
   }
-  ///
+
   ~SortTargetEdgeIterator() override {}
 };
 
@@ -154,7 +156,7 @@ struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
 *NumericProperty.
 **/
 struct SortSourceEdgeIterator : public StableIterator<tlp::edge> {
-  ///
+
   SortSourceEdgeIterator(Iterator<tlp::edge> *itIn, const Graph *sg,
                          const tlp::NumericProperty *metric, bool ascendingOrder = true)
       : StableIterator<tlp::edge>(itIn) {
@@ -167,7 +169,7 @@ struct SortSourceEdgeIterator : public StableIterator<tlp::edge> {
 
     copyIterator = sequenceCopy.begin();
   }
-  ///
+
   ~SortSourceEdgeIterator() override {}
 };
 
@@ -176,7 +178,7 @@ struct SortSourceEdgeIterator : public StableIterator<tlp::edge> {
 *NumericProperty.
 **/
 struct SortExtremitiesEdgeIterator : public StableIterator<tlp::edge> {
-  ///
+
   SortExtremitiesEdgeIterator(Iterator<tlp::edge> *itIn, const Graph *sg,
                               const tlp::NumericProperty *metric, bool ascendingOrder = true)
       : StableIterator<tlp::edge>(itIn) {
@@ -189,8 +191,78 @@ struct SortExtremitiesEdgeIterator : public StableIterator<tlp::edge> {
 
     copyIterator = sequenceCopy.begin();
   }
-  ///
+
   ~SortExtremitiesEdgeIterator() override {}
 };
+
+/**
+* @class SortIterator
+* @ingroup Iterators
+* @brief Iterator that wraps an existing one and sorts its iterated elements based on comparison
+*function.
+* @since Tulip 5.2
+* @param it the iterator to sort
+* @param comp functor or lambda function taking two parameters of type const T& and returning a
+*boolean:
+* true if the first parameter is lesser or equal than the second one, false otherwise
+*
+**/
+template <typename T, typename CompareFunction>
+struct SortIterator : public tlp::StableIterator<T> {
+
+  SortIterator(Iterator<T> *itIn, CompareFunction &&compFunc) : StableIterator<T>(itIn) {
+    sort(this->sequenceCopy.begin(), this->sequenceCopy.end(), compFunc);
+    this->copyIterator = this->sequenceCopy.begin();
+  }
+
+  ~SortIterator() {}
+};
+
+/**
+* @brief Convenient function for creating a SortIterator.
+* @ingroup Iterators
+*
+* @since Tulip 5.2
+*
+* Creates a SortIterator from another Iterator and a comparison function.
+* The returned Iterator takes ownership of the one provided as parameter.
+*
+* @param it a Tulip Iterator
+* @param compFunc functor or lambda function taking two parameters of type const T& and returning a
+*boolean:
+* true if the first parameter is lesser or equal than the second one, false otherwise
+*
+* @return a SortIterator
+*
+**/
+template <typename T, typename CompareFunction>
+inline SortIterator<T, CompareFunction> *sortIterator(Iterator<T> *it, CompareFunction &&compFunc) {
+  return new SortIterator<T, CompareFunction>(it, compFunc);
+}
+
+/**
+* @brief Convenient function for creating a SortIterator from a STL container.
+* @ingroup Iterators
+*
+* @since Tulip 5.2
+*
+* Creates a SortIterator from another Iterator and a comparison function.
+*
+* @param stlContainer any STL container
+* @param compFunc functor or lambda function taking two parameters of type const T& and returning a
+*boolean:
+* true if the first parameter is lesser or equal than the second one, false otherwise
+*
+* @return a SortIterator
+*
+**/
+template <typename Container, typename CompareFunction>
+typename std::enable_if<has_const_iterator<Container>::value,
+                        SortIterator<typename Container::value_type, CompareFunction>
+                            *>::type inline sortIterator(const Container &stlContainer,
+                                                         CompareFunction &&compFunc) {
+  return new SortIterator<typename Container::value_type, CompareFunction>(
+      stlIterator(stlContainer), compFunc);
+}
 }
 #endif
