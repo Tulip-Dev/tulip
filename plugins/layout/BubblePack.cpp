@@ -268,19 +268,16 @@ void BubblePack::calcLayout(tlp::node n, Vec2f pos, NodeStaticProperty<Vec4f> &r
 }
 
 static const char *paramHelp[] = {
-    // Complexity
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "bool")
-        HTML_HELP_DEF("values", "[true, false] o(nlog(n)) / o(n)") HTML_HELP_DEF("default", "true")
-            HTML_HELP_BODY() "This parameter enables to choose the complexity of the "
-                             "algorithm." HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "Size")
-        HTML_HELP_DEF("values", "An existing size property") HTML_HELP_DEF("default", "viewSize")
-            HTML_HELP_BODY() "This parameter defines the property used for node's "
-                             "sizes." HTML_HELP_CLOSE()};
+    // complexity
+    "This parameter enables to choose the complexity of the algorithm, true = o(nlog(n)) / false = "
+    "o(n)",
+
+    // node size
+    "This parameter defines the property used for node's sizes."};
 
 BubblePack::BubblePack(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
-  addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
   addInParameter<bool>("complexity", paramHelp[0], "true");
+  addInParameter<SizeProperty>("node size", paramHelp[1], "viewSize");
   addDependency("Connected Component Packing", "1.0");
 }
 
