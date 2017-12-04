@@ -23,6 +23,7 @@
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QGraphicsProxyWidget>
+#include <QSortFilterProxyModel>
 
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
@@ -50,7 +51,7 @@ MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
   _informationWidgetItem->setVisible(false);
 
   if (showVisualPropButton)
-    connect(_ui->displayTulipProp, SIGNAL(stateChanged(int)), this, SLOT(showVisualProp(int)));
+    connect(_ui->displayTulipProp, SIGNAL(toggled(bool)), this, SLOT(showVisualProp(bool)));
   else
     _ui->displayTulipProp->hide();
 }
@@ -60,9 +61,14 @@ MouseShowElementInfo::~MouseShowElementInfo() {
   delete _ui;
 }
 
-void MouseShowElementInfo::showVisualProp(int show) {
-  _show = show == Qt::Checked;
-  static_cast<GraphElementModel *>(tableView()->model())->setShowVisualProp(_show);
+void MouseShowElementInfo::showVisualProp(bool show) {
+  if (show) {
+    _model->setFilterRegExp("");
+  } else {
+    // filter out properties whose name starts with "view"
+    _model->setFilterRegExp("^(?!view)\\w+$");
+  }
+  _show = show;
 }
 
 void MouseShowElementInfo::clear() {
@@ -138,8 +144,14 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
             ElementType eltType =
                 selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
-            tableView()->setModel(
-                buildModel(eltType, selectedEntity.getComplexEntityId(), _informationWidget));
+            // set the table view as the parent of the models as it
+            // takes ownership of them in that case (and thus
+            _model = new QSortFilterProxyModel(tableView());
+            _model->setFilterRole(GraphEdgeElementModel::PropertyNameRole);
+            _model->setSourceModel(
+                buildModel(eltType, selectedEntity.getComplexEntityId(), tableView()));
+            showVisualProp(_show);
+            tableView()->setModel(_model);
             title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
 
             QPoint position = qMouseEv->pos();
@@ -198,9 +210,9 @@ QAbstractItemModel *MouseShowElementInfo::buildModel(ElementType elementType,
                                                      unsigned int elementId,
                                                      QObject *parent) const {
   if (elementType == NODE) {
-    return new GraphNodeElementModel(view()->graph(), elementId, parent, _show);
+    return new GraphNodeElementModel(view()->graph(), elementId, parent);
   } else {
-    return new GraphEdgeElementModel(view()->graph(), elementId, parent, _show);
+    return new GraphEdgeElementModel(view()->graph(), elementId, parent);
   }
 }
 
