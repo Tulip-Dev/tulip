@@ -27,36 +27,13 @@
 using namespace tlp;
 using namespace std;
 
-GraphElementModel::GraphElementModel(Graph *graph, unsigned int id, QObject *parent,
-                                     bool displayvisual)
-    : TulipModel(parent), _graph(graph), _id(id), _displayvisualprop(displayvisual) {}
-
-void GraphElementModel::setShowVisualProp(bool show) {
-  beginResetModel();
-  _displayvisualprop = show;
-  endResetModel();
-}
+GraphElementModel::GraphElementModel(Graph *graph, unsigned int id, QObject *parent)
+    : TulipModel(parent), _graph(graph), _id(id) {}
 
 int GraphElementModel::rowCount(const QModelIndex &parent) const {
   if (_graph == nullptr || parent.isValid())
     return 0;
-
-  PropertyInterface *prop;
-  int result = 0;
-  forEach (prop, _graph->getObjectProperties()) {
-#ifdef NDEBUG
-
-    if (prop->getName() == "viewMetaGraph")
-      continue;
-
-#endif
-
-    if (!_displayvisualprop && prop->getName().compare(0, 4, "view") == 0)
-      continue;
-
-    ++result;
-  }
-  return result;
+  return getGraphProperties().size();
 }
 
 int GraphElementModel::columnCount(const QModelIndex &parent) const {
@@ -77,24 +54,7 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
   } else if (role == Qt::DisplayRole) {
-    string propertyName;
-    int result = 0;
-    forEach (propertyName, _graph->getProperties()) {
-#ifdef NDEBUG
-
-      if (propertyName == "viewMetaGraph")
-        continue;
-
-#endif
-
-      if (!_displayvisualprop && propertyName.compare(0, 4, "view") == 0)
-        continue;
-
-      if (section == result)
-        return propertyName.c_str();
-
-      ++result;
-    }
+    return getGraphProperties()[section]->getName().c_str();
   }
 
   return TulipModel::headerData(section, orientation, role);
@@ -103,35 +63,18 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
 QModelIndex GraphElementModel::index(int row, int column, const QModelIndex &parent) const {
   if (!hasIndex(row, column, parent))
     return QModelIndex();
-
-  PropertyInterface *prop = nullptr;
-  int result = 0;
-  forEach (prop, _graph->getObjectProperties()) {
-#ifdef NDEBUG
-
-    if (prop->getName() == "viewMetaGraph")
-      continue;
-
-#endif
-
-    if (!_displayvisualprop && prop->getName().compare(0, 4, "view") == 0)
-      continue;
-
-    if (result == row)
-      break;
-
-    ++result;
-  }
-  return createIndex(row, column, prop);
+  return createIndex(row, column, getGraphProperties()[row]);
 }
 
 QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
-  if (role == Qt::DisplayRole)
+  if (role == PropertyNameRole) {
+    return static_cast<PropertyInterface *>(index.internalPointer())->getName().c_str();
+  } else if (role == Qt::DisplayRole) {
     return value(_id, static_cast<PropertyInterface *>(index.internalPointer()));
-
-  if (role == TulipModel::PropertyRole)
+  } else if (role == TulipModel::PropertyRole) {
     return QVariant::fromValue<PropertyInterface *>(
         static_cast<PropertyInterface *>(index.internalPointer()));
+  }
 
   return QVariant();
 }
@@ -148,27 +91,22 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
 #endif
 }
 
+QVector<PropertyInterface *> GraphElementModel::getGraphProperties() const {
+  QVector<PropertyInterface *> properties;
+  PropertyInterface *prop = nullptr;
+  forEach (prop, _graph->getObjectProperties()) {
+#ifdef NDEBUG
+    if (prop->getName() == "viewMetaGraph")
+      continue;
+#endif
+    properties.append(prop);
+  }
+  return properties;
+}
+
 bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    PropertyInterface *prop = nullptr;
-    int result = 0;
-    forEach (prop, _graph->getObjectProperties()) {
-#ifdef NDEBUG
-
-      if (prop->getName() == "viewMetaGraph")
-        continue;
-
-#endif
-
-      if (!_displayvisualprop && prop->getName().compare(0, 4, "view") == 0)
-        continue;
-
-      if (result == index.row())
-        break;
-
-      ++result;
-    }
-
+    PropertyInterface *prop = static_cast<PropertyInterface *>(index.internalPointer());
     _graph->push();
     return GraphModel::setNodeValue(_id, prop, value);
     _graph->popIfNoUpdates();
@@ -179,25 +117,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 
 bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    PropertyInterface *prop = nullptr;
-    int result = 0;
-    forEach (prop, _graph->getObjectProperties()) {
-#ifdef NDEBUG
-
-      if (prop->getName() == "viewMetaGraph")
-        continue;
-
-#endif
-
-      if (!_displayvisualprop && prop->getName().compare(0, 4, "view") == 0)
-        continue;
-
-      if (result == index.row())
-        break;
-
-      ++result;
-    }
-
+    PropertyInterface *prop = static_cast<PropertyInterface *>(index.internalPointer());
     _graph->push();
     return GraphModel::setEdgeValue(_id, prop, value);
     _graph->popIfNoUpdates();

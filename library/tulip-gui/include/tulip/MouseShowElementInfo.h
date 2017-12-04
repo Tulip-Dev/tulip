@@ -33,6 +33,7 @@ class QGraphicsProxyWidget;
 class QTableView;
 class QAbstractItemModel;
 class QObject;
+class QSortFilterProxyModel;
 
 namespace tlp {
 
@@ -66,6 +67,7 @@ protected:
   QGraphicsProxyWidget *_informationWidgetItem;
   GlMainWidget *glMainWidget;
   bool _show;
+  QSortFilterProxyModel *_model;
 
   QTableView *tableView() const;
 
@@ -85,8 +87,10 @@ protected:
    * @return
    */
   virtual QString elementName(ElementType elementType, unsigned int elementId) const;
+
 private slots:
-  void showVisualProp(int show);
+
+  void showVisualProp(bool show);
 };
 }
 
