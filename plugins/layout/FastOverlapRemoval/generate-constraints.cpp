@@ -96,7 +96,9 @@ bool CmpNodePos::operator()(const Node *u, const Node *v) const {
     return isNaN(u->pos);
   }
 
-  return u < v;
+  // sort according to the index of the variables
+  // in vars array (see below) to have a predictable sort
+  return u->v < v->v;
 
   /* I don't know how important it is to handle NaN correctly
    * (e.g. we probably handle it badly in other code anyway, and
@@ -183,6 +185,10 @@ int compare_events(const void *a, const void *b) {
     return (isNaN(ea->pos) ? -1 : 1);
   }
 
+  // sort according to the index of the variables
+  // in vars array (see below) to have a predictable sort
+  if (ea->v->v < eb->v->v)
+    return -1;
   return 0;
 }
 
