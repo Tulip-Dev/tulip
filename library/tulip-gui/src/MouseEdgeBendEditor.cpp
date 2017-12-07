@@ -449,18 +449,10 @@ void MouseEdgeBendEditor::mMouseCreate(int x, int y, GlMainWidget *glMainWidget)
 bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
   initProxies(glMainWidget);
 
-  Iterator<edge> *itE;
-  Iterator<node> *itN;
-  edge ite;
-  node itn;
   bool hasSelection = false;
   bool multipleSelection = false;
 
-  itE = _graph->getEdges();
-
-  while (itE->hasNext()) {
-    ite = itE->next();
-
+  for (const edge &ite : _graph->edges()) {
     if (_selection->getEdgeValue(ite)) {
       if (hasSelection) {
         hasSelection = false;
@@ -474,14 +466,8 @@ bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
     }
   }
 
-  delete itE;
-
   if (!multipleSelection) {
-    itN = _graph->getNodes();
-
-    while (itN->hasNext()) {
-      itn = itN->next();
-
+    for (const node &itn : _graph->nodes()) {
       if (_selection->getNodeValue(itn)) {
         if (hasSelection) {
           hasSelection = false;
@@ -493,8 +479,6 @@ bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
         }
       }
     }
-
-    delete itN;
   }
 
   return hasSelection;

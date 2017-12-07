@@ -39,19 +39,15 @@ public:
     node viewMetricMaxNode;
     double vMax = -DBL_MAX;
     DoubleProperty *metric = sg->getProperty<DoubleProperty>("viewMetric");
-    Iterator<node> *itN = sg->getNodes();
 
-    while (itN->hasNext()) {
-      node itn = itN->next();
-      const double &value = metric->getNodeValue(itn);
+    for (const node &itn : sg->nodes()) {
+      double value = metric->getNodeValue(itn);
 
       if (value > vMax) {
         vMax = value;
         viewMetricMaxNode = itn;
       }
     }
-
-    delete itN;
 
     if (viewMetricMaxNode.isValid())
       label->setNodeValue(mN, label->getNodeValue(viewMetricMaxNode));

@@ -91,17 +91,16 @@ public:
     if (graph->numberOfNodes() <= 2)
       return true;
 
-    Iterator<node> *it = graph->getNodes();
     unsigned int nbNodes = graph->numberOfNodes();
     unsigned int count = 0;
 
     pluginProgress->showPreview(false);
 
-    while (it->hasNext()) {
+    for (const node &s : graph->nodes()) {
+
       if (((++count % 50) == 0) && (pluginProgress->progress(count, nbNodes) != TLP_CONTINUE))
         break;
 
-      node s = it->next();
       stack<node> S;
       TLP_HASH_MAP<node, list<node>> P;
       MutableContainer<int> sigma;
@@ -119,15 +118,14 @@ public:
         int vs = sigma.get(v.id);
         Q.pop();
         S.push(v);
-        Iterator<node> *it2;
+        Iterator<node> *it = nullptr;
 
         if (directed)
-          it2 = graph->getOutNodes(v);
+          it = graph->getOutNodes(v);
         else
-          it2 = graph->getInOutNodes(v);
+          it = graph->getInOutNodes(v);
 
-        while (it2->hasNext()) {
-          node w = it2->next();
+        for (const node &w : it) {
           int wd = d.get(w.id);
 
           if (wd < 0) {
@@ -140,8 +138,6 @@ public:
             P[w].push_back(v);
           }
         }
-
-        delete it2;
       }
 
       MutableContainer<double> delta;
@@ -168,16 +164,12 @@ public:
       }
     }
 
-    delete it;
-
     // Normalization
     if (norm || !directed) {
       double n = graph->numberOfNodes();
       const double nNormFactor = 1.0 / ((n - 1) * (n - 2));
-      it = graph->getNodes();
 
-      while (it->hasNext()) {
-        node s = it->next();
+      for (const node &s : graph->nodes()) {
 
         // In the undirected case, the metric must be divided by two, then
         if (norm)
@@ -187,13 +179,9 @@ public:
           result->setNodeValue(s, result->getNodeValue(s) * 0.5);
       }
 
-      delete it;
-
-      Iterator<edge> *itE = graph->getEdges();
       const double eNormFactor = 4.0 / (n * n);
 
-      while (itE->hasNext()) {
-        edge e = itE->next();
+      for (const edge &e : graph->edges()) {
 
         if (norm)
           result->setEdgeValue(e, result->getEdgeValue(e) * eNormFactor);
@@ -201,8 +189,6 @@ public:
         if (!directed)
           result->setEdgeValue(e, result->getEdgeValue(e) * 0.5);
       }
-
-      delete itE;
     }
 
     return pluginProgress->state() != TLP_CANCEL;

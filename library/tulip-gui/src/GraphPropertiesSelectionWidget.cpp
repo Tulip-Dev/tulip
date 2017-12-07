@@ -52,15 +52,12 @@ void GraphPropertiesSelectionWidget::setWidgetParameters(
 }
 
 void GraphPropertiesSelectionWidget::initWidget() {
-  Iterator<string> *it = graph->getProperties();
-  string propertyName;
   vector<string> inputProperties;
 
   setUnselectedStringsListLabel("Available properties");
   setSelectedStringsListLabel("Selected properties");
 
-  while (it->hasNext()) {
-    propertyName = it->next();
+  for (const string &propertyName : graph->getProperties()) {
 
     if (propertySelectable(propertyName)) {
       inputProperties.push_back(propertyName);

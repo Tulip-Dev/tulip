@@ -179,7 +179,7 @@ public:
       shift = entryMetric->getNodeDoubleMin(graph);
 
       // compute size of nodes
-      vector<node> nodes = graph->nodes();
+      const vector<node> &nodes = graph->nodes();
       NodeStaticProperty<Size> nodeSize(graph);
       nodeSize.copyFromProperty(entrySize);
       unsigned nbNodes = nodes.size();
@@ -199,13 +199,13 @@ public:
         }
 
         if (xaxis)
-          nodeSize[i][0] = float(sizos);
+          nodeSize[n][0] = float(sizos);
 
         if (yaxis)
-          nodeSize[i][1] = float(sizos);
+          nodeSize[n][1] = float(sizos);
 
         if (zaxis)
-          nodeSize[i][2] = float(sizos);
+          nodeSize[n][2] = float(sizos);
       }
       nodeSize.copyToProperty(result);
     } else {
@@ -218,10 +218,10 @@ public:
 #pragma omp parallel for
 #endif
       for (OMP_ITER_TYPE i = 0; i < nbEdges; ++i) {
-        edge e(edges[i]);
+        edge e = edges[i];
         double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
-        edgeSize[i][0] = float(sizos);
-        edgeSize[i][1] = float(sizos);
+        edgeSize[e][0] = float(sizos);
+        edgeSize[e][1] = float(sizos);
       }
       edgeSize.copyToProperty(result);
     }

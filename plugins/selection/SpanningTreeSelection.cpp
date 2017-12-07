@@ -38,17 +38,12 @@ bool SpanningTreeSelection::run() {
 
   if (graph->existProperty("viewSelection")) {
     BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
-    Iterator<node> *itN = graph->getNodes();
 
-    while (itN->hasNext()) {
-      node itn = itN->next();
-
+    for (const node &itn : graph->nodes()) {
       if (viewSelection->getNodeValue(itn) == true) {
         result->setNodeValue(itn, true);
       }
     }
-
-    delete itN;
   }
 
   selectSpanningForest(graph, result, pluginProgress);

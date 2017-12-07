@@ -155,16 +155,12 @@ int ImprovedWalker::initializeNode(tlp::node n, unsigned int depth) {
 
   int maxDepth = 0;
   int count = 0;
-  Iterator<node> *itNode = tree->getOutNodes(n);
 
-  while (itNode->hasNext()) {
-    node currentNode = itNode->next();
+  for (const node &currentNode : tree->getOutNodes(n)) {
     order[currentNode] = ++count;
     int treeDepth = initializeNode(currentNode, depth + 1);
     maxDepth = max(treeDepth, maxDepth);
   }
-
-  delete itNode;
 
   return maxDepth + 1;
 }
@@ -200,15 +196,12 @@ void ImprovedWalker::firstWalk(tlp::node v) {
                     oriSize->getNodeValue(vleftSibling).getW() / 2.f;
   } else {
     node defaultAncestor = leftmostChild(v);
-    Iterator<node> *itNode = getChildren(v);
 
-    while (itNode->hasNext()) {
-      node currentNode = itNode->next();
+    for (const node &currentNode : getChildren(v)) {
       firstWalk(currentNode);
       combineSubtree(currentNode, &defaultAncestor);
     }
 
-    delete itNode;
     executeShifts(v);
 
     float midPoint = (prelimX[leftmostChild(v)] + prelimX[rightmostChild(v)]) / 2.f;
@@ -227,12 +220,9 @@ void ImprovedWalker::firstWalk(tlp::node v) {
 void ImprovedWalker::secondWalk(tlp::node v, float modifierX, int depth) {
   OrientableCoord coord = oriLayout->createCoord(prelimX[v] + modifierX, depth * spacing, 0);
   oriLayout->setNodeValue(v, coord);
-  Iterator<node> *itNode = getChildren(v);
 
-  while (itNode->hasNext())
-    secondWalk(itNode->next(), modifierX + modChildX[v], depth + 1);
-
-  delete itNode;
+  for (const node &n : getChildren(v))
+    secondWalk(n, modifierX + modChildX[v], depth + 1);
 }
 //====================================================================
 void ImprovedWalker::combineSubtree(tlp::node v, tlp::node *defaultAncestor) {
@@ -320,21 +310,15 @@ void ImprovedWalker::moveSubtree(tlp::node fromNode, tlp::node toNode, float rig
 }
 //====================================================================
 void ImprovedWalker::executeShifts(tlp::node v) {
-
   float shift = 0;
   float delta = 0;
-  Iterator<node> *itNode = getReversedChildren(v);
 
-  while (itNode->hasNext()) {
-    node currentNode = itNode->next();
-
+  for (const node &currentNode : getReversedChildren(v)) {
     prelimX[currentNode] += shift;
     modChildX[currentNode] += shift;
 
     delta += shiftDelta[currentNode];
     shift += shiftNode[currentNode] + delta;
   }
-
-  delete itNode;
 }
 //====================================================================

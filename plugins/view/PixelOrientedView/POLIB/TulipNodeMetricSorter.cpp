@@ -47,13 +47,7 @@ TulipNodeMetricSorter::~TulipNodeMetricSorter() {
 
 void TulipNodeMetricSorter::sortNodesForProperty(const string &propertyName) {
   cleanupSortNodesForProperty(propertyName);
-  Iterator<node> *nodeIt = graph->getNodes();
-
-  while (nodeIt->hasNext()) {
-    nodeSortingMap[propertyName].push_back(nodeIt->next());
-  }
-
-  delete nodeIt;
+  nodeSortingMap[propertyName] = graph->nodes();
 
   const string &propertyType = graph->getProperty(propertyName)->getTypename();
 
@@ -86,23 +80,19 @@ unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string &propert
 
     if (propertyType == "double") {
       set<double> sd;
-      Iterator<node> *nodeIt = graph->getNodes();
 
-      while (nodeIt->hasNext()) {
-        sd.insert(graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(nodeIt->next()));
+      for (const node &n : graph->nodes()) {
+        sd.insert(graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(n));
       }
 
-      delete nodeIt;
       count = sd.size();
     } else if (propertyType == "int") {
       set<int> si;
-      Iterator<node> *nodeIt = graph->getNodes();
 
-      while (nodeIt->hasNext()) {
-        si.insert(graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(nodeIt->next()));
+      for (const node &n : graph->nodes()) {
+        si.insert(graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n));
       }
 
-      delete nodeIt;
       count = si.size();
     }
 

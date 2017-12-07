@@ -140,31 +140,21 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             needPush = false;
           }
 
-          Iterator<node> *itn = selection->getNonDefaultValuatedNodes();
-
-          if (itn->hasNext()) {
+          if (!iteratorEmpty(selection->getNonDefaultValuatedNodes())) {
             if (needPush) {
               graph->push();
               needPush = false;
             }
-
-            delete itn;
             selection->setAllNodeValue(false);
-          } else
-            delete itn;
+          }
 
-          Iterator<edge> *ite = selection->getNonDefaultValuatedEdges();
-
-          if (ite->hasNext()) {
+          if (!iteratorEmpty(selection->getNonDefaultValuatedEdges())) {
             if (needPush) {
               graph->push();
               needPush = false;
             }
-
-            delete ite;
             selection->setAllEdgeValue(false);
-          } else
-            delete ite;
+          }
         }
       } else {
         boolVal = true;

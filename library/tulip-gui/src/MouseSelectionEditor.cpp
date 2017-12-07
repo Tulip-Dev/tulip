@@ -419,20 +419,9 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     composite->addGlEntity(&_controls[6], "bottom");
     composite->addGlEntity(&_controls[7], "bottom-left");
 
-    Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
-    int moreThanOneNode = 0;
+    bool moreThanOneNode = iteratorCountCheck(_selection->getNodesEqualTo(true, _graph), 2);
 
-    while (itN->hasNext()) {
-      if (moreThanOneNode >= 2)
-        break;
-
-      moreThanOneNode++;
-      itN->next();
-    }
-
-    delete itN;
-
-    if (moreThanOneNode >= 2) {
+    if (moreThanOneNode) {
       composite->addGlEntity(&advRect, "AdvRectangle");
 
       composite->addGlEntity(&_advControls[0], "center-top");
@@ -628,15 +617,10 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     }
 
     if (mode == COORD_AND_SIZE || mode == SIZE) {
-      Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
-
-      while (itN->hasNext()) {
-        node n = itN->next();
+      for (const node &n : _selection->getNodesEqualTo(true, _graph)) {
         double rotation = _rotation->getNodeValue(n);
         _rotation->setNodeValue(n, rotation - degAngle);
       }
-
-      delete itN;
     }
 
     Observable::unholdObservers();
@@ -702,12 +686,10 @@ void MouseSelectionEditor::mAlign(EditOperation operation, GlMainWidget *) {
   Observable::holdObservers();
   _graph->push();
 
-  Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
   bool init = false;
   float min = -FLT_MAX, max = FLT_MAX;
 
-  while (itN->hasNext()) {
-    node n = itN->next();
+  for (const node &n : _selection->getNodesEqualTo(true, _graph)) {
 
     float valueMin = -FLT_MAX, valueMax = FLT_MAX;
 
@@ -795,10 +777,7 @@ void MouseSelectionEditor::mAlign(EditOperation operation, GlMainWidget *) {
     }
   }
 
-  itN = _selection->getNodesEqualTo(true, _graph);
-
-  while (itN->hasNext()) {
-    node n = itN->next();
+  for (const node &n : _selection->getNodesEqualTo(true, _graph)) {
     Coord old(_layout->getNodeValue(n));
 
     switch (operation) {

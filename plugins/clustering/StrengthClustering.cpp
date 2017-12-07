@@ -47,10 +47,7 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
     }
   }
 
-  Iterator<edge> *itE = sg->getEdges();
-
-  while (itE->hasNext()) {
-    edge e = itE->next();
+  for (const edge &e : sg->edges()) {
     const pair<node, node> &eEnds = sg->ends(e);
     node n1 = eEnds.first;
     node n2 = eEnds.second;
@@ -75,8 +72,6 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
       }
     }
   }
-
-  delete itE;
 
   double positive = 0;
 
@@ -108,12 +103,9 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
 
 //==============================================================================
 void StrengthClustering::computeNodePartition(double threshold, vector<set<node>> &result) {
-  // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   Graph *tmpGraph = graph->addCloneSubGraph();
-  StableIterator<edge> itE(graph->getEdges());
 
-  while (itE.hasNext()) {
-    edge ite = itE.next();
+  for (const edge &ite : stableIterator(graph->getEdges())) {
 
     if (values->getEdgeValue(ite) < threshold) {
       const pair<node, node> &eEnds = graph->ends(ite);
@@ -125,20 +117,14 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
 
   // Select SubGraph singleton in graph
   set<node> singleton;
-  StableIterator<node> itN(tmpGraph->getNodes());
 
-  while (itN.hasNext()) {
-    node itn = itN.next();
-
+  for (const node &itn : stableIterator(tmpGraph->getNodes())) {
     if (tmpGraph->deg(itn) == 0)
       singleton.insert(itn);
   }
 
   // restore edges to reconnect singleton by computing induced subgraph
-  StableIterator<edge> itE2(graph->getEdges());
-
-  while (itE2.hasNext()) {
-    edge ite = itE2.next();
+  for (const edge &ite : stableIterator(graph->getEdges())) {
     const pair<node, node> &eEnds = graph->ends(ite);
 
     if (singleton.find(eEnds.first) != singleton.end() &&
@@ -155,10 +141,8 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
   // Compute the node partition
   int index = 0;
   map<double, int> resultIndex;
-  Iterator<node> *itN2 = tmpGraph->getNodes();
 
-  while (itN2->hasNext()) {
-    node itn = itN2->next();
+  for (const node &itn : tmpGraph->nodes()) {
     const double &val = connected.getNodeValue(itn);
 
     if (resultIndex.find(val) != resultIndex.end())
@@ -172,24 +156,8 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
     }
   }
 
-  delete itN2;
-
   graph->delAllSubGraphs(tmpGraph);
 }
-//==============================================================================
-// void drawGraph(Graph *tmpg) {
-//  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
-//  string errMsg;
-//  string layoutName;
-//  if (tmpg->numberOfNodes() > 300)
-//    layoutName = "Circular";
-//  else
-//    layoutName = "GEM (Frick)";
-//  string sizesName="Auto Sizing";
-//  tmpg->computeProperty(layoutName,tmpg->getLocalProperty<LayoutProperty>("viewLayout"),errMsg);
-//  if (tmpg->numberOfNodes() < 300)
-//    tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizeProperty>("viewSize"),errMsg);
-//}
 //==============================================================================
 double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped) {
   double maxMQ = -2;
@@ -218,99 +186,8 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped) {
     }
   }
 
-  // tlp::debug() << __PRETTY_FUNCTION__ << endl;
-  // tlp::debug() << "\t" <<" Nb try : " << numberOfSteps << endl;
-  // tlp::debug() << "\t" <<" Max MQ : " << maxMQ << endl << flush;
-  // tlp::debug() << "\t" <<" Best threshold : " << threshold << endl << flush;
   return threshold;
 }
-//==============================================================================
-// Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition) {
-//  if (partition.size()<2) return graph;
-//  Graph *tmpGraph=tlp::newCloneSubGraph(graph);
-//  stringstream sstr;
-//  sstr << "clone of ";
-//  string graphName = graph->getAttribute<string>("name");
-//  if (graphName.size() == 0)
-//    sstr << graph->getId();
-//  else
-//    sstr << graphName;
-//  tmpGraph->setAttribute(string("name"), sstr.str());
-//  unsigned int step = partition.size() / 10;
-//  for (unsigned int i=0;i<partition.size();++i) {
-//    if (pluginProgress && step && ((i % step) == 0)) {
-//      pluginProgress->progress(i, partition.size());
-//      if (pluginProgress->state() !=TLP_CONTINUE) {
-//  graph->delSubGraph(tmpGraph);
-//  return 0;
-//      }
-//    }
-//    tmpGraph->inducedSubGraph(partition[i]);
-//  }
-//  return tmpGraph;
-//}
-//==============================================================================
-// bool StrengthClustering::recursiveCall(Graph *rootGraph) {
-//  Iterator<Graph*> *itS = rootGraph->getSubGraphs();
-//  while(itS->hasNext()) {
-//    Graph *sg=itS->next();
-//    Graph *tmpGr = sg;
-//    if (sg->numberOfNodes() > 10) {
-//      double avPath;
-//      if (pluginProgress)
-//  pluginProgress->setComment("Computing average path length on subgraphs");
-//      if (!tlp::averagePathLength(sg, avPath, pluginProgress))
-//  return false;
-//      double avCluster;
-//      if (pluginProgress)
-//  pluginProgress->setComment("Computing average cluster on subgraphs");
-//      if (!tlp::averageCluster(sg, avCluster, pluginProgress))
-//  return false;
-//      /*
-//  tlp::debug() << "Average Path Length :" << avPath << endl;
-//  tlp::debug() << "Average clustering  :" <<  avCluster << endl;
-//  tlp::debug() << "Number of nodes     :" <<  tmpg->numberOfNodes() << endl;
-//  tlp::debug() << "Number of edges     :" <<  tmpg->numberOfEdges() << endl;
-//      */
-//      if ( avPath > 1 && avPath < 4 && avCluster > 0.25) {
-//  DataSet tmpData;
-//  string errMsg;
-
-//  //pluginProgress->setComment("Computing strength clustering on subgraphs...");
-//  // propagate values for layout parameters
-//  tmpData.set("layout subgraphs", subgraphsLayout);
-//  tmpData.set("layout quotient graph", quotientLayout);
-//  if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Strength Clustering",
-//         pluginProgress)) {
-//    return false;
-//  }
-//  tmpData.get("strengthGraph",tmpGr);
-//      }
-//    }
-//    if (subgraphsLayout && sg==tmpGr) {
-//      drawGraph(sg);
-//    }
-//  } delete itS;
-//  return true;
-//}
-//==============================================================================
-// Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
-//  DataSet tmpData;
-//  string errMsg;
-//  if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Quotient Clustering",
-//         pluginProgress))
-//    return 0;
-//  Graph *quotientGraph = nullptr;
-//  tmpData.get<Graph *>("quotientGraph", quotientGraph);
-//  vector<edge> toRemoved;
-//  SimpleTest::makeSimple(quotientGraph, toRemoved);
-//  for(vector<edge>::iterator it= toRemoved.begin(); it!=toRemoved.end(); ++it)
-//    quotientGraph->delAllEdge(*it);
-
-//  if (quotientLayout)
-//    drawGraph(quotientGraph);
-//  return quotientGraph;
-//}
 //==============================================================================
 static const char *paramHelp[] = {
     // metric
@@ -322,14 +199,7 @@ static const char *paramHelp[] = {
 //================================================================================
 StrengthClustering::StrengthClustering(PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
-  //  addInParameter<bool>("layout subgraphs", paramHelp[1], "true");
-  //  addInParameter<bool>("layout quotient graph", paramHelp[2], "true");
-  //  addDependency("Quotient Clustering", "1.3");
-  //  addDependency("Connected Component", "1.0");
   addDependency("Strength", "1.0");
-  //  addDependency("Circular", "1.1");
-  //  addDependency("GEM (Frick)", "1.1");
-  //  addDependency("Auto Sizing", "1.0");
 }
 
 //==============================================================================
@@ -342,12 +212,8 @@ bool StrengthClustering::run() {
 
   NumericProperty *metric = nullptr;
 
-  //  subgraphsLayout = true;
-  //  quotientLayout = true;
   if (dataSet) {
     dataSet->get("metric", metric);
-    //    dataSet->get("layout subgraphs", subgraphsLayout);
-    //    dataSet->get("layout quotient graph", quotientLayout);
   }
 
   if (metric) {
@@ -399,33 +265,6 @@ bool StrengthClustering::run() {
     }
   }
 
-  //  if (tmp.size()==1) {
-  //    if (quotientLayout)
-  //      drawGraph(graph);
-  //    if (dataSet!=0) {
-  //      dataSet->set("strengthGraph",graph);
-  //    }
-  //    return true;
-  //  }
-
-  //  Graph *tmpGraph, *quotientGraph;
-
-  //  if (pluginProgress)
-  //    pluginProgress->setComment("Building subgraphs...");
-  //  tmpGraph = buildSubGraphs(tmp);
-  //  if (!tmpGraph)
-  //    return pluginProgress->state()!= TLP_CANCEL;
-  //  if (!recursiveCall(tmpGraph))
-  //    return pluginProgress->state()!= TLP_CANCEL;
-  //  if (pluginProgress)
-  //    pluginProgress->setComment("Building quotient graph...");
-  //  quotientGraph = buildQuotientGraph(tmpGraph);
-  //  if (!quotientGraph)
-  //    return pluginProgress->state()!= TLP_CANCEL;
-
-  //  if (dataSet!=0) {
-  //    dataSet->set("strengthGraph", quotientGraph);
-  //  }
   delete values;
   return true;
 }
@@ -435,10 +274,5 @@ bool StrengthClustering::check(string &erreurMsg) {
     erreurMsg = "The graph must be simple";
     return false;
   }
-
-  //  if (!ConnectedTest::isConnected(graph)) {
-  //    erreurMsg ="The graph must be connected";
-  //    return false;
-  //  }
   return true;
 }

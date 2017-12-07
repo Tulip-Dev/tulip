@@ -266,10 +266,7 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, GlProgressB
     QApplication::processEvents();
   }
 
-  Iterator<unsigned int> *dataUnselIt = graphProxy->getDataIterator();
-
-  while (dataUnselIt->hasNext()) {
-    unsigned int dataId = dataUnselIt->next();
+  for (unsigned int dataId : graphProxy->getDataIterator()) {
 
     if (!graphProxy->isDataSelected(dataId)) {
       color = graphProxy->getDataColor(dataId);
@@ -293,8 +290,6 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, GlProgressB
       QApplication::processEvents();
     }
   }
-
-  delete dataUnselIt;
 
   lastHighlightedElements = graphProxy->getHighlightedElts();
 }

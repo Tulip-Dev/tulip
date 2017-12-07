@@ -117,18 +117,14 @@ bool MixedModel::run() {
   vector<edge> edge_planar;
 
   int nbConnectedComponent = 0;
-  Iterator<Graph *> *it = Pere->getSubGraphs();
 
-  while (it->hasNext()) {
+  for (Graph *sg : Pere->getSubGraphs()) {
     nbConnectedComponent++;
-    currentGraph = it->next();
+    currentGraph = sg;
 
     //====================================================
     // don't compute the canonical ordering if the nmber of nodes is less than 3
 
-    /* tlp::debug() << currentGraph->numberOfNodes() << " nodes and " <<
-    currentGraph->numberOfEdges() << " edges " << endl;
-    tlp::debug() << "Create map" << endl; */
     if (currentGraph->numberOfNodes() == 1) {
       node n = currentGraph->getOneNode();
       result->setNodeValue(n, Coord(0, 0, 0));
@@ -180,16 +176,12 @@ bool MixedModel::run() {
     Graph *G;
 
     if (!planar) {
-      // tlp::debug() << "Graph is not planar ...";
       BooleanProperty resultatAlgoSelection(currentGraph);
       Bfs sp(currentGraph, &resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
       G = currentGraph->addSubGraph();
-      Iterator<edge> *ite = currentGraph->getEdges();
 
-      while (ite->hasNext()) {
-        edge e_tmp = ite->next();
-
+      for (const edge &e_tmp : graph->edges()) {
         if (resultatAlgoSelection.getEdgeValue(e_tmp)) {
           const pair<node, node> &eEnds = currentGraph->ends(e_tmp);
           G->addNode(eEnds.first);
@@ -200,7 +192,6 @@ bool MixedModel::run() {
           unplanar_edges.push_back(e_tmp);
       }
 
-      delete ite;
       //===================================================
 
       graphMap = computePlanarConMap(G);
@@ -216,7 +207,6 @@ bool MixedModel::run() {
       }
 
       delete graphMap;
-      // tlp::debug() << "... Planar subGraph computed" << endl;
     } else {
       G = currentGraph->addCloneSubGraph();
       for (const edge &e : currentGraph->edges())
@@ -243,8 +233,6 @@ bool MixedModel::run() {
     // give some empirical feedback (5%)
     pluginProgress->progress(2, 100);
 
-    // tlp::debug() << "Make the map planar ...";
-    // tlp::debug() << "... end" << endl;
     // give some empirical feedback of what we are doing (10%)
     if (pluginProgress->progress(5, 100) != TLP_CONTINUE)
       return pluginProgress->state() != TLP_CANCEL;
@@ -263,23 +251,17 @@ bool MixedModel::run() {
     V.clear();
 
     NodeCoords.clear();
-    // Cout << "Partition initialization ...";
+
     initPartition();
 
-    // tlp::debug()<<"... Partition initialized"<<endl;
     if (pluginProgress->state() == TLP_CANCEL)
       return false;
 
-    // tlp::debug() << "InOutPoint computation ..."  ;
     assignInOutPoints();
-    // tlp::debug()<<"... InOutPoints computed"<<endl;
 
-    // tlp::debug() << "Coordinate computation ..."  ;
     computeCoords();
-    // tlp::debug()<<"... Coordinate computed"<<endl;
-    // tlp::debug() << "Drawing edges and nodes ..." ;
+
     placeNodesEdges();
-    // tlp::debug() << "... Edges and Nodes drawn" <<endl;
 
     vector<edge>::const_iterator ite = dummy.begin();
 
@@ -299,8 +281,6 @@ bool MixedModel::run() {
     currentGraph->delAllSubGraphs(G);
   }
 
-  delete it;
-
   if (nbConnectedComponent != 1) {
     string err = "";
     LayoutProperty layout(graph);
@@ -308,22 +288,14 @@ bool MixedModel::run() {
     tmp.set("coordinates", result);
     graph->applyPropertyAlgorithm(string("Connected Component Packing"), &layout, err, nullptr,
                                   &tmp);
-    Iterator<node> *itN = graph->getNodes();
 
-    while (itN->hasNext()) {
-      node n = itN->next();
+    for (const node &n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));
     }
 
-    delete itN;
-    Iterator<edge> *itE = graph->getEdges();
-
-    while (itE->hasNext()) {
-      edge e = itE->next();
+    for (const edge &e : graph->edges()) {
       result->setEdgeValue(e, layout.getEdgeValue(e));
     }
-
-    delete itE;
   }
 
   graph->delAllSubGraphs(Pere);
@@ -390,22 +362,14 @@ vector<edge> MixedModel::getPlanarSubGraph(tlp::PlanarConMap *sg,
 void MixedModel::placeNodesEdges() {
   float maxX = 0, maxY = 0;
 
-  Iterator<node> *it = carte->getNodes();
-
-  while (it->hasNext()) {
-    node n = it->next();
+  for (const node &n : carte->nodes()) {
     Coord c = nodeSize.get(n.id);
     c[0] -= edgeNodeSpacing;
     graph->getProperty<SizeProperty>("viewSize")->setNodeValue(n, Size(c[0], c[1], 0.3f));
     result->setNodeValue(n, NodeCoords[n]);
   }
 
-  delete it;
-
-  Iterator<edge> *ite = carte->getEdges();
-
-  while (ite->hasNext()) {
-    edge e = ite->next();
+  for (const edge &e : carte->edges()) {
     const pair<node, node> &eEnds = carte->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
@@ -454,8 +418,6 @@ void MixedModel::placeNodesEdges() {
     // rs == rt, même partition donc pas de points intermédiaire �  calculer
     // en cas de post-processing, il faudra pe y changer
   }
-
-  delete ite;
 
   if (!planar) {
     float z_size = (maxX + maxY) / 3.f; // sqrt(maxX + maxY);
@@ -545,14 +507,12 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       listOfEdgesOUT.clear();
 
       // build in-edge vector and out-edge vector in the good order
-      Iterator<edge> *it = carte->getInOutEdges(v);
       vector<edge> tmp;
       char pred = 'p';
 
       tmp.clear();
 
-      while (it->hasNext()) {
-        edge e = it->next();
+      for (const edge &e : carte->getInOutEdges(v)) {
         const pair<node, node> &eEnds = carte->ends(e);
 
         node n = (eEnds.first == v) ? eEnds.second : eEnds.first;
@@ -619,8 +579,6 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
           }
         }
       }
-
-      delete it;
 
       if (pred == 'o')
         listOfEdgesOUT.insert(listOfEdgesOUT.begin(), tmp.begin(), tmp.end());
@@ -889,16 +847,12 @@ void MixedModel::computeCoords() {
   NodeCoords.clear();
 
   nodeSize.setAll(Coord()); // permet de conserver une taille relative pout les sommets
-  Iterator<node> *itn = carte->getNodes();
 
-  while (itn->hasNext()) {
-    node n = itn->next();
+  for (const node &n : carte->nodes()) {
     Coord c(sizeResult->getNodeValue(n));
     c[0] += edgeNodeSpacing;
     nodeSize.set(n.id, c);
   }
-
-  delete itn;
 
   map<node, node> father; // permet de connaître le noeud de référence
   father.clear();

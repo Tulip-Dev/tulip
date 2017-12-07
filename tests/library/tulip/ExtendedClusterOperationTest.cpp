@@ -120,16 +120,13 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
 //==========================================================
 void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
   edge e02 = quotient->addEdge(nodes[0], nodes[2]);
-  Iterator<edge> *ite = quotient->getInEdges(nodes[2]);
   unsigned nbEdges = 0;
 
-  while (ite->hasNext()) {
+  for (const edge &e : quotient->getInEdges(nodes[2])) {
     ++nbEdges;
-    edge e = ite->next();
     CPPUNIT_ASSERT(e == e02 || e == edges[1]);
   }
 
-  delete ite;
   CPPUNIT_ASSERT_EQUAL(2u, nbEdges);
 
   CPPUNIT_ASSERT(quotient->isElement(e02));
@@ -140,16 +137,13 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
   edge metaE = quotient->existEdge(meta, nodes[2]);
   CPPUNIT_ASSERT(metaE.isValid());
 
-  ite = quotient->getEdgeMetaInfo(metaE);
   nbEdges = 0;
 
-  while (ite->hasNext()) {
+  for (const edge &e : quotient->getEdgeMetaInfo(metaE)) {
     ++nbEdges;
-    edge e = ite->next();
     CPPUNIT_ASSERT(e == e02 || e == edges[1]);
   }
 
-  delete ite;
   CPPUNIT_ASSERT_EQUAL(2u, nbEdges);
 
   quotient->openMetaNode(meta);

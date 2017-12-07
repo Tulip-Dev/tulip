@@ -48,10 +48,8 @@ NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float he
 void NominalParallelAxis::setLabels() {
 
   vector<string> labels;
-  Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 
-  while (dataIt->hasNext()) {
-    unsigned int dataId = dataIt->next();
+  for (unsigned int dataId : graphProxy->getDataIterator()) {
     string labelName =
         graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
 
@@ -59,8 +57,6 @@ void NominalParallelAxis::setLabels() {
       labels.push_back(labelName);
     }
   }
-
-  delete dataIt;
 
   if (labelsOrder.empty() || (labelsOrder.size() != labels.size())) {
     labelsOrder = labels;
@@ -101,10 +97,7 @@ const set<unsigned int> &NominalParallelAxis::getDataInSlidersRange() {
     }
   }
 
-  Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
-
-  while (dataIt->hasNext()) {
-    unsigned int dataId = dataIt->next();
+  for (unsigned int dataId : graphProxy->getDataIterator()) {
     string labelName =
         graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
 
@@ -112,8 +105,6 @@ const set<unsigned int> &NominalParallelAxis::getDataInSlidersRange() {
       dataSubset.insert(dataId);
     }
   }
-
-  delete dataIt;
 
   return dataSubset;
 }

@@ -104,10 +104,8 @@ list<int> ConvolutionClustering::getLocalMinimum() {
 void ConvolutionClustering::autoSetParameter() {
 
   map<double, int> histo;
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    node itn = itN->next();
+  for (const node &itn : graph->nodes()) {
     double tmp = metric->getNodeDoubleValue(itn);
 
     if (histo.find(tmp) == histo.end())
@@ -115,8 +113,6 @@ void ConvolutionClustering::autoSetParameter() {
     else
       histo[tmp] += 1;
   }
-
-  delete itN;
 
   if (histo.empty())
     return;

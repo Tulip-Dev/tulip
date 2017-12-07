@@ -17,6 +17,8 @@
  *
  */
 
+#include <tulip/StableIterator.h>
+
 #include "InducedSubGraphSelection.h"
 
 using namespace tlp;
@@ -54,10 +56,11 @@ bool InducedSubGraphSelection::run() {
   // of the result property are reseted to false below
   // delete done by the for loop
   Iterator<node> *itN = (result == entrySelection)
-                            ? new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true))
+                            ? stableIterator(entrySelection->getNodesEqualTo(true))
                             : entrySelection->getNodesEqualTo(true);
+
   Iterator<edge> *itE = (result == entrySelection)
-                            ? new StableIterator<tlp::edge>(entrySelection->getEdgesEqualTo(true))
+                            ? stableIterator(entrySelection->getEdgesEqualTo(true))
                             : entrySelection->getEdgesEqualTo(true);
 
   result->setAllNodeValue(false);

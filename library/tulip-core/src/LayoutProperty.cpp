@@ -50,29 +50,14 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
   tlp::Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   tlp::Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
 
-  tlp::Iterator<node> *itN = sg->getNodes();
-
-  if (itN->hasNext()) {
-    node itn = itN->next();
+  for (const node &itn : sg->nodes()) {
     const Coord &tmpCoord = this->getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
-
-  while (itN->hasNext()) {
-    node itn = itN->next();
-    const Coord &tmpCoord = this->getNodeValue(itn);
-    maxV(maxT, tmpCoord);
-    minV(minT, tmpCoord);
-  }
-
-  delete itN;
 
   if (static_cast<LayoutProperty *>(this)->nbBendedEdges > 0) {
-    tlp::Iterator<edge> *itE = sg->getEdges();
-
-    while (itE->hasNext()) {
-      edge ite = itE->next();
+    for (const edge &ite : sg->edges()) {
       const LineType::RealType &value = this->getEdgeValue(ite);
       LineType::RealType::const_iterator itCoord;
 
@@ -82,8 +67,6 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
         minV(minT, tmpCoord);
       }
     }
-
-    delete itE;
   }
 
   unsigned int sgi = sg->getId();
@@ -516,15 +499,12 @@ void LayoutProperty::normalize(const Graph *sg) {
   Observable::holdObservers();
   center();
   double dtmpMax = 1.0;
-  Iterator<node> *itN = sg->getNodes();
 
-  while (itN->hasNext()) {
-    node itn = itN->next();
+  for (const node &itn : sg->nodes()) {
     const Coord &tmpCoord = getNodeValue(itn);
     dtmpMax = std::max(dtmpMax, sqr(tmpCoord[0]) + sqr(tmpCoord[1]) + sqr(tmpCoord[2]));
   }
 
-  delete itN;
   dtmpMax = 1.0 / sqrt(dtmpMax);
   scale(Coord(float(dtmpMax), float(dtmpMax), float(dtmpMax)), sg);
   resetBoundingBox();
@@ -627,14 +607,12 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  Iterator<node> *itN = sg->getNodes();
   double result = 0;
 
-  while (itN->hasNext()) {
-    result += averageAngularResolution(itN->next(), sg);
+  for (const node &n : sg->nodes()) {
+    result += averageAngularResolution(n, sg);
   }
 
-  delete itN;
   return result / double(sg->numberOfNodes());
 }
 //=================================================================================
@@ -676,11 +654,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   list<pCE> adjCoord;
   // Extract all adjacent edges, the bends are taken
   // into account.
-  Iterator<edge> *itE = sg->getInOutEdges(n);
-
-  for (unsigned int i = 0; itE->hasNext(); ++i) {
-    edge ite = itE->next();
-
+  for (const edge &ite : sg->getInOutEdges(n)) {
     if (!getEdgeValue(ite).empty()) {
       if (sg->source(ite) == n)
         adjCoord.push_back(pCE(getEdgeValue(ite).front(), ite));
@@ -690,8 +664,6 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
       adjCoord.push_back(pCE(getNodeValue(sg->opposite(ite, n)), ite));
     }
   }
-
-  delete itE;
 
   const Coord &center = getNodeValue(n);
   list<pCE>::iterator it;
@@ -739,11 +711,7 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   list<Coord> adjCoord;
   // Extract all adjacent edges, the bends are taken
   // into account.
-  Iterator<edge> *itE = sg->getInOutEdges(n);
-
-  for (unsigned int i = 0; itE->hasNext(); ++i) {
-    edge ite = itE->next();
-
+  for (const edge &ite : sg->getInOutEdges(n)) {
     if (!getEdgeValue(ite).empty()) {
       if (sg->source(ite) == n)
         adjCoord.push_back(getEdgeValue(ite).front());
@@ -753,8 +721,6 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
       adjCoord.push_back(getNodeValue(sg->opposite(ite, n)));
     }
   }
-
-  delete itE;
 
   // Compute normalized vectors associated to incident edges.
   const Coord &center = getNodeValue(n);

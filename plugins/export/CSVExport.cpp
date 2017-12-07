@@ -190,14 +190,12 @@ bool CsvExport::exportGraph(std::ostream &os) {
   }
 
   // export non tulip defined properties
-  Iterator<PropertyInterface *> *it(graph->getObjectProperties());
   // use vectors for further access to exported properties
   vector<PropertyInterface *> props;
   vector<bool> propIsString;
   unsigned int nbProps = 0;
 
-  while (it->hasNext()) {
-    PropertyInterface *prop = it->next();
+  for (PropertyInterface *prop : graph->getObjectProperties()) {
     const string &propName = prop->getName();
 
     if (propName.compare(0, 4, "view") != 0 || exportVisualProperties) {
@@ -214,7 +212,6 @@ bool CsvExport::exportGraph(std::ostream &os) {
     }
   }
 
-  delete it;
   os << endl;
 
   // export nodes
@@ -234,8 +231,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   if (eltType != EDGE_TYPE) {
     Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
-    while (it->hasNext()) {
-      node n = it->next();
+    for (const node &n : it) {
 
       if (exportId) {
         os << n;
@@ -264,16 +260,13 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
       os << endl;
     }
-
-    delete it;
   }
 
   // export edges
   if (eltType != NODE_TYPE) {
     Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
 
-    while (it->hasNext()) {
-      edge e = it->next();
+    for (const edge &e : it) {
 
       if (exportId) {
         if (eltType == BOTH_TYPES)
@@ -303,8 +296,6 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
       os << endl;
     }
-
-    delete it;
   }
 
   // restore global locale

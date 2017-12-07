@@ -22,6 +22,8 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/ConversionIterator.h>
+#include <tulip/ConcatIterator.h>
 
 #include <set>
 
@@ -137,24 +139,8 @@ double TulipGraphDimension::maxValue() const {
 }
 
 vector<unsigned int> TulipGraphDimension::links(const unsigned int itemId) const {
-  vector<unsigned int> v;
-
-  Iterator<node> *inNodesIt = graph->getInNodes(node(itemId));
-
-  while (inNodesIt->hasNext()) {
-    v.push_back(inNodesIt->next().id);
-  }
-
-  delete inNodesIt;
-
-  Iterator<node> *outNodesIt = graph->getOutNodes(node(itemId));
-
-  while (outNodesIt->hasNext()) {
-    v.push_back(outNodesIt->next().id);
-  }
-
-  delete outNodesIt;
-
-  return v;
+  return iteratorVector(conversionIterator<unsigned int>(
+      concatIterator(graph->getInNodes(node(itemId)), graph->getOutNodes(node(itemId))),
+      [](node n) { return n.id; }));
 }
 }

@@ -308,22 +308,15 @@ public:
       if (Tprop::graph == prop.Tprop::graph) {
         setAllNodeValue(prop.getNodeDefaultValue());
         setAllEdgeValue(prop.getEdgeDefaultValue());
-        Iterator<node> *itN = prop.getNonDefaultValuatedNodes();
 
-        while (itN->hasNext()) {
-          node itn = itN->next();
+        for (const node &itn : prop.getNonDefaultValuatedNodes()) {
           setNodeValue(itn, prop.getNodeValue(itn));
         }
 
-        delete itN;
-        Iterator<edge> *itE = prop.getNonDefaultValuatedEdges();
-
-        while (itE->hasNext()) {
-          edge ite = itE->next();
+        for (const edge &ite : prop.getNonDefaultValuatedEdges()) {
           setEdgeValue(ite, prop.getEdgeValue(ite));
         }
 
-        delete itE;
       } else {
         //==============================================================*
         for (const node &n : Tprop::graph->nodes()) {

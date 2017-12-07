@@ -415,7 +415,7 @@ void SOMView::setColorToMap(tlp::ColorProperty *newColor) {
   if (mask) {
     cp = new ColorProperty(som);
     deleteAfter = true;
-    for (const node &n : som->getNodes()) {
+    for (const node &n : som->nodes()) {
       if (mask->getNodeValue(n))
         cp->setNodeValue(n, newColor->getNodeValue(n));
       else
@@ -948,7 +948,7 @@ void SOMView::refreshPreviews() {
     ColorProperty *color = propertyToColorProperty[itPC->first];
 
     if (mask) {
-      for (const node &n : som->getNodes()) {
+      for (const node &n : som->nodes()) {
         if (mask->getNodeValue(n))
           maskedColor->setNodeValue(n, color->getNodeValue(n));
         else
@@ -1190,14 +1190,10 @@ void SOMView::registerTriggers() {
 
   if (graph()) {
     addRedrawTrigger(graph());
-    Iterator<string> *it = graph()->getProperties();
 
-    while (it->hasNext()) {
-      PropertyInterface *property = graph()->getProperty(it->next());
-      addRedrawTrigger(property);
+    for (PropertyInterface *prop : graph()->getObjectProperties()) {
+      addRedrawTrigger(prop);
     }
-
-    delete it;
   }
 }
 

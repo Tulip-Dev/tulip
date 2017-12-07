@@ -323,9 +323,7 @@ void PreferencesDialog::readSettings() {
   // edges selection color is not editable
   //_ui->graphDefaultsTable->item(3,2)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
   _ui->applyDrawingDefaultsCheck->setChecked(false);
-  Iterator<Graph *> *itr = tlp::getRootGraphs();
-  _ui->applyDrawingDefaultsCheck->setEnabled(itr->hasNext());
-  delete itr;
+  _ui->applyDrawingDefaultsCheck->setEnabled(!iteratorEmpty(tlp::getRootGraphs()));
 
   _ui->displayDefaultViews->setChecked(TulipSettings::instance().displayDefaultViews());
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());

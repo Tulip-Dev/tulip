@@ -47,7 +47,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
     Iterator<unsigned int> *it = nullptr;
     it = filter->nodeProperties.findAll(true);
 
-    Iterator<node> *iteN;
+    Iterator<node> *iteN = nullptr;
 
     if (it == nullptr) {
       Graph *graphToFilter = filter->getGraph();
@@ -56,17 +56,14 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
         graphToFilter = supergraph;
 
       iteN = graphToFilter->getNodes();
-    } else
+    } else {
       iteN = new UINTIterator<node>(it);
+    }
 
-    while (iteN->hasNext()) {
-      node n = iteN->next();
-
+    for (const node &n : iteN) {
       if (filter->getNodeValue(n))
         addNode(n);
     }
-
-    delete iteN;
   }
 
   if ((filter->getGraph() == supergraph) && (filter->getEdgeDefaultValue() == true) &&
@@ -86,7 +83,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
     Iterator<unsigned int> *it = nullptr;
     it = filter->edgeProperties.findAll(true);
 
-    Iterator<edge> *iteE;
+    Iterator<edge> *itE = nullptr;
 
     if (it == nullptr) {
       Graph *graphToFilter = filter->getGraph();
@@ -94,18 +91,15 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
       if (graphToFilter == nullptr)
         graphToFilter = supergraph;
 
-      iteE = graphToFilter->getEdges();
-    } else
-      iteE = new UINTIterator<edge>(it);
+      itE = graphToFilter->getEdges();
+    } else {
+      itE = new UINTIterator<edge>(it);
+    }
 
-    while (iteE->hasNext()) {
-      edge e = iteE->next();
-
+    for (const edge &e : itE) {
       if (filter->getEdgeValue(e))
         addEdge(e);
     }
-
-    delete iteE;
   }
 }
 //----------------------------------------------------------------
@@ -407,31 +401,21 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
 
     // use a stack for a dfs subgraphs propagation
     std::stack<Graph *> sgq;
-    Iterator<Graph *> *sgs = getSubGraphs();
 
-    while (sgs->hasNext()) {
-      Graph *sg = sgs->next();
+    for (Graph *sg : getSubGraphs()) {
 
       if (sg->isElement(n))
         sgq.push(sg);
     }
 
-    delete sgs;
-
     // subgraphs loop
     while (!sgq.empty()) {
       Graph *sg = sgq.top();
 
-      sgs = sg->getSubGraphs();
-
-      while (sgs->hasNext()) {
-        Graph *ssg = sgs->next();
-
+      for (Graph *ssg : sg->getSubGraphs()) {
         if (ssg->isElement(n))
           sgq.push(ssg);
       }
-
-      delete sgs;
 
       if (sg == sgq.top()) {
         static_cast<GraphView *>(sg)->removeNode(n, ee);
@@ -475,16 +459,11 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   } else {
     assert(isElement(e));
     // propagate to subgraphs
-    Iterator<Graph *> *itS = getSubGraphs();
-
-    while (itS->hasNext()) {
-      Graph *subGraph = itS->next();
-
+    for (Graph *subGraph : getSubGraphs()) {
       if (subGraph->isElement(e))
         subGraph->delEdge(e);
     }
 
-    delete itS;
     removeEdge(e);
   }
 }

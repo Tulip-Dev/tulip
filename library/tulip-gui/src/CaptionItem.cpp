@@ -154,25 +154,18 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
     if (captionType == NodesColorCaption) {
       minProp = _metricProperty->getNodeMin();
       maxProp = _metricProperty->getNodeMax();
-      Iterator<node> *itN = view->graph()->getNodes();
 
-      for (; itN->hasNext();) {
-        node nit = itN->next();
+      for (const node &nit : view->graph()->nodes()) {
         metricToColorMap[_metricProperty->getNodeValue(nit)] = _colorProperty->getNodeValue(nit);
       }
 
-      delete itN;
     } else {
       minProp = _metricProperty->getEdgeMin();
       maxProp = _metricProperty->getEdgeMax();
-      Iterator<edge> *itE = view->graph()->getEdges();
 
-      for (; itE->hasNext();) {
-        edge eit = itE->next();
+      for (const edge &eit : view->graph()->edges()) {
         metricToColorMap[_metricProperty->getEdgeValue(eit)] = _colorProperty->getEdgeValue(eit);
       }
-
-      delete itE;
     }
 
     double intervale = (maxProp - minProp) / 50.;
@@ -219,29 +212,22 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   vector<pair<double, float>> metricToSizeFiltered;
 
   if (captionType == NodesSizeCaption) {
-    Iterator<node> *itN = view->graph()->getNodes();
 
-    for (; itN->hasNext();) {
-      node nit = itN->next();
+    for (const node &nit : view->graph()->nodes()) {
       metricToSizeMap[_metricProperty->getNodeValue(nit)] = _sizeProperty->getNodeValue(nit)[0];
 
       if (maxSize < _sizeProperty->getNodeValue(nit)[0])
         maxSize = _sizeProperty->getNodeValue(nit)[0];
     }
 
-    delete itN;
   } else {
-    Iterator<edge> *itE = view->graph()->getEdges();
 
-    for (; itE->hasNext();) {
-      edge eit = itE->next();
+    for (const edge &eit : view->graph()->edges()) {
       metricToSizeMap[_metricProperty->getEdgeValue(eit)] = _sizeProperty->getEdgeValue(eit)[0];
 
       if (maxSize < _sizeProperty->getEdgeValue(eit)[0])
         maxSize = _sizeProperty->getEdgeValue(eit)[0];
     }
-
-    delete itE;
   }
 
   double intervale = (maxProp - minProp) / 50.;
@@ -358,11 +344,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     double beginMetric = minProp + (begin * (maxProp - minProp));
     double endMetric = minProp + (end * (maxProp - minProp));
 
-    Iterator<node> *itN = view->graph()->getNodes();
-
-    for (; itN->hasNext();) {
-      node nit = itN->next();
-
+    for (const node &nit : view->graph()->nodes()) {
       tmp = Color(_backupColorProperty->getNodeValue(nit));
       borderTmp = Color(_backupBorderColorProperty->getNodeValue(nit));
 
@@ -380,7 +362,6 @@ void CaptionItem::applyNewFilter(float begin, float end) {
       }
     }
 
-    delete itN;
   } else {
     double minProp = _metricProperty->getEdgeMin();
     double maxProp = _metricProperty->getEdgeMax();
@@ -388,10 +369,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     double beginMetric = minProp + (begin * (maxProp - minProp));
     double endMetric = minProp + (end * (maxProp - minProp));
 
-    Iterator<edge> *itE = view->graph()->getEdges();
-
-    for (; itE->hasNext();) {
-      edge eit = itE->next();
+    for (const edge &eit : view->graph()->edges()) {
 
       tmp = Color(_backupColorProperty->getEdgeValue(eit));
       borderTmp = Color(_backupBorderColorProperty->getEdgeValue(eit));
@@ -409,8 +387,6 @@ void CaptionItem::applyNewFilter(float begin, float end) {
         borderColorProperty->setEdgeValue(eit, borderTmp);
       }
     }
-
-    delete itE;
   }
 
   Observable::unholdObservers();

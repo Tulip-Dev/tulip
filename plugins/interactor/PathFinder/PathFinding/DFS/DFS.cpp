@@ -80,7 +80,6 @@ bool DFS::searchPaths(node src) {
 
   bool result = false;
   visitable->setNodeValue(src, false);
-  edge e;
 
   Iterator<edge> *edgeIt = nullptr;
 
@@ -98,16 +97,13 @@ bool DFS::searchPaths(node src) {
     break;
   }
 
-  while (edgeIt->hasNext()) {
-    edge e = edgeIt->next();
+  for (const edge &e : edgeIt) {
     currentDist += weights->get(e.id);
     path.push_back(e);
     result |= searchPaths(graph->opposite(e, src));
     path.pop_back();
     currentDist -= weights->get(e.id);
   }
-
-  delete edgeIt;
 
   visitable->setNodeValue(src, true);
   return result;

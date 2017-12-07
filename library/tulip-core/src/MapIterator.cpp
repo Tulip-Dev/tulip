@@ -34,10 +34,8 @@ edge tlp::nextFaceEdge(Graph *g, edge e, node n) {
 NodeMapIterator::NodeMapIterator(Graph *sg, node source, node target) {
   assert(cloneIt.empty());
   bool start = true;
-  Iterator<node> *itIn = sg->getInOutNodes(target);
 
-  while (itIn->hasNext()) {
-    node tmp = itIn->next();
+  for (const node &tmp : sg->getInOutNodes(target)) {
 
     if ((start) && (tmp == source)) {
       start = false;
@@ -50,7 +48,6 @@ NodeMapIterator::NodeMapIterator(Graph *sg, node source, node target) {
     }
   }
 
-  delete itIn;
   itStl = cloneIt.begin();
 }
 
@@ -72,18 +69,13 @@ EdgeMapIterator::EdgeMapIterator(const Graph *sg, edge source, node target) {
   finished = false;
   treat = 0;
   pos = 0;
-  Iterator<edge> *it = sg->getInOutEdges(target);
 
-  while (it->hasNext()) {
-    edge e = it->next();
-
+  for (const edge &e : sg->getInOutEdges(target)) {
     if (e == source)
       pos = treat + 1;
 
     adj[treat++] = e;
   }
-
-  delete it;
 }
 //=========================================
 

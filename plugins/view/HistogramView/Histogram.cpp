@@ -187,25 +187,15 @@ void Histogram::computeHistogram() {
       *propertyCopy = *(graph->getProperty<DoubleProperty>(propertyName));
     } else {
       if (dataLocation == NODE) {
-        Iterator<node> *nodesIt = graph->getNodes();
-
-        while (nodesIt->hasNext()) {
-          node n = nodesIt->next();
+        for (const node &n : graph->nodes()) {
           propertyCopy->setNodeValue(
               n, graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n));
         }
-
-        delete nodesIt;
       } else {
-        Iterator<edge> *edgesIt = graph->getEdges();
-
-        while (edgesIt->hasNext()) {
-          edge e = edgesIt->next();
+        for (const edge &e : graph->edges()) {
           propertyCopy->setEdgeValue(
               e, graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e));
         }
-
-        delete edgesIt;
       }
     }
 
@@ -217,10 +207,8 @@ void Histogram::computeHistogram() {
     }
 
     if (dataLocation == NODE) {
-      Iterator<node> *nodesIt = graph->getNodes();
 
-      while (nodesIt->hasNext()) {
-        node n = nodesIt->next();
+      for (const node &n : graph->nodes()) {
         unsigned int binId = uint(propertyCopy->getNodeValue(n));
         histogramBins[binId].push_back(n.id);
 
@@ -245,13 +233,9 @@ void Histogram::computeHistogram() {
         }
       }
 
-      delete nodesIt;
-
     } else {
-      Iterator<edge> *edgesIt = graph->getEdges();
 
-      while (edgesIt->hasNext()) {
-        edge e = edgesIt->next();
+      for (const edge &e : graph->edges()) {
         unsigned int binId = uint(propertyCopy->getEdgeValue(e));
         histogramBins[binId].push_back(e.id);
 
@@ -275,8 +259,6 @@ void Histogram::computeHistogram() {
           binMinMaxMap[binId].second = val;
         }
       }
-
-      delete edgesIt;
     }
 
     uniformQuantificationAxisLabels.clear();
@@ -300,10 +282,8 @@ void Histogram::computeHistogram() {
 
   } else {
     if (dataLocation == NODE) {
-      Iterator<node> *nodesIt = graph->getNodes();
 
-      while (nodesIt->hasNext()) {
-        node n = nodesIt->next();
+      for (const node &n : graph->nodes()) {
         double value;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
@@ -332,12 +312,9 @@ void Histogram::computeHistogram() {
         }
       }
 
-      delete nodesIt;
     } else {
-      Iterator<edge> *edgesIt = graph->getEdges();
 
-      while (edgesIt->hasNext()) {
-        edge e = edgesIt->next();
+      for (const edge &e : graph->edges()) {
         double value;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
@@ -364,8 +341,6 @@ void Histogram::computeHistogram() {
           }
         }
       }
-
-      delete edgesIt;
     }
   }
 }

@@ -95,43 +95,33 @@ public:
     ColorProperty *colors = graph->getProperty<ColorProperty>("viewColor");
     SizeProperty *sizes = graph->getProperty<SizeProperty>("viewSize");
     // Save Nodes
-    Iterator<node> *itN = graph->getNodes();
 
-    if (itN->hasNext()) {
+    for (const node &itn : graph->nodes()) {
+      os << "node [" << endl;
+      os << "id " << itn.id << endl;
+      os << "label \"" << convert(label->getNodeValue(itn)) << "\"" << endl;
+      os << "graphics [" << endl;
+      printCoord(os, layout->getNodeValue(itn));
+      printSize(os, sizes->getNodeValue(itn));
+      os << "type \"rectangle\"" << endl;
+      os << "width 0.12" << endl;
+      os << "fill \"#" << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getR())
+         << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getG()) << hex
+         << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getB()) << "\"" << endl;
 
-      for (; itN->hasNext();) {
-        node itn = itN->next();
-        os << "node [" << endl;
-        os << "id " << itn.id << endl;
-        os << "label \"" << convert(label->getNodeValue(itn)) << "\"" << endl;
-        os << "graphics [" << endl;
-        printCoord(os, layout->getNodeValue(itn));
-        printSize(os, sizes->getNodeValue(itn));
-        os << "type \"rectangle\"" << endl;
-        os << "width 0.12" << endl;
-        os << "fill \"#" << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getR())
-           << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getG()) << hex
-           << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getB()) << "\"" << endl;
+      //      os << "outline \"#"<< hex << setfill('0') << setw(2)
+      //      <<(int)colors->getNodeValue(itn).getR()
+      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()
+      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getB() <<
+      //         "\""<< endl;
 
-        //      os << "outline \"#"<< hex << setfill('0') << setw(2)
-        //      <<(int)colors->getNodeValue(itn).getR()
-        //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()
-        //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getB() <<
-        //         "\""<< endl;
-
-        os << "outline \"#000000\"" << endl;
-        os << dec << setfill(' ') << setw(6) << "]" << endl;
-        os << ']' << endl;
-      }
+      os << "outline \"#000000\"" << endl;
+      os << dec << setfill(' ') << setw(6) << "]" << endl;
+      os << ']' << endl;
     }
 
-    delete itN;
-
     // Save edges
-    Iterator<edge> *itE = graph->getEdges();
-
-    for (; itE->hasNext();) {
-      edge ite = itE->next();
+    for (const edge &ite : graph->edges()) {
       os << "edge [" << endl;
       os << "source " << graph->source(ite).id << endl;
       os << "target " << graph->target(ite).id << endl;
@@ -165,7 +155,6 @@ public:
       os << "]" << endl;
     }
 
-    delete itE;
     os << "]" << endl;
     return true;
   }

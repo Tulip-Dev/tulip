@@ -163,7 +163,6 @@ double BubblePack::computeRelativePosition(tlp::node n,
       }
     } else { //        if (false) //polyo packing
       for (unsigned int i = 0; i < index.size(); ++i) {
-        // cerr << i << "." << flush;
         double radius = realCircleRadius[index[i]];
         double bestRadius = FLT_MAX;
         int discret = ceil(2. * (sizeFather + radius) * M_PI) + 3;
@@ -193,7 +192,6 @@ double BubblePack::computeRelativePosition(tlp::node n,
             }
           }
 
-// if (restcnt > 10) cout << "Aie" << endl;
 #ifdef _OPENMP
 #pragma omp critical(GOODCIRCLE)
 #endif
@@ -213,7 +211,6 @@ double BubblePack::computeRelativePosition(tlp::node n,
     }
   }
   circles.push_back(Circled(0., 0., sizeFather));
-  // cerr << "Nb circles : " << circles.size() << endl << flush;
   Circled circleH;
 
   if (circles.size() > 2000) { // Stack overflow when number of circles exceed 2k
@@ -222,7 +219,6 @@ double BubblePack::computeRelativePosition(tlp::node n,
     circleH = tlp::enclosingCircle(circles);
   }
 
-  // cerr << "packed " << endl << flush;
   /*
    * Set relative position of all children
    * according to the center of the enclosing circle
@@ -337,11 +333,8 @@ bool BubblePack::run() {
   node startNode = tree->getSource();
   assert(startNode.isValid());
   NodeStaticProperty<Vec4f> relativePosition(graph);
-  // cerr << "C" << endl << flush;
   computeRelativePosition(startNode, relativePosition);
-  // cerr << "D" << endl << flush;
   calcLayout(startNode, Vec2f(0, 0), relativePosition);
-  // cerr << "E" << endl << flush;
 
   // forget last temporary graph state
   graph->pop();

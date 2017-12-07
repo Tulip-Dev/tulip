@@ -80,15 +80,10 @@ bool DegreeMetric::check(std::string &errorMsg) {
     dataSet->get("metric", weights);
 
     if (weights && !weights->getEdgeDefaultValue()) {
-      Iterator<edge> *itE = weights->getNonDefaultValuatedEdges();
-
-      if (!itE->hasNext()) {
+      if (iteratorEmpty(weights->getNonDefaultValuatedEdges())) {
         errorMsg = "Cannot compute a weighted degree with a null weight value\nfor all edges";
-        delete itE;
         return false;
       }
-
-      delete itE;
     }
   }
 

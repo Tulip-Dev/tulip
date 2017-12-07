@@ -21,6 +21,7 @@
 
 #include <tulip/StringCollection.h>
 #include <tulip/GraphMeasure.h>
+#include <tulip/StableIterator.h>
 
 using namespace tlp;
 
@@ -113,9 +114,8 @@ bool ReachableSubGraphSelection::run() {
     // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
     // of the result property are reseted to false below
     // delete done by the for loop
-    Iterator<node> *itN = (result == startNodes)
-                              ? new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true))
-                              : startNodes->getNodesEqualTo(true);
+    Iterator<node> *itN = (result == startNodes) ? stableIterator(startNodes->getNodesEqualTo(true))
+                                                 : startNodes->getNodesEqualTo(true);
 
     TLP_HASH_MAP<node, bool> reachables;
 

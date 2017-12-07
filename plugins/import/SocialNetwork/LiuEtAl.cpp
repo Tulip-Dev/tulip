@@ -121,14 +121,14 @@ struct LiuEtAl : public ImportModule {
         pr = tlp::randomDouble();
         pr_sum = 0;
         node v;
-        Iterator<node> *it = graph->getInOutNodes(nodes[rn]);
 
-        while (it->hasNext() && pr_sum < pr) {
-          v = it->next();
-          pr_sum += graph->deg(v) / k2_sum;
+        for (const node &n : graph->getInOutNodes(nodes[rn])) {
+          if (pr_sum >= pr) {
+            break;
+          }
+          v = n;
+          pr_sum += graph->deg(n) / k2_sum;
         }
-
-        delete it;
 
         graph->addEdge(nodes[i], nodes[rn]);
         graph->addEdge(nodes[i], v);

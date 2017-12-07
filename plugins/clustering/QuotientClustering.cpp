@@ -272,10 +272,8 @@ public:
       }
       set<edge> edgesToDel;
       DoubleProperty *viewMetric = quotientGraph->getProperty<DoubleProperty>("viewMetric");
-      Iterator<edge> *itE = quotientGraph->getEdges();
 
-      while (itE->hasNext()) {
-        edge mE = itE->next();
+      for (const edge &mE : quotientGraph->edges()) {
         edge op(opProp->getEdgeValue(mE));
 
         if (op.isValid() && edgesToDel.find(mE) == edgesToDel.end() &&
@@ -358,7 +356,6 @@ public:
         }
       }
 
-      delete itE;
       set<edge>::const_iterator it;
 
       for (it = edgesToDel.begin(); it != edgesToDel.end(); ++it)

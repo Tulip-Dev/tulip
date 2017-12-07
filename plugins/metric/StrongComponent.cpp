@@ -37,10 +37,8 @@ int StrongComponent::attachNumerotation(tlp::node n, TLP_HASH_MAP<tlp::node, boo
   minAttach[n] = myId;
   renum.push(n);
   int res = myId;
-  Iterator<node> *itN = graph->getOutNodes(n);
 
-  for (; itN->hasNext();) {
-    node tmpN = itN->next();
+  for (const node &tmpN : graph->getOutNodes(n)) {
 
     if (!finished[tmpN]) {
       int tmp = attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
@@ -50,7 +48,6 @@ int StrongComponent::attachNumerotation(tlp::node n, TLP_HASH_MAP<tlp::node, boo
     }
   }
 
-  delete itN;
   minAttach[n] = res;
 
   if (res == myId) {
@@ -82,22 +79,14 @@ bool StrongComponent::run() {
   TLP_HASH_MAP<node, int> cachedValues(graph->numberOfNodes());
   int id = 1;
   int curComponent = 0;
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    node itn = itN->next();
-
+  for (const node &itn : graph->nodes()) {
     if (!visited[itn]) {
       attachNumerotation(itn, visited, finished, cachedValues, id, renum, curComponent);
     }
   }
 
-  delete itN;
-
-  Iterator<edge> *itE = graph->getEdges();
-
-  while (itE->hasNext()) {
-    edge ite = itE->next();
+  for (const edge &ite : graph->edges()) {
     const std::pair<node, node> &eEnds = graph->ends(ite);
 
     if (result->getNodeValue(eEnds.first) == result->getNodeValue(eEnds.second))
@@ -105,8 +94,6 @@ bool StrongComponent::run() {
     else
       result->setEdgeValue(ite, curComponent);
   }
-
-  delete itE;
 
   return true;
 }

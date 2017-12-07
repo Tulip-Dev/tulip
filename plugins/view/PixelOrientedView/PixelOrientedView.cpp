@@ -819,14 +819,10 @@ void PixelOrientedView::registerTriggers() {
   foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
 
   addRedrawTrigger(graph());
-  Iterator<string> *it = graph()->getProperties();
 
-  while (it->hasNext()) {
-    PropertyInterface *property = graph()->getProperty(it->next());
-    addRedrawTrigger(property);
+  for (PropertyInterface *prop : graph()->getObjectProperties()) {
+    addRedrawTrigger(prop);
   }
-
-  delete it;
 }
 
 void PixelOrientedView::applySettings() {

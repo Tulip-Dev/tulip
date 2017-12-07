@@ -104,16 +104,9 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
   if (!graph)
     return;
 
-  Iterator<string> *properties = graph->getProperties();
-  vector<string> stringList;
+  vector<string> stringList = iteratorVector(graph->getProperties());
   vector<string> finalStringList;
-  string propertyName;
   _ui->graphPropertiesSelectionWidget->clearLists();
-
-  while (properties->hasNext()) {
-    propertyName = properties->next();
-    stringList.push_back(propertyName);
-  }
 
   vector<string> selectedPropertiesCopy(selectedProperties);
 
@@ -130,7 +123,6 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
     }
   }
 
-  delete properties;
   _ui->graphPropertiesSelectionWidget->setInputPropertiesList(finalStringList);
   _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(selectedProperties);
 }

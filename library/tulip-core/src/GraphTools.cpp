@@ -267,10 +267,7 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
     while (!fifo.empty()) {
       node n1 = fifo.front();
       fifo.pop_front();
-      Iterator<edge> *itE = graph->getOutEdges(n1);
-
-      for (; itE->hasNext();) {
-        edge adjit = itE->next();
+      for (const edge &adjit : graph->getOutEdges(n1)) {
         node tgt = graph->target(adjit);
 
         if (!nodeFlag[tgt]) {
@@ -294,8 +291,6 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
           }
         }
       }
-
-      delete itE;
     }
 
     ok = false;
@@ -355,10 +350,8 @@ void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress
 
   while (nbNodes != size) {
     root = roots[i];
-    Iterator<edge> *ite = graph->getInOutEdges(root);
 
-    while (ite->hasNext()) {
-      edge e = ite->next();
+    for (const edge &e : graph->getInOutEdges(root)) {
 
       if (!selection->getEdgeValue(e)) {
         node neighbour = graph->opposite(e, root);
@@ -382,7 +375,6 @@ void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress
       }
     }
 
-    delete ite;
     i++;
   }
 

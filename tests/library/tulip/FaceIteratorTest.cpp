@@ -63,57 +63,22 @@ void FaceIteratorTest::tearDown() {
 
 //============================================================
 void FaceIteratorTest::testNodeFaceIterator() {
-  Iterator<Face> *itf = map->getFaces();
-
-  while (itf->hasNext()) {
-    Face f = itf->next();
-    unsigned int i = 0;
-    Iterator<node> *it = map->getFaceNodes(f);
-
-    while (it->hasNext()) {
-      node n = it->next();
-      i++;
-    }
-
+  for (const Face &f : map->getFaces()) {
+    unsigned int i = iteratorCount(map->getFaceNodes(f));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test NodeFaceIterator ", map->nbFacesEdges(f), i);
-    delete it;
   }
-
-  delete itf;
 }
 
 //============================================================
 void FaceIteratorTest::testFaceAdjIterator() {
-  unsigned int i = 0;
-  Iterator<Face> *it = map->getFacesAdj(nodes[4]);
-
-  while (it->hasNext()) {
-    it->next();
-    i++;
-  }
-
-  delete it;
+  unsigned int i = iteratorCount(map->getFacesAdj(nodes[4]));
   CPPUNIT_ASSERT_EQUAL_MESSAGE(" test FaceAdjIterator nbFaces ", 3u, i);
 
-  i = 0;
-  it = map->getFacesAdj(nodes[1]);
+  i = iteratorCount(map->getFacesAdj(nodes[1]));
 
-  while (it->hasNext()) {
-    it->next();
-    i++;
-  }
-
-  delete it;
   CPPUNIT_ASSERT_EQUAL_MESSAGE(" test FaceadjIterator nbFaces ", 3u, i);
 
-  i = 0;
-  it = map->getFacesAdj(nodes[8]);
+  i = iteratorCount(map->getFacesAdj(nodes[8]));
 
-  while (it->hasNext()) {
-    it->next();
-    i++;
-  }
-
-  delete it;
   CPPUNIT_ASSERT_EQUAL_MESSAGE(" test FaceAdjIterator nbFaces ", 2u, i);
 }

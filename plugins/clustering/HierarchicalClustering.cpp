@@ -39,12 +39,9 @@ public:
 };
 
 bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNode) {
-  Iterator<node> *itN = graph->getNodes();
 
-  for (; itN->hasNext();)
-    orderedNode.push_back(itN->next());
-
-  delete itN;
+  for (const node &n : graph->nodes())
+    orderedNode.push_back(n);
 
   LessThan comp;
   comp.metric = metric;
@@ -107,35 +104,23 @@ bool HierarchicalClustering::run() {
       for (itl = badNodeList.begin(); itl != badNodeList.end(); ++itl)
         splitRes.setNodeValue(*itl, false);
 
-      Iterator<node> *itN = graph->getNodes();
-
-      for (; itN->hasNext();) {
-        node nit = itN->next();
+      for (const node &nit : graph->nodes()) {
 
         if (splitRes.getNodeValue(nit)) {
           sel2.setNodeValue(nit, false);
-          Iterator<edge> *itE = graph->getInOutEdges(nit);
 
-          for (; itE->hasNext();) {
-            edge ite = itE->next();
+          for (const edge &ite : graph->getInOutEdges(nit)) {
             sel2.setEdgeValue(ite, false);
           }
 
-          delete itE;
         } else {
           sel1.setNodeValue(nit, false);
-          Iterator<edge> *itE = graph->getInOutEdges(nit);
 
-          for (; itE->hasNext();) {
-            edge ite = itE->next();
+          for (const edge &ite : graph->getInOutEdges(nit)) {
             sel1.setEdgeValue(ite, false);
           }
-
-          delete itE;
         }
       }
-
-      delete itN;
 
       Graph *tmpSubGraph;
       tmpSubGraph = graph->addSubGraph(&sel1);

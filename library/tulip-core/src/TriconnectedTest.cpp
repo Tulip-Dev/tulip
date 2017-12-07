@@ -44,10 +44,8 @@ bool TriconnectedTest::compute(Graph *graph) {
   graph->addListener(this);
   bool result = true;
   Graph *tmp = graph->addCloneSubGraph();
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    node n = itN->next();
+  for (const node &n : graph->nodes()) {
     tmp->delNode(n);
 
     if (!BiconnectedTest::isBiconnected(tmp)) {
@@ -56,16 +54,12 @@ bool TriconnectedTest::compute(Graph *graph) {
     }
 
     tmp->addNode(n);
-    Iterator<edge> *itE = graph->getInOutEdges(n);
 
-    while (itE->hasNext()) {
-      tmp->addEdge(itE->next());
+    for (const edge &e : graph->getInOutEdges(n)) {
+      tmp->addEdge(e);
     }
-
-    delete itE;
   }
 
-  delete itN;
   graph->delSubGraph(tmp);
   resultsBuffer[graph] = result;
   return result;

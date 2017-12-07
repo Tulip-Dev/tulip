@@ -198,15 +198,10 @@ void DataSet::writeData(std::ostream &os, const std::string &prop, const DataTyp
 
 void DataSet::write(std::ostream &os, const DataSet &ds) {
   os << endl;
-  // get iterator over pair attribute/value
-  Iterator<pair<string, DataType *>> *it = ds.getValues();
-
-  while (it->hasNext()) {
-    pair<string, DataType *> p = it->next();
+  // iterate over pair attribute/value
+  for (const pair<string, DataType *> &p : ds.getValues()) {
     ds.writeData(os, p.first, p.second);
   }
-
-  delete it;
 }
 
 // data read

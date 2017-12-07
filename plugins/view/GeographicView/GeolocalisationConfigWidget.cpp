@@ -37,12 +37,9 @@ const unsigned int nbViewProperties = sizeof(viewPropertiesName) / sizeof(string
 const vector<string> graphViewProperties(viewPropertiesName, viewPropertiesName + nbViewProperties);
 
 static vector<string> getGraphPropertiesListAccordingToType(Graph *graph, const string &typeName) {
-  Iterator<string> *propertiesIt = graph->getProperties();
   vector<string> ret;
 
-  while (propertiesIt->hasNext()) {
-    string propertyName = propertiesIt->next();
-
+  for (const string &propertyName : graph->getProperties()) {
     if (std::find(graphViewProperties.begin(), graphViewProperties.end(), propertyName) ==
         graphViewProperties.end()) {
       if (graph->getProperty(propertyName)->getTypename() == typeName) {

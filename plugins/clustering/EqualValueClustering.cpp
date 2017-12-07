@@ -215,7 +215,7 @@ bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, 
           sg = clusters[curValue];
 
         // add curEdge in cluster
-        std::pair<node, node> ends = graph->ends(curEdge);
+        const std::pair<node, node> &ends = graph->ends(curEdge);
         sg->addNode(ends.first);
         sg->addNode(ends.second);
         sg->addEdge(curEdge);
@@ -285,10 +285,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
       pluginProgress->setComment("Partitioning nodes...");
 
     // do a bfs traversal for each node
-    StableIterator<node> itN(graph->getNodes());
-
-    while (itN.hasNext()) {
-      node curNode = itN.next();
+    for (const node &curNode : graph->nodes()) {
 
       // check if curNode has been already visited
       if (!visited.get(curNode.id)) {
@@ -334,7 +331,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
         nodesToVisit.push_front(curNode);
 
         while (!nodesToVisit.empty()) {
-          curNode = nodesToVisit.front();
+          node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
           for (const edge &curEdge : graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
@@ -379,11 +376,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
       pluginProgress->setComment("Partitioning edges...");
 
     // do a bfs traversal for each edge
-    StableIterator<edge> itE(graph->getEdges());
-
-    // do a bfs traversal for each node
-    while (itE.hasNext()) {
-      edge curEdge = itE.next();
+    for (const edge &curEdge : graph->edges()) {
 
       // check if curEdge has been already visited
       if (!visited.get(curEdge.id)) {
@@ -415,7 +408,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes
           sg = clusters[curValue];
 
         // add curEdge in cluster
-        std::pair<node, node> ends = graph->ends(curEdge);
+        const std::pair<node, node> &ends = graph->ends(curEdge);
         sg->addNode(ends.first);
         sg->addNode(ends.second);
         sg->addEdge(curEdge);

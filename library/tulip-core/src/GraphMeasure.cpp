@@ -74,19 +74,13 @@ unsigned int tlp::maxDistance(const Graph *graph, const node n,
     fifo.pop_front();
     unsigned int nDist = distance[current] + 1;
 
-    Iterator<node> *itn;
-    itn = getIt(graph, current, direction);
-
-    while (itn->hasNext()) {
-      node u = itn->next();
+    for (const node &u : getIt(graph, current, direction)) {
       if (distance[u] == UINT_MAX) {
         fifo.push_back(u);
         distance[u] = nDist;
         maxDist = std::max(maxDist, nDist);
       }
     }
-
-    delete itn;
   }
 
   return maxDist;
@@ -216,11 +210,7 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
     fifo.pop_front();
 
     if (curDist < maxDistance) {
-      Iterator<node> *itN = getIt(graph, current, direction);
-
-      while (itN->hasNext()) {
-        node itn = itN->next();
-
+      for (const node &itn : getIt(graph, current, direction)) {
         if (!visited.get(itn.id)) {
           fifo.push_back(itn);
           result[itn] = true;
@@ -228,8 +218,6 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
           distance.set(itn.id, curDist + 1);
         }
       }
-
-      delete itN;
     }
   }
 }
@@ -255,17 +243,15 @@ void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<doub
 
     while (itr != ite) {
       node itn = itr->first;
-      Iterator<edge> *itE = graph->getInOutEdges(itn);
 
-      while (itE->hasNext()) {
-        pair<node, node> eEnds = graph->ends(itE->next());
+      for (const edge &e : graph->getInOutEdges(itn)) {
+        const pair<node, node> &eEnds = graph->ends(e);
 
         if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
           ++nbEdge;
         }
       }
 
-      delete itE;
       ++itr;
     }
 

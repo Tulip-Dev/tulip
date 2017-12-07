@@ -44,18 +44,14 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
   sxkyk = 0.0f;
 
   // We compute the sum of xk, yk, xk² and xkyk for the whole set of nodes
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    node n = itN->next();
+  for (const node &n : graph->nodes()) {
     float nodeValx = xk->getNodeValue(n), nodeValy = yk->getNodeValue(n);
     sxk += nodeValx;
     sxkxk += (nodeValx * nodeValx);
     syk += nodeValy;
     sxkyk += (nodeValx * nodeValy);
   }
-
-  delete itN;
 
   float n = graph->numberOfNodes();
 

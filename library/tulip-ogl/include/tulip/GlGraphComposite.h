@@ -129,17 +129,11 @@ public:
       metaNodes.clear();
 
       Graph *graph = inputData.getGraph();
-      Iterator<node> *nodesIterator = graph->getNodes();
 
-      while (nodesIterator->hasNext()) {
-        node n = nodesIterator->next();
-
+      for (const node &n : graph->nodes()) {
         if (graph->getNodeMetaInfo(n))
           metaNodes.insert(n);
       }
-
-      delete nodesIterator;
-
       nodesModified = false;
     }
 

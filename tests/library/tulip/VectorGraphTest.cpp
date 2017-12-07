@@ -84,13 +84,11 @@ static void checkCreatedGraph(bool nodesOnly = false) {
   // check nodes
   CPPUNIT_ASSERT(graph.numberOfNodes() == NB_NODES);
 
-  Iterator<node> *itn = graph.getNodes();
   OMP_ITER_TYPE i = 0;
-  while (itn->hasNext()) {
-    CPPUNIT_ASSERT(itn->next() == nodes[i]);
+  for (const node &n : graph.nodes()) {
+    CPPUNIT_ASSERT(n == nodes[i]);
     ++i;
   }
-  delete itn;
 
   if (nodesOnly)
     return;
@@ -696,9 +694,7 @@ void VectorGraphTest::testReverseEdges() {
   checkCreatedGraph();
 
   // reverse all edges
-  Iterator<edge> *ite = graph.getEdges();
-  while (ite->hasNext()) {
-    edge e = ite->next();
+  for (const edge &e : graph.edges()) {
     std::pair<node, node> ends = graph.ends(e);
     unsigned int src_outdeg = graph.outdeg(ends.first);
     unsigned int tgt_outdeg = graph.outdeg(ends.second);
@@ -707,7 +703,6 @@ void VectorGraphTest::testReverseEdges() {
     CPPUNIT_ASSERT(graph.outdeg(ends.second) - tgt_outdeg == 1);
     CPPUNIT_ASSERT(src_outdeg - graph.outdeg(ends.first) == 1);
   }
-  delete ite;
   // check graph
   checkGraphAfterReverseEdges();
 }
@@ -718,9 +713,7 @@ void VectorGraphTest::testSetSourcesAndTargets() {
   checkGraphAfterReverseEdges();
 
   // reverse each edge using setSource and setTarget
-  Iterator<edge> *ite = graph.getEdges();
-  while (ite->hasNext()) {
-    edge e = ite->next();
+  for (const edge &e : graph.edges()) {
     std::pair<node, node> ends = graph.ends(e);
     unsigned int src_outdeg = graph.outdeg(ends.first);
     unsigned int tgt_outdeg = graph.outdeg(ends.second);
@@ -731,7 +724,6 @@ void VectorGraphTest::testSetSourcesAndTargets() {
     CPPUNIT_ASSERT(graph.outdeg(ends.first) == src_outdeg - 1);
     CPPUNIT_ASSERT(graph.outdeg(ends.second) == tgt_outdeg + 1);
   }
-  delete ite;
 
   // check nodes and edges
   checkCreatedGraph();
@@ -743,13 +735,10 @@ void VectorGraphTest::testSetEnds() {
   checkCreatedGraph();
 
   // reverse each edge using setEnds
-  Iterator<edge> *ite = graph.getEdges();
-  while (ite->hasNext()) {
-    edge e = ite->next();
+  for (const edge &e : graph.edges()) {
     std::pair<node, node> ends = graph.ends(e);
     graph.setEnds(e, ends.second, ends.first);
   }
-  delete ite;
 
   // check graph is in afterReverseEdges state
   checkGraphAfterReverseEdges();
@@ -762,9 +751,8 @@ void VectorGraphTest::testMoreSetEnds() {
 
   // set ends for all edges
   unsigned int i = 0;
-  Iterator<edge> *ite = graph.getEdges();
-  while (ite->hasNext()) {
-    CPPUNIT_ASSERT(ite->next() == edges[i]);
+  for (const edge &e : graph.edges()) {
+    CPPUNIT_ASSERT(e == edges[i]);
     if (i < NB_NODES - 1)
       graph.setEnds(edges[i], nodes[NB_NODES - i - 2], nodes[NB_NODES - i - 1]);
     else
@@ -774,9 +762,8 @@ void VectorGraphTest::testMoreSetEnds() {
 
   // check edges
   i = 0;
-  ite = graph.getEdges();
-  while (ite->hasNext()) {
-    CPPUNIT_ASSERT(ite->next() == edges[i]);
+  for (const edge &e : graph.edges()) {
+    CPPUNIT_ASSERT(e == edges[i]);
 
     // check ends
     std::pair<node, node> ends = graph.ends(edges[i]);
@@ -809,6 +796,5 @@ void VectorGraphTest::testMoreSetEnds() {
     }
     ++i;
   }
-  delete ite;
 }
 }

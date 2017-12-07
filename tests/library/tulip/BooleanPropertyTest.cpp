@@ -86,20 +86,14 @@ void BooleanPropertyTest::testIterators() {
 void BooleanPropertyTest::testSetAll(bool value) {
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    CPPUNIT_ASSERT_EQUAL(value, selection->getNodeValue(itN->next()));
+  for (const node &n : graph->nodes()) {
+    CPPUNIT_ASSERT_EQUAL(value, selection->getNodeValue(n));
   }
 
-  delete itN;
-  Iterator<edge> *itE = graph->getEdges();
-
-  while (itE->hasNext()) {
-    CPPUNIT_ASSERT_EQUAL(value, selection->getEdgeValue(itE->next()));
+  for (const edge &e : graph->edges()) {
+    CPPUNIT_ASSERT_EQUAL(value, selection->getEdgeValue(e));
   }
-
-  delete itE;
 }
 //==========================================================
 void BooleanPropertyTest::testSetAll() {
@@ -108,24 +102,8 @@ void BooleanPropertyTest::testSetAll() {
 }
 //==========================================================
 void BooleanPropertyTest::testSetGet(bool value) {
-  vector<node> nodes(graph->numberOfNodes());
-  vector<edge> edges(graph->numberOfEdges());
-  unsigned int i = 0;
-  Iterator<node> *itN = graph->getNodes();
-
-  while (itN->hasNext()) {
-    nodes[i++] = itN->next();
-  }
-
-  delete itN;
-  Iterator<edge> *itE = graph->getEdges();
-  i = 0;
-
-  while (itE->hasNext()) {
-    edges[i++] = itE->next();
-  }
-
-  delete itE;
+  const vector<node> &nodes = graph->nodes();
+  const vector<edge> &edges = graph->edges();
 
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
@@ -144,24 +122,9 @@ void BooleanPropertyTest::testSetGet(bool value) {
 }
 //==========================================================
 void BooleanPropertyTest::testCopy() {
-  vector<node> nodes(graph->numberOfNodes());
-  vector<edge> edges(graph->numberOfEdges());
-  unsigned int i = 0;
-  Iterator<node> *itN = graph->getNodes();
+  const vector<node> &nodes = graph->nodes();
+  const vector<edge> &edges = graph->edges();
 
-  while (itN->hasNext()) {
-    nodes[i++] = itN->next();
-  }
-
-  delete itN;
-  Iterator<edge> *itE = graph->getEdges();
-  i = 0;
-
-  while (itE->hasNext()) {
-    edges[i++] = itE->next();
-  }
-
-  delete itE;
   bool value = true;
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
@@ -180,22 +143,14 @@ void BooleanPropertyTest::testCopy() {
 
   BooleanProperty tmp(graph);
   tmp = *selection;
-  itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    node n = itN->next();
+  for (const node &n : nodes) {
     CPPUNIT_ASSERT_EQUAL(selection->getNodeValue(n), tmp.getNodeValue(n));
   }
 
-  delete itN;
-  itE = graph->getEdges();
-
-  while (itE->hasNext()) {
-    edge e = itE->next();
+  for (const edge &e : edges) {
     CPPUNIT_ASSERT_EQUAL(selection->getEdgeValue(e), tmp.getEdgeValue(e));
   }
-
-  delete itE;
 }
 //==========================================================
 void BooleanPropertyTest::testSetGet() {
@@ -206,14 +161,9 @@ void BooleanPropertyTest::testSetGet() {
 void BooleanPropertyTest::testDelete(bool value) {
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
-  Iterator<node> *itN = graph->getNodes();
-  node n;
 
-  while (itN->hasNext()) {
-    n = itN->next();
-  }
+  node n = graph->getRandomNode();
 
-  delete itN;
   selection->setNodeValue(n, !value);
   CPPUNIT_ASSERT_EQUAL(!value, selection->getNodeValue(n));
   graph->delNode(n);

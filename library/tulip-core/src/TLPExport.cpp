@@ -245,12 +245,8 @@ public:
       os << endl;
     }
 
-    Iterator<Graph *> *itS = g->getSubGraphs();
-
-    while (itS->hasNext())
-      saveGraphElements(os, itS->next());
-
-    delete itS;
+    for (Graph *sg : g->getSubGraphs())
+      saveGraphElements(os, sg);
 
     if (g->getSuperGraph() != g)
       os << ")" << endl;
@@ -269,13 +265,10 @@ public:
 
     int nonDefaultvaluatedElementCount = 1;
 
-    while (itP->hasNext()) {
-      PropertyInterface *prop = itP->next();
+    for (PropertyInterface *prop : itP) {
       nonDefaultvaluatedElementCount += prop->numberOfNonDefaultValuatedNodes();
       nonDefaultvaluatedElementCount += prop->numberOfNonDefaultValuatedEdges();
     }
-
-    delete itP;
 
     if (g->getSuperGraph() == g) {
       itP = g->getObjectProperties();
@@ -283,10 +276,7 @@ public:
       itP = g->getLocalObjectProperties();
     }
 
-    PropertyInterface *prop;
-
-    while (itP->hasNext()) {
-      prop = itP->next();
+    for (PropertyInterface *prop : itP) {
       stringstream tmp;
       tmp << "Saving Property [" << prop->getName() << "]";
       pluginProgress->setComment(tmp.str());
@@ -327,12 +317,11 @@ public:
         // sort nodes to ensure a predictable ordering of the ouput
         itN = new StableIterator<node>(itN, 0, true, true);
 
-      while (itN->hasNext()) {
+      for (const node &itn : itN) {
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
           pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
         ++progress;
-        node itn = itN->next();
         string tmp = prop->getNodeStringValue(itn);
 
         // replace real path with symbolic one using TulipBitmapDir
@@ -354,8 +343,6 @@ public:
         os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
       }
 
-      delete itN;
-
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
 
       if (inGuiTestingMode())
@@ -363,7 +350,7 @@ public:
         itE = new StableIterator<edge>(itE, 0, true, true);
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
-        while (itE->hasNext()) {
+        for (const edge &ite : itE) {
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -371,7 +358,6 @@ public:
 
           // for GraphProperty we must ensure the reindexing
           // of embedded edges
-          edge ite = itE->next();
           const set<edge> &edges = static_cast<GraphProperty *>(prop)->getEdgeValue(ite);
           set<edge> rEdges;
           set<edge>::const_iterator its;
@@ -386,13 +372,12 @@ public:
           os << "\")" << endl;
         }
       } else {
-        while (itE->hasNext()) {
+        for (const edge &ite : itE) {
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
 
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
           ++progress;
-          edge ite = itE->next();
           // replace real path with symbolic one using TulipBitmapDir
           string tmp = prop->getEdgeStringValue(ite);
 
@@ -407,21 +392,15 @@ public:
         }
       }
 
-      delete itE;
       os << ")" << endl;
     }
-
-    delete itP;
   }
   //=====================================================
   void saveProperties(ostream &os, Graph *g) {
     saveLocalProperties(os, g);
-    Iterator<Graph *> *itS = g->getSubGraphs();
 
-    while (itS->hasNext())
-      saveProperties(os, itS->next());
-
-    delete itS;
+    for (Graph *sg : g->getSubGraphs())
+      saveProperties(os, sg);
   }
   //=====================================================
   void saveAttributes(ostream &os, Graph *g) {
@@ -465,12 +444,9 @@ public:
     }
 
     // save subgraph attributes
-    Iterator<Graph *> *itS = g->getSubGraphs();
 
-    while (itS->hasNext())
-      saveAttributes(os, itS->next());
-
-    delete itS;
+    for (Graph *sg : g->getSubGraphs())
+      saveAttributes(os, sg);
   }
   //=====================================================
   void saveController(ostream &os, DataSet &data) {

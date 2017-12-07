@@ -72,17 +72,13 @@ const string metaGraphPropertyName = "viewMetaGraph";
 PropertyManager::PropertyManager(Graph *g) : graph(g) {
   // get inherited properties
   if (graph != graph->getSuperGraph()) {
-    Iterator<PropertyInterface *> *it = graph->getSuperGraph()->getObjectProperties();
 
-    while (it->hasNext()) {
-      PropertyInterface *prop = it->next();
+    for (PropertyInterface *prop : graph->getSuperGraph()->getObjectProperties()) {
       inheritedProperties[prop->getName()] = prop;
 
       if (prop->getName() == metaGraphPropertyName)
         static_cast<GraphAbstract *>(graph)->metaGraphProperty = static_cast<GraphProperty *>(prop);
     }
-
-    delete it;
   }
 }
 //==============================================================

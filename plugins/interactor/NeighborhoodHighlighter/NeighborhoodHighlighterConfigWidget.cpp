@@ -70,7 +70,7 @@ void NeighborhoodHighlighterConfigWidget::setNumberOfNodes(int nodesNb) {
   _ui->nodesNumber->setValue(nodesNb);
 }
 
-void NeighborhoodHighlighterConfigWidget::setPropertyToUse(std::string &propertyName) {
+void NeighborhoodHighlighterConfigWidget::setPropertyToUse(const std::string &propertyName) {
   _ui->propertyName->addItem(tlpStringToQString(propertyName));
   _ui->propertyName->setCurrentIndex(_ui->propertyName->findText(tlpStringToQString(propertyName)));
 }

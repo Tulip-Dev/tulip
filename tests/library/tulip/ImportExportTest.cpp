@@ -616,16 +616,13 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Grap
   assert(fEdges == sEdges);
 
   // subgraphs test
-  Iterator<Graph *> *subIt = first->getDescendantGraphs();
-  while (subIt->hasNext()) {
-    Graph *firstSub = subIt->next();
+  for (Graph *firstSub : first->getDescendantGraphs()) {
     string name(firstSub->getName());
     Graph *secondSub = second->getDescendantGraph(name);
     CPPUNIT_ASSERT_MESSAGE("a subgraph is missing", secondSub != nullptr);
     CPPUNIT_ASSERT_MESSAGE("subgraphs have not the same id",
                            firstSub->getId() == secondSub->getId());
   }
-  delete subIt;
 }
 
 void TulipSaveLoadGraphFunctionsTest::setUp() {}

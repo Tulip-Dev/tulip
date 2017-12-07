@@ -134,15 +134,12 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> 
   unsigned int vDfs = count++;
   dfsNumber.set(v.id, vDfs);
   low.set(v.id, vDfs);
-  Iterator<node> *it = graph->getInOutNodes(v);
 
-  while (it->hasNext()) {
-    node w = it->next();
+  for (const node &w : graph->getInOutNodes(v)) {
 
     if (dfsNumber.get(w.id) == UINT_MAX) {
       if (vDfs == 1) {
         if (count != 2) {
-          delete it;
           return false;
         }
       }
@@ -150,13 +147,11 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> 
       supergraph.set(w.id, v);
 
       if (!biconnectedTest(graph, w, low, dfsNumber, supergraph, count)) {
-        delete it;
         return false;
       }
 
       if (vDfs != 1) {
         if (low.get(w.id) >= dfsNumber.get(v.id)) {
-          delete it;
           return false;
         } else
           low.set(v.id, std::min(low.get(v.id), low.get(w.id)));
@@ -166,7 +161,6 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> 
     }
   }
 
-  delete it;
   return true;
 }
 //=================================================================

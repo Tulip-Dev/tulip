@@ -41,16 +41,11 @@ double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V)
   }
 
   for (itU = A->begin(); itU != A->end(); ++itU) {
-    Iterator<node> *itN = graph->getInOutNodes(*itU);
-
-    while (itN->hasNext()) {
-      node itn = itN->next();
+    for (const node &itn : graph->getInOutNodes(*itU)) {
 
       if (B->find(itn) != B->end())
         result += 1.0;
     }
-
-    delete itN;
   }
 
   return result;
@@ -61,16 +56,10 @@ double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
   double result = 0.0;
 
   for (itU = U.begin(); itU != U.end(); ++itU) {
-    Iterator<node> *itN = graph->getInOutNodes(*itU);
-
-    while (itN->hasNext()) {
-      node itn = itN->next();
-
+    for (const node &itn : graph->getInOutNodes(*itU)) {
       if (U.find(itn) != U.end())
         result += 1.0;
     }
-
-    delete itN;
   }
 
   return result / 2.0;
@@ -97,31 +86,19 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
   TLP_HASH_SET<node> Nu, Nv, Wuv;
 
   // Compute Nu
-  Iterator<node> *itN = graph->getInOutNodes(u);
-
-  while (itN->hasNext()) {
-    node n = itN->next();
-
+  for (const node &n : graph->getInOutNodes(u)) {
     if (n != v)
       Nu.insert(n);
   }
-
-  delete itN;
 
   if (Nu.empty())
     return 0;
 
   // Compute Nv
-  itN = graph->getInOutNodes(v);
-
-  while (itN->hasNext()) {
-    node n = itN->next();
-
+  for (const node &n : graph->getInOutNodes(v)) {
     if (n != u)
       Nv.insert(n);
   }
-
-  delete itN;
 
   if (Nv.empty())
     return 0;
@@ -180,14 +157,11 @@ double StrengthMetric::getNodeValue(const tlp::node n) {
     return 0;
 
   double res = 0;
-  Iterator<edge> *itE = graph->getInOutEdges(n);
 
-  while (itE->hasNext()) {
-    edge ite = itE->next();
+  for (const edge &ite : graph->getInOutEdges(n)) {
     res += result->getEdgeValue(ite);
   }
 
-  delete itE;
   return res / double(graph->deg(n));
 }
 //=============================================================

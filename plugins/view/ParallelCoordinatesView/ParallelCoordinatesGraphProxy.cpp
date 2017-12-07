@@ -248,13 +248,10 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
   graphColorsChanged = false;
 
   // If new colors have been set for the graph elements, backup the change to restore the correct
-  // ones
-  // when unhighlighting
+  // ones when unhighlighting
   if (highlightedEltsSet()) {
-    Iterator<unsigned int> *dataIt = getDataIterator();
 
-    while (dataIt->hasNext()) {
-      unsigned int dataId = dataIt->next();
+    for (unsigned int dataId : getDataIterator()) {
       Color currentColor = getPropertyValueForData<ColorProperty, ColorType>("viewColor", dataId);
       Color originalColor;
 
@@ -296,7 +293,6 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
       }
     }
 
-    delete dataIt;
     lastHighlightedElementsSet = true;
   } else if (lastHighlightedElementsSet) {
     *(graph_component->getProperty<ColorProperty>("viewColor")) = *originalDataColors;

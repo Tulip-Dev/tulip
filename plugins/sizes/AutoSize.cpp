@@ -52,44 +52,28 @@ public:
 private:
   Size getNodeValue(const node n) {
     LayoutProperty *entryLayout = graph->getProperty<LayoutProperty>("viewLayout");
+    SizeProperty *entrySize = graph->getProperty<SizeProperty>("viewSize");
 
     // Compute the minimal distance to one neighbour.
-    Iterator<node> *itN = graph->getNodes();
     const Coord &tmp1 = entryLayout->getNodeValue(n);
-    double dist = 1000;
+    double dist = DBL_MAX;
 
-    if (itN->hasNext()) {
-      node itn = itN->next();
-
-      while ((itn == n) && itN->hasNext())
-        itn = itN->next();
-
-      if (itn != n) {
-        const Coord &tmp2 = entryLayout->getNodeValue(itn);
-        dist = sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) +
-                    (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
-                    (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
-      } else {
-        dist = 10;
-      }
-    }
-
-    for (; itN->hasNext();) {
-      node itn = itN->next();
-
+    for (const node &itn : graph->nodes()) {
       if (itn != n) {
         const Coord &tmp2 = entryLayout->getNodeValue(itn);
         double tmpDist = sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) +
                               (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
                               (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
 
-        if (tmpDist < dist)
-          dist = tmpDist;
+        dist = std::min(dist, tmpDist);
       }
     }
 
-    delete itN;
-    return Size(dist / 2, dist / 2, dist / 2);
+    if (dist != DBL_MAX) {
+      return Size(dist / 2, dist / 2, dist / 2);
+    } else {
+      return entrySize->getNodeValue(n);
+    }
   }
 
   Size getEdgeValue(const edge e) {

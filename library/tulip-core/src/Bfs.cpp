@@ -30,7 +30,6 @@ Bfs::Bfs(Graph *G, BooleanProperty *resultatAlgoSelection)
   nbNodes = 0;
 
   node root;
-  ;
   bool unselected = false;
   Iterator<node> *itn = resultatAlgoSelection->getNodesEqualTo(true);
 
@@ -67,10 +66,7 @@ void Bfs::computeBfs(Graph *G, BooleanProperty *resultatAlgoSelection, node root
     if (!G->isElement(r))
       tlp::error() << __PRETTY_FUNCTION__ << ": ERROR NODE R NOT IN G" << std::endl;
 
-    Iterator<edge> *ite = G->getInOutEdges(r);
-
-    while (ite->hasNext()) {
-      edge e = ite->next();
+    for (const edge &e : G->getInOutEdges(r)) {
 
       if (!selectedEdges.get(e.id)) {
         node tmp = G->opposite(e, r);
@@ -86,7 +82,6 @@ void Bfs::computeBfs(Graph *G, BooleanProperty *resultatAlgoSelection, node root
       }
     }
 
-    delete ite;
     i++;
   }
 }

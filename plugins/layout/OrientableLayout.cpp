@@ -126,20 +126,12 @@ OrientableLayout::LineType OrientableLayout::getEdgeDefaultValue() {
 
 //====================================================================
 void OrientableLayout::setOrthogonalEdge(const Graph *tree, float interNodeDistance) {
-  Iterator<node> *itNode = tree->getNodes();
-
-  while (itNode->hasNext()) {
-    node currentNode = itNode->next();
+  for (const node &currentNode : tree->nodes()) {
     OrientableCoord currentNodeCoord = getNodeValue(currentNode);
-    Iterator<edge> *itEdge = tree->getOutEdges(currentNode);
 
-    while (itEdge->hasNext())
-      addControlPoints(tree, currentNodeCoord, itEdge->next(), interNodeDistance);
-
-    delete itEdge;
+    for (const edge &e : tree->getOutEdges(currentNode))
+      addControlPoints(tree, currentNodeCoord, e, interNodeDistance);
   }
-
-  delete itNode;
 }
 
 //====================================================================

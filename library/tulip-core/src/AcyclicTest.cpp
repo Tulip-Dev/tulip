@@ -46,10 +46,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
     return;
 
   // replace self loops by three edges and two nodes.
-  StableIterator<edge> itE(graph->getEdges());
-
-  while (itE.hasNext()) {
-    edge e = itE.next();
+  for (const edge &e : stableIterator(graph->getEdges())) {
     const pair<node, node> &eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
@@ -85,10 +82,8 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
   finished.setAll(false);
   bool result = true;
   // do a dfs traversal
-  Iterator<node> *it = graph->getNodes();
 
-  while (it->hasNext()) {
-    node curNode = it->next();
+  for (const node &curNode : graph->nodes()) {
 
     if (!visited.get(curNode.id)) {
       stack<node> nodesToVisit;
@@ -97,7 +92,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
       neighboursToVisit.push(graph->getOutEdges(curNode));
 
       while (!nodesToVisit.empty()) {
-        curNode = nodesToVisit.top();
+        node curNode = nodesToVisit.top();
         Iterator<edge> *ite = neighboursToVisit.top();
 
         // check if dfs traversal of curNode neighbours is finished
@@ -163,7 +158,6 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
     }
   }
 
-  delete it;
   return result;
 }
 //**********************************************************************

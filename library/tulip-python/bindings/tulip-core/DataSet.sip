@@ -273,11 +273,9 @@ Returns the list of keys associated to the values stored in the data set.
 
 %MethodCode
   std::vector<std::string> ret;
-  tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
-  while (it->hasNext()) {
-    ret.push_back(it->next().first);
+  for (const std::pair<std::string, tlp::DataType*> &p : sipCpp->getValues()) {
+    ret.push_back(p.first);
   }
-  delete it;
   sipRes = new std::vector<std::string>(ret);
 %End
 
@@ -289,15 +287,12 @@ Returns the list of keys associated to the values stored in the data set.
   SIP_PYOBJECT __getitem__(const std::string &attributeName);
 %MethodCode
   sipRes = NULL;
-  tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
   tlp::DataType* dataType = NULL;
-  while (it->hasNext()) {
-    std::pair<std::string, tlp::DataType*> p = it->next();
+  for (const std::pair<std::string, tlp::DataType*> &p : sipCpp->getValues()) {
     if (p.first == *a0) {
       dataType = p.second;
     }
   }
-  delete it;
 
   sipRes = getPyObjectFromDataType(dataType, true);
 

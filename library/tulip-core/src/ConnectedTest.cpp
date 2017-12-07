@@ -94,12 +94,9 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
       while (!nodesToVisit.empty()) {
         node curNode = nodesToVisit.front();
         nodesToVisit.pop_front();
+
         // loop on all neighbours
-        Iterator<node> *itn = graph->getInOutNodes(curNode);
-
-        while (itn->hasNext()) {
-          node neighbour = itn->next();
-
+        for (const node &neighbour : graph->getInOutNodes(curNode)) {
           // check if neighbour has been visited
           if (!visited[neighbour]) {
             // mark neighbour as already visited
@@ -110,8 +107,6 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
             nodesToVisit.push_back(neighbour);
           }
         }
-
-        delete itn;
       }
     }
   }
@@ -148,10 +143,7 @@ static unsigned int connectedTest(const Graph *const graph, node n,
     node r = nodesToVisit.front();
     nodesToVisit.pop_front();
     // loop on all neighbours
-    Iterator<node> *itn = graph->getInOutNodes(r);
-
-    while (itn->hasNext()) {
-      node neighbour = itn->next();
+    for (const node &neighbour : graph->getInOutNodes(r)) {
 
       // check if neighbour has been visited
       if (!visited[neighbour]) {
@@ -162,8 +154,6 @@ static unsigned int connectedTest(const Graph *const graph, node n,
         ++count;
       }
     }
-
-    delete itn;
   }
 
   return count;

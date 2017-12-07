@@ -173,10 +173,7 @@ tlp::node SOMMap::getNodeAt(unsigned int x, unsigned int y) {
   unsigned int currenty = 0;
   unsigned int currentx = 0;
   // Get first node
-  node n;
-  Iterator<node> *it = graph_component->getNodes();
-  n = it->next();
-  delete it;
+  node n = graph_component->getOneNode();
 
   // Move on the line
   while (currenty != y) {

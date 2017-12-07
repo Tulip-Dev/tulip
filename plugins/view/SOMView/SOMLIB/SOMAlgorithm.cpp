@@ -144,15 +144,17 @@ void SOMAlgorithm::train(SOMMap *map, InputSample &inputSample, unsigned int max
 node SOMAlgorithm::findBMU(SOMMap *map, const DynamicVector<double> &input, double &dist) {
   vector<node> matchList;
   node n;
-  double bestDist;
-  Iterator<node> *gridNodes = map->getNodes();
-  // take the first to init the comparaison
-  n = gridNodes->next();
-  matchList.push_back(n);
-  bestDist = input.dist(map->getWeight(n));
+  double bestDist = 0;
 
-  while (gridNodes->hasNext()) {
-    n = gridNodes->next();
+  for (const node &n : map->nodes()) {
+
+    // take the first to init the comparaison
+    if (matchList.empty()) {
+      matchList.push_back(n);
+      bestDist = input.dist(map->getWeight(n));
+      continue;
+    }
+
     double newDist = input.dist(map->getWeight(n));
 
     if (newDist < bestDist) {
@@ -163,8 +165,6 @@ node SOMAlgorithm::findBMU(SOMMap *map, const DynamicVector<double> &input, doub
       matchList.push_back(n);
     }
   }
-
-  delete gridNodes;
 
   dist = bestDist;
   assert(!matchList.empty());

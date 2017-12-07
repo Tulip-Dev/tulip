@@ -59,19 +59,15 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
                             vector<edge> *loops) {
   bool result = true;
   bool computeAll = (loops != nullptr) || (multipleEdges != nullptr);
-  Iterator<node> *itNode = graph->getNodes();
   MutableContainer<bool> visited;
   visited.setAll(false);
 
-  while (itNode->hasNext()) {
-    node current = itNode->next();
+  for (const node &current : graph->nodes()) {
     // Search for multiple edges and loops
-    Iterator<edge> *itEdge = graph->getInOutEdges(current);
     MutableContainer<bool> targeted;
     targeted.setAll(false);
 
-    while (itEdge->hasNext()) {
-      edge e = itEdge->next();
+    for (const edge &e : graph->getInOutEdges(current)) {
 
       // check if edge has already been visited
       if (visited.get(e.id))
@@ -107,13 +103,10 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
         targeted.set(target.id, true);
     }
 
-    delete itEdge;
-
     if (!computeAll && !result)
       break;
   }
 
-  delete itNode;
   return result;
 }
 //=================================================================

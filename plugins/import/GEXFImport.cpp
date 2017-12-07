@@ -427,18 +427,12 @@ public:
     Graph *quotientGraph = nullptr;
     // iterate on each subgraph of graph
     // and add missing nodes
-    StableIterator<Graph *> itg(graph->getSubGraphs());
-
-    while (itg.hasNext()) {
+    for (Graph *sg : stableIterator(graph->getSubGraphs())) {
       if (!quotientGraph)
         quotientGraph = graph->addCloneSubGraph("quotient graph");
 
-      Graph *sg = itg.next();
       // iterate on nodes
-      StableIterator<node> itn(sg->getNodes());
-
-      while (itn.hasNext()) {
-        node n = itn.next();
+      for (const node &n : stableIterator(sg->getNodes())) {
         Graph *msg = nodeToSubgraph.get(n.id);
 
         if (msg) {
@@ -475,15 +469,10 @@ public:
   void computeMetaNodes(Graph *quotientGraph) {
     // iterate on each subgraph of g
     // and add needed meta nodes
-    Iterator<Graph *> *itg = graph->getSubGraphs();
 
-    while (itg->hasNext()) {
-      Graph *sg = itg->next();
+    for (Graph *sg : graph->getSubGraphs()) {
       // iterate on nodes
-      StableIterator<node> itn(sg->getNodes());
-
-      while (itn.hasNext()) {
-        node n = itn.next();
+      for (const node &n : stableIterator(sg->getNodes())) {
         Graph *msg = nodeToSubgraph.get(n.id);
 
         if (msg != nullptr) {
@@ -531,8 +520,6 @@ public:
         }
       }
     }
-
-    delete itg;
   }
 
   // Methods which compute Cubic Bézier control points for each edge

@@ -139,23 +139,14 @@ bool ConnectedComponentPacking::run() {
 
   vector<Rectangle<float>> rectanglesBackup(rectangles);
   RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress);
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    node n = itN->next();
+  for (const node &n : graph->nodes()) {
     result->setNodeValue(n, layout->getNodeValue(n));
   }
 
-  delete itN;
-
-  Iterator<edge> *itE = graph->getEdges();
-
-  while (itE->hasNext()) {
-    edge e = itE->next();
+  for (const edge &e : graph->edges()) {
     result->setEdgeValue(e, layout->getEdgeValue(e));
   }
-
-  delete itE;
 
   for (unsigned int i = 0; i < ccNodes.size(); ++i) {
     Coord move(rectangles[i][0][0] - rectanglesBackup[i][0][0],

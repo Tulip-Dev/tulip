@@ -348,13 +348,10 @@ bool TreeTest::compute(const Graph *graph) {
   }
 
   bool rootNodeFound = false;
-  Iterator<node> *it = graph->getNodes();
 
-  while (it->hasNext()) {
-    node tmp = it->next();
+  for (const node &tmp : graph->nodes()) {
 
     if (graph->indeg(tmp) > 1) {
-      delete it;
       resultsBuffer[graph] = false;
       graph->addListener(this);
       return false;
@@ -362,7 +359,6 @@ bool TreeTest::compute(const Graph *graph) {
 
     if (graph->indeg(tmp) == 0) {
       if (rootNodeFound) {
-        delete it;
         resultsBuffer[graph] = false;
         graph->addListener(this);
         return false;
@@ -370,8 +366,6 @@ bool TreeTest::compute(const Graph *graph) {
         rootNodeFound = true;
     }
   }
-
-  delete it;
 
   if (AcyclicTest::isAcyclic(graph)) {
     resultsBuffer[graph] = true;

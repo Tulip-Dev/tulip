@@ -1040,14 +1040,9 @@ void ScatterPlot2DView::registerTriggers() {
 
   if (graph()) {
     addRedrawTrigger(graph());
-    Iterator<string> *it = getScatterPlotGraph()->getProperties();
-
-    while (it->hasNext()) {
-      PropertyInterface *property = getScatterPlotGraph()->getProperty(it->next());
-      addRedrawTrigger(property);
+    for (PropertyInterface *prop : getScatterPlotGraph()->getObjectProperties()) {
+      addRedrawTrigger(prop);
     }
-
-    delete it;
   }
 }
 

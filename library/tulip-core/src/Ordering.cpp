@@ -37,16 +37,7 @@ struct tlp::augmentableAndNodes_ {
  * A function that return the number of node of the infinite face
  */
 int Ordering::infFaceSize() {
-  Iterator<unsigned int> *itn = contour.findAll(true);
-  int cpt = 0;
-
-  while (itn->hasNext()) {
-    itn->next();
-    cpt++;
-  }
-
-  delete itn;
-  return cpt;
+  return iteratorCount(contour.findAll(true));
 }
 
 //==========================================================
@@ -56,20 +47,15 @@ int Ordering::infFaceSize() {
 int Ordering::seqp(Face f) {
   MutableContainer<bool> seq_p;
   seq_p.setAll(false);
-  Iterator<node> *it = Gp->getFaceNodes(f);
 
-  while (it->hasNext()) {
-    node no = it->next();
-
+  for (const node &no : Gp->getFaceNodes(f)) {
     if (contour.get(no.id))
       seq_p.set(no.id, true);
   }
 
-  delete it;
   int cpt = 0;
   node n = v1[v1.size() - 1];
   node n2 = right.get(n.id);
-  ;
 
   while (n != v1[0]) {
     if (seq_p.get(n2.id) && seq_p.get(n.id))
@@ -199,10 +185,7 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
     if (tmp2 == node())
       tmp2 = node_f;
 
-    Iterator<node> *it_no = Gp->getFaceNodes(Gp->getFaceContaining(tmp2, node_last));
-
-    while (it_no->hasNext()) {
-      node no_tmp = it_no->next();
+    for (const node &no_tmp : Gp->getFaceNodes(Gp->getFaceContaining(tmp2, node_last))) {
 
       if (!tried.get(no_tmp.id)) {
         bool on_c = contour.get(no_tmp.id);
@@ -225,7 +208,6 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
       }
     }
 
-    delete it_no;
     lim--;
   }
 
@@ -237,19 +219,14 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
       if (is_selectable_face.get(f_tmp.id) || is_selectable_visited_face.get(f_tmp.id))
         face_sel = true;
 
-      Iterator<node> *itn = Gp->getFaceNodes(f_tmp);
-
       if (face_sel)
-        while (itn->hasNext()) {
-          node no_tmp = itn->next();
+        for (const node &no_tmp : Gp->getFaceNodes(f_tmp)) {
           is_selectable.set(no_tmp.id, false);
           is_selectable_visited.set(no_tmp.id, false);
           tried.set(no_tmp.id, true);
         }
       else {
-        while (itn->hasNext()) {
-          node no_tmp = itn->next();
-
+        for (const node &no_tmp : Gp->getFaceNodes(f_tmp)) {
           if (!tried.get(no_tmp.id) &&
               (is_selectable_visited.get(no_tmp.id) || is_selectable.get(no_tmp.id))) {
             if (!isSelectable(no_tmp)) {
@@ -261,8 +238,6 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
           tried.set(no_tmp.id, true);
         }
       }
-
-      delete itn;
     }
 }
 
@@ -305,7 +280,6 @@ void Ordering::updateSelectableFaces(vector<Face> v_faces) {
  */
 struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
   struct augmentableAndNodes_ res;
-  Iterator<node> *it = Gp->getFaceNodes(f);
   int small = infFaceSize();
   int big = 0;
   node nod = v1[v1.size() - 2];
@@ -332,8 +306,8 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
     if (nod2 == n_f)
       f_was_first = true;
 
-    while (it->hasNext()) {
-      if (it->next() == nod2) {
+    for (const node &n : Gp->getFaceNodes(f)) {
+      if (n == nod2) {
         found_ff = true;
         small = pos;
         no2 = nod2;
@@ -347,16 +321,12 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
     pos++;
   }
 
-  delete it;
-
   while (nod2 != v1[1]) {
     if (nod2 == n_f && !found_ff)
       f_was_first = true;
 
-    it = Gp->getFaceNodes(f);
-
-    while (it->hasNext()) {
-      if (it->next() == nod2) {
+    for (const node &n : Gp->getFaceNodes(f)) {
+      if (n == nod2) {
         if (pos < small) {
           found_ff = true;
           small = pos;
@@ -378,8 +348,6 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
         break;
       }
     }
-
-    delete it;
 
     if (nod2 == n_l)
       found_minl = true;
@@ -424,10 +392,7 @@ void Ordering::setMinMarkedFace(Face f) {
     if (first_pass)
       first_pass = false;
 
-    Iterator<node> *itn = Gp->getFaceNodes(f);
-
-    while (itn->hasNext()) {
-      node tmp = itn->next();
+    for (const node &tmp : Gp->getFaceNodes(f)) {
 
       if (tmp == nod) {
         if (pos < small) {
@@ -442,7 +407,6 @@ void Ordering::setMinMarkedFace(Face f) {
       }
     }
 
-    delete itn;
     nod2 = nod;
     nod = right.get(nod2.id);
     pos++;
@@ -459,7 +423,6 @@ void Ordering::setMinMarkedFace(Face f) {
  */
 void Ordering::minMarkedf() {
   int contourSize = infFaceSize() - v1.size();
-  Iterator<unsigned int> *itf = markedFaces.findAll(true);
 
   minMarkedFace.face = Face();
   int first = contourSize;
@@ -467,24 +430,24 @@ void Ordering::minMarkedf() {
   minMarkedFace.n_first = v1[v1.size() - 1];
   minMarkedFace.n_last = v1[0];
 
+  Iterator<unsigned int> *itf = markedFaces.findAll(true);
+
   if (!itf->hasNext()) {
     existMarkedF = false;
   }
 
-  while (itf->hasNext()) {
+  for (unsigned int faceId : itf) {
     int i = 0;
     int small = contourSize;
     int big = 0;
-    Face f = static_cast<Face>(itf->next());
+    Face f = Face(faceId);
     node n_f, n_l;
     node n = v1[v1.size() - 2];
     node n2 = v1[v1.size() - 1];
 
     while (n != v1[0]) {
-      Iterator<node> *itn = Gp->getFaceNodes(f);
 
-      while (itn->hasNext()) {
-        node tmp = itn->next();
+      for (const node &tmp : Gp->getFaceNodes(f)) {
 
         if (tmp == n2) {
           if (i < small) {
@@ -499,7 +462,6 @@ void Ordering::minMarkedf() {
         }
       }
 
-      delete itn;
       n = n2;
       n2 = right.get(n.id);
       i++;
@@ -513,8 +475,6 @@ void Ordering::minMarkedf() {
       last = big;
     }
   }
-
-  delete itf;
 }
 
 //==========================================================
@@ -934,14 +894,11 @@ void Ordering::selectAndUpdate(node n) {
   n2 = right.get(n2.id);
 
   while (n2 != node_last) {
-    Iterator<Face> *ite_face = Gp->getFacesAdj(n2);
 
-    while (ite_face->hasNext()) {
-      Face f_tmp = static_cast<Face>(ite_face->next());
+    for (const Face &f_tmp : Gp->getFacesAdj(n2)) {
       outv.add(f_tmp.id, -1);
     }
 
-    delete ite_face;
     oute.add(ext.id, -1);
     n2 = right.get(n2.id);
   }
@@ -1006,16 +963,12 @@ void Ordering::selectAndUpdate(node n) {
   // update visitedFaces
   for (int i = 0; uint(i) < noeuds.size(); i++) {
     int deg = Gp->deg(noeuds[i]);
-    Iterator<Face> *itf = Gp->getFacesAdj(noeuds[i]);
 
-    while (itf->hasNext()) {
-      Face f2 = itf->next();
+    for (const Face &f2 : Gp->getFacesAdj(noeuds[i])) {
 
       if (deg == 2 && !isOuterFace.get(f2.id))
         visitedFaces.set(f2.id, true);
     }
-
-    delete itf;
   }
 
   Face derniere = Gp->getFaceContaining(v1[0], v1[1]);
@@ -1076,10 +1029,8 @@ void Ordering::selectAndUpdate(node n) {
     oute.add(f1.id, 1);
     addNode++;
     int cpt = 0;
-    Iterator<Face> *itf = Gp->getFacesAdj(n2);
 
-    while (itf->hasNext()) {
-      Face f2 = itf->next();
+    for (const Face &f2 : Gp->getFacesAdj(n2)) {
 
       if (isOuterFace.get(f2.id))
         continue;
@@ -1095,7 +1046,6 @@ void Ordering::selectAndUpdate(node n) {
       outv.add(f2.id, 1);
     }
 
-    delete itf;
     n1 = n2;
     n2 = right.get(n1.id);
 
@@ -1210,27 +1160,19 @@ void Ordering::selectAndUpdate(Face f) {
   visitedNodes.set(pred.id, true);
 
   if (Gp->deg(pred) == 2) {
-    Iterator<Face> *itf = Gp->getFacesAdj(pred);
 
-    while (itf->hasNext()) {
-      Face fa = itf->next();
+    for (const Face &fa : Gp->getFacesAdj(pred)) {
       visitedFaces.set(fa.id, true);
     }
-
-    delete itf;
   }
 
   visitedNodes.set(n2.id, true);
 
   if (Gp->deg(n2) == 2) {
-    Iterator<Face> *itf = Gp->getFacesAdj(n2);
 
-    while (itf->hasNext()) {
-      Face fa = itf->next();
+    for (const Face &fa : Gp->getFacesAdj(n2)) {
       visitedFaces.set(fa.id, true);
     }
-
-    delete itf;
   }
 
   // update contour, left and right
@@ -1250,11 +1192,9 @@ void Ordering::selectAndUpdate(Face f) {
   oute.add(ext.id, -suppNodes - 1);
 
   while (n3 != n2) {
-    Iterator<Face> *itf = Gp->getFacesAdj(n3);
     int cpt = 0;
 
-    while (itf->hasNext()) {
-      Face fa = itf->next();
+    for (const Face &fa : Gp->getFacesAdj(n3)) {
 
       if (isOuterFace.get(fa.id))
         continue;
@@ -1269,7 +1209,6 @@ void Ordering::selectAndUpdate(Face f) {
       }
     }
 
-    delete itf;
     Face fa = Gp->getFaceContaining(n4, n3);
 
     if (!update_seqp.get(fa.id)) {
@@ -1300,10 +1239,8 @@ void Ordering::selectAndUpdate(Face f) {
     one_face = false;
 
   if (add_node == 0) {
-    Iterator<Face> *itf = Gp->getFacesAdj(n2);
 
-    while (itf->hasNext()) {
-      Face tmp_f = itf->next();
+    for (const Face &tmp_f : Gp->getFacesAdj(n2)) {
 
       if (isOuterFace.get(tmp_f.id))
         continue;
@@ -1314,8 +1251,6 @@ void Ordering::selectAndUpdate(Face f) {
         update_seqp.set(tmp_f.id, true);
       }
     }
-
-    delete itf;
   }
 
   outv.add(ext.id, add_node);
@@ -1342,15 +1277,13 @@ bool Ordering::isSelectable(node n) {
 
   if (Gp->deg(n) >= 3) {
     int sepf = 0, ispf = 0;
-    Iterator<Face> *itf = Gp->getFacesAdj(n);
     node n_predCont, n_succCont;
     Face derniere = Gp->getFaceContaining(v1[0], v1[1]);
 
     n_predCont = left.get(n.id);
     n_succCont = right.get(n.id);
 
-    while (itf->hasNext()) {
-      Face faces = itf->next();
+    for (const Face &faces : Gp->getFacesAdj(n)) {
 
       if (isOuterFace.get(faces.id))
         continue;
@@ -1389,7 +1322,6 @@ bool Ordering::isSelectable(node n) {
       }
     }
 
-    delete itf;
     return (ispf == sepf);
   }
 
@@ -1426,7 +1358,7 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
     Iterator<unsigned int> *itn = is_selectable_visited.findAll(true);
 
     while (itn->hasNext()) {
-      n = static_cast<node>(itn->next());
+      n = node(itn->next());
       selectAndUpdate(n);
 
       if (Gp->nbFaces() <= 2)
@@ -1443,32 +1375,25 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
 
     // search for a visited face that can be selected
     bool selVisitedFace = false;
-    Iterator<unsigned int> *itf = is_selectable_visited_face.findAll(true);
 
-    while (itf->hasNext()) {
-      Face f = static_cast<Face>(itf->next());
+    for (unsigned int faceId : is_selectable_visited_face.findAll(true)) {
+      Face f = Face(faceId);
       selectAndUpdate(f);
       selVisitedFace = true;
       break;
     }
-
-    delete itf;
 
     // search for a non-visited and selectable node, occur when no visited node or face has beeen
     // selected
     bool selNode = false;
 
     if (!selVisitedFace) {
-      Iterator<unsigned int> *itn2 = is_selectable.findAll(true);
-
-      while (itn2->hasNext()) {
-        n = static_cast<node>(itn2->next());
+      for (unsigned int id : is_selectable.findAll(true)) {
+        n = node(id);
         selNode = true;
         selectAndUpdate(n);
         break;
       }
-
-      delete itn2;
     }
 
     // search for a non-visited selectable face, occur when no node or visited face has been
@@ -1476,24 +1401,19 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
     bool selFace = false;
 
     if (!selNode && !selVisitedFace) {
-      Iterator<unsigned int> *itf = is_selectable_face.findAll(true);
 
-      while (itf->hasNext()) {
-        Face f = static_cast<Face>(itf->next());
+      for (unsigned int faceId : is_selectable_face.findAll(true)) {
+        Face f(faceId);
         selectAndUpdate(f);
         selFace = true;
         break;
       }
-
-      delete itf;
     }
 
     // search for a face to augment, occur when no node or face has been selected
     if (!selNode && !selVisitedFace && !selFace) {
-      Iterator<Face> *itf = Gp->getFaces();
 
-      while (itf->hasNext()) {
-        Face fac = itf->next();
+      for (const Face &fac : Gp->getFaces()) {
 
         if (isOuterFace.get((fac).id))
           continue;
@@ -1526,8 +1446,6 @@ Ordering::Ordering(PlanarConMap *G, PluginProgress *pluginProgress, int minProgr
           }
         }
       }
-
-      delete itf;
     }
   }
 
@@ -1609,12 +1527,9 @@ void Ordering::init_v1(vector<node> fn) {
  * initialize ext, isOuterFace
  */
 void Ordering::init_outerface() {
-  Face max;
   unsigned int max_size = 0;
-  Iterator<Face> *itf = Gp->getFaces();
 
-  while (itf->hasNext()) {
-    Face tmp = itf->next();
+  for (const Face &tmp : Gp->getFaces()) {
 
     if (Gp->nbFacesNodes(tmp) > max_size) {
       max_size = Gp->nbFacesNodes(tmp);
@@ -1622,7 +1537,6 @@ void Ordering::init_outerface() {
     }
   }
 
-  delete itf;
   isOuterFace.setAll(false);
   isOuterFace.set(ext.id, true);
 }
@@ -1633,18 +1547,14 @@ void Ordering::init_outerface() {
  */
 void Ordering::init_seqP() {
   seqP.setAll(0);
-  Iterator<Face> *itf = Gp->getFaces();
 
-  while (itf->hasNext()) {
-    Face fa = itf->next();
+  for (const Face &fa : Gp->getFaces()) {
 
     if (isOuterFace.get(fa.id))
       continue;
 
     seqP.set(fa.id, seqp(fa));
   }
-
-  delete itf;
 }
 
 //==========================================================
@@ -1660,14 +1570,10 @@ void Ordering::init_outv_oute() {
 
   if (it_node2->hasNext()) {
     no_first = it_node2->next();
-    Iterator<Face> *it_face = Gp->getFacesAdj(no_first);
 
-    while (it_face->hasNext()) {
-      Face f = it_face->next();
+    for (const Face &f : Gp->getFacesAdj(no_first)) {
       outv.add(f.id, 1);
     }
-
-    delete it_face;
   }
 
   no_pred = no_first;
@@ -1678,14 +1584,11 @@ void Ordering::init_outv_oute() {
 
     cpt++;
     n = it_node2->next();
-    Iterator<Face> *it_face2 = Gp->getFacesAdj(n);
 
-    while (it_face2->hasNext()) {
-      Face f = it_face2->next();
+    for (const Face &f : Gp->getFacesAdj(n)) {
       outv.add(f.id, 1);
     }
 
-    delete it_face2;
     Face face = Gp->getFaceContaining(n, no_pred);
     oute.add(face.id, 1);
   }
@@ -1705,10 +1608,7 @@ void Ordering::init_selectableNodes() {
   is_selectable_visited.setAll(false);
   is_selectable.setAll(false);
 
-  Iterator<node> *it_nodes = Gp->getFaceNodes(ext);
-
-  while (it_nodes->hasNext()) {
-    node no_tmp = it_nodes->next();
+  for (const node &no_tmp : Gp->getFaceNodes(ext)) {
 
     if (Gp->deg(no_tmp) < 3 || no_tmp == v1[0] || no_tmp == v1[v1.size() - 1])
       continue;
@@ -1716,8 +1616,6 @@ void Ordering::init_selectableNodes() {
     if (isSelectable(no_tmp))
       is_selectable.set(no_tmp.id, true);
   }
-
-  delete it_nodes;
 }
 
 //==========================================================
@@ -1728,11 +1626,9 @@ void Ordering::init_selectableFaces() {
   is_selectable_visited_face.setAll(false);
   is_selectable_face.setAll(false);
 
-  Iterator<Face> *it_f = Gp->getFaces();
   Face derniere = Gp->getFaceContaining(v1[0], v1[1]);
 
-  while (it_f->hasNext()) {
-    Face f = it_f->next();
+  for (const Face &f : Gp->getFaces()) {
 
     if (f == derniere || isOuterFace.get(f.id))
       continue;
@@ -1743,8 +1639,6 @@ void Ordering::init_selectableFaces() {
     if (outv.get(f.id) == oute.get(f.id) + 1)
       is_selectable_face.set(f.id, true);
   }
-
-  delete it_f;
 }
 
 //==========================================================

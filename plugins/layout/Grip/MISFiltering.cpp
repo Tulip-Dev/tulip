@@ -71,17 +71,13 @@ void MISFiltering::computeFiltering() {
     }
 
     inLastVi.setAll(false);
-    node n;
-    Iterator<unsigned int> *itn = inCurVi.findAll(true);
 
-    while (itn->hasNext()) {
-      node n = node(itn->next());
+    for (unsigned int id : inCurVi.findAll(true)) {
+      node n(id);
       levelToNodes[level].insert(n);
       inLastVi.set(n.id, true);
       ++nb;
     }
-
-    delete itn;
 
     ++level;
     inCurVi.setAll(false);
@@ -212,10 +208,8 @@ void MISFiltering::getNearest(node n, vector<node> &neighbors, vector<unsigned i
 
   for (unsigned int i = 0; !found && i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
-    Iterator<node> *itn = g_copy->getInOutNodes(current);
 
-    while (itn->hasNext()) {
-      node v = itn->next();
+    for (const node &v : g_copy->getInOutNodes(current)) {
 
       if (alreadyTreated.get(v.id))
         continue;
@@ -235,8 +229,6 @@ void MISFiltering::getNearest(node n, vector<node> &neighbors, vector<unsigned i
         break;
       }
     }
-
-    delete itn;
   }
 }
 //========================================

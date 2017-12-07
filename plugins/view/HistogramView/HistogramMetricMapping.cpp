@@ -484,13 +484,10 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
 
   int i = 0;
 
-  Iterator<node> *nodesIt = glyphGraph->getNodes();
-
   if (orientation == Vertical) {
     float xCenter = baseCoord.getX() - size / 2;
 
-    while (nodesIt->hasNext()) {
-      node n = nodesIt->next();
+    for (const node &n : glyphGraph->nodes()) {
       glyphGraphLayout->setNodeValue(n, Coord(xCenter, baseCoord.getY() + i * size + size / 2));
       int oldI = i++;
       glyphScaleMap[make_pair(baseCoord.getY() + oldI * size, baseCoord.getY() + i * size)] =
@@ -502,8 +499,7 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
   } else {
     float yCenter = baseCoord.getY() - size / 2;
 
-    while (nodesIt->hasNext()) {
-      node n = nodesIt->next();
+    for (const node &n : glyphGraph->nodes()) {
       glyphGraphLayout->setNodeValue(n, Coord(baseCoord.getX() + i++ * size + size / 2, yCenter));
       int oldI = i++;
       glyphScaleMap[make_pair(baseCoord.getX() + oldI * size, baseCoord.getX() + i * size)] =
@@ -513,8 +509,6 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
     boundingBox[0] = Coord(baseCoord.getX(), baseCoord.getY() - size);
     boundingBox[1] = Coord(baseCoord.getX() + length, baseCoord.getY() + size);
   }
-
-  delete nodesIt;
 }
 
 int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
@@ -1053,7 +1047,6 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
     return;
   }
 
-  node n;
   ColorProperty *graphColors = nullptr;
 
   if (mappingType == VIEWCOLOR_MAPPING) {
@@ -1067,10 +1060,8 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
   IntegerProperty *graphShapes = graph->getProperty<IntegerProperty>("viewShape");
 
   if (histoView->getDataLocation() == NODE) {
-    Iterator<node> *nodesIt = graph->getNodes();
 
-    while (nodesIt->hasNext()) {
-      node n = nodesIt->next();
+    for (const node &n : graph->nodes()) {
       Coord nodeHistoCoord(histogramLayout->getNodeValue(n));
       float yCurve = curve->getYCoordForX(nodeHistoCoord.getX());
 
@@ -1106,12 +1097,8 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
       }
     }
 
-    delete nodesIt;
   } else {
-    Iterator<edge> *edgesIt = graph->getEdges();
-
-    while (edgesIt->hasNext()) {
-      edge e = edgesIt->next();
+    for (const edge &e : graph->edges()) {
       Coord edgeHistoCoord(histogramLayout->getEdgeValue(e)[0]);
       float yCurve = curve->getYCoordForX(edgeHistoCoord.getX());
 

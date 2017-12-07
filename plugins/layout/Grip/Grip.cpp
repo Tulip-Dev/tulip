@@ -135,14 +135,11 @@ bool Grip::run() {
     tmp.set("coordinates", result);
     LayoutProperty layout(graph);
     graph->applyPropertyAlgorithm("Connected Component Packing", &layout, err, nullptr, &tmp);
-    Iterator<node> *itN = graph->getNodes();
 
-    while (itN->hasNext()) {
-      node n = itN->next();
+    for (const node &n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));
     }
 
-    delete itN;
   } else {
     currentGraph = graph;
     computeCurrentGraphLayout();

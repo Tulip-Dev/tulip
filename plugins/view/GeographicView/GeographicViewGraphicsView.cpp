@@ -663,11 +663,7 @@ void GeographicViewGraphicsView::mapToPolygon() {
 
   const map<string, GlSimpleEntity *> entities = composite->getGlEntities();
 
-  Iterator<node> *nodesIt = graph->getNodes();
-  node n;
-
-  while (nodesIt->hasNext()) {
-    n = nodesIt->next();
+  for (const node &n : graph->nodes()) {
 
     Coord nodePos = geoLayout->getNodeValue(n);
 
@@ -717,8 +713,6 @@ void GeographicViewGraphicsView::mapToPolygon() {
       }
     }
   }
-
-  delete nodesIt;
 }
 
 void GeographicViewGraphicsView::zoomIn() {

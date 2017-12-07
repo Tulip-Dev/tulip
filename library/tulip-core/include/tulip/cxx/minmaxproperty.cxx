@@ -103,10 +103,8 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph
   if (AbstractProperty<nodeType, edgeType, propType>::numberOfNonDefaultValuatedNodes() == 0)
     maxN2 = minN2 = AbstractProperty<nodeType, edgeType, propType>::nodeDefaultValue;
   else {
-    Iterator<node> *nodeIterator = graph->getNodes();
 
-    while (nodeIterator->hasNext()) {
-      node n = nodeIterator->next();
+    for (const node &n : graph->nodes()) {
       typename nodeType::RealType tmp = this->getNodeValue(n);
 
       if (tmp > maxN2) {
@@ -117,8 +115,6 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph
         minN2 = tmp;
       }
     }
-
-    delete nodeIterator;
 
     // be careful to empty graph
     if (maxN2 < minN2)
@@ -147,10 +143,7 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(const Graph
   if (AbstractProperty<nodeType, edgeType, propType>::numberOfNonDefaultValuatedEdges() == 0)
     maxE2 = minE2 = AbstractProperty<nodeType, edgeType, propType>::edgeDefaultValue;
   else {
-    Iterator<edge> *edgeIterator = graph->getEdges();
-
-    while (edgeIterator->hasNext()) {
-      edge ite = edgeIterator->next();
+    for (const edge &ite : graph->edges()) {
       typename edgeType::RealType tmp = this->getEdgeValue(ite);
 
       if (tmp > maxE2)
@@ -159,8 +152,6 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(const Graph
       if (tmp < minE2)
         minE2 = tmp;
     }
-
-    delete edgeIterator;
 
     // be careful to no edges graph
     if (maxE2 < minE2)

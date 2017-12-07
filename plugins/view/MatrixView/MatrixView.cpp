@@ -627,14 +627,10 @@ void MatrixView::registerTriggers() {
 
   if (graph()) {
     addRedrawTrigger(graph());
-    Iterator<string> *it = _matrixGraph->getProperties();
 
-    while (it->hasNext()) {
-      PropertyInterface *property = _matrixGraph->getProperty(it->next());
-      addRedrawTrigger(property);
+    for (PropertyInterface *prop : _matrixGraph->getObjectProperties()) {
+      addRedrawTrigger(prop);
     }
-
-    delete it;
   }
 }
 

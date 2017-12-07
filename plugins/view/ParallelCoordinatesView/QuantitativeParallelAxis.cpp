@@ -94,10 +94,8 @@ void QuantitativeParallelAxis::setAxisLabels() {
 void QuantitativeParallelAxis::computeBoxPlotCoords() {
 
   set<double> propertyValuesSet;
-  Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 
-  while (dataIt->hasNext()) {
-    unsigned int dataId = dataIt->next();
+  for (unsigned int dataId : graphProxy->getDataIterator()) {
     double value;
 
     if (getAxisDataTypeName() == "double") {
@@ -110,8 +108,6 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
 
     propertyValuesSet.insert(value);
   }
-
-  delete dataIt;
 
   vector<double> propertyValuesVector(propertyValuesSet.begin(), propertyValuesSet.end());
   unsigned int vectorSize = propertyValuesVector.size();
@@ -205,19 +201,10 @@ double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
       return graphProxy->getPropertyMinValue<IntegerProperty, IntegerType>(getAxisName());
     }
   } else {
-    Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
-    unsigned int dataId = dataIt->next();
-    double min;
 
-    if (getAxisDataTypeName() == "double") {
-      min = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), dataId);
-    } else {
-      min =
-          graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(getAxisName(), dataId);
-    }
+    double min = DBL_MAX;
 
-    while (dataIt->hasNext()) {
-      dataId = dataIt->next();
+    for (unsigned int dataId : graphProxy->getDataIterator()) {
       double propertyValue;
 
       if (getAxisDataTypeName() == "double") {
@@ -227,13 +214,9 @@ double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
         propertyValue = graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(
             getAxisName(), dataId);
       }
-
-      if (propertyValue < min) {
-        min = propertyValue;
-      }
+      min = std::min(propertyValue, min);
     }
 
-    delete dataIt;
     return min;
   }
 }
@@ -337,10 +320,8 @@ const set<unsigned int> &QuantitativeParallelAxis::getDataInRange(float yLowBoun
   dataSubset.clear();
   float rotAngleBak = rotationAngle;
   rotationAngle = 0.0f;
-  Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 
-  while (dataIt->hasNext()) {
-    unsigned int dataId = dataIt->next();
+  for (unsigned int dataId : graphProxy->getDataIterator()) {
     Coord dataCoord(getPointCoordOnAxisForData(dataId));
 
     if (dataCoord.getY() <= yHighBound && dataCoord.getY() >= yLowBound) {
@@ -348,7 +329,6 @@ const set<unsigned int> &QuantitativeParallelAxis::getDataInRange(float yLowBoun
     }
   }
 
-  delete dataIt;
   rotationAngle = rotAngleBak;
   return dataSubset;
 }

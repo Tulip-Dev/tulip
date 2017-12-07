@@ -45,10 +45,8 @@ GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
 }
 //=========================================================================
 GraphAbstract::~GraphAbstract() {
-  StableIterator<Graph *> itS(getSubGraphs());
 
-  while (itS.hasNext()) {
-    Graph *sg = itS.next();
+  for (Graph *sg : stableIterator(getSubGraphs())) {
 
     // avoid double free
     // in a push context, a 'deleted' graph (see delSubGraph)
@@ -69,15 +67,13 @@ GraphAbstract::~GraphAbstract() {
 }
 //=========================================================================
 void GraphAbstract::clear() {
-  StableIterator<Graph *> itS(getSubGraphs());
+  for (Graph *sg : stableIterator(getSubGraphs())) {
+    delAllSubGraphs(sg);
+  }
 
-  while (itS.hasNext())
-    delAllSubGraphs(itS.next());
-
-  StableIterator<node> itN(getNodes());
-
-  while (itN.hasNext())
-    delNode(itN.next());
+  for (const node &n : stableIterator(getNodes())) {
+    delNode(n);
+  }
 }
 //=========================================================================
 void GraphAbstract::restoreSubGraph(Graph *sg) {
@@ -134,14 +130,12 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     // remove from subgraphs
     notifyBeforeDelSubGraph(toRemove);
     subgraphs.erase(it);
-    Iterator<Graph *> *itS = toRemove->getSubGraphs();
 
     // add toRemove subgraphs
-    while (itS->hasNext()) {
-      restoreSubGraph(itS->next());
+    for (Graph *sg : toRemove->getSubGraphs()) {
+      restoreSubGraph(sg);
     }
 
-    delete itS;
     notifyAfterDelSubGraph(toRemove);
 
     // subGraphToKeep may have change on notifyDelSubGraph
@@ -173,10 +167,9 @@ void GraphAbstract::delAllSubGraphs(Graph *toRemove) {
     // this==toRemove : root graph
     return;
 
-  StableIterator<Graph *> itS(toRemove->getSubGraphs());
-
-  while (itS.hasNext())
-    static_cast<GraphAbstract *>(toRemove)->delAllSubGraphs(itS.next());
+  for (Graph *sg : stableIterator(toRemove->getSubGraphs())) {
+    static_cast<GraphAbstract *>(toRemove)->delAllSubGraphs(sg);
+  }
 
   delSubGraph(toRemove);
 }

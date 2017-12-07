@@ -123,16 +123,11 @@ struct HolmeKim : public ImportModule {
           // collect all neighbours of firstNeighbour
           // which are not already connected to nodes[i]
           vector<node> freeNeighbours;
-          Iterator<node> *it = graph->getInOutNodes(nodes[firstNeighbour]);
 
-          while (it->hasNext()) {
-            node neighbour = it->next();
-
+          for (const node &neighbour : graph->getInOutNodes(nodes[firstNeighbour])) {
             if (!graph->hasEdge(nodes[i], neighbour))
               freeNeighbours.push_back(neighbour);
           }
-
-          delete it;
 
           if (!freeNeighbours.empty()) {
             // randomly choose one of the free neighbours to connect with

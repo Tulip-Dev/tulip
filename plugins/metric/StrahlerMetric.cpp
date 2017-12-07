@@ -85,10 +85,8 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP
   list<int> strahlerResult;
   list<StackEval> tmpEval;
   // Construction des ensembles pour evaluer le strahler
-  Iterator<node> *itN = graph->getOutNodes(n);
 
-  for (; itN->hasNext();) {
-    node tmpN = itN->next();
+  for (const node &tmpN : graph->getOutNodes(n)) {
 
     if (!visited[tmpN]) {
       // Arc Normal
@@ -133,8 +131,6 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP
       }
     }
   }
-
-  delete itN;
 
   // compute the minimal nested cycles
   GreaterStackEval gSE;
@@ -210,25 +206,13 @@ bool StrahlerMetric::run() {
   TLP_HASH_MAP<node, int> tofree;
   TLP_HASH_MAP<node, Strahler> cachedValues;
   int curPref = 0;
-  /*
-    Selection *parameter=graph->getProperty<BooleanProperty>("viewSelection");
-    Iterator<node> *it=graph->getNodes();
-    for (;it->hasNext();) {
-    node curNode=it->next();
-    if ((!visited[curNode]) && (parameter->getNodeValue(curNode)) ) {
-    tofree[curNode]=0;
-    topSortStrahler(curNode,curPref,tofree,prefix,visited,finished,cachedValues);
-    }
-    } delete it;
-  */
-  Iterator<node> *itN = graph->getNodes();
+
   unsigned int i = 0;
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
 
-  while (itN->hasNext()) {
-    node itn = itN->next();
+  for (const node &itn : graph->nodes()) {
     tofree[itn] = 0;
 
     if (!finished[itn]) {
@@ -264,13 +248,9 @@ bool StrahlerMetric::run() {
     }
   }
 
-  delete itN;
-
   if (!allNodes) {
-    itN = graph->getNodes();
 
-    while (itN->hasNext()) {
-      node itn = itN->next();
+    for (const node &itn : graph->nodes()) {
 
       switch (computationTypes.getCurrent()) {
       case ALL:
@@ -287,8 +267,6 @@ bool StrahlerMetric::run() {
         result->setNodeValue(itn, cachedValues[itn].stacks);
       }
     }
-
-    delete itN;
   }
 
   return pluginProgress->state() != TLP_CANCEL;

@@ -37,16 +37,11 @@ GraphProperty::GraphProperty(Graph *sg, const std::string &n)
 //==============================
 GraphProperty::~GraphProperty() {
   if (graph) {
-    Iterator<node> *it = graph->getNodes();
 
-    while (it->hasNext()) {
-      node n = it->next();
-
+    for (const node &n : graph->nodes()) {
       if (getNodeValue(n) != nullptr)
         getNodeValue(n)->removeListener(this);
     }
-
-    delete it;
 
     if (getNodeDefaultValue() != nullptr) {
       getNodeDefaultValue()->removeListener(this);
@@ -56,14 +51,10 @@ GraphProperty::~GraphProperty() {
 //==============================
 void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) {
   // remove all observed graphs if any
-  Iterator<node> *it = getNonDefaultValuatedNodes();
-
-  while (it->hasNext()) {
-    node n = it->next();
+  for (const node &n : getNonDefaultValuatedNodes()) {
     getNodeValue(n)->removeListener(this);
   }
 
-  delete it;
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
 
@@ -80,14 +71,10 @@ void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::Return
 void GraphProperty::setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g,
                                          const Graph *graph) {
   // remove all observed graphs if any
-  Iterator<node> *it = getNonDefaultValuatedNodes(graph);
-
-  while (it->hasNext()) {
-    node n = it->next();
+  for (const node &n : getNonDefaultValuatedNodes(graph)) {
     getNodeValue(n)->removeListener(this);
   }
 
-  delete it;
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
 
@@ -204,26 +191,18 @@ void GraphProperty::treatEvent(const Event &evt) {
       // we must backup old value
       MutableContainer<Graph *> backup;
       backup.setAll(nullptr);
-      Iterator<node> *it = graph->getNodes();
 
-      while (it->hasNext()) {
-        node n = it->next();
-
+      for (const node &n : graph->nodes()) {
         if (getNodeValue(n) != sg)
           backup.set(n.id, getNodeValue(n));
       }
 
-      delete it;
       setAllNodeValue(nullptr);
-      // restore values
-      it = graph->getNodes();
 
-      while (it->hasNext()) {
-        node n = it->next();
+      // restore values
+      for (const node &n : graph->nodes()) {
         setNodeValue(n, backup.get(n.id));
       }
-
-      delete it;
     }
 
     const set<node> &refs = referencedGraph.get(sg->getId());

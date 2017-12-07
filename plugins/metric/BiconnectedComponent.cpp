@@ -54,13 +54,13 @@ using namespace tlp;
       it = graph.getInOutEdges(w);
       edge e;
       while(it->hasNext()) {
-  edge e = it->next();
-  if (dfsnum.get(w.id) > dfsnum.get(graph.opposite(e,w).id) ) compnum.set(e.id, count2);
+        edge e = it->next();
+        if (dfsnum.get(w.id) > dfsnum.get(graph.opposite(e,w).id) ) compnum.set(e.id, count2);
       } delete it;
     } while (w != v);
     count2++;
   }
-  }*/
+}*/
 // simple structure to implement
 // the dfs biconnected component loop
 struct dfsBicoTestStruct {

@@ -34,68 +34,14 @@ using namespace tlp;
  * function to test if an edge e exist in the adjacency of a node
  */
 static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
-  Iterator<edge> *it = g->getOutEdges(n1);
-
-  while (it->hasNext()) {
-    edge e1(it->next());
-
+  for (const edge &e1 : g->getOutEdges(n1)) {
     if (e == e1) {
-      delete it;
       return true;
     }
   }
-
-  delete it;
   return false;
 }
 #endif
-/*
- * function to test the integrity of the graph structure
- */
-/* no needed for the moment
-static bool integrityTest(Graph *graph) {
-  Iterator<edge> *itE = graph->getEdges();
-  set<edge> edgesTest;
-  while(itE->hasNext()) {
-    edge e = itE->next();
-    edgesTest.insert(e);
-    if (!existEdgeE(graph, graph->source(e), graph->target(e), e)) {
-      tlp::warning() << "edge do not exist in neighbood";
-      delete itE;
-      return false;
-    }
-  }
-  delete itE;
-  Iterator<node> *itN = graph->getNodes();
-  while(itN->hasNext()) {
-    node n(itN->next());
-    unsigned int degree = 0;
-    Iterator<edge> *it = graph->getInOutEdges(n);
-    while (it->hasNext()) {
-      edge e = it->next();
-      bool found = edgesTest.find(e)!=edgesTest.end();
-      if (graph->isElement(e)!=found) {
-  tlp::warning() << "isElment function not valid";
-  delete it;
-  delete itN;
-  return false;
-      }
-      if (!graph->isElement(e)) {
-  tlp::warning() << "Adjacency edges are not valid";
-  delete it;
-  delete itN;
-  return false;
-      }
-      degree++;
-    } delete it;
-    if (graph->deg(n) != degree) {
-      tlp::warning() << "degree failed";
-      return false;
-    }
-  }delete itN;
-  return true;
-}
-*/
 //----------------------------------------------------------------
 GraphImpl::GraphImpl() : GraphAbstract(this) {
   // id 0 is for the root
@@ -250,31 +196,20 @@ void GraphImpl::delNode(const node n, bool) {
 
   // use a stack for a dfs subgraphs propagation
   std::stack<Graph *> sgq;
-  Iterator<Graph *> *sgs = getSubGraphs();
 
-  while (sgs->hasNext()) {
-    Graph *sg = sgs->next();
-
+  for (Graph *sg : getSubGraphs()) {
     if (sg->isElement(n))
       sgq.push(sg);
   }
-
-  delete sgs;
 
   // subgraphs loop
   while (!sgq.empty()) {
     Graph *sg = sgq.top();
 
-    sgs = sg->getSubGraphs();
-
-    while (sgs->hasNext()) {
-      Graph *ssg = sgs->next();
-
+    for (Graph *ssg : sg->getSubGraphs()) {
       if (ssg->isElement(n))
         sgq.push(ssg);
     }
-
-    delete sgs;
 
     if (sg == sgq.top()) {
       static_cast<GraphView *>(sg)->removeNode(n, edges);
@@ -310,17 +245,12 @@ void GraphImpl::delEdge(const edge e, bool) {
   }
 
   // propagate to subgraphs
-  Iterator<Graph *> *itS = getSubGraphs();
-
-  while (itS->hasNext()) {
-    Graph *subgraph = itS->next();
+  for (Graph *subgraph : getSubGraphs()) {
     assert(subgraph != this);
 
     if (subgraph->isElement(e))
       subgraph->delEdge(e);
   }
-
-  delete itS;
 
   removeEdge(e);
 }

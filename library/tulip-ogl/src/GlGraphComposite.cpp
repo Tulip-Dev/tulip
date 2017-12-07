@@ -46,16 +46,10 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer)
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
-    Iterator<node> *nodesIterator = graph->getNodes();
-
-    while (nodesIterator->hasNext()) {
-      node n = nodesIterator->next();
-
+    for (const node &n : graph->nodes()) {
       if (graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }
-
-    delete nodesIterator;
   }
 }
 
@@ -70,16 +64,10 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlScene *scene)
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
-    Iterator<node> *nodesIterator = graph->getNodes();
-
-    while (nodesIterator->hasNext()) {
-      node n = nodesIterator->next();
-
+    for (const node &n : graph->nodes()) {
       if (graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }
-
-    delete nodesIterator;
   }
 }
 

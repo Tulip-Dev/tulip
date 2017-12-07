@@ -331,11 +331,8 @@ bool HierarchicalGraph::run() {
     buildGrid(mySGraph);
     crossReduction(mySGraph);
     for (const node &n : graph->nodes()) {
-      vector<edge> order;
-      for (const edge &e :
-           new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding)) {
-        order.push_back(e);
-      }
+      vector<edge> order =
+          iteratorVector(new SortTargetEdgeIterator(mySGraph->getOutEdges(n), mySGraph, embedding));
       mySGraph->setEdgeOrder(n, order);
     }
     // We extract a spanning tree from the proper dag.

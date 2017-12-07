@@ -436,18 +436,15 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
 
     while (itav != oldAttributeValues.end()) {
       Graph *g = itav->first;
-      Iterator<pair<string, DataType *>> *itv = itav->second.getValues();
       const DataSet &gAttValues = g->getAttributes();
       DataSet &nAttValues = newAttributeValues[g];
 
-      while (itv->hasNext()) {
-        pair<string, DataType *> pval = itv->next();
+      for (const pair<string, DataType *> &pval : itav->second.getValues()) {
         DataType *data = gAttValues.getData(pval.first);
         nAttValues.setData(pval.first, data);
         delete data;
       }
 
-      delete itv;
       ++itav;
     }
   }
@@ -470,32 +467,24 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface *p) {
   // record updated nodes new values
   if (oldNodeDefaultValues.find(p) != oldNodeDefaultValues.end()) {
     // loop on non default valuated nodes
-    Iterator<node> *itn = p->getNonDefaultValuatedNodes();
-
-    while (itn->hasNext()) {
-      node n(itn->next());
+    for (const node &n : p->getNonDefaultValuatedNodes()) {
       nv->copy(n, n, p);
       rn->set(n, true);
       hasNewValues = true;
     }
-
-    delete itn;
   } else {
     TLP_HASH_MAP<PropertyInterface *, RecordedValues>::const_iterator itp = oldValues.find(p);
 
     if (itp != oldValues.end() && itp->second.recordedNodes) {
-      Iterator<unsigned int> *itov = itp->second.recordedNodes->findAll(true);
 
-      while (itov->hasNext()) {
-        node n(itov->next());
+      for (unsigned int id : itp->second.recordedNodes->findAll(true)) {
+        node n(id);
 
         if (nv->copy(n, n, p)) {
           rn->set(n, true);
           hasNewValues = true;
         }
       }
-
-      delete itov;
     }
   }
 
@@ -529,32 +518,22 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface *p) {
   // record updated edges new values
   if (oldEdgeDefaultValues.find(p) != oldEdgeDefaultValues.end()) {
     // loop on non default valuated edges
-    Iterator<edge> *ite = p->getNonDefaultValuatedEdges();
-
-    while (ite->hasNext()) {
-      edge e(ite->next());
+    for (const edge &e : p->getNonDefaultValuatedEdges()) {
       nv->copy(e, e, p);
       re->set(e, true);
       hasNewValues = true;
     }
-
-    delete ite;
   } else {
     TLP_HASH_MAP<PropertyInterface *, RecordedValues>::const_iterator itp = oldValues.find(p);
 
     if (itp != oldValues.end() && itp->second.recordedEdges) {
-      Iterator<unsigned int> *itov = itp->second.recordedEdges->findAll(true);
-
-      while (itov->hasNext()) {
-        edge e(itov->next());
-
+      for (unsigned int id : itp->second.recordedEdges->findAll(true)) {
+        edge e(id);
         if (nv->copy(e, e, p)) {
           re->set(e, true);
           hasNewValues = true;
         }
       }
-
-      delete itov;
     }
   }
 
@@ -694,14 +673,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     if (!undo) {
       // restore its subgraphs as subgraph of its supergraph
       // only if we are redoing its deletion
-      Iterator<Graph *> *itss = sg->getSubGraphs();
-
-      while (itss->hasNext()) {
-        Graph *ssg = itss->next();
+      for (Graph *ssg : sg->getSubGraphs()) {
         g->restoreSubGraph(ssg);
       }
-
-      delete itss;
     }
 
     g->notifyAfterDelSubGraph(sg);
@@ -733,16 +707,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   while (itrse != geSet.rend()) {
     GraphEltsRecord *ger = (*itrse);
     // loop on graph's recorded edges
-    Iterator<unsigned int> *ite = ger->elts.findAll(true, true);
-
-    while (ite->hasNext()) {
-      edge e(ite->next());
+    for (unsigned int id : ger->elts.findAll(true, true)) {
+      edge e(id);
 
       if (ger->graph->isElement(e))
         ger->graph->removeEdge(e);
     }
-
-    delete ite;
     ++itrse;
   }
 
@@ -755,13 +725,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     itgn->nextValue(gnr);
 
     // loop on graph's recorded nodes
-    Iterator<unsigned int> *itn = gnr.value->elts.findAll(true, true);
-
-    while (itn->hasNext()) {
-      gnr.value->graph->removeNode(node(itn->next()));
+    for (unsigned int id : gnr.value->elts.findAll(true, true)) {
+      gnr.value->graph->removeNode(node(id));
     }
-
-    delete itn;
   }
 
   delete itgn;
@@ -778,16 +744,13 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     g->notifyBeforeAddSubGraph(sg);
     // restore sg as subgraph of g
     g->restoreSubGraph(sg);
-    Iterator<Graph *> *itss = sg->getSubGraphs();
 
     // and sg subgraphs are no longer subgraphs of g
-    while (itss->hasNext()) {
-      Graph *ssg = itss->next();
+    for (Graph *ssg : sg->getSubGraphs()) {
       g->removeSubGraph(ssg);
       ssg->setSuperGraph(sg);
     }
 
-    delete itss;
     // notify its addition
     g->notifyAfterAddSubGraph(sg);
 
@@ -803,13 +766,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     itgn->nextValue(gnr);
 
     // loop on graph's recorded nodes
-    Iterator<unsigned int> *itn = gnr.value->elts.findAll(true, true);
-
-    while (itn->hasNext()) {
-      gnr.value->graph->restoreNode(node(itn->next()));
+    for (unsigned int id : gnr.value->elts.findAll(true, true)) {
+      gnr.value->graph->restoreNode(node(id));
     }
-
-    delete itn;
   }
 
   delete itgn;
@@ -875,10 +834,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   while (itse != geSet.end()) {
     GraphEltsRecord *ger = (*itse);
     // loop on graph's recorded edges
-    Iterator<unsigned int> *ite = ger->elts.findAll(true, true);
-
-    while (ite->hasNext()) {
-      edge e(ite->next());
+    for (unsigned int id : ger->elts.findAll(true, true)) {
+      edge e(id);
       std::pair<node, node> *eEnds = edgesEnds.get(e);
 
       if (eEnds) {
@@ -890,8 +847,6 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
                                 ger->graph->getRoot()->target(e));
       }
     }
-
-    delete ite;
     ++itse;
   }
 
@@ -968,25 +923,19 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     PropertyInterface *nv = itrv->second.values;
 
     if (itrv->second.recordedNodes) {
-      IteratorValue *itv = itrv->second.recordedNodes->findAllValues(false, false);
 
-      while (itv->hasNext()) {
-        node n(itv->next());
+      for (unsigned int id : itrv->second.recordedNodes->findAllValues(false, false)) {
+        node n(id);
         prop->copy(n, n, nv);
       }
-
-      delete itv;
     }
 
     if (itrv->second.recordedEdges) {
-      IteratorValue *itv = itrv->second.recordedEdges->findAllValues(false, false);
 
-      while (itv->hasNext()) {
-        edge e(itv->next());
+      for (unsigned int id : itrv->second.recordedEdges->findAllValues(false, false)) {
+        edge e(id);
         prop->copy(e, e, nv);
       }
-
-      delete itv;
     }
 
     ++itrv;
@@ -998,18 +947,14 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
   while (itav != attValues.end()) {
     Graph *g = itav->first;
-    Iterator<pair<string, DataType *>> *itv = itav->second.getValues();
 
-    while (itv->hasNext()) {
-      pair<string, DataType *> pval = itv->next();
-
+    for (const pair<string, DataType *> &pval : itav->second.getValues()) {
       if (pval.second)
         g->getNonConstAttributes().setData(pval.first, pval.second);
       else
         g->getNonConstAttributes().remove(pval.first);
     }
 
-    delete itv;
     ++itav;
   }
 
@@ -1409,20 +1354,14 @@ void GraphUpdatesRecorder::addSubGraph(Graph *g, Graph *sg) {
   // sg may already have nodes and edges
   // cf addCloneSubGraph
   if (sg->numberOfNodes()) {
-    Iterator<node> *itn = sg->getNodes();
 
-    while (itn->hasNext()) {
-      addNode(sg, itn->next());
+    for (const node &n : sg->nodes()) {
+      addNode(sg, n);
     }
 
-    delete itn;
-    Iterator<edge> *ite = sg->getEdges();
-
-    while (ite->hasNext()) {
-      addEdge(sg, ite->next());
+    for (const edge &e : sg->edges()) {
+      addEdge(sg, e);
     }
-
-    delete ite;
   }
 
   sg->addListener(this);
@@ -1445,14 +1384,9 @@ void GraphUpdatesRecorder::delSubGraph(Graph *g, Graph *sg) {
     removeGraphData(sg);
 
     // but set its subgraphs as added in its supergraph
-    Iterator<Graph *> *itss = sg->getSubGraphs();
-
-    while (itss->hasNext()) {
-      Graph *ssg = itss->next();
+    for (Graph *ssg : sg->getSubGraphs()) {
       addSubGraph(g, ssg);
     }
-
-    delete itss;
 
     return;
   }

@@ -216,21 +216,15 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   }
 
   // initialize the list of faces adjacent to all nodes of the new face
-  Iterator<unsigned int> *itn = isInNewFace.findAll(true);
-
-  while (itn->hasNext()) {
-    node n_tmp = node(itn->next());
+  for (unsigned int id : isInNewFace.findAll(true)) {
+    node n_tmp(id);
     vector<Face> v_faces;
-    Iterator<Face> *itf = getFacesAdj(n_tmp);
 
-    while (itf->hasNext())
-      v_faces.push_back(itf->next());
+    for (const Face &f : getFacesAdj(n_tmp))
+      v_faces.push_back(f);
 
-    delete itf;
     nodesFaces[n_tmp] = v_faces;
   }
-
-  delete itn;
 
   return e;
 }
@@ -342,21 +336,15 @@ void PlanarConMap::delEdgeMap(edge e, Face f) {
     faceMap::iterator it2 = facesEdges.find(f2);
     facesEdges.erase(it2, ++it2);
 
-    Iterator<unsigned int> *itn = isInF2.findAll(true);
-
-    while (itn->hasNext()) {
-      node n_tmp = node(itn->next());
+    for (unsigned int id : isInF2.findAll(true)) {
+      node n_tmp(id);
       vector<Face> v_faces;
-      Iterator<Face> *itf = getFacesAdj(n_tmp);
 
-      while (itf->hasNext())
-        v_faces.push_back(itf->next());
+      for (const Face &f : getFacesAdj(n_tmp))
+        v_faces.push_back(f);
 
-      delete itf;
       nodesFaces[n_tmp] = v_faces;
     }
-
-    delete itn;
 
     vector<Face>::iterator itf = faces.begin();
 
@@ -686,18 +674,14 @@ Face PlanarConMap::splitFace(Face f, const node v, const node w, node n) {
   bool w_found = false;
 
   if (!n.isValid()) {
-    Iterator<edge> *it = getInOutEdges(v);
 
-    while (it->hasNext()) {
-      edge e = it->next();
+    for (const edge &e : getInOutEdges(v)) {
 
       if (edgesFaces[e][0] == f || edgesFaces[e][1] == f) {
         n = opposite(e, v);
         break;
       }
     }
-
-    delete it;
   }
 
   // Search for the predecessors of the futur edge (v,w) around v and w
@@ -807,21 +791,15 @@ Face PlanarConMap::splitFace(Face f, const node v, const node w, node n) {
       }
     }
 
-    Iterator<unsigned int> *itn = nodeToUpdate.findAll(true);
-
-    while (itn->hasNext()) {
-      node n_tmp = node(itn->next());
+    for (unsigned int id : nodeToUpdate.findAll(true)) {
+      node n_tmp(id);
       vector<Face> v_faces;
-      Iterator<Face> *itf = getFacesAdj(n_tmp);
 
-      while (itf->hasNext())
-        v_faces.push_back(itf->next());
+      for (const Face &f : getFacesAdj(n_tmp))
+        v_faces.push_back(f);
 
-      delete itf;
       nodesFaces[n_tmp] = v_faces;
     }
-
-    delete itn;
   }
 
   return new_face;
@@ -886,15 +864,13 @@ void PlanarConMap::mergeFaces(Face f, Face g) {
 
 //============================================================
 bool PlanarConMap::containNode(Face f, node v) {
-  Iterator<Face> *it_f = getFacesAdj(v);
 
-  while (it_f->hasNext())
-    if ((it_f->next()) == f) {
-      delete it_f;
+  for (const Face &itf : getFacesAdj(v)) {
+    if (itf == f) {
       return true;
     }
+  }
 
-  delete it_f;
   return false;
 }
 
@@ -956,64 +932,43 @@ Face PlanarConMap::sameFace(node v, node n) {
 //============================================================
 ostream &operator<<(ostream &os, PlanarConMap *sp) {
   os << "Faces : " << endl << endl;
-  Iterator<Face> *it = sp->getFaces();
 
-  while (it->hasNext()) {
-    Face tmp = it->next();
+  for (const Face &tmp : sp->getFaces()) {
     os << "Face " << tmp.id << " : ";
     os << "(edges : ";
-    Iterator<edge> *ite = sp->getFaceEdges(tmp);
 
-    while (ite->hasNext()) {
-      edge e = ite->next();
+    for (const edge &e : sp->getFaceEdges(tmp)) {
       os << e.id << " ";
     }
 
-    delete ite;
     os << ") and ";
 
     os << "(nodes : ";
-    Iterator<node> *itn = sp->getFaceNodes(tmp);
 
-    while (itn->hasNext()) {
-      node n = itn->next();
+    for (const node &n : sp->getFaceNodes(tmp)) {
       os << n.id << " ";
     }
 
-    delete itn;
     os << ")" << endl;
   }
 
-  delete it;
-
-  Iterator<node> *it_n = sp->getNodes();
-
-  while (it_n->hasNext()) {
-    node n = it_n->next();
+  for (const node &n : sp->nodes()) {
     os << "node " << n.id << " : ";
     os << "(edge : ";
-    Iterator<edge> *it_e = sp->getInOutEdges(n);
 
-    while (it_e->hasNext()) {
-      edge e = it_e->next();
+    for (const edge &e : sp->getInOutEdges(n)) {
       os << e.id << " ";
     }
 
-    delete it_e;
     os << ") and ";
     os << "(Faces : ";
-    Iterator<Face> *it_f = sp->getFacesAdj(n);
 
-    while (it_f->hasNext()) {
-      Face f = it_f->next();
+    for (const Face &f : sp->getFacesAdj(n)) {
       os << f.id << " ";
     }
 
-    delete it_f;
     os << ")" << endl;
   }
-
-  delete it_n;
 
   os << endl;
   return os;

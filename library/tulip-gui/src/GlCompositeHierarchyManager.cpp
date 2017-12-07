@@ -82,13 +82,9 @@ void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *co
   naming << _subCompositesSuffix;
   composite->addGlEntity(newComposite, naming.str());
 
-  tlp::Iterator<Graph *> *it = current->getSubGraphs();
-
-  while (it->hasNext()) {
-    this->buildComposite(it->next(), newComposite);
+  for (Graph *sg : current->getSubGraphs()) {
+    this->buildComposite(sg, newComposite);
   }
-
-  delete it;
 }
 
 void GlCompositeHierarchyManager::treatEvent(const Event &evt) {

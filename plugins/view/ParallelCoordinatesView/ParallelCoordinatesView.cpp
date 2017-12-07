@@ -999,14 +999,10 @@ void ParallelCoordinatesView::registerTriggers() {
 
   if (graph()) {
     addRedrawTrigger(graph());
-    Iterator<string> *it = graph()->getProperties();
 
-    while (it->hasNext()) {
-      PropertyInterface *property = graph()->getProperty(it->next());
-      addRedrawTrigger(property);
+    for (PropertyInterface *prop : graph()->getObjectProperties()) {
+      addRedrawTrigger(prop);
     }
-
-    delete it;
   }
 }
 

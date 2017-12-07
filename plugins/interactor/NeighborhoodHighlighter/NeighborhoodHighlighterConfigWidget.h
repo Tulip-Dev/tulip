@@ -46,7 +46,7 @@ public:
   bool bringAndGoAnimation1() const;
   std::string propertyToUse() const;
   int numberOfNodesToBring() const;
-  void setPropertyToUse(std::string &propertyName);
+  void setPropertyToUse(const std::string &propertyName);
   void setNumberOfNodes(int nodesNb);
   bool isdisplayEdgesCBChecked() const;
 

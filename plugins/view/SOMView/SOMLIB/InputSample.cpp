@@ -115,20 +115,8 @@ std::vector<std::string> InputSample::getListenedProperties() {
 }
 
 node InputSample::getNodeNumber(unsigned int i) {
-  if (rootGraph) {
-    node n;
-    unsigned int num = 0;
-    Iterator<node> *nIt = rootGraph->getNodes();
-    n = nIt->next();
-
-    while (num < i) {
-      assert(nIt->hasNext());
-      n = nIt->next();
-      ++num;
-    }
-
-    delete nIt;
-    return n;
+  if (rootGraph && rootGraph->numberOfNodes() > 0) {
+    return rootGraph->nodes()[i];
   } else
     return node();
 }

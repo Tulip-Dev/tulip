@@ -236,11 +236,10 @@ static void setViewPropertiesDefaults(Graph *g) {
   if (g->existLocalProperty(fontAwesomeIcon)) {
     StringProperty *faiProp = g->getProperty<StringProperty>(fontAwesomeIcon);
     StringProperty *iProp = g->getProperty<StringProperty>(icon);
-    Iterator<node> *itIcons = iProp->getNonDefaultValuatedNodes();
 
     // transform old font awesome icon names to new ones and store them in the viewIcon
     // property only if the content of that property is default valuated
-    if (!itIcons->hasNext()) {
+    if (!iteratorEmpty(iProp->getNonDefaultValuatedNodes())) {
       iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
       for (const node &n : faiProp->getNonDefaultValuatedNodes()) {
         const string &faIconName = faiProp->getNodeValue(n);
@@ -258,8 +257,6 @@ static void setViewPropertiesDefaults(Graph *g) {
         }
       }
     }
-
-    delete itIcons;
 
     // finally delete the old property
     // to avoid any further overwriting of the "viewIcon" property
@@ -546,7 +543,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   // extend the selection to edge ends
   if (inSel) {
     for (const edge &e : inSel->getNonDefaultValuatedEdges(inG)) {
-      const pair<node, node> eEnds = inG->ends(e);
+      const pair<node, node> &eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
     }
@@ -1072,9 +1069,7 @@ static const string colorProperty = "viewColor";
 
 static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping,
                          GraphProperty *metaInfo, const node from = node()) {
-  while (it->hasNext()) {
-    node n = it->next();
-
+  for (const node &n : it) {
     if (!from.isValid())
       mapping.set(n.id, n);
     else
@@ -1085,8 +1080,6 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping,
     if (meta != nullptr)
       buildMapping(meta->getNodes(), mapping, metaInfo, mapping.get(n.id));
   }
-
-  delete it;
 }
 //====================================================================================
 void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *clusterInfo) {

@@ -168,10 +168,7 @@ static QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) 
 
   if (graph) {
 
-    Iterator<PropertyInterface *> *itProps = graph->getObjectProperties();
-
-    while (itProps->hasNext()) {
-      PropertyInterface *prop = itProps->next();
+    for (PropertyInterface *prop : graph->getObjectProperties()) {
       QString cleanPropName(tlp::tlpStringToQString(prop->getName()));
       cleanPropName.replace("\"", "\\\"");
 

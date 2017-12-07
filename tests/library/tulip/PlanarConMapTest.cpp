@@ -138,12 +138,10 @@ void PlanarConMapTest::testAddEdgeMap() {
     if (i == 2)
       it = carte->getFaceEdges(f3);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
+    for (const edge &e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
-    delete it;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 1 AddEdgeMap cycle ", cycles[i], tmp);
   }
 
@@ -172,7 +170,6 @@ void PlanarConMapTest::testAddEdgeMap() {
 
   for (unsigned int i = 0; i < 2; i++) {
     vector<edge> tmp;
-    Iterator<edge> *it;
 
     if (i == 0)
       it = carte->getFaceEdges(f1);
@@ -180,12 +177,10 @@ void PlanarConMapTest::testAddEdgeMap() {
     if (i == 1)
       it = carte->getFaceEdges(f2);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
+    for (const edge &e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
-    delete it;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ", cycles2[i], tmp);
   }
 
@@ -235,7 +230,6 @@ void PlanarConMapTest::testAddEdgeMap() {
 
   for (unsigned int i = 0; i < 4; ++i) {
     vector<edge> tmp;
-    Iterator<edge> *it;
 
     if (i == 0)
       it = carte->getFaceEdges(f1);
@@ -249,12 +243,9 @@ void PlanarConMapTest::testAddEdgeMap() {
     if (i == 3)
       it = carte->getFaceEdges(f4);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
+    for (const edge &e_tmp : it) {
       tmp.push_back(e_tmp);
     }
-
-    delete it;
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap cycle ", cycles3[i], tmp);
   }
@@ -295,12 +286,10 @@ void PlanarConMapTest::testDelEdgeMap() {
     if (i == 1)
       it = carte->getFaceEdges(f2);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
+    for (const edge &e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
-    delete it;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test DelEdgeMap cycle ", cycles[i], tmp);
   }
 
@@ -360,12 +349,10 @@ void PlanarConMapTest::testMergeFaces() {
     if (i == 1)
       it = carte->getFaceEdges(f2);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
+    for (const edge &e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
-    delete it;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test DelEdgeMap cycle ", tmp, cycles[i]);
   }
 
@@ -397,8 +384,7 @@ void PlanarConMapTest::testSplitFace() {
   cycles[2].push_back(e);
 
   for (unsigned int i = 0; i < 3; i++) {
-    vector<edge> tmp;
-    Iterator<edge> *it;
+    Iterator<edge> *it = nullptr;
 
     if (i == 0)
       it = carte->getFaceEdges(f1);
@@ -409,12 +395,8 @@ void PlanarConMapTest::testSplitFace() {
     if (i == 2)
       it = carte->getFaceEdges(f3);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
-      tmp.push_back(e_tmp);
-    }
+    vector<edge> tmp = iteratorVector(it);
 
-    delete it;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap cycle ", tmp, cycles[i]);
   }
 
@@ -485,12 +467,10 @@ void PlanarConMapTest::testSplitFace() {
     if (i == 3)
       it = carte->getFaceEdges(f4);
 
-    while (it->hasNext()) {
-      edge e_tmp = it->next();
+    for (const edge &e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
-    delete it;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ", tmp == cycles3[i]);
   }
 

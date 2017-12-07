@@ -196,18 +196,11 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
       glWidget->setMouseTracking(true);
     }
 
-    Iterator<string> *it = originalGraph->getProperties();
-
-    while (it->hasNext()) {
-      string propertyName = it->next();
-      PropertyInterface *property = originalGraph->getProperty(propertyName);
-
-      if (property->getTypename() == "double") {
-        configWidget->setPropertyToUse(propertyName);
+    for (PropertyInterface *prop : originalGraph->getObjectProperties()) {
+      if (prop->getTypename() == "double") {
+        configWidget->setPropertyToUse(prop->getName());
       }
     }
-
-    delete it;
   }
 
   SelectedEntity selectedEntity;

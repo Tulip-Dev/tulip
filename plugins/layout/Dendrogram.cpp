@@ -111,14 +111,9 @@ float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin, OrientableLa
                                     OrientableSizeProxy *oriSize) {
   float leftMargin = rightMargin;
 
-  Iterator<node> *itNode = tree->getOutNodes(n);
-
-  while (itNode->hasNext()) {
-    node currentNode = itNode->next();
+  for (const node &currentNode : tree->getOutNodes(n)) {
     leftMargin = setAllNodesCoordX(currentNode, leftMargin, oriLayout, oriSize);
   }
-
-  delete itNode;
 
   const float nodeWidth = oriSize->getNodeValue(n).getW() + nodeSpacing;
 
@@ -147,11 +142,7 @@ void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout, OrientableSizePr
   float maxYLeaf = -FLT_MAX;
   setCoordY(root, maxYLeaf, oriLayout, oriSize);
 
-  Iterator<node> *itNode = tree->getNodes();
-
-  while (itNode->hasNext()) {
-    node currentNode = itNode->next();
-
+  for (const node &currentNode : tree->nodes()) {
     if (isLeaf(tree, currentNode)) {
       OrientableCoord coord = oriLayout->getNodeValue(currentNode);
       float newY = maxYLeaf;
@@ -160,8 +151,6 @@ void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout, OrientableSizePr
       setNodePosition(currentNode, coordX, newY, coordZ, oriLayout);
     }
   }
-
-  delete itNode;
 }
 
 //====================================================================
@@ -169,16 +158,12 @@ float Dendrogram::computeFatherXPosition(tlp::node father, OrientableLayout *ori
   float minX = FLT_MAX;
   float maxX = -FLT_MAX;
 
-  Iterator<node> *itNode = tree->getOutNodes(father);
-
-  while (itNode->hasNext()) {
-    node currentNode = itNode->next();
+  for (const node &currentNode : tree->getOutNodes(father)) {
     const float x = oriLayout->getNodeValue(currentNode).getX() + leftshift[currentNode];
     minX = min(minX, x);
     maxX = max(maxX, x);
   }
 
-  delete itNode;
   return (maxX + minX) / 2.f;
 }
 
@@ -191,12 +176,8 @@ void Dendrogram::shiftAllNodes(tlp::node n, float shift, OrientableLayout *oriLa
   coord.setX(coordX + shift);
   oriLayout->setNodeValue(n, coord);
 
-  Iterator<node> *itNode = tree->getOutNodes(n);
-
-  while (itNode->hasNext())
-    shiftAllNodes(itNode->next(), shift, oriLayout);
-
-  delete itNode;
+  for (const node &on : tree->getOutNodes(n))
+    shiftAllNodes(on, shift, oriLayout);
 }
 
 //====================================================================
@@ -223,10 +204,6 @@ void Dendrogram::setCoordY(tlp::node n, float &maxYLeaf, OrientableLayout *oriLa
     }
   }
 
-  Iterator<node> *itNode = tree->getOutNodes(n);
-
-  while (itNode->hasNext())
-    setCoordY(itNode->next(), maxYLeaf, oriLayout, oriSize);
-
-  delete itNode;
+  for (const node &on : tree->getOutNodes(n))
+    setCoordY(on, maxYLeaf, oriLayout, oriSize);
 }

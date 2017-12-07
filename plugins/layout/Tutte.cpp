@@ -34,20 +34,14 @@ list<node> findCycle(Graph *sg) {
   TLP_HASH_MAP<node, node> father;
   TLP_HASH_MAP<node, bool> visited;
   std::list<node> bfs;
-  Iterator<node> *it = sg->getNodes();
-  node itn = it->next();
-  node startNode = itn;
-  unsigned int maxDeg = sg->deg(itn);
+  node startNode = sg->getOneNode();
+  unsigned int maxDeg = sg->deg(startNode);
 
-  while (it->hasNext()) {
-    itn = it->next();
-
+  for (const node &itn : sg->nodes()) {
     if (sg->deg(itn) > maxDeg) {
       startNode = itn;
     }
   }
-
-  delete it;
 
   node n1, n2;
   father[startNode] = startNode;
@@ -56,11 +50,8 @@ list<node> findCycle(Graph *sg) {
   while (!bfs.empty()) {
     node curNode = bfs.front();
     bfs.pop_front();
-    Iterator<node> *itN = sg->getInOutNodes(curNode);
 
-    while (itN->hasNext()) {
-      node itn = itN->next();
-
+    for (const node &itn : sg->getInOutNodes(curNode)) {
       if (itn != father[curNode]) {
         if (!visited[itn]) {
           visited[itn] = true;
@@ -74,8 +65,6 @@ list<node> findCycle(Graph *sg) {
         }
       }
     }
-
-    delete itN;
   }
 
   std::list<node> result;
@@ -127,13 +116,10 @@ bool Tutte::run() {
   }
 
   std::list<node> toMove;
-  Iterator<node> *itN = graph->getNodes();
 
-  while (itN->hasNext()) {
-    toMove.push_front(itN->next());
+  for (const node &n : graph->nodes()) {
+    toMove.push_front(n);
   }
-
-  delete itN;
 
   for (itL = tmp.begin(); itL != tmp.end(); ++itL) {
     toMove.remove(*itL);
@@ -149,16 +135,13 @@ bool Tutte::run() {
       tmpCoord.set(0, 0, 0);
       Coord baseCoord = result->getNodeValue(*itn);
       int i = 0;
-      itN = graph->getInOutNodes(*itn);
 
-      while (itN->hasNext()) {
-        node itAdj = itN->next();
+      for (const node &itAdj : graph->getInOutNodes(*itn)) {
         const Coord &tmpCoord2 = result->getNodeValue(itAdj);
         tmpCoord.set(tmpCoord.getX() + tmpCoord2.getX(), tmpCoord.getY() + tmpCoord2.getY(), 0);
         ++i;
       }
 
-      delete itN;
       result->setNodeValue(*itn, Coord(tmpCoord.getX() / i, tmpCoord.getY() / i, 0));
 
       if (fabs(baseCoord.getX() - tmpCoord.getX() / i) > 0.02)
@@ -178,16 +161,12 @@ bool Tutte::check(std::string &erreurMsg) {
   if (!TriconnectedTest::isTriconnected(graph))
     result = false;
   else {
-    Iterator<node> *it = graph->getNodes();
-
-    while (it->hasNext()) {
-      if (graph->deg(it->next()) < 3) {
+    for (const node &n : graph->nodes()) {
+      if (graph->deg(n) < 3) {
         result = false;
         break;
       }
     }
-
-    delete it;
   }
 
   if (!result)
