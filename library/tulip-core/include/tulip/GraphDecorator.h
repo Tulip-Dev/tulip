@@ -69,11 +69,11 @@ public:
   Graph *getNodeMetaInfo(const node n) const override;
 
   //============================================================
-  virtual node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
-                              bool delAllEdge = true);
-  virtual void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                               std::vector<node> &metaNodes);
-  virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
+  node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
+                      bool delAllEdge = true) override;
+  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
+                       std::vector<node> &metaNodes) override;
+  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true) override;
 
   //============================================================
   node getOneNode() const override;

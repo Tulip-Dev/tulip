@@ -1591,8 +1591,8 @@ public:
    * @param delAllEdge Whether the underlying edges will be removed from the whole hierarchy.
    * @return The newly created meta node.
    */
-  node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
-                      bool delAllEdge = true);
+  virtual node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
+                              bool delAllEdge = true);
 
   /**
    * @brief deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool
@@ -1610,7 +1610,8 @@ public:
    * @param metaNodes will contains all the added meta nodes after the call
    *
    */
-  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node> &metaNodes);
+  virtual void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
+                               std::vector<node> &metaNodes);
   /**
    * @brief Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
@@ -1621,7 +1622,7 @@ public:
    * @param multiEdges indicates if a meta edge will be created for each underlying edge
    * @param delAllEdge indicates if the underlying edges will be removed from the entire hierarchy
    */
-  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
+  virtual node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
 
   /**
    * @brief Opens a metanode and replaces all edges between that
