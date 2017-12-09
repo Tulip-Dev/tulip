@@ -795,7 +795,7 @@ void SuperGraphTest::testPropertiesIteration() {
 //==========================================================
 void SuperGraphTest::testAttributes() {
   graph->clear();
-  float f = 12.12;
+  float f = 12.12f;
   CPPUNIT_ASSERT(!graph->getAttribute("f", f));
   graph->setAttribute("name", string("The Graph"));
   string name;

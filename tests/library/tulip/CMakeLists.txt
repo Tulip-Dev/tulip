@@ -13,6 +13,11 @@ TARGET_LINK_LIBRARIES(testPlugin2 ${LibTulipCoreName})
 ADD_CUSTOM_TARGET(copyTestData ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/DATA ${CMAKE_CURRENT_BINARY_DIR}/DATA VERBATIM)
 ADD_CUSTOM_TARGET(copyScript ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tulip_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip_tests.sh VERBATIM)
 
+# disable MSVC warning 'potential divide by 0' for DoublePropertyTest
+IF(MSVC)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4723")
+ENDIF(MSVC)
+
 UNIT_TEST(ImportExportTest ImportExportTest.cpp tuliplibtest.cpp)
 UNIT_TEST(ExistEdgeTest ExistEdgeTest.cpp tuliplibtest.cpp)
 UNIT_TEST(ExtendedClusterOperationTest ExtendedClusterOperationTest.cpp tuliplibtest.cpp)
