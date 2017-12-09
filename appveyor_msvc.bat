@@ -65,9 +65,10 @@ xcopy C:\tulip_dependencies\cppunit\include C:\tulip_dependencies\include /S /Y
 xcopy C:\tulip_dependencies\cppunit\lib C:\tulip_dependencies\lib /S /Y
 move C:\tulip_dependencies\lib\cppunit_dll.dll C:\tulip_dependencies\bin\
 
-rem we are good to go, let's compile Tulip now
+rem we are good to go, let's compile and install Tulip now
 cd %APPVEYOR_BUILD_FOLDER%
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_TESTS=ON ..
 msbuild INSTALL.vcxproj /m /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
-msbuild runTests.vcxproj /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+rem finally run Tulip tests
+ctest --force-new-ctest-process --output-on-failure --build-config "Release"
