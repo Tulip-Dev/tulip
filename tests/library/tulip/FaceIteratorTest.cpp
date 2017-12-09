@@ -21,8 +21,6 @@
 #include <iostream>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FaceIteratorTest);
-using namespace std;
-using namespace tlp;
 
 //============================================================
 // FaceIteratorTest
@@ -55,6 +53,8 @@ void FaceIteratorTest::setUp() {
   edges.push_back(map->addEdge(nodes[4], nodes[2]));
   edges.push_back(map->addEdge(nodes[4], nodes[5]));
   edges.push_back(map->addEdge(nodes[7], nodes[9]));
+
+  map->update();
 }
 
 void FaceIteratorTest::tearDown() {
@@ -63,7 +63,7 @@ void FaceIteratorTest::tearDown() {
 
 //============================================================
 void FaceIteratorTest::testNodeFaceIterator() {
-  for (const Face &f : map->getFaces()) {
+  for (const tlp::Face &f : map->getFaces()) {
     unsigned int i = iteratorCount(map->getFaceNodes(f));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test NodeFaceIterator ", map->nbFacesEdges(f), i);
   }
