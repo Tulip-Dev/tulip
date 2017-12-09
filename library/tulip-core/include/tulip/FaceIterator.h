@@ -34,7 +34,7 @@ namespace tlp {
 
 class PlanarConMap;
 
-class FaceIterator : public Iterator<Face> {
+class TLP_SCOPE FaceIterator : public Iterator<Face> {
 public:
   FaceIterator(PlanarConMap *m);
   virtual ~FaceIterator() {}
@@ -49,7 +49,7 @@ private:
 
 //============================================================
 /// Adjacente Face iterator for PlanarConMap
-class FaceAdjIterator : public Iterator<Face> {
+class TLP_SCOPE FaceAdjIterator : public Iterator<Face> {
 public:
   FaceAdjIterator(PlanarConMap *m, const node n);
   virtual ~FaceAdjIterator() {}
@@ -64,7 +64,7 @@ private:
 
 //============================================================
 /// Node of face iterator for PlanarConMap
-class NodeFaceIterator : public Iterator<node> {
+class TLP_SCOPE NodeFaceIterator : public Iterator<node> {
 public:
   NodeFaceIterator(PlanarConMap *m, const Face);
   virtual ~NodeFaceIterator() {}
@@ -80,7 +80,7 @@ private:
 
 //============================================================
 /// Edge of face iterator for PlanarConMap
-class EdgeFaceIterator : public Iterator<edge> {
+class TLP_SCOPE EdgeFaceIterator : public Iterator<edge> {
 public:
   EdgeFaceIterator(PlanarConMap *m, const Face);
   virtual ~EdgeFaceIterator() {}
