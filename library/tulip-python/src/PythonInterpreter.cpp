@@ -61,9 +61,7 @@ extern QString mainScriptFileName;
 extern void initconsoleutils();
 extern void inittuliputils();
 
-#ifndef WIN32
 static PyThreadState *mainThreadState;
-#endif
 
 static PyGILState_STATE gilState;
 
@@ -252,20 +250,7 @@ PythonInterpreter::PythonInterpreter()
     PySys_SetArgv(argc, argv);
 
     PyEval_InitThreads();
-#ifndef WIN32
     mainThreadState = PyEval_SaveThread();
-#else
-    PyThreadState *tcur = PyThreadState_Get();
-    PyThreadState_Swap(nullptr);
-#if PY_MAJOR_VERSION != 3 && PY_MINOR_VERSION != 3
-    PyThreadState_Clear(tcur);
-#endif
-    PyThreadState_Delete(tcur);
-#endif
-
-#if defined(WIN32) || (PY_MAJOR_VERSION < 3 && PY_MINOR_VERSION < 6)
-    PyEval_ReleaseLock();
-#endif
   }
 
   holdGIL();
@@ -436,12 +421,10 @@ PythonInterpreter::~PythonInterpreter() {
 
     runString(
         "sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
-#ifndef WIN32
     PyEval_ReleaseLock();
     PyEval_RestoreThread(mainThreadState);
-#else
+
     holdGIL();
-#endif
     Py_Finalize();
   }
 
