@@ -59,9 +59,6 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
   for (std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
     std::string dir = (*it) + "/" + folder;
 
-    if (loader != NULL)
-      loader->start(dir.c_str());
-
     PluginLister::currentLoader = loader;
     getInstance()->pluginPath = dir;
 
@@ -242,6 +239,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
       return false;
     }
 
+    if (loader != nullptr)
+      loader->start(pluginPath.c_str());
+
     SetCurrentDirectory(pluginPath.c_str());
     hFind = FindFirstFile("*.dll", &findData);
 
@@ -343,6 +343,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     message += pluginPath + " - " + std::string(strerror(errno));
     return false;
   }
+
+  if (loader != nullptr)
+    loader->start(pluginPath.c_str());
 
   while (n > 0) {
     n--;
