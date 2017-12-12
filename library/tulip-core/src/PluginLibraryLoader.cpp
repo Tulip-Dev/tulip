@@ -88,9 +88,6 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
 
-  if (loader != nullptr)
-    loader->start(rootPath.c_str());
-
   PluginLister::currentLoader = loader;
   getInstance()->pluginPath = rootPath;
 
