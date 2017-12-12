@@ -144,23 +144,13 @@ static bool runPython(const QString &version) {
 
 #endif
 
+#ifndef WIN32
 // Function to get the default Python version if any by running the python process.
 static QString getDefaultPythonVersionIfAny() {
   QString defaultPythonVersion;
   QProcess pythonProcess;
 
   QString pythonCommand = "python";
-
-// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python
-// 3.X installed in a non standard way.
-#ifdef __MINGW32__
-  char *pythonDirEv = getenv("PYTHONDIR");
-
-  if (pythonDirEv) {
-    pythonCommand = QString(pythonDirEv) + "/" + pythonCommand;
-  }
-
-#endif
 
   // Before Python 3.4, the version number was printed on the standard error output.
   // Starting Python 3.4 the version number is printed on the standard output.
@@ -178,18 +168,6 @@ static QString getDefaultPythonVersionIfAny() {
 
     if (versionRegexp.exactMatch(result)) {
       defaultPythonVersion = versionRegexp.cap(1);
-
-// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python
-// 3.X installed in a non standard way.
-#ifdef __MINGW32__
-
-      if (pythonDirEv) {
-        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-        env.insert("PYTHONHOME", QString(pythonDirEv));
-        pythonProcess.setProcessEnvironment(env);
-      }
-
-#endif
 
       // Check the binary type of the python executable (32 or 64 bits)
       pythonProcess.start(
@@ -218,6 +196,7 @@ static QString getDefaultPythonVersionIfAny() {
 
   return defaultPythonVersion;
 }
+#endif
 
 QStringList PythonVersionChecker::_installedVersions;
 bool PythonVersionChecker::_installedVersionsChecked(false);
