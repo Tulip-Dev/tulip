@@ -3,7 +3,7 @@ SET(TULIP_FOUND true)
 SET(TULIP_INCLUDE_DIR ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipOGDFInclude} ${TulipGUIInclude} ${TulipPythonInclude})
 SET(TULIP_LIBRARIES ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
-SET(TULIP_LIBRARIES_DIR ${TulipLibInstallDir})
+SET(TULIP_LIBRARIES_DIR ${TulipBinInstallDir})
 SET(TULIP_PLUGINS_DIR ${TulipPluginsInstallDir})
 SET(TULIP_GLYPH_PLUGINS_DIR ${TulipGlyphPluginsInstallDir})
 SET(TULIP_INTERACTOR_PLUGINS_DIR ${TulipInteractorPluginsInstallDir})
