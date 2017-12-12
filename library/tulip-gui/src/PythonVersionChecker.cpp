@@ -24,6 +24,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <tuple>
 
 using namespace tlp;
 using namespace std;
@@ -78,7 +79,7 @@ static QString pythonHome(const QString &pythonVersion) {
 
 // special case when using Python provided by MSYS2
 #ifdef MSYS2_PYTHON
-  (void)pythonVersion;
+  std::ignore = pythonVersion;
   return PYTHON_HOME_PATH;
 
 // standard Python installation on Windows
@@ -165,7 +166,7 @@ static QString getDefaultPythonVersionIfAny() {
   // Before Python 3.4, the version number was printed on the standard error output.
   // Starting Python 3.4 the version number is printed on the standard output.
   // So merge the output channels of the process.
-  pythonProcess.setReadChannelMode(QProcess::MergedChannels);
+  pythonProcess.setProcessChannelMode(QProcess::MergedChannels);
   pythonProcess.setReadChannel(QProcess::StandardOutput);
   pythonProcess.start(pythonCommand, QStringList() << "--version");
   pythonProcess.waitForFinished(-1);
@@ -241,6 +242,13 @@ QStringList PythonVersionChecker::installedVersions() {
       ++i;
     }
 
+    // Also try to run python executable
+    QString defaultPythonVersion = getDefaultPythonVersionIfAny();
+
+    if (!defaultPythonVersion.isEmpty() && !_installedVersions.contains(defaultPythonVersion)) {
+      _installedVersions.append(defaultPythonVersion);
+    }
+
 // On windows, we check the presence of Python by looking into the registry
 #else
 
@@ -255,13 +263,6 @@ QStringList PythonVersionChecker::installedVersions() {
     }
 
 #endif
-
-    // Also try to run python executable
-    QString defaultPythonVersion = getDefaultPythonVersionIfAny();
-
-    if (!defaultPythonVersion.isEmpty() && !_installedVersions.contains(defaultPythonVersion)) {
-      _installedVersions.append(defaultPythonVersion);
-    }
 
     _installedVersionsChecked = true;
   }
