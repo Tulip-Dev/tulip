@@ -68,20 +68,32 @@ using namespace tlp;
 
 struct PluginLoaderToProgress : public PluginLoader {
   PluginProgress *_progress;
-
+  bool _debug_output;
   int max_step;
   int step;
+
+  PluginLoaderToProgress(PluginProgress* progress = nullptr,
+			 bool debug_output = false)
+    : _progress(progress), _debug_output(debug_output) {}
 
   void start(const std::string &path) override {
     step = 0;
     _progress->setComment("Entering " + path);
+    if (_debug_output)
+      tlp::debug() << "Entering " << path << std::endl;
   }
 
   void finished(bool state, const std::string &msg) override {
-    if (state)
-      _progress->setComment("Plugin successfully loaded");
-    else
+    if (state) {
+      _progress->setComment("Plugins successfully loaded");
+      if (_debug_output)
+	tlp::debug() << "Plugins successfully loaded" << std::endl;
+    }
+    else {
       _progress->setComment(msg);
+      if (_debug_output)
+	tlp::debug() << msg << std::endl;
+    }
   }
 
   void numberOfFiles(int n) override {
@@ -92,11 +104,19 @@ struct PluginLoaderToProgress : public PluginLoader {
     step++;
     _progress->progress(step, max_step);
     _progress->setComment("Loading " + filename);
+    if (_debug_output)
+      tlp::debug() << "Loading " << filename << std::endl;
   }
 
-  void loaded(const tlp::Plugin *, const std::list<tlp::Dependency> &) override {}
+  void loaded(const tlp::Plugin* plugin,
+	      const std::list<tlp::Dependency> &) override {
+    if (_debug_output)
+      tlp::debug() << "  - Plugin '" << plugin->name()
+		   << "' registered" << std::endl;
+  }
+
   void aborted(const std::string &fileName, const std::string &errorMsg) override {
-    std::cerr << "[Warning] Failed to import " << fileName << ": " << errorMsg << std::endl;
+    tlp::error() << "[Warning] Failed to load " << fileName << ": " << errorMsg << std::endl;
   }
 };
 
@@ -178,6 +198,8 @@ int main(int argc, char **argv) {
   QRegExp portRegexp("^\\-\\-port=([0-9]*)");
   QRegExp idRegexp("^\\-\\-id=([0-9]*)");
   QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
+  QRegExp debugPluginLoadRegExp("^\\-debug_plugin_load");
+  bool debugPluginLoad = false;
   QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
 
   QStringList args = QApplication::arguments();
@@ -200,7 +222,9 @@ int main(int argc, char **argv) {
                              geometryRegexp.cap(3).toInt(), geometryRegexp.cap(4).toInt());
     } else if (portRegexp.exactMatch(a)) {
       context->tulipPort = portRegexp.cap(1).toUInt();
-    } else if (idRegexp.exactMatch(a)) {
+    } else if (debugPluginLoadRegExp.exactMatch(a))
+      debugPluginLoad = true;
+      else if (idRegexp.exactMatch(a)) {
       context->id = idRegexp.cap(1).toUInt();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
       QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
@@ -259,17 +283,13 @@ int main(int argc, char **argv) {
   QString error;
 
   // Init tulip
-  PluginLoaderToProgress *loader = new PluginLoaderToProgress();
-  loader->_progress = progress;
-
   try {
-    tlp::initTulipSoftware(loader);
+    PluginLoaderToProgress loader(progress, debugPluginLoad);
+    tlp::initTulipSoftware(&loader);
   } catch (tlp::TulipException &e) {
     QMessageBox::warning(nullptr, "Error", e.what());
     exit(1);
   }
-
-  delete loader;
 
   QFileInfo fileInfo(projectFilePath);
 
