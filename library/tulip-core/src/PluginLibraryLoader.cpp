@@ -88,9 +88,6 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
 
-  if (loader != NULL)
-    loader->start(rootPath.c_str());
-
   PluginLister::currentLoader = loader;
   getInstance()->pluginPath = rootPath;
 
@@ -344,7 +341,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
     return false;
   }
 
-  if (loader != nullptr)
+  if (loader != NULL)
     loader->start(pluginPath.c_str());
 
   while (n > 0) {
