@@ -16,13 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Interactor.h"
 
-#include <QDebug>
-
-#include <tulip/ForEach.h>
+#include <tulip/Interactor.h>
 #include <tulip/View.h>
-#include <tulip/Glyph.h>
 
 using namespace std;
 using namespace tlp;
