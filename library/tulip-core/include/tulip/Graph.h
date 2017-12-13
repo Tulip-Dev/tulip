@@ -1262,7 +1262,7 @@ public:
    * @return Whether the attribute exists.
    */
   bool existAttribute(const std::string &name) const {
-    return getAttributes().exist(name);
+    return getAttributes().exists(name);
   }
 
   /**

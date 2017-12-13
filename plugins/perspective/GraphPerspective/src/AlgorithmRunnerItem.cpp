@@ -163,7 +163,7 @@ void asLocal(QVariant var, DataSet &data, Graph *g) {
 }
 
 static void copyToLocal(DataSet &data, Graph *g) {
-  if (!data.exist("result"))
+  if (!data.exists("result"))
     return;
 
   DataType *d = data.getData("result");

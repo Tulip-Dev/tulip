@@ -94,7 +94,7 @@ bool FastOverlapRemoval::run() {
 
   if (dataSet != nullptr) {
 
-    if (dataSet->exist("overlaps removal type"))
+    if (dataSet->exists("overlaps removal type"))
       dataSet->get("overlaps removal type", stringCollection);
     else
       dataSet->get("overlap removal type", stringCollection);

@@ -65,7 +65,7 @@ bool TLPBImport::importGraph() {
   std::string filename;
   std::istream *is = nullptr;
 
-  if (dataSet->exist("file::filename")) {
+  if (dataSet->exists("file::filename")) {
     dataSet->get<std::string>("file::filename", filename);
     struct stat infoEntry;
     bool result = stat(filename.c_str(), &infoEntry) == 0;

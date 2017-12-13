@@ -538,7 +538,7 @@ public:
       _progress->progress(0, 0);
     }
 
-    if (dataSet->exist("file::filename")) {
+    if (dataSet->exists("file::filename")) {
       dataSet->get<string>("file::filename", filename);
 
       _proxy = new YajlParseFacade(_progress);

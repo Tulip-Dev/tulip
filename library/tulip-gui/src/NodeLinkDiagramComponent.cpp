@@ -220,7 +220,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
 
   std::string sceneInput = "";
 
-  if (dataSet.exist("scene")) {
+  if (dataSet.exists("scene")) {
     dataSet.get("scene", sceneInput);
   }
 
@@ -268,7 +268,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     scene->setWithXML(sceneInput, graph);
   }
 
-  if (dataSet.exist("Display")) {
+  if (dataSet.exists("Display")) {
     DataSet renderingParameters;
     dataSet.get("Display", renderingParameters);
     GlGraphRenderingParameters rp = scene->getGlGraphComposite()->getRenderingParameters();
@@ -283,7 +283,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     scene->getGlGraphComposite()->setRenderingParameters(rp);
   }
 
-  if (dataSet.exist("Hulls")) {
+  if (dataSet.exists("Hulls")) {
     useHulls(true);
     DataSet hullsSet;
     dataSet.get<DataSet>("Hulls", hullsSet);

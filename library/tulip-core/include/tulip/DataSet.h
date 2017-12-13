@@ -275,7 +275,14 @@ public:
    * @param str the name of the member to look for
    * @return true if str exists into the DataSet.
    */
-  bool exist(const std::string &str) const;
+  bool exists(const std::string &str) const;
+
+  /**
+   * @brief for compatibility only
+   */
+  _DEPRECATED bool exist(const std::string &str) const {
+    return exists(str);
+  }
 
   /**
    * @brief Removes an element from the DataSet

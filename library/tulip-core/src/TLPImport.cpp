@@ -944,7 +944,7 @@ public:
     std::istream *input;
     bool result;
 
-    if (dataSet->exist("file::filename")) {
+    if (dataSet->exists("file::filename")) {
       dataSet->get<std::string>("file::filename", filename);
       tlp_stat_t infoEntry;
       result = (statPath(filename, &infoEntry) == 0);

@@ -230,7 +230,7 @@ void SOMView::setState(const DataSet &dataSet) {
   properties->clearpropertiesConfigurationWidget();
   properties->addfilter(graph(), propertyFilterType);
 
-  if (dataSet.exist("propertiesWidget")) {
+  if (dataSet.exists("propertiesWidget")) {
     DataSet propertiesDataSet;
     dataSet.get("propertiesWidget", propertiesDataSet);
     properties->setData(propertiesDataSet);

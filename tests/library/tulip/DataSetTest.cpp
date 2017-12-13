@@ -37,7 +37,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(DataSetTest);
 //==========================================================
 void DataSetTest::testSetGetBool() {
   DataSet dSet;
-  CPPUNIT_ASSERT(!dSet.exist("bool"));
+  CPPUNIT_ASSERT(!dSet.exists("bool"));
 
   bool v1, v2;
   v1 = true;
@@ -52,7 +52,7 @@ void DataSetTest::testSetGetBool() {
 //==========================================================
 void DataSetTest::testSetGetDouble() {
   DataSet dSet;
-  CPPUNIT_ASSERT(!dSet.exist("double"));
+  CPPUNIT_ASSERT(!dSet.exists("double"));
 
   double v1, v2;
   v1 = 1.1;
@@ -67,7 +67,7 @@ void DataSetTest::testSetGetDouble() {
 //==========================================================
 void DataSetTest::testSetGetInt() {
   DataSet dSet;
-  CPPUNIT_ASSERT(!dSet.exist("int"));
+  CPPUNIT_ASSERT(!dSet.exists("int"));
 
   int v1, v2;
   v1 = 1;
@@ -82,7 +82,7 @@ void DataSetTest::testSetGetInt() {
 //==========================================================
 void DataSetTest::testSetGetString() {
   DataSet dSet;
-  CPPUNIT_ASSERT(!dSet.exist("string"));
+  CPPUNIT_ASSERT(!dSet.exists("string"));
 
   std::string v1, v2;
   v1 = "test";
@@ -128,7 +128,7 @@ unsigned int Struct::nbInstances = 0;
 
 void DataSetTest::testSetGetStruct() {
   DataSet dSet;
-  CPPUNIT_ASSERT(!dSet.exist("struct"));
+  CPPUNIT_ASSERT(!dSet.exists("struct"));
 
   Struct v1("test"), v2;
 

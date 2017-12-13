@@ -88,7 +88,7 @@ void TableView::setState(const tlp::DataSet &data) {
 
   _ui->eltTypeCombo->setCurrentIndex(showNodes ? 0 : 1);
 
-  if (data.exist("filtering_property"))
+  if (data.exists("filtering_property"))
     data.get<std::string>("filtering_property", filterPropertyName);
 
   GraphPropertiesModel<BooleanProperty> *model =

@@ -299,7 +299,7 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
   _ui->animationStepsSpinBox->setValue(uintValue);
 
   // If there is saved properties reload them.
-  if (data.exist("properties")) {
+  if (data.exists("properties")) {
     string propertiesString;
     data.get("properties", propertiesString);
     // Use QString split function to parse string.

@@ -181,13 +181,13 @@ void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
     }
   }
 
-  if (dataSet.exist("csvFileName")) {
+  if (dataSet.exists("csvFileName")) {
     string fileName;
     dataSet.get("csvFileName", fileName);
     _ui->csvFile->setText(tlpStringToQString(fileName));
   }
 
-  if (dataSet.exist("polyFileName")) {
+  if (dataSet.exists("polyFileName")) {
     string fileName;
     dataSet.get("polyFileName", fileName);
     _ui->polyFile->setText(tlpStringToQString(fileName));

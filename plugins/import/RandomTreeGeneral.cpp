@@ -89,19 +89,13 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (dataSet->exist("Minimum size"))
-        dataSet->get("Minimum size", sizeMin);
-      else
+      if (!dataSet->get("Minimum size", sizeMin))
         dataSet->get("minsize", sizeMin); // keep old parameter name for backward compatibility
 
-      if (dataSet->exist("Maximum size"))
-        dataSet->get("Maximum size", sizeMax);
-      else
+      if (!dataSet->get("Maximum size", sizeMax))
         dataSet->get("maxsize", sizeMax); // keep old parameter name for backward compatibility
 
-      if (dataSet->exist("Maximal node's degree"))
-        dataSet->get("Maximal node's degree", arityMax);
-      else
+      if (!dataSet->get("Maximal node's degree", arityMax))
         dataSet->get("maxdegree", arityMax); // keep old parameter name for backward compatibility
 
       dataSet->get("tree layout", needLayout);

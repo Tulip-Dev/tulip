@@ -55,15 +55,15 @@ void WithParameterTest::testBuildDefaultDataSet() {
   DataSet set;
   parametrizedStuff->getParameters().buildDefaultDataSet(set);
 
-  CPPUNIT_ASSERT(set.exist(intParameter));
-  CPPUNIT_ASSERT(set.exist(longParameter));
-  CPPUNIT_ASSERT(set.exist(stringParameter));
-  CPPUNIT_ASSERT(set.exist(uintParameter));
-  CPPUNIT_ASSERT(set.exist(doubleParameter));
-  CPPUNIT_ASSERT(set.exist(floatParameter));
-  CPPUNIT_ASSERT(set.exist(boolParameter));
-  CPPUNIT_ASSERT(set.exist(SizeParameter));
-  CPPUNIT_ASSERT(set.exist(ColorParameter));
+  CPPUNIT_ASSERT(set.exists(intParameter));
+  CPPUNIT_ASSERT(set.exists(longParameter));
+  CPPUNIT_ASSERT(set.exists(stringParameter));
+  CPPUNIT_ASSERT(set.exists(uintParameter));
+  CPPUNIT_ASSERT(set.exists(doubleParameter));
+  CPPUNIT_ASSERT(set.exists(floatParameter));
+  CPPUNIT_ASSERT(set.exists(boolParameter));
+  CPPUNIT_ASSERT(set.exists(SizeParameter));
+  CPPUNIT_ASSERT(set.exists(ColorParameter));
 
   EXPECTED_VALUE(int, 42);
   EXPECTED_VALUE(long, 420000000l);

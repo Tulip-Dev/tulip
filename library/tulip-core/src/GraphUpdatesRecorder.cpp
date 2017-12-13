@@ -1668,7 +1668,7 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface *p) {
 void GraphUpdatesRecorder::beforeSetAttribute(Graph *g, const std::string &name) {
   TLP_HASH_MAP<Graph *, DataSet>::iterator it = oldAttributeValues.find(g);
 
-  if (it != oldAttributeValues.end() && it->second.exist(name))
+  if (it != oldAttributeValues.end() && it->second.exists(name))
     return;
 
   // save the previously existing value

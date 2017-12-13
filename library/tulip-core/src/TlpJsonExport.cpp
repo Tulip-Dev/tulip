@@ -82,7 +82,7 @@ public:
 
   bool exportGraph(ostream &fileOut) override {
 
-    if (dataSet && dataSet->exist("Beautify JSON string")) {
+    if (dataSet && dataSet->exists("Beautify JSON string")) {
       bool beautify = false;
       dataSet->get("Beautify JSON string", beautify);
       _writer.beautifyString(beautify);

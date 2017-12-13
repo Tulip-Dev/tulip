@@ -83,14 +83,10 @@ public:
     bool needLayout = false;
 
     if (dataSet != nullptr) {
-      if (dataSet->exist("Minimum size"))
-        dataSet->get("Minimum size", minSize);
-      else
+      if (!dataSet->get("Minimum size", minSize))
         dataSet->get("minsize", minSize); // keep old name for backward compatibility
 
-      if (dataSet->exist("Maximum size"))
-        dataSet->get("Maximum size", maxSize);
-      else
+      if (!dataSet->get("Maximum size", maxSize))
         dataSet->get("maxsize", maxSize); // keep old name for backward compatibility
 
       dataSet->get("tree layout", needLayout);

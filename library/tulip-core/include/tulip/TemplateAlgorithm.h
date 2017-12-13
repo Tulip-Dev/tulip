@@ -71,7 +71,7 @@ public:
   TemplateAlgorithm(const tlp::PluginContext *context)
       : tlp::PropertyAlgorithm(context), result(nullptr) {
     if (dataSet != nullptr) {
-      if (!dataSet->exist("result")) {
+      if (!dataSet->exists("result")) {
         std::stringstream propname;
         propname << "result";
         unsigned number = 0;

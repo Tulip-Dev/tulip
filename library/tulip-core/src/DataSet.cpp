@@ -82,7 +82,7 @@ DataSet::~DataSet() {
   }
 }
 
-bool DataSet::exist(const string &str) const {
+bool DataSet::exists(const string &str) const {
   for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
        it != data.end(); ++it) {
     if ((*it).first == str)

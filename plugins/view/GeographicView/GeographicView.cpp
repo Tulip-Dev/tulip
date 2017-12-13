@@ -135,7 +135,7 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   updatePoly(true);
 
-  if (dataSet.exist("configurationWidget")) {
+  if (dataSet.exists("configurationWidget")) {
     DataSet conf;
     dataSet.get("configurationWidget", conf);
     geoViewConfigWidget->setState(conf);
@@ -145,7 +145,7 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   loadStoredPolyInformation(dataSet);
 
-  if (dataSet.exist("viewType")) {
+  if (dataSet.exists("viewType")) {
     int viewType = 0;
     dataSet.get("viewType", viewType);
     _viewType = static_cast<ViewType>(viewType);
@@ -187,7 +187,7 @@ void GeographicView::setState(const DataSet &dataSet) {
     computeGeoLayout();
   }
 
-  if (dataSet.exist("renderingParameters")) {
+  if (dataSet.exists("renderingParameters")) {
     GlGraphComposite *graphComposite =
         geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
     DataSet renderingParameters;
@@ -204,7 +204,7 @@ void GeographicView::setState(const DataSet &dataSet) {
     sceneConfigurationWidget->resetChanges();
   }
 
-  if (dataSet.exist("mapCenterLatitude")) {
+  if (dataSet.exists("mapCenterLatitude")) {
 
     dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
     dataSet.get("mapCenterLongitude", mapCenterLongitudeInit);
@@ -378,7 +378,7 @@ void GeographicView::updatePoly(bool force) {
 }
 
 void GeographicView::loadStoredPolyInformation(const DataSet &dataset) {
-  if (dataset.exist("polygons")) {
+  if (dataset.exists("polygons")) {
     DataSet polyConf;
     dataset.get("polygons", polyConf);
     GlComposite *composite = geoViewGraphicsView->getPolygon();
@@ -388,7 +388,7 @@ void GeographicView::loadStoredPolyInformation(const DataSet &dataset) {
          ++it) {
       DataSet entityData;
 
-      if (polyConf.exist((*it).first)) {
+      if (polyConf.exists((*it).first)) {
         polyConf.get((*it).first, entityData);
         Color color;
         entityData.get("color", color);

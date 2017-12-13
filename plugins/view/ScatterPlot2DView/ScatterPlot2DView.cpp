@@ -292,7 +292,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     ostringstream oss;
     oss << i;
 
-    while (selectedGraphPropertiesDataSet.exist(oss.str())) {
+    while (selectedGraphPropertiesDataSet.exists(oss.str())) {
       string propertyName;
       selectedGraphPropertiesDataSet.get(oss.str(), propertyName);
       selectedGraphProperties.push_back(propertyName);

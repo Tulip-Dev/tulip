@@ -234,7 +234,7 @@ void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
     stringstream graph;
     graph << it->first->getId();
 
-    if (dataSet.exist(graph.str())) {
+    if (dataSet.exists(graph.str())) {
       unsigned int visibility = 0;
       dataSet.get(graph.str(), visibility);
       bool firstVisibility = visibility - 1 > 0;

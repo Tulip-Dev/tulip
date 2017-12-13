@@ -304,12 +304,8 @@ public:
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
 
-      if (dataSet->exist("color scale")) {
-        dataSet->get("color scale", colorScale);
-      } else {
-        // for backward compatibility with the old parameter name
+      if (!dataSet->get("color scale", colorScale))
         dataSet->get("colorScale", colorScale);
-      }
 
       dataSet->get("maximum value", maxInput);
       dataSet->get("minimum value", minInput);
