@@ -16,8 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/StringCollection.h>
+#include <tulip/NumericProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StaticProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -48,8 +52,7 @@ static const char *paramHelp[] = {
     "increment is used between consecutive values).</li></ul>",
 
     // node/edge
-    "If true the algorithm will compute the size of nodes else it will compute the size of edges:"
-    "<ul><li>true: node size</li><li>false: edge size</li></ul>",
+    "Whether sizes are computed for nodes or for edges.",
 
     // proportional mapping
     "The mapping can either be area/volume proportional, or square/cubic;"
@@ -67,15 +70,21 @@ static const string AREA_PROPORTIONAL = "Area Proportional";
  *  according to a metric.
  *
  */
+
+#define TARGET_TYPE "target"
+#define TARGET_TYPES "nodes;edges"
+#define NODES_TARGET 0
+#define EDGES_TARGET 1
+
 class MetricSizeMapping : public SizeAlgorithm {
 public:
   PLUGININFORMATION(
       "Size Mapping", "Auber", "08/08/2003",
-      "Maps the sizes of the graph elements onto the values of a given numeric property.", "2.0",
+      "Maps the sizes of the graph elements onto the values of a given numeric property.", "2.1",
       "Size")
   MetricSizeMapping(const PluginContext *context)
       : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
-        zaxis(true), mappingType(true), min(1), max(10), range(0), shift(0), nodeoredge(true) {
+        zaxis(true), mappingType(true), min(1), max(10), range(0), shift(0) {
     addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2], "true");
@@ -84,7 +93,8 @@ public:
     addInParameter<double>("min size", paramHelp[3], "1");
     addInParameter<double>("max size", paramHelp[4], "10");
     addInParameter<bool>("type", paramHelp[5], "true");
-    addInParameter<bool>("node/edge", paramHelp[6], "true");
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[6], TARGET_TYPES, true,
+                                     "nodes <br> edges");
     addInParameter<StringCollection>("area proportional", paramHelp[7],
                                      "Area Proportional;Quadratic/Cubic", true,
                                      "Area Proportional <br> Quadratic/Cubic");
@@ -100,12 +110,12 @@ public:
     xaxis = yaxis = zaxis = true;
     min = 1;
     max = 10;
-    nodeoredge = true;
     proportional = "Area Proportional";
-    entryMetric = nullptr;
-    entrySize = nullptr;
+    entryMetric = graph->getProperty<DoubleProperty>("viewMetric");
+    entrySize = graph->getProperty<SizeProperty>("viewSize");
     mappingType = true;
     StringCollection proportionalType;
+    targetType.setCurrent(NODES_TARGET);
 
     if (dataSet != nullptr) {
       dataSet->get("property", entryMetric);
@@ -116,28 +126,28 @@ public:
       dataSet->get("min size", min);
       dataSet->get("max size", max);
       dataSet->get("type", mappingType);
-      dataSet->get("node/edge", nodeoredge);
+      dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("area proportional", proportionalType);
       proportional = proportionalType.getCurrentString();
+      // old parameter name and behavior
+      if (dataSet->exists("node/edge")) {
+        bool nodeoredge = true;
+        dataSet->get("node/edge", nodeoredge);
+        targetType.setCurrent(nodeoredge ? NODES_TARGET : EDGES_TARGET);
+      }
     }
-
-    if (!entryMetric)
-      entryMetric = graph->getProperty<DoubleProperty>("viewMetric");
-
-    if (!entrySize)
-      entrySize = graph->getProperty<SizeProperty>("viewSize");
 
     if (min >= max) {
       errorMsg = rangeSizeErrorMsg;
       return false;
     }
 
-    if (nodeoredge)
+    if (targetType.getCurrent() == NODES_TARGET)
       range = entryMetric->getNodeDoubleMax(graph) - entryMetric->getNodeDoubleMin(graph);
     else
       range = entryMetric->getEdgeDoubleMax(graph) - entryMetric->getEdgeDoubleMin(graph);
 
-    if (!range) {
+    if (range == 0) {
       errorMsg = rangeMetricErrorMsg;
       return false;
     }
@@ -163,77 +173,59 @@ public:
       entryMetric = tmp;
     }
 
-    unsigned int maxIter = graph->numberOfNodes() + graph->numberOfEdges();
     unsigned int iter = 0;
 
     pluginProgress->showPreview(false);
 
-    if (nodeoredge) {
+    if (targetType.getCurrent() == NODES_TARGET) {
       shift = entryMetric->getNodeDoubleMin(graph);
 
       // compute size of nodes
-      Iterator<node> *itN = graph->getNodes();
-
-      while (itN->hasNext()) {
-        node itn = itN->next();
+      vector<node> nodes = graph->nodes();
+      NodeStaticProperty<Size> nodeSize(graph);
+      nodeSize.copyFromProperty(entrySize);
+      unsigned nbNodes = nodes.size();
+#if defined(_OPENMP)
+#pragma omp parallel for
+#endif
+      for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
+        node n = nodes[i];
         double sizos = 0;
 
         if (proportional == AREA_PROPORTIONAL) {
           const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
-          sizos = min +
-                  pow((entryMetric->getNodeDoubleValue(itn) - shift) * (max - min) / range, power);
+          sizos =
+              min + pow((entryMetric->getNodeDoubleValue(n) - shift) * (max - min) / range, power);
         } else {
-          sizos = min + (entryMetric->getNodeDoubleValue(itn) - shift) * (max - min) / range;
+          sizos = min + (entryMetric->getNodeDoubleValue(n) - shift) * (max - min) / range;
         }
-
-        Size size = entrySize->getNodeValue(itn);
 
         if (xaxis)
-          size[0] = float(sizos);
+          nodeSize[i][0] = float(sizos);
 
         if (yaxis)
-          size[1] = float(sizos);
+          nodeSize[i][1] = float(sizos);
 
         if (zaxis)
-          size[2] = float(sizos);
-
-        result->setNodeValue(itn, size);
-
-        if ((++iter % 500 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
-          delete itN;
-
-          if (!mappingType)
-            delete tmp;
-
-          return false;
-        }
+          nodeSize[i][2] = float(sizos);
       }
-
-      delete itN;
+      nodeSize.copyToProperty(result);
     } else {
       shift = entryMetric->getEdgeDoubleMin(graph);
       // compute size of edges
-      Iterator<edge> *itE = graph->getEdges();
-
-      while (itE->hasNext()) {
-        edge ite = itE->next();
-        double sizos = min + (entryMetric->getEdgeDoubleValue(ite) - shift) * (max - min) / range;
-        Size size = entrySize->getEdgeValue(ite);
-        size[0] = float(sizos);
-        size[1] = float(sizos);
-        result->setEdgeValue(ite, size);
-
-        if ((++iter % 500 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
-          delete itE;
-
-          if (!mappingType)
-            delete tmp;
-
-          return pluginProgress->state() != TLP_CANCEL;
-        }
+      vector<edge> edges = graph->edges();
+      EdgeStaticProperty<Size> edgeSize(graph);
+      unsigned nbEdges = edges.size();
+#if defined(_OPENMP)
+#pragma omp parallel for
+#endif
+      for (OMP_ITER_TYPE i = 0; i < nbEdges; ++i) {
+        edge e(edges[i]);
+        double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
+        edgeSize[i][0] = float(sizos);
+        edgeSize[i][1] = float(sizos);
       }
-
-      delete itE;
+      edgeSize.copyToProperty(result);
     }
 
     if (!mappingType)
@@ -249,8 +241,8 @@ private:
   double min, max;
   double range;
   double shift;
-  bool nodeoredge;
   std::string proportional;
+  StringCollection targetType;
 };
 
 PLUGIN(MetricSizeMapping)
