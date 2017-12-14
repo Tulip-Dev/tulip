@@ -124,6 +124,15 @@ public:
     addInParameter<bool>("edge cardinality", paramHelp[6], "false");
   }
 
+  bool check(string &errmsg) override {
+    // do nothing if there is no subgraph
+    if (graph->numberOfSubGraphs() == 0) {
+      errmsg = "No subgraph found. Exiting because there is nothing to do.";
+      return false;
+    }
+    return true;
+  }
+
   //===============================================================================
   bool run() override {
     bool oriented = true, edgeCardinality = true, clustersLayout = false;
@@ -145,16 +154,6 @@ public:
       dataSet->get("layout quotient graph(s)", quotientLayout);
       dataSet->get("layout clusters", clustersLayout);
     }
-
-    Iterator<Graph *> *itS = graph->getSubGraphs();
-
-    // do nothing if there is no subgraph
-    if (!itS->hasNext()) {
-      delete itS;
-      return true;
-    }
-
-    delete itS;
 
     string layoutName = "FM^3 (OGDF)";
     string errMsg;
@@ -182,21 +181,18 @@ public:
 
     IntegerProperty *opProp = nullptr, *cardProp = nullptr;
     Graph *quotientGraph = graph->getRoot()->addSubGraph();
-    stringstream sstr;
-    sstr << "quotient of ";
-    string graphName;
-    graph->getAttribute("name", graphName);
+    string name("quotient of ");
+    string graphName = graph->getName();
 
-    if (graphName.size() == 0)
-      sstr << graph->getId();
+    if (graphName.empty())
+      name += to_string(graph->getId());
     else {
-      sstr << graphName;
+      name += graphName;
 
       if (graphName == "unnamed")
-        sstr << " " << graph->getId();
+        name += " " + to_string(graph->getId());
     }
-
-    quotientGraph->setAttribute(string("name"), sstr.str());
+    quotientGraph->setName(name);
 
     if (!oriented) {
       opProp = new IntegerProperty(quotientGraph);
@@ -237,7 +233,7 @@ public:
       }
     }
     // compute meta nodes, edges and associated meta values
-    itS = graph->getSubGraphs();
+    Iterator<Graph *> *itS = graph->getSubGraphs();
     vector<node> mNodes;
     graph->createMetaNodes(itS, quotientGraph, mNodes);
     delete itS;
@@ -372,8 +368,7 @@ public:
         quotientGraph->delEdge(*it);
     }
 
-    if (opProp)
-      delete opProp;
+    delete opProp;
 
     if (dataSet != nullptr) {
       dataSet->set("quotientGraph", quotientGraph);
