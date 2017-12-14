@@ -1893,12 +1893,12 @@ public:
                 } else if (aKey[k] == '\305') {
                   switch (aKey[k + 1]) {
                   case '\201': // Ł
-                    continue;
                     aKey.replace(k, 2, "L");
+                    continue;
 
                   case '\202': // ł
-                    continue;
-                    aKey.replace(k, 2, "l");
+                     aKey.replace(k, 2, "l");
+                   continue;
 
                   case '\204': // ń
                   case '\206': // ņ
