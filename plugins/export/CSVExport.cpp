@@ -155,6 +155,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
 
       case SEMICOLON_SEPARATOR:
         fieldSeparator = ';';
+	break;
 
       default:
         fieldSeparator = fieldSeparatorCustom;
