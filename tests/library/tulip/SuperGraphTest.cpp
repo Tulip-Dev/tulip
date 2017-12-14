@@ -44,12 +44,10 @@ void SuperGraphTest::tearDown() {
 //==========================================================
 void SuperGraphTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   vector<node> nodes;
-  vector<edge> edges;
   unsigned int NB_ADD = nbNodes;
   unsigned int EDGE_RATIO = edgeRatio;
 
-  for (unsigned int i = 0; i < NB_ADD; ++i)
-    nodes.push_back(graph->addNode());
+  graph->addNodes(nbNodes, nodes);
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
 
@@ -302,13 +300,10 @@ void SuperGraphTest::testAddDel() {
   unsigned int EDGE_RATIO = 100;
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
-  vector<bool> edgePresent(NB_EDGES);
-  vector<bool> nodePresent(NB_ADD);
 
   for (unsigned int i = 0; i < NB_ADD; ++i) {
     nodes.push_back(graph->addNode());
     CPPUNIT_ASSERT(graph->isElement(nodes[i]));
-    nodePresent[i] = true;
   }
 
   CPPUNIT_ASSERT_EQUAL(NB_ADD, graph->numberOfNodes());
@@ -321,7 +316,6 @@ void SuperGraphTest::testAddDel() {
 
   for (unsigned int i = 0; i < NB_ADD; ++i) {
     CPPUNIT_ASSERT(graph->isElement(nodes[i]));
-    nodePresent[i] = true;
   }
 
   CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
@@ -330,7 +324,6 @@ void SuperGraphTest::testAddDel() {
     edges.push_back(graph->addEdge(nodes[randomUnsignedInteger(NB_ADD - 1)],
                                    nodes[randomUnsignedInteger(NB_ADD - 1)]));
     CPPUNIT_ASSERT(graph->isElement(edges[i]));
-    edgePresent[i] = true;
   }
 
   CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES);
@@ -477,7 +470,7 @@ void SuperGraphTest::testDeleteSubgraph() {
   graph->delSubGraph(g4);
   g2 = g1->addSubGraph();
   g3 = g2->addSubGraph();
-  g4 = g3->addSubGraph();
+  g3->addSubGraph();
   // try to delete its father
   // fail because of an assertion in GraphAbstract::delSubGraph
   // g3->delSubGraph(g2);
@@ -627,7 +620,7 @@ void SuperGraphTest::testInheritance() {
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
-  DoubleProperty *m = graph->getProperty<DoubleProperty>("metric");
+  graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(graph->existProperty("metric"));
   CPPUNIT_ASSERT(g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
@@ -648,7 +641,7 @@ void SuperGraphTest::testInheritance() {
   CPPUNIT_ASSERT(g3->existProperty("metric"));
   CPPUNIT_ASSERT(g4->existProperty("metric"));
 
-  m = graph->getProperty<DoubleProperty>("metric");
+  DoubleProperty *m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT_EQUAL(m, graph->getProperty<DoubleProperty>("metric"));
   CPPUNIT_ASSERT_EQUAL(m, g1->getProperty<DoubleProperty>("metric"));
   CPPUNIT_ASSERT_EQUAL(m2, g2->getProperty<DoubleProperty>("metric"));

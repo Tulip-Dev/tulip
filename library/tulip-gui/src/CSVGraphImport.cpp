@@ -589,9 +589,9 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
           // check if the list of values is enclosed
           // between an openChar and a closeChar
           size_t first = token.find_first_not_of(" \t\f\v");
-          char closeChar = '\0';
 
           if (first != string::npos) {
+            char closeChar = '\0';
             // get the openChar and
             // the possible closeChar
             switch (token[first]) {

@@ -73,7 +73,7 @@ struct PluginLoaderToProgress : public PluginLoader {
   int step;
 
   PluginLoaderToProgress(PluginProgress *progress = NULL, bool debug_output = false)
-      : _progress(progress), _debug_output(debug_output) {}
+      : _progress(progress), _debug_output(debug_output), max_step(0), step(0) {}
 
   void start(const std::string &path) {
     step = 0;
