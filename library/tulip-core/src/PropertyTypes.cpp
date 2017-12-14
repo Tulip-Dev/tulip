@@ -599,7 +599,7 @@ bool PointType::read(istream &is, RealType &v) {
   }
 
   // skip spaces
-  while (ok = bool(is >> c) && isspace(c)) {
+  while ((ok = bool(is >> c)) && isspace(c)) {
   }
 
   if (!ok && c != ')')
