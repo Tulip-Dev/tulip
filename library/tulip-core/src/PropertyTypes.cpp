@@ -599,18 +599,17 @@ bool PointType::read(istream &is, RealType &v) {
   }
 
   // skip spaces
-  while (bool(is >> c) && isspace(c)) {
+  while (ok = bool(is >> c) && isspace(c)) {
   }
 
-  if (c != ')')
+  if (!ok && c != ')')
     return false;
 
   if (dbqFound) {
     // look for the close double quote
     ok = bool(is >> c);
 
-    if (c != '"')
-      return false;
+    return (ok && c == '"');
   }
 
   return true;
@@ -639,6 +638,9 @@ bool SizeType::read(istream &is, RealType &v) {
   // skip spaces
   while ((ok = bool(is >> c)) && isspace(c)) {
   }
+
+  if (!ok)
+    return false;
 
   bool dbqFound = false;
 

@@ -84,8 +84,6 @@ struct KlemmEguiluzModel : public ImportModule {
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    double a, pr, pr_sum, proba;
-
     vector<bool> activated(n, false);
 
     graph->addNodes(n);
@@ -105,15 +103,14 @@ struct KlemmEguiluzModel : public ImportModule {
           return pluginProgress->state() != TLP_CANCEL;
       }
 
-      a = 0;
-
+      double a = 0, pr, pr_sum;
       for (unsigned int j = 0; j < i; ++j)
         a += 1 / double(graph->deg(nodes[j]));
 
       // the new node is connected to m nodes
       for (unsigned int j = 0; j < i; ++j) {
         if (activated[j]) {
-          proba = tlp::randomDouble();
+          double proba = tlp::randomDouble();
 
           if (proba < mu) { // rewire the edge to a random node chosen with preferential attachment
             pr = tlp::randomDouble();
