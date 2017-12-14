@@ -519,12 +519,15 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     } else {
       action =
           removeFromSelectionMenu->addAction(tr("edge"), this, SLOT(removeItemFromSelection()));
+      action->setToolTip(QString("Remove the edge #") + sId + " from the current selection");
       action = removeFromSelectionMenu->addAction(tr("edge extremities"), this,
                                                   SLOT(removeExtremitiesFromSelection()));
+      action->setToolTip(QString("Remove the extremities of edge #") + sId +
+                         " from the current selection");
       action = removeFromSelectionMenu->addAction(tr("edge and its extremities"), this,
                                                   SLOT(removeEdgeAndExtremitiesFromSelection()));
-      action->setToolTip(QString("Remove the node #") + sId +
-                         "and its neighbours and adjacent edges from the current selection");
+      action->setToolTip(QString("Remove the edge #") + sId +
+                         " and its extremities from the current selection");
     }
 
     QMenu *toggleMenu = menu->addMenu("Toggle selection of");
