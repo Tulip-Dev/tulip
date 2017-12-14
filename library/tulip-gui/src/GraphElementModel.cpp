@@ -108,8 +108,9 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
   if (role == Qt::EditRole) {
     PropertyInterface *prop = static_cast<PropertyInterface *>(index.internalPointer());
     _graph->push();
-    return GraphModel::setNodeValue(_id, prop, value);
+    bool result = GraphModel::setNodeValue(_id, prop, value);
     _graph->popIfNoUpdates();
+    return result;
   }
 
   return false;
@@ -119,8 +120,9 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
   if (role == Qt::EditRole) {
     PropertyInterface *prop = static_cast<PropertyInterface *>(index.internalPointer());
     _graph->push();
-    return GraphModel::setEdgeValue(_id, prop, value);
+    bool result = GraphModel::setEdgeValue(_id, prop, value);
     _graph->popIfNoUpdates();
+    return result;
   }
 
   return false;
