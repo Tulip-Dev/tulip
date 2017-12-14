@@ -358,16 +358,6 @@ protected:
    */
   bool hasOnlookers() const;
 
-  /**
-  * @brief use for old observer tulip compatibility
-  */
-  _DEPRECATED tlp::Iterator<tlp::Observable *> *getObservables() const;
-
-  /**
-  * @brief use for old observer tulip compatibility
-  */
-  _DEPRECATED void notifyObservers();
-
 private:
   enum OBSERVABLEEDGETYPE { OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04 };
 
@@ -564,8 +554,6 @@ public:
   }
 };
 
-// deprecated name of this class
-_DEPRECATED_TYPEDEF(ObserverHolder, ObserverLocker);
 }
 
 #endif

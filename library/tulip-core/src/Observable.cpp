@@ -183,14 +183,6 @@ public:
   }
 };
 //=================================
-Iterator<Observable *> *Observable::getObservables() const {
-  if (isBound())
-    return new ConversionIterator<node, Observable *, Node2Observable>(getOutObjects(),
-                                                                       node2Observable);
-
-  return new NoObservableIterator();
-}
-//=================================
 void Observable::treatEvents(const std::vector<Event> &) {
 #ifndef NDEBUG
   tlp::debug() << __PRETTY_FUNCTION__ << ": not implemented" << std::endl;
@@ -643,20 +635,6 @@ void Observable::removeObserver(Observable *const observerver) const {
 void Observable::removeListener(Observable *const listener) const {
   assert(listener != nullptr);
   removeOnlooker(*listener, LISTENER);
-}
-//----------------------------------------
-void Observable::notifyObservers() {
-  if (!isBound())
-    return;
-
-  assert(_oAlive[_n]);
-
-  if (!_oAlive[_n]) {
-    throw ObservableException("notifyObservers called on a deleted Observable");
-  }
-
-  if (_oGraph.indeg(_n) > 0) // hasOnlookers
-    sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //----------------------------------------
 bool Observable::hasOnlookers() const {
