@@ -173,8 +173,6 @@ public:
       entryMetric = tmp;
     }
 
-    unsigned int iter = 0;
-
     pluginProgress->showPreview(false);
 
     if (targetType.getCurrent() == NODES_TARGET) {
