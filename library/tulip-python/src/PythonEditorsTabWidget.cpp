@@ -174,7 +174,10 @@ bool PythonEditorsTabWidget::reloadCodeInEditorIfNeeded(int index) {
 
     if (fileInfo.exists() && fileInfo.lastModified() != codeEditor->getLastSavedTime()) {
       if (codeEditor->loadCodeFromFile(fileName)) {
-        setTabText(index, fileInfo.fileName());
+        QString filename = tabText(index);
+        if (filename.endsWith("*")) {
+          setTabText(index, filename.mid(0, filename.size() - 1));
+        }
       }
 
       return true;
