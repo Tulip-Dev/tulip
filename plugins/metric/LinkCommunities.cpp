@@ -21,6 +21,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/vectorgraph.h>
 #include <tulip/vectorgraphproperty.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -200,21 +201,15 @@ void LinkCommunities::createDualGraph(const std::vector<edge> &edges) {
 //==============================================================================================================
 void LinkCommunities::computeSimilarities(const std::vector<edge> &edges) {
   if (metric == nullptr) {
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(dual.numberOfEdges()); ++i) {
+    OMP_PARALLEL_MAP_INDICES(dual.numberOfEdges(), [&](unsigned int i) {
       edge e = dual(i);
       similarity[e] = getSimilarity(e, edges);
-    }
+    });
   } else
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(dual.numberOfEdges()); ++i) {
+    OMP_PARALLEL_MAP_INDICES(dual.numberOfEdges(), [&](unsigned int i) {
       edge e = dual(i);
       similarity[e] = getWeightedSimilarity(e, edges);
-    }
+    });
 }
 //==============================================================================================================
 double LinkCommunities::getSimilarity(edge ee, const std::vector<edge> &edges) {
@@ -330,10 +325,9 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<ed
 double LinkCommunities::computeAverageDensity(double threshold, const std::vector<edge> &edges) {
   double d = 0.0;
   NodeProperty<bool> dn_visited;
-#ifdef _OPENMP
-#pragma omp critical(DN_VISITED)
-#endif
-  dual.alloc(dn_visited);
+  OMP_CRITICAL_SECTION(DN_VISITED) {
+    dual.alloc(dn_visited);
+  }
   dn_visited.setAll(false);
 
   unsigned int sz = dual.numberOfNodes();
@@ -400,10 +394,9 @@ double LinkCommunities::computeAverageDensity(double threshold, const std::vecto
     }
   }
 
-#ifdef _OPENMP
-#pragma omp critical(DN_VISITED)
-#endif
-  dual.free(dn_visited);
+  OMP_CRITICAL_SECTION(DN_VISITED) {
+    dual.free(dn_visited);
+  }
 
   return 2.0 * d / (graph->numberOfEdges());
 }
@@ -486,22 +479,16 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps,
 
   double deltaThreshold = (max - min) / double(numberOfSteps);
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(numberOfSteps); i++) {
+  OMP_PARALLEL_MAP_INDICES(numberOfSteps, [&](unsigned int i) {
     double step = min + i * deltaThreshold;
     double d = computeAverageDensity(step, edges);
-#ifdef _OPENMP
-#pragma omp critical
-#endif
-    {
+    OMP_CRITICAL_SECTION(findBestThreshold) {
       if (d > maxD) {
         threshold = step;
         maxD = d;
       }
     }
-  }
+  });
 
   return threshold;
 }

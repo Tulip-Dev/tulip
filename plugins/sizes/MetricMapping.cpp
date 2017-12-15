@@ -22,6 +22,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StaticProperty.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -179,15 +180,10 @@ public:
       shift = entryMetric->getNodeDoubleMin(graph);
 
       // compute size of nodes
-      const vector<node> &nodes = graph->nodes();
       NodeStaticProperty<Size> nodeSize(graph);
       nodeSize.copyFromProperty(entrySize);
-      unsigned nbNodes = nodes.size();
-#if defined(_OPENMP)
-#pragma omp parallel for
-#endif
-      for (OMP_ITER_TYPE i = 0; i < nbNodes; ++i) {
-        node n = nodes[i];
+
+      OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
         double sizos = 0;
 
         if (proportional == AREA_PROPORTIONAL) {
@@ -206,23 +202,18 @@ public:
 
         if (zaxis)
           nodeSize[n][2] = float(sizos);
-      }
+      });
       nodeSize.copyToProperty(result);
     } else {
       shift = entryMetric->getEdgeDoubleMin(graph);
       // compute size of edges
-      vector<edge> edges = graph->edges();
       EdgeStaticProperty<Size> edgeSize(graph);
-      unsigned nbEdges = edges.size();
-#if defined(_OPENMP)
-#pragma omp parallel for
-#endif
-      for (OMP_ITER_TYPE i = 0; i < nbEdges; ++i) {
-        edge e = edges[i];
+
+      OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
         double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
         edgeSize[e][0] = float(sizos);
         edgeSize[e][1] = float(sizos);
-      }
+      });
       edgeSize.copyToProperty(result);
     }
 

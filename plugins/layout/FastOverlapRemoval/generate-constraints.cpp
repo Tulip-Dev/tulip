@@ -15,10 +15,11 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <tulip/tulipconf.h>
+#include <tulip/ParallelTools.h>
+
 #include "generate-constraints.h"
 #include "constraint.h"
-#include <tulip/tulipconf.h>
-
 #include "isnan.h" /* Include last */
 
 using std::set;
@@ -196,15 +197,12 @@ int compare_events(const void *a, const void *b) {
  */
 int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], Constraint **&cs,
                                                const bool useNeighbourLists) {
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
+  OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
     vars[i].desiredPosition = rs[i].getCentreX();
     Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreX());
     events[2 * i] = new Event(Open, v, rs[i].getMinY());
     events[2 * i + 1] = new Event(Close, v, rs[i].getMaxY());
-  }
+  });
 
   qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n), sizeof(Event *),
         compare_events);
@@ -289,15 +287,12 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], 
  */
 int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[], Constraint **&cs) {
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
+  OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
     vars[i].desiredPosition = rs[i].getCentreY();
     Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreY());
     events[2 * i] = new Event(Open, v, rs[i].getMinX());
     events[2 * i + 1] = new Event(Close, v, rs[i].getMaxX());
-  }
+  });
 
   qsort(reinterpret_cast<Event *>(events), static_cast<size_t>(2 * n), sizeof(Event *),
         compare_events);

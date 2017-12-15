@@ -28,6 +28,7 @@
 #include <iostream>
 #include <tulip/MutableContainer.h>
 #include <tulip/StlIterator.h>
+#include <tulip/ParallelTools.h>
 
 namespace tlp {
 
@@ -329,11 +330,7 @@ public:
   // recompute elts positions
   void reIndex() {
     unsigned int nbElts = this->size();
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbElts); ++i)
-      pos[(*this)[i]] = i;
+    OMP_PARALLEL_MAP_INDICES(nbElts, [&](unsigned int i) { pos[(*this)[i]] = i; });
   }
 
   // ascending sort

@@ -34,7 +34,7 @@ namespace tlp {
 
 //===========================================================================================
 
-  double averagePathLength(const tlp::Graph* g, tlp::PluginProgress *pluginProgress= 0);
+  double averagePathLength(const tlp::Graph* g);
 %Docstring
 tlp.averagePathLength(graph)
 
@@ -50,7 +50,7 @@ the shorted distance is set to 0.
 
 //===========================================================================================
 
-  double averageClusteringCoefficient(const tlp::Graph *graph, tlp::PluginProgress *pluginProgress= 0);
+  double averageClusteringCoefficient(const tlp::Graph *graph);
 %Docstring
 tlp.averageClusteringCoefficient(graph)
 
@@ -65,7 +65,7 @@ as the average of the local clustering coefficients
 
 //===========================================================================================
 
-  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = NULL);
+  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1);
 %Docstring 
 tlp.clusteringCoefficient(graph, result, maxDepth=1)
 
@@ -84,13 +84,13 @@ This quantifies how close its neighbors are to being a clique.
 
 %MethodCode
   tlp::NodeStaticProperty<double> result(a0);
-  tlp::clusteringCoefficient(a0, result, a2, a3);
+  tlp::clusteringCoefficient(a0, result, a2);
   result.copyToProperty(a1);
 %End
  
 //===========================================================================================
 
-  void dagLevel(const tlp::Graph *graph, tlp::IntegerProperty* result, tlp::PluginProgress* = 0);
+  void dagLevel(const tlp::Graph *graph, tlp::IntegerProperty* result);
 %Docstring
 tlp.dagLevel(graph, result)
 
@@ -109,7 +109,7 @@ The algorithm ensures that the number of level used is minimal.
 
 %MethodCode
   tlp::NodeStaticProperty<unsigned int> result(a0);
-  tlp::dagLevel(a0, result, a2);
+  tlp::dagLevel(a0, result);
   result.copyToProperty(a1);
 %End  
   

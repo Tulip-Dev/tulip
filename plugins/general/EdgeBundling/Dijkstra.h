@@ -27,8 +27,8 @@
 #include <tulip/Vector.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/IntegerProperty.h>
-
 #include <tulip/vectorgraph.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 
@@ -37,10 +37,7 @@ class Dijkstra {
 public:
   //============================================================
   Dijkstra() {
-#ifdef _OPENMP
-#pragma omp critical(DIKCREATE)
-#endif
-    {
+    OMP_CRITICAL_SECTION(DIKCREATE) {
       graph.alloc(forbiddenNodes);
       graph.alloc(usedEdges);
       graph.alloc(nodeDistance);
@@ -51,10 +48,7 @@ public:
   }
 
   ~Dijkstra() {
-#ifdef _OPENMP
-#pragma omp critical(DIKCREATE)
-#endif
-    {
+    OMP_CRITICAL_SECTION(DIKCREATE) {
       graph.free(forbiddenNodes);
       graph.free(usedEdges);
       graph.free(nodeDistance);

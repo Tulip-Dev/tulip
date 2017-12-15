@@ -45,6 +45,7 @@
 #include <tulip/GlXMLTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 
@@ -74,10 +75,7 @@ static FTGLOutlineFont *getOutlineFont(const std::string &name) {
 
 static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutlineFont *&borderFont,
                           int &fontSize) {
-#ifdef _OPENMP
-#pragma omp critical(init_tulip_font)
-  {
-#endif
+  OMP_CRITICAL_SECTION(init_tulip_font) {
     fontName = TulipBitmapDir + "font.ttf";
     font = getPolygonFont(fontName);
 
@@ -88,9 +86,7 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutli
                    << endl;
 
     fontSize = 20;
-#ifdef _OPENMP
   }
-#endif
 }
 
 static const int SpaceBetweenLine = 5;

@@ -30,6 +30,7 @@
 #include <tulip/Observable.h>
 #include <tulip/ConversionIterator.h>
 #include <tulip/FilterIterator.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -164,15 +165,12 @@ Observable::Observable() : deleteMsgSent(false), queuedEvent(false), _n(node()) 
 #ifndef NDEBUG
   sent = received = 0;
 #endif
-  // tlp::debug() << "[Observable node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
 Observable::Observable(const Observable &) : deleteMsgSent(false), queuedEvent(false), _n(node()) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
-  // tlp::debug() << "[Observable node] created (copy constructor):" << n.id << "::" << this <<
-  // endl;
 }
 //----------------------------------
 Observable &Observable::operator=(const Observable &) {
@@ -191,10 +189,7 @@ Observable::~Observable() {
   if (!deleteMsgSent)
     observableDeleted();
 
-#ifdef _OPENMP
-#pragma omp critical(ObservableGraphUpdate)
-#endif
-  {
+  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
     assert(_oAlive[_n]);
 
     if (!_oAlive[_n]) {
@@ -204,7 +199,6 @@ Observable::~Observable() {
       std::terminate();
     }
 
-    // tlp::debug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
     _oAlive[_n] = false;
 
     bool noDelay = (_oNotifying == 0) && (_oUnholding == 0) && (_oHoldCounter == 0);
@@ -224,10 +218,8 @@ Observable::~Observable() {
     if (noDelay) {
       assert(_oEventsToTreat[_n] == 0);
       _oGraph.delNode(_n);
-      // tlp::debug() << "[Observable node] deleted:" << _n.id << "::" << this << endl;
     } else {
       _oDelayedDelNode.push_back(_n);
-      // tlp::debug() << "[Observable node] delayed delete:" << _n.id << "::" << this << endl;
       _oGraph.delEdges(_n);
     }
   }
@@ -235,10 +227,9 @@ Observable::~Observable() {
 
 //----------------------------------------
 void Observable::holdObservers() {
-#ifdef _OPENMP
-#pragma omp critical(ObservableGraphUpdate)
-#endif
-  ++_oHoldCounter;
+  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+    ++_oHoldCounter;
+  }
 }
 //----------------------------------------
 void Observable::unholdObservers() {
@@ -327,10 +318,7 @@ Iterator<Observable *> *Observable::getOnlookers() const {
 }
 //----------------------------------------
 void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) const {
-#ifdef _OPENMP
-#pragma omp critical(ObservableGraphUpdate)
-#endif
-  {
+  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
     assert(!isBound() || _oAlive[_n]);
 
     if (isBound() && !_oAlive[_n]) {
@@ -436,10 +424,9 @@ void Observable::sendEvent(const Event &message) {
           observerTonotify.push_back(pair<Observable *, node>(obs, src));
         } else if (!queuedEvent) {
           delayedEventAdded = true;
-#ifdef _OPENMP
-#pragma omp critical(ObservableGraphUpdate)
-#endif
-          { _oDelayedEvents.insert(pair<node, node>(_n, src)); }
+          OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+            _oDelayedEvents.insert(pair<node, node>(_n, src));
+          }
         }
       }
 
@@ -545,13 +532,9 @@ void Observable::sendEvent(const Event &message) {
 }
 //----------------------------------------
 void Observable::updateObserverGraph() {
-  // tlp::debug() << __PRETTY_FUNCTION__ << endl << flush;
   if (_oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0) {
     vector<node>::const_iterator itNodes;
-#ifdef _OPENMP
-#pragma omp critical(ObservableGraphUpdate)
-#endif
-    {
+    OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
       for (itNodes = _oDelayedDelNode.begin(); itNodes != _oDelayedDelNode.end(); ++itNodes) {
         node toDel = *itNodes;
 
@@ -568,10 +551,7 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
   if (!isBound() || !obs.isBound())
     return;
 
-#ifdef _OPENMP
-#pragma omp critical(ObservableGraphUpdate)
-#endif
-  {
+  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
     assert(_oAlive[_n]);
 
     if (!_oAlive[_n]) {

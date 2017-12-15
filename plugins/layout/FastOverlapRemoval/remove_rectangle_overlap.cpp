@@ -13,11 +13,14 @@
 #include <cassert>
 #include <vector>
 
+#include <tulip/tulipconf.h>
+#include <tulip/ParallelTools.h>
+
 #include "generate-constraints.h"
 #include "solve_VPSC.h"
 #include "variable.h"
 #include "constraint.h"
-#include <tulip/tulipconf.h>
+
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
 #include "blocks.h"
@@ -52,12 +55,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
     double *oldX = new double[n];
     unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs.data(), cs, true);
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
-      oldX[i] = vs[i].desiredPosition;
-    }
+    OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { oldX[i] = vs[i].desiredPosition; });
 
     Solver vpsc_x(n, vs.data(), m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
@@ -67,12 +65,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 #endif
     vpsc_x.solve();
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
-      rs[i].moveCentreX(vs[i].position());
-    }
+    OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
 
     for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
@@ -91,13 +84,10 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 #endif
     vpsc_y.solve();
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
+    OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
       rs[i].moveCentreY(vs[i].position());
       rs[i].moveCentreX(oldX[i]);
-    }
+    });
 
     delete[] oldX;
 
@@ -122,12 +112,7 @@ void removeRectangleOverlap(unsigned n, Rectangle rs[], double &xBorder, double 
 
     delete[] cs;
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
-      rs[i].moveCentreX(vs[i].position());
-    }
+    OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
 
   } catch (char const *str) {
     std::cerr << str << std::endl;
@@ -154,12 +139,7 @@ void removeRectangleOverlapX(unsigned n, Rectangle rs[], double &xBorder, double
 #endif
     vpsc_x.solve();
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < n; i++) {
-      rs[i].moveCentreX(vs[i].position());
-    }
+    OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreX(vs[i].position()); });
 
     for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
@@ -192,12 +172,7 @@ void removeRectangleOverlapY(unsigned n, Rectangle rs[], double &yBorder) {
 #endif
     vpsc_y.solve();
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(n); i++) {
-      rs[i].moveCentreY(vs[i].position());
-    }
+    OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) { rs[i].moveCentreY(vs[i].position()); });
 
     for (unsigned i = 0; i < m; ++i) {
       delete cs[i];

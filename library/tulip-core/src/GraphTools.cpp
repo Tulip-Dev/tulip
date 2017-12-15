@@ -30,6 +30,7 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/Ordering.h>
 #include <tulip/PlanarConMap.h>
+#include <tulip/GraphParallelTools.h>
 
 #include <queue>
 #include <stack>
@@ -131,29 +132,23 @@ vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte, std::vector<e
 //======================================================================
 std::vector<node> computeGraphCenters(Graph *graph) {
   assert(ConnectedTest::isConnected(graph));
-  std::vector<unsigned int> dist;
+  tlp::NodeStaticProperty<unsigned int> dist(graph);
   unsigned int minD = UINT_MAX;
-  unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node> &nodes = graph->nodes();
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
+  OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
-    unsigned int maxD = maxDistance(graph, nodes[i], tmp, UNDIRECTED);
-    dist[i] = maxD;
-#ifdef _OPENMP
-#pragma omp critical(COMPUTE_MIN)
-#endif
-    minD = std::min(minD, maxD);
-  }
+    unsigned int maxD = maxDistance(graph, n, tmp, UNDIRECTED);
+    dist[n] = maxD;
+    OMP_CRITICAL_SECTION(COMPUTE_MIN) {
+      minD = std::min(minD, maxD);
+    }
+  });
 
   vector<node> result;
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    if (dist[i] == minD)
-      result.push_back(nodes[i]);
+  for (const node &n : graph->nodes()) {
+    if (dist[n] == minD)
+      result.push_back(n);
   }
 
   return result;
@@ -412,12 +407,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
   unsigned int nbNodes = nodes.size();
   unsigned int numClasses = nbNodes;
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
-    classes[nodes[i]] = i;
-  }
+  OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &n, unsigned int i) { classes[n] = i; });
 
   unsigned int maxCount = numClasses;
   unsigned int edgeCount = 0;
@@ -454,13 +444,10 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
       }
     }
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
-      if (classes[nodes[i]] == tgtClass)
-        classes[nodes[i]] = srcClass;
-    }
+    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
+      if (classes[n] == tgtClass)
+        classes[n] = srcClass;
+    });
 
     --numClasses;
   }

@@ -33,6 +33,7 @@ INSTALL(FILES
   tulip/GraphIterator.h
   tulip/GraphTest.h
   tulip/GraphMeasure.h
+  tulip/GraphParallelTools.h
   tulip/GraphProperty.h
   tulip/GraphTools.h
   tulip/ImportModule.h
@@ -51,6 +52,7 @@ INSTALL(FILES
   tulip/Ordering.h
   tulip/OuterPlanarTest.h
   tulip/ParametricCurves.h
+  tulip/ParallelTools.h
   tulip/PlanarConMap.h
   tulip/PlanarityTest.h
   tulip/Plugin.h

@@ -135,21 +135,6 @@ inline double log1p(double x) {
 #define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
 #endif
 
-#ifdef _OPENMP
-#include <omp.h>
-// _OPENMP is supposed to be defined as an integer
-//  representing the year/month of the supported version
-#if _OPENMP < 200805
-// only signed integer types are supported
-// for OpenMP < 3.0
-typedef long long OMP_ITER_TYPE;
-#else
-typedef size_t OMP_ITER_TYPE;
-#endif
-#else
-typedef size_t OMP_ITER_TYPE;
-#endif
-
 // WIN32 specific defines: dllimport and dllexport stuff
 #ifdef _WIN32
 #ifdef DLL_TULIP

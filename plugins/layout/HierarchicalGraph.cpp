@@ -62,7 +62,7 @@ public:
 //================================================================================
 void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   tlp::NodeStaticProperty<unsigned int> levels(sg);
-  dagLevel(graph, levels, pluginProgress);
+  dagLevel(graph, levels);
 
   for (const node &n : graph->nodes()) {
     unsigned int level = levels[n];

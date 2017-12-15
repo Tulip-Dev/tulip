@@ -21,6 +21,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/TlpTools.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -324,16 +325,13 @@ private:
     in.resize(nb_qnodes);
     tot.resize(nb_qnodes);
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nb_qnodes); i++) {
+    OMP_PARALLEL_MAP_INDICES(nb_qnodes, [&](unsigned int i) {
       n2c[i] = i;
       double wdg, nsl;
       get_weighted_degree_and_selfloops(i, wdg, nsl);
       in[i] = nsl;
       tot[i] = wdg;
-    }
+    });
   }
 };
 /*@}*/

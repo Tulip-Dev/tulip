@@ -20,6 +20,7 @@
 #define STATICPROPERTY_H
 
 #include <tulip/Graph.h>
+#include <tulip/GraphParallelTools.h>
 
 namespace tlp {
 template <typename TYPE>
@@ -54,13 +55,7 @@ public:
 
   // set all to same values
   void setAll(const TYPE &val) {
-    const std::vector<node> &nodes = graph->nodes();
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfNodes()); ++i) {
-      (*this)[nodes[i]] = val;
-    }
+    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) { (*this)[n] = val; });
   }
 
   // add a value for a newly created node
@@ -76,13 +71,7 @@ public:
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    const std::vector<node> &nodes = graph->nodes();
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfNodes()); ++i) {
-      (*this)[nodes[i]] = prop->getNodeValue(nodes[i]);
-    }
+    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) { (*this)[n] = prop->getNodeValue(n); });
   }
 
   // copy values into a typed typed instance of PropertyInterface
@@ -115,13 +104,13 @@ public:
   }
 
   // get the stored value of a edge
-  inline typename std::vector<TYPE>::const_reference getEdgeValue(edge n) const {
-    return std::vector<TYPE>::operator[](graph->edgePos(n));
+  inline typename std::vector<TYPE>::const_reference getEdgeValue(edge e) const {
+    return std::vector<TYPE>::operator[](graph->edgePos(e));
   }
 
   // set the stored value of a edge
-  inline void setEdgeValue(edge n, TYPE val) {
-    std::vector<TYPE>::operator[](graph->edgePos(n)) = val;
+  inline void setEdgeValue(edge e, TYPE val) {
+    std::vector<TYPE>::operator[](graph->edgePos(e)) = val;
   }
 
   inline typename std::vector<TYPE>::const_reference operator[](edge e) const {
@@ -133,35 +122,23 @@ public:
   }
 
   void setAll(const TYPE &val) {
-    const std::vector<edge> &edges = graph->edges();
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfEdges()); ++i) {
-      (*this)[edges[i]] = val;
-    }
+    OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) { (*this)[e] = val; });
   }
 
   // add a value for a newly created edge
-  void addEdgeValue(edge n, TYPE val) {
-    unsigned int nPos = graph->edgePos(n);
+  void addEdgeValue(edge e, TYPE val) {
+    unsigned int ePos = graph->edgePos(e);
 
-    if (nPos + 1 > this->size())
-      this->resize(nPos + 1);
+    if (ePos + 1 > this->size())
+      this->resize(ePos + 1);
 
-    setEdgeValue(n, val);
+    setEdgeValue(e, val);
   }
 
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    const std::vector<edge> &edges = graph->edges();
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(graph->numberOfEdges()); ++i) {
-      (*this)[edges[i]] = prop->getNodeValue(edges[i]);
-    }
+    OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) { (*this)[e] = prop->getNodeValue(e); });
   }
 
   // copy values into a typed typed instance of PropertyInterface

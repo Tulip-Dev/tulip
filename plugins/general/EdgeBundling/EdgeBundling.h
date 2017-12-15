@@ -60,7 +60,6 @@ public:
   bool run() override;
 
 private:
-  // tlp::DoubleProperty* computeWeights(tlp::Graph *);
   void fixEdgeType(tlp::IntegerProperty *);
   void computeDistances();
   void computeDistance(tlp::node);

@@ -18,6 +18,7 @@
  */
 #include <tulip/SizeProperty.h>
 #include <tulip/StringCollection.h>
+#include <tulip/GraphParallelTools.h>
 
 #include "FastOverlapRemoval.h"
 #include "generate-constraints.h"
@@ -127,19 +128,12 @@ bool FastOverlapRemoval::run() {
   vector<vpsc::Rectangle> nodeRectangles(nbNodes);
 
   for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
-// size initialization
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i)
-      size[nodes[i]] = viewSize->getNodeValue(nodes[i]) * passIndex / float(nbPasses);
-
-// actually apply fast overlap removal
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
-      node curNode = nodes[i];
+    // size initialization
+    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
+      size[n] = viewSize->getNodeValue(n) * passIndex / float(nbPasses);
+    });
+    // actually apply fast overlap removal
+    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &curNode, unsigned int i) {
       const Coord &pos = viewLayout->getNodeValue(curNode);
       const Size &sz = size[curNode];
       double curRot = viewRot->getNodeValue(curNode);
@@ -154,7 +148,7 @@ bool FastOverlapRemoval::run() {
       double minY = pos.getY() - rotSize.getH() / 2.0;
 
       nodeRectangles[i] = vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
-    }
+    });
 
     if (stringCollection.getCurrentString() == "X-Y") {
       removeRectangleOverlap(nbNodes,

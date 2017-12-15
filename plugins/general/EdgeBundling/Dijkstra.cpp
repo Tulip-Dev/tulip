@@ -20,6 +20,7 @@
 #include "Dijkstra.h"
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/ParallelTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -98,7 +99,6 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
     for (const edge &e : graph.star(u.n)) {
       node v = graph.opposite(e, u.n);
       DijkstraElement &dEle = *mapDik[v];
-      // assert(weights.get(edik2tlp[e]) > 0);
 
       if (fabs((u.dist + weights.get(edik2tlp[e])) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
@@ -165,10 +165,9 @@ void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
 
     resultEdges[e] = true;
     int dep = depth->getEdgeValue(edik2tlp[e]) + 1;
-#ifdef _OPENMP
-#pragma omp critical(DEPTH)
-#endif
-    depth->setEdgeValue(edik2tlp[e], dep);
+    OMP_CRITICAL_SECTION(DEPTH) {
+      depth->setEdgeValue(edik2tlp[e], dep);
+    }
     searchPaths(ndik2tlp[tgt], depth);
   }
 }

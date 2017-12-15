@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/ParametricCurves.h>
+#include <tulip/ParallelTools.h>
 #include <map>
 
 using namespace std;
@@ -145,30 +146,28 @@ static map<unsigned int, unsigned int> computedCoefficients;
 
 static void computeCoefficients(double t, unsigned int nbControlPoints) {
   double s = (1.0 - t);
-#ifdef _OPENMP
-#pragma omp critical
-#endif
+  OMP_CRITICAL_SECTION(computeCoefficients) {
+    if (tCoeffs.find(t) == tCoeffs.end()) {
+      vector<double> tCoeff, sCoeff;
 
-  if (tCoeffs.find(t) == tCoeffs.end()) {
-    vector<double> tCoeff, sCoeff;
-
-    for (size_t i = 0; i < nbControlPoints; ++i) {
-      tCoeff.push_back(pow(t, double(i)));
-      sCoeff.push_back(pow(s, double(i)));
-    }
-
-    tCoeffs[t] = tCoeff;
-    sCoeffs[t] = sCoeff;
-  } else {
-    vector<double> &tCoeff = tCoeffs[t];
-    vector<double> &sCoeff = sCoeffs[t];
-
-    if (tCoeff.size() < nbControlPoints) {
-      size_t oldSize = tCoeff.size();
-
-      for (size_t i = oldSize; i < nbControlPoints; ++i) {
+      for (size_t i = 0; i < nbControlPoints; ++i) {
         tCoeff.push_back(pow(t, double(i)));
         sCoeff.push_back(pow(s, double(i)));
+      }
+
+      tCoeffs[t] = tCoeff;
+      sCoeffs[t] = sCoeff;
+    } else {
+      vector<double> &tCoeff = tCoeffs[t];
+      vector<double> &sCoeff = sCoeffs[t];
+
+      if (tCoeff.size() < nbControlPoints) {
+        size_t oldSize = tCoeff.size();
+
+        for (size_t i = oldSize; i < nbControlPoints; ++i) {
+          tCoeff.push_back(pow(t, double(i)));
+          sCoeff.push_back(pow(s, double(i)));
+        }
       }
     }
   }
@@ -221,15 +220,10 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
   default:
     curvePoints.resize(nbCurvePoints);
     float h = 1.0 / float(nbCurvePoints - 1);
-// With Visual Studio, the parallelization of the curve points computation
-// leads to incorrect results (why? I don't know ...)
-#if defined(_OPENMP) && !defined(_MSC_VER)
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbCurvePoints); ++i) {
+    OMP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
-    }
+    });
   }
 }
 
@@ -371,13 +365,10 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 
   computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
   curvePoints.resize(nbCurvePoints);
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbCurvePoints); ++i) {
+  OMP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
     curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / float(nbCurvePoints - 1),
                                                 globalParameter, closedCurve, alpha);
-  }
+  });
 }
 
 static float clamp(float f, float minVal, float maxVal) {
@@ -447,12 +438,9 @@ void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<
                                      const unsigned int curveDegree,
                                      const unsigned int nbCurvePoints) {
   curvePoints.resize(nbCurvePoints);
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbCurvePoints); ++i) {
+  OMP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
     curvePoints[i] =
         computeOpenUniformBsplinePoint(controlPoints, i / float(nbCurvePoints - 1), curveDegree);
-  }
+  });
 }
 }

@@ -43,14 +43,14 @@ enum EDGE_TYPE { UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2 };
  * the shorted distance is set to 0.
  * see http://en.wikipedia.org/wiki/Average_path_length for more details
  */
-TLP_SCOPE double averagePathLength(const Graph *g, PluginProgress * = nullptr);
+TLP_SCOPE double averagePathLength(const Graph *g);
 /*
  * return the clustering coefficient of a graph
  * as the average of the local clustering coefficients
  * (see clusteringCoefficient function) of all the nodes.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details.
  */
-TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = nullptr);
+TLP_SCOPE double averageClusteringCoefficient(const Graph *);
 /*
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
@@ -60,8 +60,7 @@ TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = 
  * WARNING: this function is deprecated
  */
 TLP_SCOPE _DEPRECATED void clusteringCoefficient(const Graph *g, MutableContainer<double> &result,
-                                                 unsigned int maxDepth = 1,
-                                                 PluginProgress * = nullptr);
+                                                 unsigned int maxDepth = 1);
 /*
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
@@ -70,15 +69,14 @@ TLP_SCOPE _DEPRECATED void clusteringCoefficient(const Graph *g, MutableContaine
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
  */
 TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result,
-                                     unsigned int maxDepth = 1, PluginProgress * = nullptr);
+                                     unsigned int maxDepth = 1);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
  * the number of level used is minimal.
  * WARNING: this function is deprecated
  */
-TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level,
-                                    PluginProgress * = nullptr);
+TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level);
 /*
  * assign to each node of a graph its (in/ou/inout) degree.
  * The weighted degree of a node is the sum of weights of
@@ -99,8 +97,7 @@ TLP_SCOPE void degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
  *
  * Warning: the graph must be acyclic (no self loops).
  */
-TLP_SCOPE void dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level,
-                        PluginProgress * = nullptr);
+TLP_SCOPE void dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level);
 // return the maximum value of the degree of the graph's nodes
 TLP_SCOPE unsigned int maxDegree(const Graph *);
 // return the minimum value of the degree of the graph's nodes

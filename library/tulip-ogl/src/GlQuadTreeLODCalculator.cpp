@@ -30,6 +30,7 @@
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlSceneObserver.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 
@@ -326,37 +327,22 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
     size_t nbSimples = layerLODUnit->simpleEntitiesLODVector.size();
     size_t nbNodes = layerLODUnit->nodesLODVector.size();
     size_t nbEdges = layerLODUnit->edgesLODVector.size();
-#ifdef _OPENMP
-#pragma omp parallel
-#endif
-    {
-#ifdef _OPENMP
-#pragma omp sections nowait
-#endif
-      {
-#ifdef _OPENMP
-#pragma omp section
-#endif
-        {
+    OMP(parallel) {
+      OMP(sections nowait) {
+        OMP(section) {
           for (size_t i = 0; i < nbSimples; ++i) {
             entitiesQuadTree[quadTreesVectorPosition]->insert(
                 layerLODUnit->simpleEntitiesLODVector[i].boundingBox,
                 layerLODUnit->simpleEntitiesLODVector[i].entity);
           }
         }
-#ifdef _OPENMP
-#pragma omp section
-#endif
-        {
+        OMP(section) {
           for (size_t i = 0; i < nbNodes; ++i) {
             nodesQuadTree[quadTreesVectorPosition]->insert(
                 layerLODUnit->nodesLODVector[i].boundingBox, layerLODUnit->nodesLODVector[i].id);
           }
         }
-#ifdef _OPENMP
-#pragma omp section
-#endif
-        {
+        OMP(section) {
           for (size_t i = 0; i < nbEdges; ++i) {
             // This code is here to expand edge bonding box when we have an edge with direction
             // (0,0,x)
@@ -414,19 +400,10 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
   static GlNode glNode(0);
   static GlEdge glEdge(0);
 
-// Get result of quadtrees
-#ifdef _OPENMP
-#pragma omp parallel
-#endif
-  {
-#ifdef _OPENMP
-#pragma omp sections nowait
-#endif
-    {
-#ifdef _OPENMP
-#pragma omp section
-#endif
-      {
+  // Get result of quadtrees
+  OMP(parallel) {
+    OMP(sections nowait) {
+      OMP(section) {
         if ((renderingEntitiesFlag & RenderingNodes) != 0) {
           if (aX == 0 && aY == 0) {
             if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0) {
@@ -451,10 +428,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
           }
         }
       }
-#ifdef _OPENMP
-#pragma omp section
-#endif
-      {
+      OMP(section) {
         if ((renderingEntitiesFlag & RenderingEdges) != 0) {
           if (aX == 0 && aY == 0) {
             if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0) {
@@ -480,10 +454,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
         }
       }
     }
-#ifdef _OPENMP
-#pragma omp master
-#endif
-    {
+    OMP(master) {
       if ((renderingEntitiesFlag & RenderingSimpleEntities) != 0 &&
           entitiesQuadTree[quadTreesVectorPosition] != nullptr) {
         if (aX == 0 && aY == 0) {

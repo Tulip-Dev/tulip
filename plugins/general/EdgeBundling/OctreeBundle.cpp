@@ -266,10 +266,7 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
     size = siz;
 
   this->graph = graph;
-  //
-  //  size->scale(Coord(1000.,1000.,1000.));
-  //  layout->scale(Coord(1000.,1000.,1000.));
-  //  layout->center();
+
   BoundingBox bb = tlp::computeBoundingBox(graph, layout, size, rot);
 
   // change the bbbox to have a aspect ratio of 1

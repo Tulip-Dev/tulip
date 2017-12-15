@@ -25,6 +25,7 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlTools.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/ParallelTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -242,10 +243,7 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   vector<Coord> boxPoints;
   boxPoints.resize(steps * 4);
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (int i = 0; i < steps; ++i) {
+  OMP_PARALLEL_MAP_INDICES(steps, [&](unsigned int i) {
     float w = delta + i * delta;
     float x = -cos(w);
     float y = sin(w);
@@ -269,7 +267,7 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
     y = -sin(w);
     p = P4 + Coord(x, y) * Coord(radiusL, radiusH);
     boxPoints[3 * steps + i] = p;
-  }
+  });
 
   vector<Color> fillColors;
   vector<Color> outlineColors;

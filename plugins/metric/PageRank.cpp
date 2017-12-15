@@ -18,6 +18,7 @@
  */
 
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/GraphParallelTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -92,25 +93,19 @@ struct PageRank : public DoubleAlgorithm {
 
     for (unsigned int k = 0; k < kMax + 1; ++k) {
       if (directed) {
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-        for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
+        OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
           double n_sum = 0;
-          for (const node &n : graph->getInNodes(nodes[i]))
-            n_sum += pr.getNodeValue(n) / graph->outdeg(n);
-          next_pr[nodes[i]] = one_minus_d + d * n_sum;
-        }
+          for (const node &nin : graph->getInNodes(n))
+            n_sum += pr.getNodeValue(nin) / graph->outdeg(nin);
+          next_pr[n] = one_minus_d + d * n_sum;
+        });
       } else {
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-        for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
+        OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
           double n_sum = 0;
-          for (const node &n : graph->getInOutNodes(nodes[i]))
-            n_sum += pr.getNodeValue(n) / graph->deg(n);
-          next_pr[nodes[i]] = one_minus_d + d * n_sum;
-        }
+          for (const node &nin : graph->getInOutNodes(n))
+            n_sum += pr.getNodeValue(nin) / graph->deg(nin);
+          next_pr[n] = one_minus_d + d * n_sum;
+        });
       }
 
       // swap pr and next_pr

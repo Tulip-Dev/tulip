@@ -116,7 +116,6 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
 
   if ((input.size() == 0) && (cA - cC).norm() < (minSize / splitRatio)) {
     node n = graph->addNode();
-    //    resultNode.push_back(n);
     layout->setNodeValue(n, (cA + cC) / 2.0f);
     return;
   }
@@ -212,10 +211,7 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay,
 
   rot = graph->getProperty<DoubleProperty>("viewRotation");
   this->graph = graph;
-  //
-  //  size->scale(Coord(1000.,1000.,1000.));
-  //  layout->scale(Coord(1000.,1000.,1000.));
-  //  layout->center();
+
   BoundingBox bb = tlp::computeBoundingBox(graph, layout, size, rot);
 
   // change the bbbox to have a aspect ratio of 1

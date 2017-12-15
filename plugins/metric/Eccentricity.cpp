@@ -20,6 +20,7 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/StaticProperty.h>
 #include <tulip/GraphMeasure.h>
+#include <tulip/GraphParallelTools.h>
 
 #include "Eccentricity.h"
 
@@ -99,55 +100,33 @@ bool EccentricityMetric::run() {
     dataSet->get("directed", directed);
   }
 
-  const std::vector<node> &nodes = graph->nodes();
   NodeStaticProperty<double> res(graph);
-  //  omp_set_num_threads(4);
 
-  size_t nbNodes = nodes.size();
-#ifdef _OPENMP
-  int nbThreads = omp_get_num_procs();
-#else
-  unsigned int nbThreads = 1;
-#endif
-
-  //  double t1 = omp_get_wtime();
   double diameter = 1.0;
   bool stopfor = false;
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
+  OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &n, unsigned int i) {
     if (stopfor)
-      continue;
+      return;
 
-#ifdef _OPENMP
-    if (omp_get_thread_num() == 0) {
-#endif
-
-      if (pluginProgress->progress(i, graph->numberOfNodes() / nbThreads) != TLP_CONTINUE) {
-#ifdef _OPENMP
-#pragma omp critical(STOPFOR)
-#endif
-        stopfor = true;
+    if (OpenMPManager::getThreadNumber() == 0) {
+      if (pluginProgress->progress(i, graph->numberOfNodes() /
+                                          OpenMPManager::getNumberOfThreads()) != TLP_CONTINUE) {
+        OMP_CRITICAL_SECTION(STOPFOR) {
+          stopfor = true;
+        }
       }
-
-#ifdef _OPENMP
     }
 
-#endif
-    res[nodes[i]] = compute(nodes[i]);
+    res[n] = compute(n);
 
     if (!allPaths && norm)
-#ifdef _OPENMP
-#pragma omp critical(DIAMETER)
-#endif
-    {
-      if (diameter < res[nodes[i]])
-        diameter = res[nodes[i]];
-    }
-  }
+      OMP_CRITICAL_SECTION(DIAMETER) {
+        if (diameter < res[n])
+          diameter = res[n];
+      }
+  });
 
-  for (const node &n : nodes) {
+  for (const node &n : graph->nodes()) {
     if (!allPaths && norm)
       result->setNodeValue(n, res[n] / diameter);
     else

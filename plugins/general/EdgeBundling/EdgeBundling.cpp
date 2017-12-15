@@ -16,12 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef _OPENMP
-#include <omp.h>
-#define MAX_THREADS uint(omp_get_max_threads())
-#else
-#define MAX_THREADS 1
-#endif
 
 #include <tulip/TulipException.h>
 #include <tulip/GraphTools.h>
@@ -33,6 +27,7 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/Rectangle.h>
 #include <tulip/SimpleTest.h>
+#include <tulip/ParallelTools.h>
 
 #include "EdgeBundling.h"
 #include "QuadTree.h"
@@ -116,23 +111,6 @@ public:
 };
 DoubleProperty *SortNodes::dist = nullptr;
 //============================================
-/*DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
-  DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
-  for(const edge &e : graph->edges()) {
-    const pair<node, node>& ends = graph->ends(e);
-    const Coord& a = layout->getNodeValue(ends.first);
-    const Coord& b = layout->getNodeValue(ends.second);
-    double abNorm = (double) (a-b).norm();
-    double initialWeight = pow(abNorm, longEdges);
-
-    if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap)
-      initialWeight = abNorm;
-
-    weights->setEdgeValue(e, initialWeight );
-  }
-  return weights;
-  }*/
-//============================================
 void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
                   const vector<node> &nBends, bool layout3D) {
   if (nBends.size() < 3)
@@ -167,10 +145,9 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
       --i;
   }
 
-#ifdef _OPENMP
-#pragma omp critical(LAYOUT)
-#endif
-  layout->setEdgeValue(e, bends);
+  OMP_CRITICAL_SECTION(LAYOUT) {
+    layout->setEdgeValue(e, bends);
+  }
 }
 //============================================
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
@@ -197,10 +174,7 @@ void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
   set<node> focus;
 
   if (optimizatioLevel > 0) {
-#ifdef _OPENMP
-#pragma omp critical(FOCUS)
-#endif
-    {
+    OMP_CRITICAL_SECTION(FOCUS) {
       for (const node &ni : vertexCoverGraph->getInOutNodes(n))
         focus.insert(ni);
     }
@@ -260,17 +234,6 @@ bool EdgeBundling::run() {
     dataSet->get("layout", layout);
     dataSet->get("size", size);
   }
-
-#ifdef _OPENMP
-
-  if (maxThread == 0)
-    omp_set_num_threads(omp_get_num_procs());
-  else
-    omp_set_num_threads(maxThread);
-
-  omp_set_nested(true);
-  omp_set_dynamic(false);
-#endif
 
   string err;
   oriGraph = graph->addCloneSubGraph("Original Graph");
@@ -379,6 +342,12 @@ bool EdgeBundling::run() {
     }
   }
 
+  if (maxThread == 0) {
+    OpenMPManager::setNumberOfThreads(OpenMPManager::getNumberOfProcs());
+  } else {
+    OpenMPManager::setNumberOfThreads(maxThread);
+  }
+
   IntegerProperty ntype(graph);
   fixEdgeType(&ntype);
 
@@ -445,7 +414,6 @@ bool EdgeBundling::run() {
   //==========================================================
 
   IntegerProperty depth(graph);
-  // unsigned int nbDijkstraComputed = 0;
   DoubleProperty preference(gridGraph);
   preference.setAllNodeValue(0);
 
@@ -460,8 +428,8 @@ bool EdgeBundling::run() {
       depth.setAllEdgeValue(0);
     }
 
-    vertexCoverGraph = oriGraph->addCloneSubGraph(
-        "vertexCoverGraph"); // used for optimizing the vertex cover problem
+    // used for optimizing the vertex cover problem
+    vertexCoverGraph = oriGraph->addCloneSubGraph("vertexCoverGraph");
 
     MutableContainer<bool> edgeTreated;
     edgeTreated.setAll(false);
@@ -511,7 +479,8 @@ bool EdgeBundling::run() {
           if (addOk) {
             toTreatByThreads.push_back(n);
 
-            if ((optimizationLevel == 3) && (toTreatByThreads.size() < MAX_THREADS)) {
+            if ((optimizationLevel == 3) &&
+                (toTreatByThreads.size() < OpenMPManager::getNumberOfThreads())) {
               for (const node &tmp : vertexCoverGraph->getInOutNodes(n))
                 blockNodes.insert(tmp);
             }
@@ -522,7 +491,7 @@ bool EdgeBundling::run() {
           toDelete.push_back(n);
         }
 
-        if (toTreatByThreads.size() >= MAX_THREADS)
+        if (toTreatByThreads.size() >= OpenMPManager::getNumberOfThreads())
           break;
       }
 
@@ -536,12 +505,9 @@ bool EdgeBundling::run() {
 
       int nbThread = toTreatByThreads.size();
 
-      // nbDijkstraComputed += nbThread;
       if (iteration < MAX_ITER - 1) {
-#ifdef _OPENMP
-#pragma omp parallel for default(none) shared(nbThread, depth, toTreatByThreads, mWeights,         \
-                                              edgeTreated) schedule(dynamic, 1)
-#endif
+        OMP(parallel for default(none) shared(nbThread, depth, toTreatByThreads, mWeights, \
+                                              edgeTreated) schedule(dynamic, 1))
         for (int j = 0; j < nbThread; j++) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
@@ -557,11 +523,8 @@ bool EdgeBundling::run() {
 
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
-#ifdef _OPENMP
-#pragma omp critical(EDGETREATED)
-#endif
               // when we are not using coloration edge can be treated two times
-              {
+              OMP_CRITICAL_SECTION(EDGETREATED) {
                 if (edgeTreated.get(e.id))
                   stop = true;
 
@@ -577,10 +540,8 @@ bool EdgeBundling::run() {
           }
         }
       } else {
-#ifdef _OPENMP
-#pragma omp parallel for default(none) shared(nbThread, toTreatByThreads, mWeights, preference,    \
-                                              edgeTreated) schedule(dynamic, 1)
-#endif
+        OMP(parallel for default(none) shared(nbThread, toTreatByThreads, mWeights, \
+                                              preference, edgeTreated) schedule(dynamic, 1))
         for (int j = 0; j < nbThread; j++) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
@@ -594,11 +555,8 @@ bool EdgeBundling::run() {
           for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
-#ifdef _OPENMP
-#pragma omp critical(EDGETREATED)
-#endif
               // when we are not using colration edge can be treated two times
-              {
+              OMP_CRITICAL_SECTION(EDGETREATED) {
                 if (edgeTreated.get(e.id))
                   stop = true;
 
@@ -618,10 +576,10 @@ bool EdgeBundling::run() {
               // one with high preference)
               for (size_t ii = 0; ii < tmpV.size(); ++ii) {
                 double res = preference.getNodeValue(tmpV[ii]) + 1;
-#ifdef _OPENMP
-#pragma omp critical(PREF)
-#endif
-                preference.setNodeValue(tmpV[ii], res);
+
+                OMP_CRITICAL_SECTION(PREF) {
+                  preference.setNodeValue(tmpV[ii], res);
+                }
               }
 
               if (!layout3D)
@@ -706,6 +664,8 @@ bool EdgeBundling::run() {
     graph->delAllSubGraphs(oriGraph);
     graph->delAllSubGraphs(gridGraph);
   }
+
+  OpenMPManager::setNumberOfThreads(OpenMPManager::getNumberOfProcs());
 
   return true;
 }

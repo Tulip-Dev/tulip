@@ -167,10 +167,8 @@ double BubblePack::computeRelativePosition(tlp::node n,
         double bestRadius = FLT_MAX;
         int discret = ceil(2. * (sizeFather + radius) * M_PI) + 3;
         angle += M_PI / 3.;
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-        for (int j = 0; j < discret; ++j) {
+
+        OMP_PARALLEL_MAP_INDICES(discret, [&](unsigned int j) {
           float _angle = float(j) * 2. * M_PI / float(discret) + angle;
           double spiralRadius = sizeFather + radius + 1E-3;
           Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius);
@@ -192,16 +190,13 @@ double BubblePack::computeRelativePosition(tlp::node n,
             }
           }
 
-#ifdef _OPENMP
-#pragma omp critical(GOODCIRCLE)
-#endif
-          {
+          OMP_CRITICAL_SECTION(GOODCIRCLE) {
             if (spiralRadius < bestRadius) {
               bestRadius = spiralRadius;
               bestAngle = _angle;
             }
           }
-        }
+        });
 
         circles[index[i]][0] = bestRadius * cos(bestAngle);
         circles[index[i]][1] = bestRadius * sin(bestAngle);

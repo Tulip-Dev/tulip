@@ -22,6 +22,7 @@
 #include <tulip/Delaunay.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/StaticProperty.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 
@@ -49,12 +50,8 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
     if (simplicesSubGraphs) {
       for (size_t i = 0; i < simplices.size(); ++i) {
         vector<tlp::node> sNodes(simplices[i].size());
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-        for (OMP_ITER_TYPE j = 0; j < OMP_ITER_TYPE(simplices[i].size()); ++j) {
-          sNodes[j] = nodes[simplices[i][j]];
-        }
+        OMP_PARALLEL_MAP_INDICES(sNodes.size(),
+                                 [&](unsigned int j) { sNodes[j] = nodes[simplices[i][j]]; });
 
         ostringstream oss;
         oss << (simplices[i].size() == 3 ? "triangle " : "tetrahedron ") << i;

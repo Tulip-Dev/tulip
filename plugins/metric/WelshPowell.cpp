@@ -90,29 +90,22 @@ public:
     unsigned int nbNodes = nodes.size();
     std::vector<nodeInfo> nodesInfo(nbNodes);
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
-      node n = nodes[i];
+    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &n, unsigned int i) {
       nodeInfo &nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
-    }
+    });
 
     // sort the nodes in descending order of their degrees
     sort(nodesInfo.begin(), nodesInfo.end(), nodesInfoCmp());
     // build a map
     NodeStaticProperty<unsigned int> toNodesInfo(graph);
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-    for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
+    OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
       nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;
       toNodesInfo[nInfo.n] = i;
-    }
+    });
 
     int currentColor = 0;
     unsigned int numberOfColoredNodes = 0;

@@ -24,17 +24,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
-#ifdef _OPENMP
-#define THREAD_NUMBER omp_get_thread_num()
-static const size_t MAXNBTHREADS = 128;
-#else
-#define THREAD_NUMBER 0
-static const size_t MAXNBTHREADS = 1;
-#endif
+#include <tulip/ParallelTools.h>
 
 static const size_t BUFFOBJ = 20;
 
@@ -81,19 +72,19 @@ public:
 #endif
     assert(sizeof(TYPE) == sizeofObj); // to prevent inheritance with different size of object
     TYPE *t;
-    t = _memoryChunkManager.getObject(THREAD_NUMBER);
+    t = _memoryChunkManager.getObject(OpenMPManager::getThreadNumber());
     return t;
   }
 
   inline void operator delete(void *p) {
-    _memoryChunkManager.releaseObject(THREAD_NUMBER, p);
+    _memoryChunkManager.releaseObject(OpenMPManager::getThreadNumber(), p);
   }
 
 private:
   class MemoryChunkManager {
   public:
     ~MemoryChunkManager() {
-      for (unsigned int i = 0; i < MAXNBTHREADS; ++i) {
+      for (unsigned int i = 0; i < TLP_MAX_NB_THREADS; ++i) {
         for (size_t j = 0; j < _allocatedChunks[i].size(); ++j) {
           free(_allocatedChunks[i][j]);
         }
@@ -101,7 +92,8 @@ private:
     }
 
     TYPE *getObject(size_t threadId) {
-      TYPE *result;
+
+      TYPE *result = nullptr;
 
       if (_freeObject[threadId].empty()) {
         void *chunk = malloc(BUFFOBJ * sizeof(TYPE));
@@ -127,8 +119,8 @@ private:
     }
 
   private:
-    std::vector<void *> _allocatedChunks[MAXNBTHREADS];
-    std::vector<void *> _freeObject[MAXNBTHREADS];
+    std::vector<void *> _allocatedChunks[TLP_MAX_NB_THREADS];
+    std::vector<void *> _freeObject[TLP_MAX_NB_THREADS];
   };
 
   static MemoryChunkManager _memoryChunkManager;

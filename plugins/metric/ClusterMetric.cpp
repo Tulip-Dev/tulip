@@ -55,7 +55,7 @@ bool ClusterMetric::run() {
     dataSet->get("depth", maxDepth);
 
   tlp::NodeStaticProperty<double> clusters(graph);
-  clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
+  clusteringCoefficient(graph, clusters, maxDepth);
   clusters.copyToProperty(result);
 
   const std::vector<edge> &edges = graph->edges();

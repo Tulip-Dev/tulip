@@ -29,7 +29,7 @@ DagLevelMetric::~DagLevelMetric() {}
 //======================================================
 bool DagLevelMetric::run() {
   NodeStaticProperty<unsigned int> level(graph);
-  dagLevel(graph, level, pluginProgress);
+  dagLevel(graph, level);
   level.copyToProperty(result);
 
   return true;

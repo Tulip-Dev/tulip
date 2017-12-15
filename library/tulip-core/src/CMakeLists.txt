@@ -35,6 +35,7 @@ Observable.cpp
 Ordering.cpp
 OuterPlanarTest.cpp
 ParametricCurves.cpp
+ParallelTools.cpp
 PlanarConMap.cpp
 PlanarityTest.cpp
 PlanarityTestEmbed.cpp
