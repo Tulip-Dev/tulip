@@ -146,7 +146,7 @@ double tlp::averagePathLength(const Graph *graph, PluginProgress *pluginProgress
       if (j == i)
         continue;
 
-      unsigned int d = distance[i];
+      unsigned int d = distance[j];
 
       if (d != UINT_MAX) {
 #ifdef _OPENMP
