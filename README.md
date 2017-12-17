@@ -101,9 +101,9 @@ depending on your system configuration.
 The following dependencies are required to build Tulip:
 
   * [CMake](https://cmake.org) >= 2.8.12
-  * [GCC](https://gcc.gnu.org/) >= 4.8.1,
-  [Clang](https://clang.llvm.org/) or 
-  [Microsoft Visual Studio](https://www.visualstudio.com/)
+  * A [C++11](https://en.wikipedia.org/wiki/C%2B%2B11) compiler : [GCC](https://gcc.gnu.org/) >= 4.8.1,
+  [Clang](https://clang.llvm.org/) >= 3.3 or 
+  [Microsoft Visual Studio](https://www.visualstudio.com/) >= 2013
   * [FreeType](https://www.freetype.org) 
   * [zlib](http://zlib.net)
   * [libjpeg](https://libjpeg-turbo.org/)
