@@ -123,19 +123,14 @@ bool FastOverlapRemoval::run() {
 
   size_t nbNodes = graph->numberOfNodes();
   const std::vector<node> &nodes = graph->nodes();
-  NodeStaticProperty<tlp::Size> size(graph);
 
   vector<vpsc::Rectangle> nodeRectangles(nbNodes);
 
   for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
-    // size initialization
-    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
-      size[n] = viewSize->getNodeValue(n) * passIndex / float(nbPasses);
-    });
-    // actually apply fast overlap removal
+    // initialization
     OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &curNode, unsigned int i) {
+      Size sz = viewSize->getNodeValue(curNode) * passIndex / float(nbPasses);
       const Coord &pos = viewLayout->getNodeValue(curNode);
-      const Size &sz = size[curNode];
       double curRot = viewRot->getNodeValue(curNode);
       Size rotSize = Size(sz.getW() * fabs(cos(curRot * M_PI / 180.0)) +
                               sz.getH() * fabs(sin(curRot * M_PI / 180.0)),
@@ -150,30 +145,13 @@ bool FastOverlapRemoval::run() {
       nodeRectangles[i] = vpsc::Rectangle(minX, maxX, minY, maxY, xBorder, yBorder);
     });
 
+    // actually apply fast overlap removal
     if (stringCollection.getCurrentString() == "X-Y") {
-      removeRectangleOverlap(nbNodes,
-#if defined(__APPLE__)
-                             &(nodeRectangles[0]),
-#else
-                             nodeRectangles.data(),
-#endif
-                             xBorder, yBorder);
+      removeRectangleOverlap(nbNodes, nodeRectangles.data(), xBorder, yBorder);
     } else if (stringCollection.getCurrentString() == "X") {
-      removeRectangleOverlapX(nbNodes,
-#if defined(__APPLE__)
-                              &(nodeRectangles[0]),
-#else
-                              nodeRectangles.data(),
-#endif
-                              xBorder, yBorder);
+      removeRectangleOverlapX(nbNodes, nodeRectangles.data(), xBorder, yBorder);
     } else {
-      removeRectangleOverlapY(nbNodes,
-#if defined(__APPLE__)
-                              &(nodeRectangles[0]),
-#else
-                              nodeRectangles.data(),
-#endif
-                              yBorder);
+      removeRectangleOverlapY(nbNodes, nodeRectangles.data(), yBorder);
     }
 
     for (unsigned int i = 0; i < nbNodes; ++i) {
