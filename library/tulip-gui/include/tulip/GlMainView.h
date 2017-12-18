@@ -167,7 +167,6 @@ protected slots:
   virtual void sceneRectChanged(const QRectF &);
   void setQuickAccessBarVisible(bool);
   void fillContextMenu(QMenu *menu, const QPointF &) override;
-  void delayedCenterView();
 
 protected:
   void setupWidget() override;

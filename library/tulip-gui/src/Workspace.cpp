@@ -23,6 +23,7 @@
 #include <QGraphicsView>
 #include <QGraphicsEffect>
 #include <QGraphicsSceneDragDropEvent>
+#include <QTimer>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 
@@ -188,6 +189,9 @@ int Workspace::addPanel(tlp::View *view) {
   // Force the first panel's graph combo box update when underlaying model has been updated.
   panel->viewGraphSet(view->graph());
   setFocusedPanel(panel);
+  // Slightly delay view content centering as the panel widget
+  // can take some time to get correctly resized in the workspace
+  QTimer::singleShot(100, view, SLOT(centerView()));
   return _panels.size() - 1;
 }
 

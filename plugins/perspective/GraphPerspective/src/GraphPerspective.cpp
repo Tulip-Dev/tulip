@@ -310,7 +310,8 @@ bool GraphPerspective::terminated() {
 
   if (_graphs->needsSaving() || mainWindow()->isWindowModified()) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    QString message("The project has been modified (loaded graphs or Python files opened in the IDE).\nDo you want to save your changes?");
+    QString message("The project has been modified (loaded graphs or Python files opened in the "
+                    "IDE).\nDo you want to save your changes?");
 #else
     QString message("The project has been modified.\nDo you want to save your changes?");
 #endif
@@ -1545,17 +1546,15 @@ void GraphPerspective::showStartPanels(Graph *g) {
   // so hide it if needed
   _ui->workspace->hideExposeMode();
   View *firstPanel = nullptr;
-  View *secondPanel = nullptr;
 
   foreach (const QString &panelName, QStringList() << "Spreadsheet view"
                                                    << "Node Link Diagram view") {
     View *view =
         PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
 
-    if (firstPanel == nullptr)
+    if (firstPanel == nullptr) {
       firstPanel = view;
-    else
-      secondPanel = view;
+    }
 
     view->setupUi();
     view->setGraph(g);
@@ -1565,7 +1564,6 @@ void GraphPerspective::showStartPanels(Graph *g) {
 
   _ui->workspace->setActivePanel(firstPanel);
   _ui->workspace->switchToSplitMode();
-  secondPanel->centerView(false);
 }
 
 void GraphPerspective::applyRandomLayout(Graph *g) {
