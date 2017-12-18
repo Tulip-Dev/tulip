@@ -20,8 +20,6 @@
 
 #include <iostream>
 
-using namespace tlp;
-
 CPPUNIT_TEST_SUITE_REGISTRATION(FaceIteratorTest);
 
 //============================================================
@@ -65,12 +63,12 @@ void FaceIteratorTest::tearDown() {
 
 //============================================================
 void FaceIteratorTest::testNodeFaceIterator() {
-  Iterator<Face> *itf = map->getFaces();
+  tlp::Iterator<tlp::Face> *itf = map->getFaces();
 
   while (itf->hasNext()) {
-    Face f = itf->next();
+    tlp::Face f = itf->next();
     unsigned int i = 0;
-    Iterator<node> *it = map->getFaceNodes(f);
+    tlp::Iterator<tlp::node> *it = map->getFaceNodes(f);
 
     while (it->hasNext()) {
       it->next();
@@ -87,7 +85,7 @@ void FaceIteratorTest::testNodeFaceIterator() {
 //============================================================
 void FaceIteratorTest::testFaceAdjIterator() {
   unsigned int i = 0;
-  Iterator<Face> *it = map->getFacesAdj(nodes[4]);
+  tlp::Iterator<tlp::Face> *it = map->getFacesAdj(nodes[4]);
 
   while (it->hasNext()) {
     it->next();
