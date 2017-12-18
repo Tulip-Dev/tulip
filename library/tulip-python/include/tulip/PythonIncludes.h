@@ -71,7 +71,7 @@ static const sipAPIDef *getSipAPI() {
 #ifdef TULIP_SIP
   return static_cast<const sipAPIDef *>(PyCapsule_Import("tulipsip._C_API", 0));
 #else
-  return static_cast<const sipAPIDef *>(PyCapsule_Import("sip._C_API", 0);
+  return static_cast<const sipAPIDef *>(PyCapsule_Import("sip._C_API", 0));
 #endif
 #else
   PyObject *sip_module;
