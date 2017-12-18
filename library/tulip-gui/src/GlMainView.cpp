@@ -186,13 +186,6 @@ GlMainWidget *GlMainView::getGlMainWidget() const {
 }
 
 void GlMainView::centerView(bool graphChanged) {
-  if (QApplication::activeWindow() == NULL) {
-    // the view may not have the correct size
-    // if the call occurs before the first window activation
-    // so we ensure it happens when everything is ok
-    QTimer::singleShot(100, this, SLOT(delayedCenterView()));
-    return;
-  }
 
   float gvWidth = graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width
@@ -201,10 +194,6 @@ void GlMainView::centerView(bool graphChanged) {
 
   if (_overviewItem && _overviewItem->isVisible())
     drawOverview(graphChanged);
-}
-
-void GlMainView::delayedCenterView() {
-  centerView();
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {

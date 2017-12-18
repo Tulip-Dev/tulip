@@ -1550,17 +1550,15 @@ void GraphPerspective::showStartPanels(Graph *g) {
   // so hide it if needed
   _ui->workspace->hideExposeMode();
   View *firstPanel = NULL;
-  View *secondPanel = NULL;
 
   foreach (const QString &panelName, QStringList() << "Spreadsheet view"
                                                    << "Node Link Diagram view") {
     View *view =
         PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
 
-    if (firstPanel == NULL)
+    if (firstPanel == NULL) {
       firstPanel = view;
-    else
-      secondPanel = view;
+    }
 
     view->setupUi();
     view->setGraph(g);
@@ -1570,7 +1568,6 @@ void GraphPerspective::showStartPanels(Graph *g) {
 
   _ui->workspace->setActivePanel(firstPanel);
   _ui->workspace->switchToSplitMode();
-  secondPanel->centerView(false);
 }
 
 void GraphPerspective::applyRandomLayout(Graph *g) {

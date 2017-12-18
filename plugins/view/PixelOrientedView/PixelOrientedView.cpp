@@ -851,7 +851,7 @@ void PixelOrientedView::applySettings() {
                                     (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 4.f));
 
       mainLayer->addGlEntity(detailViewLabel, "dimension label");
-      delayedCenterView();
+      centerView();
     }
   }
 }
