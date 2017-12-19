@@ -20,6 +20,7 @@
 #ifndef TULIP_ITERATOR_H
 #define TULIP_ITERATOR_H
 
+#include <cassert>
 #include <list>
 #include <set>
 #include <tuple>
@@ -94,55 +95,66 @@ struct Iterator {
   * @return bool Whether there are more elements to iterate.
   **/
   virtual bool hasNext() = 0;
+
+private:
+  // glue code in order to use Tulip iterators with C++11 for range based loops
+  struct iterator_t {
+
+    enum IteratorStatus { Begin = 0, Finished = 1, End = 3 };
+
+    IteratorStatus _iteratorStatus;
+    Iterator<T> *_it;
+
+    iterator_t(Iterator<T> *it, IteratorStatus iteratorStatus = End)
+    : _iteratorStatus(iteratorStatus), _it(it) {
+      if ((_iteratorStatus == Begin) && (_it->hasNext() == false)) {
+	_iteratorStatus = Finished;
+      }
+    }
+
+    ~iterator_t() {
+      if (_iteratorStatus != End) {
+	delete _it;
+      }
+    }
+
+    inline bool operator!=(const iterator_t &it) const {
+      return ((_iteratorStatus & it._iteratorStatus) == 0) || (_it != it._it);
+    }
+
+    inline const iterator_t &operator++() {
+      if (!_it->hasNext())
+	_iteratorStatus = Finished;
+      return *this;
+    }
+
+    inline T operator*() const {
+      assert(_iteratorStatus != Finished);
+      return _it->next();
+    }
+  };
+
+public:
+  inline iterator_t begin() {
+    return iterator_t(this, iterator_t::Begin);
+  }
+
+  inline iterator_t end() {
+    return iterator_t(this);
+  }
 };
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-// glue code in order to use Tulip iterators with C++11 for range based loops
+// as Iterator is only accessible through pointer
+// we must have a specific definition of begin and end
 template <typename T>
-class iterator_t {
-public:
-  enum IteratorType { Begin = 0, End = 1 };
-
-  iterator_t(Iterator<T> *it, IteratorType iteratorType = End)
-      : _finished(true), _iteratorType(iteratorType), _it(it) {
-    if (_iteratorType == Begin) {
-      _finished = !_it->hasNext();
-    }
-  }
-
-  ~iterator_t() {
-    if (_iteratorType == Begin) {
-      delete _it;
-    }
-  }
-
-  inline bool operator!=(const iterator_t &it) const {
-    return _finished != it._finished;
-  }
-
-  inline const iterator_t &operator++() {
-    _finished = !_it->hasNext();
-    return *this;
-  }
-
-  inline T operator*() const {
-    return _it->next();
-  }
-
-protected:
-  bool _finished;
-  IteratorType _iteratorType;
-  Iterator<T> *_it;
-};
-
-template <typename T>
-inline iterator_t<T> begin(Iterator<T> *it) {
-  return iterator_t<T>(it, iterator_t<T>::Begin);
+inline auto begin(Iterator<T> *it) -> decltype(it->begin()) {
+  return it->begin();
 }
 
 template <typename T>
-inline iterator_t<T> end(Iterator<T> *it) {
-  return iterator_t<T>(it);
+inline auto end(Iterator<T> *it) -> decltype(it->end()) {
+  return it->end();
 }
 #endif
 
