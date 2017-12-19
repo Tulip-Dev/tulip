@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-
+#include <tulip/ForEach.h>
 #include <tulip/TulipException.h>
 #include <tulip/GraphTools.h>
 #include <tulip/DrawingTools.h>
@@ -518,7 +518,10 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
+	  // warning: the forEach loop below is needed as a workaround to a
+	  // VS 2013 compilation failure when using a range-based for loop
+	  edge e;
+          forEach (e, vertexCoverGraph->getInOutEdges(n)) {
             node n2 = graph->opposite(e, n);
 
             if (optimizationLevel < 3 || forceEdgeTest) {
@@ -552,7 +555,10 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
+	  // warning: the forEach loop below is needed as a workaround to a
+	  // VS 2013 compilation failure when using a range-based for loop
+	  edge e;
+	  forEach (e, vertexCoverGraph->getInOutEdges(n)) {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
               // when we are not using colration edge can be treated two times
