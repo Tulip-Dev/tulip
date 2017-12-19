@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/ForEach.h>
+
 #include <tulip/TulipException.h>
 #include <tulip/GraphTools.h>
 #include <tulip/DrawingTools.h>
@@ -503,12 +503,11 @@ bool EdgeBundling::run() {
 
       forceEdgeTest = false;
 
-      int nbThread = toTreatByThreads.size();
+      int nbThreads = toTreatByThreads.size();
 
       if (iteration < MAX_ITER - 1) {
-        OMP(parallel for default(none) shared(nbThread, depth, toTreatByThreads, mWeights, \
-                                              edgeTreated) schedule(dynamic, 1))
-        for (int j = 0; j < nbThread; j++) {
+        OMP(parallel for schedule(dynamic, 1))
+        for (int j = 0; j < nbThreads; ++j) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
 
@@ -518,10 +517,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-	  // warning: the forEach loop below is needed as a workaround to a
-	  // VS 2013 compilation failure when using a range-based for loop
-	  edge e;
-          forEach (e, vertexCoverGraph->getInOutEdges(n)) {
+          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
             node n2 = graph->opposite(e, n);
 
             if (optimizationLevel < 3 || forceEdgeTest) {
@@ -543,9 +539,8 @@ bool EdgeBundling::run() {
           }
         }
       } else {
-        OMP(parallel for default(none) shared(nbThread, toTreatByThreads, mWeights, \
-                                              preference, edgeTreated) schedule(dynamic, 1))
-        for (int j = 0; j < nbThread; j++) {
+        OMP(parallel for schedule(dynamic, 1))
+        for (int j = 0; j < nbThreads; ++j) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
 
@@ -555,10 +550,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-	  // warning: the forEach loop below is needed as a workaround to a
-	  // VS 2013 compilation failure when using a range-based for loop
-	  edge e;
-	  forEach (e, vertexCoverGraph->getInOutEdges(n)) {
+          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
               // when we are not using colration edge can be treated two times
