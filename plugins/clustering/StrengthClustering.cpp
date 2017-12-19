@@ -19,6 +19,8 @@
 
 #include "StrengthClustering.h"
 
+#include <tulip/StableIterator.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -29,10 +31,7 @@ StrengthClustering::~StrengthClustering() {}
 //==============================================================================
 double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Graph *sg) {
 
-  vector<unsigned int> nbIntraEdges(partition.size());
-
-  for (unsigned int i = 0; i < partition.size(); ++i)
-    nbIntraEdges[i] = 0;
+  vector<unsigned int> nbIntraEdges(partition.size(), 0);
 
   map<pair<unsigned int, unsigned int>, unsigned int> nbExtraEdges;
 

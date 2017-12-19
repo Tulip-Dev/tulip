@@ -121,6 +121,14 @@ public:
     return std::vector<TYPE>::operator[](graph->edgePos(e));
   }
 
+  _DEPRECATED inline typename std::vector<TYPE>::const_reference operator[](unsigned i) const {
+    return std::vector<TYPE>::operator[](i);
+  }
+
+  _DEPRECATED inline typename std::vector<TYPE>::reference operator[](unsigned i) {
+    return std::vector<TYPE>::operator[](i);
+  }
+
   void setAll(const TYPE &val) {
     OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) { (*this)[e] = val; });
   }

@@ -22,9 +22,16 @@
 #include <cctype>
 
 #include <tulip/ImportModule.h>
-#include <tulip/TulipPluginHeaders.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/StableIterator.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/BooleanProperty.h>
 
 #include <QXmlStreamReader>
 #include <QFile>
