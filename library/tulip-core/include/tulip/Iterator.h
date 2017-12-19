@@ -106,15 +106,15 @@ private:
     Iterator<T> *_it;
 
     iterator_t(Iterator<T> *it, IteratorStatus iteratorStatus = End)
-    : _iteratorStatus(iteratorStatus), _it(it) {
+        : _iteratorStatus(iteratorStatus), _it(it) {
       if ((_iteratorStatus == Begin) && (_it->hasNext() == false)) {
-	_iteratorStatus = Finished;
+        _iteratorStatus = Finished;
       }
     }
 
     ~iterator_t() {
       if (_iteratorStatus != End) {
-	delete _it;
+        delete _it;
       }
     }
 
@@ -124,7 +124,7 @@ private:
 
     inline const iterator_t &operator++() {
       if (!_it->hasNext())
-	_iteratorStatus = Finished;
+        _iteratorStatus = Finished;
       return *this;
     }
 
