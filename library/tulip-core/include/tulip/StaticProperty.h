@@ -53,6 +53,14 @@ public:
     return std::vector<TYPE>::operator[](graph->nodePos(n));
   }
 
+  _DEPRECATED typename std::vector<TYPE>::const_reference operator[](unsigned i) const {
+    return std::vector<TYPE>::operator[](i);
+  }
+
+  _DEPRECATED typename std::vector<TYPE>::reference operator[](unsigned i) {
+    return std::vector<TYPE>::operator[](i);
+  }
+
   // set all to same values
   void setAll(const TYPE &val) {
     OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) { (*this)[n] = val; });
@@ -121,11 +129,11 @@ public:
     return std::vector<TYPE>::operator[](graph->edgePos(e));
   }
 
-  _DEPRECATED inline typename std::vector<TYPE>::const_reference operator[](unsigned i) const {
+  _DEPRECATED typename std::vector<TYPE>::const_reference operator[](unsigned i) const {
     return std::vector<TYPE>::operator[](i);
   }
 
-  _DEPRECATED inline typename std::vector<TYPE>::reference operator[](unsigned i) {
+  _DEPRECATED typename std::vector<TYPE>::reference operator[](unsigned i) {
     return std::vector<TYPE>::operator[](i);
   }
 
