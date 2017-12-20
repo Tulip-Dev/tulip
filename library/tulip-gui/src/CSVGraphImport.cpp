@@ -587,7 +587,7 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
           size_t first = token.find_first_not_of(" \t\f\v");
 
           if (first != string::npos) {
-	    char closeChar = '\0';
+            char closeChar = '\0';
             // get the openChar and
             // the possible closeChar
             switch (token[first]) {

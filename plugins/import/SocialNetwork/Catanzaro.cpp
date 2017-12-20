@@ -34,8 +34,7 @@ static const char *paramHelp[] = {
     "Number of nodes added at each time step.",
 
     // p
-    "p defines the probality a new node is wired to an existing one"\
-};
+    "p defines the probality a new node is wired to an existing one"};
 
 /**
  *

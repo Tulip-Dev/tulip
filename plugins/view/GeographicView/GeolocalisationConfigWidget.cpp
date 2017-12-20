@@ -1,4 +1,4 @@
-﻿/**
+/**
  *
  * This file is part of Tulip (http://tulip.labri.fr)
  *
