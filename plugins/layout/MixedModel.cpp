@@ -415,7 +415,7 @@ void MixedModel::placeNodesEdges() {
         result->setEdgeValue(e, bends);
     }
 
-    // rs == rt, même partition donc pas de points intermédiaire �  calculer
+    // rs == rt, même partition donc pas de points intermédiaire à  calculer
     // en cas de post-processing, il faudra pe y changer
   }
 
@@ -472,7 +472,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
     node nl = node(), nr = node();
 
     if (k != 0) {
-      // ordonné les arcs "in"
+      // ordonne les arcs "in"
       unsigned int i;
 
       for (i = 0; !nl.isValid() && (i < C.size() - 1); ++i) {
@@ -729,7 +729,6 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       outl[v] = out_l;
       outr[v] = out_r;
 
-      //
       if (nbOut >= 1) {
         Coord c;
 
@@ -831,7 +830,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
         EdgesOUT[v][s - (i + 1)] = listOfEdgesOUT[i];
     }
 
-    // mise �  jour du contour
+    // mise à jour du contour
     if (k == 0)
       C = V[0];
     else {
@@ -887,8 +886,7 @@ void MixedModel::computeCoords() {
 
     unsigned int p = V[k].size(); // taille de la partition Vk
     node cl = leftV(k),
-         cr = rightV(
-             k); // recherche du left et right de Vk, qui l�  est cherché �  l'aide de EdgesIN
+         cr = rightV(k); // recherche du left et right de Vk, qui est cherché à l'aide de EdgesIN
 
     vector<node>::iterator il = find(C.begin(), C.end(), cl);
     assert(il != C.end());
