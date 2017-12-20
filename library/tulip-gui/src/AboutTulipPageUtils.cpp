@@ -19,7 +19,7 @@ QString getTulipGitRevision() {
   if (gitCommitFile.open(QFile::ReadOnly | QFile::Text)) {
     QTextStream in(&gitCommitFile);
     in.setCodec("UTF-8");
-    return in.readAll();
+    return in.readAll().replace("\n", "");
   }
   return "";
 }
