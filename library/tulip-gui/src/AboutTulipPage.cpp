@@ -52,7 +52,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
   QString git_rev(getTulipGitRevision());
 
   if (!git_rev.isEmpty())
-    title += "<br/>(Git rev. " + git_rev.mid(0, 7) + ")";
+    title += "<br/>(Git commit: <a href=\"" + TulipRepoUrl + "/commit/" + git_rev + "\">" +
+             git_rev.mid(0, 7) + "</a>)";
 
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
   _ui->TulipLabel->setText(
