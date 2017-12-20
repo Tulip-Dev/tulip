@@ -455,7 +455,7 @@ void MixedModel::placeNodesEdges() {
         result->setEdgeValue(e, bends);
     }
 
-    // rs == rt, même partition donc pas de points intermédiaire �  calculer
+    // rs == rt, mÃªme partition donc pas de points intermÃ©diaire Ã  calculer
     // en cas de post-processing, il faudra pe y changer
   }
 
@@ -495,7 +495,7 @@ void MixedModel::initPartition() {
 }
 
 //====================================================
-void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc double
+void MixedModel::assignInOutPoints() { // on considÃ¨re qu'il n'y a pas d'arc double
   assert(carte);
   vector<node> C; // chemin courant
 
@@ -514,7 +514,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
     node nl = node(), nr = node();
 
     if (k != 0) {
-      // ordonné les arcs "in"
+      // ordonnÃ© les arcs "in"
       unsigned int i;
 
       for (i = 0; !nl.isValid() && (i < C.size() - 1); ++i) {
@@ -689,7 +689,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       int outMoins = (0 >= outPlus ? 0 : outPlus);
 
       if (dtmp != float(outPlus))
-        ++outPlus; // valeur entière supérieure
+        ++outPlus; // valeur entiÃ¨re supÃ©rieure
 
       if (nbIn >= 2) {
         dl = 1;
@@ -702,7 +702,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
         out_r = outPlus;
       } else { // cas nbIn == 1
         if (k == 0) {
-          if (i == 0) { // (Z0,Z1), existe forcément par définition
+          if (i == 0) { // (Z0,Z1), existe forcÃ©ment par dÃ©finition
             dl = 0;
             dr = 1;
             out_l = outPlus;
@@ -877,7 +877,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
         EdgesOUT[v][s - (i + 1)] = listOfEdgesOUT[i];
     }
 
-    // mise �  jour du contour
+    // mise Ã  jour du contour
     if (k == 0)
       C = V[0];
     else {
@@ -904,7 +904,7 @@ void MixedModel::computeCoords() {
 
   delete itn;
 
-  map<node, node> father; // permet de connaître le noeud de référence
+  map<node, node> father; // permet de connaÃ®tre le noeud de rÃ©fÃ©rence
   father.clear();
   assert(!V.empty());
 
@@ -938,11 +938,11 @@ void MixedModel::computeCoords() {
     unsigned int p = V[k].size(); // taille de la partition Vk
     node cl = leftV(k),
          cr = rightV(
-             k); // recherche du left et right de Vk, qui l�  est cherché �  l'aide de EdgesIN
+             k); // recherche du left et right de Vk, qui lÃ  est cherchÃ© Ã  l'aide de EdgesIN
 
     vector<node>::iterator il = find(C.begin(), C.end(), cl);
     assert(il != C.end());
-    vector<node>::iterator ir = find(il, C.end(), cr); // par définition, il<ir
+    vector<node>::iterator ir = find(il, C.end(), cr); // par dÃ©finition, il<ir
     assert(ir != C.end());
     Coord co = nodeSize.get((*il).id);
     float max_y = NodeCoords[(*il)].getY() + co.getY() / 2.f;
