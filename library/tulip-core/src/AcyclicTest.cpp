@@ -19,7 +19,6 @@
 #include <stack>
 #include <tulip/Graph.h>
 #include <tulip/AcyclicTest.h>
-#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,9 +44,16 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   if (AcyclicTest::isAcyclic(graph))
     return;
 
+  std::vector<edge> edgesToDel;
   // replace self loops by three edges and two nodes.
-  for (const edge &e : stableIterator(graph->getEdges())) {
-    const pair<node, node> &eEnds = graph->ends(e);
+  // do a loop on the already existing edges
+  auto edges = graph->edges();
+  // newly added edges during the loop
+  // will not be taken into account
+  unsigned int nbEdges = edges.size();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
+    edge e = edges[i];
+    const pair<node, node> eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();
@@ -55,9 +61,11 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
       selfLoops.push_back(tlp::SelfLoops(n1, n2, graph->addEdge(eEnds.first, n1),
                                          graph->addEdge(n1, n2), graph->addEdge(eEnds.first, n2),
                                          e));
-      graph->delEdge(e);
+      edgesToDel.push_back(e);
     }
   }
+  if (!edgesToDel.empty())
+    graph->delEdges(edgesToDel);
 
   // find obstruction edges
   reversed.clear();
