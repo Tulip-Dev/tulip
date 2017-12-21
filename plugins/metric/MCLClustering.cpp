@@ -311,8 +311,9 @@ bool MCLClustering::run() {
   g.reserveNodes(nbNodes);
 
   // add nodes to g
-  for (const node &n : graph->nodes())
-    g.reserveAdj(nodeMapping[n] = g.addNode(), 2 * graph->deg(n) + 1);
+  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+    g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(n) + 1);
+  });
 
   for (const edge &e : graph->edges()) {
     std::pair<node, node> eEnds = graph->ends(e);

@@ -161,11 +161,7 @@ private:
     neigh_weight[neigh_pos[0]] = 0;
     neigh_last = 1;
 
-    const std::vector<edge> &edges = quotient->star(node(n));
-    unsigned int nb_edges = edges.size();
-
-    for (unsigned int j = 0; j < nb_edges; ++j) {
-      edge e = edges[j];
+    for (auto e : quotient->star(node(n))) {
       std::pair<node, node> ends = quotient->ends(e);
       unsigned int neigh = (ends.first == node(n)) ? ends.second : ends.first;
       unsigned int neigh_comm = n2c[neigh];
@@ -198,17 +194,14 @@ private:
         renumber[i] = final++;
 
     // update clustering
-    for (const node &n : graph->nodes())
-      (*clusters)[n] = renumber[n2c[(*clusters)[n]]];
+    OMP_PARALLEL_MAP_INDICES(
+        nb_nodes, [&](unsigned int i) { (*clusters)[i] = renumber[n2c[(*clusters)[i]]]; });
 
     // Compute weighted graph
     new_quotient->addNodes(final);
 
     total_weight = 0;
-    const std::vector<edge> &edges = quotient->edges();
-
-    for (std::vector<edge>::const_iterator it = edges.begin(); it != edges.end(); ++it) {
-      edge e = *it;
+    for (auto e : quotient->edges()) {
       std::pair<node, node> ends = quotient->ends(e);
       node src = ends.first;
       node tgt = ends.second;
@@ -373,10 +366,7 @@ bool LouvainClustering::run() {
 
   clusters = new NodeStaticProperty<int>(graph);
 
-  int i = 0;
-  for (const node &n : graph->nodes()) {
-    (*clusters)[n] = i++;
-  }
+  OMP_PARALLEL_MAP_INDICES(nb_nodes, [&](unsigned int i) { (*clusters)[i] = i; });
 
   weights = new EdgeProperty<double>();
   quotient->alloc(*weights);
@@ -439,9 +429,9 @@ bool LouvainClustering::run() {
           renumber[i] = final++;
 
       // then set measure values
-      for (const node &n : graph->nodes()) {
-        result->setNodeValue(n, renumber[n2c[(*clusters)[n]]]);
-      }
+      MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+        result->setNodeValue(n, renumber[n2c[(*clusters)[i]]]);
+      });
 
       delete quotient;
       delete weights;

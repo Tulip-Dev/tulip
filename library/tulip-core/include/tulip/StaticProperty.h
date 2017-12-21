@@ -35,35 +35,35 @@ public:
     this->resize(graph->numberOfNodes());
   }
 
+  inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
+    return std::vector<TYPE>::operator[](i);
+  }
+
+  inline typename std::vector<TYPE>::reference operator[](unsigned int i) {
+    return std::vector<TYPE>::operator[](i);
+  }
+
+  inline typename std::vector<TYPE>::const_reference operator[](node n) const {
+    return (*this)[graph->nodePos(n)];
+  }
+
+  inline typename std::vector<TYPE>::reference operator[](node n) {
+    return (*this)[graph->nodePos(n)];
+  }
+
   // get the stored value of a node
   inline typename std::vector<TYPE>::const_reference getNodeValue(node n) const {
-    return std::vector<TYPE>::operator[](graph->nodePos(n));
+    return (*this)[n];
   }
 
   // set the stored value of a node
   inline void setNodeValue(node n, TYPE val) {
-    std::vector<TYPE>::operator[](graph->nodePos(n)) = val;
-  }
-
-  inline typename std::vector<TYPE>::const_reference operator[](node n) const {
-    return std::vector<TYPE>::operator[][graph->nodePos(n)];
-  }
-
-  inline typename std::vector<TYPE>::reference operator[](node n) {
-    return std::vector<TYPE>::operator[](graph->nodePos(n));
-  }
-
-  _DEPRECATED typename std::vector<TYPE>::const_reference operator[](unsigned i) const {
-    return std::vector<TYPE>::operator[](i);
-  }
-
-  _DEPRECATED typename std::vector<TYPE>::reference operator[](unsigned i) {
-    return std::vector<TYPE>::operator[](i);
+    (*this)[n] = val;
   }
 
   // set all to same values
   void setAll(const TYPE &val) {
-    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) { (*this)[n] = val; });
+    OMP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created node
@@ -73,20 +73,24 @@ public:
     if (nPos + 1 > this->size())
       this->resize(nPos + 1);
 
-    setNodeValue(n, val);
+    (*this)[nPos] = val;
   }
 
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) { (*this)[n] = prop->getNodeValue(n); });
+    OMP_PARALLEL_MAP_NODES_AND_INDICES(
+        graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
   }
 
   // copy values into a typed typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyToProperty(PROP_PTR prop) {
-    for (const node &n : graph->nodes())
-      prop->setNodeValue(n, (*this)[n]);
+    const std::vector<node> &nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
+
+    for (unsigned int i = 0; i < nbNodes; ++i)
+      prop->setNodeValue(nodes[i], (*this)[i]);
   }
 };
 
@@ -111,34 +115,34 @@ public:
     this->resize(graph->numberOfEdges());
   }
 
+  inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
+    return std::vector<TYPE>::operator[](i);
+  }
+
+  inline typename std::vector<TYPE>::reference operator[](unsigned int i) {
+    return std::vector<TYPE>::operator[](i);
+  }
+
+  inline typename std::vector<TYPE>::const_reference operator[](edge e) const {
+    return (*this)[graph->edgePos(e)];
+  }
+
+  inline typename std::vector<TYPE>::reference operator[](edge e) {
+    return (*this)[graph->edgePos(e)];
+  }
+
   // get the stored value of a edge
   inline typename std::vector<TYPE>::const_reference getEdgeValue(edge e) const {
-    return std::vector<TYPE>::operator[](graph->edgePos(e));
+    return (*this)[e];
   }
 
   // set the stored value of a edge
   inline void setEdgeValue(edge e, TYPE val) {
-    std::vector<TYPE>::operator[](graph->edgePos(e)) = val;
-  }
-
-  inline typename std::vector<TYPE>::const_reference operator[](edge e) const {
-    return std::vector<TYPE>::operator[](graph->edgePos(e));
-  }
-
-  inline typename std::vector<TYPE>::reference operator[](edge e) {
-    return std::vector<TYPE>::operator[](graph->edgePos(e));
-  }
-
-  _DEPRECATED typename std::vector<TYPE>::const_reference operator[](unsigned i) const {
-    return std::vector<TYPE>::operator[](i);
-  }
-
-  _DEPRECATED typename std::vector<TYPE>::reference operator[](unsigned i) {
-    return std::vector<TYPE>::operator[](i);
+    (*this)[e] = val;
   }
 
   void setAll(const TYPE &val) {
-    OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) { (*this)[e] = val; });
+    OMP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created edge
@@ -148,20 +152,24 @@ public:
     if (ePos + 1 > this->size())
       this->resize(ePos + 1);
 
-    setEdgeValue(e, val);
+    (*this)[ePos] = val;
   }
 
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) { (*this)[e] = prop->getNodeValue(e); });
+    OMP_PARALLEL_MAP_EDGES_AND_INDICES(
+        graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
   }
 
-  // copy values into a typed typed instance of PropertyInterface
+  // copy values into a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyToProperty(PROP_PTR prop) {
-    for (const edge &e : graph->edges())
-      prop->setEdgeValue(e, (*this)[e]);
+    const std::vector<edge> &edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+
+    for (unsigned int i = 0; i < nbEdges; ++i)
+      prop->setEdgeValue(edges[i], (*this)[i]);
   }
 };
 

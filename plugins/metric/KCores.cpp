@@ -122,9 +122,9 @@ bool KCores::run() {
   // the number of non deleted nodes
   unsigned int nbNodes = nodes.size();
 
-  for (const node &n : graph->nodes()) {
-    k = std::min(k, nodeK[n]);
-    nodeDeleted[n] = false;
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    k = std::min(k, nodeK[i]);
+    nodeDeleted[i] = false;
   }
 
   bool noEdgeCheck = (graph == graph->getRoot());
@@ -138,14 +138,15 @@ bool KCores::run() {
       modify = false;
 
       // finally set the values
-      for (const node &n : graph->nodes()) {
+      for (unsigned int i = 0; i < nodes.size(); ++i) {
         // nothing to do if the node
         // is already deleted
-        if (nodeDeleted[n])
+        if (nodeDeleted[i])
           continue;
 
-        double &nK = nodeK[n];
+        double &nK = nodeK[i];
         double current_k = nK;
+        node n = nodes[i];
 
         if (current_k <= k) {
           nK = k;
@@ -177,15 +178,17 @@ bool KCores::run() {
                 m = (ends.first == n) ? ends.second : ends.first;
               }
 
-              if (nodeDeleted[m])
+              unsigned int mPos = graph->nodePos(m);
+
+              if (nodeDeleted[mPos])
                 continue;
 
-              nodeK[m] -= metric ? metric->getEdgeDoubleValue(ee) : 1;
+              nodeK[mPos] -= metric ? metric->getEdgeDoubleValue(ee) : 1;
             }
           }
 
           // mark node as deleted
-          nodeDeleted[n] = true;
+          nodeDeleted[i] = true;
           --nbNodes;
           modify = true;
         } else if (current_k < next_k)

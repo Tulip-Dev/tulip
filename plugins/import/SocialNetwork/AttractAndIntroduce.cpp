@@ -70,15 +70,15 @@ public:
   }
 
   bool importGraph() override {
-    unsigned int n = 750;
-    unsigned int e = 3150;
+    unsigned int nbNodes = 750;
+    unsigned int nbEdges = 3150;
 
     double alpha = 0.9;
     double beta = 0.3;
 
     if (dataSet != nullptr) {
-      dataSet->get("nodes", n);
-      dataSet->get("edges", e);
+      dataSet->get("nodes", nbNodes);
+      dataSet->get("edges", nbEdges);
       dataSet->get("alpha", alpha);
       dataSet->get("beta", beta);
     }
@@ -95,30 +95,17 @@ public:
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
-    unsigned int iterations = e + n;
+    unsigned int iterations = nbNodes + nbEdges;
 
-    graph->addNodes(n);
-    graph->reserveEdges(e);
+    graph->addNodes(nbNodes);
+    graph->reserveEdges(nbEdges);
 
     NodeStaticProperty<double> pAttractProperty(graph);
     NodeStaticProperty<double> pIntroduceProperty(graph);
 
-    double pIAttract, pIIntroduce;
-
-    unsigned int i = 0;
-    for (const node &n : graph->nodes()) {
-      if ((1 - alpha) > randomDouble(1.0))
-        pIAttract = 0;
-      else
-        pIAttract = randomDouble(1.0);
-
-      if (beta > randomDouble(1.0))
-        pIIntroduce = 1;
-      else
-        pIIntroduce = 0;
-
-      pAttractProperty[n] = pIAttract;
-      pIntroduceProperty[n] = pIIntroduce;
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      pAttractProperty[i] = ((1 - alpha) > randomDouble(1.0)) ? 0 : randomDouble(1.0);
+      pIntroduceProperty[i] = (beta > randomDouble(1.0)) ? 1 : 0;
 
       if (i++ % 1000 == 0) {
         if (pluginProgress->progress(i, iterations) != TLP_CONTINUE)
@@ -127,37 +114,41 @@ public:
     }
 
     unsigned int tmpE = 0;
+    const vector<node> &nodes = graph->nodes();
 
-    while (tmpE < e) {
-      node n = graph->getRandomNode();
-      node n2;
+    while (tmpE < nbEdges) {
+      unsigned int i = randomInteger(nbNodes - 1);
+      unsigned int j;
 
       do {
-        n2 = graph->getRandomNode();
-      } while (n == n2);
+        j = randomInteger(nbNodes - 1);
+      } while (i == j);
 
-      if (pAttractProperty[n2] > randomDouble(1.0)) {
+      node nj = nodes[j];
 
-        if (pIntroduceProperty[n] > randomDouble(1.0)) {
-          for (const node &fd : graph->getInOutNodes(n)) {
-            if (fd == n2 || graph->hasEdge(fd, n2, false))
+      if (pAttractProperty[j] > randomDouble(1.0)) {
+        node ni = nodes[i];
+
+        if (pIntroduceProperty[i] > randomDouble(1.0)) {
+          for (const node &fd : graph->getInOutNodes(ni)) {
+            if (fd == nj || graph->hasEdge(fd, nj, false))
               continue;
 
-            if (pAttractProperty[n2] > randomDouble(1.0)) {
-              graph->addEdge(fd, n2);
+            if (pAttractProperty[j] > randomDouble(1.0)) {
+              graph->addEdge(fd, nj);
               ++tmpE;
               continue;
             }
 
             if (pAttractProperty[fd] > randomDouble(1.0)) {
-              graph->addEdge(n2, fd);
+              graph->addEdge(nj, fd);
               ++tmpE;
             }
           }
         }
 
-        if (!graph->hasEdge(n, n2, false)) {
-          graph->addEdge(n, n2);
+        if (!graph->hasEdge(ni, nj, false)) {
+          graph->addEdge(ni, nj);
           ++tmpE;
         }
 

@@ -53,12 +53,11 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {}
 //====================================================================
-double EccentricityMetric::compute(const node &n) {
+double EccentricityMetric::compute(unsigned int nPos) {
 
   NodeStaticProperty<unsigned int> distance(graph);
   distance.setAll(0);
-  double val = directed ? tlp::maxDistance(graph, n, distance, DIRECTED)
-                        : tlp::maxDistance(graph, n, distance, UNDIRECTED);
+  double val = tlp::maxDistance(graph, nPos, distance, directed ? DIRECTED : UNDIRECTED);
 
   if (!allPaths)
     return val;
@@ -67,13 +66,13 @@ double EccentricityMetric::compute(const node &n) {
   val = 0.;
   unsigned int nbNodes = graph->numberOfNodes();
 
-  for (const node &n2 : graph->nodes()) {
-    unsigned int d = distance[n];
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    unsigned int d = distance[i];
 
     if (d < nbNodes) {
       nbAcc += 1.;
 
-      if (n2 != n)
+      if (i != nPos)
         val += d;
     }
   }
@@ -101,37 +100,38 @@ bool EccentricityMetric::run() {
   }
 
   NodeStaticProperty<double> res(graph);
+  unsigned int nbNodes = graph->numberOfNodes();
 
   double diameter = 1.0;
   bool stopfor = false;
-  OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &n, unsigned int i) {
+  OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
     if (stopfor)
       return;
 
     if (OpenMPManager::getThreadNumber() == 0) {
-      if (pluginProgress->progress(i, graph->numberOfNodes() /
-                                          OpenMPManager::getNumberOfThreads()) != TLP_CONTINUE) {
+      if (pluginProgress->progress(i, nbNodes / OpenMPManager::getNumberOfThreads()) !=
+          TLP_CONTINUE) {
         OMP_CRITICAL_SECTION(STOPFOR) {
           stopfor = true;
         }
       }
     }
 
-    res[n] = compute(n);
+    res[i] = compute(i);
 
     if (!allPaths && norm)
       OMP_CRITICAL_SECTION(DIAMETER) {
-        if (diameter < res[n])
-          diameter = res[n];
+        if (diameter < res[i])
+          diameter = res[i];
       }
   });
 
-  for (const node &n : graph->nodes()) {
+  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
     if (!allPaths && norm)
-      result->setNodeValue(n, res[n] / diameter);
+      result->setNodeValue(n, res[i] / diameter);
     else
-      result->setNodeValue(n, res[n]);
-  }
+      result->setNodeValue(n, res[i]);
+  });
 
   if (!allPaths && norm)
     dataSet->set("Graph Diameter", diameter);

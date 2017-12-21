@@ -134,21 +134,27 @@ std::vector<node> computeGraphCenters(Graph *graph) {
   assert(ConnectedTest::isConnected(graph));
   tlp::NodeStaticProperty<unsigned int> dist(graph);
   unsigned int minD = UINT_MAX;
+  const std::vector<node> &nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  unsigned int minPos = 0;
 
-  OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
+  OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
-    unsigned int maxD = maxDistance(graph, n, tmp, UNDIRECTED);
-    dist[n] = maxD;
+    unsigned int maxD = tlp::maxDistance(graph, i, tmp, UNDIRECTED);
+    dist[i] = maxD;
     OMP_CRITICAL_SECTION(COMPUTE_MIN) {
-      minD = std::min(minD, maxD);
+      if (minD > maxD) {
+        minD = maxD;
+        minPos = i;
+      }
     }
   });
 
   vector<node> result;
 
-  for (const node &n : graph->nodes()) {
-    if (dist[n] == minD)
-      result.push_back(n);
+  for (unsigned int i = minPos; i < nbNodes; ++i) {
+    if (dist[i] == minD)
+      result.push_back(nodes[i]);
   }
 
   return result;
@@ -157,17 +163,18 @@ std::vector<node> computeGraphCenters(Graph *graph) {
 node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
 
-  if (graph->numberOfNodes() == 0)
+  unsigned int nbNodes = graph->numberOfNodes();
+
+  if (nbNodes == 0)
     return node();
 
+  const vector<node> &nodes = graph->nodes();
   tlp::NodeStaticProperty<bool> toTreat(graph);
   toTreat.setAll(true);
   tlp::NodeStaticProperty<unsigned int> dist(graph);
-  unsigned int i = 0;
-  node n = graph->getOneNode();
-  node result = graph->getOneNode();
+  unsigned int i = 0, n = 0, result = 0;
   unsigned int cDist = UINT_MAX - 2;
-  unsigned int nbTry = 2 + sqrt(graph->numberOfNodes());
+  unsigned int nbTry = 2 + sqrt(nbNodes);
   unsigned int maxTries = nbTry;
 
   while (nbTry) {
@@ -191,7 +198,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
       } else {
         unsigned int delta = di - cDist;
 
-        for (const node &v : graph->nodes())
+        for (unsigned int v = 0; v < nbNodes; v++)
           if (dist[v] < delta)
             // all the nodes at distance less than delta can't be center
             toTreat[v] = false;
@@ -199,7 +206,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
 
       unsigned int nextMax = 0;
 
-      for (const node &v : graph->nodes()) {
+      for (unsigned int v = 0; v < nbNodes; v++) {
         if (dist[v] > (di / 2 + di % 2))
           toTreat[v] = false;
         else {
@@ -222,7 +229,7 @@ node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress) {
     pluginProgress->progress(100, 100);
   }
 
-  return result;
+  return nodes[result];
 }
 //======================================================================
 void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
@@ -230,15 +237,19 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
   list<node> fifo;
 
   NodeStaticProperty<bool> nodeFlag(graph);
+  const std::vector<node> &nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
 
   unsigned int nbSelectedNodes = selectionProperty->numberOfNonDefaultValuatedNodes();
 
   // get previously selected nodes
   if (nbSelectedNodes) {
-    for (const node &n : graph->nodes()) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = nodes[i];
+
       if (selectionProperty->getNodeValue(n)) {
         fifo.push_back(n);
-        nodeFlag[n] = true;
+        nodeFlag[i] = true;
       }
     }
   } else {
@@ -264,9 +275,10 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
       fifo.pop_front();
       for (const edge &adjit : graph->getOutEdges(n1)) {
         node tgt = graph->target(adjit);
+        unsigned int tgtPos = graph->nodePos(tgt);
 
-        if (!nodeFlag[tgt]) {
-          nodeFlag[tgt] = true;
+        if (!nodeFlag[tgtPos]) {
+          nodeFlag[tgtPos] = true;
           ++nbSelectedNodes;
           fifo.push_back(tgt);
         } else
@@ -292,9 +304,10 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
     bool degZ = false;
     node goodNode = graph->getOneNode();
 
-    for (const node &n : graph->nodes()) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = nodes[i];
 
-      if (!nodeFlag[n]) {
+      if (!nodeFlag[i]) {
         if (!ok) {
           goodNode = n;
           ok = true;
@@ -302,7 +315,7 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
 
         if (graph->indeg(n) == 0) {
           fifo.push_back(n);
-          nodeFlag[n] = true;
+          nodeFlag[i] = true;
           ++nbSelectedNodes;
           degZ = true;
         }
@@ -382,7 +395,7 @@ void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress
 struct ltEdge {
   NumericProperty *m;
   ltEdge(NumericProperty *metric) : m(metric) {}
-  bool operator()(const edge &e1, const edge &e2) const {
+  bool operator()(const edge e1, const edge e2) const {
     return (m->getEdgeDoubleValue(e1) < m->getEdgeDoubleValue(e2));
   }
 };
@@ -397,7 +410,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
 
   const vector<node> &nodes = graph->nodes();
 
-  for (unsigned i = 0; i < nodes.size(); ++i)
+  for (unsigned int i = 0; i < nodes.size(); ++i)
     selection->setNodeValue(nodes[i], true);
 
   selection->setAllEdgeValue(false);
@@ -407,7 +420,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
   unsigned int nbNodes = nodes.size();
   unsigned int numClasses = nbNodes;
 
-  OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &n, unsigned int i) { classes[n] = i; });
+  OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) { classes[i] = i; });
 
   unsigned int maxCount = numClasses;
   unsigned int edgeCount = 0;
@@ -425,8 +438,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
     for (; iE < nbEdges; ++iE) {
       curEnds = graph->ends(cur = sortedEdges[iE]);
 
-      if ((srcClass = classes.getNodeValue(curEnds.first)) !=
-          (tgtClass = classes.getNodeValue(curEnds.second)))
+      if ((srcClass = classes[curEnds.first]) != (tgtClass = classes[curEnds.second]))
         break;
     }
 
@@ -444,9 +456,9 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
       }
     }
 
-    OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
-      if (classes[n] == tgtClass)
-        classes[n] = srcClass;
+    OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
+      if (classes[i] == tgtClass)
+        classes[i] = srcClass;
     });
 
     --numClasses;
@@ -523,11 +535,8 @@ std::vector<node> bfs(const Graph *graph, node root) {
 void bfs(const Graph *graph, std::vector<tlp::node> &visitedNodes) {
   MutableContainer<bool> visited;
   visited.setAll(false);
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    bfs(graph, nodes[i], visitedNodes, visited);
+  for (const node n : graph->nodes()) {
+    bfs(graph, n, visitedNodes, visited);
   }
 }
 //======================================================================

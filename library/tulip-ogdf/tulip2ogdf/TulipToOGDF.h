@@ -48,7 +48,6 @@ class SizeProperty;
 class TLP_OGDF_SCOPE TulipToOGDF {
 public:
   TulipToOGDF(tlp::Graph *g, bool importEdgeBends = true);
-  ~TulipToOGDF();
 
   void saveToGML(const char *fileName);
 
@@ -56,23 +55,23 @@ public:
   ogdf::GraphAttributes &getOGDFGraphAttr();
   ogdf::Graph &getOGDFGraph();
 
-  ogdf::node getOGDFGraphNode(const tlp::node &nTlp);
-  ogdf::edge getOGDFGraphEdge(const tlp::edge &eTlp);
+  ogdf::node getOGDFGraphNode(unsigned int nodeIndex);
+  ogdf::edge getOGDFGraphEdge(unsigned int edgeIndex);
 
-  tlp::Coord getNodeCoordFromOGDFGraphAttr(const tlp::node &nTlp);
+  tlp::Coord getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex);
 
   void copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *);
   void copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *);
   void copyTlpNodeSizeToOGDF(tlp::SizeProperty *);
 
-  vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(const tlp::edge &eTlp);
+  vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);
 
 private:
   tlp::Graph *tulipGraph;
+  tlp::NodeStaticProperty<ogdf::node> ogdfNodes;
+  tlp::EdgeStaticProperty<ogdf::edge> ogdfEdges;
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
-  tlp::NodeStaticProperty<ogdf::node> *ogdfNodes;
-  tlp::EdgeStaticProperty<ogdf::edge> *ogdfEdges;
 };
 
 #endif /* !TULIPTOOGDF_H_ */

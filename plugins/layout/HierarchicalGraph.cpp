@@ -64,15 +64,15 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   tlp::NodeStaticProperty<unsigned int> levels(sg);
   dagLevel(graph, levels);
 
-  for (const node &n : graph->nodes()) {
-    unsigned int level = levels[n];
+  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+    unsigned int level = levels[i];
 
     if (level >= grid.size())
       grid.resize(level + 1);
 
     embedding->setNodeValue(n, grid[level].size());
     grid[level].push_back(n);
-  }
+  });
 }
 //================================================================================
 inline unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n, bool directed) {
@@ -187,8 +187,8 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
 
-  for (vector<edge>::const_iterator it = reversedEdges.begin(); it != reversedEdges.end(); ++it)
-    isReversed.set((*it).id, true);
+  for (auto e : reversedEdges)
+    isReversed.set(e.id, true);
 
   for (TLP_HASH_MAP<edge, edge>::const_iterator it = replacedEdges.begin();
        it != replacedEdges.end(); ++it) {
