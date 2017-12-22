@@ -1,3 +1,8 @@
+MACRO(UNIT_PLUGINS_TEST)
+  UNIT_TEST(${ARGV0} ${ARGN})
+  ADD_DEPENDENCIES(${ARGV0} ${TULIP_PLUGIN_TARGETS})
+ENDMACRO(UNIT_PLUGINS_TEST)
+
 SET(TULIP_PLUGINS_TESTS_SRCS
   BasicPluginsTest.cpp
   BasicMetricTest.cpp
@@ -9,9 +14,9 @@ SET_SOURCE_FILES_PROPERTIES(pluginstest.cpp pluginsloadingtest.cpp
 
 ADD_CUSTOM_TARGET(copy_data ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data VERBATIM)
 
-UNIT_TEST(TulipPluginsTestSuite ${TULIP_PLUGINS_TESTS_SRCS})
+UNIT_PLUGINS_TEST(TulipPluginsTestSuite ${TULIP_PLUGINS_TESTS_SRCS})
 SET_TESTS_PROPERTIES(TulipPluginsTestSuite PROPERTIES DEPENDS copy_data)
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
-UNIT_TEST(TulipPluginsLoadingTest pluginsloadingtest.cpp)
+UNIT_PLUGINS_TEST(TulipPluginsLoadingTest pluginsloadingtest.cpp)
 TARGET_LINK_LIBRARIES(TulipPluginsLoadingTest ${QT_LIBRARIES})
