@@ -74,7 +74,6 @@ TLPBExport.cpp
 TLPBImport.cpp
 TulipFontAwesome.cpp
 TulipMaterialDesignIcons.cpp
-StaticProperty.cpp
 )
 
 # disable GCC var tracking on that file as it eats too much compile time

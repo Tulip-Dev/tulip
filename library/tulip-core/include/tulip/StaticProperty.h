@@ -94,14 +94,76 @@ public:
   }
 };
 
-// vector<bool> does not support // update
-// so do an iterative specialization
 template <>
-template <typename PROP_PTR>
-void NodeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
-  for (const node &n : graph->nodes())
-    (*this)[n] = prop->getNodeValue(n);
-}
+class NodeStaticProperty<bool> : public std::vector<unsigned char> {
+  const Graph *graph;
+
+public:
+  // constructor
+  NodeStaticProperty(const Graph *g) : graph(g) {
+    assert(g);
+    // set the vector size to the number of graph nodes
+    this->resize(graph->numberOfNodes());
+  }
+
+  inline bool operator[](unsigned int i) const {
+    return static_cast<bool>(std::vector<unsigned char>::operator[](i));
+  }
+
+  inline std::vector<unsigned char>::reference operator[](unsigned int i) {
+    return std::vector<unsigned char>::operator[](i);
+  }
+
+  inline bool operator[](node n) const {
+    return (*this)[graph->nodePos(n)];
+  }
+
+  inline std::vector<unsigned char>::reference operator[](node n) {
+    return (*this)[graph->nodePos(n)];
+  }
+
+  // get the stored value of a node
+  inline bool getNodeValue(node n) const {
+    return (*this)[graph->nodePos(n)];
+  }
+
+  // set the stored value of a node
+  inline void setNodeValue(node n, bool val) {
+    (*this)[graph->nodePos(n)] = val;
+  }
+
+  // set all to same values
+  void setAll(const bool &val) {
+    OMP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
+  }
+
+  // add a value for a newly created node
+  void addNodeValue(node n, bool val) {
+    unsigned int nPos = graph->nodePos(n);
+
+    if (nPos + 1 > this->size())
+      this->resize(nPos + 1);
+
+    (*this)[nPos] = val;
+  }
+
+  // get values from a typed instance of PropertyInterface
+  template <typename PROP_PTR>
+  void copyFromProperty(PROP_PTR prop) {
+    OMP_PARALLEL_MAP_NODES_AND_INDICES(
+        graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
+  }
+
+  // copy values into a typed instance of PropertyInterface
+  template <typename PROP_PTR>
+  void copyToProperty(PROP_PTR prop) {
+    const std::vector<node> &nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
+
+    for (unsigned int i = 0; i < nbNodes; ++i)
+      prop->setNodeValue(nodes[i], (*this)[i]);
+  }
+};
 
 template <typename TYPE>
 class EdgeStaticProperty : public std::vector<TYPE> {
@@ -173,14 +235,76 @@ public:
   }
 };
 
-// vector<bool> does not support // update
-// so do an iterative specialization
 template <>
-template <typename PROP_PTR>
-void EdgeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
-  for (const edge &e : graph->edges())
-    (*this)[e] = prop->getEdgeValue(e);
-}
+class EdgeStaticProperty<bool> : public std::vector<unsigned char> {
+  const Graph *graph;
+
+public:
+  // constructor
+  EdgeStaticProperty(const Graph *g) : graph(g) {
+    assert(g);
+    // set the vector size to the number of graph edges
+    this->resize(graph->numberOfEdges());
+  }
+
+  inline bool operator[](unsigned int i) const {
+    return static_cast<bool>(std::vector<unsigned char>::operator[](i));
+  }
+
+  inline std::vector<unsigned char>::reference operator[](unsigned int i) {
+    return std::vector<unsigned char>::operator[](i);
+  }
+
+  inline bool operator[](edge e) const {
+    return (*this)[graph->edgePos(e)];
+  }
+
+  inline std::vector<unsigned char>::reference operator[](edge e) {
+    return (*this)[graph->edgePos(e)];
+  }
+
+  // get the stored value of a edge
+  inline bool getEdgeValue(edge e) const {
+    return (*this)[graph->edgePos(e)];
+  }
+
+  // set the stored value of a edge
+  inline void setEdgeValue(edge e, bool val) {
+    (*this)[graph->edgePos(e)] = val;
+  }
+
+  // set all to same values
+  void setAll(const bool &val) {
+    OMP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
+  }
+
+  // add a value for a newly created edge
+  void addEdgeValue(edge e, bool val) {
+    unsigned int ePos = graph->edgePos(e);
+
+    if (ePos + 1 > this->size())
+      this->resize(ePos + 1);
+
+    (*this)[ePos] = val;
+  }
+
+  // get values from a typed instance of PropertyInterface
+  template <typename PROP_PTR>
+  void copyFromProperty(PROP_PTR prop) {
+    OMP_PARALLEL_MAP_EDGES_AND_INDICES(
+        graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
+  }
+
+  // copy values into a typed instance of PropertyInterface
+  template <typename PROP_PTR>
+  void copyToProperty(PROP_PTR prop) {
+    const std::vector<edge> &edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+
+    for (unsigned int i = 0; i < nbEdges; ++i)
+      prop->setEdgeValue(edges[i], (*this)[i]);
+  }
+};
 }
 
 #endif
