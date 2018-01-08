@@ -72,9 +72,8 @@ struct PluginLoaderToProgress : public PluginLoader {
   int max_step;
   int step;
 
-  PluginLoaderToProgress(PluginProgress* progress = nullptr,
-			 bool debug_output = false)
-    : _progress(progress), _debug_output(debug_output), max_step(0), step(0) {}
+  PluginLoaderToProgress(PluginProgress *progress = nullptr, bool debug_output = false)
+      : _progress(progress), _debug_output(debug_output), max_step(0), step(0) {}
 
   void start(const std::string &path) override {
     step = 0;
@@ -87,12 +86,11 @@ struct PluginLoaderToProgress : public PluginLoader {
     if (state) {
       _progress->setComment("Plugins successfully loaded");
       if (_debug_output)
-	tlp::debug() << "Plugins successfully loaded" << std::endl;
-    }
-    else {
+        tlp::debug() << "Plugins successfully loaded" << std::endl;
+    } else {
       _progress->setComment(msg);
       if (_debug_output)
-	tlp::debug() << msg << std::endl;
+        tlp::debug() << msg << std::endl;
     }
   }
 
@@ -108,11 +106,9 @@ struct PluginLoaderToProgress : public PluginLoader {
       tlp::debug() << "Loading " << filename << std::endl;
   }
 
-  void loaded(const tlp::Plugin* plugin,
-	      const std::list<tlp::Dependency> &) override {
+  void loaded(const tlp::Plugin *plugin, const std::list<tlp::Dependency> &) override {
     if (_debug_output)
-      tlp::debug() << "  - Plugin '" << plugin->name()
-		   << "' registered" << std::endl;
+      tlp::debug() << "  - Plugin '" << plugin->name() << "' registered" << std::endl;
   }
 
   void aborted(const std::string &fileName, const std::string &errorMsg) override {
@@ -224,7 +220,7 @@ int main(int argc, char **argv) {
       context->tulipPort = portRegexp.cap(1).toUInt();
     } else if (debugPluginLoadRegExp.exactMatch(a))
       debugPluginLoad = true;
-      else if (idRegexp.exactMatch(a)) {
+    else if (idRegexp.exactMatch(a)) {
       context->id = idRegexp.cap(1).toUInt();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
       QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))

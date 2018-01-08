@@ -1897,8 +1897,8 @@ public:
                     continue;
 
                   case '\202': // ł
-                     aKey.replace(k, 2, "l");
-                   continue;
+                    aKey.replace(k, 2, "l");
+                    continue;
 
                   case '\204': // ń
                   case '\206': // ņ

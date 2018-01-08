@@ -550,7 +550,6 @@ public:
     Observable::unholdObservers();
   }
 };
-
 }
 
 #endif

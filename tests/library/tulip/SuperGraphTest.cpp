@@ -596,7 +596,7 @@ void SuperGraphTest::testInheritance() {
   CPPUNIT_ASSERT(g3->existProperty("metric"));
   CPPUNIT_ASSERT(g4->existProperty("metric"));
 
-  DoubleProperty* m = graph->getProperty<DoubleProperty>("metric");
+  DoubleProperty *m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT_EQUAL(m, graph->getProperty<DoubleProperty>("metric"));
   CPPUNIT_ASSERT_EQUAL(m, g1->getProperty<DoubleProperty>("metric"));
   CPPUNIT_ASSERT_EQUAL(m2, g2->getProperty<DoubleProperty>("metric"));

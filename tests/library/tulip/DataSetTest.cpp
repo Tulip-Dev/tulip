@@ -109,7 +109,7 @@ struct Struct {
     ++nbInstances;
   }
 
-  Struct(const std::string &val): value(val) {
+  Struct(const std::string &val) : value(val) {
     ++nbInstances;
   }
 
@@ -117,7 +117,7 @@ struct Struct {
     --nbInstances;
   }
 
-  Struct(const Struct &st): value(st.value) {
+  Struct(const Struct &st) : value(st.value) {
     ++nbInstances;
   }
 };
