@@ -244,10 +244,10 @@ public:
     if (_treeLayout) {
       const std::string algoName = "Bubble Tree";
       tlp::DataSet defaultParameters = getDefaultAlgorithmParameters(algoName, graph);
-      tlp::LayoutProperty *viewLayout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
       std::string errMsg;
-      graph->applyPropertyAlgorithm(algoName, viewLayout, errMsg, pluginProgress,
-                                    &defaultParameters);
+      tlp::LayoutProperty *viewLayout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
+      graph->applyPropertyAlgorithm(algoName, viewLayout, errMsg,
+                                    &defaultParameters, pluginProgress);
     }
 
     return true;

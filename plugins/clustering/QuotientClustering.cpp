@@ -168,13 +168,13 @@ public:
         layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
         cluster->applyPropertyAlgorithm(layoutName,
                                         cluster->getLocalProperty<LayoutProperty>("viewLayout"),
-                                        errMsg, nullptr, &layoutParams);
+                                        errMsg, &layoutParams);
         double border = std::min(minSize[0], minSize[1]);
         layoutParams.set("x border", border);
         layoutParams.set("y border", border);
         cluster->applyPropertyAlgorithm("Fast Overlap Removal",
                                         cluster->getLocalProperty<LayoutProperty>("viewLayout"),
-                                        errMsg, nullptr, &layoutParams);
+                                        errMsg, &layoutParams);
       }
     }
 
@@ -376,13 +376,13 @@ public:
       layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
       quotientGraph->applyPropertyAlgorithm(
           layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg,
-          nullptr, &layoutParams);
+          &layoutParams);
       double border = std::min(minSize[0], minSize[1]);
       layoutParams.set("x border", border);
       layoutParams.set("y border", border);
       quotientGraph->applyPropertyAlgorithm(
           "Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"),
-          errMsg, nullptr, &layoutParams);
+          errMsg, &layoutParams);
     }
 
     // recursive call if needed

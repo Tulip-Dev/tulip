@@ -206,7 +206,7 @@ bool StrengthClustering::run() {
   string errMsg;
   values = new DoubleProperty(graph);
 
-  if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, pluginProgress))
+  if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, nullptr, pluginProgress))
     return false;
 
   NumericProperty *metric = nullptr;

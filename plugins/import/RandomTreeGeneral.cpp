@@ -149,10 +149,9 @@ public:
 
     if (needLayout) {
       // apply Tree Leaf
-      DataSet dSet;
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, pluginProgress, &dSet);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg, nullptr, pluginProgress);
     }
 
     return true;

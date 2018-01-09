@@ -277,7 +277,7 @@ bool BubblePack::run() {
 
     for (unsigned int i = 0; i < components.size(); ++i) {
       Graph *tmp = graph->inducedSubGraph(components[i]);
-      tmp->applyPropertyAlgorithm("Bubble Pack", result, err, pluginProgress, dataSet);
+      tmp->applyPropertyAlgorithm("Bubble Pack", result, err, dataSet, pluginProgress);
     }
 
     // call connected component packing

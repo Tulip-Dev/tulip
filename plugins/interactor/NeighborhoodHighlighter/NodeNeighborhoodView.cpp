@@ -131,7 +131,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
     BooleanProperty result(graph_component);
     string errorMsg;
     graph_component->applyPropertyAlgorithm(tlp::SelectionAlgorithm::ReachableSubGraphSelection,
-                                            &result, errorMsg, nullptr, &dataSet);
+                                            &result, errorMsg, &dataSet);
 
     graphViewNodes.clear();
     graphViewEdges.clear();

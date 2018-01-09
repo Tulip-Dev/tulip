@@ -359,15 +359,15 @@ bool GEMLayout::run() {
 
     for (size_t i = 0; i < components.size(); ++i) {
       Graph *tmp = graph->inducedSubGraph(components[i]);
-      tmp->applyPropertyAlgorithm("GEM (Frick)", result, err, pluginProgress, dataSet);
+      tmp->applyPropertyAlgorithm("GEM (Frick)", result, err, dataSet, pluginProgress);
     }
 
     // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet ds;
     ds.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, pluginProgress,
-                                  &ds);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout,
+				  err, &ds, pluginProgress);
     // forget last temporary graph state
     graph->pop();
     *result = tmpLayout;

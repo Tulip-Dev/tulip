@@ -493,7 +493,7 @@ void PropertiesEditor::toLabels(PropertyInterface *prop, bool nodes, bool edges,
   // _graph->push() must be done outside of this method
   // to allow call from TabelView.cpp
   StringProperty *result = _graph->getProperty<StringProperty>("viewLabel");
-  _graph->applyPropertyAlgorithm("To labels", result, msg, nullptr, &data);
+  _graph->applyPropertyAlgorithm("To labels", result, msg, &data);
 }
 
 void PropertiesEditor::checkStateChanged(QModelIndex index, Qt::CheckState state) {

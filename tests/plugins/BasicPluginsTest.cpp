@@ -317,7 +317,7 @@ void BasicPluginsTest::testMetricColorMapping() {
   DataSet ds;
   ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, nullptr, &ds);
+  result = graph->applyPropertyAlgorithm("Color Mapping", &color, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -378,7 +378,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
 
   SizeProperty size(graph);
   ds.set("property", &metric);
-  result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, nullptr, &ds);
+  result = graph->applyPropertyAlgorithm("Size Mapping", &size, errorMsg, &ds, nullptr);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -419,7 +419,7 @@ void BasicPluginsTest::testEqualValueClustering() {
 
   PluginProgress *progress = new SimplePluginProgress();
   initializeGraph("Planar Graph");
-  result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg, progress);
+  result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg, nullptr, progress);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
   result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);

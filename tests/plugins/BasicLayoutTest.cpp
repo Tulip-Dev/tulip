@@ -90,7 +90,7 @@ void BasicLayoutTest::testDendrogram() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result = graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, nullptr, &ds);
+  bool result = graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -122,7 +122,7 @@ void BasicLayoutTest::testMixedModel() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result = graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, nullptr, &ds);
+  bool result = graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -141,7 +141,7 @@ void BasicLayoutTest::testSquarifiedTreeMap() {
 
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
-  result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout, errorMsg, nullptr, &ds);
+  result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -152,7 +152,7 @@ void BasicLayoutTest::testTreeLeaf() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result = graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, nullptr, &ds);
+  bool result = graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -194,6 +194,6 @@ void BasicLayoutTest::testFastOverlapRemoval() {
   ds.set("layout", &layout);
   string errorMsg;
   bool result =
-      graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, nullptr, &ds);
+      graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }

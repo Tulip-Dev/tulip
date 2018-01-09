@@ -794,9 +794,8 @@ struct WebImport : public ImportModule {
       pluginProgress->setComment("Layouting extracted graph using FM³...");
       string errMsg;
       // apply FM³
-      DataSet tmp;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->applyPropertyAlgorithm("FM^3 (OGDF)", layout, errMsg, pluginProgress, &tmp);
+      return graph->applyPropertyAlgorithm("FM^3 (OGDF)", layout, errMsg, nullptr, pluginProgress);
     }
 
     return true;

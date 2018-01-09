@@ -547,7 +547,7 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
         cs = ColorScalesManager::getLatestColorScale();
 
       data.set<ColorScale>("color scale", cs);
-      g->applyPropertyAlgorithm("Color Mapping", color, errMsg, nullptr, &data);
+      g->applyPropertyAlgorithm("Color Mapping", color, errMsg, &data);
     }
   } else if (pluginLister->pluginExists<GraphTest>(stdName)) {
     bool result = true;

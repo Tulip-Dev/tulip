@@ -286,8 +286,8 @@ bool MixedModel::run() {
     LayoutProperty layout(graph);
     DataSet tmp;
     tmp.set("coordinates", result);
-    graph->applyPropertyAlgorithm(string("Connected Component Packing"), &layout, err, nullptr,
-                                  &tmp);
+    graph->applyPropertyAlgorithm(string("Connected Component Packing"),
+				  &layout, err, &tmp);
 
     for (const node &n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));

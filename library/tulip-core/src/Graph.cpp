@@ -670,7 +670,7 @@ Iterator<Graph *> *tlp::getRootGraphs() {
 }
 
 bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessage,
-                           DataSet *dataSet, PluginProgress *progress) {
+                           DataSet *parameters, PluginProgress *progress) {
   if (!PluginLister::pluginExists(algorithm)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
                    << "\" does not exist (or is not loaded)" << endl;
@@ -687,7 +687,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessa
   } else
     tmpProgress = progress;
 
-  AlgorithmContext *context = new AlgorithmContext(this, dataSet, tmpProgress);
+  AlgorithmContext *context = new AlgorithmContext(this, parameters, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
   if ((result = newAlgo->check(errorMessage))) {
@@ -707,9 +707,11 @@ bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessa
 }
 
 //=========================================================
-bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *prop,
-                                        std::string &errorMessage, tlp::PluginProgress *progress,
-                                        tlp::DataSet *parameters) {
+bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
+					PropertyInterface *prop,
+                                        std::string &errorMessage, 
+                                        tlp::DataSet *parameters,
+					tlp::PluginProgress *progress) {
   bool result;
   tlp::AlgorithmContext context;
 

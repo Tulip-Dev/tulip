@@ -364,8 +364,8 @@ bool HierarchicalGraph::run() {
 #ifndef NDEBUG
   resultBool =
 #endif
-      mySGraph->applyPropertyAlgorithm("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg,
-                                       nullptr, &tmp);
+      mySGraph->applyPropertyAlgorithm("Hierarchical Tree (R-T Extended)",
+				       &tmpLayout, erreurMsg, &tmp);
 
   if (edgeLength)
     delete edgeLength;
