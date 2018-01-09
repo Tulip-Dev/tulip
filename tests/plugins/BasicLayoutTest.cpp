@@ -193,7 +193,6 @@ void BasicLayoutTest::testFastOverlapRemoval() {
   LayoutProperty layout(graph);
   ds.set("layout", &layout);
   string errorMsg;
-  bool result =
-      graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, &ds);
+  bool result = graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }

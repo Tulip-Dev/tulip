@@ -134,8 +134,7 @@ bool Grip::run() {
     DataSet tmp;
     tmp.set("coordinates", result);
     LayoutProperty layout(graph);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &layout,
-				  err, &tmp);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &layout, err, &tmp);
 
     for (const node &n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));

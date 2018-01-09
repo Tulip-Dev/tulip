@@ -246,8 +246,8 @@ public:
       tlp::DataSet defaultParameters = getDefaultAlgorithmParameters(algoName, graph);
       std::string errMsg;
       tlp::LayoutProperty *viewLayout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-      graph->applyPropertyAlgorithm(algoName, viewLayout, errMsg,
-                                    &defaultParameters, pluginProgress);
+      graph->applyPropertyAlgorithm(algoName, viewLayout, errMsg, &defaultParameters,
+                                    pluginProgress);
     }
 
     return true;

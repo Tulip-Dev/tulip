@@ -707,11 +707,9 @@ bool Graph::applyAlgorithm(const std::string &algorithm, std::string &errorMessa
 }
 
 //=========================================================
-bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
-					PropertyInterface *prop,
-                                        std::string &errorMessage, 
-                                        tlp::DataSet *parameters,
-					tlp::PluginProgress *progress) {
+bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *prop,
+                                        std::string &errorMessage, tlp::DataSet *parameters,
+                                        tlp::PluginProgress *progress) {
   bool result;
   tlp::AlgorithmContext context;
 

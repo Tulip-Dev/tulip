@@ -257,10 +257,13 @@ public:
    * If an error occurs, a message describing the error should be stored in errorMessage.
    *
    * @param algorithm The algorithm to apply.
-   * @param errorMessage A string that will be modified to contain an error message if an error occurs.
+   * @param errorMessage A string that will be modified to contain an error message if an error
+   *occurs.
    * @param parameters The parameters of the algorithm. Defaults to nullptr.
-   * @param progress A PluginProgress to report the progress of the operation, as well as the final state. Defaults to nullptr.
-   * @return bool Whether the algorithm applied successfully or not. If not, check the error message.
+   * @param progress A PluginProgress to report the progress of the operation, as well as the final
+   *state. Defaults to nullptr.
+   * @return bool Whether the algorithm applied successfully or not. If not, check the error
+   *message.
    **/
   bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage,
                       DataSet *parameters = nullptr, PluginProgress *progress = nullptr);
@@ -1424,10 +1427,12 @@ public:
    * @brief Runs a plugin on the graph, whose result is a property.
    *
    * @param algorithm The name of the plugin to run.
-   * @param result The property in which to store the computed nodes/edges associated values. All previous values will be erased.
+   * @param result The property in which to store the computed nodes/edges associated values. All
+   * previous values will be erased.
    * @param errorMessage Stores the error message if the plugin fails.
    * @param parameters The parameters of the algorithm. Some algorithms use this DataSet to output
-   * @param progress A PluginProgress to report the progress of the operation, as well as the final state. Defaults to nullptr.
+   * @param progress A PluginProgress to report the progress of the operation, as well as the final
+   * state. Defaults to nullptr.
    * some additional information.
    * @return Whether the plugin applied successfully or not. If not, check the error message.
    *
@@ -1435,14 +1440,17 @@ public:
    * plugin.
    */
   bool applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *result,
-                              std::string &errorMessage, DataSet *parameters = nullptr, PluginProgress *progress = nullptr);
+                              std::string &errorMessage, DataSet *parameters = nullptr,
+                              PluginProgress *progress = nullptr);
 
   /**
-   * @brief Deprecated, use applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *result, std::string &errorMessage, DataSet *parameters = nullptr, PluginProgress *progress = nullptr) instead
+   * @brief Deprecated, use applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface
+   * *result, std::string &errorMessage, DataSet *parameters = nullptr, PluginProgress *progress =
+   * nullptr) instead
    */
   _DEPRECATED bool applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *result,
-                              std::string &errorMessage, PluginProgress *progress,
-					  DataSet *parameters = nullptr) {
+                                          std::string &errorMessage, PluginProgress *progress,
+                                          DataSet *parameters = nullptr) {
     return applyPropertyAlgorithm(algorithm, result, errorMessage, parameters, progress);
   }
 
@@ -1600,7 +1608,8 @@ public:
                               bool delAllEdge = true);
 
   /**
-   * @brief Deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool delAllEdge = true) instead
+   * @brief Deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool
+   * delAllEdge = true) instead
    */
   _DEPRECATED node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true,
                                   bool delAllEdge = true);

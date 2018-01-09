@@ -2078,8 +2078,9 @@ public:
         graph->delLocalProperty(fromLabriProp->getName());
 
       string err;
-      return graph->applyPropertyAlgorithm("FM^3 (OGDF)", graph->getProperty<LayoutProperty>("viewLayout"),
-					   err, nullptr, pluginProgress);
+      return graph->applyPropertyAlgorithm("FM^3 (OGDF)",
+                                           graph->getProperty<LayoutProperty>("viewLayout"), err,
+                                           nullptr, pluginProgress);
     }
 
     return true;
