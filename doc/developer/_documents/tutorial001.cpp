@@ -6,45 +6,45 @@
  *
  * Tutorial 001
  *
- * Create a graph 
+ * Create a graph
  * add three nodes and three edges
  * remove an edge and a node
  * print the result on the standard output
- * 
+ *
  */
 
 using namespace std;
 using namespace tlp;
 
 int main() {
-	//initialize the Tulip libs
-  initTulipLib(nullptr);
+  // initialize the Tulip libs
+  initTulipLib();
 
-  //create an empty graph
+  // create an empty graph
   Graph *graph = newGraph();
 
-  //add three nodes
+  // add three nodes
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   node n3 = graph->addNode();
 
-  //add three edges
-  edge e1 = graph->addEdge(n2,n3);
-  edge e2 = graph->addEdge(n1,n2);
-  edge e3 = graph->addEdge(n3,n1);
+  // add three edges
+  edge e1 = graph->addEdge(n2, n3);
+  graph->addEdge(n1, n2);
+  graph->addEdge(n3, n1);
 
-  //delete an edge
+  // delete an edge
   graph->delEdge(e1);
 
-  //delete a node
+  // delete a node
   graph->delNode(n2);
 
-  //print the result on the standard output
-  cout << graph << flush ;
+  // print the result on the standard output
+  cout << graph << flush;
 
-  tlp::saveGraph(graph,"tutorial001.tlp");
+  tlp::saveGraph(graph, "tutorial001.tlp");
 
-  //delete the graph
+  // delete the graph
   delete graph;
   return EXIT_SUCCESS;
 }
