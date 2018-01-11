@@ -284,8 +284,8 @@ bool BubblePack::run() {
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", result);
-    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout,
-				  err, &tmpdataSet, pluginProgress);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
+                                  pluginProgress);
     // forget last temporary graph state
     graph->pop();
     *result = tmpLayout;
