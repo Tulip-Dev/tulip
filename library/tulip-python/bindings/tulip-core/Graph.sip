@@ -76,7 +76,7 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
     if (params) {
       PropertyType tmp(graph);
       tmp = *result;
-      ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, NULL, params);
+      ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, params);
       *result = tmp;
       updateWrappedDataSetAfterAlgorithmCall(params, inputDataSetWrapper);
       delete params;
