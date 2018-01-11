@@ -1,0 +1,1 @@
+sh tulip_run_test.sh layout_gem_frick_not_connected import_pajek_file.tlp
