@@ -34,9 +34,8 @@ Circular::Circular(const tlp::PluginContext *context) : LayoutAlgorithm(context)
   addInParameter<bool>("search cycle", paramHelp[0], "false");
 }
 
-namespace {
 //===============================================================================
-vector<node> extractCycle(node n, deque<node> &st) {
+static vector<node> extractCycle(node n, deque<node> &st) {
   // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   vector<node> result;
   deque<node>::const_reverse_iterator it = st.rbegin();
@@ -50,8 +49,8 @@ vector<node> extractCycle(node n, deque<node> &st) {
   return result;
 }
 //===============================================================================
-void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
-         MutableContainer<bool> &flag, unsigned int &nbCalls, PluginProgress *pluginProgress) {
+static void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
+		MutableContainer<bool> &flag, unsigned int &nbCalls, PluginProgress *pluginProgress) {
   {
     // to enable stop of the recursion
     ++nbCalls;
@@ -84,39 +83,29 @@ void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
 }
 
 //=======================================================================
-vector<node> findMaxCycle(Graph *sg, PluginProgress *pluginProgress) {
-  Graph *g = sg->addCloneSubGraph();
-  tlp::warning() << __PRETTY_FUNCTION__ << endl;
-
+static vector<node> findMaxCycle(Graph *graph, PluginProgress *pluginProgress) {
   // compute the connected components's subgraphs
   std::vector<std::vector<node>> components;
-  ConnectedTest::computeConnectedComponents(g, components);
+  ConnectedTest::computeConnectedComponents(graph, components);
 
-  for (unsigned int i = 0; i < components.size(); ++i) {
-    g->inducedSubGraph(components[i]);
-  }
-
-  MutableContainer<bool> flag;
-  deque<node> st;
-  vector<node> res;
   vector<node> max;
   unsigned int nbCalls = 0;
-  for (Graph *g_tmp : g->getSubGraphs()) {
-    if (g_tmp->numberOfNodes() == 1)
-      continue;
-
-    st.clear();
-    res.clear();
+  for (unsigned int i = 0; i < components.size(); ++i) {
+    Graph* sg = graph->inducedSubGraph(components[i]);
+    MutableContainer<bool> flag;
     flag.setAll(false);
-    dfs(g_tmp->getOneNode(), g_tmp, st, res, flag, nbCalls, pluginProgress);
+    deque<node> st;
+    vector<node> res;
+
+    dfs(sg->getOneNode(), sg, st, res, flag, nbCalls, pluginProgress);
 
     if (max.size() < res.size())
       max = res;
+    
+    graph->delAllSubGraphs(sg);
   }
 
-  sg->delAllSubGraphs(g);
   return max;
-}
 }
 
 // this inline function computes the radius size given a size

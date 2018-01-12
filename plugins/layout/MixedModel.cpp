@@ -102,48 +102,40 @@ bool MixedModel::run() {
 
   glyphResult->setAllEdgeValue(EdgeShape::Polyline);
 
+  vector<edge> edge_planar;
+
   // give some empirical feedback of what we are doing 1 %
   pluginProgress->progress(1, 1000);
 
-  Pere = graph->addCloneSubGraph("Father");
   // compute the connected components's subgraphs
   std::vector<std::vector<node>> components;
-  ConnectedTest::computeConnectedComponents(Pere, components);
+  ConnectedTest::computeConnectedComponents(graph, components);
 
   for (unsigned int i = 0; i < components.size(); ++i) {
-    Pere->inducedSubGraph(components[i]);
-  }
-
-  vector<edge> edge_planar;
-
-  int nbConnectedComponent = 0;
-
-  for (Graph *sg : Pere->getSubGraphs()) {
-    nbConnectedComponent++;
-    currentGraph = sg;
+    std::vector<node> &nodes = components[i];
 
     //====================================================
-    // don't compute the canonical ordering if the nmber of nodes is less than 3
-
-    if (currentGraph->numberOfNodes() == 1) {
-      node n = currentGraph->getOneNode();
-      result->setNodeValue(n, Coord(0, 0, 0));
+    // don't compute the canonical ordering if the number of nodes is less than 3
+    if (nodes.size() == 1) {
+      result->setNodeValue(nodes[0], Coord(0, 0, 0));
       continue;
-    } else if (currentGraph->numberOfNodes() == 2 || currentGraph->numberOfNodes() == 3) {
-      Iterator<node> *itn = currentGraph->getNodes();
-      node n = itn->next();
+    } else if (nodes.size() < 4) {
+      node n = nodes[0];
       Coord c(sizeResult->getNodeValue(n));
       result->setNodeValue(n, Coord(0, 0, 0));
-      node n2 = itn->next();
+      node n2 = nodes[1];
       Coord c2(sizeResult->getNodeValue(n2));
       result->setNodeValue(n2, Coord(spacing + c.getX() / 2 + c2.getX() / 2, 0, 0));
 
-      if (currentGraph->numberOfNodes() == 3) {
-        node n3 = itn->next();
+      for (auto e : graph->getEdges(n, n2, false))
+        edge_planar.push_back(e);
+      
+      if (nodes.size() == 3) {
+        node n3 = nodes[2];
         Coord c3(sizeResult->getNodeValue(n2));
         result->setNodeValue(
             n3, Coord(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, 0, 0));
-        edge e = currentGraph->existEdge(n, n3, false);
+        edge e = graph->existEdge(n, n3, false);
 
         if (e.isValid()) {
           vector<Coord> bends(2);
@@ -151,7 +143,7 @@ bool MixedModel::run() {
           unsigned int max = uint(c[1] > c2[1] ? c[1] / 2 : c2[1] / 2);
           max += uint(edgeNodeSpacing);
 
-          if (currentGraph->source(e) == n) {
+          if (graph->source(e) == n) {
             bends.push_back(Coord(0, float(max), 0));
             bends.push_back(
                 Coord(2.f * spacing + c.getX() / 2.f + c2.getX() + c3.getX() / 2.f, float(max), 0));
@@ -163,15 +155,19 @@ bool MixedModel::run() {
 
           result->setEdgeValue(e, bends);
         }
+	
+	for (auto e : graph->getEdges(n, n3, false))
+	  edge_planar.push_back(e);
+	for (auto e : graph->getEdges(n2, n3, false))
+	  edge_planar.push_back(e);
       }
 
-      delete itn;
-      for (const edge &e : currentGraph->edges())
-        edge_planar.push_back(e);
       continue;
     }
 
     //====================================================
+    Graph* currentGraph = graph->inducedSubGraph(components[i]);
+    
     planar = PlanarityTest::isPlanar(currentGraph);
     Graph *G;
 
@@ -278,10 +274,10 @@ bool MixedModel::run() {
     }
 
     delete carte;
-    currentGraph->delAllSubGraphs(G);
+    graph->delAllSubGraphs(currentGraph);
   }
 
-  if (nbConnectedComponent != 1) {
+  if (components.size() > 1) {
     string err = "";
     LayoutProperty layout(graph);
     DataSet tmp;
@@ -296,8 +292,6 @@ bool MixedModel::run() {
       result->setEdgeValue(e, layout.getEdgeValue(e));
     }
   }
-
-  graph->delAllSubGraphs(Pere);
 
   // rotate layout and size
   if (orientation == "horizontal") {

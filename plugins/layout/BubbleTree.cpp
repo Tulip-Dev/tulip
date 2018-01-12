@@ -35,10 +35,10 @@ struct greaterRadius {
 };
 
 double BubbleTree::computeRelativePosition(
-    tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition) {
+    tlp::node n, NodeStaticProperty<Vector<double, 5>> &relativePosition) {
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
-  tmpSizeFather[2] = 0.; // remove z-coordiantes because the drawing is 2D
+  tmpSizeFather[2] = 0.; // remove z-coordinates because the drawing is 2D
   double sizeFather = tmpSizeFather.norm() / 2.;
 
   if (sizeFather < 1E-5)
@@ -52,8 +52,8 @@ double BubbleTree::computeRelativePosition(
   /*
    * Initialize node position
    */
-  (*relativePosition)[n][0] = 0.;
-  tlp::Vector<double, 5> &rPos = (*relativePosition)[n];
+  relativePosition[n][0] = 0.;
+  tlp::Vector<double, 5> &rPos = relativePosition[n];
   rPos[1] = 0.;
 
   /*
@@ -192,8 +192,8 @@ double BubbleTree::computeRelativePosition(
 
   for (unsigned int i = 1; i < Nc; ++i) {
     node itn = itN->next();
-    (*relativePosition)[itn][0] = circles[i][0] - circleH[0];
-    (*relativePosition)[itn][1] = circles[i][1] - circleH[1];
+    relativePosition[itn][0] = circles[i][0] - circleH[0];
+    relativePosition[itn][1] = circles[i][1] - circleH[1];
   }
 
   delete itN;
@@ -201,7 +201,7 @@ double BubbleTree::computeRelativePosition(
 }
 
 void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
-                             TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition,
+                             NodeStaticProperty<Vector<double, 5>> &relativePosition,
                              const tlp::Vector<double, 3> &enclosingCircleCenter,
                              const tlp::Vector<double, 3> &originNodePosition) {
   /*
@@ -268,7 +268,7 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
 
   while (it->hasNext()) {
     node itn = it->next();
-    tlp::Vector<double, 5> &rPos = (*relativePosition)[itn];
+    tlp::Vector<double, 5> &rPos = relativePosition[itn];
     Vector<double, 3> newpos;
     newpos[0] = rPos[0];
     newpos[1] = rPos[1];
@@ -282,7 +282,7 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
 }
 
 void BubbleTree::calcLayout(tlp::node n,
-                            TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5>> *relativePosition) {
+                            NodeStaticProperty<Vector<double, 5>> &relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -290,14 +290,14 @@ void BubbleTree::calcLayout(tlp::node n,
   Iterator<node> *it = tree->getOutNodes(n);
 
   if (it->hasNext()) {
-    tlp::Vector<double, 5> &nPos = (*relativePosition)[n];
+    tlp::Vector<double, 5> &nPos = relativePosition[n];
     double nPos2 = nPos[2];
     double nPos3 = nPos[3];
 
     while (it->hasNext()) {
       node itn = it->next();
       Vector<double, 3> origin, tmp;
-      tlp::Vector<double, 5> &rPos = (*relativePosition)[itn];
+      tlp::Vector<double, 5> &rPos = relativePosition[itn];
       origin[0] = rPos[0] - nPos2;
       origin[1] = rPos[1] - nPos3;
       origin[2] = 0.;
@@ -328,13 +328,17 @@ bool BubbleTree::run() {
     // for each component draw
     std::vector<std::vector<node>> components;
     string err;
-    // push a temporary graph state (not redoable)
-    graph->push(false);
     ConnectedTest::computeConnectedComponents(graph, components);
 
     for (unsigned int i = 0; i < components.size(); ++i) {
-      Graph *tmp = graph->inducedSubGraph(components[i]);
-      tmp->applyPropertyAlgorithm("Bubble Tree", result, err, dataSet, pluginProgress);
+      Graph* tmp = graph;
+      // apply "Bubble Tree" on the subgraph induced
+      // by the current connected component
+      graph = graph->inducedSubGraph(components[i]);
+      run();
+      tmp->delSubGraph(graph);
+      // restore current graph
+      graph = tmp;
     }
 
     // call connected component packing
@@ -343,8 +347,6 @@ bool BubbleTree::run() {
     tmpdataSet.set("coordinates", result);
     graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, &tmpdataSet,
                                   pluginProgress);
-    // forget last temporary graph state
-    graph->pop();
     *result = tmpLayout;
     return true;
   }
@@ -385,9 +387,9 @@ bool BubbleTree::run() {
 
   node startNode = tree->getSource();
   assert(startNode.isValid());
-  TLP_HASH_MAP<node, Vector<double, 5>> relativePosition;
-  computeRelativePosition(startNode, &relativePosition);
-  calcLayout(startNode, &relativePosition);
+  NodeStaticProperty<Vector<double, 5>> relativePosition(graph);
+  computeRelativePosition(startNode, relativePosition);
+  calcLayout(startNode, relativePosition);
 
   TreeTest::cleanComputedTree(graph, tree);
 
