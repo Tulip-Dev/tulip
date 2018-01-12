@@ -1,0 +1,989 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2018:01:12 
+# Time:                   12:05:22 
+# Xnee program:           cnee 
+# Xnee version:           3.19 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       11804000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             4.4.0-104-generic 
+# OS Version:             #127-Ubuntu SMP Mon Dec 11 12:16:42 UTC 2017 
+# Machine:                x86_64 
+# Nodename:               pm-Precision-5520 
+# Display name:           :0
+# Dimension:              1920x1080
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /home/pm/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o clustering_clique_enumeration.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file clustering_clique_enumeration.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1920x1080
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x22b1020
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            66-71 
+error-range                   0-0 
+7,6,1424,589,0,0,0,13261035,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1423,588,0,0,0,13261043,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1420,587,0,0,0,13261051,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1419,586,0,0,0,13261059,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1417,586,0,0,0,13261067,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1415,584,0,0,0,13261075,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1413,584,0,0,0,13261083,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1411,583,0,0,0,13261091,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1410,583,0,0,0,13261099,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1407,582,0,0,0,13261107,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1405,581,0,0,0,13261115,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1402,581,0,0,0,13261123,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1398,579,0,0,0,13261131,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1395,579,0,0,0,13261139,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1388,579,0,0,0,13261147,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1379,577,0,0,0,13261155,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1370,575,0,0,0,13261163,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1361,571,0,0,0,13261171,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1352,571,0,0,0,13261179,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1343,570,0,0,0,13261187,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1334,568,0,0,0,13261195,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1328,566,0,0,0,13261203,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1322,564,0,0,0,13261211,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1316,561,0,0,0,13261219,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1312,561,0,0,0,13261227,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1306,561,0,0,0,13261235,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1300,559,0,0,0,13261243,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1296,557,0,0,0,13261251,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1292,556,0,0,0,13261259,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1290,555,0,0,0,13261267,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1289,555,0,0,0,13261275,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1287,555,0,0,0,13261283,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1285,554,0,0,0,13261291,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1284,553,0,0,0,13261323,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1282,552,0,0,0,13261331,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1280,552,0,0,0,13261339,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1277,552,0,0,0,13261347,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1272,551,0,0,0,13261355,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1269,551,0,0,0,13261363,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1263,550,0,0,0,13261371,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1255,550,0,0,0,13261379,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1245,547,0,0,0,13261387,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1235,547,0,0,0,13261395,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1224,545,0,0,0,13261403,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1214,544,0,0,0,13261411,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1203,542,0,0,0,13261419,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1192,542,0,0,0,13261427,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1182,539,0,0,0,13261435,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1171,538,0,0,0,13261443,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1159,536,0,0,0,13261451,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1146,536,0,0,0,13261459,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1136,534,0,0,0,13261467,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1123,532,0,0,0,13261475,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1107,529,0,0,0,13261483,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1094,527,0,0,0,13261491,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1078,525,0,0,0,13261499,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1064,521,0,0,0,13261507,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1048,519,0,0,0,13261515,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1034,517,0,0,0,13261523,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1022,517,0,0,0,13261531,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1011,515,0,0,0,13261539,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,999,515,0,0,0,13261547,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,987,515,0,0,0,13261555,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,976,515,0,0,0,13261563,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,962,515,0,0,0,13261571,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,949,515,0,0,0,13261579,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,937,515,0,0,0,13261587,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,926,515,0,0,0,13261595,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,912,515,0,0,0,13261603,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,901,515,0,0,0,13261611,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,890,515,0,0,0,13261619,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,879,515,0,0,0,13261627,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,868,515,0,0,0,13261635,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,857,515,0,0,0,13261643,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,847,515,0,0,0,13261651,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,838,515,0,0,0,13261659,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,829,515,0,0,0,13261667,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,823,515,0,0,0,13261675,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,817,515,0,0,0,13261683,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,811,515,0,0,0,13261691,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,805,515,0,0,0,13261699,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,799,515,0,0,0,13261707,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,794,515,0,0,0,13261715,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,788,515,0,0,0,13261723,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,781,515,0,0,0,13261731,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,774,515,0,0,0,13261739,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,769,515,0,0,0,13261747,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,766,515,0,0,0,13261755,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,763,515,0,0,0,13261763,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,761,515,0,0,0,13261771,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,758,515,0,0,0,13261779,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,756,515,0,0,0,13261787,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,753,515,0,0,0,13261795,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,751,515,0,0,0,13261803,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,748,515,0,0,0,13261811,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,744,513,0,0,0,13261819,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,741,513,0,0,0,13261827,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,737,512,0,0,0,13261835,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,732,512,0,0,0,13261843,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,728,511,0,0,0,13261851,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,723,511,0,0,0,13261859,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,719,508,0,0,0,13261867,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,714,508,0,0,0,13261875,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,709,508,0,0,0,13261883,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,704,507,0,0,0,13261891,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,699,506,0,0,0,13261899,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,690,506,0,0,0,13261907,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,683,504,0,0,0,13261915,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,676,504,0,0,0,13261923,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,668,504,0,0,0,13261931,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,660,504,0,0,0,13261939,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,651,504,0,0,0,13261947,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,643,504,0,0,0,13261955,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,635,504,0,0,0,13261963,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,629,504,0,0,0,13261971,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,623,504,0,0,0,13261979,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,620,504,0,0,0,13261987,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,618,504,0,0,0,13261995,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,617,504,0,0,0,13262003,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,613,504,0,0,0,13262011,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,612,504,0,0,0,13262019,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,610,504,0,0,0,13262027,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,608,502,0,0,0,13262035,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,607,502,0,0,0,13262043,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,605,502,0,0,0,13262051,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,603,502,0,0,0,13262060,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,600,502,0,0,0,13262067,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,596,502,0,0,0,13262075,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,592,502,0,0,0,13262083,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,588,502,0,0,0,13262091,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,585,501,0,0,0,13262099,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,581,501,0,0,0,13262107,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,577,501,0,0,0,13262115,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,573,501,0,0,0,13262123,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,570,501,0,0,0,13262131,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,566,501,0,0,0,13262139,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,563,501,0,0,0,13262147,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,560,501,0,0,0,13262156,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,556,501,0,0,0,13262163,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,552,501,0,0,0,13262172,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,550,501,0,0,0,13262179,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,547,501,0,0,0,13262187,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,545,501,0,0,0,13262195,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,542,501,0,0,0,13262203,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,540,501,0,0,0,13262211,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,537,501,0,0,0,13262219,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,535,500,0,0,0,13262227,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,533,500,0,0,0,13262235,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,531,500,0,0,0,13262243,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,528,500,0,0,0,13262251,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,526,500,0,0,0,13262259,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,523,500,0,0,0,13262267,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,521,500,0,0,0,13262275,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,518,500,0,0,0,13262283,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,516,500,0,0,0,13262291,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,512,500,0,0,0,13262299,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,510,500,0,0,0,13262307,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,506,500,0,0,0,13262315,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,502,500,0,0,0,13262323,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,500,500,0,0,0,13262331,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,497,499,0,0,0,13262339,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,495,499,0,0,0,13262347,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,492,499,0,0,0,13262355,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,488,499,0,0,0,13262363,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,486,499,0,0,0,13262371,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,482,499,0,0,0,13262379,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,480,499,0,0,0,13262387,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,477,499,0,0,0,13262395,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,476,499,0,0,0,13262403,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,473,499,0,0,0,13262411,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,472,499,0,0,0,13262419,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,471,499,0,0,0,13262427,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,469,498,0,0,0,13262435,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,468,497,0,0,0,13262443,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,466,497,0,0,0,13262451,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,463,496,0,0,0,13262459,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,461,496,0,0,0,13262467,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,458,496,0,0,0,13262475,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,456,496,0,0,0,13262483,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,452,496,0,0,0,13262491,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,450,495,0,0,0,13262499,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,447,495,0,0,0,13262507,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,446,495,0,0,0,13262515,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,443,494,0,0,0,13262523,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,442,494,0,0,0,13262531,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,441,494,0,0,0,13262539,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,438,494,0,0,0,13262547,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,437,494,0,0,0,13262555,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,435,492,0,0,0,13262563,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,433,492,0,0,0,13262571,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,432,491,0,0,0,13262587,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,431,491,0,0,0,13262595,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,430,490,0,0,0,13262627,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,428,490,0,0,0,13262651,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,427,490,0,0,0,13262667,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,426,489,0,0,0,13262675,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,425,489,0,0,0,13262683,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,423,489,0,0,0,13262699,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,421,489,0,0,0,13262707,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,419,487,0,0,0,13262715,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,418,487,0,0,0,13262723,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,417,486,0,0,0,13262731,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,416,486,0,0,0,13262739,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,413,486,0,0,0,13262748,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,412,485,0,0,0,13262756,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,410,485,0,0,0,13262763,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,408,484,0,0,0,13262772,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,405,483,0,0,0,13262780,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,403,482,0,0,0,13262787,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,402,482,0,0,0,13262796,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,400,481,0,0,0,13262828,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,397,480,0,0,0,13262844,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,395,479,0,0,0,13262852,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,393,479,0,0,0,13262859,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,391,479,0,0,0,13262868,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,388,477,0,0,0,13262876,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,386,476,0,0,0,13262884,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,383,476,0,0,0,13262892,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,381,476,0,0,0,13262900,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,378,475,0,0,0,13262907,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,475,0,0,0,13262916,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,373,475,0,0,0,13262924,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,372,475,0,0,0,13262932,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,370,475,0,0,0,13262948,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,369,475,0,0,0,13262956,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,367,474,0,0,0,13262980,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,366,474,0,0,0,13262988,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,364,472,0,0,0,13263004,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,363,472,0,0,0,13263012,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,362,472,0,0,0,13263019,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,361,471,0,0,0,13263036,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,360,471,0,0,0,13263044,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,359,470,0,0,0,13263051,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,358,470,0,0,0,13263060,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,356,469,0,0,0,13263084,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,355,469,0,0,0,13263100,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,352,468,0,0,0,13263116,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,352,467,0,0,0,13263124,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,351,466,0,0,0,13263140,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,350,465,0,0,0,13263148,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,349,464,0,0,0,13263156,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,347,464,0,0,0,13263164,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,345,462,0,0,0,13263172,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,343,460,0,0,0,13263180,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,340,457,0,0,0,13263188,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,337,455,0,0,0,13263196,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,334,452,0,0,0,13263204,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,331,449,0,0,0,13263212,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,327,446,0,0,0,13263220,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,320,440,0,0,0,13263227,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,315,434,0,0,0,13263236,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,309,428,0,0,0,13263243,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,301,422,0,0,0,13263252,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,293,416,0,0,0,13263260,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,285,408,0,0,0,13263268,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,277,400,0,0,0,13263276,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,269,392,0,0,0,13263284,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,261,381,0,0,0,13263292,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,252,369,0,0,0,13263300,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,243,360,0,0,0,13263308,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,234,353,0,0,0,13263316,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,227,344,0,0,0,13263324,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,222,335,0,0,0,13263332,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,217,326,0,0,0,13263340,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,215,317,0,0,0,13263348,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,213,310,0,0,0,13263356,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,210,306,0,0,0,13263364,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,209,302,0,0,0,13263372,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,207,296,0,0,0,13263380,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,205,291,0,0,0,13263388,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,203,287,0,0,0,13263396,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,201,283,0,0,0,13263404,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,200,282,0,0,0,13263412,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,280,0,0,0,13263420,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,279,0,0,0,13263428,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,278,0,0,0,13263436,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,275,0,0,0,13263444,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,273,0,0,0,13263452,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,270,0,0,0,13263460,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,269,0,0,0,13263468,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,267,0,0,0,13263476,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,264,0,0,0,13263492,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,262,0,0,0,13263500,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,258,0,0,0,13263508,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,254,0,0,0,13263515,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,252,0,0,0,13263524,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,249,0,0,0,13263532,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,247,0,0,0,13263540,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,244,0,0,0,13263548,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,242,0,0,0,13263556,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,240,0,0,0,13263564,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,238,0,0,0,13263572,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,234,0,0,0,13263580,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,232,0,0,0,13263588,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,197,230,0,0,0,13263596,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,198,228,0,0,0,13263604,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,198,227,0,0,0,13263612,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,224,0,0,0,13263620,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,223,0,0,0,13263628,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,200,221,0,0,0,13263636,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,200,219,0,0,0,13263644,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,202,217,0,0,0,13263652,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,202,215,0,0,0,13263660,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,203,213,0,0,0,13263668,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,204,211,0,0,0,13263676,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,205,208,0,0,0,13263684,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,207,205,0,0,0,13263692,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,207,204,0,0,0,13263700,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,209,202,0,0,0,13263708,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,209,200,0,0,0,13263716,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,210,199,0,0,0,13263724,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,210,195,0,0,0,13263732,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,212,193,0,0,0,13263740,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,213,192,0,0,0,13263756,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,215,190,0,0,0,13263764,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,217,188,0,0,0,13263772,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,218,187,0,0,0,13263780,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,185,0,0,0,13263788,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,220,183,0,0,0,13263796,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,222,181,0,0,0,13263804,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,224,179,0,0,0,13263812,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,225,177,0,0,0,13263820,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,228,174,0,0,0,13263828,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,229,173,0,0,0,13263836,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,229,170,0,0,0,13263844,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,230,169,0,0,0,13263852,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,231,167,0,0,0,13263860,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,232,166,0,0,0,13263868,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,233,165,0,0,0,13263876,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,234,163,0,0,0,13263884,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,235,161,0,0,0,13263892,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,236,159,0,0,0,13263900,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,237,158,0,0,0,13263908,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,238,157,0,0,0,13263916,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,238,155,0,0,0,13263924,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,239,154,0,0,0,13263932,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,240,153,0,0,0,13263948,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,243,150,0,0,0,13263972,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,244,148,0,0,0,13263980,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,245,146,0,0,0,13263988,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,245,145,0,0,0,13263996,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,246,144,0,0,0,13264004,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,247,143,0,0,0,13264092,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,248,142,0,0,0,13264140,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,249,139,0,0,0,13264172,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,1,0,0,13264492,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,1,0,0,13264492,2,Virtual core pointer
+7,5,0,0,1,0,0,13264692,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,1,0,0,13264692,2,Virtual core pointer
+7,2,0,0,0,54,0,13265907,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,54,0,13265907,3,Virtual core keyboard
+7,3,0,0,0,54,0,13265971,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,54,0,13265971,3,Virtual core keyboard
+7,2,0,0,0,46,0,13266051,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,13266051,3,Virtual core keyboard
+7,3,0,0,0,46,0,13266115,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,13266115,3,Virtual core keyboard
+7,2,0,0,0,31,0,13266339,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,31,0,13266339,3,Virtual core keyboard
+7,3,0,0,0,31,0,13266403,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,31,0,13266403,3,Virtual core keyboard
+7,2,0,0,0,38,0,13266851,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,38,0,13266851,3,Virtual core keyboard
+7,3,0,0,0,38,0,13266931,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,38,0,13266931,3,Virtual core keyboard
+7,2,0,0,0,30,0,13266947,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,30,0,13266947,3,Virtual core keyboard
+7,3,0,0,0,30,0,13267027,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,30,0,13267027,3,Virtual core keyboard
+7,2,0,0,0,26,0,13267171,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,26,0,13267171,3,Virtual core keyboard
+7,3,0,0,0,26,0,13267251,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,26,0,13267251,3,Virtual core keyboard
+7,6,249,138,0,0,0,13269277,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,249,140,0,0,0,13269293,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,247,143,0,0,0,13269301,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,247,144,0,0,0,13269309,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,246,145,0,0,0,13269317,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,246,146,0,0,0,13269325,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,245,149,0,0,0,13269332,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,245,150,0,0,0,13269340,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,244,151,0,0,0,13269348,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,244,153,0,0,0,13269357,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,242,156,0,0,0,13269365,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,241,158,0,0,0,13269373,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,241,159,0,0,0,13269381,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,241,160,0,0,0,13269388,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,240,161,0,0,0,13269396,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,240,163,0,0,0,13269404,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,239,165,0,0,0,13269429,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,238,166,0,0,0,13269437,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,237,167,0,0,0,13269445,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,235,169,0,0,0,13269461,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,234,170,0,0,0,13269477,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,232,173,0,0,0,13269493,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,231,175,0,0,0,13269509,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,231,176,0,0,0,13269517,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,230,178,0,0,0,13269533,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,230,179,0,0,0,13269548,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,230,180,0,0,0,13269556,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,229,183,0,0,0,13269572,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,227,185,0,0,0,13269588,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,226,188,0,0,0,13269596,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,225,190,0,0,0,13269613,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,224,191,0,0,0,13269621,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,224,193,0,0,0,13269628,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,223,194,0,0,0,13269636,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,222,195,0,0,0,13269645,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,221,196,0,0,0,13269653,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,220,199,0,0,0,13269661,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,220,200,0,0,0,13269669,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,203,0,0,0,13269685,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,205,0,0,0,13269693,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,206,0,0,0,13269701,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,208,0,0,0,13269709,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,217,211,0,0,0,13269733,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,216,214,0,0,0,13269749,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,215,216,0,0,0,13269773,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,214,218,0,0,0,13269797,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,214,219,0,0,0,13269805,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,212,221,0,0,0,13270021,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,211,222,0,0,0,13270053,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,209,223,0,0,0,13270085,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,1,0,0,13270285,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,1,0,0,13270285,2,Virtual core pointer
+7,5,0,0,1,0,0,13270437,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,1,0,0,13270437,2,Virtual core pointer
+7,6,208,224,0,0,0,13270701,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,209,225,0,0,0,13270717,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,211,227,0,0,0,13270725,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,212,227,0,0,0,13270733,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,214,229,0,0,0,13270749,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,215,230,0,0,0,13270757,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,216,231,0,0,0,13270765,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,217,231,0,0,0,13270773,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,218,232,0,0,0,13270797,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,232,0,0,0,13270805,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,220,233,0,0,0,13270869,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,222,235,0,0,0,13270885,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,223,236,0,0,0,13270893,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,224,237,0,0,0,13270909,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,226,239,0,0,0,13270917,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,227,239,0,0,0,13270925,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,228,240,0,0,0,13270933,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,230,241,0,0,0,13270941,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,232,242,0,0,0,13270949,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,233,242,0,0,0,13270957,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,235,244,0,0,0,13270973,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,236,245,0,0,0,13270997,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,237,246,0,0,0,13271005,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,239,247,0,0,0,13271021,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,241,247,0,0,0,13271029,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,243,249,0,0,0,13271045,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,244,250,0,0,0,13271053,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,246,250,0,0,0,13271061,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,248,251,0,0,0,13271069,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,249,252,0,0,0,13271077,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,253,252,0,0,0,13271085,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,256,252,0,0,0,13271093,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,259,254,0,0,0,13271101,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,260,254,0,0,0,13271109,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,263,255,0,0,0,13271117,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,264,255,0,0,0,13271133,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,266,255,0,0,0,13271141,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,267,255,0,0,0,13271149,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,269,256,0,0,0,13271165,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,272,256,0,0,0,13271173,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,273,256,0,0,0,13271181,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,274,257,0,0,0,13271189,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,277,257,0,0,0,13271197,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,278,257,0,0,0,13271205,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,279,257,0,0,0,13271213,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,281,259,0,0,0,13271221,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,283,259,0,0,0,13271229,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,284,259,0,0,0,13271237,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,287,259,0,0,0,13271245,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,289,260,0,0,0,13271253,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,291,260,0,0,0,13271261,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,294,261,0,0,0,13271269,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,297,261,0,0,0,13271277,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,299,262,0,0,0,13271285,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,301,264,0,0,0,13271293,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,304,264,0,0,0,13271301,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,308,266,0,0,0,13271309,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,314,266,0,0,0,13271317,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,319,267,0,0,0,13271325,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,269,0,0,0,13271333,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,326,269,0,0,0,13271341,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,328,270,0,0,0,13271349,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,330,270,0,0,0,13271357,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,332,271,0,0,0,13271365,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,335,271,0,0,0,13271373,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,337,272,0,0,0,13271381,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,338,272,0,0,0,13271389,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,342,274,0,0,0,13271397,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,343,275,0,0,0,13271405,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,345,276,0,0,0,13271413,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,346,276,0,0,0,13271421,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,347,277,0,0,0,13271445,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,348,277,0,0,0,13271461,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,351,277,0,0,0,13271477,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,352,277,0,0,0,13271509,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,278,0,0,0,13271525,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,279,0,0,0,13271533,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,355,279,0,0,0,13271549,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,356,279,0,0,0,13271565,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,357,279,0,0,0,13271589,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,358,279,0,0,0,13271597,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,359,279,0,0,0,13271605,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,361,279,0,0,0,13271613,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,362,279,0,0,0,13271621,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,364,278,0,0,0,13271629,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,365,277,0,0,0,13271645,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,366,276,0,0,0,13271661,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,368,274,0,0,0,13271677,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,370,274,0,0,0,13271685,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,371,274,0,0,0,13271701,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,372,274,0,0,0,13271805,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,373,273,0,0,0,13271869,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,373,272,0,0,0,13271885,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,374,269,0,0,0,13271909,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,374,268,0,0,0,13271925,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,374,267,0,0,0,13271933,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,265,0,0,0,13271941,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,264,0,0,0,13271957,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,263,0,0,0,13271973,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,262,0,0,0,13272053,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,260,0,0,0,13272061,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,259,0,0,0,13272085,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,1,0,0,13272205,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,1,0,0,13272205,2,Virtual core pointer
+7,5,0,0,1,0,0,13272365,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,1,0,0,13272365,2,Virtual core pointer
+7,2,0,0,0,62,0,13273220,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,13273220,3,Virtual core keyboard
+7,2,0,0,0,14,0,13273556,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,14,0,13273556,3,Virtual core keyboard
+7,3,0,0,0,14,0,13273636,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,14,0,13273636,3,Virtual core keyboard
+7,3,0,0,0,62,0,13273700,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,13273700,3,Virtual core keyboard
+7,2,0,0,0,36,0,13274612,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,13274613,3,Virtual core keyboard
+7,3,0,0,0,36,0,13274676,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,13274676,3,Virtual core keyboard
+7,6,376,258,0,0,0,13276037,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,376,257,0,0,0,13276054,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,374,254,0,0,0,13276062,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,373,253,0,0,0,13276070,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,372,252,0,0,0,13276078,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,370,251,0,0,0,13276086,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,369,251,0,0,0,13276093,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,366,249,0,0,0,13276101,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,365,248,0,0,0,13276118,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,363,247,0,0,0,13276142,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,361,246,0,0,0,13276166,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,360,245,0,0,0,13276174,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,359,244,0,0,0,13276182,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,358,243,0,0,0,13276406,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,357,241,0,0,0,13276414,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,356,240,0,0,0,13276430,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,355,239,0,0,0,13276446,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,355,238,0,0,0,13276454,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,236,0,0,0,13276470,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,235,0,0,0,13276494,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,234,0,0,0,13276518,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,233,0,0,0,13276542,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,1,0,0,13277518,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,1,0,0,13277518,2,Virtual core pointer
+7,5,0,0,1,0,0,13277670,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,1,0,0,13277670,2,Virtual core pointer
+0,21,0,0,0,0,0,13277693
+NEW-WINDOW:650,328:62914804,62914804,19088033,0,0,0:0x0+500+65:0,0:Maximal Cliques Enumeration
+0,21,0,0,0,0,0,13277693
+0,21,0,0,0,0,0,13277693
+0,21,0,0,0,0,0,13277693
+7,6,353,231,0,0,0,13278934,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,236,0,0,0,13278942,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,242,0,0,0,13278950,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,254,0,0,0,13278958,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,264,0,0,0,13278966,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,271,0,0,0,13278974,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,277,0,0,0,13278982,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,283,0,0,0,13278990,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,286,0,0,0,13278998,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,290,0,0,0,13279006,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,293,0,0,0,13279014,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,297,0,0,0,13279022,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,301,0,0,0,13279030,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,305,0,0,0,13279038,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,308,0,0,0,13279046,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,310,0,0,0,13279054,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,313,0,0,0,13279062,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,316,0,0,0,13279070,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,320,0,0,0,13279078,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,324,0,0,0,13279086,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,328,0,0,0,13279094,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,331,0,0,0,13279102,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,336,0,0,0,13279110,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,340,0,0,0,13279118,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,343,0,0,0,13279126,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,347,0,0,0,13279134,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,351,0,0,0,13279142,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,353,0,0,0,13279150,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,357,0,0,0,13279158,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,360,0,0,0,13279166,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,362,0,0,0,13279174,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,366,0,0,0,13279182,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,368,0,0,0,13279190,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,371,0,0,0,13279198,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,375,0,0,0,13279206,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,377,0,0,0,13279214,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,380,0,0,0,13279222,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,383,0,0,0,13279230,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,387,0,0,0,13279238,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,389,0,0,0,13279246,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,393,0,0,0,13279254,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,396,0,0,0,13279262,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,398,0,0,0,13279270,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,354,402,0,0,0,13279278,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,405,0,0,0,13279286,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,407,0,0,0,13279294,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,353,408,0,0,0,13279302,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,351,413,0,0,0,13279310,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,350,416,0,0,0,13279318,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,349,417,0,0,0,13279326,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,349,420,0,0,0,13279334,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,347,423,0,0,0,13279342,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,345,425,0,0,0,13279350,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,345,428,0,0,0,13279358,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,345,430,0,0,0,13279366,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,345,432,0,0,0,13279374,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,344,435,0,0,0,13279382,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,343,438,0,0,0,13279390,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,341,443,0,0,0,13279398,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,341,447,0,0,0,13279406,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,340,452,0,0,0,13279414,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,339,456,0,0,0,13279422,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,338,461,0,0,0,13279430,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,336,465,0,0,0,13279438,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,335,470,0,0,0,13279446,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,335,473,0,0,0,13279454,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,334,478,0,0,0,13279462,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,334,482,0,0,0,13279470,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,333,484,0,0,0,13279478,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,330,489,0,0,0,13279486,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,329,496,0,0,0,13279494,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,327,504,0,0,0,13279502,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,325,510,0,0,0,13279510,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,323,519,0,0,0,13279518,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,321,528,0,0,0,13279526,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,320,536,0,0,0,13279534,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,315,543,0,0,0,13279542,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,315,547,0,0,0,13279550,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,314,551,0,0,0,13279558,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,313,555,0,0,0,13279566,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,313,559,0,0,0,13279574,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,310,564,0,0,0,13279582,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,310,566,0,0,0,13279590,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,310,570,0,0,0,13279598,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,310,573,0,0,0,13279606,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,309,576,0,0,0,13279614,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,309,579,0,0,0,13279622,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,309,581,0,0,0,13279630,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,309,584,0,0,0,13279638,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,308,588,0,0,0,13279646,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,308,590,0,0,0,13279654,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,308,593,0,0,0,13279662,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,308,594,0,0,0,13279670,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,307,595,0,0,0,13279678,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,307,596,0,0,0,13279686,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,307,598,0,0,0,13279694,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,306,602,0,0,0,13279702,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,603,0,0,0,13279710,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,605,0,0,0,13279718,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,606,0,0,0,13279726,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,609,0,0,0,13279734,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,611,0,0,0,13279742,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,614,0,0,0,13279750,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,615,0,0,0,13279758,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,616,0,0,0,13279766,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,619,0,0,0,13279774,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,620,0,0,0,13279782,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,621,0,0,0,13279798,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,305,623,0,0,0,13279814,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,306,625,0,0,0,13279830,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,307,627,0,0,0,13279838,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,307,629,0,0,0,13279846,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,308,630,0,0,0,13279854,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,309,634,0,0,0,13279862,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,310,635,0,0,0,13279870,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,311,636,0,0,0,13279878,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,312,638,0,0,0,13279886,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,312,639,0,0,0,13279894,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,313,641,0,0,0,13279902,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,313,643,0,0,0,13279910,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,314,645,0,0,0,13279918,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,315,646,0,0,0,13279926,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,316,647,0,0,0,13279934,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,316,649,0,0,0,13279942,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,317,650,0,0,0,13279950,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,318,652,0,0,0,13279958,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,318,653,0,0,0,13279966,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,319,655,0,0,0,13279974,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,320,656,0,0,0,13279982,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,321,659,0,0,0,13279998,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,321,660,0,0,0,13280006,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,321,661,0,0,0,13280014,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,321,665,0,0,0,13280022,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,321,666,0,0,0,13280030,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,668,0,0,0,13280038,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,669,0,0,0,13280054,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,670,0,0,0,13280062,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,671,0,0,0,13280070,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,673,0,0,0,13280086,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,674,0,0,0,13280094,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,675,0,0,0,13280110,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,676,0,0,0,13280118,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,678,0,0,0,13280134,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,679,0,0,0,13280142,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,680,0,0,0,13280150,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,681,0,0,0,13280158,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,684,0,0,0,13280166,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,685,0,0,0,13280174,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,686,0,0,0,13280190,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,688,0,0,0,13280198,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,689,0,0,0,13280230,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,690,0,0,0,13280238,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,691,0,0,0,13280246,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,693,0,0,0,13280254,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,694,0,0,0,13280262,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,695,0,0,0,13280278,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,697,0,0,0,13280286,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,698,0,0,0,13280294,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,699,0,0,0,13280382,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,700,0,0,0,13280918,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,703,0,0,0,13280926,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,704,0,0,0,13280942,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,705,0,0,0,13280974,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,322,706,0,0,0,13281070,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,3,0,0,13281878,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,3,0,0,13281878,2,Virtual core pointer
+7,5,0,0,3,0,0,13282030,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,3,0,0,13282030,2,Virtual core pointer
+7,2,0,0,0,116,0,13283622,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,13283622,3,Virtual core keyboard
+7,3,0,0,0,116,0,13283702,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,13283702,3,Virtual core keyboard
+7,2,0,0,0,116,0,13284086,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,13284086,3,Virtual core keyboard
+7,3,0,0,0,116,0,13284182,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,13284182,3,Virtual core keyboard
+7,2,0,0,0,36,0,13284950,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,13284950,3,Virtual core keyboard
+0,21,0,0,0,0,0,13284982
+NEW-WINDOW:461,197:62914828,62914828,19088108,0,0,0:0x0+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,13284982
+0,21,0,0,0,0,0,13284982
+0,21,0,0,0,0,0,13284982
+7,3,0,0,0,36,0,13285030,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,13285030,3,Virtual core keyboard
+7,2,0,0,0,28,0,13286502,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,13286502,3,Virtual core keyboard
+7,3,0,0,0,28,0,13286582,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,13286582,3,Virtual core keyboard
+7,2,0,0,0,26,0,13286758,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,26,0,13286758,3,Virtual core keyboard
+7,3,0,0,0,26,0,13286854,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,26,0,13286854,3,Virtual core keyboard
+7,2,0,0,0,39,0,13287030,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,39,0,13287030,3,Virtual core keyboard
+7,3,0,0,0,39,0,13287094,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,39,0,13287094,3,Virtual core keyboard
+7,2,0,0,0,28,0,13287286,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,13287286,3,Virtual core keyboard
+7,3,0,0,0,28,0,13287350,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,13287350,3,Virtual core keyboard
+7,2,0,0,0,17,0,13287574,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,17,0,13287574,3,Virtual core keyboard
+7,3,0,0,0,17,0,13287638,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,17,0,13287638,3,Virtual core keyboard
+7,2,0,0,0,42,0,13289319,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,42,0,13289319,3,Virtual core keyboard
+7,3,0,0,0,42,0,13289415,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,42,0,13289415,3,Virtual core keyboard
+7,2,0,0,0,30,0,13289415,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,30,0,13289415,3,Virtual core keyboard
+7,2,0,0,0,31,0,13289479,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,31,0,13289479,3,Virtual core keyboard
+7,3,0,0,0,30,0,13289527,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,30,0,13289527,3,Virtual core keyboard
+7,3,0,0,0,31,0,13289591,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,31,0,13289591,3,Virtual core keyboard
+7,2,0,0,0,62,0,13290087,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,13290087,3,Virtual core keyboard
+7,2,0,0,0,59,0,13290647,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,59,0,13290647,3,Virtual core keyboard
+7,3,0,0,0,59,0,13290759,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,59,0,13290759,3,Virtual core keyboard
+7,3,0,0,0,62,0,13290823,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,13290823,3,Virtual core keyboard
+7,2,0,0,0,28,0,13291047,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,13291047,3,Virtual core keyboard
+7,3,0,0,0,28,0,13291111,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,13291111,3,Virtual core keyboard
+7,2,0,0,0,46,0,13291175,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,13291175,3,Virtual core keyboard
+7,2,0,0,0,33,0,13291303,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,33,0,13291303,3,Virtual core keyboard
+7,3,0,0,0,46,0,13291335,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,13291335,3,Virtual core keyboard
+7,3,0,0,0,33,0,13291447,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,33,0,13291447,3,Virtual core keyboard
+7,2,0,0,0,36,0,13291911,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,13291911,3,Virtual core keyboard
+0,21,0,0,0,0,0,13291928
+NEW-WINDOW:460,169:62914828,62914828,628,0,0,0:460x169+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,13291928
+0,21,0,0,0,0,0,13291928
+0,21,0,0,0,0,0,13291928
+0,21,0,0,0,0,0,13291928
+0,21,0,0,0,0,0,13291928
+0,21,0,0,0,0,0,13291954
+NEW-WINDOW:650,338:62914837,62914837,19088192,0,0,0:0x0+500+36:0,0:TLP Export
+0,21,0,0,0,0,0,13291954
+0,21,0,0,0,0,0,13291954
+0,21,0,0,0,0,0,13291954
+7,3,0,0,0,36,0,13291976,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,13291976,3,Virtual core keyboard
