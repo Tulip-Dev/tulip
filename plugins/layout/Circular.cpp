@@ -50,7 +50,8 @@ static vector<node> extractCycle(node n, deque<node> &st) {
 }
 //===============================================================================
 static void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle,
-		MutableContainer<bool> &flag, unsigned int &nbCalls, PluginProgress *pluginProgress) {
+                MutableContainer<bool> &flag, unsigned int &nbCalls,
+                PluginProgress *pluginProgress) {
   {
     // to enable stop of the recursion
     ++nbCalls;
@@ -91,7 +92,7 @@ static vector<node> findMaxCycle(Graph *graph, PluginProgress *pluginProgress) {
   vector<node> max;
   unsigned int nbCalls = 0;
   for (unsigned int i = 0; i < components.size(); ++i) {
-    Graph* sg = graph->inducedSubGraph(components[i]);
+    Graph *sg = graph->inducedSubGraph(components[i]);
     MutableContainer<bool> flag;
     flag.setAll(false);
     deque<node> st;
@@ -101,7 +102,7 @@ static vector<node> findMaxCycle(Graph *graph, PluginProgress *pluginProgress) {
 
     if (max.size() < res.size())
       max = res;
-    
+
     graph->delAllSubGraphs(sg);
   }
 

@@ -129,7 +129,7 @@ bool MixedModel::run() {
 
       for (auto e : graph->getEdges(n, n2, false))
         edge_planar.push_back(e);
-      
+
       if (nodes.size() == 3) {
         node n3 = nodes[2];
         Coord c3(sizeResult->getNodeValue(n2));
@@ -155,19 +155,19 @@ bool MixedModel::run() {
 
           result->setEdgeValue(e, bends);
         }
-	
-	for (auto e : graph->getEdges(n, n3, false))
-	  edge_planar.push_back(e);
-	for (auto e : graph->getEdges(n2, n3, false))
-	  edge_planar.push_back(e);
+
+        for (auto e : graph->getEdges(n, n3, false))
+          edge_planar.push_back(e);
+        for (auto e : graph->getEdges(n2, n3, false))
+          edge_planar.push_back(e);
       }
 
       continue;
     }
 
     //====================================================
-    Graph* currentGraph = graph->inducedSubGraph(components[i]);
-    
+    Graph *currentGraph = graph->inducedSubGraph(components[i]);
+
     planar = PlanarityTest::isPlanar(currentGraph);
     Graph *G;
 

@@ -274,7 +274,7 @@ bool BubblePack::run() {
     ConnectedTest::computeConnectedComponents(graph, components);
 
     for (unsigned int i = 0; i < components.size(); ++i) {
-      Graph* tmp = graph;
+      Graph *tmp = graph;
       // apply "Bubble Pack" on the subgraph induced
       // by the current connected component
       graph = graph->inducedSubGraph(components[i]);

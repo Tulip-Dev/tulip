@@ -89,7 +89,9 @@ class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Fast Multipole Embedder (OGDF)", "Martin Gronemann", "12/11/2007",
-                    "Implements the fast multipole embedder layout algorithm of Martin Gronemann. It uses the same repulsive forces as FM³ of Hachul and Jünger, but slightly modified attractive forces.",
+                    "Implements the fast multipole embedder layout algorithm of Martin Gronemann. "
+                    "It uses the same repulsive forces as FM³ of Hachul and Jünger, but slightly "
+                    "modified attractive forces.",
                     "1.0", "Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext *context)
       : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()),

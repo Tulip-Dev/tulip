@@ -34,8 +34,9 @@ struct greaterRadius {
   }
 };
 
-double BubbleTree::computeRelativePosition(
-    tlp::node n, NodeStaticProperty<Vector<double, 5>> &relativePosition) {
+double
+BubbleTree::computeRelativePosition(tlp::node n,
+                                    NodeStaticProperty<Vector<double, 5>> &relativePosition) {
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0.; // remove z-coordinates because the drawing is 2D
@@ -281,8 +282,7 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5> &nrPos,
   delete it;
 }
 
-void BubbleTree::calcLayout(tlp::node n,
-                            NodeStaticProperty<Vector<double, 5>> &relativePosition) {
+void BubbleTree::calcLayout(tlp::node n, NodeStaticProperty<Vector<double, 5>> &relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -331,7 +331,7 @@ bool BubbleTree::run() {
     ConnectedTest::computeConnectedComponents(graph, components);
 
     for (unsigned int i = 0; i < components.size(); ++i) {
-      Graph* tmp = graph;
+      Graph *tmp = graph;
       // apply "Bubble Tree" on the subgraph induced
       // by the current connected component
       graph = graph->inducedSubGraph(components[i]);
