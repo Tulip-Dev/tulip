@@ -186,7 +186,8 @@ public:
   virtual int id() const;
 
   /**
-   * @return Return the a string indicating the programming language used to write the plugin (C++, Python).
+   * @return Return the a string indicating the programming language used to write the plugin (C++,
+   * Python).
    */
   virtual std::string programmingLanguage() const;
 
@@ -203,7 +204,7 @@ public:
     return !oldName.empty() ? oldName : std::string();
   }
 
- protected:
+protected:
   std::string oldName;
 };
 

@@ -134,7 +134,8 @@ public:
     if (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr)) {
       std::string pluginName = it->second.info->name();
       if (name != pluginName)
-	tlp::warning() << "Warning: '" << name << "' is a deprecated plugin name. Use '" << pluginName << "' instead." << std::endl;
+        tlp::warning() << "Warning: '" << name << "' is a deprecated plugin name. Use '"
+                       << pluginName << "' instead." << std::endl;
 
       return static_cast<PluginType *>(it->second.factory->createPluginObject(context));
     }
