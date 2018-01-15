@@ -194,7 +194,7 @@ The following methods have been added to the API:
 The signatures of the methods for setting all nodes / edges values in a graph property,
 for instance :meth:`tlp.BooleanProperty.setAllNodeValue`, :meth:`tlp.DoubleProperty.setAllEdgeValue`,
 have been updated. They now take an optionnal :class:`tlp.Graph` parameter, enabling to only
-set the nodes / edges values contained in that sub-graph.
+set the nodes / edges values contained in that subgraph.
 
 The method :meth:`tlp.Graph.attributeExist` is now deprecated, :meth:`tlp.Graph.existAttribute`
 should now be used instead.

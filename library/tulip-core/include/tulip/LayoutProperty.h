@@ -67,7 +67,7 @@ public:
   * Returns the maximum coordinate of the layout, i.e. the top-right corner of the induced bounding
   *box
   *
-  * @param subgraph If not null, returns the maximum coordinate for a sub-graph layout
+  * @param subgraph If not null, returns the maximum coordinate for a subgraph layout
   **/
   Coord getMax(const Graph *subgraph = nullptr);
 
@@ -75,7 +75,7 @@ public:
   * Returns the minimum coordinate of the layout, i.e. the bottom-left corner of the induced
   *bounding box
   *
-  * @param subgraph If not null, returns the minimum coordinate for a sub-graph layout
+  * @param subgraph If not null, returns the minimum coordinate for a subgraph layout
   **/
   Coord getMin(const Graph *subgraph = nullptr);
 
@@ -87,7 +87,7 @@ public:
   * Translates the current layout according to a movement vector
   *
   * @param move a movement vector
-  * @param subgraph If not null, only translates the layout of that sub-graph
+  * @param subgraph If not null, only translates the layout of that subgraph
   **/
   void translate(const Vec3f &move, const Graph *subgraph = nullptr);
 
@@ -107,7 +107,7 @@ public:
   * Scales the current layout according to a vector of scale factors (sx, sy, sz).
   *
   * @param scaleFactors a vector of scale factors
-  * @param subgraph If not null, only scales the layout of that sub-graph
+  * @param subgraph If not null, only scales the layout of that subgraph
   **/
   void scale(const Vec3f &scaleFactors, const Graph *subgraph = nullptr);
 
@@ -127,7 +127,7 @@ public:
   * Rotates the layout around the X-axis according to an angle in degrees.
   *
   * @param alpha an angle in degrees
-  * @param subgraph If not null, only rotates the layout of that sub-graph
+  * @param subgraph If not null, only rotates the layout of that subgraph
   **/
   void rotateX(const double &alpha, const Graph *subgraph = nullptr);
 
@@ -135,7 +135,7 @@ public:
   * Rotates the layout around the Y-axis according to an angle in degrees.
   *
   * @param alpha an angle in degrees
-  * @param subgraph If not null, only rotates the layout of that sub-graph
+  * @param subgraph If not null, only rotates the layout of that subgraph
   **/
   void rotateY(const double &alpha, const Graph *subgraph = nullptr);
 
@@ -143,7 +143,7 @@ public:
   * Rotates the layout around the Z-axis according to an angle in degrees.
   *
   * @param alpha an angle in degrees
-  * @param subgraph If not null, only rotates the layout of that sub-graph
+  * @param subgraph If not null, only rotates the layout of that subgraph
   **/
   void rotateZ(const double &alpha, const Graph *subgraph = nullptr);
 
@@ -187,7 +187,7 @@ public:
   * Centers the layout, meaning translating it in order that
   * the center of its bounding box is (0,0,0)
   *
-  * @param subgraph If not null, only centers the layout of that sub-graph
+  * @param subgraph If not null, only centers the layout of that subgraph
   **/
   void center(const Graph *subgraph = nullptr);
 
@@ -196,7 +196,7 @@ public:
   * the center of its bounding box is equal to newCenter
   *
   * @param newCenter the coordinate of the new layout center
-  * @param subgraph If not null, only centers the layout of that sub-graph
+  * @param subgraph If not null, only centers the layout of that subgraph
   **/
   void center(const Vec3f &newCenter, const Graph *subgraph = nullptr);
 
@@ -204,13 +204,13 @@ public:
   * Normalizes the layout, meaning dividing each nodes and edges coordinate by the maximum magnitude
   *of the whole coordinates set
   *
-  * @param subgraph If not null, only normalizes the layout of that sub-graph
+  * @param subgraph If not null, only normalizes the layout of that subgraph
   **/
   void normalize(const Graph *subgraph = nullptr);
 
   /**
   * Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
-  * @param subgraph If not null, only scales the layout of that sub-graph
+  * @param subgraph If not null, only scales the layout of that subgraph
   **/
   void perfectAspectRatio(const Graph *subgraph = nullptr);
 
@@ -232,7 +232,7 @@ public:
   /**
   * Returns the average edge length of the layout, the bends are taken into account
   *
-  * @param subgraph If not null, only compute the average edge length for that sub-graph
+  * @param subgraph If not null, only compute the average edge length for that subgraph
   **/
   double averageEdgeLength(const Graph *subgraph = nullptr) const;
 
@@ -241,7 +241,7 @@ public:
   * It is only defined for 2D drawing, meaning the third coordinate
   * is omitted
   *
-  * @param subgraph It not null, only computes the average angular resolution for that sub-graph
+  * @param subgraph It not null, only computes the average angular resolution for that subgraph
   **/
   double averageAngularResolution(const Graph *subgraph = nullptr) const;
 
@@ -252,7 +252,7 @@ public:
   *
   * @param n the graph node on which to compute the angular resolution
   * @param subgraph If not null, only computes the average angular resolution for the node in that
-  *sub-graph
+  *subgraph
   **/
   double averageAngularResolution(const node n, const Graph *subgraph = nullptr) const;
 
@@ -263,7 +263,7 @@ public:
   *
   * @param n the graph node on which to compute the angular resolution
   * @param subgraph If not null, only computes the average angular resolution for the node in that
-  *sub-graph
+  *subgraph
   **/
   std::vector<double> angularResolutions(const node n, const Graph *subgraph = nullptr) const;
 
@@ -272,7 +272,7 @@ public:
   * ie. sort edges around nodes according to their neighbors/bends position in the layout/
   * Only works in 2D, the third coordinate is not taken into account.
   *
-  * @param subgraph It not null, only fixes embedding in that sub-graph
+  * @param subgraph It not null, only fixes embedding in that subgraph
   **/
   void computeEmbedding(Graph *subgraph = nullptr);
 
@@ -282,7 +282,7 @@ public:
   * Only work in 2D, the third coordinate is not taken into account.
   *
   * @param n the graph node on which to fix embedding
-  * @param subgraph If not null, only fixes the embedding of the node in that sub-graph
+  * @param subgraph If not null, only fixes the embedding of the node in that subgraph
   **/
   void computeEmbedding(const node n, Graph *subgraph = nullptr);
 

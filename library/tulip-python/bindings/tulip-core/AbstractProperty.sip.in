@@ -445,7 +445,7 @@ whose associated value is equal to the one given in parameter.
 
 :param val: a value
 :type val: @PYTHON_NODE_TYPE@
-:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:param graph: a subgraph can be given in parameter, in that case returns an iterator on nodes only belonging to that subgraph
 :type graph: :class:`tlp.Graph`
 :rtype: a Tulip iterator on :class:`tlp.node` objects
 %End
@@ -477,7 +477,7 @@ whose associated value is equal to the one given in parameter.
 
 :param val: a value
 :type val: @PYTHON_EDGE_TYPE@
-:param graph: a sub-graph can be given in parameter, in that case returns an iterator on edges only belonging to that sub-graph
+:param graph: a subgraph can be given in parameter, in that case returns an iterator on edges only belonging to that subgraph
 :type graph: :class:`tlp.Graph`
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 %End
@@ -1319,7 +1319,7 @@ whose associated value is equal to the one given in parameter.
 
 :param val: a value
 :type val: list of @PYTHON_TYPE@
-:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:param graph: a subgraph can be given in parameter, in that case returns an iterator on nodes only belonging to that subgraph
 :type graph: :class:`tlp.Graph`
 :rtype: a Tulip iterator on :class:`tlp.node` objects
 %End
@@ -1341,7 +1341,7 @@ whose associated value is equal to the one given in parameter.
 
 :param val: a value
 :type val: list of @PYTHON_TYPE@
-:param graph: a sub-graph can be given in parameter, in that case returns an iterator on edges only belonging to that sub-graph
+:param graph: a subgraph can be given in parameter, in that case returns an iterator on edges only belonging to that subgraph
 :type graph: :class:`tlp.Graph`
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 %End

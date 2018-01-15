@@ -1171,6 +1171,6 @@
 (string "file" "test_gui.tlp")
 )
 (graph_attributes 1 
-(string "name" "selection sub-graph")
+(string "name" "selection subgraph")
 )
 )

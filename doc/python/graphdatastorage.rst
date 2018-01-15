@@ -29,8 +29,8 @@ Lists of values can also be associated to graph elements through the use of the 
 
 In Tulip, there is two different kinds of graph properties :
 
-	* **Local property** : means that the property belongs to the graph. Its ancestors in the sub-graph hierarchy do not have access to it but its descendants do.
-	* **Inherited property** : means that the property is inherited from an ancestor in the sub-graph hierarchy. Only the graph whose the property is local can delete it.
+	* **Local property** : means that the property belongs to the graph. Its ancestors in the subgraph hierarchy do not have access to it but its descendants do.
+	* **Inherited property** : means that the property is inherited from an ancestor in the subgraph hierarchy. Only the graph whose the property is local can delete it.
 	
 Creating / Accessing / Deleting a graph property
 ------------------------------------------------

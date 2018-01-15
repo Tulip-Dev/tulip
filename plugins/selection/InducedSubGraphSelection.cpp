@@ -28,7 +28,7 @@ PLUGIN(InducedSubGraphSelection)
 //=================================================================================
 static const char *paramHelp[] = {
     // Nodes
-    "Set of nodes from which the induced sub-graph is computed.",
+    "Set of nodes from which the induced subgraph is computed.",
     // Use edges
     "If true, source and target nodes of selected edges will also be added in the input set of "
     "nodes."};

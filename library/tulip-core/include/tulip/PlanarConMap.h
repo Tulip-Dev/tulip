@@ -80,7 +80,7 @@ public:
    * face f, and e1 and e2 will be predecessor of respectively v and w in the
    * cycles around v and w. The new face is put into new_face.
    * This edge is also added in all the super-graph of the map to maintain
-   * the sub-graph relation between graphs.
+   * the subgraph relation between graphs.
    * Warning, the edge must be element of the graph hierarchy, thus it must be
    * element of the root graph.
    * Warning : One can't add an existing edge to the root graph

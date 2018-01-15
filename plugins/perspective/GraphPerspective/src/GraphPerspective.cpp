@@ -484,12 +484,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection,
                                  "Deselect all selected elements of the current grap", "Shift+A");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionGroup_elements,
-                                 "Create a meta-node representing a newly created sub-graph "
+                                 "Create a meta-node representing a newly created subgraph "
                                  "containing all selected elements of the current graph",
                                  "G");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(
       _ui->actionCreate_sub_graph,
-      "Create a sub-graph containing all selected elements of the current graph", "Shift+G");
+      "Create a subgraph containing all selected elements of the current graph", "Shift+G");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPreferences, "Show Tulip preferences dialog", ",");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionShowUserDocumentation,
                                  "Display the User handbook in a navigator", "?");
@@ -541,9 +541,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TOOLTIP(_ui->actionPlugins_Center, _ui->pluginsButton->toolTip());
   SET_TOOLTIP(_ui->actionImport_CSV, _ui->csvImportButton->toolTip());
   SET_TOOLTIP(_ui->actionSave_graph_to_file, "Write the current graph into a file");
-  SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty sub-graph of the current graph");
+  SET_TOOLTIP(_ui->actionCreate_empty_sub_graph, "Create an empty subgraph of the current graph");
   SET_TOOLTIP(_ui->actionClone_sub_graph,
-              "Create a sub-graph containing the same elements as the current graph");
+              "Create a subgraph containing the same elements as the current graph");
   SET_TOOLTIP(_ui->action_Close_All, "Close all opened workspace views");
   SET_TOOLTIP(_ui->actionColor_scales_management, "Manage Tulip color scales");
   SET_TOOLTIP(_ui->actionMake_selection_a_graph,
@@ -1370,7 +1370,7 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
   Observable::holdObservers();
   BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   makeSelectionGraph(graph, selection);
-  Graph *result = graph->addSubGraph(selection, "selection sub-graph");
+  Graph *result = graph->addSubGraph(selection, "selection subgraph");
   Observable::unholdObservers();
   return result;
 }
@@ -1387,7 +1387,7 @@ void GraphPerspective::cloneSubGraph() {
   prop.setAllNodeValue(true);
   prop.setAllEdgeValue(true);
   _graphs->currentGraph()->push();
-  _graphs->currentGraph()->addSubGraph(&prop, "clone sub-graph");
+  _graphs->currentGraph()->addSubGraph(&prop, "clone subgraph");
 }
 
 void GraphPerspective::addEmptySubGraph() {
@@ -1395,7 +1395,7 @@ void GraphPerspective::addEmptySubGraph() {
     return;
 
   _graphs->currentGraph()->push();
-  _graphs->currentGraph()->addSubGraph(nullptr, "empty sub-graph");
+  _graphs->currentGraph()->addSubGraph(nullptr, "empty subgraph");
 }
 
 void GraphPerspective::currentGraphChanged(Graph *graph) {

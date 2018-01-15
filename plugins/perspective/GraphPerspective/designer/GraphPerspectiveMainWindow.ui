@@ -1799,7 +1799,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</iconset>
    </property>
    <property name="text">
-    <string>Create sub-graph &amp;from selection</string>
+    <string>Create subgraph &amp;from selection</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
@@ -1953,7 +1953,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionCreate_empty_sub_graph">
    <property name="text">
-    <string>Create &amp;empty sub-graph</string>
+    <string>Create &amp;empty subgraph</string>
    </property>
   </action>
   <action name="actionClone_sub_graph">
@@ -1962,7 +1962,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
-    <string>Create c&amp;lone sub-graph</string>
+    <string>Create c&amp;lone subgraph</string>
    </property>
   </action>
   <action name="actionNew_graph">

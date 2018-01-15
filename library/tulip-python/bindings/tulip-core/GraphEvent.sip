@@ -45,14 +45,14 @@ Below is an exhaustive list of those types :
   * :const:`tlp.GraphEvent.TLP_AFTER_SET_ENDS` : the extremities of an edge have been modified (use :meth:`tlp.GraphEvent.getEdge` to get the concerned edge)
   * :const:`tlp.GraphEvent.TLP_ADD_NODES` : several nodes have been added in the graph (use :meth:`tlp.GraphEvent.getNodes` to get the list of concerned nodes)
   * :const:`tlp.GraphEvent.TLP_ADD_EDGES` : several edges have been added in the graph (use :meth:`tlp.GraphEvent.getEdges` to get the list of concerned edges)
-  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct sub-graph) is about to be added in the sub-graphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct sub-graph) has been added in the sub-graphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct sub-graph) is about to be removed in the sub-graphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct sub-graph) has been removed in the sub-graphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_SUBGRAPH` : a sub-graph is about to be added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_ADD_SUBGRAPH` : a sub-graph has been added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_SUBGRAPH` : a sub-graph is about to be removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
-  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_SUBGRAPH` : a sub-graph has been removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) is about to be added in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_AFTER_ADD_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) has been added in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) is about to be removed in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_DESCENDANTGRAPH` : a descendant graph (i.e. not necessarily a direct subgraph) has been removed in the subgraphs hierarchy. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_SUBGRAPH` : a subgraph is about to be added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_AFTER_ADD_SUBGRAPH` : a subgraph has been added in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_SUBGRAPH` : a subgraph is about to be removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
+  * :const:`tlp.GraphEvent.TLP_AFTER_DEL_SUBGRAPH` : a subgraph has been removed in the graph. Use :meth:`tlp.GraphEvent.getSubGraph` to get it.
   * :const:`tlp.GraphEvent.TLP_BEFORE_ADD_LOCAL_PROPERTY` : a local property is about to be added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
   * :const:`tlp.GraphEvent.TLP_ADD_LOCAL_PROPERTY` : a local property has been added in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
   * :const:`tlp.GraphEvent.TLP_BEFORE_DEL_LOCAL_PROPERTY` : a local property is about to be deleted in the graph. Use :meth:`tlp.GraphEvent.getPropertyName` to get the name of the concerned property.
@@ -183,7 +183,7 @@ Returns the edges concerned by the event (if any, otherwise return an empty list
 %Docstring
 tlp.GraphEvent.getSubGraph()
 
-Returns the sub-graph or descendant graph concerned by the event (if any, return :const:`None` otherwise)
+Returns the subgraph or descendant graph concerned by the event (if any, return :const:`None` otherwise)
 
 :rtype: :class:`tlp.Graph`
 %End

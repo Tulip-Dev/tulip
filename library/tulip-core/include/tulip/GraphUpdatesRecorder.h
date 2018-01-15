@@ -130,9 +130,9 @@ class GraphUpdatesRecorder : public Observable {
   // copy of nodes/edges id manager state at stop time
   const GraphStorageIdsMemento *newIdsState;
 
-  // one list of (parent graph, added sub-graph)
+  // one list of (parent graph, added subgraph)
   std::list<std::pair<Graph *, Graph *>> addedSubGraphs;
-  // one list of (parent graph, deleted sub-graph)
+  // one list of (parent graph, deleted subgraph)
   std::list<std::pair<Graph *, Graph *>> deletedSubGraphs;
 
   // one set of added properties per graph

@@ -29,7 +29,7 @@ tlp.SizeProperty.getMax(subgraph=None)
 
 Returns the maximum value on the nodes for that size property.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the maximum value on the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case return the maximum value on the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Size`
 %End
@@ -42,7 +42,7 @@ tlp.SizeProperty.getMin(subgraph=None)
 
 Returns the minimum value on the nodes for that size property.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the minimum value on the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case return the minimum value on the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Size`
 %End
@@ -57,7 +57,7 @@ Scales the sizes of the nodes and edges according to a scale factors vector (sx,
 
 :param scaleFactors: a vector of scales factor
 :type scaleFactors: :class:`tlp.Size`
-:param subgraph: a sub-graph can be given in parameter, in that case scales the size of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case scales the size of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 %End
 

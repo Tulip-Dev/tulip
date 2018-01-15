@@ -284,7 +284,7 @@ class Graph : tlp::Observable /Abstract/ {
 This is the main Tulip class. It enables to :
 
   * create a directed graph
-  * create and manipulate a sub-graphs hierarchy
+  * create and manipulate a subgraphs hierarchy
   * get semantic iterators on graph elements
   * create and retrieve properties of different types to get/set data on the graph
 
@@ -358,7 +358,7 @@ which can contain an error message.
 %Docstring
 tlp.Graph.clear()
 
-Remove all nodes, edges and sub-graphs from the graph .
+Remove all nodes, edges and subgraphs from the graph .
 %End
 
 //===========================================================================================
@@ -367,12 +367,12 @@ Remove all nodes, edges and sub-graphs from the graph .
 %Docstring
 tlp.Graph.addSubGraph(selection=None, name="unnamed")
 
-Creates and returns a new sub-graph. The elements of the new sub-graph are those 
-selected in the selection. If there is no selection an empty sub-graph is returned.
+Creates and returns a new subgraph. The elements of the new subgraph are those 
+selected in the selection. If there is no selection an empty subgraph is returned.
 
-:param selection: a Boolean property whose selected elements will be added to the sub-graph
+:param selection: a Boolean property whose selected elements will be added to the subgraph
 :type selection: :class:`tlp.BooleanProperty`
-:param name: The name of the newly created sub-graph. Defaults to "unnamed".
+:param name: The name of the newly created subgraph. Defaults to "unnamed".
 :type name: string
 :rtype: :class:`tlp.Graph`
 %End
@@ -398,9 +398,9 @@ tlp.Graph.addSubGraph(name)
 
 .. versionadded:: 3.7
 
-Creates and returns a new named sub-graph of this graph.
+Creates and returns a new named subgraph of this graph.
 
-:param name: The name of the newly created sub-graph.
+:param name: The name of the newly created subgraph.
 :type name: string
 :rtype: :class:`tlp.Graph`
 %End
@@ -413,11 +413,11 @@ tlp.Graph.addCloneSubGraph(name="unnamed", addSibling=False, addSiblinProperties
 
 .. versionadded:: 4.5
 
-Creates and returns a sub-graph of this graph (or the parent of this graph) that contains all its elements.
+Creates and returns a subgraph of this graph (or the parent of this graph) that contains all its elements.
 
-:param name: The name of the newly created sub-graph. Defaults to "unnamed".
+:param name: The name of the newly created subgraph. Defaults to "unnamed".
 :type name: string
-:param addSibling: if true a sibling of this graph will be created; a sub-graph of this graph if not. Defaults to false
+:param addSibling: if true a sibling of this graph will be created; a subgraph of this graph if not. Defaults to false
 :type addSibling: bool
 :param addSiblingProperties: if true all the local properties of this graph will be copied into its clone sibling. Defaults to false
 :type addSiblingProperties: bool
@@ -432,13 +432,13 @@ tlp.Graph.inducedSubGraph(nodeSet, parentSubGraph=None, name="unnamed")
 
 .. deprecated:: 5.0
 
-Creates and returns a new sub-graph of the graph induced by a set of nodes.
-The sub-graph contains all the nodes from the set and all the existing edges
+Creates and returns a new subgraph of the graph induced by a set of nodes.
+The subgraph contains all the nodes from the set and all the existing edges
 between two nodes in the set including self-loops.
 
-:param nodeSet: the set of nodes from which to build the induced sub-graph
+:param nodeSet: the set of nodes from which to build the induced subgraph
 :type nodeSet: set of :class:`tlp.node`
-:param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
+:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
 :param name: The name of the newly created subgraph
 :type name: string
@@ -453,13 +453,13 @@ tlp.Graph.inducedSubGraph(nodes, parentSubGraph=None, name="unnamed")
 
 .. versionadded:: 5.0
 
-Creates and returns a new sub-graph of the graph induced by a set of nodes.
-The sub-graph contains all the nodes from the set and all the existing edges
+Creates and returns a new subgraph of the graph induced by a set of nodes.
+The subgraph contains all the nodes from the set and all the existing edges
 between two nodes in the set including self-loops.
 
-:param nodes: the set of nodes from which to build the induced sub-graph
+:param nodes: the set of nodes from which to build the induced subgraph
 :type nodes: list of :class:`tlp.node`
-:param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
+:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
 :param name: The name of the newly created subgraph
 :type name: string
@@ -474,13 +474,13 @@ tlp.Graph.inducedSubGraph(selection, parentSubGraph=None, name="unnamed")
 
 .. versionadded:: 4.10
 
-Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.
-The sub-graph contains all the nodes of the set induced by the selected nodes but also the source and target nodes from
+Creates and returns a new subgraph of the graph induced by a selection of nodes and edges.
+The subgraph contains all the nodes of the set induced by the selected nodes but also the source and target nodes from
 the selected edges and all the existing edges between two nodes in the set including self-loops.
 
 :param selection: a selection of nodes and edges
 :type selection: :class:`tlp.BooleanProperty`
-:param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
+:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
 :param name: The name of the newly created subgraph
 :type name: string
@@ -493,9 +493,9 @@ the selected edges and all the existing edges between two nodes in the set inclu
 %Docstring
 tlp.Graph.delSubGraph(subgraph)
 
-Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs of the graph.
+Delete a subgraph of this graph. The subgraph's subgraphs become subgraphs of the graph.
 
-:param subgraph: the sub-graph to remove
+:param subgraph: the subgraph to remove
 :type subgraph: :class:`tlp.Graph`
 %End
 
@@ -507,7 +507,7 @@ Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs o
     if (a0->getSuperGraph() != sipCpp) {
       sipIsErr = throwInvalidSgException(sipCpp, a0);
     } else {
-      // the sub-graph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
+      // the subgraph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
       // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
       // Python code raises a segmentation fault :
       // sg = graph.addSubGraph()
@@ -526,9 +526,9 @@ Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs o
 %Docstring
 tlp.Graph.delAllSubGraphs(subgraph)
 
-Delete a sub-graph of this graph and all its sub-graphs.
+Delete a subgraph of this graph and all its subgraphs.
 
-:param subgraph: the sub-graph to remove
+:param subgraph: the subgraph to remove
 :type subgraph: :class:`tlp.Graph` 
 %End
 
@@ -540,7 +540,7 @@ Delete a sub-graph of this graph and all its sub-graphs.
     if (a0->getSuperGraph() != sipCpp) {
       sipIsErr = throwInvalidSgException(sipCpp, a0);
     } else {
-      // the sub-graphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
+      // the subgraphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
       // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
       // Python code raises a segmentation fault :
       // sg = graph.addSubGraph()
@@ -594,7 +594,7 @@ Sets the parent of the graph (use very carefully). Standard users should never u
 %Docstring
 tlp.Graph.getSubGraphs()
 
-Returns an iterator on all the sub-graphs of the graph.
+Returns an iterator on all the subgraphs of the graph.
 
 :rtype: a Tulip iterator on :class:`tlp.Graph` objects
 %End
@@ -609,7 +609,7 @@ Returns an iterator on all the sub-graphs of the graph.
 %Docstring
 tlp.Graph.isSubGraph(graph)
 
-Returns :const:`True` if the graph argument is a direct sub-graph of the graph.
+Returns :const:`True` if the graph argument is a direct subgraph of the graph.
 
 :param graph: a graph
 :type graph: :class:`tlp.Graph`
@@ -635,7 +635,7 @@ Returns :const:`True` if the graph argument is a descendant of this graph.
 %Docstring
 tlp.Graph.getSubGraph(id)
 
-Returns the sub-graph with the corresponding id or :const:`None` if there is no sub-graph with that id.
+Returns the subgraph with the corresponding id or :const:`None` if there is no subgraph with that id.
 
 :param id: a graph id
 :type id: integer
@@ -650,9 +650,9 @@ tlp.Graph.getSubGraph(name)
 
 .. versionadded:: 3.7
 
-Returns the sub-graph with the corresponding name or :const:`None` if there is no sub-graph with that name.
+Returns the subgraph with the corresponding name or :const:`None` if there is no subgraph with that name.
 
-:param name: the name of the sub-graph to return
+:param name: the name of the subgraph to return
 :type name: string
 :rtype: :class:`tlp.Graph` or :const:`None` 
 %End
@@ -693,7 +693,7 @@ tlp.Graph.getNthSubGraph(n)
 
 .. versionadded:: 3.7
 
-Returns the nth sub-graph or :const:`None` if there is no such sub-graph.
+Returns the nth subgraph or :const:`None` if there is no such subgraph.
 Since order cannot be ensured in every implementation, this method should be equivalent to::
 
   i = 0
@@ -702,7 +702,7 @@ Since order cannot be ensured in every implementation, this method should be equ
       return sg
   return None    
 
-:param n: the index of the sub-graph to return
+:param n: the index of the subgraph to return
 :type n: integer
 :rtype: :class:`tlp.Graph` or :const:`None`
 %End
@@ -715,7 +715,7 @@ tlp.Graph.numberOfSubGraphs()
 
 .. versionadded:: 3.7
 
-Returns the number of direct sub-graphs.
+Returns the number of direct subgraphs.
 
 :rtype: integer
 %End  
@@ -755,7 +755,7 @@ Returns an iterator over all the descendant graphs of the graph.
 tlp.Graph.addNode(propertiesValues=None)
 
 Adds a new node in the graph and returns it. This node is also added in all 
-the graph's ancestors to maintain the sub-graph relation between graphs.
+the graph's ancestors to maintain the subgraph relation between graphs.
 Since Tulip 5.0, it is also possible to set graph properties values for the newly added node
 through the use of a dictionnary (see :meth:`tlp.Graph.setNodePropertiesValues` for more details).
 
@@ -783,7 +783,7 @@ tlp.Graph.addNodes(nbNodes)
 .. versionadded:: 3.7
 
 Adds new nodes in the graph and returns them in a list.
-The new nodes are also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+The new nodes are also added in all the graph ancestors to maintain the subgraph relation between graphs.
 
 :param nbNodes: the number of nodes to add in the graph
 :type nbNodes: integer
@@ -800,7 +800,7 @@ The new nodes are also added in all the graph ancestors to maintain the sub-grap
 tlp.Graph.addNode(node)
 
 Adds an existing node in the graph. This node is also added in all the graph ancestors 
-to maintain the sub-graph relation between graphs.
+to maintain the subgraph relation between graphs.
 
 :param node: an existing node to add to the graph
 :type node: :class:`tlp.node`
@@ -829,7 +829,7 @@ tlp.Graph.addNodes(itNodes)
 .. versionadded:: 3.7
 
 Adds existing nodes in the graph. The nodes are also added in all
-the graph ancestors to maintain the sub-graph relation between graphs.
+the graph ancestors to maintain the subgraph relation between graphs.
 
 :param itNodes: an iterator on nodes to add
 :type itNodes: a Tulip iterator on :class:`tlp.node` objects
@@ -866,7 +866,7 @@ tlp.Graph.addNodes(nodes)
 .. versionadded:: 4.5
 
 Adds existing nodes in the graph. The nodes are also added in all
-the graph ancestors to maintain the sub-graph relation between graphs.
+the graph ancestors to maintain the subgraph relation between graphs.
 
 :param nodes: a vector of nodes to add
 :type nodes: a list of :class:`tlp.node` objects
@@ -896,8 +896,8 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %Docstring
 tlp.Graph.delNode(node, deleteInAllGraphs=False)
 
-Deletes a node in the graph. This node is also removed in all the sub-graphs of the graph 
-to maintain the sub-graph relation between graphs. 
+Deletes a node in the graph. This node is also removed in all the subgraphs of the graph
+to maintain the subgraph relation between graphs.
 
 :param node: the node to delete
 :type node: :class:`tlp.node` 
@@ -923,8 +923,8 @@ tlp.Graph.delNodes(itNodes, deleteInAllGraphs=False)
 .. versionadded:: 3.7
 
 Deletes nodes in the graph. These nodes are also removed in
-the sub-graphs hierarchy of the current graph to maintain
-the sub-graph relation between graphs.
+the subgraphs hierarchy of the current graph to maintain
+the subgraph relation between graphs.
 
 :param itNodes: an iterator on the nodes to add
 :type itNodes: a Tulip iterator on :class:`tlp.node` objects
@@ -959,8 +959,8 @@ tlp.Graph.delNodes(nodes, deleteInAllGraphs=False)
 .. versionadded:: 4.5
 
 Deletes nodes in the graph. These nodes are also removed in
-the sub-graphs hierarchy of the current graph to maintain
-the sub-graph relation between graphs.
+the subgraphs hierarchy of the current graph to maintain
+the subgraph relation between graphs.
 
 :param nodes: a vector of nodes to add
 :type nodes: a list of :class:`tlp.node` objects
@@ -990,7 +990,7 @@ the sub-graph relation between graphs.
 tlp.Graph.addEdge(src, tgt, propertiesValues=None)
 
 Adds a new edge in the graph and returns it. This edge is also added in all 
-the graph's ancestors to maintain the sub-graph relation between graphs.
+the graph's ancestors to maintain the subgraph relation between graphs.
 Since Tulip 5.0, it is also possible to set graph properties values for the newly added edge
 through the use of a dictionnary (see :meth:`tlp.Graph.setEdgePropertiesValues` for more details).
 
@@ -1031,7 +1031,7 @@ tlp.Graph.addEdges(edges)
 .. versionadded:: 3.7
 
 Adds new edges in the graph and returns them in a list.
-The new edges are also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+The new edges are also added in all the graph ancestors to maintain the subgraph relation between graphs.
 
 :param edges: the list of edges to add described by a pair of nodes
 :type edges: list of tuples containing two :class:`tlp.node` objects
@@ -1062,7 +1062,7 @@ The new edges are also added in all the graph ancestors to maintain the sub-grap
 tlp.Graph.addEdge(edge)
 
 Adds an existing edge in the graph. This edge is also added in all 
-the graph's ancestors to maintain the sub-graph relation between graphs. 
+the graph's ancestors to maintain the subgraph relation between graphs. 
 
 :param edge: an existing edge to add to the graph
 :type edge: :class:`tlp.edge`
@@ -1107,7 +1107,7 @@ tlp.Graph.addEdges(itEdges)
 .. versionadded:: 3.7
 
 Adds existing edges in the graph. The edges are also added in all
-the graph ancestors to maintain the sub-graph relation between graphs.
+the graph ancestors to maintain the subgraph relation between graphs.
 
 :param itEdges: an iterator on the edges to add
 :type itEdges: a Tulip iterator on :class:`tlp.edge` objects
@@ -1159,7 +1159,7 @@ tlp.Graph.addEdges(list_edges)
 .. versionadded:: 4.5
 
 Adds existing edges in the graph. The edges are also added in all
-the graph ancestors to maintain the sub-graph relation between graphs.
+the graph ancestors to maintain the subgraph relation between graphs.
 
 :param list_edges: a list of edges to add
 :type list_edges: a list of :class:`tlp.edge` objects
@@ -1207,8 +1207,8 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %Docstring
 tlp.Graph.delEdge(edge, deleteInAllGraphs=False)
 
-Deletes an edge in the graph. This edge is also removed in all the sub-graphs 
-of the graph to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
+Deletes an edge in the graph. This edge is also removed in all the subgraphs
+of the graph to maintain the subgraph relation between graphs. The ordering of edges is preserved.
 
 :param edge: the edge to delete
 :type edge: :class:`tlp.edge` 
@@ -1234,8 +1234,8 @@ tlp.Graph.delEdges(itEdges, deleteInAllGraphs=False)
 .. versionadded:: 3.7
 
 Deletes edges in the graph. These edges are also removed in
-the sub-graphs hierarchy of the current graph to maintain
-the sub-graph relation between graphs.
+the subgraphs hierarchy of the current graph to maintain
+the subgraph relation between graphs.
 The ordering of the remaining edges is preserved.
 
 :param itEdges: an iterator on the edges to delete
@@ -1270,8 +1270,8 @@ tlp.Graph.delEdges(edges, deleteInAllGraphs=False)
 .. versionadded:: 4.5
 
 Deletes edges in the graph. These edges are also removed in
-the sub-graphs hierarchy of the current graph to maintain
-the sub-graph relation between graphs.
+the subgraphs hierarchy of the current graph to maintain
+the subgraph relation between graphs.
 
 :param edges: a list of edges to delete
 :type edges: a list of :class:`tlp.edge` objects
@@ -2341,7 +2341,7 @@ If no edge is found, returns edges is empty.
 %Docstring
 tlp.Graph.getBooleanProperty(name)
 
-Returns the boolean property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the boolean property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2387,7 +2387,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getBooleanVectorProperty(name)
 
-Returns the boolean vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the boolean vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2433,7 +2433,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getLayoutProperty(name)
 
-Returns the layout property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the layout property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2479,7 +2479,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getCoordVectorProperty(name)
 
-Returns the coord vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the coord vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2525,7 +2525,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getColorProperty(name)
 
-Returns the color property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the color property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2571,7 +2571,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getColorVectorProperty(name)
 
-Returns the color vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the color vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2617,7 +2617,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getDoubleProperty(name)
 
-Returns the double property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the double property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2663,7 +2663,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getDoubleVectorProperty(name)
 
-Returns the double vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the double vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2709,7 +2709,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getStringProperty(name)
 
-Returns the string property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the string property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2755,7 +2755,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getStringVectorProperty(name)
 
-Returns the string vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the string vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2801,7 +2801,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getSizeProperty(name)
 
-Returns the size property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the size property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2847,7 +2847,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getSizeVectorProperty(name)
 
-Returns the size vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the size vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2893,7 +2893,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getIntegerProperty(name)
 
-Returns the integer property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the integer property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2939,7 +2939,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getIntegerVectorProperty(name)
 
-Returns the integer vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the integer vector property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -2985,7 +2985,7 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %Docstring
 tlp.Graph.getGraphProperty(name)
 
-Returns the meta-graph property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns the meta-graph property associated to name in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
@@ -3048,7 +3048,7 @@ If the property does not exist it returns :const:`None`.
 %Docstring
 tlp.Graph.existProperty(name)
 
-Returns :const:`True` if a property of that name exists in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns :const:`True` if a property of that name exists in the graph properties pool or in the pool of an ancestor in the subgraphs hierarchy.
 
 :param name: the name of the property
 :type name: string
@@ -3811,25 +3811,25 @@ edges from the metanode to the other nodes.
 %Docstring
 tlp.Graph.createMetaNode(subgraph, multiEdges=True, delAllEdge=True)
 
-Closes a sub-graph into a metanode and returns it. Edges from nodes
-in the sub-graph to nodes outside the sub-graph are replaced with
-edges from the metanode to the nodes outside the sub-graph.
+Closes a subgraph into a metanode and returns it. Edges from nodes
+in the subgraph to nodes outside the subgraph are replaced with
+edges from the metanode to the nodes outside the subgraph.
 
-The provided sub-graph can not be a descendant of the current graph in the graph hierarchy.
+The provided subgraph can not be a descendant of the current graph in the graph hierarchy.
 When creating a metanode, all nodes that are closed in it are first deleted
-from the graph. These nodes are also deleted in the sub-graphs of the graph and
-in all descendant sub-graphs. So if the provided sub-graph is a descendant of
+from the graph. These nodes are also deleted in the subgraphs of the graph and
+in all descendant subgraphs. So if the provided subgraph is a descendant of
 the graph, all its nodes and edges will be deleted and the meta-node will
-point to an empty sub-graph.
+point to an empty subgraph.
 
-:param subgraph: an existing sub-graph
+:param subgraph: an existing subgraph
 :type subgraph: :class:`tlp.Graph`
 :param multiEdges: indicates if a meta edge will be created for each underlying edge
 :type multiEdges: boolean
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
 :rtype: :class:`tlp.node`
-:throws: an exception if the provided sub-graph is a descandent of the graph in the graph hierarchy or if one of the element in the sub-graph does not belong to the graph.
+:throws: an exception if the provided subgraph is a descandent of the graph in the graph hierarchy or if one of the element in the subgraph does not belong to the graph.
 
 .. warning:: This method will fail when called on the root graph.
 
@@ -3874,7 +3874,7 @@ tlp.Graph.createMetaNodes(itGraph, quotientGraph)
 Populates a quotient graph with one meta node for each iterated graph.
 Returns a list of created meta-nodes.
 
-:param itGraph: a graph iterator, (typically a sub-graph iterator)
+:param itGraph: a graph iterator, (typically a subgraph iterator)
 :type itGraph: a Tulip iterator on :class:`tlp.Graph` objects
 :param quotientGraph: the graph that will contain the meta nodes
 :type quotientGraph: :class:`tlp.Graph`
@@ -4258,7 +4258,7 @@ bool saveGraph(tlp::Graph *graph, const std::string &filename);
 %Docstring
 tlp.saveGraph(graph, filename)
 
-Serializes the corresponding graph and all its sub-graphs (depending on the format) to a file
+Serializes the corresponding graph and all its subgraphs (depending on the format) to a file
 through the available Tulip export plugins.
 
 Since Tulip 4.8, the selection of the export plugin is based on the provided filename extension.

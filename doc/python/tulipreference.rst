@@ -217,7 +217,7 @@ Modification of the graph structure
 	
 .. _graph-class.subgraphs-hierarchy:
 
-Creation and Modification of the sub-graph hierarchy
+Creation and Modification of the subgraph hierarchy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automethod:: tulip::tlp.Graph.addSubGraph

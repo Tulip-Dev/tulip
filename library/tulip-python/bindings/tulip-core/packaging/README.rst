@@ -15,7 +15,7 @@ The main features provided by the bindings are the following ones:
   - **Creation and manipulation of graphs** :
     Tulip provides an efficient graph data structure for storing large and complex networks.
     It is also one of the few that offer the possibility to
-    efficiently define and navigate graph hierarchies or cluster trees (nested sub-graphs).
+    efficiently define and navigate graph hierarchies or cluster trees (nested subgraphs).
 
   - **Storage of data on graph elements** :
     Tulip allows to associate different kind of serializable data (boolean, integer, float, string, ...)
@@ -83,10 +83,10 @@ Some information regarding the Tulip-Python releases pushed on the Python Packag
 Example
 =======
 
-The following script imports the dependency graph from the locally installed pip packages, 
+The following script imports the dependency graph from the locally installed pip packages,
 draws it using a force directed layout algorithm and serializes the resulting graph to a file
 through the TLP graph format. The imported graph can then be visualized through the Tulip software
-or the use of the dedicated `tulipgui <https://pypi.python.org/pypi/tulipgui-python>`_ module, 
+or the use of the dedicated `tulipgui <https://pypi.python.org/pypi/tulipgui-python>`_ module,
 enabling to create the OpenGL visualizations available in Tulip from Python.
 
 .. code:: python

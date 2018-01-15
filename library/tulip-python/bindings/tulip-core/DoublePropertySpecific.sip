@@ -29,7 +29,7 @@ tlp.DoubleProperty.getNodeMin(subgraph=None)
 
 Returns the minimum value on the nodes for that double property.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the minimum value on the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case return the minimum value on the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End
@@ -42,7 +42,7 @@ tlp.DoubleProperty.getNodeMax(subgraph=None)
 
 Returns the maximum value on the nodes for that double property.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the maximum value on the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case return the maximum value on the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End
@@ -55,7 +55,7 @@ tlp.DoubleProperty.getEdgeMin(subgraph=None)
 
 Returns the minimum value on the edges for that double property.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the minimum value on the edges belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case return the minimum value on the edges belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End
@@ -68,7 +68,7 @@ tlp.DoubleProperty.getEdgeMax(subgraph = None)
 
 Returns the maximum value on the edges for that double property.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the maximum value on the edges belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case return the maximum value on the edges belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End

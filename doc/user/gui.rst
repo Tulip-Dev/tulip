@@ -45,7 +45,7 @@ The Tulip User Interface exploits the standard *File, Edit, Window, Help* menu o
 
 The *File* menu contains operations for file management. One can find in it the basic *Create, Open* and *Save Project*, and the *Import* and *New graph* creation tools.
 
-The *Edit* menu gives access to the standard tools *Undo, Redo, Cut, Copy, Paste* and *Delete*. Several other options concerning selection operations or sub-graph creations can also be found there.
+The *Edit* menu gives access to the standard tools *Undo, Redo, Cut, Copy, Paste* and *Delete*. Several other options concerning selection operations or subgraph creations can also be found there.
 
 The last two menus, *Window* and *Help*, give a few various options e.g., enabling full screen mode, closing all panels, opening documentation.
 

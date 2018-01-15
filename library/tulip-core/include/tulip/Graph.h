@@ -273,7 +273,7 @@ public:
   //=========================================================================
 
   /**
-   * @brief Removes all nodes, edges and sub-graphs from this graph.
+   * @brief Removes all nodes, edges and subgraphs from this graph.
    *
    * Contrarily to creating a new Graph, this keeps attributes and properties.
    *
@@ -282,7 +282,7 @@ public:
   virtual void clear() = 0;
 
   /**
-    * @brief Creates and returns a new sub-graph of this graph.
+    * @brief Creates and returns a new subgraph of this graph.
     *
     * If a BooleanProperty is provided, only nodes and edges for which it is true will be added to
     *the subgraph.
@@ -296,7 +296,7 @@ public:
                              const std::string &name = "unnamed") = 0;
 
   /**
-   * @brief Creates and returns a new named sub-graph of this graph.
+   * @brief Creates and returns a new named subgraph of this graph.
    *
    * @param name The name of the newly created subgraph.
    * @return :Graph* The newly created subgraph.
@@ -319,7 +319,7 @@ public:
                                   bool addSiblingProperties = false);
 
   /**
-   * @brief Creates and returns a new sub-graph of the graph induced by a vector of nodes.
+   * @brief Creates and returns a new subgraph of the graph induced by a vector of nodes.
    * @since Tulip 5.0
    * Every node contained in the given vector is added to the subgraph.
    * Every edge connecting any two nodes in the set of given nodes is also added.
@@ -341,7 +341,7 @@ public:
                                      const std::string &name = "unnamed");
 
   /**
-   * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and
+   * @brief Creates and returns a new subgraph of the graph induced by a selection of nodes and
    * edges.
    * @since Tulip 4.10
    * Every node contained in the selection is added to the subgraph.
@@ -357,7 +357,7 @@ public:
                          const std::string &name = "unnamed");
 
   /**
-   * @brief Deletes a sub-graph of this graph.
+   * @brief Deletes a subgraph of this graph.
    * All subgraphs of the removed graph are re-parented to this graph.
    * For instance, with a graph hierarchy as follows :
    * root
@@ -379,7 +379,7 @@ public:
   virtual void delSubGraph(Graph *graph) = 0;
 
   /**
-   * @brief Deletes a sub-graph of this graph and all of its sub-graphs.
+   * @brief Deletes a subgraph of this graph and all of its subgraphs.
    ** For instance, with a graph hierarchy as follows :
    * root
    * / \
@@ -420,7 +420,7 @@ public:
   virtual void setSuperGraph(Graph *) = 0;
 
   /**
-   * @brief Gets an iterator over all the sub-graphs of the graph.
+   * @brief Gets an iterator over all the subgraphs of the graph.
    * For instance, in the following graph hierarchy:
    ** root
    * / \
@@ -457,7 +457,7 @@ public:
   virtual Graph *getNthSubGraph(unsigned int n) const;
 
   /**
-   * @brief Return the number of direct sub-graphs.
+   * @brief Return the number of direct subgraphs.
    * For instance, in the following graph hierarchy:
    * root
    * / \
@@ -473,7 +473,7 @@ public:
   virtual unsigned int numberOfSubGraphs() const = 0;
 
   /**
-   * @brief Return the number of descendant sub-graphs.
+   * @brief Return the number of descendant subgraphs.
    * For instance, in the following graph hierarchy:
    * root
    * / \
@@ -489,7 +489,7 @@ public:
   virtual unsigned int numberOfDescendantGraphs() const = 0;
 
   /**
-   * @brief Indicates if the graph argument is a direct sub-graph.
+   * @brief Indicates if the graph argument is a direct subgraph.
    * @param subGraph The graph to check is a subgraph of this graph.
    * @return Whether subGraph is a direct subgraph of this graph.
    * @see isDescendantGraph() to search in the whole hierarchy.
@@ -505,8 +505,8 @@ public:
   virtual bool isDescendantGraph(const Graph *subGraph) const = 0;
 
   /**
-   * @brief Returns a pointer on the sub-graph with the corresponding id
-   * or nullptr if there is no sub-graph with that id.
+   * @brief Returns a pointer on the subgraph with the corresponding id
+   * or nullptr if there is no subgraph with that id.
    * @param id The id of the subgraph to retrieve.
    * @return A subgraph of the given id, or null if no such subgraph exists on this graph.
    * @see getDescendantGraph(unsigned int) to search in the whole hierarchy.
@@ -514,8 +514,8 @@ public:
   virtual Graph *getSubGraph(unsigned int id) const = 0;
 
   /**
-   * @brief Returns a pointer on the sub-graph with the corresponding name
-   * or nullptr if there is no sub-graph with that name.
+   * @brief Returns a pointer on the subgraph with the corresponding name
+   * or nullptr if there is no subgraph with that name.
    * @param name The name of the subgraph to retrieve.
    * @return A Graph named name, or nullptr if no such subgraph exists on this graph.
    * @see getDescendantGraph(const std::string &) to search in the whole hierarchy.
@@ -542,7 +542,7 @@ public:
   virtual Graph *getDescendantGraph(const std::string &name) const = 0;
 
   /**
-   * @brief Gets an iterator over all the descendant sub-graphs of the graph.
+   * @brief Gets an iterator over all the descendant subgraphs of the graph.
    * For instance, in the following graph hierarchy:
    ** root
    * / \
@@ -626,7 +626,7 @@ public:
 
   /**
    * @brief Deletes a node in the graph.
-   * This node is also removed in the sub-graphs hierarchy of the current graph.
+   * This node is also removed in the subgraphs hierarchy of the current graph.
    * @param n The node to delete.
    * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
    * default only removes in the current graph.
@@ -636,7 +636,7 @@ public:
 
   /**
    * @brief Deletes nodes in the graph.
-   * These nodes are also removed in the sub-graphs hierarchy of the current graph.
+   * These nodes are also removed in the subgraphs hierarchy of the current graph.
    * @warning the graph does not take ownership of the Iterator.
    * @param it The nodes to delete.
    * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
@@ -647,7 +647,7 @@ public:
 
   /**
    * @brief Deletes nodes in the graph.
-   * These nodes are also removed in the sub-graphs hierarchy of the current graph.
+   * These nodes are also removed in the subgraphs hierarchy of the current graph.
    * @warning the graph does not take ownership of the Iterator.
    * @param nodes a vector of the nodes to delete.
    * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
@@ -727,7 +727,7 @@ public:
 
   /**
    * @brief Deletes an edge in the graph. The edge is also removed in
-   * the sub-graphs hierarchy.
+   * the subgraphs hierarchy.
    * The ordering of remaining edges is preserved.
    * @param e The edge to delete.
    * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By
@@ -736,7 +736,7 @@ public:
   virtual void delEdge(const edge e, bool deleteInAllGraphs = false) = 0;
 
   /**
-   * @brief Deletes edges in the graph. These edges are also removed in the sub-graphs hierarchy.
+   * @brief Deletes edges in the graph. These edges are also removed in the subgraphs hierarchy.
    * The ordering of remaining edges is preserved.
    * @warning The graph does not take ownership of the Iterator.
    * @param itE
@@ -746,7 +746,7 @@ public:
   virtual void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false) = 0;
 
   /**
-   * @brief Deletes edges in the graph. These edges are also removed in the sub-graphs hierarchy.
+   * @brief Deletes edges in the graph. These edges are also removed in the subgraphs hierarchy.
    * The ordering of remaining edges is preserved.
    * @warning The graph does not take ownership of the Iterator.
    * @param edges a vector of the edges to delete

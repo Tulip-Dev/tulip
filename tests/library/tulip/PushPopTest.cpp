@@ -918,8 +918,8 @@ static void createSubgraphs(Graph *graph, int m, int n) {
 }
 
 void PushPopTest::testDelAllSgPopUnpop() {
-  // create a hierarchy of sub-graphs
-  // the hierachy has 3 levels with 4 sub-graph per level
+  // create a hierarchy of subgraphs
+  // the hierachy has 3 levels with 4 subgraph per level
   createSubgraphs(graph, 4, 3);
 
   // We should have 4 subgraphs for the root graph
@@ -1320,16 +1320,16 @@ void PushPopTest::testDeletePushPopFalse() {
   LayoutProperty *testProp2 = g2->getLocalProperty<LayoutProperty>("test2");
   testProp2->addListener(&delObserver);
 
-  // this call should delete the two created sub-graphs
+  // this call should delete the two created subgraphs
   // and the two created properties
   graph->pop(false);
 
-  // should be equal to 4 as two delete events are sent by deleted sub-graphs : the first one when
-  // the GraphUpdatesRecorder do the updates (removing the newly added sub-graph from the
+  // should be equal to 4 as two delete events are sent by deleted subgraphs : the first one when
+  // the GraphUpdatesRecorder do the updates (removing the newly added subgraph from the
   // hierarchy),
   // the second one when the GraphUpdatedsRecorder destructor is called (as we forbid to unpop) as
   // it
-  // will really delete the sub-graph
+  // will really delete the subgraph
   CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedGraphs.size());
 
   // same thing for the two deleted properties

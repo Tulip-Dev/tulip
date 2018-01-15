@@ -178,7 +178,7 @@ features have been included to ease the use of the Tulip Python API:
 
    Figure 9: Using the autocompletion list to get the graph properties names.
 
-    * **Autocompletion list for sub-graphs** Tulip allows to manipulate a large hierarchy of sub-graphs. References to those sub-graphs can be retrieved
+    * **Autocompletion list for subgraphs** Tulip allows to manipulate a large hierarchy of subgraphs. References to those subgraphs can be retrieved
       with their names through the use of the dedicated method :meth:`tlp.Graph.getSubGraph`. When requesting the autocompletion list for the
       following context : *graph.getSubGraph(*, the list will be filled with all the names of the graphs present in the hierarchy. :ref:`Figure 10<fig10>` shows
       an example of that use case.
@@ -187,7 +187,7 @@ features have been included to ease the use of the Tulip Python API:
 .. figure:: autocompletion_subgraphs.png
    :align: center
 
-   Figure 10: Using the autocompletion list to get the sub-graphs names.
+   Figure 10: Using the autocompletion list to get the subgraphs names.
 
 .. _usingBindingsInShell:
 

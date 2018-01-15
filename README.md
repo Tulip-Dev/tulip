@@ -33,7 +33,7 @@ The Tulip framework offers numerous features, notably:
   * An efficient graph data model in terms of memory usage for storing large networks and 
   the attributes of their elements (called properties in the Tulip semantics).
   It is also one of the few that offer the possibility to efficiently define and navigate 
-  graph hierarchies or cluster trees (nested sub-graphs).
+  graph hierarchies or cluster trees (nested subgraphs).
   
   * Several graph file formats for serializing such a model to disk, notably the 
   [TLP format](http://tulip.labri.fr/TulipDrupal/?q=tlp-file-format) based on a 

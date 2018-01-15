@@ -23,7 +23,7 @@ it enables to add and manipulate views in the Tulip workspace.
 
 For instance, the following script works on a geographical network. We suppose
 that we already have an opened Node Link Diagram view (plus one Python Script view) in Tulip for visualizing the whole network.
-The script will extract the induced sub-graph of the european nodes, create a new Node Link Diagram view for visualizing
+The script will extract the induced subgraph of the european nodes, create a new Node Link Diagram view for visualizing
 it and set some rendering parameters::
 
     from tulip import tlp
@@ -31,7 +31,7 @@ it and set some rendering parameters::
 
     def main(graph):
 
-      # extraction and creation of the european sub-graph
+      # extraction and creation of the european subgraph
       continent =  graph.getStringProperty("continent")
       europeNodes = []
       for n in graph.getNodes():

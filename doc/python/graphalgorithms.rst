@@ -30,7 +30,7 @@ can get a list of the general algorithms names by calling the :func:`tlp.getAlgo
 As an example, we will call the "Equal value" algorithm from Python. This algorithm
 takes an input graph property and partitions the graph elements (nodes or edges) according
 to the values of the property. More precisely, all graph elements having the same property value
-are grouped in a class. Then for each class, a sub-graph is created.
+are grouped in a class. Then for each class, a subgraph is created.
 
 This algorithm takes 3 parameters as illustrated in the screenshot below:
 
@@ -41,7 +41,7 @@ Below is a description of each parameter :
 
 	* *Property* : the input graph property of type :class:`tlp.PropertyInterface` from which to compute the partition
 	* *Type* : a :class:`tlp.StringCollection` parameter to choose the type of the elements to partition (two possible values : "nodes" or "edges")
-	* *Connected* : a boolean parameter indicating whether the output sub-graphs have to be connected  
+	* *Connected* : a boolean parameter indicating whether the output subgraphs have to be connected
 
 The sample code below illustrates how to call this algorithm from Python. We assume that a Tulip graph
 is bound to a "graph" variable and this graph contains a double property called "myMetric"::
@@ -58,7 +58,7 @@ is bound to a "graph" variable and this graph contains a double property called 
   # if you want to partition edges instead of nodes
   # params["Type"] = "edges"
 
-  # if you want connected sub-graphs
+  # if you want connected subgraphs
   # params["Connected"] = True
 
   # now we call the algorithm

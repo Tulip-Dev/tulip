@@ -585,10 +585,10 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
       if (metaGraph) {
         action = menu->addAction(tr("Go inside"), this, SLOT(goInsideItem()));
-        action->setToolTip(QString("Display the sub-graph represented by the meta-node #") + sId);
+        action->setToolTip(QString("Display the subgraph represented by the meta-node #") + sId);
         menu->addAction(tr("Ungroup"), this, SLOT(ungroupItem()));
         action->setToolTip(QString("Replace the meta-node #") + sId +
-                           " by the sub-graph it represents");
+                           " by the subgraph it represents");
       }
     }
   } else {

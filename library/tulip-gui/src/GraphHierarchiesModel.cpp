@@ -745,7 +745,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         assert(parentIndex.isValid());
 #endif
 
-        // update index cache for subgraphs of parent graph and added sub-graphs
+        // update index cache for subgraphs of parent graph and added subgraphs
         int i = 0;
         for (Graph *sg2 : parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);

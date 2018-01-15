@@ -225,7 +225,7 @@ void GraphHierarchiesEditor::addSubGraph() {
     return;
 
   _contextGraph->push();
-  _contextGraph->addSubGraph("empty sub-graph");
+  _contextGraph->addSubGraph("empty subgraph");
 }
 
 void GraphHierarchiesEditor::cloneSubGraph() {
@@ -233,7 +233,7 @@ void GraphHierarchiesEditor::cloneSubGraph() {
     return;
 
   _contextGraph->push();
-  std::string sgName("clone sub-graph of ");
+  std::string sgName("clone subgraph of ");
   _contextGraph->addCloneSubGraph(sgName + _contextGraph->getName());
 }
 

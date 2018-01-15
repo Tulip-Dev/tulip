@@ -164,10 +164,10 @@
   </layout>
   <action name="actionAdd_sub_graph">
    <property name="text">
-    <string>Create empty sub-graph</string>
+    <string>Create empty subgraph</string>
    </property>
    <property name="toolTip">
-    <string>Create an empty sub-graph of the highlighted graph</string>
+    <string>Create an empty subgraph of the highlighted graph</string>
    </property>
   </action>
   <action name="actionClone_subgraph">
@@ -176,10 +176,10 @@
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
-    <string>Create clone sub-graph</string>
+    <string>Create clone subgraph</string>
    </property>
    <property name="toolTip">
-    <string>Clone the highlighted graph into a sub-graph</string>
+    <string>Clone the highlighted graph into a subgraph</string>
    </property>
   </action>
   <action name="actionClone_sibling">
@@ -287,7 +287,7 @@
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</iconset>
    </property>
    <property name="text">
-    <string>Create sub-graph from selection</string>
+    <string>Create subgraph from selection</string>
    </property>
    <property name="toolTip">
     <string>Create a subgraph from the selected elements of the highlighted graph [Ctrl+Shift+G]</string>

@@ -91,7 +91,7 @@ Returns the graph on which the property has been defined.
  Returns the number of nodes whose value is different
  from the default value.
 
- :param subgraph: a sub-graph can be given in parameter. In that case, only the number of nodes in this sub-graph whose value is different from the default one is returned.
+ :param subgraph: a subgraph can be given in parameter. In that case, only the number of nodes in this subgraph whose value is different from the default one is returned.
  :type subgraph: :class:`tlp.Graph`
  :rtype: integer
  %End
@@ -105,7 +105,7 @@ tlp.PropertyInterface.getNonDefaultValuatedNodes(subgraph=None)
 Returns an iterator on all nodes whose value is different
 from the default value. 
 
-:param subgraph: a sub-graph can be given in parameter. In that case, only the nodes owned by this sub-graph are returned by the iterator.
+:param subgraph: a subgraph can be given in parameter. In that case, only the nodes owned by this subgraph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorNode`
 %End
@@ -125,7 +125,7 @@ from the default value.
  Returns the number of edges whose value is different
  from the default value.
 
- :param subgraph: a sub-graph can be given in parameter. In that case, only the number of edges in this sub-graph whose value is different from the default one is returned.
+ :param subgraph: a subgraph can be given in parameter. In that case, only the number of edges in this subgraph whose value is different from the default one is returned.
  :type subgraph: :class:`tlp.Graph`
  :rtype: integer
  %End
@@ -139,7 +139,7 @@ tlp.PropertyInterface.getNonDefaultValuatedEdges(subgraph=None)
 Returns an iterator on all edges whose value is different
 from the default value. 
 
-:param subgraph: a sub-graph can be given in parameter. In that case, only the edges owned by this sub-graph are returned by the iterator.
+:param subgraph: a subgraph can be given in parameter. In that case, only the edges owned by this subgraph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorEdge`
 %End

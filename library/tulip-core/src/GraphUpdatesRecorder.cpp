@@ -841,7 +841,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
       if (eEnds) {
         ger->graph->restoreEdge(e, eEnds->first, eEnds->second);
       } else {
-        // restoration of an edge in a sub-graph that was already an element of the root graph
+        // restoration of an edge in a subgraph that was already an element of the root graph
         // (i.e., not a newly added edge)
         ger->graph->restoreEdge(e, ger->graph->getRoot()->source(e),
                                 ger->graph->getRoot()->target(e));
@@ -1348,7 +1348,7 @@ void GraphUpdatesRecorder::afterSetEnds(Graph *g, edge e) {
 }
 
 void GraphUpdatesRecorder::addSubGraph(Graph *g, Graph *sg) {
-  // last added sub-graph will be deleted first during undo/redo
+  // last added subgraph will be deleted first during undo/redo
   addedSubGraphs.push_front(std::make_pair(g, sg));
 
   // sg may already have nodes and edges
@@ -1379,7 +1379,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph *g, Graph *sg) {
 
     addedSubGraphs.erase(it);
 
-    // remove any update data concerning the removed sub-graph
+    // remove any update data concerning the removed subgraph
     // as it will be deleted
     removeGraphData(sg);
 
@@ -1391,7 +1391,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph *g, Graph *sg) {
     return;
   }
 
-  // last deleted sub-graph will be the last one created during undo/redo
+  // last deleted subgraph will be the last one created during undo/redo
   deletedSubGraphs.push_back(p);
 
   // sg is no longer observed

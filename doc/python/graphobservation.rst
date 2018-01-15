@@ -4,7 +4,7 @@ Graph/Properties observation
 =============================
 
 Tulip offers a mechanism to observe and get informed on modifications
-performed on the graph structure, the sub-graphs hierarchy and the properties
+performed on the graph structure, the subgraphs hierarchy and the properties
 values attached to the graph. This is achieved by implementing an object deriving
 from the :class:`tlp.Observable`. To get informed on modifications performed on
 the graph or properties values, you have to implement the :meth:`tlp.Observable.treatEvent` method.
@@ -55,28 +55,28 @@ to register an observer to a graph. The sample code below illustrates that obser
             print("The edges", event.getEdges(), "have been added to the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_BEFORE_ADD_DESCENDANTGRAPH:
-            print("A descendant graph", event.getSubGraph(), "is about to be added in the sub-graphs hierarchy of graph", graph)
+            print("A descendant graph", event.getSubGraph(), "is about to be added in the subgraphs hierarchy of graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_AFTER_ADD_DESCENDANTGRAPH:
-            print("A descendant graph", event.getSubGraph(), "has been added in the sub-graphs hierarchy of graph", graph)
+            print("A descendant graph", event.getSubGraph(), "has been added in the subgraphs hierarchy of graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_BEFORE_DEL_DESCENDANTGRAPH:
-            print("A descendant graph", event.getSubGraph(), "is about to be deleted in the sub-graphs hierarchy of graph", graph)
+            print("A descendant graph", event.getSubGraph(), "is about to be deleted in the subgraphs hierarchy of graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_AFTER_DEL_DESCENDANTGRAPH:
-            print("A descendant graph", event.getSubGraph(), "has been deleted in the sub-graphs hierarchy of graph", graph)
+            print("A descendant graph", event.getSubGraph(), "has been deleted in the subgraphs hierarchy of graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_BEFORE_ADD_SUBGRAPH:
-            print("A sub-graph", event.getSubGraph(), "is about to be added in the graph", graph)
+            print("A subgraph", event.getSubGraph(), "is about to be added in the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_AFTER_ADD_SUBGRAPH:
-            print("A sub-graph", event.getSubGraph(), "has been added in the graph", graph)
+            print("A subgraph", event.getSubGraph(), "has been added in the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_BEFORE_DEL_SUBGRAPH:
-            print("A sub-graph", event.getSubGraph(), "is about to be deleted in the graph", graph)
+            print("A subgraph", event.getSubGraph(), "is about to be deleted in the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_AFTER_DEL_SUBGRAPH:
-            print("A sub-graph", event.getSubGraph(), "has been deleted in the graph", graph)
+            print("A subgraph", event.getSubGraph(), "has been deleted in the graph", graph)
 
           elif event.getType() == tlp.GraphEvent.TLP_BEFORE_ADD_LOCAL_PROPERTY:
             print("A local property", event.getPropertyName(), "is about to be added in the graph", graph)
@@ -156,18 +156,18 @@ The output of that script is the following::
     The edge <edge 0> had its ends modified. Current source is <node 0> Current target is <node 1>
     The nodes [<node 2>, <node 3>, <node 4>, <node 5>] have been added to the graph <graph "graph" (id 1) >
     The edges [<edge 1>, <edge 2>] have been added to the graph <graph "graph" (id 1) >
-    A sub-graph <graph "sg1" (id 2) > is about to be added in the graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg1" (id 2) > is about to be added in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A sub-graph <graph "sg1" (id 2) > has been added in the graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg1" (id 2) > has been added in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg2" (id 3) > is about to be added in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg2" (id 3) > has been added in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg2" (id 3) > is about to be deleted in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg2" (id 3) > has been deleted in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A sub-graph <graph "sg1" (id 2) > is about to be deleted in the graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg1" (id 2) > is about to be deleted in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
-    A sub-graph <graph "sg1" (id 2) > has been deleted in the graph <graph "graph" (id 1) >
-    A descendant graph <graph "sg1" (id 2) > has been deleted in the sub-graphs hierarchy of graph <graph "graph" (id 1) >
+    A subgraph <graph "sg1" (id 2) > is about to be added in the graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg1" (id 2) > is about to be added in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A subgraph <graph "sg1" (id 2) > has been added in the graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg1" (id 2) > has been added in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg2" (id 3) > is about to be added in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg2" (id 3) > has been added in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg2" (id 3) > is about to be deleted in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg2" (id 3) > has been deleted in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A subgraph <graph "sg1" (id 2) > is about to be deleted in the graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg1" (id 2) > is about to be deleted in the subgraphs hierarchy of graph <graph "graph" (id 1) >
+    A subgraph <graph "sg1" (id 2) > has been deleted in the graph <graph "graph" (id 1) >
+    A descendant graph <graph "sg1" (id 2) > has been deleted in the subgraphs hierarchy of graph <graph "graph" (id 1) >
     A local property metric is about to be added in the graph <graph "graph" (id 1) >
     A local property metric has been added in the graph <graph "graph" (id 1) >
     An inherited property metric_root is about to be added in the graph <graph "graph" (id 1) >

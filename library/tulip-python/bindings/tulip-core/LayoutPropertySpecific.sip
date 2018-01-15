@@ -30,10 +30,10 @@ tlp.LayoutProperty.getMax(subgraph=None)
 Returns the maximum coordinate in that layout property,
 i.e. the top-right corner of the graph drawing bounding box.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the maximum coordinate of the sub-graph layout.
+:param subgraph: a subgraph can be given in parameter, in that case return the maximum coordinate of the subgraph layout.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Coord` 
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -60,10 +60,10 @@ tlp.LayoutProperty.getMin(subgraph=None)
 Returns the minimum coordinate in that layout property,
 i.e. the bottom-left corner of the graph drawing bounding box.
 
-:param subgraph: a sub-graph can be given in parameter, in that case return the minimum coordinate of the sub-graph layout.
+:param subgraph: a subgraph can be given in parameter, in that case return the minimum coordinate of the subgraph layout.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Coord` 
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -91,9 +91,9 @@ Translates the current layout according to a movement vector.
 
 :param move: a movement vector
 :type move: :class:`tlp.Vec3f`
-:param subgraph: a sub-graph can be given in parameter, in that case translates the layout of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case translates the layout of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End 
 
 %MethodCode
@@ -137,9 +137,9 @@ Scales the layout according to a vector of scale factors (sx, sy, sz).
 
 :param move: a vector of scale factors
 :type move: :class:`tlp.Vec3f`
-:param subgraph: a sub-graph can be given in parameter, in that case scales the layout of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case scales the layout of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End 
 
 %MethodCode
@@ -185,9 +185,9 @@ Rotates the layout around the X-axis according to an angle in degrees.
 
 :param alpha: an angle in degrees
 :type alpha: float
-:param subgraph: a sub-graph can be given in parameter, in that case rotates the layout of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case rotates the layout of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -217,9 +217,9 @@ Rotates the layout around the Y-axis according to an angle in degrees.
 
 :param alpha: an angle in degrees
 :type alpha: float
-:param subgraph: a sub-graph can be given in parameter, in that case rotates the layout of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case rotates the layout of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -247,9 +247,9 @@ Rotates the layout around the Z-axis according to an angle in degrees.
 
 :param alpha: an angle in degrees
 :type alpha: float
-:param subgraph: a sub-graph can be given in parameter, in that case rotates the layout of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case rotates the layout of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End 
 
 %MethodCode
@@ -323,9 +323,9 @@ tlp.LayoutProperty.center(subgraph=None)
 
 Centers the layout, meaning translating it in order that the center of its bounding box is (0,0,0)
 
-:param subgraph: a sub-graph can be given in parameter, in that case only centers the layout of that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case only centers the layout of that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -356,9 +356,9 @@ the center of its bounding box is equal to newCenter.
 
 :param newCenter: the new center of the layout
 :type newCenter: :class:`tlp.Vec3f`
-:param subgraph: a sub-graph can be given in parameter, in that case only centers the layout of that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case only centers the layout of that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -384,9 +384,9 @@ tlp.LayoutProperty.normalize(subgraph=None)
 
 Normalizes the layout, meaning dividing each nodes and edges coordinate by the maximum magnitude of the whole coordinates set
 
-:param subgraph: a sub-graph can be given in parameter, in that case only normalizes the layout of that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case only normalizes the layout of that subgraph.
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -412,7 +412,7 @@ tlp.LayoutProperty.perfectAspectRatio(subgraph=None)
 
 Scales the layout in order to approach an aspect ratio (width / height) of 1.0.
 
-:param subgraph: a sub-graph can be given in parameter, in that case only scales the layout of that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case only scales the layout of that subgraph.
 %End  
 
 //=========================================================================================== 
@@ -450,10 +450,10 @@ tlp.LayoutProperty.averageEdgeLength(subgraph=None)
 
 Returns the average edge length of the layout, the bends are taken into account.
 
-:param subgraph: a sub-graph can be given in parameter, in that case only computes the average edge length for that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case only computes the average edge length for that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -481,10 +481,10 @@ tlp.LayoutProperty.averageAngularResolution(subgraph=None)
 Returns the average angular resolution of the layout.
 It is only defined for 2D drawing, meaning the third coordinate is omitted
 
-:param subgraph: a sub-graph can be given in parameter, in that case computes the average angular resolution for the layout of the nodes belonging to that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case computes the average angular resolution for the layout of the nodes belonging to that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End
   
 %MethodCode
@@ -514,10 +514,10 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
 
 :param node: an existing node
 :type node: :class:`tlp.node`
-:param subgraph: a sub-graph can be given in parameter, in that case computes the average angular resolution of a node in that sub-graph.
+:param subgraph: a subgraph can be given in parameter, in that case computes the average angular resolution of a node in that subgraph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float
-:throws: an exception if the node does not belong to the graph attached to the property or if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the node does not belong to the graph attached to the property or if the provided subgraph is not a descendant of the graph attached to the property
 %End 
 
 
@@ -559,10 +559,10 @@ It is only defined for 2D drawing, meaning the third coordinates is omitted
 
 :param node: an existing node
 :type node: :class:`tlp.node`
-:param subgraph: a sub-graph can be given in parameter, in that case returns the list of angular resolution for the node in that sub-graph
+:param subgraph: a subgraph can be given in parameter, in that case returns the list of angular resolution for the node in that subgraph
 :type subgraph: :class:`tlp.Graph`
 :rtype: list of float
-:throws: an exception if the node does not belong to the graph attached to the property or if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the node does not belong to the graph attached to the property or if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode
@@ -602,9 +602,9 @@ Fixes embedding of the graph according to the layout,
 ie. sort edges around nodes according to their neighbors/bends position in the layout.
 Only works in 2D, the third coordinate is not taken into account.
 
-:param subgraph: a sub-graph can be given in parameter, in that case fixes embedding of that sub-graph
+:param subgraph: a subgraph can be given in parameter, in that case fixes embedding of that subgraph
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the provided subgraph is not a descendant of the graph attached to the property
 %End  
 
 %MethodCode
@@ -634,9 +634,9 @@ Fixes embedding of the node according to the layout,
 ie. sort edges around the node according to their neighbors/bends position in the layout.
 Only works in 2D, the third coordinate is not taken into account.
 
-:param subgraph: a sub-graph can be given in parameter, in that case fixes embedding of the node in that sub-graph
+:param subgraph: a subgraph can be given in parameter, in that case fixes embedding of the node in that subgraph
 :type subgraph: :class:`tlp.Graph`
-:throws: an exception if the node does not belong to the graph attached to the property or if the provided sub-graph is not a descendant of the graph attached to the property
+:throws: an exception if the node does not belong to the graph attached to the property or if the provided subgraph is not a descendant of the graph attached to the property
 %End
 
 %MethodCode

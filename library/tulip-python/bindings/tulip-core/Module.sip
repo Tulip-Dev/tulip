@@ -228,7 +228,7 @@ int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
 
 int throwInvalidSgException(const tlp::Graph *graph, const tlp::Graph *sg) {
   std::ostringstream oss;
-  oss << "Graph \"" << sg->getName() <<"\" (id " << sg->getId() <<") is not a sub-graph of graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+  oss << "Graph \"" << sg->getName() <<"\" (id " << sg->getId() <<") is not a subgraph of graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
   PyErr_SetString(PyExc_Exception, oss.str().c_str());
   return -1;
 }
