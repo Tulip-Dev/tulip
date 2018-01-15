@@ -131,9 +131,14 @@ public:
   template <typename PluginType>
   PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context) {
     std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(name);
-    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr))
-               ? static_cast<PluginType *>(it->second.factory->createPluginObject(context))
-               : nullptr;
+    if (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr)) {
+      std::string pluginName = it->second.info->name();
+      if (name != pluginName)
+	tlp::warning() << "Warning: '" << name << "' is a deprecated plugin name. Use '" << pluginName << "' instead." << std::endl;
+
+      return static_cast<PluginType *>(it->second.factory->createPluginObject(context));
+    }
+    return nullptr;
   }
 
   /**

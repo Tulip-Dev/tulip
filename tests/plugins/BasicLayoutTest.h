@@ -43,7 +43,6 @@ class BasicLayoutTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testTreeRadial);
   CPPUNIT_TEST(testTreeReingoldAndTilfordExtended);
   CPPUNIT_TEST(testTutte);
-  CPPUNIT_TEST(testInducedSubGraphSelection);
   CPPUNIT_TEST(testKruskal);
   CPPUNIT_TEST(testFastOverlapRemoval);
   CPPUNIT_TEST_SUITE_END();
@@ -75,7 +74,6 @@ public:
   void testTreeRadial();
   void testTreeReingoldAndTilfordExtended();
   void testTutte();
-  void testInducedSubGraphSelection();
   void testKruskal();
   void testFastOverlapRemoval();
 };

@@ -90,7 +90,9 @@ std::list<std::string> tlp::PluginLister::availablePlugins() {
 
   for (std::map<std::string, PluginDescription>::const_iterator it = instance()->_plugins.begin();
        it != instance()->_plugins.end(); ++it) {
-    keys.push_back(it->first);
+    // deprecated names are not listed
+    if (it->first == it->second.info->name())
+      keys.push_back(it->first);
   }
 
   return keys;
@@ -116,6 +118,17 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 
     instance()->sendPluginAddedEvent(pluginName);
 
+    // register under a deprecated name if needed
+    std::string oldName = information->deprecatedName();
+    if (!oldName.empty()) {
+      if (!pluginExists(oldName))
+	instance()->_plugins[oldName] = description;
+      else if (currentLoader != nullptr) {
+	std::string tmpStr;
+	tmpStr += "'" + oldName + "' cannot be a deprecated name of plugin '" + pluginName + "'";
+	currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+      }
+    }
   } else {
     if (currentLoader != nullptr) {
       std::string tmpStr;
@@ -144,6 +157,10 @@ tlp::Plugin *tlp::PluginLister::getPluginObject(const std::string &name, PluginC
   std::map<std::string, PluginDescription>::const_iterator it = instance()->_plugins.find(name);
 
   if (it != instance()->_plugins.end()) {
+    std::string pluginName = it->second.info->name();
+    if (name != pluginName)
+      tlp::warning() << "Warning: '" << name << "' is a deprecated plugin name. Use '" << pluginName << "' instead." << std::endl;
+
     return (*it).second.factory->createPluginObject(context);
   }
 

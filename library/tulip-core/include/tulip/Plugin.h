@@ -178,14 +178,33 @@ public:
   virtual std::string tulipMinor() const;
 
   /**
-  * @brief Returns the ID of the glyph this factory builds.
-  * @TODO this member should be removed once there is a system in Tulip to handle glyphs.
-  *
-  * @return int the id of the glyph.
+   * @brief Returns the ID of the glyph this factory builds.
+   * @TODO this member should be removed once there is a system in Tulip to handle glyphs.
+   *
+   * @return int the id of the glyph.
   **/
   virtual int id() const;
 
+  /**
+   * @return Return the a string indicating the programming language used to write the plugin (C++, Python).
+   */
   virtual std::string programmingLanguage() const;
+
+  /**
+   * @brief Allow to declare the previous name of a plugin as deprecated
+   * in order to keep an ascending compatibility at running time
+   */
+  void declareDeprecatedName(const std::string &oldName);
+
+  /**
+   * @return the old name of the plugin if any; returns an empty string if not.
+   */
+  std::string deprecatedName() {
+    return !oldName.empty() ? oldName : std::string();
+  }
+
+ protected:
+  std::string oldName;
 };
 
 /**

@@ -35,8 +35,8 @@ namespace SelectionAlgorithm {
 
 const static char LoopSelection[] = "Loop Selection";
 const static char MultipleEdgeSelection[] = "Multiple Edges Selection";
-const static char InducedSubGraphSelection[] = "Induced Sub-Graph";
-const static char ReachableSubGraphSelection[] = "Reachable Sub-Graph";
+const static char InducedSubGraphSelection[] = "Induced SubGraph";
+const static char ReachableSubGraphSelection[] = "Reachable SubGraph";
 const static char SpanningDagSelection[] = "Spanning Dag";
 const static char MakeSelectionGraph[] = "Make Selection a Graph";
 }

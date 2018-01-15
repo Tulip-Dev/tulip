@@ -173,11 +173,6 @@ void BasicLayoutTest::testTutte() {
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
-void BasicLayoutTest::testInducedSubGraphSelection() {
-  bool result = computeProperty<BooleanProperty>("Induced Sub-Graph");
-  CPPUNIT_ASSERT(result);
-}
-//==========================================================
 void BasicLayoutTest::testKruskal() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Kruskal", "Planar Graph", &selection);

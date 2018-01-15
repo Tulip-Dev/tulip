@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/Plugin.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -93,4 +94,11 @@ std::string Plugin::icon() const {
 
 std::string Plugin::programmingLanguage() const {
   return "C++";
+}
+
+void Plugin::declareDeprecatedName(const std::string &previousName) {
+  if (oldName.empty())
+    oldName = previousName;
+  else
+    tlp::warning() << "Warning: '" << previousName << "' cannot be declared as deprecated name of Plugin '" << name() << "' because '" << oldName << "' already is." << std::endl;
 }

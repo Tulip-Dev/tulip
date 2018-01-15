@@ -51,6 +51,8 @@ ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext 
                                    directionValuesDescription);
   addInParameter<BooleanProperty>("starting nodes", paramHelp[1], "viewSelection");
   addInParameter<int>("distance", paramHelp[2], "5");
+  // old name
+  declareDeprecatedName("Reachable Sub-Graph");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}

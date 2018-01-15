@@ -49,6 +49,7 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testImportPajek);
   CPPUNIT_TEST(testImportUCINET);
   CPPUNIT_TEST(testMetricColorMapping);
+  CPPUNIT_TEST(testInducedSubGraphSelection);
   CPPUNIT_TEST(testLoopSelection);
   CPPUNIT_TEST(testMultipleEdgeSelection);
   CPPUNIT_TEST(testReachableSubGraphSelection);
@@ -94,6 +95,7 @@ public:
   void testImportPajek();
   void testImportUCINET();
   void testMetricColorMapping();
+  void testInducedSubGraphSelection();
   void testLoopSelection();
   void testMultipleEdgeSelection();
   void testReachableSubGraphSelection();

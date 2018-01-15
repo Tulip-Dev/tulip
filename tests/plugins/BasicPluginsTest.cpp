@@ -321,6 +321,14 @@ void BasicPluginsTest::testMetricColorMapping() {
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
+void BasicPluginsTest::testInducedSubGraphSelection() {
+  bool result = computeProperty<BooleanProperty>("Induced SubGraph");
+  CPPUNIT_ASSERT(result);
+  // check with old name
+  result = computeProperty<BooleanProperty>("Induced Sub-Graph");
+  CPPUNIT_ASSERT(result);
+}
+//==========================================================
 void BasicPluginsTest::testLoopSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Loop Selection", "Planar Graph", &selection);
@@ -341,7 +349,10 @@ void BasicPluginsTest::testMultipleEdgeSelection() {
 }
 //==========================================================
 void BasicPluginsTest::testReachableSubGraphSelection() {
-  bool result = computeProperty<BooleanProperty>("Reachable Sub-Graph");
+  bool result = computeProperty<BooleanProperty>("Reachable SubGraph");
+  CPPUNIT_ASSERT(result);
+  // check with old name
+  result = computeProperty<BooleanProperty>("Reachable Sub-Graph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
