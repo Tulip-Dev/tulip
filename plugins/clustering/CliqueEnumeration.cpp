@@ -33,6 +33,7 @@ using namespace std;
 CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context)
     : Algorithm(context), minsize(0), cliqueid(0) {
   addInParameter<unsigned int>("minimum size", "Clique minimum size", "0");
+  addOutParameter<unsigned int>("#cliques created", "number of cliques (subgraphs) created");
 }
 
 //================================================================================
@@ -134,7 +135,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
   tlp::Graph *sub = graph->addCloneSubGraph();
   std::map<tlp::node, DegreeOrderingElem *> degrees;
   set<DegreeOrderingElem *, LessDegreeOrdering> sortednodes;
-  for (const node &n : sub->nodes()) {
+  for (auto n : sub->nodes()) {
     DegreeOrderingElem *elem = new DegreeOrderingElem(n, sub->deg(n));
     degrees.insert(make_pair(n, elem));
     sortednodes.insert(elem);
@@ -146,13 +147,13 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
     ordering.push_back(n);
     delete (*it);
     sortednodes.erase(it);
-    sub->delNode(n);
-    for (const node &v : sub->getInOutNodes(n)) {
+    for (auto v : sub->getInOutNodes(n)) {
       DegreeOrderingElem *elem = degrees.find(v)->second;
       sortednodes.erase(elem);
       elem->deg = elem->deg - 1;
       sortednodes.insert(elem);
     }
+    sub->delNode(n);
   }
 
   graph->delSubGraph(sub);
@@ -185,7 +186,7 @@ bool CliqueEnumeration::run() {
   }
 
   if (dataSet != nullptr)
-    dataSet->set("#cliques created", cliqueid + 1);
+    dataSet->set("#cliques created", cliqueid);
 
   return true;
 }
