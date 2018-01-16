@@ -54,12 +54,12 @@ bool Observable::_oInitialized = Observable::init();
 //----------------------------------
 Iterator<node> *Observable::getInObjects() const {
   assert(_n.isValid());
-  return filterIterator(_oGraph.getInNodes(_n), [&](const node &n) { return _oAlive[n]; });
+  return filterIterator(_oGraph.getInNodes(_n), [&](node n) { return _oAlive[n]; });
 }
 //----------------------------------
 Iterator<node> *Observable::getOutObjects() const {
   assert(_n.isValid());
-  return filterIterator(_oGraph.getOutNodes(_n), [&](const node &n) { return _oAlive[n]; });
+  return filterIterator(_oGraph.getOutNodes(_n), [&](node n) { return _oAlive[n]; });
 }
 //----------------------------------
 node Observable::getNode() const {
@@ -109,7 +109,7 @@ Observable *Observable::getObject(node n) {
 }
 //----------------------------------
 tlp::node Observable::getNode(const Observable *obs) {
-  return obs->getNode();
+  return obs->_n;
 }
 //----------------------------------
 bool Observable::init() {
@@ -124,7 +124,7 @@ const tlp::VectorGraph &Observable::getObservableGraph() {
   return Observable::_oGraph;
 }
 //=================================
-Event::Event(const Observable &sender, EventType type) : _sender(sender.getNode()), _type(type) {
+Event::Event(const Observable &sender, EventType type) : _sender(sender._n), _type(type) {
   assert(_type != TLP_DELETE);
 
   if (_type == TLP_DELETE)
@@ -207,8 +207,8 @@ Observable::~Observable() {
       // _n cannot be deleted only if it is observed
       // then its deletion is delayed until the observers are unhold
       noDelay = true;
-      for (const edge &e : _oGraph.getInEdges(_n)) {
-        if (_oType[e] & OBSERVER) {
+      for (auto e : _oGraph.star(_n)) {
+        if (_n == _oGraph.target(e) && _oType[e] & OBSERVER) {
           noDelay = false;
           break;
         }
@@ -329,7 +329,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
     edge link;
 
     if (isBound() && obs.isBound())
-      link = _oGraph.existEdge(obs.getNode(), getNode());
+      link = _oGraph.existEdge(obs._n, _n);
 
     if (!link.isValid()) {
       // add new link
@@ -409,10 +409,10 @@ void Observable::sendEvent(const Event &message) {
   vector<pair<Observable *, node>> observerTonotify;
   vector<pair<Observable *, node>> listenerTonotify;
   bool delayedEventAdded = false;
-  for (const edge &e : _oGraph.getInEdges(_n)) {
-    node src(_oGraph.source(e));
+  for (auto e : _oGraph.star(_n)) {
+    node &&src = _oGraph.source(e);
 
-    if (_oAlive[src]) {
+    if (_n != src && _oAlive[src]) {
       Observable *obs = _oPointer[src];
       assert(obs != nullptr);
 
@@ -558,7 +558,7 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
       throw ObservableException("removeOnlooker called on a deleted Observable");
     }
 
-    edge link(_oGraph.existEdge(obs.getNode(), getNode()));
+    edge link(_oGraph.existEdge(obs._n, _n));
 
     if (link.isValid()) {
       _oType[link] = _oType[link] &
@@ -597,23 +597,23 @@ unsigned int Observable::countListeners() const {
   if (!hasOnlookers())
     return 0;
 
-  auto linkFilterListener = [this](node n) {
-    edge link(_oGraph.existEdge(n, getNode()));
-    return (link.isValid() && (_oType[link] & LISTENER));
-  };
-
-  return iteratorCount(filterIterator(_oGraph.getInNodes(getNode()), linkFilterListener));
+  unsigned int count = 0;
+  for (auto e : _oGraph.star(_n)) {
+    if (_n == _oGraph.target(e) && (_oType[e] & LISTENER))
+      ++count;
+  }
+  return count;
 }
 //----------------------------------------
 unsigned int Observable::countObservers() const {
   if (!hasOnlookers())
     return 0;
 
-  auto linkFilterObserver = [this](node n) {
-    edge link(_oGraph.existEdge(n, getNode()));
-    return (link.isValid() && (_oType[link] & OBSERVER));
-  };
-
-  return iteratorCount(filterIterator(_oGraph.getInNodes(getNode()), linkFilterObserver));
+  unsigned int count = 0;
+  for (auto e : _oGraph.star(_n)) {
+    if (_n == _oGraph.target(e) && (_oType[e] & OBSERVER))
+      ++count;
+  }
+  return count;
 }
 }
