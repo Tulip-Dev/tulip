@@ -3901,6 +3901,27 @@ meta node and other nodes in the graph.
 
 //===========================================================================================
 
+  int __contains__(const tlp::node &n);
+%MethodCode
+  return sipCpp->isElement(*a0);
+%End
+
+//===========================================================================================
+
+  int __contains__(const tlp::edge &e);
+%MethodCode
+  return sipCpp->isElement(*a0);
+%End
+
+//===========================================================================================
+
+  int __contains__(const std::pair<tlp::node, tlp::node> &e);
+%MethodCode
+  return sipCpp->hasEdge(a0->first, a0->second);
+%End
+
+//===========================================================================================
+
   SIP_PYOBJECT __getitem__(const std::string &attributeName) const;
 %MethodCode
   if (sipCpp->existProperty(*a0)) {

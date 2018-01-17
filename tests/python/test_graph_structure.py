@@ -57,9 +57,11 @@ class TestGraphStructure(unittest.TestCase):
   def test_is_element(self):
     for n in self.nodes:
       self.assertTrue(self.graph.isElement(n))
+      self.assertTrue(n in self.graph)
 
     for e in self.edges:
       self.assertTrue(self.graph.isElement(e))
+      self.assertTrue(e in self.graph)
 
     for n in self.graph.getNodes():
       self.assertIn(n, self.nodes)
@@ -83,11 +85,15 @@ class TestGraphStructure(unittest.TestCase):
     for i in range(NB_NODES - 1):
       self.assertTrue(self.graph.hasEdge(self.nodes[i], self.nodes[i+1]))
       self.assertIn(self.graph.existEdge(self.nodes[i], self.nodes[i+1]), self.edges)
+      self.assertTrue((self.nodes[i], self.nodes[i+1]) in self.graph)
       self.assertTrue(self.graph.hasEdge(self.nodes[i], self.nodes[-1]))
       self.assertIn(self.graph.existEdge(self.nodes[i], self.nodes[-1]), self.edges)
+      self.assertTrue((self.nodes[i], self.nodes[-1]) in self.graph)
 
     self.assertFalse(self.graph.isElement(tlp.node(NB_NODES)))
+    self.assertTrue(tlp.node(NB_NODES) not in self.graph)
     self.assertFalse(self.graph.isElement(tlp.edge(NB_EDGES)))
+    self.assertTrue(tlp.edge(NB_EDGES) not in self.graph)
 
   def test_node_degrees(self):
     for i in range(NB_NODES-1):

@@ -3,6 +3,39 @@
 Release notes and API changes
 =============================
 
+Tulip-Python 5.2
+-----------------
+
+Testing if a node or an edge belongs to a graph using classical Python idioms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is now possible to test if a node or an edge is contained in a graph
+using the classical Python idiom based on the in keyword.
+
+To test if an instance of :class:`tlp.node` belongs to an instance
+of :class:`tlp.Graph`, you can now write::
+
+  if n in graph:
+    # n belongs to the graph
+  else:
+    # n does not belong to the graph
+
+To test if an instance of :class:`tlp.edge` belongs to an instance
+of :class:`tlp.Graph`, you can now write::
+
+  if e in graph:
+    # e belongs to the graph
+  else:
+    # e does not belong to the graph
+
+You can also test if an edge defined by a tuple of two instances of
+:class:`tlp.node` belongs to an instance of :class:`tlp.Graph`::
+
+  if (src, tgt) in graph:
+    # the edge belongs to the graph
+  else:
+    # the edge does not belong to the graph
+
 Tulip-Python 5.1
 -----------------
 
