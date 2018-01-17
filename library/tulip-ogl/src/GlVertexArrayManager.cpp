@@ -56,7 +56,7 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i)
       tgtAnchorSizeProperty(inputData->getElementTgtAnchorSize()), graphObserverActivated(false),
       layoutObserverActivated(false), colorObserverActivated(false), activated(true),
       isBegin(false), toComputeAll(true), toComputeLayout(true), toComputeColor(true),
-      vectorLayoutSizeInit(false), vectorColorSizeInit(false), vectorIndexSizeInit(false),
+      vectorLayoutSizeInit(false), vectorColorSizeInit(false),
       edgesModified(false), colorInterpolate(inputData->parameters->isEdgeColorInterpolate()),
       sizeInterpolate(inputData->parameters->isEdgeSizeInterpolate()),
       viewArrow(inputData->parameters->isViewArrow()), pointsVerticesVBO(0), pointsColorsVBO(0),
@@ -291,33 +291,30 @@ void GlVertexArrayManager::beginRendering() {
   pointsEdgesRenderingIndexArray.clear();
   pointsEdgesSelectedRenderingIndexArray.clear();
 
-  pointsNodesRenderingIndexArray.reserve(graph->numberOfNodes());
-  pointsNodesSelectedRenderingIndexArray.reserve(graph->numberOfNodes());
+  auto nbNodes = graph->numberOfNodes();
+  auto nbEdges = graph->numberOfEdges();
+  pointsNodesRenderingIndexArray.reserve(nbNodes);
+  pointsNodesSelectedRenderingIndexArray.reserve(nbNodes);
 
-  pointsEdgesRenderingIndexArray.reserve(graph->numberOfEdges());
-  pointsEdgesSelectedRenderingIndexArray.reserve(graph->numberOfEdges());
+  pointsEdgesRenderingIndexArray.reserve(nbEdges);
+  pointsEdgesSelectedRenderingIndexArray.reserve(nbEdges);
 
   if (!vectorLayoutSizeInit) {
-    linesCoordsArray.reserve(graph->numberOfEdges() * 2);
-    quadsCoordsArray.reserve(graph->numberOfEdges() * 4);
-    pointsCoordsArray.reserve(graph->numberOfEdges() + graph->numberOfNodes());
+    linesCoordsArray.reserve(2 * nbEdges);
+    quadsCoordsArray.reserve(4 * nbEdges);
+    pointsCoordsArray.reserve(nbNodes + nbEdges);
+    linesIndexArray.reserve(2 * nbEdges);
+    linesIndexCountArray.reserve(nbEdges);
 
     vectorLayoutSizeInit = true;
   }
 
   if (!vectorColorSizeInit) {
-    linesColorsArray.reserve(graph->numberOfEdges() * 2);
-    quadsColorsArray.reserve(graph->numberOfEdges() * 4);
-    pointsColorsArray.reserve(graph->numberOfEdges() + graph->numberOfNodes());
+    linesColorsArray.reserve(2 * nbEdges);
+    quadsColorsArray.reserve(4 * nbEdges);
+    pointsColorsArray.reserve(nbNodes + nbEdges);
 
     vectorColorSizeInit = true;
-  }
-
-  if (!vectorIndexSizeInit) {
-    linesIndexArray.reserve(graph->numberOfEdges() * 2);
-    linesIndexCountArray.reserve(graph->numberOfEdges());
-
-    vectorIndexSizeInit = true;
   }
 }
 
@@ -679,8 +676,6 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
 
       pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
 
-      edgeToPointIndexVector[gledge->id] = pointsCoordsArray.size() - 1;
-
       Size edgeSize;
       float maxSrcSize, maxTgtSize;
 
@@ -734,7 +729,7 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
       linesCoordsArray[lastIndex + numberOfVertices - 1] = tgtAnchor;
     } else {
       linesIndexCountArray.push_back(0);
-      edgeToPointIndexVector[gledge->id] = -1;
+      pointsCoordsArray.push_back(Coord());
       quadsIndexCountArray.push_back(0);
       edgeToLineIndexVector[gledge->id] = make_pair(-1, linesIndexCountArray.size() - 1);
       edgeToQuadIndexVector[gledge->id] = make_pair(-1, quadsIndexCountArray.size() - 1);
@@ -787,10 +782,10 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
 }
 
 void GlVertexArrayManager::addNode(GlNode *node) {
+  // pointsCoordsArray and pointsColorsArray
+  // are updated in the ordering of graph->nodes
   if (toComputeLayout) {
-    vector<Color> tmp;
-    node->getPointAndColor(inputData, pointsCoordsArray, tmp);
-    nodeToPointIndexVector[node->id] = pointsCoordsArray.size() - 1;
+    node->getPoint(inputData, pointsCoordsArray);
   }
 
   if (toComputeColor) {
@@ -905,11 +900,12 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *edge, bool selected) 
   }
 }
 
-void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge, bool selected) {
-  unsigned int index = edgeToPointIndexVector[edge->id];
-
-  if (index == uint(-1))
+void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *glEdge, bool selected) {
+  unsigned int ePos = graph->edgePos(edge(glEdge->id));
+  if (linesIndexCountArray[ePos] == 0)
     return;
+
+  unsigned int index = graph->numberOfNodes() + ePos;
 
   if (!selected) {
     pointsEdgesRenderingIndexArray.push_back(index);
@@ -919,10 +915,7 @@ void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge, bool selected)
 }
 
 void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node, bool selected) {
-  unsigned int index = nodeToPointIndexVector[node->id];
-
-  if (index == uint(-1))
-    return;
+  unsigned int index = graph->nodePos(tlp::node(node->id));
 
   if (!selected) {
     pointsNodesRenderingIndexArray.push_back(index);
@@ -999,14 +992,7 @@ void GlVertexArrayManager::clearLayoutData() {
   quadsTopOutlineIndexArray.clear();
   quadsBottomOutlineIndexArray.clear();
 
-  if (!edgeToPointIndexVector.empty())
-    edgeToPointIndexVector.clear();
-
-  if (!nodeToPointIndexVector.empty())
-    nodeToPointIndexVector.clear();
-
   vectorLayoutSizeInit = false;
-  vectorIndexSizeInit = false;
 }
 
 void GlVertexArrayManager::clearColorData() {

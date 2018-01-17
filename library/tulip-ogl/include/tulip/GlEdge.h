@@ -27,30 +27,44 @@
 #include <tulip/Size.h>
 #include <tulip/GlComplexeEntity.h>
 #include <tulip/Matrix.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlSceneVisitor.h>
 
 namespace tlp {
 
 struct OcclusionTest;
-class TextRenderer;
-class GlLabel;
 class EdgeExtremityGlyph;
 
 /**
  * Class to represent an edge of a graph
  */
-class TLP_GL_SCOPE GlEdge : public GlComplexeEntity {
+class TLP_GL_SCOPE GlEdge final : public GlComplexeEntity {
 
 public:
   /**
    * Build an edge with the id : id
    * id must be the id of the edge in graph
    */
-  GlEdge(unsigned int id);
+  GlEdge(unsigned int _id = UINT_MAX) : id(_id), selectionDraw(false) {
+    if (!label)
+      label = new GlLabel();
+  }
 
   /**
    * Virtual function to accept GlSceneVisitor on this class
    */
-  void acceptVisitor(GlSceneVisitor *visitor) override;
+  void acceptVisitor(GlSceneVisitor *visitor) override {
+    visitor->visit(this);
+  }
+
+  /**
+   * function to accept GlSceneVisitor with a specified edge
+   */
+  void acceptVisitorForEdge(GlSceneVisitor *visitor, const edge e) {
+    id = e.id;
+    selectionDraw = false;
+    visitor->visit(this);
+  }
 
   /**
    * Return the edge bounding box
@@ -63,15 +77,12 @@ public:
   void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
 
   /**
-   * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to
-   * drawSelect
-   * Use TextRenderer : renderer to draw the label
+   * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
    */
   void drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data, float lod);
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true
-   * Use TextRenderer : renderer to draw the label
    */
   void drawLabel(OcclusionTest *test, const GlGraphInputData *data) override;
 

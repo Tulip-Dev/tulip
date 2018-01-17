@@ -258,8 +258,8 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
   bool displayMetaNodesLabel = inputData->parameters->isViewMetaLabel();
   bool displayEdges = inputData->parameters->isDisplayEdges();
 
-  GlNode glNode(0);
-  GlEdge glEdge(0);
+  GlNode glNode;
+  GlEdge glEdge;
   glEdge.setSelectionDraw(selectionDrawActivate);
 
   bool renderOnlyOneNode = false;

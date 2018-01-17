@@ -43,7 +43,7 @@ struct OcclusionTest;
  * label->setText("example");
  * @endcode
  */
-class TLP_GL_SCOPE GlLabel : public GlSimpleEntity {
+class TLP_GL_SCOPE GlLabel final : public GlSimpleEntity {
   /**
    * @brief Set default parameters of GlLabel
    *
@@ -80,31 +80,44 @@ public:
    * @brief getText gets the text of this label.
    * @return The text of this label.
    */
-  const std::string &getText() const;
+  const std::string &getText() const {
+    return text;
+  }
 
   /**
    * @brief Set the position used to render the label
    */
-  void setPosition(const Coord &position);
+  void setPosition(const Coord &position) {
+    centerPosition = position;
+  }
+
+  /**
+   * @brief Set the position used to render the label
+   */
+  void setPosition(float x, float y, float z) {
+    centerPosition.set(x, y, z);
+  }
 
   /**
    * @brief Return the position of the label
    */
-  Coord getPosition();
+  const Coord& getPosition() const {
+    return centerPosition;
+  }
 
   ///@cond DOXYGEN_HIDDEN
 
   /**
    * @brief Set the translation used after rotation of the label
    */
-  virtual void setTranslationAfterRotation(Coord translation) {
+  void setTranslationAfterRotation(const Coord& translation) {
     translationAfterRotation = translation;
   }
 
   /**
    * @brief return the translation used after rotation of the label
    */
-  virtual Coord getTranslationAfterRotation() {
+  const Coord& getTranslationAfterRotation() const {
     return translationAfterRotation;
   }
 
@@ -118,7 +131,7 @@ public:
    * @see LabelPosition
    * @see setSizeOfOutAlign
    */
-  virtual void setAlignment(int alignment) {
+  void setAlignment(int alignment) {
     this->alignment = alignment;
   }
 
@@ -130,17 +143,23 @@ public:
   /**
    * @brief Return the bounding box of the text of the label after transformations
    */
-  virtual BoundingBox getTextBoundingBox();
+  const BoundingBox& getTextBoundingBox() {
+    return textBoundingBox;
+  }
 
   /**
    * @brief Set the size of the label
    */
-  virtual void setSize(const Size &size);
+  void setSize(const Size &size) {
+    this->sizeForOutAlign = this->size = size;
+  }
 
   /**
    * @brief return the size of the text
    */
-  virtual Size getSize();
+  const Size &getSize() const {
+    return size;
+  }
 
   /**
    * @brief Set the size for alignment outside (left/right/top/bottom)
@@ -150,39 +169,43 @@ public:
    *
    * @Warning : this size is reinit when you call setSize
    */
-  virtual void setSizeForOutAlign(const Size &size);
+  void setSizeForOutAlign(const Size &size) {
+    sizeForOutAlign = size;
+  }
 
   /**
    * @brief return the size for alignment outside (left/right/top/bottom)
    * @see setAlignment
    */
-  virtual Size getSizeForOutAlign();
+  const Size &getSizeForOutAlign() const {
+    return  sizeForOutAlign;
+  }
 
   /**
    * @brief Set color of label
    */
-  virtual void setColor(const Color &color) {
+  void setColor(const Color &color) {
     this->color = color;
   }
 
   /**
    * @brief Get color use to render the label
    */
-  virtual Color getColor() {
+  const Color& getColor() const {
     return color;
   }
 
   /**
    * @brief Enable/disable the OpenGL depth test for the label (default depth test is enable)
    */
-  virtual void enableDepthTest(bool state) {
+  void enableDepthTest(bool state) {
     depthTestEnabled = state;
   }
 
   /**
    * @brief Enable/disable if label is scaled to size
    */
-  virtual void setScaleToSize(bool state) {
+  void setScaleToSize(bool state) {
     scaleToSize = state;
   }
 
@@ -210,7 +233,7 @@ public:
   /**
    * @brief Rotate Label
    */
-  virtual void rotate(float xRot, float yRot, float zRot);
+  void rotate(float xRot, float yRot, float zRot);
 
   /**
    * @brief Function to export data in outString (in XML format)
@@ -225,43 +248,46 @@ public:
   /**
    * @brief Switch to bold font
    */
-  virtual void setBoldFont();
+  void setBoldFont();
 
   /**
    * @brief Switch to plain font
    */
-  virtual void setPlainFont();
+  void setPlainFont();
 
   /**
    * @brief Change font name
    */
-  virtual void setFontName(const std::string &name);
+  void setFontName(const std::string &name);
 
   /**
    * @brief Change font name, size and color of the text
    */
-  virtual void setFontNameSizeAndColor(const std::string &name, const int &size,
-                                       const Color &color);
+  void setFontNameSizeAndColor(const std::string &name, const int &size,
+			       const Color &color);
 
   ///@cond DOXYGEN_HIDDEN
   /**
    * @brief This parameters is not used
    */
-  virtual void setRenderingMode(int mode);
+  void setRenderingMode(int mode) {
+    renderingMode = mode;
+  }
   ///@endcond
 
   /**
    * @brief Set the occlusion tester
    * If occlusionTester is nullptr : deactivate occlusion test
    */
-  virtual void setOcclusionTester(OcclusionTest *tester) {
+  void setOcclusionTester(OcclusionTest *tester) {
     occlusionTester = tester;
   }
 
   /**
-   * @brief Set if the label is otimized with the lod
+   * @brief Set if the label is optimized with the lod
    */
-  virtual void setUseLODOptimisation(bool state, BoundingBox bb = BoundingBox()) {
+  void setUseLODOptimisation(bool state,
+			     const BoundingBox& bb = BoundingBox()) {
     useLOD = state;
     lodBoundingBox = bb;
   }
@@ -269,7 +295,7 @@ public:
   /**
    * @brief Return if the label is otimized with the lod
    */
-  virtual bool getUseLODOptimisation() {
+  bool getUseLODOptimisation() const {
     return useLOD;
   }
 
@@ -281,7 +307,7 @@ public:
    * - If density is equal to 0 : GlLabels don't overlap
    * - If density > 0 : GlLabels don't overlap and have space wetween us
    */
-  virtual void setLabelsDensity(int density) {
+  void setLabelsDensity(int density) {
     if (density < -100)
       labelsDensity = -100;
     else if (density > 100)
@@ -294,7 +320,7 @@ public:
    * @brief Return label density of occlusion test
    * This density will be in interval -100 100
    */
-  virtual int getLabelDensity() {
+  int getLabelDensity() const {
     return labelsDensity;
   }
 
@@ -310,7 +336,7 @@ public:
    * @brief Get min screen size (in pixel) of the label : this size is used in not scaled mode
    * @see setUseMinMaxSize
    */
-  int getMinSize() {
+  int getMinSize() const {
     return minSize;
   }
 
@@ -326,7 +352,7 @@ public:
    * @brief Get max screen size (in pixel) of the label : this size is used in not scaled mode
    * @see setUseMinMaxSize
    */
-  int getMaxSize() {
+  int getMaxSize() const {
     return maxSize;
   }
 
@@ -340,7 +366,7 @@ public:
   /**
    * @brief Return if the label using min/max screen size in not scaled mode
    */
-  bool isUsingMinMaxSize() {
+  bool isUsingMinMaxSize() const {
     return useMinMaxSize;
   }
 
@@ -361,7 +387,7 @@ public:
   /**
    * @brief Return the outline color
    */
-  Color getOutlineColor() const {
+  const Color &getOutlineColor() const {
     return outlineColor;
   }
 
@@ -389,7 +415,7 @@ public:
   /**
    * @brief Return the texture name used to render the label
    */
-  std::string getTextureName() const {
+  const std::string& getTextureName() const {
     return textureName;
   }
 
@@ -403,7 +429,7 @@ public:
   /**
    * @brief Return if the label is billboarded
    */
-  bool isBillboarded() {
+  bool isBillboarded() const {
     return billboarded;
   }
 

@@ -178,7 +178,6 @@ protected:
 
   bool vectorLayoutSizeInit;
   bool vectorColorSizeInit;
-  bool vectorIndexSizeInit;
 
   bool edgesModified;
   bool colorInterpolate;
@@ -219,8 +218,6 @@ protected:
   TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int>> edgeToQuadIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToBottomOulineIndexVector;
   TLP_HASH_MAP<unsigned int, unsigned int> edgeToTopOutlineIndexVector;
-  TLP_HASH_MAP<unsigned int, unsigned int> edgeToPointIndexVector;
-  TLP_HASH_MAP<unsigned int, unsigned int> nodeToPointIndexVector;
 
   GLuint pointsVerticesVBO;
   GLuint pointsColorsVBO;

@@ -178,45 +178,12 @@ void GlLabel::setText(const string &text) {
   }
 }
 //============================================================
-const std::string &GlLabel::getText() const {
-  return text;
-}
-//============================================================
-void GlLabel::setPosition(const Coord &position) {
-  centerPosition = position;
-}
-//============================================================
-Coord GlLabel::getPosition() {
-  return centerPosition;
-}
-//============================================================
 BoundingBox GlLabel::getBoundingBox() {
   if (!leftAlign)
     return BoundingBox(centerPosition - size / 2.f, centerPosition + size / 2.f);
   else
     return BoundingBox(centerPosition - Coord(0, size[1] / 2.f, 0),
                        centerPosition + Coord(size[0], size[1] / 2.f, 0));
-}
-//============================================================
-BoundingBox GlLabel::getTextBoundingBox() {
-  return textBoundingBox;
-}
-//============================================================
-void GlLabel::setSize(const Size &size) {
-  this->size = size;
-  this->sizeForOutAlign = size;
-}
-//============================================================
-Size GlLabel::getSize() {
-  return size;
-}
-//============================================================
-void GlLabel::setSizeForOutAlign(const Size &size) {
-  this->sizeForOutAlign = size;
-}
-//============================================================
-Size GlLabel::getSizeForOutAlign() {
-  return sizeForOutAlign;
 }
 //============================================================
 void GlLabel::setBoldFont() {
@@ -254,10 +221,6 @@ void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size,
   setFontName(name);
   fontSize = size;
   this->color = color;
-}
-//============================================================
-void GlLabel::setRenderingMode(int mode) {
-  renderingMode = mode;
 }
 //============================================================
 void GlLabel::drawWithStencil(float lod, Camera *camera) {

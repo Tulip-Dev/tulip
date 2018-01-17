@@ -52,9 +52,9 @@ void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor, bool vis
   if (inputData->parameters->isDisplayNodes() || inputData->parameters->isViewNodeLabel() ||
       inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
     visitor->reserveMemoryForNodes(graph->numberOfNodes());
-    for (const node &n : graph->nodes()) {
-      GlNode glNode(n.id);
-      glNode.acceptVisitor(visitor);
+    GlNode glNode;
+    for (auto n : graph->nodes()) {
+      glNode.acceptVisitorForNode(visitor, n);
     }
   }
 }
@@ -63,10 +63,10 @@ void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor, bool vis
   if (inputData->parameters->isDisplayEdges() || inputData->parameters->isViewEdgeLabel() ||
       inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
     visitor->reserveMemoryForEdges(graph->numberOfEdges());
-    for (const edge &e : graph->edges()) {
-      GlEdge glEdge(e.id);
-      glEdge.acceptVisitor(visitor);
-    }
+    GlEdge glEdge;
+    for (auto e : graph->edges()) {
+      glEdge.acceptVisitorForEdge(visitor, e);
+     }
   }
 }
 }

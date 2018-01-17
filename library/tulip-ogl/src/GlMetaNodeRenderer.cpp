@@ -97,32 +97,32 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
 
   GlNode glNode(n.id);
 
-  BoundingBox bb = glNode.getBoundingBox(_inputData);
-  BoundingBox bbTmp;
   BoundingBox includeBB;
   _inputData->glyphs.get(_inputData->getElementShape()->getNodeValue(n))
       ->getIncludeBoundingBox(includeBB, n);
-  bbTmp[0] = bb.center() - Coord((bb.width() / 2.f) * (includeBB[0][0] * -2.f),
-                                 (bb.height() / 2.f) * (includeBB[0][1] * -2.f),
-                                 (bb.depth() / 2.f) * (includeBB[0][2] * -2.f));
-  bbTmp[1] = bb.center() + Coord((bb.width() / 2.f) * (includeBB[1][0] * 2.f),
-                                 (bb.height() / 2.f) * (includeBB[1][1] * 2.f),
-                                 (bb.depth() / 2.f) * (includeBB[1][2] * 2.f));
-  bb = bbTmp;
+  BoundingBox&& bbTmp = glNode.getBoundingBox(_inputData);
+  BoundingBox bb(bbTmp.center() -
+		 Coord((bbTmp.width() / 2.f) * (includeBB[0][0] * -2.f),
+		       (bbTmp.height() / 2.f) * (includeBB[0][1] * -2.f),
+		       (bbTmp.depth() / 2.f) * (includeBB[0][2] * -2.f)),
+		 bbTmp.center() +
+		 Coord((bbTmp.width() / 2.f) * (includeBB[1][0] * 2.f),
+		       (bbTmp.height() / 2.f) * (includeBB[1][1] * 2.f),
+		       (bbTmp.depth() / 2.f) * (includeBB[1][2] * 2.f)));
 
   Coord eyeDirection = camera->getEyes() - camera->getCenter();
   eyeDirection = eyeDirection / eyeDirection.norm();
 
-  Camera newCamera2 = *camera;
+  Camera newCamera2(*camera);
   newCamera2.setEyes(newCamera2.getCenter() +
                      Coord(0, 0, 1) * (newCamera2.getEyes() - newCamera2.getCenter()).norm());
   newCamera2.setUp(Coord(0, 1, 0));
 
-  Coord first = newCamera2.worldTo2DViewport(bb[0]);
-  Coord second = newCamera2.worldTo2DViewport(bb[1]);
-
   Coord center = camera->worldTo2DViewport((bb[0] + bb[1]) / 2.f);
-  Coord size = second - first;
+  Coord&& first = newCamera2.worldTo2DViewport(bb[0]);
+  Coord&& second = newCamera2.worldTo2DViewport(bb[1]);
+
+  Coord&& size = second - first;
 
   Vector<int, 4> viewport;
   viewport[0] = center[0] - size[0] / 2;
@@ -151,7 +151,6 @@ void GlMetaNodeRenderer::render(node n, float, Camera *camera) {
   Camera *oldCamera = new Camera(scene, true);
   newCamera.setScene(scene);
   *oldCamera = newCamera;
-  newCamera.setScene(scene);
   newCamera.setUp(camera->getUp());
   newCamera.setEyes(newCamera.getCenter() + (eyeDirection * baseNorm));
   newCamera.setZoomFactor(newCamera.getZoomFactor() * 0.5);

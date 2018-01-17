@@ -37,7 +37,6 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTLPFeedBackBuilder.h>
-#include <tulip/GlSceneVisitor.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Camera.h>
 #include <tulip/GlBezierCurve.h>
@@ -45,7 +44,6 @@
 #include <tulip/GlOpenUniformCubicBSpline.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlLabel.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlScene.h>
@@ -57,11 +55,6 @@ tlp::GlLabel *tlp::GlEdge::label = nullptr;
 using namespace std;
 
 namespace tlp {
-
-GlEdge::GlEdge(unsigned int id) : id(id), selectionDraw(false) {
-  if (!label)
-    label = new GlLabel();
-}
 
 BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data) {
   edge e = edge(id);
@@ -134,10 +127,6 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data) {
   bb.expand(tgtAnchor);
 
   return bb;
-}
-
-void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
-  visitor->visit(this);
 }
 
 void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
@@ -475,7 +464,7 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data) {
 void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
                        Camera *camera) {
 
-  edge e = edge(id);
+  edge e(id);
 
   const string &tmp = data->getElementLabel()->getEdgeValue(e);
 
@@ -653,16 +642,14 @@ void GlEdge::getVertices(const GlGraphInputData *data, std::vector<Coord> &lines
   getEdgeAnchor(data, source, target, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor,
                 tgtAnchor);
 
-  vector<Coord> vertices;
-  Coord srcCoordTmp = srcCoord;
-  Coord tgtCoordTmp = tgtCoord;
-
   EdgeExtremityGlyph *startEdgeGlyph =
       data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
   EdgeExtremityGlyph *endEdgeGlyph =
       data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
 
   Coord beginLineAnchor;
+  Coord srcCoordTmp(srcCoord);
+  Coord tgtCoordTmp(tgtCoord);
 
   if (data->parameters->isViewArrow() && startEdgeGlyph != nullptr) {
     displayArrowAndAdjustAnchor(data, e, source, data->getElementSrcAnchorSize()->getEdgeValue(e),
@@ -686,6 +673,7 @@ void GlEdge::getVertices(const GlGraphInputData *data, std::vector<Coord> &lines
     endLineAnchor = tgtAnchor;
   }
 
+  vector<Coord> vertices;
   computeCleanVertices(bends, beginLineAnchor, endLineAnchor, srcCoordTmp, tgtCoordTmp, vertices);
 
   if (vertices.empty())

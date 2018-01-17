@@ -17,7 +17,6 @@
  *
  */
 
-#include <climits>
 #include <set>
 
 #include <tulip/GlNode.h>
@@ -39,31 +38,21 @@
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlLabel.h>
 #include <tulip/GlBox.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/TulipViewSettings.h>
 
 //====================================================
 tlp::GlLabel *tlp::GlNode::label = nullptr;
-tlp::GlBox *tlp::GlNode::selectionBox = nullptr;
+static tlp::GlBox selectionBox(tlp::Coord(0, 0, 0), tlp::Size(1, 1, 1),
+			       tlp::Color(0, 0, 255, 255),
+			       tlp::Color(0, 255, 0, 255), false, true, "", 3);
 
 #define LOD_MIN_TRESHOLD 10.0
 
 using namespace std;
 
 namespace tlp {
-
-GlNode::GlNode(unsigned int id) : id(id), oldId(UINT_MAX) {
-  if (!label)
-    label = new GlLabel();
-
-  if (!selectionBox) {
-    selectionBox = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255),
-                             Color(0, 255, 0, 255), false, true);
-    selectionBox->setOutlineSize(3);
-  }
-}
 
 void GlNode::init(const GlGraphInputData *data) {
   if (id != oldId) {
@@ -80,38 +69,39 @@ void GlNode::init(const GlGraphInputData *data) {
 BoundingBox GlNode::getBoundingBox(const GlGraphInputData *data) {
   init(data);
 
+  Coord &&tmp1 = size / 2.f;
   if (rot == 0) {
     BoundingBox box;
-    box.expand(coord - size / 2.f);
-    box.expand(coord + size / 2.f);
+    box.expand(coord - tmp1);
+    box.expand(coord + tmp1);
     assert(box.isValid());
     return box;
   } else {
     float cosAngle = cos(rot / 180. * M_PI);
     float sinAngle = sin(rot / 180. * M_PI);
-    Coord tmp1(size / 2.f);
     Coord tmp2(tmp1[0], -tmp1[1], tmp1[2]);
     Coord tmp3(-tmp1[0], -tmp1[1], -tmp1[2]);
     Coord tmp4(-tmp1[0], tmp1[1], -tmp1[2]);
-    tmp1 = Coord(tmp1[0] * cosAngle - tmp1[1] * sinAngle, tmp1[0] * sinAngle + tmp1[1] * cosAngle,
-                 tmp1[2]);
-    tmp2 = Coord(tmp2[0] * cosAngle - tmp2[1] * sinAngle, tmp2[0] * sinAngle + tmp2[1] * cosAngle,
-                 tmp2[2]);
-    tmp3 = Coord(tmp3[0] * cosAngle - tmp3[1] * sinAngle, tmp3[0] * sinAngle + tmp3[1] * cosAngle,
-                 tmp3[2]);
-    tmp4 = Coord(tmp4[0] * cosAngle - tmp4[1] * sinAngle, tmp4[0] * sinAngle + tmp4[1] * cosAngle,
-                 tmp4[2]);
-    BoundingBox bb;
-    bb.expand(coord + tmp1);
+    tmp1.set(tmp1[0] * cosAngle - tmp1[1] * sinAngle,
+	     tmp1[0] * sinAngle + tmp1[1] * cosAngle,
+	     tmp1[2]);
+    tmp2.set(tmp2[0] * cosAngle - tmp2[1] * sinAngle,
+	     tmp2[0] * sinAngle + tmp2[1] * cosAngle,
+	     tmp2[2]);
+    tmp3.set(tmp3[0] * cosAngle - tmp3[1] * sinAngle,
+	     tmp3[0] * sinAngle + tmp3[1] * cosAngle,
+	     tmp3[2]);
+    tmp4.set(tmp4[0] * cosAngle - tmp4[1] * sinAngle,
+	     tmp4[0] * sinAngle + tmp4[1] * cosAngle,
+	     tmp4[2]);
+    
+    tmp1 += coord;
+    BoundingBox bb(tmp1, tmp1);
     bb.expand(coord + tmp2);
     bb.expand(coord + tmp3);
     bb.expand(coord + tmp4);
     return bb;
   }
-}
-
-void GlNode::acceptVisitor(GlSceneVisitor *visitor) {
-  visitor->visit(this);
 }
 
 void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
@@ -222,9 +212,9 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
     if (selected) {
-      selectionBox->setStencil(data->parameters->getSelectedNodesStencil() - 1);
-      selectionBox->setOutlineColor(colorSelect2);
-      selectionBox->draw(10, nullptr);
+      selectionBox.setStencil(data->parameters->getSelectedNodesStencil() - 1);
+      selectionBox.setOutlineColor(colorSelect2);
+      selectionBox.draw(10, nullptr);
     }
 
     data->glyphs.get(glyph)->draw(n, lod);
@@ -325,18 +315,9 @@ void GlNode::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
   label->drawWithStencil(lod, camera);
 }
 
-void GlNode::getPointAndColor(GlGraphInputData *inputData, std::vector<Coord> &pointsCoordsArray,
-                              std::vector<Color> &pointsColorsArray) {
+void GlNode::getPoint(GlGraphInputData *inputData, std::vector<Coord> &pointsCoordsArray) {
   init(inputData);
   pointsCoordsArray.push_back(coord);
-
-  node n = node(id);
-
-  if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
-    pointsColorsArray.push_back(inputData->getElementBorderColor()->getNodeValue(n));
-  } else {
-    pointsColorsArray.push_back(inputData->getElementColor()->getNodeValue(n));
-  }
 }
 
 void GlNode::getColor(GlGraphInputData *inputData, std::vector<Color> &pointsColorsArray) {
