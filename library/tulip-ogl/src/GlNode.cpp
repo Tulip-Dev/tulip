@@ -44,9 +44,8 @@
 
 //====================================================
 tlp::GlLabel *tlp::GlNode::label = nullptr;
-static tlp::GlBox selectionBox(tlp::Coord(0, 0, 0), tlp::Size(1, 1, 1),
-			       tlp::Color(0, 0, 255, 255),
-			       tlp::Color(0, 255, 0, 255), false, true, "", 3);
+static tlp::GlBox selectionBox(tlp::Coord(0, 0, 0), tlp::Size(1, 1, 1), tlp::Color(0, 0, 255, 255),
+                               tlp::Color(0, 255, 0, 255), false, true, "", 3);
 
 #define LOD_MIN_TRESHOLD 10.0
 
@@ -82,19 +81,15 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData *data) {
     Coord tmp2(tmp1[0], -tmp1[1], tmp1[2]);
     Coord tmp3(-tmp1[0], -tmp1[1], -tmp1[2]);
     Coord tmp4(-tmp1[0], tmp1[1], -tmp1[2]);
-    tmp1.set(tmp1[0] * cosAngle - tmp1[1] * sinAngle,
-	     tmp1[0] * sinAngle + tmp1[1] * cosAngle,
-	     tmp1[2]);
-    tmp2.set(tmp2[0] * cosAngle - tmp2[1] * sinAngle,
-	     tmp2[0] * sinAngle + tmp2[1] * cosAngle,
-	     tmp2[2]);
-    tmp3.set(tmp3[0] * cosAngle - tmp3[1] * sinAngle,
-	     tmp3[0] * sinAngle + tmp3[1] * cosAngle,
-	     tmp3[2]);
-    tmp4.set(tmp4[0] * cosAngle - tmp4[1] * sinAngle,
-	     tmp4[0] * sinAngle + tmp4[1] * cosAngle,
-	     tmp4[2]);
-    
+    tmp1.set(tmp1[0] * cosAngle - tmp1[1] * sinAngle, tmp1[0] * sinAngle + tmp1[1] * cosAngle,
+             tmp1[2]);
+    tmp2.set(tmp2[0] * cosAngle - tmp2[1] * sinAngle, tmp2[0] * sinAngle + tmp2[1] * cosAngle,
+             tmp2[2]);
+    tmp3.set(tmp3[0] * cosAngle - tmp3[1] * sinAngle, tmp3[0] * sinAngle + tmp3[1] * cosAngle,
+             tmp3[2]);
+    tmp4.set(tmp4[0] * cosAngle - tmp4[1] * sinAngle, tmp4[0] * sinAngle + tmp4[1] * cosAngle,
+             tmp4[2]);
+
     tmp1 += coord;
     BoundingBox bb(tmp1, tmp1);
     bb.expand(coord + tmp2);

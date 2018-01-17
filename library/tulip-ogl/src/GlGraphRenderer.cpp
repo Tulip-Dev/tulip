@@ -66,7 +66,7 @@ void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor, bool vis
     GlEdge glEdge;
     for (auto e : graph->edges()) {
       glEdge.acceptVisitorForEdge(visitor, e);
-     }
+    }
   }
 }
 }

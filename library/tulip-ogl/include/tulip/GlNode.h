@@ -79,10 +79,10 @@ public:
   void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
 
   /**
-   * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
+   * Draw the label of the node if drawNodesLabel is true and if label selection is equal to
+   * drawSelect
    */
-  void drawLabel(bool drawSelect, OcclusionTest *test,
-		 const GlGraphInputData *data, float lod);
+  void drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data, float lod);
 
   /**
    * Draw the label of the node if drawEdgesLabel is true
@@ -93,7 +93,7 @@ public:
    * Draw the label of the node if drawEdgesLabel is true
    */
   void drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
-		 Camera *camera = nullptr);
+                 Camera *camera = nullptr);
 
   unsigned int id;
 

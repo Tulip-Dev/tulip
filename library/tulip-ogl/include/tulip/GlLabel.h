@@ -101,7 +101,7 @@ public:
   /**
    * @brief Return the position of the label
    */
-  const Coord& getPosition() const {
+  const Coord &getPosition() const {
     return centerPosition;
   }
 
@@ -110,14 +110,14 @@ public:
   /**
    * @brief Set the translation used after rotation of the label
    */
-  void setTranslationAfterRotation(const Coord& translation) {
+  void setTranslationAfterRotation(const Coord &translation) {
     translationAfterRotation = translation;
   }
 
   /**
    * @brief return the translation used after rotation of the label
    */
-  const Coord& getTranslationAfterRotation() const {
+  const Coord &getTranslationAfterRotation() const {
     return translationAfterRotation;
   }
 
@@ -143,7 +143,7 @@ public:
   /**
    * @brief Return the bounding box of the text of the label after transformations
    */
-  const BoundingBox& getTextBoundingBox() {
+  const BoundingBox &getTextBoundingBox() {
     return textBoundingBox;
   }
 
@@ -178,7 +178,7 @@ public:
    * @see setAlignment
    */
   const Size &getSizeForOutAlign() const {
-    return  sizeForOutAlign;
+    return sizeForOutAlign;
   }
 
   /**
@@ -191,7 +191,7 @@ public:
   /**
    * @brief Get color use to render the label
    */
-  const Color& getColor() const {
+  const Color &getColor() const {
     return color;
   }
 
@@ -263,8 +263,7 @@ public:
   /**
    * @brief Change font name, size and color of the text
    */
-  void setFontNameSizeAndColor(const std::string &name, const int &size,
-			       const Color &color);
+  void setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color);
 
   ///@cond DOXYGEN_HIDDEN
   /**
@@ -286,8 +285,7 @@ public:
   /**
    * @brief Set if the label is optimized with the lod
    */
-  void setUseLODOptimisation(bool state,
-			     const BoundingBox& bb = BoundingBox()) {
+  void setUseLODOptimisation(bool state, const BoundingBox &bb = BoundingBox()) {
     useLOD = state;
     lodBoundingBox = bb;
   }
@@ -415,7 +413,7 @@ public:
   /**
    * @brief Return the texture name used to render the label
    */
-  const std::string& getTextureName() const {
+  const std::string &getTextureName() const {
     return textureName;
   }
 

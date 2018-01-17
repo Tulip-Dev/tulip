@@ -77,7 +77,8 @@ public:
   void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
 
   /**
-   * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
+   * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to
+   * drawSelect
    */
   void drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data, float lod);
 
