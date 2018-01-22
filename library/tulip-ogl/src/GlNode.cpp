@@ -309,19 +309,4 @@ void GlNode::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
 
   label->drawWithStencil(lod, camera);
 }
-
-void GlNode::getPoint(GlGraphInputData *inputData, std::vector<Coord> &pointsCoordsArray) {
-  init(inputData);
-  pointsCoordsArray.push_back(coord);
-}
-
-void GlNode::getColor(GlGraphInputData *inputData, std::vector<Color> &pointsColorsArray) {
-  node n = node(id);
-
-  if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
-    pointsColorsArray.push_back(inputData->getElementBorderColor()->getNodeValue(n));
-  } else {
-    pointsColorsArray.push_back(inputData->getElementColor()->getNodeValue(n));
-  }
-}
 }

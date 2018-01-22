@@ -644,33 +644,23 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
   node src = ends.first;
   node tgt = ends.second;
 
-  const Coord &srcCoord = layoutProperty->getNodeValue(src);
-  const Coord &tgtCoord = layoutProperty->getNodeValue(tgt);
-
-  const Size &srcSize = sizeProperty->getNodeValue(src);
-  const Size &tgtSize = sizeProperty->getNodeValue(tgt);
-
-  const Color &edgeColor = colorProperty->getEdgeValue(e);
-  const Color &srcColor = colorProperty->getNodeValue(src);
-  const Color &tgtColor = colorProperty->getNodeValue(tgt);
-  const Color &borderColor = borderColorProperty->getEdgeValue(e);
-
   if (toComputeLayout) {
+    Coord srcCoord, tgtCoord;
+    Size srcSize, tgtSize;
 
-    size_t lastIndex = linesCoordsArray.size();
-    gledge->getVertices(inputData, linesCoordsArray);
-    size_t numberOfVertices = linesCoordsArray.size() - lastIndex;
 
     vector<Coord> vertices;
+    size_t numberOfVertices = 
+      gledge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord,
+			  srcSize, tgtSize, vertices);
+
 
     if (numberOfVertices != 0) {
+      size_t lastIndex = linesCoordsArray.size();
+      linesCoordsArray.insert(linesCoordsArray.end(), vertices.begin(), vertices.end());      
       edgeToLineIndexVector[gledge->id] =
           pair<unsigned int, unsigned int>(linesIndexArray.size(), linesIndexCountArray.size());
       linesIndexArray.push_back(lastIndex);
-
-      for (size_t i = 0; i < numberOfVertices; ++i) {
-        vertices.push_back(linesCoordsArray[lastIndex + i]);
-      }
 
       linesIndexCountArray.push_back(numberOfVertices);
 
@@ -743,9 +733,15 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
     GLsizei numberOfVertices = linesIndexCountArray[index.second];
 
     if (numberOfVertices != 0) {
+      const Color &edgeColor = colorProperty->getEdgeValue(e);
+      Color srcColor, tgtColor;
+
       vector<Color> colors;
-      gledge->getColors(inputData, &linesCoordsArray[linesIndexArray[index.first]],
+      gledge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
+			&linesCoordsArray[linesIndexArray[index.first]],
                         numberOfVertices, colors);
+      // must be added twice ?
+      linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
 
       GLsizei numberQuadVertices = quadsIndexCountArray[indexQuad.second];
@@ -763,6 +759,7 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
       colors.clear();
       getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor, colors);
 
+      const Color &borderColor = borderColorProperty->getEdgeValue(e);
       for (size_t i = 0; i < colors.size(); ++i) {
         if (inputData->parameters->isEdgeColorInterpolate()) {
           quadsColorsArray.push_back(colors[i]);
@@ -785,11 +782,11 @@ void GlVertexArrayManager::addNode(GlNode *node) {
   // pointsCoordsArray and pointsColorsArray
   // are updated in the ordering of graph->nodes
   if (toComputeLayout) {
-    node->getPoint(inputData, pointsCoordsArray);
+    pointsCoordsArray.push_back(std::move(node->getPoint(inputData)));
   }
 
   if (toComputeColor) {
-    node->getColor(inputData, pointsColorsArray);
+    pointsColorsArray.push_back(std::move(node->getColor(inputData)));
   }
 }
 

@@ -60,7 +60,7 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     if ((++i % 100) == 0)
       pp->progress(i, nb_elements);
 
-    const pair<node, node> &ends = graph->ends(e);
+    const pair<node, node> ends = graph->ends(e);
     ret = exportint.startEdge(e.id);
 
     if (!ret) {
@@ -74,11 +74,15 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     }
 
     GlEdge glEdge(e);
+    Coord srcCoord, tgtCoord;
+    Size srcSize, tgtSize;
     vector<Coord> edgeVertices;
-    glEdge.getVertices(&inputData, edgeVertices);
+    auto nbVertices = 
+      glEdge.getVertices(&inputData, e, ends.first, ends.second,
+			 srcCoord, tgtCoord, srcSize, tgtSize, edgeVertices);
 
     // nothing to do if current edge is a loop with no bends
-    if (edgeVertices.empty())
+    if (!nbVertices)
       continue;
 
     // Edges extremities

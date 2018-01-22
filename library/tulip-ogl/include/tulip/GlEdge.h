@@ -72,6 +72,15 @@ public:
   BoundingBox getBoundingBox(const GlGraphInputData *data) override;
 
   /**
+   * Return the edge bounding box
+   */
+  BoundingBox getBoundingBox(const GlGraphInputData *data, 
+			     const edge e, const node src, const node tgt,
+			     const Coord &srcCoord, const Coord &tgtCoord,
+			     const Size &srcSize, const Size &tgtSize,
+			     const LineType::RealType &bends);
+
+  /**
    * Draw the edge with level of detail : lod and Camera : camera
    */
   void draw(float lod, const GlGraphInputData *data, Camera *camera) override;
@@ -97,18 +106,20 @@ public:
   /**
    * This function is used by the engine to get line coordinates of the edge
    */
-  void getVertices(const GlGraphInputData *data, std::vector<Coord> &linesCoordsArray);
+  size_t getVertices(const GlGraphInputData *data,
+		     const edge e, const node src, const node tgt,
+		     Coord &srcCoord, Coord &tgtCoord,
+		     Size &srcSize, Size& tgtSize,
+		     std::vector<Coord> &vertices);
 
   /**
    * This function is used by the engine to get line colors of the edge
    */
-  void getColors(const GlGraphInputData *data, const Coord *vertices, unsigned int numberOfVertices,
-                 std::vector<Color> &linesColorsArray);
-  /**
-   * This function is used by the engine to get line colors of the edge
-   */
-  void getColors(const GlGraphInputData *data, const std::vector<Coord> &vertices,
-                 std::vector<Color> &linesColorsArray);
+  void getColors(const GlGraphInputData *data,
+		 const node src, const node tgt,
+		 const Color& eColor, Color &srcCol, Color &tgtCol,
+		 const Coord *vertices, unsigned int numberOfVertices,
+		 std::vector<Color> &colors);
 
   /**
    * Compute the edge size
@@ -119,7 +130,7 @@ public:
   /**
    * Compute edge anchor
    */
-  void getEdgeAnchor(const GlGraphInputData *data, const node &source, const node &target,
+  void getEdgeAnchor(const GlGraphInputData *data, const node src, const node tgt,
                      const LineType::RealType &bends, const Coord &srcCoord, const Coord &tgtCoord,
                      const Size &srcSize, const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
 
@@ -153,8 +164,8 @@ private:
    * Compute the edge colors and store these colors in srcCol and tgtCol
    * \param data : input data used to compute edge colors
    */
-  void getEdgeColor(const GlGraphInputData *data, const edge &e, const node &source,
-                    const node &target, bool selected, Color &srcCol, Color &tgtCol);
+  void getEdgeColor(const GlGraphInputData *data, const edge e, const node src,
+                    const node tgt, bool selected, Color &srcCol, Color &tgtCol);
 
   /**
    * Compute width lod of edge
@@ -165,7 +176,7 @@ private:
   /**
    * Thgis function is used to render edge arrows
    */
-  void displayArrowAndAdjustAnchor(const GlGraphInputData *data, const edge &e, const node &source,
+  void displayArrowAndAdjustAnchor(const GlGraphInputData *data, const edge e, const node src,
                                    const Size &sizeRatio, float edgeSize, const Color &color,
                                    float maxSize, bool selected, float selectionOutlineSize,
                                    int tgtEdgeGlyph, bool hasBends, const Coord &anchor,

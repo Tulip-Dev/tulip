@@ -30,6 +30,7 @@
 #include <tulip/GlComplexeEntity.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlSceneVisitor.h>
+#include <tulip/GlGraphInputData.h>
 
 #include <vector>
 
@@ -100,12 +101,21 @@ public:
   /**
    * This function is used by the engine to get point coordinates of the node
    */
-  void getPoint(GlGraphInputData *inputData, std::vector<Coord> &pointsCoordsArray);
+  Coord getPoint(GlGraphInputData *inputData) {
+    init(inputData);
+    return coord;
+  }
 
   /**
    * This function is used by the engine to get color of the node
    */
-  void getColor(GlGraphInputData *inputData, std::vector<Color> &pointsColorsArray);
+  Color getColor(GlGraphInputData *inputData) {
+    node n(id);
+
+    return (inputData->getElementBorderWidth()->getNodeValue(n) > 0)
+      ? inputData->getElementBorderColor()->getNodeValue(n)
+      : inputData->getElementColor()->getNodeValue(n);
+  }
 
 protected:
   unsigned int oldId;
