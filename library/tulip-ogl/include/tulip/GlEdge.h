@@ -74,11 +74,10 @@ public:
   /**
    * Return the edge bounding box
    */
-  BoundingBox getBoundingBox(const GlGraphInputData *data, 
-			     const edge e, const node src, const node tgt,
-			     const Coord &srcCoord, const Coord &tgtCoord,
-			     const Size &srcSize, const Size &tgtSize,
-			     const LineType::RealType &bends);
+  BoundingBox getBoundingBox(const GlGraphInputData *data, const edge e, const node src,
+                             const node tgt, const Coord &srcCoord, const Coord &tgtCoord,
+                             const Size &srcSize, const Size &tgtSize,
+                             const LineType::RealType &bends);
 
   /**
    * Draw the edge with level of detail : lod and Camera : camera
@@ -106,20 +105,16 @@ public:
   /**
    * This function is used by the engine to get line coordinates of the edge
    */
-  size_t getVertices(const GlGraphInputData *data,
-		     const edge e, const node src, const node tgt,
-		     Coord &srcCoord, Coord &tgtCoord,
-		     Size &srcSize, Size& tgtSize,
-		     std::vector<Coord> &vertices);
+  size_t getVertices(const GlGraphInputData *data, const edge e, const node src, const node tgt,
+                     Coord &srcCoord, Coord &tgtCoord, Size &srcSize, Size &tgtSize,
+                     std::vector<Coord> &vertices);
 
   /**
    * This function is used by the engine to get line colors of the edge
    */
-  void getColors(const GlGraphInputData *data,
-		 const node src, const node tgt,
-		 const Color& eColor, Color &srcCol, Color &tgtCol,
-		 const Coord *vertices, unsigned int numberOfVertices,
-		 std::vector<Color> &colors);
+  void getColors(const GlGraphInputData *data, const node src, const node tgt, const Color &eColor,
+                 Color &srcCol, Color &tgtCol, const Coord *vertices, unsigned int numberOfVertices,
+                 std::vector<Color> &colors);
 
   /**
    * Compute the edge size
@@ -164,8 +159,8 @@ private:
    * Compute the edge colors and store these colors in srcCol and tgtCol
    * \param data : input data used to compute edge colors
    */
-  void getEdgeColor(const GlGraphInputData *data, const edge e, const node src,
-                    const node tgt, bool selected, Color &srcCol, Color &tgtCol);
+  void getEdgeColor(const GlGraphInputData *data, const edge e, const node src, const node tgt,
+                    bool selected, Color &srcCol, Color &tgtCol);
 
   /**
    * Compute width lod of edge

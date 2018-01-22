@@ -77,9 +77,8 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
     Coord srcCoord, tgtCoord;
     Size srcSize, tgtSize;
     vector<Coord> edgeVertices;
-    auto nbVertices = 
-      glEdge.getVertices(&inputData, e, ends.first, ends.second,
-			 srcCoord, tgtCoord, srcSize, tgtSize, edgeVertices);
+    auto nbVertices = glEdge.getVertices(&inputData, e, ends.first, ends.second, srcCoord, tgtCoord,
+                                         srcSize, tgtSize, edgeVertices);
 
     // nothing to do if current edge is a loop with no bends
     if (!nbVertices)

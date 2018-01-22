@@ -648,16 +648,13 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
     Coord srcCoord, tgtCoord;
     Size srcSize, tgtSize;
 
-
     vector<Coord> vertices;
-    size_t numberOfVertices = 
-      gledge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord,
-			  srcSize, tgtSize, vertices);
-
+    size_t numberOfVertices =
+        gledge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices);
 
     if (numberOfVertices != 0) {
       size_t lastIndex = linesCoordsArray.size();
-      linesCoordsArray.insert(linesCoordsArray.end(), vertices.begin(), vertices.end());      
+      linesCoordsArray.insert(linesCoordsArray.end(), vertices.begin(), vertices.end());
       edgeToLineIndexVector[gledge->id] =
           pair<unsigned int, unsigned int>(linesIndexArray.size(), linesIndexCountArray.size());
       linesIndexArray.push_back(lastIndex);
@@ -738,8 +735,7 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
 
       vector<Color> colors;
       gledge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
-			&linesCoordsArray[linesIndexArray[index.first]],
-                        numberOfVertices, colors);
+                        &linesCoordsArray[linesIndexArray[index.first]], numberOfVertices, colors);
       // must be added twice ?
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());

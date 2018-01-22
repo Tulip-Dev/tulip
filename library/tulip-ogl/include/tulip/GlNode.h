@@ -113,8 +113,8 @@ public:
     node n(id);
 
     return (inputData->getElementBorderWidth()->getNodeValue(n) > 0)
-      ? inputData->getElementBorderColor()->getNodeValue(n)
-      : inputData->getElementColor()->getNodeValue(n);
+               ? inputData->getElementBorderColor()->getNodeValue(n)
+               : inputData->getElementColor()->getNodeValue(n);
   }
 
 protected:
