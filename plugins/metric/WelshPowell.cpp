@@ -90,9 +90,10 @@ public:
     unsigned int nbNodes = nodes.size();
     std::vector<nodeInfo> nodesInfo(nbNodes);
 
-    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &n, unsigned int i) {
-      nodeInfo &nInfo = nodesInfo[i];
-      nInfo.n = n, nInfo.val = graph->deg(n);
+    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+	nodeInfo nInfo;
+	nInfo.n = n, nInfo.val = graph->deg(n);
+	nodesInfo[i] = nInfo;
     });
 
     // sort the nodes in descending order of their degrees
@@ -122,11 +123,11 @@ public:
 #ifndef NDEBUG
         cout << "i:" << i << endl;
 #endif
-        nodeInfo &nInfo = nodesInfo[i];
+        nodeInfo nInfo = nodesInfo[i];
 
         if (nInfo.val == -1) {
           bool sameColor = false;
-          for (const node &u : graph->getInOutNodes(nInfo.n)) {
+          for (auto u : graph->getInOutNodes(nInfo.n)) {
             if (nodesInfo[toNodesInfo[u]].val == currentColor) {
               sameColor = true;
               break;
@@ -137,7 +138,7 @@ public:
 #ifndef NDEBUG
             cout << "new node found color : " << currentColor << endl;
 #endif
-            nInfo.val = currentColor;
+	    result->setNodeValue(nInfo.n, nodesInfo[i].val = currentColor);
             ++numberOfColoredNodes;
 
             if (i == minIndex)
@@ -150,12 +151,6 @@ public:
 
       maxIndex = nextMaxIndex;
       ++currentColor;
-    }
-
-    // finally set the values
-    for (unsigned int i = 0; i < nbNodes; ++i) {
-      nodeInfo &nInfo = nodesInfo[i];
-      result->setNodeValue(nInfo.n, nInfo.val);
     }
 
     return true;
