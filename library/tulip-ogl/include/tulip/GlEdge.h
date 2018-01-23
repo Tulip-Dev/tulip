@@ -46,7 +46,7 @@ public:
    * id must be the id of the edge in graph
    */
   GlEdge(unsigned int eId = UINT_MAX, unsigned int ePos = UINT_MAX, bool sel = false)
-    : id(eId), pos(ePos), selectionDraw(sel) {
+      : id(eId), pos(ePos), selectionDraw(sel) {
     if (!label)
       label = new GlLabel();
   }

@@ -153,8 +153,8 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   const Color &strokeColor = data->getElementBorderColor()->getEdgeValue(e);
   double borderWidth = data->getElementBorderWidth()->getEdgeValue(e);
 
-  if (!selectionDraw && (srcCol.getA() == 0) && (tgtCol.getA() == 0)
-      && (borderWidth == 0 || strokeColor.getA() == 0)) {
+  if (!selectionDraw && (srcCol.getA() == 0) && (tgtCol.getA() == 0) &&
+      (borderWidth == 0 || strokeColor.getA() == 0)) {
     // edge is fully transparent, no need to continue the rendering process
     return;
   }
@@ -214,7 +214,6 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
 
   glEnable(GL_COLOR_MATERIAL);
 
-
   if (data->parameters->getFeedbackRender()) {
     const Color fillColor = data->getElementColor()->getEdgeValue(e);
     const Color textColor = data->getElementLabelColor()->getEdgeValue(e);
@@ -239,9 +238,8 @@ void GlEdge::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   bool hasBends(!bends.empty());
 
-  if (!hasBends &&
-      ((src == tgt) /* a loop without bends: draw a nice loop!! */
-       || (srcCoord - tgtCoord).norm() < 1E-4) /* two very close nodes */) {
+  if (!hasBends && ((src == tgt) /* a loop without bends: draw a nice loop!! */
+                    || (srcCoord - tgtCoord).norm() < 1E-4) /* two very close nodes */) {
     return;
   }
 
@@ -625,8 +623,8 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
     displayArrowAndAdjustAnchor(data, e, src, data->getElementSrcAnchorSize()->getEdgeValue(e),
                                 std::min(srcSize[0], srcSize[1]), Color(), maxSrcSize, selected, 0,
                                 endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX, hasBends,
-                                hasBends ? bends.front() : tgtCoord, tgtCoord, srcAnchor,
-                                tgtAnchor, beginLineAnchor);
+                                hasBends ? bends.front() : tgtCoord, tgtCoord, srcAnchor, tgtAnchor,
+                                beginLineAnchor);
   } else {
     beginLineAnchor = srcAnchor;
   }
@@ -637,8 +635,8 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
     displayArrowAndAdjustAnchor(data, e, tgt, data->getElementTgtAnchorSize()->getEdgeValue(e),
                                 std::min(tgtSize[0], tgtSize[1]), Color(), maxTgtSize, selected, 0,
                                 startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX, hasBends,
-                                hasBends ? bends.back() : srcAnchor, srcCoord, tgtAnchor,
-                                srcAnchor, endLineAnchor);
+                                hasBends ? bends.back() : srcAnchor, srcCoord, tgtAnchor, srcAnchor,
+                                endLineAnchor);
   } else {
     endLineAnchor = tgtAnchor;
   }

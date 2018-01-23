@@ -55,13 +55,13 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, cons
   currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity, bb));
 }
 void GlCPULODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
-					    const BoundingBox &bb) {
+                                            const BoundingBox &bb) {
   sceneBoundingBox.expand(bb[0]);
   sceneBoundingBox.expand(bb[1]);
   currentLayerLODUnit->nodesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
 }
 void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
-					    const BoundingBox &bb) {
+                                            const BoundingBox &bb) {
   sceneBoundingBox.expand(bb[0]);
   sceneBoundingBox.expand(bb[1]);
   currentLayerLODUnit->edgesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
@@ -71,14 +71,16 @@ void GlCPULODCalculator::reserveMemoryForNodes(unsigned int numberOfNodes) {
   if (renderingEntitiesFlag & RenderingNodes)
     currentLayerLODUnit->nodesLODVector.resize(numberOfNodes);
   else
-    currentLayerLODUnit->edgesLODVector.resize(inputData->getElementSelected()->numberOfNonDefaultValuatedNodes());
+    currentLayerLODUnit->edgesLODVector.resize(
+        inputData->getElementSelected()->numberOfNonDefaultValuatedNodes());
 }
 
 void GlCPULODCalculator::reserveMemoryForEdges(unsigned int numberOfEdges) {
   if (renderingEntitiesFlag & RenderingNodes)
     currentLayerLODUnit->edgesLODVector.resize(numberOfEdges);
   else
-    currentLayerLODUnit->edgesLODVector.resize(inputData->getElementSelected()->numberOfNonDefaultValuatedEdges());
+    currentLayerLODUnit->edgesLODVector.resize(
+        inputData->getElementSelected()->numberOfNonDefaultValuatedEdges());
 }
 
 void GlCPULODCalculator::compute(const Vector<int, 4> &globalViewport,
@@ -92,7 +94,7 @@ void GlCPULODCalculator::compute(const Vector<int, 4> &globalViewport,
 
     if (camera->is3D()) {
       Coord &&eye = camera->getEyes() +
-            (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
+                    (camera->getEyes() - camera->getCenter()) / float(camera->getZoomFactor());
       computeFor3DCamera(&(*it), eye, transformMatrix, globalViewport, currentViewport);
     } else {
       computeFor2DCamera(&(*it), globalViewport, currentViewport);
@@ -132,12 +134,12 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
     if (computeEdgesLOD) {
       OMP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
         layerLODUnit->edgesLODVector[i].lod =
-            calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox, eye,
-			      transformMatrix, globalViewport, currentViewport);
+            calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox, eye, transformMatrix,
+                              globalViewport, currentViewport);
       });
     } else {
-      OMP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
-	layerLODUnit->edgesLODVector[i].lod = 10; });
+      OMP_PARALLEL_MAP_INDICES(nb,
+                               [&](unsigned int i) { layerLODUnit->edgesLODVector[i].lod = 10; });
     }
   }
 }
@@ -151,13 +153,13 @@ void GlCPULODCalculator::computeFor2DCamera(LayerLODUnit *layerLODUnit,
     it->lod = calculate2DLod(it->boundingBox, globalViewport, currentViewport);
   }
 
-  for (auto it = layerLODUnit->nodesLODVector.begin();
-       it != layerLODUnit->nodesLODVector.end(); ++it) {
+  for (auto it = layerLODUnit->nodesLODVector.begin(); it != layerLODUnit->nodesLODVector.end();
+       ++it) {
     it->lod = calculate2DLod(it->boundingBox, globalViewport, currentViewport);
   }
 
-  for (auto it = layerLODUnit->edgesLODVector.begin();
-       it != layerLODUnit->edgesLODVector.end(); ++it) {
+  for (auto it = layerLODUnit->edgesLODVector.begin(); it != layerLODUnit->edgesLODVector.end();
+       ++it) {
     it->lod = calculate2DLod(it->boundingBox, globalViewport, currentViewport);
   }
 }

@@ -91,9 +91,9 @@ public:
     std::vector<nodeInfo> nodesInfo(nbNodes);
 
     OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-	nodeInfo nInfo;
-	nInfo.n = n, nInfo.val = graph->deg(n);
-	nodesInfo[i] = nInfo;
+      nodeInfo nInfo;
+      nInfo.n = n, nInfo.val = graph->deg(n);
+      nodesInfo[i] = nInfo;
     });
 
     // sort the nodes in descending order of their degrees
@@ -138,7 +138,7 @@ public:
 #ifndef NDEBUG
             cout << "new node found color : " << currentColor << endl;
 #endif
-	    result->setNodeValue(nInfo.n, nodesInfo[i].val = currentColor);
+            result->setNodeValue(nInfo.n, nodesInfo[i].val = currentColor);
             ++numberOfColoredNodes;
 
             if (i == minIndex)

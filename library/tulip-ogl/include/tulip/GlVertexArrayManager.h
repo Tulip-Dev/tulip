@@ -219,8 +219,8 @@ protected:
     unsigned int quadsCountIndex;
     unsigned int quadsBottomIndex;
     unsigned int quadsTopIndex;
-    void init(unsigned int nv, unsigned int li, unsigned int qi,
-	 unsigned int qci, unsigned int qbi, unsigned int qti) {
+    void init(unsigned int nv, unsigned int li, unsigned int qi, unsigned int qci, unsigned int qbi,
+              unsigned int qti) {
       nbVertices = nv;
       linesIndex = li;
       quadsIndex = qi;

@@ -50,9 +50,9 @@ public:
    * id must be the id of the node in graph
    */
   GlNode(unsigned int _nid = UINT_MAX, unsigned int _npos = UINT_MAX)
-    : id(_nid), pos(_npos), oldId(UINT_MAX),
-    selectionBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255),
-		 Color(0, 255, 0, 255), false, true, "", 3) {}
+      : id(_nid), pos(_npos), oldId(UINT_MAX),
+        selectionBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255), Color(0, 255, 0, 255),
+                     false, true, "", 3) {}
 
   /**
    * Virtual function to accept GlSceneVisitor on this class
@@ -123,7 +123,6 @@ protected:
   tlp::Size size;
   float rot;
   bool selected;
-
 };
 }
 

@@ -651,18 +651,15 @@ void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
 
     vector<Coord> vertices;
     size_t numberOfVertices =
-      glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices);
-
+        glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices);
 
     if (numberOfVertices != 0) {
       size_t lastIndex = linesCoordsArray.size();
       linesCoordsArray.insert(linesCoordsArray.end(), vertices.begin(), vertices.end());
-      edgeInfosVector[glEdge->pos].init(numberOfVertices,
-					linesIndexArray.size(),
-					quadsIndexArray.size(),
-					quadsIndexCountArray.size(),
-					quadsBottomOutlineIndexArray.size(),
-					quadsTopOutlineIndexArray.size());
+      edgeInfosVector[glEdge->pos].init(numberOfVertices, linesIndexArray.size(),
+                                        quadsIndexArray.size(), quadsIndexCountArray.size(),
+                                        quadsBottomOutlineIndexArray.size(),
+                                        quadsTopOutlineIndexArray.size());
       linesIndexArray.push_back(lastIndex);
 
       pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
@@ -730,7 +727,8 @@ void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
 
       vector<Color> colors;
       glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
-                        &linesCoordsArray[linesIndexArray[eInfos.linesIndex]], numberOfVertices, colors);
+                        &linesCoordsArray[linesIndexArray[eInfos.linesIndex]], numberOfVertices,
+                        colors);
       // must be added twice ?
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
@@ -782,7 +780,7 @@ void GlVertexArrayManager::addNode(GlNode *node) {
 }
 
 void GlVertexArrayManager::activateLineEdgeDisplay(GlEdge *glEdge, bool selected) {
-  unsigned int ePos =  glEdge->pos;
+  unsigned int ePos = glEdge->pos;
   assert(ePos == graph->edgePos(edge(glEdge->id)));
 
   const edgeInfos eInfos = edgeInfosVector[ePos];
@@ -807,7 +805,7 @@ void GlVertexArrayManager::activateLineEdgeDisplay(GlEdge *glEdge, bool selected
 }
 
 void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected) {
-  unsigned int ePos =  glEdge->pos;
+  unsigned int ePos = glEdge->pos;
   edge e(glEdge->id);
   assert(ePos == graph->edgePos(e));
 
@@ -820,8 +818,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
   unsigned int bottomOutlineIndicesIdx = eInfos.quadsBottomIndex;
   unsigned int topOutlineIndicesIdx = eInfos.quadsTopIndex;
 
-  float borderWidth =
-    float(inputData->getElementBorderWidth()->getEdgeValue(e));
+  float borderWidth = float(inputData->getElementBorderWidth()->getEdgeValue(e));
 
   unsigned int baseIndex = quadsIndexArray[eInfos.quadsIndex];
 
