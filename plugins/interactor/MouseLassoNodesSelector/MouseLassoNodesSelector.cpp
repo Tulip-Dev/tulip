@@ -122,7 +122,7 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
 
   if (!tmpNodes.empty()) {
     vector<node> selectedNodes;
-    GlNode glNode(0);
+    GlNode glNode;
 
     bool needPush = true;
 

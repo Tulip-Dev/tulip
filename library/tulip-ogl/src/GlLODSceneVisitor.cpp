@@ -34,11 +34,11 @@ void GlLODSceneVisitor::visit(GlSimpleEntity *entity) {
 }
 
 void GlLODSceneVisitor::visit(GlNode *glNode) {
-  calculator->addNodeBoundingBox(glNode->id, glNode->getBoundingBox(inputData));
+  calculator->addNodeBoundingBox(glNode->id, glNode->pos, glNode->getBoundingBox(inputData));
 }
 
 void GlLODSceneVisitor::visit(GlEdge *glEdge) {
-  calculator->addEdgeBoundingBox(glEdge->id, glEdge->getBoundingBox(inputData));
+  calculator->addEdgeBoundingBox(glEdge->id, glEdge->pos, glEdge->getBoundingBox(inputData));
 }
 
 void GlLODSceneVisitor::visit(GlLayer *layer) {

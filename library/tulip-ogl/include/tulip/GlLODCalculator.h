@@ -22,6 +22,7 @@
 #define Tulip_GLLODCALCULATOR_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#include <climits>
 #include <tulip/BoundingBox.h>
 
 #include <vector>
@@ -57,9 +58,11 @@ struct SimpleEntityLODUnit : public EntityLODUnit {
 
 // struct to store complex entity (nodes/edges) lod
 struct ComplexEntityLODUnit : public EntityLODUnit {
-  ComplexEntityLODUnit(unsigned int id, const BoundingBox &boundingBox)
-      : EntityLODUnit(boundingBox), id(id) {}
+  ComplexEntityLODUnit(unsigned int id = UINT_MAX, unsigned int pos = UINT_MAX,
+		       const BoundingBox &boundingBox = BoundingBox())
+    : EntityLODUnit(boundingBox), id(id), pos(pos) {}
   unsigned int id;
+  unsigned int pos;
 };
 
 struct LayerLODUnit {
@@ -124,11 +127,11 @@ public:
   /**
    * Record a new node in current camera context
    */
-  virtual void addNodeBoundingBox(unsigned int id, const BoundingBox &bb) = 0;
+  virtual void addNodeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) = 0;
   /**
    * Record a new edge in current camera context
    */
-  virtual void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb) = 0;
+  virtual void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) = 0;
 
   /**
    * Reserve memory to store nodes LOD

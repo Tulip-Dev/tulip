@@ -27,6 +27,7 @@
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
+#include <tulip/GlBox.h>
 #include <tulip/GlComplexeEntity.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlSceneVisitor.h>
@@ -48,24 +49,15 @@ public:
    * Default constructor with id
    * id must be the id of the node in graph
    */
-  GlNode(unsigned int _id = UINT_MAX) : id(_id), oldId(UINT_MAX) {
-    if (!label)
-      label = new GlLabel();
-  }
+  GlNode(unsigned int _nid = UINT_MAX, unsigned int _npos = UINT_MAX)
+    : id(_nid), pos(_npos), oldId(UINT_MAX),
+    selectionBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 255, 255),
+		 Color(0, 255, 0, 255), false, true, "", 3) {}
 
   /**
    * Virtual function to accept GlSceneVisitor on this class
    */
   void acceptVisitor(GlSceneVisitor *visitor) override {
-    visitor->visit(this);
-  }
-
-  /**
-   * function to accept GlSceneVisitor with a specified node
-   */
-  void acceptVisitorForNode(GlSceneVisitor *visitor, const node n) {
-    id = n.id;
-    oldId = UINT_MAX;
     visitor->visit(this);
   }
 
@@ -96,7 +88,8 @@ public:
   void drawLabel(OcclusionTest *test, const GlGraphInputData *data, float lod,
                  Camera *camera = nullptr);
 
-  unsigned int id;
+  // node id and node position in graph->nodes()
+  unsigned int id, pos;
 
   /**
    * This function is used by the engine to get point coordinates of the node
@@ -119,6 +112,8 @@ public:
 
 protected:
   unsigned int oldId;
+  GlBox selectionBox;
+  GlLabel label;
 
   // initialize the data member below
   void init(const GlGraphInputData *data);
@@ -129,7 +124,6 @@ protected:
   float rot;
   bool selected;
 
-  static GlLabel *label;
 };
 }
 

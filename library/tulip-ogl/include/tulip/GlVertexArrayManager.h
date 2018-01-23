@@ -26,7 +26,6 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/Observable.h>
-#include <tulip/tuliphash.h>
 
 #include <vector>
 
@@ -187,7 +186,6 @@ protected:
   std::vector<Coord> linesCoordsArray;
   std::vector<Color> linesColorsArray;
   std::vector<GLint> linesIndexArray;
-  std::vector<GLsizei> linesIndexCountArray;
 
   std::vector<GLuint> linesRenderingIndicesArray;
   std::vector<GLuint> linesSelectedRenderingIndicesArray;
@@ -214,10 +212,25 @@ protected:
   std::vector<GLuint> pointsEdgesRenderingIndexArray;
   std::vector<GLuint> pointsEdgesSelectedRenderingIndexArray;
 
-  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int>> edgeToLineIndexVector;
-  TLP_HASH_MAP<unsigned int, std::pair<unsigned int, unsigned int>> edgeToQuadIndexVector;
-  TLP_HASH_MAP<unsigned int, unsigned int> edgeToBottomOulineIndexVector;
-  TLP_HASH_MAP<unsigned int, unsigned int> edgeToTopOutlineIndexVector;
+  struct edgeInfos {
+    unsigned int nbVertices;
+    unsigned int linesIndex;
+    unsigned int quadsIndex;
+    unsigned int quadsCountIndex;
+    unsigned int quadsBottomIndex;
+    unsigned int quadsTopIndex;
+    void init(unsigned int nv, unsigned int li, unsigned int qi,
+	 unsigned int qci, unsigned int qbi, unsigned int qti) {
+      nbVertices = nv;
+      linesIndex = li;
+      quadsIndex = qi;
+      quadsCountIndex = qci;
+      quadsBottomIndex = qbi;
+      quadsTopIndex = qti;
+    }
+  };
+
+  std::vector<edgeInfos> edgeInfosVector;
 
   GLuint pointsVerticesVBO;
   GLuint pointsColorsVBO;

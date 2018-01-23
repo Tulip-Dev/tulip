@@ -59,11 +59,11 @@ public:
   /**
    * This function is called by GlLODSceneVisitor when a node is found
    */
-  void addNodeBoundingBox(unsigned int id, const BoundingBox &bb) override;
+  void addNodeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
   /**
    * This function is called by GlLODSceneVisitor when an edge is found
    */
-  void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb) override;
+  void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
 
   /**
    * Reserve memory to store nodes LOD, this function is an optimisation function

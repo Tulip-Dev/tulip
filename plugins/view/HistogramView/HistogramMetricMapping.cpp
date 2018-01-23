@@ -546,7 +546,7 @@ int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
 }
 
 void GlGlyphScale::draw(float, Camera *camera) {
-  GlNode glNode(0);
+  GlNode glNode;
   glEnable(GL_LIGHTING);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

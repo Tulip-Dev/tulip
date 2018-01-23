@@ -68,11 +68,11 @@ public:
   /**
    * This function is call by GlLODSceneVisitor when a node is found
    */
-  void addNodeBoundingBox(unsigned int id, const BoundingBox &bb) override;
+  void addNodeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
   /**
    * This function is call by GlLODSceneVisitor when an edge is found
    */
-  void addEdgeBoundingBox(unsigned int id, const BoundingBox &bb) override;
+  void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
 
   /**
    * This function compute LOD
@@ -117,8 +117,8 @@ protected:
 
   void setHaveToCompute();
 
-  std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
-  std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
+  std::vector<QuadTreeNode<std::pair<uint, uint>> *> nodesQuadTree;
+  std::vector<QuadTreeNode<std::pair<uint, uint>> *> edgesQuadTree;
   std::vector<QuadTreeNode<GlSimpleEntity *> *> entitiesQuadTree;
   std::vector<std::vector<SimpleEntityLODUnit>> simpleEntities;
 

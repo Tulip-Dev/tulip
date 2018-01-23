@@ -45,7 +45,8 @@ public:
    * Build an edge with the id : id
    * id must be the id of the edge in graph
    */
-  GlEdge(unsigned int _id = UINT_MAX) : id(_id), selectionDraw(false) {
+  GlEdge(unsigned int eId = UINT_MAX, unsigned int ePos = UINT_MAX, bool sel = false)
+    : id(eId), pos(ePos), selectionDraw(sel) {
     if (!label)
       label = new GlLabel();
   }
@@ -54,15 +55,6 @@ public:
    * Virtual function to accept GlSceneVisitor on this class
    */
   void acceptVisitor(GlSceneVisitor *visitor) override {
-    visitor->visit(this);
-  }
-
-  /**
-   * function to accept GlSceneVisitor with a specified edge
-   */
-  void acceptVisitorForEdge(GlSceneVisitor *visitor, const edge e) {
-    id = e.id;
-    selectionDraw = false;
     visitor->visit(this);
   }
 
@@ -133,7 +125,8 @@ public:
     selectionDraw = selectDraw;
   }
 
-  unsigned int id;
+  // edge id and edge position in graph->edges()
+  unsigned int id, pos;
 
 private:
   bool selectionDraw;

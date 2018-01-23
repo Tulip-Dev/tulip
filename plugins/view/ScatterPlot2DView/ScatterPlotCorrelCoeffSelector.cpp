@@ -540,7 +540,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(
   double correlationCoeff = 0;
 
   if (!tmpNodes.empty()) {
-    GlNode glNode(0);
+    GlNode glNode;
 
     for (size_t i = 0; i < tmpNodes.size(); ++i) {
       glNode.id = tmpNodes[i].getComplexEntityId();
