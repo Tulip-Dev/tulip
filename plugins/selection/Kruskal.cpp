@@ -33,6 +33,8 @@ static const char *paramHelp[] = {
 //======================================================
 Kruskal::Kruskal(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
   addInParameter<NumericProperty *>("edge weight", paramHelp[0], "viewMetric");
+  addOutParameter<unsigned int>("#edges selected",
+				"The number of newly selected edges");
 }
 
 //======================================================
@@ -62,7 +64,7 @@ bool Kruskal::run() {
 
   // output some useful information
   if (dataSet != nullptr) {
-    dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
+    dataSet->set("#edges selected", result->numberOfNonDefaultValuatedEdges());
   }
 
   return true;

@@ -23,13 +23,16 @@ PLUGIN(LoopSelection)
 using namespace std;
 using namespace tlp;
 
-LoopSelection::LoopSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {}
+LoopSelection::LoopSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
+  addOutParameter<unsigned int>("#edges selected",
+				"The number of loops selected");
+}
 //============================================
 bool LoopSelection::run() {
   result->setAllNodeValue(false);
   unsigned cpt = 0;
-  for (const edge &e : graph->edges()) {
-    const std::pair<node, node> &eEnds = graph->ends(e);
+  for (auto e : graph->edges()) {
+    const std::pair<node, node> eEnds = graph->ends(e);
 
     if (eEnds.first == eEnds.second) {
       result->setEdgeValue(e, true);
@@ -39,7 +42,7 @@ bool LoopSelection::run() {
 
   // output some useful information
   if (dataSet != nullptr) {
-    dataSet->set("#Edges selected", cpt);
+    dataSet->set("#edges selected", cpt);
   }
 
   return true;

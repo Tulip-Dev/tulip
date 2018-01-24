@@ -26,24 +26,24 @@ using namespace std;
 using namespace tlp;
 
 MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PluginContext *context)
-    : BooleanAlgorithm(context) {}
+    : BooleanAlgorithm(context) {
+  addOutParameter<unsigned int>("#edges selected",
+				"The number of multiple edges selected");
+}
 
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;
   SimpleTest::simpleTest(graph, &multipleEdges);
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
-  vector<edge>::const_iterator it;
-  unsigned cpt = 0;
 
-  for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) {
-    result->setEdgeValue(*it, true);
-    ++cpt;
+  for (auto e : multipleEdges) {
+    result->setEdgeValue(e, true);
   }
 
   // output some useful information
   if (dataSet != nullptr)
-    dataSet->set("#Edges selected", cpt);
+    dataSet->set("#edges selected", uint(multipleEdges.size()));
 
   return true;
 }

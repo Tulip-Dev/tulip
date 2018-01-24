@@ -28,7 +28,10 @@ using namespace tlp;
 SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {}
 
-SpanningTreeSelection::~SpanningTreeSelection() {}
+SpanningTreeSelection::~SpanningTreeSelection() {
+  addOutParameter<unsigned int>("#edges selected",
+				"The number of 'tree' selected edges");
+}
 
 ///===========================================================
 bool SpanningTreeSelection::run() {
@@ -39,9 +42,9 @@ bool SpanningTreeSelection::run() {
   if (graph->existProperty("viewSelection")) {
     BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-    for (const node &itn : graph->nodes()) {
-      if (viewSelection->getNodeValue(itn) == true) {
-        result->setNodeValue(itn, true);
+    for (auto n : graph->nodes()) {
+      if (viewSelection->getNodeValue(n) == true) {
+        result->setNodeValue(n, true);
       }
     }
   }
@@ -50,7 +53,7 @@ bool SpanningTreeSelection::run() {
 
   // output some useful information
   if (dataSet != nullptr)
-    dataSet->set("#Edges selected", result->numberOfNonDefaultValuatedEdges());
+    dataSet->set("#edges selected", result->numberOfNonDefaultValuatedEdges());
 
   return true;
 }

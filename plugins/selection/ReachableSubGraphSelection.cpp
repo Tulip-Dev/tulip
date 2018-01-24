@@ -51,6 +51,10 @@ ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext 
                                    directionValuesDescription);
   addInParameter<BooleanProperty>("starting nodes", paramHelp[1], "viewSelection");
   addInParameter<int>("distance", paramHelp[2], "5");
+  addOutParameter<unsigned int>("#edges selected",
+				"The number of newly selected edges");
+  addOutParameter<unsigned int>("#nodes selected",
+				"The number of newly selected nodes");
   // old name
   declareDeprecatedName("Reachable Sub-Graph");
 }
@@ -157,8 +161,8 @@ bool ReachableSubGraphSelection::run() {
 
   // output some useful information
   if (dataSet != nullptr) {
-    dataSet->set("#Edges added to the selection", num_edges);
-    dataSet->set("#Nodes added to the selection", num_nodes);
+    dataSet->set("#edges selected", num_edges);
+    dataSet->set("#nodes selected", num_nodes);
   }
 
   return true;
