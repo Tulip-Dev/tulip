@@ -33,7 +33,7 @@ using namespace std;
 CliqueEnumeration::CliqueEnumeration(tlp::PluginContext *context)
     : Algorithm(context), minsize(0), cliqueid(0) {
   addInParameter<unsigned int>("minimum size", "Clique minimum size", "0");
-  addOutParameter<unsigned int>("#cliques created", "number of cliques (subgraphs) created");
+  addOutParameter<unsigned int>("#cliques created", "Number of cliques (subgraphs) created");
 }
 
 //================================================================================
@@ -45,7 +45,7 @@ void CliqueEnumeration::addClique(const vector<node> &clique) {
 //================================================================================
 void CliqueEnumeration::getNeighborhood(const node u, set<node> &neigh) {
   neigh.clear();
-  for (const node &v : graph->getInOutNodes(u))
+  for (auto v : graph->getInOutNodes(u))
     neigh.insert(v);
 }
 //================================================================================
@@ -53,15 +53,15 @@ node CliqueEnumeration::choosePivot(const set<node> &C) {
   node pivot;
   unsigned int maxinter = 0;
 
-  for (set<node>::const_iterator its = C.begin(); its != C.end(); ++its) {
+  for (auto c : C) {
     unsigned int inter = 0;
-    for (const node &v : graph->getInOutNodes(*its)) {
+    for (auto v : graph->getInOutNodes(c)) {
       if (C.find(v) != C.end())
         inter++;
     }
 
     if (inter >= maxinter)
-      pivot = *its;
+      pivot = c;
   }
 
   return pivot;
@@ -82,25 +82,25 @@ void CliqueEnumeration::maxCliquePivot(set<node> &P, const vector<node> &R, set<
     getNeighborhood(p, neighp);
     set<node> tovisit;
 
-    for (set<node>::iterator its = P.begin(); its != P.end(); ++its) {
-      if (neighp.find(*its) == neighp.end())
-        tovisit.insert(*its);
+    for (auto v : P) {
+      if (neighp.find(v) == neighp.end())
+        tovisit.insert(v);
     }
 
-    for (set<node>::const_iterator its = tovisit.begin(); its != tovisit.end(); ++its) {
+    for (auto v : tovisit) {
       set<node> neighx;
-      getNeighborhood(*its, neighx);
+      getNeighborhood(v, neighx);
       set<node> newP;
       set_intersection(P.begin(), P.end(), neighx.begin(), neighx.end(),
                        inserter(newP, newP.begin()));
       vector<node> newR(R);
-      newR.push_back(*its);
+      newR.push_back(v);
       set<node> newX;
       set_intersection(X.begin(), X.end(), neighx.begin(), neighx.end(),
                        inserter(newX, newX.begin()));
       maxCliquePivot(newP, newR, newX);
-      P.erase(*its);
-      X.insert(*its);
+      P.erase(v);
+      X.insert(v);
     }
   }
 }
@@ -142,7 +142,7 @@ void CliqueEnumeration::getDegenerateOrdering(vector<node> &ordering) {
   }
 
   while (!sortednodes.empty()) {
-    set<DegreeOrderingElem *, LessDegreeOrdering>::iterator it = sortednodes.begin();
+    auto it = sortednodes.begin();
     node n = (*it)->n;
     ordering.push_back(n);
     delete (*it);

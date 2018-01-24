@@ -155,7 +155,7 @@ int biconnectedComponents(const Graph &graph, MutableContainer<int> &compnum) {
       dfsnum.set(v.id, ++count1);
       bool is_isolated = true;
 
-      for (const edge &e : graph.getInOutEdges(v)) {
+      for (auto e : graph.getInOutEdges(v)) {
         if (graph.opposite(e, v) != v) {
           is_isolated = false;
           break;
@@ -189,23 +189,24 @@ public:
                     "Implements a biconnected component decomposition."
                     "It assigns the same value to all the edges in the same component.",
                     "1.0", "Component")
-  BiconnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
+  BiconnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+      addOutParameter<unsigned int>("#biconnected components", "Number of biconnected components found");
+  }
   bool run() override {
     MutableContainer<int> compo;
     compo.setAll(-1);
     biconnectedComponents(*graph, compo);
     result->setAllEdgeValue(-1);
 
-    const std::vector<edge> &edges = graph->edges();
-    unsigned int nbEdges = edges.size();
-
-    for (unsigned int i = 0; i < nbEdges; ++i) {
-      edge e = edges[i];
-      result->setEdgeValue(e, compo.get(e.id));
+    int maxVal = -1;
+    for (auto e : graph->edges()) {
+      int val = compo.get(e.id);
+      result->setEdgeValue(e, val);
+      maxVal = std::max(val, maxVal);
     }
 
     if (dataSet != nullptr)
-      dataSet->set("#biconnected components", result->getEdgeDoubleMax() + 1);
+      dataSet->set("#biconnected components", uint(maxVal + 1));
 
     return true;
   }

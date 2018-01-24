@@ -49,6 +49,7 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext *context)
   addInParameter<bool>("closeness centrality", paramHelp[0], "false");
   addInParameter<bool>("norm", paramHelp[1], "true");
   addInParameter<bool>("directed", paramHelp[2], "false");
+  addOutParameter<double>("graph diameter", "The computed diameter (-1 if not computed)", "-1");
 }
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {}
@@ -133,8 +134,9 @@ bool EccentricityMetric::run() {
       result->setNodeValue(n, res[i]);
   });
 
-  if (!allPaths && norm)
-    dataSet->set("Graph Diameter", diameter);
+  if (dataSet != nullptr)
+    dataSet->set("graph diameter",
+		 (!allPaths && norm) ?  diameter : double(-1));
 
   return pluginProgress->state() != TLP_CANCEL;
 }

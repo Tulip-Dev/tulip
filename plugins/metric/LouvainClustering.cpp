@@ -345,6 +345,8 @@ LouvainClustering::LouvainClustering(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), new_mod(0.) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
   addInParameter<double>("precision", paramHelp[1], "0.000001", false);
+  addOutParameter<double>("modularity", "The computed modularity");
+  addOutParameter<unsigned int>("#communities", "The number of communities found");
 }
 //========================================================================================
 bool LouvainClustering::run() {
@@ -392,56 +394,53 @@ bool LouvainClustering::run() {
 
   // init other vectors
   init_level();
-  bool improvement = true;
   int level = 0;
 
-  while (improvement) {
+  while (one_level()) {
+    ++level;
 
-    improvement = one_level();
+    VectorGraph *new_quotient = new VectorGraph();
+    EdgeProperty<double> *new_weights = new EdgeProperty<double>();
+    new_quotient->alloc(*new_weights);
 
-    if (improvement) {
-      ++level;
+    partitionToQuotient(new_quotient, new_weights);
+    delete quotient;
+    delete weights;
+    quotient = new_quotient;
+    weights = new_weights;
 
-      VectorGraph *new_quotient = new VectorGraph();
-      EdgeProperty<double> *new_weights = new EdgeProperty<double>();
-      new_quotient->alloc(*new_weights);
-
-      partitionToQuotient(new_quotient, new_weights);
-      delete quotient;
-      delete weights;
-      quotient = new_quotient;
-      weights = new_weights;
-
-      init_level();
-    } else {
-      // update measure
-      // Renumber communities
-      vector<int> renumber(nb_qnodes, -1);
-
-      for (unsigned int n = 0; n < nb_qnodes; n++) {
-        renumber[n2c[n]] = 0;
-      }
-
-      int final = 0;
-
-      for (unsigned int i = 0; i < nb_qnodes; i++)
-        if (renumber[i] != -1)
-          renumber[i] = final++;
-
-      // then set measure values
-      MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-        result->setNodeValue(n, renumber[n2c[(*clusters)[i]]]);
-      });
-
-      delete quotient;
-      delete weights;
-      delete clusters;
-    }
+    init_level();
   }
 
+  // update measure
+  // Renumber communities
+  vector<int> renumber(nb_qnodes, -1);
+
+  for (unsigned int n = 0; n < nb_qnodes; n++) {
+    renumber[n2c[n]] = 0;
+  }
+
+  int final = 0;
+
+  for (unsigned int i = 0; i < nb_qnodes; i++)
+    if (renumber[i] != -1)
+      renumber[i] = final++;
+
+  // then set measure values
+  int maxVal = -1;
+  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+      int val = renumber[n2c[(*clusters)[i]]];
+      result->setNodeValue(n, val);
+      maxVal = std::max(val, maxVal);
+    });
+
+  delete quotient;
+  delete weights;
+  delete clusters;
+
   if (dataSet != nullptr) {
-    dataSet->set("Modularity", new_mod);
-    dataSet->set("#Communities", result->getNodeMax() + 1);
+    dataSet->set("modularity", new_mod);
+    dataSet->set("#communities", uint(maxVal + 1));
   }
 
   return true;
