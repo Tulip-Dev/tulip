@@ -135,8 +135,7 @@ bool EccentricityMetric::run() {
   });
 
   if (dataSet != nullptr)
-    dataSet->set("graph diameter",
-		 (!allPaths && norm) ?  diameter : double(-1));
+    dataSet->set("graph diameter", (!allPaths && norm) ? diameter : double(-1));
 
   return pluginProgress->state() != TLP_CANCEL;
 }

@@ -29,8 +29,7 @@ SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {}
 
 SpanningTreeSelection::~SpanningTreeSelection() {
-  addOutParameter<unsigned int>("#edges selected",
-				"The number of 'tree' selected edges");
+  addOutParameter<unsigned int>("#edges selected", "The number of 'tree' selected edges");
 }
 
 ///===========================================================

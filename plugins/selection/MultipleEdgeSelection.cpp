@@ -27,8 +27,7 @@ using namespace tlp;
 
 MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addOutParameter<unsigned int>("#edges selected",
-				"The number of multiple edges selected");
+  addOutParameter<unsigned int>("#edges selected", "The number of multiple edges selected");
 }
 
 bool MultipleEdgeSelection::run() {

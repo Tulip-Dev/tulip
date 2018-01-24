@@ -24,8 +24,7 @@ using namespace std;
 using namespace tlp;
 
 LoopSelection::LoopSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
-  addOutParameter<unsigned int>("#edges selected",
-				"The number of loops selected");
+  addOutParameter<unsigned int>("#edges selected", "The number of loops selected");
 }
 //============================================
 bool LoopSelection::run() {

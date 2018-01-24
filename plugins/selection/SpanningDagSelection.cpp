@@ -30,8 +30,7 @@ using namespace tlp;
 //=================================================================
 SpanningDagSelection::SpanningDagSelection(const tlp::PluginContext *context)
     : BooleanAlgorithm(context) {
-  addOutParameter<unsigned int>("#edges selected",
-				"The number of 'dag' selected edges");
+  addOutParameter<unsigned int>("#edges selected", "The number of 'dag' selected edges");
 }
 //=================================================================
 bool SpanningDagSelection::run() {

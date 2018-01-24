@@ -37,8 +37,7 @@ InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *con
     : BooleanAlgorithm(context) {
   addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
   addInParameter<bool>("Use edges", paramHelp[1], "false");
-  addOutParameter<unsigned int>("#edges selected",
-				"The number of newly selected edges");
+  addOutParameter<unsigned int>("#edges selected", "The number of newly selected edges");
   // old name
   declareDeprecatedName("Induced Sub-Graph");
 }

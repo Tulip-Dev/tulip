@@ -429,10 +429,10 @@ bool LouvainClustering::run() {
   // then set measure values
   int maxVal = -1;
   MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
-      int val = renumber[n2c[(*clusters)[i]]];
-      result->setNodeValue(n, val);
-      maxVal = std::max(val, maxVal);
-    });
+    int val = renumber[n2c[(*clusters)[i]]];
+    result->setNodeValue(n, val);
+    maxVal = std::max(val, maxVal);
+  });
 
   delete quotient;
   delete weights;

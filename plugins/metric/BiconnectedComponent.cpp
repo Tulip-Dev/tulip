@@ -190,7 +190,8 @@ public:
                     "It assigns the same value to all the edges in the same component.",
                     "1.0", "Component")
   BiconnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-      addOutParameter<unsigned int>("#biconnected components", "Number of biconnected components found");
+    addOutParameter<unsigned int>("#biconnected components",
+                                  "Number of biconnected components found");
   }
   bool run() override {
     MutableContainer<int> compo;
