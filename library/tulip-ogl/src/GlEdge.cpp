@@ -434,7 +434,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   }
 
   glDepthFunc(GL_LEQUAL);
-}
+  }
 
 void GlEdge::drawLabel(bool drawSelect, OcclusionTest *test, const GlGraphInputData *data,
                        float lod) {
@@ -585,9 +585,11 @@ void GlEdge::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
   label->drawWithStencil(lod, camera);
 }
 
-size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const node src,
-                           const node tgt, Coord &srcCoord, Coord &tgtCoord, Size &srcSize,
-                           Size &tgtSize, std::vector<Coord> &vertices) {
+size_t GlEdge::getVertices(const GlGraphInputData *data,
+			   const edge e, const node src, const node tgt,
+			   Coord &srcCoord, Coord &tgtCoord,
+			   Size &srcSize, Size& tgtSize,
+			   std::vector<Coord> &vertices) {
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   bool hasBends(!bends.empty());
 
@@ -612,9 +614,9 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
   getEdgeAnchor(data, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize, srcAnchor, tgtAnchor);
 
   EdgeExtremityGlyph *startEdgeGlyph =
-      data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
+    data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
   EdgeExtremityGlyph *endEdgeGlyph =
-      data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
+    data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
 
   Coord beginLineAnchor;
   bool selected = data->getElementSelected()->getEdgeValue(e);
@@ -647,25 +649,26 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
     return 0;
 
   auto edgeShape = data->getElementShape()->getEdgeValue(e);
-  auto nbVertices = vertices.size();
-  if ((nbVertices > 2 && edgeShape == EdgeShape::BezierCurve) ||
-      (nbVertices == 3 && edgeShape == EdgeShape::CubicBSplineCurve)) {
+  if ((vertices.size() > 2 && edgeShape == EdgeShape::BezierCurve) ||
+      (vertices.size() == 3 && edgeShape == EdgeShape::CubicBSplineCurve)) {
     vector<Coord> curvePoints;
     computeBezierPoints(vertices, curvePoints, 200);
     vertices.swap(curvePoints);
-  } else if (nbVertices > 2 && edgeShape == EdgeShape::CatmullRomCurve) {
+  } else if (vertices.size() > 2 &&
+             edgeShape == EdgeShape::CatmullRomCurve) {
     vector<Coord> curvePoints;
     computeCatmullRomPoints(vertices, curvePoints, false, 200);
     vertices.swap(curvePoints);
   }
 
-  if (nbVertices > 2 && edgeShape == EdgeShape::CubicBSplineCurve) {
+  if (vertices.size() > 2 &&
+      edgeShape == EdgeShape::CubicBSplineCurve) {
     vector<Coord> curvePoints;
     computeOpenUniformBsplinePoints(vertices, curvePoints, 3, 200);
     vertices.swap(curvePoints);
   }
-
-  return nbVertices;
+  
+  return vertices.size();
 }
 
 void GlEdge::getColors(const GlGraphInputData *data, const node src, const node tgt,
