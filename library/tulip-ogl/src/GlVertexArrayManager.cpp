@@ -1082,6 +1082,8 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     switch (graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_ADD_EDGE:
+    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_DEL_EDGE:
     case GraphEvent::TLP_REVERSE_EDGE:
     case GraphEvent::TLP_AFTER_SET_ENDS:
       clearData();
