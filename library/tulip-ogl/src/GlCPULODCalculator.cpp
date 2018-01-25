@@ -68,19 +68,11 @@ void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
 }
 
 void GlCPULODCalculator::reserveMemoryForNodes(unsigned int numberOfNodes) {
-  if (renderingEntitiesFlag & RenderingNodes)
-    currentLayerLODUnit->nodesLODVector.resize(numberOfNodes);
-  else
-    currentLayerLODUnit->edgesLODVector.resize(
-        inputData->getElementSelected()->numberOfNonDefaultValuatedNodes());
+  currentLayerLODUnit->nodesLODVector.resize(numberOfNodes);
 }
 
 void GlCPULODCalculator::reserveMemoryForEdges(unsigned int numberOfEdges) {
-  if (renderingEntitiesFlag & RenderingNodes)
-    currentLayerLODUnit->edgesLODVector.resize(numberOfEdges);
-  else
-    currentLayerLODUnit->edgesLODVector.resize(
-        inputData->getElementSelected()->numberOfNonDefaultValuatedEdges());
+  currentLayerLODUnit->edgesLODVector.resize(numberOfEdges);
 }
 
 void GlCPULODCalculator::compute(const Vector<int, 4> &globalViewport,
