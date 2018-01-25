@@ -49,7 +49,7 @@ PLUGIN(FreeTreeTest)
 class MakeDirectedTree : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Make Directed Tree", "Tulip team", "18/04/2012",
-                    "Makes a graph a directed tree.", "1.0", "Topology Update")
+                    "Makes a free tree a directed tree.", "1.0", "Topology Update")
   MakeDirectedTree(const tlp::PluginContext *context) : tlp::Algorithm(context) {}
 
   tlp::node root;
