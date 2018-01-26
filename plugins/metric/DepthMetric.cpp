@@ -136,7 +136,7 @@ bool DepthMetric::run() {
 
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     result->setNodeValue(n, getNodeValue(n));
   }
   return true;

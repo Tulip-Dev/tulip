@@ -30,7 +30,7 @@ using namespace tlp;
 namespace std {
 struct couple {
   int p, r;
-  bool operator==(const couple &d) {
+  bool operator==(const couple d) {
     if ((p == d.p) && (r == d.r))
       return true;
 
@@ -40,7 +40,7 @@ struct couple {
 
 template <>
 struct equal_to<couple> {
-  bool operator()(const couple &c, const couple &d) {
+  bool operator()(const couple c, const couple d) {
     if ((c.r == d.r) && (c.p == d.p))
       return true;
 
@@ -50,7 +50,7 @@ struct equal_to<couple> {
 
 template <>
 struct less<couple> {
-  bool operator()(const couple &c, const couple &d) {
+  bool operator()(const couple c, const couple d) {
     return (c.r < d.r) || ((c.r == d.r) && (c.p < d.p));
   }
 };
@@ -62,7 +62,7 @@ struct StackEval {
 };
 
 struct GreaterStackEval {
-  bool operator()(const StackEval &e1, const StackEval &e2) {
+  bool operator()(const StackEval e1, const StackEval e2) {
     return (e1.freeS > e2.freeS);
   }
 };
@@ -86,7 +86,7 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP
   list<StackEval> tmpEval;
   // Construction des ensembles pour evaluer le strahler
 
-  for (const node &tmpN : graph->getOutNodes(n)) {
+  for (auto tmpN : graph->getOutNodes(n)) {
 
     if (!visited[tmpN]) {
       // Arc Normal
@@ -138,10 +138,10 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref, TLP_HASH_MAP
   result.stacks = 0;
   result.usedStack = 0;
 
-  for (list<StackEval>::iterator it = tmpEval.begin(); it != tmpEval.end(); ++it) {
-    result.usedStack += it->usedS;
-    result.stacks = std::max(result.stacks, it->freeS + it->usedS);
-    result.stacks -= it->usedS;
+  for (auto se : tmpEval) {
+    result.usedStack += se.usedS;
+    result.stacks = std::max(result.stacks, se.freeS + se.usedS);
+    result.stacks -= se.usedS;
   }
 
   result.stacks = result.stacks + result.usedStack;
@@ -212,11 +212,11 @@ bool StrahlerMetric::run() {
   if (pluginProgress)
     pluginProgress->showPreview(false);
 
-  for (const node &itn : graph->nodes()) {
-    tofree[itn] = 0;
+  for (auto n : graph->nodes()) {
+    tofree[n] = 0;
 
-    if (!finished[itn]) {
-      topSortStrahler(itn, curPref, tofree, prefix, visited, finished, cachedValues);
+    if (!finished[n]) {
+      topSortStrahler(n, curPref, tofree, prefix, visited, finished, cachedValues);
     }
 
     if (allNodes) {
@@ -227,16 +227,16 @@ bool StrahlerMetric::run() {
       switch (computationTypes.getCurrent()) {
       case ALL:
         result->setNodeValue(
-            itn, sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
-                      double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
+            n, sqrt(double(cachedValues[n].strahler) * double(cachedValues[n].strahler) +
+                      double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
         break;
 
       case REGISTERS:
-        result->setNodeValue(itn, cachedValues[itn].strahler);
+        result->setNodeValue(n, cachedValues[n].strahler);
         break;
 
       case STACKS:
-        result->setNodeValue(itn, cachedValues[itn].stacks);
+        result->setNodeValue(n, cachedValues[n].stacks);
       }
 
       visited.clear();
@@ -250,21 +250,21 @@ bool StrahlerMetric::run() {
 
   if (!allNodes) {
 
-    for (const node &itn : graph->nodes()) {
+    for (auto n : graph->nodes()) {
 
       switch (computationTypes.getCurrent()) {
       case ALL:
         result->setNodeValue(
-            itn, sqrt(double(cachedValues[itn].strahler) * double(cachedValues[itn].strahler) +
-                      double(cachedValues[itn].stacks) * double(cachedValues[itn].stacks)));
+            n, sqrt(double(cachedValues[n].strahler) * double(cachedValues[n].strahler) +
+                      double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
         break;
 
       case REGISTERS:
-        result->setNodeValue(itn, cachedValues[itn].strahler);
+        result->setNodeValue(n, cachedValues[n].strahler);
         break;
 
       case STACKS:
-        result->setNodeValue(itn, cachedValues[itn].stacks);
+        result->setNodeValue(n, cachedValues[n].stacks);
       }
     }
   }

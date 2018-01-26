@@ -38,7 +38,7 @@ int StrongComponent::attachNumerotation(tlp::node n, TLP_HASH_MAP<tlp::node, boo
   renum.push(n);
   int res = myId;
 
-  for (const node &tmpN : graph->getOutNodes(n)) {
+  for (auto tmpN : graph->getOutNodes(n)) {
 
     if (!finished[tmpN]) {
       int tmp = attachNumerotation(tmpN, visited, finished, minAttach, id, renum, curComponent);
@@ -80,14 +80,14 @@ bool StrongComponent::run() {
   int id = 1;
   int curComponent = 0;
 
-  for (const node &itn : graph->nodes()) {
+  for (auto itn : graph->nodes()) {
     if (!visited[itn]) {
       attachNumerotation(itn, visited, finished, cachedValues, id, renum, curComponent);
     }
   }
 
-  for (const edge &ite : graph->edges()) {
-    const std::pair<node, node> &eEnds = graph->ends(ite);
+  for (auto ite : graph->edges()) {
+    const std::pair<node, node> eEnds = graph->ends(ite);
 
     if (result->getNodeValue(eEnds.first) == result->getNodeValue(eEnds.second))
       result->setEdgeValue(ite, result->getNodeValue(eEnds.first));

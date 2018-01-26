@@ -44,7 +44,7 @@ struct dfsStruct {
     if (graph->outdeg(n)==0) return 0.0;
     if (result->getNodeValue(n) > 0.1)
       return result->getNodeValue(n);
-    for (const node &child : graph->getOutNodes(n)) {
+    for (auto child : graph->getOutNodes(n)) {
       res += getNodeValue(child);
     }
     res += leafMetric->getNodeValue(n);
@@ -133,7 +133,7 @@ bool PathLengthMetric::run() {
     return false;
   }
 
-  for (const node &n : graph->nodes())
+  for (auto n : graph->nodes())
     getNodeValue(n, &leafMetric);
   return true;
 }

@@ -96,7 +96,7 @@ public:
 
     pluginProgress->showPreview(false);
 
-    for (const node &s : graph->nodes()) {
+    for (auto s : graph->nodes()) {
 
       if (((++count % 50) == 0) && (pluginProgress->progress(count, nbNodes) != TLP_CONTINUE))
         break;
@@ -118,14 +118,8 @@ public:
         int vs = sigma.get(v.id);
         Q.pop();
         S.push(v);
-        Iterator<node> *it = nullptr;
 
-        if (directed)
-          it = graph->getOutNodes(v);
-        else
-          it = graph->getInOutNodes(v);
-
-        for (const node &w : it) {
+        for (auto w : (directed ? graph->getOutNodes(v) : graph->getInOutNodes(v))) {
           int wd = d.get(w.id);
 
           if (wd < 0) {
@@ -149,8 +143,7 @@ public:
         S.pop();
         list<node>::const_iterator itn = P[w].begin();
 
-        for (; itn != P[w].end(); ++itn) {
-          node v = *itn;
+        for (auto v : P[w]) {
           double vd = double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + wD);
           delta.add(v.id, vd);
           edge e = graph->existEdge(v, w, directed);
@@ -169,7 +162,7 @@ public:
       double n = graph->numberOfNodes();
       const double nNormFactor = 1.0 / ((n - 1) * (n - 2));
 
-      for (const node &s : graph->nodes()) {
+      for (auto s : graph->nodes()) {
 
         // In the undirected case, the metric must be divided by two, then
         if (norm)
@@ -181,7 +174,7 @@ public:
 
       const double eNormFactor = 4.0 / (n * n);
 
-      for (const edge &e : graph->edges()) {
+      for (auto e : graph->edges()) {
 
         if (norm)
           result->setEdgeValue(e, result->getEdgeValue(e) * eNormFactor);

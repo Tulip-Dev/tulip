@@ -44,7 +44,7 @@ struct dfsLeafStruct {
     if (result->getNodeValue(n) != 0)
       return result->getNodeValue(n);
     double res=0;
-    for (const node &n : graph->getOutNodes(n))
+    for (auto n : graph->getOutNodes(n))
       res += getNodeValue(n);
     if (res==0) res=1.0;
     result->setNodeValue(n, res);
@@ -116,7 +116,7 @@ double LeafMetric::getNodeValue(tlp::node current) {
 bool LeafMetric::run() {
   result->setAllNodeValue(0);
   result->setAllEdgeValue(0);
-  for (const node &n : graph->nodes())
+  for (auto n : graph->nodes())
     result->setNodeValue(n, getNodeValue(n));
   return true;
 }

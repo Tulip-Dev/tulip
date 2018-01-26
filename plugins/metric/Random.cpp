@@ -70,12 +70,12 @@ bool RandomMetric::run() {
   }
 
   if (nodes) {
-    for (const node &n : graph->nodes())
+    for (auto n : graph->nodes())
       result->setNodeValue(n, randomDouble());
   }
 
   if (edges) {
-    for (const edge &e : graph->edges())
+    for (auto e : graph->edges())
       result->setEdgeValue(e, randomDouble());
   }
 

@@ -41,9 +41,9 @@ double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V)
   }
 
   for (itU = A->begin(); itU != A->end(); ++itU) {
-    for (const node &itn : graph->getInOutNodes(*itU)) {
+    for (auto n : graph->getInOutNodes(*itU)) {
 
-      if (B->find(itn) != B->end())
+      if (B->find(n) != B->end())
         result += 1.0;
     }
   }
@@ -52,12 +52,11 @@ double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V)
 }
 //=============================================================
 double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
-  TLP_HASH_SET<node>::const_iterator itU;
   double result = 0.0;
 
-  for (itU = U.begin(); itU != U.end(); ++itU) {
-    for (const node &itn : graph->getInOutNodes(*itU)) {
-      if (U.find(itn) != U.end())
+  for (auto u : U) {
+    for (auto n : graph->getInOutNodes(u)) {
+      if (U.find(n) != U.end())
         result += 1.0;
     }
   }
@@ -80,13 +79,13 @@ double StrengthMetric::s(const TLP_HASH_SET<tlp::node> &U) {
 }
 //=============================================================
 double StrengthMetric::getEdgeValue(const tlp::edge ee) {
-  const std::pair<node, node> &eEnds = graph->ends(ee);
+  const std::pair<node, node> eEnds = graph->ends(ee);
   node u = eEnds.first;
   node v = eEnds.second;
   TLP_HASH_SET<node> Nu, Nv, Wuv;
 
   // Compute Nu
-  for (const node &n : graph->getInOutNodes(u)) {
+  for (auto n : graph->getInOutNodes(u)) {
     if (n != v)
       Nu.insert(n);
   }
@@ -95,7 +94,7 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
     return 0;
 
   // Compute Nv
-  for (const node &n : graph->getInOutNodes(v)) {
+  for (auto n : graph->getInOutNodes(v)) {
     if (n != u)
       Nv.insert(n);
   }
@@ -114,11 +113,9 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
     B = &Nu;
   }
 
-  TLP_HASH_SET<node>::const_iterator itNu;
-
-  for (itNu = A->begin(); itNu != A->end(); ++itNu) {
-    if (B->find(*itNu) != B->end())
-      Wuv.insert(*itNu);
+  for (auto na : *A) {
+    if (B->find(na) != B->end())
+      Wuv.insert(na);
   }
 
   TLP_HASH_SET<node> &Mu = Nu;
@@ -127,9 +124,9 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee) {
   /* Compute Mu and Mv, we do not need Nu and Nv anymore,
      thus we modify them to speed up computation
   */
-  for (itNu = Wuv.begin(); itNu != Wuv.end(); ++itNu) {
-    Mu.erase(*itNu);
-    Mv.erase(*itNu);
+  for (auto uv : Wuv) {
+    Mu.erase(uv);
+    Mv.erase(uv);
   }
 
   // compute strength metric
@@ -158,7 +155,7 @@ double StrengthMetric::getNodeValue(const tlp::node n) {
 
   double res = 0;
 
-  for (const edge &ite : graph->getInOutEdges(n)) {
+  for (auto ite : graph->getInOutEdges(n)) {
     res += result->getEdgeValue(ite);
   }
 
@@ -174,7 +171,7 @@ bool StrengthMetric::run() {
   pluginProgress->showPreview(false);
   pluginProgress->setComment("Computing Strength metric on edges...");
 
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     result->setEdgeValue(e, getEdgeValue(e));
 
     if ((++steps % (maxSteps / 10)) == 0) {
@@ -192,7 +189,7 @@ bool StrengthMetric::run() {
     maxSteps = 10;
 
   pluginProgress->setComment("Computing Strength metric on nodes...");
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     result->setNodeValue(n, getNodeValue(n));
 
     if ((++steps % (maxSteps / 10)) == 0) {

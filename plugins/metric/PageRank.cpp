@@ -77,12 +77,10 @@ struct PageRank : public DoubleAlgorithm {
     if (d <= 0 || d >= 1)
       return false;
 
-    const std::vector<node> &nodes = graph->nodes();
-    unsigned int nbNodes = nodes.size();
-
     // Initialize the PageRank
     NodeStaticProperty<double> pr(graph);
     NodeStaticProperty<double> next_pr(graph);
+    unsigned int nbNodes = graph->numberOfNodes();
 
     double oon = 1. / nbNodes;
 
@@ -95,14 +93,14 @@ struct PageRank : public DoubleAlgorithm {
       if (directed) {
         OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
-          for (const node &nin : graph->getInNodes(n))
+          for (auto nin : graph->getInNodes(n))
             n_sum += pr.getNodeValue(nin) / graph->outdeg(nin);
           next_pr[i] = one_minus_d + d * n_sum;
         });
       } else {
         OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
-          for (const node &nin : graph->getInOutNodes(n))
+          for (auto nin : graph->getInOutNodes(n))
             n_sum += pr.getNodeValue(nin) / graph->deg(nin);
           next_pr[i] = one_minus_d + d * n_sum;
         });

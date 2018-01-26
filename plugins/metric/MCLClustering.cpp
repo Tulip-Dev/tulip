@@ -88,11 +88,11 @@ const double epsilon = 1E-9;
 void MCLClustering::power(node n) {
   TLP_HASH_MAP<node, double> newTargets;
 
-  for (const edge &e1 : g.getOutEdges(n)) {
+  for (auto e1 : g.getOutEdges(n)) {
     double v1 = inW[e1];
 
     if (v1 > epsilon) {
-      for (const edge &e2 : g.getOutEdges(g.target(e1))) {
+      for (auto e2 : g.getOutEdges(g.target(e1))) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
@@ -105,7 +105,8 @@ void MCLClustering::power(node n) {
             TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
 
             if (it != newTargets.end())
-              newTargets[tgt] += v2;
+              //newTargets[tgt] += v2;
+	      it->second += v2;
             else
               newTargets[tgt] = v2;
           }
@@ -141,7 +142,7 @@ void MCLClustering::prune(node n) {
   // - avoid a costly stable iteration when deleting edges
   std::vector<pair<double, edge>> pvect;
   pvect.reserve(outdeg);
-  for (const edge &e : g.getOutEdges(n)) {
+  for (auto e : g.getOutEdges(n)) {
     pvect.push_back(pair<double, edge>(outW[e], e));
   }
 
@@ -149,7 +150,7 @@ void MCLClustering::prune(node n) {
   double t = pvect[outdeg - 1].first;
 
   for (unsigned int i = 0; i < outdeg; ++i) {
-    pair<double, edge> &p = pvect[i];
+    pair<double, edge> p = pvect[i];
 
     if (p.first < t || inW[p.second] < epsilon)
       g.delEdge(p.second);
@@ -168,7 +169,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   pvect.reserve(sz);
 
   double sum = 0.;
-  for (const edge &e : g.getOutEdges(n)) {
+  for (auto e : g.getOutEdges(n)) {
     double outVal = outW[e];
     sum += pow(outVal, r);
     pvect.push_back(pair<double, edge>(outVal, e));
@@ -242,8 +243,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
     double ood = 1. / outdeg;
 
     for (unsigned int i = 0; i < sz; ++i) {
-      pair<double, edge> &p = pvect[i];
-      edge e = p.second;
+      edge e = pvect[i].second;
 
       if (e.isValid()) {
         double outVal = outW[e] = ood;
@@ -315,7 +315,7 @@ bool MCLClustering::run() {
     g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(n) + 1);
   });
 
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     std::pair<node, node> eEnds = graph->ends(e);
     node src = nodeMapping[eEnds.first];
     node tgt = nodeMapping[eEnds.second];
@@ -339,7 +339,7 @@ bool MCLClustering::run() {
 
     if (weights != nullptr) {
       double tmpVal = inW[tmp] = 0.;
-      for (const edge &e : g.getOutEdges(n)) {
+      for (auto e : g.getOutEdges(n)) {
         double eVal = inW[e];
         sum += eVal;
 
@@ -353,7 +353,7 @@ bool MCLClustering::run() {
     }
 
     double oos = 1. / sum;
-    for (const edge &e : g.getOutEdges(n))
+    for (auto e : g.getOutEdges(n))
       inW[e] *= oos;
   }
 
@@ -389,10 +389,7 @@ bool MCLClustering::run() {
     //            inflate(_r, _k,  n, false);
     //        }
 
-    EdgeProperty<double> tmp;
-    tmp = inW;
-    inW = outW;
-    outW = tmp;
+    inW.swap(outW);
 
     if (equal)
       break;
@@ -405,9 +402,12 @@ bool MCLClustering::run() {
 
   outW = inW;
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    prune(g[i]);
+  for (auto n : g.nodes()) {
+    prune(n);
   }
+
+  // outW is no longer needed
+  g.free(outW);
 
   DegreeSort sortFunc(g);
   g.sortNodes(sortFunc); // sort nodes in decreasing order of their degree
@@ -420,24 +420,17 @@ bool MCLClustering::run() {
 
   // connected component loop
   // set the same value to all connected nodes
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n = g[i];
-
+  for (auto n : g.nodes()) {
     if (!visited[n]) {
       queue<node> fifo;
       fifo.push(n);
       visited[n] = true;
 
       while (!fifo.empty()) {
-        node n = fifo.front();
-        result->setNodeValue(tlpNodes[n.id], curVal);
+        node nq = fifo.front();
+        result->setNodeValue(tlpNodes[nq.id], curVal);
         fifo.pop();
-        const std::vector<node> &neighbours = g.adj(n);
-        unsigned int nbNeighbours = neighbours.size();
-
-        for (unsigned int i = 0; i < nbNeighbours; ++i) {
-          node ni = neighbours[i];
-
+        for (auto ni : g.adj(nq)) {
           if (!visited[ni]) {
             fifo.push(ni);
             visited[ni] = true;

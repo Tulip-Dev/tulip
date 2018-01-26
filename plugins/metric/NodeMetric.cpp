@@ -109,18 +109,16 @@ double NodeMetric::getNodeValue(tlp::node current) {
 bool NodeMetric::run() {
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
-  for (const node &n : graph->nodes())
+  for (auto n : graph->nodes())
     result->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //====================================================================
 bool NodeMetric::check(std::string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(graph)) {
-    erreurMsg = "";
-    return true;
-  } else {
+  if (!AcyclicTest::isAcyclic(graph)) {
     erreurMsg = "The graph must be acyclic.";
     return false;
   }
+  return true;
 }
 //===================================================================
