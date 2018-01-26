@@ -1,0 +1,1 @@
+sh tulip_run_test.sh make_directed_tree import_planar_graph.tlp

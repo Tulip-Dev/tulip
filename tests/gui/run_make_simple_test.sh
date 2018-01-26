@@ -1,0 +1,1 @@
+sh tulip_run_test.sh make_simple multiple_edges_and_loops.tlp
