@@ -54,7 +54,7 @@ public:
   /**
    * Return the id if glyph with given name
    */
-  int glyphId(const std::string &name);
+  int glyphId(const std::string &name, bool warnIfNotFound = true);
   /**
    * Load glyphs plugins
    */

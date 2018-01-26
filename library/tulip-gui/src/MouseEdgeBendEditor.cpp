@@ -561,40 +561,40 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
     edgeEntity->setCoordinates(start, end, coordinates);
     glMainWidget->getScene()->getGraphLayer()->addGlEntity(edgeEntity, "edgeEntity");
   } else {
-    int complexPolygonGlyphId = GlyphManager::getInst().glyphId("2D - Complex Polygon");
+    int complexPolygonGlyphId =
+      GlyphManager::getInst().glyphId("2D - Complex Polygon", false);
 
-    if (_shape->getNodeValue(mNode) == complexPolygonGlyphId && complexPolygonGlyphId != 0) {
+    if (complexPolygonGlyphId &&
+	(_shape->getNodeValue(mNode) == complexPolygonGlyphId)) {
       if (_coordsVectorProperty) {
-        vector<Coord> baseCoordinates = _coordsVectorProperty->getNodeValue(mNode);
+        const vector<Coord> &baseCoordinates = _coordsVectorProperty->getNodeValue(mNode);
         vector<Coord> coordinatesWithRotation;
 
         Coord min, max;
         min = baseCoordinates[0];
         max = baseCoordinates[0];
 
-        for (vector<Coord>::const_iterator it = baseCoordinates.begin();
-             it != baseCoordinates.end(); ++it) {
-          if ((*it)[0] < min[0])
-            min[0] = (*it)[0];
+        for (auto coord : baseCoordinates) {
+          if (coord[0] < min[0])
+            min[0] = coord[0];
 
-          if ((*it)[0] > max[0])
-            max[0] = (*it)[0];
+          if (coord[0] > max[0])
+            max[0] = coord[0];
 
-          if ((*it)[1] < min[1])
-            min[1] = (*it)[1];
+          if (coord[1] < min[1])
+            min[1] = coord[1];
 
-          if ((*it)[1] > max[1])
-            max[1] = (*it)[1];
+          if (coord[1] > max[1])
+            max[1] = coord[1];
         }
 
         Size nodeSize = _sizes->getNodeValue(mNode);
         double rotation = _rotation->getNodeValue(mNode) * M_PI / 180;
 
-        for (vector<Coord>::const_iterator it = baseCoordinates.begin();
-             it != baseCoordinates.end(); ++it) {
+        for (auto coord : baseCoordinates) {
           Coord tmp(
-              Coord((((*it)[0] - min[0]) / (max[0] - min[0])) * nodeSize[0] - nodeSize[0] / 2.,
-                    (((*it)[1] - min[1]) / (max[1] - min[1])) * nodeSize[1] - nodeSize[1] / 2., 0));
+              Coord(((coord[0] - min[0]) / (max[0] - min[0])) * nodeSize[0] - nodeSize[0] / 2.,
+                    ((coord[1] - min[1]) / (max[1] - min[1])) * nodeSize[1] - nodeSize[1] / 2., 0));
           coordinatesWithRotation.push_back(_layout->getNodeValue(mNode) +
                                             Coord(tmp[0] * cos(rotation) - tmp[1] * sin(rotation),
                                                   tmp[0] * sin(rotation) + tmp[1] * cos(rotation),

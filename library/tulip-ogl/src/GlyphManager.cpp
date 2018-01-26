@@ -45,13 +45,15 @@ string GlyphManager::glyphName(int id) {
   }
 }
 //====================================================
-int GlyphManager::glyphId(const string &name) {
+  int GlyphManager::glyphId(const string &name, bool warnIfNotFound) {
   if (nameToGlyphId.find(name) != nameToGlyphId.end()) {
     return nameToGlyphId[name];
   } else {
-    assert(false);
-    tlp::warning() << __PRETTY_FUNCTION__ << endl;
-    tlp::warning() << "Invalid glyph name: \"" << name.c_str() << '"' << endl;
+    if (warnIfNotFound) {
+      assert(false);
+      tlp::warning() << __PRETTY_FUNCTION__ << endl;
+      tlp::warning() << "Invalid glyph name: \"" << name.c_str() << '"' << endl;
+    }
     return 0;
   }
 }
