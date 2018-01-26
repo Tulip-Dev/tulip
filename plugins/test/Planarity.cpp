@@ -55,8 +55,11 @@ public:
     return tlp::PlanarityTest::planarEmbedding(graph);
   }
 
-  bool check(std::string &) override {
-    return tlp::PlanarityTest::isPlanar(graph);
+  bool check(std::string &errorMsg) override {
+    bool result = tlp::PlanarityTest::isPlanar(graph);
+    if (!result)
+      errorMsg = "The graph must be planar";
+    return result;
   }
 };
 PLUGIN(MakePlanarEmbedding)
