@@ -105,8 +105,8 @@ void MCLClustering::power(node n) {
             TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
 
             if (it != newTargets.end())
-              //newTargets[tgt] += v2;
-	      it->second += v2;
+              // newTargets[tgt] += v2;
+              it->second += v2;
             else
               newTargets[tgt] = v2;
           }

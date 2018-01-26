@@ -228,7 +228,7 @@ bool StrahlerMetric::run() {
       case ALL:
         result->setNodeValue(
             n, sqrt(double(cachedValues[n].strahler) * double(cachedValues[n].strahler) +
-                      double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
+                    double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
         break;
 
       case REGISTERS:
@@ -256,7 +256,7 @@ bool StrahlerMetric::run() {
       case ALL:
         result->setNodeValue(
             n, sqrt(double(cachedValues[n].strahler) * double(cachedValues[n].strahler) +
-                      double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
+                    double(cachedValues[n].stacks) * double(cachedValues[n].stacks)));
         break;
 
       case REGISTERS:
