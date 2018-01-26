@@ -86,8 +86,8 @@ public:
     */
   typename std::vector<TYPE>::reference operator[](const size_t id) {
     // assert(isValid());
-    assert(id < (*_array)._data.size());
-    return (*_array)._data[id];
+    assert(id < _array->_data.size());
+    return _array->_data[id];
   }
   /**
     * @brief read accessor
@@ -96,8 +96,8 @@ public:
     */
   typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
     // assert(isValid());
-    assert(id < (*_array)._data.size());
-    return (*_array)._data[id];
+    assert(id < _array->_data.size());
+    return _array->_data[id];
   }
   /**
     * @bried Set all the value of the property to the value given in parameter
@@ -132,6 +132,13 @@ public:
 #ifndef NDEBUG
   virtual bool isValid() const = 0;
 #endif
+
+  void swap(VectorGraphProperty<TYPE> &v) {
+    assert(_array && (_graph == v._graph));
+    auto tmp = _array;
+    _array = v._array;
+    v._array = tmp;
+  }
 
 protected:
   VectorGraphProperty() : _array(nullptr), _graph(nullptr) {}
