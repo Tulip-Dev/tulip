@@ -273,13 +273,13 @@ public:
         const std::vector<unsigned int> &elements = mapMetricElements[it.first];
 
         for (auto id : elements) {
-	  if (targetType.getCurrent() == NODES_TARGET) {
-	    result->setNodeValue(node(id), it.second);
-	  } else {
-	    result->setEdgeValue(edge(id), it.second);
-	  }
+          if (targetType.getCurrent() == NODES_TARGET) {
+            result->setNodeValue(node(id), it.second);
+          } else {
+            result->setEdgeValue(edge(id), it.second);
+          }
 
-	  if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
+          if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
             return pluginProgress->state() != TLP_CANCEL;
           }
 
@@ -355,14 +355,14 @@ public:
       // if metric is a NumericProperty, sort enumeratedValues
       // according the numerical order
       if (dynamic_cast<NumericProperty *>(metric) != nullptr) {
-	std::sort(enumeratedValues.begin(), enumeratedValues.end(),
-		  [](const std::string &a, const std::string &b) {
-		    double va, vb;
-		    std::istringstream isa(a), isb(b);
-		    DoubleType::read(isa, va);
-		    DoubleType::read(isb, vb);
-		    return va < vb;
-		  });
+        std::sort(enumeratedValues.begin(), enumeratedValues.end(),
+                  [](const std::string &a, const std::string &b) {
+                    double va, vb;
+                    std::istringstream isa(a), isb(b);
+                    DoubleType::read(isa, va);
+                    DoubleType::read(isb, vb);
+                    return va < vb;
+                  });
       }
 
       DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors);
