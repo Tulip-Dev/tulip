@@ -210,7 +210,7 @@ public:
           maxN = log(1 + maxN - minN);
         }
 
-        for (const node &n : graph->nodes()) {
+        for (auto n : graph->nodes()) {
           double dd = entryMetric->getNodeDoubleValue(n);
 
           if (eltTypes.getCurrent() == LOGARITHMIC_ELT) {
@@ -242,7 +242,7 @@ public:
           maxE = log(1 + maxE - minE);
         }
 
-        for (const edge &e : graph->edges()) {
+        for (auto e : graph->edges()) {
           double dd = entryMetric->getEdgeDoubleValue(e);
 
           if (eltTypes.getCurrent() == LOGARITHMIC_ELT) {
@@ -269,19 +269,17 @@ public:
                                                                        : graph->numberOfEdges();
       unsigned int iter = 0;
 
-      for (std::vector<std::pair<std::string, Color>>::iterator it =
-               enumeratedMappingResultVector.begin();
-           it != enumeratedMappingResultVector.end(); ++it) {
-        std::vector<unsigned int> *elements = &mapMetricElements[(*it).first];
+      for (const auto &it : enumeratedMappingResultVector) {
+        const std::vector<unsigned int> &elements = mapMetricElements[it.first];
 
-        for (std::vector<unsigned>::iterator itE = elements->begin(); itE != elements->end();
-             ++itE) {
-          if (targetType.getCurrent() == NODES_TARGET)
-            result->setNodeValue(node(*itE), (*it).second);
-          else
-            result->setEdgeValue(edge(*itE), (*it).second);
+        for (auto id : elements) {
+	  if (targetType.getCurrent() == NODES_TARGET) {
+	    result->setNodeValue(node(id), it.second);
+	  } else {
+	    result->setEdgeValue(edge(id), it.second);
+	  }
 
-          if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
+	  if ((iter % 100 == 0) && (pluginProgress->progress(iter, maxIter) != TLP_CONTINUE)) {
             return pluginProgress->state() != TLP_CANCEL;
           }
 
@@ -317,7 +315,7 @@ public:
 
       if (targetType.getCurrent() == NODES_TARGET) {
 
-        for (const node &n : graph->nodes()) {
+        for (auto n : graph->nodes()) {
           std::string tmp = metric->getNodeStringValue(n);
 
           if (mapMetricElements.count(tmp) == 0)
@@ -327,7 +325,7 @@ public:
         }
       } else {
 
-        for (const edge &e : graph->edges()) {
+        for (auto e : graph->edges()) {
           std::string tmp = metric->getEdgeStringValue(e);
 
           if (mapMetricElements.count(tmp) == 0)
@@ -352,6 +350,19 @@ public:
       for (std::map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
         if (enumeratedColors.empty() || it->second != enumeratedColors.back())
           enumeratedColors.push_back(it->second);
+      }
+
+      // if metric is a NumericProperty, sort enumeratedValues
+      // according the numerical order
+      if (dynamic_cast<NumericProperty *>(metric) != nullptr) {
+	std::sort(enumeratedValues.begin(), enumeratedValues.end(),
+		  [](const std::string &a, const std::string &b) {
+		    double va, vb;
+		    std::istringstream isa(a), isb(b);
+		    DoubleType::read(isa, va);
+		    DoubleType::read(isb, vb);
+		    return va < vb;
+		  });
       }
 
       DoubleStringsListRelationDialog dialog(enumeratedValues, enumeratedColors);

@@ -1,0 +1,1 @@
+sh tulip_run_test.sh enumerated_color_mapping grid_approximation.tlp

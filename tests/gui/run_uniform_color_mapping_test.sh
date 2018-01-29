@@ -1,0 +1,1 @@
+sh tulip_run_test.sh uniform_color_mapping measure_degree.tlp
