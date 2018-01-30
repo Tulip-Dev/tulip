@@ -61,223 +61,223 @@ struct Iterator;
   */
 class TLP_SCOPE VectorGraph {
 
-public:
+ public:
   //=======================================================
   VectorGraph();
   //=======================================================
   ~VectorGraph();
   //=======================================================
   /**
-        * @brief delete all nodes/edges and Properties of the graph
-        * @remark o(N + E + NbProp)
-        */
+   * @brief delete all nodes/edges and Properties of the graph
+   * @remark o(N + E + NbProp)
+   */
   void clear();
   //=======================================================
   /**
-        * @brief Test if an edge exist between two nodes, in directed mode the orientation
-        * is taken into account.
-        * @return the found edge, else an invalid edge.
-        * @remark o(min(deg(src), deg(tgt))
-        * @todo test
-        */
+   * @brief Test if an edge exist between two nodes, in directed mode the orientation
+   * is taken into account.
+   * @return the found edge, else an invalid edge.
+   * @remark o(min(deg(src), deg(tgt))
+   * @todo test
+   */
   edge existEdge(const node src, const node tgt, const bool directed = true) const;
   //=======================================================
   /**
-        * @brief Return true if n belongs to the graph
-        * @remark o(1)
-        */
+   * @brief Return true if n belongs to the graph
+   * @remark o(1)
+   */
   bool isElement(const node n) const {
     assert(n.id < _nData.size());
     return _nodes.isElement(n);
   }
   //=======================================================
   /**
-        * @brief Return true if e belongs to the graph
-        * @remark o(1)
-        */
+   * @brief Return true if e belongs to the graph
+   * @remark o(1)
+   */
   bool isElement(const edge e) const {
     assert(e.id < _eData.size());
     return _edges.isElement(e);
   }
   //=======================================================
   /**
-        * \brief Set the ordering of edges around n according to their order in v.
-        * \warning there is no test here, all edge in v must be element of star(e)
-        * @remark o(v.size())
-        */
+   * \brief Set the ordering of edges around n according to their order in v.
+   * \warning there is no test here, all edge in v must be element of star(e)
+   * @remark o(v.size())
+   */
   void setEdgeOrder(const node n, const std::vector<edge> &v);
   //=======================================================
   /**
-        * \brief swap to edge in the ordered adjacency vector
-        * \warning the two edges must be element of star(v)
-        * @remark o(1)
-        */
+   * \brief swap to edge in the ordered adjacency vector
+   * \warning the two edges must be element of star(v)
+   * @remark o(1)
+   */
   void swapEdgeOrder(const node n, const edge e1, const edge e2);
   //=======================================================
   /**
-        * @brief Enables to reserve memory for nbNodes
-        * Reserving memory before to addNode enable to reduce the number of vector resizing and then
-        * to speed up significantly construction of graphs.
-        * @remark o(N + nbNodes)
-        */
+   * @brief Enables to reserve memory for nbNodes
+   * Reserving memory before to addNode enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
+   * @remark o(N + nbNodes)
+   */
   void reserveNodes(const size_t nbNodes);
   //=======================================================
   /**
-        * @brief Enables to reserve memory for nbEdges
-        * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
-        * to speed up significantly construction of graphs.
-        * @remark o(N + nbNodes)
-        */
+   * @brief Enables to reserve memory for nbEdges
+   * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
+   * @remark o(N + nbNodes)
+   */
   void reserveEdges(const size_t nbEdges);
   //=======================================================
   /**
-        * @brief Enables to reserve memory for adjacency nodes
-        * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
-        * to speed up significantly construction of graphs.
-        * @remark o(E + nbEdges)
-        */
+   * @brief Enables to reserve memory for adjacency nodes
+   * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
+   * @remark o(E + nbEdges)
+   */
   void reserveAdj(const size_t nbEdges);
   //=======================================================
   /**
-        * @brief Enables to reserve memory for adjacency nodes
-        * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
-        * to speed up significantly construction of graphs.
-        * @remark o(E + nbEdges)
-        */
+   * @brief Enables to reserve memory for adjacency nodes
+   * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
+   * to speed up significantly construction of graphs.
+   * @remark o(E + nbEdges)
+   */
   void reserveAdj(const node n, const size_t nbEdges);
   //=======================================================
   /**
-        * @brief Return the node at position id in the array of nodes
-        * @remark o(1)
-        */
+   * @brief Return the node at position id in the array of nodes
+   * @remark o(1)
+   */
   node operator[](const unsigned int id) const {
     assert(id < _nodes.size());
     return _nodes[id];
   }
   //=======================================================
   /**
-        * @brief Return the edge at position id in the array of nodes
-        * @remark o(1)
-        */
+   * @brief Return the edge at position id in the array of nodes
+   * @remark o(1)
+   */
   edge operator()(const unsigned int id) const {
     assert(id < _edges.size());
     return _edges[id];
   }
   //=======================================================
   /**
-        * @brief Return the first node of graph (ie first node in the array of nodes)
-        * @remark o(1)
-        */
+   * @brief Return the first node of graph (ie first node in the array of nodes)
+   * @remark o(1)
+   */
   node getOneNode() const {
     assert(numberOfNodes() > 0);
     return _nodes[0];
   }
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on nodes of the graph
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark: o(1)
-        */
+   * @brief Return a Tulip Iterator on nodes of the graph
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark: o(1)
+   */
   Iterator<node> *getNodes() const;
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on edges of the graph
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark: o(1)
-        */
+   * @brief Return a Tulip Iterator on edges of the graph
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark: o(1)
+   */
   Iterator<edge> *getEdges() const;
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on adjacent edges of the node n
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark: o(1)
-        */
+   * @brief Return a Tulip Iterator on adjacent edges of the node n
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark: o(1)
+   */
   Iterator<edge> *getInOutEdges(const node n) const;
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on out edges of the node n
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark: o(1)
-        */
+   * @brief Return a Tulip Iterator on out edges of the node n
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark: o(1)
+   */
   Iterator<edge> *getOutEdges(const node n) const;
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on in edges of the node n
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark: o(1)
-        */
+   * @brief Return a Tulip Iterator on in edges of the node n
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark: o(1)
+   */
   Iterator<edge> *getInEdges(const node n) const;
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on adjacent nodes of the node n
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark: o(1)
-        */
+   * @brief Return a Tulip Iterator on adjacent nodes of the node n
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark: o(1)
+   */
   Iterator<node> *getInOutNodes(const node n) const;
   //=======================================================
   /**
-        * @brief Return a Tulip Iterator on in nodes of the node n
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark o(1)
-        */
+   * @brief Return a Tulip Iterator on in nodes of the node n
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark o(1)
+   */
   //=======================================================
   Iterator<node> *getInNodes(const node n) const;
   /**
-        * @brief Return a Tulip Iterator on out nodes of the node n
-        * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @remark o(1)
-        */
+   * @brief Return a Tulip Iterator on out nodes of the node n
+   * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
+   * @remark o(1)
+   */
   //=======================================================
   Iterator<node> *getOutNodes(const node n) const;
   //=======================================================
   /**
-       * @brief Return the degree of a node
-       * @remark o(1)
-       */
+   * @brief Return the degree of a node
+   * @remark o(1)
+   */
   unsigned int deg(const node n) const {
     assert(isElement(n));
     return _nData[n]._adjn.size();
   }
   //=======================================================
   /**
-       * @brief Return the out degree of a node
-       * @remark o(1)
-       */
+   * @brief Return the out degree of a node
+   * @remark o(1)
+   */
   unsigned int outdeg(const node n) const {
     assert(isElement(n));
     return _nData[n]._outdeg;
   }
   //=======================================================
   /**
-       * @brief Return the in degree of a node
-       * @remark o(1)
-       */
+   * @brief Return the in degree of a node
+   * @remark o(1)
+   */
   unsigned int indeg(const node n) const {
     return deg(n) - _nData[n]._outdeg;
   }
   //=======================================================
   /**
-       * @brief Return the number of edges in the graph
-       * @remark: o(1)
-       */
+   * @brief Return the number of edges in the graph
+   * @remark: o(1)
+   */
   unsigned int numberOfEdges() const {
     return _edges.size();
   }
   //=======================================================
   /**
-       * @brief Return the number of nodes in the graph
-       * @remark: o(1)
-       */
+   * @brief Return the number of nodes in the graph
+   * @remark: o(1)
+   */
   unsigned int numberOfNodes() const {
     return _nodes.size();
   }
   //=======================================================
   /**
-       * @brief Add a new node in the graph and return it
-       * @warning: That operation modify the array of nodes
-       * and thus devalidate all iterators on it.
-       * @remark: o(1)
-       */
+   * @brief Add a new node in the graph and return it
+   * @warning: That operation modify the array of nodes
+   * and thus devalidate all iterators on it.
+   * @remark: o(1)
+   */
   node addNode();
   //=======================================================
   /**
@@ -291,24 +291,24 @@ public:
   void addNodes(unsigned int nb, std::vector<node> *addedNodes = nullptr);
   //=======================================================
   /**
-        * @brief Delete a node and all its adjacent edges in the graph
-        * @warning That operation modify the array of nodes and the array of edges
-        * and thus devalidate all iterators on it.
-        * @warning That operation modify the array of neighboors of extrmities of edges, thus
-        * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @brief Delete a node and all its adjacent edges in the graph
+   * @warning That operation modify the array of nodes and the array of edges
+   * and thus devalidate all iterators on it.
+   * @warning That operation modify the array of neighboors of extrmities of edges, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edges.
-        * @warning Orders of edges in the extremities of the deleted edges are affected
-        * @remark: o(1)
-        */
+   * @warning Orders of edges in the extremities of the deleted edges are affected
+   * @remark: o(1)
+   */
   void delNode(const node n);
   //=======================================================
   /**
-       * @brief Add a new edge between src and tgt and return it
-       * @warning That operation modify the array of neighboors of extrmities of edges, thus
-       * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @brief Add a new edge between src and tgt and return it
+   * @warning That operation modify the array of neighboors of extrmities of edges, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edges.
-       * @remark o(1)
-       */
+   * @remark o(1)
+   */
   edge addEdge(const node src, const node tgt);
   //=======================================================
   /**
@@ -322,85 +322,85 @@ public:
                 std::vector<edge> *addedEdges = nullptr);
   //=======================================================
   /**
-        * @brief Delete an edge in the graph
-        * @warning: That operation modify the array of edges
-        * and thus devalidate all iterators on it.
-        * @warning That operation modify the array of neighboors of extremities of the edge e, thus
-        * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @brief Delete an edge in the graph
+   * @warning: That operation modify the array of edges
+   * and thus devalidate all iterators on it.
+   * @warning That operation modify the array of neighboors of extremities of the edge e, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edge.
-        * @warning Orders of edges in the extremities of the deleted edge are affected
-        * @remark o(1)
-        */
+   * @warning Orders of edges in the extremities of the deleted edge are affected
+   * @remark o(1)
+   */
   void delEdge(const edge e);
   //=======================================================
   /**
-        * @brief Delete all adjacent edges (in/out) of a node
-        * @warning: That operation modify the array of edges
-        * and thus devalidate all iterators on it.
-        * @warning That operation modify the array of neighboors of extremities of the edge e, thus
-        * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
+   * @brief Delete all adjacent edges (in/out) of a node
+   * @warning: That operation modify the array of edges
+   * and thus devalidate all iterators on it.
+   * @warning That operation modify the array of neighboors of extremities of the edge e, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities od the deleted
    * edge.
-        * @warning Orders of edges in the extremities of the deleted edge are affected
-        * @remark o(deg(V))
-        * @todo test
-        */
+   * @warning Orders of edges in the extremities of the deleted edge are affected
+   * @remark o(deg(V))
+   * @todo test
+   */
   void delEdges(const node n);
   //=======================================================
   /**
-        * @brief Delete all edges in the graph
-        * @warning: That operation modify the array of edges and all arrays of nodes
-        * and thus devalidate all iterators, only graph nodes iterators are not affected.
-        * @remark o(E + V)
-        */
+   * @brief Delete all edges in the graph
+   * @warning: That operation modify the array of edges and all arrays of nodes
+   * and thus devalidate all iterators, only graph nodes iterators are not affected.
+   * @remark o(E + V)
+   */
   void delAllEdges();
   //=======================================================
   /**
-        * @brief Delete all nodes in the graph
-        * @warning: That operation modify the array of edges and all arrays of nodes
-        * and thus devalidate all iterators.
-        * @remark o(E + V)
-        */
+   * @brief Delete all nodes in the graph
+   * @warning: That operation modify the array of edges and all arrays of nodes
+   * and thus devalidate all iterators.
+   * @remark o(E + V)
+   */
   void delAllNodes();
   //=======================================================
   /**
-      * @brief return the first extremity (considered as source if the graph is directed) of an edge
-      * @remark o(1)
-      */
+   * @brief return the first extremity (considered as source if the graph is directed) of an edge
+   * @remark o(1)
+   */
   node source(const edge e) const {
     assert(isElement(e));
     return _eData[e]._ends.first;
   }
   //=======================================================
   /**
-      * @brief return the second extremity (considered as target if the graph is directed) of an
+   * @brief return the second extremity (considered as target if the graph is directed) of an
    * edge
-      * @remark o(1)
-      */
+   * @remark o(1)
+   */
   node target(const edge e) const {
     assert(isElement(e));
     return _eData[e]._ends.second;
   }
   //=======================================================
   /**
-        * @brief return the opposite node of n through edge e
-        * @remark o(1)
-        */
+   * @brief return the opposite node of n through edge e
+   * @remark o(1)
+   */
   node opposite(const edge e, const node n) const;
   //=======================================================
   /**
-       * @brief Reverse an edge e, source become target and target become soure
-       * @remark o(1)
-       */
+   * @brief Reverse an edge e, source become target and target become soure
+   * @remark o(1)
+   */
   void reverse(const edge e);
   //=======================================================
   /**
-       * @brief change the source of an edge
-       * @warning That operation modify the array of neighboors of extrmities of edges, thus
-       * it devalidates iterators on adjacency for the nodes at the extremities of the modified
+   * @brief change the source of an edge
+   * @warning That operation modify the array of neighboors of extrmities of edges, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
-       * @remark o(1)
-       * \see setEnds
-       */
+   * @remark o(1)
+   * \see setEnds
+   */
   void setSource(const edge e, const node n) {
     assert(isElement(e));
     assert(isElement(n));
@@ -408,13 +408,13 @@ public:
   }
   //=======================================================
   /**
-       * @brief change the target of an edge
-       * @warning That operation modify the array of neighboors of extrmities of edges, thus
-       * it devalidates iterators on adjacency for the nodes at the extremities of the modified
+   * @brief change the target of an edge
+   * @warning That operation modify the array of neighboors of extrmities of edges, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
-       * @remark o(1)
-       * \see setEnds
-       */
+   * @remark o(1)
+   * \see setEnds
+   */
   void setTarget(const edge e, const node n) {
     assert(isElement(e));
     assert(isElement(n));
@@ -422,50 +422,50 @@ public:
   }
   //=======================================================
   /**
-       * @brief Return the extremities of an edge (src, target)
-       * @remark o(1)
-       */
+   * @brief Return the extremities of an edge (src, target)
+   * @remark o(1)
+   */
   const std::pair<node, node> &ends(const edge e) const {
     assert(isElement(e));
     return _eData[e]._ends;
   }
   //=======================================================
   /**
-       * @brief Reconnect the edeg e to have the new given extremities
-       * @warning That operation modify the array of neighboors of extrmities of edges, thus
-       * it devalidates iterators on adjacency for the nodes at the extremities of the modified
+   * @brief Reconnect the edeg e to have the new given extremities
+   * @warning That operation modify the array of neighboors of extrmities of edges, thus
+   * it devalidates iterators on adjacency for the nodes at the extremities of the modified
    * edges and nodes.
-       * @remark o(1)
-       */
+   * @remark o(1)
+   */
   void setEnds(const edge e, const node src, const node tgt);
   //=======================================================
   /**
-       * @brief Shuffle the array of graph nodes
-       * @remark dependant of stl::random_shuffle algorithm (should be o(N))
-       */
+   * @brief Shuffle the array of graph nodes
+   * @remark dependant of stl::random_shuffle algorithm (should be o(N))
+   */
   void shuffleNodes();
   //=======================================================
   /**
-       * @brief Shuffle the array of graph edges
-       * @remark dependant of stl::random_shuffle algorithm (should be o(E))
-       */
+   * @brief Shuffle the array of graph edges
+   * @remark dependant of stl::random_shuffle algorithm (should be o(E))
+   */
   void shuffleEdges();
   //=======================================================
   /**
-       * @brief Sort all edges according to comparison functor given in parameter
-       * if stable is true a stable sort algorithm is applied
-       * Comparison should be an instance of a class wihch implements operator():
-       * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
-       * @code
-       *  class Compare {
-       *  //return true if a < b
-       *  bool operator()(const edge a, const edge b);
-       *  };
-       * @endcode
-       * \warning that function is not compatible with the Tulip Graph API
-       */
+   * @brief Sort all edges according to comparison functor given in parameter
+   * if stable is true a stable sort algorithm is applied
+   * Comparison should be an instance of a class wihch implements operator():
+   * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
+   * @code
+   *  class Compare {
+   *  //return true if a < b
+   *  bool operator()(const edge a, const edge b);
+   *  };
+   * @endcode
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   template <typename Compare>
-  void sortEdges(Compare cmp, bool stable = false) {
+    void sortEdges(Compare cmp, bool stable = false) {
     if (stable)
       stable_sort(_edges.begin(), _edges.end(), cmp);
     else
@@ -476,20 +476,20 @@ public:
   }
   //=======================================================
   /**
-       * @brief Sort all nodes according to comparison functor given in parameter
-       * if stable is true a stable sort algorithm is applied
-       * Comparison should be an instance of a class wihch implements operator():
-       * @code
-       *  class Compare {
-       *  //return true if a < b
-       *  bool operator()(const node a, const node b);
-       *  };
-       * @endcode
-       * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
-       * \warning that function is not compatible with the Tulip Graph API
-       */
+   * @brief Sort all nodes according to comparison functor given in parameter
+   * if stable is true a stable sort algorithm is applied
+   * Comparison should be an instance of a class wihch implements operator():
+   * @code
+   *  class Compare {
+   *  //return true if a < b
+   *  bool operator()(const node a, const node b);
+   *  };
+   * @endcode
+   * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   template <typename Compare>
-  void sortNodes(Compare cmp, bool stable = false) {
+    void sortNodes(Compare cmp, bool stable = false) {
     if (stable)
       stable_sort(_nodes.begin(), _nodes.end(), cmp);
     else
@@ -500,176 +500,175 @@ public:
   }
   //=======================================================
   /**
-       * @brief return the position of an edge in the array of edges.
-       * \warning that function is not compatible with the Tulip Graph API
-       * @remark  o(1)
-       */
+   * @brief return the position of an edge in the array of edges.
+   * \warning that function is not compatible with the Tulip Graph API
+   * @remark  o(1)
+   */
   unsigned int edgePos(const edge e) const {
     assert(isElement(e));
     return _edges.getPos(e);
   }
   //=======================================================
   /**
-       * @brief return the position of a node in the array of nodes.
-       * \warning that function is not compatible with the Tulip Graph API
-       * @remark  o(1)
-       */
+   * @brief return the position of a node in the array of nodes.
+   * \warning that function is not compatible with the Tulip Graph API
+   * @remark  o(1)
+   */
   unsigned int nodePos(const node n) const {
     assert(isElement(n));
     return _nodes.getPos(n);
   }
   //=======================================================
   /**
-        * @brief Swap two nodes in the array of graph nodes
-        * @remark  o(1)
-       * \warning that function is not compatible with the Tulip Graph API
-        */
+   * @brief Swap two nodes in the array of graph nodes
+   * @remark  o(1)
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   void swap(const node a, const node b);
   //=======================================================
   /**
-        * @brief Swap two edges in the array of graph edge
-        * @remark  o(1)
-       * \warning that function is not compatible with the Tulip Graph API
-        */
+   * @brief Swap two edges in the array of graph edge
+   * @remark  o(1)
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   void swap(const edge a, const edge b);
   //=======================================================
   /**
-        * @brief Create a new node array of type TYPE
-        * NodesAttr can be copied in constant time it is just a pointer
-        * NodesAttr is not a smart pointer it must be deleted with freeNodesAttribute
-        * @remark  o(log(number of arrays) + new of a vector<TYPE> of size N)
-        * \warning that function is not compatible with the Tulip Graph API
-        */
+   * @brief Create a new node array of type TYPE
+   * NodesAttr can be copied in constant time it is just a pointer
+   * NodesAttr is not a smart pointer it must be deleted with freeNodesAttribute
+   * @remark  o(log(number of arrays) + new of a vector<TYPE> of size N)
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   template <typename TYPE>
-  void alloc(NodeProperty<TYPE> &prop) {
-    ValArray<TYPE> *array =
-        new ValArray<TYPE>(_nodes.size() + _nodes.numberOfFree(), _nodes.capacity());
-    _nodeArrays.insert(array);
-    prop = NodeProperty<TYPE>(array, this);
+    void alloc(NodeProperty<TYPE> &prop) {
+    auto values =
+      new typename VectorGraphProperty<TYPE>::ValuesImpl(_nodes.size() + _nodes.numberOfFree(), _nodes.capacity());
+    _nodeValues.insert(values);
+    prop = NodeProperty<TYPE>(values, this);
   }
   //=======================================================
   /**
-        * @brief Delete an Array from the set of node arrays
-        * @warning all copy of the ValArray are no more valid (serious bug if they are used after)
-        * @remark  o(log(number of arrays) + free of a vector<TYPE> of size N)
-        * \warning that function is not compatible with the Tulip Graph API
-        */
+   * @brief Delete an Array from the set of node values
+   * @warning all copy of the VectorGraphProperty::ValuesImpl are no more valid (serious bug if they are used after)
+   * @remark  o(log(number of arrays) + free of a vector<TYPE> of size N)
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   template <typename TYPE>
-  void free(NodeProperty<TYPE> array) {
-    assert(_nodeArrays.find(array._array) != _nodeArrays.end());
-    delete array._array;
-    _nodeArrays.erase(array._array);
+    void free(NodeProperty<TYPE> &prop) {
+    assert(_nodeValues.find(prop._values) != _nodeValues.end());
+    delete prop._values;
+    _nodeValues.erase(prop._values);
   }
   //=======================================================
   /**
-      * @brief Create a new edge array of type TYPE
-      * EdgesAttr can be copied in constant time it is just a pointer
-      * EdgesAttr is not a smart pointer it must be deleted with freeEdgesAttribute
-      * @remark  o(log(number of node arrays) + new of a vector<TYPE> of size E)
-      * \warning that function is not compatible with the Tulip Graph API
-      */
+   * @brief Create a new edge array of type TYPE
+   * EdgesAttr can be copied in constant time it is just a pointer
+   * EdgesAttr is not a smart pointer it must be deleted with freeEdgesAttribute
+   * @remark  o(log(number of node arrays) + new of a vector<TYPE> of size E)
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   template <typename TYPE>
-  void alloc(EdgeProperty<TYPE> &prop) {
-    ValArray<TYPE> *array =
-        new ValArray<TYPE>(_edges.size() + _edges.numberOfFree(), _edges.capacity());
-    _edgeArrays.insert(array);
-    prop = EdgeProperty<TYPE>(array, this);
+    void alloc(EdgeProperty<TYPE> &prop) {
+    auto values =
+      new typename VectorGraphProperty<TYPE>::ValuesImpl(_edges.size() + _edges.numberOfFree(), _edges.capacity());
+    _edgeValues.insert(values);
+    prop = EdgeProperty<TYPE>(values, this);
   }
   //=======================================================
   /**
-        * @brief Delete an Array from the set of edge arrays
-        * @warning all copy of the ValArray are no more valid (serious bug if they are used after)
-        * @remark  o(log(number of edge arrays) + free of a vector<TYPE> of size E)
-        * \warning that function is not compatible with the Tulip Graph API
-        */
+   * @brief Delete an Array from the set of edge values
+   * @warning all copy of the VectorGraphProperty::ValuesImpl are no more valid (serious bug if they are used after)
+   * @remark  o(log(number of edge values) + free of a vector<TYPE> of size E)
+   * \warning that function is not compatible with the Tulip Graph API
+   */
   template <typename TYPE>
-  void free(EdgeProperty<TYPE> array) {
-    assert(_edgeArrays.find(array._array) != _edgeArrays.end());
-    delete array._array;
-    _edgeArrays.erase(array._array);
+    void free(EdgeProperty<TYPE> &prop) {
+    assert(_edgeValues.find(prop._values) != _edgeValues.end());
+    delete prop._values;
+    _edgeValues.erase(prop._values);
   }
   //=======================================================
   /**
-        * @brief Return a const reference on the vector of adjacent nodes of n
-        *
-        * It is the fastest way to access to node adjacency, Iterators are 25% slower.
-        * \warning code that use that function won't be compatible with Tulip Graph API
-        *
-        * @remark o(1)
-        * \see getInOutNodes
-        * \see getInNodes
-        * \see getOutNodes
-        */
+   * @brief Return a const reference on the vector of adjacent nodes of n
+   *
+   * It is the fastest way to access to node adjacency, Iterators are 25% slower.
+   * \warning code that use that function won't be compatible with Tulip Graph API
+   *
+   * @remark o(1)
+   * \see getInOutNodes
+   * \see getInNodes
+   * \see getOutNodes
+   */
   const std::vector<node> &adj(const node n) const {
     assert(isElement(n));
     return _nData[n]._adjn;
   }
   //=======================================================
   /**
-        * @brief Return a const reference on the vector of adjacent edges of n
-        *
-        * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
-        * \warning code that use that function won't be compatible with Tulip Graph API
-        *
-        * @remark o(1)
-        * \see getInOutEdges
-        * \see getInEdges
-        * \see getOutEdges
-        */
+   * @brief Return a const reference on the vector of adjacent edges of n
+   *
+   * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
+   * \warning code that use that function won't be compatible with Tulip Graph API
+   *
+   * @remark o(1)
+   * \see getInOutEdges
+   * \see getInEdges
+   * \see getOutEdges
+   */
   const std::vector<edge> &star(const node n) const {
     assert(isElement(n));
     return _nData[n]._adje;
   }
   //=======================================================
   /**
-        * @brief Return a const reference on the vector of nodes of the graph
-        * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
-        * \warning code that use that function won't be compatible with Tulip Graph API
-        * @remark o(1)
-        */
+   * @brief Return a const reference on the vector of nodes of the graph
+   * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
+   * \warning code that use that function won't be compatible with Tulip Graph API
+   * @remark o(1)
+   */
   const std::vector<node> &nodes() const {
     return _nodes;
   }
   //=======================================================
   /**
-        * @brief Return a const reference on the vector of edges of the graph
-        * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
-        * \warning code that use that function won't be compatible with Tulip Graph API
-        * @remark o(1)
-        */
+   * @brief Return a const reference on the vector of edges of the graph
+   * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
+   * \warning code that use that function won't be compatible with Tulip Graph API
+   * @remark o(1)
+   */
   const std::vector<edge> &edges() const {
     return _edges;
   }
-//=======================================================
+  //=======================================================
 #ifndef NDEBUG
   /**
-        * these two function are used internally to insure that property has been allocated in debug
+   * these two functions are used internally to insure that property has been allocated in debug
    * mode
-        * @warning never used these function directly even in debug mode !!!
-        */
-  template <typename TYPE>
-  bool isNodeAttr(ValArray<TYPE> *array) {
-    return (_nodeArrays.find(array) != _nodeArrays.end());
+   * @warning never used these function directly even in debug mode !!!
+   */
+  bool isNodeAttr(VectorGraphValues *values) {
+    return (_nodeValues.find(values) != _nodeValues.end());
   }
-  template <typename TYPE>
-  bool isEdgeAttr(ValArray<TYPE> *array) {
-    return (_edgeArrays.find(array) != _edgeArrays.end());
+
+  bool isEdgeAttr(VectorGraphValues *values) {
+    return (_edgeValues.find(values) != _edgeValues.end());
   }
 #endif
   //=============================================================
   /**
-        * output the graph in a very simple way for debugging
-        */
+   * output the graph in a very simple way for debugging
+   */
   void dump() const;
   //=============================================================
   /**
-        * internal function to test the integrity of the graph
-        */
+   * internal function to test the integrity of the graph
+   */
   void integrityTest();
 
-private:
+ private:
   struct _iNodes {
-    _iNodes() : _outdeg(0) {}
+  _iNodes() : _outdeg(0) {}
 
     void clear() {
       _outdeg = 0;
@@ -701,61 +700,59 @@ private:
   IdContainer<node> _nodes; /** vector of nodes element of the graph */
   IdContainer<edge> _edges; /** vector of edges element of the graph */
 
-  std::set<ValArrayInterface *>
-      _nodeArrays; /** set of all node properties allocated on that graph */
-  std::set<ValArrayInterface *>
-      _edgeArrays; /** set of all edge properties allocated on that graph */
+  std::set<VectorGraphValues *> _nodeValues; /** set of all node properties allocated on that graph */
+  std::set<VectorGraphValues *> _edgeValues; /** set of all edge properties allocated on that graph */
 
   //=======================================================
   /**
-       * internal function to break the program and output debug information during
-       * integrity test.
-       * @TODO hide that function in the .cpp file
-       */
+   * internal function to break the program and output debug information during
+   * integrity test.
+   * @TODO hide that function in the .cpp file
+   */
   void testCond(std::string str, bool b);
   //=======================================================
   /**
-        * internal function to adjust size of node properties when graph is modified
-        */
-  void addNodeToArray(node n);
+   * internal function to adjust size of node properties when graph is modified
+   */
+  void addNodeToValues(node n);
   //=======================================================
   /**
-        * internal function to adjust size of edge properties when graph is modified
-        */
-  void addEdgeToArray(edge e);
+   * internal function to adjust size of edge properties when graph is modified
+   */
+  void addEdgeToValues(edge e);
   //=======================================================
   /**
-        * internal function to configure a new edge and its ends
-        */
+   * internal function to configure a new edge and its ends
+   */
   void addEdgeInternal(edge e, node src, node tgt);
   //=======================================================
   /**
-        * internal function to remove an edge
-        */
+   * internal function to remove an edge
+   */
   void removeEdge(edge e);
   //=======================================================
   /**
-        * Internal function to remove the edge e in the adjacency list of n
-        */
+   * Internal function to remove the edge e in the adjacency list of n
+   */
   void moveEdge(node n, unsigned int a, unsigned int b);
   /**
-        * Internal function tp remove the edge e in the adjacency list of n
-        */
+   * Internal function tp remove the edge e in the adjacency list of n
+   */
   void partialDelEdge(node n, edge e);
   //=======================================================
 };
 
-#ifndef NDEBUG // these two function are used to insure that property has been allocated in debug
+#ifndef NDEBUG // these two functions are used to insure that property has been allocated in debug
                // mode
 template <typename TYPE>
 bool NodeProperty<TYPE>::isValid() const {
   if (this->_graph == 0)
     return false;
 
-  if (this->_array == 0)
+  if (this->_values == 0)
     return false;
 
-  return this->_graph->isNodeAttr(this->_array);
+  return this->_graph->isNodeAttr(this->_values);
 }
 
 template <typename TYPE>
@@ -763,10 +760,10 @@ bool EdgeProperty<TYPE>::isValid() const {
   if (this->_graph == 0)
     return false;
 
-  if (this->_array == 0)
+  if (this->_values == 0)
     return false;
 
-  return this->_graph->isEdgeAttr(this->_array);
+  return this->_graph->isEdgeAttr(this->_values);
 }
 #endif
 }

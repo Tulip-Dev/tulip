@@ -32,8 +32,8 @@ using namespace std;
 using namespace tlp;
 
 namespace tlp {
-template class TLP_SCOPE ValArray<double>;
-template class TLP_SCOPE ValArray<node>;
+template class TLP_SCOPE VectorGraphProperty<double>::ValuesImpl;
+template class TLP_SCOPE VectorGraphProperty<node>::ValuesImpl;
 template class TLP_SCOPE NodeProperty<node>;
 template class TLP_SCOPE NodeProperty<double>;
 template class TLP_SCOPE EdgeProperty<node>;
@@ -137,27 +137,23 @@ namespace tlp {
 VectorGraph::VectorGraph() {}
 //=======================================================
 VectorGraph::~VectorGraph() {
-  set<ValArrayInterface *>::const_iterator it;
+  for (auto values : _nodeValues)
+    delete values;
 
-  for (it = _nodeArrays.begin(); it != _nodeArrays.end(); ++it)
-    delete (*it);
-
-  for (it = _edgeArrays.begin(); it != _edgeArrays.end(); ++it)
-    delete (*it);
+  for (auto values : _edgeValues)
+    delete values;
 }
 //=======================================================
 void VectorGraph::clear() {
   delAllNodes();
-  set<ValArrayInterface *>::const_iterator it;
+  for (auto values : _nodeValues)
+    delete values;
 
-  for (it = _nodeArrays.begin(); it != _nodeArrays.end(); ++it)
-    delete (*it);
+  for (auto values : _edgeValues)
+    delete values;
 
-  for (it = _edgeArrays.begin(); it != _edgeArrays.end(); ++it)
-    delete (*it);
-
-  _nodeArrays.clear();
-  _edgeArrays.clear();
+  _nodeValues.clear();
+  _edgeValues.clear();
 }
 //=======================================================
 edge VectorGraph::existEdge(const node src, const node tgt, bool directed) const {
@@ -242,19 +238,15 @@ void VectorGraph::swapEdgeOrder(const node n, const edge e1, const edge e2) {
 void VectorGraph::reserveNodes(const size_t nbNodes) {
   _nodes.reserve(nbNodes);
   _nData.reserve(nbNodes);
-  set<ValArrayInterface *>::const_iterator it;
-
-  for (it = _nodeArrays.begin(); it != _nodeArrays.end(); ++it)
-    (*it)->reserve(nbNodes);
+  for (auto values : _nodeValues)
+    values->reserve(nbNodes);
 }
 //=======================================================
 void VectorGraph::reserveEdges(const size_t nbEdges) {
   _edges.reserve(nbEdges);
   _eData.reserve(nbEdges);
-  set<ValArrayInterface *>::const_iterator it;
-
-  for (it = _edgeArrays.begin(); it != _edgeArrays.end(); ++it)
-    (*it)->reserve(nbEdges);
+  for (auto values : _edgeValues)
+    values->reserve(nbEdges);
 }
 //=======================================================
 void VectorGraph::reserveAdj(const size_t nbEdges) {
@@ -308,7 +300,7 @@ node VectorGraph::addNode() {
 
   if (newNode.id == _nData.size()) {
     _nData.push_back(_iNodes());
-    addNodeToArray(newNode);
+    addNodeToValues(newNode);
   } else
     _nData[newNode].clear();
 
@@ -332,7 +324,7 @@ void VectorGraph::addNodes(unsigned int nb, std::vector<node> *addedNodes) {
 
   if (sz < _nodes.size()) {
     _nData.resize(_nodes.size());
-    addNodeToArray(node(_nodes.size() - 1));
+    addNodeToValues(node(_nodes.size() - 1));
     // get the number of recycled nodes
     // that need to be cleared
     nb -= _nodes.size() - sz;
@@ -380,7 +372,7 @@ edge VectorGraph::addEdge(const node src, const node tgt) {
 
   if (newEdge.id == _eData.size()) {
     _eData.resize(newEdge.id + 1);
-    addEdgeToArray(newEdge);
+    addEdgeToValues(newEdge);
   }
 
   addEdgeInternal(newEdge, src, tgt);
@@ -412,7 +404,7 @@ void VectorGraph::addEdges(const std::vector<std::pair<node, node>> &ends,
 
   if (sz < _edges.size()) {
     _eData.resize(_edges.size());
-    addEdgeToArray(edge(_edges.size() - 1));
+    addEdgeToValues(edge(_edges.size() - 1));
   }
 
   for (unsigned int i = 0; i < nb; ++i)
@@ -661,18 +653,14 @@ void VectorGraph::testCond(string str, bool b) {
   }
 }
 //=======================================================
-void VectorGraph::addNodeToArray(node n) {
-  set<ValArrayInterface *>::const_iterator it = _nodeArrays.begin();
-
-  for (; it != _nodeArrays.end(); ++it)
-    (*it)->addElement(n.id);
+void VectorGraph::addNodeToValues(node n) {
+  for (auto values : _nodeValues)
+    values->addElement(n.id);
 }
 //=======================================================
-void VectorGraph::addEdgeToArray(edge e) {
-  set<ValArrayInterface *>::const_iterator it = _edgeArrays.begin();
-
-  for (; it != _edgeArrays.end(); ++it)
-    (*it)->addElement(e.id);
+void VectorGraph::addEdgeToValues(edge e) {
+  for (auto values : _edgeValues)
+    values->addElement(e.id);
 }
 //=======================================================
 void VectorGraph::removeEdge(edge e) {

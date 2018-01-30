@@ -22,49 +22,24 @@
 #define VECTORGRAPHPROPERTY_H
 #include <algorithm>
 #include <cassert>
+#include <vector>
 
 namespace tlp {
 class VectorGraph;
+
 /**
  * @brief Internal class to access to a stl::vector in VectorGraph
  * @warning never use that class
  */
-class ValArrayInterface {
+ class VectorGraphValues {
   friend class VectorGraph;
 
-protected:
-  virtual void addElement(const unsigned int id) = 0;
-  virtual void reserve(const size_t size) = 0;
-  virtual ~ValArrayInterface() {}
-};
-//===========================================
-/**
- * @brief Internal class to access to a stl::vector in VectorGraph
- * @warning never use that class
- */
-template <typename TYPE>
-class ValArray : public ValArrayInterface {
-  friend class VectorGraph;
+ protected:
+   virtual void addElement(const unsigned int id) = 0;
+   virtual void reserve(const size_t size) = 0;
+   virtual ~VectorGraphValues() {}
+ };
 
-protected:
-  ValArray(const unsigned int size = 0, const unsigned int capacity = 0) {
-    _data.reserve(capacity);
-    _data.resize(size);
-  }
-  ~ValArray() override {}
-  void addElement(const unsigned int id) override {
-    if (id >= _data.size()) {
-      _data.resize(id);
-      _data.push_back(TYPE());
-    }
-  }
-  void reserve(const size_t size) override {
-    _data.reserve(size);
-  }
-
-public:
-  std::vector<TYPE> _data; /**< TODO */
-};
 /**
   * @class VectorGraphProperty
   * @brief That class enables to factorize code for NodeProperty and EdgeProperty in VectorGraph, it
@@ -77,6 +52,29 @@ template <typename TYPE>
 class VectorGraphProperty {
   friend class VectorGraph;
 
+ protected:
+  //===========================================
+  /**
+   * @brief Internal class to access to a stl::vector in VectorGraph
+   * @warning never use that class
+   */
+  struct ValuesImpl : public VectorGraphValues, public std::vector<TYPE> {
+
+    ValuesImpl(const unsigned int size = 0, const unsigned int capacity = 0) {
+      std::vector<TYPE>::reserve(capacity);
+      std::vector<TYPE>::resize(size);
+    }
+    ~ValuesImpl() override {}
+    void addElement(const unsigned int id) override {
+      if (id >= std::vector<TYPE>::size()) {
+	std::vector<TYPE>::resize(id + 1);
+      }
+    }
+    void reserve(const size_t size) override {
+      std::vector<TYPE>::reserve(size);
+    }
+  };
+
 public:
   virtual ~VectorGraphProperty() {}
   /**
@@ -86,8 +84,8 @@ public:
     */
   typename std::vector<TYPE>::reference operator[](const size_t id) {
     // assert(isValid());
-    assert(id < _array->_data.size());
-    return _array->_data[id];
+    assert(id < _values->size());
+    return (*_values)[id];
   }
   /**
     * @brief read accessor
@@ -96,8 +94,8 @@ public:
     */
   typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
     // assert(isValid());
-    assert(id < _array->_data.size());
-    return _array->_data[id];
+    assert(id < _values->size());
+    return (*_values)[id];
   }
   /**
     * @bried Set all the value of the property to the value given in parameter
@@ -111,7 +109,7 @@ public:
     * @see MutableContainer
     */
   void setAll(const TYPE &obj) {
-    fill(_array->_data.begin(), _array->_data.end(), obj);
+    fill(_values->begin(), _values->end(), obj);
   }
   /**
     * @brief write accessor
@@ -134,19 +132,16 @@ public:
 #endif
 
   void swap(VectorGraphProperty<TYPE> &v) {
-    assert(_array && (_graph == v._graph));
-    auto tmp = _array;
-    _array = v._array;
-    v._array = tmp;
+    assert(_values && (_graph == v._graph));
+    _values->swap(*(v._values));
   }
 
 protected:
-  VectorGraphProperty() : _array(nullptr), _graph(nullptr) {}
-  VectorGraphProperty(const VectorGraphProperty &obj) : _array(obj._array), _graph(obj._graph) {}
-  VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph) : _array(array), _graph(graph) {}
+  VectorGraphProperty() : _values(nullptr), _graph(nullptr) {}
+  VectorGraphProperty(const VectorGraphProperty &obj) : _values(obj._values), _graph(obj._graph) {}
+ VectorGraphProperty(ValuesImpl *values, VectorGraph *graph) : _values(values), _graph(graph) {}
 
-protected:
-  ValArray<TYPE> *_array; /**< TODO */
+  ValuesImpl *_values; /**< TODO */
   VectorGraph *_graph;    /**< TODO */
 };
 
@@ -197,8 +192,8 @@ public:
 #endif
 
 private:
-  EdgeProperty(ValArray<TYPE> *array, VectorGraph *graph)
-      : VectorGraphProperty<TYPE>(array, graph) {}
+ EdgeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
+      : VectorGraphProperty<TYPE>(values, graph) {}
 };
 /**
   * @class NodeProperty
@@ -246,8 +241,8 @@ public:
 #endif
 
 private:
-  NodeProperty(ValArray<TYPE> *array, VectorGraph *graph)
-      : VectorGraphProperty<TYPE>(array, graph) {}
+ NodeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
+    : VectorGraphProperty<TYPE>(values, graph) {}
 };
 }
 #endif // VECTORGRAPHPROPERTY_H
