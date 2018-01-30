@@ -61,7 +61,7 @@ struct Iterator;
   */
 class TLP_SCOPE VectorGraph {
 
- public:
+public:
   //=======================================================
   VectorGraph();
   //=======================================================
@@ -465,7 +465,7 @@ class TLP_SCOPE VectorGraph {
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename Compare>
-    void sortEdges(Compare cmp, bool stable = false) {
+  void sortEdges(Compare cmp, bool stable = false) {
     if (stable)
       stable_sort(_edges.begin(), _edges.end(), cmp);
     else
@@ -489,7 +489,7 @@ class TLP_SCOPE VectorGraph {
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename Compare>
-    void sortNodes(Compare cmp, bool stable = false) {
+  void sortNodes(Compare cmp, bool stable = false) {
     if (stable)
       stable_sort(_nodes.begin(), _nodes.end(), cmp);
     else
@@ -541,21 +541,22 @@ class TLP_SCOPE VectorGraph {
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename TYPE>
-    void alloc(NodeProperty<TYPE> &prop) {
-    auto values =
-      new typename VectorGraphProperty<TYPE>::ValuesImpl(_nodes.size() + _nodes.numberOfFree(), _nodes.capacity());
+  void alloc(NodeProperty<TYPE> &prop) {
+    auto values = new typename VectorGraphProperty<TYPE>::ValuesImpl(
+        _nodes.size() + _nodes.numberOfFree(), _nodes.capacity());
     _nodeValues.insert(values);
     prop = NodeProperty<TYPE>(values, this);
   }
   //=======================================================
   /**
    * @brief Delete an Array from the set of node values
-   * @warning all copy of the VectorGraphProperty::ValuesImpl are no more valid (serious bug if they are used after)
+   * @warning all copy of the VectorGraphProperty::ValuesImpl are no more valid (serious bug if they
+   * are used after)
    * @remark  o(log(number of arrays) + free of a vector<TYPE> of size N)
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename TYPE>
-    void free(NodeProperty<TYPE> &prop) {
+  void free(NodeProperty<TYPE> &prop) {
     assert(_nodeValues.find(prop._values) != _nodeValues.end());
     delete prop._values;
     _nodeValues.erase(prop._values);
@@ -569,21 +570,22 @@ class TLP_SCOPE VectorGraph {
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename TYPE>
-    void alloc(EdgeProperty<TYPE> &prop) {
-    auto values =
-      new typename VectorGraphProperty<TYPE>::ValuesImpl(_edges.size() + _edges.numberOfFree(), _edges.capacity());
+  void alloc(EdgeProperty<TYPE> &prop) {
+    auto values = new typename VectorGraphProperty<TYPE>::ValuesImpl(
+        _edges.size() + _edges.numberOfFree(), _edges.capacity());
     _edgeValues.insert(values);
     prop = EdgeProperty<TYPE>(values, this);
   }
   //=======================================================
   /**
    * @brief Delete an Array from the set of edge values
-   * @warning all copy of the VectorGraphProperty::ValuesImpl are no more valid (serious bug if they are used after)
+   * @warning all copy of the VectorGraphProperty::ValuesImpl are no more valid (serious bug if they
+   * are used after)
    * @remark  o(log(number of edge values) + free of a vector<TYPE> of size E)
    * \warning that function is not compatible with the Tulip Graph API
    */
   template <typename TYPE>
-    void free(EdgeProperty<TYPE> &prop) {
+  void free(EdgeProperty<TYPE> &prop) {
     assert(_edgeValues.find(prop._values) != _edgeValues.end());
     delete prop._values;
     _edgeValues.erase(prop._values);
@@ -640,7 +642,7 @@ class TLP_SCOPE VectorGraph {
   const std::vector<edge> &edges() const {
     return _edges;
   }
-  //=======================================================
+//=======================================================
 #ifndef NDEBUG
   /**
    * these two functions are used internally to insure that property has been allocated in debug
@@ -666,9 +668,9 @@ class TLP_SCOPE VectorGraph {
    */
   void integrityTest();
 
- private:
+private:
   struct _iNodes {
-  _iNodes() : _outdeg(0) {}
+    _iNodes() : _outdeg(0) {}
 
     void clear() {
       _outdeg = 0;
@@ -700,8 +702,10 @@ class TLP_SCOPE VectorGraph {
   IdContainer<node> _nodes; /** vector of nodes element of the graph */
   IdContainer<edge> _edges; /** vector of edges element of the graph */
 
-  std::set<VectorGraphValues *> _nodeValues; /** set of all node properties allocated on that graph */
-  std::set<VectorGraphValues *> _edgeValues; /** set of all edge properties allocated on that graph */
+  std::set<VectorGraphValues *>
+      _nodeValues; /** set of all node properties allocated on that graph */
+  std::set<VectorGraphValues *>
+      _edgeValues; /** set of all edge properties allocated on that graph */
 
   //=======================================================
   /**

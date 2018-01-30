@@ -31,14 +31,14 @@ class VectorGraph;
  * @brief Internal class to access to a stl::vector in VectorGraph
  * @warning never use that class
  */
- class VectorGraphValues {
+class VectorGraphValues {
   friend class VectorGraph;
 
- protected:
-   virtual void addElement(const unsigned int id) = 0;
-   virtual void reserve(const size_t size) = 0;
-   virtual ~VectorGraphValues() {}
- };
+protected:
+  virtual void addElement(const unsigned int id) = 0;
+  virtual void reserve(const size_t size) = 0;
+  virtual ~VectorGraphValues() {}
+};
 
 /**
   * @class VectorGraphProperty
@@ -52,7 +52,7 @@ template <typename TYPE>
 class VectorGraphProperty {
   friend class VectorGraph;
 
- protected:
+protected:
   //===========================================
   /**
    * @brief Internal class to access to a stl::vector in VectorGraph
@@ -67,7 +67,7 @@ class VectorGraphProperty {
     ~ValuesImpl() override {}
     void addElement(const unsigned int id) override {
       if (id >= std::vector<TYPE>::size()) {
-	std::vector<TYPE>::resize(id + 1);
+        std::vector<TYPE>::resize(id + 1);
       }
     }
     void reserve(const size_t size) override {
@@ -139,10 +139,10 @@ public:
 protected:
   VectorGraphProperty() : _values(nullptr), _graph(nullptr) {}
   VectorGraphProperty(const VectorGraphProperty &obj) : _values(obj._values), _graph(obj._graph) {}
- VectorGraphProperty(ValuesImpl *values, VectorGraph *graph) : _values(values), _graph(graph) {}
+  VectorGraphProperty(ValuesImpl *values, VectorGraph *graph) : _values(values), _graph(graph) {}
 
   ValuesImpl *_values; /**< TODO */
-  VectorGraph *_graph;    /**< TODO */
+  VectorGraph *_graph; /**< TODO */
 };
 
 /**
@@ -192,7 +192,7 @@ public:
 #endif
 
 private:
- EdgeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
+  EdgeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
       : VectorGraphProperty<TYPE>(values, graph) {}
 };
 /**
@@ -241,8 +241,8 @@ public:
 #endif
 
 private:
- NodeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
-    : VectorGraphProperty<TYPE>(values, graph) {}
+  NodeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
+      : VectorGraphProperty<TYPE>(values, graph) {}
 };
 }
 #endif // VECTORGRAPHPROPERTY_H
