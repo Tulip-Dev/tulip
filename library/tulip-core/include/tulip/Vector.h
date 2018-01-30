@@ -66,7 +66,7 @@ template <typename TYPE, size_t SIZE, typename OTYPE = double, typename DTYPE = 
 class Vector : public Array<TYPE, SIZE> {
 public:
   inline VECTOR() {
-    memset(&((*this)[0]), 0, SIZE * sizeof(TYPE));
+    memset(this->data(), 0, SIZE * sizeof(TYPE));
   }
   inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
     set(v);
@@ -79,12 +79,12 @@ public:
   }
   inline VECTOR(const TYPE x, const TYPE y) {
     if (int(SIZE) - 2 > 0)
-      memset(&((*this)[2]), 0, (SIZE - 2) * sizeof(TYPE));
+      memset(this->data() + 2, 0, (SIZE - 2) * sizeof(TYPE));
     set(x, y);
   }
   inline VECTOR(const TYPE x, const TYPE y, const TYPE z) {
     if (int(SIZE) - 3 > 0)
-      memset(&((*this)[3]), 0, (SIZE - 3) * sizeof(TYPE));
+      memset(this->data() + 3, 0, (SIZE - 3) * sizeof(TYPE));
     set(x, y, z);
   }
   inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
@@ -123,25 +123,25 @@ public:
   }
   inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
     assert(SIZE > 2);
-    memcpy(&((*this)[0]), &(v[0]), 2 * sizeof(TYPE));
+    memcpy(this->data(), v.data(), 2 * sizeof(TYPE));
     (*this)[2] = z;
   }
   inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
     assert(SIZE > 3);
-    memcpy(&((*this)[0]), &(v[0]), 2 * sizeof(TYPE));
+    memcpy(this->data(), v.data(), 2 * sizeof(TYPE));
     (*this)[2] = z;
     (*this)[3] = w;
   }
   inline void set(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
     assert(SIZE > 3);
-    memcpy(&((*this)[0]), &(v[0]), 3 * sizeof(TYPE));
+    memcpy(this->data(), v.data(), 3 * sizeof(TYPE));
     (*this)[3] = w;
   }
   inline void set(const Vector<TYPE, SIZE, OTYPE> &v) {
-    memcpy(&((*this)[0]), &(v[0]), SIZE * sizeof(TYPE));
+    memcpy(this->data(), v.data(), SIZE * sizeof(TYPE));
   }
   inline void set(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
-    memcpy(&((*this)[0]), &(v[0]), SIZE * sizeof(TYPE));
+    memcpy(this->data(), v.data(), SIZE * sizeof(TYPE));
   }
   inline void get(TYPE &x) const {
     x = (*this)[0];

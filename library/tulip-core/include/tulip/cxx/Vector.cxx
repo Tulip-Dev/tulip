@@ -175,7 +175,7 @@ bool VECTORTLP::operator>(const VECTORTLP &vecto) const {
 TEMPLATEVECTOR
 bool VECTORTLP::operator<(const VECTORTLP &v) const {
   if (std::numeric_limits<TYPE>::is_integer) {
-    return memcmp(&((*this)[0]), &(v[0]), SIZE * sizeof(TYPE)) < 0;
+    return memcmp(this->data(), v.data(), SIZE * sizeof(TYPE)) < 0;
   }
 
   for (size_t i = 0; i < SIZE; ++i) {
@@ -202,7 +202,7 @@ bool VECTORTLP::operator!=(const VECTORTLP &vecto) const {
 TEMPLATEVECTOR
 bool VECTORTLP::operator==(const VECTORTLP &v) const {
   if (std::numeric_limits<TYPE>::is_integer) {
-    return memcmp(&((*this)[0]), &(v[0]), SIZE * sizeof(TYPE)) == 0;
+    return memcmp(this->data(), v.data(), SIZE * sizeof(TYPE)) == 0;
   }
 
   for (size_t i = 0; i < SIZE; ++i) {
