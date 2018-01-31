@@ -47,7 +47,7 @@ extern TLP_SCOPE int getNumIterators();
 * // graph is a pointer to a tlp::Graph instance
 *
 * // shortest syntax using C++11 for range based loops
-* for (const tlp::node &n : graph->getNodes()) {
+* for (auto n : graph->getNodes()) {
 *   // do someting with n
 * }
 *
@@ -174,10 +174,11 @@ inline auto end(Iterator<T> *it) -> decltype(it->end()) {
 template <typename T>
 inline unsigned int iteratorCount(Iterator<T> *it) {
   unsigned int count = 0;
-  for (const T &v : it) {
-    std::ignore = v;
+  while(it->hasNext()) {
     ++count;
+    it->next();
   }
+  delete it;
   return count;
 }
 
@@ -197,13 +198,15 @@ inline unsigned int iteratorCount(Iterator<T> *it) {
 template <typename T>
 inline bool iteratorCountCheck(Iterator<T> *it, unsigned int minNbElements) {
   unsigned int count = 0;
-  for (const T &v : it) {
-    std::ignore = v;
+  while(it->hasNext()) {
     ++count;
     if (count == minNbElements) {
+      delete it;
       return true;
     }
+    it->next();
   }
+  delete it;
   return false;
 }
 
@@ -242,8 +245,14 @@ inline bool iteratorEmpty(Iterator<T> *it) {
 **/
 template <typename T, class MapFunction>
 inline void iteratorMap(Iterator<T> *it, MapFunction &&mapFunction) {
-  for (const T &v : it) {
-    mapFunction(v);
+  if (sizeof(T) > sizeof(double)) {
+    for (const auto &v : it) {
+      mapFunction(v);
+    }
+  } else {
+    for (auto v : it) {
+      mapFunction(v);
+    }
   }
 }
 
@@ -265,12 +274,18 @@ inline void iteratorMap(Iterator<T> *it, MapFunction &&mapFunction) {
 * @return the reduced value from the iterated elements
 *
 **/
-template <typename itType, typename reduceType, class ReduceFunction>
-inline reduceType iteratorReduce(Iterator<itType> *it, const reduceType &initVal,
+template <typename T, typename reduceType, class ReduceFunction>
+inline reduceType iteratorReduce(Iterator<T> *it, const reduceType &initVal,
                                  ReduceFunction reduceFunction) {
   reduceType val = initVal;
-  for (const itType &v : it) {
-    val = reduceFunction(val, v);
+  if (sizeof(T) > sizeof(double)) {
+    for (const auto &v : it) {
+      val = reduceFunction(val, v);
+    }
+  } else {
+    for (auto v : it) {
+      val = reduceFunction(val, v);
+    }
   }
   return val;
 }
@@ -291,9 +306,10 @@ inline reduceType iteratorReduce(Iterator<itType> *it, const reduceType &initVal
 template <typename T>
 inline std::list<T> iteratorList(Iterator<T> *it) {
   std::list<T> ret;
-  for (const T &v : it) {
-    ret.push_back(v);
+  while (it->hasNext()) {
+    ret.push_back(std::move(it->next()));
   }
+  delete it;
   return ret;
 }
 
@@ -313,9 +329,10 @@ inline std::list<T> iteratorList(Iterator<T> *it) {
 template <typename T>
 inline std::vector<T> iteratorVector(Iterator<T> *it) {
   std::vector<T> ret;
-  for (const T &v : it) {
-    ret.push_back(v);
+  while (it->hasNext()) {
+    ret.push_back(std::move(it->next()));
   }
+  delete it;
   return ret;
 }
 
@@ -335,9 +352,10 @@ inline std::vector<T> iteratorVector(Iterator<T> *it) {
 template <typename T>
 inline std::set<T> iteratorSet(Iterator<T> *it) {
   std::set<T> ret;
-  for (const T &v : it) {
-    ret.insert(v);
+  while (it->hasNext()) {
+    ret.insert(std::move(it->next()));
   }
+  delete it;
   return ret;
 }
 
