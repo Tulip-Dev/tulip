@@ -22,6 +22,7 @@
 
 #include <tulip/TulipException.h>
 #include <tulip/vectorgraph.h>
+#include <atomic>
 #include <set>
 
 namespace tlp {
@@ -35,12 +36,12 @@ class Observable;
   * An Event is characterized by its type. The base Event class only carries information as to the
   *type of event, nothing specific.
   *
-  * Event::DELETE : send directly to all Observers/Listeners, not affected by
+  * Event::TLP_DELETE : send directly to all Observers/Listeners, not affected by
   *Observable::holdObservers().
-  * Event::MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to Observers
+  * Event::TLP_MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to Observers
   *and then to Listeners.
-  * Event::INFORMATION : sent only to Listeners.
-  * Event::INVALID : never sent, used internally for delaying events.
+  * Event::TLP_INFORMATION : sent only to Listeners.
+  * Event::TLP_INVALID : never sent, used internally for delaying events.
   *
   * @see Listener
   * @see Observer
@@ -144,8 +145,7 @@ public:
   * @brief Holds back all events until Observable::unholdObservers() is called.
   *
   * Listeners are not affected by this function.
-  * Once this function is called, all events heading to an Observer will be held, except DELETE
-  * events.
+  * Once this function is called, all events heading to an Observer will be held, except TLP_DELETE events.
   * The events are stored in a queue, and will be sent once Observable::unholdObservers() is called.
   *
   * It is possible to nest calls to  Observable::holdObservers() and  Observable::unholdObservers(),
@@ -180,6 +180,30 @@ public:
    */
   static unsigned int observersHoldCounter() {
     return _oHoldCounter;
+  }
+
+  /**
+   * @brief disable the whole event notification mechanism
+   * Until a call to enableEventNotification(),
+   * all sent events will be lost,
+   * except TLP_DELETE events which are synchronously processed,
+   * in order to void dangling pointers.
+   * @warning this function is a first step to allow parallel
+   * computation (of Tulip properties, for example). Use it at your
+   * own risk and avoid the sent of TLP_DELETE events whose management
+   * is not thread safe.
+   */
+  inline static void disableEventNotification() {
+    _oDisabled = true;
+  }
+
+  /**
+   * @brief re-enable the whole event notification mechanism
+   * All events sent since a previous call to enableEventNotification(),
+   * are definitively lost.
+   */
+  inline static void enableEventNotification() {
+    _oDisabled = false;
   }
 
   /**
@@ -493,9 +517,14 @@ private:
   static unsigned int _oHoldCounter;
 
   /**
-   * @brief _oInitialized use to initialize oGraph when the library is loaded (nice hack)
+   * @brief _oInitialized used to initialize oGraph when the library is loaded (nice hack)
    */
   static bool _oInitialized;
+
+  /**
+   * @brief _oDisabled used to disable the events notification
+   */
+  static bool _oDisabled;
 
   /**
   * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and
