@@ -174,7 +174,7 @@ inline auto end(Iterator<T> *it) -> decltype(it->end()) {
 template <typename T>
 inline unsigned int iteratorCount(Iterator<T> *it) {
   unsigned int count = 0;
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     ++count;
     it->next();
   }
@@ -198,7 +198,7 @@ inline unsigned int iteratorCount(Iterator<T> *it) {
 template <typename T>
 inline bool iteratorCountCheck(Iterator<T> *it, unsigned int minNbElements) {
   unsigned int count = 0;
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     ++count;
     if (count == minNbElements) {
       delete it;

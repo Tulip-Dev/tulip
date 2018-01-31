@@ -260,10 +260,10 @@ void Observable::unholdObservers() {
         if (Observable::_oAlive[be.first]) {
           Observable *sender = static_cast<Observable *>(Observable::_oPointer[be.first]);
           sender->queuedEvent = false;
-	  if (Observable::_oAlive[be.second]) {
-	    _oEventsToTreat[be.second] += 1;
-	    preparedEvents[be.second].push_back(Event(*sender, Event::TLP_MODIFICATION));
-	  }
+          if (Observable::_oAlive[be.second]) {
+            _oEventsToTreat[be.second] += 1;
+            preparedEvents[be.second].push_back(Event(*sender, Event::TLP_MODIFICATION));
+          }
         }
       }
 
@@ -413,7 +413,7 @@ void Observable::sendEvent(const Event &message) {
       if ((_oType[e] & OBSERVER) && (message.type() != Event::TLP_INFORMATION)) {
         if (_oHoldCounter == 0 || message.type() == Event::TLP_DELETE) {
           // schedule event
-	  _oEventsToTreat[backn] += 1;
+          _oEventsToTreat[backn] += 1;
           _oEventsToTreat[src] += 1;
           observerTonotify.push_back(std::move(make_pair(obs, src)));
         } else if (!queuedEvent) {
@@ -441,8 +441,8 @@ void Observable::sendEvent(const Event &message) {
   for (auto obs : listenerTonotify) {
     if (obs.second == backn && message.type() == Event::TLP_DELETE) {
       tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be "
-	"sent to it."
-		   << endl;
+                      "sent to it."
+                   << endl;
       // treat scheduled event
       _oEventsToTreat[backn] -= 2;
       continue;
@@ -452,7 +452,7 @@ void Observable::sendEvent(const Event &message) {
     _oEventsToTreat[obs.second] -= 1;
 
     if (_oAlive[obs.second]) { // other listeners/observers could be destroyed during the treat
-      // event
+                               // event
 #ifndef NDEBUG
       ++(obs.first->received);
 #endif
@@ -467,8 +467,8 @@ void Observable::sendEvent(const Event &message) {
 
     if (!_oAlive[backn]) {
       throw ObservableException("An observable has been deleted during the notifification of its "
-				"observer (ie. an observer has deleted its caller during an "
-				"update)");
+                                "observer (ie. an observer has deleted its caller during an "
+                                "update)");
     }
   }
 
@@ -490,7 +490,7 @@ void Observable::sendEvent(const Event &message) {
       _oEventsToTreat[obs.second] -= 1;
 
       if (_oAlive[obs.second]) { // other listeners/observers could be destroyed during the treat
-                                    // event
+                                 // event
 #ifndef NDEBUG
         ++(obs.first->received);
 #endif

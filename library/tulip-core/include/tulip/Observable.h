@@ -38,7 +38,8 @@ class Observable;
   *
   * Event::TLP_DELETE : send directly to all Observers/Listeners, not affected by
   *Observable::holdObservers().
-  * Event::TLP_MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to Observers
+  * Event::TLP_MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to
+  *Observers
   *and then to Listeners.
   * Event::TLP_INFORMATION : sent only to Listeners.
   * Event::TLP_INVALID : never sent, used internally for delaying events.
@@ -145,7 +146,8 @@ public:
   * @brief Holds back all events until Observable::unholdObservers() is called.
   *
   * Listeners are not affected by this function.
-  * Once this function is called, all events heading to an Observer will be held, except TLP_DELETE events.
+  * Once this function is called, all events heading to an Observer will be held, except TLP_DELETE
+  * events.
   * The events are stored in a queue, and will be sent once Observable::unholdObservers() is called.
   *
   * It is possible to nest calls to  Observable::holdObservers() and  Observable::unholdObservers(),
