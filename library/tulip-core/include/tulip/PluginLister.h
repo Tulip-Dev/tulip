@@ -156,8 +156,8 @@ public:
       PluginType *plugin = dynamic_cast<PluginType *>(it->second.info);
 
       if (plugin != nullptr &&
-	  // deprecated names are not listed
-	  it->first == it->second.info->name()) {
+          // deprecated names are not listed
+          it->first == it->second.info->name()) {
         keys.push_back(it->first);
       }
     }

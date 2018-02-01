@@ -86,8 +86,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
 std::list<std::string> tlp::PluginLister::availablePlugins() {
   std::list<std::string> keys;
 
-  for (auto it = instance()->_plugins.begin();
-       it != instance()->_plugins.end(); ++it) {
+  for (auto it = instance()->_plugins.begin(); it != instance()->_plugins.end(); ++it) {
     // deprecated names are not listed
     if (it->first == it->second.info->name())
       keys.push_back(it->first);
