@@ -113,7 +113,7 @@ public:
    */
   template <typename PluginType>
   bool pluginExists(const std::string &pluginName) {
-    std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(pluginName);
+    auto it = _plugins.find(pluginName);
     return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr));
   }
 
@@ -130,7 +130,7 @@ public:
    */
   template <typename PluginType>
   PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context) {
-    std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(name);
+    auto it = _plugins.find(name);
     if (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr)) {
       std::string pluginName = it->second.info->name();
       if (name != pluginName)
@@ -152,11 +152,12 @@ public:
   std::list<std::string> availablePlugins() {
     std::list<std::string> keys;
 
-    for (std::map<std::string, PluginDescription>::const_iterator it = _plugins.begin();
-         it != _plugins.end(); ++it) {
+    for (auto it = _plugins.begin(); it != _plugins.end(); ++it) {
       PluginType *plugin = dynamic_cast<PluginType *>(it->second.info);
 
-      if (plugin != nullptr) {
+      if (plugin != nullptr &&
+	  // deprecated names are not listed
+	  it->first == it->second.info->name()) {
         keys.push_back(it->first);
       }
     }

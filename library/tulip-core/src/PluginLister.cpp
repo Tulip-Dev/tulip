@@ -44,14 +44,12 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
     // loop over plugins
     std::list<std::string> plugins = PluginLister::availablePlugins();
 
-    for (std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
-      std::string pluginName = *it;
+    for (const string &pluginName : plugins) {
       std::list<Dependency> dependencies = PluginLister::getPluginDependencies(pluginName);
-      std::list<Dependency>::const_iterator itD = dependencies.begin();
 
       // loop over dependencies
-      for (; itD != dependencies.end(); ++itD) {
-        std::string pluginDepName = (*itD).pluginName;
+      for (const Dependency &dep : dependencies) {
+        std::string pluginDepName = dep.pluginName;
 
         if (!PluginLister::pluginExists(pluginDepName)) {
           if (loader)
@@ -65,7 +63,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
         }
 
         std::string release = PluginLister::getPluginRelease(pluginDepName);
-        std::string releaseDep = (*itD).pluginRelease;
+        const std::string &releaseDep = dep.pluginRelease;
 
         if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
             tlp::getMinor(release) < tlp::getMinor(releaseDep)) {
@@ -88,7 +86,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader *loader) {
 std::list<std::string> tlp::PluginLister::availablePlugins() {
   std::list<std::string> keys;
 
-  for (std::map<std::string, PluginDescription>::const_iterator it = instance()->_plugins.begin();
+  for (auto it = instance()->_plugins.begin();
        it != instance()->_plugins.end(); ++it) {
     // deprecated names are not listed
     if (it->first == it->second.info->name())
@@ -154,7 +152,7 @@ void tlp::PluginLister::removePlugin(const std::string &name) {
 }
 
 tlp::Plugin *tlp::PluginLister::getPluginObject(const std::string &name, PluginContext *context) {
-  std::map<std::string, PluginDescription>::const_iterator it = instance()->_plugins.find(name);
+  auto it = instance()->_plugins.find(name);
 
   if (it != instance()->_plugins.end()) {
     std::string pluginName = it->second.info->name();
@@ -162,7 +160,7 @@ tlp::Plugin *tlp::PluginLister::getPluginObject(const std::string &name, PluginC
       tlp::warning() << "Warning: '" << name << "' is a deprecated plugin name. Use '" << pluginName
                      << "' instead." << std::endl;
 
-    return (*it).second.factory->createPluginObject(context);
+    return it->second.factory->createPluginObject(context);
   }
 
   return nullptr;
