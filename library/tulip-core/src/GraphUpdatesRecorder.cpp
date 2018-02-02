@@ -334,7 +334,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
       }
 
       for (auto n : itan->second) {
-         if (nv->copy(n, n, p)) {
+        if (nv->copy(n, n, p)) {
           rn->set(n, true);
           hasNewValues = true;
         }

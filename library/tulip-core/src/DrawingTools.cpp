@@ -43,12 +43,9 @@ static void rotate(Coord &vec, double alpha) {
  * @todo take edge size into account
  * @todo create unit test to automatically check that function
  */
-static void computeGraphPoints(const std::vector<node> &nodes,
-			       const std::vector<edge> &edges,
-                               const LayoutProperty *layout,
-			       const SizeProperty *size,
-                               const DoubleProperty *rotation,
-			       const BooleanProperty *selection,
+static void computeGraphPoints(const std::vector<node> &nodes, const std::vector<edge> &edges,
+                               const LayoutProperty *layout, const SizeProperty *size,
+                               const DoubleProperty *rotation, const BooleanProperty *selection,
                                std::vector<Coord> &gPoints) {
   for (auto n : nodes) {
     if ((selection == nullptr) || selection->getNodeValue(n)) {
@@ -62,19 +59,18 @@ static void computeGraphPoints(const std::vector<node> &nodes,
       points[3].set(-nSize[0] / 2., +nSize[1] / 2., +nSize[2] / 2.);
 
       for (unsigned int i = 0; i < 4; ++i) {
-	if (rot)
-	  rotate(points[i], rot);
+        if (rot)
+          rotate(points[i], rot);
 
-	gPoints.push_back(points[i] + point);
+        gPoints.push_back(points[i] + point);
       }
     }
   }
 
-
   if (layout->numberOfNonDefaultValuatedEdges()) {
     for (auto e : edges) {
       if ((selection == nullptr) || selection->getEdgeValue(e)) {
-        for (const Coord &coord :  layout->getEdgeValue(e))
+        for (const Coord &coord : layout->getEdgeValue(e))
           gPoints.push_back(coord);
       }
     }
@@ -85,14 +81,11 @@ static void computeGraphPoints(const std::vector<node> &nodes,
 BoundingBox tlp::computeBoundingBox(const Graph *graph, const LayoutProperty *layout,
                                     const SizeProperty *size, const DoubleProperty *rotation,
                                     const BooleanProperty *selection) {
-  return computeBoundingBox(graph->nodes(), graph->edges(), layout, size, rotation,
-                            selection);
+  return computeBoundingBox(graph->nodes(), graph->edges(), layout, size, rotation, selection);
 }
 //===========================================================================
-BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes,
-				    const std::vector<edge> &edges,
-                                    const LayoutProperty *layout,
-				    const SizeProperty *size,
+BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes, const std::vector<edge> &edges,
+                                    const LayoutProperty *layout, const SizeProperty *size,
                                     const DoubleProperty *rotation,
                                     const BooleanProperty *selection) {
   std::vector<Coord> gPoints;
@@ -103,8 +96,7 @@ BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes,
   return bbox;
 }
 //===========================================================================
-pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph,
-					      const LayoutProperty *layout,
+pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutProperty *layout,
                                               const SizeProperty *size,
                                               const DoubleProperty *rotation,
                                               const BooleanProperty *selection) {
@@ -326,9 +318,11 @@ std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides,
 
   for (auto &point : points) {
     point.set(center[0] +
-	      ((point[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0],
-	      center[1] +
-	      ((point[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1]);
+                  ((point[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) *
+                      size[0],
+              center[1] +
+                  ((point[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) *
+                      size[1]);
   }
 
   return points;

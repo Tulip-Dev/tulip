@@ -186,7 +186,8 @@ void GraphAbstract::setSuperGraph(Graph *sg) {
 }
 //=========================================================================
 Iterator<Graph *> *GraphAbstract::getSubGraphs() const {
-  return new StlIterator<Graph *, vector<Graph*>::const_iterator>(subgraphs.cbegin(), subgraphs.cend());
+  return new StlIterator<Graph *, vector<Graph *>::const_iterator>(subgraphs.cbegin(),
+                                                                   subgraphs.cend());
 }
 //=========================================================================
 bool GraphAbstract::isSubGraph(const Graph *sg) const {
