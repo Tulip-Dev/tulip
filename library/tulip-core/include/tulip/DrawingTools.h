@@ -55,20 +55,6 @@ TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph, const LayoutPropert
 //======================================================================================================
 
 /**
- * Compute the bounding box of graph elements according to node positions, edges bends,
- * nodes z-rotations and sizes of elements.
- *
- * Iterator itN and itE will be deleted after the computations (i.e. no need to delete them
- * yourself).
- */
-TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE,
-                                         const LayoutProperty *layout, const SizeProperty *size,
-                                         const DoubleProperty *rotation,
-                                         const BooleanProperty *selection = nullptr);
-
-//======================================================================================================
-
-/**
  * Compute the bounding box of graph elements in corresponding vectors according to node positions,
  * edges bends,
  * nodes z-rotations and sizes of elements.
