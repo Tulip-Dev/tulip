@@ -333,18 +333,11 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
           rn = itnv->second.recordedNodes = new MutableContainer<bool>();
       }
 
-      set<node>::const_iterator itn = itan->second.begin();
-      set<node>::const_iterator itne = itan->second.end();
-
-      while (itn != itne) {
-        node n(*itn);
-
-        if (nv->copy(n, n, p)) {
+      for (auto n : itan->second) {
+         if (nv->copy(n, n, p)) {
           rn->set(n, true);
           hasNewValues = true;
         }
-
-        ++itn;
       }
 
       if (created) {
@@ -405,18 +398,11 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
           re = itnv->second.recordedEdges = new MutableContainer<bool>();
       }
 
-      set<edge>::const_iterator ite = iten->second.begin();
-      set<edge>::const_iterator itee = iten->second.end();
-
-      while (ite != itee) {
-        edge e(*ite);
-
+      for (auto e : iten->second) {
         if (nv->copy(e, e, p)) {
           re->set(e, true);
           hasNewValues = true;
         }
-
-        ++ite;
       }
 
       if (created) {
@@ -467,7 +453,7 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface *p) {
   // record updated nodes new values
   if (oldNodeDefaultValues.find(p) != oldNodeDefaultValues.end()) {
     // loop on non default valuated nodes
-    for (const node &n : p->getNonDefaultValuatedNodes()) {
+    for (auto n : p->getNonDefaultValuatedNodes()) {
       nv->copy(n, n, p);
       rn->set(n, true);
       hasNewValues = true;
@@ -518,7 +504,7 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface *p) {
   // record updated edges new values
   if (oldEdgeDefaultValues.find(p) != oldEdgeDefaultValues.end()) {
     // loop on non default valuated edges
-    for (const edge &e : p->getNonDefaultValuatedEdges()) {
+    for (auto e : p->getNonDefaultValuatedEdges()) {
       nv->copy(e, e, p);
       re->set(e, true);
       hasNewValues = true;
@@ -613,7 +599,7 @@ void GraphUpdatesRecorder::restartRecording(Graph *g) {
     newSubGraphs = &sgSet;
   }
 
-  for (Graph *sg : g->getSubGraphs()) {
+  for (Graph *sg : g->subGraphs()) {
     if (!newSubGraphs || newSubGraphs->find(sg) == newSubGraphs->end())
       restartRecording(sg);
   }
@@ -631,7 +617,7 @@ void GraphUpdatesRecorder::stopRecording(Graph *g) {
   g->removeListener(this);
   for (PropertyInterface *prop : g->getLocalObjectProperties())
     prop->removeListener(this);
-  for (Graph *sg : g->getSubGraphs())
+  for (Graph *sg : g->subGraphs())
     stopRecording(sg);
 }
 
@@ -647,12 +633,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
   while (itpg != propsToDel.end()) {
     Graph *g = itpg->first;
-    set<PropertyInterface *>::const_iterator itp = itpg->second.begin();
-    set<PropertyInterface *>::const_iterator itpe = itpg->second.end();
 
-    while (itp != itpe) {
-      g->delLocalProperty((*itp)->getName());
-      ++itp;
+    for (auto prop : itpg->second) {
+      g->delLocalProperty(prop->getName());
     }
 
     ++itpg;
@@ -673,7 +656,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     if (!undo) {
       // restore its subgraphs as subgraph of its supergraph
       // only if we are redoing its deletion
-      for (Graph *ssg : sg->getSubGraphs()) {
+      for (Graph *ssg : sg->subGraphs()) {
         g->restoreSubGraph(ssg);
       }
     }
@@ -746,7 +729,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     g->restoreSubGraph(sg);
 
     // and sg subgraphs are no longer subgraphs of g
-    for (Graph *ssg : sg->getSubGraphs()) {
+    for (Graph *ssg : sg->subGraphs()) {
       g->removeSubGraph(ssg);
       ssg->setSuperGraph(sg);
     }
@@ -783,11 +766,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
     g->storage.restoreIdsMemento(idsState);
 
   // loop on revertedEdges
-  set<edge>::const_iterator itre = revertedEdges.begin();
-
-  while (itre != revertedEdges.end()) {
-    g->reverse((*itre));
-    ++itre;
+  for (auto e : revertedEdges) {
+    g->reverse(e);
   }
 
   // loop on edgesEnds
@@ -857,13 +837,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
 
   while (itpg != propsToAdd.end()) {
     Graph *g = itpg->first;
-    set<PropertyInterface *>::const_iterator itp = itpg->second.begin();
-    set<PropertyInterface *>::const_iterator itpe = itpg->second.end();
 
-    while (itp != itpe) {
-      PropertyInterface *prop = (*itp);
+    for (auto prop : itpg->second) {
       g->addLocalProperty(prop->getName(), prop);
-      ++itp;
     }
 
     ++itpg;
@@ -1355,11 +1331,11 @@ void GraphUpdatesRecorder::addSubGraph(Graph *g, Graph *sg) {
   // cf addCloneSubGraph
   if (sg->numberOfNodes()) {
 
-    for (const node &n : sg->nodes()) {
+    for (auto n : sg->nodes()) {
       addNode(sg, n);
     }
 
-    for (const edge &e : sg->edges()) {
+    for (auto e : sg->edges()) {
       addEdge(sg, e);
     }
   }
@@ -1384,7 +1360,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph *g, Graph *sg) {
     removeGraphData(sg);
 
     // but set its subgraphs as added in its supergraph
-    for (Graph *ssg : sg->getSubGraphs()) {
+    for (Graph *ssg : sg->subGraphs()) {
       addSubGraph(g, ssg);
     }
 
@@ -1402,7 +1378,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph *g, Graph *sg) {
 }
 
 void GraphUpdatesRecorder::removeGraphData(Graph *g) {
-  for (Graph *sg : g->getSubGraphs()) {
+  for (Graph *sg : g->subGraphs()) {
     std::pair<Graph *, Graph *> p = std::make_pair(g, sg);
     std::list<std::pair<Graph *, Graph *>>::iterator it =
         std::find(addedSubGraphs.begin(), addedSubGraphs.end(), p);
@@ -1529,7 +1505,7 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface *p, node n) {
 void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface *p) {
   if (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()) {
     // first save the already existing value for all non default valuated nodes
-    for (const node &n : p->getNonDefaultValuatedNodes())
+    for (auto n : p->getNonDefaultValuatedNodes())
       beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
@@ -1583,7 +1559,7 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface *p, edge e) {
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface *p) {
   if (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()) {
     // first save the already existing value for all non default valuated edges
-    for (const edge &e : p->getNonDefaultValuatedEdges())
+    for (auto e : p->getNonDefaultValuatedEdges())
       beforeSetEdgeValue(p, e);
     // then record the old default value
     // because beforeSetEdgeValue does nothing if it has already been changed

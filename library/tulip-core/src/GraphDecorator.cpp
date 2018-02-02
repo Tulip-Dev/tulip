@@ -117,6 +117,11 @@ Iterator<Graph *> *GraphDecorator::getSubGraphs() const {
   return graph_component->getSubGraphs();
 }
 
+//============================================================
+const std::vector<Graph *> &GraphDecorator::subGraphs() const {
+  return graph_component->subGraphs();
+}
+
 //=========================================================================
 bool GraphDecorator::isSubGraph(const Graph *sg) const {
   return graph_component->isSubGraph(sg);

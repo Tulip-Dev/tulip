@@ -34,7 +34,7 @@ using namespace tlp;
  * function to test if an edge e exist in the adjacency of a node
  */
 static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
-  for (const edge &e1 : g->getOutEdges(n1)) {
+  for (auto e1 : g->getOutEdges(n1)) {
     if (e == e1) {
       return true;
     }
@@ -197,7 +197,7 @@ void GraphImpl::delNode(const node n, bool) {
   // use a stack for a dfs subgraphs propagation
   std::stack<Graph *> sgq;
 
-  for (Graph *sg : getSubGraphs()) {
+  for (Graph *sg : subGraphs()) {
     if (sg->isElement(n))
       sgq.push(sg);
   }
@@ -206,7 +206,7 @@ void GraphImpl::delNode(const node n, bool) {
   while (!sgq.empty()) {
     Graph *sg = sgq.top();
 
-    for (Graph *ssg : sg->getSubGraphs()) {
+    for (Graph *ssg : sg->subGraphs()) {
       if (ssg->isElement(n))
         sgq.push(ssg);
     }
@@ -219,11 +219,7 @@ void GraphImpl::delNode(const node n, bool) {
 
   // loop on inout edges of n
   // for notification and removal from propertyContainer
-  unsigned int nbEdges = edges.size();
-
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    edge e = edges[i];
-
+  for (auto e : edges) {
     // if e is a loop it may have been previously deleted
     if (isElement(e))
       removeEdge(e);
@@ -245,7 +241,7 @@ void GraphImpl::delEdge(const edge e, bool) {
   }
 
   // propagate to subgraphs
-  for (Graph *subgraph : getSubGraphs()) {
+  for (Graph *subgraph : subGraphs()) {
     assert(subgraph != this);
 
     if (subgraph->isElement(e))
@@ -303,7 +299,7 @@ void GraphImpl::reverse(const edge e) {
   storage.reverse(e);
 
   // propagate edge reversal on subgraphs
-  for (Graph *sg : getSubGraphs()) {
+  for (Graph *sg : subGraphs()) {
     static_cast<GraphView *>(sg)->reverseInternal(e, eEnds.first, eEnds.second);
   }
 }
@@ -340,7 +336,7 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   node nSrc = eEnds.first;
   node nTgt = eEnds.second;
 
-  for (Graph *sg : getSubGraphs()) {
+  for (Graph *sg : subGraphs()) {
     static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
 }
@@ -398,7 +394,7 @@ void GraphImpl::observeUpdates(Graph *g) {
   }
 
   // loop on subgraphs
-  for (Graph *sg : g->getSubGraphs()) {
+  for (Graph *sg : g->subGraphs()) {
     observeUpdates(sg);
   }
 }

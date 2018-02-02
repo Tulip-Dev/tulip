@@ -28,8 +28,6 @@
 
 namespace tlp {
 
-#define GRAPH_SEQ std::vector<Graph *>
-
 template <class C>
 struct Iterator;
 class PropertyManager;
@@ -41,7 +39,7 @@ class TLP_SCOPE GraphAbstract : public Graph {
   DataSet attributes;
   Graph *supergraph;
   Graph *const root;
-  GRAPH_SEQ subgraphs;
+  std::vector<Graph *> subgraphs;
   Graph *subGraphToKeep;
   // pointer to root viewMetaGraph property
   GraphProperty *metaGraphProperty;
@@ -68,6 +66,9 @@ public:
     return root;
   }
   Iterator<Graph *> *getSubGraphs() const override;
+  inline const std::vector<Graph *> &subGraphs() const override {
+    return subgraphs;
+  }
   bool isSubGraph(const Graph *sg) const override;
   bool isDescendantGraph(const Graph *sg) const override;
   Graph *getSubGraph(unsigned int id) const override;
@@ -133,6 +134,7 @@ protected:
   void setSubGraphToKeep(Graph *) override;
 
 private:
+  void delAllSubGraphs();
   // notification of addition/deletion of inherited properties
   void notifyBeforeAddInheritedProperty(const std::string &prop);
   void notifyAddInheritedProperty(const std::string &prop);

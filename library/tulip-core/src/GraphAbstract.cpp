@@ -46,7 +46,7 @@ GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
 //=========================================================================
 GraphAbstract::~GraphAbstract() {
 
-  for (Graph *sg : stableIterator(getSubGraphs())) {
+  for (Graph *sg : subgraphs) {
 
     // avoid double free
     // in a push context, a 'deleted' graph (see delSubGraph)
@@ -67,11 +67,10 @@ GraphAbstract::~GraphAbstract() {
 }
 //=========================================================================
 void GraphAbstract::clear() {
-  for (Graph *sg : stableIterator(getSubGraphs())) {
-    delAllSubGraphs(sg);
-  }
+  delAllSubGraphs();
 
-  for (const node &n : stableIterator(getNodes())) {
+  vector<node> vnodes(nodes());
+  for (auto n : vnodes) {
     delNode(n);
   }
 }
@@ -107,12 +106,10 @@ Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
 }
 //=========================================================================
 unsigned int GraphAbstract::numberOfDescendantGraphs() const {
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-  int result = numberOfSubGraphs();
+  unsigned int result = numberOfSubGraphs();
 
-  while (it != subgraphs.end()) {
-    result += (*it)->numberOfDescendantGraphs();
-    ++it;
+  for (auto sg : subgraphs) {
+    result += sg->numberOfDescendantGraphs();
   }
 
   return result;
@@ -120,7 +117,7 @@ unsigned int GraphAbstract::numberOfDescendantGraphs() const {
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
   // look for the graph we want to remove in the subgraphs
-  GRAPH_SEQ::iterator it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
+  auto it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
   assert(it != subgraphs.end());
 
@@ -132,13 +129,13 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     subgraphs.erase(it);
 
     // add toRemove subgraphs
-    for (Graph *sg : toRemove->getSubGraphs()) {
+    for (Graph *sg : toRemove->subGraphs()) {
       restoreSubGraph(sg);
     }
 
     notifyAfterDelSubGraph(toRemove);
 
-    // subGraphToKeep may have change on notifyDelSubGraph
+    // subGraphToKeep may have change on notifyAfterDelSubGraph
     // see GraphUpdatesRecorder::delSubGraph
     // in GraphUpdatesRecorder.cpp
     if (toRemove != subGraphToKeep) {
@@ -155,10 +152,18 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 }
 //=========================================================================
 void GraphAbstract::removeSubGraph(Graph *toRemove) {
-  GRAPH_SEQ::iterator it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
+  auto it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
   if (it != subgraphs.end()) {
     subgraphs.erase(it);
+  }
+}
+//=========================================================================
+void GraphAbstract::delAllSubGraphs() {
+  while (subgraphs.size()) {
+    auto sg = subgraphs[0];
+    static_cast<GraphAbstract *>(sg)->delAllSubGraphs();
+    delSubGraph(sg);
   }
 }
 //=========================================================================
@@ -167,9 +172,7 @@ void GraphAbstract::delAllSubGraphs(Graph *toRemove) {
     // this==toRemove : root graph
     return;
 
-  for (Graph *sg : stableIterator(toRemove->getSubGraphs())) {
-    static_cast<GraphAbstract *>(toRemove)->delAllSubGraphs(sg);
-  }
+  static_cast<GraphAbstract *>(toRemove)->delAllSubGraphs();
 
   delSubGraph(toRemove);
 }
@@ -183,50 +186,38 @@ void GraphAbstract::setSuperGraph(Graph *sg) {
 }
 //=========================================================================
 Iterator<Graph *> *GraphAbstract::getSubGraphs() const {
-  return new StlIterator<Graph *, GRAPH_SEQ::const_iterator>(subgraphs.begin(), subgraphs.end());
+  return new StlIterator<Graph *, vector<Graph*>::const_iterator>(subgraphs.cbegin(), subgraphs.cend());
 }
 //=========================================================================
 bool GraphAbstract::isSubGraph(const Graph *sg) const {
   return (std::find(subgraphs.begin(), subgraphs.end(), sg) != subgraphs.end());
 }
 //=========================================================================
-bool GraphAbstract::isDescendantGraph(const Graph *sg) const {
-  if (isSubGraph(sg))
+bool GraphAbstract::isDescendantGraph(const Graph *g) const {
+  if (isSubGraph(g))
     return true;
 
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-
-  while (it != subgraphs.end()) {
-    if ((*it)->isDescendantGraph(sg))
+  for (auto sg : subgraphs) {
+    if (sg->isDescendantGraph(g))
       return true;
-
-    ++it;
   }
 
   return false;
 }
 //=========================================================================
 Graph *GraphAbstract::getSubGraph(unsigned int sgId) const {
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-
-  while (it != subgraphs.end()) {
-    if ((*it)->getId() == sgId)
-      return *it;
-
-    ++it;
+  for (auto sg : subgraphs) {
+    if (sg->getId() == sgId)
+      return sg;
   }
 
   return nullptr;
 }
 //=========================================================================
 Graph *GraphAbstract::getSubGraph(const std::string &name) const {
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-
-  while (it != subgraphs.end()) {
-    if ((*it)->getName() == name)
-      return *it;
-
-    ++it;
+  for (auto sg : subgraphs) {
+    if (sg->getName() == name)
+      return sg;
   }
 
   return nullptr;
@@ -238,13 +229,9 @@ Graph *GraphAbstract::getDescendantGraph(unsigned int sgId) const {
   if (sg)
     return sg;
 
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-
-  while (it != subgraphs.end()) {
-    if ((sg = (*it)->getDescendantGraph(sgId)))
+  for (auto sg : subgraphs) {
+    if ((sg = sg->getDescendantGraph(sgId)))
       return sg;
-
-    ++it;
   }
 
   return nullptr;
@@ -256,13 +243,9 @@ Graph *GraphAbstract::getDescendantGraph(const string &name) const {
   if (sg)
     return sg;
 
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-
-  while (it != subgraphs.end()) {
-    if ((sg = (*it)->getDescendantGraph(name)))
+  for (auto sg : subgraphs) {
+    if ((sg = sg->getDescendantGraph(name)))
       return sg;
-
-    ++it;
   }
 
   return nullptr;

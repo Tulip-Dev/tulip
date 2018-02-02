@@ -41,6 +41,7 @@ public:
   void setSuperGraph(Graph *s) override;
   Graph *getRoot() const override;
   Iterator<Graph *> *getSubGraphs() const override;
+  const std::vector<Graph *> &subGraphs() const override;
   bool isSubGraph(const Graph *sg) const override;
   bool isDescendantGraph(const Graph *sg) const override;
   Graph *getSubGraph(unsigned int id) const override;

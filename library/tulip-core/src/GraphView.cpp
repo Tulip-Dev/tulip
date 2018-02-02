@@ -60,7 +60,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
       iteN = new UINTIterator<node>(it);
     }
 
-    for (const node &n : iteN) {
+    for (auto n : iteN) {
       if (filter->getNodeValue(n))
         addNode(n);
     }
@@ -71,10 +71,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
     // clone all supergraph edges
     _edges.clone(supergraph->edges());
     // and degrees of nodes
-    unsigned int nbNodes = _nodes.size();
-
-    for (unsigned int i = 0; i < nbNodes; ++i) {
-      node n = _nodes[i];
+    for (auto n : _nodes) {
       SGraphNodeData *nData = _nodeData.get(n.id);
       nData->outDegree = supergraph->outdeg(n);
       nData->inDegree = supergraph->indeg(n);
@@ -96,7 +93,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sg
       itE = new UINTIterator<edge>(it);
     }
 
-    for (const edge &e : itE) {
+    for (auto e : itE) {
       if (filter->getEdgeValue(e))
         addEdge(e);
     }
@@ -129,7 +126,7 @@ void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
     notifyReverseEdge(e);
 
     // propagate edge reversal on subgraphs
-    for (Graph *sg : getSubGraphs()) {
+    for (Graph *sg : subGraphs()) {
       static_cast<GraphView *>(sg)->reverseInternal(e, src, tgt);
     }
   }
@@ -167,13 +164,13 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt, const node new
       notifyAfterSetEnds(e);
 
       // propagate edge ends update on subgraphs
-      for (Graph *sg : getSubGraphs()) {
+      for (Graph *sg : subGraphs()) {
         static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
     } else {
       // delete e if its new ends do no belong to the graph
       // propagate edge ends update on subgraphs
-      for (Graph *sg : getSubGraphs()) {
+      for (Graph *sg : subGraphs()) {
         static_cast<GraphView *>(sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
       notifyDelEdge(e);
@@ -272,7 +269,7 @@ void GraphView::addNodes(Iterator<node> *addedNodes) {
 //----------------------------------------------------------------
 edge GraphView::addEdgeInternal(edge e) {
   _edges.add(e);
-  const std::pair<node, node> &eEnds = ends(e);
+  const std::pair<node, node> eEnds = ends(e);
   node src = eEnds.first;
   node tgt = eEnds.second;
   _nodeData.get(src.id)->outDegreeAdd(1);
@@ -402,7 +399,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     // use a stack for a dfs subgraphs propagation
     std::stack<Graph *> sgq;
 
-    for (Graph *sg : getSubGraphs()) {
+    for (Graph *sg : subGraphs()) {
 
       if (sg->isElement(n))
         sgq.push(sg);
@@ -412,7 +409,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     while (!sgq.empty()) {
       Graph *sg = sgq.top();
 
-      for (Graph *ssg : sg->getSubGraphs()) {
+      for (Graph *ssg : sg->subGraphs()) {
         if (ssg->isElement(n))
           sgq.push(ssg);
       }
@@ -441,15 +438,9 @@ void GraphView::removeEdge(const edge e) {
 }
 //----------------------------------------------------------------
 void GraphView::removeEdges(const std::vector<edge> &ee) {
-  std::vector<edge>::const_iterator ite = ee.begin();
-
-  while (ite != ee.end()) {
-    edge e = (*ite);
-
+  for (auto e : ee) {
     if (isElement(e))
       removeEdge(e);
-
-    ++ite;
   }
 }
 //----------------------------------------------------------------
@@ -459,7 +450,7 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   } else {
     assert(isElement(e));
     // propagate to subgraphs
-    for (Graph *subGraph : getSubGraphs()) {
+    for (Graph *subGraph : subGraphs()) {
       if (subGraph->isElement(e))
         subGraph->delEdge(e);
     }

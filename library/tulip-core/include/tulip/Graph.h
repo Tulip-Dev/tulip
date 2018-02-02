@@ -396,7 +396,7 @@ public:
    * @param graph The subgraph to delete.
    * @see delSubGraph() if you want to keep the descendants of the subgraph to remove.
    */
-  virtual void delAllSubGraphs(Graph *graph) = 0;
+  virtual void delAllSubGraphs(Graph *graph = nullptr) = 0;
 
   /**
    * @brief Returns the parent of the graph. If called on the root graph, it returns itself.
@@ -433,6 +433,13 @@ public:
    * @return An iterator over this graph's direct subgraphs.
    */
   virtual Iterator<Graph *> *getSubGraphs() const = 0;
+
+  /**
+   * @brief Return a const reference on the vector of subgraphs of the graph
+   * It is the fastest way to access to subgraphs, Iterators are 25% slower.
+   * @remark o(1)
+   */
+  virtual const std::vector<Graph *> &subGraphs() const = 0;
 
   /**
    * @brief This method returns the nth subgraph.
