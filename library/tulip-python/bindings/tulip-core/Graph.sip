@@ -602,7 +602,18 @@ Returns an iterator on all the subgraphs of the graph.
 %MethodCode
   sipRes = new tlp::StableIterator<tlp::Graph *>(sipCpp->getSubGraphs());
 %End
+//===========================================================================================
 
+  const std::vector<tlp::Graph*>& subGraphs() const /NoCopy/;
+%Docstring
+tlp.Graph.subGraphs()
+
+.. versionadded:: 5.2
+
+Returns the list of direct subgraphs of the graph.
+
+:rtype: list of :class:`tlp.Graph`
+%End
 //===========================================================================================
 
   bool isSubGraph(tlp::Graph* graph) const;
