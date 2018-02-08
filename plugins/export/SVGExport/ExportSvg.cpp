@@ -81,8 +81,7 @@ bool ExportSvg::writeHeader(const BoundingBox &bb) {
   return checkError();
 }
 
-bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background,
-			   bool noBackground) {
+bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background, bool noBackground) {
   // Background color
   _res.writeStartElement("rect");
   _res.writeAttribute("width", QString::number(bb.width() + 1));
