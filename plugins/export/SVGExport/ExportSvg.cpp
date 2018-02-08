@@ -81,12 +81,13 @@ bool ExportSvg::writeHeader(const BoundingBox &bb) {
   return checkError();
 }
 
-bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background) {
+bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background,
+			   bool noBackground) {
   // Background color
   _res.writeStartElement("rect");
   _res.writeAttribute("width", QString::number(bb.width() + 1));
   _res.writeAttribute("height", QString::number(bb.height() + 1));
-  _res.writeAttribute("fill", tlpColor2SvgColor(background));
+  _res.writeAttribute("fill", noBackground ? "none" : tlpColor2SvgColor(background));
   _res.writeEndElement(); // rect
   // start to add graph. First translate from Tulip coordinates to SVG coordinates
   _res.writeStartElement("g");

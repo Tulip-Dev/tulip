@@ -41,7 +41,10 @@ static const char *paramHelp[] = {
     "Indicates if edge extremities have to be exported.",
 
     // Background color
-    "Specifies the background color of the SVG file.",
+    "Specifies the background color.",
+
+    // No background
+    "Specifies if a background is needed.",
 
     // human readable
     "Adds line-breaks and indentation to empty sections between elements"
@@ -89,11 +92,12 @@ public:
     addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
     addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
-    addInParameter<bool>("Makes SVG output human readable", paramHelp[4], "true");
-    addInParameter<bool>("Export node labels", paramHelp[5], "true");
-    addInParameter<bool>("Export edge labels", paramHelp[6], "false");
-    addInParameter<bool>("Export metanode labels", paramHelp[7], "false");
-    addInParameter<bool>("Use Web Open Font Format v2", paramHelp[8], "false");
+    addInParameter<bool>("No background", paramHelp[4], "false");
+    addInParameter<bool>("Makes SVG output human readable", paramHelp[5], "true");
+    addInParameter<bool>("Export node labels", paramHelp[6], "true");
+    addInParameter<bool>("Export edge labels", paramHelp[7], "false");
+    addInParameter<bool>("Export metanode labels", paramHelp[8], "false");
+    addInParameter<bool>("Use Web Open Font Format v2", paramHelp[9], "false");
   }
 
   bool exportGraph(ostream &os) override {

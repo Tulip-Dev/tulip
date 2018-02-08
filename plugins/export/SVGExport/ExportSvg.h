@@ -47,7 +47,7 @@ class ExportSvg : public ExportInterface {
 public:
   ExportSvg(tlp::PluginProgress *pp, std::ostream &os, const bool autoformatting, const bool woff2);
   bool writeHeader(const tlp::BoundingBox &bb) override;
-  bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color &background) override;
+  bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color &background, bool noBackground) override;
   bool writeMetaGraph(const int transform_X, const int transform_Y, float scale) override;
   bool writeEndGraph() override;
   bool groupNode() override;

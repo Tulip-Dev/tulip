@@ -369,12 +369,14 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
   bool edge_size_interpolation = true;
   bool edge_labels(false), node_labels(true), metanode_labels(false);
   Color background = Color::White;
+  bool noBackground = false;
 
   if (ds != nullptr) {
     ds->get("Edge color interpolation", edge_color_interpolation);
     ds->get("Edge size interpolation", edge_size_interpolation);
     ds->get("Edge extremities", edge_extremities);
     ds->get("Background color", background);
+    ds->get("No background", noBackground);
     ds->get("Export node labels", node_labels);
     ds->get("Export edge labels", edge_labels);
     ds->get("Export metanode labels", metanode_labels);
@@ -393,7 +395,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
     return false;
   }
 
-  ret = exportint.writeGraph(graphbb, background);
+  ret = exportint.writeGraph(graphbb, background, noBackground);
 
   if (!ret) {
     if (pp->getError().empty())
