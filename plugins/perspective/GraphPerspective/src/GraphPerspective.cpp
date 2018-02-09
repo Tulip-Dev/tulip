@@ -1597,7 +1597,9 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
     // expose mode is not safe when deleting a panel
     // so hide it first
     _ui->workspace->hideExposeMode();
-    qDeleteAll(viewsToDelete);
+    foreach(View* v, viewsToDelete) {
+      _ui->workspace->delView(v);
+    }
   }
 }
 
