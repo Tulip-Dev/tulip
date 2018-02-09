@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${GLEW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipUIGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${GLEW_INCLUDE_DIR})
 
 SET(LIB_SRCS
     GeographicView.cpp
@@ -17,7 +17,6 @@ QTX_WRAP_UI(LIB_UI_HEADERS
     GeographicViewConfigWidget.ui
     ProgressWidget.ui
     AddressSelectionDialog.ui
-    ElementInformationWidget.ui
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS

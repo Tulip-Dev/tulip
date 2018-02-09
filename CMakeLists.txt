@@ -684,6 +684,7 @@ SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
 SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
 SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)
+SET(TulipUIGUIInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/src/)
 SET(TulipGUIBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/include/)
 SET(TulipPythonInclude ${PROJECT_SOURCE_DIR}/library/tulip-python/include)
 
