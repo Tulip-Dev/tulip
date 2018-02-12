@@ -54,7 +54,7 @@ MouseShowElementInfo::MouseShowElementInfo(const bool showVisualPropButton)
     connect(_ui->displayTulipProp, SIGNAL(toggled(bool)), this, SLOT(showVisualProp(bool)));
   else
     _ui->displayTulipProp->hide();
-  connect(_ui->closeButton, SIGNAL(clicked()),  this, SLOT(hideInfos()));
+  connect(_ui->closeButton, SIGNAL(clicked()), this, SLOT(hideInfos()));
 }
 
 MouseShowElementInfo::~MouseShowElementInfo() {

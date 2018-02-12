@@ -103,7 +103,7 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr
   _informationWidget->installEventFilter(this);
   ui.setupUi(_informationWidget);
   ui.displayTulipProp->hide();
-  connect(ui.closeButton, SIGNAL(clicked()),  this, SLOT(hideInfos()));
+  connect(ui.closeButton, SIGNAL(clicked()), this, SLOT(hideInfos()));
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem = new QGraphicsProxyWidget();
   _informationWidgetItem->setWidget(_informationWidget);
