@@ -103,6 +103,7 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr
   _informationWidget->installEventFilter(this);
   ui.setupUi(_informationWidget);
   ui.displayTulipProp->hide();
+  connect(ui.closeButton, SIGNAL(clicked()),  this, SLOT(hideInfos()));
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationWidgetItem = new QGraphicsProxyWidget();
   _informationWidgetItem->setWidget(_informationWidget);
@@ -119,6 +120,11 @@ void GeographicViewShowElementInfo::clear() {
       ->getGlMainWidget()
       ->setCursor(QCursor());
   _informationWidgetItem->setVisible(false);
+}
+
+void GeographicViewShowElementInfo::hideInfos() {
+  tableView()->setModel(nullptr);
+  clear();
 }
 
 QTableView *GeographicViewShowElementInfo::tableView() const {

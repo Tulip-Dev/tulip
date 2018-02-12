@@ -91,6 +91,7 @@ protected:
 private slots:
 
   void showVisualProp(bool show);
+  void hideInfos();
 };
 }
 

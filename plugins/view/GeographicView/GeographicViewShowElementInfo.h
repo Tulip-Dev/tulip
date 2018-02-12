@@ -35,6 +35,7 @@ class GlComplexPolygonItemEditor;
  * We define a specific interactor to show element graph info in eltProperties
  */
 class GeographicViewShowElementInfo : public InteractorComponent {
+  Q_OBJECT
 public:
   GeographicViewShowElementInfo();
   ~GeographicViewShowElementInfo() override;
@@ -53,6 +54,9 @@ protected:
   GlComplexPolygonItemEditor *_editor;
 
   QTableView *tableView() const;
+
+private slots:
+  void hideInfos();
 };
 }
 

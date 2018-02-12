@@ -36,6 +36,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
     GeographicViewGraphicsView.h
     ProgressWidgetGraphicsProxy.h
     GeographicViewConfigWidget.h
+    GeographicViewShowElementInfo.h
     GeolocalisationConfigWidget.h
     GoogleMaps.h
     OPTIONS ${QT_WEB_DEFINITIONS}
