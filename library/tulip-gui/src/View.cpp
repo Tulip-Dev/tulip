@@ -24,6 +24,8 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QMenu>
+#include <QMainWindow>
+#include <QStatusBar>
 
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>
@@ -86,6 +88,8 @@ void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   fillContextMenu(&menu, scenePoint);
 
   if (!menu.actions().empty()) {
+    // clean up status bar when menu is hidden
+    connect(&menu, SIGNAL(aboutToHide()), Perspective::instance()->mainWindow()->statusBar(), SLOT(clearMessage()));
     menu.move(point);
     menu.exec();
   }

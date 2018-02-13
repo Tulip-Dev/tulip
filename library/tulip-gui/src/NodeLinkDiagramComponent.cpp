@@ -21,12 +21,10 @@
 #include <QGraphicsView>
 #include <QActionGroup>
 #include <QDialog>
-#include <QMainWindow>
 #include <QMenu>
 #include <QHelpEvent>
 #include <QToolTip>
 #include <QString>
-#include <QStatusBar>
 #include <QKeyEvent>
 #include <QUrl>
 #include <QDesktopServices>
