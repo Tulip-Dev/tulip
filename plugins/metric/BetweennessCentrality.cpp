@@ -141,7 +141,6 @@ public:
         node w = S.top();
         double wD = delta.get(w.id);
         S.pop();
-        list<node>::const_iterator itn = P[w].begin();
 
         for (auto v : P[w]) {
           double vd = double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + wD);
