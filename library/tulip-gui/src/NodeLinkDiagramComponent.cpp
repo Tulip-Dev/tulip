@@ -137,11 +137,11 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj, QEvent *event) {
     url.clear();
 
   // get the property holding the urls associated to graph elements
-  StringProperty* urlProp = _urlPropName.empty() ? nullptr :
-    dynamic_cast<StringProperty *>(graph()->getProperty(_urlPropName));
+  StringProperty *urlProp =
+      _urlPropName.empty() ? nullptr
+                           : dynamic_cast<StringProperty *>(graph()->getProperty(_urlPropName));
 
-  if (event->type() == QEvent::ToolTip &&
-      (_tooltips == true || urlProp != nullptr)) {
+  if (event->type() == QEvent::ToolTip && (_tooltips == true || urlProp != nullptr)) {
 
     SelectedEntity type;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
@@ -152,39 +152,43 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj, QEvent *event) {
       node tmpNode = type.getNode();
 
       if (tmpNode.isValid()) {
-	if (urlProp)
-	  url = urlProp->getNodeValue(tmpNode);
-	if (_tooltips)
-	  ttip = NodesGraphModel::getNodeTooltip(graph(), tmpNode);
+        if (urlProp)
+          url = urlProp->getNodeValue(tmpNode);
+        if (_tooltips)
+          ttip = NodesGraphModel::getNodeTooltip(graph(), tmpNode);
       } else {
         edge tmpEdge = type.getEdge();
 
         if (tmpEdge.isValid()) {
-	  if (urlProp)
-	    url = urlProp->getEdgeValue(tmpEdge);
-	  if (_tooltips)
-	    ttip = EdgesGraphModel::getEdgeTooltip(graph(), tmpEdge);
-	}
+          if (urlProp)
+            url = urlProp->getEdgeValue(tmpEdge);
+          if (_tooltips)
+            ttip = EdgesGraphModel::getEdgeTooltip(graph(), tmpEdge);
+        }
       }
       // only http urls are valid
       if (!url.empty() && url.find("http://") != 0 && url.find("https://"))
-	url.insert(0, "http://");
+        url.insert(0, "http://");
       if (!url.empty()) {
-	// warn user that there is a web page associated to the current
-	// graph element which can be opened with a space key press
-	ttip.append(QString(ttip.isEmpty() ? "" : "\n\n")).append(QString("hit &lt;SPACE&gt; bar to open <b>")).append(tlpStringToQString(url)).append("</b>");
-	// give the focus to the parent widget
-	// to ensure to catch the space key press
-	graphicsView()->viewport()->parentWidget()->setFocus();
+        // warn user that there is a web page associated to the current
+        // graph element which can be opened with a space key press
+        ttip.append(QString(ttip.isEmpty() ? "" : "\n\n"))
+            .append(QString("hit &lt;SPACE&gt; bar to open <b>"))
+            .append(tlpStringToQString(url))
+            .append("</b>");
+        // give the focus to the parent widget
+        // to ensure to catch the space key press
+        graphicsView()->viewport()->parentWidget()->setFocus();
       }
       if (!ttip.isEmpty()) {
-	// preserve current formatting
-	ttip = QString("<p style='white-space:pre'><font size=\"-1\">").append(ttip).append(QString("</font></p>"));
-	QToolTip::showText(he->globalPos(), ttip, gl);
-	return true;
+        // preserve current formatting
+        ttip = QString("<p style='white-space:pre'><font size=\"-1\">")
+                   .append(ttip)
+                   .append(QString("</font></p>"));
+        QToolTip::showText(he->globalPos(), ttip, gl);
+        return true;
       }
-    }
-    else {
+    } else {
       // be sure to hide the tooltip if the mouse cursor
       // is not under a node or an edge
       QToolTip::hideText();
@@ -193,8 +197,8 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj, QEvent *event) {
   }
 
   // if there is a current url to open, check for a space key press
-  if (!url.empty() && (event->type() == QEvent::KeyPress)
-      && (static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space)) {
+  if (!url.empty() && (event->type() == QEvent::KeyPress) &&
+      (static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space)) {
     // open the current url
     QDesktopServices::openUrl(QUrl(tlpStringToQString(url)));
     url.clear();
@@ -652,12 +656,15 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     // add submenu to manage the url property choice
     QMenu *urlPropMenu;
     if (graph()->existProperty(_urlPropName))
-      urlPropMenu= menu->addMenu(QString("Url property").append(" (").append(tlpStringToQString(_urlPropName)).append(")"));
+      urlPropMenu = menu->addMenu(QString("Url property")
+                                      .append(" (")
+                                      .append(tlpStringToQString(_urlPropName))
+                                      .append(")"));
     else {
-      urlPropMenu= menu->addMenu("Url property");
+      urlPropMenu = menu->addMenu("Url property");
       _urlPropName.clear();
     }
-    QActionGroup* urlPropGroup = new QActionGroup(urlPropMenu);
+    QActionGroup *urlPropGroup = new QActionGroup(urlPropMenu);
     urlPropGroup->setExclusive(true);
     connect(urlPropMenu, SIGNAL(triggered(QAction *)), this, SLOT(setUrlProp(QAction *)));
     action = urlPropMenu->addAction(" None ");
@@ -672,24 +679,24 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
       StringProperty *prop = dynamic_cast<StringProperty *>(inheritedProp);
 
       if (prop != nullptr)
-	props.insert(prop->getName());
+        props.insert(prop->getName());
     }
 
     for (auto localProp : graph()->getLocalObjectProperties()) {
       StringProperty *prop = dynamic_cast<StringProperty *>(localProp);
       if (prop != nullptr)
-	props.insert(prop->getName());
+        props.insert(prop->getName());
     }
 
     // insert the StringProperty found
     for (auto propName : props) {
       // among the view... properties only viewLabel is allowed
       if (propName.find("view") != 0 || propName == "viewLabel") {
-	action = urlPropMenu->addAction(tlpStringToQString(propName));
-	urlPropGroup->addAction(action);
-	action->setCheckable(true);
-	if (_urlPropName == propName)
-	  action->setChecked(true);
+        action = urlPropMenu->addAction(tlpStringToQString(propName));
+        urlPropGroup->addAction(action);
+        action->setCheckable(true);
+        if (_urlPropName == propName)
+          action->setChecked(true);
       }
     }
 
@@ -1063,7 +1070,7 @@ bool NodeLinkDiagramComponent::hasHulls() const {
   return _hasHulls;
 }
 
-void NodeLinkDiagramComponent::setUrlProp(QAction* action) {
+void NodeLinkDiagramComponent::setUrlProp(QAction *action) {
   _urlPropName = QStringToTlpString(action->text());
   if (!graph()->existProperty(_urlPropName))
     _urlPropName.clear();

@@ -1066,7 +1066,7 @@ QString NodesGraphModel::getNodeTooltip(Graph *graph, node n) {
   const std::string &label = graph->getProperty("viewLabel")->getNodeStringValue(n);
   return QString("<b>Node #")
       .append(QString::number(n.id))
-    .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + "</i></b>)")
+      .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + "</i></b>)")
       .append("\ninput degree: ")
       .append(QString::number(graph->indeg(n)))
       .append("\noutput degree: ")
