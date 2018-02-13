@@ -29,10 +29,13 @@ class GridOptionsWidget;
 }
 
 class QDialog;
+class QAction;
 
 namespace tlp {
 class GlGrid;
 class GlCompositeHierarchyManager;
+class PropertyInterface;
+class StringProperty;
 
 class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
   Q_OBJECT
@@ -46,6 +49,8 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
   void updateGrid();
 
   bool _tooltips;
+
+  std::string _urlPropName;
 
   Ui::GridOptionsWidget *grid_ui;
 
@@ -130,6 +135,8 @@ protected slots:
   void removeNodeAndAllNeighbourNodesAndEdgesFromSelection();
   void removeExtremitiesFromSelection(bool pushGraph = true);
   void removeEdgeAndExtremitiesFromSelection();
+
+  void setUrlProp(QAction *);
 
 protected:
   bool isNode;

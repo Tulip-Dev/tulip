@@ -1064,9 +1064,9 @@ QVariant NodesGraphModel::headerData(int section, Qt::Orientation orientation, i
 
 QString NodesGraphModel::getNodeTooltip(Graph *graph, node n) {
   const std::string &label = graph->getProperty("viewLabel")->getNodeStringValue(n);
-  return QString("node #")
+  return QString("<b>Node #")
       .append(QString::number(n.id))
-      .append(label.empty() ? "" : " (" + tlpStringToQString(label) + ")")
+    .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + "</i></b>)")
       .append("\ninput degree: ")
       .append(QString::number(graph->indeg(n)))
       .append("\noutput degree: ")
@@ -1160,13 +1160,13 @@ QString EdgesGraphModel::getEdgeTooltip(Graph *graph, edge e) {
       graph->getProperty("viewLabel")->getNodeStringValue(extremities.first);
   const std::string &targetLabel =
       graph->getProperty("viewLabel")->getNodeStringValue(extremities.second);
-  return QString("edge #")
+  return QString("<b>Edge #")
       .append(QString::number(e.id))
-      .append(label.empty() ? "" : " (" + tlpStringToQString(label) + ")")
-      .append("\nsource: node #")
+      .append(label.empty() ? "</b>" : "</b> (<b><i>" + tlpStringToQString(label) + ")</b>")
+      .append("\nsource: <b>node #")
       .append(QString::number(extremities.first.id))
-      .append(sourceLabel.empty() ? "" : " (" + tlpStringToQString(sourceLabel) + ")")
-      .append("\ntarget: node #")
+      .append(sourceLabel.empty() ? "</b>" : "</b> (" + tlpStringToQString(sourceLabel) + ")")
+      .append("\ntarget: <b>node #")
       .append(QString::number(extremities.second.id))
-      .append(targetLabel.empty() ? "" : " (" + tlpStringToQString(targetLabel) + ")");
+      .append(targetLabel.empty() ? "</b>" : "</b> (" + tlpStringToQString(targetLabel) + ")");
 }

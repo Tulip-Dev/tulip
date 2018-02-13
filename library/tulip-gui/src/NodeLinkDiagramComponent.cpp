@@ -21,11 +21,15 @@
 #include <QGraphicsView>
 #include <QActionGroup>
 #include <QDialog>
+#include <QMainWindow>
 #include <QMenu>
 #include <QHelpEvent>
 #include <QToolTip>
 #include <QString>
-#include <QEvent>
+#include <QStatusBar>
+#include <QKeyEvent>
+#include <QUrl>
+#include <QDesktopServices>
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>
@@ -121,11 +125,26 @@ void NodeLinkDiagramComponent::draw() {
 
 void NodeLinkDiagramComponent::setupWidget() {
   GlMainView::setupWidget();
-  graphicsView()->installEventFilter(this); // Handle tooltip events
+  graphicsView()->scene()->installEventFilter(this); // Handle tooltip events
 }
 
 bool NodeLinkDiagramComponent::eventFilter(QObject *obj, QEvent *event) {
-  if (_tooltips == true && event->type() == QEvent::ToolTip) {
+  static string url;
+
+  if (graph() == nullptr)
+    return true;
+
+  // clear url if tooltip is no longer visible
+  if (!url.empty() && !QToolTip::isVisible())
+    url.clear();
+
+  // get the property holding the urls associated to graph elements
+  StringProperty* urlProp = _urlPropName.empty() ? nullptr :
+    dynamic_cast<StringProperty *>(graph()->getProperty(_urlPropName));
+
+  if (event->type() == QEvent::ToolTip &&
+      (_tooltips == true || urlProp != nullptr)) {
+
     SelectedEntity type;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
     GlMainWidget *gl = getGlMainWidget();
@@ -135,22 +154,53 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj, QEvent *event) {
       node tmpNode = type.getNode();
 
       if (tmpNode.isValid()) {
-        ttip = NodesGraphModel::getNodeTooltip(graph(), tmpNode);
-        QToolTip::showText(he->globalPos(), ttip, gl);
-        return true;
+	if (urlProp)
+	  url = urlProp->getNodeValue(tmpNode);
+	if (_tooltips)
+	  ttip = NodesGraphModel::getNodeTooltip(graph(), tmpNode);
       } else {
         edge tmpEdge = type.getEdge();
 
         if (tmpEdge.isValid()) {
-          ttip = EdgesGraphModel::getEdgeTooltip(graph(), tmpEdge);
-          QToolTip::showText(he->globalPos(), ttip, gl);
-          return true;
-        }
+	  if (urlProp)
+	    url = urlProp->getEdgeValue(tmpEdge);
+	  if (_tooltips)
+	    ttip = EdgesGraphModel::getEdgeTooltip(graph(), tmpEdge);
+	}
       }
-    } else { // be sure to hide the tooltip if the mouse cursor is not under a node or an edge
+      // only http urls are valid
+      if (!url.empty() && url.find("http://") != 0 && url.find("https://"))
+	url.insert(0, "http://");
+      if (!url.empty()) {
+	// warn user that there is a web page associated to the current
+	// graph element which can be opened with a space key press
+	ttip.append(QString(ttip.isEmpty() ? "" : "\n\n")).append(QString("hit &lt;SPACE&gt; bar to open <b>")).append(tlpStringToQString(url)).append("</b>");
+	// give the focus to the parent widget
+	// to ensure to catch the space key press
+	graphicsView()->viewport()->parentWidget()->setFocus();
+      }
+      if (!ttip.isEmpty()) {
+	// preserve current formatting
+	ttip = QString("<p style='white-space:pre'><font size=\"-1\">").append(ttip).append(QString("</font></p>"));
+	QToolTip::showText(he->globalPos(), ttip, gl);
+	return true;
+      }
+    }
+    else {
+      // be sure to hide the tooltip if the mouse cursor
+      // is not under a node or an edge
       QToolTip::hideText();
       event->ignore();
     }
+  }
+
+  // if there is a current url to open, check for a space key press
+  if (!url.empty() && (event->type() == QEvent::KeyPress)
+      && (static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space)) {
+    // open the current url
+    QDesktopServices::openUrl(QUrl(tlpStringToQString(url)));
+    url.clear();
+    return true;
   }
 
   // standard event processing
@@ -601,6 +651,50 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     action->setChecked(_tooltips);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(displayToolTips(bool)));
 
+    // add submenu to manage the url property choice
+    QMenu *urlPropMenu;
+    if (graph()->existProperty(_urlPropName))
+      urlPropMenu= menu->addMenu(QString("Url property").append(" (").append(tlpStringToQString(_urlPropName)).append(")"));
+    else {
+      urlPropMenu= menu->addMenu("Url property");
+      _urlPropName.clear();
+    }
+    QActionGroup* urlPropGroup = new QActionGroup(urlPropMenu);
+    urlPropGroup->setExclusive(true);
+    connect(urlPropMenu, SIGNAL(triggered(QAction *)), this, SLOT(setUrlProp(QAction *)));
+    action = urlPropMenu->addAction(" None ");
+    action->setCheckable(true);
+    urlPropGroup->addAction(action);
+    if (_urlPropName.empty())
+      action->setChecked(true);
+    action->setToolTip(QString("The graph elements have no associated web page"));
+    // get all existing StringProperty
+    std::set<std::string> props;
+    for (auto inheritedProp : graph()->getInheritedObjectProperties()) {
+      StringProperty *prop = dynamic_cast<StringProperty *>(inheritedProp);
+
+      if (prop != nullptr)
+	props.insert(prop->getName());
+    }
+
+    for (auto localProp : graph()->getLocalObjectProperties()) {
+      StringProperty *prop = dynamic_cast<StringProperty *>(localProp);
+      if (prop != nullptr)
+	props.insert(prop->getName());
+    }
+
+    // insert the StringProperty found
+    for (auto propName : props) {
+      // among the view... properties only viewLabel is allowed
+      if (propName.find("view") != 0 || propName == "viewLabel") {
+	action = urlPropMenu->addAction(tlpStringToQString(propName));
+	urlPropGroup->addAction(action);
+	action->setCheckable(true);
+	if (_urlPropName == propName)
+	  action->setChecked(true);
+      }
+    }
+
     action = menu->addAction(trUtf8("Use Z ordering"));
     action->setToolTip(
         QString("The graph elements are displayed according the ordering of their z coordinate"));
@@ -969,6 +1063,12 @@ void NodeLinkDiagramComponent::useHulls(bool hasHulls) {
 
 bool NodeLinkDiagramComponent::hasHulls() const {
   return _hasHulls;
+}
+
+void NodeLinkDiagramComponent::setUrlProp(QAction* action) {
+  _urlPropName = QStringToTlpString(action->text());
+  if (!graph()->existProperty(_urlPropName))
+    _urlPropName.clear();
 }
 
 PLUGIN(NodeLinkDiagramComponent)
