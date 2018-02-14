@@ -415,11 +415,11 @@ void Observable::sendEvent(const Event &message) {
           // schedule event
           _oEventsToTreat[backn] += 1;
           _oEventsToTreat[src] += 1;
-          observerTonotify.push_back(std::move(make_pair(obs, src)));
+          observerTonotify.push_back(make_pair(obs, src));
         } else if (!queuedEvent) {
           delayedEventAdded = true;
           OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
-            _oDelayedEvents.insert(std::move(make_pair(_n, src)));
+            _oDelayedEvents.insert(make_pair(_n, src));
           }
         }
       }
@@ -428,7 +428,7 @@ void Observable::sendEvent(const Event &message) {
         // schedule event
         _oEventsToTreat[backn] += 1;
         _oEventsToTreat[src] += 1;
-        listenerTonotify.push_back(std::move(make_pair(obs, src)));
+        listenerTonotify.push_back(make_pair(obs, src));
       }
     }
   }

@@ -32,8 +32,8 @@ using namespace std;
 using namespace tlp;
 
 namespace tlp {
-template class TLP_SCOPE VectorGraphProperty<double>::ValuesImpl;
-template class TLP_SCOPE VectorGraphProperty<node>::ValuesImpl;
+template struct TLP_SCOPE VectorGraphProperty<double>::ValuesImpl;
+template struct TLP_SCOPE VectorGraphProperty<node>::ValuesImpl;
 template class TLP_SCOPE NodeProperty<node>;
 template class TLP_SCOPE NodeProperty<double>;
 template class TLP_SCOPE EdgeProperty<node>;
