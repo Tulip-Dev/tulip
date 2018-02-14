@@ -52,7 +52,8 @@ using namespace std;
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext *)
-  : _grid(nullptr), _gridOptions(nullptr), _hasHulls(false), grid_ui(nullptr), _tturlManager(nullptr) {}
+    : _grid(nullptr), _gridOptions(nullptr), _hasHulls(false), grid_ui(nullptr),
+      _tturlManager(nullptr) {}
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
   if (grid_ui)
@@ -120,7 +121,7 @@ void NodeLinkDiagramComponent::draw() {
 void NodeLinkDiagramComponent::setupWidget() {
   GlMainView::setupWidget();
   // Tooltip events management
-  _tturlManager = new ViewToolTipAndUrlManager(this, getGlMainWidget()); 
+  _tturlManager = new ViewToolTipAndUrlManager(this, getGlMainWidget());
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {

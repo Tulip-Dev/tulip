@@ -82,8 +82,7 @@ void GeographicView::setupUi() {
   centerViewAction = new QAction("Center view", this);
   connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
 
-  _tturlManager =
-    new ViewToolTipAndUrlManager(this, geoViewGraphicsView->getGlMainWidget()); 
+  _tturlManager = new ViewToolTipAndUrlManager(this, geoViewGraphicsView->getGlMainWidget());
 }
 
 void GeographicView::viewTypeChanged(QString viewTypeName) {
@@ -131,7 +130,6 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   action = menu->addAction("Take a snapshot");
   action->setToolTip(QString("Show a dialog to save a snapshot of the current view display"));
   connect(action, SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
-
 }
 
 void GeographicView::setState(const DataSet &dataSet) {

@@ -37,17 +37,15 @@ class TLP_QT_SCOPE ViewToolTipAndUrlManager : public QObject {
   bool _tooltips;
   std::string _urlPropName;
   std::string _url;
-  
-public:
 
-  ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget* widget);
+public:
+  ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget *widget);
 
   // the functions below must be called by the associated view
   // when overloading the View class corresponding methods
   void setState(const tlp::DataSet &);
   void state(tlp::DataSet &) const;
   void fillContextMenu(QMenu *menu);
-
 
 protected slots:
   void displayToolTips(bool display);
@@ -56,7 +54,6 @@ protected slots:
 protected:
   bool eventFilter(QObject *, QEvent *e) override;
 };
-
 }
 
 #endif /* VIEW_TOOLTIP_AND_URL_MANAGER_H */
