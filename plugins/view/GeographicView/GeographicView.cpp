@@ -53,7 +53,7 @@ GeographicView::GeographicView(PluginContext *)
       sceneLayersConfigurationWidget(nullptr), centerViewAction(nullptr),
       showConfPanelAction(nullptr), useSharedLayoutProperty(true), useSharedSizeProperty(true),
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
-      mapZoomInit(0) {
+      mapZoomInit(0), _tturlManager(nullptr) {
   _viewType = GoogleRoadMap;
 }
 
@@ -81,6 +81,9 @@ void GeographicView::setupUi() {
 
   centerViewAction = new QAction("Center view", this);
   connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
+
+  _tturlManager =
+    new ViewToolTipAndUrlManager(this, geoViewGraphicsView->getGlMainWidget()); 
 }
 
 void GeographicView::viewTypeChanged(QString viewTypeName) {
@@ -123,9 +126,12 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   action = menu->addAction("Zoom -");
   action->setToolTip(QString("Increase zoom level"));
   connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
+  menu->addSeparator();
+  _tturlManager->fillContextMenu(menu);
   action = menu->addAction("Take a snapshot");
   action->setToolTip(QString("Show a dialog to save a snapshot of the current view display"));
   connect(action, SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
+
 }
 
 void GeographicView::setState(const DataSet &dataSet) {
@@ -203,6 +209,8 @@ void GeographicView::setState(const DataSet &dataSet) {
     sceneConfigurationWidget->resetChanges();
   }
 
+  _tturlManager->setState(dataSet);
+
   if (dataSet.exists("mapCenterLatitude")) {
 
     dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
@@ -250,6 +258,8 @@ DataSet GeographicView::state() const {
   if (graph()->existProperty(edgesPathsPropName)) {
     dataSet.set("edgesPathsPropertyName", edgesPathsPropName);
   }
+
+  _tturlManager->state(dataSet);
 
   return dataSet;
 }

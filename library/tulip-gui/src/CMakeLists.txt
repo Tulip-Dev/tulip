@@ -98,6 +98,7 @@ SET(SRCS
   ScientificDoubleSpinBox.cpp
   AboutTulipPage.cpp
   TulipFontIconDialog.cpp
+  ViewToolTipAndUrlManager.cpp
 )
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
@@ -225,6 +226,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/WorkspaceExposeWidget.h
   ../include/tulip/TulipFontIconDialog.h
   ../include/tulip/ShapeDialog.h
+  ../include/tulip/ViewToolTipAndUrlManager.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

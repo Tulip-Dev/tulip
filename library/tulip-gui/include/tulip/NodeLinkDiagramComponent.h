@@ -36,6 +36,7 @@ class GlGrid;
 class GlCompositeHierarchyManager;
 class PropertyInterface;
 class StringProperty;
+class ViewToolTipAndUrlManager;
 
 class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
   Q_OBJECT
@@ -47,10 +48,6 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
 
   void registerTriggers();
   void updateGrid();
-
-  bool _tooltips;
-
-  std::string _urlPropName;
 
   Ui::GridOptionsWidget *grid_ui;
 
@@ -89,7 +86,6 @@ protected slots:
   void setZOrdering(bool);
   void showGridControl();
   void fillContextMenu(QMenu *menu, const QPointF &point) override;
-  void displayToolTips(bool display);
 
   void addRemoveItemToSelection(bool pushGraph = true, bool toggleSelection = true,
                                 bool selectValue = false, bool resetSelection = false);
@@ -136,11 +132,10 @@ protected slots:
   void removeExtremitiesFromSelection(bool pushGraph = true);
   void removeEdgeAndExtremitiesFromSelection();
 
-  void setUrlProp(QAction *);
-
 protected:
   bool isNode;
   unsigned int itemId;
+  ViewToolTipAndUrlManager *_tturlManager;
 
   void graphChanged(tlp::Graph *) override;
 
@@ -150,7 +145,6 @@ protected:
   void useHulls(bool hasHulls);
   bool hasHulls() const;
   void setupWidget() override;
-  bool eventFilter(QObject *, QEvent *e) override;
   void editValue(PropertyInterface *pi);
 };
 }
