@@ -27,7 +27,6 @@
 #include <tulip/DataSet.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlComplexPolygon.h>
-#include <tulip/SnapshotDialog.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/OpenGlConfigManager.h>
 
@@ -53,7 +52,7 @@ GeographicView::GeographicView(PluginContext *)
       sceneLayersConfigurationWidget(nullptr), centerViewAction(nullptr),
       showConfPanelAction(nullptr), useSharedLayoutProperty(true), useSharedSizeProperty(true),
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
-      mapZoomInit(0), _tturlManager(nullptr) {
+      mapZoomInit(0), _tturlManager(nullptr), _viewActionsManager(nullptr) {
   _viewType = GoogleRoadMap;
 }
 
@@ -63,6 +62,7 @@ GeographicView::~GeographicView() {
   delete sceneConfigurationWidget;
   delete sceneLayersConfigurationWidget;
   delete _tturlManager;
+  delete _viewActionsManager;
 }
 
 void GeographicView::setupUi() {
@@ -84,6 +84,7 @@ void GeographicView::setupUi() {
   connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
 
   _tturlManager = new ViewToolTipAndUrlManager(this, geoViewGraphicsView->getGlMainWidget());
+  _viewActionsManager = new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true, false);
 }
 
 void GeographicView::viewTypeChanged(QString viewTypeName) {
@@ -118,8 +119,7 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
 }
 
 void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
-  menu->addAction(centerViewAction);
-  centerViewAction->setToolTip(QString("Make the view to fully display and center its contents"));
+  _viewActionsManager->fillContextMenu(menu);
   QAction *action = menu->addAction("Zoom +");
   action->setToolTip(QString("Increase zoom level"));
   connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
@@ -127,10 +127,9 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   action->setToolTip(QString("Increase zoom level"));
   connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
   menu->addSeparator();
+  menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
+  menu->addSeparator();
   _tturlManager->fillContextMenu(menu);
-  action = menu->addAction("Take a snapshot");
-  action->setToolTip(QString("Show a dialog to save a snapshot of the current view display"));
-  connect(action, SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
 }
 
 void GeographicView::setState(const DataSet &dataSet) {
@@ -496,12 +495,6 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 
   return QPixmap::fromImage(snapshotImage)
       .scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-}
-
-void GeographicView::openSnapshotDialog() {
-  SnapshotDialog dlg(this);
-  dlg.setSnapshotHasViewSizeRatio(true);
-  dlg.exec();
 }
 
 PLUGIN(GeographicView)

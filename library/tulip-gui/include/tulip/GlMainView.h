@@ -33,6 +33,7 @@ class SceneConfigWidget;
 class SceneLayersConfigWidget;
 class GlMainWidget;
 class QuickAccessBar;
+class ViewActionsManager;
 
 /**
  * @ingroup Plugins
@@ -70,11 +71,7 @@ class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
 
   tlp::GlMainWidget *_glMainWidget;
   tlp::GlOverviewGraphicsItem *_overviewItem;
-
-  QAction *_centerViewAction;
-  QAction *_forceRedrawAction;
-  QAction *_advAntiAliasingAction;
-  QAction *_snapshotAction;
+  tlp::ViewActionsManager *_viewActionsManager;
 
   QPushButton *_showOvButton, *_showQabButton;
 
@@ -151,16 +148,7 @@ public slots:
    */
   void applySettings() override;
 
-  /**
-   * @brief Display a dialog that takes a snapshot of the current scene.
-   */
-  void openSnapshotDialog();
-
   void undoCallback() override;
-
-  void setAntiAliasing(bool);
-
-  void setAdvancedAntiAliasing(bool);
 
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);

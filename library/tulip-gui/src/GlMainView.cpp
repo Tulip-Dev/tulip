@@ -33,10 +33,8 @@
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/SnapshotDialog.h>
 #include <tulip/Gl2DRect.h>
-#include <tulip/OpenGlConfigManager.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/ViewActionsManager.h>
 
 using namespace tlp;
 
@@ -51,6 +49,7 @@ GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
   delete _sceneLayersConfigurationWidget;
   delete _overviewItem;
+  delete _viewActionsManager;
 }
 
 void GlMainView::draw() {
@@ -147,39 +146,7 @@ GlOverviewGraphicsItem *GlMainView::overviewItem() const {
 void GlMainView::setupWidget() {
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
   assignNewGlMainWidget(new GlMainWidget(nullptr, this), true);
-
-  _forceRedrawAction = new QAction(trUtf8("Force redraw"), this);
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_forceRedrawAction, "Redraw the current view", "Shift+R");
-  connect(_forceRedrawAction, SIGNAL(triggered()), this, SLOT(redraw()));
-  _forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
-  _forceRedrawAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-
-  _centerViewAction = new QAction(trUtf8("Center view"), this);
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(
-      _centerViewAction, "Make the view to fully display and center its contents", "Shif+C");
-  connect(_centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
-  _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
-  _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-
-  _snapshotAction = new QAction(trUtf8("Take a snapshot"), this);
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(
-      _snapshotAction, "Show a dialog to save a snapshot of the current view display", "Shift+P");
-  connect(_snapshotAction, SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
-  _snapshotAction->setShortcut(tr("Ctrl+Shift+P"));
-  _snapshotAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-
-  _advAntiAliasingAction = new QAction(trUtf8("Advanced anti-aliasing"), this);
-  _advAntiAliasingAction->setToolTip(QString("Enable to use a better but more expensive technique "
-                                             "of anti-aliasing (needs off screen rendering)"));
-  _advAntiAliasingAction->setCheckable(true);
-  _advAntiAliasingAction->setChecked(_glMainWidget->advancedAntiAliasingActivated());
-  connect(_advAntiAliasingAction, SIGNAL(triggered(bool)), this,
-          SLOT(setAdvancedAntiAliasing(bool)));
-
-  graphicsView()->addAction(_centerViewAction);
-  graphicsView()->addAction(_forceRedrawAction);
-  graphicsView()->addAction(_advAntiAliasingAction);
-  graphicsView()->addAction(_snapshotAction);
+  _viewActionsManager = new ViewActionsManager(this, _glMainWidget, false);
 }
 
 GlMainWidget *GlMainView::getGlMainWidget() const {
@@ -387,11 +354,6 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) const {
       _glMainWidget->createPicture(realSize.width(), realSize.height(), false));
 }
 
-void GlMainView::openSnapshotDialog() {
-  SnapshotDialog dlg(this, graphicsView()->window());
-  dlg.exec();
-}
-
 void GlMainView::undoCallback() {
   float gvWidth = graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width
@@ -401,10 +363,7 @@ void GlMainView::undoCallback() {
 }
 
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
-  menu->addAction(trUtf8("View"))->setEnabled(false);
-  menu->addSeparator();
-  menu->addAction(_forceRedrawAction);
-  menu->addAction(_centerViewAction);
+  _viewActionsManager->fillContextMenu(menu);
 
   QAction *viewOrtho = menu->addAction(trUtf8("Use orthogonal projection"));
   viewOrtho->setToolTip(QString("Enable to switch between true perspective and orthogonal"));
@@ -412,14 +371,6 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   viewOrtho->setChecked(_glMainWidget->getScene()->isViewOrtho());
   connect(viewOrtho, SIGNAL(triggered(bool)), this, SLOT(setViewOrtho(bool)));
 
-  QAction *antiAliasing = menu->addAction(trUtf8("Anti-aliasing"));
-  antiAliasing->setToolTip(QString("Improve line rendering quality"));
-  antiAliasing->setCheckable(true);
-  antiAliasing->setChecked(OpenGlConfigManager::getInst().antiAliasing());
-  connect(antiAliasing, SIGNAL(triggered(bool)), this, SLOT(setAntiAliasing(bool)));
-
-  menu->addAction(_advAntiAliasingAction);
-  menu->addAction(_snapshotAction);
   menu->addSeparator();
   menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
   menu->addSeparator();
@@ -440,22 +391,6 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
 
 void GlMainView::applySettings() {
   _sceneConfigurationWidget->applySettings();
-}
-
-void GlMainView::setAntiAliasing(bool aa) {
-  OpenGlConfigManager::getInst().setAntiAliasing(aa);
-  _advAntiAliasingAction->setVisible(aa);
-
-  if (_advAntiAliasingAction->isChecked()) {
-    _advAntiAliasingAction->setChecked(false);
-  } else {
-    draw();
-  }
-}
-
-void GlMainView::setAdvancedAntiAliasing(bool aaa) {
-  _glMainWidget->setAdvancedAntiAliasing(aaa);
-  draw();
 }
 
 bool GlMainView::eventFilter(QObject *obj, QEvent *event) {

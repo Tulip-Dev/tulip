@@ -25,6 +25,7 @@
 #include <tulip/SceneLayersConfigWidget.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
+#include <tulip/ViewActionsManager.h>
 #include <tulip/ViewToolTipAndUrlManager.h>
 
 #include <QGraphicsScene>
@@ -149,8 +150,6 @@ public slots:
   void zoomOut();
   void currentZoomChanged();
 
-  void openSnapshotDialog();
-
 protected slots:
 
   void fillContextMenu(QMenu *, const QPointF &) override;
@@ -182,6 +181,7 @@ private:
   double mapCenterLatitudeInit, mapCenterLongitudeInit;
   int mapZoomInit;
   ViewToolTipAndUrlManager *_tturlManager;
+  ViewActionsManager *_viewActionsManager;
 };
 }
 
