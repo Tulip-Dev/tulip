@@ -60,6 +60,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
     delete grid_ui->tableView->itemDelegate();
 
   delete grid_ui;
+  delete _tturlManager;
 }
 
 void NodeLinkDiagramComponent::updateGrid() {

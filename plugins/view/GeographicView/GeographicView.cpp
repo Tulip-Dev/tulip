@@ -62,6 +62,7 @@ GeographicView::~GeographicView() {
   delete geoViewConfigWidget;
   delete sceneConfigurationWidget;
   delete sceneLayersConfigurationWidget;
+  delete _tturlManager;
 }
 
 void GeographicView::setupUi() {
