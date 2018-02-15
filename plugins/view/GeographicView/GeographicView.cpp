@@ -84,7 +84,8 @@ void GeographicView::setupUi() {
   connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
 
   _tturlManager = new ViewToolTipAndUrlManager(this, geoViewGraphicsView->getGlMainWidget());
-  _viewActionsManager = new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true, false);
+  _viewActionsManager =
+      new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true, false);
 }
 
 void GeographicView::viewTypeChanged(QString viewTypeName) {
