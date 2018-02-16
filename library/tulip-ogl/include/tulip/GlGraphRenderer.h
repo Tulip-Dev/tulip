@@ -88,8 +88,8 @@ public:
   }
 
 protected:
-  void visitNodes(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities = false);
-  void visitEdges(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities = false);
+  void visitNodes(Graph *graph, GlSceneVisitor *visitor);
+  void visitEdges(Graph *graph, GlSceneVisitor *visitor);
 
   const GlGraphInputData *inputData;
 

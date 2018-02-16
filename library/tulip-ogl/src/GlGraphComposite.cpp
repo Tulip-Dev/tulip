@@ -21,10 +21,8 @@
 #include <tulip/GlXMLTools.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
-#include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlVertexArrayVisitor.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlGraphHighDetailsRenderer.h>

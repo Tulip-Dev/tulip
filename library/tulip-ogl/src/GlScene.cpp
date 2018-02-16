@@ -27,7 +27,6 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
-#include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlSelectSceneVisitor.h>
@@ -178,16 +177,10 @@ void GlScene::draw() {
   * If LOD Calculator need entities to compute LOD, we use visitor system
   */
   if (lodCalculator->needEntities()) {
-    GlLODSceneVisitor *lodVisitor;
-
-    lodVisitor = new GlLODSceneVisitor(lodCalculator, nullptr);
-
     for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
          ++it) {
-      it->second->acceptVisitor(lodVisitor);
+      it->second->acceptVisitor(lodCalculator);
     }
-
-    delete lodVisitor;
   }
 
   lodCalculator->compute(viewport, viewport);
@@ -774,20 +767,16 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int w, in
   selectLODCalculator->clear();
 
   // Collect entities if needed
-  GlLODSceneVisitor *lodVisitor = new GlLODSceneVisitor(selectLODCalculator, nullptr);
-
   if (layerInScene) {
     if (selectLODCalculator->needEntities()) {
       for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin();
            it != layersList.end(); ++it) {
-        it->second->acceptVisitor(lodVisitor);
+        it->second->acceptVisitor(selectLODCalculator);
       }
     }
   } else {
-    layer->acceptVisitor(lodVisitor);
+    layer->acceptVisitor(selectLODCalculator);
   }
-
-  delete lodVisitor;
 
   Vector<int, 4> selectionViewport;
   selectionViewport[0] = x;

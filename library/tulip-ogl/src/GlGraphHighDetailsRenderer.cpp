@@ -21,10 +21,8 @@
 #include <tulip/NumericProperty.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
-#include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlVertexArrayVisitor.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlEdge.h>
@@ -218,9 +216,8 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   // LOD computation
   if (lodCalculator->needEntities()) {
-    GlLODSceneVisitor visitor(lodCalculator, inputData);
-    visitor.visit(fakeScene->getLayer("fakeLayer"));
-    visitGraph(&visitor);
+    lodCalculator->visit(fakeScene->getLayer("fakeLayer"));
+    visitGraph(lodCalculator);
   }
 
   if (!selectionDrawActivate) {
@@ -231,24 +228,24 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   LayersLODVector &layersLODVector = lodCalculator->getResult();
 
-  bool vertexArrayManagerActivated = inputData->getGlVertexArrayManager()->isActivated();
+  auto vertexArrayManager = inputData->getGlVertexArrayManager();
+  bool vertexArrayManagerActivated = vertexArrayManager->isActivated();
 
   if (vertexArrayManagerActivated) {
     // VertexArrayManager begin
     if (!selectionDrawActivate) {
       // inputData->getGlVertexArrayManager()->activate(true);
-      inputData->getGlVertexArrayManager()->beginRendering();
+      vertexArrayManager->beginRendering();
       inputData->getGlGlyphRenderer()->startRendering();
     } else {
-      inputData->getGlVertexArrayManager()->activate(false);
+      vertexArrayManager->activate(false);
     }
   }
 
   // VertexArrayManager update
-  if (inputData->getGlVertexArrayManager()->haveToCompute()) {
-    GlVertexArrayVisitor vertexArrayVisitor(inputData);
-    visitGraph(&vertexArrayVisitor, true);
-    inputData->getGlVertexArrayManager()->setHaveToComputeAll(false);
+  if (vertexArrayManager->haveToCompute()) {
+    visitGraph(vertexArrayManager, true);
+    vertexArrayManager->setHaveToComputeAll(false);
   }
 
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
@@ -520,12 +517,12 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   if (!selectionDrawActivate) {
     if (vertexArrayManagerActivated) {
-      inputData->getGlVertexArrayManager()->endRendering();
+      vertexArrayManager->endRendering();
       inputData->getGlGlyphRenderer()->endRendering();
     }
   } else {
     selectionDrawActivate = false;
-    inputData->getGlVertexArrayManager()->activate(true);
+    vertexArrayManager->activate(true);
     OpenGlConfigManager::getInst().activateAntiAliasing();
     return;
   }

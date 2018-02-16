@@ -638,7 +638,7 @@ void GlVertexArrayManager::activate(bool act) {
   activated = act;
 }
 
-void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
+void GlVertexArrayManager::visit(GlEdge *glEdge) {
   edge e(glEdge->id);
   const pair<node, node> ends = graph->ends(e);
   node src = ends.first;
@@ -764,7 +764,7 @@ void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
   }
 }
 
-void GlVertexArrayManager::addNode(GlNode *node) {
+void GlVertexArrayManager::visit(GlNode *node) {
   // pointsCoordsArray and pointsColorsArray
   // are updated in the ordering of graph->nodes
   if (toComputeLayout) {

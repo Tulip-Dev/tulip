@@ -41,7 +41,6 @@ INSTALL(FILES
   tulip/GlLine.h
   tulip/GlLines.h
   tulip/GlLODCalculator.h
-  tulip/GlLODSceneVisitor.h
   tulip/GlMetaNodeRenderer.h
   tulip/GlNode.h
   tulip/GlNominativeAxis.h
@@ -69,7 +68,6 @@ INSTALL(FILES
   tulip/GlTools.h
   tulip/GlTriangle.h
   tulip/GlVertexArrayManager.h
-  tulip/GlVertexArrayVisitor.h
   tulip/GlXMLTools.h
   tulip/Glyph.h
   tulip/GlyphManager.h

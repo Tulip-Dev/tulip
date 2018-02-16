@@ -26,6 +26,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/Observable.h>
+#include <tulip/GlSceneVisitor.h>
 
 #include <vector>
 
@@ -46,7 +47,8 @@ class DoubleProperty;
  *
  * Class used to render edges/nodes with vertex array
  */
-class TLP_GL_SCOPE GlVertexArrayManager : private Observable {
+ class TLP_GL_SCOPE GlVertexArrayManager
+   : public GlSceneVisitor, private Observable {
 
 public:
   /**
@@ -56,6 +58,21 @@ public:
   GlVertexArrayManager(GlGraphInputData *inputData);
 
   ~GlVertexArrayManager() override;
+
+  /**
+   * Method used for GlSimpleEntity
+   */
+  void visit(GlSimpleEntity *) override {}
+
+  /**
+   * Method used for GlNodes (and GlMetaNodes)
+   */
+  void visit(GlNode *glNode) override;
+
+  /**
+   * Method used for GlEdges
+   */
+  void visit(GlEdge *glEdge) override;
 
   /**
    * Call this function when you want to change input data used by this GlVertexArrayManager
@@ -97,17 +114,6 @@ public:
    * This function draw needed entities
    */
   void endRendering();
-
-  /**
-   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need
-   * to render an edge
-   */
-  void addEdge(GlEdge *edge);
-  /**
-   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need
-   * to render a node
-   */
-  void addNode(GlNode *node);
 
   /**
    * You can call this function to pause rendering

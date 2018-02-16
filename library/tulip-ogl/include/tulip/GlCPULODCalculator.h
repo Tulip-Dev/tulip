@@ -66,14 +66,10 @@ public:
   void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
 
   /**
-   * Reserve memory to store nodes LOD, this function is an optimisation function
+   * Reserve memory to store nodes and edges LOD
+   * this function is an optimisation function
    */
-  void reserveMemoryForNodes(unsigned int numberOfNodes) override;
-
-  /**
-   * Reserve memory to store edges LOD, this function is an optimisation function
-   */
-  void reserveMemoryForEdges(unsigned int numberOfEdges) override;
+  void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges);
 
   /**
    * Compute all bounding boxes

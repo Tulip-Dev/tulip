@@ -20,10 +20,8 @@
 #include <tulip/GraphProperty.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
-#include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlVertexArrayVisitor.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
@@ -44,33 +42,38 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
   if (!graph)
     return;
 
-  visitNodes(graph, visitor, visitHiddenEntities);
-  visitEdges(graph, visitor, visitHiddenEntities);
+  unsigned int nbNodes = graph->numberOfNodes();
+  unsigned int nbEdges = graph->numberOfEdges();
+  if (!visitHiddenEntities && !inputData->parameters->isViewMetaLabel())  {
+    if (!inputData->parameters->isDisplayNodes() &&
+	!inputData->parameters->isViewNodeLabel())
+      nbNodes = 0;
+    if (!inputData->parameters->isDisplayEdges() &&
+	!inputData->parameters->isViewEdgeLabel())
+      nbEdges = 0;
+  }
+  visitor->reserveMemoryForGraphElts(nbNodes, nbEdges);
+  if (nbNodes)
+    visitNodes(graph, visitor);
+  if (nbEdges)
+    visitEdges(graph, visitor);
 }
 
-void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities) {
-  if (inputData->parameters->isDisplayNodes() || inputData->parameters->isViewNodeLabel() ||
-      inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    visitor->reserveMemoryForNodes(graph->numberOfNodes());
-    auto nodes = graph->nodes();
-    unsigned int nbNodes = nodes.size();
-    for (unsigned int i = 0; i < nbNodes; ++i) {
-      GlNode glNode(nodes[i], i);
-      visitor->visit(&glNode);
-    }
+void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor) {
+  auto nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    GlNode glNode(nodes[i], i);
+    visitor->visit(&glNode);
   }
 }
 
-void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor, bool visitHiddenEntities) {
-  if (inputData->parameters->isDisplayEdges() || inputData->parameters->isViewEdgeLabel() ||
-      inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    visitor->reserveMemoryForEdges(graph->numberOfEdges());
-    auto edges = graph->edges();
-    unsigned int nbEdges = edges.size();
-    for (unsigned int i = 0; i < nbEdges; ++i) {
-      GlEdge glEdge(edges[i], i);
-      visitor->visit(&glEdge);
-    }
+void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor) {
+  auto edges = graph->edges();
+  unsigned int nbEdges = edges.size();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
+    GlEdge glEdge(edges[i], i);
+    visitor->visit(&glEdge);
   }
 }
 }

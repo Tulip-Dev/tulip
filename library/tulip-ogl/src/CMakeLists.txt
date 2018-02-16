@@ -41,7 +41,6 @@ SET(tulip-ogl_LIB_SRCS
   GlLayer.cpp
   GlLine.cpp
   GlLines.cpp
-  GlLODSceneVisitor.cpp
   GlMetaNodeRenderer.cpp
   GlNode.cpp
   GlNominativeAxis.cpp
@@ -69,7 +68,6 @@ SET(tulip-ogl_LIB_SRCS
   GlTools.cpp
   GlTriangle.cpp
   GlVertexArrayManager.cpp
-  GlVertexArrayVisitor.cpp
   GlXMLTools.cpp
   Glyph.cpp
   GlyphManager.cpp

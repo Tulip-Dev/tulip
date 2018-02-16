@@ -23,9 +23,14 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <climits>
-#include <tulip/BoundingBox.h>
-
 #include <vector>
+
+#include <tulip/BoundingBox.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlLayer.h>
 
 namespace tlp {
 
@@ -77,13 +82,46 @@ typedef std::vector<LayerLODUnit> LayersLODVector;
 /**
  * Class use to calculate lod of scene entities
  */
-class TLP_GL_SCOPE GlLODCalculator {
+class TLP_GL_SCOPE GlLODCalculator : public GlSceneVisitor {
 
 public:
   GlLODCalculator() : glScene(nullptr), inputData(nullptr), attachedLODCalculator(nullptr) {}
   virtual ~GlLODCalculator() {}
   virtual GlLODCalculator *clone() = 0;
 
+  /**
+   * Visit a GlSimpleEntity
+   */
+  void visit(GlSimpleEntity *entity) override {
+    addSimpleEntityBoundingBox(entity, entity->getBoundingBox());
+  }
+
+  /**
+   * Visit a node
+   */
+  void visit(GlNode *glNode) override {
+    addNodeBoundingBox(glNode->id, glNode->pos,
+		       glNode->getBoundingBox(inputData));
+  }
+  /**
+   * Visit an Edge
+   */
+  void visit(GlEdge *glEdge) override {
+    addEdgeBoundingBox(glEdge->id, glEdge->pos,
+		       glEdge->getBoundingBox(inputData));
+  }
+  /**
+   * Visit a layer
+   */
+  void visit(GlLayer *layer) override {
+    beginNewCamera(&layer->getCamera());
+  }
+
+  /**
+   * Reserve memory to store nodes and edges LOD
+   */
+  void reserveMemoryForGraphElts(unsigned int /*nbNodes*/,
+				 unsigned int /*nbEdges*/) override {}
   /**
    * Set scene use by this LOD calculator
    */
@@ -132,16 +170,6 @@ public:
    * Record a new edge in current camera context
    */
   virtual void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) = 0;
-
-  /**
-   * Reserve memory to store nodes LOD
-   */
-  virtual void reserveMemoryForNodes(unsigned int) {}
-
-  /**
-   * Reserve memory to store edges LOD
-   */
-  virtual void reserveMemoryForEdges(unsigned int) {}
 
   /**
    * Compute all lod
