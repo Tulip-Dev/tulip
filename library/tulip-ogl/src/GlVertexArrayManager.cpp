@@ -305,7 +305,7 @@ void GlVertexArrayManager::beginRendering() {
     quadsCoordsArray.reserve(4 * nbEdges);
     pointsCoordsArray.reserve(nbNodes + nbEdges);
     linesIndexArray.reserve(2 * nbEdges);
-    edgeInfosVector.resize(nbEdges);
+    edgeInfosVector.reserve(nbEdges);
 
     vectorLayoutSizeInit = true;
   }
@@ -639,7 +639,6 @@ void GlVertexArrayManager::activate(bool act) {
 }
 
 void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
-
   edge e(glEdge->id);
   const pair<node, node> ends = graph->ends(e);
   node src = ends.first;
@@ -652,6 +651,11 @@ void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
     vector<Coord> vertices;
     size_t numberOfVertices =
         glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices);
+
+    // resize edgeInfosVector if needed
+    // as the capacity has been fixed in beginRendering()
+    if (edgeInfosVector.size() != edgeInfosVector.capacity())
+      edgeInfosVector.resize(edgeInfosVector.capacity());
 
     if (numberOfVertices != 0) {
       size_t lastIndex = linesCoordsArray.size();
@@ -667,15 +671,8 @@ void GlVertexArrayManager::addEdge(GlEdge *glEdge) {
       Size edgeSize;
       float maxSrcSize, maxTgtSize;
 
-      if (srcSize[0] >= srcSize[1])
-        maxSrcSize = srcSize[0];
-      else
-        maxSrcSize = srcSize[1];
-
-      if (tgtSize[0] >= tgtSize[1])
-        maxTgtSize = tgtSize[0];
-      else
-        maxTgtSize = tgtSize[1];
+      maxSrcSize = std::max(srcSize[0], srcSize[1]);
+      maxTgtSize = std::max(tgtSize[0], tgtSize[1]);
 
       glEdge->getEdgeSize(inputData, e, srcSize, tgtSize, maxSrcSize, maxTgtSize, edgeSize);
 
