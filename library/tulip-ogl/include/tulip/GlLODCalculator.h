@@ -100,15 +100,13 @@ public:
    * Visit a node
    */
   void visit(GlNode *glNode) override {
-    addNodeBoundingBox(glNode->id, glNode->pos,
-		       glNode->getBoundingBox(inputData));
+    addNodeBoundingBox(glNode->id, glNode->pos, glNode->getBoundingBox(inputData));
   }
   /**
    * Visit an Edge
    */
   void visit(GlEdge *glEdge) override {
-    addEdgeBoundingBox(glEdge->id, glEdge->pos,
-		       glEdge->getBoundingBox(inputData));
+    addEdgeBoundingBox(glEdge->id, glEdge->pos, glEdge->getBoundingBox(inputData));
   }
   /**
    * Visit a layer
@@ -120,8 +118,7 @@ public:
   /**
    * Reserve memory to store nodes and edges LOD
    */
-  void reserveMemoryForGraphElts(unsigned int /*nbNodes*/,
-				 unsigned int /*nbEdges*/) override {}
+  void reserveMemoryForGraphElts(unsigned int /*nbNodes*/, unsigned int /*nbEdges*/) override {}
   /**
    * Set scene use by this LOD calculator
    */

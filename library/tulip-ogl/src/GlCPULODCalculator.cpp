@@ -67,8 +67,7 @@ void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
   currentLayerLODUnit->edgesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
 }
 
-void GlCPULODCalculator::reserveMemoryForGraphElts(unsigned int nbNodes,
-						   unsigned int nbEdges) {
+void GlCPULODCalculator::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
   currentLayerLODUnit->nodesLODVector.resize(nbNodes);
   currentLayerLODUnit->edgesLODVector.resize(nbEdges);
 }

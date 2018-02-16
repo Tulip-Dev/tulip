@@ -47,8 +47,7 @@ class DoubleProperty;
  *
  * Class used to render edges/nodes with vertex array
  */
- class TLP_GL_SCOPE GlVertexArrayManager
-   : public GlSceneVisitor, private Observable {
+class TLP_GL_SCOPE GlVertexArrayManager : public GlSceneVisitor, private Observable {
 
 public:
   /**

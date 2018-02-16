@@ -44,12 +44,10 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
 
   unsigned int nbNodes = graph->numberOfNodes();
   unsigned int nbEdges = graph->numberOfEdges();
-  if (!visitHiddenEntities && !inputData->parameters->isViewMetaLabel())  {
-    if (!inputData->parameters->isDisplayNodes() &&
-	!inputData->parameters->isViewNodeLabel())
+  if (!visitHiddenEntities && !inputData->parameters->isViewMetaLabel()) {
+    if (!inputData->parameters->isDisplayNodes() && !inputData->parameters->isViewNodeLabel())
       nbNodes = 0;
-    if (!inputData->parameters->isDisplayEdges() &&
-	!inputData->parameters->isViewEdgeLabel())
+    if (!inputData->parameters->isDisplayEdges() && !inputData->parameters->isViewEdgeLabel())
       nbEdges = 0;
   }
   visitor->reserveMemoryForGraphElts(nbNodes, nbEdges);
