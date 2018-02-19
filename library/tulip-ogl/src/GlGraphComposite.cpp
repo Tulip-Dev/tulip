@@ -78,7 +78,7 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
   graphRenderer->visitGraph(&bbVisitor);
   boundingBox = bbVisitor.getBoundingBox();
 
-  if (boundingBox.isValid())
+  if (visitor && boundingBox.isValid())
     visitor->visit(this);
 }
 
