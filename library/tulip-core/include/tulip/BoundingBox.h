@@ -20,6 +20,7 @@
 #ifndef Tulip_BOUNDINGBOX_H
 #define Tulip_BOUNDINGBOX_H
 
+#include <cassert>
 #include <tulip/Vector.h>
 #include <tulip/tulipconf.h>
 
@@ -61,7 +62,6 @@ namespace tlp {
   @endverbatim
  *
  *
- * Author : <a href="http://tulip.labri.fr">Tulip team</a>
  */
 struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 
@@ -87,28 +87,41 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   *
   * @return The center of the bounding box :Vec3f
   **/
-  Vec3f center() const;
+  inline Vec3f center() const {
+    assert(isValid());
+    return ((*this)[0] + (*this)[1]) / 2.f;
+  }
+
 
   /**
   * @brief Returns the width of the bounding box
   * An assertion is raised in debug mode if the BoundingBox is not valid.
   *
   **/
-  float width() const;
+  inline float width() const {
+    assert(isValid());
+    return ((*this)[1][0] - (*this)[0][0]);
+  }
 
   /**
   * @brief Returns the height of the bounding box
   * An assertion is raised in debug mode if the bounding box is not valid.
   *
   **/
-  float height() const;
+  inline float height() const  {
+    assert(isValid());
+    return ((*this)[1][2] - (*this)[0][2]);
+  }
 
   /**
   * @brief Returns the depth of the bounding box
   * An assertion is raised in debug mode if the bounding box is not valid.
   *
   **/
-  float depth() const;
+  inline float depth() const {
+    assert(isValid());
+    return ((*this)[1][2] - (*this)[0][2]);
+  }
 
   /**
   * @brief Expands the bounding box to one containing the vector passed as parameter.
@@ -118,6 +131,15 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @return void
   **/
   void expand(const tlp::Vec3f &coord);
+
+  /**
+  * @brief Expands the bounding box to one containing the bounding box passed as parameter.
+  * If the parameter is inside the bounding box, it remains unchanged.
+  *
+  * @param bb A bounding box.
+  * @return void
+  **/
+  void expand(const tlp::BoundingBox &bb, bool noCheck = false);
 
   /**
   * @brief Translates the bounding box by the displacement given by the vector passed as parameter.

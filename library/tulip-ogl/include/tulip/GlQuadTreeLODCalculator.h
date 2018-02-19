@@ -125,6 +125,7 @@ protected:
   bool haveToCompute;
   bool haveToInitObservers;
 
+  bool noNodeBBCheck, noEdgeBBCheck, noEntityBBCheck;
   BoundingBox nodesGlobalBoundingBox;
   BoundingBox edgesGlobalBoundingBox;
   BoundingBox entitiesGlobalBoundingBox;

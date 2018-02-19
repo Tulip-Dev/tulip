@@ -41,9 +41,7 @@ public:
   /**
    * Constructor
    */
-  GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : inputData(inputData) {
-    threadSafe = true;
-  }
+ GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : noBBCheck(false), inputData(inputData) {}
 
   /**
    * Method used for GlSimpleEntity
@@ -66,6 +64,7 @@ public:
   }
 
 private:
+  bool noBBCheck;
   BoundingBox boundingBox;
   GlGraphInputData *inputData;
 };

@@ -31,23 +31,23 @@ void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
     BoundingBox &&bb = entity->getBoundingBox();
 
     if (bb.isValid()) {
-      boundingBox.expand(bb[0]);
-      boundingBox.expand(bb[1]);
+      boundingBox.expand(bb, noBBCheck);
+      noBBCheck = true;
     }
   }
 }
 
 void GlBoundingBoxSceneVisitor::visit(GlNode *glNode) {
   BoundingBox &&bb = glNode->getBoundingBox(inputData);
-
-  boundingBox.expand(bb[0]);
-  boundingBox.expand(bb[1]);
+  boundingBox.expand(bb, noBBCheck);
+  noBBCheck = true;
 }
 
 void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
   BoundingBox &&bb = glEdge->getBoundingBox(inputData);
 
-  boundingBox.expand(bb[0]);
-  boundingBox.expand(bb[1]);
+  boundingBox.expand(bb, noBBCheck);
+  noBBCheck = true;
 }
+
 }

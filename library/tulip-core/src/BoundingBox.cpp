@@ -48,26 +48,6 @@ BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max) {
   assert(isValid());
 }
 
-Vec3f BoundingBox::center() const {
-  assert(isValid());
-  return ((*this)[0] + (*this)[1]) / 2.f;
-}
-
-float BoundingBox::width() const {
-  assert(isValid());
-  return ((*this)[1][0] - (*this)[0][0]);
-}
-
-float BoundingBox::height() const {
-  assert(isValid());
-  return ((*this)[1][1] - (*this)[0][1]);
-}
-
-float BoundingBox::depth() const {
-  assert(isValid());
-  return ((*this)[1][2] - (*this)[0][2]);
-}
-
 void BoundingBox::expand(const tlp::Vec3f &coord) {
   if (!isValid()) {
     (*this)[0] = coord;
@@ -76,6 +56,14 @@ void BoundingBox::expand(const tlp::Vec3f &coord) {
     (*this)[0] = tlp::minVector((*this)[0], coord);
     (*this)[1] = tlp::maxVector((*this)[1], coord);
   }
+}
+
+void BoundingBox::expand(const tlp::BoundingBox &bb, bool noCheck) {
+  if (noCheck || isValid()) {
+    (*this)[0] = tlp::minVector((*this)[0], bb[0]);
+    (*this)[1] = tlp::maxVector((*this)[1], bb[1]);
+  } else
+    *this = bb;
 }
 
 void BoundingBox::translate(const tlp::Vec3f &vec) {

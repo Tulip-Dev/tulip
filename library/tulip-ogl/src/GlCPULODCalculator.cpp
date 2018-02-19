@@ -27,7 +27,7 @@ using namespace std;
 
 namespace tlp {
 
-GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true) {}
+  GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {}
 
 GlCPULODCalculator::~GlCPULODCalculator() {}
 
@@ -48,22 +48,22 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, cons
   //   and here we don't add this false bounding box to the scene bounding box
   //   TODO: See if we can change the bounding box compute in Gl2DRect
   if (bb[0][0] != numeric_limits<float>::min()) {
-    sceneBoundingBox.expand(bb[0]);
-    sceneBoundingBox.expand(bb[1]);
+    sceneBoundingBox.expand(bb, noBBCheck);
+    noBBCheck = true;
   }
 
   currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity, bb));
 }
 void GlCPULODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
-  sceneBoundingBox.expand(bb[0]);
-  sceneBoundingBox.expand(bb[1]);
+  sceneBoundingBox.expand(bb, noBBCheck);
+  noBBCheck = true;
   currentLayerLODUnit->nodesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
 }
 void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
-  sceneBoundingBox.expand(bb[0]);
-  sceneBoundingBox.expand(bb[1]);
+  sceneBoundingBox.expand(bb, noBBCheck);
+  noBBCheck = true;
   currentLayerLODUnit->edgesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
 }
 
