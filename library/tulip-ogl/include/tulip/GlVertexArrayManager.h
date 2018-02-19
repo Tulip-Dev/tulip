@@ -73,7 +73,9 @@ public:
    */
   void visit(GlEdge *glEdge) override;
 
-  /**
+  void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) override;
+
+ /**
    * Call this function when you want to change input data used by this GlVertexArrayManager
    */
   void setInputData(GlGraphInputData *inputData);
@@ -190,7 +192,6 @@ protected:
 
   std::vector<Coord> linesCoordsArray;
   std::vector<Color> linesColorsArray;
-  std::vector<GLint> linesIndexArray;
 
   std::vector<GLuint> linesRenderingIndicesArray;
   std::vector<GLuint> linesSelectedRenderingIndicesArray;
@@ -198,10 +199,6 @@ protected:
   std::vector<Coord> quadsCoordsArray;
   std::vector<Color> quadsColorsArray;
   std::vector<Color> quadsOutlineColorsArray;
-  std::vector<GLuint> quadsIndexArray;
-  std::vector<GLsizei> quadsIndexCountArray;
-  std::vector<std::vector<GLuint>> quadsBottomOutlineIndexArray;
-  std::vector<std::vector<GLuint>> quadsTopOutlineIndexArray;
 
   std::vector<GLuint> quadsRenderingIndicesArray;
   std::vector<GLuint> quadsSelectedRenderingIndicesArray;
@@ -220,18 +217,18 @@ protected:
   struct edgeInfos {
     unsigned int nbVertices;
     unsigned int linesIndex;
+    unsigned int nbQuadVertices;
     unsigned int quadsIndex;
-    unsigned int quadsCountIndex;
-    unsigned int quadsBottomIndex;
-    unsigned int quadsTopIndex;
-    void init(unsigned int nv, unsigned int li, unsigned int qi, unsigned int qci, unsigned int qbi,
-              unsigned int qti) {
+    std::vector<GLuint> quadsBottom;
+    std::vector<GLuint> quadsTop;
+    void init(unsigned int nv, unsigned int li,
+	      unsigned int nqv, unsigned int qi) {
       nbVertices = nv;
       linesIndex = li;
+      nbQuadVertices = nqv;
       quadsIndex = qi;
-      quadsCountIndex = qci;
-      quadsBottomIndex = qbi;
-      quadsTopIndex = qti;
+      quadsBottom.resize(nqv /2);
+      quadsTop.resize(nqv / 2);
     }
   };
 
