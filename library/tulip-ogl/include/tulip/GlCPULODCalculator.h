@@ -117,8 +117,8 @@ protected:
 
   bool computeEdgesLOD;
   bool computeOutScreenLOD;
-  
-  bool noBBCheck;  
+
+  bool noBBCheck;
   BoundingBox sceneBoundingBox;
 
   LayerLODUnit *currentLayerLODUnit;

@@ -41,7 +41,7 @@ public:
   /**
    * Constructor
    */
- GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : noBBCheck(false), inputData(inputData) {}
+  GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : noBBCheck(false), inputData(inputData) {}
 
   /**
    * Method used for GlSimpleEntity

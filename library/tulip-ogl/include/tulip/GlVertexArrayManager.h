@@ -75,9 +75,9 @@ public:
 
   void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) override;
 
- /**
-   * Call this function when you want to change input data used by this GlVertexArrayManager
-   */
+  /**
+    * Call this function when you want to change input data used by this GlVertexArrayManager
+    */
   void setInputData(GlGraphInputData *inputData);
 
   /**
@@ -221,13 +221,12 @@ protected:
     unsigned int quadsIndex;
     std::vector<GLuint> quadsBottom;
     std::vector<GLuint> quadsTop;
-    void init(unsigned int nv, unsigned int li,
-	      unsigned int nqv, unsigned int qi) {
+    void init(unsigned int nv, unsigned int li, unsigned int nqv, unsigned int qi) {
       nbVertices = nv;
       linesIndex = li;
       nbQuadVertices = nqv;
       quadsIndex = qi;
-      quadsBottom.resize(nqv /2);
+      quadsBottom.resize(nqv / 2);
       quadsTop.resize(nqv / 2);
     }
   };

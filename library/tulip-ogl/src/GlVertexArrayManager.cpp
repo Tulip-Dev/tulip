@@ -271,14 +271,11 @@ void GlVertexArrayManager::setHaveToComputeColor(bool compute) {
   toComputeColor = compute;
 }
 
-void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes,
-						     unsigned int nbEdges) {
-  auto nbSelectedNodes =
-    inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
+void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
+  auto nbSelectedNodes = inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
   pointsNodesRenderingIndexArray.reserve(nbNodes - nbSelectedNodes);
   pointsNodesSelectedRenderingIndexArray.reserve(nbSelectedNodes);
-  auto nbSelectedEdges =
-    inputData->getElementSelected()->numberOfNonDefaultValuatedEdges();
+  auto nbSelectedEdges = inputData->getElementSelected()->numberOfNonDefaultValuatedEdges();
   pointsEdgesRenderingIndexArray.reserve(nbEdges - nbSelectedEdges);
   pointsEdgesSelectedRenderingIndexArray.reserve(nbSelectedEdges);
 
@@ -678,13 +675,11 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       size_t lastQuadIndex = quadsCoordsArray.size();
       quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
 
-      edgeInfosVector[glEdge->pos].init(numberOfVertices, lastIndex,
-                                        quadVertices.size(), lastQuadIndex);
+      edgeInfosVector[glEdge->pos].init(numberOfVertices, lastIndex, quadVertices.size(),
+                                        lastQuadIndex);
 
-      vector<GLuint> &quadsBottom =
-	edgeInfosVector[glEdge->pos].quadsBottom;
-      vector<GLuint> &quadsTop =
-	edgeInfosVector[glEdge->pos].quadsTop;
+      vector<GLuint> &quadsBottom = edgeInfosVector[glEdge->pos].quadsBottom;
+      vector<GLuint> &quadsTop = edgeInfosVector[glEdge->pos].quadsTop;
 
       for (size_t i = 0; i < quadVertices.size() / 2; ++i) {
         quadsBottom[i] = lastQuadIndex + 2 * i;
@@ -713,8 +708,7 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
 
       vector<Color> colors;
       glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
-                        &linesCoordsArray[eInfos.linesIndex], numberOfVertices,
-                        colors);
+                        &linesCoordsArray[eInfos.linesIndex], numberOfVertices, colors);
       // must be added twice ?
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
@@ -737,12 +731,12 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
 
       const Color &borderColor = borderColorProperty->getEdgeValue(e);
       if (inputData->parameters->isEdgeColorInterpolate())
-	for (size_t i = 0; i < colors.size(); ++i) {
+        for (size_t i = 0; i < colors.size(); ++i) {
           quadsColorsArray.push_back(colors[i]);
           quadsColorsArray.push_back(colors[i]);
         }
       else
-	quadsColorsArray.insert(quadsColorsArray.end(), 2 * colors.size(), edgeColor);
+        quadsColorsArray.insert(quadsColorsArray.end(), 2 * colors.size(), edgeColor);
       quadsOutlineColorsArray.insert(quadsOutlineColorsArray.end(), 2 * colors.size(), borderColor);
     }
   }
@@ -773,10 +767,10 @@ void GlVertexArrayManager::activateLineEdgeDisplay(GlEdge *glEdge, bool selected
   unsigned int baseIndex = eInfos.linesIndex;
 
   auto &renderingIndicesArray =
-    selected ? linesSelectedRenderingIndicesArray : linesRenderingIndicesArray;
+      selected ? linesSelectedRenderingIndicesArray : linesRenderingIndicesArray;
   for (unsigned int i = baseIndex; i < baseIndex + numberOfVertices - 1; ++i) {
-      renderingIndicesArray.push_back(i);
-      renderingIndicesArray.push_back(i + 1);
+    renderingIndicesArray.push_back(i);
+    renderingIndicesArray.push_back(i + 1);
   }
 }
 
@@ -794,7 +788,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
   unsigned int baseIndex = eInfos.quadsIndex;
 
   auto &renderingIndicesArray =
-    selected ? quadsSelectedRenderingIndicesArray : quadsRenderingIndicesArray;
+      selected ? quadsSelectedRenderingIndicesArray : quadsRenderingIndicesArray;
 
   for (unsigned int i = baseIndex; i < baseIndex + numberOfVertices - 2; i += 2) {
     renderingIndicesArray.push_back(i);
@@ -806,15 +800,13 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
     renderingIndicesArray.push_back(i + 3);
   }
 
-  float borderWidth =
-    float(inputData->getElementBorderWidth()->getEdgeValue(e));
+  float borderWidth = float(inputData->getElementBorderWidth()->getEdgeValue(e));
 
   if (borderWidth > 0) {
     auto &outlineRenderingIndicesArray =
-      selected ? quadsSelectedOutlineRenderingIndicesArray : quadsOutlineRenderingIndicesArray;
+        selected ? quadsSelectedOutlineRenderingIndicesArray : quadsOutlineRenderingIndicesArray;
 
-    if (outlineRenderingIndicesArray.find(borderWidth) ==
-	outlineRenderingIndicesArray.end()) {
+    if (outlineRenderingIndicesArray.find(borderWidth) == outlineRenderingIndicesArray.end()) {
       outlineRenderingIndicesArray[borderWidth] = vector<GLuint>();
     }
 
@@ -827,8 +819,8 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
 
     auto &quadsTop = eInfos.quadsTop;
     for (unsigned int i = 0; i < quadsTop.size() - 1; ++i) {
-        outlineRenderingIndices.push_back(quadsTop[i]);
-        outlineRenderingIndices.push_back(quadsTop[i + 1]);
+      outlineRenderingIndices.push_back(quadsTop[i]);
+      outlineRenderingIndices.push_back(quadsTop[i + 1]);
     }
   }
 }

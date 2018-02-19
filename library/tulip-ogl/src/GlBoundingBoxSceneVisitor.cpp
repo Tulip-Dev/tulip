@@ -49,5 +49,4 @@ void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
   boundingBox.expand(bb, noBBCheck);
   noBBCheck = true;
 }
-
 }

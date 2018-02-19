@@ -27,7 +27,7 @@ using namespace std;
 
 namespace tlp {
 
-  GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {}
+GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {}
 
 GlCPULODCalculator::~GlCPULODCalculator() {}
 

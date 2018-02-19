@@ -92,7 +92,6 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
     return ((*this)[0] + (*this)[1]) / 2.f;
   }
 
-
   /**
   * @brief Returns the width of the bounding box
   * An assertion is raised in debug mode if the BoundingBox is not valid.
@@ -108,7 +107,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * An assertion is raised in debug mode if the bounding box is not valid.
   *
   **/
-  inline float height() const  {
+  inline float height() const {
     assert(isValid());
     return ((*this)[1][2] - (*this)[0][2]);
   }

@@ -50,9 +50,9 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerSce
 }
 
 GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
-  : haveToCompute(true), haveToInitObservers(true), noNodeBBCheck(false),
-    noEdgeBBCheck(false), noEntityBBCheck(false), currentGraph(nullptr),
-      layoutProperty(nullptr), sizeProperty(nullptr), selectionProperty(nullptr) {}
+    : haveToCompute(true), haveToInitObservers(true), noNodeBBCheck(false), noEdgeBBCheck(false),
+      noEntityBBCheck(false), currentGraph(nullptr), layoutProperty(nullptr), sizeProperty(nullptr),
+      selectionProperty(nullptr) {}
 
 GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
   setHaveToCompute();
@@ -161,19 +161,19 @@ void GlQuadTreeLODCalculator::setNeedEntities(bool) {
 void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity,
                                                          const BoundingBox &bb) {
   GlCPULODCalculator::addSimpleEntityBoundingBox(entity, bb);
-  entitiesGlobalBoundingBox.expand(bb/*, noEntityBBCheck*/);
+  entitiesGlobalBoundingBox.expand(bb /*, noEntityBBCheck*/);
   noEntityBBCheck = true;
 }
 void GlQuadTreeLODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
                                                  const BoundingBox &bb) {
   GlCPULODCalculator::addNodeBoundingBox(id, pos, bb);
-  nodesGlobalBoundingBox.expand(bb/*, noNodeBBCheck*/);
+  nodesGlobalBoundingBox.expand(bb /*, noNodeBBCheck*/);
   noNodeBBCheck = true;
 }
 void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                                  const BoundingBox &bb) {
   GlCPULODCalculator::addEdgeBoundingBox(id, pos, bb);
-  edgesGlobalBoundingBox.expand(bb/*, noEdgeBBCheck*/);
+  edgesGlobalBoundingBox.expand(bb /*, noEdgeBBCheck*/);
   noEdgeBBCheck = true;
 }
 
