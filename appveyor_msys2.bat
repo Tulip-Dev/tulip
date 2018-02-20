@@ -38,8 +38,8 @@ bash -lc "set pwd"
 bash -lc "env"
 
 rem Install Inetc plugin for NSIS
-bash -lc "wget http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip"
-bash -lc "unzip Inetc.zip -d \"C:/Program Files (x86)/NSIS\""
+curl -fsS -o Inetc.zip http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip
+7z x Inetc.zip -o"C:\Program Files (x86)\NSIS"
 
 rem Install sphinx for Python 3
 set PATH=%PYTHON3_HOME%;%PYTHON3_HOME%/Scripts;%PATH%
