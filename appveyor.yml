@@ -52,7 +52,7 @@ environment:
 build_script:
   - 'if defined MSYS2_ARCH ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2.bat") else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")'
 
-# get the Tulip version for deployment to bintray
+# get the Tulip version for deployment
 after_build:
   - ps: "$env:TULIP_VERSION = (((Get-Content ($env:APPVEYOR_BUILD_FOLDER + '/build/library/tulip-core/include/tulip/TulipRelease.h') | %{ if ($_ -match '^#   define TULIP_VERSION.*$') { $_; } }) -replace '#   define TULIP_VERSION ', '') -replace '\"', '')"
 
@@ -61,22 +61,8 @@ artifacts:
   - path: build\*.exe
     name: tulip_installers
 
-# deploy Tulip installers on bintray
-deploy:
-  - provider: BinTray
-    username: anlambert
-    api_key:
-      secure: W3mHvyyVwEOMbCCDQ0NXobR3ByebQBxtxiATX4EE7Nt88Xei8cfrmIWHbi1Z2IKi
-    subject: tulip-dev
-    repo: tulip_binaries
-    package: Tulip
-    version: $(TULIP_VERSION)
-    publish: true
-    override: true
-    artifact: tulip_installers
-    on:
-      branch: master
-      APPVEYOR_REPO_NAME: Tulip-Dev/tulip
+# no deployment
+deploy: off
 
 # send build status notifications to tulipdev mailing list
 notifications:

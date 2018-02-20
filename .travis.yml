@@ -269,17 +269,6 @@ jobs:
       script:
         - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
 
-      # deploy Tulip AppImage to bintray
-      deploy:
-        on:
-          branch: master
-          repo: Tulip-Dev/tulip
-        provider: bintray
-        file: "build/deploy/TulipPackagesToBintray.json"
-        user: "anlambert"
-        key:
-          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
-
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     -
       # Tulip i686 AppImage build on CentOS 6
@@ -306,17 +295,6 @@ jobs:
 
       script:
         - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN --device /dev/fuse:/dev/fuse:mrw --rm=true -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_appimage_centos6_build.sh"
-
-      # deploy Tulip AppImage to bintray
-      deploy:
-        on:
-          branch: master
-          repo: Tulip-Dev/tulip
-        provider: bintray
-        file: "build/deploy/TulipPackagesToBintray.json"
-        user: "anlambert"
-        key:
-          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
 
   #==============================================================================================================================================================
     # Tulip core build stage on Mac OS
@@ -448,18 +426,6 @@ jobs:
         - ninja runTests
         # build Tulip bundle
         - ninja bundle
-        - cd ..
-
-      # deploy Tulip bundle to bintray
-      deploy:
-        on:
-          branch: master
-          repo: Tulip-Dev/tulip
-        provider: bintray
-        file: "build/deploy/TulipPackagesToBintray.json"
-        user: "anlambert"
-        key:
-          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="
     
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS
@@ -509,15 +475,3 @@ jobs:
         - ninja runTests
         # build Tulip bundle
         - ninja bundle
-        - cd ..
-
-      # deploy Tulip bundle to bintray
-      deploy:
-        on:
-          branch: master
-          repo: Tulip-Dev/tulip
-        provider: bintray
-        file: "build/deploy/TulipPackagesToBintray.json"
-        user: "anlambert"
-        key:
-          secure: "heoA4cZf81HCi7uas+2cCIqkVeIjbYhLkcKfrfeUqXequvf2+gnlFZxFkzUpfEFS3KSSzhFJGC4nT+IcuW6S2cYWwJxni0DY9yroNse6xDqF7d0lRPrwe3Cp2Hh3w/8o2nVQ0LOGUvenC3sFmyQiB6u/9qLhewvA9hUqVgrOWsr1zRI/6V1/tUmN/DhjFZclGzGmvJwsLl8lzhi9Gzb2HrR5hvLy9LzJwZLq2dC6Xd2w5aOU7HOVYE14vqzhynhTMt7vgpgBEIhVglvC7VtnjRTq8wOLnmTrHO45QtA7y35LD9a5ILgMYJdAS63pz2uwjRemHLfOuJVZognijM6JtQPh6XyXdzFZnnNmVrxQimkMQtgNee+6mr4dS1DHuOQWdJ9QOuIZthqijIdRamvYS51cgTFOVdyTBKT9gXhYo5wiQFXnT3tZEksJSvM694JFjWGb/VGhRqxdkm2QdHavZa1ynXkhRtWoKFHyIKYJ80zGDFwUUEyKcZcw5AcwUcJIe1E3UtV+qOUZHVwXDJfxL/Cr4sM+/yxyen8aPGbgzRCqGEKCYQN2+/TkSDbA2TwbgGhuPzThgRGWniFxavl18ik6TLv6E739oH0Gle/EtoK+Qy+0aANDTtFLfEfx3V+5Q8uvWcTErD2y/ey2kgCmMazVlFTVDZK2kZ7sp4zplGk="

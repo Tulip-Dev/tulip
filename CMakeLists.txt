@@ -833,7 +833,7 @@ INSTALL(FILES cmake/TulipUseFile.cmake
 IF(NOT TULIP_BUILD_CORE_ONLY)
 
   ADD_SUBDIRECTORY(bundlers)
-  ADD_SUBDIRECTORY(deploy)
+#  ADD_SUBDIRECTORY(deploy)
 
   ## ========================================================
   ## tulip-config script
