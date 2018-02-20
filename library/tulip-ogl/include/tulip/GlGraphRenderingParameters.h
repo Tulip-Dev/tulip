@@ -123,6 +123,16 @@ public:
   bool isEdgeSizeInterpolate() const;
 
   /**
+   * @brief Activate or deactivate edge display in front of the scene
+   */
+  void setEdgeFrontDisplay(const bool state);
+
+  /**
+   * @brief Return true if edge display in front of the scene is activated
+   */
+  bool isEdgeFrontDisplay() const;
+
+  /**
    * @brief Return the type of fonts used in the renderer(0=3D,1=bitmap,2=texture)
    */
   unsigned int getFontsType() const;
@@ -523,6 +533,7 @@ private:
   bool _edgeColorInterpolate;
   bool _edge3D;
   bool _edgeSizeInterpolate;
+  bool _edgeFrontDisplay;
   bool _displayEdges;
   bool _displayNodes;
   bool _displayMetaNodes;

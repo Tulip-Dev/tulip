@@ -517,8 +517,13 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
   if (!selectionDrawActivate) {
     if (vertexArrayManagerActivated) {
-      vertexArrayManager->endRendering();
+      if (inputData->renderingParameters()->isEdgeFrontDisplay()) {
+	vertexArrayManager->endRendering();
+	inputData->getGlGlyphRenderer()->endRendering();
+      } else {
       inputData->getGlGlyphRenderer()->endRendering();
+      vertexArrayManager->endRendering();
+      }
     }
   } else {
     selectionDrawActivate = false;

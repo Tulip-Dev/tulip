@@ -115,6 +115,7 @@ void SceneConfigWidget::resetChanges() {
   _ui->edgesArrowCheck->setChecked(renderingParameters->isViewArrow());
   _ui->edgesColorInterpolationCheck->setChecked(renderingParameters->isEdgeColorInterpolate());
   _ui->edgesSizeInterpolationCheck->setChecked(renderingParameters->isEdgeSizeInterpolate());
+  _ui->edgesFrontCheck->setChecked(renderingParameters->isEdgeFrontDisplay());
 
   // COLORS
   _ui->backgroundColorButton->setTulipColor(_glMainWidget->getScene()->getBackgroundColor());
@@ -188,6 +189,7 @@ void SceneConfigWidget::applySettings() {
   renderingParameters->setViewArrow(_ui->edgesArrowCheck->isChecked());
   renderingParameters->setEdgeColorInterpolate(_ui->edgesColorInterpolationCheck->isChecked());
   renderingParameters->setEdgeSizeInterpolate(_ui->edgesSizeInterpolationCheck->isChecked());
+  renderingParameters->setEdgeFrontDisplay(_ui->edgesFrontCheck->isChecked());
 
   // COLORS
   renderingParameters->setSelectionColor(_ui->selectionColorButton->tulipColor());

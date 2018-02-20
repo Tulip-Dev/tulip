@@ -28,7 +28,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters()
     : _antialiased(true), _viewArrow(false), _viewNodeLabel(true), _viewEdgeLabel(false),
       _viewMetaLabel(false), _viewOutScreenLabel(false), _elementOrdered(false),
       _elementOrderedDescending(true), _edgeColorInterpolate(true), _edge3D(false),
-      _edgeSizeInterpolate(true), _displayEdges(true), _displayNodes(true), _displayMetaNodes(true),
+      _edgeSizeInterpolate(true), _edgeFrontDisplay(true), _displayEdges(true), _displayNodes(true), _displayMetaNodes(true),
       _elementZOrdered(false), _selectedNodesStencil(0x0002), _selectedMetaNodesStencil(0x0002),
       _selectedEdgesStencil(0x0002), _nodesStencil(0xFFFF), _metaNodesStencil(0xFFFF),
       _edgesStencil(0xFFFF), _nodesLabelStencil(0xFFFF), _metaNodesLabelStencil(0xFFFF),
@@ -55,6 +55,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("elementZOrdered", _elementZOrdered);
   data.set("edgeColorInterpolation", _edgeColorInterpolate);
   data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
+  data.set("edgeFrontDisplay", _edgeFrontDisplay);
   data.set("edge3D", _edge3D);
   data.set("labelScaled", _labelScaled);
   // int
@@ -126,6 +127,9 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
 
   if (data.get<bool>("edgeSizeInterpolation", b))
     setEdgeSizeInterpolate(b);
+
+  if (data.get<bool>("edgeFrontDisplay", b))
+    setEdgeFrontDisplay(b);
 
   if (data.get<bool>("edge3D", b))
     setEdge3D(b);
@@ -401,6 +405,13 @@ bool GlGraphRenderingParameters::isEdgeSizeInterpolate() const {
 }
 void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b) {
   _edgeSizeInterpolate = b;
+}
+//====================================================
+bool GlGraphRenderingParameters::isEdgeFrontDisplay() const {
+  return (_edgeFrontDisplay);
+}
+void GlGraphRenderingParameters::setEdgeFrontDisplay(const bool b) {
+  _edgeFrontDisplay = b;
 }
 //====================================================
 bool GlGraphRenderingParameters::getEdgesMaxSizeToNodesSize() const {
