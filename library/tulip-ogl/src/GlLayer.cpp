@@ -145,7 +145,7 @@ void GlLayer::getXML(string &outString) {
 
   GlXMLTools::beginChildNode(outString, "GlEntity");
   composite.getXML(outString);
-  GlXMLTools::endChildNode(outString);
+  GlXMLTools::endChildNode(outString, "GlEntity");
 }
 
 void GlLayer::getXMLOnlyForCameras(string &outString) {
