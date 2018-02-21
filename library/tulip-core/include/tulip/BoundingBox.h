@@ -109,7 +109,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   **/
   inline float height() const {
     assert(isValid());
-    return ((*this)[1][2] - (*this)[0][2]);
+    return ((*this)[1][1] - (*this)[0][1]);
   }
 
   /**
