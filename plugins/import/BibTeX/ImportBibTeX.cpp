@@ -1464,8 +1464,7 @@ public:
 
     graph->getProperty<IntegerProperty>("viewLabelPosition")
         ->setAllNodeValue(LabelPosition::Bottom);
-    graph->getProperty<IntegerProperty>("viewShape")
-        ->setAllNodeValue(tlp::NodeShape::Icon);
+    graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(tlp::NodeShape::Icon);
 
     TLP_HASH_MAP<std::string, node> authorsMap;
     TLP_HASH_MAP<std::string, bool> publisMap;
