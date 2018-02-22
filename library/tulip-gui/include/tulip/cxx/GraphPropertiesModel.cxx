@@ -29,27 +29,27 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   if (_graph == nullptr)
     return;
 
-  for (const std::string &propName : _graph->getInheritedProperties()) {
+  for (auto inheritedProp : _graph->getInheritedObjectProperties()) {
 #ifdef NDEBUG
 
-    if (propName == "viewMetaGraph")
+    if (inheritedProp->getName() == "viewMetaGraph")
       continue;
 
 #endif
-    PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(propName));
+    PROPTYPE *prop = dynamic_cast<PROPTYPE *>(inheritedProp);
 
     if (prop != nullptr) {
       _properties += prop;
     }
   }
-  for (const std::string &propName : _graph->getLocalProperties()) {
+  for (auto localProp : _graph->getLocalObjectProperties()) {
 #ifdef NDEBUG
 
-    if (propName == "viewMetaGraph")
+    if (localProp->getName() == "viewMetaGraph")
       continue;
 
 #endif
-    PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(propName));
+    PROPTYPE *prop = dynamic_cast<PROPTYPE *>(localProp);
 
     if (prop != nullptr) {
       _properties += prop;
