@@ -27,7 +27,8 @@ using namespace std;
 
 namespace tlp {
 
-GlBoundingBoxSceneVisitor::GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : inputData(inputData) {
+GlBoundingBoxSceneVisitor::GlBoundingBoxSceneVisitor(GlGraphInputData *inputData)
+    : inputData(inputData) {
   threadSafe = true;
   noBBCheck.assign(OpenMPManager::getNumberOfThreads(), false);
   bbs.resize(OpenMPManager::getNumberOfThreads());

@@ -50,11 +50,10 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerSce
 }
 
 GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
-  : haveToCompute(true), haveToInitObservers(true),
-    seBBIndex(2 * OpenMPManager::getNumberOfThreads()),
-    eBBOffset(OpenMPManager::getNumberOfThreads()),
-    currentGraph(nullptr), layoutProperty(nullptr),
-    sizeProperty(nullptr), selectionProperty(nullptr) {
+    : haveToCompute(true), haveToInitObservers(true),
+      seBBIndex(2 * OpenMPManager::getNumberOfThreads()),
+      eBBOffset(OpenMPManager::getNumberOfThreads()), currentGraph(nullptr),
+      layoutProperty(nullptr), sizeProperty(nullptr), selectionProperty(nullptr) {
   threadSafe = true;
   // we have to deal with
   // OpenMPManager::getNumberOfThreads() bounding boxes for nodes
@@ -63,7 +62,6 @@ GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
   noBBCheck.assign(2 * OpenMPManager::getNumberOfThreads() + 1, false);
   bbs.resize(2 * OpenMPManager::getNumberOfThreads() + 1);
 }
-
 
 GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
   setHaveToCompute();
@@ -322,12 +320,11 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
       BoundingBox bb(bbs[0]);
 
       for (unsigned int i = 1; i < eBBOffset; ++i) {
-	if (noBBCheck[i])
-	  bb.expand(bbs[i], true);
+        if (noBBCheck[i])
+          bb.expand(bbs[i], true);
       }
 
-      nodesQuadTree.push_back(
-          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
+      nodesQuadTree.push_back(new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
     } else {
       nodesQuadTree.push_back(nullptr);
     }
@@ -337,12 +334,11 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
       BoundingBox bb(bbs[eBBOffset]);
 
       for (unsigned int i = eBBOffset + 1; i < seBBIndex; ++i) {
-	if (noBBCheck[i])
-	  bb.expand(bbs[i], true);
+        if (noBBCheck[i])
+          bb.expand(bbs[i], true);
       }
 
-      edgesQuadTree.push_back(
-          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
+      edgesQuadTree.push_back(new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
     } else {
       edgesQuadTree.push_back(nullptr);
     }
