@@ -21,32 +21,52 @@
 #include <tulip/GlSimpleEntity.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 
 namespace tlp {
+
+GlBoundingBoxSceneVisitor::GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : inputData(inputData) {
+  threadSafe = true;
+  noBBCheck.assign(OpenMPManager::getNumberOfThreads(), false);
+  bbs.resize(OpenMPManager::getNumberOfThreads());
+}
+
+BoundingBox GlBoundingBoxSceneVisitor::getBoundingBox() {
+  BoundingBox bb(bbs[0]);
+
+  for (unsigned int i = 1; i < bbs.size(); ++i)
+    if (noBBCheck[i])
+      bb.expand(bbs[i], true);
+  return bb;
+}
 
 void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
   if (entity->isVisible()) {
     BoundingBox &&bb = entity->getBoundingBox();
 
     if (bb.isValid()) {
-      boundingBox.expand(bb, noBBCheck);
-      noBBCheck = true;
+      auto ti = OpenMPManager::getThreadNumber();
+      bbs[ti].expand(bb, noBBCheck[ti]);
+      noBBCheck[ti] = true;
     }
   }
 }
 
 void GlBoundingBoxSceneVisitor::visit(GlNode *glNode) {
   BoundingBox &&bb = glNode->getBoundingBox(inputData);
-  boundingBox.expand(bb, noBBCheck);
-  noBBCheck = true;
+  auto ti = OpenMPManager::getThreadNumber();
+
+  bbs[ti].expand(bb, noBBCheck[ti]);
+  noBBCheck[ti] = true;
 }
 
 void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
   BoundingBox &&bb = glEdge->getBoundingBox(inputData);
+  auto ti = OpenMPManager::getThreadNumber();
 
-  boundingBox.expand(bb, noBBCheck);
-  noBBCheck = true;
+  bbs[ti].expand(bb, noBBCheck[ti]);
+  noBBCheck[ti] = true;
 }
 }

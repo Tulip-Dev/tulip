@@ -22,12 +22,17 @@
 #include <tulip/Matrix.h>
 #include <tulip/Camera.h>
 #include <tulip/GlTools.h>
+#include <tulip/ParallelTools.h>
 
 using namespace std;
 
 namespace tlp {
 
-GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {}
+GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {
+  threadSafe = true;
+  noBBCheck.assign(OpenMPManager::getNumberOfThreads(), false);
+  bbs.resize(OpenMPManager::getNumberOfThreads());
+}
 
 GlCPULODCalculator::~GlCPULODCalculator() {}
 
@@ -48,23 +53,35 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, cons
   //   and here we don't add this false bounding box to the scene bounding box
   //   TODO: See if we can change the bounding box compute in Gl2DRect
   if (bb[0][0] != numeric_limits<float>::min()) {
-    sceneBoundingBox.expand(bb, noBBCheck);
-    noBBCheck = true;
+    auto ti = OpenMPManager::getThreadNumber();
+    bbs[ti].expand(bb, noBBCheck[ti]);
+    noBBCheck[ti] = true;
   }
 
   currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity, bb));
 }
 void GlCPULODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
-  sceneBoundingBox.expand(bb, noBBCheck);
-  noBBCheck = true;
+  auto ti = OpenMPManager::getThreadNumber();
+  bbs[ti].expand(bb, noBBCheck[ti]);
+  noBBCheck[ti] = true;
   currentLayerLODUnit->nodesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
 }
 void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
-  sceneBoundingBox.expand(bb, noBBCheck);
-  noBBCheck = true;
+  auto ti = OpenMPManager::getThreadNumber();
+  bbs[ti].expand(bb, noBBCheck[ti]);
+  noBBCheck[ti] = true;
   currentLayerLODUnit->edgesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
+}
+
+BoundingBox GlCPULODCalculator::getSceneBoundingBox() {
+  BoundingBox bb(bbs[0]);
+
+  for (unsigned int i = 1; i < bbs.size(); ++i)
+    if (noBBCheck[i])
+      bb.expand(bbs[i], true);
+  return bb;
 }
 
 void GlCPULODCalculator::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {

@@ -21,6 +21,8 @@
 #ifndef Tulip_GLCPULODCALCULATOR_H
 #define Tulip_GLCPULODCALCULATOR_H
 
+#include <vector>
+
 #include <tulip/Coord.h>
 #include <tulip/GlLODCalculator.h>
 #include <tulip/Matrix.h>
@@ -87,9 +89,7 @@ public:
   /**
    * This function return the scene bounding box
    */
-  BoundingBox getSceneBoundingBox() override {
-    return sceneBoundingBox;
-  }
+  BoundingBox getSceneBoundingBox() override;
 
   /**
    * Set if the edge LOD must be calculated
@@ -118,8 +118,8 @@ protected:
   bool computeEdgesLOD;
   bool computeOutScreenLOD;
 
-  bool noBBCheck;
-  BoundingBox sceneBoundingBox;
+  std::vector<bool> noBBCheck;
+  std::vector<BoundingBox> bbs;
 
   LayerLODUnit *currentLayerLODUnit;
 };

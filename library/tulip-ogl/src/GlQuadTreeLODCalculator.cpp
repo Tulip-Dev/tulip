@@ -50,9 +50,20 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerSce
 }
 
 GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
-    : haveToCompute(true), haveToInitObservers(true), noNodeBBCheck(false), noEdgeBBCheck(false),
-      noEntityBBCheck(false), currentGraph(nullptr), layoutProperty(nullptr), sizeProperty(nullptr),
-      selectionProperty(nullptr) {}
+  : haveToCompute(true), haveToInitObservers(true),
+    seBBIndex(2 * OpenMPManager::getNumberOfThreads()),
+    eBBOffset(OpenMPManager::getNumberOfThreads()),
+    currentGraph(nullptr), layoutProperty(nullptr),
+    sizeProperty(nullptr), selectionProperty(nullptr) {
+  threadSafe = true;
+  // we have to deal with
+  // OpenMPManager::getNumberOfThreads() bounding boxes for nodes
+  // OpenMPManager::getNumberOfThreads() bounding boxes for edges
+  // 1 bounding box for simple entities
+  noBBCheck.assign(2 * OpenMPManager::getNumberOfThreads() + 1, false);
+  bbs.resize(2 * OpenMPManager::getNumberOfThreads() + 1);
+}
+
 
 GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
   setHaveToCompute();
@@ -160,21 +171,20 @@ void GlQuadTreeLODCalculator::setNeedEntities(bool) {
 
 void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity,
                                                          const BoundingBox &bb) {
-  GlCPULODCalculator::addSimpleEntityBoundingBox(entity, bb);
-  entitiesGlobalBoundingBox.expand(bb /*, noEntityBBCheck*/);
-  noEntityBBCheck = true;
+  // same check as in GlCPULODCalculator::addSimpleEntityBoundingBox
+  if (bb[0][0] != numeric_limits<float>::min()) {
+    bbs[seBBIndex].expand(bb, noBBCheck[seBBIndex]);
+    noBBCheck[seBBIndex] = true;
+  }
+  currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity, bb));
 }
-void GlQuadTreeLODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
-                                                 const BoundingBox &bb) {
-  GlCPULODCalculator::addNodeBoundingBox(id, pos, bb);
-  nodesGlobalBoundingBox.expand(bb /*, noNodeBBCheck*/);
-  noNodeBBCheck = true;
-}
+
 void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                                  const BoundingBox &bb) {
-  GlCPULODCalculator::addEdgeBoundingBox(id, pos, bb);
-  edgesGlobalBoundingBox.expand(bb /*, noEdgeBBCheck*/);
-  noEdgeBBCheck = true;
+  auto ti = eBBOffset + OpenMPManager::getThreadNumber();
+  bbs[ti].expand(bb, noBBCheck[ti]);
+  noBBCheck[ti] = true;
+  currentLayerLODUnit->edgesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
 }
 
 void GlQuadTreeLODCalculator::compute(const Vector<int, 4> &globalViewport,
@@ -302,21 +312,37 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
 
   if (haveToCompute) {
     // Create quadtrees
-    if (entitiesGlobalBoundingBox.isValid())
-      entitiesQuadTree.push_back(new QuadTreeNode<GlSimpleEntity *>(entitiesGlobalBoundingBox));
+    if (noBBCheck[seBBIndex]) // is bb for simple entities valid
+      entitiesQuadTree.push_back(new QuadTreeNode<GlSimpleEntity *>(bbs[seBBIndex]));
     else
       entitiesQuadTree.push_back(nullptr);
 
-    if (nodesGlobalBoundingBox.isValid()) {
+    if (noBBCheck[0]) { // check validity of bbs for nodes
+      // compute nodes dedicated bb
+      BoundingBox bb(bbs[0]);
+
+      for (unsigned int i = 1; i < eBBOffset; ++i) {
+	if (noBBCheck[i])
+	  bb.expand(bbs[i], true);
+      }
+
       nodesQuadTree.push_back(
-          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(nodesGlobalBoundingBox));
+          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
     } else {
       nodesQuadTree.push_back(nullptr);
     }
 
-    if (edgesGlobalBoundingBox.isValid()) {
+    if (noBBCheck[eBBOffset]) { // check validity of bbs for edges
+      // compute edges dedicated bb
+      BoundingBox bb(bbs[eBBOffset]);
+
+      for (unsigned int i = eBBOffset + 1; i < seBBIndex; ++i) {
+	if (noBBCheck[i])
+	  bb.expand(bbs[i], true);
+      }
+
       edgesQuadTree.push_back(
-          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(edgesGlobalBoundingBox));
+          new QuadTreeNode<std::pair<unsigned int, unsigned int>>(bb));
     } else {
       edgesQuadTree.push_back(nullptr);
     }

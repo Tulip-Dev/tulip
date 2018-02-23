@@ -22,6 +22,8 @@
 #define Tulip_GLBOUNDINGBOXSCENEVISITOR_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#include <vector>
+
 #include <tulip/BoundingBox.h>
 #include <tulip/GlSceneVisitor.h>
 
@@ -41,7 +43,7 @@ public:
   /**
    * Constructor
    */
-  GlBoundingBoxSceneVisitor(GlGraphInputData *inputData) : noBBCheck(false), inputData(inputData) {}
+  GlBoundingBoxSceneVisitor(GlGraphInputData *inputData);
 
   /**
    * Method used for GlSimpleEntity
@@ -59,13 +61,11 @@ public:
   /**
    * Return the scene boundingBox
    */
-  BoundingBox getBoundingBox() {
-    return boundingBox;
-  }
+  BoundingBox getBoundingBox();
 
 private:
-  bool noBBCheck;
-  BoundingBox boundingBox;
+  std::vector<bool> noBBCheck;
+  std::vector<BoundingBox> bbs;
   GlGraphInputData *inputData;
 };
 }

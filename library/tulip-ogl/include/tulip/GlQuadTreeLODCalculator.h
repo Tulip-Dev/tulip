@@ -66,10 +66,6 @@ public:
    */
   void addSimpleEntityBoundingBox(GlSimpleEntity *entity, const BoundingBox &bb) override;
   /**
-   * This function is call by GlLODSceneVisitor when a node is found
-   */
-  void addNodeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
-  /**
    * This function is call by GlLODSceneVisitor when an edge is found
    */
   void addEdgeBoundingBox(unsigned int id, unsigned int pos, const BoundingBox &bb) override;
@@ -125,10 +121,10 @@ protected:
   bool haveToCompute;
   bool haveToInitObservers;
 
-  bool noNodeBBCheck, noEdgeBBCheck, noEntityBBCheck;
-  BoundingBox nodesGlobalBoundingBox;
-  BoundingBox edgesGlobalBoundingBox;
-  BoundingBox entitiesGlobalBoundingBox;
+  // index of simple entities bounding in bbs (see CPULODCalculator.h)
+  const unsigned int seBBIndex;
+  // offset of edge entities bounding in bbs
+  const unsigned int eBBOffset;
 
   std::vector<Camera *> cameras;
   std::map<GlLayer *, Camera> layerToCamera;

@@ -22,11 +22,12 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlSceneVisitor.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GraphParallelTools.h>
 
 using namespace std;
 
@@ -58,20 +59,26 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
 }
 
 void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor) {
-  auto nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    GlNode glNode(nodes[i], i);
+  auto fn = [&](node n, unsigned int i) {
+    GlNode glNode(n, i);
     visitor->visit(&glNode);
-  }
+  };
+
+  if (visitor->isThreadSafe())
+    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, fn);
+  else
+    MAP_NODES_AND_INDICES(graph, fn);
 }
 
 void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor) {
-  auto edges = graph->edges();
-  unsigned int nbEdges = edges.size();
-  for (unsigned int i = 0; i < nbEdges; ++i) {
-    GlEdge glEdge(edges[i], i);
+  auto fn = [&](edge e, unsigned int i) {
+    GlEdge glEdge(e, i);
     visitor->visit(&glEdge);
-  }
+  };
+
+  if (visitor->isThreadSafe())
+    OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+  else
+    MAP_EDGES_AND_INDICES(graph, fn);
 }
 }
