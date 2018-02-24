@@ -20,6 +20,7 @@
 #include <GL/glew.h>
 
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/ParallelTools.h>
 
 #include <iostream>
 #include <sstream>
@@ -32,8 +33,10 @@ using namespace std;
 namespace tlp {
 
 OpenGlConfigManager &OpenGlConfigManager::getInst() {
-  if (!inst)
-    inst = new OpenGlConfigManager();
+  OMP_CRITICAL_SECTION(OpenglConfigManagerInited) {
+    if (!inst)
+      inst = new OpenGlConfigManager();
+  }
 
   return *inst;
 }
@@ -66,8 +69,10 @@ bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
   if (!glewIsInit)
     return false;
 
-  if (checkedExtensions.find(extensionName) == checkedExtensions.end()) {
-    checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
+  OMP_CRITICAL_SECTION(OpenGlConfigManagerExtensionSupported) {
+    if (checkedExtensions.find(extensionName) == checkedExtensions.end()) {
+      checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
+    }
   }
 
   return checkedExtensions[extensionName];
