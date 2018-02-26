@@ -67,7 +67,7 @@ static void computeGraphPoints(const std::vector<node> &nodes, const std::vector
     }
   }
 
-  if (layout->numberOfNonDefaultValuatedEdges()) {
+  if (layout->hasNonDefaultValuatedEdges()) {
     for (auto e : edges) {
       if ((selection == nullptr) || selection->getEdgeValue(e)) {
         for (const Coord &coord : layout->getEdgeValue(e))
@@ -133,7 +133,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
     }
   }
 
-  if (layout->numberOfNonDefaultValuatedEdges()) {
+  if (layout->hasNonDefaultValuatedEdges()) {
     for (auto e : graph->edges()) {
       if (selection == nullptr || selection->getEdgeValue(e)) {
         for (const auto coord : layout->getEdgeValue(e)) {

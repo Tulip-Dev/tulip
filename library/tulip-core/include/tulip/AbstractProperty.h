@@ -432,6 +432,7 @@ public:
     return true;
   }
   tlp::Iterator<node> *getNonDefaultValuatedNodes(const Graph *g = nullptr) const override;
+  bool hasNonDefaultValuatedNodes(const Graph *g = nullptr) const override;
   unsigned int numberOfNonDefaultValuatedNodes(const Graph *g = nullptr) const override;
   unsigned int nodeValueSize() const override;
   void writeNodeDefaultValue(std::ostream &) const override;
@@ -439,6 +440,7 @@ public:
   bool readNodeDefaultValue(std::istream &) override;
   bool readNodeValue(std::istream &, node) override;
   tlp::Iterator<edge> *getNonDefaultValuatedEdges(const Graph *g = nullptr) const override;
+  bool hasNonDefaultValuatedEdges(const Graph *g = nullptr) const override;
   unsigned int numberOfNonDefaultValuatedEdges(const Graph * = nullptr) const override;
   unsigned int edgeValueSize() const override;
   void writeEdgeDefaultValue(std::ostream &) const override;

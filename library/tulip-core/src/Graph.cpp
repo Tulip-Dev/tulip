@@ -228,8 +228,8 @@ static void setViewPropertiesDefaults(Graph *g) {
   }
 
   if (!g->existProperty(icon)) {
-    g->getProperty<StringProperty>(icon)->setAllNodeValue(TulipFontAwesome::QuestionCircle);
-    g->getProperty<StringProperty>(icon)->setAllEdgeValue(TulipFontAwesome::QuestionCircle);
+    g->getProperty<StringProperty>(icon)->setAllNodeValue("fa-question-circle");
+    g->getProperty<StringProperty>(icon)->setAllEdgeValue("fa-question-circle");
   }
 
   // for backward compatibility with Tulip < 5.0
@@ -239,7 +239,7 @@ static void setViewPropertiesDefaults(Graph *g) {
 
     // transform old font awesome icon names to new ones and store them in the viewIcon
     // property only if the content of that property is default valuated
-    if (!iteratorEmpty(iProp->getNonDefaultValuatedNodes())) {
+    if (iProp->hasNonDefaultValuatedNodes()) {
       iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
       for (const node &n : faiProp->getNonDefaultValuatedNodes()) {
         const string &faIconName = faiProp->getNodeValue(n);

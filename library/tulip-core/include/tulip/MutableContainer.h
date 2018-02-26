@@ -101,6 +101,13 @@ public:
    */
   unsigned int numberOfNonDefaultValues() const;
 
+  /**
+   * return whether a non default value exists
+   */
+  bool hasNonDefaultValues() const {
+    return numberOfNonDefaultValues() != 0;
+  }
+
 private:
   MutableContainer(const MutableContainer<TYPE> &) {}
   void operator=(const MutableContainer<TYPE> &) {}

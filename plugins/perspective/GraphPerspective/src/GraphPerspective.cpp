@@ -1570,7 +1570,7 @@ void GraphPerspective::applyRandomLayout(Graph *g) {
   Observable::holdObservers();
   LayoutProperty *viewLayout = g->getProperty<LayoutProperty>("viewLayout");
 
-  if (viewLayout->numberOfNonDefaultValuatedNodes(g) == 0) {
+  if (!viewLayout->hasNonDefaultValuatedNodes(g)) {
     std::string str;
     g->applyPropertyAlgorithm("Random layout", viewLayout, str);
   }

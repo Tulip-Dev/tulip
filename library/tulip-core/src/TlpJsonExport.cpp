@@ -242,7 +242,7 @@ public:
 
       _writer.writeString(dsValue);
 
-      if (property->numberOfNonDefaultValuatedNodes() > 0) {
+      if (property->hasNonDefaultValuatedNodes()) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
         for (const node &n : property->getNonDefaultValuatedNodes(g)) {
@@ -263,7 +263,7 @@ public:
         _writer.writeMapClose();
       }
 
-      if (property->numberOfNonDefaultValuatedEdges() > 0) {
+      if (property->hasNonDefaultValuatedEdges()) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
         for (const edge &e : property->getNonDefaultValuatedEdges(g)) {

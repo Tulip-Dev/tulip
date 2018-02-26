@@ -82,6 +82,22 @@ Returns the graph on which the property has been defined.
 
  //===========================================================================================
 
+  virtual bool hasNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+ %Docstring
+ tlp.PropertyInterface.hasNonDefaultValuatedNodes(subgraph=None)
+
+.. versionadded:: 5.2
+
+ Returns whether it exists nodes whose value is different
+ from the default value.
+
+ :param subgraph: a subgraph can be given in parameter. In that case, only the nodes belonging to this subgraph are considered.
+ :type subgraph: :class:`tlp.Graph`
+ :rtype: boolean
+ %End
+
+ //===========================================================================================
+
   virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
  %Docstring
  tlp.PropertyInterface.numberOfNonDefaultValuatedNodes(subgraph=None)
@@ -113,6 +129,22 @@ from the default value.
 %MethodCode
   sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNonDefaultValuatedNodes(a0));
 %End
+
+ //===========================================================================================
+
+  virtual bool hasNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+ %Docstring
+ tlp.PropertyInterface.hasNonDefaultValuatedEdges(subgraph=None)
+
+.. versionadded:: 5.2
+
+ Returns whether it exists edges whose value is different
+ from the default value.
+
+ :param subgraph: a subgraph can be given in parameter. In that case, only the edges belonging to this subgraph are considered.
+ :type subgraph: :class:`tlp.Graph`
+ :rtype: boolean
+ %End
 
  //===========================================================================================
 

@@ -436,6 +436,15 @@ public:
   virtual tlp::Iterator<node> *getNonDefaultValuatedNodes(const Graph * = nullptr) const = 0;
 
   /**
+   * @brief Returns whether the property has nodes with a non default value.
+   * When given a Graph as parameter, only the nodes with a non default value belonging to
+   * this graph are taken into account.
+   * @return false if all nodes has the default value, true if not.
+   *
+   */
+  virtual bool hasNonDefaultValuatedNodes(const Graph * = nullptr) const = 0;
+
+  /**
    * @brief Returns the number of nodes with a non default value.
    * When given a Graph as parameter, only the number of nodes with a non default value belonging to
    * this graph is returned.
@@ -452,6 +461,15 @@ public:
    * @warning The ownership of the iterator is given to the caller.
    */
   virtual tlp::Iterator<edge> *getNonDefaultValuatedEdges(const Graph * = nullptr) const = 0;
+
+  /**
+   * @brief Returns whether the property has edges with a non default value.
+   * When given a Graph as parameter, only the edges with a non default value belonging to
+   * this graph are taken into account.
+   * @return false if all edges has the default value, true if not.
+   *
+   */
+  virtual bool hasNonDefaultValuatedEdges(const Graph * = nullptr) const = 0;
 
   /**
    * @brief Returns the number of edges with a non default value.

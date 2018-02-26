@@ -2060,20 +2060,20 @@ public:
 
     // remove unused properties
     if (createPubliNodes) {
-      if (labriTeamsProp->numberOfNonDefaultValuatedNodes() == 0)
+      if (!labriTeamsProp->hasNonDefaultValuatedNodes())
         graph->delLocalProperty(labriTeamsProp->getName());
 
-      if (labriAuthorsProp->numberOfNonDefaultValuatedNodes() == 0)
+      if (!labriAuthorsProp->hasNonDefaultValuatedNodes())
         graph->delLocalProperty(labriAuthorsProp->getName());
     }
 
     // layout graph with a bubble tree
     if (createAuthNodes) {
       // delete labri specific properties if not used
-      if (labriTeamProp->numberOfNonDefaultValuatedNodes() == 0)
+      if (!labriTeamProp->hasNonDefaultValuatedNodes())
         graph->delLocalProperty(labriTeamProp->getName());
 
-      if (fromLabriProp->numberOfNonDefaultValuatedNodes() == 0)
+      if (!fromLabriProp->hasNonDefaultValuatedNodes())
         graph->delLocalProperty(fromLabriProp->getName());
 
       string err;

@@ -140,7 +140,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             needPush = false;
           }
 
-          if (!iteratorEmpty(selection->getNonDefaultValuatedNodes())) {
+          if (selection->hasNonDefaultValuatedNodes()) {
             if (needPush) {
               graph->push();
               needPush = false;
@@ -148,7 +148,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             selection->setAllNodeValue(false);
           }
 
-          if (!iteratorEmpty(selection->getNonDefaultValuatedEdges())) {
+          if (selection->hasNonDefaultValuatedEdges()) {
             if (needPush) {
               graph->push();
               needPush = false;

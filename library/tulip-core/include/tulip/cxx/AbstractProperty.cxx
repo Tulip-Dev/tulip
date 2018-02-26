@@ -315,6 +315,16 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedNodes(const Gra
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
+bool
+tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedNodes(const Graph *g) const {
+  if (g == nullptr) {
+    return nodeProperties.hasNonDefaultValues();
+  } else {
+    return !tlp::iteratorEmpty(getNonDefaultValuatedNodes(g));
+  }
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
 unsigned int
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::numberOfNonDefaultValuatedNodes(const Graph *g) const {
   if (g == nullptr) {
@@ -375,6 +385,16 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedEdges(const Gra
     return new GraphEltIterator<tlp::edge>(g != nullptr ? g : Tprop::graph, it);
 
   return ((g == nullptr) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+bool
+tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedEdges(const Graph *g) const {
+  if (g == nullptr) {
+    return edgeProperties.hasNonDefaultValues();
+  } else {
+    return !tlp::iteratorEmpty(getNonDefaultValuatedEdges(g));
+  }
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
