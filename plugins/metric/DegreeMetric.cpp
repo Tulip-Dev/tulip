@@ -79,8 +79,7 @@ bool DegreeMetric::check(std::string &errorMsg) {
   if (dataSet != nullptr) {
     dataSet->get("metric", weights);
 
-    if (weights && !weights->getEdgeDefaultValue()
-	&& !weights->hasNonDefaultValuatedEdges()) {
+    if (weights && !weights->getEdgeDefaultValue() && !weights->hasNonDefaultValuatedEdges()) {
       errorMsg = "Cannot compute a weighted degree with a null weight value\nfor all edges";
       return false;
     }

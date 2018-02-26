@@ -256,8 +256,8 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
   bool displayEdges = inputData->parameters->isDisplayEdges();
 
   bool renderOnlyOneNode = !selectionDrawActivate &&
-    !inputData->getElementLayout()->hasNonDefaultValuatedNodes() &&
-    !inputData->getElementSize()->hasNonDefaultValuatedNodes();
+                           !inputData->getElementLayout()->hasNonDefaultValuatedNodes() &&
+                           !inputData->getElementSize()->hasNonDefaultValuatedNodes();
 
   if (!inputData->parameters->isElementZOrdered()) {
 
@@ -636,11 +636,11 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       if (selectionProperty->getNodeValue(n) == drawSelected) {
         if (!metric) {
-	  GlNode glNode(n.id, it->pos);
-	  glNode.drawLabel(occlusionTest, inputData, lod, layerLODUnit.camera);
+          GlNode glNode(n.id, it->pos);
+          glNode.drawLabel(occlusionTest, inputData, lod, layerLODUnit.camera);
         } else {
           // Metric ordered
-	  nodesMetricOrdered.push_back(pair<node, float>(n, lod));
+          nodesMetricOrdered.push_back(pair<node, float>(n, lod));
         }
       }
     }

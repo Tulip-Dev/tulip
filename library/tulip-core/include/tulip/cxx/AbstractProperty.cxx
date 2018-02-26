@@ -315,8 +315,7 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedNodes(const Gra
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
-bool
-tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedNodes(const Graph *g) const {
+bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedNodes(const Graph *g) const {
   if (g == nullptr) {
     return nodeProperties.hasNonDefaultValues();
   } else {
@@ -388,8 +387,7 @@ tlp::AbstractProperty<Tnode, Tedge, Tprop>::getNonDefaultValuatedEdges(const Gra
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
-bool
-tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedEdges(const Graph *g) const {
+bool tlp::AbstractProperty<Tnode, Tedge, Tprop>::hasNonDefaultValuatedEdges(const Graph *g) const {
   if (g == nullptr) {
     return edgeProperties.hasNonDefaultValues();
   } else {

@@ -319,7 +319,7 @@ bool MixedModel::check(std::string &err) {
 
 //====================================================
 vector<edge> MixedModel::getPlanarSubGraph(tlp::PlanarConMap *sg,
-                                           const std::vector<tlp::edge>& unplanar_edges) {
+                                           const std::vector<tlp::edge> &unplanar_edges) {
   vector<edge> res;
 
   for (auto e : unplanar_edges) {
@@ -409,7 +409,7 @@ void MixedModel::placeNodesEdges() {
       auto c_v = NodeCoords[v];
       vector<Coord> bends;
       bends.push_back(Coord(-maxX + (c_n.getX() + c_v.getX()) / 2.f,
-			    -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size));
+                            -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size));
       result->setEdgeValue(e, bends);
       graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e, EdgeShape::BezierCurve);
       graph->getProperty<ColorProperty>("viewColor")->setEdgeValue(e, Color(218, 218, 218));

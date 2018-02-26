@@ -105,11 +105,11 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph
       typename nodeType::RealType tmp = this->getNodeValue(n);
 
       if (tmp > maxN2) {
-	maxN2 = tmp;
+        maxN2 = tmp;
       }
 
       if (tmp < minN2) {
-	minN2 = tmp;
+        minN2 = tmp;
       }
     }
   }
@@ -141,10 +141,10 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(const Graph
       typename edgeType::RealType tmp = this->getEdgeValue(ite);
 
       if (tmp > maxE2)
-	maxE2 = tmp;
+        maxE2 = tmp;
 
       if (tmp < minE2)
-	minE2 = tmp;
+        minE2 = tmp;
     }
   }
 
