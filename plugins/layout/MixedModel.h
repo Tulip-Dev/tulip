@@ -56,7 +56,7 @@ public:
 
 private:
   std::vector<tlp::edge> getPlanarSubGraph(tlp::PlanarConMap *graph,
-                                           std::vector<tlp::edge> unplanar_edges);
+                                           const std::vector<tlp::edge> &unplanar_edges);
   void initPartition();
   void assignInOutPoints();
   void computeCoords();

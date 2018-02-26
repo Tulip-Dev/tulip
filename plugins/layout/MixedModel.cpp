@@ -94,8 +94,8 @@ bool MixedModel::run() {
   //=========================================================
   // rotate size if necessary
   if (orientation == "horizontal") {
-    for (const node &n : graph->nodes()) {
-      const Size &tmp = sizeResult->getNodeValue(n);
+    for (auto n : graph->nodes()) {
+      const Size tmp = sizeResult->getNodeValue(n);
       sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
@@ -177,15 +177,15 @@ bool MixedModel::run() {
       currentGraph->delSubGraph(sp.graph);
       G = currentGraph->addSubGraph();
 
-      for (const edge &e_tmp : graph->edges()) {
-        if (resultatAlgoSelection.getEdgeValue(e_tmp)) {
-          const pair<node, node> &eEnds = currentGraph->ends(e_tmp);
+      for (auto e : graph->edges()) {
+        if (resultatAlgoSelection.getEdgeValue(e)) {
+          const pair<node, node> eEnds = currentGraph->ends(e);
           G->addNode(eEnds.first);
           G->addNode(eEnds.second);
-          G->addEdge(e_tmp);
-          edge_planar.push_back(e_tmp);
+          G->addEdge(e);
+          edge_planar.push_back(e);
         } else
-          unplanar_edges.push_back(e_tmp);
+          unplanar_edges.push_back(e);
       }
 
       //===================================================
@@ -193,8 +193,7 @@ bool MixedModel::run() {
       graphMap = computePlanarConMap(G);
       vector<edge> re_added = getPlanarSubGraph(graphMap, unplanar_edges);
 
-      for (unsigned int ui = 0; ui < re_added.size(); ++ui) {
-        edge e = re_added[ui];
+      for (auto e : re_added) {
         G->addEdge(e);
         resultatAlgoSelection.setEdgeValue(e, true);
         edge_planar.push_back(e);
@@ -205,7 +204,7 @@ bool MixedModel::run() {
       delete graphMap;
     } else {
       G = currentGraph->addCloneSubGraph();
-      for (const edge &e : currentGraph->edges())
+      for (auto e : currentGraph->edges())
         edge_planar.push_back(e);
     }
 
@@ -279,35 +278,25 @@ bool MixedModel::run() {
 
   if (components.size() > 1) {
     string err = "";
-    LayoutProperty layout(graph);
     DataSet tmp;
     tmp.set("coordinates", result);
-    graph->applyPropertyAlgorithm(string("Connected Component Packing"), &layout, err, &tmp);
-
-    for (const node &n : graph->nodes()) {
-      result->setNodeValue(n, layout.getNodeValue(n));
-    }
-
-    for (const edge &e : graph->edges()) {
-      result->setEdgeValue(e, layout.getEdgeValue(e));
-    }
+    graph->applyPropertyAlgorithm("Connected Component Packing", result, err, &tmp);
   }
 
   // rotate layout and size
   if (orientation == "horizontal") {
-    for (const node &n : graph->nodes()) {
-      const Size &tmp = sizeResult->getNodeValue(n);
-      sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      const Coord &tmpC = result->getNodeValue(n);
-      result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+    for (auto n : graph->nodes()) {
+      Size size(sizeResult->getNodeValue(n));
+      sizeResult->setNodeValue(n, Size(size[1], size[0], size[2]));
+      Coord coord = result->getNodeValue(n);
+      result->setNodeValue(n, Coord(-coord[1], coord[0], coord[2]));
     }
-    for (const edge &e : graph->edges()) {
-      LineType::RealType tmp = result->getEdgeValue(e);
+    for (auto e : graph->edges()) {
+      const auto &tmp = result->getEdgeValue(e);
       LineType::RealType tmp2;
-      LineType::RealType::iterator it;
 
-      for (it = tmp.begin(); it != tmp.end(); ++it) {
-        tmp2.push_back(Coord(-(*it)[1], (*it)[0], (*it)[2]));
+      for (auto coord : tmp) {
+        tmp2.push_back(Coord(-coord[1], coord[0], coord[2]));
       }
 
       result->setEdgeValue(e, tmp2);
@@ -321,25 +310,20 @@ bool MixedModel::run() {
 
 //====================================================
 bool MixedModel::check(std::string &err) {
-  bool result = true;
-  err = "The graph must be ";
-
   if (!SimpleTest::isSimple(graph)) {
-    err += "simple and without self-loop ";
-    result = false;
+    err = "The graph must be simple and without self-loop ";
+    return false;
   }
-
-  return result;
+  return true;
 }
 
 //====================================================
 vector<edge> MixedModel::getPlanarSubGraph(tlp::PlanarConMap *sg,
-                                           std::vector<tlp::edge> unplanar_edges) {
+                                           const std::vector<tlp::edge>& unplanar_edges) {
   vector<edge> res;
 
-  for (unsigned int ui = 0; ui < unplanar_edges.size(); ++ui) {
-    edge e = unplanar_edges[ui];
-    const pair<node, node> &eEnds = sg->ends(e);
+  for (auto e : unplanar_edges) {
+    const pair<node, node> eEnds = sg->ends(e);
     Face f = sg->sameFace(eEnds.first, eEnds.second);
 
     if (f != Face()) {
@@ -355,15 +339,15 @@ vector<edge> MixedModel::getPlanarSubGraph(tlp::PlanarConMap *sg,
 void MixedModel::placeNodesEdges() {
   float maxX = 0, maxY = 0;
 
-  for (const node &n : carte->nodes()) {
+  for (auto n : carte->nodes()) {
     Coord c = nodeSize.get(n.id);
     c[0] -= edgeNodeSpacing;
     graph->getProperty<SizeProperty>("viewSize")->setNodeValue(n, Size(c[0], c[1], 0.3f));
     result->setNodeValue(n, NodeCoords[n]);
   }
 
-  for (const edge &e : carte->edges()) {
-    const pair<node, node> &eEnds = carte->ends(e);
+  for (auto e : carte->edges()) {
+    const pair<node, node> eEnds = carte->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
     Coord cs, ct, c;
@@ -374,13 +358,13 @@ void MixedModel::placeNodesEdges() {
       vector<Coord> bends;
 
       if (rs > rt) {
-        cs = InPoints[e][0] + NodeCoords[src];
-        ct = OutPoints[e] + NodeCoords[tgt];
-        c = Coord(ct.getX(), cs.getY(), 0);
+        cs = std::move(InPoints[e][0] + NodeCoords[src]);
+        ct = std::move(OutPoints[e] + NodeCoords[tgt]);
+        c = std::move(Coord(ct.getX(), cs.getY(), 0));
       } else {
-        ct = InPoints[e][0] + NodeCoords[tgt];
-        cs = OutPoints[e] + NodeCoords[src];
-        c = Coord(cs.getX(), ct.getY(), 0);
+        ct = std::move(InPoints[e][0] + NodeCoords[tgt]);
+        cs = std::move(OutPoints[e] + NodeCoords[src]);
+        c = std::move(Coord(cs.getX(), ct.getY(), 0));
       }
 
       if (ct.getX() >= maxX)
@@ -417,15 +401,15 @@ void MixedModel::placeNodesEdges() {
     maxX /= 8;
     maxY /= 8;
 
-    for (unsigned int ui = 0; ui < unplanar_edges.size(); ++ui) {
-      edge e = unplanar_edges[ui];
-      const pair<node, node> &eEnds = carte->ends(e);
+    for (auto e : unplanar_edges) {
+      const pair<node, node> eEnds = carte->ends(e);
       node n = eEnds.first;
       node v = eEnds.second;
-      Coord c_n(-maxX + (NodeCoords[n].getX() + NodeCoords[v].getX()) / 2.f,
-                -maxY + (NodeCoords[n].getY() + NodeCoords[v].getY()) / 2.f, -z_size);
+      auto c_n = NodeCoords[n];
+      auto c_v = NodeCoords[v];
       vector<Coord> bends;
-      bends.push_back(c_n);
+      bends.push_back(Coord(-maxX + (c_n.getX() + c_v.getX()) / 2.f,
+			    -maxY + (c_n.getY() + c_v.getY()) / 2.f, -z_size));
       result->setEdgeValue(e, bends);
       graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e, EdgeShape::BezierCurve);
       graph->getProperty<ColorProperty>("viewColor")->setEdgeValue(e, Color(218, 218, 218));
@@ -505,8 +489,8 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
 
       tmp.clear();
 
-      for (const edge &e : carte->getInOutEdges(v)) {
-        const pair<node, node> &eEnds = carte->ends(e);
+      for (auto e : carte->getInOutEdges(v)) {
+        const pair<node, node> eEnds = carte->ends(e);
 
         node n = (eEnds.first == v) ? eEnds.second : eEnds.first;
 
@@ -588,7 +572,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
             vector<edge> tmp;
             tmp.insert(tmp.begin(), eil, listOfEdgesIN.end());
             tmp.insert(tmp.end(), listOfEdgesIN.begin(), eil);
-            listOfEdgesIN = tmp;
+            listOfEdgesIN.swap(tmp);
           }
         } else if (i == p - 1) {
           edge e = existEdge(nr, v);
@@ -599,7 +583,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
             vector<edge> tmp;
             tmp.insert(tmp.begin(), eir + 1, listOfEdgesIN.end());
             tmp.insert(tmp.end(), listOfEdgesIN.begin(), eir + 1);
-            listOfEdgesIN = tmp;
+            listOfEdgesIN.swap(tmp);
           }
         } else {
           edge e = existEdge(V[k][i - 1], v);
@@ -610,7 +594,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
               vector<edge>::iterator ei = find(listOfEdgesIN.begin(), listOfEdgesIN.end(), e);
               tmp.insert(tmp.begin(), ei, listOfEdgesIN.end());
               tmp.insert(tmp.end(), listOfEdgesIN.begin(), ei);
-              listOfEdgesIN = tmp;
+              listOfEdgesIN.swap(tmp);
             }
           } else {
             e = existEdge(V[k][i + 1], v);
@@ -621,7 +605,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
               vector<edge>::iterator ei = find(listOfEdgesIN.begin(), listOfEdgesIN.end(), e);
               tmp.insert(tmp.begin(), ei + 1, listOfEdgesIN.end());
               tmp.insert(tmp.end(), listOfEdgesIN.begin(), ei + 1);
-              listOfEdgesIN = tmp;
+              listOfEdgesIN.swap(tmp);
             }
           }
         }
@@ -1051,7 +1035,7 @@ void MixedModel::computeCoords() {
 node MixedModel::leftV(unsigned int k) {
   assert((0 < k) && (k < V.size()));
   edge el = EdgesIN[V[k][0]][0];
-  const pair<node, node> &eEnds = carte->ends(el);
+  const pair<node, node> eEnds = carte->ends(el);
   return (eEnds.first == V[k][0]) ? eEnds.second : eEnds.first;
 }
 
@@ -1061,7 +1045,7 @@ node MixedModel::rightV(unsigned int k) {
   unsigned int p = V[k].size();
   unsigned int n = EdgesIN[V[k][p - 1]].size();
   edge er = EdgesIN[V[k][p - 1]][n - 1];
-  const pair<node, node> &eEnds = carte->ends(er);
+  const pair<node, node> eEnds = carte->ends(er);
   return (eEnds.first == V[k][p - 1]) ? eEnds.second : eEnds.first;
 }
 //====================================================
