@@ -655,7 +655,7 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
     Coord srcCoord, tgtCoord;
     Size srcSize, tgtSize;
 
-    vector<Coord>& vertices = eInfos.lineVertices;
+    vector<Coord> &vertices = eInfos.lineVertices;
     size_t numberOfVertices =
         glEdge->getVertices(inputData, e, src, tgt, srcCoord, tgtCoord, srcSize, tgtSize, vertices);
 
@@ -674,7 +674,7 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       vector<float> edgeSizes;
       getSizes(vertices, edgeSize[0] / 2.0f, edgeSize[1] / 2.0f, edgeSizes);
 
-      vector<Coord>& quadVertices = eInfos.quadVertices;
+      vector<Coord> &quadVertices = eInfos.quadVertices;
       buildCurvePoints(vertices, edgeSizes, srcCoord, tgtCoord, quadVertices);
 
       const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
@@ -694,8 +694,8 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       Color srcColor, tgtColor;
 
       vector<Color> &lColors = eInfos.lineColors;
-      glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
-                        &eInfos.lineVertices[0], numberOfVertices, lColors);
+      glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor, &eInfos.lineVertices[0],
+                        numberOfVertices, lColors);
       // edge infos are pushed after the nodes ones
       pointsColorsArray[glEdge->pos + nbNodes] = lColors[0];
 
@@ -706,8 +706,7 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       centerLine.reserve(numberQuadVertices / 2);
 
       for (int i = 0; i < numberQuadVertices / 2; ++i) {
-        centerLine.push_back((quadVertices[2 * i] +
-			      quadVertices[2 * i + 1]) / 2.f);
+        centerLine.push_back((quadVertices[2 * i] + quadVertices[2 * i + 1]) / 2.f);
       }
 
       vector<Color> &qColors = eInfos.quadColors;
@@ -739,8 +738,7 @@ void GlVertexArrayManager::endOfVisit() {
       // update lines global vectors
       auto &vertices = eInfos.lineVertices;
       unsigned int baseIndex = linesCoordsArray.size();
-      linesCoordsArray.insert(linesCoordsArray.end(),
-			      vertices.begin(), vertices.end());
+      linesCoordsArray.insert(linesCoordsArray.end(), vertices.begin(), vertices.end());
       linesCoordsArray[baseIndex] = eInfos.srcAnchor;
       linesCoordsArray[baseIndex + numberOfVertices - 1] = eInfos.tgtAnchor;
 
@@ -753,17 +751,17 @@ void GlVertexArrayManager::endOfVisit() {
       // update quads global vectors
       auto &quadVertices = eInfos.quadVertices;
       eInfos.quadsIndex = quadsCoordsArray.size();
-      quadsCoordsArray.insert(quadsCoordsArray.end(),
-			      quadVertices.begin(), quadVertices.end());
+      quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
       vector<Color> &qcolors = eInfos.quadColors;
       if (inputData->parameters->isEdgeColorInterpolate())
-	for (size_t i = 0; i < qcolors.size(); ++i) {
-	  quadsColorsArray.push_back(qcolors[i]);
-	  quadsColorsArray.push_back(qcolors[i]);
-	}
+        for (size_t i = 0; i < qcolors.size(); ++i) {
+          quadsColorsArray.push_back(qcolors[i]);
+          quadsColorsArray.push_back(qcolors[i]);
+        }
       else
-	quadsColorsArray.insert(quadsColorsArray.end(), 2 * qcolors.size(), eInfos.edgeColor);
-      quadsOutlineColorsArray.insert(quadsOutlineColorsArray.end(), 2 * qcolors.size(), eInfos.borderColor);
+        quadsColorsArray.insert(quadsColorsArray.end(), 2 * qcolors.size(), eInfos.edgeColor);
+      quadsOutlineColorsArray.insert(quadsOutlineColorsArray.end(), 2 * qcolors.size(),
+                                     eInfos.borderColor);
     }
   }
 }
@@ -823,12 +821,12 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
     }
 
     auto &outlineRenderingIndices = outlineRenderingIndicesArray[borderWidth];
-    for (unsigned int i = 0; i < (numberOfVertices/2) - 1; ++i) {
+    for (unsigned int i = 0; i < (numberOfVertices / 2) - 1; ++i) {
       outlineRenderingIndices.push_back(baseIndex + 2 * i);
       outlineRenderingIndices.push_back(baseIndex + 2 * (i + 1));
     }
 
-    for (unsigned int i = 0; i < (numberOfVertices/2) - 1; ++i) {
+    for (unsigned int i = 0; i < (numberOfVertices / 2) - 1; ++i) {
       outlineRenderingIndices.push_back(baseIndex + 2 * i + 1);
       outlineRenderingIndices.push_back(baseIndex + 2 * (i + 1) + 1);
     }
