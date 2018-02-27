@@ -56,6 +56,7 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
     visitNodes(graph, visitor);
   if (nbEdges)
     visitEdges(graph, visitor);
+  visitor->endOfVisit();
 }
 
 void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor) {
