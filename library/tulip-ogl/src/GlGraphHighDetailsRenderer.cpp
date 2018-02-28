@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <array>
+
 #include <tulip/GlGraphHighDetailsRenderer.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/NumericProperty.h>
@@ -527,7 +529,7 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitie
       inputData->getGraph()->numberOfNodes() + inputData->getGraph()->numberOfEdges();
 
   // Allocate memory to store the result of the selection
-  vector<Vec4ui> selectBuf(size);
+  vector<std::array<GLuint, 4>> selectBuf(size);
   glSelectBuffer(size * 4, reinterpret_cast<GLuint *>(selectBuf.data()));
   // Activate Open Gl Selection mode
   glRenderMode(GL_SELECT);
