@@ -527,7 +527,7 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera, RenderingEntitie
       inputData->getGraph()->numberOfNodes() + inputData->getGraph()->numberOfEdges();
 
   // Allocate memory to store the result of the selection
-  vector<GLuint[4]> selectBuf(size);
+  vector<Vec4ui> selectBuf(size);
   glSelectBuffer(size * 4, reinterpret_cast<GLuint *>(selectBuf.data()));
   // Activate Open Gl Selection mode
   glRenderMode(GL_SELECT);
