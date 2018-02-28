@@ -78,8 +78,10 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   *
   * @param min The lower left closest point of the box.
   * @param max The higher right most farther point of the box.
+  * @param compute indicates whether the bounding box has to be computed with the min/max args
+  *
   **/
-  BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max);
+  BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max, bool checkMinMax = false);
 
   /**
   * @brief Returns the geometrical center of the bounding box.

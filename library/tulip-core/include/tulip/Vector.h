@@ -393,6 +393,23 @@ inline VECTOR maxVector(const VECTOR &u, const VECTOR &v) {
   return tmp;
 }
 
+/**
+  * compute the minimum/maximum of each dimension of the two vectors
+  */
+TEMPLATEVECTOR
+inline void minMaxVectors(const VECTOR &u, const VECTOR &v,
+			  VECTOR &min, VECTOR &max) {
+  for (size_t i = 0; i < SIZE; ++i) {
+    if (u[i] > v[i]) {
+      max[i] = u[i];
+      min[i] = v[i];
+    } else {
+       min[i] = u[i];
+       max[i] = v[i];
+    }
+  }
+}
+
 TEMPLATEVECTOR
 inline VECTOR operator*(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR

@@ -42,9 +42,14 @@ BoundingBox::BoundingBox() {
   assert(!isValid());
 }
 
-BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max) {
-  (*this)[0] = min;
-  (*this)[1] = max;
+BoundingBox::BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max,
+			 bool compute) {
+  if (compute)
+    tlp::minMaxVectors(min, max, (*this)[0], (*this)[1]);
+  else {
+    (*this)[0] = min;
+    (*this)[1] = max;
+  }
   assert(isValid());
 }
 
