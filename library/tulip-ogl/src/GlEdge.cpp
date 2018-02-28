@@ -58,7 +58,6 @@ namespace tlp {
 
 BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data) {
   edge e = edge(id);
-  BoundingBox bb;
 
   const std::pair<node, node> ends = data->graph->ends(e);
   const node src = ends.first;
@@ -77,7 +76,7 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data, const edge e, c
                                    const node tgt, const Coord &srcCoord, const Coord &tgtCoord,
                                    const Size &srcSize, const Size &tgtSize,
                                    const LineType::RealType &bends) {
-  BoundingBox bb;
+
   double srcRot = data->getElementRotation()->getNodeValue(src);
   double tgtRot = data->getElementRotation()->getNodeValue(tgt);
 
@@ -102,20 +101,14 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data, const edge e, c
   vector<Coord> tmp;
   tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor, tgtAnchor, tmp);
 
+  BoundingBox bb(srcAnchor, tgtAnchor, true);
   if (!tmp.empty()) {
 
     Size edgeSize;
     float maxSrcSize, maxTgtSize;
 
-    if (srcSize[0] >= srcSize[1])
-      maxSrcSize = srcSize[0];
-    else
-      maxSrcSize = srcSize[1];
-
-    if (tgtSize[0] >= tgtSize[1])
-      maxTgtSize = tgtSize[0];
-    else
-      maxTgtSize = tgtSize[1];
+    maxSrcSize = std::max(srcSize[0], srcSize[1]);
+    maxTgtSize = std::max(tgtSize[0], tgtSize[1]);
 
     getEdgeSize(data, e, srcSize, tgtSize, maxSrcSize, maxTgtSize, edgeSize);
 
@@ -130,9 +123,6 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data, const edge e, c
       bb.expand(quadVertices[i]);
     }
   }
-
-  bb.expand(srcAnchor);
-  bb.expand(tgtAnchor);
 
   return bb;
 }

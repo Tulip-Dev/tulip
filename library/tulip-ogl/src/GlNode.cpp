@@ -66,9 +66,7 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData *data) {
 
   Coord &&tmp1 = size / 2.f;
   if (rot == 0) {
-    BoundingBox box;
-    box.expand(coord - tmp1);
-    box.expand(coord + tmp1);
+    BoundingBox box(coord - tmp1, coord + tmp1);
     assert(box.isValid());
     return box;
   } else {
@@ -86,9 +84,7 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData *data) {
     tmp4.set(tmp4[0] * cosAngle - tmp4[1] * sinAngle, tmp4[0] * sinAngle + tmp4[1] * cosAngle,
              tmp4[2]);
 
-    tmp1 += coord;
-    BoundingBox bb(tmp1, tmp1);
-    bb.expand(coord + tmp2);
+    BoundingBox bb(coord + tmp1, coord + tmp2, true);
     bb.expand(coord + tmp3);
     bb.expand(coord + tmp4);
     return bb;
@@ -161,12 +157,6 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
 
   Size nodeSize(size);
 
-  // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
-  // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after
-  // scale will be (0,0,0) and we will have light problem)
-  if (nodeSize[2] == 0)
-    nodeSize[2] = FLT_EPSILON;
-
   // Some glyphs can not benefit from the shader rendering optimization
   // due to the use of quadrics or modelview matrix modification or lighting effect
   static set<int> noShaderGlyphs;
@@ -182,6 +172,12 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
     noShaderGlyphs.insert(NodeShape::Cube);
     noShaderGlyphs.insert(NodeShape::CubeOutlined);
   }
+
+  // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
+  // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after
+  // scale will be (0,0,0) and we will have light problem)
+  if (nodeSize[2] == 0)
+    nodeSize[2] = FLT_EPSILON;
 
   if (data->getGlGlyphRenderer()->renderingHasStarted() &&
       noShaderGlyphs.find(glyph) == noShaderGlyphs.end()) {
