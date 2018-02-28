@@ -397,15 +397,14 @@ inline VECTOR maxVector(const VECTOR &u, const VECTOR &v) {
   * compute the minimum/maximum of each dimension of the two vectors
   */
 TEMPLATEVECTOR
-inline void minMaxVectors(const VECTOR &u, const VECTOR &v,
-			  VECTOR &min, VECTOR &max) {
+inline void minMaxVectors(const VECTOR &u, const VECTOR &v, VECTOR &min, VECTOR &max) {
   for (size_t i = 0; i < SIZE; ++i) {
     if (u[i] > v[i]) {
       max[i] = u[i];
       min[i] = v[i];
     } else {
-       min[i] = u[i];
-       max[i] = v[i];
+      min[i] = u[i];
+      max[i] = v[i];
     }
   }
 }

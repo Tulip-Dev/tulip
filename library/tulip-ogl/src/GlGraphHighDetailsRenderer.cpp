@@ -263,9 +263,8 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
     // draw nodes and metanodes
     for (auto &it : layersLODVector[0].nodesLODVector) {
 
-      if ((it.lod <= 0) ||
-	  (filteringProperty && filteringProperty->getNodeValue(node(it.id))))
-          continue;
+      if ((it.lod <= 0) || (filteringProperty && filteringProperty->getNodeValue(node(it.id))))
+        continue;
 
       if (displayNodes ||
           ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(it.id)))) {
@@ -321,11 +320,9 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
       // draw edges
       for (auto &it : layersLODVector[0].edgesLODVector) {
-	
-        if ((it.lod <= 0) || 
-	    (filteringProperty &&
-	     filteringProperty->getEdgeValue(edge(it.id))) ||
-	    !displayEdges)
+
+        if ((it.lod <= 0) || (filteringProperty && filteringProperty->getEdgeValue(edge(it.id))) ||
+            !displayEdges)
           continue;
 
         if (!metric) {
@@ -382,13 +379,13 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
       // Collect complex entities
       for (auto &it : layersLODVector[0].nodesLODVector) {
 
-        if ((it.lod < 0) ||
-	    (filteringProperty && filteringProperty->getNodeValue(node(it.id))))
-	  continue;
+        if ((it.lod < 0) || (filteringProperty && filteringProperty->getNodeValue(node(it.id))))
+          continue;
 
         BoundingBox &bb = it.boundingBox;
         Coord middle((bb[1] + bb[0]) / 2.f);
-        double dist = (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
+        double dist =
+            (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
         dist += (double(middle[1]) - double(camPos[1])) * (double(middle[1]) - double(camPos[1]));
         dist += (double(middle[2]) - double(camPos[2])) * (double(middle[2]) - double(camPos[2]));
         entitiesSet.insert(EntityWithDistance(dist, &it, true));
@@ -397,13 +394,13 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
 
     if (!selectionDrawActivate || ((selectionType & RenderingEdges) != 0)) {
       for (auto &it : layersLODVector[0].edgesLODVector) {
-        if ((it.lod < 0) ||
-	    (filteringProperty && filteringProperty->getEdgeValue(edge(it.id))))
-	  continue;
+        if ((it.lod < 0) || (filteringProperty && filteringProperty->getEdgeValue(edge(it.id))))
+          continue;
 
         BoundingBox &bb = it.boundingBox;
         Coord middle((bb[0] + bb[1]) / 2.f);
-        double dist = (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
+        double dist =
+            (double(middle[0]) - double(camPos[0])) * (double(middle[0]) - double(camPos[0]));
         dist += (double(middle[1]) - double(camPos[1])) * (double(middle[1]) - double(camPos[1]));
         dist += (double(middle[2]) - double(camPos[2])) * (double(middle[2]) - double(camPos[2]));
         entitiesSet.insert(EntityWithDistance(dist, &it, false));
@@ -581,7 +578,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       float lod = it.lod;
 
       if ((lod < 0 && !viewOutScreenLabel) ||
-	  (lod < 10 && inputData->renderingParameters()->isLabelScaled()))
+          (lod < 10 && inputData->renderingParameters()->isLabelScaled()))
         continue;
 
       if (viewOutScreenLabel && lod < 0)

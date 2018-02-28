@@ -50,7 +50,7 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t nbEdges = graph->numberOfEdges();
   size_t nbBends = 0;
   for (auto e : graph->edges()) {
-      nbBends += layout->getEdgeValue(e).size();
+    nbBends += layout->getEdgeValue(e).size();
   }
   points.resize(nbEdges * 2 + nbBends); // todo: should be #|V| !!!
   indices.resize(nbEdges * 2 + nbBends * 2);
