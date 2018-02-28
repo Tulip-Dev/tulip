@@ -173,6 +173,9 @@ color: #292929;
               <property name="wordWrap">
                <bool>true</bool>
               </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
               </property>
