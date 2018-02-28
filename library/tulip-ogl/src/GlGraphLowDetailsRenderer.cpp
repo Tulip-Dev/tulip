@@ -49,10 +49,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 
   size_t nbEdges = graph->numberOfEdges();
   size_t nbBends = 0;
-  {
-    for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
       nbBends += layout->getEdgeValue(e).size();
-    }
   }
   points.resize(nbEdges * 2 + nbBends); // todo: should be #|V| !!!
   indices.resize(nbEdges * 2 + nbBends * 2);
@@ -61,8 +59,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t i_point = 0;
   size_t i_indices = 0;
   size_t i_col = 0;
-  for (const edge &e : graph->edges()) {
-    const pair<node, node> &ends = graph->ends(e);
+  for (auto e : graph->edges()) {
+    const pair<node, node> ends = graph->ends(e);
     Color a = color->getEdgeValue(e);
     Color b = color->getEdgeValue(e);
     Vec4f ca, cb;
@@ -74,10 +72,11 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 
     indices[i_indices++] = i_point;
     colors[i_col++] = a;
-    points[i_point][0] = layout->getNodeValue(ends.first)[0];
-    points[i_point++][1] = layout->getNodeValue(ends.first)[1];
+    auto &srcCoord = layout->getNodeValue(ends.first);
+    points[i_point][0] = srcCoord[0];
+    points[i_point++][1] = srcCoord[1];
 
-    vector<Coord> bends = layout->getEdgeValue(e);
+    auto &bends = layout->getEdgeValue(e);
 
     for (size_t j = 0; j < bends.size(); ++j) {
       Vec4f tmp((ca - cb));
@@ -93,8 +92,9 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 
     indices[i_indices++] = i_point;
     colors[i_col++] = b;
-    points[i_point][0] = layout->getNodeValue(ends.second)[0];
-    points[i_point++][1] = layout->getNodeValue(ends.second)[1];
+    auto &tgtCoord = layout->getNodeValue(ends.second);
+    points[i_point][0] = tgtCoord[0];
+    points[i_point++][1] = tgtCoord[1];
   }
 }
 //====================================================
@@ -116,7 +116,7 @@ void GlGraphLowDetailsRenderer::initNodesArray() {
   size_t i_col = 0;
   size_t i_indices = 0;
 
-  for (const tlp::node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     Coord p(layout->getNodeValue(n));
     Size s(size->getNodeValue(n) / 2.f);
     Color c(color->getNodeValue(n));
