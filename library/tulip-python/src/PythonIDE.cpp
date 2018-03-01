@@ -674,8 +674,8 @@ void PythonIDE::newFileModule() {
 
 void PythonIDE::newStringModule() {
   bool ok;
-  QString moduleName = QInputDialog::getText(this, "New string module  ",
-                                             "module name :", QLineEdit::Normal, "", &ok);
+  QString moduleName = QInputDialog::getText(this, "New string module  ", "module name :",
+                                             QLineEdit::Normal, "", &ok);
 
   if (ok && !moduleName.isEmpty()) {
     if (!moduleName.endsWith(".py"))
@@ -721,8 +721,9 @@ bool PythonIDE::reloadAllModules() const {
     QFileInfo fileInfo(getModuleEditor(i)->getFileName());
 
     if (fileInfo.fileName() == getModuleEditor(i)->getFileName()) {
-      ret = ret && _pythonInterpreter->registerNewModuleFromString(
-                       moduleName, getModuleEditor(i)->getCleanCode());
+      ret = ret &&
+            _pythonInterpreter->registerNewModuleFromString(moduleName,
+                                                            getModuleEditor(i)->getCleanCode());
     } else {
       _pythonInterpreter->addModuleSearchPath(fileInfo.absolutePath());
       ret = ret && _pythonInterpreter->reloadModule(moduleName);
@@ -885,9 +886,8 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
     }
   } else {
     QMessageBox::critical(
-        this, "Error",
-        "The file " + fileName +
-            " does not seem to contain the source code of a Tulip Python plugin.");
+        this, "Error", "The file " + fileName +
+                           " does not seem to contain the source code of a Tulip Python plugin.");
     return false;
   }
 
@@ -1869,8 +1869,9 @@ void PythonIDE::executeCurrentScript() {
 
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
 
-  if (!reloadAllModules() || !_pythonInterpreter->runString(
-                                 getCurrentMainScriptEditor()->getCleanCode(), scriptFileName)) {
+  if (!reloadAllModules() ||
+      !_pythonInterpreter->runString(getCurrentMainScriptEditor()->getCleanCode(),
+                                     scriptFileName)) {
     indicateErrors();
     return;
   }

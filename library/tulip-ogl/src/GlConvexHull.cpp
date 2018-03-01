@@ -33,8 +33,9 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points, const vector<Color> &fco
                            const string &name, const bool computeHull)
     :
 
-      _points(points), _fillColors(fcolors), _outlineColors(ocolors), _filled(filled),
-      _outlined(outlined), _name(name) {
+      _points(points),
+      _fillColors(fcolors), _outlineColors(ocolors), _filled(filled), _outlined(outlined),
+      _name(name) {
 
   assert(points.size() >= 3);
 

@@ -128,8 +128,9 @@ void GlPolyQuad::draw(float, Camera *) {
 
         unsigned int n = i * nbSubdivisionsPerSegment + j;
 
-        Coord v1 = polyQuadEdges[2 * i] + (j / float(nbSubdivisionsPerSegment - 1)) *
-                                              (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
+        Coord v1 = polyQuadEdges[2 * i] +
+                   (j / float(nbSubdivisionsPerSegment - 1)) *
+                       (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
         Coord v2 = polyQuadEdges[2 * i + 1] +
                    (j / float(nbSubdivisionsPerSegment - 1)) *
                        (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
