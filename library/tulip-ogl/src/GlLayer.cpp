@@ -177,7 +177,7 @@ void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) 
 
   childName = GlXMLTools::enterChildNode(inString, currentPosition);
 
-  if (childName != "") {
+  if (!childName.empty()) {
 
     map<string, string> childMap = GlXMLTools::getProperties(inString, currentPosition);
     assert(childMap["type"] == "GlComposite");
@@ -196,4 +196,4 @@ void GlLayer::glGraphCompositeRemoved(GlGraphComposite *composite) {
   assert(scene);
   scene->glGraphCompositeRemoved(this, composite);
 }
-}
+} // namespace tlp

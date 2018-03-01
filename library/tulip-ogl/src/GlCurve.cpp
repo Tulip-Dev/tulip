@@ -70,7 +70,7 @@ void GlCurve::draw(float, Camera *) {
   tlp::splineLine(newPoints, _beginFillColor, _endFillColor);
   glPopAttrib();
 
-  if (texture != "") {
+  if (!texture.empty()) {
     GlTextureManager::getInst().activateTexture(texture);
   }
 
@@ -116,4 +116,4 @@ void GlCurve::setWithXML(const string &inString, unsigned int &currentPosition) 
   for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
     boundingBox.expand(*it);
 }
-}
+} // namespace tlp

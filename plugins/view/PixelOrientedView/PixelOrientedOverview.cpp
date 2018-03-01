@@ -63,7 +63,7 @@ PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data,
       dimName(dimName), frame(nullptr), frame2(nullptr), overviewGen(false),
       backgroundColor(backgroundColor), textColor(textColor) {
 
-  if (this->dimName == "") {
+  if (this->dimName.empty()) {
     this->dimName = data->getDimensionName();
   }
 
@@ -238,4 +238,4 @@ void PixelOrientedOverview::setBLCorner(const Coord &blCorner) {
   blCornerPos = blCorner;
   computeBoundingBox();
 }
-}
+} // namespace tlp

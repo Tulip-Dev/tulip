@@ -170,7 +170,7 @@ static QString getPythonTypeNameForGraphProperty(Graph *graph, const QString &pr
   for (Graph *sg : graph->getSubGraphs()) {
     ret = getPythonTypeNameForGraphProperty(sg, propName);
 
-    if (ret != "") {
+    if (!ret.isEmpty()) {
       return ret;
     }
   }
@@ -335,7 +335,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       }
     }
 
-    if (line == "" || line.startsWith("#"))
+    if (line.isEmpty() || line.startsWith("#"))
       continue;
 
     if (!(origLine.startsWith("\t") || origLine.startsWith(" "))) {
@@ -345,7 +345,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
     QString fullName = currentFunctionName;
 
-    if (currentClassName != "") {
+    if (!currentClassName.isEmpty()) {
       fullName = currentClassName + "." + fullName;
     }
 
@@ -420,7 +420,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       QString selfPattern = "self.";
       int pos = varName.indexOf(selfPattern);
 
-      if (currentClassName != "") {
+      if (!currentClassName.isEmpty()) {
         if (pos != -1) {
           QString classEntry = varName.mid(pos + selfPattern.size());
 
@@ -442,12 +442,12 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         type = "dict";
       }
 
-      if (type == "") {
+      if (type.isEmpty()) {
         type = findTypeForExpr(expr, fullName);
       }
 
-      if (type != "") {
-        if (currentClassName == "") {
+      if (!type.isEmpty()) {
+        if (currentClassName.isEmpty()) {
           if (_varToType.find(fullName) == _varToType.end()) {
             _varToType[fullName] = QHash<QString, QString>();
           }
@@ -465,7 +465,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       if (currentFunctionName == "global") {
         _globalAutoCompletionList.insert(varName);
 
-        if (moduleName != "") {
+        if (!moduleName.isEmpty()) {
           _apiDb->addApiEntry(moduleName + "." + varName);
         }
       } else {
@@ -503,7 +503,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         }
       }
 
-      if (type != "") {
+      if (!type.isEmpty()) {
         if (_varToType.find(fullName) == _varToType.end()) {
           _varToType[fullName] = QHash<QString, QString>();
         }
@@ -521,7 +521,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       _globalAutoCompletionList.insert(funcName);
       QString fullName = currentFunctionName;
 
-      if (currentClassName != "") {
+      if (!currentClassName.isEmpty()) {
         fullName = currentClassName + "." + fullName;
 
         if (_varToType.find(fullName) == _varToType.end()) {
@@ -537,10 +537,10 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         _classContents[currentClassName].insert(currentFunctionName);
       }
 
-      if (moduleName != "") {
+      if (!moduleName.isEmpty()) {
         QString withParams = line.mid(4, line.lastIndexOf(')') - 3);
 
-        if (currentClassName != "") {
+        if (!currentClassName.isEmpty()) {
           QString withParamsFull = currentClassName + "." + withParams;
 
           if (!withParams.startsWith("__")) {
@@ -619,7 +619,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
           if (_apiDb->typeExists(cType)) {
             _classBases[className].insert(cType);
-          } else if (_apiDb->getFullTypeName(cType) != "") {
+          } else if (!_apiDb->getFullTypeName(cType).isEmpty()) {
             _classBases[className].insert(_apiDb->getFullTypeName(cType));
           } else {
             _classBases[className].insert(cType);
@@ -636,7 +636,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       currentClassName = className;
       _globalAutoCompletionList.insert(className.trimmed());
 
-      if (moduleName != "") {
+      if (!moduleName.isEmpty()) {
         _apiDb->addApiEntry(moduleName + "." + className);
       }
 
@@ -652,7 +652,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       if (findTypeForExpr(varName, fullName) == "tlp.Graph") {
         QString type = getPythonTypeNameForGraphProperty(_graph->getRoot(), propName);
 
-        if (type != "") {
+        if (!type.isEmpty()) {
           if (_varToType.find(fullName) == _varToType.end()) {
             _varToType[fullName] = QHash<QString, QString>();
           }
@@ -675,7 +675,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       if (findTypeForExpr(varName, fullName) == "tlp.Graph") {
         QString type = getPythonTypeNameForGraphProperty(_graph->getRoot(), propName);
 
-        if (type != "") {
+        if (!type.isEmpty()) {
           QString type2 = findTypeForExpr(varName2, fullName);
           QString type3 = "";
 
@@ -685,7 +685,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
             type3 = getPythonTypeNameForPropertyType(type, false);
           }
 
-          if (type3 != "") {
+          if (!type3.isEmpty()) {
             if (_varToType.find(fullName) == _varToType.end()) {
               _varToType[fullName] = QHash<QString, QString>();
             }
@@ -704,7 +704,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       QString varName2 = expr.mid(pos + 1, expr.lastIndexOf("]") - pos - 1);
       QString type = findTypeForExpr(varName, fullName);
 
-      if (type != "") {
+      if (!type.isEmpty()) {
         QString type2 = findTypeForExpr(varName2, fullName);
         QString type3 = "";
 
@@ -714,7 +714,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           type3 = getPythonTypeNameForPropertyType(type, false);
         }
 
-        if (type3 != "") {
+        if (!type3.isEmpty()) {
           if (_varToType.find(fullName) == _varToType.end()) {
             _varToType[fullName] = QHash<QString, QString>();
           }
@@ -736,14 +736,14 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
 
     if (_apiDb->typeExists(name)) {
       currentType = name;
-    } else if (_apiDb->getFullTypeName(name) != "") {
+    } else if (!_apiDb->getFullTypeName(name).isEmpty()) {
       currentType = _apiDb->getFullTypeName(name);
-    } else if (_apiDb->getReturnTypeForMethodOrFunction(name) != "") {
+    } else if (!_apiDb->getReturnTypeForMethodOrFunction(name).isEmpty()) {
       currentType = _apiDb->getReturnTypeForMethodOrFunction(name);
     }
   }
 
-  if (currentType == "" && funcName.indexOf(".") != -1) {
+  if (currentType.isEmpty() && funcName.indexOf(".") != -1) {
     QString className = funcName.mid(0, funcName.indexOf("."));
     currentType = getClassAttributeType(className, expr);
   }
@@ -763,7 +763,7 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
     }
   }
 
-  if (currentType == "" && cleanExpr.indexOf(".") != -1) {
+  if (currentType.isEmpty() && cleanExpr.indexOf(".") != -1) {
     QStringList parts = cleanExpr.split(".");
     int i = 0;
 
@@ -779,14 +779,14 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
 
         if (_apiDb->getDictContentForType(p).count() > 0) {
           currentType = p;
-        } else if (_apiDb->getFullTypeName(p) != "" &&
+        } else if (!_apiDb->getFullTypeName(p).isEmpty() &&
                    _apiDb->getDictContentForType(_apiDb->getFullTypeName(p)).count() > 0) {
           currentType = _apiDb->getFullTypeName(p);
         } else if (_varToType["global"].find(p) != _varToType["global"].end()) {
           currentType = _varToType["global"][p];
         }
 
-        if (currentType == "") {
+        if (currentType.isEmpty()) {
           currentType = PythonInterpreter::getInstance()->getVariableType(p);
         }
 
@@ -796,7 +796,7 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
 
           currentType = getReturnTypeForMethodOrFunction(currentType, func);
 
-          if (_apiDb->getFullTypeName(currentType) != "") {
+          if (!_apiDb->getFullTypeName(currentType).isEmpty()) {
             currentType = _apiDb->getFullTypeName(currentType);
           }
         } else if (_apiDb->getDictContentForType(currentType + "." + p).count() > 0) {
@@ -810,25 +810,25 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr,
 
       ++i;
 
-      if (currentType == "")
+      if (currentType.isEmpty())
         break;
     }
   }
 
-  if (currentType == "") {
+  if (currentType.isEmpty()) {
 
     if (_varToType.find(funcName) != _varToType.end() &&
         _varToType[funcName].find(expr) != _varToType[funcName].end()) {
       currentType = _varToType[funcName][expr];
     } else if (_apiDb->typeExists(expr)) {
       currentType = expr;
-    } else if (_apiDb->getFullTypeName(expr) != "") {
+    } else if (!_apiDb->getFullTypeName(expr).isEmpty()) {
       currentType = _apiDb->getFullTypeName(expr);
     } else if (_varToType["global"].find(expr) != _varToType["global"].end()) {
       currentType = _varToType["global"][expr];
     }
 
-    if (currentType == "") {
+    if (currentType.isEmpty()) {
       currentType = PythonInterpreter::getInstance()->getVariableType(expr);
     }
   }
@@ -872,7 +872,7 @@ static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix,
   QVector<PropertyInterface *> properties = getAllGraphPropertiesFromRoot(graph);
 
   foreach (PropertyInterface *prop, properties) {
-    if (type == "" || prop->getTypename() == QStringToTlpString(type)) {
+    if (type.isEmpty() || prop->getTypename() == QStringToTlpString(type)) {
       QString qProp = "\"" + tlpStringToQString(prop->getName()) + "\"";
 
       if (qProp.startsWith(prefix)) {
@@ -1446,14 +1446,14 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
       type = "dict";
     }
 
-    if (type != "") {
+    if (!type.isEmpty()) {
       _lastFoundType = type;
       ret = getAllDictForType(type, prefix);
 
       if (type != "tlp" &&
           ((_varToType.find(editedFunction) != _varToType.end() &&
             _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
-           (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr) == ""))) {
+           (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr).isEmpty()))) {
         foreach (const QString &entry, ret) {
           if (entry[0].isUpper()) {
             ret.remove(entry);
@@ -1505,7 +1505,7 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
   QString fullName = type + "." + funcName;
   QString ret = _apiDb->getReturnTypeForMethodOrFunction(fullName);
 
-  if (ret == "") {
+  if (ret.isEmpty()) {
     QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
 
     for (int i = 0; i < baseTypes.size(); ++i) {
@@ -1516,19 +1516,19 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
       if (baseType != type)
         ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
-      if (ret != "") {
+      if (!ret.isEmpty()) {
         break;
       }
     }
   }
 
-  if (ret == "") {
+  if (ret.isEmpty()) {
     if (_classBases.find(type) != _classBases.end()) {
       foreach (const QString &baseType, _classBases[type]) {
         if (baseType != type)
           ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
-        if (ret != "") {
+        if (!ret.isEmpty()) {
           break;
         }
       }
@@ -1552,7 +1552,7 @@ QString AutoCompletionDataBase::getClassAttributeType(const QString &className,
       if (baseType != className) {
         QString ret = getClassAttributeType(baseType, classAttribute);
 
-        if (ret != "") {
+        if (!ret.isEmpty()) {
           return ret;
         }
       }

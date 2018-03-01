@@ -31,7 +31,7 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
     return QValidator::Acceptable;
   }
 
-  if (input == "" || input.mid(pos - 1, 1).count(QRegExp("[e.-+]+")) == 1) {
+  if (input.isEmpty() || input.mid(pos - 1, 1).count(QRegExp("[e.-+]+")) == 1) {
     return QValidator::Intermediate;
   }
 

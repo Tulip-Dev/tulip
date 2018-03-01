@@ -580,14 +580,14 @@ void ParallelCoordinatesDrawing::erase() {
 }
 
 void ParallelCoordinatesDrawing::removeAxis(ParallelAxis *axis) {
-  if (axisPlotComposite->findKey(axis) != "") {
+  if (!axisPlotComposite->findKey(axis).empty()) {
     axis->setHidden(true);
     axisPlotComposite->deleteGlEntity(axis);
   }
 }
 
 void ParallelCoordinatesDrawing::addAxis(ParallelAxis *axis) {
-  if (axisPlotComposite->findKey(axis) == "") {
+  if (axisPlotComposite->findKey(axis).empty()) {
     axis->setHidden(false);
     axisPlotComposite->addGlEntity(axis, axis->getAxisName());
   }
@@ -732,4 +732,4 @@ void ParallelCoordinatesDrawing::removeHighlightedElt(const unsigned int dataId)
     }
   }
 }
-}
+} // namespace tlp

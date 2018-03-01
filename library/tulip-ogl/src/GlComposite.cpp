@@ -275,7 +275,7 @@ void GlComposite::setWithXML(const string &inString, unsigned int &currentPositi
 
   childName = GlXMLTools::enterChildNode(inString, currentPosition);
 
-  while (childName != "") {
+  while (!childName.empty()) {
 
     map<string, string> properties = GlXMLTools::getProperties(inString, currentPosition);
 
@@ -306,4 +306,4 @@ void GlComposite::setWithXML(const string &inString, unsigned int &currentPositi
 
   GlXMLTools::leaveChildNode(inString, currentPosition, "children");
 }
-}
+} // namespace tlp

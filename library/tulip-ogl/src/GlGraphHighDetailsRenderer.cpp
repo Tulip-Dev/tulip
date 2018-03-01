@@ -570,7 +570,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
   // Draw Labels for Nodes
   if (inputData->parameters->isViewNodeLabel() &&
-      ((inputData->getElementLabel()->getNodeDefaultStringValue() != "") ||
+      ((!inputData->getElementLabel()->getNodeDefaultStringValue().empty()) ||
        inputData->getElementLabel()->hasNonDefaultValuatedNodes())) {
 
     vector<pair<node, float>> nodesMetricOrdered;
@@ -609,7 +609,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       ltn.metric = metric;
       sort(nodesMetricOrdered.begin(), nodesMetricOrdered.end(), ltn);
 
-      for (auto &it : nodesMetricOrdered) {
+      for (auto it : nodesMetricOrdered) {
         GlNode glNode(it.first.id, graph->nodePos(node(it.first.id)));
         glNode.drawLabel(occlusionTest, inputData, it.second, layerLODUnit.camera);
       }
@@ -618,11 +618,11 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
   // Draw Labels for Edges
   if (inputData->parameters->isViewEdgeLabel() &&
-      ((inputData->getElementLabel()->getEdgeDefaultStringValue() != "") ||
+      ((!inputData->getElementLabel()->getEdgeDefaultStringValue().empty()) ||
        inputData->getElementLabel()->hasNonDefaultValuatedEdges())) {
 
     vector<pair<edge, float>> edgesMetricOrdered;
-    for (auto &it : layerLODUnit.edgesLODVector) {
+    for (auto it : layerLODUnit.edgesLODVector) {
       if (it.lod < 5)
         continue;
 
@@ -659,4 +659,4 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
     }
   }
 }
-}
+} // namespace tlp

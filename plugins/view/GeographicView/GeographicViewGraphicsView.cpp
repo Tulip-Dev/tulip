@@ -62,7 +62,7 @@ GlComposite *readPolyFile(QString fileName) {
   while (!file.atEnd()) {
     line = file.readLine();
 
-    if (line == "" || line == "\n")
+    if (line.isEmpty() || line == "\n")
       continue;
 
     line.toUInt(&ok);
@@ -101,7 +101,7 @@ GlComposite *readPolyFile(QString fileName) {
 
     if (!findLat) {
 
-      if (polygonName != "") {
+      if (!polygonName.empty()) {
 
         if (!currentVector.empty())
           datas.push_back(currentVector);
@@ -135,7 +135,7 @@ GlComposite *readPolyFile(QString fileName) {
     currentVector.push_back(Coord(lng * 2., mercatorLatitude * 360. / M_PI, 0));
   }
 
-  if (polygonName != "") {
+  if (!polygonName.empty()) {
     if (!currentVector.empty())
       datas.push_back(currentVector);
 
@@ -217,7 +217,7 @@ void simplifyPolyFile(QString fileName, float definition) {
   while (!file.atEnd()) {
     QString line(file.readLine());
 
-    if (line == "" || line == "\n")
+    if (line.isEmpty() || line == "\n")
       continue;
 
     line.toUInt(&ok);
@@ -256,7 +256,7 @@ void simplifyPolyFile(QString fileName, float definition) {
 
     if (!findLat) {
 
-      if (polygonName != "") {
+      if (!polygonName.empty()) {
 
         if (!currentVector.empty())
           datas.push_back(currentVector);
@@ -283,7 +283,7 @@ void simplifyPolyFile(QString fileName, float definition) {
     currentVector.push_back(Coord(lng, lat, 0));
   }
 
-  if (polygonName != "") {
+  if (!polygonName.empty()) {
     if (!currentVector.empty())
       datas.push_back(currentVector);
 
@@ -685,9 +685,8 @@ void GeographicViewGraphicsView::mapToPolygon() {
             if ((((*it)[1] < nodePos[1] && lastCoord[1] >= nodePos[1]) ||
                  (lastCoord[1] < nodePos[1] && (*it)[1] >= nodePos[1])) &&
                 ((*it)[0] <= nodePos[0] || lastCoord[0] <= nodePos[0])) {
-              oddNodes ^= ((*it)[0] +
-                               (nodePos[1] - (*it)[1]) / (lastCoord[1] - (*it)[1]) *
-                                   (lastCoord[0] - (*it)[0]) <
+              oddNodes ^= ((*it)[0] + (nodePos[1] - (*it)[1]) / (lastCoord[1] - (*it)[1]) *
+                                          (lastCoord[0] - (*it)[0]) <
                            nodePos[0]);
             }
 
@@ -777,7 +776,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       grabNextNode = true;
       string addr = removeQuotesIfAny(addressProperty->getNodeValue(n));
 
-      if (addr == "")
+      if (addr.empty())
         continue;
 
       progressWidget->setComment("Retrieving latitude and longitude for address : \n" +
@@ -1382,4 +1381,4 @@ void GeographicViewGraphicsView::setGeoLayoutComputed() {
   noLayoutMsgBox->setVisible(false);
   glMainWidget->getScene()->getGlGraphComposite()->setVisible(true);
 }
-}
+} // namespace tlp

@@ -111,7 +111,7 @@ void GlXMLTools::leaveChildNode(const string &inString, unsigned int &currentPos
 
 void GlXMLTools::createProperty(string &outString, const string &name, const string &value,
                                 const string &parent) {
-  if (parent == "") {
+  if (parent.empty()) {
     outString = outString.substr(0, outString.size() - 2);
     outString.append(" " + name + "=\"" + value + "\">\n");
   } else {
@@ -180,4 +180,4 @@ GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
 
   return nullptr;
 }
-}
+} // namespace tlp

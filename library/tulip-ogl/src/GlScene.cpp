@@ -174,8 +174,8 @@ void GlScene::draw() {
   lodCalculator->setRenderingEntitiesFlag(RenderingAll);
 
   /**
-  * If LOD Calculator need entities to compute LOD, we use visitor system
-  */
+   * If LOD Calculator need entities to compute LOD, we use visitor system
+   */
   if (lodCalculator->needEntities()) {
     for (vector<pair<string, GlLayer *>>::iterator it = layersList.begin(); it != layersList.end();
          ++it) {
@@ -254,7 +254,7 @@ void GlScene::draw() {
 
 /******************************************************************************
  * GlLayer management functions
-*******************************************************************************/
+ *******************************************************************************/
 
 GlLayer *GlScene::createLayer(const std::string &name) {
   GlLayer *oldLayer = getLayer(name);
@@ -1093,7 +1093,7 @@ void GlScene::setWithXML(string &in, Graph *graph) {
   GlXMLTools::enterChildNode(in, currentPosition);
   string childName = GlXMLTools::enterChildNode(in, currentPosition);
 
-  while (childName != "") {
+  while (!childName.empty()) {
     assert(childName == "GlLayer");
 
     map<string, string> properties = GlXMLTools::getProperties(in, currentPosition);
@@ -1120,4 +1120,4 @@ void GlScene::setWithXML(string &in, Graph *graph) {
 BoundingBox GlScene::getBoundingBox() {
   return lodCalculator->getSceneBoundingBox();
 }
-}
+} // namespace tlp

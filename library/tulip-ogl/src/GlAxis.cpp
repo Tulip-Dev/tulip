@@ -214,7 +214,7 @@ Coord GlAxis::computeCaptionCenter(const bool captionFrame) {
 void GlAxis::addCaption(const CaptionLabelPosition &captionPos, const float captionHeight,
                         const bool frame, const float maxCapWidth, const float offset,
                         const std::string caption) {
-  if (caption != "")
+  if (!caption.empty())
     captionText = caption;
 
   captionPosition = captionPos;
@@ -356,4 +356,4 @@ void GlAxis::setGradsLabelsHeight(float height) {
 
   computeBoundingBox();
 }
-}
+} // namespace tlp

@@ -101,7 +101,7 @@ void CaptionItem::clearObservers() {
   if (_metricProperty)
     _metricProperty->removeObserver(this);
 
-  if (_captionGraphicsItem->usedProperty() != "") {
+  if (!_captionGraphicsItem->usedProperty().empty()) {
     _metricProperty =
         view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
     _metricProperty->addObserver(this);
@@ -457,4 +457,4 @@ void CaptionItem::selectedPropertyChanged(string /*propertyName*/) {
   _backupColorProperty = new ColorProperty(_graph);
   *_backupColorProperty = *_colorProperty;
 }
-}
+} // namespace tlp

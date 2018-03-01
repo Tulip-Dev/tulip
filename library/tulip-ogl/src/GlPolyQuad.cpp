@@ -128,9 +128,8 @@ void GlPolyQuad::draw(float, Camera *) {
 
         unsigned int n = i * nbSubdivisionsPerSegment + j;
 
-        Coord v1 = polyQuadEdges[2 * i] +
-                   (j / float(nbSubdivisionsPerSegment - 1)) *
-                       (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
+        Coord v1 = polyQuadEdges[2 * i] + (j / float(nbSubdivisionsPerSegment - 1)) *
+                                              (polyQuadEdges[2 * (i + 1)] - polyQuadEdges[2 * i]);
         Coord v2 = polyQuadEdges[2 * i + 1] +
                    (j / float(nbSubdivisionsPerSegment - 1)) *
                        (polyQuadEdges[2 * (i + 1) + 1] - polyQuadEdges[2 * i + 1]);
@@ -175,7 +174,7 @@ void GlPolyQuad::draw(float, Camera *) {
 
   outlineIndices.push_back(0);
 
-  if (textureName != "") {
+  if (!textureName.empty()) {
     GlTextureManager::getInst().activateTexture(textureName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   }
@@ -201,7 +200,7 @@ void GlPolyQuad::draw(float, Camera *) {
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
 
-  if (textureName != "") {
+  if (!textureName.empty()) {
     GlTextureManager::getInst().desactivateTexture();
   }
 
@@ -261,4 +260,4 @@ void GlPolyQuad::setWithXML(const string &inString, unsigned int &currentPositio
     boundingBox.expand(*it);
   }
 }
-}
+} // namespace tlp

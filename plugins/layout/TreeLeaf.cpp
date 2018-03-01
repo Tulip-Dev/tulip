@@ -126,7 +126,7 @@ bool TreeLeaf::run() {
   // preserving layout updates
   std::vector<PropertyInterface *> propsToPreserve;
 
-  if (result->getName() != "")
+  if (!result->getName().empty())
     propsToPreserve.push_back(result);
 
   graph->push(false, &propsToPreserve);

@@ -667,9 +667,8 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
       curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
     }
 
-    if (canUseGeometryShader &&
-        curvesBillboardGeometryShadersMap.find(shaderProgramName) ==
-            curvesBillboardGeometryShadersMap.end()) {
+    if (canUseGeometryShader && curvesBillboardGeometryShadersMap.find(shaderProgramName) ==
+                                    curvesBillboardGeometryShadersMap.end()) {
       GlShaderProgram *polygonShader = new GlShaderProgram(shaderProgramName);
       polygonShader->addShaderFromSourceCode(Vertex,
                                              genCommonUniformVariables() + curveSpecificShaderCode);
@@ -728,7 +727,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
 
-  if (texture != "") {
+  if (!texture.empty()) {
     unsigned int i = nbCurvePoints / 2;
     Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / float(nbCurvePoints - 1)));
     Coord nexCurvePoint(computeCurvePointOnCPU(controlPoints, (i + 1) / float(nbCurvePoints - 1)));
@@ -754,9 +753,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair(
         static_cast<GlShaderProgram *>(nullptr), static_cast<GlShaderProgram *>(nullptr));
 
-    if (canUseGeometryShader &&
-        curvesGeometryShadersMap.find(curveShaderProgram->getName()) !=
-            curvesGeometryShadersMap.end()) {
+    if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) !=
+                                    curvesGeometryShadersMap.end()) {
       geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
       geometryBillboardShaders = curvesBillboardGeometryShadersMap[curveShaderProgram->getName()];
     }
@@ -820,7 +818,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     curveShaderProgram->setUniformColor("endColor", endColor);
     curveShaderProgram->setUniformTextureSampler("texture", 0);
     curveShaderProgram->setUniformTextureSampler("texture3d", 1);
-    curveShaderProgram->setUniformBool("useTexture", texture != "" && !lineCurve);
+    curveShaderProgram->setUniformBool("useTexture", !texture.empty() && !lineCurve);
     curveShaderProgram->setUniformBool("billboard", billboardCurve && !lineCurve);
 
     if (!geometryShaderActivated) {
@@ -872,7 +870,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       }
 
     } else {
-      if (texture != "") {
+      if (!texture.empty()) {
         glActiveTexture(GL_TEXTURE0);
         GlTextureManager::getInst().activateTexture(texture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -907,7 +905,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         GlTextureManager::getInst().desactivateTexture();
       }
 
-      if (texture != "") {
+      if (!texture.empty()) {
         glActiveTexture(GL_TEXTURE0);
         GlTextureManager::getInst().desactivateTexture();
       }
@@ -1062,4 +1060,4 @@ void AbstractGlCurve::translate(const Coord &move) {
 void AbstractGlCurve::getXML(string &) {}
 
 void AbstractGlCurve::setWithXML(const string &, unsigned int &) {}
-}
+} // namespace tlp

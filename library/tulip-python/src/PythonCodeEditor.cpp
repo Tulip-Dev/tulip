@@ -77,7 +77,7 @@ protected:
 private:
   PythonCodeEditor *codeEditor;
 };
-}
+} // namespace tlp
 
 AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent)
     : QListWidget(parent), _codeEditor(parent) {
@@ -135,7 +135,7 @@ void AutoCompletionList::insertSelectedItem() {
     QTextCursor cursor = editor->textCursor();
     QString text = cursor.block().text();
 
-    if (text != "") {
+    if (!text.isEmpty()) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
       int start = cursor.positionInBlock();
 #else
@@ -179,7 +179,7 @@ void AutoCompletionList::insertSelectedItem() {
 
     QString type = _codeEditor->_autoCompletionDb->getLastFoundType();
 
-    if (type != "") {
+    if (!type.isEmpty()) {
       QVector<QString> types;
       types.push_back(type);
       QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
@@ -278,7 +278,7 @@ void FindReplaceDialog::textToFindChanged() {
   _ui->replaceFindButton->setEnabled(false);
   QString text = _ui->textToFind->text();
 
-  if (text == "") {
+  if (text.isEmpty()) {
     _ui->findButton->setEnabled(false);
     _ui->replaceAllButton->setEnabled(false);
   } else {
@@ -313,7 +313,7 @@ void FindReplaceDialog::setSearchResult(const bool result) {
 bool FindReplaceDialog::doFind() {
   QString text = _ui->textToFind->text();
 
-  if (text == "")
+  if (text.isEmpty())
     return false;
 
   QTextDocument::FindFlags findFlags;
@@ -372,7 +372,7 @@ bool FindReplaceDialog::doFind() {
 bool FindReplaceDialog::doReplace() {
   QString text = _ui->textToFind->text();
 
-  if (text == "")
+  if (text.isEmpty())
     return false;
 
   QString selection = _editor->textCursor().selectedText();
@@ -399,7 +399,7 @@ void FindReplaceDialog::doReplaceFind() {
 void FindReplaceDialog::doReplaceAll() {
   QString text = _ui->textToFind->text();
 
-  if (text == "")
+  if (text.isEmpty())
     return;
 
   bool ret = doFind();
@@ -883,7 +883,7 @@ void PythonCodeEditor::matchParens() {
 }
 
 void PythonCodeEditor::resetExtraSelections() {
-  if (selectedText() != "")
+  if (!selectedText().isEmpty())
     return;
 
   QList<QTextEdit::ExtraSelection> selections;
@@ -893,7 +893,7 @@ void PythonCodeEditor::resetExtraSelections() {
 void PythonCodeEditor::highlightCurrentLine() {
   QList<QTextEdit::ExtraSelection> selections = extraSelections();
 
-  if (highlightEditedLine() && !isReadOnly() && selectedText() == "") {
+  if (highlightEditedLine() && !isReadOnly() && selectedText().isEmpty()) {
     QTextEdit::ExtraSelection selection;
     QColor lineColor = QColor(Qt::yellow).lighter(160);
     selection.format = textCursor().block().charFormat();
@@ -910,7 +910,7 @@ void PythonCodeEditor::highlightSelection() {
   QString text = selectedText();
   QList<QTextEdit::ExtraSelection> selections = extraSelections();
 
-  if (text != "") {
+  if (!text.isEmpty()) {
     QTextDocument::FindFlags findFlags;
     findFlags |= QTextDocument::FindCaseSensitively;
     findFlags |= QTextDocument::FindWholeWords;
@@ -994,7 +994,7 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
   } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_F) {
     QString selection = textCursor().selectedText();
 
-    if (selection != "")
+    if (!selection.isEmpty())
       _findReplaceDialog->setTextToFind(selection);
 
     _findReplaceDialog->show();
@@ -1004,7 +1004,7 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
   } else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_R) {
     QString selection = textCursor().selectedText();
 
-    if (selection != "")
+    if (!selection.isEmpty())
       _findReplaceDialog->setTextToFind(selection);
 
     _findReplaceDialog->show();
@@ -1090,7 +1090,7 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
       }
     }
 
-    if (e->text() == "(" && textAfterCursor.trimmed() == "") {
+    if (e->text() == "(" && textAfterCursor.trimmed().isEmpty()) {
 
       QString cleanContext = textBeforeCursor.trimmed();
 
@@ -1121,13 +1121,13 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
         }
       }
 
-      if (type != "") {
+      if (!type.isEmpty()) {
 
         QVector<QVector<QString>> params =
             _autoCompletionDb->getParamTypesForMethodOrFunction(type, funcName);
         QString retType = _autoCompletionDb->getReturnTypeForMethodOrFunction(type, funcName);
 
-        if (retType != "") {
+        if (!retType.isEmpty()) {
           retType = " -> " + retType;
         }
 
@@ -1311,7 +1311,7 @@ QString PythonCodeEditor::getEditedFunctionName() const {
       block = block.previous();
       currentLine = block.text();
 
-      if (currentLine.startsWith('#') || currentLine == "")
+      if (currentLine.startsWith('#') || currentLine.isEmpty())
         continue;
 
       if (funcName == "global" && funcRegexp.indexIn(currentLine.trimmed()) != -1) {
@@ -1345,7 +1345,7 @@ QString PythonCodeEditor::getEditedFunctionName() const {
     }
   }
 
-  if (funcName != "" && className != "")
+  if (!funcName.isEmpty() && !className.isEmpty())
     funcName = className + "." + funcName;
 
   return funcName;
@@ -1395,7 +1395,7 @@ int PythonCodeEditor::lineLength(int lineNumber) const {
 }
 
 bool PythonCodeEditor::hasSelectedText() const {
-  return textCursor().selectedText() != "";
+  return !textCursor().selectedText().isEmpty();
 }
 
 QString PythonCodeEditor::selectedText() const {
@@ -1408,7 +1408,7 @@ void PythonCodeEditor::insertAt(QString text, int line, int col) {
 }
 
 void PythonCodeEditor::showTooltip(int line, int col, const QString &text) {
-  if (text == "")
+  if (text.isEmpty())
     return;
 
   _tooltipActive = true;

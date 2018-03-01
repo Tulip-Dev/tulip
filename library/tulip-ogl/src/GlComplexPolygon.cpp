@@ -511,7 +511,7 @@ void GlComplexPolygon::draw(float, Camera *) {
               glGetAttribLocation(outlineExtrusionShader->getShaderProgramId(), "indice");
           glEnableVertexAttribArray(vertexPosLoc);
 
-          if (quadBorderTexture[v] != "") {
+          if (!(quadBorderTexture[v]).empty()) {
             GlTextureManager::getInst().activateTexture(quadBorderTexture[v]);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
           }
@@ -532,7 +532,7 @@ void GlComplexPolygon::draw(float, Camera *) {
 
           glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, points[v].size());
 
-          if (quadBorderTexture[v] != "") {
+          if (!(quadBorderTexture[v]).empty()) {
             GlTextureManager::getInst().desactivateTexture();
           }
 
@@ -612,7 +612,7 @@ void GlComplexPolygon::setWithXML(const string &inString, unsigned int &currentP
     }
   }
 }
-}
+} // namespace tlp
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

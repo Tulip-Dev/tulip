@@ -360,7 +360,7 @@ void RoundedBox::draw(node n, float lod) {
 
     bool textureOK = false;
 
-    if (texture != "") {
+    if (!texture.empty()) {
       textureOK = GlTextureManager::getInst().activateTexture(texture);
     }
 

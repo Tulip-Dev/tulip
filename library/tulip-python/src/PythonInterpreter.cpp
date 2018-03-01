@@ -502,7 +502,7 @@ bool PythonInterpreter::functionExists(const QString &moduleName, const QString 
 }
 
 bool PythonInterpreter::runString(const QString &pythonCode, const QString &scriptFilePath) {
-  if (scriptFilePath != "")
+  if (!scriptFilePath.isEmpty())
     mainScriptFileName = scriptFilePath;
 
   timer.start();
@@ -517,7 +517,7 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
 
   releaseGIL();
 
-  if (scriptFilePath != "")
+  if (!scriptFilePath.isEmpty())
     mainScriptFileName = "";
 
   return ret != -1;
@@ -631,7 +631,7 @@ void PythonInterpreter::addModuleSearchPath(const QString &path, const bool befo
 bool PythonInterpreter::runGraphScript(const QString &module, const QString &function,
                                        tlp::Graph *graph, const QString &scriptFilePath) {
 
-  if (scriptFilePath != "")
+  if (!scriptFilePath.isEmpty())
     mainScriptFileName = scriptFilePath;
 
   timer.start();
@@ -724,7 +724,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
   releaseGIL();
 
-  if (scriptFilePath != "")
+  if (!scriptFilePath.isEmpty())
     mainScriptFileName = "";
 
   return ret;
@@ -832,11 +832,11 @@ QVector<QString> PythonInterpreter::getGlobalDictEntries(const QString &prefixFi
   QStringList objectDictList = consoleOuputString.split("\n");
 
   for (int i = 0; i < objectDictList.count(); ++i) {
-    if (objectDictList[i] != "") {
+    if (!objectDictList[i].isEmpty()) {
       if (objectDictList[i].startsWith("_")) {
         continue;
       } else {
-        if (prefixFilter != "") {
+        if (!prefixFilter.isEmpty()) {
           if (objectDictList[i].startsWith(prefixFilter)) {
             publicMembersSorted.insert(objectDictList[i]);
           }
@@ -889,11 +889,11 @@ QVector<QString> PythonInterpreter::getObjectDictEntries(const QString &objectNa
     QStringList objectDictList = consoleOuputString.split("\n");
 
     for (int i = 0; i < objectDictList.count(); ++i) {
-      if (objectDictList[i] != "") {
+      if (!objectDictList[i].isEmpty()) {
         if (objectDictList[i].startsWith("_")) {
           continue;
         } else {
-          if (prefixFilter != "") {
+          if (!prefixFilter.isEmpty()) {
             if (objectDictList[i].startsWith(prefixFilter)) {
               publicMembersSorted.insert(objectDictList[i]);
             }
@@ -931,7 +931,7 @@ QVector<QString> PythonInterpreter::getImportedModulesList() {
     QStringList modulesList = consoleOuputString.split("\n");
 
     for (int i = 0; i < modulesList.count(); ++i) {
-      if (modulesList[i] != "") {
+      if (!modulesList[i].isEmpty()) {
         if (modulesList[i].startsWith("_")) {
           continue;
         } else {

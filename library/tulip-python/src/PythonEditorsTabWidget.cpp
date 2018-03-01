@@ -83,7 +83,7 @@ void PythonEditorsTabWidget::scriptTextChanged() {
   // workaround a Qt5 bug on linux
   curTabText = curTabText.replace("&", "");
 
-  if (curTabText == "")
+  if (curTabText.isEmpty())
     return;
 
   if (curTabText[curTabText.size() - 1] != '*') {
@@ -169,7 +169,7 @@ bool PythonEditorsTabWidget::reloadCodeInEditorIfNeeded(int index) {
   PythonCodeEditor *codeEditor = getEditor(index);
   QString fileName = codeEditor->getFileName();
 
-  if (fileName != "") {
+  if (!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
 
     if (fileInfo.exists() && fileInfo.lastModified() != codeEditor->getLastSavedTime()) {

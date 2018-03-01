@@ -197,7 +197,7 @@ void GlLabel::setPlainFont() {
 }
 //============================================================
 void GlLabel::setFontName(const std::string &name) {
-  if (fontName == name || name == "")
+  if (fontName == name || name.empty())
     return;
 
   fontName = name;
@@ -206,7 +206,7 @@ void GlLabel::setFontName(const std::string &name) {
   borderFont = getOutlineFont(fontName);
 
   if (font->Error() || borderFont->Error()) {
-    if (fontName == "")
+    if (fontName.empty())
       tlp::warning() << "Error in font loading: no font name" << endl;
     else
       tlp::warning() << "Error in font loading: " << fontName << " cannot be loaded" << endl;
@@ -797,4 +797,4 @@ void GlLabel::setWithXML(const string &inString, unsigned int &currentPosition) 
   GlXMLTools::setWithXML(inString, currentPosition, "outlineSize", outlineSize);
   GlXMLTools::setWithXML(inString, currentPosition, "textureName", textureName);
 }
-}
+} // namespace tlp

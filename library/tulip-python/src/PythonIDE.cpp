@@ -674,8 +674,8 @@ void PythonIDE::newFileModule() {
 
 void PythonIDE::newStringModule() {
   bool ok;
-  QString moduleName = QInputDialog::getText(this, "New string module  ", "module name :",
-                                             QLineEdit::Normal, "", &ok);
+  QString moduleName = QInputDialog::getText(this, "New string module  ",
+                                             "module name :", QLineEdit::Normal, "", &ok);
 
   if (ok && !moduleName.isEmpty()) {
     if (!moduleName.endsWith(".py"))
@@ -721,9 +721,8 @@ bool PythonIDE::reloadAllModules() const {
     QFileInfo fileInfo(getModuleEditor(i)->getFileName());
 
     if (fileInfo.fileName() == getModuleEditor(i)->getFileName()) {
-      ret = ret &&
-            _pythonInterpreter->registerNewModuleFromString(moduleName,
-                                                            getModuleEditor(i)->getCleanCode());
+      ret = ret && _pythonInterpreter->registerNewModuleFromString(
+                       moduleName, getModuleEditor(i)->getCleanCode());
     } else {
       _pythonInterpreter->addModuleSearchPath(fileInfo.absolutePath());
       ret = ret && _pythonInterpreter->reloadModule(moduleName);
@@ -886,8 +885,9 @@ bool PythonIDE::loadPythonPlugin(const QString &fileName, bool clear) {
     }
   } else {
     QMessageBox::critical(
-        this, "Error", "The file " + fileName +
-                           " does not seem to contain the source code of a Tulip Python plugin.");
+        this, "Error",
+        "The file " + fileName +
+            " does not seem to contain the source code of a Tulip Python plugin.");
     return false;
   }
 
@@ -903,7 +903,7 @@ bool PythonIDE::loadPythonPluginFromSrcCode(const QString &moduleName, const QSt
 
   if (checkAndGetPluginInfoFromSrcCode(pluginSrcCode, pluginName, pluginClassName, pluginType,
                                        pluginClass)) {
-    if (pluginName != "" && pluginClassName != "") {
+    if (!pluginName.isEmpty() && !pluginClassName.isEmpty()) {
       int editorId = addPluginEditor(moduleName);
       PythonCodeEditor *codeEditor = getPluginEditor(editorId);
       codeEditor->setPlainText(pluginSrcCode);
@@ -1869,9 +1869,8 @@ void PythonIDE::executeCurrentScript() {
 
   _pythonInterpreter->setConsoleWidget(_ui->consoleWidget);
 
-  if (!reloadAllModules() ||
-      !_pythonInterpreter->runString(getCurrentMainScriptEditor()->getCleanCode(),
-                                     scriptFileName)) {
+  if (!reloadAllModules() || !_pythonInterpreter->runString(
+                                 getCurrentMainScriptEditor()->getCleanCode(), scriptFileName)) {
     indicateErrors();
     return;
   }
@@ -2158,24 +2157,25 @@ void PythonIDE::loadScriptsAndModulesFromPythonScriptViewDataSet(const tlp::Data
   if (dataSet.get("main_scripts", mainScriptsDataSet)) {
     int i = 0;
     string mainScript;
-    ostringstream oss;
-    oss << "main_script" << i;
+    string mainscriptname("main_script");
+    mainscriptname.append(to_string(i));
 
-    while (mainScriptsDataSet.get(oss.str(), mainScript)) {
-      bool mainScriptLoaded = loadScript(tlpStringToQString(mainScript), false);
+    while (mainScriptsDataSet.get(mainscriptname, mainScript)) {
+      QString qmainScript = tlpStringToQString(mainScript);
+      bool mainScriptLoaded = loadScript(qmainScript, false);
 
       if (!mainScriptLoaded) {
         string mainScriptSrc;
-        oss.str("");
-        oss << "main_script_src" << i;
-        QFileInfo fileInfo(tlpStringToQString(mainScript));
+        string mainScriptSrcname("main_script_src");
+        mainScriptSrcname.append(to_string(i));
+        QFileInfo fileInfo(qmainScript);
 
-        if (mainScriptsDataSet.get(oss.str(), mainScriptSrc)) {
+        if (mainScriptsDataSet.get(mainScriptSrcname, mainScriptSrc)) {
           int mainScriptId = addMainScriptEditor();
           PythonCodeEditor *codeEditor = getMainScriptEditor(mainScriptId);
           codeEditor->setPlainText(tlpStringToQString(mainScriptSrc));
 
-          if (mainScript != "")
+          if (!mainScript.empty())
             _ui->mainScriptsTabWidget->setTabText(mainScriptId, fileInfo.fileName());
           else
             _ui->mainScriptsTabWidget->setTabText(mainScriptId, "[no file]");
@@ -2184,8 +2184,7 @@ void PythonIDE::loadScriptsAndModulesFromPythonScriptViewDataSet(const tlp::Data
         }
       }
 
-      oss.str("");
-      oss << "main_script" << ++i;
+      mainscriptname = "main_script" + to_string(++i);
     }
   }
 }

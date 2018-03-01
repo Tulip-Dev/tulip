@@ -227,12 +227,12 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
     QString expr = text.mid(index, length);
 
     if (APIDataBase::getInstance()->typeExists(expr) ||
-        APIDataBase::getInstance()->getFullTypeName(expr) != "") {
+        !APIDataBase::getInstance()->getFullTypeName(expr).isEmpty()) {
       setFormat(index, length, _qtApiFormat);
     } else if (expr.indexOf(".") != -1) {
       QString type = expr.mid(0, expr.lastIndexOf("."));
 
-      if (APIDataBase::getInstance()->getFullTypeName(type) != "")
+      if (!APIDataBase::getInstance()->getFullTypeName(type).isEmpty())
         type = APIDataBase::getInstance()->getFullTypeName(type);
 
       QString entry = expr.mid(expr.lastIndexOf(".") + 1);

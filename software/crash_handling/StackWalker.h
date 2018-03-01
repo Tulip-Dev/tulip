@@ -61,7 +61,7 @@ public:
 
     os << white;
 
-    if (funcName != "") {
+    if (!funcName.empty()) {
       os << funcName;
     } else {
       os << "??";
@@ -71,11 +71,11 @@ public:
       os << lightMagenta << " (+0x" << std::hex << symbolOffset << ")";
     }
 
-    if (fileName != "") {
+    if (!fileName.empty()) {
       os << lightRed << " at " << lightGreen << fileName << ":" << std::dec << lightYellow << line;
     }
 
-    if (moduleName != "") {
+    if (!moduleName.empty()) {
       os << lightRed << " from " << lightCyan << moduleName;
     } else {
       os << lightRed << " from " << lightGreen << "??";

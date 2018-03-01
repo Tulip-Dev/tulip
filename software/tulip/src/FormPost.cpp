@@ -155,10 +155,10 @@ QNetworkReply *FormPost::postData(QString url) {
   QNetworkRequest request;
   request.setRawHeader("Host", host.toLatin1());
 
-  if (_userAgent != "")
+  if (!_userAgent.isEmpty())
     request.setRawHeader("User-Agent", _userAgent.toLatin1());
 
-  if (_referer != "")
+  if (!_referer.isEmpty())
     request.setRawHeader("Referer", _referer.toLatin1());
 
   request.setHeader(QNetworkRequest::ContentTypeHeader, contentType.toLatin1());

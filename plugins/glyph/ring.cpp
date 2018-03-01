@@ -146,7 +146,7 @@ static void drawGlyph(const Color &glyphColor, const string &texture, const stri
 
   setMaterial(glyphColor);
 
-  if (texture != "") {
+  if (!texture.empty()) {
     GlTextureManager::getInst().activateTexture(texturePath + texture);
   }
 

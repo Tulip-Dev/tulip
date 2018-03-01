@@ -106,7 +106,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
 
   if (key == Qt::Key_Backspace || key == Qt::Key_Left || key == Qt::Key_Right) {
     if (isCursorOnLastLine()) {
-      if (key == Qt::Key_Backspace && textCursor().selectedText() != "") {
+      if (key == Qt::Key_Backspace && !textCursor().selectedText().isEmpty()) {
         textCursor().removeSelectedText();
       } else {
 
@@ -177,7 +177,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
     }
   } else if ((key == Qt::Key_Enter || key == Qt::Key_Return) && e->modifiers() == Qt::NoModifier) {
     if (isCursorOnLastLine()) {
-      if (line != "") {
+      if (!line.isEmpty()) {
         _currentCodeLines += (line + "\n");
         _history.push_back(line);
         _currentHistoryPos = _history.size() - 1;
@@ -186,7 +186,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent *e) {
       setCursorPosition(lines() - 1, lineLength(lines() - 1));
       PythonCodeEditor::keyPressEvent(e);
 
-      if (line != "") {
+      if (!line.isEmpty()) {
         if (_currentPs == ps2 || line.endsWith(":")) {
           _currentPs = ps2;
           insert(ps2 + "  ");

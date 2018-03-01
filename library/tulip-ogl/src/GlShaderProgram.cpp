@@ -259,12 +259,12 @@ void GlShaderProgram::printInfoLog() {
   for (size_t i = 0; i < attachedShaders.size(); ++i) {
     string shaderCompilationlog = attachedShaders[i]->getCompilationLog();
 
-    if (shaderCompilationlog != "") {
+    if (!shaderCompilationlog.empty()) {
       tlp::debug() << shaderCompilationlog << endl;
     }
   }
 
-  if (programLinkLog != "") {
+  if (!programLinkLog.empty()) {
     tlp::debug() << programLinkLog << endl;
   }
 }
@@ -888,4 +888,4 @@ void GlShaderProgram::getUniformVec4BoolVariableValue(const std::string &variabl
 void GlShaderProgram::setMaxGeometryShaderOutputVertices(const int maxOutputVertices) {
   maxGeometryShaderOutputVertices = maxOutputVertices;
 }
-}
+} // namespace tlp

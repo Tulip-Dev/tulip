@@ -33,9 +33,8 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points, const vector<Color> &fco
                            const string &name, const bool computeHull)
     :
 
-      _points(points),
-      _fillColors(fcolors), _outlineColors(ocolors), _filled(filled), _outlined(outlined),
-      _name(name) {
+      _points(points), _fillColors(fcolors), _outlineColors(ocolors), _filled(filled),
+      _outlined(outlined), _name(name) {
 
   assert(points.size() >= 3);
 
@@ -124,7 +123,7 @@ ConvexHullItem *GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   convexHullItem->_graph = graph;
   graph->getAttributes().get("name", convexHullItem->name);
 
-  if (convexHullItem->name == "") {
+  if (convexHullItem->name.empty()) {
     std::stringstream s;
     s << graph->getId();
     convexHullItem->name = s.str();
@@ -351,4 +350,4 @@ void GlConvexHull::setWithXML(const string &inString, unsigned int &currentPosit
   GlXMLTools::setWithXML(inString, currentPosition, "filled", _filled);
   GlXMLTools::setWithXML(inString, currentPosition, "outlined", _outlined);
 }
-}
+} // namespace tlp

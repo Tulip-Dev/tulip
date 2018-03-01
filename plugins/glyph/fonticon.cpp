@@ -269,7 +269,7 @@ static void drawIcon(const string &iconName, const string &fontFile,
     fontIcons[iconName] = FontIcon(fontFile, iconCodePoint);
   }
 
-  if (texture != "") {
+  if (!texture.empty()) {
     GlTextureManager::getInst().activateTexture(texture);
   }
 

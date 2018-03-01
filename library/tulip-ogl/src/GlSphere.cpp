@@ -156,7 +156,7 @@ void GlSphere::draw(float, Camera *) {
   glRotatef(rot[1], 0, 1, 0);
   glRotatef(rot[2], 0, 0, 1);
 
-  if (textureFile != "") {
+  if (!textureFile.empty()) {
     GlTextureManager::getInst().activateTexture(textureFile);
   }
 
@@ -169,7 +169,7 @@ void GlSphere::draw(float, Camera *) {
   glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
   glNormalPointer(GL_FLOAT, 0, BUFFER_OFFSET(0));
 
-  if (textureFile != "") {
+  if (!textureFile.empty()) {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
     glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
@@ -183,7 +183,7 @@ void GlSphere::draw(float, Camera *) {
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_NORMAL_ARRAY);
 
-  if (textureFile != "")
+  if (!textureFile.empty())
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -219,4 +219,4 @@ void GlSphere::setWithXML(const string &inString, unsigned int &currentPosition)
   boundingBox[0] = Coord(position[0] - radius, position[1] - radius, position[2] - radius);
   boundingBox[1] = Coord(position[0] + radius, position[1] + radius, position[2] + radius);
 }
-}
+} // namespace tlp

@@ -297,14 +297,14 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #endif
 
       if (status == 0) {
-        if (std::string(info.first) == "") {
+        if (std::string(info.first).empty()) {
           printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
         } else {
           printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, info.first,
                          info.second);
         }
       } else {
-        if (std::string(info.first) == "") {
+        if (std::string(info.first).empty()) {
           printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
         } else {
           printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset,

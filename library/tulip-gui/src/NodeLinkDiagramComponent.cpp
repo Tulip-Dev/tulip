@@ -193,7 +193,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     dataSet.get("scene", sceneInput);
   }
 
-  if (sceneInput == "") {
+  if (sceneInput.empty()) {
     // Default scene
     GlLayer *layer = new GlLayer("Main");
     GlLayer *backgroundLayer = new GlLayer("Background");

@@ -109,7 +109,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
     withoutParams = apiEntry.mid(0, parenPos);
     QString parameters = apiEntry.mid(parenPos + 1, apiEntry.lastIndexOf(')') - parenPos - 1);
 
-    if (parameters != "") {
+    if (!parameters.isEmpty()) {
       QStringList paramsList = parameters.split(',');
 
       bool dictListSetTupleTypeHint = false;
@@ -177,13 +177,13 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
 
         _paramTypes[wholeFuncName].append(params);
 
-        if (retType != "") {
+        if (!retType.isEmpty()) {
           _returnType[wholeFuncName] = retType;
         }
       }
     }
 
-    if (dictEntry != "") {
+    if (!dictEntry.isEmpty()) {
       _dictContent[type].insert(dictEntry);
     }
 
