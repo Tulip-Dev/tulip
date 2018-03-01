@@ -183,7 +183,7 @@ void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) 
     assert(childMap["type"] == "GlComposite");
     composite.setWithXML(inString, currentPosition);
 
-    GlXMLTools::leaveChildNode(inString, currentPosition, "children");
+    GlXMLTools::leaveChildNode(inString, currentPosition, childName);
   }
 }
 
