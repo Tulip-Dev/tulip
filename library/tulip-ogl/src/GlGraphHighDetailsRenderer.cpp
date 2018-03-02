@@ -622,7 +622,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
        inputData->getElementLabel()->hasNonDefaultValuatedEdges())) {
 
     vector<pair<edge, float>> edgesMetricOrdered;
-    for (auto it : layerLODUnit.edgesLODVector) {
+    for (auto &it : layerLODUnit.edgesLODVector) {
       if (it.lod < 5)
         continue;
 
