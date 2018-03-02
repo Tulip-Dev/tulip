@@ -315,7 +315,14 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
     else
       entitiesQuadTree.push_back(nullptr);
 
-    if (noBBCheck[0]) { // check validity of bbs for nodes
+    bool bbsOK = false;
+    for(unsigned int i = 0; i < OpenMPManager::getNumberOfThreads(); ++i) {
+      if (noBBCheck[i]) {
+	bbsOK = true;
+	break;
+      }
+    }
+    if (bbsOK) { // check validity of bbs for nodes
       // compute nodes dedicated bb
       BoundingBox bb(bbs[0]);
 
@@ -329,7 +336,14 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
       nodesQuadTree.push_back(nullptr);
     }
 
-    if (noBBCheck[eBBOffset]) { // check validity of bbs for edges
+    bbsOK = false;
+    for(unsigned int i = 0; i < OpenMPManager::getNumberOfThreads(); ++i) {
+      if (noBBCheck[eBBOffset + i]) {
+	bbsOK = true;
+	break;
+      }
+    }
+    if (bbsOK) { // check validity of bbs for edges
       // compute edges dedicated bb
       BoundingBox bb(bbs[eBBOffset]);
 
@@ -363,18 +377,18 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
           }
         }
         OMP(section) {
-          for (size_t i = 0; i < nbEdges; ++i) {
-            // This code is here to expand edge bounding box when we have an edge with direction
-            // (0,0,x)
-            auto &entity = layerLODUnit->edgesLODVector[i];
-            if (entity.boundingBox[0][0] == entity.boundingBox[1][0] &&
-                entity.boundingBox[0][1] == entity.boundingBox[1][1]) {
-              entity.boundingBox.expand(entity.boundingBox[1] + Coord(0.01f, 0.01f, 0));
-            }
+	  for (size_t i = 0; i < nbEdges; ++i) {
+	    // This code is here to expand edge bounding box when we have an edge with direction
+	    // (0,0,x)
+	    auto &entity = layerLODUnit->edgesLODVector[i];
+	    if (entity.boundingBox[0][0] == entity.boundingBox[1][0] &&
+		entity.boundingBox[0][1] == entity.boundingBox[1][1]) {
+	      entity.boundingBox.expand(entity.boundingBox[1] + Coord(0.01f, 0.01f, 0));
+	    }
 
-            edgesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
-                                                           std::make_pair(entity.id, entity.pos));
-          }
+	    edgesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
+							   std::make_pair(entity.id, entity.pos));
+	  }
         }
       }
     }
