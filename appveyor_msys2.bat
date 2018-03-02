@@ -38,7 +38,9 @@ bash -lc "set pwd"
 bash -lc "env"
 
 rem Install Inetc plugin for NSIS
-curl -fsS -o Inetc.zip http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip
+rem because the connection to the original source site seems to be difficult
+rem if it fails we use our copy
+curl -fsS -o Inetc.zip http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip || curl -fsS -o Inetc.zip http://tulip.labri.fr/code/Inetc.zip
 7z x Inetc.zip -o"C:\Program Files (x86)\NSIS"
 
 rem Install sphinx for Python 3
