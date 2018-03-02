@@ -17,6 +17,7 @@
  *
  */
 
+#include <climits>
 #include "NodeNeighborhoodView.h"
 
 #include <tulip/Iterator.h>
@@ -233,8 +234,28 @@ bool NodeNeighborhoodView::isElement(const node n) const {
   return find(graphViewNodes.begin(), graphViewNodes.end(), n) != graphViewNodes.end();
 }
 
+unsigned int NodeNeighborhoodView::nodePos(const node n) const {
+  auto nbNodes = graphViewNodes.size();
+
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    if (graphViewNodes[i] == n)
+      return i;
+
+  return UINT_MAX;
+}
+
 bool NodeNeighborhoodView::isElement(const edge e) const {
   return find(graphViewEdges.begin(), graphViewEdges.end(), e) != graphViewEdges.end();
+}
+
+unsigned int NodeNeighborhoodView::edgePos(const edge e) const {
+  auto nbEdges = graphViewEdges.size();
+
+  for (unsigned int i = 0; i < nbEdges; ++i)
+    if (graphViewEdges[i] == e)
+      return i;
+
+  return UINT_MAX;
 }
 
 Iterator<node> *NodeNeighborhoodView::getNodes() const {

@@ -43,6 +43,8 @@ public:
 
   bool isElement(const node n) const override;
   bool isElement(const edge e) const override;
+  unsigned int nodePos(const node n) const override;
+  unsigned int edgePos(const edge e) const override;
 
   Iterator<node> *getNodes() const override;
   Iterator<node> *getInNodes(const node n) const override;
@@ -57,8 +59,16 @@ public:
     return graphViewNodes;
   }
 
+  unsigned int numberOfNodes() const override {
+    return graphViewNodes.size();
+  }
+
   const std::vector<edge> &edges() const override {
     return graphViewEdges;
+  }
+
+  unsigned int numberOfEdges() const override {
+    return graphViewEdges.size();
   }
 
   Graph *getRoot() const override {
