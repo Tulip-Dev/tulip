@@ -49,6 +49,7 @@ enum RenderingEntitiesFlag {
 };
 
 struct EntityLODUnit {
+  EntityLODUnit() : lod(-1) {}
   EntityLODUnit(const BoundingBox &boundingBox) : boundingBox(boundingBox), lod(-1) {}
   BoundingBox boundingBox;
   float lod;
@@ -63,8 +64,9 @@ struct SimpleEntityLODUnit : public EntityLODUnit {
 
 // struct to store complex entity (nodes/edges) lod
 struct ComplexEntityLODUnit : public EntityLODUnit {
-  ComplexEntityLODUnit(unsigned int id = UINT_MAX, unsigned int pos = UINT_MAX,
-                       const BoundingBox &boundingBox = BoundingBox())
+  ComplexEntityLODUnit(unsigned int id = UINT_MAX, unsigned int pos = UINT_MAX)
+      : EntityLODUnit(), id(id), pos(pos) {}
+  ComplexEntityLODUnit(unsigned int id, unsigned int pos, const BoundingBox &boundingBox)
       : EntityLODUnit(boundingBox), id(id), pos(pos) {}
   unsigned int id;
   unsigned int pos;
