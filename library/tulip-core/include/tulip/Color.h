@@ -31,8 +31,8 @@ public:
   ///
   inline Color(const tlp::Vector<unsigned char, 4> &);
   ///
-  inline Color(const unsigned char red, const unsigned char green,
-               const unsigned char blue, const unsigned char alpha = 255);
+  inline Color(const unsigned char red, const unsigned char green, const unsigned char blue,
+               const unsigned char alpha = 255);
   ///
   inline void set(const unsigned char red = 0, const unsigned char green = 0,
                   const unsigned char blue = 0, const unsigned char alpha = 255);

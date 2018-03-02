@@ -67,7 +67,7 @@ class Vector : public Array<TYPE, SIZE> {
 public:
   inline VECTOR() {
     // do nothing to improve initialization of Coord vectors
-    //memset(this->data(), 0, SIZE * sizeof(TYPE));
+    // memset(this->data(), 0, SIZE * sizeof(TYPE));
   }
   inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
     set(v);
