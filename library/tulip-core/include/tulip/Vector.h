@@ -66,7 +66,8 @@ template <typename TYPE, size_t SIZE, typename OTYPE = double, typename DTYPE = 
 class Vector : public Array<TYPE, SIZE> {
 public:
   inline VECTOR() {
-    memset(this->data(), 0, SIZE * sizeof(TYPE));
+    // do nothing to improve initialization of Coord vectors
+    //memset(this->data(), 0, SIZE * sizeof(TYPE));
   }
   inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
     set(v);

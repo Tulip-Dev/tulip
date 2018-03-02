@@ -101,6 +101,6 @@ void TestPropertiesMinMaxAfterAddNode::testLayoutPropertyMinMaxAfterAddNode() {
   graph->addNode();
 
   // min should be 0
-  CPPUNIT_ASSERT_EQUAL(Coord(), property->getMin(graph));
+  CPPUNIT_ASSERT_EQUAL(Coord(0), property->getMin(graph));
   CPPUNIT_ASSERT_EQUAL(secondNodePos, property->getMax(graph));
 }

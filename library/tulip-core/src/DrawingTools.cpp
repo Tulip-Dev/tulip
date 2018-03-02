@@ -245,14 +245,12 @@ static inline void normalize(Vec3f &v) {
 //======================================================================================================
 
 bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatrix) {
-  Coord A, B, C;
+  Coord A(points[0]), B(0), C(0);
   bool BSet = false;
 
   // pick three points to define a plane
-  for (size_t i = 0; i < points.size(); ++i) {
-    if (i == 0) {
-      A = points[i];
-    } else if (!BSet && points[i] != A) {
+  for (size_t i = 1; i < points.size(); ++i) {
+    if (!BSet && points[i] != A) {
       B = points[i];
       BSet = true;
     } else if (BSet) {
