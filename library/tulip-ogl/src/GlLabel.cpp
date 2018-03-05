@@ -105,10 +105,10 @@ GlLabel::~GlLabel() {}
 void GlLabel::init() {
   initTulipFont(fontName, font, borderFont, fontSize);
 
-  outlineColor = Color(0, 0, 0, 255);
+  outlineColor.set(0, 0, 0, 255);
   outlineSize = 1.;
   renderingMode = 0;
-  translationAfterRotation = Coord(0, 0, 0);
+  translationAfterRotation.set(0, 0, 0);
   alignment = LabelPosition::Center;
   scaleToSize = true;
   useMinMaxSize = false;

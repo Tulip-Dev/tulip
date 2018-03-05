@@ -282,7 +282,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
           GlNode glNode(it.id, it.pos);
           glNode.draw(it.lod, inputData, camera);
         } else {
-          nodesMetricOrdered.push_back(make_pair(node(it.id), it.lod));
+          nodesMetricOrdered.emplace_back(node(it.id), it.lod);
         }
 
         if (renderOnlyOneNode)
@@ -339,7 +339,7 @@ void GlGraphHighDetailsRenderer::draw(float, Camera *camera) {
           GlEdge glEdge(it.id, it.pos, selectionDrawActivate);
           glEdge.draw(it.lod, inputData, camera);
         } else {
-          edgesMetricOrdered.push_back(make_pair(edge(it.id), it.lod));
+          edgesMetricOrdered.emplace_back(edge(it.id), it.lod);
         }
       }
 
@@ -596,7 +596,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
           glNode.drawLabel(occlusionTest, inputData, lod, layerLODUnit.camera);
         } else {
           // Metric ordered
-          nodesMetricOrdered.push_back(pair<node, float>(n, lod));
+          nodesMetricOrdered.emplace_back(n, lod);
         }
       }
     }
@@ -639,7 +639,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
           glEdge.drawLabel(occlusionTest, inputData, it.lod, layerLODUnit.camera);
         } else {
           // Metric ordered
-          edgesMetricOrdered.push_back(pair<edge, float>(e, it.lod));
+          edgesMetricOrdered.emplace_back(e, it.lod);
         }
       }
     }

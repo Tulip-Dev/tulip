@@ -273,6 +273,8 @@ void GlVertexArrayManager::setHaveToComputeColor(bool compute) {
   toComputeColor = compute;
 }
 
+#define VECT_COORDS_SET_SIZE(v, sz) reinterpret_cast<Coord **>(&v)[1] = reinterpret_cast<Coord **>(&v)[0] + sz
+
 void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
   auto nbSelectedNodes = inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
   pointsNodesRenderingIndexArray.reserve(nbNodes - nbSelectedNodes);
@@ -284,7 +286,9 @@ void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsig
   if (!vectorLayoutSizeInit) {
     linesCoordsArray.reserve(2 * nbEdges);
     quadsCoordsArray.reserve(4 * nbEdges);
-    pointsCoordsArray.resize(nbNodes + nbEdges);
+    pointsCoordsArray.reserve(nbNodes + nbEdges);
+    // no need to initialize each Coord element
+    VECT_COORDS_SET_SIZE(pointsCoordsArray, nbNodes + nbEdges);
     edgeInfosVector.resize(nbEdges);
 
     vectorLayoutSizeInit = true;
@@ -721,11 +725,11 @@ void GlVertexArrayManager::visit(GlNode *glNode) {
   // the first elts of pointsCoordsArray and pointsColorsArray
   // are dedicated to graph->nodes
   if (toComputeLayout) {
-    pointsCoordsArray[glNode->pos] = glNode->getPoint(inputData);
+    pointsCoordsArray[glNode->pos] = std::move(glNode->getPoint(inputData));
   }
 
   if (toComputeColor) {
-    pointsColorsArray[glNode->pos] = glNode->getColor(inputData);
+    pointsColorsArray[glNode->pos] = std::move(glNode->getColor(inputData));
   }
 }
 
