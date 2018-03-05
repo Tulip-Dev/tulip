@@ -273,7 +273,8 @@ void GlVertexArrayManager::setHaveToComputeColor(bool compute) {
   toComputeColor = compute;
 }
 
-#define VECT_COORDS_SET_SIZE(v, sz) reinterpret_cast<Coord **>(&v)[1] = reinterpret_cast<Coord **>(&v)[0] + sz
+#define VECT_COORDS_SET_SIZE(v, sz)                                                                \
+  reinterpret_cast<Coord **>(&v)[1] = reinterpret_cast<Coord **>(&v)[0] + sz
 
 void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
   auto nbSelectedNodes = inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
