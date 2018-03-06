@@ -71,7 +71,7 @@ public:
    * Reserve memory to store nodes and edges LOD
    * this function is an optimisation function
    */
-  void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges);
+  void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) override;
 
   /**
    * Compute all bounding boxes

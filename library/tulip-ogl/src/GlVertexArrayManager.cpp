@@ -726,11 +726,11 @@ void GlVertexArrayManager::visit(GlNode *glNode) {
   // the first elts of pointsCoordsArray and pointsColorsArray
   // are dedicated to graph->nodes
   if (toComputeLayout) {
-    pointsCoordsArray[glNode->pos] = std::move(glNode->getPoint(inputData));
+    pointsCoordsArray[glNode->pos] = glNode->getPoint(inputData);
   }
 
   if (toComputeColor) {
-    pointsColorsArray[glNode->pos] = std::move(glNode->getColor(inputData));
+    pointsColorsArray[glNode->pos] = glNode->getColor(inputData);
   }
 }
 
