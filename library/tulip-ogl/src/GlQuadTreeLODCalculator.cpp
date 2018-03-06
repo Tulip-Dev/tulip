@@ -485,22 +485,21 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
       }
       size_t nbRes = resEntities.size();
       for (size_t i = 0; i < nbRes; ++i) {
-        layerLODUnit->simpleEntitiesLODVector.emplace_back(resEntities[i], resEntities[i]->getBoundingBox());
+        layerLODUnit->simpleEntitiesLODVector.emplace_back(resEntities[i],
+                                                           resEntities[i]->getBoundingBox());
       }
     }
   }
-  OMP_PARALLEL_MAP_INDICES(resNodes.size(),
-			   [&](unsigned int i) {
-			     const auto &res = resNodes[i];
-			     GlNode glNode(res.first, res.second);
-			     layerLODUnit->nodesLODVector[i].init(res.first, res.second, glNode.getBoundingBox(inputData));
-			   });
-  OMP_PARALLEL_MAP_INDICES(resEdges.size(),
-			   [&](unsigned int i) {
-			     const auto &res = resEdges[i];
-			     GlEdge glEdge(res.first, res.second);
-			     layerLODUnit->edgesLODVector[i].init(res.first, res.second, glEdge.getBoundingBox(inputData));
-			   });
+  OMP_PARALLEL_MAP_INDICES(resNodes.size(), [&](unsigned int i) {
+    const auto &res = resNodes[i];
+    GlNode glNode(res.first, res.second);
+    layerLODUnit->nodesLODVector[i].init(res.first, res.second, glNode.getBoundingBox(inputData));
+  });
+  OMP_PARALLEL_MAP_INDICES(resEdges.size(), [&](unsigned int i) {
+    const auto &res = resEdges[i];
+    GlEdge glEdge(res.first, res.second);
+    layerLODUnit->edgesLODVector[i].init(res.first, res.second, glEdge.getBoundingBox(inputData));
+  });
 
   GlCPULODCalculator::computeFor3DCamera(layerLODUnit, eye, transformMatrix, globalViewport,
                                          currentViewport);

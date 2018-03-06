@@ -57,13 +57,12 @@ struct EntityLODUnit {
 
 // struct to store simple entity lod
 struct SimpleEntityLODUnit : public EntityLODUnit {
-  SimpleEntityLODUnit(GlSimpleEntity *entity = nullptr)
-      : EntityLODUnit(), entity(entity) {}
+  SimpleEntityLODUnit(GlSimpleEntity *entity = nullptr) : EntityLODUnit(), entity(entity) {}
   SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox)
       : EntityLODUnit(boundingBox), entity(entity) {}
   GlSimpleEntity *entity;
 
-  void init(GlSimpleEntity* e, const BoundingBox &bb) {
+  void init(GlSimpleEntity *e, const BoundingBox &bb) {
     entity = e;
     boundingBox = bb;
   }
