@@ -38,7 +38,7 @@ GlCPULODCalculator::~GlCPULODCalculator() {}
 
 void GlCPULODCalculator::beginNewCamera(Camera *camera) {
   // add a new layerLODUnit and set camera pointer
-  layersLODVector.push_back(LayerLODUnit());
+  layersLODVector.emplace_back();
   currentLayerLODUnit = &layersLODVector.back();
   currentLayerLODUnit->camera = camera;
 }
@@ -58,21 +58,21 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, cons
     noBBCheck[ti] = true;
   }
 
-  currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity, bb));
+  currentLayerLODUnit->simpleEntitiesLODVector.emplace_back(entity, bb);
 }
 void GlCPULODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
   auto ti = OpenMPManager::getThreadNumber();
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
-  currentLayerLODUnit->nodesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
+  currentLayerLODUnit->nodesLODVector[pos].init(id, pos, bb);
 }
 void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
   auto ti = OpenMPManager::getThreadNumber();
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
-  currentLayerLODUnit->edgesLODVector[pos] = ComplexEntityLODUnit(id, pos, bb);
+  currentLayerLODUnit->edgesLODVector[pos].init(id, pos, bb);
 }
 
 BoundingBox GlCPULODCalculator::getSceneBoundingBox() {

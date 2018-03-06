@@ -57,9 +57,16 @@ struct EntityLODUnit {
 
 // struct to store simple entity lod
 struct SimpleEntityLODUnit : public EntityLODUnit {
+  SimpleEntityLODUnit(GlSimpleEntity *entity = nullptr)
+      : EntityLODUnit(), entity(entity) {}
   SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox)
       : EntityLODUnit(boundingBox), entity(entity) {}
   GlSimpleEntity *entity;
+
+  void init(GlSimpleEntity* e, const BoundingBox &bb) {
+    entity = e;
+    boundingBox = bb;
+  }
 };
 
 // struct to store complex entity (nodes/edges) lod
@@ -68,6 +75,13 @@ struct ComplexEntityLODUnit : public EntityLODUnit {
       : EntityLODUnit(), id(id), pos(pos) {}
   ComplexEntityLODUnit(unsigned int id, unsigned int pos, const BoundingBox &boundingBox)
       : EntityLODUnit(boundingBox), id(id), pos(pos) {}
+
+  void init(unsigned int i, unsigned int p, const BoundingBox &bb) {
+    id = i;
+    pos = p;
+    boundingBox = bb;
+  }
+
   unsigned int id;
   unsigned int pos;
 };
