@@ -686,9 +686,9 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       // quadsCoordsArray because postponing it
       // until endOfVisit does not work ???
       OMP_CRITICAL_SECTION(updateQuadsCoords) {
-	auto &quadVertices = eInfos.quadVertices;
-	eInfos.quadsIndex = quadsCoordsArray.size();
-	quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
+        auto &quadVertices = eInfos.quadVertices;
+        eInfos.quadsIndex = quadsCoordsArray.size();
+        quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
       }
 
       const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
