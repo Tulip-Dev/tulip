@@ -222,14 +222,14 @@ font: bold 10px;
          <item>
           <widget class="QScrollArea" name="scrollArea">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>100</width>
              <height>25</height>
             </size>
            </property>
@@ -259,7 +259,7 @@ font: bold 10px;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>76</width>
+              <width>100</width>
               <height>25</height>
              </rect>
             </property>
