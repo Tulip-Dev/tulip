@@ -682,6 +682,15 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       vector<Coord> &quadVertices = eInfos.quadVertices;
       buildCurvePoints(vertices, edgeSizes, srcCoord, tgtCoord, quadVertices);
 
+      // must use a critical section to update
+      // quadsCoordsArray because postponing it
+      // until endOfVisit does not work ???
+      OMP_CRITICAL_SECTION(updateQuadsCoords) {
+	auto &quadVertices = eInfos.quadVertices;
+	eInfos.quadsIndex = quadsCoordsArray.size();
+	quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
+      }
+
       const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
       glEdge->getEdgeAnchor(inputData, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize,
                             eInfos.srcAnchor, eInfos.tgtAnchor);
@@ -753,10 +762,7 @@ void GlVertexArrayManager::endOfVisit() {
       linesColorsArray.insert(linesColorsArray.end(), lcolors.begin(), lcolors.end());
       eInfos.linesIndex = baseIndex;
 
-      // update quads global vectors
-      auto &quadVertices = eInfos.quadVertices;
-      eInfos.quadsIndex = quadsCoordsArray.size();
-      quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
+      // update quads colors global vectors
       vector<Color> &qcolors = eInfos.quadColors;
       if (inputData->parameters->isEdgeColorInterpolate())
         for (size_t i = 0; i < qcolors.size(); ++i) {
