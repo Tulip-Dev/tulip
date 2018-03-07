@@ -176,6 +176,7 @@ void GraphPerspective::buildRecentDocumentsMenu() {
         QIcon(":/tulip/graphperspective/icons/16/empty-file.png"), s, this, SLOT(openRecentFile()));
     action->setData(s);
   }
+  _ui->menuOpen_recent_file->setEnabled(!_ui->menuOpen_recent_file->isEmpty());
 }
 
 void GraphPerspective::addRecentDocument(const QString &path) {
