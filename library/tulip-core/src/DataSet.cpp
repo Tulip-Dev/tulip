@@ -92,6 +92,16 @@ bool DataSet::exists(const string &str) const {
   return false;
 }
 
+std::string DataSet::getTypeName(const string &str) const {
+  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin();
+       it != data.end(); ++it) {
+    if (it->first == str)
+      return it->second->getTypeName();
+  }
+
+  return std::string();
+}
+
 void DataSet::remove(const string &str) {
   for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin();
        it != data.end(); ++it) {

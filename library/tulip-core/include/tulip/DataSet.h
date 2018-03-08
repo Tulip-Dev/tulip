@@ -242,6 +242,16 @@ public:
   void set(const std::string &key, const T &value);
 
   /**
+   * @brief Returns the mangled name of a type.
+   *.
+   * @return std::string the mangled name (typeid(T).name())
+   **/
+  template <typename T>
+  std::string getTypeName() const {
+    return std::string(typeid(T).name());
+  }
+
+  /**
    * @brief Registers a serializer for a known type
    *
    * Serializers are used to write/read from std::ostream objects when saving DataSet instances.
@@ -276,6 +286,12 @@ public:
    * @return true if str exists into the DataSet.
    */
   bool exists(const std::string &str) const;
+
+  /**
+   * @param str the name of the member to look for
+   * @return the mangled name of the type if str exists into the DataSet. An empty string if not.
+   */
+  std::string getTypeName(const std::string &str) const;
 
   /**
    * @brief for compatibility only
