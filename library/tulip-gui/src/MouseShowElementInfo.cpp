@@ -67,7 +67,7 @@ void MouseShowElementInfo::showVisualProp(bool show) {
     _model->setFilterRegExp("");
   } else {
     // filter out properties whose name starts with "view"
-    _model->setFilterRegExp("^(?!view)\\w+$");
+    _model->setFilterRegExp("^(?!view[A-Z]).?");
   }
   _show = show;
 }
