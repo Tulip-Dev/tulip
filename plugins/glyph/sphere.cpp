@@ -39,18 +39,13 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlSphere *sphere = nullptr;
+static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath) {
+  static GlSphere sphere(Coord(0, 0, 0), 0.5);
 
-static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath,
-                      float) {
-  if (!sphere) {
-    sphere = new GlSphere(Coord(0, 0, 0), 0.5);
-  }
+  sphere.setColor(glyphColor);
+  sphere.setTexture(texturePath + texture);
 
-  sphere->setColor(glyphColor);
-  sphere->setTexture(texturePath + texture);
-
-  sphere->draw(0, nullptr);
+  sphere.draw(0, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -61,7 +56,7 @@ static void drawGlyph(const Color &glyphColor, const string &texture, const stri
  * property value. If this property has no value, the sphere
  * is then colored using the "viewColor" node property value.
  */
-class Sphere : public Glyph {
+class Sphere : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0",
                    NodeShape::Sphere)
@@ -74,7 +69,7 @@ public:
 PLUGIN(Sphere)
 
 //=========================================================================================
-Sphere::Sphere(const tlp::PluginContext *context) : Glyph(context) {}
+Sphere::Sphere(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 
 Sphere::~Sphere() {}
 
@@ -83,10 +78,10 @@ void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
-void Sphere::draw(node n, float lod) {
+void Sphere::draw(node n, float) {
   drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
             glGraphInputData->getElementTexture()->getNodeValue(n),
-            glGraphInputData->parameters->getTexturePath(), lod);
+            glGraphInputData->parameters->getTexturePath());
 }
 
 class EESphere : public EdgeExtremityGlyph {
@@ -95,10 +90,10 @@ class EESphere : public EdgeExtremityGlyph {
 public:
   EESphere(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
   ~EESphere() override {}
-  void draw(edge e, node, const Color &glyphColor, const Color &, float lod) override {
+  void draw(edge e, node, const Color &glyphColor, const Color &, float) override {
     glEnable(GL_LIGHTING);
     drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-              edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
+              edgeExtGlGraphInputData->parameters->getTexturePath());
   }
 };
 PLUGIN(EESphere)

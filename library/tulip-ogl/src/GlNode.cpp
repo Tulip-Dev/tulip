@@ -155,33 +155,19 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   if (!data->parameters->isDisplayNodes())
     return;
 
-  Size nodeSize(size);
-
-  // Some glyphs can not benefit from the shader rendering optimization
-  // due to the use of quadrics or modelview matrix modification or lighting effect
-  static set<int> noShaderGlyphs;
-
-  if (noShaderGlyphs.empty()) {
-    noShaderGlyphs.insert(NodeShape::Billboard);
-    noShaderGlyphs.insert(NodeShape::ChristmasTree);
-    noShaderGlyphs.insert(NodeShape::Cone);
-    noShaderGlyphs.insert(NodeShape::Cylinder);
-    noShaderGlyphs.insert(NodeShape::GlowSphere);
-    noShaderGlyphs.insert(NodeShape::HalfCylinder);
-    noShaderGlyphs.insert(NodeShape::Sphere);
-    noShaderGlyphs.insert(NodeShape::Cube);
-    noShaderGlyphs.insert(NodeShape::CubeOutlined);
-  }
-
   // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
   // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after
   // scale will be (0,0,0) and we will have light problem)
+  Size nodeSize(size);
   if (nodeSize[2] == 0)
     nodeSize[2] = FLT_EPSILON;
 
+  auto *glyphObj = data->glyphs.get(glyph);
+  // Some glyphs can not benefit from the shader rendering optimization
+  // due to the use of quadrics or modelview matrix modification or lighting effect
   if (data->getGlGlyphRenderer()->renderingHasStarted() &&
-      noShaderGlyphs.find(glyph) == noShaderGlyphs.end()) {
-    data->getGlGlyphRenderer()->addNodeGlyphRendering(data->glyphs.get(glyph), n, lod, coord,
+      glyphObj->shaderSupported()) {
+    data->getGlGlyphRenderer()->addNodeGlyphRendering(glyphObj, n, lod, coord,
                                                       nodeSize, rot, selected);
   } else {
 
@@ -204,7 +190,7 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
       selectionBox.draw(10, nullptr);
     }
 
-    data->glyphs.get(glyph)->draw(n, lod);
+    glyphObj->draw(n, lod);
 
     glPopMatrix();
   }

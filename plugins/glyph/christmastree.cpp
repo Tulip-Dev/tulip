@@ -34,10 +34,9 @@
 using namespace std;
 using namespace tlp;
 
-static GlLabel label;
-
-void drawTree(const Color &color, const Color &outlineColor, const float outlineSize,
-              const std::string &texture) {
+void drawTree(const Color &color, const Color &outlineColor,
+	      const float outlineSize, const std::string &texture) {
+  static GlLabel label;
   label.setFontNameSizeAndColor(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), 18, color);
   label.setPosition(Coord(0, 0, 0));
   label.setSize(Size(1, 1, 0));
@@ -55,7 +54,7 @@ void drawTree(const Color &color, const Color &outlineColor, const float outline
 /// A 2D glyph.
 /** This glyph draws a christmas tree special for christmas release of 2008
  */
-class ChristmasTree : public Glyph {
+class ChristmasTree : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("2D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0",
                    NodeShape::ChristmasTree)
@@ -64,7 +63,7 @@ public:
 };
 PLUGIN(ChristmasTree)
 
-ChristmasTree::ChristmasTree(const tlp::PluginContext *context) : Glyph(context) {}
+ChristmasTree::ChristmasTree(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 void ChristmasTree::draw(node n, float) {
   const tlp::Color &nodeColor = glGraphInputData->getElementColor()->getNodeValue(n);
   const tlp::Color &nodeBorderColor = glGraphInputData->getElementBorderColor()->getNodeValue(n);

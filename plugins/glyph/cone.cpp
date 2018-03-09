@@ -126,7 +126,7 @@ static void drawCone() {
  * property value. If this property has no value, the cone is then colored
  * using the "viewColor" node property value.
  */
-class Cone : public Glyph {
+class Cone : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0",
                    NodeShape::Cone)
@@ -138,7 +138,7 @@ public:
 };
 PLUGIN(Cone)
 
-Cone::Cone(const tlp::PluginContext *context) : Glyph(context) {}
+Cone::Cone(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 Cone::~Cone() {}
 void Cone::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.25, -0.25, 0);

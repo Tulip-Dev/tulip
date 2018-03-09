@@ -34,22 +34,24 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlCircle *circle = nullptr;
-
-static void drawCircle(const Color &fillColor, const Color &borderColor, float borderWidth,
-                       const std::string &textureName, float lod) {
-  circle->setFillColor(fillColor);
+static void drawCircle(const Color &fillColor, const Color &borderColor,
+		       float borderWidth, const std::string &textureName,
+		       float lod, bool mode) {
+  static GlCircle circle(Coord(0, 0, 0), 0.5, Color(0, 0, 0, 255),
+			 Color(0, 0, 0, 255), true, true, 0., 30);
+  circle.setFillColor(fillColor);
+  circle.setLightingMode(mode);
 
   if (borderWidth > 0) {
-    circle->setOutlineMode(true);
-    circle->setOutlineColor(borderColor);
-    circle->setOutlineSize(borderWidth);
+    circle.setOutlineMode(true);
+    circle.setOutlineColor(borderColor);
+    circle.setOutlineSize(borderWidth);
   } else {
-    circle->setOutlineMode(false);
+    circle.setOutlineMode(false);
   }
 
-  circle->setTextureName(textureName);
-  circle->draw(lod, nullptr);
+  circle.setTextureName(textureName);
+  circle.draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -70,18 +72,13 @@ public:
   void draw(node n, float lod) override;
 };
 PLUGIN(Circle)
-Circle::Circle(const tlp::PluginContext *context) : Glyph(context) {
-  if (!circle)
-    circle = new GlCircle(Coord(0, 0, 0), 0.5, Color(0, 0, 0, 255), Color(0, 0, 0, 255), true, true,
-                          0., 30);
-}
+Circle::Circle(const tlp::PluginContext *context) : Glyph(context) {}
 Circle::~Circle() {}
 void Circle::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
   boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 void Circle::draw(node n, float lod) {
-  circle->setLightingMode(true);
   string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!textureName.empty())
@@ -89,28 +86,24 @@ void Circle::draw(node n, float lod) {
 
   drawCircle(Glyph::glGraphInputData->getElementColor()->getNodeValue(n),
              Glyph::glGraphInputData->getElementBorderColor()->getNodeValue(n),
-             Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
+             Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+	     textureName, lod, true);
 }
 
-static GlCircle *eecircle = nullptr;
 class EECircle : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Circle extremity", "David Auber", "09/07/2002",
                    "Textured Circle for edge extremities", "1.1", EdgeExtremityShape::Circle)
-  EECircle(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
-    if (!eecircle)
-      eecircle = new GlCircle(Coord(0, 0, 0), 0.5, Color(0, 0, 0, 255), Color(0, 0, 0, 255), true,
-                              true, 0., 30);
-  }
+  EECircle(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
   void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
-    eecircle->setLightingMode(false);
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
       textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawCircle(glyphColor, borderColor,
-               edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
+               edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+	       textureName, lod, false);
   }
 };
 

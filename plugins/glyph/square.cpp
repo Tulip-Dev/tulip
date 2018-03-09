@@ -34,22 +34,22 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlRect *rect = nullptr;
-
 static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath,
                       double borderWidth, const Color &borderColor, float lod) {
-  rect->setFillColor(glyphColor);
-  rect->setTextureName(texturePath + texture);
+  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255),
+		     Color(0, 0, 0, 255));
+  rect.setFillColor(glyphColor);
+  rect.setTextureName(texturePath + texture);
 
   if (borderWidth > 0) {
-    rect->setOutlineMode(true);
-    rect->setOutlineColor(borderColor);
-    rect->setOutlineSize(borderWidth);
+    rect.setOutlineMode(true);
+    rect.setOutlineColor(borderColor);
+    rect.setOutlineSize(borderWidth);
   } else {
-    rect->setOutlineMode(false);
+    rect.setOutlineMode(false);
   }
 
-  rect->draw(lod, nullptr);
+  rect.draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -70,10 +70,7 @@ public:
   Coord getAnchor(const Coord &vector) const override;
 };
 PLUGIN(Square)
-Square::Square(const tlp::PluginContext *context) : Glyph(context) {
-  if (!rect)
-    rect = new GlRect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-}
+Square::Square(const tlp::PluginContext *context) : Glyph(context) {}
 Square::~Square() {}
 void Square::draw(node n, float lod) {
   drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -99,10 +96,7 @@ class EESquare : public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("2D - Square extremity", "David Auber", "09/07/2002",
                    "Textured square for edge extremities", "1.0", EdgeExtremityShape::Square)
-  EESquare(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
-    if (!rect)
-      rect = new GlRect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-  }
+  EESquare(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
   void draw(edge e, node, const Color &glyphColor, const Color &borderColor, float lod) override {
     glDisable(GL_LIGHTING);

@@ -32,7 +32,7 @@ namespace tlp {
  * using the "viewColor" node property value. The "viewBorderColor"
  * node property value is used to draw its edges.
  */
-class CubeOutLined : public Glyph {
+class CubeOutLined : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined",
                    "1.0", NodeShape::CubeOutlined)
@@ -51,7 +51,7 @@ namespace tlp {
 PLUGIN(CubeOutLined)
 
 //===================================================================================
-CubeOutLined::CubeOutLined(tlp::PluginContext *context) : Glyph(context) {
+CubeOutLined::CubeOutLined(tlp::PluginContext *context) : NoShaderGlyph(context) {
   if (!box)
     box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
 }

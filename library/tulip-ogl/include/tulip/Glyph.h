@@ -36,6 +36,7 @@ static const std::string GLYPH_CATEGORY = "Node shape";
 class Graph;
 struct node;
 class GlGraphInputData;
+class GlRect;
 
 class GlyphContext : public PluginContext {
 public:
@@ -89,6 +90,19 @@ public:
     return false;
   }
 
+  /**
+   * Return if the Glyph supports shader rendering optimization (see GlNode.cpp)
+   */
+  virtual bool shaderSupported() const {
+    return true;
+  }
+
+  /**
+   * draw a preconfigured GlRect in the screen plane
+   */
+  static void drawRectInScreenPlane(GlRect &rect, const Size &size,
+				    bool disableMasks);
+
   GlGraphInputData *glGraphInputData;
 
 protected:
@@ -101,6 +115,14 @@ protected:
    * Returned value is a vector to be applied to 'nodeCenter' in the public method
    */
   virtual Coord getAnchor(const Coord &vector) const;
+};
+//==========================================================
+class TLP_GL_SCOPE NoShaderGlyph : public Glyph {
+public:
+  NoShaderGlyph(const tlp::PluginContext *context = nullptr) : Glyph(context) {}
+  bool shaderSupported() const override {
+    return false;
+  }
 };
 }
 

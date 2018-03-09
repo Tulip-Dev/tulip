@@ -42,20 +42,12 @@ public:
   ~Triangle() override;
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   void draw(node n, float lod) override;
-
-protected:
-  static GlTriangle *triangle;
 };
-
-GlTriangle *Triangle::triangle = nullptr;
 
 //=====================================================
 PLUGIN(Triangle)
 //===================================================================================
-Triangle::Triangle(const tlp::PluginContext *context) : Glyph(context) {
-  if (!triangle)
-    triangle = new GlTriangle(Coord(0, 0, 0), Size(0.5, 0.5, 0));
-}
+Triangle::Triangle(const tlp::PluginContext *context) : Glyph(context) {}
 //=====================================================
 Triangle::~Triangle() {}
 //=====================================================
@@ -65,29 +57,30 @@ void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 }
 //=====================================================
 void Triangle::draw(node n, float lod) {
+  GlTriangle triangle(Coord(0, 0, 0), Size(0.5, 0.5, 0));
 
-  triangle->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
+  triangle.setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
     string texturePath = glGraphInputData->parameters->getTexturePath();
-    triangle->setTextureName(texturePath + texFile);
+    triangle.setTextureName(texturePath + texFile);
   } else {
-    triangle->setTextureName("");
+    triangle.setTextureName("");
   }
 
   double lineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
   if (lineWidth > 0) {
-    triangle->setOutlineMode(true);
-    triangle->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
-    triangle->setOutlineSize(lineWidth);
+    triangle.setOutlineMode(true);
+    triangle.setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+    triangle.setOutlineSize(lineWidth);
   } else {
-    triangle->setOutlineMode(false);
+    triangle.setOutlineMode(false);
   }
 
-  triangle->draw(lod, nullptr);
+  triangle.draw(lod, nullptr);
 }
 //=====================================================
 

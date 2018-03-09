@@ -33,20 +33,21 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlBox *box = nullptr;
 static void drawBox(const Color &fillColor, const Color &outlineColor, const float outlineSize,
                     const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
+  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255),
+		   Color(0, 0, 0, 255));
   if (textureName.size() != 0) {
     const string &texturePath = glGraphInputData->parameters->getTexturePath();
-    box->setTextureName(texturePath + textureName);
+    box.setTextureName(texturePath + textureName);
   } else
-    box->setTextureName("");
+    box.setTextureName("");
 
-  box->setFillColor(fillColor);
-  box->setOutlineSize(outlineSize);
-  box->setOutlineColor(outlineColor);
+  box.setFillColor(fillColor);
+  box.setOutlineSize(outlineSize);
+  box.setOutlineColor(outlineColor);
 
-  box->draw(lod, nullptr);
+  box.draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -56,7 +57,7 @@ static void drawBox(const Color &fillColor, const Color &outlineColor, const flo
  * property value. If this property has no value, the cube is then colored
  * using the "viewColor" node property value.
  */
-class Cube : public Glyph {
+class Cube : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0",
                    NodeShape::Cube)
@@ -68,10 +69,7 @@ public:
 protected:
 };
 PLUGIN(Cube)
-Cube::Cube(const tlp::PluginContext *context) : Glyph(context) {
-  if (!box)
-    box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-}
+Cube::Cube(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 Cube::~Cube() {}
 void Cube::draw(node n, float lod) {
   drawBox(glGraphInputData->getElementColor()->getNodeValue(n),
@@ -95,10 +93,7 @@ public:
   GLYPHINFORMATION("3D - Cube extremity", "Bertrand Mathieu", "09/07/2002",
                    "Textured cube for edge extremities", "1.0", EdgeExtremityShape::Cube)
 
-  EECube(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
-    if (!box)
-      box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-  }
+  EECube(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
   void draw(edge e, node n, const Color &glyphColor, const Color &borderColor, float lod) override {
     glEnable(GL_LIGHTING);

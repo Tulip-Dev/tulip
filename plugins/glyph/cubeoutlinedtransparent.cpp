@@ -32,25 +32,27 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlBox *box = nullptr;
 static void drawBox(const Color &borderColor, float borderWidth, const std::string &textureName,
                     float lod, GlGraphInputData *glGraphInputData) {
+  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255),
+		   Color(0, 0, 0, 255));
+
   if (textureName.size() != 0) {
     const string &texturePath = glGraphInputData->parameters->getTexturePath();
-    box->setTextureName(texturePath + textureName);
+    box.setTextureName(texturePath + textureName);
   } else
-    box->setTextureName("");
+    box.setTextureName("");
 
-  box->setFillColor(Color(0, 0, 0, 0));
-  box->setOutlineColor(borderColor);
+  box.setFillColor(Color(0, 0, 0, 0));
+  box.setOutlineColor(borderColor);
   double lineWidth = borderWidth;
 
   if (lineWidth < 1e-6)
     lineWidth = 1e-6;
 
-  box->setOutlineSize(lineWidth);
+  box.setOutlineSize(lineWidth);
 
-  box->draw(lod, nullptr);
+  box.draw(lod, nullptr);
 }
 
 /** \addtogroup glyph */
@@ -71,10 +73,7 @@ public:
 PLUGIN(CubeOutLinedTransparent)
 
 CubeOutLinedTransparent::CubeOutLinedTransparent(const tlp::PluginContext *context)
-    : Glyph(context) {
-  if (!box)
-    box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-}
+    : Glyph(context) {}
 
 CubeOutLinedTransparent::~CubeOutLinedTransparent() {}
 
@@ -106,10 +105,7 @@ public:
                    "Textured cubeOutLined for edge extremities", "1.0",
                    EdgeExtremityShape::CubeOutlinedTransparent)
 
-  EECubeOutlinedTransparent(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {
-    if (!box)
-      box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-  }
+  EECubeOutlinedTransparent(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
   void draw(edge e, node, const Color &borderColor, const Color &, float lod) override {
     glEnable(GL_LIGHTING);

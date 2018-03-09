@@ -19,6 +19,7 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlRect.h>
 
 using namespace tlp;
 using namespace std;
@@ -83,4 +84,30 @@ Coord Glyph::getAnchor(const Coord &vector) const {
   /* anchor must be on the surface of a sphere centered on nodecenter, radius is 0.5 */
   anchor *= 0.5f / anchor.norm();
   return anchor;
+}
+//=================================================================
+void Glyph::drawRectInScreenPlane(GlRect &rect, const Size &size,
+				  bool disableMasks) {
+  // setup rect orientation to ensure it is drawn is the screen plane
+  float mdlM[16];
+  glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  mdlM[0] = size.getW();
+  mdlM[5] = size.getH();
+  mdlM[10] = size.getD();
+  mdlM[1] = mdlM[2] = 0.0f;
+  mdlM[4] = mdlM[6] = 0.0f;
+  mdlM[8] = mdlM[9] = 0.0f;
+  glLoadMatrixf(mdlM);
+  if (disableMasks) {
+    glStencilMask(0x00);
+    glDepthMask(GL_FALSE);
+  }
+  rect.draw(0, nullptr);
+  if (disableMasks) {
+    glStencilMask(0xFF);
+    glDepthMask(GL_TRUE);
+  }
+  glPopMatrix();
 }

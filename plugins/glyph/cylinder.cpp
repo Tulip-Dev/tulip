@@ -167,7 +167,7 @@ private:
  * property value. If this property has no value, the cylinder is then colored
  * using the "viewColor" node property value.
  */
-class Cylinder : public Glyph, public CylinderBase {
+class Cylinder : public NoShaderGlyph, public CylinderBase {
 public:
   GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0",
                    NodeShape::Cylinder)
@@ -179,7 +179,7 @@ public:
 };
 PLUGIN(Cylinder)
 
-Cylinder::Cylinder(const tlp::PluginContext *context) : Glyph(context) {}
+Cylinder::Cylinder(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 Cylinder::~Cylinder() {}
 void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
@@ -233,7 +233,7 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
  */
 
 //=================================================================================================
-class HalfCylinder : public Glyph, public CylinderBase {
+class HalfCylinder : public NoShaderGlyph, public CylinderBase {
 public:
   GLYPHINFORMATION("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder",
                    "1.0", NodeShape::HalfCylinder)
@@ -248,7 +248,7 @@ private:
 
 PLUGIN(HalfCylinder)
 //=================================================================================================
-HalfCylinder::HalfCylinder(const tlp::PluginContext *context) : Glyph(context) {}
+HalfCylinder::HalfCylinder(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 //=================================================================================================
 HalfCylinder::~HalfCylinder() {}
 //=====================================================

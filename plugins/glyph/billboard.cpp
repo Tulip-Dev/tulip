@@ -43,7 +43,7 @@ namespace tlp {
  * It is unsensitive to any axis rotation and so always remains displayed
  * in the same position.
  */
-class Billboard : public Glyph {
+class Billboard : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0",
                    NodeShape::Billboard)
@@ -51,68 +51,47 @@ public:
   ~Billboard() override;
   void draw(node n, float lod) override;
   Coord getAnchor(const Coord &vector) const override;
-
-protected:
-  static GlRect *rect;
 };
-
-GlRect *Billboard::rect = nullptr;
 
 PLUGIN(Billboard)
 
 //===================================================================================
-Billboard::Billboard(const tlp::PluginContext *context) : Glyph(context) {
-  if (!rect)
-    rect = new GlRect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-}
+Billboard::Billboard(const tlp::PluginContext *context) : NoShaderGlyph(context) {}
 //========================================================
 Billboard::~Billboard() {}
 //========================================================
-void Billboard::draw(node n, float lod) {
+void Billboard::draw(node n, float) {
+  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255),
+		     Color(0, 0, 0, 255));
 
-  rect->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
+  rect.setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 
   if (!texFile.empty()) {
     string texturePath = glGraphInputData->parameters->getTexturePath();
-    rect->setTextureName(texturePath + texFile);
+    rect.setTextureName(texturePath + texFile);
   } else {
-    rect->setTextureName("");
+    rect.setTextureName("");
   }
 
   double borderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
   if (borderWidth > 0) {
-    rect->setOutlineMode(true);
-    rect->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
-    rect->setOutlineSize(borderWidth);
+    rect.setOutlineMode(true);
+    rect.setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+    rect.setOutlineSize(borderWidth);
   } else {
-    rect->setOutlineMode(false);
+    rect.setOutlineMode(false);
   }
 
-  // setup orientation
-  float mdlM[16];
-  glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
   Size sz(1, 1, 1);
 
   if (glGraphInputData->getElementSize())
     sz = glGraphInputData->getElementSize()->getNodeValue(n);
 
-  float nx = sz.getW();
-  float ny = sz.getH();
-  float nz = sz.getD();
-  mdlM[0] = nx;
-  mdlM[5] = ny;
-  mdlM[10] = nz;
-  mdlM[1] = mdlM[2] = 0.0f;
-  mdlM[4] = mdlM[6] = 0.0f;
-  mdlM[8] = mdlM[9] = 0.0f;
-  glLoadMatrixf(mdlM);
-  rect->draw(lod, nullptr);
-  glPopMatrix();
+  // draw rect in the screen plane
+  Glyph::drawRectInScreenPlane(rect, sz, false);
 }
 //========================================================
 Coord Billboard::getAnchor(const Coord &vector) const {

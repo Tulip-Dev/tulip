@@ -35,20 +35,17 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlSphere *sphere = nullptr;
-static GlRect *rect = nullptr;
-
 /** \addtogroup glyph */
 /*@{*/
 /// A 3D glyph.
 /**
  * This glyph draws a sphere using the "viewColor" node property value.
  */
-class GlowSphere : public Glyph {
+class GlowSphere : public NoShaderGlyph {
 public:
   GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
                    NodeShape::GlowSphere)
-  GlowSphere(const tlp::PluginContext *context = nullptr) : Glyph(context) {}
+  GlowSphere(const tlp::PluginContext *context = nullptr) : NoShaderGlyph(context) {}
   ~GlowSphere() override {}
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   void draw(node n, float lod) override;
@@ -65,49 +62,22 @@ void GlowSphere::getIncludeBoundingBox(BoundingBox &boundingBox, node) {
 
 void GlowSphere::drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
                            const string &texturePath) {
+  static GlSphere sphere(Coord(0, 0, 0), 0.5);
+  sphere.setColor(glyphColor);
+  sphere.setTexture(texturePath + texture);
+  sphere.draw(0, nullptr);
 
-  // draw a sphere
-  if (!sphere) {
-    sphere = new GlSphere(Coord(0, 0, 0), 0.5);
-  }
-
-  sphere->setColor(glyphColor);
-  sphere->setTexture(texturePath + texture);
-  sphere->draw(0, nullptr);
-
-  // draw a glow ring around
-  // setup its orientation to ensure it is drawn is the screen's plane
-  if (!rect) {
-    rect = new GlRect(Coord(0, 0, 0), 2., 2, Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-    rect->setOutlineMode(false);
-  }
+  // draw a glow ring around in the screen plane
+  static GlRect rect(Coord(0, 0, 0), 2., 2, Color(0, 0, 0, 255), Color(0, 0, 0, 255));
+  rect.setOutlineMode(false);
 
   Color ringColor(glyphColor);
   // semi transparent
   ringColor.setA(128);
-  rect->setFillColor(ringColor);
-  rect->setTextureName(TulipBitmapDir + "radialGradientTexture.png");
+  rect.setFillColor(ringColor);
+  rect.setTextureName(TulipBitmapDir + "radialGradientTexture.png");
 
-  float mdlM[16];
-  glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-  float nx = glyphSize.getW();
-  float ny = glyphSize.getH();
-  float nz = glyphSize.getD();
-  mdlM[0] = nx;
-  mdlM[5] = ny;
-  mdlM[10] = nz;
-  mdlM[1] = mdlM[2] = 0.0f;
-  mdlM[4] = mdlM[6] = 0.0f;
-  mdlM[8] = mdlM[9] = 0.0f;
-  glLoadMatrixf(mdlM);
-  glStencilMask(0x00);
-  glDepthMask(GL_FALSE);
-  rect->draw(0, nullptr);
-  glStencilMask(0xFF);
-  glDepthMask(GL_TRUE);
-  glPopMatrix();
+  Glyph::drawRectInScreenPlane(rect, glyphSize, true);
 }
 
 void GlowSphere::draw(node n, float /* lod */) {

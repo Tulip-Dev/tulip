@@ -41,18 +41,18 @@ static void initCross() {
   if (!cross) {
     float bWidth = 0.1f;
     vector<Coord> points;
-    points.push_back(Coord(-bWidth, 0.5, 0));
-    points.push_back(Coord(bWidth, 0.5, 0));
-    points.push_back(Coord(bWidth, bWidth, 0));
-    points.push_back(Coord(0.5, bWidth, 0));
-    points.push_back(Coord(0.5, -bWidth, 0));
-    points.push_back(Coord(bWidth, -bWidth, 0));
-    points.push_back(Coord(bWidth, -0.5, 0));
-    points.push_back(Coord(-bWidth, -0.5, 0));
-    points.push_back(Coord(-bWidth, -bWidth, 0));
-    points.push_back(Coord(-0.5, -bWidth, 0));
-    points.push_back(Coord(-0.5, bWidth, 0));
-    points.push_back(Coord(-bWidth, bWidth, 0));
+    points.emplace_back(-bWidth, 0.5, 0);
+    points.emplace_back(bWidth, 0.5, 0);
+    points.emplace_back(bWidth, bWidth, 0);
+    points.emplace_back(0.5, bWidth, 0);
+    points.emplace_back(0.5, -bWidth, 0);
+    points.emplace_back(bWidth, -bWidth, 0);
+    points.emplace_back(bWidth, -0.5, 0);
+    points.emplace_back(-bWidth, -0.5, 0);
+    points.emplace_back(-bWidth, -bWidth, 0);
+    points.emplace_back(-0.5, -bWidth, 0);
+    points.emplace_back(-0.5, bWidth, 0);
+    points.emplace_back(-bWidth, bWidth, 0);
     cross = new GlComplexPolygon(points, Color());
   }
 }
