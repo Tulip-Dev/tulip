@@ -653,7 +653,6 @@ QSize TulipFontIconCreator::sizeHint(const QStyleOptionViewItem &option,
                iconSize.height());
 }
 
-#define FONT_ICON_NAME "Font icon"
 /// NodeShapeEditorCreator
 QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
   // Due to a Qt issue when embedding a combo box with a large amount
@@ -668,9 +667,6 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
     QPixmap pixmap = GlyphRenderer::getInst().render(GlyphManager::getInst().glyphId(*it));
     shapes.push_back(std::make_pair(shapeName, pixmap));
   }
-  // add font icon
-  shapes.push_back(
-      std::make_pair(QString(FONT_ICON_NAME), QPixmap(":/tulip/gui/icons/i_font.png")));
 
   return new ShapeDialog(shapes,
                          Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
@@ -678,36 +674,24 @@ QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
 
 void NodeShapeEditorCreator::setEditorData(QWidget *w, const QVariant &data, bool, tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
-  auto nodeShape = data.value<NodeShape::NodeShapes>();
-  if (nodeShape == NodeShape::NodeShapes::Icon)
-    nsd->setSelectedShapeName(QString(FONT_ICON_NAME));
-  else
-    nsd->setSelectedShapeName(tlpStringToQString(GlyphManager::getInst().glyphName(nodeShape)));
+  nsd->setSelectedShapeName(
+      tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape::NodeShapes>())));
 }
 
 QVariant NodeShapeEditorCreator::editorData(QWidget *w, tlp::Graph *) {
   ShapeDialog *nsd = static_cast<ShapeDialog *>(w);
-  auto shapeName = QStringToTlpString(nsd->getSelectedShapeName());
-  if (shapeName == FONT_ICON_NAME)
-    return QVariant::fromValue<NodeShape::NodeShapes>(NodeShape::NodeShapes::Icon);
-  return QVariant::fromValue<NodeShape::NodeShapes>(
-      static_cast<NodeShape::NodeShapes>(GlyphManager::getInst().glyphId(shapeName)));
+  return QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(
+      GlyphManager::getInst().glyphId(QStringToTlpString(nsd->getSelectedShapeName()))));
 }
 
 QString NodeShapeEditorCreator::displayText(const QVariant &data) const {
-  auto nodeShape = data.value<NodeShape::NodeShapes>();
-  if (nodeShape == NodeShape::NodeShapes::Icon)
-    return QString(FONT_ICON_NAME);
-  return tlpStringToQString(GlyphManager::getInst().glyphName(nodeShape));
+  return tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape::NodeShapes>()));
 }
 
 QSize NodeShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option,
                                        const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  auto nodeShape = data.value<NodeShape::NodeShapes>();
-  static QPixmap pixmap = (nodeShape == NodeShape::NodeShapes::Icon)
-                              ? QPixmap(":/tulip/gui/icons/i_font.png")
-                              : GlyphRenderer::getInst().render(nodeShape);
+  static QPixmap pixmap = GlyphRenderer::getInst().render(data.value<NodeShape::NodeShapes>());
   QFontMetrics fontMetrics(option.font);
   return QSize(pixmap.width() + fontMetrics.boundingRect(displayText(data)).width() + 20,
                pixmap.height());
@@ -727,10 +711,7 @@ bool NodeShapeEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem
   opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #endif
 
-  auto nodeShape = data.value<NodeShape::NodeShapes>();
-  QPixmap pixmap = (nodeShape == NodeShape::NodeShapes::Icon)
-                       ? QPixmap(":/tulip/gui/icons/i_font.png")
-                       : GlyphRenderer::getInst().render(nodeShape);
+  QPixmap pixmap = GlyphRenderer::getInst().render(data.value<NodeShape::NodeShapes>());
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
 
