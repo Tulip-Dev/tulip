@@ -47,9 +47,9 @@ static const char *paramHelp[] = {
 
     // Mapping type
     "Type of mapping."
-    "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, "
+    "<ul><li>linear mapping (min value of property is mapped to min size, max to max size, "
     "and a linear interpolation is used in between.)</li>"
-    "<li>false: uniform quantification (the values of property are sorted, and the same size "
+    "<li>uniform quantification (the values of property are sorted, and the same size "
     "increment is used between consecutive values).</li></ul>",
 
     // node/edge
@@ -76,6 +76,10 @@ static const string AREA_PROPORTIONAL = "Area Proportional";
 #define TARGET_TYPES "nodes;edges"
 #define NODES_TARGET 0
 #define EDGES_TARGET 1
+#define MAPPING_TYPE "type"
+#define MAPPING_TYPES "linear;uniform"
+#define LINEAR_MAPPING 0
+#define UNIFORM_MAPPING 1
 
 class MetricSizeMapping : public SizeAlgorithm {
 public:
@@ -85,7 +89,7 @@ public:
       "Size")
   MetricSizeMapping(const PluginContext *context)
       : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
-        zaxis(true), mappingType(true), min(1), max(10), range(0), shift(0) {
+        zaxis(true), linearType(true), min(1), max(10), range(0), shift(0) {
     addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2], "true");
@@ -93,12 +97,12 @@ public:
     addInParameter<bool>("depth", paramHelp[2], "false");
     addInParameter<double>("min size", paramHelp[3], "1");
     addInParameter<double>("max size", paramHelp[4], "10");
-    addInParameter<bool>("type", paramHelp[5], "true");
+    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[5], MAPPING_TYPES, true, "linear <br/> uniform");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[6], TARGET_TYPES, true,
-                                     "nodes <br> edges");
+                                     "nodes <br/> edges");
     addInParameter<StringCollection>("area proportional", paramHelp[7],
                                      "Area Proportional;Quadratic/Cubic", true,
-                                     "Area Proportional <br> Quadratic/Cubic");
+                                     "Area Proportional <br/> Quadratic/Cubic");
 
     // result needs to be an inout parameter
     // in order to preserve the original values of non targetted elements
@@ -114,7 +118,8 @@ public:
     proportional = "Area Proportional";
     entryMetric = graph->getProperty<DoubleProperty>("viewMetric");
     entrySize = graph->getProperty<SizeProperty>("viewSize");
-    mappingType = true;
+    linearType = true;
+    StringCollection mapping;
     StringCollection proportionalType;
     targetType.setCurrent(NODES_TARGET);
 
@@ -126,7 +131,13 @@ public:
       dataSet->get("depth", zaxis);
       dataSet->get("min size", min);
       dataSet->get("max size", max);
-      dataSet->get("type", mappingType);
+      // for compatibility with old parameter type
+      if (dataSet->getTypeName(MAPPING_TYPE) == dataSet->getTypeName<bool>())
+	dataSet->get(MAPPING_TYPE, linearType);
+      else {
+	dataSet->get(MAPPING_TYPE, mapping);
+	linearType = mapping.getCurrent() == LINEAR_MAPPING;
+      }
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("area proportional", proportionalType);
       proportional = proportionalType.getCurrentString();
@@ -168,7 +179,7 @@ public:
   bool run() override {
     NumericProperty *tmp = nullptr;
 
-    if (!mappingType) {
+    if (!linearType) {
       tmp = entryMetric->copyProperty(graph);
       tmp->uniformQuantification(300);
       entryMetric = tmp;
@@ -217,7 +228,7 @@ public:
       edgeSize.copyToProperty(result);
     }
 
-    if (!mappingType)
+    if (!linearType)
       delete tmp;
 
     return true;
@@ -226,7 +237,7 @@ public:
 private:
   NumericProperty *entryMetric;
   SizeProperty *entrySize;
-  bool xaxis, yaxis, zaxis, mappingType;
+  bool xaxis, yaxis, zaxis, linearType;
   double min, max;
   double range;
   double shift;
