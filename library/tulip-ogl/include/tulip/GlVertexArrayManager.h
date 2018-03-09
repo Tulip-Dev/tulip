@@ -73,8 +73,6 @@ public:
    */
   void visit(GlEdge *glEdge) override;
 
-  void endOfVisit() override;
-
   void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) override;
 
   /**
@@ -217,14 +215,20 @@ protected:
   std::vector<GLuint> pointsEdgesSelectedRenderingIndexArray;
 
   struct edgeInfos {
+    unsigned int nbVertices;
     unsigned int linesIndex;
-    std::vector<Coord> lineVertices;
+    unsigned int nbQuadVertices;
     unsigned int quadsIndex;
-    std::vector<Coord> quadVertices;
-    std::vector<Color> lineColors;
-    std::vector<Color> quadColors;
-    Color edgeColor, borderColor;
-    Coord srcAnchor, tgtAnchor;
+    std::vector<GLuint> quadsBottom;
+    std::vector<GLuint> quadsTop;
+    void init(unsigned int nv, unsigned int li, unsigned int nqv, unsigned int qi) {
+      nbVertices = nv;
+      linesIndex = li;
+      nbQuadVertices = nqv;
+      quadsIndex = qi;
+      quadsBottom.resize(nqv / 2);
+      quadsTop.resize(nqv / 2);
+    }
   };
 
   std::vector<edgeInfos> edgeInfosVector;
