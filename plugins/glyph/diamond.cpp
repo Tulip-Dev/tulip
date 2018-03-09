@@ -85,8 +85,7 @@ void Diamond::draw(node n, float lod) {
 
   drawDiamond(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	      textureName, lod, true);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod, true);
 }
 Coord Diamond::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -132,8 +131,8 @@ public:
       textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawDiamond(glyphColor, borderColor,
-                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-		textureName, lod, false);
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod,
+                false);
   }
 };
 

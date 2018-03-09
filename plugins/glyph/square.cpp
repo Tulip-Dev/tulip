@@ -36,8 +36,7 @@ namespace tlp {
 
 static void drawGlyph(const Color &glyphColor, const string &texture, const string &texturePath,
                       double borderWidth, const Color &borderColor, float lod) {
-  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255),
-		     Color(0, 0, 0, 255));
+  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   rect.setFillColor(glyphColor);
   rect.setTextureName(texturePath + texture);
 

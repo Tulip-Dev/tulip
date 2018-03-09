@@ -85,8 +85,7 @@ void Hexagon::draw(node n, float lod) {
 
   drawHexagon(glGraphInputData->getElementColor()->getNodeValue(n),
               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	      textureName, lod, true);
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod, true);
 }
 
 class EEHexagon : public EdgeExtremityGlyph {
@@ -103,8 +102,8 @@ public:
       textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawHexagon(glyphColor, borderColor,
-                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-		textureName, lod, false);
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod,
+                false);
   }
 };
 PLUGIN(EEHexagon)

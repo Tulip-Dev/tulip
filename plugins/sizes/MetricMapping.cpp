@@ -97,7 +97,8 @@ public:
     addInParameter<bool>("depth", paramHelp[2], "false");
     addInParameter<double>("min size", paramHelp[3], "1");
     addInParameter<double>("max size", paramHelp[4], "10");
-    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[5], MAPPING_TYPES, true, "linear <br/> uniform");
+    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[5], MAPPING_TYPES, true,
+                                     "linear <br/> uniform");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[6], TARGET_TYPES, true,
                                      "nodes <br/> edges");
     addInParameter<StringCollection>("area proportional", paramHelp[7],
@@ -133,10 +134,10 @@ public:
       dataSet->get("max size", max);
       // for compatibility with old parameter type
       if (dataSet->getTypeName(MAPPING_TYPE) == dataSet->getTypeName<bool>())
-	dataSet->get(MAPPING_TYPE, linearType);
+        dataSet->get(MAPPING_TYPE, linearType);
       else {
-	dataSet->get(MAPPING_TYPE, mapping);
-	linearType = mapping.getCurrent() == LINEAR_MAPPING;
+        dataSet->get(MAPPING_TYPE, mapping);
+        linearType = mapping.getCurrent() == LINEAR_MAPPING;
       }
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("area proportional", proportionalType);

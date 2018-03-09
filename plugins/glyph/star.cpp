@@ -83,8 +83,7 @@ void Star::draw(node n, float lod) {
 
   drawStar(glGraphInputData->getElementColor()->getNodeValue(n),
            glGraphInputData->getElementBorderColor()->getNodeValue(n),
-           glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	   textureName, lod);
+           glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 
 class EEStar : public EdgeExtremityGlyph {
@@ -101,8 +100,7 @@ public:
       textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawStar(glyphColor, borderColor,
-             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-	     textureName, lod);
+             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
   }
 };
 PLUGIN(EEStar)

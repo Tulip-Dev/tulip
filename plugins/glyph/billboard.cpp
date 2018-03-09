@@ -61,8 +61,7 @@ Billboard::Billboard(const tlp::PluginContext *context) : NoShaderGlyph(context)
 Billboard::~Billboard() {}
 //========================================================
 void Billboard::draw(node n, float) {
-  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255),
-		     Color(0, 0, 0, 255));
+  static GlRect rect(Coord(0, 0, 0), 1., 1., Color(0, 0, 0, 255), Color(0, 0, 0, 255));
 
   rect.setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 

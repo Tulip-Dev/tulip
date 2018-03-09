@@ -86,8 +86,7 @@ Coord Glyph::getAnchor(const Coord &vector) const {
   return anchor;
 }
 //=================================================================
-void Glyph::drawRectInScreenPlane(GlRect &rect, const Size &size,
-				  bool disableMasks) {
+void Glyph::drawRectInScreenPlane(GlRect &rect, const Size &size, bool disableMasks) {
   // setup rect orientation to ensure it is drawn is the screen plane
   float mdlM[16];
   glGetFloatv(GL_MODELVIEW_MATRIX, mdlM);

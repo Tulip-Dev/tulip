@@ -84,8 +84,7 @@ void Pentagon::draw(node n, float lod) {
 
   drawPentagon(glGraphInputData->getElementColor()->getNodeValue(n),
                glGraphInputData->getElementBorderColor()->getNodeValue(n),
-               glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	       textureName, lod, true);
+               glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod, true);
 }
 
 class EEPentagon : public EdgeExtremityGlyph {
@@ -102,8 +101,8 @@ public:
       textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
     drawPentagon(glyphColor, borderColor,
-                 edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-		 textureName, lod, false);
+                 edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName,
+                 lod, false);
   }
 };
 PLUGIN(EEPentagon)

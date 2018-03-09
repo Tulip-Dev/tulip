@@ -165,10 +165,9 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
   auto *glyphObj = data->glyphs.get(glyph);
   // Some glyphs can not benefit from the shader rendering optimization
   // due to the use of quadrics or modelview matrix modification or lighting effect
-  if (data->getGlGlyphRenderer()->renderingHasStarted() &&
-      glyphObj->shaderSupported()) {
-    data->getGlGlyphRenderer()->addNodeGlyphRendering(glyphObj, n, lod, coord,
-                                                      nodeSize, rot, selected);
+  if (data->getGlGlyphRenderer()->renderingHasStarted() && glyphObj->shaderSupported()) {
+    data->getGlGlyphRenderer()->addNodeGlyphRendering(glyphObj, n, lod, coord, nodeSize, rot,
+                                                      selected);
   } else {
 
     if (selected) {

@@ -34,8 +34,8 @@
 using namespace std;
 using namespace tlp;
 
-void drawTree(const Color &color, const Color &outlineColor,
-	      const float outlineSize, const std::string &texture) {
+void drawTree(const Color &color, const Color &outlineColor, const float outlineSize,
+              const std::string &texture) {
   static GlLabel label;
   label.setFontNameSizeAndColor(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), 18, color);
   label.setPosition(Coord(0, 0, 0));

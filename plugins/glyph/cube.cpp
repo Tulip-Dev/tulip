@@ -35,8 +35,7 @@ namespace tlp {
 
 static void drawBox(const Color &fillColor, const Color &outlineColor, const float outlineSize,
                     const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
-  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255),
-		   Color(0, 0, 0, 255));
+  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
   if (textureName.size() != 0) {
     const string &texturePath = glGraphInputData->parameters->getTexturePath();
     box.setTextureName(texturePath + textureName);
