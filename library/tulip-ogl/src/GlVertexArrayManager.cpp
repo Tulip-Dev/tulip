@@ -271,6 +271,9 @@ void GlVertexArrayManager::setHaveToComputeColor(bool compute) {
   toComputeColor = compute;
 }
 
+#define VECT_COORDS_SET_SIZE(v, sz)                                                                \
+  reinterpret_cast<Coord **>(&v)[1] = reinterpret_cast<Coord **>(&v)[0] + sz
+
 void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
   auto nbSelectedNodes = inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
   pointsNodesRenderingIndexArray.reserve(nbNodes - nbSelectedNodes);
@@ -282,7 +285,9 @@ void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsig
   if (!vectorLayoutSizeInit) {
     linesCoordsArray.reserve(2 * nbEdges);
     quadsCoordsArray.reserve(4 * nbEdges);
-    pointsCoordsArray.resize(nbNodes + nbEdges);
+    pointsCoordsArray.reserve(nbNodes + nbEdges);
+    // no need to initialize each Coord element
+    VECT_COORDS_SET_SIZE(pointsCoordsArray, nbNodes + nbEdges);
     edgeInfosVector.resize(nbEdges);
 
     vectorLayoutSizeInit = true;
@@ -678,14 +683,6 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       edgeInfosVector[glEdge->pos].init(numberOfVertices, lastIndex, quadVertices.size(),
                                         lastQuadIndex);
 
-      vector<GLuint> &quadsBottom = edgeInfosVector[glEdge->pos].quadsBottom;
-      vector<GLuint> &quadsTop = edgeInfosVector[glEdge->pos].quadsTop;
-
-      for (size_t i = 0; i < quadVertices.size() / 2; ++i) {
-        quadsBottom[i] = lastQuadIndex + 2 * i;
-        quadsTop[i] = lastQuadIndex + 2 * i + 1;
-      }
-
       const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
       Coord srcAnchor, tgtAnchor;
       glEdge->getEdgeAnchor(inputData, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize,
@@ -728,7 +725,7 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor, colors);
 
       const Color &borderColor = borderColorProperty->getEdgeValue(e);
-      if (inputData->parameters->isEdgeColorInterpolate())
+      if (colorInterpolate)
         for (size_t i = 0; i < colors.size(); ++i) {
           quadsColorsArray.push_back(colors[i]);
           quadsColorsArray.push_back(colors[i]);
@@ -809,16 +806,14 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *glEdge, bool selected
     }
 
     auto &outlineRenderingIndices = outlineRenderingIndicesArray[borderWidth];
-    auto &quadsBottom = eInfos.quadsBottom;
-    for (unsigned int i = 0; i < quadsBottom.size() - 1; ++i) {
-      outlineRenderingIndices.push_back(quadsBottom[i]);
-      outlineRenderingIndices.push_back(quadsBottom[i + 1]);
+    for (unsigned int i = 0; i < (numberOfVertices / 2) - 1; ++i) {
+      outlineRenderingIndices.push_back(baseIndex + 2 * i);
+      outlineRenderingIndices.push_back(baseIndex + 2 * (i + 1));
     }
 
-    auto &quadsTop = eInfos.quadsTop;
-    for (unsigned int i = 0; i < quadsTop.size() - 1; ++i) {
-      outlineRenderingIndices.push_back(quadsTop[i]);
-      outlineRenderingIndices.push_back(quadsTop[i + 1]);
+    for (unsigned int i = 0; i < (numberOfVertices / 2) - 1; ++i) {
+      outlineRenderingIndices.push_back(baseIndex + 2 * i + 1);
+      outlineRenderingIndices.push_back(baseIndex + 2 * (i + 1) + 1);
     }
   }
 }

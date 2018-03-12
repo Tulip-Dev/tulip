@@ -219,15 +219,11 @@ protected:
     unsigned int linesIndex;
     unsigned int nbQuadVertices;
     unsigned int quadsIndex;
-    std::vector<GLuint> quadsBottom;
-    std::vector<GLuint> quadsTop;
     void init(unsigned int nv, unsigned int li, unsigned int nqv, unsigned int qi) {
       nbVertices = nv;
       linesIndex = li;
       nbQuadVertices = nqv;
       quadsIndex = qi;
-      quadsBottom.resize(nqv / 2);
-      quadsTop.resize(nqv / 2);
     }
   };
 
