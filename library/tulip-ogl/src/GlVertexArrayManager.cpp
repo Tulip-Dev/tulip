@@ -709,8 +709,6 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       vector<Color> colors;
       glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
                         &linesCoordsArray[eInfos.linesIndex], numberOfVertices, colors);
-      // must be added twice ?
-      linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       pointsColorsArray[glEdge->pos + nbNodes] = colors[0];
 
