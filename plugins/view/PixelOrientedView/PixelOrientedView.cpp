@@ -96,6 +96,7 @@ PixelOrientedView::~PixelOrientedView() {
   delete pixelOrientedMediator;
   delete propertiesSelectionWidget;
   delete optionsWidget;
+  delete graphComposite;
 }
 
 QList<QWidget *> PixelOrientedView::configurationWidgets() const {
@@ -450,44 +451,27 @@ void PixelOrientedView::destroyData() {
 }
 
 void PixelOrientedView::addEmptyViewLabel() {
-  // we have to center the scene
-  // before computing the position and size of empty labels
-  // but the call below causes a crash on some Linux computers
-  GlScene *scene = getGlMainWidget()->getScene();
-  Camera &cam = scene->getGraphCamera();
-#ifndef _LINUX
-  scene->centerScene();
-#endif
-  // so we can get scene center and width from the graph camera
-  Coord center = cam.getCenter();
-  float width = cam.getBoundingBox().width();
+  Color backgroundColor(optionsWidget->getBackgroundColor());
+  getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
+
   Color textColor = getTextColor();
-  // then create the labels
+
   GlLabel *noDimsLabel =
-      new GlLabel(center + Coord(0, width / 14, 0), Size(2 * width / 7, 2 * width / 7), textColor);
+    new GlLabel(Coord(0.0f, 0.0f, 0.0f), Size(200.0f, 200.0f), textColor);
   noDimsLabel->setText(ViewName::PixelOrientedViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 = new GlLabel(center, Size(4 * width / 7, 2 * width / 7), textColor);
+  GlLabel *noDimsLabel1 =
+    new GlLabel(Coord(0.0f, -50.0f, 0.0f), Size(400.0f, 200.0f), textColor);
   noDimsLabel1->setText("No graph properties selected.");
   mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   GlLabel *noDimsLabel2 =
-      new GlLabel(center - Coord(0, width / 14, 0), Size(width, 2 * width / 7), textColor);
+    new GlLabel(Coord(0.0f, -100.0f, 0.0f), Size(700.0f, 200.0f), textColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-#ifdef _LINUX
-  // finally center the scene
-  scene->centerScene();
-  // and recompute position and size of the empty labels
-  center = cam.getCenter();
-  width = cam.getBoundingBox().width();
-  noDimsLabel->setPosition(center + Coord(0, width / 14, 0));
-  noDimsLabel->setSize(Size(2 * width / 7, 2 * width / 7));
-  noDimsLabel1->setPosition(center);
-  noDimsLabel1->setSize(Size(4 * width / 7, 2 * width / 7));
-  noDimsLabel2->setPosition(center - Coord(0, width / 14, 0));
-  noDimsLabel2->setSize(Size(width, 2 * width / 7));
-#endif
+
+  mainLayer->deleteGlEntity(graphComposite);
 }
+
 
 void PixelOrientedView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
@@ -501,6 +485,8 @@ void PixelOrientedView::removeEmptyViewLabel() {
     delete noDimsLabel1;
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
+
+    mainLayer->addGlEntity(graphComposite, "graph");
   }
 }
 
