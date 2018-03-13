@@ -37,12 +37,9 @@ void AroundTexturedSphere::getIncludeBoundingBox(BoundingBox &boundingBox, node)
   boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
-void AroundTexturedSphere::drawGlyph(const Color &glyphColor,
-				     const Size &glyphSize,
-				     const string &texture,
-				     const string &texturePath,
-				     const string &aroundTextureFile,
-				     unsigned char alpha) {
+void AroundTexturedSphere::drawGlyph(const Color &glyphColor, const Size &glyphSize,
+                                     const string &texture, const string &texturePath,
+                                     const string &aroundTextureFile, unsigned char alpha) {
   // draw a sphere
   static GlSphere sphere(Coord(0, 0, 0), 0.5);
   sphere.setColor(glyphColor);
@@ -61,11 +58,9 @@ void AroundTexturedSphere::drawGlyph(const Color &glyphColor,
   Glyph::drawRectInScreenPlane(rect, glyphSize, true);
 }
 
-void AroundTexturedSphere::draw(node n, const string &aroundTextureFile,
-				unsigned char alpha) {
+void AroundTexturedSphere::draw(node n, const string &aroundTextureFile, unsigned char alpha) {
   drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
             glGraphInputData->getElementSize()->getNodeValue(n),
             glGraphInputData->getElementTexture()->getNodeValue(n),
-            glGraphInputData->parameters->getTexturePath(),
-	    aroundTextureFile, alpha);
+            glGraphInputData->parameters->getTexturePath(), aroundTextureFile, alpha);
 }

@@ -37,10 +37,9 @@ namespace tlp {
  */
 class BottomShadowSphere : public AroundTexturedSphere {
 public:
-  GLYPHINFORMATION("3D - Sphere with bottom shadow", "Patrick Mary", "09/03/2018", "Sphere with its drop shadow on bottom", "1.0",
-                   NodeShape::BottomShadowedSphere)
-  BottomShadowSphere(const tlp::PluginContext *context = nullptr)
-  : AroundTexturedSphere(context) {}
+  GLYPHINFORMATION("3D - Sphere with bottom shadow", "Patrick Mary", "09/03/2018",
+                   "Sphere with its drop shadow on bottom", "1.0", NodeShape::BottomShadowedSphere)
+  BottomShadowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context) {}
   void draw(node n, float lod) override;
 };
 
@@ -58,10 +57,11 @@ PLUGIN(BottomShadowSphere)
  */
 class LeftBottomShadowSphere : public AroundTexturedSphere {
 public:
-  GLYPHINFORMATION("3D - Sphere with left bottom shadow", "Patrick Mary", "09/03/2018", "Sphere with its drop shadow on bottom left", "1.0",
+  GLYPHINFORMATION("3D - Sphere with left bottom shadow", "Patrick Mary", "09/03/2018",
+                   "Sphere with its drop shadow on bottom left", "1.0",
                    NodeShape::LeftBottomShadowedSphere)
   LeftBottomShadowSphere(const tlp::PluginContext *context = nullptr)
-  : AroundTexturedSphere(context) {}
+      : AroundTexturedSphere(context) {}
   void draw(node n, float lod) override;
 };
 
@@ -79,10 +79,11 @@ PLUGIN(LeftBottomShadowSphere)
  */
 class RightBottomShadowSphere : public AroundTexturedSphere {
 public:
-  GLYPHINFORMATION("3D - Sphere with right bottom shadow", "Patrick Mary", "09/03/2018", "Sphere with its drop shadow on right bottom", "1.0",
+  GLYPHINFORMATION("3D - Sphere with right bottom shadow", "Patrick Mary", "09/03/2018",
+                   "Sphere with its drop shadow on right bottom", "1.0",
                    NodeShape::RightBottomShadowedSphere)
   RightBottomShadowSphere(const tlp::PluginContext *context = nullptr)
-  : AroundTexturedSphere(context) {}
+      : AroundTexturedSphere(context) {}
   void draw(node n, float lod) override;
 };
 

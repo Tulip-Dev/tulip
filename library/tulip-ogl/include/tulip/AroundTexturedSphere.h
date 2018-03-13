@@ -47,9 +47,8 @@ public:
   AroundTexturedSphere(const tlp::PluginContext *context = nullptr) : NoShaderGlyph(context) {}
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
   void draw(node n, const string &aroundTextureFile, unsigned char alpha = 255);
-  static void drawGlyph(const Color &glyphColor, const Size &glyphSize,
-			const string &texture, const string &texturePath,
-			const string &aroundTextureFile,
-			unsigned char alpha = 255);
+  static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
+                        const string &texturePath, const string &aroundTextureFile,
+                        unsigned char alpha = 255);
 };
 } // end of namespace tlp

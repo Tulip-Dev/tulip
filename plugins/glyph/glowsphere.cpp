@@ -40,8 +40,7 @@ class GlowSphere : public AroundTexturedSphere {
 public:
   GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
                    NodeShape::GlowSphere)
-  GlowSphere(const tlp::PluginContext *context = nullptr)
-  : AroundTexturedSphere(context) {}
+  GlowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context) {}
   ~GlowSphere() override {}
   void draw(node n, float lod) override;
 };
@@ -58,11 +57,13 @@ public:
                    "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
   EEGlowSphere(const tlp::PluginContext *context = nullptr) : EdgeExtremityGlyph(context) {}
   ~EEGlowSphere() override {}
-  void draw(edge e, node n, const Color &glyphColor,
-	    const Color & /* borderColor */,
+  void draw(edge e, node n, const Color &glyphColor, const Color & /* borderColor */,
             float /* lod */) override {
     glDisable(GL_LIGHTING);
-    AroundTexturedSphere::drawGlyph(glyphColor, edgeExtGlGraphInputData->getElementSize()->getNodeValue(n), edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e), edgeExtGlGraphInputData->parameters->getTexturePath(), "radialGradientTexture.png", 128);
+    AroundTexturedSphere::drawGlyph(
+        glyphColor, edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
+        edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+        edgeExtGlGraphInputData->parameters->getTexturePath(), "radialGradientTexture.png", 128);
   }
 };
 
