@@ -1,5 +1,6 @@
 INSTALL(FILES
   tulip/AbstractGlCurve.h
+  tulip/AroundTexturedSphere.h
   tulip/Camera.h
   tulip/Curves.h
   tulip/EdgeExtremityGlyph.h

@@ -1,5 +1,6 @@
-SET(tulip-ogl_LIB_SRCS 
+SET(tulip-ogl_LIB_SRCS
   AbstractGlCurve.cpp
+  AroundTexturedSphere.cpp
   Camera.cpp
   CubeOutLined.cpp
   Curves.cpp

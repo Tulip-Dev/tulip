@@ -36,6 +36,7 @@ class TLP_SCOPE NodeShape {
 public:
   enum NodeShapes {
     Billboard = 7,
+    BottomShadowedSphere = 21,
     ChristmasTree = 28,
     Circle = 14,
     Cone = 3,
@@ -48,7 +49,9 @@ public:
     GlowSphere = 16,
     HalfCylinder = 10,
     Hexagon = 13,
+    LeftBottomShadowedSphere = 22,
     Pentagon = 12,
+    RightBottomShadowedSphere = 23,
     Ring = 15,
     RoundedBox = 18,
     Sphere = 2,
