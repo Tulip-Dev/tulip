@@ -653,7 +653,6 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
   auto nbNodes = graph->numberOfNodes();
   auto &eInfos = edgeInfosVector[glEdge->pos];
 
-
   if (toComputeLayout) {
     Coord srcCoord, tgtCoord;
     Size srcSize, tgtSize;
@@ -680,8 +679,8 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       buildCurvePoints(vertices, edgeSizes, srcCoord, tgtCoord, quadVertices);
 
       const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
-      glEdge->getEdgeAnchor(inputData, src, tgt, bends, srcCoord, tgtCoord,
-			    srcSize, tgtSize, vertices[0], vertices[numberOfVertices - 1]);
+      glEdge->getEdgeAnchor(inputData, src, tgt, bends, srcCoord, tgtCoord, srcSize, tgtSize,
+                            vertices[0], vertices[numberOfVertices - 1]);
     }
   }
 
@@ -696,9 +695,8 @@ void GlVertexArrayManager::visit(GlEdge *glEdge) {
       Color srcColor, tgtColor;
 
       vector<Color> &lColors = eInfos.lineColors;
-      glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor,
-                        &eInfos.lineVertices[0], numberOfVertices,
-			lColors);
+      glEdge->getColors(inputData, src, tgt, edgeColor, srcColor, tgtColor, &eInfos.lineVertices[0],
+                        numberOfVertices, lColors);
       pointsColorsArray[glEdge->pos + nbNodes] = lColors[0];
 
       GLsizei numberQuadVertices = eInfos.quadVertices.size();
