@@ -42,7 +42,7 @@ namespace tlp {
  * This glyph draws a sphere using the "viewColor" node property value.
  * and apply a texture around it
  */
-class AroundTexturedSphere : public NoShaderGlyph {
+class TLP_GL_SCOPE AroundTexturedSphere : public NoShaderGlyph {
 public:
   AroundTexturedSphere(const tlp::PluginContext *context = nullptr) : NoShaderGlyph(context) {}
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
