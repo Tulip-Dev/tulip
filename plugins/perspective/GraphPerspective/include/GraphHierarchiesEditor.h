@@ -43,6 +43,7 @@ public:
   CustomTreeView(QWidget *parent = nullptr);
 
   void setModel(QAbstractItemModel *model) override;
+  void setAllHierarchyVisible(const QModelIndex &index, bool visible);
 
 public slots:
 
@@ -87,6 +88,8 @@ protected slots:
   void delGraph();
   void delAllGraph();
   void createPanel();
+  void collapseGraphHierarchy();
+  void expandGraphHierarchy();
   void exportGraph();
   void renameGraph();
   void saveGraphHierarchyInTlpFile();

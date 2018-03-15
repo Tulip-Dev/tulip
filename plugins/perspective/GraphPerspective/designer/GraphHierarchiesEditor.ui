@@ -14,16 +14,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -48,16 +39,7 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -133,16 +115,7 @@
       <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -296,6 +269,22 @@
     <string>Ctrl+Shift+G</string>
    </property>
   </action>
+  <action name="actionExpand_hierarchy">
+   <property name="text">
+    <string>Expand all hierarchy</string>
+   </property>
+   <property name="toolTip">
+    <string>Expand all the hierarchy under the current graph</string>
+   </property>
+  </action>
+  <action name="actionCollapse_hierarchy">
+   <property name="text">
+    <string>Collapse all hierarchy</string>
+   </property>
+   <property name="toolTip">
+    <string>Collapse all the hierarchy under the current graph</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -444,6 +433,38 @@
    </hints>
   </connection>
   <connection>
+   <sender>actionExpand_hierarchy</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>expandGraphHierarchy()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCollapse_hierarchy</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>collapseGraphHierarchy()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>actionExport</sender>
    <signal>triggered()</signal>
    <receiver>GraphHierarchiesEditorData</receiver>
@@ -533,6 +554,8 @@
   <slot>cloneSibling()</slot>
   <slot>delAllGraph()</slot>
   <slot>createPanel()</slot>
+  <slot>collapseGraphHierarchy()</slot>
+  <slot>expandGraphHierarchy()</slot>
   <slot>exportGraph()</slot>
   <slot>renameGraph()</slot>
   <slot>doubleClicked(QModelIndex)</slot>
