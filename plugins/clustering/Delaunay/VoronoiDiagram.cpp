@@ -124,7 +124,7 @@ public:
 
   bool run() override {
     // no nodes. Nothing to do.
-    if (graph->numberOfNodes() == 0)
+    if (graph->isEmpty())
       return true;
 
     bool voronoiCellSg = false;

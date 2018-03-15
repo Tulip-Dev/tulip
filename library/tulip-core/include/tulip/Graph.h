@@ -1075,6 +1075,14 @@ public:
   }
 
   /**
+   * @brief return whether the graph is empty or not.
+   * @return true if the graph has no nodes, false if not.
+   */
+  inline bool isEmpty() const {
+    return nodes().empty();
+  }
+
+  /**
    * @brief Gets the number of nodes in this graph.
    * @return The number of nodes in this graph.
    * @see numberOfEdges()

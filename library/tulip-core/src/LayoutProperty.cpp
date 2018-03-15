@@ -307,7 +307,7 @@ void LayoutProperty::rotateX(const double &alpha, const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Iterator<node> *itN = sg->getNodes();
@@ -323,7 +323,7 @@ void LayoutProperty::rotateY(const double &alpha, const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Iterator<node> *itN = sg->getNodes();
@@ -339,7 +339,7 @@ void LayoutProperty::rotateZ(const double &alpha, const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Iterator<node> *itN = sg->getNodes();
@@ -385,7 +385,7 @@ void LayoutProperty::scale(const tlp::Vec3f &v, const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Iterator<node> *itN = sg->getNodes();
@@ -444,7 +444,7 @@ void LayoutProperty::translate(const tlp::Vec3f &v, const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Iterator<node> *itN = sg->getNodes();
@@ -461,7 +461,7 @@ void LayoutProperty::center(const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Observable::holdObservers();
@@ -477,7 +477,7 @@ void LayoutProperty::center(const Vec3f &newCenter, const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Observable::holdObservers();
@@ -493,7 +493,7 @@ void LayoutProperty::normalize(const Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Observable::holdObservers();
@@ -513,7 +513,7 @@ void LayoutProperty::normalize(const Graph *sg) {
 //=================================================================================
 void LayoutProperty::perfectAspectRatio(const Graph *subgraph) {
 
-  if (graph->numberOfNodes() == 0)
+  if (graph->isEmpty())
     return;
 
   Observable::holdObservers();

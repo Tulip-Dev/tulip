@@ -221,7 +221,7 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
   }
 
   // add a node for an empty graph
-  if (graph->numberOfNodes() == 0) {
+  if (graph->isEmpty()) {
     rGraph->setAttribute(CLONE_ROOT, rGraph->addNode());
     return rGraph;
   }

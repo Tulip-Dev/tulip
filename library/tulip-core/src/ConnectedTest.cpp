@@ -50,7 +50,7 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
 }
 //=================================================================
 unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph *const graph) {
-  if (graph->numberOfNodes() == 0)
+  if (graph->isEmpty())
     return 0u;
 
   if (instance == nullptr)
@@ -169,7 +169,7 @@ bool ConnectedTest::compute(const tlp::Graph *const graph) {
   if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
-  if (graph->numberOfNodes() == 0)
+  if (graph->isEmpty())
     return true;
 
   NodeStaticProperty<bool> visited(graph);

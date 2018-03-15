@@ -169,7 +169,7 @@ public:
    * @remark o(1)
    */
   node getOneNode() const {
-    assert(numberOfNodes() > 0);
+    assert(!isEmpty());
     return _nodes[0];
   }
   //=======================================================
@@ -270,6 +270,14 @@ public:
    */
   unsigned int numberOfNodes() const {
     return _nodes.size();
+  }
+  //=======================================================
+  /**
+   * @brief Return whether the graph has nodes or not
+   * @remark: o(1)
+   */
+  bool isEmpty() const {
+    return _nodes.empty();
   }
   //=======================================================
   /**

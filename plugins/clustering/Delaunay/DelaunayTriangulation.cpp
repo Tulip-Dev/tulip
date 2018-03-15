@@ -86,7 +86,7 @@ public:
                     "1.1", "Triangulation")
 
   bool run() override {
-    if (graph->numberOfNodes() == 0)
+    if (graph->isEmpty())
       return true;
 
     bool simplicesSg = false;

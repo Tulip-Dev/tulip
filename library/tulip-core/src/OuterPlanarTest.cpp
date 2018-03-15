@@ -39,7 +39,7 @@ bool OuterPlanarTest::compute(tlp::Graph *graph) {
 
   if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
-  else if (graph->numberOfNodes() == 0) {
+  else if (graph->isEmpty()) {
     resultsBuffer[graph] = true;
     return true;
   }

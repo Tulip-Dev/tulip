@@ -442,7 +442,7 @@ bool EdgeBundling::run() {
         orderedNodes.insert(n);
     }
 
-    while (vertexCoverGraph->numberOfNodes() > 0) {
+    while (vertexCoverGraph->isEmpty() == false) {
       stringstream strm;
       strm << "Computing iteration " << iteration + 1 << "/" << MAX_ITER;
       pluginProgress->setComment(strm.str());

@@ -744,7 +744,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
   }
 
   // nothing to do if the graph is empty
-  if (numberOfNodes() == 0) {
+  if (isEmpty()) {
     errorMessage = "The graph is empty";
     return false;
   }

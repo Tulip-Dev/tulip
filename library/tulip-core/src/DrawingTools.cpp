@@ -102,7 +102,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
                                               const BooleanProperty *selection) {
   pair<Coord, Coord> result;
 
-  if (graph->numberOfNodes() == 0)
+  if (graph->isEmpty())
     return result;
 
   BoundingBox boundingBox(tlp::computeBoundingBox(graph, layout, size, rotation, selection));

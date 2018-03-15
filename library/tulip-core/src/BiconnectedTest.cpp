@@ -191,7 +191,7 @@ void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
 }
 //=================================================================
 bool BiconnectedTest::compute(const tlp::Graph *graph) {
-  if (graph->numberOfNodes() == 0) {
+  if (graph->isEmpty()) {
     return true;
   }
 

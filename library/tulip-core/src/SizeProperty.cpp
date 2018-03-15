@@ -42,7 +42,7 @@ public:
       return;
     }
 
-    if (sg->numberOfNodes() == 0) {
+    if (sg->isEmpty()) {
       prop->setNodeValue(mN, Size(1, 1, 1));
       return;
     }
@@ -99,7 +99,7 @@ void SizeProperty::scale(const tlp::Vector<float, 3> &v, const Graph *sg) {
   if (sg == nullptr)
     sg = graph;
 
-  if (sg->numberOfNodes() == 0)
+  if (sg->isEmpty())
     return;
 
   Iterator<node> *itN = sg->getNodes();

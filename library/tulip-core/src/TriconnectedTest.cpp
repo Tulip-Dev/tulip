@@ -38,7 +38,7 @@ bool TriconnectedTest::compute(Graph *graph) {
   if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
-  if (graph->numberOfNodes() == 0)
+  if (graph->isEmpty())
     return false;
 
   graph->addListener(this);

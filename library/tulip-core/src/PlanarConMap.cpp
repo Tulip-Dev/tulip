@@ -38,7 +38,7 @@ using namespace tlp;
 PlanarConMap::PlanarConMap(Graph *s) : GraphDecorator(s), facesEdges(), edgesFaces() {
   assert(SimpleTest::isSimple(s));
   assert(ConnectedTest::isConnected(s));
-  assert(PlanarityTest::isPlanar(s) || s->numberOfNodes() == 0);
+  assert(PlanarityTest::isPlanar(s) || s->isEmpty());
 
   faceId = 0;
 

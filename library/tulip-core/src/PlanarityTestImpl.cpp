@@ -39,7 +39,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   else
     embed = false;
 
-  if (sg->numberOfNodes() == 0) {
+  if (sg->isEmpty()) {
     return true;
   }
 
