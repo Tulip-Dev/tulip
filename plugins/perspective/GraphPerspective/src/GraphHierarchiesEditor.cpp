@@ -91,8 +91,7 @@ void CustomTreeView::setModel(QAbstractItemModel *m) {
   resizeFirstColumnToContent();
 }
 
-void CustomTreeView::setAllHierarchyVisible(const QModelIndex &index,
-					    bool visible) {
+void CustomTreeView::setAllHierarchyVisible(const QModelIndex &index, bool visible) {
   int childCount = index.model()->rowCount(index);
   for (int i = 0; i < childCount; i++) {
     const QModelIndex &child = index.child(i, 0);
@@ -199,9 +198,9 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
     if (!_contextGraph->subGraphs().empty()) {
       menu.addSeparator();
       if (!_ui->hierarchiesTree->isExpanded(_contextIndex))
-	menu.addAction(_ui->actionExpand_hierarchy);
+        menu.addAction(_ui->actionExpand_hierarchy);
       else
-	menu.addAction(_ui->actionCollapse_hierarchy);
+        menu.addAction(_ui->actionCollapse_hierarchy);
     }
     menu.exec(_ui->hierarchiesTree->viewport()->mapToGlobal(p));
     _contextIndex = QModelIndex();
