@@ -270,7 +270,7 @@ std::list<std::string> getAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getAlgorithmPluginsList()
 
-Return a list containing the names of the algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the algorithm plugins (written in C++ or Python) loaded so far.
 Algorithm plugins are objects implementing the tlp::Algorithm interface 
 in C++ or the :class:`tlp.Algorithm` interface in Python.
 
@@ -295,7 +295,7 @@ std::list<std::string> getImportPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getImportPluginsList()
 
-Return a list containing the names of the import plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the import plugins (written in C++ or Python) loaded so far.
 Import plugins are objects implementing the tlp::ImportModule interface 
 in C++ or the :class:`tlp.ImportModule` interface in Python.
 
@@ -312,7 +312,7 @@ std::list<std::string> getExportPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getExportPluginsList()
 
-Return a list containing the names of the export plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the export plugins (written in C++ or Python) loaded so far.
 Export plugins are objects implementing the tlp::ExportModule interface 
 in C++ or the :class:`tlp.ExportModule` interface in Python.
 
@@ -329,7 +329,7 @@ std::list<std::string> getBooleanAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getBooleanAlgorithmPluginsList()
 
-Return a list containing the names of the boolean algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the boolean algorithm plugins (written in C++ or Python) loaded so far.
 Boolean algorithm plugins are objects implementing the tlp::BooleanAlgorithm interface in C++ or 
 the :class:`tlp.BooleanAlgorithm` interface in Python.
 
@@ -346,7 +346,7 @@ std::list<std::string> getIntegerAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getIntegerAlgorithmPluginsList()
 
-Return a list containing the names of the integer algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the integer algorithm plugins (written in C++ or Python) loaded so far.
 Integer algorithm plugins are objects implementing the tlp::IntegerAlgorithm interface in C++ or 
 the :class:`tlp.IntegerAlgorithm` interface in Python.
 
@@ -363,7 +363,7 @@ std::list<std::string> getDoubleAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getDoubleAlgorithmPluginsList()
 
-Return a list containing the names of the double algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the double algorithm plugins (written in C++ or Python) loaded so far.
 Double algorithm plugins are objects implementing the tlp::DoubleAlgorithm interface in C++ or 
 the :class:`tlp.DoubleAlgorithm` interface in Python.
 
@@ -373,14 +373,13 @@ the :class:`tlp.DoubleAlgorithm` interface in Python.
 %MethodCode
   sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::DoubleAlgorithm>());
 %End
-
 //=====================================================================
 
 std::list<std::string> getColorAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getColorAlgorithmPluginsList()
 
-Return a list containing the names of the color algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the color algorithm plugins (written in C++ or Python) loaded so far.
 Color algorithm plugins are objects implementing the tlp::ColorAlgorithm interface in C++ or 
 the :class:`tlp.ColorAlgorithm` interface in Python.
 
@@ -397,7 +396,7 @@ std::list<std::string> getLayoutAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getLayoutAlgorithmPluginsList()
 
-Return a list containing the names of the layout algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the layout algorithm plugins (written in C++ or Python) loaded so far.
 Layout algorithm plugins are objects implementing the tlp::LayoutAlgorithm interface in C++ or 
 the :class:`tlp.LayoutAlgorithm` interface in Python.
 
@@ -414,7 +413,7 @@ std::list<std::string> getSizeAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getSizeAlgorithmPluginsList()
 
-Return a list containing the names of the size algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the size algorithm plugins (written in C++ or Python) loaded so far.
 Size algorithm plugins are objects implementing the tlp::SizeAlgorithm interface in C++ or 
 the :class:`tlp.SizeAlgorithm` interface in Python.
 
@@ -431,7 +430,7 @@ std::list<std::string> getStringAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getStringAlgorithmPluginsList()
 
-Return a list containing the names of the string algorithm plugins (written in C++ or Python) loaded so far.
+Returns a list containing the names of the string algorithm plugins (written in C++ or Python) loaded so far.
 String algorithm plugins are objects implementing the tlp::StringAlgorithm interface in C++ or 
 the :class:`tlp.StringAlgorithm` interface in Python.
 
@@ -448,7 +447,7 @@ unsigned int getSeedOfRandomSequence();
 %Docstring
 tlp.getSeedOfRandomSequence()
 
-Return the value of the seed used for further initialization of a random sequence
+Returns the value of the seed used for further initialization of a random sequence
 
 :rtype: integer
 %End
@@ -459,7 +458,7 @@ void setSeedOfRandomSequence(unsigned int seed);
 %Docstring
 tlp.setSeedOfRandomSequence(seed)
 
-Give the value of the seed used for further initialization of a random sequence (with further calls to rand() or rand_r(...)).
+Gives the value of the seed used for further initialization of a random sequence (with further calls to rand() or rand_r(...)).
 Set seed to UINT_MAX if you need a random choice of the seed.
 
 :param seed: the value of the seed
@@ -472,7 +471,7 @@ void initRandomSequence();
 %Docstring
 tlp.initRandomSequence()
 
-Initialize a random sequence with the seed previously set.
+Initializes a random sequence with the seed previously set.
 Further calls to rand() or rand_r(...) will return the elements of that sequence
 
 %End
