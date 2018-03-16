@@ -35,24 +35,22 @@ inline float sqrnorm(const Coord &v) {
   return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
 //================================================
-float lineLength(const vector<Coord> &line) {
+static float sqrnorm(const Coord &p0, const Coord &p1) {
   float result = 0;
-
-  for (unsigned int i = 1; i < line.size(); ++i) {
-    result += sqrnorm(line[i - 1] - line[i]);
+  for (unsigned int i = 0; i < 3; ++i) {
+    auto li = p0[i] - p1[i];
+    result += li * li;
   }
-
   return result;
 }
 //================================================
-float lineLength(const Coord *line, unsigned int lineSize) {
-  float result = 0;
-
+static float lineLength(const Coord *line, unsigned int lineSize, vector<float> &norms) {
+  norms.resize(lineSize - 1);
+  float ll = 0;
   for (unsigned int i = 1; i < lineSize; ++i) {
-    result += sqrnorm(line[i - 1] - line[i]);
+    ll += norms[i - 1] = sqrnorm(line[i - 1], line[i]);
   }
-
-  return result;
+  return ll;
 }
 //================================================
 void getColors(const Coord *line, const unsigned int lineSize, const Color &c1, const Color &c2,
@@ -72,29 +70,29 @@ void getColors(const Coord *line, const unsigned int lineSize, const Color &c1, 
     return;
 
   _c2 -= _c1;
-  _c2 /= lineLength(line, lineSize);
-
+  vector<float> norms;
+  _c2 /= lineLength(line, lineSize, norms);
   for (unsigned int i = 1; i < lineSize - 1; ++i) {
-    float delta = sqrnorm(line[i - 1] - line[i]);
-    _c1 += _c2 * delta;
+     _c1 += _c2 * norms[i - 1];
     result[i].set(uchar(_c1[0]), uchar(_c1[1]), uchar(_c1[2]), uchar(_c1[3]));
   }
 }
 //================================================
 void getColors(const vector<Coord> &line, const Color &c1, const Color &c2, vector<Color> &result) {
-  getColors(&line[0], line.size(), c1, c2, result);
+  getColors(line.data(), line.size(), c1, c2, result);
 }
 //================================================
-void getSizes(const vector<Coord> &line, float s1, float s2, vector<float> &result) {
-  result.resize(line.size());
+void getSizes(const vector<Coord> &lines, float s1, float s2, vector<float> &result) {
+  const auto sz = lines.size();
+  result.resize(sz);
   result[0] = s1;
-  result[line.size() - 1] = s2;
+  result[sz - 1] = s2;
   s2 -= s1;
-  s2 /= lineLength(line);
-
-  for (unsigned int i = 1; i < line.size() - 1; ++i) {
-    float delta = sqrnorm(line[i - 1] - line[i]);
-    s1 += s2 * delta;
+  
+  vector<float> norms;
+  s2 /= lineLength(lines.data(), sz, norms);
+  for (unsigned int i = 1; i < sz - 1; ++i) {
+    s1 += s2 * norms[i - 1];
     result[i] = s1;
   }
 }
@@ -237,11 +235,12 @@ GLfloat *buildCurvePoints(const vector<Coord> &vertices, const vector<float> &si
   return result.data;
 }
 
-static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
-                            float size, float inversion, vector<Coord> &result,
-                            bool lastPoint = false, bool twoPointsCurve = false) {
-
-  Coord u(pBefore - pCurrent);
+static float computeExtrusion(const Coord& xu, float u_norm,
+			      const Coord& pCurrent,
+			      const Coord& xv, float v_norm,
+			      float sz, float inversion, vector<Coord> &result,
+			      bool lastPoint, bool twoPointsCurve) {
+  /*Coord u(pBefore - pCurrent);
   Coord v(pAfter - pCurrent);
 
   if (fabs(u[2]) < 1e-3)
@@ -251,29 +250,30 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
     v[2] = 0;
 
   Coord xu(u);
+  auto u_norm = u.norm();
 
-  if (u.norm() != 0)
-    xu /= u.norm();
+  if (u_norm)
+    xu /= u_norm;
 
   Coord xv(v);
-
-  if (v.norm() != 0)
-    xv /= v.norm();
+  auto v_norm = xv.norm();
+  
+  if (v_norm)
+  xv /= v_norm;*/
 
   Coord bi_xu_xv(xu + xv);
+  auto norm = bi_xu_xv.norm();
 
-  float newSize = size;
-  float angle = 0;
-
-  if (!result.empty() && !lastPoint && bi_xu_xv.norm() < 1e-3) {
+  if (!result.empty() && !lastPoint && norm < 1e-3) {
     return inversion;
   }
 
-  if (bi_xu_xv.norm() != 0) {
-    bi_xu_xv /= bi_xu_xv.norm();
+  if (norm) {
+    bi_xu_xv /= norm;
   }
 
-  angle = float(M_PI - atan2((u ^ v).norm(), u.dotProduct(v)));
+  float nsz = sz;
+  float angle = float(M_PI - acos(xu[0] * xv[0] + xu[1] * xv[1] + xu[2] * xv[2]));
 
   bool angleOk = true;
 
@@ -290,39 +290,43 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
       bi_xu_xv[2] = 0;
     }
   } else {
-    newSize = newSize / float(cos(angle / 2.0));
+    nsz /= float(cos(angle / 2.0));
   }
+
+  Coord bi_xu_xv_nsz(bi_xu_xv[0] * nsz, bi_xu_xv[1] * nsz, bi_xu_xv[2] * nsz);
+  bi_xu_xv_nsz *= inversion;
 
   if (angleOk && angle < M_PI / 2 + M_PI / 4) {
     // normal form
     if ((xu ^ xv)[2] > 0) {
-      result.push_back(pCurrent + bi_xu_xv * newSize * float(inversion));
-      result.push_back(pCurrent - bi_xu_xv * newSize * float(inversion));
+      result.emplace_back(pCurrent + bi_xu_xv_nsz);
+      result.emplace_back(pCurrent - bi_xu_xv_nsz);
     } else {
-      result.push_back(pCurrent - bi_xu_xv * newSize * float(inversion));
-      result.push_back(pCurrent + bi_xu_xv * newSize * float(inversion));
+      result.emplace_back(pCurrent - bi_xu_xv_nsz);
+      result.emplace_back(pCurrent + bi_xu_xv_nsz);
     }
   } else {
     // broken form
 
-    Coord vectUnit(-bi_xu_xv[1], bi_xu_xv[0], bi_xu_xv[2]);
+    Coord vunit_sz(-bi_xu_xv[1] * sz, bi_xu_xv[0] * sz, bi_xu_xv[2] * sz);
+    vunit_sz *= inversion;
 
     if (angleOk && !twoPointsCurve &&
-        !(newSize > u.norm() || newSize > v.norm() || fabs(angle - M_PI) < 1E-3)) {
+        !(nsz > u_norm || nsz > v_norm || fabs(angle - M_PI) < 1E-3)) {
       if ((xu ^ xv)[2] > 0) {
-        result.push_back(pCurrent + bi_xu_xv * newSize * inversion);
-        result.push_back(pCurrent - vectUnit * size * inversion);
-        result.push_back(pCurrent + bi_xu_xv * newSize * inversion);
-        result.push_back(pCurrent + vectUnit * size * inversion);
+        result.emplace_back(pCurrent + bi_xu_xv_nsz);
+        result.emplace_back(pCurrent - vunit_sz);
+        result.emplace_back(pCurrent + bi_xu_xv_nsz);
+        result.emplace_back(pCurrent + vunit_sz);
       } else {
-        result.push_back(pCurrent + vectUnit * size * inversion);
-        result.push_back(pCurrent + bi_xu_xv * newSize * inversion);
-        result.push_back(pCurrent - vectUnit * size * inversion);
-        result.push_back(pCurrent + bi_xu_xv * newSize * inversion);
+        result.emplace_back(pCurrent + vunit_sz);
+        result.emplace_back(pCurrent + bi_xu_xv_nsz);
+        result.emplace_back(pCurrent - vunit_sz);
+        result.emplace_back(pCurrent + bi_xu_xv_nsz);
       }
     } else {
-      result.push_back(pCurrent + vectUnit * size * float(inversion));
-      result.push_back(pCurrent - vectUnit * size * float(inversion));
+      result.emplace_back(pCurrent + vunit_sz);
+      result.emplace_back(pCurrent - vunit_sz);
       inversion *= -1;
     }
   }
@@ -330,41 +334,54 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
   return inversion;
 }
 
+Coord inline normalize(Coord v, float &norm) {
+  if (fabs(v[2]) < 1e-3)
+    v[2] = 0;
+  norm = v.norm();
+
+  if (norm)
+    return v / norm;
+  return v;
+}
+
 void buildCurvePoints(const vector<Coord> &vertices, const vector<float> &sizes,
                       const Coord &startN, const Coord &endN, vector<Coord> &result) {
+  const auto sz = vertices.size();
+  bool twoPointsCurve = (sz == 2);
+  result.reserve(sz * 2);
 
-  int inversion = 1;
-  bool twoPointsCurve = (vertices.size() == 2);
+  float inversion = 1;
+  float beforeNorm, afterNorm;
+  Coord after(normalize(vertices[1] - vertices[0], afterNorm));
+  Coord before;
+  if (startN != vertices[0])
+    before = normalize(startN - vertices[0], beforeNorm);
+  else
+    before = -after, beforeNorm = afterNorm;
+  inversion = computeExtrusion(before, beforeNorm, vertices[0],
+			       after, afterNorm, sizes[0], inversion, result,
+			       false, twoPointsCurve);
 
-  result.reserve(vertices.size() * 2);
-
-  if (startN != vertices[0]) {
-    inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result,
+  for (unsigned int i = 1; i < sz - 1; ++i) {
+    inversion = computeExtrusion(-after, afterNorm, vertices[i],
+				 after = normalize(vertices[i + 1]  - vertices[i], afterNorm), afterNorm,
+				 sizes[i], inversion, result,
                                  false, twoPointsCurve);
-  } else {
-    inversion = computeExtrusion(vertices[0] - (vertices[1] - vertices[0]), vertices[0],
-                                 vertices[1], sizes[0], inversion, result, false, twoPointsCurve);
   }
 
-  for (unsigned int i = 1; i < vertices.size() - 1; ++i) {
-    inversion = computeExtrusion(vertices[i - 1], vertices[i], vertices[i + 1], sizes[i], inversion,
-                                 result, false, twoPointsCurve);
-  }
-
-  if (endN != vertices[vertices.size() - 1]) {
-    inversion = computeExtrusion(vertices[vertices.size() - 2], vertices[vertices.size() - 1], endN,
-                                 sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
-  } else {
-    inversion = computeExtrusion(vertices[vertices.size() - 2], vertices[vertices.size() - 1],
-                                 vertices[vertices.size() - 1] + (vertices[vertices.size() - 1] -
-                                                                  vertices[vertices.size() - 2]),
-                                 sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
-  }
+  before = -after, beforeNorm = afterNorm;
+  if (endN != vertices[sz - 1])
+    after = normalize(endN - vertices[sz - 1], afterNorm);
+  inversion = computeExtrusion(before, beforeNorm, vertices[sz - 1], 
+			       after, afterNorm,
+			       sizes[sizes.size() - 1], inversion, result,
+			       true, twoPointsCurve);
 }
 //==============================================
 vector<Coord> splineCurve(const vector<Coord> &vertices) {
   vector<Coord> curve;
-  curve.push_back(vertices[0]);
+  curve.reserve(2 + 3 * (vertices.size() - 2));
+  curve.emplace_back(vertices[0]);
 
   for (unsigned int i = 1; i < vertices.size() - 1; ++i) {
     Coord xu(vertices[i - 1] - vertices[i]);
@@ -383,12 +400,12 @@ vector<Coord> splineCurve(const vector<Coord> &vertices) {
     tgt_xu_xv /= tgt_xu_xv.norm();
     Coord dir(tgt_xu_xv ^ bi_xu_xv);
     dir /= dir.norm();
-    curve.push_back(vertices[i] - (dir * (n_xu / 5.0f)));
-    curve.push_back(vertices[i]);
-    curve.push_back(vertices[i] + (dir * (n_xv / 5.0f)));
+    curve.emplace_back(vertices[i] - (dir * (n_xu / 5.0f)));
+    curve.emplace_back(vertices[i]);
+    curve.emplace_back(vertices[i] + (dir * (n_xv / 5.0f)));
   }
 
-  curve.push_back(vertices.back());
+  curve.emplace_back(vertices.back());
   return curve;
 }
 
@@ -398,19 +415,17 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
 
   if (!bends.empty()) {
     result.reserve(bends.size() + 2);
-    result.push_back(startPoint);
+    result.emplace_back(startPoint);
     Coord lastPoint(bends[0]);
 
     if ((startPoint - lastPoint).norm() > 1E-4)
-      result.push_back(lastPoint);
+      result.emplace_back(lastPoint);
 
-    unsigned int i;
-
-    for (i = 1; i < bends.size(); ++i) {
+    for (unsigned int i = 1; i < bends.size(); ++i) {
       Coord currentPoint(bends[i]);
 
       if ((currentPoint - lastPoint).norm() > 1E-4) {
-        result.push_back(currentPoint);
+        result.emplace_back(currentPoint);
       }
 
       lastPoint = currentPoint;
@@ -418,7 +433,7 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
 
     if ((endPoint - lastPoint).norm() > 1E-4) {
       lastPoint = endPoint;
-      result.push_back(endPoint);
+      result.emplace_back(endPoint);
     }
 
     if (result.size() < 2) { // only one valid point for a line
@@ -439,8 +454,8 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
   } else {
     if ((startPoint - endPoint).norm() > 1E-4) {
       result.reserve(2);
-      result.push_back(startPoint);
-      result.push_back(endPoint);
+      result.emplace_back(startPoint);
+      result.emplace_back(endPoint);
 
       if ((startN - startPoint).norm() < 1E-4) {
         startN = startPoint - (endPoint - startPoint);
@@ -477,43 +492,43 @@ void polyQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2, f
   getSizes(vertices, s1, s2, sizes);
 
   vector<Coord> quadVertices;
-  vector<unsigned int> bottomOutlineIndices;
-  vector<unsigned int> topOutlineIndices;
-  vector<float> texCoords;
 
   buildCurvePoints(vertices, sizes, startN, endN, quadVertices);
 
   if (GlShaderProgram::getCurrentActiveShader() &&
       GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye") {
+    const unsigned int nbQuads_div2 = quadVertices.size() / 2;
     const float nbSubDiv = 20.f;
     vector<Coord> newVertices;
-    newVertices.push_back(quadVertices[0]);
-    newVertices.push_back(quadVertices[1]);
+    newVertices.reserve((nbQuads_div2 - 1) * 19 * 2 + 2);
+    newVertices.emplace_back(quadVertices[0]);
+    newVertices.emplace_back(quadVertices[1]);
 
-    for (size_t i = 0; i < quadVertices.size() / 2 - 1; ++i) {
+    for (size_t i = 0; i < nbQuads_div2 - 1; ++i) {
       for (float j = 1; j < nbSubDiv; ++j) {
-        newVertices.push_back(quadVertices[2 * i] +
-                              (j / (nbSubDiv - 1)) *
-                                  (quadVertices[2 * (i + 1)] - quadVertices[2 * i]));
-        newVertices.push_back(quadVertices[2 * i + 1] +
-                              (j / (nbSubDiv - 1)) *
-                                  (quadVertices[2 * (i + 1) + 1] - quadVertices[2 * i + 1]));
+        newVertices.emplace_back(quadVertices[2 * i] +
+				 (j / (nbSubDiv - 1)) *
+				 (quadVertices[2 * (i + 1)] - quadVertices[2 * i]));
+        newVertices.emplace_back(quadVertices[2 * i + 1] +
+				 (j / (nbSubDiv - 1)) *
+				 (quadVertices[2 * (i + 1) + 1] - quadVertices[2 * i + 1]));
       }
     }
 
-    quadVertices = newVertices;
+    quadVertices.swap(newVertices);
   }
 
   float length = 0;
+  const unsigned int nbQuads_div2 = quadVertices.size() / 2;
+
   vector<Coord> centerLine;
+  centerLine.reserve(nbQuads_div2);
+  vector<unsigned int> bottomOutlineIndices(nbQuads_div2);
+  vector<unsigned int> topOutlineIndices(nbQuads_div2);
+  vector<float> texCoords(quadVertices.size() * 2);
 
-  centerLine.resize(quadVertices.size() / 2);
-  bottomOutlineIndices.resize(quadVertices.size() / 2);
-  topOutlineIndices.resize(quadVertices.size() / 2);
-  texCoords.resize(quadVertices.size() * 2);
-
-  for (size_t i = 0; i < quadVertices.size() / 2; ++i) {
-    centerLine[i] = (quadVertices[2 * i] + quadVertices[2 * i + 1]) / 2.f;
+  for (size_t i = 0; i < nbQuads_div2; ++i) {
+    centerLine.emplace_back((quadVertices[2 * i] + quadVertices[2 * i + 1]) / 2.f);
     bottomOutlineIndices[i] = 2 * i;
     topOutlineIndices[i] = 2 * i + 1;
 
@@ -523,10 +538,10 @@ void polyQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2, f
       texCoords[2] = 0;
       texCoords[3] = 0;
     } else {
-      Coord p1_0 = quadVertices[2 * (i - 1)];
-      Coord p1_1 = quadVertices[2 * i];
-      Coord p2_0 = quadVertices[2 * (i - 1) + 1];
-      Coord p2_1 = quadVertices[2 * i + 1];
+      const Coord& p1_0 = quadVertices[2 * (i - 1)];
+      const Coord& p1_1 = quadVertices[2 * i];
+      const Coord& p2_0 = quadVertices[2 * (i - 1) + 1];
+      const Coord& p2_1 = quadVertices[2 * i + 1];
       length += ((p1_1 + p2_1) / 2.f - (p1_0 + p2_0) / 2.f).norm() / (p1_0 - p2_0).norm();
       texCoords[i * 4] = length;
       texCoords[i * 4 + 1] = 1;
@@ -589,12 +604,14 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
                 const Coord &startN, const Coord &endN, const Coord &lookDir, bool colorInterpolate,
                 const Color &borderColor, const string &textureName, const float outlineWidth) {
 
+  auto sz = vertices.size();
+
   vector<Color> colors;
   getColors(vertices, c1, c2, colors);
   vector<float> sizes;
   getSizes(vertices, s1, s2, sizes);
 
-  CurvePoints result(vertices.size());
+  CurvePoints result(sz);
   // start point
   Coord xu(startN - vertices[0]);
   xu /= xu.norm();
@@ -607,9 +624,21 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
   result(0, 1) = vertices[0] + dir * s1;
 
   //============
-  for (unsigned int i = 1; i < vertices.size() - 1; ++i) {
-    Coord xu(vertices[i - 1] - vertices[i]);
-    Coord xv(vertices[i + 1] - vertices[i]);
+  Coord v(vertices[1] - vertices[0]);
+  for (unsigned int i = 1; i < sz - 1; ++i) {
+    float newSize = sizes[i];
+    Coord u(-v);
+    v = vertices[i + 1] - vertices[i];
+    float angle =
+        float(M_PI - acos((u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) / (u.norm() * v.norm())));
+
+    if (isnan(angle))
+      angle = 0;
+
+    newSize /= float(cos(angle / 2.));
+
+    Coord xu(u);
+    Coord xv(v);
     xu = xu ^ lookDir;
     xv = xv ^ (-lookDir);
 
@@ -632,30 +661,17 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
     if (nrm > 0.00000001f) {
       xu_xv /= xu_xv.norm();
     }
-
-    float newSize = sizes[i];
-    Coord u(vertices[i - 1] - vertices[i]);
-    Coord v(vertices[i + 1] - vertices[i]);
-    float angle =
-        float(M_PI - acos((u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) / (u.norm() * v.norm())));
-
-    if (isnan(angle))
-      angle = 0;
-
-    newSize = newSize / float(cos(angle / 2.));
-
     result(i, 0) = vertices[i] - xu_xv * newSize;
     result(i, 1) = vertices[i] + xu_xv * newSize;
   }
 
   // end point
-  xu = endN - vertices[vertices.size() - 1];
+  xu = endN - vertices[sz - 1];
   xu = xu ^ lookDir;
   xu /= xu.norm();
-  result(vertices.size() - 1, 1) = vertices[vertices.size() - 1] - xu * sizes[vertices.size() - 1];
-  result(vertices.size() - 1, 0) = vertices[vertices.size() - 1] + xu * sizes[vertices.size() - 1];
+  result(sz - 1, 1) = vertices[sz - 1] - xu * sizes[sz - 1];
+  result(sz - 1, 0) = vertices[sz - 1] + xu * sizes[sz - 1];
 
-  unsigned int size = vertices.size();
   GLfloat *points = result.data;
 
   if (!textureName.empty()) {
@@ -677,7 +693,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
   float length = 0;
   glBegin(GL_QUAD_STRIP);
 
-  for (unsigned int i = 0; i < size; ++i) {
+  for (unsigned int i = 0; i < sz; ++i) {
     glColor4ubv(reinterpret_cast<const GLubyte *>(&colors[i]));
 
     if (i == 0) {
@@ -686,14 +702,14 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
       glVertex3fv(&points[i * 3]);
       glMultiTexCoord2f(GL_TEXTURE0, 0, 0.0f);
       glMultiTexCoord2f(GL_TEXTURE1, 0, 0.0f);
-      glVertex3fv(&points[i * 3 + size * 3]);
+      glVertex3fv(&points[i * 3 + sz * 3]);
     } else {
       Coord p1_0(points[i * 3 - 3], points[i * 3 - 2], points[i * 3 - 1]);
       Coord p1_1(points[i * 3], points[i * 3 + 1], points[i * 3 + 2]);
-      Coord p2_0(points[i * 3 + size * 3 - 3], points[i * 3 + size * 3 - 2],
-                 points[i * 3 + size * 3 - 1]);
-      Coord p2_1(points[i * 3 + size * 3], points[i * 3 + size * 3 + 1],
-                 points[i * 3 + size * 3 + 2]);
+      Coord p2_0(points[i * 3 + sz * 3 - 3], points[i * 3 + sz * 3 - 2],
+                 points[i * 3 + sz * 3 - 1]);
+      Coord p2_1(points[i * 3 + sz * 3], points[i * 3 + sz * 3 + 1],
+                 points[i * 3 + sz * 3 + 2]);
 
       length += ((p1_1 + p2_1) / 2.f - (p1_0 + p2_0) / 2.f).norm() / (p1_0 - p2_0).norm();
       glMultiTexCoord2f(GL_TEXTURE0, length, 1.0f);
@@ -701,7 +717,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
       glVertex3fv(&points[i * 3]);
       glMultiTexCoord2f(GL_TEXTURE0, length, 0.0f);
       glMultiTexCoord2f(GL_TEXTURE1, length, 0.0f);
-      glVertex3fv(&points[i * 3 + size * 3]);
+      glVertex3fv(&points[i * 3 + sz * 3]);
     }
   }
 
@@ -725,7 +741,7 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
     if (!colorInterpolate)
       glColor4ubv(reinterpret_cast<const GLubyte *>(&borderColor));
 
-    for (unsigned int i = 0; i < size; ++i) {
+    for (unsigned int i = 0; i < sz; ++i) {
       if (colorInterpolate)
         glColor4ubv(reinterpret_cast<const GLubyte *>(&colors[i]));
 
@@ -739,11 +755,11 @@ void simpleQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
     if (!colorInterpolate)
       glColor4ubv(reinterpret_cast<const GLubyte *>(&borderColor));
 
-    for (unsigned int i = 0; i < size; ++i) {
+    for (unsigned int i = 0; i < sz; ++i) {
       if (colorInterpolate)
         glColor4ubv(reinterpret_cast<const GLubyte *>(&colors[i]));
 
-      glVertex3fv(&points[i * 3 + size * 3]);
+      glVertex3fv(&points[i * 3 + sz * 3]);
     }
 
     glEnd();
@@ -796,8 +812,7 @@ void bezierQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
   vector<float> sizes;
   getSizes(vertices, s1, s2, sizes);
   GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN, size);
-  GLfloat *pointsIt = points;
-  glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, size, 0.0, 1.0, size * 3, 2, pointsIt);
+  glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, size, 0.0, 1.0, size * 3, 2, points);
   glEnable(GL_MAP2_VERTEX_3);
 
   glBegin(GL_QUAD_STRIP);
@@ -872,11 +887,14 @@ void bezierLine(const vector<Coord> &vertices, const Color &c1, const Color &c2)
     return;
   }
 
-  GLfloat *data = new GLfloat[vertices.size() * 3];
+  vector<GLfloat> buff;
+  buff.reserve(3 * vertices.size());
+  memcpy(buff.data(), vertices.data(), 3 * vertices.size() * sizeof(GLfloat));
 
-  for (unsigned int i = 0; i < vertices.size(); ++i) {
-    *(reinterpret_cast<Coord *>(&data[i * 3])) = vertices[i];
-  }
+  glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, vertices.size(), buff.data());
+  glEnable(GL_MAP1_VERTEX_3);
+
+  glBegin(GL_LINE_STRIP);
 
   unsigned int steps = 40;
   Vector<float, 4> color, delta;
@@ -887,11 +905,6 @@ void bezierLine(const vector<Coord> &vertices, const Color &c1, const Color &c2)
   }
 
   delta /= float(steps);
-  glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, vertices.size(), data);
-  glEnable(GL_MAP1_VERTEX_3);
-
-  glBegin(GL_LINE_STRIP);
-
   for (unsigned int i = 0; i <= steps; ++i) {
     setColor(Color(uchar(color[0]), uchar(color[1]), uchar(color[2]), uchar(color[3])));
     glEvalCoord1f(i / GLfloat(steps));
@@ -901,7 +914,6 @@ void bezierLine(const vector<Coord> &vertices, const Color &c1, const Color &c2)
   glEnd();
 
   glDisable(GL_MAP1_VERTEX_3);
-  delete[] data;
 }
 
 void splineQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2, float s1, float s2,
