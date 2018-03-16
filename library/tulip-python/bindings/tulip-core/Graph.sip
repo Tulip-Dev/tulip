@@ -1998,6 +1998,17 @@ Returns the graph's id. This id is unique.
 
 //===========================================================================================
 
+  bool isEmpty() const;
+%Docstring
+tlp.Graph.isEmpty()
+
+Returns :const:`True` if the graph has no nodes.
+
+:rtype: boolean 
+%End
+
+//===========================================================================================
+
   unsigned int numberOfNodes() const;
 %Docstring
 tlp.Graph.numberOfNodes()
