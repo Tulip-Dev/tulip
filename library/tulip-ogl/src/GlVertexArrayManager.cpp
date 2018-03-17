@@ -273,8 +273,13 @@ void GlVertexArrayManager::setHaveToComputeColor(bool compute) {
   toComputeColor = compute;
 }
 
-#define VECT_COORDS_SET_SIZE(v, sz)                                                                \
-  reinterpret_cast<Coord **>(&v)[1] = reinterpret_cast<Coord **>(&v)[0] + sz
+// we define a specific templated function to resize a vector<T>
+// in order to avoid numerous unneeded calls to T default constructor
+template<typename T>
+inline void vector_set_size(std::vector<T> &v, unsigned int sz) {
+  assert(v.capacity() >= sz);
+  reinterpret_cast<T **>(&v)[1] = reinterpret_cast<T **>(&v)[0] + sz;
+}
 
 void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) {
   auto nbSelectedNodes = inputData->getElementSelected()->numberOfNonDefaultValuatedNodes();
@@ -289,7 +294,7 @@ void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsig
     quadsCoordsArray.reserve(4 * nbEdges);
     pointsCoordsArray.reserve(nbNodes + nbEdges);
     // no need to initialize each Coord element
-    VECT_COORDS_SET_SIZE(pointsCoordsArray, nbNodes + nbEdges);
+    vector_set_size<Coord>(pointsCoordsArray, nbNodes + nbEdges);
     edgeInfosVector.resize(nbEdges);
 
     vectorLayoutSizeInit = true;
@@ -298,7 +303,9 @@ void GlVertexArrayManager::reserveMemoryForGraphElts(unsigned int nbNodes, unsig
   if (!vectorColorSizeInit) {
     linesColorsArray.reserve(2 * nbEdges);
     quadsColorsArray.reserve(4 * nbEdges);
-    pointsColorsArray.resize(nbNodes + nbEdges);
+    pointsColorsArray.reserve(nbNodes + nbEdges);
+    // no need to initialize each Color element
+    vector_set_size<Color>(pointsColorsArray, nbNodes + nbEdges);
 
     vectorColorSizeInit = true;
   }
