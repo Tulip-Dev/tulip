@@ -275,7 +275,7 @@ void GlVertexArrayManager::setHaveToComputeColor(bool compute) {
 
 // we define a specific templated function to resize a vector<T>
 // in order to avoid numerous unneeded calls to T default constructor
-template<typename T>
+template <typename T>
 inline void vector_set_size(std::vector<T> &v, unsigned int sz) {
   assert(v.capacity() >= sz);
   reinterpret_cast<T **>(&v)[1] = reinterpret_cast<T **>(&v)[0] + sz;
