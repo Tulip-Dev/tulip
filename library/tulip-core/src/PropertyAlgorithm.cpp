@@ -46,7 +46,9 @@ tlp::DoubleAlgorithm::DoubleAlgorithm(const tlp::PluginContext *context)
 }
 
 tlp::IntegerAlgorithm::IntegerAlgorithm(const tlp::PluginContext *context)
-    : tlp::TemplateAlgorithm<IntegerProperty>(context) {}
+    : tlp::TemplateAlgorithm<IntegerProperty>(context) {
+  addOutParameter<tlp::IntegerProperty>("result", "This parameter indicates the property to compute.");
+}
 
 tlp::LayoutAlgorithm::LayoutAlgorithm(const tlp::PluginContext *context)
     : tlp::TemplateAlgorithm<LayoutProperty>(context) {
