@@ -268,6 +268,11 @@ unsigned int GraphDecorator::numberOfEdges() const {
 }
 
 //============================================================
+bool GraphDecorator::isEmpty() const {
+  return graph_component->isEmpty();
+}
+
+//============================================================
 void GraphDecorator::reserveEdges(unsigned int nbEdges) {
   return graph_component->reserveEdges(nbEdges);
 }

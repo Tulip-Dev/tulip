@@ -86,6 +86,7 @@ public:
 
   unsigned int numberOfNodes() const override;
   unsigned int numberOfEdges() const override;
+  bool isEmpty() const override;
 
   //=========================================================================
 
@@ -191,7 +192,7 @@ PropertyType *GraphDecorator::getProperty(const std::string &name) {
     return graph_component->getLocalProperty<PropertyType>(name);
   }
 }
-}
+} // namespace tlp
 
 #endif
 

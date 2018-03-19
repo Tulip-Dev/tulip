@@ -282,16 +282,16 @@ public:
   virtual void clear() = 0;
 
   /**
-    * @brief Creates and returns a new subgraph of this graph.
-    *
-    * If a BooleanProperty is provided, only nodes and edges for which it is true will be added to
-    *the subgraph.
-    * If none is provided, then the subgraph will be empty.
-    *
-    * @param selection The elements to add to the new subgraph. Defaults to nullptr.
-    * @param name The name of the newly created subgraph. Defaults to "unnamed".
-    * @return :Graph* The newly created subgraph.
-    **/
+   * @brief Creates and returns a new subgraph of this graph.
+   *
+   * If a BooleanProperty is provided, only nodes and edges for which it is true will be added to
+   *the subgraph.
+   * If none is provided, then the subgraph will be empty.
+   *
+   * @param selection The elements to add to the new subgraph. Defaults to nullptr.
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @return :Graph* The newly created subgraph.
+   **/
   virtual Graph *addSubGraph(BooleanProperty *selection = nullptr,
                              const std::string &name = "unnamed") = 0;
 
@@ -1078,7 +1078,7 @@ public:
    * @brief return whether the graph is empty or not.
    * @return true if the graph has no nodes, false if not.
    */
-  inline bool isEmpty() const {
+  virtual inline bool isEmpty() const {
     return nodes().empty();
   }
 
@@ -1926,7 +1926,7 @@ protected:
     std::vector<edge> *addedEdges;
   } vectInfos;
 };
-}
+} // namespace tlp
 
 /// Print the graph (only nodes and edges) in ostream, in the tulip format
 TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
