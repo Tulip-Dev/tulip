@@ -147,6 +147,10 @@ template <typename PROP>
 void asLocal(QVariant var, DataSet &data, Graph *g) {
   if (var.userType() == qMetaTypeId<PROP *>()) {
     PROP *prop = var.value<PROP *>();
+    if (!prop) {
+      data.remove("result");
+      return;
+    }
     const std::string &propName = prop->getName();
     bool hasProp = g->existLocalProperty(propName);
     PROP *local = g->getLocalProperty<PROP>(propName);
@@ -306,6 +310,14 @@ void AlgorithmRunnerItem::run(Graph *g) {
       continue;
     }
 
+    auto displayMandatoryMessage = [&]() {
+      QString message("The mandatory property parameter\n'");
+      message += tlp::tlpStringToQString(desc.getName());
+      message += "' cannot be empty.";
+      qCritical() << message;
+      QMessageBox::critical(parentWidget(), name(), message);
+    };
+
     if (desc.getDirection() == IN_PARAM) {
       if (desc.isMandatory()) {
         // if it is a mandatory input property
@@ -314,13 +326,9 @@ void AlgorithmRunnerItem::run(Graph *g) {
         dataSet.get(desc.getName(), prop);
 
         if (prop == nullptr) {
-          g->pop();
-          Observable::unholdObservers();
-          QString message("Mandatory property parameter '");
-          message += tlp::tlpStringToQString(desc.getName());
-          message += "'<br/> cannot be null";
-          qCritical() << message;
-          QMessageBox::critical(parentWidget(), name(), message);
+	  g->pop();
+	  Observable::unholdObservers();
+          displayMandatoryMessage();
           return;
         }
       }
@@ -331,6 +339,15 @@ void AlgorithmRunnerItem::run(Graph *g) {
     OutPropertyParam outPropParam(desc.getName());
     // get destination property
     dataSet.get(desc.getName(), outPropParam.dest);
+    // if it is a mandatory property
+    // it cannot be null
+    if (desc.isMandatory() && !outPropParam.dest) {
+      g->pop();
+      Observable::unholdObservers();
+      displayMandatoryMessage();
+      return;
+    }
+
     // clone it in a not registered (because unnamed)
     // temporary property
     outPropParam.tmp = outPropParam.dest
