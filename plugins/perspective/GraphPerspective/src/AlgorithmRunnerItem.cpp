@@ -326,8 +326,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
         dataSet.get(desc.getName(), prop);
 
         if (prop == nullptr) {
-	  g->pop();
-	  Observable::unholdObservers();
+          g->pop();
+          Observable::unholdObservers();
           displayMandatoryMessage();
           return;
         }
