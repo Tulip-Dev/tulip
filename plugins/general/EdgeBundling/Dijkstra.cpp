@@ -19,7 +19,6 @@
 
 #include "Dijkstra.h"
 #include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
 #include <tulip/ParallelTools.h>
 
 using namespace tlp;
@@ -34,7 +33,7 @@ bool Dijkstra::_initB = Dijkstra::initG();
 
 //============================================================
 void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
-                            const tlp::MutableContainer<double> &weights, const set<node> &fous) {
+                            const EdgeStaticProperty<double> &weights, const set<node> &fous) {
 
   assert(srcTlp.isValid());
   src = ntlp2dik.get(srcTlp);
@@ -59,7 +58,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   for (const node &n : fous)
     focus[ntlp2dik.get(n)] = true;
 
-  for (const node &n : graph.nodes()) {
+  for (auto n : graph.nodes()) {
     if (n != src) { // init all nodes to +inf
       DijkstraElement *tmp = new DijkstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
@@ -96,16 +95,16 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
     if (forbiddenNodes[u.n] && u.n != src)
       continue;
 
-    for (const edge &e : graph.star(u.n)) {
+    for (auto e : graph.star(u.n)) {
       node v = graph.opposite(e, u.n);
       DijkstraElement &dEle = *mapDik[v];
 
-      if (fabs((u.dist + weights.get(edik2tlp[e])) - dEle.dist) < 1E-9) // path of the same length
+      auto eWeight = weights.getEdgeValue(edik2tlp[e]);
+      if (fabs((u.dist + eWeight) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
       else
-
           // we find a node closer with that path
-          if ((u.dist + weights.get(edik2tlp[e])) < dEle.dist) {
+          if ((u.dist + eWeight) < dEle.dist) {
         dEle.usedEdge.clear();
         //**********************************************
         dikjstraTable.erase(&dEle);
@@ -114,7 +113,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
           focusTable.erase(&dEle);
         }
 
-        dEle.dist = u.dist + weights.get(edik2tlp[e]);
+        dEle.dist = u.dist + eWeight;
         dEle.previous = u.n;
         dEle.usedEdge.push_back(e);
         dikjstraTable.insert(&dEle);
@@ -126,7 +125,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
     }
   }
 
-  for (const node &tmpN : graph.nodes()) {
+  for (auto tmpN : graph.nodes()) {
     DijkstraElement *dEle = mapDik[tmpN];
     nodeDistance[tmpN.id] = dEle->dist;
 
@@ -141,7 +140,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   resultEdges.setAll(false);
 }
 //=======================================================================
-void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
+void Dijkstra::searchPaths(node ntlp, EdgeStaticProperty<unsigned int> &depth) {
 
   node n = ntlp2dik.get(ntlp);
 
@@ -150,7 +149,7 @@ void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
 
   resultNodes[n] = true;
 
-  for (const edge &e : graph.star(n)) {
+  for (auto e : graph.star(n)) {
 
     if (!usedEdges[e])
       continue;
@@ -164,10 +163,9 @@ void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
       continue;
 
     resultEdges[e] = true;
-    int dep = depth->getEdgeValue(edik2tlp[e]) + 1;
-    OMP_CRITICAL_SECTION(DEPTH) {
-      depth->setEdgeValue(edik2tlp[e], dep);
-    }
+    auto ePos = depth.getGraph()->edgePos(edik2tlp[e]);
+    depth[ePos] += 1;
+
     searchPaths(ndik2tlp[tgt], depth);
   }
 }

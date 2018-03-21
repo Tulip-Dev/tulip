@@ -26,7 +26,7 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/Vector.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/IntegerProperty.h>
+#include <tulip/StaticProperty.h>
 #include <tulip/vectorgraph.h>
 #include <tulip/ParallelTools.h>
 
@@ -86,10 +86,10 @@ public:
   }
 
   void initDijkstra(const tlp::Graph *const forbiddenNodes, tlp::node src,
-                    const tlp::MutableContainer<double> &weights, const std::set<tlp::node> &focus);
+                    const tlp::EdgeStaticProperty<double> &weights, const std::set<tlp::node> &focus);
 
   //========================================================
-  void searchPaths(tlp::node n, tlp::IntegerProperty *depth);
+  void searchPaths(tlp::node n, tlp::EdgeStaticProperty<unsigned int> &depth);
   void searchPath(tlp::node n, std::vector<tlp::node> &vNodes);
   //=============================================================
 private:

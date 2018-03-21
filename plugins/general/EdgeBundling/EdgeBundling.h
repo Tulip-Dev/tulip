@@ -18,10 +18,10 @@
  */
 #ifndef EDGE_BUNDLING_H
 #define EDGE_BUNDLING_H
+#include <climits>
 #include <vector>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
 
 /** \addtogroup selection */
 /*@{*/
@@ -60,9 +60,9 @@ public:
   bool run() override;
 
 private:
-  void fixEdgeType(tlp::IntegerProperty *);
+  void fixEdgeType(tlp::EdgeStaticProperty<unsigned int> &);
   void computeDistances();
-  void computeDistance(tlp::node);
+  void computeDistance(tlp::node, unsigned int = UINT_MAX);
   double longEdges;
   double splitRatio;
   unsigned int optimizationLevel;
