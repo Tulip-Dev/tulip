@@ -86,7 +86,8 @@ public:
   }
 
   void initDijkstra(const tlp::Graph *const forbiddenNodes, tlp::node src,
-                    const tlp::EdgeStaticProperty<double> &weights, const std::set<tlp::node> &focus);
+                    const tlp::EdgeStaticProperty<double> &weights,
+                    const std::set<tlp::node> &focus);
 
   //========================================================
   void searchPaths(tlp::node n, tlp::EdgeStaticProperty<unsigned int> &depth);

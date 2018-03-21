@@ -106,7 +106,7 @@ public:
     this->resize(graph->numberOfNodes());
   }
 
-  inline const Graph* getGraph() const {
+  inline const Graph *getGraph() const {
     return graph;
   }
 
@@ -181,7 +181,7 @@ public:
     this->resize(graph->numberOfEdges());
   }
 
-  inline const Graph* getGraph() const {
+  inline const Graph *getGraph() const {
     return graph;
   }
 

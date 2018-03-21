@@ -153,24 +153,22 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
 void EdgeBundling::fixEdgeType(EdgeStaticProperty<unsigned int> &ntype) {
   OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
-      if (oriGraph->isElement(e)) {
-	ntype[i] = 1;
-      }
-      else {
-	pair<node, node> ends = graph->ends(e);
+    if (oriGraph->isElement(e)) {
+      ntype[i] = 1;
+    } else {
+      pair<node, node> ends = graph->ends(e);
 
-	if (oriGraph->isElement(ends.first) || oriGraph->isElement(ends.second))
-	  ntype[i] = 2;
-	else
-	  ntype[i] = 0;
-      }
-    });
+      if (oriGraph->isElement(ends.first) || oriGraph->isElement(ends.second))
+        ntype[i] = 2;
+      else
+        ntype[i] = 0;
+    }
+  });
 }
 //============================================
 static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
-		       const Graph *const oriGraph, const node n,
-		       const EdgeStaticProperty<double> &mWeights,
-		       unsigned int optimizatioLevel) {
+                       const Graph *const oriGraph, const node n,
+                       const EdgeStaticProperty<double> &mWeights, unsigned int optimizatioLevel) {
   set<node> focus;
 
   if (optimizatioLevel > 0) {
@@ -184,9 +182,8 @@ static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
 }
 //==========================================================================
 void EdgeBundling::computeDistances() {
-  OMP_PARALLEL_MAP_NODES_AND_INDICES(oriGraph, [&](node n, unsigned int i) {
-      computeDistance(n, i);
-    });
+  OMP_PARALLEL_MAP_NODES_AND_INDICES(oriGraph,
+                                     [&](node n, unsigned int i) { computeDistance(n, i); });
 }
 //==========================================================================
 void EdgeBundling::computeDistance(node n, unsigned int i) {
@@ -337,7 +334,7 @@ bool EdgeBundling::run() {
     // the use of a stable iterator
     auto nodes = graph->nodes();
     unsigned int sz = nodes.size();
-    while(sz) {
+    while (sz) {
       auto n = nodes[--sz];
       if (oriGraph->isElement(n))
         continue;
@@ -364,10 +361,10 @@ bool EdgeBundling::run() {
   gridGraph = graph->getSubGraph("Voronoi");
   gridGraph->setName("Grid Graph");
   OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
-      if (ntype[i] == 1 && gridGraph->isElement(e)) {
-	gridGraph->delEdge(e);
-      }
-    });
+    if (ntype[i] == 1 && gridGraph->isElement(e)) {
+      gridGraph->delEdge(e);
+    }
+  });
 
   // If there was nodes at the same position, the voronoi diagram process
   // only considers one of them when connecting original graph nodes to
@@ -404,17 +401,17 @@ bool EdgeBundling::run() {
   EdgeStaticProperty<double> mWeights(graph);
   EdgeStaticProperty<double> mWeightsInit(graph);
   OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
-      pair<node, node> ends = graph->ends(e);
-      const Coord &a = layout->getNodeValue(ends.first);
-      const Coord &b = layout->getNodeValue(ends.second);
-      double abNorm = (a - b).norm();
-      double initialWeight = pow(abNorm, longEdges);
+    pair<node, node> ends = graph->ends(e);
+    const Coord &a = layout->getNodeValue(ends.first);
+    const Coord &b = layout->getNodeValue(ends.second);
+    double abNorm = (a - b).norm();
+    double initialWeight = pow(abNorm, longEdges);
 
-      if (ntype[i] == 2 && !edgeNodeOverlap)
-        initialWeight = abNorm;
+    if (ntype[i] == 2 && !edgeNodeOverlap)
+      initialWeight = abNorm;
 
-      mWeights[i] = mWeightsInit[i] = initialWeight;
-    });
+    mWeights[i] = mWeightsInit[i] = initialWeight;
+  });
 
   //==========================================================
 
@@ -508,75 +505,75 @@ bool EdgeBundling::run() {
       int nbThreads = toTreatByThreads.size();
 
       if (iteration < MAX_ITER - 1) {
-	OMP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
-	    node n = toTreatByThreads[j];
-	    Dijkstra dijkstra;
+        OMP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
+          node n = toTreatByThreads[j];
+          Dijkstra dijkstra;
 
-	    if (edgeNodeOverlap)
-	      computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
-	    else
-	      computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
+          if (edgeNodeOverlap)
+            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
+          else
+            computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
-	    // for each edge of n compute the shortest paths in the grid
-	    for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
-	      node n2 = graph->opposite(e, n);
+          // for each edge of n compute the shortest paths in the grid
+          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
+            node n2 = graph->opposite(e, n);
 
-	      if (optimizationLevel < 3 || forceEdgeTest) {
-		bool stop = false;
-		// when we are not using coloration edge can be treated two times
-		OMP_CRITICAL_SECTION(EDGETREATED) {
-		  if (edgeTreated.get(e.id))
-		    stop = true;
+            if (optimizationLevel < 3 || forceEdgeTest) {
+              bool stop = false;
+              // when we are not using coloration edge can be treated two times
+              OMP_CRITICAL_SECTION(EDGETREATED) {
+                if (edgeTreated.get(e.id))
+                  stop = true;
 
-		  edgeTreated.set(e.id, true);
-		}
+                edgeTreated.set(e.id, true);
+              }
 
-		if (stop) {
-		  continue;
-		}
-	      }
+              if (stop) {
+                continue;
+              }
+            }
 
-	      dijkstra.searchPaths(n2, depth);
-	    }
-	  });
+            dijkstra.searchPaths(n2, depth);
+          }
+        });
       } else {
-	OMP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
-	    node n = toTreatByThreads[j];
-	    Dijkstra dijkstra;
+        OMP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
+          node n = toTreatByThreads[j];
+          Dijkstra dijkstra;
 
-	    if (edgeNodeOverlap)
-	      computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
-	    else
-	      computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
+          if (edgeNodeOverlap)
+            computeDik(dijkstra, vertexCoverGraph, nullptr, n, mWeights, optimizationLevel);
+          else
+            computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
-	    // for each edge of n compute the shortest paths in the grid
-	    for (auto e : vertexCoverGraph->getInOutEdges(n)) {
-	      if (optimizationLevel < 3 || forceEdgeTest) {
-		bool stop = false;
-		// when we are not using colration edge can be treated two times
-		OMP_CRITICAL_SECTION(EDGETREATED) {
-		  if (edgeTreated.get(e.id))
-		    stop = true;
+          // for each edge of n compute the shortest paths in the grid
+          for (auto e : vertexCoverGraph->getInOutEdges(n)) {
+            if (optimizationLevel < 3 || forceEdgeTest) {
+              bool stop = false;
+              // when we are not using colration edge can be treated two times
+              OMP_CRITICAL_SECTION(EDGETREATED) {
+                if (edgeTreated.get(e.id))
+                  stop = true;
 
-		  edgeTreated.set(e.id, true);
-		}
+                edgeTreated.set(e.id, true);
+              }
 
-		if (stop)
-		  continue;
-	      }
+              if (stop)
+                continue;
+            }
 
-	      {
-		/// bends
-		vector<node> tmpV;
-		dijkstra.searchPath(graph->opposite(e, n), tmpV);
+            {
+              /// bends
+              vector<node> tmpV;
+              dijkstra.searchPath(graph->opposite(e, n), tmpV);
 
-		if (!layout3D)
-		  tmpV = BendsTools::bendsSimplification(tmpV, layout);
+              if (!layout3D)
+                tmpV = BendsTools::bendsSimplification(tmpV, layout);
 
-		updateLayout(n, e, graph, layout, tmpV, layout3D);
-	      }
-	    }
-	  });
+              updateLayout(n, e, graph, layout, tmpV, layout3D);
+            }
+          }
+        });
       }
 
       for (size_t j = 0; j < toTreatByThreads.size(); ++j) {
@@ -601,20 +598,20 @@ bool EdgeBundling::run() {
     // Adjust weights of routing grid.
     if (iteration < MAX_ITER - 1) {
       OMP_PARALLEL_MAP_EDGES(gridGraph, [&](edge e) {
-	  auto ePos = graph->edgePos(e);
+        auto ePos = graph->edgePos(e);
 
-	  if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap) {
-	    mWeights[ePos] = mWeightsInit[ePos];
-	  } else {
-	    // double avgdepth = weightFactor * depth.getEdgeValue(e) + 1.;
-	    double avgdepth = depth.getEdgeValue(e);
+        if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap) {
+          mWeights[ePos] = mWeightsInit[ePos];
+        } else {
+          // double avgdepth = weightFactor * depth.getEdgeValue(e) + 1.;
+          double avgdepth = depth.getEdgeValue(e);
 
-	    if (avgdepth > 0)
-	      mWeights[ePos] = mWeightsInit[ePos] / (log(avgdepth) + 1);
-	    else
-	      mWeights[ePos] = mWeightsInit[ePos];
-	  }
-	});
+          if (avgdepth > 0)
+            mWeights[ePos] = mWeightsInit[ePos] / (log(avgdepth) + 1);
+          else
+            mWeights[ePos] = mWeightsInit[ePos];
+        }
+      });
     }
   }
 
@@ -651,7 +648,7 @@ bool EdgeBundling::run() {
     // the use of a stable iterator
     auto nodes = graph->nodes();
     unsigned int sz = nodes.size();
-    while(sz) {
+    while (sz) {
       auto n = nodes[--sz];
       if (!oriGraph->isElement(n))
         graph->delNode(n, true);
