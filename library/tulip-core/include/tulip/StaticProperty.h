@@ -106,6 +106,10 @@ public:
     this->resize(graph->numberOfNodes());
   }
 
+  inline const Graph* getGraph() const {
+    return graph;
+  }
+
   inline bool operator[](unsigned int i) const {
     return static_cast<bool>(std::vector<unsigned char>::operator[](i));
   }
@@ -175,6 +179,10 @@ public:
     assert(g);
     // set the vector size to the number of graph edges
     this->resize(graph->numberOfEdges());
+  }
+
+  inline const Graph* getGraph() const {
+    return graph;
   }
 
   inline typename std::vector<TYPE>::const_reference operator[](unsigned int i) const {
