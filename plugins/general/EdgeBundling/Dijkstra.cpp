@@ -41,7 +41,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   forbiddenNodes.setAll(false);
 
   if (forbidden) {
-    for (const node &n : forbidden->nodes()) {
+    for (auto n : forbidden->nodes()) {
       node ndik = ntlp2dik.get(n);
       forbiddenNodes[ndik] = true;
     }
@@ -55,7 +55,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   mapDik.setAll(0);
   vector<bool> focus(graph.numberOfNodes(), false);
 
-  for (const node &n : fous)
+  for (auto n : fous)
     focus[ntlp2dik.get(n)] = true;
 
   for (auto n : graph.nodes()) {
@@ -92,42 +92,42 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
       }
     }
 
-    if (forbiddenNodes[u.n] && u.n != src)
+    node n = u.n;
+    if (forbiddenNodes[n] && n != src)
       continue;
 
-    for (auto e : graph.star(u.n)) {
-      node v = graph.opposite(e, u.n);
+    for (auto e : graph.star(n)) {
+      node v = graph.opposite(e, n);
       DijkstraElement &dEle = *mapDik[v];
 
       auto eWeight = weights.getEdgeValue(edik2tlp[e]);
       if (fabs((u.dist + eWeight) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
-      else
-          // we find a node closer with that path
-          if ((u.dist + eWeight) < dEle.dist) {
-        dEle.usedEdge.clear();
-        //**********************************************
-        dikjstraTable.erase(&dEle);
+      else if ((u.dist + eWeight) < dEle.dist) {
+	// we find a node closer with that path
+	dEle.usedEdge.clear();
+	//**********************************************
+	dikjstraTable.erase(&dEle);
 
-        if (focus[dEle.n]) {
-          focusTable.erase(&dEle);
-        }
+	if (focus[dEle.n]) {
+	  focusTable.erase(&dEle);
+	}
 
-        dEle.dist = u.dist + eWeight;
-        dEle.previous = u.n;
-        dEle.usedEdge.push_back(e);
-        dikjstraTable.insert(&dEle);
+	dEle.dist = u.dist + eWeight;
+	dEle.previous = n;
+	dEle.usedEdge.push_back(e);
+	dikjstraTable.insert(&dEle);
 
-        if (focus[dEle.n]) {
-          focusTable.insert(&dEle);
-        }
+	if (focus[dEle.n]) {
+	  focusTable.insert(&dEle);
+	}
       }
     }
   }
 
-  for (auto tmpN : graph.nodes()) {
-    DijkstraElement *dEle = mapDik[tmpN];
-    nodeDistance[tmpN.id] = dEle->dist;
+  for (auto n : graph.nodes()) {
+    DijkstraElement *dEle = mapDik[n];
+    nodeDistance[n] = dEle->dist;
 
     for (size_t i = 0; i < dEle->usedEdge.size(); ++i) {
       usedEdges[dEle->usedEdge[i]] = true;
@@ -151,10 +151,7 @@ void Dijkstra::searchPaths(node ntlp, EdgeStaticProperty<unsigned int> &depth) {
 
   for (auto e : graph.star(n)) {
 
-    if (!usedEdges[e])
-      continue;
-
-    if (resultEdges[e])
+    if (!usedEdges[e] || resultEdges[e])
       continue;
 
     node tgt = graph.opposite(e, n);
@@ -174,31 +171,26 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
 
   node n = ntlp2dik.get(ntlp);
   node tgte(ntlp);
-  resultNodes.setAll(false);
   resultEdges.setAll(false);
   bool ok = true;
 
   while (ok) {
-
-    resultNodes[n] = true;
     vNodes.push_back(ndik2tlp[n]);
     ok = false;
-    edge edik;
-    edge e;
     bool findEdge = false;
+    edge e;
+    node tgt;
     const vector<edge> &adjEdges = graph.star(n);
 
     for (size_t i = 0; i < adjEdges.size(); ++i) {
-      edik = adjEdges[i];
-      e = edik2tlp[edik];
+      e = adjEdges[i];
 
-      if (!usedEdges[edik])
-        continue; // that edge do not belongs to the shortest path edges
+      // check if that edge does not belong to the shortest path edges
+      // or if it has already been treated
+      if (!usedEdges[e] || resultEdges[e])
+        continue;
 
-      if (resultEdges[edik])
-        continue; // that edge has already been treated
-
-      node tgt = graph.opposite(edik, n);
+      tgt = graph.opposite(e, n);
 
       if (nodeDistance[tgt] >= nodeDistance[n])
         continue;
@@ -209,8 +201,8 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
 
     if (findEdge) {
       ok = true;
-      n = graph.opposite(edik, n); // validEdge.begin()->first;
-      resultEdges[edik] = true;
+      n = tgt; // validEdge.begin()->first;
+      resultEdges[e] = true;
     }
   }
 

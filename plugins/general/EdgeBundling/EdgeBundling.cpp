@@ -172,10 +172,8 @@ static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
   set<node> focus;
 
   if (optimizatioLevel > 0) {
-    OMP_CRITICAL_SECTION(FOCUS) {
-      for (auto ni : vertexCoverGraph->getInOutNodes(n))
+    for (auto ni : vertexCoverGraph->getInOutNodes(n))
         focus.insert(ni);
-    }
   }
 
   dijkstra.initDijkstra(oriGraph, n, mWeights, focus);
@@ -189,9 +187,8 @@ void EdgeBundling::computeDistances() {
 void EdgeBundling::computeDistance(node n, unsigned int i) {
   double maxDist = 0;
   Coord nPos = layout->getNodeValue(n);
-  for (const node &n2 : vertexCoverGraph->getInOutNodes(n)) {
-    const Coord &n2Pos = layout->getNodeValue(n2);
-    double dist = (nPos - n2Pos).norm();
+  for (auto n2 : vertexCoverGraph->getInOutNodes(n)) {
+    double dist = (nPos - layout->getNodeValue(n2)).norm();
     maxDist += dist;
   }
   if (i != UINT_MAX)
@@ -250,7 +247,12 @@ bool EdgeBundling::run() {
     // Grid graph computation first step : generate quad-tree/octree
     if (layout3D) {
       OctreeBundle::compute(graph, splitRatio, layout, size);
-      for (const edge &e : stableIterator(graph->getEdges())) {
+      // delete edges in reverse order to avoid
+      // the use of a stable iterator
+      auto edges = graph->edges();
+      unsigned int sz = edges.size();
+      while (sz) {
+	auto e = edges[--sz];
         if (oriGraph->isElement(e))
           continue;
 
@@ -434,8 +436,8 @@ bool EdgeBundling::run() {
     edgeTreated.setAll(false);
     NodeStaticProperty<double> distance(oriGraph);
     SortNodes::dist = &distance;
-    set<node, SortNodes> orderedNodes;
     computeDistances();
+    set<node, SortNodes> orderedNodes;
     {
       for (auto n : vertexCoverGraph->nodes())
         orderedNodes.insert(n);
@@ -515,7 +517,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           // for each edge of n compute the shortest paths in the grid
-          for (const edge &e : vertexCoverGraph->getInOutEdges(n)) {
+          for (auto e : vertexCoverGraph->getInOutEdges(n)) {
             node n2 = graph->opposite(e, n);
 
             if (optimizationLevel < 3 || forceEdgeTest) {
