@@ -173,7 +173,7 @@ static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
 
   if (optimizatioLevel > 0) {
     for (auto ni : vertexCoverGraph->getInOutNodes(n))
-        focus.insert(ni);
+      focus.insert(ni);
   }
 
   dijkstra.initDijkstra(oriGraph, n, mWeights, focus);
@@ -252,7 +252,7 @@ bool EdgeBundling::run() {
       auto edges = graph->edges();
       unsigned int sz = edges.size();
       while (sz) {
-	auto e = edges[--sz];
+        auto e = edges[--sz];
         if (oriGraph->isElement(e))
           continue;
 

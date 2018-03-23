@@ -104,23 +104,23 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
       if (fabs((u.dist + eWeight) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
       else if ((u.dist + eWeight) < dEle.dist) {
-	// we find a node closer with that path
-	dEle.usedEdge.clear();
-	//**********************************************
-	dikjstraTable.erase(&dEle);
+        // we find a node closer with that path
+        dEle.usedEdge.clear();
+        //**********************************************
+        dikjstraTable.erase(&dEle);
 
-	if (focus[dEle.n]) {
-	  focusTable.erase(&dEle);
-	}
+        if (focus[dEle.n]) {
+          focusTable.erase(&dEle);
+        }
 
-	dEle.dist = u.dist + eWeight;
-	dEle.previous = n;
-	dEle.usedEdge.push_back(e);
-	dikjstraTable.insert(&dEle);
+        dEle.dist = u.dist + eWeight;
+        dEle.previous = n;
+        dEle.usedEdge.push_back(e);
+        dikjstraTable.insert(&dEle);
 
-	if (focus[dEle.n]) {
-	  focusTable.insert(&dEle);
-	}
+        if (focus[dEle.n]) {
+          focusTable.insert(&dEle);
+        }
       }
     }
   }
