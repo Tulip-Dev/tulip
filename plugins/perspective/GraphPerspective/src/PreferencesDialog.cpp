@@ -407,6 +407,8 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
           model->index(1, 2),
           QVariant::fromValue<tlp::Size>(TulipSettings::instance().defaultSize(tlp::EDGE, true)));
 
+    break;
+
   case 2: // default shape
     if (updateMode == RESET_NODE)
       model->setData(model->index(2, 1),
@@ -417,6 +419,8 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
                      QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(
                          TulipSettings::instance().defaultShape(tlp::EDGE, true))));
 
+    break;
+
   case 3: // default selection color
     if (updateMode == RESET_NODE)
       model->setData(
@@ -426,6 +430,8 @@ void PreferencesDialog::resetToTulipDefaults(int row, int updateMode) {
       model->setData(
           model->index(3, 2),
           QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor(true)));
+
+    break;
 
   case 4: // default label color
     if (updateMode == RESET_NODE)
