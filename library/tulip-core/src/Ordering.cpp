@@ -48,7 +48,7 @@ int Ordering::seqp(Face f) {
   MutableContainer<bool> seq_p;
   seq_p.setAll(false);
 
-  for (const node &no : Gp->getFaceNodes(f)) {
+  for (auto no : Gp->getFaceNodes(f)) {
     if (contour.get(no.id))
       seq_p.set(no.id, true);
   }
@@ -185,7 +185,7 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
     if (tmp2 == node())
       tmp2 = node_f;
 
-    for (const node &no_tmp : Gp->getFaceNodes(Gp->getFaceContaining(tmp2, node_last))) {
+    for (auto no_tmp : Gp->getFaceNodes(Gp->getFaceContaining(tmp2, node_last))) {
 
       if (!tried.get(no_tmp.id)) {
         bool on_c = contour.get(no_tmp.id);
@@ -220,13 +220,13 @@ void Ordering::updateNewSelectableNodes(node node_f, node no_tmp2, edge, node no
         face_sel = true;
 
       if (face_sel)
-        for (const node &no_tmp : Gp->getFaceNodes(f_tmp)) {
+        for (auto no_tmp : Gp->getFaceNodes(f_tmp)) {
           is_selectable.set(no_tmp.id, false);
           is_selectable_visited.set(no_tmp.id, false);
           tried.set(no_tmp.id, true);
         }
       else {
-        for (const node &no_tmp : Gp->getFaceNodes(f_tmp)) {
+        for (auto no_tmp : Gp->getFaceNodes(f_tmp)) {
           if (!tried.get(no_tmp.id) &&
               (is_selectable_visited.get(no_tmp.id) || is_selectable.get(no_tmp.id))) {
             if (!isSelectable(no_tmp)) {
@@ -306,7 +306,7 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
     if (nod2 == n_f)
       f_was_first = true;
 
-    for (const node &n : Gp->getFaceNodes(f)) {
+    for (auto n : Gp->getFaceNodes(f)) {
       if (n == nod2) {
         found_ff = true;
         small = pos;
@@ -325,7 +325,7 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
     if (nod2 == n_f && !found_ff)
       f_was_first = true;
 
-    for (const node &n : Gp->getFaceNodes(f)) {
+    for (auto n : Gp->getFaceNodes(f)) {
       if (n == nod2) {
         if (pos < small) {
           found_ff = true;
@@ -392,7 +392,7 @@ void Ordering::setMinMarkedFace(Face f) {
     if (first_pass)
       first_pass = false;
 
-    for (const node &tmp : Gp->getFaceNodes(f)) {
+    for (auto tmp : Gp->getFaceNodes(f)) {
 
       if (tmp == nod) {
         if (pos < small) {
@@ -447,7 +447,7 @@ void Ordering::minMarkedf() {
 
     while (n != v1[0]) {
 
-      for (const node &tmp : Gp->getFaceNodes(f)) {
+      for (auto tmp : Gp->getFaceNodes(f)) {
 
         if (tmp == n2) {
           if (i < small) {
@@ -1608,7 +1608,7 @@ void Ordering::init_selectableNodes() {
   is_selectable_visited.setAll(false);
   is_selectable.setAll(false);
 
-  for (const node &no_tmp : Gp->getFaceNodes(ext)) {
+  for (auto no_tmp : Gp->getFaceNodes(ext)) {
 
     if (Gp->deg(no_tmp) < 3 || no_tmp == v1[0] || no_tmp == v1[v1.size() - 1])
       continue;

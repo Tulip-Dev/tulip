@@ -317,7 +317,7 @@ public:
         // sort nodes to ensure a predictable ordering of the ouput
         itN = new StableIterator<node>(itN, 0, true, true);
 
-      for (const node &itn : itN) {
+      for (auto itn : itN) {
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
           pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -350,7 +350,7 @@ public:
         itE = new StableIterator<edge>(itE, 0, true, true);
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
-        for (const edge &ite : itE) {
+        for (auto ite : itE) {
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
@@ -372,7 +372,7 @@ public:
           os << "\")" << endl;
         }
       } else {
-        for (const edge &ite : itE) {
+        for (auto ite : itE) {
           if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
 
             pluginProgress->progress(progress, nonDefaultvaluatedElementCount);

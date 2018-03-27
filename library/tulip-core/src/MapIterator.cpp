@@ -35,7 +35,7 @@ NodeMapIterator::NodeMapIterator(Graph *sg, node source, node target) {
   assert(cloneIt.empty());
   bool start = true;
 
-  for (const node &tmp : sg->getInOutNodes(target)) {
+  for (auto tmp : sg->getInOutNodes(target)) {
 
     if ((start) && (tmp == source)) {
       start = false;
@@ -70,7 +70,7 @@ EdgeMapIterator::EdgeMapIterator(const Graph *sg, edge source, node target) {
   treat = 0;
   pos = 0;
 
-  for (const edge &e : sg->getInOutEdges(target)) {
+  for (auto e : sg->getInOutEdges(target)) {
     if (e == source)
       pos = treat + 1;
 

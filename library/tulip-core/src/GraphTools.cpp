@@ -99,7 +99,7 @@ node makeSimpleSource(Graph *graph) {
 
   node startNode = graph->addNode();
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     if (n != startNode && graph->indeg(n) == 0) {
       graph->addEdge(startNode, n);
     }
@@ -263,7 +263,7 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
   edgeSel.setAll(true);
 
   // select all nodes
-  for (const node &n : graph->nodes())
+  for (auto n : graph->nodes())
     selectionProperty->setNodeValue(n, true);
 
   bool ok = true;
@@ -273,7 +273,7 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
     while (!fifo.empty()) {
       node n1 = fifo.front();
       fifo.pop_front();
-      for (const edge &adjit : graph->getOutEdges(n1)) {
+      for (auto adjit : graph->getOutEdges(n1)) {
         node tgt = graph->target(adjit);
         unsigned int tgtPos = graph->nodePos(tgt);
 
@@ -359,7 +359,7 @@ void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress
   while (nbNodes != size) {
     root = roots[i];
 
-    for (const edge &e : graph->getInOutEdges(root)) {
+    for (auto e : graph->getInOutEdges(root)) {
 
       if (!selection->getEdgeValue(e)) {
         node neighbour = graph->opposite(e, root);
@@ -484,7 +484,7 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes,
   unsigned nbNodes = 1;
 
   while (current) {
-    for (const node &neigh : graph->getInOutNodes(current->n)) {
+    for (auto neigh : graph->getInOutNodes(current->n)) {
       if (!visited.get(neigh)) {
         visited.set(neigh, true);
         last = last->next = new visitedElt(neigh);
@@ -646,7 +646,7 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
                                      unsigned int k, std::map<double, int> &edgeMapping) {
   // build the histogram of edges values
   map<double, int> histogram;
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     double value = prop->getEdgeDoubleValue(e);
     map<double, int>::iterator it = histogram.find(value);
 
@@ -674,7 +674,7 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
 unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test) {
   Observable::holdObservers();
   unsigned added = 0;
-  for (const edge &e : selection->getEdgesEqualTo(true, graph)) {
+  for (auto e : selection->getEdgesEqualTo(true, graph)) {
     const pair<node, node> ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {

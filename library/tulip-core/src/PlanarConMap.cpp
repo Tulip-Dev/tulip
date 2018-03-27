@@ -102,7 +102,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // Compute the cycle around v
   vector<edge> v_order(deg(v));
   unsigned int cpt = 0;
-  for (const edge &e_order : getInOutEdges(v)) {
+  for (auto e_order : getInOutEdges(v)) {
     if (e_order == e)
       continue;
 
@@ -120,7 +120,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // Compute the cycle around w
   vector<edge> v_order2(deg(w));
   cpt = 0;
-  for (const edge &e_order : getInOutEdges(w)) {
+  for (auto e_order : getInOutEdges(w)) {
     if (e_order == e)
       continue;
 
@@ -531,7 +531,7 @@ void PlanarConMap::computeFaces() {
     v_faces.push_back(f);
 
     // Compute the list of adjacent faces of each edge
-    for (const edge &e : edges()) {
+    for (auto e : edges()) {
       edgesFaces.insert(edgeMapEntry(e, v_faces));
       faceMap::iterator itf = facesEdges.find(f);
 
@@ -544,7 +544,7 @@ void PlanarConMap::computeFaces() {
     }
 
     // Compute the list of adjacent faces of each node
-    for (const node &n : nodes())
+    for (auto n : nodes())
       nodesFaces.insert(nodeMapEntry(n, v_faces));
 
     if (facesEdges.size() == 0) {
@@ -563,7 +563,7 @@ void PlanarConMap::computeFaces() {
     // Each edge must be considered two times
     for (int k = 0; k < 2; k++) {
       vector<edge> edges;
-      for (const edge &e : this->edges()) {
+      for (auto e : this->edges()) {
         edges.clear();
 
         if (considered.get(e.id) < 2) {
@@ -675,7 +675,7 @@ Face PlanarConMap::splitFace(Face f, const node v, const node w, node n) {
 
   if (!n.isValid()) {
 
-    for (const edge &e : getInOutEdges(v)) {
+    for (auto e : getInOutEdges(v)) {
 
       if (edgesFaces[e][0] == f || edgesFaces[e][1] == f) {
         n = opposite(e, v);
@@ -937,7 +937,7 @@ ostream &operator<<(ostream &os, PlanarConMap *sp) {
     os << "Face " << tmp.id << " : ";
     os << "(edges : ";
 
-    for (const edge &e : sp->getFaceEdges(tmp)) {
+    for (auto e : sp->getFaceEdges(tmp)) {
       os << e.id << " ";
     }
 
@@ -945,18 +945,18 @@ ostream &operator<<(ostream &os, PlanarConMap *sp) {
 
     os << "(nodes : ";
 
-    for (const node &n : sp->getFaceNodes(tmp)) {
+    for (auto n : sp->getFaceNodes(tmp)) {
       os << n.id << " ";
     }
 
     os << ")" << endl;
   }
 
-  for (const node &n : sp->nodes()) {
+  for (auto n : sp->nodes()) {
     os << "node " << n.id << " : ";
     os << "(edge : ";
 
-    for (const edge &e : sp->getInOutEdges(n)) {
+    for (auto e : sp->getInOutEdges(n)) {
       os << e.id << " ";
     }
 

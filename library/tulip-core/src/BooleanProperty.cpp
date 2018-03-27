@@ -32,11 +32,11 @@ void BooleanProperty::reverse(const Graph *sg) {
   if (sg == nullptr)
     sg = graph;
 
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     setNodeValue(n, !getNodeValue(n));
   }
 
-  for (const edge &e : sg->edges()) {
+  for (auto e : sg->edges()) {
     setEdgeValue(e, !getEdgeValue(e));
   }
 }
@@ -46,7 +46,7 @@ void BooleanProperty::reverseEdgeDirection(Graph *sg) {
   if (sg == nullptr)
     sg = graph;
 
-  for (const edge &e : sg->edges()) {
+  for (auto e : sg->edges()) {
     if (getEdgeValue(e))
       sg->reverse(e);
   }

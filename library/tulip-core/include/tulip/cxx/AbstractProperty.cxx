@@ -132,7 +132,7 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setNodeDefaultValue(
   std::vector<tlp::node> nodesOldDefaultToUpdate;
   std::vector<tlp::node> nodesDefaultToUpdate;
 
-  for (const node &n : this->getGraph()->nodes()) {
+  for (auto n : this->getGraph()->nodes()) {
     const typename Tnode::RealType &val = this->getNodeValue(n);
 
     if (val == oldDefaultValue) {
@@ -169,7 +169,7 @@ template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphNodes(
     typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
   if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       setNodeValue(n, v);
     }
   }
@@ -189,7 +189,7 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setEdgeDefaultValue(
   // backup list of edges whose value equals the new default one
   std::vector<tlp::edge> edgesDefaultToUpdate;
 
-  for (const edge &e : this->getGraph()->edges()) {
+  for (auto e : this->getGraph()->edges()) {
     const typename Tedge::RealType &val = this->getEdgeValue(e);
 
     if (val == oldDefaultValue) {
@@ -235,7 +235,7 @@ template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setValueToGraphEdges(
     typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph) {
   if (this->getGraph() == graph || this->getGraph()->isDescendantGraph(graph)) {
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       setEdgeValue(e, v);
     }
   }

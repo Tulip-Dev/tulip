@@ -309,22 +309,22 @@ public:
         setAllNodeValue(prop.getNodeDefaultValue());
         setAllEdgeValue(prop.getEdgeDefaultValue());
 
-        for (const node &itn : prop.getNonDefaultValuatedNodes()) {
+        for (auto itn : prop.getNonDefaultValuatedNodes()) {
           setNodeValue(itn, prop.getNodeValue(itn));
         }
 
-        for (const edge &ite : prop.getNonDefaultValuatedEdges()) {
+        for (auto ite : prop.getNonDefaultValuatedEdges()) {
           setEdgeValue(ite, prop.getEdgeValue(ite));
         }
 
       } else {
         //==============================================================*
-        for (const node &n : Tprop::graph->nodes()) {
+        for (auto n : Tprop::graph->nodes()) {
           if (prop.Tprop::graph->isElement(n))
             setNodeValue(n, prop.getNodeValue(n));
         }
 
-        for (const edge &e : Tprop::graph->edges()) {
+        for (auto e : Tprop::graph->edges()) {
           if (prop.Tprop::graph->isElement(e))
             setEdgeValue(e, prop.getEdgeValue(e));
         }

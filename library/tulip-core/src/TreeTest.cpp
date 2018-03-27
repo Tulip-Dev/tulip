@@ -276,7 +276,7 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return nullptr;
 
-    for (const node &n : sTree->nodes()) {
+    for (auto n : sTree->nodes()) {
       tree->addNode(n);
 
       if (sTree->indeg(n) == 0)
@@ -349,7 +349,7 @@ bool TreeTest::compute(const Graph *graph) {
 
   bool rootNodeFound = false;
 
-  for (const node &tmp : graph->nodes()) {
+  for (auto tmp : graph->nodes()) {
 
     if (graph->indeg(tmp) > 1) {
       resultsBuffer[graph] = false;

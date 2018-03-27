@@ -94,7 +94,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   // restores G;
   // forall_nodes(u, G)
 
-  for (const node &n2 : stableIterator(sg->getNodes())) {
+  for (auto n2 : stableIterator(sg->getNodes())) {
 
     if (isCNode(n2))
       sg->delNode(n2, true);
@@ -179,7 +179,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n, list<node> &listOfC
   traversedNodes.push_back(n);
   // forall_out_edges(e, n) {
 
-  for (const edge &e : sG->getOutEdges(n)) {
+  for (auto e : sG->getOutEdges(n)) {
     node target = sG->target(e);
     node neighborOfN = target;
 

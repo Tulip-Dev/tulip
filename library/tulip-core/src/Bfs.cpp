@@ -66,7 +66,7 @@ void Bfs::computeBfs(Graph *G, BooleanProperty *resultatAlgoSelection, node root
     if (!G->isElement(r))
       tlp::error() << __PRETTY_FUNCTION__ << ": ERROR NODE R NOT IN G" << std::endl;
 
-    for (const edge &e : G->getInOutEdges(r)) {
+    for (auto e : G->getInOutEdges(r)) {
 
       if (!selectedEdges.get(e.id)) {
         node tmp = G->opposite(e, r);

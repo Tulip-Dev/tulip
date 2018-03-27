@@ -55,7 +55,7 @@ static void computeNodeAvgValue(
 
   double value = 0;
   unsigned int nbNodes = 0;
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     ++nbNodes;
     value += metric->getNodeValue(n);
   }
@@ -96,7 +96,7 @@ static void computeNodeSumValue(
   }
 
   double value = 0;
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     value += metric->getNodeValue(n);
   }
   metric->setNodeValue(mN, value);
@@ -131,7 +131,7 @@ static void computeNodeMaxValue(
   }
 
   double value = -DBL_MAX;
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     double nVal = metric->getNodeValue(n);
 
     if (nVal > value)
@@ -171,7 +171,7 @@ static void computeNodeMinValue(
   }
 
   double value = DBL_MAX;
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     double nVal = metric->getNodeValue(n);
 
     if (nVal < value)
@@ -265,7 +265,7 @@ void DoubleProperty::nodesUniformQuantification(unsigned int k) {
   std::map<double, int> nodeMapping;
   buildNodesUniformQuantification(graph, this, k, nodeMapping);
 
-  for (const node &itn : graph->nodes()) {
+  for (auto itn : graph->nodes()) {
     setNodeValue(itn, nodeMapping[getNodeValue(itn)]);
   }
 }
@@ -274,7 +274,7 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
   std::map<double, int> edgeMapping;
   buildEdgesUniformQuantification(graph, this, k, edgeMapping);
 
-  for (const edge &ite : graph->edges()) {
+  for (auto ite : graph->edges()) {
     setEdgeValue(ite, edgeMapping[getEdgeValue(ite)]);
   }
 }

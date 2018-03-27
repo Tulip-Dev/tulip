@@ -57,7 +57,7 @@ ostream &operator<<(ostream &os, const Graph *graph) {
     os << beginNode.id;
     unsigned int i = 0;
 
-    for (const node &current : graph->nodes()) {
+    for (auto current : graph->nodes()) {
 
       if (current.id == previousNode.id + 1) {
         previousNode = current;
@@ -78,7 +78,7 @@ ostream &operator<<(ostream &os, const Graph *graph) {
   os << ")" << endl;
   os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
 
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     std::pair<node, node> ends = graph->ends(e);
     os << "(edge " << e.id << " " << ends.first.id << " " << ends.second.id << ")" << endl;
   }
@@ -241,7 +241,7 @@ static void setViewPropertiesDefaults(Graph *g) {
     // property only if the content of that property is default valuated
     if (iProp->hasNonDefaultValuatedNodes()) {
       iProp->setAllNodeValue("fa-" + faiProp->getNodeDefaultValue());
-      for (const node &n : faiProp->getNonDefaultValuatedNodes()) {
+      for (auto n : faiProp->getNonDefaultValuatedNodes()) {
         const string &faIconName = faiProp->getNodeValue(n);
 
         if (!faIconName.empty()) {
@@ -249,7 +249,7 @@ static void setViewPropertiesDefaults(Graph *g) {
         }
       }
       iProp->setAllEdgeValue("fa-" + faiProp->getEdgeDefaultValue());
-      for (const edge &e : faiProp->getNonDefaultValuatedEdges()) {
+      for (auto e : faiProp->getNonDefaultValuatedEdges()) {
         const string &faIconName = faiProp->getEdgeValue(e);
 
         if (!faIconName.empty()) {
@@ -277,22 +277,23 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string importPluginName = "TLP Import";
 
-  list<string> importPlugins = PluginLister::instance()->availablePlugins<ImportModule>();
+  list<string> importPlugins =
+    PluginLister::instance()->availablePlugins<ImportModule>();
 
-  for (list<string>::iterator it = importPlugins.begin(); it != importPlugins.end(); ++it) {
+  for (const string &pluginName : importPlugins) {
     const ImportModule &importPlugin =
-        static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(*it));
-    list<string> extensions = importPlugin.fileExtensions();
-    list<string> gzipextensions = importPlugin.gzipFileExtensions();
+      static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(pluginName));
+    list<string> extensions(importPlugin.fileExtensions());
 
-    for (list<string>::iterator itE = extensions.begin(); itE != extensions.end(); ++itE)
-      if (filename.rfind(*itE) == (filename.size() - (*itE).size())) {
+    for (const string &ext : extensions)
+      if (filename.rfind(ext) == (filename.size() - ext.size())) {
         importPluginName = importPlugin.name();
         break;
       }
 
-    for (list<string>::iterator itE = gzipextensions.begin(); itE != gzipextensions.end(); ++itE)
-      if (filename.rfind(*itE) == (filename.size() - (*itE).size())) {
+    extensions = importPlugin.gzipFileExtensions();
+    for (const string &ext : extensions)
+      if (filename.rfind(ext) == (filename.size() - ext.size())) {
         importPluginName = importPlugin.name();
         break;
       }
@@ -310,11 +311,12 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   bool gzip = false;
 
   string exportPluginName;
-  list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
+  list<string> exportPlugins =
+    PluginLister::instance()->availablePlugins<ExportModule>();
 
-  for (list<string>::iterator it = exportPlugins.begin(); it != exportPlugins.end(); ++it) {
+  for (const string &pluginName : exportPlugins) {
     ExportModule *exportPlugin =
-        PluginLister::instance()->getPluginObject<ExportModule>(*it, nullptr);
+        PluginLister::instance()->getPluginObject<ExportModule>(pluginName, nullptr);
     string ext(exportPlugin->fileExtension());
 
     if (filename.rfind(ext) != string::npos &&
@@ -323,19 +325,18 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
       delete exportPlugin;
       break;
     } else {
-      list<string> gext(exportPlugin->gzipFileExtensions());
+      list<string> extensions(exportPlugin->gzipFileExtensions());
 
-      for (list<string>::const_iterator zit = gext.begin(); zit != gext.end(); ++zit) {
-        string zext(*zit);
-
-        if (filename.rfind(zext) == filename.length() - zext.length()) {
+      for (const string& zext : exportPlugin->gzipFileExtensions()) {
+         if (filename.rfind(zext) == filename.length() - zext.length()) {
           exportPluginName = exportPlugin->name();
           gzip = true;
           break;
         }
       }
-
       delete exportPlugin;
+      if (gzip)
+	break;
     }
   }
 
@@ -475,9 +476,7 @@ static void removeFromGraph(Graph *g, const vector<node> &nodes, const std::vect
   unsigned int nbEdges = edges.size();
 
   // Clean properties
-  for (const std::string &prop : g->getProperties()) {
-    PropertyInterface *p = g->getProperty(prop);
-
+  for (auto p : g->getObjectProperties()) {
     for (unsigned int i = 0; i < nbNodes; i++)
       p->erase(nodes[i]);
 
@@ -506,7 +505,7 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   vector<edge> edgeA;
 
   // get edges
-  for (const edge &e : ioG->edges()) {
+  for (auto e : ioG->edges()) {
     if (inSel->getEdgeValue(e)) {
       // selected edge -> remove it !
       edgeA.push_back(e);
@@ -520,7 +519,7 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
 
   vector<node> nodeA;
   // get nodes
-  for (const node &n : ioG->nodes()) {
+  for (auto n : ioG->nodes()) {
     if (inSel->getNodeValue(n)) {
       // selected node -> remove it !
       nodeA.push_back(n);
@@ -542,7 +541,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
 
   // extend the selection to edge ends
   if (inSel) {
-    for (const edge &e : inSel->getNonDefaultValuatedEdges(inG)) {
+    for (auto e : inSel->getNonDefaultValuatedEdges(inG)) {
       const pair<node, node> &eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
@@ -580,7 +579,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   unsigned int nbProperties = properties.size();
 
   // loop on nodes
-  for (const node &nIn : nodeIt) {
+  for (auto nIn : nodeIt) {
     // add outG corresponding node
     node nOut = outG->addNode();
 
@@ -610,7 +609,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   }
 
   // loop on edges
-  for (const edge &eIn : edgeIt) {
+  for (auto eIn : edgeIt) {
     const pair<node, node> &eEnds = inG->ends(eIn);
     // add outG correponding edge
     edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id), nodeTrl.get(eEnds.second.id));
@@ -637,7 +636,7 @@ public:
     const VectorGraph &ovg = tlp::Observable::getObservableGraph();
 
     // we iterate the observable graph nodes
-    for (const node &n : ovg.nodes()) {
+    for (auto n : ovg.nodes()) {
       Graph *g = nullptr;
 
       if (tlp::Observable::isAlive(n) &&
@@ -808,7 +807,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
 }
 
 tlp::node Graph::getSource() const {
-  for (const node &source : this->nodes()) {
+  for (auto source : this->nodes()) {
     if (indeg(source) == 0)
       return source;
   }
@@ -817,7 +816,7 @@ tlp::node Graph::getSource() const {
 }
 
 tlp::node Graph::getSink() const {
-  for (const node &sink : this->nodes()) {
+  for (auto sink : this->nodes()) {
     if (outdeg(sink) == 0)
       return sink;
   }
@@ -1069,7 +1068,7 @@ static const string colorProperty = "viewColor";
 
 static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping,
                          GraphProperty *metaInfo, const node from = node()) {
-  for (const node &n : it) {
+  for (auto n : it) {
     if (!from.isValid())
       mapping.set(n.id, n);
     else
@@ -1096,7 +1095,8 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *clusterSize = cluster->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *clusterRot = cluster->getProperty<DoubleProperty>(rotationProperty);
-  BoundingBox box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
+  BoundingBox &&box =
+    tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   double width = box.width();
   double height = box.height();
   double depth = box.depth();
@@ -1127,13 +1127,13 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
   clusterLayout->translate(pos, cluster);
   clusterSize->scale(Size(scale, scale, size[2] / depth), cluster);
 
-  for (const node &n : cluster->nodes()) {
+  for (auto n : cluster->nodes()) {
     graphLayout->setNodeValue(n, clusterLayout->getNodeValue(n));
     graphSize->setNodeValue(n, clusterSize->getNodeValue(n));
     graphRot->setNodeValue(n, clusterRot->getNodeValue(n) + rot);
   }
 
-  for (const edge &e : cluster->edges()) {
+  for (auto e : cluster->edges()) {
     graphLayout->setEdgeValue(e, clusterLayout->getEdgeValue(e));
     graphSize->setEdgeValue(e, clusterSize->getEdgeValue(e));
   }
@@ -1151,11 +1151,11 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
     else
       graphProp = property->clonePrototype(graph, property->getName());
 
-    for (const node &n : cluster->nodes()) {
+    for (auto n : cluster->nodes()) {
       graphProp->setNodeStringValue(n, property->getNodeStringValue(n));
     }
 
-    for (const edge &e : cluster->edges()) {
+    for (auto e : cluster->edges()) {
       graphProp->setEdgeStringValue(e, property->getEdgeStringValue(e));
     }
   }
@@ -1194,7 +1194,8 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
   return clone;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph,
+Graph *Graph::inducedSubGraph(const std::vector<node> &nodes,
+			      Graph *parentSubGraph,
                               const string &name) {
   if (parentSubGraph == nullptr)
     parentSubGraph = this;
@@ -1203,17 +1204,18 @@ Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGr
   Graph *result = parentSubGraph->addSubGraph(name);
   result->addNodes(nodes);
 
-  for (const node &n : nodes) {
-    for (const edge &ite : getOutEdges(n)) {
-      if (result->isElement(target(ite)))
-        result->addEdge(ite);
+  for (auto n : nodes) {
+    for (auto e : getOutEdges(n)) {
+      if (result->isElement(target(e)))
+        result->addEdge(e);
     }
   }
 
   return result;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph,
+Graph *Graph::inducedSubGraph(const std::set<node> &nodeSet,
+			      Graph *parentSubGraph,
                               const string &name) {
   std::vector<node> nodes(nodeSet.size());
   unsigned int i = 0;
@@ -1227,11 +1229,11 @@ Graph *Graph::inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGra
 Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
                               const string &name) {
   vector<node> nodes;
-  for (const node &n : selection->getNodesEqualTo(true, parentSubGraph)) {
+  for (auto n : selection->getNodesEqualTo(true, parentSubGraph)) {
     nodes.push_back(n);
   }
-  for (const edge &e : selection->getEdgesEqualTo(true, parentSubGraph)) {
-    const pair<node, node> &ext = ends(e);
+  for (auto e : selection->getEdgesEqualTo(true, parentSubGraph)) {
+    const pair<node, node> ext = ends(e);
     nodes.push_back(ext.first);
     nodes.push_back(ext.second);
   }
@@ -1256,7 +1258,7 @@ node Graph::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool
   // must be cloned in subgraph
   for (PropertyInterface *prop : getLocalObjectProperties()) {
     PropertyInterface *sgProp = prop->clonePrototype(subGraph, prop->getName());
-    for (const node &n : nodes) {
+    for (auto n : nodes) {
       DataMem *val = prop->getNodeDataMemValue(n);
       sgProp->setNodeDataMemValue(n, val);
       delete val;
@@ -1304,7 +1306,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   MutableContainer<bool> graphEdges;
   graphEdges.setAll(false);
 
-  for (const edge &e : edges())
+  for (auto e : edges())
     graphEdges.set(e.id, true);
 
   // we can now remove nodes from graph
@@ -1316,9 +1318,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   TLP_HASH_MAP<node, edge> metaEdges;
   TLP_HASH_MAP<edge, set<edge>> subEdges;
 
-  for (const node &n : subGraph->nodes()) {
-    for (const edge &e : getSuperGraph()->getInOutEdges(n)) {
-      const pair<node, node> &eEnds = ends(e);
+  for (auto n : subGraph->nodes()) {
+    for (auto e : getSuperGraph()->getInOutEdges(n)) {
+      const pair<node, node> eEnds = ends(e);
       node src = eEnds.first;
       node tgt = eEnds.second;
       unsigned int toDelete = isElement(src);
@@ -1393,8 +1395,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   TLP_HASH_MAP<edge, set<edge>>::const_iterator it;
 
   for (it = subEdges.begin(); it != subEdges.end(); ++it) {
-    edge mE = (*it).first;
-    metaInfo->setEdgeValue(mE, (*it).second);
+    edge mE = it->first;
+    metaInfo->setEdgeValue(mE, it->second);
     // compute meta edge values
     for (PropertyInterface *property : getObjectProperties()) {
       Iterator<edge> *itE = getEdgeMetaInfo(mE);
@@ -1410,9 +1412,10 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
 // map all nodes or embedded nodes (nodes of meta node subgraph)
 // of a subgraph to metaNode
-static void mapSubGraphNodes(Graph *sg, node metaNode, MutableContainer<node> &mappingM,
+static void mapSubGraphNodes(Graph *sg, node metaNode,
+			     MutableContainer<node> &mappingM,
                              GraphProperty *metaInfo) {
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     mappingM.set(n.id, metaNode);
     Graph *ssg = metaInfo->getNodeValue(n);
 
@@ -1439,8 +1442,11 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
   mappingM.setAll(node());
   // add node from meta to graph
   {
+    auto nodes = metaGraph->nodes();
+    unsigned int nbNodes = nodes.size();
     // stable in case of fractal graph
-    for (const node &n : stableIterator(metaGraph->getNodes())) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = nodes[i];
       addNode(n);
       mappingM.set(n.id, n);
       Graph *sg = metaInfo->getNodeValue(n);
@@ -1450,8 +1456,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
         // of this subgraph to n
         mapSubGraphNodes(sg, n, mappingM, metaInfo);
     }
-    StableIterator<edge> ite(metaGraph->getEdges());
-    addEdges(&ite);
+    addEdges(metaGraph->edges());
   }
 
   if (updateProperties)
@@ -1477,23 +1482,25 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (hasSubEdges) {
     // compute mapping for neighbour nodes
     // and their sub nodes
-    for (const node &mn : super->getInOutNodes(metaNode)) {
+    for (auto mn : super->getInOutNodes(metaNode)) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
       if (mnGraph != nullptr) {
-        for (const node &mnn : mnGraph->nodes()) {
+        for (auto mnn : mnGraph->nodes()) {
           mappingM.set(mnn.id, mn);
         }
       }
     }
 
-    for (const edge &metaEdge : stableIterator(super->getInOutEdges(metaNode))) {
+    for (auto metaEdge : super->allEdges(metaNode)) {
+      if (!super->isElement(metaNode))
+	continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>> newMetaEdges;
 
-      for (const edge &e : getEdgeMetaInfo(metaEdge)) {
-        const std::pair<node, node> &eEnds = super->ends(e);
+      for (auto e : getEdgeMetaInfo(metaEdge)) {
+        const std::pair<node, node> eEnds = super->ends(e);
 
         if (isElement(eEnds.first)) {
           if (isElement(eEnds.second)) {
@@ -1531,9 +1538,9 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>>::iterator itme = newMetaEdges.begin();
 
       while (itme != newMetaEdges.end()) {
-        node src = (*itme).first;
-        TLP_HASH_MAP<node, set<edge>>::iterator itnme = (*itme).second.begin();
-        TLP_HASH_MAP<node, set<edge>>::iterator itnmeEnd = (*itme).second.end();
+        node src = itme->first;
+        TLP_HASH_MAP<node, set<edge>>::iterator itnme = itme->second.begin();
+        TLP_HASH_MAP<node, set<edge>>::iterator itnmeEnd = itme->second.end();
 
         while (itnme != itnmeEnd) {
           Graph *graph = this;
@@ -1571,7 +1578,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
     TLP_HASH_MAP<node, Color> metaEdgeToColor;
 
-    for (const edge &metaEdge : super->getInOutEdges(metaNode)) {
+    for (auto metaEdge : super->getInOutEdges(metaNode)) {
       metaEdgeToColor[opposite(metaEdge, metaNode)] = graphColors->getEdgeValue(metaEdge);
     }
 
@@ -1579,7 +1586,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     root->delNode(metaNode, true);
     TLP_HASH_MAP<node, TLP_HASH_SET<node>> edges;
     //=================================
-    for (const edge &e : stableIterator(root->getEdges())) {
+    for (auto e : root->edges()) {
 
       if (isElement(e))
         continue;
@@ -1665,7 +1672,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
         for (PropertyInterface *property : quotientGraph->getObjectProperties()) {
           property->computeMetaValue(metaN, its, quotientGraph);
         }
-        for (const node &n : its->nodes()) {
+        for (auto n : its->nodes()) {
           // map each subgraph's node to a set of meta nodes
           // in order to deal consistently with overlapping clusters
           nMapping[n].insert(metaN);
@@ -1688,14 +1695,8 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
         set<node> &metaSources = nMapping[eEnds.first];
         set<node> &metaTargets = nMapping[eEnds.second];
 
-        for (set<node>::const_iterator itms = metaSources.begin(); itms != metaSources.end();
-             ++itms) {
-          node mSource = *itms;
-
-          for (set<node>::const_iterator itmt = metaTargets.begin(); itmt != metaTargets.end();
-               ++itmt) {
-            node mTarget = *itmt;
-
+        for (auto mSource : metaSources) {
+          for (auto mTarget : metaTargets) {
             if (mSource != mTarget) {
               MetaEdge tmp;
               tmp.source = mSource.id, tmp.target = mTarget.id;
@@ -1723,10 +1724,9 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
     edge mE = itm->first;
     metaInfo->setEdgeValue(mE, itm->second);
     // compute meta edge values
-    for (const string &pName : quotientGraph->getProperties()) {
+    for (auto prop : quotientGraph->getObjectProperties()) {
       Iterator<edge> *itE = getRoot()->getEdgeMetaInfo(mE);
-      PropertyInterface *property = quotientGraph->getProperty(pName);
-      property->computeMetaValue(mE, itE, quotientGraph);
+      prop->computeMetaValue(mE, itE, quotientGraph);
       delete itE;
     }
     ++itm;

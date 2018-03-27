@@ -37,7 +37,7 @@ edge PlanarityTestImpl::edgeReversal(edge e) {
 static void dfsAux(Graph *sG, node n, MutableContainer<int> &dfsPre, MutableContainer<int> &dfsPos,
                    list<edge> &dfsEdges, unsigned int &preCount, unsigned int &postCount) {
   dfsPre.set(n.id, ++preCount);
-  for (const edge &e : sG->getOutEdges(n)) {
+  for (auto e : sG->getOutEdges(n)) {
     node target = sG->target(e);
 
     if (dfsPre.get(target.id) == 0) {
@@ -55,7 +55,7 @@ list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos) {
   dfsPre.setAll(0);
   unsigned int preCount = 0;
   unsigned int postCount = 0;
-  for (const node &n : sG->nodes()) {
+  for (auto n : sG->nodes()) {
     if (dfsPre.get(n.id) == 0)
       dfsAux(sG, n, dfsPre, dfsPos, dfsEdges, preCount, postCount);
   }
@@ -64,7 +64,7 @@ list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos) {
 }
 //=================================================================
 void PlanarityTestImpl::makeBidirected(Graph *sG) {
-  for (const edge &e : stableIterator(sG->getEdges())) {
+  for (auto e : stableIterator(sG->getEdges())) {
     const pair<node, node> &eEnds = sG->ends(e);
     edge newEdge = sG->addEdge(eEnds.second, eEnds.first);
     bidirectedEdges[newEdge] = e;
@@ -131,7 +131,7 @@ void PlanarityTestImpl::sortNodesIncreasingOrder(Graph *g, MutableContainer<int>
   int j = 0;
 
   // forall_nodes(n, g)
-  for (const node &n : g->nodes()) {
+  for (auto n : g->nodes()) {
     a[++j] = n;
   }
 
@@ -188,7 +188,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
 #endif
 
-  for (const node &n : g->nodes()) {
+  for (auto n : g->nodes()) {
     int dfsPos = dfsPosNum.get(n.id);
     nodeWithDfsPos.set(dfsPos, n);
     largestNeighbor.set(n.id, dfsPos);
@@ -205,7 +205,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
   for (int i = 1; i <= numberOfNodes; ++i) {
     node n = nodeWithDfsPos.get(i);
-    for (const edge &e : g->getOutEdges(n)) {
+    for (auto e : g->getOutEdges(n)) {
       node v = g->target(e);
 
       if (labelB.get(n.id) < labelB.get(v.id))

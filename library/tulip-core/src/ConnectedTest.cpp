@@ -76,12 +76,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   // do a bfs traversal for each node
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n = nodes[i];
-
+  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     // check if curNode has been already visited
     if (!visited[i]) {
       // add a new component
@@ -99,7 +94,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
         nodesToVisit.pop_front();
 
         // loop on all neighbours
-        for (const node &neighbour : graph->getInOutNodes(n)) {
+        for (auto neighbour : graph->getInOutNodes(n)) {
           unsigned int neighPos = graph->nodePos(neighbour);
           // check if neighbour has been visited
           if (!visited[neighPos]) {
@@ -113,7 +108,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
         }
       }
     }
-  }
+    });
 }
 
 //======================================================================
@@ -147,7 +142,7 @@ static unsigned int connectedTest(const Graph *const graph, node n,
     node r = nodesToVisit.front();
     nodesToVisit.pop_front();
     // loop on all neighbours
-    for (const node &neighbour : graph->getInOutNodes(r)) {
+    for (auto neighbour : graph->getInOutNodes(r)) {
       unsigned int neighPos = graph->nodePos(neighbour);
       // check if neighbour has been visited
       if (!visited[neighPos]) {
@@ -187,22 +182,18 @@ void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink)
       return;
   }
 
-  const std::vector<node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-
-  if (nbNodes == 0)
+  if (graph->isEmpty())
     return;
 
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
 
-  for (unsigned int i = 0; i < nbNodes; ++i) {
-    if (!visited[i]) {
-      node n = nodes[i];
-      toLink.push_back(n);
-      connectedTest(graph, n, visited);
-    }
-  }
+  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
+      if (!visited[i]) {
+	toLink.push_back(n);
+	connectedTest(graph, n, visited);
+      }
+    });
 }
 //=================================================================
 void ConnectedTest::treatEvent(const Event &evt) {

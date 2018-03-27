@@ -28,7 +28,7 @@
 template <typename NodeIndexFunction>
 void inline MAP_NODES_AND_INDICES(const tlp::Graph *graph, NodeIndexFunction &&nodeIndexFunction) {
   unsigned int i = 0;
-  for (const tlp::node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     nodeIndexFunction(n, i++);
   }
 }
@@ -70,7 +70,7 @@ void inline OMP_PARALLEL_MAP_NODES(const tlp::Graph *graph, NodeFunction &&nodeF
   }
 #else
   // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  for (const tlp::node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     nodeFunction(n);
   }
 #endif
@@ -124,7 +124,7 @@ void inline OMP_PARALLEL_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
 template <typename EdgeIndexFunction>
 void inline MAP_EDGES_AND_INDICES(const tlp::Graph *graph, EdgeIndexFunction &&edgeIndexFunction) {
   unsigned int i = 0;
-  for (const tlp::edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     edgeIndexFunction(e, i++);
   }
 }
@@ -166,7 +166,7 @@ void inline OMP_PARALLEL_MAP_EDGES(const tlp::Graph *graph, EdgeFunction &&edgeF
   }
 #else
   // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  for (const tlp::edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     edgeFunction(e);
   }
 #endif

@@ -50,7 +50,7 @@ bool OuterPlanarTest::compute(tlp::Graph *graph) {
     return (resultsBuffer[graph] = false);
   else {
     node n = graph->addNode();
-    for (const node &current : graph->nodes()) {
+    for (auto current : graph->nodes()) {
       if (current != n)
         graph->addEdge(n, current);
     }

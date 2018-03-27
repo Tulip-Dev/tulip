@@ -59,7 +59,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   state.set(r.id, VISITED);
   //  tlp::debug() << "   " << dfsPosNum.get(r.id) << ": ";
   /// forall_out_edges(e, r)
-  for (const edge &e : stableIterator(sG->getOutEdges(r))) {
+  for (auto e : stableIterator(sG->getOutEdges(r))) {
     u = sG->target(e);
 
     if (dfsPosNum.get(u.id) < dfsPosNum.get(r.id) && isBackEdge(sG, e)) {
@@ -671,7 +671,7 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG, node, node repr, list<edge>
 
     list<edge> el;
 
-    for (const edge &e : stableIterator(D->getOutEdges(nodeInD[v]))) {
+    for (auto e : stableIterator(D->getOutEdges(nodeInD[v]))) {
       isInD[nodeInG[D->target(e)]] = true;
       el.push_back(e);
     }
@@ -738,7 +738,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph *sG) {
   //  displayMap(sG);
   for (int k = 0; k < 2; ++k) {
 
-    for (const edge &e : sG->edges()) {
+    for (auto e : sG->edges()) {
 
       if (considered.get(e.id) < 2) {
         count = 0;

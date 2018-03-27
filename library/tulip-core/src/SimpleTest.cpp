@@ -62,12 +62,12 @@ bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges
   MutableContainer<bool> visited;
   visited.setAll(false);
 
-  for (const node &current : graph->nodes()) {
+  for (auto current : graph->nodes()) {
     // Search for multiple edges and loops
     MutableContainer<bool> targeted;
     targeted.setAll(false);
 
-    for (const edge &e : graph->getInOutEdges(current)) {
+    for (auto e : graph->getInOutEdges(current)) {
 
       // check if edge has already been visited
       if (visited.get(e.id))

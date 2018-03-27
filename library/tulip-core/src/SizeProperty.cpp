@@ -143,7 +143,7 @@ void SizeProperty::computeMinMax(const Graph *sg) {
   Size maxS(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   Size minS(FLT_MAX, FLT_MAX, FLT_MAX);
 
-  for (const node &itn : sg->nodes()) {
+  for (auto itn : sg->nodes()) {
     const Size &tmpSize = getNodeValue(itn);
 
     for (int i = 0; i < 3; ++i) {

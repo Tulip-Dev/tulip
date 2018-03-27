@@ -50,14 +50,14 @@ tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Grap
   tlp::Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   tlp::Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
 
-  for (const node &itn : sg->nodes()) {
+  for (auto itn : sg->nodes()) {
     const Coord &tmpCoord = this->getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
 
   if (static_cast<LayoutProperty *>(this)->nbBendedEdges > 0) {
-    for (const edge &ite : sg->edges()) {
+    for (auto ite : sg->edges()) {
       const LineType::RealType &value = this->getEdgeValue(ite);
       LineType::RealType::const_iterator itCoord;
 
@@ -500,7 +500,7 @@ void LayoutProperty::normalize(const Graph *sg) {
   center();
   double dtmpMax = 1.0;
 
-  for (const node &itn : sg->nodes()) {
+  for (auto itn : sg->nodes()) {
     const Coord &tmpCoord = getNodeValue(itn);
     dtmpMax = std::max(dtmpMax, sqr(tmpCoord[0]) + sqr(tmpCoord[1]) + sqr(tmpCoord[2]));
   }
@@ -609,7 +609,7 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
 
   double result = 0;
 
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     result += averageAngularResolution(n, sg);
   }
 
@@ -634,7 +634,7 @@ void LayoutProperty::computeEmbedding(Graph *sg) {
 
   assert(sg == graph || graph->isDescendantGraph(sg));
 
-  for (const node &n : sg->nodes()) {
+  for (auto n : sg->nodes()) {
     computeEmbedding(n, sg);
   }
 }
@@ -654,7 +654,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   list<pCE> adjCoord;
   // Extract all adjacent edges, the bends are taken
   // into account.
-  for (const edge &ite : sg->getInOutEdges(n)) {
+  for (auto ite : sg->getInOutEdges(n)) {
     if (!getEdgeValue(ite).empty()) {
       if (sg->source(ite) == n)
         adjCoord.push_back(pCE(getEdgeValue(ite).front(), ite));
@@ -711,7 +711,7 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   list<Coord> adjCoord;
   // Extract all adjacent edges, the bends are taken
   // into account.
-  for (const edge &ite : sg->getInOutEdges(n)) {
+  for (auto ite : sg->getInOutEdges(n)) {
     if (!getEdgeValue(ite).empty()) {
       if (sg->source(ite) == n)
         adjCoord.push_back(getEdgeValue(ite).front());
@@ -824,7 +824,7 @@ double LayoutProperty::averageEdgeLength(const Graph *sg) const {
   assert(sg == graph || graph->isDescendantGraph(sg));
 
   double ret = 0;
-  for (const edge &e : sg->edges()) {
+  for (auto e : sg->edges()) {
     ret += edgeLength(e);
   }
   return (ret / sg->numberOfEdges());

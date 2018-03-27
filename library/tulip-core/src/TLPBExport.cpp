@@ -92,7 +92,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     // use a vector as buffer
     std::vector<std::pair<node, node>> vEdges(MAX_EDGES_TO_WRITE);
     unsigned int edgesToWrite = 0, nbWrittenEdges = 0;
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       std::pair<node, node> ends = graph->ends(e);
       ends.first = getNode(ends.first);
       ends.second = getNode(ends.second);
@@ -380,7 +380,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // loop on nodes
         unsigned int nbValues = 0;
-        for (const node &n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
+        for (auto n : prop->getNonDefaultValuatedNodes(propGraphId ? nullptr : graph)) {
           size = getNode(n).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 
@@ -480,7 +480,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // loop on edges
         unsigned int nbValues = 0;
-        for (const edge &e : prop->getNonDefaultValuatedEdges(propGraphId ? nullptr : graph)) {
+        for (auto e : prop->getNonDefaultValuatedEdges(propGraphId ? nullptr : graph)) {
           size = getEdge(e).id;
           s.write(reinterpret_cast<const char *>(&size), sizeof(size));
 

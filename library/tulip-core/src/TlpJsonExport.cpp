@@ -166,7 +166,7 @@ public:
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
 
-      for (const edge &e : g->edges()) {
+      for (auto e : g->edges()) {
         std::pair<node, node> ends = g->ends(e);
         _writer.writeArrayOpen();
         _writer.writeInteger(graph->nodePos(ends.first));
@@ -245,7 +245,7 @@ public:
       if (property->hasNonDefaultValuatedNodes()) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        for (const node &n : property->getNonDefaultValuatedNodes(g)) {
+        for (auto n : property->getNonDefaultValuatedNodes(g)) {
           stringstream temp;
           temp << graph->nodePos(n);
           _writer.writeString(temp.str());
@@ -266,7 +266,7 @@ public:
       if (property->hasNonDefaultValuatedEdges()) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        for (const edge &e : property->getNonDefaultValuatedEdges(g)) {
+        for (auto e : property->getNonDefaultValuatedEdges(g)) {
           stringstream temp;
           temp << graph->edgePos(e);
           _writer.writeString(temp.str());

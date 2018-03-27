@@ -135,7 +135,7 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> 
   dfsNumber.set(v.id, vDfs);
   low.set(v.id, vDfs);
 
-  for (const node &w : graph->getInOutNodes(v)) {
+  for (auto w : graph->getInOutNodes(v)) {
 
     if (dfsNumber.get(w.id) == UINT_MAX) {
       if (vDfs == 1) {
@@ -204,12 +204,8 @@ bool BiconnectedTest::compute(const tlp::Graph *graph) {
   MutableContainer<node> supergraph;
   unsigned int count = 1;
   bool result = false;
-  Iterator<node> *it = graph->getNodes();
 
-  if (it->hasNext())
-    result = (biconnectedTest(graph, it->next(), low, dfsNumber, supergraph, count));
-
-  delete it;
+  result = biconnectedTest(graph, graph->nodes()[0], low, dfsNumber, supergraph, count);
 
   if (count != graph->numberOfNodes() + 1) {
     result = false;

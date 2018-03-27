@@ -123,7 +123,7 @@ void IntegerProperty::nodesUniformQuantification(unsigned int k) {
   std::map<double, int> nodeMapping;
   buildNodesUniformQuantification(graph, this, k, nodeMapping);
 
-  for (const node &itn : graph->nodes()) {
+  for (auto itn : graph->nodes()) {
     setNodeValue(itn, nodeMapping[getNodeValue(itn)]);
   }
 }
@@ -133,7 +133,7 @@ void IntegerProperty::edgesUniformQuantification(unsigned int k) {
   std::map<double, int> edgeMapping;
   buildEdgesUniformQuantification(graph, this, k, edgeMapping);
 
-  for (const edge &ite : graph->edges()) {
+  for (auto ite : graph->edges()) {
     setEdgeValue(ite, edgeMapping[getEdgeValue(ite)]);
   }
 }

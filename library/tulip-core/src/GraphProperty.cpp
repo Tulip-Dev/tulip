@@ -38,7 +38,7 @@ GraphProperty::GraphProperty(Graph *sg, const std::string &n)
 GraphProperty::~GraphProperty() {
   if (graph) {
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       if (getNodeValue(n) != nullptr)
         getNodeValue(n)->removeListener(this);
     }
@@ -51,7 +51,7 @@ GraphProperty::~GraphProperty() {
 //==============================
 void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g) {
   // remove all observed graphs if any
-  for (const node &n : getNonDefaultValuatedNodes()) {
+  for (auto n : getNonDefaultValuatedNodes()) {
     getNodeValue(n)->removeListener(this);
   }
 
@@ -71,7 +71,7 @@ void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::Return
 void GraphProperty::setValueToGraphNodes(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g,
                                          const Graph *graph) {
   // remove all observed graphs if any
-  for (const node &n : getNonDefaultValuatedNodes(graph)) {
+  for (auto n : getNonDefaultValuatedNodes(graph)) {
     getNodeValue(n)->removeListener(this);
   }
 
@@ -192,7 +192,7 @@ void GraphProperty::treatEvent(const Event &evt) {
       MutableContainer<Graph *> backup;
       backup.setAll(nullptr);
 
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         if (getNodeValue(n) != sg)
           backup.set(n.id, getNodeValue(n));
       }
@@ -200,7 +200,7 @@ void GraphProperty::treatEvent(const Event &evt) {
       setAllNodeValue(nullptr);
 
       // restore values
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         setNodeValue(n, backup.get(n.id));
       }
     }

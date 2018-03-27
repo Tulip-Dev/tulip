@@ -40,7 +40,7 @@ public:
     double vMax = -DBL_MAX;
     DoubleProperty *metric = sg->getProperty<DoubleProperty>("viewMetric");
 
-    for (const node &itn : sg->nodes()) {
+    for (auto itn : sg->nodes()) {
       double value = metric->getNodeValue(itn);
 
       if (value > vMax) {

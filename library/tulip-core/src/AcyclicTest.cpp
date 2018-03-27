@@ -75,10 +75,8 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
     tlp::warning() << "[Warning]: " << __FUNCTION__ << ", is not efficient" << std::endl;
   }
 
-  vector<edge>::const_iterator it = reversed.begin();
-
-  for (; it != reversed.end(); ++it)
-    graph->reverse(*it);
+  for (auto e : reversed)
+    graph->reverse(e);
 
   assert(AcyclicTest::isAcyclic(graph));
 }
@@ -91,7 +89,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
   bool result = true;
   // do a dfs traversal
 
-  for (const node &curNode : graph->nodes()) {
+  for (auto curNode : graph->nodes()) {
 
     if (!visited.get(curNode.id)) {
       stack<node> nodesToVisit;
