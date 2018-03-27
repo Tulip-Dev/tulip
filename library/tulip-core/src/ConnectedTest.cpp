@@ -108,7 +108,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
         }
       }
     }
-    });
+  });
 }
 
 //======================================================================
@@ -189,11 +189,11 @@ void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink)
   visited.setAll(false);
 
   MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-      if (!visited[i]) {
-	toLink.push_back(n);
-	connectedTest(graph, n, visited);
-      }
-    });
+    if (!visited[i]) {
+      toLink.push_back(n);
+      connectedTest(graph, n, visited);
+    }
+  });
 }
 //=================================================================
 void ConnectedTest::treatEvent(const Event &evt) {

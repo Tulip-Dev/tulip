@@ -197,52 +197,48 @@ void tlp::clusteringCoefficient(const Graph *graph, MutableContainer<double> &cl
   tlp::NodeStaticProperty<double> vClusters(graph);
   tlp::clusteringCoefficient(graph, vClusters, maxDepth);
 
-  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-      clusters.set(n.id, vClusters[i]);
-    });
+  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) { clusters.set(n.id, vClusters[i]); });
 }
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,
                                 unsigned int maxDepth) {
 
   MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-      TLP_HASH_MAP<node, bool> reachables;
-      markReachableNodes(graph, n, reachables, maxDepth);
-      double nbEdge = 0; // e(N_v)*2$
+    TLP_HASH_MAP<node, bool> reachables;
+    markReachableNodes(graph, n, reachables, maxDepth);
+    double nbEdge = 0; // e(N_v)*2$
 
-      TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
-      TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
+    TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
+    TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
 
-      while (itr != ite) {
-	node itn = itr->first;
+    while (itr != ite) {
+      node itn = itr->first;
 
-	for (auto e : graph->getInOutEdges(itn)) {
-	  const pair<node, node> eEnds = graph->ends(e);
+      for (auto e : graph->getInOutEdges(itn)) {
+        const pair<node, node> eEnds = graph->ends(e);
 
-	  if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
-	    ++nbEdge;
-	  }
-	}
-
-	++itr;
+        if ((reachables.find(eEnds.first) != ite) && (reachables.find(eEnds.second) != ite)) {
+          ++nbEdge;
+        }
       }
 
-      double nNode = reachables.size(); //$|N_v|$
+      ++itr;
+    }
 
-      if (reachables.size() > 1) {
-	//$e(N_v)/(\frac{k*(k-1)}{2}}$
-	clusters[i] = nbEdge / (nNode * (nNode - 1));
-      } else
-	clusters[i] = 0;
-    });
+    double nNode = reachables.size(); //$|N_v|$
+
+    if (reachables.size() > 1) {
+      //$e(N_v)/(\frac{k*(k-1)}{2}}$
+      clusters[i] = nbEdge / (nNode * (nNode - 1));
+    } else
+      clusters[i] = 0;
+  });
 }
 //==================================================
 void tlp::dagLevel(const Graph *graph, MutableContainer<unsigned int> &level) {
   tlp::NodeStaticProperty<unsigned int> tmp(graph);
   dagLevel(graph, tmp);
-  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-      level.set(n.id, tmp[i]);
-    });
+  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) { level.set(n.id, tmp[i]); });
 }
 
 //==================================================
@@ -250,14 +246,14 @@ void tlp::dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &le
   tlp::NodeStaticProperty<unsigned int> totreat(graph);
   deque<node> fifo;
   MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
-      unsigned int indegree = graph->indeg(n);
+    unsigned int indegree = graph->indeg(n);
 
-      if (indegree == 0) {
-	fifo.push_back(n);
-	level[i] = 0;
-      } else
-	totreat[i] = indegree - 1;
-    });
+    if (indegree == 0) {
+      fifo.push_back(n);
+      level[i] = 0;
+    } else
+      totreat[i] = indegree - 1;
+  });
 
   //==============================================
   while (!fifo.empty()) {
@@ -279,8 +275,7 @@ void tlp::dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &le
 }
 
 //==================================================
-void tlp::degree(const Graph *graph,
-		 tlp::NodeStaticProperty<double> &deg, EDGE_TYPE direction,
+void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_TYPE direction,
                  NumericProperty *weights, bool norm) {
   unsigned int nbNodes = graph->numberOfNodes();
 

@@ -277,12 +277,11 @@ Graph *tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string importPluginName = "TLP Import";
 
-  list<string> importPlugins =
-    PluginLister::instance()->availablePlugins<ImportModule>();
+  list<string> importPlugins = PluginLister::instance()->availablePlugins<ImportModule>();
 
   for (const string &pluginName : importPlugins) {
     const ImportModule &importPlugin =
-      static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(pluginName));
+        static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(pluginName));
     list<string> extensions(importPlugin.fileExtensions());
 
     for (const string &ext : extensions)
@@ -311,8 +310,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
   bool gzip = false;
 
   string exportPluginName;
-  list<string> exportPlugins =
-    PluginLister::instance()->availablePlugins<ExportModule>();
+  list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
 
   for (const string &pluginName : exportPlugins) {
     ExportModule *exportPlugin =
@@ -327,8 +325,8 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
     } else {
       list<string> extensions(exportPlugin->gzipFileExtensions());
 
-      for (const string& zext : exportPlugin->gzipFileExtensions()) {
-         if (filename.rfind(zext) == filename.length() - zext.length()) {
+      for (const string &zext : exportPlugin->gzipFileExtensions()) {
+        if (filename.rfind(zext) == filename.length() - zext.length()) {
           exportPluginName = exportPlugin->name();
           gzip = true;
           break;
@@ -336,7 +334,7 @@ bool tlp::saveGraph(Graph *graph, const std::string &filename, PluginProgress *p
       }
       delete exportPlugin;
       if (gzip)
-	break;
+        break;
     }
   }
 
@@ -1095,8 +1093,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *clusterSize = cluster->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *clusterRot = cluster->getProperty<DoubleProperty>(rotationProperty);
-  BoundingBox &&box =
-    tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
+  BoundingBox &&box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   double width = box.width();
   double height = box.height();
   double depth = box.depth();
@@ -1194,8 +1191,7 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling,
   return clone;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::vector<node> &nodes,
-			      Graph *parentSubGraph,
+Graph *Graph::inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph,
                               const string &name) {
   if (parentSubGraph == nullptr)
     parentSubGraph = this;
@@ -1214,8 +1210,7 @@ Graph *Graph::inducedSubGraph(const std::vector<node> &nodes,
   return result;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::set<node> &nodeSet,
-			      Graph *parentSubGraph,
+Graph *Graph::inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph,
                               const string &name) {
   std::vector<node> nodes(nodeSet.size());
   unsigned int i = 0;
@@ -1412,8 +1407,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
 // map all nodes or embedded nodes (nodes of meta node subgraph)
 // of a subgraph to metaNode
-static void mapSubGraphNodes(Graph *sg, node metaNode,
-			     MutableContainer<node> &mappingM,
+static void mapSubGraphNodes(Graph *sg, node metaNode, MutableContainer<node> &mappingM,
                              GraphProperty *metaInfo) {
   for (auto n : sg->nodes()) {
     mappingM.set(n.id, metaNode);
@@ -1495,7 +1489,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
     for (auto metaEdge : super->allEdges(metaNode)) {
       if (!super->isElement(metaNode))
-	continue;
+        continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>> newMetaEdges;
 
