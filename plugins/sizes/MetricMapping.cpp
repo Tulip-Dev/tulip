@@ -195,7 +195,7 @@ public:
       NodeStaticProperty<Size> nodeSize(graph);
       nodeSize.copyFromProperty(entrySize);
 
-      OMP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
+      TLP_PARALLEL_MAP_NODES(graph, [&](const node &n) {
         double sizos = 0;
 
         if (proportional == AREA_PROPORTIONAL) {
@@ -221,7 +221,7 @@ public:
       // compute size of edges
       EdgeStaticProperty<Size> edgeSize(graph);
 
-      OMP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
+      TLP_PARALLEL_MAP_EDGES(graph, [&](const edge &e) {
         double sizos = min + (entryMetric->getEdgeDoubleValue(e) - shift) * (max - min) / range;
         edgeSize[e][0] = float(sizos);
         edgeSize[e][1] = float(sizos);

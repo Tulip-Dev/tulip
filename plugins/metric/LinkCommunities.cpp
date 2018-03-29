@@ -201,12 +201,12 @@ void LinkCommunities::createDualGraph(const std::vector<edge> &edges) {
 //==============================================================================================================
 void LinkCommunities::computeSimilarities(const std::vector<edge> &edges) {
   if (metric == nullptr) {
-    OMP_PARALLEL_MAP_INDICES(dual.numberOfEdges(), [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(dual.numberOfEdges(), [&](unsigned int i) {
       edge e = dual(i);
       similarity[e] = getSimilarity(e, edges);
     });
   } else
-    OMP_PARALLEL_MAP_INDICES(dual.numberOfEdges(), [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(dual.numberOfEdges(), [&](unsigned int i) {
       edge e = dual(i);
       similarity[e] = getWeightedSimilarity(e, edges);
     });
@@ -322,12 +322,16 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee, const std::vector<ed
     return a1a2 / m;
 }
 //==============================================================================================================
+// define a lock to protect allocation/free of dn_visited
+TLP_DEFINE_GLOBAL_LOCK(DN_VISITED);
+
 double LinkCommunities::computeAverageDensity(double threshold, const std::vector<edge> &edges) {
   double d = 0.0;
   NodeProperty<bool> dn_visited;
-  OMP_CRITICAL_SECTION(DN_VISITED) {
+  TLP_GLOBALLY_LOCK_SECTION(DN_VISITED) {
     dual.alloc(dn_visited);
   }
+  TLP_GLOBALLY_UNLOCK_SECTION(DN_VISITED);
   dn_visited.setAll(false);
 
   unsigned int sz = dual.numberOfNodes();
@@ -394,9 +398,10 @@ double LinkCommunities::computeAverageDensity(double threshold, const std::vecto
     }
   }
 
-  OMP_CRITICAL_SECTION(DN_VISITED) {
+  TLP_GLOBALLY_LOCK_SECTION(DN_VISITED) {
     dual.free(dn_visited);
   }
+  TLP_GLOBALLY_UNLOCK_SECTION(DN_VISITED);
 
   return 2.0 * d / (graph->numberOfEdges());
 }
@@ -479,15 +484,16 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps,
 
   double deltaThreshold = (max - min) / double(numberOfSteps);
 
-  OMP_PARALLEL_MAP_INDICES(numberOfSteps, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(numberOfSteps, [&](unsigned int i) {
     double step = min + i * deltaThreshold;
     double d = computeAverageDensity(step, edges);
-    OMP_CRITICAL_SECTION(findBestThreshold) {
+    TLP_LOCK_SECTION(findBestThreshold) {
       if (d > maxD) {
         threshold = step;
         maxD = d;
       }
     }
+    TLP_UNLOCK_SECTION(findBestThreshold);
   });
 
   return threshold;

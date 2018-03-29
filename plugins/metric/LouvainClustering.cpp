@@ -194,7 +194,7 @@ private:
         renumber[i] = final++;
 
     // update clustering
-    OMP_PARALLEL_MAP_INDICES(
+    TLP_PARALLEL_MAP_INDICES(
         nb_nodes, [&](unsigned int i) { (*clusters)[i] = renumber[n2c[(*clusters)[i]]]; });
 
     // Compute weighted graph
@@ -318,7 +318,7 @@ private:
     in.resize(nb_qnodes);
     tot.resize(nb_qnodes);
 
-    OMP_PARALLEL_MAP_INDICES(nb_qnodes, [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(nb_qnodes, [&](unsigned int i) {
       n2c[i] = i;
       double wdg, nsl;
       get_weighted_degree_and_selfloops(i, wdg, nsl);
@@ -368,7 +368,7 @@ bool LouvainClustering::run() {
 
   clusters = new NodeStaticProperty<int>(graph);
 
-  OMP_PARALLEL_MAP_INDICES(nb_nodes, [&](unsigned int i) { (*clusters)[i] = i; });
+  TLP_PARALLEL_MAP_INDICES(nb_nodes, [&](unsigned int i) { (*clusters)[i] = i; });
 
   weights = new EdgeProperty<double>();
   quotient->alloc(*weights);
@@ -428,7 +428,7 @@ bool LouvainClustering::run() {
 
   // then set measure values
   int maxVal = -1;
-  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+  TLP_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
     int val = renumber[n2c[(*clusters)[i]]];
     result->setNodeValue(n, val);
     maxVal = std::max(val, maxVal);

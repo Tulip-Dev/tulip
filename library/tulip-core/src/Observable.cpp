@@ -37,6 +37,9 @@ using namespace tlp;
 
 namespace tlp {
 
+// we need a lock to protect the update
+// of the observation graph
+TLP_DEFINE_GLOBAL_LOCK(ObservableGraphUpdate);
 //=================================
 VectorGraph Observable::_oGraph;
 unsigned int Observable::_oNotifying = 0;
@@ -190,7 +193,7 @@ Observable::~Observable() {
   if (!deleteMsgSent)
     observableDeleted();
 
-  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+  TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
     assert(_oAlive[_n]);
 
     if (!_oAlive[_n]) {
@@ -224,13 +227,15 @@ Observable::~Observable() {
       _oGraph.delEdges(_n);
     }
   }
+  TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
 }
 
 //----------------------------------------
 void Observable::holdObservers() {
-  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+  TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
     ++_oHoldCounter;
   }
+  TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
 }
 //----------------------------------------
 void Observable::unholdObservers() {
@@ -312,7 +317,7 @@ Iterator<Observable *> *Observable::getOnlookers() const {
 }
 //----------------------------------------
 void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) const {
-  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+  TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
     assert(!isBound() || _oAlive[_n]);
 
     if (isBound() && !_oAlive[_n]) {
@@ -343,6 +348,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
       _oType[link] |= type;
     }
   }
+  TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
 }
 //----------------------------------------
 void Observable::addObserver(Observable *const observer) const {
@@ -418,9 +424,10 @@ void Observable::sendEvent(const Event &message) {
           observerTonotify.push_back(make_pair(obs, src));
         } else if (!queuedEvent) {
           delayedEventAdded = true;
-          OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
-            _oDelayedEvents.insert(make_pair(_n, src));
-          }
+          TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
+	    _oDelayedEvents.insert(make_pair(_n, src));
+	  }
+          TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
         }
       }
 
@@ -522,12 +529,13 @@ void Observable::sendEvent(const Event &message) {
 //----------------------------------------
 void Observable::updateObserverGraph() {
   if (_oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0) {
-    OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+    TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
       for (auto toDel : _oDelayedDelNode) {
         if (_oEventsToTreat[toDel] == 0)
           _oGraph.delNode(toDel);
       }
     }
+    TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
     _oDelayedDelNode.clear();
   }
 }
@@ -537,7 +545,7 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
   if (!isBound() || !obs.isBound())
     return;
 
-  OMP_CRITICAL_SECTION(ObservableGraphUpdate) {
+  TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
     assert(_oAlive[_n]);
 
     if (!_oAlive[_n]) {
@@ -554,6 +562,7 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
         _oGraph.delEdge(link);
     }
   }
+  TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
 }
 //----------------------------------------
 void Observable::removeObserver(Observable *const observerver) const {

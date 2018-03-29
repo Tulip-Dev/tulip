@@ -30,8 +30,8 @@ namespace tlp {
 
 GlCPULODCalculator::GlCPULODCalculator() : computeEdgesLOD(true), noBBCheck(false) {
   threadSafe = true;
-  noBBCheck.assign(OpenMPManager::getNumberOfThreads(), false);
-  bbs.resize(OpenMPManager::getNumberOfThreads());
+  noBBCheck.assign(ThreadManager::getNumberOfThreads(), false);
+  bbs.resize(ThreadManager::getNumberOfThreads());
 }
 
 GlCPULODCalculator::~GlCPULODCalculator() {}
@@ -53,7 +53,7 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, cons
   //   and here we don't add this false bounding box to the scene bounding box
   //   TODO: See if we can change the bounding box compute in Gl2DRect
   if (bb[0][0] != numeric_limits<float>::min()) {
-    auto ti = OpenMPManager::getThreadNumber();
+    auto ti = ThreadManager::getThreadNumber();
     bbs[ti].expand(bb, noBBCheck[ti]);
     noBBCheck[ti] = true;
   }
@@ -62,14 +62,14 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity, cons
 }
 void GlCPULODCalculator::addNodeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
-  auto ti = OpenMPManager::getThreadNumber();
+  auto ti = ThreadManager::getThreadNumber();
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
   currentLayerLODUnit->nodesLODVector[pos].init(id, pos, bb);
 }
 void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                             const BoundingBox &bb) {
-  auto ti = OpenMPManager::getThreadNumber();
+  auto ti = ThreadManager::getThreadNumber();
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
   currentLayerLODUnit->edgesLODVector[pos].init(id, pos, bb);
@@ -118,7 +118,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
   unsigned int nb = 0;
   if ((renderingEntitiesFlag & RenderingSimpleEntities) != 0) {
     nb = layerLODUnit->simpleEntitiesLODVector.size();
-    OMP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
       layerLODUnit->simpleEntitiesLODVector[i].lod =
           calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox, eye,
                             transformMatrix, globalViewport, currentViewport);
@@ -127,7 +127,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
 
   if ((renderingEntitiesFlag & RenderingNodes) != 0) {
     nb = layerLODUnit->nodesLODVector.size();
-    OMP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
       layerLODUnit->nodesLODVector[i].lod =
           calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox, eye, transformMatrix,
                             globalViewport, currentViewport);
@@ -138,13 +138,13 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, const Co
     nb = layerLODUnit->edgesLODVector.size();
 
     if (computeEdgesLOD) {
-      OMP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
+      TLP_PARALLEL_MAP_INDICES(nb, [&](unsigned int i) {
         layerLODUnit->edgesLODVector[i].lod =
             calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox, eye, transformMatrix,
                               globalViewport, currentViewport);
       });
     } else {
-      OMP_PARALLEL_MAP_INDICES(nb,
+      TLP_PARALLEL_MAP_INDICES(nb,
                                [&](unsigned int i) { layerLODUnit->edgesLODVector[i].lod = 10; });
     }
   }

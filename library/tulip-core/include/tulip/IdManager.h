@@ -330,7 +330,7 @@ public:
   // recompute elts positions
   void reIndex() {
     unsigned int nbElts = this->size();
-    OMP_PARALLEL_MAP_INDICES(nbElts, [&](unsigned int i) { pos[(*this)[i]] = i; });
+    TLP_PARALLEL_MAP_INDICES(nbElts, [&](unsigned int i) { pos[(*this)[i]] = i; });
   }
 
   // ascending sort

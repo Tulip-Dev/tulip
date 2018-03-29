@@ -104,30 +104,30 @@ bool EccentricityMetric::run() {
   unsigned int nbNodes = graph->numberOfNodes();
 
   double diameter = 1.0;
-  bool stopfor = false;
-  OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
-    if (stopfor)
+  std::atomic<bool> stopfor(false);
+  TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
+      if (stopfor.load())
       return;
 
-    if (OpenMPManager::getThreadNumber() == 0) {
-      if (pluginProgress->progress(i, nbNodes / OpenMPManager::getNumberOfThreads()) !=
+    if (ThreadManager::getThreadNumber() == 0) {
+      if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
           TLP_CONTINUE) {
-        OMP_CRITICAL_SECTION(STOPFOR) {
-          stopfor = true;
-        }
+	stopfor = true;
       }
     }
 
     res[i] = compute(i);
 
-    if (!allPaths && norm)
-      OMP_CRITICAL_SECTION(DIAMETER) {
+    if (!allPaths && norm) {
+      TLP_LOCK_SECTION(DIAMETER) {
         if (diameter < res[i])
           diameter = res[i];
       }
+      TLP_UNLOCK_SECTION(DIAMETER);
+    }
   });
 
-  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+  TLP_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
     if (!allPaths && norm)
       result->setNodeValue(n, res[i] / diameter);
     else

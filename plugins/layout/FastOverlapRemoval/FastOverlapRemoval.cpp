@@ -128,7 +128,7 @@ bool FastOverlapRemoval::run() {
 
   for (float passIndex = 1; passIndex <= nbPasses; ++passIndex) {
     // initialization
-    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &curNode, unsigned int i) {
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node &curNode, unsigned int i) {
       Size sz = viewSize->getNodeValue(curNode) * passIndex / float(nbPasses);
       const Coord &pos = viewLayout->getNodeValue(curNode);
       double curRot = viewRot->getNodeValue(curNode);

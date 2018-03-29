@@ -133,21 +133,22 @@ vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte, std::vector<e
 std::vector<node> computeGraphCenters(Graph *graph) {
   assert(ConnectedTest::isConnected(graph));
   tlp::NodeStaticProperty<unsigned int> dist(graph);
-  unsigned int minD = UINT_MAX;
   const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+  unsigned int minD = UINT_MAX;
   unsigned int minPos = 0;
 
-  OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
     unsigned int maxD = tlp::maxDistance(graph, i, tmp, UNDIRECTED);
     dist[i] = maxD;
-    OMP_CRITICAL_SECTION(COMPUTE_MIN) {
+    TLP_LOCK_SECTION(COMPUTE_MIN) {
       if (minD > maxD) {
         minD = maxD;
         minPos = i;
       }
     }
+    TLP_UNLOCK_SECTION(COMPUTE_MIN);
   });
 
   vector<node> result;
@@ -420,7 +421,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
   unsigned int nbNodes = nodes.size();
   unsigned int numClasses = nbNodes;
 
-  OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) { classes[i] = i; });
+  TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) { classes[i] = i; });
 
   unsigned int maxCount = numClasses;
   unsigned int edgeCount = 0;
@@ -456,7 +457,7 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection,
       }
     }
 
-    OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
       if (classes[i] == tgtClass)
         classes[i] = srcClass;
     });

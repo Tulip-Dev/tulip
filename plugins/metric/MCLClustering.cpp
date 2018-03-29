@@ -311,7 +311,7 @@ bool MCLClustering::run() {
   g.reserveNodes(nbNodes);
 
   // add nodes to g
-  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+  TLP_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
     g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(n) + 1);
   });
 

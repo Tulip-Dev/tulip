@@ -33,11 +33,11 @@ using namespace std;
 namespace tlp {
 
 OpenGlConfigManager &OpenGlConfigManager::getInst() {
-  OMP_CRITICAL_SECTION(OpenglConfigManagerInited) {
+  TLP_LOCK_SECTION(OpenglConfigManagerInited) {
     if (!inst)
       inst = new OpenGlConfigManager();
   }
-
+  TLP_UNLOCK_SECTION(OpenglConfigManagerInited);
   return *inst;
 }
 
@@ -69,13 +69,16 @@ bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
   if (!glewIsInit)
     return false;
 
-  OMP_CRITICAL_SECTION(OpenGlConfigManagerExtensionSupported) {
-    if (checkedExtensions.find(extensionName) == checkedExtensions.end()) {
-      checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
-    }
+  bool supported = false;
+  TLP_LOCK_SECTION(OpenGlConfigManagerExtensionSupported) {
+    auto it = checkedExtensions.find(extensionName);
+    if (it == checkedExtensions.end()) {
+      supported = checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
+    } else
+      supported = it->second;
   }
-
-  return checkedExtensions[extensionName];
+  TLP_UNLOCK_SECTION(OpenGlConfigManagerExtensionSupported);
+  return supported;
 }
 
 bool OpenGlConfigManager::hasVertexBufferObject() {

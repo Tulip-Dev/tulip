@@ -168,7 +168,7 @@ double BubblePack::computeRelativePosition(tlp::node n,
         int discret = ceil(2. * (sizeFather + radius) * M_PI) + 3;
         angle += M_PI / 3.;
 
-        OMP_PARALLEL_MAP_INDICES(discret, [&](unsigned int j) {
+        TLP_PARALLEL_MAP_INDICES(discret, [&](unsigned int j) {
           float _angle = float(j) * 2. * M_PI / float(discret) + angle;
           double spiralRadius = sizeFather + radius + 1E-3;
           Circled tmp(spiralRadius * cos(_angle), spiralRadius * sin(_angle), radius);
@@ -190,12 +190,13 @@ double BubblePack::computeRelativePosition(tlp::node n,
             }
           }
 
-          OMP_CRITICAL_SECTION(GOODCIRCLE) {
+          TLP_LOCK_SECTION(GOODCIRCLE) {
             if (spiralRadius < bestRadius) {
               bestRadius = spiralRadius;
               bestAngle = _angle;
             }
           }
+          TLP_UNLOCK_SECTION(GOODCIRCLE);
         });
 
         circles[index[i]][0] = bestRadius * cos(bestAngle);

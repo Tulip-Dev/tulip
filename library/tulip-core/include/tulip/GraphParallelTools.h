@@ -23,10 +23,12 @@
 #include <tulip/Graph.h>
 #include <tulip/ParallelTools.h>
 
+namespace tlp {
+
 // ===================================================================================
 
 template <typename NodeIndexFunction>
-void inline MAP_NODES_AND_INDICES(const tlp::Graph *graph, NodeIndexFunction &&nodeIndexFunction) {
+void inline TLP_MAP_NODES_AND_INDICES(const tlp::Graph *graph, const NodeIndexFunction &nodeIndexFunction) {
   unsigned int i = 0;
   for (auto n : graph->nodes()) {
     nodeIndexFunction(n, i++);
@@ -53,27 +55,15 @@ void inline MAP_NODES_AND_INDICES(const tlp::Graph *graph, NodeIndexFunction &&n
  *  return result;
  * };
  * tlp::NodeStaticProperty<double> result(graph);
- * OMP_PARALLEL_MAP_NODES(graph, [&](const tlp::node &n) {
+ * TLP_PARALLEL_MAP_NODES(graph, [&](const tlp::node &n) {
  *   // run task in a thread
  *   result[n] = computationIntensiveTask(n);
  * });
  * @endcode
  */
 template <typename NodeFunction>
-void inline OMP_PARALLEL_MAP_NODES(const tlp::Graph *graph, NodeFunction &&nodeFunction) {
-#ifdef _OPENMP
-  const std::vector<tlp::node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-  OMP(parallel for)
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
-    nodeFunction(nodes[i]);
-  }
-#else
-  // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  for (auto n : graph->nodes()) {
-    nodeFunction(n);
-  }
-#endif
+void inline TLP_PARALLEL_MAP_NODES(const tlp::Graph *graph, const NodeFunction &nodeFunction) {
+  TLP_PARALLEL_MAP_VECTOR<tlp::node, NodeFunction>(graph->nodes(), nodeFunction);
 }
 
 // ===================================================================================
@@ -97,32 +87,22 @@ void inline OMP_PARALLEL_MAP_NODES(const tlp::Graph *graph, NodeFunction &&nodeF
  *  return result;
  * };
  * tlp::NodeStaticProperty<double> result(graph);
- * OMP_PARALLEL_MAP_EDGES(graph, [&](const tlp::node &n, unsigned int i) {
+ * TLP_PARALLEL_MAP_EDGES(graph, [&](const tlp::node &n, unsigned int i) {
  *   // run task in a thread
  *   result[n] = computationIntensiveTask(n, i);
  * });
  * @endcode
  */
-template <typename NodeIndexFunction>
-void inline OMP_PARALLEL_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
-                                               NodeIndexFunction &&nodeIndexFunction) {
-#ifdef _OPENMP
-  const std::vector<tlp::node> &nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
-  OMP(parallel for)
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbNodes); ++i) {
-    nodeIndexFunction(nodes[i], uint(i));
-  }
-#else
-  // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  MAP_NODES_AND_INDICES(graph, nodeIndexFunction);
-#endif
+template <typename NodeFunction>
+void inline TLP_PARALLEL_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
+                                               const NodeFunction &nodeFunction) {
+  TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::node, NodeFunction>(graph->nodes(), nodeFunction);
 }
 
 // ===================================================================================
 
 template <typename EdgeIndexFunction>
-void inline MAP_EDGES_AND_INDICES(const tlp::Graph *graph, EdgeIndexFunction &&edgeIndexFunction) {
+void inline TLP_MAP_EDGES_AND_INDICES(const tlp::Graph *graph, const EdgeIndexFunction &edgeIndexFunction) {
   unsigned int i = 0;
   for (auto e : graph->edges()) {
     edgeIndexFunction(e, i++);
@@ -149,27 +129,15 @@ void inline MAP_EDGES_AND_INDICES(const tlp::Graph *graph, EdgeIndexFunction &&e
  *  return result;
  * };
  * tlp::EdgeStaticProperty<double> result(graph);
- * OMP_PARALLEL_MAP_EDGES(graph, [&](const tlp::edge &e) {
+ * TLP_PARALLEL_MAP_EDGES(graph, [&](const tlp::edge &e) {
  *   // run task in a thread
  *   result[e] = computationIntensiveTask(e);
  * });
  * @endcode
  */
 template <typename EdgeFunction>
-void inline OMP_PARALLEL_MAP_EDGES(const tlp::Graph *graph, EdgeFunction &&edgeFunction) {
-#ifdef _OPENMP
-  const std::vector<tlp::edge> &edges = graph->edges();
-  unsigned int nbEdges = edges.size();
-  OMP(parallel for)
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbEdges); ++i) {
-    edgeFunction(edges[i]);
-  }
-#else
-  // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  for (auto e : graph->edges()) {
-    edgeFunction(e);
-  }
-#endif
+void inline TLP_PARALLEL_MAP_EDGES(const tlp::Graph *graph, const EdgeFunction &edgeFunction) {
+  TLP_PARALLEL_MAP_VECTOR<tlp::edge, EdgeFunction>(graph->edges(), edgeFunction);
 }
 
 // ===================================================================================
@@ -193,26 +161,18 @@ void inline OMP_PARALLEL_MAP_EDGES(const tlp::Graph *graph, EdgeFunction &&edgeF
  *  return result;
  * };
  * tlp::EdgeStaticProperty<double> result(graph);
- * OMP_PARALLEL_MAP_EDGES(graph, [&](const tlp::edge &e, unsigned int i) {
+ * TLP_PARALLEL_MAP_EDGES(graph, [&](const tlp::edge &e, unsigned int i) {
  *   // run task in a thread
  *   result[e] = computationIntensiveTask(e, i);
  * });
  * @endcode
  */
-template <typename EdgeIndexFunction>
-void inline OMP_PARALLEL_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
-                                               EdgeIndexFunction &&edgeIndexFunction) {
-#ifdef _OPENMP
-  const std::vector<tlp::edge> &edges = graph->edges();
-  unsigned int nbEdges = edges.size();
-  OMP(parallel for)
-  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(nbEdges); ++i) {
-    edgeIndexFunction(edges[i], uint(i));
-  }
-#else
-  // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  MAP_EDGES_AND_INDICES(graph, edgeIndexFunction);
-#endif
+template <typename EdgeFunction>
+void inline TLP_PARALLEL_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
+                                               const EdgeFunction &edgeFunction) {
+  TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::edge, EdgeFunction>(graph->edges(), edgeFunction);
+}
+
 }
 
 #endif

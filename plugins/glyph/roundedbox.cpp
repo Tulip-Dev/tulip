@@ -243,7 +243,7 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   vector<Coord> boxPoints;
   boxPoints.resize(steps * 4);
 
-  OMP_PARALLEL_MAP_INDICES(steps, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(steps, [&](unsigned int i) {
     float w = delta + i * delta;
     float x = -cos(w);
     float y = sin(w);

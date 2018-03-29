@@ -17,10 +17,13 @@
  *
  */
 
-#ifndef PARALLEL_TOOLS_H
-#define PARALLEL_TOOLS_H
+#ifndef TLP_PARALLEL_TOOLS_H
+#define TLP_PARALLEL_TOOLS_H
 
 #include <tulip/tulipconf.h>
+#include <vector>
+
+#ifndef TLP_NO_THREADS
 
 #ifdef _OPENMP
 // _OPENMP is supposed to be defined as an integer
@@ -39,25 +42,73 @@ typedef size_t OMP_ITER_TYPE;
 #define OMP(x) __pragma(omp x)
 #define OMP_CRITICAL_SECTION(x) __pragma(omp critical(x))
 #endif
-#define TLP_MAX_NB_THREADS 128
+
 #else
-#define OMP(x)
-#define OMP_CRITICAL_SECTION(x)
-#define TLP_MAX_NB_THREADS 1
+
+// OPENMP no available use c++11 threads
+#include <iostream>
+#include <algorithm>
+#include <mutex>
+#include <thread>
+
+#endif
+
 #endif
 
 namespace tlp {
 
+class TlpThread;
 // ===================================================================================
 
 /**
- * @brief Static wrapper class around the OpenMP runtime library
+ * @brief Static wrapper class around the std::thread
  *
  * @since Tulip 5.2
  */
-class TLP_SCOPE OpenMPManager {
+class TLP_SCOPE ThreadManager {
+
+  static unsigned int maxNumberOfThreads;
+
+#if !defined(TLP_NO_THREADS) && !defined(_OPENMP)
+
+  // allocate a number for the calling thread
+  static void allocateThreadNumber();
+
+  // deallocate the number of the calling thread
+  static void freeThreadNumber();
+
+  // create a thread dedicated to the execution of a function
+  // used to iterate between begin and end indices
+  template<typename runFunction>
+    static inline std::thread* launchThread(const runFunction &f, uint begin, uint end) {
+    auto thrdFunction = [&](uint begin, uint end) {
+      allocateThreadNumber();
+      f(begin, end);
+      freeThreadNumber();
+    };
+    return new std::thread(thrdFunction, begin, end);
+  }
+
+#endif
 
 public:
+
+#if !defined(TLP_NO_THREADS) && !defined(_OPENMP)
+
+  // create a thread dedicated to the execution of a function
+  // with no arguments
+  template<typename runFunction>
+    static inline std::thread* launchThread(const runFunction &f) {
+    auto thrdFunction = [&]() {
+      allocateThreadNumber();
+      f();
+      freeThreadNumber();
+    };
+    return new std::thread(thrdFunction);
+  }
+
+#endif
+
   /**
    * Returns the number of processors on the host system.
    */
@@ -69,44 +120,106 @@ public:
   static unsigned int getNumberOfThreads();
 
   /**
-   * Sets the number of threads used by default in subsequent OpenMP parallel sections.
+   * Sets the number of threads used by default in subsequent parallel sections.
    */
   static void setNumberOfThreads(unsigned int nbThreads);
 
   /**
-   * Returns the current OpenMP thread number.
+   * Returns the current thread number.
    */
   static unsigned int getThreadNumber();
 
-  /**
-   * Enables or disables nested OpenMP parallel regions.
-   */
-  static void setNested(bool nested);
+#ifndef _OPENMP
 
   /**
-   * Returns the nested state.
+   * Parallel iteration of the same function over partitioned ranges
+   * between 0 and maxId
    */
-  static bool nested();
+  template <typename ThreadFunction>
+  static inline void iterate(size_t maxId, const ThreadFunction &threadFunction) {
+#ifndef TLP_NO_THREADS
+    if (maxId == 0)
+      return;
 
-  /**
-   * Enables or disables the dynamic adjustment of the number of OpenMP threads.
-   */
-  static void setDynamic(bool dynamic);
+    // compute the size of range indices for each thread
+    size_t nbPerThread = maxId == 1 ? 1 :
+      std::max(maxId / (maxNumberOfThreads - 1), size_t(2));
+    // begin and end indices of thread partition
+    size_t begin = 0, end = nbPerThread;
+    maxId -= end - begin;
+    // create threads
+    std::vector<std::thread *> threads;
+    threads.reserve(maxNumberOfThreads - 1);
+    while (maxId) {
+      threads.push_back(launchThread(threadFunction, begin, end));
+      if (nbPerThread > 1) {
+	if (maxNumberOfThreads - threads.size() == maxId)
+	  nbPerThread = 1;
+      }
+      begin = end;
+      end += std::min(nbPerThread, maxId);
+      maxId -= end - begin;
+    }
+    // iterate on last partition
+    threadFunction(begin, end);
+    // wait for threads
+    for (auto thrd : threads) {
+      thrd->join();
+      delete thrd;
+    }
+#else
+    threadFunction(0, maxId);
+#endif
+  }
 
-  /**
-   * Returns the dynamic state.
-   */
-  static bool dynamic();
-
-private:
-  static unsigned int maxNumberOfThreads;
+#endif
 };
-}
+
+#ifndef TLP_NO_THREADS
+
+#define TLP_MAX_NB_THREADS 128
+
+#define TLP_NB_THREADS tlp::ThreadManager::getNumberOfThreads()
+
+#ifdef _OPENMP
+
+#define TLP_LOCK_SECTION(mtx) OMP_CRITICAL_SECTION(mtx)
+#define TLP_UNLOCK_SECTION(mtx)
+#define TLP_DECLARE_GLOBAL_LOCK(mtx) extern void mtx()
+#define TLP_DEFINE_GLOBAL_LOCK(mtx) extern void mtx()
+#define TLP_GLOBALLY_LOCK_SECTION(mtx) OMP_CRITICAL_SECTION(mtx)
+#define TLP_GLOBALLY_UNLOCK_SECTION(mtx)
+
+#else
+
+#define TLP_LOCK_SECTION(mtx) static std::mutex mtx; mtx.lock();
+#define TLP_UNLOCK_SECTION(mtx) mtx.unlock()
+#define TLP_DECLARE_GLOBAL_LOCK(mtx) extern std::mutex mtx
+#define TLP_DEFINE_GLOBAL_LOCK(mtx) std::mutex mtx
+#define TLP_GLOBALLY_LOCK_SECTION(mtx) mtx.lock();
+#define TLP_GLOBALLY_UNLOCK_SECTION(mtx) mtx.unlock()
+
+#endif
+
+#else
+
+// no multi-threading
+#define TLP_MAX_NB_THREADS 1
+
+#define TLP_NB_THREADS 1
+
+#define TLP_LOCK_SECTION(mtx)
+#define TLP_UNLOCK_SECTION(mtx)
+#define TLP_DEFINE_GLOBAL_LOCK(mtx)
+#define TLP_GLOBALLY_LOCK_SECTION(mtx)
+#define TLP_GLOBALLY_UNLOCK_SECTION(mtx)
+
+#endif
 
 // ===================================================================================
 
 /**
- * Template function to ease the creation of OpenMP parallel jobs taking
+ * Template function to ease the creation of parallel threads taking
  * an index as parameter (0 <= index < maxIdx).
  *
  * @since Tulip 5.2
@@ -124,25 +237,166 @@ private:
  * };
  * const unsigned int N = ... ;
  * std::vector<double> result(N);
- * OMP_PARALLEL_MAP_INDICES(N, [&](unsigned int i) {
+ * TLP_PARALLEL_MAP_INDICES(N, [&](unsigned int i) {
  *   // run task in a thread
  *   result[i] = computationIntensiveTask(i);
  * });
  * @endcode
  */
 template <typename IdxFunction>
-void inline OMP_PARALLEL_MAP_INDICES(unsigned int maxIdx, IdxFunction &&idxFunction) {
+void inline TLP_PARALLEL_MAP_INDICES(size_t maxIdx, const IdxFunction &idxFunction) {
 #ifdef _OPENMP
   OMP(parallel for)
   for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(maxIdx); ++i) {
     idxFunction(i);
   }
 #else
-  // fallback to sequential processing if OpenMP is not available (e.g. with Apple Clang)
-  for (unsigned int i = 0; i < maxIdx; ++i) {
-    idxFunction(i);
-  }
+  auto threadFunction = [&](size_t begin, size_t end) {
+    for(; begin < end; ++begin) {
+      idxFunction(begin);
+    }
+  };
+  ThreadManager::iterate(maxIdx, threadFunction);
 #endif
 }
 
+template <typename EltType, typename IdxFunction>
+  void inline TLP_PARALLEL_MAP_VECTOR(const std::vector<EltType> &vect, const IdxFunction &idxFunction) {
+#ifdef _OPENMP
+  auto maxIdx = vect.size();
+  OMP(parallel for)
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(maxIdx); ++i) {
+    idxFunction(vect[i]);
+  }
+#else
+  auto threadFunction = [&](size_t begin, size_t end) {
+    for(; begin < end; ++begin) {
+      idxFunction(vect[begin]);
+    }
+  };
+
+  ThreadManager::iterate(vect.size(), threadFunction);
 #endif
+}
+
+template <typename EltType, typename IdxFunction>
+  void inline TLP_PARALLEL_MAP_VECTOR_AND_INDICES(const std::vector<EltType> &vect, const IdxFunction &idxFunction) {
+#ifdef _OPENMP
+  auto maxIdx = vect.size();
+  OMP(parallel for)
+  for (OMP_ITER_TYPE i = 0; i < OMP_ITER_TYPE(maxIdx); ++i) {
+    idxFunction(vect[i], i);
+  }
+#else
+  auto threadFunction = [&](size_t begin, size_t end) {
+    for(;begin < end; ++begin) {
+      idxFunction(vect[begin], begin);
+    }
+  };
+
+  ThreadManager::iterate(vect.size(), threadFunction);
+#endif
+}
+
+template <typename F1, typename F2>
+void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2) {
+#ifndef TLP_NO_THREADS
+#ifdef _OPENMP
+  OMP(parallel) {
+    OMP(sections nowait) {
+      OMP(section) {
+	f1();
+      }
+    }
+    OMP(master) {
+      f2();
+    }
+  }
+#else
+  auto thrd = ThreadManager::launchThread(f1);
+  f2();
+  thrd->join();
+  delete thrd;
+#endif
+#else
+  f1();
+  f2();
+#endif
+}
+
+template <typename F1, typename F2, typename F3>
+  void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3) {
+#ifndef TLP_NO_THREADS
+#ifdef _OPENMP
+  OMP(parallel) {
+    OMP(sections nowait) {
+      OMP(section) {
+	f1();
+      }
+      OMP(section) {
+	f2();
+      }
+    }
+    OMP(master) {
+      f3();
+    }
+  }
+#else
+  auto thrd1 = ThreadManager::launchThread(f1);
+  auto thrd2 = ThreadManager::launchThread(f2);
+  f3();
+  thrd1->join();
+  thrd2->join();
+  delete thrd1;
+  delete thrd2;
+#endif
+#else
+  f1();
+  f2();
+  f3();
+#endif
+}
+
+template <typename F1, typename F2, typename F3, typename F4>
+  void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3, const F4 &f4) {
+#ifndef TLP_NO_THREADS
+#ifdef _OPENMP
+  OMP(parallel) {
+    OMP(sections nowait) {
+      OMP(section) {
+	f1();
+      }
+      OMP(section) {
+	f2();
+      }
+      OMP(section) {
+	f3();
+      }
+    }
+    OMP(master) {
+      f4();
+    }
+  }
+#else
+  auto thrd1 = ThreadManager::launchThread(f1);
+  auto thrd2 = ThreadManager::launchThread(f2);
+  auto thrd3 = ThreadManager::launchThread(f3);
+  f4();
+  thrd1->join();
+  thrd2->join();
+  thrd3->join();
+  delete thrd1;
+  delete thrd2;
+  delete thrd3;
+#endif
+#else
+  f1();
+  f2();
+  f3();
+  f4();
+#endif
+}
+
+}
+
+#endif // TLP_PARALLEL_TOOLS_H

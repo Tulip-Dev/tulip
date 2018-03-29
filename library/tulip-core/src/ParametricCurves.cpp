@@ -146,7 +146,7 @@ static map<unsigned int, unsigned int> computedCoefficients;
 
 static void computeCoefficients(double t, unsigned int nbControlPoints) {
   double s = (1.0 - t);
-  OMP_CRITICAL_SECTION(computeCoefficients) {
+  TLP_LOCK_SECTION(computeCoefficients) {
     if (tCoeffs.find(t) == tCoeffs.end()) {
       vector<double> tCoeff, sCoeff;
 
@@ -171,6 +171,7 @@ static void computeCoefficients(double t, unsigned int nbControlPoints) {
       }
     }
   }
+  TLP_UNLOCK_SECTION(computeCoefficients);
 }
 
 Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
@@ -220,7 +221,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
   default:
     curvePoints.resize(nbCurvePoints);
     float h = 1.0 / float(nbCurvePoints - 1);
-    OMP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
     });
@@ -365,7 +366,7 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 
   computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
   curvePoints.resize(nbCurvePoints);
-  OMP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
     curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / float(nbCurvePoints - 1),
                                                 globalParameter, closedCurve, alpha);
   });
@@ -438,7 +439,7 @@ void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<
                                      const unsigned int curveDegree,
                                      const unsigned int nbCurvePoints) {
   curvePoints.resize(nbCurvePoints);
-  OMP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(nbCurvePoints, [&](unsigned int i) {
     curvePoints[i] =
         computeOpenUniformBsplinePoint(controlPoints, i / float(nbCurvePoints - 1), curveDegree);
   });

@@ -76,7 +76,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph *graph,
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   // do a bfs traversal for each node
-  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
+  TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     // check if curNode has been already visited
     if (!visited[i]) {
       // add a new component
@@ -188,7 +188,7 @@ void ConnectedTest::connect(const tlp::Graph *const graph, vector<node> &toLink)
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
 
-  MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
+  TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) {
     if (!visited[i]) {
       toLink.push_back(n);
       connectedTest(graph, n, visited);

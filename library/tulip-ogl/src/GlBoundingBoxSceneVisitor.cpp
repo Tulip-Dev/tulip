@@ -30,8 +30,8 @@ namespace tlp {
 GlBoundingBoxSceneVisitor::GlBoundingBoxSceneVisitor(GlGraphInputData *inputData)
     : inputData(inputData) {
   threadSafe = true;
-  noBBCheck.assign(OpenMPManager::getNumberOfThreads(), false);
-  bbs.resize(OpenMPManager::getNumberOfThreads());
+  noBBCheck.assign(ThreadManager::getNumberOfThreads(), false);
+  bbs.resize(ThreadManager::getNumberOfThreads());
 }
 
 BoundingBox GlBoundingBoxSceneVisitor::getBoundingBox() {
@@ -48,7 +48,7 @@ void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
     BoundingBox &&bb = entity->getBoundingBox();
 
     if (bb.isValid()) {
-      auto ti = OpenMPManager::getThreadNumber();
+      auto ti = ThreadManager::getThreadNumber();
       bbs[ti].expand(bb, noBBCheck[ti]);
       noBBCheck[ti] = true;
     }
@@ -57,7 +57,7 @@ void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
 
 void GlBoundingBoxSceneVisitor::visit(GlNode *glNode) {
   BoundingBox &&bb = glNode->getBoundingBox(inputData);
-  auto ti = OpenMPManager::getThreadNumber();
+  auto ti = ThreadManager::getThreadNumber();
 
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
@@ -65,7 +65,7 @@ void GlBoundingBoxSceneVisitor::visit(GlNode *glNode) {
 
 void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
   BoundingBox &&bb = glEdge->getBoundingBox(inputData);
-  auto ti = OpenMPManager::getThreadNumber();
+  auto ti = ThreadManager::getThreadNumber();
 
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;

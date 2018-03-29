@@ -28,7 +28,7 @@ void ParallelToolsTest::tearDown() {
 
 void ParallelToolsTest::testParallelMapIndices() {
   std::vector<unsigned int> v(100);
-  OMP_PARALLEL_MAP_INDICES(v.size(), [&](unsigned int i) { v[i] = 2 * i; });
+  tlp::TLP_PARALLEL_MAP_INDICES(v.size(), [&](unsigned int i) { v[i] = 2 * i; });
   for (unsigned int i = 0; i < v.size(); ++i) {
     CPPUNIT_ASSERT_EQUAL(v[i], 2 * i);
   }
@@ -36,7 +36,7 @@ void ParallelToolsTest::testParallelMapIndices() {
 
 void ParallelToolsTest::testParallelMapNodes() {
   tlp::NodeStaticProperty<unsigned int> deg(_graph);
-  OMP_PARALLEL_MAP_NODES(_graph, [&](const tlp::node &n) { deg[n] = _graph->deg(n); });
+  TLP_PARALLEL_MAP_NODES(_graph, [&](const tlp::node &n) { deg[n] = _graph->deg(n); });
   for (const tlp::node &n : _graph->nodes()) {
     CPPUNIT_ASSERT_EQUAL(deg[n], _graph->deg(n));
   }
@@ -44,7 +44,7 @@ void ParallelToolsTest::testParallelMapNodes() {
 
 void ParallelToolsTest::testParallelMapNodesAndIndices() {
   std::vector<tlp::node> nodes(_graph->numberOfNodes());
-  OMP_PARALLEL_MAP_NODES_AND_INDICES(_graph,
+  TLP_PARALLEL_MAP_NODES_AND_INDICES(_graph,
                                      [&](const tlp::node &n, unsigned int i) { nodes[i] = n; });
   unsigned int i = 0;
   for (const tlp::node &n : _graph->nodes()) {
@@ -54,7 +54,7 @@ void ParallelToolsTest::testParallelMapNodesAndIndices() {
 
 void ParallelToolsTest::testParallelMapEdges() {
   tlp::EdgeStaticProperty<int> selfLoop(_graph);
-  OMP_PARALLEL_MAP_EDGES(
+  TLP_PARALLEL_MAP_EDGES(
       _graph, [&](const tlp::edge &e) { selfLoop[e] = _graph->source(e) == _graph->target(e); });
   for (const tlp::edge &e : _graph->edges()) {
     CPPUNIT_ASSERT_EQUAL(selfLoop[e], int(_graph->source(e) == _graph->target(e)));
@@ -63,7 +63,7 @@ void ParallelToolsTest::testParallelMapEdges() {
 
 void ParallelToolsTest::testParallelMapEdgesAndIndices() {
   std::vector<tlp::edge> edges(_graph->numberOfEdges());
-  OMP_PARALLEL_MAP_EDGES_AND_INDICES(_graph,
+  TLP_PARALLEL_MAP_EDGES_AND_INDICES(_graph,
                                      [&](const tlp::edge &e, unsigned int i) { edges[i] = e; });
   unsigned int i = 0;
   for (const tlp::edge &e : _graph->edges()) {
@@ -73,11 +73,12 @@ void ParallelToolsTest::testParallelMapEdgesAndIndices() {
 
 void ParallelToolsTest::testCriticalSection() {
   unsigned int maxDegPar = 0;
-  OMP_PARALLEL_MAP_NODES(_graph, [&](const tlp::node &n) {
+  TLP_PARALLEL_MAP_NODES(_graph, [&](const tlp::node &n) {
     unsigned int deg = _graph->deg(n);
-    OMP_CRITICAL_SECTION(maxDeg) {
+    TLP_LOCK_SECTION(maxDeg) {
       maxDegPar = std::max(deg, maxDegPar);
     }
+    TLP_UNLOCK_SECTION(maxDeg);
   });
   unsigned int maxDegSeq = 0;
   for (const tlp::node &n : _graph->nodes()) {
@@ -89,12 +90,12 @@ void ParallelToolsTest::testCriticalSection() {
 void ParallelToolsTest::testNumberOfThreads() {
   const unsigned int vSize = 100;
   const unsigned int nbThreads = 32;
-  tlp::OpenMPManager::setNumberOfThreads(nbThreads);
+  tlp::ThreadManager::setNumberOfThreads(nbThreads);
   std::vector<unsigned int> tids(vSize);
-  OMP_PARALLEL_MAP_INDICES(
-      nbThreads, [&](unsigned int i) { tids[i] = tlp::OpenMPManager::getThreadNumber(); });
+  tlp::TLP_PARALLEL_MAP_INDICES(
+      nbThreads, [&](unsigned int i) { tids[i] = tlp::ThreadManager::getThreadNumber(); });
 
   for (unsigned int tid : tids) {
-    CPPUNIT_ASSERT(tid <= tlp::OpenMPManager::getNumberOfThreads() - 1);
+    CPPUNIT_ASSERT(tid <= tlp::ThreadManager::getNumberOfThreads() - 1);
   }
 }

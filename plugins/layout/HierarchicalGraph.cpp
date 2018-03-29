@@ -64,7 +64,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   tlp::NodeStaticProperty<unsigned int> levels(sg);
   dagLevel(graph, levels);
 
-  MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+  TLP_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
     unsigned int level = levels[i];
 
     if (level >= grid.size())

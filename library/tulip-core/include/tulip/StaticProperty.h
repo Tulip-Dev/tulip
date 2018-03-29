@@ -63,7 +63,7 @@ public:
 
   // set all to same values
   void setAll(const TYPE &val) {
-    OMP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created node
@@ -79,7 +79,7 @@ public:
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    OMP_PARALLEL_MAP_NODES_AND_INDICES(
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(
         graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
   }
 
@@ -138,7 +138,7 @@ public:
 
   // set all to same values
   void setAll(const bool &val) {
-    OMP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfNodes(), [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created node
@@ -154,7 +154,7 @@ public:
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    OMP_PARALLEL_MAP_NODES_AND_INDICES(
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(
         graph, [&](const node n, unsigned int i) { (*this)[i] = prop->getNodeValue(n); });
   }
 
@@ -212,7 +212,7 @@ public:
   }
 
   void setAll(const TYPE &val) {
-    OMP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created edge
@@ -228,7 +228,7 @@ public:
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    OMP_PARALLEL_MAP_EDGES_AND_INDICES(
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(
         graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
   }
 
@@ -283,7 +283,7 @@ public:
 
   // set all to same values
   void setAll(const bool &val) {
-    OMP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
+    TLP_PARALLEL_MAP_INDICES(graph->numberOfEdges(), [&](unsigned int i) { (*this)[i] = val; });
   }
 
   // add a value for a newly created edge
@@ -299,7 +299,7 @@ public:
   // get values from a typed instance of PropertyInterface
   template <typename PROP_PTR>
   void copyFromProperty(PROP_PTR prop) {
-    OMP_PARALLEL_MAP_EDGES_AND_INDICES(
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(
         graph, [&](const edge e, unsigned int i) { (*this)[i] = prop->getEdgeValue(e); });
   }
 

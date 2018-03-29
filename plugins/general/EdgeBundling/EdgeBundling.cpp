@@ -145,14 +145,15 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout,
       --i;
   }
 
-  OMP_CRITICAL_SECTION(LAYOUT) {
+  TLP_LOCK_SECTION(LAYOUT) {
     layout->setEdgeValue(e, bends);
   }
+  TLP_UNLOCK_SECTION(LAYOUT);
 }
 //============================================
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
 void EdgeBundling::fixEdgeType(EdgeStaticProperty<unsigned int> &ntype) {
-  OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
+  TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
     if (oriGraph->isElement(e)) {
       ntype[i] = 1;
     } else {
@@ -180,7 +181,7 @@ static void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph,
 }
 //==========================================================================
 void EdgeBundling::computeDistances() {
-  OMP_PARALLEL_MAP_NODES_AND_INDICES(oriGraph,
+  TLP_PARALLEL_MAP_NODES_AND_INDICES(oriGraph,
                                      [&](node n, unsigned int i) { computeDistance(n, i); });
 }
 //==========================================================================
@@ -350,9 +351,9 @@ bool EdgeBundling::run() {
   }
 
   if (maxThread == 0) {
-    OpenMPManager::setNumberOfThreads(OpenMPManager::getNumberOfProcs());
+    ThreadManager::setNumberOfThreads(ThreadManager::getNumberOfProcs());
   } else {
-    OpenMPManager::setNumberOfThreads(maxThread);
+    ThreadManager::setNumberOfThreads(maxThread);
   }
 
   EdgeStaticProperty<unsigned int> ntype(graph);
@@ -362,7 +363,7 @@ bool EdgeBundling::run() {
   //==========================================================
   gridGraph = graph->getSubGraph("Voronoi");
   gridGraph->setName("Grid Graph");
-  OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
+  TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
     if (ntype[i] == 1 && gridGraph->isElement(e)) {
       gridGraph->delEdge(e);
     }
@@ -402,7 +403,7 @@ bool EdgeBundling::run() {
   //==========================================================
   EdgeStaticProperty<double> mWeights(graph);
   EdgeStaticProperty<double> mWeightsInit(graph);
-  OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
+  TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, [&](edge e, unsigned int i) {
     pair<node, node> ends = graph->ends(e);
     const Coord &a = layout->getNodeValue(ends.first);
     const Coord &b = layout->getNodeValue(ends.second);
@@ -481,7 +482,7 @@ bool EdgeBundling::run() {
             toTreatByThreads.push_back(n);
 
             if ((optimizationLevel == 3) &&
-                (toTreatByThreads.size() < OpenMPManager::getNumberOfThreads())) {
+                (toTreatByThreads.size() < ThreadManager::getNumberOfThreads())) {
               for (auto tmp : vertexCoverGraph->getInOutNodes(n))
                 blockNodes.insert(tmp);
             }
@@ -492,7 +493,7 @@ bool EdgeBundling::run() {
           toDelete.push_back(n);
         }
 
-        if (toTreatByThreads.size() >= OpenMPManager::getNumberOfThreads())
+        if (toTreatByThreads.size() >= ThreadManager::getNumberOfThreads())
           break;
       }
 
@@ -507,7 +508,7 @@ bool EdgeBundling::run() {
       int nbThreads = toTreatByThreads.size();
 
       if (iteration < MAX_ITER - 1) {
-        OMP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
+        TLP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
 
@@ -523,12 +524,13 @@ bool EdgeBundling::run() {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
               // when we are not using coloration edge can be treated two times
-              OMP_CRITICAL_SECTION(EDGETREATED) {
+              TLP_LOCK_SECTION(EDGETREATED) {
                 if (edgeTreated.get(e.id))
                   stop = true;
 
                 edgeTreated.set(e.id, true);
               }
+              TLP_UNLOCK_SECTION(EDGETREATED);
 
               if (stop) {
                 continue;
@@ -539,7 +541,7 @@ bool EdgeBundling::run() {
           }
         });
       } else {
-        OMP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
+        TLP_PARALLEL_MAP_INDICES(nbThreads, [&](unsigned int j) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
 
@@ -553,12 +555,13 @@ bool EdgeBundling::run() {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
               // when we are not using colration edge can be treated two times
-              OMP_CRITICAL_SECTION(EDGETREATED) {
+              TLP_LOCK_SECTION(EDGETREATED) {
                 if (edgeTreated.get(e.id))
                   stop = true;
 
                 edgeTreated.set(e.id, true);
               }
+              TLP_UNLOCK_SECTION(EDGETREATED);
 
               if (stop)
                 continue;
@@ -599,7 +602,7 @@ bool EdgeBundling::run() {
 
     // Adjust weights of routing grid.
     if (iteration < MAX_ITER - 1) {
-      OMP_PARALLEL_MAP_EDGES(gridGraph, [&](edge e) {
+      TLP_PARALLEL_MAP_EDGES(gridGraph, [&](edge e) {
         auto ePos = graph->edgePos(e);
 
         if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap) {
@@ -659,7 +662,7 @@ bool EdgeBundling::run() {
     graph->delAllSubGraphs(gridGraph);
   }
 
-  OpenMPManager::setNumberOfThreads(OpenMPManager::getNumberOfProcs());
+  ThreadManager::setNumberOfThreads(ThreadManager::getNumberOfProcs());
 
   return true;
 }

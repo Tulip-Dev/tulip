@@ -75,7 +75,7 @@ static FTGLOutlineFont *getOutlineFont(const std::string &name) {
 
 static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutlineFont *&borderFont,
                           int &fontSize) {
-  OMP_CRITICAL_SECTION(init_tulip_font) {
+  TLP_LOCK_SECTION(init_tulip_font) {
     fontName = TulipBitmapDir + "font.ttf";
     font = getPolygonFont(fontName);
 
@@ -87,6 +87,7 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font, FTOutli
 
     fontSize = 20;
   }
+  TLP_UNLOCK_SECTION(init_tulip_font);
 }
 
 static const int SpaceBetweenLine = 5;

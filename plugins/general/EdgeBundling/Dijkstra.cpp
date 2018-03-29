@@ -31,6 +31,9 @@ MutableContainer<edge> Dijkstra::etlp2dik;
 VectorGraph Dijkstra::graph;
 bool Dijkstra::_initB = Dijkstra::initG();
 
+// define the lock needed to protect Dijkstra()/~Dijkstra()
+TLP_DEFINE_GLOBAL_LOCK(DijkstraProps);
+
 //============================================================
 void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
                             const EdgeStaticProperty<double> &weights, const set<node> &fous) {

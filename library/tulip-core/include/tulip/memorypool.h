@@ -72,12 +72,12 @@ public:
 #endif
     assert(sizeof(TYPE) == sizeofObj); // to prevent inheritance with different size of object
     TYPE *t;
-    t = _memoryChunkManager.getObject(OpenMPManager::getThreadNumber());
+    t = _memoryChunkManager.getObject();
     return t;
   }
 
   inline void operator delete(void *p) {
-    _memoryChunkManager.releaseObject(OpenMPManager::getThreadNumber(), p);
+    _memoryChunkManager.releaseObject(p);
   }
 
 private:
@@ -91,8 +91,8 @@ private:
       }
     }
 
-    TYPE *getObject(size_t threadId) {
-
+    TYPE *getObject() {
+      unsigned int threadId = tlp::ThreadManager::getThreadNumber();
       TYPE *result = nullptr;
 
       if (_freeObject[threadId].empty()) {
@@ -114,7 +114,8 @@ private:
       return result;
     }
 
-    void releaseObject(size_t threadId, void *p) {
+    void releaseObject(void *p) {
+      unsigned int threadId = tlp::ThreadManager::getThreadNumber();
       _freeObject[threadId].push_back(p);
     }
 

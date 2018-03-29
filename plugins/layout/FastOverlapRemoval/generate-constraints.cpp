@@ -24,6 +24,7 @@
 
 using std::set;
 using std::vector;
+using namespace tlp;
 
 namespace vpsc {
 std::ostream &operator<<(std::ostream &os, const Rectangle &r) {
@@ -197,7 +198,7 @@ int compare_events(const void *a, const void *b) {
  */
 int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], Constraint **&cs,
                                                const bool useNeighbourLists) {
-  OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
     vars[i].desiredPosition = rs[i].getCentreX();
     Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreX());
     events[2 * i] = new Event(Open, v, rs[i].getMinY());
@@ -287,7 +288,7 @@ int ConstraintsGenerator::generateXConstraints(Rectangle rs[], Variable vars[], 
  */
 int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[], Constraint **&cs) {
 
-  OMP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(n, [&](unsigned int i) {
     vars[i].desiredPosition = rs[i].getCentreY();
     Node *v = new Node(&vars[i], &rs[i], rs[i].getCentreY());
     events[2 * i] = new Event(Open, v, rs[i].getMinX());

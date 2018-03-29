@@ -51,16 +51,16 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box, const Coord &centerSce
 
 GlQuadTreeLODCalculator::GlQuadTreeLODCalculator()
     : haveToCompute(true), haveToInitObservers(true),
-      seBBIndex(2 * OpenMPManager::getNumberOfThreads()),
-      eBBOffset(OpenMPManager::getNumberOfThreads()), currentGraph(nullptr),
+      seBBIndex(2 * ThreadManager::getNumberOfThreads()),
+      eBBOffset(ThreadManager::getNumberOfThreads()), currentGraph(nullptr),
       layoutProperty(nullptr), sizeProperty(nullptr), selectionProperty(nullptr) {
   threadSafe = true;
   // we have to deal with
-  // OpenMPManager::getNumberOfThreads() bounding boxes for nodes
-  // OpenMPManager::getNumberOfThreads() bounding boxes for edges
+  // ThreadManager::getNumberOfThreads() bounding boxes for nodes
+  // ThreadManager::getNumberOfThreads() bounding boxes for edges
   // 1 bounding box for simple entities
-  noBBCheck.assign(2 * OpenMPManager::getNumberOfThreads() + 1, false);
-  bbs.resize(2 * OpenMPManager::getNumberOfThreads() + 1);
+  noBBCheck.assign(2 * ThreadManager::getNumberOfThreads() + 1, false);
+  bbs.resize(2 * ThreadManager::getNumberOfThreads() + 1);
 }
 
 GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
@@ -179,7 +179,7 @@ void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity *entity,
 
 void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id, unsigned int pos,
                                                  const BoundingBox &bb) {
-  auto ti = eBBOffset + OpenMPManager::getThreadNumber();
+  auto ti = eBBOffset + ThreadManager::getThreadNumber();
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
   currentLayerLODUnit->edgesLODVector[pos].init(id, pos, bb);
@@ -316,7 +316,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
       entitiesQuadTree.push_back(nullptr);
 
     bool bbsOK = false;
-    for (unsigned int i = 0; i < OpenMPManager::getNumberOfThreads(); ++i) {
+    for (unsigned int i = 0; i < ThreadManager::getNumberOfThreads(); ++i) {
       if (noBBCheck[i]) {
         bbsOK = true;
         break;
@@ -337,7 +337,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
     }
 
     bbsOK = false;
-    for (unsigned int i = 0; i < OpenMPManager::getNumberOfThreads(); ++i) {
+    for (unsigned int i = 0; i < ThreadManager::getNumberOfThreads(); ++i) {
       if (noBBCheck[eBBOffset + i]) {
         bbsOK = true;
         break;
@@ -361,37 +361,34 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
     size_t nbSimples = layerLODUnit->simpleEntitiesLODVector.size();
     size_t nbNodes = layerLODUnit->nodesLODVector.size();
     size_t nbEdges = layerLODUnit->edgesLODVector.size();
-    OMP(parallel) {
-      OMP(sections nowait) {
-        OMP(section) {
-          for (size_t i = 0; i < nbSimples; ++i) {
-            const auto &entity = layerLODUnit->simpleEntitiesLODVector[i];
-            entitiesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox, entity.entity);
-          }
-        }
-        OMP(section) {
-          for (size_t i = 0; i < nbNodes; ++i) {
-            const auto &entity = layerLODUnit->nodesLODVector[i];
-            nodesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
-                                                           std::make_pair(entity.id, entity.pos));
-          }
-        }
-        OMP(section) {
-          for (size_t i = 0; i < nbEdges; ++i) {
-            // This code is here to expand edge bounding box when we have an edge with direction
-            // (0,0,x)
-            auto &entity = layerLODUnit->edgesLODVector[i];
-            if (entity.boundingBox[0][0] == entity.boundingBox[1][0] &&
-                entity.boundingBox[0][1] == entity.boundingBox[1][1]) {
-              entity.boundingBox.expand(entity.boundingBox[1] + Coord(0.01f, 0.01f, 0));
-            }
-
-            edgesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
-                                                           std::make_pair(entity.id, entity.pos));
-          }
-        }
+    auto thrdF1 = [&]() {
+      for (size_t i = 0; i < nbSimples; ++i) {
+	const auto &entity = layerLODUnit->simpleEntitiesLODVector[i];
+	entitiesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox, entity.entity);
       }
-    }
+    };
+    auto thrdF2 = [&]() {
+      for (size_t i = 0; i < nbNodes; ++i) {
+	const auto &entity = layerLODUnit->nodesLODVector[i];
+	nodesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
+						       std::make_pair(entity.id, entity.pos));
+      }
+    };
+    auto thrdF3 = [&]() {
+      for (size_t i = 0; i < nbEdges; ++i) {
+	// This code is here to expand edge bounding box when we have an edge with direction
+	// (0,0,x)
+	auto &entity = layerLODUnit->edgesLODVector[i];
+	if (entity.boundingBox[0][0] == entity.boundingBox[1][0] &&
+	    entity.boundingBox[0][1] == entity.boundingBox[1][1]) {
+	  entity.boundingBox.expand(entity.boundingBox[1] + Coord(0.01f, 0.01f, 0));
+	}
+
+	edgesQuadTree[quadTreesVectorPosition]->insert(entity.boundingBox,
+						       std::make_pair(entity.id, entity.pos));
+      }
+    };
+    TLP_PARALLEL_SECTIONS(thrdF1, thrdF2, thrdF3);
 
     layerLODUnit->simpleEntitiesLODVector.clear();
     layerLODUnit->nodesLODVector.clear();
@@ -430,72 +427,69 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit, con
   vector<GlSimpleEntity *> resEntities;
 
   // Get result of quadtrees
-  OMP(parallel) {
-    OMP(sections nowait) {
-      OMP(section) {
-        if ((renderingEntitiesFlag & RenderingNodes) != 0) {
-          auto &quadTree = nodesQuadTree[quadTreesVectorPosition];
-          if (quadTree) {
-            if (aX == 0 && aY == 0) {
-              if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0) {
-                quadTree->getElementsWithRatio(cameraBoundingBox, resNodes, ratio);
-              } else {
-                quadTree->getElements(cameraBoundingBox, resNodes);
-              }
-            } else {
-              quadTree->getElements(resNodes);
-            }
-          }
-        }
-        size_t nbRes = resNodes.size();
-        layerLODUnit->nodesLODVector.resize(nbRes);
-      }
-      OMP(section) {
-        if ((renderingEntitiesFlag & RenderingEdges) != 0) {
-          auto &quadTree = edgesQuadTree[quadTreesVectorPosition];
-          if (quadTree) {
-            if (aX == 0 && aY == 0) {
-              if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0) {
-                quadTree->getElementsWithRatio(cameraBoundingBox, resEdges, ratio);
-              } else {
-                quadTree->getElements(cameraBoundingBox, resEdges);
-              }
-            } else {
-              quadTree->getElements(resEdges);
-            }
-          }
-        }
-        size_t nbRes = resEdges.size();
-        layerLODUnit->edgesLODVector.resize(nbRes);
+  auto thrdF1 = [&]() {
+    if ((renderingEntitiesFlag & RenderingNodes) != 0) {
+      auto &quadTree = nodesQuadTree[quadTreesVectorPosition];
+      if (quadTree) {
+	if (aX == 0 && aY == 0) {
+	  if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0) {
+	    quadTree->getElementsWithRatio(cameraBoundingBox, resNodes, ratio);
+	  } else {
+	    quadTree->getElements(cameraBoundingBox, resNodes);
+	  }
+	} else {
+	  quadTree->getElements(resNodes);
+	}
       }
     }
-    OMP(master) {
-      if ((renderingEntitiesFlag & RenderingSimpleEntities) != 0) {
-        auto &quadTree = entitiesQuadTree[quadTreesVectorPosition];
-        if (quadTree) {
-          if (aX == 0 && aY == 0) {
-            if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0)
-              quadTree->getElementsWithRatio(cameraBoundingBox, resEntities, ratio);
-            else
-              quadTree->getElements(cameraBoundingBox, resEntities);
-          } else {
-            quadTree->getElements(resEntities);
-          }
-        }
-      }
-      size_t nbRes = resEntities.size();
-      for (size_t i = 0; i < nbRes; ++i) {
-        layerLODUnit->simpleEntitiesLODVector.emplace_back(resEntities[i],
-                                                           resEntities[i]->getBoundingBox());
+    size_t nbRes = resNodes.size();
+    layerLODUnit->nodesLODVector.resize(nbRes);
+  };
+  auto thrdF2 = [&]() {
+    if ((renderingEntitiesFlag & RenderingEdges) != 0) {
+      auto &quadTree = edgesQuadTree[quadTreesVectorPosition];
+      if (quadTree) {
+	if (aX == 0 && aY == 0) {
+	  if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0) {
+	    quadTree->getElementsWithRatio(cameraBoundingBox, resEdges, ratio);
+	  } else {
+	    quadTree->getElements(cameraBoundingBox, resEdges);
+	  }
+	} else {
+	  quadTree->getElements(resEdges);
+	}
       }
     }
-  }
-  OMP_PARALLEL_MAP_INDICES(resNodes.size(), [&](unsigned int i) {
+    size_t nbRes = resEdges.size();
+    layerLODUnit->edgesLODVector.resize(nbRes);
+  };
+  auto thrdF3 = [&]() {
+    if ((renderingEntitiesFlag & RenderingSimpleEntities) != 0) {
+      auto &quadTree = entitiesQuadTree[quadTreesVectorPosition];
+      if (quadTree) {
+	if (aX == 0 && aY == 0) {
+	  if ((renderingEntitiesFlag & RenderingWithoutRemove) == 0)
+	    quadTree->getElementsWithRatio(cameraBoundingBox, resEntities, ratio);
+	  else
+	    quadTree->getElements(cameraBoundingBox, resEntities);
+	} else {
+	  quadTree->getElements(resEntities);
+	}
+      }
+    }
+    size_t nbRes = resEntities.size();
+    for (size_t i = 0; i < nbRes; ++i) {
+      layerLODUnit->simpleEntitiesLODVector.emplace_back(resEntities[i],
+							 resEntities[i]->getBoundingBox());
+    }
+  };
+  TLP_PARALLEL_SECTIONS(thrdF1, thrdF2, thrdF3);
+  TLP_PARALLEL_MAP_INDICES(resNodes.size(), [&](unsigned int i) {
     const auto &res = resNodes[i];
     GlNode glNode(res.first, res.second);
     layerLODUnit->nodesLODVector[i].init(res.first, res.second, glNode.getBoundingBox(inputData));
   });
-  OMP_PARALLEL_MAP_INDICES(resEdges.size(), [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(resEdges.size(), [&](unsigned int i) {
     const auto &res = resEdges[i];
     GlEdge glEdge(res.first, res.second);
     layerLODUnit->edgesLODVector[i].init(res.first, res.second, glEdge.getBoundingBox(inputData));

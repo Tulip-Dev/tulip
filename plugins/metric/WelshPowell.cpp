@@ -90,7 +90,7 @@ public:
     unsigned int nbNodes = nodes.size();
     std::vector<nodeInfo> nodesInfo(nbNodes);
 
-    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
       nodeInfo nInfo;
       nInfo.n = n, nInfo.val = graph->deg(n);
       nodesInfo[i] = nInfo;
@@ -101,7 +101,7 @@ public:
     // build a map
     NodeStaticProperty<unsigned int> toNodesInfo(graph);
 
-    OMP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
+    TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
       nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;

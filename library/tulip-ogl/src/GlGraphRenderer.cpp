@@ -66,9 +66,9 @@ void GlGraphRenderer::visitNodes(Graph *graph, GlSceneVisitor *visitor) {
   };
 
   if (visitor->isThreadSafe())
-    OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, fn);
+    TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, fn);
   else
-    MAP_NODES_AND_INDICES(graph, fn);
+    TLP_MAP_NODES_AND_INDICES(graph, fn);
 }
 
 void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor) {
@@ -78,8 +78,8 @@ void GlGraphRenderer::visitEdges(Graph *graph, GlSceneVisitor *visitor) {
   };
 
   if (visitor->isThreadSafe())
-    OMP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
   else
-    MAP_EDGES_AND_INDICES(graph, fn);
+    TLP_MAP_EDGES_AND_INDICES(graph, fn);
 }
 }

@@ -100,7 +100,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
   const std::vector<edge> &gEdges = graph.edges();
   CPPUNIT_ASSERT(gEdges.size() == NB_NODES);
 
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     CPPUNIT_ASSERT(gEdges[i] == edges[i]);
 
     // check ends
@@ -134,7 +134,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
 
   // check edges per node
   const std::vector<node> &gNodes = graph.nodes();
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     CPPUNIT_ASSERT(gNodes[i] == nodes[i]);
     // check degree
     CPPUNIT_ASSERT(graph.deg(nodes[i]) == 2);
@@ -162,7 +162,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
   });
 
   // check neighbours per node
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     // check out neighbours
     Iterator<node> *itn = graph.getOutNodes(nodes[i]);
     CPPUNIT_ASSERT(itn->hasNext());
@@ -241,7 +241,7 @@ static void checkGraphAfterDelEdge() {
 
   // check edges
   CPPUNIT_ASSERT(graph.numberOfEdges() == NB_NODES / 2);
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     CPPUNIT_ASSERT(graph.isElement(edges[i]) == ((i % 2) == 0));
   });
   i = 0;
@@ -251,7 +251,7 @@ static void checkGraphAfterDelEdge() {
   }
   CPPUNIT_ASSERT(i == NB_NODES / 2);
 
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     // check out neighbours
     Iterator<node> *itn = graph.getOutNodes(nodes[i]);
     if (i % 2 == 0) {
@@ -307,16 +307,16 @@ static void checkGraphAfterDelNode() {
   }
   CPPUNIT_ASSERT(i == NB_NODES / 4);
 
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     CPPUNIT_ASSERT(graph.isElement(nodes[i]) == ((i % 4) != 0));
   });
   // check edges
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     CPPUNIT_ASSERT(graph.isElement(edges[i]) == ((i % 4) == 2));
   });
 
   // check neighbours per node
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     if (i % 4) {
       // check out neighbours
       Iterator<node> *itn = graph.getOutNodes(nodes[i]);
@@ -369,7 +369,7 @@ void checkGraphAfterDelEdges() {
   CPPUNIT_ASSERT(i == 0);
 
   // check neighbours per node
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     if (i % 4) {
       // check out neighbours
       Iterator<node> *itn = graph.getOutNodes(nodes[i]);
@@ -438,7 +438,7 @@ void VectorGraphTest::testAddDelEdges() {
   // check edges
   const std::vector<edge> &nEdges = graph.star(nodes[0]);
   CPPUNIT_ASSERT(nEdges.size() == NB_NODES - 1);
-  OMP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
     edge e = nEdges[i];
     CPPUNIT_ASSERT(e == edges[i]);
     // check ends
@@ -466,7 +466,7 @@ void VectorGraphTest::testAddDelEdges() {
 
   const std::vector<node> &nNodes = graph.adj(nodes[0]);
   CPPUNIT_ASSERT(nNodes.size() == NB_NODES - 1);
-  OMP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
     node n = nNodes[i];
     CPPUNIT_ASSERT(n == nodes[i + 1]);
     // check degree
@@ -493,7 +493,7 @@ void VectorGraphTest::testAddDelEdges() {
   // swap order of nodes[0] edges
   std::sort(edges.begin(), edges.end(), std::greater<edge>());
   // check edge ordering
-  OMP_PARALLEL_MAP_INDICES(NB_NODES - 2,
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 2,
                            [&](unsigned int i) { CPPUNIT_ASSERT(edges[i] > edges[i + 1]); });
   // swap edges of nodes[0]
   graph.setEdgeOrder(nodes[0], edges);
@@ -501,7 +501,7 @@ void VectorGraphTest::testAddDelEdges() {
   // check edges
   const std::vector<edge> &n0Edges = graph.star(nodes[0]);
   CPPUNIT_ASSERT(n0Edges.size() == NB_NODES - 1);
-  OMP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
     edge e = n0Edges[i];
     CPPUNIT_ASSERT(e == edges[i]);
     // check ends
@@ -529,7 +529,7 @@ void VectorGraphTest::testAddDelEdges() {
   // nNodes = graph.adj(nodes[0]);
   CPPUNIT_ASSERT(nNodes.size() == NB_NODES - 1);
 
-  OMP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
     node n = nNodes[i];
     CPPUNIT_ASSERT(n == nodes[NB_NODES - i - 1]);
     // check degree
@@ -568,7 +568,7 @@ void VectorGraphTest::testAddDelEdges() {
   CPPUNIT_ASSERT(graph.outdeg(nodes[0]) == 0);
   // check in degree
   CPPUNIT_ASSERT(graph.indeg(nodes[0]) == 0);
-  OMP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES - 1, [&](unsigned int i) {
     node n = nodes[i + 1];
     // check degree
     CPPUNIT_ASSERT(graph.deg(n) == 0);
@@ -601,7 +601,7 @@ void checkGraphAfterReverseEdges() {
   // check edges
   const std::vector<edge> &nEdges = graph.edges();
   CPPUNIT_ASSERT(nEdges.size() == NB_NODES);
-  OMP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
+  TLP_PARALLEL_MAP_INDICES(NB_NODES, [&](unsigned int i) {
     edge e = nEdges[i];
     CPPUNIT_ASSERT(e == edges[i]);
 

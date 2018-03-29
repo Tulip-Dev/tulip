@@ -91,14 +91,14 @@ struct PageRank : public DoubleAlgorithm {
 
     for (unsigned int k = 0; k < kMax + 1; ++k) {
       if (directed) {
-        OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+        TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
           for (auto nin : graph->getInNodes(n))
             n_sum += pr.getNodeValue(nin) / graph->outdeg(nin);
           next_pr[i] = one_minus_d + d * n_sum;
         });
       } else {
-        OMP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
+        TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double n_sum = 0;
           for (auto nin : graph->getInOutNodes(n))
             n_sum += pr.getNodeValue(nin) / graph->deg(nin);

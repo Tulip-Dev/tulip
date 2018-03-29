@@ -18,10 +18,7 @@
  */
 
 #include <tulip/ParallelTools.h>
-
-#include <algorithm>
-#include <iostream>
-#include <tuple>
+#ifndef TLP_NO_THREADS
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -36,75 +33,104 @@ struct OpenMPDefaultOptions {
 
 static OpenMPDefaultOptions openMpDefaultOptions;
 
-#endif
-
-#ifdef _OPENMP
-unsigned int tlp::OpenMPManager::maxNumberOfThreads(omp_get_num_procs());
 #else
-unsigned int tlp::OpenMPManager::maxNumberOfThreads(1);
+
+#include <condition_variable>
+#include <unordered_map>
+#include <tulip/IdManager.h>
+
 #endif
 
-unsigned int tlp::OpenMPManager::getNumberOfProcs() {
+#endif
+
+namespace tlp {
+
+#ifndef TLP_NO_THREADS
+#ifdef _OPENMP
+unsigned int tlp::ThreadManager::maxNumberOfThreads(omp_get_num_procs());
+#else
+unsigned int ThreadManager::maxNumberOfThreads(std::thread::hardware_concurrency());
+#endif
+#else
+unsigned int ThreadManager::maxNumberOfThreads(1);
+#endif
+
+unsigned int ThreadManager::getNumberOfProcs() {
+#ifndef TLP_NO_THREADS
 #ifdef _OPENMP
   return omp_get_num_procs();
 #else
-  return 1;
+  return std::thread::hardware_concurrency();
 #endif
-}
-
-unsigned int tlp::OpenMPManager::getNumberOfThreads() {
-#ifdef _OPENMP
-  return maxNumberOfThreads;
 #else
   return 1;
 #endif
 }
 
-void tlp::OpenMPManager::setNumberOfThreads(unsigned int nbThreads) {
-#ifdef _OPENMP
+unsigned int ThreadManager::getNumberOfThreads() {
+  return maxNumberOfThreads;
+}
+
+void ThreadManager::setNumberOfThreads(unsigned int nbThreads) {
+#ifndef TLP_NO_THREADS
   maxNumberOfThreads = std::min(nbThreads, uint(TLP_MAX_NB_THREADS));
+#ifdef _OPENMP
   omp_set_num_threads(maxNumberOfThreads);
+#endif
 #else
   std::ignore = nbThreads;
 #endif
 }
 
-unsigned int tlp::OpenMPManager::getThreadNumber() {
+#if !defined(TLP_NO_THREADS) && !defined(_OPENMP)
+
+// the manager of the thread associated number
+// which must be in the range between 0 and maxNumberOfThreads
+// 0 is reserved to the main thread
+static IdContainer<uint> tNumManager;
+// a mutex to ensure serialisation when allocating the thread number
+static std::mutex tNumMtx;
+// the global map used to register the thread number
+static std::unordered_map<std::thread::id, uint> tNumMap;
+
+void ThreadManager::allocateThreadNumber() {
+  // exclusive access to tNumManager
+  tNumMtx.lock();
+  // 0 is reserved for main thread
+  auto num = tNumManager.get() + 1;
+  auto tNum = std::this_thread::get_id();
+  tNumMap[tNum] = num;
+  tNumMtx.unlock();
+}
+
+void ThreadManager::freeThreadNumber() {
+  // exclusive access to tNumManager
+  tNumMtx.lock();
+  auto tNum = std::this_thread::get_id();
+  unsigned int num = tNumMap[tNum];
+  tNumMap.erase(tNum);
+  assert(num > 0);
+  tNumManager.free(num - 1);
+  tNumMtx.unlock();
+}
+
+#endif
+
+unsigned int ThreadManager::getThreadNumber() {
+#ifndef TLP_NO_THREADS
 #ifdef _OPENMP
   return omp_get_thread_num();
 #else
+  tNumMtx.lock();
+  auto it = tNumMap.find(std::this_thread::get_id());
+  if (it != tNumMap.end()) {
+      tNumMtx.unlock();
+      return it->second;
+  }
+  tNumMtx.unlock();
+#endif
+#endif
   return 0;
-#endif
 }
 
-void tlp::OpenMPManager::setNested(bool nested) {
-#ifdef _OPENMP
-  omp_set_nested(nested);
-#else
-  std::ignore = nested;
-#endif
-}
-
-bool tlp::OpenMPManager::nested() {
-#ifdef _OPENMP
-  return omp_get_nested();
-#else
-  return false;
-#endif
-}
-
-void tlp::OpenMPManager::setDynamic(bool dynamic) {
-#ifdef _OPENMP
-  omp_set_dynamic(dynamic);
-#else
-  std::ignore = dynamic;
-#endif
-}
-
-bool tlp::OpenMPManager::dynamic() {
-#ifdef _OPENMP
-  return omp_get_dynamic();
-#else
-  return false;
-#endif
 }

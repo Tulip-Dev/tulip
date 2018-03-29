@@ -32,12 +32,16 @@
 
 using namespace std;
 
+// we need a lock to protect the allocation/free
+// of neede VectorGraph properties
+TLP_DECLARE_GLOBAL_LOCK(DijkstraProps);
+
 class Dijkstra {
 
 public:
   //============================================================
   Dijkstra() {
-    OMP_CRITICAL_SECTION(DIKCREATE) {
+    TLP_GLOBALLY_LOCK_SECTION(DijkstraProps) {
       graph.alloc(forbiddenNodes);
       graph.alloc(usedEdges);
       graph.alloc(nodeDistance);
@@ -45,10 +49,11 @@ public:
       graph.alloc(resultEdges);
       graph.alloc(mapDik);
     }
+    TLP_GLOBALLY_UNLOCK_SECTION(DijkstraProps);
   }
 
   ~Dijkstra() {
-    OMP_CRITICAL_SECTION(DIKCREATE) {
+    TLP_GLOBALLY_LOCK_SECTION(DijkstraProps) {
       graph.free(forbiddenNodes);
       graph.free(usedEdges);
       graph.free(nodeDistance);
@@ -56,6 +61,7 @@ public:
       graph.free(resultEdges);
       graph.free(mapDik);
     }
+    TLP_GLOBALLY_UNLOCK_SECTION(DijkstraProps);
   }
 
   static void loadGraph(const tlp::Graph *src) {
