@@ -79,8 +79,8 @@ class TLP_SCOPE ThreadManager {
 
   // create a thread dedicated to the execution of a function
   // used to iterate between begin and end indices
-  template<typename runFunction>
-    static inline std::thread* launchThread(const runFunction &f, uint begin, uint end) {
+  template <typename runFunction>
+  static inline std::thread *launchThread(const runFunction &f, uint begin, uint end) {
     auto thrdFunction = [&](uint begin, uint end) {
       allocateThreadNumber();
       f(begin, end);
@@ -92,13 +92,12 @@ class TLP_SCOPE ThreadManager {
 #endif
 
 public:
-
 #if !defined(TLP_NO_THREADS) && !defined(_OPENMP)
 
   // create a thread dedicated to the execution of a function
   // with no arguments
-  template<typename runFunction>
-    static inline std::thread* launchThread(const runFunction &f) {
+  template <typename runFunction>
+  static inline std::thread *launchThread(const runFunction &f) {
     auto thrdFunction = [&]() {
       allocateThreadNumber();
       f();
@@ -142,8 +141,7 @@ public:
       return;
 
     // compute the size of range indices for each thread
-    size_t nbPerThread = maxId == 1 ? 1 :
-      std::max(maxId / (maxNumberOfThreads - 1), size_t(2));
+    size_t nbPerThread = maxId == 1 ? 1 : std::max(maxId / (maxNumberOfThreads - 1), size_t(2));
     // begin and end indices of thread partition
     size_t begin = 0, end = nbPerThread;
     maxId -= end - begin;
@@ -153,8 +151,8 @@ public:
     while (maxId) {
       threads.push_back(launchThread(threadFunction, begin, end));
       if (nbPerThread > 1) {
-	if (maxNumberOfThreads - threads.size() == maxId)
-	  nbPerThread = 1;
+        if (maxNumberOfThreads - threads.size() == maxId)
+          nbPerThread = 1;
       }
       begin = end;
       end += std::min(nbPerThread, maxId);
@@ -192,7 +190,9 @@ public:
 
 #else
 
-#define TLP_LOCK_SECTION(mtx) static std::mutex mtx; mtx.lock();
+#define TLP_LOCK_SECTION(mtx)                                                                      \
+  static std::mutex mtx;                                                                           \
+  mtx.lock();
 #define TLP_UNLOCK_SECTION(mtx) mtx.unlock()
 #define TLP_DECLARE_GLOBAL_LOCK(mtx) extern std::mutex mtx
 #define TLP_DEFINE_GLOBAL_LOCK(mtx) std::mutex mtx
@@ -252,7 +252,7 @@ void inline TLP_PARALLEL_MAP_INDICES(size_t maxIdx, const IdxFunction &idxFuncti
   }
 #else
   auto threadFunction = [&](size_t begin, size_t end) {
-    for(; begin < end; ++begin) {
+    for (; begin < end; ++begin) {
       idxFunction(begin);
     }
   };
@@ -261,7 +261,8 @@ void inline TLP_PARALLEL_MAP_INDICES(size_t maxIdx, const IdxFunction &idxFuncti
 }
 
 template <typename EltType, typename IdxFunction>
-  void inline TLP_PARALLEL_MAP_VECTOR(const std::vector<EltType> &vect, const IdxFunction &idxFunction) {
+void inline TLP_PARALLEL_MAP_VECTOR(const std::vector<EltType> &vect,
+                                    const IdxFunction &idxFunction) {
 #ifdef _OPENMP
   auto maxIdx = vect.size();
   OMP(parallel for)
@@ -270,7 +271,7 @@ template <typename EltType, typename IdxFunction>
   }
 #else
   auto threadFunction = [&](size_t begin, size_t end) {
-    for(; begin < end; ++begin) {
+    for (; begin < end; ++begin) {
       idxFunction(vect[begin]);
     }
   };
@@ -280,7 +281,8 @@ template <typename EltType, typename IdxFunction>
 }
 
 template <typename EltType, typename IdxFunction>
-  void inline TLP_PARALLEL_MAP_VECTOR_AND_INDICES(const std::vector<EltType> &vect, const IdxFunction &idxFunction) {
+void inline TLP_PARALLEL_MAP_VECTOR_AND_INDICES(const std::vector<EltType> &vect,
+                                                const IdxFunction &idxFunction) {
 #ifdef _OPENMP
   auto maxIdx = vect.size();
   OMP(parallel for)
@@ -289,7 +291,7 @@ template <typename EltType, typename IdxFunction>
   }
 #else
   auto threadFunction = [&](size_t begin, size_t end) {
-    for(;begin < end; ++begin) {
+    for (; begin < end; ++begin) {
       idxFunction(vect[begin], begin);
     }
   };
@@ -305,7 +307,7 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2) {
   OMP(parallel) {
     OMP(sections nowait) {
       OMP(section) {
-	f1();
+        f1();
       }
     }
     OMP(master) {
@@ -325,16 +327,16 @@ void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2) {
 }
 
 template <typename F1, typename F2, typename F3>
-  void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3) {
+void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3) {
 #ifndef TLP_NO_THREADS
 #ifdef _OPENMP
   OMP(parallel) {
     OMP(sections nowait) {
       OMP(section) {
-	f1();
+        f1();
       }
       OMP(section) {
-	f2();
+        f2();
       }
     }
     OMP(master) {
@@ -358,19 +360,19 @@ template <typename F1, typename F2, typename F3>
 }
 
 template <typename F1, typename F2, typename F3, typename F4>
-  void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3, const F4 &f4) {
+void inline TLP_PARALLEL_SECTIONS(const F1 &f1, const F2 &f2, const F3 &f3, const F4 &f4) {
 #ifndef TLP_NO_THREADS
 #ifdef _OPENMP
   OMP(parallel) {
     OMP(sections nowait) {
       OMP(section) {
-	f1();
+        f1();
       }
       OMP(section) {
-	f2();
+        f2();
       }
       OMP(section) {
-	f3();
+        f3();
       }
     }
     OMP(master) {
@@ -396,7 +398,6 @@ template <typename F1, typename F2, typename F3, typename F4>
   f4();
 #endif
 }
-
 }
 
 #endif // TLP_PARALLEL_TOOLS_H

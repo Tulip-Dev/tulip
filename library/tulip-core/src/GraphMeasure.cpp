@@ -196,7 +196,8 @@ void tlp::clusteringCoefficient(const Graph *graph, MutableContainer<double> &cl
   tlp::NodeStaticProperty<double> vClusters(graph);
   tlp::clusteringCoefficient(graph, vClusters, maxDepth);
 
-  TLP_MAP_NODES_AND_INDICES(graph, [&](node n, unsigned int i) { clusters.set(n.id, vClusters[i]); });
+  TLP_MAP_NODES_AND_INDICES(graph,
+                            [&](node n, unsigned int i) { clusters.set(n.id, vClusters[i]); });
 }
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph, tlp::NodeStaticProperty<double> &clusters,

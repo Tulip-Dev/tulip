@@ -106,13 +106,13 @@ bool EccentricityMetric::run() {
   double diameter = 1.0;
   std::atomic<bool> stopfor(false);
   TLP_PARALLEL_MAP_INDICES(nbNodes, [&](unsigned int i) {
-      if (stopfor.load())
+    if (stopfor.load())
       return;
 
     if (ThreadManager::getThreadNumber() == 0) {
       if (pluginProgress->progress(i, nbNodes / ThreadManager::getNumberOfThreads()) !=
           TLP_CONTINUE) {
-	stopfor = true;
+        stopfor = true;
       }
     }
 

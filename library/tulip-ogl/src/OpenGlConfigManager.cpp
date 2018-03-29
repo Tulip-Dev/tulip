@@ -73,7 +73,8 @@ bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
   TLP_LOCK_SECTION(OpenGlConfigManagerExtensionSupported) {
     auto it = checkedExtensions.find(extensionName);
     if (it == checkedExtensions.end()) {
-      supported = checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
+      supported = checkedExtensions[extensionName] =
+          (glewIsSupported(extensionName.c_str()) == GL_TRUE);
     } else
       supported = it->second;
   }

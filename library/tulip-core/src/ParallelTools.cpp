@@ -124,13 +124,12 @@ unsigned int ThreadManager::getThreadNumber() {
   tNumMtx.lock();
   auto it = tNumMap.find(std::this_thread::get_id());
   if (it != tNumMap.end()) {
-      tNumMtx.unlock();
-      return it->second;
+    tNumMtx.unlock();
+    return it->second;
   }
   tNumMtx.unlock();
 #endif
 #endif
   return 0;
 }
-
 }

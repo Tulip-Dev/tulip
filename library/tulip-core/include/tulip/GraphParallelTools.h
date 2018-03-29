@@ -28,7 +28,8 @@ namespace tlp {
 // ===================================================================================
 
 template <typename NodeIndexFunction>
-void inline TLP_MAP_NODES_AND_INDICES(const tlp::Graph *graph, const NodeIndexFunction &nodeIndexFunction) {
+void inline TLP_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
+                                      const NodeIndexFunction &nodeIndexFunction) {
   unsigned int i = 0;
   for (auto n : graph->nodes()) {
     nodeIndexFunction(n, i++);
@@ -102,7 +103,8 @@ void inline TLP_PARALLEL_MAP_NODES_AND_INDICES(const tlp::Graph *graph,
 // ===================================================================================
 
 template <typename EdgeIndexFunction>
-void inline TLP_MAP_EDGES_AND_INDICES(const tlp::Graph *graph, const EdgeIndexFunction &edgeIndexFunction) {
+void inline TLP_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
+                                      const EdgeIndexFunction &edgeIndexFunction) {
   unsigned int i = 0;
   for (auto e : graph->edges()) {
     edgeIndexFunction(e, i++);
@@ -172,7 +174,6 @@ void inline TLP_PARALLEL_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
                                                const EdgeFunction &edgeFunction) {
   TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::edge, EdgeFunction>(graph->edges(), edgeFunction);
 }
-
 }
 
 #endif

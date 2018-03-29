@@ -425,8 +425,8 @@ void Observable::sendEvent(const Event &message) {
         } else if (!queuedEvent) {
           delayedEventAdded = true;
           TLP_GLOBALLY_LOCK_SECTION(ObservableGraphUpdate) {
-	    _oDelayedEvents.insert(make_pair(_n, src));
-	  }
+            _oDelayedEvents.insert(make_pair(_n, src));
+          }
           TLP_GLOBALLY_UNLOCK_SECTION(ObservableGraphUpdate);
         }
       }
