@@ -18,7 +18,13 @@
  */
 
 #include <tulip/ParallelTools.h>
-#ifndef TLP_NO_THREADS
+
+#ifdef TLP_NO_THREADS
+// the header below is needed
+// to have access to std::ignore
+#include <tuple>
+
+#else
 
 #ifdef _OPENMP
 #include <omp.h>

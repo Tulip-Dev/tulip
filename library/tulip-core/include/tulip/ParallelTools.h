@@ -210,7 +210,8 @@ public:
 
 #define TLP_LOCK_SECTION(mtx)
 #define TLP_UNLOCK_SECTION(mtx)
-#define TLP_DEFINE_GLOBAL_LOCK(mtx)
+#define TLP_DECLARE_GLOBAL_LOCK(mtx) extern void mtx()
+#define TLP_DEFINE_GLOBAL_LOCK(mtx) extern void mtx()
 #define TLP_GLOBALLY_LOCK_SECTION(mtx)
 #define TLP_GLOBALLY_UNLOCK_SECTION(mtx)
 
