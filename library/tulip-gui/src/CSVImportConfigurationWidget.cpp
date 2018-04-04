@@ -312,7 +312,7 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
                 QString(
                     "row %1: the number of fields (%2) is greater than the number of columns (%3)")
                     .arg(row + 1)
-		    .arg(lineTokens.size())
+                    .arg(lineTokens.size())
                     .arg(headerColumnCount),
                 QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel)
           return false;

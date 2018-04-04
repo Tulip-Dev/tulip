@@ -206,23 +206,23 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     assert(pos < str.size());
 
     bool inText = false;
-    while(pos < str.length() &&
-	  (inText || (str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+    while (pos < str.length() &&
+           (inText || (str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
-	pos += 1;
-	if (!inText) {
-	  inText = true;
-	  // go the the next text delimiter .
-	  pos = str.find_first_of(textDelim, pos);
-	} else {
-	  // check for double textDelim
-	  if (str[pos] == textDelim)
-	    pos += 1;
-	  else
-	    inText = false;
-	}
-      }
-      else pos += 1;
+        pos += 1;
+        if (!inText) {
+          inText = true;
+          // go the the next text delimiter .
+          pos = str.find_first_of(textDelim, pos);
+        } else {
+          // check for double textDelim
+          if (str[pos] == textDelim)
+            pos += 1;
+          else
+            inText = false;
+        }
+      } else
+        pos += 1;
     }
 
     // if merge delimiter, skip the next char if it is a delimiter
@@ -295,7 +295,7 @@ string CSVSimpleParser::treatToken(const string &token, int, int) {
   // remove double " in text delimited token
   if (currentToken[0] == '"' && currentToken.size() > 2) {
     beginPos = 0;
-    while((beginPos = currentToken.find("\"\"", beginPos)) != std::string::npos) {
+    while ((beginPos = currentToken.find("\"\"", beginPos)) != std::string::npos) {
       currentToken.replace(beginPos, 2, "\"");
       beginPos += 1;
     }
