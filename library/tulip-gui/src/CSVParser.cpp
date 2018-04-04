@@ -192,26 +192,38 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
 }
 
 void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const QString &delimiters,
-                               const bool mergedelim, char textDelimiter, unsigned int) {
+                               const bool mergedelim, char textDelim, unsigned int) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
   bool quit = false;
 
-  string delim(QStringToTlpString(delimiters));
+  auto delim = QStringToTlpString(delimiters);
 
   while (!quit) {
     // Don't search tokens in chars sourrounded by text delimiters.
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    if (str[pos] == textDelimiter) {
-      // Go the the next text delimiter .
-      pos = str.find_first_of(textDelimiter, pos + 1);
+    bool inText = false;
+    while(pos < str.length() &&
+	  (inText || (str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+      if (str[pos] == textDelim) {
+	pos += 1;
+	if (!inText) {
+	  inText = true;
+	  // go the the next text delimiter .
+	  pos = str.find_first_of(textDelim, pos);
+	} else {
+	  // check for double textDelim
+	  if (str[pos] == textDelim)
+	    pos += 1;
+	  else
+	    inText = false;
+	}
+      }
+      else pos += 1;
     }
-
-    // Find the delimiter
-    pos = str.find(delim, pos);
 
     // if merge delimiter, skip the next char if it is a delimiter
     if (mergedelim) {
@@ -221,15 +233,8 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
 
     // Extracting tokens.
     assert(lastPos != string::npos);
-    size_t nbExtractedChars = string::npos;
-
-    if (pos == string::npos) {
-      // If no delimiter found extract the rest of the line.
-      nbExtractedChars = pos;
-    } else {
-      // Compute the extracted char number
-      nbExtractedChars = pos - lastPos;
-    }
+    // Compute the extracted char number
+    size_t nbExtractedChars = pos - lastPos;
 
     try {
       tokens.push_back(str.substr(lastPos, nbExtractedChars));
@@ -239,9 +244,10 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     }
 
     // Go to the begin of the next token.
-    if (pos != string::npos && pos + 1 < str.size()) {
+    if (pos + 1 < str.size()) {
       // Skip the delimiter.
       ++pos;
+      assert(pos > lastPos);
       // Store the begin position of the next token
       lastPos = pos;
     } else {
@@ -283,7 +289,17 @@ string CSVSimpleParser::treatToken(const string &token, int, int) {
       beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
     }
   }
+  if (currentToken == "\"\"")
+    return std::string();
 
+  // remove double " in text delimited token
+  if (currentToken[0] == '"' && currentToken.size() > 2) {
+    beginPos = 0;
+    while((beginPos = currentToken.find("\"\"", beginPos)) != std::string::npos) {
+      currentToken.replace(beginPos, 2, "\"");
+      beginPos += 1;
+    }
+  }
   // Treat string to remove special characters from its beginning and its end.
   string rejectedChars = defaultRejectedChars;
   rejectedChars.push_back(_textDelimiter);
