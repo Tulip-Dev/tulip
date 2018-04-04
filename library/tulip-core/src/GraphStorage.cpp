@@ -408,11 +408,12 @@ void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
 void GraphStorage::restoreNode(const node n) {
   if (n.id == nodeData.size())
     nodeData.resize(n.id + 1);
-
-  NodeData &nData = nodeData[n.id];
-  // clear edge infos
-  nData.edges.clear();
-  nData.outDegree = 0;
+  else {
+    NodeData &nData = nodeData[n.id];
+    // clear edge infos
+    nData.edges.clear();
+    nData.outDegree = 0;
+  }
 }
 //=======================================================
 /**
