@@ -292,33 +292,35 @@ string CSVSimpleParser::treatToken(const string &token, int, int) {
   if (currentToken == "\"\"")
     return std::string();
 
-  // remove double " in text delimited token
-  if (currentToken[0] == '"' && currentToken.size() > 2) {
-    beginPos = 0;
-    while ((beginPos = currentToken.find("\"\"", beginPos)) != std::string::npos) {
-      currentToken.replace(beginPos, 2, "\"");
-      beginPos += 1;
-    }
-  }
   // Treat string to remove special characters from its beginning and its end.
-  string rejectedChars = defaultRejectedChars;
-  rejectedChars.push_back(_textDelimiter);
-  return removeQuotesIfAny(currentToken, rejectedChars);
+  // and non needed "
+  return removeQuotesIfAny(currentToken);
 }
 
-string CSVSimpleParser::removeQuotesIfAny(const string &s, const std::string &rejectedChars) {
-  string::size_type beginPos = s.find_first_not_of(rejectedChars);
-  string::size_type endPos = s.find_last_not_of(rejectedChars);
+string CSVSimpleParser::removeQuotesIfAny(string &s) {
+  // remove special chars at the beginning and end
+  string::size_type pos = s.find_first_not_of(defaultRejectedChars);
+  if (pos && pos != string::npos)
+    s.erase(0, pos);
+  pos = s.find_last_not_of(defaultRejectedChars);
+  if (pos != string::npos && pos < s.size() - 1)
+    s.erase(pos + 1);
 
-  if (beginPos != string::npos && endPos != string::npos) {
-    try {
-      return s.substr(beginPos, endPos - beginPos + 1);
-    } catch (...) {
-      return s;
+  if (s[0] == _textDelimiter) {
+    s.erase(0, 1);
+    // treat " in " delimited string
+    if (_textDelimiter == '"') {
+      pos = 0;
+      while ((pos = s.find("\"\"", pos)) != std::string::npos) {
+	// replace double " by "
+	s.replace(pos, 2, "\"");
+	pos += 1;
+      }
     }
-  } else {
-    return s;
+    if (s[s.size() - 1] == _textDelimiter)
+      s.erase(s.size() - 1, 1);
   }
+  return s;
 }
 
 CSVInvertMatrixParser::CSVInvertMatrixParser(CSVParser *parser) : parser(parser) {}

@@ -131,7 +131,7 @@ private:
     **/
   bool multiplatformgetline(std::istream &is, std::string &str);
 
-  std::string removeQuotesIfAny(const std::string &s, const std::string &rejectedChars);
+  std::string removeQuotesIfAny(std::string &s);
   std::string _fileName;
   QString _separator;
   char _textDelimiter;
