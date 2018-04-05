@@ -312,9 +312,9 @@ string CSVSimpleParser::removeQuotesIfAny(string &s) {
     if (_textDelimiter == '"') {
       pos = 0;
       while ((pos = s.find("\"\"", pos)) != std::string::npos) {
-	// replace double " by "
-	s.replace(pos, 2, "\"");
-	pos += 1;
+        // replace double " by "
+        s.replace(pos, 2, "\"");
+        pos += 1;
       }
     }
     if (s[s.size() - 1] == _textDelimiter)
