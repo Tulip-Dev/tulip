@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <iomanip>
+
 #include "tulip/CSVGraphImport.h"
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
@@ -84,7 +86,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
 
   // Fill map with graph values.
   if (type == NODE) {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       string key;
 
       for (unsigned int i = 0; i < keyProperties.size(); ++i)
@@ -93,7 +95,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
       valueToId[key] = n.id;
     }
   } else {
-    for (const tlp::edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       string key;
 
       for (unsigned int i = 0; i < keyProperties.size(); ++i)
@@ -221,7 +223,7 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(
 
 void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
   srcValueToId.clear();
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     string key;
 
     for (unsigned int i = 0; i < srcProperties.size(); ++i)
@@ -465,8 +467,6 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
   // of valid source-target entities couple
   for (unsigned int i = 0; i < srcs.size(); ++i) {
     for (unsigned int j = 0; j < tgts.size(); ++j) {
-      edge e;
-
       if (srcs[i].isValid() && tgts[j].isValid()) {
         results.push_back(graph->addEdge(srcs[i], tgts[j]).id);
       }
@@ -479,6 +479,21 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
 CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(
     Graph *graph, const CSVImportParameters &importParameters, QWidget *parent)
     : graph(graph), importParameters(importParameters), parent(parent) {}
+
+PropertyInterface*
+CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const std::string &name, const std::string &type) {
+  // loop to generate a non existing approximate name
+  std::ostringstream nameBuf;
+  unsigned int nb = 1;
+  while (true) {
+    nameBuf << name << '_' << setfill('0') << setw(2) << nb;
+    if (!graph->existProperty(nameBuf.str()))
+      return graph->getProperty(nameBuf.str(), type);
+    nameBuf.seekp(0);
+    ++nb;
+  }
+  return nullptr;
+}
 
 PropertyInterface *
 CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,
@@ -499,37 +514,38 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
 
     PropertyInterface *interf = nullptr;
 
-    // The property already exists. Need to check if existing property is compatible with the new
-    // one.
+    // If the property already exists.
+    // we need to check the compatibility
     if (graph->existProperty(propertyName)) {
       PropertyInterface *existingProperty = graph->getProperty(propertyName);
 
-      // If the properties are compatible query if we had to override existing.
+      // If the properties are compatible query if we had to use existing.
       if (existingProperty->getTypename().compare(propertyType) == 0) {
         if (overwritePropertiesButton != QMessageBox::YesToAll &&
             overwritePropertiesButton != QMessageBox::NoToAll) {
           overwritePropertiesButton = QMessageBox::question(
-              parent, parent->tr("Property already exists."),
-              parent->tr("A property with the name \"") + tlpStringToQString(propertyName) +
-                  parent->tr("\" already exists. Overwrite?"),
+              parent, parent->tr("Property already exists"),
+              parent->tr("A property named \"") + tlpStringToQString(propertyName) +
+                  parent->tr("\" already exists.\nDo you want to use it ?\nIf not a property with an approximate name will be generated."),
               QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll,
               QMessageBox::Yes);
         }
 
         if (overwritePropertiesButton == QMessageBox::NoToAll ||
             overwritePropertiesButton == QMessageBox::No) {
-          interf = nullptr;
+          interf = generateApproximateProperty(propertyName, propertyType);
         } else {
           interf = graph->getProperty(propertyName);
         }
       } else {
-        // If the properties are not compatible skip.
+        // If the properties are not compatible
+	// generate a new property with an approximate name
         QMessageBox::critical(
-            parent, parent->tr("Property already existing."),
-            parent->tr("A property with the name \"") + tlpStringToQString(propertyName) +
+            parent, parent->tr("Property already existing"),
+            parent->tr("A property named \"") + tlpStringToQString(propertyName) +
                 parent->tr(
-                    "\" already exists with a different type. This property will be ignored."));
-        interf = nullptr;
+                    "\" already exists with a different type. A property with an approximate name will be generated."));
+        interf = generateApproximateProperty(propertyName, propertyType);
       }
     } else {
       interf = graph->getProperty(propertyName, propertyType);
