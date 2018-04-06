@@ -58,9 +58,9 @@ void AroundTexturedSphere::drawGlyph(const Color &glyphColor, const Size &glyphS
   Glyph::drawRectInScreenPlane(rect, glyphSize, true);
 }
 
-void AroundTexturedSphere::draw(node n, const string &aroundTextureFile, unsigned char alpha) {
+void AroundTexturedSphere::draw(node n, float) {
   drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
             glGraphInputData->getElementSize()->getNodeValue(n),
             glGraphInputData->getElementTexture()->getNodeValue(n),
-            glGraphInputData->parameters->getTexturePath(), aroundTextureFile, alpha);
+            glGraphInputData->parameters->getTexturePath(), textureFile, alpha);
 }

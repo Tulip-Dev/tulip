@@ -39,13 +39,8 @@ class BottomShadowSphere : public AroundTexturedSphere {
 public:
   GLYPHINFORMATION("3D - Sphere with bottom shadow", "Patrick Mary", "09/03/2018",
                    "Sphere with its drop shadow on bottom", "1.0", NodeShape::BottomShadowedSphere)
-  BottomShadowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context) {}
-  void draw(node n, float lod) override;
+  BottomShadowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context, "bottomShadowTexture.png") {}
 };
-
-void BottomShadowSphere::draw(node n, float /* lod */) {
-  AroundTexturedSphere::draw(n, "bottomShadowTexture.png");
-}
 
 PLUGIN(BottomShadowSphere)
 
@@ -61,13 +56,8 @@ public:
                    "Sphere with its drop shadow on bottom left", "1.0",
                    NodeShape::LeftBottomShadowedSphere)
   LeftBottomShadowSphere(const tlp::PluginContext *context = nullptr)
-      : AroundTexturedSphere(context) {}
-  void draw(node n, float lod) override;
+  : AroundTexturedSphere(context, "leftBottomShadowTexture.png") {}
 };
-
-void LeftBottomShadowSphere::draw(node n, float /* lod */) {
-  AroundTexturedSphere::draw(n, "leftBottomShadowTexture.png");
-}
 
 PLUGIN(LeftBottomShadowSphere)
 
@@ -83,13 +73,8 @@ public:
                    "Sphere with its drop shadow on right bottom", "1.0",
                    NodeShape::RightBottomShadowedSphere)
   RightBottomShadowSphere(const tlp::PluginContext *context = nullptr)
-      : AroundTexturedSphere(context) {}
-  void draw(node n, float lod) override;
+  : AroundTexturedSphere(context, "rightBottomShadowTexture.png") {}
 };
-
-void RightBottomShadowSphere::draw(node n, float /* lod */) {
-  AroundTexturedSphere::draw(n, "rightBottomShadowTexture.png");
-}
 
 PLUGIN(RightBottomShadowSphere)
 

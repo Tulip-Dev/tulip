@@ -40,16 +40,11 @@ class GlowSphere : public AroundTexturedSphere {
 public:
   GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
                    NodeShape::GlowSphere)
-  GlowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context) {}
+  GlowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context, "radialGradientTexture.png", 128) {}
   ~GlowSphere() override {}
-  void draw(node n, float lod) override;
 };
 
 PLUGIN(GlowSphere)
-
-void GlowSphere::draw(node n, float /* lod */) {
-  AroundTexturedSphere::draw(n, "radialGradientTexture.png", 128);
-}
 
 class EEGlowSphere : public EdgeExtremityGlyph {
 public:

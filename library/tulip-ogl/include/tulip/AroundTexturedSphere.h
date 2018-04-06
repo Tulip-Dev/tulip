@@ -43,10 +43,13 @@ namespace tlp {
  * and apply a texture around it
  */
 class TLP_GL_SCOPE AroundTexturedSphere : public NoShaderGlyph {
+  const std::string textureFile;
+  const unsigned char alpha;
 public:
-  AroundTexturedSphere(const tlp::PluginContext *context = nullptr) : NoShaderGlyph(context) {}
+ AroundTexturedSphere(const tlp::PluginContext *context = nullptr, const std::string& aroundTextureFile = "", unsigned char alphaVal = 255) :
+  NoShaderGlyph(context), textureFile(aroundTextureFile), alpha(alphaVal) {}
   void getIncludeBoundingBox(BoundingBox &boundingBox, node) override;
-  void draw(node n, const string &aroundTextureFile, unsigned char alpha = 255);
+  void draw(node n, float) override;
   static void drawGlyph(const Color &glyphColor, const Size &glyphSize, const string &texture,
                         const string &texturePath, const string &aroundTextureFile,
                         unsigned char alpha = 255);
