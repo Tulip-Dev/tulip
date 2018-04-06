@@ -39,7 +39,8 @@ class BottomShadowSphere : public AroundTexturedSphere {
 public:
   GLYPHINFORMATION("3D - Sphere with bottom shadow", "Patrick Mary", "09/03/2018",
                    "Sphere with its drop shadow on bottom", "1.0", NodeShape::BottomShadowedSphere)
-  BottomShadowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context, "bottomShadowTexture.png") {}
+  BottomShadowSphere(const tlp::PluginContext *context = nullptr)
+      : AroundTexturedSphere(context, "bottomShadowTexture.png") {}
 };
 
 PLUGIN(BottomShadowSphere)
@@ -56,7 +57,7 @@ public:
                    "Sphere with its drop shadow on bottom left", "1.0",
                    NodeShape::LeftBottomShadowedSphere)
   LeftBottomShadowSphere(const tlp::PluginContext *context = nullptr)
-  : AroundTexturedSphere(context, "leftBottomShadowTexture.png") {}
+      : AroundTexturedSphere(context, "leftBottomShadowTexture.png") {}
 };
 
 PLUGIN(LeftBottomShadowSphere)
@@ -73,7 +74,7 @@ public:
                    "Sphere with its drop shadow on right bottom", "1.0",
                    NodeShape::RightBottomShadowedSphere)
   RightBottomShadowSphere(const tlp::PluginContext *context = nullptr)
-  : AroundTexturedSphere(context, "rightBottomShadowTexture.png") {}
+      : AroundTexturedSphere(context, "rightBottomShadowTexture.png") {}
 };
 
 PLUGIN(RightBottomShadowSphere)

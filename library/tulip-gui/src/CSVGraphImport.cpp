@@ -480,8 +480,9 @@ CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappin
     Graph *graph, const CSVImportParameters &importParameters, QWidget *parent)
     : graph(graph), importParameters(importParameters), parent(parent) {}
 
-PropertyInterface*
-CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const std::string &name, const std::string &type) {
+PropertyInterface *
+CSVImportColumnToGraphPropertyMappingProxy::generateApproximateProperty(const std::string &name,
+                                                                        const std::string &type) {
   // loop to generate a non existing approximate name
   std::ostringstream nameBuf;
   unsigned int nb = 1;
@@ -526,7 +527,8 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
           overwritePropertiesButton = QMessageBox::question(
               parent, parent->tr("Property already exists"),
               parent->tr("A property named \"") + tlpStringToQString(propertyName) +
-                  parent->tr("\" already exists.\nDo you want to use it ?\nIf not a property with an approximate name will be generated."),
+                  parent->tr("\" already exists.\nDo you want to use it ?\nIf not a property with "
+                             "an approximate name will be generated."),
               QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll,
               QMessageBox::Yes);
         }
@@ -539,12 +541,11 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
         }
       } else {
         // If the properties are not compatible
-	// generate a new property with an approximate name
-        QMessageBox::critical(
-            parent, parent->tr("Property already existing"),
-            parent->tr("A property named \"") + tlpStringToQString(propertyName) +
-                parent->tr(
-                    "\" already exists with a different type. A property with an approximate name will be generated."));
+        // generate a new property with an approximate name
+        QMessageBox::critical(parent, parent->tr("Property already existing"),
+                              parent->tr("A property named \"") + tlpStringToQString(propertyName) +
+                                  parent->tr("\" already exists with a different type. A property "
+                                             "with an approximate name will be generated."));
         interf = generateApproximateProperty(propertyName, propertyType);
       }
     } else {

@@ -40,7 +40,8 @@ class GlowSphere : public AroundTexturedSphere {
 public:
   GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0",
                    NodeShape::GlowSphere)
-  GlowSphere(const tlp::PluginContext *context = nullptr) : AroundTexturedSphere(context, "radialGradientTexture.png", 128) {}
+  GlowSphere(const tlp::PluginContext *context = nullptr)
+      : AroundTexturedSphere(context, "radialGradientTexture.png", 128) {}
   ~GlowSphere() override {}
 };
 

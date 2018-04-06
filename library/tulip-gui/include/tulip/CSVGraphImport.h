@@ -321,7 +321,7 @@ private:
   TLP_HASH_MAP<unsigned int, tlp::PropertyInterface *> propertiesBuffer;
   QMessageBox::StandardButton overwritePropertiesButton;
   QWidget *parent;
-  PropertyInterface* generateApproximateProperty(const std::string &name, const std::string &type);
+  PropertyInterface *generateApproximateProperty(const std::string &name, const std::string &type);
 };
 
 /**
