@@ -19,10 +19,6 @@ QTabBar::tab {
 }
 
 QTabBar::tab:!selected {
-  margin-left: 1px;
-}
-
-QTabBar::tab:!selected {
   background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
   stop: 0 #ffffff,
   stop: 0.4 #eeeeee,
@@ -54,4 +50,20 @@ QTabBar::tab:selected:hover {
   stop: 0.4 #808080,
   stop: 0.401 #737373,
   stop: 1 #5a5a5a);
+}
+
+QTabBar::close-button:selected {
+    image: url(:/tulip/gui/ui/lightclosebutton.png)
+}
+
+QTabBar::close-button:selected:hover {
+    image: url(:/tulip/gui/ui/whiteclosebutton.png)
+}
+
+QTabBar::close-button:!selected {
+    image: url(:/tulip/gui/ui/darkclosebutton.png)
+}
+
+QTabBar::close-button:!selected:hover {
+    image: url(:/tulip/gui/ui/blackclosebutton.png)
 }
