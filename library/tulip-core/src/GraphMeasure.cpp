@@ -350,7 +350,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
       case DIRECTED:
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double nWeight = 0.0;
-          for (auto e : graph->getInEdges(n)) {
+          for (auto e : graph->getOutEdges(n)) {
             nWeight += weights->getEdgeDoubleValue(e);
           }
           deg[i] = nWeight;
@@ -402,7 +402,7 @@ void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_
       case DIRECTED:
         TLP_PARALLEL_MAP_NODES_AND_INDICES(graph, [&](const node n, unsigned int i) {
           double nWeight = 0.0;
-          for (auto e : graph->getInEdges(n)) {
+          for (auto e : graph->getOutEdges(n)) {
             nWeight += weights->getEdgeDoubleValue(e);
           }
           deg[i] = nWeight * normalization;
