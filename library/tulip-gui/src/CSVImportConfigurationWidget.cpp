@@ -350,9 +350,11 @@ bool CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
   // Force the table to correctly update.
   useFirstLineAsHeaderUpdated();
   // Avoid updating widget.
-  ui->previewLineNumberSpinBox->blockSignals(true);
-  ui->previewLineNumberSpinBox->setMaximum(rowNumber);
-  ui->previewLineNumberSpinBox->blockSignals(false);
+  if (rowNumber > 1) {
+    ui->previewLineNumberSpinBox->blockSignals(true);
+    ui->previewLineNumberSpinBox->setMaximum(rowNumber);
+    ui->previewLineNumberSpinBox->blockSignals(false);
+  }
   return true;
 }
 
@@ -585,7 +587,7 @@ CSVImportConfigurationWidget::guessPropertyDataType(const string &data,
     return previousType;
   }
 
-  string dataType = guessDataType(data);
+  const string &dataType = guessDataType(data);
   return combinePropertyDataType(previousType, dataType);
 }
 
