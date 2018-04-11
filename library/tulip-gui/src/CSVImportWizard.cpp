@@ -42,6 +42,11 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(QWidget *
   layout()->addWidget(previewTableWidget);
   previewTableWidget->setMaxPreviewLineNumber(previewLineNumber);
   previewTableWidget->horizontalHeader()->setVisible(false);
+#if QT_VERSION >= 0x050000
+  previewTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
+  previewTableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
   previewTableWidget->verticalHeader()->setVisible(false);
   connect(parserConfigurationWidget, SIGNAL(parserChanged()), this, SLOT(parserChanged()));
   QLabel *noteWidget = new QLabel(this);

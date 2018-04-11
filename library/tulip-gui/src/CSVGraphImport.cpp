@@ -108,7 +108,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
 
 pair<ElementType, vector<unsigned int>>
 AbstractCSVToGraphDataMapping::getElementsForRow(const vector<string> &tokens,
-                                                 const vector<PropertyInterface *>) {
+                                                 const vector<PropertyInterface *> &) {
   vector<unsigned int> results(1);
 
   bool idsOK = true;
@@ -160,7 +160,7 @@ void CSVToNewNodeIdMapping::init(unsigned int rowNumber) {
 
 pair<ElementType, vector<unsigned int>>
 CSVToNewNodeIdMapping::getElementsForRow(const vector<string> &,
-                                         const vector<PropertyInterface *>) {
+                                         const vector<PropertyInterface *> &) {
   vector<unsigned int> result(1);
   result[0] = graph->addNode().id;
   return make_pair(NODE, result);
@@ -311,7 +311,7 @@ static bool splitIntoTokens(const string &token, vector<string> &tokens, char se
 
 pair<ElementType, vector<unsigned int>>
 CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
-                                               const vector<PropertyInterface *> props) {
+                                               const vector<PropertyInterface *> &props) {
 
   vector<unsigned int> results;
 
@@ -527,7 +527,7 @@ CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int co
           overwritePropertiesButton = QMessageBox::question(
               parent, parent->tr("Property already exists"),
               parent->tr("A property named \"") + tlpStringToQString(propertyName) +
-                  parent->tr("\" already exists.\nDo you want to use it ?\nIf not a property with "
+                  parent->tr("\" already exists.\nDo you want to use it ?\nIf not, a property with "
                              "an approximate name will be generated."),
               QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll,
               QMessageBox::Yes);

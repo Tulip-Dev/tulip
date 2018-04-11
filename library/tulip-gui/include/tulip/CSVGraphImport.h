@@ -135,7 +135,7 @@ public:
   virtual ~CSVToGraphDataMapping() {}
   virtual std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props) = 0;
+                    const std::vector<PropertyInterface *> &props) = 0;
   virtual void init(unsigned int rowNumber) = 0;
 };
 
@@ -156,7 +156,7 @@ public:
   void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props) override;
+                    const std::vector<PropertyInterface *> &props) override;
 
 protected:
   /**
@@ -181,7 +181,7 @@ public:
   void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props) override;
+                    const std::vector<PropertyInterface *> &props) override;
 
 private:
   tlp::Graph *graph;
@@ -265,7 +265,7 @@ public:
   void init(unsigned int lineNumbers) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
   getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> props) override;
+                    const std::vector<PropertyInterface *> &props) override;
 
 private:
   tlp::Graph *graph;
