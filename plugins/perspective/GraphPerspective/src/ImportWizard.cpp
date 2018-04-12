@@ -63,7 +63,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
   if (TulipSettings::instance().displayDefaultViews())
     importLabel += "<b>Node Link Diagram</b> and <b>Spreadsheet</b> (automatically opened) views.";
   else
-    importLabel += "<img src=\":/tulip/graphperspective/icons/16/view-add.png\"/>&nbsp;<b>Add "
+    importLabel += "<img src=\":/tulip/gui/icons/16/list-add.png\"/>&nbsp;<b>Add "
                    "panel</b> button to open specific views on it.";
 
   importLabel += "<br/><br/>See <b>Edit</b> menu, then <b>Preferences</b> for more options when "

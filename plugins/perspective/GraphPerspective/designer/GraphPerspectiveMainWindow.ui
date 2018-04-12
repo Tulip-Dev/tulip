@@ -1140,7 +1140,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
+                   <normaloff>:/tulip/gui/icons/16/list-add.png</normaloff>:/tulip/gui/icons/16/list-add.png</iconset>
                  </property>
                 </widget>
                </item>
