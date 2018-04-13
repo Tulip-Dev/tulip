@@ -41,6 +41,9 @@
      </item>
      <item>
       <widget class="QSpinBox" name="toLineSpinBox">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
        <property name="maximum">
         <number>0</number>
        </property>

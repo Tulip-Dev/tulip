@@ -374,7 +374,7 @@ void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber) {
   ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);
   updateWidget();
   // Reset import range
-  updateLineNumbers(true);
+  updateLineNumbers(false);
 }
 
 void CSVImportConfigurationWidget::toLineValueChanged(int) {
