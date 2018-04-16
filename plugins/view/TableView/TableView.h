@@ -76,6 +76,7 @@ protected slots:
   void toggleHighlightedRows();
   void selectHighlightedRows();
   bool setAllHighlightedRows(tlp::PropertyInterface *);
+  bool setCurrentValue(tlp::PropertyInterface *, unsigned int);
   void setLabelsOfHighlightedRows(tlp::PropertyInterface *);
   void setMatchProperty();
   void setColumnsFilter(QString);

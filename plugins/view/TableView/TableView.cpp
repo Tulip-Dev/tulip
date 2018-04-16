@@ -494,10 +494,14 @@ void TableView::selectHighlightedRows() {
 bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
   Graph *g = graph();
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+  uint eltId = UINT_MAX;
+  if (rows.size() == 1)
+    eltId = rows[0].data(TulipModel::ElementIdRole).toUInt();
 
   QVariant val = TulipItemDelegate::showEditorDialog(
       NODES_DISPLAYED ? NODE : EDGE, prop, g,
-      static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()));
+      static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()),
+      graphicsView()->viewport()->parentWidget(), eltId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -509,6 +513,24 @@ bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
     else
       GraphModel::setEdgeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(), prop, val);
   }
+
+  return true;
+}
+
+bool TableView::setCurrentValue(PropertyInterface *prop, unsigned int eltId) {
+  QVariant val = TulipItemDelegate::showEditorDialog(
+      NODES_DISPLAYED ? NODE : EDGE, prop, graph(),
+      static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()),
+      graphicsView()->viewport()->parentWidget(), eltId);
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return false;
+
+  if (NODES_DISPLAYED)
+    GraphModel::setNodeValue(eltId, prop, val);
+  else
+    GraphModel::setEdgeValue(eltId, prop, val);
 
   return true;
 }
@@ -564,7 +586,7 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
 
   // QAction* setDefault = contextMenu.addAction(trUtf8("Set default") + ' ' + eltName + " value");
 
-  QMenu *subMenu = contextMenu.addMenu(trUtf8("Set values of "));
+  QMenu *subMenu = contextMenu.addMenu(trUtf8("Set value(s) of "));
   QAction *setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_PROPERTY +
                                        trUtf8(" to a new default value"));
   setAll->setToolTip(QString("Choose a new ") + eltsName +
@@ -577,38 +599,44 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   selectedSetAll->setToolTip(QString("Choose a value to be assigned to the selected ") + eltsName +
                              OF_GRAPH);
 
-  QAction *highlightedSetAll = subMenu->addAction(
-      (trUtf8("Rows highlighted") + ' ' + eltsName) +
-      (highlightedRows.size() > 1
-           ? ""
-           : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)")
-                 .arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
-  highlightedSetAll->setToolTip(QString("Choose a value to be assigned to the ") + eltsName +
+  QAction *highlightedSetAll;
+  if (highlightedRows.size() > 1) {
+    highlightedSetAll = subMenu->addAction(trUtf8("Rows highlighted") + ' ' + eltsName);
+    highlightedSetAll->setToolTip(QString("Choose a value to be assigned to the ") + eltsName +
                                 " displayed in the currently highlighted row(s)");
+  } else {
+    highlightedSetAll = subMenu->addAction(QString("%1 #%2").arg(eltName).arg(eltId));
+    highlightedSetAll->setToolTip(QString("Choose a value for to be assigned to the current property of %1 #%2").arg(eltName).arg(eltId));
+  }
 
-  subMenu = contextMenu.addMenu(trUtf8("To labels of "));
-  QAction *toLabels = subMenu->addAction(trUtf8("All ") + eltsName + OF_GRAPH);
-  toLabels->setToolTip(QString("Set the values of the current property as labels of the ") +
-                       eltsName + OF_GRAPH);
-  QAction *selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + OF_GRAPH);
-  selectedToLabels->setToolTip(
-      QString("Set the values of the current property as labels of the selected ") + eltsName +
-      OF_GRAPH);
+  QAction *toLabels, *selectedToLabels, *highlightedToLabels;
+  toLabels = selectedToLabels = highlightedToLabels = nullptr;
+  if (propName != "viewLabel") {
+    subMenu = contextMenu.addMenu(trUtf8("To label(s) of "));
+    toLabels = subMenu->addAction(trUtf8("All ") + eltsName + OF_GRAPH);
+    toLabels->setToolTip(QString("Set the values of the current property as labels of the ") +
+			 eltsName + OF_GRAPH);
+    selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + OF_GRAPH);
+    selectedToLabels->setToolTip(
+				 QString("Set the values of the current property as labels of the selected ") + eltsName +
+				 OF_GRAPH);
 
-  QAction *highlightedToLabels = subMenu->addAction(
-      (trUtf8("Rows highlighted") + ' ' + eltsName) +
-      (highlightedRows.size() > 1
-           ? ""
-           : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)")
-                 .arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
-  highlightedToLabels->setToolTip(
-      QString("Set the values of the current property as labels of the ") + eltsName +
-      " displayed in the currently highlighted row(s)");
+    if (highlightedRows.size() > 1) {
+      highlightedToLabels = subMenu->addAction(trUtf8("Rows highlighted") + ' ' + eltsName);
+      highlightedToLabels->setToolTip(
+				      QString("Set the values of the current property as labels of the ") + eltsName +
+				      " displayed in the currently highlighted row(s)");
+    } else {
+      highlightedToLabels = subMenu->addAction(QString("%1 #%2").arg(eltName).arg(eltId));
+      highlightedToLabels->setToolTip(
+				      QString("Set the value of the current property as label of %1 #%2").arg(eltName).arg(eltId));
+    }
+  }
 
   contextMenu.addSeparator();
   action = contextMenu.addAction(
       highlightedRows.size() > 1 ? (trUtf8("Rows highlighted") + ' ' + eltsName)
-                                 : QString(NODES_DISPLAYED ? "Node #%1" : "Edge #%1").arg(eltId));
+      : QString("%1 #%2").arg(eltName).arg(eltId));
   action->setEnabled(false);
   contextMenu.addSeparator();
   QAction *toggleAction = contextMenu.addAction(trUtf8("Toggle selection"));
@@ -618,6 +646,9 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   selectAction->setToolTip(QString("Set the selection with the ") + action->text());
   QAction *deleteAction = contextMenu.addAction(trUtf8("Delete"));
   deleteAction->setToolTip(QString("Delete the ") + action->text());
+  QAction *setValueAction =
+    contextMenu.addAction(QString((highlightedRows.size() > 1) ? "Set values" : "Set value"));
+  setValueAction->setToolTip(highlightedSetAll->toolTip());
 
   // display the menu with the mouse inside to allow
   // keyboard navigation
@@ -682,9 +713,13 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
     return;
   }
 
-  if (action == highlightedSetAll) {
+  if ((action == highlightedSetAll) || (action == setValueAction)) {
     // set values for elts corresponding to highlighted rows
-    setAllHighlightedRows(prop);
+    if (!((highlightedRows.size() > 1)
+	  ? setAllHighlightedRows(prop) : setCurrentValue(prop, eltId)))
+      // cancelled so undo
+      graph()->pop();
+
     return;
   }
 
