@@ -603,10 +603,13 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   if (highlightedRows.size() > 1) {
     highlightedSetAll = subMenu->addAction(trUtf8("Rows highlighted") + ' ' + eltsName);
     highlightedSetAll->setToolTip(QString("Choose a value to be assigned to the ") + eltsName +
-                                " displayed in the currently highlighted row(s)");
+                                  " displayed in the currently highlighted row(s)");
   } else {
     highlightedSetAll = subMenu->addAction(QString("%1 #%2").arg(eltName).arg(eltId));
-    highlightedSetAll->setToolTip(QString("Choose a value for to be assigned to the current property of %1 #%2").arg(eltName).arg(eltId));
+    highlightedSetAll->setToolTip(
+        QString("Choose a value for to be assigned to the current property of %1 #%2")
+            .arg(eltName)
+            .arg(eltId));
   }
 
   QAction *toLabels, *selectedToLabels, *highlightedToLabels;
@@ -615,28 +618,30 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
     subMenu = contextMenu.addMenu(trUtf8("To label(s) of "));
     toLabels = subMenu->addAction(trUtf8("All ") + eltsName + OF_GRAPH);
     toLabels->setToolTip(QString("Set the values of the current property as labels of the ") +
-			 eltsName + OF_GRAPH);
+                         eltsName + OF_GRAPH);
     selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + OF_GRAPH);
     selectedToLabels->setToolTip(
-				 QString("Set the values of the current property as labels of the selected ") + eltsName +
-				 OF_GRAPH);
+        QString("Set the values of the current property as labels of the selected ") + eltsName +
+        OF_GRAPH);
 
     if (highlightedRows.size() > 1) {
       highlightedToLabels = subMenu->addAction(trUtf8("Rows highlighted") + ' ' + eltsName);
       highlightedToLabels->setToolTip(
-				      QString("Set the values of the current property as labels of the ") + eltsName +
-				      " displayed in the currently highlighted row(s)");
+          QString("Set the values of the current property as labels of the ") + eltsName +
+          " displayed in the currently highlighted row(s)");
     } else {
       highlightedToLabels = subMenu->addAction(QString("%1 #%2").arg(eltName).arg(eltId));
       highlightedToLabels->setToolTip(
-				      QString("Set the value of the current property as label of %1 #%2").arg(eltName).arg(eltId));
+          QString("Set the value of the current property as label of %1 #%2")
+              .arg(eltName)
+              .arg(eltId));
     }
   }
 
   contextMenu.addSeparator();
-  action = contextMenu.addAction(
-      highlightedRows.size() > 1 ? (trUtf8("Rows highlighted") + ' ' + eltsName)
-      : QString("%1 #%2").arg(eltName).arg(eltId));
+  action = contextMenu.addAction(highlightedRows.size() > 1
+                                     ? (trUtf8("Rows highlighted") + ' ' + eltsName)
+                                     : QString("%1 #%2").arg(eltName).arg(eltId));
   action->setEnabled(false);
   contextMenu.addSeparator();
   QAction *toggleAction = contextMenu.addAction(trUtf8("Toggle selection"));
@@ -647,7 +652,7 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   QAction *deleteAction = contextMenu.addAction(trUtf8("Delete"));
   deleteAction->setToolTip(QString("Delete the ") + action->text());
   QAction *setValueAction =
-    contextMenu.addAction(QString((highlightedRows.size() > 1) ? "Set values" : "Set value"));
+      contextMenu.addAction(QString((highlightedRows.size() > 1) ? "Set values" : "Set value"));
   setValueAction->setToolTip(highlightedSetAll->toolTip());
 
   // display the menu with the mouse inside to allow
@@ -715,8 +720,8 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
 
   if ((action == highlightedSetAll) || (action == setValueAction)) {
     // set values for elts corresponding to highlighted rows
-    if (!((highlightedRows.size() > 1)
-	  ? setAllHighlightedRows(prop) : setCurrentValue(prop, eltId)))
+    if (!((highlightedRows.size() > 1) ? setAllHighlightedRows(prop)
+                                       : setCurrentValue(prop, eltId)))
       // cancelled so undo
       graph()->pop();
 

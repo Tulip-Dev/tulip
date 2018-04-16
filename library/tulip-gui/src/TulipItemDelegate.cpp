@@ -288,7 +288,8 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
   QDialog *dlg = dynamic_cast<QDialog *>(w);
 
   if (dlg == nullptr) {
-    QString title(QString("Set %1 %2").arg(elType == NODE ? "node" : "edge").arg(valid ? "value" : "values"));
+    QString title(
+        QString("Set %1 %2").arg(elType == NODE ? "node" : "edge").arg(valid ? "value" : "values"));
     // create a dialog on the fly
     dlg = new QDialog(dialogParent);
     dlg->setWindowTitle(title);
