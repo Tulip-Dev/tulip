@@ -26,12 +26,13 @@
 
 #include <fstream>
 #include <cassert>
+#include <regex>
 
 using namespace std;
 using namespace tlp;
 
-const string defaultRejectedChars = " \r\n";
-const string spaceChars = " \t";
+// const string defaultRejectedChars = " \r\n";
+// const string spaceChars = " \t";
 CSVSimpleParser::CSVSimpleParser(const string &fileName, const QString &separator,
                                  const bool mergesep, char textDelimiter, char decimalMark,
                                  const string &fileEncoding, unsigned int firstLine,
@@ -115,18 +116,18 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
         line = convertStringEncoding(line, codec);
         tokens.clear();
         tokenize(line, tokens, _separator, _mergesep, _textDelimiter, 0);
-        unsigned int column = 0;
+        //        unsigned int column = 0;
 
-        for (column = 0; column < tokens.size(); ++column) {
-          tokens[column] = treatToken(tokens[column], row, column);
-        }
+        //        for (column = 0; column < tokens.size(); ++column) {
+        //          tokens[column] = treatToken(tokens[column], row, column);
+        //        }
 
         result = handler->line(row, tokens);
 
         if (!result)
           break;
 
-        columnMax = max(columnMax, column);
+        columnMax = max(columnMax, unsigned(tokens.size()));
 
         // If user want to stop break the import process.
         if (progress) {
@@ -192,136 +193,105 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
 }
 
 void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const QString &delimiters,
-                               const bool mergedelim, char textDelim, unsigned int) {
-  // Skip delimiters at beginning.
-  string::size_type lastPos = 0;
-  string::size_type pos = 0;
-  bool quit = false;
-
+                               const bool mergedelim, const char textDelim, unsigned int) {
   auto delim = QStringToTlpString(delimiters);
+  auto textDel = string(1, textDelim);
 
-  while (!quit) {
-    // Don't search tokens in chars sourrounded by text delimiters.
-    assert(pos != string::npos);
-    assert(pos < str.size());
-
-    bool inText = false;
-    while (pos < str.length() &&
-           (inText || (str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
-      if (str[pos] == textDelim) {
-        pos += 1;
-        if (!inText) {
-          inText = true;
-          // go the the next text delimiter .
-          pos = str.find_first_of(textDelim, pos);
-        } else {
-          // check for double textDelim
-          if (str[pos] == textDelim)
-            pos += 1;
-          else
-            inText = false;
-        }
-      } else
-        pos += 1;
-    }
-
-    // if merge delimiter, skip the next char if it is a delimiter
+  // first step tokenize
+  std::regex rgx(delim + string("(?=(?:[^" + textDel + "]*" + textDel + "[^" + textDel + "]*" +
+                                textDel + ")*[^" + textDel + "]*$)"));
+  std::sregex_token_iterator end;
+  for (std::sregex_token_iterator iter(str.cbegin(), str.cend(), rgx, -1); iter != end; ++iter) {
+    //      std::cout << "token ==> " << *iter << endl;
+    // remove unneeded textDelim if any at begin and end of the token (so match 1st or 2nd case of
+    // re)
+    regex re("(" + textDel + "((?:[^" + textDel + "]|" + textDel + textDel + ")*)\"|([^" + delim +
+             textDel + "\\n\\r]*))");
+    string token(*iter);
+    std::smatch cm;
+    std::regex_match(token, cm, re);
+    string tok;
+    if (cm[2].length() == 0)
+      tok = cm[1].str();
+    else
+      tok = cm[2].str();
+    // remove any double delimiter
+    string tok_final(regex_replace(tok, regex(textDel + textDel), textDel));
+    //      std::cout << "cleaned string ==> " << tok_final << endl;
+    tokens.push_back(tok_final);
+    // replace successive empty elements by only one empty elements
     if (mergedelim) {
-      while ((pos < str.length() - delim.size()) && (str.substr(pos + 1, delim.length()) == delim))
-        pos += delim.length();
-    }
-
-    // Extracting tokens.
-    assert(lastPos != string::npos);
-    // Compute the extracted char number
-    size_t nbExtractedChars = pos - lastPos;
-
-    try {
-      tokens.push_back(str.substr(lastPos, nbExtractedChars));
-    } catch (...) {
-      // An error occur quit the line parsing.
-      break;
-    }
-
-    // Go to the begin of the next token.
-    if (pos + 1 < str.size()) {
-      // Skip the delimiter.
-      ++pos;
-      assert(pos > lastPos);
-      // Store the begin position of the next token
-      lastPos = pos;
-    } else {
-      // End of line found quit
-      quit = true;
+      // todo
     }
   }
+  //  cout << endl;
 }
 
-string CSVSimpleParser::treatToken(const string &token, int, int) {
-  string currentToken = token;
-  // erase space chars at the beginning/end of the value
-  // and replace multiple occurences of space chars by a blank
-  string::size_type beginPos = currentToken.find_first_of(spaceChars);
+// string CSVSimpleParser::treatToken(const string &token, int, int) {
+//  string currentToken = token;
+//  // erase space chars at the beginning/end of the value
+//  // and replace multiple occurences of space chars by a blank
+//  string::size_type beginPos = currentToken.find_first_of(spaceChars);
 
-  while (beginPos != string::npos) {
-    string::size_type endPos = currentToken.find_first_not_of(spaceChars, beginPos);
+//  while (beginPos != string::npos) {
+//    string::size_type endPos = currentToken.find_first_not_of(spaceChars, beginPos);
 
-    if (beginPos == 0) {
-      // erase space chars at the beginning
-      if (endPos != string::npos)
-        currentToken.erase(beginPos, endPos - beginPos);
-      else
-        // only space chars in currentToken
-        currentToken.clear();
+//    if (beginPos == 0) {
+//      // erase space chars at the beginning
+//      if (endPos != string::npos)
+//        currentToken.erase(beginPos, endPos - beginPos);
+//      else
+//        // only space chars in currentToken
+//        currentToken.clear();
 
-      beginPos = currentToken.find_first_of(spaceChars);
-    } else {
-      if (endPos == string::npos) {
-        // erase space chars at the end
-        currentToken.erase(beginPos);
-        break;
-      }
+//      beginPos = currentToken.find_first_of(spaceChars);
+//    } else {
+//      if (endPos == string::npos) {
+//        // erase space chars at the end
+//        currentToken.erase(beginPos);
+//        break;
+//      }
 
-      // replace multiple space chars
-      if (endPos - beginPos > 1)
-        currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
+//      // replace multiple space chars
+//      if (endPos - beginPos > 1)
+//        currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
 
-      beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
-    }
-  }
-  if (currentToken == "\"\"")
-    return std::string();
+//      beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
+//    }
+//  }
+//  if (currentToken == "\"\"")
+//    return std::string();
 
-  // Treat string to remove special characters from its beginning and its end.
-  // and non needed "
-  return removeQuotesIfAny(currentToken);
-}
+//  // Treat string to remove special characters from its beginning and its end.
+//  // and non needed "
+//  return removeQuotesIfAny(currentToken);
+//}
 
-string CSVSimpleParser::removeQuotesIfAny(string &s) {
-  // remove special chars at the beginning and end
-  string::size_type pos = s.find_first_not_of(defaultRejectedChars);
-  if (pos && pos != string::npos)
-    s.erase(0, pos);
-  pos = s.find_last_not_of(defaultRejectedChars);
-  if (pos != string::npos && pos < s.size() - 1)
-    s.erase(pos + 1);
+// string CSVSimpleParser::removeQuotesIfAny(string &s) {
+//  // remove special chars at the beginning and end
+//  string::size_type pos = s.find_first_not_of(defaultRejectedChars);
+//  if (pos && pos != string::npos)
+//    s.erase(0, pos);
+//  pos = s.find_last_not_of(defaultRejectedChars);
+//  if (pos != string::npos && pos < s.size() - 1)
+//    s.erase(pos + 1);
 
-  if (s[0] == _textDelimiter) {
-    s.erase(0, 1);
-    // treat " in " delimited string
-    if (_textDelimiter == '"') {
-      pos = 0;
-      while ((pos = s.find("\"\"", pos)) != std::string::npos) {
-        // replace double " by "
-        s.replace(pos, 2, "\"");
-        pos += 1;
-      }
-    }
-    if (s[s.size() - 1] == _textDelimiter)
-      s.erase(s.size() - 1, 1);
-  }
-  return s;
-}
+//  if (s[0] == _textDelimiter) {
+//    s.erase(0, 1);
+//    // treat " in " delimited string
+//    if (_textDelimiter == '"') {
+//      pos = 0;
+//      while ((pos = s.find("\"\"", pos)) != std::string::npos) {
+//        // replace double " by "
+//        s.replace(pos, 2, "\"");
+//        pos += 1;
+//      }
+//    }
+//    if (s[s.size() - 1] == _textDelimiter)
+//      s.erase(s.size() - 1, 1);
+//  }
+//  return s;
+//}
 
 CSVInvertMatrixParser::CSVInvertMatrixParser(CSVParser *parser) : parser(parser) {}
 
