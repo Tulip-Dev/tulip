@@ -45,9 +45,8 @@
 using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *)
-    : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr),
-      _model(nullptr), isNewGraph(false), filteringColumns(false),
-      previousGraph(nullptr) {}
+    : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr),
+      isNewGraph(false), filteringColumns(false), previousGraph(nullptr) {}
 
 TableView::~TableView() {
   delete _ui;
@@ -67,8 +66,7 @@ tlp::BooleanProperty *TableView::getFilteringProperty() const {
 }
 
 bool TableView::hasEffectiveFiltering() {
-  GraphSortFilterProxyModel *sortModel =
-      static_cast<GraphSortFilterProxyModel *>(table->model());
+  GraphSortFilterProxyModel *sortModel = static_cast<GraphSortFilterProxyModel *>(table->model());
 
   return sortModel->rowCount() != sortModel->sourceModel()->rowCount();
 }
@@ -112,16 +110,16 @@ void TableView::setState(const tlp::DataSet &data) {
 bool TableView::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::Resize) {
     if (obj == _ui->tableView->viewport()) {
-     // ensure automatic resize of the table
-     qreal factor = _ui->tableView->transform().m11();
+      // ensure automatic resize of the table
+      qreal factor = _ui->tableView->transform().m11();
       if (factor > 1.0) {
-	auto tSize = _ui->tableView->viewport()->size();
-	tSize.rwidth() = tSize.width() / factor;
-	tSize.rheight() = tSize.height() / factor;
-	table->resize(tSize);
+        auto tSize = _ui->tableView->viewport()->size();
+        tSize.rwidth() = tSize.width() / factor;
+        tSize.rheight() = tSize.height() / factor;
+        table->resize(tSize);
       } else {
-	auto tSize = _ui->tableView->viewport()->size();
-	table->resize(tSize);
+        auto tSize = _ui->tableView->viewport()->size();
+        table->resize(tSize);
       }
       return true;
     }
@@ -145,7 +143,7 @@ bool TableView::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::QEvent::GraphicsSceneContextMenu) {
     QPoint pos = static_cast<QGraphicsSceneContextMenuEvent *>(event)->scenePos().toPoint();
     auto hHeight = table->horizontalHeader()->height();
-    if (pos.y() >  hHeight)
+    if (pos.y() > hHeight)
       showCustomContextMenu(pos - QPoint(table->verticalHeader()->width(), hHeight));
     else
       showHorizontalHeaderCustomContextMenu(pos);
@@ -310,8 +308,7 @@ void TableView::readSettings() {
     filterChanged();
   }
 
-  GraphSortFilterProxyModel *sortModel =
-      static_cast<GraphSortFilterProxyModel *>(table->model());
+  GraphSortFilterProxyModel *sortModel = static_cast<GraphSortFilterProxyModel *>(table->model());
 
   sortModel->setFilterProperty(getFilteringProperty());
 
@@ -463,8 +460,7 @@ void TableView::setPropertiesFilter(QString text) {
 
 void TableView::filterChanged() {
   QString filter = _ui->filterEdit->text();
-  GraphSortFilterProxyModel *sortModel =
-      static_cast<GraphSortFilterProxyModel *>(table->model());
+  GraphSortFilterProxyModel *sortModel = static_cast<GraphSortFilterProxyModel *>(table->model());
   QVector<PropertyInterface *> props;
 
   Graph *g = graph();
@@ -556,10 +552,10 @@ bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
   if (rows.size() == 1)
     eltId = rows[0].data(TulipModel::ElementIdRole).toUInt();
 
-  QVariant val = TulipItemDelegate::showEditorDialog(
-      NODES_DISPLAYED ? NODE : EDGE, prop, g,
-      static_cast<TulipItemDelegate *>(table->itemDelegate()),
-      graphicsView()->viewport()->parentWidget(), eltId);
+  QVariant val =
+      TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE, prop, g,
+                                          static_cast<TulipItemDelegate *>(table->itemDelegate()),
+                                          graphicsView()->viewport()->parentWidget(), eltId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -576,10 +572,10 @@ bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
 }
 
 bool TableView::setCurrentValue(PropertyInterface *prop, unsigned int eltId) {
-  QVariant val = TulipItemDelegate::showEditorDialog(
-      NODES_DISPLAYED ? NODE : EDGE, prop, graph(),
-      static_cast<TulipItemDelegate *>(table->itemDelegate()),
-      graphicsView()->viewport()->parentWidget(), eltId);
+  QVariant val =
+      TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE, prop, graph(),
+                                          static_cast<TulipItemDelegate *>(table->itemDelegate()),
+                                          graphicsView()->viewport()->parentWidget(), eltId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
