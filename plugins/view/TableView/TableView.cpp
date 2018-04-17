@@ -37,6 +37,7 @@
 #include <QMainWindow>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsSceneContextMenuEvent>
 #include <QTimeLine>
 #include <QTransform>
 #include <QWheelEvent>
@@ -111,7 +112,8 @@ void TableView::setState(const tlp::DataSet &data) {
 bool TableView::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::Resize) {
     if (obj == _ui->tableView->viewport()) {
-      qreal factor = _ui->tableView->transform().m11();
+     // ensure automatic resize of the table
+     qreal factor = _ui->tableView->transform().m11();
       if (factor > 1.0) {
 	auto tSize = _ui->tableView->viewport()->size();
 	tSize.rwidth() = tSize.width() / factor;
@@ -135,9 +137,20 @@ bool TableView::eventFilter(QObject *obj, QEvent *event) {
     propertiesEditor->resize(pSize);
     return true;
   }
-  // avoid to scroll the table outside the viewport
-  if (event->type() == QEvent::Wheel && obj == _ui->tableView->viewport())
+  // wheel events must be redirected to the table
+  if (event->type() == QEvent::Wheel && obj == _ui->tableView->viewport()) {
+    table->wheelEvent(static_cast<QWheelEvent *>(event));
     return true;
+  }
+  if (event->type() == QEvent::QEvent::GraphicsSceneContextMenu) {
+    QPoint pos = static_cast<QGraphicsSceneContextMenuEvent *>(event)->scenePos().toPoint();
+    auto hHeight = table->horizontalHeader()->height();
+    if (pos.y() >  hHeight)
+      showCustomContextMenu(pos - QPoint(table->verticalHeader()->width(), hHeight));
+    else
+      showHorizontalHeaderCustomContextMenu(pos);
+    return true;
+  }
   // standard event processing
   return QObject::eventFilter(obj, event);
 }
@@ -156,7 +169,6 @@ void TableView::setZoomLevel(int level) {
     tSize.rheight() = tSize.height() / factor;
     table->resize(tSize);
   }
-  _ui->tableView->ensureVisible(0, 0, 10, 10);
 }
 
 void TableView::setupWidget() {
@@ -166,18 +178,21 @@ void TableView::setupWidget() {
   QWidget *centralWidget = new QWidget();
   _ui->setupUi(centralWidget);
   setCentralWidget(centralWidget);
-  // no need for scrollbars in tableView
-  _ui->tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  _ui->tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  _ui->tableView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
   _ui->tableView->setScene(new QGraphicsScene());
   table = new NavigableTableView();
   table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  table->setFrameShape(QFrame::NoFrame);
+  table->setSelectionBehavior(QAbstractItemView::SelectRows);
+  table->setSortingEnabled(true);
+  table->setWordWrap(false);
+  table->setCornerButtonEnabled(false);
+  table->verticalHeader()->setMinimumSectionSize(30);
   _ui->tableView->scene()->addWidget(table);
   // install this as event filter
   // for automatic resizing of the table
   _ui->tableView->viewport()->installEventFilter(this);
+  _ui->tableView->scene()->installEventFilter(this);
   connect(_ui->zoomSpinBox, SIGNAL(valueChanged(int)), this, SLOT(setZoomLevel(int)));
 
   propertiesEditor =
@@ -193,11 +208,6 @@ void TableView::setupWidget() {
 #else
   table->horizontalHeader()->setMovable(true);
 #endif
-  table->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(table->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint &)), this,
-          SLOT(showHorizontalHeaderCustomContextMenu(const QPoint &)));
-  connect(table, SIGNAL(customContextMenuRequested(const QPoint &)),
-          SLOT(showCustomContextMenu(const QPoint &)));
   connect(_ui->filterEdit, SIGNAL(returnPressed()), this, SLOT(filterChanged()));
 
   _ui->eltTypeCombo->addItem("Nodes");

@@ -500,7 +500,23 @@ border-left: 1px solid #C9C9C9;</string>
           </layout>
          </item>
          <item>
-          <widget class="QGraphicsView" name="tableView"/>
+          <widget class="QGraphicsView" name="tableView">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="transformationAnchor">
+            <enum>QGraphicsView::NoAnchor</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
