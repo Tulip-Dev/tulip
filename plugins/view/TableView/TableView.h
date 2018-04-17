@@ -23,6 +23,7 @@
 #include <tulip/ViewWidget.h>
 #include <tulip/BooleanProperty.h>
 #include <QModelIndex>
+#include "navigabletableview.h"
 
 namespace Ui {
 class TableViewWidget;
@@ -41,9 +42,9 @@ class TableView : public tlp::ViewWidget {
   Ui::TableViewWidget *_ui;
   PropertiesEditor *propertiesEditor;
   tlp::GraphModel *_model;
-  bool isNewGraph;
-  bool filteringColumns;
+  bool isNewGraph, filteringColumns;
   tlp::Graph *previousGraph;
+  NavigableTableView *table;
 
 public:
   PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012", "Spreadsheet view for raw data",
@@ -87,6 +88,7 @@ protected slots:
   void showCustomContextMenu(const QPoint &pos);
   void showHorizontalHeaderCustomContextMenu(const QPoint &pos);
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+  void setZoomLevel(int);
 };
 
 #endif // TABLEVIEW_H
