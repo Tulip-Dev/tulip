@@ -140,7 +140,7 @@ bool TableView::eventFilter(QObject *obj, QEvent *event) {
     table->wheelEvent(static_cast<QWheelEvent *>(event));
     return true;
   }
-  if (event->type() == QEvent::QEvent::GraphicsSceneContextMenu) {
+  if (event->type() == QEvent::GraphicsSceneContextMenu) {
     QPoint pos = static_cast<QGraphicsSceneContextMenuEvent *>(event)->scenePos().toPoint();
     auto hHeight = table->horizontalHeader()->height();
     if (pos.y() > hHeight)
