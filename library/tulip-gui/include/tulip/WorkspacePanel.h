@@ -105,12 +105,12 @@ protected:
 
   bool handleDragEnterEvent(QEvent *e, const QMimeData *mimedata);
   bool handleDropEvent(const QMimeData *mimedata);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#if ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) && (QT_VERSION < QT_VERSION_CHECK(5, 9, 0)))
   void showEvent(QShowEvent *event) override;
 #endif
   void closeEvent(QCloseEvent *event) override;
 };
-}
+} // namespace tlp
 
 #endif // WORKSPACEPANEL_H
 ///@endcond

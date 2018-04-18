@@ -226,7 +226,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   resetInteractorsScrollButtonsVisibility();
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#if ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) && (QT_VERSION < QT_VERSION_CHECK(5, 9, 0)))
 // Workaround to avoid a Qt5 bug :
 // After the panels containing QGraphicsView objects were rearranged in the workspace,
 // some events were no more sent to the QGraphicsWidget objects embedded in the asoociated
