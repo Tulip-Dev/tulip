@@ -71,8 +71,8 @@ std::string TulipFontAwesome::getIconUtf8String(const std::string &iconName) {
   }
 
   std::string iconString;
-  utf8::utf32to8(iconCodePoint[iconName.c_str()].begin(),
-                 iconCodePoint[iconName.c_str()].end(), back_inserter(iconString));
+  utf8::utf32to8(iconCodePoint[iconName.c_str()].begin(), iconCodePoint[iconName.c_str()].end(),
+                 back_inserter(iconString));
   return iconString;
 }
 

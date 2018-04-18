@@ -19,11 +19,9 @@ static QtAwesome qtAwesomeMd;
 
 QIcon TulipFontIconDialog::getFontAwesomeIcon(const QString &iconName) {
   if (qtAwesomeFa.fontName().isEmpty())
-    qtAwesomeFa.initFontAwesome(
-        tlpStringToQString(TulipFontAwesome::getTrueTypeFileLocation()));
+    qtAwesomeFa.initFontAwesome(tlpStringToQString(TulipFontAwesome::getTrueTypeFileLocation()));
 
-  return qtAwesomeFa.icon(
-      TulipFontAwesome::getIconCodePoint(QStringToTlpString(iconName)));
+  return qtAwesomeFa.icon(TulipFontAwesome::getIconCodePoint(QStringToTlpString(iconName)));
 }
 
 QIcon TulipFontIconDialog::getMaterialDesignIcon(const QString &iconName) {
@@ -31,8 +29,7 @@ QIcon TulipFontIconDialog::getMaterialDesignIcon(const QString &iconName) {
     qtAwesomeMd.initFontAwesome(
         tlpStringToQString(TulipMaterialDesignIcons::getTrueTypeFileLocation()));
 
-  return qtAwesomeMd.icon(
-      TulipMaterialDesignIcons::getIconCodePoint(QStringToTlpString(iconName)));
+  return qtAwesomeMd.icon(TulipMaterialDesignIcons::getIconCodePoint(QStringToTlpString(iconName)));
 }
 
 TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)

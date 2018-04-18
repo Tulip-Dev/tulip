@@ -590,14 +590,11 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.device()->write("&"); // do not escape the character
 
     if (faIcon) {
-      _res.writeCharacters(
-          "#x" + QString::number(TulipFontAwesome::getIconCodePoint(iconName), 16) +
-          ";");
+      _res.writeCharacters("#x" +
+                           QString::number(TulipFontAwesome::getIconCodePoint(iconName), 16) + ";");
     } else {
       _res.writeCharacters(
-          "#x" +
-          QString::number(TulipMaterialDesignIcons::getIconCodePoint(iconName), 16) +
-          ";");
+          "#x" + QString::number(TulipMaterialDesignIcons::getIconCodePoint(iconName), 16) + ";");
     }
   } break;
 

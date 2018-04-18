@@ -71,8 +71,8 @@ std::string TulipMaterialDesignIcons::getIconUtf8String(const std::string &iconN
   }
 
   std::string iconString;
-  utf8::utf32to8(iconCodePoint[iconName.c_str()].begin(),
-                 iconCodePoint[iconName.c_str()].end(), back_inserter(iconString));
+  utf8::utf32to8(iconCodePoint[iconName.c_str()].begin(), iconCodePoint[iconName.c_str()].end(),
+                 back_inserter(iconString));
   return iconString;
 }
 
@@ -88,5 +88,4 @@ unsigned int TulipMaterialDesignIcons::getIconCodePoint(const std::string &iconN
 
   return 0;
 }
-
 }

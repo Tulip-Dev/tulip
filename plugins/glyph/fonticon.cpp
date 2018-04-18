@@ -303,8 +303,8 @@ public:
                nodeBorderWidth, nodeTexture);
     } else {
       drawIcon(iconName, TulipMaterialDesignIcons::getTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getIconCodePoint(iconName), nodeColor,
-               nodeBorderColor, nodeBorderWidth, nodeTexture);
+               TulipMaterialDesignIcons::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
+               nodeBorderWidth, nodeTexture);
     }
   }
 
@@ -357,12 +357,12 @@ public:
 
     if (iconName.substr(0, 2) == "fa") {
       drawIcon(iconName, TulipFontAwesome::getTrueTypeFileLocation(),
-               TulipFontAwesome::getIconCodePoint(iconName), glyphColor, borderColor,
-               borderWidth, edgeTexture);
+               TulipFontAwesome::getIconCodePoint(iconName), glyphColor, borderColor, borderWidth,
+               edgeTexture);
     } else {
       drawIcon(iconName, TulipMaterialDesignIcons::getTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getIconCodePoint(iconName), glyphColor,
-               borderColor, borderWidth, edgeTexture);
+               TulipMaterialDesignIcons::getIconCodePoint(iconName), glyphColor, borderColor,
+               borderWidth, edgeTexture);
     }
   }
 };
