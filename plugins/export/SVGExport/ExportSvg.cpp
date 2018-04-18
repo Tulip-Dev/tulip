@@ -561,12 +561,12 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   } break;
 
   case NodeShape::ChristmasTree:
-    iconName = TulipFontAwesome::Tree;
+    iconName = "fa-tree";
 
   case NodeShape::Icon: {
     addWebFontFromIconName(iconName);
 
-    bool faIcon = iconName.substr(0, 3) == "fa-";
+    bool faIcon = iconName.find("fa-") == 0;
 
     _res.writeStartElement("text");
     _res.writeAttribute("x", QString::number(x));
@@ -591,12 +591,12 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
     if (faIcon) {
       _res.writeCharacters(
-          "#x" + QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16) +
+          "#x" + QString::number(TulipFontAwesome::getIconCodePoint(iconName), 16) +
           ";");
     } else {
       _res.writeCharacters(
           "#x" +
-          QString::number(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), 16) +
+          QString::number(TulipMaterialDesignIcons::getIconCodePoint(iconName), 16) +
           ";");
     }
   } break;

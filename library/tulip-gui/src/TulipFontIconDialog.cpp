@@ -20,19 +20,19 @@ static QtAwesome qtAwesomeMd;
 QIcon TulipFontIconDialog::getFontAwesomeIcon(const QString &iconName) {
   if (qtAwesomeFa.fontName().isEmpty())
     qtAwesomeFa.initFontAwesome(
-        tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
+        tlpStringToQString(TulipFontAwesome::getTrueTypeFileLocation()));
 
   return qtAwesomeFa.icon(
-      TulipFontAwesome::getFontAwesomeIconCodePoint(QStringToTlpString(iconName)));
+      TulipFontAwesome::getIconCodePoint(QStringToTlpString(iconName)));
 }
 
 QIcon TulipFontIconDialog::getMaterialDesignIcon(const QString &iconName) {
   if (qtAwesomeMd.fontName().isEmpty())
     qtAwesomeMd.initFontAwesome(
-        tlpStringToQString(TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation()));
+        tlpStringToQString(TulipMaterialDesignIcons::getTrueTypeFileLocation()));
 
   return qtAwesomeMd.icon(
-      TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(iconName)));
+      TulipMaterialDesignIcons::getIconCodePoint(QStringToTlpString(iconName)));
 }
 
 TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
@@ -53,7 +53,7 @@ void TulipFontIconDialog::updateIconList() {
 
   QRegExp regexp(_ui->iconNameFilterLineEdit->text());
 
-  std::vector<std::string> iconNames = TulipFontAwesome::getSupportedFontAwesomeIcons();
+  std::vector<std::string> iconNames = TulipFontAwesome::getSupportedIcons();
 
   for (std::vector<std::string>::const_iterator it = iconNames.begin(); it != iconNames.end();
        ++it) {
@@ -65,7 +65,7 @@ void TulipFontIconDialog::updateIconList() {
     }
   }
 
-  iconNames = TulipMaterialDesignIcons::getSupportedMaterialDesignIcons();
+  iconNames = TulipMaterialDesignIcons::getSupportedIcons();
 
   for (std::vector<std::string>::const_iterator it = iconNames.begin(); it != iconNames.end();
        ++it) {

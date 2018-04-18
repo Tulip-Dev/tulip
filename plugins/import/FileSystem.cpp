@@ -19,7 +19,6 @@
 
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipViewSettings.h>
 
 #include <QStack>
@@ -178,7 +177,7 @@ public:
     if (_useIcons) {
       tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
       viewShape->setAllNodeValue(tlp::NodeShape::Icon);
-      _fontIcon->setAllNodeValue(tlp::TulipFontAwesome::FileO);
+      _fontIcon->setAllNodeValue("fa-file-o");
     }
 
     tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
@@ -276,35 +275,35 @@ private:
       std::string extension = QStringToTlpString(info.suffix());
 
       if (info.isDir()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
+        _fontIcon->setNodeValue(n, "fa-folder-o");
         tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
         viewColor->setNodeValue(n, dirColor);
       } else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) !=
                  commonTextFilesExt.end()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileTextO);
+        _fontIcon->setNodeValue(n, "fa-file-text-o");
       } else if (std::find(commonArchiveFilesExt.begin(), commonArchiveFilesExt.end(), extension) !=
                  commonArchiveFilesExt.end()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileArchiveO);
+        _fontIcon->setNodeValue(n, "fa-file-archive-o");
       } else if (std::find(commonAudioFilesExt.begin(), commonAudioFilesExt.end(), extension) !=
                  commonAudioFilesExt.end()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileAudioO);
+        _fontIcon->setNodeValue(n, "fa-file-audio-o");
       } else if (std::find(commonImageFilesExt.begin(), commonImageFilesExt.end(), extension) !=
                  commonImageFilesExt.end()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileImageO);
+        _fontIcon->setNodeValue(n, "fa-file-image-o");
       } else if (std::find(commonVideoFilesExt.begin(), commonVideoFilesExt.end(), extension) !=
                  commonVideoFilesExt.end()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileVideoO);
+        _fontIcon->setNodeValue(n, "fa-file-video-o");
       } else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(), extension) !=
                  commonDevFilesExt.end()) {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileCodeO);
+        _fontIcon->setNodeValue(n, "file-file-code-o");
       } else if (extension == "pdf") {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePdfO);
+        _fontIcon->setNodeValue(n, "file-file-pdf-o");
       } else if (extension == "doc" || extension == "docx") {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileWordO);
+        _fontIcon->setNodeValue(n, "file-file-word-o");
       } else if (extension == "xls" || extension == "xlsx") {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileExcelO);
+        _fontIcon->setNodeValue(n, "file-file-excel-o");
       } else if (extension == "ppt" || extension == "pptx") {
-        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePowerpointO);
+        _fontIcon->setNodeValue(n, "file-file-powerpoint-o");
       }
     }
 
