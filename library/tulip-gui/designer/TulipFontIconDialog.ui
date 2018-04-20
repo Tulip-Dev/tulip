@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>425</width>
+    <height>500</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>300</height>
+    <height>500</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -47,12 +53,17 @@
    <item>
     <widget class="QLabel" name="iconsCreditLabel">
      <property name="text">
-      <string>&lt;p&gt;
-Icons credit goes to &lt;b&gt;Font Awesome&lt;/b&gt;: &lt;a href=&quot;http://fontawesome.io&quot;&gt;http://fontawesome.io&lt;/a&gt;&lt;br/&gt; and &lt;b&gt;Material Design Icons&lt;/b&gt;: &lt;a href=&quot;https://materialdesignicons.com&quot;&gt;https://materialdesignicons.com&lt;/a&gt; 
-&lt;/p&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Special credit for the design of icons goes to:&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Font Awesome &lt;/span&gt;&lt;a href=&quot;http://fontawesome.io&quot;&gt;&lt;span style=&quot; font-size:8pt; color:#0000ff;&quot;&gt;http://fontawesome.io&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;
+&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Material Design Icons &lt;/span&gt;&lt;a href=&quot;https://materialdesignicons.com&quot;&gt;&lt;span style=&quot;font-size:8pt;color:#0000ff;&quot;&gt;https://materialdesignicons.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="margin">
+      <number>0</number>
      </property>
      <property name="openExternalLinks">
       <bool>false</bool>

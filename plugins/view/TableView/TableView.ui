@@ -446,6 +446,45 @@ border-left: 1px solid #C9C9C9;</string>
             </widget>
            </item>
            <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="zoomLabel">
+             <property name="toolTip">
+              <string>Select the table zoom level</string>
+             </property>
+             <property name="text">
+              <string>Zoom</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="zoomSpinBox">
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::PlusMinus</enum>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="minimum">
+              <number>100</number>
+             </property>
+             <property name="maximum">
+              <number>200</number>
+             </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -461,28 +500,22 @@ border-left: 1px solid #C9C9C9;</string>
           </layout>
          </item>
          <item>
-          <widget class="NavigableTableView" name="table">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
+          <widget class="QGraphicsView" name="tableView">
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
-           <property name="wordWrap">
-            <bool>false</bool>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
-           <property name="cornerButtonEnabled">
-            <bool>false</bool>
+           <property name="transformationAnchor">
+            <enum>QGraphicsView::NoAnchor</enum>
            </property>
-           <attribute name="verticalHeaderMinimumSectionSize">
-            <number>30</number>
-           </attribute>
           </widget>
          </item>
         </layout>
@@ -498,11 +531,6 @@ border-left: 1px solid #C9C9C9;</string>
    <class>ClearableLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">tulip/ClearableLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>NavigableTableView</class>
-   <extends>QTableView</extends>
-   <header>navigabletableview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

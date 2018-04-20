@@ -132,6 +132,6 @@ protected:
 
   QPixmap snapshot(const QSize &outputSize = QSize()) const override;
 };
-}
+} // namespace tlp
 
 #endif // VIEWWIDGET_H

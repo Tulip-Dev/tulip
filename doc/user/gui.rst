@@ -175,7 +175,8 @@ Workspace view
 ==============
 
 .. |icon_addpanel| image:: _images/icon_addpanel.png
-.. |icon_add| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/view-add.png
+.. |icon_add| image:: ../../library/tulip-gui/resources/icons/16/list-add.png
+
 
 The workspace is where the visualization takes place. In this space, the user can create different panels to represent data and information.
 

@@ -208,9 +208,9 @@ public:
 
 public slots:
   /**
-  * @brief This method is called whenever the context menu is required on the view.
-  * @param point The screen coordinates where the context menu should be displayed.
-  */
+   * @brief This method is called whenever the context menu is required on the view.
+   * @param point The screen coordinates where the context menu should be displayed.
+   */
   void showContextMenu(const QPoint &point, const QPointF &scenePoint);
 
   /**
@@ -398,6 +398,6 @@ protected slots:
    */
   virtual void fillContextMenu(QMenu *, const QPointF &) {}
 };
-}
+} // namespace tlp
 
 #endif /* VIEW_H_ */

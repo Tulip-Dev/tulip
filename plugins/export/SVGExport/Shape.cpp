@@ -233,13 +233,11 @@ void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color, const str
   res.device()->write("&"); // do not escape the character
 
   if (faIcon) {
-    res.writeCharacters(
-        "#x" + QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16) + ";");
+    res.writeCharacters("#x" + QString::number(TulipFontAwesome::getIconCodePoint(iconName), 16) +
+                        ";");
   } else {
     res.writeCharacters(
-        "#x" +
-        QString::number(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), 16) +
-        ";");
+        "#x" + QString::number(TulipMaterialDesignIcons::getIconCodePoint(iconName), 16) + ";");
   }
 }
 

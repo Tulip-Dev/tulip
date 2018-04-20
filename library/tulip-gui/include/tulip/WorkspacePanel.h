@@ -110,7 +110,7 @@ protected:
 #endif
   void closeEvent(QCloseEvent *event) override;
 };
-}
+} // namespace tlp
 
 #endif // WORKSPACEPANEL_H
 ///@endcond

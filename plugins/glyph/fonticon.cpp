@@ -298,13 +298,13 @@ public:
                                 glGraphInputData->getElementTexture()->getNodeValue(n);
 
     if (iconName.substr(0, 3) == "fa-") {
-      drawIcon(iconName, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(),
-               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), nodeColor, nodeBorderColor,
+      drawIcon(iconName, TulipFontAwesome::getTrueTypeFileLocation(),
+               TulipFontAwesome::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
                nodeBorderWidth, nodeTexture);
     } else {
-      drawIcon(iconName, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), nodeColor,
-               nodeBorderColor, nodeBorderWidth, nodeTexture);
+      drawIcon(iconName, TulipMaterialDesignIcons::getTrueTypeFileLocation(),
+               TulipMaterialDesignIcons::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
+               nodeBorderWidth, nodeTexture);
     }
   }
 
@@ -321,8 +321,8 @@ private:
     StringProperty *viewIcon = glGraphInputData->getElementIcon();
     string iconName = viewIcon->getNodeValue(n);
 
-    if (iconName.empty() || (!TulipFontAwesome::isFontAwesomeIconSupported(iconName) &&
-                             !TulipMaterialDesignIcons::isMaterialDesignIconSupported(iconName))) {
+    if (iconName.empty() || (!TulipFontAwesome::isIconSupported(iconName) &&
+                             !TulipMaterialDesignIcons::isIconSupported(iconName))) {
       iconName = defaultIcon;
     }
 
@@ -344,8 +344,8 @@ public:
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
     string iconName = viewIcon->getEdgeValue(e);
 
-    if (iconName.empty() || (!TulipFontAwesome::isFontAwesomeIconSupported(iconName) &&
-                             !TulipMaterialDesignIcons::isMaterialDesignIconSupported(iconName))) {
+    if (iconName.empty() || (!TulipFontAwesome::isIconSupported(iconName) &&
+                             !TulipMaterialDesignIcons::isIconSupported(iconName))) {
       iconName = defaultIcon;
     }
 
@@ -356,13 +356,13 @@ public:
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 
     if (iconName.substr(0, 2) == "fa") {
-      drawIcon(iconName, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(),
-               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), glyphColor, borderColor,
-               borderWidth, edgeTexture);
+      drawIcon(iconName, TulipFontAwesome::getTrueTypeFileLocation(),
+               TulipFontAwesome::getIconCodePoint(iconName), glyphColor, borderColor, borderWidth,
+               edgeTexture);
     } else {
-      drawIcon(iconName, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), glyphColor,
-               borderColor, borderWidth, edgeTexture);
+      drawIcon(iconName, TulipMaterialDesignIcons::getTrueTypeFileLocation(),
+               TulipMaterialDesignIcons::getIconCodePoint(iconName), glyphColor, borderColor,
+               borderWidth, edgeTexture);
     }
   }
 };

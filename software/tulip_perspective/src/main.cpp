@@ -175,6 +175,9 @@ int main(int argc, char **argv) {
   else
     title += TULIP_MM_VERSION;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
+  QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+#endif
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in

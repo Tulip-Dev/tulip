@@ -258,18 +258,18 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
                                              tlp::Graph *g, TulipItemDelegate *delegate,
                                              QWidget *dialogParent, unsigned int id) {
   QVariant value;
-
+  bool valid;
   if (elType == tlp::NODE) {
     node n(id);
 
-    if (n.isValid())
+    if ((valid = n.isValid()))
       value = GraphModel::nodeValue(id, pi);
     else
       value = GraphModel::nodeDefaultValue(pi);
   } else {
     edge e(id);
 
-    if (e.isValid())
+    if ((valid = e.isValid()))
       value = GraphModel::edgeValue(id, pi);
     else
       value = GraphModel::edgeDefaultValue(pi);
@@ -288,9 +288,11 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
   QDialog *dlg = dynamic_cast<QDialog *>(w);
 
   if (dlg == nullptr) {
+    QString title(
+        QString("Set %1 %2").arg(elType == NODE ? "node" : "edge").arg(valid ? "value" : "values"));
     // create a dialog on the fly
     dlg = new QDialog(dialogParent);
-    dlg->setWindowTitle(elType == NODE ? "Set node values" : "Set edge values");
+    dlg->setWindowTitle(title);
     QVBoxLayout *layout = new QVBoxLayout;
     dlg->setLayout(layout);
     dlg->setMinimumWidth(250);
