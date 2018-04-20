@@ -124,7 +124,7 @@ public:
     @note This method MUST ALWAYS return the same instance of a QGraphicsView.
     */
   virtual QGraphicsView *graphicsView() const = 0;
-#if ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) && (QT_VERSION < QT_VERSION_CHECK(5, 9, 0)))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   // Following commit #10531 (see void WorkspacePanel::showEvent(QShowEvent *event);)
   // this method is called when creating a new QGraphicsScene
   // to restore any specific behaviour in user made graph views
