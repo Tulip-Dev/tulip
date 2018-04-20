@@ -116,11 +116,6 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
         line = convertStringEncoding(line, codec);
         tokens.clear();
         tokenize(line, tokens, _separator, _mergesep, _textDelimiter, 0);
-        //        unsigned int column = 0;
-
-        //        for (column = 0; column < tokens.size(); ++column) {
-        //          tokens[column] = treatToken(tokens[column], row, column);
-        //        }
 
         result = handler->line(row, tokens);
 
@@ -202,7 +197,6 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
                                 textDel + ")*[^" + textDel + "]*$)"));
   std::sregex_token_iterator end;
   for (std::sregex_token_iterator iter(str.cbegin(), str.cend(), rgx, -1); iter != end; ++iter) {
-    //      std::cout << "token ==> " << *iter << endl;
     // remove unneeded textDelim if any at begin and end of the token (so match 1st or 2nd case of
     // re)
     regex re("(" + textDel + "((?:[^" + textDel + "]|" + textDel + textDel + ")*)\"|([^" + delim +
@@ -217,81 +211,16 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
       tok = cm[2].str();
     // remove any double delimiter
     string tok_final(regex_replace(tok, regex(textDel + textDel), textDel));
-    //      std::cout << "cleaned string ==> " << tok_final << endl;
     tokens.push_back(tok_final);
     // replace successive empty elements by only one empty elements
     if (mergedelim) {
-      // todo
+      auto end = std::unique(tokens.begin(), tokens.end(), [](const string &l, const string &r) {
+        return l.empty() && r.empty();
+      });
+      tokens = std::move(vector<string>(tokens.begin(), end));
     }
   }
-  //  cout << endl;
 }
-
-// string CSVSimpleParser::treatToken(const string &token, int, int) {
-//  string currentToken = token;
-//  // erase space chars at the beginning/end of the value
-//  // and replace multiple occurences of space chars by a blank
-//  string::size_type beginPos = currentToken.find_first_of(spaceChars);
-
-//  while (beginPos != string::npos) {
-//    string::size_type endPos = currentToken.find_first_not_of(spaceChars, beginPos);
-
-//    if (beginPos == 0) {
-//      // erase space chars at the beginning
-//      if (endPos != string::npos)
-//        currentToken.erase(beginPos, endPos - beginPos);
-//      else
-//        // only space chars in currentToken
-//        currentToken.clear();
-
-//      beginPos = currentToken.find_first_of(spaceChars);
-//    } else {
-//      if (endPos == string::npos) {
-//        // erase space chars at the end
-//        currentToken.erase(beginPos);
-//        break;
-//      }
-
-//      // replace multiple space chars
-//      if (endPos - beginPos > 1)
-//        currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
-
-//      beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
-//    }
-//  }
-//  if (currentToken == "\"\"")
-//    return std::string();
-
-//  // Treat string to remove special characters from its beginning and its end.
-//  // and non needed "
-//  return removeQuotesIfAny(currentToken);
-//}
-
-// string CSVSimpleParser::removeQuotesIfAny(string &s) {
-//  // remove special chars at the beginning and end
-//  string::size_type pos = s.find_first_not_of(defaultRejectedChars);
-//  if (pos && pos != string::npos)
-//    s.erase(0, pos);
-//  pos = s.find_last_not_of(defaultRejectedChars);
-//  if (pos != string::npos && pos < s.size() - 1)
-//    s.erase(pos + 1);
-
-//  if (s[0] == _textDelimiter) {
-//    s.erase(0, 1);
-//    // treat " in " delimited string
-//    if (_textDelimiter == '"') {
-//      pos = 0;
-//      while ((pos = s.find("\"\"", pos)) != std::string::npos) {
-//        // replace double " by "
-//        s.replace(pos, 2, "\"");
-//        pos += 1;
-//      }
-//    }
-//    if (s[s.size() - 1] == _textDelimiter)
-//      s.erase(s.size() - 1, 1);
-//  }
-//  return s;
-//}
 
 CSVInvertMatrixParser::CSVInvertMatrixParser(CSVParser *parser) : parser(parser) {}
 
