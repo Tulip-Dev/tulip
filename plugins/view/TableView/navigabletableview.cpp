@@ -29,7 +29,6 @@ NavigableTableView::NavigableTableView(QWidget *parent) : QTableView(parent) {
 #else
   horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 #endif
-  setFrameStyle(QFrame::NoFrame);
 }
 
 void NavigableTableView::keyPressEvent(QKeyEvent *event) {
@@ -40,12 +39,6 @@ void NavigableTableView::keyPressEvent(QKeyEvent *event) {
   } else {
     QTableView::keyPressEvent(event);
   }
-}
-
-// this overload only exists to set the scope of the wheelEvent method
-// from protected to public
-void NavigableTableView::wheelEvent(QWheelEvent *event) {
-  QTableView::wheelEvent(event);
 }
 
 int NavigableTableView::sizeHintForRow(int row) const {

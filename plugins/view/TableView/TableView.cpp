@@ -37,16 +37,12 @@
 #include <QMainWindow>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QTimeLine>
-#include <QTransform>
-#include <QWheelEvent>
 
 using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *)
     : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr),
-      isNewGraph(false), filteringColumns(false), previousGraph(nullptr) {}
+      isNewGraph(false), filteringColumns(false), previousGraph(nullptr), minFontSize(-1) {}
 
 TableView::~TableView() {
   delete _ui;
@@ -66,7 +62,8 @@ tlp::BooleanProperty *TableView::getFilteringProperty() const {
 }
 
 bool TableView::hasEffectiveFiltering() {
-  GraphSortFilterProxyModel *sortModel = static_cast<GraphSortFilterProxyModel *>(table->model());
+  GraphSortFilterProxyModel *sortModel =
+      static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
 
   return sortModel->rowCount() != sortModel->sourceModel()->rowCount();
 }
@@ -109,20 +106,6 @@ void TableView::setState(const tlp::DataSet &data) {
 
 bool TableView::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::Resize) {
-    if (obj == _ui->tableView->viewport()) {
-      // ensure automatic resize of the table
-      qreal factor = _ui->tableView->transform().m11();
-      if (factor > 1.0) {
-        auto tSize = _ui->tableView->viewport()->size();
-        tSize.rwidth() = tSize.width() / factor;
-        tSize.rheight() = tSize.height() / factor;
-        table->resize(tSize);
-      } else {
-        auto tSize = _ui->tableView->viewport()->size();
-        table->resize(tSize);
-      }
-      return true;
-    }
     // ensure automatic resize of the viewport
     QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
@@ -134,39 +117,15 @@ bool TableView::eventFilter(QObject *obj, QEvent *event) {
     pSize.setHeight(resizeEvent->size().height() - 40);
     propertiesEditor->resize(pSize);
     return true;
+  } else {
+    // standard event processing
+    return QObject::eventFilter(obj, event);
   }
-  // wheel events must be redirected to the table
-  if (event->type() == QEvent::Wheel && obj == _ui->tableView->viewport()) {
-    table->wheelEvent(static_cast<QWheelEvent *>(event));
-    return true;
-  }
-  if (event->type() == QEvent::GraphicsSceneContextMenu) {
-    QPoint pos = static_cast<QGraphicsSceneContextMenuEvent *>(event)->scenePos().toPoint();
-    auto hHeight = table->horizontalHeader()->height();
-    if (pos.y() > hHeight)
-      showCustomContextMenu(pos - QPoint(table->verticalHeader()->width(), hHeight));
-    else
-      showHorizontalHeaderCustomContextMenu(pos);
-    return true;
-  }
-  // standard event processing
-  return QObject::eventFilter(obj, event);
 }
 
 void TableView::setZoomLevel(int level) {
-  if (level == 100) {
-    _ui->tableView->setTransform(QTransform());
-    auto tSize = _ui->tableView->viewport()->size();
-    table->resize(tSize);
-  } else {
-    qreal factor = level * 0.01;
-    _ui->tableView->setTransform(QTransform());
-    _ui->tableView->scale(factor, factor);
-    auto tSize = _ui->tableView->viewport()->size();
-    tSize.rwidth() = tSize.width() / factor;
-    tSize.rheight() = tSize.height() / factor;
-    table->resize(tSize);
-  }
+  int fs = (level * minFontSize)/100;
+  _ui->table->setStyleSheet(QString("QTableView { font-size: %1pt; }").arg(fs));
 }
 
 void TableView::setupWidget() {
@@ -175,23 +134,8 @@ void TableView::setupWidget() {
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
   QWidget *centralWidget = new QWidget();
   _ui->setupUi(centralWidget);
+
   setCentralWidget(centralWidget);
-  _ui->tableView->setScene(new QGraphicsScene());
-  table = new NavigableTableView();
-  table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  table->setFrameShape(QFrame::NoFrame);
-  table->setSelectionBehavior(QAbstractItemView::SelectRows);
-  table->setSortingEnabled(true);
-  table->setWordWrap(false);
-  table->setCornerButtonEnabled(false);
-  table->verticalHeader()->setMinimumSectionSize(30);
-  _ui->tableView->scene()->addWidget(table);
-  // install this as event filter
-  // for automatic resizing of the table
-  _ui->tableView->viewport()->installEventFilter(this);
-  _ui->tableView->scene()->installEventFilter(this);
-  connect(_ui->zoomSpinBox, SIGNAL(valueChanged(int)), this, SLOT(setZoomLevel(int)));
 
   propertiesEditor =
       new PropertiesEditor(static_cast<QGraphicsProxyWidget *>(centralItem())->widget());
@@ -200,12 +144,19 @@ void TableView::setupWidget() {
           SLOT(setPropertyVisible(tlp::PropertyInterface *, bool)));
   connect(propertiesEditor, SIGNAL(mapToGraphSelection()), this, SLOT(mapToGraphSelection()));
 
-  table->setItemDelegate(new GraphTableItemDelegate(table));
+  _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  table->horizontalHeader()->setSectionsMovable(true);
+  _ui->table->horizontalHeader()->setSectionsMovable(true);
 #else
-  table->horizontalHeader()->setMovable(true);
+  _ui->table->horizontalHeader()->setMovable(true);
 #endif
+  _ui->table->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(_ui->table->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint &)), this,
+          SLOT(showHorizontalHeaderCustomContextMenu(const QPoint &)));
+  connect(_ui->table, SIGNAL(customContextMenuRequested(const QPoint &)),
+          SLOT(showCustomContextMenu(const QPoint &)));
+  connect(_ui->zoomSpinBox, SIGNAL(valueChanged(int)), this, SLOT(setZoomLevel(int)));
+  minFontSize = _ui->table->font().pointSize();
   connect(_ui->filterEdit, SIGNAL(returnPressed()), this, SLOT(filterChanged()));
 
   _ui->eltTypeCombo->addItem("Nodes");
@@ -247,8 +198,8 @@ void TableView::graphChanged(tlp::Graph *g) {
 
   propertiesEditor->setGraph(g);
 
-  table->horizontalHeader()->show();
-  table->verticalHeader()->show();
+  _ui->table->horizontalHeader()->show();
+  _ui->table->verticalHeader()->show();
 
   // Show all the properties
   if (_model != nullptr) {
@@ -288,19 +239,19 @@ void TableView::readSettings() {
                      dynamic_cast<NodesGraphModel *>(_model) == nullptr) ||
       ((_ui->eltTypeCombo->currentIndex() == 1) &&
        dynamic_cast<EdgesGraphModel *>(_model) == nullptr)) {
-    table->setModel(nullptr);
+    _ui->table->setModel(nullptr);
 
     delete _model;
 
     if (_ui->eltTypeCombo->currentIndex() == 0)
-      _model = new NodesGraphModel(table);
+      _model = new NodesGraphModel(_ui->table);
     else
-      _model = new EdgesGraphModel(table);
+      _model = new EdgesGraphModel(_ui->table);
 
     _model->setGraph(graph());
-    GraphSortFilterProxyModel *sortModel = new GraphSortFilterProxyModel(table);
+    GraphSortFilterProxyModel *sortModel = new GraphSortFilterProxyModel(_ui->table);
     sortModel->setSourceModel(_model);
-    table->setModel(sortModel);
+    _ui->table->setModel(sortModel);
     connect(_model, SIGNAL(columnsInserted(QModelIndex, int, int)), this,
             SLOT(columnsInserted(QModelIndex, int, int)));
     connect(_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this,
@@ -308,7 +259,8 @@ void TableView::readSettings() {
     filterChanged();
   }
 
-  GraphSortFilterProxyModel *sortModel = static_cast<GraphSortFilterProxyModel *>(table->model());
+  GraphSortFilterProxyModel *sortModel =
+      static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
 
   sortModel->setFilterProperty(getFilteringProperty());
 
@@ -319,7 +271,7 @@ void TableView::readSettings() {
                                 .value<tlp::PropertyInterface *>();
 
     if (!visibleProperties.contains(pi))
-      table->setColumnHidden(i, true);
+      _ui->table->setColumnHidden(i, true);
   }
 
   // reset columns filtering
@@ -336,7 +288,7 @@ void TableView::dataChanged(const QModelIndex &topLeft, const QModelIndex &botto
 
     if (pi->getTypename() == "string" && pi->getName() != "viewTexture" &&
         pi->getName() != "viewFont")
-      table->resizeRowToContents(i);
+      _ui->table->resizeRowToContents(i);
   }
 }
 
@@ -358,7 +310,7 @@ void TableView::setPropertyVisible(PropertyInterface *pi, bool v) {
 
   for (int i = 0; i < _model->columnCount(); ++i) {
     if (_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() == propName) {
-      table->horizontalHeader()->setSectionHidden(i, !v);
+      _ui->table->horizontalHeader()->setSectionHidden(i, !v);
     }
   }
 
@@ -370,14 +322,14 @@ void TableView::setPropertyVisible(PropertyInterface *pi, bool v) {
   bool visible = false;
 
   for (int i = 0; i < _model->columnCount(); ++i) {
-    if (!table->isColumnHidden(i)) {
+    if (!_ui->table->isColumnHidden(i)) {
       visible = true;
       break;
     }
   }
 
-  table->horizontalHeader()->setVisible(visible);
-  table->verticalHeader()->setVisible(visible);
+  _ui->table->horizontalHeader()->setVisible(visible);
+  _ui->table->verticalHeader()->setVisible(visible);
 }
 
 void TableView::setMatchProperty() {
@@ -460,14 +412,15 @@ void TableView::setPropertiesFilter(QString text) {
 
 void TableView::filterChanged() {
   QString filter = _ui->filterEdit->text();
-  GraphSortFilterProxyModel *sortModel = static_cast<GraphSortFilterProxyModel *>(table->model());
+  GraphSortFilterProxyModel *sortModel =
+      static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
   QVector<PropertyInterface *> props;
 
   Graph *g = graph();
 
   if (_ui->matchPropertyButton->text() == "Any") {
     for (int i = 0; i < _model->columnCount(); ++i) {
-      if (!table->horizontalHeader()->isSectionHidden(i))
+      if (!_ui->table->horizontalHeader()->isSectionHidden(i))
         props += _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole)
                      .value<PropertyInterface *>();
     }
@@ -484,7 +437,7 @@ void TableView::mapToGraphSelection() {
 
   if (NODES_DISPLAYED) {
     out->setAllNodeValue(false);
-    QItemSelectionModel *selectionModel = table->selectionModel();
+    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
 
     foreach (const QModelIndex &idx, selectionModel->selectedRows()) {
       node n(idx.data(TulipModel::ElementIdRole).toUInt());
@@ -492,7 +445,7 @@ void TableView::mapToGraphSelection() {
     }
   } else {
     out->setAllEdgeValue(false);
-    QItemSelectionModel *selectionModel = table->selectionModel();
+    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
 
     foreach (const QModelIndex &idx, selectionModel->selectedRows()) {
       edge e(idx.data(TulipModel::ElementIdRole).toUInt());
@@ -503,7 +456,7 @@ void TableView::mapToGraphSelection() {
 
 void TableView::delHighlightedRows() {
   Graph *g = graph();
-  QModelIndexList rows = table->selectionModel()->selectedRows();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
   for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
     if (NODES_DISPLAYED)
@@ -516,7 +469,7 @@ void TableView::delHighlightedRows() {
 void TableView::toggleHighlightedRows() {
   Graph *g = graph();
   BooleanProperty *selection = g->getProperty<BooleanProperty>("viewSelection");
-  QModelIndexList rows = table->selectionModel()->selectedRows();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
   for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
     if (NODES_DISPLAYED) {
@@ -532,7 +485,7 @@ void TableView::toggleHighlightedRows() {
 void TableView::selectHighlightedRows() {
   Graph *g = graph();
   BooleanProperty *selection = g->getProperty<BooleanProperty>("viewSelection");
-  QModelIndexList rows = table->selectionModel()->selectedRows();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
@@ -547,15 +500,15 @@ void TableView::selectHighlightedRows() {
 
 bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
   Graph *g = graph();
-  QModelIndexList rows = table->selectionModel()->selectedRows();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
   uint eltId = UINT_MAX;
   if (rows.size() == 1)
     eltId = rows[0].data(TulipModel::ElementIdRole).toUInt();
 
-  QVariant val =
-      TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE, prop, g,
-                                          static_cast<TulipItemDelegate *>(table->itemDelegate()),
-                                          graphicsView()->viewport()->parentWidget(), eltId);
+  QVariant val = TulipItemDelegate::showEditorDialog(
+      NODES_DISPLAYED ? NODE : EDGE, prop, g,
+      static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()),
+      graphicsView()->viewport()->parentWidget(), eltId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -572,10 +525,10 @@ bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
 }
 
 bool TableView::setCurrentValue(PropertyInterface *prop, unsigned int eltId) {
-  QVariant val =
-      TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE, prop, graph(),
-                                          static_cast<TulipItemDelegate *>(table->itemDelegate()),
-                                          graphicsView()->viewport()->parentWidget(), eltId);
+  QVariant val = TulipItemDelegate::showEditorDialog(
+      NODES_DISPLAYED ? NODE : EDGE, prop, graph(),
+      static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()),
+      graphicsView()->viewport()->parentWidget(), eltId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -590,7 +543,7 @@ bool TableView::setCurrentValue(PropertyInterface *prop, unsigned int eltId) {
 }
 
 void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
-  QModelIndexList rows = table->selectionModel()->selectedRows();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
   StringProperty *label = graph()->getProperty<StringProperty>("viewLabel");
 
@@ -606,10 +559,10 @@ void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
 }
 
 void TableView::showCustomContextMenu(const QPoint &pos) {
-  if (table->model()->rowCount() == 0)
+  if (_ui->table->model()->rowCount() == 0)
     return;
 
-  QModelIndex idx = table->indexAt(pos);
+  QModelIndex idx = _ui->table->indexAt(pos);
   unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
 
   QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
@@ -622,7 +575,7 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
 
   PropertyInterface *prop = graph()->getProperty(propName);
 
-  QModelIndexList highlightedRows = table->selectionModel()->selectedRows();
+  QModelIndexList highlightedRows = _ui->table->selectionModel()->selectedRows();
 
   QMenu contextMenu;
   Perspective::redirectStatusTipOfMenu(&contextMenu);
@@ -731,7 +684,7 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
     // delete elts corresponding to highlighted rows
     delHighlightedRows();
     // no more highlighted rows
-    table->clearSelection();
+    _ui->table->clearSelection();
     return;
   }
 
@@ -803,10 +756,10 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
 }
 
 void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
-  if (table->model()->columnCount() == 0)
+  if (_ui->table->model()->columnCount() == 0)
     return;
 
-  QModelIndex idx = table->indexAt(pos);
+  QModelIndex idx = _ui->table->indexAt(pos);
 
   QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
   std::string propName = QStringToTlpString(
@@ -817,7 +770,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
 
   PropertyInterface *prop = graph()->getProperty(propName);
 
-  QModelIndexList highlightedRows = table->selectionModel()->selectedRows();
+  QModelIndexList highlightedRows = _ui->table->selectionModel()->selectedRows();
 
   QMenu contextMenu;
   Perspective::redirectStatusTipOfMenu(&contextMenu);
@@ -950,10 +903,10 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
     return;
 
   if (action == sortById) {
-    if (table->horizontalHeader()->sortIndicatorSection() != -1) {
-      table->horizontalHeader()->setSortIndicator(-1, Qt::AscendingOrder);
+    if (_ui->table->horizontalHeader()->sortIndicatorSection() != -1) {
+      _ui->table->horizontalHeader()->setSortIndicator(-1, Qt::AscendingOrder);
       GraphSortFilterProxyModel *sortModel =
-          static_cast<GraphSortFilterProxyModel *>(table->model());
+          static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
       QAbstractItemModel *model = sortModel->sourceModel();
       sortModel->setSourceModel(nullptr);
       sortModel->setSourceModel(model);
@@ -966,7 +919,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
                                     .value<tlp::PropertyInterface *>();
 
         if (!visibleProperties.contains(pi))
-          table->setColumnHidden(i, true);
+          _ui->table->setColumnHidden(i, true);
       }
     }
 

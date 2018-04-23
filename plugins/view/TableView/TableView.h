@@ -23,7 +23,6 @@
 #include <tulip/ViewWidget.h>
 #include <tulip/BooleanProperty.h>
 #include <QModelIndex>
-#include "navigabletableview.h"
 
 namespace Ui {
 class TableViewWidget;
@@ -42,9 +41,10 @@ class TableView : public tlp::ViewWidget {
   Ui::TableViewWidget *_ui;
   PropertiesEditor *propertiesEditor;
   tlp::GraphModel *_model;
-  bool isNewGraph, filteringColumns;
+  bool isNewGraph;
+  bool filteringColumns;
   tlp::Graph *previousGraph;
-  NavigableTableView *table;
+  int minFontSize;
 
 public:
   PLUGININFORMATION("Spreadsheet view", "Tulip Team", "04/17/2012", "Spreadsheet view for raw data",

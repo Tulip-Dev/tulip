@@ -22,7 +22,6 @@
 #include <QTableView>
 
 class QKeyEvent;
-class QWheelEvent;
 
 class NavigableTableView : public QTableView {
   Q_OBJECT
@@ -30,7 +29,6 @@ class NavigableTableView : public QTableView {
 public:
   explicit NavigableTableView(QWidget *parent = nullptr);
   void keyPressEvent(QKeyEvent *event) override;
-  void wheelEvent(QWheelEvent *event) override;
 
 protected:
   int sizeHintForRow(int row) const override;
