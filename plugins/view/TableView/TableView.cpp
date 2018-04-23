@@ -124,8 +124,12 @@ bool TableView::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void TableView::setZoomLevel(int level) {
-  int fs = (level * minFontSize)/100;
-  _ui->table->setStyleSheet(QString("QTableView { font-size: %1pt; } QHeaderView::section:horizontal { font: bold; font-size: %2pt; margin-bottom: 5px; margin-left: 12px; margin-right: 12px;}").arg(fs).arg(fs - 1));
+  int fs = (level * minFontSize) / 100;
+  _ui->table->setStyleSheet(
+      QString("QTableView { font-size: %1pt; } QHeaderView::section:horizontal { font: bold; "
+              "font-size: %2pt; margin-bottom: 5px; margin-left: 12px; margin-right: 12px;}")
+          .arg(fs)
+          .arg(fs - 1));
 }
 
 void TableView::setupWidget() {
