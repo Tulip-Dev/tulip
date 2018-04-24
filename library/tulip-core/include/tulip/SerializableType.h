@@ -153,7 +153,7 @@ public:
     return false;
   }
   static bool read(const std::vector<std::string> &vs,
-		   typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
+                   typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
     v.clear();
     v.reserve(vs.size());
 
@@ -161,14 +161,14 @@ public:
       ELT_TYPE val;
       std::istringstream is(s);
       if (!ELT_READER::read(is, val))
-	return false;
+        return false;
 
       v.push_back(val);
     }
     return true;
   }
-  static bool tokenize(const std::string &s, std::vector<std::string> &v,
-		       char openChar, char sepChar, char closeChar) {
+  static bool tokenize(const std::string &s, std::vector<std::string> &v, char openChar,
+                       char sepChar, char closeChar) {
     v.clear();
 
     std::istringstream is(s);
@@ -213,13 +213,13 @@ public:
 
           is.unget();
 
-	  auto pos = is.tellg();
+          auto pos = is.tellg();
           if (!ELT_READER::read(is, val))
             return false;
 
-	  v.push_back(s.substr(pos, is.tellg() - pos)),
+          v.push_back(s.substr(pos, is.tellg() - pos)),
 
-          firstVal = false;
+              firstVal = false;
           sepFound = false;
         } else
           return false;

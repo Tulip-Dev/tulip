@@ -607,9 +607,8 @@ public:
   AbstractVectorProperty(Graph *, const std::string &name = "");
 
   // 5 methods inherited from VectorPropertyInterface
-  bool tokenize(const std::string &str, std::vector<std::string> &vect,
-		char openChar = '(', char sepChar = ',',
-		char closeChar = ')') override;
+  bool tokenize(const std::string &str, std::vector<std::string> &vect, char openChar = '(',
+                char sepChar = ',', char closeChar = ')') override;
 
   bool setNodeStringValueAsVector(const node n, const std::vector<std::string> &values) override;
 

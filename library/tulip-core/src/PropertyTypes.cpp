@@ -453,7 +453,8 @@ bool BooleanVectorType::read(const std::vector<std::string> &vs, RealType &v) {
   return true;
 }
 
-bool BooleanVectorType::tokenize(const std::string &s, std::vector<std::string> &v, char openChar, char sepChar, char closeChar) {
+bool BooleanVectorType::tokenize(const std::string &s, std::vector<std::string> &v, char openChar,
+                                 char sepChar, char closeChar) {
   v.clear();
 
   std::istringstream is(s);
