@@ -632,6 +632,37 @@ public:
   ~VectorPropertyInterface() override {}
 
   /**
+   * @brief split an input string into a vector of strings
+   * @param str A string listing the elements of the vector to set on a node/edge.
+   * @param vect An output vector containing the string elements
+   * @param openChar an optional character opening the list of elements. Default value is '('; when
+   * set to '\0' it indicates that there is no opening character.
+   * @param sepChar an optional character separing the elements of the list. Default value is ','.
+   * @param closeChar an optional character closing the list of elements. Default value is ')'; when
+   * set to '\0' it indicates that there is no opening character.
+   * @return Whether the string was a correct representation for this property's type.
+   */
+  virtual bool tokenize(const std::string &str, std::vector<std::string> &vect,
+			char openChar = '(', char sepChar = ',',
+			char closeChar = ')') = 0;
+
+  /**
+   * @brief Sets a new vector represented by the vector of string parameter as the node value.
+   * @param n The node on which to set the new value.
+   * @param values A vector of strings listing the string representations of elements of the vector to set on the node.
+   * @return Whether the vector was a correct representation for this property's type. If not, the value is not set.
+   */
+  virtual bool setNodeStringValueAsVector(const node n, const std::vector<std::string> &values) = 0;
+
+  /**
+   * @brief Sets a new vector represented by the vector of string parameter as the edge value.
+   * @param e The edge on which to set the new value.
+   * @param values A vector of strings listing the string representations of elements of the vector to set on the edge.
+   * @return Whether the vector was a correct representation for this property's type. If not, the value is not set.
+   */
+  virtual bool setEdgeStringValueAsVector(const edge e, const std::vector<std::string> &values) = 0;
+
+  /**
    * @brief Sets a new vector represented by the string parameter as the node value.
    * @param n The node on which to set the new value.
    * @param value A string listing the elements of the vector to set on the node.

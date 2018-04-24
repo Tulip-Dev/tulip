@@ -119,8 +119,11 @@ class TLP_SCOPE BooleanVectorType : public TypeInterface<std::vector<bool>> {
 public:
   static void write(std::ostream &, const RealType &);
   static void writeb(std::ostream &, const RealType &);
-  static bool read(std::istream &, RealType &, char openChar = '(', char sepChar = ',',
-                   char closeChar = ')');
+  static bool read(std::istream &, RealType &, char openChar = '(',
+		   char sepChar = ',', char closeChar = ')');
+  static bool read(const std::vector<std::string> &vs, RealType &v);
+  static bool tokenize(const std::string &, std::vector<std::string> &,
+		       char openChar = '(', char sepChar = ',', char closeChar = ')');
   static bool readb(std::istream &, RealType &);
   FORWARD_STRING_METHODS(BooleanVectorType)
 };
@@ -170,8 +173,21 @@ class TLP_SCOPE StringVectorType : public TypeInterface<std::vector<std::string>
 public:
   static void write(std::ostream &, const RealType &);
   static void writeb(std::ostream &oss, const RealType &vStr);
-  static bool read(std::istream &, RealType &, char openChar = '(', char sepchar = ',',
-                   char closeChar = ')');
+  static bool read(std::istream &, RealType &, char openChar = '(',
+		   char sepchar = ',', char closeChar = ')');
+  static bool read(const std::vector<std::string> &vs, RealType &v) {
+    v.clear();
+    v.reserve(vs.size());
+    for (const std::string &s : vs)
+      v.push_back(s);
+
+    return true;
+  }
+  static bool tokenize(const std::string &s, std::vector<std::string> &v,
+		       char openChar = '(', char sepChar = ',', char closeChar = ')') {
+    std::istringstream is(s);
+    return read(is, v, openChar, sepChar, closeChar);
+  }
   static bool readb(std::istream &iss, RealType &vStr);
   FORWARD_STRING_METHODS(StringVectorType)
 };

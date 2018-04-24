@@ -449,6 +449,21 @@ tlp::AbstractVectorProperty<vectType, eltType, propType>::AbstractVectorProperty
     : AbstractProperty<vectType, vectType, propType>(g, name) {}
 //============================================================
 template <typename vectType, typename eltType, typename propType>
+bool tlp::AbstractVectorProperty<vectType, eltType, propType>::tokenize(const std::string &s, std::vector<std::string> &vect, char openChar, char sepChar, char closeChar) {
+  return vectType::tokenize(s, vect, openChar, sepChar, closeChar);
+}
+//============================================================
+template <typename vectType, typename eltType, typename propType>
+bool tlp::AbstractVectorProperty<vectType, eltType, propType>::setNodeStringValueAsVector(const node n, const std::vector<std::string> &vs) {
+  typename vectType::RealType v;
+  if (!vectType::read(vs, v))
+    return false;
+
+  this->setNodeValue(n, v);
+  return true;
+}
+//============================================================
+template <typename vectType, typename eltType, typename propType>
 bool tlp::AbstractVectorProperty<vectType, eltType, propType>::setNodeStringValueAsVector(
     const node n, const std::string &s, char openChar, char sepChar, char closeChar) {
   typename vectType::RealType v;
@@ -458,6 +473,16 @@ bool tlp::AbstractVectorProperty<vectType, eltType, propType>::setNodeStringValu
     return false;
 
   this->setNodeValue(n, v);
+  return true;
+}
+//============================================================
+template <typename vectType, typename eltType, typename propType>
+bool tlp::AbstractVectorProperty<vectType, eltType, propType>::setEdgeStringValueAsVector(const edge e, const std::vector<std::string> &vs) {
+  typename vectType::RealType v;
+  if (!vectType::read(vs, v))
+    return false;
+
+  this->setEdgeValue(e, v);
   return true;
 }
 //============================================================

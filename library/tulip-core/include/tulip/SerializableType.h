@@ -150,8 +150,81 @@ public:
       v.resize(vSize);
       return bool(iss.read(reinterpret_cast<char *>(v.data()), vSize * sizeof(ELT_TYPE)));
     }
-
     return false;
+  }
+  static bool read(const std::vector<std::string> &vs,
+		   typename TypeInterface<std::vector<ELT_TYPE>>::RealType &v) {
+    v.clear();
+    v.reserve(vs.size());
+
+    for (const std::string &s : vs) {
+      ELT_TYPE val;
+      std::istringstream is(s);
+      if (!ELT_READER::read(is, val))
+	return false;
+
+      v.push_back(val);
+    }
+    return true;
+  }
+  static bool tokenize(const std::string &s, std::vector<std::string> &v,
+		       char openChar, char sepChar, char closeChar) {
+    v.clear();
+
+    std::istringstream is(s);
+    char c = ' ';
+    ELT_TYPE val;
+    bool firstVal = true;
+    bool sepFound = false;
+
+    // go to first non space char
+    while ((is >> c) && isspace(c)) {
+    }
+
+    if (openChar) {
+      if (c != openChar)
+        return false;
+    } else
+      is.unget();
+
+    for (;;) {
+      if (!(is >> c))
+        return (!sepFound && !closeChar);
+
+      if (isspace(c))
+        continue;
+
+      if (c == closeChar) {
+        if (!openChar || sepFound)
+          return false;
+
+        return true;
+      }
+
+      if (c == sepChar) {
+        if (firstVal || sepFound)
+          return false;
+
+        sepFound = true;
+      } else {
+        if (firstVal || sepFound) {
+          if (openParen && c != '(')
+            return false;
+
+          is.unget();
+
+	  auto pos = is.tellg();
+          if (!ELT_READER::read(is, val))
+            return false;
+
+	  v.push_back(s.substr(pos, is.tellg() - pos)),
+
+          firstVal = false;
+          sepFound = false;
+        } else
+          return false;
+      }
+    }
   }
   static unsigned int valueSize() {
     return 0; // means is not fixed

@@ -438,6 +438,66 @@ bool BooleanVectorType::read(istream &is, RealType &v, char openChar, char sepCh
   }
 }
 
+bool BooleanVectorType::read(const std::vector<std::string> &vs, RealType &v) {
+  v.clear();
+  v.reserve(vs.size());
+
+  for (const std::string &s : vs) {
+    bool val;
+    std::istringstream is(s);
+    if (!BooleanType::read(is, val))
+      return false;
+
+    v.push_back(val);
+  }
+  return true;
+}
+
+bool BooleanVectorType::tokenize(const std::string &s, std::vector<std::string> &v, char openChar, char sepChar, char closeChar) {
+  v.clear();
+
+  std::istringstream is(s);
+  char c = ' ';
+  bool firstVal = true;
+
+  // go to first non space char
+  while ((is >> c) && isspace(c)) {
+  }
+
+  if (openChar) {
+    if (c != openChar)
+      return false;
+  } else
+    is.unget();
+
+  for (;;) {
+    if (!(is >> c))
+      return !closeChar;
+
+    if (isspace(c))
+      continue;
+
+    if (c == closeChar) {
+      return true;
+    }
+
+    if (c == sepChar) {
+      if (firstVal)
+        return false;
+    } else
+      is.unget();
+
+    bool val;
+
+    auto pos = is.tellg();
+    if (!BooleanType::read(is, val))
+      return false;
+
+    v.push_back(s.substr(pos, is.tellg() - pos));
+    firstVal = false;
+  }
+}
+
 bool BooleanVectorType::readb(istream &iss, RealType &v) {
   unsigned int vSize = v.size();
 

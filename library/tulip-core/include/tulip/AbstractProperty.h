@@ -606,8 +606,16 @@ class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectT
 public:
   AbstractVectorProperty(Graph *, const std::string &name = "");
 
-  // 2 methods inherited from VectorPropertyInterface
+  // 5 methods inherited from VectorPropertyInterface
+  bool tokenize(const std::string &str, std::vector<std::string> &vect,
+		char openChar = '(', char sepChar = ',',
+		char closeChar = ')') override;
+
+  bool setNodeStringValueAsVector(const node n, const std::vector<std::string> &values) override;
+
   bool setNodeStringValueAsVector(const node, const std::string &, char, char, char) override;
+
+  bool setEdgeStringValueAsVector(const edge e, const std::vector<std::string> &values) override;
 
   bool setEdgeStringValueAsVector(const edge, const std::string &, char, char, char) override;
 
