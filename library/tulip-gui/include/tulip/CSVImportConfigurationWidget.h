@@ -43,12 +43,12 @@ class PropertyNameValidator;
 /**
  * @brief Configuration widget for a property.
  */
- class TLP_QT_SCOPE PropertyConfigurationWidget: public QWidget, public CSVColumn {
+class TLP_QT_SCOPE PropertyConfigurationWidget : public QWidget, public CSVColumn {
   Q_OBJECT
 public:
   PropertyConfigurationWidget(unsigned int propertyNumber, const QString &propertyName,
                               bool propertyNameIsEditable, const std::string &PropertyType,
-                              PropertyNameValidator* validator, QWidget *parent = nullptr);
+                              PropertyNameValidator *validator, QWidget *parent = nullptr);
   /**
    * Return the selected property type.
    *  The property type is not the label displayed in the
@@ -63,7 +63,7 @@ public:
 
   QString getPropertyName() const;
 
-  void setPropertyName(const QString& name);
+  void setPropertyName(const QString &name);
 
   void toggleUsed();
 
@@ -117,18 +117,18 @@ class CSVTableHeader : public QHeaderView {
   const std::vector<PropertyConfigurationWidget *> &widgets;
 
 public:
-  CSVTableHeader(QWidget *parent,
-		 std::vector<PropertyConfigurationWidget *> &propertyWidgets);
+  CSVTableHeader(QWidget *parent, std::vector<PropertyConfigurationWidget *> &propertyWidgets);
 
 protected:
   void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const override;
 
- protected slots:
+protected slots:
   void checkBoxPressed(int logicalIndex);
 };
 
 /**
-* @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a CSVContentHandler.
+* @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a
+*CSVContentHandler.
 **/
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:

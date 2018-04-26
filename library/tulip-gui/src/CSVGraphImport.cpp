@@ -67,7 +67,8 @@ char CSVImportParameters::getColumnMultiValueSeparator(unsigned int column) cons
   return 0;
 }
 
-CSVColumn::Action CSVImportParameters::getColumnActionForToken(unsigned int column, const std::string &token) const {
+CSVColumn::Action CSVImportParameters::getColumnActionForToken(unsigned int column,
+                                                               const std::string &token) const {
   if (column < columns.size())
     return columns[column]->getActionForToken(token);
   return CSVColumn::Action::SKIP_ROW;
@@ -142,8 +143,8 @@ AbstractCSVToGraphDataMapping::getElementsForRow(const vector<vector<string>> &t
 
     for (unsigned int i = 0; i < columnIds.size(); ++i) {
       for (const string &token : tokens[columnIds[i]]) {
-	key.append(token);
-	keys.push_back(token);
+        key.append(token);
+        keys.push_back(token);
       }
     }
 
@@ -515,13 +516,14 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
 
   for (size_t column = 0; column < lineTokens.size(); ++column) {
     if (importParameters.importColumn(column)) {
-      PropertyInterface *property = props[column] = propertiesManager->getPropertyInterface(column, lineTokens[column]);
+      PropertyInterface *property = props[column] =
+          propertiesManager->getPropertyInterface(column, lineTokens[column]);
       const string &token = lineTokens[column];
 
       // If the property does not exists or
       // if the token is empty no need to import the value
       if (property != nullptr && !token.empty()) {
-	CSVColumn::Action action = CSVColumn::Action::ASSIGN_VALUE;
+        CSVColumn::Action action = CSVColumn::Action::ASSIGN_VALUE;
         bool isVectorProperty = (property->getTypename().find("vector") == 0);
 
         if (isVectorProperty) {
@@ -567,32 +569,32 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
               }
             }
           }
-	  static_cast<VectorPropertyInterface *>(property)->tokenize(tokenCopy, tokens[column], '\0', importParameters.getColumnMultiValueSeparator(column), '\0');
-	  // check tokens actions
-	  for (const std::string &tok : tokens[column]) {
-	    auto tokAction =
-	      importParameters.getColumnActionForToken(column, tok);
-	    if (tokAction == CSVColumn::Action::SKIP_ROW) {
-	      action = tokAction;
-	      break;
-	    } else if (tokAction != CSVColumn::Action::ASSIGN_VALUE)
-	      action = tokAction;
-	  }
+          static_cast<VectorPropertyInterface *>(property)->tokenize(
+              tokenCopy, tokens[column], '\0',
+              importParameters.getColumnMultiValueSeparator(column), '\0');
+          // check tokens actions
+          for (const std::string &tok : tokens[column]) {
+            auto tokAction = importParameters.getColumnActionForToken(column, tok);
+            if (tokAction == CSVColumn::Action::SKIP_ROW) {
+              action = tokAction;
+              break;
+            } else if (tokAction != CSVColumn::Action::ASSIGN_VALUE)
+              action = tokAction;
+          }
         } else {
-	  action = importParameters.getColumnActionForToken(column, token);
-	  tokens[column].push_back(token);
-	}
-	if (action == CSVColumn::Action::SKIP_ROW)
-	  return true;
-	if (action == CSVColumn::Action::ASSIGN_NO_VALUE)
-	  tokens[column].clear();
+          action = importParameters.getColumnActionForToken(column, token);
+          tokens[column].push_back(token);
+        }
+        if (action == CSVColumn::Action::SKIP_ROW)
+          return true;
+        if (action == CSVColumn::Action::ASSIGN_NO_VALUE)
+          tokens[column].clear();
       }
     }
   }
 
   // Compute the element id associated to the line
-  pair<ElementType, vector<unsigned int>> elements =
-    mapping->getElementsForRow(tokens);
+  pair<ElementType, vector<unsigned int>> elements = mapping->getElementsForRow(tokens);
 
   for (size_t column = 0; column < lineTokens.size(); ++column) {
     PropertyInterface *property = props[column];
@@ -602,35 +604,33 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
     if (property != nullptr && !tokens[column].empty()) {
       bool isVectorProperty = (property->getTypename().find("vector") == 0);
       if (elements.first == NODE) {
-	for (size_t i = 0; i < elements.second.size(); ++i) {
-	  if (elements.second[i] == UINT_MAX)
-	    continue;
+        for (size_t i = 0; i < elements.second.size(); ++i) {
+          if (elements.second[i] == UINT_MAX)
+            continue;
 
-	  if (!(isVectorProperty
-		? static_cast<VectorPropertyInterface *>(property)
-		->setNodeStringValueAsVector(node(elements.second[i]), tokens[column])
-		: property->setNodeStringValue(node(elements.second[i]), tokens[column][0]))) {
-	    // We add one to the row number as in the configuration widget we start from row 1 not
-	    // row 0
-	    qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-		       << " error when importing token \"" << lineTokens[column] << "\" in property \""
-		       << property->getName() << "\" of type \"" << property->getTypename()
-		       << "\" at line " << row + 1;
-	  }
-	}
+          if (!(isVectorProperty
+                    ? static_cast<VectorPropertyInterface *>(property)->setNodeStringValueAsVector(
+                          node(elements.second[i]), tokens[column])
+                    : property->setNodeStringValue(node(elements.second[i]), tokens[column][0]))) {
+            // We add one to the row number as in the configuration widget we start from row 1 not
+            // row 0
+            qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
+                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
+          }
+        }
       } else {
-	for (size_t i = 0; i < elements.second.size(); ++i) {
-	  if (!(isVectorProperty
-		? static_cast<VectorPropertyInterface *>(property)
-		->setEdgeStringValueAsVector(edge(elements.second[i]), tokens[column])
-		: property->setEdgeStringValue(edge(elements.second[i]), tokens[column][0]))) {
-	    // We add one to the row number as in the configuration widget we start from row 1 not
-	    // row 0
-	    qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-		       << " error when importing token \"" << lineTokens[column] << "\" in property \""
-		       << property->getName() << "\" of type \"" << property->getTypename()
-		       << "\" at line " << row + 1;
-	  }
+        for (size_t i = 0; i < elements.second.size(); ++i) {
+          if (!(isVectorProperty
+                    ? static_cast<VectorPropertyInterface *>(property)->setEdgeStringValueAsVector(
+                          edge(elements.second[i]), tokens[column])
+                    : property->setEdgeStringValue(edge(elements.second[i]), tokens[column][0]))) {
+            // We add one to the row number as in the configuration widget we start from row 1 not
+            // row 0
+            qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " error when importing token \""
+                       << lineTokens[column] << "\" in property \"" << property->getName()
+                       << "\" of type \"" << property->getTypename() << "\" at line " << row + 1;
+          }
         }
       }
     }

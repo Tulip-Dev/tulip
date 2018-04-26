@@ -150,7 +150,7 @@ void CSVGraphMappingConfigurationQWizardPage::initializePage() {
       csvWizard->getGraph(), csvWizard->getImportConfigurationPage()->getImportParameters());
 }
 
-Graph* CSVImportWizard::graph = nullptr;
+Graph *CSVImportWizard::graph = nullptr;
 
 CSVImportWizard::CSVImportWizard(QWidget *parent) : QWizard(parent), ui(new Ui::CSVImportWizard) {
   // ensure there is a Cancel button (may be hidden on Mac)

@@ -41,13 +41,12 @@
 using namespace tlp;
 using namespace std;
 
-PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable, const std::string& propertyType, PropertyNameValidator *validator, QWidget* parent) :
-  QWidget(parent),
-  CSVColumn(QStringToTlpString(propertyName), propertyType),
-  propertyNameValidator(validator),
-  propertyEditButton(new QPushButton(this)),
-  nameEditable(propertyNameIsEditable),
-  propertyNumber(propertyNumber) {
+PropertyConfigurationWidget::PropertyConfigurationWidget(
+    unsigned int propertyNumber, const QString &propertyName, bool propertyNameIsEditable,
+    const std::string &propertyType, PropertyNameValidator *validator, QWidget *parent)
+    : QWidget(parent), CSVColumn(QStringToTlpString(propertyName), propertyType),
+      propertyNameValidator(validator), propertyEditButton(new QPushButton(this)),
+      nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
   setLayout(new QVBoxLayout());
   layout()->setContentsMargins(0, 0, 0, 0);
   layout()->setSpacing(0);
@@ -62,19 +61,20 @@ PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNu
 }
 
 const string &PropertyConfigurationWidget::getPropertyType() const {
-  //Return the real type
+  // Return the real type
   return _type;
 }
 
 void PropertyConfigurationWidget::setPropertyType(const string &pType) {
   _type = pType.empty() ? "string" : pType;
-  propertyEditButton->setText(QString("%1\n[%2]").arg(getPropertyName()).arg(propertyTypeToPropertyTypeLabel(_type)));
+  propertyEditButton->setText(
+      QString("%1\n[%2]").arg(getPropertyName()).arg(propertyTypeToPropertyTypeLabel(_type)));
 }
 
 QString PropertyConfigurationWidget::getPropertyName() const {
   return tlpStringToQString(_name);
 }
-void PropertyConfigurationWidget::setPropertyName(const QString& pName) {
+void PropertyConfigurationWidget::setPropertyName(const QString &pName) {
   _name = QStringToTlpString(pName);
   propertyEditButton->setText(QString("%1\n[%2]").arg(pName).arg(QString(_type.c_str())));
 }
@@ -122,41 +122,40 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   ui->name->setValidator(propertyNameValidator);
   ui->typeCB->clear();
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename),
-		     QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename),
-		     QVariant(QString::fromStdString(DoubleProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(DoubleProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(ColorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(ColorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(ColorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(IntegerProperty::propertyTypename),
-		     QVariant(QString::fromStdString(IntegerProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(IntegerProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(LayoutProperty::propertyTypename),
-		     QVariant(QString::fromStdString(LayoutProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(LayoutProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(SizeProperty::propertyTypename),
-		     QVariant(QString::fromStdString(SizeProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(SizeProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(StringProperty::propertyTypename),
-		     QVariant(QString::fromStdString(StringProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(StringProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(BooleanVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(BooleanVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(BooleanVectorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(ColorVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(ColorVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(ColorVectorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(CoordVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(CoordVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(CoordVectorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(DoubleVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(DoubleVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(DoubleVectorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(IntegerVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(IntegerVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(IntegerVectorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(SizeVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(SizeVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(SizeVectorProperty::propertyTypename)));
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(StringVectorProperty::propertyTypename),
-		     QVariant(QString::fromStdString(StringVectorProperty::propertyTypename)));
+                      QVariant(QString::fromStdString(StringVectorProperty::propertyTypename)));
 
   auto index = ui->typeCB->findData(QVariant(QString::fromStdString(_type)));
   if (index != -1) {
     ui->typeCB->setCurrentIndex(index);
   }
   typeCBChanged(ui->typeCB->currentText());
-  connect(ui->typeCB, SIGNAL(currentIndexChanged(QString)),
-	  this, SLOT(typeCBChanged(QString)));
+  connect(ui->typeCB, SIGNAL(currentIndexChanged(QString)), this, SLOT(typeCBChanged(QString)));
 
   if (_valueSeparator) {
     index = ui->separatorCB->findText(QString(QChar(_valueSeparator)));
@@ -178,17 +177,18 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
     _valueSeparator = ui->separatorCB->currentText()[0].toAscii();
     clearExceptions();
     for (int i = 0; i < ui->exceptionTableWidget->rowCount(); ++i) {
-      std::string value =
-	QStringToTlpString(ui->exceptionTableWidget->item(i, 0)->text());
-      auto action = static_cast<QComboBox *>(ui->exceptionTableWidget->cellWidget(i, 1))->currentIndex();
+      std::string value = QStringToTlpString(ui->exceptionTableWidget->item(i, 0)->text());
+      auto action =
+          static_cast<QComboBox *>(ui->exceptionTableWidget->cellWidget(i, 1))->currentIndex();
       CSVColumn::addException(value, CSVColumn::Action(action));
     }
   }
   delete ui;
 }
 
-CSVTableHeader::CSVTableHeader(QWidget *parent, std::vector<PropertyConfigurationWidget *> &propertyWidgets) :
-    QHeaderView(Qt::Horizontal, parent), widgets(propertyWidgets) {
+CSVTableHeader::CSVTableHeader(QWidget *parent,
+                               std::vector<PropertyConfigurationWidget *> &propertyWidgets)
+    : QHeaderView(Qt::Horizontal, parent), widgets(propertyWidgets) {
   setClickable(true);
   connect(this, SIGNAL(sectionPressed(int)), this, SLOT(checkBoxPressed(int)));
 }
@@ -198,14 +198,12 @@ void CSVTableHeader::paintSection(QPainter *painter, const QRect &rect, int logi
   QHeaderView::paintSection(painter, rect, logicalIndex);
   painter->restore();
   QStyleOptionButton cb;
-  auto cbRect =
-    this->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
-  cb.rect = 
-    QRect(rect.x() + (rect.width() - cbRect.width())/2,
-	  rect.y() + (rect.height() - cbRect.height())/2,
-	  cbRect.width(), cbRect.height());
+  auto cbRect = this->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
+  cb.rect =
+      QRect(rect.x() + (rect.width() - cbRect.width()) / 2,
+            rect.y() + (rect.height() - cbRect.height()) / 2, cbRect.width(), cbRect.height());
   cb.state = QStyle::State_Enabled |
-    (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
+             (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
   this->style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter);
 }
 
@@ -214,7 +212,9 @@ void CSVTableHeader::checkBoxPressed(int logicalIndex) {
   this->update();
 }
 
-CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX),firstLineIndex(0), checkCommentsLines(true), nbCommentsLines(0) {}
+CSVTableWidget::CSVTableWidget(QWidget *parent)
+    : QTableWidget(parent), maxLineNumber(UINT_MAX), firstLineIndex(0), checkCommentsLines(true),
+      nbCommentsLines(0) {}
 
 bool CSVTableWidget::begin() {
   clear();
@@ -267,9 +267,10 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
   return true;
 }
 
-CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::CSVImportConfigurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL), firstLine(0), guessFirstLineIsHeader(true) {
+CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
+    : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),
+      validator(new PropertyNameValidator(propertyWidgets, this)), maxLineNumber(0), parser(NULL),
+      firstLine(0), guessFirstLineIsHeader(true) {
   ui->setupUi(this);
 
   // Import line number change
@@ -289,7 +290,8 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
   }
 
   // set horizontal header
-  ui->previewTableWidget->setHorizontalHeader(new CSVTableHeader(ui->previewTableWidget, propertyWidgets));
+  ui->previewTableWidget->setHorizontalHeader(
+      new CSVTableHeader(ui->previewTableWidget, propertyWidgets));
   ui->previewTableWidget->horizontalHeader()->setMinimumSectionSize(120);
 #if QT_VERSION >= 0x050000
   ui->previewTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -467,7 +469,7 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
   for (unsigned int i = 0; i < columnCount(); ++i) {
     // Update the column name
     QString columnName = generateColumnName(i);
-    itemsLabels << "" ; //columnName;
+    itemsLabels << ""; // columnName;
     propertyWidgets[i]->setPropertyName(columnName);
     // Update the column type.
     propertyWidgets[i]->setPropertyType(getColumnType(i));
@@ -568,9 +570,8 @@ void CSVImportConfigurationWidget::addPropertyToPropertyList(const string &prope
 PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigurationWidget(
     unsigned int propertyNumber, const QString &propertyName, bool isEditable,
     const string &propertyType, QWidget *parent) {
-  PropertyConfigurationWidget *propertyConfigurationWidget =
-    new PropertyConfigurationWidget(propertyNumber, propertyName, isEditable,
-				    propertyType, validator, parent);
+  PropertyConfigurationWidget *propertyConfigurationWidget = new PropertyConfigurationWidget(
+      propertyNumber, propertyName, isEditable, propertyType, validator, parent);
   propertyConfigurationWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
   connect(propertyConfigurationWidget, SIGNAL(stateChange(bool)), this,
           SLOT(propertyStateChanged(bool)));
@@ -591,10 +592,10 @@ void CSVImportConfigurationWidget::propertyStateChanged(bool state) {
   }
 }
 
-const vector<CSVColumn*> CSVImportConfigurationWidget::getPropertiesToImport() const {
-  vector<CSVColumn*> properties(propertyWidgets.size());
+const vector<CSVColumn *> CSVImportConfigurationWidget::getPropertiesToImport() const {
+  vector<CSVColumn *> properties(propertyWidgets.size());
 
-  for(size_t i = 0 ; i < propertyWidgets.size(); ++i) {
+  for (size_t i = 0; i < propertyWidgets.size(); ++i) {
     properties[i] = propertyWidgets[i];
   }
 
@@ -633,8 +634,8 @@ QValidator::State PropertyNameValidator::validate(QString &input, int &) const {
 
   // Only the property at the current index can have this name
   for (auto widget : widgets) {
-    if ((widget->getPropertyName().compare(input) == 0)
-	&& (currentIndex != widget->getPropertyNumber()))
+    if ((widget->getPropertyName().compare(input) == 0) &&
+        (currentIndex != widget->getPropertyNumber()))
       return QValidator::Invalid;
   }
 

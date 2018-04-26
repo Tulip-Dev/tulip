@@ -38,13 +38,13 @@ class PropertyInterface;
   **/
 class TLP_QT_SCOPE CSVColumn {
 public:
-  CSVColumn(const std::string& columnName="", const std::string& columnType="")
-    :_used(true), _name(columnName), _type(columnType), _valueSeparator(0) {}
+  CSVColumn(const std::string &columnName = "", const std::string &columnType = "")
+      : _used(true), _name(columnName), _type(columnType), _valueSeparator(0) {}
 
   /**
     * @brief Get the name of the column.
     **/
-  const std::string& name()const {
+  const std::string &name() const {
     return _name;
   }
 
@@ -58,7 +58,7 @@ public:
   /**
     * @brief Return the property data type.
     **/
-  const std::string& dataType() const {
+  const std::string &dataType() const {
     return _type;
   }
 
@@ -77,7 +77,7 @@ public:
   struct Exception {
     std::string value;
     Action action;
-  Exception(const std::string &v, Action a) :value(v), action(a) {}
+    Exception(const std::string &v, Action a) : value(v), action(a) {}
   };
 
   void addException(const std::string &value, Action action) {
@@ -90,9 +90,9 @@ public:
 
   // look for a specific exception defined for token
   Action getActionForToken(const std::string &token) {
-    for(const Exception &exception : _exceptions) {
+    for (const Exception &exception : _exceptions) {
       if (exception.value == token)
-	return exception.action;
+        return exception.action;
     }
     return Action::ASSIGN_VALUE;
   }
@@ -142,7 +142,7 @@ public:
   /**
     * @brief Get the column action according to the given token
     **/
-  CSVColumn::Action getColumnActionForToken(unsigned int column, const std::string& token) const;
+  CSVColumn::Action getColumnActionForToken(unsigned int column, const std::string &token) const;
 
   /**
     * @brief Return the index of the first line to import
@@ -153,14 +153,15 @@ public:
     **/
   unsigned int getLastLineIndex() const;
   /**
-    * @brief Return true if the given row is between the first row to import and the last row to import
+    * @brief Return true if the given row is between the first row to import and the last row to
+    *import
     **/
   bool importRow(unsigned int row) const;
 
 private:
   unsigned int fromLine;
   unsigned int toLine;
-  std::vector<CSVColumn*> columns;
+  std::vector<CSVColumn *> columns;
 };
 
 /**
@@ -180,7 +181,7 @@ class TLP_QT_SCOPE CSVToGraphDataMapping {
 public:
   virtual ~CSVToGraphDataMapping() {}
   virtual std::pair<tlp::ElementType, std::vector<unsigned int>>
-    getElementsForRow(const std::vector<std::vector<std::string>> &tokens) = 0;
+  getElementsForRow(const std::vector<std::vector<std::string>> &tokens) = 0;
   virtual void init(unsigned int rowNumber) = 0;
 };
 
@@ -200,7 +201,7 @@ public:
 
   void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
-    getElementsForRow(const std::vector<std::vector<std::string>> &tokens) override;
+  getElementsForRow(const std::vector<std::vector<std::string>> &tokens) override;
 
 protected:
   /**
@@ -341,7 +342,8 @@ public:
 };
 
 /**
-  * @brief Proxy to handle all the properties operations like access, creation, data type detection during the CSV parsing process.
+  * @brief Proxy to handle all the properties operations like access, creation, data type detection
+  *during the CSV parsing process.
   *
   * Try to guess the type of the property in function of the first token
   * if user don't tell which type the property is.
