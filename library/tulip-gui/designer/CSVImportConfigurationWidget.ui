@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
+    <width>617</width>
     <height>300</height>
    </rect>
   </property>
@@ -76,6 +76,9 @@
    </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -84,7 +87,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>596</width>
+        <width>609</width>
         <height>137</height>
        </rect>
       </property>
@@ -96,19 +99,12 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-        </layout>
-       </item>
-       <item>
         <widget class="tlp::CSVTableWidget" name="previewTableWidget">
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOn</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAlwaysOn</enum>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
@@ -117,7 +113,7 @@
           <enum>QAbstractItemView::NoSelection</enum>
          </property>
          <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
+          <bool>true</bool>
          </attribute>
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>

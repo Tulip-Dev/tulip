@@ -95,11 +95,11 @@ public:
   CSVImportConfigurationQWizardPage *getImportConfigurationPage() const;
   CSVGraphMappingConfigurationQWizardPage *getMappingConfigurationPage() const;
 
-  inline void setGraph(Graph *graph) {
-    this->graph = graph;
+  static void setGraph(Graph* g) {
+    graph = g;
   }
 
-  inline Graph *getGraph() const {
+  static Graph* getGraph() {
     return graph;
   }
 
@@ -108,7 +108,7 @@ public slots:
 
 private:
   Ui::CSVImportWizard *ui;
-  tlp::Graph *graph;
+  static tlp::Graph *graph;
 };
 }
 #endif // CSVIMPORTWIZARD_H

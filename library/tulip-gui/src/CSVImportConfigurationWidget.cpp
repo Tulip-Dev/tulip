@@ -16,11 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "tulip/CSVImportWizard.h"
 #include "tulip/CSVImportConfigurationWidget.h"
 #include "ui_CSVImportConfigurationWidget.h"
+#include "ui_CSVPropertyDialog.h"
 
-#include <QComboBox>
-#include <QLineEdit>
+#include <QLabel>
+#include <QPainter>
+#include <QPushButton>
+#include <QStyleOptionButton>
 
 #include <tulip/CSVParser.h>
 #include <tulip/CSVGraphImport.h>
@@ -37,120 +41,180 @@
 using namespace tlp;
 using namespace std;
 
-PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber,
-                                                         const QString &propertyName,
-                                                         bool propertyNameIsEditable,
-                                                         const std::string &PropertyType,
-                                                         QWidget *parent)
-    : QWidget(parent), propertyNameLineEdit(new QLineEdit(this)),
-      propertyTypeComboBox(new QComboBox(this)), usedCheckBox(new QCheckBox("", this)),
-      nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
+PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable, const std::string& propertyType, PropertyNameValidator *validator, QWidget* parent) :
+  QWidget(parent),
+  CSVColumn(QStringToTlpString(propertyName), propertyType),
+  propertyNameValidator(validator),
+  propertyEditButton(new QPushButton(this)),
+  nameEditable(propertyNameIsEditable),
+  propertyNumber(propertyNumber) {
   setLayout(new QVBoxLayout());
   layout()->setContentsMargins(0, 0, 0, 0);
   layout()->setSpacing(0);
-  layout()->addWidget(usedCheckBox);
-  layout()->setAlignment(usedCheckBox, Qt::AlignHCenter);
-  connect(usedCheckBox, SIGNAL(stateChanged(int)), this, SLOT(useStateChanged(int)));
-  usedCheckBox->setCheckState(Qt::Checked);
-  propertyNameLineEdit->setText(propertyName);
-  propertyNameLineEdit->setEnabled(propertyNameIsEditable);
-  propertyNameLineEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-  layout()->addWidget(propertyNameLineEdit);
-  layout()->setAlignment(propertyNameLineEdit, Qt::AlignHCenter);
-  fillPropertyTypeComboBox();
-  propertyTypeComboBox->setCurrentIndex(0);
+  propertyEditButton->setText(propertyName);
+  propertyEditButton->setEnabled(propertyNameIsEditable);
+  propertyEditButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+  layout()->addWidget(propertyEditButton);
+  connect(propertyEditButton, SIGNAL(released()), this, SLOT(showPropertyCreationDialog()));
+  layout()->setAlignment(propertyEditButton, Qt::AlignHCenter);
 
-  if (!PropertyType.empty()) {
-    setPropertyType(PropertyType);
-  }
-
-  propertyTypeComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-  layout()->addWidget(propertyTypeComboBox);
-  layout()->setAlignment(propertyTypeComboBox, Qt::AlignHCenter);
+  setPropertyType(propertyType);
 }
 
-void PropertyConfigurationWidget::fillPropertyTypeComboBox() {
-  propertyTypeComboBox->clear();
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename),
-      QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename),
-                                QVariant(QString::fromStdString(DoubleProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(ColorProperty::propertyTypename),
-                                QVariant(QString::fromStdString(ColorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(IntegerProperty::propertyTypename),
-      QVariant(QString::fromStdString(IntegerProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(LayoutProperty::propertyTypename),
-                                QVariant(QString::fromStdString(LayoutProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(SizeProperty::propertyTypename),
-                                QVariant(QString::fromStdString(SizeProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(StringProperty::propertyTypename),
-                                QVariant(QString::fromStdString(StringProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(BooleanVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(BooleanVectorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(ColorVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(ColorVectorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(CoordVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(CoordVectorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(DoubleVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(DoubleVectorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(IntegerVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(IntegerVectorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(SizeVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(SizeVectorProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(
-      propertyTypeToPropertyTypeLabel(StringVectorProperty::propertyTypename),
-      QVariant(QString::fromStdString(StringVectorProperty::propertyTypename)));
+const string &PropertyConfigurationWidget::getPropertyType() const {
+  //Return the real type
+  return _type;
 }
 
-string PropertyConfigurationWidget::getPropertyType() const {
-  // Return the real type in the
-  return QStringToTlpString(
-      propertyTypeComboBox->itemData(propertyTypeComboBox->currentIndex()).toString());
+void PropertyConfigurationWidget::setPropertyType(const string &pType) {
+  _type = pType.empty() ? "string" : pType;
+  propertyEditButton->setText(QString("%1\n[%2]").arg(getPropertyName()).arg(propertyTypeToPropertyTypeLabel(_type)));
 }
 
-void PropertyConfigurationWidget::setPropertyType(const string &propertyType) {
-  int index = propertyTypeComboBox->findData(QVariant(QString::fromStdString(propertyType)));
-
-  if (index != -1) {
-    propertyTypeComboBox->setCurrentIndex(index);
-  }
-}
 QString PropertyConfigurationWidget::getPropertyName() const {
-  return propertyNameLineEdit->text();
+  return tlpStringToQString(_name);
 }
-bool PropertyConfigurationWidget::getPropertyUsed() const {
-  return usedCheckBox->checkState() == Qt::Checked;
+void PropertyConfigurationWidget::setPropertyName(const QString& pName) {
+  _name = QStringToTlpString(pName);
+  propertyEditButton->setText(QString("%1\n[%2]").arg(pName).arg(QString(_type.c_str())));
 }
+
 unsigned int PropertyConfigurationWidget::getPropertyNumber() const {
   return propertyNumber;
 }
-void PropertyConfigurationWidget::useStateChanged(int state) {
-  if (state == Qt::Checked) {
-    propertyNameLineEdit->setEnabled(nameEditable);
-    propertyTypeComboBox->setEnabled(true);
-    emit stateChange(true);
-  } else {
-    propertyNameLineEdit->setEnabled(false);
-    propertyTypeComboBox->setEnabled(false);
-    emit stateChange(false);
+
+void PropertyConfigurationWidget::toggleUsed() {
+  _used = !_used;
+  propertyEditButton->setEnabled(_used);
+  emit stateChange(_used);
+}
+
+void PropertyConfigurationWidget::typeCBChanged(const QString &text) {
+  bool enabled = text.contains(QString("Vector"));
+  ui->separatorCB->setEnabled(enabled);
+}
+
+void PropertyConfigurationWidget::addException() {
+  QTableWidget *w = ui->exceptionTableWidget;
+  auto row = w->rowCount();
+  w->insertRow(row);
+  w->setItem(row, 0, new QTableWidgetItem(QString("edit the value")));
+  QComboBox *actionCB = new QComboBox(w);
+  actionCB->addItem(QString("Assign no value"));
+  actionCB->addItem(QString("Ignore the row"));
+  w->setCellWidget(row, 1, actionCB);
+}
+
+void PropertyConfigurationWidget::delCurrentException() {
+  QTableWidget *w = ui->exceptionTableWidget;
+  auto row = w->currentRow();
+  if (row > -1)
+    w->removeRow(row);
+}
+
+void PropertyConfigurationWidget::showPropertyCreationDialog() {
+  QDialog dialog(this);
+  ui = new Ui_CSVPropertyDialog();
+  ui->setupUi(&dialog);
+  ui->label->setText(QString("Column #%1").arg(propertyNumber + 1));
+  ui->name->setText(tlpStringToQString(_name));
+  propertyNameValidator->setCurrentIndex(propertyNumber);
+  ui->name->setValidator(propertyNameValidator);
+  ui->typeCB->clear();
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename),
+		     QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename),
+		     QVariant(QString::fromStdString(DoubleProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(ColorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(ColorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(IntegerProperty::propertyTypename),
+		     QVariant(QString::fromStdString(IntegerProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(LayoutProperty::propertyTypename),
+		     QVariant(QString::fromStdString(LayoutProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(SizeProperty::propertyTypename),
+		     QVariant(QString::fromStdString(SizeProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(StringProperty::propertyTypename),
+		     QVariant(QString::fromStdString(StringProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(BooleanVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(BooleanVectorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(ColorVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(ColorVectorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(CoordVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(CoordVectorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(DoubleVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(DoubleVectorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(IntegerVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(IntegerVectorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(SizeVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(SizeVectorProperty::propertyTypename)));
+  ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(StringVectorProperty::propertyTypename),
+		     QVariant(QString::fromStdString(StringVectorProperty::propertyTypename)));
+
+  auto index = ui->typeCB->findData(QVariant(QString::fromStdString(_type)));
+  if (index != -1) {
+    ui->typeCB->setCurrentIndex(index);
   }
+  typeCBChanged(ui->typeCB->currentText());
+  connect(ui->typeCB, SIGNAL(currentIndexChanged(QString)),
+	  this, SLOT(typeCBChanged(QString)));
+
+  if (_valueSeparator) {
+    index = ui->separatorCB->findText(QString(QChar(_valueSeparator)));
+    if (index != -1)
+      ui->separatorCB->setCurrentIndex(index);
+  }
+
+#if QT_VERSION >= 0x050000
+  ui->exceptionTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
+  ui->exceptionTableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
+  connect(ui->addExceptionButton, SIGNAL(released()), this, SLOT(addException()));
+  connect(ui->delCurrentExceptionButton, SIGNAL(released()), this, SLOT(delCurrentException()));
+
+  if (dialog.exec() == QDialog::Accepted) {
+    _name = QStringToTlpString(ui->name->text());
+    setPropertyType(propertyTypeLabelToPropertyType(ui->typeCB->currentText()));
+    _valueSeparator = ui->separatorCB->currentText()[0].toAscii();
+    clearExceptions();
+    for (int i = 0; i < ui->exceptionTableWidget->rowCount(); ++i) {
+      std::string value =
+	QStringToTlpString(ui->exceptionTableWidget->item(i, 0)->text());
+      auto action = static_cast<QComboBox *>(ui->exceptionTableWidget->cellWidget(i, 1))->currentIndex();
+      CSVColumn::addException(value, CSVColumn::Action(action));
+    }
+  }
+  delete ui;
 }
 
-void PropertyConfigurationWidget::setPropertyNameValidator(QValidator *validator) {
-  propertyNameLineEdit->setValidator(validator);
+CSVTableHeader::CSVTableHeader(QWidget *parent, std::vector<PropertyConfigurationWidget *> &propertyWidgets) :
+    QHeaderView(Qt::Horizontal, parent), widgets(propertyWidgets) {
+  setClickable(true);
+  connect(this, SIGNAL(sectionPressed(int)), this, SLOT(checkBoxPressed(int)));
 }
 
-CSVTableWidget::CSVTableWidget(QWidget *parent)
-    : QTableWidget(parent), maxLineNumber(UINT_MAX), firstLineIndex(0), checkCommentsLines(true),
-      nbCommentsLines(0) {}
+void CSVTableHeader::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const {
+  painter->save();
+  QHeaderView::paintSection(painter, rect, logicalIndex);
+  painter->restore();
+  QStyleOptionButton cb;
+  auto cbRect =
+    this->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
+  cb.rect = 
+    QRect(rect.x() + (rect.width() - cbRect.width())/2,
+	  rect.y() + (rect.height() - cbRect.height())/2,
+	  cbRect.width(), cbRect.height());
+  cb.state = QStyle::State_Enabled |
+    (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
+  this->style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter);
+}
+
+void CSVTableHeader::checkBoxPressed(int logicalIndex) {
+  widgets[logicalIndex]->toggleUsed();
+  this->update();
+}
+
+CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX),firstLineIndex(0), checkCommentsLines(true), nbCommentsLines(0) {}
 
 bool CSVTableWidget::begin() {
   clear();
@@ -158,8 +222,6 @@ bool CSVTableWidget::begin() {
   setRowCount(0);
   nbCommentsLines = 0;
   checkCommentsLines = true;
-  // Force the table view to redraw
-  QApplication::processEvents();
   return true;
 }
 
@@ -170,8 +232,8 @@ bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
     return true;
   }
 
-  // If the maximum line number is reach ignore the token.
-  if (static_cast<unsigned>(rowCount()) >= maxLineNumber) {
+  // If the maximum line number is reached ignore the token.
+  if (static_cast<unsigned>(rowCount() + 1) >= maxLineNumber) {
     return true;
   }
 
@@ -205,10 +267,9 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
   return true;
 }
 
-CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
-    : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),
-      validator(new PropertyNameValidator(propertyWidgets, this)), maxLineNumber(0),
-      parser(nullptr), firstLine(0), guessFirstLineIsHeader(true) {
+CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
+  QWidget(parent),
+  ui(new Ui::CSVImportConfigurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL), firstLine(0), guessFirstLineIsHeader(true) {
   ui->setupUi(this);
 
   // Import line number change
@@ -227,8 +288,9 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
     ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
   }
 
-// ensure the table columns are vertically aligned
-// with the PropertyConfigurationWidget(s)
+  // set horizontal header
+  ui->previewTableWidget->setHorizontalHeader(new CSVTableHeader(ui->previewTableWidget, propertyWidgets));
+  ui->previewTableWidget->horizontalHeader()->setMinimumSectionSize(120);
 #if QT_VERSION >= 0x050000
   ui->previewTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
@@ -265,7 +327,7 @@ void CSVImportConfigurationWidget::updateWidget(const std::string &title) {
     progress.setWindowTitle(QString(title.c_str()));
     progress.show();
 
-    // if neede try to guess if the first line is used as header.
+    // if needed try to guess if the first line is used as header.
     if (guessFirstLineIsHeader) {
       setUseFirstLineAsPropertyName(true);
       // parse the first line only
@@ -280,7 +342,6 @@ void CSVImportConfigurationWidget::updateWidget(const std::string &title) {
         }
       }
     }
-
     parser->parse(this, &progress);
   } else {
     setEnabled(true);
@@ -294,6 +355,11 @@ bool CSVImportConfigurationWidget::begin() {
   // Clear initialized columns
   columnHeaderType.clear();
   columnType.clear();
+  // insert a first row to display the propertyWidgets
+  // (see line method below)
+  ui->previewTableWidget->insertRow(0);
+  ui->previewTableWidget->setRowHeight(0, 50);
+
   return true;
 }
 
@@ -320,15 +386,14 @@ bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &
     }
 
     for (size_t column = 0; column < lineTokens.size(); ++column) {
-      // A new column was created set its label and it's configuration widget.
+      // A new column was created set its label and its configuration widget.
       if (propertyWidgets.size() <= column) {
         QString columnName = generateColumnName(column);
-        ui->previewTableWidget->setHorizontalHeaderItem(column, new QTableWidgetItem(columnName));
         // Store the first token type
         columnHeaderType.push_back(guessDataType(lineTokens[column]));
-        // Mark the colun type as uninitialised
+        // Mark the column type as uninitialized
         columnType.push_back("");
-        // Create the new column widget. The default type is String property
+        // Create the new column widget. The default type is string
         addPropertyToPropertyList(QStringToTlpString(columnName), true,
                                   StringProperty::propertyTypename);
       } else {
@@ -402,8 +467,8 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
   for (unsigned int i = 0; i < columnCount(); ++i) {
     // Update the column name
     QString columnName = generateColumnName(i);
-    itemsLabels << columnName;
-    propertyWidgets[i]->getNameLineEdit()->setText(columnName);
+    itemsLabels << "" ; //columnName;
+    propertyWidgets[i]->setPropertyName(columnName);
     // Update the column type.
     propertyWidgets[i]->setPropertyType(getColumnType(i));
   }
@@ -423,15 +488,15 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
 
 QString CSVImportConfigurationWidget::generateColumnName(unsigned int col) const {
   if (useFirstLineAsPropertyName()) {
-    QTableWidgetItem *item = ui->previewTableWidget->item(0, col);
+    QTableWidgetItem *item = ui->previewTableWidget->item(1, col);
 
     if (item != nullptr) {
       return item->text();
     } else {
-      return QString("Column_") + QString::number(col);
+      return QString("Column_") + QString::number(col + 1);
     }
   } else {
-    return QString("Column_") + QString::number(col);
+    return QString("Column_") + QString::number(col + 1);
   }
 }
 
@@ -445,9 +510,9 @@ string CSVImportConfigurationWidget::getColumnType(unsigned int col) const {
 
 void CSVImportConfigurationWidget::useFirstLineAsHeaderUpdated() {
   if (useFirstLineAsPropertyName()) {
-    ui->previewTableWidget->hideRow(0);
+    ui->previewTableWidget->hideRow(1);
   } else {
-    ui->previewTableWidget->showRow(0);
+    ui->previewTableWidget->showRow(1);
   }
 
   updateTableHeaders();
@@ -478,12 +543,6 @@ void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues) {
 }
 
 void CSVImportConfigurationWidget::clearPropertiesTypeList() {
-  for (vector<PropertyConfigurationWidget *>::iterator it = propertyWidgets.begin();
-       it != propertyWidgets.end(); ++it) {
-    ui->gridLayout->removeWidget(*it);
-    (*it)->deleteLater();
-  }
-
   propertyWidgets.clear();
 }
 
@@ -493,17 +552,25 @@ void CSVImportConfigurationWidget::addPropertyToPropertyList(const string &prope
 
   PropertyConfigurationWidget *propertyConfigurationWidget = createPropertyConfigurationWidget(
       propertyWidgets.size(), QString::fromStdString(propertyName), isEditable, propertyType,
-      ui->scrollAreaWidgetContents);
-  ui->gridLayout->addWidget(propertyConfigurationWidget, 0, propertyWidgets.size());
+      ui->previewTableWidget);
+  if (ui->previewTableWidget->rowCount() == 0) {
+    ui->previewTableWidget->insertRow(0);
+    ui->previewTableWidget->setRowHeight(0, 50);
+  }
   propertyWidgets.push_back(propertyConfigurationWidget);
+
+  int column = propertyWidgets.size() - 1;
+  // Fill the first row
+  ui->previewTableWidget->setItem(0, column, new QTableWidgetItem());
+  ui->previewTableWidget->setCellWidget(0, column, propertyConfigurationWidget);
 }
 
 PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigurationWidget(
     unsigned int propertyNumber, const QString &propertyName, bool isEditable,
     const string &propertyType, QWidget *parent) {
-  PropertyConfigurationWidget *propertyConfigurationWidget = new PropertyConfigurationWidget(
-      propertyNumber, propertyName, isEditable, propertyType, parent);
-  propertyConfigurationWidget->setPropertyNameValidator(validator);
+  PropertyConfigurationWidget *propertyConfigurationWidget =
+    new PropertyConfigurationWidget(propertyNumber, propertyName, isEditable,
+				    propertyType, validator, parent);
   propertyConfigurationWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
   connect(propertyConfigurationWidget, SIGNAL(stateChange(bool)), this,
           SLOT(propertyStateChanged(bool)));
@@ -524,13 +591,11 @@ void CSVImportConfigurationWidget::propertyStateChanged(bool state) {
   }
 }
 
-vector<CSVColumn> CSVImportConfigurationWidget::getPropertiesToImport() const {
-  vector<CSVColumn> properties(propertyWidgets.size());
+const vector<CSVColumn*> CSVImportConfigurationWidget::getPropertiesToImport() const {
+  vector<CSVColumn*> properties(propertyWidgets.size());
 
-  for (size_t i = 0; i < propertyWidgets.size(); ++i) {
-    properties[i] =
-        CSVColumn(QStringToTlpString(propertyWidgets[i]->getNameLineEdit()->text()),
-                  propertyWidgets[i]->getPropertyUsed(), propertyWidgets[i]->getPropertyType());
+  for(size_t i = 0 ; i < propertyWidgets.size(); ++i) {
+    properties[i] = propertyWidgets[i];
   }
 
   return properties;
@@ -566,17 +631,14 @@ QValidator::State PropertyNameValidator::validate(QString &input, int &) const {
     return QValidator::Invalid;
   }
 
-  // Only one property can have the same name
-  unsigned int count = 0;
-
-  for (vector<PropertyConfigurationWidget *>::const_iterator it = widgets.begin();
-       it != widgets.end(); ++it) {
-    if ((*it)->getPropertyName().compare(input) == 0) {
-      ++count;
-    }
+  // Only the property at the current index can have this name
+  for (auto widget : widgets) {
+    if ((widget->getPropertyName().compare(input) == 0)
+	&& (currentIndex != widget->getPropertyNumber()))
+      return QValidator::Invalid;
   }
 
-  return count <= 1 ? QValidator::Acceptable : QValidator::Invalid;
+  return QValidator::Acceptable;
 }
 
 const string &
@@ -658,27 +720,5 @@ const string &CSVImportConfigurationWidget::guessDataType(const string &data) co
   } else {
     // All the other cases are treated as string.
     return StringProperty::propertyTypename;
-  }
-}
-
-bool CSVImportConfigurationWidget::eventFilter(QObject *obj, QEvent *evt) {
-  if (evt->type() == QEvent::Resize) {
-    PropertyConfigurationWidget *columnWidget = qobject_cast<PropertyConfigurationWidget *>(obj);
-
-    if (columnWidget != nullptr) {
-      columnSizeChanged(columnWidget->getPropertyNumber());
-    }
-  }
-
-  return QWidget::eventFilter(obj, evt);
-}
-
-void CSVImportConfigurationWidget::columnSizeChanged(unsigned int i) {
-  //    assert(_columns.size()>i);
-  PropertyConfigurationWidget *widget = propertyWidgets[i];
-
-  if (widget != nullptr) {
-    // QRect widgetRect = ui->horizontalLayout_4->;
-    ui->previewTableWidget->setColumnWidth(i, widget->width());
   }
 }

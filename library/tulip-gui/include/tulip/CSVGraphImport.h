@@ -38,34 +38,71 @@ class PropertyInterface;
   **/
 class TLP_QT_SCOPE CSVColumn {
 public:
-  CSVColumn(const std::string &columnName = "", bool isUsed = false,
-            const std::string &columnType = "")
-      : name(columnName), used(isUsed), type(columnType) {}
+  CSVColumn(const std::string& columnName="", const std::string& columnType="")
+    :_used(true), _name(columnName), _type(columnType), _valueSeparator(0) {}
 
   /**
     * @brief Get the name of the column.
     **/
-  std::string columnName() const {
-    return name;
+  const std::string& name()const {
+    return _name;
   }
 
   /**
     * @brief Tells if the property marked for import.
     **/
   bool isUsed() const {
-    return used;
+    return _used;
   }
+
   /**
     * @brief Return the property data type.
     **/
-  std::string columnDataType() const {
-    return type;
+  const std::string& dataType() const {
+    return _type;
   }
 
-private:
-  std::string name;
-  bool used;
-  std::string type;
+  bool needMultiValues() const {
+    return _valueSeparator != 0;
+  }
+
+  char getMultiValueSeparator() const {
+    return _valueSeparator;
+  }
+
+  // possible actions
+  // the two first ones indicate an exception
+  enum Action { ASSIGN_NO_VALUE = 0, SKIP_ROW = 1, ASSIGN_VALUE = 2 };
+
+  struct Exception {
+    std::string value;
+    Action action;
+  Exception(const std::string &v, Action a) :value(v), action(a) {}
+  };
+
+  void addException(const std::string &value, Action action) {
+    _exceptions.emplace_back(value, action);
+  }
+
+  void clearExceptions() {
+    _exceptions.clear();
+  }
+
+  // look for a specific exception defined for token
+  Action getActionForToken(const std::string &token) {
+    for(const Exception &exception : _exceptions) {
+      if (exception.value == token)
+	return exception.action;
+    }
+    return Action::ASSIGN_VALUE;
+  }
+
+protected:
+  bool _used;
+  std::string _name;
+  std::string _type;
+  char _valueSeparator;
+  std::vector<Exception> _exceptions;
 };
 /**
   * @brief Store all the advanced import parameters for the CSV file.
@@ -76,7 +113,7 @@ private:
 class TLP_QT_SCOPE CSVImportParameters {
 public:
   CSVImportParameters(unsigned int fromLine = 0, unsigned int toLine = UINT_MAX,
-                      const std::vector<CSVColumn> &columns = std::vector<CSVColumn>());
+                      const std::vector<CSVColumn *> &columns = std::vector<CSVColumn *>());
   virtual ~CSVImportParameters();
 
   /**
@@ -85,36 +122,45 @@ public:
   unsigned int columnNumber() const;
 
   /**
-    * @brief return true if the column is marked for import.
+    * @brief return true if the column is marked for import
     **/
   bool importColumn(unsigned int column) const;
   /**
-    * @brief Get the column name.
+    * @brief Get the column name
     **/
   std::string getColumnName(unsigned int column) const;
   /**
-    * @brief Get the column data type.
+    * @brief Get the column data type
     **/
   std::string getColumnDataType(unsigned int column) const;
 
   /**
-    * @brief Return the index of the first line to import.
+    * @brief Get the column separator for multiple values
+    **/
+  char getColumnMultiValueSeparator(unsigned int column) const;
+
+  /**
+    * @brief Get the column action according to the given token
+    **/
+  CSVColumn::Action getColumnActionForToken(unsigned int column, const std::string& token) const;
+
+  /**
+    * @brief Return the index of the first line to import
     **/
   unsigned int getFirstLineIndex() const;
   /**
-    * @brief Return the index of the last line to import.
+    * @brief Return the index of the last line to import
     **/
   unsigned int getLastLineIndex() const;
   /**
-    * @brief Return true if the given row is between the first row to import and the last row to
-    *import.
+    * @brief Return true if the given row is between the first row to import and the last row to import
     **/
   bool importRow(unsigned int row) const;
 
 private:
   unsigned int fromLine;
   unsigned int toLine;
-  std::vector<CSVColumn> columns;
+  std::vector<CSVColumn*> columns;
 };
 
 /**
@@ -134,8 +180,7 @@ class TLP_QT_SCOPE CSVToGraphDataMapping {
 public:
   virtual ~CSVToGraphDataMapping() {}
   virtual std::pair<tlp::ElementType, std::vector<unsigned int>>
-  getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> &props) = 0;
+    getElementsForRow(const std::vector<std::vector<std::string>> &tokens) = 0;
   virtual void init(unsigned int rowNumber) = 0;
 };
 
@@ -155,8 +200,7 @@ public:
 
   void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
-  getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> &props) override;
+    getElementsForRow(const std::vector<std::vector<std::string>> &tokens) override;
 
 protected:
   /**
@@ -180,8 +224,7 @@ public:
   CSVToNewNodeIdMapping(tlp::Graph *graph);
   void init(unsigned int rowNumber) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
-  getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> &props) override;
+  getElementsForRow(const std::vector<std::vector<std::string>> &tokens) override;
 
 private:
   tlp::Graph *graph;
@@ -264,8 +307,7 @@ public:
   std::pair<tlp::ElementType, unsigned int> getElementForRow(unsigned int row);
   void init(unsigned int lineNumbers) override;
   std::pair<tlp::ElementType, std::vector<unsigned int>>
-  getElementsForRow(const std::vector<std::string> &tokens,
-                    const std::vector<PropertyInterface *> &props) override;
+  getElementsForRow(const std::vector<std::vector<std::string>> &tokens) override;
 
 private:
   tlp::Graph *graph;
@@ -299,11 +341,10 @@ public:
 };
 
 /**
-  * @brief Proxy to handle all the properties operations like access, creation, data type detection
-  *during the CSV parsing process.
+  * @brief Proxy to handle all the properties operations like access, creation, data type detection during the CSV parsing process.
   *
-  * Try to guess the type of the property in function of the first token if user don't tell which
-  *type the property is.
+  * Try to guess the type of the property in function of the first token
+  * if user don't tell which type the property is.
   **/
 class TLP_QT_SCOPE CSVImportColumnToGraphPropertyMappingProxy
     : public CSVImportColumnToGraphPropertyMapping {

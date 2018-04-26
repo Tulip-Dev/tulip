@@ -142,6 +142,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/CSVImportConfigurationWidget.ui
   ../designer/CSVImportWizard.ui
   ../designer/CSVParserConfigurationWidget.ui
+  ../designer/CSVPropertyDialog.ui
   ../designer/DoubleStringsListSelectionWidget.ui
   ../designer/ElementInformationWidget.ui
   ../designer/GridOptionsWidget.ui

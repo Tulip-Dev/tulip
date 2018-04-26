@@ -28,7 +28,7 @@ using namespace tlp;
 using namespace std;
 
 CSVImportParameters::CSVImportParameters(unsigned int fromLine, unsigned int toLine,
-                                         const vector<CSVColumn> &columns)
+                                         const vector<CSVColumn *> &columns)
     : fromLine(fromLine), toLine(toLine), columns(columns) {}
 
 CSVImportParameters::~CSVImportParameters() {}
@@ -36,27 +36,43 @@ CSVImportParameters::~CSVImportParameters() {}
 unsigned int CSVImportParameters::columnNumber() const {
   return columns.size();
 }
+
 bool CSVImportParameters::importColumn(unsigned int column) const {
   if (column < columns.size()) {
-    return columns[column].isUsed();
+    return columns[column]->isUsed();
   } else {
     return false;
   }
 }
+
 string CSVImportParameters::getColumnName(unsigned int column) const {
   if (column < columns.size()) {
-    return columns[column].columnName();
+    return columns[column]->name();
   } else {
     return string();
   }
 }
+
 string CSVImportParameters::getColumnDataType(unsigned int column) const {
   if (column < columns.size()) {
-    return columns[column].columnDataType();
+    return columns[column]->dataType();
   } else {
     return string();
   }
 }
+
+char CSVImportParameters::getColumnMultiValueSeparator(unsigned int column) const {
+  if (column < columns.size())
+    return columns[column]->getMultiValueSeparator();
+  return 0;
+}
+
+CSVColumn::Action CSVImportParameters::getColumnActionForToken(unsigned int column, const std::string &token) const {
+  if (column < columns.size())
+    return columns[column]->getActionForToken(token);
+  return CSVColumn::Action::SKIP_ROW;
+}
+
 bool CSVImportParameters::importRow(unsigned int row) const {
   return row >= fromLine && row <= toLine;
 }
@@ -107,8 +123,7 @@ void AbstractCSVToGraphDataMapping::init(unsigned int) {
 }
 
 pair<ElementType, vector<unsigned int>>
-AbstractCSVToGraphDataMapping::getElementsForRow(const vector<string> &tokens,
-                                                 const vector<PropertyInterface *> &) {
+AbstractCSVToGraphDataMapping::getElementsForRow(const vector<vector<string>> &tokens) {
   vector<unsigned int> results(1);
 
   bool idsOK = true;
@@ -126,9 +141,10 @@ AbstractCSVToGraphDataMapping::getElementsForRow(const vector<string> &tokens,
     vector<string> keys;
 
     for (unsigned int i = 0; i < columnIds.size(); ++i) {
-      string token = tokens[columnIds[i]];
-      key.append(token);
-      keys.push_back(token);
+      for (const string &token : tokens[columnIds[i]]) {
+	key.append(token);
+	keys.push_back(token);
+      }
     }
 
     if (valueToId.find(key) == valueToId.end()) {
@@ -159,8 +175,7 @@ void CSVToNewNodeIdMapping::init(unsigned int rowNumber) {
 }
 
 pair<ElementType, vector<unsigned int>>
-CSVToNewNodeIdMapping::getElementsForRow(const vector<string> &,
-                                         const vector<PropertyInterface *> &) {
+CSVToNewNodeIdMapping::getElementsForRow(const vector<vector<string>> &) {
   vector<unsigned int> result(1);
   result[0] = graph->addNode().id;
   return make_pair(NODE, result);
@@ -251,67 +266,8 @@ void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
   }
 }
 
-// split a columns contents into string tokens
-static bool splitIntoTokens(const string &token, vector<string> &tokens, char sepChar) {
-  tokens.clear();
-  char c = ' ';
-  char strDelimChar = '\0';
-
-  istringstream is(token);
-
-  // go to first non space char
-  while ((is >> c) && isspace(c)) {
-  }
-
-  if (c == '"')
-    strDelimChar = '"';
-
-  if (c == '\'')
-    strDelimChar = '\'';
-
-  is.unget();
-
-  is.unsetf(ios_base::skipws);
-  bool firstVal = true;
-  bool sepFound = false;
-
-  for (;;) {
-    if (!(is >> c))
-      return (!sepFound);
-
-    if (isspace(c))
-      continue;
-
-    if (c == sepChar) {
-      if (sepFound)
-        return false;
-
-      sepFound = true;
-    } else {
-      if ((firstVal || sepFound) && (!strDelimChar || c == strDelimChar)) {
-        string str;
-        is.unget();
-
-        if (!StringType::read(is, str, strDelimChar, sepChar))
-          return false;
-
-        tokens.push_back(str);
-
-        if (!strDelimChar)
-          // last read char was sepChar
-          is.unget();
-
-        firstVal = false;
-        sepFound = false;
-      } else
-        return false;
-    }
-  }
-}
-
 pair<ElementType, vector<unsigned int>>
-CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
-                                               const vector<PropertyInterface *> &props) {
+CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<vector<string>> &tokens) {
 
   vector<unsigned int> results;
 
@@ -322,68 +278,57 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
 
   // Check if the src ids are available for this line
   for (unsigned int i = 0; i < srcColumnIds.size(); ++i) {
-    if (srcColumnIds[i] >= lineTokens.size()) {
+    if (srcColumnIds[i] >= tokens.size()) {
       idsOK = false;
       break;
     }
   }
 
   if (idsOK) {
-    vector<vector<string>> tokens;
+    vector<vector<string>> keyTokens;
 
     for (unsigned int i = 0; i < srcColumnIds.size(); ++i) {
-      const string &token = lineTokens[srcColumnIds[i]];
-      vector<string> currentTokens;
-      PropertyInterface *srcProp = props[srcColumnIds[i]];
-
-      // if srcProp is of type vector, we may find multiple tokens
-      if (srcProp && srcProp->getTypename().find("vector") == 0) {
-        if (!splitIntoTokens(token, currentTokens, ',')) {
-          results.push_back(UINT_MAX);
-          return make_pair(EDGE, results);
-        }
-      } else
-        currentTokens.push_back(token);
+      const vector<string> &currentTokens = tokens[srcColumnIds[i]];
 
       // merge current tokens with previous ones
-      if (tokens.empty()) {
-        tokens.resize(currentTokens.size());
+      if (keyTokens.empty()) {
+        keyTokens.resize(currentTokens.size());
 
         for (unsigned int j = 0; j < currentTokens.size(); ++j)
-          tokens[j].push_back(currentTokens[j]);
+          keyTokens[j].push_back(currentTokens[j]);
       } else {
-        vector<vector<string>> previousTokens(tokens);
-        tokens.clear();
-        tokens.resize(previousTokens.size() * currentTokens.size());
+        vector<vector<string>> previousTokens(keyTokens);
+        keyTokens.clear();
+        keyTokens.resize(previousTokens.size() * currentTokens.size());
 
         for (unsigned int j = 0; j < previousTokens.size(); ++j) {
           for (unsigned int k = 0; k < currentTokens.size(); ++k) {
-            tokens[j * currentTokens.size() + k] = previousTokens[j];
-            tokens[j * currentTokens.size() + k].push_back(currentTokens[k]);
+            keyTokens[j * currentTokens.size() + k] = previousTokens[j];
+            keyTokens[j * currentTokens.size() + k].push_back(currentTokens[k]);
           }
         }
       }
     }
 
-    for (unsigned int i = 0; i < tokens.size(); ++i) {
+    for (unsigned int i = 0; i < keyTokens.size(); ++i) {
       // because column values may be of type vector
       // we can have several source entities
       string key;
 
-      for (unsigned int j = 0; j < tokens[i].size(); ++j)
-        key.append(tokens[i][j]);
+      for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
+        key.append(keyTokens[i][j]);
 
       TLP_HASH_MAP<string, unsigned int>::iterator it = srcValueToId.find(key);
 
       // token exists in the map
       if (it != srcValueToId.end()) {
         srcs.push_back(node(it->second));
-      } else if (buildMissingElements && srcProperties.size() == tokens[i].size()) {
+      } else if (buildMissingElements && srcProperties.size() == keyTokens[i].size()) {
         node src = graph->addNode();
         srcs.push_back(src);
 
-        for (unsigned int j = 0; j < tokens[i].size(); ++j)
-          srcProperties[j]->setNodeStringValue(src, tokens[i][j]);
+        for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
+          srcProperties[j]->setNodeStringValue(src, keyTokens[i][j]);
 
         srcValueToId[key] = src.id;
       }
@@ -392,44 +337,33 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
 
   // Check if the target ids are available for this line
   for (unsigned int i = 0; i < tgtColumnIds.size(); ++i) {
-    if (tgtColumnIds[i] >= lineTokens.size()) {
+    if (tgtColumnIds[i] >= tokens.size()) {
       idsOK = false;
       break;
     }
   }
 
   if (idsOK) {
-    vector<vector<string>> tokens;
+    vector<vector<string>> keyTokens;
 
     for (unsigned int i = 0; i < tgtColumnIds.size(); ++i) {
-      const string &token = lineTokens[tgtColumnIds[i]];
-      vector<string> currentTokens;
-      PropertyInterface *tgtProp = props[tgtColumnIds[i]];
-
-      // if tgtProp is of type vector, we may find multiple tokens
-      if (tgtProp && tgtProp->getTypename().find("vector") == 0) {
-        if (!splitIntoTokens(token, currentTokens, ',')) {
-          results.push_back(UINT_MAX);
-          return make_pair(EDGE, results);
-        }
-      } else
-        currentTokens.push_back(token);
+      const vector<string> &currentTokens = tokens[tgtColumnIds[i]];
 
       // merge current tokens with previous ones
-      if (tokens.empty()) {
-        tokens.resize(currentTokens.size());
+      if (keyTokens.empty()) {
+        keyTokens.resize(currentTokens.size());
 
         for (unsigned int j = 0; j < currentTokens.size(); ++j)
-          tokens[j].push_back(currentTokens[j]);
+          keyTokens[j].push_back(currentTokens[j]);
       } else {
-        vector<vector<string>> previousTokens(tokens);
-        tokens.clear();
-        tokens.resize(previousTokens.size() * currentTokens.size());
+        vector<vector<string>> previousTokens(keyTokens);
+        keyTokens.clear();
+        keyTokens.resize(previousTokens.size() * currentTokens.size());
 
         for (unsigned int j = 0; j < previousTokens.size(); ++j) {
           for (unsigned int k = 0; k < currentTokens.size(); ++k) {
-            tokens[j * currentTokens.size() + k] = previousTokens[j];
-            tokens[j * currentTokens.size() + k].push_back(currentTokens[k]);
+            keyTokens[j * currentTokens.size() + k] = previousTokens[j];
+            keyTokens[j * currentTokens.size() + k].push_back(currentTokens[k]);
           }
         }
       }
@@ -438,25 +372,25 @@ CSVToGraphEdgeSrcTgtMapping::getElementsForRow(const vector<string> &lineTokens,
     TLP_HASH_MAP<string, unsigned int> &valueToId =
         sameSrcTgtProperties ? srcValueToId : tgtValueToId;
 
-    for (unsigned int i = 0; i < tokens.size(); ++i) {
+    for (unsigned int i = 0; i < keyTokens.size(); ++i) {
       // because column values may be of type vector
       // we can have several target entities
       string key;
 
-      for (unsigned int j = 0; j < tokens[i].size(); ++j)
-        key.append(tokens[i][j]);
+      for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
+        key.append(keyTokens[i][j]);
 
       TLP_HASH_MAP<string, unsigned int>::iterator it = valueToId.find(key);
 
       // token exists in the map
       if (it != valueToId.end()) {
         tgts.push_back(node(it->second));
-      } else if (buildMissingElements && tgtProperties.size() == tokens[i].size()) {
+      } else if (buildMissingElements && tgtProperties.size() == keyTokens[i].size()) {
         node tgt = graph->addNode();
         tgts.push_back(tgt);
 
-        for (unsigned int j = 0; j < tokens[i].size(); ++j)
-          tgtProperties[j]->setNodeStringValue(tgt, tokens[i][j]);
+        for (unsigned int j = 0; j < keyTokens[i].size(); ++j)
+          tgtProperties[j]->setNodeStringValue(tgt, keyTokens[i][j]);
 
         valueToId[key] = tgt.id;
       }
@@ -575,30 +509,23 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
     return true;
   }
 
+  // build vector of property interface and vector of input tokens
   vector<PropertyInterface *> props(lineTokens.size(), nullptr);
+  vector<std::vector<std::string>> tokens(lineTokens.size());
 
   for (size_t column = 0; column < lineTokens.size(); ++column) {
-    if (importParameters.importColumn(column))
-      props[column] = propertiesManager->getPropertyInterface(column, lineTokens[column]);
-  }
-
-  // Compute the element id associated to the line
-  pair<ElementType, vector<unsigned int>> elements = mapping->getElementsForRow(lineTokens, props);
-
-  for (size_t column = 0; column < lineTokens.size(); ++column) {
-    // If user wants to import the column
     if (importParameters.importColumn(column)) {
+      PropertyInterface *property = props[column] = propertiesManager->getPropertyInterface(column, lineTokens[column]);
       const string &token = lineTokens[column];
-      PropertyInterface *property = props[column];
 
-      // If the property don't exists or
+      // If the property does not exists or
       // if the token is empty no need to import the value
       if (property != nullptr && !token.empty()) {
+	CSVColumn::Action action = CSVColumn::Action::ASSIGN_VALUE;
         bool isVectorProperty = (property->getTypename().find("vector") == 0);
-        string tokenCopy;
 
         if (isVectorProperty) {
-          tokenCopy = token;
+          string tokenCopy = token;
           // check if the list of values is enclosed
           // between an openChar and a closeChar
           size_t first = token.find_first_not_of(" \t\f\v");
@@ -640,41 +567,70 @@ bool CSVGraphImport::line(unsigned int row, const vector<string> &lineTokens) {
               }
             }
           }
-        }
-
-        if (elements.first == NODE) {
-          for (size_t i = 0; i < elements.second.size(); ++i) {
-            if (elements.second[i] == UINT_MAX)
-              continue;
-
-            if (!(isVectorProperty
-                      ? static_cast<VectorPropertyInterface *>(property)
-                            ->setNodeStringValueAsVector(node(elements.second[i]), tokenCopy, '\0',
-                                                         ',', '\0')
-                      : property->setNodeStringValue(node(elements.second[i]), token))) {
-              // We add one to the row number as in the configuration widget we start from row 1 not
-              // row 0
-              qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                         << " error when importing token \"" << token << "\" in property \""
-                         << property->getName() << "\" of type \"" << property->getTypename()
-                         << "\" at line " << row + 1;
-            }
-          }
+	  static_cast<VectorPropertyInterface *>(property)->tokenize(tokenCopy, tokens[column], '\0', importParameters.getColumnMultiValueSeparator(column), '\0');
+	  // check tokens actions
+	  for (const std::string &tok : tokens[column]) {
+	    auto tokAction =
+	      importParameters.getColumnActionForToken(column, tok);
+	    if (tokAction == CSVColumn::Action::SKIP_ROW) {
+	      action = tokAction;
+	      break;
+	    } else if (tokAction != CSVColumn::Action::ASSIGN_VALUE)
+	      action = tokAction;
+	  }
         } else {
-          for (size_t i = 0; i < elements.second.size(); ++i) {
-            if (!(isVectorProperty
-                      ? static_cast<VectorPropertyInterface *>(property)
-                            ->setEdgeStringValueAsVector(edge(elements.second[i]), tokenCopy, '\0',
-                                                         ',', '\0')
-                      : property->setEdgeStringValue(edge(elements.second[i]), token))) {
-              // We add one to the row number as in the configuration widget we start from row 1 not
-              // row 0
-              qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
-                         << " error when importing token \"" << token << "\" in property \""
-                         << property->getName() << "\" of type \"" << property->getTypename()
-                         << "\" at line " << row + 1;
-            }
-          }
+	  action = importParameters.getColumnActionForToken(column, token);
+	  tokens[column].push_back(token);
+	}
+	if (action == CSVColumn::Action::SKIP_ROW)
+	  return true;
+	if (action == CSVColumn::Action::ASSIGN_NO_VALUE)
+	  tokens[column].clear();
+      }
+    }
+  }
+
+  // Compute the element id associated to the line
+  pair<ElementType, vector<unsigned int>> elements =
+    mapping->getElementsForRow(tokens);
+
+  for (size_t column = 0; column < lineTokens.size(); ++column) {
+    PropertyInterface *property = props[column];
+
+    // If the property does not exists or
+    // if the token is empty no need to import the value
+    if (property != nullptr && !tokens[column].empty()) {
+      bool isVectorProperty = (property->getTypename().find("vector") == 0);
+      if (elements.first == NODE) {
+	for (size_t i = 0; i < elements.second.size(); ++i) {
+	  if (elements.second[i] == UINT_MAX)
+	    continue;
+
+	  if (!(isVectorProperty
+		? static_cast<VectorPropertyInterface *>(property)
+		->setNodeStringValueAsVector(node(elements.second[i]), tokens[column])
+		: property->setNodeStringValue(node(elements.second[i]), tokens[column][0]))) {
+	    // We add one to the row number as in the configuration widget we start from row 1 not
+	    // row 0
+	    qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
+		       << " error when importing token \"" << lineTokens[column] << "\" in property \""
+		       << property->getName() << "\" of type \"" << property->getTypename()
+		       << "\" at line " << row + 1;
+	  }
+	}
+      } else {
+	for (size_t i = 0; i < elements.second.size(); ++i) {
+	  if (!(isVectorProperty
+		? static_cast<VectorPropertyInterface *>(property)
+		->setEdgeStringValueAsVector(edge(elements.second[i]), tokens[column])
+		: property->setEdgeStringValue(edge(elements.second[i]), tokens[column][0]))) {
+	    // We add one to the row number as in the configuration widget we start from row 1 not
+	    // row 0
+	    qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__
+		       << " error when importing token \"" << lineTokens[column] << "\" in property \""
+		       << property->getName() << "\" of type \"" << property->getTypename()
+		       << "\" at line " << row + 1;
+	  }
         }
       }
     }

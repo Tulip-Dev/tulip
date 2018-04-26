@@ -24,73 +24,63 @@
 #include <QWidget>
 #include <QValidator>
 #include <QTableWidget>
+#include <QHeaderView>
 
 #include <tulip/CSVContentHandler.h>
+#include <tulip/CSVGraphImport.h>
 #include <tulip/tulipconf.h>
 
-class QComboBox;
-class QCheckBox;
-class QValidator;
-class QLineEdit;
+class QPushButton;
+class Ui_CSVPropertyDialog;
 
 namespace Ui {
 class CSVImportConfigurationWidget;
 }
-
 namespace tlp {
 class CSVParser;
-class CSVImportParameters;
-class CSVColumn;
+class PropertyNameValidator;
 
 /**
  * @brief Configuration widget for a property.
  */
-class TLP_QT_SCOPE PropertyConfigurationWidget : public QWidget {
+ class TLP_QT_SCOPE PropertyConfigurationWidget: public QWidget, public CSVColumn {
   Q_OBJECT
 public:
   PropertyConfigurationWidget(unsigned int propertyNumber, const QString &propertyName,
                               bool propertyNameIsEditable, const std::string &PropertyType,
-                              QWidget *parent = nullptr);
+                              PropertyNameValidator* validator, QWidget *parent = nullptr);
   /**
-     * Return the selected property type. The property type is not the label displayed in the
-   * combobox but correspond to the Property::propertyTypename static string variable of the
-   * property class.
-     */
-  std::string getPropertyType() const;
+   * Return the selected property type.
+   *  The property type is not the label displayed in the
+   * combobox but correspond to the Property::propertyTypename
+   * static string variable of the property class.
+   */
+  const std::string &getPropertyType() const;
   /**
     * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
     **/
   void setPropertyType(const std::string &propertyType);
 
   QString getPropertyName() const;
-  bool getPropertyUsed() const;
-  /**
-     *  @brief Set the property name validator. Use to chek if entered graph name is valid.
-     */
-  void setPropertyNameValidator(QValidator *validator);
+
+  void setPropertyName(const QString& name);
+
+  void toggleUsed();
+
   unsigned int getPropertyNumber() const;
 
-  QLineEdit *getNameLineEdit() {
-    return propertyNameLineEdit;
-  }
-  QComboBox *getTypeComboBox() {
-    return propertyTypeComboBox;
-  }
-
-  QCheckBox *getCheckBox() {
-    return usedCheckBox;
-  }
-
 private:
-  void fillPropertyTypeComboBox();
-  QLineEdit *propertyNameLineEdit;
-  QComboBox *propertyTypeComboBox;
-  QCheckBox *usedCheckBox;
+  PropertyNameValidator *propertyNameValidator;
+  QPushButton *propertyEditButton;
+  Ui_CSVPropertyDialog *ui;
   bool nameEditable;
   unsigned int propertyNumber;
 
 private slots:
-  void useStateChanged(int state);
+  void showPropertyCreationDialog();
+  void typeCBChanged(const QString &index);
+  void addException();
+  void delCurrentException();
 
 signals:
   void stateChange(bool state);
@@ -111,13 +101,34 @@ public:
    */
   QValidator::State validate(QString &input, int &pos) const override;
 
+  // set the index of the column/property currently edited
+  void setCurrentIndex(unsigned int index) {
+    currentIndex = index;
+  }
+
 private:
+  unsigned int currentIndex;
   const std::vector<PropertyConfigurationWidget *> &widgets;
 };
 
+class CSVTableHeader : public QHeaderView {
+  Q_OBJECT
+
+  const std::vector<PropertyConfigurationWidget *> &widgets;
+
+public:
+  CSVTableHeader(QWidget *parent,
+		 std::vector<PropertyConfigurationWidget *> &propertyWidgets);
+
+protected:
+  void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const override;
+
+ protected slots:
+  void checkBoxPressed(int logicalIndex);
+};
+
 /**
-* @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a
-*CSVContentHandler.
+* @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a CSVContentHandler.
 **/
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:
@@ -130,7 +141,8 @@ public:
     *in account.
     **/
   void setMaxPreviewLineNumber(unsigned int lineNumber) {
-    maxLineNumber = lineNumber;
+    // first row is used to display configuration widgets
+    maxLineNumber = lineNumber + 2;
   }
 
   /**
@@ -187,12 +199,10 @@ public:
   **/
   CSVImportParameters getImportParameters() const;
 
-  bool eventFilter(QObject *, QEvent *) override;
-
 protected:
   void updateWidget(const std::string &title = "Generating preview");
 
-  std::vector<CSVColumn> getPropertiesToImport() const;
+  const std::vector<CSVColumn *> getPropertiesToImport() const;
 
   void updateLineNumbers(bool resetValues);
 
@@ -288,8 +298,6 @@ private:
     * @return The property typename of the type
     **/
   const std::string &guessDataType(const std::string &data) const;
-
-  void columnSizeChanged(unsigned int i);
 
   // The data type of the header
   std::vector<std::string> columnHeaderType;
