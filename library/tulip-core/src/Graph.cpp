@@ -22,7 +22,6 @@
 #include <stack>
 
 #include <tulip/StlIterator.h>
-#include <tulip/StableIterator.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
@@ -42,7 +41,6 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/TulipFontAwesome.h>
 
 using namespace std;
 using namespace tlp;
