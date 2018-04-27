@@ -50,9 +50,13 @@ pip install sphinx
 rem Build Tulip with Python 3, run its unit tests and package it
 bash -lc "mkdir build"
 bash -lc "cd build && cmake -G \"MSYS Makefiles\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_NEED_RESPONSE=ON -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/build/install -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_QT5=ON -DTULIP_USE_CCACHE=ON -DPYTHON_EXECUTABLE=%PYTHON3_HOME%/python.exe .."
+if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make -j4 install"
+if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make runTests"
+if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make bundle"
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem Install sphinx for Python 2
 set PATH=%PYTHON2_HOME%;%PYTHON2_HOME%/Scripts;%PATH%
@@ -61,6 +65,9 @@ pip install sphinx
 rem Build Tulip with Python 2, run its unit tests and package it
 bash -lc "mkdir build"
 bash -lc "cd build && cmake -G \"MSYS Makefiles\" -DCMAKE_BUILD_TYPE=Release -DCMAKE_NEED_RESPONSE=ON -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/build/install -DTULIP_BUILD_DOC=OFF -DTULIP_BUILD_TESTS=ON -DTULIP_USE_QT5=ON -DTULIP_USE_CCACHE=ON -DPYTHON_EXECUTABLE=%PYTHON2_HOME%/python.exe .."
+if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make -j4 install"
+if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make runTests"
+if %errorlevel% neq 0 exit /b %errorlevel%
 bash -lc "cd build && make bundle"
