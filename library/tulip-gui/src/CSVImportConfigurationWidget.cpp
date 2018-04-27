@@ -174,7 +174,7 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   if (dialog.exec() == QDialog::Accepted) {
     _name = QStringToTlpString(ui->name->text());
     setPropertyType(propertyTypeLabelToPropertyType(ui->typeCB->currentText()));
-    _valueSeparator = ui->separatorCB->currentText()[0].toAscii();
+    _valueSeparator = ui->separatorCB->currentText()[0].toLatin1();
     clearExceptions();
     for (int i = 0; i < ui->exceptionTableWidget->rowCount(); ++i) {
       std::string value = QStringToTlpString(ui->exceptionTableWidget->item(i, 0)->text());
@@ -189,7 +189,11 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
 CSVTableHeader::CSVTableHeader(QWidget *parent,
                                std::vector<PropertyConfigurationWidget *> &propertyWidgets)
     : QHeaderView(Qt::Horizontal, parent), widgets(propertyWidgets) {
+#if QT_VERSION >= 0x050000
+  setSectionsClickable(true);
+#else
   setClickable(true);
+#endif
   connect(this, SIGNAL(sectionPressed(int)), this, SLOT(checkBoxPressed(int)));
 }
 
