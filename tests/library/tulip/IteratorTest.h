@@ -21,9 +21,8 @@
 #define ITERATORTEST_H
 
 #include <string>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestSuite.h>
-#include <cppunit/extensions/HelperMacros.h>
+
+#include "CppUnitIncludes.h"
 
 namespace tlp {
 class Graph;
