@@ -238,6 +238,10 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
         buildNeighborhoodGraph(tmpNode, originalGraph);
         selectedNode = tmpNode;
       }
+      if (tmpNode.isValid())
+	glWidget->setCursor(Qt::PointingHandCursor);
+      else
+	glWidget->setCursor(QCursor());
     } else {
       *neighborhoodGraphColors = *neighborhoodGraphBackupColors;
 
@@ -252,10 +256,13 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
         }
       }
 
-      if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)
+      if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         selectedNeighborNode = node(selectedEntity.getComplexEntityId());
-      else
-        selectedNeighborNode = node();
+	glWidget->setCursor(Qt::PointingHandCursor);
+      } else {
+	selectedNeighborNode = node();
+	glWidget->setCursor(QCursor());
+      }
     }
 
     glWidget->redraw();
@@ -345,6 +352,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
       neighborhoodDist = 1;
       configWidget->setCurrentMaxDistanceForReachableNodes(neighborhoodDist);
       neighborhoodGraphCentralNode = node();
+      glWidget->setCursor(QCursor());
       glWidget->redraw();
     }
 
