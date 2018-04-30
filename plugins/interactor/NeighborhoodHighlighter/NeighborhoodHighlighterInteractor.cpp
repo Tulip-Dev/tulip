@@ -239,9 +239,9 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
         selectedNode = tmpNode;
       }
       if (tmpNode.isValid())
-	glWidget->setCursor(Qt::PointingHandCursor);
+        glWidget->setCursor(Qt::PointingHandCursor);
       else
-	glWidget->setCursor(QCursor());
+        glWidget->setCursor(QCursor());
     } else {
       *neighborhoodGraphColors = *neighborhoodGraphBackupColors;
 
@@ -258,10 +258,10 @@ bool NeighborhoodHighlighter::eventFilter(QObject *, QEvent *e) {
 
       if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         selectedNeighborNode = node(selectedEntity.getComplexEntityId());
-	glWidget->setCursor(Qt::PointingHandCursor);
+        glWidget->setCursor(Qt::PointingHandCursor);
       } else {
-	selectedNeighborNode = node();
-	glWidget->setCursor(QCursor());
+        selectedNeighborNode = node();
+        glWidget->setCursor(QCursor());
       }
     }
 
