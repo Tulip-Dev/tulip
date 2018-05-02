@@ -52,7 +52,7 @@ void SimpleTest::makeSimple(Graph *graph, vector<edge> &removed) {
     graph->delEdge(*it);
   }
 
-  assert(SimpleTest::isSimple(graph));
+  assert(SimpleTest::simpleTest(graph));
 }
 //=================================================================
 bool SimpleTest::simpleTest(const tlp::Graph *graph, vector<edge> *multipleEdges,

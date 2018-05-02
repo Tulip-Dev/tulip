@@ -116,6 +116,27 @@ bool TreeTest::isFreeTree(const Graph *graph, node curRoot) {
   return true;
 } // end isFreeTree
 //====================================================================
+static bool treeTest(const Graph *graph) {
+  if (graph->numberOfEdges() != graph->numberOfNodes() - 1)
+    return false;
+
+  bool rootNodeFound = false;
+
+  for (auto tmp : graph->nodes()) {
+    if (graph->indeg(tmp) > 1)
+      return false;
+
+    if (graph->indeg(tmp) == 0) {
+      if (rootNodeFound)
+        return false;
+      else
+        rootNodeFound = true;
+    }
+  }
+
+  return AcyclicTest::acyclicTest(graph);
+}
+//====================================================================
 // simple structure to implement
 // the further makeRootedTree dfs loop
 struct dfsMakeRootedTreeStruct {
@@ -180,18 +201,17 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
   instance->resultsBuffer.erase(graph);
 
   if (!graph->isElement(root)) {
-    tlp::warning() << "makeRootedTree:  Passed root is not element of graph" << endl;
+    tlp::warning() << "makeRootedTree:  Passed root is not an element of the graph" << endl;
     return;
   } // end if
 
   if (!TreeTest::isFreeTree(graph)) {
-    tlp::warning() << "makeRootedTree:  Graph is not topologically a tree, so rooted "
-                   << "tree cannot be made." << endl;
+    tlp::warning() << "makeRootedTree: The graph is not topologically a tree, so rooted tree cannot be made." << endl;
     return;
   } // end if
 
   ::makeRootedTree(graph, root, nullptr);
-  assert(TreeTest::isTree(graph));
+  assert(treeTest(graph));
 } // end makeRootedTree
 
 //====================================================================
@@ -284,7 +304,7 @@ static Graph *computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     }
     tree->addEdges(sTree->edges());
   }
-  assert(TreeTest::isTree(tree));
+  assert(treeTest(tree));
   return tree;
 }
 
@@ -334,48 +354,14 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   // delete the clone
   graph->delAllSubGraphs(sg);
 }
-
 //====================================================================
 bool TreeTest::compute(const Graph *graph) {
   if (resultsBuffer.find(graph) != resultsBuffer.end()) {
     return resultsBuffer[graph];
   }
 
-  if (graph->numberOfEdges() != graph->numberOfNodes() - 1) {
-    resultsBuffer[graph] = false;
-    graph->addListener(this);
-    return false;
-  }
-
-  bool rootNodeFound = false;
-
-  for (auto tmp : graph->nodes()) {
-
-    if (graph->indeg(tmp) > 1) {
-      resultsBuffer[graph] = false;
-      graph->addListener(this);
-      return false;
-    }
-
-    if (graph->indeg(tmp) == 0) {
-      if (rootNodeFound) {
-        resultsBuffer[graph] = false;
-        graph->addListener(this);
-        return false;
-      } else
-        rootNodeFound = true;
-    }
-  }
-
-  if (AcyclicTest::isAcyclic(graph)) {
-    resultsBuffer[graph] = true;
-    graph->addListener(this);
-    return true;
-  } else {
-    resultsBuffer[graph] = false;
-    graph->addListener(this);
-    return false;
-  }
+  graph->addListener(this);
+  return resultsBuffer[graph] = treeTest(graph);
 }
 
 void TreeTest::treatEvent(const Event &evt) {

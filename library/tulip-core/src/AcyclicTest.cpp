@@ -78,7 +78,7 @@ void AcyclicTest::makeAcyclic(Graph *graph, vector<edge> &reversed,
   for (auto e : reversed)
     graph->reverse(e);
 
-  assert(AcyclicTest::isAcyclic(graph));
+  assert(AcyclicTest::acyclicTest(graph));
 }
 //**********************************************************************
 bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges) {

@@ -164,6 +164,21 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> 
   return true;
 }
 //=================================================================
+static bool biconnectedTest(const Graph *graph) {
+  MutableContainer<unsigned int> low;
+  MutableContainer<unsigned int> dfsNumber;
+  dfsNumber.setAll(UINT_MAX);
+  MutableContainer<node> supergraph;
+  unsigned int count = 1;
+  bool result = false;
+
+  result = biconnectedTest(graph, graph->nodes()[0], low, dfsNumber, supergraph, count);
+
+  if (result)
+    return (count == graph->numberOfNodes() + 1);
+  return false;
+}
+//=================================================================
 BiconnectedTest::BiconnectedTest() {}
 //=================================================================
 bool BiconnectedTest::isBiconnected(const tlp::Graph *graph) {
@@ -198,22 +213,8 @@ bool BiconnectedTest::compute(const tlp::Graph *graph) {
   if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
-  MutableContainer<unsigned int> low;
-  MutableContainer<unsigned int> dfsNumber;
-  dfsNumber.setAll(UINT_MAX);
-  MutableContainer<node> supergraph;
-  unsigned int count = 1;
-  bool result = false;
-
-  result = biconnectedTest(graph, graph->nodes()[0], low, dfsNumber, supergraph, count);
-
-  if (count != graph->numberOfNodes() + 1) {
-    result = false;
-  } // connected test
-
-  resultsBuffer[graph] = result;
   graph->addListener(this);
-  return result;
+  return resultsBuffer[graph] = biconnectedTest(graph);
 }
 //=================================================================
 void BiconnectedTest::treatEvent(const Event &evt) {
