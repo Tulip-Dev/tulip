@@ -65,7 +65,7 @@ static unsigned int connectedTest(const Graph *const graph, node n,
 static bool connectedTest(const Graph *const graph) {
   if (graph->isEmpty())
     return true;
-  
+
   NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   unsigned int count = connectedTest(graph, graph->getOneNode(), visited);

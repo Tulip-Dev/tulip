@@ -206,7 +206,9 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
   } // end if
 
   if (!TreeTest::isFreeTree(graph)) {
-    tlp::warning() << "makeRootedTree: The graph is not topologically a tree, so rooted tree cannot be made." << endl;
+    tlp::warning()
+        << "makeRootedTree: The graph is not topologically a tree, so rooted tree cannot be made."
+        << endl;
     return;
   } // end if
 
