@@ -64,10 +64,10 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4 || travis_terminate 1
+        - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -105,7 +105,7 @@ jobs:
             - libfreetype6-dev
       before_install:
         # set up external ppa for Qt 5.9 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt592-trusty
+        - sudo add-apt-repository -y ppa:beineri/opt-qt594-trusty
         # update packages list
         - sudo apt-get -qy update
         # force the use of GCC 7
@@ -122,10 +122,10 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4  || travis_terminate 1
+        - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -174,10 +174,10 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4 || travis_terminate 1
+        - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -212,7 +212,7 @@ jobs:
             - libfreetype6-dev
       before_install:
         # set up external ppa for Qt 5.9 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt592-trusty
+        - sudo add-apt-repository -y ppa:beineri/opt-qt594-trusty
         # update packages list
         - sudo apt-get -qy update
         # force the use of GCC 7
@@ -234,10 +234,10 @@ jobs:
         # create build directoty
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON  || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4  || travis_terminate 1
+        - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
 
@@ -331,10 +331,10 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4 || travis_terminate 1
+        - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
     
@@ -370,10 +370,10 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_CORE_ONLY=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - sudo ninja -j4 install
+        - ninja -j4 || travis_terminate 1
+        - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
     
@@ -409,6 +409,8 @@ jobs:
         - sudo port -N install libtool
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
+        - curl -O https://bootstrap.pypa.io/get-pip.py
+        - sudo python get-pip.py
         - sudo pip install sphinx
 
       env:
@@ -418,12 +420,12 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib || travis_terminate 1
         # compile Tulip using ninja for faster builds
-        - ninja -j4
-        - ninja -j4 install
+        - ninja -j4 || travis_terminate 1
+        - ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
-        - ninja runTests
+        - ninja runTests || travis_terminate 1
         # build Tulip bundle
         - ninja bundle
     
@@ -458,6 +460,8 @@ jobs:
         - sudo port -N install yajl
         - sudo port -N install pkgconfig
         - sudo port -N install cppunit
+        - curl -O https://bootstrap.pypa.io/get-pip.py
+        - sudo python get-pip.py
         - sudo pip install sphinx --ignore-installed six
       env:
         # use system Python 2.7
