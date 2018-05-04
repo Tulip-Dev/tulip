@@ -55,7 +55,7 @@ namespace tlp {
  * @endcode
  **/
 
-class TLP_SCOPE TulipFontAwesome {
+class TLP_GL_SCOPE TulipFontAwesome {
 
 public:
   /**
@@ -64,22 +64,24 @@ public:
   static std::string getVersion();
 
   /**
-   * Returns the location of the Font Awesome TrueType font file bundled with Tulip
+   * Returns the location of the Font Awesome .ttf file bundled with Tulip
    */
-  static std::string getTrueTypeFileLocation();
+  static std::string getTTFLocation(const std::string &iconName);
 
-  _DEPRECATED static std::string getFontAwesomeTrueTypeFileLocation() {
-    return getTrueTypeFileLocation();
-  }
+  /**
+   * Returns the location of the Font Awesome .woff file bundled with Tulip
+   */
+  static std::string getWOFFLocation(const std::string &iconName);
+
+  /**
+   * Returns the location of the Font Awesome .woff2 file bundled with Tulip
+   */
+  static std::string getWOFF2Location(const std::string &iconName);
 
   /**
    * Returns the list of supported Font Awesome icons names
    */
   static const std::vector<std::string> &getSupportedIcons();
-
-  _DEPRECATED static const std::vector<std::string> &getSupportedFontAwesomeIcons() {
-    return getSupportedIcons();
-  }
 
   /**
    * Checks if the provided Font Awesome icon name is supported
@@ -87,19 +89,17 @@ public:
    */
   static bool isIconSupported(const std::string &iconName);
 
-  _DEPRECATED static bool isFontAwesomeIconSupported(const std::string &iconName) {
-    return isIconSupported(iconName);
-  }
-
   /**
    * Returns the Unicode code point associated to an icon name
    * @param iconName the name of the icon to get the codepoint
    */
   static unsigned int getIconCodePoint(const std::string &iconName);
 
-  _DEPRECATED static unsigned int getFontAwesomeIconCodePoint(const std::string &iconName) {
-    return getIconCodePoint(iconName);
-  }
+  /**
+   * Returns the font family name associated to an icon name
+   * @param iconName the name of the icon
+   */
+  static std::string getIconFamily(const std::string &iconName);
 
   /**
    * Returns an UTF-8 encoded string of a Font Awesome icon
@@ -107,10 +107,6 @@ public:
    * @return
    */
   static std::string getIconUtf8String(const std::string &iconName);
-
-  _DEPRECATED static std::string getFontAwesomeIconUtf8String(const std::string &iconName) {
-    return getIconUtf8String(iconName);
-  }
 };
 }
 

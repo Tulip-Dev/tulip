@@ -1,4 +1,24 @@
+/**
+ *
+ * This file is part of Tulip (http://tulip.labri.fr)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
 #include <tulip/TulipFontIconDialog.h>
+#include <tulip/TulipFontIconEngine.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpQtTools.h>
@@ -7,38 +27,18 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-#include <QtAwesome.h>
-
 #include "ui_TulipFontIconDialog.h"
 
 using namespace tlp;
-
-static QtAwesome qtAwesomeFa;
-
-static QtAwesome qtAwesomeMd;
-
-QIcon TulipFontIconDialog::getFontAwesomeIcon(const QString &iconName) {
-  if (qtAwesomeFa.fontName().isEmpty())
-    qtAwesomeFa.initFontAwesome(tlpStringToQString(TulipFontAwesome::getTrueTypeFileLocation()));
-
-  return qtAwesomeFa.icon(TulipFontAwesome::getIconCodePoint(QStringToTlpString(iconName)));
-}
-
-QIcon TulipFontIconDialog::getMaterialDesignIcon(const QString &iconName) {
-  if (qtAwesomeMd.fontName().isEmpty())
-    qtAwesomeMd.initFontAwesome(
-        tlpStringToQString(TulipMaterialDesignIcons::getTrueTypeFileLocation()));
-
-  return qtAwesomeMd.icon(TulipMaterialDesignIcons::getIconCodePoint(QStringToTlpString(iconName)));
-}
 
 TulipFontIconDialog::TulipFontIconDialog(QWidget *parent)
     : QDialog(parent), _ui(new Ui::TulipFontIconDialog) {
 
   _ui->setupUi(this);
 
-  connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this,
-          SLOT(updateIconList()));
+  _ui->iconsCreditLabel->setText(QString("<html><head/><body><p><span style=\" font-size:8pt;\">Special credit for the design of icons goes to:</span><br/><span style=\" font-size:8pt; font-weight:600;\">Font Awesome </span><span style=\"font-size:8pt; color:#0000ff;\"><a href=\"http://fontawesome.com\">http://fontawesome.com</a></span><span style=\" font-size:8pt;\"> (v%1)</span><br/><span style=\"font-size:8pt; font-weight:600;\">Material Design Icons </span><span style=\"font-size:8pt;color:#0000ff;\"><a href=\"https://materialdesignicons.com\">https://materialdesignicons.com</a></span><span style=\" font-size:8pt;\"> (v%2)</span></p></body></html>").arg(TulipFontAwesome::getVersion().c_str()).arg(TulipMaterialDesignIcons::getVersion().c_str()));
+  connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)),
+	  this, SLOT(updateIconList()));
   connect(_ui->iconsCreditLabel, SIGNAL(linkActivated(const QString &)), this,
           SLOT(openUrlInBrowser(const QString &)));
 
@@ -57,8 +57,7 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(*it);
 
     if (regexp.indexIn(iconName) != -1) {
-      QIcon faIcon = getFontAwesomeIcon(iconName);
-      _ui->iconListWidget->addItem(new QListWidgetItem(faIcon.pixmap(16, 16), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(*it), iconName));
     }
   }
 
@@ -69,8 +68,7 @@ void TulipFontIconDialog::updateIconList() {
     QString iconName = tlpStringToQString(*it);
 
     if (regexp.indexIn(iconName) != -1) {
-      QIcon mdIcon = getMaterialDesignIcon(iconName);
-      _ui->iconListWidget->addItem(new QListWidgetItem(mdIcon.pixmap(16, 16), iconName));
+      _ui->iconListWidget->addItem(new QListWidgetItem(TulipFontIconEngine::icon(*it), iconName));
     }
   }
 

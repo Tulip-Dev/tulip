@@ -32,8 +32,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/TulipFontAwesome.h>
-#include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/TulipIconicFont.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTools.h>
 #include <tulip/OpenGlConfigManager.h>
@@ -297,15 +296,9 @@ public:
     const string &nodeTexture = glGraphInputData->parameters->getTexturePath() +
                                 glGraphInputData->getElementTexture()->getNodeValue(n);
 
-    if (iconName.substr(0, 3) == "fa-") {
-      drawIcon(iconName, TulipFontAwesome::getTrueTypeFileLocation(),
-               TulipFontAwesome::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
-               nodeBorderWidth, nodeTexture);
-    } else {
-      drawIcon(iconName, TulipMaterialDesignIcons::getTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
-               nodeBorderWidth, nodeTexture);
-    }
+    drawIcon(iconName, TulipIconicFont::getTTFLocation(iconName),
+	     TulipIconicFont::getIconCodePoint(iconName), nodeColor,
+	     nodeBorderColor, nodeBorderWidth, nodeTexture);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox, node n) override {
@@ -321,8 +314,7 @@ private:
     StringProperty *viewIcon = glGraphInputData->getElementIcon();
     string iconName = viewIcon->getNodeValue(n);
 
-    if (iconName.empty() || (!TulipFontAwesome::isIconSupported(iconName) &&
-                             !TulipMaterialDesignIcons::isIconSupported(iconName))) {
+    if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {
       iconName = defaultIcon;
     }
 
@@ -344,8 +336,7 @@ public:
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
     string iconName = viewIcon->getEdgeValue(e);
 
-    if (iconName.empty() || (!TulipFontAwesome::isIconSupported(iconName) &&
-                             !TulipMaterialDesignIcons::isIconSupported(iconName))) {
+    if (iconName.empty() || !TulipIconicFont::isIconSupported(iconName)) {
       iconName = defaultIcon;
     }
 
@@ -355,15 +346,9 @@ public:
 
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 
-    if (iconName.substr(0, 2) == "fa") {
-      drawIcon(iconName, TulipFontAwesome::getTrueTypeFileLocation(),
-               TulipFontAwesome::getIconCodePoint(iconName), glyphColor, borderColor, borderWidth,
-               edgeTexture);
-    } else {
-      drawIcon(iconName, TulipMaterialDesignIcons::getTrueTypeFileLocation(),
-               TulipMaterialDesignIcons::getIconCodePoint(iconName), glyphColor, borderColor,
-               borderWidth, edgeTexture);
-    }
+    drawIcon(iconName, TulipIconicFont::getTTFLocation(iconName),
+	     TulipIconicFont::getIconCodePoint(iconName), glyphColor,
+	     borderColor, borderWidth, edgeTexture);
   }
 };
 

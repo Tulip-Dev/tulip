@@ -73,6 +73,9 @@ SET(tulip-ogl_LIB_SRCS
   Glyph.cpp
   GlyphManager.cpp
   OpenGlConfigManager.cpp
+  TulipFontAwesome.cpp
+  TulipIconicFont.cpp
+  TulipMaterialDesignIcons.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})

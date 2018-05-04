@@ -61,7 +61,7 @@ namespace tlp {
  * @endcode
  **/
 
-class TLP_SCOPE TulipMaterialDesignIcons {
+class TLP_GL_SCOPE TulipMaterialDesignIcons {
 
 public:
   /**
@@ -70,9 +70,19 @@ public:
   static std::string getVersion();
 
   /**
-   * Returns the location of the Material Design Icons TrueType font file bundled with Tulip
+   * Returns the location of the Material Design Icons .ttf file bundled with Tulip
    */
-  static std::string getTrueTypeFileLocation();
+  static std::string getTTFLocation();
+
+  /**
+   * Returns the location of the Material Design Icons .woff file bundled with Tulip
+   */
+  static std::string getWOFFLocation();
+
+  /**
+   * Returns the location of the Material Design Icons .woff2 file bundled with Tulip
+   */
+  static std::string getWOFF2Location();
 
   /**
    * Returns the list of supported Material Design icons names
@@ -90,6 +100,12 @@ public:
    * @param iconName the name of the icon to get the codepoint
    */
   static unsigned int getIconCodePoint(const std::string &iconName);
+
+  /**
+   * Returns the font family name associated to an icon name
+   * @param iconName the name of the icon
+   */
+  static std::string getIconFamily(const std::string &iconName);
 
   /**
    * Returns an UTF-8 encoded string of a Material Design icon

@@ -72,14 +72,7 @@ TlpJsonExport.cpp
 TlpJsonImport.cpp
 TLPBExport.cpp
 TLPBImport.cpp
-TulipFontAwesome.cpp
-TulipMaterialDesignIcons.cpp
 )
-
-# disable GCC var tracking on that file as it eats too much compile time
-IF(CMAKE_COMPILER_IS_GNUCXX)
-SET_SOURCE_FILES_PROPERTIES(TulipFontAwesome.cpp TulipMaterialDesignIcons.cpp COMPILE_FLAGS -fno-var-tracking)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 IF(EMSCRIPTEN)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}

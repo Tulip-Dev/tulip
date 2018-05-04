@@ -43,6 +43,7 @@
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TextureFileDialog.h>
 #include <tulip/TulipFontIconDialog.h>
+#include <tulip/TulipFontIconEngine.h>
 #include <tulip/ShapeDialog.h>
 
 using namespace tlp;
@@ -584,7 +585,7 @@ QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 }
 
 /*
-  TulipFontAwesomeIconCreator
+  TulipFontIconCreator
   */
 QWidget *TulipFontIconCreator::createWidget(QWidget *parent) const {
   // Due to a Qt issue when embedding a combo box with a large amount
@@ -629,11 +630,7 @@ bool TulipFontIconCreator::paint(QPainter *painter, const QStyleOptionViewItem &
   opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #endif
 
-  if (iconName.startsWith("fa")) {
-    opt.icon = TulipFontIconDialog::getFontAwesomeIcon(iconName);
-  } else {
-    opt.icon = TulipFontIconDialog::getMaterialDesignIcon(iconName);
-  }
+  opt.icon.addPixmap(TulipFontIconEngine::pixmap(iconName, 16));
 
   opt.decorationSize = opt.icon.actualSize(QSize(16, 16));
 

@@ -21,8 +21,7 @@
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/BoundingBox.h>
-#include <tulip/TulipFontAwesome.h>
-#include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/TulipIconicFont.h>
 #include <tulip/TlpTools.h>
 
 #include <QFile>
@@ -250,7 +249,7 @@ void ExportSvg::addGlowEffect() {
   }
 }
 
-void ExportSvg::addBase64font(const QString &fontName) {
+/*void ExportSvg::addBase64font(const QString &fontName) {
   if (!_base64fontAdded.contains(fontName)) {
     _base64fontAdded[fontName] = true;
     QString extension("woff");
@@ -276,13 +275,28 @@ void ExportSvg::addBase64font(const QString &fontName) {
     _res.writeCDATA(header + base64code + "\");}");
     _res.writeEndElement();
   }
-}
+  }*/
 
 void ExportSvg::addWebFontFromIconName(const string &iconName) {
-  if (iconName.substr(0, 3) == "fa-") {
-    addBase64font("fontawesome");
-  } else {
-    addBase64font("materialdesignicons");
+  std::string fontFile = _woff2
+    ? TulipIconicFont::getWOFF2Location(iconName)
+    : TulipIconicFont::getWOFF2Location(iconName);
+  if (_base64fontAdded.find(fontFile) == _base64fontAdded.end()) {
+    _base64fontAdded.insert(fontFile);
+
+    QFile file(tlpStringToQString(fontFile));
+    if (!file.open(QIODevice::ReadOnly))
+      tlp::warning() << "Cannot open " << fontFile << endl;
+
+    QByteArray byteArray(file.readAll());
+    file.close();
+    _res.writeStartElement("style");
+    _res.writeAttribute("style", "text/css");
+    QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
+    QString header("@font-face {font-family: \"" + tlpStringToQString(TulipIconicFont::getIconFamily(iconName)) +
+                   "\";src: url(\"data:application/x-font-" + (_woff2 ? "woff2" : "woff") + ";base64,");
+    _res.writeCDATA(header + base64code + "\");}");
+    _res.writeEndElement();
   }
 }
 
@@ -566,17 +580,11 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   case NodeShape::Icon: {
     addWebFontFromIconName(iconName);
 
-    bool faIcon = iconName.find("fa-") == 0;
-
     _res.writeStartElement("text");
     _res.writeAttribute("x", QString::number(x));
     _res.writeAttribute("y", QString::number(-y));
 
-    if (faIcon) {
-      _res.writeAttribute("font-family", "fontawesome");
-    } else {
-      _res.writeAttribute("font-family", "materialdesignicons");
-    }
+    _res.writeAttribute("font-family", tlpStringToQString(TulipIconicFont::getIconFamily(iconName)));
 
     _res.writeAttribute("transform", "scale(1,-1) translate(0," + QString::number(h * 0.72) + ")");
     _res.writeAttribute("font-size", QString::number(w * 2));
@@ -589,13 +597,8 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.writeCharacters("");
     _res.device()->write("&"); // do not escape the character
 
-    if (faIcon) {
-      _res.writeCharacters("#x" +
-                           QString::number(TulipFontAwesome::getIconCodePoint(iconName), 16) + ";");
-    } else {
-      _res.writeCharacters(
-          "#x" + QString::number(TulipMaterialDesignIcons::getIconCodePoint(iconName), 16) + ";");
-    }
+    _res.writeCharacters("#x" +
+			 QString::number(TulipIconicFont::getIconCodePoint(iconName), 16) + ";");
   } break;
 
   // TODO!!!! Right now, just draw an ellipse

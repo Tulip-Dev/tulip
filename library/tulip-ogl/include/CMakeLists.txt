@@ -75,6 +75,9 @@ INSTALL(FILES
   tulip/OcclusionTest.h
   tulip/OpenGlConfigManager.h
   tulip/OpenGlIncludes.h
+  tulip/TulipFontAwesome.h
+  tulip/TulipIconicFont.h
+  tulip/TulipMaterialDesignIcons.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_ogl_dev
 )

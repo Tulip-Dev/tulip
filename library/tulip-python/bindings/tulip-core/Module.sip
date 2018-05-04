@@ -397,9 +397,7 @@ bool isTupleAndCanConvertToVec3fType(PyObject *pyObj) {
 %Include TulipViewSettings.sip
 %Include Delaunay.sip
 %Include ConvexHull.sip
-%Include TulipFontAwesome.sip
 %Include PluginLister.sip
-%Include TulipMaterialDesignIcons.sip
 %Include ParametricCurves.sip
 
 // force generation of wrappers for specialized template classes

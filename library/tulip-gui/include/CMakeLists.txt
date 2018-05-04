@@ -103,6 +103,7 @@ INSTALL(FILES
   tulip/ColorScalesManager.h
   tulip/ScientificDoubleSpinBox.h
   tulip/TulipFontIconDialog.h
+  tulip/TulipFontIconEngine.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

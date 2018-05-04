@@ -1,7 +1,25 @@
+/**
+ *
+ * This file is part of Tulip (http://tulip.labri.fr)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include "Shape.h"
 
-#include <tulip/TulipFontAwesome.h>
-#include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/TulipIconicFont.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -211,16 +229,11 @@ void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool
   res.writeEndElement();
 }
 
-void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color, const string &iconName,
-                          bool tgt) {
-  bool faIcon = iconName.substr(0, 3) == "fa-";
+void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color,
+			  const string &iconName, bool tgt) {
   res.writeStartElement("text");
 
-  if (faIcon) {
-    res.writeAttribute("font-family", "fontawesome");
-  } else {
-    res.writeAttribute("font-family", "materialdesignicons");
-  }
+  res.writeAttribute("font-family", tlpStringToQString(TulipIconicFont::getIconFamily(iconName)));
 
   res.writeAttribute("transform", "scale(1,-1)");
   res.writeAttribute("font-size", "2");
@@ -232,13 +245,7 @@ void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color, const str
   res.writeCharacters("");
   res.device()->write("&"); // do not escape the character
 
-  if (faIcon) {
-    res.writeCharacters("#x" + QString::number(TulipFontAwesome::getIconCodePoint(iconName), 16) +
-                        ";");
-  } else {
-    res.writeCharacters(
-        "#x" + QString::number(TulipMaterialDesignIcons::getIconCodePoint(iconName), 16) + ";");
-  }
+  res.writeCharacters("#x" + QString::number(TulipIconicFont::getIconCodePoint(iconName), 16) + ";");
 }
 
 void ExtremityShape::GlowSphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt,

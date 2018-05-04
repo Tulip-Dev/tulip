@@ -27,7 +27,7 @@
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/TulipFontAwesome.h>
+#include <tulip/TulipIconicFont.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlGraphRenderingParameters.h>
 
@@ -37,7 +37,7 @@ using namespace tlp;
 void drawTree(const Color &color, const Color &outlineColor, const float outlineSize,
               const std::string &texture) {
   static GlLabel label;
-  label.setFontNameSizeAndColor(TulipFontAwesome::getTrueTypeFileLocation(), 18, color);
+  label.setFontNameSizeAndColor(TulipIconicFont::getTTFLocation("fa-tree"), 18, color);
   label.setPosition(Coord(0, 0, 0));
   label.setSize(Size(1, 1, 0));
   label.setUseLODOptimisation(false);
@@ -45,7 +45,7 @@ void drawTree(const Color &color, const Color &outlineColor, const float outline
   label.setOutlineColor(outlineColor);
   label.setOutlineSize(outlineSize);
   label.setTextureName(texture);
-  label.setText(TulipFontAwesome::getIconUtf8String("fa-tree"));
+  label.setText(TulipIconicFont::getIconUtf8String("fa-tree"));
   label.draw(100);
 }
 

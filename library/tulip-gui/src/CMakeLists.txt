@@ -98,6 +98,7 @@ SET(SRCS
   ScientificDoubleSpinBox.cpp
   AboutTulipPage.cpp
   TulipFontIconDialog.cpp
+  TulipFontIconEngine.cpp
   ViewActionsManager.cpp
   ViewToolTipAndUrlManager.cpp
 )
