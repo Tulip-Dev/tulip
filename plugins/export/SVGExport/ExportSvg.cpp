@@ -278,9 +278,8 @@ void ExportSvg::addGlowEffect() {
   }*/
 
 void ExportSvg::addWebFontFromIconName(const string &iconName) {
-  std::string fontFile = _woff2
-    ? TulipIconicFont::getWOFF2Location(iconName)
-    : TulipIconicFont::getWOFF2Location(iconName);
+  std::string fontFile = _woff2 ? TulipIconicFont::getWOFF2Location(iconName)
+                                : TulipIconicFont::getWOFF2Location(iconName);
   if (_base64fontAdded.find(fontFile) == _base64fontAdded.end()) {
     _base64fontAdded.insert(fontFile);
 
@@ -293,8 +292,10 @@ void ExportSvg::addWebFontFromIconName(const string &iconName) {
     _res.writeStartElement("style");
     _res.writeAttribute("style", "text/css");
     QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
-    QString header("@font-face {font-family: \"" + tlpStringToQString(TulipIconicFont::getIconFamily(iconName)) +
-                   "\";src: url(\"data:application/x-font-" + (_woff2 ? "woff2" : "woff") + ";base64,");
+    QString header("@font-face {font-family: \"" +
+                   tlpStringToQString(TulipIconicFont::getIconFamily(iconName)) +
+                   "\";src: url(\"data:application/x-font-" + (_woff2 ? "woff2" : "woff") +
+                   ";base64,");
     _res.writeCDATA(header + base64code + "\");}");
     _res.writeEndElement();
   }
@@ -584,7 +585,8 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.writeAttribute("x", QString::number(x));
     _res.writeAttribute("y", QString::number(-y));
 
-    _res.writeAttribute("font-family", tlpStringToQString(TulipIconicFont::getIconFamily(iconName)));
+    _res.writeAttribute("font-family",
+                        tlpStringToQString(TulipIconicFont::getIconFamily(iconName)));
 
     _res.writeAttribute("transform", "scale(1,-1) translate(0," + QString::number(h * 0.72) + ")");
     _res.writeAttribute("font-size", QString::number(w * 2));
@@ -597,8 +599,8 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.writeCharacters("");
     _res.device()->write("&"); // do not escape the character
 
-    _res.writeCharacters("#x" +
-			 QString::number(TulipIconicFont::getIconCodePoint(iconName), 16) + ";");
+    _res.writeCharacters("#x" + QString::number(TulipIconicFont::getIconCodePoint(iconName), 16) +
+                         ";");
   } break;
 
   // TODO!!!! Right now, just draw an ellipse

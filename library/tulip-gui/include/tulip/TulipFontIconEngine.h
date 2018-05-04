@@ -25,27 +25,25 @@
 #include <QPixmap>
 #include <QString>
 
-class TulipFontIconEngine :public QIconEngine {
+class TulipFontIconEngine : public QIconEngine {
   unsigned int codePoint;
   QString fontName;
 
   void init(const std::string &iconName);
-  
- public:
-  
+
+public:
   TulipFontIconEngine(const std::string &iconName);
   TulipFontIconEngine(const QString &iconName);
   TulipFontIconEngine(const TulipFontIconEngine &engine)
-    : QIconEngine(), codePoint(engine.codePoint), fontName(engine.fontName) {}
+      : QIconEngine(), codePoint(engine.codePoint), fontName(engine.fontName) {}
 
   TulipFontIconEngine *clone() const {
     return new TulipFontIconEngine(*this);
   }
 
-  void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode,
-	     QIcon::State state) override;
+  void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
 
-  QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) override;
+  QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
 
   static inline QIcon icon(const std::string &iconName) {
     return QIcon(new TulipFontIconEngine(iconName));
@@ -56,14 +54,12 @@ class TulipFontIconEngine :public QIconEngine {
   }
 
   static inline QPixmap pixmap(const std::string &iconName, unsigned int height,
-			       QIcon::Mode mode = QIcon::Normal,
-			       QIcon::State state = QIcon::On) {
+                               QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::On) {
     return TulipFontIconEngine(iconName).pixmap(QSize(height, height), mode, state);
   }
 
   static inline QPixmap pixmap(const QString &iconName, unsigned int height,
-			       QIcon::Mode mode = QIcon::Normal,
-			       QIcon::State state = QIcon::On) {
+                               QIcon::Mode mode = QIcon::Normal, QIcon::State state = QIcon::On) {
     return TulipFontIconEngine(iconName).pixmap(QSize(height, height), mode, state);
   }
 };

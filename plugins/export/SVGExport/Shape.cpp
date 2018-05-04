@@ -229,8 +229,8 @@ void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool
   res.writeEndElement();
 }
 
-void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color,
-			  const string &iconName, bool tgt) {
+void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color, const string &iconName,
+                          bool tgt) {
   res.writeStartElement("text");
 
   res.writeAttribute("font-family", tlpStringToQString(TulipIconicFont::getIconFamily(iconName)));
@@ -245,7 +245,8 @@ void ExtremityShape::Icon(QXmlStreamWriter &res, const QString &color,
   res.writeCharacters("");
   res.device()->write("&"); // do not escape the character
 
-  res.writeCharacters("#x" + QString::number(TulipIconicFont::getIconCodePoint(iconName), 16) + ";");
+  res.writeCharacters("#x" + QString::number(TulipIconicFont::getIconCodePoint(iconName), 16) +
+                      ";");
 }
 
 void ExtremityShape::GlowSphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt,

@@ -297,8 +297,8 @@ public:
                                 glGraphInputData->getElementTexture()->getNodeValue(n);
 
     drawIcon(iconName, TulipIconicFont::getTTFLocation(iconName),
-	     TulipIconicFont::getIconCodePoint(iconName), nodeColor,
-	     nodeBorderColor, nodeBorderWidth, nodeTexture);
+             TulipIconicFont::getIconCodePoint(iconName), nodeColor, nodeBorderColor,
+             nodeBorderWidth, nodeTexture);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox, node n) override {
@@ -347,8 +347,8 @@ public:
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 
     drawIcon(iconName, TulipIconicFont::getTTFLocation(iconName),
-	     TulipIconicFont::getIconCodePoint(iconName), glyphColor,
-	     borderColor, borderWidth, edgeTexture);
+             TulipIconicFont::getIconCodePoint(iconName), glyphColor, borderColor, borderWidth,
+             edgeTexture);
   }
 };
 

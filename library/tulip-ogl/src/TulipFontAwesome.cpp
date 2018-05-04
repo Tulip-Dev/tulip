@@ -37,7 +37,7 @@ static map<std::string, vector<unsigned int>> iconCodePoint;
 static unordered_map<std::string, const char *> iconFile;
 static vector<std::string> iconsNames;
 
-static bool codePointExists(const char* fontFile, unsigned int codePoint) {
+static bool codePointExists(const char *fontFile, unsigned int codePoint) {
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
 
   FT_Face face;
@@ -160,5 +160,4 @@ std::string TulipFontAwesome::getIconUtf8String(const std::string &iconName) {
                  back_inserter(iconString));
   return iconString;
 }
-
 }

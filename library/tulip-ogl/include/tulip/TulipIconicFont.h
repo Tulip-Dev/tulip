@@ -76,7 +76,6 @@ public:
    */
   static std::string getIconUtf8String(const std::string &iconName);
 };
-
 }
 
 #endif // TULIPFONTICONIC_H
