@@ -45,6 +45,10 @@ public:
 
   QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state) override;
 
+  static inline QIcon icon(const char* iconName) {
+    return QIcon(new TulipFontIconEngine(std::string(iconName)));
+  }
+
   static inline QIcon icon(const std::string &iconName) {
     return QIcon(new TulipFontIconEngine(iconName));
   }
