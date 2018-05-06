@@ -25,7 +25,7 @@
 #include <QPixmap>
 #include <QString>
 
-class TulipFontIconEngine : public QIconEngine {
+class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
   unsigned int codePoint;
   QString fontName;
 
