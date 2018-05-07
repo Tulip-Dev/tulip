@@ -61,9 +61,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "  <head/>"
       "  <body>"
       "    <p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" +
-      title + "</span></p>"
-              "    <p align=\"center\"><a href=\"" +
-      TulipRepoUrl + "\">" + TulipRepoUrl + "</a></p>"
+      title + "</span></p>" + (!git_rev.isEmpty() ? (QString("    <p align=\"center\"><a href=\"") + TulipRepoUrl + "\">" + TulipRepoUrl + "</a></p>") : QString()) +
                                             "  </body>"
                                             "</html>");
 
