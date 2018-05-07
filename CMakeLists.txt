@@ -687,8 +687,6 @@ ELSE(YAJL_FOUND)
 ENDIF(YAJL_FOUND)
 
 SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
-SET(QtAwesomeLibrary QtAwesome)
-SET(QtAwesomeInclude ${PROJECT_SOURCE_DIR}/thirdparty/QtAwesome)
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
 SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
