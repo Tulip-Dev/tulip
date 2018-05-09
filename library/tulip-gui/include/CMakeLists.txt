@@ -1,3 +1,5 @@
+IF(NOT TULIP_BUILD_FOR_APPIMAGE)
+
 INSTALL(FILES
   tulip/AboutTulipPage.h
   tulip/ColorScaleConfigDialog.h
@@ -126,3 +128,5 @@ INSTALL(FILES
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )
+
+ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)

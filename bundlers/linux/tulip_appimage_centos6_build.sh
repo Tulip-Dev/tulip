@@ -56,7 +56,7 @@ pip2.7 install sphinx
 # build and install tulip
 mkdir /tulip/build
 cd /tulip/build
-cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_INSTALL_PREFIX=$PWD/install -DTULIP_USE_CCACHE=ON ..
+cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python2.7 -DCMAKE_INSTALL_PREFIX=$PWD/install -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_FOR_APPIMAGE=ON ..
 make -j4 install
 
 # build a bundle dir suitable for AppImageKit

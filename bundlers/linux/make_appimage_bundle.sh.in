@@ -90,10 +90,6 @@ cp -Rp $TULIP_INSTALL_DIR/@CMAKE_INSTALL_LIBDIR@/* $BUNDLE_LIB_DIR
 echo "copying $TULIP_INSTALL_DIR/share files into $BUNDLE_SHARE_DIR"
 cp -Rp $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
 
-# remove not needed files
-rm -rf $BUNDLE_LIB_DIR/tulip/cmake
-rm -rf $BUNDLE_SHARE_DIR/tulip/doc/doxygen
-
 # add qt plugins directory
 mkdir $BUNDLE_BIN_DIR/plugins
 cp -v -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR/plugins
