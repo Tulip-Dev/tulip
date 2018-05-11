@@ -96,23 +96,23 @@ public:
     SizeProperty *sizes = graph->getProperty<SizeProperty>("viewSize");
     // Save Nodes
 
-    for (const node &itn : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       os << "node [" << endl;
-      os << "id " << itn.id << endl;
-      os << "label \"" << convert(label->getNodeValue(itn)) << "\"" << endl;
+      os << "id " << n.id << endl;
+      os << "label \"" << convert(label->getNodeValue(n)) << "\"" << endl;
       os << "graphics [" << endl;
-      printCoord(os, layout->getNodeValue(itn));
-      printSize(os, sizes->getNodeValue(itn));
+      printCoord(os, layout->getNodeValue(n));
+      printSize(os, sizes->getNodeValue(n));
       os << "type \"rectangle\"" << endl;
       os << "width 0.12" << endl;
-      os << "fill \"#" << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getR())
-         << hex << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getG()) << hex
-         << setfill('0') << setw(2) << int(colors->getNodeValue(itn).getB()) << "\"" << endl;
+      os << "fill \"#" << hex << setfill('0') << setw(2) << int(colors->getNodeValue(n).getR())
+         << hex << setfill('0') << setw(2) << int(colors->getNodeValue(n).getG()) << hex
+         << setfill('0') << setw(2) << int(colors->getNodeValue(n).getB()) << "\"" << endl;
 
       //      os << "outline \"#"<< hex << setfill('0') << setw(2)
-      //      <<(int)colors->getNodeValue(itn).getR()
-      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()
-      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getB() <<
+      //      <<(int)colors->getNodeValue(n).getR()
+      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(n).getG()
+      //         << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(n).getB() <<
       //         "\""<< endl;
 
       os << "outline \"#000000\"" << endl;
@@ -121,12 +121,13 @@ public:
     }
 
     // Save edges
-    for (const edge &ite : graph->edges()) {
+    for (auto e : graph->edges()) {
+      const std::pair<node, node> ends = graph->ends(e);
       os << "edge [" << endl;
-      os << "source " << graph->source(ite).id << endl;
-      os << "target " << graph->target(ite).id << endl;
-      os << "id " << ite.id << endl;
-      os << "label \"" << label->getEdgeValue(ite) << "\"" << endl;
+      os << "source " << ends.first.id << endl;
+      os << "target " << ends.second.id << endl;
+      os << "id " << e.id << endl;
+      os << "label \"" << label->getEdgeValue(e) << "\"" << endl;
       os << "graphics [" << endl;
       os << "type \"line\"" << endl;
       os << "arrow \"last\"" << endl;
@@ -134,11 +135,10 @@ public:
       os << "Line [" << endl;
       vector<Coord> lcoord;
       vector<Coord>::const_iterator it;
-      lcoord = layout->getEdgeValue(ite);
+      lcoord = layout->getEdgeValue(e);
 
       if (!lcoord.empty()) {
-        node itn = graph->source(ite);
-        printPoint(os, layout->getNodeValue(itn));
+        printPoint(os, layout->getNodeValue(ends.first));
       }
 
       for (it = lcoord.begin(); it != lcoord.end(); ++it) {
@@ -146,8 +146,7 @@ public:
       }
 
       if (!lcoord.empty()) {
-        node itn = graph->target(ite);
-        printPoint(os, layout->getNodeValue(itn));
+        printPoint(os, layout->getNodeValue(ends.second));
       }
 
       os << "]" << endl;

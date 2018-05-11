@@ -56,7 +56,7 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
   unsigned int id_tgt_grad = 0;
   GlGraphRenderingParameters rp;
   GlGraphInputData inputData(graph, &rp);
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     if ((++i % 100) == 0)
       pp->progress(i, nb_elements);
 
@@ -246,7 +246,7 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &e
   sortNodes srt(layout);
   std::sort(nodes.begin(), nodes.end(), srt);
 
-  for (const node &n : nodes) {
+  for (auto n : nodes) {
 
     if (graph->isMetaNode(n))
       metanodeVertices.push_back(n);

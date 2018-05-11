@@ -36,18 +36,18 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
   map<pair<unsigned int, unsigned int>, unsigned int> nbExtraEdges;
 
   MutableContainer<unsigned int> clusterId;
-  vector<set<node>>::const_iterator itPart = partition.begin();
+  auto itPart = partition.begin();
 
   for (unsigned int i = 0; itPart != partition.end(); ++itPart, ++i) {
-    set<node>::const_iterator itSet = itPart->begin();
+    auto itSet = itPart->begin();
 
     for (; itSet != itPart->end(); ++itSet) {
       clusterId.set(itSet->id, i);
     }
   }
 
-  for (const edge &e : sg->edges()) {
-    const pair<node, node> &eEnds = sg->ends(e);
+  for (auto e : sg->edges()) {
+    const pair<node, node> eEnds = sg->ends(e);
     node n1 = eEnds.first;
     node n2 = eEnds.second;
 
@@ -104,31 +104,30 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Gr
 void StrengthClustering::computeNodePartition(double threshold, vector<set<node>> &result) {
   Graph *tmpGraph = graph->addCloneSubGraph();
 
-  for (const edge &ite : stableIterator(graph->getEdges())) {
-
-    if (values->getEdgeValue(ite) < threshold) {
-      const pair<node, node> &eEnds = graph->ends(ite);
+  for (auto e : graph->edges()) {
+    if (values->getEdgeValue(e) < threshold) {
+      const pair<node, node> eEnds = graph->ends(e);
 
       if (graph->deg(eEnds.first) > 1 && graph->deg(eEnds.second) > 1)
-        tmpGraph->delEdge(ite);
+        tmpGraph->delEdge(e);
     }
   }
 
   // Select SubGraph singleton in graph
   set<node> singleton;
 
-  for (const node &itn : stableIterator(tmpGraph->getNodes())) {
-    if (tmpGraph->deg(itn) == 0)
-      singleton.insert(itn);
+  for (auto n : tmpGraph->nodes()) {
+    if (tmpGraph->deg(n) == 0)
+      singleton.insert(n);
   }
 
   // restore edges to reconnect singleton by computing induced subgraph
-  for (const edge &ite : stableIterator(graph->getEdges())) {
-    const pair<node, node> &eEnds = graph->ends(ite);
+  for (auto e : graph->edges()) {
+    const pair<node, node> eEnds = graph->ends(e);
 
     if (singleton.find(eEnds.first) != singleton.end() &&
         singleton.find(eEnds.second) != singleton.end()) {
-      tmpGraph->addEdge(ite);
+      tmpGraph->addEdge(e);
     }
   }
 
@@ -141,16 +140,16 @@ void StrengthClustering::computeNodePartition(double threshold, vector<set<node>
   int index = 0;
   map<double, int> resultIndex;
 
-  for (const node &itn : tmpGraph->nodes()) {
-    const double &val = connected.getNodeValue(itn);
+  for (auto n : tmpGraph->nodes()) {
+    const double &val = connected.getNodeValue(n);
 
     if (resultIndex.find(val) != resultIndex.end())
-      result[resultIndex[val]].insert(itn);
+      result[resultIndex[val]].insert(n);
     else {
       set<node> tmp;
       result.push_back(tmp);
       resultIndex[val] = index;
-      result[index].insert(itn);
+      result[index].insert(n);
       ++index;
     }
   }
@@ -227,7 +226,7 @@ bool StrengthClustering::run() {
     if (maxSteps < 10)
       maxSteps = 10;
 
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       values->setEdgeValue(e, values->getEdgeValue(e) * (mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {

@@ -105,7 +105,7 @@ void ConvolutionClustering::autoSetParameter() {
 
   map<double, int> histo;
 
-  for (const node &itn : graph->nodes()) {
+  for (auto itn : graph->nodes()) {
     double tmp = metric->getNodeDoubleValue(itn);
 
     if (histo.find(tmp) == histo.end())
@@ -190,7 +190,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
   double minVal = metric->getNodeDoubleMin();
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     int tmp = int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange);
 
     if (histogramOfValues.find(tmp) == histogramOfValues.end())
@@ -225,7 +225,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
 void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
   double minVal = metric->getNodeDoubleMin();
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     int tmp = getInterval(int((metric->getNodeDoubleValue(n) - minVal) * histosize / maxMinRange),
                           ranges);
     result->setNodeValue(n, tmp);
@@ -243,11 +243,8 @@ bool ConvolutionClustering::run() {
 
   autoSetParameter();
   getHistogram();
-  ConvolutionClusteringSetup *mysetup = new ConvolutionClusteringSetup(this);
-  bool setupResult = mysetup->exec();
-  delete mysetup;
 
-  if (setupResult == QDialog::Rejected) {
+  if (ConvolutionClusteringSetup(this).exec() == QDialog::Rejected) {
     pluginProgress->setError("user cancellation");
     return false;
   }

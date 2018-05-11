@@ -231,7 +231,7 @@ bool CsvExport::exportGraph(std::ostream &os) {
   if (eltType != EDGE_TYPE) {
     Iterator<node> *it = exportSelection ? prop->getNodesEqualTo(true, graph) : graph->getNodes();
 
-    for (const node &n : it) {
+    for (auto n : it) {
 
       if (exportId) {
         os << n;
@@ -266,13 +266,13 @@ bool CsvExport::exportGraph(std::ostream &os) {
   if (eltType != NODE_TYPE) {
     Iterator<edge> *it = exportSelection ? prop->getEdgesEqualTo(true, graph) : graph->getEdges();
 
-    for (const edge &e : it) {
+    for (auto e : it) {
 
       if (exportId) {
         if (eltType == BOTH_TYPES)
           os << fieldSeparator;
 
-        const std::pair<node, node> &ends = graph->ends(e);
+        const std::pair<node, node> ends = graph->ends(e);
         os << ends.first << fieldSeparator << ends.second.id;
 
         if (nbProps > 0)

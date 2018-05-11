@@ -161,7 +161,7 @@ public:
     DataSet layoutParams;
 
     if (clustersLayout) {
-      for (Graph *cluster : graph->getSubGraphs()) {
+      for (auto cluster : graph->subGraphs()) {
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
         Size maxSize = viewSize->getMax(cluster);
@@ -261,7 +261,7 @@ public:
     if (!oriented) {
       // for each edge
       // store opposite edge in opProp
-      for (const edge &mE : quotientGraph->edges()) {
+      for (auto mE : quotientGraph->edges()) {
         const std::pair<node, node> &eEnds = quotientGraph->ends(mE);
         edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 
@@ -273,7 +273,7 @@ public:
       set<edge> edgesToDel;
       DoubleProperty *viewMetric = quotientGraph->getProperty<DoubleProperty>("viewMetric");
 
-      for (const edge &mE : quotientGraph->edges()) {
+      for (auto mE : quotientGraph->edges()) {
         edge op(opProp->getEdgeValue(mE));
 
         if (op.isValid() && edgesToDel.find(mE) == edgesToDel.end() &&

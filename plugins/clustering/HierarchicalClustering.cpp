@@ -40,7 +40,7 @@ public:
 
 bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNode) {
 
-  for (const node &n : graph->nodes())
+  for (auto n : graph->nodes())
     orderedNode.push_back(n);
 
   LessThan comp;
@@ -50,7 +50,7 @@ bool HierarchicalClustering::split(DoubleProperty *metric, list<node> &orderedNo
   list<node>::iterator itListNode;
   double tmpDbl;
 
-  // We split the sorted list in two part
+  // We split the sorted list in two parts
   int nbElement = orderedNode.size();
   nbElement /= 2;
 
@@ -104,19 +104,19 @@ bool HierarchicalClustering::run() {
       for (itl = badNodeList.begin(); itl != badNodeList.end(); ++itl)
         splitRes.setNodeValue(*itl, false);
 
-      for (const node &nit : graph->nodes()) {
+      for (auto nit : graph->nodes()) {
 
         if (splitRes.getNodeValue(nit)) {
           sel2.setNodeValue(nit, false);
 
-          for (const edge &ite : graph->getInOutEdges(nit)) {
+          for (auto ite : graph->getInOutEdges(nit)) {
             sel2.setEdgeValue(ite, false);
           }
 
         } else {
           sel1.setNodeValue(nit, false);
 
-          for (const edge &ite : graph->getInOutEdges(nit)) {
+          for (auto ite : graph->getInOutEdges(nit)) {
             sel1.setEdgeValue(ite, false);
           }
         }
