@@ -150,8 +150,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     connect(action, SIGNAL(triggered()), this, SLOT(setPropsNotVisibleExcept()));
     menu.addSeparator();
 
-    action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),
-                            trUtf8("Add new property"));
+    action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"), trUtf8("Add new property"));
     action->setToolTip("Display a dialog to create a new property belonging to the current graph");
     connect(action, SIGNAL(triggered()), this, SLOT(newProperty()));
     connect(menu.addAction(trUtf8("Copy")), SIGNAL(triggered()), this, SLOT(copyProperty()));
