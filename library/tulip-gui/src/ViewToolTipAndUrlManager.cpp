@@ -70,7 +70,7 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
     _urlPropName.clear();
   }
   urlPropMenu->setToolTip(
-      QString("Choose the property giving the url of the graph elements associated web page"));
+      QString("Choose the property giving the web page associated with a graph element"));
 
   QActionGroup *urlPropGroup = new QActionGroup(urlPropMenu);
   urlPropGroup->setExclusive(true);
@@ -102,7 +102,7 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
     if (propName.find("view") != 0 || propName == "viewLabel") {
       action = urlPropMenu->addAction(tlpStringToQString(propName));
       action->setToolTip(
-          QString("The url of the graph elements associated web page is given by the \"")
+          QString("The url of the web page associated with a graph element is given by the \"")
               .append(tlpStringToQString(propName))
               .append(QString("\" property value")));
       urlPropGroup->addAction(action);

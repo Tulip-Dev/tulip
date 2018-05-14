@@ -790,8 +790,8 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   action->setEnabled(false);
   contextMenu.addSeparator();
   QAction *addProp = contextMenu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"),
-                                           "Add property of the same type");
-  addProp->setToolTip("Display a dialog to create a new property owning to the current graph");
+                                           "Add new property");
+  addProp->setToolTip("Display a dialog to create a new property belonging to the current graph");
   QAction *copyProp = contextMenu.addAction("Copy");
   copyProp->setToolTip(QString("Copy the values of \"") + action->text() +
                        "\" in a property of the same type");
@@ -811,9 +811,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
     renameProp->setToolTip(QString("Rename the property \"") + action->text() + '"');
   }
 
-  /*QMenu* subMenu = contextMenu.addMenu(trUtf8("Set default value for"));
-  QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
-  QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));*/
+  contextMenu.addSeparator();
 
   QMenu *subMenu = contextMenu.addMenu(trUtf8("Set values of "));
   QAction *nodesSetAll =
@@ -895,12 +893,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   }
 
   contextMenu.addSeparator();
-  QAction *sortById = contextMenu.addAction("Sort by id");
+  QAction *sortById = contextMenu.addAction("Sort the rows by id");
   sortById->setToolTip(QString("Display the rows in ordering of the id of the ") + eltsName);
-  contextMenu.addSeparator();
 
-  // display the menu with the mouse inside to allow
-  // keyboard navigation
+  // display the menu with the mouse inside to give it the focus
+  // and thus allow keyboard navigation
   action = contextMenu.exec(QCursor::pos() - QPoint(5, 5));
 
   if (!action)
