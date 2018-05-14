@@ -130,6 +130,9 @@ void checkTulipRunning(const QString &perspName, const QString &fileToOpen, bool
 int main(int argc, char **argv) {
   CrashHandling::installCrashHandler();
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
+  QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
+#endif
   QApplication tulip_agent(argc, argv);
   QString name("Tulip ");
 
