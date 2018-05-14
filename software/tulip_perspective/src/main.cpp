@@ -245,11 +245,12 @@ int main(int argc, char **argv) {
   mainWindow->setVisible(false);
 
   // Progress bar dialog
-  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
+  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog();
   progress->setStopButtonVisible(false);
   progress->setCancelButtonVisible(false);
   progress->showPreview(false);
-  progress->resize(500, progress->height());
+
+  progress->resize(500, std::min(50, progress->height()));
   progress->setComment(QString("Initializing ") + title);
   progress->setWindowTitle(title);
   progress->progress(0, 100);
