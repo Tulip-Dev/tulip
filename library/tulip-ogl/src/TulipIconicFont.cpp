@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <cassert>
+
 #include "tulip/TulipIconicFont.h"
 #include "tulip/TulipFontAwesome.h"
 #include "tulip/TulipMaterialDesignIcons.h"
@@ -28,11 +30,13 @@ std::string TulipIconicFont::getTTFLocation(const std::string &iconName) {
 }
 
 std::string TulipIconicFont::getWOFFLocation(const std::string &iconName) {
+  assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getWOFFLocation(iconName)
                                      : TulipMaterialDesignIcons::getWOFFLocation();
 }
 
 std::string TulipIconicFont::getWOFF2Location(const std::string &iconName) {
+  assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getWOFF2Location(iconName)
                                      : TulipMaterialDesignIcons::getWOFF2Location();
 }
@@ -43,16 +47,19 @@ bool TulipIconicFont::isIconSupported(const std::string &iconName) {
 }
 
 unsigned int TulipIconicFont::getIconCodePoint(const std::string &iconName) {
+  assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconCodePoint(iconName)
                                      : TulipMaterialDesignIcons::getIconCodePoint(iconName);
 }
 
 std::string TulipIconicFont::getIconFamily(const std::string &iconName) {
+  assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconFamily(iconName)
                                      : TulipMaterialDesignIcons::getIconFamily(iconName);
 }
 
 std::string TulipIconicFont::getIconUtf8String(const std::string &iconName) {
+  assert(isIconSupported(iconName));
   return (iconName.find("fa-") == 0) ? TulipFontAwesome::getIconUtf8String(iconName)
                                      : TulipMaterialDesignIcons::getIconUtf8String(iconName);
 }
