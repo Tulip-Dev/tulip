@@ -24,6 +24,7 @@
 #include <QIconEngine>
 #include <QPixmap>
 #include <QString>
+#include <tulip/tulipconf.h>
 
 class TLP_QT_SCOPE TulipFontIconEngine : public QIconEngine {
   unsigned int codePoint;
