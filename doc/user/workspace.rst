@@ -207,10 +207,10 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 * The second element is the contextual menu displayed on a right click.
 
   .. image:: _images/i_workspace_rclick.png
-    :width: 297
 
-  By default, the options are divided in two parts : *View* et *Augmented display*.
-
+By default, the options are divided in two parts : *View* et *Augmented display*.
+	    
+**View**
   * *Force redraw*: update the graph displayed.
 
   * *Center view*: reset the camera position.
@@ -223,15 +223,22 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * *Take snapshot*: take a screenshot.
 
+  * *Use orthogonal projection*: allow to switch between the orthogonal or classic perspective projection.
+
+**Augmented display**
   * *Show overview*: display/hide the overview in the bottom right corner of the window.
 
   * *Show quick access bar*: display/hide the quick access bar.
+
+  * *Tooltips*: enable/disable the display of essential informations about the node/edge under the mouse pointer.
+
+  * *Url property*: display a sub menu allowing to choose a property giving the url of the web page associated with a graph element. When moving the mouse pointer over a node or edge, the url of the associated web page is displayed; this web page can then be shown in your default web browser in typing on the space bar.
 
   * *Use Z ordering*: adapt the display priority according to the Z position.
 
   * *Grid display parameters*: open the grid setup wizard.
 
-  When right clicking on an edge or a node, a different menu appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it or its neighboring nodes or adjacent edges to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to update (*Edit*) one of the main draw properties (color, label, shape or size)
+When right clicking on an edge or a node, a different menu appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it or its neighboring nodes or adjacent edges to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to update (*Edit*) one of the main draw properties (color, label, shape or size)
 
 
   |i_workspace_rclick_edge|    |i_workspace_rclick_node|
@@ -333,15 +340,15 @@ The scene rendering settings can be opened by clicking on the **Scene** tab, in 
 
 * **Colors**: customize the selection and background colors.
 
-* **Labels**: manage the labels display by adapting their size so they can fit into their respective nodes, choosing the number of labels simultaneously displayed and setting the size limits of the used font. 
-
 * **Edges**: manage the edge display by enabling the 3D edges, showing the arrows, enabling the color or the size interpolations.
 
-* **Graph elements rendering**: manage the display of the graph nodes/edges and their labels by ordering them according to a given metric. 
+* **Elements ordering**: manage the display of the graph nodes/edges and their labels by ordering them according to a given metric. 
 
-* **Projection**: select the orthogonal or classic perspective projection.
+* **Labels**: manage the labels display by adapting their size so they can fit into their respective nodes, choosing the number of labels simultaneously displayed and setting the size limits of the used font. 
 
 * **Graph changing**: specify if the scene point of view must change when switching the graph to display.
+
+* **Projection**: select the orthogonal or classic perspective projection.
 
 Note that some of the settings mentioned above can be modified through the quick access bar or with the right click menu in the main window.
 
@@ -356,7 +363,6 @@ Layers
 The layers settings can be accessed by clicking on the **Layers** tab. The following tab is then displayed:
 
 .. image:: _images/i_workspace_layers.png
-    :width: 450
 
 The first column, *Visible*, allows you to select the elements you want to display in the graph. The second column, *Stencil*, gives you another level of visibility by setting the objects on the foreground. 
 
@@ -481,7 +487,6 @@ The spreadsheet view allows you to select the elements you want to watch by choo
 The value stored in the table can be modified by several ways. A double click on one of the cells will offers to enter the value for one property and one element (edge or node). A right click in one of the cells opens the following menu :
 
 .. image:: _images/i_workspace_rclick_elements.png
-    :width: 159
 
 Two types of action can be done, the ones concerning the property values and the ones concerning the selection of the element. The property values can be set for all nodes or edges (having the property or belonging to the current graph), the ones selected (where *viewSelection = true*) or the ones  corresponding to the highlighted rows (current element and the ones clicked on while maintaining *Ctrl* pushed). The values of the current property (corresponding to the current cell column) can also be copied into *viewLabel* in order to display them in the graph.
 
@@ -548,7 +553,7 @@ Geographic view
 Map modes
 ---------
 
-The geographic view provides six differents map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to adapt the visualization background to your need.
+The geographic view provides six differents map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to customize the visualization background to your need.
 
 * Roadmap:
 
@@ -683,11 +688,11 @@ In this panel, you can select the properties you are interested in. The nodes or
 Options
 -------
 
-The second tab offers options to adapt the histogram. It can only be used when viewing a specific histogram :
+The second tab offers options to customize the histogram. It can only be used when viewing a specific histogram :
 
 .. image:: _images/i_histogram_options.png
 
-These settings will alter the initial histogram by adapting the discrete intervals used.
+These settings will alter the initial histogram by customizing the discrete intervals used.
 
 * **Background color**: changes the background color.
 
