@@ -87,6 +87,8 @@ cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR
 # copy all lib and share installed files (no include)
 echo "copying $TULIP_INSTALL_DIR/lib files into $BUNDLE_LIB_DIR"
 cp -Rp $TULIP_INSTALL_DIR/@CMAKE_INSTALL_LIBDIR@/* $BUNDLE_LIB_DIR
+# no need of lib/cmake
+rm -rf $BUNDLE_LIB_DIR/cmake
 echo "copying $TULIP_INSTALL_DIR/share files into $BUNDLE_SHARE_DIR"
 cp -Rp $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
 
