@@ -44,7 +44,6 @@ public:
   PathFinderComponent(PathFinder *parent);
   ~PathFinderComponent() override;
   bool eventFilter(QObject *, QEvent *) override;
-  void timerEvent(QTimerEvent *) override;
 
   /**
    * Install a path highlighter. This highlighter is not always activated. The component will ask
@@ -63,12 +62,9 @@ public:
 private:
   tlp::node src;
   tlp::node tgt;
+  tlp::node tmp;
   PathFinder *parent;
   bool graphPopable;
-  int timerId;
-  int lastX;
-  int lastY;
-  tlp::GlMainWidget *glMW;
 
   QSet<PathHighlighter *> highlighters;
   void runHighlighters(tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection,
