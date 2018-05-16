@@ -49,13 +49,13 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::MouseMove) {
     SelectedEntity entity;
     if (glw->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), entity) &&
-	entity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+        entity.getEntityType() == SelectedEntity::NODE_SELECTED) {
       tmp.id = entity.getComplexEntityId();
       glw->setCursor(Qt::CrossCursor);
     } else {
       tmp = node();
       glw->setCursor(Qt::ArrowCursor);
-  }
+    }
   } else if (event->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
     Observable::holdObservers();
 
