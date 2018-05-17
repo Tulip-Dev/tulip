@@ -102,6 +102,7 @@ wd="\${0%/*}"
 cd "\$wd/.."
 
 export DYLD_FRAMEWORK_PATH="\$(pwd)/Frameworks"
+export DYLD_FALLBACK_LIBRARY_PATH="\$(pwd)/Frameworks"
 export QT_QPA_PLATFORM_PLUGIN_PATH="\$(pwd)/PlugIns/platforms"
 export QT_PLUGIN_PATH="\$(pwd)/PlugIns"
 "\$(pwd)"/bin/tulip
