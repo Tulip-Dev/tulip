@@ -27,8 +27,9 @@ using namespace tlp;
 using namespace std;
 
 DFS::DFS(Graph *graph, BooleanProperty *result, DoubleProperty *dists, node tgt,
-         const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation, double maxDist)
-  : graph(graph), result(result), dists(dists), tgt(tgt), weights(eWeights), currentDist(0),
+         const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
+         double maxDist)
+    : graph(graph), result(result), dists(dists), tgt(tgt), weights(eWeights), currentDist(0),
       edgesOrientation(edgesOrientation), maxDist(maxDist) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());

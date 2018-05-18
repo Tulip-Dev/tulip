@@ -547,40 +547,40 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
 
       if (g->existLocalProperty("viewColor")) {
         color = g->getLocalProperty<ColorProperty>("viewColor");
-	if (!applyMapping && (color->numberOfNonDefaultValuatedNodes() != 0)) {
-	  color->setAllNodeDataMemValue(color->getNodeDefaultDataMemValue());
-	  color->setAllEdgeDataMemValue(color->getEdgeDefaultDataMemValue());
-	}
+        if (!applyMapping && (color->numberOfNonDefaultValuatedNodes() != 0)) {
+          color->setAllNodeDataMemValue(color->getNodeDefaultDataMemValue());
+          color->setAllEdgeDataMemValue(color->getEdgeDefaultDataMemValue());
+        }
       } else {
         color = g->getLocalProperty<ColorProperty>("viewColor");
         ColorProperty *ancestorColor = g->getSuperGraph()->getProperty<ColorProperty>("viewColor");
-	if (!applyMapping &&
-	    (ancestorColor->numberOfNonDefaultValuatedNodes(g) != 0)) {
-	  // same default values as ancestor property default values
-	  color->setAllNodeDataMemValue(ancestorColor->getNodeDefaultDataMemValue());
-	  color->setAllEdgeDataMemValue(ancestorColor->getEdgeDefaultDataMemValue());
-	}
+        if (!applyMapping && (ancestorColor->numberOfNonDefaultValuatedNodes(g) != 0)) {
+          // same default values as ancestor property default values
+          color->setAllNodeDataMemValue(ancestorColor->getNodeDefaultDataMemValue());
+          color->setAllEdgeDataMemValue(ancestorColor->getEdgeDefaultDataMemValue());
+        }
       }
 
       if (applyMapping) {
-	// set value of "color scale" parameter of "Color Mapping" plugin
-	// to the user defined value
-	tlp::DataSet data;
-	ColorScale cs;
+        // set value of "color scale" parameter of "Color Mapping" plugin
+        // to the user defined value
+        tlp::DataSet data;
+        ColorScale cs;
 
-	if (colorMappingModel)
-	  colorMappingModel->parametersValues().get<ColorScale>("color scale", cs);
-	else
-	  cs = ColorScalesManager::getLatestColorScale();
+        if (colorMappingModel)
+          colorMappingModel->parametersValues().get<ColorScale>("color scale", cs);
+        else
+          cs = ColorScalesManager::getLatestColorScale();
 
-	data.set<ColorScale>("color scale", cs);
-	g->applyPropertyAlgorithm("Color Mapping", color, errMsg, &data);
+        data.set<ColorScale>("color scale", cs);
+        g->applyPropertyAlgorithm("Color Mapping", color, errMsg, &data);
       }
     }
   } else if (pluginLister->pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result", result);
-    std::string str = "\"" + stdName + "\" test " + (result ? "succeeded" : "failed") + " on:\n" + g->getName() + ".";
+    std::string str = "\"" + stdName + "\" test " + (result ? "succeeded" : "failed") + " on:\n" +
+                      g->getName() + ".";
 
     if (result) {
       tlp::debug() << str << std::endl;

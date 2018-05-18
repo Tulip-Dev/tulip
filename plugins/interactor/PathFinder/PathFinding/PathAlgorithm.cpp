@@ -37,15 +37,14 @@ double computePathLength(BooleanProperty *result, EdgeStaticProperty<double> &we
   double retVal(0);
   Graph *graph(result->getGraph());
   auto ite = result->getNonDefaultValuatedEdges(graph);
-  while(ite->hasNext()) {
+  while (ite->hasNext()) {
     retVal += weights.getEdgeValue(ite->next());
   }
   delete ite;
   return retVal;
 }
 
-bool PathAlgorithm::computePath(Graph *graph, PathType pathType,
-				EdgeOrientation edgesOrientation,
+bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,
                                 node src, node tgt, BooleanProperty *result,
                                 DoubleProperty *weights, double tolerance) {
 #ifndef NDEBUG
@@ -110,7 +109,7 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType,
         DoubleProperty dists(result->getGraph());
         DFS d(graph, result, &dists, tgt, eWeights, edgesOrientation, pathLength);
         retVal = d.searchPaths(src);
-       }
+      }
     }
 
     break;

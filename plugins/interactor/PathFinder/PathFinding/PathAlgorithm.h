@@ -64,8 +64,7 @@ public:
    * @see Dikjstra
    * @see DFS
    */
-  static bool computePath(tlp::Graph *graph, PathType pathType,
-			  EdgeOrientation edgesOrientation,
+  static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,
                           tlp::node src, tlp::node tgt, tlp::BooleanProperty *result,
                           tlp::DoubleProperty *weights = nullptr, double tolerance = DBL_MAX);
 };
