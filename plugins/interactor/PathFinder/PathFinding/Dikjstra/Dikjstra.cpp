@@ -27,7 +27,7 @@ using namespace std;
 //============================================================
 void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *const forbiddenNodes,
                             tlp::node src, EdgeOrientation directed,
-                            const tlp::MutableContainer<double> &weights, double,
+                            const tlp::EdgeStaticProperty<double> &weights, double,
                             const set<node> &focus) {
   assert(src.isValid());
   this->graph = graph;
@@ -39,7 +39,7 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   MutableContainer<DikjstraElement *> mapDik;
   mapDik.setAll(nullptr);
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     if (n != src) { // init all nodes to +inf
       DikjstraElement *tmp = new DikjstraElement(DBL_MAX / 2. + 10., node(), n);
       dikjstraTable.insert(tmp);
@@ -105,25 +105,26 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
       break;
     }
 
-    for (const edge &e : iter) {
+    for (auto e : iter) {
       node v = graph->opposite(e, u.n);
       DikjstraElement &dEle = *mapDik.get(v.id);
-      assert(weights.get(e.id) > 0);
+      double eWeight = weights.getEdgeValue(e);
+      assert(eWeight > 0);
 
       /*
-                  if (DBL_MAX - u.dist <  weights.get(e.id))
+                  if (DBL_MAX - u.dist <  eWeight)
               cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" <<
          endl;
-            if (DBL_MAX - fabs((u.dist + weights.get(e.id))) < dEle.dist)
+            if (DBL_MAX - fabs((u.dist + eWeight)) < dEle.dist)
               cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" <<
          endl;
                     */
-      if (fabs((u.dist + weights.get(e.id)) - dEle.dist) < 1E-9) // path of the same length
+      if (fabs((u.dist + eWeight) - dEle.dist) < 1E-9) // path of the same length
         dEle.usedEdge.push_back(e);
       else
 
           // we find a node closer with that path
-          if ((u.dist + weights.get(e.id)) < dEle.dist) {
+          if ((u.dist + eWeight) < dEle.dist) {
         dEle.usedEdge.clear();
         //**********************************************
         dikjstraTable.erase(&dEle);
@@ -132,9 +133,9 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
           focusTable.erase(&dEle);
         }
 
-        dEle.dist = u.dist + weights.get(e.id);
+        dEle.dist = u.dist + eWeight;
         /*
-        if (DBL_MAX - u.dist <  weights.get(e.id))
+        if (DBL_MAX - u.dist <  eWeight)
         cerr << __PRETTY_FUNCTION__ << "at line : " << __LINE__ << " : Double overflow" << endl;
         */
         dEle.previous = u.n;
@@ -149,9 +150,9 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   }
 
   usedEdges.setAll(false);
-  for (const node &tmpN : graph->nodes()) {
-    DikjstraElement *dEle = mapDik.get(tmpN.id);
-    nodeDistance.set(tmpN.id, dEle->dist);
+  for (auto n : graph->nodes()) {
+    DikjstraElement *dEle = mapDik.get(n.id);
+    nodeDistance.set(n.id, dEle->dist);
 
     for (unsigned int i = 0; i < dEle->usedEdge.size(); ++i) {
       usedEdges.set(dEle->usedEdge[i].id, true);
@@ -161,12 +162,12 @@ void Dikjstra::initDikjstra(const tlp::Graph *const graph, const tlp::Graph *con
   }
 }
 //=======================================================================
-void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProperty *depth) {
+void Dikjstra::internalSearchPaths(node n, BooleanProperty *result) {
   if (result->getNodeValue(n))
     return;
 
   result->setNodeValue(n, true);
-  for (const edge &e : graph->getInOutEdges(n)) {
+  for (auto e : graph->getInOutEdges(n)) {
     if (!usedEdges.get(e.id))
       continue;
 
@@ -179,14 +180,11 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProper
       continue;
 
     result->setEdgeValue(e, true);
-    double dep = depth->getEdgeValue(e) + 1.;
-    depth->setEdgeValue(e, dep);
-    searchPaths(tgt, result, depth);
+    searchPaths(tgt, result);
   }
 }
 //=============================================================================
-bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
-                          DoubleProperty *preference) {
+bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes) {
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
   bool ok = true;
@@ -195,8 +193,8 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
     result->setNodeValue(n, true);
     vNodes.push_back(n);
     ok = false;
-    map<double, edge> validEdge;
-    for (const edge &e : graph->getInOutEdges(n)) {
+    edge validEdge;
+    for (auto e : graph->getInOutEdges(n)) {
       if (!usedEdges.get(e.id))
         continue; // edge does not belong to the shortest path
 
@@ -208,14 +206,13 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
       if (nodeDistance.get(tgt.id) >= nodeDistance.get(n.id))
         continue;
 
-      validEdge[preference->getNodeValue(tgt)] = e;
+      validEdge = e;
     }
 
-    if (!validEdge.empty()) {
+    if (validEdge.isValid()) {
       ok = true;
-      edge e = validEdge.rbegin()->second;
-      n = graph->opposite(e, n); // validEdge.begin()->first;
-      result->setEdgeValue(e, true);
+      n = graph->opposite(validEdge, n);
+      result->setEdgeValue(validEdge, true);
     }
   }
 
@@ -229,7 +226,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
   return true;
 }
 //========================================
-bool Dikjstra::searchPaths(tlp::node n, tlp::BooleanProperty *result, tlp::DoubleProperty *depth) {
-  internalSearchPaths(n, result, depth);
+bool Dikjstra::searchPaths(tlp::node n, tlp::BooleanProperty *result) {
+  internalSearchPaths(n, result);
   return result->getNodeValue(src);
 }

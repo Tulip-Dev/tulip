@@ -25,7 +25,7 @@
 
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include <tulip/MutableContainer.h>
+#include <tulip/StaticProperty.h>
 
 #include "../PathAlgorithm.h"
 
@@ -51,7 +51,7 @@ public:
    * the search (DBL_MAX by default)
    */
   DFS(tlp::Graph *graph, tlp::BooleanProperty *result, tlp::DoubleProperty *dists, tlp::node tgt,
-      tlp::MutableContainer<double> &weights, EdgeOrientation edgesOrientation,
+      const tlp::EdgeStaticProperty<double> &weights, EdgeOrientation edgesOrientation,
       double maxDist = DBL_MAX);
 
   ~DFS();
@@ -70,7 +70,7 @@ private:
   tlp::DoubleProperty *dists;
   tlp::BooleanProperty *visitable;
   tlp::node tgt;
-  tlp::MutableContainer<double> *weights;
+  const tlp::EdgeStaticProperty<double> &weights;
   std::vector<tlp::edge> path;
   double currentDist;
   EdgeOrientation edgesOrientation;

@@ -23,6 +23,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Graph.h>
+#include <tulip/GraphParallelTools.h>
 
 #include "Dikjstra/Dikjstra.h"
 #include "DFS/DFS.h"
@@ -32,17 +33,19 @@
 using namespace tlp;
 using namespace std;
 
-double computePathLength(BooleanProperty *result, MutableContainer<double> &weights) {
+double computePathLength(BooleanProperty *result, EdgeStaticProperty<double> &weights) {
   double retVal(0);
   Graph *graph(result->getGraph());
-  for (const edge &e : graph->edges()) {
-    if (result->getEdgeValue(e))
-      retVal += weights.get(e.id);
+  auto ite = result->getNonDefaultValuatedEdges(graph);
+  while(ite->hasNext()) {
+    retVal += weights.getEdgeValue(ite->next());
   }
+  delete ite;
   return retVal;
 }
 
-bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,
+bool PathAlgorithm::computePath(Graph *graph, PathType pathType,
+				EdgeOrientation edgesOrientation,
                                 node src, node tgt, BooleanProperty *result,
                                 DoubleProperty *weights, double tolerance) {
 #ifndef NDEBUG
@@ -58,41 +61,37 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
 #endif /* NDEBUG */
 
   // We always compute Dikjstra as it is used in the all path computation too
-  MutableContainer<double> weightsContainer;
+  EdgeStaticProperty<double> eWeights(graph);
 
   if (!weights) {
-    for (const edge &e : graph->edges())
-      weightsContainer.set(e.id, SMALLEST_WEIGHT);
+    eWeights.setAll(SMALLEST_WEIGHT);
   } else {
-    for (const edge &e : graph->edges()) {
+    auto fn = [&](edge e, unsigned int i) {
       double val(weights->getEdgeValue(e));
 
-      if (val == 0)
-        weightsContainer.set(e.id, SMALLEST_WEIGHT);
-      else
-        weightsContainer.set(e.id, val);
-    }
+      eWeights[i] = val ? val : SMALLEST_WEIGHT;
+    };
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
   }
 
   set<node> focus;
   vector<node> vNodes;
-  DoubleProperty *depth = new DoubleProperty(graph);
   Dikjstra dikjstra;
-  dikjstra.initDikjstra(graph, nullptr, src, edgesOrientation, weightsContainer, 0, focus);
+  dikjstra.initDikjstra(graph, nullptr, src, edgesOrientation, eWeights, 0, focus);
 
   bool retVal = false;
 
   switch (pathType) {
   case AllShortest:
-    retVal = dikjstra.searchPaths(tgt, result, depth);
+    retVal = dikjstra.searchPaths(tgt, result);
     break;
 
   case OneShortest:
-    retVal = dikjstra.searchPath(tgt, result, vNodes, depth);
+    retVal = dikjstra.searchPath(tgt, result, vNodes);
     break;
 
   case AllPaths:
-    retVal = dikjstra.searchPath(tgt, result, vNodes, depth);
+    retVal = dikjstra.searchPath(tgt, result, vNodes);
 
     if (retVal) {
       double pathLength;
@@ -100,7 +99,7 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       if (tolerance == DBL_MAX)
         pathLength = DBL_MAX;
       else {
-        pathLength = computePathLength(result, weightsContainer);
+        pathLength = computePathLength(result, eWeights);
         pathLength *= tolerance;
       }
 
@@ -108,16 +107,13 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
                            // Meaning that the user doesn't want only the shortest path.
         result->setAllNodeValue(false);
         result->setAllEdgeValue(false);
-        DoubleProperty *dists = new DoubleProperty(result->getGraph());
-        DFS d(graph, result, dists, tgt, weightsContainer, edgesOrientation, pathLength);
+        DoubleProperty dists(result->getGraph());
+        DFS d(graph, result, &dists, tgt, eWeights, edgesOrientation, pathLength);
         retVal = d.searchPaths(src);
-        delete dists;
-      }
+       }
     }
 
     break;
   }
-
-  delete depth;
   return retVal;
 }

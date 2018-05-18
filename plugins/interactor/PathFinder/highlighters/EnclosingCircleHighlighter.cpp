@@ -88,14 +88,14 @@ void EnclosingCircleHighlighter::highlight(const PathFinder *, GlMainWidget *glM
   LayoutProperty *layout = inputData->getElementLayout();
   vector<Circlef> circles;
   float minDepth = -.5; // We'll draw the circle beyond the deeper node. Will work in most cases.
-  for (const node &n : selection->getNodesEqualTo(true)) {
+  for (auto n : selection->getNodesEqualTo(true)) {
     Circlef c;
     minDepth = min(minDepth, layout->getNodeValue(n).getZ());
 
     if (getNodeEnclosingCircle(c, inputData, n))
       circles.push_back(c);
   }
-  for (const edge &e : selection->getEdgesEqualTo(true)) {
+  for (auto e : selection->getEdgesEqualTo(true)) {
     Circlef c;
 
     if (getEdgeEnclosingCircle(c, inputData, e))

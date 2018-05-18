@@ -27,8 +27,8 @@ using namespace tlp;
 using namespace std;
 
 DFS::DFS(Graph *graph, BooleanProperty *result, DoubleProperty *dists, node tgt,
-         MutableContainer<double> &weights, EdgeOrientation edgesOrientation, double maxDist)
-    : graph(graph), result(result), dists(dists), tgt(tgt), currentDist(0),
+         const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation, double maxDist)
+  : graph(graph), result(result), dists(dists), tgt(tgt), weights(eWeights), currentDist(0),
       edgesOrientation(edgesOrientation), maxDist(maxDist) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
@@ -37,7 +37,6 @@ DFS::DFS(Graph *graph, BooleanProperty *result, DoubleProperty *dists, node tgt,
   visitable = new BooleanProperty(graph);
   visitable->setAllNodeValue(true);
   visitable->setAllEdgeValue(true);
-  this->weights = &weights;
 }
 
 DFS::~DFS() {
@@ -69,7 +68,7 @@ bool DFS::searchPaths(node src) {
       result->setNodeValue(opposite, true);
       result->setNodeValue(nd, true);
       dists->setNodeValue(nd, min<double>(distLeft, dists->getNodeValue(nd)));
-      distLeft += weights->get(e.id);
+      distLeft += weights.getEdgeValue(e);
       nd = opposite;
     }
 
@@ -97,12 +96,12 @@ bool DFS::searchPaths(node src) {
     break;
   }
 
-  for (const edge &e : edgeIt) {
-    currentDist += weights->get(e.id);
+  for (auto e : edgeIt) {
+    currentDist += weights.getEdgeValue(e);
     path.push_back(e);
     result |= searchPaths(graph->opposite(e, src));
     path.pop_back();
-    currentDist -= weights->get(e.id);
+    currentDist -= weights.getEdgeValue(e);
   }
 
   visitable->setNodeValue(src, true);

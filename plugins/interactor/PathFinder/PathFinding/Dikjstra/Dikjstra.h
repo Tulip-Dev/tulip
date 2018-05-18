@@ -23,10 +23,11 @@
 #include <set>
 #include <climits>
 #include <tulip/Graph.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/Vector.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/StaticProperty.h>
+#include <tulip/MutableContainer.h>
 
 #include "../PathAlgorithm.h"
 
@@ -37,16 +38,15 @@ public:
   //============================================================
   void initDikjstra(const tlp::Graph *const graph, const tlp::Graph *const forbiddenNodes,
                     tlp::node src, EdgeOrientation directed,
-                    const tlp::MutableContainer<double> &weights, double maxDist,
+                    const tlp::EdgeStaticProperty<double> &weights, double maxDist,
                     const std::set<tlp::node> &focus);
   //========================================================
-  bool searchPaths(tlp::node n, tlp::BooleanProperty *result, tlp::DoubleProperty *depth);
+  bool searchPaths(tlp::node n, tlp::BooleanProperty *result);
   //=========================================================
-  bool searchPath(tlp::node n, tlp::BooleanProperty *result, std::vector<tlp::node> &vNodes,
-                  tlp::DoubleProperty *preference);
+  bool searchPath(tlp::node n, tlp::BooleanProperty *result, std::vector<tlp::node> &vNodes);
   //=============================================================
 private:
-  void internalSearchPaths(tlp::node n, tlp::BooleanProperty *result, tlp::DoubleProperty *depth);
+  void internalSearchPaths(tlp::node n, tlp::BooleanProperty *result);
   //=========================================================
   struct DikjstraElement {
     DikjstraElement(const double dist = DBL_MAX, const tlp::node previous = tlp::node(),
