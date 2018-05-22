@@ -56,6 +56,7 @@ class AlphaMapping(tlp.ColorAlgorithm):
 
   def run(self):
     
+    vColor = self.graph.getColorProperty("viewColor")
     inputMetric = self.dataSet['input property']
     minAlpha = clamp(self.dataSet['min alpha'], 0, 255)
     maxAlpha = clamp(self.dataSet['max alpha'], 0, 255)
@@ -82,11 +83,11 @@ class AlphaMapping(tlp.ColorAlgorithm):
       minValue = inputMetric.getNodeDoubleMin(self.graph)
       maxValue = inputMetric.getNodeDoubleMax(self.graph)
       
-      for n in self.graph.getNodes():
+      for n in self.graph.nodes():
         val = inputMetric[n]
         t = getFactor(val - minValue, maxValue - minValue)
         alpha = minAlpha + t * (maxAlpha - minAlpha)
-        color = self.result[n]
+        color = vColor[n]
         color[3] = int(alpha)
         self.result[n] = color
     
@@ -94,11 +95,11 @@ class AlphaMapping(tlp.ColorAlgorithm):
       minValue = inputMetric.getEdgeDoubleMin(self.graph)
       maxValue = inputMetric.getEdgeDoubleMax(self.graph)
       
-      for e in self.graph.getEdges():
+      for e in self.graph.edges():
         val = inputMetric[e]
         t = getFactor(val - minValue, maxValue - minValue)
         alpha = minAlpha + t * (maxAlpha - minAlpha)
-        color = self.result[e]
+        color = vColor[e]
         color[3] = int(alpha)
         self.result[e] = color  
     
@@ -112,4 +113,4 @@ stored in a numeric property of a graph.
 
 # The line below does the magic to register the plugin into the plugin database
 # and updates the GUI to make it accessible through the menus.
-tulipplugins.registerPlugin("AlphaMapping", "Alpha Mapping", "Antoine Lambert", "20/04/2017", pluginDoc, "1.0")
+tulipplugins.registerPlugin("AlphaMapping", "Alpha Mapping", "Antoine Lambert", "20/04/2017", pluginDoc, "1.1")
