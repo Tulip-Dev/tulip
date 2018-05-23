@@ -235,10 +235,9 @@ GLfloat *buildCurvePoints(const vector<Coord> &vertices, const vector<float> &si
   return result.data;
 }
 
-static float computeExtrusion(const Coord &pBefore, const Coord &pCurrent,
-			      const Coord &pAfter, float sz, float inversion,
-			      vector<Coord> &result, bool lastPoint = false,
-			      bool twoPointsCurve = false) {
+static float computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
+                              float sz, float inversion, vector<Coord> &result,
+                              bool lastPoint = false, bool twoPointsCurve = false) {
 
   Coord u = pBefore - pCurrent;
   Coord v = pAfter - pCurrent;
@@ -355,8 +354,8 @@ void buildCurvePoints(const vector<Coord> &vertices, const vector<float> &sizes,
   }
 
   if (endN != vertices[sz - 1]) {
-    inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1], endN,
-                                 sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
+    inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1], endN, sizes[sizes.size() - 1],
+                                 inversion, result, true, twoPointsCurve);
   } else {
     inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1],
                                  vertices[sz - 1] + (vertices[sz - 1] - vertices[sz - 2]),
