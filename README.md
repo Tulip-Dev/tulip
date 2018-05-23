@@ -1,4 +1,4 @@
-# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://travis-ci.org/Tulip-Dev/tulip.svg?branch=master)](https://travis-ci.org/Tulip-Dev/tulip) [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![Download](https://api.bintray.com/packages/tulip-dev/tulip_binaries/Tulip/images/download.svg)](https://bintray.com/tulip-dev/tulip_binaries/Tulip/_latestVersion) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python) [![Download](https://api.bintray.com/packages/tulip-dev/tulip_binaries/Tulip/images/download.svg?version=5.2.0-dev)](https://bintray.com/tulip-dev/tulip_binaries/Tulip/5.2.0-dev/link)
+# Tulip [![license](https://img.shields.io/github/license/Tulip-dev/tulip.svg)](https://www.gnu.org/licenses/lgpl-3.0.html) [![GitHub last commit](https://img.shields.io/github/last-commit/Tulip-Dev/tulip.svg)]() [![Build Status](https://travis-ci.org/Tulip-Dev/tulip.svg?branch=master)](https://travis-ci.org/Tulip-Dev/tulip) [![Build Status](https://ci.appveyor.com/api/projects/status/github/tulip-dev/tulip?branch=master&svg=true)](https://ci.appveyor.com/project/tulip-dev/tulip) [![SourceForge](https://img.shields.io/sourceforge/dt/auber/tulip.svg)](https://sourceforge.net/projects/auber/files/tulip/) [![PyPI version](https://badge.fury.io/py/tulip-python.svg)](https://badge.fury.io/py/tulip-python)
 
 ![alt text](http://tulip.labri.fr/TulipDrupal/sites/default/files/logo_web.png "Tulip")
 
@@ -149,6 +149,8 @@ Hints on how to build Tulip for these three platforms can be found in the contin
 ## References
 
 Below are some scientific publications related to Tulip (see http://tulip.labri.fr/TulipDrupal/?q=tulip-biblio for more information):
+
+  * David Auber, Daniel Archambault, Romain Bourqui, Maylis Delest, Jonathan Dubois, Antoine Lambert, Patrick Mary, Morgan Mathiaut, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. TULIP 5. In Encyclopedia of Social Network Analysis and Mining, Springer, pages 1-28, 2017. https://hal.archives-ouvertes.fr/hal-01654518
 
   * David Auber, Romain Bourqui, Maylis Delest, Antoine Lambert, Patrick Mary, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. TULIP 4. Research report. LaBRI - Laboratoire Bordelais de Recherche en Informatique. 2016. https://hal.archives-ouvertes.fr/hal-01359308
 
