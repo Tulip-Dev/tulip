@@ -235,11 +235,13 @@ GLfloat *buildCurvePoints(const vector<Coord> &vertices, const vector<float> &si
   return result.data;
 }
 
-static float computeExtrusion(const Coord &xu, float u_norm, const Coord &pCurrent, const Coord &xv,
-                              float v_norm, float sz, float inversion, vector<Coord> &result,
-                              bool lastPoint, bool twoPointsCurve) {
-  /*Coord u(pBefore - pCurrent);
-  Coord v(pAfter - pCurrent);
+static float computeExtrusion(const Coord &pBefore, const Coord &pCurrent,
+			      const Coord &pAfter, float sz, float inversion,
+			      vector<Coord> &result, bool lastPoint = false,
+			      bool twoPointsCurve = false) {
+
+  Coord u = pBefore - pCurrent;
+  Coord v = pAfter - pCurrent;
 
   if (fabs(u[2]) < 1e-3)
     u[2] = 0;
@@ -248,30 +250,28 @@ static float computeExtrusion(const Coord &xu, float u_norm, const Coord &pCurre
     v[2] = 0;
 
   Coord xu(u);
-  auto u_norm = u.norm();
 
-  if (u_norm)
-    xu /= u_norm;
+  if (u.norm() != 0)
+    xu /= u.norm();
 
   Coord xv(v);
-  auto v_norm = xv.norm();
 
-  if (v_norm)
-  xv /= v_norm;*/
+  if (v.norm() != 0)
+    xv /= v.norm();
 
-  Coord bi_xu_xv(xu + xv);
+  Coord bi_xu_xv = xu + xv;
   auto norm = bi_xu_xv.norm();
 
   if (!result.empty() && !lastPoint && norm < 1e-3) {
     return inversion;
   }
 
-  if (norm) {
+  if (norm != 0) {
     bi_xu_xv /= norm;
   }
 
   float nsz = sz;
-  float angle = float(M_PI - acos(xu[0] * xv[0] + xu[1] * xv[1] + xu[2] * xv[2]));
+  float angle = float(M_PI - atan2((u ^ v).norm(), u.dotProduct(v)));
 
   bool angleOk = true;
 
@@ -310,7 +310,7 @@ static float computeExtrusion(const Coord &xu, float u_norm, const Coord &pCurre
     vunit_sz *= inversion;
 
     if (angleOk && !twoPointsCurve &&
-        !(nsz > u_norm || nsz > v_norm || fabs(angle - M_PI) < 1E-3)) {
+        !(nsz > u.norm() || nsz > v.norm() || fabs(angle - M_PI) < 1E-3)) {
       if ((xu ^ xv)[2] > 0) {
         result.emplace_back(pCurrent + bi_xu_xv_nsz);
         result.emplace_back(pCurrent - vunit_sz);
@@ -332,44 +332,36 @@ static float computeExtrusion(const Coord &xu, float u_norm, const Coord &pCurre
   return inversion;
 }
 
-Coord inline normalize(Coord v, float &norm) {
-  if (fabs(v[2]) < 1e-3)
-    v[2] = 0;
-  norm = v.norm();
-
-  if (norm)
-    return v / norm;
-  return v;
-}
-
 void buildCurvePoints(const vector<Coord> &vertices, const vector<float> &sizes,
                       const Coord &startN, const Coord &endN, vector<Coord> &result) {
+
   const auto sz = vertices.size();
   bool twoPointsCurve = (sz == 2);
   result.reserve(sz * 2);
 
   float inversion = 1;
-  float beforeNorm, afterNorm;
-  Coord after(normalize(vertices[1] - vertices[0], afterNorm));
-  Coord before;
-  if (startN != vertices[0])
-    before = normalize(startN - vertices[0], beforeNorm);
-  else
-    before = -after, beforeNorm = afterNorm;
-  inversion = computeExtrusion(before, beforeNorm, vertices[0], after, afterNorm, sizes[0],
-                               inversion, result, false, twoPointsCurve);
 
-  for (unsigned int i = 1; i < sz - 1; ++i) {
-    inversion = computeExtrusion(-after, afterNorm, vertices[i],
-                                 after = normalize(vertices[i + 1] - vertices[i], afterNorm),
-                                 afterNorm, sizes[i], inversion, result, false, twoPointsCurve);
+  if (startN != vertices[0]) {
+    inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result,
+                                 false, twoPointsCurve);
+  } else {
+    inversion = computeExtrusion(vertices[0] - (vertices[1] - vertices[0]), vertices[0],
+                                 vertices[1], sizes[0], inversion, result, false, twoPointsCurve);
   }
 
-  before = -after, beforeNorm = afterNorm;
-  if (endN != vertices[sz - 1])
-    after = normalize(endN - vertices[sz - 1], afterNorm);
-  inversion = computeExtrusion(before, beforeNorm, vertices[sz - 1], after, afterNorm,
-                               sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
+  for (unsigned int i = 1; i < sz - 1; ++i) {
+    inversion = computeExtrusion(vertices[i - 1], vertices[i], vertices[i + 1], sizes[i], inversion,
+                                 result, false, twoPointsCurve);
+  }
+
+  if (endN != vertices[sz - 1]) {
+    inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1], endN,
+                                 sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
+  } else {
+    inversion = computeExtrusion(vertices[sz - 2], vertices[sz - 1],
+                                 vertices[sz - 1] + (vertices[sz - 1] - vertices[sz - 2]),
+                                 sizes[sizes.size() - 1], inversion, result, true, twoPointsCurve);
+  }
 }
 //==============================================
 vector<Coord> splineCurve(const vector<Coord> &vertices) {
