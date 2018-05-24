@@ -555,7 +555,10 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
         action->setToolTip(QString("Replace the meta-node #") + sId +
                            " by the subgraph it represents");
       }
-    }
+
+      _tturlManager->fillContextMenu(menu, node(entity.getComplexEntityId()));
+    } else
+      _tturlManager->fillContextMenu(menu, edge(entity.getComplexEntityId()));
   } else {
     GlMainView::fillContextMenu(menu, point);
 

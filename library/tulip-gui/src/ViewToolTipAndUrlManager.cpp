@@ -50,6 +50,45 @@ void ViewToolTipAndUrlManager::state(DataSet &data) const {
   data.set("Url property", _urlPropName);
 }
 
+void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, node n) {
+  if (_urlPropName.empty())
+    return;
+
+  Graph *graph = _view->graph();
+
+  _contextMenuUrl = dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getNodeValue(n);
+
+  if (_contextMenuUrl.empty())
+    return;
+
+  menu->addSeparator();
+  QAction *action =
+    menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)), this, SLOT(openUrl()));
+  action->setToolTip(action->text().append(" in the default browser"));
+}
+
+void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, edge e) {
+  if (_urlPropName.empty())
+    return;
+
+  Graph *graph = _view->graph();
+
+  _contextMenuUrl = dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getEdgeValue(e);
+  if (_contextMenuUrl.empty())
+    return;
+
+  menu->addSeparator();
+
+  QAction *action =
+    menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)), this, SLOT(openUrl()));
+  action->setToolTip(action->text().append(" in the default browser"));
+}
+
+void ViewToolTipAndUrlManager::openUrl() {
+  // open the current url
+  QDesktopServices::openUrl(QUrl(tlpStringToQString(_contextMenuUrl)));
+}
+
 void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
   Graph *graph = _view->graph();
 

@@ -36,7 +36,7 @@ class TLP_QT_SCOPE ViewToolTipAndUrlManager : public QObject {
   GlMainWidget *_glMainWidget;
   bool _tooltips;
   std::string _urlPropName;
-  std::string _url;
+  std::string _url, _contextMenuUrl;
 
 public:
   ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget *widget);
@@ -46,10 +46,13 @@ public:
   void setState(const tlp::DataSet &);
   void state(tlp::DataSet &) const;
   void fillContextMenu(QMenu *menu);
+  void fillContextMenu(QMenu *menu, node n);
+  void fillContextMenu(QMenu *menu, edge e);
 
 protected slots:
   void displayToolTips(bool display);
   void setUrlProp(QAction *);
+  void openUrl();
 
 protected:
   bool eventFilter(QObject *, QEvent *e) override;
