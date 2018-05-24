@@ -127,13 +127,13 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setNodeDefaultValue(
   }
 
   // backup old default value
-  typename Tnode::RealType oldDefaultValue = nodeDefaultValue;
+  auto oldDefaultValue = nodeDefaultValue;
   // we need to get the list of nodes whose value equals the current default one first
   std::vector<tlp::node> nodesOldDefaultToUpdate;
   std::vector<tlp::node> nodesDefaultToUpdate;
 
   for (auto n : this->getGraph()->nodes()) {
-    const typename Tnode::RealType &val = this->getNodeValue(n);
+    auto val = nodeProperties.get(n.id);
 
     if (val == oldDefaultValue) {
       nodesOldDefaultToUpdate.push_back(n);
@@ -155,7 +155,7 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setNodeDefaultValue(
   // reset the backup nodes to their current value in order
   // to synchronize the underlying MutableContainer state
   for (size_t i = 0; i < nodesDefaultToUpdate.size(); ++i) {
-    nodeProperties.set(nodesDefaultToUpdate[i].id, v);
+    nodeProperties.set(nodesDefaultToUpdate[i].id, v, true);
   }
 }
 //=============================================================
@@ -183,14 +183,14 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setEdgeDefaultValue(
   }
 
   // backup old default value
-  typename Tedge::RealType oldDefaultValue = edgeDefaultValue;
+  auto oldDefaultValue = edgeDefaultValue;
   // backup list of edges whose value equals the current default one
   std::vector<tlp::edge> edgesOldDefaultToUpdate;
   // backup list of edges whose value equals the new default one
   std::vector<tlp::edge> edgesDefaultToUpdate;
 
   for (auto e : this->getGraph()->edges()) {
-    const typename Tedge::RealType &val = this->getEdgeValue(e);
+    auto val = edgeProperties.get(e.id);
 
     if (val == oldDefaultValue) {
       edgesOldDefaultToUpdate.push_back(e);
@@ -212,7 +212,7 @@ void tlp::AbstractProperty<Tnode, Tedge, Tprop>::setEdgeDefaultValue(
   // reset the backup edges to their current value in order
   // to synchronize the underlying MutableContainer state
   for (size_t i = 0; i < edgesDefaultToUpdate.size(); ++i) {
-    edgeProperties.set(edgesDefaultToUpdate[i].id, v);
+    edgeProperties.set(edgesDefaultToUpdate[i].id, v, true);
   }
 }
 //============================================================

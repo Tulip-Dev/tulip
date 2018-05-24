@@ -261,7 +261,7 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   prop->setAllNodeValue(v1);
   prop->setAllEdgeValue(v2);
 
-  // check number of non default valuated edges
+  // check number of non default valuated elements
   CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), 0u);
   CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), 0u);
 
@@ -269,18 +269,35 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
 
+  // set value of n1 to future default value
+  prop->setNodeValue(n1, v2);
+  // check non default valuated nodes
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), 1u);
   // change the default node value for future added nodes
   prop->setNodeDefaultValue(v2);
-  // change the default edge value for future added edges
-  prop->setEdgeDefaultValue(v1);
-
-  // check number of non default valuated edges (not 0 anymore)
-  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), graph->numberOfNodes());
-  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), graph->numberOfEdges());
-
   // check that the default property value has been correctly modified
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v2, 1e-6);
+  // check non default valuated nodes
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), graph->numberOfNodes() - 1);
+  // reset n1 prop value to v1
+  prop->setNodeValue(n1, v1);
+
+  // set value of e1 to future default value
+  prop->setEdgeValue(e1, v1);
+  // check non default valuated edges
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), 1u);
+  // change the default edge value for future added edges
+  prop->setEdgeDefaultValue(v1);
+  // check that the default property value has been correctly modified
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v1, 1e-6);
+  // check non default valuated edges
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), graph->numberOfEdges() - 1);
+  // reset value of e1 to v2
+  prop->setEdgeValue(e1, v2);
+
+  // check number of non default valuated elements
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedNodes(), graph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(prop->numberOfNonDefaultValuatedEdges(), graph->numberOfEdges());
 
   // add a new node
   node nNew = graph->addNode();

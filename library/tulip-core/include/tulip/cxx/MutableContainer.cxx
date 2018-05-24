@@ -209,7 +209,7 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::set(const unsigned int i,
-                                      typename StoredType<TYPE>::ReturnedConstValue value) {
+                                      typename StoredType<TYPE>::ReturnedConstValue value, bool forceDefaultValueRemoval) {
   // Test if after insertion we need to resize
   if (!compressing && !StoredType<TYPE>::equal(defaultValue, value)) {
     compressing = true;
@@ -229,7 +229,8 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
           (*vData)[i - minIndex] = defaultValue;
           StoredType<TYPE>::destroy(val);
           --elementInserted;
-        }
+        } else if (forceDefaultValueRemoval)
+	  --elementInserted;
       }
 
       return;
