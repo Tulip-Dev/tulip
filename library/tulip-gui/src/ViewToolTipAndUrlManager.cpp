@@ -56,14 +56,15 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, node n) {
 
   Graph *graph = _view->graph();
 
-  _contextMenuUrl = dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getNodeValue(n);
+  _contextMenuUrl =
+      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getNodeValue(n);
 
   if (_contextMenuUrl.empty())
     return;
 
   menu->addSeparator();
-  QAction *action =
-    menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)), this, SLOT(openUrl()));
+  QAction *action = menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)),
+                                    this, SLOT(openUrl()));
   action->setToolTip(action->text().append(" in the default browser"));
 }
 
@@ -73,14 +74,15 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu, edge e) {
 
   Graph *graph = _view->graph();
 
-  _contextMenuUrl = dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getEdgeValue(e);
+  _contextMenuUrl =
+      dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName))->getEdgeValue(e);
   if (_contextMenuUrl.empty())
     return;
 
   menu->addSeparator();
 
-  QAction *action =
-    menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)), this, SLOT(openUrl()));
+  QAction *action = menu->addAction(QString("Open ").append(tlpStringToQString(_contextMenuUrl)),
+                                    this, SLOT(openUrl()));
   action->setToolTip(action->text().append(" in the default browser"));
 }
 
