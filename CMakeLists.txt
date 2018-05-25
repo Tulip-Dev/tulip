@@ -297,18 +297,11 @@ IF(NOT CLANG OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7.0 OR CMAKE_CXX_CO
 
   FIND_PACKAGE(Threads)
   IF (NOT CMAKE_BUILD_TYPE STREQUAL "")
-    IF(APPLE)
-      # on Mac OSX multithreading is disabled by default
-      # because it may lead to really poor performances
-      # in comparison with a mono thread execution
-      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code?" OFF)
-    ELSE(APPLE)
-      IF(CMAKE_DEBUG_MODE)
-	OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code (debug mode)?" OFF)
-      ELSE()
-	OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code?" ON)
-      ENDIF()
-    ENDIF(APPLE)
+    IF(CMAKE_DEBUG_MODE)
+      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code (debug mode)?" OFF)
+    ELSE()
+      OPTION(TULIP_ENABLE_MULTI_THREADING "Do you want to enable multithreaded code?" ON)
+    ENDIF()
     IF(TULIP_ENABLE_MULTI_THREADING)
       # TULIP_CXX_THREADS can be set to force the use of the cxx threads
       # regardless the OpenMP availability
