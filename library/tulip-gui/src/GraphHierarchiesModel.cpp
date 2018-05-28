@@ -125,7 +125,7 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
                              projectTexturesFolders, projectTexturesFiles);
 
     // Process the non default valuated nodes in the viewTexture property
-    for (const node &n : viewTexture->getNonDefaultValuatedNodes()) {
+    for (auto n : viewTexture->getNonDefaultValuatedNodes()) {
       copyTextureFileInProject(tlpStringToQString(viewTexture->getNodeValue(n)), project,
                                projectTexturesFolders, projectTexturesFiles);
     }
@@ -135,7 +135,7 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
                              projectTexturesFolders, projectTexturesFiles);
 
     // Process the non default valuated nodes in the viewTexture property
-    for (const edge &e : viewTexture->getNonDefaultValuatedEdges()) {
+    for (auto e : viewTexture->getNonDefaultValuatedEdges()) {
       copyTextureFileInProject(tlpStringToQString(viewTexture->getEdgeValue(e)), project,
                                projectTexturesFolders, projectTexturesFiles);
     }
@@ -179,7 +179,7 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   // as they will be removed by the possible call to setAllNodeValue afterwards
   QMap<node, QString> nonDefaultValuatedNodes;
 
-  for (const node &n : viewTexture->getNonDefaultValuatedNodes()) {
+  for (auto n : viewTexture->getNonDefaultValuatedNodes()) {
     nonDefaultValuatedNodes[n] = tlpStringToQString(viewTexture->getNodeValue(n));
   }
 
@@ -203,7 +203,7 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   // Iterate once again on non default valuated nodes
   // Get a stable iterator on non default valuated nodes as their value can be reseted to the
   // default one by the possible call to setAllNodeValue
-  for (const node &n : stableIterator(viewTexture->getNonDefaultValuatedNodes())) {
+  for (auto n : stableIterator(viewTexture->getNonDefaultValuatedNodes())) {
     // Get the node texture file previously backuped
     const QString &textureFile = nonDefaultValuatedNodes[n];
     QFileInfo fileInfo(textureFile);
@@ -234,7 +234,7 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   // as they will be removed by the possible call to setAllEdgeValue afterwards
   QMap<edge, QString> nonDefaultValuatedEdges;
 
-  for (const edge &e : viewTexture->getNonDefaultValuatedEdges()) {
+  for (auto e : viewTexture->getNonDefaultValuatedEdges()) {
     nonDefaultValuatedEdges[e] = tlpStringToQString(viewTexture->getEdgeValue(e));
   }
 
@@ -258,7 +258,7 @@ static void restoreTextureFilesFromProjectIfNeeded(tlp::Graph *g, tlp::TulipProj
   // Iterate once again on non default valuated edges
   // Get a stable iterator on non default valuated edges as their value can be reset to the default
   // one by the possible call to setAllEdgeValue afterwards
-  for (const edge &e : stableIterator(viewTexture->getNonDefaultValuatedEdges())) {
+  for (auto e : stableIterator(viewTexture->getNonDefaultValuatedEdges())) {
     // Get the node texture file previously backuped
     const QString &textureFile = nonDefaultValuatedEdges[e];
     QFileInfo fileInfo(textureFile);

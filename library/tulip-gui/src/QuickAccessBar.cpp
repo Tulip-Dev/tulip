@@ -415,7 +415,7 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
 
   Color color = QColorToColor(c);
 
-  for (const node &n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+  for (auto n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
     labelColors->setNodeValue(n, color);
     labelBorderColors->setNodeValue(n, color);
     hasSelected = true;
@@ -426,7 +426,7 @@ void QuickAccessBarImpl::setLabelColor(const QColor &c) {
     labelBorderColors->setAllNodeValue(color);
   }
 
-  for (const edge &e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+  for (auto e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
     labelColors->setEdgeValue(e, color);
     labelBorderColors->setEdgeValue(e, color);
     hasSelected = true;
@@ -452,7 +452,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType, ColorProperty *
   Observable::holdObservers();
 
   if (eltType == NODE) {
-    for (const node &n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+    for (auto n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
       prop->setNodeValue(n, color);
       hasSelected = true;
     }
@@ -460,7 +460,7 @@ void QuickAccessBarImpl::setAllColorValues(unsigned int eltType, ColorProperty *
     if (hasSelected == false)
       prop->setAllNodeValue(color);
   } else {
-    for (const edge &e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+    for (auto e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
       prop->setEdgeValue(e, color);
       hasSelected = true;
     }
@@ -507,7 +507,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
   Observable::holdObservers();
 
   if (eltType == NODE) {
-    for (const node &n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+    for (auto n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
       GraphModel::setNodeValue(n.id, prop, val);
       hasSelected = true;
     }
@@ -515,7 +515,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType, PropertyInterface *p
     if (hasSelected == false)
       GraphModel::setAllNodeValue(prop, val);
   } else {
-    for (const edge &e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+    for (auto e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
       GraphModel::setEdgeValue(e.id, prop, val);
       hasSelected = true;
     }

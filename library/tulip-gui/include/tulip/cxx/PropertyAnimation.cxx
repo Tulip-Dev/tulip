@@ -61,14 +61,14 @@ PropertyAnimation<PropType, NodeType, EdgeType>::~PropertyAnimation() {
 template <typename PropType, typename NodeType, typename EdgeType>
 void PropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
   if (_computeNodes) {
-    for (const tlp::node &n : _graph->nodes()) {
+    for (auto n : _graph->nodes()) {
       if (_selection->getNodeValue(n))
         _out->setNodeValue(n, getNodeFrameValue(_start->getNodeValue(n), _end->getNodeValue(n), f));
     }
   }
 
   if (_computeEdges) {
-    for (const tlp::edge &e : _graph->edges()) {
+    for (auto e : _graph->edges()) {
       if (_selection->getEdgeValue(e))
         _out->setEdgeValue(e, getEdgeFrameValue(_start->getEdgeValue(e), _end->getEdgeValue(e), f));
     }

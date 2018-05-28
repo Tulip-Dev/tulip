@@ -130,7 +130,7 @@ public:
 
       Graph *graph = inputData.getGraph();
 
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         if (graph->getNodeMetaInfo(n))
           metaNodes.insert(n);
       }

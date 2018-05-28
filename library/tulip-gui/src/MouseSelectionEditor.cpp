@@ -617,7 +617,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     }
 
     if (mode == COORD_AND_SIZE || mode == SIZE) {
-      for (const node &n : _selection->getNodesEqualTo(true, _graph)) {
+      for (auto n : _selection->getNodesEqualTo(true, _graph)) {
         double rotation = _rotation->getNodeValue(n);
         _rotation->setNodeValue(n, rotation - degAngle);
       }
@@ -689,7 +689,7 @@ void MouseSelectionEditor::mAlign(EditOperation operation, GlMainWidget *) {
   bool init = false;
   float min = -FLT_MAX, max = FLT_MAX;
 
-  for (const node &n : _selection->getNodesEqualTo(true, _graph)) {
+  for (auto n : _selection->getNodesEqualTo(true, _graph)) {
 
     float valueMin = -FLT_MAX, valueMax = FLT_MAX;
 
@@ -777,7 +777,7 @@ void MouseSelectionEditor::mAlign(EditOperation operation, GlMainWidget *) {
     }
   }
 
-  for (const node &n : _selection->getNodesEqualTo(true, _graph)) {
+  for (auto n : _selection->getNodesEqualTo(true, _graph)) {
     Coord old(_layout->getNodeValue(n));
 
     switch (operation) {
