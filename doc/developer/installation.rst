@@ -1,7 +1,7 @@
 .. _installation:
 
 ********************************************
-Installation instructions : Ready to compile
+Installation instructions: Ready to compile
 ********************************************
 
 The classic installation details are specified in the *INSTALL.[linux,mac,win]* files available in the tulip source code root directory. However, if you are reading this tutorial/documentation, you may be interested in using Tulip in a more advanced fashion whether by creating new perspectives, plug-ins or algorithms. The following instructions will help you to prepare your system by installing the Tulip program ready to be compiled and modified to your convenience.
@@ -34,11 +34,11 @@ If you want to be able to recompile Tulip, you have to organize the different di
 First, select the directory in which you want to set the application (you must have the appropriate permissions from the OS) and create here the directory *Tulip-4.X* (where *X* is adapted to the current version number).
 Into that folder, create five subdirectories: 
 
-* *tulip-src* : the source files will be kept here
-* *build-debug* : where we stock the generated build file (with the mode *Debug*)
-* *build-release* : where we stock the generated build file (with the mode *Release*)
-* *install-debug* : the program will be installed here (with the mode *Debug*)
-* *install-release* : the program will be installed here (with the mode *Release*)
+* *tulip-src*: the source files will be kept here
+* *build-debug*: where we stock the generated build file (with the mode *Debug*)
+* *build-release*: where we stock the generated build file (with the mode *Release*)
+* *install-debug*: the program will be installed here (with the mode *Debug*)
+* *install-release*: the program will be installed here (with the mode *Release*)
 
 You should obtain a directory hierarchy similar to this one:
 
@@ -207,7 +207,7 @@ For a 32-bits build :
 
 * the precompiled **Qt 4.8.5** binaries from the mingw-builds project (`MinGW-x32-Qt-4.8.5 <http://sourceforge.net/projects/mingwbuilds/files/external-binary-packages/Qt-Builds/x32-Qt-4.8.5%2Bqtcreator-2.8.0-RC-%28gcc-4.8.1-dwarf-rev1%29.7z/download>`_)
 
-* **Python** for 32 bits windows : either version `2.7-x32 <http://python.org/ftp/python/2.7.5/python-2.7.5.msi>`_ or `3.3-x32 <http://python.org/ftp/python/3.3.2/python-3.3.2.msi>`_
+* **Python** for 32 bits windows: either version `2.7-x32 <http://python.org/ftp/python/2.7.5/python-2.7.5.msi>`_ or `3.3-x32 <http://python.org/ftp/python/3.3.2/python-3.3.2.msi>`_
 
 
 For both builds :
