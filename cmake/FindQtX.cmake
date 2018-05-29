@@ -91,6 +91,12 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
     GET_FILENAME_COMPONENT(QT_FRAMEWORKS_DIR ${QtCore_location} PATH)
     SET(QT_FRAMEWORKS_DIR ${QT_FRAMEWORKS_DIR}/..)
     SET(QT_BINARY_DIR ${QT_FRAMEWORKS_DIR}/../bin)
+  ELSE()
+    SET(QT_BINARY_DIR "${_qt5Gui_install_prefix}/bin")
+    # Standard Qt5 installation
+    IF(EXISTS ${QT_BINARY_DIR}/../plugins)
+      SET(QT_PLUGINS_DIR ${QT_BINARY_DIR}/../plugins)
+    ENDIF()
   ENDIF()
 
 
