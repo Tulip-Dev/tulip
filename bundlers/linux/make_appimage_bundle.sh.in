@@ -96,6 +96,7 @@ cp -Rp $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
 
 # add qt plugins directory
 mkdir $BUNDLE_USR_DIR/plugins
+cp -v -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_USR_DIR/plugins
 if [ -e @QT_PLUGINS_DIR@/platforms ]; then
   cp -v -Rp @QT_PLUGINS_DIR@/platforms $BUNDLE_USR_DIR/plugins
 fi
@@ -138,40 +139,29 @@ if [ "$PYTHON_LIB" != "" ]; then
   popd > /dev/null 2>&1
 fi
 
-function copy_to_usr_lib() {
-  LIB_TO_COPY=$1
-  if [ ! -e $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
-    cp -v --preserve=mode $LIB_TO_COPY $BUNDLE_LIB_DIR
-  fi
+function looking_for_plugin_dependencies() {
+  LIBS_DIR=$1
+  for PLUGIN in $(find $LIBS_DIR -name "*.so")
+  do
+    echo "looking for $(basename $PLUGIN) dependencies"
+    for LIB in $(ldd $PLUGIN | grep "=> /" | awk '{print $3}')
+    do
+      if [ ! -e $BUNDLE_LIB_DIR/$(basename $LIB) ]; then
+	cp -v --preserve=mode $LIB $BUNDLE_LIB_DIR
+      fi
+    done;
+  done;
 }
 
-# copy other common libs needed by plugins
-for PLUGIN in $(find $BUNDLE_LIB_DIR/tulip -name "*.so")
-do
-  echo "Search dependencies for $(basename $PLUGIN)"
-  for LIB in $(ldd $PLUGIN | grep "=> /" | awk '{print $3}')
-  do
-    copy_to_usr_lib $LIB
-  done;
-done;
+# copy other common libs needed by tulip plugins
+looking_for_plugin_dependencies $BUNDLE_LIB_DIR/tulip
 
-# copy other common libs needed by plugins
-for PLUGIN in $(find $BUNDLE_USR_DIR/plugins -name "*.so")
-do
-  echo "Search dependencies for $(basename $PLUGIN)"
-  for LIB in $(ldd $PLUGIN | grep "=> /" | awk '{print $3}')
-  do
-    copy_to_usr_lib $LIB
-  done;
-done;
+# copy other common libs needed by qt plugins
+looking_for_plugin_dependencies $BUNDLE_USR_DIR/plugins
 
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
-if [ -e $BUNDLE_USR_DIR/plugins/platforms ]; then
-  LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libz.* 2> /dev/null)
-else
-  LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
-fi
+LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
 if [ "$LIBS" != "" ]; then
   rm $LIBS
 fi
