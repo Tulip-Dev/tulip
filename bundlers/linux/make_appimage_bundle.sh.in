@@ -62,11 +62,13 @@ BUNDLE_USR_DIR=$BUNDLE_DIR/usr
 APPRUN_FILE=$BUNDLE_DIR/AppRun
 echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
-echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 # do not set LD_LIBRARY_PATH to ensure a successful launch
 # of the default web browser to show the Tuip documentation
 #echo "export LD_LIBRARY_PATH=\${TLP_DIR}:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
+echo "export QT_PLUGIN_PATH=\${BUNDLE_DIR}/usr/plugins" >> $APPRUN_FILE
+echo "export QT_STYLE_OVERRIDE=GTK+" >> $APPRUN_FILE
+echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
 echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
@@ -93,8 +95,13 @@ echo "copying $TULIP_INSTALL_DIR/share files into $BUNDLE_SHARE_DIR"
 cp -Rp $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
 
 # add qt plugins directory
-mkdir $BUNDLE_BIN_DIR/plugins
-cp -v -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR/plugins
+mkdir $BUNDLE_USR_DIR/plugins
+if [ -e @QT_PLUGINS_DIR@/platforms ]; then
+  cp -v -Rp @QT_PLUGINS_DIR@/platforms $BUNDLE_USR_DIR/plugins
+fi
+if [ -e @QT_PLUGINS_DIR@/xcbglintegrations ]; then
+  cp -v -Rp @QT_PLUGINS_DIR@/xcbglintegrations $BUNDLE_USR_DIR/plugins
+fi
 
 # set up LD_LIBRARY_PATH with the installation path of the Qt libs used
 export LD_LIBRARY_PATH=$(${QMAKE} -query QT_INSTALL_LIBS):${LD_LIBRARY_PATH}
@@ -148,9 +155,23 @@ do
   done;
 done;
 
+# copy other common libs needed by plugins
+for PLUGIN in $(find $BUNDLE_USR_DIR/plugins -name "*.so")
+do
+  echo "Search dependencies for $(basename $PLUGIN)"
+  for LIB in $(ldd $PLUGIN | grep "=> /" | awk '{print $3}')
+  do
+    copy_to_usr_lib $LIB
+  done;
+done;
+
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
-LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
+if [ -e $BUNDLE_USR_DIR/plugins/platforms ]; then
+  LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libz.* 2> /dev/null)
+else
+  LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
+fi
 if [ "$LIBS" != "" ]; then
   rm $LIBS
 fi
