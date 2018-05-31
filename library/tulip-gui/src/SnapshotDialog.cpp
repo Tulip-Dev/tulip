@@ -80,8 +80,8 @@ protected:
 };
 
 SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
-    : QDialog(parent), ui(new Ui::SnapshotDialogData()), view(v),
-      ratio(-1), inSizeSpinBoxValueChanged(false) {
+    : QDialog(parent), ui(new Ui::SnapshotDialogData()), view(v), ratio(-1),
+      inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
   int maxTextureSize = 0;
@@ -226,9 +226,9 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     // regenerate preview pixmap only if the aspect ratio changed
     QPixmap pixmap;
 
-    pixmap = view->snapshot(
-			    QSize((view->centralItem()->scene()->sceneRect().height() - 2) * imageRatio,
-				  view->centralItem()->scene()->sceneRect().height() - 2));
+    pixmap =
+        view->snapshot(QSize((view->centralItem()->scene()->sceneRect().height() - 2) * imageRatio,
+                             view->centralItem()->scene()->sceneRect().height() - 2));
     ratio = float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
     ui->snapshotLabel->setPixmap(pixmap);
   }
@@ -239,7 +239,7 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   psize.scale(sSize, Qt::KeepAspectRatio);
   ui->snapshotLabel->resize(psize);
   sSize -= psize;
-  ui->snapshotLabel->move(sSize.width()/2, sSize.height()/2);
+  ui->snapshotLabel->move(sSize.width() / 2, sSize.height() / 2);
 }
 
 void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio) {
