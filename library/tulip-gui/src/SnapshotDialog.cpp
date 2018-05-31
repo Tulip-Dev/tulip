@@ -27,7 +27,7 @@
 #include <QMessageBox>
 #include <QImageWriter>
 #include <QFileDialog>
-#include <QGraphicsPixmapItem>
+#include <QGraphicsItem>
 #include <QClipboard>
 #include <QGraphicsScene>
 #include <QPixmap>
@@ -80,8 +80,8 @@ protected:
 };
 
 SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
-    : QDialog(parent), ui(new Ui::SnapshotDialogData()), view(v), scene(nullptr),
-      pixmapItem(nullptr), ratio(-1), inSizeSpinBoxValueChanged(false) {
+    : QDialog(parent), ui(new Ui::SnapshotDialogData()), view(v),
+      ratio(-1), inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
   int maxTextureSize = 0;
@@ -124,7 +124,6 @@ void SnapshotDialog::clicked(QAbstractButton *b) {
 
 SnapshotDialog::~SnapshotDialog() {
   delete ui;
-  delete scene;
 }
 
 void SnapshotDialog::resizeEvent(QResizeEvent *) {
@@ -221,43 +220,26 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     return;
   }
 
-  float viewRatio = float(ui->graphicsView->width()) / float(ui->graphicsView->height());
   float imageRatio = float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
 
-  // regenerate preview pixmap only if the aspect ratio changed
   if (imageRatio != ratio) {
-
+    // regenerate preview pixmap only if the aspect ratio changed
     QPixmap pixmap;
 
-    if (viewRatio > imageRatio) {
-      pixmap = view->snapshot(
-          QSize((view->centralItem()->scene()->sceneRect().height() - 2) * imageRatio,
-                view->centralItem()->scene()->sceneRect().height() - 2));
-      pixmap = pixmap.scaled((ui->graphicsView->height() - 2) * imageRatio,
-                             ui->graphicsView->height() - 2, Qt::IgnoreAspectRatio,
-                             Qt::SmoothTransformation);
-    } else {
-      pixmap = view->snapshot(
-          QSize(view->centralItem()->scene()->sceneRect().width() - 2,
-                (view->centralItem()->scene()->sceneRect().width() - 2) / imageRatio));
-      pixmap =
-          pixmap.scaled(ui->graphicsView->width() - 2, (ui->graphicsView->width() - 2) / imageRatio,
-                        Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
-
+    pixmap = view->snapshot(
+			    QSize((view->centralItem()->scene()->sceneRect().height() - 2) * imageRatio,
+				  view->centralItem()->scene()->sceneRect().height() - 2));
     ratio = float(ui->widthSpinBox->value()) / float(ui->heightSpinBox->value());
-
-    if (pixmapItem != nullptr) {
-      delete scene;
-    }
-
-    scene = new QGraphicsScene();
-    scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
-    ui->graphicsView->setScene(scene);
-    pixmapItem = scene->addPixmap(pixmap);
-    pixmapItem->setPos(ui->graphicsView->sceneRect().center() -
-                       pixmapItem->boundingRect().center());
+    ui->snapshotLabel->setPixmap(pixmap);
   }
+  // resize snapshotLabel
+  QSize sSize = ui->snapshotWidget->size();
+  sSize -= QSize(2, 2);
+  QSize psize = ui->snapshotLabel->pixmap()->size();
+  psize.scale(sSize, Qt::KeepAspectRatio);
+  ui->snapshotLabel->resize(psize);
+  sSize -= psize;
+  ui->snapshotLabel->move(sSize.width()/2, sSize.height()/2);
 }
 
 void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio) {
