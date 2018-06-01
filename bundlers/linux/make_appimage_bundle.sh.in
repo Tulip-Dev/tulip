@@ -67,8 +67,12 @@ echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
 #echo "export LD_LIBRARY_PATH=\${TLP_DIR}:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
 echo "export QT_PLUGIN_PATH=\${BUNDLE_DIR}/usr/plugins" >> $APPRUN_FILE
-echo "export QT_STYLE_OVERRIDE=GTK+" >> $APPRUN_FILE
 echo "export TLP_DIR=\${BUNDLE_DIR}/usr/lib" >> $APPRUN_FILE
+echo "env | grep GTK > /dev/null 2>&1"
+echo "if [ $? -eq 0 ]; then"
+echo "  export QT_STYLE_OVERRIDE=GTK+" >> $APPRUN_FILE
+echo "  \${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE; exit" >> $APPRUN_FILE
+echo "fi"
 echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
