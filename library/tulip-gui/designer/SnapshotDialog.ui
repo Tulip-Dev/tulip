@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Take snapshot</string>
+   <string>Save snapshot</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/TulipGUIResource.qrc">
@@ -270,7 +270,7 @@ font: bold;
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
+      <set>QDialogButtonBox::Abort|QDialogButtonBox::Apply|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
      </property>
     </widget>
    </item>

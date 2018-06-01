@@ -97,9 +97,9 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
   connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthSpinBoxValueChanged(int)));
   connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightSpinBoxValueChanged(int)));
 
-  QPushButton *copybutton =
-      new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), tr("&Copy to clipboard"), this);
-  ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
+  QPushButton *copyButton = ui->buttonBox->button(QDialogButtonBox::Apply);
+  copyButton->setText("&Copy to clipboard");
+  ui->buttonBox->addButton(copyButton, QDialogButtonBox::ActionRole);
   connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton *)), this,
           SLOT(clicked(QAbstractButton *)));
 
