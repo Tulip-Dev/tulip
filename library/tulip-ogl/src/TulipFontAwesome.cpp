@@ -45,7 +45,7 @@ static void clearFtFaces() {
   ftFaces.clear();
 }
 
-static bool codePointExists(const std::string& fontFile, unsigned int codePoint) {
+static bool codePointExists(const std::string &fontFile, unsigned int codePoint) {
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
   FT_Face *face;
 
@@ -66,7 +66,7 @@ static bool codePointExists(const std::string& fontFile, unsigned int codePoint)
       delete face;
       return false;
     }
-    ftFaces[fontFile] =  face;
+    ftFaces[fontFile] = face;
   } else
     face = it->second;
 
