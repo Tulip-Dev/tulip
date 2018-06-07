@@ -26,6 +26,7 @@
 #include <QDoubleValidator>
 #include <QRadioButton>
 #include <QPushButton>
+#include <QButtonGroup>
 
 #include <tulip/GraphPropertiesSelectionWidget.h>
 #include <tulip/ColorScalesManager.h>
