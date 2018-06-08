@@ -27,6 +27,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QXmlStreamReader>
+#include <QStyle>
 
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginManager.h>
