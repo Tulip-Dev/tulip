@@ -40,8 +40,10 @@ static vector<std::string> iconsNames;
 static map<std::string, FT_Face *> ftFaces;
 
 static void clearFtFaces() {
-  for (auto it = ftFaces.begin(); it != ftFaces.end(); ++it)
+  for (auto it = ftFaces.begin(); it != ftFaces.end(); ++it) {
+    FT_Done_Face(*it->second);
     delete it->second;
+  }
   ftFaces.clear();
 }
 
