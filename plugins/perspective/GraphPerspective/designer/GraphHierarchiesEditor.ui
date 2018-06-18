@@ -14,7 +14,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -39,7 +48,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -115,7 +133,16 @@
       <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -208,7 +235,7 @@
   </action>
   <action name="actionCreate_panel">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/list-add.png</normaloff>:/tulip/graphperspective/icons/16/list-add.png</iconset>
    </property>
    <property name="text">
@@ -240,6 +267,9 @@
    </property>
    <property name="toolTip">
     <string>Rename the highlighted graph</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
    </property>
   </action>
   <action name="actionSave_to_file">

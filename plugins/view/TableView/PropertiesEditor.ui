@@ -211,7 +211,7 @@ color: #595959;</string>
          <string>Show/Hide visual rendering properties</string>
         </property>
         <property name="text">
-         <string>Show visual properties (view*)</string>
+         <string>Show visual rendering properties</string>
         </property>
         <property name="checked">
          <bool>true</bool>
