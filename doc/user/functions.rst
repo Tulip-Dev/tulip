@@ -1,8 +1,8 @@
 .. _functions:
 
-***************
-Functionalities
-***************
+********
+Features
+********
 
 
 .. _hierarchy:

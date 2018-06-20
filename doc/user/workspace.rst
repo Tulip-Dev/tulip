@@ -404,7 +404,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 * *When I change the size of my edges, the layout stays identical, how should I proceed to modify that?*
 
-  Just like the color and the arrows issues, the program will not use the size value given for each edge if the size interpolation is enable. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
+  Just like the color and the arrows issues, the program will not use the size value given for each edge if the size interpolation is enabled. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
 
 **Color/Transparancy**
 
@@ -1003,7 +1003,7 @@ We can apply some of these new knowledges to a small example aiming at coloring 
 
 * In the algorithm panel, search under the category *Measure*, subcategory *Graph*, the *Betweenness Centrality* button.
 
-* Before launching it, check the settings by clicking on the gear on the left of the icon. The parameters should apperars as follow:
+* Before launching it, check the settings by clicking on the gear on the left of the icon. The parameters should appear as follows:
 
   |tutorial_color-betweeness_settings|
 
@@ -1015,7 +1015,7 @@ Once those are correctly set, you can launch the algorithm.
 
 * Now, we just have to enable the edge color interpolation by clicking on |icon_wsm_edge_color_interpol_dis| in the Node Link Diagram panel.
 
-* The result should be quite similar as this one :
+* The result should be similar to:
 
 .. image:: _images/tutorial_color-graph_color.png
     :width: 400
