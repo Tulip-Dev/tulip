@@ -130,7 +130,7 @@ char *getTulipLibDir(char *buf) {
 }
 
 // throw an exception if an expected directory does not exist
-static void checkDirectory(std::string dir) {
+static void checkDirectory(std::string dir, bool tlpDirSet, bool throwEx) {
   // remove ending / separator if any
   // bug detected on Windows
   if (dir[dir.length() - 1] == '/')
@@ -141,9 +141,12 @@ static void checkDirectory(std::string dir) {
   if (statPath(dir, &infoEntry) != 0) {
     std::stringstream ess;
     ess << "Error - " << dir << ": " << std::endl << strerror(errno);
-    ess << std::endl << "Check your TLP_DIR environment variable";
-
-    throw TulipException(ess.str());
+    if (tlpDirSet)
+      ess << std::endl << "Check your TLP_DIR environment variable";
+    if (throwEx)
+      throw TulipException(ess.str());
+    else
+      tlp::error() << ess.str();
   }
 }
 
@@ -154,88 +157,93 @@ void tlp::initTulipLib(const char *appDirPath) {
 
   char *getEnvTlp;
   string::size_type pos;
+  // we use curDir to ease debugging
+  // Tulip..Dir global variables may be invisible
+  // when using gdb
+  std::string curDir;
 
   getEnvTlp = getenv("TLP_DIR");
 
   if (getEnvTlp == nullptr) {
     if (appDirPath) {
 #ifdef _WIN32
-      TulipLibDir = std::string(appDirPath) + "/../" + TULIP_INSTALL_LIBDIR_STR;
+      curDir = std::string(appDirPath) + "/../" + TULIP_INSTALL_LIBDIR_STR;
 #else
       // one dir up to initialize the lib dir
-      TulipLibDir.append(appDirPath, strlen(appDirPath) - strlen(strrchr(appDirPath, '/') + 1));
-      TulipLibDir.append(TULIP_INSTALL_LIBDIR_STR);
+      curDir.append(appDirPath, strlen(appDirPath) - strlen(strrchr(appDirPath, '/') + 1));
+      curDir.append(TULIP_INSTALL_LIBDIR_STR);
 
 #endif
     } else {
       char buf[1024];
       // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
-      TulipLibDir = getTulipLibDir(buf);
+      curDir = getTulipLibDir(buf);
     }
   } else
-    TulipLibDir = string(getEnvTlp);
+    curDir = string(getEnvTlp);
 
 #ifdef _WIN32
   // ensure it is a unix-style path
-  pos = TulipLibDir.find('\\', 0);
+  pos = curDir.find('\\', 0);
 
   while (pos != string::npos) {
-    TulipLibDir[pos] = '/';
-    pos = TulipLibDir.find('\\', pos);
+    curDir[pos] = '/';
+    pos = curDir.find('\\', pos);
   }
 
 #endif
 
   // ensure it is '/' terminated
-  if (TulipLibDir[TulipLibDir.length() - 1] != '/')
-    TulipLibDir += '/';
+  if (curDir[curDir.length() - 1] != '/')
+    curDir += '/';
 
-  // check TulipLibDir exists
+  // check that TulipLibDir exists
   bool tlpDirSet = (getEnvTlp != nullptr);
+  bool throwExOnCheck = appDirPath != nullptr;
 
-  if (tlpDirSet)
-    checkDirectory(TulipLibDir);
+  checkDirectory(TulipLibDir = curDir, tlpDirSet, throwExOnCheck);
 
   getEnvTlp = getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
   if (getEnvTlp != nullptr) {
-    TulipPluginsPath = string(getEnvTlp);
+    curDir = string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
-    pos = TulipPluginsPath.find('\\', 0);
+    pos = curDir.find('\\', 0);
 
     while (pos != string::npos) {
-      TulipPluginsPath[pos] = '/';
-      pos = TulipPluginsPath.find('\\', pos);
+      curDir[pos] = '/';
+      pos = curDir.find('\\', pos);
     }
 
 #endif
-    TulipPluginsPath = TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
+    curDir = TulipLibDir + "tulip" + PATH_DELIMITER + curDir;
   } else
-    TulipPluginsPath = TulipLibDir + "tulip";
+    curDir = TulipLibDir + "tulip";
+  TulipPluginsPath = curDir;
 
   // one dir up to initialize the share dir
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
-  TulipShareDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
+  curDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
 
+#ifndef _WIN32
   // special case for Debian when Tulip install prefix is /usr
   // as libraries are installed in <prefix>/lib/<arch>
   tlp_stat_t statInfo;
-  if (statPath(TulipShareDir, &statInfo) != 0) {
+  if (statPath(curDir, &statInfo) != 0) {
     pos = TulipLibDir.rfind("/", pos - 1);
-    TulipShareDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
+    curDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
   }
+#endif
 
-  // check it exists
-  if (tlpDirSet)
-    checkDirectory(TulipShareDir);
+  // check that TulipShareDir exists
+  checkDirectory(TulipShareDir = curDir, tlpDirSet, throwExOnCheck);
 
-  TulipBitmapDir = TulipShareDir + "bitmaps/";
+  curDir = TulipShareDir + "bitmaps/";
 
-  // check it exists
-  if (tlpDirSet)
-    checkDirectory(TulipBitmapDir);
+  // check that TulipBitmapDir exists
+  checkDirectory(TulipBitmapDir = curDir, tlpDirSet, throwExOnCheck);
 
   // initialize serializers
   initTypeSerializers();
