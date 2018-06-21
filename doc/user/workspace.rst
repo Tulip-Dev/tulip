@@ -1013,14 +1013,9 @@ Once those are correctly set, you can launch the algorithm.
 
 * In the algorithms, under the category *Coloring*, find the *Color Mapping*. The parameters should be *viewMetric* in the input property, a *linear* progression, the *nodes* as target and any color scale. The computed colors must be sored into the *viewColor* property. Once everything is set, you can launch the color mapping.
 
-<<<<<<< HEAD
 * Now, we just have to enable the edge color interpolation by clicking on |icon_wsm_edge_color_interpol_dis| in the Node Link Diagram panel.
 
 * The result should be similar to:
-=======
-* Now, we just have to enable *edge color interpolation* by clicking on |icon_wsm_edge_color_interpol_dis| at the bottom of the Node Link Diagram panel.
-* The result should be quite similar to this one:
->>>>>>> upstream/master
 
 .. image:: _images/tutorial_color-graph_color.png
     :width: 400
