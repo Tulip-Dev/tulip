@@ -208,7 +208,7 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   .. image:: _images/i_workspace_rclick.png
 
-By default, the options are divided in two parts : *View* et *Augmented display*.
+By default, the options are divided in two parts: *View* et *Augmented display*.
 	    
 **View**
   * *Force redraw*: update the graph displayed.
@@ -442,7 +442,7 @@ Main window
 
 Properties are an important concept in Tulip, they are used to store information about each node and edge. By convention, the properties used by the rendering engine begin with the “view” prefix but it is possible to define an unlimited number of additional properties to your convenience. 
 
-Here is the list of all the rendering properties (e : used with edges, n: used with nodes):
+Here is the list of all the rendering properties (e: used with edges, n: used with nodes):
 
 * *viewBorderColor*: border color (e/n).
 
@@ -977,7 +977,7 @@ Beside offering the capability to work on high-dimensionnal data, the self organ
 
 .. _workspace_spreadsheet_example:
 
-Example : Coloring a graph
+Example: Coloring a graph
 ==========================
 
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
@@ -1011,11 +1011,16 @@ Once those are correctly set, you can launch the algorithm.
 
 * In the spreadsheet view, you can notice that the *viewMetric* column values have changed. 
 
-* In the algorithms, under the category *Coloring*, find the *Color Mapping*. The parameters should be *viewMetric* in the enumerated property, a *linear* progression, the *nodes* as target and any color scale. The computed colors must be sored into the *viewColor* property. Once everything is set, you can launch the color mapping.
+* In the algorithms, under the category *Coloring*, find the *Color Mapping*. The parameters should be *viewMetric* in the input property, a *linear* progression, the *nodes* as target and any color scale. The computed colors must be sored into the *viewColor* property. Once everything is set, you can launch the color mapping.
 
+<<<<<<< HEAD
 * Now, we just have to enable the edge color interpolation by clicking on |icon_wsm_edge_color_interpol_dis| in the Node Link Diagram panel.
 
 * The result should be similar to:
+=======
+* Now, we just have to enable *edge color interpolation* by clicking on |icon_wsm_edge_color_interpol_dis| at the bottom of the Node Link Diagram panel.
+* The result should be quite similar to this one:
+>>>>>>> upstream/master
 
 .. image:: _images/tutorial_color-graph_color.png
     :width: 400
@@ -1028,7 +1033,7 @@ Once those are correctly set, you can launch the algorithm.
 
 * In the Spreadsheet view, perform a right click on the *viewMetric* column and select *To labels of → All nodes*.
 
-* Back in the Node Link Diagram panel, you should now obtain a graph similar to this one :
+* Back in the Node Link Diagram panel, you should now obtain a graph similar to this:
 
 .. image:: _images/tutorial_color-graph_label.png
     :width: 400
@@ -1046,7 +1051,7 @@ Do not hesitate to try different combinations of algorithm to further discover t
 Complements about the workspace
 ===============================
 
-We have said a few words about the toolbar located at the bottom of the workspace in :ref:`workspace_panel` but we have not yet explained the use of the buttons 2 and 3 : *Search* and *Python*.
+We have said a few words about the toolbar located at the bottom of the workspace in:ref:`workspace_panel` but we have not yet explained the use of the buttons 2 and 3: *Search* and *Python*.
 
 
 .. _workspace_complements_search:

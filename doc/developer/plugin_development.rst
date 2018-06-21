@@ -262,7 +262,7 @@ In the following small example, we will iterate all the nodes and notify the use
   unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
   const unsigned int STEP = 10;
-  for(const node &n : graph->nodes()) {
+  for(auto n : graph->nodes()) {
     ...
     ... // Do what you want
     ...
@@ -327,7 +327,7 @@ Following is an example of a dummy color algorithm::
     //   return true;
     // }
   
-    // The run method is the main method : 
+    // The run method is the main method:
     //     - It will be called out if the pre-condition method (bool check (..)) returned true.
     //     - It is the starting point of your algorithm.
     // The returned value must be true if your algorithm succeeded.

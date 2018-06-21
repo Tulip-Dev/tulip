@@ -452,7 +452,7 @@ bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
   bool hasSelection = false;
   bool multipleSelection = false;
 
-  for (const edge &ite : _graph->edges()) {
+  for (auto ite : _graph->edges()) {
     if (_selection->getEdgeValue(ite)) {
       if (hasSelection) {
         hasSelection = false;
@@ -467,7 +467,7 @@ bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
   }
 
   if (!multipleSelection) {
-    for (const node &itn : _graph->nodes()) {
+    for (auto itn : _graph->nodes()) {
       if (_selection->getNodeValue(itn)) {
         if (hasSelection) {
           hasSelection = false;

@@ -81,17 +81,13 @@ Below are some links to relevant documentation resources about the Tulip framewo
 ## Installing Tulip
 
 Tulip is a cross-platform framework and can be compiled or installed on [FreeBSD](https://www.freshports.org/graphics/tulip/),
-Linux (packages available for [Debian](https://packages.debian.org/search?keywords=tulip), [OpenSUSE](https://software.opensuse.org/download.html?project=graphics&package=tulip), [Ubuntu](https://packages.ubuntu.com/fr/xenial/tulip) or [Fedora](https://fedora.pkgs.org/26/rpm-sphere/tulip-4.9.0-6.1.x86_64.rpm.html) but not necessarily
-in synch with latest Tulip version), MacOs and Windows.
+main Linux distributions ([Debian](https://packages.debian.org/search?keywords=tulip), [Fedora](https://fedora.pkgs.org/26/rpm-sphere/tulip-4.9.0-6.1.x86_64.rpm.html), [OpenSUSE](https://software.opensuse.org/download.html?project=graphics&package=tulip) or [Ubuntu](https://packages.ubuntu.com/fr/xenial/tulip), the packages provided are not necessarily in synch with latest Tulip version), MacOS and Windows.
 
 ### Precompiled binaries
 
 For each release, Tulip offers precompiled binaries for Linux (using [AppImage](https://github.com/AppImage/AppImageKit)), 
 MacOS (dmg bundles) or Windows ([NSIS](http://nsis.sourceforge.net/Main_Page) based installers).
-You can download those binaries from [Bintray](https://bintray.com/tulip-dev/tulip_binaries/Tulip/_latestVersion),
-[GitHub](https://github.com/Tulip-Dev/tulip/releases/latest) or [SourceForge](https://sourceforge.net/projects/auber/files/tulip/). 
-
-You can also test the latest development version of Tulip from the installers continuously uploaded on [Bintray](https://bintray.com/tulip-dev/tulip_binaries/Tulip/5.2.0-dev). Development versions are not considered stable so use at your own risks.
+You can download those binaries from [SourceForge](https://sourceforge.net/projects/auber/files/tulip/).
 
 ### Compiling from scratch
 
@@ -148,7 +144,7 @@ Hints on how to build Tulip for these three platforms can be found in the contin
 
 ## References
 
-Below are some scientific publications related to Tulip (see http://tulip.labri.fr/TulipDrupal/?q=tulip-biblio for more information):
+Below are some scientific publications related to Tulip (see [Tulip bibliography](http://tulip.labri.fr/TulipDrupal/?q=tulip-biblio) for more information):
 
   * David Auber, Daniel Archambault, Romain Bourqui, Maylis Delest, Jonathan Dubois, Antoine Lambert, Patrick Mary, Morgan Mathiaut, Guy Mélançon, Bruno Pinaud, Benjamin Renoust and Jason Vallet. TULIP 5. In Encyclopedia of Social Network Analysis and Mining, Springer, pages 1-28, 2017. https://hal.archives-ouvertes.fr/hal-01654518
 

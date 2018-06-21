@@ -155,16 +155,16 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
       minProp = _metricProperty->getNodeMin();
       maxProp = _metricProperty->getNodeMax();
 
-      for (const node &nit : view->graph()->nodes()) {
-        metricToColorMap[_metricProperty->getNodeValue(nit)] = _colorProperty->getNodeValue(nit);
+      for (auto n : view->graph()->nodes()) {
+        metricToColorMap[_metricProperty->getNodeValue(n)] = _colorProperty->getNodeValue(n);
       }
 
     } else {
       minProp = _metricProperty->getEdgeMin();
       maxProp = _metricProperty->getEdgeMax();
 
-      for (const edge &eit : view->graph()->edges()) {
-        metricToColorMap[_metricProperty->getEdgeValue(eit)] = _colorProperty->getEdgeValue(eit);
+      for (auto e : view->graph()->edges()) {
+        metricToColorMap[_metricProperty->getEdgeValue(e)] = _colorProperty->getEdgeValue(e);
       }
     }
 
@@ -213,20 +213,20 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
 
   if (captionType == NodesSizeCaption) {
 
-    for (const node &nit : view->graph()->nodes()) {
-      metricToSizeMap[_metricProperty->getNodeValue(nit)] = _sizeProperty->getNodeValue(nit)[0];
+    for (auto n : view->graph()->nodes()) {
+      metricToSizeMap[_metricProperty->getNodeValue(n)] = _sizeProperty->getNodeValue(n)[0];
 
-      if (maxSize < _sizeProperty->getNodeValue(nit)[0])
-        maxSize = _sizeProperty->getNodeValue(nit)[0];
+      if (maxSize < _sizeProperty->getNodeValue(n)[0])
+        maxSize = _sizeProperty->getNodeValue(n)[0];
     }
 
   } else {
 
-    for (const edge &eit : view->graph()->edges()) {
-      metricToSizeMap[_metricProperty->getEdgeValue(eit)] = _sizeProperty->getEdgeValue(eit)[0];
+    for (auto e : view->graph()->edges()) {
+      metricToSizeMap[_metricProperty->getEdgeValue(e)] = _sizeProperty->getEdgeValue(e)[0];
 
-      if (maxSize < _sizeProperty->getEdgeValue(eit)[0])
-        maxSize = _sizeProperty->getEdgeValue(eit)[0];
+      if (maxSize < _sizeProperty->getEdgeValue(e)[0])
+        maxSize = _sizeProperty->getEdgeValue(e)[0];
     }
   }
 
@@ -344,7 +344,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     double beginMetric = minProp + (begin * (maxProp - minProp));
     double endMetric = minProp + (end * (maxProp - minProp));
 
-    for (const node &nit : view->graph()->nodes()) {
+    for (auto nit : view->graph()->nodes()) {
       tmp = Color(_backupColorProperty->getNodeValue(nit));
       borderTmp = Color(_backupBorderColorProperty->getNodeValue(nit));
 
@@ -369,22 +369,22 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     double beginMetric = minProp + (begin * (maxProp - minProp));
     double endMetric = minProp + (end * (maxProp - minProp));
 
-    for (const edge &eit : view->graph()->edges()) {
+    for (auto e : view->graph()->edges()) {
 
-      tmp = Color(_backupColorProperty->getEdgeValue(eit));
-      borderTmp = Color(_backupBorderColorProperty->getEdgeValue(eit));
+      tmp = Color(_backupColorProperty->getEdgeValue(e));
+      borderTmp = Color(_backupBorderColorProperty->getEdgeValue(e));
 
-      if (_metricProperty->getEdgeValue(eit) < beginMetric ||
-          _metricProperty->getEdgeValue(eit) > endMetric) {
+      if (_metricProperty->getEdgeValue(e) < beginMetric ||
+          _metricProperty->getEdgeValue(e) > endMetric) {
         tmp[3] = 25;
         borderTmp[3] = 25;
-        _colorProperty->setEdgeValue(eit, tmp);
-        borderColorProperty->setEdgeValue(eit, borderTmp);
+        _colorProperty->setEdgeValue(e, tmp);
+        borderColorProperty->setEdgeValue(e, borderTmp);
       } else {
         tmp[3] = 255;
         borderTmp[3] = 255;
-        _colorProperty->setEdgeValue(eit, tmp);
-        borderColorProperty->setEdgeValue(eit, borderTmp);
+        _colorProperty->setEdgeValue(e, tmp);
+        borderColorProperty->setEdgeValue(e, borderTmp);
       }
     }
   }

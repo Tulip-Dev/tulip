@@ -23,6 +23,8 @@
 
 #include <cfloat>
 
+#include <QDoubleValidator>
+
 using namespace tlp;
 
 CoordEditor::CoordEditor(QWidget *parent, bool editSize)

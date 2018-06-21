@@ -189,13 +189,13 @@ void OGDFLayoutPluginBase::transposeLayoutVertically() {
                               graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
 
-  for (const tlp::node &n : nodes) {
+  for (auto n : nodes) {
     tlp::Coord nodeCoord = result->getNodeValue(n);
     nodeCoord[1] = midY - (nodeCoord[1] - midY);
     result->setNodeValue(n, nodeCoord);
   }
 
-  for (const tlp::edge &e : edges) {
+  for (auto e : edges) {
     std::vector<tlp::Coord> bends = result->getEdgeValue(e);
 
     if (bends.size()) {

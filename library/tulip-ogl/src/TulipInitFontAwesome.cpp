@@ -883,6 +883,8 @@ static void initIconCodePoints() {
   addIconCodePoint("fa-youtube", 0xf167);
   addIconCodePoint("fa-youtube-square", 0xf431);
 
+  clearFtFaces();
+
   auto it = iconCodePoint.begin();
 
   for (; it != iconCodePoint.end(); ++it) {

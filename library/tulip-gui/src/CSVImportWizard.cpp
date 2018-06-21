@@ -20,6 +20,7 @@
 
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QHeaderView>
 
 #include <tulip/CSVGraphImport.h>
 #include <tulip/CSVParserConfigurationWidget.h>

@@ -26,7 +26,7 @@ CachedPropertyAnimation<PropType, NodeType, EdgeType>::CachedPropertyAnimation(
                                                       computeNodes, computeEdges, parent) {
 
   if (this->_computeNodes) {
-    for (const tlp::node &n : this->_graph->nodes()) {
+    for (auto n : this->_graph->nodes()) {
       if (this->equalNodes(this->_end->getNodeValue(n), this->_start->getNodeValue(n))) {
         this->_selection->setNodeValue(n, false);
         // Init the out properties with the default value.
@@ -36,7 +36,7 @@ CachedPropertyAnimation<PropType, NodeType, EdgeType>::CachedPropertyAnimation(
   }
 
   if (this->_computeEdges) {
-    for (const tlp::edge &e : this->_graph->edges()) {
+    for (auto e : this->_graph->edges()) {
       if (this->equalEdges(this->_end->getEdgeValue(e), this->_start->getEdgeValue(e))) {
         this->_selection->setEdgeValue(e, false);
         // Init the out properties with the default value.
@@ -53,7 +53,7 @@ template <typename PropType, typename NodeType, typename EdgeType>
 void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
   if (this->_computeNodes) {
     computedNodeSteps.clear();
-    for (const tlp::node &n : this->_graph->nodes()) {
+    for (auto n : this->_graph->nodes()) {
       if (this->_selection && !this->_selection->getNodeValue(n))
         continue;
 
@@ -73,7 +73,7 @@ void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) 
 
   if (this->_computeEdges) {
     computedEdgeSteps.clear();
-    for (const tlp::edge &e : this->_graph->edges()) {
+    for (auto e : this->_graph->edges()) {
       if (this->_selection && !this->_selection->getEdgeValue(e))
         continue;
 

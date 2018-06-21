@@ -3,7 +3,7 @@ ADD_CORE_FILES(.)
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(MetricSizeMapping-${TulipVersion} SHARED MetricMapping.cpp)
+ADD_LIBRARY(MetricSizeMapping-${TulipVersion} SHARED SizeMapping.cpp)
 TARGET_LINK_LIBRARIES(MetricSizeMapping-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------

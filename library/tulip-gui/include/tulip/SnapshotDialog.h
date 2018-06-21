@@ -32,6 +32,7 @@ class SnapshotDialogData;
 class QGraphicsScene;
 class QGraphicsPixmapItem;
 class QAbstractButton;
+class QLabel;
 
 namespace tlp {
 
@@ -66,8 +67,6 @@ protected:
   Ui::SnapshotDialogData *ui;
   const View *view;
 
-  QGraphicsScene *scene;
-  QGraphicsPixmapItem *pixmapItem;
   LockLabel *lockLabel;
 
   float ratio;

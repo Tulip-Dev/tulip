@@ -35,8 +35,19 @@ static const char *paramHelp[] = {
     "If not all dimensions (width, height, depth) are checked below, the dimensions not computed "
     "are copied from this property.",
 
-    // width, height, depth
-    "Each checked dimension is adjusted to represent property, each unchecked dimension is copied "
+    // width
+    "Adjusts width (along x axis) to represent the chosen property. If not chosen, the dimension "
+    "is copied "
+    "from input.",
+
+    // height
+    "Adjusts height (along y axis) to represent the chosen property. If not chosen, the dimension "
+    "is copied "
+    "from input.",
+
+    //  depth
+    "Adjusts depth (along z axis) to represent the chosen property. If not chosen, the dimension "
+    "is copied "
     "from input.",
 
     // min
@@ -85,7 +96,7 @@ class MetricSizeMapping : public SizeAlgorithm {
 public:
   PLUGININFORMATION(
       "Size Mapping", "Auber", "08/08/2003",
-      "Maps the sizes of the graph elements onto the values of a given numeric property.", "2.1",
+      "Maps the size of the graph elements onto the values of a given numeric property.", "2.1",
       "Size")
   MetricSizeMapping(const PluginContext *context)
       : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true),
@@ -93,13 +104,13 @@ public:
     addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2], "true");
-    addInParameter<bool>("height", paramHelp[2], "true");
-    addInParameter<bool>("depth", paramHelp[2], "false");
-    addInParameter<double>("min size", paramHelp[3], "1");
-    addInParameter<double>("max size", paramHelp[4], "10");
-    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[5], MAPPING_TYPES, true,
+    addInParameter<bool>("height", paramHelp[3], "true");
+    addInParameter<bool>("depth", paramHelp[4], "false");
+    addInParameter<double>("min size", paramHelp[5], "1");
+    addInParameter<double>("max size", paramHelp[6], "10");
+    addInParameter<StringCollection>(MAPPING_TYPE, paramHelp[7], MAPPING_TYPES, true,
                                      "linear <br/> uniform");
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[6], TARGET_TYPES, true,
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[8], TARGET_TYPES, true,
                                      "nodes <br/> edges");
     addInParameter<StringCollection>("area proportional", paramHelp[7],
                                      "Area Proportional;Quadratic/Cubic", true,

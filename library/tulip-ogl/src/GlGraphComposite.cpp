@@ -44,7 +44,7 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlGraphRenderer *graphRenderer)
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       if (graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }
@@ -62,7 +62,7 @@ GlGraphComposite::GlGraphComposite(Graph *graph, GlScene *scene)
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       if (graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }

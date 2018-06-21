@@ -102,13 +102,13 @@ Sample::
 Property Type
 -------------
           
-* layout : This type enables to store nodes position in 3D. The position of nodes is defined by a set of 3 doubles *(x_coord,y_coord,z_coord)*. The position of edges is a list of 3D points. These points are the bends of edges. *((x_coord1,y_coord1,z_coord1)(x_coord2,y_coord2,z_coord2))*
-* size : This type enables to store the size of elements. The size is defined with a sequence of three double. *(width,heigth,depth)*
-* color : This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. *(red,green,blue,alpha)*
-* string : This enables to store text on elements.
-* metric : This enables to store real on elements.
-* bool : This type enables to store boolean on elements.
-* int : This type enables to store integers on elements.  
+* layout: This type enables to store nodes position in 3D. The position of nodes is defined by a set of 3 doubles *(x_coord,y_coord,z_coord)*. The position of edges is a list of 3D points. These points are the bends of edges. *((x_coord1,y_coord1,z_coord1)(x_coord2,y_coord2,z_coord2))*
+* size: This type enables to store the size of elements. The size is defined with a sequence of three double. *(width,heigth,depth)*
+* color: This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. *(red,green,blue,alpha)*
+* string: This enables to store text on elements.
+* metric: This enables to store real on elements.
+* bool: This type enables to store boolean on elements.
+* int: This type enables to store integers on elements.
 
         
         
@@ -120,7 +120,7 @@ Properties of Tulip
 
 *viewSelection*
 
-  type : bool, this property is the one used for selected elements in Tulip. ::
+  type: bool, this property is the one used for selected elements in Tulip. ::
 
     (property  0 bool "viewSelection"
       (default "false" "false")
@@ -133,7 +133,7 @@ Properties of Tulip
 
 *viewLayout*
 
-  type : layout, this property is the one used for displaying graph in Tulip. ::
+  type: layout, this property is the one used for displaying graph in Tulip. ::
 
     (property  0 layout "viewLayout"
       (default "(0,0,0)" "()" )
@@ -144,7 +144,7 @@ Properties of Tulip
 
 *viewColor*
 
-  type : color, this property is the one used for coloring graphs in Tulip. ::
+  type: color, this property is the one used for coloring graphs in Tulip. ::
 
     (property  0 color "viewColor"
       (default "(235,0,23,255)" "(0,0,0,0)" )
@@ -156,7 +156,7 @@ Properties of Tulip
 
 *viewLabel*
 
-  type : string, this property is the one used for labeling the graphs in Tulip(in label mode). ::
+  type: string, this property is the one used for labeling the graphs in Tulip(in label mode). ::
 
     (property  0 string "viewLabel"
       (default "" "" )
@@ -168,7 +168,7 @@ Properties of Tulip
 
 *viewSize*
 
-  type : size, this property is the one used for the size of elements displayed. ::
+  type: size, this property is the one used for the size of elements displayed. ::
 
     (property  0 size "viewSize"
       (default "(0,0,0)" "(1,1,1)" )
@@ -178,7 +178,7 @@ Properties of Tulip
 
 *viewShape*
 
-  type : int, this property is used for defining the shape of elements. ::
+  type: int, this property is used for defining the shape of elements. ::
 
     (property  0 int "viewShape"
       (default "0" "0" )
