@@ -140,7 +140,7 @@ static void checkDirectory(std::string dir, bool tlpDirSet, bool throwEx) {
 
   if (statPath(dir, &infoEntry) != 0) {
     std::stringstream ess;
-    ess << "Error - " << dir << ": " << std::endl << strerror(errno);
+    ess << "Error - " << dir << ":" << std::endl << strerror(errno) << std::endl;
     if (tlpDirSet)
       ess << std::endl << "Check your TLP_DIR environment variable";
     if (throwEx)
