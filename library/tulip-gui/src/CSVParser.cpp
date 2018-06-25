@@ -26,6 +26,7 @@
 
 #include <fstream>
 #include <cassert>
+#include <locale>
 
 using namespace std;
 using namespace tlp;
@@ -89,10 +90,12 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
     }
 
     // change locale if needed
-    char *prevLocale = setlocale(LC_NUMERIC, nullptr);
+    std::locale prevLocale;
 
-    if (decimalMark() == ',')
-      setlocale(LC_NUMERIC, "fr_FR");
+    if (decimalMark() == ',') {
+      std::locale loc = std::locale().combine<std::numpunct<char>>(std::locale("fr_FR.UTF8"));
+      std::locale::global(loc);
+    }
 
     while (multiplatformgetline(*csvFile, line) && row <= _lastLine) {
 
@@ -144,7 +147,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
 
     delete csvFile;
     // reset locale
-    setlocale(LC_NUMERIC, prevLocale);
+    std::locale::global(prevLocale);
 
     return result ? handler->end(row, columnMax) : false;
   } else {
