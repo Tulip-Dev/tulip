@@ -33,7 +33,7 @@ ScatterPlotQuickAccessBar::ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget 
                        QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
                        QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
                        QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::EDGECOLOR |
-                       QuickAccessBarImpl::NODEBORDERCOLOR | QuickAccessBarImpl::LABELCOLOR),
+                       QuickAccessBarImpl::NODEBORDERCOLOR | QuickAccessBarImpl::LABELCOLOR | QuickAccessBarImpl::NODESIZE),
           parent),
       _optionsWidget(opt) {}
 
