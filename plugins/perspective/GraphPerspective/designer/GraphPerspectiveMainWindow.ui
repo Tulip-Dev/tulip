@@ -1724,7 +1724,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Delete Selection</string>
+    <string>&amp;Delete selection</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
