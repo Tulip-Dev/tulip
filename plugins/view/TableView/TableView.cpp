@@ -578,6 +578,7 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
     return;
 
   PropertyInterface *prop = graph()->getProperty(propName);
+  bool propIsInherited = prop->getGraph() != graph();
 
   QModelIndexList highlightedRows = _ui->table->selectionModel()->selectedRows();
 
@@ -598,10 +599,13 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   // QAction* setDefault = contextMenu.addAction(trUtf8("Set default") + ' ' + eltName + " value");
 
   QMenu *subMenu = contextMenu.addMenu(trUtf8("Set value(s) of "));
-  QAction *setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_PROPERTY +
-                                       trUtf8(" to a new default value"));
-  setAll->setToolTip(QString("Choose a new ") + eltsName +
-                     " default value to reset the values of all " + eltsName + OF_PROPERTY);
+  QAction *setAll = nullptr;
+  if (propIsInherited) {
+    setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_PROPERTY +
+				trUtf8(" to a new default value"));
+    setAll->setToolTip(QString("Choose a new ") + eltsName +
+		       " default value to reset the values of all " + eltsName + OF_PROPERTY);
+  }
   QAction *setAllGraph = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_GRAPH);
   setAllGraph->setToolTip(QString("Choose a value to be assigned to all the existing ") + eltsName +
                           OF_GRAPH);
@@ -773,6 +777,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
     return;
 
   PropertyInterface *prop = graph()->getProperty(propName);
+  bool propIsInherited = prop->getGraph() != graph();
 
   QModelIndexList highlightedRows = _ui->table->selectionModel()->selectedRows();
 
@@ -814,14 +819,16 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   contextMenu.addSeparator();
 
   QMenu *subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction *nodesSetAll =
-      subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" to a new default value"));
-  nodesSetAll->setToolTip(
-      QString("Choose a new node default value to reset the values of all nodes") + OF_PROPERTY);
-  QAction *edgesSetAll =
-      subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" to a new default value"));
-  edgesSetAll->setToolTip(
-      QString("Choose a new edge default value to reset the values of all edges ") + OF_PROPERTY);
+  QAction *nodesSetAll = nullptr;
+  QAction *edgesSetAll = nullptr;
+  if (propIsInherited) {
+    nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" to a new default value"));
+    nodesSetAll->setToolTip(
+			    QString("Choose a new node default value to reset the values of all nodes") + OF_PROPERTY);
+    edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" to a new default value"));
+    edgesSetAll->setToolTip(
+			    QString("Choose a new edge default value to reset the values of all edges ") + OF_PROPERTY);
+  }
   QAction *nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
   nodesSetAllGraph->setToolTip(QString("Choose a value to be assigned to all the existing nodes") +
                                OF_GRAPH);
