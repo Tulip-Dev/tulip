@@ -1,1 +1,1 @@
-sh tulip_run_test.sh export_tlpb_file grid_approximation.tlp grid_approximation.tlp
+sh tulip_run_test.sh export_tlpb_file grid_approximation.tlp

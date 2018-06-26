@@ -1,8 +1,8 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2017:05:17 
-# Time:                   10:20:47 
+# Date:                   2018:06:26 
+# Time:                   10:54:20 
 # Xnee program:           cnee 
 # Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
@@ -15,10 +15,10 @@
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             4.4.0-78-generic 
-# OS Version:             #99-Ubuntu SMP Thu Apr 27 15:29:09 UTC 2017 
+# OS Release:             4.4.0-128-generic 
+# OS Version:             #154-Ubuntu SMP Fri May 25 14:15:18 UTC 2018 
 # Machine:                x86_64 
-# Nodename:               pm-laptop 
+# Nodename:               pm-Precision-5520 
 # Display name:           :0
 # Dimension:              2048x1152
 
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0x1470020
+#   rState              0x1f55020
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -158,598 +158,553 @@ extension-reply-minor-range   0-0
 delivered-event-range         0-0 
 device-event-range            66-71 
 error-range                   0-0 
-7,6,317,708,0,0,0,2605247,9,'Logitech USB Optical Mouse'
-7,6,314,708,0,0,0,2605255,9,'Logitech USB Optical Mouse'
-7,6,312,708,0,0,0,2605263,9,'Logitech USB Optical Mouse'
-7,6,310,708,0,0,0,2605271,9,'Logitech USB Optical Mouse'
-7,6,308,709,0,0,0,2605279,9,'Logitech USB Optical Mouse'
-7,6,306,709,0,0,0,2605287,9,'Logitech USB Optical Mouse'
-7,6,304,710,0,0,0,2605295,9,'Logitech USB Optical Mouse'
-7,6,301,710,0,0,0,2605303,9,'Logitech USB Optical Mouse'
-7,6,300,710,0,0,0,2605311,9,'Logitech USB Optical Mouse'
-7,6,298,711,0,0,0,2605319,9,'Logitech USB Optical Mouse'
-7,6,296,712,0,0,0,2605327,9,'Logitech USB Optical Mouse'
-7,6,294,712,0,0,0,2605335,9,'Logitech USB Optical Mouse'
-7,6,291,712,0,0,0,2605343,9,'Logitech USB Optical Mouse'
-7,6,289,712,0,0,0,2605351,9,'Logitech USB Optical Mouse'
-7,6,285,712,0,0,0,2605359,9,'Logitech USB Optical Mouse'
-7,6,282,712,0,0,0,2605367,9,'Logitech USB Optical Mouse'
-7,6,278,713,0,0,0,2605375,9,'Logitech USB Optical Mouse'
-7,6,274,713,0,0,0,2605383,9,'Logitech USB Optical Mouse'
-7,6,271,713,0,0,0,2605391,9,'Logitech USB Optical Mouse'
-7,6,266,714,0,0,0,2605399,9,'Logitech USB Optical Mouse'
-7,6,261,714,0,0,0,2605407,9,'Logitech USB Optical Mouse'
-7,6,257,714,0,0,0,2605415,9,'Logitech USB Optical Mouse'
-7,6,253,715,0,0,0,2605423,9,'Logitech USB Optical Mouse'
-7,6,249,715,0,0,0,2605431,9,'Logitech USB Optical Mouse'
-7,6,245,716,0,0,0,2605439,9,'Logitech USB Optical Mouse'
-7,6,242,717,0,0,0,2605447,9,'Logitech USB Optical Mouse'
-7,6,239,718,0,0,0,2605455,9,'Logitech USB Optical Mouse'
-7,6,236,719,0,0,0,2605463,9,'Logitech USB Optical Mouse'
-7,6,234,720,0,0,0,2605471,9,'Logitech USB Optical Mouse'
-7,6,231,721,0,0,0,2605479,9,'Logitech USB Optical Mouse'
-7,6,229,722,0,0,0,2605487,9,'Logitech USB Optical Mouse'
-7,6,226,722,0,0,0,2605495,9,'Logitech USB Optical Mouse'
-7,6,225,724,0,0,0,2605503,9,'Logitech USB Optical Mouse'
-7,6,222,725,0,0,0,2605511,9,'Logitech USB Optical Mouse'
-7,6,220,726,0,0,0,2605519,9,'Logitech USB Optical Mouse'
-7,6,218,727,0,0,0,2605527,9,'Logitech USB Optical Mouse'
-7,6,216,728,0,0,0,2605535,9,'Logitech USB Optical Mouse'
-7,6,213,729,0,0,0,2605543,9,'Logitech USB Optical Mouse'
-7,6,211,730,0,0,0,2605551,9,'Logitech USB Optical Mouse'
-7,6,208,731,0,0,0,2605559,9,'Logitech USB Optical Mouse'
-7,6,207,733,0,0,0,2605567,9,'Logitech USB Optical Mouse'
-7,6,205,734,0,0,0,2605575,9,'Logitech USB Optical Mouse'
-7,6,203,734,0,0,0,2605583,9,'Logitech USB Optical Mouse'
-7,6,201,736,0,0,0,2605591,9,'Logitech USB Optical Mouse'
-7,6,200,737,0,0,0,2605599,9,'Logitech USB Optical Mouse'
-7,6,198,739,0,0,0,2605607,9,'Logitech USB Optical Mouse'
-7,6,197,739,0,0,0,2605615,9,'Logitech USB Optical Mouse'
-7,6,196,741,0,0,0,2605623,9,'Logitech USB Optical Mouse'
-7,6,195,741,0,0,0,2605631,9,'Logitech USB Optical Mouse'
-7,6,194,742,0,0,0,2605639,9,'Logitech USB Optical Mouse'
-7,6,192,743,0,0,0,2605647,9,'Logitech USB Optical Mouse'
-7,6,192,744,0,0,0,2605655,9,'Logitech USB Optical Mouse'
-7,6,190,746,0,0,0,2605663,9,'Logitech USB Optical Mouse'
-7,6,188,749,0,0,0,2605671,9,'Logitech USB Optical Mouse'
-7,6,187,750,0,0,0,2605679,9,'Logitech USB Optical Mouse'
-7,6,186,752,0,0,0,2605687,9,'Logitech USB Optical Mouse'
-7,6,185,753,0,0,0,2605703,9,'Logitech USB Optical Mouse'
-7,6,183,755,0,0,0,2605711,9,'Logitech USB Optical Mouse'
-7,6,181,756,0,0,0,2605719,9,'Logitech USB Optical Mouse'
-7,6,178,759,0,0,0,2605727,9,'Logitech USB Optical Mouse'
-7,6,177,760,0,0,0,2605735,9,'Logitech USB Optical Mouse'
-7,6,176,761,0,0,0,2605743,9,'Logitech USB Optical Mouse'
-7,6,174,762,0,0,0,2605759,9,'Logitech USB Optical Mouse'
-7,6,172,763,0,0,0,2605767,9,'Logitech USB Optical Mouse'
-7,6,171,764,0,0,0,2605775,9,'Logitech USB Optical Mouse'
-7,6,170,764,0,0,0,2605783,9,'Logitech USB Optical Mouse'
-7,6,169,765,0,0,0,2605791,9,'Logitech USB Optical Mouse'
-7,6,167,766,0,0,0,2605799,9,'Logitech USB Optical Mouse'
-7,6,166,767,0,0,0,2605807,9,'Logitech USB Optical Mouse'
-7,6,164,767,0,0,0,2605815,9,'Logitech USB Optical Mouse'
-7,6,162,768,0,0,0,2605823,9,'Logitech USB Optical Mouse'
-7,6,161,769,0,0,0,2605831,9,'Logitech USB Optical Mouse'
-7,6,159,770,0,0,0,2605839,9,'Logitech USB Optical Mouse'
-7,6,157,770,0,0,0,2605847,9,'Logitech USB Optical Mouse'
-7,6,154,772,0,0,0,2605855,9,'Logitech USB Optical Mouse'
-7,6,153,772,0,0,0,2605863,9,'Logitech USB Optical Mouse'
-7,6,151,773,0,0,0,2605871,9,'Logitech USB Optical Mouse'
-7,6,151,774,0,0,0,2605879,9,'Logitech USB Optical Mouse'
-7,6,149,774,0,0,0,2605887,9,'Logitech USB Optical Mouse'
-7,6,149,775,0,0,0,2605895,9,'Logitech USB Optical Mouse'
-7,6,148,775,0,0,0,2605903,9,'Logitech USB Optical Mouse'
-7,6,147,775,0,0,0,2605911,9,'Logitech USB Optical Mouse'
-7,6,146,775,0,0,0,2605935,9,'Logitech USB Optical Mouse'
-7,6,146,776,0,0,0,2605943,9,'Logitech USB Optical Mouse'
-7,4,0,0,1,0,0,2606327,9,Logitech USB Optical Mouse
-6,4,0,0,1,0,0,2606327,2,Virtual core pointer
-7,5,0,0,1,0,0,2606487,9,Logitech USB Optical Mouse
-6,5,0,0,1,0,0,2606487,2,Virtual core pointer
-0,21,0,0,0,0,0,2606517
-NEW-WINDOW:461,197:65011954,65011954,20997271,0,0,0:0x0+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
-0,21,0,0,0,0,0,2606517
-0,21,0,0,0,0,0,2606517
-0,21,0,0,0,0,0,2606517
-7,2,0,0,0,28,0,2608580,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2608580,3,Virtual core keyboard
-7,3,0,0,0,28,0,2608642,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2608642,3,Virtual core keyboard
-7,2,0,0,0,26,0,2608808,10,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,2608808,3,Virtual core keyboard
-7,3,0,0,0,26,0,2608879,10,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,2608879,3,Virtual core keyboard
-7,2,0,0,0,39,0,2609030,10,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,2609030,3,Virtual core keyboard
-7,3,0,0,0,39,0,2609092,10,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,2609092,3,Virtual core keyboard
-7,2,0,0,0,28,0,2609277,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2609277,3,Virtual core keyboard
-7,3,0,0,0,28,0,2609369,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2609369,3,Virtual core keyboard
-7,2,0,0,0,17,0,2609489,10,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,2609489,3,Virtual core keyboard
-7,3,0,0,0,17,0,2609571,10,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,2609571,3,Virtual core keyboard
-7,2,0,0,0,42,0,2609979,10,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,2609979,3,Virtual core keyboard
-7,3,0,0,0,42,0,2610050,10,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,2610050,3,Virtual core keyboard
-7,2,0,0,0,30,0,2610090,10,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,2610090,3,Virtual core keyboard
-7,2,0,0,0,31,0,2610161,10,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,2610161,3,Virtual core keyboard
-7,3,0,0,0,30,0,2610203,10,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,2610203,3,Virtual core keyboard
-7,3,0,0,0,31,0,2610278,10,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,2610278,3,Virtual core keyboard
-7,2,0,0,0,62,0,2610837,10,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,2610837,3,Virtual core keyboard
-7,2,0,0,0,59,0,2611192,10,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,2611192,3,Virtual core keyboard
-7,3,0,0,0,59,0,2611258,10,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,2611258,3,Virtual core keyboard
-7,3,0,0,0,62,0,2611338,10,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,2611338,3,Virtual core keyboard
-7,2,0,0,0,28,0,2611712,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2611712,3,Virtual core keyboard
-7,3,0,0,0,28,0,2611809,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2611809,3,Virtual core keyboard
-7,2,0,0,0,46,0,2611838,10,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,2611838,3,Virtual core keyboard
-7,2,0,0,0,33,0,2611949,10,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,2611949,3,Virtual core keyboard
-7,3,0,0,0,46,0,2611970,10,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,2611970,3,Virtual core keyboard
-7,3,0,0,0,33,0,2612072,10,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,2612072,3,Virtual core keyboard
-7,2,0,0,0,56,0,2612520,10,AT Translated Set 2 keyboard
-6,2,0,0,0,56,0,2612520,3,Virtual core keyboard
-7,3,0,0,0,56,0,2612571,10,AT Translated Set 2 keyboard
-6,3,0,0,0,56,0,2612571,3,Virtual core keyboard
-7,2,0,0,0,25,0,2613110,10,AT Translated Set 2 keyboard
-6,2,0,0,0,25,0,2613110,3,Virtual core keyboard
-7,3,0,0,0,25,0,2613182,10,AT Translated Set 2 keyboard
-6,3,0,0,0,25,0,2613182,3,Virtual core keyboard
-7,2,0,0,0,36,0,2614429,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,2614429,3,Virtual core keyboard
-0,21,0,0,0,0,0,2614451
-NEW-WINDOW:650,338:65011963,65011963,20997354,0,0,0:0x0+500+36:0,0:TLPB Export
-0,21,0,0,0,0,0,2614451
-0,21,0,0,0,0,0,2614451
-0,21,0,0,0,0,0,2614451
-7,3,0,0,0,36,0,2614490,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,2614490,3,Virtual core keyboard
-0,21,0,0,0,0,0,2614589
-NEW-WINDOW:459,141:65011954,65011954,748,0,0,0:459x141+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
-0,21,0,0,0,0,0,2614589
-0,21,0,0,0,0,0,2614589
-0,21,0,0,0,0,0,2614589
-0,21,0,0,0,0,0,2614589
-0,21,0,0,0,0,0,2614589
-7,6,145,776,0,0,0,2617225,9,'Logitech USB Optical Mouse'
-7,6,151,775,0,0,0,2617233,9,'Logitech USB Optical Mouse'
-7,6,159,771,0,0,0,2617241,9,'Logitech USB Optical Mouse'
-7,6,174,766,0,0,0,2617249,9,'Logitech USB Optical Mouse'
-7,6,183,763,0,0,0,2617257,9,'Logitech USB Optical Mouse'
-7,6,190,761,0,0,0,2617265,9,'Logitech USB Optical Mouse'
-7,6,194,759,0,0,0,2617273,9,'Logitech USB Optical Mouse'
-7,6,197,757,0,0,0,2617281,9,'Logitech USB Optical Mouse'
-7,6,201,756,0,0,0,2617289,9,'Logitech USB Optical Mouse'
-7,6,204,756,0,0,0,2617297,9,'Logitech USB Optical Mouse'
-7,6,206,755,0,0,0,2617305,9,'Logitech USB Optical Mouse'
-7,6,207,754,0,0,0,2617313,9,'Logitech USB Optical Mouse'
-7,6,208,754,0,0,0,2617321,9,'Logitech USB Optical Mouse'
-7,6,208,753,0,0,0,2617337,9,'Logitech USB Optical Mouse'
-7,6,209,753,0,0,0,2617361,9,'Logitech USB Optical Mouse'
-7,6,210,753,0,0,0,2617369,9,'Logitech USB Optical Mouse'
-7,6,211,752,0,0,0,2617377,9,'Logitech USB Optical Mouse'
-7,6,212,752,0,0,0,2617393,9,'Logitech USB Optical Mouse'
-7,6,213,752,0,0,0,2617401,9,'Logitech USB Optical Mouse'
-7,6,214,751,0,0,0,2617441,9,'Logitech USB Optical Mouse'
-7,6,214,750,0,0,0,2617449,9,'Logitech USB Optical Mouse'
-7,6,215,750,0,0,0,2617457,9,'Logitech USB Optical Mouse'
-7,6,216,750,0,0,0,2617473,9,'Logitech USB Optical Mouse'
-7,6,217,750,0,0,0,2617481,9,'Logitech USB Optical Mouse'
-7,6,218,750,0,0,0,2617497,9,'Logitech USB Optical Mouse'
-7,6,220,750,0,0,0,2617505,9,'Logitech USB Optical Mouse'
-7,6,223,749,0,0,0,2617513,9,'Logitech USB Optical Mouse'
-7,6,227,748,0,0,0,2617521,9,'Logitech USB Optical Mouse'
-7,6,235,746,0,0,0,2617529,9,'Logitech USB Optical Mouse'
-7,6,244,746,0,0,0,2617537,9,'Logitech USB Optical Mouse'
-7,6,252,744,0,0,0,2617545,9,'Logitech USB Optical Mouse'
-7,6,256,743,0,0,0,2617553,9,'Logitech USB Optical Mouse'
-7,6,260,742,0,0,0,2617561,9,'Logitech USB Optical Mouse'
-7,6,263,741,0,0,0,2617569,9,'Logitech USB Optical Mouse'
-7,6,265,740,0,0,0,2617577,9,'Logitech USB Optical Mouse'
-7,6,268,739,0,0,0,2617585,9,'Logitech USB Optical Mouse'
-7,6,270,738,0,0,0,2617593,9,'Logitech USB Optical Mouse'
-7,6,271,738,0,0,0,2617601,9,'Logitech USB Optical Mouse'
-7,6,273,737,0,0,0,2617617,9,'Logitech USB Optical Mouse'
-7,6,274,736,0,0,0,2617625,9,'Logitech USB Optical Mouse'
-7,6,275,736,0,0,0,2617633,9,'Logitech USB Optical Mouse'
-7,6,275,735,0,0,0,2617641,9,'Logitech USB Optical Mouse'
-7,6,276,735,0,0,0,2617649,9,'Logitech USB Optical Mouse'
-7,6,277,734,0,0,0,2617657,9,'Logitech USB Optical Mouse'
-7,6,278,734,0,0,0,2617665,9,'Logitech USB Optical Mouse'
-7,6,279,734,0,0,0,2617673,9,'Logitech USB Optical Mouse'
-7,6,281,733,0,0,0,2617681,9,'Logitech USB Optical Mouse'
-7,6,282,732,0,0,0,2617689,9,'Logitech USB Optical Mouse'
-7,6,284,732,0,0,0,2617697,9,'Logitech USB Optical Mouse'
-7,6,286,731,0,0,0,2617705,9,'Logitech USB Optical Mouse'
-7,6,287,730,0,0,0,2617713,9,'Logitech USB Optical Mouse'
-7,6,288,730,0,0,0,2617721,9,'Logitech USB Optical Mouse'
-7,6,289,729,0,0,0,2617729,9,'Logitech USB Optical Mouse'
-7,6,290,729,0,0,0,2617737,9,'Logitech USB Optical Mouse'
-7,6,291,728,0,0,0,2617745,9,'Logitech USB Optical Mouse'
-7,6,292,727,0,0,0,2617753,9,'Logitech USB Optical Mouse'
-7,6,293,726,0,0,0,2617761,9,'Logitech USB Optical Mouse'
-7,6,295,726,0,0,0,2617769,9,'Logitech USB Optical Mouse'
-7,6,296,725,0,0,0,2617785,9,'Logitech USB Optical Mouse'
-7,6,297,724,0,0,0,2617801,9,'Logitech USB Optical Mouse'
-7,6,298,724,0,0,0,2617809,9,'Logitech USB Optical Mouse'
-7,6,298,723,0,0,0,2617817,9,'Logitech USB Optical Mouse'
-7,6,299,723,0,0,0,2617825,9,'Logitech USB Optical Mouse'
-7,6,300,722,0,0,0,2617833,9,'Logitech USB Optical Mouse'
-7,6,301,722,0,0,0,2617841,9,'Logitech USB Optical Mouse'
-7,6,302,722,0,0,0,2617857,9,'Logitech USB Optical Mouse'
-7,6,302,721,0,0,0,2617865,9,'Logitech USB Optical Mouse'
-7,6,303,721,0,0,0,2617873,9,'Logitech USB Optical Mouse'
-7,6,303,720,0,0,0,2617881,9,'Logitech USB Optical Mouse'
-7,6,304,720,0,0,0,2617889,9,'Logitech USB Optical Mouse'
-7,6,306,719,0,0,0,2617897,9,'Logitech USB Optical Mouse'
-7,6,306,718,0,0,0,2617905,9,'Logitech USB Optical Mouse'
-7,6,307,716,0,0,0,2617913,9,'Logitech USB Optical Mouse'
-7,6,308,716,0,0,0,2617921,9,'Logitech USB Optical Mouse'
-7,6,309,714,0,0,0,2617929,9,'Logitech USB Optical Mouse'
-7,6,310,714,0,0,0,2617937,9,'Logitech USB Optical Mouse'
-7,6,310,713,0,0,0,2617945,9,'Logitech USB Optical Mouse'
-7,6,312,712,0,0,0,2617953,9,'Logitech USB Optical Mouse'
-7,6,312,711,0,0,0,2617969,9,'Logitech USB Optical Mouse'
-7,6,313,709,0,0,0,2617977,9,'Logitech USB Optical Mouse'
-7,6,314,709,0,0,0,2617985,9,'Logitech USB Optical Mouse'
-7,6,314,708,0,0,0,2617993,9,'Logitech USB Optical Mouse'
-7,6,315,707,0,0,0,2618001,9,'Logitech USB Optical Mouse'
-7,6,316,706,0,0,0,2618009,9,'Logitech USB Optical Mouse'
-7,6,316,705,0,0,0,2618017,9,'Logitech USB Optical Mouse'
-7,6,318,705,0,0,0,2618025,9,'Logitech USB Optical Mouse'
-7,6,319,703,0,0,0,2618033,9,'Logitech USB Optical Mouse'
-7,6,320,703,0,0,0,2618041,9,'Logitech USB Optical Mouse'
-7,6,322,702,0,0,0,2618049,9,'Logitech USB Optical Mouse'
-7,6,322,701,0,0,0,2618057,9,'Logitech USB Optical Mouse'
-7,6,323,701,0,0,0,2618065,9,'Logitech USB Optical Mouse'
-7,6,324,701,0,0,0,2618401,9,'Logitech USB Optical Mouse'
-7,6,324,702,0,0,0,2618425,9,'Logitech USB Optical Mouse'
-7,6,324,703,0,0,0,2618449,9,'Logitech USB Optical Mouse'
-7,6,324,704,0,0,0,2618473,9,'Logitech USB Optical Mouse'
-7,6,324,705,0,0,0,2618497,9,'Logitech USB Optical Mouse'
-7,6,323,706,0,0,0,2618545,9,'Logitech USB Optical Mouse'
-7,6,323,707,0,0,0,2618577,9,'Logitech USB Optical Mouse'
-7,6,323,708,0,0,0,2618601,9,'Logitech USB Optical Mouse'
-7,6,323,709,0,0,0,2618937,9,'Logitech USB Optical Mouse'
-7,6,323,708,0,0,0,2618961,9,'Logitech USB Optical Mouse'
-7,6,323,707,0,0,0,2618969,9,'Logitech USB Optical Mouse'
-7,4,0,0,3,0,0,2619473,9,Logitech USB Optical Mouse
-6,4,0,0,3,0,0,2619473,2,Virtual core pointer
-7,5,0,0,3,0,0,2619649,9,Logitech USB Optical Mouse
-6,5,0,0,3,0,0,2619649,2,Virtual core pointer
-7,2,0,0,0,116,0,2621541,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2621541,3,Virtual core keyboard
-7,3,0,0,0,116,0,2621653,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2621653,3,Virtual core keyboard
-7,2,0,0,0,116,0,2621844,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2621844,3,Virtual core keyboard
-7,3,0,0,0,116,0,2621930,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2621930,3,Virtual core keyboard
-7,2,0,0,0,116,0,2622131,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2622132,3,Virtual core keyboard
-7,3,0,0,0,116,0,2622234,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2622234,3,Virtual core keyboard
-7,2,0,0,0,116,0,2622389,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2622390,3,Virtual core keyboard
-7,3,0,0,0,116,0,2622461,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2622461,3,Virtual core keyboard
-7,2,0,0,0,116,0,2622572,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2622572,3,Virtual core keyboard
-7,3,0,0,0,116,0,2622654,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2622654,3,Virtual core keyboard
-7,2,0,0,0,116,0,2622754,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2622754,3,Virtual core keyboard
-7,3,0,0,0,116,0,2622856,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2622856,3,Virtual core keyboard
-7,2,0,0,0,116,0,2622950,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2622950,3,Virtual core keyboard
-7,3,0,0,0,116,0,2623072,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2623072,3,Virtual core keyboard
-7,2,0,0,0,116,0,2623263,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2623263,3,Virtual core keyboard
-7,3,0,0,0,116,0,2623380,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2623380,3,Virtual core keyboard
-7,2,0,0,0,36,0,2624159,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,2624159,3,Virtual core keyboard
-0,21,0,0,0,0,0,2624195
-NEW-WINDOW:650,318:65011979,65011979,20997454,0,0,0:0x0+500+94:0,0:Delete a whole hierarchy
-0,21,0,0,0,0,0,2624195
-0,21,0,0,0,0,0,2624195
-0,21,0,0,0,0,0,2624195
-7,3,0,0,0,36,0,2624244,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,2624244,3,Virtual core keyboard
-7,2,0,0,0,36,0,2625527,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,2625527,3,Virtual core keyboard
-0,21,0,0,0,0,0,2625559
-NEW-WINDOW:2,48:65011929,65011929,748,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,2625559
-0,21,0,0,0,0,0,2625559
-0,21,0,0,0,0,0,2625559
-0,21,0,0,0,0,0,2625559
-NEW-WINDOW:529,102:65011831,65011831,65011987,0,0,0:0x0+739+27:0,0:
-0,21,0,0,0,0,0,2625559
-NEW-WINDOW:529,129:65011833,65011833,65011987,0,27,0:0x27+739+822:0,0:
-0,21,0,0,0,0,0,2625563
-NEW-WINDOW:0,0:65011987,65011987,748,0,0,0:0x0+739+849:0,0:Node Link Diagram view
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-0,21,0,0,0,0,0,2625563
-NEW-WINDOW:529,102:65011831,65011831,65011990,0,0,0:0x0+739+27:0,0:
-0,21,0,0,0,0,0,2625563
-NEW-WINDOW:529,129:65011833,65011833,65011990,0,27,0:0x27+739+822:0,0:
-0,21,0,0,0,0,0,2625596
-NEW-WINDOW:8384,0:65011990,65011990,748,0,0,0:-1084451152x32765+-1084451160+32765:2250,2250:
-0,21,0,0,0,0,0,2625596
-0,21,0,0,0,0,0,2625596
-0,21,0,0,0,0,0,2625596
-0,21,0,0,0,0,0,2625597
-NEW-WINDOW:529,355:65011831,65011831,65011992,0,0,0:0x0+430+27:0,0:
-0,21,0,0,0,0,0,2625597
-NEW-WINDOW:529,382:65011833,65011833,65011992,0,27,0:0x27+430+569:0,0:
-7,3,0,0,0,36,0,2625644,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,2625644,3,Virtual core keyboard
-0,21,0,0,0,0,0,2625644
-NEW-WINDOW:0,0:65011992,65011992,748,0,0,0:0x0+430+596:0,0:Node Link Diagram view
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625644
-0,21,0,0,0,0,0,2625645
-NEW-WINDOW:529,355:65011831,65011831,65011995,0,0,0:0x0+430+27:0,0:
-0,21,0,0,0,0,0,2625645
-NEW-WINDOW:529,382:65011833,65011833,65011995,0,27,0:0x27+430+569:0,0:
-7,2,0,0,0,37,0,2627088,10,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,2627088,3,Virtual core keyboard
-7,2,0,0,0,32,0,2627588,10,AT Translated Set 2 keyboard
-6,2,0,0,0,32,0,2627588,3,Virtual core keyboard
-0,21,0,0,0,0,0,2627634
-NEW-WINDOW:583,206:65011998,65011998,20997521,0,0,0:0x0+635+430:0,0:Open graph
-0,21,0,0,0,0,0,2627634
-0,21,0,0,0,0,0,2627634
-0,21,0,0,0,0,0,2627634
-7,3,0,0,0,32,0,2627669,10,AT Translated Set 2 keyboard
-6,3,0,0,0,32,0,2627669,3,Virtual core keyboard
-7,3,0,0,0,37,0,2627710,10,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,2627710,3,Virtual core keyboard
-7,2,0,0,0,28,0,2629209,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2629209,3,Virtual core keyboard
-7,3,0,0,0,28,0,2629291,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2629291,3,Virtual core keyboard
-7,2,0,0,0,26,0,2629447,10,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,2629447,3,Virtual core keyboard
-7,3,0,0,0,26,0,2629508,10,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,2629508,3,Virtual core keyboard
-7,2,0,0,0,39,0,2629649,10,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,2629649,3,Virtual core keyboard
-7,3,0,0,0,39,0,2629721,10,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,2629721,3,Virtual core keyboard
-7,2,0,0,0,28,0,2629912,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2629912,3,Virtual core keyboard
-7,3,0,0,0,28,0,2630008,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2630008,3,Virtual core keyboard
-7,2,0,0,0,17,0,2630149,10,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,2630149,3,Virtual core keyboard
-7,3,0,0,0,17,0,2630231,10,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,2630231,3,Virtual core keyboard
-7,2,0,0,0,42,0,2630871,10,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,2630871,3,Virtual core keyboard
-7,2,0,0,0,30,0,2630942,10,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,2630942,3,Virtual core keyboard
-7,3,0,0,0,42,0,2630976,10,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,2630976,3,Virtual core keyboard
-7,2,0,0,0,31,0,2631025,10,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,2631025,3,Virtual core keyboard
-7,3,0,0,0,30,0,2631067,10,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,2631067,3,Virtual core keyboard
-7,3,0,0,0,31,0,2631148,10,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,2631148,3,Virtual core keyboard
-7,2,0,0,0,62,0,2631657,10,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,2631657,3,Virtual core keyboard
-7,2,0,0,0,59,0,2632268,10,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,2632269,3,Virtual core keyboard
-7,3,0,0,0,59,0,2632350,10,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,2632350,3,Virtual core keyboard
-7,3,0,0,0,62,0,2632432,10,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,2632432,3,Virtual core keyboard
-7,2,0,0,0,28,0,2632810,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2632810,3,Virtual core keyboard
-7,3,0,0,0,28,0,2632911,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2632911,3,Virtual core keyboard
-7,2,0,0,0,46,0,2632985,10,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,2632985,3,Virtual core keyboard
-7,3,0,0,0,46,0,2633118,10,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,2633118,3,Virtual core keyboard
-7,2,0,0,0,33,0,2633137,10,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,2633137,3,Virtual core keyboard
-7,3,0,0,0,33,0,2633269,10,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,2633269,3,Virtual core keyboard
-7,2,0,0,0,56,0,2634920,10,AT Translated Set 2 keyboard
-6,2,0,0,0,56,0,2634920,3,Virtual core keyboard
-7,3,0,0,0,56,0,2635026,10,AT Translated Set 2 keyboard
-6,3,0,0,0,56,0,2635026,3,Virtual core keyboard
-7,2,0,0,0,25,0,2635769,10,AT Translated Set 2 keyboard
-6,2,0,0,0,25,0,2635769,3,Virtual core keyboard
-7,3,0,0,0,25,0,2635881,10,AT Translated Set 2 keyboard
-6,3,0,0,0,25,0,2635881,3,Virtual core keyboard
-7,2,0,0,0,36,0,2636698,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,2636698,3,Virtual core keyboard
-0,21,0,0,0,0,0,2636700
-NEW-WINDOW:10,50:65012006,65012006,748,0,0,1:91x110+0+0:0,0:
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636700
-0,21,0,0,0,0,0,2636738
-NEW-WINDOW:650,334:65012014,65012014,20997629,0,0,0:0x0+500+46:0,0:TLPB Import
-0,21,0,0,0,0,0,2636738
-0,21,0,0,0,0,0,2636738
-0,21,0,0,0,0,0,2636738
-7,3,0,0,0,36,0,2636767,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,2636767,3,Virtual core keyboard
-0,21,0,0,0,0,0,2636846
-NEW-WINDOW:8384,0:65012041,65012041,748,0,0,0:-1084451152x32765+-1084451160+32765:3451,3451:
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636846
-0,21,0,0,0,0,0,2636898
-NEW-WINDOW:8384,0:65012047,65012047,748,0,0,0:0x0+21695200+0:21690512,21690512:
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-0,21,0,0,0,0,0,2636898
-NEW-WINDOW:0,0:65012050,65012050,65012075,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,2636898
-NEW-WINDOW:0,0:65012052,65012052,65012075,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,2636898
-NEW-WINDOW:0,0:65012056,65012056,65012075,0,0,0:0x0+1024+460:0,0:
-0,21,0,0,0,0,0,2636917
-NEW-WINDOW:8384,0:65012031,65012031,748,0,0,0:-1084451152x32765+-1084451160+32765:3528,3528:
-0,21,0,0,0,0,0,2636917
-0,21,0,0,0,0,0,2636917
-0,21,0,0,0,0,0,2636917
-0,21,0,0,0,0,0,2636919
-NEW-WINDOW:8384,0:65012080,65012080,748,0,0,0:-1084451152x32765+-1084451160+32765:3528,3528:
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636919
-0,21,0,0,0,0,0,2636930
-NEW-WINDOW:8384,0:65012070,65012070,748,0,0,0:0x0+21695200+0:21690512,21690512:
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-0,21,0,0,0,0,0,2636930
-NEW-WINDOW:962,102:65012073,65012073,65012085,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,2636930
-NEW-WINDOW:962,102:65012075,65012075,65012085,0,0,0:0x0+1024+460:0,0:
-7,4,0,0,3,0,0,2639212,9,Logitech USB Optical Mouse
-6,4,0,0,3,0,0,2639212,2,Virtual core pointer
-7,5,0,0,3,0,0,2639372,9,Logitech USB Optical Mouse
-6,5,0,0,3,0,0,2639372,2,Virtual core pointer
-7,2,0,0,0,116,0,2640475,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2640475,3,Virtual core keyboard
-7,3,0,0,0,116,0,2640593,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2640593,3,Virtual core keyboard
-7,2,0,0,0,116,0,2640794,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,2640794,3,Virtual core keyboard
-7,3,0,0,0,116,0,2640906,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,2640906,3,Virtual core keyboard
-7,2,0,0,0,36,0,2641842,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,2641842,3,Virtual core keyboard
-0,21,0,0,0,0,0,2641903
-NEW-WINDOW:461,197:65012098,65012098,20997716,0,0,0:0x0+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
-0,21,0,0,0,0,0,2641903
-0,21,0,0,0,0,0,2641903
-0,21,0,0,0,0,0,2641903
-7,3,0,0,0,36,0,2641913,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,2641913,3,Virtual core keyboard
-7,2,0,0,0,28,0,2643299,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2643299,3,Virtual core keyboard
-7,3,0,0,0,28,0,2643381,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2643381,3,Virtual core keyboard
-7,2,0,0,0,26,0,2643532,10,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,2643532,3,Virtual core keyboard
-7,3,0,0,0,26,0,2643609,10,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,2643609,3,Virtual core keyboard
-7,2,0,0,0,39,0,2643759,10,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,2643759,3,Virtual core keyboard
-7,3,0,0,0,39,0,2643841,10,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,2643841,3,Virtual core keyboard
-7,2,0,0,0,28,0,2644002,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2644002,3,Virtual core keyboard
-7,3,0,0,0,28,0,2644094,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2644094,3,Virtual core keyboard
-7,2,0,0,0,17,0,2644189,10,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,2644189,3,Virtual core keyboard
-7,3,0,0,0,17,0,2644271,10,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,2644271,3,Virtual core keyboard
-7,2,0,0,0,42,0,2644659,10,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,2644659,3,Virtual core keyboard
-7,3,0,0,0,42,0,2644751,10,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,2644751,3,Virtual core keyboard
-7,2,0,0,0,30,0,2644754,10,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,2644754,3,Virtual core keyboard
-7,2,0,0,0,31,0,2644831,10,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,2644831,3,Virtual core keyboard
-7,3,0,0,0,30,0,2644873,10,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,2644873,3,Virtual core keyboard
-7,3,0,0,0,31,0,2644943,10,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,2644943,3,Virtual core keyboard
-7,2,0,0,0,62,0,2645422,10,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,2645422,3,Virtual core keyboard
-7,2,0,0,0,59,0,2645719,10,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,2645719,3,Virtual core keyboard
-7,3,0,0,0,59,0,2645791,10,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,2645791,3,Virtual core keyboard
-7,3,0,0,0,62,0,2645852,10,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,2645852,3,Virtual core keyboard
-7,2,0,0,0,28,0,2646178,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,2646178,3,Virtual core keyboard
-7,3,0,0,0,28,0,2646280,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,2646280,3,Virtual core keyboard
-7,2,0,0,0,46,0,2646340,10,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,2646340,3,Virtual core keyboard
-7,2,0,0,0,33,0,2646512,10,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,2646512,3,Virtual core keyboard
-7,3,0,0,0,46,0,2646516,10,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,2646516,3,Virtual core keyboard
-7,3,0,0,0,33,0,2646638,10,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,2646638,3,Virtual core keyboard
-7,2,0,0,0,36,0,2647930,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,2647930,3,Virtual core keyboard
-0,21,0,0,0,0,0,2647972
-NEW-WINDOW:1,28:65012106,65012106,20997789,0,0,0:0x0+500+36:0,0:TLP Export
-0,21,0,0,0,0,0,2647972
-0,21,0,0,0,0,0,2647972
-0,21,0,0,0,0,0,2647972
-7,3,0,0,0,36,0,2648022,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,2648022,3,Virtual core keyboard
-0,21,0,0,0,0,0,2648071
-NEW-WINDOW:459,141:65012098,65012098,748,0,0,0:459x141+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
-0,21,0,0,0,0,0,2648071
-0,21,0,0,0,0,0,2648071
-0,21,0,0,0,0,0,2648071
-0,21,0,0,0,0,0,2648072
-0,21,0,0,0,0,0,2648072
+7,6,321,709,0,0,0,8549381,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,318,709,0,0,0,8549388,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,300,709,0,0,0,8549396,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,275,716,0,0,0,8549404,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,258,722,0,0,0,8549412,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,247,728,0,0,0,8549420,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,237,731,0,0,0,8549428,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,227,736,0,0,0,8549436,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,218,741,0,0,0,8549444,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,209,743,0,0,0,8549452,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,204,746,0,0,0,8549460,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,198,748,0,0,0,8549468,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,192,750,0,0,0,8549476,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,188,750,0,0,0,8549484,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,186,750,0,0,0,8549492,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,184,753,0,0,0,8549500,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,182,754,0,0,0,8549516,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,179,755,0,0,0,8549524,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,178,755,0,0,0,8549532,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,177,756,0,0,0,8549540,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,176,756,0,0,0,8549548,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,174,756,0,0,0,8549556,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,172,758,0,0,0,8549564,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,171,759,0,0,0,8549588,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,169,759,0,0,0,8549596,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,168,760,0,0,0,8549612,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,167,762,0,0,0,8549644,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,167,763,0,0,0,8549652,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,166,764,0,0,0,8549668,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,164,765,0,0,0,8549676,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,163,766,0,0,0,8549684,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,161,768,0,0,0,8549692,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,160,769,0,0,0,8549700,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,158,769,0,0,0,8549708,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,157,770,0,0,0,8549724,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,155,771,0,0,0,8549756,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,154,771,0,0,0,8549804,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,153,771,0,0,0,8549812,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,152,771,0,0,0,8549820,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,151,771,0,0,0,8549828,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,149,771,0,0,0,8549836,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,148,771,0,0,0,8549844,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,1,0,0,8549956,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,1,0,0,8549956,2,Virtual core pointer
+7,5,0,0,1,0,0,8550116,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,1,0,0,8550116,2,Virtual core pointer
+0,21,0,0,0,0,0,8550153
+NEW-WINDOW:461,197:60817642,60817642,19002567,0,0,0:0x0+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,8550153
+0,21,0,0,0,0,0,8550153
+0,21,0,0,0,0,0,8550153
+7,2,0,0,0,28,0,8551428,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8551428,3,Virtual core keyboard
+7,3,0,0,0,28,0,8551524,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8551524,3,Virtual core keyboard
+7,2,0,0,0,26,0,8551684,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,26,0,8551684,3,Virtual core keyboard
+7,3,0,0,0,26,0,8551764,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,26,0,8551764,3,Virtual core keyboard
+7,2,0,0,0,39,0,8551924,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,39,0,8551924,3,Virtual core keyboard
+7,3,0,0,0,39,0,8551988,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,39,0,8551988,3,Virtual core keyboard
+7,2,0,0,0,28,0,8552180,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8552180,3,Virtual core keyboard
+7,3,0,0,0,28,0,8552228,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8552228,3,Virtual core keyboard
+7,2,0,0,0,17,0,8552340,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,17,0,8552340,3,Virtual core keyboard
+7,3,0,0,0,17,0,8552404,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,17,0,8552404,3,Virtual core keyboard
+7,2,0,0,0,42,0,8552756,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,42,0,8552756,3,Virtual core keyboard
+7,3,0,0,0,42,0,8552820,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,42,0,8552820,3,Virtual core keyboard
+7,2,0,0,0,30,0,8552836,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,30,0,8552836,3,Virtual core keyboard
+7,2,0,0,0,31,0,8552932,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,31,0,8552932,3,Virtual core keyboard
+7,3,0,0,0,30,0,8552964,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,30,0,8552964,3,Virtual core keyboard
+7,3,0,0,0,31,0,8553012,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,31,0,8553012,3,Virtual core keyboard
+7,2,0,0,0,62,0,8553620,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,8553620,3,Virtual core keyboard
+7,2,0,0,0,59,0,8554388,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,59,0,8554388,3,Virtual core keyboard
+7,3,0,0,0,59,0,8554452,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,59,0,8554452,3,Virtual core keyboard
+7,3,0,0,0,62,0,8554516,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,8554516,3,Virtual core keyboard
+7,2,0,0,0,28,0,8554964,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8554964,3,Virtual core keyboard
+7,3,0,0,0,28,0,8555044,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8555044,3,Virtual core keyboard
+7,2,0,0,0,46,0,8555060,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,8555060,3,Virtual core keyboard
+7,2,0,0,0,33,0,8555236,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,33,0,8555236,3,Virtual core keyboard
+7,3,0,0,0,46,0,8555253,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,8555253,3,Virtual core keyboard
+7,3,0,0,0,33,0,8555348,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,33,0,8555348,3,Virtual core keyboard
+7,2,0,0,0,56,0,8556356,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,56,0,8556357,3,Virtual core keyboard
+7,3,0,0,0,56,0,8556404,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,56,0,8556404,3,Virtual core keyboard
+7,2,0,0,0,25,0,8557013,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,25,0,8557013,3,Virtual core keyboard
+7,3,0,0,0,25,0,8557092,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,25,0,8557093,3,Virtual core keyboard
+7,2,0,0,0,36,0,8558949,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8558949,3,Virtual core keyboard
+0,21,0,0,0,0,0,8558977
+NEW-WINDOW:650,338:60817651,60817651,19002917,0,0,0:0x0+500+36:0,0:TLPB Export
+0,21,0,0,0,0,0,8558977
+0,21,0,0,0,0,0,8558977
+0,21,0,0,0,0,0,8558977
+7,3,0,0,0,36,0,8559013,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8559013,3,Virtual core keyboard
+0,21,0,0,0,0,0,8559040
+NEW-WINDOW:0,0:60817642,60817642,639,0,0,0:0x0+879+458:0,0:Exporting graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,8559040
+0,21,0,0,0,0,0,8559040
+0,21,0,0,0,0,0,8559040
+0,21,0,0,0,0,0,8559040
+0,21,0,0,0,0,0,8559040
+7,6,146,773,0,0,0,8561390,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,148,773,0,0,0,8561398,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,149,773,0,0,0,8561406,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,152,773,0,0,0,8561414,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,153,772,0,0,0,8561422,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,155,772,0,0,0,8561430,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,157,771,0,0,0,8561438,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,159,771,0,0,0,8561446,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,160,770,0,0,0,8561454,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,162,768,0,0,0,8561462,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,163,768,0,0,0,8561470,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,164,767,0,0,0,8561486,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,165,766,0,0,0,8561502,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,168,766,0,0,0,8561510,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,169,765,0,0,0,8561518,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,171,763,0,0,0,8561526,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,172,762,0,0,0,8561534,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,173,761,0,0,0,8561542,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,175,760,0,0,0,8561550,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,179,758,0,0,0,8561558,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,180,757,0,0,0,8561566,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,182,757,0,0,0,8561574,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,183,756,0,0,0,8561582,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,185,756,0,0,0,8561590,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,187,755,0,0,0,8561598,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,189,754,0,0,0,8561606,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,190,753,0,0,0,8561614,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,192,752,0,0,0,8561622,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,195,751,0,0,0,8561638,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,198,750,0,0,0,8561646,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,199,750,0,0,0,8561654,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,201,748,0,0,0,8561662,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,202,748,0,0,0,8561670,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,204,747,0,0,0,8561678,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,206,746,0,0,0,8561686,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,207,746,0,0,0,8561694,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,208,746,0,0,0,8561702,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,210,746,0,0,0,8561710,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,212,745,0,0,0,8561718,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,213,745,0,0,0,8561726,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,215,743,0,0,0,8561734,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,219,742,0,0,0,8561742,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,223,741,0,0,0,8561750,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,225,741,0,0,0,8561758,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,229,740,0,0,0,8561766,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,233,739,0,0,0,8561774,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,235,737,0,0,0,8561782,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,236,737,0,0,0,8561790,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,238,737,0,0,0,8561798,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,240,736,0,0,0,8561806,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,242,735,0,0,0,8561822,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,244,733,0,0,0,8561854,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,247,731,0,0,0,8561862,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,249,730,0,0,0,8561870,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,250,730,0,0,0,8561878,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,253,727,0,0,0,8561894,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,254,727,0,0,0,8561902,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,255,727,0,0,0,8561910,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,258,726,0,0,0,8561926,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,259,725,0,0,0,8561942,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,261,724,0,0,0,8561950,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,263,722,0,0,0,8561966,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,264,721,0,0,0,8561974,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,265,720,0,0,0,8561990,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,267,718,0,0,0,8561998,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,269,717,0,0,0,8562014,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,270,717,0,0,0,8562022,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,271,716,0,0,0,8562030,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,272,715,0,0,0,8562046,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,274,714,0,0,0,8562086,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,275,713,0,0,0,8562110,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,277,713,0,0,0,8562126,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,278,712,0,0,0,8562142,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,279,712,0,0,0,8562150,15,'PixArt Dell MS116 USB Optical Mouse'
+7,6,280,711,0,0,0,8562310,15,'PixArt Dell MS116 USB Optical Mouse'
+7,4,0,0,3,0,0,8563022,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,3,0,0,8563022,2,Virtual core pointer
+7,5,0,0,3,0,0,8563206,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,3,0,0,8563206,2,Virtual core pointer
+7,2,0,0,0,50,0,8564646,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,50,0,8564646,3,Virtual core keyboard
+7,2,0,0,0,119,0,8565174,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,119,0,8565174,3,Virtual core keyboard
+0,21,0,0,0,0,0,8565190
+NEW-WINDOW:650,318:60817675,60817675,19003195,0,0,0:0x0+500+94:0,0:Delete a whole hierarchy
+0,21,0,0,0,0,0,8565190
+0,21,0,0,0,0,0,8565190
+0,21,0,0,0,0,0,8565190
+7,3,0,0,0,119,0,8565254,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,119,0,8565254,3,Virtual core keyboard
+7,3,0,0,0,50,0,8565270,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,50,0,8565270,3,Virtual core keyboard
+7,2,0,0,0,36,0,8566102,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8566102,3,Virtual core keyboard
+0,21,0,0,0,0,0,8566133
+NEW-WINDOW:2,48:60817625,60817625,639,0,0,0:91x110+0+0:0,0:
+0,21,0,0,0,0,0,8566134
+0,21,0,0,0,0,0,8566134
+0,21,0,0,0,0,0,8566134
+0,21,0,0,0,0,0,8566134
+NEW-WINDOW:529,102:60817523,60817523,60817683,0,0,0:0x0+741+27:0,0:
+0,21,0,0,0,0,0,8566134
+NEW-WINDOW:529,129:60817525,60817525,60817683,0,27,0:0x27+741+822:0,0:
+0,21,0,0,0,0,0,8566138
+NEW-WINDOW:529,129:60817683,60817683,639,0,0,0:0x0+741+849:0,0:
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+0,21,0,0,0,0,0,8566138
+NEW-WINDOW:529,102:60817523,60817523,60817686,0,0,0:0x0+741+27:0,0:
+0,21,0,0,0,0,0,8566138
+NEW-WINDOW:529,129:60817525,60817525,60817686,0,27,0:0x27+741+822:0,0:
+0,21,0,0,0,0,0,8566150
+NEW-WINDOW:0,0:60817686,60817686,639,0,0,0:0x0+428+596:0,0:
+0,21,0,0,0,0,0,8566150
+0,21,0,0,0,0,0,8566150
+0,21,0,0,0,0,0,8566150
+0,21,0,0,0,0,0,8566150
+NEW-WINDOW:0,253:60817523,60817523,60817688,0,0,0:0x0+428+27:0,0:
+0,21,0,0,0,0,0,8566150
+NEW-WINDOW:0,280:60817525,60817525,60817688,0,27,0:0x27+428+569:0,0:
+0,21,0,0,0,0,0,8566154
+NEW-WINDOW:8384,0:60817688,60817688,639,0,0,0:-1491972096x32765+-1491972104+32765:1850,1850:
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+0,21,0,0,0,0,0,8566154
+NEW-WINDOW:529,102:60817523,60817523,60817691,0,0,0:0x0+1172+27:0,0:
+0,21,0,0,0,0,0,8566154
+NEW-WINDOW:529,129:60817525,60817525,60817691,0,27,0:0x27+1172+822:0,0:
+7,3,0,0,0,36,0,8566166,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8566166,3,Virtual core keyboard
+7,2,0,0,0,37,0,8568006,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,37,0,8568006,3,Virtual core keyboard
+7,2,0,0,0,32,0,8568390,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,32,0,8568390,3,Virtual core keyboard
+0,21,0,0,0,0,0,8568449
+NEW-WINDOW:583,206:60817697,60817697,19003362,0,0,0:0x0+635+430:0,0:Open graph
+0,21,0,0,0,0,0,8568449
+0,21,0,0,0,0,0,8568449
+0,21,0,0,0,0,0,8568449
+7,3,0,0,0,32,0,8568454,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,32,0,8568454,3,Virtual core keyboard
+7,3,0,0,0,37,0,8568486,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,37,0,8568486,3,Virtual core keyboard
+7,2,0,0,0,28,0,8569622,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8569622,3,Virtual core keyboard
+7,3,0,0,0,28,0,8569702,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8569702,3,Virtual core keyboard
+7,2,0,0,0,26,0,8569862,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,26,0,8569863,3,Virtual core keyboard
+7,3,0,0,0,26,0,8569926,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,26,0,8569926,3,Virtual core keyboard
+7,2,0,0,0,39,0,8570086,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,39,0,8570087,3,Virtual core keyboard
+7,3,0,0,0,39,0,8570183,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,39,0,8570183,3,Virtual core keyboard
+7,2,0,0,0,28,0,8570359,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8570359,3,Virtual core keyboard
+7,3,0,0,0,28,0,8570406,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8570406,3,Virtual core keyboard
+7,2,0,0,0,17,0,8570486,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,17,0,8570487,3,Virtual core keyboard
+7,3,0,0,0,17,0,8570550,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,17,0,8570550,3,Virtual core keyboard
+7,2,0,0,0,42,0,8570935,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,42,0,8570935,3,Virtual core keyboard
+7,3,0,0,0,42,0,8571015,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,42,0,8571015,3,Virtual core keyboard
+7,2,0,0,0,30,0,8571031,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,30,0,8571031,3,Virtual core keyboard
+7,2,0,0,0,31,0,8571126,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,31,0,8571126,3,Virtual core keyboard
+7,3,0,0,0,30,0,8571159,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,30,0,8571159,3,Virtual core keyboard
+7,3,0,0,0,31,0,8571207,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,31,0,8571207,3,Virtual core keyboard
+7,2,0,0,0,62,0,8571799,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,8571799,3,Virtual core keyboard
+7,2,0,0,0,59,0,8572295,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,59,0,8572295,3,Virtual core keyboard
+7,3,0,0,0,59,0,8572391,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,59,0,8572391,3,Virtual core keyboard
+7,3,0,0,0,62,0,8572423,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,8572423,3,Virtual core keyboard
+7,2,0,0,0,28,0,8573527,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8573527,3,Virtual core keyboard
+7,3,0,0,0,28,0,8573607,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8573607,3,Virtual core keyboard
+7,2,0,0,0,46,0,8573671,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,8573671,3,Virtual core keyboard
+7,3,0,0,0,46,0,8573879,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,8573879,3,Virtual core keyboard
+7,2,0,0,0,33,0,8573895,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,33,0,8573895,3,Virtual core keyboard
+7,3,0,0,0,33,0,8573991,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,33,0,8573991,3,Virtual core keyboard
+7,2,0,0,0,56,0,8574471,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,56,0,8574471,3,Virtual core keyboard
+7,3,0,0,0,56,0,8574519,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,56,0,8574519,3,Virtual core keyboard
+7,2,0,0,0,25,0,8575047,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,25,0,8575047,3,Virtual core keyboard
+7,3,0,0,0,25,0,8575111,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,25,0,8575111,3,Virtual core keyboard
+7,2,0,0,0,36,0,8575751,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8575752,3,Virtual core keyboard
+0,21,0,0,0,0,0,8575753
+NEW-WINDOW:10,50:60817705,60817705,639,0,0,1:91x110+0+0:0,0:
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575753
+0,21,0,0,0,0,0,8575788
+NEW-WINDOW:650,334:60817713,60817713,19003697,0,0,0:0x0+500+46:0,0:TLPB Import
+0,21,0,0,0,0,0,8575788
+0,21,0,0,0,0,0,8575788
+0,21,0,0,0,0,0,8575788
+7,3,0,0,0,36,0,8575799,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8575799,3,Virtual core keyboard
+0,21,0,0,0,0,0,8575864
+NEW-WINDOW:8384,0:60817740,60817740,639,0,0,0:-1491972096x32765+-1491972104+32765:2876,2876:
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575864
+0,21,0,0,0,0,0,8575895
+NEW-WINDOW:8384,0:60817746,60817746,639,0,0,0:0x0+33028272+0:33073888,33073888:
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+0,21,0,0,0,0,0,8575895
+NEW-WINDOW:0,0:60817749,60817749,60817774,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,8575895
+NEW-WINDOW:0,0:60817751,60817751,60817774,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,8575895
+NEW-WINDOW:0,0:60817755,60817755,60817774,0,0,0:0x0+1024+460:0,0:
+0,21,0,0,0,0,0,8575917
+NEW-WINDOW:0,0:60817730,60817730,639,0,0,0:0x0+1172+849:0,0:
+0,21,0,0,0,0,0,8575917
+0,21,0,0,0,0,0,8575917
+0,21,0,0,0,0,0,8575917
+0,21,0,0,0,0,0,8575919
+NEW-WINDOW:8384,0:60817779,60817779,639,0,0,0:-1491972096x32765+-1491972104+32765:2963,2963:
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575919
+0,21,0,0,0,0,0,8575930
+NEW-WINDOW:8384,0:60817769,60817769,639,0,0,0:0x0+33028272+0:33073888,33073888:
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+0,21,0,0,0,0,0,8575930
+NEW-WINDOW:960,102:60817772,60817772,60817784,0,0,0:0x0+741+27:0,0:
+0,21,0,0,0,0,0,8575930
+NEW-WINDOW:960,129:60817774,60817774,60817784,0,0,0:0x27+741+822:0,0:
+7,4,0,0,3,0,0,8577312,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,3,0,0,8577312,2,Virtual core pointer
+7,5,0,0,3,0,0,8577481,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,3,0,0,8577481,2,Virtual core pointer
+7,2,0,0,0,116,0,8578664,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,8578664,3,Virtual core keyboard
+7,3,0,0,0,116,0,8578760,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,8578760,3,Virtual core keyboard
+7,2,0,0,0,116,0,8578904,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,8578904,3,Virtual core keyboard
+7,3,0,0,0,116,0,8578984,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,8578984,3,Virtual core keyboard
+7,2,0,0,0,116,0,8579144,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,8579144,3,Virtual core keyboard
+7,3,0,0,0,116,0,8579208,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,8579208,3,Virtual core keyboard
+7,2,0,0,0,116,0,8579352,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,8579352,3,Virtual core keyboard
+7,3,0,0,0,116,0,8579432,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,8579432,3,Virtual core keyboard
+7,2,0,0,0,36,0,8580168,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8580168,3,Virtual core keyboard
+7,3,0,0,0,36,0,8580248,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8580248,3,Virtual core keyboard
+7,2,0,0,0,62,0,8580904,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,8580904,3,Virtual core keyboard
+7,2,0,0,0,28,0,8581512,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8581512,3,Virtual core keyboard
+7,3,0,0,0,28,0,8581576,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8581576,3,Virtual core keyboard
+7,2,0,0,0,46,0,8581672,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,8581672,3,Virtual core keyboard
+7,3,0,0,0,46,0,8581832,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,8581832,3,Virtual core keyboard
+7,2,0,0,0,33,0,8581864,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,33,0,8581864,3,Virtual core keyboard
+7,3,0,0,0,33,0,8581960,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,33,0,8581960,3,Virtual core keyboard
+7,2,0,0,0,56,0,8582328,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,56,0,8582328,3,Virtual core keyboard
+7,3,0,0,0,56,0,8582376,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,56,0,8582376,3,Virtual core keyboard
+7,2,0,0,0,25,0,8583048,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,25,0,8583049,3,Virtual core keyboard
+7,3,0,0,0,25,0,8583112,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,25,0,8583113,3,Virtual core keyboard
+7,3,0,0,0,62,0,8583272,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,8583272,3,Virtual core keyboard
+7,2,0,0,0,36,0,8584041,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8584041,3,Virtual core keyboard
+7,3,0,0,0,36,0,8584121,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8584121,3,Virtual core keyboard
+7,4,0,0,3,0,0,8585690,15,PixArt Dell MS116 USB Optical Mouse
+6,4,0,0,3,0,0,8585690,2,Virtual core pointer
+7,5,0,0,3,0,0,8585834,15,PixArt Dell MS116 USB Optical Mouse
+6,5,0,0,3,0,0,8585834,2,Virtual core pointer
+7,2,0,0,0,116,0,8586857,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,8586857,3,Virtual core keyboard
+7,3,0,0,0,116,0,8586953,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,8586953,3,Virtual core keyboard
+7,2,0,0,0,116,0,8587129,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,116,0,8587129,3,Virtual core keyboard
+7,3,0,0,0,116,0,8587241,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,116,0,8587241,3,Virtual core keyboard
+7,2,0,0,0,36,0,8587801,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8587801,3,Virtual core keyboard
+0,21,0,0,0,0,0,8587849
+NEW-WINDOW:461,197:60817807,60817807,19004187,0,0,0:0x0+879+458:0,0:Exporting graph "TLPBZ"
+0,21,0,0,0,0,0,8587849
+0,21,0,0,0,0,0,8587849
+0,21,0,0,0,0,0,8587849
+7,3,0,0,0,36,0,8587865,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8587865,3,Virtual core keyboard
+7,2,0,0,0,28,0,8588825,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8588825,3,Virtual core keyboard
+7,3,0,0,0,28,0,8588889,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8588889,3,Virtual core keyboard
+7,2,0,0,0,26,0,8589065,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,26,0,8589066,3,Virtual core keyboard
+7,3,0,0,0,26,0,8589145,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,26,0,8589145,3,Virtual core keyboard
+7,2,0,0,0,39,0,8589289,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,39,0,8589290,3,Virtual core keyboard
+7,3,0,0,0,39,0,8589353,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,39,0,8589353,3,Virtual core keyboard
+7,2,0,0,0,28,0,8589513,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8589514,3,Virtual core keyboard
+7,3,0,0,0,28,0,8589577,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8589577,3,Virtual core keyboard
+7,2,0,0,0,17,0,8589689,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,17,0,8589690,3,Virtual core keyboard
+7,3,0,0,0,17,0,8589753,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,17,0,8589753,3,Virtual core keyboard
+7,2,0,0,0,42,0,8590074,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,42,0,8590074,3,Virtual core keyboard
+7,3,0,0,0,42,0,8590138,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,42,0,8590138,3,Virtual core keyboard
+7,2,0,0,0,30,0,8590185,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,30,0,8590186,3,Virtual core keyboard
+7,2,0,0,0,31,0,8590282,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,31,0,8590282,3,Virtual core keyboard
+7,3,0,0,0,30,0,8590314,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,30,0,8590314,3,Virtual core keyboard
+7,3,0,0,0,31,0,8590377,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,31,0,8590377,3,Virtual core keyboard
+7,2,0,0,0,62,0,8590730,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,62,0,8590730,3,Virtual core keyboard
+7,2,0,0,0,59,0,8590937,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,59,0,8590938,3,Virtual core keyboard
+7,3,0,0,0,59,0,8591082,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,59,0,8591082,3,Virtual core keyboard
+7,3,0,0,0,62,0,8591178,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,62,0,8591178,3,Virtual core keyboard
+7,2,0,0,0,28,0,8591450,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,28,0,8591450,3,Virtual core keyboard
+7,3,0,0,0,28,0,8591498,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,28,0,8591498,3,Virtual core keyboard
+7,2,0,0,0,46,0,8591562,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,46,0,8591562,3,Virtual core keyboard
+7,3,0,0,0,46,0,8591706,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,46,0,8591706,3,Virtual core keyboard
+7,2,0,0,0,33,0,8591946,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,33,0,8591946,3,Virtual core keyboard
+7,3,0,0,0,33,0,8592042,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,33,0,8592042,3,Virtual core keyboard
+7,2,0,0,0,36,0,8592538,13,Dell KB216 Wired Keyboard
+6,2,0,0,0,36,0,8592538,3,Virtual core keyboard
+0,21,0,0,0,0,0,8592572
+NEW-WINDOW:1,28:60817815,60817815,19004395,0,0,0:0x0+500+36:0,0:TLP Export
+0,21,0,0,0,0,0,8592572
+0,21,0,0,0,0,0,8592572
+0,21,0,0,0,0,0,8592572
+7,3,0,0,0,36,0,8592618,13,Dell KB216 Wired Keyboard
+6,3,0,0,0,36,0,8592618,3,Virtual core keyboard
+0,21,0,0,0,0,0,8592669
+NEW-WINDOW:459,141:60817807,60817807,639,0,0,0:459x141+879+458:0,0:Exporting graph "TLPBZ"
+0,21,0,0,0,0,0,8592669
+0,21,0,0,0,0,0,8592669
+0,21,0,0,0,0,0,8592669
+0,21,0,0,0,0,0,8592669
+0,21,0,0,0,0,0,8592669

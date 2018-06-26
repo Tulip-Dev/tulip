@@ -18,20 +18,19 @@ A Visual Representation of the Tulip Directory
 ==============================================
 
 .. |icon_panels| image:: _images/icon_panels.png
-	:width: 150
+
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
-     :width: 26
-.. |icon_wsm_label_visible_dis| image:: ../../library/tulip-gui/resources/icons/20/labels_disabled.png
-    :width: 20
+
+.. |icon_wsm_label_visible_dis| image:: ../../library/tulip-gui/resources/icons/20/labels_enabled.png
+
 .. |icon_wsm_node_shape_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_shape.png
-    :width: 20
 
 This introductory tutorial will be a good opportunity to apply some of the basic features of Tulip presented in the previous sections. We will see how we can **generate a graph**, apply a **resizing algorithm**, and more.
 
 Generating the graph
 --------------------
 
-Before anything else, we will need Tulip to **generate** the graph:
+Before anything else, we will need Tulip to **import** the graph:
 
 * Click on the |icon_import| **Import** icon in the toolbar on the left, or in the center of the workspace if no graph is currently opened, or select *File → Import*.
 
@@ -42,7 +41,7 @@ Before anything else, we will need Tulip to **generate** the graph:
 	:width: 770
 
 
-* Select a directory. Here we will simply select the *tulip* directory and let Tulip generate a tree layout automatically. By default, Tulip will display the corresponding *Spreadsheet View* on the left, and a *Node Link Diagram view* on the right.
+* Select a directory. Here we will simply select the *tulip* directory and let Tulip generate a tree layout automatically. By default (see `Preferences <gui.html#preferences>`_), Tulip will display the corresponding *Spreadsheet View* on the left, and a *Node Link Diagram view* on the right.
 
 
 .. note:: The default layout algorithm applied to file system directories is the *Bubble Tree* algorithm, but other layout algorithms are available.
@@ -72,21 +71,20 @@ Here the goal will be to apply a few basic algorithms to greatly improve the lay
 	:width: 770
 
 
-In this particular representation, we can notice how the number of files contained in a particular folder influences its size. The wide and circular directory on the top right corresponds to the "html" folder, which contains numerous files and only one subfolder. However, at the moment the size of the nodes is irrelevant, and so it might be interesting to map the size of the files to the size of the nodes. From now on, we will focus on a small subfolder, for better visibility.
+In this representation, we can notice how the number of files contained in a directory influences its size. The wide and circular directory on the top right corresponds to the "html" folder, which contains numerous files and only one subfolder. However, for the moment the size of the nodes is not relevant, and so it might be interesting to map that size to the size of the files. From now on, we will focus on a small subfolder, for better visibility.
 
 
 .. image:: _images/tutorial01_04b.png
 	:width: 770
 
 
-* First, we want the area occupied by the nodes to reflect the size of the files they represent. Naturally, the size of each file is part of the data collected by Tulip when generating the spreadsheet. Therefore, we simply have to apply a resizing algorithm on the basis of the file sizes. 
+* First, we want the area occupied by the nodes to reflect the size of the files they represent. Naturally, the size of each file is part of the data collected by Tulip when importing the directory. Therefore, we simply have to apply a resizing algorithm on the basis of the file sizes.
 
 Here are the settings (the size of the files will be mapped to the area of the circles, on a scale from 1 to 10):
 
 
 .. image:: _images/tutorial01_05b.png
-	:width: 200
-
+	:align: center
 
 The result is the following layout. As we can see, the resizing algorithm has caused some overlap between nodes. 
 
@@ -95,7 +93,7 @@ The result is the following layout. As we can see, the resizing algorithm has ca
 	:width: 770
 
 
-* In order to solve that problem, we will simply ask Tulip to redraw the tree, by applying the *Bubble Tree* layout algorithm once again. Here is the result: 
+* In order to solve that problem, we will simply re-apply the *Bubble Tree* layout algorithm (click on *Bubble Tree* in the *Algorithms* top left panel). Here is the result:
 
 
 .. image:: _images/tutorial01_07b.png
@@ -108,12 +106,10 @@ From a 2D to a 2.5D Representation
 
 Now that the area of the nodes is dealt with, we will map the size of the files to the depth of the half-cylinders. We will apply the same resizing algorithm as before, only this time the width and height settings will remain unchanged, whereas the resizing will occur on the depth value. We will also change the scale, making it from 1 to 20. This should help highlight the diversity in file sizes. Here are the settings:
 
-
 .. image:: _images/tutorial01_08b.png
-	:width: 200
+	:align: center
 
-
-In order to observe the newly-applied algorithm, we will take advantage of the possibilities offered by the *Node Link Diagram view* (explained in detail in the *Navigate in graph* tooltip). And there we have it, a visual representation of the Tulip directory.
+In order to observe the result of the previously applied algorithm, we will do a X-Y rotation using the current *Navigate in graph* interactor (see `Toolbar <workspace.html#toolbar>`_ for more details). And there we have it, a visual representation of the Tulip directory.
 
 
 .. image:: _images/tutorial01_09b.png
@@ -136,34 +132,29 @@ Taking Advantage of the Geographic view: A Simple US Temperature Map
 ====================================================================
 
 .. |icon_add_panel| image:: _images/icon_addpanel.png
-    :width: 60
 
 The potential offered by the *Geographic view* is indeed great for data visualization. In this short tutorial, we will go through the process of **importing a CSV file**, **generating a geographic view** on the basis of this data, and we will apply some basic algorithms in order to make our visualization as relevant as possible.
 
 Importing the data
 ------------------
 
-The data used for this visualization was downloaded from the `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`_ website. A *CSV* file can easily be generated from the XLS table found in the archive.
+The data used for this visualization was downloaded from the `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/the-city-temperature-data-set/>`_ website. A *CSV* file can easily be generated from the XLS table found in the archive.
 
-The point here is to make sense of the following raw data, using some of Tulip's basic features:
-
+The point here is to make sense of the following raw data, using some of the Tulip basic features:
 
 .. image:: _images/tutorial02_01b.png
-	:width: 300
-
 
 * The first step will be to import the *CSV* file into Tulip. As the reader should be comfortable with that process by now, we will simply include a link to the relevant section: :ref:`csv`. The default import settings should work nicely, and of course these are *new entities (nodes)*.
 
-* Here again, Tulip generates a two-panel view with the *Spreadsheet view* on the left, and a *Node Link Diagram view* on the right. Therefore, we might want to start by switching to a one-panel view. Just like we did previously, we will use the icons situated at the bottom of the view: |icon_panels|
+* Here again, Tulip displays a two-panel view with the *Spreadsheet view* on the left, and a *Node Link Diagram view* on the right. Therefore, we might want to start by switching to a one-panel view. Just like we did previously, we will use the icons situated at the bottom of the view: |icon_panels|
 
 Generating a *Geographic view*
 ------------------------------
 
-* Now that our workspace is set up, it is time to generate the *Geographic view*. The simplest way is to double click on the graph name in the graph window, or else we can also click on the |icon_add_panel| icon. Select *Geographic view*, click on *OK*, and the RoadMap view should appear. Also, the following warning message should pop up:
+* Now that our workspace is set up, it is time to generate the *Geographic view*. The simplest way is to double click on the graph name in the *Graphs* panel on the left, or else we can also click on the |icon_add_panel| icon. Select *Geographic view*, click on *OK*, and the RoadMap view should appear. Also, the following warning message should pop up:
 
 
 .. image:: _images/tutorial02_02b.png
-	:width: 300
 	:align: center
 
 
@@ -171,19 +162,17 @@ Generating a *Geographic view*
 .. note:: Because of the nature of the visualization we are aiming for, we suggest switching to the Hybrid view.
 
 
-* In order to place the nodes, click on the *Geolocation* tab on the right-hand side of the view. Despite the fact that the data includes the latitude and longitude of US cities, these should be negative and for that reason, we will use the city names instead. Fortunately, they will be sufficient for Google Maps to place the nodes. The *geolocation method* will therefore be **By address** and the string property will be **City**:
+* In order to place the nodes, click on the *Geolocation* tab on the right-hand side of the view. Despite the fact that the data includes the latitude and longitude of US cities, the longitude values are not directly usable because they must be negative but they are not, and for that reason, we will use the city names instead. Fortunately, they will be sufficient for Google Maps to place the nodes. The *geolocation method* will therefore be **By address** and the string property will be **City**:
 
 
 .. image:: _images/tutorial02_03b.png
-	:width: 300
 	:align: center
 
 
-* We can see the process of geolocation taking place thanks to this progress bar:
+* We can see the process of geolocation taking place, thanks to this progress bar:
 
 
 .. image:: _images/tutorial02_04b.png
-	:width: 300
 	:align: center
 
 
@@ -203,14 +192,12 @@ Improving the layout
 
 Now that the nodes are correctly placed, we will apply a few algorithms to create the most relevant layout possible:
 
-1. First, we will modify the shape. Since the usual toolbar is not present in the *Geographic view*, we will need to switch to the *Spreadsheet view* to proceed to these changes. To modify the default value of all nodes at once, *Right click* on the said value (the node does not matter) → *Set value(s) of* → *All nodes of the current graph*. Here we will use the *2D - Rounded box* shape.
+1. First, we will modify the shape. Since the usual toolbar is not present in the *Geographic view*, we can switch to the *Spreadsheet view* to proceed to these changes. To modify the default value for all nodes at once, *Right click* in the *viewColor* column (the node does not matter) → *Set value(s) of* → *All nodes of the current graph*. Here we will use the *2D - Rounded box* shape.
 
 
 .. image:: _images/tutorial02_06b.png
-	:width: 400
 
-
-2. We will go through the same process to increase the size of the nodes (making the *viewSize* values W:5, H:5, D:1), as well as the default color of the nodes (*viewColor*), in order to achieve this kind of layout:
+2. We will go through the same process (in clicking in a view property column) to increase the size of the nodes (making the *viewSize* values W:5, H:5, D:1), as well as the default color of the nodes (*viewColor*), in order to achieve this kind of layout:
 
 
 .. image:: _images/tutorial02_07b.png
@@ -221,21 +208,19 @@ Now that the nodes are correctly placed, we will apply a few algorithms to creat
 
 
 .. image:: _images/tutorial02_08b.png
-	:width: 200
-
+	:align: center
 
 4. The final step is to apply a *Coloring* algorithm. As we are dealing with temperature in this case, the choice of a color gradient will be paramount in creating a relevant visualization. First, open the *Color Mapping* algorithm settings, in the *Coloring* section. Of course, the input will be **JanTemp**, and the target will be the nodes. In order to configure the color scale, we will click once on the gradient, go in the *Predefined color scale* tab, and select the *RdYlBu_9.png* color scale.
 
 
 .. image:: _images/tutorial02_09b.png
-	:width: 400
-
+	:align: center
 
 By default, the maximum value corresponds to blue, and the minimum to red. In order to invert the scale, click one more time on the gradient, and in the first tab, click on the double arrow.
 
 
 .. image:: _images/tutorial02_10b.png
-	:width: 400
+	:align: center
 
 |
 
@@ -251,9 +236,12 @@ Analysis of a Multivariate Dataset
 ==================================
 
 .. |icon_workspace_macros| image:: _images/icon_workspace_macros.png
-	:width: 180
 
-In this third tutorial, we will highlight some of the possibilities offered by Tulip for the analysis of multivariate datasets. The dataset may already be familiar to the reader, as it was featured in the :ref:`workspace` section. The file may be downloaded :download:`here <./_documents/04cars_data.csv>`, and is available on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`_.
+.. |icon_resize_nodes| image:: _images/set_node_size.png
+					       
+.. |icon_color_nodes| image:: _images/set_node_color.png
+					       
+In this third tutorial, we will highlight some of the possibilities offered by Tulip for the analysis of multivariate datasets. The dataset may already be familiar to the reader, as it was featured in the :ref:`workspace` section. The file may be downloaded :download:`here <./_documents/04cars_data.csv>`, and is available on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/2004-cars-and-trucks-data/>`_.
 
 Note that originally, data was missing for some cars, and so in order to *clean* the file and avoid having to deal with problems when importing the file into Tulip, we chose the strategy of simply discarding those vehicles. The resulting *cleaned* file consists of the vehicles for which all the information was available.
 
@@ -264,7 +252,7 @@ In this case, we will ask ourselves a somewhat naive question when dealing with 
 Generating a *Scatter Plot 2D view*
 -----------------------------------
 
-* The first step is of course to import the data in Tulip. Once the *Spreadsheet view* and *Node Link Diagram view* have been generated, we will close the latter, as it is irrelevant to this analysis.
+* The first step is of course to import the data in Tulip. Once the *Spreadsheet view* and *Node Link Diagram view* have been generated, we will close the latter, as it is not relevant to this analysis.
 
 
 .. image:: _images/tutorial03_01b.png
@@ -273,12 +261,10 @@ Generating a *Scatter Plot 2D view*
 
 .. note:: By default, when the *Spreadsheet view* is generated, the columns are re-arranged in alphabetical order. We might want to re-organize them for better visibility. In order to do that, simply drag the column title to the desired slot.
 
-* Next, we will generate a *Scatter Plot 2D view*, with the following graph properties. The idea of course, is to include as many properties that may be relevant as possible, in order to produce a more accurate analysis. We can also pair related properties together in order to obtain a nicer layout:
-
+* Next, we will generate a *Scatter Plot 2D view*, for the following imported properties. The idea of course, is to include as many properties that may be relevant as possible, in order to produce a more accurate analysis. We can also pair related properties together in order to obtain a nicer layout:
 
 .. image:: _images/tutorial03_02b.png
-	:width: 200
-
+	:align: center
 
 After closing the *Properties* tab, the following view is generated:
 
@@ -292,21 +278,18 @@ Evidently, there is a lot to explore here. However, thanks to the mapping of the
 Analyzing the data using subgraphs
 ----------------------------------
 
-In order to confirm this hypothesis, we will generate other *Scatter Plot 2D views* with fewer graph properties, and use a multi-panel view. In addition to that, we will also generate a *Parallel Coordinates view*, which will enable us, not only to visualize the data differently, but also to go deeper in our analysis:
+In order to confirm this hypothesis, we will generate other *Scatter Plot 2D views* with fewer properties, and use a multi-panel view. In addition to that, we will also generate a *Parallel Coordinates view*, which will enable us, not only to visualize the data differently, but also to go deeper in our analysis:
 
 
 .. image:: _images/tutorial03_04b.png
 	:width: 770
 
 
-By default, the size of the nodes is too small. Also, at the moment their color does not represent anything. Therefore, we will use the *Spreadsheet view* to manually resize the nodes. We will also map the type of vehicle to the color of the nodes, using the *Search* mode. To access the *Search* mode, either press *Ctrl+F* or click on *Search* in the |icon_workspace_macros| panel. The *Search* mode enables the user to toggle node and/or edge selection based on a filter system. In order to select all vehicles in the **SUV** category, we proceed as follows:
-
+By default, the size of the nodes is rather small. Also, at the moment their color does not represent anything. Therefore, we will use the *Scatter plot 2D view* toolbar button [ |icon_resize_nodes| ] of the quick access bar to manually resize the nodes. We will also map the color of the nodes to the type of vehicle, using the *Search* mode. To access the *Search* mode, either press *Ctrl+F* or click on *Search* in the |icon_workspace_macros| panel. The *Search* mode enables the user to toggle node and/or edge selection based on a filter system. In order to select all vehicles in the **SUV** category, we proceed as follows:
 
 .. image:: _images/tutorial03_05b.png
-	:width: 400
 
-
-After clicking on the *Search* button, the 59 nodes for which the **SUV** property was "true" are selected. After that, *Right click* on any **viewColor** cell, *Set value(s) of* → *Selected nodes of the current graph* and choose a color. If we go back to the multi-panel view, here is what it might look like after all vehicles types have been assigned a color. We also chose to modify the *Lines type* in the *View setup* (*Right click* anywhere in the view except on graph elements to access the *View setup*):
+After clicking on the *Search* button, the 59 nodes for which the **SUV** property was "true" are selected. After that, we will use the *Scatter plot 2D view* toolbar button [ |icon_color_nodes| ] of the quick access bar and choose a color. If we go back to the multi-panel view, here is what it might look like after all vehicles types have been assigned a color. We also chose to modify the *Lines type* in the *View setup* (*Right click* anywhere in the view except on graph elements to access the *View setup*):
 
 
 .. image:: _images/tutorial03_06b.png
@@ -325,8 +308,6 @@ In order to do that, we will go through a similar process to the one we used to 
 
 
 .. image:: _images/tutorial03_07b.png
-	:width: 400
-
 
 Here is what the view looks like when focussing on the **SUV** subgraph:
 
@@ -362,7 +343,7 @@ Analyzing the data using highlights
 
 Another strategy that we can rely on when analyzing a multivariate dataset, instead of creating subgraphs for every category we want to look at, is the highlighting tool featured in Tulip. To access this tool, we will focus on our *Parallel Coordinates view*, and click on the |icon_par_axis_sliders| icon.
 
-Here, we will see how applying filters to one or several properties simultaneously may effect the views.
+Here, we will see how applying filters to one or several properties simultaneously may affect the views.
 
 One thing we might want to know is how the other properties may affect our previous analysis. In order to find out, we will play around with the *Axis sliders* in the *Parallel Coordinates view* and observe how the scatter plots react to the filters we apply. For more details on how to use the *Axis slider*, open its configuration panel by clicking on *Axis slider* at the top left of the view.
 
@@ -404,17 +385,13 @@ The first file contains five columns, respectively **Name**, **Birth Place**, **
 
 
 .. image:: _images/tutorial04_01b.png
-	:width: 400
-
 
 The second file contains two columns, each corresponding to one player. Every line represents a game played between two players.
 
 
 .. image:: _images/tutorial04_02b.png
-	:width: 150
 
-
-In order to import the data, follow the instructions as explained in :ref:`this section <csv>`. Make sure to choose ``,`` as field separator for the games file.
+In order to import the data, follow the instructions as explained in :ref:`csv`. Make sure to choose ``,`` as field separator for the games file.
 
 The goal
 ^^^^^^^^
@@ -454,17 +431,14 @@ Now that the layout is cleaner, we simply need to apply a few algorithms in orde
 
 
 .. image:: _images/tutorial04_05b.png
-	:width: 200
-
+	:align: center
 
 .. note:: This pattern will reoccur very often when analyzing a network. First, we apply a particular *Measure* algorithm in order to extract information from the graph, and then store its result in the **viewMetric** column so that we can apply a second algorithm, whether it be a *Resizing*, *Color mapping* algorithm, etc.
 
-* In order to identify communities within this very small network of 8 World Champions, we will use the *Louvain* algorithm in the *Measure* → *Clustering* section. Now if we have a look at the *Spreadsheet view*, we can see that the **viewMetric** column contains one of three integers. That tells us that our algorithm identified three communities. Note that this information is also stored in the *Louvain* algorithm settings themselves.
-
+* In order to identify communities within this very small network of 8 World Champions, we will use the *Louvain* algorithm in the *Measure* → *Clustering* section. Now if we have a look at the *Spreadsheet view*, we can see that the **viewMetric** column contains one of three integers. That tells us that our algorithm identified three communities. Note that this information is also stored in the *Louvain* algorithm output parameter **#communities**.
 
 .. image:: _images/tutorial04_06b.png
-	:width: 200
-
+	:align: center
 
 * Now we will apply the *Color Mapping* algorithm, choosing three distinct colors so that the commuities are easily identified in the *Geographic view*. This might be the result:
 
@@ -475,10 +449,8 @@ Now that the layout is cleaner, we simply need to apply a few algorithms in orde
 
 * The final step will consist in manually tweaking the layout in order to make the data more accessible. That is, we will resize the labels, map their color to that of the corresponding nodes, and finally take care of the overlap between the labels. We will have to switch back to the *Spreadsheet view* in order to implement some of these changes. Here is one example of the type of view we might reach:
 
-
 .. image:: _images/tutorial04_08b.png
 	:width: 770
-
 
 This is our final view. If we go back to our original goal, here is what we have achieved:
 
@@ -529,14 +501,13 @@ There are several ways to create a new graph property in the *Spreadsheet view*,
 
 
 .. image:: _images/tutorial04_11b.png
-	:width: 400
+	:align: center
 
 Next, we can copy the content of the **viewMetric** property into this newly-created and empty column, with a *Right click* on the sources property → *Copy*, and a similar window will pop up:
 
 
 .. image:: _images/tutorial04_12b.png
-	:width: 400
-
+	:align: center
 
 
 We can repeat this process in order to have access simultaneously to a variety of metrics related to our graph. We might then want to analyze those metrics in relation to each other, for example in a *Scatter Plot 2D view*:
