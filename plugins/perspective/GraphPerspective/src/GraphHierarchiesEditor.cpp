@@ -386,7 +386,7 @@ void GraphHierarchiesEditor::delSelection(bool fromRoot) {
   tlp::BooleanProperty *selection = _contextGraph->getProperty<BooleanProperty>("viewSelection");
 
   std::vector<tlp::edge> edgesToDelete =
-    iteratorVector(selection->getEdgesEqualTo(true, _contextGraph));
+      iteratorVector(selection->getEdgesEqualTo(true, _contextGraph));
   bool hasPush = !edgesToDelete.empty();
 
   if (hasPush) {
@@ -395,7 +395,7 @@ void GraphHierarchiesEditor::delSelection(bool fromRoot) {
   }
 
   std::vector<tlp::node> nodesToDelete =
-    iteratorVector(selection->getNodesEqualTo(true, _contextGraph));
+      iteratorVector(selection->getNodesEqualTo(true, _contextGraph));
 
   if (!hasPush && !nodesToDelete.empty())
     _contextGraph->push();
