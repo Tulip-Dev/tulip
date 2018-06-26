@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <vector>
 #include "GraphHierarchiesEditor.h"
 
 #include <QDebug>
@@ -36,6 +37,8 @@
 #include "GraphPerspective.h"
 #include <tulip/GraphHierarchiesModel.h>
 #include "ui_GraphHierarchiesEditor.h"
+
+using namespace tlp;
 
 CustomTreeView::CustomTreeView(QWidget *parent) : QTreeView(parent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -179,22 +182,26 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
     menu.addSeparator();
     menu.addAction(_ui->actionRename);
     menu.addSeparator();
-    menu.addAction(_ui->actionAdd_sub_graph);
-    menu.addAction(_ui->actionCreate_induced_sub_graph);
-    menu.addAction(_ui->actionClone_subgraph);
+    auto subMenu = menu.addMenu("Create");
+    subMenu->addAction(_ui->actionAdd_sub_graph);
+    subMenu->addAction(_ui->actionCreate_induced_sub_graph);
+    subMenu->addAction(_ui->actionClone_subgraph);
 
     if (_contextGraph->getRoot() != _contextGraph) {
-      menu.addAction(_ui->actionClone_sibling);
-      menu.addAction(_ui->actionClone_sibling_with_properties);
+      subMenu->addAction(_ui->actionClone_sibling);
+      subMenu->addAction(_ui->actionClone_sibling_with_properties);
     }
-
-    menu.addSeparator();
-
+    subMenu = menu.addMenu("Delete");
     if (_contextGraph->getRoot() != _contextGraph) {
-      menu.addAction(_ui->actionDelete_graph);
+      subMenu->addAction(_ui->actionDelete_graph);
     }
 
-    menu.addAction(_ui->actionDelete_All);
+    subMenu->addAction(_ui->actionDelete_All);
+    subMenu->addAction(_ui->actionDelete_all_nodes);
+    subMenu->addAction(_ui->actionDelete_all_edges);
+    subMenu->addAction(_ui->actionDelete_selection);
+    if (_contextGraph->getRoot() != _contextGraph)
+      subMenu->addAction(_ui->actionDelete_selection_from_root_graph);
     if (!_contextGraph->subGraphs().empty()) {
       menu.addSeparator();
       if (!_ui->hierarchiesTree->isExpanded(_contextIndex))
@@ -351,6 +358,55 @@ void GraphHierarchiesEditor::delAllGraph() {
   }
 
   _contextGraph = nullptr;
+}
+
+void GraphHierarchiesEditor::delAllNodes() {
+  if (_contextGraph == nullptr)
+    return;
+
+  _contextGraph->push();
+  Observable::holdObservers();
+  _contextGraph->clear();
+  Observable::unholdObservers();
+}
+
+void GraphHierarchiesEditor::delAllEdges() {
+  if (_contextGraph == nullptr)
+    return;
+
+  _contextGraph->push();
+  Observable::holdObservers();
+  std::vector<edge> edges = _contextGraph->edges();
+  _contextGraph->delEdges(edges);
+  Observable::unholdObservers();
+}
+
+void GraphHierarchiesEditor::delSelection(bool fromRoot) {
+  Observable::holdObservers();
+  tlp::BooleanProperty *selection = _contextGraph->getProperty<BooleanProperty>("viewSelection");
+
+  std::vector<tlp::edge> edgesToDelete =
+    iteratorVector(selection->getEdgesEqualTo(true, _contextGraph));
+  bool hasPush = !edgesToDelete.empty();
+
+  if (hasPush) {
+    _contextGraph->push();
+    _contextGraph->delEdges(edgesToDelete, fromRoot);
+  }
+
+  std::vector<tlp::node> nodesToDelete =
+    iteratorVector(selection->getNodesEqualTo(true, _contextGraph));
+
+  if (!hasPush && !nodesToDelete.empty())
+    _contextGraph->push();
+
+  _contextGraph->delNodes(nodesToDelete, fromRoot);
+
+  Observable::unholdObservers();
+}
+
+void GraphHierarchiesEditor::delSelectionFromRoot() {
+  delSelection(true);
 }
 
 void GraphHierarchiesEditor::createPanel() {

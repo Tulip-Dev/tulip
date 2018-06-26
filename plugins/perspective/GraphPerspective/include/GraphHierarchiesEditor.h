@@ -87,6 +87,10 @@ protected slots:
   void addInducedSubGraph();
   void delGraph();
   void delAllGraph();
+  void delAllNodes();
+  void delAllEdges();
+  void delSelection(bool fromRoot = false);
+  void delSelectionFromRoot();
   void createPanel();
   void collapseGraphHierarchy();
   void expandGraphHierarchy();

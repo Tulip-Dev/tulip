@@ -14,16 +14,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -48,16 +39,7 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -133,16 +115,7 @@
       <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -212,10 +185,10 @@
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>Delete</string>
+    <string>Delete graph</string>
    </property>
    <property name="toolTip">
-    <string>Delete the highlighed graph, reparenting its subgraphs hierarchy to its parent</string>
+    <string>Delete the highlighted graph, reparenting its subgraphs hierarchy to its parent</string>
    </property>
   </action>
   <action name="actionDelete_All">
@@ -224,7 +197,7 @@
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>Delete All</string>
+    <string>Delete all</string>
    </property>
    <property name="toolTip">
     <string>Delete the highlighted graph and all its subgraphs [Shift+Del]</string>
@@ -313,6 +286,38 @@
    </property>
    <property name="toolTip">
     <string>Collapse all the hierarchy under the current graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_selection">
+   <property name="text">
+    <string>Delete selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete the currently selected nodes or edges</string>
+   </property>
+  </action>
+  <action name="actionDelete_all_nodes">
+   <property name="text">
+    <string>Delete all nodes</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete all the nodes of the highlighted graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_all_edges">
+   <property name="text">
+    <string>Delete all edges</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete all the edges of the highlighted graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_selection_from_root_graph">
+   <property name="text">
+    <string>Delete selection from the root graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected elements from all the graph hierarchy</string>
    </property>
   </action>
  </widget>
@@ -574,6 +579,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDelete_all_edges</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delAllEdges()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDelete_all_nodes</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delAllNodes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDelete_selection</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDelete_selection_from_root_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delSelectionFromRoot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -583,6 +652,10 @@
   <slot>cloneSubGraph()</slot>
   <slot>cloneSibling()</slot>
   <slot>delAllGraph()</slot>
+  <slot>delAllNodes()</slot>
+  <slot>delAllEdges()</slot>
+  <slot>delSelection()</slot>
+  <slot>delSelectionFromRoot()</slot>
   <slot>createPanel()</slot>
   <slot>collapseGraphHierarchy()</slot>
   <slot>expandGraphHierarchy()</slot>
