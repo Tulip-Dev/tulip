@@ -321,20 +321,17 @@ void TulipSettings::setProxyPassword(const QString &s) {
 }
 
 void TulipSettings::applyProxySettings() {
-  QNetworkProxy proxy(QNetworkProxy::NoProxy);
-
   if (isProxyEnabled()) {
-    proxy.setType(proxyType());
-    proxy.setHostName(proxyHost());
-    proxy.setPort(proxyPort());
+    QNetworkProxy proxy(proxyType(), proxyHost(),
+			static_cast<qint16>(proxyPort()));
 
     if (isUseProxyAuthentification()) {
       proxy.setUser(proxyUsername());
       proxy.setPassword(proxyPassword());
     }
-  }
-
-  QNetworkProxy::setApplicationProxy(proxy);
+    QNetworkProxy::setApplicationProxy(proxy);
+  } else
+    QNetworkProxyFactory::setUseSystemConfiguration(true);
 }
 
 bool TulipSettings::isFirstRun() const {
