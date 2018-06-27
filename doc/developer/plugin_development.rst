@@ -5,7 +5,7 @@
 Plug-ins development
 ********************
 
-Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set up. It enables to directly add new functionalities into the Tulip kernel. One must keeps in mind that a plug-in have access to all the parts of Tulip. Thus, plug-ins have to be written very carefully to prevent memory leak, errors and "core dump". 
+Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set up. It enables to directly add new features into the Tulip kernel. One must keeps in mind that a plug-in have access to all the parts of Tulip. Thus, plug-ins have to be written very carefully to prevent memory leak, errors and "core dump". 
 
 To enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function loads dynamically all the plug-ins and register them into a factory that will enable to direct access to it. 
 
@@ -216,7 +216,7 @@ The class *PropertyAlgorithm* has a protected member called *dataSet* that conta
 
   Returns an iterator on all values.
 
-The methods described above are just the core of the functionalities. Consult the Doxygen documentation or the sources for an exhaustive listing.
+The methods described above are just the core of the features. Consult the Doxygen documentation or the sources for an exhaustive listing.
 
 
 .. _plugins_pluginprogress:

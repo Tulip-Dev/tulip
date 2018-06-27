@@ -22,7 +22,7 @@ Tulip can be compiled and thus executed in two different modes. The first one, c
 
 Nevertheless, because Tulip is a research tool, the users testing their algorithms or plug-ins may not be sure of their code source reliability. These people should be more concerned with the second mode available, the *Debug* mode. With it, the whole program will be slightly slower as the execution is monitored with sanity assertions. If an unexpected behaviour happens and one of the assertion detect it, Tulip will pop an error message expliciting the problem encounter. 
 
-These modes must be separated as their behaviour are entirely different. A program instance compiled in *Debug* mod can not be used to launch a *Release* version of Tulip and vice versa. For instance, a few functionalities will need assertions only checked in debug mode to run correctly, some of these cases are presented in the :ref:`Tulip library tutorial section <tulip_library_tutorial>`.
+These modes must be separated as their behaviour are entirely different. A program instance compiled in *Debug* mod can not be used to launch a *Release* version of Tulip and vice versa. For instance, a few features will need assertions only checked in debug mode to run correctly, some of these cases are presented in the :ref:`Tulip library tutorial section <tulip_library_tutorial>`.
 
 .. _installation_how_to_setup:
 

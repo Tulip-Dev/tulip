@@ -35,7 +35,7 @@ Plugins are sorted by categories :
 
 * |icon_algorithm| **Algorithms**: here are regrouped the plugins to perform a specific test or layout on your values. Despite an impressive number of proposed algorithms, new or more efficient versions of the already existing ones may be implemented depending of research publications.
 
-* |icon_import_export| **Import/Export**: these plugins are used for the importation and exportation technics. They can describe a file formalism or specific rules for randomly generating trees or graphs.
+* |icon_import_export| **Import/Export**: these plugins are used for the importation and exportation features. They can process a file formalism or specific rules for randomly generating trees or graphs.
 
 * |icon_glyph| **Glyphs**: the glyphs are the graphic elements representing a node (*viewShape* property) or located at the ends of an edge (*view...Anchorshape* properties). Special edge extremities can give more information about the transition between the two nodes.
 
@@ -43,7 +43,7 @@ Plugins are sorted by categories :
 
 * |icon_interactor| **Interactors**: interactors are used to interact with a view or the elements of a view. For example the node link diagram view provides interactors (among others) to deal with nodes/edges selection, addition, removal, or to navigate in the graph.
 
-* |icon_perspective| **Perspectives**: Tulip may have different uses. Perspectives can be developed for a specific domain such as social network analysis or an advanced customization of the provided functionalities for specific tasks such as web sites links analysis.
+* |icon_perspective| **Perspectives**: Tulip may have different uses. Perspectives can be developed for a specific domain such as social network analysis or an advanced customization of the provided features for specific tasks such as web sites links analysis.
 
 If you are looking for a specific plugin, the search field will help you to find it.
 

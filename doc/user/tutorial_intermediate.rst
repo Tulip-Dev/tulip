@@ -1,8 +1,8 @@
 .. _in_practice:
 
-*********************************
-Tulip in Practice: Four Tutorials
-*********************************
+************************************
+Tulip in Practice: Four case studies
+************************************
 
 These tutorials are intended for users who are already familiarized with the Tulip workspace, as presented in :ref:`gui`, as well as with the basics of Tulip detailed in :ref:`first_steps`.
 Here, our purpose will be to highlight some of the possibilities offered by Tulip for data visualization and data analysis, using real-word dataset examples. 
