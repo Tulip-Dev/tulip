@@ -9,7 +9,7 @@ Here, our purpose will be to highlight some of the possibilities offered by Tuli
 
 Some of these files can be found on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`_, which is associated with the book:
  
-*Interactive data visualization: foundations, techniques, and applications*, by Matthew Ward, Georges Grinstein, and Daniel Klein. [#footnote1]_
+*Interactive data visualization: foundations, techniques, and applications*, by Matthew Ward, Georges Grinstein, and Daniel Keim. [#footnote1]_
 
 
 .. _tulip_directory:
