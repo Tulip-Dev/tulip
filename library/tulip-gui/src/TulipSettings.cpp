@@ -322,8 +322,7 @@ void TulipSettings::setProxyPassword(const QString &s) {
 
 void TulipSettings::applyProxySettings() {
   if (isProxyEnabled()) {
-    QNetworkProxy proxy(proxyType(), proxyHost(),
-			static_cast<qint16>(proxyPort()));
+    QNetworkProxy proxy(proxyType(), proxyHost(), static_cast<qint16>(proxyPort()));
 
     if (isUseProxyAuthentification()) {
       proxy.setUser(proxyUsername());
