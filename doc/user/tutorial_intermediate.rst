@@ -7,7 +7,7 @@ Tulip in Practice: Four case studies
 These tutorials are intended for users who are already familiarized with the Tulip workspace, as presented in :ref:`gui`, as well as with the basics of Tulip detailed in :ref:`first_steps`.
 Here, our purpose will be to highlight some of the possibilities offered by Tulip for data visualization and data analysis, using real-word dataset examples. 
 
-Some of these files can be found on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`_, which is associated with the book:
+Some of these files can be found on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/>`__, which is associated with the book:
  
 *Interactive data visualization: foundations, techniques, and applications*, by Matthew Ward, Georges Grinstein, and Daniel Keim. [#footnote1]_
 
@@ -138,7 +138,7 @@ The potential offered by the *Geographic view* is indeed great for data visualiz
 Importing the data
 ------------------
 
-The data used for this visualization was downloaded from the `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/the-city-temperature-data-set/>`_ website. A *CSV* file can easily be generated from the XLS table found in the archive.
+The data used for this visualization was downloaded from the `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/the-city-temperature-data-set/>`__ website. A *CSV* file can easily be generated from the XLS table found in the archive.
 
 The point here is to make sense of the following raw data, using some of the Tulip basic features:
 
@@ -237,9 +237,9 @@ Analysis of a Multivariate Dataset
 
 .. |icon_workspace_macros| image:: _images/icon_workspace_macros.png
 
-.. |icon_resize_nodes| image:: _images/set_node_size.png
-					       
-.. |icon_color_nodes| image:: _images/set_node_color.png
+.. |icon_wsm_node_size_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_size.png
+
+.. |icon_wsm_node_color_set| image:: ../../library/tulip-gui/resources/icons/20/set_node_color.png
 					       
 In this third tutorial, we will highlight some of the possibilities offered by Tulip for the analysis of multivariate datasets. The dataset may already be familiar to the reader, as it was featured in the :ref:`workspace` section. The file may be downloaded :download:`here <./_documents/04cars_data.csv>`, and is available on the website `idvbook.com <http://www.idvbook.com/teaching-aid/data-sets/2004-cars-and-trucks-data/>`_.
 
@@ -285,11 +285,11 @@ In order to confirm this hypothesis, we will generate other *Scatter Plot 2D vie
 	:width: 770
 
 
-By default, the size of the nodes is rather small. Also, at the moment their color does not represent anything. Therefore, we will use the *Scatter plot 2D view* toolbar button [ |icon_resize_nodes| ] of the quick access bar to manually resize the nodes. We will also map the color of the nodes to the type of vehicle, using the *Search* mode. To access the *Search* mode, either press *Ctrl+F* or click on *Search* in the |icon_workspace_macros| panel. The *Search* mode enables the user to toggle node and/or edge selection based on a filter system. In order to select all vehicles in the **SUV** category, we proceed as follows:
+By default, the size of the nodes is rather small. Also, at the moment their color does not represent anything. Therefore, we will use the *Scatter plot 2D view* toolbar button [ |icon_wsm_node_size_set| ] of the quick access bar to manually resize the nodes. We will also map the color of the nodes to the type of vehicle, using the *Search* mode. To access the *Search* mode, either press *Ctrl+F* or click on *Search* in the |icon_workspace_macros| panel. The *Search* mode enables the user to toggle node and/or edge selection based on a filter system. In order to select all vehicles in the **SUV** category, we proceed as follows:
 
 .. image:: _images/tutorial03_05b.png
 
-After clicking on the *Search* button, the 59 nodes for which the **SUV** property was "true" are selected. After that, we will use the *Scatter plot 2D view* toolbar button [ |icon_color_nodes| ] of the quick access bar and choose a color. If we go back to the multi-panel view, here is what it might look like after all vehicles types have been assigned a color. We also chose to modify the *Lines type* in the *View setup* (*Right click* anywhere in the view except on graph elements to access the *View setup*):
+After clicking on the *Search* button, the 59 nodes for which the **SUV** property was "true" are selected. After that, we will use the *Scatter plot 2D view* toolbar button [ |icon_wsm_node_color_set| ] of the quick access bar and choose a color. If we go back to the multi-panel view, here is what it might look like after all vehicles types have been assigned a color. We also chose to modify the *Lines type* in the *View setup* (*Right click* anywhere in the view except on graph elements to access the *View setup*):
 
 
 .. image:: _images/tutorial03_06b.png
