@@ -262,6 +262,7 @@ void PreferencesDialog::readSettings() {
   if (TulipSettings::instance().isProxyEnabled()) {
     _ui->networkFrame1->setEnabled(true);
     _ui->networkFrame2->setEnabled(true);
+    _ui->networkFrame3->setEnabled(true);
   }
 
   switch (TulipSettings::instance().proxyType()) {
