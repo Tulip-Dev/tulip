@@ -456,8 +456,8 @@ void GraphImpl::push(bool unpopAllowed, std::vector<PropertyInterface *> *propsT
         delete (*it);
         --nb;
         ++it;
-        recorders.pop_back();
       }
+      recorders.resize(nb);
     }
   }
 
