@@ -228,7 +228,7 @@ bool GlEditableCurve::pointBelong(const Coord &point) {
     return fn(startPoint, endPoint);
 
   if (fn(startPoint, curvePoints[0]))
-      return true;
+    return true;
   for (size_t i = 0; i < curvePoints.size() - 1; ++i)
     if (fn(curvePoints[i], curvePoints[i + 1]))
       return true;
@@ -252,9 +252,9 @@ Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point, Camera *c
     Coord anchorCenter(camera->worldTo2DViewport(cp));
 
     return (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) &&
-	    point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
-	    point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) &&
-	    point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS));
+            point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
+            point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) &&
+            point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS));
   };
   if (fn(startPoint))
     return new Coord(startPoint);
@@ -321,11 +321,11 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
     if (!fn(startPoint, curvePoints[0])) {
       bool ok = false;
       for (size_t i = 0; i < curvePoints.size() - 1; ++i) {
-	if ((ok = fn(curvePoints[i], curvePoints[i + 1])))
-	  break;
+        if ((ok = fn(curvePoints[i], curvePoints[i + 1])))
+          break;
       }
       if (!ok)
-	fn(curvePoints[curvePoints.size() - 1], endPoint);
+        fn(curvePoints[curvePoints.size() - 1], endPoint);
     }
   }
 

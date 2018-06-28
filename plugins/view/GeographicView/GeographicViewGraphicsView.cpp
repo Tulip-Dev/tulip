@@ -305,14 +305,12 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   Coord *lastCoord = nullptr;
 
-  for (auto it1 = clearPolygons.begin();
-       it1 != clearPolygons.end(); ++it1) {
+  for (auto it1 = clearPolygons.begin(); it1 != clearPolygons.end(); ++it1) {
     out << (*it1).first.c_str();
 
     unsigned int i = 1;
 
-    for (auto it2 = (*it1).second.begin(); it2 != (*it1).second.end();
-         ++it2) {
+    for (auto it2 = (*it1).second.begin(); it2 != (*it1).second.end(); ++it2) {
       out << i << "\n";
 
       for (auto it3 = (*it2).begin(); it3 != (*it2).end(); ++it3) {
@@ -667,21 +665,18 @@ void GeographicViewGraphicsView::mapToPolygon() {
 
     Coord nodePos = geoLayout->getNodeValue(n);
 
-    for (auto it = entities.begin(); it != entities.end();
-         ++it) {
+    for (auto it = entities.begin(); it != entities.end(); ++it) {
       if ((*it).second->getBoundingBox().contains(nodePos)) {
         GlComplexPolygon *polygon = static_cast<GlComplexPolygon *>((*it).second);
 
         const vector<vector<Coord>> polygonSides = polygon->getPolygonSides();
 
-        for (auto it2 = polygonSides.begin();
-             it2 != polygonSides.end(); ++it2) {
+        for (auto it2 = polygonSides.begin(); it2 != polygonSides.end(); ++it2) {
           vector<Coord> polygonSide = (*it2);
           bool oddNodes = false;
           Coord lastCoord = polygonSide[0];
 
-          for (auto it = (++polygonSide.begin()); it != polygonSide.end();
-               ++it) {
+          for (auto it = (++polygonSide.begin()); it != polygonSide.end(); ++it) {
             if ((((*it)[1] < nodePos[1] && lastCoord[1] >= nodePos[1]) ||
                  (lastCoord[1] < nodePos[1] && (*it)[1] >= nodePos[1])) &&
                 ((*it)[0] <= nodePos[0] || lastCoord[0] <= nodePos[0])) {
@@ -698,8 +693,7 @@ void GeographicViewGraphicsView::mapToPolygon() {
 
             BoundingBox bb;
 
-            for (auto it3 = polygonSides[0].begin();
-                 it3 != polygonSides[0].end(); ++it3) {
+            for (auto it3 = polygonSides[0].begin(); it3 != polygonSides[0].end(); ++it3) {
               bb.expand(*it3);
             }
 

@@ -553,8 +553,8 @@ void MatrixView::updateLayout() {
   for (auto e : graph()->edges()) {
     const std::pair<node, node> eEnds = graph()->ends(e);
     const vector<int> &srcNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first),
-                &tgtNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second),
-                &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+                      &tgtNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second),
+                      &edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
 
     // 0 => horizontal line, 1 => vertical line
     Coord src0 = layout->getNodeValue(node(srcNodes[0])),

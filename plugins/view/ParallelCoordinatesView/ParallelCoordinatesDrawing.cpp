@@ -209,13 +209,12 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
       string typeName((graphProxy->getProperty(selectedProp))->getTypename());
 
       if (typeName == "string") {
-        axis = new NominalParallelAxis(coord, height, maxCaptionWidth,
-				       graphProxy, selectedProp, axisColor,
-                                       rotationAngle, captionPosition);
+        axis = new NominalParallelAxis(coord, height, maxCaptionWidth, graphProxy, selectedProp,
+                                       axisColor, rotationAngle, captionPosition);
       } else if (typeName == "int" || typeName == "double") {
-        axis = new QuantitativeParallelAxis(coord, height, maxCaptionWidth,
-					    graphProxy, selectedProp, true,
-                                            axisColor, rotationAngle, captionPosition);
+        axis =
+            new QuantitativeParallelAxis(coord, height, maxCaptionWidth, graphProxy, selectedProp,
+                                         true, axisColor, rotationAngle, captionPosition);
       }
     }
 

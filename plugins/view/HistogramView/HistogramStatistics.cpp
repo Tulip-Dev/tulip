@@ -371,8 +371,7 @@ void HistogramStatistics::computeInteractor() {
 
   propertyMean /= (nbElements);
 
-  for (auto it = graphPropertyValueSet.begin();
-       it != graphPropertyValueSet.end(); ++it) {
+  for (auto it = graphPropertyValueSet.begin(); it != graphPropertyValueSet.end(); ++it) {
     propertyStandardDeviation += square(it->second - propertyMean);
   }
 
@@ -391,8 +390,7 @@ void HistogramStatistics::computeInteractor() {
     for (double val = min; val <= max; val += sampleStep) {
       float fx = 0;
 
-      for (auto it = graphPropertyValueSet.begin();
-           it != graphPropertyValueSet.end(); ++it) {
+      for (auto it = graphPropertyValueSet.begin(); it != graphPropertyValueSet.end(); ++it) {
         fx += float((*kf)((val - (it->second)) / (bandwidth / 2.)));
       }
 

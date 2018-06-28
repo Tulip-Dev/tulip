@@ -769,9 +769,8 @@ void HistogramView::destroyHistogramsIfNeeded() {
   }
 
   for (const string &prop : propertiesToRemove) {
-    selectedProperties.erase(
-        remove(selectedProperties.begin(), selectedProperties.end(), prop),
-        selectedProperties.end());
+    selectedProperties.erase(remove(selectedProperties.begin(), selectedProperties.end(), prop),
+                             selectedProperties.end());
   }
 }
 
@@ -946,8 +945,7 @@ void HistogramView::interactorsInstalled(const QList<tlp::Interactor *> &) {
 void HistogramView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
-  for (auto it = interactorsList.begin(); it != interactorsList.end();
-       ++it) {
+  for (auto it = interactorsList.begin(); it != interactorsList.end(); ++it) {
     if (!(dynamic_cast<HistogramInteractorNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);
 
