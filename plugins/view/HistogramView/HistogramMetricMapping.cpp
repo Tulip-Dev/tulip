@@ -180,20 +180,14 @@ void GlEditableCurve::draw(float lod, Camera *camera) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
 
-  vector<Coord> curvePointsCp(curvePoints);
-  curvePointsCp.insert(curvePointsCp.begin(), startPoint);
-  curvePointsCp.push_back(endPoint);
-  vector<Coord>::iterator it;
-
   Camera camera2D(camera->getScene(), false);
   camera2D.setScene(camera->getScene());
 
-  for (it = curvePointsCp.begin(); it != curvePointsCp.end(); ++it) {
-    Coord anchor(*it);
+  auto fn = [&](const Coord &anchor) {
     camera->initGl();
+    camera2D.initGl();
     Coord tmp(camera->worldTo2DViewport(anchor));
     tmp[2] = 0;
-    camera2D.initGl();
     basicCircle.set(tmp, CIRCLE_RADIUS, 0.);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     basicCircle.draw(lod, camera);
@@ -212,27 +206,33 @@ void GlEditableCurve::draw(float lod, Camera *camera) {
       label.setText(labelText);
       label.draw(lod, camera);
     }
-  }
+  };
+
+  fn(startPoint);
+  for (const Coord &cp : curvePoints)
+    fn(cp);
+  fn(endPoint);
 
   camera->initGl();
 }
 
 bool GlEditableCurve::pointBelong(const Coord &point) {
+  auto fn = [&](const Coord &cp1, const Coord &cp2) {
+    double startToEndDist = cp1.dist(cp2);
+    double startToPointDist = cp1.dist(point);
+    double pointToEndDist = point.dist(cp2);
+    return (((startToPointDist + pointToEndDist) - startToEndDist) / startToEndDist < 1E-3);
+  };
 
-  bool ret = false;
+  if (curvePoints.empty())
+    return fn(startPoint, endPoint);
 
-  vector<Coord> curvePointsCp(curvePoints);
-  curvePointsCp.insert(curvePointsCp.begin(), startPoint);
-  curvePointsCp.push_back(endPoint);
-
-  for (size_t i = 0; i < curvePointsCp.size() - 1; ++i) {
-    double startToEndDist = curvePointsCp[i].dist(curvePointsCp[i + 1]);
-    double startToPointDist = curvePointsCp[i].dist(point);
-    double pointToEndDist = point.dist(curvePointsCp[i + 1]);
-    ret = ret || (((startToPointDist + pointToEndDist) - startToEndDist) / startToEndDist < 1E-3);
-  }
-
-  return ret;
+  if (fn(startPoint, curvePoints[0]))
+      return true;
+  for (size_t i = 0; i < curvePoints.size() - 1; ++i)
+    if (fn(curvePoints[i], curvePoints[i + 1]))
+      return true;
+  return fn(curvePoints[curvePoints.size() - 1], endPoint);
 }
 
 void GlEditableCurve::addCurveAnchor(const Coord &point) {
@@ -246,26 +246,24 @@ void GlEditableCurve::addCurveAnchor(const Coord &point) {
 }
 
 Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point, Camera *camera) {
-  Coord *anchor = nullptr;
-  vector<Coord> curvePointsCp(curvePoints);
-  curvePointsCp.insert(curvePointsCp.begin(), startPoint);
-  curvePointsCp.push_back(endPoint);
-  vector<Coord>::iterator it;
   camera->initGl();
 
-  for (it = curvePointsCp.begin(); it != curvePointsCp.end(); ++it) {
-    Coord anchorCenter(camera->worldTo2DViewport(*it));
+  auto fn = [&](const Coord &cp) {
+    Coord anchorCenter(camera->worldTo2DViewport(cp));
 
-    if (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) &&
-        point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
-        point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) &&
-        point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS)) {
-      anchor = new Coord(*it);
-      break;
-    }
-  }
-
-  return anchor;
+    return (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) &&
+	    point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
+	    point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) &&
+	    point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS));
+  };
+  if (fn(startPoint))
+    return new Coord(startPoint);
+  for (const Coord &cp : curvePoints)
+    if (fn(cp))
+      return new Coord(cp);
+  if (fn(endPoint))
+    return new Coord(endPoint);
+  return nullptr;
 }
 
 Coord GlEditableCurve::translateCurveAnchorToPoint(const Coord &curveAnchor,
@@ -309,15 +307,25 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
   Coord line1[2] = {Coord(xCoord, 0), Coord(xCoord, 10)};
   Coord line2[2];
 
-  vector<Coord> curvePointsCp(curvePoints);
-  curvePointsCp.insert(curvePointsCp.begin(), startPoint);
-  curvePointsCp.push_back(endPoint);
-
-  for (size_t i = 0; i < curvePointsCp.size() - 1; ++i) {
-    if (xCoord >= curvePointsCp[i].getX() && xCoord <= curvePointsCp[i + 1].getX()) {
-      line2[0] = curvePointsCp[i];
-      line2[1] = curvePointsCp[i + 1];
-      break;
+  auto fn = [&](const Coord &cp1, const Coord &cp2) {
+    if (xCoord >= cp1.getX() && xCoord <= cp2.getX()) {
+      line2[0] = cp1;
+      line2[1] = cp2;
+      return true;
+    }
+    return false;
+  };
+  if (curvePoints.empty())
+    fn(startPoint, endPoint);
+  else {
+    if (!fn(startPoint, curvePoints[0])) {
+      bool ok = false;
+      for (size_t i = 0; i < curvePoints.size() - 1; ++i) {
+	if ((ok = fn(curvePoints[i], curvePoints[i + 1])))
+	  break;
+      }
+      if (!ok)
+	fn(curvePoints[curvePoints.size() - 1], endPoint);
     }
   }
 
@@ -464,19 +472,11 @@ GlGlyphScale::~GlGlyphScale() {
 }
 
 void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
-
-  BooleanProperty *wholeGlyphGraphSelec = new BooleanProperty(glyphGraph);
-  wholeGlyphGraphSelec->setAllNodeValue(true);
-  wholeGlyphGraphSelec->setAllEdgeValue(true);
-  removeFromGraph(glyphGraph, wholeGlyphGraphSelec);
-  delete wholeGlyphGraphSelec;
-
+  glyphGraph->clear();
   glyphScaleMap.clear();
 
-  for (size_t i = 0; i < glyphsList.size(); ++i) {
-    node n = glyphGraph->addNode();
-    glyphGraphShape->setNodeValue(n, glyphsList[i]);
-  }
+  for (auto glyph : glyphsList)
+    glyphGraphShape->setNodeValue(glyphGraph->addNode(), glyph);
 
   size = length / glyphsList.size();
   glyphGraphSize->setAllNodeValue(Size(size, size, size));
@@ -487,7 +487,7 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
   if (orientation == Vertical) {
     float xCenter = baseCoord.getX() - size / 2;
 
-    for (const node &n : glyphGraph->nodes()) {
+    for (auto n : glyphGraph->nodes()) {
       glyphGraphLayout->setNodeValue(n, Coord(xCenter, baseCoord.getY() + i * size + size / 2));
       int oldI = i++;
       glyphScaleMap[make_pair(baseCoord.getY() + oldI * size, baseCoord.getY() + i * size)] =
@@ -499,7 +499,7 @@ void GlGlyphScale::setGlyphsList(const vector<int> &glyphsList) {
   } else {
     float yCenter = baseCoord.getY() - size / 2;
 
-    for (const node &n : glyphGraph->nodes()) {
+    for (auto n : glyphGraph->nodes()) {
       glyphGraphLayout->setNodeValue(n, Coord(baseCoord.getX() + i++ * size + size / 2, yCenter));
       int oldI = i++;
       glyphScaleMap[make_pair(baseCoord.getX() + oldI * size, baseCoord.getX() + i * size)] =
@@ -518,9 +518,7 @@ int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
     } else if (pos.getY() > baseCoord.getY() + length) {
       return glyphScaleMap[make_pair(baseCoord.getY() + length - size, baseCoord.getY() + length)];
     } else {
-      map<pair<float, float>, int>::iterator it;
-
-      for (it = glyphScaleMap.begin(); it != glyphScaleMap.end(); ++it) {
+      for (auto it = glyphScaleMap.begin(); it != glyphScaleMap.end(); ++it) {
         if (pos.getY() >= (*it).first.first && pos.getY() < (*it).first.second) {
           return (*it).second;
         }
@@ -532,9 +530,7 @@ int GlGlyphScale::getGlyphAtPos(const Coord &pos) {
     } else if (pos.getX() > baseCoord.getX() + length) {
       return glyphScaleMap[make_pair(baseCoord.getX() + length - size, baseCoord.getX() + length)];
     } else {
-      map<pair<float, float>, int>::iterator it;
-
-      for (it = glyphScaleMap.begin(); it != glyphScaleMap.end(); ++it) {
+      for (auto it = glyphScaleMap.begin(); it != glyphScaleMap.end(); ++it) {
         if (pos.getX() >= (*it).first.first && pos.getX() < (*it).first.second) {
           return (*it).second;
         }
@@ -550,14 +546,14 @@ void GlGlyphScale::draw(float, Camera *camera) {
   glEnable(GL_LIGHTING);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  for (const node &n : glyphGraph->nodes()) {
+  for (auto n : glyphGraph->nodes()) {
     glNode.id = n.id;
     glNode.draw(30, glyphGraphInputData, camera);
   }
 }
 
 void GlGlyphScale::translate(const Coord &move) {
-  for (const node &n : glyphGraph->nodes()) {
+  for (auto n : glyphGraph->nodes()) {
     Coord currentNodeCoord(glyphGraphLayout->getNodeValue(n));
     glyphGraphLayout->setNodeValue(n, currentNodeCoord + move);
   }
@@ -979,7 +975,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
     } else {
       glGlyphScale->draw(0, &camera);
       GlNode glNode(0);
-      for (const node &n : glyphMappingGraph->nodes()) {
+      for (auto n : glyphMappingGraph->nodes()) {
         glNode.id = n.id;
         glNode.draw(30, glyphMappingGraphInputData, &camera);
       }
@@ -1061,7 +1057,7 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
 
   if (histoView->getDataLocation() == NODE) {
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       Coord nodeHistoCoord(histogramLayout->getNodeValue(n));
       float yCurve = curve->getYCoordForX(nodeHistoCoord.getX());
 
@@ -1098,7 +1094,7 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
     }
 
   } else {
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       Coord edgeHistoCoord(histogramLayout->getEdgeValue(e)[0]);
       float yCurve = curve->getYCoordForX(edgeHistoCoord.getX());
 
@@ -1174,11 +1170,7 @@ void HistogramMetricMapping::updateMapping(GlQuantitativeAxis *histoXAxis,
           Coord(x, histoXAxis->getAxisBaseCoord().getY() - offset - offset2, 0), color);
     }
   } else {
-    BooleanProperty *wholeGlyphMappingGraphSelec = new BooleanProperty(glyphMappingGraph);
-    wholeGlyphMappingGraphSelec->setAllNodeValue(true);
-    wholeGlyphMappingGraphSelec->setAllEdgeValue(true);
-    removeFromGraph(glyphMappingGraph, wholeGlyphMappingGraphSelec);
-    delete wholeGlyphMappingGraphSelec;
+    glyphMappingGraph->clear();
     IntegerProperty *glyphGraphShape = glyphMappingGraph->getProperty<IntegerProperty>("viewShape");
     LayoutProperty *glyphGraphLayout = glyphMappingGraph->getProperty<LayoutProperty>("viewLayout");
     SizeProperty *glyphGraphSize = glyphMappingGraph->getProperty<SizeProperty>("viewSize");

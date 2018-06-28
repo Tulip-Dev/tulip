@@ -80,7 +80,6 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
 
   unsigned int pos = 0;
   vector<string> selectedProperties(graphProxy->getSelectedProperties());
-  vector<string>::iterator it;
   GlAxis::CaptionLabelPosition captionPosition;
 
   static LayoutType lastLayouType = PARALLEL;
@@ -122,9 +121,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
     }
   }
 
-  map<string, ParallelAxis *>::iterator it2;
-
-  for (it2 = parallelAxis.begin(); it2 != parallelAxis.end(); ++it2) {
+  for (auto it2 = parallelAxis.begin(); it2 != parallelAxis.end(); ++it2) {
     (it2->second)->setHidden(true);
   }
 
@@ -165,7 +162,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
 
   unsigned int cpt = 0;
 
-  for (it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
+  for (const string &selectedProp : selectedProperties) {
 
     ParallelAxis *axis = nullptr;
     float rotationAngle = (cpt++ * rotationAngleBase) * (180.0f / M_PI);
@@ -181,8 +178,8 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
       coord = Coord(0, circleLayoutYOffset, 0.0f);
     }
 
-    if (parallelAxis.find(*it) != parallelAxis.end()) {
-      axis = (parallelAxis.find(*it))->second;
+    if (parallelAxis.find(selectedProp) != parallelAxis.end()) {
+      axis = (parallelAxis.find(selectedProp))->second;
 
       if (layoutType == PARALLEL) {
         axis->setRotationAngle(0.0f);
@@ -209,21 +206,23 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
       axis->redraw();
       axis->setHidden(false);
     } else {
-      string typeName((graphProxy->getProperty(*it))->getTypename());
+      string typeName((graphProxy->getProperty(selectedProp))->getTypename());
 
       if (typeName == "string") {
-        axis = new NominalParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, axisColor,
+        axis = new NominalParallelAxis(coord, height, maxCaptionWidth,
+				       graphProxy, selectedProp, axisColor,
                                        rotationAngle, captionPosition);
       } else if (typeName == "int" || typeName == "double") {
-        axis = new QuantitativeParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, true,
+        axis = new QuantitativeParallelAxis(coord, height, maxCaptionWidth,
+					    graphProxy, selectedProp, true,
                                             axisColor, rotationAngle, captionPosition);
       }
     }
 
     if (axis != nullptr) {
-      axisPlotComposite->addGlEntity(axis, *it);
-      axisOrder.push_back(*it);
-      parallelAxis[*it] = axis;
+      axisPlotComposite->addGlEntity(axis, selectedProp);
+      axisOrder.push_back(selectedProp);
+      parallelAxis[selectedProp] = axis;
       ++pos;
     }
 
@@ -240,9 +239,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget, GlProgressBa
 }
 
 void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
-  map<string, ParallelAxis *>::iterator it;
-
-  for (it = parallelAxis.begin(); it != parallelAxis.end(); ++it) {
+  for (auto it = parallelAxis.begin(); it != parallelAxis.end(); ++it) {
     if (!graphProxy->existProperty(it->first)) {
       delete it->second;
       parallelAxis.erase(it->first);
@@ -450,11 +447,10 @@ unsigned int ParallelCoordinatesDrawing::nbParallelAxis() const {
 }
 
 void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1, ParallelAxis *axis2) {
-  vector<string>::iterator it;
   int pi = 0, pj = 0;
   int pos = 0;
 
-  for (it = axisOrder.begin(); it != axisOrder.end(); ++it, ++pos) {
+  for (auto it = axisOrder.begin(); it != axisOrder.end(); ++it, ++pos) {
     if (*it == axis1->getAxisName()) {
       pi = pos;
     }
@@ -561,10 +557,7 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
 
 void ParallelCoordinatesDrawing::eraseDataPlot() {
   dataPlotComposite->reset(true);
-  BooleanProperty *wholeGraphSelec = new BooleanProperty(axisPointsGraph);
-  wholeGraphSelec->setAllNodeValue(true);
-  removeFromGraph(axisPointsGraph, wholeGraphSelec);
-  delete wholeGraphSelec;
+  axisPointsGraph->clear();
   glEntitiesDataMap.clear();
   axisPointsDataMap.clear();
 }
@@ -668,9 +661,7 @@ void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(
       graphProxy->addOrRemoveEltToHighlight(*it);
     }
 
-    map<string, ParallelAxis *>::iterator it2;
-
-    for (it2 = parallelAxis.begin(); it2 != parallelAxis.end(); ++it2) {
+    for (auto it2 = parallelAxis.begin(); it2 != parallelAxis.end(); ++it2) {
       if ((it2->second) != axis) {
         (it2->second)->updateSlidersWithDataSubset(dataSubset);
       }
@@ -682,9 +673,8 @@ void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(
 
 void ParallelCoordinatesDrawing::resetAxisSlidersPosition() {
   vector<ParallelAxis *> axis = getAllAxis();
-  vector<ParallelAxis *>::iterator it;
 
-  for (it = axis.begin(); it != axis.end(); ++it) {
+  for (auto it = axis.begin(); it != axis.end(); ++it) {
     (*it)->resetSlidersPosition();
   }
 }

@@ -102,9 +102,8 @@ return x*x*x;
 }
 static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *camera) {
   map<string, tlp::GlSimpleEntity *> glEntities = composite->getGlEntities();
-  map<string, tlp::GlSimpleEntity *>::iterator it2;
 
-  for (it2 = glEntities.begin(); it2 != glEntities.end(); ++it2) {
+  for (auto it2 = glEntities.begin(); it2 != glEntities.end(); ++it2) {
     tlp::GlSimpleEntity *entity = it2->second;
     tlp::GlComposite *compositeEntity = dynamic_cast<tlp::GlComposite *>(entity);
 
@@ -341,7 +340,7 @@ void HistogramStatistics::computeInteractor() {
 
   if (histoView->getDataLocation() == NODE) {
     nbElements = graph->numberOfNodes();
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       double nodeVal;
 
       if (propertyType == "double") {
@@ -356,7 +355,7 @@ void HistogramStatistics::computeInteractor() {
 
   } else {
     nbElements = graph->numberOfEdges();
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       double edgeVal;
 
       if (propertyType == "double") {
@@ -372,7 +371,7 @@ void HistogramStatistics::computeInteractor() {
 
   propertyMean /= (nbElements);
 
-  for (map<unsigned int, double>::iterator it = graphPropertyValueSet.begin();
+  for (auto it = graphPropertyValueSet.begin();
        it != graphPropertyValueSet.end(); ++it) {
     propertyStandardDeviation += square(it->second - propertyMean);
   }
@@ -392,7 +391,7 @@ void HistogramStatistics::computeInteractor() {
     for (double val = min; val <= max; val += sampleStep) {
       float fx = 0;
 
-      for (map<unsigned, double>::iterator it = graphPropertyValueSet.begin();
+      for (auto it = graphPropertyValueSet.begin();
            it != graphPropertyValueSet.end(); ++it) {
         fx += float((*kf)((val - (it->second)) / (bandwidth / 2.)));
       }

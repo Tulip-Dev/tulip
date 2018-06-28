@@ -212,7 +212,7 @@ void HistogramView::setState(const DataSet &dataSet) {
       edgeAsNodeGraph = tlp::newGraph();
       edgeToNode.clear();
       nodeToEdge.clear();
-      for (const edge &e : _histoGraph->edges()) {
+      for (auto e : _histoGraph->edges()) {
         nodeToEdge[edgeToNode[e] = edgeAsNodeGraph->addNode()] = e;
         edgeAsNodeGraph->getProperty<ColorProperty>("viewColor")
             ->setNodeValue(edgeToNode[e],
@@ -717,18 +717,16 @@ void HistogramView::buildHistograms() {
   // reenable user input
   tlp::enableQtUserInput();
 
-  for (vector<GlLabel *>::iterator it = propertiesLabels.begin(); it != propertiesLabels.end();
-       ++it) {
-    (*it)->setSize(Size((*it)->getSize()[0], minSize));
+  for (auto label : propertiesLabels) {
+    label->setSize(Size(label->getSize()[0], minSize));
   }
 }
 
 void HistogramView::updateHistograms(Histogram *detailOverview) {
   needUpdateHistogram = false;
   getGlMainWidget()->makeCurrent();
-  map<string, Histogram *>::iterator it;
 
-  for (it = histogramsMap.begin(); it != histogramsMap.end(); ++it) {
+  for (auto it = histogramsMap.begin(); it != histogramsMap.end(); ++it) {
     if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) !=
         selectedProperties.end()) {
       if (it->second != detailOverview) {
@@ -740,9 +738,8 @@ void HistogramView::updateHistograms(Histogram *detailOverview) {
 
 vector<Histogram *> HistogramView::getHistograms() const {
   vector<Histogram *> ret;
-  map<string, Histogram *>::const_iterator it;
 
-  for (it = histogramsMap.begin(); it != histogramsMap.end(); ++it) {
+  for (auto it = histogramsMap.cbegin(); it != histogramsMap.cend(); ++it) {
     if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) !=
         selectedProperties.end()) {
       ret.push_back(it->second);
@@ -755,9 +752,9 @@ vector<Histogram *> HistogramView::getHistograms() const {
 void HistogramView::destroyHistogramsIfNeeded() {
   vector<string> propertiesToRemove;
 
-  for (size_t i = 0; i < selectedProperties.size(); ++i) {
-    if (!_histoGraph || !_histoGraph->existProperty(selectedProperties[i])) {
-      if (histogramsMap[selectedProperties[i]] == detailedHistogram) {
+  for (const string &selectedProp : selectedProperties) {
+    if (!_histoGraph || !_histoGraph->existProperty(selectedProp)) {
+      if (histogramsMap[selectedProp] == detailedHistogram) {
         if (!smallMultiplesView) {
           mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
         }
@@ -765,15 +762,15 @@ void HistogramView::destroyHistogramsIfNeeded() {
         detailedHistogram = nullptr;
       }
 
-      propertiesToRemove.push_back(selectedProperties[i]);
-      delete histogramsMap[selectedProperties[i]];
-      histogramsMap.erase(selectedProperties[i]);
+      propertiesToRemove.push_back(selectedProp);
+      delete histogramsMap[selectedProp];
+      histogramsMap.erase(selectedProp);
     }
   }
 
-  for (size_t i = 0; i < propertiesToRemove.size(); ++i) {
+  for (const string &prop : propertiesToRemove) {
     selectedProperties.erase(
-        remove(selectedProperties.begin(), selectedProperties.end(), propertiesToRemove[i]),
+        remove(selectedProperties.begin(), selectedProperties.end(), prop),
         selectedProperties.end());
   }
 }
@@ -949,7 +946,7 @@ void HistogramView::interactorsInstalled(const QList<tlp::Interactor *> &) {
 void HistogramView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
-  for (QList<Interactor *>::iterator it = interactorsList.begin(); it != interactorsList.end();
+  for (auto it = interactorsList.begin(); it != interactorsList.end();
        ++it) {
     if (!(dynamic_cast<HistogramInteractorNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);
@@ -1091,7 +1088,7 @@ void HistogramView::afterSetAllEdgeValue(PropertyInterface *p) {
     BooleanProperty *edgeAsNodeGraphSelection =
         edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty *>(p);
-    for (const edge &e : _histoGraph->edges()) {
+    for (auto e : _histoGraph->edges()) {
       if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
         edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
       }

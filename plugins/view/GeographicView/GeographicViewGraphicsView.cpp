@@ -85,7 +85,7 @@ GlComposite *readPolyFile(QString fileName) {
     float lng;
     float lat;
 
-    for (QStringList::iterator it = strList.begin(); it != strList.end(); ++it) {
+    for (auto it = strList.begin(); it != strList.end(); ++it) {
       (*it).toDouble(&ok);
 
       if (ok) {
@@ -167,7 +167,7 @@ GlComposite *readCsvFile(QString fileName) {
       if (!currentVector.empty())
         datas.push_back(currentVector);
 
-      currentVector = vector<Coord>();
+      currentVector.clear();
       continue;
     }
 
@@ -176,7 +176,7 @@ GlComposite *readCsvFile(QString fileName) {
         datas.push_back(currentVector);
 
       lastIndex = strList[0].toInt();
-      currentVector = vector<Coord>();
+      currentVector.clear();
     }
 
     double mercatorLatitude = strList[1].toDouble();
@@ -226,7 +226,7 @@ void simplifyPolyFile(QString fileName, float definition) {
       if (!currentVector.empty())
         datas.push_back(currentVector);
 
-      currentVector = vector<Coord>();
+      currentVector.clear();
       continue;
     }
 
@@ -240,7 +240,7 @@ void simplifyPolyFile(QString fileName, float definition) {
     float lng;
     float lat;
 
-    for (QStringList::iterator it = strList.begin(); it != strList.end(); ++it) {
+    for (auto it = strList.begin(); it != strList.end(); ++it) {
       (*it).toDouble(&ok);
 
       if (ok) {
@@ -305,17 +305,17 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   Coord *lastCoord = nullptr;
 
-  for (map<string, vector<vector<Coord>>>::iterator it1 = clearPolygons.begin();
+  for (auto it1 = clearPolygons.begin();
        it1 != clearPolygons.end(); ++it1) {
     out << (*it1).first.c_str();
 
     unsigned int i = 1;
 
-    for (vector<vector<Coord>>::iterator it2 = (*it1).second.begin(); it2 != (*it1).second.end();
+    for (auto it2 = (*it1).second.begin(); it2 != (*it1).second.end();
          ++it2) {
       out << i << "\n";
 
-      for (vector<Coord>::iterator it3 = (*it2).begin(); it3 != (*it2).end(); ++it3) {
+      for (auto it3 = (*it2).begin(); it3 != (*it2).end(); ++it3) {
         if (lastCoord == nullptr) {
           out << (*it3)[0] << " " << (*it3)[1] << "\n";
           lastCoord = &(*it3);
@@ -663,24 +663,24 @@ void GeographicViewGraphicsView::mapToPolygon() {
 
   const map<string, GlSimpleEntity *> entities = composite->getGlEntities();
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
 
     Coord nodePos = geoLayout->getNodeValue(n);
 
-    for (map<string, GlSimpleEntity *>::const_iterator it = entities.begin(); it != entities.end();
+    for (auto it = entities.begin(); it != entities.end();
          ++it) {
       if ((*it).second->getBoundingBox().contains(nodePos)) {
         GlComplexPolygon *polygon = static_cast<GlComplexPolygon *>((*it).second);
 
         const vector<vector<Coord>> polygonSides = polygon->getPolygonSides();
 
-        for (vector<vector<Coord>>::const_iterator it2 = polygonSides.begin();
+        for (auto it2 = polygonSides.begin();
              it2 != polygonSides.end(); ++it2) {
           vector<Coord> polygonSide = (*it2);
           bool oddNodes = false;
           Coord lastCoord = polygonSide[0];
 
-          for (vector<Coord>::const_iterator it = (++polygonSide.begin()); it != polygonSide.end();
+          for (auto it = (++polygonSide.begin()); it != polygonSide.end();
                ++it) {
             if ((((*it)[1] < nodePos[1] && lastCoord[1] >= nodePos[1]) ||
                  (lastCoord[1] < nodePos[1] && (*it)[1] >= nodePos[1])) &&
@@ -698,7 +698,7 @@ void GeographicViewGraphicsView::mapToPolygon() {
 
             BoundingBox bb;
 
-            for (vector<Coord>::const_iterator it3 = polygonSides[0].begin();
+            for (auto it3 = polygonSides[0].begin();
                  it3 != polygonSides[0].end(); ++it3) {
               bb.expand(*it3);
             }
@@ -912,7 +912,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
   if (graph->existProperty(latitudePropertyName) && graph->existProperty(longitudePropertyName)) {
     DoubleProperty *latitudeProperty = graph->getProperty<DoubleProperty>(latitudePropertyName);
     DoubleProperty *longitudeProperty = graph->getProperty<DoubleProperty>(longitudePropertyName);
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       latLng.first = latitudeProperty->getNodeValue(n);
       latLng.second = longitudeProperty->getNodeValue(n);
       nodeLatLng[n] = latLng;
@@ -922,7 +922,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
   if (graph->existProperty(edgesPathsPropertyName)) {
     DoubleVectorProperty *edgesPathsProperty =
         graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       const std::vector<double> &edgePath = edgesPathsProperty->getEdgeValue(e);
       std::vector<std::pair<double, double>> latLngs;
 
@@ -1200,7 +1200,7 @@ void GeographicViewGraphicsView::switchViewType() {
   if (viewType != GeographicView::Globe && geoLayoutComputed) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       if (viewSize != geoViewSize) {
         const Size &nodeSize = viewSize->getNodeValue(n);
         geoViewSize->setNodeValue(n, nodeSize);
@@ -1213,7 +1213,7 @@ void GeographicViewGraphicsView::switchViewType() {
     }
 
     if (!edgeBendsLatLng.empty()) {
-      for (const edge &e : graph->edges()) {
+      for (auto e : graph->edges()) {
         vector<Coord> edgeBendsCoords;
 
         for (unsigned int i = 0; i < edgeBendsLatLng[e].size(); ++i) {
@@ -1284,7 +1284,7 @@ void GeographicViewGraphicsView::switchViewType() {
       geoViewShape->setAllNodeValue(NodeShape::Sphere);
       geoViewShape->setAllEdgeValue(EdgeShape::CubicBSplineCurve);
 
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         if (viewSize != geoViewSize) {
           const Size &nodeSize = viewSize->getNodeValue(n);
           geoViewSize->setNodeValue(n, nodeSize);
@@ -1309,7 +1309,7 @@ void GeographicViewGraphicsView::switchViewType() {
         }
       }
 
-      for (const edge &e : graph->edges()) {
+      for (auto e : graph->edges()) {
         const std::pair<node, node> &eEnds = graph->ends(e);
         node src = eEnds.first;
         node tgt = eEnds.second;

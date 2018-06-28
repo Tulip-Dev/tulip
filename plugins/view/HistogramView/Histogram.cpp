@@ -181,25 +181,25 @@ void Histogram::computeHistogram() {
   integerScale = true;
 
   if (uniformQuantification) {
-    DoubleProperty *propertyCopy = new DoubleProperty(graph);
+    DoubleProperty propertyCopy(graph);
 
     if (graph->getProperty(propertyName)->getTypename() == "double") {
-      *propertyCopy = *(graph->getProperty<DoubleProperty>(propertyName));
+      propertyCopy = *(graph->getProperty<DoubleProperty>(propertyName));
     } else {
       if (dataLocation == NODE) {
-        for (const node &n : graph->nodes()) {
-          propertyCopy->setNodeValue(
+        for (auto n : graph->nodes()) {
+          propertyCopy.setNodeValue(
               n, graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n));
         }
       } else {
-        for (const edge &e : graph->edges()) {
-          propertyCopy->setEdgeValue(
+        for (auto e : graph->edges()) {
+          propertyCopy.setEdgeValue(
               e, graph->getProperty<IntegerProperty>(propertyName)->getEdgeValue(e));
         }
       }
     }
 
-    propertyCopy->uniformQuantification(nbHistogramBins);
+    propertyCopy.uniformQuantification(nbHistogramBins);
 
     for (unsigned int i = 0; i < nbHistogramBins; ++i) {
       binMinMaxMap[i].first = DBL_MAX;
@@ -208,8 +208,8 @@ void Histogram::computeHistogram() {
 
     if (dataLocation == NODE) {
 
-      for (const node &n : graph->nodes()) {
-        unsigned int binId = uint(propertyCopy->getNodeValue(n));
+      for (auto n : graph->nodes()) {
+        unsigned int binId = uint(propertyCopy.getNodeValue(n));
         histogramBins[binId].push_back(n.id);
 
         if (histogramBins[binId].size() > maxBinSize) {
@@ -235,8 +235,8 @@ void Histogram::computeHistogram() {
 
     } else {
 
-      for (const edge &e : graph->edges()) {
-        unsigned int binId = uint(propertyCopy->getEdgeValue(e));
+      for (auto e : graph->edges()) {
+        unsigned int binId = uint(propertyCopy.getEdgeValue(e));
         histogramBins[binId].push_back(e.id);
 
         if (histogramBins[binId].size() > maxBinSize) {
@@ -278,12 +278,10 @@ void Histogram::computeHistogram() {
 
     uniformQuantificationAxisLabels.push_back(
         getStringFromNumber(binMinMaxMap[nbHistogramBins - 1].second));
-    delete propertyCopy;
-
   } else {
     if (dataLocation == NODE) {
 
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         double value;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
@@ -314,7 +312,7 @@ void Histogram::computeHistogram() {
 
     } else {
 
-      for (const edge &e : graph->edges()) {
+      for (auto e : graph->edges()) {
         double value;
 
         if (graph->getProperty(propertyName)->getTypename() == "double") {
