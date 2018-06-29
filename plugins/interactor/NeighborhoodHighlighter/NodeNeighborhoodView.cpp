@@ -84,24 +84,21 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
         map<double, vector<node>> nodesTokeep;
         nodesAtDist[currentDist].clear();
 
-        for (vector<node>::const_iterator it = graphViewNodes.begin(); it != graphViewNodes.end();
-             ++it) {
-          nodesTokeep[property->getNodeValue(*it)].push_back(*it);
+        for (auto n : graphViewNodes) {
+          nodesTokeep[property->getNodeValue(n)].push_back(n);
         }
 
         graphViewNodes.clear();
         graphViewNodes.push_back(n);
         int count = 0;
 
-        for (std::map<double, vector<node>>::const_iterator it = nodesTokeep.begin();
-             it != nodesTokeep.end(); ++it) {
-          for (vector<node>::const_iterator nodeIt = it->second.begin(); nodeIt != it->second.end();
-               ++nodeIt) {
+        for (auto it = nodesTokeep.begin(); it != nodesTokeep.end(); ++it) {
+          for (auto n : it->second) {
             if (count++ > nbNodes)
               break;
 
-            graphViewNodes.push_back(*nodeIt);
-            nodesAtDist[currentDist].push_back(*nodeIt);
+            graphViewNodes.push_back(n);
+            nodesAtDist[currentDist].push_back(n);
           }
         }
       }
@@ -137,13 +134,13 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
     graphViewNodes.clear();
     graphViewEdges.clear();
 
-    for (const node &n2 : graph_component->nodes()) {
+    for (auto n2 : graph_component->nodes()) {
       if (result.getNodeValue(n2)) {
         graphViewNodes.push_back(n2);
       }
     }
 
-    for (const edge &e : graph_component->edges()) {
+    for (auto e : graph_component->edges()) {
       if (result.getEdgeValue(e)) {
         graphViewEdges.push_back(e);
       }
@@ -153,7 +150,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
 
 void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecursion) {
 
-  for (const node &inNode : graph_component->getInNodes(n)) {
+  for (auto inNode : graph_component->getInNodes(n)) {
     if (find(graphViewNodes.begin(), graphViewNodes.end(), inNode) == graphViewNodes.end()) {
       graphViewNodes.push_back(inNode);
       nodesAtDist[dist].push_back(inNode);
@@ -168,7 +165,7 @@ void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecu
   }
 
   if (dist > 1 && !noRecursion) {
-    for (const node &inNode : graph_component->getInNodes(n)) {
+    for (auto inNode : graph_component->getInNodes(n)) {
       getInNeighbors(inNode, dist - 1);
     }
   }
@@ -176,7 +173,7 @@ void NodeNeighborhoodView::getInNeighbors(node n, unsigned int dist, bool noRecu
 
 void NodeNeighborhoodView::getOutNeighbors(node n, unsigned int dist, bool noRecursion) {
 
-  for (const node &outNode : graph_component->getOutNodes(n)) {
+  for (auto outNode : graph_component->getOutNodes(n)) {
     if (find(graphViewNodes.begin(), graphViewNodes.end(), outNode) == graphViewNodes.end()) {
       graphViewNodes.push_back(outNode);
       nodesAtDist[dist].push_back(outNode);
@@ -191,7 +188,7 @@ void NodeNeighborhoodView::getOutNeighbors(node n, unsigned int dist, bool noRec
   }
 
   if (dist > 1 && !noRecursion) {
-    for (const node &outNode : graph_component->getOutNodes(n)) {
+    for (auto outNode : graph_component->getOutNodes(n)) {
       getOutNeighbors(outNode, dist - 1);
     }
   }
