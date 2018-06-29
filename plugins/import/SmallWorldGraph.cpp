@@ -98,7 +98,7 @@ public:
 
     const vector<node> &nodes = graph->nodes();
 
-    for (const node &n : nodes) {
+    for (auto n : nodes) {
       newLayout->setNodeValue(n,
                               Coord(float(randomInteger(WIDTH)), float(randomInteger(HEIGHT)), 0));
     }

@@ -73,7 +73,7 @@ static const char *paramHelp[] = {
     "The type of curve to compute (12 available: 6 quadratics and 6 cubics).",
 
     // bezier edges
-    "If activated, set all edge shapes to Bézier curves."};
+    "If activated, set all edge shapes to Bezier curves."};
 
 static const char *curveTypeValues = "QuadraticContinuous <br>"
                                      "QuadraticDiscrete <br>"
@@ -105,15 +105,14 @@ public:
   }
 
   std::vector<tlp::Coord> computeCubicBezierControlPoints(tlp::edge e) {
-    tlp::node src = graph->source(e);
-    tlp::node tgt = graph->target(e);
-    const tlp::Coord &srcCoord = layout->getNodeValue(src);
-    const tlp::Coord &tgtCoord = layout->getNodeValue(tgt);
+    std::pair<tlp::node, tlp::node> eEnds = graph->ends(e);
+    const tlp::Coord &srcCoord = layout->getNodeValue(eEnds.first);
+    const tlp::Coord &tgtCoord = layout->getNodeValue(eEnds.second);
     tlp::Coord dir = tgtCoord - srcCoord;
     dir /= dir.norm();
     float length = srcCoord.dist(tgtCoord);
     float factor = curveRoundness * length;
-    tlp::Coord normal = tlp::Coord(dir[1], -dir[0]);
+    tlp::Coord normal(dir[1], -dir[0]);
     normal *= factor;
 
     if (curveType == CURVE_TYPE_CUBIC_VERTICAL ||
@@ -155,8 +154,9 @@ public:
   std::vector<tlp::Coord> computeQuadraticBezierControlPoints(tlp::edge e) {
     float x = FLT_MAX, y = FLT_MAX;
     float factor = curveRoundness;
-    const tlp::Coord &srcCoord = layout->getNodeValue(graph->source(e));
-    const tlp::Coord &tgtCoord = layout->getNodeValue(graph->target(e));
+    std::pair<tlp::node, tlp::node> eEnds = graph->ends(e);
+    const tlp::Coord &srcCoord = layout->getNodeValue(eEnds.first);
+    const tlp::Coord &tgtCoord = layout->getNodeValue(eEnds.second);
     float dx = std::abs(srcCoord[0] - tgtCoord[0]);
     float dy = std::abs(srcCoord[1] - tgtCoord[1]);
 
@@ -305,9 +305,9 @@ public:
     std::vector<tlp::Coord> controlPoints;
 
     if (x != FLT_MAX && y != FLT_MAX) {
-      controlPoints.push_back(tlp::Coord(x, y));
+      controlPoints.emplace_back(x, y);
     } else {
-      controlPoints.push_back((srcCoord + tgtCoord) / 2.f);
+      controlPoints.emplace_back((srcCoord + tgtCoord) / 2.f);
     }
 
     return controlPoints;
@@ -331,7 +331,7 @@ public:
       layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
     }
 
-    for (const tlp::edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       if (curveType >= CURVE_TYPE_CUBIC_CONTINUOUS) {
         layout->setEdgeValue(e, computeCubicBezierControlPoints(e));
       } else {

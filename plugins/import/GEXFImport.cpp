@@ -439,13 +439,13 @@ public:
         quotientGraph = graph->addCloneSubGraph("quotient graph");
 
       // iterate on nodes
-      for (const node &n : stableIterator(sg->getNodes())) {
+      for (auto n : stableIterator(sg->getNodes())) {
         Graph *msg = nodeToSubgraph.get(n.id);
 
         if (msg) {
           // if the current node is a fake meta node
           // add the nodes of the pointed subgraph
-          for (const node &msn : msg->nodes()) {
+          for (auto msn : msg->nodes()) {
             sg->addNode(msn);
             // the nodes in a pointed subgraph have to be removed
             // from quotientGraph
@@ -461,11 +461,11 @@ public:
   void addSubGraphsEdges() {
     // iterate on each subgraph of graph
     // and add needed edges
-    for (Graph *sg : graph->getSubGraphs()) {
+    for (Graph *sg : graph->subGraphs()) {
       // iterate on nodes
-      for (const node &n : sg->nodes()) {
+      for (auto n : sg->nodes()) {
         // add its out edges
-        for (const edge &e : graph->getOutEdges(n)) {
+        for (auto e : graph->getOutEdges(n)) {
           if (sg->isElement(graph->target(e)))
             sg->addEdge(e);
         }
@@ -477,9 +477,9 @@ public:
     // iterate on each subgraph of g
     // and add needed meta nodes
 
-    for (Graph *sg : graph->getSubGraphs()) {
+    for (Graph *sg : graph->subGraphs()) {
       // iterate on nodes
-      for (const node &n : stableIterator(sg->getNodes())) {
+      for (auto n : sg->nodes()) {
         Graph *msg = nodeToSubgraph.get(n.id);
 
         if (msg != nullptr) {
@@ -505,7 +505,7 @@ public:
             quotientGraph->addNode(mn);
 
           // replace n by mn
-          for (const edge &e : graph->getInOutEdges(n)) {
+          for (auto e : graph->getInOutEdges(n)) {
             const pair<node, node> &eEnds = graph->ends(e);
 
             if (eEnds.first == n) {
@@ -531,11 +531,10 @@ public:
 
   // Methods which compute Cubic Bézier control points for each edge
   void curveGraphEdges() {
-    for (const edge &e : graph->edges()) {
-      node src = graph->source(e);
-      node tgt = graph->target(e);
-      Coord srcCoord = viewLayout->getNodeValue(src);
-      Coord tgtCoord = viewLayout->getNodeValue(tgt);
+    for (auto e : graph->edges()) {
+      std::pair<node, node> eEnds = graph->ends(e);
+      const Coord &srcCoord = viewLayout->getNodeValue(eEnds.first);
+      const Coord &tgtCoord = viewLayout->getNodeValue(eEnds.second);
       Coord dir = tgtCoord - srcCoord;
       dir /= dir.norm();
       float length = srcCoord.dist(tgtCoord);
@@ -555,8 +554,8 @@ public:
 
       // Set the second and third Cubic Bézier curve control points as edge bends
       vector<Coord> bends;
-      bends.push_back(p1);
-      bends.push_back(p2);
+      bends.emplace_back(p1);
+      bends.emplace_back(p2);
 
       viewLayout->setEdgeValue(e, bends);
     }

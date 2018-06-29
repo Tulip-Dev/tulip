@@ -122,7 +122,7 @@ struct FuLiao : public ImportModule {
 
         while (rn < (i - 1)) {
           if (!graph->hasEdge(nodes[i], nodes[rn])) {
-            for (const node &v : graph->getInOutNodes(nodes[rn])) {
+            for (auto v : graph->getInOutNodes(nodes[rn])) {
               if (graph->hasEdge(nodes[i], v)) {
                 h_sum++;
               }
@@ -139,7 +139,7 @@ struct FuLiao : public ImportModule {
         while (pr_sum < pr && rn < (i - 1)) {
           if (!graph->hasEdge(nodes[i], nodes[rn])) {
             double h = 0;
-            for (const node &v : graph->getInOutNodes(nodes[rn])) {
+            for (auto v : graph->getInOutNodes(nodes[rn])) {
               if (graph->hasEdge(nodes[i], v)) {
                 h++;
               }

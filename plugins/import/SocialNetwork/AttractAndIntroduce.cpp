@@ -130,7 +130,7 @@ public:
         node ni = nodes[i];
 
         if (pIntroduceProperty[i] > randomDouble(1.0)) {
-          for (const node &fd : graph->getInOutNodes(ni)) {
+          for (auto fd : graph->getInOutNodes(ni)) {
             if (fd == nj || graph->hasEdge(fd, nj, false))
               continue;
 

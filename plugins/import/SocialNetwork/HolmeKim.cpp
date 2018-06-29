@@ -124,7 +124,7 @@ struct HolmeKim : public ImportModule {
           // which are not already connected to nodes[i]
           vector<node> freeNeighbours;
 
-          for (const node &neighbour : graph->getInOutNodes(nodes[firstNeighbour])) {
+          for (auto neighbour : graph->getInOutNodes(nodes[firstNeighbour])) {
             if (!graph->hasEdge(nodes[i], neighbour))
               freeNeighbours.push_back(neighbour);
           }
