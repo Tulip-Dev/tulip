@@ -81,7 +81,7 @@ void SOMAlgorithm::initMap(SOMMap *map, InputSample &inputSample,
   int numberOfNode = map->numberOfNodes();
   int currentNumberOfNode = 0;
   Iterator<node> *nodeIterator = inputSample.getRandomNodeOrder();
-  for (const node &n : map->nodes()) {
+  for (auto n : map->nodes()) {
     if (!nodeIterator->hasNext()) {
       delete nodeIterator;
       nodeIterator = inputSample.getRandomNodeOrder();
@@ -146,7 +146,7 @@ node SOMAlgorithm::findBMU(SOMMap *map, const DynamicVector<double> &input, doub
   node n;
   double bestDist = 0;
 
-  for (const node &n : map->nodes()) {
+  for (auto n : map->nodes()) {
 
     // take the first to init the comparaison
     if (matchList.empty()) {
@@ -187,7 +187,7 @@ void SOMAlgorithm::propagateModification(SOMMap *map, const DynamicVector<double
                                          unsigned int currentIteration, unsigned int maxIteration,
                                          unsigned int sampleSize) {
 
-  // Parcour en largeur
+  // Parcours en largeur
   MutableContainer<bool> seen;
   seen.setAll(false);
   MutableContainer<int> distance;
@@ -224,7 +224,7 @@ void SOMAlgorithm::propagateModification(SOMMap *map, const DynamicVector<double
     // Mark neighborhood
     // If the diffusion rate is equal to 0 no need to propagate modification
     if (diffusionRate > 0) {
-      for (const node &neighbor : map->getInOutNodes(current)) {
+      for (auto neighbor : map->getInOutNodes(current)) {
         // not already treated
         if (!seen.get(neighbor.id)) {
           seen.set(neighbor.id, true);
@@ -244,7 +244,7 @@ void SOMAlgorithm::computeMapping(SOMMap *map, InputSample &inputSample,
   double dist;
   maxElement = 0;
 
-  for (const node &n : inputSample.getNodes()) {
+  for (auto n : inputSample.getNodes()) {
     node somNode = findBMU(map, inputSample.getWeight(n), dist);
     cumDist += dist;
     mappingTab[somNode].insert(n);

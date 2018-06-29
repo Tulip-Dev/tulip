@@ -211,7 +211,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       StringProperty *graphLabel = scatterPlotGraph->getProperty<StringProperty>("viewLabel");
       edgeToNode.clear();
       nodeToEdge.clear();
-      for (const edge &e : scatterPlotGraph->edges()) {
+      for (auto e : scatterPlotGraph->edges()) {
         node n = edgeToNode[e] = edgeAsNodeGraph->addNode();
         nodeToEdge[n] = e;
         edgeAsNodeGraphColor->setNodeValue(n, graphColor->getEdgeValue(e));
@@ -367,9 +367,8 @@ DataSet ScatterPlot2DView::state() const {
 
   dataSet.set("selected graph properties", selectedGraphPropertiesDataSet);
   DataSet generatedScatterPlotDataSet;
-  map<pair<string, string>, bool>::const_iterator it;
 
-  for (it = scatterPlotsGenMap.begin(); it != scatterPlotsGenMap.end(); ++it) {
+  for (auto it = scatterPlotsGenMap.begin(); it != scatterPlotsGenMap.end(); ++it) {
     generatedScatterPlotDataSet.set((*it).first.first + "_" + (*it).first.second, (*it).second);
   }
 
@@ -403,7 +402,7 @@ void ScatterPlot2DView::graphChanged(Graph *) {
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
-  for (QList<Interactor *>::iterator it = interactorsList.begin(); it != interactorsList.end();
+  for (auto it = interactorsList.begin(); it != interactorsList.end();
        ++it) {
     if (!(dynamic_cast<ScatterPlot2DInteractorNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);
@@ -445,7 +444,7 @@ void ScatterPlot2DView::computeNodeSizes() {
     }
   }
 
-  for (const node &n : scatterPlotGraph->nodes()) {
+  for (auto n : scatterPlotGraph->nodes()) {
     const Size &nodeSize = viewSize->getNodeValue(n);
     Size adjustedNodeSize(pointMinSize + resizeFactor * (nodeSize + Size(-1.0f, -1.0f, -1.0f)));
     scatterPlotSize->setNodeValue(n, adjustedNodeSize);
@@ -1142,7 +1141,7 @@ void ScatterPlot2DView::afterSetAllEdgeValue(PropertyInterface *p) {
     BooleanProperty *edgeAsNodeGraphSelection =
         edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty *>(p);
-    for (const edge &e : scatterPlotGraph->edges()) {
+    for (auto e : scatterPlotGraph->edges()) {
       if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
         edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
       }

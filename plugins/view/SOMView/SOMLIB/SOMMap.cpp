@@ -112,7 +112,7 @@ DynamicVector<double> &SOMMap::getWeight(tlp::node n) {
 }
 const DynamicVector<double> SOMMap::getWeight(const tlp::node &n) const {
 
-  std::map<tlp::node, DynamicVector<double>>::const_iterator it = nodeToNodeVec.find(n);
+  auto it = nodeToNodeVec.find(n);
 
   if (it != nodeToNodeVec.end()) {
     return (*it).second;
@@ -129,23 +129,22 @@ void SOMMap::registerModification(const vector<string> &propertiesToListen) {
   // Get all properties
   vector<PropertyInterface *> properties;
 
-  for (vector<string>::const_iterator it = propertiesToListen.begin();
-       it != propertiesToListen.end(); ++it) {
+  for (const std::string &strProp : propertiesToListen) {
     // If the properties don't exist create it
-    if (!existProperty((*it))) {
+    if (!existProperty(strProp)) {
 #ifndef NDEBUG
       std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
                 << "Property doesn't exist creating new" << std::endl;
 #endif
       DoubleProperty *property = new DoubleProperty(this);
-      addLocalProperty((*it), property);
+      addLocalProperty(strProp, property);
       properties.push_back(property);
     } else
-      properties.push_back(getProperty((*it)));
+      properties.push_back(getProperty(strProp));
   }
 
   // Store all the value from the DynamicVectors in the properties
-  for (const node &n : nodes()) {
+  for (auto n : nodes()) {
     assert(propertiesToListen.size() == nodeToNodeVec[n].getSize());
 
     for (unsigned int propertyNumber = 0; propertyNumber < properties.size(); ++propertyNumber) {

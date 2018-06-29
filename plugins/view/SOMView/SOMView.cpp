@@ -77,7 +77,7 @@ SOMView::~SOMView() {
     mask = nullptr;
 
     // Clear the color properties
-    for (map<string, ColorProperty *>::iterator it = propertyToColorProperty.begin();
+    for (auto it = propertyToColorProperty.begin();
          it != propertyToColorProperty.end(); ++it) {
       delete it->second;
     }
@@ -386,7 +386,7 @@ void SOMView::drawPreviews() {
 void SOMView::clearPreviews() {
 
   // Destroy preview
-  for (map<string, SOMPreviewComposite *>::iterator it = propertyToPreviews.begin();
+  for (auto it = propertyToPreviews.begin();
        it != propertyToPreviews.end(); ++it) {
     delete it->second;
   }
@@ -415,7 +415,7 @@ void SOMView::setColorToMap(tlp::ColorProperty *newColor) {
   if (mask) {
     cp = new ColorProperty(som);
     deleteAfter = true;
-    for (const node &n : som->nodes()) {
+    for (auto n : som->nodes()) {
       if (mask->getNodeValue(n))
         cp->setNodeValue(n, newColor->getNodeValue(n));
       else
@@ -691,12 +691,12 @@ void SOMView::computeMapping() {
   Coord nodeCoord;
   Size nodeSize;
 
-  for (map<node, set<node>>::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
+  for (auto it = mappingTab.begin(); it != mappingTab.end(); ++it) {
     som->getPosForNode(it->first, x, y);
     nodeDisplayAreaTopLeft = marginShift + mapCompositeElements->getTopLeftPositionForElement(x, y);
     unsigned int num = 0;
 
-    for (set<node>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+    for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
       // Compute node center
       nodeCoord.set(nodeDisplayAreaTopLeft[0] + (num % colNumber) * maxElementWidth +
                         maxElementWidth / 2,
@@ -733,7 +733,7 @@ void SOMView::addPropertyToSelection(const string &propertyName) {
     refreshSOMMap();
     getGlMainWidget()->getScene()->centerScene();
 
-    map<string, SOMPreviewComposite *>::iterator it = propertyToPreviews.find(propertyName);
+    auto it = propertyToPreviews.find(propertyName);
     assert(it != propertyToPreviews.end() && it->second);
     switchToDetailledMode(it->second);
     draw();
@@ -775,7 +775,7 @@ ColorProperty *SOMView::getSelectedBaseSOMColors() {
 vector<SOMPreviewComposite *> SOMView::getPreviews() {
   vector<SOMPreviewComposite *> previews;
 
-  for (map<string, SOMPreviewComposite *>::iterator it = propertyToPreviews.begin();
+  for (auto it = propertyToPreviews.begin();
        it != propertyToPreviews.end(); ++it) {
     previews.push_back((*it).second);
   }
@@ -788,9 +788,9 @@ void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewCom
   previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, nullptr,
                                             selectedEntities);
 
-  for (vector<SelectedEntity>::iterator itEntities = selectedEntities.begin();
+  for (auto itEntities = selectedEntities.begin();
        itEntities != selectedEntities.end(); ++itEntities) {
-    for (map<string, SOMPreviewComposite *>::iterator itSOM = propertyToPreviews.begin();
+    for (auto itSOM = propertyToPreviews.begin();
          itSOM != propertyToPreviews.end(); ++itSOM) {
       if (itSOM->second->isElement(itEntities->getSimpleEntity())) {
         result.push_back(itSOM->second);
@@ -805,7 +805,7 @@ void SOMView::computeColor(SOMMap *som, tlp::NumericProperty *property, tlp::Col
   double min = property->getNodeDoubleMin(som);
   double max = property->getNodeDoubleMax(som);
 
-  for (const node &n : som->nodes()) {
+  for (auto n : som->nodes()) {
     double curentValue = property->getNodeDoubleValue(n);
     float pos = 0;
 
@@ -889,7 +889,7 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
       if (mask) {
         somColorProperty = new ColorProperty(som);
         deleteAfter = true;
-        for (const node &n : som->nodes()) {
+        for (auto n : som->nodes()) {
           if (mask->getNodeValue(n))
             somColorProperty->setNodeValue(n, origColor->getNodeValue(n));
           else
@@ -907,10 +907,10 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
     Observable::holdObservers();
     graph()->push();
 
-    for (map<node, set<node>>::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
+    for (auto it = mappingTab.begin(); it != mappingTab.end(); ++it) {
       Color currentNodeColor = somColorProperty->getNodeValue(it->first);
 
-      for (set<node>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+      for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
         // Update real color
         realColorProp->setNodeValue(*it2, currentNodeColor);
       }
@@ -924,7 +924,7 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
 }
 
 void SOMView::updateDefaultColorProperty() {
-  for (map<std::string, ColorProperty *>::iterator itCP = propertyToColorProperty.begin();
+  for (auto itCP = propertyToColorProperty.begin();
        itCP != propertyToColorProperty.end(); ++itCP) {
     double min, max;
     // Recompute color property
@@ -943,12 +943,12 @@ void SOMView::refreshPreviews() {
     maskedColor = new ColorProperty(som);
   }
 
-  for (map<std::string, SOMPreviewComposite *>::iterator itPC = propertyToPreviews.begin();
+  for (auto itPC = propertyToPreviews.begin();
        itPC != propertyToPreviews.end(); ++itPC) {
     ColorProperty *color = propertyToColorProperty[itPC->first];
 
     if (mask) {
-      for (const node &n : som->nodes()) {
+      for (auto n : som->nodes()) {
         if (mask->getNodeValue(n))
           maskedColor->setNodeValue(n, color->getNodeValue(n));
         else
@@ -972,8 +972,8 @@ void SOMView::setMask(const std::set<node> &maskSet) {
 
   mask->setAllNodeValue(false);
 
-  for (set<node>::const_iterator it = maskSet.begin(); it != maskSet.end(); ++it) {
-    mask->setNodeValue((*it), true);
+  for (auto n : maskSet) {
+    mask->setNodeValue(n, true);
   }
 
   refreshPreviews();
@@ -998,9 +998,8 @@ void SOMView::copySelectionToMask() {
   if (graph()) {
     set<node> somNodes;
     BooleanProperty *selection = graph()->getProperty<BooleanProperty>("viewSelection");
-    for (const node &n : selection->getNodesEqualTo(true, graph())) {
-      for (map<tlp::node, std::set<tlp::node>>::iterator it = mappingTab.begin();
-           it != mappingTab.end(); ++it) {
+    for (auto n : selection->getNodesEqualTo(true, graph())) {
+      for (auto it = mappingTab.begin(); it != mappingTab.end(); ++it) {
         if (it->second.find(n) != it->second.end())
           somNodes.insert(it->first);
       }
@@ -1016,7 +1015,7 @@ void SOMView::copySelectionToMask() {
 void SOMView::invertMask() {
   if (mask) {
     set<node> somNodes;
-    for (const node &n : som->nodes()) {
+    for (auto n : som->nodes()) {
       if (!mask->getNodeValue(n))
         somNodes.insert(n);
     }
@@ -1033,9 +1032,9 @@ void SOMView::selectAllNodesInMask() {
     BooleanProperty *selection = graph()->getProperty<BooleanProperty>("viewSelection");
     Observable::holdObservers();
     selection->setAllNodeValue(false);
-    for (const node &n : mask->getNodesEqualTo(true, som)) {
+    for (auto n : mask->getNodesEqualTo(true, som)) {
       if (mappingTab.find(n) != mappingTab.end()) {
-        for (set<node>::iterator it = mappingTab[n].begin(); it != mappingTab[n].end(); ++it) {
+        for (auto it = mappingTab[n].begin(); it != mappingTab[n].end(); ++it) {
           selection->setNodeValue(*it, true);
         }
       }
@@ -1200,7 +1199,7 @@ void SOMView::registerTriggers() {
 void SOMView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
-  for (QList<Interactor *>::iterator it = interactorsList.begin(); it != interactorsList.end();
+  for (auto it = interactorsList.begin(); it != interactorsList.end();
        ++it) {
     if (!(dynamic_cast<SOMViewNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);

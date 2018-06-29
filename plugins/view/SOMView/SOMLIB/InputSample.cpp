@@ -77,14 +77,13 @@ void InputSample::buildPropertyVector(const std::vector<std::string> &properties
   propertiesList.clear();
   PropertyInterface *property;
 
-  for (vector<string>::const_iterator it = propertiesToListen.begin();
-       it != propertiesToListen.end(); ++it) {
-    if (rootGraph->existProperty(*it)) {
-      property = rootGraph->getProperty((*it));
+  for (const std::string &strProp : propertiesToListen) {
+    if (rootGraph->existProperty(strProp)) {
+      property = rootGraph->getProperty(strProp);
       string type = property->getTypename();
 
       if (type.compare("double") == 0 || type.compare("int") == 0) {
-        propertiesNameList.push_back(*it);
+        propertiesNameList.push_back(strProp);
         propertiesList.push_back(static_cast<NumericProperty *>(property));
       } else {
         cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
@@ -123,19 +122,7 @@ node InputSample::getNodeNumber(unsigned int i) {
 
 unsigned int InputSample::getNumberForNode(tlp::node no) {
   assert(rootGraph && rootGraph->isElement(no));
-  node n;
-  unsigned int num = 0;
-  Iterator<node> *nIt = rootGraph->getNodes();
-  n = nIt->next();
-
-  while (n != no) {
-    assert(nIt->hasNext());
-    n = nIt->next();
-    ++num;
-  }
-
-  delete nIt;
-  return num;
+  return rootGraph->nodePos(no);
 }
 
 void InputSample::buildNodeVector(node n) {
@@ -144,12 +131,14 @@ void InputSample::buildNodeVector(node n) {
   unsigned int propNum = 0;
 
   if (usingNormalizedValues) {
-    for (; propNum < propertiesList.size(); ++propNum) {
-      nodeVec[propNum] = normalize(propertiesList[propNum]->getNodeDoubleValue(n), propNum);
+    for (auto prop : propertiesList) {
+      nodeVec[propNum] = normalize(prop->getNodeDoubleValue(n), propNum);
+      ++propNum;
     }
   } else {
-    for (; propNum < propertiesList.size(); ++propNum) {
-      nodeVec[propNum] = propertiesList[propNum]->getNodeDoubleValue(n);
+    for (auto prop : propertiesList) {
+      nodeVec[propNum] = prop->getNodeDoubleValue(n);
+      ++propNum;
     }
   }
 
@@ -217,12 +206,11 @@ void InputSample::update(std::set<Observable *>::iterator begin,
   bool updated = false;
 
   // A property has been updated clear the cache
-  for (std::set<Observable *>::iterator it = begin; it != end; ++it) {
+  for (auto it = begin; it != end; ++it) {
     unsigned int propNum = 0;
 
-    for (std::vector<tlp::NumericProperty *>::iterator itP = propertiesList.begin();
-         itP != propertiesList.end(); ++itP) {
-      if ((*it) == (*itP)) {
+    for (auto prop : propertiesList) {
+      if ((*it) == prop) {
         // mWeightTab.setAll(DynamicVector<double> ());
         mWeightTab.clear();
 
@@ -310,11 +298,7 @@ tlp::Iterator<tlp::node> *InputSample::getNodes() {
 
 tlp::Iterator<tlp::node> *InputSample::getRandomNodeOrder() {
   if (rootGraph) {
-    randomVector.clear();
-    for (const node &n : rootGraph->nodes()) {
-      // Random placing nodes
-      randomVector.push_back(n);
-    }
+    randomVector = rootGraph->nodes();
     random_shuffle(randomVector.begin(), randomVector.end());
 
     return new StlIterator<node, vector<node>::iterator>(randomVector.begin(), randomVector.end());
@@ -326,7 +310,7 @@ void InputSample::updateMeanValue(unsigned int propNum) {
   assert(propNum < propertiesList.size());
   NumericProperty *property = propertiesList[propNum];
   double mean = 0.0;
-  for (const node &n : rootGraph->nodes()) {
+  for (auto n : rootGraph->nodes()) {
     mean += property->getNodeDoubleValue(n);
   }
   meanProperties[propNum] = mean / double(rootGraph->numberOfNodes());
@@ -342,7 +326,7 @@ void InputSample::updateSDValue(unsigned int propNum) {
 
   NumericProperty *property = propertiesList[propNum];
   double sd = 0.0;
-  for (const node &n : rootGraph->nodes())
+  for (auto n : rootGraph->nodes())
     sd += pow(property->getNodeDoubleValue(n) - meanProperties[propNum], 2.0);
 
   if (sd <= 0.0) {

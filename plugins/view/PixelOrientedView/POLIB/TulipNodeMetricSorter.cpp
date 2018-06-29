@@ -81,7 +81,7 @@ unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string &propert
     if (propertyType == "double") {
       set<double> sd;
 
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         sd.insert(graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(n));
       }
 
@@ -89,7 +89,7 @@ unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string &propert
     } else if (propertyType == "int") {
       set<int> si;
 
-      for (const node &n : graph->nodes()) {
+      for (auto n : graph->nodes()) {
         si.insert(graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(n));
       }
 

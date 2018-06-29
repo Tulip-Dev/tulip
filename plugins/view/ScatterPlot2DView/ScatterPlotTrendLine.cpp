@@ -45,7 +45,7 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
 
   // We compute the sum of xk, yk, xk² and xkyk for the whole set of nodes
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     float nodeValx = xk->getNodeValue(n), nodeValy = yk->getNodeValue(n);
     sxk += nodeValx;
     sxkxk += (nodeValx * nodeValx);
@@ -140,7 +140,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget *) {
   } else {
     IntegerProperty *xDimInt = graph->getProperty<IntegerProperty>(xDimName);
     xDim = new DoubleProperty(graph);
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       xDim->setNodeValue(n, double(xDimInt->getNodeValue(n)));
     }
   }
@@ -150,7 +150,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget *) {
   } else {
     IntegerProperty *yDimInt = graph->getProperty<IntegerProperty>(yDimName);
     yDim = new DoubleProperty(graph);
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       yDim->setNodeValue(n, double(yDimInt->getNodeValue(n)));
     }
   }

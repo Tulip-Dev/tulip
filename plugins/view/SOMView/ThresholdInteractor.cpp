@@ -223,6 +223,7 @@ SliderBar::~SliderBar() {}
 float SliderBar::getLeftBound() {
   return left->getLeftBound();
 }
+
 float SliderBar::getRightBound() {
   return right->getRightBound();
 }
@@ -232,6 +233,7 @@ void SliderBar::beginShift() {
   right->beginShift();
   left->beginShift();
 }
+
 void SliderBar::shift(float shift) {
   float combinedShift = shift;
 
@@ -244,11 +246,13 @@ void SliderBar::shift(float shift) {
   right->shift(combinedShift);
   left->shift(combinedShift);
 }
+
 void SliderBar::endShift() {
   right->endShift();
   left->endShift();
   isVisible = false;
 }
+
 void SliderBar::draw(float lod, tlp::Camera *camera) {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -281,6 +285,7 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
 
   glDisable(GL_BLEND);
 }
+
 ThresholdInteractor::ThresholdInteractor()
     : layer(new GlLayer("Threshold")), mouvingSlider(nullptr), rSlider(nullptr), lSlider(nullptr),
       bar(nullptr), startDrag(false), XPosCursor(0), textureName("") {}
@@ -317,6 +322,7 @@ bool ThresholdInteractor::draw(GlMainWidget *glMainWidget) {
 
   return true;
 }
+
 bool ThresholdInteractor::eventFilter(QObject *widget, QEvent *event) {
 
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
@@ -455,7 +461,7 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
                                    ? inputSample.normalize(lSlider->getValue(), propertyIndex)
                                    : lSlider->getValue();
 
-  for (const node &n : it) {
+  for (auto n : it) {
     double nodeValue = currentProperty->getNodeDoubleValue(n);
 
     if (nodeValue <= rightSliderRealValue && nodeValue >= leftSliderRealValue) {
@@ -496,6 +502,7 @@ void ThresholdInteractor::propertyChanged(SOMView *somView, const string &proper
   } else
     layer->setVisible(false);
 }
+
 void ThresholdInteractor::buildSliders(SOMView *somView) {
   BooleanProperty *mask = somView->getMask();
   SOMMap *som = somView->getSOM();
@@ -510,7 +517,7 @@ void ThresholdInteractor::buildSliders(SOMView *somView) {
   if (mask) {
     intervalMinValue = maxValue;
     intervalMaxValue = minValue;
-    for (const node &n : mask->getNodesEqualTo(true, som)) {
+    for (auto n : mask->getNodesEqualTo(true, som)) {
       double nodeValue = currentProperty->getNodeDoubleValue(n);
 
       if (nodeValue < intervalMinValue)
