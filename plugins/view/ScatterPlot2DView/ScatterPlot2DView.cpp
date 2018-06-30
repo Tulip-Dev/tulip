@@ -402,8 +402,7 @@ void ScatterPlot2DView::graphChanged(Graph *) {
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
-  for (auto it = interactorsList.begin(); it != interactorsList.end();
-       ++it) {
+  for (auto it = interactorsList.begin(); it != interactorsList.end(); ++it) {
     if (!(dynamic_cast<ScatterPlot2DInteractorNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);
 

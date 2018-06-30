@@ -77,8 +77,7 @@ SOMView::~SOMView() {
     mask = nullptr;
 
     // Clear the color properties
-    for (auto it = propertyToColorProperty.begin();
-         it != propertyToColorProperty.end(); ++it) {
+    for (auto it = propertyToColorProperty.begin(); it != propertyToColorProperty.end(); ++it) {
       delete it->second;
     }
 
@@ -386,8 +385,7 @@ void SOMView::drawPreviews() {
 void SOMView::clearPreviews() {
 
   // Destroy preview
-  for (auto it = propertyToPreviews.begin();
-       it != propertyToPreviews.end(); ++it) {
+  for (auto it = propertyToPreviews.begin(); it != propertyToPreviews.end(); ++it) {
     delete it->second;
   }
 
@@ -775,8 +773,7 @@ ColorProperty *SOMView::getSelectedBaseSOMColors() {
 vector<SOMPreviewComposite *> SOMView::getPreviews() {
   vector<SOMPreviewComposite *> previews;
 
-  for (auto it = propertyToPreviews.begin();
-       it != propertyToPreviews.end(); ++it) {
+  for (auto it = propertyToPreviews.begin(); it != propertyToPreviews.end(); ++it) {
     previews.push_back((*it).second);
   }
 
@@ -788,10 +785,9 @@ void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewCom
   previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, nullptr,
                                             selectedEntities);
 
-  for (auto itEntities = selectedEntities.begin();
-       itEntities != selectedEntities.end(); ++itEntities) {
-    for (auto itSOM = propertyToPreviews.begin();
-         itSOM != propertyToPreviews.end(); ++itSOM) {
+  for (auto itEntities = selectedEntities.begin(); itEntities != selectedEntities.end();
+       ++itEntities) {
+    for (auto itSOM = propertyToPreviews.begin(); itSOM != propertyToPreviews.end(); ++itSOM) {
       if (itSOM->second->isElement(itEntities->getSimpleEntity())) {
         result.push_back(itSOM->second);
       }
@@ -924,8 +920,7 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty *cp) {
 }
 
 void SOMView::updateDefaultColorProperty() {
-  for (auto itCP = propertyToColorProperty.begin();
-       itCP != propertyToColorProperty.end(); ++itCP) {
+  for (auto itCP = propertyToColorProperty.begin(); itCP != propertyToColorProperty.end(); ++itCP) {
     double min, max;
     // Recompute color property
     computePropertyColor(itCP->first, min, max);
@@ -943,8 +938,7 @@ void SOMView::refreshPreviews() {
     maskedColor = new ColorProperty(som);
   }
 
-  for (auto itPC = propertyToPreviews.begin();
-       itPC != propertyToPreviews.end(); ++itPC) {
+  for (auto itPC = propertyToPreviews.begin(); itPC != propertyToPreviews.end(); ++itPC) {
     ColorProperty *color = propertyToColorProperty[itPC->first];
 
     if (mask) {
@@ -1199,8 +1193,7 @@ void SOMView::registerTriggers() {
 void SOMView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
-  for (auto it = interactorsList.begin(); it != interactorsList.end();
-       ++it) {
+  for (auto it = interactorsList.begin(); it != interactorsList.end(); ++it) {
     if (!(dynamic_cast<SOMViewNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);
 
