@@ -177,7 +177,7 @@ void BasicLayoutTest::testKruskal() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Kruskal", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n));
   }
 }

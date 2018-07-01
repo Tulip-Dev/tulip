@@ -65,8 +65,8 @@ void IsMetaEdgeTest::setUp() {
   Graph *sg2 = graph->addSubGraph(&selec);
 
   // link each node of the first cluster to each node of the second cluster
-  for (const node &n1 : sg1->nodes()) {
-    for (const node &n2 : sg2->nodes()) {
+  for (auto n1 : sg1->nodes()) {
+    for (auto n2 : sg2->nodes()) {
       graph->addEdge(n1, n2);
     }
   }
@@ -92,13 +92,13 @@ void IsMetaEdgeTest::testIsMetaEdge() {
   CPPUNIT_ASSERT_EQUAL(2u, quotientGraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, quotientGraph->numberOfEdges());
 
-  for (const node &n : quotientGraph->nodes()) {
+  for (auto n : quotientGraph->nodes()) {
     if (quotientGraph->isMetaNode(n)) {
       ++nbMetaNodes;
     }
   }
 
-  for (const edge &e : quotientGraph->edges()) {
+  for (auto e : quotientGraph->edges()) {
     if (quotientGraph->isMetaEdge(e)) {
       ++nbMetaEdges;
     }

@@ -87,11 +87,11 @@ void BooleanPropertyTest::testSetAll(bool value) {
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT_EQUAL(value, selection->getNodeValue(n));
   }
 
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     CPPUNIT_ASSERT_EQUAL(value, selection->getEdgeValue(e));
   }
 }
@@ -144,11 +144,11 @@ void BooleanPropertyTest::testCopy() {
   BooleanProperty tmp(graph);
   tmp = *selection;
 
-  for (const node &n : nodes) {
+  for (auto n : nodes) {
     CPPUNIT_ASSERT_EQUAL(selection->getNodeValue(n), tmp.getNodeValue(n));
   }
 
-  for (const edge &e : edges) {
+  for (auto e : edges) {
     CPPUNIT_ASSERT_EQUAL(selection->getEdgeValue(e), tmp.getEdgeValue(e));
   }
 }

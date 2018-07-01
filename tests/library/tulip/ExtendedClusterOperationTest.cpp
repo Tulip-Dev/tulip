@@ -122,7 +122,7 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
   edge e02 = quotient->addEdge(nodes[0], nodes[2]);
   unsigned nbEdges = 0;
 
-  for (const edge &e : quotient->getInEdges(nodes[2])) {
+  for (auto e : quotient->getInEdges(nodes[2])) {
     ++nbEdges;
     CPPUNIT_ASSERT(e == e02 || e == edges[1]);
   }
@@ -139,7 +139,7 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
 
   nbEdges = 0;
 
-  for (const edge &e : quotient->getEdgeMetaInfo(metaE)) {
+  for (auto e : quotient->getEdgeMetaInfo(metaE)) {
     ++nbEdges;
     CPPUNIT_ASSERT(e == e02 || e == edges[1]);
   }
@@ -171,7 +171,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
   // open all meta nodes
-  for (const node &n : stableIterator(subgraph->getNodes())) {
+  for (auto n : stableIterator(subgraph->getNodes())) {
     subgraph->openMetaNode(n);
   }
   CPPUNIT_ASSERT_EQUAL(6u, subgraph->numberOfNodes());

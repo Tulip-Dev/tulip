@@ -138,7 +138,7 @@ void PlanarConMapTest::testAddEdgeMap() {
     if (i == 2)
       it = carte->getFaceEdges(f3);
 
-    for (const edge &e_tmp : it) {
+    for (auto e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
@@ -177,7 +177,7 @@ void PlanarConMapTest::testAddEdgeMap() {
     if (i == 1)
       it = carte->getFaceEdges(f2);
 
-    for (const edge &e_tmp : it) {
+    for (auto e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
@@ -243,7 +243,7 @@ void PlanarConMapTest::testAddEdgeMap() {
     if (i == 3)
       it = carte->getFaceEdges(f4);
 
-    for (const edge &e_tmp : it) {
+    for (auto e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
@@ -286,7 +286,7 @@ void PlanarConMapTest::testDelEdgeMap() {
     if (i == 1)
       it = carte->getFaceEdges(f2);
 
-    for (const edge &e_tmp : it) {
+    for (auto e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
@@ -349,7 +349,7 @@ void PlanarConMapTest::testMergeFaces() {
     if (i == 1)
       it = carte->getFaceEdges(f2);
 
-    for (const edge &e_tmp : it) {
+    for (auto e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 
@@ -467,7 +467,7 @@ void PlanarConMapTest::testSplitFace() {
     if (i == 3)
       it = carte->getFaceEdges(f4);
 
-    for (const edge &e_tmp : it) {
+    for (auto e_tmp : it) {
       tmp.push_back(e_tmp);
     }
 

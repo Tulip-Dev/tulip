@@ -91,13 +91,12 @@ static bool tulipCanOpenFile(const QString &path) {
 
   std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
 
-  for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
+  for (auto &import : imports) {
+    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(import, nullptr);
     std::list<std::string> fileExtensions(m->allFileExtensions());
 
-    for (std::list<std::string>::const_iterator itExt = fileExtensions.begin();
-         itExt != fileExtensions.end(); ++itExt) {
-      if (path.endsWith(tlpStringToQString(*itExt))) {
+    for (auto &ext : fileExtensions) {
+      if (path.endsWith(tlpStringToQString(ext))) {
         delete m;
         return true;
       }
@@ -1048,26 +1047,25 @@ void GraphPerspective::open(QString fileName) {
   std::string filters("Tulip project (*.tlpx);;");
   std::string filterAny("Any supported format (");
 
-  for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
+  for (auto &import : imports) {
+    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(import, nullptr);
     std::list<std::string> fileExtension(m->allFileExtensions());
 
     std::string currentFilter;
 
-    for (std::list<std::string>::const_iterator listIt = fileExtension.begin();
-         listIt != fileExtension.end(); ++listIt) {
+    for (auto &ext : fileExtension) {
 
-      if (listIt->empty())
+      if (ext.empty())
         continue;
 
-      filterAny += "*." + *listIt + " ";
-      currentFilter += "*." + *listIt + " ";
+      filterAny += "*." + ext + " ";
+      currentFilter += "*." + ext + " ";
 
-      modules[*listIt] = *it;
+      modules[ext] = import;
     }
 
     if (!currentFilter.empty())
-      filters += *it + "(" + currentFilter + ");;";
+      filters += import + "(" + currentFilter + ");;";
 
     delete m;
   }
@@ -1186,10 +1184,10 @@ void GraphPerspective::cancelSelection() {
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  for (const node &n : selection->getNodesEqualTo(true, graph)) {
+  for (auto n : selection->getNodesEqualTo(true, graph)) {
     selection->setNodeValue(n, false);
   }
-  for (const edge &e : selection->getEdgesEqualTo(true, graph)) {
+  for (auto e : selection->getEdgesEqualTo(true, graph)) {
     selection->setEdgeValue(e, false);
   }
   graph->popIfNoUpdates();
@@ -1299,7 +1297,7 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
   QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
 
   if (deleteAfter) {
-    for (const node &n : stableIterator(selection->getNodesEqualTo(true))) {
+    for (auto n : stableIterator(selection->getNodesEqualTo(true))) {
       g->delNode(n);
     }
   }
@@ -1316,7 +1314,7 @@ void GraphPerspective::group() {
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::vector<node> groupedNodes;
-  for (const node &n : selection->getNodesEqualTo(true)) {
+  for (auto n : selection->getNodesEqualTo(true)) {
     if (graph->isElement(n))
       groupedNodes.push_back(n);
   }

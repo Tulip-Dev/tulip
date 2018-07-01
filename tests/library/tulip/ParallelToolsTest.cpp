@@ -37,7 +37,7 @@ void ParallelToolsTest::testParallelMapIndices() {
 void ParallelToolsTest::testParallelMapNodes() {
   tlp::NodeStaticProperty<unsigned int> deg(_graph);
   TLP_PARALLEL_MAP_NODES(_graph, [&](const tlp::node &n) { deg[n] = _graph->deg(n); });
-  for (const tlp::node &n : _graph->nodes()) {
+  for (auto n : _graph->nodes()) {
     CPPUNIT_ASSERT_EQUAL(deg[n], _graph->deg(n));
   }
 }
@@ -47,7 +47,7 @@ void ParallelToolsTest::testParallelMapNodesAndIndices() {
   TLP_PARALLEL_MAP_NODES_AND_INDICES(_graph,
                                      [&](const tlp::node &n, unsigned int i) { nodes[i] = n; });
   unsigned int i = 0;
-  for (const tlp::node &n : _graph->nodes()) {
+  for (auto n : _graph->nodes()) {
     CPPUNIT_ASSERT_EQUAL(n, nodes[i++]);
   }
 }
@@ -56,7 +56,7 @@ void ParallelToolsTest::testParallelMapEdges() {
   tlp::EdgeStaticProperty<int> selfLoop(_graph);
   TLP_PARALLEL_MAP_EDGES(
       _graph, [&](const tlp::edge &e) { selfLoop[e] = _graph->source(e) == _graph->target(e); });
-  for (const tlp::edge &e : _graph->edges()) {
+  for (auto e : _graph->edges()) {
     CPPUNIT_ASSERT_EQUAL(selfLoop[e], int(_graph->source(e) == _graph->target(e)));
   }
 }
@@ -66,7 +66,7 @@ void ParallelToolsTest::testParallelMapEdgesAndIndices() {
   TLP_PARALLEL_MAP_EDGES_AND_INDICES(_graph,
                                      [&](const tlp::edge &e, unsigned int i) { edges[i] = e; });
   unsigned int i = 0;
-  for (const tlp::edge &e : _graph->edges()) {
+  for (auto e : _graph->edges()) {
     CPPUNIT_ASSERT_EQUAL(e, edges[i++]);
   }
 }
@@ -81,7 +81,7 @@ void ParallelToolsTest::testCriticalSection() {
     TLP_UNLOCK_SECTION(maxDeg);
   });
   unsigned int maxDegSeq = 0;
-  for (const tlp::node &n : _graph->nodes()) {
+  for (auto n : _graph->nodes()) {
     maxDegSeq = std::max(maxDegSeq, _graph->deg(n));
   }
   CPPUNIT_ASSERT_EQUAL(maxDegPar, maxDegSeq);

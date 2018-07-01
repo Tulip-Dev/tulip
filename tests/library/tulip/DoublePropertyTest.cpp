@@ -207,14 +207,14 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
 
   // check that each node has the correct value
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
   }
   // check that the default node value has been changed
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
 
   // check that each edge has the correct value
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
   }
   // check that the default edge value has been changed
@@ -229,7 +229,7 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
 
   // check that the nodes have expected values
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     if (sg->isElement(n)) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v2, 1e-6);
     } else {
@@ -240,7 +240,7 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
 
   // check that the edges have expected values
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     if (sg->isElement(e)) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v1, 1e-6);
     } else {
@@ -310,12 +310,12 @@ void DoublePropertyTest::testDoublePropertySetDefaultValue() {
 
   // check that original nodes and edges still have the same value
   // as before modifying the default property value
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     if (n != nNew) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
     }
   }
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     if (e != eNew) {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
     }

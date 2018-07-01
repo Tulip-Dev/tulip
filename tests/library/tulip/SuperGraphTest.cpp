@@ -74,7 +74,7 @@ void SuperGraphTest::testIterators() {
   {
     unsigned int i = 0;
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       CPPUNIT_ASSERT_EQUAL(nodes[i].id, n.id);
       ++i;
     }
@@ -84,7 +84,7 @@ void SuperGraphTest::testIterators() {
   {
     unsigned int i = 0;
 
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       CPPUNIT_ASSERT_EQUAL(edges[i].id, e.id);
       ++i;
     }
@@ -143,7 +143,7 @@ void SuperGraphTest::testIterators() {
 //==========================================================
 void degreeCheck(Graph *graph) {
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     unsigned int outdeg = iteratorCount(graph->getOutEdges(n));
     unsigned int indeg = iteratorCount(graph->getInEdges(n));
     unsigned int deg = iteratorCount(graph->getInOutEdges(n));
@@ -171,7 +171,7 @@ void SuperGraphTest::testDegree() {
   degreeCheck(gr1);
   degreeCheck(gr2);
 
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     graph->reverse(e);
   }
 
@@ -180,7 +180,7 @@ void SuperGraphTest::testDegree() {
   degreeCheck(gr1);
   degreeCheck(gr2);
 
-  for (const edge &e : gr2->getEdges()) {
+  for (auto e : gr2->getEdges()) {
     gr2->reverse(e);
   }
 
@@ -317,7 +317,7 @@ void SuperGraphTest::testAddDel() {
 
   for (unsigned int i = 0; i < NB_ADD; ++i) {
 
-    for (const edge &e : graph->getInOutEdges(nodes[i]))
+    for (auto e : graph->getInOutEdges(nodes[i]))
       CPPUNIT_ASSERT(graph->isElement(e));
 
     graph->delNode(nodes[i]);
@@ -352,7 +352,7 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
   {
     unsigned int i = 0;
 
-    for (const edge &e : graph->getInOutEdges(nodes[0])) {
+    for (auto e : graph->getInOutEdges(nodes[0])) {
       CPPUNIT_ASSERT_EQUAL(edges[i], e);
       ++i;
     }
@@ -371,7 +371,7 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
   {
     unsigned int i = 0;
 
-    for (const edge &e : graph->getInOutEdges(nodes[0])) {
+    for (auto e : graph->getInOutEdges(nodes[0])) {
       CPPUNIT_ASSERT_EQUAL(edges[i], e);
       ++i;
     }
@@ -390,7 +390,7 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
   {
     unsigned int i = 0;
 
-    for (const edge &e : graph->getInOutEdges(nodes[0])) {
+    for (auto e : graph->getInOutEdges(nodes[0])) {
       CPPUNIT_ASSERT_EQUAL(edges[i], e);
       ++i;
     }
@@ -732,7 +732,7 @@ void SuperGraphTest::testGetNodesEqualTo() {
   property.setAllNodeValue(false);
   Graph *subGraph = graph->addSubGraph();
 
-  for (const node &n : property.getNodesEqualTo(false, subGraph)) {
+  for (auto n : property.getNodesEqualTo(false, subGraph)) {
     CPPUNIT_ASSERT(subGraph->isElement(n));
   }
 }

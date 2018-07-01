@@ -90,10 +90,10 @@ void ImportExportTest::testAttributes() {
   set<edge> setEdge;
   vector<edge> vectorEdge;
   vector<node> vectorNode;
-  for (const node &n : original->nodes()) {
+  for (auto n : original->nodes()) {
     vectorNode.push_back(n);
   }
-  for (const edge &e : original->edges()) {
+  for (auto e : original->edges()) {
     vectorEdge.push_back(e);
     setEdge.insert(e);
   }
@@ -169,7 +169,7 @@ void ImportExportTest::testSubGraphsImportExport() {
   int subsublowerBound = 75;
   int subsubhigherBound = 125;
   int i = 0;
-  for (const node &n : original->nodes()) {
+  for (auto n : original->nodes()) {
     if (i >= sub1lowerBound && i <= sub1higherBound) {
       sub1nodes.push_back(n);
     }
@@ -199,19 +199,19 @@ void ImportExportTest::testSubGraphsImportExport() {
 
   i = 0;
   IntegerProperty *sub1id = sub1->getLocalProperty<IntegerProperty>("sub1id");
-  for (const node &n : sub1->nodes()) {
+  for (auto n : sub1->nodes()) {
     sub1id->setNodeValue(n, i++);
   }
 
   i = 0;
   IntegerProperty *sub2id = sub2->getLocalProperty<IntegerProperty>("sub2id");
-  for (const node &n : sub2->nodes()) {
+  for (auto n : sub2->nodes()) {
     sub2id->setNodeValue(n, i++);
   }
 
   i = 0;
   IntegerProperty *subsubid = subsub->getLocalProperty<IntegerProperty>("subsubid");
-  for (const node &n : subsub->nodes()) {
+  for (auto n : subsub->nodes()) {
     subsubid->setNodeValue(n, i++);
   }
 
@@ -263,10 +263,10 @@ Graph *ImportExportTest::createSimpleGraph() const {
   }
 
   IntegerProperty *id = original->getProperty<IntegerProperty>("id");
-  for (const node &n : original->nodes()) {
+  for (auto n : original->nodes()) {
     id->setNodeValue(n, n.id);
   }
-  for (const edge &e : original->edges()) {
+  for (auto e : original->edges()) {
     id->setEdgeValue(e, e.id);
   }
 
@@ -294,7 +294,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
       original->getProperty<StringVectorProperty>("stringVecProp");
 
   std::ostringstream oss;
-  for (const node &n : original->nodes()) {
+  for (auto n : original->nodes()) {
 
     unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
     vector<bool> boolVec;
@@ -335,7 +335,7 @@ Graph *ImportExportTest::createSimpleGraph() const {
     stringVecProp->setNodeValue(n, stringVec);
   }
 
-  for (const edge &e : original->edges()) {
+  for (auto e : original->edges()) {
 
     unsigned int vecSize = tlp::randomUnsignedInteger(9) + 1;
     vector<bool> boolVec;
@@ -385,7 +385,7 @@ void ImportExportTest::testNanInfValuesImportExport() {
   DoubleProperty *doubleProp = original->getProperty<DoubleProperty>("doubleProp");
   DoubleVectorProperty *doubleVecProp =
       original->getProperty<DoubleVectorProperty>("doubleVecProp");
-  for (const node &n : original->nodes()) {
+  for (auto n : original->nodes()) {
     if (n.id % 3 == 0) {
       doubleProp->setNodeValue(n, std::numeric_limits<double>::quiet_NaN());
     } else if (n.id % 3 == 1) {
@@ -517,7 +517,7 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph *first, Graph *second) 
     message << "a node value for property " << firstPropertyName
             << " in the first graph is not equal to the one in the second graph";
 
-    for (const node &n2 : second->nodes()) {
+    for (auto n2 : second->nodes()) {
       node n1(secondIdProperty->getNodeValue(n2));
       CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getNodeStringValue(n1),
                                    secondProperty->getNodeStringValue(n2));
@@ -527,7 +527,7 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph *first, Graph *second) 
     message << "an edge value for property " << firstPropertyName
             << " in the first graph is not equal to the one in the second graph";
 
-    for (const edge &e2 : second->edges()) {
+    for (auto e2 : second->edges()) {
       edge e1(secondIdProperty->getEdgeValue(e2));
 
       CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getEdgeStringValue(e1),

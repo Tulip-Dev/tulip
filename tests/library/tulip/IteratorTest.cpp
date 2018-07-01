@@ -178,7 +178,7 @@ void IteratorTest::testIteratorToStlContainers() {
   std::set<tlp::node> sNodes = tlp::iteratorSet(graph->getNodes());
   std::list<tlp::node> lNodes = tlp::iteratorList(graph->getNodes());
 
-  for (const tlp::node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     CPPUNIT_ASSERT(std::find(lNodes.begin(), lNodes.end(), n) != lNodes.end());
     CPPUNIT_ASSERT(std::find(vNodes.begin(), vNodes.end(), n) != vNodes.end());
     CPPUNIT_ASSERT(sNodes.find(n) != sNodes.end());

@@ -215,7 +215,7 @@ void ObservablePropertyTest::setNodeValue(PropertyInterface *prop, const char *v
     CPPUNIT_ASSERT(pObserver->nbProperties() == (found2 ? 1 : 0));
     CPPUNIT_ASSERT(pObserver->found(prop) == found2);
   } else {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       prop->setNodeStringValue(n, string(val));
       CPPUNIT_ASSERT(observer->nbObservables() == (found1 ? 1 : 0));
       CPPUNIT_ASSERT(observer->found(prop) == found1);
@@ -240,7 +240,7 @@ void ObservablePropertyTest::setEdgeValue(PropertyInterface *prop, const char *v
     CPPUNIT_ASSERT(pObserver->nbProperties() == (found2 ? 1 : 0));
     CPPUNIT_ASSERT(pObserver->found(prop) == found2);
   } else {
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       prop->setEdgeStringValue(e, string(val));
       CPPUNIT_ASSERT(observer->nbObservables() == (found1 ? 1 : 0));
       CPPUNIT_ASSERT(observer->found(prop) == found1);

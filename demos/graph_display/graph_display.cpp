@@ -51,7 +51,7 @@ void setTreeVisualProperties(Graph *tree) {
 
   // Labels the node with their id
   StringProperty *viewLabel = tree->getProperty<StringProperty>("viewLabel");
-  for (const node &n : tree->nodes()) {
+  for (auto n : tree->nodes()) {
     viewLabel->setNodeValue(n, QStringToTlpString(QString::number(n.id)));
   }
 
@@ -84,7 +84,7 @@ void setTreeVisualProperties(Graph *tree) {
   // Sets different shapes and colors for each layer of the tree
   IntegerProperty *viewShape = tree->getProperty<IntegerProperty>("viewShape");
   ColorProperty *viewColor = tree->getProperty<ColorProperty>("viewColor");
-  for (const node &n : tree->nodes()) {
+  for (auto n : tree->nodes()) {
     viewShape->setNodeValue(n, glyphsMap[int(dagLevel.getNodeValue(n))]);
     viewColor->setNodeValue(n, colorsMap[int(dagLevel.getNodeValue(n))]);
   }

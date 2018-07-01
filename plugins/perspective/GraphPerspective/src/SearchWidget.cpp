@@ -59,12 +59,12 @@ public:
     tlp::BooleanProperty *prop = new BooleanProperty(g);
 
     if (onNodes) {
-      for (const node &n : g->nodes())
+      for (auto n : g->nodes())
         prop->setNodeValue(n, compare(n));
     }
 
     if (onEdges) {
-      for (const edge &e : g->edges())
+      for (auto e : g->edges())
         prop->setEdgeValue(e, compare(e));
     }
 
@@ -362,14 +362,14 @@ void SearchWidget::search() {
     resultsCountEdges = iteratorCount(result->getEdgesEqualTo(true));
   } else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
     if (onNodes) {
-      for (const node &n : result->getNodesEqualTo(true)) {
+      for (auto n : result->getNodesEqualTo(true)) {
         output->setNodeValue(n, true);
         resultsCountNodes++;
       }
     }
 
     if (onEdges) {
-      for (const edge &e : result->getEdgesEqualTo(true)) {
+      for (auto e : result->getEdgesEqualTo(true)) {
         output->setEdgeValue(e, true);
         resultsCountEdges++;
       }
@@ -378,7 +378,7 @@ void SearchWidget::search() {
     searchOpDescription = "added to selection";
   } else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      for (const node &n : output->getNodesEqualTo(true)) {
+      for (auto n : output->getNodesEqualTo(true)) {
         if (result->getNodeValue(n)) {
           output->setNodeValue(n, false);
           resultsCountNodes++;
@@ -387,7 +387,7 @@ void SearchWidget::search() {
     }
 
     if (onEdges) {
-      for (const edge &e : output->getEdgesEqualTo(true)) {
+      for (auto e : output->getEdgesEqualTo(true)) {
         if (result->getEdgeValue(e)) {
           output->setEdgeValue(e, false);
           resultsCountEdges++;

@@ -86,7 +86,7 @@ static void checkCreatedGraph(bool nodesOnly = false) {
   CPPUNIT_ASSERT(graph.numberOfNodes() == NB_NODES);
 
   unsigned int i = 0;
-  for (const node &n : graph.nodes()) {
+  for (auto n : graph.nodes()) {
     CPPUNIT_ASSERT(n == nodes[i]);
     ++i;
   }
@@ -234,7 +234,7 @@ static void checkGraphAfterDelEdge() {
 
   // check nodes
   unsigned int i = 0;
-  for (const node &n : graph.nodes()) {
+  for (auto n : graph.nodes()) {
     CPPUNIT_ASSERT(n == nodes[i]);
     ++i;
   }
@@ -245,7 +245,7 @@ static void checkGraphAfterDelEdge() {
     CPPUNIT_ASSERT(graph.isElement(edges[i]) == ((i % 2) == 0));
   });
   i = 0;
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     std::ignore = e;
     ++i;
   }
@@ -292,7 +292,7 @@ static void checkGraphAfterDelNode() {
   // check number of nodes
   CPPUNIT_ASSERT(graph.numberOfNodes() == 3 * NB_NODES / 4);
   unsigned int i = 0;
-  for (const node &n : graph.nodes()) {
+  for (auto n : graph.nodes()) {
     std::ignore = n;
     ++i;
   }
@@ -301,7 +301,7 @@ static void checkGraphAfterDelNode() {
   // check number of edges
   CPPUNIT_ASSERT(graph.numberOfEdges() == NB_NODES / 4);
   i = 0;
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     std::ignore = e;
     ++i;
   }
@@ -362,7 +362,7 @@ void checkGraphAfterDelEdges() {
   // check number of edges
   CPPUNIT_ASSERT(graph.numberOfEdges() == 0);
   unsigned int i = 0;
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     std::ignore = e;
     ++i;
   }
@@ -388,7 +388,7 @@ void VectorGraphTest::testDelEdges() {
   checkGraphAfterDelNode();
 
   // delete all edges
-  for (const node &n : graph.nodes())
+  for (auto n : graph.nodes())
     graph.delEdges(n);
 
   // check remaining nodes and edges
@@ -647,7 +647,7 @@ void VectorGraphTest::testReverseEdges() {
   checkCreatedGraph();
 
   // reverse all edges
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     std::pair<node, node> ends = graph.ends(e);
     unsigned int src_outdeg = graph.outdeg(ends.first);
     unsigned int tgt_outdeg = graph.outdeg(ends.second);
@@ -666,7 +666,7 @@ void VectorGraphTest::testSetSourcesAndTargets() {
   checkGraphAfterReverseEdges();
 
   // reverse each edge using setSource and setTarget
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     std::pair<node, node> ends = graph.ends(e);
     unsigned int src_outdeg = graph.outdeg(ends.first);
     unsigned int tgt_outdeg = graph.outdeg(ends.second);
@@ -688,7 +688,7 @@ void VectorGraphTest::testSetEnds() {
   checkCreatedGraph();
 
   // reverse each edge using setEnds
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     std::pair<node, node> ends = graph.ends(e);
     graph.setEnds(e, ends.second, ends.first);
   }
@@ -704,7 +704,7 @@ void VectorGraphTest::testMoreSetEnds() {
 
   // set ends for all edges
   unsigned int i = 0;
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     CPPUNIT_ASSERT(e == edges[i]);
     if (i < NB_NODES - 1)
       graph.setEnds(edges[i], nodes[NB_NODES - i - 2], nodes[NB_NODES - i - 1]);
@@ -715,7 +715,7 @@ void VectorGraphTest::testMoreSetEnds() {
 
   // check edges
   i = 0;
-  for (const edge &e : graph.edges()) {
+  for (auto e : graph.edges()) {
     CPPUNIT_ASSERT(e == edges[i]);
 
     // check ends

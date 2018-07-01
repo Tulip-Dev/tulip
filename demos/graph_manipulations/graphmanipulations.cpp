@@ -76,7 +76,7 @@ int main(int, char **) {
     }
   } else {
     std::cout << "could not find the plugin, computing" << std::endl;
-    for (const node &n : myGraph->nodes()) {
+    for (auto n : myGraph->nodes()) {
       metric->setNodeValue(n, myGraph->deg(n));
     }
   }
