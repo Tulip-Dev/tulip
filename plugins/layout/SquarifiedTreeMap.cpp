@@ -116,8 +116,8 @@ bool SquarifiedTreeMap::run() {
     glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
 
   {
-    // change the glyph of all internal node to be a window
-    for (const node &n : graph->nodes()) {
+    // change the glyph of all internal nodes to be a window
+    for (auto n : graph->nodes()) {
       if (graph->outdeg(n) != 0)
         glyphResult->setNodeValue(n, NodeShape::Window);
     }
@@ -162,35 +162,34 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
                                   const tlp::Rectd &rectArea) {
   assert(rectArea.isValid());
   assert(!row.empty());
-  vector<node>::const_iterator it;
   double rowArea = 0;
 
-  for (it = row.begin(); it != row.end(); ++it)
-    rowArea += nodesSize.get(it->id);
+  for (auto n : row)
+    rowArea += nodesSize.get(n.id);
 
   double sum = 0;
   Vec2d dist = rectArea[1] - rectArea[0];
 
-  for (it = row.begin(); it != row.end(); ++it) {
+  for (auto n : row) {
     Rectd layoutRec(rectArea);
 
     if (rectArea.width() > rectArea.height()) {
       layoutRec[0][0] = rectArea[0][0] + (sum / rowArea) * dist[0];
-      layoutRec[1][0] = layoutRec[0][0] + (nodesSize.get(it->id) / rowArea) * dist[0];
+      layoutRec[1][0] = layoutRec[0][0] + (nodesSize.get(n.id) / rowArea) * dist[0];
     } else {
       layoutRec[0][1] = rectArea[0][1] + (sum / rowArea) * dist[1];
-      layoutRec[1][1] = layoutRec[0][1] + (nodesSize.get(it->id) / rowArea) * dist[1];
+      layoutRec[1][1] = layoutRec[0][1] + (nodesSize.get(n.id) / rowArea) * dist[1];
     }
 
     assert(layoutRec.isValid());
-    sum += nodesSize.get(it->id);
+    sum += nodesSize.get(n.id);
     Vec2d center = layoutRec.center();
-    result->setNodeValue(*it,
+    result->setNodeValue(n,
                          Coord(float(center[0]), float(center[1]), float(depth * SEPARATION_Z)));
-    sizeResult->setNodeValue(*it, Size(float(layoutRec.width()), float(layoutRec.height()), 0));
+    sizeResult->setNodeValue(n, Size(float(layoutRec.width()), float(layoutRec.height()), 0));
 
-    if (graph->outdeg(*it) > 0) {
-      vector<node> toTreat(orderedChildren(*it));
+    if (graph->outdeg(n) > 0) {
+      vector<node> toTreat(orderedChildren(n));
       Rectd newRec(adjustRectangle(layoutRec));
       squarify(toTreat, newRec, depth + 1);
     }
@@ -212,7 +211,7 @@ vector<node> SquarifiedTreeMap::orderedChildren(const tlp::node n) const {
   vector<node> result(graph->outdeg(n));
   // build a list of pair <node, size>
   size_t i = 0;
-  for (const node &child : graph->getOutNodes(n)) {
+  for (auto child : graph->getOutNodes(n)) {
     result[i++] = child;
   }
   IsGreater sortFunctor(nodesSize);
@@ -233,8 +232,8 @@ double SquarifiedTreeMap::evaluateRow(const std::vector<tlp::node> &row, tlp::no
   double sumOfNodesSurface = nodesSize.get(n.id);
   vector<node>::const_iterator it;
 
-  for (it = row.begin(); it != row.end(); ++it) {
-    sumOfNodesSurface += nodesSize.get(it->id);
+  for (auto nr : row) {
+    sumOfNodesSurface += nodesSize.get(nr.id);
   }
 
   //====================
@@ -248,8 +247,8 @@ double SquarifiedTreeMap::evaluateRow(const std::vector<tlp::node> &row, tlp::no
   double maxratio = ratio;
   double sumratio = ratio;
 
-  for (it = row.begin(); it != row.end(); ++it) {
-    double size = nodesSize.get(it->id);
+  for (auto nr : row) {
+    double size = nodesSize.get(nr.id);
     double nodeRectangleWidth = length * sumOfNodesSurface / surface;
     double nodeRectangleHeight = width * size / sumOfNodesSurface;
     double ratio = std::min(nodeRectangleHeight, nodeRectangleWidth) /
@@ -354,7 +353,7 @@ void SquarifiedTreeMap::computeNodesSize(const tlp::node n) {
   }
 
   double internalNodeValue = 0.;
-  for (const node &child : graph->getOutNodes(n)) {
+  for (auto child : graph->getOutNodes(n)) {
     computeNodesSize(child);
     internalNodeValue += nodesSize.get(child.id);
   }

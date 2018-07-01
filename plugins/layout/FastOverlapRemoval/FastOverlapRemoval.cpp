@@ -118,7 +118,7 @@ bool FastOverlapRemoval::run() {
 
   // initialize result for edges
   result->setAllEdgeValue(viewLayout->getEdgeDefaultValue());
-  for (const edge &e : viewLayout->getNonDefaultValuatedEdges())
+  for (auto e : viewLayout->getNonDefaultValuatedEdges())
     result->setEdgeValue(e, viewLayout->getEdgeValue(e));
 
   size_t nbNodes = graph->numberOfNodes();

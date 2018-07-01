@@ -42,13 +42,10 @@ bool Random::run() {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
-  for (const node &itn : graph->nodes()) {
-
-    if (is3D)
-      result->setNodeValue(itn,
-                           Coord(randomInteger(1024), randomInteger(1024), randomInteger(1024)));
-    else
-      result->setNodeValue(itn, Coord(randomInteger(1024), randomInteger(1024), 0));
+  for (auto n : graph->nodes()) {
+    result->setNodeValue(n,
+			 Coord(randomInteger(1024), randomInteger(1024),
+			       is3D ? randomInteger(1024) : 0));
   }
 
   return true;

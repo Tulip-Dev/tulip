@@ -37,9 +37,9 @@ list<node> findCycle(Graph *sg) {
   node startNode = sg->getOneNode();
   unsigned int maxDeg = sg->deg(startNode);
 
-  for (const node &itn : sg->nodes()) {
-    if (sg->deg(itn) > maxDeg) {
-      startNode = itn;
+  for (auto n : sg->nodes()) {
+    if (sg->deg(n) > maxDeg) {
+      startNode = n;
     }
   }
 
@@ -51,15 +51,15 @@ list<node> findCycle(Graph *sg) {
     node curNode = bfs.front();
     bfs.pop_front();
 
-    for (const node &itn : sg->getInOutNodes(curNode)) {
-      if (itn != father[curNode]) {
-        if (!visited[itn]) {
-          visited[itn] = true;
-          father[itn] = curNode;
-          bfs.push_back(itn);
+    for (auto n : sg->getInOutNodes(curNode)) {
+      if (n != father[curNode]) {
+        if (!visited[n]) {
+          visited[n] = true;
+          father[n] = curNode;
+          bfs.push_back(n);
         } else {
           n1 = curNode;
-          n2 = itn;
+          n2 = n;
           bfs.clear();
           break;
         }
@@ -101,7 +101,6 @@ bool Tutte::run() {
   result->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
   tmp = findCycle(graph);
-  std::list<node>::iterator itL;
   // We place the nodes on the outer face
   Coord tmpCoord, tmpCoord2, baseCoord;
   float gamma;
@@ -109,40 +108,39 @@ bool Tutte::run() {
   int rayon = 100;
   gamma = 2 * M_PI / tmp.size();
 
-  for (itL = tmp.begin(); itL != tmp.end(); ++itL) {
-    result->setNodeValue(
-        *itL, Coord(rayon * cos(gamma * i) + rayon * 2, rayon * sin(gamma * i) + rayon * 2, 0));
+  for (auto n : tmp) {
+    result->setNodeValue(n, Coord(rayon * cos(gamma * i) + rayon * 2,
+				  rayon * sin(gamma * i) + rayon * 2, 0));
     i++;
   }
 
   std::list<node> toMove;
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     toMove.push_front(n);
   }
 
-  for (itL = tmp.begin(); itL != tmp.end(); ++itL) {
-    toMove.remove(*itL);
+  for (auto n : tmp) {
+    toMove.remove(n);
   }
 
-  std::list<node>::iterator itn;
   bool ok = true;
 
   while (ok) {
     ok = false;
 
-    for (itn = toMove.begin(); itn != toMove.end(); ++itn) {
+    for (auto n : toMove) {
       tmpCoord.set(0, 0, 0);
-      Coord baseCoord = result->getNodeValue(*itn);
+      Coord baseCoord = result->getNodeValue(n);
       int i = 0;
 
-      for (const node &itAdj : graph->getInOutNodes(*itn)) {
-        const Coord &tmpCoord2 = result->getNodeValue(itAdj);
+      for (auto nn : graph->getInOutNodes(n)) {
+        const Coord &tmpCoord2 = result->getNodeValue(nn);
         tmpCoord.set(tmpCoord.getX() + tmpCoord2.getX(), tmpCoord.getY() + tmpCoord2.getY(), 0);
         ++i;
       }
 
-      result->setNodeValue(*itn, Coord(tmpCoord.getX() / i, tmpCoord.getY() / i, 0));
+      result->setNodeValue(n, Coord(tmpCoord.getX() / i, tmpCoord.getY() / i, 0));
 
       if (fabs(baseCoord.getX() - tmpCoord.getX() / i) > 0.02)
         ok = true;
@@ -161,7 +159,7 @@ bool Tutte::check(std::string &erreurMsg) {
   if (!TriconnectedTest::isTriconnected(graph))
     result = false;
   else {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       if (graph->deg(n) < 3) {
         result = false;
         break;

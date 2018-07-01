@@ -120,7 +120,6 @@ private:
 
   std::vector<GEMparticule> _particules;
   std::vector<int> _map; // for random selection
-  tlp::MutableContainer<GEMparticule *> _nodeToParticules;
 
   /*
    * GEM3D variables

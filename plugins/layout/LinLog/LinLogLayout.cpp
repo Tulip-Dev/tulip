@@ -100,10 +100,10 @@ void LinLogLayout::initEnergyFactors() {
   double repuSum = 0.0;
   double attrSum = 0.0;
 
-  for (const node &u : graph->nodes()) {
+  for (auto u : graph->nodes()) {
     double u_weight = linLogWeight->getNodeValue(u);
     repuSum += u_weight;
-    for (const edge &e : graph->getInOutEdges(u)) {
+    for (auto e : graph->getInOutEdges(u)) {
       double edgeweight = linLogWeight->getEdgeValue(e);
       attrSum += edgeweight;
     }
@@ -144,7 +144,7 @@ double LinLogLayout::getRepulsionEnergy(node u) {
   const Coord &u_layout = layoutResult->getNodeValue(u);
   double energy = 0.0;
 
-  for (const node &v : graph->nodes()) {
+  for (auto v : graph->nodes()) {
     double v_weight = linLogWeight->getNodeValue(v);
 
     if (v == u || v_weight == 0.0)
@@ -205,7 +205,7 @@ double LinLogLayout::getRepulsionEnergy(node u, OctTree *tree) {
 double LinLogLayout::getAttractionEnergy(node u) {
   double energy = 0.0;
   const Coord &u_layout = layoutResult->getNodeValue(u);
-  for (const edge &e : graph->getInOutEdges(u)) {
+  for (auto e : graph->getInOutEdges(u)) {
     node v = graph->opposite(e, u);
     double dist = getDist(u_layout, layoutResult->getNodeValue(v));
     double edgeweight = linLogWeight->getEdgeValue(e);
@@ -278,7 +278,7 @@ double LinLogLayout::addRepulsionDir(node u, double *dir) {
 
   double dir2 = 0.0;
 
-  for (const node &v : graph->nodes()) {
+  for (auto v : graph->nodes()) {
     double v_weight = linLogWeight->getNodeValue(v);
 
     if (v == u || v_weight == 0.0)
@@ -347,7 +347,7 @@ double LinLogLayout::addAttractionDir(node u, double *dir) {
 
   const Coord &position = layoutResult->getNodeValue(u);
 
-  for (const edge &e : graph->getInOutEdges(u)) {
+  for (auto e : graph->getInOutEdges(u)) {
     node v = graph->opposite(e, u);
     const Coord &position2 = layoutResult->getNodeValue(v);
     double dist = getDist(position, position2);
@@ -409,7 +409,7 @@ void LinLogLayout::getDirection(node u, double *dir) {
 
   // compute average Euclidean distance to other nodes
   double avgDist = 0.0;
-  for (const node &v : graph->nodes()) {
+  for (auto v : graph->nodes()) {
     const Coord &position2 = layoutResult->getNodeValue(v);
 
     avgDist += getDist(position, position2);
@@ -499,7 +499,7 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
 
   double energySum = 0.0;
 
-  for (const node &u : graph->nodes())
+  for (auto u : graph->nodes())
     energySum += getEnergy(u);
 
   // minimize energy
@@ -529,7 +529,7 @@ bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
     // move each node
     int count = 0;
     energySum = 0.0;
-    for (const node &u : graph->nodes()) {
+    for (auto u : graph->nodes()) {
 
       count++;
 
@@ -615,7 +615,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
 
   double energySum = 0.0;
 
-  for (const node &u : graph->nodes())
+  for (auto u : graph->nodes())
     energySum += getEnergy(u, octTree);
 
   // minimize energy
@@ -646,7 +646,7 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
     // move each node
     int count = 0;
     energySum = 0.0;
-    for (const node &u : graph->nodes()) {
+    for (auto u : graph->nodes()) {
       ++count;
       double oldEnergy = getEnergy(u, octTree);
 
@@ -730,7 +730,7 @@ void LinLogLayout::computeBaryCenter() {
     baryCenter[d] = 0.0;
 
   double weightSum = 0.0;
-  for (const node &u : graph->nodes()) {
+  for (auto u : graph->nodes()) {
     double u_weight = linLogWeight->getNodeValue(u);
     weightSum += u_weight;
     const Coord &position = layoutResult->getNodeValue(u);
@@ -753,7 +753,7 @@ void LinLogLayout::initWeights() {
 
   if (edgeWeight == nullptr) {
     linLogWeight->setAllEdgeValue(1.0);
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       const std::pair<node, node> &eEnds = graph->ends(e);
       node u = eEnds.first;
       node v = eEnds.second;
@@ -764,14 +764,14 @@ void LinLogLayout::initWeights() {
       linLogWeight->setNodeValue(v, wv + 1.0);
     }
   } else {
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       double tmpweight = edgeWeight->getEdgeDoubleValue(e) * 100.0 + 1.0;
       linLogWeight->setEdgeValue(e, tmpweight);
     }
 
-    for (const node &u : graph->nodes()) {
+    for (auto u : graph->nodes()) {
       double weight = 0.0;
-      for (const edge &e : graph->getInOutEdges(u)) {
+      for (auto e : graph->getInOutEdges(u)) {
         weight += linLogWeight->getEdgeValue(e);
       }
 
@@ -787,7 +787,7 @@ OctTree *LinLogLayout::buildOctTree() {
   Coord zero(0, 0, 0);
 
   node n;
-  for (const node &u : linLogWeight->getNonDefaultValuatedNodes()) {
+  for (auto u : linLogWeight->getNonDefaultValuatedNodes()) {
     const Coord &position = layoutResult->getNodeValue(u);
 
     for (unsigned int d = 0; d < _dim; ++d) {
@@ -807,7 +807,7 @@ OctTree *LinLogLayout::buildOctTree() {
   // add nodes with non-zero weight to the octtree
   OctTree *result = new OctTree(n, zero, minPos, maxPos, linLogWeight, true);
 
-  for (const node &u : linLogWeight->getNonDefaultValuatedNodes()) {
+  for (auto u : linLogWeight->getNonDefaultValuatedNodes()) {
     result->addNode(u, layoutResult->getNodeValue(u), 0);
   }
   return result;

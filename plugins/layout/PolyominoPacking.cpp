@@ -59,13 +59,15 @@ static const char *paramHelp[] = {
     "If there is no place where the polyomino fits, the square gets bigger and every place gets "
     "tried again."};
 
-typedef struct {
-  std::vector<node> ccNodes;     // the connected nodes associated to that polyomino
+struct Polyomino {
+  std::vector<node> *ccNodes;     // the connected nodes associated to that polyomino
   int perim;                     // the perimeter value of the polyomino
   std::vector<tlp::Vec2i> cells; // the cells of the grid representing the polyomino
   tlp::BoundingBox ccBB;         // the bounding box of the connected nodes
   tlp::Vec2i newPlace;
-} Polyomino;
+
+  Polyomino(std::vector<node> *nodes, tlp::BoundingBox &bb) :ccNodes(nodes), ccBB(bb) {}
+};
 
 class PolyominoPacking : public tlp::LayoutAlgorithm {
 
@@ -152,10 +154,10 @@ bool PolyominoPacking::run() {
   tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
 
   if (connectedComponents.size() <= 1) {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       result->setNodeValue(n, layout->getNodeValue(n));
     }
-    for (const edge &e : graph->edges()) {
+    for (auto e : graph->edges()) {
       result->setEdgeValue(e, layout->getEdgeValue(e));
     }
     return true;
@@ -172,16 +174,13 @@ bool PolyominoPacking::run() {
 
     // get edges of current connected component
     for (unsigned int j = 0; j < nbNodes; ++j) {
-      for (const edge &e : graph->getOutEdges(ccNodes[j])) {
+      for (auto e : graph->getOutEdges(ccNodes[j])) {
         ccEdges.push_back(e);
       }
     }
 
     BoundingBox ccBB = tlp::computeBoundingBox(ccNodes, ccEdges, layout, size, rotation);
-    Polyomino info;
-    info.ccNodes = ccNodes;
-    info.ccBB = ccBB;
-    polyominos.push_back(info);
+    polyominos.emplace_back(&ccNodes, ccBB);
 
     if (pluginProgress) {
       pluginProgress->progress(i + 1, connectedComponents.size());
@@ -224,13 +223,13 @@ bool PolyominoPacking::run() {
   for (size_t i = 0; i < polyominos.size(); ++i) {
     Polyomino &poly = polyominos[i];
     Coord move = Coord(poly.newPlace[0], poly.newPlace[1]);
-    const std::vector<node> &ccNodes = poly.ccNodes;
+    const std::vector<node> &ccNodes = *poly.ccNodes;
     unsigned int nbNodes = ccNodes.size();
 
     for (unsigned int j = 0; j < nbNodes; ++j) {
       node n = ccNodes[j];
       result->setNodeValue(n, layout->getNodeValue(n) + move);
-      for (const edge &e : graph->getOutEdges(n)) {
+      for (auto e : graph->getOutEdges(n)) {
         vector<Coord> bends = layout->getEdgeValue(e);
 
         if (bends.size()) {
@@ -304,7 +303,7 @@ static Vec2i vec3fToVec2i(const Vec3f &c) {
 void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty *layout, SizeProperty *size) {
 
   const BoundingBox &ccBB = poly.ccBB;
-  const std::vector<node> &ccNodes = poly.ccNodes;
+  const std::vector<node> &ccNodes = *poly.ccNodes;
 
   int dx = -rint(ccBB[0][0]);
   int dy = -rint(ccBB[0][1]);
@@ -336,7 +335,7 @@ void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty *layout, Siz
     }
 
     point = cell(point, gridStepSize);
-    for (const edge &e : graph->getOutEdges(n)) {
+    for (auto e : graph->getOutEdges(n)) {
       fillEdge(e, point, poly.cells, dx, dy, layout);
     }
   }

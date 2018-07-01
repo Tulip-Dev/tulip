@@ -42,7 +42,7 @@ void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
     levelSize.push_back(0);
 
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]);
-  for (const node &i : tree->getOutNodes(n)) {
+  for (auto i : tree->getOutNodes(n)) {
     computeLayerSize(i, level + 1);
   }
 }
@@ -65,12 +65,13 @@ double ConeTreeExtended::treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double
   (*posRelX)[n] = 0;
   (*posRelY)[n] = 0;
 
-  if (tree->outdeg(n) == 0) {
+  auto outdeg = tree->outdeg(n);
+  if (outdeg == 0) {
     const Coord &tmp = Coord(nodeSize->getNodeValue(n));
     return sqrt(tmp[0] * tmp[0] + tmp[2] * tmp[2]) / 2.0;
   }
 
-  if (tree->outdeg(n) == 1) {
+  if (outdeg == 1) {
     Iterator<node> *itN = tree->getOutNodes(n);
     node itn = itN->next();
     delete itN;
@@ -81,7 +82,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node, double
   double maxRadius = 0;
   float newRadius;
 
-  vector<double> subCircleRadius(tree->outdeg(n));
+  vector<double> subCircleRadius(outdeg);
   Iterator<node> *itN = tree->getOutNodes(n);
 
   for (int i = 0; itN->hasNext(); ++i) {
@@ -147,7 +148,7 @@ void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, double> *
                                   int level) {
   result->setNodeValue(
       n, Coord(float(x + (*px)[n]), -float(yCoordinates[level]), float(y + (*py)[n])));
-  for (const node &itn : tree->getOutNodes(n)) {
+  for (auto itn : tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x + (*px)[n], y + (*py)[n], level + 1);
   }
 }
@@ -194,7 +195,7 @@ bool ConeTreeExtended::run() {
   // rotate size if needed
   // will be undone at then end
   if (orientation == "horizontal") {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       const Size &tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -233,7 +234,7 @@ bool ConeTreeExtended::run() {
 
   // rotate layout and size
   if (orientation == "horizontal") {
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       // if not in tulip gui, ensure cleanup
       LayoutProperty *elementLayout;
 

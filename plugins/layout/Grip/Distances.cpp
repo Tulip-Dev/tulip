@@ -37,7 +37,7 @@ unsigned int getDist(Graph *g, node n1, node n2) {
   for (unsigned int i = 0; !found && i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
 
-    for (const node &v : g->getInOutNodes(current)) {
+    for (auto v : g->getInOutNodes(current)) {
 
       if (alreadyTreated.get(v.id))
         continue;

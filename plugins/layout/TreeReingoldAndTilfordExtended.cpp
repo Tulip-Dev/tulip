@@ -315,7 +315,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
   result->setNodeValue(n, tmpCoord);
 
   if (useLength) {
-    for (const edge &ite : tree->getOutEdges(n)) {
+    for (auto ite : tree->getOutEdges(n)) {
       node itn = tree->target(ite);
       double decalY = y;
       int decalLevel = level;
@@ -334,7 +334,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
       calcLayout(itn, p, x + (*p)[n], decalY, decalLevel, maxLevelSize);
     }
   } else {
-    for (const node &itn : tree->getOutNodes(n)) {
+    for (auto itn : tree->getOutNodes(n)) {
       if (!compactLayout)
         calcLayout(itn, p, x + (*p)[n], y + spacing, level + 1, maxLevelSize);
       else
@@ -385,7 +385,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   // use bounding circles if specified
   if (boundingCircles) {
     SizeProperty *circleSizes = new SizeProperty(graph);
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       const Size &boundCircle = sizes->getNodeValue(n);
       double diam = 2 * sqrt(boundCircle.getW() * boundCircle.getW() / 4.0 +
                              boundCircle.getH() * boundCircle.getH() / 4.0);
@@ -445,29 +445,25 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   if (ortho) {
     // Edge bends
-    for (const edge &e : tree->edges()) {
-      LineType::RealType tmp;
+    for (auto e : tree->edges()) {
       node src = tree->source(e);
       node tgt = tree->target(e);
       const Coord &srcPos = result->getNodeValue(src);
       const Coord &tgtPos = result->getNodeValue(tgt);
 
-      if (srcPos[0] != tgtPos[0])
-        tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
-
-      result->setEdgeValue(e, tmp);
-    }
-
-    if (orientation == "horizontal") {
-      for (const edge &e : tree->edges()) {
-        LineType::RealType tmp = result->getEdgeValue(e);
-        LineType::RealType tmp2;
-
-        if (!tmp.empty())
-          tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
-
-        result->setEdgeValue(e, tmp2);
+      LineType::RealType tmp;
+      Coord coord;
+      if (srcPos[0] != tgtPos[0]) {
+	if (orientation == "horizontal") {
+	  coord[0] = -srcPos[1];
+	  coord[1] = tgtPos[0];
+	} else {
+	  coord[0] = tgtPos[0];
+	  coord[1] = srcPos[1];
+	}
+	tmp.push_back(coord);
       }
+     result->setEdgeValue(e, tmp);
     }
   }
 

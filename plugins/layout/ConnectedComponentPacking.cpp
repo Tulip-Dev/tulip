@@ -99,9 +99,9 @@ bool ConnectedComponentPacking::run() {
     unsigned int nbNodes = nodes.size();
 
     for (unsigned int j = 0; j < nbNodes; ++j) {
-      for (const edge &e : graph->getInOutEdges(nodes[j])) {
+      for (auto e : graph->getInOutEdges(nodes[j])) {
         if (!visited.get(e.id)) {
-          visited.set(e.id, false);
+          visited.set(e.id, true);
           edges.push_back(e);
         }
       }
@@ -140,11 +140,11 @@ bool ConnectedComponentPacking::run() {
   vector<Rectangle<float>> rectanglesBackup(rectangles);
   RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress);
 
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     result->setNodeValue(n, layout->getNodeValue(n));
   }
 
-  for (const edge &e : graph->edges()) {
+  for (auto e : graph->edges()) {
     result->setEdgeValue(e, layout->getEdgeValue(e));
   }
 

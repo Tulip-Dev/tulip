@@ -156,7 +156,7 @@ int ImprovedWalker::initializeNode(tlp::node n, unsigned int depth) {
   int maxDepth = 0;
   int count = 0;
 
-  for (const node &currentNode : tree->getOutNodes(n)) {
+  for (auto currentNode : tree->getOutNodes(n)) {
     order[currentNode] = ++count;
     int treeDepth = initializeNode(currentNode, depth + 1);
     maxDepth = max(treeDepth, maxDepth);
@@ -197,7 +197,7 @@ void ImprovedWalker::firstWalk(tlp::node v) {
   } else {
     node defaultAncestor = leftmostChild(v);
 
-    for (const node &currentNode : getChildren(v)) {
+    for (auto currentNode : getChildren(v)) {
       firstWalk(currentNode);
       combineSubtree(currentNode, &defaultAncestor);
     }
@@ -221,7 +221,7 @@ void ImprovedWalker::secondWalk(tlp::node v, float modifierX, int depth) {
   OrientableCoord coord = oriLayout->createCoord(prelimX[v] + modifierX, depth * spacing, 0);
   oriLayout->setNodeValue(v, coord);
 
-  for (const node &n : getChildren(v))
+  for (auto n : getChildren(v))
     secondWalk(n, modifierX + modChildX[v], depth + 1);
 }
 //====================================================================
@@ -313,7 +313,7 @@ void ImprovedWalker::executeShifts(tlp::node v) {
   float shift = 0;
   float delta = 0;
 
-  for (const node &currentNode : getReversedChildren(v)) {
+  for (auto currentNode : getReversedChildren(v)) {
     prelimX[currentNode] += shift;
     modChildX[currentNode] += shift;
 

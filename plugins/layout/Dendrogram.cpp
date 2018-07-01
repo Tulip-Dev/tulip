@@ -46,7 +46,7 @@ void Dendrogram::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int
   if (nodeHeight > levelHeights[depth])
     levelHeights[depth] = nodeHeight;
 
-  for (const node &on : tree->getOutNodes(n))
+  for (auto on : tree->getOutNodes(n))
     computeLevelHeights(tree, on, depth + 1, oriSize);
 }
 //====================================================================
@@ -111,7 +111,7 @@ float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin, OrientableLa
                                     OrientableSizeProxy *oriSize) {
   float leftMargin = rightMargin;
 
-  for (const node &currentNode : tree->getOutNodes(n)) {
+  for (auto currentNode : tree->getOutNodes(n)) {
     leftMargin = setAllNodesCoordX(currentNode, leftMargin, oriLayout, oriSize);
   }
 
@@ -142,7 +142,7 @@ void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout, OrientableSizePr
   float maxYLeaf = -FLT_MAX;
   setCoordY(root, maxYLeaf, oriLayout, oriSize);
 
-  for (const node &currentNode : tree->nodes()) {
+  for (auto currentNode : tree->nodes()) {
     if (isLeaf(tree, currentNode)) {
       OrientableCoord coord = oriLayout->getNodeValue(currentNode);
       float newY = maxYLeaf;
@@ -158,7 +158,7 @@ float Dendrogram::computeFatherXPosition(tlp::node father, OrientableLayout *ori
   float minX = FLT_MAX;
   float maxX = -FLT_MAX;
 
-  for (const node &currentNode : tree->getOutNodes(father)) {
+  for (auto currentNode : tree->getOutNodes(father)) {
     const float x = oriLayout->getNodeValue(currentNode).getX() + leftshift[currentNode];
     minX = min(minX, x);
     maxX = max(maxX, x);
@@ -176,7 +176,7 @@ void Dendrogram::shiftAllNodes(tlp::node n, float shift, OrientableLayout *oriLa
   coord.setX(coordX + shift);
   oriLayout->setNodeValue(n, coord);
 
-  for (const node &on : tree->getOutNodes(n))
+  for (auto on : tree->getOutNodes(n))
     shiftAllNodes(on, shift, oriLayout);
 }
 
@@ -204,6 +204,6 @@ void Dendrogram::setCoordY(tlp::node n, float &maxYLeaf, OrientableLayout *oriLa
     }
   }
 
-  for (const node &on : tree->getOutNodes(n))
+  for (auto on : tree->getOutNodes(n))
     setCoordY(on, maxYLeaf, oriLayout, oriSize);
 }

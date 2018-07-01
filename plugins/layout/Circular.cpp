@@ -38,7 +38,7 @@ Circular::Circular(const tlp::PluginContext *context) : LayoutAlgorithm(context)
 static vector<node> extractCycle(node n, deque<node> &st) {
   // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   vector<node> result;
-  deque<node>::const_reverse_iterator it = st.rbegin();
+  auto it = st.rbegin();
 
   while ((*it) != n) {
     result.push_back(*it);
@@ -69,14 +69,14 @@ static void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle
     vector<node> cycle(extractCycle(n, st));
 
     if (cycle.size() > maxCycle.size())
-      maxCycle = cycle;
+      maxCycle.swap(cycle);
 
     return;
   }
 
   st.push_back(n);
   flag.set(n.id, true);
-  for (const node &n2 : sg->getInOutNodes(n)) {
+  for (auto n2 : sg->getInOutNodes(n)) {
     dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
   }
   flag.set(n.id, false);
@@ -101,7 +101,7 @@ static vector<node> findMaxCycle(Graph *graph, PluginProgress *pluginProgress) {
     dfs(sg->getOneNode(), sg, st, res, flag, nbCalls, pluginProgress);
 
     if (max.size() < res.size())
-      max = res;
+      max.swap(res);
 
     graph->delAllSubGraphs(sg);
   }
@@ -134,13 +134,13 @@ bool Circular::run() {
   double sumOfRad = 0;
   double maxRad = 0;
   node maxRadNode;
-  for (const node &itn : graph->nodes()) {
-    double rad = computeRadius(nodeSize->getNodeValue(itn));
+  for (auto n : graph->nodes()) {
+    double rad = computeRadius(nodeSize->getNodeValue(n));
     sumOfRad += rad;
 
     if (maxRad < rad) {
       maxRad = rad;
-      maxRadNode = itn;
+      maxRadNode = n;
     } // end if
   }
 
@@ -148,8 +148,8 @@ bool Circular::run() {
   if (graph->numberOfNodes() <= 2) {
     // set the (max 2) nodes maxRad appart
     double xcoord = maxRad / 2.0;
-    for (const node &itn : graph->nodes()) {
-      result->setNodeValue(itn, Coord(xcoord, 0, 0));
+    for (auto n : graph->nodes()) {
+      result->setNodeValue(n, Coord(xcoord, 0, 0));
       xcoord *= -1;
     }
   } // end if
@@ -184,26 +184,23 @@ bool Circular::run() {
       if (!inCir.get(dfsOrdering[i].id))
         cycleOrdering.push_back(dfsOrdering[i]);
 
-    vector<node>::const_iterator it = cycleOrdering.begin();
-
-    for (; it != cycleOrdering.end(); ++it) {
-      node itn = *it;
+    for (auto n : cycleOrdering) {
       // compute the radius to ensure non overlap.  If adjustment to
       // ensure no angle greater than pi done, detect it.
-      double nodeRad = computeRadius(nodeSize->getNodeValue(itn));
+      double nodeRad = computeRadius(nodeSize->getNodeValue(n));
       double halfAngle = (nodeRad / sumOfRad) * ((angleAdjust) ? M_PI / 2.0 : M_PI);
       double rayon = nodeRad / sin(halfAngle);
 
       // if this node was the node that took up more than half the circle,
       // we complet the adjustment to make sure that it does not.
-      if (angleAdjust && (maxRadNode == itn)) {
+      if (angleAdjust && (maxRadNode == n)) {
         halfAngle = M_PI / 2.0;
         rayon = nodeRad;
       } // end if
 
       // compute the position of the node.
       gamma += halfAngle;
-      result->setNodeValue(itn, Coord(rayon * cos(gamma), rayon * sin(gamma), 0));
+      result->setNodeValue(n, Coord(rayon * cos(gamma), rayon * sin(gamma), 0));
       gamma += halfAngle;
     } // end while
   }   // end else

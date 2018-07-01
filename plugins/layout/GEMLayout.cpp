@@ -161,16 +161,16 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
   }
 
   // attractive forces
-  for (const edge &e : graph->getInOutEdges(vNode)) {
+  for (auto e : graph->getInOutEdges(vNode)) {
     node uNode = graph->opposite(e, vNode);
 
     if (uNode == vNode)
       // nothing to do if it is a self loop
       continue;
 
-    GEMparticule *gemQ = _nodeToParticules.get(uNode.id);
+    const GEMparticule &gemQ = _particules[graph->nodePos(uNode)];
 
-    if (!testPlaced || gemQ->in > 0) { // test whether the node is already placed
+    if (!testPlaced || gemQ.in > 0) { // test whether the node is already placed
       float edgeLength;
 
       if (_useLength)
@@ -178,7 +178,7 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
       else
         edgeLength = EDGELENGTH;
 
-      Coord d(vPos - gemQ->pos);
+      Coord d(vPos - gemQ.pos);
       float n = d.norm() / vMass;
       n = std::min(n, MAXATTRACT); //   1048576L
       force -= (d * n) / (edgeLength * edgeLength + 1.f);
@@ -188,7 +188,6 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
 }
 //==========================================================================
 void GEMLayout::insert() {
-  GEMparticule *gemP, *gemQ;
   int startNode;
 
   this->vertexdata_init(i_starttemp);
@@ -198,7 +197,7 @@ void GEMLayout::insert() {
   _maxtemp = i_maxtemp;
 
   node nCenter = graphCenterHeuristic(graph);
-  unsigned int v = _nodeToParticules.get(nCenter.id)->id;
+  unsigned int v = _particules[graph->nodePos(nCenter)].id;
 
   for (unsigned int i = 0; i < _nbNodes; ++i)
     _particules[i].in = 0;
@@ -232,40 +231,40 @@ void GEMLayout::insert() {
       continue;
 
     // remove one to non-visited nodes
-    for (const node &uNode : graph->getInOutNodes(vNode)) {
+    for (auto uNode : graph->getInOutNodes(vNode)) {
       if (uNode == vNode)
         // nothing to do if it is a self loop
         continue;
 
-      if (_nodeToParticules.get(uNode.id)->in <= 0)
-        --(_nodeToParticules.get(uNode.id)->in);
+      GEMparticule &gemQ = _particules[uNode];
+      if (gemQ.in <= 0)
+        --gemQ.in;
     }
 
-    gemP = &_particules[v];
-    gemP->pos.fill(0);
+    GEMparticule &gemP = _particules[v];
+    gemP.pos.fill(0);
 
     if (startNode >= 0) {
       int d = 0;
-      for (const node &uNode : graph->getInOutNodes(vNode)) {
+      for (auto uNode : graph->getInOutNodes(vNode)) {
         if (uNode == vNode)
           // nothing to do if it a self loop
           continue;
 
-        gemQ = _nodeToParticules.get(uNode.id);
-
-        if (gemQ->in > 0) {
-          gemP->pos += gemQ->pos;
+	GEMparticule &gemQ = _particules[uNode];
+        if (gemQ.in > 0) {
+          gemP.pos += gemQ.pos;
           ++d;
         }
       }
 
       if (d > 1) {
-        gemP->pos /= float(d);
+        gemP.pos /= float(d);
       }
 
       d = 0;
 
-      while ((d++ < i_maxiter) && (gemP->heat > i_finaltemp))
+      while ((d++ < i_maxiter) && (gemP.heat > i_finaltemp))
         this->displace(v, computeForces(v, i_shake, i_gravity, true));
     } else
       startNode = i;
@@ -414,7 +413,7 @@ bool GEMLayout::run() {
   _particules.resize(_nbNodes);
   /* Max Edge to scale actual edges lentgh to preferres lentgh */
   unsigned int i = 0;
-  for (const node &n : graph->nodes()) {
+  for (auto n : graph->nodes()) {
     _particules[i] = GEMparticule(float(graph->deg(n)));
     _particules[i].n = n;
     _particules[i].id = i;
@@ -424,7 +423,6 @@ bool GEMLayout::run() {
     else
       _particules[i].pos.fill(0);
 
-    _nodeToParticules.set(n.id, &_particules[i]);
     ++i;
   }
 

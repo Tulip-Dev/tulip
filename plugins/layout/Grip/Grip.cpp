@@ -43,6 +43,7 @@ Grip::~Grip() {}
 void Grip::computeCurrentGraphLayout() {
   if (currentGraph->numberOfNodes() <= 3) {
     unsigned int nb_nodes = currentGraph->numberOfNodes();
+    auto nodes = currentGraph->nodes();
 
     if (nb_nodes == 1) {
       node n = currentGraph->getOneNode();
@@ -50,30 +51,25 @@ void Grip::computeCurrentGraphLayout() {
     }
 
     if (nb_nodes == 2) {
-      Iterator<node> *itn = currentGraph->getNodes();
-      node n1 = itn->next();
-      node n2 = itn->next();
-      delete itn;
+      node n1 = nodes[0];
+      node n2 = nodes[1];
       result->setNodeValue(n1, Coord(0, 0, 0));
       result->setNodeValue(n2, Coord(1, 0, 0));
     } else if (nb_nodes == 3) {
       if (currentGraph->numberOfEdges() == 3) {
-        Iterator<node> *itn = currentGraph->getNodes();
-        node n1 = itn->next();
-        node n2 = itn->next();
-        node n3 = itn->next();
-        delete itn;
+	node n1 = nodes[0];
+	node n2 = nodes[1];
+        node n3 = nodes[2];
         result->setNodeValue(n1, Coord(0, 0, 0));
         result->setNodeValue(n2, Coord(1, 0, 0));
         result->setNodeValue(n3, Coord(0.5, sqrt(0.5), 0));
       } else {
-        Iterator<edge> *ite = currentGraph->getEdges();
-        edge e1 = ite->next();
-        edge e2 = ite->next();
-        delete ite;
+	auto edges = currentGraph->edges();
+        edge e1 = edges[0];
+        edge e2 = edges[1];
 
-        const std::pair<node, node> &ends1 = currentGraph->ends(e1);
-        const std::pair<node, node> &ends2 = currentGraph->ends(e2);
+        const std::pair<node, node> ends1 = currentGraph->ends(e1);
+        const std::pair<node, node> ends2 = currentGraph->ends(e2);
         node n1 = ends1.first;
         node n2 = ends1.second;
         node n3;
@@ -136,7 +132,7 @@ bool Grip::run() {
     LayoutProperty layout(graph);
     graph->applyPropertyAlgorithm("Connected Component Packing", &layout, err, &tmp);
 
-    for (const node &n : graph->nodes()) {
+    for (auto n : graph->nodes()) {
       result->setNodeValue(n, layout.getNodeValue(n));
     }
 
@@ -360,7 +356,7 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
       disp[currNode] = Coord(0, 0, 0);
 
       // attractive force calculation
-      for (const node &n : currentGraph->getInOutNodes(currNode)) {
+      for (auto n : currentGraph->getInOutNodes(currNode)) {
         const Coord &c_n = result->getNodeValue(n);
         Coord c_tmp = c_n - curCoord;
         float euclidian_dist_sqr = c_tmp[0] * c_tmp[0] + c_tmp[1] * c_tmp[1];
@@ -458,7 +454,7 @@ void Grip::init() {
   level = 0;
 
   double diam = sqrt(currentGraph->numberOfNodes());
-  for (const node &n : currentGraph->nodes()) {
+  for (auto n : currentGraph->nodes()) {
     Coord alea = Coord(diam - (2. * diam * randomInteger(1)), diam - (2. * diam * randomInteger(1)),
                        diam - (2. * diam * randomInteger(1)));
 
@@ -483,7 +479,7 @@ void Grip::set_nbr_size() {
   int initCxty = 10000;
   unsigned int maxLevel = 0;
 
-  for (const node &n : currentGraph->nodes())
+  for (auto n : currentGraph->nodes())
     maxCxty += currentGraph->deg(n);
 
   if (maxCxty < uint(initCxty))

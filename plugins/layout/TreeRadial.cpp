@@ -370,7 +370,7 @@ public:
     getSpacingParameters(dataSet, nSpacing, lSpacing);
 
     SizeProperty *circleSizes = new SizeProperty(graph);
-    for (const node &n : tree->nodes()) {
+    for (auto n : tree->nodes()) {
       const Size &boundingBox = sizes->getNodeValue(n);
       double diam = 2. * sqrt(boundingBox.getW() * boundingBox.getW() / 4.0 +
                               boundingBox.getH() * boundingBox.getH() / 4.0);

@@ -41,7 +41,7 @@ void MISFiltering::computeFiltering() {
 
   inLastVi.setAll(true);
 
-  for (const node &n : g_copy->nodes())
+  for (auto n : g_copy->nodes())
     levelToNodes[0].insert(n);
 
   level = 1;
@@ -98,7 +98,7 @@ void MISFiltering::bfsDepth(node n, unsigned int depth) {
 
   for (unsigned int i = 0; i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
-    for (const node &v : g_copy->getInOutNodes(current)) {
+    for (auto v : g_copy->getInOutNodes(current)) {
       if (visited.get(v.id) || inNext.get(v.id))
         continue;
 
@@ -132,7 +132,7 @@ void MISFiltering::updateVectors() {
 
   if (level == 1) {
     unsigned int curPos = 0;
-    for (const node &n : g_copy->nodes())
+    for (auto n : g_copy->nodes())
       ordering[curPos++] = n;
     return;
   }
@@ -209,7 +209,7 @@ void MISFiltering::getNearest(node n, vector<node> &neighbors, vector<unsigned i
   for (unsigned int i = 0; !found && i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
 
-    for (const node &v : g_copy->getInOutNodes(current)) {
+    for (auto v : g_copy->getInOutNodes(current)) {
 
       if (alreadyTreated.get(v.id))
         continue;
