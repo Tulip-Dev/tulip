@@ -109,8 +109,8 @@ bool Tutte::run() {
   gamma = 2 * M_PI / tmp.size();
 
   for (auto n : tmp) {
-    result->setNodeValue(n, Coord(rayon * cos(gamma * i) + rayon * 2,
-				  rayon * sin(gamma * i) + rayon * 2, 0));
+    result->setNodeValue(
+        n, Coord(rayon * cos(gamma * i) + rayon * 2, rayon * sin(gamma * i) + rayon * 2, 0));
     i++;
   }
 

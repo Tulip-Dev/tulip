@@ -60,13 +60,13 @@ static const char *paramHelp[] = {
     "tried again."};
 
 struct Polyomino {
-  std::vector<node> *ccNodes;     // the connected nodes associated to that polyomino
+  std::vector<node> *ccNodes;    // the connected nodes associated to that polyomino
   int perim;                     // the perimeter value of the polyomino
   std::vector<tlp::Vec2i> cells; // the cells of the grid representing the polyomino
   tlp::BoundingBox ccBB;         // the bounding box of the connected nodes
   tlp::Vec2i newPlace;
 
-  Polyomino(std::vector<node> *nodes, tlp::BoundingBox &bb) :ccNodes(nodes), ccBB(bb) {}
+  Polyomino(std::vector<node> *nodes, tlp::BoundingBox &bb) : ccNodes(nodes), ccBB(bb) {}
 };
 
 class PolyominoPacking : public tlp::LayoutAlgorithm {

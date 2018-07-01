@@ -454,16 +454,16 @@ bool TreeReingoldAndTilfordExtended::run() {
       LineType::RealType tmp;
       Coord coord;
       if (srcPos[0] != tgtPos[0]) {
-	if (orientation == "horizontal") {
-	  coord[0] = -srcPos[1];
-	  coord[1] = tgtPos[0];
-	} else {
-	  coord[0] = tgtPos[0];
-	  coord[1] = srcPos[1];
-	}
-	tmp.push_back(coord);
+        if (orientation == "horizontal") {
+          coord[0] = -srcPos[1];
+          coord[1] = tgtPos[0];
+        } else {
+          coord[0] = tgtPos[0];
+          coord[1] = srcPos[1];
+        }
+        tmp.push_back(coord);
       }
-     result->setEdgeValue(e, tmp);
+      result->setEdgeValue(e, tmp);
     }
   }
 

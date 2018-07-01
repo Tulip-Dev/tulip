@@ -57,14 +57,14 @@ void Grip::computeCurrentGraphLayout() {
       result->setNodeValue(n2, Coord(1, 0, 0));
     } else if (nb_nodes == 3) {
       if (currentGraph->numberOfEdges() == 3) {
-	node n1 = nodes[0];
-	node n2 = nodes[1];
+        node n1 = nodes[0];
+        node n2 = nodes[1];
         node n3 = nodes[2];
         result->setNodeValue(n1, Coord(0, 0, 0));
         result->setNodeValue(n2, Coord(1, 0, 0));
         result->setNodeValue(n3, Coord(0.5, sqrt(0.5), 0));
       } else {
-	auto edges = currentGraph->edges();
+        auto edges = currentGraph->edges();
         edge e1 = edges[0];
         edge e2 = edges[1];
 

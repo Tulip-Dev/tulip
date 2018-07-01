@@ -43,9 +43,8 @@ bool Random::run() {
   tlp::initRandomSequence();
 
   for (auto n : graph->nodes()) {
-    result->setNodeValue(n,
-			 Coord(randomInteger(1024), randomInteger(1024),
-			       is3D ? randomInteger(1024) : 0));
+    result->setNodeValue(
+        n, Coord(randomInteger(1024), randomInteger(1024), is3D ? randomInteger(1024) : 0));
   }
 
   return true;
