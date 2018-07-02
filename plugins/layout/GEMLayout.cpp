@@ -236,7 +236,7 @@ void GEMLayout::insert() {
         // nothing to do if it is a self loop
         continue;
 
-      GEMparticule &gemQ = _particules[uNode];
+      GEMparticule &gemQ = _particules[graph->nodePos(uNode)];
       if (gemQ.in <= 0)
         --gemQ.in;
     }
@@ -251,7 +251,7 @@ void GEMLayout::insert() {
           // nothing to do if it a self loop
           continue;
 
-        GEMparticule &gemQ = _particules[uNode];
+        GEMparticule &gemQ = _particules[graph->nodePos(uNode)];
         if (gemQ.in > 0) {
           gemP.pos += gemQ.pos;
           ++d;
