@@ -479,7 +479,8 @@ public:
 
     for (Graph *sg : graph->subGraphs()) {
       // iterate on nodes
-      for (auto n : sg->nodes()) {
+      vector<node> sgNodes(sg->nodes());
+      for (auto n : sgNodes) {
         Graph *msg = nodeToSubgraph.get(n.id);
 
         if (msg != nullptr) {
