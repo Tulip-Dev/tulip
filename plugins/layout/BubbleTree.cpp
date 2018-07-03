@@ -371,8 +371,7 @@ bool BubbleTree::run() {
 
   if (graph->numberOfNodes() == 3 && graph->numberOfEdges() == 3) {
     string err;
-    graph->applyPropertyAlgorithm("Circular", result,
-				  err, nullptr, pluginProgress);
+    graph->applyPropertyAlgorithm("Circular", result, err, nullptr, pluginProgress);
     return true;
   }
 
