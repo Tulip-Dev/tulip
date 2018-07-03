@@ -318,6 +318,7 @@ BubbleTree::BubbleTree(const tlp::PluginContext *context) : LayoutAlgorithm(cont
   addNodeSizePropertyParameter(this);
   addInParameter<bool>("complexity", paramHelp[0], "true");
   addDependency("Connected Component Packing", "1.0");
+  addDependency("Circular", "1.1");
 }
 
 BubbleTree::~BubbleTree() {}
@@ -376,6 +377,15 @@ bool BubbleTree::run() {
     propsToPreserve.push_back(result);
 
   graph->push(false, &propsToPreserve);
+
+  if (graph->numberOfNodes() == 3 && graph->numberOfEdges() == 3) {
+    string err;
+    LayoutProperty tmpLayout(graph);
+    graph->applyPropertyAlgorithm("Circular", &tmpLayout,
+				  err, nullptr, pluginProgress);
+    *result = tmpLayout;
+    return true;
+  }
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 

@@ -31,11 +31,6 @@
  *  D. Auber and S. Grivet and J-P Domenger and Guy Melancon, \n
  *  In International Conference on Computer Vision and Graphics, pages 633-641, september 2004.
  *
- *  <b>HISTORY</b>
- *
- *  - 07/12/04 Version 0.0.3: Use new Tulip plugin parameter mechanism
- *  - 16/07/03 Version 0.0.2: Better management of node size
- *  - 16/05/03 Version 0.0.1: Initial release
  *
  *  \note  This algorithm only works on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)),
@@ -56,7 +51,7 @@ public:
                     "Implement the bubble tree drawing algorithm first published as:<br/>"
                     "<b>Bubble Tree Drawing Algorithm</b>, D. Auber and S. Grivet and J-P Domenger "
                     "and Guy Melancon, ICCVG, pages 633-641 (2004).",
-                    "1.0", "Tree")
+                    "1.1", "Tree")
   BubbleTree(const tlp::PluginContext *context);
   ~BubbleTree() override;
   bool run() override;
