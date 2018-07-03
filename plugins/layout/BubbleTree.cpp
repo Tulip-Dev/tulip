@@ -369,6 +369,13 @@ bool BubbleTree::run() {
   if (pluginProgress)
     pluginProgress->showPreview(false);
 
+  if (graph->numberOfNodes() == 3 && graph->numberOfEdges() == 3) {
+    string err;
+    graph->applyPropertyAlgorithm("Circular", result,
+				  err, nullptr, pluginProgress);
+    return true;
+  }
+
   // push a temporary graph state (not redoable)
   // preserving layout updates
   std::vector<PropertyInterface *> propsToPreserve;
@@ -377,15 +384,6 @@ bool BubbleTree::run() {
     propsToPreserve.push_back(result);
 
   graph->push(false, &propsToPreserve);
-
-  if (graph->numberOfNodes() == 3 && graph->numberOfEdges() == 3) {
-    string err;
-    LayoutProperty tmpLayout(graph);
-    graph->applyPropertyAlgorithm("Circular", &tmpLayout,
-				  err, nullptr, pluginProgress);
-    *result = tmpLayout;
-    return true;
-  }
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 
