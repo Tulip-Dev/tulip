@@ -199,6 +199,10 @@ public:
   **/
   CSVImportParameters getImportParameters() const;
 
+  // return the sorted names of the existing properties of a known typename
+  // see PropertyInterface::getTypename()
+  static const std::set<std::string> &getPropsForTypename(const std::string &type);
+
 protected:
   void updateWidget(const std::string &title = "Generating preview");
 

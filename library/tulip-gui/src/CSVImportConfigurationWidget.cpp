@@ -89,9 +89,17 @@ void PropertyConfigurationWidget::toggleUsed() {
   emit stateChange(_used);
 }
 
-void PropertyConfigurationWidget::typeCBChanged(const QString &text) {
-  bool enabled = text.contains(QString("Vector"));
+void PropertyConfigurationWidget::typeCBChanged(const QString &type) {
+  bool enabled = type.contains(QString("Vector"));
   ui->separatorCB->setEnabled(enabled);
+  // update ui->nameCB
+  int nbItems = ui->nameCB->count();
+  for (int i = 1; i < nbItems; ++i)
+    ui->nameCB->removeItem(1);
+  const std::set<std::string> &props =
+    CSVImportConfigurationWidget::getPropsForTypename(propertyTypeLabelToPropertyType(type));
+  for (const std::string &prop : props)
+    ui->nameCB->addItem(tlpStringToQString(prop));
 }
 
 void PropertyConfigurationWidget::addException() {
@@ -117,9 +125,8 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   ui = new Ui_CSVPropertyDialog();
   ui->setupUi(&dialog);
   ui->label->setText(QString("Column #%1").arg(propertyNumber + 1));
-  ui->name->setText(tlpStringToQString(_name));
   propertyNameValidator->setCurrentIndex(propertyNumber);
-  ui->name->setValidator(propertyNameValidator);
+  ui->nameCB->setValidator(propertyNameValidator);
   ui->typeCB->clear();
   ui->typeCB->addItem(propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename),
                       QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
@@ -154,6 +161,8 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   if (index != -1) {
     ui->typeCB->setCurrentIndex(index);
   }
+  ui->nameCB->addItem(tlpStringToQString(_name));
+  ui->nameCB->setCurrentIndex(0);
   typeCBChanged(ui->typeCB->currentText());
   connect(ui->typeCB, SIGNAL(currentIndexChanged(QString)), this, SLOT(typeCBChanged(QString)));
 
@@ -172,7 +181,7 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
   connect(ui->delCurrentExceptionButton, SIGNAL(released()), this, SLOT(delCurrentException()));
 
   if (dialog.exec() == QDialog::Accepted) {
-    _name = QStringToTlpString(ui->name->text());
+    _name = QStringToTlpString(ui->nameCB->currentText());
     setPropertyType(propertyTypeLabelToPropertyType(ui->typeCB->currentText()));
     _valueSeparator = ui->separatorCB->currentText()[0].toLatin1();
     clearExceptions();
@@ -271,6 +280,8 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
   return true;
 }
 
+static std::unordered_map<std::string, std::set<std::string> > typenameToProps;
+
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),
       validator(new PropertyNameValidator(propertyWidgets, this)), maxLineNumber(0), parser(NULL),
@@ -307,6 +318,10 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
   delete ui;
   delete parser;
+}
+
+const std::set<std::string> &CSVImportConfigurationWidget::getPropsForTypename(const std::string &type) {
+  return typenameToProps[type];
 }
 
 void CSVImportConfigurationWidget::setFirstLineIndex(int fl) {
@@ -580,6 +595,18 @@ PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigu
   connect(propertyConfigurationWidget, SIGNAL(stateChange(bool)), this,
           SLOT(propertyStateChanged(bool)));
   propertyConfigurationWidget->installEventFilter(this);
+
+  // rebuild typenameToProps if needed
+  if (propertyNumber == 0) {
+    typenameToProps.clear();
+
+    auto itp = CSVImportWizard::getGraph()->getObjectProperties();
+    while(itp->hasNext()) {
+      auto prop = itp->next();
+      typenameToProps[prop->getTypename()].insert(prop->getName());
+    }
+  }
+
   return propertyConfigurationWidget;
 }
 
