@@ -51,7 +51,7 @@ public:
   bool createLatAndLngProperties() const;
 
   bool resetLatAndLngValues() const;
-  
+
   std::string getAddressGraphPropertyName() const;
 
   std::string getLatitudeGraphPropertyName() const;

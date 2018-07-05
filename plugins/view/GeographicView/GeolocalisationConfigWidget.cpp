@@ -57,7 +57,8 @@ GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent)
   connect(_ui->addressLocRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
   connect(_ui->latLngRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
   connect(_ui->genLayoutButton, SIGNAL(clicked()), this, SIGNAL(computeGeoLayout()));
-  connect(_ui->createLatLngPropsCB, SIGNAL(clicked(bool)), _ui->resetLatLngValuesCB, SLOT(setEnabled(bool)));
+  connect(_ui->createLatLngPropsCB, SIGNAL(clicked(bool)), _ui->resetLatLngValuesCB,
+          SLOT(setEnabled(bool)));
 }
 
 GeolocalisationConfigWidget::~GeolocalisationConfigWidget() {
@@ -138,8 +139,8 @@ bool GeolocalisationConfigWidget::createLatAndLngProperties() const {
 }
 
 bool GeolocalisationConfigWidget::resetLatAndLngValues() const {
-   return _ui->resetLatLngValuesCB->isChecked();
- }
+  return _ui->resetLatLngValuesCB->isChecked();
+}
 
 void GeolocalisationConfigWidget::enableDisableComboBoxes() {
   if (_ui->addressLocRB->isChecked()) {

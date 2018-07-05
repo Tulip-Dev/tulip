@@ -97,7 +97,7 @@ void PropertyConfigurationWidget::typeCBChanged(const QString &type) {
   for (int i = 1; i < nbItems; ++i)
     ui->nameCB->removeItem(1);
   const std::set<std::string> &props =
-    CSVImportConfigurationWidget::getPropsForTypename(propertyTypeLabelToPropertyType(type));
+      CSVImportConfigurationWidget::getPropsForTypename(propertyTypeLabelToPropertyType(type));
   for (const std::string &prop : props)
     ui->nameCB->addItem(tlpStringToQString(prop));
 }
@@ -280,7 +280,7 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
   return true;
 }
 
-static std::unordered_map<std::string, std::set<std::string> > typenameToProps;
+static std::unordered_map<std::string, std::set<std::string>> typenameToProps;
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),
@@ -320,7 +320,8 @@ CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
   delete parser;
 }
 
-const std::set<std::string> &CSVImportConfigurationWidget::getPropsForTypename(const std::string &type) {
+const std::set<std::string> &
+CSVImportConfigurationWidget::getPropsForTypename(const std::string &type) {
   return typenameToProps[type];
 }
 
@@ -601,7 +602,7 @@ PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigu
     typenameToProps.clear();
 
     auto itp = CSVImportWizard::getGraph()->getObjectProperties();
-    while(itp->hasNext()) {
+    while (itp->hasNext()) {
       auto prop = itp->next();
       typenameToProps[prop->getTypename()].insert(prop->getName());
     }
