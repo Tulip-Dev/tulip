@@ -42,7 +42,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Contact the Google Maps geolocation server to retrieve&lt;br&gt; the latitude and longitude associated to an address.&lt;/p&gt;
+&lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use the Google Maps geolocation server&lt;br&gt; to get the location associated to an address.&lt;/p&gt;
 &lt;p align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This operation may take some time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
@@ -97,10 +97,25 @@ addresses associated to nodes</string>
    </item>
    <item>
     <widget class="QCheckBox" name="createLatLngPropsCB">
+     <property name="toolTip">
+      <string>If checked, a &quot;latitude&quot; and &quot;longitude&quot; properties are created to store the values retrieved for the geolocation server</string>
+     </property>
      <property name="text">
-      <string>Create a latitude and longitude 
-properties to allow faster layout 
-loading in the future</string>
+      <string>Create latitude/longitude properties
+(upcoming layout loading will be faster)</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="resetLatLngValuesCB">
+     <property name="toolTip">
+      <string>If not checked, latitude and longitude values are retrieved only when not set.</string>
+     </property>
+     <property name="text">
+      <string>Recompute latitude/longitude values</string>
      </property>
      <property name="checked">
       <bool>true</bool>

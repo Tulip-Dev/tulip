@@ -727,7 +727,8 @@ GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
 }
 
 void GeographicViewGraphicsView::createLayoutWithAddresses(const string &addressPropertyName,
-                                                           bool createLatAndLngProps) {
+                                                           bool createLatAndLngProps,
+							   bool resetLatAndLngValues) {
   geocodingActive = true;
   nodeLatLng.clear();
   Observable::holdObservers();
@@ -787,6 +788,15 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             longitudeProperty->setNodeValue(n, nodeLatLng[n].second);
           }
         } else {
+	  if (!resetLatAndLngValues) {
+	    // check if latitude/longitude are already set
+	    latLng.first = latitudeProperty->getNodeValue(n);
+	    latLng.second = longitudeProperty->getNodeValue(n);
+	    if (latLng.first != 0 || latLng.second != 0) {
+	      nodeLatLng[n] = addressesLatLngMap[addr] = latLng;
+	      continue;
+	    }
+	  }
           string geocodingRequestStatus =
               googleMaps->getLatLngForAddress(tlpStringToQString(addr), latLng, true);
 
