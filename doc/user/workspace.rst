@@ -619,9 +619,9 @@ A geolocation tool has been embedded in the view, exploiting the Google Maps web
 
 You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the already computed latitude and longitude values, each contained in their respective properties.
 
-The above europe map snapshots for example have been build in such a way, by giving to each node a town name.
+The previous Europe map snapshots, for example, have been build in such a way, by giving to each node a city name.
 
-Once the service is being queried, you will have to specify the corresponding town/address for the ambiguous choices. With the layout finished, you can choose to keep the result value obtained in complementary properties to ease the possible next computation.
+Once the service is being queried, you will have to specify the corresponding town/address for the ambiguous choices. You can choose to keep the result values obtained in latitude/longitude properties to ease a possible next use of your data.
 
 The node placement should be instantaneous otherwise, close and reopen the view to update the new layout.
 
