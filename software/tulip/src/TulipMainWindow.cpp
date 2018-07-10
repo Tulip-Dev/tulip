@@ -161,9 +161,8 @@ void TulipMainWindow::checkPython() {
     QString errorMessage;
 
     if (installedPythons.isEmpty()) {
-      errorMessage =
-          requiredPython +
-          " does not seem to be installed on your system.\nPlease install it in order to use Tulip.";
+      errorMessage = requiredPython + " does not seem to be installed on your system.\nPlease "
+                                      "install it in order to use Tulip.";
     } else {
       errorMessage =
           "Python version mismatch. Please install " + requiredPython + " in order to use Tulip.\n";
