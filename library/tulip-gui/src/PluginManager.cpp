@@ -113,7 +113,6 @@ public:
       QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
-    reply->open(QIODevice::ReadOnly);
     QByteArray contents = reply->readAll();
     reply->close();
     parse(reinterpret_cast<const unsigned char *>(contents.constData()), contents.size());
