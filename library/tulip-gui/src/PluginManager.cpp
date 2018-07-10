@@ -89,7 +89,6 @@ public:
       url = QUrl(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl());
     } while (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid());
 
-    reply->open(QIODevice::ReadOnly);
     QString tmpOutPath = QDir::temp().absoluteFilePath("tulip_plugin_" + name + ".zip");
     QFile tmpOut(tmpOutPath);
     tmpOut.open(QIODevice::WriteOnly);
