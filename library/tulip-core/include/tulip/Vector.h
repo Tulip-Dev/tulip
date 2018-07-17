@@ -365,10 +365,10 @@ inline TYPE dist(const VECTOR &a, const VECTOR &b) {
 }
 
 /**
-  * Return the minimun of each dimension of the two vectors
-  * for instance for a 2 vectors of dim 2 :
-  * min(V1, V2) = (min(V1[0], v2[0]), min(V1[1], v2[1))
-  */
+ * Return the minimun of each dimension of the two vectors
+ * for instance for a 2 vectors of dim 2 :
+ * min(V1, V2) = (min(V1[0], v2[0]), min(V1[1], v2[1))
+ */
 TEMPLATEVECTOR
 inline VECTOR minVector(const VECTOR &u, const VECTOR &v) {
   VECTOR tmp;
@@ -379,10 +379,10 @@ inline VECTOR minVector(const VECTOR &u, const VECTOR &v) {
   return tmp;
 }
 /**
-  * Return the maximum of each dimension of the two vectors
-  * for instance for a 2 vectors of dim 2 :
-  * max(V1, V2) = (max(V1[0], v2[0]), max(V1[1], v2[1))
-  */
+ * Return the maximum of each dimension of the two vectors
+ * for instance for a 2 vectors of dim 2 :
+ * max(V1, V2) = (max(V1[0], v2[0]), max(V1[1], v2[1))
+ */
 TEMPLATEVECTOR
 inline VECTOR maxVector(const VECTOR &u, const VECTOR &v) {
   VECTOR tmp;
@@ -394,8 +394,8 @@ inline VECTOR maxVector(const VECTOR &u, const VECTOR &v) {
 }
 
 /**
-  * compute the minimum/maximum of each dimension of the two vectors
-  */
+ * compute the minimum/maximum of each dimension of the two vectors
+ */
 TEMPLATEVECTOR
 inline void minMaxVectors(const VECTOR &u, const VECTOR &v, VECTOR &min, VECTOR &max) {
   for (size_t i = 0; i < SIZE; ++i) {
@@ -436,54 +436,54 @@ inline VECTOR operator^(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR &);
 /**
-  * @brief typedef for 2D vector of unsigned int
-  */
+ * @brief typedef for 2D vector of unsigned int
+ */
 typedef Vector<unsigned int, 2> Vec2ui;
 /**
-  * @brief typedef for 3D vector of unsigned int
-  */
+ * @brief typedef for 3D vector of unsigned int
+ */
 typedef Vector<unsigned int, 3> Vec3ui;
 /**
-  * @brief typedef for 4D vector of unsigned int
-  */
+ * @brief typedef for 4D vector of unsigned int
+ */
 typedef Vector<unsigned int, 4> Vec4ui;
 /**
-  * @brief typedef for 2D vector of int
-  */
+ * @brief typedef for 2D vector of int
+ */
 typedef Vector<int, 2> Vec2i;
 /**
-  * @brief typedef for 3D vector of int
-  */
+ * @brief typedef for 3D vector of int
+ */
 typedef Vector<int, 3> Vec3i;
 /**
-  * @brief typedef for 4D vector of int
-  */
+ * @brief typedef for 4D vector of int
+ */
 typedef Vector<int, 4> Vec4i;
 /**
-  * @brief typedef for 2D vector of double
-  */
+ * @brief typedef for 2D vector of double
+ */
 typedef Vector<double, 2, long double> Vec2d;
 /**
-  * @brief typedef for 3D vector of double
-  */
+ * @brief typedef for 3D vector of double
+ */
 typedef Vector<double, 3, long double> Vec3d;
 /**
-  * @brief typedef for 4D vector of double
-  */
+ * @brief typedef for 4D vector of double
+ */
 typedef Vector<double, 4, long double> Vec4d;
 /**
-  * @brief typedef for 2D vector of float
-  */
+ * @brief typedef for 2D vector of float
+ */
 typedef Vector<float, 2, double> Vec2f;
 /**
-  * @brief typedef for 3D vector of float
-  */
+ * @brief typedef for 3D vector of float
+ */
 typedef Vector<float, 3, double> Vec3f;
 /**
-  * @brief typedef for 4D vector of float
-  */
+ * @brief typedef for 4D vector of float
+ */
 typedef Vector<float, 4, double> Vec4f;
-}
+} // namespace tlp
 
 #ifdef _MSC_VER
 static double sqrt(tlp::Vector<float, 5> &v) {
@@ -500,7 +500,7 @@ TLP_BEGIN_HASH_NAMESPACE {
     size_t seed = 0;
 
     for (size_t i = 0; i < SIZE; ++i) {
-      hash_combine(seed, v[i]);
+      tlp_hash_combine(seed, v[i]);
     }
 
     return seed;

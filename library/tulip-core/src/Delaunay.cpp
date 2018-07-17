@@ -280,10 +280,9 @@ static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, con
   long double det = m.determinant();
 
   if (det != 0) {
-    Vec3ld c = Ad +
-               ((danorm * danorm * (ba ^ ca)) + (canorm * canorm * (da ^ ba)) +
-                (banorm * banorm * (ca ^ da))) /
-                   (2.0 * det);
+    Vec3ld c = Ad + ((danorm * danorm * (ba ^ ca)) + (canorm * canorm * (da ^ ba)) +
+                     (banorm * banorm * (ca ^ da))) /
+                        (2.0 * det);
     return tlp::Coord(c[0], c[1], c[2]);
   } else {
     return (A + B + C + D) / 4.0f;
@@ -330,9 +329,9 @@ TLP_BEGIN_HASH_NAMESPACE {
   struct hash<Face> {
     inline std::size_t operator()(const Face &f) const {
       size_t seed = 0;
-      hash_combine(seed, f.sortedIndexes[0]);
-      hash_combine(seed, f.sortedIndexes[1]);
-      hash_combine(seed, f.sortedIndexes[2]);
+      tlp_hash_combine(seed, f.sortedIndexes[0]);
+      tlp_hash_combine(seed, f.sortedIndexes[1]);
+      tlp_hash_combine(seed, f.sortedIndexes[2]);
       return seed;
     }
   };

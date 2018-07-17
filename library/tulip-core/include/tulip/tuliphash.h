@@ -55,7 +55,7 @@
 // differences will soon be spread across all the bits.
 TLP_BEGIN_HASH_NAMESPACE {
   template <class T>
-  inline void hash_combine(std::size_t & seed, const T &v) {
+  inline void tlp_hash_combine(std::size_t & seed, const T &v) {
     hash<T> hasher;
     seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
   }
