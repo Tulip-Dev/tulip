@@ -311,24 +311,22 @@ static struct PyModuleDef consoleutilsModuleDef = {
 };
 #endif
 
-void initconsoleutils(void) {
+// This is called via the PyImport_AppendInittab mechanism called
+// during interpreter initialization, to make the built-in consoleutils
+// module known to Python
+PyMODINIT_FUNC initconsoleutils(void) {
   PyObject *m;
 
   consoleutils_ConsoleOutputType.tp_new = PyType_GenericNew;
   consoleutils_ConsoleInputType.tp_new = PyType_GenericNew;
 
-  if (PyType_Ready(&consoleutils_ConsoleOutputType) < 0)
-    return;
-
-  if (PyType_Ready(&consoleutils_ConsoleInputType) < 0)
-    return;
+  PyType_Ready(&consoleutils_ConsoleOutputType);
+  PyType_Ready(&consoleutils_ConsoleInputType);
 
 #if PY_MAJOR_VERSION >= 3
   m = PyModule_Create(&consoleutilsModuleDef);
-  _PyImport_FixupBuiltin(m, const_cast<char *>("consoleutils"));
 #else
-  m = Py_InitModule3("consoleutils", nullptr, "");
-  _PyImport_FixupExtension(const_cast<char *>("consoleutils"), const_cast<char *>("consoleutils"));
+   m = Py_InitModule("consoleutils", nullptr);
 #endif
   PyObject *cot = reinterpret_cast<PyObject *>(&consoleutils_ConsoleOutputType);
   Py_INCREF(cot);
@@ -336,6 +334,9 @@ void initconsoleutils(void) {
   PyObject *cit = reinterpret_cast<PyObject *>(&consoleutils_ConsoleInputType);
   Py_INCREF(cit);
   PyModule_AddObject(m, "ConsoleInput", cit);
+#if PY_MAJOR_VERSION >= 3
+  return m;
+#endif
 }
 
 #ifdef __GNUC__

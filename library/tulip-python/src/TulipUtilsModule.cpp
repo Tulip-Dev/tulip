@@ -152,13 +152,14 @@ static struct PyModuleDef tulipUtilsModuleDef = {
 };
 #endif
 
-void inittuliputils(void) {
+// This is called via the PyImport_AppendInittab mechanism called
+// during interpreter initialization, to make the built-in tuliputils
+// module known to Python
+PyMODINIT_FUNC inittuliputils(void) {
 #if PY_MAJOR_VERSION >= 3
-  PyObject *m = PyModule_Create(&tulipUtilsModuleDef);
-  _PyImport_FixupBuiltin(m, const_cast<char *>("tuliputils"));
+  return PyModule_Create(&tulipUtilsModuleDef);
 #else
   Py_InitModule("tuliputils", tulipUtilsMethods);
-  _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 #endif
 }
 
