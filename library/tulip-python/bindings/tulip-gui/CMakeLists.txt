@@ -1,7 +1,3 @@
-IF(PYTHONINTERP_FOUND)
-IF(PYTHONLIBS_FOUND)
-IF(SIP_OK)
-
 SET(TULIP_GUI_SIP_FILES
     Interactor.sip
     Module.sip
@@ -19,7 +15,7 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_GUI_PYTHON_BINDINGS_SRC}
-  COMMAND ${SIP_EXE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -c ${CMAKE_CURRENT_BINARY_DIR} -j3 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+  COMMAND ${SIP_EXE} -n tulip.native.sip -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -c ${CMAKE_CURRENT_BINARY_DIR} -j3 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
   COMMENT "Generating Python Bindings for libtulip-gui"
   DEPENDS ${TULIP_GUI_SIP_FILES} ${TULIP_SIP_FILES} ${STL_SIP_FILES} VERBATIM)
 
@@ -31,34 +27,33 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUti
 DISABLE_COMPILER_WARNINGS()
 
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
+  STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
 
-IF(WIN32)
-SET(WHEEL_INSTALL_PATH "\\")
-ELSE(WIN32)
-SET(WHEEL_INSTALL_PATH "/")
-ENDIF(WIN32)
+  IF(WIN32)
+    SET(WHEEL_INSTALL_PATH "\\")
+  ELSE(WIN32)
+    SET(WHEEL_INSTALL_PATH "/")
+  ENDIF(WIN32)
 
-ADD_CUSTOM_COMMAND(OUTPUT ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
-  COMMAND ${CMAKE_COMMAND} -DINPUT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/packaging/
-                           -DOUTPUT_DIR=${TULIPGUI_PYTHON_FOLDER}/../
-                           -DTulipVersion=${TulipVersion}
-                           -DTulipVersionClean=${TulipVersionClean}
-                           -DPythonWheelVersionSuffix=${PythonWheelVersionSuffix}
-                           -DWHEEL_INSTALL_PATH=${WHEEL_INSTALL_PATH}
-                           -P ${CMAKE_CURRENT_SOURCE_DIR}/packaging/configure_tulipgui_python_setup.cmake
-  DEPENDS
-    packaging/setup.py.in
-    packaging/setup.cfg.in
-  COMMENT "Generating tulipgui-python packaging files"
-  VERBATIM)
+  ADD_CUSTOM_COMMAND(OUTPUT ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
+    COMMAND ${CMAKE_COMMAND} -DINPUT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/packaging/
+                             -DOUTPUT_DIR=${TULIPGUI_PYTHON_FOLDER}/../
+                             -DTulipVersion=${TulipVersion}
+                             -DTulipVersionClean=${TulipVersionClean}
+                             -DPythonWheelVersionSuffix=${PythonWheelVersionSuffix}
+                             -DWHEEL_INSTALL_PATH=${WHEEL_INSTALL_PATH}
+                             -P ${CMAKE_CURRENT_SOURCE_DIR}/packaging/configure_tulipgui_python_setup.cmake
+    DEPENDS
+      packaging/setup.py.in
+      packaging/setup.cfg.in
+    COMMENT "Generating tulipgui-python packaging files"
+    VERBATIM)
 
-ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
-                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
-                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipGuiDllDependencies.cmake ${TULIPGUI_PYTHON_FOLDER}/../copyTulipGuiDllDependencies.cmake
-                                                   DEPENDS ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
-)
-ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
+  ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
+     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
+     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipGuiDllDependencies.cmake ${TULIPGUI_PYTHON_FOLDER}/../copyTulipGuiDllDependencies.cmake
+     DEPENDS ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg)
+  ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 # Force to use SIP headers located in thirdparty
@@ -85,22 +80,22 @@ ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} create-tulipgui-python-native-
 
 ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiInitPy)
+  ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiInitPy)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(NOT SYSTEM_SIP)
-ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})
+  ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
 
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
                       PROPERTIES OUTPUT_NAME tulipgui PREFIX "_")
 
 IF(WIN32)
-SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
-                      PROPERTIES SUFFIX ".pyd")
+  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
+                        PROPERTIES SUFFIX ".pyd")
 ELSE(WIN32)
-SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
-                      PROPERTIES SUFFIX ".so")
+  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
+                        PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
 FILE(RELATIVE_PATH TulipLibsInstallRelPath ${TulipPythonModulesInstallDir}/tulipgui/native ${CMAKE_INSTALL_PREFIX}/${TulipLibInstallDir})
@@ -132,17 +127,12 @@ ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 TULIP_INSTALL_PYTHON_FILES(tulipgui ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})
 
-ADD_CUSTOM_COMMAND(
-  TARGET ${LibTulipGUIPythonBindingsName}
-  POST_BUILD
-  COMMAND ${SIP_EXE} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -a ${CMAKE_CURRENT_BINARY_DIR}/tulipgui.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-  COMMENT "Generating API file for Tulip GUI Python bindings"
-  VERBATIM)
+ADD_CUSTOM_COMMAND(TARGET ${LibTulipGUIPythonBindingsName}
+                   POST_BUILD
+                   COMMAND ${SIP_EXE} -n tulip.native.sip -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -a ${CMAKE_CURRENT_BINARY_DIR}/tulipgui.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMENT "Generating API file for Tulip GUI Python bindings"
+                   VERBATIM)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulipgui.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulipgui.api;sipAPI_tulipgui.h;tulipgui_module")
-
-ENDIF(SIP_OK)
-ENDIF(PYTHONLIBS_FOUND)
-ENDIF(PYTHONINTERP_FOUND)

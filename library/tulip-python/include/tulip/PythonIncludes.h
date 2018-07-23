@@ -69,7 +69,7 @@
 static const sipAPIDef *getSipAPI() {
 #if defined(SIP_USE_PYCAPSULE)
 #ifdef TULIP_SIP
-  return static_cast<const sipAPIDef *>(PyCapsule_Import("tulipsip._C_API", 0));
+  return static_cast<const sipAPIDef *>(PyCapsule_Import("tulip.native.sip._C_API", 0));
 #else
   return static_cast<const sipAPIDef *>(PyCapsule_Import("sip._C_API", 0));
 #endif
@@ -80,7 +80,7 @@ static const sipAPIDef *getSipAPI() {
 
 /* Import the SIP module. */
 #ifdef TULIP_SIP
-  sip_module = PyImport_ImportModule("tulipsip");
+  sip_module = PyImport_ImportModule("tulip.native.sip");
 #else
   sip_module = PyImport_ImportModule("sip");
 #endif

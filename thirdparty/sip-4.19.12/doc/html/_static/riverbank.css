@@ -1,0 +1,29 @@
+@import url("classic.css");
+
+div.body h1,
+div.body h2 {
+    border-radius: 10px;
+    margin-right: 0px;
+}
+
+h1 a,
+h1 a:visited,
+h2 a,
+h2 a:visited,
+h3 a,
+h3 a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+.classtable {
+    width: 100%;
+}
+
+th.field-name {
+    background: none;
+}
+
+th.head {
+    background: lightgray;
+}
