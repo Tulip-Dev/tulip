@@ -229,7 +229,6 @@ double SquarifiedTreeMap::evaluateRow(const std::vector<tlp::node> &row, tlp::no
                                       double length, double surface) {
 
   double sumOfNodesSurface = nodesSize.get(n.id);
-  vector<node>::const_iterator it;
 
   for (auto nr : row) {
     sumOfNodesSurface += nodesSize.get(nr.id);

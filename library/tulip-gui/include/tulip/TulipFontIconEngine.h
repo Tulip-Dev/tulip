@@ -38,7 +38,7 @@ public:
   TulipFontIconEngine(const TulipFontIconEngine &engine)
       : QIconEngine(), codePoint(engine.codePoint), fontName(engine.fontName) {}
 
-  TulipFontIconEngine *clone() const {
+  TulipFontIconEngine *clone() const  override {
     return new TulipFontIconEngine(*this);
   }
 
