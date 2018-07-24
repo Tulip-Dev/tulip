@@ -246,8 +246,8 @@ PythonInterpreter::PythonInterpreter()
 #endif
 
     // register Tulip builtin Python modules
-    PyImport_AppendInittab ("consoleutils", initconsoleutils);
-    PyImport_AppendInittab ("tuliputils", inittuliputils);
+    PyImport_AppendInittab("consoleutils", initconsoleutils);
+    PyImport_AppendInittab("tuliputils", inittuliputils);
 
     Py_InitializeEx(0);
 

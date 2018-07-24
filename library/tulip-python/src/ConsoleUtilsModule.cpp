@@ -326,7 +326,7 @@ PyMODINIT_FUNC initconsoleutils(void) {
 #if PY_MAJOR_VERSION >= 3
   m = PyModule_Create(&consoleutilsModuleDef);
 #else
-   m = Py_InitModule("consoleutils", nullptr);
+  m = Py_InitModule("consoleutils", nullptr);
 #endif
   PyObject *cot = reinterpret_cast<PyObject *>(&consoleutils_ConsoleOutputType);
   Py_INCREF(cot);
