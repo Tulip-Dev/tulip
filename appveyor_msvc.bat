@@ -38,10 +38,10 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install libpng
 cd C:/tulip_dependencies
-curl -LO https://sourceforge.mirrorservice.org/l/li/libpng/libpng16/1.6.32/libpng-1.6.32.tar.gz
+curl -LO https://sourceforge.mirrorservice.org/l/li/libpng/libpng16/1.6.35/libpng-1.6.35.tar.gz
 if %errorlevel% neq 0 exit /b %errorlevel%
-7z x libpng-1.6.32.tar.gz -so | 7z x -aoa -si -ttar
-cd libpng-1.6.32
+7z x libpng-1.6.35.tar.gz -so | 7z x -aoa -si -ttar
+cd libpng-1.6.35
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
