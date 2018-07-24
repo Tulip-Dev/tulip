@@ -58,8 +58,8 @@ extern QString consoleOuputString;
 extern QString consoleErrorOuputString;
 extern QString mainScriptFileName;
 
-extern void initconsoleutils();
-extern void inittuliputils();
+PyMODINIT_FUNC initconsoleutils();
+PyMODINIT_FUNC inittuliputils();
 
 static PyThreadState *mainThreadState;
 
@@ -244,6 +244,10 @@ PythonInterpreter::PythonInterpreter()
     }
 
 #endif
+
+    // register Tulip builtin Python modules
+    PyImport_AppendInittab ("consoleutils", initconsoleutils);
+    PyImport_AppendInittab ("tuliputils", inittuliputils);
 
     Py_InitializeEx(0);
 

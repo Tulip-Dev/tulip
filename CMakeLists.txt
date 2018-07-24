@@ -508,7 +508,7 @@ else:
         ENDIF()
       ENDIF(APPLE)
 
-      SET(SIP_VERSION_THIRDPARTY 4.19.3)
+      SET(SIP_VERSION_THIRDPARTY 4.19.12)
       SET(SIP_OK FALSE CACHE INTERNAL "")
       FIND_PACKAGE(SIP)
       SET(SIP_OK ${SIP_FOUND})
@@ -521,7 +521,7 @@ else:
           SET(SIP_FOUND FALSE)
         ENDIF(SIP_OK)
         MESSAGE(STATUS "Using SIP ${SIP_VERSION_THIRDPARTY} located in thirdparty for generating the Python bindings.")
-        SET(SIP_LIB tulipsip)
+        SET(SIP_LIB sip)
         SET(SYSTEM_SIP FALSE)
         
         TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen sip
@@ -529,6 +529,7 @@ else:
           -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} -DPYTHON_INCLUDE_DIR2=${PYTHON_INCLUDE_DIR2}
           -DPYTHON_INCLUDE_PATH=${PYTHON_INCLUDE_PATH} -DPYTHON_LIBRARY=${PYTHON_LIBRARY}
           -DSIP_LIB=${SIP_LIB})
+
         IF(SIP_OK)
           SET(SIP_VERSION_STR "${SIP_VERSION_THIRDPARTY}")
           IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe")
@@ -536,7 +537,7 @@ else:
           ELSE()
             SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/sip)
           ENDIF()
-          SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
+          SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
         ENDIF(SIP_OK)
       ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
 
