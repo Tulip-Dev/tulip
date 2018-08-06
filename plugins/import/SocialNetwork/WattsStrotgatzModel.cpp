@@ -17,6 +17,7 @@
  *
  */
 
+#include <cmath>
 #include <tulip/ImportModule.h>
 #include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
@@ -31,7 +32,7 @@ static const char *paramHelp[] = {
     "This parameter defines the amount of nodes used to build the scale-free graph.",
 
     // k
-    "Number of edges added to each node in the inital ring lattice.",
+    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k > ln(#nodes)",
 
     // p
     "Probability in [0,1] to rewire an edge.",
@@ -49,14 +50,14 @@ static const char *paramHelp[] = {
  * Nature 393, 440 (1998).
  *
  */
-struct WattsStrotgatzModel : public ImportModule {
-  PLUGININFORMATION("Watts Strotgatz Model", "Arnaud Sallaberry", "21/02/2011",
+struct WattsStrogatzModel : public ImportModule {
+  PLUGININFORMATION("Watts Strogatz Model", "Arnaud Sallaberry", "21/02/2011",
                     "Randomly generates a small world graph using the model described in<br/>D. J. "
                     "Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world "
                     "networks.</b><br/>Nature 393, 440 (1998).",
                     "1.0", "Social network")
 
-  WattsStrotgatzModel(PluginContext *context) : ImportModule(context) {
+  WattsStrogatzModel(PluginContext *context) : ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "200");
     addInParameter<unsigned int>("k", paramHelp[1], "3");
     addInParameter<double>("p", paramHelp[2], "0.02");
@@ -81,10 +82,18 @@ struct WattsStrotgatzModel : public ImportModule {
       pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
       return false;
     }
+    if (k >= nbNodes) {
+      pluginProgress->setError("The k parameter cannot be greater than the number of nodes.");
+      return false;
+    }
+    if (original_model && (nbNodes >= log((float) k))) {
+      pluginProgress->setError("The number of nodes cannot be greater than ln(k)");
+      return false;
+    }
 
     if (original_model) {
       if (k % 2 == 1) {
-        stringstream sstr("k must be pair when used in the original model; rounding k down to ");
+        stringstream sstr("k must be an even number when used in the original model; rounding k down to ");
         sstr << k - 1 << '.';
         pluginProgress->setComment(sstr.str());
         k--;
@@ -157,4 +166,4 @@ struct WattsStrotgatzModel : public ImportModule {
   }
 };
 
-PLUGIN(WattsStrotgatzModel)
+PLUGIN(WattsStrogatzModel)
