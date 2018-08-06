@@ -32,7 +32,8 @@ static const char *paramHelp[] = {
     "This parameter defines the amount of nodes used to build the scale-free graph.",
 
     // k
-    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k > ln(#nodes)",
+    "Number of edges added to each node in the initial ring lattice. Be careful that #nodes > k > "
+    "ln(#nodes)",
 
     // p
     "Probability in [0,1] to rewire an edge.",
@@ -86,14 +87,15 @@ struct WattsStrogatzModel : public ImportModule {
       pluginProgress->setError("The k parameter cannot be greater than the number of nodes.");
       return false;
     }
-    if (original_model && (nbNodes >= log((float) k))) {
+    if (original_model && (nbNodes >= log((float)k))) {
       pluginProgress->setError("The number of nodes cannot be greater than ln(k)");
       return false;
     }
 
     if (original_model) {
       if (k % 2 == 1) {
-        stringstream sstr("k must be an even number when used in the original model; rounding k down to ");
+        stringstream sstr(
+            "k must be an even number when used in the original model; rounding k down to ");
         sstr << k - 1 << '.';
         pluginProgress->setComment(sstr.str());
         k--;
