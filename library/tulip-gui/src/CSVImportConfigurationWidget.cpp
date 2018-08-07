@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QStyleOptionButton>
+#include <QStylePainter>
 
 #include <tulip/CSVParser.h>
 #include <tulip/CSVGraphImport.h>
@@ -211,13 +212,30 @@ void CSVTableHeader::paintSection(QPainter *painter, const QRect &rect, int logi
   QHeaderView::paintSection(painter, rect, logicalIndex);
   painter->restore();
   QStyleOptionButton cb;
-  auto cbRect = this->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
+  cb.initFrom(parentWidget());
+  cb.state = QStyle::State_Enabled |
+             (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
+  auto cbRect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &cb);
+#ifdef __APPLE__
+  // this a specific MacOSX hack because on this platform
+  // style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter)
+  // executes always as if cb.rect.x() = cb.rect.y() = 0
+  cb.rect = QRect(0, 0, cbRect.width(), cbRect.height());
+  QPixmap pix(cbRect.width(), cbRect.height());
+  QStylePainter pixpainter(&pix, parentWidget());
+  pixpainter.fillRect(0, 0, cbRect.width(), cbRect.height(),
+		      cb.palette.brush(QPalette::Midlight));
+  style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, &pixpainter);
+  pixpainter.end();
+  painter->drawPixmap(rect.x() + (rect.width() - cbRect.width()) / 2,
+		      rect.y() + (rect.height() - cbRect.height()) / 2, pix,
+		      0, 0, cbRect.width(), cbRect.height());
+#else
   cb.rect =
       QRect(rect.x() + (rect.width() - cbRect.width()) / 2,
             rect.y() + (rect.height() - cbRect.height()) / 2, cbRect.width(), cbRect.height());
-  cb.state = QStyle::State_Enabled |
-             (widgets[logicalIndex]->isUsed() ? QStyle::State_On : QStyle::State_Off);
-  this->style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter);
+  style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, painter);
+#endif
 }
 
 void CSVTableHeader::checkBoxPressed(int logicalIndex) {
