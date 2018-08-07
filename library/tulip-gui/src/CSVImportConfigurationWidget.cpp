@@ -223,13 +223,12 @@ void CSVTableHeader::paintSection(QPainter *painter, const QRect &rect, int logi
   cb.rect = QRect(0, 0, cbRect.width(), cbRect.height());
   QPixmap pix(cbRect.width(), cbRect.height());
   QStylePainter pixpainter(&pix, parentWidget());
-  pixpainter.fillRect(0, 0, cbRect.width(), cbRect.height(),
-		      cb.palette.brush(QPalette::Midlight));
+  pixpainter.fillRect(0, 0, cbRect.width(), cbRect.height(), cb.palette.brush(QPalette::Midlight));
   style()->drawPrimitive(QStyle::PE_IndicatorCheckBox, &cb, &pixpainter);
   pixpainter.end();
   painter->drawPixmap(rect.x() + (rect.width() - cbRect.width()) / 2,
-		      rect.y() + (rect.height() - cbRect.height()) / 2, pix,
-		      0, 0, cbRect.width(), cbRect.height());
+                      rect.y() + (rect.height() - cbRect.height()) / 2, pix, 0, 0, cbRect.width(),
+                      cbRect.height());
 #else
   cb.rect =
       QRect(rect.x() + (rect.width() - cbRect.width()) / 2,
