@@ -279,7 +279,7 @@ void ExportSvg::addGlowEffect() {
 
 void ExportSvg::addWebFontFromIconName(const string &iconName) {
   std::string fontFile = _woff2 ? TulipIconicFont::getWOFF2Location(iconName)
-                                : TulipIconicFont::getWOFF2Location(iconName);
+                                : TulipIconicFont::getWOFFLocation(iconName);
   if (_base64fontAdded.find(fontFile) == _base64fontAdded.end()) {
     _base64fontAdded.insert(fontFile);
 
