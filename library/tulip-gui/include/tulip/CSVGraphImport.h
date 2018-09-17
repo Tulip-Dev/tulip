@@ -31,33 +31,33 @@ namespace tlp {
 class PropertyInterface;
 
 /**
-  * @brief Store import parameters for a CSV file column.
-  *
-  * Contains all the parameters defined by user for a given CSV column (the name of the column, its
-  *data type and if user want to import it).
-  **/
+ * @brief Store import parameters for a CSV file column.
+ *
+ * Contains all the parameters defined by user for a given CSV column (the name of the column, its
+ *data type and if user want to import it).
+ **/
 class TLP_QT_SCOPE CSVColumn {
 public:
   CSVColumn(const std::string &columnName = "", const std::string &columnType = "")
       : _used(true), _name(columnName), _type(columnType), _valueSeparator(0) {}
 
   /**
-    * @brief Get the name of the column.
-    **/
+   * @brief Get the name of the column.
+   **/
   const std::string &name() const {
     return _name;
   }
 
   /**
-    * @brief Tells if the property marked for import.
-    **/
+   * @brief Tells if the property marked for import.
+   **/
   bool isUsed() const {
     return _used;
   }
 
   /**
-    * @brief Return the property data type.
-    **/
+   * @brief Return the property data type.
+   **/
   const std::string &dataType() const {
     return _type;
   }
@@ -105,11 +105,11 @@ protected:
   std::vector<Exception> _exceptions;
 };
 /**
-  * @brief Store all the advanced import parameters for the CSV file.
-  *
-  * Store the information about columns and rows to import.
-  * Use this object to configure the import process of a CSVImportGraph object.
-  **/
+ * @brief Store all the advanced import parameters for the CSV file.
+ *
+ * Store the information about columns and rows to import.
+ * Use this object to configure the import process of a CSVImportGraph object.
+ **/
 class TLP_QT_SCOPE CSVImportParameters {
 public:
   CSVImportParameters(unsigned int fromLine = 0, unsigned int toLine = UINT_MAX,
@@ -117,45 +117,45 @@ public:
   virtual ~CSVImportParameters();
 
   /**
-    * @brief Return the number of column.
-    **/
+   * @brief Return the number of column.
+   **/
   unsigned int columnNumber() const;
 
   /**
-    * @brief return true if the column is marked for import
-    **/
+   * @brief return true if the column is marked for import
+   **/
   bool importColumn(unsigned int column) const;
   /**
-    * @brief Get the column name
-    **/
+   * @brief Get the column name
+   **/
   std::string getColumnName(unsigned int column) const;
   /**
-    * @brief Get the column data type
-    **/
+   * @brief Get the column data type
+   **/
   std::string getColumnDataType(unsigned int column) const;
 
   /**
-    * @brief Get the column separator for multiple values
-    **/
+   * @brief Get the column separator for multiple values
+   **/
   char getColumnMultiValueSeparator(unsigned int column) const;
 
   /**
-    * @brief Get the column action according to the given token
-    **/
+   * @brief Get the column action according to the given token
+   **/
   CSVColumn::Action getColumnActionForToken(unsigned int column, const std::string &token) const;
 
   /**
-    * @brief Return the index of the first line to import
-    **/
+   * @brief Return the index of the first line to import
+   **/
   unsigned int getFirstLineIndex() const;
   /**
-    * @brief Return the index of the last line to import
-    **/
+   * @brief Return the index of the last line to import
+   **/
   unsigned int getLastLineIndex() const;
   /**
-    * @brief Return true if the given row is between the first row to import and the last row to
-    *import
-    **/
+   * @brief Return true if the given row is between the first row to import and the last row to
+   *import
+   **/
   bool importRow(unsigned int row) const;
 
 private:
@@ -165,18 +165,18 @@ private:
 };
 
 /**
-  * @brief Interface to map CSV rows to graph elements.
-  *
-  * To build the mapping user had to parse the CSV file.
-  * @code
-  * CSVParser *parser;
-  * CSVToGraphDataMapping *mapping;
-  * parser->parse(mapping);
-  * //Now the mapping has been built.
-  * //Get the element for the first row.
-  * pair<tlp::ElementType,unsigned int> element = mapping->getElementForRow(0);
-  * @endcode
-  **/
+ * @brief Interface to map CSV rows to graph elements.
+ *
+ * To build the mapping user had to parse the CSV file.
+ * @code
+ * CSVParser *parser;
+ * CSVToGraphDataMapping *mapping;
+ * parser->parse(mapping);
+ * //Now the mapping has been built.
+ * //Get the element for the first row.
+ * pair<tlp::ElementType,unsigned int> element = mapping->getElementForRow(0);
+ * @endcode
+ **/
 class TLP_QT_SCOPE CSVToGraphDataMapping {
 public:
   virtual ~CSVToGraphDataMapping() {}
@@ -186,12 +186,12 @@ public:
 };
 
 /**
-  * @brief Abstract class handling node or edge mapping between a CSV column and a graph property.
-  *
-  * Be sure there is a property with the given name in the graph or an error will occur.
-  * Automatically handle CSV file parsing just implements the buildIndexForRow function to fill the
-  *rowToGraphId map with the right graph element.
-  **/
+ * @brief Abstract class handling node or edge mapping between a CSV column and a graph property.
+ *
+ * Be sure there is a property with the given name in the graph or an error will occur.
+ * Automatically handle CSV file parsing just implements the buildIndexForRow function to fill the
+ *rowToGraphId map with the right graph element.
+ **/
 class TLP_QT_SCOPE AbstractCSVToGraphDataMapping : public CSVToGraphDataMapping {
 public:
   AbstractCSVToGraphDataMapping(tlp::Graph *graph, tlp::ElementType type,
@@ -205,9 +205,9 @@ public:
 
 protected:
   /**
-    * @brief Create a new element if no elements for the given row was found.
-    * @return Return the graph element id or UINT_MAX if no new element is created.
-    **/
+   * @brief Create a new element if no elements for the given row was found.
+   * @return Return the graph element id or UINT_MAX if no new element is created.
+   **/
   virtual unsigned int buildIndexForRow(unsigned int row, const std::vector<std::string> &keys) = 0;
 
 protected:
@@ -218,8 +218,8 @@ protected:
   std::vector<tlp::PropertyInterface *> keyProperties;
 };
 /**
-  * @brief Map each row of the CSV file on a new node.
-  **/
+ * @brief Map each row of the CSV file on a new node.
+ **/
 class TLP_QT_SCOPE CSVToNewNodeIdMapping : public CSVToGraphDataMapping {
 public:
   CSVToNewNodeIdMapping(tlp::Graph *graph);
@@ -232,22 +232,22 @@ private:
 };
 
 /**
-  * @brief Try to map CSV file rows to nodes according to value between a CSV column and a graph
-  *property.
-  *
-  * Be sure there is a property with the given name in the graph before using it.
-  **/
+ * @brief Try to map CSV file rows to nodes according to value between a CSV column and a graph
+ *property.
+ *
+ * Be sure there is a property with the given name in the graph before using it.
+ **/
 class TLP_QT_SCOPE CSVToGraphNodeIdMapping : public AbstractCSVToGraphDataMapping {
 public:
   /**
-    * @param graph The graph where the nodes will be searched.
-    * @param columnIndex The index of the column with the ids in the CSV file.
-    * @param propertyName The name of the property to search ids.
-    * @param firstRow The first row to search ids.
-    * @param lastRow The last row to search ids.
-    * @param createNode If set to true if there is no node for an id in the CSV file a new node will
-    *be created for this id.
-    **/
+   * @param graph The graph where the nodes will be searched.
+   * @param columnIndex The index of the column with the ids in the CSV file.
+   * @param propertyName The name of the property to search ids.
+   * @param firstRow The first row to search ids.
+   * @param lastRow The last row to search ids.
+   * @param createNode If set to true if there is no node for an id in the CSV file a new node will
+   *be created for this id.
+   **/
   CSVToGraphNodeIdMapping(tlp::Graph *graph, const std::vector<unsigned int> &columnIds,
                           const std::vector<std::string> &propertyNames, bool createNode = false);
   void init(unsigned int rowNumber) override;
@@ -259,20 +259,20 @@ private:
   bool createMissingNodes;
 };
 /**
-  * @brief Try to map CSV file rows to edges according to value between a CSV column and a graph
-  *property.
-  *
-  * Be sure there is a property with the given name in the graph before using it.
-  **/
+ * @brief Try to map CSV file rows to edges according to value between a CSV column and a graph
+ *property.
+ *
+ * Be sure there is a property with the given name in the graph before using it.
+ **/
 class TLP_QT_SCOPE CSVToGraphEdgeIdMapping : public AbstractCSVToGraphDataMapping {
 public:
   /**
-  * @param graph The graph where the edges will be searched.
-  * @param columnIndex The index of the column with the ids in the CSV file.
-  * @param propertyName The name of the property to search ids.
-  * @param firstRow The first row to search ids.
-  * @param lastRow The last row to search ids.
-  **/
+   * @param graph The graph where the edges will be searched.
+   * @param columnIndex The index of the column with the ids in the CSV file.
+   * @param propertyName The name of the property to search ids.
+   * @param firstRow The first row to search ids.
+   * @param lastRow The last row to search ids.
+   **/
   CSVToGraphEdgeIdMapping(tlp::Graph *graph, const std::vector<unsigned int> &columnIds,
                           const std::vector<std::string> &propertyNames);
 
@@ -281,25 +281,25 @@ protected:
 };
 
 /**
-  * @brief Try to map CSV file rows to edges according to edge source and destination.
-  *
-  * For each row in the CSV file create an edge in the graph between source and destination nodes.
-  *Find source node by comparing id in the source CSV column and destination node by comparing id in
-  *the destination CSV column.
-  **/
+ * @brief Try to map CSV file rows to edges according to edge source and destination.
+ *
+ * For each row in the CSV file create an edge in the graph between source and destination nodes.
+ *Find source node by comparing id in the source CSV column and destination node by comparing id in
+ *the destination CSV column.
+ **/
 class TLP_QT_SCOPE CSVToGraphEdgeSrcTgtMapping : public CSVToGraphDataMapping {
 public:
   /**
-  * @param graph The graph where the edges will be searched.
-  * @param srcColumnIndex The index of the column with the source node id in the CSV file.
-  * @param tgtColumnIndex The index of the column with the taret node id in the CSV file.
-  * @param srcPropertyName The name of the property to search source node id.
-  * @param tgtPropertyName The name of the property to search target node id.
-  * @param firstRow The first row to search ids.
-  * @param lastRow The last row to search ids.
-  * @param createMissinElements If true create source node, destination node if one of them is not
-  *found in the graph.
-  **/
+   * @param graph The graph where the edges will be searched.
+   * @param srcColumnIndex The index of the column with the source node id in the CSV file.
+   * @param tgtColumnIndex The index of the column with the taret node id in the CSV file.
+   * @param srcPropertyName The name of the property to search source node id.
+   * @param tgtPropertyName The name of the property to search target node id.
+   * @param firstRow The first row to search ids.
+   * @param lastRow The last row to search ids.
+   * @param createMissinElements If true create source node, destination node if one of them is not
+   *found in the graph.
+   **/
   CSVToGraphEdgeSrcTgtMapping(tlp::Graph *graph, const std::vector<unsigned int> &srcColumnIds,
                               const std::vector<unsigned int> &tgtColumnIds,
                               const std::vector<std::string> &srcPropNames,
@@ -323,31 +323,31 @@ private:
 };
 
 /**
-  * @brief Interface to perform mapping between CSV columns and graph properties during the CSV
-  *import process.
-  *
-  **/
+ * @brief Interface to perform mapping between CSV columns and graph properties during the CSV
+ *import process.
+ *
+ **/
 class TLP_QT_SCOPE CSVImportColumnToGraphPropertyMapping {
 public:
   virtual ~CSVImportColumnToGraphPropertyMapping() {}
   /**
-    * @brief Return the property corresponding to the column index.
-    * @param column The index of the column.
-    * @param token The current token. May be needed to determine column data type.
-    *
-    * The token parameter is used to guess property type if needed.
-    **/
+   * @brief Return the property corresponding to the column index.
+   * @param column The index of the column.
+   * @param token The current token. May be needed to determine column data type.
+   *
+   * The token parameter is used to guess property type if needed.
+   **/
   virtual tlp::PropertyInterface *getPropertyInterface(unsigned int column,
                                                        const std::string &token) = 0;
 };
 
 /**
-  * @brief Proxy to handle all the properties operations like access, creation, data type detection
-  *during the CSV parsing process.
-  *
-  * Try to guess the type of the property in function of the first token
-  * if user don't tell which type the property is.
-  **/
+ * @brief Proxy to handle all the properties operations like access, creation, data type detection
+ *during the CSV parsing process.
+ *
+ * Try to guess the type of the property in function of the first token
+ * if user don't tell which type the property is.
+ **/
 class TLP_QT_SCOPE CSVImportColumnToGraphPropertyMappingProxy
     : public CSVImportColumnToGraphPropertyMapping {
 public:
@@ -368,10 +368,10 @@ private:
 };
 
 /**
-  * @brief Manage all the CSV import process. Use the mapping object to find the graph element in
-  *function of the row and the propertiesManager to find the property corresponding to the column.
-  * The import parameters are used to filter the rows and the columns to import.
-  **/
+ * @brief Manage all the CSV import process. Use the mapping object to find the graph element in
+ *function of the row and the propertiesManager to find the property corresponding to the column.
+ * The import parameters are used to filter the rows and the columns to import.
+ **/
 class TLP_QT_SCOPE CSVGraphImport : public tlp::CSVContentHandler {
 public:
   CSVGraphImport(CSVToGraphDataMapping *mapping,
@@ -387,6 +387,6 @@ protected:
   CSVImportColumnToGraphPropertyMapping *propertiesManager;
   CSVImportParameters importParameters;
 };
-}
+} // namespace tlp
 #endif // CSVGRAPHIMPORT_H
 ///@endcond

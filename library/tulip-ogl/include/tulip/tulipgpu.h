@@ -71,7 +71,7 @@ TLP_GL_SCOPE bool getGpuOutPropertyValues(tlp::IntegerProperty &prop, const tlp:
 TLP_GL_SCOPE bool getGpuOutPropertyValues(tlp::LayoutProperty &prop, const tlp::Graph &);
 // SizeProperty
 TLP_GL_SCOPE bool getGpuOutPropertyValues(tlp::SizeProperty &prop, const tlp::Graph &);
-}
+} // namespace tlp
 
 #endif
 ///@endcond

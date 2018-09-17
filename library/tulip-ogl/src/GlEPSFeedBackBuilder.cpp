@@ -251,4 +251,4 @@ void GlEPSFeedBackBuilder::end() {
 void GlEPSFeedBackBuilder::getResult(string *str) {
   *str = stream_out.str();
 }
-}
+} // namespace tlp

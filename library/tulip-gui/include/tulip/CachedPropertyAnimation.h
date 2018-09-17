@@ -46,7 +46,7 @@ protected:
 };
 
 #include "cxx/CachedPropertyAnimation.cxx"
-}
+} // namespace tlp
 
 #endif /* CACHEDPROPERTYANIMATION_H_ */
 ///@endcond

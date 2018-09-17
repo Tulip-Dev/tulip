@@ -76,5 +76,5 @@ private:
   EdgeOrientation edgesOrientation;
   double maxDist;
 };
-}
+} // namespace tlp
 #endif /* DFS_H_ */

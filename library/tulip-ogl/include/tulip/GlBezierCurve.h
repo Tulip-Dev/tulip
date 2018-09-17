@@ -73,5 +73,5 @@ protected:
 
   std::string genCurveVertexShaderSpecificCode();
 };
-}
+} // namespace tlp
 #endif /* GLBEZIERCURVE_H_ */

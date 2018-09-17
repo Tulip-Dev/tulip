@@ -266,5 +266,5 @@ protected:
   std::vector<int> quadBorderPosition;
   std::vector<float> quadBorderTexFactor;
 };
-}
+} // namespace tlp
 #endif

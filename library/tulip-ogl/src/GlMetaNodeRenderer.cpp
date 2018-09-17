@@ -202,4 +202,4 @@ GlScene *GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) const {
   std::map<Graph *, GlScene *>::const_iterator sceneit(_metaGraphToSceneMap.find(g));
   return (sceneit == _metaGraphToSceneMap.end()) ? (nullptr) : (sceneit->second);
 }
-}
+} // namespace tlp

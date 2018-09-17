@@ -137,4 +137,4 @@ void NominalParallelAxis::redraw() {
   setLabels();
   ParallelAxis::redraw();
 }
-}
+} // namespace tlp

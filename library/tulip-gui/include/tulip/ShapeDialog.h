@@ -36,6 +36,6 @@ public:
 protected slots:
   void updateShapeList();
 };
-}
+} // namespace tlp
 
 #endif

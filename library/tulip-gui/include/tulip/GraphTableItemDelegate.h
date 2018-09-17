@@ -29,9 +29,9 @@ class QStyleOptionViewItem;
 namespace tlp {
 
 /**
-* @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view
-*architecture.
-**/
+ * @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view
+ *architecture.
+ **/
 class TLP_QT_SCOPE GraphTableItemDelegate : public TulipItemDelegate {
   Q_OBJECT
 public:
@@ -39,6 +39,6 @@ public:
   void paint(QPainter *painter, const QStyleOptionViewItem &option,
              const QModelIndex &index) const override;
 };
-}
+} // namespace tlp
 #endif /* TULIPTABLEWIDGETITEMDELEGATE_H_ */
 ///@endcond

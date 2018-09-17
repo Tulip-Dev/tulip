@@ -30,5 +30,5 @@ public:
   virtual Vec2f project(const Vec2f &) const = 0;
   virtual Vec2f unproject(const Vec2f &) const = 0;
 };
-}
+} // namespace pocore
 #endif // SCREENFUNCTION_H

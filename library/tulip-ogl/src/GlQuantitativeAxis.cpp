@@ -331,4 +331,4 @@ void GlQuantitativeAxis::setLogScale(const bool log, const unsigned int base) {
   logScale = log;
   logBase = base;
 }
-}
+} // namespace tlp

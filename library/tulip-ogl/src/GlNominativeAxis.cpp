@@ -86,4 +86,4 @@ void GlNominativeAxis::updateAxis() {
   buildAxisGraduations();
   GlAxis::updateAxis();
 }
-}
+} // namespace tlp

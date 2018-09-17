@@ -166,4 +166,4 @@ void GlSVGFeedBackBuilder::end() {
 void GlSVGFeedBackBuilder::getResult(string *str) {
   *str = stream_out.str();
 }
-}
+} // namespace tlp

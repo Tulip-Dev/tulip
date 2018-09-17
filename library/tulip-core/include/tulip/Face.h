@@ -41,7 +41,7 @@ struct Face {
     return id != UINT_MAX;
   }
 };
-}
+} // namespace tlp
 
 TLP_BEGIN_HASH_NAMESPACE {
   template <>
@@ -66,7 +66,7 @@ struct less<tlp::Face> {
     return f.id < f2.id;
   }
 };
-}
+} // namespace std
 
 #endif
 ///@endcond

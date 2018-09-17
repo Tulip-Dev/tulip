@@ -40,7 +40,7 @@ void spewSortedFeedback(FILE *file, GLint size, GLfloat *buffer);
 void spewWireFrameEPS(FILE *file, int doSort, GLint size, GLfloat *buffer, char *creator);
 void print3DcolorVertex(GLint size, GLint *count, GLfloat *buffer);
 void printBuffer(GLint size, GLfloat *buffer);
-}
+} // namespace tlp
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif
 ///@endcond

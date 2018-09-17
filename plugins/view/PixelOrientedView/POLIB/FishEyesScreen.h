@@ -40,5 +40,5 @@ private:
   double k;
   Vec2f fisheyesCenter;
 };
-}
+} // namespace pocore
 #endif // FISHEYESSCREEN_H

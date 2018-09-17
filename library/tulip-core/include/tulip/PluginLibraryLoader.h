@@ -44,30 +44,30 @@ class TLP_SCOPE PluginLibraryLoader {
 public:
 #ifndef EMSCRIPTEN
   /**
-  * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
-  * This function will not look into subfolders of the specified folder.
-  *
-  *
-  * To load all the plugins in the following example, you need to call this function once for the
-  *lib/tulip folder,
-  * once for the glyph folder, and once for the interactors folder.
-  *
-  * lib/tulip/
-  * -> glyphs
-  *      |-> libBillboard-4.0.0.so
-  *      |-> libWindow-4.0.0.so
-  * -> interactors
-  *      |-> libInteractorAddEdge-4.0.0.so
-  *      |-> libInteractorSelectionModifier-4.0.0.so
-  * -> libAdjacencyMatrixImport-4.0.0.so
-  * -> libColorMapping-4.0.0.so
-  * -> libCompleteGraph-4.0.0.so
-  *
-  *
-  * @param loader A PluginLoader to output what is going on. Defaults to nullptr.
-  * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
-  *
-  **/
+   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
+   * This function will not look into subfolders of the specified folder.
+   *
+   *
+   * To load all the plugins in the following example, you need to call this function once for the
+   *lib/tulip folder,
+   * once for the glyph folder, and once for the interactors folder.
+   *
+   * lib/tulip/
+   * -> glyphs
+   *      |-> libBillboard-4.0.0.so
+   *      |-> libWindow-4.0.0.so
+   * -> interactors
+   *      |-> libInteractorAddEdge-4.0.0.so
+   *      |-> libInteractorSelectionModifier-4.0.0.so
+   * -> libAdjacencyMatrixImport-4.0.0.so
+   * -> libColorMapping-4.0.0.so
+   * -> libCompleteGraph-4.0.0.so
+   *
+   *
+   * @param loader A PluginLoader to output what is going on. Defaults to nullptr.
+   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
+   *
+   **/
   static void loadPlugins(PluginLoader *loader = nullptr, const std::string &pluginPath = "");
 
   /**
@@ -127,7 +127,7 @@ private:
   std::string pluginPath;
   std::string currentPluginLibrary;
 };
-}
+} // namespace tlp
 
 #endif // PLUGINLIBLOADER_H
 

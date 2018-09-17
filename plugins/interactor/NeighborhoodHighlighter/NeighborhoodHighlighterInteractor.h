@@ -150,6 +150,6 @@ private:
   unsigned char startAlpha, endAlpha;
   int nbAnimSteps;
 };
-}
+} // namespace tlp
 
 #endif /* NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_ */

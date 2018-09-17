@@ -58,26 +58,26 @@ Workspace::Workspace(QWidget *parent)
   // those slots
   _modeToSlots[_ui->startupPage] = QVector<PlaceHolderWidget *>();
   _modeToSlots[_ui->singlePage] = QVector<PlaceHolderWidget *>() << _ui->singlePage;
-  _modeToSlots[_ui->splitPage] = QVector<PlaceHolderWidget *>() << _ui->splitPagePanel1
-                                                                << _ui->splitPagePanel2;
+  _modeToSlots[_ui->splitPage] = QVector<PlaceHolderWidget *>()
+                                 << _ui->splitPagePanel1 << _ui->splitPagePanel2;
   _modeToSlots[_ui->splitPageHorizontal] = QVector<PlaceHolderWidget *>()
                                            << _ui->splitPageHorizontalPanel1
                                            << _ui->splitPageHorizontalPanel2;
-  _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget *>() << _ui->split3PagePanel1
-                                                                 << _ui->split3PagePanel2
-                                                                 << _ui->split3PagePanel3;
-  _modeToSlots[_ui->split32Page] = QVector<PlaceHolderWidget *>() << _ui->split32Panel1
-                                                                  << _ui->split32Panel2
-                                                                  << _ui->split32Panel3;
-  _modeToSlots[_ui->split33Page] = QVector<PlaceHolderWidget *>() << _ui->split33Panel1
-                                                                  << _ui->split33Panel2
-                                                                  << _ui->split33Panel3;
+  _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget *>()
+                                  << _ui->split3PagePanel1 << _ui->split3PagePanel2
+                                  << _ui->split3PagePanel3;
+  _modeToSlots[_ui->split32Page] = QVector<PlaceHolderWidget *>()
+                                   << _ui->split32Panel1 << _ui->split32Panel2
+                                   << _ui->split32Panel3;
+  _modeToSlots[_ui->split33Page] = QVector<PlaceHolderWidget *>()
+                                   << _ui->split33Panel1 << _ui->split33Panel2
+                                   << _ui->split33Panel3;
   _modeToSlots[_ui->gridPage] = QVector<PlaceHolderWidget *>()
                                 << _ui->gridPagePanel1 << _ui->gridPagePanel2 << _ui->gridPagePanel3
                                 << _ui->gridPagePanel4;
-  _modeToSlots[_ui->sixPage] = QVector<PlaceHolderWidget *>() << _ui->sixMode1 << _ui->sixMode2
-                                                              << _ui->sixMode3 << _ui->sixMode4
-                                                              << _ui->sixMode5 << _ui->sixMode6;
+  _modeToSlots[_ui->sixPage] = QVector<PlaceHolderWidget *>()
+                               << _ui->sixMode1 << _ui->sixMode2 << _ui->sixMode3 << _ui->sixMode4
+                               << _ui->sixMode5 << _ui->sixMode6;
 
   // This map allows us to know which widget can toggle a mode
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;

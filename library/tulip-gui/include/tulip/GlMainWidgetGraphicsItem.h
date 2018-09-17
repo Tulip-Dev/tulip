@@ -81,7 +81,7 @@ private:
   bool _graphChanged;
   int width, height;
 };
-}
+} // namespace tlp
 
 #endif // GLMAINWIDGETGRAPHICSITEM_H
 ///@endcond

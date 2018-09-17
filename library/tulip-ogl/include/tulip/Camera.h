@@ -313,6 +313,6 @@ private:
 
   bool d3;
 };
-}
+} // namespace tlp
 
 #endif

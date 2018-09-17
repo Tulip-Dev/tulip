@@ -118,6 +118,6 @@ private:
   std::map<ParallelAxis *, std::pair<float, float>> slidersYBoundaries;
   GlLayer *selectionLayer;
 };
-}
+} // namespace tlp
 
 #endif /* PARALLELCOORDSAXISSLIDERS_H_ */

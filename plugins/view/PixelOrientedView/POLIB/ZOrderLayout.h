@@ -33,5 +33,5 @@ private:
   unsigned char order;
   int shift;
 };
-}
+} // namespace pocore
 #endif // ZORDERLAYOUT_H

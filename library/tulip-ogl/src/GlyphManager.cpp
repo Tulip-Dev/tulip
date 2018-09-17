@@ -97,4 +97,4 @@ void GlyphManager::clearGlyphList(Graph **, GlGraphInputData *, MutableContainer
 
   delete glyphs.getDefault();
 }
-}
+} // namespace tlp

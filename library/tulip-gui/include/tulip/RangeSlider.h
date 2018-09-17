@@ -120,6 +120,6 @@ public slots:
   void updateRange(int min, int max);
   void movePressedHandle();
 };
-}
+} // namespace tlp
 
 #endif // RANGESLIDER_H

@@ -38,8 +38,8 @@ public:
 };
 
 /** \brief Parallel coordinates interactor to select elements
-  *
-  */
+ *
+ */
 class InteractorParallelCoordsSelection : public ParallelCoordinatesInteractor {
 
 public:
@@ -138,8 +138,8 @@ public:
 };
 
 /** \brief Parallel coordinates interactor to show element properties when clicking on it
-   *
-   */
+ *
+ */
 class InteractorShowElementInfo : public ParallelCoordinatesInteractor {
 
 public:
@@ -159,8 +159,8 @@ public:
 
 /** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the
  * mouse wheel
-   *
-   */
+ *
+ */
 class InteractorAxisSpacer : public ParallelCoordinatesInteractor {
 
 public:
@@ -177,6 +177,6 @@ public:
    */
   void construct() override;
 };
-}
+} // namespace tlp
 
 #endif /* PARALLELCOORDINATESINTERACTORS_H_ */

@@ -58,6 +58,6 @@ protected:
 private slots:
   void hideInfos();
 };
-}
+} // namespace tlp
 
 #endif // GOOGLEMAPSSHOWELEMENTINFO_H

@@ -56,7 +56,7 @@ protected slots:
 
   void openUrlInBrowser(const QString &url);
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

@@ -48,6 +48,6 @@ private:
   bool started;
   Graph *graph;
 };
-}
+} // namespace tlp
 #endif // MOUSEZOOMBOX_H
 ///@endcond

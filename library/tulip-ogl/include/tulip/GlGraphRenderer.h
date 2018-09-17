@@ -100,6 +100,6 @@ protected:
   std::map<unsigned int, SelectedEntity> *selectionIdMap;
   unsigned int *selectionCurrentId;
 };
-}
+} // namespace tlp
 
 #endif

@@ -39,7 +39,7 @@ protected:
   double getNodeFrameValue(const double &startValue, const double &endValue, int frame) override;
   double getEdgeFrameValue(const double &startValue, const double &endValue, int frame) override;
 };
-}
+} // namespace tlp
 
 #endif // DOUBLEPROPERTYANIMATION_H
 ///@endcond

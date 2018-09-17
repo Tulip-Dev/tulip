@@ -68,5 +68,5 @@ public:
                           tlp::node src, tlp::node tgt, tlp::BooleanProperty *result,
                           tlp::DoubleProperty *weights = nullptr, double tolerance = DBL_MAX);
 };
-}
+} // namespace tlp
 #endif /* PATHALGORITHM_H_ */

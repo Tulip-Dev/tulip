@@ -50,7 +50,7 @@ public:
 protected:
   bool threadSafe;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLSCENEVISITOR_H
 ///@endcond

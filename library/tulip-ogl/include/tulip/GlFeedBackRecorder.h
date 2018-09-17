@@ -59,7 +59,7 @@ private:
   GlFeedBackBuilder *feedBackBuilder;
   unsigned int pointSize;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLFEEDBACKRECORDER_H
 ///@endcond

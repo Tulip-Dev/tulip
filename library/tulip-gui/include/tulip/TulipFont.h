@@ -70,7 +70,7 @@ public slots:
   void setBold(bool);
   void setFontName(const QString &);
 };
-}
+} // namespace tlp
 
 #endif // TULIPFONT_H
 ///@endcond

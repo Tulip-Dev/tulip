@@ -183,6 +183,6 @@ private:
   ViewToolTipAndUrlManager *_tturlManager;
   ViewActionsManager *_viewActionsManager;
 };
-}
+} // namespace tlp
 
 #endif /* GOOGLEMAPSVIEW_H_ */

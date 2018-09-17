@@ -44,7 +44,7 @@ private:
   TLP_HASH_MAP<unsigned int, float> *lodMap;
   GlGraphInputData *inputData;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLDRAWSCENEVISITOR_H
 ///@endcond

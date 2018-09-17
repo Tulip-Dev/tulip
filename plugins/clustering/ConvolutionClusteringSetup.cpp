@@ -154,4 +154,4 @@ void ConvolutionClusteringSetup::update() {
 
   QDialog::update();
 }
-}
+} // namespace tlp

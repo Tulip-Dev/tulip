@@ -41,5 +41,5 @@ public:
    */
   ~GlHexagon() override;
 };
-}
+} // namespace tlp
 #endif

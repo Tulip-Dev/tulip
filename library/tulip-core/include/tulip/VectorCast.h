@@ -108,7 +108,7 @@ public:
     return VECTORCAST(*this) ^= v;
   }
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

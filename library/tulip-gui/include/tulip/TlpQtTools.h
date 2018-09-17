@@ -44,14 +44,14 @@ inline Color QColorToColor(const QColor &color) {
   return Color(color.red(), color.green(), color.blue(), color.alpha());
 }
 /**
-  * @brief Convert a QString to a Tulip UTF-8 encoded std::string.
-  **/
+ * @brief Convert a QString to a Tulip UTF-8 encoded std::string.
+ **/
 inline std::string QStringToTlpString(const QString &toConvert) {
   return std::string(toConvert.toUtf8());
 }
 /**
-  * @brief Convert a Tulip UTF-8 encoded std::string to a QString
-  **/
+ * @brief Convert a Tulip UTF-8 encoded std::string to a QString
+ **/
 inline QString tlpStringToQString(const std::string &toConvert) {
   return QString::fromUtf8(toConvert.c_str());
 }
@@ -64,35 +64,35 @@ inline bool QStringCaseCmp(const QString &s1, const QString &s2) {
 }
 
 /**
-    * @brief Convert the property type string to a label to display in the GUI.
-    * The property type label is the string to display in the GUI instead of the basic property type
-  *string.
-    **/
+ * @brief Convert the property type string to a label to display in the GUI.
+ * The property type label is the string to display in the GUI instead of the basic property type
+ *string.
+ **/
 TLP_QT_SCOPE QString propertyTypeToPropertyTypeLabel(const std::string &typeName);
 
 /**
-  * @brief Get the string to display as property type for the given property.
-  * The property type label is the string to display in the GUI instead of the property type string.
-  * By example for a property of type "double" the label displayed in the GUI will be "Metric".
-  **/
+ * @brief Get the string to display as property type for the given property.
+ * The property type label is the string to display in the GUI instead of the property type string.
+ * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+ **/
 inline QString propertyInterfaceToPropertyTypeLabel(const tlp::PropertyInterface *const property) {
   return propertyTypeToPropertyTypeLabel(property->getTypename());
 }
 
 /**
-  * @brief Convert the label of a property type to it's corresponding property type.
-  * The property type label is the string to display in the GUI instead of the property type string.
-  * By example for a property of type "double" the label displayed in the GUI will be "Metric".
-  **/
+ * @brief Convert the label of a property type to it's corresponding property type.
+ * The property type label is the string to display in the GUI instead of the property type string.
+ * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+ **/
 TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString &typeNameLabel);
 
 /**
-    * @brief Gets the name of the package to retrieve for this version of tulip.
-    * The package name uses the Tulip release, platform (windows, unix, ...), architecture (x86,
-  *x86_64), and compiler used (GCC, Clang, MSVC) to determine which package this version can use.
-    *
-    * @param pluginName The name of the plugin for which we want the package name.
-    **/
+ * @brief Gets the name of the package to retrieve for this version of tulip.
+ * The package name uses the Tulip release, platform (windows, unix, ...), architecture (x86,
+ *x86_64), and compiler used (GCC, Clang, MSVC) to determine which package this version can use.
+ *
+ * @param pluginName The name of the plugin for which we want the package name.
+ **/
 TLP_QT_SCOPE QString getPluginPackageName(const QString &pluginName);
 
 TLP_QT_SCOPE QString getPluginStagingDirectory();
@@ -131,7 +131,7 @@ TLP_QT_SCOPE void redirectErrorOutputToQCritical();
 TLP_QT_SCOPE void disableQtUserInput();
 
 TLP_QT_SCOPE void enableQtUserInput();
-}
+} // namespace tlp
 
 // QDebug extension
 inline QDebug operator<<(QDebug dbg, const std::string &s) {

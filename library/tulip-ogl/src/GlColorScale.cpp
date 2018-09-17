@@ -118,4 +118,4 @@ void GlColorScale::translate(const Coord &move) {
     boundingBox = colorScalePolyQuad->getBoundingBox();
   }
 }
-}
+} // namespace tlp

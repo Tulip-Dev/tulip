@@ -26,8 +26,8 @@
 using namespace std;
 
 /**
-* Construct the pairing heap.
-*/
+ * Construct the pairing heap.
+ */
 template <class T>
 PairingHeap<T>::PairingHeap(bool (*lessThan)(T const &lhs, T const &rhs)) {
   root = nullptr;
@@ -36,8 +36,8 @@ PairingHeap<T>::PairingHeap(bool (*lessThan)(T const &lhs, T const &rhs)) {
 }
 
 /**
-* Copy constructor
-*/
+ * Copy constructor
+ */
 template <class T>
 PairingHeap<T>::PairingHeap(const PairingHeap<T> &rhs) {
   root = nullptr;
@@ -46,17 +46,17 @@ PairingHeap<T>::PairingHeap(const PairingHeap<T> &rhs) {
 }
 
 /**
-* Destroy the leftist heap.
-*/
+ * Destroy the leftist heap.
+ */
 template <class T>
 PairingHeap<T>::~PairingHeap() {
   makeEmpty();
 }
 
 /**
-* Insert item x into the priority queue, maintaining heap order.
-* Return a pointer to the node containing the new item.
-*/
+ * Insert item x into the priority queue, maintaining heap order.
+ * Return a pointer to the node containing the new item.
+ */
 template <class T>
 PairNode<T> *PairingHeap<T>::insert(const T &x) {
   PairNode<T> *newNode = new PairNode<T>(x);
@@ -74,9 +74,9 @@ int PairingHeap<T>::size() {
   return counter;
 }
 /**
-* Find the smallest item in the priority queue.
-* Return the smallest item, or throw Underflow if empty.
-*/
+ * Find the smallest item in the priority queue.
+ * Return the smallest item, or throw Underflow if empty.
+ */
 template <class T>
 const T &PairingHeap<T>::findMin() const {
   if (isEmpty())
@@ -105,26 +105,26 @@ void PairingHeap<T>::deleteMin() {
 }
 
 /**
-* Test if the priority queue is logically empty.
-* Returns true if empty, false otherwise.
-*/
+ * Test if the priority queue is logically empty.
+ * Returns true if empty, false otherwise.
+ */
 template <class T>
 bool PairingHeap<T>::isEmpty() const {
   return root == nullptr;
 }
 
 /**
-* Test if the priority queue is logically full.
-* Returns false in this implementation.
-*/
+ * Test if the priority queue is logically full.
+ * Returns false in this implementation.
+ */
 template <class T>
 bool PairingHeap<T>::isFull() const {
   return false;
 }
 
 /**
-* Make the priority queue logically empty.
-*/
+ * Make the priority queue logically empty.
+ */
 template <class T>
 void PairingHeap<T>::makeEmpty() {
   reclaimMemory(root);
@@ -132,8 +132,8 @@ void PairingHeap<T>::makeEmpty() {
 }
 
 /**
-* Deep copy.
-*/
+ * Deep copy.
+ */
 template <class T>
 const PairingHeap<T> &PairingHeap<T>::operator=(const PairingHeap<T> &rhs) {
   if (this != &rhs) {
@@ -145,9 +145,9 @@ const PairingHeap<T> &PairingHeap<T>::operator=(const PairingHeap<T> &rhs) {
 }
 
 /**
-* Internal method to make the tree empty.
-* WARNING: This is prone to running out of stack space.
-*/
+ * Internal method to make the tree empty.
+ * WARNING: This is prone to running out of stack space.
+ */
 template <class T>
 void PairingHeap<T>::reclaimMemory(PairNode<T> *t) const {
   if (t != nullptr) {
@@ -158,12 +158,12 @@ void PairingHeap<T>::reclaimMemory(PairNode<T> *t) const {
 }
 
 /**
-* Change the value of the item stored in the pairing heap.
-* Does nothing if newVal is larger than currently stored value.
-* p points to a node returned by insert.
-* newVal is the new value, which must be smaller
-*    than the currently stored value.
-*/
+ * Change the value of the item stored in the pairing heap.
+ * Does nothing if newVal is larger than currently stored value.
+ * p points to a node returned by insert.
+ * newVal is the new value, which must be smaller
+ *    than the currently stored value.
+ */
 template <class T>
 void PairingHeap<T>::decreaseKey(PairNode<T> *p, const T &newVal) {
   if (lessThan(p->element, newVal))
@@ -186,13 +186,13 @@ void PairingHeap<T>::decreaseKey(PairNode<T> *p, const T &newVal) {
 }
 
 /**
-* Internal method that is the basic operation to maintain order.
-* Links first and second together to satisfy heap order.
-* first is root of tree 1, which may not be nullptr.
-*    first->nextSibling MUST be nullptr on entry.
-* second is root of tree 2, which may be nullptr.
-* first becomes the result of the tree merge.
-*/
+ * Internal method that is the basic operation to maintain order.
+ * Links first and second together to satisfy heap order.
+ * first is root of tree 1, which may not be nullptr.
+ *    first->nextSibling MUST be nullptr on entry.
+ * second is root of tree 2, which may be nullptr.
+ * first becomes the result of the tree merge.
+ */
 template <class T>
 void PairingHeap<T>::compareAndLink(PairNode<T> *&first, PairNode<T> *second) const {
   if (second == nullptr)
@@ -227,10 +227,10 @@ void PairingHeap<T>::compareAndLink(PairNode<T> *&first, PairNode<T> *second) co
 }
 
 /**
-* Internal method that implements two-pass merging.
-* firstSibling the root of the conglomerate;
-*     assumed not nullptr.
-*/
+ * Internal method that implements two-pass merging.
+ * firstSibling the root of the conglomerate;
+ *     assumed not nullptr.
+ */
 template <class T>
 PairNode<T> *PairingHeap<T>::combineSiblings(PairNode<T> *firstSibling) const {
   if (firstSibling->nextSibling == nullptr)
@@ -278,9 +278,9 @@ PairNode<T> *PairingHeap<T>::combineSiblings(PairNode<T> *firstSibling) const {
 }
 
 /**
-* Internal method to clone subtree.
-* WARNING: This is prone to running out of stack space.
-*/
+ * Internal method to clone subtree.
+ * WARNING: This is prone to running out of stack space.
+ */
 template <class T>
 PairNode<T> *PairingHeap<T>::clone(PairNode<T> *t) const {
   if (t == nullptr)

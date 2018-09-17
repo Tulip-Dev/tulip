@@ -51,7 +51,7 @@ public:
   BmdLink *suc;
   BmdLink(TYPE a, BmdLink<TYPE> *pre, BmdLink<TYPE> *suc);
 };
-}
+} // namespace tlp
 #include <tulip/cxx/BmdLink.cxx>
 
 #endif

@@ -400,7 +400,7 @@ public:
       pos.set((*this)[i], i);
   }
 };
-}
+} // namespace tlp
 
 #endif
 

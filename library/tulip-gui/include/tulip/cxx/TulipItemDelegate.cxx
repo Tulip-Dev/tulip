@@ -42,4 +42,4 @@ template <typename T>
 tlp::TulipItemEditorCreator *TulipItemDelegate::creator() const {
   return creator(qMetaTypeId<T>());
 }
-}
+} // namespace tlp

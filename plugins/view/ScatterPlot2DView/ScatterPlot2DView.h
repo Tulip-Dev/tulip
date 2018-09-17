@@ -206,6 +206,6 @@ private:
   std::map<edge, node> edgeToNode;
   std::map<node, edge> nodeToEdge;
 };
-}
+} // namespace tlp
 
 #endif /* SCATTERPLOT2DVIEW_H_ */

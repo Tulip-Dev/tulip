@@ -36,7 +36,7 @@ public:
   void setPlaceholderText(const QString &) {}
 #endif
 };
-}
+} // namespace tlp
 
 #endif
 

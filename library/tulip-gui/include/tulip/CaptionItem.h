@@ -94,7 +94,7 @@ private:
   ColorProperty *_backupColorProperty;
   ColorProperty *_backupBorderColorProperty;
 };
-}
+} // namespace tlp
 
 #endif // CAPTIONITEM_H
 ///@endcond

@@ -211,4 +211,4 @@ int TulipViewSettings::defaultFontSize() const {
 void TulipViewSettings::setDefaultFontSize(int fontSize) {
   _defaultFontSize = fontSize;
 }
-}
+} // namespace tlp

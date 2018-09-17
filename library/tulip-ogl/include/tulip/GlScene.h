@@ -586,6 +586,6 @@ public:
 
   ///@endcond
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLSCENE_H

@@ -36,6 +36,6 @@ public:
   void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h,
                                bool addToSelection) override;
 };
-}
+} // namespace tlp
 
 #endif /* PARALLELCOORDSELEMNTSSELECTOR_H_ */

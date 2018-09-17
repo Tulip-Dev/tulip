@@ -544,4 +544,4 @@ void GraphView::popIfNoUpdates() {
 void GraphView::unpop() {
   getRootImpl()->unpop();
 }
-}
+} // namespace tlp

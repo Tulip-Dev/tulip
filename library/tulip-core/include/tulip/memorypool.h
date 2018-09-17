@@ -31,35 +31,35 @@ static const size_t BUFFOBJ = 20;
 
 namespace tlp {
 /**
-  * @class MemoryPool
-  * \brief That class enables to easily create a memory pool for an a class
-  *
-  * It allocates chunk of BUFFOBJ size of continous memory to allocate
-  * instance of the class. After a delete the memory is not free, and
-  * will be reused at the next new of the class.
-  *
-  * @warning it is not recommended to inherit from an object that inherit of that class
-  *
-  * The following  code only calls malloc one time even if NBTRY object are created
-  * in that example, the speedup is about 23, without MemoryPool malloc is called NBTRY times
-  * @code
-  * class A : public MemoryPool<A> {
-  * public:
-  *     A(){}
-  *    ~A(){}
-  *    int data[1000];
-  * };
-  *
-  * size_t NBTRY = 1000 * 1000;
-  * for (size_t j=0; j < NBTRY; ++j) {
-  *    A *a = new A();
-  *    a->data[100] = j;
-  *    r1 += a->data[100];
-  *    delete a;
-  * }
-  * @endcode
-  *
-  */
+ * @class MemoryPool
+ * \brief That class enables to easily create a memory pool for an a class
+ *
+ * It allocates chunk of BUFFOBJ size of continous memory to allocate
+ * instance of the class. After a delete the memory is not free, and
+ * will be reused at the next new of the class.
+ *
+ * @warning it is not recommended to inherit from an object that inherit of that class
+ *
+ * The following  code only calls malloc one time even if NBTRY object are created
+ * in that example, the speedup is about 23, without MemoryPool malloc is called NBTRY times
+ * @code
+ * class A : public MemoryPool<A> {
+ * public:
+ *     A(){}
+ *    ~A(){}
+ *    int data[1000];
+ * };
+ *
+ * size_t NBTRY = 1000 * 1000;
+ * for (size_t j=0; j < NBTRY; ++j) {
+ *    A *a = new A();
+ *    a->data[100] = j;
+ *    r1 += a->data[100];
+ *    delete a;
+ * }
+ * @endcode
+ *
+ */
 template <typename TYPE>
 class MemoryPool {
 public:
@@ -129,6 +129,6 @@ private:
 
 template <typename TYPE>
 typename MemoryPool<TYPE>::MemoryChunkManager MemoryPool<TYPE>::_memoryChunkManager;
-}
+} // namespace tlp
 #endif // MEMORYPOOL_H
 ///@endcond

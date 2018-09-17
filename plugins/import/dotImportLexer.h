@@ -1373,7 +1373,7 @@ static int input(void)
         /* Reset buffer status. */
         yyrestart(yyin);
 
-      /*FALLTHROUGH*/
+        /*FALLTHROUGH*/
 
       case EOB_ACT_END_OF_FILE: {
         if (yywrap())
@@ -1630,7 +1630,7 @@ static void yyensure_buffer_stack(void) {
     /* First allocation is just for 2 elements, since we don't know if this
      * scanner will even need a stack. We use 2 instead of 1 to avoid an
      * immediate realloc on the next call.
-         */
+     */
     num_to_alloc = 1;
     (yy_buffer_stack) =
         (struct yy_buffer_state **)yyalloc(num_to_alloc * sizeof(struct yy_buffer_state *));

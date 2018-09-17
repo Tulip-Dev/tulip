@@ -29,7 +29,7 @@ namespace {
 inline double eq2D2(const double c) {
   return (4. - sqrt(16. - 16. * c)) / -8.;
 }
-}
+} // namespace
 
 namespace pocore {
 //==============================================================
@@ -109,7 +109,7 @@ Vector<int, 2> SpiralLayout::project(const unsigned int _id) const {
 
   return point;
 }
-}
+} // namespace pocore
 //==============================================================================
 /*
  *  781

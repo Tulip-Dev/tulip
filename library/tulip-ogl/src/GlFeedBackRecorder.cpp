@@ -249,4 +249,4 @@ GLfloat *GlFeedBackRecorder::recordPrimitive(GLfloat *loc) {
 
   return loc;
 }
-}
+} // namespace tlp

@@ -60,7 +60,7 @@ protected:
 };
 
 #include "cxx/PropertyAnimation.cxx"
-}
+} // namespace tlp
 
 #endif /* PROPERTYANIMATION_H_ */
 ///@endcond

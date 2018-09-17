@@ -51,5 +51,5 @@ private:
 };
 
 extern long blockTimeCtr;
-}
+} // namespace vpsc
 #endif // SEEN_REMOVEOVERLAP_BLOCKS_H

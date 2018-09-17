@@ -93,7 +93,7 @@ private slots:
   void showVisualProp(bool show);
   void hideInfos();
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

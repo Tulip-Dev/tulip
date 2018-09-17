@@ -41,7 +41,7 @@
  *  by Romain Bourqui, LaBRI, University Bordeaux I, France
  *
  *
-*/
+ */
 
 class Grip : public tlp::LayoutAlgorithm {
 

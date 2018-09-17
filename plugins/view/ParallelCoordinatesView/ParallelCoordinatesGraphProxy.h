@@ -185,7 +185,7 @@ public:
 private:
   StableIterator<GraphDataSource> graphDataSourceIt;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

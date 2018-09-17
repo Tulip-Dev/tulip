@@ -55,7 +55,7 @@ protected slots:
   void setAntiAliasing(bool);
   void setAdvancedAntiAliasing(bool);
 };
-}
+} // namespace tlp
 
 #endif /* VIEW_ACTIONS_MANAGER_H */
 

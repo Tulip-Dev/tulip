@@ -66,137 +66,138 @@ namespace tlp {
 struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 
   /**
-  * @brief Creates an invalid boundig box.
-  * The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
-  *
-  **/
+   * @brief Creates an invalid boundig box.
+   * The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
+   *
+   **/
   BoundingBox();
 
   /**
-  * @brief Creates a bounding box that must be valid.
-  * Validity is checked in debug mode by an assert.
-  *
-  * @param min The lower left closest point of the box.
-  * @param max The higher right most farther point of the box.
-  * @param compute indicates whether the bounding box has to be computed with the min/max args
-  *
-  **/
+   * @brief Creates a bounding box that must be valid.
+   * Validity is checked in debug mode by an assert.
+   *
+   * @param min The lower left closest point of the box.
+   * @param max The higher right most farther point of the box.
+   * @param compute indicates whether the bounding box has to be computed with the min/max args
+   *
+   **/
   BoundingBox(const tlp::Vec3f &min, const tlp::Vec3f &max, bool checkMinMax = false);
 
   /**
-  * @brief Returns the geometrical center of the bounding box.
-  * An assertion is raised in debug mode if the BoundingBox is not valid.
-  *
-  * @return The center of the bounding box :Vec3f
-  **/
+   * @brief Returns the geometrical center of the bounding box.
+   * An assertion is raised in debug mode if the BoundingBox is not valid.
+   *
+   * @return The center of the bounding box :Vec3f
+   **/
   inline Vec3f center() const {
     assert(isValid());
     return ((*this)[0] + (*this)[1]) / 2.f;
   }
 
   /**
-  * @brief Returns the width of the bounding box
-  * An assertion is raised in debug mode if the BoundingBox is not valid.
-  *
-  **/
+   * @brief Returns the width of the bounding box
+   * An assertion is raised in debug mode if the BoundingBox is not valid.
+   *
+   **/
   inline float width() const {
     assert(isValid());
     return ((*this)[1][0] - (*this)[0][0]);
   }
 
   /**
-  * @brief Returns the height of the bounding box
-  * An assertion is raised in debug mode if the bounding box is not valid.
-  *
-  **/
+   * @brief Returns the height of the bounding box
+   * An assertion is raised in debug mode if the bounding box is not valid.
+   *
+   **/
   inline float height() const {
     assert(isValid());
     return ((*this)[1][1] - (*this)[0][1]);
   }
 
   /**
-  * @brief Returns the depth of the bounding box
-  * An assertion is raised in debug mode if the bounding box is not valid.
-  *
-  **/
+   * @brief Returns the depth of the bounding box
+   * An assertion is raised in debug mode if the bounding box is not valid.
+   *
+   **/
   inline float depth() const {
     assert(isValid());
     return ((*this)[1][2] - (*this)[0][2]);
   }
 
   /**
-  * @brief Expands the bounding box to one containing the vector passed as parameter.
-  * If the parameter is inside the bounding box, it remains unchanged.
-  *
-  * @param coord A point in the 3D space we want the bounding box to encompass.
-  * @return void
-  **/
+   * @brief Expands the bounding box to one containing the vector passed as parameter.
+   * If the parameter is inside the bounding box, it remains unchanged.
+   *
+   * @param coord A point in the 3D space we want the bounding box to encompass.
+   * @return void
+   **/
   void expand(const tlp::Vec3f &coord);
 
   /**
-  * @brief Expands the bounding box to one containing the bounding box passed as parameter.
-  * If the parameter is inside the bounding box, it remains unchanged.
-  *
-  * @param bb A bounding box.
-  * @return void
-  **/
+   * @brief Expands the bounding box to one containing the bounding box passed as parameter.
+   * If the parameter is inside the bounding box, it remains unchanged.
+   *
+   * @param bb A bounding box.
+   * @return void
+   **/
   void expand(const tlp::BoundingBox &bb, bool noCheck = false);
 
   /**
-  * @brief Translates the bounding box by the displacement given by the vector passed as parameter.
-  *
-  * @param vec The displacement vector in 3D space to translate this bounding box by.
-  * @return void
-  **/
+   * @brief Translates the bounding box by the displacement given by the vector passed as parameter.
+   *
+   * @param vec The displacement vector in 3D space to translate this bounding box by.
+   * @return void
+   **/
   void translate(const tlp::Vec3f &vec);
 
   /**
-  * @brief Scales the bounding box, i.e. multiplying its components by a vector passed as parameter.
-  *
-  * @param factor The factor vector to scale this bounding box by.
-  * @return void
-  **/
+   * @brief Scales the bounding box, i.e. multiplying its components by a vector passed as
+   *parameter.
+   *
+   * @param factor The factor vector to scale this bounding box by.
+   * @return void
+   **/
   void scale(const tlp::Vec3f &factor);
 
   /**
-  * @brief Checks whether the bounding box's lowest point is less than it's highest point.
-  * "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
-  *
-  * @return bool Whether this bounding box is valid.
-  **/
+   * @brief Checks whether the bounding box's lowest point is less than it's highest point.
+   * "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
+   *
+   * @return bool Whether this bounding box is valid.
+   **/
   bool isValid() const;
 
   /**
-  * @brief Checks if the given vector is inside the current bounding box. If the bounding box is
-  *invalid the result is always false.
-  * @param coord A point in the 3D space.
-  * @return bool Wether coord is in the bounding box.
-  **/
+   * @brief Checks if the given vector is inside the current bounding box. If the bounding box is
+   *invalid the result is always false.
+   * @param coord A point in the 3D space.
+   * @return bool Wether coord is in the bounding box.
+   **/
   bool contains(const tlp::Vec3f &coord) const;
 
   /**
-  * @brief Checks if the given bounding box is inside the current bounding box. If one of the
-  *bounding boxes is invalid the result is always false.
-  * @param boundingBox The bounding box to test inclusion
-  * @return bool Wether boundingBox is in the bounding box.
-  **/
+   * @brief Checks if the given bounding box is inside the current bounding box. If one of the
+   *bounding boxes is invalid the result is always false.
+   * @param boundingBox The bounding box to test inclusion
+   * @return bool Wether boundingBox is in the bounding box.
+   **/
   bool contains(const tlp::BoundingBox &boundingBox) const;
 
   /**
-  * @brief Checks if the given bounding box intersect the current one. If one of the bounding box is
-  *invalid return false.
-  * @param boundingBox The bounding box to compare with.
-  * @return bool Wether the bounding boxes intersect.
-  **/
+   * @brief Checks if the given bounding box intersect the current one. If one of the bounding box
+   *is invalid return false.
+   * @param boundingBox The bounding box to compare with.
+   * @return bool Wether the bounding boxes intersect.
+   **/
   bool intersect(const tlp::BoundingBox &boundingBox) const;
 
   /**
-  * @brief Checks if the bounding box intersects a given line segment. If the bounding box is
-  *invalid the result is always false.
-  * @param segStart the start point of the line segment on which to check intersection
-  * @param segEnd the end point of the line segment on which to check intersection
-  * @return bool Wether the line segment intersects the bounding box
-  **/
+   * @brief Checks if the bounding box intersects a given line segment. If the bounding box is
+   *invalid the result is always false.
+   * @param segStart the start point of the line segment on which to check intersection
+   * @param segEnd the end point of the line segment on which to check intersection
+   * @return bool Wether the line segment intersects the bounding box
+   **/
   bool intersect(const Vec3f &segStart, const Vec3f &segEnd) const;
 
   /**
@@ -232,6 +233,6 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   **/
   void getCompleteBB(Vec3f bb[8]) const;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_BOUNDINGBOX_H

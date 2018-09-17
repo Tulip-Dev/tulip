@@ -18,15 +18,15 @@
 #include "constraint.h"
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
+using std::endl;
 using std::ios;
 using std::ofstream;
-using std::endl;
 #endif
-using std::set;
-using std::vector;
+using std::copy;
 using std::iterator;
 using std::list;
-using std::copy;
+using std::set;
+using std::vector;
 
 namespace vpsc {
 
@@ -218,4 +218,4 @@ double Blocks::cost() {
 
   return c;
 }
-}
+} // namespace vpsc

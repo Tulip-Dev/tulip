@@ -660,4 +660,4 @@ void MatrixView::applySettings() {
 }
 
 PLUGIN(MatrixView)
-}
+} // namespace tlp

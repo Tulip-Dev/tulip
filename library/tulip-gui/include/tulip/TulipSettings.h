@@ -32,13 +32,13 @@
 namespace tlp {
 
 /**
-  * @brief This class provides convenience functions to access the Tulip settings file (using
+ * @brief This class provides convenience functions to access the Tulip settings file (using
  * QSettings)
-  * TulipSettings is a wrapper for QSettings providing quick access to common keys provided in the
+ * TulipSettings is a wrapper for QSettings providing quick access to common keys provided in the
  * tulip configuration file.
-  * This object does not mask any method from the QSettings class, which mean that the user can
+ * This object does not mask any method from the QSettings class, which mean that the user can
  * still access custom keys by invoking the QSettings::value method.
-  */
+ */
 class TLP_QT_SCOPE TulipSettings : public QSettings, GlDefaultSelectionColorManager, Observable {
   Q_OBJECT
   Q_ENUMS(DisplayProperty)
@@ -193,6 +193,6 @@ private:
 
   void setFavoriteAlgorithms(const QSet<QString> &lst);
 };
-}
+} // namespace tlp
 #endif // TULIPSETTINGS_H
 ///@endcond

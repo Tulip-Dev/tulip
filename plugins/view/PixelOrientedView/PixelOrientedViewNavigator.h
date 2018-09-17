@@ -42,6 +42,6 @@ private:
   PixelOrientedView *pixelView;
   PixelOrientedOverview *selectedOverview;
 };
-}
+} // namespace tlp
 
 #endif /* PIXELORIENTEDOVERVIEWSELECTOR_H_ */

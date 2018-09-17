@@ -61,7 +61,7 @@ private:
   GlGraphInputData *_inputData;
   std::map<Graph *, GlScene *> _metaGraphToSceneMap;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLMETANODERENDERER_H
 ///@endcond

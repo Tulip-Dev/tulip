@@ -67,7 +67,7 @@ public:
    */
   float planePointValue(const Coord &pos);
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond

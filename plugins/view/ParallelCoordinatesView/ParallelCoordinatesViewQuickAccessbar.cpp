@@ -68,4 +68,4 @@ void ParallelCoordinatesViewQuickAccessBar::setLabelsVisible(bool visible) {
                                        : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
   emit settingsChanged();
 }
-}
+} // namespace tlp

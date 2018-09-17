@@ -68,5 +68,5 @@ private:
   ConstraintList inactive;
   Constraint *mostViolated(ConstraintList &l);
 };
-}
+} // namespace vpsc
 #endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H

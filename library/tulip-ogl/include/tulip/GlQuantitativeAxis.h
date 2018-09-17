@@ -161,7 +161,7 @@ private:
   unsigned long long incrementStep;
   bool minMaxSet;
 };
-}
+} // namespace tlp
 
 #endif /* GLQUANTITATIVEAXIS_H_ */
 ///@endcond

@@ -74,5 +74,5 @@ protected:
   double maxValue;
   bool colorScaleAtTop;
 };
-}
+} // namespace tlp
 #endif /* GLLABELLEDCOLORSCALE_H_ */

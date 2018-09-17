@@ -66,15 +66,15 @@ void Solver::printBlocks() {
 #endif
 }
 /**
-* Produces a feasible - though not necessarily optimal - solution by
-* examining blocks in the partial order defined by the directed acyclic
-* localGraph of constraints. For each block (when processing left to right) we
-* maintain the invariant that all constraints to the left of the block
-* (incoming constraints) are satisfied. This is done by repeatedly merging
-* blocks into bigger blocks across violated constraints (most violated
-* first) fixing the position of variables inside blocks relative to one
-* another so that constraints internal to the block are satisfied.
-*/
+ * Produces a feasible - though not necessarily optimal - solution by
+ * examining blocks in the partial order defined by the directed acyclic
+ * localGraph of constraints. For each block (when processing left to right) we
+ * maintain the invariant that all constraints to the left of the block
+ * (incoming constraints) are satisfied. This is done by repeatedly merging
+ * blocks into bigger blocks across violated constraints (most violated
+ * first) fixing the position of variables inside blocks relative to one
+ * another so that constraints internal to the block are satisfied.
+ */
 void Solver::satisfy() {
   list<Variable *> *vs = bs->totalOrder();
 
@@ -474,4 +474,4 @@ bool Solver::blockGraphIsCyclic() {
   return false;
 }
 #endif
-}
+} // namespace vpsc

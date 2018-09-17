@@ -30,6 +30,6 @@ public:
   ~ParallelCoordsElementDeleter() override {}
   bool eventFilter(QObject *, QEvent *) override;
 };
-}
+} // namespace tlp
 
 #endif /* PARALLELCOORDSELEMENTDELETER_H_ */

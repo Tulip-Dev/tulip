@@ -27,7 +27,7 @@ class Graph;
 class Plugin;
 class GraphHierarchiesModel;
 class View;
-}
+} // namespace tlp
 
 namespace Ui {
 class PanelSelectionWizard;

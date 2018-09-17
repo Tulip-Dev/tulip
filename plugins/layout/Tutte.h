@@ -32,7 +32,7 @@
  *  "1963",
  *  pages 743-768.
  *
-*/
+ */
 class Tutte : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION(

@@ -56,7 +56,7 @@ public:
 protected:
   GlGraphInputData *edgeExtGlGraphInputData;
 };
-}
+} // namespace tlp
 
 #endif /* EDGEEXTREMITYGLYPH_H_ */
 ///@endcond

@@ -41,11 +41,11 @@ public:
   ~GlColorScale() override;
 
   /**
-    * @brief Compute the color corresponding to the position in the color scale.
-    * The orientation of the scale define the coordinate used to compute the color (if the
-    *orientation is horizontal use only the X coordinate).
-    * If the position is outside of the entity coordinates returns the nearest extremity value.
-    **/
+   * @brief Compute the color corresponding to the position in the color scale.
+   * The orientation of the scale define the coordinate used to compute the color (if the
+   *orientation is horizontal use only the X coordinate).
+   * If the position is outside of the entity coordinates returns the nearest extremity value.
+   **/
   Color getColorAtPos(Coord pos);
 
   void draw(float lod, Camera *camera) override;
@@ -90,7 +90,7 @@ private:
   GlPolyQuad *colorScalePolyQuad;
   Orientation orientation;
 };
-}
+} // namespace tlp
 
 #endif /* GLCOLORSCALE_H_ */
 ///@endcond

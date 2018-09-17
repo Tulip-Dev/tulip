@@ -178,4 +178,4 @@ void ScatterPlotTrendLine::viewChanged(View *view) {
   compute(nullptr);
   scatterView->refresh();
 }
-}
+} // namespace tlp

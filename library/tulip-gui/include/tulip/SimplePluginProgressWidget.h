@@ -117,7 +117,7 @@ public slots:
 private:
   tlp::SimplePluginProgressWidget *_progress;
 };
-}
+} // namespace tlp
 
 #endif // SIMPLEPLUGINPROGRESSWIDGET_H
 ///@endcond

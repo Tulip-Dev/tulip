@@ -245,7 +245,7 @@ private:
   static GLuint slidersTextureId;
   static unsigned int parallelViewInstancesCount;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

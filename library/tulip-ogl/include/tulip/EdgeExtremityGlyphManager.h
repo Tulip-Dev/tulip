@@ -73,6 +73,6 @@ private:
   static std::list<std::string> plugins;
   static EdgeExtremityGlyphManager eeinst;
 };
-}
+} // namespace tlp
 #endif /* EDGEEXTREMITYGLYPHMANAGER_H_ */
 ///@endcond

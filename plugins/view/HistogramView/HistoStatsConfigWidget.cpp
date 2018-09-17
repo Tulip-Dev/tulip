@@ -158,4 +158,4 @@ double HistoStatsConfigWidget::getBoundFromString(const QString &bound) const {
     return max;
   }
 }
-}
+} // namespace tlp

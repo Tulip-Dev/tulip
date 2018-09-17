@@ -42,6 +42,6 @@ public:
 
   void construct() override;
 };
-}
+} // namespace tlp
 
 #endif /* PIXELORIENTEDVIEWINTERACTORS_H_ */

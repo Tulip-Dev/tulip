@@ -54,7 +54,7 @@ struct less<couple> {
     return (c.r < d.r) || ((c.r == d.r) && (c.p < d.p));
   }
 };
-}
+} // namespace std
 
 struct StackEval {
   StackEval(int f, int u) : freeS(f), usedS(u) {}

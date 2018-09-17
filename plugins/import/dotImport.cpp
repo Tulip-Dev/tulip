@@ -37,7 +37,7 @@ using namespace tlp;
 namespace {
 #include "dotImportParser.h"
 #include "dotImportLexer.h"
-}
+} // namespace
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif

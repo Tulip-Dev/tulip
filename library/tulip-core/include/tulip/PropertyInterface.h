@@ -498,15 +498,15 @@ public:
   virtual void writeNodeValue(std::ostream &, node) const = 0;
 
   /**
-  * @brief Reads the nodes default value
-  *
-  */
+   * @brief Reads the nodes default value
+   *
+   */
   virtual bool readNodeDefaultValue(std::istream &) = 0;
 
   /**
-  * @brief Reads the value of a node
-  *
-  */
+   * @brief Reads the value of a node
+   *
+   */
   virtual bool readNodeValue(std::istream &, node) = 0;
 
   /**
@@ -529,15 +529,15 @@ public:
   virtual void writeEdgeValue(std::ostream &, edge) const = 0;
 
   /**
-  * @brief Reads the edges default value
-  *
-  */
+   * @brief Reads the edges default value
+   *
+   */
   virtual bool readEdgeDefaultValue(std::istream &) = 0;
 
   /**
-  * @brief Reads the value of an edge
-  *
-  */
+   * @brief Reads the value of an edge
+   *
+   */
   virtual bool readEdgeValue(std::istream &, edge) = 0;
 
   /**
@@ -744,7 +744,7 @@ protected:
   PropertyEventType evtType;
   unsigned int eltId;
 };
-}
+} // namespace tlp
 
 //================================================================================
 // these functions allow to use tlp::PropertyInterface as a key in a hash-based data structure (e.g.

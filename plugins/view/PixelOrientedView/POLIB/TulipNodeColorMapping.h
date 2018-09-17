@@ -38,6 +38,6 @@ public:
 private:
   tlp::Graph *graph;
 };
-}
+} // namespace pocore
 
 #endif /* TULIPNODECOLORMAPPING_H_ */

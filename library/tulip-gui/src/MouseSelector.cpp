@@ -128,7 +128,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 #else
           Qt::ControlModifier
 #endif
-          ) {
+      ) {
         if (mousePressModifier == Qt::ShiftModifier && kModifier != Qt::ShiftModifier)
           boolVal = false;
         else {
@@ -286,7 +286,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
 #else
       Qt::ControlModifier
 #endif
-      ) {
+  ) {
     col[0] = 1.;
     col[1] = 0.8f;
     col[2] = 1.;

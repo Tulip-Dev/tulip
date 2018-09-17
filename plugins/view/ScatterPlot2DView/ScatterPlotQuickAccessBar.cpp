@@ -27,15 +27,16 @@ namespace tlp {
 
 ScatterPlotQuickAccessBar::ScatterPlotQuickAccessBar(ScatterPlot2DOptionsWidget *opt,
                                                      QWidget *parent)
-    : QuickAccessBarImpl(
-          nullptr, QuickAccessBarImpl::QuickAccessButtons(
-                       QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-                       QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
-                       QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
-                       QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::EDGECOLOR |
-                       QuickAccessBarImpl::NODEBORDERCOLOR | QuickAccessBarImpl::LABELCOLOR |
-                       QuickAccessBarImpl::NODESIZE),
-          parent),
+    : QuickAccessBarImpl(nullptr,
+                         QuickAccessBarImpl::QuickAccessButtons(
+                             QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                             QuickAccessBarImpl::SHOWLABELS |
+                             QuickAccessBarImpl::COLORINTERPOLATION |
+                             QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
+                             QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::EDGECOLOR |
+                             QuickAccessBarImpl::NODEBORDERCOLOR | QuickAccessBarImpl::LABELCOLOR |
+                             QuickAccessBarImpl::NODESIZE),
+                         parent),
       _optionsWidget(opt) {}
 
 void ScatterPlotQuickAccessBar::setEdgesVisible(bool visible) {
@@ -80,4 +81,4 @@ void ScatterPlotQuickAccessBar::setLabelsScaled(bool scaled) {
                                      : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
   emit settingsChanged();
 }
-}
+} // namespace tlp

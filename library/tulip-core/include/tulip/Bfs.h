@@ -41,6 +41,6 @@ private:
   MutableContainer<bool> selectedNodes;
   MutableContainer<bool> selectedEdges;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

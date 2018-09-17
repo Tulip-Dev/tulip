@@ -104,6 +104,6 @@ private:
   // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event &) override;
 };
-}
+} // namespace tlp
 
 #endif // TULIP_ACYCLICITY_TEST_H

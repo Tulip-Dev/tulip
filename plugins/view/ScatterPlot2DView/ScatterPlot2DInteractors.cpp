@@ -173,4 +173,4 @@ void ScatterPlot2DInteractorGetInformation::construct() {
 bool ScatterPlot2DInteractorGetInformation::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::ScatterPlot2DViewName);
 }
-}
+} // namespace tlp

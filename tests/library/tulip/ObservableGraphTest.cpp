@@ -316,56 +316,56 @@ public:
         afterDelInheritedProperty(graph, gEvt->getPropertyName());
         return;
 
-      /*case GraphEvent::TLP_BEFORE_SET_ENDS:
-beforeSetEnds(graph, gEvt->getEdge());
-break;
+        /*case GraphEvent::TLP_BEFORE_SET_ENDS:
+  beforeSetEnds(graph, gEvt->getEdge());
+  break;
 
-    case GraphEvent::TLP_AFTER_SET_ENDS:
-afterSetEnds(graph, gEvt->getEdge());
-break;
+      case GraphEvent::TLP_AFTER_SET_ENDS:
+  afterSetEnds(graph, gEvt->getEdge());
+  break;
 
-    case GraphEvent::TLP_ADD_NODES: {
-const std::vector<node>& nodes = gEvt->getNodes();
+      case GraphEvent::TLP_ADD_NODES: {
+  const std::vector<node>& nodes = gEvt->getNodes();
 
-for (unsigned int i = 0; i < nodes.size(); ++i)
-  addNode(graph, nodes[i]);
+  for (unsigned int i = 0; i < nodes.size(); ++i)
+    addNode(graph, nodes[i]);
 
-break;
-    }
+  break;
+      }
 
-    case GraphEvent::TLP_ADD_EDGES: {
-const std::vector<edge>& edges = gEvt->getEdges();
+      case GraphEvent::TLP_ADD_EDGES: {
+  const std::vector<edge>& edges = gEvt->getEdges();
 
-for (unsigned int i = 0; i < edges.size(); ++i)
-  addEdge(graph, edges[i]);
+  for (unsigned int i = 0; i < edges.size(); ++i)
+    addEdge(graph, edges[i]);
 
-break;
-    }
+  break;
+      }
 
-    case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
-beforeSetAttribute(graph, gEvt->getAttributeName());
-break;
+      case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
+  beforeSetAttribute(graph, gEvt->getAttributeName());
+  break;
 
-    case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
-afterSetAttribute(graph, gEvt->getAttributeName());
-break;
+      case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
+  afterSetAttribute(graph, gEvt->getAttributeName());
+  break;
 
-    case GraphEvent::TLP_REMOVE_ATTRIBUTE:
-removeAttribute(graph, gEvt->getAttributeName());
+      case GraphEvent::TLP_REMOVE_ATTRIBUTE:
+  removeAttribute(graph, gEvt->getAttributeName());
 
-    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
-    case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
-    case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
-    case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
-    case GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH:
-    case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
-    case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
-    case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
-    case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
-    case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
-    case GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY:
-    case GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY:
-    break;*/
+      case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
+      case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
+      case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
+      case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
+      case GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH:
+      case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
+      case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
+      case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
+      case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
+      case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
+      case GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY:
+      case GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY:
+      break;*/
 
       default:
         break;

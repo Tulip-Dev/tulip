@@ -231,7 +231,7 @@ public:
   }
   FORWARD_STRING_METHODS(typename TypeInterface<std::vector<ELT_TYPE>>)
 };
-}
+} // namespace tlp
 
 #endif // SERIALIZABLETYPE_H
 ///@endcond

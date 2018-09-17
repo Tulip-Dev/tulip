@@ -100,4 +100,4 @@ std::string TulipMaterialDesignIcons::getIconUtf8String(const std::string &iconN
                  back_inserter(iconString));
   return iconString;
 }
-}
+} // namespace tlp

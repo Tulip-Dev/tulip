@@ -115,5 +115,5 @@ public:
 
   void draw(float lod, Camera *camera) override;
 };
-}
+} // namespace tlp
 #endif

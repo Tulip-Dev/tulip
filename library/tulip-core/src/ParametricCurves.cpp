@@ -444,4 +444,4 @@ void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<
         computeOpenUniformBsplinePoint(controlPoints, i / float(nbCurvePoints - 1), curveDegree);
   });
 }
-}
+} // namespace tlp

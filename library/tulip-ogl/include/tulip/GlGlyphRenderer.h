@@ -103,6 +103,6 @@ private:
   static GlShaderProgram *_glyphShader;
   static GlBox *_selectionBox;
 };
-}
+} // namespace tlp
 
 #endif // GLYPHRENDERER_H

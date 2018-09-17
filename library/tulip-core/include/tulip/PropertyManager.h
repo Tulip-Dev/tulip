@@ -64,7 +64,7 @@ public:
 protected:
   void setInheritedProperty(const std::string &, PropertyInterface *);
 };
-}
+} // namespace tlp
 
 #endif
 

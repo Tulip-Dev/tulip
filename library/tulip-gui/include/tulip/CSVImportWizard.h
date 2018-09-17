@@ -41,8 +41,8 @@ class CSVGraphMappingConfigurationWidget;
 class CSVImportParameters;
 
 /**
-  * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a preview.
-  **/
+ * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a preview.
+ **/
 class CSVParsingConfigurationQWizardPage : public QWizardPage {
   Q_OBJECT
 public:
@@ -110,6 +110,6 @@ private:
   Ui::CSVImportWizard *ui;
   static tlp::Graph *graph;
 };
-}
+} // namespace tlp
 #endif // CSVIMPORTWIZARD_H
 ///@endcond

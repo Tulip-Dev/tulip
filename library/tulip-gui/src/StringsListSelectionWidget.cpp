@@ -124,4 +124,4 @@ void StringsListSelectionWidget::selectAllStrings() {
 void StringsListSelectionWidget::unselectAllStrings() {
   stringsListSelectionWidget->unselectAllStrings();
 }
-}
+} // namespace tlp

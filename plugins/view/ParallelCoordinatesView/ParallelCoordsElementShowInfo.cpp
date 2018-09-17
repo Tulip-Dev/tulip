@@ -28,4 +28,4 @@ bool ParallelCoordsElementShowInfo::pick(int x, int y, SelectedEntity &selectedE
   ParallelCoordinatesView *parallelView = static_cast<ParallelCoordinatesView *>(view());
   return parallelView->getDataUnderPointerProperties(x, y, selectedEntity);
 }
-}
+} // namespace tlp

@@ -46,6 +46,6 @@ protected:
   Graph *graph;
   SelectionMode _mode;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

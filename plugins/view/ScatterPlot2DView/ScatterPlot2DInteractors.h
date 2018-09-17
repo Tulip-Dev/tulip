@@ -92,6 +92,6 @@ public:
 
   bool isCompatible(const std::string &viewName) const override;
 };
-}
+} // namespace tlp
 
 #endif /* SCATTERPLOT2DINTERACTORS_H_ */

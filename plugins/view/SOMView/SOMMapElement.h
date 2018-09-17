@@ -72,5 +72,5 @@ protected:
   Size size;
   Size nodeAreaSize;
 };
-}
+} // namespace tlp
 #endif /* SOMMAPELEMENT_H_ */

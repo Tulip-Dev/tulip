@@ -40,7 +40,7 @@
  *  \author Patrick Mary of Tulip Team http://tulip.labri.fr/
  *
  *
-*/
+ */
 using namespace std;
 using namespace tlp;
 
@@ -104,7 +104,7 @@ bool tokenize(const string &str, vector<string> &tokens, const string &delimiter
 
   return true;
 }
-}
+} // namespace
 
 class ImportPajek : public ImportModule {
 

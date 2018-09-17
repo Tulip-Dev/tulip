@@ -73,7 +73,7 @@ protected:
 
   bool inSizeSpinBoxValueChanged;
 };
-}
+} // namespace tlp
 
 #endif
 

@@ -33,7 +33,7 @@ namespace tlp {
 class GraphHierarchiesModel;
 class Graph;
 class PropertyInterface;
-}
+} // namespace tlp
 
 class SearchWidget : public QWidget {
   Q_OBJECT

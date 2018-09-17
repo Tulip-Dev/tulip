@@ -163,7 +163,7 @@ public:
 #else
           std::isnan(minInput)
 #endif
-              )
+      )
         minInput = 0;
 
       if (overrideMinInput &&
@@ -172,7 +172,7 @@ public:
 #else
           std::isnan(maxInput)
 #endif
-              )
+      )
         maxInput = 0;
 
       if (overrideMinInput && overrideMaxInput) {

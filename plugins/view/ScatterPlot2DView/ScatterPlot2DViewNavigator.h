@@ -51,6 +51,6 @@ private:
 
   GlMainWidget *glWidget;
 };
-}
+} // namespace tlp
 
 #endif /* SCATTERPLOTPREVIEWGENERATOR_H_ */

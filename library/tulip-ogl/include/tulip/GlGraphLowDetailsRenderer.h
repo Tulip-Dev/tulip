@@ -89,7 +89,7 @@ protected:
   SizeProperty *observedSizeProperty;
   BooleanProperty *observedSelectionProperty;
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

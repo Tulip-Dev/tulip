@@ -79,5 +79,5 @@ public:
 
   void testComputeFaces();
 };
-}
+} // namespace tlp
 #endif

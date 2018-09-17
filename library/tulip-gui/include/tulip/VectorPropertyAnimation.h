@@ -50,7 +50,7 @@ private:
 };
 
 #include "cxx/VectorPropertyAnimation.cxx"
-}
+} // namespace tlp
 
 #endif /* VECTORPROPERTYANIMATION_H_ */
 ///@endcond

@@ -61,6 +61,6 @@ private:
   std::vector<std::string> lastSelectedProperties;
   ElementType lastDataLocation;
 };
-}
+} // namespace tlp
 
 #endif /* HISTODATACONFIGWIDGET_H_ */

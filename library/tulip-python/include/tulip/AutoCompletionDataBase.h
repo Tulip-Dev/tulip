@@ -87,6 +87,6 @@ public:
 
   QString getTypeNameForExpr(const QString &varName) const;
 };
-}
+} // namespace tlp
 
 #endif /* AUTOCOMPLETIONDATABASE_H_ */

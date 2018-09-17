@@ -29,4 +29,4 @@ GlTriangle::GlTriangle(const Coord &position, const Size &size, const Color &fil
                        outlineSize) {}
 //=====================================================
 GlTriangle::~GlTriangle() {}
-}
+} // namespace tlp

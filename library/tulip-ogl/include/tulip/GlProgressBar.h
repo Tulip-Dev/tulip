@@ -69,6 +69,6 @@ private:
   unsigned int currentPercent;
   std::string comment;
 };
-}
+} // namespace tlp
 #endif /* GLPROGRESSBAR_H_ */
 ///@endcond

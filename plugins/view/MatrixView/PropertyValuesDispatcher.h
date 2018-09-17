@@ -62,5 +62,5 @@ private:
   std::set<std::string> _targetToSourceProperties;
   bool _modifying;
 };
-}
+} // namespace tlp
 #endif // PROPERTYVALUESDISPATCHER_H

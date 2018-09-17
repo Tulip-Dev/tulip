@@ -201,4 +201,4 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
 
   return false;
 }
-}
+} // namespace tlp

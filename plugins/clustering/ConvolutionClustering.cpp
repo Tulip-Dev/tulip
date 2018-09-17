@@ -280,4 +280,4 @@ bool ConvolutionClustering::check(std::string &errorMsg) {
 }
 
 PLUGIN(ConvolutionClustering)
-}
+} // namespace tlp

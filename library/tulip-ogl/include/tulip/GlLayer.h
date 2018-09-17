@@ -251,6 +251,6 @@ private:
 
   friend class GlScene;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLLAYER_H

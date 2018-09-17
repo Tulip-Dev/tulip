@@ -154,7 +154,7 @@ protected:
 
   void setFocusedPanel(WorkspacePanel *panel);
 };
-}
+} // namespace tlp
 
 #endif // WORKSPACE_H
 ///@endcond

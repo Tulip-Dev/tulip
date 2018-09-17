@@ -60,6 +60,6 @@ public:
   QString getFullTypeName(const QString &type) const;
   bool dictEntryExists(const QString &type, const QString &dictEntry) const;
 };
-}
+} // namespace tlp
 
 #endif /* APIDATABASE_H_ */

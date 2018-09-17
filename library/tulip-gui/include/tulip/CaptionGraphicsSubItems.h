@@ -202,7 +202,7 @@ protected:
   QGraphicsPathItem *_topSizeCaptionPathItem;
   QGraphicsPathItem *_bottomSizeCaptionPathItem;
 };
-}
+} // namespace tlp
 
 #endif // CAPTIONGRAPHICSSUB_H
 ///@endcond

@@ -96,7 +96,7 @@ void IdManager::getFreeId(unsigned int id) {
     state.freeIds.erase(state.freeIds.find(id));
   }
 }
-}
+} // namespace tlp
 
 //-----------------------------------------------------------
 ostream &tlp::operator<<(std::ostream &os, const tlp::IdManager &idM) {

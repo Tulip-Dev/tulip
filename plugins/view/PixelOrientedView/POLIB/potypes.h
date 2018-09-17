@@ -27,6 +27,6 @@ namespace pocore {
 typedef tlp::Vector<unsigned char, 4> RGBA;
 typedef tlp::Vector<float, 2> Vec2f;
 typedef tlp::Vector<int, 2> Vec2i;
-}
+} // namespace pocore
 
 #endif

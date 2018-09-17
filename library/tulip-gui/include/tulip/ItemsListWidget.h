@@ -73,7 +73,7 @@ private:
   QHash<QString, itemInfo> hashDataBase;
   unsigned int maxListSize;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

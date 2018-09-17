@@ -72,7 +72,7 @@ public:
 protected slots:
   void comboDataChanged();
 };
-}
+} // namespace tlp
 
 #include "cxx/TulipItemDelegate.cxx"
 

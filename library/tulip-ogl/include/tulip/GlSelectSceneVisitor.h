@@ -67,7 +67,7 @@ private:
 
   GlLODCalculator *calculator;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLSELECTSCENEVISITOR_H
 ///@endcond

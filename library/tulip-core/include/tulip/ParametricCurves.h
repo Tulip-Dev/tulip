@@ -97,19 +97,19 @@ TLP_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoints,
                                        const float alpha = 0.5);
 
 /**
-  * Compute the position of a point 'p' at t (0 <= t <= 1)
-  * along open uniform B-spline curve defined by a set of control points.
-  * An uniform B-spline is a piecewise collection of Bézier curves of the same degree, connected end
+ * Compute the position of a point 'p' at t (0 <= t <= 1)
+ * along open uniform B-spline curve defined by a set of control points.
+ * An uniform B-spline is a piecewise collection of Bézier curves of the same degree, connected end
  * to end.
-  * The features of this type of spline are the following :
-  *   -> the spline is C^2 continuous, meaning there is no discontinuities in curvature
-  *     -> the spline has local control : its parameters only affect a small part of the entire
+ * The features of this type of spline are the following :
+ *   -> the spline is C^2 continuous, meaning there is no discontinuities in curvature
+ *     -> the spline has local control : its parameters only affect a small part of the entire
  * spline
-  * A B-spline is qualified as open when it passes through its first and last control points.
-  * \param controlPoints a vector of control points
-  * \param t curve parameter value (0 <= t <= 1)
-  * \param curveDegree the B-spline degree
-  */
+ * A B-spline is qualified as open when it passes through its first and last control points.
+ * \param controlPoints a vector of control points
+ * \param t curve parameter value (0 <= t <= 1)
+ * \param curveDegree the B-spline degree
+ */
 
 TLP_SCOPE Coord computeOpenUniformBsplinePoint(const std::vector<Coord> &controlPoints,
                                                const float t, const unsigned int curveDegree = 3);
@@ -125,7 +125,7 @@ TLP_SCOPE void computeOpenUniformBsplinePoints(const std::vector<Coord> &control
                                                std::vector<Coord> &curvePoints,
                                                const unsigned int curveDegree = 3,
                                                const unsigned int nbCurvePoints = 100);
-}
+} // namespace tlp
 
 #endif /* PARAMETRICCURVES_H_ */
 ///@endcond

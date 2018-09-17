@@ -93,7 +93,7 @@ struct node {
     return id != UINT_MAX;
   }
 };
-}
+} // namespace tlp
 
 ///@cond DOXYGEN_HIDDEN
 // these three functions allow to use tlp::node as a key in a hash-based data structure (e.g.
@@ -121,7 +121,7 @@ struct less<tlp::node> {
     return n.id < n2.id;
   }
 };
-}
+} // namespace std
 ///@endcond
 
 #endif

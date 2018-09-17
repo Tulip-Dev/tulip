@@ -29,7 +29,7 @@
 namespace Ui {
 class AlgorithmRunner;
 class AlgorithmRunnerItem;
-}
+} // namespace Ui
 
 class QToolButton;
 

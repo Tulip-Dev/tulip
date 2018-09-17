@@ -1643,7 +1643,7 @@ struct less<MetaEdge> {
     return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
   }
 };
-}
+} // namespace std
 
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes) {
   GraphProperty *metaInfo = static_cast<GraphAbstract *>(getRoot())->getMetaGraphProperty();

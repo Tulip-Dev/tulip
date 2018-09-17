@@ -62,6 +62,6 @@ static inline bool compareConstraints(Constraint *const &l, Constraint *const &r
 
   return sl < sr;
 }
-}
+} // namespace vpsc
 
 #endif // SEEN_REMOVEOVERLAP_CONSTRAINT_H

@@ -113,7 +113,7 @@ private:
   std::vector<std::string> propertiesTypes;
   bool includeViewProperties;
 };
-}
+} // namespace tlp
 
 #endif /* GRAPHPROPERTYSELECTIONWIDGET_H_ */
 ///@endcond

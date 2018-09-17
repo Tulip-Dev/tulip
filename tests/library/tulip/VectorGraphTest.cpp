@@ -750,4 +750,4 @@ void VectorGraphTest::testMoreSetEnds() {
     ++i;
   }
 }
-}
+} // namespace tlp

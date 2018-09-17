@@ -55,5 +55,5 @@ TLP_SCOPE void convexHull(const std::vector<Coord> &points,
                           std::vector<std::vector<unsigned int>> &facetNeighbors);
 
 /*@}*/
-}
+} // namespace tlp
 #endif

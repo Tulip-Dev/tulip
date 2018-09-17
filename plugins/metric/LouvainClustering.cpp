@@ -29,30 +29,30 @@ using namespace tlp;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
-* \brief  An implementation of the Louvain clustering algorithm
-*
-* This plugin is an implementation of the Louvain clustering algorithm
-* first published as:
-*
-* Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and Lefebvre, E., \n
-* "Fast unfolding of communities in large networks", \n
-* "Journal of Statistical Mechanics: Theory and Experiment, P10008",\n
-* 2008. \n
-*
-* <b> HISTORY</b>
-*
-* - 25/02/2011 Version 1.0: Initial release (François Queyroi)
-* - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General Algorithm to
-*DoubleAlgorithm, code cleaning and fix some memory leaks.
-* - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated version of the original
-*source code available at  https://sites.google.com/site/findcommunities/
-*
-* \note A threshold for modularity improvement is used here, its value is 0.000001
-*
-* \author Patrick Mary, Labri
-*
-*
-**/
+ * \brief  An implementation of the Louvain clustering algorithm
+ *
+ * This plugin is an implementation of the Louvain clustering algorithm
+ * first published as:
+ *
+ * Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and Lefebvre, E., \n
+ * "Fast unfolding of communities in large networks", \n
+ * "Journal of Statistical Mechanics: Theory and Experiment, P10008",\n
+ * 2008. \n
+ *
+ * <b> HISTORY</b>
+ *
+ * - 25/02/2011 Version 1.0: Initial release (François Queyroi)
+ * - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General Algorithm to
+ *DoubleAlgorithm, code cleaning and fix some memory leaks.
+ * - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated version of the
+ *original source code available at  https://sites.google.com/site/findcommunities/
+ *
+ * \note A threshold for modularity improvement is used here, its value is 0.000001
+ *
+ * \author Patrick Mary, Labri
+ *
+ *
+ **/
 class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(

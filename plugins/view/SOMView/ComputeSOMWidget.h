@@ -49,5 +49,5 @@ public:
   void setWidgetParameters(tlp::Graph *g, std::vector<std::string> &propertyFilterType);
   void setOutputPropertiesList(std::vector<std::string> &properties);
 };
-}
+} // namespace tlp
 #endif /* COMPUTESOMWIDGET_H_ */

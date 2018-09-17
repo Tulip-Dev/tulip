@@ -507,4 +507,4 @@ pair<double, double> GoogleMaps::getMapCurrentNorthEastLatLng() {
 
   return latLng;
 }
-}
+} // namespace tlp

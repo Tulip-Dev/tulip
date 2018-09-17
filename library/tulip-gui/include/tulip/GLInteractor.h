@@ -91,6 +91,6 @@ public slots:
    */
   virtual void draw(tlp::GlMainWidget *);
 };
-}
+} // namespace tlp
 
 #endif // GLINTERACTOR_H

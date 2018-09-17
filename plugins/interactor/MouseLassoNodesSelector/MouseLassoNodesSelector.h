@@ -69,6 +69,6 @@ private:
   BooleanProperty *viewSelection;
   bool dragStarted;
 };
-}
+} // namespace tlp
 
 #endif // MOUSEFREEHANDSELECTOR_H

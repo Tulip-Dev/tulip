@@ -29,4 +29,4 @@ GlHexagon::GlHexagon(const Coord &position, const Size &size, const Color &fillC
                        outlineSize) {}
 //=====================================================
 GlHexagon::~GlHexagon() {}
-}
+} // namespace tlp

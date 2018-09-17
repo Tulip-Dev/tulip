@@ -26,4 +26,4 @@ HSIColorMapping::HSIColorMapping(const HSI &from, const HSI &to) : hsiColorScale
 RGBA HSIColorMapping::getColor(const double &value, const unsigned int) const {
   return hsiColorScale[value].getRGBA();
 }
-}
+} // namespace pocore

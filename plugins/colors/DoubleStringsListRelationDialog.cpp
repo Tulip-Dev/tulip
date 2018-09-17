@@ -119,4 +119,4 @@ void DoubleStringsListRelationDialog::scrollBarValueChanged(int value) {
   if (_ui->secondListWidget->verticalScrollBar()->value() != value)
     _ui->secondListWidget->verticalScrollBar()->setSliderPosition(value);
 }
-}
+} // namespace tlp

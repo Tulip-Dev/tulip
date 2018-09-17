@@ -138,7 +138,7 @@ protected:
   int quadTreesVectorPosition;
   int simpleEntitiesVectorPosition;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_QTQUADTREELODCALCULATOR_H
 ///@endcond

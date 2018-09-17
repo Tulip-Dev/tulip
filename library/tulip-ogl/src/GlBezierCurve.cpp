@@ -101,4 +101,4 @@ void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &st
     curve.drawCurve(curvePoints, startColor, endColor, startSize, endSize, nbCurvePoints);
   }
 }
-}
+} // namespace tlp

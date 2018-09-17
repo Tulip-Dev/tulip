@@ -69,4 +69,4 @@ void GlConvexGraphHull::setVisible(bool visible) {
   if (_polygon)
     _polygon->setVisible(visible);
 }
-}
+} // namespace tlp

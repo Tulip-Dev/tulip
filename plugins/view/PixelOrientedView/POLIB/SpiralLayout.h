@@ -29,5 +29,5 @@ public:
   Vec2i project(const unsigned int id) const override;
   unsigned int unproject(const Vec2i &) const override;
 };
-}
+} // namespace pocore
 #endif // SPIRALLAYOUT_H

@@ -195,6 +195,6 @@ private:
 
   static unsigned int planisphereTextureId;
 };
-}
+} // namespace tlp
 
 #endif // GOOGLEMAPSGRAPHICSVIEW_H

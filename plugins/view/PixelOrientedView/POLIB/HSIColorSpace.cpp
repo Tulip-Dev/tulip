@@ -84,4 +84,4 @@ HSI HSIColorScale::operator[](double f) const {
   return HSI(hue_range * f + foot.hue, sat_range * f + foot.saturation,
              int_range * f + foot.intensity);
 }
-}
+} // namespace pocore

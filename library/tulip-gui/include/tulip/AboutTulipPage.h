@@ -49,6 +49,6 @@ private slots:
 private:
   Ui::AboutTulipPageData *_ui;
 };
-}
+} // namespace tlp
 
 #endif // ABOUTTULIPPAGE_H

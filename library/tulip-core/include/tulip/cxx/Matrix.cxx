@@ -44,7 +44,7 @@ public:
     return *this;
   }
 };
-}
+} // namespace tlp
 
 //===================================================================
 template <typename Obj, size_t SIZE>

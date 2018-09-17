@@ -43,5 +43,5 @@ public:
    */
   ~GlPentagon() override;
 };
-}
+} // namespace tlp
 #endif

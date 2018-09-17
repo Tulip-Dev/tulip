@@ -44,7 +44,7 @@ public:
  *  "2004", \n
  *  pages 105 - 126.
  *
-*/
+ */
 class HierarchicalGraph : public tlp::LayoutAlgorithm {
 
 public:

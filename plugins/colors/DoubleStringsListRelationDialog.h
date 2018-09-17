@@ -50,6 +50,6 @@ private slots:
   void downButtonColorClicked();
   void scrollBarValueChanged(int value);
 };
-}
+} // namespace tlp
 
 #endif /* DOUBLESTRINGSLISTRELATIONDIALOG_H_ */

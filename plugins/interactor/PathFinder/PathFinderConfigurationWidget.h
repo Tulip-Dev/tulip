@@ -62,5 +62,5 @@ signals:
   void activateTolerance(bool);
   void setTolerance(int);
 };
-}
+} // namespace tlp
 #endif /* PATHFINDERCONFIGURATIONWIDGET_H_ */

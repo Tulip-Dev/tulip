@@ -97,4 +97,4 @@ RGBA LinearMappingColor::getColor(const double &value, unsigned int) const {
   color[3] = 255;
   return color;
 }
-}
+} // namespace pocore

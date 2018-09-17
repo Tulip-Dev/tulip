@@ -36,7 +36,7 @@
  *  \author Patrick Mary of Tulip Team http://tulip.labri.fr/
  *
  *
-*/
+ */
 using namespace std;
 using namespace tlp;
 
@@ -187,7 +187,7 @@ bool tokenize(const string &str, vector<string> &tokens, const string &separator
 
   return result;
 }
-}
+} // namespace
 
 static const char *paramHelp[] = {
     // filename

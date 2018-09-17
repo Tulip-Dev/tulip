@@ -95,7 +95,7 @@ private:
   std::map<std::string, Coord> labelsCoord;
   LabelPosition axisLabelsPosition;
 };
-}
+} // namespace tlp
 
 #endif /* GLNOMINATIVEAXIS_H_ */
 ///@endcond

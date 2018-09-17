@@ -89,5 +89,5 @@ public:
     }
   }
 };
-}
+} // namespace tlp
 #endif

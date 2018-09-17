@@ -49,5 +49,5 @@ private:
   HSI foot;
   double hue_range, sat_range, int_range;
 };
-}
+} // namespace pocore
 #endif /* HSI_H_ */

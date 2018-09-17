@@ -37,7 +37,7 @@ class DataSet;
 /**
  * @addtogroup Plugins
  * @brief Base class for import plug-ins.
-**/
+ **/
 class ImportModule : public tlp::Plugin {
 public:
   ImportModule(const tlp::PluginContext *context) {
@@ -95,27 +95,27 @@ public:
   }
 
   /**
-  * @brief The import operations should take place here.
-  *
-  * @return bool Whether the import was successful or not.
-  **/
+   * @brief The import operations should take place here.
+   *
+   * @return bool Whether the import was successful or not.
+   **/
   virtual bool importGraph() = 0;
 
   /**
-  * @brief The Graph in which to write the data to import.
-  **/
+   * @brief The Graph in which to write the data to import.
+   **/
   Graph *graph;
 
   /**
-  * @brief A means to report progress to the user.
-  **/
+   * @brief A means to report progress to the user.
+   **/
   PluginProgress *pluginProgress;
 
   /**
-  * @brief A container for the parameters of this import plug-in.
-  **/
+   * @brief A container for the parameters of this import plug-in.
+   **/
   DataSet *dataSet;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

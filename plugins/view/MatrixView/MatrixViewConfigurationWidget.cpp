@@ -150,4 +150,4 @@ void MatrixViewConfigurationWidget::setOrderingProperty(int index) {
 void MatrixViewConfigurationWidget::setgridmode(int index) {
   _ui->gridDisplayCombo->setCurrentIndex(index);
 }
-}
+} // namespace tlp

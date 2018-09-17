@@ -40,6 +40,6 @@ public:
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *) override;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

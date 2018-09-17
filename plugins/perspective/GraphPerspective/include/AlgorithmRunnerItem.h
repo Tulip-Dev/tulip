@@ -30,7 +30,7 @@ class AlgorithmRunnerItem;
 namespace tlp {
 class Graph;
 class ParameterListModel;
-}
+} // namespace tlp
 
 class AlgorithmRunnerItem : public QWidget {
   Q_OBJECT

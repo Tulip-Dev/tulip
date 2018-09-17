@@ -90,5 +90,5 @@ private:
   MutableContainer<std::set<node>> referencedGraph;
   const std::set<edge> &getReferencedEdges(const edge) const;
 };
-}
+} // namespace tlp
 #endif

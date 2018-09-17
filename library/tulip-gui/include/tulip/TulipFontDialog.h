@@ -61,7 +61,7 @@ public slots:
 protected slots:
   void fontChanged();
 };
-}
+} // namespace tlp
 
 #endif // TULIPFONTDIALOG_H
 ///@endcond

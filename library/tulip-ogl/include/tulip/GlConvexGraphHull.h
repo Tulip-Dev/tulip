@@ -67,8 +67,8 @@ public:
   ~GlConvexGraphHull();
 
   /**
-  * Recomputes the whole Hull
-  */
+   * Recomputes the whole Hull
+   */
   void updateHull();
 
   void setVisible(bool visible);
@@ -85,7 +85,7 @@ private:
   DoubleProperty *rotation;
   static int bezierValue;
 };
-}
+} // namespace tlp
 
 #endif /* GLCONVEXGRAPHHULL_H_ */
 ///@endcond

@@ -29,10 +29,10 @@
 //===============================================================================
 namespace tlp {
 /**
-* @brief That class implement a default functor that always returns true
-*
-* @see UniqueIterator
-*/
+ * @brief That class implement a default functor that always returns true
+ *
+ * @see UniqueIterator
+ */
 template <typename T>
 struct CheckAllFunctor {
   bool operator()(const T &) {
@@ -41,27 +41,27 @@ struct CheckAllFunctor {
 };
 
 /**
-* @class UniqueIterator
-* @ingroup Iterators
-*
-* @brief UniqueIterator enables to remove duplicated elements in an iterator
-*
-* @param it the iterator in which we want to filter out duplicated elements
-* @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
-*element could be duplicated (default test all elements)
-*
-* The functor function shoul have the following form
-* @code
-* template <typename T>
-* class ACheckFunctor {
-*  bool operator(const T &a) {
-*   return true if a could be duplicated else false;
-*  }
-* };
-* @endcode
-* checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when not
-*necessary.
-**/
+ * @class UniqueIterator
+ * @ingroup Iterators
+ *
+ * @brief UniqueIterator enables to remove duplicated elements in an iterator
+ *
+ * @param it the iterator in which we want to filter out duplicated elements
+ * @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
+ *element could be duplicated (default test all elements)
+ *
+ * The functor function shoul have the following form
+ * @code
+ * template <typename T>
+ * class ACheckFunctor {
+ *  bool operator(const T &a) {
+ *   return true if a could be duplicated else false;
+ *  }
+ * };
+ * @endcode
+ * checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when
+ *not necessary.
+ **/
 template <typename T, typename CheckFunc = CheckAllFunctor<T>>
 class UniqueIterator : public Iterator<T> {
 public:
@@ -120,41 +120,41 @@ public:
 };
 
 /**
-* @brief Convenient function for creating a UniqueIterator.
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Creates a UniqueIterator from another Iterator.
-* The returned Iterator takes ownership of the one provided as parameter.
-*
-* @param it a Tulip Iterator
-* @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
-*element could be duplicated (default test all elements)
-*
-* @return a UniqueIterator
-*
-**/
+ * @brief Convenient function for creating a UniqueIterator.
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Creates a UniqueIterator from another Iterator.
+ * The returned Iterator takes ownership of the one provided as parameter.
+ *
+ * @param it a Tulip Iterator
+ * @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
+ *element could be duplicated (default test all elements)
+ *
+ * @return a UniqueIterator
+ *
+ **/
 template <typename T, typename CheckFunc = CheckAllFunctor<T>>
 inline UniqueIterator<T> *uniqueIterator(Iterator<T> *it, CheckFunc checkFunctor = CheckFunc()) {
   return new MPUniqueIterator<T, CheckFunc>(it, checkFunctor);
 }
 
 /**
-* @brief Convenient function for creating a UniqueIterator from a STL container.
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Creates a UniqueIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
-*
-* @param stlContainer any STL container
-* @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
-*element could be duplicated (default test all elements)
-*
-* @return a UniqueIterator
-*
-**/
+ * @brief Convenient function for creating a UniqueIterator from a STL container.
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Creates a UniqueIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
+ *
+ * @param stlContainer any STL container
+ * @param checkFunctor a functor or a lambda function that enables to indicate whether or not the
+ *element could be duplicated (default test all elements)
+ *
+ * @return a UniqueIterator
+ *
+ **/
 template <typename Container, typename CheckFunc = CheckAllFunctor<typename Container::value_type>>
 typename std::enable_if<has_const_iterator<Container>::value,
                         UniqueIterator<typename Container::value_type, CheckFunc>
@@ -163,5 +163,5 @@ typename std::enable_if<has_const_iterator<Container>::value,
   return new MPUniqueIterator<typename Container::value_type, CheckFunc>(stlIterator(stlContainer),
                                                                          checkFunctor);
 }
-}
+} // namespace tlp
 #endif // UNIQUEITERATOR_H

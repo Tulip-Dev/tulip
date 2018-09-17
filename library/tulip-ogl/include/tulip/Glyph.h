@@ -123,7 +123,7 @@ public:
     return false;
   }
 };
-}
+} // namespace tlp
 
 #define GLYPHINFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, ID)                                    \
   PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")                                         \

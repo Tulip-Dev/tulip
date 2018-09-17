@@ -129,5 +129,5 @@ protected slots:
   void scalingMethodChange(QAbstractButton *);
   void animationCheckBoxClicked();
 };
-}
+} // namespace tlp
 #endif /* SOMPROPERTIESWIDGET_H_ */

@@ -92,7 +92,7 @@ TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertice
  */
 TLP_GL_SCOPE std::vector<Coord> computeNormals(const std::vector<Coord> &vertices,
                                                const std::vector<unsigned int> &facesIndices);
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif

@@ -152,7 +152,7 @@ protected:
   float curveQuadBordersWidth;
   bool outlineColorInterpolation;
 };
-}
+} // namespace tlp
 
 #endif
 

@@ -172,5 +172,5 @@ public slots:
   void install(QObject *target) override;
   void uninstall() override;
 };
-}
+} // namespace tlp
 #endif // INTERACTORCOMPOSITE_H

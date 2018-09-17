@@ -51,6 +51,6 @@ public:
    */
   virtual bool end(unsigned int rowNumber, unsigned int columnNumber) = 0;
 };
-}
+} // namespace tlp
 #endif /* CSVCONTENTHANDLER_H_ */
 ///@endcond

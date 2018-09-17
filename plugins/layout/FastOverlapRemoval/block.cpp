@@ -17,9 +17,9 @@
 #include "blocks.h"
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
+using std::endl;
 using std::ios;
 using std::ofstream;
-using std::endl;
 #endif
 using std::vector;
 
@@ -472,4 +472,4 @@ ostream &operator<<(ostream &os, const Block &b) {
 
   return os;
 }
-}
+} // namespace vpsc

@@ -93,7 +93,7 @@ private:
   std::vector<edge> ve;
   unsigned int i;
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond

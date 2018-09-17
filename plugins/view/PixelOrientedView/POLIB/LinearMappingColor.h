@@ -35,5 +35,5 @@ private:
   RGBA startColor;
   RGBA endColor;
 };
-}
+} // namespace pocore
 #endif // LINEARMAPPINGCOLOR_H

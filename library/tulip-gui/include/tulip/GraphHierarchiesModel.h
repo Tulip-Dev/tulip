@@ -121,7 +121,7 @@ public slots:
 private:
   QSet<const Graph *> _graphsChanged;
 };
-}
+} // namespace tlp
 
 #endif // GRAPHHIERARCHIESMODEL_H
 ///@endcond

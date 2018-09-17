@@ -96,5 +96,5 @@ public:
     return _dependencies;
   }
 };
-}
+} // namespace tlp
 #endif

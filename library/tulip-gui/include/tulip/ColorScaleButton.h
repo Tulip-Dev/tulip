@@ -47,6 +47,6 @@ public:
 public slots:
   void editColorScale();
 };
-}
+} // namespace tlp
 #endif // COLORSCALEBUTTON_H
 ///@endcond

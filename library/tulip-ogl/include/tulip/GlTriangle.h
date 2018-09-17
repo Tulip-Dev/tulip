@@ -44,5 +44,5 @@ public:
    */
   ~GlTriangle() override;
 };
-}
+} // namespace tlp
 #endif

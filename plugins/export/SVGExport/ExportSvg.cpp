@@ -49,7 +49,7 @@ QString tlpAlphaColor2Opacity(const Color &color) {
   // converting color to SVG
   return QString::number(color.getA() / 255.f);
 }
-}
+} // namespace
 
 ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2)
     : ExportInterface(pp, os), _res(&_out), _woff2(woff2), _gloweffectAdded(false) {

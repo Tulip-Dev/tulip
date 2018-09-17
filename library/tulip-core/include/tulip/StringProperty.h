@@ -79,5 +79,5 @@ public:
   }
 };
 /*\@}*/
-}
+} // namespace tlp
 #endif

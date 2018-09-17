@@ -38,15 +38,15 @@ template class TLP_SCOPE NodeProperty<node>;
 template class TLP_SCOPE NodeProperty<double>;
 template class TLP_SCOPE EdgeProperty<node>;
 template class TLP_SCOPE EdgeProperty<double>;
-}
+} // namespace tlp
 
 namespace {
 //==================================================================================
 /**
-  * \class bInOutNodeIterator
-  * \brief internal class to iterate on adj+/adj- of element of a BAsicGraph
-  * \see VectorGraph
-  */
+ * \class bInOutNodeIterator
+ * \brief internal class to iterate on adj+/adj- of element of a BAsicGraph
+ * \see VectorGraph
+ */
 template <bool SENS>
 class bInOutNodeIterator : public Iterator<node>, public MemoryPool<bInOutNodeIterator<SENS>> {
 public:
@@ -88,10 +88,10 @@ private:
 
 //==================================================================================
 /**
-  * \class bInOutEdgeIterator
-  * \brief internal class to iterate on star+/star- of element of a BAsicGraph
-  * \see VectorGraph
-  */
+ * \class bInOutEdgeIterator
+ * \brief internal class to iterate on star+/star- of element of a BAsicGraph
+ * \see VectorGraph
+ */
 template <bool SENS>
 class bInOutEdgeIterator : public Iterator<edge>, public MemoryPool<bInOutEdgeIterator<SENS>> {
 public:
@@ -130,7 +130,7 @@ private:
   std::vector<bool>::const_iterator its, its_end;
   unsigned int _elem;
 };
-}
+} // namespace
 
 namespace tlp {
 //===========================================
@@ -718,4 +718,4 @@ void VectorGraph::partialDelEdge(node n, edge e) {
   _nData[n]._adjt.resize(endP);
 }
 //=======================================================
-}
+} // namespace tlp

@@ -147,7 +147,7 @@ protected:
   void setupWidget() override;
   void editValue(PropertyInterface *pi);
 };
-}
+} // namespace tlp
 
 #endif /* NODELINKDIAGRAMCOMPONENT_H_ */
 

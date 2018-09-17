@@ -280,10 +280,9 @@ static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, con
   long double det = m.determinant();
 
   if (det != 0) {
-    Vec3ld c = Ad +
-               ((danorm * danorm * (ba ^ ca)) + (canorm * canorm * (da ^ ba)) +
-                (banorm * banorm * (ca ^ da))) /
-                   (2.0 * det);
+    Vec3ld c = Ad + ((danorm * danorm * (ba ^ ca)) + (canorm * canorm * (da ^ ba)) +
+                     (banorm * banorm * (ca ^ da))) /
+                        (2.0 * det);
     return tlp::Coord(c[0], c[1], c[2]);
   } else {
     return (A + B + C + D) / 4.0f;

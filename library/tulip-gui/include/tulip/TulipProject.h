@@ -417,5 +417,5 @@ private:
   QString _lastError;
   bool _isValid;
 };
-}
+} // namespace tlp
 #endif // TULIPPROJECT_H

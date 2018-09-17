@@ -51,7 +51,7 @@ public:
 
   virtual void unselectAllStrings() = 0;
 };
-}
+} // namespace tlp
 
 #endif /* STRINGLISTSELECTIONWIDGETINTERFACE_H_ */
 ///@endcond

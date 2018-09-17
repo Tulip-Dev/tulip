@@ -63,8 +63,8 @@ void GraphNeedsSavingObserver::forceToSave() {
 }
 
 /**
-    * @brief Listen all the observable objects in the graph (subgraphs, properties).
-    **/
+ * @brief Listen all the observable objects in the graph (subgraphs, properties).
+ **/
 void GraphNeedsSavingObserver::addObserver() {
   deque<Graph *> toObserve;
   toObserve.push_back(_graph);
@@ -87,8 +87,8 @@ void GraphNeedsSavingObserver::addObserver() {
 }
 
 /**
-  * @brief  Stop listening all the observable objects in the graph (subgraphs, properties).
-**/
+ * @brief  Stop listening all the observable objects in the graph (subgraphs, properties).
+ **/
 void GraphNeedsSavingObserver::removeObservers() {
   deque<Graph *> toUnobserve;
   toUnobserve.push_back(_graph);

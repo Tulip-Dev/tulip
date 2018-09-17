@@ -82,7 +82,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 #else
             Qt::ShiftModifier
 #endif
-            ) {
+        ) {
 
           unselectAllEntitiesHandler(parallelView);
 
@@ -117,4 +117,4 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
   return false;
 }
-}
+} // namespace tlp

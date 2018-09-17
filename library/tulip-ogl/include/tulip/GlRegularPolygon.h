@@ -78,5 +78,5 @@ protected:
   unsigned int numberOfSides;
   float startAngle;
 };
-}
+} // namespace tlp
 #endif

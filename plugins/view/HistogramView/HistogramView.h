@@ -217,6 +217,6 @@ private:
   std::map<edge, node> edgeToNode;
   std::map<node, edge> nodeToEdge;
 };
-}
+} // namespace tlp
 
 #endif /* HISTOGRAMVIEW_H_ */

@@ -29,8 +29,8 @@
 
 namespace tlp {
 /**
-* @brief Simple String edition widget.
-**/
+ * @brief Simple String edition widget.
+ **/
 class TLP_QT_SCOPE StringEditor : public QDialog {
   QString currentString;
   QTextEdit *edit;
@@ -48,7 +48,7 @@ public slots:
   // redefinition to ensure to catch the end of input
   void done(int r) override;
 };
-}
+} // namespace tlp
 
 #endif // STRINGEDITOR_H
 ///@endcond

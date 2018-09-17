@@ -263,4 +263,4 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
     }
   }
 }
-}
+} // namespace tlp

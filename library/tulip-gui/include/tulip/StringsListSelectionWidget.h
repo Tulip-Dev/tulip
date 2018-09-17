@@ -144,7 +144,7 @@ private:
   ListType listType;
   StringsListSelectionWidgetInterface *stringsListSelectionWidget;
 };
-}
+} // namespace tlp
 
 #endif /* STRINGLISTSELECTIONWIDGET_H_ */
 ///@endcond

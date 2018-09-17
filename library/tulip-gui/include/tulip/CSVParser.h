@@ -36,10 +36,10 @@ namespace tlp {
 class PluginProgress;
 
 /*
-* @brief Interface for CSV data parser.
-*
-* Send the found tokens to the CSVContentHandler interface.
-*/
+ * @brief Interface for CSV data parser.
+ *
+ * Send the found tokens to the CSVContentHandler interface.
+ */
 class TLP_QT_SCOPE CSVParser {
 public:
   virtual ~CSVParser() {}
@@ -48,38 +48,38 @@ public:
     return '.';
   }
   /**
-    * @brief Parse the data and send the tokens found to the CSVContentHandler.
-    *
-    * Notify the progression of the parsing with the progress object.
-    **/
+   * @brief Parse the data and send the tokens found to the CSVContentHandler.
+   *
+   * Notify the progression of the parsing with the progress object.
+   **/
   virtual bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress = nullptr,
                      bool firstLineOnly = false) = 0;
 };
 
 /**
-* @brief Parse a csv data and send each tokens to the given CSVContentHandler object.
-*
-* Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the
-*file in the given range and parse them. This object skip empty lines.
-* Send the found tokens to the CSVContentHandler interface.
-* \code
-* CSVParser parser(fileName,";","\"","UTF-8",true);
-* \/\/Automatically remove quotes.
-* CSVContentHandler * handler ;
-* parser.parse(handler);
-* \endcode
-**/
+ * @brief Parse a csv data and send each tokens to the given CSVContentHandler object.
+ *
+ * Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the
+ *file in the given range and parse them. This object skip empty lines.
+ * Send the found tokens to the CSVContentHandler interface.
+ * \code
+ * CSVParser parser(fileName,";","\"","UTF-8",true);
+ * \/\/Automatically remove quotes.
+ * CSVContentHandler * handler ;
+ * parser.parse(handler);
+ * \endcode
+ **/
 class TLP_QT_SCOPE CSVSimpleParser : public CSVParser {
 public:
   /**
-    * @brief Construct a csv simple file parser.
-    * @param filename The path to the file to import.
-    * @param separator The separator to use.
-    * @param textDelimiter If a token is sourrounded by this charater we ignore all the separators
-    *found in this token. Useful if a token contains the separator.
-    * @param firstLine The number of the first line to read. The first line is 0.
-    * @param lastLine The number of the last line to read.
-    **/
+   * @brief Construct a csv simple file parser.
+   * @param filename The path to the file to import.
+   * @param separator The separator to use.
+   * @param textDelimiter If a token is sourrounded by this charater we ignore all the separators
+   *found in this token. Useful if a token contains the separator.
+   * @param firstLine The number of the first line to read. The first line is 0.
+   * @param lastLine The number of the last line to read.
+   **/
   CSVSimpleParser(const std::string &fileName, const QString &separator = ";",
                   const bool mergesep = false, char textDelimiter = '"', char delimiterMark = '.',
                   const std::string &fileEncoding = std::string("UTF-8"),
@@ -126,9 +126,9 @@ private:
   std::string convertStringEncoding(const std::string &toConvert, QTextCodec *encoder);
 
   /**
-    * @brief Function to extract a line from a istream. Can handle Linux,Mac and Windows end of line
-    *pattern.
-    **/
+   * @brief Function to extract a line from a istream. Can handle Linux,Mac and Windows end of line
+   *pattern.
+   **/
   bool multiplatformgetline(std::istream &is, std::string &str);
 
   std::string removeQuotesIfAny(std::string &s);
@@ -143,8 +143,8 @@ private:
 };
 
 /**
-  *@brief CSV parser used to invert the token matrix in order to treat rows as columns.
-  **/
+ *@brief CSV parser used to invert the token matrix in order to treat rows as columns.
+ **/
 class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser, public tlp::CSVContentHandler {
 public:
   CSVInvertMatrixParser(CSVParser *parser);
@@ -167,6 +167,6 @@ private:
   std::vector<std::vector<std::string>> columns;
   unsigned int maxLineSize;
 };
-}
+} // namespace tlp
 #endif /* CSVDATALOADER_H_ */
 ///@endcond

@@ -158,7 +158,7 @@ public:
     return result;
   }
 };
-}
+} // namespace tlp
 
 #include "cxx/GraphPropertiesModel.cxx"
 

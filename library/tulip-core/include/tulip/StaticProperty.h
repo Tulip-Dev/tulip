@@ -313,6 +313,6 @@ public:
       prop->setEdgeValue(edges[i], (*this)[i]);
   }
 };
-}
+} // namespace tlp
 
 #endif

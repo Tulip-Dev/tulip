@@ -108,7 +108,7 @@ typedef struct _sig_ucontext {
 
 void dumpStack(int sig, siginfo_t *, void *ucontext) {
 
-// Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
+  // Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
 
 #ifndef __APPLE__
 

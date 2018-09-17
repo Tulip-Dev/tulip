@@ -184,7 +184,7 @@ void ExportWizard::browseButtonClicked() {
                                    ,
                                    QFileDialog::DontUseNativeDialog
 #endif
-                                   );
+      );
 
   if (!exportFile.isEmpty()) {
     _ui->pathEdit->setText(exportFile);

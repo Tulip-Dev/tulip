@@ -477,9 +477,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Paste the clipboard elements into the current graph", "V");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSelect_All, "Select all elements of the current graph",
                                  "A");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionInvert_selection, "Invert the selection of the current "
-                                                              "graph elements, deselect if "
-                                                              "selected and select if not selected",
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionInvert_selection,
+                                 "Invert the selection of the current "
+                                 "graph elements, deselect if "
+                                 "selected and select if not selected",
                                  "I");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCancel_selection,
                                  "Deselect all selected elements of the current grap", "Shift+A");

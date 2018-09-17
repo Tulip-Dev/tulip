@@ -164,7 +164,7 @@ private:
   BoxPlotValue boxPlotLowBound, boxPlotHighBound;
   bool integerScale;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

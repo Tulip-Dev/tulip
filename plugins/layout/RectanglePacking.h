@@ -166,16 +166,16 @@ public:
       int positionInSecondSequence);
 
   /**
-    *Compare the left abscissa and the low ordonate of the rectangle pointed by
-    *itRectOfSequenceToReposition with the right abscissa  and the high
-    *ordonate of all the rectangles placed in the first sequence between
-    *the first rectangle on the right of the tested position and the rectangle
-    *pointed by itRectOfSequenceToReposition.
-    *@param itFirstRectangleRightOrAboveOfNewRectangle pointer on the first
-    *rectangle on the right or above the new rectangle.
-    *@param itRectOfSequenceToReposition pointer on the rectangles places on the
-    *right or above the new rectangle.
-    */
+   *Compare the left abscissa and the low ordonate of the rectangle pointed by
+   *itRectOfSequenceToReposition with the right abscissa  and the high
+   *ordonate of all the rectangles placed in the first sequence between
+   *the first rectangle on the right of the tested position and the rectangle
+   *pointed by itRectOfSequenceToReposition.
+   *@param itFirstRectangleRightOrAboveOfNewRectangle pointer on the first
+   *rectangle on the right or above the new rectangle.
+   *@param itRectOfSequenceToReposition pointer on the rectangles places on the
+   *right or above the new rectangle.
+   */
   void
   modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionAlreadyRepositionnedRectangles(
       std::list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle,
@@ -236,10 +236,10 @@ public:
                     float &heightTemp, bool &boolWidth, bool &boolHeight);
 
   /**
-  *We start or continue a new column if the height of the new rectangle to
-  *pack, added to the height of the current column, is strictly lower to the
-  *height of the including rectangle.
-  */
+   *We start or continue a new column if the height of the new rectangle to
+   *pack, added to the height of the current column, is strictly lower to the
+   *height of the including rectangle.
+   */
   void continueColumn(std::vector<tlp::Rectangle<float>>::iterator itr, float &widthTemp,
                       float &heightTemp, bool &boolWidth, bool &boolHeight);
 

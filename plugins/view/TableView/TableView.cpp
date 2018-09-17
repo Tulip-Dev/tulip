@@ -239,8 +239,9 @@ void TableView::graphDeleted(Graph *ancestor) {
 }
 
 void TableView::readSettings() {
-  if (isNewGraph || ((_ui->eltTypeCombo->currentIndex() == 0) &&
-                     dynamic_cast<NodesGraphModel *>(_model) == nullptr) ||
+  if (isNewGraph ||
+      ((_ui->eltTypeCombo->currentIndex() == 0) &&
+       dynamic_cast<NodesGraphModel *>(_model) == nullptr) ||
       ((_ui->eltTypeCombo->currentIndex() == 1) &&
        dynamic_cast<EdgesGraphModel *>(_model) == nullptr)) {
     _ui->table->setModel(nullptr);

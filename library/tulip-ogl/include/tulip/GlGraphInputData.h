@@ -499,7 +499,7 @@ protected:
   GlVertexArrayManager *_glVertexArrayManager;
   GlGlyphRenderer *_glGlyphRenderer;
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

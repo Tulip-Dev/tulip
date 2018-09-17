@@ -38,5 +38,5 @@ public slots:
   void setBackgroundColor(const QColor &) override;
   void setColorInterpolation(bool) override;
 };
-}
+} // namespace tlp
 #endif // SCATTERPLOTQUICKACCESSBAR_H

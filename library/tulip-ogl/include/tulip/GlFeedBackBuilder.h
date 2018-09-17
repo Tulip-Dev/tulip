@@ -67,7 +67,7 @@ public:
 
   virtual void getResult(std::string *str) = 0;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLFEEDBACKBUILDER_H
 ///@endcond

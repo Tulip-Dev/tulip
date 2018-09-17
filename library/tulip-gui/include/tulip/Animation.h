@@ -44,7 +44,7 @@ public slots:
   virtual void frameChanged(int) = 0;
   virtual void setFrameCount(int);
 };
-}
+} // namespace tlp
 
 #endif /* ANIMATION_H_ */
 ///@endcond

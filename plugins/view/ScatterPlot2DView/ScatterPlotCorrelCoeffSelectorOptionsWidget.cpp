@@ -87,4 +87,4 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::updateColorScale() {
 void ScatterPlotCorrelCoeffSelectorOptionsWidget::showEvent(QShowEvent *) {
   updateColorScale();
 }
-}
+} // namespace tlp

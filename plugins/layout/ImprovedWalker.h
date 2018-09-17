@@ -49,9 +49,10 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   friend class ImprovedWalkerUnitTests;
 
 public:
-  PLUGININFORMATION("Improved Walker", "Julien Testut, Antony Durand, Pascal Ollier, "
-                                       "Yashvin Nababsing, Sebastien Leclerc, "
-                                       "Thibault Ruchon, Eric Dauchier",
+  PLUGININFORMATION("Improved Walker",
+                    "Julien Testut, Antony Durand, Pascal Ollier, "
+                    "Yashvin Nababsing, Sebastien Leclerc, "
+                    "Thibault Ruchon, Eric Dauchier",
                     "11/11/04",
                     "It is a linear implementation of the Walker's tree layout improved algorithm "
                     "described in<br/>"

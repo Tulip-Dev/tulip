@@ -132,7 +132,7 @@ private:
   void mMouseDelete();
   void mMouseCreate(int, int, GlMainWidget *);
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

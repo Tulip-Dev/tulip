@@ -282,7 +282,7 @@ template class AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
 template class AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
 template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 #endif
-}
+} // namespace tlp
 
 #endif
 ///@endcond

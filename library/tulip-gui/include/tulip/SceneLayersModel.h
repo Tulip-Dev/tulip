@@ -55,7 +55,7 @@ public:
 signals:
   void drawNeeded(tlp::GlScene *);
 };
-}
+} // namespace tlp
 
 #endif // SCENELAYERSMODEL_H
 ///@endcond

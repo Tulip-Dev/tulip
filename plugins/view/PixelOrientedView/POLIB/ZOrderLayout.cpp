@@ -54,7 +54,7 @@ inline unsigned int zorderKey(const Vec2i &p, const unsigned char order) {
 
   return key;
 }
-}
+} // namespace
 //===============================================================
 namespace pocore {
 ZorderLayout::ZorderLayout(unsigned char order) : order(order) {
@@ -79,5 +79,5 @@ unsigned int ZorderLayout::unproject(const Vec2i &point) const {
 Vec2i ZorderLayout::project(const unsigned int id) const {
   return zorderPoint(id, order) -= shift;
 }
-}
+} // namespace pocore
 //==============================================================================

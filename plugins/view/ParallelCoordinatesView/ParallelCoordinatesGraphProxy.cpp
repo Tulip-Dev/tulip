@@ -320,4 +320,4 @@ void ParallelCoordinatesGraphProxy::update(std::set<Observable *>::iterator begi
   (void)end;
   graphColorsChanged = true;
 }
-}
+} // namespace tlp

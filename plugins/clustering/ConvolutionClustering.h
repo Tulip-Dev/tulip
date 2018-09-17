@@ -24,16 +24,16 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** This plugin allow the discretization and the filtering of the distribution of
-* a node metric using convolution.
-*
-* A detailled usage of this procedure is detailled in :
-*
-* D. Auber, M. Delest and Y. Chiricota \n
-* "Strahler based graph clustering using convolution",\n
-* Published by the IEEE Computer Society, \n
-* 2004.
-*
-*/
+ * a node metric using convolution.
+ *
+ * A detailled usage of this procedure is detailled in :
+ *
+ * D. Auber, M. Delest and Y. Chiricota \n
+ * "Strahler based graph clustering using convolution",\n
+ * Published by the IEEE Computer Society, \n
+ * 2004.
+ *
+ */
 
 namespace tlp {
 
@@ -59,6 +59,6 @@ private:
   int histosize, threshold, width;
   tlp::NumericProperty *metric;
 };
-}
+} // namespace tlp
 
 #endif

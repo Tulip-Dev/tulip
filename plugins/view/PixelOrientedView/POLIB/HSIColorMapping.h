@@ -37,5 +37,5 @@ public:
 private:
   HSIColorScale hsiColorScale;
 };
-}
+} // namespace pocore
 #endif /* HSICOLORMAPPING_H_ */

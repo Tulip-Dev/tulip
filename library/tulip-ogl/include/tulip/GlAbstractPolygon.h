@@ -251,5 +251,5 @@ protected:
   bool generated;
   GLuint buffers[7];
 };
-}
+} // namespace tlp
 #endif

@@ -340,7 +340,7 @@ public:
   bool hasNext() override;
 };
 //============================================================
-}
+} // namespace tlp
 #endif
 
 ///@endcond

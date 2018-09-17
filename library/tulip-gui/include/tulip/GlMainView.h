@@ -171,6 +171,6 @@ protected:
 
   bool _updateOverview;
 };
-}
+} // namespace tlp
 
 #endif /* GLMAINVIEW_H_ */

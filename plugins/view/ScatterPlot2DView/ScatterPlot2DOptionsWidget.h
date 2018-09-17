@@ -112,6 +112,6 @@ private:
   std::pair<double, double> initXAxisScale, initYAxisScale;
   Ui::ScatterPlot2DOptionsWidgetData *_ui;
 };
-}
+} // namespace tlp
 
 #endif /* SCATTERPLOT2DOPTIONSWIDGET_H_ */

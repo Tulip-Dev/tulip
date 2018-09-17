@@ -70,4 +70,4 @@ void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
   bbs[ti].expand(bb, noBBCheck[ti]);
   noBBCheck[ti] = true;
 }
-}
+} // namespace tlp

@@ -500,7 +500,7 @@ struct TLPParser {
     return true;
   }
 };
-}
+} // namespace tlp
 //=====================================================================================
 #endif // TLPPARSER_H
 

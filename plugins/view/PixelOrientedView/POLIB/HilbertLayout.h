@@ -35,5 +35,5 @@ private:
   unsigned char order;
   int shift;
 };
-}
+} // namespace pocore
 #endif // HILBERTLAYOUT_H

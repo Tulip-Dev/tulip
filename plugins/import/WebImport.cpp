@@ -86,7 +86,7 @@ struct less<UrlElement> {
     return lhs.getUrl().compare(rhs.getUrl()) < 0;
   }
 };
-}
+} // namespace std
 
 HttpContext::HttpContext()
     : status(false), code(-1), reply(nullptr), processed(false), redirected(false), isHtml(false) {}

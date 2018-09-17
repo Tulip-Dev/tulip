@@ -29,17 +29,17 @@
 namespace tlp {
 
 /**
-* @class StlIterator
-* @ingroup Iterators
-*
-* @brief StlIterator wraps a stl iterator.
-*
-* Creates a Tulip Iterator from two stl iterators.
-*
-* @param startIt a stl iterator from which to begin the iteration
-* @param endIt a stl iterator on which to end the iteration
-*
-**/
+ * @class StlIterator
+ * @ingroup Iterators
+ *
+ * @brief StlIterator wraps a stl iterator.
+ *
+ * Creates a Tulip Iterator from two stl iterators.
+ *
+ * @param startIt a stl iterator from which to begin the iteration
+ * @param endIt a stl iterator on which to end the iteration
+ *
+ **/
 template <typename T, typename ITERATOR>
 struct StlIterator : public Iterator<T> {
   StlIterator(const ITERATOR &startIt, const ITERATOR &endIt) : it(startIt), itEnd(endIt) {}
@@ -78,16 +78,16 @@ public:
 };
 
 /**
-* @brief Convenient function for creating a StlIterator from a stl container.
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Creates a StlIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
-*
-* @param stlContainer any STL container
-* @return a StlIterator
-**/
+ * @brief Convenient function for creating a StlIterator from a stl container.
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Creates a StlIterator from a STL container (std::list, std::vector, std::set, std::map, ...).
+ *
+ * @param stlContainer any STL container
+ * @return a StlIterator
+ **/
 template <typename Container>
 typename std::enable_if<
     has_const_iterator<Container>::value,
@@ -137,6 +137,6 @@ struct StlMapKeyIterator : public tlp::Iterator<KEY> {
 private:
   typename std::map<KEY, VALUE>::const_iterator it, itEnd;
 };
-}
+} // namespace tlp
 
 #endif

@@ -57,5 +57,5 @@ protected:
 
   GlLayer *selectionLayer;
 };
-}
+} // namespace tlp
 #endif /* EDITCOLORSCALEINTERACTOR_H_ */

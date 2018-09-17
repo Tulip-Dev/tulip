@@ -106,5 +106,5 @@ public:
    */
   DataSet *dataSet;
 };
-}
+} // namespace tlp
 #endif

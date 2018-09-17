@@ -40,6 +40,6 @@ public:
 private:
   std::string desc;
 };
-}
+} // namespace tlp
 #endif // TULIPEXCEPTION
 ///@endcond

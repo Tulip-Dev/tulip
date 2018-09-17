@@ -35,24 +35,24 @@ using namespace std;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
-* \brief  An implementation of the MCL clustering algorithm
-*
-* This plugin is an implementation of the MCL algorithm
-* first published as:
-*
-* Stijn van Dongen \n
-* PhD Thesis "Graph Clustering by Flow Simulation", \n
-* University of Utrecht,\n
-* 2000. \n
-*
-* <b> HISTORY</b>
-*
-* - 16/09/2011 Version 1.0: Initial release
-*
-* \author David Auber, Labri, Email : auber@labri.fr
-*
-*
-**/
+ * \brief  An implementation of the MCL clustering algorithm
+ *
+ * This plugin is an implementation of the MCL algorithm
+ * first published as:
+ *
+ * Stijn van Dongen \n
+ * PhD Thesis "Graph Clustering by Flow Simulation", \n
+ * University of Utrecht,\n
+ * 2000. \n
+ *
+ * <b> HISTORY</b>
+ *
+ * - 16/09/2011 Version 1.0: Initial release
+ *
+ * \author David Auber, Labri, Email : auber@labri.fr
+ *
+ *
+ **/
 class MCLClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(

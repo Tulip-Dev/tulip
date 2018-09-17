@@ -74,8 +74,8 @@ public:
     QNetworkAccessManager mgr;
 
     QNetworkReply *reply = nullptr;
-    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" +
-             TULIP_MM_VERSION + "&name=" + name);
+    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE +
+             "&tulip=" + TULIP_MM_VERSION + "&name=" + name);
 
     do {
       QNetworkRequest request(url);
@@ -103,9 +103,9 @@ public:
                                             const QString &categoryFilter) {
     _result.clear();
     QNetworkAccessManager mgr;
-    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" +
-                                 OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" +
-                                 nameFilter + "&category=" + categoryFilter));
+    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM +
+                                 "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION +
+                                 "&name=" + nameFilter + "&category=" + categoryFilter));
     QNetworkReply *reply = mgr.get(request);
 
     while (!reply->isFinished()) {

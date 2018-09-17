@@ -52,7 +52,7 @@ protected:
 private:
   std::map<std::pair<tlp::Coord, tlp::Coord>, tlp::Vector<double, 3>> steps;
 };
-}
+} // namespace tlp
 
 #endif /* LAYOUTPROPERTYANIMATION_H_ */
 ///@endcond

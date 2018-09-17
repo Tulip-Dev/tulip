@@ -80,6 +80,6 @@ private:
   std::vector<tlp::node> nodeHierarchy;
   std::vector<float> alphaHierarchy;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

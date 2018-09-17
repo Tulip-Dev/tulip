@@ -36,8 +36,7 @@ SOMAlgorithm::SOMAlgorithm(TimeDecreasingFunction *learningRateFunction,
                            DiffusionRateFunction *diffusionRateFunction)
     :
 
-      learningRateFunction(learningRateFunction),
-      diffusionRateFunction(diffusionRateFunction) {
+      learningRateFunction(learningRateFunction), diffusionRateFunction(diffusionRateFunction) {
 
   // Init default degenerescence functions if user don't do it
   if (this->learningRateFunction == nullptr)

@@ -178,7 +178,7 @@ public:
 };
 
 extern void initQTypeSerializers();
-}
+} // namespace tlp
 
 #endif // TULIPMETATYPES_H
 ///@endcond

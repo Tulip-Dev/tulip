@@ -159,6 +159,6 @@ private slots:
 
   tlp::Graph *getSelectedGraph() const;
 };
-}
+} // namespace tlp
 
 #endif // PYTHONPLUGINSIDE_H

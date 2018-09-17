@@ -267,7 +267,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 #else
             Qt::ControlModifier
 #endif
-            ) {
+        ) {
           operation = ROTATE_XY;
           glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
         } else {
@@ -287,7 +287,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 #else
           Qt::ControlModifier
 #endif
-          )
+      )
         mode = SIZE;
 
       initEdition();

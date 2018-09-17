@@ -69,7 +69,7 @@ protected:
   GlScene *fakeScene;
   Vec4i selectionViewport;
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

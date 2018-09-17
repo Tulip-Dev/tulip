@@ -573,6 +573,6 @@ public:
 private:
   static GlDefaultSelectionColorManager *manager;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLGRAPH_H

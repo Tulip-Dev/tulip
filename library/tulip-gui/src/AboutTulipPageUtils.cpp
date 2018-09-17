@@ -23,4 +23,4 @@ QString getTulipGitRevision() {
   }
   return "";
 }
-}
+} // namespace tlp

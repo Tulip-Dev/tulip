@@ -78,7 +78,7 @@ private:
   int width;
   int height;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

@@ -53,5 +53,5 @@ private:
   Color oldBackgroundColor;
   std::string oldLayoutType;
 };
-}
+} // namespace tlp
 #endif /* PIXELORIENTEDOPTIONSWIDGET_H_ */

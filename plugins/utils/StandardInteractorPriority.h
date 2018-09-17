@@ -49,6 +49,6 @@ public:
     Navigation
   };
 };
-}
+} // namespace tlp
 
 #endif

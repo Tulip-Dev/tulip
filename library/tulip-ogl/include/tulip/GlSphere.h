@@ -129,6 +129,6 @@ private:
   std::vector<unsigned short> indices;
   unsigned int verticesCount;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLSCENE_H

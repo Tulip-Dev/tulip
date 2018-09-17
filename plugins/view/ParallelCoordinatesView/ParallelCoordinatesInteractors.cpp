@@ -57,9 +57,10 @@ InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(const tlp::
     : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_selection.png", "Select elements") {
   setConfigurationWidgetText(
       QString("<html><head>") + "<title></title>" + "</head>" + "<body>" +
-      "<h3>Elements selection interactor</h3>" + "<p>This interactor allows to select elements on "
-                                                 "the parallel coordinates view by using the "
-                                                 "mouse.</p>" +
+      "<h3>Elements selection interactor</h3>" +
+      "<p>This interactor allows to select elements on "
+      "the parallel coordinates view by using the "
+      "mouse.</p>" +
       "<p>By <b>left clicking</b> in the drawing, all elements located under the mouse pointer "
       "will be selected.</p>" +
       "<p>It is also possible to <b>select a set of elements by defining a rectangular area</b> "
@@ -120,8 +121,9 @@ InteractorAxisSwapper::InteractorAxisSwapper(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_axis_swapper.png", "Axis swapper") {
   setConfigurationWidgetText(
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
-      "<h3>Axis swapper interactor</h3>" + "<p>This interactor allows to swap two axis with the "
-                                           "mouse in the parallel coordinates drawing.</p>" +
+      "<h3>Axis swapper interactor</h3>" +
+      "<p>This interactor allows to swap two axis with the "
+      "mouse in the parallel coordinates drawing.</p>" +
       "<p>To do so, put the mouse pointer under the axis you want to swap, a translucent blue "
       "rectangle will be drawn to indicate that you can click to move the axis. Once the pointer "
       "is under the axis, do a left click and keep the mouse button pressed while you're dragging "
@@ -183,10 +185,11 @@ InteractorBoxPlot::InteractorBoxPlot(const tlp::PluginContext *)
       "read a box plot.</p>" +
       "<p>" +
       "<img src=\":/boxplot_legend.png\" width=\"180\" height=\"240\" border=\"0\" alt=\"\">" +
-      "</p>" + "<p>Boxplots can be useful to display differences between populations without "
-               "making any assumptions of the underlying statistical distribution. The spacings "
-               "between the different parts of the box help indicate the degree of dispersion "
-               "(spread) and skewness in the data, and identify outliers.</p>" +
+      "</p>" +
+      "<p>Boxplots can be useful to display differences between populations without "
+      "making any assumptions of the underlying statistical distribution. The spacings "
+      "between the different parts of the box help indicate the degree of dispersion "
+      "(spread) and skewness in the data, and identify outliers.</p>" +
       "<p>It is possible to <b>highlight data</b> included in the following <b>axis box plot "
       "range</b> :" +
       "<ul>" + "<li>[Bottom Outlier, First Quartile]</li>" + "<li>[First Quartile, Median]</li>" +

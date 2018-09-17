@@ -475,16 +475,16 @@ void LinLogLayout::getDirection(node u, double *dir, OctTree *tree) {
  * Iteratively minimizes energy using the Barnes-Hut algorithm.
  * Starts from the positions in the parameter <code>positions</code>,
  * and stores the computed positions in <code>positions</code>.
-* @param positions  position in <code>nrDims</code>-dimensional space for each node.
-*   Is not copied and serves as input and output parameter.
-*   Each position must be a <code>double[nrDims]</code>.
-*   If the input is two-dimensional (i.e. the third array element
-*   is 0.0 for all nodes), the output is also two-dimensional.
-*   Different nodes with nonzero weights must have different positions.
-*   Random initial positions are appropriate.
-* @param nrIterations  number of iterations. Choose appropriate values
-*   by observing the convergence of energy.  A typical value is 100.
-*/
+ * @param positions  position in <code>nrDims</code>-dimensional space for each node.
+ *   Is not copied and serves as input and output parameter.
+ *   Each position must be a <code>double[nrDims]</code>.
+ *   If the input is two-dimensional (i.e. the third array element
+ *   is 0.0 for all nodes), the output is also two-dimensional.
+ *   Different nodes with nonzero weights must have different positions.
+ *   Random initial positions are appropriate.
+ * @param nrIterations  number of iterations. Choose appropriate values
+ *   by observing the convergence of energy.  A typical value is 100.
+ */
 bool LinLogLayout::minimizeEnergyNoTree(int nrIterations) {
   if (graph->numberOfNodes() <= 1)
     return true;
@@ -722,9 +722,9 @@ bool LinLogLayout::minimizeEnergy(int nrIterations) {
 }
 
 /**
-* Computes the position of the barycenter of all nodes
-* and stores it in the attribute <code>baryCenter</code>.
-*/
+ * Computes the position of the barycenter of all nodes
+ * and stores it in the attribute <code>baryCenter</code>.
+ */
 void LinLogLayout::computeBaryCenter() {
   for (unsigned int d = 0; d < _dim; ++d)
     baryCenter[d] = 0.0;

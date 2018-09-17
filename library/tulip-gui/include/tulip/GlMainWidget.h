@@ -68,17 +68,16 @@ class TLP_QT_SCOPE GlMainWidget : public QGLWidget {
 
 public:
   /**
-    * @brief Configure the rendering process ( see render function)
-    * @see render
-    **/
+   * @brief Configure the rendering process ( see render function)
+   * @see render
+   **/
   enum RenderingOption {
     RenderScene = 0x1, /** Force to render the graph even if there is a previous buffered render.
                           You need to call this option if the graph is updated to regenerate the
                           buffer. If not set try to use the last buffered graph render, if there is
                           no valid buffer this flag is forced. **/
-    SwapBuffers =
-        0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled
-               it's up to you to call the swapBuffer function. **/
+    SwapBuffers = 0x2  /** Call the swapBuffer functions at the end of the rendering process. If the
+                          disabled  it's up to you to call the swapBuffer function. **/
   };
   Q_DECLARE_FLAGS(RenderingOptions, RenderingOption)
 
@@ -342,15 +341,15 @@ public:
   void drawInteractors();
 
   /**
-    * @brief This function performs all the rendering process of the graph.
-    * Use this function only for advanced purpose, if you want to perform simple rendering use the
-    *draw or redraw functions instead.
-    * @param options Configure the rendering process, see the RenderingOption documentation for more
-    *information on each rendering option effect.
-    * @see RenderingOption
-    * @param checkVisibility If check visibility is set as true : the engine check if GlMainWidget
-    *QWidget is visible. If set at false : the engine render the scene in all cases
-    **/
+   * @brief This function performs all the rendering process of the graph.
+   * Use this function only for advanced purpose, if you want to perform simple rendering use the
+   *draw or redraw functions instead.
+   * @param options Configure the rendering process, see the RenderingOption documentation for more
+   *information on each rendering option effect.
+   * @see RenderingOption
+   * @param checkVisibility If check visibility is set as true : the engine check if GlMainWidget
+   *QWidget is visible. If set at false : the engine render the scene in all cases
+   **/
   void render(RenderingOptions options = RenderingOptions(RenderScene | SwapBuffers),
               bool checkVisibility = true);
 
@@ -428,7 +427,7 @@ public slots:
    * getScene()->zoomFactor();
    * draw();
    * @endcode
-  **/
+   **/
   void centerScene(bool graphChanged = false, float zoomFactor = 1.0);
 
   void emitGraphChanged();
@@ -467,6 +466,6 @@ public:
 private:
   static QGLWidget *firstQGLWidget;
 };
-}
+} // namespace tlp
 
 #endif

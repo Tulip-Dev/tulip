@@ -713,4 +713,4 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
   return added;
 }
-}
+} // namespace tlp

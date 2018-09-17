@@ -77,7 +77,7 @@ private slots:
 private:
   void qtWidgetsConnection();
 };
-}
+} // namespace tlp
 
 #endif /* DOUBLESTRINGSLISTSELECTIONWIDGET_H_ */
 ///@endcond

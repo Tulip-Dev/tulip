@@ -183,7 +183,7 @@ private:
 // Compute a PlanarConMap from a graph.
 // return a nullptr value if the graph is not connected
 TLP_SCOPE PlanarConMap *computePlanarConMap(Graph *graph);
-}
+} // namespace tlp
 
 /// Print the map (only faces, nodes and edges) in ostream, in the tulip format
 TLP_SCOPE std::ostream &operator<<(std::ostream &, tlp::PlanarConMap *);

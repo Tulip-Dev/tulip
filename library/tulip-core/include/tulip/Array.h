@@ -44,7 +44,7 @@ std::ostream &operator<<(std::ostream &os, const Array<T, N> &array);
  */
 template <typename T, size_t N>
 std::istream &operator>>(std::istream &is, Array<T, N> &array);
-}
+} // namespace tlp
 
 #include "cxx/Array.cxx"
 

@@ -32,4 +32,4 @@ void triangulate(SuperGraph *map, std::vector<edge> &addedEdges);
  * about canonical ordering the user must reffer to the planar graph drawing book.
  */
 void canonicalOrdering(SuperGraph *graph, std::vector<node> &order);
-}
+} // namespace tlp

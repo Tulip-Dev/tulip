@@ -33,15 +33,15 @@ namespace tlp {
 class Graph;
 
 /**
-  * @brief Generate Qt previews for Glyphs plug-ins.
-  **/
+ * @brief Generate Qt previews for Glyphs plug-ins.
+ **/
 class TLP_QT_SCOPE GlyphRenderer {
 public:
   static GlyphRenderer &getInst();
   ~GlyphRenderer();
   /**
-    * @brief Get the preview for the glyph with the given Id.
-    */
+   * @brief Get the preview for the glyph with the given Id.
+   */
   QPixmap render(unsigned int pluginId);
 
 private:
@@ -53,15 +53,15 @@ private:
 };
 
 /**
-  * @brief Generate Qt previews for edge extremities glyphs plug-ins.
-  **/
+ * @brief Generate Qt previews for edge extremities glyphs plug-ins.
+ **/
 class TLP_QT_SCOPE EdgeExtremityGlyphRenderer {
 public:
   ~EdgeExtremityGlyphRenderer();
   static EdgeExtremityGlyphRenderer &getInst();
   /**
-    * @brief Get the preview for the edge extremity glyph with the given Id.
-    */
+   * @brief Get the preview for the edge extremity glyph with the given Id.
+   */
   QPixmap render(unsigned int pluginId);
 
 private:
@@ -71,6 +71,6 @@ private:
   tlp::Graph *_graph;
   tlp::edge _edge;
 };
-}
+} // namespace tlp
 #endif // GLYPHPREVIEWGENERATOR_H
 ///@endcond

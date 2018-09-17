@@ -158,7 +158,7 @@ void SnapshotDialog::accept() {
                                                   ,
                                                   QFileDialog::DontUseNativeDialog
 #endif
-                                                  );
+  );
 
   if (fileName.isEmpty())
     return;
@@ -243,4 +243,4 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
 void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio) {
   lockLabel->setAlwaysLocked(snapshotHasViewSizeRatio);
 }
-}
+} // namespace tlp

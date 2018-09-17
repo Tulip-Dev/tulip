@@ -34,5 +34,5 @@ struct TLP_SCOPE PluginLoaderTxt : public PluginLoader {
   void aborted(const std::string &filename, const std::string &erreurmsg) override;
   void finished(bool state, const std::string &msg) override;
 };
-}
+} // namespace tlp
 #endif

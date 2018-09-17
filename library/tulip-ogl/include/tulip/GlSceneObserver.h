@@ -64,7 +64,7 @@ protected:
   GlLayer *layer;
   GlSimpleEntity *glSimpleEntity;
 };
-}
+} // namespace tlp
 
 #endif
 

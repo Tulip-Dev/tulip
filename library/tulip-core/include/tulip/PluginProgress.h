@@ -114,10 +114,10 @@ public:
   virtual void cancel() = 0;
 
   /**
-  * @brief Sets the state flag to stop, notifying to the process that the user wants to stop it.
-  * Stopping a process does not revert changes.
-  * @return void
-  **/
+   * @brief Sets the state flag to stop, notifying to the process that the user wants to stop it.
+   * Stopping a process does not revert changes.
+   * @return void
+   **/
   virtual void stop() = 0;
 
   /**
@@ -184,5 +184,5 @@ public:
    **/
   virtual void setTitle(const std::string &title) = 0;
 };
-}
+} // namespace tlp
 #endif

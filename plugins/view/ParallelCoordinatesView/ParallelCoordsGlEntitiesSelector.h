@@ -41,6 +41,6 @@ public:
   virtual void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w,
                                        int h, bool addToSelection) = 0;
 };
-}
+} // namespace tlp
 
 #endif /* PARALLELCOORDSGLENTITIESSELECTOR_H_ */

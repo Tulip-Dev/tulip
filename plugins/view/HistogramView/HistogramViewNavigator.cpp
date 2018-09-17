@@ -100,4 +100,4 @@ Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoo
 
   return ret;
 }
-}
+} // namespace tlp

@@ -103,7 +103,7 @@ protected slots:
   void resetSceneRect();
   void itemOpened();
 };
-}
+} // namespace tlp
 
 #endif // WORKSPACEEXPOSEWIDGET_H
 

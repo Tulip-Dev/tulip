@@ -45,5 +45,5 @@ public:
     return reinterpret_cast<size_t>(this);
   }
 };
-}
+} // namespace vpsc
 #endif // SEEN_REMOVEOVERLAP_VARIABLE_H

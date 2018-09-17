@@ -39,7 +39,7 @@ private:
   static QStringList _installedVersions;
   static bool _installedVersionsChecked;
 };
-}
+} // namespace tlp
 
 #endif // PYTHONVERSIONCHECKER_H
 ///@endcond

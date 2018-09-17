@@ -29,24 +29,24 @@ using namespace tlp;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
-* @brief This plugin is an implementation of a fuzzy clustering procedure. First introduced in :
-*
-* Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., \n
-* "Link communities reveal multiscale complexity in networks", \n
-* in Nature vol:466, \n
-* pages 761--764, \n
-* 2010 \n
-*
-* The result of this procedure is saved as an edge metric : two edges share the same value
-* if they are part of the same group.
-* The result for a node shows the number of groups to which it belongs.
-*
-* @note To create subgraphs using the result of this algortihm use "Equal Value" with parameter
-*Type="edges".
-*
-* @todo Deal with directed graphs.
-*
-**/
+ * @brief This plugin is an implementation of a fuzzy clustering procedure. First introduced in :
+ *
+ * Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., \n
+ * "Link communities reveal multiscale complexity in networks", \n
+ * in Nature vol:466, \n
+ * pages 761--764, \n
+ * 2010 \n
+ *
+ * The result of this procedure is saved as an edge metric : two edges share the same value
+ * if they are part of the same group.
+ * The result for a node shows the number of groups to which it belongs.
+ *
+ * @note To create subgraphs using the result of this algortihm use "Equal Value" with parameter
+ *Type="edges".
+ *
+ * @todo Deal with directed graphs.
+ *
+ **/
 class LinkCommunities : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION(
@@ -63,39 +63,39 @@ public:
 
 private:
   /**
-  * @brief Create the dual (as VectorGraph) of the graph
-  * in order to store Similarity value between two edges
-  * Edges are represented by nodes linked according to edges' neighborhood.
-  **/
+   * @brief Create the dual (as VectorGraph) of the graph
+   * in order to store Similarity value between two edges
+   * Edges are represented by nodes linked according to edges' neighborhood.
+   **/
   void createDualGraph(const std::vector<edge> &edges);
   /**
-  * @brief Compute all similarities between all pairs of adjacent edges.
-  **/
+   * @brief Compute all similarities between all pairs of adjacent edges.
+   **/
   void computeSimilarities(const std::vector<edge> &edges);
   /**
-  * @brief Compute similarity (Jaccard) between graph->edges()[source(e).id] and
-  *graph->edges()[target(e).id]
-  **/
+   * @brief Compute similarity (Jaccard) between graph->edges()[source(e).id] and
+   *graph->edges()[target(e).id]
+   **/
   double getSimilarity(tlp::edge e, const std::vector<edge> &edges);
   /**
-  * @brief Compute weighted (Tanimoto) similarity between graph->edges()[source(e).id] and
-  *graph->edges()[target(e).id]
-  **/
+   * @brief Compute weighted (Tanimoto) similarity between graph->edges()[source(e).id] and
+   *graph->edges()[target(e).id]
+   **/
   double getWeightedSimilarity(tlp::edge e, const std::vector<edge> &edges);
   /**
-  * @brief Perform #(step) single linkage clustering in order to find the partition
-  * which maximise the average density
-  **/
+   * @brief Perform #(step) single linkage clustering in order to find the partition
+   * which maximise the average density
+   **/
   double findBestThreshold(unsigned int, const std::vector<edge> &edges);
   /**
-  * @brief Compute the partition of dual node for the given threshold value
-  * and return average density of this edge partition
-  **/
+   * @brief Compute the partition of dual node for the given threshold value
+   * and return average density of this edge partition
+   **/
   double computeAverageDensity(double, const std::vector<edge> &edges);
   /**
-  * @brief set edge values according the partition corresponding
-  * to the best threshold
-  **/
+   * @brief set edge values according the partition corresponding
+   * to the best threshold
+   **/
   void setEdgeValues(double, bool, const std::vector<edge> &edges);
 
   tlp::VectorGraph dual; // Dual Node -> Graph Edges; Dual Edge -> indicates that the linked Graph

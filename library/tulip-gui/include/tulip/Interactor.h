@@ -349,6 +349,6 @@ public:
     }                                                                                              \
   };                                                                                               \
   PLUGIN(CLASS_NAME)
-}
+} // namespace tlp
 
 #endif

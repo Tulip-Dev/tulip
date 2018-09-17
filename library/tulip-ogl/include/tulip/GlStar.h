@@ -58,5 +58,5 @@ protected:
   Size size;
   unsigned int numberOfStarPoints;
 };
-}
+} // namespace tlp
 #endif

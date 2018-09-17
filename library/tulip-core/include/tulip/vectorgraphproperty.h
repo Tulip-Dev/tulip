@@ -41,13 +41,13 @@ protected:
 };
 
 /**
-  * @class VectorGraphProperty
-  * @brief That class enables to factorize code for NodeProperty and EdgeProperty in VectorGraph, it
+ * @class VectorGraphProperty
+ * @brief That class enables to factorize code for NodeProperty and EdgeProperty in VectorGraph, it
  * could not be used directly.
-  * @see NodeProperty
-  * @see EdgeProperty
-  * @see VectorGraph
-  */
+ * @see NodeProperty
+ * @see EdgeProperty
+ * @see VectorGraph
+ */
 template <typename TYPE>
 class VectorGraphProperty {
   friend class VectorGraph;
@@ -78,52 +78,52 @@ protected:
 public:
   virtual ~VectorGraphProperty() {}
   /**
-    * @brief read/write accessor
-    *
-    * return the value of the ith element and enables to modify it.
-    */
+   * @brief read/write accessor
+   *
+   * return the value of the ith element and enables to modify it.
+   */
   typename std::vector<TYPE>::reference operator[](const size_t id) {
     // assert(isValid());
     assert(id < _values->size());
     return (*_values)[id];
   }
   /**
-    * @brief read accessor
-    *
-    * return the value of the ith element.
-    */
+   * @brief read accessor
+   *
+   * return the value of the ith element.
+   */
   typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
     // assert(isValid());
     assert(id < _values->size());
     return (*_values)[id];
   }
   /**
-    * @bried Set all the value of the property to the value given in parameter
-    *
-    * That function affect the same value to all elements of the vector, there
-    * is no effect on the future value added in the vector
-    * @warning There is differences between the setAll of the MutableContainer and
-    * the setAll of VectorProperty (NodeProperty or EdgeProperty). The MutableContainer,
-    * ensures that new inserted element will have the value given by the last setAll
-    *
-    * @see MutableContainer
-    */
+   * @bried Set all the value of the property to the value given in parameter
+   *
+   * That function affect the same value to all elements of the vector, there
+   * is no effect on the future value added in the vector
+   * @warning There is differences between the setAll of the MutableContainer and
+   * the setAll of VectorProperty (NodeProperty or EdgeProperty). The MutableContainer,
+   * ensures that new inserted element will have the value given by the last setAll
+   *
+   * @see MutableContainer
+   */
   void setAll(const TYPE &obj) {
     fill(_values->begin(), _values->end(), obj);
   }
   /**
-    * @brief write accessor
-    *
-    * change the value of the ith element.
-    */
+   * @brief write accessor
+   *
+   * change the value of the ith element.
+   */
   void set(const size_t id, const TYPE &obj) {
     (*this)[id] = obj;
   }
   /**
-    * @brief read accessor
-    *
-    * return the value of the ith element.
-    */
+   * @brief read accessor
+   *
+   * return the value of the ith element.
+   */
   typename std::vector<TYPE>::const_reference get(const size_t id) const {
     return (*this)[id];
   }
@@ -196,39 +196,39 @@ private:
       : VectorGraphProperty<TYPE>(values, graph) {}
 };
 /**
-  * @class NodeProperty
-  * @brief That class enables to define a property/attribute on nodes on a VectorGraph.
-  *
-  * Using NodeProperty you can assign any kind of attribute to nodes. To use that class
-  * you must first create an instance of NodeProperty and then connect it to your graph.
-  * NodeProperty can be copied in another NodeProperty, however the to NodeProperty will
-  * share the same content. You can consider that NodeProperty is just a pointer on a stl:vector.
-  * to free memory used by a NodeProperty connected to a graph you must use the free function.
-  * @warning After the call to free all The copy of the orignal NodeProperty are no more valid
-  *
-  * Using NodeProperty you can store and access to values with the same efficiency as if
-  * you created manually a vector. NodeProperty manage for you the resize, etc... when the
-  * graph is modified.
-  *
-  * Furthemrore, in DEBUG mode, operator[] check if one try to access outside of the Array Bound.
-  * in DEBUG mode, the validy of the Property is also checked (if it has been free/alloc etc...)
-  *
-  * @code
-  * VectorGraph g;
-  * NodeProperty<double> weight;
-  * g.alloc(weight); //connect weight to g, g allocate memory for that attribute
-  * for(const node &n : g.nodes()) {
-  *   weight[n] = g.deg(n);
-  * }
-  * NodeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory
+ * @class NodeProperty
+ * @brief That class enables to define a property/attribute on nodes on a VectorGraph.
+ *
+ * Using NodeProperty you can assign any kind of attribute to nodes. To use that class
+ * you must first create an instance of NodeProperty and then connect it to your graph.
+ * NodeProperty can be copied in another NodeProperty, however the to NodeProperty will
+ * share the same content. You can consider that NodeProperty is just a pointer on a stl:vector.
+ * to free memory used by a NodeProperty connected to a graph you must use the free function.
+ * @warning After the call to free all The copy of the orignal NodeProperty are no more valid
+ *
+ * Using NodeProperty you can store and access to values with the same efficiency as if
+ * you created manually a vector. NodeProperty manage for you the resize, etc... when the
+ * graph is modified.
+ *
+ * Furthemrore, in DEBUG mode, operator[] check if one try to access outside of the Array Bound.
+ * in DEBUG mode, the validy of the Property is also checked (if it has been free/alloc etc...)
+ *
+ * @code
+ * VectorGraph g;
+ * NodeProperty<double> weight;
+ * g.alloc(weight); //connect weight to g, g allocate memory for that attribute
+ * for(const node &n : g.nodes()) {
+ *   weight[n] = g.deg(n);
+ * }
+ * NodeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory
  * addres
-  * weight2[g[0]] = 3;
-  * tlp::debug() << weight[g[0]]; //output 3
-  * g.free(weight2); //free the memory, weight and weight2 are no more valid.
-  * @endcode
-  * @see VectorGraph alloc(NodeProperty)
-  * @see VectorGraph free(NodeProperty)
-  */
+ * weight2[g[0]] = 3;
+ * tlp::debug() << weight[g[0]]; //output 3
+ * g.free(weight2); //free the memory, weight and weight2 are no more valid.
+ * @endcode
+ * @see VectorGraph alloc(NodeProperty)
+ * @see VectorGraph free(NodeProperty)
+ */
 template <typename TYPE>
 class NodeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
@@ -244,6 +244,6 @@ private:
   NodeProperty(typename VectorGraphProperty<TYPE>::ValuesImpl *values, VectorGraph *graph)
       : VectorGraphProperty<TYPE>(values, graph) {}
 };
-}
+} // namespace tlp
 #endif // VECTORGRAPHPROPERTY_H
 ///@endcond

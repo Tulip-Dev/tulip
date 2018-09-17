@@ -75,8 +75,8 @@ public:
   StringCollection(const std::vector<std::string> &vectorParam, const std::string &currentString);
 
   /**
-  * Returns all the selectable string entries.
-  **/
+   * Returns all the selectable string entries.
+   **/
   const std::vector<std::string> &getValues() const;
 
   /**
@@ -158,6 +158,6 @@ public:
     return _data[i];
   }
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

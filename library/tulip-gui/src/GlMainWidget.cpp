@@ -424,20 +424,18 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
-  if (pickNodes &&
-      scene.selectEntities(
-          static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
-          screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3),
-          screenToViewport(3), layer, selectedEntities)) {
+  if (pickNodes && scene.selectEntities(
+                       static_cast<RenderingEntitiesFlag>(RenderingNodes | RenderingWithoutRemove),
+                       screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3),
+                       screenToViewport(3), layer, selectedEntities)) {
     selectedEntity = selectedEntities[0];
     return true;
   }
 
-  if (pickEdges &&
-      scene.selectEntities(
-          static_cast<RenderingEntitiesFlag>(RenderingEdges | RenderingWithoutRemove),
-          screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3),
-          screenToViewport(3), layer, selectedEntities)) {
+  if (pickEdges && scene.selectEntities(
+                       static_cast<RenderingEntitiesFlag>(RenderingEdges | RenderingWithoutRemove),
+                       screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3),
+                       screenToViewport(3), layer, selectedEntities)) {
     selectedEntity = selectedEntities[0];
     return true;
   }
@@ -625,4 +623,4 @@ void GlMainWidget::setKeepScenePointOfViewOnSubgraphChanging(bool k) {
 bool GlMainWidget::keepScenePointOfViewOnSubgraphChanging() const {
   return keepPointOfViewOnSubgraphChanging;
 }
-}
+} // namespace tlp

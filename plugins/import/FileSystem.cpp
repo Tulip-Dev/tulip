@@ -82,10 +82,10 @@ static const std::vector<std::string>
 
 static const char *commonArchiveFilesExtArray[] = {
     "7z", "cbr", "deb", "gz", "pkg", "rar", "rpm", "sitx", "tar", "zip", "zipx", "bz2", "lzma"};
-static const std::vector<std::string> commonArchiveFilesExt(
-    commonArchiveFilesExtArray,
-    commonArchiveFilesExtArray +
-        sizeof(commonArchiveFilesExtArray) / sizeof(commonArchiveFilesExtArray[0]));
+static const std::vector<std::string>
+    commonArchiveFilesExt(commonArchiveFilesExtArray,
+                          commonArchiveFilesExtArray + sizeof(commonArchiveFilesExtArray) /
+                                                           sizeof(commonArchiveFilesExtArray[0]));
 
 static const char *commonDevFilesExtArray[] = {
     "c",       "cc",        "class", "cpp", "cs",   "dtd", "fla", "h",   "hh",

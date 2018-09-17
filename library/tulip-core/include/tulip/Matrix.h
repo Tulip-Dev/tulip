@@ -178,7 +178,7 @@ inline Vector<Obj, SIZE> operator*(const Vector<Obj, SIZE> &vec, const tlp::Matr
  */
 template <typename Obj, size_t SIZE>
 inline Vector<Obj, SIZE> operator*(const Matrix<Obj, SIZE> &, const Vector<Obj, SIZE> &vec);
-}
+} // namespace tlp
 
 #include "cxx/Matrix.cxx"
 #endif

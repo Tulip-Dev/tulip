@@ -50,7 +50,7 @@ static const char *paramHelp[] = {
  *  by François Queyroi, LaBRI, University Bordeaux I, France
  *
  *
-*/
+ */
 /*@}*/
 struct PageRank : public DoubleAlgorithm {
 

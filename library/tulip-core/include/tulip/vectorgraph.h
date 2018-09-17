@@ -38,27 +38,27 @@ template <class itType>
 struct Iterator;
 //===========================================
 /**
-  * @class VectorGraph
-  *
-  * @brief That class provide a simple implementation of graph structure (without subgraphs,
+ * @class VectorGraph
+ *
+ * @brief That class provide a simple implementation of graph structure (without subgraphs,
  * observer, metagraph)
-  * it enables to obtain very efficient access/modification time.
-  *
-  * User can both use tulip iterators or direct vector to access to the graph structure for better
+ * it enables to obtain very efficient access/modification time.
+ *
+ * User can both use tulip iterators or direct vector to access to the graph structure for better
  * performance.
-  * To have maximum speedup, that Graph implementation use only vectors, almost all operations
-  * are done in constant time (even modification), however since the class use vectors, modification
-  * of adjacency can change the ordering of edges around nodes. If you use it only for standard
-  * graph operations there is no problem. However if you want to manipulate maps, be aware that
-  * a modification can change the graph embedding. EdgeOrdering function can be used to reorder
-  * correctly elements when necessary.
-  *
-  * @warning the class is not thread safe
-  * @warning modification of the graph structure devalidate iterations.
-  *
-  * @warning Use that class only if you need performance.
-  * @todo split the file in .h .cpp
-  */
+ * To have maximum speedup, that Graph implementation use only vectors, almost all operations
+ * are done in constant time (even modification), however since the class use vectors, modification
+ * of adjacency can change the ordering of edges around nodes. If you use it only for standard
+ * graph operations there is no problem. However if you want to manipulate maps, be aware that
+ * a modification can change the graph embedding. EdgeOrdering function can be used to reorder
+ * correctly elements when necessary.
+ *
+ * @warning the class is not thread safe
+ * @warning modification of the graph structure devalidate iterations.
+ *
+ * @warning Use that class only if you need performance.
+ * @todo split the file in .h .cpp
+ */
 class TLP_SCOPE VectorGraph {
 
 public:
@@ -778,6 +778,6 @@ bool EdgeProperty<TYPE>::isValid() const {
   return this->_graph->isEdgeAttr(this->_values);
 }
 #endif
-}
+} // namespace tlp
 #endif // VECTORGRAPH_H
 ///@endcond

@@ -656,4 +656,4 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(
 
   polygonsToNodesSubsetAndCorrelCoeff[polygon] = make_pair(selectedNodes, correlationCoeff);
 }
-}
+} // namespace tlp

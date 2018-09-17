@@ -76,7 +76,7 @@ inline unsigned int hilbertKey(const uPoint &p, const unsigned char order) {
 
   return key;
 }
-}
+} // namespace
 
 namespace pocore {
 HilbertLayout::HilbertLayout(unsigned char order) : order(order) {
@@ -101,5 +101,5 @@ unsigned int HilbertLayout::unproject(const Vec2i &point) const {
 Vector<int, 2> HilbertLayout::project(const unsigned int id) const {
   return hilbertPoint(id, order) -= shift;
 }
-}
+} // namespace pocore
 //==============================================================================

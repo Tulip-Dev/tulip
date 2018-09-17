@@ -266,6 +266,6 @@ protected:
 
   std::map<MappingType, std::vector<Coord>> curveShapeForMapping;
 };
-}
+} // namespace tlp
 
 #endif /* HISTOGRAMCOLORMAPPING_H_ */

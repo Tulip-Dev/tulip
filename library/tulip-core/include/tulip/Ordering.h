@@ -112,7 +112,7 @@ private:
   void init_seqP();
   void init_outerface();
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond

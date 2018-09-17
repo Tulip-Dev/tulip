@@ -28,5 +28,5 @@ public:
   virtual Vec2i project(const unsigned int id) const = 0;
   virtual unsigned int unproject(const Vec2i &) const = 0;
 };
-}
+} // namespace pocore
 #endif // LAYOUTFUNCTION_H

@@ -326,4 +326,4 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   return textureId;
 }
-}
+} // namespace tlp

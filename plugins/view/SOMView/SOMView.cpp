@@ -707,13 +707,12 @@ void SOMView::computeMapping() {
       } else if (mt == SOMPropertiesWidget::RealNodeSizeMapping) {
         // Compute size mapping coef
         Size realSize = realGraphSizeProperty->getNodeValue(*it2);
-        nodeSize.set(minElementWidth +
-                         ((realSize.getW() - graphMinSize.getW()) / (graphDiffSize.getW())) *
-                             (maxElementWidth - minElementWidth),
-                     minElementHeight +
-                         ((realSize.getH() - graphMinSize.getH()) / (graphDiffSize.getH())) *
-                             (maxElementHeight - minElementHeight),
-                     0);
+        nodeSize.set(
+            minElementWidth + ((realSize.getW() - graphMinSize.getW()) / (graphDiffSize.getW())) *
+                                  (maxElementWidth - minElementWidth),
+            minElementHeight + ((realSize.getH() - graphMinSize.getH()) / (graphDiffSize.getH())) *
+                                   (maxElementHeight - minElementHeight),
+            0);
         assert(nodeSize.getW() >= 0 && nodeSize.getH() >= 0);
       }
 

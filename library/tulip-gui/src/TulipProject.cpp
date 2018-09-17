@@ -406,4 +406,4 @@ void TulipProject::setProjectFile(const QString &projectFile) {
   _projectFile = projectFile;
   emit projectFileChanged(projectFile);
 }
-}
+} // namespace tlp

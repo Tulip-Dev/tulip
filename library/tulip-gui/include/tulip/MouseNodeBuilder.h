@@ -41,6 +41,6 @@ private:
   QEvent::Type _eventType;
   GlMainWidget *glMainWidget;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

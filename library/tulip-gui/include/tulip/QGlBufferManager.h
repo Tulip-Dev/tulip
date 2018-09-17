@@ -88,7 +88,7 @@ private:
   bool pixelBufferWork;
   bool framebufferObjectWork;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_QGLBUFFERMANAGER_H
 ///@endcond

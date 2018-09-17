@@ -88,7 +88,7 @@ public:
 
   bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 };
-}
+} // namespace tlp
 
 #endif // GRAPHELEMENTMODEL_H
 ///@endcond

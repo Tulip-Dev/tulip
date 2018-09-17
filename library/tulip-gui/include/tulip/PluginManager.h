@@ -91,7 +91,7 @@ public:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::PluginLocations)
-}
+} // namespace tlp
 
 #endif // PLUGINMANAGER_H
 ///@endcond

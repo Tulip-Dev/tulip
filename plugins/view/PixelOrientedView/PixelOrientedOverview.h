@@ -106,5 +106,5 @@ private:
 
   Color backgroundColor, textColor;
 };
-}
+} // namespace tlp
 #endif /* PIXELORIENTEDDRAWING_H_ */

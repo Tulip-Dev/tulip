@@ -47,5 +47,5 @@ public:
   float getFishEyeRadiusIncrementStep() const;
   float getFishEyeHeightIncrementStep() const;
 };
-}
+} // namespace tlp
 #endif /* FISHEYECONFIGWIDGET_H_ */

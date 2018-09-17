@@ -133,7 +133,7 @@ protected:
   bool hidden;
   std::set<unsigned int> dataSubset;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

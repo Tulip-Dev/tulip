@@ -210,7 +210,7 @@ private:
   void addEdgesInternal(unsigned int nbAdded, const std::vector<edge> *edges,
                         const std::vector<std::pair<node, node>> &ends);
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond

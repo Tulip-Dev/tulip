@@ -128,4 +128,4 @@ void GlLine::setWithXML(const string &inString, unsigned int &currentPosition) {
   for (vector<Coord>::iterator it = _points.begin(); it != _points.end(); ++it)
     boundingBox.expand(*it);
 }
-}
+} // namespace tlp

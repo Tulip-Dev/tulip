@@ -98,6 +98,6 @@ public:
 private:
   tlp::WorkspacePanel *_panel;
 };
-}
+} // namespace tlp
 #endif //_TLP_MIMES_H
 ///@endcond

@@ -152,7 +152,7 @@ public slots:
   void selectFont();
   void setNodeLabelPosition();
 };
-}
+} // namespace tlp
 Q_DECLARE_OPERATORS_FOR_FLAGS(tlp::QuickAccessBarImpl::QuickAccessButtons)
 #endif // QUICKACCESSBAR_H
 ///@endcond

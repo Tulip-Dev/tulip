@@ -54,5 +54,5 @@ private slots:
   void maxSizeValueChanged(double newValue);
   void viewSizeRadioButtonToggled(bool checked);
 };
-}
+} // namespace tlp
 #endif /* SIZESCALECONFIGDIALOG_H_ */

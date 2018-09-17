@@ -57,6 +57,6 @@ private:
 signals:
   void computeAndDrawInteractor();
 };
-}
+} // namespace tlp
 
 #endif /* HISTOSTATSCONFIGWIDGET_H_ */

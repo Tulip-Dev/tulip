@@ -88,6 +88,6 @@ protected:
   float _endSize;
   std::string texture;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

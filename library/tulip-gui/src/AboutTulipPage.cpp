@@ -37,7 +37,7 @@ namespace tlp {
 extern QString getSipVersion();
 #endif
 extern QString getTulipGitRevision();
-}
+} // namespace tlp
 
 const QString TulipRepoUrl = "https://github.com/Tulip-Dev/tulip";
 
@@ -78,8 +78,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       "This open source software is powered by:"
       "<ul>"
       "  <li> <b> Qt </b> " +
-      tlpStringToQString(qVersion()) + ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
-                                       "  <li> <b> OpenGL </b> " +
+      tlpStringToQString(qVersion()) +
+      ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
+      "  <li> <b> OpenGL </b> " +
       (openGL_OK ? QString::number(OpenGlConfigManager::getInst().getOpenGLVersion())
                  : QString("?.?")) +
       " (from vendor " +
@@ -94,12 +95,13 @@ AboutTulipPage::AboutTulipPage(QWidget *parent)
       PythonVersionChecker::compiledVersion() +
       ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
       "  <li> <b> SIP </b> " +
-      getSipVersion() + ": <a "
-                        "href=\"https://www.riverbankcomputing.com/software/sip/\">https://"
-                        "www.riverbankcomputing.com/software/sip</a> </li>"
+      getSipVersion() +
+      ": <a "
+      "href=\"https://www.riverbankcomputing.com/software/sip/\">https://"
+      "www.riverbankcomputing.com/software/sip</a> </li>"
 #endif
-                        "</ul>"
-                        "</p>";
+      "</ul>"
+      "</p>";
 
   if (openGL_OK)
     GlMainWidget::getFirstQGLWidget()->doneCurrent();

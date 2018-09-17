@@ -179,4 +179,4 @@ RGBA PixelOrientedMediator::getColorForPixelAtPos(Vec2i pos, DimensionBase *data
 Vec2i PixelOrientedMediator::getPixelPosForRank(const unsigned int rank) {
   return sceneToScreen(layout->project(rank));
 }
-}
+} // namespace pocore

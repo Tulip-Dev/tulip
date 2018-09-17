@@ -47,4 +47,4 @@ Vector<int, 2> SquareLayout::project(const unsigned int id) const {
   point[1] = id / _width - _width / 2;
   return point;
 }
-}
+} // namespace pocore

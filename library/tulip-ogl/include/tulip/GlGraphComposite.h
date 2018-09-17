@@ -178,6 +178,6 @@ protected:
   bool nodesModified;
   std::set<node> metaNodes;
 };
-}
+} // namespace tlp
 
 #endif

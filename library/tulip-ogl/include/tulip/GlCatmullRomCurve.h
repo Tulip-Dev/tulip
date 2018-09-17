@@ -94,6 +94,6 @@ private:
   float alpha;
   ParameterizationType paramType;
 };
-}
+} // namespace tlp
 
 #endif /* GLCATMULLROMCURVE_H_ */

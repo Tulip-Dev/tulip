@@ -147,7 +147,7 @@ protected:
   void removeListenersAndClearNodeMap();
   void removeListenersAndClearEdgeMap();
 };
-}
+} // namespace tlp
 
 #include "cxx/minmaxproperty.cxx"
 

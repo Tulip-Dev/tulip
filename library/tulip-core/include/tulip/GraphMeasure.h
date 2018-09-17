@@ -143,6 +143,6 @@ TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNo
 TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode,
                                   TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
                                   EDGE_TYPE direction = UNDIRECTED);
-}
+} // namespace tlp
 #endif
 ///@endcond

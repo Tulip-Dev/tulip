@@ -293,4 +293,4 @@ bool ScatterPlot2DOptionsWidget::configurationChanged() {
 
   return confChanged;
 }
-}
+} // namespace tlp

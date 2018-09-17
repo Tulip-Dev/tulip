@@ -70,6 +70,6 @@ private:
 
   static std::map<tlp::Graph *, TulipNodeMetricSorter *> instances;
 };
-}
+} // namespace pocore
 
 #endif /* TULIPNODESORTER_H_ */

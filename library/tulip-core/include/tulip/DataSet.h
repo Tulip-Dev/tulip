@@ -255,7 +255,7 @@ public:
    * @brief Registers a serializer for a known type
    *
    * Serializers are used to write/read from std::ostream objects when saving DataSet instances.
-  */
+   */
   template <typename T>
   static void registerDataTypeSerializer(const DataTypeSerializer &serializer) {
     registerDataTypeSerializer(std::string(typeid(T).name()), serializer.clone());
@@ -263,7 +263,7 @@ public:
 
   /**
    * @brief write an embedded value
-  */
+   */
   void writeData(std::ostream &os, const std::string &prop, const DataType *dt) const;
 
   /**
@@ -343,7 +343,7 @@ public:
    */
   std::string toString() const;
 };
-}
+} // namespace tlp
 
 #include "cxx/DataSet.cxx"
 

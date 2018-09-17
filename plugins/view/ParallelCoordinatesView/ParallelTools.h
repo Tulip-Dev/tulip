@@ -68,6 +68,6 @@ const int Z_ROT = 2;
 void rotateVector(Coord &vec, float alpha, int rot);
 
 Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]);
-}
+} // namespace tlp
 
 #endif /* !PARALLELTOOLS_H_ */

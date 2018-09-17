@@ -46,6 +46,6 @@ std::string edgePropertyToString(PropertyInterface *propertyName, edge e);
 std::string propertyType(PropertyInterface *propertyName);
 std::string propertyNodeDefaultValue(PropertyInterface *propertyName);
 std::string propertyEdgeDefaultValue(PropertyInterface *propertyName);
-}
+} // namespace tlp
 #endif
 ///@endcond

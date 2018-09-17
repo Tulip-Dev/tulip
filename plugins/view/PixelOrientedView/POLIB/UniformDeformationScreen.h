@@ -44,5 +44,5 @@ private:
   tlp::Matrix<double, 3> _mat;
   tlp::Matrix<double, 3> _invMat;
 };
-}
+} // namespace pocore
 #endif // UNIFORMDEFORMATIONSCREEN_H

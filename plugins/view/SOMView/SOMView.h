@@ -103,7 +103,7 @@ public:
   std::vector<SOMPreviewComposite *> getPreviews();
 
   /**
-     * Return the name of the selected property
+   * Return the name of the selected property
    * @return
    */
   std::string getSelectedProperty() {
@@ -124,15 +124,15 @@ public:
    */
   ColorProperty *getSelectedBaseSOMColors();
   /**
-    * Returns the current SOMMap.
-    **/
+   * Returns the current SOMMap.
+   **/
   SOMMap *getSOM() {
     return som;
   }
 
   /**
-    * Return the input sample
-    **/
+   * Return the input sample
+   **/
   InputSample &getInputSample() {
     return inputSample;
   }
@@ -425,5 +425,5 @@ private slots:
 
   void toggleInteractors(const bool activate);
 };
-}
+} // namespace tlp
 #endif /* SOMVIEW_H_ */

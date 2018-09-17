@@ -37,18 +37,18 @@ namespace tlp {
 template <typename Obj, typename OTYPE = double>
 struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
   /**
-    * Create a new invalid rectangle
-    */
+   * Create a new invalid rectangle
+   */
   Rectangle() {
     (*this)[0].fill(1);
     (*this)[1].fill(-1);
   }
   /**
-    * Create a new rectangle with
-    * (*this)[0] = min = (xmin, ymin);
-    * (*this)[1] = max = (xmax, ymax);
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Create a new rectangle with
+   * (*this)[0] = min = (xmin, ymin);
+   * (*this)[1] = max = (xmax, ymax);
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Rectangle(const Obj xmin, const Obj ymin, const Obj xmax, const Obj ymax) {
     (*this)[0][0] = xmin;
     (*this)[0][1] = ymin;
@@ -57,9 +57,9 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     assert(isValid());
   }
   /**
-    * Create a new Rectangle from a Bounding Box correct conversion from 3D -> 2D
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Create a new Rectangle from a Bounding Box correct conversion from 3D -> 2D
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Rectangle(const tlp::BoundingBox &b) {
     (*this)[0][0] = b[0][0];
     (*this)[0][1] = b[0][1];
@@ -69,18 +69,18 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
   }
 
   /**
-  * create a new Rectangle
-  * \warning the rectangle must be valid (tested in debug mode)
-  */
+   * create a new Rectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Rectangle(const Vector<Obj, 2, OTYPE> &min, const Vector<Obj, 2, OTYPE> &max) {
     (*this)[0] = min;
     (*this)[1] = max;
     assert(isValid());
   }
   /**
-         * @return true if r intersect "this".
-         * \warning the rectangle must be valid (tested in debug mode)
-         */
+   * @return true if r intersect "this".
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   bool intersect(const Rectangle &r) const {
     assert(this->isValid());
     assert(r.isValid());
@@ -100,10 +100,10 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return true;
   }
   /**
-       * @return the true if there is an intersection else false, the intersection parameter is used
+   * @return the true if there is an intersection else false, the intersection parameter is used
    * to stored the Rectangle pf intersection (if it exists).
-       * \warning the rectangle must be valid (tested in debug mode)
-       */
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   bool intersect(const Rectangle &r, Rectangle &intersection) const {
     assert(this->isValid());
     assert(r.isValid());
@@ -119,15 +119,15 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return true;
   }
   /**
-  * @return true if the Rectangle is well define [0] min corner, [1] max corner.
-  */
+   * @return true if the Rectangle is well define [0] min corner, [1] max corner.
+   */
   bool isValid() const {
     return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1];
   }
   /**
-  * Return true if point is stricly inside the AARectangle
-  * \warning the rectangle must be valid (tested in debug mode)
-  */
+   * Return true if point is stricly inside the AARectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   bool isInside(const Vector<Obj, 2, OTYPE> &p) const {
     assert(isValid());
 
@@ -146,9 +146,9 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return true;
   }
   /**
-  * @return true if r is inside or equal to the AARectangle
-  * \warning the rectangle must be valid (tested in debug mode)
-  */
+   * @return true if r is inside or equal to the AARectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   bool isInside(const Rectangle &r) const {
     assert(isValid());
     assert(r.isValid());
@@ -163,43 +163,43 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
   }
 
   /**
-  * Translate "this" by vector v
-  * \warning the rectangle must be valid (tested in debug mode)
-  */
+   * Translate "this" by vector v
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   void translate(const tlp::Vector<Obj, 2, OTYPE> &v) {
     assert(isValid());
     (*this)[0] += v;
     (*this)[1] += v;
   }
   /**
-    * Return the width of the rectangle
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Return the width of the rectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Obj width() const {
     assert(isValid());
     return (*this)[1][0] - (*this)[0][0];
   }
   /**
-    * Return the height of the rectangle
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Return the height of the rectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Obj height() const {
     assert(isValid());
     return (*this)[1][1] - (*this)[0][1];
   }
   /**
-    * Return the surface of the rectangle
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Return the surface of the rectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Obj surface() const {
     assert(isValid());
     return height() * width();
   }
   /**
-    * Return the aspect ratio of the reactangle
-    * a value between [0..1]
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Return the aspect ratio of the reactangle
+   * a value between [0..1]
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Obj aspectRatio() const {
     assert(isValid());
 
@@ -209,9 +209,9 @@ struct Rectangle : public Array<Vector<Obj, 2, OTYPE>, 2> {
     return std::min(height(), width()) / std::max(height(), width());
   }
   /**
-    * Return the center of a rectangle
-    * \warning the rectangle must be valid (tested in debug mode)
-    */
+   * Return the center of a rectangle
+   * \warning the rectangle must be valid (tested in debug mode)
+   */
   Vector<Obj, 2, OTYPE> center() const {
     assert(isValid());
     return ((*this)[0] + (*this)[1]) / Obj(2);
@@ -222,6 +222,6 @@ typedef Rectangle<double, long double> Rectd;
 typedef Rectangle<float, double> Rectf;
 typedef Rectangle<int, double> Recti;
 typedef Rectangle<unsigned int, double> Rectui;
-}
+} // namespace tlp
 #endif
 ///@endcond

@@ -182,4 +182,4 @@ std::string TulipFontAwesome::getIconUtf8String(const std::string &iconName) {
                  back_inserter(iconString));
   return iconString;
 }
-}
+} // namespace tlp

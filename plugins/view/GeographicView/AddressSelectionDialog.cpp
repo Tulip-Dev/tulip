@@ -52,4 +52,4 @@ bool AddressSelectionDialog::rememberAddressChoice() const {
 int AddressSelectionDialog::getPickedResultIdx() {
   return _ui->resultsList->currentRow();
 }
-}
+} // namespace tlp

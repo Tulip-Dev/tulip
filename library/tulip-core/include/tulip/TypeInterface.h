@@ -63,7 +63,7 @@ public:
     return false;
   }
 };
-}
+} // namespace tlp
 
 #endif // TYPEINTERFACE_H
 ///@endcond

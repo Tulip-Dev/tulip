@@ -158,4 +158,4 @@ Vec2f FishEyesScreenFurnas::unproject(const Vec2f &p) const {
   return result;
 }
 //==============================================================
-}
+} // namespace pocore

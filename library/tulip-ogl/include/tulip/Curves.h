@@ -88,7 +88,7 @@ TLP_GL_SCOPE GLfloat *buildCurvePoints(const std::vector<Coord> &vertices,
 TLP_GL_SCOPE void buildCurvePoints(const std::vector<Coord> &vertices,
                                    const std::vector<float> &sizes, const Coord &startN,
                                    const Coord &endN, std::vector<Coord> &result);
-}
+} // namespace tlp
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif
 ///@endcond

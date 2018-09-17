@@ -109,5 +109,5 @@ protected:
   bool xInv;
   bool yInv;
 };
-}
+} // namespace tlp
 #endif

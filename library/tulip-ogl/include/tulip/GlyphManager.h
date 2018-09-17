@@ -78,7 +78,7 @@ private:
 
   static GlyphManager inst;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

@@ -39,11 +39,11 @@ class CSVImportParameters;
 class CSVToGraphDataMapping;
 
 /**
-  * @brief Widget generating the CSVToGraphDataMapping object.
-  *
-  * This widget allow user to configure a CSVToGraphDataMapping object. This object is used during
-  *the CSV import process to map CSV columns to graph elements like nodes or edges.
-  **/
+ * @brief Widget generating the CSVToGraphDataMapping object.
+ *
+ * This widget allow user to configure a CSVToGraphDataMapping object. This object is used during
+ *the CSV import process to map CSV columns to graph elements like nodes or edges.
+ **/
 class TLP_QT_SCOPE CSVGraphMappingConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
@@ -51,19 +51,19 @@ public:
   ~CSVGraphMappingConfigurationWidget() override;
 
   /**
-    * @brief Configure the widget with the CSV import parameters.
-    **/
+   * @brief Configure the widget with the CSV import parameters.
+   **/
   void updateWidget(tlp::Graph *graph, const CSVImportParameters &importParameters);
   /**
-    * @brief Build the mapping object between the CSV columns and the graph elements.
-    **/
+   * @brief Build the mapping object between the CSV columns and the graph elements.
+   **/
   CSVToGraphDataMapping *buildMappingObject() const;
 
   /**
-    * @brief Check if the values entered by user are valid.
-    *
-    * If return true you are sure that buildMappingObject never return a nullptr object.
-    **/
+   * @brief Check if the values entered by user are valid.
+   *
+   * If return true you are sure that buildMappingObject never return a nullptr object.
+   **/
   bool isValid() const;
 
 protected:
@@ -99,6 +99,6 @@ private slots:
 signals:
   void mappingChanged();
 };
-}
+} // namespace tlp
 #endif // CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 ///@endcond

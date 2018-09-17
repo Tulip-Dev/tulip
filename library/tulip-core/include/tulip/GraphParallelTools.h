@@ -174,6 +174,6 @@ void inline TLP_PARALLEL_MAP_EDGES_AND_INDICES(const tlp::Graph *graph,
                                                const EdgeFunction &edgeFunction) {
   TLP_PARALLEL_MAP_VECTOR_AND_INDICES<tlp::edge, EdgeFunction>(graph->edges(), edgeFunction);
 }
-}
+} // namespace tlp
 
 #endif

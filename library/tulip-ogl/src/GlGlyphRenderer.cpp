@@ -170,4 +170,4 @@ void GlGlyphRenderer::endRendering() {
 
   _renderingStarted = false;
 }
-}
+} // namespace tlp

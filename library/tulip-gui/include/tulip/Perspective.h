@@ -323,6 +323,6 @@ protected slots:
   void showStatusTipOf(QAction *action);
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
-}
+} // namespace tlp
 
 #endif //_PERSPECTIVE_H

@@ -62,6 +62,6 @@ protected slots:
 
   void selectPluginSourceFile();
 };
-}
+} // namespace tlp
 
 #endif /* PLUGINCREATIONDIALOG_H_ */

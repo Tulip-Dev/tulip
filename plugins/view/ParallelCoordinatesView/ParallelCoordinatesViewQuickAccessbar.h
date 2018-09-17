@@ -39,5 +39,5 @@ public slots:
   void setBackgroundColor(const QColor &) override;
   void setLabelsVisible(bool) override;
 };
-}
+} // namespace tlp
 #endif

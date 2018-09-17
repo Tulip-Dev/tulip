@@ -86,7 +86,7 @@ private:
   static void loadImageColorScalesFromDir(const QString &colorScalesDir);
   static std::vector<Color> getColorScaleFromImageFile(const QString &imageFilePath);
 };
-}
+} // namespace tlp
 
 #endif /* COLORSCALECONFIGDIALOG_H_ */
 ///@endcond

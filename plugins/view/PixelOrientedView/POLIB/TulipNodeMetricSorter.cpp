@@ -120,4 +120,4 @@ unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n,
 
   return 0;
 }
-}
+} // namespace pocore

@@ -135,5 +135,5 @@ protected:
 
   bool graphCreated;
 };
-}
+} // namespace tlp
 #endif /* SOMMAP_H_ */

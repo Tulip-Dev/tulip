@@ -157,6 +157,6 @@ private:
   int outlineWidth;
   Color outlineColor;
 };
-}
+} // namespace tlp
 #endif /* GLPOLYQUAD_H_ */
 ///@endcond

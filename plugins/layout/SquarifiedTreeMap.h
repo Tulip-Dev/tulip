@@ -84,11 +84,11 @@ private:
   bool shneidermanTreeMap;
   double aspectRatio;
   /**
-  * return a measure quality of row in which one wants ot add n
-  * width is the width of the rectangle in which we create the row
-  * length is the height of the rectangle in wich on creates the row
-  * surface is sum of size of elements what belongs to the rectangle
-  */
+   * return a measure quality of row in which one wants ot add n
+   * width is the width of the rectangle in which we create the row
+   * length is the height of the rectangle in wich on creates the row
+   * surface is sum of size of elements what belongs to the rectangle
+   */
   double evaluateRow(const std::vector<tlp::node> &row, tlp::node n, double width, double length,
                      double surface);
   void layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectd &rectArea);
@@ -99,10 +99,10 @@ private:
   // return a vector containing children of n ordered in decreasing order of their size.
   std::vector<tlp::node> orderedChildren(const tlp::node n) const;
   /**
-  * compute the size of each node in the tree
-  * the size is the sum of all the size of all leaves descendant of a node
-  * in the tree.
-  */
+   * compute the size of each node in the tree
+   * the size is the sum of all the size of all leaves descendant of a node
+   * in the tree.
+   */
   void computeNodesSize(tlp::node n);
 };
 

@@ -137,6 +137,6 @@ protected:
   float zoomAreaWidth, zoomAreaHeight;
   bool doZoomAndPan;
 };
-}
+} // namespace tlp
 
 #endif /* GLSCENEZOOMANDPAN_H_ */

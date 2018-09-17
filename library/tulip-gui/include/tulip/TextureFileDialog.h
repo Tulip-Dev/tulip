@@ -34,11 +34,11 @@ class TextureFileDialogData;
 namespace tlp {
 
 /**
-  * @brief Provide a dialog that allow the user to choose
-  * a file whose name may be empty
-  *
-  *
-  **/
+ * @brief Provide a dialog that allow the user to choose
+ * a file whose name may be empty
+ *
+ *
+ **/
 class TLP_QT_SCOPE TextureFileDialog : public QDialog {
   Q_OBJECT
 public:
@@ -62,6 +62,6 @@ public:
 public slots:
   void browse();
 };
-}
+} // namespace tlp
 #endif // TEXTUREFILEDIALOG_H
 ///@endcond

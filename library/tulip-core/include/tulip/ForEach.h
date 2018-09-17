@@ -28,11 +28,11 @@
 ///@cond DOXYGEN_HIDDEN
 namespace tlp {
 /**
-* @brief Encapsulation of a Tulip Iterator intended to be allocated on the stack instead of the
-*heap,
-* so it gets deleted when out of scope.
-*
-**/
+ * @brief Encapsulation of a Tulip Iterator intended to be allocated on the stack instead of the
+ *heap,
+ * so it gets deleted when out of scope.
+ *
+ **/
 template <typename TYPE>
 struct _TLP_IT {
   _TLP_IT(Iterator<TYPE> *_it) : _it(_it) {}
@@ -43,8 +43,8 @@ struct _TLP_IT {
 };
 
 /**
-* @brief
-**/
+ * @brief
+ **/
 template <typename TYPE>
 inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
   assert(_it._it != nullptr);
@@ -56,7 +56,7 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
     return false;
   }
 }
-}
+} // namespace tlp
 ///@endcond
 
 /**

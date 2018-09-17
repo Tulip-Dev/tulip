@@ -56,6 +56,6 @@ public:
    */
   void getXML(std::string &outString) override;
 };
-}
+} // namespace tlp
 
 #endif

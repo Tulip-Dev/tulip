@@ -48,5 +48,5 @@ public:
 
   bool rememberAddressChoice() const;
 };
-}
+} // namespace tlp
 #endif /* ADDRESSSELECTIONDIALOG_H_ */

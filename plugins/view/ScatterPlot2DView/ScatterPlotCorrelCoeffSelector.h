@@ -107,6 +107,6 @@ private:
   std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double>>
       polygonsToNodesSubsetAndCorrelCoeff;
 };
-}
+} // namespace tlp
 
 #endif /* SCATTERPLOTCORELCOEFFSELECTOR_H_ */

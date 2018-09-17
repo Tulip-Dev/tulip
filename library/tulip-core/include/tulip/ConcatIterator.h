@@ -25,26 +25,26 @@
 namespace tlp {
 
 /**
-* @brief This Iterator iterates over the sequence formed by the concatenation of the sequences it is
-*given.
-* @warning This class takes ownership of the Iterators it is given.
-**/
+ * @brief This Iterator iterates over the sequence formed by the concatenation of the sequences it
+ *is given.
+ * @warning This class takes ownership of the Iterators it is given.
+ **/
 template <class T>
 struct ConcatIterator : public Iterator<T> {
 
   /**
-  * @brief Creates an Iterator that iterates over the concatenation of the two sequences it is
-  *given.
-  *
-  * @param itOne The first sequence to iterate upon.
-  * @param itTwo The second sequence, which will be iterated upon after the first sequence has been
-  *completely iterated upon.
-  **/
+   * @brief Creates an Iterator that iterates over the concatenation of the two sequences it is
+   *given.
+   *
+   * @param itOne The first sequence to iterate upon.
+   * @param itTwo The second sequence, which will be iterated upon after the first sequence has been
+   *completely iterated upon.
+   **/
   ConcatIterator(Iterator<T> *itOne, Iterator<T> *itTwo) : itOne(itOne), itTwo(itTwo) {}
 
   /**
-  * @brief Deletes the two iterators it was given at construction.
-  **/
+   * @brief Deletes the two iterators it was given at construction.
+   **/
   ~ConcatIterator() override {
     delete itOne;
     delete itTwo;
@@ -68,21 +68,21 @@ private:
 };
 
 /**
-* @brief Convenient function for creating a ConcatIterator.
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Creates a ConcatIterator from two other Iterators.
-* The returned Iterator takes ownership of the one provided as parameter.
-*
-* @param itOne the first input Iterator
-* @param itTwo the second input Iterator
-* @return a ConcatIterator
-**/
+ * @brief Convenient function for creating a ConcatIterator.
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Creates a ConcatIterator from two other Iterators.
+ * The returned Iterator takes ownership of the one provided as parameter.
+ *
+ * @param itOne the first input Iterator
+ * @param itTwo the second input Iterator
+ * @return a ConcatIterator
+ **/
 template <class T>
 Iterator<T> *concatIterator(Iterator<T> *itOne, Iterator<T> *itTwo) {
   return new ConcatIterator<T>(itOne, itTwo);
 }
-}
+} // namespace tlp
 #endif

@@ -157,6 +157,6 @@ struct StoredType {
     }                                                                                              \
   };
 #endif
-}
+} // namespace tlp
 #endif
 ///@endcond

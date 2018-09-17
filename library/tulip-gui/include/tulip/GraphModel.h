@@ -152,7 +152,7 @@ private:
   bool _edgesAdded;
   bool _edgesRemoved;
 };
-}
+} // namespace tlp
 
 #endif // GRAPHMODEL_H
 ///@endcond

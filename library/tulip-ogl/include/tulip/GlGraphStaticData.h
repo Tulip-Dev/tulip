@@ -40,7 +40,7 @@ public:
   static std::string labelPositionName(int id);
   static int labelPositionId(const std::string &name);
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLGRAPHSTATICDATA_H
 ///@endcond

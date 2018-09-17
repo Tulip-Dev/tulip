@@ -52,7 +52,7 @@ public slots:
 signals:
   void drawNeeded();
 };
-}
+} // namespace tlp
 
 #endif // SCENELAYERSCONFIGWIDGET_H
 ///@endcond

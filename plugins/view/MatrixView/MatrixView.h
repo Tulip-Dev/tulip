@@ -147,5 +147,5 @@ private:
   void updateNodesOrder();
   void updateLayout();
 };
-}
+} // namespace tlp
 #endif // MATRIXVIEW_H

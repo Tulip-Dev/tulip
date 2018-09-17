@@ -1165,4 +1165,4 @@ unsigned int ScatterPlot2DView::getMappedId(unsigned int id) {
 
   return id;
 }
-}
+} // namespace tlp

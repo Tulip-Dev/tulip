@@ -61,5 +61,5 @@ private:
    **/
   TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-}
+} // namespace tlp
 #endif

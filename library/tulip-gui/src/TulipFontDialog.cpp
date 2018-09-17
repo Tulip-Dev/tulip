@@ -70,8 +70,8 @@ void TulipFontDialog::fontChanged() {
   TulipFont selectedFont = font();
   _ui->preview->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; " +
                               (selectedFont.isItalic() ? "font-style: italic; " : "") +
-                              (selectedFont.isBold() ? "font-weight: bold; " : "") + "font-size: " +
-                              QString::number(_ui->sizeSpin->value()) + "px; ");
+                              (selectedFont.isBold() ? "font-weight: bold; " : "") +
+                              "font-size: " + QString::number(_ui->sizeSpin->value()) + "px; ");
 }
 int TulipFontDialog::fontSize() const {
   return _ui->sizeSpin->value();

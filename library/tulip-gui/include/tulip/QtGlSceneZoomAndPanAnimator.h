@@ -75,6 +75,6 @@ protected:
   GlMainWidget *glWidget;
   double animationDurationMsec;
 };
-}
+} // namespace tlp
 
 #endif /* QTGLSCENEZOOMANDPANANIMATOR_H_ */

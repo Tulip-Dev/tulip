@@ -526,4 +526,4 @@ void GlAbstractPolygon::recomputeBoundingBox() {
     boundingBox.expand(*it);
   }
 }
-}
+} // namespace tlp

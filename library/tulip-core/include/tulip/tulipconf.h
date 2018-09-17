@@ -230,7 +230,7 @@ extern TLP_SCOPE void setErrorOutput(std::ostream &os);
  * @brief return the TULIP_VERSION value
  */
 extern TLP_SCOPE std::string getTulipVersion();
-}
+} // namespace tlp
 
 #endif // TULIPCONF_H
 ///@endcond

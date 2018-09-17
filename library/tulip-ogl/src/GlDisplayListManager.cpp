@@ -61,4 +61,4 @@ bool GlDisplayListManager::callDisplayList(const std::string &name) {
   glCallList(it->second);
   return true;
 }
-}
+} // namespace tlp

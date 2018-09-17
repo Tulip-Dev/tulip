@@ -466,7 +466,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 #else
           Qt::ControlModifier
 #endif
-          )
+      )
         currentMouse = new MouseZoomRotZ();
       else if (qMouseEv->modifiers() & Qt::ShiftModifier)
         currentMouse = new MouseRotXRotY();

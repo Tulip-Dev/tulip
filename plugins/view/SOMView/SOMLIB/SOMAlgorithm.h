@@ -155,5 +155,5 @@ protected:
   TimeDecreasingFunction *learningRateFunction;
   DiffusionRateFunction *diffusionRateFunction;
 };
-}
+} // namespace tlp
 #endif /* SOMALGORITHM_H_ */

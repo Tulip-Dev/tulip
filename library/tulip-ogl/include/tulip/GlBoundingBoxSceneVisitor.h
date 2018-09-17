@@ -68,7 +68,7 @@ private:
   std::vector<BoundingBox> bbs;
   GlGraphInputData *inputData;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

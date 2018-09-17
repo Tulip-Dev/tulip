@@ -89,4 +89,4 @@ void UniformDeformationScreen::updateMatrix() {
   _invMat = _mat;
   _invMat.inverse();
 }
-}
+} // namespace pocore

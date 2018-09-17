@@ -667,9 +667,8 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName,
       curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
     }
 
-    if (canUseGeometryShader &&
-        curvesBillboardGeometryShadersMap.find(shaderProgramName) ==
-            curvesBillboardGeometryShadersMap.end()) {
+    if (canUseGeometryShader && curvesBillboardGeometryShadersMap.find(shaderProgramName) ==
+                                    curvesBillboardGeometryShadersMap.end()) {
       GlShaderProgram *polygonShader = new GlShaderProgram(shaderProgramName);
       polygonShader->addShaderFromSourceCode(Vertex,
                                              genCommonUniformVariables() + curveSpecificShaderCode);
@@ -754,9 +753,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair(
         static_cast<GlShaderProgram *>(nullptr), static_cast<GlShaderProgram *>(nullptr));
 
-    if (canUseGeometryShader &&
-        curvesGeometryShadersMap.find(curveShaderProgram->getName()) !=
-            curvesGeometryShadersMap.end()) {
+    if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) !=
+                                    curvesGeometryShadersMap.end()) {
       geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
       geometryBillboardShaders = curvesBillboardGeometryShadersMap[curveShaderProgram->getName()];
     }

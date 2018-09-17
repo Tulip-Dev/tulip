@@ -735,28 +735,24 @@ struct TLPPropertyBuilder : public TLPFalse {
     return true;
   }
   bool setNodeValue(int nodeId, const std::string &value) {
-    return property
-               ? graphBuilder->setNodeValue(nodeId, property, const_cast<std::string &>(value),
-                                            isGraphProperty, isPathViewProperty)
-               : false;
+    return property ? graphBuilder->setNodeValue(nodeId, property, const_cast<std::string &>(value),
+                                                 isGraphProperty, isPathViewProperty)
+                    : false;
   }
   bool setEdgeValue(int edgeId, const std::string &value) {
-    return property
-               ? graphBuilder->setEdgeValue(edgeId, property, const_cast<std::string &>(value),
-                                            isGraphProperty, isPathViewProperty)
-               : false;
+    return property ? graphBuilder->setEdgeValue(edgeId, property, const_cast<std::string &>(value),
+                                                 isGraphProperty, isPathViewProperty)
+                    : false;
   }
   bool setAllNodeValue(const std::string &value) {
-    return property
-               ? graphBuilder->setAllNodeValue(property, const_cast<std::string &>(value),
-                                               isGraphProperty, isPathViewProperty)
-               : false;
+    return property ? graphBuilder->setAllNodeValue(property, const_cast<std::string &>(value),
+                                                    isGraphProperty, isPathViewProperty)
+                    : false;
   }
   bool setAllEdgeValue(const std::string &value) {
-    return property
-               ? graphBuilder->setAllEdgeValue(property, const_cast<std::string &>(value),
-                                               isGraphProperty, isPathViewProperty)
-               : false;
+    return property ? graphBuilder->setAllEdgeValue(property, const_cast<std::string &>(value),
+                                                    isGraphProperty, isPathViewProperty)
+                    : false;
   }
   bool addStruct(const std::string &structName, TLPBuilder *&newBuilder) override;
   bool close() override {
@@ -1004,4 +1000,4 @@ public:
   }
 };
 PLUGIN(TLPImport)
-}
+} // namespace tlp

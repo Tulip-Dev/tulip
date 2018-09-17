@@ -477,5 +477,5 @@ private:
   std::vector<float> textWidthVector;
   BoundingBox textBoundingBox;
 };
-}
+} // namespace tlp
 #endif

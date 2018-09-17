@@ -38,10 +38,10 @@ class QuadTreeNode {
 public:
   //======================================
   /*
-     * build a new Quadtree
-     * to work correctly box should be the bounding box
-     * of all elements inserted in that QuadTree
-     */
+   * build a new Quadtree
+   * to work correctly box should be the bounding box
+   * of all elements inserted in that QuadTree
+   */
   /**
    * Contructor, you have to put the global bounding box of the quadtree
    */
@@ -246,7 +246,7 @@ private:
   std::vector<TYPE> entities;
   tlp::Rectangle<float> _box;
 };
-}
+} // namespace tlp
 
 #endif // QUADTREE_H
 

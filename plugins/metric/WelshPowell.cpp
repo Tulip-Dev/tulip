@@ -56,7 +56,7 @@ public:
  *  by David Auber, LaBRI, University Bordeaux I, France
  *
  *
-*/
+ */
 class WelshPowell : public DoubleAlgorithm {
   // to maximize the locality of reference we will use a vector
   // holding the all the nodes needed info in the structure below

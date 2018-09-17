@@ -57,7 +57,7 @@ protected slots:
 protected:
   bool eventFilter(QObject *, QEvent *e) override;
 };
-}
+} // namespace tlp
 
 #endif /* VIEW_TOOLTIP_AND_URL_MANAGER_H */
 

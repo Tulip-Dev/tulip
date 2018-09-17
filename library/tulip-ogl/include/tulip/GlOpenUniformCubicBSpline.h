@@ -55,7 +55,7 @@ public:
    * @param startSize the width at the start of the curve
    * @param endSize the width at the end of the curve
    * @param nbCurvePoints the number of curve points to generate
-  */
+   */
   GlOpenUniformCubicBSpline(const std::vector<Coord> &controlPoints, const Color &startColor,
                             const Color &endColor, const float startSize, const float endSize,
                             const unsigned int nbCurvePoints = 200);
@@ -79,6 +79,6 @@ private:
   unsigned nbKnots;
   float stepKnots;
 };
-}
+} // namespace tlp
 
 #endif

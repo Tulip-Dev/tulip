@@ -41,7 +41,7 @@ public:
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor) = 0;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLENTITY_H
 ///@endcond

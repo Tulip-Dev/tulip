@@ -100,7 +100,7 @@ protected:
   virtual void mMouseStretchAxis(double, double, GlMainWidget *);
   virtual void mAlign(EditOperation operation, GlMainWidget *);
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

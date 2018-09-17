@@ -85,7 +85,7 @@ private:
   QGraphicsSimpleTextItem *_nodesEdgesTextItem;
   QPushButton *_confPropertySelectionWidget;
 };
-}
+} // namespace tlp
 
 #endif // CAPTIONGRAPHICSITEM_H
 ///@endcond

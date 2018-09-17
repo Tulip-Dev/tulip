@@ -470,12 +470,10 @@ void MovablePathItem::updatePath() {
         // init of second path
         float midValue =
             computeToto(firstLimit, lastValue.second, (*it).second, lastValue.first, (*it).first);
-        pathsPoints[0].push_back(
-            QPoint(15 + 15. * midValue,
-                   160 - 160 * (firstLimit - _minMetric) / (_maxMetric - _minMetric)));
-        pathsPoints[1].push_back(
-            QPoint(15 + 15. * midValue,
-                   160 - 160 * (firstLimit - _minMetric) / (_maxMetric - _minMetric)));
+        pathsPoints[0].push_back(QPoint(15 + 15. * midValue, 160 - 160 * (firstLimit - _minMetric) /
+                                                                       (_maxMetric - _minMetric)));
+        pathsPoints[1].push_back(QPoint(15 + 15. * midValue, 160 - 160 * (firstLimit - _minMetric) /
+                                                                       (_maxMetric - _minMetric)));
         pathsPoints[1].push_back(
             QPoint(15 + 15. * (*it).second,
                    160 - 160 * ((*it).first - _minMetric) / (_maxMetric - _minMetric)));
@@ -573,4 +571,4 @@ SelectionTextItem::SelectionTextItem() {
   f.setBold(true);
   setFont(f);
 }
-}
+} // namespace tlp

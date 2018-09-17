@@ -74,6 +74,6 @@ protected:
   PolyFileType _oldPolyFileType;
   std::string _oldFileLoaded;
 };
-}
+} // namespace tlp
 
 #endif /* GOOGLEMAPSVIEWCONFIGWIDGET_H_ */

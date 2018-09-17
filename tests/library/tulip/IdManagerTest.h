@@ -50,5 +50,5 @@ public:
 private:
   IdManager *idManager;
 };
-}
+} // namespace tlp
 #endif

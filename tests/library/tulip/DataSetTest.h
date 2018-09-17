@@ -43,5 +43,5 @@ public:
   void testSetGetStruct();
   void testDataSetSerialization();
 };
-}
+} // namespace tlp
 #endif

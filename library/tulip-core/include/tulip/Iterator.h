@@ -37,37 +37,37 @@ extern TLP_SCOPE int getNumIterators();
 ///@endcond
 
 /**
-* @brief Interface for Tulip iterators.
-* Allows basic iteration operations only.
-*
-* Below are some examples about how to use Tulip iterators in C++ code.
-*
-* @code
-*
-* // graph is a pointer to a tlp::Graph instance
-*
-* // shortest syntax using C++11 for range based loops
-* for (auto n : graph->getNodes()) {
-*   // do someting with n
-* }
-*
-* // legacy syntax using Tulip forEach macro
-* #include <tulip/ForEach.h>
-* tlp::node n;
-* forEach(n, graph->getNodes()) {
-*   // do something with n
-* }
-*
-* // no syntactic sugar syntax (needs to explicitely delete the iterator
-* // after its use)
-* tlp::Iterator<tl::node> *nodesIt = graph->getNodes();
-* while (nodesIt->hasNext()) {
-*   tlp::node n = nodes->next();
-*   // do something with n
-* }
-* delete nodesIt;
-* @endcode
-**/
+ * @brief Interface for Tulip iterators.
+ * Allows basic iteration operations only.
+ *
+ * Below are some examples about how to use Tulip iterators in C++ code.
+ *
+ * @code
+ *
+ * // graph is a pointer to a tlp::Graph instance
+ *
+ * // shortest syntax using C++11 for range based loops
+ * for (auto n : graph->getNodes()) {
+ *   // do someting with n
+ * }
+ *
+ * // legacy syntax using Tulip forEach macro
+ * #include <tulip/ForEach.h>
+ * tlp::node n;
+ * forEach(n, graph->getNodes()) {
+ *   // do something with n
+ * }
+ *
+ * // no syntactic sugar syntax (needs to explicitely delete the iterator
+ * // after its use)
+ * tlp::Iterator<tl::node> *nodesIt = graph->getNodes();
+ * while (nodesIt->hasNext()) {
+ *   tlp::node n = nodes->next();
+ *   // do something with n
+ * }
+ * delete nodesIt;
+ * @endcode
+ **/
 template <typename T>
 struct Iterator {
   ///
@@ -83,17 +83,17 @@ struct Iterator {
 #endif
   }
   /**
-  * @brief Moves the Iterator on the next element.
-  *
-  * @return The current element pointed by the Iterator.
-  **/
+   * @brief Moves the Iterator on the next element.
+   *
+   * @return The current element pointed by the Iterator.
+   **/
   virtual T next() = 0;
 
   /**
-  * @brief Tells if the sequence is at its end.
-  *
-  * @return bool Whether there are more elements to iterate.
-  **/
+   * @brief Tells if the sequence is at its end.
+   *
+   * @return bool Whether there are more elements to iterate.
+   **/
   virtual bool hasNext() = 0;
 
 private:
@@ -159,18 +159,18 @@ inline auto end(Iterator<T> *it) -> decltype(it->end()) {
 #endif
 
 /**
-* @brief Counts the number of iterated elements
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Counts the number of elements iterated by the provided iterator.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-*
-* @return The number of iterated elements
-**/
+ * @brief Counts the number of iterated elements
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Counts the number of elements iterated by the provided iterator.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ *
+ * @return The number of iterated elements
+ **/
 template <typename T>
 inline unsigned int iteratorCount(Iterator<T> *it) {
   unsigned int count = 0;
@@ -183,18 +183,18 @@ inline unsigned int iteratorCount(Iterator<T> *it) {
 }
 
 /**
-* @brief Checks a mimimum amount of iterated elements
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Checks if the iterator returns at least n values.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-*
-* @return true if the iterator returns at least n values
-**/
+ * @brief Checks a mimimum amount of iterated elements
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Checks if the iterator returns at least n values.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ *
+ * @return true if the iterator returns at least n values
+ **/
 template <typename T>
 inline bool iteratorCountCheck(Iterator<T> *it, unsigned int minNbElements) {
   unsigned int count = 0;
@@ -211,38 +211,38 @@ inline bool iteratorCountCheck(Iterator<T> *it, unsigned int minNbElements) {
 }
 
 /**
-* @brief Checks if an iterator is empty
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Checks if the iterator does not return any value.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-*
-* @return true if the iterator is empty
-**/
+ * @brief Checks if an iterator is empty
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Checks if the iterator does not return any value.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ *
+ * @return true if the iterator is empty
+ **/
 template <typename T>
 inline bool iteratorEmpty(Iterator<T> *it) {
   return !iteratorCountCheck(it, 1);
 }
 
 /**
-* @brief Applies a function to each iterated element
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Applies a function to each element iterated by the provided iterator.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-* @param mapFunction functor or lambda function taking one parameter of the same type of the
-*iterated elements
-*
-*
-**/
+ * @brief Applies a function to each iterated element
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Applies a function to each element iterated by the provided iterator.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ * @param mapFunction functor or lambda function taking one parameter of the same type of the
+ *iterated elements
+ *
+ *
+ **/
 template <typename T, class MapFunction>
 inline void iteratorMap(Iterator<T> *it, MapFunction &&mapFunction) {
   if (sizeof(T) > sizeof(double)) {
@@ -257,23 +257,23 @@ inline void iteratorMap(Iterator<T> *it, MapFunction &&mapFunction) {
 }
 
 /**
-* @brief Reduces iterated elements to a single value
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Produces a single value from the iterated elements (e.g. sum).
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-* @param initVal initial value of the reduced result
-* @param reduceFunction functor or lambda function taking two parameters : first one being the
-*current reduced value,
-* second one being the current iterated element and returning intermediate reduced value
-*
-* @return the reduced value from the iterated elements
-*
-**/
+ * @brief Reduces iterated elements to a single value
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Produces a single value from the iterated elements (e.g. sum).
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ * @param initVal initial value of the reduced result
+ * @param reduceFunction functor or lambda function taking two parameters : first one being the
+ *current reduced value,
+ * second one being the current iterated element and returning intermediate reduced value
+ *
+ * @return the reduced value from the iterated elements
+ *
+ **/
 template <typename T, typename reduceType, class ReduceFunction>
 inline reduceType iteratorReduce(Iterator<T> *it, const reduceType &initVal,
                                  ReduceFunction reduceFunction) {
@@ -291,18 +291,18 @@ inline reduceType iteratorReduce(Iterator<T> *it, const reduceType &initVal,
 }
 
 /**
-* @brief Converts an iterator to a std::list
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Returns a std::list filled with the iterated elements.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-*
-* @return a std::list filled with iterated elements
-**/
+ * @brief Converts an iterator to a std::list
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Returns a std::list filled with the iterated elements.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ *
+ * @return a std::list filled with iterated elements
+ **/
 template <typename T>
 inline std::list<T> iteratorList(Iterator<T> *it) {
   std::list<T> ret;
@@ -314,18 +314,18 @@ inline std::list<T> iteratorList(Iterator<T> *it) {
 }
 
 /**
-* @brief Converts an iterator to a std::vector
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Returns a std::vector filled with the iterated elements.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-*
-* @return a std::vector filled with iterated elements
-**/
+ * @brief Converts an iterator to a std::vector
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Returns a std::vector filled with the iterated elements.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ *
+ * @return a std::vector filled with iterated elements
+ **/
 template <typename T>
 inline std::vector<T> iteratorVector(Iterator<T> *it) {
   std::vector<T> ret;
@@ -337,18 +337,18 @@ inline std::vector<T> iteratorVector(Iterator<T> *it) {
 }
 
 /**
-* @brief Converts an iterator to a std::set
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Returns a std::set filled with the iterated elements.
-* That function takes ownership of the iterator and will delete it.
-*
-* @param it a Tulip iterator
-*
-* @return a std::set filled with iterated elements
-**/
+ * @brief Converts an iterator to a std::set
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Returns a std::set filled with the iterated elements.
+ * That function takes ownership of the iterator and will delete it.
+ *
+ * @param it a Tulip iterator
+ *
+ * @return a std::set filled with iterated elements
+ **/
 template <typename T>
 inline std::set<T> iteratorSet(Iterator<T> *it) {
   std::set<T> ret;
@@ -379,7 +379,7 @@ private:
 };
 
 #endif // DOXYGEN_NOTFOR_DEVEL
-}
+} // namespace tlp
 
 #ifdef _MSC_VER
 

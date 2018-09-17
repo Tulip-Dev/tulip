@@ -66,5 +66,5 @@ private:
   std::map<std::string, bool> entities;
   int entityId;
 };
-}
+} // namespace tlp
 #endif /* PATHHIGHLIGHTER_H_ */

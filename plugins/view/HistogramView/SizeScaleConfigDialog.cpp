@@ -75,4 +75,4 @@ bool SizeScaleConfigDialog::doMappingOnViewSize() const {
 void SizeScaleConfigDialog::viewSizeRadioButtonToggled(bool checked) {
   _ui->dimensionsMappingGB->setEnabled(checked);
 }
-}
+} // namespace tlp

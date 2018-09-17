@@ -39,6 +39,6 @@ struct DimensionBase {
   virtual std::vector<unsigned int> links(const unsigned int itemId) const = 0;
   virtual std::string getDimensionName() const = 0;
 };
-}
+} // namespace pocore
 
 #endif

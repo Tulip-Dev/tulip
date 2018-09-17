@@ -394,4 +394,4 @@ void GlBox::clearGenerated() {
 
   generated = false;
 }
-}
+} // namespace tlp

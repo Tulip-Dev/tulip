@@ -123,7 +123,7 @@ protected:
 
   LayerLODUnit *currentLayerLODUnit;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLCPULODCALCULATOR_H
 ///@endcond

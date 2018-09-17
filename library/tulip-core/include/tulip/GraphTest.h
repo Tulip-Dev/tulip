@@ -42,6 +42,6 @@ public:
 
   virtual bool test() = 0;
 };
-}
+} // namespace tlp
 #endif //_GRAPHTEST_H
 ///@endcond

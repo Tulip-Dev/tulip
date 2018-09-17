@@ -76,7 +76,7 @@ private:
 
   unsigned int maxSelectedStringsListSize;
 };
-}
+} // namespace tlp
 
 #endif /* SIMPLESTRINGSLISTSELECTIONWIDGET_H_ */
 ///@endcond

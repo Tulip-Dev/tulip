@@ -45,6 +45,6 @@ private:
   int x, y;
   bool dragStarted;
 };
-}
+} // namespace tlp
 
 #endif /* PARALLELCOORDSAXISSPACER_H_ */

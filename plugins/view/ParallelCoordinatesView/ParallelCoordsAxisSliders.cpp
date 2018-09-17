@@ -605,4 +605,4 @@ void ParallelCoordsAxisSliders::updateSlidersYBoundaries() {
     slidersYBoundaries[axis].second = axis->getTopSliderCoord().getY();
   }
 }
-}
+} // namespace tlp

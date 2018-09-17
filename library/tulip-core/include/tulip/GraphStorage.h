@@ -34,20 +34,20 @@ class Graph;
 
 //===========================================
 /**
-  * @class GraphStorageIdsMemento
-  * @brief that class provides a simple interface
-  * to save the state of the ids manage by the GraphStorage class
-  */
+ * @class GraphStorageIdsMemento
+ * @brief that class provides a simple interface
+ * to save the state of the ids manage by the GraphStorage class
+ */
 class GraphStorageIdsMemento {
 public:
   virtual ~GraphStorageIdsMemento() {}
 };
 //===========================================
 /**
-  * @class GraphStorage
-  * @brief That class provide a simple implementation
-  * for the storage of graph elts (nodes edges)
-  */
+ * @class GraphStorage
+ * @brief That class provide a simple implementation
+ * for the storage of graph elts (nodes edges)
+ */
 class GraphStorage {
 public:
   //=======================================================
@@ -92,7 +92,7 @@ public:
    * @brief Enables to reserve memory for nbEdges
    * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
    * to speed up significantly construction of graphs.
-    */
+   */
   void reserveEdges(const size_t nb);
   //=======================================================
   /**
@@ -485,6 +485,6 @@ private:
    */
   void removeFromEdges(const edge e, node end = node());
 };
-}
+} // namespace tlp
 #endif // GRAPHSTORAGE_H
 ///@endcond

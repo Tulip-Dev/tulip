@@ -315,12 +315,11 @@ std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides,
   }
 
   for (auto &point : points) {
-    point.set(center[0] +
-                  ((point[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) *
-                      size[0],
-              center[1] +
-                  ((point[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) *
-                      size[1]);
+    point.set(
+        center[0] + ((point[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) *
+                        size[0],
+        center[1] + ((point[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) *
+                        size[1]);
   }
 
   return points;

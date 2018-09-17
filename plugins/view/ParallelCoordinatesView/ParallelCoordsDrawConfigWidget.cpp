@@ -216,4 +216,4 @@ bool ParallelCoordsDrawConfigWidget::configurationChanged() {
 
   return confChanged;
 }
-}
+} // namespace tlp

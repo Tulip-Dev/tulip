@@ -42,6 +42,6 @@ private:
   bool _pressed;
   QPoint _clickPosition;
 };
-}
+} // namespace tlp
 #endif //_DRAGHANDLE_H
 ///@endcond

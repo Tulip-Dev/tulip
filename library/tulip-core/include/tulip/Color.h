@@ -159,7 +159,7 @@ public:
 
 TLP_SCOPE std::ostream &operator<<(std::ostream &os, const tlp::Color &);
 TLP_SCOPE std::istream &operator>>(std::istream &is, tlp::Color &);
-}
+} // namespace tlp
 
 tlp::Color::Color(const tlp::Vector<unsigned char, 4> &v) : tlp::Vector<unsigned char, 4>(v) {}
 

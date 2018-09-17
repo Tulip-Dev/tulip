@@ -148,7 +148,7 @@ private:
 
   std::map<std::string, bool> checkedExtensions;
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

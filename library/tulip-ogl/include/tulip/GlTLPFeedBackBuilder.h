@@ -79,7 +79,7 @@ private:
 
   std::vector<GLfloat> dataBuffer;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLFEEDBACKBUILDER_H
 ///@endcond

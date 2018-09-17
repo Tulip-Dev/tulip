@@ -251,6 +251,6 @@ protected:
   float maxCaptionWidth;
   float maxGraduationLabelWidth;
 };
-}
+} // namespace tlp
 
 #endif /* GLAXIS_H_ */

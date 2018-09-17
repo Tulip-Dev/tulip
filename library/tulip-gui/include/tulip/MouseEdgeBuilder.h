@@ -81,6 +81,6 @@ public:
 
   void clear() override;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

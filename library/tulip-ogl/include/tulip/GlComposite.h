@@ -189,5 +189,5 @@ protected:
   std::vector<GlLayer *> layerParents;
   bool deleteComponentsInDestructor;
 };
-}
+} // namespace tlp
 #endif

@@ -48,7 +48,7 @@ void sortEdges(Graph *graph, const vector<edge> &order, map<edge, edge> &rev) {
  * Preconditions:
  * - G is a graph with n nodes;
  * - G is biconnected.
-*/
+ */
 void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   if (n <= 2)
     return;
@@ -184,7 +184,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
  * - state[u] == NOT_VISITED for all nodes u in T_w;
  * - for all nodes u in T_w, has_back_edge[u] == false;
  * - T_w is biconnected.
-*/
+ */
 void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNode,
                                                   list<edge> &listBackEdges,
                                                   list<node> &terminalNodes) {
@@ -303,7 +303,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG, node w, node newCNo
  * For all node u in path from t to w upward in T,
  * initializes backedge_representant[u] = u,
  * marks u as VISITED and appends u to list traversed_nodes.
-*/
+ */
 void PlanarityTestImpl::markPathInT(node t, node w, map<node, node> &backEdgeRepresentant,
                                     list<node> &traversedNodes) {
   state.set(w.id, VISITED);
@@ -327,7 +327,7 @@ void PlanarityTestImpl::markPathInT(node t, node w, map<node, node> &backEdgeRep
  * Appends all nodes marked as VISITED in list traversed_nodes.
  * Precondition:
  * - for all nodes u in T_w, has_back_edge[u] == false.
-*/
+ */
 map<node, list<edge>> PlanarityTestImpl::groupBackEdgesByRepr(Graph *sG, list<edge> &listBackEdges,
                                                               map<node, node> &backEdgeRepresentant,
                                                               list<node> &traversedNodes,
@@ -608,7 +608,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW, Graph *sG, node re
 /*
  * Sorts all back-edges with representant repr by depth first search traversal in
  * (T_repr - P), denoted as T_v^*.
-*/
+ */
 int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG, node, node repr, list<edge> &listBackEdges,
                                           vector<edge> &backEdge) {
   // constructs a DFS tree of T_v^* to sort back-edges to embed;

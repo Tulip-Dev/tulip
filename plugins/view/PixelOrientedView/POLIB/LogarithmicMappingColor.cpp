@@ -25,4 +25,4 @@ LogarithmicMappingColor::LogarithmicMappingColor(const double &min, const double
 RGBA LogarithmicMappingColor::getColor(const double &value, const unsigned int idColor) const {
   return LinearMappingColor::getColor(log1p(value), idColor);
 }
-}
+} // namespace pocore

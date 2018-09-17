@@ -198,7 +198,7 @@ private:
   void unobserveUpdates();
   void delPreviousRecorders();
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond

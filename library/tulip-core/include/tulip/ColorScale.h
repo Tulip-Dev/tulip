@@ -221,6 +221,6 @@ protected:
   std::map<float, Color> colorMap;
   bool gradient;
 };
-}
+} // namespace tlp
 
 #endif /* COLORSCALE_H_ */

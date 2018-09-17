@@ -70,5 +70,5 @@ private:
   void addVariable(Variable *const v);
   void setUpConstraintHeap(PairingHeap<Constraint *> *&h, bool in);
 };
-}
+} // namespace vpsc
 #endif // SEEN_REMOVEOVERLAP_BLOCK_H

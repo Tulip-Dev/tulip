@@ -30,24 +30,24 @@ namespace tlp {
 class Observable;
 //=======================================
 /**
-  * @ingroup Observation
-  * @brief Event is the base class for all events used in the Observation mechanism.
-  *
-  * An Event is characterized by its type. The base Event class only carries information as to the
-  *type of event, nothing specific.
-  *
-  * Event::TLP_DELETE : send directly to all Observers/Listeners, not affected by
-  *Observable::holdObservers().
-  * Event::TLP_MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to
-  *Observers
-  *and then to Listeners.
-  * Event::TLP_INFORMATION : sent only to Listeners.
-  * Event::TLP_INVALID : never sent, used internally for delaying events.
-  *
-  * @see Listener
-  * @see Observer
-  * @see Observable
-  **/
+ * @ingroup Observation
+ * @brief Event is the base class for all events used in the Observation mechanism.
+ *
+ * An Event is characterized by its type. The base Event class only carries information as to the
+ *type of event, nothing specific.
+ *
+ * Event::TLP_DELETE : send directly to all Observers/Listeners, not affected by
+ *Observable::holdObservers().
+ * Event::TLP_MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to
+ *Observers
+ *and then to Listeners.
+ * Event::TLP_INFORMATION : sent only to Listeners.
+ * Event::TLP_INVALID : never sent, used internally for delaying events.
+ *
+ * @see Listener
+ * @see Observer
+ * @see Observable
+ **/
 class TLP_SCOPE Event {
   friend class Observable;
   friend class Graph;
@@ -70,14 +70,14 @@ private:
 //=======================================
 /**
  * @ingroup Observation
-  * @class ObservableException
-  * @brief ObservableException is the base class of all exceptions sent by the
+ * @class ObservableException
+ * @brief ObservableException is the base class of all exceptions sent by the
  *Observable/Listener/Observer system.
-  *
-  * @see Listener
-  * @see Observer
-  * @see Observable
-  **/
+ *
+ * @see Listener
+ * @see Observer
+ * @see Observable
+ **/
 class TLP_SCOPE ObservableException : public tlp::TulipException {
 public:
   ObservableException(const std::string &desc) : tlp::TulipException(desc) {}
@@ -143,35 +143,36 @@ class TLP_SCOPE Observable {
 
 public:
   /**
-  * @brief Holds back all events until Observable::unholdObservers() is called.
-  *
-  * Listeners are not affected by this function.
-  * Once this function is called, all events heading to an Observer will be held, except TLP_DELETE
-  * events.
-  * The events are stored in a queue, and will be sent once Observable::unholdObservers() is called.
-  *
-  * It is possible to nest calls to  Observable::holdObservers() and  Observable::unholdObservers(),
-  * and in this case the events will only be sent when there
-  * have been as many calls to  Observable::unholdObservers() as to  Observable::holdObservers().
-  *
-  * It is possible to check whether the events are being help by checking the
-  * Observable::observersHoldCounter() function.
-  *
-  * @see unholdObservers
-  * @see observersHoldCounter
-  */
+   * @brief Holds back all events until Observable::unholdObservers() is called.
+   *
+   * Listeners are not affected by this function.
+   * Once this function is called, all events heading to an Observer will be held, except TLP_DELETE
+   * events.
+   * The events are stored in a queue, and will be sent once Observable::unholdObservers() is
+   * called.
+   *
+   * It is possible to nest calls to  Observable::holdObservers() and Observable::unholdObservers(),
+   * and in this case the events will only be sent when there
+   * have been as many calls to  Observable::unholdObservers() as to  Observable::holdObservers().
+   *
+   * It is possible to check whether the events are being help by checking the
+   * Observable::observersHoldCounter() function.
+   *
+   * @see unholdObservers
+   * @see observersHoldCounter
+   */
   static void holdObservers();
   /**
-  * @brief Sends all held events to the Observers.
-  *
-  * Listeners are not affected by this function.
-  *
-  * In debug mode, if the hold counter is less than one when calling this function, an
-  * ObservableException will be raised.
-  *
-  * @see holdObservers
-  * @see observersHoldCounter
-  */
+   * @brief Sends all held events to the Observers.
+   *
+   * Listeners are not affected by this function.
+   *
+   * In debug mode, if the hold counter is less than one when calling this function, an
+   * ObservableException will be raised.
+   *
+   * @see holdObservers
+   * @see observersHoldCounter
+   */
   static void unholdObservers();
 
   /**
@@ -272,7 +273,7 @@ public:
    * Checks if the object represented by the node has been deleted.
    * @param n The node to check for life signs.
    * @return Whether the node is dead.
-  **/
+   **/
   static bool isAlive(tlp::node n);
 
   /**
@@ -281,7 +282,7 @@ public:
    * use isAlive() to check for this and avoid a crash.
    * @param n The node representing the object to retrieve.
    * @return The object represented by the node.
-  **/
+   **/
   static Observable *getObject(tlp::node n);
 
   /**
@@ -352,21 +353,21 @@ protected:
   virtual void treatEvent(const Event &message);
 
   /**
-  * @brief Sends the Event::DELETE before the deletion of the subclass and its internal objects.
-  *
-  * The observation system automatically sends the DELETE event when the Observable is deleted, but
-  * in the case you need to access members of the class inheriting from Observable, you need the
-  * event
-  * sent *before* the outermost objects are destroyed.
-  *
-  * To achieve this, you can call this function in your destructor, and the DELETE event will be
-  * sent.
-  * This will allow your Listeners/Observers to access your members one last time before deletion.
-  *
-  * @warning This function must be called only once per object.
-  * Make sure no other class in the inheritance tree calls this function before adding this call to
-  * your destructor.
-  */
+   * @brief Sends the Event::DELETE before the deletion of the subclass and its internal objects.
+   *
+   * The observation system automatically sends the DELETE event when the Observable is deleted, but
+   * in the case you need to access members of the class inheriting from Observable, you need the
+   * event
+   * sent *before* the outermost objects are destroyed.
+   *
+   * To achieve this, you can call this function in your destructor, and the DELETE event will be
+   * sent.
+   * This will allow your Listeners/Observers to access your members one last time before deletion.
+   *
+   * @warning This function must be called only once per object.
+   * Make sure no other class in the inheritance tree calls this function before adding this call to
+   * your destructor.
+   */
   void observableDeleted();
 
   /**
@@ -413,10 +414,10 @@ private:
 #endif
 
   /**
-  * @brief return an Iterator on all Onlookers
-  * @warning adding or removing Onlooker to that Observable will devalidate the iterator
-  * @see StableIterator
-  */
+   * @brief return an Iterator on all Onlookers
+   * @warning adding or removing Onlooker to that Observable will devalidate the iterator
+   * @see StableIterator
+   */
   tlp::Iterator<Observable *> *getOnlookers() const;
 
   /**
@@ -529,9 +530,9 @@ private:
   static bool _oDisabled;
 
   /**
-  * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and
-  * check bad use of the mechanism.
-  */
+   * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and
+   * check bad use of the mechanism.
+   */
   static void updateObserverGraph();
 
   /**
@@ -545,9 +546,9 @@ private:
   }
 
   /**
-  * @brief Trick to init the ObservableGraph properties (called at the loading of the library,
-  * during static initialization).
-  */
+   * @brief Trick to init the ObservableGraph properties (called at the loading of the library,
+   * during static initialization).
+   */
   static bool init();
 };
 
@@ -581,6 +582,6 @@ public:
     Observable::unholdObservers();
   }
 };
-}
+} // namespace tlp
 
 #endif

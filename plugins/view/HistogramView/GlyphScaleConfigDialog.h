@@ -52,5 +52,5 @@ private:
   QStringList glyphsNameList;
   Ui::GlyphScaleConfigDialogData *_ui;
 };
-}
+} // namespace tlp
 #endif /* GLYPHSCALECONFIGDIALOG_H_ */

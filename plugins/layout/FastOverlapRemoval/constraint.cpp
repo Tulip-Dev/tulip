@@ -42,4 +42,4 @@ std::ostream &operator<<(std::ostream &os, const Constraint &c) {
      << (c.active ? "-active" : "");
   return os;
 }
-}
+} // namespace vpsc

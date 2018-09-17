@@ -72,11 +72,11 @@ TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes,
                              IntegerProperty *edgeLength = nullptr);
 
 /**
-   * Select a spanning forest of the graph,
-   * i.e for all graph elements (nodes or edges) belonging to that forest
-   * the selectionProperty associated value is true. The value is false
-   * for the other elements
-   */
+ * Select a spanning forest of the graph,
+ * i.e for all graph elements (nodes or edges) belonging to that forest
+ * the selectionProperty associated value is true. The value is false
+ * for the other elements
+ */
 TLP_SCOPE void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty,
                                     PluginProgress *pluginProgress = nullptr);
 
@@ -119,9 +119,9 @@ TLP_SCOPE void bfs(const Graph *graph, node root, std::vector<node> &nodes);
 TLP_SCOPE void bfs(const Graph *graph, std::vector<node> &nodes);
 
 /**
-* @brief deprecated function,
-* use bfs(const Graph*, node, std::vector<node>&) instead
-*/
+ * @brief deprecated function,
+ * use bfs(const Graph*, node, std::vector<node>&) instead
+ */
 TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph, node root = node());
 
 /**
@@ -174,6 +174,6 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const Numeric
  */
 TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection,
                                       bool *test = nullptr);
-}
+} // namespace tlp
 #endif
 ///@endcond

@@ -60,4 +60,4 @@ bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, edge e
   circle = getEnclosingCircle(inputData, selection);
   return true;
 }
-}
+} // namespace tlp

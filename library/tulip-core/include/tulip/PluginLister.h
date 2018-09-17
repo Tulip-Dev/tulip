@@ -270,6 +270,6 @@ protected:
   std::string pluginName;
 };
 ///@endcond
-}
+} // namespace tlp
 
 #endif // TULIP_PLUGINLISTER_H

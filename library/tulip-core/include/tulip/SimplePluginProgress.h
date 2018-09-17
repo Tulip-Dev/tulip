@@ -25,9 +25,9 @@
 #include <string>
 namespace tlp {
 /**
-  * @brief Basic implementation for PluginProgress interface.
-  *
-  **/
+ * @brief Basic implementation for PluginProgress interface.
+ *
+ **/
 class TLP_SCOPE SimplePluginProgress : public PluginProgress {
 public:
   SimplePluginProgress();
@@ -57,6 +57,6 @@ private:
   bool _preview;
   std::string _error;
 };
-}
+} // namespace tlp
 #endif // SIMPLEPLUGINPROGRESS_H
 ///@endcond

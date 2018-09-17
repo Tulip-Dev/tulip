@@ -57,8 +57,8 @@ public:
    */
   const std::string &getPropertyType() const;
   /**
-    * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
-    **/
+   * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
+   **/
   void setPropertyType(const std::string &propertyType);
 
   QString getPropertyName() const;
@@ -127,9 +127,9 @@ protected slots:
 };
 
 /**
-* @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a
-*CSVContentHandler.
-**/
+ * @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a
+ *CSVContentHandler.
+ **/
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:
   CSVTableWidget(QWidget *parent = nullptr);
@@ -137,17 +137,17 @@ public:
   bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   /**
-    * @brief Limit the line number of the preview. Need to parse the file again to take this limit
-    *in account.
-    **/
+   * @brief Limit the line number of the preview. Need to parse the file again to take this limit
+   *in account.
+   **/
   void setMaxPreviewLineNumber(unsigned int lineNumber) {
     // first row is used to display configuration widgets
     maxLineNumber = lineNumber + 2;
   }
 
   /**
-    * @brief Get the preview line number.
-    **/
+   * @brief Get the preview line number.
+   **/
   unsigned int getMaxPreviewLineNumber() const {
     return maxLineNumber;
   }
@@ -172,11 +172,11 @@ private:
 };
 
 /**
-  * @brief Widget generating a CSVImportParameters object configuring the CSV import process.
-  *
-  * Use a CSV parser to fill this widget with previews and CSV file statistics like number of rows
-  *and columns.
-  **/
+ * @brief Widget generating a CSVImportParameters object configuring the CSV import process.
+ *
+ * Use a CSV parser to fill this widget with previews and CSV file statistics like number of rows
+ *and columns.
+ **/
 class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public CSVContentHandler {
   Q_OBJECT
 public:
@@ -188,15 +188,15 @@ public:
   void setFirstLineIndex(int firstLine);
 
   /**
-    * @brief Update the widget contents with the new file parser.
-    **/
+   * @brief Update the widget contents with the new file parser.
+   **/
   void setNewParser(tlp::CSVParser *parser);
 
   /**
-  * @brief Get the import parameters.
-  *
-  * Use this object to configure import process of the CSVImportGraph object.
-  **/
+   * @brief Get the import parameters.
+   *
+   * Use this object to configure import process of the CSVImportGraph object.
+   **/
   CSVImportParameters getImportParameters() const;
 
   // return the sorted names of the existing properties of a known typename
@@ -216,21 +216,21 @@ protected:
   unsigned int columnCount() const;
 
   /**
-  *@brief The index of the first line to get in the file.
-  *@brief A line number from 0 to LastLineIndex.
-  **/
+   *@brief The index of the first line to get in the file.
+   *@brief A line number from 0 to LastLineIndex.
+   **/
   unsigned int getFirstLineIndex() const;
 
   /**
-    * @brief The index of the last line to take in the file.
-    **/
+   * @brief The index of the last line to take in the file.
+   **/
   unsigned int getLastLineIndex() const;
   /**
-    * @brief The index of the first imported line. This index change if user use the first line as
-    *column names.
-    * For example if the user wants to import all lines but uses the first line as column names this
-    *function will return 1 not 0.
-    **/
+   * @brief The index of the first imported line. This index change if user use the first line as
+   *column names.
+   * For example if the user wants to import all lines but uses the first line as column names this
+   *function will return 1 not 0.
+   **/
   unsigned int getFirstImportedLineIndex() const;
 
   /**
@@ -259,14 +259,14 @@ protected:
                                     QWidget *parent);
 
   /**
-    * @brief Compute the name of the column. Return the first token fo the column if the first lline
-    *is used as header r Column_x xhere x is the column index.
-    **/
+   * @brief Compute the name of the column. Return the first token fo the column if the first lline
+   *is used as header r Column_x xhere x is the column index.
+   **/
   QString generateColumnName(unsigned int col) const;
   /**
-    * @brief Compute the column data type. Take in account the first row only if it is not used as
-    *column label
-    **/
+   * @brief Compute the column data type. Take in account the first row only if it is not used as
+   *column label
+   **/
   std::string getColumnType(unsigned int col) const;
 
   std::vector<PropertyConfigurationWidget *> propertyWidgets;
@@ -285,22 +285,22 @@ protected slots:
 
 private:
   /**
-    * @brief Try to guess the property datatype in function of the type of the previous tokens and
-    *the type of the current token.
-    **/
+   * @brief Try to guess the property datatype in function of the type of the previous tokens and
+   *the type of the current token.
+   **/
   const std::string &guessPropertyDataType(const std::string &data,
                                            const std::string &previousType) const;
 
   /**
-    * @brief Return the type of the column in function of the old and new type.
-    **/
+   * @brief Return the type of the column in function of the old and new type.
+   **/
   const std::string &combinePropertyDataType(const std::string &previousType,
                                              const std::string &newType) const;
   /**
-    * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the
-    *type is other return string.
-    * @return The property typename of the type
-    **/
+   * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the
+   *type is other return string.
+   * @return The property typename of the type
+   **/
   const std::string &guessDataType(const std::string &data) const;
 
   // The data type of the header
@@ -316,6 +316,6 @@ private:
   unsigned int firstLine;
   bool guessFirstLineIsHeader;
 };
-}
+} // namespace tlp
 #endif // CSVIMPORTCONFIGURATIONWIDGET_H
 ///@endcond

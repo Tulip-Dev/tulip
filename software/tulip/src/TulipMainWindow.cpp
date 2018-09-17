@@ -250,11 +250,13 @@ void TulipMainWindow::createPerspective(const QString &name) {
 void TulipMainWindow::showOpenProjectWindow() {
   setVisible(true);
   QString filePath = QFileDialog::getOpenFileName(
-      this, trUtf8("Choose a Tulip project to open with its associated perspective. Or select a "
-                   "external file format to import."),
-      QDir::homePath(), "Tulip Files(*.tlp *.tlp.gz *.tlpb *.tlpb.gz *.tlpx *.tlpz *.tlpbz);;Tulip "
-                        "Project (*.tlpx);;Tulip Graph (*.tlp *.tlp.gz *.tlpb *.tlpb.gz *.tlpz "
-                        "*.tlpbz)");
+      this,
+      trUtf8("Choose a Tulip project to open with its associated perspective. Or select a "
+             "external file format to import."),
+      QDir::homePath(),
+      "Tulip Files(*.tlp *.tlp.gz *.tlpb *.tlpb.gz *.tlpx *.tlpz *.tlpbz);;Tulip "
+      "Project (*.tlpx);;Tulip Graph (*.tlp *.tlp.gz *.tlpb *.tlpb.gz *.tlpz "
+      "*.tlpbz)");
 
   if (filePath.isEmpty())
     return;

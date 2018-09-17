@@ -88,4 +88,4 @@ int GlGraphStaticData::labelPositionId(const string &name) {
   tlp::warning() << "Invalid label position name" << endl;
   return -1;
 }
-}
+} // namespace tlp

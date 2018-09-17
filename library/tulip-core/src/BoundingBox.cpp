@@ -197,4 +197,4 @@ void BoundingBox::getCompleteBB(Vec3f bb[8]) const {
   bb[7] = bb[3];
   bb[7][2] = (*this)[1][2];
 }
-}
+} // namespace tlp

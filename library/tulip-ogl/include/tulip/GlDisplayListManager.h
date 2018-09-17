@@ -89,7 +89,7 @@ private:
 
   ContextAndDisplayListMap displayListMap;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLDISPLAYLISTMANAGER_H
 ///@endcond

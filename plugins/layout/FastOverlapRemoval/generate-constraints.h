@@ -124,6 +124,6 @@ public:
                            const bool useNeighbourLists);
   int generateYConstraints(Rectangle rs[], Variable vars[], Constraint **&cs);
 };
-}
+} // namespace vpsc
 
 #endif // SEEN_REMOVEOVERLAP_GENERATE_CONSTRAINTS_H

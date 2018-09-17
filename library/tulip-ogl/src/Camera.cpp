@@ -496,4 +496,4 @@ void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   GlXMLTools::leaveDataNode(inString, currentPosition);
 }
-}
+} // namespace tlp

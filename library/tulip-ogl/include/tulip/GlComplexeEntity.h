@@ -55,7 +55,7 @@ public:
    */
   virtual void drawLabel(OcclusionTest *test, const GlGraphInputData *data) = 0;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLCOMPLEXEENTITY_H
 ///@endcond

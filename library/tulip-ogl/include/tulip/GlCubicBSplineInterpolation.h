@@ -49,5 +49,5 @@ private:
   std::vector<Coord>
   constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
 };
-}
+} // namespace tlp
 ///@endcond

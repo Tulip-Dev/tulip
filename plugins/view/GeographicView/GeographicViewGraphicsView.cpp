@@ -680,9 +680,8 @@ void GeographicViewGraphicsView::mapToPolygon() {
             if ((((*it)[1] < nodePos[1] && lastCoord[1] >= nodePos[1]) ||
                  (lastCoord[1] < nodePos[1] && (*it)[1] >= nodePos[1])) &&
                 ((*it)[0] <= nodePos[0] || lastCoord[0] <= nodePos[0])) {
-              oddNodes ^= ((*it)[0] +
-                               (nodePos[1] - (*it)[1]) / (lastCoord[1] - (*it)[1]) *
-                                   (lastCoord[0] - (*it)[0]) <
+              oddNodes ^= ((*it)[0] + (nodePos[1] - (*it)[1]) / (lastCoord[1] - (*it)[1]) *
+                                          (lastCoord[0] - (*it)[0]) <
                            nodePos[0]);
             }
 

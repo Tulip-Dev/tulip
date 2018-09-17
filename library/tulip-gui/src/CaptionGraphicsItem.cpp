@@ -172,4 +172,4 @@ void CaptionGraphicsItem::propertySelectedSlot() {
 QString CaptionGraphicsItem::wrappedPropName(const QString &originalName) const {
   return originalName;
 }
-}
+} // namespace tlp

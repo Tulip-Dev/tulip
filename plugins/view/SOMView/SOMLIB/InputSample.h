@@ -28,10 +28,10 @@
 #include "DynamicVector.h"
 
 /**
-  * Handle all the the samples data used to train the SOM. Take a graph and a vector of
-  *NumericProperties to use it as sample data.
-  * This object can handle standard or normalized values.
-  **/
+ * Handle all the the samples data used to train the SOM. Take a graph and a vector of
+ *NumericProperties to use it as sample data.
+ * This object can handle standard or normalized values.
+ **/
 namespace tlp {
 class InputSample : public tlp::Observable {
 public:
@@ -76,8 +76,8 @@ public:
   void setUsingNormalizedValues(bool);
 
   /**
-    * Search the index of the property with the given name.
-    **/
+   * Search the index of the property with the given name.
+   **/
   unsigned findIndexForProperty(const std::string &propertyName) const;
 
   // recover normalized value for val according to meanProperties[propNum] and sdProperties[propNum]
@@ -139,5 +139,5 @@ protected:
   // Indicates whether or not normalized values should be used
   bool usingNormalizedValues;
 };
-}
+} // namespace tlp
 #endif /* INPUTSAMPLE_H_ */

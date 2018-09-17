@@ -252,4 +252,4 @@ bool HistoOptionsWidget::configurationChanged() {
 
   return confChanged;
 }
-}
+} // namespace tlp

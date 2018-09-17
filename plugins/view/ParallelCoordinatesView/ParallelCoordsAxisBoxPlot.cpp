@@ -446,4 +446,4 @@ bool ParallelCoordsAxisBoxPlot::draw(GlMainWidget *glMainWidget) {
 
   return true;
 }
-}
+} // namespace tlp

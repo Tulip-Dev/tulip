@@ -152,6 +152,6 @@ public:
     return STRING_ALGORITHM_CATEGORY;
   }
 };
-}
+} // namespace tlp
 
 #endif // PROPERTYALGORITHM_H

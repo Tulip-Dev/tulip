@@ -46,6 +46,6 @@ public:
 
   void setPriority(const unsigned int p);
 };
-}
+} // namespace tlp
 
 #endif // NODELINKDIAGRAMCOMPONENTINTERACTOR_H

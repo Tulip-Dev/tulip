@@ -139,7 +139,7 @@ private:
   Coord cameraCenter;
   bool antialiasedFbo;
 };
-}
+} // namespace tlp
 
 #endif /* GLOFFSCREENRENDERER_H_ */
 ///@endcond

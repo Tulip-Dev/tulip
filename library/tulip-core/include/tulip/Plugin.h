@@ -182,7 +182,7 @@ public:
    * @TODO this member should be removed once there is a system in Tulip to handle glyphs.
    *
    * @return int the id of the glyph.
-  **/
+   **/
   virtual int id() const;
 
   /**
@@ -252,7 +252,7 @@ protected:
   std::string group() const override {                                                             \
     return GROUP;                                                                                  \
   }
-}
+} // namespace tlp
 
 // This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro
 // needs to know the PluginLister.
@@ -298,6 +298,6 @@ PLUGIN(MyPlugin) // Register MyPlugin into Tulip
   extern "C" {                                                                                     \
   C##Factory C##FactoryInitializer;                                                                \
   }
-}
+} // namespace tlp
 
 #endif // TULIP_PLUGIN_H

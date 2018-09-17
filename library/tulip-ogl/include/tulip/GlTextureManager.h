@@ -66,8 +66,8 @@ class TLP_GL_SCOPE GlTextureManager {
 
 public:
   /**
-  * Return the texture manager singleton, il singleton doesn't exist this function create it
-  */
+   * Return the texture manager singleton, il singleton doesn't exist this function create it
+   */
   static GlTextureManager &getInst() {
     if (!inst)
       inst = new GlTextureManager();
@@ -180,7 +180,7 @@ private:
 
   unsigned int animationFrame;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLTEXTUREMANAGER_H
 ///@endcond

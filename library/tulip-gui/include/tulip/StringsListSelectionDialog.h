@@ -33,27 +33,27 @@ class StringsListSelectionDialog;
 namespace tlp {
 
 /**
-  * @brief Provide a dialog that allow user to select a list of strings.
-  *
-  * The easiest way to use this class is to use the static function.
-  * @code
-  * QString title;
-  * QWidget* parent;
-  * vector<string> listOfStrings; // must be initialized
-  * vector<string> selectedStrings;
-  * bool choosen = StringsListSelectionDialog::choose(title, parent, listOfStrings,
-  *selectedStrings);
-  * @endcode
-  *
-  *
-  **/
+ * @brief Provide a dialog that allow user to select a list of strings.
+ *
+ * The easiest way to use this class is to use the static function.
+ * @code
+ * QString title;
+ * QWidget* parent;
+ * vector<string> listOfStrings; // must be initialized
+ * vector<string> selectedStrings;
+ * bool choosen = StringsListSelectionDialog::choose(title, parent, listOfStrings,
+ *selectedStrings);
+ * @endcode
+ *
+ *
+ **/
 class TLP_QT_SCOPE StringsListSelectionDialog : public QDialog {
   Q_OBJECT
 
 public:
   /**
-    * @brief Constructs a dialog with the given parent.
-    **/
+   * @brief Constructs a dialog with the given parent.
+   **/
   explicit StringsListSelectionDialog(QWidget *parent = nullptr);
 
   /**
@@ -73,12 +73,12 @@ public:
   void setStringsList(const std::vector<std::string> &strList, std::vector<std::string> &selList);
 
   /**
-    * @brief Constructs a strings list selection dialog with the given parent.
-    * \param parent the widget's parent
-    * \param listType this parameter defines the widget's look (see class description)
-    * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
-    *size restriction)
-    **/
+   * @brief Constructs a strings list selection dialog with the given parent.
+   * \param parent the widget's parent
+   * \param listType this parameter defines the widget's look (see class description)
+   * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
+   *size restriction)
+   **/
   explicit StringsListSelectionDialog(
       QString title, QWidget *parent = nullptr,
       const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST,
@@ -86,17 +86,17 @@ public:
   ~StringsListSelectionDialog() override;
 
   /**
-    * @brief This is a convenience static function that create a dialog
-    * to select some strings in a list.
-    * The function creates a modal dialog with the given title and parent widget.
-    *
-    * @param title the string to display in the dialog title bar,
-    * @param strList the list of strings to choose,
-    * @param selList on input it indicates the already selected strings, then on output the user
-    *selected strings,
-    * @param listType the type of display for the strings to choose,
-    * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
-    **/
+   * @brief This is a convenience static function that create a dialog
+   * to select some strings in a list.
+   * The function creates a modal dialog with the given title and parent widget.
+   *
+   * @param title the string to display in the dialog title bar,
+   * @param strList the list of strings to choose,
+   * @param selList on input it indicates the already selected strings, then on output the user
+   *selected strings,
+   * @param listType the type of display for the strings to choose,
+   * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
+   **/
   static bool choose(
       QString title, const std::vector<std::string> &strList, std::vector<std::string> &selList,
       QWidget *parent = nullptr,
@@ -106,7 +106,7 @@ public:
 private:
   Ui::StringsListSelectionDialog *ui;
 };
-}
+} // namespace tlp
 
 #endif // STRINGSLISTSELECTIONDIALOG_H
 ///@endcond

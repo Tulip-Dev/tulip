@@ -24,9 +24,8 @@ PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(
     QObject *parent)
     :
 
-      Animation(frameCount, parent),
-      _graph(graph), _start(nullptr), _end(nullptr), _out(out), _computeNodes(computeNodes),
-      _computeEdges(computeEdges) {
+      Animation(frameCount, parent), _graph(graph), _start(nullptr), _end(nullptr), _out(out),
+      _computeNodes(computeNodes), _computeEdges(computeEdges) {
 
   assert(out);
   assert(start);

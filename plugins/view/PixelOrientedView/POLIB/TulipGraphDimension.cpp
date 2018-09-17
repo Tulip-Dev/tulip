@@ -143,4 +143,4 @@ vector<unsigned int> TulipGraphDimension::links(const unsigned int itemId) const
       concatIterator(graph->getInNodes(node(itemId)), graph->getOutNodes(node(itemId))),
       [](node n) { return n.id; }));
 }
-}
+} // namespace pocore

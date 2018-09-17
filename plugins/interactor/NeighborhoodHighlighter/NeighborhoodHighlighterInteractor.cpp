@@ -694,4 +694,4 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
 
   return true;
 }
-}
+} // namespace tlp

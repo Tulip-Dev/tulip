@@ -45,9 +45,10 @@ public:
 };
 
 class isGraphTest : public tlp::GraphTest {
-  PLUGININFORMATION("Graph", "Bruno Pinaud", "29/11/2016", "Tests whether the set of the selected "
-                                                           "elements of the current graph is a "
-                                                           "graph or not (no dangling edges).",
+  PLUGININFORMATION("Graph", "Bruno Pinaud", "29/11/2016",
+                    "Tests whether the set of the selected "
+                    "elements of the current graph is a "
+                    "graph or not (no dangling edges).",
                     "1.0", "Topological Test")
 public:
   isGraphTest(const tlp::PluginContext *context);

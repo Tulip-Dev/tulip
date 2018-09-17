@@ -186,6 +186,6 @@ private:
 };
 
 #endif
-}
+} // namespace tlp
 
 #endif // GOOGLEMAPS_H

@@ -115,6 +115,6 @@ private:
   Vec2i fishTranslation;
   Vec2f fishCenter;
 };
-}
+} // namespace pocore
 
 #endif /* PIXELORIENTEDALGORITHMS_H_ */

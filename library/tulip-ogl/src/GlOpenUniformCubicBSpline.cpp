@@ -134,4 +134,4 @@ void GlOpenUniformCubicBSpline::computeCurvePointsOnCPU(const std::vector<Coord>
                                                         unsigned int nbCurvePoints) {
   computeOpenUniformBsplinePoints(controlPoints, curvePoints, curveDegree, nbCurvePoints);
 }
-}
+} // namespace tlp

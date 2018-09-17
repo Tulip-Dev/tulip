@@ -200,14 +200,23 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
     nullptr,                                                          /* tp_alloc */
     consoleutils_ConsoleOutput_new,                                   /* tp_new */
     nullptr,
-    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    0
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
     ,
     0
 #endif
 };
 
-typedef struct { PyObject_HEAD } consoleutils_ConsoleInput;
+typedef struct {
+  PyObject_HEAD
+} consoleutils_ConsoleInput;
 
 static void consoleutils_ConsoleInput_dealloc(consoleutils_ConsoleInput *self) {
 #if PY_MAJOR_VERSION >= 3
@@ -290,7 +299,14 @@ static PyTypeObject consoleutils_ConsoleInputType = {
     nullptr,                                                         /* tp_alloc */
     consoleutils_ConsoleInput_new,                                   /* tp_new */
     nullptr,
-    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    0
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
     ,
     0

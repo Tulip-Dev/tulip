@@ -50,4 +50,4 @@ RGBA TulipNodeColorMapping::getColor(const double &, const unsigned int itemId) 
 
   return ret;
 }
-}
+} // namespace pocore

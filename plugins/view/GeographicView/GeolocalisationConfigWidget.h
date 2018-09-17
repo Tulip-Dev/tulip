@@ -69,6 +69,6 @@ public slots:
 signals:
   void computeGeoLayout();
 };
-}
+} // namespace tlp
 
 #endif /* GOOGLEMAPSVIEWCONFIGWIDGET_H_ */

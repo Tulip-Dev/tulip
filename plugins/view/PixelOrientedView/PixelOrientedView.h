@@ -193,5 +193,5 @@ private:
 
   bool isConstruct;
 };
-}
+} // namespace tlp
 #endif /* DATACUBEVIEW_H_ */

@@ -29,7 +29,7 @@ const static char ParallelCoordinatesViewName[] = "Parallel Coordinates view";
 const static char PixelOrientedViewName[] = "Pixel Oriented view";
 const static char ScatterPlot2DViewName[] = "Scatter Plot 2D view";
 const static char SOMViewName[] = "Self Organizing Map view";
-}
+} // namespace ViewName
 
 namespace SelectionAlgorithm {
 
@@ -39,7 +39,7 @@ const static char InducedSubGraphSelection[] = "Induced SubGraph";
 const static char ReachableSubGraphSelection[] = "Reachable SubGraph";
 const static char SpanningDagSelection[] = "Spanning Dag";
 const static char MakeSelectionGraph[] = "Make Selection a Graph";
-}
-}
+} // namespace SelectionAlgorithm
+} // namespace tlp
 
 #endif // VIEWNAMES_H

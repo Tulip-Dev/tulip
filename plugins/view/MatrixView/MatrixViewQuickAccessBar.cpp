@@ -27,13 +27,14 @@ namespace tlp {
 
 MatrixViewQuickAccessBar::MatrixViewQuickAccessBar(MatrixViewConfigurationWidget *opt,
                                                    QWidget *parent)
-    : QuickAccessBarImpl(
-          nullptr, QuickAccessBarImpl::QuickAccessButtons(
-                       QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
-                       QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::COLORINTERPOLATION |
-                       QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
-                       QuickAccessBarImpl::LABELCOLOR),
-          parent),
+    : QuickAccessBarImpl(nullptr,
+                         QuickAccessBarImpl::QuickAccessButtons(
+                             QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
+                             QuickAccessBarImpl::SHOWLABELS |
+                             QuickAccessBarImpl::COLORINTERPOLATION |
+                             QuickAccessBarImpl::SHOWEDGES | QuickAccessBarImpl::LABELSSCALED |
+                             QuickAccessBarImpl::LABELCOLOR),
+                         parent),
       _optionsWidget(opt) {}
 
 void MatrixViewQuickAccessBar::setEdgesVisible(bool visible) {
@@ -69,4 +70,4 @@ void MatrixViewQuickAccessBar::setColorInterpolation(bool state) {
              : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
   emit settingsChanged();
 }
-}
+} // namespace tlp

@@ -138,6 +138,6 @@ public:
  * for each input site.
  */
 TLP_SCOPE bool voronoiDiagram(std::vector<Coord> &sites, VoronoiDiagram &voronoiDiagram);
-}
+} // namespace tlp
 #endif
 ///@endcond

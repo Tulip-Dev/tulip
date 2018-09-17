@@ -119,6 +119,6 @@ struct ConvexHullItem {
   std::string name;
   std::vector<ConvexHullItem *> children;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

@@ -139,9 +139,10 @@ void GlNode::draw(float lod, const GlGraphInputData *data, Camera *camera) {
       data->getGlVertexArrayManager()->activatePointNodeDisplay(this, selected);
     } else {
       glDisable(GL_LIGHTING);
-      setColor(selected ? colorSelect2 : ((data->getElementBorderWidth()->getNodeValue(n) > 0)
-                                              ? data->getElementBorderColor()->getNodeValue(n)
-                                              : data->getElementColor()->getNodeValue(n)));
+      setColor(selected ? colorSelect2
+                        : ((data->getElementBorderWidth()->getNodeValue(n) > 0)
+                               ? data->getElementBorderColor()->getNodeValue(n)
+                               : data->getElementColor()->getNodeValue(n)));
       glPointSize(4);
       glBegin(GL_POINTS);
       glVertex3f(coord[0], coord[1], coord[2] + size[2] / 2.);
@@ -286,4 +287,4 @@ void GlNode::drawLabel(OcclusionTest *test, const GlGraphInputData *data, float 
 
   label.drawWithStencil(lod, camera);
 }
-}
+} // namespace tlp

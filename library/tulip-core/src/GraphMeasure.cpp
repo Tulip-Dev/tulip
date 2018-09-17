@@ -45,7 +45,7 @@ inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
 
   return nullptr;
 }
-}
+} // namespace
 //================================================================
 unsigned int tlp::maxDistance(const Graph *graph, const node n,
                               MutableContainer<unsigned int> &distance, EDGE_TYPE direction) {

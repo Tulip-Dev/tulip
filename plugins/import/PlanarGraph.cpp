@@ -31,7 +31,7 @@ struct Triangle {
   Triangle(node a, node b, node c) : a(a), b(b), c(c) {}
   node a, b, c;
 };
-}
+} // namespace
 //=============================================================
 /** \addtogroup import */
 

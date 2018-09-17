@@ -33,7 +33,7 @@ struct less<edgeS> {
     return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
   }
 };
-}
+} // namespace std
 
 static const char *paramHelp[] = {
     // nodes

@@ -82,5 +82,5 @@ private:
 public:
   tlp::MutableContainer<double> nodeDistance;
 };
-}
+} // namespace tlp
 #endif // DIKJSTRA_H

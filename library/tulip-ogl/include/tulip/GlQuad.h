@@ -115,6 +115,6 @@ public:
    */
   void setWithXML(const std::string &inString, unsigned int &currentPosition) override;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

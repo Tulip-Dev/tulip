@@ -1125,4 +1125,4 @@ unsigned int HistogramView::getMappedId(unsigned int id) {
 
   return id;
 }
-}
+} // namespace tlp

@@ -62,38 +62,38 @@ public:
   GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow = nullptr);
 
   /**
-    * @brief saved If the graph has been saved, one has to call this method to reset the status of
+   * @brief saved If the graph has been saved, one has to call this method to reset the status of
    * the graph (it does not need to be saved).
-    * to indicate that the graph does not need to be saved until a new modification.
-    */
+   * to indicate that the graph does not need to be saved until a new modification.
+   */
   void saved();
 
   /**
-    * @brief needsSaving Indicates if the graph has been modified, and thus needs to be saved.
-    *
-    * @return true if the graph needs to be saved, false otherwise.
-    */
+   * @brief needsSaving Indicates if the graph has been modified, and thus needs to be saved.
+   *
+   * @return true if the graph needs to be saved, false otherwise.
+   */
   bool needsSaving() const;
 
   /**
-    *
-    * @brief forceToSave Even if there is no modification on the graph, this method can be used to
+   *
+   * @brief forceToSave Even if there is no modification on the graph, this method can be used to
    * force to save the graph.
-    */
+   */
   void forceToSave();
 
 protected:
   /**
-    * @see Listener
-    * @see Observer
-    * @see Observable
-    * @see Observable::treatEvents(const std::vector<Event>&)
-    *
-    * @brief treatEvents This function is called when events are sent to Observers, and Observers
+   * @see Listener
+   * @see Observer
+   * @see Observable
+   * @see Observable::treatEvents(const std::vector<Event>&)
+   *
+   * @brief treatEvents This function is called when events are sent to Observers, and Observers
    * only.
-    *
-    * @param events The events that happened since the last unHoldObservers().
-    */
+   *
+   * @param events The events that happened since the last unHoldObservers().
+   */
   void treatEvents(const std::vector<Event> &) override;
 
 signals:
@@ -105,5 +105,5 @@ signals:
 
   void savingNeeded();
 };
-}
+} // namespace tlp
 #endif // GRAPHNEEDSSAVINGOBSERVER_H

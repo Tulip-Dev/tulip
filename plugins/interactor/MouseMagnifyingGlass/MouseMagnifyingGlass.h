@@ -90,5 +90,5 @@ public:
 
   bool isCompatible(const std::string &viewName) const override;
 };
-}
+} // namespace tlp
 #endif /* MOUSEMAGNIFYINGGLASS_H_ */

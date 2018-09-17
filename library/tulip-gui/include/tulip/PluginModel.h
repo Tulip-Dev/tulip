@@ -215,7 +215,7 @@ public:
     return result;
   }
 };
-}
+} // namespace tlp
 
 #endif // PLUGINMODEL_H
 ///@endcond

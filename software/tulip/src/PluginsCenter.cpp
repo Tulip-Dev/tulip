@@ -96,14 +96,14 @@ void PluginsCenter::searchAll() {
 }
 
 void PluginsCenter::searchAlgorithms() {
-  setCategoryFilters(QStringList() << tlp::ALGORITHM_CATEGORY.c_str()
-                                   << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::STRING_ALGORITHM_CATEGORY.c_str()
-                                   << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
+  setCategoryFilters(QStringList()
+                     << tlp::ALGORITHM_CATEGORY.c_str() << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
+                     << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
+                     << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
+                     << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
+                     << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
+                     << tlp::STRING_ALGORITHM_CATEGORY.c_str()
+                     << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
 }
 
 void PluginsCenter::searchImportExport() {

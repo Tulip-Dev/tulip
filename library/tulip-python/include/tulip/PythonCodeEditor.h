@@ -289,6 +289,6 @@ protected:
 
   QString _indentPattern;
 };
-}
+} // namespace tlp
 
 #endif /* PYTHONCODEEDITOR2_H_ */

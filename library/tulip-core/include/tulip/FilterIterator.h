@@ -26,22 +26,22 @@
 
 namespace tlp {
 /**
-* @class FilterIterator
-* @ingroup Iterators
-* @brief Iterator that enables to filter an other Iterator
-* @param it the iterator that should be filtered
-* @param filter the functor or lambda function that enables to test whether or not an element is
-*filtered
-*
-* The functor function should have the following form:
-* @code
-* class AFilterFunctor {
-*  bool operator()(TYPE a) {
-*    return true if a should be iterated, false if a should be removed;
-*  }
-* };
-* @endcode
-**/
+ * @class FilterIterator
+ * @ingroup Iterators
+ * @brief Iterator that enables to filter an other Iterator
+ * @param it the iterator that should be filtered
+ * @param filter the functor or lambda function that enables to test whether or not an element is
+ *filtered
+ *
+ * The functor function should have the following form:
+ * @code
+ * class AFilterFunctor {
+ *  bool operator()(TYPE a) {
+ *    return true if a should be iterated, false if a should be removed;
+ *  }
+ * };
+ * @endcode
+ **/
 template <typename TYPE, typename FILTER>
 class FilterIterator : public Iterator<TYPE> {
 public:
@@ -89,38 +89,38 @@ public:
 };
 
 /**
-* @brief Convenient function for creating a FilterIterator.
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Creates a FilterIterator from another iterator and a filter function.
-* The returned iterator takes ownership of the one provided as parameter.
-*
-* @param it a Tulip iterator
-* @param filter the functor or lambda function that enables to test whether or not an element is
-*filtered
-* @return a FilterIterator
-**/
+ * @brief Convenient function for creating a FilterIterator.
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Creates a FilterIterator from another iterator and a filter function.
+ * The returned iterator takes ownership of the one provided as parameter.
+ *
+ * @param it a Tulip iterator
+ * @param filter the functor or lambda function that enables to test whether or not an element is
+ *filtered
+ * @return a FilterIterator
+ **/
 template <typename TYPE, typename FILTER>
 inline FilterIterator<TYPE, FILTER> *filterIterator(Iterator<TYPE> *it, FILTER filter) {
   return new MPFilterIterator<TYPE, FILTER>(it, filter);
 }
 
 /**
-* @brief Convenient function for creating a FilterIterator from a STL container.
-* @ingroup Iterators
-*
-* @since Tulip 5.2
-*
-* Creates a FilterIterator from a STL container (std::list, std::vector, std::set, std::map, ...)
-* and a filter function.
-*
-* @param stlContainer any STL container
-* @param filter the functor or lambda function that enables to test whether or not an element is
-*filtered
-* @return a FilterIterator
-**/
+ * @brief Convenient function for creating a FilterIterator from a STL container.
+ * @ingroup Iterators
+ *
+ * @since Tulip 5.2
+ *
+ * Creates a FilterIterator from a STL container (std::list, std::vector, std::set, std::map, ...)
+ * and a filter function.
+ *
+ * @param stlContainer any STL container
+ * @param filter the functor or lambda function that enables to test whether or not an element is
+ *filtered
+ * @return a FilterIterator
+ **/
 template <typename Container, typename FILTER>
 typename std::enable_if<has_const_iterator<Container>::value,
                         MPFilterIterator<typename Container::value_type, FILTER>
@@ -129,5 +129,5 @@ typename std::enable_if<has_const_iterator<Container>::value,
   return new MPFilterIterator<typename Container::value_type, FILTER>(stlIterator(stlContainer),
                                                                       filter);
 }
-}
+} // namespace tlp
 #endif // FILTERITERATOR_H

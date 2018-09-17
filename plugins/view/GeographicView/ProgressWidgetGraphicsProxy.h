@@ -85,5 +85,5 @@ private:
   ProgressWidget *progressWidget;
   QColor frameColor;
 };
-}
+} // namespace tlp
 #endif /* PROGRESSWIDGETGRAPHICSPROXY_H_ */

@@ -124,7 +124,7 @@ protected:
   float rot;
   bool selected;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

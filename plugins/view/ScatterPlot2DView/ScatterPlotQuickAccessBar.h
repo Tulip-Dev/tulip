@@ -39,5 +39,5 @@ public slots:
   void setLabelsVisible(bool) override;
   void setLabelsScaled(bool) override;
 };
-}
+} // namespace tlp
 #endif // SCATTERPLOTQUICKACCESSBAR_H

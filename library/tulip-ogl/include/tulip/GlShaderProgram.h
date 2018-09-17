@@ -595,7 +595,7 @@ private:
 
   static GlShaderProgram *currentActiveShaderProgram;
 };
-}
+} // namespace tlp
 
 #endif // GL_SHADER_PROGRAM
 ///@endcond

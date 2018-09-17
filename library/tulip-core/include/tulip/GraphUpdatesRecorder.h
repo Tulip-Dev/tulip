@@ -42,7 +42,7 @@ struct less<tlp::Graph *> {
     return g1->getId() < g2->getId();
   }
 };
-}
+} // namespace std
 
 namespace tlp {
 
@@ -73,7 +73,7 @@ struct less<tlp::GraphEltsRecord *> {
     return g1->graph->getId() < g2->graph->getId();
   }
 };
-}
+} // namespace std
 
 namespace tlp {
 class GraphImpl;
@@ -279,7 +279,7 @@ protected:
   // override Observable::treatEvent
   void treatEvent(const Event &ev) override;
 };
-}
+} // namespace tlp
 
 #endif // TLPGRAPHRECORDER_H
 

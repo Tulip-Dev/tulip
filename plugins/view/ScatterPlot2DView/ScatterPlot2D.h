@@ -187,6 +187,6 @@ private:
   int overviewId;
   static int overviewCpt;
 };
-}
+} // namespace tlp
 
 #endif /* SCATTERPLOTOVERVIEW_H_ */

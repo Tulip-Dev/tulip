@@ -109,4 +109,4 @@ void GlTLPFeedBackBuilder::passThroughToken(GLfloat *data) {
     }
   }
 }
-}
+} // namespace tlp

@@ -174,6 +174,6 @@ protected:
 
   std::vector<GlComposite *> parents;
 };
-}
+} // namespace tlp
 
 #endif // Tulip_GLSIMPLEENTITY_H

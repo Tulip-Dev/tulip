@@ -74,5 +74,5 @@ public:
 
   void construct() override;
 };
-}
+} // namespace tlp
 #endif /* SOMVIEWINTERACTOR_H_ */

@@ -274,6 +274,6 @@ signals:
 };
 
 #include "PythonInterpreter.cxx"
-}
+} // namespace tlp
 
 #endif /* PYTHONINTERPRETER_H_ */

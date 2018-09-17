@@ -750,4 +750,4 @@ void Histogram::setSizesUpdateNeeded() {
 void Histogram::setTextureUpdateNeeded() {
   textureUpdateNeeded = true;
 }
-}
+} // namespace tlp

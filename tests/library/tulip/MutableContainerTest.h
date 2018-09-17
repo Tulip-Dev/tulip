@@ -49,5 +49,5 @@ public:
   void testFindAll();
   void testCompression();
 };
-}
+} // namespace tlp
 #endif

@@ -36,5 +36,5 @@ public slots:
   void reset() override;
   void setBackgroundColor(const QColor &) override;
 };
-}
+} // namespace tlp
 #endif

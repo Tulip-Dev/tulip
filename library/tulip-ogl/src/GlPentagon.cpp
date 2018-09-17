@@ -29,4 +29,4 @@ GlPentagon::GlPentagon(const Coord &position, const Size &size, const Color &fil
                        outlineSize) {}
 //=====================================================
 GlPentagon::~GlPentagon() {}
-}
+} // namespace tlp

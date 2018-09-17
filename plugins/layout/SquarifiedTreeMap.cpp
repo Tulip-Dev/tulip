@@ -92,10 +92,10 @@ bool SquarifiedTreeMap::check(std::string &errorMsg) {
 
 //====================================================================
 /**
-  *
-  *  @todo manage correctly parameters remove texture mode, enable to choose bordersize + header
+ *
+ *  @todo manage correctly parameters remove texture mode, enable to choose bordersize + header
  * size
-  */
+ */
 bool SquarifiedTreeMap::run() {
   double aspectRatio = DEFAULT_RATIO;
   shneidermanTreeMap = false;

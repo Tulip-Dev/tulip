@@ -72,7 +72,7 @@ public:
 protected:
   void paintEvent(QPaintEvent *) override;
 };
-}
+} // namespace tlp
 
 #endif // COLORBUTTON_H
 ///@endcond

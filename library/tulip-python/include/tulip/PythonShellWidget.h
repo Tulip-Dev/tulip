@@ -63,6 +63,6 @@ protected slots:
 
   void updateAutoCompletionList(bool dotContext = false) override;
 };
-}
+} // namespace tlp
 
 #endif /* PYTHONSHELLWIDGET_H_ */

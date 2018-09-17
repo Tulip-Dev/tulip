@@ -118,7 +118,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 #else
               Qt::ControlModifier
 #endif
-              ) {
+          ) {
             _operation = DELETE_OP;
             mMouseDelete();
           } else {

@@ -32,8 +32,8 @@ class CoordEditor;
 
 namespace tlp {
 /**
-* @brief Simple Coord edition widget.
-**/
+ * @brief Simple Coord edition widget.
+ **/
 class TLP_QT_SCOPE CoordEditor : public QDialog {
   Q_OBJECT
   Q_PROPERTY(Coord coord READ coord WRITE setCoord NOTIFY coordChanged)
@@ -61,7 +61,7 @@ signals:
 private slots:
   void coordUpdated();
 };
-}
+} // namespace tlp
 
 #endif // COORDEDITOR_H
 ///@endcond

@@ -223,7 +223,7 @@ private:
 
   static unsigned int indentationNumber;
 };
-}
+} // namespace tlp
 #endif
 
 #endif // DOXYGEN_NOTFOR_DEVEL

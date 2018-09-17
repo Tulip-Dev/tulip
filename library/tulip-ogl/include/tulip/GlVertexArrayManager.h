@@ -78,8 +78,8 @@ public:
   void reserveMemoryForGraphElts(unsigned int nbNodes, unsigned int nbEdges) override;
 
   /**
-    * Call this function when you want to change input data used by this GlVertexArrayManager
-    */
+   * Call this function when you want to change input data used by this GlVertexArrayManager
+   */
   void setInputData(GlGraphInputData *inputData);
 
   /**
@@ -247,7 +247,7 @@ protected:
   bool verticesUploadNeeded;
   bool colorsUploadNeeded;
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

@@ -67,6 +67,6 @@ private:
   TulipNodeMetricSorter *nodeSorter;
   static std::map<tlp::Graph *, unsigned int> graphDimensionsMap;
 };
-}
+} // namespace pocore
 
 #endif /* TULIPGRAPHDIMENSION_H_ */

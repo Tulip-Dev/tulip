@@ -247,7 +247,7 @@ GeographicViewInteractorEditEdgeBends::GeographicViewInteractorEditEdgeBends(con
 #else
       "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
 #endif
-      );
+  );
 }
 
 void GeographicViewInteractorEditEdgeBends::construct() {

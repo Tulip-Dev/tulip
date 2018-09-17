@@ -392,4 +392,4 @@ void QuantitativeParallelAxis::setAscendingOrder(const bool ascendingOrder) {
 
   glQuantitativeAxis->setAscendingOrder(ascendingOrder);
 }
-}
+} // namespace tlp

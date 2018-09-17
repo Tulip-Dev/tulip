@@ -93,4 +93,4 @@ void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData *,
     delete glyphs.get(PluginLister::pluginInformation(glyphName).id());
   }
 }
-}
+} // namespace tlp

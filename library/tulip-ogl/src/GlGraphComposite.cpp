@@ -169,4 +169,4 @@ void GlGraphComposite::setRenderer(tlp::GlGraphRenderer *renderer) {
     graphRenderer = renderer;
   }
 }
-}
+} // namespace tlp

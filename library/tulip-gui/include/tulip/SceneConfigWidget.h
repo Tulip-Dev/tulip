@@ -56,7 +56,7 @@ public slots:
 protected:
   bool eventFilter(QObject *, QEvent *) override;
 };
-}
+} // namespace tlp
 
 #endif // SCENECONFIGWIDGET_H
 ///@endcond

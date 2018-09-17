@@ -104,7 +104,7 @@ public:
 private:
   GlCompositeHierarchyManager *_manager;
 };
-}
+} // namespace tlp
 
 #endif
 ///@endcond

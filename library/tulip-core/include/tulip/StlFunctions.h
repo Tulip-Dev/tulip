@@ -39,7 +39,7 @@ public:
 private:
   DoubleProperty *metric;
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond

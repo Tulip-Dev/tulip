@@ -52,12 +52,12 @@ void StringsListSelectionDialog::setStringsList(const std::vector<std::string> &
 }
 
 /**
-  * @brief Constructs a strings list selection dialog with the given parent.
-  * \param parent the widget's parent
-  * \param listType this parameter defines the widget's look (see class description)
-  * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
-  *size restriction)
-  **/
+ * @brief Constructs a strings list selection dialog with the given parent.
+ * \param parent the widget's parent
+ * \param listType this parameter defines the widget's look (see class description)
+ * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no
+ *size restriction)
+ **/
 StringsListSelectionDialog::StringsListSelectionDialog(
     QString title, QWidget *parent, const StringsListSelectionWidget::ListType listType,
     const unsigned int maxSize)
@@ -74,17 +74,17 @@ StringsListSelectionDialog::~StringsListSelectionDialog() {
 }
 
 /**
-  * @brief This is a convenience static function that create a dialog
-  * to select some strings in a list.
-  * The function creates a modal dialog with the given title and parent widget.
-  *
-  * @param title the string to display in the dialog title bar,
-  * @param strList the list of strings to choose,
-  * @param selList on input it indicates the already selected strings, then on output the user
-  *selected strings,
-  * @param listType the type of display for the strings to choose,
-  * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
-  **/
+ * @brief This is a convenience static function that create a dialog
+ * to select some strings in a list.
+ * The function creates a modal dialog with the given title and parent widget.
+ *
+ * @param title the string to display in the dialog title bar,
+ * @param strList the list of strings to choose,
+ * @param selList on input it indicates the already selected strings, then on output the user
+ *selected strings,
+ * @param listType the type of display for the strings to choose,
+ * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
+ **/
 bool StringsListSelectionDialog::choose(QString title, const std::vector<std::string> &strList,
                                         std::vector<std::string> &selList, QWidget *parent,
                                         const StringsListSelectionWidget::ListType listType,
@@ -100,4 +100,4 @@ bool StringsListSelectionDialog::choose(QString title, const std::vector<std::st
 
   return false;
 }
-}
+} // namespace tlp

@@ -114,7 +114,7 @@ private:
   Color strokeColor;
   Color textColor;
 };
-}
+} // namespace tlp
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

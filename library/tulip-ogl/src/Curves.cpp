@@ -907,4 +907,4 @@ void splineQuad(const vector<Coord> &vertices, const Color &c1, const Color &c2,
 void splineLine(const vector<Coord> &vertices, const Color &c1, const Color &c2) {
   tlp::bezierLine(splineCurve(vertices), c1, c2);
 }
-}
+} // namespace tlp

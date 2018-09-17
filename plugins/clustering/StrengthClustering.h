@@ -28,17 +28,17 @@
 /** \addtogroup clustering */
 
 /**
-* This plugin performs a single-linkage clustering.
-* The similarity measure used here is the Strength Metric computed on edges.
-* The best threshold is found using MQ Quality Measure.
-* See :
-*
-* Y. Chiricota, F. Jourdan and G. Melancon, G. \n
-* "Software components capture using graph clustering", \n
-* IEEE Computer Society, \n
-* 2003.
-*
-*/
+ * This plugin performs a single-linkage clustering.
+ * The similarity measure used here is the Strength Metric computed on edges.
+ * The best threshold is found using MQ Quality Measure.
+ * See :
+ *
+ * Y. Chiricota, F. Jourdan and G. Melancon, G. \n
+ * "Software components capture using graph clustering", \n
+ * IEEE Computer Society, \n
+ * 2003.
+ *
+ */
 class StrengthClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Strength Clustering", "David Auber", "27/01/2003",

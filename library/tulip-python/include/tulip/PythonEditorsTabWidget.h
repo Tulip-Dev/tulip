@@ -79,6 +79,6 @@ public slots:
 
   void closeTabRequested(int tab);
 };
-}
+} // namespace tlp
 
 #endif // PYTHONEDITORSTABWIDGET_H

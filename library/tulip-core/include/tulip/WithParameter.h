@@ -142,27 +142,27 @@ public:
 };
 
 /**
-  * @ingroup Plugins
-  * @brief This class describes parameters taken by a plugin.
-  *
-  * It is used by WithParameter to store parameters.
-  * Each parameter is identified by a name, has a default value, a value, a help string, and a
-  *boolean indicating whether it is mandatory or optional.
-  **/
+ * @ingroup Plugins
+ * @brief This class describes parameters taken by a plugin.
+ *
+ * It is used by WithParameter to store parameters.
+ * Each parameter is identified by a name, has a default value, a value, a help string, and a
+ *boolean indicating whether it is mandatory or optional.
+ **/
 struct TLP_SCOPE ParameterDescriptionList {
 
   ParameterDescriptionList() {}
 
   /**
-    * @brief Adds a new parameter of type T to the list.
-    *
-    * @param parameterName The name of the parameter.
-    * @param help The help string of this parameter. Defaults to std::string().
-    * @param defaultValue The default value of this parameter. Defaults to std::string().
-    * @param isMandatory Whether this parameter is mandatory or optional. Defaults to true.
-    * @param direction The parameter's direction (see tlp::ParameterDirection for details)
-    * @return void
-    **/
+   * @brief Adds a new parameter of type T to the list.
+   *
+   * @param parameterName The name of the parameter.
+   * @param help The help string of this parameter. Defaults to std::string().
+   * @param defaultValue The default value of this parameter. Defaults to std::string().
+   * @param isMandatory Whether this parameter is mandatory or optional. Defaults to true.
+   * @param direction The parameter's direction (see tlp::ParameterDirection for details)
+   * @return void
+   **/
   template <typename T>
   void add(const std::string &parameterName, const std::string &help,
            const std::string &defaultValue, bool isMandatory = true,
@@ -393,5 +393,5 @@ protected:
   ParameterDescriptionList parameters;
   ///@endcond
 };
-}
+} // namespace tlp
 #endif

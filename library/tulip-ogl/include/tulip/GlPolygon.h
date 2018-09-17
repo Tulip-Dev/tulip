@@ -76,5 +76,5 @@ public:
    */
   virtual Coord &point(const unsigned int i);
 };
-}
+} // namespace tlp
 #endif

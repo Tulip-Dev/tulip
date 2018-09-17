@@ -28,5 +28,5 @@ public:
   virtual ~ColorFunction() {}
   virtual RGBA getColor(const double &value, const unsigned int itemId) const = 0;
 };
-}
+} // namespace pocore
 #endif // COLORFUNCTION_H

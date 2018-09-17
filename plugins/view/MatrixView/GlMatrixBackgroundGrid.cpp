@@ -77,4 +77,4 @@ void GlMatrixBackgroundGrid::draw(float lod, tlp::Camera *camera) {
     line.draw(lod, camera);
   }
 }
-}
+} // namespace tlp

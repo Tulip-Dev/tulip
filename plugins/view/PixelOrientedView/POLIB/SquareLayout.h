@@ -32,5 +32,5 @@ public:
 private:
   unsigned int _width;
 };
-}
+} // namespace pocore
 #endif // SQUARELAYOUT_H

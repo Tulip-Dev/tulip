@@ -44,7 +44,7 @@ public:
 protected:
   static GlBox *box;
 };
-}
+} // namespace tlp
 tlp::GlBox *tlp::CubeOutLined::box = nullptr;
 
 namespace tlp {
@@ -90,4 +90,4 @@ Coord CubeOutLined::getAnchor(const Coord &vector) const {
   else
     return vector;
 }
-}
+} // namespace tlp

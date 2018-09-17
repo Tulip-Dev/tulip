@@ -174,4 +174,4 @@ bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
 
   return false;
 }
-}
+} // namespace tlp

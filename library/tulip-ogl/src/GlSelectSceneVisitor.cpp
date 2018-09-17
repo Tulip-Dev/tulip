@@ -49,4 +49,4 @@ void GlSelectSceneVisitor::visit(GlEdge *glEdge) {
 void GlSelectSceneVisitor::visit(GlLayer *layer) {
   calculator->beginNewCamera(&layer->getCamera());
 }
-}
+} // namespace tlp

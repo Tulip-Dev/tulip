@@ -30,7 +30,7 @@ namespace tlp {
 class Color;
 struct BoundingBox;
 class PluginProgress;
-}
+} // namespace tlp
 
 // Builder
 class ExportInterface {

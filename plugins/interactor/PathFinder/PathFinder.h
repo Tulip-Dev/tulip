@@ -43,14 +43,14 @@ class BooleanProperty;
 
 /*@{*/
 /** \file
-*  \brief PathFinder helps you finding paths between nodes in your graph.
-*
-* This plug-in offers several possibilities to highlight different kinds of paths between two nodes
-* in a graph.
-* You can thus display one or several shortest paths between two selected nodes, or you can even
-* extend to non-shortest paths
-* with length limitations.
-*/
+ *  \brief PathFinder helps you finding paths between nodes in your graph.
+ *
+ * This plug-in offers several possibilities to highlight different kinds of paths between two nodes
+ * in a graph.
+ * You can thus display one or several shortest paths between two selected nodes, or you can even
+ * extend to non-shortest paths
+ * with length limitations.
+ */
 class PathFinder : public tlp::GLInteractorComposite {
   Q_OBJECT
 public:
@@ -145,5 +145,5 @@ private:
   tlp::StringsListSelectionWidget *highlightersListWidget;
   QPushButton *configureHighlighterBtn;
 };
-}
+} // namespace tlp
 #endif /* PATHFINDER_H_ */

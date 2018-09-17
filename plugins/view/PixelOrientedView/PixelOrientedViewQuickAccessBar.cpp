@@ -45,4 +45,4 @@ void PixelOrientedViewQuickAccessBar::setBackgroundColor(const QColor &col) {
   _optionsWidget->setBackgroundColor(tlp::QColorToColor(col));
   emit settingsChanged();
 }
-}
+} // namespace tlp

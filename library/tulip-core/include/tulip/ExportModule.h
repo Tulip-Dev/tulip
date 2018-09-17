@@ -106,6 +106,6 @@ public:
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };
-}
+} // namespace tlp
 #endif
 ///@endcond

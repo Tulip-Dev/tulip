@@ -363,4 +363,4 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   view->getGlMainWidget()->draw(false);
 }
-}
+} // namespace tlp

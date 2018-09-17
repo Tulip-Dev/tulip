@@ -288,8 +288,9 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
         if (!INRANGE(static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr,
                      <= static_cast<int64_t>(textSection_vma + textSection_size))) {
           cerr << "Trying to look up an address that's outside of the range of the text section of "
-               << filePath << "... usually this means the executable or DSO in question has "
-                              "changed since the stack trace was generated"
+               << filePath
+               << "... usually this means the executable or DSO in question has "
+                  "changed since the stack trace was generated"
                << endl;
           return ret;
         }
@@ -334,8 +335,9 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int6
   if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset,
                <= static_cast<int64_t>(textSection_size))) {
     cerr << "Trying to look up an address that's outside of the range of the text section of "
-         << filePath << "... usually this means the executable or DSO in question has changed "
-                        "since the stack trace was generated"
+         << filePath
+         << "... usually this means the executable or DSO in question has changed "
+            "since the stack trace was generated"
          << endl;
   } else {
     bfd_find_nearest_line(abfd, textSection, symbolTable, symbolOffset, &fileName, &funcName,
@@ -361,8 +363,9 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
   if (!INRANGE(static_cast<int64_t>(0) <=, symbolOffset,
                <= static_cast<int64_t>(textSection_size))) {
     cerr << "Trying to look up an address that's outside of the range of the text section of "
-         << filePath << "... usually this means the executable or DSO in question has changed "
-                        "since the stack trace was generated"
+         << filePath
+         << "... usually this means the executable or DSO in question has changed "
+            "since the stack trace was generated"
          << endl;
     return funcName;
   }

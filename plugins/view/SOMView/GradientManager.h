@@ -49,5 +49,5 @@ protected:
   int endColorRange;
   int minSVal;
 };
-}
+} // namespace tlp
 #endif /* GRADIENTMANAGER_H_ */

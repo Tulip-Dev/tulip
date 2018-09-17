@@ -13,4 +13,4 @@ std::ostream &operator<<(std::ostream &os, const Variable &v) {
   os << "(" << v.id() << "=" << v.position() << ")";
   return os;
 }
-}
+} // namespace vpsc

@@ -184,7 +184,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
     QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));
 
-    subMenu =*/menu.addMenu(trUtf8("Set values of"));
+    subMenu =*/
+        menu.addMenu(trUtf8("Set values of"));
     QAction *nodesSetAll =
         subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" to a new default value"));
     nodesSetAll->setToolTip(
@@ -245,7 +246,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
       setDefaultValue(_contextProperty, action == nodesSetDefault);
     }
 
-    else*/ if (action != nullptr) {
+    else*/
+    if (action != nullptr) {
       bool result = false;
 
       _graph->push();

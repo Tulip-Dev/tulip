@@ -89,7 +89,7 @@ private:
   Color _frameColor;
   int _frameWidth;
 };
-}
+} // namespace tlp
 
 #endif // GLOVERVIEWGRAPHICSITEM_H
 ///@endcond

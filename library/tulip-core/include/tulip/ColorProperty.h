@@ -63,5 +63,5 @@ public:
     return propertyTypename;
   }
 };
-}
+} // namespace tlp
 #endif

@@ -131,7 +131,7 @@ std::ostream &operator<<(std::ostream &os, const tlp::Circle<Obj, OTYPE> &);
 typedef Circle<double, long double> Circled;
 typedef Circle<float, double> Circlef;
 typedef Circle<int, double> Circlei;
-}
+} // namespace tlp
 
 #include "cxx/Circle.cxx"
 #endif

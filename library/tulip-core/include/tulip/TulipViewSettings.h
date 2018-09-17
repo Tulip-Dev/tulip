@@ -241,6 +241,6 @@ private:
   Size _size;
   int _shape;
 };
-}
+} // namespace tlp
 
 #endif // TULIPVIEWSETTINGS_H

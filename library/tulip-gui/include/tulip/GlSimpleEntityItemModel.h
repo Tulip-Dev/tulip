@@ -107,7 +107,7 @@ public:
 protected:
   GlSimpleEntityItemEditor *editor;
 };
-}
+} // namespace tlp
 
 #endif // GLSIMPLEENTITYITEMMODEL_H
 ///@endcond

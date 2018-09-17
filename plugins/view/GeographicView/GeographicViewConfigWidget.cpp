@@ -56,9 +56,10 @@ void GeographicViewConfigWidget::openCsvHelp() {
 }
 
 void GeographicViewConfigWidget::openPolyHelp() {
-  QMessageBox::about(nullptr, "Map poly files", ".poly files format are an open street map "
-                                                "format.\nYou can donwload .poly file on "
-                                                ":\nhttp://downloads.cloudmade.com/");
+  QMessageBox::about(nullptr, "Map poly files",
+                     ".poly files format are an open street map "
+                     "format.\nYou can donwload .poly file on "
+                     ":\nhttp://downloads.cloudmade.com/");
 }
 
 bool GeographicViewConfigWidget::useSharedLayoutProperty() const {

@@ -349,4 +349,4 @@ int ConstraintsGenerator::generateYConstraints(Rectangle rs[], Variable vars[], 
 
   return constraints.size();
 }
-}
+} // namespace vpsc
