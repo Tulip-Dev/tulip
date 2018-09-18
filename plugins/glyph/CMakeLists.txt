@@ -44,8 +44,8 @@ INSTALL(FILES radialGradientTexture.png bottomShadowTexture.png leftBottomShadow
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   ADD_CUSTOM_TARGET(copyGlyphTextures ALL
     ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/radialGradientTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/radialGradientTexture.png
-    ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/bottomShadowTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/bottomShadowTexture.png
-    ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/leftBottomShadowTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/leftBottomShadowTexture.png
-    ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/rightBottomShadowTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/rightBottomShadowTexture.png    )
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/bottomShadowTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/bottomShadowTexture.png
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/leftBottomShadowTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/leftBottomShadowTexture.png
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/rightBottomShadowTexture.png ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/rightBottomShadowTexture.png    )
   ADD_DEPENDENCIES(tulip-gui-wheel copyGlyphTextures)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
