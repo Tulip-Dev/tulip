@@ -73,6 +73,8 @@ public:
   static const QString pythonPluginsPath;
   static const QString pythonPluginsPathHome;
   static const char pythonReservedCharacters[];
+  static const std::vector<QString> pythonAccentuatedCharacters;
+  static const std::vector<QString> pythonAccentuatedCharactersReplace;
   static const char *pythonKeywords[];
 
   static PythonInterpreter *getInstance();

@@ -167,6 +167,12 @@ const char PythonInterpreter::pythonReservedCharacters[] = {
     '#', '%',  '/',  '+', '-', '&', '*', '<', '>', '|', '~', '^', '=',
     '!', '\'', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
 
+const std::vector<QString> PythonInterpreter::pythonAccentuatedCharacters = {"é", "è", "ù", "à",
+                                                                             "ç"};
+
+const std::vector<QString> PythonInterpreter::pythonAccentuatedCharactersReplace = {"e", "e", "u",
+                                                                                    "a", "c"};
+
 const char *PythonInterpreter::pythonKeywords[] = {
     "def",     "class",    "from",  "in",     "and",  "or",    "not",    "is",
     "with",    "assert",   "for",   "while",  "if",   "elif",  "import", "True",

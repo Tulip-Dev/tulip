@@ -94,6 +94,11 @@ static QString cleanPropertyName(const QString &propertyName) {
     ret.remove(PythonInterpreter::pythonReservedCharacters[i++]);
   }
 
+  for (unsigned i = 0; i < PythonInterpreter::pythonAccentuatedCharacters.size(); ++i) {
+    ret.replace(PythonInterpreter::pythonAccentuatedCharacters[i],
+                PythonInterpreter::pythonAccentuatedCharactersReplace[i]);
+  }
+
   i = 0;
 
   while (PythonInterpreter::pythonKeywords[i]) {
@@ -119,8 +124,6 @@ static QString cleanPropertyName(const QString &propertyName) {
       break;
     }
   }
-
-  ret.replace("\"", "");
 
   return ret;
 }
