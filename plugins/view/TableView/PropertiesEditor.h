@@ -50,6 +50,7 @@ class PropertiesEditor : public QWidget {
   tlp::GraphPropertiesModel<tlp::PropertyInterface> *_sourceModel;
   bool filteringProperties;
   QWidget *editorParent;
+  Qt::CaseSensitivity _caseSensitiveSearch;
 
 public:
   explicit PropertiesEditor(QWidget *parent = nullptr);
@@ -63,7 +64,7 @@ public:
 
   void setPropertyChecked(int index, bool state);
   void setPropertyChecked(const QString &pName, bool state);
-
+  void setCaseSensitive(Qt::CaseSensitivity cs);
   QLineEdit *getPropertiesFilterEdit();
   void toLabels(tlp::PropertyInterface *prop, bool nodes, bool edges, bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface *prop, bool nodes, bool selectedOnly,

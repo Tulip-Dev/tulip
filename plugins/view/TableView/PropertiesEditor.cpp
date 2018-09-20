@@ -47,7 +47,7 @@ using namespace tlp;
 PropertiesEditor::PropertiesEditor(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr),
       _delegate(new tlp::TulipItemDelegate), _sourceModel(nullptr), filteringProperties(false),
-      editorParent(parent) {
+      editorParent(parent), _caseSensitiveSearch(Qt::CaseSensitive) {
   _ui->setupUi(this);
   connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
 }
@@ -56,6 +56,11 @@ PropertiesEditor::~PropertiesEditor() {
   delete _ui;
   delete _delegate;
   delete _sourceModel;
+}
+
+void PropertiesEditor::setCaseSensitive(Qt::CaseSensitivity cs) {
+  _caseSensitiveSearch = cs;
+  setPropertiesFilter(_ui->propertiesFilterEdit->text());
 }
 
 void PropertiesEditor::setGraph(tlp::Graph *g) {
@@ -83,7 +88,8 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::setPropertiesFilter(QString filter) {
   filteringProperties = true;
-  static_cast<QSortFilterProxyModel *>(_ui->tableView->model())->setFilterRegExp(filter);
+  static_cast<QSortFilterProxyModel *>(_ui->tableView->model())
+      ->setFilterRegExp(QRegExp(filter, _caseSensitiveSearch));
   filteringProperties = false;
 }
 

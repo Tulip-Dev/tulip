@@ -80,8 +80,9 @@ protected slots:
   bool setCurrentValue(tlp::PropertyInterface *, unsigned int);
   void setLabelsOfHighlightedRows(tlp::PropertyInterface *);
   void setMatchProperty();
-  void setColumnsFilter(QString);
-  void setPropertiesFilter(QString);
+  void setColumnsFilter(const QString &);
+  void setColumnsFilterCase();
+  void setPropertiesFilter(const QString &);
   void mapToGraphSelection();
 
   void columnsInserted(const QModelIndex &, int, int);

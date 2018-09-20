@@ -162,6 +162,7 @@ void TableView::setupWidget() {
   connect(_ui->zoomSpinBox, SIGNAL(valueChanged(int)), this, SLOT(setZoomLevel(int)));
   minFontSize = _ui->table->font().pointSize();
   connect(_ui->filterEdit, SIGNAL(returnPressed()), this, SLOT(filterChanged()));
+  connect(_ui->filtercase, SIGNAL(stateChanged(int)), this, SLOT(filterChanged()));
 
   _ui->eltTypeCombo->addItem("Nodes");
   _ui->eltTypeCombo->addItem("Edges");
@@ -176,6 +177,7 @@ void TableView::setupWidget() {
   filteringColumns = false;
   connect(_ui->columnsFilterEdit, SIGNAL(textChanged(QString)), this,
           SLOT(setColumnsFilter(QString)));
+  connect(_ui->columnsfiltercase, SIGNAL(stateChanged(int)), this, SLOT(setColumnsFilterCase()));
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this,
           SLOT(setPropertiesFilter(QString)));
 }
@@ -397,7 +399,17 @@ void TableView::setMatchProperty() {
   }
 }
 
-void TableView::setColumnsFilter(QString text) {
+void TableView::setColumnsFilterCase() {
+  if (filteringColumns)
+    return;
+
+  filteringColumns = true;
+  propertiesEditor->setCaseSensitive(_ui->columnsfiltercase->isChecked() ? Qt::CaseSensitive
+                                                                         : Qt::CaseInsensitive);
+  filteringColumns = false;
+}
+
+void TableView::setColumnsFilter(const QString &text) {
   if (filteringColumns)
     return;
 
@@ -406,7 +418,7 @@ void TableView::setColumnsFilter(QString text) {
   filteringColumns = false;
 }
 
-void TableView::setPropertiesFilter(QString text) {
+void TableView::setPropertiesFilter(const QString &text) {
   if (filteringColumns)
     return;
 
@@ -434,7 +446,8 @@ void TableView::filterChanged() {
     props += g->getProperty(QStringToTlpString(_ui->matchPropertyButton->text()));
 
   sortModel->setProperties(props);
-  sortModel->setFilterRegExp(filter);
+  sortModel->setFilterRegExp(
+      QRegExp(filter, _ui->filtercase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive));
 }
 
 void TableView::mapToGraphSelection() {
