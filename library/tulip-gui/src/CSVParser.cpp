@@ -116,6 +116,7 @@ bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress
       if (!line.empty() && row >= _firstLine) {
         // Correct the encoding of the line.
         line = convertStringEncoding(line, codec);
+
         tokens.clear();
         tokenize(line, tokens, _separator, _mergesep, _textDelimiter, 0);
         unsigned int column = 0;
@@ -178,6 +179,7 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
       // Check if the next character is \n and remove it.
       if (is.get(c) && c != '\n') {
         is.unget();
+	c = '\r';
       }
 
       if (!tdlm)
@@ -204,26 +206,20 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
   auto delim = QStringToTlpString(delimiters);
 
   while (!quit) {
-    // Don't search tokens in chars sourrounded by text delimiters.
+    // Don't search tokens in chars surrounded by text delimiters.
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    bool inText = false;
     while (pos < str.length() &&
-           (inText || (str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+           ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
-        pos += 1;
-        if (!inText) {
-          inText = true;
-          // go the the next text delimiter .
+	do {
+	  pos += 1;
+	  // go the the next text delimiter .
           pos = str.find_first_of(textDelim, pos);
-        } else {
-          // check for double textDelim
-          if (str[pos] == textDelim)
-            pos += 1;
-          else
-            inText = false;
-        }
+	}
+	// continue until a single textDelim
+	while (pos != string::npos && str[++pos] == textDelim);
       } else
         pos += 1;
     }
