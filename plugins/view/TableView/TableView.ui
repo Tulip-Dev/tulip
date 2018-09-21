@@ -349,7 +349,7 @@ the chosen column value contains the given pattern</string>
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show the rows (nodes or edges) whose&lt;/p&gt;&lt;p&gt;the chosen column value contains the given pattern.&lt;/p&gt;&lt;p&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show rows (nodes or edges) whose&lt;/p&gt;&lt;p&gt;the chosen column value contains the given pattern (regular expression).&lt;/p&gt;&lt;p&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: white;
@@ -360,7 +360,7 @@ border-top: 1px solid #C9C9C9;
 border-left: 1px solid #C9C9C9;</string>
              </property>
              <property name="placeholderText">
-              <string>give a pattern</string>
+              <string>give a pattern (regular expression)</string>
              </property>
             </widget>
            </item>
@@ -462,8 +462,7 @@ contains the given pattern</string>
               </size>
              </property>
              <property name="toolTip">
-              <string>Only show the columns (properties) whose name
-contains the given pattern</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show columns (properties) whose name&lt;/p&gt;&lt;p&gt;contains the given pattern (regular expression).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: white;
@@ -474,7 +473,7 @@ border-top: 1px solid #C9C9C9;
 border-left: 1px solid #C9C9C9;</string>
              </property>
              <property name="placeholderText">
-              <string>give a pattern</string>
+              <string>give a pattern (regular expression)</string>
              </property>
             </widget>
            </item>
