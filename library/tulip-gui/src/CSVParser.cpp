@@ -179,7 +179,7 @@ bool CSVSimpleParser::multiplatformgetline(istream &is, string &str) {
       // Check if the next character is \n and remove it.
       if (is.get(c) && c != '\n') {
         is.unget();
-	c = '\r';
+        c = '\r';
       }
 
       if (!tdlm)
@@ -210,16 +210,15 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
     assert(pos != string::npos);
     assert(pos < str.size());
 
-    while (pos < str.length() &&
-           ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
+    while (pos < str.length() && ((str[pos] != delim[0]) || (str.find(delim, pos) != pos))) {
       if (str[pos] == textDelim) {
-	do {
-	  pos += 1;
-	  // go the the next text delimiter .
+        do {
+          pos += 1;
+          // go the the next text delimiter .
           pos = str.find_first_of(textDelim, pos);
-	}
-	// continue until a single textDelim
-	while (pos != string::npos && str[++pos] == textDelim);
+        }
+        // continue until a single textDelim
+        while (pos != string::npos && str[++pos] == textDelim);
       } else
         pos += 1;
     }
