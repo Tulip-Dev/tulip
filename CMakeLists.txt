@@ -556,11 +556,11 @@ else:
 
           ADD_CUSTOM_TARGET(tulip-core-wheel
             COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
 
           ADD_CUSTOM_TARGET(tulip-gui-wheel
             COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
             DEPENDS tulip-core-wheel)
 
         ELSE(NOT LINUX)
@@ -584,12 +584,12 @@ else:
           ADD_CUSTOM_TARGET(tulip-core-wheel
             COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
             COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
-            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
 
           ADD_CUSTOM_TARGET(tulip-gui-wheel
             COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
             COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
             DEPENDS tulip-core-wheel)
 
         ENDIF(NOT LINUX)  
@@ -627,16 +627,16 @@ else:
         ENDIF(LINUX)
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
           COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+          WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
           COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER})
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+          WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER})
 
         ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
         ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test tulip-gui-wheel-upload-test)
