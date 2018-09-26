@@ -446,33 +446,10 @@ MACRO(TULIP_INSTALL_PLUGIN plugin_target destination)
 
   # When building a Python wheel, copy Tulip plugins in wheel build folder
   # in order to package them with the Tulip Python bindings
-  IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
     SET(TULIP_PLUGIN_WHEEL_INSTALL_DIR "${TULIP_PYTHON_NATIVE_FOLDER}/plugins")
-    SET(TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR "${TULIPGUI_PYTHON_NATIVE_FOLDER}/plugins")
-
-    # Default install folder : tulip-core plugins
-    SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIP_PLUGIN_WHEEL_INSTALL_DIR})
-    # Copy interactor and view plugins in tulipgui wheel folder
-    IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
-      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
-    ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
-    # Copy glyph plugins in tulipgui wheel folder
-    IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
-      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
-    ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
-
-    # Those plugins depend on Qt, copy them in tulipgui wheel folder
-    IF("${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
-       "${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
-       "${plugin_target}" MATCHES "^.*FileSystem.*$" OR
-       "${plugin_target}" MATCHES "^.*GEXFImport.*$" OR
-       "${plugin_target}" MATCHES "^.*WebImport.*$" OR
-       "${plugin_target}" MATCHES "^.*SVGExport.*$")
-      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
-    ENDIF()
-
-    TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${PLUGIN_WHEEL_INSTALL_DIR} wheels)
-  ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+    TULIP_COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${TULIP_PLUGIN_WHEEL_INSTALL_DIR} wheel)
+  ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ENDMACRO(TULIP_INSTALL_PLUGIN)
 
 # for backward compatibility with Tulip < 5.1 for external projects

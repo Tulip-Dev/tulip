@@ -86,8 +86,7 @@ Example
 The following script imports the dependency graph from the locally installed pip packages,
 draws it using a force directed layout algorithm and serializes the resulting graph to a file
 through the TLP graph format. The imported graph can then be visualized through the Tulip software
-or the use of the dedicated `tulipgui <https://pypi.python.org/pypi/tulipgui-python>`_ module,
-enabling to create the OpenGL visualizations available in Tulip from Python.
+for interactive analysis.
 
 .. code:: python
 

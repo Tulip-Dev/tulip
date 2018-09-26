@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclu
 
 ##----------------------------------------------------------------------------------------------------------------------------
 
-IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
@@ -24,7 +24,7 @@ QTX_WRAP_CPP(ColorMapping_MOC_SRCS
 ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS} ${ColorMapping_UI_SRCS} ${ColorMapping_MOC_SRCS})
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipCoreName} ${LibTulipGUIName})
 
-ELSE(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ELSE(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 SET(ColorMapping_SRCS
   ColorMapping.cpp
@@ -36,7 +36,7 @@ SET_SOURCE_FILES_PROPERTIES(ColorMapping.cpp
 ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS})
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipCoreName})
 
-ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 TULIP_INSTALL_PLUGIN(ColorMapping-${TulipVersion} ${TulipPluginsInstallDir})

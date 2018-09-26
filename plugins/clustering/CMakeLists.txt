@@ -29,7 +29,7 @@ ADD_LIBRARY(CliqueEnumeration-${TulipVersion} SHARED ${CliqueEnumeration_SRCS})
 TARGET_LINK_LIBRARIES(CliqueEnumeration-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-IF(NOT TULIP_BUILD_CORE_ONLY)
+IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
 QTX_WRAP_UI(ConvolutionClustering_UI_SRCS
@@ -46,7 +46,7 @@ SET(ConvolutionClustering_SRCS
 
 ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName} ${QT_LIBRARIES})
-ENDIF(NOT TULIP_BUILD_CORE_ONLY)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS
   EqualValueClustering.h
@@ -66,9 +66,9 @@ TARGET_LINK_LIBRARIES(QuotientClustering-${TulipVersion} ${LibTulipCoreName})
 ##----------------------------------------------------------------------------------------------------------------------------
 TULIP_INSTALL_PLUGIN(StrengthClustering-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(HierarchicalClustering-${TulipVersion} ${TulipPluginsInstallDir})
-IF(NOT TULIP_BUILD_CORE_ONLY)
-TULIP_INSTALL_PLUGIN(ConvolutionClustering-${TulipVersion} ${TulipPluginsInstallDir})
-ENDIF(NOT TULIP_BUILD_CORE_ONLY)
+IF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  TULIP_INSTALL_PLUGIN(ConvolutionClustering-${TulipVersion} ${TulipPluginsInstallDir})
+ENDIF(NOT TULIP_BUILD_CORE_ONLY AND NOT TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 TULIP_INSTALL_PLUGIN(EqualValueClustering-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(QuotientClustering-${TulipVersion} ${TulipPluginsInstallDir})
 TULIP_INSTALL_PLUGIN(CliqueEnumeration-${TulipVersion} ${TulipPluginsInstallDir})

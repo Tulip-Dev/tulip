@@ -13,8 +13,7 @@ SET(QT_HAS_WEBENGINE FALSE)
 # If CMake does not automatically find Qt5 , the root directory
 # of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable.
 
-# Also, when building Tulip Python wheels, force the use of Qt4 (more lightweight, easier to deploy)
-IF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(TULIP_USE_QT5)
 
   # Unset related CMake variables in order to change the Qt5 version (by modifying the root Qt5 directory through the CMAKE_PREFIX_PATH variable)
   # without having to delete the current CMake cache
@@ -62,7 +61,7 @@ IF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   FIND_PACKAGE(Qt5OpenGL)
   FIND_PACKAGE(Qt5Network)
 
-ENDIF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(TULIP_USE_QT5)
 
  # Qt5 and all the required modules are present, do global setup
 IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
@@ -197,10 +196,10 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
 # Use Qt4 otherwise
 ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
 
-  IF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  IF(TULIP_USE_QT5)
     MESSAGE("Qt 5 required components or the CMake modules to locate them have not been found.")
     MESSAGE("Falling back to Qt 4.")
-  ENDIF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  ENDIF(TULIP_USE_QT5)
 
   FIND_PACKAGE(Qt4 4.6.0 REQUIRED)
   SET(USE_QT4 true)
