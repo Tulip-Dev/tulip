@@ -240,7 +240,32 @@ jobs:
         - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
+  #==============================================================================================================================================================
+    # Tulip-Python wheels build on manylinux1
+    - stage: Tulip-Python wheels build (CentOS 5.11 manylinux1)
+      os: linux
+      dist: trusty
+      cache:
+        directories:
+          - $HOME/ccache
 
+      sudo: required
+      env:
+        - ARCH=x86_64
+        - DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+
+      services:
+        - docker
+
+      before_install:
+        - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+        - sudo service docker restart
+        - sleep 5
+        - sudo docker pull ${DOCKER_IMAGE}
+        - sudo docker create -v $HOME/ccache:/ccache --name ccache ${DOCKER_IMAGE}
+
+      script:
+        - sudo docker run --rm=true -e CCACHE_DIR=/ccache --volumes-from ccache --cap-add SYS_ADMIN -v `pwd`:/tulip:rw ${DOCKER_IMAGE} /bin/bash -c "bash -xe /tulip/bundlers/linux/tulip_python_wheels_build.sh"
   #==============================================================================================================================================================
     # Tulip AppImage build on CentOS
     - stage: Tulip AppImage build (CentOS)
