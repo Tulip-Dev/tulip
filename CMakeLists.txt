@@ -248,9 +248,9 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
   ELSEIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND LINUX)
     FILE(READ /etc/issue LINUX_ISSUE)
-    IF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT IS_DIRECTORY /opt/python)
+    IF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
       MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS 5.11 docker image provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
-    ENDIF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT IS_DIRECTORY /opt/python)
+    ENDIF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
     # build binaries with install rpath when generating Tulip Python wheels for Linux
     # as we don't install the project in that case
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
@@ -571,25 +571,19 @@ else:
           # When building Python binary wheels on Linux, produced binaries have to be patched
           # in order for the tulip modules to be successfully imported and loaded on every computer.
           # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
-          # in order to ease that patching task, so install its latest version with pip first.
-          # The tool is only compatible with Python 3.X, so we will use Python 3.5 installed
-          # in the docker image provided by the manylinux project (see https://github.com/pypa/manylinux).
+          # in order to ease that patching task.
+          # We use a patched version of the auditwheel tool
+	  # as the official one does not repair Tulip-Python wheels correctly
+	  EXECUTE_PROCESS(COMMAND bash -c "echo $(dirname $(readlink /usr/local/bin/auditwheel))" OUTPUT_VARIABLE PYBIN OUTPUT_STRIP_TRAILING_WHITESPACE)
+	  EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel;git clone -b purelib_fixes https://github.com/anlambert/auditwheel.git /tmp/auditwheel;${PYBIN}/pip install /tmp/auditwheel; rm -rf /tmp/auditwheel")
 
-          # Use a patched version of the auditwheel tool as the official one does not
-          # repair Tulip-Python wheels correctly
-          EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip uninstall -y auditwheel)
-          EXECUTE_PROCESS(COMMAND git clone -b purelib_fixes https://github.com/anlambert/auditwheel.git ERROR_QUIET)
-          EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip install auditwheel/)
-
-          ADD_CUSTOM_TARGET(tulip-core-wheel
-            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-            COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
-            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
+	  ADD_CUSTOM_TARGET(tulip-core-wheel
+	    COMMAND bash -c "for CPYBIN in /opt/python/cp*m/bin; do \${CPYBIN}/python setup.py bdist_wheel; auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1); done"
+            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
 
           ADD_CUSTOM_TARGET(tulip-gui-wheel
-            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-            COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
+	    COMMAND bash -c "for CPYBIN in /opt/python/cp*m/bin; do \${CPYBIN}/python setup.py bdist_wheel; auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1); done"
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM
             DEPENDS tulip-core-wheel)
 
         ENDIF(NOT LINUX)  
