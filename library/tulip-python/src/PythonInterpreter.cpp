@@ -343,9 +343,6 @@ PythonInterpreter::PythonInterpreter()
       addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "/tulip/python", true);
 #endif
 
-      initconsoleutils();
-      inittuliputils();
-
       // Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is
       // not set
       // and if the site module is not present on the host system
