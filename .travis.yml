@@ -456,7 +456,7 @@ jobs:
     
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS
-    - 
+    -
       os: osx
       # use xcode9 travis image to get a recent clang compiler
       osx_image: xcode9
@@ -504,3 +504,53 @@ jobs:
         - ninja runTests
         # build Tulip bundle
         - ninja bundle
+  #==============================================================================================================================================================
+    # Tulip-Python wheels build stage on Mac OS
+    - stage: Tulip-Python wheels build (Mac OS)
+      os: osx
+      osx_image: xcode7.3
+      compiler: clang
+      cache: ccache
+      install:
+        # set columns in terminal, required for curl to work correctly:
+        - export COLUMNS=80
+        # install MacPorts in order to easily retrieve Tulip dependencies
+        - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
+        - chmod +x ./macports-ci
+        - travis_wait ./macports-ci install
+        - export PATH=/opt/local/bin:$PATH
+        # install Tulip core build dependencies
+        - sudo port -N install cmake
+        - sudo port -N install ccache
+        - sudo port -N install ninja
+        - sudo port -N install qhull +universal
+        - sudo port -N install yajl +universal
+        # use official Python releases for building the wheels
+        - curl -LO https://www.python.org/ftp/python/2.7.15/python-2.7.15-macosx10.6.pkg
+        - sudo installer -pkg python-2.7.15-macosx10.6.pkg -target /
+        - sudo /Library/Frameworks/Python.framework/Versions/2.7/bin/pip install wheel
+        - curl -LO https://www.python.org/ftp/python/3.7.0/python-3.7.0-macosx10.6.pkg
+        - sudo installer -pkg python-3.7.0-macosx10.6.pkg -target /
+        - sudo /Library/Frameworks/Python.framework/Versions/3.7/bin/pip3 install wheel
+
+      script:
+        # create build directory
+        - mkdir build && cd build
+        # configure Tulip-Python wheel build for Python 2 using cmake
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DPYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/2.7/bin/python -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        # compile Tulip and build the Python wheel
+        - ninja -j4 wheel || travis_terminate 1
+        # check that the produced wheel can be correctly imported
+        - cd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
+        - /Library/Frameworks/Python.framework/Versions/2.7/bin/pip install $(ls -t | head -1)
+        - cd -
+        - /Library/Frameworks/Python.framework/Versions/2.7/bin/python -c "import tulip"
+        # configure Tulip-Python wheel build for Python 3 using cmake
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DTULIP_ACTIVATE_PYTHON_WHEEL_TARGET=ON -DPYTHON_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/3.7/bin/python3 -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        # compile Tulip and build the Python wheel
+        - ninja -j4 wheel || travis_terminate 1
+        # check that the produced wheel can be correctly imported
+        - cd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
+        - /Library/Frameworks/Python.framework/Versions/3.7/bin/pip3 install $(ls -t | head -1)
+        - cd -
+        - /Library/Frameworks/Python.framework/Versions/3.7/bin/python3 -c "import tulip"
