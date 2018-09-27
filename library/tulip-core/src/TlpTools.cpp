@@ -145,8 +145,7 @@ static void checkDirectory(std::string dir, bool tlpDirSet, bool throwEx) {
       ess << std::endl << "Check your TLP_DIR environment variable";
     if (throwEx)
       throw TulipException(ess.str());
-    else if ((dir.find("python") == string::npos) &&
-	     (dir.find("site-packages") == string::npos))
+    else if ((dir.find("python") == string::npos) && (dir.find("site-packages") == string::npos))
       // output only if not in a python installed wheel
       tlp::error() << ess.str();
   }
