@@ -22,39 +22,50 @@ init:
 # define build jobs
 environment:
   matrix:
+
     # 64 bits GCC build
     - MSYS2_ARCH: x86_64
       MSYSTEM: MINGW64
       PYTHON2_HOME: "C:/Python27-x64"
-      PYTHON3_HOME: "C:/Python36-x64"
+      PYTHON3_HOME: "C:/Python37-x64"
 
     # 64 bits MSVC build
     - CMAKE_VS_GENERATOR: "Visual Studio 14 2015 Win64"
       MSVC_PLATFORM: "x64"
       MSVC_PLATFORM_TOOLSET: "v140"
       QT5_DIR: "C:/Qt/5.9/msvc2015_64"
-      PYTHON_EXECUTABLE: "C:/Python36-x64/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python37-x64/python.exe"
       
     # 32 bits GCC build
     - MSYS2_ARCH: i686
       MSYSTEM: MINGW32
       PYTHON2_HOME: "C:/Python27"
-      PYTHON3_HOME: "C:/Python36"
+      PYTHON3_HOME: "C:/Python37"
     
     # 32 bits MSVC build
     - CMAKE_VS_GENERATOR: "Visual Studio 14 2015"
       MSVC_PLATFORM: "Win32"
       MSVC_PLATFORM_TOOLSET: "v140"
       QT5_DIR: "C:/Qt/5.9/msvc2015"
-      PYTHON_EXECUTABLE: "C:/Python36/python.exe"
+      PYTHON_EXECUTABLE: "C:/Python37/python.exe"
+
+    # 64 bits GCC tulip-python wheels build
+    - MSYS2_ARCH: x86_64
+      MSYSTEM: MINGW64
+      PYTHON2_HOME: "C:/Python27-x64"
+      PYTHON3_HOME: "C:/Python37-x64"
+      WHEEL: 1
+
+    # 32 bits GCC tulip-python wheels build
+    - MSYS2_ARCH: i686
+      MSYSTEM: MINGW32
+      PYTHON2_HOME: "C:/Python27"
+      PYTHON3_HOME: "C:/Python37"
+      WHEEL: 1
 
 # build script that simply call the right batch script depending on the compiler used
 build_script:
-  - 'if defined MSYS2_ARCH ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2.bat") else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")'
-
-# get the Tulip version for deployment
-after_build:
-  - ps: "$env:TULIP_VERSION = (((Get-Content ($env:APPVEYOR_BUILD_FOLDER + '/build/library/tulip-core/include/tulip/TulipRelease.h') | %{ if ($_ -match '^#   define TULIP_VERSION.*$') { $_; } }) -replace '#   define TULIP_VERSION ', '') -replace '\"', '')"
+  - 'if defined MSYS2_ARCH (if defined WHEEL ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2_wheel.bat") else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msys2.bat")) else ("%APPVEYOR_BUILD_FOLDER%\appveyor_msvc.bat")'
 
 # set generated installers as artifacts to deploy
 artifacts:
