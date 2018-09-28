@@ -158,10 +158,8 @@ if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
   sys.setdlopenflags(dlOpenFlagsBackup)
 
 __all__ = ['tlp']
-__author__ = "David Auber, Antoine Lambert and the Tulip development Team"
-__copyright__ = "Copyright " + str(date.today().year) + ", LaBRI and University of Bordeaux"
-__license__ = "LGPL-3.0"
+__author__ = "David Auber and the Tulip development Team"
+__license__ = "LGPLv3"
 __version__ = tlp.getTulipRelease()
-__maintainer__ = "Antoine Lambert"
-__email__ = "antoine.lambert33@gmail.com"
+__email__ = "tulipdev@labri.fr"
 __status__ = "Production"

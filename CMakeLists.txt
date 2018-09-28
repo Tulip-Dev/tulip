@@ -572,17 +572,21 @@ else:
           # in order for the tulip modules to be successfully imported and loaded on every computer.
           # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
           # in order to ease that patching task.
-          # We use a patched version of the auditwheel tool
-	  # as the official one does not repair Tulip-Python wheels correctly
-	  EXECUTE_PROCESS(COMMAND bash -c "echo $(dirname $(readlink /usr/local/bin/auditwheel))" OUTPUT_VARIABLE PYBIN OUTPUT_STRIP_TRAILING_WHITESPACE)
-	  EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel;git clone -b purelib_fixes https://github.com/anlambert/auditwheel.git /tmp/auditwheel;${PYBIN}/pip install /tmp/auditwheel; rm -rf /tmp/auditwheel")
+          # We use our patched version of the auditwheel tool
+	  # as the official one does not repair tulip-gui wheels correctly
+	  IF(NOT IS_DIRECTORY /tmp/auditwheel)
+	    EXECUTE_PROCESS(COMMAND bash -c "echo $(dirname $(readlink /usr/local/bin/auditwheel))" OUTPUT_VARIABLE PYBIN OUTPUT_STRIP_TRAILING_WHITESPACE)
+	    EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO http://tulip.labri.fr/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
+	  ENDIF(NOT IS_DIRECTORY /tmp/auditwheel)
 
 	  ADD_CUSTOM_TARGET(tulip-core-wheel
-	    COMMAND bash -c "for CPYBIN in /opt/python/cp*m/bin; do \${CPYBIN}/python setup.py bdist_wheel; auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1); done"
+	    COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+	    COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
             WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
 
           ADD_CUSTOM_TARGET(tulip-gui-wheel
-	    COMMAND bash -c "for CPYBIN in /opt/python/cp*m/bin; do \${CPYBIN}/python setup.py bdist_wheel; auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1); done"
+	    COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+	    COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
             WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM
             DEPENDS tulip-core-wheel)
 

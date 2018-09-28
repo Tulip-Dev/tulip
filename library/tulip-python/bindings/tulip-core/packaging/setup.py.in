@@ -139,7 +139,7 @@ setup(
     author_email='tulipdev@labri.fr',
 
     # Choose your license
-    license='LGPLv2+',
+    license='LGPLv3',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -178,7 +178,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['tulip', 'tulipplugins'],
+    packages=['tulip', 'tulip.native', 'tulipplugins'],
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's

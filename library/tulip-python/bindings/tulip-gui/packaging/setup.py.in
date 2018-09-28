@@ -144,7 +144,7 @@ setup(
     author_email='tulipdev@labri.fr',
 
     # Choose your license
-    license='LGPLv2+',
+    license='LGPLv3',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[

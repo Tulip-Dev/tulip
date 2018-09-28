@@ -89,10 +89,9 @@ import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 __all__ = ['tlpgui']
-__author__ = "David Auber, Antoine Lambert and the Tulip development Team"
+__author__ = "David Auber, and the Tulip development Team"
 __copyright__ = "Copyright " + str(date.today().year) + ", LaBRI and University of Bordeaux"
-__license__ = "LGPL-3.0"
+__license__ = "LGPLv3"
 __version__ = tlp.getTulipRelease()
-__maintainer__ = "Antoine Lambert"
-__email__ = "antoine.lambert33@gmail.com"
+__email__ = "tulipdev@labri.fr"
 __status__ = "Production"
