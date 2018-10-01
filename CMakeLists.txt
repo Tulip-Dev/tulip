@@ -547,11 +547,11 @@ else:
           EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
           IF(NOT WHEEL_OK EQUAL 0)
             MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
-            MESSAGE("You can install it trough the 'pip' tool ($ pip install wheel)")
+            MESSAGE("You can install it through the 'pip' tool ($ pip install wheel)")
           ENDIF(NOT WHEEL_OK EQUAL 0)
           IF(NOT TWINE_OK EQUAL 0)
             MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
-            MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
+            MESSAGE("You can install it through the 'pip' tool ($ pip install twine)")
           ENDIF(NOT TWINE_OK EQUAL 0)
 
           ADD_CUSTOM_TARGET(tulip-core-wheel
@@ -565,15 +565,19 @@ else:
 
         ELSE(NOT LINUX)
 
-          EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
-          EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade twine)
+          IF(NOT EXISTS ${PYTHON_HOME_PATH}/wheel)
+	    EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
+	  ENDIF(NOT EXISTS ${PYTHON_HOME_PATH}/wheel)
+          IF(NOT EXISTS ${PYTHON_HOME_PATH}/twine)
+            EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade twine)
+	  ENDIF(NOT EXISTS ${PYTHON_HOME_PATH}/twine)
 
           # When building Python binary wheels on Linux, produced binaries have to be patched
           # in order for the tulip modules to be successfully imported and loaded on every computer.
           # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
           # in order to ease that patching task.
           # We use our patched version of the auditwheel tool
-	  # as the official one does not repair tulip-gui wheels correctly
+	  # as the official one does not repair tulip-gui wheel correctly
 	  IF(NOT IS_DIRECTORY /tmp/auditwheel)
 	    EXECUTE_PROCESS(COMMAND bash -c "echo $(dirname $(readlink /usr/local/bin/auditwheel))" OUTPUT_VARIABLE PYBIN OUTPUT_STRIP_TRAILING_WHITESPACE)
 	    EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO http://tulip.labri.fr/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
@@ -598,17 +602,17 @@ else:
         # [distutils]
         # index-servers=
         #     pypi
-        #     pypitest
+        #     testpypi
         #
-        # [pypitest]
-        # repository = https://test.pypi.org/legacy/
-        # username = <your user name goes here>
-        # password = <your password goes here>
+        # [testpypi]
+        # repository: https://test.pypi.org/legacy/
+        # username: <your user name goes here>
+        # password: <your password goes here>
         #
         # [pypi]
-        # repository = https://upload.pypi.org/legacy/
-        # username = <your user name goes here>
-        # password = <your password goes here>
+        # repository: https://upload.pypi.org/legacy/
+        # username: <your user name goes here>
+        # password: <your password goes here>
         ###############################################################
 
 
@@ -624,10 +628,10 @@ else:
           SET(WHEEL_FILES_REGEXP "*manylinux*")
         ENDIF(LINUX)
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
-          COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
+          COMMAND ${TWINE} upload -r testpypi dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
-          COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
+          COMMAND ${TWINE} upload -r testpypi dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER})
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
