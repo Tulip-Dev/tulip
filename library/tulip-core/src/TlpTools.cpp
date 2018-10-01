@@ -145,10 +145,10 @@ static void checkDirectory(std::string dir, bool tlpDirSet, bool throwEx) {
       ess << std::endl << "Check your TLP_DIR environment variable";
     if (throwEx)
       throw TulipException(ess.str());
-    else if (// output only if not in a python installed wheel
-	     (dir.find("/tulip/native/") == string::npos) &&
-	     // and not building tulip-core bindings
-	     (dir.find("library/tulip-core/src") == string::npos))
+    else if ( // output only if not in a python installed wheel
+        (dir.find("/tulip/native/") == string::npos) &&
+        // and not building tulip-core bindings
+        (dir.find("library/tulip-core/src") == string::npos))
       tlp::error() << ess.str();
   }
 }
