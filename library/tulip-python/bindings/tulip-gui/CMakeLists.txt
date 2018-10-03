@@ -27,33 +27,21 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUti
 DISABLE_COMPILER_WARNINGS()
 
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
-
-  IF(WIN32)
-    SET(WHEEL_INSTALL_PATH "\\")
-  ELSE(WIN32)
-    SET(WHEEL_INSTALL_PATH "/")
-  ENDIF(WIN32)
-
-  ADD_CUSTOM_COMMAND(OUTPUT ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
-    COMMAND ${CMAKE_COMMAND} -DINPUT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/packaging/
-                             -DOUTPUT_DIR=${TULIPGUI_PYTHON_FOLDER}/../
-                             -DTulipVersion=${TulipVersion}
-                             -DTulipVersionClean=${TulipVersionClean}
-                             -DPythonWheelVersionSuffix=${PythonWheelVersionSuffix}
-                             -DWHEEL_INSTALL_PATH=${WHEEL_INSTALL_PATH}
-                             -P ${CMAKE_CURRENT_SOURCE_DIR}/packaging/configure_tulipgui_python_setup.cmake
-    DEPENDS
-      packaging/setup.py.in
-      packaging/setup.cfg.in
-    COMMENT "Generating tulipgui-python packaging files"
-    VERBATIM)
+  CONFIGURE_FILE(packaging/setup.cfg.in ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg)
+  CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
+  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+    SET(TULIP_PYTHON_WHEEL_VERSION ${TULIP_PYTHON_TEST_WHEEL_VERSION})
+    CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setuptest.py)
+  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipGuiDllDependencies.cmake ${TULIPGUI_PYTHON_FOLDER}/../copyTulipGuiDllDependencies.cmake
      DEPENDS ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg)
   ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
+  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+    ADD_DEPENDENCIES(tulip-gui-test-wheel copyTulipGuiPythonPackagingFiles)
+  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 # Force to use SIP headers located in thirdparty

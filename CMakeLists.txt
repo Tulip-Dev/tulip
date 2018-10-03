@@ -542,7 +542,45 @@ else:
       ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
 
       IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+	STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION ${TulipVersion})
+
+	IF(WIN32)
+	  SET(WHEEL_INSTALL_PATH "\\")
+	ELSE(WIN32)
+	  SET(WHEEL_INSTALL_PATH "/")
+	ENDIF(WIN32)
+
+        ADD_CUSTOM_TARGET(tulip-core-wheel
+          COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+          WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
+
+        ADD_CUSTOM_TARGET(tulip-gui-wheel
+          COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
+          DEPENDS tulip-core-wheel)
+
+        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
+
+	# check generation of test wheels
+	STRING(COMPARE NOTEQUAL "${TULIP_PYTHON_TEST_WHEEL_SUFFIX}" "" TULIP_GENERATE_TESTPYPI_WHEEL)
+
+	IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+	  SET(TULIP_PYTHON_TEST_WHEEL_VERSION ${TULIP_PYTHON_WHEEL_VERSION}.${TULIP_PYTHON_TEST_WHEEL_SUFFIX})
+
+	  ADD_CUSTOM_TARGET(tulip-core-test-wheel
+	    COMMAND ${PYTHON_EXECUTABLE} setuptest.py bdist_wheel
+            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
+	  ADD_DEPENDENCIES(tulip-core-wheel tulip-core-test-wheel)
+
+	  ADD_CUSTOM_TARGET(tulip-gui-test-wheel
+	    COMMAND ${PYTHON_EXECUTABLE} setuptest.py bdist_wheel
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
+            DEPENDS tulip-core-test-wheel)
+	  ADD_DEPENDENCIES(tulip-gui-wheel tulip-gui-test-wheel)
+	ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
+
         IF(NOT LINUX)
+
           EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
           EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
           IF(NOT WHEEL_OK EQUAL 0)
@@ -554,16 +592,7 @@ else:
             MESSAGE("You can install it through the 'pip' tool ($ pip install twine)")
           ENDIF(NOT TWINE_OK EQUAL 0)
 
-          ADD_CUSTOM_TARGET(tulip-core-wheel
-            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-
-          ADD_CUSTOM_TARGET(tulip-gui-wheel
-            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
-            DEPENDS tulip-core-wheel)
-
-        ELSE(NOT LINUX)
+	ELSE(NOT LINUX)
 
           IF(NOT EXISTS ${PYTHON_HOME_PATH}/wheel)
 	    EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
@@ -583,18 +612,32 @@ else:
 	    EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO http://tulip.labri.fr/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
 	  ENDIF(NOT IS_DIRECTORY /tmp/auditwheel)
 
-	  ADD_CUSTOM_TARGET(tulip-core-wheel
-	    COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+	  ADD_CUSTOM_COMMAND(TARGET tulip-core-wheel POST_BUILD
 	    COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
+	    COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+	    WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
+	    COMMENT "patching linux tulip-core wheel" VERBATIM)
 
-          ADD_CUSTOM_TARGET(tulip-gui-wheel
-	    COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+	  ADD_CUSTOM_COMMAND(TARGET tulip-gui-wheel POST_BUILD
 	    COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM
-            DEPENDS tulip-core-wheel)
+	    COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+	    WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
+	    COMMENT "patching linux tulip-gui wheel" VERBATIM)
 
-        ENDIF(NOT LINUX)  
+	  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+	    ADD_CUSTOM_COMMAND(TARGET tulip-core-test-wheel POST_BUILD
+	      COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+	      COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+	      WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
+	      COMMENT "patching linux tulip-core test wheel" VERBATIM)
+	    ADD_CUSTOM_COMMAND(TARGET tulip-gui-test-wheel POST_BUILD
+	      COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
+	      COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
+	      WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
+	      COMMENT "patching linux tulip-gui test wheel" VERBATIM)
+	  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
+
+	ENDIF(NOT LINUX)
 
         # In order to upload the generated wheels, an account must be created on PyPi
         # and the following configuration must be stored in the ~/.pypirc file
@@ -623,26 +666,29 @@ else:
         IF(WIN32)
           SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
         ENDIF(WIN32)
-        SET(WHEEL_FILES_REGEXP "*")
-        IF(LINUX)
-          SET(WHEEL_FILES_REGEXP "*manylinux*")
-        ENDIF(LINUX)
-        ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
-          COMMAND ${TWINE} upload -r testpypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-        ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
-          COMMAND ${TWINE} upload -r testpypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER})
+        SET(WHEEL_FILES_REGEXP "*${TULIP_PYTHON_WHEEL_VERSION}-cp*")
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload
+	  COMMAND bash -c "echo -e 'uploading wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${WHEEL_FILES_REGEXP})"
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
+          WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
+	  COMMAND bash -c "echo -e 'uploading wheels:\\n' $(ls ${TULIPGUI_PYTHON_ROOT_FOLDER}/dist/${WHEEL_FILES_REGEXP})"
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER})
-
-        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
-        ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test tulip-gui-wheel-upload-test)
+          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM)
         ADD_CUSTOM_TARGET(wheels-upload DEPENDS tulip-core-wheel-upload tulip-gui-wheel-upload)
+
+	IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+          SET(TEST_WHEEL_FILES_REGEXP "*${TULIP_PYTHON_TEST_WHEEL_VERSION}*")
+          ADD_CUSTOM_TARGET(tulip-core-test-wheel-upload
+	    COMMAND bash -c "echo -e 'uploading test wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${TEST_WHEEL_FILES_REGEXP})"
+            COMMAND ${TWINE} upload -r testpypi dist/${TEST_WHEEL_FILES_REGEXP}
+            WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
+          ADD_CUSTOM_TARGET(tulip-gui-test-wheel-upload
+	    COMMAND bash -c "echo -e 'uploading test wheels:\\n' $(ls ${TULIPGUI_PYTHON_ROOT_FOLDER}/dist/${TEST_WHEEL_FILES_REGEXP})"
+            COMMAND ${TWINE} upload -r testpypi dist/${TEST_WHEEL_FILES_REGEXP}
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM)
+          ADD_CUSTOM_TARGET(test-wheels-upload DEPENDS tulip-core-test-wheel-upload tulip-gui-test-wheel-upload)
+	  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
       ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
     ENDIF(PYTHONLIBS_FOUND)

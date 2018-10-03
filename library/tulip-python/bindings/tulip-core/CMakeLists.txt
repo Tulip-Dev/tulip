@@ -118,33 +118,21 @@ IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
-
-  IF(WIN32)
-    SET(WHEEL_INSTALL_PATH "\\")
-  ELSE(WIN32)
-    SET(WHEEL_INSTALL_PATH "/")
-  ENDIF(WIN32)
-
-  ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_FOLDER}/../setup.py ${TULIP_PYTHON_FOLDER}/../setup.cfg
-    COMMAND ${CMAKE_COMMAND} -DINPUT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/packaging/
-                             -DOUTPUT_DIR=${TULIP_PYTHON_FOLDER}/../
-                             -DTulipVersionClean=${TulipVersionClean}
-                             -DPythonWheelVersionSuffix=${PythonWheelVersionSuffix}
-                             -DWHEEL_INSTALL_PATH=${WHEEL_INSTALL_PATH}
-                             -P ${CMAKE_CURRENT_SOURCE_DIR}/packaging/configure_tulip_python_setup.cmake
-    DEPENDS
-      packaging/setup.py.in
-      packaging/setup.cfg.in
-    COMMENT "Generating tulip-python packaging files"
-    VERBATIM)
-
+  CONFIGURE_FILE(packaging/setup.cfg.in ${TULIP_PYTHON_FOLDER}/../setup.cfg)
+  CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
+  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+    SET(TULIP_PYTHON_WHEEL_VERSION ${TULIP_PYTHON_TEST_WHEEL_VERSION})
+    CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setuptest.py)
+  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
   ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
                     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
                     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipCoreDllDependencies.cmake ${TULIP_PYTHON_FOLDER}/../copyTulipCoreDllDependencies.cmake
                     DEPENDS ${TULIP_PYTHON_FOLDER}/../setup.py ${TULIP_PYTHON_FOLDER}/../setup.cfg)
   ADD_DEPENDENCIES(tulip-core-wheel copyTulipPythonPackagingFiles)
+  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
+    ADD_DEPENDENCIES(tulip-core-test-wheel copyTulipPythonPackagingFiles)
+  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(NOT SYSTEM_SIP)
