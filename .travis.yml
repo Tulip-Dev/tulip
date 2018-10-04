@@ -411,7 +411,7 @@ jobs:
         - sudo port -N install cppunit
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
-        - sudo pip install sphinx
+        - sudo pip install sphinx==1.7.9
 
       env:
         # use system Python 2.7
@@ -462,7 +462,7 @@ jobs:
         - sudo port -N install cppunit
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
-        - sudo pip install sphinx --ignore-installed six
+        - sudo pip install sphinx==1.7.9 --ignore-installed six
       env:
         # use system Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7

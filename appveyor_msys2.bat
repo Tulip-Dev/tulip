@@ -12,22 +12,20 @@ rem Upgrade the MSYS2 platform
 bash -lc "pacman --noconfirm --sync --refresh --sysupgrade"
 
 rem Install required tools
-bash -lc "pacman --noconfirm -S --needed base-devel wget unzip mingw-w64-%MSYS2_ARCH%-toolchain"
+bash -lc "pacman --noconfirm -S --needed base-devel unzip mingw-w64-%MSYS2_ARCH%-toolchain"
 
 rem Install the relevant native dependencies
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-yajl"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qhull"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-freetype"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-glew"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-libpng"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-pcre2"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qt5"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-quazip"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-qtwebkit"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-cppunit"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-cmake"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-ccache"
-bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-doxygen"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-yajl"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qhull"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-freetype"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-glew"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-libpng"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-pcre2"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qt5"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-quazip"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qtwebkit"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-cppunit"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-ccache"
 
 rem Invoke subsequent bash in the build tree
 cd %APPVEYOR_BUILD_FOLDER%
@@ -38,14 +36,7 @@ bash -lc "set pwd"
 bash -lc "env"
 
 rem Install Inetc plugin for NSIS
-rem because the connection to the original source site seems to be difficult
-rem if it fails we use our copy
-curl -fsS -o Inetc.zip http://nsis.sourceforge.net/mediawiki/images/c/c9/Inetc.zip || curl -fsS -o Inetc.zip http://tulip.labri.fr/code/Inetc.zip
-7z x Inetc.zip -o"C:\Program Files (x86)\NSIS"
-
-rem Install sphinx for Python 3
-set PATH=%PYTHON3_HOME%;%PYTHON3_HOME%/Scripts;%PATH%
-pip install sphinx
+bash -lc "unzip bundlers/win/Inetc.zip -d\"C:\Program Files (x86)\NSIS\""
 
 rem Build Tulip with Python 3, run its unit tests and package it
 bash -lc "mkdir build"
