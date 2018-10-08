@@ -44,7 +44,7 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
 
     def relinkDyLibsInDirAndSetRpaths(dirPath, rpaths):
         for lib in os.listdir(dirPath):
-            if fnmatch.fnmatch(lib, '*.dylib'):
+            if not fnmatch.fnmatch(lib, '*.py'):
                 libPath = dirPath + lib
                 if not os.path.isdir(libPath):
                     relinkDyLibAndSetRpaths(libPath, rpaths)
@@ -54,7 +54,7 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
         toProcess = os.listdir(dirPath)
         while lastNbProcessed == 0 or len(toProcess) > lastNbProcessed:
             for lib in toProcess:
-                if fnmatch.fnmatch(lib, '*.dylib'):
+                if not fnmatch.fnmatch(lib, '*.py'):
                     libPath = dirPath + lib
                     if not os.path.isdir(libPath):
                         libs = getDyLibDependencies(libPath)
