@@ -5,6 +5,7 @@ from setuptools.dist import Distribution
 from codecs import open
 import os
 from os import path
+import fnmatch
 import platform
 import subprocess
 import sys
@@ -43,27 +44,29 @@ if platform.system() == 'Darwin' and len(sys.argv) > 1 and sys.argv[1] == 'bdist
 
     def relinkDyLibsInDirAndSetRpaths(dirPath, rpaths):
         for lib in os.listdir(dirPath):
-            libPath = dirPath + lib
-            if not os.path.isdir(libPath):
-                relinkDyLibAndSetRpaths(libPath, rpaths)
+            if fnmatch.fnmatch(lib, '*.dylib'):
+                libPath = dirPath + lib
+                if not os.path.isdir(libPath):
+                    relinkDyLibAndSetRpaths(libPath, rpaths)
 
     def copyDyLibsDependencies(dirPath, relativeCopyPath = './'):
         lastNbProcessed = 0
         toProcess = os.listdir(dirPath)
         while lastNbProcessed == 0 or len(toProcess) > lastNbProcessed:
             for lib in toProcess:
-                libPath = dirPath + lib
-                if not os.path.isdir(libPath):
-                    libs = getDyLibDependencies(libPath)
-                    for L in libs:
-                        filename = os.path.basename(L)
-                        dylibCopy = dirPath + relativeCopyPath + filename
-                        if not os.path.isfile(dylibCopy):
-                            shutil.copyfile(L, dylibCopy)
-                            subprocess.call(
-                                'install_name_tool -id @rpath/%s %s 2>/dev/null' %
-                                 (filename, dylibCopy),
-                                 shell=True)
+                if fnmatch.fnmatch(lib, '*.dylib'):
+                    libPath = dirPath + lib
+                    if not os.path.isdir(libPath):
+                        libs = getDyLibDependencies(libPath)
+                        for L in libs:
+                            filename = os.path.basename(L)
+                            dylibCopy = dirPath + relativeCopyPath + filename
+                            if not os.path.isfile(dylibCopy):
+                                shutil.copyfile(L, dylibCopy)
+                                subprocess.call(
+                                    'install_name_tool -id @rpath/%s %s 2>/dev/null' %
+                                    (filename, dylibCopy),
+                                    shell=True)
             lastNbProcessed = len(toProcess)
             toProcess = os.listdir(dirPath)
 
