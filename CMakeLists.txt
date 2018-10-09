@@ -466,14 +466,14 @@ else:
 
     IF(PYTHONLIBS_FOUND)
 
-      # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-      EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
-      STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
-
-      # Python 64bits does not provide a dll import library for MinGW.
-      # Fortunately, we can directly link to the Python dll with that compiler.
-      # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
       IF(MINGW)
+	# Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
+	EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
+	STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
+
+	# Python 64bits does not provide a dll import library for MinGW.
+	# Fortunately, we can directly link to the Python dll with that compiler.
+	# So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
         STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
 
         IF(MSYS2_PYTHON)
@@ -987,7 +987,7 @@ ENDIF(NOT TULIP_BUILD_FOR_APPIMAGE)
       ELSE(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
         MESSAGE("NSIS Inetc plugin is required to build the Tulip installer.")
-        MESSAGE("Download the plugin archive from http://nsis.sourceforge.net/Inetc_plug-in and extract it in ${NSIS_PATH}.")
+        MESSAGE("Extract ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/Inetc.zip in ${NSIS_PATH}.")
 
       ENDIF(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
