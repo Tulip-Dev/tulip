@@ -1526,11 +1526,18 @@ void GraphPerspective::CSVImport() {
     else
       centerPanelsForGraph(g);
 
-    if ((nbLogsAfter != nbLogsBefore) &&
-        (QMessageBox::question(_mainWindow, "CSV Parse errors found",
-                               QString("When parsing your CSV file,<br/> %1 error(s) has been "
+    unsigned nb_error = nbLogsAfter - nbLogsBefore;
+    if ((nb_error == 1) &&
+        (QMessageBox::question(_mainWindow, "CSV parse error",
+                               "When parsing your CSV file,<br/> one error has been "
+                               "encountered.<br/>Do you want to see it?",
+                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes))
+      showLogger();
+    if ((nb_error > 1) &&
+        (QMessageBox::question(_mainWindow, "CSV parse errors",
+                               QString("When parsing your CSV file,<br/> %1 errors have been "
                                        "encountered.<br/>Do you want to see them?")
-                                   .arg(nbLogsAfter - nbLogsBefore),
+                                   .arg(nb_error),
                                QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes))
       showLogger();
 
