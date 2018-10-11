@@ -57,8 +57,6 @@ ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext 
   declareDeprecatedName("Reachable Sub-Graph");
 }
 
-ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
-
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
   unsigned int maxDistance = 5;
