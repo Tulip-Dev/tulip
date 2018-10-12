@@ -100,7 +100,7 @@ for /D %%P in ("c:\Python%pysuffix%") do (
   set pminor=!pdir:~10,1!
   if !pminor! gtr 4 (
     set pyexe=%%P/python.exe
-    cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DPYTHON_EXECUTABLE=!pyexe! -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_ACTIVATE_PYTHON_WHEELS_TARGETS=ON
+    cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DPYTHON_EXECUTABLE=!pyexe! -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_ACTIVATE_PYTHON_WHEELS_TARGETS=ON ..
     if %errorlevel% neq 0 exit /b %errorlevel%
     msbuild tulip-core-wheel.vcxproj /m /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
     if %errorlevel% neq 0 exit /b %errorlevel%
