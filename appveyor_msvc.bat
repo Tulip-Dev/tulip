@@ -91,28 +91,3 @@ msbuild INSTALL.vcxproj /m /p:Configuration=Release /p:TrackFileAccess=false /p:
 if %errorlevel% neq 0 exit /b %errorlevel%
 rem finally run Tulip tests
 ctest --force-new-ctest-process --output-on-failure --build-config "Release"
-
-rem build and test tulip-core-wheel for all Python versions (> 3.4) installed
-if %MSVC_PLATFORM% == "x64" (set pysuffix=3?-x64) else (set pysuffix=3?)
-for /D %%P in ("c:\Python%pysuffix%") do (
-  setlocal EnableDelayedExpansion
-  set pdir=%%P
-  set pminor=!pdir:~10,1!
-  if !pminor! gtr 4 (
-    set pyexe=%%P/python.exe
-    !pyexe! -m pip install wheel
-    cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DPYTHON_EXECUTABLE=!pyexe! -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_ACTIVATE_PYTHON_WHEELS_TARGETS=ON ..
-    if %errorlevel% neq 0 exit /b %errorlevel%
-    msbuild tulip-core-wheel.vcxproj /m /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
-    if %errorlevel% neq 0 exit /b %errorlevel%
-    set "FC=1"
-    for /F %%F in ('dir /S /B library\tulip-python\bindings\tulip-core\tulip_module\dist\*.whl /O:-D') do (
-      if !FC! == 1 (
-        !pyexe! -m pip install %%F
-        !pyexe! -c "import tulip"
-      )
-      set /A FC-=1
-    )
-  )
-  endlocal
-)
