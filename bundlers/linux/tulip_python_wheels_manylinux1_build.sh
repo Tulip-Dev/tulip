@@ -12,14 +12,14 @@ yum -y install freetype-devel libpng-devel libjpeg-devel glew-devel fontconfig
 pushd /tmp
 
 # download and install our own build of Qt 4.8.7
-curl -LO http://tulip.labri.fr/code/qt-4.8.7.tar.gz
+curl http://tulip.labri.fr/code/qt-4.8.7_$(uname -m).tar.gz -o /tmp/qt-4.8.7.tar.gz
 pushd /opt
 tar zxvf /tmp/qt-4.8.7.tar.gz
 rm -rf /tmp/qt-4.8.7.tar.gz
 export LD_LIBRARY_PATH=/opt/qt-4.8.7/lib
 popd
 
-# downaload, build and install cmake-2.8.12 needed by tulip
+# download, build and install cmake-2.8.12 needed by tulip
 curl -LO https://cmake.org/files/v2.8/cmake-2.8.12.tar.gz
 tar zxvf cmake-2.8.12.tar.gz
 pushd cmake-2.8.12
@@ -41,7 +41,12 @@ else
 fi
 
 # build tulip
-mkdir /tmp/tulip_build; cd /tmp/tulip_build
+if [ -d /tulip_build ]
+then
+  cd /tulip_build; rm -rf *;
+else
+  mkdir /tmp/tulip_build; cd /tmp/tulip_build
+fi
 # iterate on available Python versions
 for CPYBIN in /opt/python/cp*/bin
 do
