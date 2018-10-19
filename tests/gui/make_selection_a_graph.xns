@@ -274,8 +274,8 @@ error-range                   0-0
 7,6,1196,122,0,0,0,868654112,10,'PixArt Dell MS116 USB Optical Mouse'
 7,6,1198,121,0,0,0,868654208,10,'PixArt Dell MS116 USB Optical Mouse'
 7,6,1199,120,0,0,0,868654216,10,'PixArt Dell MS116 USB Optical Mouse'
-7,6,1200,119,0,0,0,868654224,10,'PixArt Dell MS116 USB Optical Mouse'
-7,6,1201,118,0,0,0,868654248,10,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1210,119,0,0,0,868654224,10,'PixArt Dell MS116 USB Optical Mouse'
+7,6,1210,118,0,0,0,868654248,10,'PixArt Dell MS116 USB Optical Mouse'
 7,4,0,0,1,0,0,868654512,10,PixArt Dell MS116 USB Optical Mouse
 6,4,0,0,1,0,0,868654512,2,Virtual core pointer
 7,5,0,0,1,0,0,868654664,10,PixArt Dell MS116 USB Optical Mouse
@@ -978,8 +978,8 @@ NEW-WINDOW:667,318:73400566,73400566,16140768,0,0,0:0x0+467+94:0,0:Tulip test re
 7,6,958,229,0,0,0,868674216,10,'PixArt Dell MS116 USB Optical Mouse'
 7,6,959,228,0,0,0,868674224,10,'PixArt Dell MS116 USB Optical Mouse'
 7,6,960,227,0,0,0,868674272,10,'PixArt Dell MS116 USB Optical Mouse'
-7,6,961,226,0,0,0,868674288,10,'PixArt Dell MS116 USB Optical Mouse'
-7,6,961,225,0,0,0,868674328,10,'PixArt Dell MS116 USB Optical Mouse'
+7,6,951,226,0,0,0,868674288,10,'PixArt Dell MS116 USB Optical Mouse'
+7,6,951,225,0,0,0,868674328,10,'PixArt Dell MS116 USB Optical Mouse'
 7,4,0,0,1,0,0,868674504,10,PixArt Dell MS116 USB Optical Mouse
 6,4,0,0,1,0,0,868674504,2,Virtual core pointer
 7,5,0,0,1,0,0,868674624,10,PixArt Dell MS116 USB Optical Mouse
