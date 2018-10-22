@@ -52,11 +52,39 @@ for CPYBIN in /opt/python/cp*/bin
 do
   # configure and build python wheels with specific Python version
   cmake ${TULIP_SRC} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/tmp/tulip_install -DPYTHON_EXECUTABLE=${CPYBIN}/python -DQT_QMAKE_EXECUTABLE=/opt/qt-4.8.7/bin/qmake -DTULIP_ACTIVATE_PYTHON_WHEELS_TARGETS=ON -DTULIP_PYTHON_TEST_WHEEL_SUFFIX=${TULIP_PYTHON_TEST_WHEEL_SUFFIX} -DTULIP_USE_CCACHE=ON 
-  make -j4 wheels
+  make -j4
+  make wheels
   if [ $? -ne 0 ]
   then
      break
   fi
+  # check the tulip-core test wheel
+  pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
+  ${CPYBIN}/pip install $(ls *${TULIP_PYTHON_TEST_WHEEL_SUFFIX}*.whl -t | head -1)
+  ${CPYBIN}/python -c "import tulip
+from platform import python_version
+str = 'tulip successfully imported in Python ' + python_version()
+print(str)"
+  if [ $? -ne 0 ]
+  then
+     break
+  fi
+  popd
+  # check the tulip-gui test wheel
+  pushd ./library/tulip-python/bindings/tulip-gui/tulipgui_module/dist
+  ${CPYBIN}/pip install $(ls *${TULIP_PYTHON_TEST_WHEEL_SUFFIX}*.whl -t | head -1)
+  ${CPYBIN}/python -c "import tulipgui
+from platform import python_version
+str = 'tulipgui successfully imported in Python ' + python_version()
+print(str)"
+  if [ $? -ne 0 ]
+  then
+     break
+  fi
+  popd
+  # uninstall test wheels
+  ${CPYBIN}/pip uninstall -y tulip-python tulipgui-python
+
   # check the tulip-core wheel
   pushd ./library/tulip-python/bindings/tulip-core/tulip_module/dist
   ${CPYBIN}/pip install $(ls -t | head -1)
