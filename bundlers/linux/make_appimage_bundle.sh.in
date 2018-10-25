@@ -158,6 +158,9 @@ looking_for_plugin_dependencies $BUNDLE_LIB_DIR/tulip
 # copy other common libs needed by qt plugins
 looking_for_plugin_dependencies $BUNDLE_USR_DIR/plugins
 
+# copy other common libs needed by python modules
+looking_for_plugin_dependencies $PYTHON_PACKAGE_BUNDLE_DIR/lib-dynload
+
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
 LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
