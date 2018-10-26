@@ -55,7 +55,7 @@ mkdir -p $BUNDLE_BIN_DIR
 BUNDLE_LIB_DIR=$BUNDLE_DIR/usr/lib
 mkdir -p $BUNDLE_LIB_DIR
 BUNDLE_SHARE_DIR=$BUNDLE_DIR/usr/share
-mkdir -p $BUNDLE_SHARE_DIR
+mkdir -p $BUNDLE_SHARE_DIR/metainfo
 BUNDLE_USR_DIR=$BUNDLE_DIR/usr
 
 # create AppRun executable file
@@ -82,6 +82,9 @@ echo "Categories=Science;" >> $DESKTOP_FILE
 
 # copy Tulip.png
 cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
+
+# copy tulip.appdata.xml
+cp @tulip_SOURCE_DIR@/bundlers/linux/tulip.appdata.xml $BUNDLE_SHARE_DIR/metainfo
 
 # copy tulip_perspective exe
 cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR

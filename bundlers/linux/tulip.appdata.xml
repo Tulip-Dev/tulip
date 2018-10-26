@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>tulip</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>LGPL-3.0</project_license>
+	<name>Tulip</name>
+	<summary>Display, analyze and edit relation data</summary>
+	<description>
+		<p>Tulip is an information visualization framework dedicated to the analysis and visualization of relational data.</p>
+	</description>
+	<icon type="cached">Tulip.png</icon>	
+        <icon type="remote" width="48" height="48">http://tulip.labri.fr/images/Tulip.png</icon>
+	<launchable type="desktop-id">tulip.desktop</launchable>
+	<url type="homepage">tulip.labri.fr</url>
+	<screenshots>
+		<screenshot type="default">
+		  <image type="source" width="1720" height="1026">http://tulip.labri.fr/TulipDrupal/sites/default/files/uploadedFiles/images/overview2.png</image>
+		  <image type="thumbnail" width="100" height="60">http://tulip.labri.fr/TulipDrupal/sites/default/files/uploadedFiles/images/overview2.thumbnail.png</image>
+		</screenshot>
+	</screenshots>
+	<provides>
+		<id>tulip.desktop</id>
+	</provides>
+</component>
