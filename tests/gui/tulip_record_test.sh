@@ -33,7 +33,13 @@ if [ -f data/test_gui.tlp ]; then
 fi
 
 # record the test
-sh tulip_record.sh $TEST_NAME.xns $TLP_INPUT_FILE
+RESOLUTION=$(xrandr -q | grep current | awk -F ',' '{print $2}' | awk '{print $2$3$4}')
+if [ "$RESOLUTION" != "1920x1080" ]; then
+    echo "wrong screen resolution : $RESOLUTION"
+    exit 1
+else
+  sh tulip_record.sh $TEST_NAME.xns $TLP_INPUT_FILE
+fi
 
 # check failure
 if [ $? -eq 1 ]; then
