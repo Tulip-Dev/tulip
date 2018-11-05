@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 
 #include <tulip/CSVParser.h>
+#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 
 using namespace tlp;
@@ -133,7 +134,9 @@ void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
   QString fileName = QFileDialog::getOpenFileName(
       this, tr("Choose a CSV file"),
       lastOpenedFile.isEmpty() ? QString() : QFileInfo(lastOpenedFile).absoluteDir().absolutePath(),
-      tr("CSV files (*.csv);;Text files (*.txt);;All files (*)"));
+      tr("CSV files (*.csv);;Text files (*.txt);;All files (*)"),
+      // ensure predictable behavior (needed by gui tests)
+      nullptr, inGuiTestingMode() ? QFileDialog::DontUseNativeDialog : static_cast<QFileDialog::Options>(0));
   setFileToOpen(fileName);
 }
 

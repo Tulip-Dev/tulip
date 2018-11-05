@@ -351,7 +351,7 @@ QWidget *TulipFileDescriptorEditorCreator::createWidget(QWidget *parent) const {
 #if defined(__APPLE__)
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 #else
-  dlg->setOption(QFileDialog::DontUseNativeDialog, false);
+  dlg->setOption(QFileDialog::DontUseNativeDialog, inGuiTestingMode());
 #endif
   dlg->setMinimumSize(300, 400);
   return dlg;

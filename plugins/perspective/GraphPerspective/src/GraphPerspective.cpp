@@ -1078,7 +1078,10 @@ void GraphPerspective::open(QString fileName) {
 
   if (fileName.isEmpty()) // If open() was called without a parameter, open the file dialog
     fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"), _lastOpenLocation,
-                                            filters.c_str());
+					    filters.c_str(), nullptr,
+					    // ensure predictable behavior
+					    // needed by gui tests
+					    inGuiTestingMode() ? QFileDialog::DontUseNativeDialog : static_cast<QFileDialog::Options>(0));
 
   if (!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
