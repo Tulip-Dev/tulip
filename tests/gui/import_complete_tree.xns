@@ -1,8 +1,8 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2017:05:24 
-# Time:                   09:40:09 
+# Date:                   2018:10:31 
+# Time:                   16:18:57 
 # Xnee program:           cnee 
 # Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
@@ -11,23 +11,23 @@
 # X version:              11 
 # X revision:             0 
 # X vendor:               The X.Org Foundation 
-# X vendor release:       11804000 
+# X vendor release:       11906000 
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             4.4.0-78-generic 
-# OS Version:             #99-Ubuntu SMP Thu Apr 27 15:29:09 UTC 2017 
+# OS Release:             4.15.0-38-generic 
+# OS Version:             #41-Ubuntu SMP Wed Oct 10 10:59:38 UTC 2018 
 # Machine:                x86_64 
-# Nodename:               pm-laptop 
+# Nodename:               tulip-ubuntu-1804 
 # Display name:           :0
-# Dimension:              2048x1152
+# Dimension:              1920x1080
 
 
 
 ##############################################
 #      Xnee application arguments            #
 ##############################################
-#  /home/pm/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_complete_tree.xns 
+#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_complete_tree.xns 
 
 
 ##############################################
@@ -77,7 +77,7 @@ all-clients
 ##############################################
 
 # Resolution
-#recorded-resolution  2048x1152
+#recorded-resolution  1920x1080
 #replay-resolution  1x1
 #resolution-adjustment  0
 
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0x1f44020
+#   rState              0x55e2871cd270
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -158,1386 +158,1537 @@ extension-reply-minor-range   0-0
 delivered-event-range         0-0 
 device-event-range            66-71 
 error-range                   0-0 
-7,2,0,0,0,37,0,44493446,9,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,44493446,3,Virtual core keyboard
-7,2,0,0,0,50,0,44493649,9,AT Translated Set 2 keyboard
-6,2,0,0,0,50,0,44493649,3,Virtual core keyboard
-7,2,0,0,0,32,0,44493935,9,AT Translated Set 2 keyboard
-6,2,0,0,0,32,0,44493935,3,Virtual core keyboard
-0,21,0,0,0,0,0,44494002
-NEW-WINDOW:461,197:67108908,67108908,19214184,0,0,0:0x0+879+458:0,0:Import
-0,21,0,0,0,0,0,44494002
-0,21,0,0,0,0,0,44494002
-0,21,0,0,0,0,0,44494002
-7,3,0,0,0,32,0,44494045,9,AT Translated Set 2 keyboard
-6,3,0,0,0,32,0,44494045,3,Virtual core keyboard
-7,3,0,0,0,50,0,44494045,9,AT Translated Set 2 keyboard
-6,3,0,0,0,50,0,44494045,3,Virtual core keyboard
-7,3,0,0,0,37,0,44494088,9,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,44494088,3,Virtual core keyboard
-7,2,0,0,0,116,0,44495261,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44495261,3,Virtual core keyboard
-7,3,0,0,0,116,0,44495353,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44495353,3,Virtual core keyboard
-7,2,0,0,0,116,0,44495474,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44495474,3,Virtual core keyboard
-7,3,0,0,0,116,0,44495566,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44495566,3,Virtual core keyboard
-7,2,0,0,0,116,0,44495666,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44495667,3,Virtual core keyboard
-7,3,0,0,0,116,0,44495750,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44495750,3,Virtual core keyboard
-7,2,0,0,0,116,0,44495861,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44495862,3,Virtual core keyboard
-7,3,0,0,0,116,0,44495954,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44495954,3,Virtual core keyboard
-7,2,0,0,0,116,0,44496054,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44496054,3,Virtual core keyboard
-7,3,0,0,0,116,0,44496167,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44496167,3,Virtual core keyboard
-7,2,0,0,0,116,0,44496268,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44496268,3,Virtual core keyboard
-7,3,0,0,0,116,0,44496360,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44496360,3,Virtual core keyboard
-7,2,0,0,0,116,0,44496461,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44496461,3,Virtual core keyboard
-7,3,0,0,0,116,0,44496553,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44496553,3,Virtual core keyboard
-7,2,0,0,0,116,0,44496654,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44496654,3,Virtual core keyboard
-7,3,0,0,0,116,0,44496736,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44496736,3,Virtual core keyboard
-7,2,0,0,0,116,0,44496848,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44496849,3,Virtual core keyboard
-7,3,0,0,0,116,0,44496931,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44496931,3,Virtual core keyboard
-7,2,0,0,0,116,0,44497031,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44497031,3,Virtual core keyboard
-7,3,0,0,0,116,0,44497113,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44497113,3,Virtual core keyboard
-7,2,0,0,0,116,0,44497224,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44497224,3,Virtual core keyboard
-7,3,0,0,0,116,0,44497317,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44497317,3,Virtual core keyboard
-7,2,0,0,0,116,0,44497418,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44497418,3,Virtual core keyboard
-7,3,0,0,0,116,0,44497530,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44497530,3,Virtual core keyboard
-7,2,0,0,0,116,0,44497651,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44497651,3,Virtual core keyboard
-7,3,0,0,0,116,0,44497775,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44497775,3,Virtual core keyboard
-7,2,0,0,0,116,0,44498007,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44498007,3,Virtual core keyboard
-7,3,0,0,0,116,0,44498130,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44498130,3,Virtual core keyboard
-7,2,0,0,0,116,0,44498698,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44498699,3,Virtual core keyboard
-7,3,0,0,0,116,0,44498802,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44498802,3,Virtual core keyboard
-7,2,0,0,0,36,0,44500050,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,44500050,3,Virtual core keyboard
-0,21,0,0,0,0,0,44500081
-NEW-WINDOW:650,334:67108917,67108917,19214250,0,0,0:0x0+500+46:0,0:Complete Tree
-0,21,0,0,0,0,0,44500081
-0,21,0,0,0,0,0,44500081
-0,21,0,0,0,0,0,44500081
-7,3,0,0,0,36,0,44500102,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,44500102,3,Virtual core keyboard
-0,21,0,0,0,0,0,44500164
-NEW-WINDOW:459,141:67108908,67108908,748,0,0,0:459x141+879+458:0,0:Import
-0,21,0,0,0,0,0,44500164
-0,21,0,0,0,0,0,44500164
-0,21,0,0,0,0,0,44500164
-0,21,0,0,0,0,0,44500164
-0,21,0,0,0,0,0,44500164
-0,21,0,0,0,0,0,44500386
-NEW-WINDOW:5,49:67108961,67108961,748,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500386
-0,21,0,0,0,0,0,44500423
-NEW-WINDOW:5,49:67108967,67108967,748,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-0,21,0,0,0,0,0,44500423
-NEW-WINDOW:0,0:67108970,67108970,67109000,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,44500423
-NEW-WINDOW:0,0:67108972,67108972,67109000,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,44500423
-NEW-WINDOW:0,0:67108976,67108976,67109000,0,0,0:0x0+1024+460:0,0:
-0,21,0,0,0,0,0,44500464
-NEW-WINDOW:0,0:67109009,67109009,748,0,0,0:0x0+1172+849:0,0:Spreadsheet view
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500464
-0,21,0,0,0,0,0,44500490
-NEW-WINDOW:0,0:67108995,67108995,748,0,0,0:0x0+943+595:0,0:Node Link Diagram view
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500490
-0,21,0,0,0,0,0,44500537
-NEW-WINDOW:1117,102:67108998,67108998,67109100,0,0,0:0x0+584+27:0,0:
-0,21,0,0,0,0,0,44500537
-NEW-WINDOW:1117,129:67109000,67109000,67109100,0,0,0:0x27+584+822:0,0:
-7,6,1558,810,0,0,0,44503193,11,'SynPS/2 Synaptics TouchPad'
-7,6,1555,808,0,0,0,44503208,11,'SynPS/2 Synaptics TouchPad'
-7,6,1534,800,0,0,0,44503226,11,'SynPS/2 Synaptics TouchPad'
-7,6,1512,789,0,0,0,44503243,11,'SynPS/2 Synaptics TouchPad'
-7,6,1453,761,0,0,0,44503259,11,'SynPS/2 Synaptics TouchPad'
-7,6,1355,721,0,0,0,44503277,11,'SynPS/2 Synaptics TouchPad'
-7,6,1298,701,0,0,0,44503294,11,'SynPS/2 Synaptics TouchPad'
-7,6,1190,669,0,0,0,44503309,11,'SynPS/2 Synaptics TouchPad'
-7,6,1091,648,0,0,0,44503606,11,'SynPS/2 Synaptics TouchPad'
-7,6,1079,648,0,0,0,44503623,11,'SynPS/2 Synaptics TouchPad'
-7,6,1061,640,0,0,0,44503640,11,'SynPS/2 Synaptics TouchPad'
-7,6,956,595,0,0,0,44503658,11,'SynPS/2 Synaptics TouchPad'
-7,6,807,532,0,0,0,44503676,11,'SynPS/2 Synaptics TouchPad'
-7,6,673,469,0,0,0,44503693,11,'SynPS/2 Synaptics TouchPad'
-7,6,620,442,0,0,0,44503710,11,'SynPS/2 Synaptics TouchPad'
-7,6,542,399,0,0,0,44503727,11,'SynPS/2 Synaptics TouchPad'
-7,6,496,363,0,0,0,44503745,11,'SynPS/2 Synaptics TouchPad'
-7,6,487,356,0,0,0,44504012,11,'SynPS/2 Synaptics TouchPad'
-7,6,481,348,0,0,0,44504028,11,'SynPS/2 Synaptics TouchPad'
-7,6,473,341,0,0,0,44504046,11,'SynPS/2 Synaptics TouchPad'
-7,6,447,318,0,0,0,44504063,11,'SynPS/2 Synaptics TouchPad'
-7,6,411,289,0,0,0,44504078,11,'SynPS/2 Synaptics TouchPad'
-7,6,399,278,0,0,0,44504097,11,'SynPS/2 Synaptics TouchPad'
-7,6,378,256,0,0,0,44504113,11,'SynPS/2 Synaptics TouchPad'
-7,6,364,236,0,0,0,44504129,11,'SynPS/2 Synaptics TouchPad'
-7,6,359,228,0,0,0,44504147,11,'SynPS/2 Synaptics TouchPad'
-7,6,349,213,0,0,0,44504164,11,'SynPS/2 Synaptics TouchPad'
-7,6,338,200,0,0,0,44504180,11,'SynPS/2 Synaptics TouchPad'
-7,6,331,192,0,0,0,44504198,11,'SynPS/2 Synaptics TouchPad'
-7,6,320,178,0,0,0,44504214,11,'SynPS/2 Synaptics TouchPad'
-7,6,311,167,0,0,0,44504232,11,'SynPS/2 Synaptics TouchPad'
-7,6,309,163,0,0,0,44504249,11,'SynPS/2 Synaptics TouchPad'
-7,6,306,158,0,0,0,44504265,11,'SynPS/2 Synaptics TouchPad'
-7,6,305,154,0,0,0,44504283,11,'SynPS/2 Synaptics TouchPad'
-7,6,305,153,0,0,0,44504300,11,'SynPS/2 Synaptics TouchPad'
-7,6,304,150,0,0,0,44504316,11,'SynPS/2 Synaptics TouchPad'
-7,6,303,146,0,0,0,44504333,11,'SynPS/2 Synaptics TouchPad'
-7,6,303,145,0,0,0,44504547,11,'SynPS/2 Synaptics TouchPad'
-7,6,303,145,0,0,0,44504700,11,'SynPS/2 Synaptics TouchPad'
-7,6,301,145,0,0,0,44504716,11,'SynPS/2 Synaptics TouchPad'
-7,6,300,145,0,0,0,44504730,11,'SynPS/2 Synaptics TouchPad'
-7,6,298,144,0,0,0,44504746,11,'SynPS/2 Synaptics TouchPad'
-7,6,297,143,0,0,0,44504762,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,142,0,0,0,44504779,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,141,0,0,0,44504795,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,140,0,0,0,44504812,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,139,0,0,0,44504828,11,'SynPS/2 Synaptics TouchPad'
-7,6,291,138,0,0,0,44504843,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,137,0,0,0,44504860,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,137,0,0,0,44504876,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,137,0,0,0,44504894,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,136,0,0,0,44504911,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,136,0,0,0,44504929,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,136,0,0,0,44504946,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,136,0,0,0,44504964,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,135,0,0,0,44504982,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44505440,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44505440,2,Virtual core pointer
-7,6,287,135,0,0,0,44505471,11,'SynPS/2 Synaptics TouchPad'
-7,5,0,0,1,0,0,44505471,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44505471,2,Virtual core pointer
-7,6,286,135,0,0,0,44505847,11,'SynPS/2 Synaptics TouchPad'
-7,2,0,0,0,28,0,44507232,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,44507232,3,Virtual core keyboard
-7,3,0,0,0,28,0,44507324,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,44507324,3,Virtual core keyboard
-7,2,0,0,0,27,0,44507446,9,AT Translated Set 2 keyboard
-6,2,0,0,0,27,0,44507446,3,Virtual core keyboard
-7,3,0,0,0,27,0,44507538,9,AT Translated Set 2 keyboard
-6,3,0,0,0,27,0,44507538,3,Virtual core keyboard
-7,2,0,0,0,26,0,44507761,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,44507761,3,Virtual core keyboard
-7,3,0,0,0,26,0,44507812,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,44507812,3,Virtual core keyboard
-7,2,0,0,0,26,0,44507913,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,44507913,3,Virtual core keyboard
-7,3,0,0,0,26,0,44507977,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,44507977,3,Virtual core keyboard
-7,2,0,0,0,65,0,44508189,9,AT Translated Set 2 keyboard
-6,2,0,0,0,65,0,44508189,3,Virtual core keyboard
-7,3,0,0,0,65,0,44508281,9,AT Translated Set 2 keyboard
-6,3,0,0,0,65,0,44508281,3,Virtual core keyboard
-7,2,0,0,0,46,0,44508525,9,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,44508525,3,Virtual core keyboard
-7,3,0,0,0,46,0,44508587,9,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,44508587,3,Virtual core keyboard
-7,2,0,0,0,26,0,44508738,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,44508738,3,Virtual core keyboard
-7,3,0,0,0,26,0,44508800,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,44508800,3,Virtual core keyboard
-7,6,286,135,0,0,0,44509625,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,136,0,0,0,44509642,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,137,0,0,0,44509659,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,138,0,0,0,44509676,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,143,0,0,0,44509695,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,147,0,0,0,44509712,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,149,0,0,0,44509729,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,154,0,0,0,44509746,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,158,0,0,0,44509763,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,161,0,0,0,44509780,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,165,0,0,0,44509797,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,169,0,0,0,44509814,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,170,0,0,0,44509831,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,173,0,0,0,44509848,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,176,0,0,0,44509864,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,178,0,0,0,44509882,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,181,0,0,0,44509898,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,184,0,0,0,44509915,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,186,0,0,0,44509932,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,188,0,0,0,44509950,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,191,0,0,0,44509966,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,192,0,0,0,44509981,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,195,0,0,0,44510000,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,198,0,0,0,44510014,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,199,0,0,0,44510030,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,203,0,0,0,44510044,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,205,0,0,0,44510060,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,208,0,0,0,44510075,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,209,0,0,0,44510091,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,211,0,0,0,44510105,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,211,0,0,0,44510121,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,212,0,0,0,44510135,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,213,0,0,0,44510152,11,'SynPS/2 Synaptics TouchPad'
-7,6,291,214,0,0,0,44510166,11,'SynPS/2 Synaptics TouchPad'
-7,6,291,215,0,0,0,44510182,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,217,0,0,0,44510196,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,218,0,0,0,44510212,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,220,0,0,0,44510228,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,221,0,0,0,44510243,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,222,0,0,0,44510258,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,223,0,0,0,44510273,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,223,0,0,0,44510289,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,223,0,0,0,44510304,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,224,0,0,0,44510319,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,224,0,0,0,44510334,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,224,0,0,0,44510349,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,225,0,0,0,44510365,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,225,0,0,0,44510395,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,226,0,0,0,44510410,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,226,0,0,0,44510426,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,226,0,0,0,44510441,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,227,0,0,0,44510458,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,227,0,0,0,44510474,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,227,0,0,0,44510492,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,228,0,0,0,44510509,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,228,0,0,0,44510543,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,228,0,0,0,44510665,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44511165,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44511165,2,Virtual core pointer
-7,5,0,0,1,0,0,44511172,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44511172,2,Virtual core pointer
-0,21,0,0,0,0,0,44511201
-NEW-WINDOW:8384,0:67109115,67109115,19214375,0,0,0:1306506144x32766+1306506136+32766:1023,1023:
-0,21,0,0,0,0,0,44511201
-0,21,0,0,0,0,0,44511201
-0,21,0,0,0,0,0,44511201
-7,6,294,229,0,0,0,44512080,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,229,0,0,0,44512165,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,228,0,0,0,44512182,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,225,0,0,0,44512199,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,223,0,0,0,44512216,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,219,0,0,0,44512233,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,216,0,0,0,44512250,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,210,0,0,0,44512267,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,203,0,0,0,44512283,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,200,0,0,0,44512300,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,193,0,0,0,44512317,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,187,0,0,0,44512334,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,184,0,0,0,44512351,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,179,0,0,0,44512368,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,174,0,0,0,44512384,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,171,0,0,0,44512402,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,168,0,0,0,44512419,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,165,0,0,0,44512435,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,164,0,0,0,44512452,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,163,0,0,0,44512470,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,161,0,0,0,44512488,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,161,0,0,0,44512504,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,160,0,0,0,44512521,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,159,0,0,0,44512539,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,159,0,0,0,44512556,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,158,0,0,0,44512571,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,158,0,0,0,44512586,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,158,0,0,0,44512602,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,157,0,0,0,44512617,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,157,0,0,0,44512632,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,156,0,0,0,44512647,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,155,0,0,0,44512663,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,153,0,0,0,44512678,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,153,0,0,0,44512693,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,152,0,0,0,44512708,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,151,0,0,0,44512723,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,150,0,0,0,44512739,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,150,0,0,0,44512754,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,149,0,0,0,44512769,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,149,0,0,0,44512784,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,149,0,0,0,44512800,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,148,0,0,0,44512817,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,148,0,0,0,44512834,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,147,0,0,0,44512851,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,147,0,0,0,44512870,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,146,0,0,0,44512887,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,145,0,0,0,44512904,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,144,0,0,0,44512922,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,144,0,0,0,44512939,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,143,0,0,0,44512956,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,143,0,0,0,44512973,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,142,0,0,0,44512991,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,142,0,0,0,44513010,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,142,0,0,0,44513027,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44513780,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44513780,2,Virtual core pointer
-7,5,0,0,1,0,0,44513794,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44513794,2,Virtual core pointer
-7,4,0,0,1,0,0,44513986,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44513986,2,Virtual core pointer
-7,5,0,0,1,0,0,44514038,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44514038,2,Virtual core pointer
-7,4,0,0,1,0,0,44514513,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44514513,2,Virtual core pointer
-7,5,0,0,1,0,0,44514581,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44514581,2,Virtual core pointer
-7,4,0,0,1,0,0,44515032,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44515032,2,Virtual core pointer
-7,5,0,0,1,0,0,44515040,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44515040,2,Virtual core pointer
-7,4,0,0,1,0,0,44515218,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44515218,2,Virtual core pointer
-7,5,0,0,1,0,0,44515264,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44515264,2,Virtual core pointer
-7,4,0,0,1,0,0,44515495,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44515495,2,Virtual core pointer
-7,5,0,0,1,0,0,44515588,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44515588,2,Virtual core pointer
-7,2,0,0,0,40,0,44516882,9,AT Translated Set 2 keyboard
-6,2,0,0,0,40,0,44516882,3,Virtual core keyboard
-7,3,0,0,0,40,0,44516964,9,AT Translated Set 2 keyboard
-6,3,0,0,0,40,0,44516964,3,Virtual core keyboard
-7,2,0,0,0,31,0,44516983,9,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,44516983,3,Virtual core keyboard
-7,3,0,0,0,31,0,44517066,9,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,44517066,3,Virtual core keyboard
-7,2,0,0,0,27,0,44517178,9,AT Translated Set 2 keyboard
-6,2,0,0,0,27,0,44517178,3,Virtual core keyboard
-7,3,0,0,0,27,0,44517250,9,AT Translated Set 2 keyboard
-6,3,0,0,0,27,0,44517250,3,Virtual core keyboard
-7,2,0,0,0,26,0,44517361,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,44517361,3,Virtual core keyboard
-7,3,0,0,0,26,0,44517443,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,44517443,3,Virtual core keyboard
-7,2,0,0,0,54,0,44517597,9,AT Translated Set 2 keyboard
-6,2,0,0,0,54,0,44517597,3,Virtual core keyboard
-7,3,0,0,0,54,0,44517668,9,AT Translated Set 2 keyboard
-6,3,0,0,0,54,0,44517668,3,Virtual core keyboard
-7,2,0,0,0,28,0,44517911,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,44517911,3,Virtual core keyboard
-7,3,0,0,0,28,0,44517973,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,44517973,3,Virtual core keyboard
-7,2,0,0,0,26,0,44518126,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,44518126,3,Virtual core keyboard
-7,3,0,0,0,26,0,44518188,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,44518188,3,Virtual core keyboard
-7,2,0,0,0,40,0,44518340,9,AT Translated Set 2 keyboard
-6,2,0,0,0,40,0,44518340,3,Virtual core keyboard
-7,3,0,0,0,40,0,44518422,9,AT Translated Set 2 keyboard
-6,3,0,0,0,40,0,44518422,3,Virtual core keyboard
-7,2,0,0,0,65,0,44519093,9,AT Translated Set 2 keyboard
-6,2,0,0,0,65,0,44519093,3,Virtual core keyboard
-7,3,0,0,0,65,0,44519195,9,AT Translated Set 2 keyboard
-6,3,0,0,0,65,0,44519195,3,Virtual core keyboard
-7,2,0,0,0,28,0,44520172,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,44520172,3,Virtual core keyboard
-7,3,0,0,0,28,0,44520254,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,44520254,3,Virtual core keyboard
-7,2,0,0,0,27,0,44520375,9,AT Translated Set 2 keyboard
-6,2,0,0,0,27,0,44520375,3,Virtual core keyboard
-7,3,0,0,0,27,0,44520447,9,AT Translated Set 2 keyboard
-6,3,0,0,0,27,0,44520447,3,Virtual core keyboard
-7,6,281,141,0,0,0,44521183,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,147,0,0,0,44521198,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,150,0,0,0,44521213,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,157,0,0,0,44521229,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,160,0,0,0,44521244,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,167,0,0,0,44521259,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,171,0,0,0,44521274,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,182,0,0,0,44521290,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,188,0,0,0,44521305,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,200,0,0,0,44521320,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,206,0,0,0,44521335,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,216,0,0,0,44521350,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,220,0,0,0,44521366,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,226,0,0,0,44521382,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,229,0,0,0,44521399,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,235,0,0,0,44521416,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,240,0,0,0,44521434,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,242,0,0,0,44521450,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,245,0,0,0,44521467,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,246,0,0,0,44521485,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,247,0,0,0,44521502,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,248,0,0,0,44521519,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,249,0,0,0,44521537,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,250,0,0,0,44521554,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,251,0,0,0,44521572,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,251,0,0,0,44521589,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,252,0,0,0,44521606,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,252,0,0,0,44521624,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,252,0,0,0,44521676,11,'SynPS/2 Synaptics TouchPad'
-7,6,288,252,0,0,0,44521694,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,252,0,0,0,44521711,11,'SynPS/2 Synaptics TouchPad'
-7,6,289,252,0,0,0,44521727,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,252,0,0,0,44521744,11,'SynPS/2 Synaptics TouchPad'
-7,6,290,252,0,0,0,44521762,11,'SynPS/2 Synaptics TouchPad'
-7,6,291,250,0,0,0,44521778,11,'SynPS/2 Synaptics TouchPad'
-7,6,291,249,0,0,0,44521795,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,246,0,0,0,44521812,11,'SynPS/2 Synaptics TouchPad'
-7,6,292,243,0,0,0,44521829,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,242,0,0,0,44521846,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,241,0,0,0,44521863,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,240,0,0,0,44521879,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,239,0,0,0,44521897,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,239,0,0,0,44521912,11,'SynPS/2 Synaptics TouchPad'
-7,6,294,239,0,0,0,44521930,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,238,0,0,0,44521945,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,238,0,0,0,44521963,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,238,0,0,0,44521978,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,237,0,0,0,44521993,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,237,0,0,0,44522008,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,237,0,0,0,44522024,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,236,0,0,0,44522039,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,236,0,0,0,44522054,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,236,0,0,0,44522069,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,236,0,0,0,44522085,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,235,0,0,0,44522100,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,235,0,0,0,44522183,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,234,0,0,0,44522235,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,234,0,0,0,44522253,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,234,0,0,0,44522427,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,233,0,0,0,44522443,11,'SynPS/2 Synaptics TouchPad'
-7,6,295,233,0,0,0,44522460,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44522561,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44522561,2,Virtual core pointer
-7,5,0,0,1,0,0,44522568,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44522568,2,Virtual core pointer
-0,21,0,0,0,0,0,44522587
-NEW-WINDOW:8384,0:67109131,67109131,19214490,0,0,0:0x0+33044352+0:33039664,33039664:
-0,21,0,0,0,0,0,44522587
-0,21,0,0,0,0,0,44522587
-0,21,0,0,0,0,0,44522587
-0,21,0,0,0,0,0,44522597
-NEW-WINDOW:5,49:67109131,67109131,748,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,44522597
-0,21,0,0,0,0,0,44522597
-0,21,0,0,0,0,0,44522597
-0,21,0,0,0,0,0,44522597
-0,21,0,0,0,0,0,44522621
-NEW-WINDOW:689,318:67109141,67109141,19214501,0,0,0:0x0+422+94:0,0:Tulip test result
-0,21,0,0,0,0,0,44522621
-0,21,0,0,0,0,0,44522621
-0,21,0,0,0,0,0,44522621
-7,6,295,233,0,0,0,44523466,11,'SynPS/2 Synaptics TouchPad'
-7,6,297,233,0,0,0,44523484,11,'SynPS/2 Synaptics TouchPad'
-7,6,308,233,0,0,0,44523501,11,'SynPS/2 Synaptics TouchPad'
-7,6,324,236,0,0,0,44523519,11,'SynPS/2 Synaptics TouchPad'
-7,6,333,239,0,0,0,44523536,11,'SynPS/2 Synaptics TouchPad'
-7,6,353,244,0,0,0,44523553,11,'SynPS/2 Synaptics TouchPad'
-7,6,376,250,0,0,0,44523571,11,'SynPS/2 Synaptics TouchPad'
-7,6,400,256,0,0,0,44523588,11,'SynPS/2 Synaptics TouchPad'
-7,6,413,258,0,0,0,44523615,11,'SynPS/2 Synaptics TouchPad'
-7,6,439,263,0,0,0,44523624,11,'SynPS/2 Synaptics TouchPad'
-7,6,466,268,0,0,0,44523641,11,'SynPS/2 Synaptics TouchPad'
-7,6,495,273,0,0,0,44523657,11,'SynPS/2 Synaptics TouchPad'
-7,6,510,275,0,0,0,44523675,11,'SynPS/2 Synaptics TouchPad'
-7,6,540,279,0,0,0,44523693,11,'SynPS/2 Synaptics TouchPad'
-7,6,567,285,0,0,0,44523710,11,'SynPS/2 Synaptics TouchPad'
-7,6,579,288,0,0,0,44523726,11,'SynPS/2 Synaptics TouchPad'
-7,6,602,293,0,0,0,44523742,11,'SynPS/2 Synaptics TouchPad'
-7,6,622,299,0,0,0,44523760,11,'SynPS/2 Synaptics TouchPad'
-7,6,627,300,0,0,0,44524027,11,'SynPS/2 Synaptics TouchPad'
-7,6,629,300,0,0,0,44524045,11,'SynPS/2 Synaptics TouchPad'
-7,6,636,302,0,0,0,44524062,11,'SynPS/2 Synaptics TouchPad'
-7,6,657,306,0,0,0,44524078,11,'SynPS/2 Synaptics TouchPad'
-7,6,692,314,0,0,0,44524096,11,'SynPS/2 Synaptics TouchPad'
-7,6,708,317,0,0,0,44524113,11,'SynPS/2 Synaptics TouchPad'
-7,6,733,321,0,0,0,44524128,11,'SynPS/2 Synaptics TouchPad'
-7,6,751,322,0,0,0,44524146,11,'SynPS/2 Synaptics TouchPad'
-7,6,757,323,0,0,0,44524165,11,'SynPS/2 Synaptics TouchPad'
-7,6,765,324,0,0,0,44524182,11,'SynPS/2 Synaptics TouchPad'
-7,6,772,326,0,0,0,44524199,11,'SynPS/2 Synaptics TouchPad'
-7,6,780,329,0,0,0,44524219,11,'SynPS/2 Synaptics TouchPad'
-7,6,783,330,0,0,0,44524236,11,'SynPS/2 Synaptics TouchPad'
-7,6,788,332,0,0,0,44524252,11,'SynPS/2 Synaptics TouchPad'
-7,6,792,334,0,0,0,44524266,11,'SynPS/2 Synaptics TouchPad'
-7,6,794,335,0,0,0,44524283,11,'SynPS/2 Synaptics TouchPad'
-7,6,798,336,0,0,0,44524297,11,'SynPS/2 Synaptics TouchPad'
-7,6,799,336,0,0,0,44524313,11,'SynPS/2 Synaptics TouchPad'
-7,6,803,338,0,0,0,44524327,11,'SynPS/2 Synaptics TouchPad'
-7,6,805,339,0,0,0,44524344,11,'SynPS/2 Synaptics TouchPad'
-7,6,811,341,0,0,0,44524358,11,'SynPS/2 Synaptics TouchPad'
-7,6,814,342,0,0,0,44524374,11,'SynPS/2 Synaptics TouchPad'
-7,6,821,344,0,0,0,44524388,11,'SynPS/2 Synaptics TouchPad'
-7,6,824,345,0,0,0,44524618,11,'SynPS/2 Synaptics TouchPad'
-7,6,824,345,0,0,0,44524635,11,'SynPS/2 Synaptics TouchPad'
-7,6,824,344,0,0,0,44524648,11,'SynPS/2 Synaptics TouchPad'
-7,6,824,344,0,0,0,44524663,11,'SynPS/2 Synaptics TouchPad'
-7,6,824,344,0,0,0,44524681,11,'SynPS/2 Synaptics TouchPad'
-7,6,832,343,0,0,0,44524698,11,'SynPS/2 Synaptics TouchPad'
-7,6,840,342,0,0,0,44524715,11,'SynPS/2 Synaptics TouchPad'
-7,6,843,341,0,0,0,44524732,11,'SynPS/2 Synaptics TouchPad'
-7,6,849,340,0,0,0,44524750,11,'SynPS/2 Synaptics TouchPad'
-7,6,855,340,0,0,0,44524768,11,'SynPS/2 Synaptics TouchPad'
-7,6,858,339,0,0,0,44524785,11,'SynPS/2 Synaptics TouchPad'
-7,6,863,339,0,0,0,44524802,11,'SynPS/2 Synaptics TouchPad'
-7,6,867,339,0,0,0,44524820,11,'SynPS/2 Synaptics TouchPad'
-7,6,869,338,0,0,0,44524839,11,'SynPS/2 Synaptics TouchPad'
-7,6,870,338,0,0,0,44524856,11,'SynPS/2 Synaptics TouchPad'
-7,6,871,338,0,0,0,44524873,11,'SynPS/2 Synaptics TouchPad'
-7,6,873,338,0,0,0,44524891,11,'SynPS/2 Synaptics TouchPad'
-7,6,873,338,0,0,0,44524927,11,'SynPS/2 Synaptics TouchPad'
-7,6,874,338,0,0,0,44524944,11,'SynPS/2 Synaptics TouchPad'
-7,6,875,338,0,0,0,44524962,11,'SynPS/2 Synaptics TouchPad'
-7,6,875,338,0,0,0,44524998,11,'SynPS/2 Synaptics TouchPad'
-7,6,875,338,0,0,0,44525015,11,'SynPS/2 Synaptics TouchPad'
-7,6,876,338,0,0,0,44525032,11,'SynPS/2 Synaptics TouchPad'
-7,6,876,338,0,0,0,44525066,11,'SynPS/2 Synaptics TouchPad'
-7,6,877,338,0,0,0,44525082,11,'SynPS/2 Synaptics TouchPad'
-7,6,878,338,0,0,0,44525100,11,'SynPS/2 Synaptics TouchPad'
-7,6,879,338,0,0,0,44525117,11,'SynPS/2 Synaptics TouchPad'
-7,6,880,338,0,0,0,44525133,11,'SynPS/2 Synaptics TouchPad'
-7,6,882,338,0,0,0,44525150,11,'SynPS/2 Synaptics TouchPad'
-7,6,883,338,0,0,0,44525168,11,'SynPS/2 Synaptics TouchPad'
-7,6,884,338,0,0,0,44525186,11,'SynPS/2 Synaptics TouchPad'
-7,6,885,338,0,0,0,44525203,11,'SynPS/2 Synaptics TouchPad'
-7,6,886,338,0,0,0,44525219,11,'SynPS/2 Synaptics TouchPad'
-7,6,886,338,0,0,0,44525234,11,'SynPS/2 Synaptics TouchPad'
-7,6,888,338,0,0,0,44525249,11,'SynPS/2 Synaptics TouchPad'
-7,6,888,338,0,0,0,44525264,11,'SynPS/2 Synaptics TouchPad'
-7,6,889,338,0,0,0,44525280,11,'SynPS/2 Synaptics TouchPad'
-7,6,890,338,0,0,0,44525298,11,'SynPS/2 Synaptics TouchPad'
-7,6,891,338,0,0,0,44525315,11,'SynPS/2 Synaptics TouchPad'
-7,6,892,338,0,0,0,44525331,11,'SynPS/2 Synaptics TouchPad'
-7,6,892,338,0,0,0,44525348,11,'SynPS/2 Synaptics TouchPad'
-7,6,894,338,0,0,0,44525366,11,'SynPS/2 Synaptics TouchPad'
-7,6,894,338,0,0,0,44525382,11,'SynPS/2 Synaptics TouchPad'
-7,6,896,338,0,0,0,44525399,11,'SynPS/2 Synaptics TouchPad'
-7,6,897,338,0,0,0,44525416,11,'SynPS/2 Synaptics TouchPad'
-7,6,898,338,0,0,0,44525433,11,'SynPS/2 Synaptics TouchPad'
-7,6,899,338,0,0,0,44525450,11,'SynPS/2 Synaptics TouchPad'
-7,6,901,338,0,0,0,44525467,11,'SynPS/2 Synaptics TouchPad'
-7,6,901,338,0,0,0,44525483,11,'SynPS/2 Synaptics TouchPad'
-7,6,903,338,0,0,0,44525501,11,'SynPS/2 Synaptics TouchPad'
-7,6,904,338,0,0,0,44525517,11,'SynPS/2 Synaptics TouchPad'
-7,6,905,338,0,0,0,44525534,11,'SynPS/2 Synaptics TouchPad'
-7,6,906,338,0,0,0,44525552,11,'SynPS/2 Synaptics TouchPad'
-7,6,907,338,0,0,0,44525569,11,'SynPS/2 Synaptics TouchPad'
-7,6,907,338,0,0,0,44525586,11,'SynPS/2 Synaptics TouchPad'
-7,6,908,338,0,0,0,44525604,11,'SynPS/2 Synaptics TouchPad'
-7,6,909,338,0,0,0,44525622,11,'SynPS/2 Synaptics TouchPad'
-7,6,910,338,0,0,0,44525639,11,'SynPS/2 Synaptics TouchPad'
-7,6,910,338,0,0,0,44525656,11,'SynPS/2 Synaptics TouchPad'
-7,6,911,338,0,0,0,44525673,11,'SynPS/2 Synaptics TouchPad'
-7,6,912,338,0,0,0,44525691,11,'SynPS/2 Synaptics TouchPad'
-7,6,912,338,0,0,0,44525708,11,'SynPS/2 Synaptics TouchPad'
-7,6,913,338,0,0,0,44525725,11,'SynPS/2 Synaptics TouchPad'
-7,6,914,338,0,0,0,44525742,11,'SynPS/2 Synaptics TouchPad'
-7,6,914,338,0,0,0,44525760,11,'SynPS/2 Synaptics TouchPad'
-7,6,915,338,0,0,0,44525778,11,'SynPS/2 Synaptics TouchPad'
-7,6,915,338,0,0,0,44525793,11,'SynPS/2 Synaptics TouchPad'
-7,6,916,338,0,0,0,44525811,11,'SynPS/2 Synaptics TouchPad'
-7,6,916,338,0,0,0,44525826,11,'SynPS/2 Synaptics TouchPad'
-7,6,916,338,0,0,0,44525856,11,'SynPS/2 Synaptics TouchPad'
-7,6,917,338,0,0,0,44525887,11,'SynPS/2 Synaptics TouchPad'
-7,6,918,338,0,0,0,44525902,11,'SynPS/2 Synaptics TouchPad'
-7,6,918,338,0,0,0,44525917,11,'SynPS/2 Synaptics TouchPad'
-7,6,918,338,0,0,0,44525947,11,'SynPS/2 Synaptics TouchPad'
-7,6,919,338,0,0,0,44525963,11,'SynPS/2 Synaptics TouchPad'
-7,6,919,338,0,0,0,44525978,11,'SynPS/2 Synaptics TouchPad'
-7,6,919,338,0,0,0,44525993,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,338,0,0,0,44526008,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,338,0,0,0,44526434,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,338,0,0,0,44527203,11,'SynPS/2 Synaptics TouchPad'
-7,6,935,338,0,0,0,44527270,11,'SynPS/2 Synaptics TouchPad'
-7,6,935,338,0,0,0,44527287,11,'SynPS/2 Synaptics TouchPad'
-7,6,935,338,0,0,0,44527321,11,'SynPS/2 Synaptics TouchPad'
-7,6,935,337,0,0,0,44527338,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44527396,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44527396,2,Virtual core pointer
-7,6,920,337,0,0,0,44527444,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,337,0,0,0,44527461,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,337,0,0,0,44527513,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,336,0,0,0,44527565,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,336,0,0,0,44527583,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,336,0,0,0,44527601,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,335,0,0,0,44527618,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,334,0,0,0,44527635,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,333,0,0,0,44527653,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,333,0,0,0,44527669,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,332,0,0,0,44527686,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,332,0,0,0,44527703,11,'SynPS/2 Synaptics TouchPad'
-7,6,920,332,0,0,0,44527721,11,'SynPS/2 Synaptics TouchPad'
-7,6,919,331,0,0,0,44527737,11,'SynPS/2 Synaptics TouchPad'
-7,6,918,331,0,0,0,44527753,11,'SynPS/2 Synaptics TouchPad'
-7,6,918,331,0,0,0,44527767,11,'SynPS/2 Synaptics TouchPad'
-7,6,917,331,0,0,0,44527783,11,'SynPS/2 Synaptics TouchPad'
-7,6,917,330,0,0,0,44527798,11,'SynPS/2 Synaptics TouchPad'
-7,6,916,330,0,0,0,44527814,11,'SynPS/2 Synaptics TouchPad'
-7,6,915,330,0,0,0,44527828,11,'SynPS/2 Synaptics TouchPad'
-7,6,913,329,0,0,0,44527844,11,'SynPS/2 Synaptics TouchPad'
-7,6,913,329,0,0,0,44527858,11,'SynPS/2 Synaptics TouchPad'
-7,6,912,329,0,0,0,44527875,11,'SynPS/2 Synaptics TouchPad'
-7,6,911,329,0,0,0,44527890,11,'SynPS/2 Synaptics TouchPad'
-7,6,910,329,0,0,0,44527905,11,'SynPS/2 Synaptics TouchPad'
-7,6,910,329,0,0,0,44527920,11,'SynPS/2 Synaptics TouchPad'
-7,6,909,329,0,0,0,44527936,11,'SynPS/2 Synaptics TouchPad'
-7,6,909,329,0,0,0,44527951,11,'SynPS/2 Synaptics TouchPad'
-7,6,908,329,0,0,0,44527981,11,'SynPS/2 Synaptics TouchPad'
-7,6,907,329,0,0,0,44527997,11,'SynPS/2 Synaptics TouchPad'
-7,6,907,329,0,0,0,44528012,11,'SynPS/2 Synaptics TouchPad'
-7,6,906,329,0,0,0,44528027,11,'SynPS/2 Synaptics TouchPad'
-7,6,906,329,0,0,0,44528042,11,'SynPS/2 Synaptics TouchPad'
-7,6,905,329,0,0,0,44528058,11,'SynPS/2 Synaptics TouchPad'
-7,6,905,329,0,0,0,44528073,11,'SynPS/2 Synaptics TouchPad'
-7,6,903,329,0,0,0,44528088,11,'SynPS/2 Synaptics TouchPad'
-7,6,903,329,0,0,0,44528103,11,'SynPS/2 Synaptics TouchPad'
-7,6,901,329,0,0,0,44528118,11,'SynPS/2 Synaptics TouchPad'
-7,6,901,329,0,0,0,44528134,11,'SynPS/2 Synaptics TouchPad'
-7,6,900,329,0,0,0,44528151,11,'SynPS/2 Synaptics TouchPad'
-7,6,899,329,0,0,0,44528168,11,'SynPS/2 Synaptics TouchPad'
-7,6,898,329,0,0,0,44528186,11,'SynPS/2 Synaptics TouchPad'
-7,6,897,329,0,0,0,44528204,11,'SynPS/2 Synaptics TouchPad'
-7,6,897,329,0,0,0,44528221,11,'SynPS/2 Synaptics TouchPad'
-7,6,896,329,0,0,0,44528238,11,'SynPS/2 Synaptics TouchPad'
-7,6,895,329,0,0,0,44528255,11,'SynPS/2 Synaptics TouchPad'
-7,6,893,329,0,0,0,44528274,11,'SynPS/2 Synaptics TouchPad'
-7,6,892,330,0,0,0,44528290,11,'SynPS/2 Synaptics TouchPad'
-7,6,890,331,0,0,0,44528307,11,'SynPS/2 Synaptics TouchPad'
-7,6,888,332,0,0,0,44528324,11,'SynPS/2 Synaptics TouchPad'
-7,6,887,333,0,0,0,44528344,11,'SynPS/2 Synaptics TouchPad'
-7,6,886,334,0,0,0,44528361,11,'SynPS/2 Synaptics TouchPad'
-7,6,885,335,0,0,0,44528378,11,'SynPS/2 Synaptics TouchPad'
-7,6,883,335,0,0,0,44528396,11,'SynPS/2 Synaptics TouchPad'
-7,6,880,337,0,0,0,44528414,11,'SynPS/2 Synaptics TouchPad'
-7,6,878,337,0,0,0,44528431,11,'SynPS/2 Synaptics TouchPad'
-7,6,875,339,0,0,0,44528448,11,'SynPS/2 Synaptics TouchPad'
-7,6,871,340,0,0,0,44528466,11,'SynPS/2 Synaptics TouchPad'
-7,6,870,340,0,0,0,44528483,11,'SynPS/2 Synaptics TouchPad'
-7,6,866,342,0,0,0,44528500,11,'SynPS/2 Synaptics TouchPad'
-7,6,862,343,0,0,0,44528518,11,'SynPS/2 Synaptics TouchPad'
-7,6,859,344,0,0,0,44528536,11,'SynPS/2 Synaptics TouchPad'
-7,6,857,344,0,0,0,44528552,11,'SynPS/2 Synaptics TouchPad'
-7,6,853,345,0,0,0,44528568,11,'SynPS/2 Synaptics TouchPad'
-7,6,848,346,0,0,0,44528586,11,'SynPS/2 Synaptics TouchPad'
-7,6,846,346,0,0,0,44528604,11,'SynPS/2 Synaptics TouchPad'
-7,6,842,347,0,0,0,44528621,11,'SynPS/2 Synaptics TouchPad'
-7,6,837,347,0,0,0,44528638,11,'SynPS/2 Synaptics TouchPad'
-7,6,835,347,0,0,0,44528654,11,'SynPS/2 Synaptics TouchPad'
-7,6,831,347,0,0,0,44528670,11,'SynPS/2 Synaptics TouchPad'
-7,6,827,347,0,0,0,44528685,11,'SynPS/2 Synaptics TouchPad'
-7,6,825,347,0,0,0,44528700,11,'SynPS/2 Synaptics TouchPad'
-7,6,821,347,0,0,0,44528715,11,'SynPS/2 Synaptics TouchPad'
-7,6,819,347,0,0,0,44528731,11,'SynPS/2 Synaptics TouchPad'
-7,6,815,347,0,0,0,44528748,11,'SynPS/2 Synaptics TouchPad'
-7,6,814,347,0,0,0,44528765,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,347,0,0,0,44528782,11,'SynPS/2 Synaptics TouchPad'
-7,6,808,347,0,0,0,44528800,11,'SynPS/2 Synaptics TouchPad'
-7,6,806,347,0,0,0,44528817,11,'SynPS/2 Synaptics TouchPad'
-7,6,804,347,0,0,0,44528833,11,'SynPS/2 Synaptics TouchPad'
-7,6,802,347,0,0,0,44528850,11,'SynPS/2 Synaptics TouchPad'
-7,6,801,347,0,0,0,44528868,11,'SynPS/2 Synaptics TouchPad'
-7,6,800,347,0,0,0,44528884,11,'SynPS/2 Synaptics TouchPad'
-7,6,799,347,0,0,0,44528901,11,'SynPS/2 Synaptics TouchPad'
-7,6,798,347,0,0,0,44528919,11,'SynPS/2 Synaptics TouchPad'
-7,6,797,347,0,0,0,44528935,11,'SynPS/2 Synaptics TouchPad'
-7,6,796,347,0,0,0,44528953,11,'SynPS/2 Synaptics TouchPad'
-7,6,795,347,0,0,0,44528970,11,'SynPS/2 Synaptics TouchPad'
-7,6,794,347,0,0,0,44528985,11,'SynPS/2 Synaptics TouchPad'
-7,6,792,346,0,0,0,44529004,11,'SynPS/2 Synaptics TouchPad'
-7,6,791,345,0,0,0,44529021,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,345,0,0,0,44529036,11,'SynPS/2 Synaptics TouchPad'
-7,6,789,344,0,0,0,44529055,11,'SynPS/2 Synaptics TouchPad'
-7,6,788,343,0,0,0,44529072,11,'SynPS/2 Synaptics TouchPad'
-7,6,787,343,0,0,0,44529087,11,'SynPS/2 Synaptics TouchPad'
-7,6,786,343,0,0,0,44529105,11,'SynPS/2 Synaptics TouchPad'
-7,6,785,342,0,0,0,44529123,11,'SynPS/2 Synaptics TouchPad'
-7,6,784,342,0,0,0,44529138,11,'SynPS/2 Synaptics TouchPad'
-7,6,782,342,0,0,0,44529156,11,'SynPS/2 Synaptics TouchPad'
-7,6,781,341,0,0,0,44529173,11,'SynPS/2 Synaptics TouchPad'
-7,6,780,341,0,0,0,44529189,11,'SynPS/2 Synaptics TouchPad'
-7,6,779,341,0,0,0,44529207,11,'SynPS/2 Synaptics TouchPad'
-7,6,779,341,0,0,0,44529224,11,'SynPS/2 Synaptics TouchPad'
-7,6,778,340,0,0,0,44529240,11,'SynPS/2 Synaptics TouchPad'
-7,6,777,340,0,0,0,44529271,11,'SynPS/2 Synaptics TouchPad'
-7,6,776,340,0,0,0,44529304,11,'SynPS/2 Synaptics TouchPad'
-7,6,776,340,0,0,0,44529321,11,'SynPS/2 Synaptics TouchPad'
-7,6,776,340,0,0,0,44529339,11,'SynPS/2 Synaptics TouchPad'
-7,6,775,340,0,0,0,44529356,11,'SynPS/2 Synaptics TouchPad'
-7,6,775,340,0,0,0,44529460,11,'SynPS/2 Synaptics TouchPad'
-7,6,774,340,0,0,0,44529581,11,'SynPS/2 Synaptics TouchPad'
-7,6,774,340,0,0,0,44529616,11,'SynPS/2 Synaptics TouchPad'
-7,6,774,340,0,0,0,44529668,11,'SynPS/2 Synaptics TouchPad'
-7,6,773,340,0,0,0,44529686,11,'SynPS/2 Synaptics TouchPad'
-7,6,773,340,0,0,0,44529721,11,'SynPS/2 Synaptics TouchPad'
-7,6,773,340,0,0,0,44529738,11,'SynPS/2 Synaptics TouchPad'
-7,6,772,340,0,0,0,44529755,11,'SynPS/2 Synaptics TouchPad'
-7,6,772,340,0,0,0,44529770,11,'SynPS/2 Synaptics TouchPad'
-7,6,771,340,0,0,0,44529786,11,'SynPS/2 Synaptics TouchPad'
-7,6,771,340,0,0,0,44529801,11,'SynPS/2 Synaptics TouchPad'
-7,6,771,340,0,0,0,44529816,11,'SynPS/2 Synaptics TouchPad'
-7,6,770,340,0,0,0,44529846,11,'SynPS/2 Synaptics TouchPad'
-7,6,770,340,0,0,0,44529862,11,'SynPS/2 Synaptics TouchPad'
-7,6,770,340,0,0,0,44529877,11,'SynPS/2 Synaptics TouchPad'
-7,6,768,340,0,0,0,44529892,11,'SynPS/2 Synaptics TouchPad'
-7,6,768,340,0,0,0,44529907,11,'SynPS/2 Synaptics TouchPad'
-7,6,767,340,0,0,0,44529923,11,'SynPS/2 Synaptics TouchPad'
-7,6,767,340,0,0,0,44529938,11,'SynPS/2 Synaptics TouchPad'
-7,6,766,340,0,0,0,44529953,11,'SynPS/2 Synaptics TouchPad'
-7,6,766,340,0,0,0,44529970,11,'SynPS/2 Synaptics TouchPad'
-7,6,765,340,0,0,0,44529987,11,'SynPS/2 Synaptics TouchPad'
-7,6,764,340,0,0,0,44530004,11,'SynPS/2 Synaptics TouchPad'
-7,6,763,340,0,0,0,44530021,11,'SynPS/2 Synaptics TouchPad'
-7,6,763,340,0,0,0,44530055,11,'SynPS/2 Synaptics TouchPad'
-7,6,763,340,0,0,0,44530072,11,'SynPS/2 Synaptics TouchPad'
-7,6,762,340,0,0,0,44530089,11,'SynPS/2 Synaptics TouchPad'
-7,6,762,340,0,0,0,44530105,11,'SynPS/2 Synaptics TouchPad'
-7,6,761,340,0,0,0,44530123,11,'SynPS/2 Synaptics TouchPad'
-7,6,761,340,0,0,0,44530140,11,'SynPS/2 Synaptics TouchPad'
-7,6,761,340,0,0,0,44530156,11,'SynPS/2 Synaptics TouchPad'
-7,6,760,340,0,0,0,44530173,11,'SynPS/2 Synaptics TouchPad'
-7,6,760,340,0,0,0,44530207,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,340,0,0,0,44530224,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,340,0,0,0,44530259,11,'SynPS/2 Synaptics TouchPad'
-7,6,758,340,0,0,0,44530312,11,'SynPS/2 Synaptics TouchPad'
-7,6,758,340,0,0,0,44530329,11,'SynPS/2 Synaptics TouchPad'
-7,6,758,340,0,0,0,44530346,11,'SynPS/2 Synaptics TouchPad'
-7,6,757,340,0,0,0,44530365,11,'SynPS/2 Synaptics TouchPad'
-7,6,757,340,0,0,0,44530382,11,'SynPS/2 Synaptics TouchPad'
-7,6,756,340,0,0,0,44530400,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,340,0,0,0,44530416,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,340,0,0,0,44530433,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,340,0,0,0,44530451,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,340,0,0,0,44530467,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,340,0,0,0,44530482,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,340,0,0,0,44530500,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,340,0,0,0,44530622,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,340,0,0,0,44530683,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,340,0,0,0,44530712,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,340,0,0,0,44530728,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,340,0,0,0,44530759,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,340,0,0,0,44530776,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,339,0,0,0,44530794,11,'SynPS/2 Synaptics TouchPad'
-7,6,751,339,0,0,0,44530811,11,'SynPS/2 Synaptics TouchPad'
-7,6,751,339,0,0,0,44530828,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,338,0,0,0,44530846,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,338,0,0,0,44530862,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,337,0,0,0,44530879,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,337,0,0,0,44530896,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,336,0,0,0,44530913,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,336,0,0,0,44530930,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,336,0,0,0,44530947,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,335,0,0,0,44530980,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,335,0,0,0,44530997,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,335,0,0,0,44531012,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,335,0,0,0,44531061,11,'SynPS/2 Synaptics TouchPad'
-7,5,0,0,1,0,0,44531344,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44531344,2,Virtual core pointer
-7,6,749,335,0,0,0,44531605,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,334,0,0,0,44531640,11,'SynPS/2 Synaptics TouchPad'
-7,2,0,0,0,37,0,44532070,9,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,44532070,3,Virtual core keyboard
-7,2,0,0,0,54,0,44533904,9,AT Translated Set 2 keyboard
-6,2,0,0,0,54,0,44533904,3,Virtual core keyboard
-7,3,0,0,0,54,0,44534016,9,AT Translated Set 2 keyboard
-6,3,0,0,0,54,0,44534016,3,Virtual core keyboard
-7,3,0,0,0,37,0,44534169,9,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,44534169,3,Virtual core keyboard
-7,2,0,0,0,36,0,44535949,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,44535949,3,Virtual core keyboard
-7,3,0,0,0,36,0,44536011,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,44536011,3,Virtual core keyboard
-7,6,749,334,0,0,0,44538323,11,'SynPS/2 Synaptics TouchPad'
-7,6,749,334,0,0,0,44538432,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,332,0,0,0,44538449,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,331,0,0,0,44538466,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,329,0,0,0,44538484,11,'SynPS/2 Synaptics TouchPad'
-7,6,750,327,0,0,0,44538501,11,'SynPS/2 Synaptics TouchPad'
-7,6,751,324,0,0,0,44538518,11,'SynPS/2 Synaptics TouchPad'
-7,6,751,321,0,0,0,44538536,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,318,0,0,0,44538551,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,312,0,0,0,44538566,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,306,0,0,0,44538581,11,'SynPS/2 Synaptics TouchPad'
-7,6,752,303,0,0,0,44538596,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,297,0,0,0,44538612,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,294,0,0,0,44538627,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,289,0,0,0,44538642,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,287,0,0,0,44538657,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,285,0,0,0,44538672,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,284,0,0,0,44538688,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,284,0,0,0,44538703,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,283,0,0,0,44538718,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,283,0,0,0,44538733,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,282,0,0,0,44538749,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,281,0,0,0,44538764,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,280,0,0,0,44538779,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,279,0,0,0,44538795,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,278,0,0,0,44538812,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,278,0,0,0,44538830,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,277,0,0,0,44538847,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,276,0,0,0,44538864,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,276,0,0,0,44538883,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,275,0,0,0,44538901,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,275,0,0,0,44538918,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,274,0,0,0,44538935,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,272,0,0,0,44538953,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,271,0,0,0,44538971,11,'SynPS/2 Synaptics TouchPad'
-7,6,754,270,0,0,0,44538988,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,268,0,0,0,44539005,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,268,0,0,0,44539023,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,267,0,0,0,44539040,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,266,0,0,0,44539057,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,266,0,0,0,44539074,11,'SynPS/2 Synaptics TouchPad'
-7,6,755,265,0,0,0,44539093,11,'SynPS/2 Synaptics TouchPad'
-7,6,756,264,0,0,0,44539110,11,'SynPS/2 Synaptics TouchPad'
-7,6,756,263,0,0,0,44539127,11,'SynPS/2 Synaptics TouchPad'
-7,6,757,261,0,0,0,44539144,11,'SynPS/2 Synaptics TouchPad'
-7,6,757,260,0,0,0,44539162,11,'SynPS/2 Synaptics TouchPad'
-7,6,758,259,0,0,0,44539179,11,'SynPS/2 Synaptics TouchPad'
-7,6,758,257,0,0,0,44539196,11,'SynPS/2 Synaptics TouchPad'
-7,6,758,257,0,0,0,44539214,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,256,0,0,0,44539232,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,255,0,0,0,44539249,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,255,0,0,0,44539284,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,254,0,0,0,44539301,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,254,0,0,0,44541031,11,'SynPS/2 Synaptics TouchPad'
-7,6,759,253,0,0,0,44543498,11,'SynPS/2 Synaptics TouchPad'
-7,6,760,253,0,0,0,44543515,11,'SynPS/2 Synaptics TouchPad'
-7,6,767,253,0,0,0,44543533,11,'SynPS/2 Synaptics TouchPad'
-7,6,780,253,0,0,0,44543550,11,'SynPS/2 Synaptics TouchPad'
-7,6,799,252,0,0,0,44543569,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,250,0,0,0,44543586,11,'SynPS/2 Synaptics TouchPad'
-7,6,831,247,0,0,0,44543603,11,'SynPS/2 Synaptics TouchPad'
-7,6,849,245,0,0,0,44543620,11,'SynPS/2 Synaptics TouchPad'
-7,6,857,244,0,0,0,44543637,11,'SynPS/2 Synaptics TouchPad'
-7,6,872,242,0,0,0,44543654,11,'SynPS/2 Synaptics TouchPad'
-7,6,889,240,0,0,0,44543671,11,'SynPS/2 Synaptics TouchPad'
-7,6,898,240,0,0,0,44543688,11,'SynPS/2 Synaptics TouchPad'
-7,6,915,240,0,0,0,44543705,11,'SynPS/2 Synaptics TouchPad'
-7,6,932,240,0,0,0,44543721,11,'SynPS/2 Synaptics TouchPad'
-7,6,942,240,0,0,0,44543737,11,'SynPS/2 Synaptics TouchPad'
-7,6,960,239,0,0,0,44543755,11,'SynPS/2 Synaptics TouchPad'
-7,6,977,237,0,0,0,44543769,11,'SynPS/2 Synaptics TouchPad'
-7,6,986,236,0,0,0,44543785,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,236,0,0,0,44543800,11,'SynPS/2 Synaptics TouchPad'
-7,6,1009,236,0,0,0,44543826,11,'SynPS/2 Synaptics TouchPad'
-7,6,1021,236,0,0,0,44544161,11,'SynPS/2 Synaptics TouchPad'
-7,6,1021,235,0,0,0,44544179,11,'SynPS/2 Synaptics TouchPad'
-7,6,1021,233,0,0,0,44544196,11,'SynPS/2 Synaptics TouchPad'
-7,6,1023,227,0,0,0,44544214,11,'SynPS/2 Synaptics TouchPad'
-7,6,1028,223,0,0,0,44544231,11,'SynPS/2 Synaptics TouchPad'
-7,6,1034,220,0,0,0,44544248,11,'SynPS/2 Synaptics TouchPad'
-7,6,1037,218,0,0,0,44544266,11,'SynPS/2 Synaptics TouchPad'
-7,6,1043,215,0,0,0,44544284,11,'SynPS/2 Synaptics TouchPad'
-7,6,1049,213,0,0,0,44544301,11,'SynPS/2 Synaptics TouchPad'
-7,6,1055,211,0,0,0,44544318,11,'SynPS/2 Synaptics TouchPad'
-7,6,1058,211,0,0,0,44544336,11,'SynPS/2 Synaptics TouchPad'
-7,6,1063,209,0,0,0,44544353,11,'SynPS/2 Synaptics TouchPad'
-7,6,1070,208,0,0,0,44544370,11,'SynPS/2 Synaptics TouchPad'
-7,6,1073,207,0,0,0,44544387,11,'SynPS/2 Synaptics TouchPad'
-7,6,1080,206,0,0,0,44544406,11,'SynPS/2 Synaptics TouchPad'
-7,6,1086,205,0,0,0,44544423,11,'SynPS/2 Synaptics TouchPad'
-7,6,1088,204,0,0,0,44544440,11,'SynPS/2 Synaptics TouchPad'
-7,6,1092,203,0,0,0,44544457,11,'SynPS/2 Synaptics TouchPad'
-7,6,1095,203,0,0,0,44544475,11,'SynPS/2 Synaptics TouchPad'
-7,6,1097,203,0,0,0,44544490,11,'SynPS/2 Synaptics TouchPad'
-7,6,1098,203,0,0,0,44544508,11,'SynPS/2 Synaptics TouchPad'
-7,6,1098,203,0,0,0,44544526,11,'SynPS/2 Synaptics TouchPad'
-7,6,1099,203,0,0,0,44544561,11,'SynPS/2 Synaptics TouchPad'
-7,6,1100,203,0,0,0,44544578,11,'SynPS/2 Synaptics TouchPad'
-7,6,1100,203,0,0,0,44544613,11,'SynPS/2 Synaptics TouchPad'
-7,6,1101,203,0,0,0,44544629,11,'SynPS/2 Synaptics TouchPad'
-7,6,1101,203,0,0,0,44544646,11,'SynPS/2 Synaptics TouchPad'
-7,6,1101,203,0,0,0,44544664,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,203,0,0,0,44544680,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,203,0,0,0,44544731,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,202,0,0,0,44544883,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,202,0,0,0,44544900,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,202,0,0,0,44544918,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44546179,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44546179,2,Virtual core pointer
-7,5,0,0,1,0,0,44546185,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44546185,2,Virtual core pointer
-7,6,1102,202,0,0,0,44546655,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,201,0,0,0,44546672,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,201,0,0,0,44546708,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,201,0,0,0,44546881,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,201,0,0,0,44547191,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,200,0,0,0,44547225,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,200,0,0,0,44547242,11,'SynPS/2 Synaptics TouchPad'
-7,6,1102,200,0,0,0,44547310,11,'SynPS/2 Synaptics TouchPad'
-7,6,1101,200,0,0,0,44547326,11,'SynPS/2 Synaptics TouchPad'
-7,6,1101,200,0,0,0,44547343,11,'SynPS/2 Synaptics TouchPad'
-7,6,1099,200,0,0,0,44547360,11,'SynPS/2 Synaptics TouchPad'
-7,6,1098,200,0,0,0,44547377,11,'SynPS/2 Synaptics TouchPad'
-7,6,1098,200,0,0,0,44547394,11,'SynPS/2 Synaptics TouchPad'
-7,6,1098,200,0,0,0,44547410,11,'SynPS/2 Synaptics TouchPad'
-7,6,1097,200,0,0,0,44547428,11,'SynPS/2 Synaptics TouchPad'
-7,6,1096,200,0,0,0,44547445,11,'SynPS/2 Synaptics TouchPad'
-7,6,1095,200,0,0,0,44547461,11,'SynPS/2 Synaptics TouchPad'
-7,6,1094,200,0,0,0,44547478,11,'SynPS/2 Synaptics TouchPad'
-7,6,1093,200,0,0,0,44547496,11,'SynPS/2 Synaptics TouchPad'
-7,6,1092,200,0,0,0,44547513,11,'SynPS/2 Synaptics TouchPad'
-7,6,1091,200,0,0,0,44547528,11,'SynPS/2 Synaptics TouchPad'
-7,6,1091,200,0,0,0,44547546,11,'SynPS/2 Synaptics TouchPad'
-7,6,1090,200,0,0,0,44547561,11,'SynPS/2 Synaptics TouchPad'
-7,6,1089,200,0,0,0,44547579,11,'SynPS/2 Synaptics TouchPad'
-7,6,1089,200,0,0,0,44547596,11,'SynPS/2 Synaptics TouchPad'
-7,6,1088,200,0,0,0,44547614,11,'SynPS/2 Synaptics TouchPad'
-7,6,1087,200,0,0,0,44547631,11,'SynPS/2 Synaptics TouchPad'
-7,6,1086,200,0,0,0,44547648,11,'SynPS/2 Synaptics TouchPad'
-7,6,1085,200,0,0,0,44547666,11,'SynPS/2 Synaptics TouchPad'
-7,6,1084,200,0,0,0,44547684,11,'SynPS/2 Synaptics TouchPad'
-7,6,1083,200,0,0,0,44547701,11,'SynPS/2 Synaptics TouchPad'
-7,6,1083,200,0,0,0,44547718,11,'SynPS/2 Synaptics TouchPad'
-7,6,1081,200,0,0,0,44547735,11,'SynPS/2 Synaptics TouchPad'
-7,6,1080,201,0,0,0,44547753,11,'SynPS/2 Synaptics TouchPad'
-7,6,1080,202,0,0,0,44547770,11,'SynPS/2 Synaptics TouchPad'
-7,6,1078,203,0,0,0,44547788,11,'SynPS/2 Synaptics TouchPad'
-7,6,1078,204,0,0,0,44547806,11,'SynPS/2 Synaptics TouchPad'
-7,6,1077,205,0,0,0,44547823,11,'SynPS/2 Synaptics TouchPad'
-7,6,1076,205,0,0,0,44547840,11,'SynPS/2 Synaptics TouchPad'
-7,6,1075,206,0,0,0,44547856,11,'SynPS/2 Synaptics TouchPad'
-7,6,1074,207,0,0,0,44547874,11,'SynPS/2 Synaptics TouchPad'
-7,6,1073,207,0,0,0,44547891,11,'SynPS/2 Synaptics TouchPad'
-7,6,1072,208,0,0,0,44547908,11,'SynPS/2 Synaptics TouchPad'
-7,6,1071,209,0,0,0,44547925,11,'SynPS/2 Synaptics TouchPad'
-7,6,1071,209,0,0,0,44547943,11,'SynPS/2 Synaptics TouchPad'
-7,6,1070,210,0,0,0,44547961,11,'SynPS/2 Synaptics TouchPad'
-7,6,1069,210,0,0,0,44547978,11,'SynPS/2 Synaptics TouchPad'
-7,6,1069,210,0,0,0,44547995,11,'SynPS/2 Synaptics TouchPad'
-7,6,1068,210,0,0,0,44548013,11,'SynPS/2 Synaptics TouchPad'
-7,6,1068,210,0,0,0,44548030,11,'SynPS/2 Synaptics TouchPad'
-7,6,1068,210,0,0,0,44548060,11,'SynPS/2 Synaptics TouchPad'
-7,6,1067,210,0,0,0,44548204,11,'SynPS/2 Synaptics TouchPad'
-7,6,1067,210,0,0,0,44548426,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44549415,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44549415,2,Virtual core pointer
-7,5,0,0,1,0,0,44549432,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44549432,2,Virtual core pointer
-0,21,0,0,0,0,0,44549448
-NEW-WINDOW:733,310:67109159,67109159,19214965,0,0,0:0x0+334+118:0,0:Create new property
-0,21,0,0,0,0,0,44549448
-0,21,0,0,0,0,0,44549448
-0,21,0,0,0,0,0,44549448
-7,6,1067,210,0,0,0,44550706,11,'SynPS/2 Synaptics TouchPad'
-7,6,1066,210,0,0,0,44550973,11,'SynPS/2 Synaptics TouchPad'
-7,6,1066,210,0,0,0,44551813,11,'SynPS/2 Synaptics TouchPad'
-7,6,1065,210,0,0,0,44551831,11,'SynPS/2 Synaptics TouchPad'
-7,6,1065,211,0,0,0,44551865,11,'SynPS/2 Synaptics TouchPad'
-7,6,1063,212,0,0,0,44551882,11,'SynPS/2 Synaptics TouchPad'
-7,6,1063,212,0,0,0,44551899,11,'SynPS/2 Synaptics TouchPad'
-7,6,1062,214,0,0,0,44551916,11,'SynPS/2 Synaptics TouchPad'
-7,6,1062,214,0,0,0,44551933,11,'SynPS/2 Synaptics TouchPad'
-7,6,1060,215,0,0,0,44551950,11,'SynPS/2 Synaptics TouchPad'
-7,6,1060,216,0,0,0,44551969,11,'SynPS/2 Synaptics TouchPad'
-7,6,1059,217,0,0,0,44551986,11,'SynPS/2 Synaptics TouchPad'
-7,6,1058,218,0,0,0,44552003,11,'SynPS/2 Synaptics TouchPad'
-7,6,1057,220,0,0,0,44552020,11,'SynPS/2 Synaptics TouchPad'
-7,6,1056,220,0,0,0,44552038,11,'SynPS/2 Synaptics TouchPad'
-7,6,1055,222,0,0,0,44552056,11,'SynPS/2 Synaptics TouchPad'
-7,6,1053,224,0,0,0,44552073,11,'SynPS/2 Synaptics TouchPad'
-7,6,1052,226,0,0,0,44552088,11,'SynPS/2 Synaptics TouchPad'
-7,6,1051,227,0,0,0,44552106,11,'SynPS/2 Synaptics TouchPad'
-7,6,1049,229,0,0,0,44552123,11,'SynPS/2 Synaptics TouchPad'
-7,6,1048,232,0,0,0,44552140,11,'SynPS/2 Synaptics TouchPad'
-7,6,1047,233,0,0,0,44552159,11,'SynPS/2 Synaptics TouchPad'
-7,6,1045,235,0,0,0,44552176,11,'SynPS/2 Synaptics TouchPad'
-7,6,1044,237,0,0,0,44552193,11,'SynPS/2 Synaptics TouchPad'
-7,6,1043,238,0,0,0,44552210,11,'SynPS/2 Synaptics TouchPad'
-7,6,1042,241,0,0,0,44552228,11,'SynPS/2 Synaptics TouchPad'
-7,6,1040,243,0,0,0,44552245,11,'SynPS/2 Synaptics TouchPad'
-7,6,1039,245,0,0,0,44552262,11,'SynPS/2 Synaptics TouchPad'
-7,6,1038,246,0,0,0,44552280,11,'SynPS/2 Synaptics TouchPad'
-7,6,1036,249,0,0,0,44552298,11,'SynPS/2 Synaptics TouchPad'
-7,6,1034,252,0,0,0,44552313,11,'SynPS/2 Synaptics TouchPad'
-7,6,1033,253,0,0,0,44552328,11,'SynPS/2 Synaptics TouchPad'
-7,6,1031,256,0,0,0,44552344,11,'SynPS/2 Synaptics TouchPad'
-7,6,1030,258,0,0,0,44552359,11,'SynPS/2 Synaptics TouchPad'
-7,6,1029,261,0,0,0,44552374,11,'SynPS/2 Synaptics TouchPad'
-7,6,1028,262,0,0,0,44552389,11,'SynPS/2 Synaptics TouchPad'
-7,6,1026,265,0,0,0,44552404,11,'SynPS/2 Synaptics TouchPad'
-7,6,1025,267,0,0,0,44552420,11,'SynPS/2 Synaptics TouchPad'
-7,6,1023,270,0,0,0,44552435,11,'SynPS/2 Synaptics TouchPad'
-7,6,1022,271,0,0,0,44552450,11,'SynPS/2 Synaptics TouchPad'
-7,6,1021,274,0,0,0,44552465,11,'SynPS/2 Synaptics TouchPad'
-7,6,1020,276,0,0,0,44552481,11,'SynPS/2 Synaptics TouchPad'
-7,6,1018,279,0,0,0,44552496,11,'SynPS/2 Synaptics TouchPad'
-7,6,1017,280,0,0,0,44552511,11,'SynPS/2 Synaptics TouchPad'
-7,6,1015,283,0,0,0,44552526,11,'SynPS/2 Synaptics TouchPad'
-7,6,1014,285,0,0,0,44552541,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,288,0,0,0,44552557,11,'SynPS/2 Synaptics TouchPad'
-7,6,1011,290,0,0,0,44552573,11,'SynPS/2 Synaptics TouchPad'
-7,6,1010,292,0,0,0,44552592,11,'SynPS/2 Synaptics TouchPad'
-7,6,1009,295,0,0,0,44552609,11,'SynPS/2 Synaptics TouchPad'
-7,6,1008,296,0,0,0,44552627,11,'SynPS/2 Synaptics TouchPad'
-7,6,1007,299,0,0,0,44552644,11,'SynPS/2 Synaptics TouchPad'
-7,6,1006,301,0,0,0,44552661,11,'SynPS/2 Synaptics TouchPad'
-7,6,1005,303,0,0,0,44552679,11,'SynPS/2 Synaptics TouchPad'
-7,6,1004,304,0,0,0,44552695,11,'SynPS/2 Synaptics TouchPad'
-7,6,1004,306,0,0,0,44552712,11,'SynPS/2 Synaptics TouchPad'
-7,6,1003,307,0,0,0,44552729,11,'SynPS/2 Synaptics TouchPad'
-7,6,1003,307,0,0,0,44552746,11,'SynPS/2 Synaptics TouchPad'
-7,6,1003,308,0,0,0,44552763,11,'SynPS/2 Synaptics TouchPad'
-7,6,1002,308,0,0,0,44552780,11,'SynPS/2 Synaptics TouchPad'
-7,6,1002,309,0,0,0,44552796,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,310,0,0,0,44552814,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,311,0,0,0,44552831,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,311,0,0,0,44552847,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,312,0,0,0,44552864,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,313,0,0,0,44552882,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,313,0,0,0,44552898,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,314,0,0,0,44552915,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,314,0,0,0,44552931,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,314,0,0,0,44552949,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,315,0,0,0,44552966,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,315,0,0,0,44552983,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,315,0,0,0,44553000,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,316,0,0,0,44553017,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,317,0,0,0,44553034,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,317,0,0,0,44553050,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,318,0,0,0,44553068,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,319,0,0,0,44553085,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,319,0,0,0,44553102,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,320,0,0,0,44553118,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,320,0,0,0,44553137,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,320,0,0,0,44553154,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,321,0,0,0,44553171,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,322,0,0,0,44553188,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,323,0,0,0,44553206,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,324,0,0,0,44553223,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,325,0,0,0,44553240,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,326,0,0,0,44553258,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,327,0,0,0,44553276,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,327,0,0,0,44553293,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,327,0,0,0,44553310,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,328,0,0,0,44553327,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,328,0,0,0,44553345,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44555248,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44555248,2,Virtual core pointer
-7,5,0,0,1,0,0,44555257,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44555257,2,Virtual core pointer
-7,2,0,0,0,116,0,44557050,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44557050,3,Virtual core keyboard
-7,3,0,0,0,116,0,44557143,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44557143,3,Virtual core keyboard
-7,2,0,0,0,116,0,44557254,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44557254,3,Virtual core keyboard
-7,3,0,0,0,116,0,44557347,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44557347,3,Virtual core keyboard
-7,2,0,0,0,116,0,44557447,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44557447,3,Virtual core keyboard
-7,3,0,0,0,116,0,44557540,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44557540,3,Virtual core keyboard
-7,2,0,0,0,116,0,44557630,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44557630,3,Virtual core keyboard
-7,3,0,0,0,116,0,44557745,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44557745,3,Virtual core keyboard
-7,2,0,0,0,116,0,44557866,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44557866,3,Virtual core keyboard
-7,3,0,0,0,116,0,44557999,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44557999,3,Virtual core keyboard
-7,2,0,0,0,116,0,44558182,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44558182,3,Virtual core keyboard
-7,3,0,0,0,116,0,44558304,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44558304,3,Virtual core keyboard
-7,2,0,0,0,36,0,44559104,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,44559104,3,Virtual core keyboard
-7,3,0,0,0,36,0,44559186,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,44559186,3,Virtual core keyboard
-7,6,998,328,0,0,0,44560271,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,328,0,0,0,44560286,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,330,0,0,0,44560301,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,332,0,0,0,44560317,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,333,0,0,0,44560332,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,336,0,0,0,44560347,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,337,0,0,0,44560362,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,340,0,0,0,44560378,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,341,0,0,0,44560397,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,344,0,0,0,44560414,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,347,0,0,0,44560431,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,348,0,0,0,44560449,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,351,0,0,0,44560465,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,353,0,0,0,44560482,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,354,0,0,0,44560499,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,355,0,0,0,44560515,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,356,0,0,0,44560533,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,356,0,0,0,44560550,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,357,0,0,0,44560566,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,357,0,0,0,44560584,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,357,0,0,0,44560601,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44561010,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44561010,2,Virtual core pointer
-7,5,0,0,1,0,0,44561056,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44561056,2,Virtual core pointer
-7,2,0,0,0,37,0,44561946,9,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,44561946,3,Virtual core keyboard
-7,2,0,0,0,55,0,44562618,9,AT Translated Set 2 keyboard
-6,2,0,0,0,55,0,44562618,3,Virtual core keyboard
-7,3,0,0,0,55,0,44562669,9,AT Translated Set 2 keyboard
-6,3,0,0,0,55,0,44562669,3,Virtual core keyboard
-7,3,0,0,0,37,0,44562805,9,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,44562805,3,Virtual core keyboard
-7,6,997,358,0,0,0,44564290,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,358,0,0,0,44564307,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,359,0,0,0,44564324,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,360,0,0,0,44564342,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,360,0,0,0,44564360,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,361,0,0,0,44564376,11,'SynPS/2 Synaptics TouchPad'
-7,6,997,361,0,0,0,44564392,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,361,0,0,0,44564411,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,362,0,0,0,44564427,11,'SynPS/2 Synaptics TouchPad'
-7,6,998,362,0,0,0,44564443,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,363,0,0,0,44564461,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,363,0,0,0,44564478,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,363,0,0,0,44564494,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,364,0,0,0,44564512,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,364,0,0,0,44564528,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,364,0,0,0,44564545,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,365,0,0,0,44564560,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,365,0,0,0,44564575,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,365,0,0,0,44564859,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,366,0,0,0,44564877,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,366,0,0,0,44564896,11,'SynPS/2 Synaptics TouchPad'
-7,6,999,366,0,0,0,44564913,11,'SynPS/2 Synaptics TouchPad'
-7,6,1000,367,0,0,0,44564931,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,368,0,0,0,44564948,11,'SynPS/2 Synaptics TouchPad'
-7,6,1002,370,0,0,0,44564967,11,'SynPS/2 Synaptics TouchPad'
-7,6,1003,371,0,0,0,44564984,11,'SynPS/2 Synaptics TouchPad'
-7,6,1004,374,0,0,0,44565002,11,'SynPS/2 Synaptics TouchPad'
-7,6,1005,376,0,0,0,44565019,11,'SynPS/2 Synaptics TouchPad'
-7,6,1005,378,0,0,0,44565038,11,'SynPS/2 Synaptics TouchPad'
-7,6,1006,379,0,0,0,44565056,11,'SynPS/2 Synaptics TouchPad'
-7,6,1007,382,0,0,0,44565073,11,'SynPS/2 Synaptics TouchPad'
-7,6,1007,384,0,0,0,44565090,11,'SynPS/2 Synaptics TouchPad'
-7,6,1008,387,0,0,0,44565109,11,'SynPS/2 Synaptics TouchPad'
-7,6,1009,389,0,0,0,44565127,11,'SynPS/2 Synaptics TouchPad'
-7,6,1010,391,0,0,0,44565144,11,'SynPS/2 Synaptics TouchPad'
-7,6,1010,394,0,0,0,44565161,11,'SynPS/2 Synaptics TouchPad'
-7,6,1010,396,0,0,0,44565180,11,'SynPS/2 Synaptics TouchPad'
-7,6,1011,396,0,0,0,44565198,11,'SynPS/2 Synaptics TouchPad'
-7,6,1011,398,0,0,0,44565215,11,'SynPS/2 Synaptics TouchPad'
-7,6,1011,399,0,0,0,44565232,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,400,0,0,0,44565252,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,401,0,0,0,44565269,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,401,0,0,0,44565286,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,402,0,0,0,44565303,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,402,0,0,0,44565322,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,402,0,0,0,44565338,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,403,0,0,0,44565355,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,403,0,0,0,44565372,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,403,0,0,0,44565389,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,404,0,0,0,44565406,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,404,0,0,0,44565423,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,405,0,0,0,44565439,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,405,0,0,0,44565457,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,405,0,0,0,44565474,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,406,0,0,0,44565490,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,406,0,0,0,44565508,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,406,0,0,0,44566022,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,44566375,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,44566375,2,Virtual core pointer
-7,5,0,0,1,0,0,44566382,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,44566382,2,Virtual core pointer
-7,6,1012,407,0,0,0,44567518,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,407,0,0,0,44567532,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,407,0,0,0,44567548,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,408,0,0,0,44567563,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,409,0,0,0,44567579,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,412,0,0,0,44567593,11,'SynPS/2 Synaptics TouchPad'
-7,6,1012,414,0,0,0,44567609,11,'SynPS/2 Synaptics TouchPad'
-7,6,1005,418,0,0,0,44567624,11,'SynPS/2 Synaptics TouchPad'
-7,6,1001,420,0,0,0,44567640,11,'SynPS/2 Synaptics TouchPad'
-7,6,989,425,0,0,0,44567655,11,'SynPS/2 Synaptics TouchPad'
-7,6,982,429,0,0,0,44567670,11,'SynPS/2 Synaptics TouchPad'
-7,6,969,435,0,0,0,44567685,11,'SynPS/2 Synaptics TouchPad'
-7,6,962,439,0,0,0,44567701,11,'SynPS/2 Synaptics TouchPad'
-7,6,945,447,0,0,0,44567716,11,'SynPS/2 Synaptics TouchPad'
-7,6,935,452,0,0,0,44567731,11,'SynPS/2 Synaptics TouchPad'
-7,6,913,462,0,0,0,44567746,11,'SynPS/2 Synaptics TouchPad'
-7,6,900,468,0,0,0,44567762,11,'SynPS/2 Synaptics TouchPad'
-7,6,873,480,0,0,0,44567776,11,'SynPS/2 Synaptics TouchPad'
-7,6,857,486,0,0,0,44567792,11,'SynPS/2 Synaptics TouchPad'
-7,6,824,500,0,0,0,44567807,11,'SynPS/2 Synaptics TouchPad'
-7,6,806,507,0,0,0,44567823,11,'SynPS/2 Synaptics TouchPad'
-7,6,766,522,0,0,0,44567839,11,'SynPS/2 Synaptics TouchPad'
-7,6,748,530,0,0,0,44567856,11,'SynPS/2 Synaptics TouchPad'
-7,6,714,546,0,0,0,44567874,11,'SynPS/2 Synaptics TouchPad'
-7,6,694,558,0,0,0,44568151,11,'SynPS/2 Synaptics TouchPad'
-7,6,692,558,0,0,0,44568169,11,'SynPS/2 Synaptics TouchPad'
-7,6,666,569,0,0,0,44568185,11,'SynPS/2 Synaptics TouchPad'
-7,6,643,579,0,0,0,44568202,11,'SynPS/2 Synaptics TouchPad'
-7,6,600,599,0,0,0,44568220,11,'SynPS/2 Synaptics TouchPad'
-7,6,558,617,0,0,0,44568236,11,'SynPS/2 Synaptics TouchPad'
-7,6,538,624,0,0,0,44568252,11,'SynPS/2 Synaptics TouchPad'
-7,6,503,635,0,0,0,44568271,11,'SynPS/2 Synaptics TouchPad'
-7,6,474,646,0,0,0,44568287,11,'SynPS/2 Synaptics TouchPad'
-7,6,463,651,0,0,0,44568303,11,'SynPS/2 Synaptics TouchPad'
-7,6,446,660,0,0,0,44568321,11,'SynPS/2 Synaptics TouchPad'
-7,6,432,667,0,0,0,44568339,11,'SynPS/2 Synaptics TouchPad'
-7,6,427,671,0,0,0,44568355,11,'SynPS/2 Synaptics TouchPad'
-7,6,418,677,0,0,0,44568371,11,'SynPS/2 Synaptics TouchPad'
-7,6,408,685,0,0,0,44568389,11,'SynPS/2 Synaptics TouchPad'
-7,6,402,688,0,0,0,44568404,11,'SynPS/2 Synaptics TouchPad'
-7,6,392,695,0,0,0,44568419,11,'SynPS/2 Synaptics TouchPad'
-7,6,384,700,0,0,0,44568435,11,'SynPS/2 Synaptics TouchPad'
-7,6,381,701,0,0,0,44568453,11,'SynPS/2 Synaptics TouchPad'
-7,6,376,703,0,0,0,44568470,11,'SynPS/2 Synaptics TouchPad'
-7,6,375,704,0,0,0,44568487,11,'SynPS/2 Synaptics TouchPad'
-7,6,371,705,0,0,0,44568505,11,'SynPS/2 Synaptics TouchPad'
-7,6,369,705,0,0,0,44568522,11,'SynPS/2 Synaptics TouchPad'
-7,6,367,706,0,0,0,44568540,11,'SynPS/2 Synaptics TouchPad'
-7,6,365,707,0,0,0,44568557,11,'SynPS/2 Synaptics TouchPad'
-7,6,361,708,0,0,0,44568575,11,'SynPS/2 Synaptics TouchPad'
-7,6,358,709,0,0,0,44568592,11,'SynPS/2 Synaptics TouchPad'
-7,6,356,709,0,0,0,44568609,11,'SynPS/2 Synaptics TouchPad'
-7,6,354,710,0,0,0,44568626,11,'SynPS/2 Synaptics TouchPad'
-7,6,352,711,0,0,0,44568644,11,'SynPS/2 Synaptics TouchPad'
-7,6,351,711,0,0,0,44568662,11,'SynPS/2 Synaptics TouchPad'
-7,6,349,711,0,0,0,44568679,11,'SynPS/2 Synaptics TouchPad'
-7,6,348,711,0,0,0,44568697,11,'SynPS/2 Synaptics TouchPad'
-7,6,347,711,0,0,0,44568714,11,'SynPS/2 Synaptics TouchPad'
-7,6,346,711,0,0,0,44568731,11,'SynPS/2 Synaptics TouchPad'
-7,6,346,711,0,0,0,44568749,11,'SynPS/2 Synaptics TouchPad'
-7,6,345,711,0,0,0,44568767,11,'SynPS/2 Synaptics TouchPad'
-7,6,344,711,0,0,0,44568801,11,'SynPS/2 Synaptics TouchPad'
-7,6,344,711,0,0,0,44568818,11,'SynPS/2 Synaptics TouchPad'
-7,6,344,711,0,0,0,44568836,11,'SynPS/2 Synaptics TouchPad'
-7,6,343,711,0,0,0,44568853,11,'SynPS/2 Synaptics TouchPad'
-7,6,343,711,0,0,0,44568900,11,'SynPS/2 Synaptics TouchPad'
-7,6,343,711,0,0,0,44568934,11,'SynPS/2 Synaptics TouchPad'
-7,6,342,711,0,0,0,44568953,11,'SynPS/2 Synaptics TouchPad'
-7,6,342,711,0,0,0,44569092,11,'SynPS/2 Synaptics TouchPad'
-7,6,342,711,0,0,0,44569126,11,'SynPS/2 Synaptics TouchPad'
-7,6,342,711,0,0,0,44569143,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,711,0,0,0,44569161,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,711,0,0,0,44569179,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,710,0,0,0,44569196,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,710,0,0,0,44569213,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,710,0,0,0,44569231,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,709,0,0,0,44569248,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,709,0,0,0,44569265,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,709,0,0,0,44569283,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,708,0,0,0,44569300,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,708,0,0,0,44569318,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,708,0,0,0,44569368,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,707,0,0,0,44569383,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,707,0,0,0,44569398,11,'SynPS/2 Synaptics TouchPad'
-7,6,341,707,0,0,0,44569493,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,3,0,0,44571114,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,3,0,0,44571114,2,Virtual core pointer
-7,5,0,0,3,0,0,44571157,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,3,0,0,44571157,2,Virtual core pointer
-7,2,0,0,0,116,0,44573971,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44573971,3,Virtual core keyboard
-7,3,0,0,0,116,0,44574094,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44574094,3,Virtual core keyboard
-7,2,0,0,0,116,0,44574307,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,44574307,3,Virtual core keyboard
-7,3,0,0,0,116,0,44574409,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,44574409,3,Virtual core keyboard
-7,2,0,0,0,36,0,44574934,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,44574935,3,Virtual core keyboard
-0,21,0,0,0,0,0,44574970
-NEW-WINDOW:461,197:67109197,67109197,19215114,0,0,0:0x0+879+458:0,0:Exporting graph "Complete Tree - 'depth'=5 'degree'=2 'tree layout'=false "
-0,21,0,0,0,0,0,44574970
-0,21,0,0,0,0,0,44574970
-0,21,0,0,0,0,0,44574970
-7,3,0,0,0,36,0,44575015,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,44575015,3,Virtual core keyboard
-7,2,0,0,0,28,0,44576230,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,44576230,3,Virtual core keyboard
-7,3,0,0,0,28,0,44576322,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,44576322,3,Virtual core keyboard
-7,2,0,0,0,26,0,44576464,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,44576464,3,Virtual core keyboard
-7,3,0,0,0,26,0,44576546,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,44576546,3,Virtual core keyboard
-7,2,0,0,0,39,0,44576688,9,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,44576688,3,Virtual core keyboard
-7,3,0,0,0,39,0,44576770,9,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,44576770,3,Virtual core keyboard
-7,2,0,0,0,28,0,44576952,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,44576952,3,Virtual core keyboard
-7,3,0,0,0,28,0,44577025,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,44577025,3,Virtual core keyboard
-7,2,0,0,0,17,0,44577146,9,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,44577146,3,Virtual core keyboard
-7,3,0,0,0,17,0,44577238,9,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,44577238,3,Virtual core keyboard
-7,2,0,0,0,42,0,44577553,9,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,44577554,3,Virtual core keyboard
-7,2,0,0,0,30,0,44577635,9,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,44577635,3,Virtual core keyboard
-7,3,0,0,0,42,0,44577656,9,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,44577656,3,Virtual core keyboard
-7,2,0,0,0,31,0,44577696,9,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,44577696,3,Virtual core keyboard
-7,3,0,0,0,30,0,44577747,9,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,44577747,3,Virtual core keyboard
-7,3,0,0,0,31,0,44577808,9,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,44577808,3,Virtual core keyboard
-7,2,0,0,0,62,0,44578439,9,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,44578439,3,Virtual core keyboard
-7,2,0,0,0,59,0,44578786,9,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,44578786,3,Virtual core keyboard
-7,3,0,0,0,59,0,44578898,9,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,44578898,3,Virtual core keyboard
-7,3,0,0,0,62,0,44578980,9,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,44578980,3,Virtual core keyboard
-7,2,0,0,0,28,0,44579551,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,44579551,3,Virtual core keyboard
-7,3,0,0,0,28,0,44579633,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,44579633,3,Virtual core keyboard
-7,2,0,0,0,46,0,44579652,9,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,44579652,3,Virtual core keyboard
-7,2,0,0,0,33,0,44579764,9,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,44579764,3,Virtual core keyboard
-7,3,0,0,0,46,0,44579796,9,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,44579796,3,Virtual core keyboard
-7,3,0,0,0,33,0,44579877,9,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,44579877,3,Virtual core keyboard
-7,2,0,0,0,36,0,44580477,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,44580477,3,Virtual core keyboard
-0,21,0,0,0,0,0,44580506
-NEW-WINDOW:650,338:67109206,67109206,19215191,0,0,0:0x0+500+36:0,0:TLP Export
-0,21,0,0,0,0,0,44580506
-0,21,0,0,0,0,0,44580506
-0,21,0,0,0,0,0,44580506
-7,3,0,0,0,36,0,44580549,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,44580549,3,Virtual core keyboard
-0,21,0,0,0,0,0,44580622
-NEW-WINDOW:459,141:67109197,67109197,748,0,0,0:459x141+879+458:0,0:Exporting graph "Complete Tree - 'depth'=5 'degree'=2 'tree layout'=false "
-0,21,0,0,0,0,0,44580622
-0,21,0,0,0,0,0,44580622
-0,21,0,0,0,0,0,44580622
-0,21,0,0,0,0,0,44580622
-0,21,0,0,0,0,0,44580622
+7,2,0,0,0,37,0,16660728,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,16660728,3,Virtual core keyboard
+7,2,0,0,0,50,0,16660939,11,AT Translated Set 2 keyboard
+6,2,0,0,0,50,0,16660940,3,Virtual core keyboard
+7,2,0,0,0,32,0,16661281,11,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,16661281,3,Virtual core keyboard
+0,21,0,0,0,0,0,16661322
+NEW-WINDOW:451,254:62914587,62914587,34461422,0,0,0:36x74+879+458:0,0:Import
+0,21,0,0,0,0,0,16661322
+0,21,0,0,0,0,0,16661322
+0,21,0,0,0,0,0,16661322
+7,3,0,0,0,32,0,16661356,11,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,16661356,3,Virtual core keyboard
+7,3,0,0,0,50,0,16661366,11,AT Translated Set 2 keyboard
+6,3,0,0,0,50,0,16661366,3,Virtual core keyboard
+7,3,0,0,0,37,0,16661400,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,16661400,3,Virtual core keyboard
+7,2,0,0,0,116,0,16663118,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16663118,3,Virtual core keyboard
+7,3,0,0,0,116,0,16663222,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16663222,3,Virtual core keyboard
+7,2,0,0,0,116,0,16663549,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16663549,3,Virtual core keyboard
+7,3,0,0,0,116,0,16663656,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16663656,3,Virtual core keyboard
+7,2,0,0,0,116,0,16663822,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16663822,3,Virtual core keyboard
+7,3,0,0,0,116,0,16663891,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16663891,3,Virtual core keyboard
+7,2,0,0,0,116,0,16664032,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16664032,3,Virtual core keyboard
+7,3,0,0,0,116,0,16664112,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16664112,3,Virtual core keyboard
+7,2,0,0,0,116,0,16664260,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16664260,3,Virtual core keyboard
+7,3,0,0,0,116,0,16664322,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16664322,3,Virtual core keyboard
+7,2,0,0,0,116,0,16664450,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16664450,3,Virtual core keyboard
+7,3,0,0,0,116,0,16664535,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16664535,3,Virtual core keyboard
+7,2,0,0,0,116,0,16664662,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16664663,3,Virtual core keyboard
+7,3,0,0,0,116,0,16664748,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16664748,3,Virtual core keyboard
+7,2,0,0,0,116,0,16664872,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16664873,3,Virtual core keyboard
+7,3,0,0,0,116,0,16664961,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16664961,3,Virtual core keyboard
+7,2,0,0,0,116,0,16665083,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16665083,3,Virtual core keyboard
+7,3,0,0,0,116,0,16665171,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16665171,3,Virtual core keyboard
+7,2,0,0,0,116,0,16665301,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16665301,3,Virtual core keyboard
+7,3,0,0,0,116,0,16665375,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16665375,3,Virtual core keyboard
+7,2,0,0,0,116,0,16665511,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16665511,3,Virtual core keyboard
+7,3,0,0,0,116,0,16665623,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16665623,3,Virtual core keyboard
+7,2,0,0,0,116,0,16665863,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16665863,3,Virtual core keyboard
+7,3,0,0,0,116,0,16666002,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16666002,3,Virtual core keyboard
+7,2,0,0,0,116,0,16666191,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16666192,3,Virtual core keyboard
+7,3,0,0,0,116,0,16666296,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16666296,3,Virtual core keyboard
+7,2,0,0,0,116,0,16666474,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16666474,3,Virtual core keyboard
+7,3,0,0,0,116,0,16666578,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16666578,3,Virtual core keyboard
+7,2,0,0,0,116,0,16666775,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16666775,3,Virtual core keyboard
+7,3,0,0,0,116,0,16666876,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16666876,3,Virtual core keyboard
+7,2,0,0,0,36,0,16668032,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,16668032,3,Virtual core keyboard
+0,21,0,0,0,0,0,16668041
+NEW-WINDOW:451,212:62914587,62914587,701,451,212,0:451x212+879+458:0,0:Import
+0,21,0,0,0,0,0,16668041
+0,21,0,0,0,0,0,16668041
+0,21,0,0,0,0,0,16668041
+0,21,0,0,0,0,0,16668041
+0,21,0,0,0,0,0,16668085
+NEW-WINDOW:640,459:62914598,62914598,34462392,0,0,0:36x74+500+49:0,0:
+0,21,0,0,0,0,0,16668085
+0,21,0,0,0,0,0,16668085
+0,21,0,0,0,0,0,16668085
+7,3,0,0,0,36,0,16668107,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,16668107,3,Virtual core keyboard
+0,21,0,0,0,0,0,16668116
+NEW-WINDOW:-2027802672,21986:62914598,62914598,701,640,417,0:-64829648x32766+-1580394868+32608:-2027802752,-2027802752:
+0,21,0,0,0,0,0,16668116
+0,21,0,0,0,0,0,16668116
+0,21,0,0,0,0,0,16668116
+0,21,0,0,0,0,0,16668116
+0,21,0,0,0,0,0,16668772
+NEW-WINDOW:1116,127:62914638,62914638,62914738,0,0,0:0x0+584+819:0,0:
+0,21,0,0,0,0,0,16668772
+0,21,0,0,0,0,0,16668772
+7,6,479,695,0,0,0,16670198,9,'VirtualBox mouse integration'
+7,6,477,694,0,0,0,16670206,9,'VirtualBox mouse integration'
+7,6,477,692,0,0,0,16670214,9,'VirtualBox mouse integration'
+7,6,476,690,0,0,0,16670221,9,'VirtualBox mouse integration'
+7,6,475,686,0,0,0,16670229,9,'VirtualBox mouse integration'
+7,6,474,684,0,0,0,16670237,9,'VirtualBox mouse integration'
+7,6,473,682,0,0,0,16670245,9,'VirtualBox mouse integration'
+7,6,472,680,0,0,0,16670253,9,'VirtualBox mouse integration'
+7,6,471,676,0,0,0,16670261,9,'VirtualBox mouse integration'
+7,6,470,673,0,0,0,16670269,9,'VirtualBox mouse integration'
+7,6,468,669,0,0,0,16670277,9,'VirtualBox mouse integration'
+7,6,466,665,0,0,0,16670285,9,'VirtualBox mouse integration'
+7,6,464,662,0,0,0,16670293,9,'VirtualBox mouse integration'
+7,6,463,659,0,0,0,16670301,9,'VirtualBox mouse integration'
+7,6,461,655,0,0,0,16670309,9,'VirtualBox mouse integration'
+7,6,460,651,0,0,0,16670317,9,'VirtualBox mouse integration'
+7,6,459,649,0,0,0,16670325,9,'VirtualBox mouse integration'
+7,6,457,645,0,0,0,16670333,9,'VirtualBox mouse integration'
+7,6,456,641,0,0,0,16670341,9,'VirtualBox mouse integration'
+7,6,455,638,0,0,0,16670349,9,'VirtualBox mouse integration'
+7,6,454,635,0,0,0,16670357,9,'VirtualBox mouse integration'
+7,6,453,632,0,0,0,16670365,9,'VirtualBox mouse integration'
+7,6,452,628,0,0,0,16670373,9,'VirtualBox mouse integration'
+7,6,451,624,0,0,0,16670381,9,'VirtualBox mouse integration'
+7,6,450,618,0,0,0,16670389,9,'VirtualBox mouse integration'
+7,6,448,614,0,0,0,16670397,9,'VirtualBox mouse integration'
+7,6,446,609,0,0,0,16670405,9,'VirtualBox mouse integration'
+7,6,445,602,0,0,0,16670413,9,'VirtualBox mouse integration'
+7,6,442,594,0,0,0,16670421,9,'VirtualBox mouse integration'
+7,6,441,587,0,0,0,16670429,9,'VirtualBox mouse integration'
+7,6,439,579,0,0,0,16670437,9,'VirtualBox mouse integration'
+7,6,437,572,0,0,0,16670445,9,'VirtualBox mouse integration'
+7,6,434,563,0,0,0,16670453,9,'VirtualBox mouse integration'
+7,6,431,553,0,0,0,16670461,9,'VirtualBox mouse integration'
+7,6,427,544,0,0,0,16670469,9,'VirtualBox mouse integration'
+7,6,425,530,0,0,0,16670477,9,'VirtualBox mouse integration'
+7,6,422,522,0,0,0,16670485,9,'VirtualBox mouse integration'
+7,6,418,512,0,0,0,16670493,9,'VirtualBox mouse integration'
+7,6,416,501,0,0,0,16670501,9,'VirtualBox mouse integration'
+7,6,414,491,0,0,0,16670509,9,'VirtualBox mouse integration'
+7,6,411,484,0,0,0,16670517,9,'VirtualBox mouse integration'
+7,6,408,474,0,0,0,16670525,9,'VirtualBox mouse integration'
+7,6,406,463,0,0,0,16670533,9,'VirtualBox mouse integration'
+7,6,404,459,0,0,0,16670541,9,'VirtualBox mouse integration'
+7,6,402,446,0,0,0,16670549,9,'VirtualBox mouse integration'
+7,6,399,434,0,0,0,16670557,9,'VirtualBox mouse integration'
+7,6,396,421,0,0,0,16670565,9,'VirtualBox mouse integration'
+7,6,393,413,0,0,0,16670574,9,'VirtualBox mouse integration'
+7,6,390,404,0,0,0,16670582,9,'VirtualBox mouse integration'
+7,6,387,396,0,0,0,16670590,9,'VirtualBox mouse integration'
+7,6,386,387,0,0,0,16670598,9,'VirtualBox mouse integration'
+7,6,383,379,0,0,0,16670606,9,'VirtualBox mouse integration'
+7,6,383,374,0,0,0,16670614,9,'VirtualBox mouse integration'
+7,6,378,364,0,0,0,16670622,9,'VirtualBox mouse integration'
+7,6,376,354,0,0,0,16670630,9,'VirtualBox mouse integration'
+7,6,374,346,0,0,0,16670637,9,'VirtualBox mouse integration'
+7,6,371,338,0,0,0,16670646,9,'VirtualBox mouse integration'
+7,6,369,332,0,0,0,16670654,9,'VirtualBox mouse integration'
+7,6,367,326,0,0,0,16670661,9,'VirtualBox mouse integration'
+7,6,366,319,0,0,0,16670670,9,'VirtualBox mouse integration'
+7,6,363,312,0,0,0,16670678,9,'VirtualBox mouse integration'
+7,6,361,304,0,0,0,16670686,9,'VirtualBox mouse integration'
+7,6,359,298,0,0,0,16670693,9,'VirtualBox mouse integration'
+7,6,356,290,0,0,0,16670701,9,'VirtualBox mouse integration'
+7,6,356,286,0,0,0,16670709,9,'VirtualBox mouse integration'
+7,6,355,284,0,0,0,16670718,9,'VirtualBox mouse integration'
+7,6,354,282,0,0,0,16670725,9,'VirtualBox mouse integration'
+7,6,353,281,0,0,0,16670734,9,'VirtualBox mouse integration'
+7,6,353,277,0,0,0,16670742,9,'VirtualBox mouse integration'
+7,6,353,276,0,0,0,16670750,9,'VirtualBox mouse integration'
+7,6,353,272,0,0,0,16670758,9,'VirtualBox mouse integration'
+7,6,353,268,0,0,0,16670766,9,'VirtualBox mouse integration'
+7,6,352,266,0,0,0,16670774,9,'VirtualBox mouse integration'
+7,6,352,263,0,0,0,16670782,9,'VirtualBox mouse integration'
+7,6,352,261,0,0,0,16670790,9,'VirtualBox mouse integration'
+7,6,350,260,0,0,0,16670798,9,'VirtualBox mouse integration'
+7,6,350,258,0,0,0,16670806,9,'VirtualBox mouse integration'
+7,6,350,257,0,0,0,16670814,9,'VirtualBox mouse integration'
+7,6,350,256,0,0,0,16670822,9,'VirtualBox mouse integration'
+7,6,349,254,0,0,0,16670830,9,'VirtualBox mouse integration'
+7,6,349,253,0,0,0,16670838,9,'VirtualBox mouse integration'
+7,6,347,251,0,0,0,16670846,9,'VirtualBox mouse integration'
+7,6,347,249,0,0,0,16670854,9,'VirtualBox mouse integration'
+7,6,346,246,0,0,0,16670862,9,'VirtualBox mouse integration'
+7,6,344,244,0,0,0,16670870,9,'VirtualBox mouse integration'
+7,6,344,243,0,0,0,16670878,9,'VirtualBox mouse integration'
+7,6,344,242,0,0,0,16670886,9,'VirtualBox mouse integration'
+7,6,343,240,0,0,0,16670894,9,'VirtualBox mouse integration'
+7,6,342,240,0,0,0,16670902,9,'VirtualBox mouse integration'
+7,6,342,238,0,0,0,16670910,9,'VirtualBox mouse integration'
+7,6,341,237,0,0,0,16670918,9,'VirtualBox mouse integration'
+7,6,341,234,0,0,0,16670926,9,'VirtualBox mouse integration'
+7,6,340,234,0,0,0,16670934,9,'VirtualBox mouse integration'
+7,6,339,232,0,0,0,16670942,9,'VirtualBox mouse integration'
+7,6,338,230,0,0,0,16670950,9,'VirtualBox mouse integration'
+7,6,337,229,0,0,0,16670958,9,'VirtualBox mouse integration'
+7,6,337,228,0,0,0,16670966,9,'VirtualBox mouse integration'
+7,6,337,227,0,0,0,16670974,9,'VirtualBox mouse integration'
+7,6,336,227,0,0,0,16670982,9,'VirtualBox mouse integration'
+7,6,335,225,0,0,0,16670990,9,'VirtualBox mouse integration'
+7,6,334,223,0,0,0,16670998,9,'VirtualBox mouse integration'
+7,6,333,222,0,0,0,16671006,9,'VirtualBox mouse integration'
+7,6,332,220,0,0,0,16671014,9,'VirtualBox mouse integration'
+7,6,331,218,0,0,0,16671022,9,'VirtualBox mouse integration'
+7,6,330,216,0,0,0,16671030,9,'VirtualBox mouse integration'
+7,6,329,215,0,0,0,16671038,9,'VirtualBox mouse integration'
+7,6,328,213,0,0,0,16671046,9,'VirtualBox mouse integration'
+7,6,326,208,0,0,0,16671054,9,'VirtualBox mouse integration'
+7,6,324,206,0,0,0,16671062,9,'VirtualBox mouse integration'
+7,6,324,204,0,0,0,16671070,9,'VirtualBox mouse integration'
+7,6,322,202,0,0,0,16671078,9,'VirtualBox mouse integration'
+7,6,322,201,0,0,0,16671086,9,'VirtualBox mouse integration'
+7,6,320,198,0,0,0,16671094,9,'VirtualBox mouse integration'
+7,6,319,196,0,0,0,16671102,9,'VirtualBox mouse integration'
+7,6,318,193,0,0,0,16671110,9,'VirtualBox mouse integration'
+7,6,317,193,0,0,0,16671118,9,'VirtualBox mouse integration'
+7,6,316,191,0,0,0,16671126,9,'VirtualBox mouse integration'
+7,6,315,189,0,0,0,16671134,9,'VirtualBox mouse integration'
+7,6,315,188,0,0,0,16671142,9,'VirtualBox mouse integration'
+7,6,315,187,0,0,0,16671150,9,'VirtualBox mouse integration'
+7,6,314,186,0,0,0,16671158,9,'VirtualBox mouse integration'
+7,6,313,185,0,0,0,16671166,9,'VirtualBox mouse integration'
+7,6,313,183,0,0,0,16671174,9,'VirtualBox mouse integration'
+7,6,312,181,0,0,0,16671182,9,'VirtualBox mouse integration'
+7,6,311,180,0,0,0,16671190,9,'VirtualBox mouse integration'
+7,6,311,179,0,0,0,16671198,9,'VirtualBox mouse integration'
+7,6,311,177,0,0,0,16671206,9,'VirtualBox mouse integration'
+7,6,310,177,0,0,0,16671214,9,'VirtualBox mouse integration'
+7,6,309,177,0,0,0,16671222,9,'VirtualBox mouse integration'
+7,6,309,175,0,0,0,16671230,9,'VirtualBox mouse integration'
+7,6,309,174,0,0,0,16671238,9,'VirtualBox mouse integration'
+7,6,309,173,0,0,0,16671246,9,'VirtualBox mouse integration'
+7,6,308,173,0,0,0,16671254,9,'VirtualBox mouse integration'
+7,6,307,171,0,0,0,16671262,9,'VirtualBox mouse integration'
+7,6,307,169,0,0,0,16671270,9,'VirtualBox mouse integration'
+7,6,306,169,0,0,0,16671278,9,'VirtualBox mouse integration'
+7,6,306,168,0,0,0,16671286,9,'VirtualBox mouse integration'
+7,6,305,168,0,0,0,16671294,9,'VirtualBox mouse integration'
+7,6,305,167,0,0,0,16671318,9,'VirtualBox mouse integration'
+7,6,305,165,0,0,0,16671326,9,'VirtualBox mouse integration'
+7,6,304,164,0,0,0,16671334,9,'VirtualBox mouse integration'
+7,6,304,163,0,0,0,16671342,9,'VirtualBox mouse integration'
+7,6,303,162,0,0,0,16671350,9,'VirtualBox mouse integration'
+7,6,303,161,0,0,0,16671358,9,'VirtualBox mouse integration'
+7,6,303,160,0,0,0,16671366,9,'VirtualBox mouse integration'
+7,6,302,159,0,0,0,16671374,9,'VirtualBox mouse integration'
+7,6,301,159,0,0,0,16671382,9,'VirtualBox mouse integration'
+7,6,301,158,0,0,0,16671390,9,'VirtualBox mouse integration'
+7,6,301,157,0,0,0,16671406,9,'VirtualBox mouse integration'
+7,6,301,156,0,0,0,16671414,9,'VirtualBox mouse integration'
+7,6,301,155,0,0,0,16671422,9,'VirtualBox mouse integration'
+7,6,300,154,0,0,0,16671430,9,'VirtualBox mouse integration'
+7,6,299,153,0,0,0,16671438,9,'VirtualBox mouse integration'
+7,6,299,152,0,0,0,16671446,9,'VirtualBox mouse integration'
+7,6,299,151,0,0,0,16671454,9,'VirtualBox mouse integration'
+7,6,299,150,0,0,0,16671462,9,'VirtualBox mouse integration'
+7,6,299,149,0,0,0,16671494,9,'VirtualBox mouse integration'
+7,6,299,148,0,0,0,16671502,9,'VirtualBox mouse integration'
+7,6,299,147,0,0,0,16671510,9,'VirtualBox mouse integration'
+7,6,298,147,0,0,0,16671518,9,'VirtualBox mouse integration'
+7,6,298,145,0,0,0,16671526,9,'VirtualBox mouse integration'
+7,6,298,144,0,0,0,16671534,9,'VirtualBox mouse integration'
+7,6,297,143,0,0,0,16671542,9,'VirtualBox mouse integration'
+7,6,297,141,0,0,0,16671550,9,'VirtualBox mouse integration'
+7,6,297,140,0,0,0,16671558,9,'VirtualBox mouse integration'
+7,6,297,139,0,0,0,16671575,9,'VirtualBox mouse integration'
+7,6,297,138,0,0,0,16671614,9,'VirtualBox mouse integration'
+7,6,297,137,0,0,0,16671622,9,'VirtualBox mouse integration'
+7,6,297,136,0,0,0,16671639,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16672331,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16672331,2,Virtual core pointer
+7,5,0,0,1,0,0,16672555,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16672555,2,Virtual core pointer
+7,2,0,0,0,28,0,16673601,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,16673601,3,Virtual core keyboard
+7,3,0,0,0,28,0,16673686,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,16673686,3,Virtual core keyboard
+7,2,0,0,0,27,0,16673859,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,16673859,3,Virtual core keyboard
+7,3,0,0,0,27,0,16673937,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,16673937,3,Virtual core keyboard
+7,2,0,0,0,26,0,16674123,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16674123,3,Virtual core keyboard
+7,3,0,0,0,26,0,16674187,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16674187,3,Virtual core keyboard
+7,2,0,0,0,26,0,16674276,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16674276,3,Virtual core keyboard
+7,3,0,0,0,26,0,16674351,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16674351,3,Virtual core keyboard
+7,2,0,0,0,65,0,16674543,11,AT Translated Set 2 keyboard
+6,2,0,0,0,65,0,16674543,3,Virtual core keyboard
+7,3,0,0,0,65,0,16674626,11,AT Translated Set 2 keyboard
+6,3,0,0,0,65,0,16674626,3,Virtual core keyboard
+7,2,0,0,0,46,0,16674812,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,16674812,3,Virtual core keyboard
+7,3,0,0,0,46,0,16674886,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,16674886,3,Virtual core keyboard
+7,2,0,0,0,26,0,16675028,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16675028,3,Virtual core keyboard
+7,3,0,0,0,26,0,16675098,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16675098,3,Virtual core keyboard
+7,2,0,0,0,24,0,16676013,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,16676013,3,Virtual core keyboard
+7,3,0,0,0,24,0,16676137,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,16676137,3,Virtual core keyboard
+7,2,0,0,0,41,0,16677166,11,AT Translated Set 2 keyboard
+6,2,0,0,0,41,0,16677166,3,Virtual core keyboard
+7,3,0,0,0,41,0,16677229,11,AT Translated Set 2 keyboard
+6,3,0,0,0,41,0,16677229,3,Virtual core keyboard
+7,6,296,136,0,0,0,16677363,9,'VirtualBox mouse integration'
+7,6,295,136,0,0,0,16677369,9,'VirtualBox mouse integration'
+7,6,294,136,0,0,0,16677377,9,'VirtualBox mouse integration'
+7,6,292,136,0,0,0,16677385,9,'VirtualBox mouse integration'
+7,6,291,136,0,0,0,16677393,9,'VirtualBox mouse integration'
+7,6,289,136,0,0,0,16677401,9,'VirtualBox mouse integration'
+7,6,287,136,0,0,0,16677409,9,'VirtualBox mouse integration'
+7,6,285,137,0,0,0,16677417,9,'VirtualBox mouse integration'
+7,6,285,139,0,0,0,16677425,9,'VirtualBox mouse integration'
+7,6,283,140,0,0,0,16677433,9,'VirtualBox mouse integration'
+7,6,281,142,0,0,0,16677441,9,'VirtualBox mouse integration'
+7,6,280,144,0,0,0,16677449,9,'VirtualBox mouse integration'
+7,6,279,146,0,0,0,16677457,9,'VirtualBox mouse integration'
+7,6,278,148,0,0,0,16677465,9,'VirtualBox mouse integration'
+7,6,278,149,0,0,0,16677473,9,'VirtualBox mouse integration'
+7,6,277,150,0,0,0,16677481,9,'VirtualBox mouse integration'
+7,6,277,151,0,0,0,16677489,9,'VirtualBox mouse integration'
+7,6,276,153,0,0,0,16677497,9,'VirtualBox mouse integration'
+7,6,276,155,0,0,0,16677505,9,'VirtualBox mouse integration'
+7,6,276,156,0,0,0,16677513,9,'VirtualBox mouse integration'
+7,6,275,158,0,0,0,16677521,9,'VirtualBox mouse integration'
+7,6,275,161,0,0,0,16677529,9,'VirtualBox mouse integration'
+7,6,275,163,0,0,0,16677537,9,'VirtualBox mouse integration'
+7,6,275,165,0,0,0,16677545,9,'VirtualBox mouse integration'
+7,6,274,167,0,0,0,16677553,9,'VirtualBox mouse integration'
+7,6,274,169,0,0,0,16677561,9,'VirtualBox mouse integration'
+7,6,274,171,0,0,0,16677569,9,'VirtualBox mouse integration'
+7,6,274,172,0,0,0,16677577,9,'VirtualBox mouse integration'
+7,6,274,173,0,0,0,16677585,9,'VirtualBox mouse integration'
+7,6,274,175,0,0,0,16677593,9,'VirtualBox mouse integration'
+7,6,274,177,0,0,0,16677601,9,'VirtualBox mouse integration'
+7,6,274,179,0,0,0,16677609,9,'VirtualBox mouse integration'
+7,6,274,181,0,0,0,16677617,9,'VirtualBox mouse integration'
+7,6,274,183,0,0,0,16677625,9,'VirtualBox mouse integration'
+7,6,274,184,0,0,0,16677633,9,'VirtualBox mouse integration'
+7,6,274,186,0,0,0,16677641,9,'VirtualBox mouse integration'
+7,6,274,188,0,0,0,16677649,9,'VirtualBox mouse integration'
+7,6,274,190,0,0,0,16677657,9,'VirtualBox mouse integration'
+7,6,274,192,0,0,0,16677665,9,'VirtualBox mouse integration'
+7,6,274,194,0,0,0,16677673,9,'VirtualBox mouse integration'
+7,6,274,195,0,0,0,16677681,9,'VirtualBox mouse integration'
+7,6,274,197,0,0,0,16677689,9,'VirtualBox mouse integration'
+7,6,274,198,0,0,0,16677697,9,'VirtualBox mouse integration'
+7,6,274,199,0,0,0,16677713,9,'VirtualBox mouse integration'
+7,6,274,200,0,0,0,16677721,9,'VirtualBox mouse integration'
+7,6,274,201,0,0,0,16677729,9,'VirtualBox mouse integration'
+7,6,274,202,0,0,0,16677737,9,'VirtualBox mouse integration'
+7,6,275,203,0,0,0,16677745,9,'VirtualBox mouse integration'
+7,6,276,203,0,0,0,16677753,9,'VirtualBox mouse integration'
+7,6,276,204,0,0,0,16677761,9,'VirtualBox mouse integration'
+7,6,276,205,0,0,0,16677769,9,'VirtualBox mouse integration'
+7,6,276,207,0,0,0,16677785,9,'VirtualBox mouse integration'
+7,6,277,208,0,0,0,16677793,9,'VirtualBox mouse integration'
+7,6,278,209,0,0,0,16677801,9,'VirtualBox mouse integration'
+7,6,278,211,0,0,0,16677817,9,'VirtualBox mouse integration'
+7,6,278,212,0,0,0,16677825,9,'VirtualBox mouse integration'
+7,6,278,213,0,0,0,16677833,9,'VirtualBox mouse integration'
+7,6,279,213,0,0,0,16677841,9,'VirtualBox mouse integration'
+7,6,280,214,0,0,0,16677849,9,'VirtualBox mouse integration'
+7,6,280,215,0,0,0,16677881,9,'VirtualBox mouse integration'
+7,6,281,216,0,0,0,16677889,9,'VirtualBox mouse integration'
+7,6,281,217,0,0,0,16677897,9,'VirtualBox mouse integration'
+7,6,282,217,0,0,0,16677905,9,'VirtualBox mouse integration'
+7,6,282,219,0,0,0,16677921,9,'VirtualBox mouse integration'
+7,6,283,220,0,0,0,16677929,9,'VirtualBox mouse integration'
+7,6,283,221,0,0,0,16677937,9,'VirtualBox mouse integration'
+7,6,284,221,0,0,0,16677953,9,'VirtualBox mouse integration'
+7,6,284,222,0,0,0,16677969,9,'VirtualBox mouse integration'
+7,6,285,222,0,0,0,16677977,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16678334,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16678334,2,Virtual core pointer
+7,5,0,0,1,0,0,16678503,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16678503,2,Virtual core pointer
+0,21,0,0,0,0,0,16678544
+NEW-WINDOW:640,448:62915096,62915096,34464733,0,0,0:36x74+500+71:0,0:
+0,21,0,0,0,0,0,16678544
+0,21,0,0,0,0,0,16678544
+0,21,0,0,0,0,0,16678544
+0,21,0,0,0,0,0,16678625
+NEW-WINDOW:640,406:62915096,62915096,701,640,406,0:640x406+500+71:0,0:Tree Leaf
+0,21,0,0,0,0,0,16678625
+0,21,0,0,0,0,0,16678625
+0,21,0,0,0,0,0,16678625
+0,21,0,0,0,0,0,16678625
+7,6,285,223,0,0,0,16679498,9,'VirtualBox mouse integration'
+7,6,284,221,0,0,0,16679506,9,'VirtualBox mouse integration'
+7,6,283,220,0,0,0,16679514,9,'VirtualBox mouse integration'
+7,6,282,218,0,0,0,16679522,9,'VirtualBox mouse integration'
+7,6,281,216,0,0,0,16679530,9,'VirtualBox mouse integration'
+7,6,280,214,0,0,0,16679538,9,'VirtualBox mouse integration'
+7,6,279,213,0,0,0,16679546,9,'VirtualBox mouse integration'
+7,6,279,211,0,0,0,16679554,9,'VirtualBox mouse integration'
+7,6,278,209,0,0,0,16679562,9,'VirtualBox mouse integration'
+7,6,277,209,0,0,0,16679570,9,'VirtualBox mouse integration'
+7,6,277,207,0,0,0,16679578,9,'VirtualBox mouse integration'
+7,6,276,206,0,0,0,16679586,9,'VirtualBox mouse integration'
+7,6,275,203,0,0,0,16679594,9,'VirtualBox mouse integration'
+7,6,274,201,0,0,0,16679602,9,'VirtualBox mouse integration'
+7,6,272,199,0,0,0,16679610,9,'VirtualBox mouse integration'
+7,6,272,197,0,0,0,16679618,9,'VirtualBox mouse integration'
+7,6,270,194,0,0,0,16679626,9,'VirtualBox mouse integration'
+7,6,269,192,0,0,0,16679634,9,'VirtualBox mouse integration'
+7,6,268,191,0,0,0,16679642,9,'VirtualBox mouse integration'
+7,6,267,190,0,0,0,16679650,9,'VirtualBox mouse integration'
+7,6,266,188,0,0,0,16679658,9,'VirtualBox mouse integration'
+7,6,265,186,0,0,0,16679666,9,'VirtualBox mouse integration'
+7,6,264,184,0,0,0,16679674,9,'VirtualBox mouse integration'
+7,6,262,181,0,0,0,16679682,9,'VirtualBox mouse integration'
+7,6,261,178,0,0,0,16679690,9,'VirtualBox mouse integration'
+7,6,260,176,0,0,0,16679698,9,'VirtualBox mouse integration'
+7,6,258,174,0,0,0,16679706,9,'VirtualBox mouse integration'
+7,6,257,172,0,0,0,16679714,9,'VirtualBox mouse integration'
+7,6,256,171,0,0,0,16679722,9,'VirtualBox mouse integration'
+7,6,255,169,0,0,0,16679730,9,'VirtualBox mouse integration'
+7,6,253,167,0,0,0,16679738,9,'VirtualBox mouse integration'
+7,6,253,163,0,0,0,16679746,9,'VirtualBox mouse integration'
+7,6,251,161,0,0,0,16679754,9,'VirtualBox mouse integration'
+7,6,249,159,0,0,0,16679762,9,'VirtualBox mouse integration'
+7,6,249,157,0,0,0,16679770,9,'VirtualBox mouse integration'
+7,6,247,155,0,0,0,16679778,9,'VirtualBox mouse integration'
+7,6,246,153,0,0,0,16679786,9,'VirtualBox mouse integration'
+7,6,245,152,0,0,0,16679794,9,'VirtualBox mouse integration'
+7,6,244,151,0,0,0,16679802,9,'VirtualBox mouse integration'
+7,6,244,149,0,0,0,16679811,9,'VirtualBox mouse integration'
+7,6,243,148,0,0,0,16679818,9,'VirtualBox mouse integration'
+7,6,242,147,0,0,0,16679826,9,'VirtualBox mouse integration'
+7,6,241,145,0,0,0,16679834,9,'VirtualBox mouse integration'
+7,6,240,144,0,0,0,16679842,9,'VirtualBox mouse integration'
+7,6,240,143,0,0,0,16680115,9,'VirtualBox mouse integration'
+7,6,240,142,0,0,0,16680123,9,'VirtualBox mouse integration'
+7,6,240,141,0,0,0,16680179,9,'VirtualBox mouse integration'
+7,6,240,140,0,0,0,16680187,9,'VirtualBox mouse integration'
+7,6,240,139,0,0,0,16680211,9,'VirtualBox mouse integration'
+7,6,240,138,0,0,0,16680219,9,'VirtualBox mouse integration'
+7,6,240,137,0,0,0,16680235,9,'VirtualBox mouse integration'
+7,6,239,136,0,0,0,16680243,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16680582,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16680582,2,Virtual core pointer
+7,5,0,0,1,0,0,16680712,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16680712,2,Virtual core pointer
+7,4,0,0,1,0,0,16680830,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16680830,2,Virtual core pointer
+7,5,0,0,1,0,0,16680960,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16680960,2,Virtual core pointer
+7,4,0,0,1,0,0,16681096,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16681096,2,Virtual core pointer
+7,5,0,0,1,0,0,16681288,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16681288,2,Virtual core pointer
+7,2,0,0,0,40,0,16682606,11,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,16682606,3,Virtual core keyboard
+7,3,0,0,0,40,0,16682671,11,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,16682671,3,Virtual core keyboard
+7,2,0,0,0,31,0,16682686,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,16682686,3,Virtual core keyboard
+7,3,0,0,0,31,0,16682750,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,16682750,3,Virtual core keyboard
+7,2,0,0,0,27,0,16682866,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,16682866,3,Virtual core keyboard
+7,3,0,0,0,27,0,16682931,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,16682931,3,Virtual core keyboard
+7,2,0,0,0,26,0,16683062,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16683062,3,Virtual core keyboard
+7,3,0,0,0,26,0,16683122,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16683122,3,Virtual core keyboard
+7,2,0,0,0,54,0,16683277,11,AT Translated Set 2 keyboard
+6,2,0,0,0,54,0,16683277,3,Virtual core keyboard
+7,3,0,0,0,54,0,16683341,11,AT Translated Set 2 keyboard
+6,3,0,0,0,54,0,16683341,3,Virtual core keyboard
+7,2,0,0,0,28,0,16683571,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,16683571,3,Virtual core keyboard
+7,3,0,0,0,28,0,16683631,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,16683631,3,Virtual core keyboard
+7,2,0,0,0,26,0,16683801,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16683801,3,Virtual core keyboard
+7,3,0,0,0,26,0,16683862,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16683862,3,Virtual core keyboard
+7,2,0,0,0,40,0,16684024,11,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,16684025,3,Virtual core keyboard
+7,3,0,0,0,40,0,16684089,11,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,16684089,3,Virtual core keyboard
+7,2,0,0,0,65,0,16684262,11,AT Translated Set 2 keyboard
+6,2,0,0,0,65,0,16684262,3,Virtual core keyboard
+7,3,0,0,0,65,0,16684332,11,AT Translated Set 2 keyboard
+6,3,0,0,0,65,0,16684332,3,Virtual core keyboard
+7,2,0,0,0,28,0,16684601,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,16684601,3,Virtual core keyboard
+7,3,0,0,0,28,0,16684675,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,16684675,3,Virtual core keyboard
+7,2,0,0,0,27,0,16684858,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,16684858,3,Virtual core keyboard
+7,3,0,0,0,27,0,16684918,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,16684918,3,Virtual core keyboard
+7,2,0,0,0,26,0,16685119,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16685120,3,Virtual core keyboard
+7,3,0,0,0,26,0,16685170,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16685170,3,Virtual core keyboard
+7,2,0,0,0,26,0,16685266,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16685266,3,Virtual core keyboard
+7,3,0,0,0,26,0,16685333,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16685333,3,Virtual core keyboard
+7,6,239,135,0,0,0,16686598,9,'VirtualBox mouse integration'
+7,6,239,137,0,0,0,16686605,9,'VirtualBox mouse integration'
+7,6,239,138,0,0,0,16686614,9,'VirtualBox mouse integration'
+7,6,240,140,0,0,0,16686622,9,'VirtualBox mouse integration'
+7,6,241,142,0,0,0,16686630,9,'VirtualBox mouse integration'
+7,6,242,144,0,0,0,16686638,9,'VirtualBox mouse integration'
+7,6,242,148,0,0,0,16686646,9,'VirtualBox mouse integration'
+7,6,244,150,0,0,0,16686654,9,'VirtualBox mouse integration'
+7,6,244,153,0,0,0,16686661,9,'VirtualBox mouse integration'
+7,6,246,155,0,0,0,16686669,9,'VirtualBox mouse integration'
+7,6,246,158,0,0,0,16686677,9,'VirtualBox mouse integration'
+7,6,248,160,0,0,0,16686686,9,'VirtualBox mouse integration'
+7,6,249,162,0,0,0,16686693,9,'VirtualBox mouse integration'
+7,6,250,163,0,0,0,16686702,9,'VirtualBox mouse integration'
+7,6,250,165,0,0,0,16686710,9,'VirtualBox mouse integration'
+7,6,252,167,0,0,0,16686718,9,'VirtualBox mouse integration'
+7,6,253,169,0,0,0,16686726,9,'VirtualBox mouse integration'
+7,6,255,173,0,0,0,16686734,9,'VirtualBox mouse integration'
+7,6,256,175,0,0,0,16686742,9,'VirtualBox mouse integration'
+7,6,258,177,0,0,0,16686750,9,'VirtualBox mouse integration'
+7,6,260,180,0,0,0,16686758,9,'VirtualBox mouse integration'
+7,6,262,182,0,0,0,16686766,9,'VirtualBox mouse integration'
+7,6,263,184,0,0,0,16686774,9,'VirtualBox mouse integration'
+7,6,265,185,0,0,0,16686782,9,'VirtualBox mouse integration'
+7,6,267,187,0,0,0,16686790,9,'VirtualBox mouse integration'
+7,6,269,189,0,0,0,16686798,9,'VirtualBox mouse integration'
+7,6,270,190,0,0,0,16686806,9,'VirtualBox mouse integration'
+7,6,270,191,0,0,0,16686814,9,'VirtualBox mouse integration'
+7,6,271,191,0,0,0,16686822,9,'VirtualBox mouse integration'
+7,6,272,193,0,0,0,16686830,9,'VirtualBox mouse integration'
+7,6,273,193,0,0,0,16686838,9,'VirtualBox mouse integration'
+7,6,274,195,0,0,0,16686846,9,'VirtualBox mouse integration'
+7,6,275,195,0,0,0,16686854,9,'VirtualBox mouse integration'
+7,6,276,196,0,0,0,16686862,9,'VirtualBox mouse integration'
+7,6,277,197,0,0,0,16686870,9,'VirtualBox mouse integration'
+7,6,278,197,0,0,0,16686878,9,'VirtualBox mouse integration'
+7,6,278,198,0,0,0,16686886,9,'VirtualBox mouse integration'
+7,6,279,199,0,0,0,16686894,9,'VirtualBox mouse integration'
+7,6,280,200,0,0,0,16686902,9,'VirtualBox mouse integration'
+7,6,282,201,0,0,0,16686910,9,'VirtualBox mouse integration'
+7,6,283,202,0,0,0,16686918,9,'VirtualBox mouse integration'
+7,6,284,204,0,0,0,16686926,9,'VirtualBox mouse integration'
+7,6,285,204,0,0,0,16686934,9,'VirtualBox mouse integration'
+7,6,286,206,0,0,0,16686942,9,'VirtualBox mouse integration'
+7,6,288,207,0,0,0,16686950,9,'VirtualBox mouse integration'
+7,6,288,208,0,0,0,16686958,9,'VirtualBox mouse integration'
+7,6,290,208,0,0,0,16686966,9,'VirtualBox mouse integration'
+7,6,290,209,0,0,0,16686974,9,'VirtualBox mouse integration'
+7,6,291,209,0,0,0,16686982,9,'VirtualBox mouse integration'
+7,6,292,211,0,0,0,16686990,9,'VirtualBox mouse integration'
+7,6,293,211,0,0,0,16686998,9,'VirtualBox mouse integration'
+7,6,294,211,0,0,0,16687006,9,'VirtualBox mouse integration'
+7,6,294,212,0,0,0,16687014,9,'VirtualBox mouse integration'
+7,6,295,212,0,0,0,16687022,9,'VirtualBox mouse integration'
+7,6,296,213,0,0,0,16687030,9,'VirtualBox mouse integration'
+7,6,297,213,0,0,0,16687038,9,'VirtualBox mouse integration'
+7,6,298,213,0,0,0,16687046,9,'VirtualBox mouse integration'
+7,6,298,214,0,0,0,16687062,9,'VirtualBox mouse integration'
+7,6,299,214,0,0,0,16687078,9,'VirtualBox mouse integration'
+7,6,300,214,0,0,0,16687101,9,'VirtualBox mouse integration'
+7,6,301,215,0,0,0,16687101,9,'VirtualBox mouse integration'
+7,6,302,217,0,0,0,16687109,9,'VirtualBox mouse integration'
+7,6,304,217,0,0,0,16687118,9,'VirtualBox mouse integration'
+7,6,306,218,0,0,0,16687126,9,'VirtualBox mouse integration'
+7,6,308,219,0,0,0,16687134,9,'VirtualBox mouse integration'
+7,6,309,220,0,0,0,16687142,9,'VirtualBox mouse integration'
+7,6,310,221,0,0,0,16687150,9,'VirtualBox mouse integration'
+7,6,311,221,0,0,0,16687182,9,'VirtualBox mouse integration'
+7,6,312,221,0,0,0,16687190,9,'VirtualBox mouse integration'
+7,6,313,222,0,0,0,16687198,9,'VirtualBox mouse integration'
+7,6,313,223,0,0,0,16687206,9,'VirtualBox mouse integration'
+7,6,314,223,0,0,0,16687214,9,'VirtualBox mouse integration'
+7,6,315,223,0,0,0,16687222,9,'VirtualBox mouse integration'
+7,6,316,223,0,0,0,16687286,9,'VirtualBox mouse integration'
+7,6,316,224,0,0,0,16687294,9,'VirtualBox mouse integration'
+7,6,317,225,0,0,0,16687302,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16687746,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16687746,2,Virtual core pointer
+7,5,0,0,1,0,0,16687931,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16687931,2,Virtual core pointer
+0,21,0,0,0,0,0,16687989
+NEW-WINDOW:640,448:62915328,62915328,34466576,0,0,0:36x74+500+71:0,0:
+0,21,0,0,0,0,0,16687989
+0,21,0,0,0,0,0,16687989
+0,21,0,0,0,0,0,16687989
+0,21,0,0,0,0,0,16688058
+NEW-WINDOW:-2027802432,21986:62915328,62915328,701,640,406,0:-64829648x32766+-1580394868+32608:-2027796896,-2027796896:
+0,21,0,0,0,0,0,16688058
+0,21,0,0,0,0,0,16688058
+0,21,0,0,0,0,0,16688058
+0,21,0,0,0,0,0,16688058
+0,21,0,0,0,0,0,16688088
+NEW-WINDOW:661,433:62915342,62915342,34467126,0,0,0:36x74+459+100:0,0:Tulip test result
+0,21,0,0,0,0,0,16688088
+0,21,0,0,0,0,0,16688088
+0,21,0,0,0,0,0,16688088
+7,6,318,225,0,0,0,16688215,9,'VirtualBox mouse integration'
+7,6,318,226,0,0,0,16688415,9,'VirtualBox mouse integration'
+7,6,318,227,0,0,0,16688423,9,'VirtualBox mouse integration'
+7,6,318,228,0,0,0,16688431,9,'VirtualBox mouse integration'
+7,6,320,230,0,0,0,16688439,9,'VirtualBox mouse integration'
+7,6,320,232,0,0,0,16688447,9,'VirtualBox mouse integration'
+7,6,320,234,0,0,0,16688455,9,'VirtualBox mouse integration'
+7,6,321,236,0,0,0,16688463,9,'VirtualBox mouse integration'
+7,6,322,239,0,0,0,16688471,9,'VirtualBox mouse integration'
+7,6,324,241,0,0,0,16688479,9,'VirtualBox mouse integration'
+7,6,324,244,0,0,0,16688486,9,'VirtualBox mouse integration'
+7,6,326,246,0,0,0,16688494,9,'VirtualBox mouse integration'
+7,6,327,248,0,0,0,16688502,9,'VirtualBox mouse integration'
+7,6,328,252,0,0,0,16688510,9,'VirtualBox mouse integration'
+7,6,329,254,0,0,0,16688518,9,'VirtualBox mouse integration'
+7,6,331,257,0,0,0,16688527,9,'VirtualBox mouse integration'
+7,6,332,260,0,0,0,16688534,9,'VirtualBox mouse integration'
+7,6,334,263,0,0,0,16688543,9,'VirtualBox mouse integration'
+7,6,335,265,0,0,0,16688551,9,'VirtualBox mouse integration'
+7,6,336,267,0,0,0,16688559,9,'VirtualBox mouse integration'
+7,6,338,271,0,0,0,16688567,9,'VirtualBox mouse integration'
+7,6,340,275,0,0,0,16688575,9,'VirtualBox mouse integration'
+7,6,342,279,0,0,0,16688583,9,'VirtualBox mouse integration'
+7,6,345,283,0,0,0,16688591,9,'VirtualBox mouse integration'
+7,6,347,287,0,0,0,16688599,9,'VirtualBox mouse integration'
+7,6,350,291,0,0,0,16688607,9,'VirtualBox mouse integration'
+7,6,352,296,0,0,0,16688615,9,'VirtualBox mouse integration'
+7,6,354,299,0,0,0,16688623,9,'VirtualBox mouse integration'
+7,6,356,302,0,0,0,16688631,9,'VirtualBox mouse integration'
+7,6,358,305,0,0,0,16688639,9,'VirtualBox mouse integration'
+7,6,362,308,0,0,0,16688647,9,'VirtualBox mouse integration'
+7,6,362,309,0,0,0,16688655,9,'VirtualBox mouse integration'
+7,6,365,313,0,0,0,16688663,9,'VirtualBox mouse integration'
+7,6,368,316,0,0,0,16688671,9,'VirtualBox mouse integration'
+7,6,372,320,0,0,0,16688679,9,'VirtualBox mouse integration'
+7,6,379,328,0,0,0,16688687,9,'VirtualBox mouse integration'
+7,6,383,332,0,0,0,16688694,9,'VirtualBox mouse integration'
+7,6,390,336,0,0,0,16688703,9,'VirtualBox mouse integration'
+7,6,398,341,0,0,0,16688711,9,'VirtualBox mouse integration'
+7,6,405,347,0,0,0,16688719,9,'VirtualBox mouse integration'
+7,6,412,351,0,0,0,16688727,9,'VirtualBox mouse integration'
+7,6,420,355,0,0,0,16688735,9,'VirtualBox mouse integration'
+7,6,427,359,0,0,0,16688743,9,'VirtualBox mouse integration'
+7,6,433,363,0,0,0,16688751,9,'VirtualBox mouse integration'
+7,6,439,367,0,0,0,16688759,9,'VirtualBox mouse integration'
+7,6,444,369,0,0,0,16688767,9,'VirtualBox mouse integration'
+7,6,450,371,0,0,0,16688775,9,'VirtualBox mouse integration'
+7,6,454,373,0,0,0,16688783,9,'VirtualBox mouse integration'
+7,6,458,375,0,0,0,16688791,9,'VirtualBox mouse integration'
+7,6,462,376,0,0,0,16688799,9,'VirtualBox mouse integration'
+7,6,466,378,0,0,0,16688807,9,'VirtualBox mouse integration'
+7,6,468,379,0,0,0,16688815,9,'VirtualBox mouse integration'
+7,6,470,379,0,0,0,16688823,9,'VirtualBox mouse integration'
+7,6,471,380,0,0,0,16688831,9,'VirtualBox mouse integration'
+7,6,474,381,0,0,0,16688839,9,'VirtualBox mouse integration'
+7,6,476,381,0,0,0,16688847,9,'VirtualBox mouse integration'
+7,6,478,383,0,0,0,16688855,9,'VirtualBox mouse integration'
+7,6,480,384,0,0,0,16688863,9,'VirtualBox mouse integration'
+7,6,484,385,0,0,0,16688871,9,'VirtualBox mouse integration'
+7,6,486,386,0,0,0,16688879,9,'VirtualBox mouse integration'
+7,6,489,388,0,0,0,16688887,9,'VirtualBox mouse integration'
+7,6,492,389,0,0,0,16688895,9,'VirtualBox mouse integration'
+7,6,496,391,0,0,0,16688903,9,'VirtualBox mouse integration'
+7,6,497,391,0,0,0,16688911,9,'VirtualBox mouse integration'
+7,6,501,393,0,0,0,16688919,9,'VirtualBox mouse integration'
+7,6,505,395,0,0,0,16688927,9,'VirtualBox mouse integration'
+7,6,508,396,0,0,0,16688935,9,'VirtualBox mouse integration'
+7,6,511,396,0,0,0,16688943,9,'VirtualBox mouse integration'
+7,6,514,398,0,0,0,16688951,9,'VirtualBox mouse integration'
+7,6,515,398,0,0,0,16688959,9,'VirtualBox mouse integration'
+7,6,519,399,0,0,0,16688967,9,'VirtualBox mouse integration'
+7,6,522,401,0,0,0,16688975,9,'VirtualBox mouse integration'
+7,6,525,403,0,0,0,16688983,9,'VirtualBox mouse integration'
+7,6,528,404,0,0,0,16688991,9,'VirtualBox mouse integration'
+7,6,531,405,0,0,0,16688999,9,'VirtualBox mouse integration'
+7,6,534,405,0,0,0,16689007,9,'VirtualBox mouse integration'
+7,6,536,407,0,0,0,16689015,9,'VirtualBox mouse integration'
+7,6,539,407,0,0,0,16689022,9,'VirtualBox mouse integration'
+7,6,542,409,0,0,0,16689031,9,'VirtualBox mouse integration'
+7,6,546,410,0,0,0,16689039,9,'VirtualBox mouse integration'
+7,6,550,411,0,0,0,16689047,9,'VirtualBox mouse integration'
+7,6,555,413,0,0,0,16689055,9,'VirtualBox mouse integration'
+7,6,562,415,0,0,0,16689063,9,'VirtualBox mouse integration'
+7,6,566,416,0,0,0,16689071,9,'VirtualBox mouse integration'
+7,6,574,419,0,0,0,16689079,9,'VirtualBox mouse integration'
+7,6,583,421,0,0,0,16689087,9,'VirtualBox mouse integration'
+7,6,592,424,0,0,0,16689095,9,'VirtualBox mouse integration'
+7,6,601,428,0,0,0,16689103,9,'VirtualBox mouse integration'
+7,6,611,432,0,0,0,16689111,9,'VirtualBox mouse integration'
+7,6,620,437,0,0,0,16689119,9,'VirtualBox mouse integration'
+7,6,628,441,0,0,0,16689127,9,'VirtualBox mouse integration'
+7,6,643,445,0,0,0,16689135,9,'VirtualBox mouse integration'
+7,6,655,450,0,0,0,16689143,9,'VirtualBox mouse integration'
+7,6,664,454,0,0,0,16689151,9,'VirtualBox mouse integration'
+7,6,672,456,0,0,0,16689159,9,'VirtualBox mouse integration'
+7,6,680,458,0,0,0,16689167,9,'VirtualBox mouse integration'
+7,6,688,463,0,0,0,16689175,9,'VirtualBox mouse integration'
+7,6,697,465,0,0,0,16689183,9,'VirtualBox mouse integration'
+7,6,703,465,0,0,0,16689190,9,'VirtualBox mouse integration'
+7,6,708,466,0,0,0,16689198,9,'VirtualBox mouse integration'
+7,6,710,466,0,0,0,16689206,9,'VirtualBox mouse integration'
+7,6,714,468,0,0,0,16689214,9,'VirtualBox mouse integration'
+7,6,715,468,0,0,0,16689222,9,'VirtualBox mouse integration'
+7,6,719,470,0,0,0,16689230,9,'VirtualBox mouse integration'
+7,6,723,470,0,0,0,16689238,9,'VirtualBox mouse integration'
+7,6,729,472,0,0,0,16689246,9,'VirtualBox mouse integration'
+7,6,732,473,0,0,0,16689254,9,'VirtualBox mouse integration'
+7,6,735,473,0,0,0,16689262,9,'VirtualBox mouse integration'
+7,6,738,474,0,0,0,16689271,9,'VirtualBox mouse integration'
+7,6,742,475,0,0,0,16689278,9,'VirtualBox mouse integration'
+7,6,745,477,0,0,0,16689286,9,'VirtualBox mouse integration'
+7,6,750,478,0,0,0,16689295,9,'VirtualBox mouse integration'
+7,6,752,479,0,0,0,16689302,9,'VirtualBox mouse integration'
+7,6,756,481,0,0,0,16689310,9,'VirtualBox mouse integration'
+7,6,758,481,0,0,0,16689318,9,'VirtualBox mouse integration'
+7,6,760,481,0,0,0,16689327,9,'VirtualBox mouse integration'
+7,6,764,483,0,0,0,16689334,9,'VirtualBox mouse integration'
+7,6,766,484,0,0,0,16689343,9,'VirtualBox mouse integration'
+7,6,769,486,0,0,0,16689351,9,'VirtualBox mouse integration'
+7,6,773,487,0,0,0,16689359,9,'VirtualBox mouse integration'
+7,6,777,488,0,0,0,16689367,9,'VirtualBox mouse integration'
+7,6,780,490,0,0,0,16689375,9,'VirtualBox mouse integration'
+7,6,781,490,0,0,0,16689383,9,'VirtualBox mouse integration'
+7,6,785,491,0,0,0,16689391,9,'VirtualBox mouse integration'
+7,6,787,492,0,0,0,16689399,9,'VirtualBox mouse integration'
+7,6,787,491,0,0,0,16689407,9,'VirtualBox mouse integration'
+7,6,787,490,0,0,0,16689447,9,'VirtualBox mouse integration'
+7,6,787,488,0,0,0,16689463,9,'VirtualBox mouse integration'
+7,6,787,487,0,0,0,16689471,9,'VirtualBox mouse integration'
+7,6,787,486,0,0,0,16689479,9,'VirtualBox mouse integration'
+7,6,787,485,0,0,0,16689487,9,'VirtualBox mouse integration'
+7,6,787,484,0,0,0,16689495,9,'VirtualBox mouse integration'
+7,6,787,483,0,0,0,16689535,9,'VirtualBox mouse integration'
+7,6,787,482,0,0,0,16689543,9,'VirtualBox mouse integration'
+7,6,787,481,0,0,0,16689551,9,'VirtualBox mouse integration'
+7,6,786,479,0,0,0,16689567,9,'VirtualBox mouse integration'
+7,6,784,477,0,0,0,16689583,9,'VirtualBox mouse integration'
+7,6,783,475,0,0,0,16689591,9,'VirtualBox mouse integration'
+7,6,782,475,0,0,0,16689599,9,'VirtualBox mouse integration'
+7,6,781,474,0,0,0,16689607,9,'VirtualBox mouse integration'
+7,6,780,474,0,0,0,16689615,9,'VirtualBox mouse integration'
+7,6,780,473,0,0,0,16689623,9,'VirtualBox mouse integration'
+7,6,778,472,0,0,0,16689631,9,'VirtualBox mouse integration'
+7,6,777,470,0,0,0,16689639,9,'VirtualBox mouse integration'
+7,6,776,470,0,0,0,16689647,9,'VirtualBox mouse integration'
+7,6,775,468,0,0,0,16689655,9,'VirtualBox mouse integration'
+7,6,774,468,0,0,0,16689663,9,'VirtualBox mouse integration'
+7,6,773,467,0,0,0,16689671,9,'VirtualBox mouse integration'
+7,6,772,467,0,0,0,16689679,9,'VirtualBox mouse integration'
+7,6,770,465,0,0,0,16689687,9,'VirtualBox mouse integration'
+7,6,769,463,0,0,0,16689695,9,'VirtualBox mouse integration'
+7,6,769,464,0,0,0,16689703,9,'VirtualBox mouse integration'
+7,6,767,463,0,0,0,16689711,9,'VirtualBox mouse integration'
+7,6,766,461,0,0,0,16689719,9,'VirtualBox mouse integration'
+7,6,765,461,0,0,0,16689727,9,'VirtualBox mouse integration'
+7,6,763,461,0,0,0,16689735,9,'VirtualBox mouse integration'
+7,6,762,459,0,0,0,16689743,9,'VirtualBox mouse integration'
+7,6,760,459,0,0,0,16689751,9,'VirtualBox mouse integration'
+7,6,758,459,0,0,0,16689759,9,'VirtualBox mouse integration'
+7,6,755,457,0,0,0,16689767,9,'VirtualBox mouse integration'
+7,6,754,457,0,0,0,16689775,9,'VirtualBox mouse integration'
+7,6,753,457,0,0,0,16689783,9,'VirtualBox mouse integration'
+7,6,752,457,0,0,0,16689791,9,'VirtualBox mouse integration'
+7,6,752,458,0,0,0,16689799,9,'VirtualBox mouse integration'
+7,6,751,458,0,0,0,16689807,9,'VirtualBox mouse integration'
+7,6,751,457,0,0,0,16689815,9,'VirtualBox mouse integration'
+7,6,750,457,0,0,0,16689823,9,'VirtualBox mouse integration'
+7,6,749,456,0,0,0,16689831,9,'VirtualBox mouse integration'
+7,6,748,456,0,0,0,16689839,9,'VirtualBox mouse integration'
+7,6,747,455,0,0,0,16689847,9,'VirtualBox mouse integration'
+7,6,746,455,0,0,0,16689855,9,'VirtualBox mouse integration'
+7,6,745,455,0,0,0,16689879,9,'VirtualBox mouse integration'
+7,6,744,455,0,0,0,16689887,9,'VirtualBox mouse integration'
+7,6,743,455,0,0,0,16689903,9,'VirtualBox mouse integration'
+7,6,743,456,0,0,0,16689911,9,'VirtualBox mouse integration'
+7,6,743,457,0,0,0,16689919,9,'VirtualBox mouse integration'
+7,6,741,457,0,0,0,16689943,9,'VirtualBox mouse integration'
+7,6,740,457,0,0,0,16689951,9,'VirtualBox mouse integration'
+7,6,739,457,0,0,0,16689959,9,'VirtualBox mouse integration'
+7,6,738,457,0,0,0,16689967,9,'VirtualBox mouse integration'
+7,6,737,457,0,0,0,16689991,9,'VirtualBox mouse integration'
+7,6,736,457,0,0,0,16689999,9,'VirtualBox mouse integration'
+7,6,735,457,0,0,0,16690007,9,'VirtualBox mouse integration'
+7,6,734,457,0,0,0,16690015,9,'VirtualBox mouse integration'
+7,6,733,457,0,0,0,16690023,9,'VirtualBox mouse integration'
+7,6,732,457,0,0,0,16690039,9,'VirtualBox mouse integration'
+7,6,731,457,0,0,0,16690079,9,'VirtualBox mouse integration'
+7,6,730,457,0,0,0,16690087,9,'VirtualBox mouse integration'
+7,6,729,457,0,0,0,16690111,9,'VirtualBox mouse integration'
+7,6,728,457,0,0,0,16690119,9,'VirtualBox mouse integration'
+7,6,727,457,0,0,0,16690175,9,'VirtualBox mouse integration'
+7,6,726,457,0,0,0,16690183,9,'VirtualBox mouse integration'
+7,6,725,456,0,0,0,16690200,9,'VirtualBox mouse integration'
+7,6,725,455,0,0,0,16690248,9,'VirtualBox mouse integration'
+7,6,724,455,0,0,0,16690391,9,'VirtualBox mouse integration'
+7,6,723,455,0,0,0,16690400,9,'VirtualBox mouse integration'
+7,6,723,456,0,0,0,16690591,9,'VirtualBox mouse integration'
+7,6,722,456,0,0,0,16691008,9,'VirtualBox mouse integration'
+7,6,722,455,0,0,0,16691016,9,'VirtualBox mouse integration'
+7,6,723,455,0,0,0,16691096,9,'VirtualBox mouse integration'
+7,6,724,455,0,0,0,16691104,9,'VirtualBox mouse integration'
+7,6,724,454,0,0,0,16691112,9,'VirtualBox mouse integration'
+7,6,725,454,0,0,0,16691128,9,'VirtualBox mouse integration'
+7,6,725,453,0,0,0,16691248,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16691692,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16691692,2,Virtual core pointer
+7,6,726,453,0,0,0,16691914,9,'VirtualBox mouse integration'
+7,6,727,453,0,0,0,16691921,9,'VirtualBox mouse integration'
+7,6,728,453,0,0,0,16691929,9,'VirtualBox mouse integration'
+7,6,728,451,0,0,0,16691937,9,'VirtualBox mouse integration'
+7,6,728,450,0,0,0,16691961,9,'VirtualBox mouse integration'
+7,6,728,449,0,0,0,16691969,9,'VirtualBox mouse integration'
+7,6,729,449,0,0,0,16691977,9,'VirtualBox mouse integration'
+7,6,730,449,0,0,0,16691985,9,'VirtualBox mouse integration'
+7,6,730,448,0,0,0,16692017,9,'VirtualBox mouse integration'
+7,6,731,448,0,0,0,16692025,9,'VirtualBox mouse integration'
+7,6,731,447,0,0,0,16692033,9,'VirtualBox mouse integration'
+7,6,732,447,0,0,0,16692065,9,'VirtualBox mouse integration'
+7,6,733,447,0,0,0,16692073,9,'VirtualBox mouse integration'
+7,6,734,447,0,0,0,16692104,9,'VirtualBox mouse integration'
+7,6,735,447,0,0,0,16692129,9,'VirtualBox mouse integration'
+7,6,736,447,0,0,0,16692163,9,'VirtualBox mouse integration'
+7,6,737,447,0,0,0,16692169,9,'VirtualBox mouse integration'
+7,6,738,447,0,0,0,16692177,9,'VirtualBox mouse integration'
+7,6,739,447,0,0,0,16692185,9,'VirtualBox mouse integration'
+7,6,740,447,0,0,0,16692201,9,'VirtualBox mouse integration'
+7,6,741,447,0,0,0,16692209,9,'VirtualBox mouse integration'
+7,6,742,447,0,0,0,16692217,9,'VirtualBox mouse integration'
+7,6,743,447,0,0,0,16692225,9,'VirtualBox mouse integration'
+7,6,744,447,0,0,0,16692233,9,'VirtualBox mouse integration'
+7,6,745,447,0,0,0,16692241,9,'VirtualBox mouse integration'
+7,6,746,447,0,0,0,16692249,9,'VirtualBox mouse integration'
+7,6,747,447,0,0,0,16692257,9,'VirtualBox mouse integration'
+7,6,748,447,0,0,0,16692265,9,'VirtualBox mouse integration'
+7,6,749,447,0,0,0,16692273,9,'VirtualBox mouse integration'
+7,6,751,447,0,0,0,16692281,9,'VirtualBox mouse integration'
+7,6,752,447,0,0,0,16692289,9,'VirtualBox mouse integration'
+7,6,753,447,0,0,0,16692298,9,'VirtualBox mouse integration'
+7,6,754,447,0,0,0,16692305,9,'VirtualBox mouse integration'
+7,6,755,447,0,0,0,16692313,9,'VirtualBox mouse integration'
+7,6,756,447,0,0,0,16692321,9,'VirtualBox mouse integration'
+7,6,757,447,0,0,0,16692329,9,'VirtualBox mouse integration'
+7,6,759,447,0,0,0,16692338,9,'VirtualBox mouse integration'
+7,6,760,447,0,0,0,16692345,9,'VirtualBox mouse integration'
+7,6,761,447,0,0,0,16692353,9,'VirtualBox mouse integration'
+7,6,763,447,0,0,0,16692361,9,'VirtualBox mouse integration'
+7,6,764,447,0,0,0,16692369,9,'VirtualBox mouse integration'
+7,6,765,447,0,0,0,16692377,9,'VirtualBox mouse integration'
+7,6,766,447,0,0,0,16692385,9,'VirtualBox mouse integration'
+7,6,767,447,0,0,0,16692394,9,'VirtualBox mouse integration'
+7,6,769,447,0,0,0,16692401,9,'VirtualBox mouse integration'
+7,6,770,447,0,0,0,16692410,9,'VirtualBox mouse integration'
+7,6,771,448,0,0,0,16692418,9,'VirtualBox mouse integration'
+7,6,773,448,0,0,0,16692425,9,'VirtualBox mouse integration'
+7,6,774,448,0,0,0,16692433,9,'VirtualBox mouse integration'
+7,6,776,448,0,0,0,16692441,9,'VirtualBox mouse integration'
+7,6,778,448,0,0,0,16692450,9,'VirtualBox mouse integration'
+7,6,779,448,0,0,0,16692458,9,'VirtualBox mouse integration'
+7,6,781,449,0,0,0,16692465,9,'VirtualBox mouse integration'
+7,6,783,450,0,0,0,16692474,9,'VirtualBox mouse integration'
+7,6,784,450,0,0,0,16692481,9,'VirtualBox mouse integration'
+7,6,785,450,0,0,0,16692489,9,'VirtualBox mouse integration'
+7,6,787,450,0,0,0,16692497,9,'VirtualBox mouse integration'
+7,6,788,450,0,0,0,16692505,9,'VirtualBox mouse integration'
+7,6,789,450,0,0,0,16692513,9,'VirtualBox mouse integration'
+7,6,790,450,0,0,0,16692521,9,'VirtualBox mouse integration'
+7,6,793,450,0,0,0,16692529,9,'VirtualBox mouse integration'
+7,6,794,451,0,0,0,16692538,9,'VirtualBox mouse integration'
+7,6,796,451,0,0,0,16692545,9,'VirtualBox mouse integration'
+7,6,797,451,0,0,0,16692554,9,'VirtualBox mouse integration'
+7,6,800,451,0,0,0,16692561,9,'VirtualBox mouse integration'
+7,6,802,451,0,0,0,16692569,9,'VirtualBox mouse integration'
+7,6,804,451,0,0,0,16692578,9,'VirtualBox mouse integration'
+7,6,806,451,0,0,0,16692585,9,'VirtualBox mouse integration'
+7,6,807,451,0,0,0,16692594,9,'VirtualBox mouse integration'
+7,6,809,451,0,0,0,16692601,9,'VirtualBox mouse integration'
+7,6,811,451,0,0,0,16692609,9,'VirtualBox mouse integration'
+7,6,813,451,0,0,0,16692618,9,'VirtualBox mouse integration'
+7,6,815,451,0,0,0,16692626,9,'VirtualBox mouse integration'
+7,6,817,451,0,0,0,16692634,9,'VirtualBox mouse integration'
+7,6,818,452,0,0,0,16692641,9,'VirtualBox mouse integration'
+7,6,820,452,0,0,0,16692649,9,'VirtualBox mouse integration'
+7,6,822,452,0,0,0,16692658,9,'VirtualBox mouse integration'
+7,6,824,452,0,0,0,16692665,9,'VirtualBox mouse integration'
+7,6,826,452,0,0,0,16692673,9,'VirtualBox mouse integration'
+7,6,828,452,0,0,0,16692681,9,'VirtualBox mouse integration'
+7,6,831,452,0,0,0,16692689,9,'VirtualBox mouse integration'
+7,6,833,452,0,0,0,16692698,9,'VirtualBox mouse integration'
+7,6,835,452,0,0,0,16692706,9,'VirtualBox mouse integration'
+7,6,838,452,0,0,0,16692714,9,'VirtualBox mouse integration'
+7,6,840,452,0,0,0,16692721,9,'VirtualBox mouse integration'
+7,6,842,452,0,0,0,16692729,9,'VirtualBox mouse integration'
+7,6,845,452,0,0,0,16692737,9,'VirtualBox mouse integration'
+7,6,847,452,0,0,0,16692745,9,'VirtualBox mouse integration'
+7,6,848,452,0,0,0,16692753,9,'VirtualBox mouse integration'
+7,6,850,452,0,0,0,16692761,9,'VirtualBox mouse integration'
+7,6,852,452,0,0,0,16692770,9,'VirtualBox mouse integration'
+7,6,853,452,0,0,0,16692778,9,'VirtualBox mouse integration'
+7,6,855,452,0,0,0,16692785,9,'VirtualBox mouse integration'
+7,6,857,452,0,0,0,16692793,9,'VirtualBox mouse integration'
+7,6,859,452,0,0,0,16692801,9,'VirtualBox mouse integration'
+7,6,860,452,0,0,0,16692809,9,'VirtualBox mouse integration'
+7,6,861,452,0,0,0,16692818,9,'VirtualBox mouse integration'
+7,6,862,452,0,0,0,16692825,9,'VirtualBox mouse integration'
+7,6,863,452,0,0,0,16692833,9,'VirtualBox mouse integration'
+7,6,864,452,0,0,0,16692841,9,'VirtualBox mouse integration'
+7,6,865,452,0,0,0,16692849,9,'VirtualBox mouse integration'
+7,6,866,452,0,0,0,16692858,9,'VirtualBox mouse integration'
+7,6,867,452,0,0,0,16692865,9,'VirtualBox mouse integration'
+7,6,869,452,0,0,0,16692874,9,'VirtualBox mouse integration'
+7,6,871,452,0,0,0,16692881,9,'VirtualBox mouse integration'
+7,6,872,452,0,0,0,16692889,9,'VirtualBox mouse integration'
+7,6,873,452,0,0,0,16692898,9,'VirtualBox mouse integration'
+7,6,874,452,0,0,0,16692905,9,'VirtualBox mouse integration'
+7,6,875,452,0,0,0,16692914,9,'VirtualBox mouse integration'
+7,6,876,451,0,0,0,16692921,9,'VirtualBox mouse integration'
+7,6,877,451,0,0,0,16692929,9,'VirtualBox mouse integration'
+7,6,878,451,0,0,0,16692938,9,'VirtualBox mouse integration'
+7,6,879,451,0,0,0,16692945,9,'VirtualBox mouse integration'
+7,6,880,451,0,0,0,16692953,9,'VirtualBox mouse integration'
+7,6,881,451,0,0,0,16692961,9,'VirtualBox mouse integration'
+7,6,883,451,0,0,0,16692969,9,'VirtualBox mouse integration'
+7,6,884,451,0,0,0,16692978,9,'VirtualBox mouse integration'
+7,6,885,451,0,0,0,16692985,9,'VirtualBox mouse integration'
+7,6,887,451,0,0,0,16692994,9,'VirtualBox mouse integration'
+7,6,888,451,0,0,0,16693001,9,'VirtualBox mouse integration'
+7,6,889,451,0,0,0,16693009,9,'VirtualBox mouse integration'
+7,6,890,451,0,0,0,16693017,9,'VirtualBox mouse integration'
+7,6,891,451,0,0,0,16693025,9,'VirtualBox mouse integration'
+7,6,892,451,0,0,0,16693033,9,'VirtualBox mouse integration'
+7,6,893,451,0,0,0,16693042,9,'VirtualBox mouse integration'
+7,6,894,451,0,0,0,16693049,9,'VirtualBox mouse integration'
+7,6,896,451,0,0,0,16693058,9,'VirtualBox mouse integration'
+7,6,899,450,0,0,0,16693066,9,'VirtualBox mouse integration'
+7,6,899,449,0,0,0,16693074,9,'VirtualBox mouse integration'
+7,6,900,449,0,0,0,16693082,9,'VirtualBox mouse integration'
+7,6,901,449,0,0,0,16693090,9,'VirtualBox mouse integration'
+7,6,902,449,0,0,0,16693097,9,'VirtualBox mouse integration'
+7,6,903,449,0,0,0,16693105,9,'VirtualBox mouse integration'
+7,6,904,449,0,0,0,16693122,9,'VirtualBox mouse integration'
+7,6,905,449,0,0,0,16693129,9,'VirtualBox mouse integration'
+7,6,906,449,0,0,0,16693170,9,'VirtualBox mouse integration'
+7,6,907,449,0,0,0,16693178,9,'VirtualBox mouse integration'
+7,6,908,449,0,0,0,16693218,9,'VirtualBox mouse integration'
+7,6,909,449,0,0,0,16693226,9,'VirtualBox mouse integration'
+7,6,910,449,0,0,0,16693258,9,'VirtualBox mouse integration'
+7,6,911,449,0,0,0,16693266,9,'VirtualBox mouse integration'
+7,6,912,449,0,0,0,16693282,9,'VirtualBox mouse integration'
+7,6,913,449,0,0,0,16693290,9,'VirtualBox mouse integration'
+7,6,914,449,0,0,0,16693306,9,'VirtualBox mouse integration'
+7,6,915,449,0,0,0,16693314,9,'VirtualBox mouse integration'
+7,6,916,449,0,0,0,16693322,9,'VirtualBox mouse integration'
+7,6,917,449,0,0,0,16693330,9,'VirtualBox mouse integration'
+7,6,918,449,0,0,0,16693338,9,'VirtualBox mouse integration'
+7,6,919,449,0,0,0,16693346,9,'VirtualBox mouse integration'
+7,6,920,449,0,0,0,16693354,9,'VirtualBox mouse integration'
+7,6,921,449,0,0,0,16693363,9,'VirtualBox mouse integration'
+7,6,922,449,0,0,0,16693369,9,'VirtualBox mouse integration'
+7,6,923,449,0,0,0,16693377,9,'VirtualBox mouse integration'
+7,6,924,449,0,0,0,16693386,9,'VirtualBox mouse integration'
+7,6,925,450,0,0,0,16693393,9,'VirtualBox mouse integration'
+7,6,926,450,0,0,0,16693425,9,'VirtualBox mouse integration'
+7,6,927,450,0,0,0,16693578,9,'VirtualBox mouse integration'
+7,6,928,450,0,0,0,16693586,9,'VirtualBox mouse integration'
+7,6,929,450,0,0,0,16693602,9,'VirtualBox mouse integration'
+7,6,929,452,0,0,0,16693626,9,'VirtualBox mouse integration'
+7,6,930,452,0,0,0,16693642,9,'VirtualBox mouse integration'
+7,6,931,452,0,0,0,16693738,9,'VirtualBox mouse integration'
+7,6,932,452,0,0,0,16693746,9,'VirtualBox mouse integration'
+7,6,933,452,0,0,0,16693795,9,'VirtualBox mouse integration'
+7,6,934,453,0,0,0,16693810,9,'VirtualBox mouse integration'
+7,5,0,0,1,0,0,16694198,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16694198,2,Virtual core pointer
+7,2,0,0,0,37,0,16694873,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,16694874,3,Virtual core keyboard
+7,2,0,0,0,54,0,16695348,11,AT Translated Set 2 keyboard
+6,2,0,0,0,54,0,16695348,3,Virtual core keyboard
+7,3,0,0,0,54,0,16695499,11,AT Translated Set 2 keyboard
+6,3,0,0,0,54,0,16695499,3,Virtual core keyboard
+7,3,0,0,0,37,0,16695554,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,16695554,3,Virtual core keyboard
+7,2,0,0,0,36,0,16695910,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,16695910,3,Virtual core keyboard
+0,21,0,0,0,0,0,16695929
+NEW-WINDOW:661,391:62915342,62915342,701,661,391,0:661x391+459+100:0,0:Tulip test result
+0,21,0,0,0,0,0,16695929
+0,21,0,0,0,0,0,16695929
+0,21,0,0,0,0,0,16695929
+0,21,0,0,0,0,0,16695929
+7,3,0,0,0,36,0,16695980,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,16695980,3,Virtual core keyboard
+7,6,935,453,0,0,0,16697636,9,'VirtualBox mouse integration'
+7,6,935,450,0,0,0,16697643,9,'VirtualBox mouse integration'
+7,6,935,449,0,0,0,16697651,9,'VirtualBox mouse integration'
+7,6,935,443,0,0,0,16697659,9,'VirtualBox mouse integration'
+7,6,936,440,0,0,0,16697668,9,'VirtualBox mouse integration'
+7,6,937,436,0,0,0,16697675,9,'VirtualBox mouse integration'
+7,6,938,432,0,0,0,16697683,9,'VirtualBox mouse integration'
+7,6,939,427,0,0,0,16697691,9,'VirtualBox mouse integration'
+7,6,940,425,0,0,0,16697699,9,'VirtualBox mouse integration'
+7,6,942,421,0,0,0,16697707,9,'VirtualBox mouse integration'
+7,6,944,415,0,0,0,16697715,9,'VirtualBox mouse integration'
+7,6,946,407,0,0,0,16697723,9,'VirtualBox mouse integration'
+7,6,948,398,0,0,0,16697731,9,'VirtualBox mouse integration'
+7,6,949,388,0,0,0,16697739,9,'VirtualBox mouse integration'
+7,6,949,381,0,0,0,16697747,9,'VirtualBox mouse integration'
+7,6,949,375,0,0,0,16697755,9,'VirtualBox mouse integration'
+7,6,949,370,0,0,0,16697763,9,'VirtualBox mouse integration'
+7,6,952,366,0,0,0,16697771,9,'VirtualBox mouse integration'
+7,6,953,363,0,0,0,16697779,9,'VirtualBox mouse integration'
+7,6,953,360,0,0,0,16697787,9,'VirtualBox mouse integration'
+7,6,954,356,0,0,0,16697795,9,'VirtualBox mouse integration'
+7,6,956,352,0,0,0,16697803,9,'VirtualBox mouse integration'
+7,6,956,350,0,0,0,16697811,9,'VirtualBox mouse integration'
+7,6,958,347,0,0,0,16697819,9,'VirtualBox mouse integration'
+7,6,960,343,0,0,0,16697827,9,'VirtualBox mouse integration'
+7,6,962,340,0,0,0,16697835,9,'VirtualBox mouse integration'
+7,6,964,337,0,0,0,16697843,9,'VirtualBox mouse integration'
+7,6,966,333,0,0,0,16697851,9,'VirtualBox mouse integration'
+7,6,968,328,0,0,0,16697859,9,'VirtualBox mouse integration'
+7,6,969,325,0,0,0,16697867,9,'VirtualBox mouse integration'
+7,6,971,321,0,0,0,16697875,9,'VirtualBox mouse integration'
+7,6,973,318,0,0,0,16697883,9,'VirtualBox mouse integration'
+7,6,974,316,0,0,0,16697891,9,'VirtualBox mouse integration'
+7,6,975,314,0,0,0,16697899,9,'VirtualBox mouse integration'
+7,6,975,312,0,0,0,16697907,9,'VirtualBox mouse integration'
+7,6,977,311,0,0,0,16697915,9,'VirtualBox mouse integration'
+7,6,977,308,0,0,0,16697923,9,'VirtualBox mouse integration'
+7,6,979,306,0,0,0,16697931,9,'VirtualBox mouse integration'
+7,6,981,304,0,0,0,16697940,9,'VirtualBox mouse integration'
+7,6,982,301,0,0,0,16697948,9,'VirtualBox mouse integration'
+7,6,983,299,0,0,0,16697955,9,'VirtualBox mouse integration'
+7,6,985,297,0,0,0,16697964,9,'VirtualBox mouse integration'
+7,6,986,295,0,0,0,16697972,9,'VirtualBox mouse integration'
+7,6,987,294,0,0,0,16697980,9,'VirtualBox mouse integration'
+7,6,988,293,0,0,0,16697988,9,'VirtualBox mouse integration'
+7,6,988,291,0,0,0,16697996,9,'VirtualBox mouse integration'
+7,6,990,290,0,0,0,16698004,9,'VirtualBox mouse integration'
+7,6,991,288,0,0,0,16698012,9,'VirtualBox mouse integration'
+7,6,993,286,0,0,0,16698020,9,'VirtualBox mouse integration'
+7,6,995,285,0,0,0,16698028,9,'VirtualBox mouse integration'
+7,6,997,284,0,0,0,16698035,9,'VirtualBox mouse integration'
+7,6,999,282,0,0,0,16698043,9,'VirtualBox mouse integration'
+7,6,1000,282,0,0,0,16698052,9,'VirtualBox mouse integration'
+7,6,1001,281,0,0,0,16698060,9,'VirtualBox mouse integration'
+7,6,1002,280,0,0,0,16698067,9,'VirtualBox mouse integration'
+7,6,1005,278,0,0,0,16698076,9,'VirtualBox mouse integration'
+7,6,1007,277,0,0,0,16698084,9,'VirtualBox mouse integration'
+7,6,1008,276,0,0,0,16698092,9,'VirtualBox mouse integration'
+7,6,1010,276,0,0,0,16698100,9,'VirtualBox mouse integration'
+7,6,1012,274,0,0,0,16698108,9,'VirtualBox mouse integration'
+7,6,1016,273,0,0,0,16698116,9,'VirtualBox mouse integration'
+7,6,1019,271,0,0,0,16698124,9,'VirtualBox mouse integration'
+7,6,1022,269,0,0,0,16698132,9,'VirtualBox mouse integration'
+7,6,1025,267,0,0,0,16698140,9,'VirtualBox mouse integration'
+7,6,1028,266,0,0,0,16698148,9,'VirtualBox mouse integration'
+7,6,1030,264,0,0,0,16698156,9,'VirtualBox mouse integration'
+7,6,1031,264,0,0,0,16698164,9,'VirtualBox mouse integration'
+7,6,1034,262,0,0,0,16698172,9,'VirtualBox mouse integration'
+7,6,1037,261,0,0,0,16698179,9,'VirtualBox mouse integration'
+7,6,1039,259,0,0,0,16698187,9,'VirtualBox mouse integration'
+7,6,1042,258,0,0,0,16698196,9,'VirtualBox mouse integration'
+7,6,1045,256,0,0,0,16698204,9,'VirtualBox mouse integration'
+7,6,1047,255,0,0,0,16698211,9,'VirtualBox mouse integration'
+7,6,1049,254,0,0,0,16698220,9,'VirtualBox mouse integration'
+7,6,1051,253,0,0,0,16698228,9,'VirtualBox mouse integration'
+7,6,1052,252,0,0,0,16698236,9,'VirtualBox mouse integration'
+7,6,1054,252,0,0,0,16698243,9,'VirtualBox mouse integration'
+7,6,1054,251,0,0,0,16698252,9,'VirtualBox mouse integration'
+7,6,1056,250,0,0,0,16698260,9,'VirtualBox mouse integration'
+7,6,1057,249,0,0,0,16698267,9,'VirtualBox mouse integration'
+7,6,1058,249,0,0,0,16698276,9,'VirtualBox mouse integration'
+7,6,1060,247,0,0,0,16698284,9,'VirtualBox mouse integration'
+7,6,1061,247,0,0,0,16698292,9,'VirtualBox mouse integration'
+7,6,1062,247,0,0,0,16698299,9,'VirtualBox mouse integration'
+7,6,1062,246,0,0,0,16698307,9,'VirtualBox mouse integration'
+7,6,1064,244,0,0,0,16698315,9,'VirtualBox mouse integration'
+7,6,1064,243,0,0,0,16698324,9,'VirtualBox mouse integration'
+7,6,1066,242,0,0,0,16698332,9,'VirtualBox mouse integration'
+7,6,1066,241,0,0,0,16698340,9,'VirtualBox mouse integration'
+7,6,1067,240,0,0,0,16698348,9,'VirtualBox mouse integration'
+7,6,1068,240,0,0,0,16698356,9,'VirtualBox mouse integration'
+7,6,1068,239,0,0,0,16698364,9,'VirtualBox mouse integration'
+7,6,1069,238,0,0,0,16698372,9,'VirtualBox mouse integration'
+7,6,1071,236,0,0,0,16698380,9,'VirtualBox mouse integration'
+7,6,1072,235,0,0,0,16698388,9,'VirtualBox mouse integration'
+7,6,1073,233,0,0,0,16698395,9,'VirtualBox mouse integration'
+7,6,1074,232,0,0,0,16698404,9,'VirtualBox mouse integration'
+7,6,1075,231,0,0,0,16698412,9,'VirtualBox mouse integration'
+7,6,1075,230,0,0,0,16698420,9,'VirtualBox mouse integration'
+7,6,1077,229,0,0,0,16698428,9,'VirtualBox mouse integration'
+7,6,1077,228,0,0,0,16698436,9,'VirtualBox mouse integration'
+7,6,1078,227,0,0,0,16698444,9,'VirtualBox mouse integration'
+7,6,1079,226,0,0,0,16698452,9,'VirtualBox mouse integration'
+7,6,1080,225,0,0,0,16698460,9,'VirtualBox mouse integration'
+7,6,1081,225,0,0,0,16698468,9,'VirtualBox mouse integration'
+7,6,1081,224,0,0,0,16698476,9,'VirtualBox mouse integration'
+7,6,1082,223,0,0,0,16698484,9,'VirtualBox mouse integration'
+7,6,1083,223,0,0,0,16698492,9,'VirtualBox mouse integration'
+7,6,1083,222,0,0,0,16698508,9,'VirtualBox mouse integration'
+7,6,1084,222,0,0,0,16698516,9,'VirtualBox mouse integration'
+7,6,1084,221,0,0,0,16698524,9,'VirtualBox mouse integration'
+7,6,1085,220,0,0,0,16698532,9,'VirtualBox mouse integration'
+7,6,1086,220,0,0,0,16698540,9,'VirtualBox mouse integration'
+7,6,1087,219,0,0,0,16698548,9,'VirtualBox mouse integration'
+7,6,1088,218,0,0,0,16698556,9,'VirtualBox mouse integration'
+7,6,1089,218,0,0,0,16698564,9,'VirtualBox mouse integration'
+7,6,1089,217,0,0,0,16698572,9,'VirtualBox mouse integration'
+7,6,1090,216,0,0,0,16698580,9,'VirtualBox mouse integration'
+7,6,1090,215,0,0,0,16698588,9,'VirtualBox mouse integration'
+7,6,1091,215,0,0,0,16698596,9,'VirtualBox mouse integration'
+7,6,1091,214,0,0,0,16698604,9,'VirtualBox mouse integration'
+7,6,1092,214,0,0,0,16698612,9,'VirtualBox mouse integration'
+7,6,1092,213,0,0,0,16698620,9,'VirtualBox mouse integration'
+7,6,1093,213,0,0,0,16698644,9,'VirtualBox mouse integration'
+7,6,1094,213,0,0,0,16698668,9,'VirtualBox mouse integration'
+7,6,1094,212,0,0,0,16698676,9,'VirtualBox mouse integration'
+7,6,1094,211,0,0,0,16698684,9,'VirtualBox mouse integration'
+7,6,1096,210,0,0,0,16698699,9,'VirtualBox mouse integration'
+7,6,1096,209,0,0,0,16698707,9,'VirtualBox mouse integration'
+7,6,1097,209,0,0,0,16698716,9,'VirtualBox mouse integration'
+7,6,1098,208,0,0,0,16698812,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16699272,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16699272,2,Virtual core pointer
+7,5,0,0,1,0,0,16699496,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16699496,2,Virtual core pointer
+7,6,1098,207,0,0,0,16700575,9,'VirtualBox mouse integration'
+7,6,1097,208,0,0,0,16700581,9,'VirtualBox mouse integration'
+7,6,1097,209,0,0,0,16700589,9,'VirtualBox mouse integration'
+7,6,1096,209,0,0,0,16700597,9,'VirtualBox mouse integration'
+7,6,1095,209,0,0,0,16700605,9,'VirtualBox mouse integration'
+7,6,1093,209,0,0,0,16700629,9,'VirtualBox mouse integration'
+7,6,1092,209,0,0,0,16700637,9,'VirtualBox mouse integration'
+7,6,1091,209,0,0,0,16700645,9,'VirtualBox mouse integration'
+7,6,1090,209,0,0,0,16700653,9,'VirtualBox mouse integration'
+7,6,1090,210,0,0,0,16700661,9,'VirtualBox mouse integration'
+7,6,1089,210,0,0,0,16700669,9,'VirtualBox mouse integration'
+7,6,1088,210,0,0,0,16700676,9,'VirtualBox mouse integration'
+7,6,1087,210,0,0,0,16700684,9,'VirtualBox mouse integration'
+7,6,1086,210,0,0,0,16700692,9,'VirtualBox mouse integration'
+7,6,1085,210,0,0,0,16700708,9,'VirtualBox mouse integration'
+7,6,1084,210,0,0,0,16700716,9,'VirtualBox mouse integration'
+7,6,1083,210,0,0,0,16700732,9,'VirtualBox mouse integration'
+7,6,1082,210,0,0,0,16700740,9,'VirtualBox mouse integration'
+7,6,1081,210,0,0,0,16700748,9,'VirtualBox mouse integration'
+7,6,1080,210,0,0,0,16700756,9,'VirtualBox mouse integration'
+7,6,1079,210,0,0,0,16700764,9,'VirtualBox mouse integration'
+7,6,1079,212,0,0,0,16700772,9,'VirtualBox mouse integration'
+7,6,1078,212,0,0,0,16700780,9,'VirtualBox mouse integration'
+7,6,1077,212,0,0,0,16700788,9,'VirtualBox mouse integration'
+7,6,1076,212,0,0,0,16700796,9,'VirtualBox mouse integration'
+7,6,1075,212,0,0,0,16700805,9,'VirtualBox mouse integration'
+7,6,1074,212,0,0,0,16700813,9,'VirtualBox mouse integration'
+7,6,1073,212,0,0,0,16700853,9,'VirtualBox mouse integration'
+7,6,1072,212,0,0,0,16700861,9,'VirtualBox mouse integration'
+7,6,1072,211,0,0,0,16700869,9,'VirtualBox mouse integration'
+7,6,1071,210,0,0,0,16700877,9,'VirtualBox mouse integration'
+7,6,1070,210,0,0,0,16700885,9,'VirtualBox mouse integration'
+7,6,1069,210,0,0,0,16700893,9,'VirtualBox mouse integration'
+7,6,1069,209,0,0,0,16700901,9,'VirtualBox mouse integration'
+7,6,1067,208,0,0,0,16700949,9,'VirtualBox mouse integration'
+7,6,1067,207,0,0,0,16700957,9,'VirtualBox mouse integration'
+7,6,1066,207,0,0,0,16700965,9,'VirtualBox mouse integration'
+7,6,1065,206,0,0,0,16701069,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,16701577,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,16701577,2,Virtual core pointer
+7,5,0,0,1,0,0,16701770,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,16701770,2,Virtual core pointer
+0,21,0,0,0,0,0,16701803
+NEW-WINDOW:705,422:62915414,62915414,34471357,0,0,0:36x74+370+123:0,0:Create new property
+0,21,0,0,0,0,0,16701803
+0,21,0,0,0,0,0,16701803
+0,21,0,0,0,0,0,16701803
+7,2,0,0,0,65,0,16703529,11,AT Translated Set 2 keyboard
+6,2,0,0,0,65,0,16703529,3,Virtual core keyboard
+7,3,0,0,0,65,0,16703622,11,AT Translated Set 2 keyboard
+6,3,0,0,0,65,0,16703622,3,Virtual core keyboard
+7,2,0,0,0,116,0,16705302,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16705303,3,Virtual core keyboard
+7,3,0,0,0,116,0,16705414,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16705414,3,Virtual core keyboard
+7,2,0,0,0,116,0,16705540,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16705540,3,Virtual core keyboard
+7,3,0,0,0,116,0,16705636,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16705636,3,Virtual core keyboard
+7,2,0,0,0,116,0,16705761,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16705761,3,Virtual core keyboard
+7,3,0,0,0,116,0,16705835,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16705835,3,Virtual core keyboard
+7,2,0,0,0,116,0,16705953,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16705953,3,Virtual core keyboard
+7,3,0,0,0,116,0,16706042,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16706042,3,Virtual core keyboard
+7,2,0,0,0,116,0,16706169,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16706169,3,Virtual core keyboard
+7,3,0,0,0,116,0,16706293,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16706293,3,Virtual core keyboard
+7,2,0,0,0,116,0,16706511,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16706511,3,Virtual core keyboard
+7,3,0,0,0,116,0,16706627,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16706627,3,Virtual core keyboard
+7,2,0,0,0,36,0,16707204,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,16707204,3,Virtual core keyboard
+7,3,0,0,0,36,0,16707344,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,16707344,3,Virtual core keyboard
+7,2,0,0,0,23,0,16708422,11,AT Translated Set 2 keyboard
+6,2,0,0,0,23,0,16708422,3,Virtual core keyboard
+7,3,0,0,0,23,0,16708503,11,AT Translated Set 2 keyboard
+6,3,0,0,0,23,0,16708503,3,Virtual core keyboard
+7,2,0,0,0,37,0,16709333,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,16709333,3,Virtual core keyboard
+7,2,0,0,0,55,0,16709656,11,AT Translated Set 2 keyboard
+6,2,0,0,0,55,0,16709656,3,Virtual core keyboard
+7,3,0,0,0,55,0,16709724,11,AT Translated Set 2 keyboard
+6,3,0,0,0,55,0,16709724,3,Virtual core keyboard
+7,3,0,0,0,37,0,16709811,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,16709811,3,Virtual core keyboard
+7,2,0,0,0,36,0,16711048,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,16711048,3,Virtual core keyboard
+0,21,0,0,0,0,0,16711076
+NEW-WINDOW:705,380:62915414,62915414,701,705,380,0:705x380+370+123:0,0:Create new property
+0,21,0,0,0,0,0,16711076
+0,21,0,0,0,0,0,16711076
+0,21,0,0,0,0,0,16711076
+0,21,0,0,0,0,0,16711076
+7,3,0,0,0,36,0,16711132,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,16711132,3,Virtual core keyboard
+7,6,1065,205,0,0,0,16712556,9,'VirtualBox mouse integration'
+7,6,1064,205,0,0,0,16712562,9,'VirtualBox mouse integration'
+7,6,1062,206,0,0,0,16712570,9,'VirtualBox mouse integration'
+7,6,1060,210,0,0,0,16712578,9,'VirtualBox mouse integration'
+7,6,1053,220,0,0,0,16712586,9,'VirtualBox mouse integration'
+7,6,1045,226,0,0,0,16712594,9,'VirtualBox mouse integration'
+7,6,1033,233,0,0,0,16712602,9,'VirtualBox mouse integration'
+7,6,1020,240,0,0,0,16712610,9,'VirtualBox mouse integration'
+7,6,1007,247,0,0,0,16712618,9,'VirtualBox mouse integration'
+7,6,994,254,0,0,0,16712627,9,'VirtualBox mouse integration'
+7,6,980,261,0,0,0,16712635,9,'VirtualBox mouse integration'
+7,6,967,266,0,0,0,16712643,9,'VirtualBox mouse integration'
+7,6,955,272,0,0,0,16712651,9,'VirtualBox mouse integration'
+7,6,944,279,0,0,0,16712658,9,'VirtualBox mouse integration'
+7,6,933,284,0,0,0,16712667,9,'VirtualBox mouse integration'
+7,6,923,289,0,0,0,16712675,9,'VirtualBox mouse integration'
+7,6,914,294,0,0,0,16712683,9,'VirtualBox mouse integration'
+7,6,907,299,0,0,0,16712690,9,'VirtualBox mouse integration'
+7,6,901,304,0,0,0,16712699,9,'VirtualBox mouse integration'
+7,6,894,309,0,0,0,16712706,9,'VirtualBox mouse integration'
+7,6,889,314,0,0,0,16712714,9,'VirtualBox mouse integration'
+7,6,883,318,0,0,0,16712722,9,'VirtualBox mouse integration'
+7,6,876,323,0,0,0,16712730,9,'VirtualBox mouse integration'
+7,6,870,329,0,0,0,16712738,9,'VirtualBox mouse integration'
+7,6,866,329,0,0,0,16712746,9,'VirtualBox mouse integration'
+7,6,861,333,0,0,0,16712755,9,'VirtualBox mouse integration'
+7,6,856,335,0,0,0,16712762,9,'VirtualBox mouse integration'
+7,6,852,336,0,0,0,16712771,9,'VirtualBox mouse integration'
+7,6,849,338,0,0,0,16712779,9,'VirtualBox mouse integration'
+7,6,846,340,0,0,0,16712787,9,'VirtualBox mouse integration'
+7,6,842,341,0,0,0,16712795,9,'VirtualBox mouse integration'
+7,6,838,343,0,0,0,16712803,9,'VirtualBox mouse integration'
+7,6,835,346,0,0,0,16712811,9,'VirtualBox mouse integration'
+7,6,830,349,0,0,0,16712819,9,'VirtualBox mouse integration'
+7,6,823,351,0,0,0,16712827,9,'VirtualBox mouse integration'
+7,6,817,356,0,0,0,16712835,9,'VirtualBox mouse integration'
+7,6,811,360,0,0,0,16712843,9,'VirtualBox mouse integration'
+7,6,806,364,0,0,0,16712851,9,'VirtualBox mouse integration'
+7,6,802,366,0,0,0,16712859,9,'VirtualBox mouse integration'
+7,6,796,370,0,0,0,16712866,9,'VirtualBox mouse integration'
+7,6,791,374,0,0,0,16712875,9,'VirtualBox mouse integration'
+7,6,785,376,0,0,0,16712883,9,'VirtualBox mouse integration'
+7,6,779,380,0,0,0,16712891,9,'VirtualBox mouse integration'
+7,6,774,384,0,0,0,16712899,9,'VirtualBox mouse integration'
+7,6,768,388,0,0,0,16712907,9,'VirtualBox mouse integration'
+7,6,762,392,0,0,0,16712915,9,'VirtualBox mouse integration'
+7,6,757,396,0,0,0,16712923,9,'VirtualBox mouse integration'
+7,6,751,400,0,0,0,16712931,9,'VirtualBox mouse integration'
+7,6,745,404,0,0,0,16712939,9,'VirtualBox mouse integration'
+7,6,740,408,0,0,0,16712947,9,'VirtualBox mouse integration'
+7,6,734,412,0,0,0,16712955,9,'VirtualBox mouse integration'
+7,6,730,414,0,0,0,16712963,9,'VirtualBox mouse integration'
+7,6,724,416,0,0,0,16712971,9,'VirtualBox mouse integration'
+7,6,719,418,0,0,0,16712979,9,'VirtualBox mouse integration'
+7,6,713,421,0,0,0,16712987,9,'VirtualBox mouse integration'
+7,6,703,425,0,0,0,16712995,9,'VirtualBox mouse integration'
+7,6,697,429,0,0,0,16713003,9,'VirtualBox mouse integration'
+7,6,691,433,0,0,0,16713011,9,'VirtualBox mouse integration'
+7,6,686,435,0,0,0,16713019,9,'VirtualBox mouse integration'
+7,6,682,437,0,0,0,16713027,9,'VirtualBox mouse integration'
+7,6,678,439,0,0,0,16713035,9,'VirtualBox mouse integration'
+7,6,674,441,0,0,0,16713043,9,'VirtualBox mouse integration'
+7,6,671,443,0,0,0,16713051,9,'VirtualBox mouse integration'
+7,6,670,444,0,0,0,16713059,9,'VirtualBox mouse integration'
+7,6,668,446,0,0,0,16713067,9,'VirtualBox mouse integration'
+7,6,665,449,0,0,0,16713075,9,'VirtualBox mouse integration'
+7,6,662,452,0,0,0,16713083,9,'VirtualBox mouse integration'
+7,6,660,455,0,0,0,16713091,9,'VirtualBox mouse integration'
+7,6,656,457,0,0,0,16713099,9,'VirtualBox mouse integration'
+7,6,654,460,0,0,0,16713107,9,'VirtualBox mouse integration'
+7,6,650,463,0,0,0,16713115,9,'VirtualBox mouse integration'
+7,6,646,467,0,0,0,16713123,9,'VirtualBox mouse integration'
+7,6,642,470,0,0,0,16713131,9,'VirtualBox mouse integration'
+7,6,639,474,0,0,0,16713139,9,'VirtualBox mouse integration'
+7,6,635,477,0,0,0,16713147,9,'VirtualBox mouse integration'
+7,6,631,480,0,0,0,16713155,9,'VirtualBox mouse integration'
+7,6,626,484,0,0,0,16713163,9,'VirtualBox mouse integration'
+7,6,620,488,0,0,0,16713171,9,'VirtualBox mouse integration'
+7,6,614,492,0,0,0,16713179,9,'VirtualBox mouse integration'
+7,6,610,496,0,0,0,16713187,9,'VirtualBox mouse integration'
+7,6,604,500,0,0,0,16713195,9,'VirtualBox mouse integration'
+7,6,599,505,0,0,0,16713203,9,'VirtualBox mouse integration'
+7,6,593,509,0,0,0,16713211,9,'VirtualBox mouse integration'
+7,6,587,510,0,0,0,16713219,9,'VirtualBox mouse integration'
+7,6,582,513,0,0,0,16713227,9,'VirtualBox mouse integration'
+7,6,572,519,0,0,0,16713235,9,'VirtualBox mouse integration'
+7,6,567,523,0,0,0,16713243,9,'VirtualBox mouse integration'
+7,6,561,527,0,0,0,16713251,9,'VirtualBox mouse integration'
+7,6,557,528,0,0,0,16713259,9,'VirtualBox mouse integration'
+7,6,552,531,0,0,0,16713267,9,'VirtualBox mouse integration'
+7,6,548,532,0,0,0,16713275,9,'VirtualBox mouse integration'
+7,6,546,533,0,0,0,16713283,9,'VirtualBox mouse integration'
+7,6,543,535,0,0,0,16713291,9,'VirtualBox mouse integration'
+7,6,540,537,0,0,0,16713299,9,'VirtualBox mouse integration'
+7,6,537,539,0,0,0,16713307,9,'VirtualBox mouse integration'
+7,6,533,541,0,0,0,16713315,9,'VirtualBox mouse integration'
+7,6,529,544,0,0,0,16713323,9,'VirtualBox mouse integration'
+7,6,526,546,0,0,0,16713331,9,'VirtualBox mouse integration'
+7,6,522,548,0,0,0,16713339,9,'VirtualBox mouse integration'
+7,6,518,550,0,0,0,16713347,9,'VirtualBox mouse integration'
+7,6,516,553,0,0,0,16713355,9,'VirtualBox mouse integration'
+7,6,512,554,0,0,0,16713363,9,'VirtualBox mouse integration'
+7,6,509,557,0,0,0,16713371,9,'VirtualBox mouse integration'
+7,6,505,559,0,0,0,16713379,9,'VirtualBox mouse integration'
+7,6,502,561,0,0,0,16713387,9,'VirtualBox mouse integration'
+7,6,501,561,0,0,0,16713395,9,'VirtualBox mouse integration'
+7,6,498,563,0,0,0,16713403,9,'VirtualBox mouse integration'
+7,6,496,565,0,0,0,16713411,9,'VirtualBox mouse integration'
+7,6,494,567,0,0,0,16713419,9,'VirtualBox mouse integration'
+7,6,492,567,0,0,0,16713427,9,'VirtualBox mouse integration'
+7,6,490,569,0,0,0,16713435,9,'VirtualBox mouse integration'
+7,6,487,572,0,0,0,16713443,9,'VirtualBox mouse integration'
+7,6,484,575,0,0,0,16713451,9,'VirtualBox mouse integration'
+7,6,481,577,0,0,0,16713459,9,'VirtualBox mouse integration'
+7,6,477,581,0,0,0,16713467,9,'VirtualBox mouse integration'
+7,6,472,586,0,0,0,16713475,9,'VirtualBox mouse integration'
+7,6,471,587,0,0,0,16713483,9,'VirtualBox mouse integration'
+7,6,468,589,0,0,0,16713491,9,'VirtualBox mouse integration'
+7,6,466,592,0,0,0,16713499,9,'VirtualBox mouse integration'
+7,6,464,594,0,0,0,16713507,9,'VirtualBox mouse integration'
+7,6,462,595,0,0,0,16713515,9,'VirtualBox mouse integration'
+7,6,461,596,0,0,0,16713523,9,'VirtualBox mouse integration'
+7,6,459,598,0,0,0,16713531,9,'VirtualBox mouse integration'
+7,6,457,598,0,0,0,16713539,9,'VirtualBox mouse integration'
+7,6,455,599,0,0,0,16713547,9,'VirtualBox mouse integration'
+7,6,455,601,0,0,0,16713555,9,'VirtualBox mouse integration'
+7,6,453,602,0,0,0,16713563,9,'VirtualBox mouse integration'
+7,6,452,603,0,0,0,16713571,9,'VirtualBox mouse integration'
+7,6,451,604,0,0,0,16713579,9,'VirtualBox mouse integration'
+7,6,451,606,0,0,0,16713587,9,'VirtualBox mouse integration'
+7,6,449,608,0,0,0,16713595,9,'VirtualBox mouse integration'
+7,6,446,611,0,0,0,16713603,9,'VirtualBox mouse integration'
+7,6,445,614,0,0,0,16713611,9,'VirtualBox mouse integration'
+7,6,444,614,0,0,0,16713619,9,'VirtualBox mouse integration'
+7,6,443,616,0,0,0,16713627,9,'VirtualBox mouse integration'
+7,6,440,619,0,0,0,16713635,9,'VirtualBox mouse integration'
+7,6,438,621,0,0,0,16713643,9,'VirtualBox mouse integration'
+7,6,436,623,0,0,0,16713651,9,'VirtualBox mouse integration'
+7,6,434,624,0,0,0,16713660,9,'VirtualBox mouse integration'
+7,6,432,626,0,0,0,16713667,9,'VirtualBox mouse integration'
+7,6,430,629,0,0,0,16713675,9,'VirtualBox mouse integration'
+7,6,429,631,0,0,0,16713683,9,'VirtualBox mouse integration'
+7,6,427,633,0,0,0,16713691,9,'VirtualBox mouse integration'
+7,6,426,635,0,0,0,16713699,9,'VirtualBox mouse integration'
+7,6,424,637,0,0,0,16713707,9,'VirtualBox mouse integration'
+7,6,422,637,0,0,0,16713715,9,'VirtualBox mouse integration'
+7,6,420,639,0,0,0,16713724,9,'VirtualBox mouse integration'
+7,6,419,640,0,0,0,16713732,9,'VirtualBox mouse integration'
+7,6,416,641,0,0,0,16713739,9,'VirtualBox mouse integration'
+7,6,414,643,0,0,0,16713747,9,'VirtualBox mouse integration'
+7,6,413,645,0,0,0,16713755,9,'VirtualBox mouse integration'
+7,6,411,647,0,0,0,16713763,9,'VirtualBox mouse integration'
+7,6,408,649,0,0,0,16713771,9,'VirtualBox mouse integration'
+7,6,407,651,0,0,0,16713780,9,'VirtualBox mouse integration'
+7,6,406,652,0,0,0,16713787,9,'VirtualBox mouse integration'
+7,6,405,652,0,0,0,16713795,9,'VirtualBox mouse integration'
+7,6,405,653,0,0,0,16713803,9,'VirtualBox mouse integration'
+7,6,404,654,0,0,0,16713811,9,'VirtualBox mouse integration'
+7,6,403,654,0,0,0,16713819,9,'VirtualBox mouse integration'
+7,6,403,655,0,0,0,16713827,9,'VirtualBox mouse integration'
+7,6,402,656,0,0,0,16713835,9,'VirtualBox mouse integration'
+7,6,401,656,0,0,0,16713843,9,'VirtualBox mouse integration'
+7,6,400,658,0,0,0,16713852,9,'VirtualBox mouse integration'
+7,6,399,659,0,0,0,16713859,9,'VirtualBox mouse integration'
+7,6,398,660,0,0,0,16713867,9,'VirtualBox mouse integration'
+7,6,397,661,0,0,0,16713876,9,'VirtualBox mouse integration'
+7,6,396,661,0,0,0,16713883,9,'VirtualBox mouse integration'
+7,6,396,662,0,0,0,16713891,9,'VirtualBox mouse integration'
+7,6,395,663,0,0,0,16713899,9,'VirtualBox mouse integration'
+7,6,393,665,0,0,0,16713908,9,'VirtualBox mouse integration'
+7,6,391,667,0,0,0,16713916,9,'VirtualBox mouse integration'
+7,6,390,667,0,0,0,16713924,9,'VirtualBox mouse integration'
+7,6,389,669,0,0,0,16713932,9,'VirtualBox mouse integration'
+7,6,387,670,0,0,0,16713940,9,'VirtualBox mouse integration'
+7,6,387,671,0,0,0,16713948,9,'VirtualBox mouse integration'
+7,6,386,673,0,0,0,16713956,9,'VirtualBox mouse integration'
+7,6,384,675,0,0,0,16713963,9,'VirtualBox mouse integration'
+7,6,383,676,0,0,0,16713972,9,'VirtualBox mouse integration'
+7,6,382,678,0,0,0,16713979,9,'VirtualBox mouse integration'
+7,6,381,680,0,0,0,16713988,9,'VirtualBox mouse integration'
+7,6,380,682,0,0,0,16713996,9,'VirtualBox mouse integration'
+7,6,379,683,0,0,0,16714004,9,'VirtualBox mouse integration'
+7,6,379,685,0,0,0,16714012,9,'VirtualBox mouse integration'
+7,6,377,685,0,0,0,16714020,9,'VirtualBox mouse integration'
+7,6,377,687,0,0,0,16714028,9,'VirtualBox mouse integration'
+7,6,376,688,0,0,0,16714035,9,'VirtualBox mouse integration'
+7,6,374,689,0,0,0,16714043,9,'VirtualBox mouse integration'
+7,6,374,690,0,0,0,16714052,9,'VirtualBox mouse integration'
+7,6,374,691,0,0,0,16714059,9,'VirtualBox mouse integration'
+7,6,372,693,0,0,0,16714076,9,'VirtualBox mouse integration'
+7,6,370,695,0,0,0,16714084,9,'VirtualBox mouse integration'
+7,6,369,697,0,0,0,16714092,9,'VirtualBox mouse integration'
+7,6,368,697,0,0,0,16714115,9,'VirtualBox mouse integration'
+7,6,368,698,0,0,0,16714124,9,'VirtualBox mouse integration'
+7,6,367,699,0,0,0,16714171,9,'VirtualBox mouse integration'
+7,6,366,699,0,0,0,16714195,9,'VirtualBox mouse integration'
+7,6,366,700,0,0,0,16714412,9,'VirtualBox mouse integration'
+7,6,366,701,0,0,0,16714428,9,'VirtualBox mouse integration'
+7,6,366,702,0,0,0,16714436,9,'VirtualBox mouse integration'
+7,6,365,702,0,0,0,16714548,9,'VirtualBox mouse integration'
+7,6,365,703,0,0,0,16714556,9,'VirtualBox mouse integration'
+7,6,365,704,0,0,0,16714580,9,'VirtualBox mouse integration'
+7,4,0,0,3,0,0,16715310,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,3,0,0,16715310,2,Virtual core pointer
+7,5,0,0,3,0,0,16715473,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,3,0,0,16715473,2,Virtual core pointer
+7,2,0,0,0,116,0,16717125,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16717125,3,Virtual core keyboard
+7,3,0,0,0,116,0,16717249,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16717249,3,Virtual core keyboard
+7,2,0,0,0,116,0,16717616,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,16717617,3,Virtual core keyboard
+7,3,0,0,0,116,0,16717783,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,16717783,3,Virtual core keyboard
+7,2,0,0,0,36,0,16718584,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,16718584,3,Virtual core keyboard
+0,21,0,0,0,0,0,16718629
+NEW-WINDOW:451,254:62915515,62915515,34473133,0,0,0:36x74+879+458:0,0:Exporting graph "Complete Tree - 'depth'=5 'degree'=2 'tree layout'=false "
+0,21,0,0,0,0,0,16718629
+0,21,0,0,0,0,0,16718629
+0,21,0,0,0,0,0,16718629
+7,3,0,0,0,36,0,16718726,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,16718726,3,Virtual core keyboard
+7,2,0,0,0,28,0,16719980,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,16719980,3,Virtual core keyboard
+7,3,0,0,0,28,0,16720045,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,16720045,3,Virtual core keyboard
+7,2,0,0,0,26,0,16720208,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,16720208,3,Virtual core keyboard
+7,3,0,0,0,26,0,16720349,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,16720349,3,Virtual core keyboard
+7,2,0,0,0,39,0,16720437,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,16720437,3,Virtual core keyboard
+7,3,0,0,0,39,0,16720510,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,16720510,3,Virtual core keyboard
+7,2,0,0,0,28,0,16720704,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,16720704,3,Virtual core keyboard
+7,3,0,0,0,28,0,16720760,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,16720760,3,Virtual core keyboard
+7,2,0,0,0,17,0,16720866,11,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,16720866,3,Virtual core keyboard
+7,3,0,0,0,17,0,16720949,11,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,16720949,3,Virtual core keyboard
+7,2,0,0,0,42,0,16721316,11,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,16721316,3,Virtual core keyboard
+7,3,0,0,0,42,0,16721392,11,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,16721392,3,Virtual core keyboard
+7,2,0,0,0,30,0,16721438,11,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,16721438,3,Virtual core keyboard
+7,2,0,0,0,31,0,16721524,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,16721524,3,Virtual core keyboard
+7,3,0,0,0,30,0,16721561,11,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,16721561,3,Virtual core keyboard
+7,3,0,0,0,31,0,16721628,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,16721628,3,Virtual core keyboard
+7,2,0,0,0,62,0,16722184,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,16722184,3,Virtual core keyboard
+7,3,0,0,0,62,0,16722601,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,16722601,3,Virtual core keyboard
+7,2,0,0,0,62,0,16722915,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,16722915,3,Virtual core keyboard
+7,2,0,0,0,59,0,16723232,11,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,16723232,3,Virtual core keyboard
+7,3,0,0,0,59,0,16723337,11,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,16723337,3,Virtual core keyboard
+7,3,0,0,0,62,0,16723391,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,16723391,3,Virtual core keyboard
+7,2,0,0,0,28,0,16723736,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,16723737,3,Virtual core keyboard
+7,3,0,0,0,28,0,16723822,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,16723822,3,Virtual core keyboard
+7,2,0,0,0,46,0,16724167,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,16724167,3,Virtual core keyboard
+7,3,0,0,0,46,0,16724228,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,16724228,3,Virtual core keyboard
+7,2,0,0,0,33,0,16725204,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,16725204,3,Virtual core keyboard
+7,3,0,0,0,33,0,16725322,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,16725322,3,Virtual core keyboard
+7,2,0,0,0,36,0,16726384,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,16726385,3,Virtual core keyboard
+0,21,0,0,0,0,0,16726406
+NEW-WINDOW:451,212:62915515,62915515,701,451,212,0:451x212+879+458:0,0:Exporting graph "Complete Tree - 'depth'=5 'degree'=2 'tree layout'=false "
+0,21,0,0,0,0,0,16726406
+0,21,0,0,0,0,0,16726406
+0,21,0,0,0,0,0,16726406
+0,21,0,0,0,0,0,16726406
+0,21,0,0,0,0,0,16726440
+NEW-WINDOW:640,462:62915532,62915532,34474463,0,0,0:36x74+500+42:0,0:
+0,21,0,0,0,0,0,16726440
+0,21,0,0,0,0,0,16726440
+0,21,0,0,0,0,0,16726440
+7,3,0,0,0,36,0,16726468,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,16726468,3,Virtual core keyboard
+0,21,0,0,0,0,0,16726515
+NEW-WINDOW:640,420:62915532,62915532,701,640,420,0:640x420+500+42:0,0:TLP Export
+0,21,0,0,0,0,0,16726515
+0,21,0,0,0,0,0,16726515
+0,21,0,0,0,0,0,16726515
+0,21,0,0,0,0,0,16726515

@@ -1,8 +1,8 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2017:04:27 
-# Time:                   10:12:13 
+# Date:                   2018:10:31 
+# Time:                   17:59:15 
 # Xnee program:           cnee 
 # Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
@@ -11,23 +11,23 @@
 # X version:              11 
 # X revision:             0 
 # X vendor:               The X.Org Foundation 
-# X vendor release:       11804000 
+# X vendor release:       11906000 
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             4.4.0-75-generic 
-# OS Version:             #96-Ubuntu SMP Thu Apr 20 09:56:33 UTC 2017 
+# OS Release:             4.15.0-38-generic 
+# OS Version:             #41-Ubuntu SMP Wed Oct 10 10:59:38 UTC 2018 
 # Machine:                x86_64 
-# Nodename:               pm-laptop 
+# Nodename:               tulip-ubuntu-1804 
 # Display name:           :0
-# Dimension:              2048x1152
+# Dimension:              1920x1080
 
 
 
 ##############################################
 #      Xnee application arguments            #
 ##############################################
-#  /home/pm/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_random_simple_graph.xns 
+#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_random_simple_graph.xns 
 
 
 ##############################################
@@ -77,7 +77,7 @@ all-clients
 ##############################################
 
 # Resolution
-#recorded-resolution  2048x1152
+#recorded-resolution  1920x1080
 #replay-resolution  1x1
 #resolution-adjustment  0
 
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0xe41020
+#   rState              0x5601642a5270
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -158,904 +158,1512 @@ extension-reply-minor-range   0-0
 delivered-event-range         0-0 
 device-event-range            66-71 
 error-range                   0-0 
-7,2,0,0,0,37,0,9057402,10,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,9057402,3,Virtual core keyboard
-7,2,0,0,0,50,0,9057727,10,AT Translated Set 2 keyboard
-6,2,0,0,0,50,0,9057727,3,Virtual core keyboard
-7,2,0,0,0,32,0,9058022,10,AT Translated Set 2 keyboard
-6,2,0,0,0,32,0,9058022,3,Virtual core keyboard
-0,21,0,0,0,0,0,9058054
-NEW-WINDOW:461,197:62914604,62914604,18917619,0,0,0:0x0+879+458:0,0:Import
-0,21,0,0,0,0,0,9058054
-0,21,0,0,0,0,0,9058054
-7,3,0,0,0,32,0,9058108,10,AT Translated Set 2 keyboard
-6,3,0,0,0,32,0,9058108,3,Virtual core keyboard
-7,3,0,0,0,50,0,9058135,10,AT Translated Set 2 keyboard
-6,3,0,0,0,50,0,9058135,3,Virtual core keyboard
-7,3,0,0,0,37,0,9058216,10,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,9058216,3,Virtual core keyboard
-7,2,0,0,0,116,0,9059288,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9059288,3,Virtual core keyboard
-7,3,0,0,0,116,0,9059360,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9059360,3,Virtual core keyboard
-7,2,0,0,0,116,0,9059482,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9059482,3,Virtual core keyboard
-7,3,0,0,0,116,0,9059594,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9059594,3,Virtual core keyboard
-7,2,0,0,0,116,0,9059695,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9059695,3,Virtual core keyboard
-7,3,0,0,0,116,0,9059787,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9059787,3,Virtual core keyboard
-7,2,0,0,0,116,0,9059888,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9059888,3,Virtual core keyboard
-7,3,0,0,0,116,0,9059961,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9059961,3,Virtual core keyboard
-7,2,0,0,0,116,0,9060072,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9060072,3,Virtual core keyboard
-7,3,0,0,0,116,0,9060134,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9060134,3,Virtual core keyboard
-7,2,0,0,0,116,0,9060234,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9060234,3,Virtual core keyboard
-7,3,0,0,0,116,0,9060306,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9060306,3,Virtual core keyboard
-7,2,0,0,0,116,0,9060407,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9060407,3,Virtual core keyboard
-7,3,0,0,0,116,0,9060470,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9060470,3,Virtual core keyboard
-7,2,0,0,0,116,0,9060570,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9060570,3,Virtual core keyboard
-7,3,0,0,0,116,0,9060642,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9060642,3,Virtual core keyboard
-7,2,0,0,0,116,0,9060743,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9060743,3,Virtual core keyboard
-7,3,0,0,0,116,0,9060815,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9060815,3,Virtual core keyboard
-7,2,0,0,0,116,0,9060916,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9060916,3,Virtual core keyboard
-7,3,0,0,0,116,0,9060989,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9060989,3,Virtual core keyboard
-7,2,0,0,0,116,0,9061100,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9061100,3,Virtual core keyboard
-7,3,0,0,0,116,0,9061172,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9061172,3,Virtual core keyboard
-7,2,0,0,0,116,0,9061272,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9061272,3,Virtual core keyboard
-7,3,0,0,0,116,0,9061354,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9061354,3,Virtual core keyboard
-7,2,0,0,0,116,0,9061466,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9061466,3,Virtual core keyboard
-7,3,0,0,0,116,0,9061560,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9061560,3,Virtual core keyboard
-7,2,0,0,0,116,0,9061681,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9061681,3,Virtual core keyboard
-7,3,0,0,0,116,0,9061773,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9061773,3,Virtual core keyboard
-7,2,0,0,0,116,0,9061894,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9061894,3,Virtual core keyboard
-7,3,0,0,0,116,0,9062018,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9062018,3,Virtual core keyboard
-7,2,0,0,0,116,0,9062128,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9062128,3,Virtual core keyboard
-7,3,0,0,0,116,0,9062231,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9062231,3,Virtual core keyboard
-7,2,0,0,0,116,0,9062352,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9062352,3,Virtual core keyboard
-7,3,0,0,0,116,0,9062486,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9062486,3,Virtual core keyboard
-7,2,0,0,0,116,0,9062932,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9062932,3,Virtual core keyboard
-7,3,0,0,0,116,0,9063066,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9063066,3,Virtual core keyboard
-7,2,0,0,0,116,0,9063359,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9063359,3,Virtual core keyboard
-7,3,0,0,0,116,0,9063452,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9063452,3,Virtual core keyboard
-7,2,0,0,0,116,0,9063797,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9063797,3,Virtual core keyboard
-7,3,0,0,0,116,0,9063900,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9063900,3,Virtual core keyboard
-7,2,0,0,0,116,0,9064097,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9064097,3,Virtual core keyboard
-7,3,0,0,0,116,0,9064200,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9064200,3,Virtual core keyboard
-7,2,0,0,0,36,0,9064823,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,9064823,3,Virtual core keyboard
-0,21,0,0,0,0,0,9064847
-NEW-WINDOW:1,28:62914612,62914612,18917702,0,0,0:0x0+500+46:0,0:Random Simple Graph
-0,21,0,0,0,0,0,9064847
-0,21,0,0,0,0,0,9064848
-7,3,0,0,0,36,0,9064896,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,9064896,3,Virtual core keyboard
-0,21,0,0,0,0,0,9064913
-NEW-WINDOW:459,141:62914604,62914604,748,0,0,0:459x141+879+458:0,0:Import
-0,21,0,0,0,0,0,9064913
-0,21,0,0,0,0,0,9064913
-0,21,0,0,0,0,0,9064913
-0,21,0,0,0,0,0,9064913
-0,21,0,0,0,0,0,9065133
-NEW-WINDOW:5,49:62914657,62914657,748,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,9065133
-0,21,0,0,0,0,0,9065133
-0,21,0,0,0,0,0,9065133
-0,21,0,0,0,0,0,9065133
-0,21,0,0,0,0,0,9065133
-0,21,0,0,0,0,0,9065181
-NEW-WINDOW:0,0:62914663,62914663,748,0,0,0:0x0+1024+460:0,0:tulip_perspective
-0,21,0,0,0,0,0,9065181
-0,21,0,0,0,0,0,9065181
-0,21,0,0,0,0,0,9065181
-0,21,0,0,0,0,0,9065181
-0,21,0,0,0,0,0,9065181
-0,21,0,0,0,0,0,9065181
-NEW-WINDOW:0,0:62914666,62914666,62914696,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,9065181
-NEW-WINDOW:0,0:62914668,62914668,62914696,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,9065181
-NEW-WINDOW:0,0:62914672,62914672,62914696,0,0,0:0x0+1024+460:0,0:
-0,21,0,0,0,0,0,9065221
-NEW-WINDOW:0,0:62914705,62914705,748,0,0,0:0x0+1172+849:0,0:Spreadsheet view
-0,21,0,0,0,0,0,9065221
-0,21,0,0,0,0,0,9065221
-0,21,0,0,0,0,0,9065221
-0,21,0,0,0,0,0,9065221
-0,21,0,0,0,0,0,9065221
-0,21,0,0,0,0,0,9065247
-NEW-WINDOW:0,0:62914691,62914691,748,0,0,0:0x0+943+595:0,0:Node Link Diagram view
-0,21,0,0,0,0,0,9065247
-0,21,0,0,0,0,0,9065247
-0,21,0,0,0,0,0,9065247
-0,21,0,0,0,0,0,9065247
-0,21,0,0,0,0,0,9065247
-0,21,0,0,0,0,0,9065293
-NEW-WINDOW:1117,102:62914694,62914694,62914796,0,0,0:0x0+584+27:0,0:
-0,21,0,0,0,0,0,9065293
-NEW-WINDOW:1117,129:62914696,62914696,62914796,0,0,0:0x27+584+822:0,0:
-7,6,1580,777,0,0,0,9066487,9,'USB Optical Mouse'
-7,6,1578,777,0,0,0,9066495,9,'USB Optical Mouse'
-7,6,1571,777,0,0,0,9066503,9,'USB Optical Mouse'
-7,6,1555,777,0,0,0,9066511,9,'USB Optical Mouse'
-7,6,1527,775,0,0,0,9066519,9,'USB Optical Mouse'
-7,6,1495,772,0,0,0,9066527,9,'USB Optical Mouse'
-7,6,1458,768,0,0,0,9066535,9,'USB Optical Mouse'
-7,6,1416,764,0,0,0,9066543,9,'USB Optical Mouse'
-7,6,1372,761,0,0,0,9066551,9,'USB Optical Mouse'
-7,6,1330,758,0,0,0,9066559,9,'USB Optical Mouse'
-7,6,1289,750,0,0,0,9066567,9,'USB Optical Mouse'
-7,6,1246,741,0,0,0,9066575,9,'USB Optical Mouse'
-7,6,1207,733,0,0,0,9066583,9,'USB Optical Mouse'
-7,6,1161,721,0,0,0,9066591,9,'USB Optical Mouse'
-7,6,1118,705,0,0,0,9066599,9,'USB Optical Mouse'
-7,6,1078,683,0,0,0,9066607,9,'USB Optical Mouse'
-7,6,1034,660,0,0,0,9066615,9,'USB Optical Mouse'
-7,6,1001,637,0,0,0,9066623,9,'USB Optical Mouse'
-7,6,966,613,0,0,0,9066631,9,'USB Optical Mouse'
-7,6,928,590,0,0,0,9066639,9,'USB Optical Mouse'
-7,6,897,566,0,0,0,9066647,9,'USB Optical Mouse'
-7,6,863,543,0,0,0,9066655,9,'USB Optical Mouse'
-7,6,832,519,0,0,0,9066663,9,'USB Optical Mouse'
-7,6,802,496,0,0,0,9066671,9,'USB Optical Mouse'
-7,6,772,470,0,0,0,9066679,9,'USB Optical Mouse'
-7,6,742,443,0,0,0,9066687,9,'USB Optical Mouse'
-7,6,709,417,0,0,0,9066695,9,'USB Optical Mouse'
-7,6,675,387,0,0,0,9066703,9,'USB Optical Mouse'
-7,6,642,360,0,0,0,9066711,9,'USB Optical Mouse'
-7,6,608,330,0,0,0,9066719,9,'USB Optical Mouse'
-7,6,578,304,0,0,0,9066727,9,'USB Optical Mouse'
-7,6,552,282,0,0,0,9066735,9,'USB Optical Mouse'
-7,6,534,259,0,0,0,9066743,9,'USB Optical Mouse'
-7,6,516,245,0,0,0,9066751,9,'USB Optical Mouse'
-7,6,498,230,0,0,0,9066759,9,'USB Optical Mouse'
-7,6,485,217,0,0,0,9066767,9,'USB Optical Mouse'
-7,6,472,204,0,0,0,9066775,9,'USB Optical Mouse'
-7,6,459,191,0,0,0,9066783,9,'USB Optical Mouse'
-7,6,446,178,0,0,0,9066791,9,'USB Optical Mouse'
-7,6,433,165,0,0,0,9066799,9,'USB Optical Mouse'
-7,6,421,156,0,0,0,9066807,9,'USB Optical Mouse'
-7,6,410,147,0,0,0,9066815,9,'USB Optical Mouse'
-7,6,399,139,0,0,0,9066823,9,'USB Optical Mouse'
-7,6,388,131,0,0,0,9066831,9,'USB Optical Mouse'
-7,6,378,125,0,0,0,9066839,9,'USB Optical Mouse'
-7,6,371,120,0,0,0,9066847,9,'USB Optical Mouse'
-7,6,366,115,0,0,0,9066855,9,'USB Optical Mouse'
-7,6,362,113,0,0,0,9066863,9,'USB Optical Mouse'
-7,6,359,112,0,0,0,9066871,9,'USB Optical Mouse'
-7,6,358,111,0,0,0,9066879,9,'USB Optical Mouse'
-7,6,357,110,0,0,0,9066887,9,'USB Optical Mouse'
-7,6,356,108,0,0,0,9066895,9,'USB Optical Mouse'
-7,6,355,107,0,0,0,9066903,9,'USB Optical Mouse'
-7,6,354,105,0,0,0,9066911,9,'USB Optical Mouse'
-7,6,352,102,0,0,0,9066919,9,'USB Optical Mouse'
-7,6,350,99,0,0,0,9066927,9,'USB Optical Mouse'
-7,6,347,96,0,0,0,9066935,9,'USB Optical Mouse'
-7,6,345,94,0,0,0,9066943,9,'USB Optical Mouse'
-7,6,342,90,0,0,0,9066951,9,'USB Optical Mouse'
-7,6,338,87,0,0,0,9066959,9,'USB Optical Mouse'
-7,6,336,85,0,0,0,9066967,9,'USB Optical Mouse'
-7,6,335,83,0,0,0,9066975,9,'USB Optical Mouse'
-7,6,333,82,0,0,0,9067015,9,'USB Optical Mouse'
-7,6,332,82,0,0,0,9067055,9,'USB Optical Mouse'
-7,6,332,83,0,0,0,9067063,9,'USB Optical Mouse'
-7,6,332,84,0,0,0,9067071,9,'USB Optical Mouse'
-7,6,332,87,0,0,0,9067079,9,'USB Optical Mouse'
-7,6,331,89,0,0,0,9067087,9,'USB Optical Mouse'
-7,6,329,92,0,0,0,9067095,9,'USB Optical Mouse'
-7,6,328,95,0,0,0,9067103,9,'USB Optical Mouse'
-7,6,327,98,0,0,0,9067111,9,'USB Optical Mouse'
-7,6,326,101,0,0,0,9067119,9,'USB Optical Mouse'
-7,6,325,104,0,0,0,9067127,9,'USB Optical Mouse'
-7,6,324,107,0,0,0,9067135,9,'USB Optical Mouse'
-7,6,323,109,0,0,0,9067143,9,'USB Optical Mouse'
-7,6,322,112,0,0,0,9067151,9,'USB Optical Mouse'
-7,6,322,114,0,0,0,9067159,9,'USB Optical Mouse'
-7,6,322,116,0,0,0,9067167,9,'USB Optical Mouse'
-7,6,322,119,0,0,0,9067175,9,'USB Optical Mouse'
-7,6,322,121,0,0,0,9067183,9,'USB Optical Mouse'
-7,6,322,123,0,0,0,9067191,9,'USB Optical Mouse'
-7,6,322,126,0,0,0,9067199,9,'USB Optical Mouse'
-7,6,321,128,0,0,0,9067207,9,'USB Optical Mouse'
-7,6,321,129,0,0,0,9067215,9,'USB Optical Mouse'
-7,6,321,131,0,0,0,9067223,9,'USB Optical Mouse'
-7,6,321,132,0,0,0,9067231,9,'USB Optical Mouse'
-7,6,321,133,0,0,0,9067239,9,'USB Optical Mouse'
-7,6,321,134,0,0,0,9067255,9,'USB Optical Mouse'
-7,4,0,0,1,0,0,9067623,9,USB Optical Mouse
-6,4,0,0,1,0,0,9067623,2,Virtual core pointer
-7,5,0,0,1,0,0,9067767,9,USB Optical Mouse
-6,5,0,0,1,0,0,9067767,2,Virtual core pointer
-7,2,0,0,0,39,0,9068712,10,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,9068712,3,Virtual core keyboard
-7,3,0,0,0,39,0,9068814,10,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,9068814,3,Virtual core keyboard
-7,2,0,0,0,31,0,9068895,10,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,9068895,3,Virtual core keyboard
-7,3,0,0,0,31,0,9068987,10,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,9068987,3,Virtual core keyboard
-7,2,0,0,0,47,0,9069170,10,AT Translated Set 2 keyboard
-6,2,0,0,0,47,0,9069170,3,Virtual core keyboard
-7,3,0,0,0,47,0,9069272,10,AT Translated Set 2 keyboard
-6,3,0,0,0,47,0,9069272,3,Virtual core keyboard
-7,2,0,0,0,33,0,9069505,10,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,9069505,3,Virtual core keyboard
-7,2,0,0,0,46,0,9069658,10,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,9069658,3,Virtual core keyboard
-7,3,0,0,0,33,0,9069680,10,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,9069680,3,Virtual core keyboard
-7,3,0,0,0,46,0,9069751,10,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,9069751,3,Virtual core keyboard
-7,2,0,0,0,26,0,9069923,10,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,9069923,3,Virtual core keyboard
-7,3,0,0,0,26,0,9070025,10,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,9070025,3,Virtual core keyboard
-7,6,321,135,0,0,0,9071639,9,'USB Optical Mouse'
-7,6,322,136,0,0,0,9071647,9,'USB Optical Mouse'
-7,6,322,138,0,0,0,9071655,9,'USB Optical Mouse'
-7,6,322,140,0,0,0,9071663,9,'USB Optical Mouse'
-7,6,322,142,0,0,0,9071671,9,'USB Optical Mouse'
-7,6,322,144,0,0,0,9071679,9,'USB Optical Mouse'
-7,6,322,145,0,0,0,9071687,9,'USB Optical Mouse'
-7,6,322,146,0,0,0,9071703,9,'USB Optical Mouse'
-7,6,322,147,0,0,0,9071719,9,'USB Optical Mouse'
-7,6,322,148,0,0,0,9071727,9,'USB Optical Mouse'
-7,6,322,149,0,0,0,9071735,9,'USB Optical Mouse'
-7,6,322,150,0,0,0,9071743,9,'USB Optical Mouse'
-7,6,322,152,0,0,0,9071751,9,'USB Optical Mouse'
-7,6,322,154,0,0,0,9071759,9,'USB Optical Mouse'
-7,6,322,156,0,0,0,9071767,9,'USB Optical Mouse'
-7,6,322,157,0,0,0,9071775,9,'USB Optical Mouse'
-7,6,322,159,0,0,0,9071783,9,'USB Optical Mouse'
-7,6,322,160,0,0,0,9071791,9,'USB Optical Mouse'
-7,6,322,161,0,0,0,9071799,9,'USB Optical Mouse'
-7,6,322,163,0,0,0,9071807,9,'USB Optical Mouse'
-7,6,322,164,0,0,0,9071815,9,'USB Optical Mouse'
-7,6,322,165,0,0,0,9071823,9,'USB Optical Mouse'
-7,6,322,166,0,0,0,9071831,9,'USB Optical Mouse'
-7,6,322,168,0,0,0,9071839,9,'USB Optical Mouse'
-7,6,322,169,0,0,0,9071847,9,'USB Optical Mouse'
-7,6,322,170,0,0,0,9071855,9,'USB Optical Mouse'
-7,6,322,172,0,0,0,9071863,9,'USB Optical Mouse'
-7,6,322,173,0,0,0,9071871,9,'USB Optical Mouse'
-7,6,322,174,0,0,0,9071887,9,'USB Optical Mouse'
-7,6,322,175,0,0,0,9071895,9,'USB Optical Mouse'
-7,6,322,176,0,0,0,9071903,9,'USB Optical Mouse'
-7,6,322,177,0,0,0,9071919,9,'USB Optical Mouse'
-7,6,322,178,0,0,0,9071927,9,'USB Optical Mouse'
-7,6,322,179,0,0,0,9071935,9,'USB Optical Mouse'
-7,6,322,180,0,0,0,9071943,9,'USB Optical Mouse'
-7,6,322,181,0,0,0,9071951,9,'USB Optical Mouse'
-7,6,322,183,0,0,0,9071959,9,'USB Optical Mouse'
-7,6,322,185,0,0,0,9071967,9,'USB Optical Mouse'
-7,6,322,186,0,0,0,9071975,9,'USB Optical Mouse'
-7,6,322,189,0,0,0,9071983,9,'USB Optical Mouse'
-7,6,322,190,0,0,0,9071991,9,'USB Optical Mouse'
-7,6,322,192,0,0,0,9071999,9,'USB Optical Mouse'
-7,6,324,193,0,0,0,9072007,9,'USB Optical Mouse'
-7,6,324,195,0,0,0,9072015,9,'USB Optical Mouse'
-7,6,324,197,0,0,0,9072023,9,'USB Optical Mouse'
-7,6,324,199,0,0,0,9072031,9,'USB Optical Mouse'
-7,6,324,201,0,0,0,9072039,9,'USB Optical Mouse'
-7,6,324,203,0,0,0,9072047,9,'USB Optical Mouse'
-7,6,324,205,0,0,0,9072055,9,'USB Optical Mouse'
-7,6,325,207,0,0,0,9072063,9,'USB Optical Mouse'
-7,6,325,209,0,0,0,9072071,9,'USB Optical Mouse'
-7,6,325,210,0,0,0,9072079,9,'USB Optical Mouse'
-7,6,325,211,0,0,0,9072087,9,'USB Optical Mouse'
-7,6,325,212,0,0,0,9072095,9,'USB Optical Mouse'
-7,6,325,213,0,0,0,9072103,9,'USB Optical Mouse'
-7,6,325,214,0,0,0,9072111,9,'USB Optical Mouse'
-7,6,325,216,0,0,0,9072119,9,'USB Optical Mouse'
-7,6,325,217,0,0,0,9072127,9,'USB Optical Mouse'
-7,6,325,218,0,0,0,9072135,9,'USB Optical Mouse'
-7,6,325,220,0,0,0,9072143,9,'USB Optical Mouse'
-7,6,326,222,0,0,0,9072151,9,'USB Optical Mouse'
-7,6,326,223,0,0,0,9072159,9,'USB Optical Mouse'
-7,6,326,224,0,0,0,9072167,9,'USB Optical Mouse'
-7,4,0,0,1,0,0,9072495,9,USB Optical Mouse
-6,4,0,0,1,0,0,9072495,2,Virtual core pointer
-7,5,0,0,1,0,0,9072631,9,USB Optical Mouse
-6,5,0,0,1,0,0,9072631,2,Virtual core pointer
-0,21,0,0,0,0,0,9072649
-NEW-WINDOW:650,328:62914811,62914811,18917809,0,0,0:0x0+500+65:0,0:Simple
-0,21,0,0,0,0,0,9072649
-0,21,0,0,0,0,0,9072649
-0,21,0,0,0,0,0,9072683
-NEW-WINDOW:706,318:62914821,62914821,18917824,0,0,0:0x0+389+94:0,0:Tulip test result
-0,21,0,0,0,0,0,9072683
-0,21,0,0,0,0,0,9072683
-7,6,326,225,0,0,0,9072967,9,'USB Optical Mouse'
-7,6,327,226,0,0,0,9072975,9,'USB Optical Mouse'
-7,6,330,229,0,0,0,9072983,9,'USB Optical Mouse'
-7,6,336,233,0,0,0,9072991,9,'USB Optical Mouse'
-7,6,344,239,0,0,0,9072999,9,'USB Optical Mouse'
-7,6,354,244,0,0,0,9073007,9,'USB Optical Mouse'
-7,6,365,251,0,0,0,9073015,9,'USB Optical Mouse'
-7,6,375,257,0,0,0,9073023,9,'USB Optical Mouse'
-7,6,386,264,0,0,0,9073031,9,'USB Optical Mouse'
-7,6,397,269,0,0,0,9073039,9,'USB Optical Mouse'
-7,6,408,274,0,0,0,9073047,9,'USB Optical Mouse'
-7,6,418,276,0,0,0,9073055,9,'USB Optical Mouse'
-7,6,427,278,0,0,0,9073063,9,'USB Optical Mouse'
-7,6,435,280,0,0,0,9073071,9,'USB Optical Mouse'
-7,6,443,282,0,0,0,9073079,9,'USB Optical Mouse'
-7,6,452,284,0,0,0,9073087,9,'USB Optical Mouse'
-7,6,458,286,0,0,0,9073095,9,'USB Optical Mouse'
-7,6,468,286,0,0,0,9073103,9,'USB Optical Mouse'
-7,6,475,288,0,0,0,9073111,9,'USB Optical Mouse'
-7,6,481,290,0,0,0,9073119,9,'USB Optical Mouse'
-7,6,489,292,0,0,0,9073127,9,'USB Optical Mouse'
-7,6,496,295,0,0,0,9073135,9,'USB Optical Mouse'
-7,6,504,297,0,0,0,9073143,9,'USB Optical Mouse'
-7,6,510,298,0,0,0,9073151,9,'USB Optical Mouse'
-7,6,516,300,0,0,0,9073159,9,'USB Optical Mouse'
-7,6,523,300,0,0,0,9073167,9,'USB Optical Mouse'
-7,6,529,302,0,0,0,9073175,9,'USB Optical Mouse'
-7,6,535,303,0,0,0,9073183,9,'USB Optical Mouse'
-7,6,540,305,0,0,0,9073191,9,'USB Optical Mouse'
-7,6,546,307,0,0,0,9073199,9,'USB Optical Mouse'
-7,6,550,308,0,0,0,9073207,9,'USB Optical Mouse'
-7,6,555,309,0,0,0,9073215,9,'USB Optical Mouse'
-7,6,562,310,0,0,0,9073223,9,'USB Optical Mouse'
-7,6,569,312,0,0,0,9073231,9,'USB Optical Mouse'
-7,6,576,313,0,0,0,9073239,9,'USB Optical Mouse'
-7,6,583,315,0,0,0,9073247,9,'USB Optical Mouse'
-7,6,590,315,0,0,0,9073255,9,'USB Optical Mouse'
-7,6,596,317,0,0,0,9073263,9,'USB Optical Mouse'
-7,6,602,317,0,0,0,9073271,9,'USB Optical Mouse'
-7,6,607,317,0,0,0,9073279,9,'USB Optical Mouse'
-7,6,613,317,0,0,0,9073287,9,'USB Optical Mouse'
-7,6,617,317,0,0,0,9073295,9,'USB Optical Mouse'
-7,6,619,317,0,0,0,9073303,9,'USB Optical Mouse'
-7,6,621,317,0,0,0,9073311,9,'USB Optical Mouse'
-7,6,623,317,0,0,0,9073319,9,'USB Optical Mouse'
-7,6,626,318,0,0,0,9073327,9,'USB Optical Mouse'
-7,6,628,318,0,0,0,9073335,9,'USB Optical Mouse'
-7,6,630,319,0,0,0,9073343,9,'USB Optical Mouse'
-7,6,632,320,0,0,0,9073351,9,'USB Optical Mouse'
-7,6,635,320,0,0,0,9073359,9,'USB Optical Mouse'
-7,6,638,321,0,0,0,9073367,9,'USB Optical Mouse'
-7,6,641,322,0,0,0,9073375,9,'USB Optical Mouse'
-7,6,644,323,0,0,0,9073383,9,'USB Optical Mouse'
-7,6,647,323,0,0,0,9073391,9,'USB Optical Mouse'
-7,6,651,324,0,0,0,9073399,9,'USB Optical Mouse'
-7,6,654,325,0,0,0,9073407,9,'USB Optical Mouse'
-7,6,658,327,0,0,0,9073415,9,'USB Optical Mouse'
-7,6,661,327,0,0,0,9073423,9,'USB Optical Mouse'
-7,6,665,328,0,0,0,9073431,9,'USB Optical Mouse'
-7,6,669,328,0,0,0,9073439,9,'USB Optical Mouse'
-7,6,672,329,0,0,0,9073447,9,'USB Optical Mouse'
-7,6,675,329,0,0,0,9073455,9,'USB Optical Mouse'
-7,6,678,329,0,0,0,9073463,9,'USB Optical Mouse'
-7,6,680,329,0,0,0,9073471,9,'USB Optical Mouse'
-7,6,683,329,0,0,0,9073479,9,'USB Optical Mouse'
-7,6,686,329,0,0,0,9073487,9,'USB Optical Mouse'
-7,6,688,330,0,0,0,9073495,9,'USB Optical Mouse'
-7,6,690,331,0,0,0,9073503,9,'USB Optical Mouse'
-7,6,693,331,0,0,0,9073511,9,'USB Optical Mouse'
-7,6,695,331,0,0,0,9073519,9,'USB Optical Mouse'
-7,6,697,332,0,0,0,9073527,9,'USB Optical Mouse'
-7,6,699,332,0,0,0,9073535,9,'USB Optical Mouse'
-7,6,700,332,0,0,0,9073543,9,'USB Optical Mouse'
-7,6,702,333,0,0,0,9073551,9,'USB Optical Mouse'
-7,6,704,333,0,0,0,9073559,9,'USB Optical Mouse'
-7,6,706,334,0,0,0,9073567,9,'USB Optical Mouse'
-7,6,708,334,0,0,0,9073575,9,'USB Optical Mouse'
-7,6,710,335,0,0,0,9073583,9,'USB Optical Mouse'
-7,6,713,336,0,0,0,9073591,9,'USB Optical Mouse'
-7,6,715,337,0,0,0,9073599,9,'USB Optical Mouse'
-7,6,718,338,0,0,0,9073607,9,'USB Optical Mouse'
-7,6,720,339,0,0,0,9073615,9,'USB Optical Mouse'
-7,6,722,339,0,0,0,9073623,9,'USB Optical Mouse'
-7,6,724,339,0,0,0,9073631,9,'USB Optical Mouse'
-7,6,726,340,0,0,0,9073639,9,'USB Optical Mouse'
-7,6,728,340,0,0,0,9073647,9,'USB Optical Mouse'
-7,6,729,340,0,0,0,9073655,9,'USB Optical Mouse'
-7,6,731,340,0,0,0,9073663,9,'USB Optical Mouse'
-7,6,732,341,0,0,0,9073671,9,'USB Optical Mouse'
-7,6,733,341,0,0,0,9073679,9,'USB Optical Mouse'
-7,6,734,341,0,0,0,9073687,9,'USB Optical Mouse'
-7,6,735,341,0,0,0,9073695,9,'USB Optical Mouse'
-7,6,736,341,0,0,0,9073703,9,'USB Optical Mouse'
-7,6,738,341,0,0,0,9073711,9,'USB Optical Mouse'
-7,6,739,341,0,0,0,9073719,9,'USB Optical Mouse'
-7,6,741,341,0,0,0,9073727,9,'USB Optical Mouse'
-7,6,742,342,0,0,0,9073735,9,'USB Optical Mouse'
-7,6,744,342,0,0,0,9073743,9,'USB Optical Mouse'
-7,6,746,342,0,0,0,9073751,9,'USB Optical Mouse'
-7,6,747,342,0,0,0,9073759,9,'USB Optical Mouse'
-7,6,749,342,0,0,0,9073767,9,'USB Optical Mouse'
-7,6,750,342,0,0,0,9073775,9,'USB Optical Mouse'
-7,6,751,342,0,0,0,9073791,9,'USB Optical Mouse'
-7,6,752,341,0,0,0,9073807,9,'USB Optical Mouse'
-7,6,753,341,0,0,0,9073823,9,'USB Optical Mouse'
-7,6,754,341,0,0,0,9073847,9,'USB Optical Mouse'
-7,6,755,341,0,0,0,9073855,9,'USB Optical Mouse'
-7,6,756,340,0,0,0,9073871,9,'USB Optical Mouse'
-7,6,757,340,0,0,0,9073879,9,'USB Optical Mouse'
-7,6,757,339,0,0,0,9073887,9,'USB Optical Mouse'
-7,6,758,339,0,0,0,9073895,9,'USB Optical Mouse'
-7,6,758,338,0,0,0,9073903,9,'USB Optical Mouse'
-7,6,759,338,0,0,0,9073911,9,'USB Optical Mouse'
-7,6,760,338,0,0,0,9073919,9,'USB Optical Mouse'
-7,6,760,337,0,0,0,9073935,9,'USB Optical Mouse'
-7,6,760,336,0,0,0,9073983,9,'USB Optical Mouse'
-7,4,0,0,1,0,0,9074439,9,USB Optical Mouse
-6,4,0,0,1,0,0,9074439,2,Virtual core pointer
-7,6,760,335,0,0,0,9074623,9,'USB Optical Mouse'
-7,6,761,335,0,0,0,9074631,9,'USB Optical Mouse'
-7,6,763,336,0,0,0,9074647,9,'USB Optical Mouse'
-7,6,764,336,0,0,0,9074655,9,'USB Optical Mouse'
-7,6,765,336,0,0,0,9074663,9,'USB Optical Mouse'
-7,6,766,336,0,0,0,9074671,9,'USB Optical Mouse'
-7,6,767,336,0,0,0,9074687,9,'USB Optical Mouse'
-7,6,768,336,0,0,0,9074711,9,'USB Optical Mouse'
-7,6,769,336,0,0,0,9074727,9,'USB Optical Mouse'
-7,6,770,336,0,0,0,9074735,9,'USB Optical Mouse'
-7,6,771,336,0,0,0,9074743,9,'USB Optical Mouse'
-7,6,772,336,0,0,0,9074759,9,'USB Optical Mouse'
-7,6,773,336,0,0,0,9074783,9,'USB Optical Mouse'
-7,6,774,336,0,0,0,9074815,9,'USB Optical Mouse'
-7,6,775,336,0,0,0,9074831,9,'USB Optical Mouse'
-7,6,776,336,0,0,0,9074839,9,'USB Optical Mouse'
-7,6,777,336,0,0,0,9074847,9,'USB Optical Mouse'
-7,6,778,336,0,0,0,9074855,9,'USB Optical Mouse'
-7,6,779,336,0,0,0,9074863,9,'USB Optical Mouse'
-7,6,780,336,0,0,0,9074871,9,'USB Optical Mouse'
-7,6,781,336,0,0,0,9074887,9,'USB Optical Mouse'
-7,6,782,336,0,0,0,9074903,9,'USB Optical Mouse'
-7,6,783,336,0,0,0,9074919,9,'USB Optical Mouse'
-7,6,784,336,0,0,0,9074935,9,'USB Optical Mouse'
-7,6,785,336,0,0,0,9074943,9,'USB Optical Mouse'
-7,6,786,336,0,0,0,9074951,9,'USB Optical Mouse'
-7,6,787,336,0,0,0,9074959,9,'USB Optical Mouse'
-7,6,788,336,0,0,0,9074975,9,'USB Optical Mouse'
-7,6,789,336,0,0,0,9074983,9,'USB Optical Mouse'
-7,6,790,336,0,0,0,9074999,9,'USB Optical Mouse'
-7,6,791,336,0,0,0,9075015,9,'USB Optical Mouse'
-7,6,792,336,0,0,0,9075023,9,'USB Optical Mouse'
-7,6,793,336,0,0,0,9075039,9,'USB Optical Mouse'
-7,6,794,336,0,0,0,9075055,9,'USB Optical Mouse'
-7,6,795,336,0,0,0,9075071,9,'USB Optical Mouse'
-7,6,796,336,0,0,0,9075087,9,'USB Optical Mouse'
-7,6,797,336,0,0,0,9075103,9,'USB Optical Mouse'
-7,6,798,336,0,0,0,9075119,9,'USB Optical Mouse'
-7,6,799,336,0,0,0,9075127,9,'USB Optical Mouse'
-7,6,800,336,0,0,0,9075135,9,'USB Optical Mouse'
-7,6,801,336,0,0,0,9075143,9,'USB Optical Mouse'
-7,6,802,336,0,0,0,9075151,9,'USB Optical Mouse'
-7,6,803,336,0,0,0,9075159,9,'USB Optical Mouse'
-7,6,804,336,0,0,0,9075167,9,'USB Optical Mouse'
-7,6,805,336,0,0,0,9075175,9,'USB Optical Mouse'
-7,6,806,336,0,0,0,9075183,9,'USB Optical Mouse'
-7,6,807,336,0,0,0,9075191,9,'USB Optical Mouse'
-7,6,809,336,0,0,0,9075199,9,'USB Optical Mouse'
-7,6,810,336,0,0,0,9075207,9,'USB Optical Mouse'
-7,6,811,336,0,0,0,9075215,9,'USB Optical Mouse'
-7,6,812,336,0,0,0,9075223,9,'USB Optical Mouse'
-7,6,813,336,0,0,0,9075231,9,'USB Optical Mouse'
-7,6,815,336,0,0,0,9075239,9,'USB Optical Mouse'
-7,6,816,336,0,0,0,9075247,9,'USB Optical Mouse'
-7,6,817,336,0,0,0,9075255,9,'USB Optical Mouse'
-7,6,818,336,0,0,0,9075263,9,'USB Optical Mouse'
-7,6,819,336,0,0,0,9075271,9,'USB Optical Mouse'
-7,6,820,336,0,0,0,9075279,9,'USB Optical Mouse'
-7,6,821,336,0,0,0,9075287,9,'USB Optical Mouse'
-7,6,822,336,0,0,0,9075303,9,'USB Optical Mouse'
-7,6,823,336,0,0,0,9075311,9,'USB Optical Mouse'
-7,6,824,336,0,0,0,9075319,9,'USB Optical Mouse'
-7,6,825,336,0,0,0,9075327,9,'USB Optical Mouse'
-7,6,826,336,0,0,0,9075335,9,'USB Optical Mouse'
-7,6,827,336,0,0,0,9075343,9,'USB Optical Mouse'
-7,6,828,336,0,0,0,9075351,9,'USB Optical Mouse'
-7,6,829,336,0,0,0,9075359,9,'USB Optical Mouse'
-7,6,830,336,0,0,0,9075367,9,'USB Optical Mouse'
-7,6,831,336,0,0,0,9075375,9,'USB Optical Mouse'
-7,6,833,336,0,0,0,9075391,9,'USB Optical Mouse'
-7,6,834,336,0,0,0,9075399,9,'USB Optical Mouse'
-7,6,835,336,0,0,0,9075407,9,'USB Optical Mouse'
-7,6,837,335,0,0,0,9075415,9,'USB Optical Mouse'
-7,6,838,335,0,0,0,9075423,9,'USB Optical Mouse'
-7,6,839,335,0,0,0,9075431,9,'USB Optical Mouse'
-7,6,840,335,0,0,0,9075439,9,'USB Optical Mouse'
-7,6,842,335,0,0,0,9075447,9,'USB Optical Mouse'
-7,6,843,334,0,0,0,9075455,9,'USB Optical Mouse'
-7,6,844,334,0,0,0,9075471,9,'USB Optical Mouse'
-7,6,845,334,0,0,0,9075479,9,'USB Optical Mouse'
-7,6,846,334,0,0,0,9075495,9,'USB Optical Mouse'
-7,6,847,334,0,0,0,9075503,9,'USB Optical Mouse'
-7,6,848,334,0,0,0,9075519,9,'USB Optical Mouse'
-7,6,849,334,0,0,0,9075527,9,'USB Optical Mouse'
-7,6,850,334,0,0,0,9075535,9,'USB Optical Mouse'
-7,6,851,334,0,0,0,9075543,9,'USB Optical Mouse'
-7,6,852,334,0,0,0,9075551,9,'USB Optical Mouse'
-7,6,853,333,0,0,0,9075559,9,'USB Optical Mouse'
-7,6,854,333,0,0,0,9075567,9,'USB Optical Mouse'
-7,6,855,333,0,0,0,9075575,9,'USB Optical Mouse'
-7,6,856,333,0,0,0,9075591,9,'USB Optical Mouse'
-7,6,857,333,0,0,0,9075599,9,'USB Optical Mouse'
-7,6,858,333,0,0,0,9075615,9,'USB Optical Mouse'
-7,6,859,333,0,0,0,9075631,9,'USB Optical Mouse'
-7,6,860,333,0,0,0,9075647,9,'USB Optical Mouse'
-7,6,861,333,0,0,0,9075655,9,'USB Optical Mouse'
-7,6,862,333,0,0,0,9075679,9,'USB Optical Mouse'
-7,6,863,333,0,0,0,9075695,9,'USB Optical Mouse'
-7,6,864,333,0,0,0,9075703,9,'USB Optical Mouse'
-7,6,865,333,0,0,0,9075719,9,'USB Optical Mouse'
-7,6,866,333,0,0,0,9075735,9,'USB Optical Mouse'
-7,6,867,333,0,0,0,9075775,9,'USB Optical Mouse'
-7,6,868,333,0,0,0,9075847,9,'USB Optical Mouse'
-7,6,869,333,0,0,0,9075863,9,'USB Optical Mouse'
-7,6,870,333,0,0,0,9075887,9,'USB Optical Mouse'
-7,6,871,333,0,0,0,9075903,9,'USB Optical Mouse'
-7,6,872,333,0,0,0,9075911,9,'USB Optical Mouse'
-7,6,873,333,0,0,0,9075927,9,'USB Optical Mouse'
-7,6,874,333,0,0,0,9075951,9,'USB Optical Mouse'
-7,6,875,333,0,0,0,9075975,9,'USB Optical Mouse'
-7,6,876,333,0,0,0,9076007,9,'USB Optical Mouse'
-7,6,877,333,0,0,0,9076047,9,'USB Optical Mouse'
-7,6,878,333,0,0,0,9076119,9,'USB Optical Mouse'
-7,6,879,333,0,0,0,9076207,9,'USB Optical Mouse'
-7,6,880,333,0,0,0,9076247,9,'USB Optical Mouse'
-7,6,881,333,0,0,0,9076279,9,'USB Optical Mouse'
-7,6,882,333,0,0,0,9076295,9,'USB Optical Mouse'
-7,6,883,333,0,0,0,9076335,9,'USB Optical Mouse'
-7,6,884,333,0,0,0,9076527,9,'USB Optical Mouse'
-7,6,885,333,0,0,0,9076575,9,'USB Optical Mouse'
-7,6,886,333,0,0,0,9076719,9,'USB Optical Mouse'
-7,6,887,333,0,0,0,9076743,9,'USB Optical Mouse'
-7,6,888,333,0,0,0,9076767,9,'USB Optical Mouse'
-7,6,889,333,0,0,0,9076791,9,'USB Optical Mouse'
-7,6,890,332,0,0,0,9076823,9,'USB Optical Mouse'
-7,6,891,332,0,0,0,9076839,9,'USB Optical Mouse'
-7,6,892,332,0,0,0,9076855,9,'USB Optical Mouse'
-7,6,893,332,0,0,0,9076887,9,'USB Optical Mouse'
-7,6,894,332,0,0,0,9077295,9,'USB Optical Mouse'
-7,6,895,332,0,0,0,9077599,9,'USB Optical Mouse'
-7,6,896,332,0,0,0,9077863,9,'USB Optical Mouse'
-7,6,897,332,0,0,0,9078191,9,'USB Optical Mouse'
-7,6,898,332,0,0,0,9078711,9,'USB Optical Mouse'
-7,6,899,332,0,0,0,9079887,9,'USB Optical Mouse'
-7,5,0,0,1,0,0,9080559,9,USB Optical Mouse
-6,5,0,0,1,0,0,9080559,2,Virtual core pointer
-7,6,900,332,0,0,0,9080847,9,'USB Optical Mouse'
-7,6,899,332,0,0,0,9080871,9,'USB Optical Mouse'
-7,6,898,332,0,0,0,9080919,9,'USB Optical Mouse'
-7,6,897,332,0,0,0,9080959,9,'USB Optical Mouse'
-7,6,896,332,0,0,0,9080967,9,'USB Optical Mouse'
-7,6,894,332,0,0,0,9080975,9,'USB Optical Mouse'
-7,6,893,333,0,0,0,9080983,9,'USB Optical Mouse'
-7,6,891,333,0,0,0,9080991,9,'USB Optical Mouse'
-7,6,890,333,0,0,0,9080999,9,'USB Optical Mouse'
-7,6,889,333,0,0,0,9081007,9,'USB Optical Mouse'
-7,6,887,333,0,0,0,9081023,9,'USB Optical Mouse'
-7,6,886,333,0,0,0,9081031,9,'USB Optical Mouse'
-7,6,885,333,0,0,0,9081039,9,'USB Optical Mouse'
-7,6,884,333,0,0,0,9081047,9,'USB Optical Mouse'
-7,6,882,333,0,0,0,9081055,9,'USB Optical Mouse'
-7,6,881,333,0,0,0,9081063,9,'USB Optical Mouse'
-7,6,879,333,0,0,0,9081071,9,'USB Optical Mouse'
-7,6,878,333,0,0,0,9081087,9,'USB Optical Mouse'
-7,6,877,333,0,0,0,9081111,9,'USB Optical Mouse'
-7,2,0,0,0,37,0,9082639,10,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,9082639,3,Virtual core keyboard
-7,2,0,0,0,54,0,9082945,10,AT Translated Set 2 keyboard
-6,2,0,0,0,54,0,9082945,3,Virtual core keyboard
-7,3,0,0,0,54,0,9083027,10,AT Translated Set 2 keyboard
-6,3,0,0,0,54,0,9083027,3,Virtual core keyboard
-7,3,0,0,0,37,0,9083048,10,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,9083048,3,Virtual core keyboard
-7,2,0,0,0,36,0,9083748,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,9083748,3,Virtual core keyboard
-7,3,0,0,0,36,0,9083832,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,9083832,3,Virtual core keyboard
-7,6,876,333,0,0,0,9084823,9,'USB Optical Mouse'
-7,6,875,333,0,0,0,9084831,9,'USB Optical Mouse'
-7,6,872,333,0,0,0,9084839,9,'USB Optical Mouse'
-7,6,871,332,0,0,0,9084847,9,'USB Optical Mouse'
-7,6,870,332,0,0,0,9084855,9,'USB Optical Mouse'
-7,6,869,332,0,0,0,9084863,9,'USB Optical Mouse'
-7,2,0,0,0,37,0,9085743,10,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,9085743,3,Virtual core keyboard
-7,2,0,0,0,24,0,9086131,10,AT Translated Set 2 keyboard
-6,2,0,0,0,24,0,9086131,3,Virtual core keyboard
-7,3,0,0,0,24,0,9086213,10,AT Translated Set 2 keyboard
-6,3,0,0,0,24,0,9086213,3,Virtual core keyboard
-7,3,0,0,0,37,0,9086233,10,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,9086233,3,Virtual core keyboard
-7,2,0,0,0,119,0,9087243,10,AT Translated Set 2 keyboard
-6,2,0,0,0,119,0,9087243,3,Virtual core keyboard
-7,3,0,0,0,119,0,9087285,10,AT Translated Set 2 keyboard
-6,3,0,0,0,119,0,9087285,3,Virtual core keyboard
-7,6,869,331,0,0,0,9088367,9,'USB Optical Mouse'
-7,6,868,331,0,0,0,9088375,9,'USB Optical Mouse'
-7,6,864,332,0,0,0,9088383,9,'USB Optical Mouse'
-7,6,856,333,0,0,0,9088391,9,'USB Optical Mouse'
-7,6,851,336,0,0,0,9088399,9,'USB Optical Mouse'
-7,6,845,338,0,0,0,9088407,9,'USB Optical Mouse'
-7,6,841,341,0,0,0,9088415,9,'USB Optical Mouse'
-7,6,838,341,0,0,0,9088423,9,'USB Optical Mouse'
-7,6,834,342,0,0,0,9088431,9,'USB Optical Mouse'
-7,6,832,343,0,0,0,9088439,9,'USB Optical Mouse'
-7,6,830,343,0,0,0,9088447,9,'USB Optical Mouse'
-7,6,827,344,0,0,0,9088455,9,'USB Optical Mouse'
-7,6,823,345,0,0,0,9088463,9,'USB Optical Mouse'
-7,6,819,346,0,0,0,9088471,9,'USB Optical Mouse'
-7,6,814,348,0,0,0,9088479,9,'USB Optical Mouse'
-7,6,809,349,0,0,0,9088487,9,'USB Optical Mouse'
-7,6,804,349,0,0,0,9088495,9,'USB Optical Mouse'
-7,6,794,350,0,0,0,9088503,9,'USB Optical Mouse'
-7,6,783,352,0,0,0,9088511,9,'USB Optical Mouse'
-7,6,771,352,0,0,0,9088519,9,'USB Optical Mouse'
-7,6,759,355,0,0,0,9088527,9,'USB Optical Mouse'
-7,6,748,357,0,0,0,9088535,9,'USB Optical Mouse'
-7,6,736,359,0,0,0,9088543,9,'USB Optical Mouse'
-7,6,725,363,0,0,0,9088559,9,'USB Optical Mouse'
-7,6,712,365,0,0,0,9088559,9,'USB Optical Mouse'
-7,6,704,368,0,0,0,9088567,9,'USB Optical Mouse'
-7,6,695,371,0,0,0,9088575,9,'USB Optical Mouse'
-7,6,686,374,0,0,0,9088583,9,'USB Optical Mouse'
-7,6,679,377,0,0,0,9088591,9,'USB Optical Mouse'
-7,6,672,380,0,0,0,9088599,9,'USB Optical Mouse'
-7,6,665,383,0,0,0,9088607,9,'USB Optical Mouse'
-7,6,659,386,0,0,0,9088615,9,'USB Optical Mouse'
-7,6,650,388,0,0,0,9088623,9,'USB Optical Mouse'
-7,6,642,394,0,0,0,9088631,9,'USB Optical Mouse'
-7,6,631,401,0,0,0,9088639,9,'USB Optical Mouse'
-7,6,621,407,0,0,0,9088647,9,'USB Optical Mouse'
-7,6,611,414,0,0,0,9088655,9,'USB Optical Mouse'
-7,6,601,420,0,0,0,9088663,9,'USB Optical Mouse'
-7,6,590,429,0,0,0,9088671,9,'USB Optical Mouse'
-7,6,580,437,0,0,0,9088679,9,'USB Optical Mouse'
-7,6,570,444,0,0,0,9088687,9,'USB Optical Mouse'
-7,6,559,450,0,0,0,9088695,9,'USB Optical Mouse'
-7,6,547,457,0,0,0,9088703,9,'USB Optical Mouse'
-7,6,536,464,0,0,0,9088711,9,'USB Optical Mouse'
-7,6,527,471,0,0,0,9088719,9,'USB Optical Mouse'
-7,6,517,478,0,0,0,9088727,9,'USB Optical Mouse'
-7,6,508,486,0,0,0,9088735,9,'USB Optical Mouse'
-7,6,499,493,0,0,0,9088743,9,'USB Optical Mouse'
-7,6,489,500,0,0,0,9088751,9,'USB Optical Mouse'
-7,6,480,507,0,0,0,9088759,9,'USB Optical Mouse'
-7,6,471,515,0,0,0,9088767,9,'USB Optical Mouse'
-7,6,464,522,0,0,0,9088775,9,'USB Optical Mouse'
-7,6,457,529,0,0,0,9088783,9,'USB Optical Mouse'
-7,6,450,536,0,0,0,9088791,9,'USB Optical Mouse'
-7,6,443,542,0,0,0,9088799,9,'USB Optical Mouse'
-7,6,436,549,0,0,0,9088807,9,'USB Optical Mouse'
-7,6,432,556,0,0,0,9088815,9,'USB Optical Mouse'
-7,6,425,562,0,0,0,9088823,9,'USB Optical Mouse'
-7,6,419,569,0,0,0,9088831,9,'USB Optical Mouse'
-7,6,414,575,0,0,0,9088839,9,'USB Optical Mouse'
-7,6,410,579,0,0,0,9088847,9,'USB Optical Mouse'
-7,6,405,584,0,0,0,9088855,9,'USB Optical Mouse'
-7,6,401,588,0,0,0,9088863,9,'USB Optical Mouse'
-7,6,400,592,0,0,0,9088871,9,'USB Optical Mouse'
-7,6,398,594,0,0,0,9088879,9,'USB Optical Mouse'
-7,6,398,595,0,0,0,9088887,9,'USB Optical Mouse'
-7,6,396,596,0,0,0,9088895,9,'USB Optical Mouse'
-7,6,395,597,0,0,0,9088903,9,'USB Optical Mouse'
-7,6,393,600,0,0,0,9088911,9,'USB Optical Mouse'
-7,6,391,602,0,0,0,9088919,9,'USB Optical Mouse'
-7,6,389,605,0,0,0,9088927,9,'USB Optical Mouse'
-7,6,387,608,0,0,0,9088935,9,'USB Optical Mouse'
-7,6,386,610,0,0,0,9088943,9,'USB Optical Mouse'
-7,6,385,613,0,0,0,9088951,9,'USB Optical Mouse'
-7,6,383,616,0,0,0,9088959,9,'USB Optical Mouse'
-7,6,381,619,0,0,0,9088967,9,'USB Optical Mouse'
-7,6,380,621,0,0,0,9088975,9,'USB Optical Mouse'
-7,6,378,624,0,0,0,9088983,9,'USB Optical Mouse'
-7,6,376,627,0,0,0,9088991,9,'USB Optical Mouse'
-7,6,374,630,0,0,0,9088999,9,'USB Optical Mouse'
-7,6,373,633,0,0,0,9089007,9,'USB Optical Mouse'
-7,6,371,636,0,0,0,9089015,9,'USB Optical Mouse'
-7,6,371,638,0,0,0,9089023,9,'USB Optical Mouse'
-7,6,370,641,0,0,0,9089031,9,'USB Optical Mouse'
-7,6,369,642,0,0,0,9089039,9,'USB Optical Mouse'
-7,6,368,644,0,0,0,9089047,9,'USB Optical Mouse'
-7,6,368,645,0,0,0,9089055,9,'USB Optical Mouse'
-7,6,366,647,0,0,0,9089063,9,'USB Optical Mouse'
-7,6,364,649,0,0,0,9089071,9,'USB Optical Mouse'
-7,6,363,651,0,0,0,9089079,9,'USB Optical Mouse'
-7,6,361,654,0,0,0,9089087,9,'USB Optical Mouse'
-7,6,359,657,0,0,0,9089095,9,'USB Optical Mouse'
-7,6,357,660,0,0,0,9089103,9,'USB Optical Mouse'
-7,6,354,663,0,0,0,9089111,9,'USB Optical Mouse'
-7,6,352,665,0,0,0,9089119,9,'USB Optical Mouse'
-7,6,349,668,0,0,0,9089127,9,'USB Optical Mouse'
-7,6,348,671,0,0,0,9089135,9,'USB Optical Mouse'
-7,6,347,674,0,0,0,9089143,9,'USB Optical Mouse'
-7,6,344,676,0,0,0,9089151,9,'USB Optical Mouse'
-7,6,343,678,0,0,0,9089159,9,'USB Optical Mouse'
-7,6,341,679,0,0,0,9089167,9,'USB Optical Mouse'
-7,6,340,681,0,0,0,9089175,9,'USB Optical Mouse'
-7,6,338,682,0,0,0,9089183,9,'USB Optical Mouse'
-7,6,336,683,0,0,0,9089191,9,'USB Optical Mouse'
-7,6,335,684,0,0,0,9089199,9,'USB Optical Mouse'
-7,6,333,685,0,0,0,9089207,9,'USB Optical Mouse'
-7,6,332,686,0,0,0,9089215,9,'USB Optical Mouse'
-7,6,330,687,0,0,0,9089223,9,'USB Optical Mouse'
-7,6,329,687,0,0,0,9089231,9,'USB Optical Mouse'
-7,6,328,687,0,0,0,9089239,9,'USB Optical Mouse'
-7,6,327,687,0,0,0,9089255,9,'USB Optical Mouse'
-7,6,326,688,0,0,0,9089263,9,'USB Optical Mouse'
-7,6,325,688,0,0,0,9089271,9,'USB Optical Mouse'
-7,6,325,689,0,0,0,9089279,9,'USB Optical Mouse'
-7,6,324,689,0,0,0,9089287,9,'USB Optical Mouse'
-7,6,323,689,0,0,0,9089295,9,'USB Optical Mouse'
-7,6,323,690,0,0,0,9089303,9,'USB Optical Mouse'
-7,6,322,691,0,0,0,9089311,9,'USB Optical Mouse'
-7,6,321,691,0,0,0,9089319,9,'USB Optical Mouse'
-7,6,320,692,0,0,0,9089343,9,'USB Optical Mouse'
-7,6,320,693,0,0,0,9089359,9,'USB Optical Mouse'
-7,6,319,693,0,0,0,9089375,9,'USB Optical Mouse'
-7,6,319,694,0,0,0,9089391,9,'USB Optical Mouse'
-7,6,319,695,0,0,0,9089399,9,'USB Optical Mouse'
-7,6,318,696,0,0,0,9089423,9,'USB Optical Mouse'
-7,6,317,697,0,0,0,9089471,9,'USB Optical Mouse'
-7,6,317,698,0,0,0,9089479,9,'USB Optical Mouse'
-7,6,317,699,0,0,0,9089495,9,'USB Optical Mouse'
-7,6,317,700,0,0,0,9089927,9,'USB Optical Mouse'
-7,6,318,701,0,0,0,9089967,9,'USB Optical Mouse'
-7,6,319,702,0,0,0,9090007,9,'USB Optical Mouse'
-7,6,319,703,0,0,0,9090023,9,'USB Optical Mouse'
-7,6,320,703,0,0,0,9090247,9,'USB Optical Mouse'
-7,6,320,704,0,0,0,9090271,9,'USB Optical Mouse'
-7,6,321,704,0,0,0,9090295,9,'USB Optical Mouse'
-7,6,321,705,0,0,0,9090327,9,'USB Optical Mouse'
-7,6,322,705,0,0,0,9090367,9,'USB Optical Mouse'
-7,6,322,706,0,0,0,9090455,9,'USB Optical Mouse'
-7,6,322,707,0,0,0,9090479,9,'USB Optical Mouse'
-7,4,0,0,3,0,0,9091591,9,USB Optical Mouse
-6,4,0,0,3,0,0,9091591,2,Virtual core pointer
-7,5,0,0,3,0,0,9091767,9,USB Optical Mouse
-6,5,0,0,3,0,0,9091767,2,Virtual core pointer
-7,2,0,0,0,116,0,9092846,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9092846,3,Virtual core keyboard
-7,3,0,0,0,116,0,9092949,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9092949,3,Virtual core keyboard
-7,2,0,0,0,116,0,9093081,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9093081,3,Virtual core keyboard
-7,3,0,0,0,116,0,9093183,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9093183,3,Virtual core keyboard
-7,2,0,0,0,116,0,9093335,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9093335,3,Virtual core keyboard
-7,3,0,0,0,116,0,9093427,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9093427,3,Virtual core keyboard
-7,2,0,0,0,116,0,9093640,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9093640,3,Virtual core keyboard
-7,3,0,0,0,116,0,9093743,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9093743,3,Virtual core keyboard
-7,2,0,0,0,36,0,9094309,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,9094309,3,Virtual core keyboard
-7,3,0,0,0,36,0,9094381,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,9094381,3,Virtual core keyboard
-7,2,0,0,0,37,0,9095196,10,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,9095196,3,Virtual core keyboard
-7,2,0,0,0,55,0,9097221,10,AT Translated Set 2 keyboard
-6,2,0,0,0,55,0,9097221,3,Virtual core keyboard
-7,3,0,0,0,55,0,9097313,10,AT Translated Set 2 keyboard
-6,3,0,0,0,55,0,9097313,3,Virtual core keyboard
-7,3,0,0,0,37,0,9097364,10,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,9097364,3,Virtual core keyboard
-7,2,0,0,0,36,0,9098413,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,9098413,3,Virtual core keyboard
-7,3,0,0,0,36,0,9098495,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,9098495,3,Virtual core keyboard
-7,4,0,0,3,0,0,9100575,9,USB Optical Mouse
-6,4,0,0,3,0,0,9100575,2,Virtual core pointer
-7,5,0,0,3,0,0,9100751,9,USB Optical Mouse
-6,5,0,0,3,0,0,9100751,2,Virtual core pointer
-7,2,0,0,0,116,0,9101777,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9101777,3,Virtual core keyboard
-7,3,0,0,0,116,0,9101900,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9101900,3,Virtual core keyboard
-7,2,0,0,0,116,0,9102123,10,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,9102123,3,Virtual core keyboard
-7,3,0,0,0,116,0,9102237,10,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,9102237,3,Virtual core keyboard
-7,2,0,0,0,36,0,9103129,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,9103129,3,Virtual core keyboard
-0,21,0,0,0,0,0,9103176
-NEW-WINDOW:461,197:62914854,62914854,18918161,0,0,0:0x0+879+458:0,0:Export of graph ""Simple" test succeed "
-0,21,0,0,0,0,0,9103176
-0,21,0,0,0,0,0,9103176
-7,3,0,0,0,36,0,9103225,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,9103225,3,Virtual core keyboard
-7,2,0,0,0,28,0,9104371,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,9104371,3,Virtual core keyboard
-7,3,0,0,0,28,0,9104443,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,9104443,3,Virtual core keyboard
-7,2,0,0,0,26,0,9104595,10,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,9104595,3,Virtual core keyboard
-7,3,0,0,0,26,0,9104668,10,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,9104668,3,Virtual core keyboard
-7,2,0,0,0,39,0,9104829,10,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,9104830,3,Virtual core keyboard
-7,3,0,0,0,39,0,9104891,10,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,9104891,3,Virtual core keyboard
-7,2,0,0,0,28,0,9105073,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,9105073,3,Virtual core keyboard
-7,3,0,0,0,28,0,9105167,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,9105167,3,Virtual core keyboard
-7,2,0,0,0,17,0,9105226,10,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,9105227,3,Virtual core keyboard
-7,3,0,0,0,17,0,9105299,10,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,9105299,3,Virtual core keyboard
-7,2,0,0,0,42,0,9105623,10,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,9105623,3,Virtual core keyboard
-7,2,0,0,0,30,0,9105695,10,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,9105695,3,Virtual core keyboard
-7,3,0,0,0,42,0,9105736,10,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,9105736,3,Virtual core keyboard
-7,2,0,0,0,31,0,9105766,10,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,9105766,3,Virtual core keyboard
-7,3,0,0,0,30,0,9105818,10,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,9105818,3,Virtual core keyboard
-7,3,0,0,0,31,0,9105889,10,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,9105889,3,Virtual core keyboard
-7,2,0,0,0,62,0,9106245,10,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,9106245,3,Virtual core keyboard
-7,2,0,0,0,59,0,9106427,10,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,9106427,3,Virtual core keyboard
-7,3,0,0,0,62,0,9106479,10,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,9106479,3,Virtual core keyboard
-7,3,0,0,0,59,0,9106509,10,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,9106509,3,Virtual core keyboard
-7,2,0,0,0,28,0,9106692,10,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,9106693,3,Virtual core keyboard
-7,3,0,0,0,28,0,9106785,10,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,9106785,3,Virtual core keyboard
-7,2,0,0,0,46,0,9106825,10,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,9106825,3,Virtual core keyboard
-7,2,0,0,0,33,0,9106957,10,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,9106957,3,Virtual core keyboard
-7,3,0,0,0,46,0,9106998,10,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,9106998,3,Virtual core keyboard
-7,3,0,0,0,33,0,9107089,10,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,9107089,3,Virtual core keyboard
-7,2,0,0,0,36,0,9107609,10,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,9107609,3,Virtual core keyboard
-0,21,0,0,0,0,0,9107644
-NEW-WINDOW:650,338:62914862,62914862,18918231,0,0,0:0x0+500+36:0,0:TLP Export
-0,21,0,0,0,0,0,9107644
-0,21,0,0,0,0,0,9107644
-7,3,0,0,0,36,0,9107704,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,9107704,3,Virtual core keyboard
+7,2,0,0,0,37,0,22678976,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,22678977,3,Virtual core keyboard
+7,2,0,0,0,50,0,22679145,11,AT Translated Set 2 keyboard
+6,2,0,0,0,50,0,22679146,3,Virtual core keyboard
+7,2,0,0,0,32,0,22679411,11,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,22679411,3,Virtual core keyboard
+7,3,0,0,0,50,0,22679439,11,AT Translated Set 2 keyboard
+6,3,0,0,0,50,0,22679439,3,Virtual core keyboard
+0,21,0,0,0,0,0,22679467
+NEW-WINDOW:451,254:62914587,62914587,35149923,0,0,0:36x74+879+458:0,0:Import
+0,21,0,0,0,0,0,22679467
+0,21,0,0,0,0,0,22679467
+0,21,0,0,0,0,0,22679467
+7,3,0,0,0,37,0,22679480,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,22679480,3,Virtual core keyboard
+7,3,0,0,0,32,0,22679482,11,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,22679482,3,Virtual core keyboard
+7,2,0,0,0,116,0,22680943,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22680943,3,Virtual core keyboard
+7,3,0,0,0,116,0,22681098,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22681098,3,Virtual core keyboard
+7,2,0,0,0,116,0,22681311,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22681311,3,Virtual core keyboard
+7,3,0,0,0,116,0,22681314,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22681314,3,Virtual core keyboard
+7,2,0,0,0,116,0,22681484,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22681484,3,Virtual core keyboard
+7,3,0,0,0,116,0,22681537,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22681537,3,Virtual core keyboard
+7,2,0,0,0,116,0,22681743,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22681743,3,Virtual core keyboard
+7,3,0,0,0,116,0,22681818,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22681818,3,Virtual core keyboard
+7,2,0,0,0,116,0,22681972,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22681972,3,Virtual core keyboard
+7,3,0,0,0,116,0,22682043,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22682043,3,Virtual core keyboard
+7,2,0,0,0,116,0,22682173,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22682173,3,Virtual core keyboard
+7,3,0,0,0,116,0,22682259,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22682259,3,Virtual core keyboard
+7,2,0,0,0,116,0,22682474,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22682474,3,Virtual core keyboard
+7,3,0,0,0,116,0,22682480,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22682480,3,Virtual core keyboard
+7,2,0,0,0,116,0,22682613,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22682613,3,Virtual core keyboard
+7,3,0,0,0,116,0,22682821,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22682821,3,Virtual core keyboard
+7,2,0,0,0,116,0,22682833,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22682833,3,Virtual core keyboard
+7,3,0,0,0,116,0,22682926,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22682926,3,Virtual core keyboard
+7,2,0,0,0,116,0,22683071,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22683071,3,Virtual core keyboard
+7,3,0,0,0,116,0,22683177,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22683177,3,Virtual core keyboard
+7,2,0,0,0,116,0,22683343,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22683343,3,Virtual core keyboard
+7,3,0,0,0,116,0,22683516,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22683516,3,Virtual core keyboard
+7,2,0,0,0,116,0,22683730,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22683730,3,Virtual core keyboard
+7,3,0,0,0,116,0,22683814,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22683814,3,Virtual core keyboard
+7,2,0,0,0,116,0,22684017,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22684017,3,Virtual core keyboard
+7,3,0,0,0,116,0,22684200,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22684200,3,Virtual core keyboard
+7,2,0,0,0,116,0,22684565,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22684565,3,Virtual core keyboard
+7,3,0,0,0,116,0,22684703,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22684703,3,Virtual core keyboard
+7,2,0,0,0,116,0,22684892,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22684892,3,Virtual core keyboard
+7,3,0,0,0,116,0,22684997,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22684997,3,Virtual core keyboard
+7,2,0,0,0,116,0,22685193,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22685193,3,Virtual core keyboard
+7,3,0,0,0,116,0,22685303,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22685303,3,Virtual core keyboard
+7,2,0,0,0,116,0,22685473,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22685473,3,Virtual core keyboard
+7,3,0,0,0,116,0,22685584,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22685584,3,Virtual core keyboard
+7,2,0,0,0,116,0,22685912,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22685912,3,Virtual core keyboard
+7,3,0,0,0,116,0,22686020,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22686020,3,Virtual core keyboard
+7,2,0,0,0,116,0,22686223,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22686223,3,Virtual core keyboard
+7,3,0,0,0,116,0,22686332,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22686332,3,Virtual core keyboard
+7,2,0,0,0,116,0,22686570,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22686570,3,Virtual core keyboard
+7,3,0,0,0,116,0,22686683,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22686683,3,Virtual core keyboard
+7,2,0,0,0,116,0,22686933,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22686933,3,Virtual core keyboard
+7,3,0,0,0,116,0,22687053,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22687053,3,Virtual core keyboard
+7,2,0,0,0,116,0,22687525,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22687525,3,Virtual core keyboard
+7,3,0,0,0,116,0,22687637,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22687637,3,Virtual core keyboard
+7,2,0,0,0,36,0,22688808,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,22688808,3,Virtual core keyboard
+0,21,0,0,0,0,0,22688817
+NEW-WINDOW:451,212:62914587,62914587,701,451,212,0:451x212+879+458:0,0:Import
+0,21,0,0,0,0,0,22688817
+0,21,0,0,0,0,0,22688817
+0,21,0,0,0,0,0,22688817
+0,21,0,0,0,0,0,22688817
+0,21,0,0,0,0,0,22688861
+NEW-WINDOW:640,459:62914598,62914598,35151143,0,0,0:36x74+500+49:0,0:
+0,21,0,0,0,0,0,22688861
+0,21,0,0,0,0,0,22688861
+0,21,0,0,0,0,0,22688861
+0,21,0,0,0,0,0,22688909
+NEW-WINDOW:640,417:62914598,62914598,701,640,417,0:640x417+500+49:0,0:Random Simple Graph
+0,21,0,0,0,0,0,22688909
+0,21,0,0,0,0,0,22688909
+0,21,0,0,0,0,0,22688909
+0,21,0,0,0,0,0,22688909
+7,3,0,0,0,36,0,22688916,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,22688916,3,Virtual core keyboard
+0,21,0,0,0,0,0,22689591
+NEW-WINDOW:1116,127:62914638,62914638,62914738,0,0,0:0x0+584+819:0,0:
+0,21,0,0,0,0,0,22689591
+0,21,0,0,0,0,0,22689591
+7,6,436,677,0,0,0,22690760,9,'VirtualBox mouse integration'
+7,6,436,675,0,0,0,22690768,9,'VirtualBox mouse integration'
+7,6,436,671,0,0,0,22690776,9,'VirtualBox mouse integration'
+7,6,436,667,0,0,0,22690784,9,'VirtualBox mouse integration'
+7,6,436,664,0,0,0,22690792,9,'VirtualBox mouse integration'
+7,6,436,659,0,0,0,22690800,9,'VirtualBox mouse integration'
+7,6,437,652,0,0,0,22690808,9,'VirtualBox mouse integration'
+7,6,437,645,0,0,0,22690816,9,'VirtualBox mouse integration'
+7,6,437,642,0,0,0,22690824,9,'VirtualBox mouse integration'
+7,6,437,635,0,0,0,22690832,9,'VirtualBox mouse integration'
+7,6,437,632,0,0,0,22690840,9,'VirtualBox mouse integration'
+7,6,437,629,0,0,0,22690848,9,'VirtualBox mouse integration'
+7,6,437,626,0,0,0,22690856,9,'VirtualBox mouse integration'
+7,6,437,621,0,0,0,22690864,9,'VirtualBox mouse integration'
+7,6,437,619,0,0,0,22690872,9,'VirtualBox mouse integration'
+7,6,437,616,0,0,0,22690880,9,'VirtualBox mouse integration'
+7,6,437,613,0,0,0,22690888,9,'VirtualBox mouse integration'
+7,6,437,610,0,0,0,22690896,9,'VirtualBox mouse integration'
+7,6,437,608,0,0,0,22690904,9,'VirtualBox mouse integration'
+7,6,437,604,0,0,0,22690912,9,'VirtualBox mouse integration'
+7,6,437,602,0,0,0,22690920,9,'VirtualBox mouse integration'
+7,6,437,600,0,0,0,22690928,9,'VirtualBox mouse integration'
+7,6,437,597,0,0,0,22690936,9,'VirtualBox mouse integration'
+7,6,437,593,0,0,0,22690944,9,'VirtualBox mouse integration'
+7,6,436,591,0,0,0,22690952,9,'VirtualBox mouse integration'
+7,6,436,589,0,0,0,22690960,9,'VirtualBox mouse integration'
+7,6,436,586,0,0,0,22690968,9,'VirtualBox mouse integration'
+7,6,435,583,0,0,0,22690976,9,'VirtualBox mouse integration'
+7,6,434,580,0,0,0,22690984,9,'VirtualBox mouse integration'
+7,6,434,578,0,0,0,22690992,9,'VirtualBox mouse integration'
+7,6,433,576,0,0,0,22691000,9,'VirtualBox mouse integration'
+7,6,431,570,0,0,0,22691008,9,'VirtualBox mouse integration'
+7,6,431,567,0,0,0,22691016,9,'VirtualBox mouse integration'
+7,6,429,564,0,0,0,22691024,9,'VirtualBox mouse integration'
+7,6,429,561,0,0,0,22691032,9,'VirtualBox mouse integration'
+7,6,427,558,0,0,0,22691040,9,'VirtualBox mouse integration'
+7,6,425,553,0,0,0,22691048,9,'VirtualBox mouse integration'
+7,6,423,547,0,0,0,22691056,9,'VirtualBox mouse integration'
+7,6,421,542,0,0,0,22691064,9,'VirtualBox mouse integration'
+7,6,419,539,0,0,0,22691072,9,'VirtualBox mouse integration'
+7,6,417,534,0,0,0,22691080,9,'VirtualBox mouse integration'
+7,6,415,530,0,0,0,22691088,9,'VirtualBox mouse integration'
+7,6,411,523,0,0,0,22691096,9,'VirtualBox mouse integration'
+7,6,407,516,0,0,0,22691104,9,'VirtualBox mouse integration'
+7,6,401,507,0,0,0,22691112,9,'VirtualBox mouse integration'
+7,6,395,495,0,0,0,22691120,9,'VirtualBox mouse integration'
+7,6,391,491,0,0,0,22691128,9,'VirtualBox mouse integration'
+7,6,384,479,0,0,0,22691136,9,'VirtualBox mouse integration'
+7,6,380,469,0,0,0,22691144,9,'VirtualBox mouse integration'
+7,6,373,458,0,0,0,22691152,9,'VirtualBox mouse integration'
+7,6,368,448,0,0,0,22691160,9,'VirtualBox mouse integration'
+7,6,360,437,0,0,0,22691168,9,'VirtualBox mouse integration'
+7,6,355,428,0,0,0,22691176,9,'VirtualBox mouse integration'
+7,6,350,418,0,0,0,22691184,9,'VirtualBox mouse integration'
+7,6,345,407,0,0,0,22691192,9,'VirtualBox mouse integration'
+7,6,340,398,0,0,0,22691200,9,'VirtualBox mouse integration'
+7,6,335,389,0,0,0,22691208,9,'VirtualBox mouse integration'
+7,6,330,380,0,0,0,22691216,9,'VirtualBox mouse integration'
+7,6,325,369,0,0,0,22691224,9,'VirtualBox mouse integration'
+7,6,320,360,0,0,0,22691232,9,'VirtualBox mouse integration'
+7,6,315,351,0,0,0,22691240,9,'VirtualBox mouse integration'
+7,6,310,342,0,0,0,22691248,9,'VirtualBox mouse integration'
+7,6,305,333,0,0,0,22691256,9,'VirtualBox mouse integration'
+7,6,300,322,0,0,0,22691264,9,'VirtualBox mouse integration'
+7,6,295,314,0,0,0,22691272,9,'VirtualBox mouse integration'
+7,6,290,305,0,0,0,22691280,9,'VirtualBox mouse integration'
+7,6,286,296,0,0,0,22691288,9,'VirtualBox mouse integration'
+7,6,281,288,0,0,0,22691296,9,'VirtualBox mouse integration'
+7,6,276,279,0,0,0,22691304,9,'VirtualBox mouse integration'
+7,6,271,270,0,0,0,22691312,9,'VirtualBox mouse integration'
+7,6,267,264,0,0,0,22691320,9,'VirtualBox mouse integration'
+7,6,265,258,0,0,0,22691328,9,'VirtualBox mouse integration'
+7,6,262,249,0,0,0,22691336,9,'VirtualBox mouse integration'
+7,6,259,241,0,0,0,22691344,9,'VirtualBox mouse integration'
+7,6,258,233,0,0,0,22691352,9,'VirtualBox mouse integration'
+7,6,253,225,0,0,0,22691360,9,'VirtualBox mouse integration'
+7,6,249,214,0,0,0,22691368,9,'VirtualBox mouse integration'
+7,6,244,207,0,0,0,22691376,9,'VirtualBox mouse integration'
+7,6,244,201,0,0,0,22691384,9,'VirtualBox mouse integration'
+7,6,242,198,0,0,0,22691392,9,'VirtualBox mouse integration'
+7,6,241,195,0,0,0,22691400,9,'VirtualBox mouse integration'
+7,6,240,193,0,0,0,22691408,9,'VirtualBox mouse integration'
+7,6,239,191,0,0,0,22691416,9,'VirtualBox mouse integration'
+7,6,239,189,0,0,0,22691424,9,'VirtualBox mouse integration'
+7,6,238,186,0,0,0,22691433,9,'VirtualBox mouse integration'
+7,6,237,182,0,0,0,22691440,9,'VirtualBox mouse integration'
+7,6,236,179,0,0,0,22691448,9,'VirtualBox mouse integration'
+7,6,235,177,0,0,0,22691456,9,'VirtualBox mouse integration'
+7,6,235,175,0,0,0,22691464,9,'VirtualBox mouse integration'
+7,6,234,173,0,0,0,22691472,9,'VirtualBox mouse integration'
+7,6,233,171,0,0,0,22691480,9,'VirtualBox mouse integration'
+7,6,233,169,0,0,0,22691488,9,'VirtualBox mouse integration'
+7,6,233,168,0,0,0,22691496,9,'VirtualBox mouse integration'
+7,6,232,165,0,0,0,22691504,9,'VirtualBox mouse integration'
+7,6,232,164,0,0,0,22691512,9,'VirtualBox mouse integration'
+7,6,232,163,0,0,0,22691520,9,'VirtualBox mouse integration'
+7,6,232,162,0,0,0,22691528,9,'VirtualBox mouse integration'
+7,6,231,161,0,0,0,22691536,9,'VirtualBox mouse integration'
+7,6,230,159,0,0,0,22691544,9,'VirtualBox mouse integration'
+7,6,230,158,0,0,0,22691552,9,'VirtualBox mouse integration'
+7,6,230,157,0,0,0,22691608,9,'VirtualBox mouse integration'
+7,6,230,156,0,0,0,22691616,9,'VirtualBox mouse integration'
+7,6,230,155,0,0,0,22691632,9,'VirtualBox mouse integration'
+7,6,230,154,0,0,0,22691640,9,'VirtualBox mouse integration'
+7,6,230,153,0,0,0,22691664,9,'VirtualBox mouse integration'
+7,6,230,152,0,0,0,22691672,9,'VirtualBox mouse integration'
+7,6,230,151,0,0,0,22691680,9,'VirtualBox mouse integration'
+7,6,230,150,0,0,0,22691688,9,'VirtualBox mouse integration'
+7,6,230,149,0,0,0,22691696,9,'VirtualBox mouse integration'
+7,6,230,148,0,0,0,22691704,9,'VirtualBox mouse integration'
+7,6,230,147,0,0,0,22691712,9,'VirtualBox mouse integration'
+7,6,230,146,0,0,0,22691720,9,'VirtualBox mouse integration'
+7,6,230,145,0,0,0,22691744,9,'VirtualBox mouse integration'
+7,6,230,144,0,0,0,22691760,9,'VirtualBox mouse integration'
+7,6,230,143,0,0,0,22691768,9,'VirtualBox mouse integration'
+7,6,230,142,0,0,0,22691776,9,'VirtualBox mouse integration'
+7,6,230,141,0,0,0,22691792,9,'VirtualBox mouse integration'
+7,6,230,139,0,0,0,22691800,9,'VirtualBox mouse integration'
+7,6,230,137,0,0,0,22691808,9,'VirtualBox mouse integration'
+7,6,230,136,0,0,0,22691816,9,'VirtualBox mouse integration'
+7,6,229,135,0,0,0,22691856,9,'VirtualBox mouse integration'
+7,6,229,134,0,0,0,22691912,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22692092,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22692092,2,Virtual core pointer
+7,5,0,0,1,0,0,22692277,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22692277,2,Virtual core pointer
+7,2,0,0,0,39,0,22693395,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,22693395,3,Virtual core keyboard
+7,3,0,0,0,39,0,22693503,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,22693503,3,Virtual core keyboard
+7,2,0,0,0,31,0,22693576,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,22693576,3,Virtual core keyboard
+7,3,0,0,0,31,0,22693635,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,22693635,3,Virtual core keyboard
+7,2,0,0,0,47,0,22693897,11,AT Translated Set 2 keyboard
+6,2,0,0,0,47,0,22693897,3,Virtual core keyboard
+7,3,0,0,0,47,0,22693976,11,AT Translated Set 2 keyboard
+6,3,0,0,0,47,0,22693976,3,Virtual core keyboard
+7,2,0,0,0,33,0,22694219,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,22694219,3,Virtual core keyboard
+7,3,0,0,0,33,0,22694293,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,22694293,3,Virtual core keyboard
+7,2,0,0,0,46,0,22694460,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,22694460,3,Virtual core keyboard
+7,3,0,0,0,46,0,22694543,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,22694543,3,Virtual core keyboard
+7,6,229,133,0,0,0,22695579,9,'VirtualBox mouse integration'
+7,6,229,134,0,0,0,22695584,9,'VirtualBox mouse integration'
+7,6,230,134,0,0,0,22695592,9,'VirtualBox mouse integration'
+7,6,231,136,0,0,0,22695600,9,'VirtualBox mouse integration'
+7,6,232,138,0,0,0,22695608,9,'VirtualBox mouse integration'
+7,6,233,140,0,0,0,22695616,9,'VirtualBox mouse integration'
+7,6,236,144,0,0,0,22695624,9,'VirtualBox mouse integration'
+7,6,239,146,0,0,0,22695632,9,'VirtualBox mouse integration'
+7,6,242,149,0,0,0,22695640,9,'VirtualBox mouse integration'
+7,6,244,152,0,0,0,22695648,9,'VirtualBox mouse integration'
+7,6,247,155,0,0,0,22695656,9,'VirtualBox mouse integration'
+7,6,249,157,0,0,0,22695664,9,'VirtualBox mouse integration'
+7,6,251,159,0,0,0,22695672,9,'VirtualBox mouse integration'
+7,6,253,161,0,0,0,22695681,9,'VirtualBox mouse integration'
+7,6,254,163,0,0,0,22695688,9,'VirtualBox mouse integration'
+7,6,256,165,0,0,0,22695696,9,'VirtualBox mouse integration'
+7,6,257,167,0,0,0,22695703,9,'VirtualBox mouse integration'
+7,6,258,167,0,0,0,22695711,9,'VirtualBox mouse integration'
+7,6,260,169,0,0,0,22695719,9,'VirtualBox mouse integration'
+7,6,262,172,0,0,0,22695727,9,'VirtualBox mouse integration'
+7,6,263,174,0,0,0,22695735,9,'VirtualBox mouse integration'
+7,6,265,176,0,0,0,22695743,9,'VirtualBox mouse integration'
+7,6,265,177,0,0,0,22695751,9,'VirtualBox mouse integration'
+7,6,267,179,0,0,0,22695759,9,'VirtualBox mouse integration'
+7,6,268,181,0,0,0,22695767,9,'VirtualBox mouse integration'
+7,6,269,183,0,0,0,22695775,9,'VirtualBox mouse integration'
+7,6,270,185,0,0,0,22695783,9,'VirtualBox mouse integration'
+7,6,272,188,0,0,0,22695791,9,'VirtualBox mouse integration'
+7,6,273,190,0,0,0,22695799,9,'VirtualBox mouse integration'
+7,6,274,192,0,0,0,22695807,9,'VirtualBox mouse integration'
+7,6,276,194,0,0,0,22695815,9,'VirtualBox mouse integration'
+7,6,276,196,0,0,0,22695823,9,'VirtualBox mouse integration'
+7,6,278,198,0,0,0,22695831,9,'VirtualBox mouse integration'
+7,6,278,199,0,0,0,22695839,9,'VirtualBox mouse integration'
+7,6,280,201,0,0,0,22695847,9,'VirtualBox mouse integration'
+7,6,280,203,0,0,0,22695855,9,'VirtualBox mouse integration'
+7,6,281,204,0,0,0,22695863,9,'VirtualBox mouse integration'
+7,6,281,205,0,0,0,22695871,9,'VirtualBox mouse integration'
+7,6,282,205,0,0,0,22695879,9,'VirtualBox mouse integration'
+7,6,282,206,0,0,0,22695887,9,'VirtualBox mouse integration'
+7,6,282,207,0,0,0,22695895,9,'VirtualBox mouse integration'
+7,6,283,207,0,0,0,22695927,9,'VirtualBox mouse integration'
+7,6,283,208,0,0,0,22695935,9,'VirtualBox mouse integration'
+7,6,283,209,0,0,0,22695943,9,'VirtualBox mouse integration'
+7,6,284,209,0,0,0,22695951,9,'VirtualBox mouse integration'
+7,6,284,210,0,0,0,22695960,9,'VirtualBox mouse integration'
+7,6,285,211,0,0,0,22695992,9,'VirtualBox mouse integration'
+7,6,285,212,0,0,0,22696000,9,'VirtualBox mouse integration'
+7,6,285,213,0,0,0,22696008,9,'VirtualBox mouse integration'
+7,6,286,213,0,0,0,22696016,9,'VirtualBox mouse integration'
+7,6,286,214,0,0,0,22696024,9,'VirtualBox mouse integration'
+7,6,287,215,0,0,0,22696056,9,'VirtualBox mouse integration'
+7,6,287,216,0,0,0,22696136,9,'VirtualBox mouse integration'
+7,6,288,216,0,0,0,22696144,9,'VirtualBox mouse integration'
+7,6,288,217,0,0,0,22696152,9,'VirtualBox mouse integration'
+7,6,289,218,0,0,0,22696160,9,'VirtualBox mouse integration'
+7,6,289,219,0,0,0,22696168,9,'VirtualBox mouse integration'
+7,6,289,220,0,0,0,22696184,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22696453,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22696453,2,Virtual core pointer
+7,5,0,0,1,0,0,22696605,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22696605,2,Virtual core pointer
+0,21,0,0,0,0,0,22696668
+NEW-WINDOW:640,448:62915051,62915051,35153613,0,0,0:36x74+500+71:0,0:
+0,21,0,0,0,0,0,22696668
+0,21,0,0,0,0,0,22696668
+0,21,0,0,0,0,0,22696668
+0,21,0,0,0,0,0,22696744
+NEW-WINDOW:1680846416,22017:62915051,62915051,701,640,406,0:1774893104x32767+-685726068+32647:1680846640,1680846640:
+0,21,0,0,0,0,0,22696744
+0,21,0,0,0,0,0,22696744
+0,21,0,0,0,0,0,22696744
+0,21,0,0,0,0,0,22696744
+0,21,0,0,0,0,0,22696772
+NEW-WINDOW:681,433:62915065,62915065,35154325,0,0,0:36x74+419+100:0,0:Tulip test result
+0,21,0,0,0,0,0,22696772
+0,21,0,0,0,0,0,22696772
+0,21,0,0,0,0,0,22696772
+7,6,290,220,0,0,0,22697378,9,'VirtualBox mouse integration'
+7,6,290,221,0,0,0,22697384,9,'VirtualBox mouse integration'
+7,6,291,222,0,0,0,22697392,9,'VirtualBox mouse integration'
+7,6,294,225,0,0,0,22697400,9,'VirtualBox mouse integration'
+7,6,296,228,0,0,0,22697408,9,'VirtualBox mouse integration'
+7,6,300,231,0,0,0,22697416,9,'VirtualBox mouse integration'
+7,6,304,235,0,0,0,22697424,9,'VirtualBox mouse integration'
+7,6,307,237,0,0,0,22697432,9,'VirtualBox mouse integration'
+7,6,311,239,0,0,0,22697440,9,'VirtualBox mouse integration'
+7,6,317,243,0,0,0,22697448,9,'VirtualBox mouse integration'
+7,6,324,247,0,0,0,22697456,9,'VirtualBox mouse integration'
+7,6,326,247,0,0,0,22697464,9,'VirtualBox mouse integration'
+7,6,330,250,0,0,0,22697472,9,'VirtualBox mouse integration'
+7,6,338,254,0,0,0,22697480,9,'VirtualBox mouse integration'
+7,6,343,258,0,0,0,22697488,9,'VirtualBox mouse integration'
+7,6,349,260,0,0,0,22697496,9,'VirtualBox mouse integration'
+7,6,356,264,0,0,0,22697504,9,'VirtualBox mouse integration'
+7,6,364,268,0,0,0,22697512,9,'VirtualBox mouse integration'
+7,6,371,272,0,0,0,22697520,9,'VirtualBox mouse integration'
+7,6,379,276,0,0,0,22697528,9,'VirtualBox mouse integration'
+7,6,386,280,0,0,0,22697536,9,'VirtualBox mouse integration'
+7,6,392,280,0,0,0,22697544,9,'VirtualBox mouse integration'
+7,6,398,283,0,0,0,22697552,9,'VirtualBox mouse integration'
+7,6,404,285,0,0,0,22697560,9,'VirtualBox mouse integration'
+7,6,409,289,0,0,0,22697568,9,'VirtualBox mouse integration'
+7,6,415,294,0,0,0,22697576,9,'VirtualBox mouse integration'
+7,6,423,298,0,0,0,22697584,9,'VirtualBox mouse integration'
+7,6,431,302,0,0,0,22697592,9,'VirtualBox mouse integration'
+7,6,438,308,0,0,0,22697600,9,'VirtualBox mouse integration'
+7,6,446,312,0,0,0,22697608,9,'VirtualBox mouse integration'
+7,6,454,317,0,0,0,22697616,9,'VirtualBox mouse integration'
+7,6,462,321,0,0,0,22697624,9,'VirtualBox mouse integration'
+7,6,472,327,0,0,0,22697632,9,'VirtualBox mouse integration'
+7,6,481,332,0,0,0,22697640,9,'VirtualBox mouse integration'
+7,6,486,333,0,0,0,22697648,9,'VirtualBox mouse integration'
+7,6,492,338,0,0,0,22697656,9,'VirtualBox mouse integration'
+7,6,502,340,0,0,0,22697664,9,'VirtualBox mouse integration'
+7,6,512,344,0,0,0,22697672,9,'VirtualBox mouse integration'
+7,6,522,349,0,0,0,22697680,9,'VirtualBox mouse integration'
+7,6,532,353,0,0,0,22697688,9,'VirtualBox mouse integration'
+7,6,540,358,0,0,0,22697709,9,'VirtualBox mouse integration'
+7,6,557,367,0,0,0,22697711,9,'VirtualBox mouse integration'
+7,6,563,369,0,0,0,22697720,9,'VirtualBox mouse integration'
+7,6,569,372,0,0,0,22697728,9,'VirtualBox mouse integration'
+7,6,576,374,0,0,0,22697736,9,'VirtualBox mouse integration'
+7,6,584,376,0,0,0,22697744,9,'VirtualBox mouse integration'
+7,6,592,379,0,0,0,22697752,9,'VirtualBox mouse integration'
+7,6,599,381,0,0,0,22697760,9,'VirtualBox mouse integration'
+7,6,607,383,0,0,0,22697768,9,'VirtualBox mouse integration'
+7,6,615,386,0,0,0,22697776,9,'VirtualBox mouse integration'
+7,6,623,387,0,0,0,22697784,9,'VirtualBox mouse integration'
+7,6,631,390,0,0,0,22697792,9,'VirtualBox mouse integration'
+7,6,638,393,0,0,0,22697800,9,'VirtualBox mouse integration'
+7,6,644,394,0,0,0,22697808,9,'VirtualBox mouse integration'
+7,6,650,397,0,0,0,22697816,9,'VirtualBox mouse integration'
+7,6,656,398,0,0,0,22697824,9,'VirtualBox mouse integration'
+7,6,661,401,0,0,0,22697832,9,'VirtualBox mouse integration'
+7,6,663,401,0,0,0,22697840,9,'VirtualBox mouse integration'
+7,6,667,403,0,0,0,22697848,9,'VirtualBox mouse integration'
+7,6,673,404,0,0,0,22697856,9,'VirtualBox mouse integration'
+7,6,678,407,0,0,0,22697864,9,'VirtualBox mouse integration'
+7,6,680,407,0,0,0,22697872,9,'VirtualBox mouse integration'
+7,6,684,410,0,0,0,22697880,9,'VirtualBox mouse integration'
+7,6,686,410,0,0,0,22697888,9,'VirtualBox mouse integration'
+7,6,689,412,0,0,0,22697896,9,'VirtualBox mouse integration'
+7,6,691,413,0,0,0,22697904,9,'VirtualBox mouse integration'
+7,6,693,414,0,0,0,22697912,9,'VirtualBox mouse integration'
+7,6,696,416,0,0,0,22697920,9,'VirtualBox mouse integration'
+7,6,699,417,0,0,0,22697928,9,'VirtualBox mouse integration'
+7,6,704,420,0,0,0,22697936,9,'VirtualBox mouse integration'
+7,6,706,420,0,0,0,22697944,9,'VirtualBox mouse integration'
+7,6,707,421,0,0,0,22697952,9,'VirtualBox mouse integration'
+7,6,709,421,0,0,0,22697960,9,'VirtualBox mouse integration'
+7,6,709,422,0,0,0,22697968,9,'VirtualBox mouse integration'
+7,6,711,423,0,0,0,22697976,9,'VirtualBox mouse integration'
+7,6,712,423,0,0,0,22697984,9,'VirtualBox mouse integration'
+7,6,713,423,0,0,0,22697992,9,'VirtualBox mouse integration'
+7,6,713,424,0,0,0,22698000,9,'VirtualBox mouse integration'
+7,6,715,425,0,0,0,22698008,9,'VirtualBox mouse integration'
+7,6,716,425,0,0,0,22698016,9,'VirtualBox mouse integration'
+7,6,717,426,0,0,0,22698024,9,'VirtualBox mouse integration'
+7,6,718,427,0,0,0,22698032,9,'VirtualBox mouse integration'
+7,6,719,428,0,0,0,22698040,9,'VirtualBox mouse integration'
+7,6,721,429,0,0,0,22698048,9,'VirtualBox mouse integration'
+7,6,721,430,0,0,0,22698056,9,'VirtualBox mouse integration'
+7,6,723,431,0,0,0,22698064,9,'VirtualBox mouse integration'
+7,6,723,432,0,0,0,22698072,9,'VirtualBox mouse integration'
+7,6,725,433,0,0,0,22698080,9,'VirtualBox mouse integration'
+7,6,725,434,0,0,0,22698088,9,'VirtualBox mouse integration'
+7,6,726,435,0,0,0,22698096,9,'VirtualBox mouse integration'
+7,6,727,435,0,0,0,22698104,9,'VirtualBox mouse integration'
+7,6,728,437,0,0,0,22698112,9,'VirtualBox mouse integration'
+7,6,729,437,0,0,0,22698120,9,'VirtualBox mouse integration'
+7,6,730,439,0,0,0,22698128,9,'VirtualBox mouse integration'
+7,6,731,439,0,0,0,22698136,9,'VirtualBox mouse integration'
+7,6,731,441,0,0,0,22698144,9,'VirtualBox mouse integration'
+7,6,732,442,0,0,0,22698152,9,'VirtualBox mouse integration'
+7,6,733,442,0,0,0,22698160,9,'VirtualBox mouse integration'
+7,6,734,443,0,0,0,22698416,9,'VirtualBox mouse integration'
+7,6,734,444,0,0,0,22698424,9,'VirtualBox mouse integration'
+7,6,735,445,0,0,0,22698456,9,'VirtualBox mouse integration'
+7,6,736,445,0,0,0,22698464,9,'VirtualBox mouse integration'
+7,6,737,445,0,0,0,22698488,9,'VirtualBox mouse integration'
+7,6,738,445,0,0,0,22698496,9,'VirtualBox mouse integration'
+7,6,739,445,0,0,0,22698504,9,'VirtualBox mouse integration'
+7,6,739,446,0,0,0,22698520,9,'VirtualBox mouse integration'
+7,6,739,447,0,0,0,22698536,9,'VirtualBox mouse integration'
+7,6,740,447,0,0,0,22698584,9,'VirtualBox mouse integration'
+7,6,740,448,0,0,0,22698600,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22699301,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22699301,2,Virtual core pointer
+7,6,741,448,0,0,0,22699545,9,'VirtualBox mouse integration'
+7,6,743,448,0,0,0,22699553,9,'VirtualBox mouse integration'
+7,6,745,449,0,0,0,22699577,9,'VirtualBox mouse integration'
+7,6,746,449,0,0,0,22699585,9,'VirtualBox mouse integration'
+7,6,747,451,0,0,0,22699593,9,'VirtualBox mouse integration'
+7,6,747,450,0,0,0,22699601,9,'VirtualBox mouse integration'
+7,6,748,450,0,0,0,22699609,9,'VirtualBox mouse integration'
+7,6,749,451,0,0,0,22699617,9,'VirtualBox mouse integration'
+7,6,750,451,0,0,0,22699625,9,'VirtualBox mouse integration'
+7,6,751,451,0,0,0,22699665,9,'VirtualBox mouse integration'
+7,6,752,451,0,0,0,22699713,9,'VirtualBox mouse integration'
+7,6,753,451,0,0,0,22699721,9,'VirtualBox mouse integration'
+7,6,753,452,0,0,0,22699729,9,'VirtualBox mouse integration'
+7,6,754,452,0,0,0,22699745,9,'VirtualBox mouse integration'
+7,6,755,453,0,0,0,22699753,9,'VirtualBox mouse integration'
+7,6,756,453,0,0,0,22699761,9,'VirtualBox mouse integration'
+7,6,757,453,0,0,0,22699840,9,'VirtualBox mouse integration'
+7,6,758,453,0,0,0,22699849,9,'VirtualBox mouse integration'
+7,6,758,454,0,0,0,22699857,9,'VirtualBox mouse integration'
+7,6,759,454,0,0,0,22699889,9,'VirtualBox mouse integration'
+7,6,760,454,0,0,0,22699897,9,'VirtualBox mouse integration'
+7,5,0,0,1,0,0,22700357,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22700357,2,Virtual core pointer
+7,6,761,454,0,0,0,22700498,9,'VirtualBox mouse integration'
+7,6,760,454,0,0,0,22700528,9,'VirtualBox mouse integration'
+7,6,759,454,0,0,0,22700536,9,'VirtualBox mouse integration'
+7,6,758,454,0,0,0,22700568,9,'VirtualBox mouse integration'
+7,6,757,454,0,0,0,22700576,9,'VirtualBox mouse integration'
+7,6,756,454,0,0,0,22700600,9,'VirtualBox mouse integration'
+7,6,755,454,0,0,0,22700608,9,'VirtualBox mouse integration'
+7,6,754,454,0,0,0,22700624,9,'VirtualBox mouse integration'
+7,6,753,454,0,0,0,22700632,9,'VirtualBox mouse integration'
+7,6,752,453,0,0,0,22700640,9,'VirtualBox mouse integration'
+7,6,751,452,0,0,0,22700648,9,'VirtualBox mouse integration'
+7,6,750,452,0,0,0,22700672,9,'VirtualBox mouse integration'
+7,6,749,452,0,0,0,22700680,9,'VirtualBox mouse integration'
+7,6,748,452,0,0,0,22700688,9,'VirtualBox mouse integration'
+7,6,747,452,0,0,0,22700696,9,'VirtualBox mouse integration'
+7,6,746,452,0,0,0,22700728,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22701076,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22701076,2,Virtual core pointer
+7,6,745,452,0,0,0,22701587,9,'VirtualBox mouse integration'
+7,6,746,452,0,0,0,22701625,9,'VirtualBox mouse integration'
+7,6,747,452,0,0,0,22701632,9,'VirtualBox mouse integration'
+7,6,748,452,0,0,0,22701697,9,'VirtualBox mouse integration'
+7,6,749,452,0,0,0,22701704,9,'VirtualBox mouse integration'
+7,6,750,452,0,0,0,22701745,9,'VirtualBox mouse integration'
+7,6,751,452,0,0,0,22701753,9,'VirtualBox mouse integration'
+7,6,752,452,0,0,0,22701785,9,'VirtualBox mouse integration'
+7,6,753,452,0,0,0,22701793,9,'VirtualBox mouse integration'
+7,6,754,452,0,0,0,22701809,9,'VirtualBox mouse integration'
+7,6,755,452,0,0,0,22701825,9,'VirtualBox mouse integration'
+7,6,756,452,0,0,0,22701857,9,'VirtualBox mouse integration'
+7,6,757,452,0,0,0,22701921,9,'VirtualBox mouse integration'
+7,6,758,453,0,0,0,22701945,9,'VirtualBox mouse integration'
+7,6,759,453,0,0,0,22701977,9,'VirtualBox mouse integration'
+7,6,760,453,0,0,0,22701985,9,'VirtualBox mouse integration'
+7,6,761,453,0,0,0,22702017,9,'VirtualBox mouse integration'
+7,6,762,453,0,0,0,22702025,9,'VirtualBox mouse integration'
+7,6,763,453,0,0,0,22702041,9,'VirtualBox mouse integration'
+7,6,764,453,0,0,0,22702057,9,'VirtualBox mouse integration'
+7,6,765,453,0,0,0,22702081,9,'VirtualBox mouse integration'
+7,6,766,453,0,0,0,22702097,9,'VirtualBox mouse integration'
+7,6,767,453,0,0,0,22702113,9,'VirtualBox mouse integration'
+7,6,768,453,0,0,0,22702129,9,'VirtualBox mouse integration'
+7,6,769,453,0,0,0,22702137,9,'VirtualBox mouse integration'
+7,6,770,453,0,0,0,22702153,9,'VirtualBox mouse integration'
+7,6,771,454,0,0,0,22702161,9,'VirtualBox mouse integration'
+7,6,772,454,0,0,0,22702169,9,'VirtualBox mouse integration'
+7,6,773,454,0,0,0,22702177,9,'VirtualBox mouse integration'
+7,6,774,454,0,0,0,22702185,9,'VirtualBox mouse integration'
+7,6,775,455,0,0,0,22702209,9,'VirtualBox mouse integration'
+7,6,776,455,0,0,0,22702216,9,'VirtualBox mouse integration'
+7,6,777,455,0,0,0,22702241,9,'VirtualBox mouse integration'
+7,6,778,455,0,0,0,22702249,9,'VirtualBox mouse integration'
+7,6,779,455,0,0,0,22702273,9,'VirtualBox mouse integration'
+7,6,780,455,0,0,0,22702281,9,'VirtualBox mouse integration'
+7,6,781,455,0,0,0,22702297,9,'VirtualBox mouse integration'
+7,6,782,455,0,0,0,22702305,9,'VirtualBox mouse integration'
+7,6,783,455,0,0,0,22702313,9,'VirtualBox mouse integration'
+7,6,784,455,0,0,0,22702329,9,'VirtualBox mouse integration'
+7,6,785,456,0,0,0,22702337,9,'VirtualBox mouse integration'
+7,6,786,456,0,0,0,22702344,9,'VirtualBox mouse integration'
+7,6,787,456,0,0,0,22702361,9,'VirtualBox mouse integration'
+7,6,788,456,0,0,0,22702369,9,'VirtualBox mouse integration'
+7,6,789,456,0,0,0,22702393,9,'VirtualBox mouse integration'
+7,6,790,456,0,0,0,22702401,9,'VirtualBox mouse integration'
+7,6,791,456,0,0,0,22702417,9,'VirtualBox mouse integration'
+7,6,792,456,0,0,0,22702424,9,'VirtualBox mouse integration'
+7,6,793,457,0,0,0,22702449,9,'VirtualBox mouse integration'
+7,6,794,457,0,0,0,22702457,9,'VirtualBox mouse integration'
+7,6,795,457,0,0,0,22702465,9,'VirtualBox mouse integration'
+7,6,796,457,0,0,0,22702473,9,'VirtualBox mouse integration'
+7,6,797,457,0,0,0,22702480,9,'VirtualBox mouse integration'
+7,6,798,457,0,0,0,22702488,9,'VirtualBox mouse integration'
+7,6,799,457,0,0,0,22702504,9,'VirtualBox mouse integration'
+7,6,800,457,0,0,0,22702513,9,'VirtualBox mouse integration'
+7,6,801,457,0,0,0,22702521,9,'VirtualBox mouse integration'
+7,6,802,457,0,0,0,22702528,9,'VirtualBox mouse integration'
+7,6,803,456,0,0,0,22702537,9,'VirtualBox mouse integration'
+7,6,804,456,0,0,0,22702553,9,'VirtualBox mouse integration'
+7,6,805,456,0,0,0,22702561,9,'VirtualBox mouse integration'
+7,6,806,456,0,0,0,22702568,9,'VirtualBox mouse integration'
+7,6,807,456,0,0,0,22702585,9,'VirtualBox mouse integration'
+7,6,808,456,0,0,0,22702601,9,'VirtualBox mouse integration'
+7,6,809,456,0,0,0,22702609,9,'VirtualBox mouse integration'
+7,6,810,456,0,0,0,22702617,9,'VirtualBox mouse integration'
+7,6,811,456,0,0,0,22702625,9,'VirtualBox mouse integration'
+7,6,812,456,0,0,0,22702641,9,'VirtualBox mouse integration'
+7,6,813,456,0,0,0,22702649,9,'VirtualBox mouse integration'
+7,6,814,456,0,0,0,22702657,9,'VirtualBox mouse integration'
+7,6,815,456,0,0,0,22702665,9,'VirtualBox mouse integration'
+7,6,816,456,0,0,0,22702673,9,'VirtualBox mouse integration'
+7,6,816,455,0,0,0,22702681,9,'VirtualBox mouse integration'
+7,6,817,455,0,0,0,22702688,9,'VirtualBox mouse integration'
+7,6,818,454,0,0,0,22702712,9,'VirtualBox mouse integration'
+7,6,820,454,0,0,0,22702713,9,'VirtualBox mouse integration'
+7,6,821,454,0,0,0,22702729,9,'VirtualBox mouse integration'
+7,6,822,454,0,0,0,22702745,9,'VirtualBox mouse integration'
+7,6,823,454,0,0,0,22702785,9,'VirtualBox mouse integration'
+7,6,824,454,0,0,0,22702793,9,'VirtualBox mouse integration'
+7,6,825,454,0,0,0,22702809,9,'VirtualBox mouse integration'
+7,6,826,454,0,0,0,22702817,9,'VirtualBox mouse integration'
+7,6,827,454,0,0,0,22702824,9,'VirtualBox mouse integration'
+7,6,828,454,0,0,0,22702841,9,'VirtualBox mouse integration'
+7,6,829,454,0,0,0,22702848,9,'VirtualBox mouse integration'
+7,6,830,454,0,0,0,22702865,9,'VirtualBox mouse integration'
+7,6,831,454,0,0,0,22702881,9,'VirtualBox mouse integration'
+7,6,832,454,0,0,0,22702888,9,'VirtualBox mouse integration'
+7,6,833,454,0,0,0,22702929,9,'VirtualBox mouse integration'
+7,6,834,454,0,0,0,22702937,9,'VirtualBox mouse integration'
+7,6,835,454,0,0,0,22702953,9,'VirtualBox mouse integration'
+7,6,836,454,0,0,0,22702961,9,'VirtualBox mouse integration'
+7,6,837,454,0,0,0,22702969,9,'VirtualBox mouse integration'
+7,6,838,454,0,0,0,22702977,9,'VirtualBox mouse integration'
+7,6,839,453,0,0,0,22702984,9,'VirtualBox mouse integration'
+7,6,839,452,0,0,0,22702993,9,'VirtualBox mouse integration'
+7,6,840,452,0,0,0,22703000,9,'VirtualBox mouse integration'
+7,6,841,452,0,0,0,22703009,9,'VirtualBox mouse integration'
+7,6,842,452,0,0,0,22703016,9,'VirtualBox mouse integration'
+7,6,843,452,0,0,0,22703025,9,'VirtualBox mouse integration'
+7,6,844,452,0,0,0,22703033,9,'VirtualBox mouse integration'
+7,6,845,452,0,0,0,22703049,9,'VirtualBox mouse integration'
+7,6,846,452,0,0,0,22703057,9,'VirtualBox mouse integration'
+7,6,847,452,0,0,0,22703073,9,'VirtualBox mouse integration'
+7,6,848,452,0,0,0,22703081,9,'VirtualBox mouse integration'
+7,6,848,451,0,0,0,22703088,9,'VirtualBox mouse integration'
+7,6,849,451,0,0,0,22703096,9,'VirtualBox mouse integration'
+7,6,850,451,0,0,0,22703105,9,'VirtualBox mouse integration'
+7,6,851,451,0,0,0,22703137,9,'VirtualBox mouse integration'
+7,6,852,451,0,0,0,22703144,9,'VirtualBox mouse integration'
+7,6,853,451,0,0,0,22703169,9,'VirtualBox mouse integration'
+7,6,854,451,0,0,0,22703233,9,'VirtualBox mouse integration'
+7,6,855,451,0,0,0,22703241,9,'VirtualBox mouse integration'
+7,6,856,451,0,0,0,22703265,9,'VirtualBox mouse integration'
+7,6,857,451,0,0,0,22703281,9,'VirtualBox mouse integration'
+7,6,858,451,0,0,0,22703321,9,'VirtualBox mouse integration'
+7,6,859,451,0,0,0,22703329,9,'VirtualBox mouse integration'
+7,6,860,451,0,0,0,22703361,9,'VirtualBox mouse integration'
+7,6,861,451,0,0,0,22703369,9,'VirtualBox mouse integration'
+7,6,862,452,0,0,0,22703417,9,'VirtualBox mouse integration'
+7,6,863,452,0,0,0,22703433,9,'VirtualBox mouse integration'
+7,6,864,452,0,0,0,22703473,9,'VirtualBox mouse integration'
+7,6,865,452,0,0,0,22703480,9,'VirtualBox mouse integration'
+7,6,866,452,0,0,0,22703505,9,'VirtualBox mouse integration'
+7,6,867,452,0,0,0,22703521,9,'VirtualBox mouse integration'
+7,6,868,452,0,0,0,22703553,9,'VirtualBox mouse integration'
+7,6,869,452,0,0,0,22703561,9,'VirtualBox mouse integration'
+7,6,870,452,0,0,0,22703569,9,'VirtualBox mouse integration'
+7,6,871,452,0,0,0,22703576,9,'VirtualBox mouse integration'
+7,6,872,452,0,0,0,22703592,9,'VirtualBox mouse integration'
+7,6,873,452,0,0,0,22703625,9,'VirtualBox mouse integration'
+7,6,874,452,0,0,0,22703633,9,'VirtualBox mouse integration'
+7,6,875,452,0,0,0,22703665,9,'VirtualBox mouse integration'
+7,6,876,452,0,0,0,22703672,9,'VirtualBox mouse integration'
+7,6,877,452,0,0,0,22703736,9,'VirtualBox mouse integration'
+7,6,878,452,0,0,0,22703873,9,'VirtualBox mouse integration'
+7,6,879,452,0,0,0,22703881,9,'VirtualBox mouse integration'
+7,6,880,452,0,0,0,22703921,9,'VirtualBox mouse integration'
+7,6,881,452,0,0,0,22703929,9,'VirtualBox mouse integration'
+7,6,882,452,0,0,0,22705089,9,'VirtualBox mouse integration'
+7,6,884,452,0,0,0,22705097,9,'VirtualBox mouse integration'
+7,6,886,452,0,0,0,22705104,9,'VirtualBox mouse integration'
+7,6,887,454,0,0,0,22705113,9,'VirtualBox mouse integration'
+7,6,889,454,0,0,0,22705121,9,'VirtualBox mouse integration'
+7,6,890,454,0,0,0,22705129,9,'VirtualBox mouse integration'
+7,6,892,455,0,0,0,22705137,9,'VirtualBox mouse integration'
+7,6,894,455,0,0,0,22705145,9,'VirtualBox mouse integration'
+7,6,895,456,0,0,0,22705153,9,'VirtualBox mouse integration'
+7,6,896,456,0,0,0,22705161,9,'VirtualBox mouse integration'
+7,6,898,456,0,0,0,22705169,9,'VirtualBox mouse integration'
+7,6,899,456,0,0,0,22705177,9,'VirtualBox mouse integration'
+7,6,900,456,0,0,0,22705201,9,'VirtualBox mouse integration'
+7,6,901,456,0,0,0,22705209,9,'VirtualBox mouse integration'
+7,6,902,456,0,0,0,22705321,9,'VirtualBox mouse integration'
+7,6,903,456,0,0,0,22705393,9,'VirtualBox mouse integration'
+7,6,904,456,0,0,0,22705409,9,'VirtualBox mouse integration'
+7,6,905,456,0,0,0,22705457,9,'VirtualBox mouse integration'
+7,6,906,456,0,0,0,22705465,9,'VirtualBox mouse integration'
+7,6,907,456,0,0,0,22705561,9,'VirtualBox mouse integration'
+7,6,908,456,0,0,0,22705569,9,'VirtualBox mouse integration'
+7,5,0,0,1,0,0,22706197,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22706197,2,Virtual core pointer
+7,2,0,0,0,37,0,22706836,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,22706836,3,Virtual core keyboard
+7,2,0,0,0,54,0,22707164,11,AT Translated Set 2 keyboard
+6,2,0,0,0,54,0,22707164,3,Virtual core keyboard
+7,3,0,0,0,54,0,22707303,11,AT Translated Set 2 keyboard
+6,3,0,0,0,54,0,22707303,3,Virtual core keyboard
+7,3,0,0,0,37,0,22707337,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,22707337,3,Virtual core keyboard
+7,6,909,456,0,0,0,22707443,9,'VirtualBox mouse integration'
+7,6,909,458,0,0,0,22707448,9,'VirtualBox mouse integration'
+7,6,909,459,0,0,0,22707456,9,'VirtualBox mouse integration'
+7,6,910,460,0,0,0,22707464,9,'VirtualBox mouse integration'
+7,6,910,462,0,0,0,22707472,9,'VirtualBox mouse integration'
+7,6,911,464,0,0,0,22707480,9,'VirtualBox mouse integration'
+7,6,911,465,0,0,0,22707488,9,'VirtualBox mouse integration'
+7,6,912,466,0,0,0,22707496,9,'VirtualBox mouse integration'
+7,6,912,467,0,0,0,22707504,9,'VirtualBox mouse integration'
+7,6,912,468,0,0,0,22707528,9,'VirtualBox mouse integration'
+7,6,912,469,0,0,0,22707536,9,'VirtualBox mouse integration'
+7,6,912,470,0,0,0,22707544,9,'VirtualBox mouse integration'
+7,6,912,471,0,0,0,22707552,9,'VirtualBox mouse integration'
+7,6,913,472,0,0,0,22707560,9,'VirtualBox mouse integration'
+7,6,914,474,0,0,0,22707568,9,'VirtualBox mouse integration'
+7,6,914,475,0,0,0,22707576,9,'VirtualBox mouse integration'
+7,6,914,476,0,0,0,22707584,9,'VirtualBox mouse integration'
+7,6,915,478,0,0,0,22707592,9,'VirtualBox mouse integration'
+7,6,915,479,0,0,0,22707600,9,'VirtualBox mouse integration'
+7,6,915,480,0,0,0,22707608,9,'VirtualBox mouse integration'
+7,6,916,481,0,0,0,22707616,9,'VirtualBox mouse integration'
+7,6,917,483,0,0,0,22707624,9,'VirtualBox mouse integration'
+7,6,917,485,0,0,0,22707632,9,'VirtualBox mouse integration'
+7,6,917,486,0,0,0,22707640,9,'VirtualBox mouse integration'
+7,6,919,489,0,0,0,22707648,9,'VirtualBox mouse integration'
+7,6,919,490,0,0,0,22707656,9,'VirtualBox mouse integration'
+7,6,919,491,0,0,0,22707664,9,'VirtualBox mouse integration'
+7,6,920,493,0,0,0,22707672,9,'VirtualBox mouse integration'
+7,6,921,494,0,0,0,22707680,9,'VirtualBox mouse integration'
+7,6,921,496,0,0,0,22707688,9,'VirtualBox mouse integration'
+7,6,921,497,0,0,0,22707711,9,'VirtualBox mouse integration'
+7,6,921,498,0,0,0,22707711,9,'VirtualBox mouse integration'
+7,6,921,499,0,0,0,22707720,9,'VirtualBox mouse integration'
+7,6,921,500,0,0,0,22707728,9,'VirtualBox mouse integration'
+7,6,921,501,0,0,0,22707736,9,'VirtualBox mouse integration'
+7,6,921,502,0,0,0,22707744,9,'VirtualBox mouse integration'
+7,6,921,503,0,0,0,22707752,9,'VirtualBox mouse integration'
+7,6,921,504,0,0,0,22707760,9,'VirtualBox mouse integration'
+7,6,921,506,0,0,0,22707784,9,'VirtualBox mouse integration'
+7,6,921,507,0,0,0,22708000,9,'VirtualBox mouse integration'
+7,6,921,506,0,0,0,22708008,9,'VirtualBox mouse integration'
+7,6,921,505,0,0,0,22708016,9,'VirtualBox mouse integration'
+7,6,921,504,0,0,0,22708024,9,'VirtualBox mouse integration'
+7,6,921,503,0,0,0,22708032,9,'VirtualBox mouse integration'
+7,6,921,502,0,0,0,22708040,9,'VirtualBox mouse integration'
+7,6,921,501,0,0,0,22708048,9,'VirtualBox mouse integration'
+7,6,921,500,0,0,0,22708056,9,'VirtualBox mouse integration'
+7,6,921,499,0,0,0,22708064,9,'VirtualBox mouse integration'
+7,6,921,498,0,0,0,22708088,9,'VirtualBox mouse integration'
+7,6,921,497,0,0,0,22708096,9,'VirtualBox mouse integration'
+7,6,920,496,0,0,0,22708112,9,'VirtualBox mouse integration'
+7,6,920,495,0,0,0,22708168,9,'VirtualBox mouse integration'
+7,2,0,0,0,36,0,22708639,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,22708639,3,Virtual core keyboard
+0,21,0,0,0,0,0,22708676
+NEW-WINDOW:1680846960,22017:62915065,62915065,701,681,391,0:1774893104x32767+-685726068+32647:1680852576,1680852576:
+0,21,0,0,0,0,0,22708676
+0,21,0,0,0,0,0,22708676
+0,21,0,0,0,0,0,22708676
+0,21,0,0,0,0,0,22708676
+7,3,0,0,0,36,0,22708702,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,22708702,3,Virtual core keyboard
+7,6,920,494,0,0,0,22709088,9,'VirtualBox mouse integration'
+7,6,920,491,0,0,0,22709096,9,'VirtualBox mouse integration'
+7,6,921,491,0,0,0,22709104,9,'VirtualBox mouse integration'
+7,6,923,484,0,0,0,22709112,9,'VirtualBox mouse integration'
+7,6,928,475,0,0,0,22709120,9,'VirtualBox mouse integration'
+7,6,932,467,0,0,0,22709128,9,'VirtualBox mouse integration'
+7,6,937,461,0,0,0,22709136,9,'VirtualBox mouse integration'
+7,6,941,459,0,0,0,22709144,9,'VirtualBox mouse integration'
+7,6,945,455,0,0,0,22709152,9,'VirtualBox mouse integration'
+7,6,950,451,0,0,0,22709160,9,'VirtualBox mouse integration'
+7,6,956,447,0,0,0,22709168,9,'VirtualBox mouse integration'
+7,6,960,444,0,0,0,22709176,9,'VirtualBox mouse integration'
+7,6,965,438,0,0,0,22709184,9,'VirtualBox mouse integration'
+7,6,970,433,0,0,0,22709192,9,'VirtualBox mouse integration'
+7,6,976,427,0,0,0,22709200,9,'VirtualBox mouse integration'
+7,6,982,418,0,0,0,22709208,9,'VirtualBox mouse integration'
+7,6,988,409,0,0,0,22709216,9,'VirtualBox mouse integration'
+7,6,992,401,0,0,0,22709224,9,'VirtualBox mouse integration'
+7,6,998,390,0,0,0,22709232,9,'VirtualBox mouse integration'
+7,6,1004,382,0,0,0,22709240,9,'VirtualBox mouse integration'
+7,6,1009,374,0,0,0,22709248,9,'VirtualBox mouse integration'
+7,6,1013,366,0,0,0,22709256,9,'VirtualBox mouse integration'
+7,6,1015,366,0,0,0,22709264,9,'VirtualBox mouse integration'
+7,6,1019,359,0,0,0,22709272,9,'VirtualBox mouse integration'
+7,6,1023,351,0,0,0,22709280,9,'VirtualBox mouse integration'
+7,6,1028,343,0,0,0,22709288,9,'VirtualBox mouse integration'
+7,6,1032,336,0,0,0,22709296,9,'VirtualBox mouse integration'
+7,6,1037,330,0,0,0,22709304,9,'VirtualBox mouse integration'
+7,6,1041,324,0,0,0,22709312,9,'VirtualBox mouse integration'
+7,6,1046,317,0,0,0,22709320,9,'VirtualBox mouse integration'
+7,6,1050,311,0,0,0,22709328,9,'VirtualBox mouse integration'
+7,6,1055,305,0,0,0,22709336,9,'VirtualBox mouse integration'
+7,6,1059,299,0,0,0,22709344,9,'VirtualBox mouse integration'
+7,6,1063,293,0,0,0,22709352,9,'VirtualBox mouse integration'
+7,6,1067,287,0,0,0,22709360,9,'VirtualBox mouse integration'
+7,6,1069,281,0,0,0,22709368,9,'VirtualBox mouse integration'
+7,6,1073,276,0,0,0,22709376,9,'VirtualBox mouse integration'
+7,6,1077,270,0,0,0,22709384,9,'VirtualBox mouse integration'
+7,6,1082,262,0,0,0,22709392,9,'VirtualBox mouse integration'
+7,6,1086,255,0,0,0,22709400,9,'VirtualBox mouse integration'
+7,6,1090,247,0,0,0,22709408,9,'VirtualBox mouse integration'
+7,6,1094,240,0,0,0,22709416,9,'VirtualBox mouse integration'
+7,6,1096,234,0,0,0,22709424,9,'VirtualBox mouse integration'
+7,6,1097,228,0,0,0,22709432,9,'VirtualBox mouse integration'
+7,6,1101,223,0,0,0,22709440,9,'VirtualBox mouse integration'
+7,6,1103,218,0,0,0,22709448,9,'VirtualBox mouse integration'
+7,6,1104,217,0,0,0,22709456,9,'VirtualBox mouse integration'
+7,6,1105,215,0,0,0,22709464,9,'VirtualBox mouse integration'
+7,6,1105,213,0,0,0,22709472,9,'VirtualBox mouse integration'
+7,6,1107,212,0,0,0,22709480,9,'VirtualBox mouse integration'
+7,6,1107,209,0,0,0,22709488,9,'VirtualBox mouse integration'
+7,6,1109,209,0,0,0,22709496,9,'VirtualBox mouse integration'
+7,6,1109,207,0,0,0,22709504,9,'VirtualBox mouse integration'
+7,6,1111,205,0,0,0,22709512,9,'VirtualBox mouse integration'
+7,6,1111,204,0,0,0,22709520,9,'VirtualBox mouse integration'
+7,6,1112,202,0,0,0,22709528,9,'VirtualBox mouse integration'
+7,6,1113,202,0,0,0,22709536,9,'VirtualBox mouse integration'
+7,6,1113,201,0,0,0,22709560,9,'VirtualBox mouse integration'
+7,6,1114,201,0,0,0,22709576,9,'VirtualBox mouse integration'
+7,6,1114,200,0,0,0,22709600,9,'VirtualBox mouse integration'
+7,6,1114,199,0,0,0,22709736,9,'VirtualBox mouse integration'
+7,6,1113,199,0,0,0,22709744,9,'VirtualBox mouse integration'
+7,6,1113,201,0,0,0,22709752,9,'VirtualBox mouse integration'
+7,6,1112,201,0,0,0,22709760,9,'VirtualBox mouse integration'
+7,6,1111,203,0,0,0,22709768,9,'VirtualBox mouse integration'
+7,6,1109,203,0,0,0,22709776,9,'VirtualBox mouse integration'
+7,6,1109,204,0,0,0,22709785,9,'VirtualBox mouse integration'
+7,6,1108,204,0,0,0,22709792,9,'VirtualBox mouse integration'
+7,6,1107,205,0,0,0,22709800,9,'VirtualBox mouse integration'
+7,6,1106,205,0,0,0,22709808,9,'VirtualBox mouse integration'
+7,6,1105,205,0,0,0,22709816,9,'VirtualBox mouse integration'
+7,6,1105,206,0,0,0,22709824,9,'VirtualBox mouse integration'
+7,6,1105,207,0,0,0,22709912,9,'VirtualBox mouse integration'
+7,6,1104,207,0,0,0,22709920,9,'VirtualBox mouse integration'
+7,6,1104,208,0,0,0,22709928,9,'VirtualBox mouse integration'
+7,6,1103,208,0,0,0,22709936,9,'VirtualBox mouse integration'
+7,6,1103,209,0,0,0,22709992,9,'VirtualBox mouse integration'
+7,6,1102,209,0,0,0,22710008,9,'VirtualBox mouse integration'
+7,6,1102,210,0,0,0,22710040,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22710220,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22710220,2,Virtual core pointer
+7,5,0,0,1,0,0,22710428,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22710428,2,Virtual core pointer
+7,6,1102,211,0,0,0,22710994,9,'VirtualBox mouse integration'
+7,6,1101,211,0,0,0,22711000,9,'VirtualBox mouse integration'
+7,6,1100,211,0,0,0,22711008,9,'VirtualBox mouse integration'
+7,6,1099,211,0,0,0,22711016,9,'VirtualBox mouse integration'
+7,6,1097,211,0,0,0,22711024,9,'VirtualBox mouse integration'
+7,6,1095,211,0,0,0,22711032,9,'VirtualBox mouse integration'
+7,6,1094,211,0,0,0,22711040,9,'VirtualBox mouse integration'
+7,6,1093,211,0,0,0,22711048,9,'VirtualBox mouse integration'
+7,6,1092,211,0,0,0,22711056,9,'VirtualBox mouse integration'
+7,6,1091,211,0,0,0,22711064,9,'VirtualBox mouse integration'
+7,6,1090,211,0,0,0,22711072,9,'VirtualBox mouse integration'
+7,6,1089,211,0,0,0,22711080,9,'VirtualBox mouse integration'
+7,6,1088,211,0,0,0,22711088,9,'VirtualBox mouse integration'
+7,6,1087,211,0,0,0,22711096,9,'VirtualBox mouse integration'
+7,6,1086,211,0,0,0,22711104,9,'VirtualBox mouse integration'
+7,6,1085,210,0,0,0,22711112,9,'VirtualBox mouse integration'
+7,6,1083,209,0,0,0,22711120,9,'VirtualBox mouse integration'
+7,6,1079,207,0,0,0,22711128,9,'VirtualBox mouse integration'
+7,6,1077,207,0,0,0,22711136,9,'VirtualBox mouse integration'
+7,6,1076,207,0,0,0,22711144,9,'VirtualBox mouse integration'
+7,6,1074,206,0,0,0,22711152,9,'VirtualBox mouse integration'
+7,6,1072,205,0,0,0,22711160,9,'VirtualBox mouse integration'
+7,6,1071,205,0,0,0,22711168,9,'VirtualBox mouse integration'
+7,6,1070,204,0,0,0,22711176,9,'VirtualBox mouse integration'
+7,6,1069,204,0,0,0,22711185,9,'VirtualBox mouse integration'
+7,6,1068,204,0,0,0,22711192,9,'VirtualBox mouse integration'
+7,6,1067,203,0,0,0,22711200,9,'VirtualBox mouse integration'
+7,6,1066,203,0,0,0,22711208,9,'VirtualBox mouse integration'
+7,6,1065,202,0,0,0,22711216,9,'VirtualBox mouse integration'
+7,6,1064,202,0,0,0,22711224,9,'VirtualBox mouse integration'
+7,6,1063,201,0,0,0,22711232,9,'VirtualBox mouse integration'
+7,6,1062,201,0,0,0,22711240,9,'VirtualBox mouse integration'
+7,6,1061,201,0,0,0,22711272,9,'VirtualBox mouse integration'
+7,6,1060,201,0,0,0,22711312,9,'VirtualBox mouse integration'
+7,6,1059,200,0,0,0,22711320,9,'VirtualBox mouse integration'
+7,6,1058,200,0,0,0,22711328,9,'VirtualBox mouse integration'
+7,6,1058,199,0,0,0,22711336,9,'VirtualBox mouse integration'
+7,6,1057,199,0,0,0,22711360,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22711476,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22711476,2,Virtual core pointer
+7,5,0,0,1,0,0,22711662,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22711662,2,Virtual core pointer
+0,21,0,0,0,0,0,22711696
+NEW-WINDOW:705,422:62915171,62915171,35158363,0,0,0:36x74+370+123:0,0:Create new property
+0,21,0,0,0,0,0,22711696
+0,21,0,0,0,0,0,22711696
+0,21,0,0,0,0,0,22711696
+7,6,1056,199,0,0,0,22712522,9,'VirtualBox mouse integration'
+7,6,1054,199,0,0,0,22712528,9,'VirtualBox mouse integration'
+7,6,1054,200,0,0,0,22712536,9,'VirtualBox mouse integration'
+7,6,1052,200,0,0,0,22712544,9,'VirtualBox mouse integration'
+7,6,1052,201,0,0,0,22712552,9,'VirtualBox mouse integration'
+7,6,1050,202,0,0,0,22712560,9,'VirtualBox mouse integration'
+7,6,1050,203,0,0,0,22712568,9,'VirtualBox mouse integration'
+7,6,1050,206,0,0,0,22712576,9,'VirtualBox mouse integration'
+7,6,1048,208,0,0,0,22712584,9,'VirtualBox mouse integration'
+7,6,1046,210,0,0,0,22712592,9,'VirtualBox mouse integration'
+7,6,1044,212,0,0,0,22712600,9,'VirtualBox mouse integration'
+7,6,1042,214,0,0,0,22712608,9,'VirtualBox mouse integration'
+7,6,1039,216,0,0,0,22712616,9,'VirtualBox mouse integration'
+7,6,1035,219,0,0,0,22712624,9,'VirtualBox mouse integration'
+7,6,1033,223,0,0,0,22712632,9,'VirtualBox mouse integration'
+7,6,1031,226,0,0,0,22712640,9,'VirtualBox mouse integration'
+7,6,1029,230,0,0,0,22712648,9,'VirtualBox mouse integration'
+7,6,1027,234,0,0,0,22712656,9,'VirtualBox mouse integration'
+7,6,1026,238,0,0,0,22712664,9,'VirtualBox mouse integration'
+7,6,1024,241,0,0,0,22712672,9,'VirtualBox mouse integration'
+7,6,1022,244,0,0,0,22712680,9,'VirtualBox mouse integration'
+7,6,1020,247,0,0,0,22712688,9,'VirtualBox mouse integration'
+7,6,1018,249,0,0,0,22712705,9,'VirtualBox mouse integration'
+7,6,1016,254,0,0,0,22712712,9,'VirtualBox mouse integration'
+7,6,1014,258,0,0,0,22712720,9,'VirtualBox mouse integration'
+7,6,1012,260,0,0,0,22712728,9,'VirtualBox mouse integration'
+7,6,1011,263,0,0,0,22712736,9,'VirtualBox mouse integration'
+7,6,1009,266,0,0,0,22712744,9,'VirtualBox mouse integration'
+7,6,1007,268,0,0,0,22712752,9,'VirtualBox mouse integration'
+7,6,1006,272,0,0,0,22712760,9,'VirtualBox mouse integration'
+7,6,1005,274,0,0,0,22712768,9,'VirtualBox mouse integration'
+7,6,1003,278,0,0,0,22712776,9,'VirtualBox mouse integration'
+7,6,1001,281,0,0,0,22712784,9,'VirtualBox mouse integration'
+7,6,999,285,0,0,0,22712792,9,'VirtualBox mouse integration'
+7,6,994,300,0,0,0,22712800,9,'VirtualBox mouse integration'
+7,6,987,308,0,0,0,22712808,9,'VirtualBox mouse integration'
+7,6,983,316,0,0,0,22712816,9,'VirtualBox mouse integration'
+7,6,983,320,0,0,0,22712824,9,'VirtualBox mouse integration'
+7,6,981,324,0,0,0,22712832,9,'VirtualBox mouse integration'
+7,6,978,329,0,0,0,22712840,9,'VirtualBox mouse integration'
+7,6,975,333,0,0,0,22712848,9,'VirtualBox mouse integration'
+7,6,975,336,0,0,0,22712856,9,'VirtualBox mouse integration'
+7,6,974,337,0,0,0,22712864,9,'VirtualBox mouse integration'
+7,6,973,339,0,0,0,22712872,9,'VirtualBox mouse integration'
+7,6,973,341,0,0,0,22712880,9,'VirtualBox mouse integration'
+7,6,973,342,0,0,0,22712888,9,'VirtualBox mouse integration'
+7,6,972,344,0,0,0,22712896,9,'VirtualBox mouse integration'
+7,6,971,345,0,0,0,22712904,9,'VirtualBox mouse integration'
+7,6,971,347,0,0,0,22712912,9,'VirtualBox mouse integration'
+7,6,971,349,0,0,0,22712920,9,'VirtualBox mouse integration'
+7,6,971,350,0,0,0,22712928,9,'VirtualBox mouse integration'
+7,6,971,351,0,0,0,22712936,9,'VirtualBox mouse integration'
+7,6,971,353,0,0,0,22712944,9,'VirtualBox mouse integration'
+7,6,970,353,0,0,0,22712952,9,'VirtualBox mouse integration'
+7,6,970,355,0,0,0,22712960,9,'VirtualBox mouse integration'
+7,6,969,355,0,0,0,22712968,9,'VirtualBox mouse integration'
+7,6,969,357,0,0,0,22712976,9,'VirtualBox mouse integration'
+7,6,969,358,0,0,0,22713000,9,'VirtualBox mouse integration'
+7,2,0,0,0,65,0,22714099,11,AT Translated Set 2 keyboard
+6,2,0,0,0,65,0,22714099,3,Virtual core keyboard
+7,3,0,0,0,65,0,22714279,11,AT Translated Set 2 keyboard
+6,3,0,0,0,65,0,22714279,3,Virtual core keyboard
+7,2,0,0,0,116,0,22715132,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22715133,3,Virtual core keyboard
+7,3,0,0,0,116,0,22715203,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22715203,3,Virtual core keyboard
+7,2,0,0,0,116,0,22715362,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22715362,3,Virtual core keyboard
+7,3,0,0,0,116,0,22715432,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22715432,3,Virtual core keyboard
+7,2,0,0,0,116,0,22715587,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22715588,3,Virtual core keyboard
+7,3,0,0,0,116,0,22715663,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22715663,3,Virtual core keyboard
+7,2,0,0,0,116,0,22715832,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22715833,3,Virtual core keyboard
+7,3,0,0,0,116,0,22715924,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22715924,3,Virtual core keyboard
+7,2,0,0,0,116,0,22716193,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22716193,3,Virtual core keyboard
+7,3,0,0,0,116,0,22716262,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22716262,3,Virtual core keyboard
+7,2,0,0,0,116,0,22716493,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22716493,3,Virtual core keyboard
+7,3,0,0,0,116,0,22716581,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22716581,3,Virtual core keyboard
+7,2,0,0,0,36,0,22717056,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,22717056,3,Virtual core keyboard
+7,3,0,0,0,36,0,22717130,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,22717130,3,Virtual core keyboard
+7,2,0,0,0,23,0,22718373,11,AT Translated Set 2 keyboard
+6,2,0,0,0,23,0,22718373,3,Virtual core keyboard
+7,3,0,0,0,23,0,22718433,11,AT Translated Set 2 keyboard
+6,3,0,0,0,23,0,22718433,3,Virtual core keyboard
+7,2,0,0,0,37,0,22719206,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,22719206,3,Virtual core keyboard
+7,2,0,0,0,55,0,22719664,11,AT Translated Set 2 keyboard
+6,2,0,0,0,55,0,22719664,3,Virtual core keyboard
+7,3,0,0,0,55,0,22719730,11,AT Translated Set 2 keyboard
+6,3,0,0,0,55,0,22719730,3,Virtual core keyboard
+7,3,0,0,0,37,0,22719843,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,22719843,3,Virtual core keyboard
+7,2,0,0,0,36,0,22720816,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,22720817,3,Virtual core keyboard
+0,21,0,0,0,0,0,22720845
+NEW-WINDOW:705,380:62915171,62915171,701,705,380,0:705x380+370+123:0,0:Create new property
+0,21,0,0,0,0,0,22720845
+0,21,0,0,0,0,0,22720845
+0,21,0,0,0,0,0,22720845
+0,21,0,0,0,0,0,22720845
+7,3,0,0,0,36,0,22720882,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,22720882,3,Virtual core keyboard
+7,6,969,359,0,0,0,22723600,9,'VirtualBox mouse integration'
+7,6,968,359,0,0,0,22723632,9,'VirtualBox mouse integration'
+7,6,967,359,0,0,0,22723640,9,'VirtualBox mouse integration'
+7,6,966,359,0,0,0,22723744,9,'VirtualBox mouse integration'
+7,6,965,359,0,0,0,22723752,9,'VirtualBox mouse integration'
+7,6,964,359,0,0,0,22725264,9,'VirtualBox mouse integration'
+7,6,963,359,0,0,0,22725272,9,'VirtualBox mouse integration'
+7,6,962,359,0,0,0,22725344,9,'VirtualBox mouse integration'
+7,6,961,359,0,0,0,22725352,9,'VirtualBox mouse integration'
+7,6,960,359,0,0,0,22725360,9,'VirtualBox mouse integration'
+7,6,960,360,0,0,0,22725368,9,'VirtualBox mouse integration'
+7,6,960,361,0,0,0,22725376,9,'VirtualBox mouse integration'
+7,6,959,361,0,0,0,22725384,9,'VirtualBox mouse integration'
+7,6,958,361,0,0,0,22725408,9,'VirtualBox mouse integration'
+7,6,958,362,0,0,0,22725424,9,'VirtualBox mouse integration'
+7,6,957,362,0,0,0,22725432,9,'VirtualBox mouse integration'
+7,6,957,363,0,0,0,22725448,9,'VirtualBox mouse integration'
+7,6,956,363,0,0,0,22726016,9,'VirtualBox mouse integration'
+7,6,954,363,0,0,0,22726024,9,'VirtualBox mouse integration'
+7,6,954,364,0,0,0,22726056,9,'VirtualBox mouse integration'
+7,6,953,364,0,0,0,22726112,9,'VirtualBox mouse integration'
+7,6,952,364,0,0,0,22726120,9,'VirtualBox mouse integration'
+7,6,951,364,0,0,0,22726128,9,'VirtualBox mouse integration'
+7,6,951,365,0,0,0,22726136,9,'VirtualBox mouse integration'
+7,6,950,365,0,0,0,22726144,9,'VirtualBox mouse integration'
+7,6,948,365,0,0,0,22726152,9,'VirtualBox mouse integration'
+7,6,946,365,0,0,0,22726160,9,'VirtualBox mouse integration'
+7,6,944,365,0,0,0,22726168,9,'VirtualBox mouse integration'
+7,6,943,365,0,0,0,22726176,9,'VirtualBox mouse integration'
+7,6,942,365,0,0,0,22726184,9,'VirtualBox mouse integration'
+7,6,940,365,0,0,0,22726192,9,'VirtualBox mouse integration'
+7,6,938,365,0,0,0,22726200,9,'VirtualBox mouse integration'
+7,6,936,365,0,0,0,22726208,9,'VirtualBox mouse integration'
+7,6,935,365,0,0,0,22726216,9,'VirtualBox mouse integration'
+7,6,933,364,0,0,0,22726224,9,'VirtualBox mouse integration'
+7,6,932,364,0,0,0,22726232,9,'VirtualBox mouse integration'
+7,6,930,364,0,0,0,22726240,9,'VirtualBox mouse integration'
+7,6,929,364,0,0,0,22726248,9,'VirtualBox mouse integration'
+7,6,927,363,0,0,0,22726256,9,'VirtualBox mouse integration'
+7,6,925,363,0,0,0,22726264,9,'VirtualBox mouse integration'
+7,6,923,363,0,0,0,22726272,9,'VirtualBox mouse integration'
+7,6,922,362,0,0,0,22726280,9,'VirtualBox mouse integration'
+7,6,920,361,0,0,0,22726288,9,'VirtualBox mouse integration'
+7,6,918,360,0,0,0,22726296,9,'VirtualBox mouse integration'
+7,6,916,360,0,0,0,22726304,9,'VirtualBox mouse integration'
+7,6,915,358,0,0,0,22726312,9,'VirtualBox mouse integration'
+7,6,913,358,0,0,0,22726320,9,'VirtualBox mouse integration'
+7,6,911,357,0,0,0,22726328,9,'VirtualBox mouse integration'
+7,6,909,355,0,0,0,22726336,9,'VirtualBox mouse integration'
+7,6,907,355,0,0,0,22726344,9,'VirtualBox mouse integration'
+7,6,905,355,0,0,0,22726352,9,'VirtualBox mouse integration'
+7,6,902,353,0,0,0,22726360,9,'VirtualBox mouse integration'
+7,6,900,352,0,0,0,22726368,9,'VirtualBox mouse integration'
+7,6,898,350,0,0,0,22726376,9,'VirtualBox mouse integration'
+7,6,896,350,0,0,0,22726384,9,'VirtualBox mouse integration'
+7,6,894,349,0,0,0,22726392,9,'VirtualBox mouse integration'
+7,6,891,347,0,0,0,22726400,9,'VirtualBox mouse integration'
+7,6,889,346,0,0,0,22726408,9,'VirtualBox mouse integration'
+7,6,887,344,0,0,0,22726416,9,'VirtualBox mouse integration'
+7,6,884,344,0,0,0,22726424,9,'VirtualBox mouse integration'
+7,6,882,342,0,0,0,22726432,9,'VirtualBox mouse integration'
+7,6,880,342,0,0,0,22726440,9,'VirtualBox mouse integration'
+7,6,877,341,0,0,0,22726448,9,'VirtualBox mouse integration'
+7,6,874,340,0,0,0,22726456,9,'VirtualBox mouse integration'
+7,6,871,338,0,0,0,22726464,9,'VirtualBox mouse integration'
+7,6,867,336,0,0,0,22726472,9,'VirtualBox mouse integration'
+7,6,864,335,0,0,0,22726480,9,'VirtualBox mouse integration'
+7,6,860,333,0,0,0,22726488,9,'VirtualBox mouse integration'
+7,6,856,331,0,0,0,22726496,9,'VirtualBox mouse integration'
+7,6,853,329,0,0,0,22726504,9,'VirtualBox mouse integration'
+7,6,850,328,0,0,0,22726512,9,'VirtualBox mouse integration'
+7,6,846,326,0,0,0,22726520,9,'VirtualBox mouse integration'
+7,6,844,326,0,0,0,22726528,9,'VirtualBox mouse integration'
+7,6,841,324,0,0,0,22726536,9,'VirtualBox mouse integration'
+7,6,839,324,0,0,0,22726544,9,'VirtualBox mouse integration'
+7,6,835,322,0,0,0,22726552,9,'VirtualBox mouse integration'
+7,6,832,321,0,0,0,22726560,9,'VirtualBox mouse integration'
+7,6,828,319,0,0,0,22726568,9,'VirtualBox mouse integration'
+7,6,824,317,0,0,0,22726576,9,'VirtualBox mouse integration'
+7,6,820,316,0,0,0,22726584,9,'VirtualBox mouse integration'
+7,6,817,314,0,0,0,22726592,9,'VirtualBox mouse integration'
+7,6,813,312,0,0,0,22726600,9,'VirtualBox mouse integration'
+7,6,810,311,0,0,0,22726608,9,'VirtualBox mouse integration'
+7,6,808,310,0,0,0,22726616,9,'VirtualBox mouse integration'
+7,6,804,308,0,0,0,22726624,9,'VirtualBox mouse integration'
+7,6,799,305,0,0,0,22726632,9,'VirtualBox mouse integration'
+7,6,795,305,0,0,0,22726640,9,'VirtualBox mouse integration'
+7,6,793,303,0,0,0,22726648,9,'VirtualBox mouse integration'
+7,6,789,301,0,0,0,22726656,9,'VirtualBox mouse integration'
+7,6,784,299,0,0,0,22726664,9,'VirtualBox mouse integration'
+7,6,776,297,0,0,0,22726672,9,'VirtualBox mouse integration'
+7,6,768,294,0,0,0,22726680,9,'VirtualBox mouse integration'
+7,6,761,290,0,0,0,22726688,9,'VirtualBox mouse integration'
+7,6,743,283,0,0,0,22726696,9,'VirtualBox mouse integration'
+7,6,730,278,0,0,0,22726704,9,'VirtualBox mouse integration'
+7,6,716,273,0,0,0,22726712,9,'VirtualBox mouse integration'
+7,6,705,268,0,0,0,22726720,9,'VirtualBox mouse integration'
+7,6,694,263,0,0,0,22726728,9,'VirtualBox mouse integration'
+7,6,683,258,0,0,0,22726736,9,'VirtualBox mouse integration'
+7,6,676,256,0,0,0,22726744,9,'VirtualBox mouse integration'
+7,6,667,249,0,0,0,22726752,9,'VirtualBox mouse integration'
+7,6,656,247,0,0,0,22726760,9,'VirtualBox mouse integration'
+7,6,646,242,0,0,0,22726768,9,'VirtualBox mouse integration'
+7,6,637,237,0,0,0,22726776,9,'VirtualBox mouse integration'
+7,6,628,232,0,0,0,22726784,9,'VirtualBox mouse integration'
+7,6,621,230,0,0,0,22726792,9,'VirtualBox mouse integration'
+7,6,614,227,0,0,0,22726800,9,'VirtualBox mouse integration'
+7,6,607,225,0,0,0,22726808,9,'VirtualBox mouse integration'
+7,6,601,223,0,0,0,22726816,9,'VirtualBox mouse integration'
+7,6,595,221,0,0,0,22726824,9,'VirtualBox mouse integration'
+7,6,588,218,0,0,0,22726832,9,'VirtualBox mouse integration'
+7,6,584,216,0,0,0,22726840,9,'VirtualBox mouse integration'
+7,6,578,215,0,0,0,22726848,9,'VirtualBox mouse integration'
+7,6,574,212,0,0,0,22726856,9,'VirtualBox mouse integration'
+7,6,570,211,0,0,0,22726864,9,'VirtualBox mouse integration'
+7,6,565,208,0,0,0,22726872,9,'VirtualBox mouse integration'
+7,6,561,208,0,0,0,22726880,9,'VirtualBox mouse integration'
+7,6,558,205,0,0,0,22726888,9,'VirtualBox mouse integration'
+7,6,551,204,0,0,0,22726896,9,'VirtualBox mouse integration'
+7,6,543,201,0,0,0,22726904,9,'VirtualBox mouse integration'
+7,6,539,201,0,0,0,22726912,9,'VirtualBox mouse integration'
+7,6,535,199,0,0,0,22726920,9,'VirtualBox mouse integration'
+7,6,532,198,0,0,0,22726928,9,'VirtualBox mouse integration'
+7,6,530,196,0,0,0,22726936,9,'VirtualBox mouse integration'
+7,6,528,196,0,0,0,22726944,9,'VirtualBox mouse integration'
+7,6,526,195,0,0,0,22726952,9,'VirtualBox mouse integration'
+7,6,523,194,0,0,0,22726960,9,'VirtualBox mouse integration'
+7,6,520,194,0,0,0,22726968,9,'VirtualBox mouse integration'
+7,6,513,191,0,0,0,22726976,9,'VirtualBox mouse integration'
+7,6,511,190,0,0,0,22726985,9,'VirtualBox mouse integration'
+7,6,509,190,0,0,0,22726992,9,'VirtualBox mouse integration'
+7,6,505,188,0,0,0,22727011,9,'VirtualBox mouse integration'
+7,6,499,185,0,0,0,22727032,9,'VirtualBox mouse integration'
+7,6,486,183,0,0,0,22727039,9,'VirtualBox mouse integration'
+7,6,483,182,0,0,0,22727047,9,'VirtualBox mouse integration'
+7,6,479,181,0,0,0,22727056,9,'VirtualBox mouse integration'
+7,6,475,181,0,0,0,22727063,9,'VirtualBox mouse integration'
+7,6,472,180,0,0,0,22727072,9,'VirtualBox mouse integration'
+7,6,468,180,0,0,0,22727080,9,'VirtualBox mouse integration'
+7,6,464,179,0,0,0,22727088,9,'VirtualBox mouse integration'
+7,6,462,179,0,0,0,22727096,9,'VirtualBox mouse integration'
+7,6,459,178,0,0,0,22727104,9,'VirtualBox mouse integration'
+7,6,456,177,0,0,0,22727112,9,'VirtualBox mouse integration'
+7,6,452,175,0,0,0,22727120,9,'VirtualBox mouse integration'
+7,6,450,175,0,0,0,22727128,9,'VirtualBox mouse integration'
+7,6,447,173,0,0,0,22727136,9,'VirtualBox mouse integration'
+7,6,446,173,0,0,0,22727144,9,'VirtualBox mouse integration'
+7,6,444,172,0,0,0,22727152,9,'VirtualBox mouse integration'
+7,6,443,172,0,0,0,22727160,9,'VirtualBox mouse integration'
+7,6,442,172,0,0,0,22727168,9,'VirtualBox mouse integration'
+7,6,441,171,0,0,0,22727176,9,'VirtualBox mouse integration'
+7,6,439,170,0,0,0,22727184,9,'VirtualBox mouse integration'
+7,6,438,170,0,0,0,22727192,9,'VirtualBox mouse integration'
+7,6,437,170,0,0,0,22727200,9,'VirtualBox mouse integration'
+7,6,436,170,0,0,0,22727208,9,'VirtualBox mouse integration'
+7,6,435,169,0,0,0,22727216,9,'VirtualBox mouse integration'
+7,6,432,167,0,0,0,22727224,9,'VirtualBox mouse integration'
+7,6,430,167,0,0,0,22727232,9,'VirtualBox mouse integration'
+7,6,429,167,0,0,0,22727240,9,'VirtualBox mouse integration'
+7,6,427,165,0,0,0,22727248,9,'VirtualBox mouse integration'
+7,6,424,165,0,0,0,22727256,9,'VirtualBox mouse integration'
+7,6,422,164,0,0,0,22727264,9,'VirtualBox mouse integration'
+7,6,420,164,0,0,0,22727272,9,'VirtualBox mouse integration'
+7,6,418,163,0,0,0,22727280,9,'VirtualBox mouse integration'
+7,6,415,161,0,0,0,22727288,9,'VirtualBox mouse integration'
+7,6,414,161,0,0,0,22727296,9,'VirtualBox mouse integration'
+7,6,411,160,0,0,0,22727304,9,'VirtualBox mouse integration'
+7,6,408,159,0,0,0,22727312,9,'VirtualBox mouse integration'
+7,6,400,156,0,0,0,22727320,9,'VirtualBox mouse integration'
+7,6,394,152,0,0,0,22727328,9,'VirtualBox mouse integration'
+7,6,390,152,0,0,0,22727336,9,'VirtualBox mouse integration'
+7,6,387,150,0,0,0,22727344,9,'VirtualBox mouse integration'
+7,6,384,149,0,0,0,22727352,9,'VirtualBox mouse integration'
+7,6,382,149,0,0,0,22727360,9,'VirtualBox mouse integration'
+7,6,380,147,0,0,0,22727368,9,'VirtualBox mouse integration'
+7,6,378,147,0,0,0,22727376,9,'VirtualBox mouse integration'
+7,6,376,147,0,0,0,22727384,9,'VirtualBox mouse integration'
+7,6,374,146,0,0,0,22727392,9,'VirtualBox mouse integration'
+7,6,372,146,0,0,0,22727400,9,'VirtualBox mouse integration'
+7,6,371,146,0,0,0,22727408,9,'VirtualBox mouse integration'
+7,6,369,146,0,0,0,22727416,9,'VirtualBox mouse integration'
+7,6,368,144,0,0,0,22727424,9,'VirtualBox mouse integration'
+7,6,366,144,0,0,0,22727432,9,'VirtualBox mouse integration'
+7,6,365,144,0,0,0,22727440,9,'VirtualBox mouse integration'
+7,6,363,143,0,0,0,22727448,9,'VirtualBox mouse integration'
+7,6,361,143,0,0,0,22727456,9,'VirtualBox mouse integration'
+7,6,359,143,0,0,0,22727464,9,'VirtualBox mouse integration'
+7,6,358,143,0,0,0,22727472,9,'VirtualBox mouse integration'
+7,6,357,142,0,0,0,22727480,9,'VirtualBox mouse integration'
+7,6,355,142,0,0,0,22727488,9,'VirtualBox mouse integration'
+7,6,354,142,0,0,0,22727496,9,'VirtualBox mouse integration'
+7,6,352,141,0,0,0,22727504,9,'VirtualBox mouse integration'
+7,6,351,141,0,0,0,22727512,9,'VirtualBox mouse integration'
+7,6,350,141,0,0,0,22727520,9,'VirtualBox mouse integration'
+7,6,348,141,0,0,0,22727528,9,'VirtualBox mouse integration'
+7,6,347,141,0,0,0,22727536,9,'VirtualBox mouse integration'
+7,6,346,141,0,0,0,22727544,9,'VirtualBox mouse integration'
+7,6,345,141,0,0,0,22727552,9,'VirtualBox mouse integration'
+7,6,344,141,0,0,0,22727560,9,'VirtualBox mouse integration'
+7,6,342,141,0,0,0,22727568,9,'VirtualBox mouse integration'
+7,6,341,141,0,0,0,22727576,9,'VirtualBox mouse integration'
+7,6,340,141,0,0,0,22727584,9,'VirtualBox mouse integration'
+7,6,339,141,0,0,0,22727592,9,'VirtualBox mouse integration'
+7,6,338,140,0,0,0,22727600,9,'VirtualBox mouse integration'
+7,6,336,140,0,0,0,22727608,9,'VirtualBox mouse integration'
+7,6,335,140,0,0,0,22727616,9,'VirtualBox mouse integration'
+7,6,333,140,0,0,0,22727624,9,'VirtualBox mouse integration'
+7,6,331,140,0,0,0,22727632,9,'VirtualBox mouse integration'
+7,6,329,140,0,0,0,22727640,9,'VirtualBox mouse integration'
+7,6,328,140,0,0,0,22727648,9,'VirtualBox mouse integration'
+7,6,324,140,0,0,0,22727656,9,'VirtualBox mouse integration'
+7,6,322,140,0,0,0,22727664,9,'VirtualBox mouse integration'
+7,6,321,140,0,0,0,22727672,9,'VirtualBox mouse integration'
+7,6,319,140,0,0,0,22727680,9,'VirtualBox mouse integration'
+7,6,316,140,0,0,0,22727688,9,'VirtualBox mouse integration'
+7,6,315,140,0,0,0,22727706,9,'VirtualBox mouse integration'
+7,6,313,140,0,0,0,22727712,9,'VirtualBox mouse integration'
+7,6,312,140,0,0,0,22727720,9,'VirtualBox mouse integration'
+7,6,310,140,0,0,0,22727728,9,'VirtualBox mouse integration'
+7,6,309,140,0,0,0,22727736,9,'VirtualBox mouse integration'
+7,6,308,140,0,0,0,22727744,9,'VirtualBox mouse integration'
+7,6,307,140,0,0,0,22727752,9,'VirtualBox mouse integration'
+7,6,306,140,0,0,0,22727808,9,'VirtualBox mouse integration'
+7,6,305,140,0,0,0,22727824,9,'VirtualBox mouse integration'
+7,6,304,140,0,0,0,22728440,9,'VirtualBox mouse integration'
+7,6,303,140,0,0,0,22728448,9,'VirtualBox mouse integration'
+7,6,302,140,0,0,0,22728456,9,'VirtualBox mouse integration'
+7,6,301,140,0,0,0,22728480,9,'VirtualBox mouse integration'
+7,6,300,140,0,0,0,22728600,9,'VirtualBox mouse integration'
+7,6,299,140,0,0,0,22728696,9,'VirtualBox mouse integration'
+7,6,298,140,0,0,0,22728704,9,'VirtualBox mouse integration'
+7,6,297,140,0,0,0,22728744,9,'VirtualBox mouse integration'
+7,6,296,140,0,0,0,22728752,9,'VirtualBox mouse integration'
+7,6,295,140,0,0,0,22728808,9,'VirtualBox mouse integration'
+7,6,294,140,0,0,0,22728832,9,'VirtualBox mouse integration'
+7,6,293,140,0,0,0,22730184,9,'VirtualBox mouse integration'
+7,6,292,140,0,0,0,22730192,9,'VirtualBox mouse integration'
+7,6,292,139,0,0,0,22730203,9,'VirtualBox mouse integration'
+7,6,291,139,0,0,0,22730232,9,'VirtualBox mouse integration'
+7,6,291,138,0,0,0,22730240,9,'VirtualBox mouse integration'
+7,6,290,138,0,0,0,22730248,9,'VirtualBox mouse integration'
+7,6,290,137,0,0,0,22730256,9,'VirtualBox mouse integration'
+7,6,289,137,0,0,0,22730288,9,'VirtualBox mouse integration'
+7,6,289,136,0,0,0,22730384,9,'VirtualBox mouse integration'
+7,6,289,135,0,0,0,22730392,9,'VirtualBox mouse integration'
+7,6,288,135,0,0,0,22730408,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,22731702,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22731702,2,Virtual core pointer
+7,5,0,0,1,0,0,22731885,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22731885,2,Virtual core pointer
+7,4,0,0,1,0,0,22732004,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,22732004,2,Virtual core pointer
+7,5,0,0,1,0,0,22732165,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,22732165,2,Virtual core pointer
+7,2,0,0,0,41,0,22734804,11,AT Translated Set 2 keyboard
+6,2,0,0,0,41,0,22734804,3,Virtual core keyboard
+7,3,0,0,0,41,0,22734866,11,AT Translated Set 2 keyboard
+6,3,0,0,0,41,0,22734866,3,Virtual core keyboard
+7,2,0,0,0,22,0,22740508,11,AT Translated Set 2 keyboard
+6,2,0,0,0,22,0,22740508,3,Virtual core keyboard
+7,3,0,0,0,22,0,22740611,11,AT Translated Set 2 keyboard
+6,3,0,0,0,22,0,22740611,3,Virtual core keyboard
+7,6,288,134,0,0,0,22741712,9,'VirtualBox mouse integration'
+7,6,288,135,0,0,0,22741720,9,'VirtualBox mouse integration'
+7,6,288,137,0,0,0,22741728,9,'VirtualBox mouse integration'
+7,6,288,139,0,0,0,22741736,9,'VirtualBox mouse integration'
+7,6,288,143,0,0,0,22741744,9,'VirtualBox mouse integration'
+7,6,288,144,0,0,0,22741752,9,'VirtualBox mouse integration'
+7,6,287,147,0,0,0,22741760,9,'VirtualBox mouse integration'
+7,6,287,150,0,0,0,22741768,9,'VirtualBox mouse integration'
+7,6,287,154,0,0,0,22741776,9,'VirtualBox mouse integration'
+7,6,287,156,0,0,0,22741784,9,'VirtualBox mouse integration'
+7,6,287,158,0,0,0,22741792,9,'VirtualBox mouse integration'
+7,6,287,161,0,0,0,22741800,9,'VirtualBox mouse integration'
+7,6,287,164,0,0,0,22741808,9,'VirtualBox mouse integration'
+7,6,287,167,0,0,0,22741816,9,'VirtualBox mouse integration'
+7,6,287,169,0,0,0,22741824,9,'VirtualBox mouse integration'
+7,6,287,171,0,0,0,22741832,9,'VirtualBox mouse integration'
+7,6,287,174,0,0,0,22741840,9,'VirtualBox mouse integration'
+7,6,287,177,0,0,0,22741848,9,'VirtualBox mouse integration'
+7,6,287,180,0,0,0,22741856,9,'VirtualBox mouse integration'
+7,6,287,184,0,0,0,22741864,9,'VirtualBox mouse integration'
+7,6,287,188,0,0,0,22741872,9,'VirtualBox mouse integration'
+7,6,287,191,0,0,0,22741880,9,'VirtualBox mouse integration'
+7,6,287,193,0,0,0,22741888,9,'VirtualBox mouse integration'
+7,6,287,197,0,0,0,22741896,9,'VirtualBox mouse integration'
+7,6,287,201,0,0,0,22741904,9,'VirtualBox mouse integration'
+7,6,287,206,0,0,0,22741912,9,'VirtualBox mouse integration'
+7,6,287,210,0,0,0,22741920,9,'VirtualBox mouse integration'
+7,6,287,215,0,0,0,22741928,9,'VirtualBox mouse integration'
+7,6,287,221,0,0,0,22741936,9,'VirtualBox mouse integration'
+7,6,287,226,0,0,0,22741944,9,'VirtualBox mouse integration'
+7,6,287,232,0,0,0,22741952,9,'VirtualBox mouse integration'
+7,6,287,241,0,0,0,22741960,9,'VirtualBox mouse integration'
+7,6,287,250,0,0,0,22741968,9,'VirtualBox mouse integration'
+7,6,288,259,0,0,0,22741976,9,'VirtualBox mouse integration'
+7,6,288,268,0,0,0,22741985,9,'VirtualBox mouse integration'
+7,6,288,278,0,0,0,22741992,9,'VirtualBox mouse integration'
+7,6,288,286,0,0,0,22742000,9,'VirtualBox mouse integration'
+7,6,288,294,0,0,0,22742008,9,'VirtualBox mouse integration'
+7,6,288,298,0,0,0,22742016,9,'VirtualBox mouse integration'
+7,6,288,304,0,0,0,22742024,9,'VirtualBox mouse integration'
+7,6,288,310,0,0,0,22742032,9,'VirtualBox mouse integration'
+7,6,288,316,0,0,0,22742040,9,'VirtualBox mouse integration'
+7,6,288,326,0,0,0,22742048,9,'VirtualBox mouse integration'
+7,6,288,336,0,0,0,22742056,9,'VirtualBox mouse integration'
+7,6,288,345,0,0,0,22742064,9,'VirtualBox mouse integration'
+7,6,288,359,0,0,0,22742072,9,'VirtualBox mouse integration'
+7,6,288,372,0,0,0,22742081,9,'VirtualBox mouse integration'
+7,6,288,384,0,0,0,22742088,9,'VirtualBox mouse integration'
+7,6,290,396,0,0,0,22742096,9,'VirtualBox mouse integration'
+7,6,290,408,0,0,0,22742104,9,'VirtualBox mouse integration'
+7,6,290,418,0,0,0,22742112,9,'VirtualBox mouse integration'
+7,6,290,428,0,0,0,22742120,9,'VirtualBox mouse integration'
+7,6,290,435,0,0,0,22742128,9,'VirtualBox mouse integration'
+7,6,290,441,0,0,0,22742136,9,'VirtualBox mouse integration'
+7,6,290,448,0,0,0,22742144,9,'VirtualBox mouse integration'
+7,6,290,452,0,0,0,22742152,9,'VirtualBox mouse integration'
+7,6,290,458,0,0,0,22742160,9,'VirtualBox mouse integration'
+7,6,290,464,0,0,0,22742168,9,'VirtualBox mouse integration'
+7,6,289,465,0,0,0,22742176,9,'VirtualBox mouse integration'
+7,6,288,468,0,0,0,22742184,9,'VirtualBox mouse integration'
+7,6,286,471,0,0,0,22742192,9,'VirtualBox mouse integration'
+7,6,284,480,0,0,0,22742200,9,'VirtualBox mouse integration'
+7,6,284,481,0,0,0,22742208,9,'VirtualBox mouse integration'
+7,6,283,483,0,0,0,22742216,9,'VirtualBox mouse integration'
+7,6,282,485,0,0,0,22742224,9,'VirtualBox mouse integration'
+7,6,282,487,0,0,0,22742232,9,'VirtualBox mouse integration'
+7,6,281,487,0,0,0,22742240,9,'VirtualBox mouse integration'
+7,6,280,491,0,0,0,22742248,9,'VirtualBox mouse integration'
+7,6,279,492,0,0,0,22742256,9,'VirtualBox mouse integration'
+7,6,279,495,0,0,0,22742264,9,'VirtualBox mouse integration'
+7,6,278,497,0,0,0,22742272,9,'VirtualBox mouse integration'
+7,6,277,500,0,0,0,22742280,9,'VirtualBox mouse integration'
+7,6,276,503,0,0,0,22742288,9,'VirtualBox mouse integration'
+7,6,276,506,0,0,0,22742296,9,'VirtualBox mouse integration'
+7,6,275,510,0,0,0,22742304,9,'VirtualBox mouse integration'
+7,6,274,514,0,0,0,22742312,9,'VirtualBox mouse integration'
+7,6,274,516,0,0,0,22742320,9,'VirtualBox mouse integration'
+7,6,274,518,0,0,0,22742328,9,'VirtualBox mouse integration'
+7,6,274,521,0,0,0,22742336,9,'VirtualBox mouse integration'
+7,6,274,525,0,0,0,22742344,9,'VirtualBox mouse integration'
+7,6,274,529,0,0,0,22742352,9,'VirtualBox mouse integration'
+7,6,274,531,0,0,0,22742360,9,'VirtualBox mouse integration'
+7,6,274,536,0,0,0,22742368,9,'VirtualBox mouse integration'
+7,6,273,540,0,0,0,22742376,9,'VirtualBox mouse integration'
+7,6,273,542,0,0,0,22742384,9,'VirtualBox mouse integration'
+7,6,273,546,0,0,0,22742392,9,'VirtualBox mouse integration'
+7,6,273,548,0,0,0,22742400,9,'VirtualBox mouse integration'
+7,6,273,551,0,0,0,22742408,9,'VirtualBox mouse integration'
+7,6,273,553,0,0,0,22742416,9,'VirtualBox mouse integration'
+7,6,273,556,0,0,0,22742424,9,'VirtualBox mouse integration'
+7,6,273,558,0,0,0,22742432,9,'VirtualBox mouse integration'
+7,6,273,561,0,0,0,22742440,9,'VirtualBox mouse integration'
+7,6,273,566,0,0,0,22742448,9,'VirtualBox mouse integration'
+7,6,271,569,0,0,0,22742456,9,'VirtualBox mouse integration'
+7,6,270,570,0,0,0,22742464,9,'VirtualBox mouse integration'
+7,6,269,574,0,0,0,22742472,9,'VirtualBox mouse integration'
+7,6,269,578,0,0,0,22742480,9,'VirtualBox mouse integration'
+7,6,269,582,0,0,0,22742488,9,'VirtualBox mouse integration'
+7,6,269,586,0,0,0,22742496,9,'VirtualBox mouse integration'
+7,6,268,588,0,0,0,22742504,9,'VirtualBox mouse integration'
+7,6,268,591,0,0,0,22742512,9,'VirtualBox mouse integration'
+7,6,268,594,0,0,0,22742520,9,'VirtualBox mouse integration'
+7,6,268,597,0,0,0,22742528,9,'VirtualBox mouse integration'
+7,6,268,598,0,0,0,22742536,9,'VirtualBox mouse integration'
+7,6,268,601,0,0,0,22742544,9,'VirtualBox mouse integration'
+7,6,268,603,0,0,0,22742552,9,'VirtualBox mouse integration'
+7,6,268,606,0,0,0,22742560,9,'VirtualBox mouse integration'
+7,6,268,608,0,0,0,22742568,9,'VirtualBox mouse integration'
+7,6,268,611,0,0,0,22742576,9,'VirtualBox mouse integration'
+7,6,268,613,0,0,0,22742584,9,'VirtualBox mouse integration'
+7,6,268,615,0,0,0,22742592,9,'VirtualBox mouse integration'
+7,6,268,618,0,0,0,22742600,9,'VirtualBox mouse integration'
+7,6,268,620,0,0,0,22742608,9,'VirtualBox mouse integration'
+7,6,268,621,0,0,0,22742616,9,'VirtualBox mouse integration'
+7,6,268,623,0,0,0,22742624,9,'VirtualBox mouse integration'
+7,6,268,625,0,0,0,22742632,9,'VirtualBox mouse integration'
+7,6,269,626,0,0,0,22742640,9,'VirtualBox mouse integration'
+7,6,269,627,0,0,0,22742648,9,'VirtualBox mouse integration'
+7,6,269,629,0,0,0,22742656,9,'VirtualBox mouse integration'
+7,6,269,630,0,0,0,22742664,9,'VirtualBox mouse integration'
+7,6,271,633,0,0,0,22742672,9,'VirtualBox mouse integration'
+7,6,271,635,0,0,0,22742680,9,'VirtualBox mouse integration'
+7,6,273,637,0,0,0,22742688,9,'VirtualBox mouse integration'
+7,6,273,639,0,0,0,22742708,9,'VirtualBox mouse integration'
+7,6,275,644,0,0,0,22742712,9,'VirtualBox mouse integration'
+7,6,277,647,0,0,0,22742720,9,'VirtualBox mouse integration'
+7,6,279,651,0,0,0,22742728,9,'VirtualBox mouse integration'
+7,6,281,654,0,0,0,22742736,9,'VirtualBox mouse integration'
+7,6,281,656,0,0,0,22742744,9,'VirtualBox mouse integration'
+7,6,283,659,0,0,0,22742752,9,'VirtualBox mouse integration'
+7,6,284,662,0,0,0,22742760,9,'VirtualBox mouse integration'
+7,6,285,664,0,0,0,22742768,9,'VirtualBox mouse integration'
+7,6,285,666,0,0,0,22742776,9,'VirtualBox mouse integration'
+7,6,286,667,0,0,0,22742784,9,'VirtualBox mouse integration'
+7,6,287,668,0,0,0,22742792,9,'VirtualBox mouse integration'
+7,6,287,671,0,0,0,22742800,9,'VirtualBox mouse integration'
+7,6,287,672,0,0,0,22742808,9,'VirtualBox mouse integration'
+7,6,288,673,0,0,0,22742816,9,'VirtualBox mouse integration'
+7,6,288,675,0,0,0,22742824,9,'VirtualBox mouse integration'
+7,6,289,677,0,0,0,22742832,9,'VirtualBox mouse integration'
+7,6,290,679,0,0,0,22742840,9,'VirtualBox mouse integration'
+7,6,290,681,0,0,0,22742848,9,'VirtualBox mouse integration'
+7,6,291,681,0,0,0,22742856,9,'VirtualBox mouse integration'
+7,6,291,683,0,0,0,22742864,9,'VirtualBox mouse integration'
+7,6,292,684,0,0,0,22742872,9,'VirtualBox mouse integration'
+7,6,293,685,0,0,0,22742880,9,'VirtualBox mouse integration'
+7,6,294,687,0,0,0,22742888,9,'VirtualBox mouse integration'
+7,6,294,688,0,0,0,22742896,9,'VirtualBox mouse integration'
+7,6,294,689,0,0,0,22742920,9,'VirtualBox mouse integration'
+7,6,294,690,0,0,0,22742928,9,'VirtualBox mouse integration'
+7,6,294,691,0,0,0,22742936,9,'VirtualBox mouse integration'
+7,6,296,692,0,0,0,22742944,9,'VirtualBox mouse integration'
+7,6,296,693,0,0,0,22742952,9,'VirtualBox mouse integration'
+7,6,296,695,0,0,0,22742960,9,'VirtualBox mouse integration'
+7,6,296,696,0,0,0,22742968,9,'VirtualBox mouse integration'
+7,6,297,697,0,0,0,22742976,9,'VirtualBox mouse integration'
+7,6,298,698,0,0,0,22742984,9,'VirtualBox mouse integration'
+7,6,298,700,0,0,0,22742992,9,'VirtualBox mouse integration'
+7,6,299,701,0,0,0,22743000,9,'VirtualBox mouse integration'
+7,6,299,702,0,0,0,22743008,9,'VirtualBox mouse integration'
+7,6,300,702,0,0,0,22743016,9,'VirtualBox mouse integration'
+7,6,300,703,0,0,0,22743024,9,'VirtualBox mouse integration'
+7,6,300,704,0,0,0,22743032,9,'VirtualBox mouse integration'
+7,6,300,706,0,0,0,22743056,9,'VirtualBox mouse integration'
+7,6,300,707,0,0,0,22743064,9,'VirtualBox mouse integration'
+7,6,300,708,0,0,0,22743080,9,'VirtualBox mouse integration'
+7,6,300,709,0,0,0,22743088,9,'VirtualBox mouse integration'
+7,6,301,709,0,0,0,22743104,9,'VirtualBox mouse integration'
+7,6,302,710,0,0,0,22743376,9,'VirtualBox mouse integration'
+7,6,302,709,0,0,0,22743384,9,'VirtualBox mouse integration'
+7,6,303,709,0,0,0,22743400,9,'VirtualBox mouse integration'
+7,6,303,708,0,0,0,22743408,9,'VirtualBox mouse integration'
+7,6,304,708,0,0,0,22743416,9,'VirtualBox mouse integration'
+7,4,0,0,3,0,0,22745484,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,3,0,0,22745484,2,Virtual core pointer
+7,5,0,0,3,0,0,22745709,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,3,0,0,22745709,2,Virtual core pointer
+7,2,0,0,0,116,0,22747655,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22747656,3,Virtual core keyboard
+7,3,0,0,0,116,0,22747792,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22747792,3,Virtual core keyboard
+7,2,0,0,0,116,0,22748082,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,22748082,3,Virtual core keyboard
+7,3,0,0,0,116,0,22748195,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,22748195,3,Virtual core keyboard
+7,2,0,0,0,36,0,22749423,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,22749423,3,Virtual core keyboard
+0,21,0,0,0,0,0,22749460
+NEW-WINDOW:451,254:62915462,62915462,35161139,0,0,0:36x74+879+458:0,0:Exporting graph "Random Simple Graph - 'nodes'=500 'edges'=1000 "
+0,21,0,0,0,0,0,22749460
+0,21,0,0,0,0,0,22749460
+0,21,0,0,0,0,0,22749460
+7,3,0,0,0,36,0,22749563,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,22749563,3,Virtual core keyboard
+7,2,0,0,0,28,0,22751270,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,22751270,3,Virtual core keyboard
+7,3,0,0,0,28,0,22751349,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,22751349,3,Virtual core keyboard
+7,2,0,0,0,26,0,22751562,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,22751562,3,Virtual core keyboard
+7,3,0,0,0,26,0,22751642,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,22751643,3,Virtual core keyboard
+7,2,0,0,0,39,0,22751791,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,22751791,3,Virtual core keyboard
+7,3,0,0,0,39,0,22751862,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,22751862,3,Virtual core keyboard
+7,2,0,0,0,28,0,22752071,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,22752072,3,Virtual core keyboard
+7,3,0,0,0,28,0,22752117,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,22752117,3,Virtual core keyboard
+7,2,0,0,0,17,0,22752651,11,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,22752651,3,Virtual core keyboard
+7,3,0,0,0,17,0,22752750,11,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,22752750,3,Virtual core keyboard
+7,2,0,0,0,42,0,22754177,11,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,22754177,3,Virtual core keyboard
+7,2,0,0,0,30,0,22754258,11,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,22754258,3,Virtual core keyboard
+7,3,0,0,0,42,0,22754290,11,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,22754290,3,Virtual core keyboard
+7,2,0,0,0,31,0,22754352,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,22754352,3,Virtual core keyboard
+7,3,0,0,0,30,0,22754395,11,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,22754395,3,Virtual core keyboard
+7,3,0,0,0,31,0,22754469,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,22754469,3,Virtual core keyboard
+7,2,0,0,0,62,0,22755008,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,22755008,3,Virtual core keyboard
+7,2,0,0,0,59,0,22755307,11,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,22755308,3,Virtual core keyboard
+7,3,0,0,0,59,0,22755432,11,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,22755432,3,Virtual core keyboard
+7,3,0,0,0,62,0,22755462,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,22755462,3,Virtual core keyboard
+7,2,0,0,0,28,0,22755643,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,22755643,3,Virtual core keyboard
+7,3,0,0,0,28,0,22755742,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,22755742,3,Virtual core keyboard
+7,2,0,0,0,46,0,22755799,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,22755799,3,Virtual core keyboard
+7,3,0,0,0,46,0,22755880,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,22755880,3,Virtual core keyboard
+7,2,0,0,0,33,0,22756050,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,22756050,3,Virtual core keyboard
+7,3,0,0,0,33,0,22756122,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,22756122,3,Virtual core keyboard
+7,2,0,0,0,36,0,22756808,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,22756808,3,Virtual core keyboard
+0,21,0,0,0,0,0,22756829
+NEW-WINDOW:451,212:62915462,62915462,701,451,212,0:451x212+879+458:0,0:Exporting graph "Random Simple Graph - 'nodes'=500 'edges'=1000 "
+0,21,0,0,0,0,0,22756830
+0,21,0,0,0,0,0,22756830
+0,21,0,0,0,0,0,22756830
+0,21,0,0,0,0,0,22756830
+0,21,0,0,0,0,0,22756873
+NEW-WINDOW:640,462:62915479,62915479,35162432,0,0,0:36x74+500+42:0,0:
+0,21,0,0,0,0,0,22756873
+0,21,0,0,0,0,0,22756873
+0,21,0,0,0,0,0,22756873
+7,3,0,0,0,36,0,22756892,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,22756892,3,Virtual core keyboard
+0,21,0,0,0,0,0,22757087
+NEW-WINDOW:640,420:62915479,62915479,701,640,420,0:640x420+500+42:0,0:TLP Export
+0,21,0,0,0,0,0,22757087
+0,21,0,0,0,0,0,22757087
+0,21,0,0,0,0,0,22757087
+0,21,0,0,0,0,0,22757087

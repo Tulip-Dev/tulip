@@ -1,8 +1,8 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2018:06:26 
-# Time:                   11:07:54 
+# Date:                   2018:11:05 
+# Time:                   10:56:14 
 # Xnee program:           cnee 
 # Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
@@ -11,23 +11,23 @@
 # X version:              11 
 # X revision:             0 
 # X vendor:               The X.Org Foundation 
-# X vendor release:       11804000 
+# X vendor release:       11906000 
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             4.4.0-128-generic 
-# OS Version:             #154-Ubuntu SMP Fri May 25 14:15:18 UTC 2018 
+# OS Release:             4.15.0-38-generic 
+# OS Version:             #41-Ubuntu SMP Wed Oct 10 10:59:38 UTC 2018 
 # Machine:                x86_64 
-# Nodename:               pm-Precision-5520 
+# Nodename:               tulip-ubuntu-1804 
 # Display name:           :0
-# Dimension:              2048x1152
+# Dimension:              1920x1080
 
 
 
 ##############################################
 #      Xnee application arguments            #
 ##############################################
-#  /home/pm/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_dot_file.xns 
+#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_dot_file.xns 
 
 
 ##############################################
@@ -77,7 +77,7 @@ all-clients
 ##############################################
 
 # Resolution
-#recorded-resolution  2048x1152
+#recorded-resolution  1920x1080
 #replay-resolution  1x1
 #resolution-adjustment  0
 
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0x14a9020
+#   rState              0x55cbefad0270
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -158,947 +158,845 @@ extension-reply-minor-range   0-0
 delivered-event-range         0-0 
 device-event-range            66-71 
 error-range                   0-0 
-7,2,0,0,0,37,0,9363168,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,37,0,9363168,3,Virtual core keyboard
-7,2,0,0,0,50,0,9363328,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,50,0,9363328,3,Virtual core keyboard
-7,2,0,0,0,32,0,9363584,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,32,0,9363584,3,Virtual core keyboard
-0,21,0,0,0,0,0,9363633
-NEW-WINDOW:461,197:60817448,60817448,19036316,0,0,0:0x0+879+458:0,0:Import
-0,21,0,0,0,0,0,9363633
-0,21,0,0,0,0,0,9363633
-0,21,0,0,0,0,0,9363633
-7,3,0,0,0,50,0,9363681,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,50,0,9363682,3,Virtual core keyboard
-7,3,0,0,0,32,0,9363682,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,32,0,9363682,3,Virtual core keyboard
-7,3,0,0,0,37,0,9363696,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,37,0,9363696,3,Virtual core keyboard
-7,2,0,0,0,116,0,9365089,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9365089,3,Virtual core keyboard
-7,3,0,0,0,116,0,9365169,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9365169,3,Virtual core keyboard
-7,2,0,0,0,116,0,9365281,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9365281,3,Virtual core keyboard
-7,3,0,0,0,116,0,9365360,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9365361,3,Virtual core keyboard
-7,2,0,0,0,116,0,9365473,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9365473,3,Virtual core keyboard
-7,3,0,0,0,116,0,9365552,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9365552,3,Virtual core keyboard
-7,2,0,0,0,116,0,9365681,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9365681,3,Virtual core keyboard
-7,3,0,0,0,116,0,9365809,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9365809,3,Virtual core keyboard
-7,2,0,0,0,116,0,9365969,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9365969,3,Virtual core keyboard
-7,3,0,0,0,116,0,9366081,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9366081,3,Virtual core keyboard
-7,2,0,0,0,116,0,9366225,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9366225,3,Virtual core keyboard
-7,3,0,0,0,116,0,9366353,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9366353,3,Virtual core keyboard
-7,2,0,0,0,116,0,9366849,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9366849,3,Virtual core keyboard
-7,3,0,0,0,116,0,9366945,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9366945,3,Virtual core keyboard
-7,6,343,860,0,0,0,9368258,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,343,859,0,0,0,9368266,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,343,856,0,0,0,9368274,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,347,852,0,0,0,9368282,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,352,847,0,0,0,9368290,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,358,841,0,0,0,9368298,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,364,835,0,0,0,9368306,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,372,829,0,0,0,9368314,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,382,821,0,0,0,9368322,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,397,807,0,0,0,9368330,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,411,796,0,0,0,9368341,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,426,781,0,0,0,9368346,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,443,766,0,0,0,9368354,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,463,753,0,0,0,9368362,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,481,740,0,0,0,9368370,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,500,726,0,0,0,9368378,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,518,713,0,0,0,9368386,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,537,699,0,0,0,9368394,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,558,688,0,0,0,9368402,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,578,679,0,0,0,9368410,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,600,670,0,0,0,9368418,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,620,660,0,0,0,9368426,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,641,653,0,0,0,9368434,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,661,647,0,0,0,9368442,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,681,640,0,0,0,9368450,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,696,633,0,0,0,9368458,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,710,631,0,0,0,9368466,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,715,628,0,0,0,9368474,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,722,626,0,0,0,9368482,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,728,623,0,0,0,9368490,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,733,621,0,0,0,9368498,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,737,621,0,0,0,9368506,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,741,617,0,0,0,9368514,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,745,616,0,0,0,9368522,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,747,614,0,0,0,9368530,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,751,612,0,0,0,9368538,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,754,610,0,0,0,9368546,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,756,607,0,0,0,9368554,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,759,605,0,0,0,9368562,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,760,603,0,0,0,9368570,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,762,599,0,0,0,9368578,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,766,594,0,0,0,9368586,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,769,590,0,0,0,9368594,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,771,586,0,0,0,9368602,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,773,581,0,0,0,9368610,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,776,577,0,0,0,9368618,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,780,570,0,0,0,9368626,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,784,563,0,0,0,9368634,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,788,557,0,0,0,9368642,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,792,552,0,0,0,9368650,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,799,539,0,0,0,9368658,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,808,525,0,0,0,9368666,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,817,514,0,0,0,9368674,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,823,503,0,0,0,9368682,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,828,495,0,0,0,9368690,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,835,486,0,0,0,9368698,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,840,477,0,0,0,9368706,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,842,473,0,0,0,9368714,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,846,468,0,0,0,9368730,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,848,465,0,0,0,9368738,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,849,463,0,0,0,9368746,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,850,463,0,0,0,9368754,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,852,461,0,0,0,9368762,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,852,459,0,0,0,9368770,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,457,0,0,0,9368786,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,455,0,0,0,9368794,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,453,0,0,0,9368810,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,856,449,0,0,0,9368818,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,857,447,0,0,0,9368826,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,857,443,0,0,0,9368834,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,440,0,0,0,9368842,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,860,438,0,0,0,9368850,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,436,0,0,0,9368858,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,433,0,0,0,9368874,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,430,0,0,0,9368890,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,429,0,0,0,9368898,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,865,426,0,0,0,9368906,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,866,425,0,0,0,9368914,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,866,424,0,0,0,9368922,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,866,423,0,0,0,9368930,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,867,420,0,0,0,9368938,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,867,419,0,0,0,9368946,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,867,417,0,0,0,9368954,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,867,415,0,0,0,9368962,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,868,414,0,0,0,9368978,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,868,413,0,0,0,9368986,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,868,412,0,0,0,9368994,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,870,410,0,0,0,9369002,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,870,409,0,0,0,9369010,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,870,407,0,0,0,9369018,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,871,406,0,0,0,9369026,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,871,405,0,0,0,9369034,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,871,404,0,0,0,9369058,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,403,0,0,0,9369066,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,402,0,0,0,9369074,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,400,0,0,0,9369082,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,399,0,0,0,9369098,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,398,0,0,0,9369106,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,397,0,0,0,9369130,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,872,395,0,0,0,9369178,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,873,392,0,0,0,9369186,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,875,391,0,0,0,9369202,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,875,390,0,0,0,9369218,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,875,389,0,0,0,9369226,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,876,387,0,0,0,9369266,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,876,385,0,0,0,9369298,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,876,384,0,0,0,9369314,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,876,383,0,0,0,9369330,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,1,0,0,9369482,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,1,0,0,9369482,2,Virtual core pointer
-0,21,0,0,0,0,0,9369515
-NEW-WINDOW:727,210:60817457,60817457,19036546,0,0,0:0x0+530+400:0,0:Open
-0,21,0,0,0,0,0,9369515
-0,21,0,0,0,0,0,9369515
-0,21,0,0,0,0,0,9369515
-7,5,0,0,1,0,0,9369618,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,1,0,0,9369618,2,Virtual core pointer
-7,6,876,382,0,0,0,9370330,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,876,380,0,0,0,9370338,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,876,374,0,0,0,9370346,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,874,369,0,0,0,9370354,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,868,363,0,0,0,9370362,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,864,357,0,0,0,9370370,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,348,0,0,0,9370378,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,336,0,0,0,9370386,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,329,0,0,0,9370394,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,321,0,0,0,9370402,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,312,0,0,0,9370410,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,850,304,0,0,0,9370418,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,848,296,0,0,0,9370426,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,848,291,0,0,0,9370434,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,847,288,0,0,0,9370442,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,847,287,0,0,0,9370458,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,847,285,0,0,0,9370466,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,847,283,0,0,0,9370474,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,846,281,0,0,0,9370482,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,280,0,0,0,9370498,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,277,0,0,0,9370506,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,276,0,0,0,9370514,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,275,0,0,0,9370530,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,273,0,0,0,9370546,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,272,0,0,0,9370658,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,271,0,0,0,9370666,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,270,0,0,0,9370674,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,845,268,0,0,0,9370690,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,846,267,0,0,0,9370698,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,847,266,0,0,0,9370730,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,848,265,0,0,0,9370754,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,849,264,0,0,0,9370770,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,850,263,0,0,0,9370802,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,851,262,0,0,0,9370882,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,852,262,0,0,0,9370914,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,262,0,0,0,9370930,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,262,0,0,0,9370962,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,856,262,0,0,0,9370994,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,857,262,0,0,0,9371026,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,859,262,0,0,0,9371058,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,860,262,0,0,0,9371066,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,1,0,0,9371698,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,1,0,0,9371698,2,Virtual core pointer
-7,5,0,0,1,0,0,9371818,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,1,0,0,9371818,2,Virtual core pointer
-7,4,0,0,1,0,0,9371915,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,1,0,0,9371915,2,Virtual core pointer
-7,5,0,0,1,0,0,9372051,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,1,0,0,9372051,2,Virtual core pointer
-7,6,861,263,0,0,0,9373779,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,266,0,0,0,9373787,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,269,0,0,0,9373795,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,273,0,0,0,9373803,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,277,0,0,0,9373811,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,281,0,0,0,9373819,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,284,0,0,0,9373827,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,289,0,0,0,9373835,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,295,0,0,0,9373843,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,297,0,0,0,9373851,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,301,0,0,0,9373859,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,304,0,0,0,9373867,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,308,0,0,0,9373875,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,311,0,0,0,9373883,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,314,0,0,0,9373891,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,317,0,0,0,9373899,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,320,0,0,0,9373907,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,324,0,0,0,9373915,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,328,0,0,0,9373923,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,332,0,0,0,9373931,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,335,0,0,0,9373939,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,339,0,0,0,9373947,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,343,0,0,0,9373955,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,346,0,0,0,9373963,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,349,0,0,0,9373971,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,352,0,0,0,9373979,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,354,0,0,0,9373987,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,355,0,0,0,9373995,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,358,0,0,0,9374003,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,360,0,0,0,9374011,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,363,0,0,0,9374019,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,365,0,0,0,9374027,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,368,0,0,0,9374035,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,370,0,0,0,9374043,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,374,0,0,0,9374051,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,378,0,0,0,9374059,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,382,0,0,0,9374067,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,387,0,0,0,9374075,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,390,0,0,0,9374083,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,395,0,0,0,9374091,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,400,0,0,0,9374099,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,404,0,0,0,9374107,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,408,0,0,0,9374115,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,411,0,0,0,9374123,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,414,0,0,0,9374131,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,417,0,0,0,9374139,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,419,0,0,0,9374147,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,423,0,0,0,9374155,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,427,0,0,0,9374163,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,430,0,0,0,9374171,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,434,0,0,0,9374179,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,437,0,0,0,9374187,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,440,0,0,0,9374195,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,444,0,0,0,9374203,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,447,0,0,0,9374211,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,449,0,0,0,9374219,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,452,0,0,0,9374227,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,863,453,0,0,0,9374235,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,455,0,0,0,9374251,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,862,458,0,0,0,9374259,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,861,460,0,0,0,9374275,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,860,462,0,0,0,9374283,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,860,465,0,0,0,9374291,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,860,467,0,0,0,9374299,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,860,469,0,0,0,9374307,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,859,470,0,0,0,9374315,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,859,472,0,0,0,9374323,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,859,473,0,0,0,9374331,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,859,475,0,0,0,9374339,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,478,0,0,0,9374355,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,479,0,0,0,9374363,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,482,0,0,0,9374371,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,483,0,0,0,9374379,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,858,484,0,0,0,9374387,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,857,487,0,0,0,9374395,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,857,489,0,0,0,9374403,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,857,492,0,0,0,9374411,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,495,0,0,0,9374427,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,498,0,0,0,9374435,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,500,0,0,0,9374443,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,855,503,0,0,0,9374451,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,504,0,0,0,9374459,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,507,0,0,0,9374467,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,508,0,0,0,9374475,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,510,0,0,0,9374483,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,512,0,0,0,9374491,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,514,0,0,0,9374499,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,515,0,0,0,9374507,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,519,0,0,0,9374515,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,520,0,0,0,9374523,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,523,0,0,0,9374539,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,525,0,0,0,9374547,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,527,0,0,0,9374555,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,528,0,0,0,9374571,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,854,529,0,0,0,9374579,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,532,0,0,0,9374587,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,533,0,0,0,9374595,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,537,0,0,0,9374611,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,540,0,0,0,9374619,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,543,0,0,0,9374627,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,544,0,0,0,9374635,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,545,0,0,0,9374651,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,547,0,0,0,9374675,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,548,0,0,0,9374691,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,549,0,0,0,9374699,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,853,550,0,0,0,9374715,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,1,0,0,9374971,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,1,0,0,9374971,2,Virtual core pointer
-7,5,0,0,1,0,0,9375131,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,1,0,0,9375131,2,Virtual core pointer
-7,2,0,0,0,42,0,9376418,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,42,0,9376418,3,Virtual core keyboard
-7,3,0,0,0,42,0,9376482,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,42,0,9376482,3,Virtual core keyboard
-7,2,0,0,0,27,0,9376642,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,27,0,9376642,3,Virtual core keyboard
-7,3,0,0,0,27,0,9376690,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,27,0,9376690,3,Virtual core keyboard
-7,2,0,0,0,24,0,9376978,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,24,0,9376979,3,Virtual core keyboard
-7,3,0,0,0,24,0,9377058,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,24,0,9377058,3,Virtual core keyboard
-7,2,0,0,0,33,0,9377362,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,33,0,9377363,3,Virtual core keyboard
-7,3,0,0,0,33,0,9377410,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,33,0,9377410,3,Virtual core keyboard
-7,2,0,0,0,43,0,9377714,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,43,0,9377715,3,Virtual core keyboard
-7,3,0,0,0,43,0,9377795,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,43,0,9377795,3,Virtual core keyboard
-7,2,0,0,0,62,0,9378451,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,62,0,9378451,3,Virtual core keyboard
-7,2,0,0,0,59,0,9378915,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,59,0,9378915,3,Virtual core keyboard
-7,3,0,0,0,59,0,9378979,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,59,0,9378979,3,Virtual core keyboard
-7,3,0,0,0,62,0,9379075,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,62,0,9379075,3,Virtual core keyboard
-7,2,0,0,0,40,0,9379507,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,40,0,9379507,3,Virtual core keyboard
-7,3,0,0,0,40,0,9379587,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,40,0,9379587,3,Virtual core keyboard
-7,2,0,0,0,32,0,9379619,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,32,0,9379619,3,Virtual core keyboard
-7,3,0,0,0,32,0,9379699,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,32,0,9379699,3,Virtual core keyboard
-7,2,0,0,0,28,0,9379827,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,28,0,9379827,3,Virtual core keyboard
-7,3,0,0,0,28,0,9379891,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,28,0,9379891,3,Virtual core keyboard
-7,2,0,0,0,36,0,9381139,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,36,0,9381139,3,Virtual core keyboard
-0,21,0,0,0,0,0,9381140
-NEW-WINDOW:2,48:60817470,60817470,639,0,0,1:91x110+0+0:0,0:
-0,21,0,0,0,0,0,9381140
-0,21,0,0,0,0,0,9381140
-0,21,0,0,0,0,0,9381140
-0,21,0,0,0,0,0,9381140
-0,21,0,0,0,0,0,9381140
-0,21,0,0,0,0,0,9381140
-0,21,0,0,0,0,0,9381140
-7,3,0,0,0,36,0,9381205,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,36,0,9381205,3,Virtual core keyboard
-7,2,0,0,0,36,0,9382643,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,36,0,9382643,3,Virtual core keyboard
-0,21,0,0,0,0,0,9382669
-NEW-WINDOW:8384,0:60817478,60817478,19037082,0,0,0:0x0+500+46:0,0:
-0,21,0,0,0,0,0,9382669
-0,21,0,0,0,0,0,9382669
-0,21,0,0,0,0,0,9382669
-7,3,0,0,0,36,0,9382723,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,36,0,9382723,3,Virtual core keyboard
-0,21,0,0,0,0,0,9382739
-NEW-WINDOW:459,141:60817448,60817448,639,0,0,0:459x141+879+458:0,0:Import
-0,21,0,0,0,0,0,9382739
-0,21,0,0,0,0,0,9382739
-0,21,0,0,0,0,0,9382739
-0,21,0,0,0,0,0,9382739
-0,21,0,0,0,0,0,9382739
-0,21,0,0,0,0,0,9382884
-NEW-WINDOW:8384,0:60817523,60817523,639,0,0,0:1734209984x32766+1734209976+32766:2094,2094:
-0,21,0,0,0,0,0,9382884
-0,21,0,0,0,0,0,9382884
-0,21,0,0,0,0,0,9382884
-0,21,0,0,0,0,0,9382884
-0,21,0,0,0,0,0,9382884
-0,21,0,0,0,0,0,9382884
-0,21,0,0,0,0,0,9382923
-NEW-WINDOW:5,49:60817529,60817529,639,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-0,21,0,0,0,0,0,9382923
-NEW-WINDOW:0,0:60817532,60817532,60817562,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,9382923
-NEW-WINDOW:0,0:60817534,60817534,60817562,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,9382923
-NEW-WINDOW:0,0:60817538,60817538,60817562,0,0,0:0x0+1024+460:0,0:
-0,21,0,0,0,0,0,9382967
-NEW-WINDOW:8384,0:60817573,60817573,639,0,0,0:1734209984x32766+1734209976+32766:2170,2170:
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382967
-0,21,0,0,0,0,0,9382985
-NEW-WINDOW:0,0:60817557,60817557,639,0,0,0:0x0+943+595:0,0:Node Link Diagram view
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9382985
-0,21,0,0,0,0,0,9383012
-NEW-WINDOW:1117,102:60817560,60817560,60817666,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,9383012
-NEW-WINDOW:1117,102:60817562,60817562,60817666,0,0,0:0x0+1024+460:0,0:
-7,6,853,552,0,0,0,9385565,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,851,553,0,0,0,9385588,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,850,553,0,0,0,9385605,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,849,553,0,0,0,9385613,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,848,552,0,0,0,9385637,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,846,552,0,0,0,9385677,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,844,551,0,0,0,9386053,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,843,551,0,0,0,9386061,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,841,551,0,0,0,9386069,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,840,551,0,0,0,9386085,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,838,550,0,0,0,9386109,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,836,550,0,0,0,9386117,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,834,549,0,0,0,9386125,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,832,547,0,0,0,9386133,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,830,546,0,0,0,9386141,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,829,546,0,0,0,9386149,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,826,545,0,0,0,9386157,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,825,545,0,0,0,9386165,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,823,545,0,0,0,9386173,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,822,544,0,0,0,9386181,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,821,543,0,0,0,9386189,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,820,543,0,0,0,9386205,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,819,543,0,0,0,9386213,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,818,542,0,0,0,9386221,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,816,542,0,0,0,9386229,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,815,541,0,0,0,9386237,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,813,540,0,0,0,9386245,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,809,538,0,0,0,9386253,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,807,535,0,0,0,9386261,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,803,533,0,0,0,9386269,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,800,530,0,0,0,9386277,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,797,526,0,0,0,9386285,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,791,521,0,0,0,9386293,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,786,514,0,0,0,9386301,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,782,512,0,0,0,9386309,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,778,510,0,0,0,9386317,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,774,509,0,0,0,9386325,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,771,507,0,0,0,9386333,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,767,504,0,0,0,9386341,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,765,502,0,0,0,9386349,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,762,500,0,0,0,9386357,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,757,497,0,0,0,9386365,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,750,493,0,0,0,9386373,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,743,487,0,0,0,9386381,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,737,480,0,0,0,9386389,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,730,471,0,0,0,9386397,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,719,459,0,0,0,9386405,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,709,448,0,0,0,9386413,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,699,440,0,0,0,9386421,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,684,431,0,0,0,9386429,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,674,422,0,0,0,9386437,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,663,414,0,0,0,9386445,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,654,407,0,0,0,9386453,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,645,402,0,0,0,9386461,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,640,400,0,0,0,9386469,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,632,395,0,0,0,9386477,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,630,393,0,0,0,9386485,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,625,387,0,0,0,9386493,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,621,382,0,0,0,9386501,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,616,378,0,0,0,9386509,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,612,374,0,0,0,9386517,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,610,370,0,0,0,9386525,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,608,366,0,0,0,9386533,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,606,362,0,0,0,9386541,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,605,361,0,0,0,9386549,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,603,359,0,0,0,9386557,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,601,355,0,0,0,9386565,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,599,353,0,0,0,9386573,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,596,350,0,0,0,9386581,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,592,348,0,0,0,9386589,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,589,345,0,0,0,9386597,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,586,342,0,0,0,9386605,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,584,340,0,0,0,9386613,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,580,336,0,0,0,9386621,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,577,332,0,0,0,9386629,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,574,328,0,0,0,9386637,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,567,319,0,0,0,9386645,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,561,314,0,0,0,9386653,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,556,308,0,0,0,9386661,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,548,304,0,0,0,9386669,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,544,300,0,0,0,9386677,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,540,296,0,0,0,9386685,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,536,292,0,0,0,9386693,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,530,290,0,0,0,9386701,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,526,287,0,0,0,9386709,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,523,287,0,0,0,9386717,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,521,285,0,0,0,9386725,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,518,283,0,0,0,9386733,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,515,280,0,0,0,9386741,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,513,279,0,0,0,9386749,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,511,278,0,0,0,9386757,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,508,277,0,0,0,9386765,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,504,274,0,0,0,9386773,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,501,272,0,0,0,9386781,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,497,269,0,0,0,9386789,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,491,265,0,0,0,9386797,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,487,261,0,0,0,9386805,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,483,258,0,0,0,9386813,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,479,255,0,0,0,9386821,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,473,250,0,0,0,9386829,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,469,249,0,0,0,9386837,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,462,244,0,0,0,9386845,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,455,240,0,0,0,9386853,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,450,236,0,0,0,9386861,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,446,232,0,0,0,9386869,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,442,228,0,0,0,9386877,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,438,223,0,0,0,9386885,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,434,222,0,0,0,9386893,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,430,219,0,0,0,9386901,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,426,218,0,0,0,9386909,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,423,216,0,0,0,9386917,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,421,216,0,0,0,9386925,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,418,215,0,0,0,9386933,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,416,213,0,0,0,9386941,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,414,211,0,0,0,9386949,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,413,210,0,0,0,9386957,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,411,208,0,0,0,9386965,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,408,206,0,0,0,9386973,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,406,205,0,0,0,9386981,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,403,203,0,0,0,9386989,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,402,202,0,0,0,9386997,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,399,201,0,0,0,9387005,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,397,199,0,0,0,9387013,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,394,198,0,0,0,9387021,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,390,196,0,0,0,9387029,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,387,194,0,0,0,9387037,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,386,193,0,0,0,9387045,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,385,192,0,0,0,9387061,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,383,192,0,0,0,9387069,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,382,191,0,0,0,9387077,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,380,189,0,0,0,9387085,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,379,189,0,0,0,9387477,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,377,188,0,0,0,9387493,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,375,187,0,0,0,9387501,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,374,187,0,0,0,9387517,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,373,186,0,0,0,9387525,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,372,186,0,0,0,9387541,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,370,184,0,0,0,9387549,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,369,184,0,0,0,9387557,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,368,183,0,0,0,9387573,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,367,182,0,0,0,9387589,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,363,181,0,0,0,9387605,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,363,180,0,0,0,9387613,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,361,178,0,0,0,9387629,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,360,178,0,0,0,9387637,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,358,178,0,0,0,9387645,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,357,177,0,0,0,9387677,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,356,176,0,0,0,9387685,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,355,176,0,0,0,9387717,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,353,175,0,0,0,9387733,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,352,174,0,0,0,9387749,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,351,173,0,0,0,9387757,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,350,173,0,0,0,9387765,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,349,173,0,0,0,9387773,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,348,172,0,0,0,9387789,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,346,171,0,0,0,9387813,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,344,170,0,0,0,9387821,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,343,169,0,0,0,9387837,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,342,168,0,0,0,9387853,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,340,168,0,0,0,9387861,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,339,167,0,0,0,9387877,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,338,166,0,0,0,9387893,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,336,164,0,0,0,9387909,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,335,163,0,0,0,9387917,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,334,163,0,0,0,9387933,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,332,163,0,0,0,9387949,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,330,162,0,0,0,9387957,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,329,161,0,0,0,9387965,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,328,160,0,0,0,9387973,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,327,159,0,0,0,9387981,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,326,158,0,0,0,9387989,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,325,158,0,0,0,9387997,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,324,157,0,0,0,9388005,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,323,157,0,0,0,9388013,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,322,156,0,0,0,9388045,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,320,154,0,0,0,9388061,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,319,154,0,0,0,9388069,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,318,153,0,0,0,9388077,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,317,153,0,0,0,9388093,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,315,153,0,0,0,9388101,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,314,153,0,0,0,9388109,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,313,152,0,0,0,9388165,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,312,152,0,0,0,9388173,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,311,151,0,0,0,9388189,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,310,149,0,0,0,9388213,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,309,148,0,0,0,9388285,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,308,147,0,0,0,9388293,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,306,146,0,0,0,9388309,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,305,146,0,0,0,9388317,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,1,0,0,9388701,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,1,0,0,9388701,2,Virtual core pointer
-7,5,0,0,1,0,0,9388869,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,1,0,0,9388869,2,Virtual core pointer
-7,2,0,0,0,28,0,9392133,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,28,0,9392133,3,Virtual core keyboard
-7,3,0,0,0,28,0,9392229,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,28,0,9392229,3,Virtual core keyboard
-7,2,0,0,0,27,0,9392389,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,27,0,9392389,3,Virtual core keyboard
-7,3,0,0,0,27,0,9392437,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,27,0,9392437,3,Virtual core keyboard
-7,2,0,0,0,26,0,9392789,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,26,0,9392789,3,Virtual core keyboard
-7,3,0,0,0,26,0,9392853,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,26,0,9392853,3,Virtual core keyboard
-7,2,0,0,0,26,0,9392949,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,26,0,9392949,3,Virtual core keyboard
-7,3,0,0,0,26,0,9393045,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,26,0,9393045,3,Virtual core keyboard
-7,2,0,0,0,65,0,9394405,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,65,0,9394405,3,Virtual core keyboard
-7,3,0,0,0,65,0,9394501,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,65,0,9394501,3,Virtual core keyboard
-7,2,0,0,0,46,0,9395573,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,46,0,9395573,3,Virtual core keyboard
-7,3,0,0,0,46,0,9395669,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,46,0,9395669,3,Virtual core keyboard
-7,6,304,145,0,0,0,9397279,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,303,149,0,0,0,9397287,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,303,150,0,0,0,9397295,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,303,153,0,0,0,9397302,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,303,154,0,0,0,9397311,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,302,155,0,0,0,9397318,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,302,156,0,0,0,9397326,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,301,159,0,0,0,9397343,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,300,161,0,0,0,9397351,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,299,162,0,0,0,9397359,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,299,163,0,0,0,9397367,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,298,165,0,0,0,9397406,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,298,168,0,0,0,9397423,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,169,0,0,0,9397431,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,170,0,0,0,9397447,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,171,0,0,0,9397454,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,173,0,0,0,9397463,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,174,0,0,0,9397470,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,295,176,0,0,0,9397479,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,177,0,0,0,9397494,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,178,0,0,0,9397503,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,180,0,0,0,9397518,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,183,0,0,0,9397526,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,184,0,0,0,9397535,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,185,0,0,0,9397543,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,186,0,0,0,9397559,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,188,0,0,0,9397582,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,190,0,0,0,9397599,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,193,0,0,0,9397607,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,195,0,0,0,9397623,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,196,0,0,0,9397638,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,199,0,0,0,9397655,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,201,0,0,0,9397663,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,202,0,0,0,9397670,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,204,0,0,0,9397679,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,205,0,0,0,9397687,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,286,207,0,0,0,9397703,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,286,208,0,0,0,9397711,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,285,210,0,0,0,9397718,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,211,0,0,0,9397727,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,213,0,0,0,9397734,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,214,0,0,0,9397742,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,216,0,0,0,9397750,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,218,0,0,0,9397758,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,219,0,0,0,9397767,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,220,0,0,0,9397775,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,221,0,0,0,9397782,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,222,0,0,0,9397791,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,1,0,0,9398095,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,1,0,0,9398095,2,Virtual core pointer
-7,5,0,0,1,0,0,9398222,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,1,0,0,9398222,2,Virtual core pointer
-0,21,0,0,0,0,0,9398234
-NEW-WINDOW:650,328:60817676,60817676,19037687,0,0,0:0x0+500+65:0,0:Tree Leaf
-0,21,0,0,0,0,0,9398234
-0,21,0,0,0,0,0,9398234
-0,21,0,0,0,0,0,9398234
-7,6,283,223,0,0,0,9402239,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,228,0,0,0,9402247,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,234,0,0,0,9402255,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,285,245,0,0,0,9402263,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,285,256,0,0,0,9402271,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,264,0,0,0,9402279,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,272,0,0,0,9402287,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,276,0,0,0,9402295,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,287,280,0,0,0,9402303,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,281,0,0,0,9402311,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,282,0,0,0,9402319,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,285,0,0,0,9402327,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,287,0,0,0,9402335,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,291,0,0,0,9402343,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,293,0,0,0,9402351,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,296,0,0,0,9402359,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,301,0,0,0,9402367,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,305,0,0,0,9402375,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,312,0,0,0,9402383,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,322,0,0,0,9402391,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,330,0,0,0,9402399,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,341,0,0,0,9402407,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,350,0,0,0,9402415,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,358,0,0,0,9402423,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,365,0,0,0,9402431,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,371,0,0,0,9402439,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,376,0,0,0,9402447,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,378,0,0,0,9402455,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,380,0,0,0,9402463,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,383,0,0,0,9402471,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,386,0,0,0,9402479,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,389,0,0,0,9402487,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,393,0,0,0,9402495,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,398,0,0,0,9402503,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,400,0,0,0,9402511,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,404,0,0,0,9402519,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,406,0,0,0,9402527,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,292,411,0,0,0,9402535,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,416,0,0,0,9402543,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,420,0,0,0,9402551,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,424,0,0,0,9402559,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,428,0,0,0,9402567,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,431,0,0,0,9402575,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,435,0,0,0,9402583,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,439,0,0,0,9402591,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,442,0,0,0,9402599,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,446,0,0,0,9402607,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,450,0,0,0,9402615,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,455,0,0,0,9402623,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,459,0,0,0,9402631,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,463,0,0,0,9402639,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,469,0,0,0,9402647,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,475,0,0,0,9402655,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,480,0,0,0,9402663,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,484,0,0,0,9402671,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,295,487,0,0,0,9402679,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,490,0,0,0,9402687,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,494,0,0,0,9402695,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,497,0,0,0,9402703,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,500,0,0,0,9402711,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,504,0,0,0,9402719,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,506,0,0,0,9402727,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,510,0,0,0,9402735,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,513,0,0,0,9402743,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,516,0,0,0,9402751,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,520,0,0,0,9402759,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,524,0,0,0,9402767,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,528,0,0,0,9402775,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,534,0,0,0,9402783,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,538,0,0,0,9402791,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,541,0,0,0,9402799,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,545,0,0,0,9402807,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,550,0,0,0,9402815,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,554,0,0,0,9402823,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,556,0,0,0,9402831,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,559,0,0,0,9402839,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,561,0,0,0,9402847,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,563,0,0,0,9402855,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,565,0,0,0,9402863,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,569,0,0,0,9402871,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,571,0,0,0,9402879,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,574,0,0,0,9402887,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,578,0,0,0,9402895,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,580,0,0,0,9402903,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,583,0,0,0,9402911,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,584,0,0,0,9402919,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,586,0,0,0,9402935,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,589,0,0,0,9402943,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,590,0,0,0,9402951,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,591,0,0,0,9402959,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,594,0,0,0,9402967,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,595,0,0,0,9402975,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,599,0,0,0,9402983,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,601,0,0,0,9402991,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,603,0,0,0,9402999,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,606,0,0,0,9403007,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,609,0,0,0,9403015,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,610,0,0,0,9403023,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,297,613,0,0,0,9403031,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,618,0,0,0,9403039,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,620,0,0,0,9403047,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,296,625,0,0,0,9403055,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,295,628,0,0,0,9403063,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,295,630,0,0,0,9403071,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,295,634,0,0,0,9403079,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,636,0,0,0,9403087,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,638,0,0,0,9403095,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,639,0,0,0,9403103,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,294,641,0,0,0,9403111,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,642,0,0,0,9403119,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,293,644,0,0,0,9403135,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,291,647,0,0,0,9403143,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,290,649,0,0,0,9403151,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,651,0,0,0,9403159,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,289,655,0,0,0,9403167,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,659,0,0,0,9403175,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,663,0,0,0,9403183,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,666,0,0,0,9403191,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,288,670,0,0,0,9403199,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,286,674,0,0,0,9403207,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,285,676,0,0,0,9403215,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,284,678,0,0,0,9403223,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,679,0,0,0,9403231,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,680,0,0,0,9403247,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,681,0,0,0,9403255,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,683,0,0,0,9403263,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,684,0,0,0,9403271,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,685,0,0,0,9403287,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,283,686,0,0,0,9403295,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,282,687,0,0,0,9403303,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,688,0,0,0,9403311,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,689,0,0,0,9403327,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,690,0,0,0,9403335,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,691,0,0,0,9403351,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,693,0,0,0,9403447,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,694,0,0,0,9403479,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,695,0,0,0,9403495,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,281,696,0,0,0,9403511,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,280,697,0,0,0,9403583,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,280,698,0,0,0,9403600,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,279,701,0,0,0,9403759,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,279,703,0,0,0,9403767,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,279,704,0,0,0,9403784,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,279,705,0,0,0,9403864,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,279,706,0,0,0,9403887,15,'PixArt Dell MS116 USB Optical Mouse'
-7,6,279,708,0,0,0,9403919,15,'PixArt Dell MS116 USB Optical Mouse'
-7,4,0,0,3,0,0,9404407,15,PixArt Dell MS116 USB Optical Mouse
-6,4,0,0,3,0,0,9404407,2,Virtual core pointer
-7,5,0,0,3,0,0,9404591,15,PixArt Dell MS116 USB Optical Mouse
-6,5,0,0,3,0,0,9404591,2,Virtual core pointer
-7,2,0,0,0,116,0,9406231,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9406231,3,Virtual core keyboard
-7,3,0,0,0,116,0,9406327,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9406327,3,Virtual core keyboard
-7,2,0,0,0,116,0,9406535,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,116,0,9406535,3,Virtual core keyboard
-7,3,0,0,0,116,0,9406663,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,116,0,9406663,3,Virtual core keyboard
-7,2,0,0,0,36,0,9407927,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,36,0,9407927,3,Virtual core keyboard
-0,21,0,0,0,0,0,9407960
-NEW-WINDOW:461,197:60817692,60817692,19038052,0,0,0:0x0+879+458:0,0:Exporting graph "graphviz - 'filename'="/code/tulipdev/tulip/tests/gui/data/graph.dot" "
-0,21,0,0,0,0,0,9407960
-0,21,0,0,0,0,0,9407960
-0,21,0,0,0,0,0,9407960
-7,3,0,0,0,36,0,9407991,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,36,0,9407991,3,Virtual core keyboard
-7,2,0,0,0,28,0,9410231,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,28,0,9410231,3,Virtual core keyboard
-7,3,0,0,0,28,0,9410311,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,28,0,9410311,3,Virtual core keyboard
-7,2,0,0,0,26,0,9411032,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,26,0,9411032,3,Virtual core keyboard
-7,3,0,0,0,26,0,9411111,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,26,0,9411111,3,Virtual core keyboard
-7,2,0,0,0,39,0,9411240,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,39,0,9411240,3,Virtual core keyboard
-7,3,0,0,0,39,0,9411336,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,39,0,9411336,3,Virtual core keyboard
-7,2,0,0,0,28,0,9411512,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,28,0,9411512,3,Virtual core keyboard
-7,3,0,0,0,28,0,9411576,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,28,0,9411576,3,Virtual core keyboard
-7,2,0,0,0,17,0,9411992,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,17,0,9411992,3,Virtual core keyboard
-7,3,0,0,0,17,0,9412056,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,17,0,9412056,3,Virtual core keyboard
-7,2,0,0,0,42,0,9412520,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,42,0,9412520,3,Virtual core keyboard
-7,3,0,0,0,42,0,9412616,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,42,0,9412616,3,Virtual core keyboard
-7,2,0,0,0,30,0,9412616,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,30,0,9412616,3,Virtual core keyboard
-7,2,0,0,0,31,0,9412712,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,31,0,9412712,3,Virtual core keyboard
-7,3,0,0,0,30,0,9412760,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,30,0,9412760,3,Virtual core keyboard
-7,3,0,0,0,31,0,9412824,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,31,0,9412824,3,Virtual core keyboard
-7,2,0,0,0,62,0,9413736,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,62,0,9413736,3,Virtual core keyboard
-7,2,0,0,0,59,0,9414328,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,59,0,9414328,3,Virtual core keyboard
-7,3,0,0,0,59,0,9414392,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,59,0,9414392,3,Virtual core keyboard
-7,3,0,0,0,62,0,9414456,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,62,0,9414456,3,Virtual core keyboard
-7,2,0,0,0,28,0,9414824,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,28,0,9414824,3,Virtual core keyboard
-7,3,0,0,0,28,0,9414920,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,28,0,9414920,3,Virtual core keyboard
-7,2,0,0,0,46,0,9414936,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,46,0,9414936,3,Virtual core keyboard
-7,2,0,0,0,33,0,9415064,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,33,0,9415064,3,Virtual core keyboard
-7,3,0,0,0,46,0,9415112,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,46,0,9415112,3,Virtual core keyboard
-7,3,0,0,0,33,0,9415192,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,33,0,9415192,3,Virtual core keyboard
-7,2,0,0,0,36,0,9416328,13,Dell KB216 Wired Keyboard
-6,2,0,0,0,36,0,9416329,3,Virtual core keyboard
-0,21,0,0,0,0,0,9416347
-NEW-WINDOW:1,28:60817701,60817701,19038391,0,0,0:0x0+500+36:0,0:TLP Export
-0,21,0,0,0,0,0,9416347
-0,21,0,0,0,0,0,9416347
-0,21,0,0,0,0,0,9416347
-7,3,0,0,0,36,0,9416396,13,Dell KB216 Wired Keyboard
-6,3,0,0,0,36,0,9416396,3,Virtual core keyboard
-0,21,0,0,0,0,0,9416410
-NEW-WINDOW:459,141:60817692,60817692,639,0,0,0:459x141+879+458:0,0:Exporting graph "graphviz - 'filename'="/code/tulipdev/tulip/tests/gui/data/graph.dot" "
-0,21,0,0,0,0,0,9416410
-0,21,0,0,0,0,0,9416410
-0,21,0,0,0,0,0,9416410
-0,21,0,0,0,0,0,9416410
-0,21,0,0,0,0,0,9416410
+7,2,0,0,0,37,0,66667724,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,66667724,3,Virtual core keyboard
+7,2,0,0,0,50,0,66667916,11,AT Translated Set 2 keyboard
+6,2,0,0,0,50,0,66667916,3,Virtual core keyboard
+7,2,0,0,0,32,0,66668188,11,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,66668188,3,Virtual core keyboard
+0,21,0,0,0,0,0,66668241
+NEW-WINDOW:451,254:62914587,62914587,34479369,0,0,0:36x74+879+458:0,0:Import
+0,21,0,0,0,0,0,66668241
+0,21,0,0,0,0,0,66668241
+0,21,0,0,0,0,0,66668241
+7,3,0,0,0,50,0,66668284,11,AT Translated Set 2 keyboard
+6,3,0,0,0,50,0,66668284,3,Virtual core keyboard
+7,3,0,0,0,32,0,66668286,11,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,66668286,3,Virtual core keyboard
+7,3,0,0,0,37,0,66668348,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,66668348,3,Virtual core keyboard
+7,2,0,0,0,116,0,66669517,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66669517,3,Virtual core keyboard
+7,3,0,0,0,116,0,66669661,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66669661,3,Virtual core keyboard
+7,2,0,0,0,116,0,66669918,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66669919,3,Virtual core keyboard
+7,3,0,0,0,116,0,66670085,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66670085,3,Virtual core keyboard
+7,2,0,0,0,116,0,66670867,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66670867,3,Virtual core keyboard
+7,3,0,0,0,116,0,66670966,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66670966,3,Virtual core keyboard
+7,2,0,0,0,116,0,66671167,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66671167,3,Virtual core keyboard
+7,3,0,0,0,116,0,66671264,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66671264,3,Virtual core keyboard
+7,2,0,0,0,116,0,66671475,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66671475,3,Virtual core keyboard
+7,3,0,0,0,116,0,66671587,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66671587,3,Virtual core keyboard
+7,2,0,0,0,116,0,66671807,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66671807,3,Virtual core keyboard
+7,3,0,0,0,116,0,66671915,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66671915,3,Virtual core keyboard
+7,2,0,0,0,116,0,66672206,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66672207,3,Virtual core keyboard
+7,3,0,0,0,116,0,66672307,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66672307,3,Virtual core keyboard
+7,6,55,751,0,0,0,66673045,9,'VirtualBox mouse integration'
+7,6,62,749,0,0,0,66673053,9,'VirtualBox mouse integration'
+7,6,70,746,0,0,0,66673061,9,'VirtualBox mouse integration'
+7,6,87,740,0,0,0,66673069,9,'VirtualBox mouse integration'
+7,6,105,738,0,0,0,66673077,9,'VirtualBox mouse integration'
+7,6,122,732,0,0,0,66673085,9,'VirtualBox mouse integration'
+7,6,140,726,0,0,0,66673093,9,'VirtualBox mouse integration'
+7,6,159,720,0,0,0,66673100,9,'VirtualBox mouse integration'
+7,6,174,718,0,0,0,66673108,9,'VirtualBox mouse integration'
+7,6,189,714,0,0,0,66673117,9,'VirtualBox mouse integration'
+7,6,202,711,0,0,0,66673125,9,'VirtualBox mouse integration'
+7,6,214,709,0,0,0,66673133,9,'VirtualBox mouse integration'
+7,6,224,706,0,0,0,66673141,9,'VirtualBox mouse integration'
+7,6,234,704,0,0,0,66673148,9,'VirtualBox mouse integration'
+7,6,243,701,0,0,0,66673157,9,'VirtualBox mouse integration'
+7,6,254,698,0,0,0,66673165,9,'VirtualBox mouse integration'
+7,6,266,696,0,0,0,66673173,9,'VirtualBox mouse integration'
+7,6,284,691,0,0,0,66673181,9,'VirtualBox mouse integration'
+7,6,297,689,0,0,0,66673189,9,'VirtualBox mouse integration'
+7,6,315,683,0,0,0,66673197,9,'VirtualBox mouse integration'
+7,6,329,678,0,0,0,66673205,9,'VirtualBox mouse integration'
+7,6,344,673,0,0,0,66673212,9,'VirtualBox mouse integration'
+7,6,358,671,0,0,0,66673220,9,'VirtualBox mouse integration'
+7,6,369,668,0,0,0,66673229,9,'VirtualBox mouse integration'
+7,6,380,663,0,0,0,66673237,9,'VirtualBox mouse integration'
+7,6,390,663,0,0,0,66673245,9,'VirtualBox mouse integration'
+7,6,394,661,0,0,0,66673253,9,'VirtualBox mouse integration'
+7,6,397,660,0,0,0,66673260,9,'VirtualBox mouse integration'
+7,6,398,660,0,0,0,66673269,9,'VirtualBox mouse integration'
+7,6,400,658,0,0,0,66673277,9,'VirtualBox mouse integration'
+7,6,401,657,0,0,0,66673285,9,'VirtualBox mouse integration'
+7,6,404,657,0,0,0,66673293,9,'VirtualBox mouse integration'
+7,6,409,657,0,0,0,66673300,9,'VirtualBox mouse integration'
+7,6,417,657,0,0,0,66673309,9,'VirtualBox mouse integration'
+7,6,429,657,0,0,0,66673316,9,'VirtualBox mouse integration'
+7,6,443,657,0,0,0,66673325,9,'VirtualBox mouse integration'
+7,6,458,655,0,0,0,66673333,9,'VirtualBox mouse integration'
+7,6,474,655,0,0,0,66673341,9,'VirtualBox mouse integration'
+7,6,492,655,0,0,0,66673348,9,'VirtualBox mouse integration'
+7,6,508,653,0,0,0,66673356,9,'VirtualBox mouse integration'
+7,6,524,649,0,0,0,66673364,9,'VirtualBox mouse integration'
+7,6,539,647,0,0,0,66673372,9,'VirtualBox mouse integration'
+7,6,553,644,0,0,0,66673380,9,'VirtualBox mouse integration'
+7,6,565,641,0,0,0,66673388,9,'VirtualBox mouse integration'
+7,6,574,638,0,0,0,66673396,9,'VirtualBox mouse integration'
+7,6,583,636,0,0,0,66673404,9,'VirtualBox mouse integration'
+7,6,592,634,0,0,0,66673412,9,'VirtualBox mouse integration'
+7,6,602,634,0,0,0,66673420,9,'VirtualBox mouse integration'
+7,6,613,634,0,0,0,66673429,9,'VirtualBox mouse integration'
+7,6,627,627,0,0,0,66673437,9,'VirtualBox mouse integration'
+7,6,642,625,0,0,0,66673445,9,'VirtualBox mouse integration'
+7,6,660,618,0,0,0,66673453,9,'VirtualBox mouse integration'
+7,6,678,610,0,0,0,66673460,9,'VirtualBox mouse integration'
+7,6,694,605,0,0,0,66673469,9,'VirtualBox mouse integration'
+7,6,708,600,0,0,0,66673476,9,'VirtualBox mouse integration'
+7,6,720,594,0,0,0,66673484,9,'VirtualBox mouse integration'
+7,6,731,587,0,0,0,66673493,9,'VirtualBox mouse integration'
+7,6,743,580,0,0,0,66673501,9,'VirtualBox mouse integration'
+7,6,752,572,0,0,0,66673509,9,'VirtualBox mouse integration'
+7,6,760,567,0,0,0,66673517,9,'VirtualBox mouse integration'
+7,6,764,562,0,0,0,66673525,9,'VirtualBox mouse integration'
+7,6,773,555,0,0,0,66673533,9,'VirtualBox mouse integration'
+7,6,782,550,0,0,0,66673541,9,'VirtualBox mouse integration'
+7,6,792,545,0,0,0,66673549,9,'VirtualBox mouse integration'
+7,6,799,543,0,0,0,66673556,9,'VirtualBox mouse integration'
+7,6,806,536,0,0,0,66673565,9,'VirtualBox mouse integration'
+7,6,812,531,0,0,0,66673572,9,'VirtualBox mouse integration'
+7,6,821,525,0,0,0,66673581,9,'VirtualBox mouse integration'
+7,6,829,518,0,0,0,66673589,9,'VirtualBox mouse integration'
+7,6,839,514,0,0,0,66673596,9,'VirtualBox mouse integration'
+7,6,847,509,0,0,0,66673604,9,'VirtualBox mouse integration'
+7,6,853,505,0,0,0,66673612,9,'VirtualBox mouse integration'
+7,6,861,500,0,0,0,66673620,9,'VirtualBox mouse integration'
+7,6,867,496,0,0,0,66673628,9,'VirtualBox mouse integration'
+7,6,877,492,0,0,0,66673636,9,'VirtualBox mouse integration'
+7,6,881,487,0,0,0,66673644,9,'VirtualBox mouse integration'
+7,6,889,483,0,0,0,66673652,9,'VirtualBox mouse integration'
+7,6,894,479,0,0,0,66673661,9,'VirtualBox mouse integration'
+7,6,901,473,0,0,0,66673669,9,'VirtualBox mouse integration'
+7,6,908,468,0,0,0,66673677,9,'VirtualBox mouse integration'
+7,6,914,464,0,0,0,66673685,9,'VirtualBox mouse integration'
+7,6,918,459,0,0,0,66673693,9,'VirtualBox mouse integration'
+7,6,922,458,0,0,0,66673701,9,'VirtualBox mouse integration'
+7,6,924,457,0,0,0,66673709,9,'VirtualBox mouse integration'
+7,6,925,456,0,0,0,66673716,9,'VirtualBox mouse integration'
+7,6,926,455,0,0,0,66673725,9,'VirtualBox mouse integration'
+7,6,927,454,0,0,0,66673741,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,66674016,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,66674016,2,Virtual core pointer
+7,5,0,0,1,0,0,66674168,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,66674168,2,Virtual core pointer
+0,21,0,0,0,0,0,66674174
+NEW-WINDOW:779,295:62914593,62914593,34479994,0,0,0:36x74+539+400:0,0:Open
+0,21,0,0,0,0,0,66674174
+0,21,0,0,0,0,0,66674174
+0,21,0,0,0,0,0,66674174
+7,6,929,453,0,0,0,66676904,9,'VirtualBox mouse integration'
+7,6,930,455,0,0,0,66676909,9,'VirtualBox mouse integration'
+7,6,930,457,0,0,0,66676917,9,'VirtualBox mouse integration'
+7,6,930,460,0,0,0,66676925,9,'VirtualBox mouse integration'
+7,6,929,462,0,0,0,66676933,9,'VirtualBox mouse integration'
+7,6,929,465,0,0,0,66676941,9,'VirtualBox mouse integration'
+7,6,927,468,0,0,0,66676949,9,'VirtualBox mouse integration'
+7,6,927,470,0,0,0,66676957,9,'VirtualBox mouse integration'
+7,6,927,471,0,0,0,66676965,9,'VirtualBox mouse integration'
+7,6,926,473,0,0,0,66676973,9,'VirtualBox mouse integration'
+7,6,925,476,0,0,0,66676981,9,'VirtualBox mouse integration'
+7,6,925,478,0,0,0,66676989,9,'VirtualBox mouse integration'
+7,6,925,482,0,0,0,66676997,9,'VirtualBox mouse integration'
+7,6,924,485,0,0,0,66677005,9,'VirtualBox mouse integration'
+7,6,924,487,0,0,0,66677021,9,'VirtualBox mouse integration'
+7,6,922,490,0,0,0,66677029,9,'VirtualBox mouse integration'
+7,6,922,492,0,0,0,66677037,9,'VirtualBox mouse integration'
+7,6,920,498,0,0,0,66677045,9,'VirtualBox mouse integration'
+7,6,920,503,0,0,0,66677053,9,'VirtualBox mouse integration'
+7,6,918,509,0,0,0,66677061,9,'VirtualBox mouse integration'
+7,6,916,513,0,0,0,66677069,9,'VirtualBox mouse integration'
+7,6,915,518,0,0,0,66677077,9,'VirtualBox mouse integration'
+7,6,914,524,0,0,0,66677085,9,'VirtualBox mouse integration'
+7,6,912,529,0,0,0,66677093,9,'VirtualBox mouse integration'
+7,6,910,532,0,0,0,66677101,9,'VirtualBox mouse integration'
+7,6,909,537,0,0,0,66677109,9,'VirtualBox mouse integration'
+7,6,908,542,0,0,0,66677117,9,'VirtualBox mouse integration'
+7,6,906,549,0,0,0,66677125,9,'VirtualBox mouse integration'
+7,6,906,553,0,0,0,66677133,9,'VirtualBox mouse integration'
+7,6,905,556,0,0,0,66677141,9,'VirtualBox mouse integration'
+7,6,905,559,0,0,0,66677149,9,'VirtualBox mouse integration'
+7,6,905,561,0,0,0,66677157,9,'VirtualBox mouse integration'
+7,6,905,564,0,0,0,66677165,9,'VirtualBox mouse integration'
+7,6,904,566,0,0,0,66677173,9,'VirtualBox mouse integration'
+7,6,904,568,0,0,0,66677181,9,'VirtualBox mouse integration'
+7,6,904,569,0,0,0,66677189,9,'VirtualBox mouse integration'
+7,6,904,570,0,0,0,66677197,9,'VirtualBox mouse integration'
+7,6,902,573,0,0,0,66677205,9,'VirtualBox mouse integration'
+7,6,902,575,0,0,0,66677213,9,'VirtualBox mouse integration'
+7,6,902,578,0,0,0,66677221,9,'VirtualBox mouse integration'
+7,6,902,580,0,0,0,66677229,9,'VirtualBox mouse integration'
+7,6,901,584,0,0,0,66677237,9,'VirtualBox mouse integration'
+7,6,901,586,0,0,0,66677245,9,'VirtualBox mouse integration'
+7,6,901,588,0,0,0,66677253,9,'VirtualBox mouse integration'
+7,6,900,590,0,0,0,66677261,9,'VirtualBox mouse integration'
+7,6,900,591,0,0,0,66677269,9,'VirtualBox mouse integration'
+7,6,900,594,0,0,0,66677285,9,'VirtualBox mouse integration'
+7,6,900,596,0,0,0,66677301,9,'VirtualBox mouse integration'
+7,6,899,598,0,0,0,66677309,9,'VirtualBox mouse integration'
+7,6,899,599,0,0,0,66677317,9,'VirtualBox mouse integration'
+7,6,899,600,0,0,0,66677325,9,'VirtualBox mouse integration'
+7,6,899,601,0,0,0,66677333,9,'VirtualBox mouse integration'
+7,6,899,603,0,0,0,66677341,9,'VirtualBox mouse integration'
+7,6,899,604,0,0,0,66677349,9,'VirtualBox mouse integration'
+7,6,897,606,0,0,0,66677365,9,'VirtualBox mouse integration'
+7,6,896,608,0,0,0,66677373,9,'VirtualBox mouse integration'
+7,6,896,610,0,0,0,66677381,9,'VirtualBox mouse integration'
+7,6,896,613,0,0,0,66677389,9,'VirtualBox mouse integration'
+7,6,896,615,0,0,0,66677397,9,'VirtualBox mouse integration'
+7,6,896,616,0,0,0,66677405,9,'VirtualBox mouse integration'
+7,6,896,618,0,0,0,66677413,9,'VirtualBox mouse integration'
+7,6,896,619,0,0,0,66677421,9,'VirtualBox mouse integration'
+7,6,896,620,0,0,0,66677437,9,'VirtualBox mouse integration'
+7,6,896,623,0,0,0,66677453,9,'VirtualBox mouse integration'
+7,6,896,624,0,0,0,66677469,9,'VirtualBox mouse integration'
+7,6,896,625,0,0,0,66677485,9,'VirtualBox mouse integration'
+7,6,897,627,0,0,0,66677493,9,'VirtualBox mouse integration'
+7,6,897,628,0,0,0,66677501,9,'VirtualBox mouse integration'
+7,6,897,629,0,0,0,66677517,9,'VirtualBox mouse integration'
+7,6,898,630,0,0,0,66677525,9,'VirtualBox mouse integration'
+7,6,898,631,0,0,0,66677541,9,'VirtualBox mouse integration'
+7,6,898,633,0,0,0,66677549,9,'VirtualBox mouse integration'
+7,6,899,635,0,0,0,66677565,9,'VirtualBox mouse integration'
+7,6,899,636,0,0,0,66677573,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,66677840,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,66677840,2,Virtual core pointer
+7,5,0,0,1,0,0,66678011,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,66678011,2,Virtual core pointer
+7,2,0,0,0,40,0,66679182,11,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,66679182,3,Virtual core keyboard
+7,3,0,0,0,40,0,66679232,11,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,66679232,3,Virtual core keyboard
+7,2,0,0,0,24,0,66679470,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,66679470,3,Virtual core keyboard
+7,3,0,0,0,24,0,66679518,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,66679518,3,Virtual core keyboard
+7,2,0,0,0,28,0,66679870,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,66679870,3,Virtual core keyboard
+7,3,0,0,0,28,0,66679936,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,66679936,3,Virtual core keyboard
+7,2,0,0,0,24,0,66680254,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,66680254,3,Virtual core keyboard
+7,3,0,0,0,24,0,66680319,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,66680319,3,Virtual core keyboard
+7,2,0,0,0,62,0,66680750,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,66680750,3,Virtual core keyboard
+7,2,0,0,0,60,0,66680958,11,AT Translated Set 2 keyboard
+6,2,0,0,0,60,0,66680958,3,Virtual core keyboard
+7,3,0,0,0,60,0,66681086,11,AT Translated Set 2 keyboard
+6,3,0,0,0,60,0,66681086,3,Virtual core keyboard
+7,3,0,0,0,62,0,66681104,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,66681104,3,Virtual core keyboard
+7,2,0,0,0,42,0,66681806,11,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,66681806,3,Virtual core keyboard
+7,3,0,0,0,42,0,66681872,11,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,66681872,3,Virtual core keyboard
+7,2,0,0,0,27,0,66682094,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,66682094,3,Virtual core keyboard
+7,3,0,0,0,27,0,66682147,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,66682147,3,Virtual core keyboard
+7,2,0,0,0,24,0,66683166,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,66683166,3,Virtual core keyboard
+7,3,0,0,0,24,0,66683281,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,66683281,3,Virtual core keyboard
+7,2,0,0,0,33,0,66684350,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,66684351,3,Virtual core keyboard
+7,3,0,0,0,33,0,66684465,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,66684465,3,Virtual core keyboard
+7,2,0,0,0,116,0,66685634,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,66685634,3,Virtual core keyboard
+7,3,0,0,0,116,0,66685743,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,66685743,3,Virtual core keyboard
+7,2,0,0,0,23,0,66686654,11,AT Translated Set 2 keyboard
+6,2,0,0,0,23,0,66686654,3,Virtual core keyboard
+7,3,0,0,0,23,0,66686718,11,AT Translated Set 2 keyboard
+6,3,0,0,0,23,0,66686718,3,Virtual core keyboard
+7,6,900,637,0,0,0,66687353,9,'VirtualBox mouse integration'
+7,6,907,637,0,0,0,66687358,9,'VirtualBox mouse integration'
+7,6,931,637,0,0,0,66687367,9,'VirtualBox mouse integration'
+7,6,980,633,0,0,0,66687375,9,'VirtualBox mouse integration'
+7,6,1026,633,0,0,0,66687383,9,'VirtualBox mouse integration'
+7,6,1072,633,0,0,0,66687391,9,'VirtualBox mouse integration'
+7,6,1098,633,0,0,0,66687399,9,'VirtualBox mouse integration'
+7,6,1123,633,0,0,0,66687407,9,'VirtualBox mouse integration'
+7,6,1140,633,0,0,0,66687415,9,'VirtualBox mouse integration'
+7,6,1151,633,0,0,0,66687423,9,'VirtualBox mouse integration'
+7,6,1152,633,0,0,0,66687439,9,'VirtualBox mouse integration'
+7,6,1153,633,0,0,0,66687471,9,'VirtualBox mouse integration'
+7,6,1154,633,0,0,0,66687487,9,'VirtualBox mouse integration'
+7,6,1156,633,0,0,0,66687495,9,'VirtualBox mouse integration'
+7,6,1158,632,0,0,0,66687503,9,'VirtualBox mouse integration'
+7,6,1159,631,0,0,0,66687511,9,'VirtualBox mouse integration'
+7,6,1161,631,0,0,0,66687519,9,'VirtualBox mouse integration'
+7,6,1165,630,0,0,0,66687527,9,'VirtualBox mouse integration'
+7,6,1167,630,0,0,0,66687534,9,'VirtualBox mouse integration'
+7,6,1172,629,0,0,0,66687542,9,'VirtualBox mouse integration'
+7,6,1176,629,0,0,0,66687551,9,'VirtualBox mouse integration'
+7,6,1179,628,0,0,0,66687559,9,'VirtualBox mouse integration'
+7,6,1183,628,0,0,0,66687567,9,'VirtualBox mouse integration'
+7,6,1187,626,0,0,0,66687574,9,'VirtualBox mouse integration'
+7,6,1191,625,0,0,0,66687583,9,'VirtualBox mouse integration'
+7,6,1193,625,0,0,0,66687591,9,'VirtualBox mouse integration'
+7,6,1194,625,0,0,0,66687598,9,'VirtualBox mouse integration'
+7,6,1197,625,0,0,0,66687607,9,'VirtualBox mouse integration'
+7,6,1199,625,0,0,0,66687614,9,'VirtualBox mouse integration'
+7,6,1202,624,0,0,0,66687623,9,'VirtualBox mouse integration'
+7,6,1203,624,0,0,0,66687631,9,'VirtualBox mouse integration'
+7,6,1204,624,0,0,0,66687639,9,'VirtualBox mouse integration'
+7,6,1208,624,0,0,0,66687647,9,'VirtualBox mouse integration'
+7,6,1210,624,0,0,0,66687655,9,'VirtualBox mouse integration'
+7,6,1213,624,0,0,0,66687663,9,'VirtualBox mouse integration'
+7,6,1217,624,0,0,0,66687671,9,'VirtualBox mouse integration'
+7,6,1221,624,0,0,0,66687679,9,'VirtualBox mouse integration'
+7,6,1224,624,0,0,0,66687687,9,'VirtualBox mouse integration'
+7,6,1227,624,0,0,0,66687695,9,'VirtualBox mouse integration'
+7,6,1229,624,0,0,0,66687703,9,'VirtualBox mouse integration'
+7,6,1233,624,0,0,0,66687710,9,'VirtualBox mouse integration'
+7,6,1234,624,0,0,0,66687719,9,'VirtualBox mouse integration'
+7,6,1236,624,0,0,0,66687727,9,'VirtualBox mouse integration'
+7,6,1237,624,0,0,0,66687743,9,'VirtualBox mouse integration'
+7,6,1239,624,0,0,0,66687751,9,'VirtualBox mouse integration'
+7,6,1241,624,0,0,0,66687759,9,'VirtualBox mouse integration'
+7,6,1242,624,0,0,0,66687767,9,'VirtualBox mouse integration'
+7,6,1246,624,0,0,0,66687775,9,'VirtualBox mouse integration'
+7,6,1248,624,0,0,0,66687783,9,'VirtualBox mouse integration'
+7,6,1251,624,0,0,0,66687791,9,'VirtualBox mouse integration'
+7,6,1253,624,0,0,0,66687798,9,'VirtualBox mouse integration'
+7,6,1256,624,0,0,0,66687807,9,'VirtualBox mouse integration'
+7,6,1257,624,0,0,0,66687815,9,'VirtualBox mouse integration'
+7,6,1259,624,0,0,0,66687831,9,'VirtualBox mouse integration'
+7,6,1260,625,0,0,0,66687839,9,'VirtualBox mouse integration'
+7,6,1261,626,0,0,0,66687846,9,'VirtualBox mouse integration'
+7,6,1262,626,0,0,0,66687855,9,'VirtualBox mouse integration'
+7,6,1263,626,0,0,0,66687863,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,66688459,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,66688459,2,Virtual core pointer
+7,5,0,0,1,0,0,66688644,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,66688644,2,Virtual core pointer
+0,21,0,0,0,0,0,66688658
+NEW-WINDOW:779,253:62914593,62914593,701,779,253,0:779x253+539+400:0,0:Open
+0,21,0,0,0,0,0,66688658
+0,21,0,0,0,0,0,66688658
+0,21,0,0,0,0,0,66688658
+0,21,0,0,0,0,0,66688658
+7,2,0,0,0,36,0,66690527,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,66690527,3,Virtual core keyboard
+0,21,0,0,0,0,0,66690539
+NEW-WINDOW:451,212:62914587,62914587,701,451,212,0:451x212+879+458:0,0:Import
+0,21,0,0,0,0,0,66690539
+0,21,0,0,0,0,0,66690539
+0,21,0,0,0,0,0,66690539
+0,21,0,0,0,0,0,66690539
+0,21,0,0,0,0,0,66690570
+NEW-WINDOW:640,459:62914618,62914618,34481786,0,0,0:36x74+500+49:0,0:graphviz
+0,21,0,0,0,0,0,66690570
+0,21,0,0,0,0,0,66690570
+0,21,0,0,0,0,0,66690570
+0,21,0,0,0,0,0,66690579
+NEW-WINDOW:-273522560,21963:62914618,62914618,701,640,417,0:-1588164224x32764+-1743526260+32547:-273521728,-273521728:
+0,21,0,0,0,0,0,66690579
+0,21,0,0,0,0,0,66690579
+0,21,0,0,0,0,0,66690579
+0,21,0,0,0,0,0,66690579
+7,3,0,0,0,36,0,66690607,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,66690607,3,Virtual core keyboard
+0,21,0,0,0,0,0,66691258
+NEW-WINDOW:1116,127:62914656,62914656,62914756,0,0,0:0x0+584+819:0,0:
+0,21,0,0,0,0,0,66691258
+0,21,0,0,0,0,0,66691258
+7,6,1264,627,0,0,0,66693306,9,'VirtualBox mouse integration'
+7,6,1259,623,0,0,0,66693311,9,'VirtualBox mouse integration'
+7,6,1249,617,0,0,0,66693319,9,'VirtualBox mouse integration'
+7,6,1230,608,0,0,0,66693327,9,'VirtualBox mouse integration'
+7,6,1210,599,0,0,0,66693335,9,'VirtualBox mouse integration'
+7,6,1188,590,0,0,0,66693344,9,'VirtualBox mouse integration'
+7,6,1165,580,0,0,0,66693352,9,'VirtualBox mouse integration'
+7,6,1142,570,0,0,0,66693360,9,'VirtualBox mouse integration'
+7,6,1118,561,0,0,0,66693367,9,'VirtualBox mouse integration'
+7,6,1095,548,0,0,0,66693375,9,'VirtualBox mouse integration'
+7,6,1071,536,0,0,0,66693383,9,'VirtualBox mouse integration'
+7,6,1050,526,0,0,0,66693391,9,'VirtualBox mouse integration'
+7,6,1032,516,0,0,0,66693399,9,'VirtualBox mouse integration'
+7,6,1009,510,0,0,0,66693408,9,'VirtualBox mouse integration'
+7,6,997,503,0,0,0,66693415,9,'VirtualBox mouse integration'
+7,6,985,494,0,0,0,66693423,9,'VirtualBox mouse integration'
+7,6,974,487,0,0,0,66693431,9,'VirtualBox mouse integration'
+7,6,963,479,0,0,0,66693439,9,'VirtualBox mouse integration'
+7,6,949,470,0,0,0,66693447,9,'VirtualBox mouse integration'
+7,6,935,461,0,0,0,66693456,9,'VirtualBox mouse integration'
+7,6,922,450,0,0,0,66693464,9,'VirtualBox mouse integration'
+7,6,908,439,0,0,0,66693472,9,'VirtualBox mouse integration'
+7,6,893,428,0,0,0,66693480,9,'VirtualBox mouse integration'
+7,6,877,420,0,0,0,66693487,9,'VirtualBox mouse integration'
+7,6,865,412,0,0,0,66693496,9,'VirtualBox mouse integration'
+7,6,852,404,0,0,0,66693503,9,'VirtualBox mouse integration'
+7,6,840,396,0,0,0,66693512,9,'VirtualBox mouse integration'
+7,6,832,391,0,0,0,66693520,9,'VirtualBox mouse integration'
+7,6,823,385,0,0,0,66693527,9,'VirtualBox mouse integration'
+7,6,813,378,0,0,0,66693535,9,'VirtualBox mouse integration'
+7,6,803,370,0,0,0,66693544,9,'VirtualBox mouse integration'
+7,6,794,363,0,0,0,66693552,9,'VirtualBox mouse integration'
+7,6,784,356,0,0,0,66693560,9,'VirtualBox mouse integration'
+7,6,775,348,0,0,0,66693568,9,'VirtualBox mouse integration'
+7,6,765,341,0,0,0,66693576,9,'VirtualBox mouse integration'
+7,6,756,334,0,0,0,66693584,9,'VirtualBox mouse integration'
+7,6,747,327,0,0,0,66693591,9,'VirtualBox mouse integration'
+7,6,738,325,0,0,0,66693599,9,'VirtualBox mouse integration'
+7,6,728,318,0,0,0,66693607,9,'VirtualBox mouse integration'
+7,6,719,311,0,0,0,66693615,9,'VirtualBox mouse integration'
+7,6,711,307,0,0,0,66693623,9,'VirtualBox mouse integration'
+7,6,702,302,0,0,0,66693631,9,'VirtualBox mouse integration'
+7,6,694,297,0,0,0,66693639,9,'VirtualBox mouse integration'
+7,6,686,293,0,0,0,66693647,9,'VirtualBox mouse integration'
+7,6,677,288,0,0,0,66693655,9,'VirtualBox mouse integration'
+7,6,669,286,0,0,0,66693663,9,'VirtualBox mouse integration'
+7,6,661,282,0,0,0,66693671,9,'VirtualBox mouse integration'
+7,6,655,280,0,0,0,66693680,9,'VirtualBox mouse integration'
+7,6,649,278,0,0,0,66693687,9,'VirtualBox mouse integration'
+7,6,641,276,0,0,0,66693696,9,'VirtualBox mouse integration'
+7,6,633,271,0,0,0,66693704,9,'VirtualBox mouse integration'
+7,6,623,267,0,0,0,66693712,9,'VirtualBox mouse integration'
+7,6,614,262,0,0,0,66693720,9,'VirtualBox mouse integration'
+7,6,604,258,0,0,0,66693728,9,'VirtualBox mouse integration'
+7,6,596,254,0,0,0,66693736,9,'VirtualBox mouse integration'
+7,6,590,252,0,0,0,66693744,9,'VirtualBox mouse integration'
+7,6,584,249,0,0,0,66693752,9,'VirtualBox mouse integration'
+7,6,578,248,0,0,0,66693760,9,'VirtualBox mouse integration'
+7,6,570,245,0,0,0,66693768,9,'VirtualBox mouse integration'
+7,6,566,242,0,0,0,66693776,9,'VirtualBox mouse integration'
+7,6,560,240,0,0,0,66693784,9,'VirtualBox mouse integration'
+7,6,554,240,0,0,0,66693792,9,'VirtualBox mouse integration'
+7,6,545,236,0,0,0,66693800,9,'VirtualBox mouse integration'
+7,6,537,231,0,0,0,66693808,9,'VirtualBox mouse integration'
+7,6,529,230,0,0,0,66693816,9,'VirtualBox mouse integration'
+7,6,522,225,0,0,0,66693824,9,'VirtualBox mouse integration'
+7,6,514,224,0,0,0,66693832,9,'VirtualBox mouse integration'
+7,6,508,222,0,0,0,66693840,9,'VirtualBox mouse integration'
+7,6,500,219,0,0,0,66693847,9,'VirtualBox mouse integration'
+7,6,492,218,0,0,0,66693856,9,'VirtualBox mouse integration'
+7,6,485,216,0,0,0,66693864,9,'VirtualBox mouse integration'
+7,6,477,214,0,0,0,66693872,9,'VirtualBox mouse integration'
+7,6,471,214,0,0,0,66693880,9,'VirtualBox mouse integration'
+7,6,466,212,0,0,0,66693888,9,'VirtualBox mouse integration'
+7,6,460,209,0,0,0,66693896,9,'VirtualBox mouse integration'
+7,6,454,205,0,0,0,66693904,9,'VirtualBox mouse integration'
+7,6,448,204,0,0,0,66693912,9,'VirtualBox mouse integration'
+7,6,443,201,0,0,0,66693920,9,'VirtualBox mouse integration'
+7,6,437,201,0,0,0,66693928,9,'VirtualBox mouse integration'
+7,6,431,197,0,0,0,66693936,9,'VirtualBox mouse integration'
+7,6,427,196,0,0,0,66693944,9,'VirtualBox mouse integration'
+7,6,423,195,0,0,0,66693952,9,'VirtualBox mouse integration'
+7,6,419,193,0,0,0,66693960,9,'VirtualBox mouse integration'
+7,6,416,191,0,0,0,66693968,9,'VirtualBox mouse integration'
+7,6,412,190,0,0,0,66693976,9,'VirtualBox mouse integration'
+7,6,408,188,0,0,0,66693984,9,'VirtualBox mouse integration'
+7,6,405,186,0,0,0,66693992,9,'VirtualBox mouse integration'
+7,6,402,185,0,0,0,66694000,9,'VirtualBox mouse integration'
+7,6,400,184,0,0,0,66694007,9,'VirtualBox mouse integration'
+7,6,398,182,0,0,0,66694016,9,'VirtualBox mouse integration'
+7,6,397,181,0,0,0,66694024,9,'VirtualBox mouse integration'
+7,6,395,180,0,0,0,66694031,9,'VirtualBox mouse integration'
+7,6,391,178,0,0,0,66694040,9,'VirtualBox mouse integration'
+7,6,390,177,0,0,0,66694048,9,'VirtualBox mouse integration'
+7,6,388,176,0,0,0,66694055,9,'VirtualBox mouse integration'
+7,6,385,174,0,0,0,66694064,9,'VirtualBox mouse integration'
+7,6,384,173,0,0,0,66694072,9,'VirtualBox mouse integration'
+7,6,381,171,0,0,0,66694080,9,'VirtualBox mouse integration'
+7,6,380,170,0,0,0,66694088,9,'VirtualBox mouse integration'
+7,6,379,169,0,0,0,66694096,9,'VirtualBox mouse integration'
+7,6,377,167,0,0,0,66694112,9,'VirtualBox mouse integration'
+7,6,376,166,0,0,0,66694120,9,'VirtualBox mouse integration'
+7,6,375,165,0,0,0,66694128,9,'VirtualBox mouse integration'
+7,6,372,164,0,0,0,66694136,9,'VirtualBox mouse integration'
+7,6,370,162,0,0,0,66694143,9,'VirtualBox mouse integration'
+7,6,369,161,0,0,0,66694160,9,'VirtualBox mouse integration'
+7,6,366,158,0,0,0,66694184,9,'VirtualBox mouse integration'
+7,6,364,157,0,0,0,66694208,9,'VirtualBox mouse integration'
+7,6,363,156,0,0,0,66694304,9,'VirtualBox mouse integration'
+7,6,361,155,0,0,0,66694328,9,'VirtualBox mouse integration'
+7,6,360,154,0,0,0,66694352,9,'VirtualBox mouse integration'
+7,6,359,151,0,0,0,66694360,9,'VirtualBox mouse integration'
+7,6,358,150,0,0,0,66694368,9,'VirtualBox mouse integration'
+7,6,357,149,0,0,0,66694376,9,'VirtualBox mouse integration'
+7,6,356,147,0,0,0,66694392,9,'VirtualBox mouse integration'
+7,6,355,145,0,0,0,66694400,9,'VirtualBox mouse integration'
+7,6,355,144,0,0,0,66694408,9,'VirtualBox mouse integration'
+7,6,354,143,0,0,0,66694416,9,'VirtualBox mouse integration'
+7,6,352,141,0,0,0,66694432,9,'VirtualBox mouse integration'
+7,6,351,139,0,0,0,66694448,9,'VirtualBox mouse integration'
+7,6,351,138,0,0,0,66694456,9,'VirtualBox mouse integration'
+7,6,350,137,0,0,0,66694488,9,'VirtualBox mouse integration'
+7,6,350,136,0,0,0,66694504,9,'VirtualBox mouse integration'
+7,6,349,135,0,0,0,66694512,9,'VirtualBox mouse integration'
+7,6,349,134,0,0,0,66694560,9,'VirtualBox mouse integration'
+7,6,349,133,0,0,0,66694576,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,66694748,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,66694748,2,Virtual core pointer
+7,5,0,0,1,0,0,66694926,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,66694926,2,Virtual core pointer
+7,2,0,0,0,28,0,66695792,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,66695792,3,Virtual core keyboard
+7,3,0,0,0,28,0,66695876,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,66695876,3,Virtual core keyboard
+7,2,0,0,0,27,0,66696064,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,66696064,3,Virtual core keyboard
+7,3,0,0,0,27,0,66696131,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,66696131,3,Virtual core keyboard
+7,2,0,0,0,26,0,66696352,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,66696352,3,Virtual core keyboard
+7,3,0,0,0,26,0,66696416,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,66696416,3,Virtual core keyboard
+7,2,0,0,0,26,0,66696512,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,66696512,3,Virtual core keyboard
+7,3,0,0,0,26,0,66696596,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,66696596,3,Virtual core keyboard
+7,2,0,0,0,65,0,66697296,11,AT Translated Set 2 keyboard
+6,2,0,0,0,65,0,66697296,3,Virtual core keyboard
+7,3,0,0,0,65,0,66697376,11,AT Translated Set 2 keyboard
+6,3,0,0,0,65,0,66697376,3,Virtual core keyboard
+7,2,0,0,0,46,0,66697664,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,66697664,3,Virtual core keyboard
+7,3,0,0,0,46,0,66697746,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,66697746,3,Virtual core keyboard
+7,2,0,0,0,26,0,66697952,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,66697952,3,Virtual core keyboard
+7,3,0,0,0,26,0,66698002,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,66698002,3,Virtual core keyboard
+7,2,0,0,0,24,0,66698240,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,66698240,3,Virtual core keyboard
+7,3,0,0,0,24,0,66698306,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,66698306,3,Virtual core keyboard
+7,2,0,0,0,41,0,66698544,11,AT Translated Set 2 keyboard
+6,2,0,0,0,41,0,66698545,3,Virtual core keyboard
+7,3,0,0,0,41,0,66698611,11,AT Translated Set 2 keyboard
+6,3,0,0,0,41,0,66698611,3,Virtual core keyboard
+7,6,349,132,0,0,0,66699489,9,'VirtualBox mouse integration'
+7,6,346,131,0,0,0,66699496,9,'VirtualBox mouse integration'
+7,6,342,131,0,0,0,66699504,9,'VirtualBox mouse integration'
+7,6,340,131,0,0,0,66699512,9,'VirtualBox mouse integration'
+7,6,338,133,0,0,0,66699520,9,'VirtualBox mouse integration'
+7,6,336,135,0,0,0,66699528,9,'VirtualBox mouse integration'
+7,6,334,137,0,0,0,66699536,9,'VirtualBox mouse integration'
+7,6,333,139,0,0,0,66699544,9,'VirtualBox mouse integration'
+7,6,331,141,0,0,0,66699552,9,'VirtualBox mouse integration'
+7,6,330,143,0,0,0,66699560,9,'VirtualBox mouse integration'
+7,6,329,144,0,0,0,66699568,9,'VirtualBox mouse integration'
+7,6,328,148,0,0,0,66699576,9,'VirtualBox mouse integration'
+7,6,326,150,0,0,0,66699592,9,'VirtualBox mouse integration'
+7,6,325,152,0,0,0,66699600,9,'VirtualBox mouse integration'
+7,6,324,153,0,0,0,66699608,9,'VirtualBox mouse integration'
+7,6,322,155,0,0,0,66699616,9,'VirtualBox mouse integration'
+7,6,321,156,0,0,0,66699624,9,'VirtualBox mouse integration'
+7,6,320,157,0,0,0,66699632,9,'VirtualBox mouse integration'
+7,6,320,158,0,0,0,66699640,9,'VirtualBox mouse integration'
+7,6,319,159,0,0,0,66699648,9,'VirtualBox mouse integration'
+7,6,317,161,0,0,0,66699656,9,'VirtualBox mouse integration'
+7,6,315,164,0,0,0,66699664,9,'VirtualBox mouse integration'
+7,6,314,165,0,0,0,66699672,9,'VirtualBox mouse integration'
+7,6,313,166,0,0,0,66699680,9,'VirtualBox mouse integration'
+7,6,311,168,0,0,0,66699688,9,'VirtualBox mouse integration'
+7,6,310,169,0,0,0,66699696,9,'VirtualBox mouse integration'
+7,6,309,170,0,0,0,66699704,9,'VirtualBox mouse integration'
+7,6,307,172,0,0,0,66699712,9,'VirtualBox mouse integration'
+7,6,305,174,0,0,0,66699720,9,'VirtualBox mouse integration'
+7,6,304,175,0,0,0,66699728,9,'VirtualBox mouse integration'
+7,6,303,176,0,0,0,66699736,9,'VirtualBox mouse integration'
+7,6,301,177,0,0,0,66699745,9,'VirtualBox mouse integration'
+7,6,300,179,0,0,0,66699753,9,'VirtualBox mouse integration'
+7,6,299,180,0,0,0,66699760,9,'VirtualBox mouse integration'
+7,6,298,181,0,0,0,66699776,9,'VirtualBox mouse integration'
+7,6,296,183,0,0,0,66699793,9,'VirtualBox mouse integration'
+7,6,295,184,0,0,0,66699800,9,'VirtualBox mouse integration'
+7,6,294,185,0,0,0,66699817,9,'VirtualBox mouse integration'
+7,6,293,188,0,0,0,66699833,9,'VirtualBox mouse integration'
+7,6,291,189,0,0,0,66699841,9,'VirtualBox mouse integration'
+7,6,290,190,0,0,0,66699856,9,'VirtualBox mouse integration'
+7,6,289,191,0,0,0,66699864,9,'VirtualBox mouse integration'
+7,6,287,193,0,0,0,66699873,9,'VirtualBox mouse integration'
+7,6,286,194,0,0,0,66699880,9,'VirtualBox mouse integration'
+7,6,285,195,0,0,0,66699889,9,'VirtualBox mouse integration'
+7,6,284,196,0,0,0,66699896,9,'VirtualBox mouse integration'
+7,6,283,198,0,0,0,66699905,9,'VirtualBox mouse integration'
+7,6,282,199,0,0,0,66699912,9,'VirtualBox mouse integration'
+7,6,281,200,0,0,0,66699921,9,'VirtualBox mouse integration'
+7,6,281,202,0,0,0,66699929,9,'VirtualBox mouse integration'
+7,6,281,203,0,0,0,66699936,9,'VirtualBox mouse integration'
+7,6,280,204,0,0,0,66699945,9,'VirtualBox mouse integration'
+7,6,280,205,0,0,0,66699953,9,'VirtualBox mouse integration'
+7,6,279,206,0,0,0,66699968,9,'VirtualBox mouse integration'
+7,6,279,208,0,0,0,66699976,9,'VirtualBox mouse integration'
+7,6,278,209,0,0,0,66699984,9,'VirtualBox mouse integration'
+7,6,277,210,0,0,0,66699992,9,'VirtualBox mouse integration'
+7,6,276,211,0,0,0,66700009,9,'VirtualBox mouse integration'
+7,6,275,213,0,0,0,66700025,9,'VirtualBox mouse integration'
+7,6,274,215,0,0,0,66700032,9,'VirtualBox mouse integration'
+7,6,274,217,0,0,0,66700057,9,'VirtualBox mouse integration'
+7,6,272,219,0,0,0,66700089,9,'VirtualBox mouse integration'
+7,6,272,220,0,0,0,66700113,9,'VirtualBox mouse integration'
+7,6,272,222,0,0,0,66700121,9,'VirtualBox mouse integration'
+7,6,272,223,0,0,0,66700129,9,'VirtualBox mouse integration'
+7,6,271,224,0,0,0,66700193,9,'VirtualBox mouse integration'
+7,6,271,227,0,0,0,66700433,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,66701147,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,66701147,2,Virtual core pointer
+7,5,0,0,1,0,0,66701310,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,66701310,2,Virtual core pointer
+0,21,0,0,0,0,0,66701374
+NEW-WINDOW:640,448:62915069,62915069,34484153,0,0,0:36x74+500+71:0,0:
+0,21,0,0,0,0,0,66701374
+0,21,0,0,0,0,0,66701374
+0,21,0,0,0,0,0,66701374
+0,21,0,0,0,0,0,66701448
+NEW-WINDOW:640,406:62915069,62915069,701,640,406,0:640x406+500+71:0,0:Tree Leaf
+0,21,0,0,0,0,0,66701448
+0,21,0,0,0,0,0,66701448
+0,21,0,0,0,0,0,66701448
+0,21,0,0,0,0,0,66701448
+7,6,271,228,0,0,0,66702137,9,'VirtualBox mouse integration'
+7,6,271,233,0,0,0,66702145,9,'VirtualBox mouse integration'
+7,6,271,239,0,0,0,66702153,9,'VirtualBox mouse integration'
+7,6,271,249,0,0,0,66702161,9,'VirtualBox mouse integration'
+7,6,271,259,0,0,0,66702169,9,'VirtualBox mouse integration'
+7,6,273,272,0,0,0,66702177,9,'VirtualBox mouse integration'
+7,6,275,285,0,0,0,66702185,9,'VirtualBox mouse integration'
+7,6,277,296,0,0,0,66702193,9,'VirtualBox mouse integration'
+7,6,279,307,0,0,0,66702201,9,'VirtualBox mouse integration'
+7,6,279,318,0,0,0,66702209,9,'VirtualBox mouse integration'
+7,6,282,326,0,0,0,66702217,9,'VirtualBox mouse integration'
+7,6,284,333,0,0,0,66702225,9,'VirtualBox mouse integration'
+7,6,284,339,0,0,0,66702233,9,'VirtualBox mouse integration'
+7,6,286,349,0,0,0,66702241,9,'VirtualBox mouse integration'
+7,6,288,357,0,0,0,66702249,9,'VirtualBox mouse integration'
+7,6,290,365,0,0,0,66702257,9,'VirtualBox mouse integration'
+7,6,293,375,0,0,0,66702265,9,'VirtualBox mouse integration'
+7,6,295,386,0,0,0,66702273,9,'VirtualBox mouse integration'
+7,6,298,396,0,0,0,66702281,9,'VirtualBox mouse integration'
+7,6,300,406,0,0,0,66702289,9,'VirtualBox mouse integration'
+7,6,301,415,0,0,0,66702297,9,'VirtualBox mouse integration'
+7,6,306,425,0,0,0,66702305,9,'VirtualBox mouse integration'
+7,6,310,433,0,0,0,66702313,9,'VirtualBox mouse integration'
+7,6,312,441,0,0,0,66702321,9,'VirtualBox mouse integration'
+7,6,315,447,0,0,0,66702329,9,'VirtualBox mouse integration'
+7,6,317,453,0,0,0,66702336,9,'VirtualBox mouse integration'
+7,6,319,460,0,0,0,66702345,9,'VirtualBox mouse integration'
+7,6,322,466,0,0,0,66702352,9,'VirtualBox mouse integration'
+7,6,322,472,0,0,0,66702361,9,'VirtualBox mouse integration'
+7,6,324,478,0,0,0,66702369,9,'VirtualBox mouse integration'
+7,6,326,484,0,0,0,66702377,9,'VirtualBox mouse integration'
+7,6,328,490,0,0,0,66702385,9,'VirtualBox mouse integration'
+7,6,330,495,0,0,0,66702393,9,'VirtualBox mouse integration'
+7,6,332,503,0,0,0,66702401,9,'VirtualBox mouse integration'
+7,6,333,507,0,0,0,66702409,9,'VirtualBox mouse integration'
+7,6,333,510,0,0,0,66702417,9,'VirtualBox mouse integration'
+7,6,333,512,0,0,0,66702425,9,'VirtualBox mouse integration'
+7,6,334,514,0,0,0,66702433,9,'VirtualBox mouse integration'
+7,6,335,517,0,0,0,66702441,9,'VirtualBox mouse integration'
+7,6,336,522,0,0,0,66702449,9,'VirtualBox mouse integration'
+7,6,336,524,0,0,0,66702457,9,'VirtualBox mouse integration'
+7,6,336,526,0,0,0,66702465,9,'VirtualBox mouse integration'
+7,6,336,530,0,0,0,66702472,9,'VirtualBox mouse integration'
+7,6,336,532,0,0,0,66702481,9,'VirtualBox mouse integration'
+7,6,337,535,0,0,0,66702489,9,'VirtualBox mouse integration'
+7,6,337,537,0,0,0,66702497,9,'VirtualBox mouse integration'
+7,6,337,540,0,0,0,66702505,9,'VirtualBox mouse integration'
+7,6,337,542,0,0,0,66702513,9,'VirtualBox mouse integration'
+7,6,337,545,0,0,0,66702521,9,'VirtualBox mouse integration'
+7,6,337,547,0,0,0,66702529,9,'VirtualBox mouse integration'
+7,6,337,550,0,0,0,66702537,9,'VirtualBox mouse integration'
+7,6,337,551,0,0,0,66702545,9,'VirtualBox mouse integration'
+7,6,337,553,0,0,0,66702553,9,'VirtualBox mouse integration'
+7,6,337,557,0,0,0,66702561,9,'VirtualBox mouse integration'
+7,6,337,561,0,0,0,66702569,9,'VirtualBox mouse integration'
+7,6,337,565,0,0,0,66702577,9,'VirtualBox mouse integration'
+7,6,337,568,0,0,0,66702585,9,'VirtualBox mouse integration'
+7,6,337,573,0,0,0,66702593,9,'VirtualBox mouse integration'
+7,6,337,576,0,0,0,66702601,9,'VirtualBox mouse integration'
+7,6,338,581,0,0,0,66702609,9,'VirtualBox mouse integration'
+7,6,338,583,0,0,0,66702617,9,'VirtualBox mouse integration'
+7,6,340,587,0,0,0,66702625,9,'VirtualBox mouse integration'
+7,6,340,590,0,0,0,66702633,9,'VirtualBox mouse integration'
+7,6,340,593,0,0,0,66702641,9,'VirtualBox mouse integration'
+7,6,341,597,0,0,0,66702649,9,'VirtualBox mouse integration'
+7,6,341,601,0,0,0,66702657,9,'VirtualBox mouse integration'
+7,6,341,603,0,0,0,66702665,9,'VirtualBox mouse integration'
+7,6,341,606,0,0,0,66702673,9,'VirtualBox mouse integration'
+7,6,341,608,0,0,0,66702681,9,'VirtualBox mouse integration'
+7,6,341,610,0,0,0,66702689,9,'VirtualBox mouse integration'
+7,6,341,612,0,0,0,66702697,9,'VirtualBox mouse integration'
+7,6,340,614,0,0,0,66702705,9,'VirtualBox mouse integration'
+7,6,340,616,0,0,0,66702713,9,'VirtualBox mouse integration'
+7,6,339,618,0,0,0,66702721,9,'VirtualBox mouse integration'
+7,6,338,620,0,0,0,66702729,9,'VirtualBox mouse integration'
+7,6,337,622,0,0,0,66702745,9,'VirtualBox mouse integration'
+7,6,337,623,0,0,0,66702753,9,'VirtualBox mouse integration'
+7,6,337,625,0,0,0,66702761,9,'VirtualBox mouse integration'
+7,6,337,626,0,0,0,66702769,9,'VirtualBox mouse integration'
+7,6,335,628,0,0,0,66702785,9,'VirtualBox mouse integration'
+7,6,335,630,0,0,0,66702793,9,'VirtualBox mouse integration'
+7,6,334,631,0,0,0,66702809,9,'VirtualBox mouse integration'
+7,6,334,632,0,0,0,66702825,9,'VirtualBox mouse integration'
+7,6,333,633,0,0,0,66702833,9,'VirtualBox mouse integration'
+7,6,333,635,0,0,0,66702841,9,'VirtualBox mouse integration'
+7,6,332,636,0,0,0,66702849,9,'VirtualBox mouse integration'
+7,6,330,639,0,0,0,66702857,9,'VirtualBox mouse integration'
+7,6,329,641,0,0,0,66702865,9,'VirtualBox mouse integration'
+7,6,329,645,0,0,0,66702873,9,'VirtualBox mouse integration'
+7,6,328,647,0,0,0,66702880,9,'VirtualBox mouse integration'
+7,6,327,650,0,0,0,66702889,9,'VirtualBox mouse integration'
+7,6,327,652,0,0,0,66702897,9,'VirtualBox mouse integration'
+7,6,325,654,0,0,0,66702905,9,'VirtualBox mouse integration'
+7,6,324,656,0,0,0,66702913,9,'VirtualBox mouse integration'
+7,6,324,657,0,0,0,66702921,9,'VirtualBox mouse integration'
+7,6,324,658,0,0,0,66702929,9,'VirtualBox mouse integration'
+7,6,324,661,0,0,0,66702937,9,'VirtualBox mouse integration'
+7,6,324,662,0,0,0,66702945,9,'VirtualBox mouse integration'
+7,6,323,664,0,0,0,66702953,9,'VirtualBox mouse integration'
+7,6,323,666,0,0,0,66702969,9,'VirtualBox mouse integration'
+7,6,323,668,0,0,0,66702977,9,'VirtualBox mouse integration'
+7,6,323,670,0,0,0,66702985,9,'VirtualBox mouse integration'
+7,6,322,673,0,0,0,66703001,9,'VirtualBox mouse integration'
+7,6,322,676,0,0,0,66703009,9,'VirtualBox mouse integration'
+7,6,322,678,0,0,0,66703017,9,'VirtualBox mouse integration'
+7,6,322,681,0,0,0,66703025,9,'VirtualBox mouse integration'
+7,6,322,682,0,0,0,66703033,9,'VirtualBox mouse integration'
+7,6,322,683,0,0,0,66703041,9,'VirtualBox mouse integration'
+7,6,321,687,0,0,0,66703049,9,'VirtualBox mouse integration'
+7,6,320,688,0,0,0,66703057,9,'VirtualBox mouse integration'
+7,6,320,690,0,0,0,66703065,9,'VirtualBox mouse integration'
+7,6,320,692,0,0,0,66703073,9,'VirtualBox mouse integration'
+7,6,320,693,0,0,0,66703080,9,'VirtualBox mouse integration'
+7,6,319,695,0,0,0,66703089,9,'VirtualBox mouse integration'
+7,6,319,696,0,0,0,66703097,9,'VirtualBox mouse integration'
+7,6,319,697,0,0,0,66703105,9,'VirtualBox mouse integration'
+7,6,319,698,0,0,0,66703121,9,'VirtualBox mouse integration'
+7,6,318,701,0,0,0,66703161,9,'VirtualBox mouse integration'
+7,6,318,702,0,0,0,66703169,9,'VirtualBox mouse integration'
+7,6,318,703,0,0,0,66703177,9,'VirtualBox mouse integration'
+7,6,318,705,0,0,0,66703185,9,'VirtualBox mouse integration'
+7,6,318,706,0,0,0,66703201,9,'VirtualBox mouse integration'
+7,4,0,0,3,0,0,66703780,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,3,0,0,66703780,2,Virtual core pointer
+7,5,0,0,3,0,0,66703990,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,3,0,0,66703990,2,Virtual core pointer
+7,6,318,707,0,0,0,66704978,9,'VirtualBox mouse integration'
+7,6,318,708,0,0,0,66704985,9,'VirtualBox mouse integration'
+7,6,318,710,0,0,0,66704993,9,'VirtualBox mouse integration'
+7,6,318,711,0,0,0,66705001,9,'VirtualBox mouse integration'
+7,6,318,712,0,0,0,66705025,9,'VirtualBox mouse integration'
+7,6,320,714,0,0,0,66705033,9,'VirtualBox mouse integration'
+7,6,320,715,0,0,0,66705042,9,'VirtualBox mouse integration'
+7,6,321,716,0,0,0,66705057,9,'VirtualBox mouse integration'
+7,6,321,718,0,0,0,66705081,9,'VirtualBox mouse integration'
+7,6,321,720,0,0,0,66705089,9,'VirtualBox mouse integration'
+7,6,322,721,0,0,0,66705121,9,'VirtualBox mouse integration'
+7,6,322,722,0,0,0,66705129,9,'VirtualBox mouse integration'
+7,6,323,723,0,0,0,66705144,9,'VirtualBox mouse integration'
+7,6,323,725,0,0,0,66705161,9,'VirtualBox mouse integration'
+7,6,324,726,0,0,0,66705169,9,'VirtualBox mouse integration'
+7,6,325,727,0,0,0,66705217,9,'VirtualBox mouse integration'
+7,6,326,727,0,0,0,66705233,9,'VirtualBox mouse integration'
+7,6,327,728,0,0,0,66705249,9,'VirtualBox mouse integration'
+7,6,328,729,0,0,0,66705257,9,'VirtualBox mouse integration'
+7,6,329,729,0,0,0,66705265,9,'VirtualBox mouse integration'
+7,6,330,730,0,0,0,66705281,9,'VirtualBox mouse integration'
+7,6,330,731,0,0,0,66705297,9,'VirtualBox mouse integration'
+7,6,331,732,0,0,0,66705329,9,'VirtualBox mouse integration'
+7,6,332,733,0,0,0,66705345,9,'VirtualBox mouse integration'
+7,6,333,735,0,0,0,66705361,9,'VirtualBox mouse integration'
+7,6,334,737,0,0,0,66705369,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,66706164,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,66706164,2,Virtual core pointer
+7,5,0,0,1,0,0,66706350,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,66706350,2,Virtual core pointer
+0,21,0,0,0,0,0,66706399
+NEW-WINDOW:451,254:62915144,62915144,34486202,0,0,0:36x74+879+458:0,0:Exporting graph "graphviz - 'filename'="/media/sf_tulip/tests/gui/data/graph.dot" "
+0,21,0,0,0,0,0,66706399
+0,21,0,0,0,0,0,66706399
+0,21,0,0,0,0,0,66706399
+7,2,0,0,0,28,0,66707650,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,66707650,3,Virtual core keyboard
+7,3,0,0,0,28,0,66707714,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,66707714,3,Virtual core keyboard
+7,2,0,0,0,26,0,66707906,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,66707906,3,Virtual core keyboard
+7,3,0,0,0,26,0,66707986,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,66707986,3,Virtual core keyboard
+7,2,0,0,0,39,0,66708146,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,66708146,3,Virtual core keyboard
+7,3,0,0,0,39,0,66708213,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,66708213,3,Virtual core keyboard
+7,2,0,0,0,28,0,66708418,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,66708418,3,Virtual core keyboard
+7,3,0,0,0,28,0,66708483,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,66708483,3,Virtual core keyboard
+7,2,0,0,0,17,0,66708738,11,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,66708738,3,Virtual core keyboard
+7,3,0,0,0,17,0,66708806,11,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,66708806,3,Virtual core keyboard
+7,2,0,0,0,42,0,66709266,11,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,66709266,3,Virtual core keyboard
+7,3,0,0,0,42,0,66709329,11,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,66709329,3,Virtual core keyboard
+7,2,0,0,0,30,0,66709346,11,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,66709346,3,Virtual core keyboard
+7,2,0,0,0,31,0,66709426,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,66709426,3,Virtual core keyboard
+7,3,0,0,0,30,0,66709467,11,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,66709467,3,Virtual core keyboard
+7,3,0,0,0,31,0,66709526,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,66709527,3,Virtual core keyboard
+7,2,0,0,0,62,0,66709906,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,66709907,3,Virtual core keyboard
+7,2,0,0,0,59,0,66710098,11,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,66710098,3,Virtual core keyboard
+7,3,0,0,0,62,0,66710179,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,66710179,3,Virtual core keyboard
+7,3,0,0,0,59,0,66710180,11,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,66710180,3,Virtual core keyboard
+7,2,0,0,0,28,0,66710482,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,66710482,3,Virtual core keyboard
+7,3,0,0,0,28,0,66710546,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,66710546,3,Virtual core keyboard
+7,2,0,0,0,46,0,66710610,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,66710610,3,Virtual core keyboard
+7,3,0,0,0,46,0,66710773,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,66710773,3,Virtual core keyboard
+7,2,0,0,0,33,0,66710834,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,66710834,3,Virtual core keyboard
+7,3,0,0,0,33,0,66710934,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,66710934,3,Virtual core keyboard
+7,2,0,0,0,36,0,66711442,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,66711442,3,Virtual core keyboard
+0,21,0,0,0,0,0,66711463
+NEW-WINDOW:451,212:62915144,62915144,701,451,212,0:451x212+879+458:0,0:Exporting graph "graphviz - 'filename'="/media/sf_tulip/tests/gui/data/graph.dot" "
+0,21,0,0,0,0,0,66711463
+0,21,0,0,0,0,0,66711463
+0,21,0,0,0,0,0,66711463
+0,21,0,0,0,0,0,66711463
+0,21,0,0,0,0,0,66711496
+NEW-WINDOW:640,462:62915161,62915161,34487424,0,0,0:36x74+500+42:0,0:
+0,21,0,0,0,0,0,66711496
+0,21,0,0,0,0,0,66711496
+0,21,0,0,0,0,0,66711496
+7,3,0,0,0,36,0,66711522,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,66711522,3,Virtual core keyboard
+0,21,0,0,0,0,0,66711609
+NEW-WINDOW:-273522624,21963:62915161,62915161,701,640,420,0:-1588164224x32764+-1743526260+32547:-273521728,-273521728:
+0,21,0,0,0,0,0,66711609
+0,21,0,0,0,0,0,66711609
+0,21,0,0,0,0,0,66711609
+0,21,0,0,0,0,0,66711609
