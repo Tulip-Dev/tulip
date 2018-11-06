@@ -273,7 +273,7 @@ void HalfCylinder::draw(node n, float) {
 }
 //=================================================================================================
 Coord HalfCylinder::getAnchor(const Coord &vector) const {
-  Coord anchor = vector;
+  Coord anchor(vector);
   float x, y, z, n;
   anchor.get(x, y, z);
   n = sqrt(x * x + y * y);
@@ -281,18 +281,7 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const {
   if (n == 0.0f)
     return anchor;
 
-  n = 0.5f / n;
-  x *= n;
-  y *= n;
-  z *= n;
-
-  if (z < 0.0f)
-    z = 0.0f; // z = z >? 0.0f;
-
-  if (z > 0.5f)
-    z = 0.5f; // z = z <? 0.5f;
-
-  return Coord(x, y, z);
+  return anchor * (0.5f / n);
 }
 
 class EECylinder : public EdgeExtremityGlyph, public CylinderBase {

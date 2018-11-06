@@ -97,7 +97,6 @@ Coord Billboard::getAnchor(const Coord &vector) const {
   Coord v(vector);
   float x, y, z, fmax;
   v.get(x, y, z);
-  v.setZ(0.0f);
   fmax = std::max(fabsf(x), fabsf(y)); // fmax = fabsf(x) >? fabsf(y);
 
   if (fmax > 0.0f)
