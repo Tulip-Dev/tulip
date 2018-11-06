@@ -1,8 +1,8 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2018:07:01 
-# Time:                   10:04:49 
+# Date:                   2018:11:05 
+# Time:                   16:01:31 
 # Xnee program:           cnee 
 # Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
@@ -11,14 +11,14 @@
 # X version:              11 
 # X revision:             0 
 # X vendor:               The X.Org Foundation 
-# X vendor release:       11804000 
+# X vendor release:       11906000 
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             4.4.0-128-generic 
-# OS Version:             #154-Ubuntu SMP Fri May 25 14:15:18 UTC 2018 
+# OS Release:             4.15.0-38-generic 
+# OS Version:             #41-Ubuntu SMP Wed Oct 10 10:59:38 UTC 2018 
 # Machine:                x86_64 
-# Nodename:               pm-Precision-5520 
+# Nodename:               tulip-ubuntu-1804 
 # Display name:           :0
 # Dimension:              1920x1080
 
@@ -27,7 +27,7 @@
 ##############################################
 #      Xnee application arguments            #
 ##############################################
-#  /home/pm/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o layout_squarified_tree_map.xns 
+#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o layout_squarified_tree_map.xns 
 
 
 ##############################################
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0x1847020
+#   rState              0x561e3cf5b270
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -158,557 +158,453 @@ extension-reply-minor-range   0-0
 delivered-event-range         0-0 
 device-event-range            66-71 
 error-range                   0-0 
-7,6,1329,777,0,0,0,1547210,11,'Logitech USB Receiver'
-7,6,1328,775,0,0,0,1547218,11,'Logitech USB Receiver'
-7,6,1328,774,0,0,0,1547226,11,'Logitech USB Receiver'
-7,6,1316,768,0,0,0,1547234,11,'Logitech USB Receiver'
-7,6,1291,756,0,0,0,1547242,11,'Logitech USB Receiver'
-7,6,1257,740,0,0,0,1547250,11,'Logitech USB Receiver'
-7,6,1215,720,0,0,0,1547258,11,'Logitech USB Receiver'
-7,6,1173,699,0,0,0,1547266,11,'Logitech USB Receiver'
-7,6,1131,680,0,0,0,1547274,11,'Logitech USB Receiver'
-7,6,1087,657,0,0,0,1547282,11,'Logitech USB Receiver'
-7,6,1043,634,0,0,0,1547290,11,'Logitech USB Receiver'
-7,6,994,611,0,0,0,1547298,11,'Logitech USB Receiver'
-7,6,951,587,0,0,0,1547306,11,'Logitech USB Receiver'
-7,6,905,563,0,0,0,1547314,11,'Logitech USB Receiver'
-7,6,882,550,0,0,0,1547322,11,'Logitech USB Receiver'
-7,6,840,530,0,0,0,1547330,11,'Logitech USB Receiver'
-7,6,799,510,0,0,0,1547338,11,'Logitech USB Receiver'
-7,6,764,490,0,0,0,1547346,11,'Logitech USB Receiver'
-7,6,729,473,0,0,0,1547354,11,'Logitech USB Receiver'
-7,6,701,457,0,0,0,1547362,11,'Logitech USB Receiver'
-7,6,666,440,0,0,0,1547370,11,'Logitech USB Receiver'
-7,6,640,425,0,0,0,1547378,11,'Logitech USB Receiver'
-7,6,614,409,0,0,0,1547386,11,'Logitech USB Receiver'
-7,6,597,401,0,0,0,1547394,11,'Logitech USB Receiver'
-7,6,585,394,0,0,0,1547402,11,'Logitech USB Receiver'
-7,6,579,392,0,0,0,1547410,11,'Logitech USB Receiver'
-7,6,575,392,0,0,0,1547418,11,'Logitech USB Receiver'
-7,6,574,392,0,0,0,1547426,11,'Logitech USB Receiver'
-7,6,573,391,0,0,0,1547474,11,'Logitech USB Receiver'
-7,6,572,390,0,0,0,1547482,11,'Logitech USB Receiver'
-7,6,571,389,0,0,0,1547490,11,'Logitech USB Receiver'
-7,6,569,389,0,0,0,1547498,11,'Logitech USB Receiver'
-7,6,568,388,0,0,0,1547506,11,'Logitech USB Receiver'
-7,6,566,387,0,0,0,1547514,11,'Logitech USB Receiver'
-7,6,565,387,0,0,0,1547522,11,'Logitech USB Receiver'
-7,6,563,387,0,0,0,1547530,11,'Logitech USB Receiver'
-7,6,561,386,0,0,0,1547538,11,'Logitech USB Receiver'
-7,6,560,385,0,0,0,1547546,11,'Logitech USB Receiver'
-7,6,559,385,0,0,0,1547554,11,'Logitech USB Receiver'
-7,6,558,385,0,0,0,1547562,11,'Logitech USB Receiver'
-7,6,557,385,0,0,0,1547570,11,'Logitech USB Receiver'
-7,6,555,384,0,0,0,1547578,11,'Logitech USB Receiver'
-7,6,552,383,0,0,0,1547586,11,'Logitech USB Receiver'
-7,6,549,381,0,0,0,1547594,11,'Logitech USB Receiver'
-7,6,546,379,0,0,0,1547602,11,'Logitech USB Receiver'
-7,6,543,378,0,0,0,1547610,11,'Logitech USB Receiver'
-7,6,541,377,0,0,0,1547618,11,'Logitech USB Receiver'
-7,6,539,376,0,0,0,1547626,11,'Logitech USB Receiver'
-7,6,538,376,0,0,0,1547634,11,'Logitech USB Receiver'
-7,6,537,376,0,0,0,1547642,11,'Logitech USB Receiver'
-7,6,536,375,0,0,0,1547650,11,'Logitech USB Receiver'
-7,6,534,375,0,0,0,1547658,11,'Logitech USB Receiver'
-7,6,533,375,0,0,0,1547666,11,'Logitech USB Receiver'
-7,6,532,375,0,0,0,1547674,11,'Logitech USB Receiver'
-7,6,531,374,0,0,0,1547682,11,'Logitech USB Receiver'
-7,6,530,373,0,0,0,1547690,11,'Logitech USB Receiver'
-7,6,529,373,0,0,0,1547706,11,'Logitech USB Receiver'
-7,6,528,373,0,0,0,1547714,11,'Logitech USB Receiver'
-7,6,528,372,0,0,0,1547722,11,'Logitech USB Receiver'
-7,6,527,372,0,0,0,1547730,11,'Logitech USB Receiver'
-7,6,526,371,0,0,0,1547738,11,'Logitech USB Receiver'
-7,6,525,371,0,0,0,1547746,11,'Logitech USB Receiver'
-7,6,523,370,0,0,0,1547770,11,'Logitech USB Receiver'
-7,6,522,370,0,0,0,1547778,11,'Logitech USB Receiver'
-7,6,521,372,0,0,0,1547786,11,'Logitech USB Receiver'
-7,6,520,374,0,0,0,1547794,11,'Logitech USB Receiver'
-7,6,518,378,0,0,0,1547802,11,'Logitech USB Receiver'
-7,6,517,381,0,0,0,1547810,11,'Logitech USB Receiver'
-7,6,515,386,0,0,0,1547818,11,'Logitech USB Receiver'
-7,6,513,392,0,0,0,1547826,11,'Logitech USB Receiver'
-7,6,508,402,0,0,0,1547834,11,'Logitech USB Receiver'
-7,6,502,411,0,0,0,1547842,11,'Logitech USB Receiver'
-7,6,494,421,0,0,0,1547850,11,'Logitech USB Receiver'
-7,6,486,429,0,0,0,1548474,11,'Logitech USB Receiver'
-7,6,486,428,0,0,0,1548482,11,'Logitech USB Receiver'
-7,6,486,426,0,0,0,1548490,11,'Logitech USB Receiver'
-7,6,486,422,0,0,0,1548498,11,'Logitech USB Receiver'
-7,6,486,416,0,0,0,1548506,11,'Logitech USB Receiver'
-7,6,486,407,0,0,0,1548514,11,'Logitech USB Receiver'
-7,6,486,398,0,0,0,1548522,11,'Logitech USB Receiver'
-7,6,485,389,0,0,0,1548530,11,'Logitech USB Receiver'
-7,6,480,380,0,0,0,1548538,11,'Logitech USB Receiver'
-7,6,479,370,0,0,0,1548546,11,'Logitech USB Receiver'
-7,6,476,361,0,0,0,1548554,11,'Logitech USB Receiver'
-7,6,474,351,0,0,0,1548562,11,'Logitech USB Receiver'
-7,6,473,341,0,0,0,1548570,11,'Logitech USB Receiver'
-7,6,471,335,0,0,0,1548578,11,'Logitech USB Receiver'
-7,6,469,329,0,0,0,1548586,11,'Logitech USB Receiver'
-7,6,467,323,0,0,0,1548594,11,'Logitech USB Receiver'
-7,6,467,317,0,0,0,1548602,11,'Logitech USB Receiver'
-7,6,464,313,0,0,0,1548610,11,'Logitech USB Receiver'
-7,6,464,312,0,0,0,1548618,11,'Logitech USB Receiver'
-7,6,462,310,0,0,0,1548626,11,'Logitech USB Receiver'
-7,6,462,308,0,0,0,1548634,11,'Logitech USB Receiver'
-7,6,460,307,0,0,0,1548642,11,'Logitech USB Receiver'
-7,6,460,306,0,0,0,1548650,11,'Logitech USB Receiver'
-7,6,460,305,0,0,0,1548658,11,'Logitech USB Receiver'
-7,6,460,304,0,0,0,1548666,11,'Logitech USB Receiver'
-7,6,460,303,0,0,0,1548674,11,'Logitech USB Receiver'
-7,6,458,303,0,0,0,1548682,11,'Logitech USB Receiver'
-7,6,458,302,0,0,0,1548690,11,'Logitech USB Receiver'
-7,6,458,301,0,0,0,1548698,11,'Logitech USB Receiver'
-7,6,456,300,0,0,0,1548706,11,'Logitech USB Receiver'
-7,6,456,298,0,0,0,1548714,11,'Logitech USB Receiver'
-7,6,455,297,0,0,0,1548722,11,'Logitech USB Receiver'
-7,6,454,296,0,0,0,1548730,11,'Logitech USB Receiver'
-7,6,454,295,0,0,0,1548738,11,'Logitech USB Receiver'
-7,6,454,294,0,0,0,1548746,11,'Logitech USB Receiver'
-7,6,453,292,0,0,0,1548754,11,'Logitech USB Receiver'
-7,6,452,292,0,0,0,1548762,11,'Logitech USB Receiver'
-7,6,452,291,0,0,0,1548770,11,'Logitech USB Receiver'
-7,6,451,290,0,0,0,1548778,11,'Logitech USB Receiver'
-7,6,450,288,0,0,0,1548786,11,'Logitech USB Receiver'
-7,6,449,287,0,0,0,1548794,11,'Logitech USB Receiver'
-7,6,447,286,0,0,0,1548802,11,'Logitech USB Receiver'
-7,6,446,284,0,0,0,1548810,11,'Logitech USB Receiver'
-7,6,443,281,0,0,0,1548818,11,'Logitech USB Receiver'
-7,6,437,277,0,0,0,1548826,11,'Logitech USB Receiver'
-7,6,435,274,0,0,0,1548834,11,'Logitech USB Receiver'
-7,6,431,272,0,0,0,1548842,11,'Logitech USB Receiver'
-7,6,428,270,0,0,0,1548850,11,'Logitech USB Receiver'
-7,6,426,268,0,0,0,1548858,11,'Logitech USB Receiver'
-7,6,422,266,0,0,0,1548866,11,'Logitech USB Receiver'
-7,6,418,264,0,0,0,1548874,11,'Logitech USB Receiver'
-7,6,414,260,0,0,0,1548882,11,'Logitech USB Receiver'
-7,6,410,258,0,0,0,1548890,11,'Logitech USB Receiver'
-7,6,406,255,0,0,0,1548898,11,'Logitech USB Receiver'
-7,6,403,253,0,0,0,1548906,11,'Logitech USB Receiver'
-7,6,398,250,0,0,0,1548914,11,'Logitech USB Receiver'
-7,6,391,247,0,0,0,1548922,11,'Logitech USB Receiver'
-7,6,383,243,0,0,0,1548930,11,'Logitech USB Receiver'
-7,6,376,239,0,0,0,1548938,11,'Logitech USB Receiver'
-7,6,370,235,0,0,0,1548946,11,'Logitech USB Receiver'
-7,6,364,231,0,0,0,1548954,11,'Logitech USB Receiver'
-7,6,359,226,0,0,0,1548962,11,'Logitech USB Receiver'
-7,6,354,222,0,0,0,1548970,11,'Logitech USB Receiver'
-7,6,354,221,0,0,0,1548978,11,'Logitech USB Receiver'
-7,6,352,220,0,0,0,1548986,11,'Logitech USB Receiver'
-7,6,351,219,0,0,0,1548994,11,'Logitech USB Receiver'
-7,6,350,218,0,0,0,1549002,11,'Logitech USB Receiver'
-7,6,349,217,0,0,0,1549010,11,'Logitech USB Receiver'
-7,6,347,215,0,0,0,1549018,11,'Logitech USB Receiver'
-7,6,346,214,0,0,0,1549026,11,'Logitech USB Receiver'
-7,6,343,212,0,0,0,1549034,11,'Logitech USB Receiver'
-7,6,343,211,0,0,0,1549042,11,'Logitech USB Receiver'
-7,6,342,210,0,0,0,1549050,11,'Logitech USB Receiver'
-7,6,341,210,0,0,0,1549058,11,'Logitech USB Receiver'
-7,6,341,209,0,0,0,1549066,11,'Logitech USB Receiver'
-7,6,340,209,0,0,0,1549074,11,'Logitech USB Receiver'
-7,6,339,207,0,0,0,1549082,11,'Logitech USB Receiver'
-7,6,339,206,0,0,0,1549090,11,'Logitech USB Receiver'
-7,6,338,205,0,0,0,1549098,11,'Logitech USB Receiver'
-7,6,335,200,0,0,0,1549106,11,'Logitech USB Receiver'
-7,6,334,198,0,0,0,1549114,11,'Logitech USB Receiver'
-7,6,332,196,0,0,0,1549122,11,'Logitech USB Receiver'
-7,6,331,195,0,0,0,1549130,11,'Logitech USB Receiver'
-7,6,329,193,0,0,0,1549138,11,'Logitech USB Receiver'
-7,6,328,192,0,0,0,1549146,11,'Logitech USB Receiver'
-7,6,326,190,0,0,0,1549154,11,'Logitech USB Receiver'
-7,6,325,189,0,0,0,1549162,11,'Logitech USB Receiver'
-7,6,325,188,0,0,0,1549170,11,'Logitech USB Receiver'
-7,6,324,187,0,0,0,1549178,11,'Logitech USB Receiver'
-7,6,323,186,0,0,0,1549186,11,'Logitech USB Receiver'
-7,6,322,185,0,0,0,1549194,11,'Logitech USB Receiver'
-7,6,322,183,0,0,0,1549202,11,'Logitech USB Receiver'
-7,6,320,183,0,0,0,1549210,11,'Logitech USB Receiver'
-7,6,319,181,0,0,0,1549218,11,'Logitech USB Receiver'
-7,6,318,180,0,0,0,1549226,11,'Logitech USB Receiver'
-7,6,318,179,0,0,0,1549234,11,'Logitech USB Receiver'
-7,6,318,178,0,0,0,1549242,11,'Logitech USB Receiver'
-7,6,316,177,0,0,0,1549250,11,'Logitech USB Receiver'
-7,6,316,175,0,0,0,1549258,11,'Logitech USB Receiver'
-7,6,315,174,0,0,0,1549266,11,'Logitech USB Receiver'
-7,6,314,171,0,0,0,1549274,11,'Logitech USB Receiver'
-7,6,314,170,0,0,0,1549282,11,'Logitech USB Receiver'
-7,6,312,168,0,0,0,1549290,11,'Logitech USB Receiver'
-7,6,310,166,0,0,0,1549298,11,'Logitech USB Receiver'
-7,6,310,163,0,0,0,1549306,11,'Logitech USB Receiver'
-7,6,308,162,0,0,0,1549314,11,'Logitech USB Receiver'
-7,6,308,160,0,0,0,1549322,11,'Logitech USB Receiver'
-7,6,307,159,0,0,0,1549330,11,'Logitech USB Receiver'
-7,6,306,158,0,0,0,1549338,11,'Logitech USB Receiver'
-7,6,306,156,0,0,0,1549346,11,'Logitech USB Receiver'
-7,6,304,154,0,0,0,1549354,11,'Logitech USB Receiver'
-7,6,304,153,0,0,0,1549362,11,'Logitech USB Receiver'
-7,6,302,151,0,0,0,1549370,11,'Logitech USB Receiver'
-7,6,302,149,0,0,0,1549378,11,'Logitech USB Receiver'
-7,6,302,148,0,0,0,1549386,11,'Logitech USB Receiver'
-7,6,301,148,0,0,0,1549394,11,'Logitech USB Receiver'
-7,6,301,147,0,0,0,1549402,11,'Logitech USB Receiver'
-7,6,300,147,0,0,0,1549410,11,'Logitech USB Receiver'
-7,6,300,146,0,0,0,1549418,11,'Logitech USB Receiver'
-7,6,300,145,0,0,0,1549434,11,'Logitech USB Receiver'
-7,6,300,144,0,0,0,1549442,11,'Logitech USB Receiver'
-7,6,299,144,0,0,0,1549450,11,'Logitech USB Receiver'
-7,6,298,143,0,0,0,1549458,11,'Logitech USB Receiver'
-7,6,298,141,0,0,0,1549466,11,'Logitech USB Receiver'
-7,6,298,140,0,0,0,1549474,11,'Logitech USB Receiver'
-7,6,297,139,0,0,0,1549482,11,'Logitech USB Receiver'
-7,6,296,139,0,0,0,1549490,11,'Logitech USB Receiver'
-7,6,296,138,0,0,0,1549498,11,'Logitech USB Receiver'
-7,6,296,137,0,0,0,1549506,11,'Logitech USB Receiver'
-7,6,296,136,0,0,0,1549514,11,'Logitech USB Receiver'
-7,6,295,135,0,0,0,1549522,11,'Logitech USB Receiver'
-7,4,0,0,1,0,0,1549962,11,Logitech USB Receiver
-6,4,0,0,1,0,0,1549962,2,Virtual core pointer
-7,5,0,0,1,0,0,1550138,11,Logitech USB Receiver
-6,5,0,0,1,0,0,1550138,2,Virtual core pointer
-7,2,0,0,0,39,0,1550834,15,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,1550834,3,Virtual core keyboard
-7,3,0,0,0,39,0,1550911,15,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,1550911,3,Virtual core keyboard
-7,2,0,0,0,38,0,1551206,15,AT Translated Set 2 keyboard
-6,2,0,0,0,38,0,1551206,3,Virtual core keyboard
-7,3,0,0,0,38,0,1551295,15,AT Translated Set 2 keyboard
-6,3,0,0,0,38,0,1551296,3,Virtual core keyboard
-7,2,0,0,0,30,0,1551485,15,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,1551485,3,Virtual core keyboard
-7,3,0,0,0,30,0,1551533,15,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,1551533,3,Virtual core keyboard
-7,2,0,0,0,24,0,1552846,15,AT Translated Set 2 keyboard
-6,2,0,0,0,24,0,1552846,3,Virtual core keyboard
-7,3,0,0,0,24,0,1552915,15,AT Translated Set 2 keyboard
-6,3,0,0,0,24,0,1552915,3,Virtual core keyboard
-7,6,294,135,0,0,0,1553730,11,'Logitech USB Receiver'
-7,6,294,136,0,0,0,1553738,11,'Logitech USB Receiver'
-7,6,294,137,0,0,0,1553746,11,'Logitech USB Receiver'
-7,6,294,138,0,0,0,1553754,11,'Logitech USB Receiver'
-7,6,294,139,0,0,0,1553762,11,'Logitech USB Receiver'
-7,6,294,140,0,0,0,1553778,11,'Logitech USB Receiver'
-7,6,294,141,0,0,0,1553786,11,'Logitech USB Receiver'
-7,6,294,142,0,0,0,1553794,11,'Logitech USB Receiver'
-7,6,294,143,0,0,0,1553802,11,'Logitech USB Receiver'
-7,6,293,144,0,0,0,1553810,11,'Logitech USB Receiver'
-7,6,293,145,0,0,0,1553818,11,'Logitech USB Receiver'
-7,6,293,146,0,0,0,1553826,11,'Logitech USB Receiver'
-7,6,293,147,0,0,0,1553834,11,'Logitech USB Receiver'
-7,6,293,148,0,0,0,1553842,11,'Logitech USB Receiver'
-7,6,293,149,0,0,0,1553850,11,'Logitech USB Receiver'
-7,6,293,150,0,0,0,1553858,11,'Logitech USB Receiver'
-7,6,293,151,0,0,0,1553866,11,'Logitech USB Receiver'
-7,6,293,152,0,0,0,1553874,11,'Logitech USB Receiver'
-7,6,293,153,0,0,0,1553882,11,'Logitech USB Receiver'
-7,6,293,154,0,0,0,1553890,11,'Logitech USB Receiver'
-7,6,293,155,0,0,0,1553906,11,'Logitech USB Receiver'
-7,6,293,156,0,0,0,1553922,11,'Logitech USB Receiver'
-7,6,293,157,0,0,0,1553946,11,'Logitech USB Receiver'
-7,6,293,158,0,0,0,1553962,11,'Logitech USB Receiver'
-7,6,293,159,0,0,0,1553986,11,'Logitech USB Receiver'
-7,6,293,160,0,0,0,1554002,11,'Logitech USB Receiver'
-7,6,293,161,0,0,0,1554018,11,'Logitech USB Receiver'
-7,6,293,162,0,0,0,1554026,11,'Logitech USB Receiver'
-7,6,293,163,0,0,0,1554034,11,'Logitech USB Receiver'
-7,6,293,164,0,0,0,1554042,11,'Logitech USB Receiver'
-7,6,293,165,0,0,0,1554058,11,'Logitech USB Receiver'
-7,6,293,166,0,0,0,1554066,11,'Logitech USB Receiver'
-7,6,293,167,0,0,0,1554074,11,'Logitech USB Receiver'
-7,6,293,168,0,0,0,1554082,11,'Logitech USB Receiver'
-7,6,293,169,0,0,0,1554090,11,'Logitech USB Receiver'
-7,6,293,170,0,0,0,1554098,11,'Logitech USB Receiver'
-7,6,293,171,0,0,0,1554106,11,'Logitech USB Receiver'
-7,6,293,172,0,0,0,1554114,11,'Logitech USB Receiver'
-7,6,293,173,0,0,0,1554122,11,'Logitech USB Receiver'
-7,6,293,174,0,0,0,1554130,11,'Logitech USB Receiver'
-7,6,293,175,0,0,0,1554146,11,'Logitech USB Receiver'
-7,6,293,176,0,0,0,1554170,11,'Logitech USB Receiver'
-7,6,293,177,0,0,0,1554202,11,'Logitech USB Receiver'
-7,6,293,178,0,0,0,1554210,11,'Logitech USB Receiver'
-7,6,293,179,0,0,0,1554234,11,'Logitech USB Receiver'
-7,6,293,180,0,0,0,1554242,11,'Logitech USB Receiver'
-7,6,293,181,0,0,0,1554266,11,'Logitech USB Receiver'
-7,6,293,182,0,0,0,1554274,11,'Logitech USB Receiver'
-7,6,293,183,0,0,0,1554306,11,'Logitech USB Receiver'
-7,6,293,184,0,0,0,1554314,11,'Logitech USB Receiver'
-7,6,293,185,0,0,0,1554330,11,'Logitech USB Receiver'
-7,6,293,186,0,0,0,1554338,11,'Logitech USB Receiver'
-7,6,293,187,0,0,0,1554354,11,'Logitech USB Receiver'
-7,6,293,188,0,0,0,1554370,11,'Logitech USB Receiver'
-7,6,293,189,0,0,0,1554378,11,'Logitech USB Receiver'
-7,6,293,190,0,0,0,1554386,11,'Logitech USB Receiver'
-7,6,293,191,0,0,0,1554394,11,'Logitech USB Receiver'
-7,6,293,192,0,0,0,1554402,11,'Logitech USB Receiver'
-7,6,293,193,0,0,0,1554410,11,'Logitech USB Receiver'
-7,6,294,194,0,0,0,1554418,11,'Logitech USB Receiver'
-7,6,294,195,0,0,0,1554426,11,'Logitech USB Receiver'
-7,6,294,196,0,0,0,1554434,11,'Logitech USB Receiver'
-7,6,294,197,0,0,0,1554442,11,'Logitech USB Receiver'
-7,4,0,0,1,0,0,1555050,11,Logitech USB Receiver
-6,4,0,0,1,0,0,1555050,2,Virtual core pointer
-7,5,0,0,1,0,0,1555186,11,Logitech USB Receiver
-6,5,0,0,1,0,0,1555186,2,Virtual core pointer
-0,21,0,0,0,0,0,1555198
-NEW-WINDOW:650,328:58720494,58720494,18892509,0,0,0:0x0+500+65:0,0:Squarified Tree Map Helper
-0,21,0,0,0,0,0,1555198
-0,21,0,0,0,0,0,1555198
-0,21,0,0,0,0,0,1555206
-NEW-WINDOW:5,49:58720494,58720494,618,0,0,0:91x110+0+0:0,0:
-0,21,0,0,0,0,0,1555206
-0,21,0,0,0,0,0,1555206
-0,21,0,0,0,0,0,1555206
-0,21,0,0,0,0,0,1555206
-7,6,294,198,0,0,0,1556490,11,'Logitech USB Receiver'
-7,6,294,199,0,0,0,1556498,11,'Logitech USB Receiver'
-7,6,294,200,0,0,0,1556506,11,'Logitech USB Receiver'
-7,6,294,205,0,0,0,1556514,11,'Logitech USB Receiver'
-7,6,294,208,0,0,0,1556522,11,'Logitech USB Receiver'
-7,6,294,211,0,0,0,1556530,11,'Logitech USB Receiver'
-7,6,294,215,0,0,0,1556538,11,'Logitech USB Receiver'
-7,6,294,219,0,0,0,1556546,11,'Logitech USB Receiver'
-7,6,294,222,0,0,0,1556554,11,'Logitech USB Receiver'
-7,6,294,224,0,0,0,1556562,11,'Logitech USB Receiver'
-7,6,293,228,0,0,0,1556570,11,'Logitech USB Receiver'
-7,6,293,232,0,0,0,1556578,11,'Logitech USB Receiver'
-7,6,293,235,0,0,0,1556586,11,'Logitech USB Receiver'
-7,6,291,240,0,0,0,1556594,11,'Logitech USB Receiver'
-7,6,291,243,0,0,0,1556602,11,'Logitech USB Receiver'
-7,6,291,247,0,0,0,1556610,11,'Logitech USB Receiver'
-7,6,291,251,0,0,0,1556618,11,'Logitech USB Receiver'
-7,6,291,255,0,0,0,1556626,11,'Logitech USB Receiver'
-7,6,291,259,0,0,0,1556634,11,'Logitech USB Receiver'
-7,6,291,263,0,0,0,1556642,11,'Logitech USB Receiver'
-7,6,290,265,0,0,0,1556650,11,'Logitech USB Receiver'
-7,6,290,269,0,0,0,1556658,11,'Logitech USB Receiver'
-7,6,290,272,0,0,0,1556666,11,'Logitech USB Receiver'
-7,6,289,276,0,0,0,1556674,11,'Logitech USB Receiver'
-7,6,288,280,0,0,0,1556682,11,'Logitech USB Receiver'
-7,6,286,284,0,0,0,1556690,11,'Logitech USB Receiver'
-7,6,285,288,0,0,0,1556698,11,'Logitech USB Receiver'
-7,6,285,292,0,0,0,1556706,11,'Logitech USB Receiver'
-7,6,283,295,0,0,0,1556714,11,'Logitech USB Receiver'
-7,6,282,299,0,0,0,1556722,11,'Logitech USB Receiver'
-7,6,281,302,0,0,0,1556730,11,'Logitech USB Receiver'
-7,6,280,305,0,0,0,1556738,11,'Logitech USB Receiver'
-7,6,279,310,0,0,0,1556746,11,'Logitech USB Receiver'
-7,6,277,312,0,0,0,1556754,11,'Logitech USB Receiver'
-7,6,277,316,0,0,0,1556762,11,'Logitech USB Receiver'
-7,6,276,319,0,0,0,1556770,11,'Logitech USB Receiver'
-7,6,274,323,0,0,0,1556778,11,'Logitech USB Receiver'
-7,6,274,325,0,0,0,1556786,11,'Logitech USB Receiver'
-7,6,273,329,0,0,0,1556794,11,'Logitech USB Receiver'
-7,6,272,333,0,0,0,1556802,11,'Logitech USB Receiver'
-7,6,272,335,0,0,0,1556810,11,'Logitech USB Receiver'
-7,6,271,339,0,0,0,1556818,11,'Logitech USB Receiver'
-7,6,271,343,0,0,0,1556826,11,'Logitech USB Receiver'
-7,6,269,347,0,0,0,1556834,11,'Logitech USB Receiver'
-7,6,268,350,0,0,0,1556842,11,'Logitech USB Receiver'
-7,6,268,352,0,0,0,1556850,11,'Logitech USB Receiver'
-7,6,268,356,0,0,0,1556858,11,'Logitech USB Receiver'
-7,6,268,359,0,0,0,1556866,11,'Logitech USB Receiver'
-7,6,267,362,0,0,0,1556874,11,'Logitech USB Receiver'
-7,6,266,366,0,0,0,1556882,11,'Logitech USB Receiver'
-7,6,265,369,0,0,0,1556890,11,'Logitech USB Receiver'
-7,6,264,372,0,0,0,1556898,11,'Logitech USB Receiver'
-7,6,263,377,0,0,0,1556906,11,'Logitech USB Receiver'
-7,6,263,381,0,0,0,1556914,11,'Logitech USB Receiver'
-7,6,263,385,0,0,0,1556922,11,'Logitech USB Receiver'
-7,6,262,389,0,0,0,1556930,11,'Logitech USB Receiver'
-7,6,262,394,0,0,0,1556938,11,'Logitech USB Receiver'
-7,6,262,399,0,0,0,1556946,11,'Logitech USB Receiver'
-7,6,262,404,0,0,0,1556954,11,'Logitech USB Receiver'
-7,6,262,408,0,0,0,1556962,11,'Logitech USB Receiver'
-7,6,262,413,0,0,0,1556970,11,'Logitech USB Receiver'
-7,6,262,417,0,0,0,1556978,11,'Logitech USB Receiver'
-7,6,262,420,0,0,0,1556986,11,'Logitech USB Receiver'
-7,6,262,428,0,0,0,1556994,11,'Logitech USB Receiver'
-7,6,262,435,0,0,0,1557002,11,'Logitech USB Receiver'
-7,6,262,445,0,0,0,1557010,11,'Logitech USB Receiver'
-7,6,261,455,0,0,0,1557018,11,'Logitech USB Receiver'
-7,6,261,461,0,0,0,1557026,11,'Logitech USB Receiver'
-7,6,261,468,0,0,0,1557034,11,'Logitech USB Receiver'
-7,6,261,474,0,0,0,1557042,11,'Logitech USB Receiver'
-7,6,261,480,0,0,0,1557050,11,'Logitech USB Receiver'
-7,6,261,487,0,0,0,1557058,11,'Logitech USB Receiver'
-7,6,261,489,0,0,0,1557066,11,'Logitech USB Receiver'
-7,6,261,493,0,0,0,1557074,11,'Logitech USB Receiver'
-7,6,261,495,0,0,0,1557082,11,'Logitech USB Receiver'
-7,6,261,498,0,0,0,1557090,11,'Logitech USB Receiver'
-7,6,261,501,0,0,0,1557098,11,'Logitech USB Receiver'
-7,6,261,502,0,0,0,1557106,11,'Logitech USB Receiver'
-7,6,261,505,0,0,0,1557114,11,'Logitech USB Receiver'
-7,6,261,508,0,0,0,1557122,11,'Logitech USB Receiver'
-7,6,261,511,0,0,0,1557130,11,'Logitech USB Receiver'
-7,6,261,514,0,0,0,1557138,11,'Logitech USB Receiver'
-7,6,261,518,0,0,0,1557146,11,'Logitech USB Receiver'
-7,6,261,521,0,0,0,1557154,11,'Logitech USB Receiver'
-7,6,261,525,0,0,0,1557162,11,'Logitech USB Receiver'
-7,6,261,529,0,0,0,1557170,11,'Logitech USB Receiver'
-7,6,262,532,0,0,0,1557178,11,'Logitech USB Receiver'
-7,6,263,533,0,0,0,1557186,11,'Logitech USB Receiver'
-7,6,263,536,0,0,0,1557194,11,'Logitech USB Receiver'
-7,6,263,539,0,0,0,1557202,11,'Logitech USB Receiver'
-7,6,263,543,0,0,0,1557210,11,'Logitech USB Receiver'
-7,6,263,546,0,0,0,1557218,11,'Logitech USB Receiver'
-7,6,265,553,0,0,0,1557226,11,'Logitech USB Receiver'
-7,6,266,555,0,0,0,1557234,11,'Logitech USB Receiver'
-7,6,266,559,0,0,0,1557242,11,'Logitech USB Receiver'
-7,6,267,562,0,0,0,1557250,11,'Logitech USB Receiver'
-7,6,268,565,0,0,0,1557258,11,'Logitech USB Receiver'
-7,6,268,568,0,0,0,1557266,11,'Logitech USB Receiver'
-7,6,269,572,0,0,0,1557274,11,'Logitech USB Receiver'
-7,6,269,574,0,0,0,1557282,11,'Logitech USB Receiver'
-7,6,270,576,0,0,0,1557290,11,'Logitech USB Receiver'
-7,6,271,578,0,0,0,1557298,11,'Logitech USB Receiver'
-7,6,271,580,0,0,0,1557306,11,'Logitech USB Receiver'
-7,6,271,582,0,0,0,1557314,11,'Logitech USB Receiver'
-7,6,271,583,0,0,0,1557322,11,'Logitech USB Receiver'
-7,6,273,586,0,0,0,1557330,11,'Logitech USB Receiver'
-7,6,274,588,0,0,0,1557338,11,'Logitech USB Receiver'
-7,6,274,592,0,0,0,1557346,11,'Logitech USB Receiver'
-7,6,274,593,0,0,0,1557354,11,'Logitech USB Receiver'
-7,6,276,596,0,0,0,1557362,11,'Logitech USB Receiver'
-7,6,276,598,0,0,0,1557370,11,'Logitech USB Receiver'
-7,6,277,600,0,0,0,1557378,11,'Logitech USB Receiver'
-7,6,278,603,0,0,0,1557386,11,'Logitech USB Receiver'
-7,6,278,605,0,0,0,1557394,11,'Logitech USB Receiver'
-7,6,279,608,0,0,0,1557402,11,'Logitech USB Receiver'
-7,6,280,610,0,0,0,1557410,11,'Logitech USB Receiver'
-7,6,282,613,0,0,0,1557418,11,'Logitech USB Receiver'
-7,6,282,616,0,0,0,1557426,11,'Logitech USB Receiver'
-7,6,283,619,0,0,0,1557434,11,'Logitech USB Receiver'
-7,6,284,621,0,0,0,1557442,11,'Logitech USB Receiver'
-7,6,285,623,0,0,0,1557450,11,'Logitech USB Receiver'
-7,6,286,625,0,0,0,1557458,11,'Logitech USB Receiver'
-7,6,287,628,0,0,0,1557466,11,'Logitech USB Receiver'
-7,6,287,630,0,0,0,1557474,11,'Logitech USB Receiver'
-7,6,288,632,0,0,0,1557482,11,'Logitech USB Receiver'
-7,6,288,634,0,0,0,1557490,11,'Logitech USB Receiver'
-7,6,288,636,0,0,0,1557498,11,'Logitech USB Receiver'
-7,6,290,638,0,0,0,1557506,11,'Logitech USB Receiver'
-7,6,291,640,0,0,0,1557514,11,'Logitech USB Receiver'
-7,6,292,643,0,0,0,1557522,11,'Logitech USB Receiver'
-7,6,293,645,0,0,0,1557530,11,'Logitech USB Receiver'
-7,6,293,648,0,0,0,1557538,11,'Logitech USB Receiver'
-7,6,295,650,0,0,0,1557546,11,'Logitech USB Receiver'
-7,6,295,652,0,0,0,1557554,11,'Logitech USB Receiver'
-7,6,297,654,0,0,0,1557562,11,'Logitech USB Receiver'
-7,6,297,655,0,0,0,1557570,11,'Logitech USB Receiver'
-7,6,297,658,0,0,0,1557578,11,'Logitech USB Receiver'
-7,6,297,660,0,0,0,1557586,11,'Logitech USB Receiver'
-7,6,299,662,0,0,0,1557594,11,'Logitech USB Receiver'
-7,6,299,664,0,0,0,1557602,11,'Logitech USB Receiver'
-7,6,300,666,0,0,0,1557610,11,'Logitech USB Receiver'
-7,6,301,668,0,0,0,1557618,11,'Logitech USB Receiver'
-7,6,301,670,0,0,0,1557626,11,'Logitech USB Receiver'
-7,6,302,672,0,0,0,1557634,11,'Logitech USB Receiver'
-7,6,303,675,0,0,0,1557642,11,'Logitech USB Receiver'
-7,6,304,677,0,0,0,1557650,11,'Logitech USB Receiver'
-7,6,305,679,0,0,0,1557658,11,'Logitech USB Receiver'
-7,6,305,681,0,0,0,1557666,11,'Logitech USB Receiver'
-7,6,307,683,0,0,0,1557674,11,'Logitech USB Receiver'
-7,6,307,686,0,0,0,1557682,11,'Logitech USB Receiver'
-7,6,307,687,0,0,0,1557690,11,'Logitech USB Receiver'
-7,6,308,690,0,0,0,1557698,11,'Logitech USB Receiver'
-7,6,309,692,0,0,0,1557706,11,'Logitech USB Receiver'
-7,6,310,696,0,0,0,1557714,11,'Logitech USB Receiver'
-7,6,311,698,0,0,0,1557722,11,'Logitech USB Receiver'
-7,6,311,699,0,0,0,1557730,11,'Logitech USB Receiver'
-7,6,311,700,0,0,0,1557738,11,'Logitech USB Receiver'
-7,6,312,702,0,0,0,1557746,11,'Logitech USB Receiver'
-7,6,312,703,0,0,0,1557754,11,'Logitech USB Receiver'
-7,6,312,704,0,0,0,1557762,11,'Logitech USB Receiver'
-7,6,313,704,0,0,0,1557770,11,'Logitech USB Receiver'
-7,6,313,705,0,0,0,1557778,11,'Logitech USB Receiver'
-7,6,314,706,0,0,0,1557786,11,'Logitech USB Receiver'
-7,4,0,0,3,0,0,1558186,11,Logitech USB Receiver
-6,4,0,0,3,0,0,1558186,2,Virtual core pointer
-7,5,0,0,3,0,0,1558354,11,Logitech USB Receiver
-6,5,0,0,3,0,0,1558354,2,Virtual core pointer
-7,4,0,0,3,0,0,1558362,11,Logitech USB Receiver
-6,4,0,0,3,0,0,1558362,2,Virtual core pointer
-7,5,0,0,3,0,0,1558490,11,Logitech USB Receiver
-6,5,0,0,3,0,0,1558490,2,Virtual core pointer
-7,2,0,0,0,116,0,1559807,15,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,1559807,3,Virtual core keyboard
-7,3,0,0,0,116,0,1559922,15,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,1559922,3,Virtual core keyboard
-7,2,0,0,0,116,0,1560118,15,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,1560118,3,Virtual core keyboard
-7,3,0,0,0,116,0,1560231,15,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,1560231,3,Virtual core keyboard
-7,2,0,0,0,36,0,1560672,15,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,1560672,3,Virtual core keyboard
-0,21,0,0,0,0,0,1560705
-NEW-WINDOW:461,197:58720511,58720511,18892578,0,0,0:0x0+879+458:0,0:Exporting graph "unnamed_1"
-0,21,0,0,0,0,0,1560705
-0,21,0,0,0,0,0,1560705
-7,3,0,0,0,36,0,1560809,15,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,1560809,3,Virtual core keyboard
-7,2,0,0,0,28,0,1561865,15,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,1561865,3,Virtual core keyboard
-7,3,0,0,0,28,0,1561950,15,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,1561950,3,Virtual core keyboard
-7,2,0,0,0,26,0,1562101,15,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,1562101,3,Virtual core keyboard
-7,3,0,0,0,26,0,1562175,15,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,1562175,3,Virtual core keyboard
-7,2,0,0,0,39,0,1562323,15,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,1562323,3,Virtual core keyboard
-7,3,0,0,0,39,0,1562392,15,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,1562392,3,Virtual core keyboard
-7,2,0,0,0,28,0,1562556,15,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,1562556,3,Virtual core keyboard
-7,3,0,0,0,28,0,1562633,15,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,1562633,3,Virtual core keyboard
-7,2,0,0,0,17,0,1562813,15,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,1562813,3,Virtual core keyboard
-7,3,0,0,0,17,0,1562901,15,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,1562901,3,Virtual core keyboard
-7,2,0,0,0,42,0,1563467,15,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,1563467,3,Virtual core keyboard
-7,3,0,0,0,42,0,1563555,15,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,1563555,3,Virtual core keyboard
-7,2,0,0,0,30,0,1563583,15,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,1563583,3,Virtual core keyboard
-7,2,0,0,0,31,0,1563677,15,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,1563677,3,Virtual core keyboard
-7,3,0,0,0,30,0,1563715,15,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,1563715,3,Virtual core keyboard
-7,3,0,0,0,31,0,1563796,15,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,1563796,3,Virtual core keyboard
-7,2,0,0,0,62,0,1564605,15,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,1564605,3,Virtual core keyboard
-7,2,0,0,0,59,0,1564883,15,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,1564883,3,Virtual core keyboard
-7,3,0,0,0,59,0,1564948,15,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,1564948,3,Virtual core keyboard
-7,3,0,0,0,62,0,1565027,15,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,1565027,3,Virtual core keyboard
-7,2,0,0,0,28,0,1565200,15,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,1565201,3,Virtual core keyboard
-7,3,0,0,0,28,0,1565298,15,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,1565298,3,Virtual core keyboard
-7,2,0,0,0,46,0,1565356,15,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,1565356,3,Virtual core keyboard
-7,3,0,0,0,46,0,1565503,15,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,1565503,3,Virtual core keyboard
-7,2,0,0,0,33,0,1565577,15,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,1565577,3,Virtual core keyboard
-7,3,0,0,0,33,0,1565669,15,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,1565669,3,Virtual core keyboard
-7,2,0,0,0,36,0,1566309,15,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,1566309,3,Virtual core keyboard
-0,21,0,0,0,0,0,1566326
-NEW-WINDOW:650,338:58720520,58720520,18892663,0,0,0:0x0+500+36:0,0:TLP Export
-0,21,0,0,0,0,0,1566326
-0,21,0,0,0,0,0,1566326
-7,3,0,0,0,36,0,1566379,15,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,1566379,3,Virtual core keyboard
-0,21,0,0,0,0,0,1566408
-NEW-WINDOW:460,169:58720511,58720511,618,0,0,0:460x169+879+458:0,0:Exporting graph "unnamed_1"
-0,21,0,0,0,0,0,1566408
-0,21,0,0,0,0,0,1566408
-0,21,0,0,0,0,0,1566408
-0,21,0,0,0,0,0,1566408
+7,6,314,706,0,0,0,84986468,9,'VirtualBox mouse integration'
+7,6,514,774,0,0,0,84986472,9,'VirtualBox mouse integration'
+7,6,497,774,0,0,0,84986480,9,'VirtualBox mouse integration'
+7,6,461,770,0,0,0,84986488,9,'VirtualBox mouse integration'
+7,6,419,761,0,0,0,84986496,9,'VirtualBox mouse integration'
+7,6,390,758,0,0,0,84986504,9,'VirtualBox mouse integration'
+7,6,377,755,0,0,0,84986512,9,'VirtualBox mouse integration'
+7,6,366,741,0,0,0,84986520,9,'VirtualBox mouse integration'
+7,6,364,735,0,0,0,84986528,9,'VirtualBox mouse integration'
+7,6,356,726,0,0,0,84986536,9,'VirtualBox mouse integration'
+7,6,354,717,0,0,0,84986544,9,'VirtualBox mouse integration'
+7,6,351,706,0,0,0,84986552,9,'VirtualBox mouse integration'
+7,6,346,697,0,0,0,84986560,9,'VirtualBox mouse integration'
+7,6,344,692,0,0,0,84986579,9,'VirtualBox mouse integration'
+7,6,340,680,0,0,0,84986584,9,'VirtualBox mouse integration'
+7,6,338,676,0,0,0,84986591,9,'VirtualBox mouse integration'
+7,6,338,673,0,0,0,84986599,9,'VirtualBox mouse integration'
+7,6,337,668,0,0,0,84986607,9,'VirtualBox mouse integration'
+7,6,337,665,0,0,0,84986615,9,'VirtualBox mouse integration'
+7,6,335,659,0,0,0,84986624,9,'VirtualBox mouse integration'
+7,6,335,654,0,0,0,84986632,9,'VirtualBox mouse integration'
+7,6,335,650,0,0,0,84986639,9,'VirtualBox mouse integration'
+7,6,333,644,0,0,0,84986648,9,'VirtualBox mouse integration'
+7,6,333,637,0,0,0,84986655,9,'VirtualBox mouse integration'
+7,6,333,630,0,0,0,84986663,9,'VirtualBox mouse integration'
+7,6,333,625,0,0,0,84986672,9,'VirtualBox mouse integration'
+7,6,333,621,0,0,0,84986680,9,'VirtualBox mouse integration'
+7,6,333,617,0,0,0,84986688,9,'VirtualBox mouse integration'
+7,6,333,610,0,0,0,84986696,9,'VirtualBox mouse integration'
+7,6,333,603,0,0,0,84986704,9,'VirtualBox mouse integration'
+7,6,331,594,0,0,0,84986712,9,'VirtualBox mouse integration'
+7,6,331,585,0,0,0,84986720,9,'VirtualBox mouse integration'
+7,6,331,576,0,0,0,84986728,9,'VirtualBox mouse integration'
+7,6,329,566,0,0,0,84986736,9,'VirtualBox mouse integration'
+7,6,329,559,0,0,0,84986744,9,'VirtualBox mouse integration'
+7,6,327,551,0,0,0,84986751,9,'VirtualBox mouse integration'
+7,6,327,543,0,0,0,84986760,9,'VirtualBox mouse integration'
+7,6,327,535,0,0,0,84986768,9,'VirtualBox mouse integration'
+7,6,327,531,0,0,0,84986776,9,'VirtualBox mouse integration'
+7,6,327,522,0,0,0,84986784,9,'VirtualBox mouse integration'
+7,6,329,511,0,0,0,84986792,9,'VirtualBox mouse integration'
+7,6,329,501,0,0,0,84986800,9,'VirtualBox mouse integration'
+7,6,329,492,0,0,0,84986808,9,'VirtualBox mouse integration'
+7,6,329,482,0,0,0,84986815,9,'VirtualBox mouse integration'
+7,6,329,468,0,0,0,84986824,9,'VirtualBox mouse integration'
+7,6,329,456,0,0,0,84986832,9,'VirtualBox mouse integration'
+7,6,329,448,0,0,0,84986840,9,'VirtualBox mouse integration'
+7,6,329,440,0,0,0,84986848,9,'VirtualBox mouse integration'
+7,6,329,431,0,0,0,84986856,9,'VirtualBox mouse integration'
+7,6,329,423,0,0,0,84986863,9,'VirtualBox mouse integration'
+7,6,329,417,0,0,0,84986872,9,'VirtualBox mouse integration'
+7,6,329,410,0,0,0,84986880,9,'VirtualBox mouse integration'
+7,6,329,402,0,0,0,84986888,9,'VirtualBox mouse integration'
+7,6,329,394,0,0,0,84986896,9,'VirtualBox mouse integration'
+7,6,329,384,0,0,0,84986904,9,'VirtualBox mouse integration'
+7,6,329,372,0,0,0,84986912,9,'VirtualBox mouse integration'
+7,6,329,362,0,0,0,84986920,9,'VirtualBox mouse integration'
+7,6,329,352,0,0,0,84986928,9,'VirtualBox mouse integration'
+7,6,329,342,0,0,0,84986936,9,'VirtualBox mouse integration'
+7,6,327,332,0,0,0,84986944,9,'VirtualBox mouse integration'
+7,6,327,322,0,0,0,84986952,9,'VirtualBox mouse integration'
+7,6,325,312,0,0,0,84986960,9,'VirtualBox mouse integration'
+7,6,324,302,0,0,0,84986968,9,'VirtualBox mouse integration'
+7,6,321,290,0,0,0,84986976,9,'VirtualBox mouse integration'
+7,6,321,278,0,0,0,84986984,9,'VirtualBox mouse integration'
+7,6,321,266,0,0,0,84986992,9,'VirtualBox mouse integration'
+7,6,321,255,0,0,0,84987000,9,'VirtualBox mouse integration'
+7,6,321,242,0,0,0,84987008,9,'VirtualBox mouse integration'
+7,6,321,232,0,0,0,84987016,9,'VirtualBox mouse integration'
+7,6,321,221,0,0,0,84987024,9,'VirtualBox mouse integration'
+7,6,321,210,0,0,0,84987032,9,'VirtualBox mouse integration'
+7,6,321,199,0,0,0,84987040,9,'VirtualBox mouse integration'
+7,6,321,193,0,0,0,84987048,9,'VirtualBox mouse integration'
+7,6,321,186,0,0,0,84987056,9,'VirtualBox mouse integration'
+7,6,321,180,0,0,0,84987064,9,'VirtualBox mouse integration'
+7,6,321,173,0,0,0,84987072,9,'VirtualBox mouse integration'
+7,6,319,169,0,0,0,84987080,9,'VirtualBox mouse integration'
+7,6,318,165,0,0,0,84987088,9,'VirtualBox mouse integration'
+7,6,318,162,0,0,0,84987096,9,'VirtualBox mouse integration'
+7,6,317,161,0,0,0,84987104,9,'VirtualBox mouse integration'
+7,6,317,159,0,0,0,84987112,9,'VirtualBox mouse integration'
+7,6,317,158,0,0,0,84987120,9,'VirtualBox mouse integration'
+7,6,316,156,0,0,0,84987128,9,'VirtualBox mouse integration'
+7,6,315,154,0,0,0,84987136,9,'VirtualBox mouse integration'
+7,6,314,153,0,0,0,84987144,9,'VirtualBox mouse integration'
+7,6,314,152,0,0,0,84987160,9,'VirtualBox mouse integration'
+7,6,313,151,0,0,0,84987200,9,'VirtualBox mouse integration'
+7,6,312,150,0,0,0,84987208,9,'VirtualBox mouse integration'
+7,6,312,149,0,0,0,84987328,9,'VirtualBox mouse integration'
+7,6,310,145,0,0,0,84987336,9,'VirtualBox mouse integration'
+7,6,310,144,0,0,0,84987344,9,'VirtualBox mouse integration'
+7,6,309,142,0,0,0,84987352,9,'VirtualBox mouse integration'
+7,6,309,141,0,0,0,84987360,9,'VirtualBox mouse integration'
+7,6,308,139,0,0,0,84987368,9,'VirtualBox mouse integration'
+7,6,308,138,0,0,0,84987384,9,'VirtualBox mouse integration'
+7,6,308,137,0,0,0,84987408,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,84987668,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,84987668,2,Virtual core pointer
+7,5,0,0,1,0,0,84987829,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,84987829,2,Virtual core pointer
+7,2,0,0,0,39,0,84988728,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,84988728,3,Virtual core keyboard
+7,3,0,0,0,39,0,84988845,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,84988845,3,Virtual core keyboard
+7,2,0,0,0,38,0,84989704,11,AT Translated Set 2 keyboard
+6,2,0,0,0,38,0,84989704,3,Virtual core keyboard
+7,3,0,0,0,38,0,84989801,11,AT Translated Set 2 keyboard
+6,3,0,0,0,38,0,84989801,3,Virtual core keyboard
+7,2,0,0,0,30,0,84989816,11,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,84989817,3,Virtual core keyboard
+7,3,0,0,0,30,0,84989899,11,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,84989899,3,Virtual core keyboard
+7,2,0,0,0,24,0,84991337,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,84991337,3,Virtual core keyboard
+7,3,0,0,0,24,0,84991418,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,84991418,3,Virtual core keyboard
+7,2,0,0,0,27,0,84991913,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,84991913,3,Virtual core keyboard
+7,3,0,0,0,27,0,84992024,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,84992024,3,Virtual core keyboard
+7,2,0,0,0,31,0,84992057,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,84992057,3,Virtual core keyboard
+7,3,0,0,0,31,0,84992155,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,84992155,3,Virtual core keyboard
+7,6,308,136,0,0,0,84993667,9,'VirtualBox mouse integration'
+7,6,309,138,0,0,0,84993673,9,'VirtualBox mouse integration'
+7,6,312,141,0,0,0,84993681,9,'VirtualBox mouse integration'
+7,6,319,148,0,0,0,84993689,9,'VirtualBox mouse integration'
+7,6,325,154,0,0,0,84993697,9,'VirtualBox mouse integration'
+7,6,330,158,0,0,0,84993713,9,'VirtualBox mouse integration'
+7,6,330,161,0,0,0,84993721,9,'VirtualBox mouse integration'
+7,6,331,162,0,0,0,84993729,9,'VirtualBox mouse integration'
+7,6,331,163,0,0,0,84993737,9,'VirtualBox mouse integration'
+7,6,331,166,0,0,0,84993745,9,'VirtualBox mouse integration'
+7,6,333,168,0,0,0,84993793,9,'VirtualBox mouse integration'
+7,6,333,170,0,0,0,84993801,9,'VirtualBox mouse integration'
+7,6,333,171,0,0,0,84993817,9,'VirtualBox mouse integration'
+7,6,333,172,0,0,0,84993824,9,'VirtualBox mouse integration'
+7,6,333,173,0,0,0,84993833,9,'VirtualBox mouse integration'
+7,6,333,175,0,0,0,84993849,9,'VirtualBox mouse integration'
+7,6,333,176,0,0,0,84993873,9,'VirtualBox mouse integration'
+7,6,333,177,0,0,0,84993905,9,'VirtualBox mouse integration'
+7,6,333,178,0,0,0,84993913,9,'VirtualBox mouse integration'
+7,6,333,180,0,0,0,84993921,9,'VirtualBox mouse integration'
+7,6,333,181,0,0,0,84993937,9,'VirtualBox mouse integration'
+7,6,333,182,0,0,0,84993945,9,'VirtualBox mouse integration'
+7,6,333,183,0,0,0,84993961,9,'VirtualBox mouse integration'
+7,6,333,185,0,0,0,84993985,9,'VirtualBox mouse integration'
+7,6,333,186,0,0,0,84993993,9,'VirtualBox mouse integration'
+7,6,333,187,0,0,0,84994009,9,'VirtualBox mouse integration'
+7,6,333,188,0,0,0,84994017,9,'VirtualBox mouse integration'
+7,6,333,190,0,0,0,84994025,9,'VirtualBox mouse integration'
+7,6,333,191,0,0,0,84994033,9,'VirtualBox mouse integration'
+7,6,333,192,0,0,0,84994057,9,'VirtualBox mouse integration'
+7,6,333,193,0,0,0,84994129,9,'VirtualBox mouse integration'
+7,6,333,195,0,0,0,84994145,9,'VirtualBox mouse integration'
+7,6,333,196,0,0,0,84994161,9,'VirtualBox mouse integration'
+7,6,333,197,0,0,0,84994481,9,'VirtualBox mouse integration'
+7,6,333,198,0,0,0,84994489,9,'VirtualBox mouse integration'
+7,6,333,200,0,0,0,84994521,9,'VirtualBox mouse integration'
+7,6,333,201,0,0,0,84994537,9,'VirtualBox mouse integration'
+7,6,333,202,0,0,0,84994577,9,'VirtualBox mouse integration'
+7,4,0,0,1,0,0,84995378,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,1,0,0,84995378,2,Virtual core pointer
+7,5,0,0,1,0,0,84995494,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,1,0,0,84995494,2,Virtual core pointer
+0,21,0,0,0,0,0,84995568
+NEW-WINDOW:640,448:58720770,58720770,34749932,0,0,0:36x74+500+71:0,0:
+0,21,0,0,0,0,0,84995568
+0,21,0,0,0,0,0,84995568
+0,21,0,0,0,0,0,84995568
+0,21,0,0,0,0,0,84995632
+NEW-WINDOW:640,406:58720770,58720770,701,640,406,0:640x406+500+71:0,0:Squarified Tree Map Helper
+0,21,0,0,0,0,0,84995632
+0,21,0,0,0,0,0,84995632
+0,21,0,0,0,0,0,84995632
+0,21,0,0,0,0,0,84995632
+7,6,333,203,0,0,0,84998429,9,'VirtualBox mouse integration'
+7,6,333,208,0,0,0,84998433,9,'VirtualBox mouse integration'
+7,6,333,212,0,0,0,84998442,9,'VirtualBox mouse integration'
+7,6,333,215,0,0,0,84998450,9,'VirtualBox mouse integration'
+7,6,333,218,0,0,0,84998458,9,'VirtualBox mouse integration'
+7,6,333,223,0,0,0,84998465,9,'VirtualBox mouse integration'
+7,6,332,227,0,0,0,84998474,9,'VirtualBox mouse integration'
+7,6,332,231,0,0,0,84998481,9,'VirtualBox mouse integration'
+7,6,332,232,0,0,0,84998490,9,'VirtualBox mouse integration'
+7,6,332,235,0,0,0,84998497,9,'VirtualBox mouse integration'
+7,6,332,238,0,0,0,84998506,9,'VirtualBox mouse integration'
+7,6,332,240,0,0,0,84998514,9,'VirtualBox mouse integration'
+7,6,332,242,0,0,0,84998521,9,'VirtualBox mouse integration'
+7,6,333,245,0,0,0,84998530,9,'VirtualBox mouse integration'
+7,6,334,247,0,0,0,84998538,9,'VirtualBox mouse integration'
+7,6,334,248,0,0,0,84998546,9,'VirtualBox mouse integration'
+7,6,334,251,0,0,0,84998554,9,'VirtualBox mouse integration'
+7,6,334,253,0,0,0,84998562,9,'VirtualBox mouse integration'
+7,6,334,256,0,0,0,84998570,9,'VirtualBox mouse integration'
+7,6,334,258,0,0,0,84998577,9,'VirtualBox mouse integration'
+7,6,334,261,0,0,0,84998586,9,'VirtualBox mouse integration'
+7,6,334,265,0,0,0,84998593,9,'VirtualBox mouse integration'
+7,6,334,267,0,0,0,84998602,9,'VirtualBox mouse integration'
+7,6,334,270,0,0,0,84998610,9,'VirtualBox mouse integration'
+7,6,334,275,0,0,0,84998618,9,'VirtualBox mouse integration'
+7,6,334,277,0,0,0,84998626,9,'VirtualBox mouse integration'
+7,6,335,282,0,0,0,84998634,9,'VirtualBox mouse integration'
+7,6,335,285,0,0,0,84998642,9,'VirtualBox mouse integration'
+7,6,335,288,0,0,0,84998650,9,'VirtualBox mouse integration'
+7,6,335,291,0,0,0,84998657,9,'VirtualBox mouse integration'
+7,6,335,295,0,0,0,84998665,9,'VirtualBox mouse integration'
+7,6,335,300,0,0,0,84998674,9,'VirtualBox mouse integration'
+7,6,335,303,0,0,0,84998682,9,'VirtualBox mouse integration'
+7,6,335,307,0,0,0,84998690,9,'VirtualBox mouse integration'
+7,6,335,310,0,0,0,84998698,9,'VirtualBox mouse integration'
+7,6,335,311,0,0,0,84998706,9,'VirtualBox mouse integration'
+7,6,335,314,0,0,0,84998714,9,'VirtualBox mouse integration'
+7,6,335,317,0,0,0,84998721,9,'VirtualBox mouse integration'
+7,6,335,320,0,0,0,84998730,9,'VirtualBox mouse integration'
+7,6,335,322,0,0,0,84998738,9,'VirtualBox mouse integration'
+7,6,335,325,0,0,0,84998746,9,'VirtualBox mouse integration'
+7,6,335,327,0,0,0,84998753,9,'VirtualBox mouse integration'
+7,6,335,329,0,0,0,84998762,9,'VirtualBox mouse integration'
+7,6,335,332,0,0,0,84998769,9,'VirtualBox mouse integration'
+7,6,335,333,0,0,0,84998777,9,'VirtualBox mouse integration'
+7,6,334,337,0,0,0,84998786,9,'VirtualBox mouse integration'
+7,6,333,338,0,0,0,84998794,9,'VirtualBox mouse integration'
+7,6,333,341,0,0,0,84998802,9,'VirtualBox mouse integration'
+7,6,333,342,0,0,0,84998810,9,'VirtualBox mouse integration'
+7,6,333,345,0,0,0,84998817,9,'VirtualBox mouse integration'
+7,6,333,347,0,0,0,84998825,9,'VirtualBox mouse integration'
+7,6,333,350,0,0,0,84998833,9,'VirtualBox mouse integration'
+7,6,333,353,0,0,0,84998842,9,'VirtualBox mouse integration'
+7,6,333,356,0,0,0,84998850,9,'VirtualBox mouse integration'
+7,6,333,358,0,0,0,84998858,9,'VirtualBox mouse integration'
+7,6,333,362,0,0,0,84998866,9,'VirtualBox mouse integration'
+7,6,333,366,0,0,0,84998874,9,'VirtualBox mouse integration'
+7,6,333,368,0,0,0,84998882,9,'VirtualBox mouse integration'
+7,6,333,372,0,0,0,84998890,9,'VirtualBox mouse integration'
+7,6,333,376,0,0,0,84998897,9,'VirtualBox mouse integration'
+7,6,333,378,0,0,0,84998906,9,'VirtualBox mouse integration'
+7,6,333,381,0,0,0,84998913,9,'VirtualBox mouse integration'
+7,6,333,385,0,0,0,84998922,9,'VirtualBox mouse integration'
+7,6,333,387,0,0,0,84998930,9,'VirtualBox mouse integration'
+7,6,333,390,0,0,0,84998938,9,'VirtualBox mouse integration'
+7,6,333,392,0,0,0,84998946,9,'VirtualBox mouse integration'
+7,6,333,395,0,0,0,84998954,9,'VirtualBox mouse integration'
+7,6,333,398,0,0,0,84998962,9,'VirtualBox mouse integration'
+7,6,333,401,0,0,0,84998970,9,'VirtualBox mouse integration'
+7,6,333,404,0,0,0,84998978,9,'VirtualBox mouse integration'
+7,6,333,407,0,0,0,84998985,9,'VirtualBox mouse integration'
+7,6,333,411,0,0,0,84998994,9,'VirtualBox mouse integration'
+7,6,333,415,0,0,0,84999002,9,'VirtualBox mouse integration'
+7,6,332,418,0,0,0,84999010,9,'VirtualBox mouse integration'
+7,6,331,422,0,0,0,84999018,9,'VirtualBox mouse integration'
+7,6,331,424,0,0,0,84999026,9,'VirtualBox mouse integration'
+7,6,330,427,0,0,0,84999034,9,'VirtualBox mouse integration'
+7,6,330,430,0,0,0,84999042,9,'VirtualBox mouse integration'
+7,6,330,432,0,0,0,84999050,9,'VirtualBox mouse integration'
+7,6,329,438,0,0,0,84999057,9,'VirtualBox mouse integration'
+7,6,328,441,0,0,0,84999066,9,'VirtualBox mouse integration'
+7,6,327,444,0,0,0,84999074,9,'VirtualBox mouse integration'
+7,6,326,448,0,0,0,84999082,9,'VirtualBox mouse integration'
+7,6,325,451,0,0,0,84999090,9,'VirtualBox mouse integration'
+7,6,323,454,0,0,0,84999098,9,'VirtualBox mouse integration'
+7,6,323,456,0,0,0,84999106,9,'VirtualBox mouse integration'
+7,6,322,460,0,0,0,84999114,9,'VirtualBox mouse integration'
+7,6,321,462,0,0,0,84999121,9,'VirtualBox mouse integration'
+7,6,321,465,0,0,0,84999129,9,'VirtualBox mouse integration'
+7,6,321,469,0,0,0,84999138,9,'VirtualBox mouse integration'
+7,6,321,473,0,0,0,84999146,9,'VirtualBox mouse integration'
+7,6,320,476,0,0,0,84999154,9,'VirtualBox mouse integration'
+7,6,319,481,0,0,0,84999162,9,'VirtualBox mouse integration'
+7,6,318,485,0,0,0,84999170,9,'VirtualBox mouse integration'
+7,6,317,490,0,0,0,84999178,9,'VirtualBox mouse integration'
+7,6,317,495,0,0,0,84999186,9,'VirtualBox mouse integration'
+7,6,317,500,0,0,0,84999193,9,'VirtualBox mouse integration'
+7,6,317,505,0,0,0,84999202,9,'VirtualBox mouse integration'
+7,6,317,510,0,0,0,84999210,9,'VirtualBox mouse integration'
+7,6,317,512,0,0,0,84999218,9,'VirtualBox mouse integration'
+7,6,316,517,0,0,0,84999226,9,'VirtualBox mouse integration'
+7,6,316,523,0,0,0,84999234,9,'VirtualBox mouse integration'
+7,6,316,525,0,0,0,84999241,9,'VirtualBox mouse integration'
+7,6,316,528,0,0,0,84999250,9,'VirtualBox mouse integration'
+7,6,316,530,0,0,0,84999258,9,'VirtualBox mouse integration'
+7,6,316,534,0,0,0,84999266,9,'VirtualBox mouse integration'
+7,6,316,536,0,0,0,84999274,9,'VirtualBox mouse integration'
+7,6,316,541,0,0,0,84999282,9,'VirtualBox mouse integration'
+7,6,316,544,0,0,0,84999290,9,'VirtualBox mouse integration'
+7,6,316,548,0,0,0,84999298,9,'VirtualBox mouse integration'
+7,6,316,551,0,0,0,84999306,9,'VirtualBox mouse integration'
+7,6,316,555,0,0,0,84999314,9,'VirtualBox mouse integration'
+7,6,316,558,0,0,0,84999321,9,'VirtualBox mouse integration'
+7,6,315,560,0,0,0,84999329,9,'VirtualBox mouse integration'
+7,6,315,563,0,0,0,84999337,9,'VirtualBox mouse integration'
+7,6,315,564,0,0,0,84999345,9,'VirtualBox mouse integration'
+7,6,314,566,0,0,0,84999353,9,'VirtualBox mouse integration'
+7,6,313,568,0,0,0,84999361,9,'VirtualBox mouse integration'
+7,6,313,571,0,0,0,84999369,9,'VirtualBox mouse integration'
+7,6,313,574,0,0,0,84999377,9,'VirtualBox mouse integration'
+7,6,313,578,0,0,0,84999385,9,'VirtualBox mouse integration'
+7,6,313,581,0,0,0,84999393,9,'VirtualBox mouse integration'
+7,6,313,585,0,0,0,84999401,9,'VirtualBox mouse integration'
+7,6,313,589,0,0,0,84999409,9,'VirtualBox mouse integration'
+7,6,313,591,0,0,0,84999417,9,'VirtualBox mouse integration'
+7,6,313,594,0,0,0,84999425,9,'VirtualBox mouse integration'
+7,6,313,596,0,0,0,84999433,9,'VirtualBox mouse integration'
+7,6,313,600,0,0,0,84999441,9,'VirtualBox mouse integration'
+7,6,313,604,0,0,0,84999449,9,'VirtualBox mouse integration'
+7,6,313,608,0,0,0,84999457,9,'VirtualBox mouse integration'
+7,6,313,610,0,0,0,84999465,9,'VirtualBox mouse integration'
+7,6,313,615,0,0,0,84999473,9,'VirtualBox mouse integration'
+7,6,313,618,0,0,0,84999481,9,'VirtualBox mouse integration'
+7,6,313,620,0,0,0,84999489,9,'VirtualBox mouse integration'
+7,6,312,623,0,0,0,84999497,9,'VirtualBox mouse integration'
+7,6,312,625,0,0,0,84999505,9,'VirtualBox mouse integration'
+7,6,312,626,0,0,0,84999513,9,'VirtualBox mouse integration'
+7,6,312,631,0,0,0,84999521,9,'VirtualBox mouse integration'
+7,6,312,633,0,0,0,84999529,9,'VirtualBox mouse integration'
+7,6,312,635,0,0,0,84999537,9,'VirtualBox mouse integration'
+7,6,312,638,0,0,0,84999545,9,'VirtualBox mouse integration'
+7,6,312,641,0,0,0,84999553,9,'VirtualBox mouse integration'
+7,6,312,644,0,0,0,84999562,9,'VirtualBox mouse integration'
+7,6,312,646,0,0,0,84999569,9,'VirtualBox mouse integration'
+7,6,312,649,0,0,0,84999578,9,'VirtualBox mouse integration'
+7,6,312,651,0,0,0,84999585,9,'VirtualBox mouse integration'
+7,6,312,654,0,0,0,84999594,9,'VirtualBox mouse integration'
+7,6,312,656,0,0,0,84999601,9,'VirtualBox mouse integration'
+7,6,313,658,0,0,0,84999609,9,'VirtualBox mouse integration'
+7,6,313,660,0,0,0,84999625,9,'VirtualBox mouse integration'
+7,6,313,661,0,0,0,84999633,9,'VirtualBox mouse integration'
+7,6,313,664,0,0,0,84999641,9,'VirtualBox mouse integration'
+7,6,313,665,0,0,0,84999649,9,'VirtualBox mouse integration'
+7,6,314,666,0,0,0,84999665,9,'VirtualBox mouse integration'
+7,6,315,669,0,0,0,84999681,9,'VirtualBox mouse integration'
+7,6,316,671,0,0,0,84999689,9,'VirtualBox mouse integration'
+7,6,316,673,0,0,0,84999697,9,'VirtualBox mouse integration'
+7,6,319,676,0,0,0,84999705,9,'VirtualBox mouse integration'
+7,6,320,678,0,0,0,84999713,9,'VirtualBox mouse integration'
+7,6,320,680,0,0,0,84999721,9,'VirtualBox mouse integration'
+7,6,321,681,0,0,0,84999729,9,'VirtualBox mouse integration'
+7,6,324,684,0,0,0,84999737,9,'VirtualBox mouse integration'
+7,6,324,685,0,0,0,84999746,9,'VirtualBox mouse integration'
+7,6,325,688,0,0,0,84999753,9,'VirtualBox mouse integration'
+7,6,326,689,0,0,0,84999770,9,'VirtualBox mouse integration'
+7,6,326,690,0,0,0,84999778,9,'VirtualBox mouse integration'
+7,6,326,691,0,0,0,84999802,9,'VirtualBox mouse integration'
+7,6,328,693,0,0,0,84999810,9,'VirtualBox mouse integration'
+7,6,328,694,0,0,0,84999906,9,'VirtualBox mouse integration'
+7,6,328,695,0,0,0,84999914,9,'VirtualBox mouse integration'
+7,6,329,696,0,0,0,84999930,9,'VirtualBox mouse integration'
+7,6,330,698,0,0,0,85000074,9,'VirtualBox mouse integration'
+7,6,330,699,0,0,0,85000082,9,'VirtualBox mouse integration'
+7,6,331,700,0,0,0,85000314,9,'VirtualBox mouse integration'
+7,6,331,701,0,0,0,85000322,9,'VirtualBox mouse integration'
+7,6,333,703,0,0,0,85000330,9,'VirtualBox mouse integration'
+7,6,333,704,0,0,0,85000338,9,'VirtualBox mouse integration'
+7,6,334,705,0,0,0,85000362,9,'VirtualBox mouse integration'
+7,6,335,707,0,0,0,85000778,9,'VirtualBox mouse integration'
+7,4,0,0,3,0,0,85001646,12,ImExPS/2 Generic Explorer Mouse
+6,4,0,0,3,0,0,85001646,2,Virtual core pointer
+7,5,0,0,3,0,0,85001815,12,ImExPS/2 Generic Explorer Mouse
+6,5,0,0,3,0,0,85001815,2,Virtual core pointer
+7,2,0,0,0,116,0,85003359,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,85003359,3,Virtual core keyboard
+7,3,0,0,0,116,0,85003435,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,85003435,3,Virtual core keyboard
+7,2,0,0,0,116,0,85003818,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,85003819,3,Virtual core keyboard
+7,3,0,0,0,116,0,85003922,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,85003922,3,Virtual core keyboard
+7,2,0,0,0,36,0,85004730,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,85004730,3,Virtual core keyboard
+0,21,0,0,0,0,0,85004783
+NEW-WINDOW:451,254:58720849,58720849,34751469,0,0,0:36x74+879+458:0,0:Exporting graph "unnamed_1"
+0,21,0,0,0,0,0,85004783
+0,21,0,0,0,0,0,85004783
+0,21,0,0,0,0,0,85004783
+7,3,0,0,0,36,0,85004811,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,85004811,3,Virtual core keyboard
+7,2,0,0,0,28,0,85006043,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,85006043,3,Virtual core keyboard
+7,3,0,0,0,28,0,85006124,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,85006124,3,Virtual core keyboard
+7,2,0,0,0,26,0,85006283,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,85006283,3,Virtual core keyboard
+7,3,0,0,0,26,0,85006384,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,85006384,3,Virtual core keyboard
+7,2,0,0,0,39,0,85006539,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,85006539,3,Virtual core keyboard
+7,3,0,0,0,39,0,85006604,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,85006604,3,Virtual core keyboard
+7,2,0,0,0,28,0,85006827,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,85006827,3,Virtual core keyboard
+7,3,0,0,0,28,0,85006924,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,85006924,3,Virtual core keyboard
+7,2,0,0,0,17,0,85006955,11,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,85006955,3,Virtual core keyboard
+7,3,0,0,0,17,0,85007244,11,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,85007244,3,Virtual core keyboard
+7,2,0,0,0,42,0,85007244,11,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,85007244,3,Virtual core keyboard
+7,3,0,0,0,42,0,85007324,11,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,85007324,3,Virtual core keyboard
+7,2,0,0,0,30,0,85007324,11,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,85007324,3,Virtual core keyboard
+7,2,0,0,0,31,0,85007419,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,85007419,3,Virtual core keyboard
+7,3,0,0,0,30,0,85007453,11,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,85007453,3,Virtual core keyboard
+7,3,0,0,0,31,0,85007516,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,85007516,3,Virtual core keyboard
+7,2,0,0,0,62,0,85007980,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,85007980,3,Virtual core keyboard
+7,2,0,0,0,59,0,85008315,11,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,85008315,3,Virtual core keyboard
+7,3,0,0,0,59,0,85008382,11,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,85008382,3,Virtual core keyboard
+7,3,0,0,0,62,0,85008480,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,85008480,3,Virtual core keyboard
+7,2,0,0,0,28,0,85008667,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,85008667,3,Virtual core keyboard
+7,3,0,0,0,28,0,85008734,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,85008734,3,Virtual core keyboard
+7,2,0,0,0,46,0,85008795,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,85008795,3,Virtual core keyboard
+7,3,0,0,0,46,0,85008892,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,85008892,3,Virtual core keyboard
+7,2,0,0,0,33,0,85009179,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,85009179,3,Virtual core keyboard
+7,3,0,0,0,33,0,85009293,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,85009293,3,Virtual core keyboard
+7,2,0,0,0,36,0,85009659,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,85009660,3,Virtual core keyboard
+0,21,0,0,0,0,0,85009684
+NEW-WINDOW:451,212:58720849,58720849,701,451,212,0:451x212+879+458:0,0:Exporting graph "unnamed_1"
+0,21,0,0,0,0,0,85009684
+0,21,0,0,0,0,0,85009684
+0,21,0,0,0,0,0,85009684
+0,21,0,0,0,0,0,85009684
+7,3,0,0,0,36,0,85009723,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,85009723,3,Virtual core keyboard
+0,21,0,0,0,0,0,85009723
+NEW-WINDOW:640,462:58720870,58720870,34752637,0,0,0:36x74+500+42:0,0:
+0,21,0,0,0,0,0,85009723
+0,21,0,0,0,0,0,85009723
+0,21,0,0,0,0,0,85009723
+0,21,0,0,0,0,0,85009893
+NEW-WINDOW:640,420:58720870,58720870,701,640,420,0:640x420+500+42:0,0:TLP Export
+0,21,0,0,0,0,0,85009893
+0,21,0,0,0,0,0,85009893
+0,21,0,0,0,0,0,85009893
+0,21,0,0,0,0,0,85009893
