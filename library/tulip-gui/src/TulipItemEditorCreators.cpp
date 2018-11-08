@@ -75,7 +75,9 @@ QSize TulipItemEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 // of a QColorDialog. calling QDialog::result() instead does not work
 class TulipColorDialog : public QColorDialog {
 public:
-  TulipColorDialog(QWidget *w) : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {}
+  TulipColorDialog(QWidget *w) : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {
+    setOption(QColorDialog::DontUseNativeDialog, inGuiTestingMode());
+  }
   ~TulipColorDialog() override {}
   tlp::Color previousColor;
   int ok;
@@ -86,7 +88,7 @@ public:
   void showEvent(QShowEvent *ev) override {
     QDialog::showEvent(ev);
 
-    if (!inGuiTestingMode() && parentWidget())
+    if (parentWidget())
       move(parentWidget()->window()->frameGeometry().topLeft() +
            parentWidget()->window()->rect().center() - rect().center());
   }
