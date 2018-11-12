@@ -22,6 +22,7 @@
 #include <QMainWindow>
 #include <QStylePainter>
 
+#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
 
@@ -71,7 +72,7 @@ void ChooseColorButton::setTulipColor(const tlp::Color &c) {
 void ChooseColorButton::chooseColor() {
   QColor c = QColorDialog::getColor(
       _color, _dialogParent, _dialogTitle.isEmpty() ? QString("Choose a color") : _dialogTitle,
-      QColorDialog::ShowAlphaChannel);
+      QColorDialog::ShowAlphaChannel | (inGuiTestingMode() ? QColorDialog::DontUseNativeDialog : static_cast<QColorDialog::ColorDialogOption>(0)));
 
   if (c.isValid())
     setColor(c);
