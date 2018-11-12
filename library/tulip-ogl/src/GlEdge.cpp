@@ -116,8 +116,7 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData *data, const edge e, c
     getSizes(tmp, edgeSize[0] / 2.0f, edgeSize[1] / 2.0f, edgeSizes);
 
     vector<Coord> quadVertices;
-    buildCurvePoints(tmp, edgeSizes, data->getElementLayout()->getNodeValue(src),
-                     data->getElementLayout()->getNodeValue(tgt), quadVertices);
+    buildCurvePoints(tmp, edgeSizes, srcCoord, tgtCoord, quadVertices);
 
     for (size_t i = 0; i < quadVertices.size(); ++i) {
       bb.expand(quadVertices[i]);
@@ -637,18 +636,19 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
     return 0;
 
   auto edgeShape = data->getElementShape()->getEdgeValue(e);
-  if ((vertices.size() > 2 && edgeShape == EdgeShape::BezierCurve) ||
-      (vertices.size() == 3 && edgeShape == EdgeShape::CubicBSplineCurve)) {
+  auto vSize = vertices.size();
+  if ((vSize > 2 && edgeShape == EdgeShape::BezierCurve) ||
+      (vSize == 3 && edgeShape == EdgeShape::CubicBSplineCurve)) {
     vector<Coord> curvePoints;
     computeBezierPoints(vertices, curvePoints, 200);
     vertices.swap(curvePoints);
-  } else if (vertices.size() > 2 && edgeShape == EdgeShape::CatmullRomCurve) {
+  } else if (vSize > 2 && edgeShape == EdgeShape::CatmullRomCurve) {
     vector<Coord> curvePoints;
     computeCatmullRomPoints(vertices, curvePoints, false, 200);
     vertices.swap(curvePoints);
   }
 
-  if (vertices.size() > 2 && edgeShape == EdgeShape::CubicBSplineCurve) {
+  if (vSize > 2 && edgeShape == EdgeShape::CubicBSplineCurve) {
     vector<Coord> curvePoints;
     computeOpenUniformBsplinePoints(vertices, curvePoints, 3, 200);
     vertices.swap(curvePoints);
