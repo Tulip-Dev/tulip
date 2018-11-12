@@ -1,1 +1,1 @@
-sh tulip_run_test.sh layout_ogdf_planarization_grid layout_ogdf_planarization.tlp
+sh tulip_run_test.sh layout_ogdf_planarization_grid import_planar_graph.tlp
