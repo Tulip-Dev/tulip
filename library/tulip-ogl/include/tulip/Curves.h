@@ -38,7 +38,7 @@ class Matrix;
 // return vertices, update startN and endN to prevent bad edge drawing
 TLP_GL_SCOPE void computeCleanVertices(const std::vector<Coord> &bends, const Coord &startPoint,
                                        const Coord &endPoint, Coord &startN, Coord &endN,
-                                       std::vector<Coord> &);
+                                       std::vector<Coord> &vertices, bool adjustTangent = true);
 TLP_GL_SCOPE void polyLine(const std::vector<Coord> &, /* polyline vertices */
                            const Color &,              /* start color */
                            const Color &);             /* end color */
