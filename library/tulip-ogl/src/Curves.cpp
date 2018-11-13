@@ -395,8 +395,8 @@ vector<Coord> splineCurve(const vector<Coord> &vertices) {
 }
 
 void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
-                          const Coord &endPoint, Coord &startN, Coord &endN,
-                          vector<Coord> &result, bool adjustTangent) {
+                          const Coord &endPoint, Coord &startN, Coord &endN, vector<Coord> &result,
+                          bool adjustTangent) {
 
   if (!bends.empty()) {
     result.reserve(bends.size() + 2);
@@ -430,12 +430,12 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
     if (adjustTangent) {
       auto norm = (startN - startPoint).norm();
       if (norm && (norm < 1E-4)) {
-	startN = startPoint - (result[1] - startPoint);
+        startN = startPoint - (result[1] - startPoint);
       }
 
       norm = (endN - lastPoint).norm();
       if (norm && (norm < 1E-4)) {
-	endN = lastPoint + lastPoint - result[result.size() - 2];
+        endN = lastPoint + lastPoint - result[result.size() - 2];
       }
     }
   } else {
@@ -446,15 +446,15 @@ void computeCleanVertices(const vector<Coord> &bends, const Coord &startPoint,
 
       // Adjust tangent direction
       if (adjustTangent) {
-	auto norm = (startN - startPoint).norm();
-	if (norm && (norm < 1E-4)) {
-	  startN = startPoint - (endPoint - startPoint);
-	}
+        auto norm = (startN - startPoint).norm();
+        if (norm && (norm < 1E-4)) {
+          startN = startPoint - (endPoint - startPoint);
+        }
 
-	norm = (endN - endPoint).norm();
-	if (norm && (norm < 1E-4)) {
-	  endN = endPoint + endPoint - startPoint;
-	}
+        norm = (endN - endPoint).norm();
+        if (norm && (norm < 1E-4)) {
+          endN = endPoint + endPoint - startPoint;
+        }
       }
     }
   }

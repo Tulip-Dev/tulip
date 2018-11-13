@@ -630,8 +630,7 @@ size_t GlEdge::getVertices(const GlGraphInputData *data, const edge e, const nod
     endLineAnchor = tgtAnchor;
   }
 
-  computeCleanVertices(bends, beginLineAnchor, endLineAnchor, srcCoord,
-		       tgtCoord, vertices, false);
+  computeCleanVertices(bends, beginLineAnchor, endLineAnchor, srcCoord, tgtCoord, vertices, false);
 
   if (vertices.empty())
     return 0;
