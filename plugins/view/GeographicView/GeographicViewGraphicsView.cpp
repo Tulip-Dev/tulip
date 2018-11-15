@@ -19,6 +19,7 @@
 
 #include "GeographicViewGraphicsView.h"
 #include "GeographicView.h"
+#include "NominatimGeocoder.h"
 
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlComplexPolygon.h>
@@ -362,7 +363,7 @@ unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
                                                        QGraphicsScene *graphicsScene,
                                                        QWidget *parent)
-    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), googleMaps(nullptr),
+    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), leafletMaps(nullptr),
       currentMapZoom(0), globeCameraBackup(nullptr, true), mapCameraBackup(nullptr, true),
       geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
@@ -376,40 +377,40 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   setFrameStyle(QFrame::NoFrame);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  googleMaps = new GoogleMaps();
+  leafletMaps = new LeafletMaps();
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-  googleMaps->setWindowOpacity(0.99);
+  leafletMaps->setWindowOpacity(0.99);
 #endif
-  googleMaps->setMouseTracking(false);
-  googleMaps->resize(512, 512);
+  leafletMaps->setMouseTracking(false);
+  leafletMaps->resize(512, 512);
   progressWidget = new ProgressWidgetGraphicsProxy();
   progressWidget->hide();
   progressWidget->setZValue(2);
-  addressSelectionDialog = new AddressSelectionDialog(googleMaps);
+  addressSelectionDialog = new AddressSelectionDialog(leafletMaps);
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   addressSelectionDialog->setWindowOpacity(0.99);
 #endif
   scene()->addItem(progressWidget);
-  addresseSelectionProxy = scene()->addWidget(addressSelectionDialog, Qt::Dialog);
-  addresseSelectionProxy->hide();
-  addresseSelectionProxy->setZValue(3);
+  addressSelectionProxy = scene()->addWidget(addressSelectionDialog, Qt::Dialog);
+  addressSelectionProxy->hide();
+  addressSelectionProxy->setZValue(3);
 
-  googleMaps->setProgressWidget(progressWidget);
-  googleMaps->setAdresseSelectionDialog(addressSelectionDialog, addresseSelectionProxy);
+  leafletMaps->setProgressWidget(progressWidget);
+  leafletMaps->setAdresseSelectionDialog(addressSelectionDialog, addressSelectionProxy);
 
-  connect(googleMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
-  connect(googleMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
+  connect(leafletMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
+  connect(leafletMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
 
   _placeholderItem = new QGraphicsRectItem(0, 0, 1, 1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
   scene()->addItem(_placeholderItem);
 
-  QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
+  QGraphicsProxyWidget *proxyGM = scene()->addWidget(leafletMaps);
   proxyGM->setPos(0, 0);
   proxyGM->setParentItem(_placeholderItem);
 
@@ -425,7 +426,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   // before allowing some display feedback
   tlp::disableQtUserInput();
 
-  while (!googleMaps->pageInit()) {
+  while (!leafletMaps->pageInit()) {
     QApplication::processEvents();
   }
 
@@ -442,11 +443,11 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   viewTypeComboBox->setWindowOpacity(0.99);
 #endif
-  viewTypeComboBox->addItems(QStringList() << "RoadMap"
-                                           << "RoadMap"
-                                           << "Satellite"
-                                           << "Terrain"
-                                           << "Hybrid"
+  viewTypeComboBox->addItems(QStringList() << "Open Street Map (Leaflet)"
+                                           << "Open Street Map (Leaflet)"
+                                           << "Esri Satellite (Leaflet)"
+                                           << "Esri Terrain (Leaflet)"
+                                           << "Esri Gray Canvas (Leaflet)"
                                            << "Polygon"
                                            << "Globe");
   viewTypeComboBox->insertSeparator(1);
@@ -709,16 +710,16 @@ void GeographicViewGraphicsView::mapToPolygon() {
 }
 
 void GeographicViewGraphicsView::zoomIn() {
-  googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom() + 1);
+  leafletMaps->setCurrentZoom(leafletMaps->getCurrentMapZoom() + 1);
 }
 
 void GeographicViewGraphicsView::zoomOut() {
-  googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom() - 1);
+  leafletMaps->setCurrentZoom(leafletMaps->getCurrentMapZoom() - 1);
 }
 
 void GeographicViewGraphicsView::currentZoomChanged() {
-  zoomInButton->setEnabled(googleMaps->getCurrentMapZoom() != 20);
-  zoomOutButton->setEnabled(googleMaps->getCurrentMapZoom() != 0);
+  zoomInButton->setEnabled(leafletMaps->getCurrentMapZoom() != 20);
+  zoomOutButton->setEnabled(leafletMaps->getCurrentMapZoom() != 0);
 }
 
 GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
@@ -751,24 +752,18 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
     progressWidget->show();
 
     pair<double, double> latLng;
-    vector<pair<node, string>> multipleResultsAddresses;
     map<string, pair<double, double>> addressesLatLngMap;
+
+    NominatimGeocoder nominatimGeocoder;
 
     Iterator<node> *nodesIt = graph->getNodes();
     node n;
-    bool grabNextNode = true;
-
-    // disable user input
-    // before allowing some display feedback
-    tlp::disableQtUserInput();
 
     while (nodesIt->hasNext() && !progressWidget->cancelRequested() && !cancelGeocoding) {
-      if (grabNextNode) {
-        n = nodesIt->next();
-        progressWidget->setProgress(++nbNodesProcessed, nbNodes);
-      }
 
-      grabNextNode = true;
+      n = nodesIt->next();
+      progressWidget->setProgress(++nbNodesProcessed, nbNodes);
+
       string addr = removeQuotesIfAny(addressProperty->getNodeValue(n));
 
       if (addr.empty())
@@ -796,10 +791,50 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
               continue;
             }
           }
-          string geocodingRequestStatus =
-              googleMaps->getLatLngForAddress(tlpStringToQString(addr), latLng, true);
 
-          if (geocodingRequestStatus == "OK") {
+          unsigned int idx = 0;
+          vector<NominatimGeocoderResult> geocodingResults = nominatimGeocoder.getLatLngForAddress(addr);
+
+          if (geocodingResults.size() > 1) {
+            bool showProgressWidget = false;
+
+            if (progressWidget->isVisible()) {
+              progressWidget->hide();
+              showProgressWidget = true;
+            }
+
+            addressSelectionDialog->clearList();
+            addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
+
+            for (unsigned int i = 0; i < geocodingResults.size(); ++i) {
+              addressSelectionDialog->addResultToList(tlpStringToQString(geocodingResults[i].address));
+            }
+
+            addressSelectionProxy->setPos(
+                width() / 2 - addressSelectionProxy->sceneBoundingRect().width() / 2,
+                height() / 2 - addressSelectionProxy->sceneBoundingRect().height() / 2);
+
+            addressSelectionDialog->show();
+
+
+            addressSelectionDialog->show();
+            addressSelectionDialog->exec();
+            idx = addressSelectionDialog->getPickedResultIdx();
+            addressSelectionDialog->hide();
+
+            if (showProgressWidget) {
+              progressWidget->show();
+            }
+          } else if (geocodingResults.empty()) {
+            progressWidget->hide();
+            QMessageBox::warning(nullptr, "Geolocation failed",
+                                 "No results were found for address : \n" +
+                                     tlpStringToQString(addr));
+            progressWidget->show();
+          }
+
+          if (geocodingResults.size() > 0) {
+            const pair<double, double> &latLng = geocodingResults[idx].latLng;
             nodeLatLng[n] = latLng;
             addressesLatLngMap[addr] = latLng;
 
@@ -809,97 +844,14 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             }
           }
 
-          else if (geocodingRequestStatus == "MULTIPLE_RESULTS") {
-            multipleResultsAddresses.push_back(make_pair(n, addr));
-          } else if (geocodingRequestStatus != "ZERO_RESULTS") {
-            // the number of geocoding requests to the google servers in a short period of time is
-            // limited
-            // So wait 3,5 seconds before sending a new request to avoid errors
-            progressWidget->setFrameColor(Qt::red);
-            progressWidget->setComment(
-                "Geocoding requests limit reached. \n Waiting 3,5 seconds ...");
-            draw();
-            QTimeLine timeLine(3500);
-            timeLine.start();
-
-            // disable user input
-            // before allowing some display feedback
-            tlp::disableQtUserInput();
-
-            while (timeLine.state() != QTimeLine::NotRunning) {
-              QApplication::processEvents();
-            }
-
-            // reenable user input
-            tlp::enableQtUserInput();
-
-            progressWidget->setFrameColor(Qt::green);
-            grabNextNode = false;
-          } else {
-            progressWidget->hide();
-            QMessageBox::warning(nullptr, "Geolocation failed",
-                                 "No results were found for address : \n" +
-                                     tlpStringToQString(addr));
-            progressWidget->show();
-          }
         }
 
         QApplication::processEvents();
       }
     }
 
-    // reenable user input
-    tlp::enableQtUserInput();
-
     delete nodesIt;
     progressWidget->hide();
-
-    for (unsigned int i = 0; i < multipleResultsAddresses.size(); ++i) {
-      string addr = multipleResultsAddresses[i].second;
-      n = multipleResultsAddresses[i].first;
-
-      if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
-        latLng = addressesLatLngMap[addr];
-        nodeLatLng[n] = latLng;
-
-        if (createLatAndLngProps) {
-          latitudeProperty->setNodeValue(n, latLng.first);
-          longitudeProperty->setNodeValue(n, latLng.second);
-        }
-      } else {
-        string geocodingRequestStatus =
-            googleMaps->getLatLngForAddress(tlpStringToQString(addr), latLng);
-
-        if (geocodingRequestStatus != "OK") {
-          QTimeLine timeLine(3500);
-          timeLine.start();
-
-          // disable user input
-          // before allowing some display feedback
-          tlp::disableQtUserInput();
-
-          while (timeLine.state() != QTimeLine::NotRunning) {
-            QApplication::processEvents();
-          }
-
-          // reenable user input
-          tlp::enableQtUserInput();
-
-          --i;
-        } else {
-          nodeLatLng[n] = latLng;
-
-          if (createLatAndLngProps) {
-            latitudeProperty->setNodeValue(n, latLng.first);
-            longitudeProperty->setNodeValue(n, latLng.second);
-          }
-
-          if (addressSelectionDialog->rememberAddressChoice()) {
-            addressesLatLngMap[addr] = latLng;
-          }
-        }
-      }
-    }
   }
 
   Observable::unholdObservers();
@@ -941,7 +893,7 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string &lati
 void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   QGraphicsView::resizeEvent(event);
   scene()->setSceneRect(QRect(QPoint(0, 0), size()));
-  googleMaps->resize(width(), height());
+  leafletMaps->resize(width(), height());
   glWidgetItem->resize(width(), height());
 
   if (progressWidget->isVisible()) {
@@ -954,10 +906,10 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
                            height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
   }
 
-  if (addresseSelectionProxy->isVisible()) {
-    addresseSelectionProxy->setPos(
-        width() / 2 - addresseSelectionProxy->sceneBoundingRect().width() / 2,
-        height() / 2 - addresseSelectionProxy->sceneBoundingRect().height() / 2);
+  if (addressSelectionProxy->isVisible()) {
+    addressSelectionProxy->setPos(
+        width() / 2 - addressSelectionProxy->sceneBoundingRect().width() / 2,
+        height() / 2 - addressSelectionProxy->sceneBoundingRect().height() / 2);
   }
 
   if (scene())
@@ -977,44 +929,24 @@ void GeographicViewGraphicsView::paintEvent(QPaintEvent *event) {
 
   if (graph && !geocodingActive) {
 
-    if (googleMaps->isVisible() && (prevMapCenter != googleMaps->getCurrentMapCenter() ||
-                                    prevMapZoom != googleMaps->getCurrentMapZoom())) {
+    if (leafletMaps->isVisible() && (prevMapCenter != leafletMaps->getCurrentMapCenter() ||
+                                    prevMapZoom != leafletMaps->getCurrentMapZoom())) {
 
-      prevMapCenter = googleMaps->getCurrentMapCenter();
-      prevMapZoom = googleMaps->getCurrentMapZoom();
-
-      float worldWidth = googleMaps->getWorldWidth();
-      static const double maxLat = 85.05113f;
-      Coord swPos = googleMaps->getPixelPosOnScreenForLatLng(-maxLat, 0.0);
-      swPos[1] = height() - swPos[1];
-      Coord nePos = googleMaps->getPixelPosOnScreenForLatLng(maxLat, 0.0);
-      nePos[1] = height() - nePos[1];
-
-      Coord mapCenterCoord =
-          googleMaps->getPixelPosOnScreenForLatLng(prevMapCenter.first, prevMapCenter.second);
-      float westToMapCenterDist = ((prevMapCenter.second + 180.0) * worldWidth) / 360.0;
-      swPos.setX(mapCenterCoord.getX() - westToMapCenterDist);
-      nePos.setX(swPos.getX() + worldWidth);
-
+      prevMapCenter = leafletMaps->getCurrentMapCenter();
+      prevMapZoom = leafletMaps->getCurrentMapZoom();
       currentMapCenter = prevMapCenter;
       lastSceneRect = sceneRect();
       currentMapZoom = prevMapZoom;
 
       BoundingBox bb;
-      Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180, 180);
-      Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0, 0);
+      Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
+      Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
 
       if (rightCoord[0] - leftCoord[0]) {
         float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
-        float middleLng =
-            googleMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-        bb.expand(Coord(
-            middleLng - mapWidth / 2.,
-            latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
-        bb.expand(Coord(middleLng + mapWidth / 2.,
-                        latitudeToMercator(
-                            googleMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
-                        0));
+        float middleLng = leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
+        bb.expand(Coord(middleLng - mapWidth / 2., latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
+        bb.expand(Coord(middleLng + mapWidth / 2., latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.), 0));
         GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
         sceneZoomAndPan.zoomAndPanAnimationStep(1);
       }
@@ -1042,15 +974,15 @@ void GeographicViewGraphicsView::setMapTranslationBlocked(const bool translation
 }
 
 void GeographicViewGraphicsView::centerView() {
-  if (googleMaps->isVisible()) {
-    googleMaps->setMapBounds(graph, nodeLatLng);
+  if (leafletMaps->isVisible()) {
+    leafletMaps->setMapBounds(graph, nodeLatLng);
   } else {
     glMainWidget->centerScene();
   }
 }
 void GeographicViewGraphicsView::centerMapOnNode(const node n) {
   if (nodeLatLng.find(n) != nodeLatLng.end()) {
-    googleMaps->setMapCenter(nodeLatLng[n].first, nodeLatLng[n].second);
+    leafletMaps->setMapCenter(nodeLatLng[n].first, nodeLatLng[n].second);
   }
 }
 
@@ -1113,49 +1045,35 @@ void GeographicViewGraphicsView::treatEvent(const Event &ev) {
   }
 }
 
-/*
-static void getAngle(const Coord& coord,float &theta, float &phi) {
-  Coord tmp(coord[1],coord[0],0);
-  float lambda = tmp[1];
-
-  if ( lambda <= M_PI)
-    theta = lambda;
-  else
-    theta = lambda + 2. * M_PI;
-
-  phi = M_PI / 2.0 - tmp[0];
-}
-*/
-
 void GeographicViewGraphicsView::switchViewType() {
   GeographicView::ViewType viewType = _geoView->viewType();
 
-  bool enableGoogleMap = false;
+  bool enableLeafletMap = false;
   bool enablePolygon = false;
   bool enablePlanisphere = false;
 
   switch (viewType) {
-  case GeographicView::GoogleRoadMap: {
-    enableGoogleMap = true;
-    googleMaps->switchToRoadMapView();
+  case GeographicView::OpenStreetMap: {
+    enableLeafletMap = true;
+    leafletMaps->switchToOpenStreetMap();
     break;
   }
 
-  case GeographicView::GoogleSatellite: {
-    enableGoogleMap = true;
-    googleMaps->switchToSatelliteView();
+  case GeographicView::EsriSatellite: {
+    enableLeafletMap = true;
+    leafletMaps->switchToEsriSatellite();
     break;
   }
 
-  case GeographicView::GoogleTerrain: {
-    enableGoogleMap = true;
-    googleMaps->switchToTerrainView();
+  case GeographicView::EsriTerrain: {
+    enableLeafletMap = true;
+    leafletMaps->switchToEsriTerrain();
     break;
   }
 
-  case GeographicView::GoogleHybrid: {
-    enableGoogleMap = true;
-    googleMaps->switchToHybridView();
+  case GeographicView::EsriGrayCanvas: {
+    enableLeafletMap = true;
+    leafletMaps->switchToEsriGrayCanvas();
     break;
   }
 
@@ -1193,7 +1111,7 @@ void GeographicViewGraphicsView::switchViewType() {
 
   Observable::holdObservers();
 
-  googleMaps->setVisible(enableGoogleMap);
+  leafletMaps->setVisible(enableLeafletMap);
 
   if (polygonEntity)
     polygonEntity->setVisible(enablePolygon);
@@ -1230,19 +1148,19 @@ void GeographicViewGraphicsView::switchViewType() {
 
     if (firstMapSwitch) {
       BoundingBox bb;
-      Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180, 180);
-      Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0, 0);
+      Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
+      Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
 
       if (rightCoord[0] - leftCoord[0]) {
         float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
         float middleLng =
-            googleMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
+            leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
         bb.expand(Coord(
             middleLng - mapWidth / 2.,
-            latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
+            latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
         bb.expand(Coord(middleLng + mapWidth / 2.,
                         latitudeToMercator(
-                            googleMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+                            leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
                         0));
         GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
         sceneZoomAndPan.zoomAndPanAnimationStep(1);
@@ -1277,8 +1195,6 @@ void GeographicViewGraphicsView::switchViewType() {
     if (geoLayoutComputed) {
 
       SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
-      node n;
-      edge e;
 
       assert(geoLayoutBackup == nullptr);
       geoLayoutBackup = new LayoutProperty(graph);
@@ -1385,4 +1301,5 @@ void GeographicViewGraphicsView::setGeoLayoutComputed() {
   noLayoutMsgBox->setVisible(false);
   glMainWidget->getScene()->getGlGraphComposite()->setVisible(true);
 }
-} // namespace tlp
+
+}

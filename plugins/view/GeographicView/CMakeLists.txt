@@ -7,9 +7,10 @@ SET(LIB_SRCS
     ProgressWidgetGraphicsProxy.cpp
     GeographicViewInteractors.cpp
     AddressSelectionDialog.cpp
-    GoogleMaps.cpp
+    LeafletMaps.cpp
     GeographicViewGraphicsView.cpp
     GeographicViewShowElementInfo.cpp
+    NominatimGeocoder.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
@@ -38,7 +39,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
     GeographicViewConfigWidget.h
     GeographicViewShowElementInfo.h
     GeolocalisationConfigWidget.h
-    GoogleMaps.h
+    LeafletMaps.h
     OPTIONS ${QT_WEB_DEFINITIONS}
 )
 

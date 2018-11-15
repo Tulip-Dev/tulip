@@ -109,16 +109,10 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
   QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
-  if (geoView->viewType() == GeographicView::GoogleRoadMap ||
-      geoView->viewType() == GeographicView::GoogleSatellite ||
-      geoView->viewType() == GeographicView::GoogleTerrain ||
-      geoView->viewType() == GeographicView::GoogleHybrid) {
-
-    if (qMouseEv || qWheelEv) {
-      GeographicView *geoView = static_cast<GeographicView *>(view());
-      QApplication::sendEvent(geoView->getGoogleMap(), e);
-    }
-
+  if (geoView->viewType() == GeographicView::OpenStreetMap ||
+      geoView->viewType() == GeographicView::EsriSatellite ||
+      geoView->viewType() == GeographicView::EsriTerrain ||
+      geoView->viewType() == GeographicView::EsriGrayCanvas) {
     return false;
   } else if (geoView->viewType() == GeographicView::Globe) {
     if (e->type() == QEvent::Wheel && qWheelEv->orientation() == Qt::Vertical) {

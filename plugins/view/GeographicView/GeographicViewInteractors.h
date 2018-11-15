@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef GOOGLEMAPSVIEWINTERACTORS_H_
-#define GOOGLEMAPSVIEWINTERACTORS_H_
+#ifndef GEOGRAPHIC_VIEW_INTERACTORS_H
+#define GEOGRAPHIC_VIEW_INTERACTORS_H
 
 #include <tulip/GLInteractor.h>
 #include <tulip/MouseInteractors.h>
@@ -98,4 +98,4 @@ public:
   bool isCompatible(const std::string &viewName) const override;
 };
 
-#endif /* GOOGLEMAPSVIEWINTERACTORS_H_ */
+#endif // GEOGRAPHIC_VIEW_INTERACTORS_H

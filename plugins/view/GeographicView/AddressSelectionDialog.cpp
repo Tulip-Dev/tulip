@@ -52,4 +52,12 @@ bool AddressSelectionDialog::rememberAddressChoice() const {
 int AddressSelectionDialog::getPickedResultIdx() {
   return _ui->resultsList->currentRow();
 }
-} // namespace tlp
+
+void AddressSelectionDialog::showEvent(QShowEvent *showEvt) {
+  if (_ui->resultsList->count() > 0) {
+    _ui->resultsList->setCurrentRow(0);
+  }
+  QDialog::showEvent(showEvt);
+}
+
+}

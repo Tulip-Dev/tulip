@@ -1,0 +1,112 @@
+/**
+ *
+ * This file is part of Tulip (http://tulip.labri.fr)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+#include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+
+#include <tulip/TlpQtTools.h>
+#include <tulip/YajlFacade.h>
+
+#include "NominatimGeocoder.h"
+
+using namespace std;
+using namespace tlp;
+
+class NominatimResultsParser : public YajlParseFacade {
+
+public:
+
+  void parseString(const string &value) override {
+    if (_currentKey == "display_name") {
+      adresses.push_back(value);
+    } else if (_currentKey == "lat") {
+      _lat = stod(value);
+    } else if (_currentKey == "lon") {
+      _lng = stod(value);
+      latLngs.push_back(make_pair(_lat, _lng));
+    }
+  }
+
+  void parseMapKey(const string &value) override {
+    _currentKey = value;
+  }
+
+  vector<string> adresses;
+  vector<pair<double, double>> latLngs;
+
+private:
+
+  string _currentKey;
+  double _lat;
+  double _lng;
+
+};
+
+NominatimGeocoder::NominatimGeocoder() {
+  _networkAccessManager = new QNetworkAccessManager();
+}
+
+NominatimGeocoder::~NominatimGeocoder() {
+  delete _networkAccessManager;
+}
+
+vector<NominatimGeocoderResult> NominatimGeocoder::getLatLngForAddress(const string &address) {
+
+  QUrl nominatimSearchUrl;
+  nominatimSearchUrl.setScheme("https");
+  nominatimSearchUrl.setHost("nominatim.openstreetmap.org");
+  nominatimSearchUrl.setPath("/search/" + tlpStringToQString(address));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  nominatimSearchUrl.setQuery("format=json&dedupe=1&limit=20");
+#else
+  QList<QPair<QString, QString> > queryItems;
+  queryItems.append(qMakePair(QString("format"), QString("json")));
+  queryItems.append(qMakePair(QString("dedupe"), QString("1")));
+  queryItems.append(qMakePair(QString("limit"), QString("20")));
+  nominatimSearchUrl.setQueryItems(queryItems);
+#endif
+
+  QNetworkRequest request;
+  request.setUrl(nominatimSearchUrl);
+
+  QNetworkReply *reply = _networkAccessManager->get(request);
+  QEventLoop loop;
+  QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+  loop.exec();
+  QByteArray jsonData = reply->readAll();
+
+  NominatimResultsParser nominatimParser;
+  nominatimParser.parse(reinterpret_cast<const unsigned char *>(jsonData.constData()), jsonData.size());
+
+  unsigned int nbResults = nominatimParser.adresses.size();
+
+  vector<NominatimGeocoderResult> ret;
+
+  for (unsigned int i = 0; i < nbResults; ++i) {
+    NominatimGeocoderResult result;
+    result.address = nominatimParser.adresses[i];
+    result.latLng = nominatimParser.latLngs[i];
+    ret.push_back(result);
+  }
+
+  return ret;
+}

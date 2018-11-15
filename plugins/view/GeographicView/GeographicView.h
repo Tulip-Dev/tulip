@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef GOOGLEMAPSVIEW_H_
-#define GOOGLEMAPSVIEW_H_
+#ifndef GEOGRAPHIC_VIEW_H
+#define GEOGRAPHIC_VIEW_H
 
 #include <tulip/OcclusionTest.h>
 #include <tulip/SceneConfigWidget.h>
@@ -38,7 +38,7 @@
 
 #include "GeographicViewConfigWidget.h"
 #include "GeolocalisationConfigWidget.h"
-#include "GoogleMaps.h"
+#include "LeafletMaps.h"
 #include "GeographicViewGraphicsView.h"
 
 #include "../../utils/PluginNames.h"
@@ -49,7 +49,7 @@ namespace tlp {
 /** \file
  *  \brief  Tulip Geographic View
 
- * This view plugin allows to visualize a geolocated Tulip graph on top of Google Maps.
+ * This view plugin allows to visualize a geolocated Tulip graph on top of maps.
  * If geographic properties are attached to graph nodes (address or latitude/longitude), this
  * plugin uses them to layout the nodes on the map.
  *
@@ -64,15 +64,15 @@ class GeographicView : public View {
 
   PLUGININFORMATION(ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
                     "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of "
-                    "Google Maps.</p>"
+                    "maps or projected on a globe.</p>"
                     "<p>If geographic properties are attached to graph nodes (address or "
-                    "latitude/longitude), they are used to layout the nodes on the map.</p>"
+                    "latitude/longitude), they are used to layout the nodes on the maps or on the globe.</p>"
                     "<p>An interactor for performing selection on graph elements is also bundled "
                     "with the view.</p>",
-                    "2.2", "View")
+                    "3.0", "View")
 
 public:
-  enum ViewType { GoogleRoadMap = 0, GoogleSatellite, GoogleTerrain, GoogleHybrid, Polygon, Globe };
+  enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas, Polygon, Globe };
 
   GeographicView(PluginContext *);
   ~GeographicView() override;
@@ -96,8 +96,8 @@ public:
 
   QGraphicsItem *centralItem() const override;
 
-  GoogleMaps *getGoogleMap() {
-    return geoViewGraphicsView->getGoogleMapsPage();
+  LeafletMaps *getLeafletMap() {
+    return geoViewGraphicsView->getLeafletMapsPage();
   }
 
   void registerTriggers();
@@ -183,6 +183,6 @@ private:
   ViewToolTipAndUrlManager *_tturlManager;
   ViewActionsManager *_viewActionsManager;
 };
-} // namespace tlp
+}
 
-#endif /* GOOGLEMAPSVIEW_H_ */
+#endif // GEOGRAPHIC_VIEW_H

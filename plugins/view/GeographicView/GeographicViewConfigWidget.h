@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef GOOGLEMAPSVIEWCONFIGWIDGET_H_
-#define GOOGLEMAPSVIEWCONFIGWIDGET_H_
+#ifndef GEOGRAPHIC_VIEW_CONFIG_WIDGET_H
+#define GEOGRAPHIC_VIEW_CONFIG_WIDGET_H
 
 #include <QWidget>
 
@@ -74,6 +74,6 @@ protected:
   PolyFileType _oldPolyFileType;
   std::string _oldFileLoaded;
 };
-} // namespace tlp
+}
 
-#endif /* GOOGLEMAPSVIEWCONFIGWIDGET_H_ */
+#endif // GEOGRAPHIC_VIEW_CONFIG_WIDGET_H
