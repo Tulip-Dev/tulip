@@ -53,7 +53,7 @@ GeographicView::GeographicView(PluginContext *)
       showConfPanelAction(nullptr), useSharedLayoutProperty(true), useSharedSizeProperty(true),
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
       mapZoomInit(0), _tturlManager(nullptr), _viewActionsManager(nullptr) {
-  _viewType = GoogleRoadMap;
+  _viewType = OpenStreetMap;
 }
 
 GeographicView::~GeographicView() {
@@ -96,14 +96,14 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
 
   disconnect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(viewTypeChanged(QString)));
 
-  if (viewTypeName == "RoadMap") {
-    _viewType = GoogleRoadMap;
-  } else if (viewTypeName == "Satellite") {
-    _viewType = GoogleSatellite;
-  } else if (viewTypeName == "Terrain") {
-    _viewType = GoogleTerrain;
-  } else if (viewTypeName == "Hybrid") {
-    _viewType = GoogleHybrid;
+  if (viewTypeName == "Open Street Map (Leaflet)") {
+    _viewType = OpenStreetMap;
+  } else if (viewTypeName == "Esri Satellite (Leaflet)") {
+    _viewType = EsriSatellite;
+  } else if (viewTypeName == "Esri Terrain (Leaflet)") {
+    _viewType = EsriTerrain;
+  } else if (viewTypeName == "Esri Gray Canvas (Leaflet)") {
+    _viewType = EsriGrayCanvas;
   } else if (viewTypeName == "Polygon") {
     _viewType = Polygon;
   } else if (viewTypeName == "Globe") {
@@ -155,18 +155,19 @@ void GeographicView::setState(const DataSet &dataSet) {
     _viewType = static_cast<ViewType>(viewType);
   }
 
-  string viewTypeName = "RoadMap";
+  string viewTypeName = "Open Street Map (Leaflet)";
 
-  if (_viewType == GoogleSatellite)
-    viewTypeName = "Satellite";
-  else if (_viewType == GoogleTerrain)
-    viewTypeName = "Terrain";
-  else if (_viewType == GoogleHybrid)
-    viewTypeName = "Hybrid";
-  else if (_viewType == Polygon)
+  if (_viewType == EsriSatellite) {
+    viewTypeName = "Esri Satellite (Leaflet)";
+  } else if (_viewType == EsriTerrain) {
+    viewTypeName = "Esri Terrain (Leaflet)";
+  } else if (_viewType == EsriGrayCanvas) {
+    viewTypeName = "Esri Gray Canvas (Leaflet)";
+  } else if (_viewType == Polygon) {
     viewTypeName = "Polygon";
-  else if (_viewType == Globe)
+  } else if (_viewType == Globe) {
     viewTypeName = "Globe";
+  }
 
   viewTypeChanged(viewTypeName.c_str());
 
@@ -221,9 +222,9 @@ void GeographicView::setState(const DataSet &dataSet) {
 }
 
 void GeographicView::initMap() {
-  geoViewGraphicsView->getGoogleMapsPage()->setMapCenter(mapCenterLatitudeInit,
+  geoViewGraphicsView->getLeafletMapsPage()->setMapCenter(mapCenterLatitudeInit,
                                                          mapCenterLongitudeInit);
-  geoViewGraphicsView->getGoogleMapsPage()->setCurrentZoom(mapZoomInit);
+  geoViewGraphicsView->getLeafletMapsPage()->setCurrentZoom(mapZoomInit);
 }
 
 DataSet GeographicView::state() const {
@@ -231,10 +232,10 @@ DataSet GeographicView::state() const {
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
   dataSet.set("viewType", int(_viewType));
-  pair<double, double> mapCenter = geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapCenter();
+  pair<double, double> mapCenter = geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapCenter();
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
-  dataSet.set("mapZoom", geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapZoom());
+  dataSet.set("mapZoom", geoViewGraphicsView->getLeafletMapsPage()->getCurrentMapZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()
                                          ->getScene()
                                          ->getGlGraphComposite()

@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef GOOGLEMAPS_H
-#define GOOGLEMAPS_H
+#ifndef LEAFLET_MAPS_H
+#define LEAFLET_MAPS_H
 
 #ifdef QT_HAS_WEBKIT
 #include <QWebView>
@@ -53,15 +53,15 @@ signals:
 #endif
 
 #ifdef QT_HAS_WEBKIT
-class GoogleMaps : public QWebView {
+class LeafletMaps : public QWebView {
 #else
-class GoogleMaps : public QWebEngineView {
+class LeafletMaps : public QWebEngineView {
 #endif
 
   Q_OBJECT
 
 public:
-  GoogleMaps(QWidget *parent = nullptr);
+  LeafletMaps(QWidget *parent = nullptr);
 
   void setMapCenter(double latitude, double longitude);
 
@@ -70,9 +70,6 @@ public:
   void setCurrentZoom(int zoom);
 
   std::pair<double, double> getCurrentMapCenter();
-
-  std::string getLatLngForAddress(const QString &address, std::pair<double, double> &latLng,
-                                  bool skipMultipleResults = false);
 
   Coord getPixelPosOnScreenForLatLng(double lat, double lng);
 
@@ -97,15 +94,13 @@ public:
 
   int getWorldWidth();
 
-  void wheelEvent(QWheelEvent *ev) override;
+  void switchToOpenStreetMap();
 
-  void mouseMoveEvent(QMouseEvent *ev) override;
-  void mousePressEvent(QMouseEvent *ev) override;
+  void switchToEsriSatellite();
 
-  void switchToSatelliteView();
-  void switchToRoadMapView();
-  void switchToTerrainView();
-  void switchToHybridView();
+  void switchToEsriTerrain();
+
+  void switchToEsriGrayCanvas();
 
   void setProgressWidget(ProgressWidgetGraphicsProxy *progressWidget) {
     this->progressWidget = progressWidget;
@@ -114,7 +109,7 @@ public:
   void setAdresseSelectionDialog(AddressSelectionDialog *addressSelectionDialog,
                                  QGraphicsProxyWidget *addresseSelectionProxy) {
     this->addressSelectionDialog = addressSelectionDialog;
-    this->addresseSelectionProxy = addresseSelectionProxy;
+    this->addressSelectionProxy = addresseSelectionProxy;
   }
 
 signals:
@@ -138,12 +133,13 @@ private:
   int x, y;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *addresseSelectionProxy;
+  QGraphicsProxyWidget *addressSelectionProxy;
   ProgressWidgetGraphicsProxy *progressWidget;
 
 #ifdef QT_HAS_WEBENGINE
   MapRefresher *mapRefresher;
 #endif
+
 };
 
 #ifdef QT_HAS_WEBENGINE
@@ -188,4 +184,4 @@ private:
 #endif
 } // namespace tlp
 
-#endif // GOOGLEMAPS_H
+#endif // LEAFLET_MAPS_H

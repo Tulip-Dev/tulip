@@ -17,10 +17,10 @@
  *
  */
 
-#ifndef GOOGLEMAPSGRAPHICSVIEW_H
-#define GOOGLEMAPSGRAPHICSVIEW_H
+#ifndef GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
+#define GEOGRAPHIC_VIEW_GRAPHICSVIEW_H
 
-#include "GoogleMaps.h"
+#include "LeafletMaps.h"
 
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
@@ -79,8 +79,8 @@ public:
     return glMainWidget;
   }
 
-  GoogleMaps *getGoogleMapsPage() const {
-    return googleMaps;
+  LeafletMaps *getLeafletMapsPage() const {
+    return leafletMaps;
   }
 
   LayoutProperty *getGeoLayout() const {
@@ -150,7 +150,7 @@ private:
   GeographicView *_geoView;
   GlMainWidget *glWidget;
   Graph *graph;
-  GoogleMaps *googleMaps;
+  LeafletMaps *leafletMaps;
   std::map<node, std::pair<double, double>> nodeLatLng;
   std::map<node, std::pair<double, double>> nodeLatLngFOR;
   std::map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
@@ -180,7 +180,7 @@ private:
   GlSimpleEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
-  QGraphicsProxyWidget *addresseSelectionProxy;
+  QGraphicsProxyWidget *addressSelectionProxy;
   ProgressWidgetGraphicsProxy *progressWidget;
   QGraphicsProxyWidget *noLayoutMsgBox;
 
@@ -195,6 +195,6 @@ private:
 
   static unsigned int planisphereTextureId;
 };
-} // namespace tlp
+}
 
-#endif // GOOGLEMAPSGRAPHICSVIEW_H
+#endif // GEOGRAPHIC_VIEW_GRAPHICSVIEW_H

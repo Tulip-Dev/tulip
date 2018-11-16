@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef GOOGLEMAPSSHOWELEMENTINFO_H
-#define GOOGLEMAPSSHOWELEMENTINFO_H
+#ifndef GEOGRAPHIC_VIEW_SHOW_ELEMENT_INFO_H
+#define GEOGRAPHIC_VIEW_SHOW_ELEMENT_INFO_H
 
 #include <tulip/InteractorComposite.h>
 
@@ -58,6 +58,6 @@ protected:
 private slots:
   void hideInfos();
 };
-} // namespace tlp
+}
 
-#endif // GOOGLEMAPSSHOWELEMENTINFO_H
+#endif // GEOGRAPHIC_VIEW_SHOW_ELEMENT_INFO_H

@@ -17,40 +17,36 @@
  *
  */
 
-#ifndef ADDRESS_SELECTION_DIALOG_H
-#define ADDRESS_SELECTION_DIALOG_H
+#ifndef NOMINATIM_GEOCODER_H
+#define NOMINATIM_GEOCODER_H
 
-#include <QDialog>
+#include <string>
+#include <vector>
 
-class QWidget;
-class QString;
-class QShowEvent;
-
-namespace Ui {
-class AddressSelectionDialogData;
-}
+class QNetworkAccessManager;
 
 namespace tlp {
-class AddressSelectionDialog : public QDialog {
 
-  Ui::AddressSelectionDialogData *_ui;
+struct NominatimGeocoderResult {
+  std::string address;
+  std::pair<double, double> latLng;
+};
+
+class NominatimGeocoder {
 
 public:
-  AddressSelectionDialog(QWidget *parent = nullptr);
-  ~AddressSelectionDialog() override;
 
-  void setBaseAddress(const QString &address);
+  NominatimGeocoder();
+  ~NominatimGeocoder();
 
-  void addResultToList(const QString &result);
+  std::vector<NominatimGeocoderResult> getLatLngForAddress(const std::string &address);
 
-  void clearList();
+private:
 
-  int getPickedResultIdx();
+  QNetworkAccessManager *_networkAccessManager;
 
-  bool rememberAddressChoice() const;
-
-  void showEvent(QShowEvent *showEvt);
 };
+
 }
 
-#endif // ADDRESS_SELECTION_DIALOG_H
+#endif // NOMINATIM_GEOCODER_H

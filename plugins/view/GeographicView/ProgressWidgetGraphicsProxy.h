@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PROGRESSWIDGETGRAPHICSPROXY_H_
-#define PROGRESSWIDGETGRAPHICSPROXY_H_
+#ifndef PROGRESS_WIDGET_GRAPHICSPROXY_H
+#define PROGRESS_WIDGET_GRAPHICSPROXY_H
 
 #include <QGraphicsProxyWidget>
 #include <QWidget>
@@ -85,5 +85,6 @@ private:
   ProgressWidget *progressWidget;
   QColor frameColor;
 };
-} // namespace tlp
-#endif /* PROGRESSWIDGETGRAPHICSPROXY_H_ */
+}
+
+#endif // PROGRESS_WIDGET_GRAPHICSPROXY_H
