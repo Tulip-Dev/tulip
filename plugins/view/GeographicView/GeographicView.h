@@ -62,14 +62,15 @@ class GeographicView : public View {
 
   Q_OBJECT
 
-  PLUGININFORMATION(ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
-                    "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of "
-                    "maps or projected on a globe.</p>"
-                    "<p>If geographic properties are attached to graph nodes (address or "
-                    "latitude/longitude), they are used to layout the nodes on the maps or on the globe.</p>"
-                    "<p>An interactor for performing selection on graph elements is also bundled "
-                    "with the view.</p>",
-                    "3.0", "View")
+  PLUGININFORMATION(
+      ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
+      "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of "
+      "maps or projected on a globe.</p>"
+      "<p>If geographic properties are attached to graph nodes (address or "
+      "latitude/longitude), they are used to layout the nodes on the maps or on the globe.</p>"
+      "<p>An interactor for performing selection on graph elements is also bundled "
+      "with the view.</p>",
+      "3.0", "View")
 
 public:
   enum ViewType { OpenStreetMap = 0, EsriSatellite, EsriTerrain, EsriGrayCanvas, Polygon, Globe };
@@ -183,6 +184,6 @@ private:
   ViewToolTipAndUrlManager *_tturlManager;
   ViewActionsManager *_viewActionsManager;
 };
-}
+} // namespace tlp
 
 #endif // GEOGRAPHIC_VIEW_H

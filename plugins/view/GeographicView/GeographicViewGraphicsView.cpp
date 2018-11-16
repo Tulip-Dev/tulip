@@ -793,7 +793,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
           }
 
           unsigned int idx = 0;
-          vector<NominatimGeocoderResult> geocodingResults = nominatimGeocoder.getLatLngForAddress(addr);
+          vector<NominatimGeocoderResult> geocodingResults =
+              nominatimGeocoder.getLatLngForAddress(addr);
 
           if (geocodingResults.size() > 1) {
             bool showProgressWidget = false;
@@ -807,7 +808,8 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             addressSelectionDialog->setBaseAddress(tlpStringToQString(addr));
 
             for (unsigned int i = 0; i < geocodingResults.size(); ++i) {
-              addressSelectionDialog->addResultToList(tlpStringToQString(geocodingResults[i].address));
+              addressSelectionDialog->addResultToList(
+                  tlpStringToQString(geocodingResults[i].address));
             }
 
             addressSelectionProxy->setPos(
@@ -815,7 +817,6 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
                 height() / 2 - addressSelectionProxy->sceneBoundingRect().height() / 2);
 
             addressSelectionDialog->show();
-
 
             addressSelectionDialog->show();
             addressSelectionDialog->exec();
@@ -843,7 +844,6 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
               longitudeProperty->setNodeValue(n, latLng.second);
             }
           }
-
         }
 
         QApplication::processEvents();
@@ -930,7 +930,7 @@ void GeographicViewGraphicsView::paintEvent(QPaintEvent *event) {
   if (graph && !geocodingActive) {
 
     if (leafletMaps->isVisible() && (prevMapCenter != leafletMaps->getCurrentMapCenter() ||
-                                    prevMapZoom != leafletMaps->getCurrentMapZoom())) {
+                                     prevMapZoom != leafletMaps->getCurrentMapZoom())) {
 
       prevMapCenter = leafletMaps->getCurrentMapCenter();
       prevMapZoom = leafletMaps->getCurrentMapZoom();
@@ -944,9 +944,16 @@ void GeographicViewGraphicsView::paintEvent(QPaintEvent *event) {
 
       if (rightCoord[0] - leftCoord[0]) {
         float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
-        float middleLng = leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-        bb.expand(Coord(middleLng - mapWidth / 2., latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
-        bb.expand(Coord(middleLng + mapWidth / 2., latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.), 0));
+        float middleLng =
+            leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
+        bb.expand(Coord(
+            middleLng - mapWidth / 2.,
+            latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
+        bb.expand(
+            Coord(middleLng + mapWidth / 2.,
+                  latitudeToMercator(
+                      leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+                  0));
         GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
         sceneZoomAndPan.zoomAndPanAnimationStep(1);
       }
@@ -1158,10 +1165,11 @@ void GeographicViewGraphicsView::switchViewType() {
         bb.expand(Coord(
             middleLng - mapWidth / 2.,
             latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
-        bb.expand(Coord(middleLng + mapWidth / 2.,
-                        latitudeToMercator(
-                            leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
-                        0));
+        bb.expand(
+            Coord(middleLng + mapWidth / 2.,
+                  latitudeToMercator(
+                      leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+                  0));
         GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
         sceneZoomAndPan.zoomAndPanAnimationStep(1);
       }
@@ -1302,4 +1310,4 @@ void GeographicViewGraphicsView::setGeoLayoutComputed() {
   glMainWidget->getScene()->getGlGraphComposite()->setVisible(true);
 }
 
-}
+} // namespace tlp

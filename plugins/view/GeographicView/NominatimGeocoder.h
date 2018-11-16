@@ -35,18 +35,15 @@ struct NominatimGeocoderResult {
 class NominatimGeocoder {
 
 public:
-
   NominatimGeocoder();
   ~NominatimGeocoder();
 
   std::vector<NominatimGeocoderResult> getLatLngForAddress(const std::string &address);
 
 private:
-
   QNetworkAccessManager *_networkAccessManager;
-
 };
 
-}
+} // namespace tlp
 
 #endif // NOMINATIM_GEOCODER_H

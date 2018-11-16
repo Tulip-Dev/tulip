@@ -58,6 +58,6 @@ protected:
 private slots:
   void hideInfos();
 };
-}
+} // namespace tlp
 
 #endif // GEOGRAPHIC_VIEW_SHOW_ELEMENT_INFO_H

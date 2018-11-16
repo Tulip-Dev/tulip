@@ -51,6 +51,6 @@ public:
 
   void showEvent(QShowEvent *showEvt);
 };
-}
+} // namespace tlp
 
 #endif // ADDRESS_SELECTION_DIALOG_H

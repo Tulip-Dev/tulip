@@ -51,16 +51,26 @@ const string htmlMap =
     "   zoomControl: false"
     " });"
     " osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"
-    "    attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'"
+    "    attribution: '&copy; <a "
+    "href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'"
     " });"
     " osm.addTo(map);"
-    " esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {"
-    "   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'"
+    " esriSatellite = "
+    "L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/"
+    "tile/{z}/{y}/{x}', {"
+    "   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, "
+    "Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'"
     " });"
-    " esriTerrain = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {"
-    "   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'"
+    " esriTerrain = "
+    "L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/"
+    "tile/{z}/{y}/{x}', {"
+    "   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, "
+    "USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China "
+    "(Hong Kong), and the GIS User Community'"
     " });"
-    " esriGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {"
+    " esriGrayCanvas = "
+    "L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/"
+    "World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {"
     "   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',"
     "   maxZoom: 16"
     " });"
@@ -231,7 +241,7 @@ Coord LeafletMaps::getPixelPosOnScreenForLatLng(double lat, double lng) {
 }
 
 Coord LeafletMaps::mercatorProjection(const Coord &swPixel, const Coord &nePixel,
-                                     const double latitude, const double longitude) {
+                                      const double latitude, const double longitude) {
   double dLng = longitude + 180.0;
   double latRadians = M_PI * latitude / 180.0;
   double worldHeight = nePixel[1] - swPixel[1];
@@ -283,7 +293,7 @@ pair<double, double> LeafletMaps::getCurrentMapCenter() {
 
   if (!ret.isNull()) {
     QString pointStr = ret.toString();
-    int pos = pointStr.indexOf('(')+1;
+    int pos = pointStr.indexOf('(') + 1;
     QString xStr = pointStr.mid(pos, pointStr.lastIndexOf(',') - pos);
     pos = pointStr.lastIndexOf(',') + 1;
     QString yStr = pointStr.mid(pos, pointStr.lastIndexOf(')') - pos);
@@ -376,4 +386,4 @@ pair<double, double> LeafletMaps::getMapCurrentNorthEastLatLng() {
   return latLng;
 }
 
-}
+} // namespace tlp

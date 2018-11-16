@@ -223,7 +223,7 @@ void GeographicView::setState(const DataSet &dataSet) {
 
 void GeographicView::initMap() {
   geoViewGraphicsView->getLeafletMapsPage()->setMapCenter(mapCenterLatitudeInit,
-                                                         mapCenterLongitudeInit);
+                                                          mapCenterLongitudeInit);
   geoViewGraphicsView->getLeafletMapsPage()->setCurrentZoom(mapZoomInit);
 }
 

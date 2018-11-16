@@ -139,7 +139,6 @@ private:
 #ifdef QT_HAS_WEBENGINE
   MapRefresher *mapRefresher;
 #endif
-
 };
 
 #ifdef QT_HAS_WEBENGINE

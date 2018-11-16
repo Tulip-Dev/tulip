@@ -34,7 +34,6 @@ using namespace tlp;
 class NominatimResultsParser : public YajlParseFacade {
 
 public:
-
   void parseString(const string &value) override {
     if (_currentKey == "display_name") {
       adresses.push_back(value);
@@ -54,11 +53,9 @@ public:
   vector<pair<double, double>> latLngs;
 
 private:
-
   string _currentKey;
   double _lat;
   double _lng;
-
 };
 
 NominatimGeocoder::NominatimGeocoder() {
@@ -78,7 +75,7 @@ vector<NominatimGeocoderResult> NominatimGeocoder::getLatLngForAddress(const str
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   nominatimSearchUrl.setQuery("format=json&dedupe=1&limit=20");
 #else
-  QList<QPair<QString, QString> > queryItems;
+  QList<QPair<QString, QString>> queryItems;
   queryItems.append(qMakePair(QString("format"), QString("json")));
   queryItems.append(qMakePair(QString("dedupe"), QString("1")));
   queryItems.append(qMakePair(QString("limit"), QString("20")));
@@ -95,7 +92,8 @@ vector<NominatimGeocoderResult> NominatimGeocoder::getLatLngForAddress(const str
   QByteArray jsonData = reply->readAll();
 
   NominatimResultsParser nominatimParser;
-  nominatimParser.parse(reinterpret_cast<const unsigned char *>(jsonData.constData()), jsonData.size());
+  nominatimParser.parse(reinterpret_cast<const unsigned char *>(jsonData.constData()),
+                        jsonData.size());
 
   unsigned int nbResults = nominatimParser.adresses.size();
 
