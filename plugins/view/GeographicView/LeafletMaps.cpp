@@ -46,7 +46,7 @@ const string htmlMap =
     "var esriTerrain;"
     "var esriGrayCanvas;"
     "var currentLayer;"
-    "function init(lat, lng) { "
+    "function init(lat, lng, zoom) { "
     " map = L.map('map_canvas', {"
     "   zoomControl: false"
     " });"
@@ -95,7 +95,7 @@ const string htmlMap =
     " map.on('zoomend', function() {"
     "  leafletMapsQObject.refreshMap();"
     " });"
-    " map.setView(L.latLng(lat, lng), 13);"
+    " map.setView(L.latLng(lat, lng), zoom);"
     "}"
     "function setMapBounds(latLngArray) {"
     "  var latLngBounds = L.latLngBounds();"
@@ -195,7 +195,7 @@ void LeafletMaps::triggerLoading() {
 #ifdef QT_HAS_WEBKIT
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
-  QString code = "init(44.8084000, -0.5968050)";
+  QString code = "init(44.8084000, -2.0, 2)";
   executeJavascript(code);
   init = true;
 }
@@ -222,7 +222,6 @@ void LeafletMaps::switchToEsriGrayCanvas() {
 
 void LeafletMaps::setMapCenter(double latitude, double longitude) {
   QString code = "map.setView(L.latLng(%1, %2), map.getZoom());";
-  executeJavascript(code.arg(latitude).arg(longitude));
   executeJavascript(code.arg(latitude).arg(longitude));
 }
 
