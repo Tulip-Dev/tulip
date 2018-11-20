@@ -157,6 +157,8 @@ protected slots:
 
   void initMap();
 
+  void firstLayoutRefresh();
+
 private:
   void updatePoly(bool force = false);
 

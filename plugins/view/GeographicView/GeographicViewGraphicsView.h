@@ -185,7 +185,6 @@ private:
   QGraphicsProxyWidget *noLayoutMsgBox;
 
   bool firstGlobeSwitch;
-  bool firstMapSwitch;
 
   std::pair<double, double> prevMapCenter;
   int prevMapZoom;

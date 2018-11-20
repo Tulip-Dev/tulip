@@ -75,6 +75,7 @@ const string htmlMap =
     "   maxZoom: 16"
     " });"
     " currentLayer = osm;"
+    " map.setView(L.latLng(lat, lng), zoom);"
 #ifdef QT_HAS_WEBENGINE
     " map.on('zoomstart', function() {"
     "  leafletMapsQObject.refreshMap();"
@@ -95,14 +96,13 @@ const string htmlMap =
     " map.on('zoomend', function() {"
     "  leafletMapsQObject.refreshMap();"
     " });"
-    " map.setView(L.latLng(lat, lng), zoom);"
     "}"
     "function setMapBounds(latLngArray) {"
     "  var latLngBounds = L.latLngBounds();"
     "  for (var i = 0 ; i < latLngArray.length ; ++i) {"
     "    latLngBounds.extend(latLngArray[i]);"
     "  }"
-    "  map.fitBounds(latLngBounds);"
+    "  map.flyToBounds(latLngBounds);"
     "}"
     "function getWorldWidth() {"
     "  var bounds = map.getPixelWorldBounds();"
@@ -195,6 +195,9 @@ void LeafletMaps::triggerLoading() {
 #ifdef QT_HAS_WEBKIT
   frame->addToJavaScriptWindowObject("leafletMapsQObject", this);
 #endif
+  // map is first centered in the gulf of gascogne
+  // at the latitude of Bordeaux
+  // zoom level is pretty low to minimize the map display time
   QString code = "init(44.8084000, -2.0, 2)";
   executeJavascript(code);
   init = true;

@@ -368,7 +368,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
       geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr),
       mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
       polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
-      firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false) {
+      firstGlobeSwitch(true), geoLayoutComputed(false) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing |
                  QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
@@ -1153,36 +1153,12 @@ void GeographicViewGraphicsView::switchViewType() {
       }
     }
 
-    if (firstMapSwitch) {
-      BoundingBox bb;
-      Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
-      Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
-
-      if (rightCoord[0] - leftCoord[0]) {
-        float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
-        float middleLng =
-            leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-        bb.expand(Coord(
-            middleLng - mapWidth / 2.,
-            latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
-        bb.expand(
-            Coord(middleLng + mapWidth / 2.,
-                  latitudeToMercator(
-                      leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
-                  0));
-        GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
-        sceneZoomAndPan.zoomAndPanAnimationStep(1);
-      }
-
-      firstMapSwitch = false;
-    } else {
-      Camera &camera = glMainWidget->getScene()->getGraphCamera();
-      camera.setEyes(mapCameraBackup.getEyes());
-      camera.setCenter(mapCameraBackup.getCenter());
-      camera.setUp(mapCameraBackup.getUp());
-      camera.setZoomFactor(mapCameraBackup.getZoomFactor());
-      camera.setSceneRadius(mapCameraBackup.getSceneRadius());
-    }
+    Camera &camera = glMainWidget->getScene()->getGraphCamera();
+    camera.setEyes(mapCameraBackup.getEyes());
+    camera.setCenter(mapCameraBackup.getCenter());
+    camera.setUp(mapCameraBackup.getUp());
+    camera.setZoomFactor(mapCameraBackup.getZoomFactor());
+    camera.setSceneRadius(mapCameraBackup.getSceneRadius());
   }
 
   else {
