@@ -75,7 +75,8 @@ unsigned int GeographicViewInteractorSelection::priority() const {
 
 PLUGIN(GeographicViewInteractorSelection)
 
-GeographicViewInteractorSelectionEditor::GeographicViewInteractorSelectionEditor(const PluginContext *)
+GeographicViewInteractorSelectionEditor::GeographicViewInteractorSelectionEditor(
+    const PluginContext *)
     : GeographicViewInteractor(":/tulip/gui/icons/i_move.png", "selection edition in view") {}
 
 void GeographicViewInteractorSelectionEditor::construct() {

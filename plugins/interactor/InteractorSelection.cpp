@@ -69,8 +69,7 @@ public:
 
   bool isCompatible(const std::string &viewName) const override {
     return ((viewName == NodeLinkDiagramComponent::viewName) ||
-            (viewName == ViewName::HistogramViewName) ||
-	    (viewName == ViewName::MatrixViewName) ||
+            (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
             (viewName == ViewName::PixelOrientedViewName) ||
             (viewName == ViewName::ScatterPlot2DViewName));
   }
