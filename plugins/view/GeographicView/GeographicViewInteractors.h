@@ -24,6 +24,7 @@
 #include <tulip/MouseInteractors.h>
 #include "GeographicView.h"
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <QCursor>
 
 using namespace tlp;
 
@@ -67,6 +68,40 @@ public:
   void construct() override;
 
   QWidget *configurationWidget() const override;
+  unsigned int priority() const override;
+};
+
+class GeographicViewInteractorSelection : public GeographicViewInteractor {
+
+public:
+  PLUGININFORMATION("InteractorSelectionGeographicView", "Tulip Team", "01/12/2018",
+                    "Geographic View Selection Interactor", "1.0", "Selection")
+
+  GeographicViewInteractorSelection(const PluginContext *);
+
+  void construct() override;
+
+  QWidget *configurationWidget() const override;
+
+  QCursor cursor() const override;
+
+  unsigned int priority() const override;
+};
+
+class GeographicViewInteractorSelectionEditor : public GeographicViewInteractor {
+
+public:
+  PLUGININFORMATION("InteractorSelectionEditorGeographicView", "Tulip Team", "01/12/2018",
+                    "Geographic View Selection Editor Interactor", "1.0", "Selection")
+
+  GeographicViewInteractorSelectionEditor(const PluginContext *);
+
+  void construct() override;
+
+  QWidget *configurationWidget() const override;
+
+  QCursor cursor() const override;
+
   unsigned int priority() const override;
 };
 

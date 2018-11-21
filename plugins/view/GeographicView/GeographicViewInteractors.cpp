@@ -21,6 +21,7 @@
 #include <tulip/MouseNodeBuilder.h>
 #include <tulip/MouseEdgeBuilder.h>
 #include <tulip/MouseSelector.h>
+#include <tulip/MouseSelectionEditor.h>
 #include <tulip/MouseEdgeBendEditor.h>
 
 #include "GeographicViewInteractors.h"
@@ -51,6 +52,51 @@ void GeographicViewInteractorNavigation::construct() {
 QWidget *GeographicViewInteractorNavigation::configurationWidget() const {
   return nullptr;
 }
+
+GeographicViewInteractorSelection::GeographicViewInteractorSelection(const PluginContext *)
+    : GeographicViewInteractor(":/tulip/gui/icons/i_selection.png", "selection in view") {}
+
+void GeographicViewInteractorSelection::construct() {
+  push_back(new GeographicViewNavigator);
+  push_back(new MouseSelector);
+}
+
+QWidget *GeographicViewInteractorSelection::configurationWidget() const {
+  return nullptr;
+}
+
+QCursor GeographicViewInteractorSelection::cursor() const {
+  return Qt::CrossCursor;
+}
+
+unsigned int GeographicViewInteractorSelection::priority() const {
+  return StandardInteractorPriority::RectangleSelection;
+}
+
+PLUGIN(GeographicViewInteractorSelection)
+
+GeographicViewInteractorSelectionEditor::GeographicViewInteractorSelectionEditor(const PluginContext *)
+    : GeographicViewInteractor(":/tulip/gui/icons/i_move.png", "selection edition in view") {}
+
+void GeographicViewInteractorSelectionEditor::construct() {
+  push_back(new GeographicViewNavigator);
+  push_back(new MouseSelector);
+  push_back(new MouseSelectionEditor);
+}
+
+QWidget *GeographicViewInteractorSelectionEditor::configurationWidget() const {
+  return nullptr;
+}
+
+QCursor GeographicViewInteractorSelectionEditor::cursor() const {
+  return Qt::CrossCursor;
+}
+
+unsigned int GeographicViewInteractorSelectionEditor::priority() const {
+  return StandardInteractorPriority::RectangleSelectionModifier;
+}
+
+PLUGIN(GeographicViewInteractorSelectionEditor)
 
 GeographicViewNavigator::GeographicViewNavigator() : x(0), y(0), inRotation(false) {}
 
