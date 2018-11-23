@@ -121,9 +121,10 @@ struct TLPGraphBuilder : public TLPTrue {
       char *endptr;
       version = strtod(cptr, &endptr);
       // check for correctness of version parsing and value
-      return (endptr != cptr) && (version <= TLP_VERSION);
+      if ((endptr != cptr) && (version <= TLP_VERSION))
+	return true;
     }
-
+    parser->errorMsg = "invalid tlp version";
     return false;
   }
 
@@ -136,6 +137,13 @@ struct TLPGraphBuilder : public TLPTrue {
     return true;
   }
   bool addNodes(int first, int last) {
+    // node with id first - 1 must exist
+    if (first && !_graph->isElement(node(first - 1))) {
+      std::stringstream ess;
+      ess << "node with id " << (first - 1) << " must exist";
+      parser->errorMsg = ess.str();
+      return false;
+    }
     _graph->addNodes(last - first + 1);
 
     if (version < 2.1) {
@@ -190,12 +198,23 @@ struct TLPGraphBuilder : public TLPTrue {
       tgt = nodeIndex[idTarget];
     }
 
-    if (_graph->isElement(src) && _graph->isElement(tgt)) {
-      edgeIndex[id] = _graph->addEdge(src, tgt);
-      return true;
+    if (!_graph->isElement(src)) {
+      std::stringstream ess;
+      ess << "node with id " << src << " does not exist";
+      parser->errorMsg = ess.str();
+
+      return false;
+    }
+    if (!_graph->isElement(tgt)) {
+      std::stringstream ess;
+      ess << "node with id " << tgt << " does not exist";
+      parser->errorMsg = ess.str();
+
+      return false;
     }
 
-    return false;
+    edgeIndex[id] = _graph->addEdge(src, tgt);
+    return true;
   }
   PropertyInterface *createProperty(int clusterId, const std::string &propertyType,
                                     const std::string &propertyName, bool &isGraphProperty,
@@ -280,14 +299,15 @@ struct TLPGraphBuilder : public TLPTrue {
         const char *startPtr = value.c_str();
         int result = strtol(startPtr, &endPtr, 10);
 
-        if (endPtr == startPtr)
+        if ((endPtr == startPtr) ||
+	    (clusterIndex.find(result) == clusterIndex.end())) {
+	  std::stringstream ess;
+	  ess << "invalid node value for property " << prop->getName();
+	  parser->errorMsg = ess.str();
           return false;
-
-        if (clusterIndex.find(result) == clusterIndex.end())
-          return false;
+	}
 
         gProp->setNodeValue(n, result ? clusterIndex[result] : nullptr);
-
         return true;
       }
     }
@@ -324,7 +344,11 @@ struct TLPGraphBuilder : public TLPTrue {
 
         if (result)
           gProp->setEdgeValue(e, v);
-
+	else {
+	  std::stringstream ess;
+	  ess << "invalid edge value for property " << propertyName;
+	  parser->errorMsg = ess.str();
+	}
         return result;
       }
     }
@@ -379,10 +403,14 @@ struct TLPGraphBuilder : public TLPTrue {
       int result = strtol(startPtr, &endPtr, 10);
 
       if (endPtr == startPtr)
-        result = 0; // return false;
+	result = 0; // use root graph
 
-      if (clusterIndex.find(result) == clusterIndex.end())
-        return false;
+      if (clusterIndex.find(result) == clusterIndex.end()) {
+	std::stringstream ess;
+	ess << "invalid node value for property " << prop->getName();
+	parser->errorMsg = ess.str();
+	return false;
+      }
 
       gProp->setAllNodeValue(result ? clusterIndex[result] : nullptr);
 
@@ -402,6 +430,8 @@ struct TLPGraphBuilder : public TLPTrue {
 
   bool setAllEdgeValue(PropertyInterface *prop, std::string &value, bool isGraphProperty,
                        bool isPathViewProperty) {
+    const std::string &propertyName = prop->getName();
+
     if (isGraphProperty) {
       GraphProperty *gProp = dynamic_cast<GraphProperty *>(prop);
       std::set<edge> v;
@@ -409,11 +439,14 @@ struct TLPGraphBuilder : public TLPTrue {
 
       if (result)
         gProp->setAllEdgeValue(v);
+      else {
+	std::stringstream ess;
+	ess << "invalid edge value for property " << propertyName;
+	parser->errorMsg = ess.str();
+      }
 
       return result;
     }
-
-    const std::string &propertyName = prop->getName();
 
     if (dynamic_cast<IntegerProperty *>(prop)) {
       // If we are in the old edge extremities id system we need to convert the ids in the file.
@@ -446,6 +479,9 @@ struct TLPGraphBuilder : public TLPTrue {
       return true;
     }
 
+    std::stringstream ess;
+    ess << "sub graph with id " << supergraphId << " does not exist.";
+    parser->errorMsg = ess.str();
     return false;
   }
   bool addStruct(const std::string &structName, TLPBuilder *&newBuilder) override;
@@ -486,14 +522,16 @@ struct TLPEdgeBuilder : public TLPFalse {
       parameters.push_back(id);
       nbParameter++;
       return true;
-    } else
-      return false;
+    }
+    parser->errorMsg = "wrong edge format, must be (edge id src target)";
+    return false;
   }
   bool close() override {
     if (nbParameter == 3) {
       return graphBuilder->addEdge(parameters[0], parameters[1], parameters[2]);
-    } else
-      return false;
+    }
+    parser->errorMsg = "wrong edge format, must be (edge id src target)";
+    return false;
   }
 };
 //=================================================================================
@@ -604,8 +642,12 @@ struct TLPAttributesBuilder : public TLPFalse {
 
     Graph *subgraph = id ? graphBuilder->getSubGraph(id) : graphBuilder->_graph;
 
-    if (subgraph == nullptr)
+    if (subgraph == nullptr) {
+      std::stringstream ess;
+      ess << "sub graph with id " << id << " does not exist.";
+      parser->errorMsg = ess.str();
       return false;
+    }
 
     return DataSet::read(is, const_cast<DataSet &>(subgraph->getAttributes()));
   }
@@ -729,8 +771,10 @@ struct TLPPropertyBuilder : public TLPFalse {
 
       if (clusterId != INT_MAX)
         return getProperty();
-    } else
+    } else {
+      parser->errorMsg = "invalid property format";
       return false;
+    }
 
     return true;
   }
@@ -813,7 +857,7 @@ struct TLPDefaultPropertyBuilder : public TLPFalse {
       i++;
       return propertyBuilder->setAllEdgeValue(val);
     }
-
+    parser->errorMsg = "invalid property default value format";
     return false;
   }
   bool close() override {
@@ -984,7 +1028,7 @@ public:
 
     pluginProgress->showPreview(false);
     pluginProgress->setComment(std::string("Loading ") + filename + "...");
-    TLPParser<false> myParser(*input, new TLPGraphBuilder(graph, dataSet), pluginProgress, size);
+    TLPParser myParser(*input, new TLPGraphBuilder(graph, dataSet), pluginProgress, size);
     result = myParser.parse();
 
     if (!result) {

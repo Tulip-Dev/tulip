@@ -28,6 +28,7 @@
 namespace tlp {
 
 class PluginProgress;
+struct TLPParser;
 
 struct ParserError {
   ParserError(int err = 0, int lin = 0, int cha = 0)
@@ -310,6 +311,8 @@ struct TLPBuilder {
   virtual bool read(std::istream &) {
     return false;
   }
+
+  TLPParser* parser;
 };
 
 struct TLPTrue : public TLPBuilder {
@@ -362,17 +365,18 @@ struct TLPFalse : public TLPBuilder {
   }
 };
 //=====================================================================================
-template <bool displayComment>
 struct TLPParser {
   std::list<TLPBuilder *> builderStack;
   std::istream &inputStream;
   TLPTokenParser *tokenParser;
   PluginProgress *pluginProgress;
+  std::string errorMsg;
   int fileSize, curPos;
+  bool displayComment;
 
   TLPParser(std::istream &inputStream, TLPBuilder *builder, PluginProgress *pluginProgress,
-            int size)
-      : inputStream(inputStream), pluginProgress(pluginProgress), fileSize(size), curPos(0) {
+            int size, bool dispComment = false)
+  : inputStream(inputStream), pluginProgress(pluginProgress), fileSize(size), curPos(0), displayComment(dispComment) {
     builderStack.push_front(builder);
   }
 
@@ -392,6 +396,8 @@ struct TLPParser {
 
     if (errno)
       ess << std::endl << strerror(errno);
+    else if (!errorMsg.empty())
+      ess << std::endl << errorMsg;
 
     pluginProgress->setError(ess.str());
     return false;
@@ -418,6 +424,7 @@ struct TLPParser {
         TLPBuilder *newBuilder;
 
         if (builderStack.front()->addStruct(currentValue.str, newBuilder)) {
+	  newBuilder->parser = this;
           builderStack.push_front(newBuilder);
 
           if (newBuilder->canRead())
