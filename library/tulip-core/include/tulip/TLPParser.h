@@ -312,7 +312,7 @@ struct TLPBuilder {
     return false;
   }
 
-  TLPParser* parser;
+  TLPParser *parser;
 };
 
 struct TLPTrue : public TLPBuilder {
@@ -376,7 +376,8 @@ struct TLPParser {
 
   TLPParser(std::istream &inputStream, TLPBuilder *builder, PluginProgress *pluginProgress,
             int size, bool dispComment = false)
-  : inputStream(inputStream), pluginProgress(pluginProgress), fileSize(size), curPos(0), displayComment(dispComment) {
+      : inputStream(inputStream), pluginProgress(pluginProgress), fileSize(size), curPos(0),
+        displayComment(dispComment) {
     builderStack.push_front(builder);
   }
 
@@ -424,7 +425,7 @@ struct TLPParser {
         TLPBuilder *newBuilder;
 
         if (builderStack.front()->addStruct(currentValue.str, newBuilder)) {
-	  newBuilder->parser = this;
+          newBuilder->parser = this;
           builderStack.push_front(newBuilder);
 
           if (newBuilder->canRead())

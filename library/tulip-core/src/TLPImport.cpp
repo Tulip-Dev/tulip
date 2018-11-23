@@ -122,7 +122,7 @@ struct TLPGraphBuilder : public TLPTrue {
       version = strtod(cptr, &endptr);
       // check for correctness of version parsing and value
       if ((endptr != cptr) && (version <= TLP_VERSION))
-	return true;
+        return true;
     }
     parser->errorMsg = "invalid tlp version";
     return false;
@@ -299,13 +299,12 @@ struct TLPGraphBuilder : public TLPTrue {
         const char *startPtr = value.c_str();
         int result = strtol(startPtr, &endPtr, 10);
 
-        if ((endPtr == startPtr) ||
-	    (clusterIndex.find(result) == clusterIndex.end())) {
-	  std::stringstream ess;
-	  ess << "invalid node value for property " << prop->getName();
-	  parser->errorMsg = ess.str();
+        if ((endPtr == startPtr) || (clusterIndex.find(result) == clusterIndex.end())) {
+          std::stringstream ess;
+          ess << "invalid node value for property " << prop->getName();
+          parser->errorMsg = ess.str();
           return false;
-	}
+        }
 
         gProp->setNodeValue(n, result ? clusterIndex[result] : nullptr);
         return true;
@@ -344,11 +343,11 @@ struct TLPGraphBuilder : public TLPTrue {
 
         if (result)
           gProp->setEdgeValue(e, v);
-	else {
-	  std::stringstream ess;
-	  ess << "invalid edge value for property " << propertyName;
-	  parser->errorMsg = ess.str();
-	}
+        else {
+          std::stringstream ess;
+          ess << "invalid edge value for property " << propertyName;
+          parser->errorMsg = ess.str();
+        }
         return result;
       }
     }
@@ -403,13 +402,13 @@ struct TLPGraphBuilder : public TLPTrue {
       int result = strtol(startPtr, &endPtr, 10);
 
       if (endPtr == startPtr)
-	result = 0; // use root graph
+        result = 0; // use root graph
 
       if (clusterIndex.find(result) == clusterIndex.end()) {
-	std::stringstream ess;
-	ess << "invalid node value for property " << prop->getName();
-	parser->errorMsg = ess.str();
-	return false;
+        std::stringstream ess;
+        ess << "invalid node value for property " << prop->getName();
+        parser->errorMsg = ess.str();
+        return false;
       }
 
       gProp->setAllNodeValue(result ? clusterIndex[result] : nullptr);
@@ -440,9 +439,9 @@ struct TLPGraphBuilder : public TLPTrue {
       if (result)
         gProp->setAllEdgeValue(v);
       else {
-	std::stringstream ess;
-	ess << "invalid edge value for property " << propertyName;
-	parser->errorMsg = ess.str();
+        std::stringstream ess;
+        ess << "invalid edge value for property " << propertyName;
+        parser->errorMsg = ess.str();
       }
 
       return result;
