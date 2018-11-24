@@ -394,7 +394,7 @@ bool EdgeBundling::run() {
           continue;
 
         tlp::edge e = gridGraph->addEdge(samePositionNodes[i][j], n);
-        ntype.setEdgeValue(e, 2);
+        ntype.addEdgeValue(e, 2);
       }
     }
   }
