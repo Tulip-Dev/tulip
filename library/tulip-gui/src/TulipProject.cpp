@@ -332,10 +332,10 @@ bool TulipProject::readMetaInfo() {
         return false;
       }
 
-      const char *name(QStringToTlpString(doc.name().toString()).c_str());
+      std::string name = QStringToTlpString(doc.name().toString());
 
-      if (property(name).isValid())
-        setProperty(name, doc.readElementText());
+      if (property(name.c_str()).isValid())
+        setProperty(name.c_str(), doc.readElementText());
     }
   }
 
