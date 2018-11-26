@@ -175,16 +175,8 @@ string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
 
 QString getPluginPackageName(const QString &pluginName) {
   return pluginName.simplified().remove(' ').toLower() +
-         /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_VERSION + "-" + OS_PLATFORM +
+         "-" + TULIP_VERSION + "-" + OS_PLATFORM +
          OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
-}
-
-QString getPluginStagingDirectory() {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/staging/plugins";
-#else
-  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/plugins";
-#endif
 }
 
 QString getPluginLocalInstallationDir() {
@@ -196,12 +188,7 @@ QString getPluginLocalInstallationDir() {
 }
 
 QString localPluginsPath() {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  return QString(QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) +
-                 "/plugins/");
-#else
-  return QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/");
-#endif
+  return getPluginLocalInstallationDir() + '/';
 }
 
 // we define a specific GlTextureLoader allowing to load a GlTexture
@@ -423,11 +410,10 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   initQTypeSerializers();
   // initialize Texture loader
   GlTextureManager::setTextureLoader(new GlTextureFromQImageLoader());
-
   // Load plugins
-  tlp::PluginLibraryLoader::loadPluginsFromDir(tlp::TulipPluginsPath, loader);
-  tlp::PluginLibraryLoader::loadPluginsFromDir(
-      QStringToTlpString(tlp::getPluginLocalInstallationDir()), loader);
+  tlp::PluginLibraryLoader::loadPluginsFromDir(tlp::TulipPluginsPath, loader,
+					       QStringToTlpString(tlp::getPluginLocalInstallationDir()) + "/lib/tulip");
+  tlp::PluginLibraryLoader::loadPluginsFromDir(QStringToTlpString(tlp::getPluginLocalInstallationDir()), loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
   tlp::GlyphManager::getInst().loadGlyphPlugins();

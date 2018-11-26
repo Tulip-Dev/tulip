@@ -77,15 +77,17 @@ public:
   *
   * This function enables to recursively load Tulip plugins from a
   * provided root directory, thus visiting subdirectories of the provided
-  * one and so forth.
+  * one and so forth. If a new version of a plugin exist in a user specific
+  * local directory then the plugin is not loaded.
   *
   *
   * @param rootPath The root directory from which to look for plugins to load.
   * @param loader A PluginLoader to output what is going on. Defaults to nullptr.
+  * @param userLocalPath A user specific local directory where some plugins may have been downloaded
 
   *
   **/
-  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = nullptr);
+  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = nullptr, const std::string &userLocalPath = "");
 
   /**
    * @brief Loads a single plugin library.
@@ -93,7 +95,7 @@ public:
    * @param filename The name of the plugin file to load.
    * @param loader A loader to report what is going on (only its loaded or aborted functions will be
    *called) Defaults to nullptr.
-   * @return bool Whether the plugin was sucessfully loaded.
+   * @return bool Whether the plugin was successfully loaded.
    **/
   static bool loadPluginLibrary(const std::string &filename, PluginLoader *loader = nullptr);
 #endif // EMSCRIPTEN
@@ -111,7 +113,7 @@ public:
 private:
   PluginLibraryLoader() {}
 #ifndef EMSCRIPTEN
-  bool initPluginDir(PluginLoader *loader, bool recursive = false);
+  bool initPluginDir(PluginLoader *loader, bool recursive = false, const std::string &userPluginsPath = "");
 #endif
 
   static PluginLibraryLoader *getInstance() {

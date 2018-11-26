@@ -34,6 +34,7 @@
 #include <cstdlib>
 #include <dlfcn.h>
 #include <dirent.h>
+#include <sys/stat.h>
 #include <cerrno>
 #endif
 
@@ -83,7 +84,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
   getInstance()->pluginPath = currentPluginPath;
 }
 
-void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader) {
+void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader, const std::string& userLocalPath) {
   // backup current plugin path as the pluginPath variable can be modified as a side effect
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
@@ -94,7 +95,7 @@ void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, Plugin
   // ensure message is empty before plugins directory loading
   getInstance()->message.clear();
 
-  if (getInstance()->initPluginDir(loader, true)) {
+  if (getInstance()->initPluginDir(loader, true, userLocalPath)) {
     if (loader)
       loader->finished(true, getInstance()->message);
   }
@@ -212,7 +213,8 @@ int __tulip_select_dirs(struct dirent *ent) {
 
 #endif
 
-bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
+ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
+					 const std::string& userPluginsPath) {
   std::string tulip_mm_version(TULIP_MM_VERSION);
   std::string tulip_version(TULIP_VERSION);
 
@@ -278,6 +280,16 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
       if (idx != std::string::npos) {
         if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
+	  // if a user local plugin with the same name exists
+	  // we do not try to load the current one
+	  if (!userPluginsPath.empty()) {
+	    std::string userPluginLibrary =
+	      userPluginsPath + "/" + findData.cFileName;
+	    if (GetFileAttributes(userPluginLibrary.c_str()) != 0xFFFFFFFF) {
+	      success = FindNextFile(hFind, &findData);
+	      continue;
+	    }
+	  }
           if (loader)
             loader->loading(findData.cFileName);
 
@@ -308,7 +320,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
           if (dir != "." && dir != "..") {
             pluginPath = rootPath + "/" + dir;
-            initPluginDir(loader, true);
+            initPluginDir(loader, true, userPluginsPath);
             pluginPath = rootPath;
           }
         }
@@ -364,6 +376,14 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
     if (idx != std::string::npos) {
       if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
+	// if a user local plugin with the same name exists
+	// we do not try to load the current one
+	if (!userPluginsPath.empty()) {
+	  std::string userPluginLibrary = userPluginsPath + "/" + lib;
+	  struct stat slib;
+	  if (stat(userPluginLibrary.c_str(), &slib) == 0)
+	    continue;
+	}
         if (loader != nullptr)
           loader->loading(lib);
 
@@ -432,7 +452,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive) {
 
       pluginPath = rootPath + "/" + dir;
 
-      initPluginDir(loader, true);
+      initPluginDir(loader, true, userPluginsPath);
 
       pluginPath = rootPath;
 
