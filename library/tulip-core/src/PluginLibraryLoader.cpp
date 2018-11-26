@@ -84,7 +84,8 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string &f
   getInstance()->pluginPath = currentPluginPath;
 }
 
-void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader, const std::string& userLocalPath) {
+void PluginLibraryLoader::loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader,
+                                             const std::string &userLocalPath) {
   // backup current plugin path as the pluginPath variable can be modified as a side effect
   // while loading a plugin that loads plugins
   std::string currentPluginPath = getInstance()->pluginPath;
@@ -213,8 +214,8 @@ int __tulip_select_dirs(struct dirent *ent) {
 
 #endif
 
- bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
-					 const std::string& userPluginsPath) {
+bool PluginLibraryLoader::initPluginDir(PluginLoader *loader, bool recursive,
+                                        const std::string &userPluginsPath) {
   std::string tulip_mm_version(TULIP_MM_VERSION);
   std::string tulip_version(TULIP_VERSION);
 
@@ -280,16 +281,15 @@ int __tulip_select_dirs(struct dirent *ent) {
 
       if (idx != std::string::npos) {
         if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
-	  // if a user local plugin with the same name exists
-	  // we do not try to load the current one
-	  if (!userPluginsPath.empty()) {
-	    std::string userPluginLibrary =
-	      userPluginsPath + "/" + findData.cFileName;
-	    if (GetFileAttributes(userPluginLibrary.c_str()) != 0xFFFFFFFF) {
-	      success = FindNextFile(hFind, &findData);
-	      continue;
-	    }
-	  }
+          // if a user local plugin with the same name exists
+          // we do not try to load the current one
+          if (!userPluginsPath.empty()) {
+            std::string userPluginLibrary = userPluginsPath + "/" + findData.cFileName;
+            if (GetFileAttributes(userPluginLibrary.c_str()) != 0xFFFFFFFF) {
+              success = FindNextFile(hFind, &findData);
+              continue;
+            }
+          }
           if (loader)
             loader->loading(findData.cFileName);
 
@@ -376,14 +376,14 @@ int __tulip_select_dirs(struct dirent *ent) {
 
     if (idx != std::string::npos) {
       if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
-	// if a user local plugin with the same name exists
-	// we do not try to load the current one
-	if (!userPluginsPath.empty()) {
-	  std::string userPluginLibrary = userPluginsPath + "/" + lib;
-	  struct stat slib;
-	  if (stat(userPluginLibrary.c_str(), &slib) == 0)
-	    continue;
-	}
+        // if a user local plugin with the same name exists
+        // we do not try to load the current one
+        if (!userPluginsPath.empty()) {
+          std::string userPluginLibrary = userPluginsPath + "/" + lib;
+          struct stat slib;
+          if (stat(userPluginLibrary.c_str(), &slib) == 0)
+            continue;
+        }
         if (loader != nullptr)
           loader->loading(lib);
 

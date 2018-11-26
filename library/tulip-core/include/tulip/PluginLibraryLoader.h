@@ -87,7 +87,8 @@ public:
 
   *
   **/
-  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = nullptr, const std::string &userLocalPath = "");
+  static void loadPluginsFromDir(const std::string &rootPath, PluginLoader *loader = nullptr,
+                                 const std::string &userLocalPath = "");
 
   /**
    * @brief Loads a single plugin library.
@@ -113,7 +114,8 @@ public:
 private:
   PluginLibraryLoader() {}
 #ifndef EMSCRIPTEN
-  bool initPluginDir(PluginLoader *loader, bool recursive = false, const std::string &userPluginsPath = "");
+  bool initPluginDir(PluginLoader *loader, bool recursive = false,
+                     const std::string &userPluginsPath = "");
 #endif
 
   static PluginLibraryLoader *getInstance() {

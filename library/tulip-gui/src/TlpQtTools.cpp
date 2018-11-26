@@ -174,8 +174,7 @@ string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
 }
 
 QString getPluginPackageName(const QString &pluginName) {
-  return pluginName.simplified().remove(' ').toLower() +
-         "-" + TULIP_VERSION + "-" + OS_PLATFORM +
+  return pluginName.simplified().remove(' ').toLower() + "-" + TULIP_VERSION + "-" + OS_PLATFORM +
          OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
 }
 
@@ -411,9 +410,11 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   // initialize Texture loader
   GlTextureManager::setTextureLoader(new GlTextureFromQImageLoader());
   // Load plugins
-  tlp::PluginLibraryLoader::loadPluginsFromDir(tlp::TulipPluginsPath, loader,
-					       QStringToTlpString(tlp::getPluginLocalInstallationDir()) + "/lib/tulip");
-  tlp::PluginLibraryLoader::loadPluginsFromDir(QStringToTlpString(tlp::getPluginLocalInstallationDir()), loader);
+  tlp::PluginLibraryLoader::loadPluginsFromDir(
+      tlp::TulipPluginsPath, loader,
+      QStringToTlpString(tlp::getPluginLocalInstallationDir()) + "/lib/tulip");
+  tlp::PluginLibraryLoader::loadPluginsFromDir(
+      QStringToTlpString(tlp::getPluginLocalInstallationDir()), loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
   tlp::GlyphManager::getInst().loadGlyphPlugins();
