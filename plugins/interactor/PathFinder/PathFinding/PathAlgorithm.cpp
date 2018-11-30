@@ -24,8 +24,8 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphParallelTools.h>
+#include <tulip/GraphTools.h>
 
-#include "Dikjstra/Dikjstra.h"
 #include "DFS/DFS.h"
 
 #define SMALLEST_WEIGHT 1.E-6
@@ -59,60 +59,66 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
   assert(src != tgt);
 #endif /* NDEBUG */
 
-  // We always compute Dikjstra as it is used in the all path computation too
-  EdgeStaticProperty<double> eWeights(graph);
-
-  if (!weights) {
-    eWeights.setAll(SMALLEST_WEIGHT);
-  } else {
-    auto fn = [&](edge e, unsigned int i) {
-      double val(weights->getEdgeValue(e));
-
-      eWeights[i] = val ? val : SMALLEST_WEIGHT;
-    };
-    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
-  }
-
-  set<node> focus;
-  vector<node> vNodes;
-  Dikjstra dikjstra;
-  dikjstra.initDikjstra(graph, nullptr, src, edgesOrientation, eWeights, 0, focus);
-
   bool retVal = false;
+  tlp::ShortestPathType spt;
 
-  switch (pathType) {
-  case AllShortest:
-    retVal = dikjstra.searchPaths(tgt, result);
-    break;
+  if (pathType == AllShortest) {
+    switch (edgesOrientation) {
+    case Directed:
+      spt = ShortestPathType::AllDirectedPaths;
+      break;
+    case Undirected:
+      spt = ShortestPathType::AllPaths;
+      break;
+    case Reversed:
+    default:
+      spt = ShortestPathType::AllReversedPaths;
+    }
+  } else {
+    switch (edgesOrientation) {
+    case Directed:
+      spt = ShortestPathType::OneDirectedPath;
+      break;
+    case Undirected:
+      spt = ShortestPathType::OnePath;
+      break;
+    case Reversed:
+    default:
+      spt = ShortestPathType::OneReversedPath;
+    }
+  }
+  retVal = selectShortestPaths(graph, src, tgt, spt, weights, result);
+  if (pathType == AllPaths && retVal) {
+    EdgeStaticProperty<double> eWeights(graph);
 
-  case OneShortest:
-    retVal = dikjstra.searchPath(tgt, result, vNodes);
-    break;
+    if (!weights) {
+      eWeights.setAll(SMALLEST_WEIGHT);
+    } else {
+      auto fn = [&](edge e, unsigned int i) {
+	double val(weights->getEdgeValue(e));
 
-  case AllPaths:
-    retVal = dikjstra.searchPath(tgt, result, vNodes);
-
-    if (retVal) {
-      double pathLength;
-
-      if (tolerance == DBL_MAX)
-        pathLength = DBL_MAX;
-      else {
-        pathLength = computePathLength(result, eWeights);
-        pathLength *= tolerance;
-      }
-
-      if (tolerance > 1) { // We only compute the other paths if the tolerance is greater than 1.
-                           // Meaning that the user doesn't want only the shortest path.
-        result->setAllNodeValue(false);
-        result->setAllEdgeValue(false);
-        DoubleProperty dists(result->getGraph());
-        DFS d(graph, result, &dists, tgt, eWeights, edgesOrientation, pathLength);
-        retVal = d.searchPaths(src);
-      }
+	eWeights[i] = val ? val : SMALLEST_WEIGHT;
+      };
+      TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
     }
 
-    break;
+    double pathLength;
+
+    if (tolerance == DBL_MAX)
+      pathLength = DBL_MAX;
+    else {
+      pathLength = computePathLength(result, eWeights);
+      pathLength *= tolerance;
+    }
+
+    if (tolerance > 1) {
+      // We only compute the other paths if the tolerance is greater than 1.
+      // Meaning that the user doesn't want only the shortest path.
+      result->setAllNodeValue(false);
+      result->setAllEdgeValue(false);
+      DFS d(graph, result, tgt, eWeights, edgesOrientation, pathLength);
+      retVal = d.searchPaths(src);
+    }
   }
   return retVal;
 }

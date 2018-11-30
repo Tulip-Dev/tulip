@@ -50,8 +50,8 @@ PathFinder::PathFinder(const tlp::PluginContext *)
       tolerance(DEFAULT_TOLERANCE), _configurationWidget(nullptr), highlightersListWidget(nullptr),
       configureHighlighterBtn(nullptr) {
 
-  edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
-  edgeOrientationLabels[PathAlgorithm::NonOriented] = "Consider edges as non-oriented";
+  edgeOrientationLabels[PathAlgorithm::Directed] = "Consider edges as directed";
+  edgeOrientationLabels[PathAlgorithm::Undirected] = "Consider edges as undirected";
   edgeOrientationLabels[PathAlgorithm::Reversed] = "Consider edges as reversed";
   pathsTypesLabels[PathAlgorithm::AllPaths] = "Select all paths";
   pathsTypesLabels[PathAlgorithm::AllShortest] = "Select all shortest paths";
@@ -174,9 +174,7 @@ void PathFinder::setPathsType(const QString &pathType) {
   }
 
   bool disabled(pathsTypes != PathAlgorithm::AllPaths);
-  _configurationWidget->toleranceCheckDisabled(disabled);
-  _configurationWidget->toleranceSpinDisabled(disabled);
-  _configurationWidget->toleranceLabelDisabled(disabled);
+  _configurationWidget->toleranceDisabled(disabled);
 }
 
 double PathFinder::getTolerance() {

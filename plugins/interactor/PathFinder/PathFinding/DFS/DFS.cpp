@@ -26,25 +26,28 @@
 using namespace tlp;
 using namespace std;
 
-DFS::DFS(Graph *graph, BooleanProperty *result, DoubleProperty *dists, node tgt,
+DFS::DFS(Graph *graph, BooleanProperty *result, node tgt,
          const EdgeStaticProperty<double> &eWeights, EdgeOrientation edgesOrientation,
          double maxDist)
-    : graph(graph), result(result), dists(dists), tgt(tgt), weights(eWeights), currentDist(0),
+    : graph(graph), result(result), tgt(tgt), weights(eWeights), currentDist(0),
       edgesOrientation(edgesOrientation), maxDist(maxDist) {
 #ifndef NDEBUG
   assert(graph->getRoot() == result->getGraph()->getRoot());
 #endif /* NDEBUG */
-  dists->setAllNodeValue(DBL_MAX);
-  visitable = new BooleanProperty(graph);
-  visitable->setAllNodeValue(true);
-  visitable->setAllEdgeValue(true);
-}
-
-DFS::~DFS() {
-  delete visitable;
 }
 
 bool DFS::searchPaths(node src) {
+  DoubleProperty dists(result->getGraph());
+  dists.setAllNodeValue(DBL_MAX);
+
+  BooleanProperty visitable(graph);
+  visitable.setAllNodeValue(true);
+
+  return computeSearchPaths(src, &visitable, &dists);
+}
+
+bool DFS::computeSearchPaths(node src, BooleanProperty *visitable,
+			     DoubleProperty *dists) {
   if (!visitable->getNodeValue(src))
     return false;
 
@@ -78,17 +81,17 @@ bool DFS::searchPaths(node src) {
     return true;
   }
 
-  bool result = false;
+  bool res = false;
   visitable->setNodeValue(src, false);
 
   Iterator<edge> *edgeIt = nullptr;
 
   switch (edgesOrientation) {
-  case NonOriented:
+  case Undirected:
     edgeIt = graph->getInOutEdges(src);
     break;
 
-  case Oriented:
+  case Directed:
     edgeIt = graph->getOutEdges(src);
     break;
 
@@ -100,11 +103,11 @@ bool DFS::searchPaths(node src) {
   for (auto e : edgeIt) {
     currentDist += weights.getEdgeValue(e);
     path.push_back(e);
-    result |= searchPaths(graph->opposite(e, src));
+    res |= computeSearchPaths(graph->opposite(e, src), visitable, dists);
     path.pop_back();
     currentDist -= weights.getEdgeValue(e);
   }
 
   visitable->setNodeValue(src, true);
-  return result;
+  return res;
 }

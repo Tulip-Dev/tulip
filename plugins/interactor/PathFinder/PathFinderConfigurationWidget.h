@@ -51,9 +51,7 @@ public:
   void setToleranceSpinValue(const int val);
   void highlightersLabelDisabled(const bool disable);
   void addbottomWidget(QWidget *w);
-  void toleranceCheckDisabled(const bool disabled);
-  void toleranceSpinDisabled(const bool disabled);
-  void toleranceLabelDisabled(const bool disabled);
+  void toleranceDisabled(const bool disabled);
 
 signals:
   void setWeightMetric(const QString &);

@@ -31,6 +31,7 @@
 #include <tulip/Ordering.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/GraphParallelTools.h>
+#include <tulip/Dikjstra.h>
 
 #include <queue>
 #include <stack>
@@ -713,4 +714,55 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
   return added;
 }
+
+#define SMALLEST_WEIGHT 1.E-6
+
+bool selectShortestPaths(const Graph *const graph,
+			 node src, node tgt,
+			 ShortestPathType pathType,
+			 const DoubleProperty *const weights,
+			 BooleanProperty *result) {
+  std::function<Iterator<edge>* (node)> getOutEdges =
+    [&](node un) { return graph->getOutEdges(un); };
+  std::function<Iterator<edge>* (node)> getInOutEdges =
+    [&](node un) { return graph->getInOutEdges(un); };
+  std::function<Iterator<edge>* (node)> getInEdges =
+    [&](node un) { return graph->getInEdges(un); };
+
+  std::function<Iterator<edge>* (node)> getEdges;
+  switch (pathType) {
+  case ShortestPathType::OnePath:
+  case ShortestPathType::AllPaths:
+    getEdges = getInOutEdges;
+    break;
+  case ShortestPathType::OneDirectedPath:
+  case ShortestPathType::AllDirectedPaths:
+    getEdges = getOutEdges;
+    break;
+  case ShortestPathType::OneReversedPath:
+  case ShortestPathType::AllReversedPaths:
+    getEdges = getInEdges;
+    break;
+  }
+
+  EdgeStaticProperty<double> eWeights(graph);
+  if (!weights) {
+    eWeights.setAll(SMALLEST_WEIGHT);
+  } else {
+    auto fn = [&](edge e, unsigned int i) {
+      double val(weights->getEdgeValue(e));
+
+      eWeights[i] = val ? val : SMALLEST_WEIGHT;
+    };
+    TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
+  }
+
+  NodeStaticProperty<double> nodeDistance(graph);
+  Dikjstra dikjstra(graph, src, eWeights, nodeDistance, getEdges);
+
+  if (uint(pathType) < ShortestPathType::AllPaths)
+    return dikjstra.searchPath(tgt, result);
+  return dikjstra.searchPaths(tgt, result);
+}
+
 } // namespace tlp

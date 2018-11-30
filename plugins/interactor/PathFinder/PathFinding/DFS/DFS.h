@@ -50,11 +50,9 @@ public:
    * @param maxDist The maximal distance the algorithm can go from the source node before dropping
    * the search (DBL_MAX by default)
    */
-  DFS(tlp::Graph *graph, tlp::BooleanProperty *result, tlp::DoubleProperty *dists, tlp::node tgt,
+  DFS(tlp::Graph *graph, tlp::BooleanProperty *result, tlp::node tgt,
       const tlp::EdgeStaticProperty<double> &weights, EdgeOrientation edgesOrientation,
       double maxDist = DBL_MAX);
-
-  ~DFS();
 
   /**
    * Compute the path between the source node and the target node. Caution ! This method is
@@ -67,14 +65,14 @@ public:
 private:
   tlp::Graph *graph;
   tlp::BooleanProperty *result;
-  tlp::DoubleProperty *dists;
-  tlp::BooleanProperty *visitable;
   tlp::node tgt;
   const tlp::EdgeStaticProperty<double> &weights;
   std::vector<tlp::edge> path;
   double currentDist;
   EdgeOrientation edgesOrientation;
   double maxDist;
+
+  bool computeSearchPaths(tlp::node src, tlp::BooleanProperty *visitable, tlp::DoubleProperty *dists);
 };
 } // namespace tlp
 #endif /* DFS_H_ */

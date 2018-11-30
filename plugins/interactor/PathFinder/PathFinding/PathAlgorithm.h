@@ -36,10 +36,10 @@ class Graph;
 class PathAlgorithm {
 public:
   /**
-   * By default, Tulip works on oriented edges. This behavior can be overloaded by forcing the edges
-   * to be Oriented, non oriented or reversed.
+   * By default, Tulip works on directed edges. This behavior can be overloaded by forcing the edges
+   * to be directed, undirected or reversed.
    */
-  enum EdgeOrientation { Oriented, NonOriented, Reversed };
+  enum EdgeOrientation { Directed, Undirected, Reversed };
 
   /**
    * A path algorithm can look for only one (shortest) path, all the shortest paths or all the
@@ -61,7 +61,6 @@ public:
    *
    * @see PathType
    * @see EdgeOrientation
-   * @see Dikjstra
    * @see DFS
    */
   static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation,

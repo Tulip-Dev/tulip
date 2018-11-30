@@ -17,11 +17,13 @@
  *
  */
 
-#ifndef DIKJSTRA_H
-#define DIKJSTRA_H
+///@cond DOXYGEN_HIDDEN
+#ifndef DIKJSTRA_TOOL_H
+#define DIKJSTRA_TOOL_H
 #include <vector>
 #include <set>
 #include <climits>
+#include <functional>
 #include <tulip/Graph.h>
 #include <tulip/Vector.h>
 #include <tulip/LayoutProperty.h>
@@ -29,28 +31,27 @@
 #include <tulip/StaticProperty.h>
 #include <tulip/MutableContainer.h>
 
-#include "../PathAlgorithm.h"
-
 namespace tlp {
 
-class Dikjstra : public PathAlgorithm {
+class Dikjstra {
 public:
   //============================================================
-  void initDikjstra(const tlp::Graph *const graph, const tlp::Graph *const forbiddenNodes,
-                    tlp::node src, EdgeOrientation directed,
-                    const tlp::EdgeStaticProperty<double> &weights, double maxDist,
-                    const std::set<tlp::node> &focus);
+  Dikjstra(const Graph *const graph,
+	   node src,
+	   const EdgeStaticProperty<double> &weights,
+	   NodeStaticProperty<double> &nodeDistance,
+	   std::function<Iterator<edge>* (node)>& getFunc);
   //========================================================
-  bool searchPaths(tlp::node n, tlp::BooleanProperty *result);
+  bool searchPaths(node n, BooleanProperty *result);
   //=========================================================
-  bool searchPath(tlp::node n, tlp::BooleanProperty *result, std::vector<tlp::node> &vNodes);
+  bool searchPath(node n, BooleanProperty *result);
   //=============================================================
 private:
-  void internalSearchPaths(tlp::node n, tlp::BooleanProperty *result);
+  void internalSearchPaths(node n, BooleanProperty *result);
   //=========================================================
   struct DikjstraElement {
-    DikjstraElement(const double dist = DBL_MAX, const tlp::node previous = tlp::node(),
-                    const tlp::node n = tlp::node())
+    DikjstraElement(const double dist = DBL_MAX, const node previous = node(),
+                    const node n = node())
         : dist(dist), previous(previous), n(n) {}
     bool operator==(const DikjstraElement &b) const {
       return n == b.n;
@@ -59,9 +60,9 @@ private:
       return n != b.n;
     }
     double dist;
-    tlp::node previous;
-    tlp::node n;
-    std::vector<tlp::edge> usedEdge;
+    node previous;
+    node n;
+    std::vector<edge> usedEdge;
   };
 
   struct LessDikjstraElement {
@@ -74,13 +75,11 @@ private:
     }
   };
 
-  tlp::Graph const *graph;
-  tlp::Graph const *forbiddenNodes;
-  tlp::node src;
-  tlp::MutableContainer<bool> usedEdges;
-
-public:
-  tlp::MutableContainer<double> nodeDistance;
+  Graph const *graph;
+  node src;
+  MutableContainer<bool> usedEdges;
+  NodeStaticProperty<double>& nodeDistance;
 };
 } // namespace tlp
 #endif // DIKJSTRA_H
+///@endcond

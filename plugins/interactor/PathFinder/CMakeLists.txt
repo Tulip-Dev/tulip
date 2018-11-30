@@ -8,7 +8,6 @@ SET(LIB_SRCS
     PathFinderTools.cpp
     PathFinding/PathAlgorithm.cpp
     PathFinding/DFS/DFS.cpp
-    PathFinding/Dikjstra/Dikjstra.cpp
     highlighters/EnclosingCircleHighlighter.cpp
     highlighters/PathHighlighter.cpp
     highlighters/ZoomAndPanHighlighter.cpp

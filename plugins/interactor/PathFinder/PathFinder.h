@@ -26,7 +26,7 @@
 #include "PathFinding/PathAlgorithm.h"
 
 #define NO_METRIC "None"
-#define DEFAULT_ORIENTATION PathAlgorithm::NonOriented
+#define DEFAULT_ORIENTATION PathAlgorithm::Undirected
 #define DEFAULT_PATHS_TYPE PathAlgorithm::OneShortest
 #define DEFAULT_TOLERANCE 100
 #define DEFAULT_TOLERANCE_ACTIVATION false

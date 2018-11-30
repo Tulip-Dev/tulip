@@ -85,14 +85,9 @@ void PathFinderConfigurationWidget::addbottomWidget(QWidget *w) {
   _ui->bottomArea->addWidget(w, 0, Qt::AlignLeft);
 }
 
-void PathFinderConfigurationWidget::toleranceCheckDisabled(const bool disabled) {
+void PathFinderConfigurationWidget::toleranceDisabled(const bool disabled) {
   _ui->toleranceCheck->setDisabled(disabled);
-}
-
-void PathFinderConfigurationWidget::toleranceSpinDisabled(const bool disabled) {
   _ui->toleranceSpin->setDisabled(disabled);
-}
-
-void PathFinderConfigurationWidget::toleranceLabelDisabled(const bool disabled) {
   _ui->toleranceLabel->setDisabled(disabled);
+  _ui->tolerancePercentLabel->setDisabled(disabled);
 }

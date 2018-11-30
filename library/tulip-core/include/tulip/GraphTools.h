@@ -174,6 +174,26 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const Numeric
  */
 TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection,
                                       bool *test = nullptr);
+
+enum ShortestPathType { OnePath = 0, OneDirectedPath = 1 , OneReversedPath = 2,
+			AllPaths = 3, AllDirectedPaths = 4, AllReversedPaths = 5 };
+
+/**
+ * @brief set selection to the shortets paths
+ * @param graph The graph to compute on.
+ * @param src The source node of the paths
+ * @param tgt The target node of the paths
+ * @param pathType The type of path to consider
+ * @param weights A Double property to get the edges weight if weighted paths have to be considered. Can be set to null to select unweighted paths.
+ * @param selection The Boolean property to consider as selection.
+ * @return false if no path exist between the src and tgt nodes; true if not.
+ */
+TLP_SCOPE bool selectShortestPaths(const Graph *const graph,
+				   node src, node tgt,
+				   ShortestPathType pathType,
+				   const DoubleProperty *const weights,
+				   BooleanProperty* selection);
+
 } // namespace tlp
 #endif
 ///@endcond
