@@ -166,7 +166,8 @@ void Dijkstra::searchPaths(node ntlp, EdgeStaticProperty<unsigned int> &depth) {
     auto ePos = depth.getGraph()->edgePos(edik2tlp[e]);
     depth[ePos] += 1;
 
-    searchPaths(ndik2tlp[tgt], depth);
+    if (!resultNodes[tgt])
+      searchPaths(ndik2tlp[tgt], depth);
   }
 }
 //=============================================================================
@@ -180,32 +181,21 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
   while (ok) {
     vNodes.push_back(ndik2tlp[n]);
     ok = false;
-    bool findEdge = false;
-    edge e;
-    node tgt;
-    const vector<edge> &adjEdges = graph.star(n);
 
-    for (size_t i = 0; i < adjEdges.size(); ++i) {
-      e = adjEdges[i];
-
+    for (auto e : graph.star(n)) {
       // check if that edge does not belong to the shortest path edges
       // or if it has already been treated
       if (!usedEdges[e] || resultEdges[e])
         continue;
 
-      tgt = graph.opposite(e, n);
+      node tgt = graph.opposite(e, n);
 
       if (nodeDistance[tgt] >= nodeDistance[n])
         continue;
 
-      findEdge = true;
+      n = tgt;
+      resultEdges[e] = ok = true;
       break;
-    }
-
-    if (findEdge) {
-      ok = true;
-      n = tgt; // validEdge.begin()->first;
-      resultEdges[e] = true;
     }
   }
 
