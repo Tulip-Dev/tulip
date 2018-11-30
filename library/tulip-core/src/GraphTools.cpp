@@ -717,19 +717,17 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 
 #define SMALLEST_WEIGHT 1.E-6
 
-bool selectShortestPaths(const Graph *const graph,
-			 node src, node tgt,
-			 ShortestPathType pathType,
-			 const DoubleProperty *const weights,
-			 BooleanProperty *result) {
-  std::function<Iterator<edge>* (node)> getOutEdges =
-    [&](node un) { return graph->getOutEdges(un); };
-  std::function<Iterator<edge>* (node)> getInOutEdges =
-    [&](node un) { return graph->getInOutEdges(un); };
-  std::function<Iterator<edge>* (node)> getInEdges =
-    [&](node un) { return graph->getInEdges(un); };
+bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestPathType pathType,
+                         const DoubleProperty *const weights, BooleanProperty *result) {
+  std::function<Iterator<edge> *(node)> getOutEdges = [&](node un) {
+    return graph->getOutEdges(un);
+  };
+  std::function<Iterator<edge> *(node)> getInOutEdges = [&](node un) {
+    return graph->getInOutEdges(un);
+  };
+  std::function<Iterator<edge> *(node)> getInEdges = [&](node un) { return graph->getInEdges(un); };
 
-  std::function<Iterator<edge>* (node)> getEdges;
+  std::function<Iterator<edge> *(node)> getEdges;
   switch (pathType) {
   case ShortestPathType::OnePath:
   case ShortestPathType::AllPaths:

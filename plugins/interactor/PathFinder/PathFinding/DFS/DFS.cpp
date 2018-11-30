@@ -46,8 +46,7 @@ bool DFS::searchPaths(node src) {
   return computeSearchPaths(src, &visitable, &dists);
 }
 
-bool DFS::computeSearchPaths(node src, BooleanProperty *visitable,
-			     DoubleProperty *dists) {
+bool DFS::computeSearchPaths(node src, BooleanProperty *visitable, DoubleProperty *dists) {
   if (!visitable->getNodeValue(src))
     return false;
 

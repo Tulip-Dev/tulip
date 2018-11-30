@@ -26,11 +26,9 @@ using namespace tlp;
 using namespace std;
 
 //============================================================
-Dikjstra::Dikjstra(const Graph *const graph, node src,
-		   const EdgeStaticProperty<double> &weights,
-		   NodeStaticProperty<double> &nd,
-		   std::function<Iterator<edge>* (node)>& getEdges):
-  nodeDistance(nd) {
+Dikjstra::Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+                   NodeStaticProperty<double> &nd, std::function<Iterator<edge> *(node)> &getEdges)
+    : nodeDistance(nd) {
   assert(src.isValid());
   this->graph = graph;
   usedEdges.setAll(false);
@@ -74,17 +72,18 @@ Dikjstra::Dikjstra(const Graph *const graph, node src,
       if (fabs((u.dist + eWeight) - dEle->dist) < 1E-9) // path of the same length
         dEle->usedEdge.push_back(e);
       else if ((u.dist + eWeight) < dEle->dist) {
-	  // we find a node closer with that path
-	  dEle->usedEdge.clear();
-	  //**********************************************
-	  dikjstraTable.erase(dEle);
+        // we find a node closer with that path
+        dEle->usedEdge.clear();
+        //**********************************************
+        dikjstraTable.erase(dEle);
 
-	  dEle->dist = u.dist + eWeight;
-	  dEle->previous = u.n;
-	  dEle->usedEdge.push_back(e);
-	  dikjstraTable.insert(dEle);
-	}
-    } delete iter;
+        dEle->dist = u.dist + eWeight;
+        dEle->previous = u.n;
+        dEle->usedEdge.push_back(e);
+        dikjstraTable.insert(dEle);
+      }
+    }
+    delete iter;
   }
 
   usedEdges.setAll(false);
@@ -107,7 +106,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result) {
   while (ok) {
     result->setNodeValue(n, true);
     ok = false;
-    Iterator<edge>* it = graph->getInOutEdges(n);
+    Iterator<edge> *it = graph->getInOutEdges(n);
     while (it->hasNext()) {
       edge e = it->next();
       if (!usedEdges.get(e.id))
@@ -125,7 +124,8 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result) {
       result->setEdgeValue(e, true);
       ok = true;
       break;
-    } delete it;
+    }
+    delete it;
   }
 
   if (n != src) {
@@ -166,19 +166,17 @@ bool Dikjstra::searchPaths(node n, BooleanProperty *result) {
 //========================================
 #define SMALLEST_WEIGHT 1.E-6
 
-bool selectShortestPaths(const Graph *const graph,
-			 node src, node tgt,
-			 ShortestPathType pathType,
-			 const DoubleProperty *const weights,
-			 BooleanProperty *result) {
-  std::function<Iterator<edge>* (node)> getOutEdges =
-    [&](node un) { return graph->getOutEdges(un); };
-  std::function<Iterator<edge>* (node)> getInOutEdges =
-    [&](node un) { return graph->getInOutEdges(un); };
-  std::function<Iterator<edge>* (node)> getInEdges =
-    [&](node un) { return graph->getInEdges(un); };
+bool selectShortestPaths(const Graph *const graph, node src, node tgt, ShortestPathType pathType,
+                         const DoubleProperty *const weights, BooleanProperty *result) {
+  std::function<Iterator<edge> *(node)> getOutEdges = [&](node un) {
+    return graph->getOutEdges(un);
+  };
+  std::function<Iterator<edge> *(node)> getInOutEdges = [&](node un) {
+    return graph->getInOutEdges(un);
+  };
+  std::function<Iterator<edge> *(node)> getInEdges = [&](node un) { return graph->getInEdges(un); };
 
-  std::function<Iterator<edge>* (node)> getEdges;
+  std::function<Iterator<edge> *(node)> getEdges;
   switch (pathType) {
   case ShortestPathType::OnePath:
   case ShortestPathType::AllPaths:

@@ -95,9 +95,9 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       eWeights.setAll(SMALLEST_WEIGHT);
     } else {
       auto fn = [&](edge e, unsigned int i) {
-	double val(weights->getEdgeValue(e));
+        double val(weights->getEdgeValue(e));
 
-	eWeights[i] = val ? val : SMALLEST_WEIGHT;
+        eWeights[i] = val ? val : SMALLEST_WEIGHT;
       };
       TLP_PARALLEL_MAP_EDGES_AND_INDICES(graph, fn);
     }

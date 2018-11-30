@@ -36,11 +36,9 @@ namespace tlp {
 class Dikjstra {
 public:
   //============================================================
-  Dikjstra(const Graph *const graph,
-	   node src,
-	   const EdgeStaticProperty<double> &weights,
-	   NodeStaticProperty<double> &nodeDistance,
-	   std::function<Iterator<edge>* (node)>& getFunc);
+  Dikjstra(const Graph *const graph, node src, const EdgeStaticProperty<double> &weights,
+           NodeStaticProperty<double> &nodeDistance,
+           std::function<Iterator<edge> *(node)> &getFunc);
   //========================================================
   bool searchPaths(node n, BooleanProperty *result);
   //=========================================================
@@ -78,7 +76,7 @@ private:
   Graph const *graph;
   node src;
   MutableContainer<bool> usedEdges;
-  NodeStaticProperty<double>& nodeDistance;
+  NodeStaticProperty<double> &nodeDistance;
 };
 } // namespace tlp
 #endif // DIKJSTRA_H
