@@ -87,6 +87,7 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       spt = ShortestPathType::OneReversedPath;
     }
   }
+  graph->push();
   retVal = selectShortestPaths(graph, src, tgt, spt, weights, result);
   if (pathType == AllPaths && retVal) {
     EdgeStaticProperty<double> eWeights(graph);
@@ -120,5 +121,7 @@ bool PathAlgorithm::computePath(Graph *graph, PathType pathType, EdgeOrientation
       retVal = d.searchPaths(src);
     }
   }
+  if (!retVal)
+    graph->pop();
   return retVal;
 }
