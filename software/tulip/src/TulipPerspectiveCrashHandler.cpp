@@ -97,7 +97,6 @@ void TulipPerspectiveCrashHandler::sendReport() {
           SIGNAL(finished()), this, SLOT(reportPosted()));
 
   _ui->sendReportButton->setText(trUtf8("Sending report..."));
-  _ui->detailsFrame->setEnabled(false);
   _ui->sendReportButton->setEnabled(false);
   _ui->commentsEdit->setEnabled(false);
 }
@@ -112,6 +111,7 @@ void TulipPerspectiveCrashHandler::reportPosted() {
   } else {
     _ui->sendReportButton->setText(trUtf8("Error while sending report"));
     _ui->errorReportTitle->setText("<i>" + reply->errorString() + "</i>");
+    _ui->commentsEdit->setEnabled(true);
     _ui->sendReportButton->setEnabled(true);
   }
 
