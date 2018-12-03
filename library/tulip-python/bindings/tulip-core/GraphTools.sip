@@ -113,4 +113,44 @@ containing the nodes of the graph in the order they have been visited.
   }
 %End
 
+//========================================================================================
+
+enum ShortestPathType { OnePath = 0, OneDirectedPath = 1 , OneReversedPath = 2,
+			AllPaths = 3, AllDirectedPaths = 4, AllReversedPaths = 5 };
+
+bool selectShortestPaths(const tlp::Graph *graph, tlp::node src, tlp::node tgt, tlp::ShortestPathType pathType, const tlp::DoubleProperty *weights, tlp::BooleanProperty* selection);
+%Docstring
+tlp.selectShortestPaths(graph, src, tgt, pathType, weights, selection)
+
+.. versionadded::5.2
+
+select the shortest paths between two nodes. Returns false if no path exist between the src and tgt nodes; true if not.
+
+:param graph: The graph to compute on.
+:type graph: :class:`tlp.Graph`
+:param src: The source node of the paths
+:type node: :class:`tlp.node`
+:param tgt: The target node of the paths
+:type node: :class:`tlp.node`
+:param pathType: The type of path to consider
+:type pathType: tlp.OnePath, tlp.OneDirectedPath, tlp.OneReversedPath, tlp.AllPaths, tlp.AllDirectedPaths, tlp.AllReversedPaths
+:param weights: A graph property giving the edges weight if weighted paths have to be considered. Can be set to null to select unweighted paths.
+:type weights:class:`tlp.DoubleProperty`
+:param selection: The graph property to consider as selection.
+:type selection:class:`tlp.BooleanProperty`
+:rtype: boolean
+:throws: an exception if one of the source or target nodes does not belong to the graph.
+%End
+
+%MethodCode
+  if (a0->isElement(*a1)) {
+    if (a0->isElement(*a2)) {
+     tlp::selectShortestPaths(a0, *a1, *a2, a3, a4, a5);
+    } else {
+      sipIsErr = throwInvalidNodeException(a0, *a2);
+    }
+  } else {
+      sipIsErr = throwInvalidNodeException(a0, *a1);
+  }
+%End
 };
