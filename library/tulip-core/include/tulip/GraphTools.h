@@ -185,12 +185,12 @@ enum ShortestPathType {
 };
 
 /**
- * @brief set selection to the shortets paths
+ * @brief select the shortest paths between two nodes
  * @param graph The graph to compute on.
  * @param src The source node of the paths
  * @param tgt The target node of the paths
  * @param pathType The type of path to consider
- * @param weights A Double property to get the edges weight if weighted paths have to be considered.
+ * @param weights A Double property giving the edges weight if weighted paths have to be considered.
  * Can be set to null to select unweighted paths.
  * @param selection The Boolean property to consider as selection.
  * @return false if no path exist between the src and tgt nodes; true if not.
