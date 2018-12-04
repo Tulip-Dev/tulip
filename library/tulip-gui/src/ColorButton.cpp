@@ -72,9 +72,9 @@ void ChooseColorButton::setTulipColor(const tlp::Color &c) {
 void ChooseColorButton::chooseColor() {
   QColor c = QColorDialog::getColor(
       _color, _dialogParent, _dialogTitle.isEmpty() ? QString("Choose a color") : _dialogTitle,
-      QColorDialog::ShowAlphaChannel |
-          (inGuiTestingMode() ? QColorDialog::DontUseNativeDialog
-                              : static_cast<QColorDialog::ColorDialogOption>(0)));
+      // we dont use native dialog to ensure alpha channel can be set
+      // it may not be shown when using gnome
+      QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
 
   if (c.isValid())
     setColor(c);

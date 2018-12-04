@@ -76,7 +76,9 @@ QSize TulipItemEditorCreator::sizeHint(const QStyleOptionViewItem &option,
 class TulipColorDialog : public QColorDialog {
 public:
   TulipColorDialog(QWidget *w) : QColorDialog(w), previousColor(), ok(QDialog::Rejected) {
-    setOption(QColorDialog::DontUseNativeDialog, inGuiTestingMode());
+    // we dont use native dialog to ensure alpha channel can be set
+    // it may not be shown when using gnome
+    setOptions(QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
   }
   ~TulipColorDialog() override {}
   tlp::Color previousColor;
@@ -100,7 +102,6 @@ public:
 QWidget *ColorEditorCreator::createWidget(QWidget *parent) const {
   TulipColorDialog *colorDialog = new TulipColorDialog(
       tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : parent);
-  colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
   return colorDialog;
 }
