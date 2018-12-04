@@ -238,9 +238,7 @@ bool EdgeBundling::run() {
     // when the layout is in 3D
     auto lMin = layout->getMin();
     auto lMax = layout->getMax();
-    layout3D = (lMin.z() != lMax.z()) &&
-      (lMin.y() != lMax.y()) &&
-      (lMin.x() != lMax.x());
+    layout3D = (lMin.z() != lMax.z()) && (lMin.y() != lMax.y()) && (lMin.x() != lMax.x());
   }
 
   string err;
