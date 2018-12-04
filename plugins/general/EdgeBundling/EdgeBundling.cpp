@@ -233,6 +233,16 @@ bool EdgeBundling::run() {
     dataSet->get("size", size);
   }
 
+  if (!layout3D) {
+    // avoid potential crash
+    // when the layout is in 3D
+    auto lMin = layout->getMin();
+    auto lMax = layout->getMax();
+    layout3D = (lMin.z() != lMax.z()) &&
+      (lMin.y() != lMax.y()) &&
+      (lMin.x() != lMax.x());
+  }
+
   string err;
   oriGraph = graph->addCloneSubGraph("Original Graph");
 
