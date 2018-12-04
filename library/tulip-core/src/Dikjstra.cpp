@@ -132,6 +132,8 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result) {
 #ifndef NDEBUG
     cout << "Path does not exist !" << endl;
 #endif /* NDEBUG */
+    result->setAllNodeValue(false);
+    result->setAllEdgeValue(false);
     return false;
   }
 
@@ -160,7 +162,13 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result) {
 //========================================
 bool Dikjstra::searchPaths(node n, BooleanProperty *result) {
   internalSearchPaths(n, result);
-  return result->getNodeValue(src);
+  if (!result->getNodeValue(src)) {
+    result->setAllNodeValue(false);
+    result->setAllEdgeValue(false);
+    return false;
+  }
+
+  return true;
 }
 
 //========================================
