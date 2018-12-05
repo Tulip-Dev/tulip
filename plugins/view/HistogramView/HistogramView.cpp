@@ -569,13 +569,13 @@ void HistogramView::draw() {
     addEmptyViewLabel();
     gl->centerScene();
 
-    if (_bar)
+    if (_bar && quickAccessBarVisible())
       _bar->setEnabled(false);
 
     return;
   }
 
-  if (_bar)
+  if (_bar && quickAccessBarVisible())
     _bar->setEnabled(true);
 
   if (detailedHistogram != nullptr) {

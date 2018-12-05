@@ -678,7 +678,7 @@ void ScatterPlot2DView::draw() {
     getGlMainWidget()->getScene()->centerScene();
     getGlMainWidget()->draw();
 
-    if (_bar)
+    if (_bar && quickAccessBarVisible())
       _bar->setEnabled(false);
 
     return;
@@ -686,7 +686,7 @@ void ScatterPlot2DView::draw() {
     removeEmptyViewLabel();
   }
 
-  if (_bar)
+  if (_bar && quickAccessBarVisible())
     _bar->setEnabled(true);
 
   computeNodeSizes();
@@ -742,7 +742,8 @@ void ScatterPlot2DView::centerView(bool) {
 void ScatterPlot2DView::applySettings() {
   if (propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
     viewConfigurationChanged();
-    _bar->reset();
+    if (_bar != nullptr && quickAccessBarVisible())
+      _bar->reset();
   }
 }
 

@@ -390,7 +390,7 @@ DataSet ParallelCoordinatesView::state() const {
 void ParallelCoordinatesView::graphChanged(tlp::Graph *) {
   if (isConstruct)
     setState(DataSet());
-  else if (_bar != nullptr) {
+  else if (_bar != nullptr && quickAccessBarVisible()) {
     _bar->setEnabled(false);
   }
 }
@@ -466,13 +466,15 @@ void ParallelCoordinatesView::draw() {
     if (graphProxy->selectedPropertiesisEmpty()) {
       removeEmptyViewLabel();
       addEmptyViewLabel();
-      _bar->setEnabled(false);
+      if (_bar != nullptr && quickAccessBarVisible())
+        _bar->setEnabled(false);
       getGlMainWidget()->getScene()->centerScene();
       getGlMainWidget()->draw();
       return;
     } else {
       removeEmptyViewLabel();
-      _bar->setEnabled(true);
+      if (_bar != nullptr && quickAccessBarVisible())
+        _bar->setEnabled(true);
 
       if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
         updateWithProgressBar();

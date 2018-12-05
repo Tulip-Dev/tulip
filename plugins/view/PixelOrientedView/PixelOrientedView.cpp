@@ -515,13 +515,15 @@ void PixelOrientedView::draw() {
 
       removeEmptyViewLabel();
       addEmptyViewLabel();
-      _bar->setEnabled(false);
+      if (_bar != nullptr && quickAccessBarVisible())
+        _bar->setEnabled(false);
       scene->centerScene();
       glw->draw();
       return;
     } else {
       removeEmptyViewLabel();
-      _bar->setEnabled(true);
+      if (_bar != nullptr && quickAccessBarVisible())
+        _bar->setEnabled(true);
     }
 
     if (lastNbDimensionsSelected != selectedGraphProperties.size()) {
