@@ -32,28 +32,6 @@ using namespace tlp;
 
 namespace tlp {
 
-static void drawBox(const Color &borderColor, float borderWidth, const std::string &textureName,
-                    float lod, GlGraphInputData *glGraphInputData) {
-  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-
-  if (textureName.size() != 0) {
-    const string &texturePath = glGraphInputData->parameters->getTexturePath();
-    box.setTextureName(texturePath + textureName);
-  } else
-    box.setTextureName("");
-
-  box.setFillColor(Color(0, 0, 0, 0));
-  box.setOutlineColor(borderColor);
-  double lineWidth = borderWidth;
-
-  if (lineWidth < 1e-6)
-    lineWidth = 1e-6;
-
-  box.setOutlineSize(lineWidth);
-
-  box.draw(lod, nullptr);
-}
-
 /** \addtogroup glyph */
 
 /// A 3D glyph.
@@ -77,25 +55,14 @@ CubeOutLinedTransparent::CubeOutLinedTransparent(const tlp::PluginContext *conte
 CubeOutLinedTransparent::~CubeOutLinedTransparent() {}
 
 void CubeOutLinedTransparent::draw(node n, float lod) {
-  string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
-
-  if (!textureName.empty())
-    textureName = glGraphInputData->parameters->getTexturePath() + textureName;
-
-  drawBox(glGraphInputData->getElementBorderColor()->getNodeValue(n),
-          glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod,
-          glGraphInputData);
+  GlBox::draw(Color(0, 0, 0, 0),
+	      glGraphInputData->getElementBorderColor()->getNodeValue(n),
+	      glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+	      "", lod);
 }
 
 Coord CubeOutLinedTransparent::getAnchor(const Coord &vector) const {
-  float x, y, z, fmax;
-  vector.get(x, y, z);
-  fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
-
-  if (fmax > 0.0f)
-    return vector * (0.5f / fmax);
-  else
-    return vector;
+  return GlBox::getAnchor(vector);
 }
 
 class EECubeOutlinedTransparent : public EdgeExtremityGlyph {
@@ -106,15 +73,14 @@ public:
 
   EECubeOutlinedTransparent(const tlp::PluginContext *context) : EdgeExtremityGlyph(context) {}
 
-  void draw(edge e, node, const Color &borderColor, const Color &, float lod) override {
-    glEnable(GL_LIGHTING);
+  void draw(edge e, node, const Color &fillColor, const Color &borderColor, float lod) override {
     string textureName = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if (!textureName.empty())
       textureName = edgeExtGlGraphInputData->parameters->getTexturePath() + textureName;
 
-    drawBox(borderColor, edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-            textureName, lod, edgeExtGlGraphInputData);
+    glEnable(GL_LIGHTING);
+    GlBox::draw(fillColor, borderColor, edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName, lod);
     glDisable(GL_LIGHTING);
   }
 };

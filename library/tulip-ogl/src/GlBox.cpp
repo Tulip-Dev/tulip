@@ -394,4 +394,33 @@ void GlBox::clearGenerated() {
 
   generated = false;
 }
+
+//============================================================
+void GlBox::draw(const Color &fillColor, const Color &outlineColor,
+		 float outlineWidth, const std::string &textureFile,
+		 float lod) {
+  static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
+
+  box.setTextureName(textureFile);
+  box.setFillColor(fillColor);
+  box.setOutlineColor(outlineColor);
+  if (outlineWidth < 1e-6)
+    outlineWidth = 1e-6;
+  box.setOutlineSize(outlineWidth);
+
+  box.draw(lod, nullptr);
+}
+
+//============================================================
+Coord GlBox::getAnchor(const Coord &vector) {
+  float x, y, z, fmax;
+  vector.get(x, y, z);
+  fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
+
+  if (fmax > 0.0f)
+    return vector * (0.5f / fmax);
+  else
+    return vector;
+}
+
 } // namespace tlp

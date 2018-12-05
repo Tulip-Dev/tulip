@@ -40,54 +40,29 @@ public:
   ~CubeOutLined() override;
   void draw(node n, float lod) override;
   Coord getAnchor(const Coord &vector) const override;
-
-protected:
-  static GlBox *box;
 };
-} // namespace tlp
-tlp::GlBox *tlp::CubeOutLined::box = nullptr;
 
-namespace tlp {
 PLUGIN(CubeOutLined)
 
 //===================================================================================
-CubeOutLined::CubeOutLined(tlp::PluginContext *context) : NoShaderGlyph(context) {
-  if (!box)
-    box = new GlBox(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
-}
+CubeOutLined::CubeOutLined(tlp::PluginContext *context) : NoShaderGlyph(context) {}
 
 CubeOutLined::~CubeOutLined() {}
 
 void CubeOutLined::draw(node n, float lod) {
+  string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  const string &texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+  if (!textureName.empty())
+    textureName = glGraphInputData->parameters->getTexturePath() + textureName;
 
-  if (!texFile.empty()) {
-    const string &texturePath = glGraphInputData->parameters->getTexturePath();
-    box->setTextureName(texturePath + texFile);
-  } else
-    box->setTextureName("");
-
-  box->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
-  box->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
-  double lineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
-
-  if (lineWidth < 1e-6)
-    lineWidth = 1e-6;
-
-  box->setOutlineSize(lineWidth);
-
-  box->draw(lod, nullptr);
+  GlBox::draw(glGraphInputData->getElementColor()->getNodeValue(n),
+	      glGraphInputData->getElementBorderColor()->getNodeValue(n),
+	      glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+	      textureName, lod);
 }
 
 Coord CubeOutLined::getAnchor(const Coord &vector) const {
-  float x, y, z, fmax;
-  vector.get(x, y, z);
-  fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
-
-  if (fmax > 0.0f)
-    return vector * (0.5f / fmax);
-  else
-    return vector;
+  return GlBox::getAnchor(vector);
 }
+
 } // namespace tlp

@@ -27,6 +27,7 @@
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
+
 /**
  * @ingroup OpenGL
  * @brief General class used to render boxes as GlSimpleEntity.
@@ -60,6 +61,15 @@ public:
   ~GlBox() override;
 
   void draw(float lod, Camera *camera) override;
+
+  /**
+   * @brief Draw a GlBox
+   */
+  static void draw(const Color &fillColor, const Color &outlineColor,
+		   float outlineWidth, const std::string &textureName,
+		   float lod);
+
+  static Coord getAnchor(const Coord &vector);
 
   /**
    * @brief Accessor in reading to the size.
