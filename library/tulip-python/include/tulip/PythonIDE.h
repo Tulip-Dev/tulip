@@ -1,4 +1,4 @@
-/**
+﻿/**
  *
  * This file is part of Tulip (http://tulip.labri.fr)
  *
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PYTHONPLUGINSIDE_H
-#define PYTHONPLUGINSIDE_H
+#ifndef PYTHON_IDE_H
+#define PYTHON_IDE_H
 
 #include <QWidget>
 #include <QDateTime>
@@ -63,6 +63,8 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
   QWidget *_pluginEditorsWidget, *_pluginControlWidget;
   QWidget *_moduleEditorsWidget, *_moduleControlWidget;
 
+  bool _anchored;
+
   bool loadPythonPlugin(const QString &fileName, bool clear = true);
   bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode,
                                    bool clear = true);
@@ -97,6 +99,11 @@ public:
   void setPluginEditorsVisible(bool visible);
   void setModuleEditorsVisible(bool visible);
 
+  void setAnchoredCheckboxVisible(bool visible);
+  void setAnchored(bool anchored);
+  bool isAnchored() const;
+
+
 protected:
   void dragEnterEvent(QDragEnterEvent *) override;
   void dropEvent(QDropEvent *) override;
@@ -121,6 +128,10 @@ private:
   bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
 
   void loadScriptsAndModulesFromPythonScriptViewDataSet(const DataSet &dataSet);
+
+signals:
+
+  void anchoredRequest(bool anchored);
 
 private slots:
 
@@ -157,8 +168,10 @@ private slots:
   void closeScriptTabRequested(int index);
   void closePluginTabRequested(int index);
 
+  void anchored(bool anchored);
+
   tlp::Graph *getSelectedGraph() const;
 };
-} // namespace tlp
+}
 
-#endif // PYTHONPLUGINSIDE_H
+#endif // PYTHON_IDE_H

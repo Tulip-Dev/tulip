@@ -1367,6 +1367,16 @@ can not be undone but performance of the script execution will be better
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="anchoredCB">
+            <property name="toolTip">
+             <string>Anchor the Python IDE window to the main Tulip window</string>
+            </property>
+            <property name="text">
+             <string>anchored</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_4">
             <property name="toolTip">
              <string>Decrease/Increase the size of the font of the python code editors</string>
@@ -1434,6 +1444,9 @@ can not be undone but performance of the script execution will be better
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
        <property name="spacing">
         <number>0</number>
@@ -1543,6 +1556,24 @@ font-size: 10px;</string>
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="anchoredCB_2">
+            <property name="toolTip">
+             <string>Anchor the Python IDE window to the main Tulip window</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox {
+	border: none;
+	color: white;
+	font: bold;
+	font-size: 10px;
+}</string>
+            </property>
+            <property name="text">
+             <string>anchored</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_3">
             <property name="font">
              <font>
@@ -1619,6 +1650,7 @@ font-size: 10px;</string>
          <zorder>decreaseFontSizeButton</zorder>
          <zorder>label_3</zorder>
          <zorder>registerPluginButton</zorder>
+         <zorder>anchoredCB_2</zorder>
         </widget>
        </item>
       </layout>
@@ -1671,6 +1703,24 @@ QToolButton {
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="anchoredCB_3">
+         <property name="toolTip">
+          <string>Anchor the Python IDE window to the main Tulip window</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QCheckBox {
+	border: none;
+	color: white;
+	font: bold;
+	font-size: 10px;
+}</string>
+         </property>
+         <property name="text">
+          <string>anchored</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_5">

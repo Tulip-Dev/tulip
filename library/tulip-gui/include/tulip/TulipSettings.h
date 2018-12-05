@@ -185,6 +185,9 @@ public:
   bool loggerAnchored() const;
   void setLoggerAnchored(bool);
 
+  bool pythonIDEAnchored() const;
+  void setPythonIDEAnchored(bool);
+
   void treatEvent(const Event &message) override;
 
 private:

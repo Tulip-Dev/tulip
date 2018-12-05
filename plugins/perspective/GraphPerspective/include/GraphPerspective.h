@@ -170,6 +170,7 @@ protected slots:
   void showHideMenuBar();
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void initPythonIDE();
+  void anchoredPythonIDE(bool anchored);
 #endif
 
 protected:

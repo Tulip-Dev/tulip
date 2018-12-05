@@ -454,7 +454,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName,
 PythonIDE::PythonIDE(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PythonIDE), _pythonInterpreter(PythonInterpreter::getInstance()),
       _dontTreatFocusIn(false), _project(nullptr), _graphsModel(nullptr), _scriptStopped(false),
-      _saveFilesToProject(true), _notifyProjectModified(false) {
+      _saveFilesToProject(true), _notifyProjectModified(false), _anchored(false) {
   _ui->setupUi(this);
   _ui->tabWidget->setDrawTabBarBgGradient(true);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
@@ -541,6 +541,10 @@ PythonIDE::PythonIDE(QWidget *parent)
           SLOT(saveAllScripts()));
   connect(_ui->pluginsTabWidget->tabBar(), SIGNAL(tabMoved(int, int)), this,
           SLOT(saveAllPlugins()));
+
+  connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  connect(_ui->anchoredCB_2, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  connect(_ui->anchoredCB_3, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) +
                                           "/apiFiles/tulip.api");
@@ -2266,4 +2270,32 @@ void PythonIDE::setModuleEditorsVisible(bool visible) {
 Graph *PythonIDE::getSelectedGraph() const {
   return _graphsModel->data(_ui->graphComboBox->selectedIndex(), TulipModel::GraphRole)
       .value<Graph *>();
+}
+
+void PythonIDE::setAnchoredCheckboxVisible(bool visible) {
+  _ui->anchoredCB->setVisible(visible);
+  _ui->anchoredCB_2->setVisible(visible);
+  _ui->anchoredCB_3->setVisible(visible);
+}
+
+void PythonIDE::anchored(bool anchored) {
+  setAnchored(anchored);
+  emit anchoredRequest(anchored);
+}
+
+void PythonIDE::setAnchored(bool anchored) {
+  _anchored = anchored;
+  disconnect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  disconnect(_ui->anchoredCB_2, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  disconnect(_ui->anchoredCB_3, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  _ui->anchoredCB->setChecked(anchored);
+  _ui->anchoredCB_2->setChecked(anchored);
+  _ui->anchoredCB_3->setChecked(anchored);
+  connect(_ui->anchoredCB, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  connect(_ui->anchoredCB_2, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+  connect(_ui->anchoredCB_3, SIGNAL(toggled(bool)), this, SLOT(anchored(bool)));
+}
+
+bool PythonIDE::isAnchored() const {
+  return _anchored;
 }

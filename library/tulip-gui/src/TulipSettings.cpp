@@ -75,6 +75,7 @@ static const QString TS_SeedForRandomSequence = "graph/auto/seed";
 static const QString TS_WarnUserAboutGraphicsCard = "app/warn_about_graphics_card";
 static const QString TS_ShowStatusBar = "app/gui/show_status_bar";
 static const QString TS_LoggerAnchored = "app/gui/logger_anchored";
+static const QString TS_PythonIDEAnchored = "app/gui/python_ide_anchored";
 
 TulipSettings::TulipSettings() : QSettings("TulipSoftware", "Tulip") {}
 
@@ -475,6 +476,14 @@ bool TulipSettings::loggerAnchored() const {
 
 void TulipSettings::setLoggerAnchored(bool f) {
   setValue(TS_LoggerAnchored, f);
+}
+
+bool TulipSettings::pythonIDEAnchored() const {
+  return value(TS_PythonIDEAnchored, false).toBool();
+}
+
+void TulipSettings::setPythonIDEAnchored(bool f) {
+  setValue(TS_PythonIDEAnchored, f);
 }
 
 void TulipSettings::treatEvent(const Event &message) {
