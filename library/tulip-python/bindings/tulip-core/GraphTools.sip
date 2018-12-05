@@ -145,7 +145,7 @@ select the shortest paths between two nodes. Returns false if no path exist betw
 %MethodCode
   if (a0->isElement(*a1)) {
     if (a0->isElement(*a2)) {
-     tlp::selectShortestPaths(a0, *a1, *a2, a3, a4, a5);
+     sipRes = tlp::selectShortestPaths(a0, *a1, *a2, a3, a4, a5);
     } else {
       sipIsErr = throwInvalidNodeException(a0, *a2);
     }
