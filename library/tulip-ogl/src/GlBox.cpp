@@ -396,9 +396,8 @@ void GlBox::clearGenerated() {
 }
 
 //============================================================
-void GlBox::draw(const Color &fillColor, const Color &outlineColor,
-		 float outlineWidth, const std::string &textureFile,
-		 float lod) {
+void GlBox::draw(const Color &fillColor, const Color &outlineColor, float outlineWidth,
+                 const std::string &textureFile, float lod) {
   static GlBox box(Coord(0, 0, 0), Size(1, 1, 1), Color(0, 0, 0, 255), Color(0, 0, 0, 255));
 
   box.setTextureName(textureFile);

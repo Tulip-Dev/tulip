@@ -60,9 +60,8 @@ void Cube::draw(node n, float lod) {
     textureName = textureName + glGraphInputData->parameters->getTexturePath();
 
   GlBox::draw(glGraphInputData->getElementColor()->getNodeValue(n),
-	      glGraphInputData->getElementColor()->getNodeValue(n),
-	      glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	      textureName, lod);
+              glGraphInputData->getElementColor()->getNodeValue(n),
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 Coord Cube::getAnchor(const Coord &vector) const {
   return GlBox::getAnchor(vector);
@@ -82,8 +81,8 @@ public:
 
     glEnable(GL_LIGHTING);
     GlBox::draw(glyphColor, borderColor,
-		edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-		textureName, lod);
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e), textureName,
+                lod);
     glDisable(GL_LIGHTING);
   }
 };

@@ -65,9 +65,8 @@ public:
   /**
    * @brief Draw a GlBox
    */
-  static void draw(const Color &fillColor, const Color &outlineColor,
-		   float outlineWidth, const std::string &textureName,
-		   float lod);
+  static void draw(const Color &fillColor, const Color &outlineColor, float outlineWidth,
+                   const std::string &textureName, float lod);
 
   static Coord getAnchor(const Coord &vector);
 

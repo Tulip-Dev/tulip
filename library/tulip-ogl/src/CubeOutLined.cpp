@@ -56,9 +56,8 @@ void CubeOutLined::draw(node n, float lod) {
     textureName = glGraphInputData->parameters->getTexturePath() + textureName;
 
   GlBox::draw(glGraphInputData->getElementColor()->getNodeValue(n),
-	      glGraphInputData->getElementBorderColor()->getNodeValue(n),
-	      glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	      textureName, lod);
+              glGraphInputData->getElementBorderColor()->getNodeValue(n),
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n), textureName, lod);
 }
 
 Coord CubeOutLined::getAnchor(const Coord &vector) const {

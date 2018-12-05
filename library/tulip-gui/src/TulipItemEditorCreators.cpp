@@ -411,7 +411,7 @@ public:
   const QIcon &getIconForImageFile(const QString &file) {
     if (iconPool.contains(file)) {
       return iconPool[file];
-    } else if (!file.isEmpty())  {
+    } else if (!file.isEmpty()) {
       QImage image;
 
       QFile imageFile(file);
