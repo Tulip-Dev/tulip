@@ -15,17 +15,17 @@ rem Install required tools
 bash -lc "pacman --noconfirm -S --needed base-devel unzip"
 
 rem Install the relevant native dependencies
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-yajl"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-qhull"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-freetype"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-glew"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-libpng"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-pcre2"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-qt5"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-quazip"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-qtwebkit"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-cppunit"
-bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-ccache"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-yajl"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qhull"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-freetype"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-glew"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-libpng"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-pcre2"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qt5"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-quazip"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qtwebkit"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-cppunit"
+bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-ccache"
 
 rem Invoke subsequent bash in the build tree
 cd %APPVEYOR_BUILD_FOLDER%
