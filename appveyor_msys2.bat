@@ -12,7 +12,7 @@ rem Upgrade the MSYS2 platform
 bash -lc "pacman --noconfirm --sync --refresh --sysupgrade"
 
 rem Install required tools
-bash -lc "pacman --noconfirm -S --needed base-devel unzip mingw-w64-%MSYS2_ARCH%-gcc mingw-w64-%MSYS2_ARCH%-make"
+bash -lc "pacman --noconfirm -S --needed base-devel unzip"
 
 rem Install the relevant native dependencies
 bash -lc "pacman --noconfirm -S --needed --overwrite mingw-w64-%MSYS2_ARCH%-yajl"
