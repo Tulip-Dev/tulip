@@ -193,9 +193,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     switch (qMouseEv->buttons()) {
     case Qt::LeftButton: {
       // first ensure that something is selected
-      bool hasSelection =
-	_selection->hasNonDefaultValuatedNodes(_graph) ||
-	_selection->hasNonDefaultValuatedEdges(_graph);
+      bool hasSelection = _selection->hasNonDefaultValuatedNodes(_graph) ||
+                          _selection->hasNonDefaultValuatedEdges(_graph);
 
       if (!hasSelection ||
           (!glMainWidget->pickGlEntities(int(editPosition[0]) - 3, int(editPosition[1]) - 3, 6, 6,
@@ -323,9 +322,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::KeyPress) {
     // first ensure that something is selected
-    bool hasSelection =
-      _selection->hasNonDefaultValuatedNodes(_graph) ||
-      _selection->hasNonDefaultValuatedEdges(_graph);
+    bool hasSelection = _selection->hasNonDefaultValuatedNodes(_graph) ||
+                        _selection->hasNonDefaultValuatedEdges(_graph);
 
     if (hasSelection) {
       switch (static_cast<QKeyEvent *>(e)->key()) {
