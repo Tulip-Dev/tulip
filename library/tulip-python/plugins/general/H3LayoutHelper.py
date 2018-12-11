@@ -74,7 +74,7 @@ class H3LayoutHelper(tlp.Algorithm):
 tulipplugins.registerPluginOfGroup("H3LayoutHelper", "H3 Layout Helper", "Antoine Lambert", "01/09/2017",
 """
 Enables to easily configure a H3 layout visualisation for a connected quasi-hierarchical graph.
-As this is a 3d layout, some rendering setup has to done after the algorithm execution
+As this is a 3d layout, some rendering setup has to be done after the algorithm execution
 in order to get an aesthetic rendering of it in Tulip.
 That plugin takes care of calling the H3 layout algorithm, setting node shapes as sphere,
 setting edge extremity shapes to cone and set appropriate rendering parameters for 3d
