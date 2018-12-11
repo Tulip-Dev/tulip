@@ -239,22 +239,25 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
   SET(TULIPGUI_PYTHON_FOLDER ${TULIPGUI_PYTHON_ROOT_FOLDER}/tulipgui)
   SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
   SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
-  SET(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
-  IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
-    # build universal binaries when generating Tulip Python wheels for MacOs
-    SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
-    # build binaries with install rpath when generating Tulip Python wheels for MacOs
-    # as we don't install the project in that case
-    SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-  ELSEIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND LINUX)
-    FILE(READ /etc/issue LINUX_ISSUE)
-    IF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
-      MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS 5.11 docker image provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
-    ENDIF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
-    # build binaries with install rpath when generating Tulip Python wheels for Linux
-    # as we don't install the project in that case
-    SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-  ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
+  SET(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET OFF CACHE BOOL "Add a wheel make target for generating Python tulip-core module wheel ? [ON|OFF]")
+  IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+    SET(TULIP_BUILD_CORE_ONLY ON)
+    IF(APPLE)
+      # build universal binaries when generating Tulip Python wheels for MacOs
+      SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+      # build binaries with install rpath when generating Tulip Python wheels for MacOs
+      # as we don't install the project in that case
+      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    ELSEIF(LINUX)
+      FILE(READ /etc/issue LINUX_ISSUE)
+      IF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
+	MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS 5.11 docker image provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
+      ENDIF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT EXISTS /usr/local/bin/auditwheel)
+      # build binaries with install rpath when generating Tulip Python wheels for Linux
+      # as we don't install the project in that case
+      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+    ENDIF(APPLE)
+  ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 ## ========================================================
@@ -541,7 +544,7 @@ else:
         ENDIF(SIP_OK)
       ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
 
-      IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+      IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 	STRING(REGEX REPLACE "[^0-9.]" "" TULIP_PYTHON_WHEEL_VERSION "${TulipMajorVersion}.${TulipMinorVersion}.${TulipReleaseVersion}")
 
 	IF(WIN32)
@@ -550,16 +553,9 @@ else:
 	  SET(WHEEL_INSTALL_PATH "/")
 	ENDIF(WIN32)
 
-        ADD_CUSTOM_TARGET(tulip-core-wheel
+        ADD_CUSTOM_TARGET(wheel
           COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
           WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-
-        ADD_CUSTOM_TARGET(tulip-gui-wheel
-          COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
-          DEPENDS tulip-core-wheel)
-
-        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
 
 	# check generation of test wheels
 	STRING(COMPARE NOTEQUAL "${TULIP_PYTHON_TEST_WHEEL_SUFFIX}" "" TULIP_GENERATE_TESTPYPI_WHEEL)
@@ -567,16 +563,10 @@ else:
 	IF(TULIP_GENERATE_TESTPYPI_WHEEL)
 	  SET(TULIP_PYTHON_TEST_WHEEL_VERSION ${TULIP_PYTHON_WHEEL_VERSION}.${TULIP_PYTHON_TEST_WHEEL_SUFFIX})
 
-	  ADD_CUSTOM_TARGET(tulip-core-test-wheel
+	  ADD_CUSTOM_TARGET(test-wheel
 	    COMMAND ${PYTHON_EXECUTABLE} setuptest.py bdist_wheel
             WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER})
-	  ADD_DEPENDENCIES(tulip-core-wheel tulip-core-test-wheel)
-
-	  ADD_CUSTOM_TARGET(tulip-gui-test-wheel
-	    COMMAND ${PYTHON_EXECUTABLE} setuptest.py bdist_wheel
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
-            DEPENDS tulip-core-test-wheel)
-	  ADD_DEPENDENCIES(tulip-gui-wheel tulip-gui-test-wheel)
+	  ADD_DEPENDENCIES(wheel test-wheel)
 	ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
         IF(NOT LINUX)
@@ -612,29 +602,18 @@ else:
 	    EXECUTE_PROCESS(COMMAND bash -c "${PYBIN}/pip uninstall -y auditwheel; cd /tmp; curl -LO http://tulip.labri.fr/code/auditwheel.tar.gz; tar zxvf auditwheel.tar.gz; ${PYBIN}/pip install /tmp/auditwheel")
 	  ENDIF(NOT IS_DIRECTORY /tmp/auditwheel)
 
-	  ADD_CUSTOM_COMMAND(TARGET tulip-core-wheel POST_BUILD
+	  ADD_CUSTOM_COMMAND(TARGET wheel POST_BUILD
 	    COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
 	    COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
 	    WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
 	    COMMENT "patching linux tulip-core wheel" VERBATIM)
 
-	  ADD_CUSTOM_COMMAND(TARGET tulip-gui-wheel POST_BUILD
-	    COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-	    COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
-	    WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
-	    COMMENT "patching linux tulip-gui wheel" VERBATIM)
-
 	  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-	    ADD_CUSTOM_COMMAND(TARGET tulip-core-test-wheel POST_BUILD
+	    ADD_CUSTOM_COMMAND(TARGET test-wheel POST_BUILD
 	      COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
 	      COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
 	      WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER}
 	      COMMENT "patching linux tulip-core test wheel" VERBATIM)
-	    ADD_CUSTOM_COMMAND(TARGET tulip-gui-test-wheel POST_BUILD
-	      COMMAND bash -c "auditwheel repair -L native -w ./dist ./dist/$(ls -t ./dist/ | head -1)"
-	      COMMAND bash -c "rm ./dist/$(ls -t ./dist/ | head -2 | tail -1)"
-	      WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER}
-	      COMMENT "patching linux tulip-gui test wheel" VERBATIM)
 	  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
 
 	ENDIF(NOT LINUX)
@@ -667,29 +646,19 @@ else:
           SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
         ENDIF(WIN32)
         SET(WHEEL_FILES_REGEXP "*${TULIP_PYTHON_WHEEL_VERSION}-cp*")
-        ADD_CUSTOM_TARGET(tulip-core-wheel-upload
+        ADD_CUSTOM_TARGET(wheel-upload
 	  COMMAND bash -c "echo -e 'uploading wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${WHEEL_FILES_REGEXP})"
           COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
           WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
-        ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
-	  COMMAND bash -c "echo -e 'uploading wheels:\\n' $(ls ${TULIPGUI_PYTHON_ROOT_FOLDER}/dist/${WHEEL_FILES_REGEXP})"
-          COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-          WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM)
-        ADD_CUSTOM_TARGET(wheels-upload DEPENDS tulip-core-wheel-upload tulip-gui-wheel-upload)
 
 	IF(TULIP_GENERATE_TESTPYPI_WHEEL)
           SET(TEST_WHEEL_FILES_REGEXP "*${TULIP_PYTHON_TEST_WHEEL_VERSION}*")
-          ADD_CUSTOM_TARGET(tulip-core-test-wheel-upload
+          ADD_CUSTOM_TARGET(test-wheel-upload
 	    COMMAND bash -c "echo -e 'uploading test wheels:\\n' $(ls ${TULIP_PYTHON_ROOT_FOLDER}/dist/${TEST_WHEEL_FILES_REGEXP})"
             COMMAND ${TWINE} upload -r testpypi dist/${TEST_WHEEL_FILES_REGEXP}
             WORKING_DIRECTORY ${TULIP_PYTHON_ROOT_FOLDER} VERBATIM)
-          ADD_CUSTOM_TARGET(tulip-gui-test-wheel-upload
-	    COMMAND bash -c "echo -e 'uploading test wheels:\\n' $(ls ${TULIPGUI_PYTHON_ROOT_FOLDER}/dist/${TEST_WHEEL_FILES_REGEXP})"
-            COMMAND ${TWINE} upload -r testpypi dist/${TEST_WHEEL_FILES_REGEXP}
-            WORKING_DIRECTORY ${TULIPGUI_PYTHON_ROOT_FOLDER} VERBATIM)
-          ADD_CUSTOM_TARGET(test-wheels-upload DEPENDS tulip-core-test-wheel-upload tulip-gui-test-wheel-upload)
 	  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-      ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+      ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 
     ENDIF(PYTHONLIBS_FOUND)
   ENDIF(PYTHONINTERP_FOUND)
@@ -755,12 +724,12 @@ SET(CMAKE_MACOSX_RPATH ON)
 FUNCTION(ADD_LIBRARY name)
   _ADD_LIBRARY(${name} ${ARGN})
   IF(APPLE)
-    # relative locations of Tulip dylibs dependencies are not the sames when generating Python wheels
-    IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+    # relative locations of Tulip dylibs dependencies are not the sames when generating Python wheel
+    IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
       SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "@loader_path/;@loader_path/../")
-    ELSE(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+    ELSE(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
       SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "@loader_path/../lib;@loader_path/../Frameworks;${QT_FRAMEWORKS_DIR}")
-    ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+    ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
   ELSE(APPLE)
     # CMake >= 3.1.0 does not allow to set the INSTALL_RPATH property on INTERFACE_LIBRARY target type
     GET_TARGET_PROPERTY(TARGET_TYPE ${name} TYPE)
@@ -783,10 +752,9 @@ FUNCTION(ADD_LIBRARY name)
       ENDIF(MSVC)
     ENDIF(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
   ENDIF(APPLE)
-  IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-    ADD_DEPENDENCIES(tulip-core-wheel ${name})
-    ADD_DEPENDENCIES(tulip-gui-wheel ${name})
-  ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+    ADD_DEPENDENCIES(wheel ${name})
+  ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
 ENDFUNCTION()
 
 FUNCTION(ADD_EXECUTABLE name)
@@ -854,13 +822,9 @@ ADD_SUBDIRECTORY(plugins)
 IF(NOT TULIP_BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(doc)
   ADD_SUBDIRECTORY(textures)
-  IF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-    ADD_SUBDIRECTORY(externalplugins)
-    ADD_SUBDIRECTORY(demos)
-    ADD_SUBDIRECTORY(software)
-  ELSE(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-    ADD_CUSTOM_TARGET(copyTulipColorScales ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/software/bitmaps/colorscales ${TULIPGUI_PYTHON_FOLDER}/share/bitmaps/colorscales)
-  ENDIF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  ADD_SUBDIRECTORY(externalplugins)
+  ADD_SUBDIRECTORY(demos)
+  ADD_SUBDIRECTORY(software)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 IF(TULIP_BUILD_TESTS)

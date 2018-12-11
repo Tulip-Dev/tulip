@@ -14,6 +14,6 @@ ADD_CUSTOM_TARGET(copyTulipPythonPlugins ALL
                                          COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIPGUI_PYTHON_FOLDER}/plugins/general
                                          COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/general/H3LayoutHelper.py ${TULIPGUI_PYTHON_FOLDER}/plugins/general)
 
-IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  ADD_DEPENDENCIES(tulip-core-wheel copyTulipPythonPlugins)
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
+  ADD_DEPENDENCIES(wheel copyTulipPythonPlugins)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)

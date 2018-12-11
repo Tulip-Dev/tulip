@@ -26,24 +26,6 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUti
            
 DISABLE_COMPILER_WARNINGS()
 
-IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  CONFIGURE_FILE(packaging/setup.cfg.in ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg)
-  CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    SET(TULIP_PYTHON_WHEEL_VERSION ${TULIP_PYTHON_TEST_WHEEL_VERSION})
-    CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setuptest.py)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-
-  ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
-     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
-     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipGuiDllDependencies.cmake ${TULIPGUI_PYTHON_FOLDER}/../copyTulipGuiDllDependencies.cmake
-     DEPENDS ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg)
-  ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
-  IF(TULIP_GENERATE_TESTPYPI_WHEEL)
-    ADD_DEPENDENCIES(tulip-gui-test-wheel copyTulipGuiPythonPackagingFiles)
-  ENDIF(TULIP_GENERATE_TESTPYPI_WHEEL)
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR}  ${TulipCoreBuildInclude} ${TulipGUIBuildInclude})
@@ -66,11 +48,6 @@ ADD_CUSTOM_TARGET(create-tulipgui-python-native-folder ALL
                   COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} create-tulipgui-python-native-folder)
 
-ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
-IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiInitPy)
-ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-
 IF(NOT SYSTEM_SIP)
   ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
@@ -91,26 +68,15 @@ FILE(RELATIVE_PATH TulipLibsInstallRelPath ${TulipPythonModulesInstallDir}/tulip
 # On MacOS, add the paths of dependencies dylibs in install rpaths of the _tulipgui.so binary
 # That way, the tulipgui module can be imported in a classical Python shell without having to
 # modify the content of the DYLD_LIBRARY_PATH environment variable
-IF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(APPLE)
   GET_TARGET_PROPERTY(CURRENT_INSTALL_RPATHS ${LibTulipGUIPythonBindingsName} INSTALL_RPATH)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/${TulipLibsInstallRelPath}/;@loader_path/../../../../Frameworks")
-ELSEIF(LINUX AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ELSEIF(LINUX)
   GET_TARGET_PROPERTY(CURRENT_INSTALL_RPATHS ${LibTulipGUIPythonBindingsName} INSTALL_RPATH)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS}:$ORIGIN/${TulipLibsInstallRelPath}")
-ENDIF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(APPLE)
 
 TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
-# When building Python wheel for MacOS, don't link the C extension module with the Python library
-# and use dynamic lookup for retrieving its symbols.
-# That way, we can produce a C extension module that can be imported through the Python interpreter
-# provided by Apple with the System and the one provided by Python.org
-IF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-ELSE(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-  IF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-    TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${PYTHON_LIBRARY})
-  ENDIF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 TULIP_INSTALL_PYTHON_FILES(tulipgui ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})
