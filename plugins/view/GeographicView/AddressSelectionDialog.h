@@ -49,7 +49,7 @@ public:
 
   bool rememberAddressChoice() const;
 
-  void showEvent(QShowEvent *showEvt);
+  void showEvent(QShowEvent *showEvt) override;
 };
 } // namespace tlp
 
