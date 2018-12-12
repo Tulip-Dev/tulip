@@ -111,8 +111,9 @@ ADD_CUSTOM_TARGET(create-tulip-python-native-folder ALL
                   COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIP_PYTHON_NATIVE_FOLDER})
 ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} create-tulip-python-native-folder)
 
+ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py)
+
 IF(TULIP_ACTIVATE_PYTHON_WHEEL_TARGET)
-  ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py)
   ADD_DEPENDENCIES(wheel copyTulipInitPy)
 
   CONFIGURE_FILE(packaging/setup.cfg.in ${TULIP_PYTHON_FOLDER}/../setup.cfg)

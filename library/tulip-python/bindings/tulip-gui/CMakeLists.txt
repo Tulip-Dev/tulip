@@ -48,6 +48,8 @@ ADD_CUSTOM_TARGET(create-tulipgui-python-native-folder ALL
                   COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} create-tulipgui-python-native-folder)
 
+ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
+
 IF(NOT SYSTEM_SIP)
   ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
