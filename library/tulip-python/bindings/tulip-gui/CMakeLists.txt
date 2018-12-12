@@ -23,7 +23,7 @@ QTX_WRAP_CPP(tulipguiutils_MOC TulipViewsUtils.h)
 QTX_ADD_RESOURCES(tulipgui_RCC_SRCS TulipGui.qrc)
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUtils.cpp ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS})
-           
+
 DISABLE_COMPILER_WARNINGS()
 
 # Force to use SIP headers located in thirdparty
@@ -76,7 +76,7 @@ ELSEIF(LINUX)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS}:$ORIGIN/${TulipLibsInstallRelPath}")
 ENDIF(APPLE)
 
-TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} ${PYTHON_LIBRARY})
 
 TULIP_INSTALL_PYTHON_FILES(tulipgui ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py)
 TULIP_INSTALL_PYTHON_FILES(tulipgui/native ${LibTulipGUIPythonBindingsName})
