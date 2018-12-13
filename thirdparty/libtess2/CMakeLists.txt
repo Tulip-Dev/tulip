@@ -1,8 +1,8 @@
 IF(WIN32)
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDLL_TESS2")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDLL_TESS2")
 ENDIF(WIN32)
 
-SET(LibTess2_SRCS
+SET(libtess2_SRCS
     Source/bucketalloc.c
     Source/dict.c
     Source/geom.c
@@ -13,7 +13,7 @@ SET(LibTess2_SRCS
 
 INCLUDE_DIRECTORIES(${Tess2Include})
 
-ADD_LIBRARY(${Tess2Library} SHARED ${LibTess2_SRCS})
+ADD_LIBRARY(${Tess2Library} SHARED ${libtess2_SRCS})
 
 INSTALL(TARGETS ${Tess2Library}
         RUNTIME DESTINATION ${TulipBinInstallDir}
