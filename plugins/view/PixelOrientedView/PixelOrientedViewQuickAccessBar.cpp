@@ -32,7 +32,7 @@ PixelOrientedViewQuickAccessBar::PixelOrientedViewQuickAccessBar(PixelOrientedOp
                              QuickAccessBarImpl::SCREENSHOT | QuickAccessBarImpl::BACKGROUNDCOLOR |
                              QuickAccessBarImpl::SHOWLABELS | QuickAccessBarImpl::NODEBORDERCOLOR |
                              QuickAccessBarImpl::NODECOLOR | QuickAccessBarImpl::LABELSSCALED |
-                             QuickAccessBarImpl::LABELCOLOR),
+                             QuickAccessBarImpl::LABELCOLOR | QuickAccessBarImpl::NODESHAPE),
                          parent),
       _optionsWidget(opt) {}
 
