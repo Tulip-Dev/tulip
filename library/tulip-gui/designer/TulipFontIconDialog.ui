@@ -116,5 +116,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>iconListWidget</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>TulipFontIconDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>212</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>212</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
