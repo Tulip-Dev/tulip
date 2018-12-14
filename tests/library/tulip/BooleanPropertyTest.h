@@ -36,6 +36,7 @@ class BooleanPropertyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testCopy);
   CPPUNIT_TEST(testIterators);
   CPPUNIT_TEST(testDelete);
+  CPPUNIT_TEST(testReverse);
   CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -53,6 +54,7 @@ public:
   void testIterators();
   void testDelete(bool value);
   void testDelete();
+  void testReverse();
 };
 
 #endif
