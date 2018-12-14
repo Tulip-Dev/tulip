@@ -270,10 +270,10 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
 
       if (it != hData->end()) {
         StoredType<TYPE>::destroy(it->second);
-	it->second = newVal;
+        it->second = newVal;
       } else {
         ++elementInserted;
-	(*hData)[i] = newVal;
+        (*hData)[i] = newVal;
       }
       break;
     }
@@ -388,28 +388,29 @@ void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
     switch (state) {
     case VECT: {
       if (i > maxIndex || i < minIndex)
-	vectset(i, !defaultValue);
+        vectset(i, !defaultValue);
       else {
         typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
 
         if (val != defaultValue)
-	  --elementInserted;
-	else
-	  ++elementInserted;
-	(*vData)[i - minIndex] = !val;
+          --elementInserted;
+        else
+          ++elementInserted;
+        (*vData)[i - minIndex] = !val;
       }
       return;
     }
 
     case HASH: {
-      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
+          hData->find(i);
 
       if (it != hData->end()) {
-	hData->erase(it);
-	--elementInserted;
+        hData->erase(it);
+        --elementInserted;
       } else {
-	(*hData)[i] = !defaultValue;
-	++elementInserted;
+        (*hData)[i] = !defaultValue;
+        ++elementInserted;
       }
       return;
     }
