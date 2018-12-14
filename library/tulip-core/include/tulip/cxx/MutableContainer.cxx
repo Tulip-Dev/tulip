@@ -383,6 +383,49 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
 }
 //===================================================================
 template <typename TYPE>
+void tlp::MutableContainer<TYPE>::invertBooleanValue(const unsigned int i) {
+  if (std::is_same<typename StoredType<TYPE>::Value, bool>::value) {
+    switch (state) {
+    case VECT: {
+      if (i > maxIndex || i < minIndex)
+	vectset(i, !defaultValue);
+      else {
+        typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
+
+        if (val != defaultValue)
+	  --elementInserted;
+	else
+	  ++elementInserted;
+	(*vData)[i - minIndex] = !val;
+      }
+      return;
+    }
+
+    case HASH: {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
+
+      if (it != hData->end()) {
+	hData->erase(it);
+	--elementInserted;
+      } else {
+	(*hData)[i] = !defaultValue;
+	++elementInserted;
+      }
+      return;
+    }
+
+    default:
+      assert(false);
+      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      break;
+    }
+  }
+
+  assert(false);
+  std::cerr << __PRETTY_FUNCTION__ << "not implemented" << std::endl;
+}
+//===================================================================
+template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDefault() const {
   return StoredType<TYPE>::get(defaultValue);
 }

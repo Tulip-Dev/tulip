@@ -109,6 +109,11 @@ public:
     return numberOfNonDefaultValues() != 0;
   }
 
+  /**
+   * invert the boolean value set to i (do nothing for non boolean value)
+   */
+  void invertBooleanValue(const unsigned int i);
+
 private:
   MutableContainer(const MutableContainer<TYPE> &) {}
   void operator=(const MutableContainer<TYPE> &) {}

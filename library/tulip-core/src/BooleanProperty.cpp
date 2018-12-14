@@ -33,11 +33,15 @@ void BooleanProperty::reverse(const Graph *sg) {
     sg = graph;
 
   for (auto n : sg->nodes()) {
-    setNodeValue(n, !getNodeValue(n));
+    notifyBeforeSetNodeValue(n);
+    nodeProperties.invertBooleanValue(n.id);
+    notifyAfterSetNodeValue(n);
   }
 
   for (auto e : sg->edges()) {
-    setEdgeValue(e, !getEdgeValue(e));
+    notifyBeforeSetEdgeValue(e);
+    edgeProperties.invertBooleanValue(e.id);
+    notifyAfterSetEdgeValue(e);
   }
 }
 
