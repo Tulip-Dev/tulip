@@ -55,7 +55,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
           hData->begin();
 
       while (it != hData->end()) {
-        StoredType<TYPE>::destroy((*it).second);
+        StoredType<TYPE>::destroy(it->second);
         ++it;
       }
     }
@@ -107,7 +107,7 @@ void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedCons
           hData->begin();
 
       while (it != hData->end()) {
-        StoredType<TYPE>::destroy((*it).second);
+        StoredType<TYPE>::destroy(it->second);
         ++it;
       }
     }
@@ -241,8 +241,8 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
           hData->find(i);
 
       if (it != hData->end()) {
-        StoredType<TYPE>::destroy((*it).second);
-        hData->erase(i);
+        StoredType<TYPE>::destroy(it->second);
+        hData->erase(it);
         --elementInserted;
       }
 
@@ -268,12 +268,13 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i,
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it =
           hData->find(i);
 
-      if (it != hData->end())
-        StoredType<TYPE>::destroy((*it).second);
-      else
+      if (it != hData->end()) {
+        StoredType<TYPE>::destroy(it->second);
+	it->second = newVal;
+      } else {
         ++elementInserted;
-
-      (*hData)[i] = newVal;
+	(*hData)[i] = newVal;
+      }
       break;
     }
 
@@ -326,8 +327,8 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
       if (it != hData->end()) {
         // check default value
         if ((it->second + val) == defaultValue) {
-          StoredType<TYPE>::destroy((*it).second);
-          hData->erase(i);
+          StoredType<TYPE>::destroy(it->second);
+          hData->erase(it);
           --elementInserted;
         } else
           it->second += val;
@@ -368,7 +369,7 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
         hData->find(i);
 
     if (it != hData->end())
-      return StoredType<TYPE>::get((*it).second);
+      return StoredType<TYPE>::get(it->second);
     else
       return StoredType<TYPE>::get(defaultValue);
   }
@@ -431,7 +432,7 @@ tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
 
     if (it != hData->end()) {
       notDefault = true;
-      return StoredType<TYPE>::get((*it).second);
+      return StoredType<TYPE>::get(it->second);
     } else {
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
