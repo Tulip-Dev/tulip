@@ -63,8 +63,7 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent)
 }
 
 void CSVParserConfigurationWidget::initWithLastOpenedFile() {
-  if (QFile::exists(lastOpenedFile))
-    setFileToOpen(lastOpenedFile);
+  setFileToOpen(lastOpenedFile);
 }
 
 CSVParserConfigurationWidget::~CSVParserConfigurationWidget() {
@@ -142,7 +141,7 @@ void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
 }
 
 void CSVParserConfigurationWidget::setFileToOpen(const QString &fileToOpen) {
-  if (QFile::exists(fileToOpen)) {
+  if (!fileToOpen.isEmpty() && QFile::exists(fileToOpen)) {
     ui->fileLineEdit->setText(fileToOpen);
 
     // Try to autodetect separator
@@ -190,7 +189,8 @@ string CSVParserConfigurationWidget::getFile() const {
   return QStringToTlpString(ui->fileLineEdit->text());
 }
 bool CSVParserConfigurationWidget::isValid() const {
-  return QFile::exists(ui->fileLineEdit->text());
+  QString txt = ui->fileLineEdit->text();
+  return !txt.isEmpty() && QFile::exists(txt);
 }
 string CSVParserConfigurationWidget::getEncoding() const {
   return QStringToTlpString(ui->encodingComboBox->currentText());
