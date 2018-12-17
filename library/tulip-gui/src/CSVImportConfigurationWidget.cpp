@@ -257,15 +257,10 @@ bool CSVTableWidget::begin() {
 
 bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
 
-  // Wait for the first line index
-  if (row < firstLineIndex) {
+  if ((row < firstLineIndex) || // Wait for the first line index
+      // If the maximum line number is reached ignore the token.
+      (static_cast<unsigned>(rowCount()) >= maxLineNumber))
     return true;
-  }
-
-  // If the maximum line number is reached ignore the token.
-  if (static_cast<unsigned>(rowCount() + 1) >= maxLineNumber) {
-    return true;
-  }
 
   if (checkCommentsLines) {
     if (lineTokens[0][0] == '#')
@@ -302,11 +297,10 @@ static std::unordered_map<std::string, std::set<std::string>> typenameToProps;
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::CSVImportConfigurationWidget),
       validator(new PropertyNameValidator(propertyWidgets, this)), maxLineNumber(0), parser(NULL),
-      firstLine(0), guessFirstLineIsHeader(true) {
+      firstLine(0), guessFirstLineIsHeader(true), keepPropertyWidgets(false) {
   ui->setupUi(this);
 
   // Import line number change
-  // connect(ui->toLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(toLineValueChanged(int)));
   connect(ui->useFirstLineAsPropertyNamecheckBox, SIGNAL(clicked(bool)), this,
           SLOT(useFirstLineAsHeaderUpdated()));
   connect(ui->limitPreviewLineNumberCheckBox, SIGNAL(clicked(bool)), this,
@@ -316,7 +310,7 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
 
   // Init the preview line number with the right value.
   if (ui->limitPreviewLineNumberCheckBox->isChecked()) {
-    ui->previewTableWidget->setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
+    setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
   } else {
     ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
   }
@@ -388,23 +382,27 @@ void CSVImportConfigurationWidget::updateWidget(const std::string &title) {
 }
 
 bool CSVImportConfigurationWidget::begin() {
-  ui->previewTableWidget->begin();
-  ui->previewTableWidget->setFirstLineIndex(getFirstLineIndex());
-  clearPropertiesTypeList();
-  // Clear initialized columns
-  columnHeaderType.clear();
-  columnType.clear();
-  // insert a first row to display the propertyWidgets
-  // (see line method below)
-  ui->previewTableWidget->insertRow(0);
-  ui->previewTableWidget->setRowHeight(0, 50);
-
+  if (keepPropertyWidgets == false) {
+    ui->previewTableWidget->begin();
+    ui->previewTableWidget->setFirstLineIndex(getFirstLineIndex());
+    clearPropertiesTypeList();
+    // Clear initialized columns
+    columnHeaderType.clear();
+    columnType.clear();
+    // insert a first row to display the propertyWidgets
+    // (see line method below)
+    ui->previewTableWidget->insertRow(0);
+    ui->previewTableWidget->setRowHeight(0, 50);
+  } else
+    ui->previewTableWidget->setRowCount(1);
   return true;
 }
 
 bool CSVImportConfigurationWidget::line(unsigned int row, const vector<string> &lineTokens) {
-
   ui->previewTableWidget->line(row, lineTokens);
+
+  if (keepPropertyWidgets)
+    return true;
 
   // Wait for the first row
   if (row >= getFirstLineIndex()) {
@@ -462,9 +460,15 @@ bool CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
   return true;
 }
 
+void CSVImportConfigurationWidget::setMaxPreviewLineNumber(unsigned int lineNumber) {
+  if (useFirstLineAsPropertyName())
+    ++lineNumber;
+  ui->previewTableWidget->setMaxPreviewLineNumber(lineNumber);
+}
+
 void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked) {
   if (checked) {
-    ui->previewTableWidget->setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
+    setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
   } else {
     ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
   }
@@ -475,8 +479,10 @@ void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked) {
 }
 
 void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber) {
-  ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);
+  setMaxPreviewLineNumber(maxLineNumber);
+  keepPropertyWidgets = true;
   updateWidget();
+  keepPropertyWidgets = false;
   // Reset import range
   updateLineNumbers(false);
 }
@@ -550,12 +556,16 @@ string CSVImportConfigurationWidget::getColumnType(unsigned int col) const {
 void CSVImportConfigurationWidget::useFirstLineAsHeaderUpdated() {
   if (useFirstLineAsPropertyName()) {
     ui->previewTableWidget->hideRow(1);
+    ui->previewTableWidget->showRow(ui->previewTableWidget->rowCount() - 1);
   } else {
     ui->previewTableWidget->showRow(1);
+    ui->previewTableWidget->hideRow(ui->previewTableWidget->rowCount() - 1);
   }
 
-  updateTableHeaders();
-  updateLineNumbers(false);
+  if (keepPropertyWidgets == false) {
+    updateTableHeaders();
+    updateLineNumbers(false);
+  }
 }
 
 void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues) {

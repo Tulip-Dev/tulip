@@ -137,19 +137,11 @@ public:
   bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   /**
-   * @brief Limit the line number of the preview. Need to parse the file again to take this limit
-   *in account.
+   * @brief Limit the line number of the preview. Need to parse the file again to take this limit into account.
    **/
   void setMaxPreviewLineNumber(unsigned int lineNumber) {
     // first row is used to display configuration widgets
-    maxLineNumber = lineNumber + 2;
-  }
-
-  /**
-   * @brief Get the preview line number.
-   **/
-  unsigned int getMaxPreviewLineNumber() const {
-    return maxLineNumber;
+    maxLineNumber = lineNumber + 1;
   }
 
   unsigned int getFirstLineIndex() {
@@ -303,6 +295,9 @@ private:
    **/
   const std::string &guessDataType(const std::string &data) const;
 
+  // update the max line number of the preview table
+  void setMaxPreviewLineNumber(unsigned int lineNumber);
+
   // The data type of the header
   std::vector<std::string> columnHeaderType;
   // The data type of the rest of the column;
@@ -315,6 +310,7 @@ private:
   tlp::CSVParser *parser;
   unsigned int firstLine;
   bool guessFirstLineIsHeader;
+  bool keepPropertyWidgets;
 };
 } // namespace tlp
 #endif // CSVIMPORTCONFIGURATIONWIDGET_H
