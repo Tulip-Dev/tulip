@@ -24,10 +24,7 @@ padding: 0px 6px;
 font-size: 12px;
 }
 QPushButton::flat {
-border-image: none;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
+border-width: 0;
 background-color: transparent;
 }
 QPushButton, QComboBox, QLabel {
@@ -35,6 +32,7 @@ color: black;
 }
 QPushButton:hover, QComboBox:hover {
 border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+border-width: 4;
 }
 QPushButton:disabled, QComboBox::disabled {
 color:gray;
@@ -333,7 +331,8 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</normaloff>
+       <normalon>:/tulip/gui/icons/20/color_interpolation_enabled.png</normalon>:/tulip/gui/icons/20/color_interpolation_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -368,7 +367,8 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/size_interpolation_disabled.png</normaloff>:/tulip/gui/icons/20/size_interpolation_disabled.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/size_interpolation_disabled.png</normaloff>
+       <normalon>:/tulip/gui/icons/20/size_interpolation_enabled.png</normalon>:/tulip/gui/icons/20/size_interpolation_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -409,7 +409,8 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/edges_disabled.png</normaloff>:/tulip/gui/icons/20/edges_disabled.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/edges_disabled.png</normaloff>
+       <normalon>:/tulip/gui/icons/20/edges_enabled.png</normalon>:/tulip/gui/icons/20/edges_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -450,7 +451,8 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/nodes_disabled.png</normaloff>:/tulip/gui/icons/20/nodes_disabled.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/nodes_disabled.png</normaloff>
+       <normalon>:/tulip/gui/icons/20/nodes_enabled.png</normalon>:/tulip/gui/icons/20/nodes_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -485,7 +487,8 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/labels_disabled.png</normaloff>:/tulip/gui/icons/20/labels_disabled.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/labels_disabled.png</normaloff>
+       <normalon>:/tulip/gui/icons/20/labels_enabled.png</normalon>:/tulip/gui/icons/20/labels_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -520,7 +523,8 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</normaloff>
+       <normalon>:/tulip/gui/icons/20/labels_scaled_enabled.png</normalon>:/tulip/gui/icons/20/labels_scaled_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
