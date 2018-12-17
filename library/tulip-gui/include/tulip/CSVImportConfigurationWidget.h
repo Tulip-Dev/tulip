@@ -137,7 +137,8 @@ public:
   bool line(unsigned int row, const std::vector<std::string> &lineTokens) override;
   bool end(unsigned int rowNumber, unsigned int columnNumber) override;
   /**
-   * @brief Limit the line number of the preview. Need to parse the file again to take this limit into account.
+   * @brief Limit the line number of the preview. Need to parse the file again to take this limit
+   *into account.
    **/
   void setMaxPreviewLineNumber(unsigned int lineNumber) {
     // first row is used to display configuration widgets

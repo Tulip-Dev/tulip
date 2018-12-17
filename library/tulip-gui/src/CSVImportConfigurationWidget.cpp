@@ -258,7 +258,7 @@ bool CSVTableWidget::begin() {
 bool CSVTableWidget::line(unsigned int row, const vector<string> &lineTokens) {
 
   if ((row < firstLineIndex) || // Wait for the first line index
-      // If the maximum line number is reached ignore the token.
+                                // If the maximum line number is reached ignore the token.
       (static_cast<unsigned>(rowCount()) >= maxLineNumber))
     return true;
 
