@@ -32,33 +32,44 @@ GlConvexGraphHull::GlConvexGraphHull(GlComposite *parent, const std::string &nam
                                      const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout,
                                      SizeProperty *size, DoubleProperty *rotation)
     : _parent(parent), _name(name), _fcolor(fcolor), _polygon(nullptr), graph(graph),
-      layout(layout), size(size), rotation(rotation) {
+      _layout(layout), _size(size), _rotation(rotation) {
   assert(graph);
 
-  if (graph->isEmpty() == false) {
-    _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, nullptr),
-                                    fcolor, GlConvexGraphHull::bezierValue);
-    _parent->addGlEntity(_polygon, _name);
-  }
+  updateHull();
 }
 
 GlConvexGraphHull::~GlConvexGraphHull() {
   delete _polygon;
-  _polygon = nullptr;
 }
 
-void GlConvexGraphHull::updateHull() {
-  if (!isVisible())
+  void GlConvexGraphHull::updateHull(LayoutProperty *layout,
+				     SizeProperty *size,
+				     DoubleProperty *rotation) {
+  if (_polygon && !_polygon->isVisible())
     return;
 
   if (_polygon) {
     _parent->deleteGlEntity(_polygon);
     delete _polygon;
+    _polygon = nullptr;
   }
 
-  _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, nullptr),
-                                  _fcolor, GlConvexGraphHull::bezierValue);
-  _parent->addGlEntity(_polygon, _name);
+  if (layout)
+    _layout = layout;
+
+  if (size)
+    _size = size;
+
+  if (rotation)
+    _rotation = rotation;
+
+  if (graph->isEmpty() == false) {
+    _polygon =
+      new GlComplexPolygon(computeConvexHull(graph, _layout, _size, _rotation,
+					     nullptr),
+			   _fcolor, GlConvexGraphHull::bezierValue);
+    _parent->addGlEntity(_polygon, _name);
+  }
 }
 
 bool GlConvexGraphHull::isVisible() {

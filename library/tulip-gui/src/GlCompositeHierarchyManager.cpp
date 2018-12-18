@@ -22,7 +22,9 @@
 #include <tulip/GlLayer.h>
 #include <tulip/GlConvexHull.h>
 #include <tulip/GlConvexGraphHull.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
 
 #include <sstream>
 
@@ -39,13 +41,16 @@ GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph *graph, GlLayer *
                                                          DoubleProperty *rotation, bool visible,
                                                          const std::string &namingProperty,
                                                          const std::string &subCompositeSuffix)
-    : _shouldRecreate(false), _currentColor(0), _graph(graph), _layer(layer),
-      _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size),
-      _rotation(rotation), _layerName(layerName), _isVisible(visible),
+    : _currentColor(0), _graph(graph), _layer(layer),
+      _composite(new GlHierarchyMainComposite(this)),
+      _layout(layout), _size(size), _rotation(rotation),
+      _layerName(layerName), _isVisible(visible),
       _subCompositesSuffix(subCompositeSuffix), _nameAttribute(namingProperty) {
-  this->_layer->addGlEntity(this->_composite, this->_layerName);
-  this->_composite->setVisible(_isVisible);
+  _layer->addGlEntity(_composite, _layerName);
+  _composite->setVisible(_isVisible);
   _layout->addObserver(this);
+  _size->addObserver(this);
+  _rotation->addObserver(this);
 
   _fillColors.push_back(Color(255, 148, 169, 100));
   _fillColors.push_back(Color(153, 250, 255, 100));
@@ -68,22 +73,23 @@ const tlp::Color GlCompositeHierarchyManager::getColor() {
 void GlCompositeHierarchyManager::buildComposite(Graph *current, GlComposite *composite) {
   current->addListener(this);
 
-  string propertyValue;
-  current->getAttribute<string>(_nameAttribute, propertyValue);
   stringstream naming;
-  naming << propertyValue << " (" << current->getId() << ")";
-  GlConvexGraphHull *hull = new GlConvexGraphHull(composite, naming.str(), getColor(), current,
-                                                  _layout, _size, _rotation);
+  naming << current->getName() << " [#" << current->getId() << ']';
+  GlConvexGraphHull *hull =
+    new GlConvexGraphHull(composite, naming.str(), getColor(), current,
+			  _layout, _size, _rotation);
 
   _graphsComposites.insert(std::pair<Graph *, std::pair<GlComposite *, GlConvexGraphHull *>>(
       current, std::pair<GlComposite *, GlConvexGraphHull *>(composite, hull)));
 
-  GlComposite *newComposite = new GlComposite();
-  naming << _subCompositesSuffix;
-  composite->addGlEntity(newComposite, naming.str());
+  if (!current->subGraphs().empty()) {
+    GlComposite *newComposite = new GlComposite();
+    naming << " - " << _subCompositesSuffix;
+    composite->addGlEntity(newComposite, naming.str());
 
-  for (Graph *sg : current->getSubGraphs()) {
-    this->buildComposite(sg, newComposite);
+    for (Graph *sg : current->getSubGraphs()) {
+      this->buildComposite(sg, newComposite);
+    }
   }
 }
 
@@ -103,32 +109,28 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
       break;
 
     case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
-    case GraphEvent::TLP_AFTER_DEL_SUBGRAPH:
-      _shouldRecreate = true;
-      _shouldRecreate = true;
+    case GraphEvent::TLP_AFTER_DEL_SUBGRAPH: {
+      createComposite();
       break;
+    }
 
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE: {
-      const std::string attributeName = gEvt->getAttributeName();
+      auto attributeName = gEvt->getAttributeName();
 
       // we save the old property value in a temporary attribute, so we can find the GlEntity and
       // change its name once the attribute has been set
       if (attributeName == _nameAttribute) {
-        string propertyValue;
-        graph->getAttribute<string>(_nameAttribute, propertyValue);
         graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue,
-                                    propertyValue);
+                                    graph->getName());
       }
 
       break;
     }
 
     case GraphEvent::TLP_AFTER_SET_ATTRIBUTE: {
-      const std::string attributeName = gEvt->getAttributeName();
+      auto attributeName = gEvt->getAttributeName();
 
       if (attributeName == _nameAttribute) {
-        string propertyValue;
-        graph->getAttribute<string>(_nameAttribute, propertyValue);
         string oldPropertyValue;
         graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue,
                                     oldPropertyValue);
@@ -138,11 +140,60 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
 
         if (temporaryEntity) {
           composite->deleteGlEntity(temporaryEntity);
-          composite->addGlEntity(temporaryEntity, propertyValue);
+          composite->addGlEntity(temporaryEntity, graph->getName());
         }
       }
 
       break;
+    }
+
+    case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
+      auto propertyName = gEvt->getPropertyName();
+      if (propertyName == _layout->getName())
+	_layout = nullptr;
+
+      break;
+    }
+
+    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY: {
+      if (!_layout) {
+	auto propertyName = gEvt->getPropertyName();
+	_layout = graph->getProperty<LayoutProperty>(propertyName);
+	_layout->addObserver(this);
+	std::vector<Event> v;
+	treatEvents(v);
+      }
+      break;
+    }
+
+    case GraphEvent::TLP_ADD_LOCAL_PROPERTY: {
+      auto propertyName = gEvt->getPropertyName();
+
+      if (propertyName == _layout->getName()) {
+	_layout->removeObserver(this);
+	_layout = graph->getProperty<LayoutProperty>(propertyName);
+	_layout->addObserver(this);
+	if (_layout->hasNonDefaultValuatedNodes(graph)) {
+	  std::vector<Event> v;
+	  treatEvents(v);
+	}
+      } else if (propertyName == _size->getName()) {
+	_size->removeObserver(this);
+	_size = graph->getProperty<SizeProperty>(propertyName);
+	_size->addObserver(this);
+	if (_size->hasNonDefaultValuatedNodes(graph)) {
+	  std::vector<Event> v;
+	  treatEvents(v);
+	}
+      } else if (propertyName == _rotation->getName()) {
+	_rotation->removeObserver(this);
+	_rotation = graph->getProperty<DoubleProperty>(propertyName);
+	_rotation->addObserver(this);
+	if (_rotation->hasNonDefaultValuatedNodes(graph)) {
+	  std::vector<Event> v;
+	  treatEvents(v);
+	}
+      }
     }
 
     default:
@@ -150,33 +201,35 @@ void GlCompositeHierarchyManager::treatEvent(const Event &evt) {
       break;
     }
   }
+
+  Graph* graph = dynamic_cast<Graph *>(evt.sender());
+  if (graph && evt.type() == Event::TLP_DELETE) {
+    if (graph == _graph) {
+      _graph = nullptr;
+      _graphsComposites.clear();
+    } else
+      _graphsComposites.erase(graph);
+  }
 }
 
 void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
-  if (_shouldRecreate) {
-    createComposite();
-  } else {
-    for (std::map<tlp::Graph *,
-                  std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
-             _graphsComposites.begin();
-         it != _graphsComposites.end(); ++it) {
-      if (it->first->numberOfNodes() != 0) {
-        it->second.second->setVisible(true);
-        it->second.second->updateHull();
-      } else {
-        it->second.second->setVisible(false);
-      }
+  for (std::map<tlp::Graph *,
+	 std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
+	 _graphsComposites.begin();
+       it != _graphsComposites.end(); ++it) {
+    if (it->first->numberOfNodes() != 0) {
+      it->second.second->setVisible(true);
+      it->second.second->updateHull(_layout, _size, _rotation);
+    } else {
+      it->second.second->setVisible(false);
     }
   }
-
-  _shouldRecreate = false;
 }
 
 void GlCompositeHierarchyManager::setGraph(tlp::Graph *graph) {
   // TODO here we could rebuild only if the graph is not in the composites map
   this->_graph = graph;
   //    deleteComposite();
-
   if (_composite->isVisible())
     this->createComposite();
 }
@@ -184,6 +237,28 @@ void GlCompositeHierarchyManager::setGraph(tlp::Graph *graph) {
 void GlCompositeHierarchyManager::createComposite() {
   this->_composite->reset(true);
   _graphsComposites.clear();
+  LayoutProperty *layout =
+    _graph->getProperty<LayoutProperty>(_layout->getName());
+  if (layout != _layout) {
+    _layout->removeObserver(this);
+    _layout = layout;
+    _layout->addObserver(this);
+  }
+  SizeProperty *size =
+    _graph->getProperty<SizeProperty>(_size->getName());
+  if (size != _size) {
+    _size->removeObserver(this);
+    _size = size;
+    _size->addObserver(this);
+  }
+  DoubleProperty *rotation =
+    _graph->getProperty<DoubleProperty>(_rotation->getName());
+  if (rotation != _rotation) {
+    _rotation->removeObserver(this);
+    _rotation = rotation;
+    _rotation->addObserver(this);
+  }
+
   //    this->_composite->setVisible(_isVisible);
   this->buildComposite(_graph, _composite);
 }

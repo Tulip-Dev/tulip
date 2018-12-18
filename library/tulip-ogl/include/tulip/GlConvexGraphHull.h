@@ -69,7 +69,9 @@ public:
   /**
    * Recomputes the whole Hull
    */
-  void updateHull();
+  void updateHull(LayoutProperty *layout = nullptr,
+		  SizeProperty *size = nullptr,
+		  DoubleProperty *rotation = nullptr);
 
   void setVisible(bool visible);
   bool isVisible();
@@ -80,9 +82,9 @@ private:
   Color _fcolor;
   GlComplexPolygon *_polygon;
   Graph *graph;
-  LayoutProperty *layout;
-  SizeProperty *size;
-  DoubleProperty *rotation;
+  LayoutProperty *_layout;
+  SizeProperty *_size;
+  DoubleProperty *_rotation;
   static int bezierValue;
 };
 } // namespace tlp

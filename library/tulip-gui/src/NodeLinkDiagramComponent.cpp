@@ -52,7 +52,7 @@ using namespace std;
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext *)
-    : _grid(nullptr), _gridOptions(nullptr), _hasHulls(false), grid_ui(nullptr),
+  : _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false), grid_ui(nullptr),
       _tturlManager(nullptr) {}
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -61,6 +61,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 
   delete grid_ui;
   delete _tturlManager;
+  delete manager;
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
@@ -152,7 +153,8 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {
 
   _tturlManager->setState(data);
 
-  createScene(graph(), data);
+  if (!data.empty())
+    createScene(graph(), data);
   registerTriggers();
 
   if (overviewItem())
@@ -252,15 +254,16 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     scene->getGlGraphComposite()->setRenderingParameters(rp);
   }
 
+  useHulls(true);
+
   if (dataSet.exists("Hulls")) {
-    useHulls(true);
     DataSet hullsSet;
     dataSet.get<DataSet>("Hulls", hullsSet);
     manager->setVisible(true);
     manager->setData(hullsSet);
   }
 
-  getGlMainWidget()->emitGraphChanged();
+  //getGlMainWidget()->emitGraphChanged();
 }
 //==================================================
 DataSet NodeLinkDiagramComponent::sceneData() const {
@@ -301,6 +304,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
 
   if (!oldGraphComposite) {
     createScene(graph, DataSet());
+
     return;
   }
 

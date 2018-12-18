@@ -68,7 +68,6 @@ protected:
   void treatEvent(const Event &) override;
 
 private:
-  bool _shouldRecreate;
   const tlp::Color getColor();
   int _currentColor;
 
