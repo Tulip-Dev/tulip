@@ -52,7 +52,7 @@ using namespace std;
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext *)
-  : _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false), grid_ui(nullptr),
+    : _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false), grid_ui(nullptr),
       _tturlManager(nullptr) {}
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -263,7 +263,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
     manager->setData(hullsSet);
   }
 
-  //getGlMainWidget()->emitGraphChanged();
+  // getGlMainWidget()->emitGraphChanged();
 }
 //==================================================
 DataSet NodeLinkDiagramComponent::sceneData() const {

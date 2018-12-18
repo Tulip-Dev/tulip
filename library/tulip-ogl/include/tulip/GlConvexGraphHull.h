@@ -69,9 +69,8 @@ public:
   /**
    * Recomputes the whole Hull
    */
-  void updateHull(LayoutProperty *layout = nullptr,
-		  SizeProperty *size = nullptr,
-		  DoubleProperty *rotation = nullptr);
+  void updateHull(LayoutProperty *layout = nullptr, SizeProperty *size = nullptr,
+                  DoubleProperty *rotation = nullptr);
 
   void setVisible(bool visible);
   bool isVisible();
