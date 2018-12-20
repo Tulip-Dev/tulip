@@ -95,6 +95,7 @@ static void addIconCodePoint(const string &iconName, unsigned int codePoint) {
   // gives a different family name (Font Awesome 5 outl)
   // that the one downloaded from fontawesome.com
   // which have the same family name (Font Awesome 5 Free) that fa-solid-900.ttf
+  // The first occurence of ^@F^@r^@e^@e" must be replaced by ^@o^@u^@t^@l
   if (codePointExists("fa-regular-400.ttf", codePoint)) {
     string name(iconName);
     if (iconFound)

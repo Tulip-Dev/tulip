@@ -22,6 +22,8 @@ FA_VERSION=$(grep fa-version ${FA_VARIABLES_FILE} | awk -F '"' '{print $2}')
  # grep 'fa-var-' ${FA_VARIABLES_FILE} | awk -F ';' '{print $1}' | awk -F '$' '{print $2}' | awk -F 'var-' '{print $1 $2}' | awk -F ': \' '{printf "  addIconCodePoint(\"%s\", 0x%s);\n", $1, $2}';
  grep 'fa-var-' ${FA_VARIABLES_FILE} | awk -F ';' '{print $1}' | awk -F '$' '{print $2}' | awk -F 'var-' '{print $1 $2}' | awk -F ': ' '{print $1 $2}' | awk -F '\' '{printf "  addIconCodePoint(\"%s\", 0x%s);\n", $1, $2}';
  echo;
+ echo "#error fa-regular-400.ttf needs to be updated (see library/tulip-ogl/src/TulipInitFontAwesome.cpp)"
+ echo;
  echo "  clearFtFaces();";
  echo;
  echo "  auto it = iconCodePoint.begin();";
