@@ -923,46 +923,50 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   QApplication::sendEvent(this, eventModif);
 }
 
-void GeographicViewGraphicsView::paintEvent(QPaintEvent *event) {
+void GeographicViewGraphicsView::showDefaultMap() {
+  auto mapCenter = leafletMaps->getCurrentMapCenter();
+  auto mapZoom = leafletMaps->getCurrentMapZoom();
 
   Observable::holdObservers();
 
-  if (graph && !geocodingActive) {
+  if (currentMapCenter != mapCenter || currentMapZoom != mapZoom) {
 
-    if (leafletMaps->isVisible() && (prevMapCenter != leafletMaps->getCurrentMapCenter() ||
-                                     prevMapZoom != leafletMaps->getCurrentMapZoom())) {
+    currentMapCenter = mapCenter;
+    currentMapZoom = mapZoom;
 
-      prevMapCenter = leafletMaps->getCurrentMapCenter();
-      prevMapZoom = leafletMaps->getCurrentMapZoom();
-      currentMapCenter = prevMapCenter;
-      lastSceneRect = sceneRect();
-      currentMapZoom = prevMapZoom;
+    BoundingBox bb;
+    Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
+    Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
 
-      BoundingBox bb;
-      Coord rightCoord = leafletMaps->getPixelPosOnScreenForLatLng(180, 180);
-      Coord leftCoord = leafletMaps->getPixelPosOnScreenForLatLng(0, 0);
-
-      if (rightCoord[0] - leftCoord[0]) {
-        float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
-        float middleLng =
-            leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-        bb.expand(Coord(
-            middleLng - mapWidth / 2.,
-            latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
-        bb.expand(
-            Coord(middleLng + mapWidth / 2.,
-                  latitudeToMercator(
-                      leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
-                  0));
-        GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
-        sceneZoomAndPan.zoomAndPanAnimationStep(1);
-      }
-
-      glWidgetItem->setRedrawNeeded(true);
+    if (rightCoord[0] - leftCoord[0]) {
+      float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
+      float middleLng =
+	leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
+      bb.expand(Coord(
+		      middleLng - mapWidth / 2.,
+		      latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
+      bb.expand(
+		Coord(middleLng + mapWidth / 2.,
+		      latitudeToMercator(
+					 leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+		      0));
+      GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
+      sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
+
+    glWidgetItem->setRedrawNeeded(true);
   }
 
   Observable::unholdObservers();
+}
+
+void GeographicViewGraphicsView::paintEvent(QPaintEvent *event) {
+  if (graph && !geocodingActive) {
+
+    if (leafletMaps->isVisible())
+      // avoid Warning: QWidget::repaint: Recursive repaint detected
+      QTimer::singleShot(500, this, SLOT(showDefaultMap()));
+  }
 
   QGraphicsView::paintEvent(event);
 }

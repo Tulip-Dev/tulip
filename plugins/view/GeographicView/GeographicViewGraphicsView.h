@@ -139,6 +139,7 @@ public slots:
   void currentZoomChanged();
   void queueMapRefresh();
   void refreshMap();
+  void showDefaultMap();
 
 protected:
   void cleanup();
@@ -155,10 +156,9 @@ private:
   std::map<node, std::pair<double, double>> nodeLatLngFOR;
   std::map<edge, std::vector<std::pair<double, double>>> edgeBendsLatLng;
   std::pair<double, double> currentMapCenter;
-  unsigned int currentMapZoom;
+  int currentMapZoom;
   Camera globeCameraBackup;
   Camera mapCameraBackup;
-  QRectF lastSceneRect;
 
   LayoutProperty *geoLayout;
   SizeProperty *geoViewSize;
@@ -186,8 +186,6 @@ private:
 
   bool firstGlobeSwitch;
 
-  std::pair<double, double> prevMapCenter;
-  int prevMapZoom;
   QGraphicsRectItem *_placeholderItem;
 
   bool geoLayoutComputed;
