@@ -364,7 +364,7 @@ The layers settings can be accessed by clicking on the **Layers** tab. The follo
 
 .. image:: _images/i_workspace_layers.png
 
-The first column, *Visible*, allows you to select the elements you want to display in the graph. The second column, *Stencil*, gives you another level of visibility by setting the objects on the foreground. 
+The **Visible** column allows you to select the elements you want to display. The **Stencil** column gives you another level of visibility by setting the objects in the front of the display. If the **Visible** check box on the *Hulls* row is checked, the convex hulls of the current graph and its descendant subgraphs are computed and can then be shown/hidden using their corresponding **Visible** check boxes.
 
 
 .. _workspace_diagram_faq:
@@ -381,7 +381,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
   Because we want to allow people working with large graphs to use Tulip too, displaying each and every label is a poor choice.
   The rendering becomes demanding and the visibility is not really at its best. 
   By default, the density of labels displayed is set in order to forbid any overlap. 
-  This options can be customized in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
+  This option can be customized in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
 
 
 * *The size of the labels is not adapted. Even when I try to augment it for each node, nothing happens; what should I do?*
@@ -555,22 +555,22 @@ Map modes
 
 The geographic view provides six differents map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to customize the visualization background to your need.
 
-* Roadmap:
+* Open Stree Map:
 
 .. image:: _images/i_geographic_main_roadmap.png
     :width: 400
 
-* Satellite:
+* Esri Satellite:
 
 .. image:: _images/i_geographic_main_satellite.png
     :width: 400
 
-* Terrain:
+* Esri Terrain:
 
 .. image:: _images/i_geographic_main_terrain.png
     :width: 400
 
-* Hybrid: 
+* Esri Gray Canvas:
 
 .. image:: _images/i_geographic_main_hybrid.png
     :width: 400
@@ -615,11 +615,9 @@ Geolocation
 
 .. image:: _images/i_geographic_geoloc.png
 
-A geolocation tool has been embedded in the view, exploiting the Google Maps web service. It can appropriatly place the nodes on the map.
+A geolocation tool has been embedded in the view, exploiting the `Nominatim <https://nominatim.openstreetmap.org/>`_ geocoding service. It can appropriatly place the nodes on the map.
 
 You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the already computed latitude and longitude values, each contained in their respective properties.
-
-The previous Europe map snapshots, for example, have been build in such a way, by giving to each node a city name.
 
 Once the service is being queried, you will have to specify the corresponding town/address for the ambiguous choices. You can choose to keep the result values obtained in latitude/longitude properties to ease a possible next use of your data.
 
