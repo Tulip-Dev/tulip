@@ -44,7 +44,7 @@ GlConvexGraphHull::~GlConvexGraphHull() {
 
 void GlConvexGraphHull::updateHull(LayoutProperty *layout, SizeProperty *size,
                                    DoubleProperty *rotation) {
-  bool visible =  !_polygon || _polygon->isVisible();
+  bool visible = !_polygon || _polygon->isVisible();
 
   if (_polygon) {
     _parent->deleteGlEntity(_polygon);

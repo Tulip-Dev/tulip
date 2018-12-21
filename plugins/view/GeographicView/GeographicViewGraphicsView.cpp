@@ -941,15 +941,14 @@ void GeographicViewGraphicsView::showDefaultMap() {
     if (rightCoord[0] - leftCoord[0]) {
       float mapWidth = (width() / (rightCoord - leftCoord)[0]) * 180.;
       float middleLng =
-	leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
-      bb.expand(Coord(
-		      middleLng - mapWidth / 2.,
-		      latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
+          leafletMaps->getLatLngForPixelPosOnScreen(width() / 2., height() / 2.).second * 2.;
       bb.expand(
-		Coord(middleLng + mapWidth / 2.,
-		      latitudeToMercator(
-					 leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
-		      0));
+          Coord(middleLng - mapWidth / 2.,
+                latitudeToMercator(leafletMaps->getLatLngForPixelPosOnScreen(0, 0).first * 2.), 0));
+      bb.expand(Coord(middleLng + mapWidth / 2.,
+                      latitudeToMercator(
+                          leafletMaps->getLatLngForPixelPosOnScreen(width(), height()).first * 2.),
+                      0));
       GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(), bb, "Main", 1);
       sceneZoomAndPan.zoomAndPanAnimationStep(1);
     }
