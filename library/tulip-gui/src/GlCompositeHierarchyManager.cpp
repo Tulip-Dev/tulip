@@ -215,8 +215,7 @@ void GlCompositeHierarchyManager::treatEvents(const std::vector<Event> &) {
                 std::pair<tlp::GlComposite *, tlp::GlConvexGraphHull *>>::const_iterator it =
            _graphsComposites.begin();
        it != _graphsComposites.end(); ++it) {
-    if (it->first->numberOfNodes() != 0) {
-      it->second.second->setVisible(true);
+    if (!it->first->isEmpty()) {
       it->second.second->updateHull(_layout, _size, _rotation);
     } else {
       it->second.second->setVisible(false);
