@@ -22,9 +22,7 @@
 #include <QGLPixelBuffer>
 #include <QGLFramebufferObject>
 #include <QGLFormat>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QWindow>
-#endif
 #include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>

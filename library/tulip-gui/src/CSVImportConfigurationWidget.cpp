@@ -173,11 +173,7 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
       ui->separatorCB->setCurrentIndex(index);
   }
 
-#if QT_VERSION >= 0x050000
   ui->exceptionTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  ui->exceptionTableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
   connect(ui->addExceptionButton, SIGNAL(released()), this, SLOT(addException()));
   connect(ui->delCurrentExceptionButton, SIGNAL(released()), this, SLOT(delCurrentException()));
 
@@ -199,11 +195,7 @@ void PropertyConfigurationWidget::showPropertyCreationDialog() {
 CSVTableHeader::CSVTableHeader(QWidget *parent,
                                std::vector<PropertyConfigurationWidget *> &propertyWidgets)
     : QHeaderView(Qt::Horizontal, parent), widgets(propertyWidgets) {
-#if QT_VERSION >= 0x050000
   setSectionsClickable(true);
-#else
-  setClickable(true);
-#endif
   connect(this, SIGNAL(sectionPressed(int)), this, SLOT(checkBoxPressed(int)));
 }
 
@@ -319,11 +311,7 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
   ui->previewTableWidget->setHorizontalHeader(
       new CSVTableHeader(ui->previewTableWidget, propertyWidgets));
   ui->previewTableWidget->horizontalHeader()->setMinimumSectionSize(120);
-#if QT_VERSION >= 0x050000
   ui->previewTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  ui->previewTableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
 }
 
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {

@@ -41,11 +41,7 @@
 using namespace tlp;
 
 CustomTreeView::CustomTreeView(QWidget *parent) : QTreeView(parent) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-#else
-  header()->setResizeMode(QHeaderView::ResizeToContents);
-#endif
   connect(this, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeFirstColumnToContent()));
   connect(this, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeFirstColumnToContent()));
 }
@@ -154,11 +150,7 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   proxyModel->setDynamicSortFilter(false);
   _ui->hierarchiesTree->setModel(proxyModel);
   _ui->hierarchiesTree->header()->resizeSection(0, 100);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   _ui->hierarchiesTree->header()->setSectionResizeMode(0, QHeaderView::Interactive);
-#else
-  _ui->hierarchiesTree->header()->setResizeMode(0, QHeaderView::Interactive);
-#endif
   connect(_ui->hierarchiesTree->selectionModel(),
           SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), this,
           SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));

@@ -301,11 +301,7 @@ bool TulipProject::writeMetaInfo() {
 
   doc.writeEndDocument();
   out.close();
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
   return !doc.hasError();
-#else
-  return true;
-#endif
 }
 
 bool TulipProject::readMetaInfo() {
@@ -352,7 +348,7 @@ QString TulipProject::toAbsolutePath(const QString &relativePath) {
   return _dataDir.absoluteFilePath(path);
 }
 
-// Some hack: Qt4 does not provide method to create temporary DIRS.
+// Some hack: Qt does not provide method to create temporary DIRS.
 QString TulipProject::temporaryPath() {
   QString basePath(QDir::tempPath() + QDir::separator() + QCoreApplication::applicationName() +
                    "-" + QString::number(QCoreApplication::applicationPid()) + "-");

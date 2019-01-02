@@ -149,11 +149,7 @@ void TableView::setupWidget() {
   connect(propertiesEditor, SIGNAL(mapToGraphSelection()), this, SLOT(mapToGraphSelection()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   _ui->table->horizontalHeader()->setSectionsMovable(true);
-#else
-  _ui->table->horizontalHeader()->setMovable(true);
-#endif
   _ui->table->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(_ui->table->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint &)), this,
           SLOT(showHorizontalHeaderCustomContextMenu(const QPoint &)));

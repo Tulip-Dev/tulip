@@ -22,11 +22,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QStandardPaths>
-#else
-#include <QDesktopServices>
-#endif
 
 #include <CrashHandling.h>
 
@@ -225,13 +221,8 @@ int main(int argc, char **argv) {
       debugPluginLoad = true;
     else if (idRegexp.exactMatch(a)) {
       context->id = idRegexp.cap(1).toUInt();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
       QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
                              .filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
-#else
-      QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation))
-                             .filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
-#endif
       CrashHandling::setDumpPath(QStringToTlpString(dumpPath));
     } else if (extraParametersRegexp.exactMatch(a)) {
       extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);

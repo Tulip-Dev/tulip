@@ -44,11 +44,7 @@ ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::Impor
           this, SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate(_ui->parametersList));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  _ui->parametersList->verticalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif
   connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton),
           SLOT(click()));
   // display OK instead of Finish

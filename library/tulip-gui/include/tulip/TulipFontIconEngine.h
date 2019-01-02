@@ -38,11 +38,7 @@ public:
   TulipFontIconEngine(const TulipFontIconEngine &engine)
       : QIconEngine(), codePoint(engine.codePoint), fontName(engine.fontName) {}
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   TulipFontIconEngine *clone() const override {
-#else
-  TulipFontIconEngine *clone() const {
-#endif
     return new TulipFontIconEngine(*this);
   }
 

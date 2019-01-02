@@ -197,12 +197,8 @@ void GraphPerspective::addRecentDocument(const QString &path) {
 
 static void logMsgToStdErr(const QString &msg) {
   if (msg.startsWith("[Python")) {
-// remove quotes around message added by Qt
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    // remove quotes around message added by Qt
     QString msgClean = msg.mid(14).mid(2, msg.length() - 17);
-#else
-    QString msgClean = msg.mid(14).mid(2, msg.length() - 18);
-#endif
 
     if (msg.startsWith("[PythonStdOut]")) {
       std::cout << QStringToTlpString(msgClean) << std::endl;
@@ -248,8 +244,6 @@ void GraphPerspective::updateLogIconsAndCounters() {
   SET_TIPS(logCounterLabel, "Click here to show/hide the message log window");
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-
 void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
   logMsgToStdErr(msg);
   static_cast<GraphPerspective *>(Perspective::instance())->log(type, context, msg);
@@ -260,28 +254,10 @@ void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, co
   updateLogIconsAndCounters();
 }
 
-#else
-
-void graphPerspectiveLogger(QtMsgType type, const char *msg) {
-  logMsgToStdErr(msg);
-  static_cast<GraphPerspective *>(Perspective::instance())->log(type, msg);
-}
-
-void GraphPerspective::log(QtMsgType type, const char *msg) {
-  _logger->log(type, msg);
-  updateLogIconsAndCounters();
-}
-
-#endif
-
 GraphPerspective::~GraphPerspective() {
   // uninstall Qt message handler only if it is the current active perspective
   if (Perspective::instance() == this) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     qInstallMessageHandler(nullptr);
-#else
-    qInstallMsgHandler(0);
-#endif
   }
 
   // ensure the opened views and interactors get deleted before the loaded graphs
@@ -614,11 +590,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   TulipSettings::instance().synchronizeViewSettings();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   qInstallMessageHandler(graphPerspectiveLogger);
-#else
-  qInstallMsgHandler(graphPerspectiveLogger);
-#endif
 
   connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(workspaceButtonClicked()));
   connect(_ui->workspace, SIGNAL(addPanelRequest(tlp::Graph *)), this,

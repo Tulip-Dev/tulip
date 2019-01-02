@@ -13,9 +13,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} include/)
 
-IF(USE_QT5)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-ENDIF(USE_QT5)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 IF(WIN32)
 
@@ -55,9 +53,7 @@ IF(WIN32)
   IF(TULIP_FIXUP_BUNDLE)
     # copy required Qt plugins
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
-    IF(USE_QT5)
-      INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})
-    ENDIF(USE_QT5)
+    INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})
 
     # then schedule a call to FIXUP_BUNDLE at the end of the CMake install process
     # this process is configured here instead in the root CMakeLists.txt as

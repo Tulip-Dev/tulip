@@ -72,15 +72,7 @@ vector<NominatimGeocoderResult> NominatimGeocoder::getLatLngForAddress(const str
   nominatimSearchUrl.setScheme("https");
   nominatimSearchUrl.setHost("nominatim.openstreetmap.org");
   nominatimSearchUrl.setPath("/search/" + tlpStringToQString(address));
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   nominatimSearchUrl.setQuery("format=json&dedupe=1&limit=20");
-#else
-  QList<QPair<QString, QString>> queryItems;
-  queryItems.append(qMakePair(QString("format"), QString("json")));
-  queryItems.append(qMakePair(QString("dedupe"), QString("1")));
-  queryItems.append(qMakePair(QString("limit"), QString("20")));
-  nominatimSearchUrl.setQueryItems(queryItems);
-#endif
 
   QNetworkRequest request;
   request.setUrl(nominatimSearchUrl);

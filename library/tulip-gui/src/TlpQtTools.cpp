@@ -36,11 +36,7 @@
 
 #include <QDir>
 #include <QApplication>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-#include <QDesktopServices>
-#else
 #include <QStandardPaths>
-#endif
 
 #include <tulip/DataSet.h>
 #include <tulip/TulipSettings.h>
@@ -179,11 +175,7 @@ QString getPluginPackageName(const QString &pluginName) {
 }
 
 QString getPluginLocalInstallationDir() {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins";
-#else
-  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins";
-#endif
 }
 
 QString localPluginsPath() {

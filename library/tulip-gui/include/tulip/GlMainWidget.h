@@ -21,9 +21,7 @@
 #define Tulip_GLMAINWIDGET_H
 
 #include <QGLWidget>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QWindow>
-#endif
 
 #include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
@@ -148,11 +146,7 @@ public:
    * @return the converted measure in viewport coordinates as an integer
    */
   int screenToViewport(int l) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     return l * windowHandle()->devicePixelRatio();
-#else
-    return l;
-#endif
   }
 
   /**
@@ -161,11 +155,7 @@ public:
    * @return the converted measure in viewport coordinates as a double
    */
   double screenToViewport(double l) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     return l * windowHandle()->devicePixelRatio();
-#else
-    return l;
-#endif
   }
 
   /**
@@ -174,12 +164,8 @@ public:
    * @return the converted point in viewport coordinates
    */
   Coord screenToViewport(const Coord &point) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
     return Coord(point.x() * dpr, point.y() * dpr);
-#else
-    return point;
-#endif
   }
 
   /**
@@ -188,11 +174,7 @@ public:
    * @return the converted measure in screen coordinates as a double
    */
   double viewportToScreen(double l) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     return l / windowHandle()->devicePixelRatio();
-#else
-    return l;
-#endif
   }
 
   /**
@@ -201,12 +183,8 @@ public:
    * @return the converted point in screen coordinates
    */
   Coord viewportToScreen(const Coord &point) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
     return Coord(point.x() / dpr, point.y() / dpr);
-#else
-    return point;
-#endif
   }
 
   /**

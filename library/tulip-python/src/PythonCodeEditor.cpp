@@ -83,10 +83,8 @@ AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent)
     : QListWidget(parent), _codeEditor(parent) {
 #if defined(__APPLE__)
   setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Popup | Qt::FramelessWindowHint));
-#elif QT_VERSION >= 0x040500
-  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::ToolTip));
 #else
-  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Tool | Qt::FramelessWindowHint));
+  setWindowFlags(static_cast<Qt::WindowFlags>(Qt::ToolTip));
 #endif
   setAttribute(Qt::WA_StaticContents);
   setFrameShape(StyledPanel);
@@ -136,11 +134,7 @@ void AutoCompletionList::insertSelectedItem() {
     QString text = cursor.block().text();
 
     if (!text.isEmpty()) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
       int start = cursor.positionInBlock();
-#else
-      int start = cursor.position() - cursor.block().position();
-#endif
 
       int end = 0;
       bool endOk = false;
@@ -406,11 +400,7 @@ void FindReplaceDialog::doReplaceAll() {
 
   if (ret) {
     int startLine = _editor->textCursor().blockNumber();
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
     int startIndex = _editor->textCursor().positionInBlock();
-#else
-    int startIndex = _editor->textCursor().position() - _editor->textCursor().block().position();
-#endif
     int nbReplacements = 0;
 
     while (ret) {
@@ -418,11 +408,7 @@ void FindReplaceDialog::doReplaceAll() {
       ret = doFind();
       ++nbReplacements;
       int line = _editor->textCursor().blockNumber();
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
       int index = _editor->textCursor().positionInBlock();
-#else
-      int index = _editor->textCursor().position() - _editor->textCursor().block().position();
-#endif
 
       // when replacing a pattern P by a pattern following this regexp .*P.*
       // this can lead to an infinite loop, handle this case

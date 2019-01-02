@@ -58,11 +58,7 @@ ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting,
 }
 
 bool ExportSvg::checkError() const {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
   return !_res.hasError();
-#else
-  return true;
-#endif
 }
 
 bool ExportSvg::writeHeader(const BoundingBox &bb) {

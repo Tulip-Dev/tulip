@@ -53,11 +53,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent)
                      item->text() + "</b>.");
   }
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  _ui->graphDefaultsTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-#else
   _ui->graphDefaultsTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-#endif
 }
 
 PreferencesDialog::~PreferencesDialog() {

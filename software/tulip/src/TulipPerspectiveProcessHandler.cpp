@@ -23,11 +23,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QPainter>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QStandardPaths>
-#else
-#include <QDesktopServices>
-#endif
 #include <QTcpSocket>
 #include <tulip/TulipProject.h>
 
@@ -55,13 +51,8 @@ TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance = null
 TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
   listen(QHostAddress::LocalHost);
   connect(this, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
               .filePath("tulip.lck"));
-#else
-  QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation))
-              .filePath("tulip.lck"));
-#endif
   f.open(QIODevice::WriteOnly);
   f.write(QString::number(serverPort()).toUtf8());
   f.flush();
@@ -133,13 +124,8 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
       version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n");
 
 // TODO: replace reading process by reading file
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
               .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
-#else
-  QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation))
-              .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
-#endif
   f.open(QIODevice::ReadOnly);
 
   QMap<QRegExp *, QString> envInfo;

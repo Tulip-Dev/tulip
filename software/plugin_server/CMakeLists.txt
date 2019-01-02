@@ -2,9 +2,7 @@ INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclu
 
 QTX_SET_INCLUDES_AND_DEFINITIONS()
 
-IF(USE_QT5)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-ENDIF(USE_QT5)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 #QTX_WRAP_CPP(pluginPusher_MOC_SRCS WebDavManager.h)
 #ADD_EXECUTABLE(pushPlugins PluginPusher.cpp WebDavManager.cpp ${pluginPusher_MOC_SRCS})

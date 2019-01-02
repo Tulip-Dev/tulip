@@ -23,11 +23,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QStandardPaths>
-#else
-#include <QDesktopServices>
-#endif
 #include <QTcpSocket>
 
 #include <tulip/TulipRelease.h>
@@ -89,13 +85,8 @@ bool sendAgentMessage(int port, const QString &message) {
 }
 
 void checkTulipRunning(const QString &perspName, const QString &fileToOpen, bool showAgent) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile lockFile(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
                      .filePath("tulip.lck"));
-#else
-  QFile lockFile(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation))
-                     .filePath("tulip.lck"));
-#endif
 
   if (lockFile.exists() && lockFile.open(QIODevice::ReadOnly)) {
     QString agentPort = lockFile.readAll();
@@ -205,13 +196,8 @@ int main(int argc, char **argv) {
 
   int result = tulip_agent.exec();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
               .filePath("tulip.lck"));
-#else
-  QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation))
-              .filePath("tulip.lck"));
-#endif
   f.remove();
 
   return result;

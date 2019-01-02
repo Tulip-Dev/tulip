@@ -207,7 +207,7 @@ void WorkspacePanel::setView(tlp::View *view) {
     viewConfigurationTabs->findChild<QTabBar *>()->installEventFilter(this);
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if defined(__APPLE__)
     viewConfigurationTabs->setWindowOpacity(0.99);
 #endif
 
@@ -226,7 +226,6 @@ void WorkspacePanel::setView(tlp::View *view) {
   resetInteractorsScrollButtonsVisibility();
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 // Workaround to avoid a Qt5 bug :
 // After the panels containing QGraphicsView objects were rearranged in the workspace,
 // some events were no more sent to the QGraphicsWidget objects embedded in the asoociated
@@ -273,7 +272,6 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
     delete oldScene;
   }
 }
-#endif
 
 void WorkspacePanel::closeEvent(QCloseEvent *event) {
   if (_view->checkOnClose())

@@ -380,7 +380,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   leafletMaps = new LeafletMaps();
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if defined(__APPLE__)
   leafletMaps->setWindowOpacity(0.99);
 #endif
   leafletMaps->setMouseTracking(false);
@@ -391,7 +391,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   addressSelectionDialog = new AddressSelectionDialog(leafletMaps);
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if defined(__APPLE__)
   addressSelectionDialog->setWindowOpacity(0.99);
 #endif
   scene()->addItem(progressWidget);
@@ -440,7 +440,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   viewTypeComboBox = new QComboBox;
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if defined(__APPLE__)
   viewTypeComboBox->setWindowOpacity(0.99);
 #endif
   viewTypeComboBox->addItems(QStringList() << "Open Street Map (Leaflet)"
@@ -465,7 +465,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   zoomInButton = new QPushButton(QIcon(":/zoom+.png"), "");
 // workaround to get rid of Qt5 warnings: QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if defined(__APPLE__)
   zoomInButton->setWindowOpacity(0.99);
 #endif
   zoomInButton->setFixedSize(29, 27);
@@ -479,7 +479,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView,
   zoomOutButton = new QPushButton(QIcon(":/zoom-.png"), "");
 // workaround to get rid of Qt5 warnings : QMacCGContext:: Unsupported painter devtype type 1
 // see https://bugreports.qt.io/browse/QTBUG-32639
-#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if defined(__APPLE__)
   zoomOutButton->setWindowOpacity(0.99);
 #endif
   zoomOutButton->setFixedSize(29, 27);

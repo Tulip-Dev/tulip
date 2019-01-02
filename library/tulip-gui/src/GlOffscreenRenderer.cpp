@@ -123,9 +123,7 @@ void GlOffscreenRenderer::clearScene(bool deleteGlEntities) {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                   \
-    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) ||   \
-                                                    defined(QT_MAC_USE_COCOA))))
+#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
@@ -138,9 +136,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   }
 
   if (glFrameBuf == nullptr) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                   \
-    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) ||   \
-                                                    defined(QT_MAC_USE_COCOA))))
+#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
@@ -204,9 +200,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   scene.draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                   \
-    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) ||   \
-                                                    defined(QT_MAC_USE_COCOA))))
+#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
 
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(
@@ -250,9 +244,7 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   scene->draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                   \
-    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION > QT_VERSION_CHECK(5, 0, 0)) ||    \
-                                                    defined(QT_MAC_USE_COCOA))))
+#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
 
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(

@@ -85,11 +85,7 @@ public:
 
   void treatEvent(const tlp::Event &) override;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
-#else
-  void log(QtMsgType, const char *);
-#endif
 
   bool terminated() override;
 

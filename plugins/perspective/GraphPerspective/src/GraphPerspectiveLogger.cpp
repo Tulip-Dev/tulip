@@ -93,15 +93,9 @@ int GraphPerspectiveLogger::countByType(LogType logType) const {
   return _logCounts[logType];
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg) {
   logImpl(type, msg);
 }
-#else
-void GraphPerspectiveLogger::log(QtMsgType type, const char *msg) {
-  logImpl(type, QString::fromUtf8(msg));
-}
-#endif
 
 void GraphPerspectiveLogger::logImpl(QtMsgType type, const QString &msg) {
 
@@ -120,12 +114,8 @@ void GraphPerspectiveLogger::logImpl(QtMsgType type, const QString &msg) {
   QString msgClean = msg;
 
   if (msg.startsWith("[Python")) {
-// remove quotes around message added by Qt
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    // remove quotes around message added by Qt
     msgClean = msg.mid(14).mid(2, msg.length() - 17);
-#else
-    msgClean = msg.mid(14).mid(2, msg.length() - 18);
-#endif
     _pythonOutput = true;
   } else {
     _pythonOutput = false;

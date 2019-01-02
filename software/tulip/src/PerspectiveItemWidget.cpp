@@ -21,10 +21,8 @@
 #include "ui_PerspectiveItem.h"
 
 #include <QMouseEvent>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QGuiApplication>
 #include <QScreen>
-#endif
 
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
@@ -41,11 +39,9 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName, QWi
   _ui->description->setText(info.info().c_str());
 
   QPixmap px(info.icon().c_str());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   // take care of the devicePixelRatio
   // before setting the label pixmap
   px.setDevicePixelRatio(QGuiApplication::primaryScreen()->devicePixelRatio());
-#endif
   _ui->icon->setPixmap(px);
 }
 

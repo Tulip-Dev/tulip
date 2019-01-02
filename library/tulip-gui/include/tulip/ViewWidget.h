@@ -65,9 +65,7 @@ public:
     @note This method should not be reimplemented as a subclass of ViewWidget
     */
   QGraphicsView *graphicsView() const override;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void resetGraphicsScene() override {}
-#endif
 
 public slots:
   /**

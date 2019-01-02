@@ -398,34 +398,6 @@ PythonInterpreter::~PythonInterpreter() {
 
   if (!_wasInit && interpreterInit()) {
     consoleOuputString = "";
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-
-    if (QApplication::instance()) {
-
-      // This is a hack to prevent segfaults when the PyQt4 module has been imported
-      // during the Python session. Seems there is some garbage collection issue
-      // on Qt objects wrapped by SIP. After looking at the SIP source code, the
-      // segfault is raised when the sipQtSupport->qt_find_sipslot function is called.
-      // So reset the sipQtSupport pointer to nullptr, this way the problematic function will no
-      // more be called when the Python interpreter is finalized.
-      setOutputEnabled(false);
-      setErrorOutputEnabled(false);
-#ifdef TULIP_SIP
-      runString("import tulipsip; sys.stdout.write(tulipsip.__file__)");
-#else
-      runString("import sip; sys.stdout.write(sip.__file__)");
-#endif
-      QString sipModulePath = consoleOuputString;
-      sipQtAPI **sipQtSupport =
-          static_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
-
-      if (sipQtSupport)
-        *sipQtSupport = nullptr;
-    }
-
-#endif
-
     runString(
         "sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
     PyEval_ReleaseLock();
