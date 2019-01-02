@@ -123,7 +123,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
       compiler("^" + QString(TLP_COMPILER_HEADER) + " (.*)\n"),
       version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n");
 
-// TODO: replace reading process by reading file
+  // TODO: replace reading process by reading file
   QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
               .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
   f.open(QIODevice::ReadOnly);
