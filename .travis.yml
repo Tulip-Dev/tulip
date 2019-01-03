@@ -47,7 +47,6 @@ jobs:
             # as expected in the complete build stage that follows (due to cache slug depending on the environment),
             # so install them anyway
             - qt5-default
-            - libquazip5-dev
             - libqt5webkit5-dev
             - libglew-dev
             - libpng-dev
@@ -153,7 +152,6 @@ jobs:
             - libcppunit-dev
             - binutils-dev
             - qt5-default
-            - libquazip5-dev
             - libqt5webkit5-dev
             - libglew-dev
             - libpng-dev
