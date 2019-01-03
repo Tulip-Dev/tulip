@@ -1,8 +1,8 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
-#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++11 standard Qt 4.8 and Python 2.7
+#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++11 standard Qt 5 and Python 2.7
 #  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from XCode9 on Mac OS), C++11 standard, 
-#    Qt 5.9 on Linux / Qt 5.8 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
+#    Qt 5.10 on Linux / Qt 5 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
 # As TravisCI limits build jobs to 45 minutes timeout, we build Tulip in two successive build stages:
 #  - a core build with no Tulip OpenGL and Qt components
 #  - a complete build including OpenGL and Qt components
@@ -46,9 +46,9 @@ jobs:
             # the dependencies below are not required for a Tulip core build but travis build cache does not work
             # as expected in the complete build stage that follows (due to cache slug depending on the environment),
             # so install them anyway
-            - libqt4-dev
-            - libquazip-dev
-            - libqtwebkit-dev
+            - qt5-default
+            - libquazip5-dev
+            - libqt5webkit5-dev
             - libglew-dev
             - libpng-dev
             - libjpeg-dev
@@ -104,15 +104,15 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       before_install:
-        # set up external ppa for Qt 5.9 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt594-trusty
+        # set up external ppa for Qt 5.10.1 not registered in travis
+        - sudo add-apt-repository -y ppa:beineri/opt-qt-5.10.1-trusty
         # update packages list
         - sudo apt-get -qy update
         # force the use of GCC 7
         - eval "${MATRIX_EVAL}"
       install:
-        # install Qt 5.9 from external ppa (not required for this build though but needed for travis build cache to work correctly between builds stages)
-        - sudo apt-get -qy install qt59-meta-minimal qt59webengine
+        # install Qt 5.10 from external ppa (not required for this build though but needed for travis build cache to work correctly between builds stages)
+        - sudo apt-get -qy install qt510-meta-minimal qt510webengine
       env:
         # use Python 3.6
         - PYTHON_EXECUTABLE=/usr/bin/python3.6
@@ -152,9 +152,9 @@ jobs:
             - libpython2.7-dev
             - libcppunit-dev
             - binutils-dev
-            - libqt4-dev
-            - libquazip-dev
-            - libqtwebkit-dev
+            - qt5-default
+            - libquazip5-dev
+            - libqt5webkit5-dev
             - libglew-dev
             - libpng-dev
             - libjpeg-dev
@@ -174,7 +174,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build with cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=ON -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1
@@ -211,15 +211,15 @@ jobs:
             - libjpeg-dev
             - libfreetype6-dev
       before_install:
-        # set up external ppa for Qt 5.9 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt594-trusty
+        # set up external ppa for Qt 5.10.1 not registered in travis
+        - sudo add-apt-repository -y ppa:beineri/opt-qt-5.10.1-trusty
         # update packages list
         - sudo apt-get -qy update
         # force the use of GCC 7
         - eval "${MATRIX_EVAL}"
       install:
-        # install Qt 5.9 from external ppa
-        - sudo apt-get -qy install qt59-meta-minimal qt59webengine
+        # install Qt 5.10 from external ppa
+        - sudo apt-get -qy install qt510-meta-minimal qt510webengine
       env:
         # use Python 3.6
         - PYTHON_EXECUTABLE=/usr/bin/python3.6
@@ -234,7 +234,7 @@ jobs:
         # create build directoty
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt59/ -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON  || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4  || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1
@@ -311,7 +311,7 @@ jobs:
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
         - chmod +x ./macports-ci
         - travis_wait ./macports-ci install
-        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
+        - export PATH=/opt/local/bin:$PATH
         # install Tulip core build dependencies
         - sudo port -N install cmake
         - sudo port -N install ccache
@@ -353,7 +353,7 @@ jobs:
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
         - chmod +x ./macports-ci
         - travis_wait ./macports-ci install
-        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
+        - export PATH=/opt/local/bin:$PATH
         # install Tulip core build dependencies
         - sudo port -N install cmake
         - sudo port -N install ccache
@@ -392,12 +392,14 @@ jobs:
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
         - chmod +x ./macports-ci
         - travis_wait ./macports-ci install
-        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
+        - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
         - sudo port -N install ccache
         - sudo port -N install ninja
-        - sudo port -N install qt4-mac
+        - sudo port -N install qt5-qtbase
+        - sudo port -N install qt5-qttools
+        - sudo port -N install qt5-qtwebengine
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install libpng
@@ -420,7 +422,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DTULIP_USE_QT5=${TULIP_USE_QT5} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - ninja -j4 install || travis_terminate 1
@@ -444,14 +446,14 @@ jobs:
         - wget https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci
         - chmod +x ./macports-ci
         - travis_wait ./macports-ci install
-        - export PATH=/opt/local/bin:/opt/local/libexec/qt4/bin:$PATH
+        - export PATH=/opt/local/bin:$PATH
         # install Tulip complete build dependencies
         - sudo port -N install cmake
         - sudo port -N install ccache
         - sudo port -N install ninja
         - sudo port -N install qt5-qtbase
         - sudo port -N install qt5-qttools
-        - sudo port -N install qt5-qtwebkit
+        - sudo port -N install qt5-qtwebengine
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install libpng
@@ -471,7 +473,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON -DZLIB_INCLUDE_DIR=/opt/local/include -DZLIB_LIBRARY_RELEASE=/opt/local/lib/libz.dylib -DPNG_INCLUDE_DIR=/opt/local/include -DPNG_LIBRARY_RELEASE=/opt/local/lib/libpng.dylib -DJPEG_INCLUDE_DIR=/opt/local/include -DJPEG_LIBRARY=/opt/local/lib/libjpeg.dylib
         # compile Tulip using ninja for faster builds
         - ninja -j4
         - ninja -j4 install
