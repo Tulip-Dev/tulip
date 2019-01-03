@@ -395,9 +395,9 @@ jobs:
         - sudo port -N install cmake
         - sudo port -N install ccache
         - sudo port -N install ninja
-        - sudo port -N install qt5-qtbase
-        - sudo port -N install qt5-qttools
-        - sudo port -N install qt5-qtwebengine
+        - sudo port -N install qt59-qtbase
+        - sudo port -N install qt59-qttools
+        - sudo port -N install qt59-qtwebengine
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install libpng
@@ -449,9 +449,9 @@ jobs:
         - sudo port -N install cmake
         - sudo port -N install ccache
         - sudo port -N install ninja
-        - sudo port -N install qt5-qtbase
-        - sudo port -N install qt5-qttools
-        - sudo port -N install qt5-qtwebengine
+        - sudo port -N install qt59-qtbase
+        - sudo port -N install qt59-qttools
+        - sudo port -N install qt59-qtwebengine
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install libpng
