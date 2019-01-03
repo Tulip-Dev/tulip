@@ -41,7 +41,6 @@ class ExportSvg : public ExportInterface {
                   const unsigned id_tgt_shape, const std::vector<tlp::Coord> &edgeVertice);
   void addWebFontFromIconName(const std::string &iconName);
   void addGlowEffect();
-  bool checkError() const;
 
 public:
   ExportSvg(tlp::PluginProgress *pp, std::ostream &os, const bool autoformatting, const bool woff2);
