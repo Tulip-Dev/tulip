@@ -175,6 +175,10 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const Numeric
 TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection,
                                       bool *test = nullptr);
 
+/**
+ * @enum This Enum describes the possible types of path to select between a source and target nodes
+ * It is used in tlp::selectShortestPaths. Reversed means the same than Directed from target node to source node.
+ **/
 enum ShortestPathType {
   OnePath = 0,
   OneDirectedPath = 1,
@@ -189,11 +193,11 @@ enum ShortestPathType {
  * @param graph The graph to compute on.
  * @param src The source node of the paths
  * @param tgt The target node of the paths
- * @param pathType The type of path to consider
+ * @param pathType The type of path to consider (choosen among tlp::ShortestPathType enumation values)
  * @param weights A Double property giving the edges weight if weighted paths have to be considered.
  * Can be set to null to select unweighted paths.
  * @param selection The Boolean property to consider as selection.
- * @return false if no path exist between the src and tgt nodes; true if not.
+ * @return true if a path exists between the src and tgt nodes; false if not.
  */
 TLP_SCOPE bool selectShortestPaths(const Graph *const graph, node src, node tgt,
                                    ShortestPathType pathType, const DoubleProperty *const weights,

@@ -122,9 +122,9 @@ bool selectShortestPaths(const tlp::Graph *graph, tlp::node src, tlp::node tgt, 
 %Docstring
 tlp.selectShortestPaths(graph, src, tgt, pathType, weights, selection)
 
-.. versionadded::5.2
+.. versionadded::5.3
 
-select the shortest paths between two nodes. Returns false if no path exist between the src and tgt nodes; true if not.
+select the shortest paths between two nodes. Returns True if a path exists between the src and tgt nodes; False if not.
 
 :param graph: The graph to compute on.
 :type graph: :class:`tlp.Graph`
@@ -133,13 +133,17 @@ select the shortest paths between two nodes. Returns false if no path exist betw
 :param tgt: The target node of the paths
 :type node: :class:`tlp.node`
 :param pathType: The type of path to consider
-:type pathType: tlp.OnePath, tlp.OneDirectedPath, tlp.OneReversedPath, tlp.AllPaths, tlp.AllDirectedPaths, tlp.AllReversedPaths
+:type pathType: tlp.OnePath, tlp.OneDirectedPath, tlp.OneReversedPath, tlp.AllPaths, tlp.AllDirectedPaths, tlp.AllReversedPaths (Reversed is the same than Directed from target node to source node)
 :param weights: A graph property giving the edges weight if weighted paths have to be considered. Can be set to null to select unweighted paths.
 :type weights:class:`tlp.DoubleProperty`
 :param selection: The graph property to consider as selection.
 :type selection:class:`tlp.BooleanProperty`
-:rtype: boolean
+:rtype: boolean (True if a path is found)
 :throws: an exception if one of the source or target nodes does not belong to the graph.
+
+One usage would be:
+tlp.selectShortestPaths(graph, tlp.node(1), tlp.node(2), tlp.AllPaths, graph['viewMetric'], graph['viewSelection'])
+Then the existing paths will correspond to the edges (and connected nodes) of graph for which graph['viewSelection'] value is equal to True.
 %End
 
 %MethodCode
