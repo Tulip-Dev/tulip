@@ -63,7 +63,7 @@ if [ -d /tulip/build ]; then
 fi
 mkdir /tulip/build
 cd /tulip/build
-cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$USR_LIB/qt5 -DTULIP_USE_CCACHE=ON -DTULIP_USE_QT5=ON -DTULIP_BUILD_FOR_APPIMAGE=ON ..
+cmake -DCMAKE_C_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gcc -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_PREFIX_PATH=$USR_LIB/qt5 -DTULIP_USE_CCACHE=ON -DTULIP_BUILD_FOR_APPIMAGE=ON ..
 make -j4 install
 
 # build a bundle dir suitable for AppImageKit

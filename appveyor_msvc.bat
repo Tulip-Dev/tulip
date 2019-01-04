@@ -85,7 +85,7 @@ move C:\tulip_dependencies\lib\cppunit_dll.dll C:\tulip_dependencies\bin\
 rem we are good to go, let's compile and install Tulip now
 cd %APPVEYOR_BUILD_FOLDER%
 md build && cd build
-cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DTULIP_USE_QT5=ON -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_TESTS=ON ..
+cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_TESTS=ON ..
 if %errorlevel% neq 0 exit /b %errorlevel%
 msbuild INSTALL.vcxproj /m /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
 if %errorlevel% neq 0 exit /b %errorlevel%
