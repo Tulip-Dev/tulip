@@ -264,14 +264,13 @@ int main(int argc, char **argv) {
     if (tmp.pixmap(QSize(16, 16)).isNull() == false)
       icon = tmp;
     else
-      usage("Could not load icon : " + iconFullPath);
+      usage("Could not load icon: " + iconFullPath);
   }
 
   progress->setWindowIcon(icon);
   progress->show();
 
   TulipProject *project = nullptr;
-  QString error;
 
   // Init tulip
   try {
@@ -289,13 +288,7 @@ int main(int argc, char **argv) {
   }
 
   if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
-    project = TulipProject::openProject(projectFilePath, progress);
-
-    if (!project->isValid()) {
-      error = project->lastError();
-      delete project;
-      project = nullptr;
-    }
+      project = TulipProject::openProject(projectFilePath, progress);
   }
 
   if (project == nullptr) {

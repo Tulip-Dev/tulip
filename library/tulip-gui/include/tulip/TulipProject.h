@@ -22,10 +22,7 @@
 
 #include <QDir>
 #include <QString>
-#include <QStringList>
-#include <QDate>
-#include <QObject>
-#include <QIODevice>
+#include <QTemporaryDir>
 
 #include <tulip/tulipconf.h>
 
@@ -82,8 +79,8 @@ class PluginProgress;
 class TLP_QT_SCOPE TulipProject : public QObject {
   Q_OBJECT
 
-  TulipProject();
-  TulipProject(const QString &);
+  TulipProject() = delete;
+  explicit TulipProject(QTemporaryDir *);
 
 public:
   ~TulipProject() override;
@@ -120,22 +117,23 @@ public:
     */
   bool openProjectFile(const QString &file, tlp::PluginProgress *progress = nullptr);
 
-  /**
+/*
+
     @brief Restores a project which has already been extracted into path
 
     @warning Using several TulipProject instances on the same directory may result in undefined
     behavior. This method should only be used for crash handling purposes.
     @param path The path where the archive was previously extracted
     @return a pointer to a TulipProject object.
-    */
-  static TulipProject *restoreProject(const QString &path);
+
+  static TulipProject *restoreProject(const QString &path); */
 
   /**
    * @brief Removes all files in the project and unset project file if any
    *
    * @since Tulip 5.0
    */
-  void clearProject();
+  bool clearProject();
 
   /**
    * @brief Sets the file where to save the project
@@ -278,24 +276,6 @@ public:
   QIODevice *fileStream(const QString &path, QIODevice::OpenMode mode = QIODevice::ReadWrite);
 
   /**
-    @brief Returns the last error raised.
-
-    @note The returned string is empty if no error was raised.
-    */
-  QString lastError() const {
-    return _lastError;
-  }
-
-  /**
-    @brief Checks if the object is a valid TulipProject.
-
-    @warning Calling methods on invalid TulipProject instances may result in undefined behavior.
-    */
-  bool isValid() const {
-    return _isValid;
-  }
-
-  /**
     @brief Returns the archive file associated with this project.
 
     If the project has been opened from an existing file or if the write method has already been
@@ -395,17 +375,17 @@ public slots:
   void setPerspective(const QString &);
 
 private:
-  static QString temporaryPath();
 
   bool writeMetaInfo();
   bool readMetaInfo();
 
-  bool removeAllDirPrivate(const QString &path, bool removeRootDir = true);
-
   // Core fileset
-  QDir _rootDir;
-  QDir _dataDir;
+  QTemporaryDir* _rootDir;
   QString _projectFile;
+
+  inline const QString rootDir() const {
+      return _rootDir->path();
+  }
 
   // Meta information
   QString _author;
@@ -413,9 +393,6 @@ private:
   QString _description;
   QString _perspective;
 
-  // Error handling
-  QString _lastError;
-  bool _isValid;
 };
 } // namespace tlp
 #endif // TULIPPROJECT_H
