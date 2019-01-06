@@ -291,9 +291,9 @@ void TulipMainWindow::showTrayMessage(const QString &message) {
 
 void TulipMainWindow::openProject(const QString &file) {
 
-   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
+  tlp::TulipProject *project = tlp::TulipProject::openProject(file);
 
-  if (project!=nullptr) {
+  if (project != nullptr) {
     openProjectWith(file, project->perspective(), QVariantMap());
   } else {
     QString perspectiveName;

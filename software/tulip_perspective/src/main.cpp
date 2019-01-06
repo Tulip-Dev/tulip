@@ -288,7 +288,7 @@ int main(int argc, char **argv) {
   }
 
   if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
-      project = TulipProject::openProject(projectFilePath, progress);
+    project = TulipProject::openProject(projectFilePath, progress);
   }
 
   if (project == nullptr) {

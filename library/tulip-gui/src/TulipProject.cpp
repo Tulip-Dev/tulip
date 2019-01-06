@@ -38,18 +38,21 @@
 
 namespace tlp {
 
-TulipProject::TulipProject(QTemporaryDir* path): _rootDir(path) {}
+TulipProject::TulipProject(QTemporaryDir *path) : _rootDir(path) {}
 
 TulipProject::~TulipProject() {
-    delete _rootDir;
+  delete _rootDir;
 }
 
 TulipProject *TulipProject::newProject() {
-   QTemporaryDir *tempdir = new QTemporaryDir();
-  bool dirOk = tempdir->isValid()&& QDir(tempdir->path()).mkdir(DATA_DIR_NAME);
+  QTemporaryDir *tempdir = new QTemporaryDir();
+  bool dirOk = tempdir->isValid() && QDir(tempdir->path()).mkdir(DATA_DIR_NAME);
 
   if (!dirOk) {
-   tlp::error() << "Failed to create a temporary path " + tlp::QStringToTlpString(tempdir->path())+": "+ tlp::QStringToTlpString(tempdir->errorString()) << std::endl;
+    tlp::error() << "Failed to create a temporary path " +
+                        tlp::QStringToTlpString(tempdir->path()) + ": " +
+                        tlp::QStringToTlpString(tempdir->errorString())
+                 << std::endl;
     delete tempdir;
     return nullptr;
   }
@@ -62,7 +65,7 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
   QFileInfo fileInfo(file);
 
   if (!fileInfo.exists()) {
-      progress->setError("File " + tlp::QStringToTlpString(file) + " not found");
+    progress->setError("File " + tlp::QStringToTlpString(file) + " not found");
     return false;
   }
 
@@ -100,10 +103,10 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
 TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress *progress) {
   TulipProject *project = TulipProject::newProject();
 
-  if (project!=nullptr) {
-      if(!project->openProjectFile(file, progress)) {
-          return nullptr;
-        }
+  if (project != nullptr) {
+    if (!project->openProjectFile(file, progress)) {
+      return nullptr;
+    }
   }
   return project;
 }
@@ -134,7 +137,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
   return true;
 }
 
-//TulipProject *TulipProject::restoreProject(const QString &path) {
+// TulipProject *TulipProject::restoreProject(const QString &path) {
 //  TulipProject *project = new TulipProject(path);
 //  project->_isValid = project->readMetaInfo();
 //  return project;
@@ -198,7 +201,7 @@ bool TulipProject::removeDir(const QString &path) {
 
 bool TulipProject::removeAllDir(const QString &path) {
   QDir dir(toAbsolutePath(path));
-    return dir.removeRecursively();
+  return dir.removeRecursively();
 }
 
 bool TulipProject::copy(const QString &source, const QString &destination) {
@@ -335,31 +338,32 @@ QString TulipProject::toAbsolutePath(const QString &relativePath) {
   if (relativePath.startsWith("/"))
     path = path.remove(0, 1);
 
-  return QDir(rootDir()+"/"+QString(DATA_DIR_NAME)).absoluteFilePath(path);
+  return QDir(rootDir() + "/" + QString(DATA_DIR_NAME)).absoluteFilePath(path);
 }
 
 bool TulipProject::clearProject() {
-      QFileInfo pathInfo(QDir(rootDir()).absolutePath());
+  QFileInfo pathInfo(QDir(rootDir()).absolutePath());
 
-      if (!pathInfo.isDir() || !pathInfo.exists())
-        return false;
+  if (!pathInfo.isDir() || !pathInfo.exists())
+    return false;
 
-      QDir dir(pathInfo.absoluteFilePath());
-      QFileInfoList entries(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden |
-                                                  QDir::AllDirs | QDir::Files,QDir::DirsFirst));
+  QDir dir(pathInfo.absoluteFilePath());
+  QFileInfoList entries(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden |
+                                              QDir::AllDirs | QDir::Files,
+                                          QDir::DirsFirst));
 
-      for(const QFileInfo info:entries) {
-        bool result = true;
-        if (info.isDir()) {
-            QDir dird(info.absoluteFilePath());
-          result = dird.removeRecursively();
-        } else
-          result = dir.remove(info.absoluteFilePath());
+  for (const QFileInfo info : entries) {
+    bool result = true;
+    if (info.isDir()) {
+      QDir dird(info.absoluteFilePath());
+      result = dird.removeRecursively();
+    } else
+      result = dir.remove(info.absoluteFilePath());
 
-        if (!result)
-          return false;
-      }
-      return true;
+    if (!result)
+      return false;
+  }
+  return true;
 }
 
 void TulipProject::setProjectFile(const QString &projectFile) {

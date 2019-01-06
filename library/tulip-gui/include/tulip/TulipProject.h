@@ -117,16 +117,16 @@ public:
     */
   bool openProjectFile(const QString &file, tlp::PluginProgress *progress = nullptr);
 
-/*
+  /*
 
-    @brief Restores a project which has already been extracted into path
+      @brief Restores a project which has already been extracted into path
 
-    @warning Using several TulipProject instances on the same directory may result in undefined
-    behavior. This method should only be used for crash handling purposes.
-    @param path The path where the archive was previously extracted
-    @return a pointer to a TulipProject object.
+      @warning Using several TulipProject instances on the same directory may result in undefined
+      behavior. This method should only be used for crash handling purposes.
+      @param path The path where the archive was previously extracted
+      @return a pointer to a TulipProject object.
 
-  static TulipProject *restoreProject(const QString &path); */
+    static TulipProject *restoreProject(const QString &path); */
 
   /**
    * @brief Removes all files in the project and unset project file if any
@@ -375,16 +375,15 @@ public slots:
   void setPerspective(const QString &);
 
 private:
-
   bool writeMetaInfo();
   bool readMetaInfo();
 
   // Core fileset
-  QTemporaryDir* _rootDir;
+  QTemporaryDir *_rootDir;
   QString _projectFile;
 
   inline const QString rootDir() const {
-      return _rootDir->path();
+    return _rootDir->path();
   }
 
   // Meta information
@@ -392,7 +391,6 @@ private:
   QString _name;
   QString _description;
   QString _perspective;
-
 };
 } // namespace tlp
 #endif // TULIPPROJECT_H

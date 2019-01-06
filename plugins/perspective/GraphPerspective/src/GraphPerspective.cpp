@@ -1084,18 +1084,17 @@ void GraphPerspective::open(QString fileName) {
 void GraphPerspective::openProjectFile(const QString &path) {
   if (_graphs->empty()) {
     PluginProgress *prg = progress(NoProgressOption);
-    if(_project->openProjectFile(path, prg)) {
-        QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
-        _ui->workspace->readProject(_project, rootIds, prg);
+    if (_project->openProjectFile(path, prg)) {
+      QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
+      _ui->workspace->readProject(_project, rootIds, prg);
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-        QTimer::singleShot(100, this, SLOT(initPythonIDE()));
+      QTimer::singleShot(100, this, SLOT(initPythonIDE()));
 #endif
-    }
-    else {
-        QMessageBox::critical(_mainWindow,
-                              QString("Error while loading project ").append(_project->projectFile()),
-                              QString("The Tulip project file is probably corrupted:<br>") +
-                                  tlpStringToQString(prg->getError()));
+    } else {
+      QMessageBox::critical(_mainWindow,
+                            QString("Error while loading project ").append(_project->projectFile()),
+                            QString("The Tulip project file is probably corrupted:<br>") +
+                                tlpStringToQString(prg->getError()));
     }
     delete prg;
   } else {
