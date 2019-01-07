@@ -49,12 +49,13 @@ TulipProject *TulipProject::newProject() {
   bool dirOk = tempdir->isValid() && QDir(tempdir->path()).mkdir(DATA_DIR_NAME);
 
   if (!dirOk) {
-      std::string err = "Failed to create a temporary path " + tlp::QStringToTlpString(tempdir->path());
-   #if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
-      err += ": "+ tlp::QStringToTlpString(tempdir->errorString());
-     #endif
-   tlp::error() << err << std::endl;
-   delete tempdir;
+    std::string err =
+        "Failed to create a temporary path " + tlp::QStringToTlpString(tempdir->path());
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+    err += ": " + tlp::QStringToTlpString(tempdir->errorString());
+#endif
+    tlp::error() << err << std::endl;
+    delete tempdir;
     return nullptr;
   }
 
