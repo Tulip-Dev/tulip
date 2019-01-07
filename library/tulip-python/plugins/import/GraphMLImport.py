@@ -34,6 +34,7 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
     self.viewSize = graph.getSizeProperty('viewSize')
     self.viewColor = graph.getColorProperty('viewColor')
     self.viewLabel = graph.getStringProperty('viewLabel')
+    self.attrLabel = ''
     self.attributes = {}
     self.currentNode = None
     self.currentEdge = None
@@ -56,14 +57,28 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
   def startElement(self, name, attrs):
     # attribute definition
     if name == 'key':
-      # only parse standarly defined attributes
-      if 'attr.name' in attrs and 'attr.type' in attrs and 'for' in attrs:
-        # save attributes info for later use
-        self.attributes[attrs['id']] = {'name': attrs['attr.name'], 
-                                        'typename': attrs['attr.type'],
-                                        'for': attrs['for']}
+      # only parse standardly defined attributes
+      if 'id' in attrs and 'for' in attrs and (attrs['for'] == 'node' or attrs['for'] == 'edge'):
         self.currentAttrId = attrs['id']
+        # get attribute name and type
+        attrName = attrs['id']
+        attrType = 'string'
+        if 'attr.name' in attrs:
+          attrName = attrs['attr.name']
+        if 'attr.type' in attrs:
+          attrType = attrs['attr.type']
+        # get viewLabel corresponding attribute
+        if attrName == 'name' and attrType == 'string':
+          self.attrLabel = 'name'
+        elif attrName == 'label' and attrType == 'string' and self.attrLabel != 'name':
+          self.attrLabel = 'label'
 
+        # Create a Tulip property compatible with the attribute type
+        graphProperty = self.getGraphProperty(self.currentAttrId, attrName, attrType)
+        # save attributes info for later use
+        self.attributes[attrs['id']] = {'name': attrName,
+                                        'typename': attrType,
+                                        'for': attrs['for']}
     # attribute default value
     elif name == 'default':
       self.parsingDefault = True
@@ -134,7 +149,7 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
         # parse node attribute
         if self.currentNode:
           # try to parse some standard node visual attributes (label, layout, size, color)
-          if attrName == 'label':
+          if attrName == self.attrLabel:
             self.viewLabel[self.currentNode] = content
           elif attrName == 'x' or attrName == 'y':
             nodeCoord = self.viewLayout[self.currentNode]
@@ -161,7 +176,7 @@ class TulipGraphMLHandler(xml.sax.ContentHandler):
               nodeColor[2] = int(content)
             self.viewColor[self.currentNode] = nodeColor
 
-          # try to create a Tulip property compatible with the attribute type
+          # try to get a Tulip property compatible with the attribute type
           graphProperty = self.getGraphProperty(self.currentAttrId, attrName, attrType)
           if graphProperty:
             # set the property value from its string representation
