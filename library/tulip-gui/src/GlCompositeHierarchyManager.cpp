@@ -227,7 +227,7 @@ void GlCompositeHierarchyManager::setGraph(tlp::Graph *graph) {
   // TODO here we could rebuild only if the graph is not in the composites map
   this->_graph = graph;
   //    deleteComposite();
-  if (_composite->isVisible())
+  if (_isVisible)
     this->createComposite();
 }
 

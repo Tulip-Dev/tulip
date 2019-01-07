@@ -186,6 +186,11 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
 
 //==================================================
 void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
+  if (manager) {
+    delete manager;
+    manager = nullptr;
+  }
+
   GlScene *scene = getGlMainWidget()->getScene();
   scene->clearLayersList();
 
@@ -913,14 +918,14 @@ void NodeLinkDiagramComponent::ungroupItem() {
 }
 
 void NodeLinkDiagramComponent::useHulls(bool hasHulls) {
-  GlScene *scene = getGlMainWidget()->getScene();
-
-  if (hasHulls == _hasHulls)
+  if (manager && (hasHulls == _hasHulls))
     return;
 
   _hasHulls = hasHulls;
 
   if (_hasHulls) {
+    GlScene *scene = getGlMainWidget()->getScene();
+
     manager = new GlCompositeHierarchyManager(
         scene->getGlGraphComposite()->getInputData()->getGraph(), scene->getLayer("Main"), "Hulls",
         scene->getGlGraphComposite()->getInputData()->getElementLayout(),
