@@ -1,8 +1,8 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
 #  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++11 standard Qt 5 and Python 2.7
-#  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from XCode9 on Mac OS), C++11 standard, 
-#    Qt 5.10 on Linux / Qt 5 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
+#  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from Xcode10.1 on Mac OS), C++11 standard,
+#    Qt 5.10 on Linux / Qt 5.12 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
 # As TravisCI limits build jobs to 45 minutes timeout, we build Tulip in two successive build stages:
 #  - a core build with no Tulip OpenGL and Qt components
 #  - a complete build including OpenGL and Qt components
@@ -340,8 +340,8 @@ jobs:
     # modern Tulip core build on Mac OS
     -
       os: osx
-      # use xcode9 travis image to get a recent clang compiler
-      osx_image: xcode9
+      # use xcode10.1 travis image to get a recent clang compiler
+      osx_image: xcode10.1
       compiler: clang
       cache: ccache
       install:
@@ -433,8 +433,8 @@ jobs:
     # modern Tulip complete build on Mac OS
     - 
       os: osx
-      # use xcode9 travis image to get a recent clang compiler
-      osx_image: xcode9
+      # use xcode10.1 travis image to get a recent clang compiler
+      osx_image: xcode10.1
       compiler: clang
       cache: ccache
       install:
@@ -449,9 +449,9 @@ jobs:
         - sudo port -N install cmake
         - sudo port -N install ccache
         - sudo port -N install ninja
-        - sudo port -N install qt59-qtbase
-        - sudo port -N install qt59-qttools
-        - sudo port -N install qt59-qtwebengine
+        - sudo port -N install qt5-qtbase
+        - sudo port -N install qt5-qttools
+        - sudo port -N install qt5-qtwebengine
         - sudo port -N install freetype
         - sudo port -N install glew
         - sudo port -N install libpng
