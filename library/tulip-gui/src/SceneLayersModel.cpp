@@ -195,39 +195,39 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
     bool visible = false;
 
     if (id == NODES_ID) {
-      display = trUtf8("Nodes");
+      display = "Nodes";
       stencil = parameters->getNodesStencil();
       visible = parameters->isDisplayNodes();
     } else if (id == EDGES_ID) {
-      display = trUtf8("Edges");
+      display = "Edges";
       stencil = parameters->getEdgesStencil();
       visible = parameters->isDisplayEdges();
     } else if (id == SELECTED_NODES_ID) {
-      display = trUtf8("Selected nodes");
+      display = "Selected nodes";
       stencil = parameters->getSelectedNodesStencil();
       visible = parameters->isDisplayNodes();
     } else if (id == SELECTED_EDGES_ID) {
-      display = trUtf8("Selected edges");
+      display = "Selected edges";
       stencil = parameters->getSelectedEdgesStencil();
       visible = parameters->isDisplayEdges();
     } else if (id == META_NODES_ID) {
-      display = trUtf8("Meta nodes content");
+      display = "Meta nodes content";
       stencil = parameters->getMetaNodesStencil();
       visible = parameters->isDisplayMetaNodes();
     } else if (id == SELECTED_META_NODES_ID) {
-      display = trUtf8("Selected meta nodes");
+      display = "Selected meta nodes";
       stencil = parameters->getSelectedMetaNodesStencil();
       visible = parameters->isDisplayMetaNodes();
     } else if (id == META_NODE_LABELS_ID) {
-      display = trUtf8("Meta node content labels");
+      display = "Meta node content labels";
       stencil = parameters->getMetaNodesLabelStencil();
       visible = parameters->isViewMetaLabel();
     } else if (id == NODE_LABELS_ID) {
-      display = trUtf8("Node labels");
+      display = "Node labels";
       stencil = parameters->getNodesLabelStencil();
       visible = parameters->isViewNodeLabel();
     } else if (id == EDGE_LABELS_ID) {
-      display = trUtf8("Edge labels");
+      display = "Edge labels";
       stencil = parameters->getEdgesLabelStencil();
       visible = parameters->isViewEdgeLabel();
     }
@@ -364,11 +364,11 @@ QVariant SceneLayersModel::headerData(int section, Qt::Orientation orientation, 
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
       if (section == 0)
-        return trUtf8("Name");
+        return "Name";
       else if (section == 1)
-        return trUtf8("Visible");
+        return "Visible";
       else
-        return trUtf8("Stencil");
+        return "Stencil";
     }
 
     else if (role == Qt::TextAlignmentRole)

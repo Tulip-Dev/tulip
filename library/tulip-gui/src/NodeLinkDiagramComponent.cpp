@@ -394,7 +394,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     itemId = entity.getComplexEntityId();
     QString sId = QString::number(itemId);
 
-    menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #")) + sId)->setEnabled(false);
+    menu->addAction((isNode ? "Node #" : "Edge #") + sId)->setEnabled(false);
 
     menu->addSeparator();
 
@@ -573,7 +573,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
     _tturlManager->fillContextMenu(menu);
 
-    QAction *action = menu->addAction(trUtf8("Use Z ordering"));
+    QAction *action = menu->addAction("Use Z ordering");
     action->setToolTip(
         QString("The graph elements are displayed according the ordering of their z coordinate"));
     action->setCheckable(true);
@@ -583,7 +583,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
                            ->getRenderingParametersPointer()
                            ->isElementZOrdered());
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setZOrdering(bool)));
-    action = menu->addAction(trUtf8("Grid display parameters"), this, SLOT(showGridControl()));
+    action = menu->addAction("Grid display parameters", this, SLOT(showGridControl()));
     action->setToolTip(QString("Display the grid setup wizard"));
   }
 }

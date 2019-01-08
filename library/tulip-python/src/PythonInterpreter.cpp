@@ -654,8 +654,8 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
   if (PyCallable_Check(pFunc)) {
 
     if (sipAPI() == nullptr) {
-      QMessageBox::critical(nullptr, QObject::trUtf8("failed to initalize Python"),
-                            QObject::trUtf8("SIP could not be initialized (sipApi is null)"));
+      QMessageBox::critical(nullptr, "Failed to initalize Python",
+                            "SIP could not be initialized (sipApi is null)");
       return false;
     }
 

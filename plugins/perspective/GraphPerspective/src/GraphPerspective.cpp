@@ -292,7 +292,7 @@ bool GraphPerspective::terminated() {
     QString message("The project has been modified.\nDo you want to save your changes?");
 #endif
     QMessageBox::StandardButton answer = QMessageBox::question(
-        _mainWindow, trUtf8("Save"), message,
+        _mainWindow, "Save", message,
         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
     if ((answer == QMessageBox::Yes && !save()) || (answer == QMessageBox::Cancel)) {
@@ -819,9 +819,9 @@ void GraphPerspective::exportGraph(Graph *g) {
   bool result = tlp::saveGraph(g, filename, prg, &data);
 
   if (!result) {
-    QMessageBox::critical(_mainWindow, trUtf8("Export error"),
+    QMessageBox::critical(_mainWindow, "Export error",
                           QString("<i>") + wizard.algorithm() +
-                              trUtf8("</i> failed to export graph.<br/><br/><b>") +
+                              "</i> failed to export graph.<br/><br/><b>" +
                               tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // log export plugin call
@@ -857,8 +857,7 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     bool result = tlp::saveGraph(g, tlp::QStringToTlpString(filename));
 
     if (!result)
-      QMessageBox::critical(_mainWindow, trUtf8("Save error"),
-                            trUtf8("Failed to save graph hierarchy"));
+      QMessageBox::critical(_mainWindow, "Save error", "Failed to save graph hierarchy");
     else {
       savedFile = filename;
       addRecentDocument(filename);
@@ -877,9 +876,9 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::importGraph(module, data, prg);
 
     if (g == nullptr) {
-      QMessageBox::critical(_mainWindow, trUtf8("Import error"),
+      QMessageBox::critical(_mainWindow, "Import error",
                             QString("<i>") + tlp::tlpStringToQString(module) +
-                                trUtf8("</i> failed to import data.<br/><br/><b>") +
+                                "</i> failed to import data.<br/><br/><b>" +
                                 tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
@@ -983,7 +982,7 @@ bool GraphPerspective::saveAs(const QString &path) {
     return false;
 
   if (path.isEmpty()) {
-    QString path = QFileDialog::getSaveFileName(_mainWindow, trUtf8("Save project"), QString(),
+    QString path = QFileDialog::getSaveFileName(_mainWindow, "Save project", QString(),
                                                 "Tulip Project (*.tlpx)");
 
     if (!path.isEmpty()) {

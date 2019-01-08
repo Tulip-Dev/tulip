@@ -98,9 +98,9 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
     if (section == 0)
-      return QObject::trUtf8("Name");
+      return "Name";
     else
-      return QObject::trUtf8("Value");
+      return "Value";
   }
 
   if (orientation == Qt::Vertical) {

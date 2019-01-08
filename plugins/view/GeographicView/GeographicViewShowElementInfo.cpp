@@ -172,11 +172,11 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
             QLabel *title = _informationWidget->findChild<QLabel *>();
 
             if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-              title->setText(trUtf8("Node"));
+              title->setText("Node");
               tableView()->setModel(new GraphNodeElementModel(
                   _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
             } else {
-              title->setText(trUtf8("Edge"));
+              title->setText("Edge");
               tableView()->setModel(new GraphEdgeElementModel(
                   _view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
             }

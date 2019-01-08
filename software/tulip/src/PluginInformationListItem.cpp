@@ -62,8 +62,8 @@ PluginInformationListItem::PluginInformationListItem(PluginInformation info, QWi
     _ui->icon->setPixmap(QPixmap(versionInfo.icon).scaled(32, 32));
 
   _ui->name->setText(info.name + " " + versionInfo.version);
-  _ui->desc->setText(versionInfo.description + "\n\n" + trUtf8("Author: ") + versionInfo.author);
-  _ui->installButton->setText(trUtf8("Install ") + info.availableVersion.version);
+  _ui->desc->setText(versionInfo.description + "\n\nAuthor: " + versionInfo.author);
+  _ui->installButton->setText("Install " + info.availableVersion.version);
 }
 
 PluginInformationListItem::~PluginInformationListItem() {

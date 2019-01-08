@@ -128,7 +128,7 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   action->setToolTip(QString("Increase zoom level"));
   connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
   menu->addSeparator();
-  menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
+  menu->addAction("Augmented display")->setEnabled(false);
   menu->addSeparator();
   _tturlManager->fillContextMenu(menu);
 }

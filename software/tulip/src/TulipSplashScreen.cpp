@@ -26,6 +26,7 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/Plugin.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -42,7 +43,7 @@ TulipSplashScreen::TulipSplashScreen() : PluginLoader(), QSplashScreen(), _fileC
 }
 
 void TulipSplashScreen::start(const std::string &) {
-  _title = trUtf8("Loading ") + "...";
+  _title = "Loading...";
   _message = QString();
   repaint();
 }
@@ -55,18 +56,18 @@ void TulipSplashScreen::loading(const std::string &filename) {
 }
 
 void TulipSplashScreen::loaded(const Plugin *info, const std::list<Dependency> &) {
-  _message = info->name().c_str() + trUtf8(" loaded.");
+  _message = tlp::tlpStringToQString(info->name()) + " loaded.";
 }
 
 void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {
-  _message = trUtf8("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
+  _message = QString("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
 }
 
 void TulipSplashScreen::finished(bool state, const std::string &) {
-  _title = trUtf8("Plugins loaded.");
+  _title = "Plugins loaded.";
 
   if (!state)
-    _message = trUtf8("Errors have been reported, see details on the startup screen.");
+    _message = "Errors have been reported, see details on the startup screen.";
 
   repaint();
 }

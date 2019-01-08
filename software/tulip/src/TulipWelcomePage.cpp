@@ -139,8 +139,7 @@ void TulipWelcomePage::openLink(const QString &link) {
 
 void TulipWelcomePage::recentFileLinkActivated(const QString &link) {
   if (!QFileInfo(link).exists())
-    QMessageBox::critical(this, trUtf8("Error"),
-                          trUtf8("Selected recent project does not exist anymore"));
+    QMessageBox::critical(this, "Error", "Selected recent project does not exist anymore");
   else
     emit openFile(link);
 }

@@ -223,7 +223,7 @@ void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
     } else
       itemId = _displayedEdgesToGraphEdges->getEdgeValue(edge(itemId));
 
-    menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #")) + sId)->setEnabled(false);
+    menu->addAction((isNode ? "Node #" : "Edge #") + sId)->setEnabled(false);
 
     menu->addSeparator();
 

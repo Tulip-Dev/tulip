@@ -365,24 +365,24 @@ void GlMainView::undoCallback() {
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   _viewActionsManager->fillContextMenu(menu);
 
-  QAction *viewOrtho = menu->addAction(trUtf8("Use orthogonal projection"));
+  QAction *viewOrtho = menu->addAction("Use orthogonal projection");
   viewOrtho->setToolTip(QString("Enable to switch between true perspective and orthogonal"));
   viewOrtho->setCheckable(true);
   viewOrtho->setChecked(_glMainWidget->getScene()->isViewOrtho());
   connect(viewOrtho, SIGNAL(triggered(bool)), this, SLOT(setViewOrtho(bool)));
 
   menu->addSeparator();
-  menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
+  menu->addAction("Augmented display")->setEnabled(false);
   menu->addSeparator();
 
-  QAction *a = menu->addAction(trUtf8("Show overview"), this, SLOT(setOverviewVisible(bool)));
+  QAction *a = menu->addAction("Show overview", this, SLOT(setOverviewVisible(bool)));
   a->setToolTip(QString("Show/hide the overview in a corner of the view"));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
 
   if (needQuickAccessBar) {
-    QAction *quickbarAction = menu->addAction(trUtf8("Show quick access bar"), this,
-                                              SLOT(setQuickAccessBarVisible(bool)));
+    QAction *quickbarAction =
+        menu->addAction("Show quick access bar", this, SLOT(setQuickAccessBarVisible(bool)));
     quickbarAction->setToolTip(QString("Show/hide the quick access bar"));
     quickbarAction->setCheckable(true);
     quickbarAction->setChecked(quickAccessBarVisible());

@@ -93,16 +93,16 @@ TulipMainWindow::TulipMainWindow(QWidget *parent)
 
   // System tray
   _systemTrayIcon = new QSystemTrayIcon(QIcon(":/tulip/gui/icons/tulip.ico"), this);
-  _systemTrayIcon->setToolTip(trUtf8("Tulip agent"));
+  _systemTrayIcon->setToolTip("Tulip agent");
   QMenu *systemTrayMenu = new QMenu();
-  systemTrayMenu->addAction(trUtf8("Show"), this, SLOT(showProjectsCenter()));
-  systemTrayMenu->addAction(trUtf8("Hide"), this, SLOT(close()));
+  systemTrayMenu->addAction("Show", this, SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction("Hide", this, SLOT(close()));
   systemTrayMenu->addSeparator();
-  systemTrayMenu->addAction(trUtf8("Projects"), this, SLOT(showProjectsCenter()));
-  systemTrayMenu->addAction(trUtf8("Plugins center"), this, SLOT(showPluginsCenter()));
-  systemTrayMenu->addAction(trUtf8("About us"), this, SLOT(showAboutCenter()));
+  systemTrayMenu->addAction("Projects", this, SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction("Plugins center", this, SLOT(showPluginsCenter()));
+  systemTrayMenu->addAction("About us", this, SLOT(showAboutCenter()));
   systemTrayMenu->addSeparator();
-  connect(systemTrayMenu->addAction(trUtf8("Exit")), SIGNAL(triggered()), this, SLOT(closeApp()));
+  connect(systemTrayMenu->addAction("Exit"), SIGNAL(triggered()), this, SLOT(closeApp()));
   connect(_ui->exitButton, SIGNAL(released()), this, SLOT(closeApp()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
   connect(_systemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
@@ -196,9 +196,9 @@ void TulipMainWindow::closeEvent(QCloseEvent *e) {
 
   if (TulipSettings::instance().value("app/showsystraynotif", true).toBool()) {
     showTrayMessage(
-        trUtf8("Tulip"),
-        trUtf8("Tulip is still running.\nTo show the Tulip window again, click Tulip icon located "
-               "into your notification area.\n\nNote: This message will be displayed only once."),
+        "Tulip",
+        "Tulip is still running.\nTo show the Tulip window again, click Tulip icon located "
+        "into your notification area.\n\nNote: This message will be displayed only once.",
         QSystemTrayIcon::Information, 3000);
     TulipSettings::instance().setValue("app/showsystraynotif", false);
   }
@@ -247,8 +247,8 @@ void TulipMainWindow::showOpenProjectWindow() {
   setVisible(true);
   QString filePath = QFileDialog::getOpenFileName(
       this,
-      trUtf8("Choose a Tulip project to open with its associated perspective. Or select a "
-             "external file format to import."),
+      "Choose a Tulip project to open with its associated perspective. Or select a "
+      "external file format to import.",
       QDir::homePath(),
       "Tulip Files(*.tlp *.tlp.gz *.tlpb *.tlpb.gz *.tlpx *.tlpz *.tlpbz);;Tulip "
       "Project (*.tlpx);;Tulip Graph (*.tlp *.tlp.gz *.tlpb *.tlpb.gz *.tlpz "
@@ -285,7 +285,7 @@ void TulipMainWindow::showAboutCenter() {
 }
 
 void TulipMainWindow::showTrayMessage(const QString &message) {
-  showTrayMessage(trUtf8("Perspective"), "\n" + message + "\n\n" + trUtf8("Click to dismiss"),
+  showTrayMessage("Perspective", "\n" + message + "\n\n" + "Click to dismiss",
                   uint(QSystemTrayIcon::Information), 3000);
 }
 
@@ -344,7 +344,7 @@ void TulipMainWindow::showErrorMessage(const QString &title, const QString &mess
 
 void TulipMainWindow::pluginErrorMessage(const QString &message) {
   _currentTrayMessage = PluginErrorMessage;
-  showTrayMessage(trUtf8("Error while loading plugins"),
-                  message + "\n\n" + trUtf8("Click on this message to see detailed information"),
+  showTrayMessage("Error while loading plugins",
+                  message + "\n\nClick on this message to see detailed information",
                   uint(QSystemTrayIcon::Critical), 10000);
 }

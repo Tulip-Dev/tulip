@@ -198,10 +198,10 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
   _storeResultAsLocalButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
   _storeResultAsLocalButton->setIconSize(QSize(22, 22));
   _storeResultAsLocalButton->setToolTip(
-      trUtf8("Choose the storage policy for the result of property algorithms\nWhen they are "
-             "applied to a subgraph, this result can be stored either\n- in a local subgraph "
-             "property (created on the fly if needed),\nor\n- in a property already existing in "
-             "the ascendant hierarchy (inherited or local)."));
+      "Choose the storage policy for the result of property algorithms\nWhen they are "
+      "applied to a subgraph, this result can be stored either\n- in a local subgraph "
+      "property (created on the fly if needed),\nor\n- in a property already existing in "
+      "the ascendant hierarchy (inherited or local).");
   _ui->header->mainFrame()->layout()->addWidget(_storeResultAsLocalButton);
   QMenu *resultMenu = new QMenu(this);
   _resultAsLocalPropAction =
@@ -343,7 +343,7 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
       painter.setPen(QColor(107, 107, 107));
       painter.drawText(0, 8 + (px.height() - 12) / 2, _ui->favoritesBox->widget()->width(), 65535,
                        /*Qt::AlignHCenter | Qt::AlignTop |*/ Qt::TextWordWrap,
-                       trUtf8("Put your favorite algorithms here"));
+                       "Put your favorite algorithms here");
     }
   } else if ((ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) &&
              draggableObject) {

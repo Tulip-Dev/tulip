@@ -197,8 +197,7 @@ void PropertyInterfaceEditorCreator::setEditorData(QWidget *w, const QVariant &v
   if (isMandatory)
     model = new GraphPropertiesModel<PropertyInterface>(g, false, combo);
   else
-    model = new GraphPropertiesModel<PropertyInterface>(QObject::trUtf8("Select a property"), g,
-                                                        false, combo);
+    model = new GraphPropertiesModel<PropertyInterface>("Select a property", g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
@@ -241,8 +240,7 @@ void NumericPropertyEditorCreator::setEditorData(QWidget *w, const QVariant &val
   if (isMandatory)
     model = new GraphPropertiesModel<NumericProperty>(g, false, combo);
   else
-    model = new GraphPropertiesModel<NumericProperty>(QObject::trUtf8("Select a property"), g,
-                                                      false, combo);
+    model = new GraphPropertiesModel<NumericProperty>("Select a property", g, false, combo);
 
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
@@ -993,7 +991,7 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
   if (v.size() == 1)
     return QString("1 element");
 
-  return QString::number(v.size()) + QObject::trUtf8(" elements");
+  return QString::number(v.size()) + QString(" elements");
 }
 
 // QStringEditorCreator

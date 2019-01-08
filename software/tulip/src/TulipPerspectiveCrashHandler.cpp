@@ -94,7 +94,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   connect(_poster->postData("http://tulip.labri.fr/devel/tulip_crash_report.php"),
           SIGNAL(finished()), this, SLOT(reportPosted()));
 
-  _ui->sendReportButton->setText(trUtf8("Sending report..."));
+  _ui->sendReportButton->setText("Sending report...");
   _ui->sendReportButton->setEnabled(false);
   _ui->commentsEdit->setEnabled(false);
 }
@@ -103,11 +103,10 @@ void TulipPerspectiveCrashHandler::reportPosted() {
   QNetworkReply *reply = static_cast<QNetworkReply *>(sender());
 
   if (reply->error() == QNetworkReply::NoError) {
-    _ui->sendReportButton->setText(trUtf8("Report sent"));
-    _ui->errorReportTitle->setText(
-        trUtf8("<b>Report has been sent. Thank you for supporting Tulip !"));
+    _ui->sendReportButton->setText("Report sent");
+    _ui->errorReportTitle->setText("<b>Report has been sent. Thank you for supporting Tulip!");
   } else {
-    _ui->sendReportButton->setText(trUtf8("Error while sending report"));
+    _ui->sendReportButton->setText("Error while sending report");
     _ui->errorReportTitle->setText("<i>" + reply->errorString() + "</i>");
     _ui->commentsEdit->setEnabled(true);
     _ui->sendReportButton->setEnabled(true);

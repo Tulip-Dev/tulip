@@ -132,10 +132,10 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     }
 
     if (enabled) {
-      action = menu.addAction(trUtf8("Delete highlighted properties"));
+      action = menu.addAction("Delete highlighted properties");
       action->setToolTip("Delete the highlighted properties");
       connect(action, SIGNAL(triggered()), this, SLOT(delProperties()));
-      action = menu.addAction(trUtf8("Hide all other properties"));
+      action = menu.addAction("Hide all other properties");
       action->setToolTip("Show only the columns corresponding to the highlighted properties");
       connect(action, SIGNAL(triggered()), this, SLOT(setPropsNotVisibleExcept()));
     }
@@ -151,15 +151,15 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     menu.setProperty("mainMenu", true);
     menu.addAction(pname)->setEnabled(false);
     menu.addSeparator();
-    action = menu.addAction(trUtf8("Hide all other properties"));
+    action = menu.addAction("Hide all other properties");
     action->setToolTip("Show only the column corresponding to this property");
     connect(action, SIGNAL(triggered()), this, SLOT(setPropsNotVisibleExcept()));
     menu.addSeparator();
 
-    action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"), trUtf8("Add new property"));
+    action = menu.addAction(QIcon(":/tulip/gui/icons/64/list-add.png"), "Add new property");
     action->setToolTip("Display a dialog to create a new property belonging to the current graph");
     connect(action, SIGNAL(triggered()), this, SLOT(newProperty()));
-    connect(menu.addAction(trUtf8("Copy")), SIGNAL(triggered()), this, SLOT(copyProperty()));
+    connect(menu.addAction("Copy"), SIGNAL(triggered()), this, SLOT(copyProperty()));
 
     bool enabled = true;
     const std::string &propName = _contextProperty->getName();
@@ -171,7 +171,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
     }
 
     if (enabled) {
-      action = menu.addAction(trUtf8("Delete"));
+      action = menu.addAction("Delete");
       action->setToolTip(QString("Delete the property \"") + propName.c_str() + '"');
       connect(action, SIGNAL(triggered()), this, SLOT(delProperty()));
     }
@@ -185,61 +185,55 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
 
     menu.addSeparator();
 
-    QMenu *subMenu =
-        /*menu.addMenu(trUtf8("Set default value for"));
-    QAction* nodesSetDefault = subMenu->addAction(trUtf8("nodes"));
-    QAction* edgesSetDefault = subMenu->addAction(trUtf8("edges"));
-
-    subMenu =*/
-        menu.addMenu(trUtf8("Set values of"));
+    QMenu *subMenu = menu.addMenu("Set values of");
     QAction *nodesSetAll =
-        subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY + trUtf8(" to a new default value"));
+        subMenu->addAction(QString("All nodes") + OF_PROPERTY + " to a new default value");
     nodesSetAll->setToolTip(
         QString("Choose a new node default value to reset the values of all nodes") + OF_PROPERTY);
     QAction *edgesSetAll =
-        subMenu->addAction(trUtf8("All edges") + OF_PROPERTY + trUtf8(" to a new default value"));
+        subMenu->addAction(QString("All edges") + OF_PROPERTY + " to a new default value");
     edgesSetAll->setToolTip(
         QString("Choose a new edge default value to reset the values of all edges ") + OF_PROPERTY);
-    QAction *nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+    QAction *nodesSetAllGraph = subMenu->addAction(QString("All nodes") + OF_GRAPH);
     nodesSetAllGraph->setToolTip(
         QString("Choose a value to be assigned to all the existing nodes") + OF_GRAPH);
-    QAction *edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+    QAction *edgesSetAllGraph = subMenu->addAction("All edges" + OF_GRAPH);
     edgesSetAllGraph->setToolTip(
         QString("Choose a value to be assigned to all the existing edges") + OF_GRAPH);
-    QAction *selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+    QAction *selectedNodesSetAll = subMenu->addAction("Selected nodes" + OF_GRAPH);
     selectedNodesSetAll->setToolTip(QString("Choose a value to be assigned to the selected nodes") +
                                     OF_GRAPH);
-    QAction *selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
+    QAction *selectedEdgesSetAll = subMenu->addAction("Selected edges" + OF_GRAPH);
     selectedEdgesSetAll->setToolTip(QString("Choose a value to be assigned to the selected edges") +
                                     OF_GRAPH);
 
     enabled = (pname != "viewLabel");
 
     if (enabled) {
-      subMenu = menu.addMenu(trUtf8("To labels of"));
-      action = subMenu->addAction(trUtf8("All elements") + OF_GRAPH);
+      subMenu = menu.addMenu("To labels of");
+      action = subMenu->addAction("All elements" + OF_GRAPH);
       action->setToolTip(
           QString("Set the values of the current property as labels of all elements") + OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toLabels()));
-      action = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+      action = subMenu->addAction("All nodes" + OF_GRAPH);
       action->setToolTip(QString("Set the values of the current property as labels of the nodes") +
                          OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toNodesLabels()));
-      action = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+      action = subMenu->addAction("All edges" + OF_GRAPH);
       action->setToolTip(QString("Set the values of the current property as labels of the edges") +
                          OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toEdgesLabels()));
-      action = subMenu->addAction(trUtf8("All selected elements") + OF_GRAPH);
+      action = subMenu->addAction("All selected elements" + OF_GRAPH);
       action->setToolTip(
           QString("Set the values of the current property as labels of the selected elements") +
           OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toSelectedLabels()));
-      action = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+      action = subMenu->addAction("Selected nodes" + OF_GRAPH);
       action->setToolTip(
           QString("Set the values of the current property as labels of the selected nodes") +
           OF_GRAPH);
       connect(action, SIGNAL(triggered()), this, SLOT(toSelectedNodesLabels()));
-      action = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
+      action = subMenu->addAction("Selected edges" + OF_GRAPH);
       action->setToolTip(
           QString("Set the values of the current property as labels of the selected edges") +
           OF_GRAPH);

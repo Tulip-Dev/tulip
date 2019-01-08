@@ -120,8 +120,8 @@ int TulipFont::fontId() const {
 }
 
 QString TulipFont::fontFamily() const {
-  QStringList families = QFontDatabase::applicationFontFamilies(fontId());
-  QString family = trUtf8("Unregistered font");
+  QStringList families(QFontDatabase::applicationFontFamilies(fontId()));
+  QString family("Unregistered font");
 
   if (!families.empty())
     family = families[0];

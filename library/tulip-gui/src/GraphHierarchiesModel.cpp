@@ -541,13 +541,13 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
       if (section == NAME_SECTION)
-        return trUtf8("Name");
+        return "Name";
       else if (section == ID_SECTION)
-        return trUtf8("Id");
+        return "Id";
       else if (section == NODES_SECTION)
-        return trUtf8("Nodes");
+        return "Nodes";
       else if (section == EDGES_SECTION)
-        return trUtf8("Edges");
+        return "Edges";
     }
 
     else if (role == Qt::TextAlignmentRole && section != NAME_SECTION)

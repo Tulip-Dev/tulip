@@ -91,7 +91,7 @@ void SceneConfigWidget::resetChanges() {
   // NODES
   delete _ui->labelsOrderingCombo->model();
   GraphPropertiesModel<NumericProperty> *model =
-      new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"), graph);
+      new GraphPropertiesModel<NumericProperty>("Disable ordering", graph);
   _ui->labelsOrderingCombo->setModel(model);
 
   if (renderingParameters->getElementOrderingProperty() == nullptr)

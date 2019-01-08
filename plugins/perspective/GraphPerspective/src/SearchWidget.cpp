@@ -173,7 +173,7 @@ SearchWidget::SearchWidget(QWidget *parent)
   _ui->searchTermACombo->setModel(
       new GraphPropertiesModel<PropertyInterface>(nullptr, false, _ui->searchTermACombo));
   _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(
-      trUtf8("Custom value"), nullptr, false, _ui->searchTermBCombo));
+      "Custom value", nullptr, false, _ui->searchTermBCombo));
   connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphIndexChanged()));
   connect(_ui->selectionModeCombo, SIGNAL(currentIndexChanged(int)), this,
           SLOT(selectionModeChanged(int)));
@@ -250,8 +250,8 @@ void SearchWidget::setGraph(Graph *g) {
       new GraphPropertiesModel<BooleanProperty>(g, false, _ui->resultsStorageCombo));
   _ui->searchTermACombo->setModel(
       new GraphPropertiesModel<PropertyInterface>(g, false, _ui->searchTermACombo));
-  _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(
-      trUtf8("Custom value"), g, false, _ui->searchTermBCombo));
+  _ui->searchTermBCombo->setModel(
+      new GraphPropertiesModel<PropertyInterface>("Custom value", g, false, _ui->searchTermBCombo));
 
   if (!oldStorageName.isEmpty())
     searchForIndex(_ui->resultsStorageCombo, oldStorageName);
@@ -266,7 +266,7 @@ void SearchWidget::setGraph(Graph *g) {
   if (!oldTermBName.isEmpty())
     searchForIndex(_ui->searchTermBCombo, oldTermBName);
   else
-    searchForIndex(_ui->searchTermBCombo, trUtf8("Custom value"));
+    searchForIndex(_ui->searchTermBCombo, "Custom value");
 }
 
 void SearchWidget::selectionModeChanged(int index) {

@@ -257,7 +257,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     g = _graph;
 
   if (g == nullptr) {
-    qCritical() << QStringToTlpString(name()) << trUtf8(": No graph selected");
+    qCritical() << QStringToTlpString(name()) << ": No graph selected";
     return;
   }
 
@@ -393,17 +393,17 @@ void AlgorithmRunnerItem::run(Graph *g) {
     g->pop();
 
     if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
-      errorMessage = QStringToTlpString(trUtf8("Cancelled by user"));
-      qWarning() << QStringToTlpString(name()).c_str() << ": " << errorMessage.c_str();
+      errorMessage = "Cancelled by user";
+      tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     } else {
-      qCritical() << QStringToTlpString(name()).c_str() << ": " << errorMessage.c_str();
+      tlp::error() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
     }
   } else {
     if (progress->state() == TLP_STOP) {
-      errorMessage = QStringToTlpString(trUtf8("Stopped by user"));
-      qWarning() << QStringToTlpString(name()).c_str() << ": " << errorMessage.c_str();
+      errorMessage = "Stopped by user";
+      tlp::warning() << QStringToTlpString(name()) << ": " << errorMessage;
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     }
   }
@@ -412,24 +412,22 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   if (result) {
     // copy or cleanup out properties
-    std::vector<OutPropertyParam>::const_iterator it = outPropertyParams.begin();
-
-    for (; it != outPropertyParams.end(); ++it) {
+    for (const OutPropertyParam &opp : outPropertyParams) {
       // copy computed property in the original output property
-      it->dest->copy(it->tmp);
+      opp.dest->copy(opp.tmp);
       // restore it in the dataset
-      dataSet.set(it->name, it->dest);
+      dataSet.set(opp.name, opp.dest);
 
-      if (it->name == "result" && TulipSettings::instance().isResultPropertyStored()) {
+      if (opp.name == "result" && TulipSettings::instance().isResultPropertyStored()) {
         // store the result property values in an automatically named property
         std::string storedResultName =
-            algorithm + " - " + originalDataSet.toString() + "(" + it->dest->getName() + ")";
+            algorithm + " - " + originalDataSet.toString() + "(" + opp.dest->getName() + ")";
         PropertyInterface *storedResultProp =
-            it->dest->clonePrototype(it->dest->getGraph(), storedResultName);
-        storedResultProp->copy(it->tmp);
+            opp.dest->clonePrototype(opp.dest->getGraph(), storedResultName);
+        storedResultProp->copy(opp.tmp);
       }
 
-      delete it->tmp;
+      delete opp.tmp;
     }
 
     // display it if needed
