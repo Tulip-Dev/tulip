@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  * Copyright (c) 2008 Sean Morrison <learner@brlcad.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -180,7 +180,8 @@ FTGL_EXPORT void ftglSetLayoutLineLength(FTGLlayout *, const float);
 FTGL_EXPORT float ftglGetLayoutLineLength(FTGLlayout *);
 
 FTGL_EXPORT void ftglSetLayoutAlignment(FTGLlayout *, const int);
-FTGL_EXPORT int ftglGetLayoutAlignement(FTGLlayout *);
+FTGL_EXPORT int ftglGetLayoutAlignment(FTGLlayout *);
+FTGL_EXPORT int ftglGetLayoutAlignement(FTGLlayout *); // old typo
 
 FTGL_EXPORT void ftglSetLayoutLineSpacing(FTGLlayout *, const float);
 FTGL_EXPORT float ftglGetLayoutLineSpacing(FTGLlayout *);

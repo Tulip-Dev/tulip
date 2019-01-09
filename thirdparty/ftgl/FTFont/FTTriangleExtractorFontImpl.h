@@ -1,8 +1,7 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2011 Richard Ulrich <richi@paraeasy.ch>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,24 +23,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __FTBitmapFontImpl__
-#define __FTBitmapFontImpl__
+#ifndef __FTTriangleExtractorFontImpl__
+#define __FTTriangleExtractorFontImpl__
 
 #include "FTFontImpl.h"
+// std lib
+#include <vector>
 
 class FTGlyph;
 
-class FTBitmapFontImpl : public FTFontImpl
+class FTTriangleExtractorFontImpl : public FTFontImpl
 {
-    friend class FTBitmapFont;
+    friend class FTTriangleExtractorFont;
 
     protected:
-        FTBitmapFontImpl(FTFont *ftFont, const char* fontFilePath) :
-            FTFontImpl(ftFont, fontFilePath) {};
+        FTTriangleExtractorFontImpl(FTFont *ftFont, const char* fontFilePath, std::vector<float>& triangles);
 
-        FTBitmapFontImpl(FTFont *ftFont, const unsigned char *pBufferBytes,
-                         size_t bufferSizeInBytes) :
-            FTFontImpl(ftFont, pBufferBytes, bufferSizeInBytes) {};
+        FTTriangleExtractorFontImpl(FTFont *ftFont, const unsigned char *pBufferBytes,
+                          size_t bufferSizeInBytes, std::vector<float>& triangles);
+
+        /**
+         * Set the outset distance for the font. Only implemented by
+         * FTOutlineFont, FTPolygonFont and FTExtrudeFont
+         *
+         * @param outset  The outset distance.
+         */
+        virtual void Outset(float o) { outset = o; }
 
         virtual FTPoint Render(const char *s, const int len,
                                FTPoint position, FTPoint spacing,
@@ -51,12 +58,20 @@ class FTBitmapFontImpl : public FTFontImpl
                                FTPoint position, FTPoint spacing,
                                int renderMode);
 
+
     private:
+        /**
+         * The outset distance for the font.
+         */
+        float outset;
+
+        std::vector<float>& triangles_;
+
         /* Internal generic Render() implementation */
         template <typename T>
         inline FTPoint RenderI(const T *s, const int len,
                                FTPoint position, FTPoint spacing, int mode);
 };
 
-#endif  //  __FTBitmapFontImpl__
+#endif // __FTPolygonFontImpl__
 

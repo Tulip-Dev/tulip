@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
  * Copyright (c) 2008 Éric Beets <ericbeets@free.fr>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -48,7 +48,7 @@
 #endif
 
 
-#ifdef WIN32
+#ifdef _WIN32
 
     // Under windows avoid including <windows.h> is overrated.
     // Sure, it can be avoided and "name space pollution" can be
@@ -93,7 +93,7 @@ typedef enum
     GLYPH_OUTLINE,
     GLYPH_POLYGON,
     GLYPH_EXTRUDE,
-    GLYPH_TEXTURE
+    GLYPH_TEXTURE,
 } GlyphType;
 
 struct _FTGLglyph
@@ -111,7 +111,7 @@ typedef enum
     FONT_OUTLINE,
     FONT_POLYGON,
     FONT_EXTRUDE,
-    FONT_TEXTURE
+    FONT_TEXTURE,
 } FontType;
 
 struct _FTGLfont
@@ -122,7 +122,7 @@ struct _FTGLfont
 
 typedef enum
 {
-    LAYOUT_SIMPLE
+    LAYOUT_SIMPLE,
 } LayoutType;
 
 struct _FTGLlayout

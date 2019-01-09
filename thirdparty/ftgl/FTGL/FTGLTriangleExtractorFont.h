@@ -1,9 +1,7 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
- * Copyright (c) 2008 Sean Morrison <learner@brlcad.org>
+ * Copyright (c) 2011 Richard Ulrich <richi@paraeasy.ch>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -30,28 +28,29 @@
 #   include <FTGL/ftgl.h>
 #endif
 
-#ifndef __FTExtrudeFont__
-#define __FTExtrudeFont__
+#ifndef __FTTriangleExtractorFont__
+#define __FTTriangleExtractorFont__
 
 #ifdef __cplusplus
 
+#include <vector>
 
 /**
- * FTExtrudeFont is a specialisation of the FTFont class for handling
- * extruded Polygon fonts
+ * FTPolygonFont is a specialisation of the FTFont class for handling
+ * tesselated Polygon Mesh fonts
  *
- * @see FTFont
- * @see FTPolygonFont
+ * @see     FTFont
  */
-class FTGL_EXPORT FTExtrudeFont : public FTFont
+class FTGL_EXPORT FTTriangleExtractorFont : public FTFont
 {
     public:
         /**
          * Open and read a font file. Sets Error flag.
          *
          * @param fontFilePath  font file path.
+         * @param triangles     the container to store the triangle data.
          */
-        FTExtrudeFont(const char* fontFilePath);
+        FTTriangleExtractorFont(const char* fontFilePath, std::vector<float>& triangles);
 
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.
@@ -60,14 +59,15 @@ class FTGL_EXPORT FTExtrudeFont : public FTFont
          *
          * @param pBufferBytes  the in-memory buffer
          * @param bufferSizeInBytes  the length of the buffer in bytes
+         * @param triangles     the container to store the triangle data.
          */
-        FTExtrudeFont(const unsigned char *pBufferBytes,
-                      size_t bufferSizeInBytes);
+        FTTriangleExtractorFont(const unsigned char *pBufferBytes,
+                      size_t bufferSizeInBytes, std::vector<float>& triangles);
 
         /**
          * Destructor
          */
-        ~FTExtrudeFont();
+        ~FTTriangleExtractorFont();
 
     protected:
         /**
@@ -82,36 +82,37 @@ class FTGL_EXPORT FTExtrudeFont : public FTFont
         virtual FTGlyph* MakeGlyph(FT_GlyphSlot slot);
 };
 
-#define FTGLExtrdFont FTExtrudeFont
+#define FTGLTriangleExtractorFont FTTriangleExtractorFont
 
 #endif //__cplusplus
 
 FTGL_BEGIN_C_DECLS
 
 /**
- * Create a specialised FTGLfont object for handling extruded polygon fonts.
+ * Create a specialised FTGLfont object for handling tesselated polygon
+ * mesh fonts.
  *
  * @param file  The font file name.
  * @return  An FTGLfont* object.
  *
  * @see  FTGLfont
- * @see  ftglCreatePolygonFont
  */
-FTGL_EXPORT FTGLfont *ftglCreateExtrudeFont(const char *file);
+FTGL_EXPORT FTGLfont *ftglCreateTriangleExtractorFont(const char *file);
 
 /**
- * Create a specialised FTGLfont object for handling extruded polygon fonts
- * from a buffer in memory. Sets Error flag. The buffer is owned by the client
- * and is NOT copied by FTGL. The pointer must be valid while using FTGL.
+ * Create a specialised FTGLfont object for handling tesselated polygon
+ * mesh fonts from a buffer in memory. Sets Error flag. The buffer is owned
+ * by the client and is NOT copied by FTGL. The pointer must be valid while
+ * using FTGL.
  *
  * @param bytes  the in-memory buffer
  * @param len  the length of the buffer in bytes
  * @return  An FTGLfont* object.
  */
-FTGL_EXPORT FTGLfont *ftglCreateExtrudeFontFromMem(const unsigned char *bytes,
+FTGL_EXPORT FTGLfont *ftglCreateTriangleExtractorFontFromMem(const unsigned char *bytes,
                                                    size_t len);
 
 FTGL_END_C_DECLS
 
-#endif // __FTExtrudeFont__
+#endif  //  __FTTriangleExtractorFont__
 

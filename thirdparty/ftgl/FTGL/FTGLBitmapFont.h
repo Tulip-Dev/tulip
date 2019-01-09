@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  * Copyright (c) 2008 Sean Morrison <learner@brlcad.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -96,6 +96,18 @@ FTGL_BEGIN_C_DECLS
  * @see  FTGLfont
  */
 FTGL_EXPORT FTGLfont *ftglCreateBitmapFont(const char *file);
+
+/**
+ * Create a specialised FTGLfont object for handling bitmap fonts from
+ * a buffer in memory. Sets Error flag. The buffer is owned by the client
+ * and is NOT copied by FTGL. The pointer must be valid while using FTGL.
+ *
+ * @param bytes  the in-memory buffer
+ * @param len  the length of the buffer in bytes
+ * @return  An FTGLfont* object.
+ */
+FTGL_EXPORT FTGLfont *ftglCreateBitmapFontFromMem(const unsigned char *bytes,
+                                                  size_t len);
 
 FTGL_END_C_DECLS
 

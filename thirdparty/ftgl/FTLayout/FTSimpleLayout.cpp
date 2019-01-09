@@ -2,7 +2,8 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2008 Daniel Remenak <dtremenak@users.sourceforge.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,7 +28,7 @@
 #include "config.h"
 
 #include <ctype.h>
-#include <wchar.h>
+#include <wctype.h>
 
 #include "FTInternals.h"
 #include "FTUnicode.h"
@@ -194,7 +195,6 @@ inline void FTSimpleLayoutImpl::WrapTextI(const T *buf, const int len,
                                           FTPoint position, int renderMode,
                                           FTBBox *bounds)
 {
-    (void) len;
     FTUnicodeStringItr<T> breakItr(buf);          // points to the last break character
     FTUnicodeStringItr<T> lineStart(buf);         // points to the line start
     float nextStart = 0.0;     // total width of the current line
@@ -262,7 +262,7 @@ inline void FTSimpleLayoutImpl::WrapTextI(const T *buf, const int len,
                 ++breakChar; --charCount;
             }
 
-            if (breakCharCount >= 0)
+            if(breakCharCount >= 0)
             {
                 OutputWrapped(lineStart.getBufferFromHere(), breakCharCount,
                               //breakItr.getBufferFromHere() - lineStart.getBufferFromHere(),
@@ -405,9 +405,11 @@ void FTSimpleLayoutImpl::OutputWrapped(const wchar_t *buf, const int len,
 
 template <typename T>
 inline void FTSimpleLayoutImpl::RenderSpaceI(const T *string, const int len,
-                                             FTPoint, int renderMode,
+                                             FTPoint position, int renderMode,
                                              const float extraSpace)
 {
+    (void)position;
+
     float space = 0.0;
 
     // If there is space to distribute, count the number of spaces

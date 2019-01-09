@@ -1,8 +1,7 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2011 Richard Ulrich <richi@paraeasy.ch>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,44 +23,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __FTPixmapGlyphImpl__
-#define __FTPixmapGlyphImpl__
+#ifndef __FTTriangleExtractorGlyphImpl__
+#define __FTTriangleExtractorGlyphImpl__
 
 #include "FTGlyphImpl.h"
 
-class FTPixmapGlyphImpl : public FTGlyphImpl
+class FTVectoriser;
+
+class FTTriangleExtractorGlyphImpl : public FTGlyphImpl
 {
-    friend class FTPixmapGlyph;
+    friend class FTTriangleExtractorGlyph;
 
-    protected:
-        FTPixmapGlyphImpl(FT_GlyphSlot glyph);
+    public:
+        FTTriangleExtractorGlyphImpl(FT_GlyphSlot glyph, float outset,
+                           std::vector<float>& triangles);
 
-        virtual ~FTPixmapGlyphImpl();
+        virtual ~FTTriangleExtractorGlyphImpl();
 
         virtual const FTPoint& RenderImpl(const FTPoint& pen, int renderMode);
 
     private:
-        /**
-         * The width of the glyph 'image'
-         */
-        int destWidth;
+
+        void AddVertex(const FTPoint& pen, const FTPoint& point);
 
         /**
-         * The height of the glyph 'image'
+         * Private rendering variables.
          */
-        int destHeight;
-
-        /**
-         * Vector from the pen position to the topleft corner of the pixmap
-         */
-        FTPoint pos;
-
-        /**
-         * Pointer to the 'image' data
-         */
-        unsigned char* data;
-
+        unsigned int hscale, vscale;
+        FTVectoriser *vectoriser;
+        float outset;
+        std::vector<float>& triangles_;
 };
 
-#endif  //  __FTPixmapGlyphImpl__
+#endif  //  __FTTriangleExtractorGlyphImpl__
 

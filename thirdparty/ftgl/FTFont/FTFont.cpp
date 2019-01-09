@@ -2,7 +2,8 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2008 Daniel Remenak <dtremenak@users.sourceforge.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -41,7 +42,6 @@
 #include "FTGlyphContainer.h"
 #include "FTFace.h"
 
-#include <iostream>
 
 //
 //  FTFont
@@ -307,21 +307,21 @@ unsigned int FTFontImpl::FaceSize() const
 }
 
 
-void FTFontImpl::Depth(float)
+void FTFontImpl::Depth(float depth)
 {
-    ;
+    (void)depth;
 }
 
 
-void FTFontImpl::Outset(float)
+void FTFontImpl::Outset(float outset)
 {
-    ;
+    (void)outset;
 }
 
 
-void FTFontImpl::Outset(float, float)
+void FTFontImpl::Outset(float front, float back)
 {
-    ;
+    (void)front; (void)back;
 }
 
 
@@ -466,7 +466,8 @@ inline float FTFontImpl::AdvanceI(const T* string, const int len,
 float FTFontImpl::Advance(const char* string, const int len, FTPoint spacing)
 {
     /* The chars need to be unsigned because they are cast to int later */
-    return AdvanceI((const unsigned char *)string, len, spacing);
+    const unsigned char *ustring = (const unsigned char *)string;
+    return AdvanceI(ustring, len, spacing);
 }
 
 

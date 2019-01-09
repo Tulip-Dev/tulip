@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  * Copyright (c) 2008 Éric Beets <ericbeets@free.fr>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -110,6 +110,13 @@ void FTContour::evaluateCubicCurve(FTPoint A, FTPoint B, FTPoint C, FTPoint D)
 //
 FTPoint FTContour::ComputeOutsetPoint(FTPoint A, FTPoint B, FTPoint C)
 {
+    // If the angle between 'ab' and 'bc' approaches 180 degrees,
+    // the outset point goes to infinity, giving an invalid result.
+    // Even for angles near 180 degrees, the point will be quite
+    // far away from A, B and C. To avoid ugly results, limit
+    // its distance to 64.0 * OutsetMax.
+    static const FTGL_DOUBLE OutsetMax = 5;
+
     /* Build the rotation matrix from 'ba' vector */
     FTPoint ba = (A - B).Normalise();
     FTPoint bc = C - B;
@@ -120,7 +127,11 @@ FTPoint FTContour::ComputeOutsetPoint(FTPoint A, FTPoint B, FTPoint C)
 
     /* Compute the vector bisecting 'abc' */
     FTGL_DOUBLE norm = sqrt(tmp.X() * tmp.X() + tmp.Y() * tmp.Y());
-    FTGL_DOUBLE dist = 64.0 * sqrt((norm - tmp.X()) / (norm + tmp.X()));
+    FTGL_DOUBLE dist;
+    if (norm - tmp.X() > (norm + tmp.X()) * OutsetMax * OutsetMax)
+      dist = 64.0 * OutsetMax;
+    else
+      dist = 64.0 * sqrt((norm - tmp.X()) / (norm + tmp.X()));
     tmp.X(tmp.Y() < 0.0 ? dist : -dist);
     tmp.Y(64.0);
 
@@ -239,7 +250,6 @@ void FTContour::buildFrontOutset(float outset)
 
 void FTContour::buildBackOutset(float outset)
 {
-
     backPointList.clear();
 
     for(size_t i = 0; i < PointCount(); ++i)

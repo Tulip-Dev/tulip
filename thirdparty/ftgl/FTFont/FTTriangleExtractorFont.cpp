@@ -1,8 +1,7 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2011 Richard Ulrich <richi@paraeasy.ch>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -29,88 +28,79 @@
 #include "FTGL/ftgl.h"
 
 #include "FTInternals.h"
-#include "FTOutlineFontImpl.h"
+#include "FTTriangleExtractorFontImpl.h"
 
 
 //
-//  FTOutlineFont
+//  FTTriangleExtractorFont
 //
 
 
-FTOutlineFont::FTOutlineFont(char const *fontFilePath) :
-    FTFont(new FTOutlineFontImpl(this, fontFilePath))
+FTTriangleExtractorFont::FTTriangleExtractorFont(char const *fontFilePath, std::vector<float>& triangles) :
+    FTFont(new FTTriangleExtractorFontImpl(this, fontFilePath, triangles))
 {}
 
 
-FTOutlineFont::FTOutlineFont(const unsigned char *pBufferBytes,
-                             size_t bufferSizeInBytes) :
-    FTFont(new FTOutlineFontImpl(this, pBufferBytes, bufferSizeInBytes))
+FTTriangleExtractorFont::FTTriangleExtractorFont(const unsigned char *pBufferBytes,
+                             size_t bufferSizeInBytes, std::vector<float>& triangles) :
+    FTFont(new FTTriangleExtractorFontImpl(this, pBufferBytes, bufferSizeInBytes, triangles))
 {}
 
 
-FTOutlineFont::~FTOutlineFont()
+FTTriangleExtractorFont::~FTTriangleExtractorFont()
 {}
 
 
-FTGlyph* FTOutlineFont::MakeGlyph(FT_GlyphSlot ftGlyph)
+FTGlyph* FTTriangleExtractorFont::MakeGlyph(FT_GlyphSlot ftGlyph)
 {
-    FTOutlineFontImpl *myimpl = dynamic_cast<FTOutlineFontImpl *>(impl);
+    FTTriangleExtractorFontImpl *myimpl = dynamic_cast<FTTriangleExtractorFontImpl*>(impl);
     if(!myimpl)
     {
         return NULL;
     }
 
-    return new FTOutlineGlyph(ftGlyph, myimpl->outset,
-                              myimpl->useDisplayLists);
+    return new FTTriangleExtractorGlyph(ftGlyph, myimpl->outset,
+                              myimpl->triangles_);
 }
 
-
 //
-//  FTOutlineFontImpl
+//  FTTriangleExtractorFontImpl
 //
 
 
-FTOutlineFontImpl::FTOutlineFontImpl(FTFont *ftFont, const char* fontFilePath)
+FTTriangleExtractorFontImpl::FTTriangleExtractorFontImpl(FTFont *ftFont, const char* fontFilePath, std::vector<float>& triangles)
 : FTFontImpl(ftFont, fontFilePath),
-  outset(0.0f)
+  outset(0.0f),
+  triangles_(triangles)
 {
     load_flags = FT_LOAD_NO_HINTING;
 }
 
 
-FTOutlineFontImpl::FTOutlineFontImpl(FTFont *ftFont,
+FTTriangleExtractorFontImpl::FTTriangleExtractorFontImpl(FTFont *ftFont,
                                      const unsigned char *pBufferBytes,
-                                     size_t bufferSizeInBytes)
+                                     size_t bufferSizeInBytes, std::vector<float>& triangles)
 : FTFontImpl(ftFont, pBufferBytes, bufferSizeInBytes),
-  outset(0.0f)
+  outset(0.0f),
+  triangles_(triangles)
 {
     load_flags = FT_LOAD_NO_HINTING;
 }
 
 
 template <typename T>
-inline FTPoint FTOutlineFontImpl::RenderI(const T* string, const int len,
+inline FTPoint FTTriangleExtractorFontImpl::RenderI(const T* string, const int len,
                                           FTPoint position, FTPoint spacing,
                                           int renderMode)
 {
-    // Protect GL_TEXTURE_2D, glHint() and GL_LINE_SMOOTH
-    glPushAttrib(GL_ENABLE_BIT | GL_HINT_BIT | GL_LINE_BIT
-                  | GL_COLOR_BUFFER_BIT);
-
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LINE_SMOOTH);
-    glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-
     FTPoint tmp = FTFontImpl::Render(string, len,
                                      position, spacing, renderMode);
-
-    glPopAttrib();
 
     return tmp;
 }
 
 
-FTPoint FTOutlineFontImpl::Render(const char * string, const int len,
+FTPoint FTTriangleExtractorFontImpl::Render(const char * string, const int len,
                                   FTPoint position, FTPoint spacing,
                                   int renderMode)
 {
@@ -118,10 +108,11 @@ FTPoint FTOutlineFontImpl::Render(const char * string, const int len,
 }
 
 
-FTPoint FTOutlineFontImpl::Render(const wchar_t * string, const int len,
+FTPoint FTTriangleExtractorFontImpl::Render(const wchar_t * string, const int len,
                                   FTPoint position, FTPoint spacing,
                                   int renderMode)
 {
     return RenderI(string, len, position, spacing, renderMode);
 }
+
 
