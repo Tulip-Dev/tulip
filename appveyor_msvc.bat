@@ -2,12 +2,9 @@ rem Matrix-driven Appveyor CI script for Tulip using Visual Studio compiler
 
 rem let's compile clcache in order to speedup incremental builds
 cd C:/
-git clone https://github.com/frerich/clcache.git
 set PATH=C:/Python35-x64;C:/Python35-x64/Scripts;%PATH%
-pip install pyinstaller --upgrade
-cd clcache
-pyinstaller pyinstaller/clcache_main.py -n clcache
-set PATH=C:/clcache/dist/clcache;%PATH%
+pip install clcache
+set CLCACHE_MSBUILD_CONF=/p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\Python35-x64\Scripts
 
 rem create a directory to store Tulip dependencies
 cd C:/ && md tulip_dependencies 
@@ -21,7 +18,7 @@ cd freetype-2.8
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install zlib
@@ -33,7 +30,7 @@ cd zlib-1.2.11
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install libpng
@@ -45,7 +42,7 @@ cd libpng-1.6.35
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /clp:ErrorsOnly /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild INSTALL.vcxproj /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install glew
@@ -56,7 +53,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 cd glew-2.1.0/build/cmake
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" .
 if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install libjpeg
@@ -68,7 +65,7 @@ cd libjpeg-turbo-1.5.2
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DWITH_SIMD=OFF -DCMAKE_INSTALL_PREFIX="C:/tulip_dependencies" ..
 if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild INSTALL.vcxproj /m /clp:ErrorsOnly /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 rem get, compile and install cppunit
@@ -76,7 +73,7 @@ cd C:/tulip_dependencies
 git clone git://anongit.freedesktop.org/git/libreoffice/cppunit/
 if %errorlevel% neq 0 exit /b %errorlevel%
 cd cppunit/src
-msbuild CppUnitLibraries2010.sln /m /clp:ErrorsOnly /p:Configuration=Release /p:Platform=%MSVC_PLATFORM% /p:PlatformToolset=%MSVC_PLATFORM_TOOLSET% /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild CppUnitLibraries2010.sln /m /clp:ErrorsOnly /p:Configuration=Release /p:Platform=%MSVC_PLATFORM% /p:PlatformToolset=%MSVC_PLATFORM_TOOLSET% %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 xcopy C:\tulip_dependencies\cppunit\include C:\tulip_dependencies\include /S /Y
 xcopy C:\tulip_dependencies\cppunit\lib C:\tulip_dependencies\lib /S /Y
@@ -87,7 +84,7 @@ cd %APPVEYOR_BUILD_FOLDER%
 md build && cd build
 cmake -G "%CMAKE_VS_GENERATOR%" -DCMAKE_INCLUDE_PATH="C:/tulip_dependencies/include" -DCMAKE_LIBRARY_PATH="C:/tulip_dependencies/lib;C:/tulip_dependencies/bin" -DCMAKE_PREFIX_PATH="%QT5_DIR%" -DPYTHON_EXECUTABLE="%PYTHON_EXECUTABLE%" -DTULIP_BUILD_TESTS=ON ..
 if %errorlevel% neq 0 exit /b %errorlevel%
-msbuild INSTALL.vcxproj /m /p:Configuration=Release /p:TrackFileAccess=false /p:CLToolExe=clcache.exe /p:CLToolPath=C:\clcache\dist\clcache
+msbuild INSTALL.vcxproj /m /p:Configuration=Release %CLCACHE_MSBUILD_CONF%
 if %errorlevel% neq 0 exit /b %errorlevel%
 rem finally run Tulip tests
 ctest --force-new-ctest-process --output-on-failure --build-config "Release"
