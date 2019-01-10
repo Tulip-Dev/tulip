@@ -1499,7 +1499,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
             addEdge(e);
             graphColors->setEdgeValue(e, metaColor);
           } else if (eEnds.first != metaNode) {
-	    node tgt = mappingM.get(eEnds.second.id);
+            node tgt = mappingM.get(eEnds.second.id);
 
             // tgt may not be valid because at this time
             // when deleting a node from a subgraph pointed

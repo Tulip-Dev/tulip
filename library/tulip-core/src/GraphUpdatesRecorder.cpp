@@ -241,10 +241,8 @@ void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> 
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> &containers,
-                                               GraphImpl *g,
-					       node n,
-					       const vector<edge>& gEdges,
-					       unsigned int nbAdded) {
+                                               GraphImpl *g, node n, const vector<edge> &gEdges,
+                                               unsigned int nbAdded) {
   if (!containers.get(n)) {
     vector<edge> *adj = new vector<edge>(g->storage.adj(n));
     // we must ensure that the last edges added in gEdges
@@ -256,14 +254,14 @@ void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> 
     for (unsigned int i = adj->size(); i > 0; --i) {
       edge e = (*adj)[i];
       while (nbAdded) {
-	--nbAdded;
-	if (e == gEdges[--lastAdded]) {
-	  ++adjAdded;
-	  break;
-	}
+        --nbAdded;
+        if (e == gEdges[--lastAdded]) {
+          ++adjAdded;
+          break;
+        }
       }
       if (nbAdded == 0)
-	break;
+        break;
     }
     assert(adjAdded);
     adj->resize(adj->size() - adjAdded);
@@ -1146,10 +1144,8 @@ void GraphUpdatesRecorder::addEdge(Graph *g, edge e) {
     auto eEnds = g->ends(e);
     addedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
     // record source & target old adjacencies
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
-			eEnds.first, e);
-    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
-			eEnds.second, e);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first, e);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second, e);
   }
 
   // we need to backup properties values of the newly added edge
@@ -1178,10 +1174,9 @@ void GraphUpdatesRecorder::addEdges(Graph *g, unsigned int nbAdded) {
       auto eEnds = g->ends(e);
       addedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
       // record source & target old adjacencies
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
-			  eEnds.first, gEdges, nbAdded);
-      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
-			  eEnds.second, gEdges, nbAdded);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first, gEdges, nbAdded);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.second, gEdges,
+                          nbAdded);
     }
 
     // we need to backup properties values of the newly added edge

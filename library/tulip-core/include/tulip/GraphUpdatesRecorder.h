@@ -185,8 +185,10 @@ class GraphUpdatesRecorder : public Observable {
   // deletion of DataMem default values
   void deleteDefaultValues(TLP_HASH_MAP<PropertyInterface *, DataMem *> &values);
   // record of a node's edges container before/after modification
-  void recordEdgeContainer(MutableContainer<std::vector<edge> *> &, GraphImpl *, node, edge e = edge());
-  void recordEdgeContainer(MutableContainer<std::vector<edge> *> &, GraphImpl *, node, const std::vector<edge>&, unsigned int);
+  void recordEdgeContainer(MutableContainer<std::vector<edge> *> &, GraphImpl *, node,
+                           edge e = edge());
+  void recordEdgeContainer(MutableContainer<std::vector<edge> *> &, GraphImpl *, node,
+                           const std::vector<edge> &, unsigned int);
   // remove an edge from a node's edges container
   void removeFromEdgeContainer(MutableContainer<std::vector<edge> *> &containers, edge e, node n);
 
