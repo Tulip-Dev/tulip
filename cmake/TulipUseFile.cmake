@@ -105,7 +105,6 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
       # Dynamic ling against libstdc++ on win32/MinGW
       # The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
       IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
-
         IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.0)
           SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--subsystem,windows")
           #GCC 4.4 use double dashes and gcc 4.6 single dashes for this option
@@ -118,15 +117,6 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
             SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
             SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
           ENDIF()
-
-        ENDIF()
-
-        IF(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.4)
-          SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
-        ELSEIF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.5 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.5)
-          #mingw 4.4.0 cannot link the tulip core library as it does not have exceptions symbols correctly defined (MinGW bug #2836185)
-          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
-          SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
         ENDIF()
       ENDIF()
     ENDIF(NOT MSVC)
@@ -175,11 +165,6 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
     ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
 	
   ENDIF(WIN32)
-
-  # Use debug mode with GLIBC
-  IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGLIBCXX")
-  ENDIF()
 
 ENDMACRO(TULIP_SET_COMPILER_OPTIONS)
 
