@@ -14,6 +14,10 @@ bash -lc "pacman --noconfirm --sync --refresh --sysupgrade"
 rem Install required tools
 bash -lc "pacman --noconfirm -S --needed base-devel unzip"
 
+rem Always install latest GCC toolchain in order to detect possible build failures
+rem when its version evolves
+bash -lc "pacman --noconfirm -S --needed mingw-w64-%MSYS2_ARCH%-toolchain"
+
 rem Install the relevant native dependencies
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-yajl"
 bash -lc "pacman --noconfirm -S --needed --force mingw-w64-%MSYS2_ARCH%-qhull"
