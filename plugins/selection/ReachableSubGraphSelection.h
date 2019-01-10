@@ -40,8 +40,7 @@ class ReachableSubGraphSelection : public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION(tlp::SelectionAlgorithm::ReachableSubGraphSelection, "David Auber",
                     "01/12/1999",
-                    "Selects all nodes and edges at a given distance of the"
-                    "nodes of a set of selected nodes.",
+                    "Selects all nodes and edges at a given distance of a set of selected nodes.",
                     "1.1", "Selection")
 
   ReachableSubGraphSelection(const tlp::PluginContext *context);

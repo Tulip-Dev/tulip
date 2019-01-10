@@ -33,19 +33,21 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // type
-    "If linear, logarithmic or uniform, the input property must be a <b>numeric</b> property. For "
-    "the linear case, the minimum value is mapped to one end of the color scale, "
+    "If linear, logarithmic or uniform, the input property must be a <b>numeric</b> property."
+    "<ul><li><b> linear</b>: the minimum value is mapped to one end of the color scale, "
     "the maximum value is mapped to the other end, and a linear interpolation is used between both "
-    "to compute the associated color. For the logarithmic case, graph elements values are first "
+    "to compute the associated color.</li>"
+    "<li> <b>logarithmic</b>: graph elements values are first "
     "mapped in the [1, +inf[ range. "
     "Then the log of each mapped value is computed and used to compute the associated color of the "
     "graph element trough a linear interpolation between 0 and the log of the mapped maximum value "
-    "of graph elements.<BR>"
-    "If uniform, this is the same except for the interpolation: the values are sorted, numbered, "
-    "and a linear interpolation is used on those numbers"
-    "(in other words, only the order is taken into account, not the actual values).<BR>"
-    "Finally, if enumerated, the input property can be of <b>any type</b>. Each possible value is "
-    "mapped to a distinct color without any specific order.",
+    "of graph elements.</li>"
+    "<li><b>uniform</b>: this is the same as logarithmic except for the interpolation: the values "
+    "are sorted, numbered, "
+    "and a linear interpolation is used on those numbers "
+    "(in other words, only the order is taken into account, not the actual values).</li>"
+    "<li><b>enumerated</b>: the input property can be of any type. Each possible value is "
+    "mapped manually to a distinct color without any specific order.</li></ul>",
 
     // property
     "This property is used to get the values affected to graph items.",
