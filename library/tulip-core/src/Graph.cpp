@@ -1486,24 +1486,20 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     }
 
     for (auto metaEdge : super->allEdges(metaNode)) {
-      if (!super->isElement(metaNode))
+      if (!super->isElement(metaEdge))
         continue;
       Color metaColor = graphColors->getEdgeValue(metaEdge);
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge>>> newMetaEdges;
 
       for (auto e : getEdgeMetaInfo(metaEdge)) {
-        const std::pair<node, node> eEnds = super->ends(e);
+        auto eEnds = super->ends(e);
 
         if (isElement(eEnds.first)) {
-          if (isElement(eEnds.second)) {
+          if (isElement(eEnds.second) && isElement(metaEdge)) {
             addEdge(e);
-
-            if (!isElement(metaEdge))
-              delEdge(e);
-
             graphColors->setEdgeValue(e, metaColor);
-          } else {
-            node tgt = mappingM.get(eEnds.second.id);
+          } else if (eEnds.first != metaNode) {
+	    node tgt = mappingM.get(eEnds.second.id);
 
             // tgt may not be valid because at this time
             // when deleting a node from a subgraph pointed
@@ -1513,7 +1509,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
             if (tgt.isValid())
               newMetaEdges[eEnds.first][tgt].insert(e);
           }
-        } else {
+        } else if (eEnds.second != metaNode) {
           node src = mappingM.get(eEnds.first.id);
 
           // src may not be valid because at this time
@@ -1538,7 +1534,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           Graph *graph = this;
           node tgt(itnme->first);
 
-          // add edge in the right graph
+          // add an edge in the relevant graph
           if (!isElement(src) || !isElement(tgt))
             graph = super;
 
