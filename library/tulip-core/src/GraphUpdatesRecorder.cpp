@@ -93,14 +93,9 @@ void GraphUpdatesRecorder::treatEvent(const Event &ev) {
       break;
     }
 
-    case GraphEvent::TLP_ADD_EDGES: {
-      const std::vector<edge> &edges = graph->edges();
-
-      for (unsigned int i = edges.size() - gEvt->getNumberOfEdges(); i < edges.size(); ++i)
-        addEdge(graph, edges[i]);
-
+    case GraphEvent::TLP_ADD_EDGES:
+      addEdges(graph, gEvt->getNumberOfEdges());
       break;
-    }
 
     case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
       addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
@@ -229,23 +224,63 @@ void GraphUpdatesRecorder::deleteDefaultValues(
 }
 
 void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> &containers,
-                                               GraphImpl *g, node n) {
+                                               GraphImpl *g, node n, edge e) {
   if (!containers.get(n)) {
-    vector<edge> *ctnr = new vector<edge>(g->storage.adj(n));
-    containers.set(n, ctnr);
+    vector<edge> *adj = new vector<edge>(g->storage.adj(n));
+    // if we got a valid edge, this means that we must register
+    // the node adjacencies before that edge was added (see addEdge)
+    if (e.isValid()) {
+      // as the edge is the last added
+      // it must be at the last adj position
+      auto size = adj->size() - 1;
+      assert(e == (*adj)[size]);
+      adj->resize(size);
+    }
+    containers.set(n, adj);
+  }
+}
+
+void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> &containers,
+                                               GraphImpl *g,
+					       node n,
+					       const vector<edge>& gEdges,
+					       unsigned int nbAdded) {
+  if (!containers.get(n)) {
+    vector<edge> *adj = new vector<edge>(g->storage.adj(n));
+    // we must ensure that the last edges added in gEdges
+    // are previously removed from the current node adjacencies,
+    // so we look (in reverse order because they must be at the end)
+    // for the elts of adj that are in the last edges added and remove them
+    unsigned int adjAdded = 0;
+    unsigned int lastAdded = gEdges.size();
+    for (unsigned int i = adj->size(); i > 0; --i) {
+      edge e = (*adj)[i];
+      while (nbAdded) {
+	--nbAdded;
+	if (e == gEdges[--lastAdded]) {
+	  ++adjAdded;
+	  break;
+	}
+      }
+      if (nbAdded == 0)
+	break;
+    }
+    assert(adjAdded);
+    adj->resize(adj->size() - adjAdded);
+    containers.set(n, adj);
   }
 }
 
 void GraphUpdatesRecorder::removeFromEdgeContainer(MutableContainer<vector<edge> *> &containers,
                                                    edge e, node n) {
-  vector<edge> *ctnr = containers.get(n);
+  vector<edge> *adj = containers.get(n);
 
-  if (ctnr) {
-    vector<edge>::iterator it = ctnr->begin();
+  if (adj) {
+    vector<edge>::iterator it = adj->begin();
 
-    while (it != ctnr->end()) {
+    while (it != adj->end()) {
       if ((*it) == e) {
-        ctnr->erase(it);
+        adj->erase(it);
         break;
       }
 
@@ -1090,7 +1125,7 @@ void GraphUpdatesRecorder::addNode(Graph *g, node n) {
   }
 
   // we need to backup properties values of the newly added node
-  // in order to restore them when readding the node through the tlp::Graph::unpop() method
+  // in order to restore them when reading the node through the tlp::Graph::unpop() method
   // as the default properties values might change
   for (PropertyInterface *prop : g->getLocalObjectProperties()) {
     beforeSetNodeValue(prop, n);
@@ -1107,15 +1142,54 @@ void GraphUpdatesRecorder::addEdge(Graph *g, edge e) {
 
   ger->elts.set(e, true);
 
-  if (g->getRoot() == g) {
-    addedEdgesEnds.set(e, new std::pair<node, node>(g->ends(e)));
+  if (g == g->getRoot()) {
+    auto eEnds = g->ends(e);
+    addedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
+    // record source & target old adjacencies
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+			eEnds.first, e);
+    recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+			eEnds.second, e);
   }
 
   // we need to backup properties values of the newly added edge
-  // in order to restore them when readding the node through the tlp::Graph::unpop() method
+  // in order to restore them when reading the node through the tlp::Graph::unpop() method
   // as the default properties values can change
   for (PropertyInterface *prop : g->getLocalObjectProperties()) {
     beforeSetEdgeValue(prop, e);
+  }
+}
+
+void GraphUpdatesRecorder::addEdges(Graph *g, unsigned int nbAdded) {
+  GraphEltsRecord *ger = graphAddedEdges.get(g->getId());
+
+  if (ger == nullptr) {
+    ger = new GraphEltsRecord(g);
+    graphAddedEdges.set(g->getId(), ger);
+  }
+
+  const std::vector<edge> &gEdges = g->edges();
+
+  for (unsigned int i = gEdges.size() - nbAdded; i < gEdges.size(); ++i) {
+    edge e = gEdges[i];
+    ger->elts.set(e, true);
+
+    if (g == g->getRoot()) {
+      auto eEnds = g->ends(e);
+      addedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
+      // record source & target old adjacencies
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+			  eEnds.first, gEdges, nbAdded);
+      recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g),
+			  eEnds.second, gEdges, nbAdded);
+    }
+
+    // we need to backup properties values of the newly added edge
+    // in order to restore them when reading the node through the tlp::Graph::unpop() method
+    // as the default properties values can change
+    for (PropertyInterface *prop : g->getLocalObjectProperties()) {
+      beforeSetEdgeValue(prop, e);
+    }
   }
 }
 
@@ -1195,7 +1269,7 @@ void GraphUpdatesRecorder::delEdge(Graph *g, edge e) {
   }
 
   if (deletedEdgesEnds.get(e) == nullptr) {
-    const pair<node, node> &eEnds = g->ends(e);
+    auto eEnds = g->ends(e);
 
     if (g == g->getSuperGraph()) {
       // remove from revertedEdges if needed
@@ -1238,7 +1312,7 @@ void GraphUpdatesRecorder::delEdge(Graph *g, edge e) {
     beforeSetEdgeValue(prop, e);
   }
 
-  if (g == g->getSuperGraph()) {
+  if (g == g->getRoot()) {
     // record source & target old containers
     const pair<node, node> &eEnds = g->ends(e);
     recordEdgeContainer(oldContainers, static_cast<GraphImpl *>(g), eEnds.first);
