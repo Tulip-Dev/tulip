@@ -500,14 +500,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   SET_TIPS(_ui->menubarButton, "Hide Menubar");
   SET_TIPS(_ui->statusbarButton, "Hide Statusbar");
   SET_TIPS(_ui->addPanelButton, "Open a new visualization panel on the current graph");
-  SET_TIPS(_ui->singleModeButton, "Switch to 1-panel mode");
-  SET_TIPS(_ui->splitModeButton, "Switch to 2-panels mode");
-  SET_TIPS(_ui->splitHorizontalModeButton, "Switch to 2-panels mode");
-  SET_TIPS(_ui->split3ModeButton, "Switch to 2-top-1-bottom-panels mode");
-  SET_TIPS(_ui->split32ModeButton, "Switch to 1-left-2-right-panels mode");
-  SET_TIPS(_ui->split33ModeButton, "Switch to 2-left-1-right-panels mode");
-  SET_TIPS(_ui->gridModeButton, "Switch to 4-panels mode");
-  SET_TIPS(_ui->sixModeButton, "Switch to 6-panels mode");
+  SET_TIPS(_ui->singleModeButton, "Switch to 1 panel mode");
+  SET_TIPS(_ui->splitModeButton, "Switch to 2 panels mode");
+  SET_TIPS(_ui->splitHorizontalModeButton, "Switch to 2 panels mode");
+  SET_TIPS(_ui->split3ModeButton, "Switch to 2-top 1-bottom panels mode");
+  SET_TIPS(_ui->split32ModeButton, "Switch to 1-left 2-right panels mode");
+  SET_TIPS(_ui->split33ModeButton, "Switch to 2-left 1-right panels mode");
+  SET_TIPS(_ui->gridModeButton, "Switch to 4 panels mode");
+  SET_TIPS(_ui->sixModeButton, "Switch to 6 panels mode");
   SET_TIPS(_ui->menuDelete, "Delete elements of the current graph");
   _ui->menuOpen_recent_file->setToolTip(
       QString("Choose a file to open among the recently opened/saved graphs or projects"));
