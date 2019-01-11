@@ -40,9 +40,9 @@ using namespace tlp;
 
 GlMainView::GlMainView(bool needtturlManager)
     : _glMainWidget(nullptr), _overviewItem(nullptr), _viewActionsManager(nullptr),
-      _showOvButton(nullptr), _showQabButton(nullptr),
-      needQuickAccessBar(false), _needTooltipAndUrlManager(needtturlManager),
-      _quickAccessBarItem(nullptr), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr),
+      _showOvButton(nullptr), _showQabButton(nullptr), needQuickAccessBar(false),
+      _needTooltipAndUrlManager(needtturlManager), _quickAccessBarItem(nullptr),
+      _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr),
       _sceneLayersConfigurationWidget(nullptr), _overviewPosition(OVERVIEW_BOTTOM_RIGHT),
       _updateOverview(true) {}
 

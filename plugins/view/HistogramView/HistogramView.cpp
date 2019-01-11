@@ -61,15 +61,15 @@ PLUGIN(HistogramView)
 GLuint HistogramView::binTextureId(0);
 unsigned int HistogramView::histoViewInstancesCount(0);
 
-  HistogramView::HistogramView(const PluginContext *) : GlMainView(true),
-    _bar(nullptr), propertiesSelectionWidget(nullptr), histoOptionsWidget(nullptr),
-      xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr), emptyGraph(nullptr),
-      emptyGlGraphComposite(nullptr), histogramsComposite(nullptr), labelsComposite(nullptr),
-      axisComposite(nullptr), smallMultiplesView(true), mainLayer(nullptr),
-      detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0), noDimsLabel(nullptr),
-      noDimsLabel1(nullptr), noDimsLabel2(nullptr), emptyRect(nullptr), emptyRect2(nullptr),
-      interactorsActivated(false), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),
-      needUpdateHistogram(false), edgeAsNodeGraph(nullptr) {
+HistogramView::HistogramView(const PluginContext *)
+    : GlMainView(true), _bar(nullptr), propertiesSelectionWidget(nullptr),
+      histoOptionsWidget(nullptr), xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr),
+      emptyGraph(nullptr), emptyGlGraphComposite(nullptr), histogramsComposite(nullptr),
+      labelsComposite(nullptr), axisComposite(nullptr), smallMultiplesView(true),
+      mainLayer(nullptr), detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0),
+      noDimsLabel(nullptr), noDimsLabel1(nullptr), noDimsLabel2(nullptr), emptyRect(nullptr),
+      emptyRect2(nullptr), interactorsActivated(false), isConstruct(false), lastNbHistograms(0),
+      dataLocation(NODE), needUpdateHistogram(false), edgeAsNodeGraph(nullptr) {
   ++histoViewInstancesCount;
 }
 

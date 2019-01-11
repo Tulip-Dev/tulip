@@ -56,13 +56,14 @@ using namespace tlp;
 PLUGIN(SOMView)
 
 SOMView::SOMView(PluginContext *)
-: GlMainView(true), graphComposite(nullptr), graphLayoutProperty(nullptr), graphSizeProperty(nullptr),
-      mask(nullptr), somMask(nullptr), mapCompositeElements(nullptr), som(nullptr),
-      previewWidget(nullptr), mapWidget(nullptr), isDetailledMode(false), mappingIsVisible(false),
-      hideMappingAction(nullptr), showMappingAction(nullptr), computeMappingAction(nullptr),
-      updateNodesColorAction(nullptr), addSelectionToMaskAction(nullptr), clearMaskAction(nullptr),
-      invertMaskAction(nullptr), selectNodesInMaskAction(nullptr), properties(nullptr),
-      destruct(false), somMapIsBuild(false), isConstruct(false) {
+    : GlMainView(true), graphComposite(nullptr), graphLayoutProperty(nullptr),
+      graphSizeProperty(nullptr), mask(nullptr), somMask(nullptr), mapCompositeElements(nullptr),
+      som(nullptr), previewWidget(nullptr), mapWidget(nullptr), isDetailledMode(false),
+      mappingIsVisible(false), hideMappingAction(nullptr), showMappingAction(nullptr),
+      computeMappingAction(nullptr), updateNodesColorAction(nullptr),
+      addSelectionToMaskAction(nullptr), clearMaskAction(nullptr), invertMaskAction(nullptr),
+      selectNodesInMaskAction(nullptr), properties(nullptr), destruct(false), somMapIsBuild(false),
+      isConstruct(false) {
   addDependency("Grid", "2.0");
 }
 

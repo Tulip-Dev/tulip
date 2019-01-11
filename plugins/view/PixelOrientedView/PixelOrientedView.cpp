@@ -73,15 +73,15 @@ namespace tlp {
 PLUGIN(PixelOrientedView)
 
 PixelOrientedView::PixelOrientedView(const PluginContext *)
-: GlMainView(true), _bar(nullptr), pixelOrientedGraph(nullptr), graphComposite(nullptr), mainLayer(nullptr),
-      overviewsComposite(nullptr), optionsWidget(nullptr), propertiesSelectionWidget(nullptr),
-      pixelOrientedMediator(nullptr), lastNbNodes(0), overviewWidth(0), overviewHeight(0),
-      minWidth(0), refSize(0), hilbertLayout(nullptr), squareLayout(nullptr),
-      spiralLayout(new SpiralLayout()), zorderLayout(nullptr), tulipNodeColorMapping(nullptr),
-      smallMultiplesView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), detailViewLabel(nullptr),
-      detailOverview(nullptr), newGraphSet(false), smallMultiplesNeedUpdate(false),
-      lastViewWindowWidth(0), lastViewWindowHeight(0), center(false), interactorsActivated(false),
-      isConstruct(false) {}
+    : GlMainView(true), _bar(nullptr), pixelOrientedGraph(nullptr), graphComposite(nullptr),
+      mainLayer(nullptr), overviewsComposite(nullptr), optionsWidget(nullptr),
+      propertiesSelectionWidget(nullptr), pixelOrientedMediator(nullptr), lastNbNodes(0),
+      overviewWidth(0), overviewHeight(0), minWidth(0), refSize(0), hilbertLayout(nullptr),
+      squareLayout(nullptr), spiralLayout(new SpiralLayout()), zorderLayout(nullptr),
+      tulipNodeColorMapping(nullptr), smallMultiplesView(true), sceneRadiusBak(0.0),
+      zoomFactorBak(0.0), detailViewLabel(nullptr), detailOverview(nullptr), newGraphSet(false),
+      smallMultiplesNeedUpdate(false), lastViewWindowWidth(0), lastViewWindowHeight(0),
+      center(false), interactorsActivated(false), isConstruct(false) {}
 
 PixelOrientedView::~PixelOrientedView() {
   if (isConstruct) {

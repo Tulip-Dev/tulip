@@ -74,7 +74,7 @@ const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
 const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
 
 ScatterPlot2DView::ScatterPlot2DView(const PluginContext *)
-  : GlMainView(true), _bar(nullptr), propertiesSelectionWidget(nullptr), optionsWidget(nullptr),
+    : GlMainView(true), _bar(nullptr), propertiesSelectionWidget(nullptr), optionsWidget(nullptr),
       scatterPlotGraph(nullptr), emptyGraph(nullptr), mainLayer(nullptr), glGraphComposite(nullptr),
       scatterPlotSize(nullptr), matrixComposite(nullptr), axisComposite(nullptr),
       labelsComposite(nullptr), detailedScatterPlot(nullptr),

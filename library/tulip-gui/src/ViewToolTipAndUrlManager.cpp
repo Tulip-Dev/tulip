@@ -36,8 +36,7 @@ using namespace tlp;
 using namespace std;
 
 ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget *widget)
-    : _view(view), _glMainWidget(widget), _tooltips(false) {
-}
+    : _view(view), _glMainWidget(widget), _tooltips(false) {}
 
 void ViewToolTipAndUrlManager::setState(const tlp::DataSet &data) {
   data.get("Tooltips", _tooltips);

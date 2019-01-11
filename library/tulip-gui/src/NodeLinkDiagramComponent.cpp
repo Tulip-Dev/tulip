@@ -51,7 +51,8 @@ using namespace std;
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext *)
-  : GlMainView(true), _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false), grid_ui(nullptr) {}
+    : GlMainView(true), _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false),
+      grid_ui(nullptr) {}
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
   if (grid_ui)
