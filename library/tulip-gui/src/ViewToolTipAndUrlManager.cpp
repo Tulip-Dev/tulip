@@ -37,7 +37,6 @@ using namespace std;
 
 ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget *widget)
     : _view(view), _glMainWidget(widget), _tooltips(false) {
-  view->graphicsView()->installEventFilter(this);
 }
 
 void ViewToolTipAndUrlManager::setState(const tlp::DataSet &data) {
@@ -155,7 +154,10 @@ void ViewToolTipAndUrlManager::fillContextMenu(QMenu *menu) {
 }
 
 void ViewToolTipAndUrlManager::displayToolTips(bool display) {
-  _tooltips = display;
+  if ((_tooltips = display))
+    _view->graphicsView()->viewport()->installEventFilter(this);
+  else
+    _view->graphicsView()->viewport()->removeEventFilter(this);
 }
 
 void ViewToolTipAndUrlManager::setUrlProp(QAction *action) {

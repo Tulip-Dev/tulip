@@ -31,10 +31,11 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
+#include <tulip/ViewToolTipAndUrlManager.h>
 
 using namespace tlp;
 
-View::View() : _currentInteractor(nullptr), _graph(nullptr) {}
+View::View() : _currentInteractor(nullptr), _graph(nullptr), _tturlManager(nullptr) {}
 
 View::~View() {
   foreach (Interactor *i, _interactors) {
@@ -44,6 +45,7 @@ View::~View() {
     i->setView(nullptr);
     delete i;
   }
+  delete _tturlManager;
 }
 
 QList<Interactor *> View::interactors() const {
@@ -79,6 +81,26 @@ void View::currentInteractorChanged(tlp::Interactor *i) {
     i->install(graphicsView());
 }
 
+void View::activateTooltipAndUrlManager(GlMainWidget *glw) {
+  delete _tturlManager;
+  _tturlManager = new tlp::ViewToolTipAndUrlManager(this, glw);
+}
+
+void View::fillContextMenu(QMenu *menu, const QPointF &) {
+  if (_tturlManager)
+    _tturlManager->fillContextMenu(menu);
+}
+
+void View::fillContextMenu(QMenu *menu, node n) {
+  if (_tturlManager)
+    _tturlManager->fillContextMenu(menu, n);
+}
+
+void View::fillContextMenu(QMenu *menu, edge e) {
+  if (_tturlManager)
+    _tturlManager->fillContextMenu(menu, e);
+}
+
 void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   QMenu menu;
   Perspective::redirectStatusTipOfMenu(&menu);
@@ -94,6 +116,18 @@ void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
     menu.move(point);
     menu.exec();
   }
+}
+
+DataSet View::state() const {
+  DataSet data;
+  if (_tturlManager)
+    _tturlManager->state(data);
+  return data;
+}
+
+void View::setState(const DataSet &dataSet) {
+  if (_tturlManager)
+    _tturlManager->setState(dataSet);
 }
 
 void View::undoCallback() {

@@ -52,7 +52,7 @@ GeographicView::GeographicView(PluginContext *)
       sceneLayersConfigurationWidget(nullptr), centerViewAction(nullptr),
       showConfPanelAction(nullptr), useSharedLayoutProperty(true), useSharedSizeProperty(true),
       useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0),
-      mapZoomInit(0), _tturlManager(nullptr), _viewActionsManager(nullptr) {
+      mapZoomInit(0), _viewActionsManager(nullptr) {
   _viewType = OpenStreetMap;
 }
 
@@ -61,7 +61,6 @@ GeographicView::~GeographicView() {
   delete geoViewConfigWidget;
   delete sceneConfigurationWidget;
   delete sceneLayersConfigurationWidget;
-  delete _tturlManager;
   delete _viewActionsManager;
 }
 
@@ -83,7 +82,7 @@ void GeographicView::setupUi() {
   centerViewAction = new QAction("Center view", this);
   connect(centerViewAction, SIGNAL(triggered()), this, SLOT(centerView()));
 
-  _tturlManager = new ViewToolTipAndUrlManager(this, geoViewGraphicsView->getGlMainWidget());
+  activateTooltipAndUrlManager(geoViewGraphicsView->getGlMainWidget());
   _viewActionsManager =
       new ViewActionsManager(this, geoViewGraphicsView->getGlMainWidget(), true, false);
 }
@@ -119,7 +118,7 @@ void GeographicView::viewTypeChanged(QString viewTypeName) {
   connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(viewTypeChanged(QString)));
 }
 
-void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
+void GeographicView::fillContextMenu(QMenu *menu, const QPointF &pf) {
   _viewActionsManager->fillContextMenu(menu);
   QAction *action = menu->addAction("Zoom +");
   action->setToolTip(QString("Increase zoom level"));
@@ -130,7 +129,7 @@ void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addSeparator();
   menu->addAction("Augmented display")->setEnabled(false);
   menu->addSeparator();
-  _tturlManager->fillContextMenu(menu);
+  View::fillContextMenu(menu, pf);
 }
 
 void GeographicView::setState(const DataSet &dataSet) {
@@ -209,7 +208,7 @@ void GeographicView::setState(const DataSet &dataSet) {
     sceneConfigurationWidget->resetChanges();
   }
 
-  _tturlManager->setState(dataSet);
+  View::setState(dataSet);
 
   if (dataSet.exists("mapCenterLatitude")) {
 
@@ -228,7 +227,7 @@ void GeographicView::initMap() {
 }
 
 DataSet GeographicView::state() const {
-  DataSet dataSet;
+  DataSet dataSet = View::state();
   DataSet configurationWidget = geoViewConfigWidget->state();
   dataSet.set("configurationWidget", configurationWidget);
   dataSet.set("viewType", int(_viewType));
@@ -258,8 +257,6 @@ DataSet GeographicView::state() const {
   if (graph()->existProperty(edgesPathsPropName)) {
     dataSet.set("edgesPathsPropertyName", edgesPathsPropName);
   }
-
-  _tturlManager->state(dataSet);
 
   return dataSet;
 }

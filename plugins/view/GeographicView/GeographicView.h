@@ -26,7 +26,6 @@
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
 #include <tulip/ViewActionsManager.h>
-#include <tulip/ViewToolTipAndUrlManager.h>
 
 #include <QGraphicsScene>
 #include <QResizeEvent>
@@ -183,7 +182,6 @@ private:
 
   double mapCenterLatitudeInit, mapCenterLongitudeInit;
   int mapZoomInit;
-  ViewToolTipAndUrlManager *_tturlManager;
   ViewActionsManager *_viewActionsManager;
 };
 } // namespace tlp

@@ -61,8 +61,8 @@ PLUGIN(HistogramView)
 GLuint HistogramView::binTextureId(0);
 unsigned int HistogramView::histoViewInstancesCount(0);
 
-HistogramView::HistogramView(const PluginContext *)
-    : _bar(nullptr), propertiesSelectionWidget(nullptr), histoOptionsWidget(nullptr),
+  HistogramView::HistogramView(const PluginContext *) : GlMainView(true),
+    _bar(nullptr), propertiesSelectionWidget(nullptr), histoOptionsWidget(nullptr),
       xAxisDetail(nullptr), yAxisDetail(nullptr), _histoGraph(nullptr), emptyGraph(nullptr),
       emptyGlGraphComposite(nullptr), histogramsComposite(nullptr), labelsComposite(nullptr),
       axisComposite(nullptr), smallMultiplesView(true), mainLayer(nullptr),

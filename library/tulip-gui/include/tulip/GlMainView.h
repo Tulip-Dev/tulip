@@ -76,7 +76,7 @@ class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
   QPushButton *_showOvButton, *_showQabButton;
 
 protected:
-  bool needQuickAccessBar;
+  bool needQuickAccessBar, _needTooltipAndUrlManager;
   QGraphicsProxyWidget *_quickAccessBarItem;
   tlp::QuickAccessBar *_quickAccessBar;
   tlp::SceneConfigWidget *_sceneConfigurationWidget;
@@ -90,7 +90,7 @@ public:
     OVERVIEW_BOTTOM_RIGHT
   };
 
-  GlMainView();
+  GlMainView(bool needTooltipAndUrlManager = false);
   ~GlMainView() override;
   tlp::GlMainWidget *getGlMainWidget() const;
   QList<QWidget *> configurationWidgets() const override;

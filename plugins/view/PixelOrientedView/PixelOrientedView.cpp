@@ -73,7 +73,7 @@ namespace tlp {
 PLUGIN(PixelOrientedView)
 
 PixelOrientedView::PixelOrientedView(const PluginContext *)
-    : _bar(nullptr), pixelOrientedGraph(nullptr), graphComposite(nullptr), mainLayer(nullptr),
+: GlMainView(true), _bar(nullptr), pixelOrientedGraph(nullptr), graphComposite(nullptr), mainLayer(nullptr),
       overviewsComposite(nullptr), optionsWidget(nullptr), propertiesSelectionWidget(nullptr),
       pixelOrientedMediator(nullptr), lastNbNodes(0), overviewWidth(0), overviewHeight(0),
       minWidth(0), refSize(0), hilbertLayout(nullptr), squareLayout(nullptr),

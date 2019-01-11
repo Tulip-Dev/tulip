@@ -56,7 +56,7 @@ using namespace tlp;
 PLUGIN(SOMView)
 
 SOMView::SOMView(PluginContext *)
-    : graphComposite(nullptr), graphLayoutProperty(nullptr), graphSizeProperty(nullptr),
+: GlMainView(true), graphComposite(nullptr), graphLayoutProperty(nullptr), graphSizeProperty(nullptr),
       mask(nullptr), somMask(nullptr), mapCompositeElements(nullptr), som(nullptr),
       previewWidget(nullptr), mapWidget(nullptr), isDetailledMode(false), mappingIsVisible(false),
       hideMappingAction(nullptr), showMappingAction(nullptr), computeMappingAction(nullptr),

@@ -36,7 +36,6 @@ class GlGrid;
 class GlCompositeHierarchyManager;
 class PropertyInterface;
 class StringProperty;
-class ViewToolTipAndUrlManager;
 
 class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
   Q_OBJECT
@@ -135,7 +134,6 @@ protected slots:
 protected:
   bool isNode;
   unsigned int itemId;
-  ViewToolTipAndUrlManager *_tturlManager;
 
   void graphChanged(tlp::Graph *) override;
 
@@ -144,7 +142,6 @@ protected:
   void loadGraphOnScene(Graph *graph);
   void useHulls(bool hasHulls);
   bool hasHulls() const;
-  void setupWidget() override;
   void editValue(PropertyInterface *pi);
 };
 } // namespace tlp

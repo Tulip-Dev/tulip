@@ -44,7 +44,6 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GraphModel.h>
 #include <tulip/NumericProperty.h>
-#include <tulip/ViewToolTipAndUrlManager.h>
 
 using namespace tlp;
 using namespace std;
@@ -52,15 +51,13 @@ using namespace std;
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext *)
-    : _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false), grid_ui(nullptr),
-      _tturlManager(nullptr) {}
+  : GlMainView(true), _grid(nullptr), _gridOptions(nullptr), manager(nullptr), _hasHulls(false), grid_ui(nullptr) {}
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
   if (grid_ui)
     delete grid_ui->tableView->itemDelegate();
 
   delete grid_ui;
-  delete _tturlManager;
   delete manager;
 }
 
@@ -120,12 +117,6 @@ void NodeLinkDiagramComponent::draw() {
   GlMainView::draw();
 }
 
-void NodeLinkDiagramComponent::setupWidget() {
-  GlMainView::setupWidget();
-  // Tooltip events management
-  _tturlManager = new ViewToolTipAndUrlManager(this, getGlMainWidget());
-}
-
 void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {
   ParameterDescriptionList gridParameters;
   gridParameters.add<StringCollection>("Grid mode", "", "No grid;Space divisions;Fixed size", true);
@@ -150,8 +141,6 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {
   bool keepSPOV = false;
   data.get<bool>("keepScenePointOfViewOnSubgraphChanging", keepSPOV);
   getGlMainWidget()->setKeepScenePointOfViewOnSubgraphChanging(keepSPOV);
-
-  _tturlManager->setState(data);
 
   if (!data.empty())
     createScene(graph(), data);
@@ -179,7 +168,6 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
   DataSet data = sceneData();
   data.set("keepScenePointOfViewOnSubgraphChanging",
            getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging());
-  _tturlManager->state(data);
 
   return data;
 }
@@ -565,13 +553,11 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
                            " by the subgraph it represents");
       }
 
-      _tturlManager->fillContextMenu(menu, node(entity.getComplexEntityId()));
+      View::fillContextMenu(menu, node(entity.getComplexEntityId()));
     } else
-      _tturlManager->fillContextMenu(menu, edge(entity.getComplexEntityId()));
+      View::fillContextMenu(menu, edge(entity.getComplexEntityId()));
   } else {
     GlMainView::fillContextMenu(menu, point);
-
-    _tturlManager->fillContextMenu(menu);
 
     QAction *action = menu->addAction("Use Z ordering");
     action->setToolTip(

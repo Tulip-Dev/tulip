@@ -38,9 +38,10 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView()
+GlMainView::GlMainView(bool needtturlManager)
     : _glMainWidget(nullptr), _overviewItem(nullptr), _viewActionsManager(nullptr),
-      _showOvButton(nullptr), _showQabButton(nullptr), needQuickAccessBar(false),
+      _showOvButton(nullptr), _showQabButton(nullptr),
+      needQuickAccessBar(false), _needTooltipAndUrlManager(needtturlManager),
       _quickAccessBarItem(nullptr), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr),
       _sceneLayersConfigurationWidget(nullptr), _overviewPosition(OVERVIEW_BOTTOM_RIGHT),
       _updateOverview(true) {}
@@ -82,6 +83,8 @@ bool GlMainView::updateOverview() const {
 }
 
 void GlMainView::setState(const tlp::DataSet &data) {
+  View::setState(data);
+
   bool overviewVisible = true;
 
   if (data.get<bool>("overviewVisible", overviewVisible))
@@ -96,7 +99,7 @@ void GlMainView::setState(const tlp::DataSet &data) {
 }
 
 tlp::DataSet GlMainView::state() const {
-  DataSet data;
+  DataSet data = View::state();
   data.set("overviewVisible", overviewVisible());
 
   if (needQuickAccessBar)
@@ -137,6 +140,9 @@ void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOl
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
 
   connect(glMainWidgetGraphicsItem, SIGNAL(widgetPainted(bool)), this, SLOT(glMainViewDrawn(bool)));
+  // Tooltip events and url management
+  if (_needTooltipAndUrlManager)
+    activateTooltipAndUrlManager(_glMainWidget);
 }
 
 GlOverviewGraphicsItem *GlMainView::overviewItem() const {
@@ -362,7 +368,7 @@ void GlMainView::undoCallback() {
   draw();
 }
 
-void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
+void GlMainView::fillContextMenu(QMenu *menu, const QPointF &pf) {
   _viewActionsManager->fillContextMenu(menu);
 
   QAction *viewOrtho = menu->addAction("Use orthogonal projection");
@@ -387,6 +393,7 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
     quickbarAction->setCheckable(true);
     quickbarAction->setChecked(quickAccessBarVisible());
   }
+  View::fillContextMenu(menu, pf);
 }
 
 void GlMainView::applySettings() {
