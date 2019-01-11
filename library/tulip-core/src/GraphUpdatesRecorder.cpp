@@ -227,7 +227,7 @@ void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> 
                                                GraphImpl *g, node n, edge e) {
   if (!containers.get(n)) {
     vector<edge> *adj = new vector<edge>(g->storage.adj(n));
-    // if we got a valid edge, this means that we must register
+    // if we got a valid edge, this means that we must record
     // the node adjacencies before that edge was added (see addEdge)
     if (e.isValid()) {
       // as the edge is the last added
@@ -251,7 +251,7 @@ void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge> *> 
     // for the elts of adj that are in the last edges added and remove them
     unsigned int adjAdded = 0;
     unsigned int lastAdded = gEdges.size();
-    for (unsigned int i = adj->size(); i > 0; --i) {
+    for (unsigned int i = adj->size() - 1; i > 0; --i) {
       edge e = (*adj)[i];
       while (nbAdded) {
         --nbAdded;
@@ -819,7 +819,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl *g, bool undo) {
   while (itc->hasNext()) {
     TypedValueContainer<std::vector<edge> *> tvc;
     node n(itc->nextValue(tvc));
-    g->storage.restoreAdj(n, *(tvc.value));
+    // n may have been deleted as a previously added node
+    if (g->isElement(n))
+      g->storage.restoreAdj(n, *(tvc.value));
   }
 
   delete itc;
