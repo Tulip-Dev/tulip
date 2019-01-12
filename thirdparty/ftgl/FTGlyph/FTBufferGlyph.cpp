@@ -1,7 +1,7 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -88,8 +88,10 @@ FTBufferGlyphImpl::~FTBufferGlyphImpl()
 }
 
 
-const FTPoint& FTBufferGlyphImpl::RenderImpl(const FTPoint& pen, int)
+const FTPoint& FTBufferGlyphImpl::RenderImpl(const FTPoint& pen, int renderMode)
 {
+    (void)renderMode;
+
     if(has_bitmap)
     {
         FTPoint pos(buffer->Pos() + pen + corner);
@@ -102,15 +104,32 @@ const FTPoint& FTBufferGlyphImpl::RenderImpl(const FTPoint& pen, int)
             // FIXME: change the loop bounds instead of doing this test
             if(y + dy < 0 || y + dy >= buffer->Height()) continue;
 
-            for(int x = 0; x < bitmap.width; x++)
+            if(bitmap.num_grays == 1)
             {
-                if(x + dx < 0 || x + dx >= buffer->Width()) continue;
-
-                unsigned char p = pixels[y * bitmap.pitch + x];
-
-                if(p)
+                for(int x = 0; x < bitmap.width; x++)
                 {
-                    dest[y * buffer->Width() + x] = p;
+                    if(x + dx < 0 || x + dx >= buffer->Width()) continue;
+
+                    unsigned char p = pixels[y * bitmap.pitch + x / 8];
+
+                    if((p << (x % 8)) & 0x80)
+                    {
+                        dest[y * buffer->Width() + x] = 255;
+                    }
+                }
+            }
+            else
+            {
+                for(int x = 0; x < bitmap.width; x++)
+                {
+                    if(x + dx < 0 || x + dx >= buffer->Width()) continue;
+
+                    unsigned char p = pixels[y * bitmap.pitch + x];
+
+                    if(p)
+                    {
+                        dest[y * buffer->Width() + x] = p;
+                    }
                 }
             }
         }

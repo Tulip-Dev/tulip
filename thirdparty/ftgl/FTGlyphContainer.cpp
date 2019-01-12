@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -76,10 +76,11 @@ void FTGlyphContainer::Add(FTGlyph* tempGlyph, const unsigned int charCode)
 }
 
 
-const FTGlyph* FTGlyphContainer::Glyph(const unsigned int charCode) const
+const FTGlyph* const FTGlyphContainer::Glyph(const unsigned int charCode) const
 {
     unsigned int index = charMap->GlyphListIndex(charCode);
-    return glyphs[index];
+
+    return (index < glyphs.size()) ? glyphs[index] : NULL;
 }
 
 
@@ -94,8 +95,12 @@ float FTGlyphContainer::Advance(const unsigned int charCode,
 {
     unsigned int left = charMap->FontIndex(charCode);
     unsigned int right = charMap->FontIndex(nextCharCode);
+    const FTGlyph *glyph = Glyph(charCode);
 
-    return face->KernAdvance(left, right).Xf() + Glyph(charCode)->Advance();
+    if (!glyph)
+      return 0.0f;
+
+    return face->KernAdvance(left, right).Xf() + glyph->Advance();
 }
 
 
@@ -111,7 +116,8 @@ FTPoint FTGlyphContainer::Render(const unsigned int charCode,
     if(!face->Error())
     {
         unsigned int index = charMap->GlyphListIndex(charCode);
-        kernAdvance += glyphs[index]->Render(penPosition, renderMode);
+        if (index < glyphs.size())
+            kernAdvance += glyphs[index]->Render(penPosition, renderMode);
     }
 
     return kernAdvance;

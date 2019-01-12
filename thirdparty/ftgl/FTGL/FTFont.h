@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  * Copyright (c) 2008 Sean Morrison <learner@brlcad.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -82,6 +82,7 @@ class FTGL_EXPORT FTFont
         friend class FTPixmapFont;
         friend class FTPolygonFont;
         friend class FTTextureFont;
+        friend class FTTriangleExtractorFont;
 
         /**
          * Internal FTGL FTFont constructor. For private use only.
@@ -330,6 +331,13 @@ class FTGL_EXPORT FTFont
          * @param spacing  A displacement vector to add after each character
          *                 has been displayed (optional).
          * @param renderMode  Render mode to use for display (optional).
+         *                    Gives the application the ability to
+         *                    control whether to render the font's
+         *                    front and back faces via
+         *                    FTGL::RENDER_FRONT and FTGL::RENDER_BACK
+         *                    respectively, or font sides via
+         *                    FTGL::RENDER_SIDE for extruded glyph
+         *                    fonts.
          * @return  The new pen position after the last character was output.
          */
         virtual FTPoint Render(const char* string, const int len = -1,
@@ -348,6 +356,13 @@ class FTGL_EXPORT FTFont
          * @param spacing  A displacement vector to add after each character
          *                 has been displayed (optional).
          * @param renderMode  Render mode to use for display (optional).
+         *                    Gives the application the ability to
+         *                    control whether to render the font's
+         *                    front and back faces via
+         *                    FTGL::RENDER_FRONT and FTGL::RENDER_BACK
+         *                    respectively, or font sides via
+         *                    FTGL::RENDER_SIDE for extruded glyph
+         *                    fonts.
          * @return  The new pen position after the last character was output.
          */
         virtual FTPoint Render(const wchar_t *string, const int len = -1,
@@ -411,6 +426,19 @@ FTGL_EXPORT FTGLfont *ftglCreateCustomFont(char const *fontFilePath,
                    FTGLglyph * (*makeglyphCallback) (FT_GlyphSlot, void *));
 
 /**
+ * Create a custom FTGL font object from a buffer in memory.
+ *
+ * @param bytes  the in-memory buffer
+ * @param len  the length of the buffer in bytes
+ * @param data  A pointer to private data that will be passed to callbacks.
+ * @param makeglyphCallback  A glyph-making callback function.
+ * @return  An FTGLfont* object.
+ */
+FTGL_EXPORT FTGLfont *ftglCreateCustomFontFromMem(const unsigned char *bytes,
+                                                  size_t len, void *data,
+                   FTGLglyph * (*makeglyphCallback) (FT_GlyphSlot, void *));
+
+/**
  * Destroy an FTGL font object.
  *
  * @param font  An FTGLfont* object.
@@ -440,6 +468,16 @@ FTGL_EXPORT int ftglAttachFile(FTGLfont* font, const char* path);
  */
 FTGL_EXPORT int ftglAttachData(FTGLfont* font, const unsigned char * data,
                                size_t size);
+
+/**
+ * Set the glyph loading flags. By default, fonts use the most
+ * sensible flags when loading a font's glyph using FT_Load_Glyph().
+ * This function allows to override the default flags.
+ *
+ * @param font  An FTGLfont* object.
+ * @param flags  The glyph loading flags.
+ */
+FTGL_EXPORT void ftglSetFontGlyphLoadFlags(FTGLfont* font, FT_Int flags);
 
 /**
  * Set the character map for the face.

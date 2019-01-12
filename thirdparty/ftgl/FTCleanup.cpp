@@ -1,8 +1,8 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2009 Sam Hocevar <sam@hocevar.net>
+ *               2009 Mathew Eis (kingrobot)
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,44 +24,46 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __FTPixmapGlyphImpl__
-#define __FTPixmapGlyphImpl__
+#include "config.h"
 
-#include "FTGlyphImpl.h"
+#include "FTCleanup.h"
 
-class FTPixmapGlyphImpl : public FTGlyphImpl
+FTCleanup *FTCleanup::_instance = 0;
+
+
+FTCleanup::FTCleanup()
 {
-    friend class FTPixmapGlyph;
+}
 
-    protected:
-        FTPixmapGlyphImpl(FT_GlyphSlot glyph);
 
-        virtual ~FTPixmapGlyphImpl();
+FTCleanup::~FTCleanup()
+{
+    std::set<FT_Face **>::iterator cleanupItr = cleanupFT_FaceItems.begin();
+    FT_Face **cleanupFace = 0;
 
-        virtual const FTPoint& RenderImpl(const FTPoint& pen, int renderMode);
+    while (cleanupItr != cleanupFT_FaceItems.end())
+    {
+        cleanupFace = *cleanupItr;
+        if (*cleanupFace)
+        {
+            FT_Done_Face(**cleanupFace);
+            delete *cleanupFace;
+            *cleanupFace = 0;
+        }
+        cleanupItr++;
+    }
+    cleanupFT_FaceItems.clear();
+}
 
-    private:
-        /**
-         * The width of the glyph 'image'
-         */
-        int destWidth;
 
-        /**
-         * The height of the glyph 'image'
-         */
-        int destHeight;
+void FTCleanup::RegisterObject(FT_Face **obj)
+{
+    cleanupFT_FaceItems.insert(obj);
+}
 
-        /**
-         * Vector from the pen position to the topleft corner of the pixmap
-         */
-        FTPoint pos;
 
-        /**
-         * Pointer to the 'image' data
-         */
-        unsigned char* data;
-
-};
-
-#endif  //  __FTPixmapGlyphImpl__
+void FTCleanup::UnregisterObject(FT_Face **obj)
+{
+    cleanupFT_FaceItems.erase(obj);
+}
 

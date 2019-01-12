@@ -1,8 +1,7 @@
 /*
  * FTGL - OpenGL font library
  *
- * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
+ * Copyright (c) 2008-2010 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,44 +23,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __FTPixmapGlyphImpl__
-#define __FTPixmapGlyphImpl__
+#include "config.h"
 
-#include "FTGlyphImpl.h"
+#include "FTInternals.h"
 
-class FTPixmapGlyphImpl : public FTGlyphImpl
+namespace FTGL {
+
+char const *GetString(ConfigString config)
 {
-    friend class FTPixmapGlyph;
+    switch(config)
+    {
+    case CONFIG_VERSION:
+        return PACKAGE_VERSION;
+    }
 
-    protected:
-        FTPixmapGlyphImpl(FT_GlyphSlot glyph);
+    return 0;
+}
 
-        virtual ~FTPixmapGlyphImpl();
+} // namespace FTGL
 
-        virtual const FTPoint& RenderImpl(const FTPoint& pen, int renderMode);
+FTGL_BEGIN_C_DECLS
 
-    private:
-        /**
-         * The width of the glyph 'image'
-         */
-        int destWidth;
+char const *ftglGetString(int config)
+{
+    return FTGL::GetString(static_cast<FTGL::ConfigString>(config));
+}
 
-        /**
-         * The height of the glyph 'image'
-         */
-        int destHeight;
-
-        /**
-         * Vector from the pen position to the topleft corner of the pixmap
-         */
-        FTPoint pos;
-
-        /**
-         * Pointer to the 'image' data
-         */
-        unsigned char* data;
-
-};
-
-#endif  //  __FTPixmapGlyphImpl__
+FTGL_END_C_DECLS
 

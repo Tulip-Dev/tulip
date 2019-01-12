@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
  * Copyright (c) 2008 Éric Beets <ericbeets@free.fr>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -64,6 +64,7 @@ const FTPoint& FTPolygonGlyph::Render(const FTPoint& pen, int renderMode)
 FTPolygonGlyphImpl::FTPolygonGlyphImpl(FT_GlyphSlot glyph, float _outset,
                                        bool useDisplayList)
 :   FTGlyphImpl(glyph),
+    vectoriser(0),
     glList(0)
 {
     if(ft_glyph_format_outline != glyph->format)
@@ -115,8 +116,10 @@ FTPolygonGlyphImpl::~FTPolygonGlyphImpl()
 
 
 const FTPoint& FTPolygonGlyphImpl::RenderImpl(const FTPoint& pen,
-                                              int)
+                                              int renderMode)
 {
+    (void)renderMode;
+
     glTranslatef(pen.Xf(), pen.Yf(), pen.Zf());
     if(glList)
     {

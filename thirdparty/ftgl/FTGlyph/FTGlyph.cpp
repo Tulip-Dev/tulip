@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -78,8 +78,10 @@ FT_Error FTGlyph::Error() const
 //
 
 
-FTGlyphImpl::FTGlyphImpl(FT_GlyphSlot glyph, bool) : err(0)
+FTGlyphImpl::FTGlyphImpl(FT_GlyphSlot glyph, bool useList) : err(0)
 {
+    (void)useList;
+
     if(glyph)
     {
         bBox = FTBBox(glyph);

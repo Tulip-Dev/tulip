@@ -2,7 +2,7 @@
  * FTGL - OpenGL font library
  *
  * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
- * Copyright (c) 2008 Sam Hocevar <sam@zoy.org>
+ * Copyright (c) 2008 Sam Hocevar <sam@hocevar.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -32,6 +32,7 @@
 
 #include "FTInternals.h"
 #include "FTPixmapGlyphImpl.h"
+#include "FTBitmapGlyphImpl.h"
 
 
 //
@@ -40,7 +41,7 @@
 
 
 FTPixmapGlyph::FTPixmapGlyph(FT_GlyphSlot glyph) :
-    FTGlyph(new FTPixmapGlyphImpl(glyph))
+    FTGlyph(NewImpl(glyph))
 {}
 
 
@@ -48,10 +49,23 @@ FTPixmapGlyph::~FTPixmapGlyph()
 {}
 
 
+FTGlyphImpl *FTPixmapGlyph::NewImpl(FT_GlyphSlot glyph)
+{
+  FTPixmapGlyphImpl *Impl = new FTPixmapGlyphImpl(glyph);
+  if (Impl->destWidth && Impl->destHeight)
+    return Impl;
+  delete Impl;
+  return new FTBitmapGlyphImpl(glyph);
+}
+
+
 const FTPoint& FTPixmapGlyph::Render(const FTPoint& pen, int renderMode)
 {
     FTPixmapGlyphImpl *myimpl = dynamic_cast<FTPixmapGlyphImpl *>(impl);
-    return myimpl->RenderImpl(pen, renderMode);
+    if (myimpl)
+      return myimpl->RenderImpl(pen, renderMode);
+    FTBitmapGlyphImpl *myimpl_bitmap = dynamic_cast<FTBitmapGlyphImpl *>(impl);
+    return myimpl_bitmap->RenderImpl(pen, renderMode);
 }
 
 
@@ -67,7 +81,7 @@ FTPixmapGlyphImpl::FTPixmapGlyphImpl(FT_GlyphSlot glyph)
     data(0)
 {
     err = FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL);
-    if(err || ft_glyph_format_bitmap != glyph->format)
+    if(err || ft_glyph_format_bitmap != glyph->format || glyph->bitmap.num_grays == 1)
     {
         return;
     }
@@ -91,14 +105,32 @@ FTPixmapGlyphImpl::FTPixmapGlyphImpl(FT_GlyphSlot glyph)
         unsigned char* dest = data + ((destHeight - 1) * destWidth * 2);
         size_t destStep = destWidth * 2 * 2;
 
-        for(int y = 0; y < srcHeight; ++y)
+        if (FT_PIXEL_MODE_MONO == bitmap.pixel_mode)
         {
-            for(int x = 0; x < srcWidth; ++x)
+            // Convert the 1 bpp bitmap to 8 bpp
+            for(int y = 0; y < srcHeight; ++y)
             {
-                *dest++ = static_cast<unsigned char>(255);
-                *dest++ = *src++;
+                for(int x = 0; x < srcWidth; ++x)
+                {
+                    *dest++ = static_cast<unsigned char>(255);
+                    // Store 255 if bit (x % 8) is set, store 0 otherwise
+                    *dest++ = static_cast<unsigned char>(static_cast<signed char>(src[static_cast<unsigned int>(x) >> 3] << (x & 7)) >> 7);
+                }
+                dest -= destStep;
+                src += bitmap.pitch;
             }
-            dest -= destStep;
+        }
+        else
+        {
+            for(int y = 0; y < srcHeight; ++y)
+            {
+                for(int x = 0; x < srcWidth; ++x)
+                {
+                    *dest++ = static_cast<unsigned char>(255);
+                    *dest++ = *src++;
+                }
+                dest -= destStep;
+            }
         }
 
         destHeight = srcHeight;
@@ -116,7 +148,7 @@ FTPixmapGlyphImpl::~FTPixmapGlyphImpl()
 
 
 const FTPoint& FTPixmapGlyphImpl::RenderImpl(const FTPoint& pen,
-                                             int)
+                                             int renderMode)
 {
     if(data)
     {
