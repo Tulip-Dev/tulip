@@ -56,7 +56,6 @@ public:
   std::string getDataTexture(const unsigned int dataId);
   Size getDataViewSize(const unsigned int dataId);
   std::string getDataLabel(const unsigned int dataId);
-  std::string getToolTipTextforData(const unsigned int dataId);
 
   bool isDataSelected(const unsigned int dataId);
   void setDataSelected(const unsigned int dataId, const bool dataSelected);

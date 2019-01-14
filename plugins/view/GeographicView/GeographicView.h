@@ -25,6 +25,7 @@
 #include <tulip/SceneLayersConfigWidget.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
+#include <tulip/GlMainView.h>
 #include <tulip/ViewActionsManager.h>
 
 #include <QGraphicsScene>
@@ -114,6 +115,10 @@ public:
 
   GeographicViewGraphicsView *getGeographicViewGraphicsView() const {
     return geoViewGraphicsView;
+  }
+
+  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override {
+    return GlMainView::getNodeOrEdgeAtViewportPos(geoViewGraphicsView->getGlMainWidget(), x, y, n, e);
   }
 
 public slots:

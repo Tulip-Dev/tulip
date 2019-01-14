@@ -150,6 +150,13 @@ public slots:
 
   void undoCallback() override;
 
+  static bool getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y,
+					 node &n, edge &e);
+
+  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override {
+    return getNodeOrEdgeAtViewportPos(_glMainWidget, x, y, n, e);
+  }
+
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF &);

@@ -21,11 +21,12 @@
 #ifndef VIEW_TOOLTIP_AND_URL_MANAGER_H
 #define VIEW_TOOLTIP_AND_URL_MANAGER_H
 
+class QWidget;
+
 #include <QMenu>
 
 #include <tulip/View.h>
 #include <tulip/DataSet.h>
-#include <tulip/GlMainWidget.h>
 
 namespace tlp {
 
@@ -33,13 +34,13 @@ class TLP_QT_SCOPE ViewToolTipAndUrlManager : public QObject {
   Q_OBJECT
 
   View *_view;
-  GlMainWidget *_glMainWidget;
+  QWidget *_widget;
   bool _tooltips;
   std::string _urlPropName;
   std::string _url, _contextMenuUrl;
 
 public:
-  ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget *widget);
+  ViewToolTipAndUrlManager(tlp::View *view, QWidget *widget);
 
   // the functions below must be called by the associated view
   // when overloading the View class corresponding methods

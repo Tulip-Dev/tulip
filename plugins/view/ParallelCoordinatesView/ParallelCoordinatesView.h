@@ -109,6 +109,7 @@ public:
   bool eventFilter(QObject *object, QEvent *event) override;
   void fillContextMenu(QMenu *menu, const QPointF &point) override;
   QList<QWidget *> configurationWidgets() const override;
+  bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override;
 
   // methods called by interactors
   void setDataUnderPointerSelectFlag(const int x, const int y, const bool selectFlag);
@@ -176,9 +177,10 @@ protected slots:
   void resetHightlightedElementsSlot();
 
 private:
-  const std::set<unsigned int> &mapGlEntitiesInRegionToData(const int x, const int y,
-                                                            const unsigned int width,
-                                                            const unsigned int height);
+  bool mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData,
+				   const int x, const int y,
+				   const unsigned int width = 1,
+				   const unsigned int height = 1) const;
   void initGlWidget();
   void buildContextMenu();
   void showAxisConfigDialog(ParallelAxis *axis);
@@ -200,7 +202,6 @@ private:
   QAction *cubicBSplineInterpolationLinesType;
   QAction *thickLines;
   QAction *thinLines;
-  QAction *showToolTips;
   QAction *addRemoveDataFromSelection;
   QAction *selectData;
   QAction *deleteData;
@@ -238,8 +239,6 @@ private:
   bool isConstruct;
   bool dontCenterViewAfterConfLoaded;
   bool needDraw;
-
-  std::set<unsigned int> mappedData;
 
   static GLuint linesTextureId;
   static GLuint slidersTextureId;

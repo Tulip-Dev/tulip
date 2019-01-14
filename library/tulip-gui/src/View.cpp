@@ -81,9 +81,9 @@ void View::currentInteractorChanged(tlp::Interactor *i) {
     i->install(graphicsView());
 }
 
-void View::activateTooltipAndUrlManager(GlMainWidget *glw) {
+void View::activateTooltipAndUrlManager(QWidget *w) {
   delete _tturlManager;
-  _tturlManager = new tlp::ViewToolTipAndUrlManager(this, glw);
+  _tturlManager = new tlp::ViewToolTipAndUrlManager(this, w);
 }
 
 void View::fillContextMenu(QMenu *menu, const QPointF &) {

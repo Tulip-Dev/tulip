@@ -35,8 +35,8 @@
 using namespace tlp;
 using namespace std;
 
-ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, tlp::GlMainWidget *widget)
-    : _view(view), _glMainWidget(widget), _tooltips(false) {}
+ViewToolTipAndUrlManager::ViewToolTipAndUrlManager(tlp::View *view, QWidget *widget)
+    : _view(view), _widget(widget), _tooltips(false) {}
 
 void ViewToolTipAndUrlManager::setState(const tlp::DataSet &data) {
   data.get("Tooltips", _tooltips);
@@ -181,27 +181,23 @@ bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
                                 : dynamic_cast<StringProperty *>(graph->getProperty(_urlPropName));
 
   if (event->type() == QEvent::ToolTip && (_tooltips == true || urlProp != nullptr)) {
-    SelectedEntity type;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
 
-    if (_glMainWidget->pickNodesEdges(he->x(), he->y(), type)) {
+    node tmpNode;
+    edge tmpEdge;
+    if (_view->getNodeOrEdgeAtViewportPos(he->x(), he->y(), tmpNode, tmpEdge)) {
       QString ttip;
-      node tmpNode = type.getNode();
 
       if (tmpNode.isValid()) {
         if (urlProp)
           _url = urlProp->getNodeValue(tmpNode);
         if (_tooltips)
           ttip = NodesGraphModel::getNodeTooltip(graph, tmpNode);
-      } else {
-        edge tmpEdge = type.getEdge();
-
-        if (tmpEdge.isValid()) {
-          if (urlProp)
-            _url = urlProp->getEdgeValue(tmpEdge);
-          if (_tooltips)
-            ttip = EdgesGraphModel::getEdgeTooltip(graph, tmpEdge);
-        }
+      } else if (tmpEdge.isValid()) {
+	if (urlProp)
+	  _url = urlProp->getEdgeValue(tmpEdge);
+	if (_tooltips)
+	  ttip = EdgesGraphModel::getEdgeTooltip(graph, tmpEdge);
       }
       // only http urls are valid
       if (!_url.empty() && _url.find("http://") != 0 && _url.find("https://"))
@@ -222,7 +218,7 @@ bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
         ttip = QString("<p style='white-space:pre'><font size=\"-1\">")
                    .append(ttip)
                    .append(QString("</font></p>"));
-        QToolTip::showText(he->globalPos(), ttip, _glMainWidget);
+        QToolTip::showText(he->globalPos(), ttip, _widget);
         return true;
       }
     } else {

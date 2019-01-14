@@ -167,25 +167,6 @@ Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getUnselectedDataIterator
   }
 }
 
-string ParallelCoordinatesGraphProxy::getToolTipTextforData(const unsigned int dataId) {
-  string ttipText;
-
-  if (getDataLocation() == NODE) {
-    ttipText = "node ";
-  } else {
-    ttipText = "edge ";
-  }
-
-  ttipText += getStringFromNumber(dataId);
-  string label = getDataLabel(dataId);
-
-  if (!label.empty()) {
-    ttipText = label + " (" + ttipText + ")";
-  }
-
-  return ttipText;
-}
-
 void ParallelCoordinatesGraphProxy::addOrRemoveEltToHighlight(const unsigned int eltId) {
   if (isDataHighlighted(eltId)) {
     highlightedElts.erase(eltId);

@@ -344,6 +344,19 @@ public slots:
     return true;
   }
 
+  /**
+   * @brief indicate which node or edge is under the (x, y) position in graphicsView()->viewport()
+   * @param x the x axis coordinate
+   * @param y the y axis coordinate
+   * @param n on return will give the found node
+   * @param e on return will give the found edge
+    @return true if a node or edge has been found, false if not
+   */
+  virtual bool getNodeOrEdgeAtViewportPos(int /*x*/, int /*y*/,
+					  node &/*n*/, edge &/*e*/) const {
+    return false;
+  }
+
 signals:
   /**
     @brief Inform the overlying subsystem that this view needs to be drawn.
@@ -412,9 +425,9 @@ protected slots:
   /**
    * @brief activate the management of tooltips and urls
    * through the context menu
-   * @param GlMainWidget the widget to manage.
+   * @param Qwidget the widget to manage.
    */
-  void activateTooltipAndUrlManager(GlMainWidget *);
+  void activateTooltipAndUrlManager(QWidget *);
 };
 } // namespace tlp
 

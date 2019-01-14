@@ -73,7 +73,7 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 PLUGIN(ParallelCoordinatesView)
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
-    : _bar(nullptr), showToolTips(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
+: GlMainView(true), _bar(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
       glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr),
       parallelCoordsDrawing(nullptr), dataConfigWidget(nullptr), drawConfigWidget(nullptr),
       firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0),
@@ -527,20 +527,6 @@ bool ParallelCoordinatesView::eventFilter(QObject *obj, QEvent *event) {
       centerView();
   }
 
-  if (event->type() == QEvent::ToolTip && showToolTips->isChecked()) {
-    QHelpEvent *he = dynamic_cast<QHelpEvent *>(event);
-
-    if (parallelCoordsDrawing != nullptr) {
-      const set<unsigned int> &dataUnderPointer(
-          mapGlEntitiesInRegionToData(he->x(), he->y(), 1, 1));
-
-      if (!dataUnderPointer.empty()) {
-        QString ttip(graphProxy->getToolTipTextforData(*(dataUnderPointer.begin())).c_str());
-        QToolTip::showText(he->globalPos(), ttip);
-      }
-    }
-  }
-
   if (graphProxy != nullptr && graphProxy->graphColorsModified()) {
     Observable::holdObservers();
     graphProxy->colorDataAccordingToHighlightedElts();
@@ -548,6 +534,21 @@ bool ParallelCoordinatesView::eventFilter(QObject *obj, QEvent *event) {
   }
 
   return GlMainView::eventFilter(obj, event);
+}
+
+bool ParallelCoordinatesView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const {
+  set<unsigned int> data;
+
+  if (mapGlEntitiesInRegionToData(data, x, y)) {
+    if (graphProxy->getDataLocation() == NODE) {
+      n = node(*(data.begin()));
+      return true;
+    } else {
+      e = edge(*(data.begin()));
+      return true;
+    }
+  }
+  return false;
 }
 
 void ParallelCoordinatesView::buildContextMenu() {
@@ -606,12 +607,6 @@ void ParallelCoordinatesView::buildContextMenu() {
   thinLines->setCheckable(true);
   lineActionGroup->addAction(thinLines);
 
-  showToolTips = new QAction(QString("Tooltips"), nullptr);
-  showToolTips->setToolTip(QString(
-      "Enable to display a tooltip indicating the graph element located under the mouse pointer"));
-  showToolTips->setCheckable(true);
-  showToolTips->setChecked(false);
-
   axisMenuSeparator = new QAction(nullptr);
   axisMenuSeparator->setSeparator(true);
   axisConfiguration = new QAction(tr("Axis configuration"), nullptr);
@@ -648,7 +643,6 @@ void ParallelCoordinatesView::fillContextMenu(QMenu *menu, const QPointF &point)
   GlMainView::fillContextMenu(menu, point);
   menu->addAction(viewSetupMenu->menuAction());
   viewSetupMenu->setStyleSheet(menu->styleSheet());
-  menu->addAction(showToolTips);
 
   axisUnderPointer = getAxisUnderPointer(point.x(), point.y());
 
@@ -772,8 +766,7 @@ ParallelCoordinatesDrawing::LinesThickness ParallelCoordinatesView::getLinesThic
                                    : ParallelCoordinatesDrawing::THIN;
 }
 
-const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(
-    const int x, const int y, const unsigned int width, const unsigned int height) {
+bool ParallelCoordinatesView::mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData, const int x, const int y, const unsigned int width, const unsigned int height) const {
 
   vector<SelectedEntity> selectedEntities;
   vector<SelectedEntity> selectedAxisPoints;
@@ -807,12 +800,13 @@ const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(
     }
   }
 
-  return mappedData;
+  return !mappedData.empty();
 }
 
 void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const int y,
                                                             const bool selectFlag) {
-  const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
+  set<unsigned int> dataUnderPointer;
+  mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
   for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
        it != dataUnderPointer.end(); ++it) {
@@ -825,7 +819,8 @@ void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y
                                                         const unsigned int width,
                                                         const unsigned int height,
                                                         const bool selectFlag) {
-  const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, width, height));
+  set<unsigned int> dataUnderPointer;
+  mapGlEntitiesInRegionToData(dataUnderPointer, x, y, width, height);
 
   for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
        it != dataUnderPointer.end(); ++it) {
@@ -839,7 +834,8 @@ void ParallelCoordinatesView::resetSelection() {
 }
 
 void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
-  const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
+  set<unsigned int> dataUnderPointer;
+  mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
   for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
        it != dataUnderPointer.end(); ++it) {
@@ -850,7 +846,8 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
 
 bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const int y,
                                                             SelectedEntity &selectedEntity) {
-  const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
+  set<unsigned int> dataUnderPointer;
+  mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
   if (!dataUnderPointer.empty()) {
     unsigned int dataId;
@@ -889,7 +886,8 @@ void ParallelCoordinatesView::highlightDataUnderPointer(const int x, const int y
     graphProxy->unsetHighlightedElts();
   }
 
-  const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
+  set<unsigned int> dataUnderPointer;
+  mapGlEntitiesInRegionToData(dataUnderPointer, x, y);
 
   for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
        it != dataUnderPointer.end(); ++it) {
@@ -906,7 +904,8 @@ void ParallelCoordinatesView::highlightDataInRegion(const int x, const int y, co
     graphProxy->unsetHighlightedElts();
   }
 
-  const set<unsigned int> &dataUnderPointer = mapGlEntitiesInRegionToData(x, y, width, height);
+  set<unsigned int> dataUnderPointer;
+  mapGlEntitiesInRegionToData(dataUnderPointer, x, y, width, height);
 
   for (set<unsigned int>::const_iterator it = dataUnderPointer.begin();
        it != dataUnderPointer.end(); ++it) {
