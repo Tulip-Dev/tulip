@@ -59,6 +59,7 @@ public:
   void setState(const tlp::DataSet &) override;
   void setupWidget() override;
   QList<QWidget *> configurationWidgets() const override;
+  bool getNodeOrEdgeAtViewportPos(int x, int y, tlp::node &n, tlp::edge &e) const override;
 
 public slots:
   void readSettings();

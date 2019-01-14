@@ -98,6 +98,7 @@ class TLP_QT_SCOPE View : public QObject, public tlp::Plugin, public tlp::Observ
   tlp::ViewToolTipAndUrlManager *_tturlManager;
 
   QSet<tlp::Observable *> _triggers;
+  bool _displayContextMenu;
 
 public:
   /**
@@ -207,13 +208,21 @@ public:
     */
   virtual QPixmap snapshot(const QSize &outputSize = QSize()) const = 0;
 
-public slots:
   /**
    * @brief This method is called whenever the context menu is required on the view.
    * @param point The screen coordinates where the context menu should be displayed.
    */
   void showContextMenu(const QPoint &point, const QPointF &scenePoint);
 
+  /**
+   * @brief This method allows to control the display of the context menu.
+   * @param show a bool indicating if the context menu must be displayed or not.
+   */
+  void setShowContextMenu(bool show) {
+    _displayContextMenu = show;
+  }
+
+public slots:
   /**
    * @brief This method is a callback to notify the panel that the pop() method (undo) has just been
    *called on the graph.

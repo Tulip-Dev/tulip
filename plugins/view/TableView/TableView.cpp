@@ -138,7 +138,9 @@ void TableView::setupWidget() {
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
   QWidget *centralWidget = new QWidget();
   _ui->setupUi(centralWidget);
-
+  activateTooltipAndUrlManager(_ui->table->viewport());
+  // no need to display standard View context menu
+  setShowContextMenu(false);
   setCentralWidget(centralWidget);
 
   propertiesEditor =
@@ -572,6 +574,24 @@ void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
   }
 }
 
+bool TableView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const {
+  QPoint pos = graphicsView()->viewport()->mapToGlobal(QPoint(x, y));
+  if (pos.x() < propertiesEditor->mapToGlobal(QPoint(0, 0)).x()) {
+    pos = graphicsView()->viewport()->mapToGlobal(QPoint(0, y - _ui->table->horizontalHeader()->height())) - _ui->table->mapToGlobal(QPoint(0, 0));
+
+    QModelIndex idx = _ui->table->indexAt(pos);
+    unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
+    if (NODES_DISPLAYED) {
+      n = node(eltId);
+      return n.isValid();
+    } else {
+      e = edge(eltId);
+      return e.isValid();
+    }
+  }
+  return false;
+}
+
 void TableView::showCustomContextMenu(const QPoint &pos) {
   if (_ui->table->model()->rowCount() == 0)
     return;
@@ -677,6 +697,9 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   QAction *setValueAction =
       contextMenu.addAction(QString((highlightedRows.size() > 1) ? "Set values" : "Set value"));
   setValueAction->setToolTip(highlightedSetAll->toolTip());
+
+  contextMenu.addSeparator();
+  View::fillContextMenu(&contextMenu, QPointF());
 
   // display the menu with the mouse inside to allow
   // keyboard navigation
