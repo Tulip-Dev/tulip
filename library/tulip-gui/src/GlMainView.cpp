@@ -431,8 +431,7 @@ bool GlMainView::eventFilter(QObject *obj, QEvent *event) {
   return ViewWidget::eventFilter(obj, event);
 }
 
-bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget* glw, int x, int y,
-					    node &n, edge &e) {
+bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget *glw, int x, int y, node &n, edge &e) {
   SelectedEntity type;
   if (glw->pickNodesEdges(x, y, type)) {
     node tmpNode = type.getNode();
@@ -443,8 +442,8 @@ bool GlMainView::getNodeOrEdgeAtViewportPos(GlMainWidget* glw, int x, int y,
     } else {
       edge tmpEdge = type.getEdge();
       if (tmpEdge.isValid()) {
-	e = tmpEdge;
-	return true;
+        e = tmpEdge;
+        return true;
       }
     }
   }

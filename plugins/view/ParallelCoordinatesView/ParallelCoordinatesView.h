@@ -177,10 +177,9 @@ protected slots:
   void resetHightlightedElementsSlot();
 
 private:
-  bool mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData,
-				   const int x, const int y,
-				   const unsigned int width = 1,
-				   const unsigned int height = 1) const;
+  bool mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData, const int x, const int y,
+                                   const unsigned int width = 1,
+                                   const unsigned int height = 1) const;
   void initGlWidget();
   void buildContextMenu();
   void showAxisConfigDialog(ParallelAxis *axis);

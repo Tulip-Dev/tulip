@@ -118,7 +118,8 @@ public:
   }
 
   bool getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const override {
-    return GlMainView::getNodeOrEdgeAtViewportPos(geoViewGraphicsView->getGlMainWidget(), x, y, n, e);
+    return GlMainView::getNodeOrEdgeAtViewportPos(geoViewGraphicsView->getGlMainWidget(), x, y, n,
+                                                  e);
   }
 
 public slots:

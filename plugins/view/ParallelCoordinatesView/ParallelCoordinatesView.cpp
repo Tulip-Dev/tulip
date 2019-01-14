@@ -73,7 +73,7 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
 PLUGIN(ParallelCoordinatesView)
 
 ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
-: GlMainView(true), _bar(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
+    : GlMainView(true), _bar(nullptr), mainLayer(nullptr), axisSelectionLayer(nullptr),
       glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr),
       parallelCoordsDrawing(nullptr), dataConfigWidget(nullptr), drawConfigWidget(nullptr),
       firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0),
@@ -766,7 +766,10 @@ ParallelCoordinatesDrawing::LinesThickness ParallelCoordinatesView::getLinesThic
                                    : ParallelCoordinatesDrawing::THIN;
 }
 
-bool ParallelCoordinatesView::mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData, const int x, const int y, const unsigned int width, const unsigned int height) const {
+bool ParallelCoordinatesView::mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData,
+                                                          const int x, const int y,
+                                                          const unsigned int width,
+                                                          const unsigned int height) const {
 
   vector<SelectedEntity> selectedEntities;
   vector<SelectedEntity> selectedAxisPoints;

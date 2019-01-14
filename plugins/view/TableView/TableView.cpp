@@ -577,7 +577,9 @@ void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
 bool TableView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const {
   QPoint pos = graphicsView()->viewport()->mapToGlobal(QPoint(x, y));
   if (pos.x() < propertiesEditor->mapToGlobal(QPoint(0, 0)).x()) {
-    pos = graphicsView()->viewport()->mapToGlobal(QPoint(0, y - _ui->table->horizontalHeader()->height())) - _ui->table->mapToGlobal(QPoint(0, 0));
+    pos = graphicsView()->viewport()->mapToGlobal(
+              QPoint(0, y - _ui->table->horizontalHeader()->height())) -
+          _ui->table->mapToGlobal(QPoint(0, 0));
 
     QModelIndex idx = _ui->table->indexAt(pos);
     unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();

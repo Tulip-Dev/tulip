@@ -194,10 +194,10 @@ bool ViewToolTipAndUrlManager::eventFilter(QObject *, QEvent *event) {
         if (_tooltips)
           ttip = NodesGraphModel::getNodeTooltip(graph, tmpNode);
       } else if (tmpEdge.isValid()) {
-	if (urlProp)
-	  _url = urlProp->getEdgeValue(tmpEdge);
-	if (_tooltips)
-	  ttip = EdgesGraphModel::getEdgeTooltip(graph, tmpEdge);
+        if (urlProp)
+          _url = urlProp->getEdgeValue(tmpEdge);
+        if (_tooltips)
+          ttip = EdgesGraphModel::getEdgeTooltip(graph, tmpEdge);
       }
       // only http urls are valid
       if (!_url.empty() && _url.find("http://") != 0 && _url.find("https://"))

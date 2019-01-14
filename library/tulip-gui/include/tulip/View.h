@@ -361,8 +361,7 @@ public slots:
    * @param e on return will give the found edge
     @return true if a node or edge has been found, false if not
    */
-  virtual bool getNodeOrEdgeAtViewportPos(int /*x*/, int /*y*/,
-					  node &/*n*/, edge &/*e*/) const {
+  virtual bool getNodeOrEdgeAtViewportPos(int /*x*/, int /*y*/, node & /*n*/, edge & /*e*/) const {
     return false;
   }
 
