@@ -1166,12 +1166,8 @@ void GraphPerspective::cancelSelection() {
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  for (auto n : selection->getNodesEqualTo(true, graph)) {
-    selection->setNodeValue(n, false);
-  }
-  for (auto e : selection->getEdgesEqualTo(true, graph)) {
-    selection->setEdgeValue(e, false);
-  }
+  selection->setValueToGraphNodes(false, graph);
+  selection->setValueToGraphEdges(false, graph);
   graph->popIfNoUpdates();
   Observable::unholdObservers();
 }
