@@ -584,11 +584,11 @@ bool TableView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const
       QModelIndex idx = _ui->table->indexAt(pos);
       unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
       if (NODES_DISPLAYED) {
-	n = node(eltId);
-	return n.isValid();
+        n = node(eltId);
+        return n.isValid();
       } else {
-	e = edge(eltId);
-	return e.isValid();
+        e = edge(eltId);
+        return e.isValid();
       }
     }
   }
