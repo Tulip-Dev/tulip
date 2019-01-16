@@ -196,7 +196,7 @@ void TableView::graphChanged(tlp::Graph *g) {
   }
 
   GraphPropertiesModel<BooleanProperty> *model = new GraphPropertiesModel<BooleanProperty>(
-      "no selections", g, false, _ui->filteringPropertyCombo);
+      "no selection", g, false, _ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
 
@@ -580,15 +580,16 @@ bool TableView::getNodeOrEdgeAtViewportPos(int x, int y, node &n, edge &e) const
     pos = graphicsView()->viewport()->mapToGlobal(
               QPoint(0, y - _ui->table->horizontalHeader()->height())) -
           _ui->table->mapToGlobal(QPoint(0, 0));
-
-    QModelIndex idx = _ui->table->indexAt(pos);
-    unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
-    if (NODES_DISPLAYED) {
-      n = node(eltId);
-      return n.isValid();
-    } else {
-      e = edge(eltId);
-      return e.isValid();
+    if (_ui->table->rowAt(pos.y()) >= 0) {
+      QModelIndex idx = _ui->table->indexAt(pos);
+      unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
+      if (NODES_DISPLAYED) {
+	n = node(eltId);
+	return n.isValid();
+      } else {
+	e = edge(eltId);
+	return e.isValid();
+      }
     }
   }
   return false;
