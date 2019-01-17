@@ -129,16 +129,7 @@ stop:1 rgb(90, 90, 90));
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -147,43 +138,27 @@ stop:1 rgb(90, 90, 90));
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
-       <widget class="QFrame" name="frame_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QFrame" name="frame_3">
+        <property name="styleSheet">
+         <string notr="true">#frame_3 {
+padding-top: 5px;
+}</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="leftMargin">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="spacing">
           <number>5</number>
          </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -191,7 +166,7 @@ stop:1 rgb(90, 90, 90));
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>42</height>
+             <height>38</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -212,7 +187,7 @@ color: #595959;</string>
             <enum>QLayout::SetMinimumSize</enum>
            </property>
            <property name="leftMargin">
-            <number>0</number>
+            <number>5</number>
            </property>
            <property name="topMargin">
             <number>0</number>
@@ -269,6 +244,48 @@ the chosen selection property value is 'true'</string>
             </widget>
            </item>
            <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="zoomLabel">
+             <property name="toolTip">
+              <string>Select the table zoom level</string>
+             </property>
+             <property name="text">
+              <string>Zoom</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="zoomSpinBox">
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::PlusMinus</enum>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="minimum">
+              <number>60</number>
+             </property>
+             <property name="maximum">
+              <number>300</number>
+             </property>
+             <property name="singleStep">
+              <number>20</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -286,32 +303,6 @@ the chosen selection property value is 'true'</string>
            </item>
           </layout>
          </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="frame_3">
-        <property name="styleSheet">
-         <string notr="true">#frame_3 {
-padding-top: 5px;
-}</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <property name="spacing">
-          <number>5</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <property name="spacing">
@@ -321,7 +312,7 @@ padding-top: 5px;
             <number>5</number>
            </property>
            <property name="bottomMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="label_3">
@@ -349,7 +340,7 @@ the chosen column value contains the given pattern</string>
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show rows (nodes or edges) whose&lt;/p&gt;&lt;p&gt;the chosen column value contains the given pattern (regular expression).&lt;/p&gt;&lt;p&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show rows (nodes or edges) whose the chosen column&lt;br/&gt;value contains the given pattern (regular expression). &lt;br/&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: white;
@@ -357,7 +348,8 @@ border: 0px;
 color: black;
 border-bottom: 1px solid #C9C9C9;
 border-top: 1px solid #C9C9C9;
-border-left: 1px solid #C9C9C9;</string>
+border-left: 1px solid #C9C9C9;
+border-right: 1px solid #C9C9C9;</string>
              </property>
              <property name="placeholderText">
               <string>give a pattern (regular expression)</string>
@@ -402,8 +394,20 @@ the chosen column value contains the given pattern</string>
            </item>
            <item>
             <widget class="QCheckBox" name="filtercase">
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>indicates if the match is case sensitive or not</string>
+             </property>
              <property name="text">
-              <string>Case-sensitive</string>
+              <string>case
+sensitive</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -434,7 +438,7 @@ the chosen column value contains the given pattern</string>
             <number>5</number>
            </property>
            <property name="bottomMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="label_6">
@@ -443,7 +447,7 @@ the chosen column value contains the given pattern</string>
 contains the given pattern</string>
              </property>
              <property name="text">
-              <string>show columns matching</string>
+              <string>Show columns matching</string>
              </property>
             </widget>
            </item>
@@ -462,7 +466,7 @@ contains the given pattern</string>
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show columns (properties) whose name&lt;/p&gt;&lt;p&gt;contains the given pattern (regular expression).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only show rows (nodes or edges) whose the chosen column&lt;br/&gt;value contains the given pattern (regular expression). &lt;br/&gt;Press &amp;quot;Return&amp;quot; to validate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: white;
@@ -470,7 +474,8 @@ border: 0px;
 color: black;
 border-bottom: 1px solid #C9C9C9;
 border-top: 1px solid #C9C9C9;
-border-left: 1px solid #C9C9C9;</string>
+border-left: 1px solid #C9C9C9;
+border-right: 1px solid #C9C9C9;</string>
              </property>
              <property name="placeholderText">
               <string>give a pattern (regular expression)</string>
@@ -478,16 +483,18 @@ border-left: 1px solid #C9C9C9;</string>
             </widget>
            </item>
            <item>
-            <widget class="Line" name="line">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QCheckBox" name="columnsfiltercase">
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>indicates if the match is case sensitive or not</string>
+             </property>
              <property name="text">
-              <string>Case-sensitive</string>
+              <string>case
+sensitive</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -496,54 +503,6 @@ border-left: 1px solid #C9C9C9;</string>
            </item>
            <item>
             <spacer name="horizontalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="zoomLabel">
-             <property name="toolTip">
-              <string>Select the table zoom level</string>
-             </property>
-             <property name="text">
-              <string>Zoom</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="zoomSpinBox">
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::PlusMinus</enum>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>%</string>
-             </property>
-             <property name="minimum">
-              <number>60</number>
-             </property>
-             <property name="maximum">
-              <number>300</number>
-             </property>
-             <property name="singleStep">
-              <number>20</number>
-             </property>
-             <property name="value">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
