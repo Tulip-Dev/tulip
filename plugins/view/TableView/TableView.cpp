@@ -487,6 +487,12 @@ void TableView::toggleHighlightedRows() {
   BooleanProperty *selection = g->getProperty<BooleanProperty>("viewSelection");
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
+  GraphSortFilterProxyModel *sortModel =
+      static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
+
+  if (sortModel->filterProperty() == selection)
+    selection->removeListener(sortModel);
+
   for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
     if (NODES_DISPLAYED) {
       node n(itIdx->data(TulipModel::ElementIdRole).toUInt());
@@ -496,12 +502,21 @@ void TableView::toggleHighlightedRows() {
       selection->setEdgeValue(e, !selection->getEdgeValue(e));
     }
   }
+
+  if (sortModel->filterProperty() == selection)
+    selection->addListener(sortModel);
 }
 
 void TableView::selectHighlightedRows() {
   Graph *g = graph();
   BooleanProperty *selection = g->getProperty<BooleanProperty>("viewSelection");
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+
+  GraphSortFilterProxyModel *sortModel =
+      static_cast<GraphSortFilterProxyModel *>(_ui->table->model());
+
+  if (sortModel->filterProperty() == selection)
+    selection->removeListener(sortModel);
 
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
@@ -512,6 +527,9 @@ void TableView::selectHighlightedRows() {
     else
       selection->setEdgeValue(edge(itIdx->data(TulipModel::ElementIdRole).toUInt()), true);
   }
+
+  if (sortModel->filterProperty() == selection)
+    selection->addListener(sortModel);
 }
 
 bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
