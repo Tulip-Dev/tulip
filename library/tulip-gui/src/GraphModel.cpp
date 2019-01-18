@@ -833,8 +833,6 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
   bool selected = true;
 
   if (_filterProperty != nullptr) {
-    GraphModel *graphModel = static_cast<GraphModel *>(sourceModel());
-
     if (graphModel->isNode())
       selected = _filterProperty->getNodeValue(node(id));
     else
