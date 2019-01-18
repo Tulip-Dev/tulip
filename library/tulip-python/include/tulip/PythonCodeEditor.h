@@ -50,6 +50,8 @@ class TLP_PYTHON_SCOPE AutoCompletionList : public QListWidget {
 public:
   explicit AutoCompletionList(tlp::PythonCodeEditor *parent = nullptr);
 
+  void setCodeEditor(tlp::PythonCodeEditor *parent);
+
 protected:
   void insertSelectedItem();
   void keyPressEvent(QKeyEvent *e) override;
@@ -262,8 +264,8 @@ protected:
   QFont _currentFont;
   QVector<int> _currentErrorLines;
 
-  AutoCompletionList *_autoCompletionList;
-  AutoCompletionDataBase *_autoCompletionDb;
+  static AutoCompletionList *_autoCompletionList;
+  static AutoCompletionDataBase *_autoCompletionDb;
 
   FindReplaceDialog *_findReplaceDialog;
 

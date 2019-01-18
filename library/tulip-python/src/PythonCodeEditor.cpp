@@ -80,7 +80,7 @@ private:
 } // namespace tlp
 
 AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent)
-    : QListWidget(parent), _codeEditor(parent) {
+    : QListWidget(), _codeEditor(parent) {
 #if defined(__APPLE__)
   setWindowFlags(static_cast<Qt::WindowFlags>(Qt::Popup | Qt::FramelessWindowHint));
 #else
@@ -129,8 +129,7 @@ void AutoCompletionList::mouseDoubleClickEvent(QMouseEvent *) {
 
 void AutoCompletionList::insertSelectedItem() {
   if (currentItem()) {
-    PythonCodeEditor *editor = static_cast<PythonCodeEditor *>(parent());
-    QTextCursor cursor = editor->textCursor();
+    QTextCursor cursor = _codeEditor->textCursor();
     QString text = cursor.block().text();
 
     if (!text.isEmpty()) {
@@ -171,7 +170,7 @@ void AutoCompletionList::insertSelectedItem() {
 
     cursor.insertText(textToInsert);
 
-    QString type = _codeEditor->_autoCompletionDb->getLastFoundType();
+    QString type = PythonCodeEditor::_autoCompletionDb->getLastFoundType();
 
     if (!type.isEmpty()) {
       QVector<QString> types;
@@ -217,6 +216,12 @@ void AutoCompletionList::hideEvent(QHideEvent *event) {
   releaseKeyboard();
   _codeEditor->setFocus();
   _activated = false;
+}
+
+void AutoCompletionList::setCodeEditor(PythonCodeEditor *parent) {
+  _codeEditor = parent;
+  parent->installEventFilter(this);
+  setFocusProxy(parent);
 }
 
 bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
@@ -427,6 +432,9 @@ void FindReplaceDialog::hideEvent(QHideEvent *) {
   _editor->setFocus();
 }
 
+AutoCompletionList *PythonCodeEditor::_autoCompletionList = nullptr;
+AutoCompletionDataBase *PythonCodeEditor::_autoCompletionDb = nullptr;
+
 PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern("  ") {
   installEventFilter(&keyboardFocusEventFilter);
@@ -465,8 +473,10 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
   _parenHighlighter = new ParenMatcherHighlighter(document());
   _highlighter = new PythonCodeHighlighter(document());
 
-  _autoCompletionList = new AutoCompletionList(this);
-  _autoCompletionDb = new AutoCompletionDataBase(APIDataBase::getInstance());
+  if (_autoCompletionList == nullptr)
+    _autoCompletionList = new AutoCompletionList(this);
+  if (_autoCompletionDb == nullptr)
+    _autoCompletionDb = new AutoCompletionDataBase(APIDataBase::getInstance());
 
   // Hack to get a pointer on the main window
   // in order for the autocompletion dialog to catch
@@ -490,8 +500,6 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
     _mainWindow->installEventFilter(_autoCompletionList);
   }
 
-  installEventFilter(_autoCompletionList);
-
   _findReplaceDialog = new FindReplaceDialog(this);
 
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
@@ -509,9 +517,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent)
 }
 
 PythonCodeEditor::~PythonCodeEditor() {
-  delete _autoCompletionDb;
   removeEventFilter(_autoCompletionList);
-  delete _autoCompletionList;
 }
 
 QString PythonCodeEditor::getCleanCode() const {
@@ -1207,6 +1213,7 @@ void PythonCodeEditor::analyseScriptCode(const bool wholeText) {
 }
 
 void PythonCodeEditor::showAutoCompletionList(bool dotContext) {
+  _autoCompletionList->setCodeEditor(this);
   analyseScriptCode();
   _autoCompletionList->show();
   updateAutoCompletionList(dotContext);
