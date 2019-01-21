@@ -5,6 +5,11 @@ IF(POLICY CMP0020)
   CMAKE_POLICY(SET CMP0020 NEW)
 ENDIF(POLICY CMP0020)
 
+# Needed by clang compiler provided by MacPorts or homebrew
+IF(POLICY CMP0025)
+  CMAKE_POLICY(SET CMP0025 NEW)
+ENDIF(POLICY CMP0025)
+
 # Remove CMake warnings related to rpath on MacOS
 IF(POLICY CMP0042)
   CMAKE_POLICY(SET CMP0042 NEW)
