@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef INTERACTORCONFIGWIDGET_H
 #define INTERACTORCONFIGWIDGET_H
 
@@ -31,23 +30,21 @@ class InteractorConfigWidget;
 namespace tlp {
 class Interactor;
 
-class InteractorConfigWidget : public QDialog
-{
-    Q_OBJECT
+class InteractorConfigWidget : public QDialog {
+  Q_OBJECT
 
-    Ui::InteractorConfigWidget *_ui;
-    Interactor* _interactor;
+  Ui::InteractorConfigWidget *_ui;
+  Interactor *_interactor;
 
 public:
-    explicit InteractorConfigWidget(QWidget *parent = nullptr);
-    ~InteractorConfigWidget();
-    void setWidget(Interactor* interactor);
-    void clearWidget();
+  explicit InteractorConfigWidget(QWidget *parent = nullptr);
+  ~InteractorConfigWidget();
+  void setWidget(Interactor *interactor);
+  void clearWidget();
 
 signals:
 
 public slots:
-
 };
 
 #endif // INTERACTORCONFIGWIDGET_H

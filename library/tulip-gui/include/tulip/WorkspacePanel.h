@@ -55,7 +55,6 @@ class TLP_QT_SCOPE WorkspacePanel : public QFrame {
   QMap<QAction *, QWidget *> _actionTriggers;
   QGraphicsRectItem *_overlayRect;
 
-
   QGraphicsProxyWidget *_viewConfigurationWidgets;
   bool _viewConfigurationExpanded;
 

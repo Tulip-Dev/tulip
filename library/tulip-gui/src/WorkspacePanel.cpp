@@ -104,8 +104,9 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
-    : QFrame(parent), _ui(new Ui::WorkspacePanel), _interactorConfigWidget(new InteractorConfigWidget(this)), _view(nullptr), _overlayRect(nullptr),
-      _viewConfigurationWidgets(nullptr), _viewConfigurationExpanded(false) {
+    : QFrame(parent), _ui(new Ui::WorkspacePanel),
+      _interactorConfigWidget(new InteractorConfigWidget(this)), _view(nullptr),
+      _overlayRect(nullptr), _viewConfigurationWidgets(nullptr), _viewConfigurationExpanded(false) {
   _ui->setupUi(this);
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
@@ -324,12 +325,13 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
                   : "</b>"));
 }
 
-void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool ) {
-  if ((_view->currentInteractor() == nullptr)||(_view->currentInteractor()->configurationWidget() == nullptr))
+void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool) {
+  if ((_view->currentInteractor() == nullptr) ||
+      (_view->currentInteractor()->configurationWidget() == nullptr))
     return;
 
-  if(_interactorConfigWidget->isVisible())
-      return;
+  if (_interactorConfigWidget->isVisible())
+    return;
 
   _interactorConfigWidget->setWidget(_view->currentInteractor());
   _interactorConfigWidget->show();
@@ -343,10 +345,9 @@ void WorkspacePanel::interactorActionTriggered() {
     return;
 
   setCurrentInteractor(interactor);
-  if(_interactorConfigWidget->isVisible()) {
-      _interactorConfigWidget->setWidget(_view->currentInteractor());
+  if (_interactorConfigWidget->isVisible()) {
+    _interactorConfigWidget->setWidget(_view->currentInteractor());
   }
-
 }
 
 void WorkspacePanel::hideConfigurationTab() {
