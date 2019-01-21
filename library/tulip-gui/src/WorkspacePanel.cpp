@@ -18,9 +18,9 @@
  */
 
 #include "tulip/WorkspacePanel.h"
+#include "tulip/InteractorConfigWidget.h"
 #include "ui_WorkspacePanel.h"
 
-#include <QPropertyAnimation>
 #include <QGraphicsView>
 #include <QCloseEvent>
 #include <QPushButton>
@@ -30,8 +30,10 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QTabWidget>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 #include <QScrollBar>
-#include <QHBoxLayout>
+#include <QPropertyAnimation>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
@@ -102,9 +104,8 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
-    : QFrame(parent), _ui(new Ui::WorkspacePanel), _view(nullptr), _overlayRect(nullptr),
-      _viewConfigurationWidgets(nullptr), _viewConfigurationExpanded(false),
-      _currentInteractorConfigurationItem(nullptr) {
+    : QFrame(parent), _ui(new Ui::WorkspacePanel), _interactorConfigWidget(new InteractorConfigWidget(this)), _view(nullptr), _overlayRect(nullptr),
+      _viewConfigurationWidgets(nullptr), _viewConfigurationExpanded(false) {
   _ui->setupUi(this);
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
@@ -118,12 +119,6 @@ WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
 }
 
 WorkspacePanel::~WorkspacePanel() {
-  // Ensure the current interactor configuration widget is not deleted by the scrool area.
-  // It is up to the interactor developer to delete its configuration widget.
-  if (_currentInteractorConfigurationItem != nullptr) {
-    static_cast<QScrollArea *>(_currentInteractorConfigurationItem->widget())->takeWidget();
-  }
-
   delete _ui;
   // because of possible mis-synchronization of Qt events
   // set it to nullptr
@@ -132,6 +127,7 @@ WorkspacePanel::~WorkspacePanel() {
 
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+    _interactorConfigWidget->clearWidget();
     delete _view;
     // same as above
     _view = nullptr;
@@ -140,6 +136,7 @@ WorkspacePanel::~WorkspacePanel() {
 void WorkspacePanel::viewDestroyed() {
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+    _interactorConfigWidget->clearWidget();
     _view = nullptr;
   }
 
@@ -151,7 +148,7 @@ View *WorkspacePanel::view() const {
 }
 
 QString WorkspacePanel::viewName() const {
-  return _viewName;
+  return tlp::tlpStringToQString(_view->name());
 }
 
 void WorkspacePanel::setView(tlp::View *view) {
@@ -168,7 +165,6 @@ void WorkspacePanel::setView(tlp::View *view) {
   delete _view;
 
   _view = view;
-  _viewName = tlp::tlpStringToQString(view->name());
 
   QList<Interactor *> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
@@ -328,70 +324,15 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
                   : "</b>"));
 }
 
-void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
-  if (_currentInteractorConfigurationItem != nullptr) {
-    if (!toggle)
-      _currentInteractorConfigurationItem->hide();
-    else {
-      QWidget *interactorWidget = _view->currentInteractor()->configurationWidget();
-
-      if (!interactorWidget)
-        return;
-
-      QScrollArea *area = static_cast<QScrollArea *>(_currentInteractorConfigurationItem->widget());
-      // avoid deletion of previous contents
-      area->takeWidget();
-
-      // set new contents
-      if (interactorWidget->objectName() != "contents")
-        interactorWidget->setObjectName("contents");
-
-      area->setWidget(interactorWidget);
-
-      // resize as much as possible
-      QSize size(interactorWidget->sizeHint());
-      QSize psize(_view->graphicsView()->size());
-
-      if (size.width() > psize.width() - 30)
-        size.setWidth(psize.width() - 30);
-
-      if (size.height() > psize.height() - 30)
-        size.setHeight(psize.height() - 30);
-
-      area->resize(size);
-
-      _currentInteractorConfigurationItem->show();
-    }
-
-    return;
-  }
-
-  if (!toggle || _view->currentInteractor() == nullptr ||
-      _view->currentInteractor()->configurationWidget() == nullptr)
+void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool ) {
+  if ((_view->currentInteractor() == nullptr)||(_view->currentInteractor()->configurationWidget() == nullptr))
     return;
 
-  _currentInteractorConfigurationItem = new QGraphicsProxyWidget();
-  _currentInteractorConfigurationItem->setParent(_view->graphicsView());
-  _currentInteractorConfigurationItem->setObjectName("currentInteractorConfigurationItem");
-  _currentInteractorConfigurationItem->setOpacity(0);
-  _currentInteractorConfigurationItem->setPos(0, 0);
-  QScrollArea *area = new QScrollArea();
-  area->setFrameShape(QScrollArea::NoFrame);
-  QWidget *interactorWidget = _view->currentInteractor()->configurationWidget();
-  interactorWidget->setObjectName("contents");
-  area->setStyleSheet("#contents { background-color: white; border: 1px solid #C9C9C9; }");
-  area->setWidget(interactorWidget);
-  _currentInteractorConfigurationItem->setWidget(area);
-  _currentInteractorConfigurationItem->setPos(0, 0);
-  _view->graphicsView()->scene()->addItem(_currentInteractorConfigurationItem);
-  QPropertyAnimation *anim = new QPropertyAnimation(_currentInteractorConfigurationItem, "opacity",
-                                                    _currentInteractorConfigurationItem);
-  anim->setStartValue(0);
-  // there are artefacts in the fonts when the opacity is 1; ugly fix
-  anim->setEndValue(0.99);
-  anim->setDuration(300);
-  anim->setEasingCurve(QEasingCurve::OutQuad);
-  anim->start(QAbstractAnimation::DeleteWhenStopped);
+  if(_interactorConfigWidget->isVisible())
+      return;
+
+  _interactorConfigWidget->setWidget(_view->currentInteractor());
+  _interactorConfigWidget->show();
 }
 
 void WorkspacePanel::interactorActionTriggered() {
@@ -402,6 +343,10 @@ void WorkspacePanel::interactorActionTriggered() {
     return;
 
   setCurrentInteractor(interactor);
+  if(_interactorConfigWidget->isVisible()) {
+      _interactorConfigWidget->setWidget(_view->currentInteractor());
+  }
+
 }
 
 void WorkspacePanel::hideConfigurationTab() {

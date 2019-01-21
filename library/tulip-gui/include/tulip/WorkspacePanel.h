@@ -23,6 +23,7 @@
 
 #include <QFrame>
 #include <QAction>
+#include <QDialog>
 
 #include <tulip/tulipconf.h>
 
@@ -32,6 +33,7 @@ class QPropertyAnimation;
 class QGraphicsProxyWidget;
 class QGraphicsRectItem;
 class QMimeData;
+class QVBoxLayout;
 
 namespace Ui {
 class WorkspacePanel;
@@ -42,19 +44,20 @@ class Graph;
 class View;
 class Interactor;
 class GraphHierarchiesModel;
+class InteractorConfigWidget;
 
 class TLP_QT_SCOPE WorkspacePanel : public QFrame {
   Q_OBJECT
 
   Ui::WorkspacePanel *_ui;
+  InteractorConfigWidget *_interactorConfigWidget;
   tlp::View *_view;
-  QString _viewName;
   QMap<QAction *, QWidget *> _actionTriggers;
   QGraphicsRectItem *_overlayRect;
 
+
   QGraphicsProxyWidget *_viewConfigurationWidgets;
   bool _viewConfigurationExpanded;
-  QGraphicsProxyWidget *_currentInteractorConfigurationItem;
 
   QPointF configurationTabPosition(bool expanded) const;
   void setConfigurationTabExpanded(bool expanded, bool animate = true);
@@ -108,6 +111,7 @@ protected:
   void showEvent(QShowEvent *event) override;
   void closeEvent(QCloseEvent *event) override;
 };
+
 } // namespace tlp
 
 #endif // WORKSPACEPANEL_H

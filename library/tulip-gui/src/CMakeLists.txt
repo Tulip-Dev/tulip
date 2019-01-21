@@ -1,5 +1,6 @@
 
 SET(SRCS
+  InteractorConfigWidget.cpp
   ColorScaleConfigDialog.cpp
   CopyPropertyDialog.cpp
   CSVGraphImport.cpp
@@ -162,6 +163,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/VectorEditor.ui
   ../designer/Workspace.ui
   ../designer/WorkspacePanel.ui
+  ../designer/InteractorConfigWidget.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
@@ -231,6 +233,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/ShapeDialog.h
   ../include/tulip/ViewActionsManager.h
   ../include/tulip/ViewToolTipAndUrlManager.h
+  ../include/tulip/InteractorConfigWidget.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

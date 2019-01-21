@@ -27,7 +27,6 @@ using namespace tlp;
 NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent)
     : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
   _ui->setupUi(this);
-  connect(_ui->applyButton, SIGNAL(clicked()), this, SIGNAL(updateNeighborhoodGraph()));
 }
 
 NeighborhoodHighlighterConfigWidget::~NeighborhoodHighlighterConfigWidget() {
