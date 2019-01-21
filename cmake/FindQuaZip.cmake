@@ -28,17 +28,21 @@ IF (WIN32)
   FIND_PATH(QUAZIP_ZLIB_INCLUDE_DIR NAMES zlib.h)
 ELSE(WIN32)  
 
-  # special case when using Qt5 on Linux
-  SET(QUAZIP_LIBRARY_NAME quazip5 quazip-qt5)
+  # special case when using Qt5 on unix
+  SET(QUAZIP_LIBRARY_NAMES quazip5 quazip-qt5)
+  IF (APPLE)
+    # needed by homebrew on MacOS
+    SET(QUAZIP_LIBRARY_NAMES ${QUAZIP_LIBRARY_NAMES} quazip)
+  ENDIF(APPLE)
   FIND_LIBRARY(QUAZIP_LIBRARIES
-    NAMES ${QUAZIP_LIBRARY_NAME}
-    HINTS /usr/lib /usr/lib64
+    NAMES ${QUAZIP_LIBRARY_NAMES}
+    HINTS /usr/lib /usr/lib64 /usr/local/lib /opt/local/lib
   )
-  SET(QUAZIP_PATH_SUFFIXES quazip)
-  # special case when using Qt5 on Linux
-  SET(QUAZIP_PATH_SUFFIXES quazip5 ${QUAZIP_PATH_SUFFIXES})
+
+  # special case when using Qt5 on unix
+  SET(QUAZIP_PATH_SUFFIXES quazip5 quazip)
   FIND_PATH(QUAZIP_INCLUDE_DIR quazip.h
-  HINTS /usr/include /usr/local/include
+  HINTS /usr/include /usr/local/include /usr/local/include/quazip
   PATH_SUFFIXES ${QUAZIP_PATH_SUFFIXES}
   )
   FIND_PATH(QUAZIP_ZLIB_INCLUDE_DIR zlib.h HINTS /usr/include /usr/local/include)
