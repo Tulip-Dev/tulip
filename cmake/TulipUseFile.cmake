@@ -25,7 +25,13 @@ MACRO(TULIP_SET_COMPILER_OPTIONS)
 
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
-  STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
+  # When CMake policy CMP0025 (https://cmake.org/cmake/help/v3.0/policy/CMP0025.html)
+  # is set to NEW, CMAKE_CXX_COMPILER_ID is equal to "AppleClang" when using clang
+  # compilers bundled with XCode while it is equal to "Clang" when using upstream
+  # clang compilers provided by MacPorts or Homebrew.
+  # So we need to handle both cases to avoid build issues.
+  STRING(FIND "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG_POS)
+  STRING(COMPARE NOTEQUAL "${CLANG_POS}" "-1" CLANG)
 
   # enable C++11 (not required for GCC >= 6.1 as the standard is enabled by default)
   # set -std=c++11 only if no other standard (eg. c++14, c++17, gnu++11, gnu++14, gnu++1z)
