@@ -455,9 +455,8 @@ private:
   struct NodeData {
     std::vector<edge> edges;
     unsigned int outDegree;
-    unsigned int pos;
 
-    NodeData(unsigned int pos = UINT_MAX) : outDegree(0), pos(pos) {}
+    NodeData() : outDegree(0) {}
   };
 
   // data members
