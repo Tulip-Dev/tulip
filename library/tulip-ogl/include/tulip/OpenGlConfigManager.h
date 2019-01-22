@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-#define BUFFER_OFFSET(bytes) (static_cast<GLubyte *>(nullptr) + (bytes))
+#define BUFFER_OFFSET(bytes) (reinterpret_cast<GLubyte *>(bytes))
 
 namespace tlp {
 
