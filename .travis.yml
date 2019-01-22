@@ -386,15 +386,15 @@ jobs:
       addons:
         homebrew:
           # install Tulip core build dependencies
-	  packages:
-	  - ccache
-	  - cmake
-	  - ninja
-	  - llvm
-	  - qhull
-	  - yajl
-	  - cppunit
-	  - pkg-config
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
 
       env:
         # use system Python 2.7
@@ -526,21 +526,21 @@ jobs:
       addons:
         homebrew:
           # install Tulip complete build dependencies
-	  packages:
-	  - ccache
-	  - cmake
-	  - ninja
-	  - llvm
-	  - qhull
-	  - yajl
-	  - cppunit
-	  - pkg-config
-	  - glew
-	  - freetype
-	  - jpeg
-	  - libpng
-	  - qt5
-	  - quazip
+          packages:
+            - ccache
+            - cmake
+            - ninja
+            - llvm
+            - qhull
+            - yajl
+            - cppunit
+            - pkg-config
+            - glew
+            - freetype
+            - jpeg
+            - libpng
+            - qt5
+            - quazip
 
       install:
         # set columns in terminal, required for curl to work correctly:
