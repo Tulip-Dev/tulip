@@ -406,7 +406,7 @@ void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
  * @brief restore the given node in the structure and return it
  */
 void GraphStorage::restoreNode(const node n) {
-  if (n.id == nodeData.size())
+  if (n.id >= nodeData.size())
     nodeData.resize(n.id + 1);
   else {
     NodeData &nData = nodeData[n.id];
