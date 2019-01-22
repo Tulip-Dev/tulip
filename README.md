@@ -104,14 +104,14 @@ The following dependencies are required to build Tulip:
   * [zlib](http://zlib.net)
   * [libjpeg](https://libjpeg-turbo.org/)
   * [libpng](http://www.libpng.org/pub/png/libpng.html)
-  * [Qt](https://www.qt.io) >= 4.6.0
+  * [Qt](https://www.qt.io) >= 5.0.0
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
 
 In order to build the Python components, the following dependencies are needed:
 
   * [Python](https://www.python.org) >= 2.6
-  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.3
+  * [SIP](https://www.riverbankcomputing.com/software/sip/intro) >= 4.19.12
   (if SIP can not be found or its version does not match the required one, 
   it will be compiled using a copy of its source code in the Tulip tree)
   
@@ -129,7 +129,7 @@ In order to generate the documentation, the following tools must be installed:
 
 If you are a Linux user, all these dependencies can be installed with the package manager of your distribution. 
 
-If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org/) in order to easily install all these dependencies.
+If you are a MacOS user, we recommend to use [MacPorts](https://www.macports.org/) or [Homebrew](https://brew.sh/) in order to easily install all these dependencies.
 
 If you are a Windows user, we recommend to use [MSYS2](http://www.msys2.org/) as it facilitates a lot the build of Tulip on
 that platform (notably by providing up to date compilers and precompiled dependencies).
