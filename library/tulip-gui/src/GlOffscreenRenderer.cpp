@@ -123,9 +123,7 @@ void GlOffscreenRenderer::clearScene(bool deleteGlEntities) {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
-#endif
 
   if (glFrameBuf != nullptr &&
       (vPWidth != uint(glFrameBuf->width()) || vPHeight != uint(glFrameBuf->height()))) {
@@ -136,7 +134,6 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   }
 
   if (glFrameBuf == nullptr) {
-#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
@@ -150,11 +147,6 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
   }
 
-#else
-    glFrameBuf =
-        new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
-  }
-#endif
 }
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
@@ -200,14 +192,10 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   scene.draw();
   glFrameBuf->release();
 
-#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
-
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(
         glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
         QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
-
-#endif
 
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
@@ -244,14 +232,10 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   scene->draw();
   glFrameBuf->release();
 
-#if !defined(__APPLE__) || defined(QT_MAC_USE_COCOA)
-
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(
         glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
         QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
-
-#endif
 
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
