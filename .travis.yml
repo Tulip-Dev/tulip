@@ -383,18 +383,18 @@ jobs:
       osx_image: xcode9.2
       compiler: clang
       cache: ccache
-      install:
-        # set columns in terminal, required for curl to work correctly:
-        - export COLUMNS=80
-        # install Tulip core build dependencies
-        - brew install ccache
-        - brew install cmake
-        - brew install ninja
-        - brew install llvm
-        - brew install qhull
-        - brew install yajl
-        - brew install cppunit
-        - brew install pkg-config
+      addons:
+        homebrew:
+          # install Tulip core build dependencies
+	  packages:
+	  - ccache
+	  - cmake
+	  - ninja
+	  - llvm
+	  - qhull
+	  - yajl
+	  - cppunit
+	  - pkg-config
 
       env:
         # use system Python 2.7
@@ -523,24 +523,28 @@ jobs:
       osx_image: xcode9.2
       compiler: clang
       cache: ccache
+      addons:
+        homebrew:
+          # install Tulip complete build dependencies
+	  packages:
+	  - ccache
+	  - cmake
+	  - ninja
+	  - llvm
+	  - qhull
+	  - yajl
+	  - cppunit
+	  - pkg-config
+	  - glew
+	  - freetype
+	  - jpeg
+	  - libpng
+	  - qt5
+	  - quazip
+
       install:
         # set columns in terminal, required for curl to work correctly:
         - export COLUMNS=80
-        # install Tulip complete build dependencies
-        - brew install ccache
-        - brew install cmake
-        - brew install ninja
-        - brew install llvm
-        - brew install qhull
-        - brew install yajl
-        - brew install cppunit
-        - brew install pkg-config
-        - brew install glew
-        - brew install freetype
-        - brew install jpeg
-        - brew install libpng
-        - brew install qt5
-        - brew install quazip
         - curl -O https://bootstrap.pypa.io/get-pip.py
         - sudo python get-pip.py
         - pip install --user sphinx==1.7.9
