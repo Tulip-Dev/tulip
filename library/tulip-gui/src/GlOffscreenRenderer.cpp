@@ -146,7 +146,6 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   if (antialiasedFbo && glFrameBuf2 == nullptr) {
     glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
   }
-
 }
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
