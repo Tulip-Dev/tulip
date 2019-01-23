@@ -19,7 +19,15 @@
 
 #include <cassert>
 #include <cstring>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 #include <FTLibrary.h>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TlpTools.h>
