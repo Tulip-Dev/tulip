@@ -1032,7 +1032,7 @@ void NodesGraphModel::treatEvent(const Event &ev) {
           _nodesAdded ? _elementsToModify.indexOf(qMakePair(graphEv->getNode().id, true)) : -1;
 
       if (wasAdded == -1) {
-	auto id = graphEv->getNode().id;
+        auto id = graphEv->getNode().id;
         _elementsToModify.push_back(QPair<unsigned int, bool>(id, false));
       } else {
         _elementsToModify.remove(wasAdded);
