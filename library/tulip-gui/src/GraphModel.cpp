@@ -845,7 +845,7 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
   if (filterRegExp().isEmpty())
     return true;
 
-  foreach (PropertyInterface *pi, _properties) {
+  for (auto pi : _properties) {
     if (graphModel->stringValue(id, pi).contains(filterRegExp()))
       return true;
   }
@@ -874,11 +874,13 @@ BooleanProperty *GraphSortFilterProxyModel::filterProperty() const {
   return _filterProperty;
 }
 
-void GraphModel::addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add) {
+void GraphModel::addRemoveRowsSequence(QVector<unsigned int> &rowsSequence, bool add) {
   if (add) {
     beginInsertRows(QModelIndex(), _elements.size(), _elements.size() + rowsSequence.size() - 1);
 
-    foreach (unsigned int id, rowsSequence) { _elements.push_back(id); }
+    qSort(rowsSequence);
+    for (auto id : rowsSequence)
+      _elements.push_back(id);
 
     endInsertRows();
   } else {
@@ -898,7 +900,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
   bool lastAdded = false;
   typedef QPair<unsigned int, bool> PUB;
 
-  foreach (const PUB &e, _elementsToModify) {
+  for (const PUB &e : _elementsToModify) {
     bool add = e.second;
     unsigned int id = e.first;
 
@@ -930,7 +932,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
         // insert according to id
         // to ensure that deleted elements are re-inserted at the
         // same place on undo (graph->pop())
-        unsigned int idx = id;
+        unsigned int idx = _elements.size();
 
         while (idx && _elements[idx - 1] > id)
           --idx;
@@ -968,7 +970,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
 
   _elementsToModify.clear();
 
-  foreach (PropertyInterface *prop, _propertiesModified) {
+  for (PropertyInterface *prop : _propertiesModified) {
     int col = _properties.indexOf(prop);
 
     if (col != -1) {
@@ -977,7 +979,6 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
       emit dataChanged(firstIndex, lastIndex);
     }
   }
-
   _propertiesModified.clear();
 }
 
@@ -1031,7 +1032,8 @@ void NodesGraphModel::treatEvent(const Event &ev) {
           _nodesAdded ? _elementsToModify.indexOf(qMakePair(graphEv->getNode().id, true)) : -1;
 
       if (wasAdded == -1) {
-        _elementsToModify.push_back(QPair<unsigned int, bool>(graphEv->getNode().id, false));
+	auto id = graphEv->getNode().id;
+        _elementsToModify.push_back(QPair<unsigned int, bool>(id, false));
       } else {
         _elementsToModify.remove(wasAdded);
       }

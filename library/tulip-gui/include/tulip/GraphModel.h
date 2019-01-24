@@ -80,7 +80,7 @@ protected:
   QSet<PropertyInterface *> _propertiesModified;
 
   virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const = 0;
-  void addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add);
+  void addRemoveRowsSequence(QVector<unsigned int> &rowsSequence, bool add);
 };
 
 class TLP_QT_SCOPE GraphSortFilterProxyModel : public QSortFilterProxyModel, public Observable {
