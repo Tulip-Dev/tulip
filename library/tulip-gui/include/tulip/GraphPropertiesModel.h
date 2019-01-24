@@ -113,10 +113,12 @@ public:
 
       if (prop != nullptr) {
         int row = rowOf(prop);
-        beginRemoveRows(QModelIndex(), row, row);
-        _properties.remove(_properties.indexOf(prop));
-        _removingRows = true;
-        _checkedProperties.remove(prop);
+	if (row > -1) {
+	  beginRemoveRows(QModelIndex(), row, row);
+	  _properties.remove(_properties.indexOf(prop));
+	  _removingRows = true;
+	  _checkedProperties.remove(prop);
+	}
       }
     } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
                graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
@@ -132,7 +134,7 @@ public:
         rebuildCache();
         int row = rowOf(prop);
 
-        if (row >= 0) {
+        if (row > -1) {
           beginInsertRows(QModelIndex(), row, row);
           endInsertRows();
         }

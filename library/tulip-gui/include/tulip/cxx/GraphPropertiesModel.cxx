@@ -169,7 +169,7 @@ template <typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE *pi) const {
   int result = _properties.indexOf(pi);
 
-  if (!_placeholder.isEmpty())
+  if (result > -1 && !_placeholder.isEmpty())
     ++result;
 
   return result;
