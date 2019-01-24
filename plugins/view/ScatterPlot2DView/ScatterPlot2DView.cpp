@@ -29,9 +29,9 @@
 #include <tulip/TulipViewSettings.h>
 
 #include <QTime>
-#include <QMenu>
 #include <QGraphicsView>
 #include <QApplication>
+#include <QAction>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"

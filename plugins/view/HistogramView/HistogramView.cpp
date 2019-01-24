@@ -28,10 +28,10 @@
 #include <tulip/QuickAccessBar.h>
 #include <tulip/TulipViewSettings.h>
 
-#include <QToolTip>
 #include <QHelpEvent>
 #include <QApplication>
-#include <QMenu>
+#include <QToolTip>
+#include <QAction>
 
 #include "HistogramView.h"
 #include "HistogramInteractors.h"

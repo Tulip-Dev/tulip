@@ -44,8 +44,8 @@
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
 #include <QApplication>
-#include <QMenu>
 #include <QGraphicsView>
+#include <QAction>
 
 using namespace std;
 using namespace pocore;

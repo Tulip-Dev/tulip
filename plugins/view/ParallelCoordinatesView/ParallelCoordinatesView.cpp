@@ -27,10 +27,7 @@
 #include "QuantitativeParallelAxis.h"
 
 #include <QMenu>
-#include <QMenuBar>
-#include <QToolTip>
 #include <QImageWriter>
-#include <QThread>
 #include <QDir>
 #include <QGraphicsView>
 #include <QKeyEvent>

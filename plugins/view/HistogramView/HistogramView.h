@@ -30,8 +30,6 @@
 
 #include <tulip/OpenGlIncludes.h>
 
-class QMenu;
-
 namespace tlp {
 
 class Graph;
