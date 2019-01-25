@@ -44,6 +44,7 @@
 #include <QMenu>
 #include <QToolTip>
 #include <QMessageBox>
+#include <QMouseEvent>
 
 using namespace std;
 using namespace tlp;
