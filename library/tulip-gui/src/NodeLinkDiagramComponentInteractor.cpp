@@ -21,7 +21,7 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 
 #include <QLabel>
-#include <QtGui/QIcon>
+#include <QIcon>
 
 using namespace tlp;
 
@@ -42,7 +42,7 @@ void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QStrin
   _label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
-QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
+QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
   return _label;
 }
 
