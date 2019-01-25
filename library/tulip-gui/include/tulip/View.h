@@ -407,6 +407,11 @@ protected slots:
     */
   virtual void currentInteractorChanged(tlp::Interactor *);
 
+  /**
+   * @brief Activate or deactivate interactors in the view
+   * @param activate: set to true (resp. false) to enable (resp. disable) interactors
+   * @param exceptions: a set of interactor names whose bevahior has to be left unchanged
+   */
   virtual void toggleInteractors(const bool activate, std::unordered_set<const char *> exceptions);
 
   /**
