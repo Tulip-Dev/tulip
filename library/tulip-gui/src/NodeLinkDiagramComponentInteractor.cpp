@@ -45,6 +45,7 @@ void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QStrin
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
   return _label;
 =======
@@ -54,6 +55,8 @@ QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
 =======
 =======
 >>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
+=======
+>>>>>>> start to update interactors to the new config dialog
 QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
   return _label->text().isEmpty() ? nullptr : _label;
 =======
@@ -64,14 +67,30 @@ QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
 >>>>>>> start to update interactors to the new config dialog
 =======
 =======
+=======
+>>>>>>> start to update interactors to the new config dialog
 QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
   return _label;
 =======
 QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
   return _label->text().isEmpty() ? nullptr : _label;
 >>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
+<<<<<<< HEAD
 >>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
+<<<<<<< HEAD
 >>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
+=======
+=======
+=======
+QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
+  return _label->text().isEmpty() ? nullptr : _label;
+=======
+QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
+  return _label;
+>>>>>>> start to update interactors to the new config dialog
+>>>>>>> start to update interactors to the new config dialog
+>>>>>>> start to update interactors to the new config dialog
+>>>>>>> start to update interactors to the new config dialog
 }
 
 unsigned int NodeLinkDiagramComponentInteractor::priority() const {
