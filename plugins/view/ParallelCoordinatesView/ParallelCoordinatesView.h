@@ -132,6 +132,8 @@ public:
     parallelCoordsDrawing->resetAxisLayoutNextUpdate();
   }
 
+  void toggleInteractors(bool activate);
+
   void
   updateWithAxisSlidersRange(ParallelAxis *axis,
                              ParallelCoordinatesDrawing::HighlightedEltsSetOp highlightedEltsSetOp);
@@ -192,6 +194,8 @@ private:
 
   void registerTriggers();
   void removeTriggers();
+
+  void interactorsInstalled(const QList<tlp::Interactor *> &);
 
   QMenu *viewSetupMenu;
   QAction *classicLayout;

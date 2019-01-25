@@ -31,7 +31,6 @@
 #include <QHelpEvent>
 #include <QApplication>
 #include <QToolTip>
-#include <QAction>
 
 #include "HistogramView.h"
 #include "HistogramInteractors.h"
@@ -68,8 +67,8 @@ HistogramView::HistogramView(const PluginContext *)
       labelsComposite(nullptr), axisComposite(nullptr), smallMultiplesView(true),
       mainLayer(nullptr), detailedHistogram(nullptr), sceneRadiusBak(0), zoomFactorBak(0),
       noDimsLabel(nullptr), noDimsLabel1(nullptr), noDimsLabel2(nullptr), emptyRect(nullptr),
-      emptyRect2(nullptr), interactorsActivated(false), isConstruct(false), lastNbHistograms(0),
-      dataLocation(NODE), needUpdateHistogram(false), edgeAsNodeGraph(nullptr) {
+      emptyRect2(nullptr), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),
+      needUpdateHistogram(false), edgeAsNodeGraph(nullptr) {
   ++histoViewInstancesCount;
 }
 
@@ -895,6 +894,10 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
   gl->draw();
 }
 
+void HistogramView::toggleInteractors(const bool activate) {
+  View::toggleInteractors(activate, {InteractorName::HistogramInteractorNavigation});
+}
+
 void HistogramView::updateDetailedHistogramAxis() {
   GlQuantitativeAxis *xAxis = detailedHistogram->getXAxis();
   GlQuantitativeAxis *yAxis = detailedHistogram->getYAxis();
@@ -940,24 +943,6 @@ void HistogramView::registerTriggers() {
 
 void HistogramView::interactorsInstalled(const QList<tlp::Interactor *> &) {
   toggleInteractors(false);
-}
-
-void HistogramView::toggleInteractors(const bool activate) {
-  QList<Interactor *> interactorsList = interactors();
-
-  for (auto it = interactorsList.begin(); it != interactorsList.end(); ++it) {
-    if (!(dynamic_cast<HistogramInteractorNavigation *>(*it))) {
-      (*it)->action()->setEnabled(activate);
-
-      if (!activate) {
-        (*it)->action()->setChecked(false);
-      }
-    } else if (!activate) {
-      (*it)->action()->setChecked(true);
-    }
-
-    interactorsActivated = activate;
-  }
 }
 
 void HistogramView::applySettings() {

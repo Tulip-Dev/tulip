@@ -102,9 +102,7 @@ public:
   void interactorsInstalled(const QList<tlp::Interactor *> &) override;
 
   void toggleInteractors(const bool activate);
-  bool interactorsEnabled() const {
-    return interactorsActivated;
-  }
+
   std::vector<PixelOrientedOverview *> getOverviews();
   bool smallMultiplesViewSet() const {
     return smallMultiplesView;
@@ -189,8 +187,6 @@ private:
   int lastViewWindowWidth, lastViewWindowHeight;
 
   bool center;
-  bool interactorsActivated;
-
   bool isConstruct;
 };
 } // namespace tlp

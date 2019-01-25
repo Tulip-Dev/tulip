@@ -32,8 +32,8 @@ using namespace tlp;
 class InteractorNavigation : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("InteractorNavigation", "Tulip Team", "01/04/2009", "Navigation Interactor",
-                    "1.0", "Navigation")
+  PLUGININFORMATION(InteractorName::InteractorNavigation, "Tulip Team", "01/04/2009",
+                    "Navigation Interactor", "1.0", "Navigation")
   /**
    * Default constructor
    */

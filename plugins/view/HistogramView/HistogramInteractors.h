@@ -21,6 +21,7 @@
 #define HISTOGRAMINTERACTORS_H_
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "../../utils/PluginNames.h"
 
 using namespace std;
 
@@ -40,7 +41,7 @@ public:
 class HistogramInteractorNavigation : public HistogramInteractor {
 
 public:
-  PLUGININFORMATION("HistogramInteractorNavigation", "Tulip Team", "02/04/2009",
+  PLUGININFORMATION(InteractorName::HistogramInteractorNavigation, "Tulip Team", "02/04/2009",
                     "Histogram Navigation Interactor", "1.0", "Navigation")
 
   HistogramInteractorNavigation(const PluginContext *);

@@ -21,6 +21,7 @@
 #define SOMVIEWINTERACTOR_H_
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 
@@ -33,7 +34,7 @@ public:
 
 class SOMViewNavigation : public SOMViewInteractor {
 
-  PLUGININFORMATION("SOMViewNavigation", "Dubois Jonathan", "02/04/2009",
+  PLUGININFORMATION(InteractorName::SOMViewNavigation, "Dubois Jonathan", "02/04/2009",
                     "Standard navigation with scale", "1.0", "Navigation")
 
 public:

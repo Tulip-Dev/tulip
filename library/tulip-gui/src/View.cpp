@@ -35,7 +35,9 @@
 
 using namespace tlp;
 
-View::View() : _currentInteractor(nullptr), _graph(nullptr), _tturlManager(nullptr) {}
+View::View()
+    : _currentInteractor(nullptr), _graph(nullptr), _tturlManager(nullptr),
+      interactorsActivated(false) {}
 
 View::~View() {
   foreach (Interactor *i, _interactors) {
@@ -46,6 +48,20 @@ View::~View() {
     delete i;
   }
   delete _tturlManager;
+}
+
+void View::toggleInteractors(const bool activate, std::unordered_set<const char *> exceptions) {
+  foreach (Interactor *it, _interactors) {
+    if (exceptions.find(it->name().c_str()) == exceptions.end()) {
+      it->action()->setEnabled(activate);
+      if (!activate) {
+        it->action()->setChecked(false);
+      }
+    } else if (!activate) {
+      it->action()->setChecked(true);
+    }
+    interactorsActivated = activate;
+  }
 }
 
 QList<Interactor *> View::interactors() const {

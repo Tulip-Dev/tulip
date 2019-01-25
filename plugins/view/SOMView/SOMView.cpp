@@ -42,13 +42,8 @@
 #include <tulip/GlGraphComposite.h>
 
 #include <QMenu>
-#include <QPalette>
 #include <QToolTip>
 #include <QMessageBox>
-#include <QMouseEvent>
-#include <QFileDialog>
-#include <QImageWriter>
-#include <QVBoxLayout>
 
 using namespace std;
 using namespace tlp;
@@ -1191,17 +1186,5 @@ void SOMView::registerTriggers() {
 }
 
 void SOMView::toggleInteractors(const bool activate) {
-  QList<Interactor *> interactorsList = interactors();
-
-  for (auto it = interactorsList.begin(); it != interactorsList.end(); ++it) {
-    if (!(dynamic_cast<SOMViewNavigation *>(*it))) {
-      (*it)->action()->setEnabled(activate);
-
-      if (!activate) {
-        (*it)->action()->setChecked(false);
-      }
-    } else if (!activate) {
-      (*it)->action()->setChecked(true);
-    }
-  }
+  View::toggleInteractors(activate, {InteractorName::SOMViewNavigation});
 }

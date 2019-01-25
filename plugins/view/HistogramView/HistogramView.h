@@ -109,9 +109,6 @@ public:
   }
 
   void toggleInteractors(const bool activate);
-  bool interactorsEnabled() const {
-    return interactorsActivated;
-  }
 
   ElementType getDataLocation() const {
     return dataLocation;
@@ -199,8 +196,6 @@ private:
   GlLabel *noDimsLabel2;
   GlRect *emptyRect;
   GlRect *emptyRect2;
-
-  bool interactorsActivated;
 
   static GLuint binTextureId;
   static unsigned int histoViewInstancesCount;

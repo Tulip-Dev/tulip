@@ -117,9 +117,6 @@ public:
   }
 
   void toggleInteractors(const bool activate);
-  bool interactorsEnabled() const {
-    return interactorsActivated;
-  }
 
   ElementType getDataLocation() const {
     return dataLocation;
@@ -195,7 +192,6 @@ private:
 
   int lastViewWindowWidth, lastViewWindowHeight;
 
-  bool interactorsActivated;
   bool initialized;
 
   static GLuint backgroundTextureId;

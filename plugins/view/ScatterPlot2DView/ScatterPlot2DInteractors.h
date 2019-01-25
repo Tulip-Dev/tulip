@@ -21,6 +21,7 @@
 #define SCATTERPLOT2DINTERACTORS_H_
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 
@@ -37,7 +38,7 @@ public:
 class ScatterPlot2DInteractorNavigation : public ScatterPlot2DInteractor {
 
 public:
-  PLUGININFORMATION("ScatterPlot2DInteractorNavigation", "Tulip Team", "02/04/2009",
+  PLUGININFORMATION(InteractorName::ScatterPlot2DInteractorNavigation, "Tulip Team", "02/04/2009",
                     "Scatter Plot 2D Navigation Interactor", "1.0", "Navigation")
 
   ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);

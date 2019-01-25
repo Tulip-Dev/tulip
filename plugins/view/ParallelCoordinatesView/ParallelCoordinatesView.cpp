@@ -104,6 +104,14 @@ QuickAccessBar *ParallelCoordinatesView::getQuickAccessBarImpl() {
   return _bar;
 }
 
+void ParallelCoordinatesView::interactorsInstalled(const QList<tlp::Interactor *> &) {
+  toggleInteractors(false);
+}
+
+void ParallelCoordinatesView::toggleInteractors(bool activate) {
+  View::toggleInteractors(activate, {InteractorName::InteractorNavigation});
+}
+
 void ParallelCoordinatesView::initGlWidget() {
   GlScene *scene = getGlMainWidget()->getScene();
 
@@ -463,6 +471,7 @@ void ParallelCoordinatesView::draw() {
     if (graphProxy->selectedPropertiesisEmpty()) {
       removeEmptyViewLabel();
       addEmptyViewLabel();
+      toggleInteractors(false);
       if (_bar != nullptr && quickAccessBarVisible())
         _bar->setEnabled(false);
       getGlMainWidget()->getScene()->centerScene();
@@ -472,7 +481,7 @@ void ParallelCoordinatesView::draw() {
       removeEmptyViewLabel();
       if (_bar != nullptr && quickAccessBarVisible())
         _bar->setEnabled(true);
-
+      toggleInteractors(true);
       if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
         updateWithProgressBar();
       } else {

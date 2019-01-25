@@ -31,7 +31,6 @@
 #include <QTime>
 #include <QGraphicsView>
 #include <QApplication>
-#include <QAction>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"
@@ -80,8 +79,8 @@ ScatterPlot2DView::ScatterPlot2DView(const PluginContext *)
       labelsComposite(nullptr), detailedScatterPlot(nullptr),
       detailedScatterPlotPropertyName(make_pair("", "")), center(false), matrixView(true),
       sceneRadiusBak(0.0), zoomFactorBak(0.0), matrixUpdateNeeded(false), newGraphSet(false),
-      lastViewWindowWidth(0), lastViewWindowHeight(0), interactorsActivated(false),
-      initialized(false), edgeAsNodeGraph(nullptr) {}
+      lastViewWindowWidth(0), lastViewWindowHeight(0), initialized(false),
+      edgeAsNodeGraph(nullptr) {}
 
 ScatterPlot2DView::~ScatterPlot2DView() {
 
@@ -400,21 +399,7 @@ void ScatterPlot2DView::graphChanged(Graph *) {
 }
 
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
-  QList<Interactor *> interactorsList = interactors();
-
-  for (auto it = interactorsList.begin(); it != interactorsList.end(); ++it) {
-    if (!(dynamic_cast<ScatterPlot2DInteractorNavigation *>(*it))) {
-      (*it)->action()->setEnabled(activate);
-
-      if (!activate) {
-        (*it)->action()->setChecked(false);
-      }
-    } else if (!activate) {
-      (*it)->action()->setChecked(true);
-    }
-
-    interactorsActivated = activate;
-  }
+  View::toggleInteractors(activate, {InteractorName::ScatterPlot2DInteractorNavigation});
 }
 
 void ScatterPlot2DView::computeNodeSizes() {

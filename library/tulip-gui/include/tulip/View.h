@@ -96,6 +96,7 @@ class TLP_QT_SCOPE View : public QObject, public tlp::Plugin, public tlp::Observ
   tlp::Interactor *_currentInteractor;
   tlp::Graph *_graph;
   tlp::ViewToolTipAndUrlManager *_tturlManager;
+  bool interactorsActivated;
 
   QSet<tlp::Observable *> _triggers;
   bool _displayContextMenu;
@@ -147,6 +148,14 @@ public:
     @warning This method may return a nullptr pointer if no interactor is currently active.
     */
   tlp::Interactor *currentInteractor() const;
+
+  /**
+   * @brief interactorsEnabled indicates if interactors are enabled or not
+   * @return true if interactors are enabled, false instead
+   */
+  virtual bool interactorsEnabled() const {
+    return interactorsActivated;
+  }
 
   /**
     @return a list of widgets that can be used to set up the view.
@@ -397,6 +406,8 @@ protected slots:
     current interactor should be set.
     */
   virtual void currentInteractorChanged(tlp::Interactor *);
+
+  virtual void toggleInteractors(const bool activate, std::unordered_set<const char *> exceptions);
 
   /**
     @brief Callback method after setGraph() was called.

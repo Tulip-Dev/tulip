@@ -45,7 +45,6 @@
 
 #include <QApplication>
 #include <QGraphicsView>
-#include <QAction>
 
 using namespace std;
 using namespace pocore;
@@ -81,7 +80,7 @@ PixelOrientedView::PixelOrientedView(const PluginContext *)
       tulipNodeColorMapping(nullptr), smallMultiplesView(true), sceneRadiusBak(0.0),
       zoomFactorBak(0.0), detailViewLabel(nullptr), detailOverview(nullptr), newGraphSet(false),
       smallMultiplesNeedUpdate(false), lastViewWindowWidth(0), lastViewWindowHeight(0),
-      center(false), interactorsActivated(false), isConstruct(false) {}
+      center(false), isConstruct(false) {}
 
 PixelOrientedView::~PixelOrientedView() {
   if (isConstruct) {
@@ -781,22 +780,7 @@ void PixelOrientedView::interactorsInstalled(const QList<tlp::Interactor *> &) {
 }
 
 void PixelOrientedView::toggleInteractors(const bool activate) {
-  QList<Interactor *> interactorsList = interactors();
-
-  for (QList<Interactor *>::iterator it = interactorsList.begin(); it != interactorsList.end();
-       ++it) {
-    if (!(dynamic_cast<PixelOrientedInteractorNavigation *>(*it))) {
-      (*it)->action()->setEnabled(activate);
-
-      if (!activate) {
-        (*it)->action()->setChecked(false);
-      }
-    } else if (!activate) {
-      (*it)->action()->setChecked(true);
-    }
-
-    interactorsActivated = activate;
-  }
+  View::toggleInteractors(activate, {InteractorName::PixelOrientedInteractorNavigation});
 }
 
 void PixelOrientedView::registerTriggers() {

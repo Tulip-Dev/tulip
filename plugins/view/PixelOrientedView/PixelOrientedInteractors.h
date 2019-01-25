@@ -21,6 +21,7 @@
 #define PIXELORIENTEDVIEWINTERACTORS_H_
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 
@@ -35,7 +36,7 @@ public:
 class PixelOrientedInteractorNavigation : public PixelOrientedInteractor {
 
 public:
-  PLUGININFORMATION("PixelOrientedInteractorNavigation", "Tulip Team", "02/04/2009",
+  PLUGININFORMATION(InteractorName::PixelOrientedInteractorNavigation, "Tulip Team", "02/04/2009",
                     "Pixel Oriented Navigation Interactor", "1.0", "Navigation")
 
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
