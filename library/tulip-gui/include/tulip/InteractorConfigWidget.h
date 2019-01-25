@@ -39,8 +39,8 @@ class InteractorConfigWidget : public QDialog {
 public:
   explicit InteractorConfigWidget(QWidget *parent = nullptr);
   ~InteractorConfigWidget();
-  void setWidget(Interactor *interactor);
-  void clearWidget();
+  bool setWidgets(Interactor *interactor);
+  void clearWidgets();
 
 signals:
 

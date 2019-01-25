@@ -128,7 +128,7 @@ WorkspacePanel::~WorkspacePanel() {
 
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-    _interactorConfigWidget->clearWidget();
+    _interactorConfigWidget->clearWidgets();
     delete _view;
     // same as above
     _view = nullptr;
@@ -137,7 +137,7 @@ WorkspacePanel::~WorkspacePanel() {
 void WorkspacePanel::viewDestroyed() {
   if (_view != nullptr) {
     disconnect(_view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
-    _interactorConfigWidget->clearWidget();
+    _interactorConfigWidget->clearWidgets();
     _view = nullptr;
   }
 
@@ -317,7 +317,6 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
   view()->setCurrentInteractor(i);
   _ui->currentInteractorButton->setText(i->action()->text());
   _ui->currentInteractorButton->setIcon(i->action()->icon());
-  _ui->currentInteractorButton->setChecked(false);
   _ui->currentInteractorButton->setToolTip(
       QString("Active tool:<br/><b>") + i->action()->text() +
       QString(_view->currentInteractor()->configurationWidget()
@@ -326,15 +325,14 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
 }
 
 void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool) {
-  if ((_view->currentInteractor() == nullptr) ||
-      (_view->currentInteractor()->configurationWidget() == nullptr))
+  if (_view->currentInteractor() == nullptr)
     return;
 
   if (_interactorConfigWidget->isVisible())
     return;
 
-  _interactorConfigWidget->setWidget(_view->currentInteractor());
-  _interactorConfigWidget->show();
+  if (_interactorConfigWidget->setWidgets(_view->currentInteractor()))
+    _interactorConfigWidget->show();
 }
 
 void WorkspacePanel::interactorActionTriggered() {
@@ -346,7 +344,7 @@ void WorkspacePanel::interactorActionTriggered() {
 
   setCurrentInteractor(interactor);
   if (_interactorConfigWidget->isVisible()) {
-    _interactorConfigWidget->setWidget(_view->currentInteractor());
+    _interactorConfigWidget->setWidgets(_view->currentInteractor());
   }
 }
 
