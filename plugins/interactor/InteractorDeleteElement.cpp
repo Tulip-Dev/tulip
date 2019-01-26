@@ -38,15 +38,15 @@ public:
   InteractorDeleteElement(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png", "Delete nodes or edges") {
     setPriority(StandardInteractorPriority::DeleteElement);
-    setConfigurationWidgetText(QString("<h3>Delete nodes or edges</h3>") +
-                               "<b>Mouse left</b> click on an element to delete it.<br/>No "
-                               "deletion confirmation will be asked.");
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
+    setConfigurationWidgetText(QString("<h3>Delete nodes or edges</h3>") +
+                               "<b>Mouse left</b> click on an element to delete it.<br/>No "
+                               "deletion confirmation will be asked.");
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseElementDeleter);
   }

@@ -77,14 +77,14 @@ void SOMViewProperties::construct() {
 SOMViewThreshold::SOMViewThreshold(PluginContext *)
     : SOMViewInteractor(":/i_slider.png", "Threshold Selection") {
   setPriority(StandardInteractorPriority::ViewInteractor1);
+}
+
+void SOMViewThreshold::construct() {
   setConfigurationWidgetText(QString(
       "<H1>Threshold Interactor</H1><p>This interactor is used to select nodes with a value "
       "between those indicated by the two sliders</p><p>Move the each slider to change the "
       "bound.</p><p>Press the Ctrl button to add the new threshold selection to the current "
       "selection. If Ctrl is not pressed the old selection will be replaced</p>"));
-}
-
-void SOMViewThreshold::construct() {
   push_back(new MouseNKeysNavigator());
   push_back(new ThresholdInteractor());
 }

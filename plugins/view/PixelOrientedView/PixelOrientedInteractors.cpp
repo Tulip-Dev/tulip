@@ -41,6 +41,10 @@ PLUGIN(PixelOrientedInteractorNavigation)
 
 PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const PluginContext *)
     : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
+  setPriority(StandardInteractorPriority::Navigation);
+}
+
+void PixelOrientedInteractorNavigation::construct() {
   setConfigurationWidgetText(
       QString("<html><head>") + "<title></title>" + "</head>" + "<body>" +
       "<h3>View navigation interactor</h3>" +
@@ -57,10 +61,6 @@ PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const Plugi
       "<b>Shift + Mouse</b> : rotation<br>" + "<b>Key up/down</b> : up/down<br>" +
       "<b>Key left/right</b> : left/right<br>" + "<b>Key page up/down</b> : zoom<br>" +
       "<b>Key insert</b> : rotate<br>" + "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::Navigation);
-}
-
-void PixelOrientedInteractorNavigation::construct() {
   push_back(new PixelOrientedViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
