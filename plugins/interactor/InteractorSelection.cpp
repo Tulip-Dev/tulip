@@ -42,6 +42,12 @@ public:
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png",
                                            "Select nodes/edges in a rectangle") {
     setPriority(StandardInteractorPriority::RectangleSelection);
+  }
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Selection nodes/edges in a rectangle</h3>") +
         "Draw selection rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse "
@@ -53,12 +59,6 @@ public:
         "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>" +
 #endif
         "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
-  }
-
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseSelector);
   }

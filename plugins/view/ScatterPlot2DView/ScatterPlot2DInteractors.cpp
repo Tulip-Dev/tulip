@@ -50,6 +50,10 @@ PLUGIN(ScatterPlot2DInteractorGetInformation)
 
 ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::PluginContext *)
     : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
+  setPriority(StandardInteractorPriority::Navigation);
+}
+
+void ScatterPlot2DInteractorNavigation::construct() {
   setConfigurationWidgetText(
       QString("<html><head>") + "<title></title>" + "</head>" + "<body>" +
       "<h3>View navigation interactor</h3>" +
@@ -66,10 +70,6 @@ ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::
       "<b>Shift + Mouse</b> : rotation<br>" + "<b>Key up/down</b> : up/down<br>" +
       "<b>Key left/right</b> : left/right<br>" + "<b>Key page up/down</b> : zoom<br>" +
       "<b>Key insert</b> : rotate<br>" + "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::Navigation);
-}
-
-void ScatterPlot2DInteractorNavigation::construct() {
   push_back(new ScatterPlot2DViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
@@ -159,13 +159,13 @@ ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
                                          "Display node or edge properties") {
   setPriority(StandardInteractorPriority::GetInformation);
+}
+
+void ScatterPlot2DInteractorGetInformation::construct() {
   setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
                              "<b>Mouse left click</b> on an element to display its "
                              "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
                              "corresponding value.");
-}
-
-void ScatterPlot2DInteractorGetInformation::construct() {
   push_back(new MousePanNZoomNavigator);
   push_back(new ScatterPlot2DMouseShowElementInfo);
 }

@@ -47,6 +47,10 @@ PLUGIN(HistogramInteractorGetInformation)
 
 HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext *)
     : HistogramInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
+  setPriority(StandardInteractorPriority::Navigation);
+}
+
+void HistogramInteractorNavigation::construct() {
   setConfigurationWidgetText(
       QString("<html><head><title></title></head><body><h3>View navigation interactor</h3>") +
       "<p>This interactor allows to navigate in the histogram view.</p>" +
@@ -62,16 +66,16 @@ HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext
       "<b>Shift + Mouse</b> : rotation<br>" + "<b>Key up/down</b> : up/down<br>" +
       "<b>Key left/right</b> : left/right<br>" + "<b>Key page up/down</b> : zoom<br>" +
       "<b>Key insert</b> : rotate<br>" + "</body></html>");
-  setPriority(StandardInteractorPriority::Navigation);
-}
-
-void HistogramInteractorNavigation::construct() {
   push_back(new HistogramViewNavigator);
   push_back(new MouseNKeysNavigator);
 }
 
 HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginContext *)
     : HistogramInteractor(":/i_histo_color_mapping.png", "Metric Mapping") {
+  setPriority(StandardInteractorPriority::ViewInteractor1);
+}
+
+void HistogramInteractorMetricMapping::construct() {
   setConfigurationWidgetText(
       QString("<html><head><title></title></head><body>") + "<h3>Metric mapping interactor</h3>" +
       "<p>This interactor allows to perform a metric mapping on nodes colors, nodes borders "
@@ -139,11 +143,6 @@ HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginC
       "<img src=\":/HistoColorMapping.png\" width=\"280\" height=\"260\" border=\"0\" alt=\"\"><br "
       "/>" +
       "</p>" + "</body></html>");
-  setPriority(StandardInteractorPriority::ViewInteractor1);
-}
-
-void HistogramInteractorMetricMapping::construct() {
-
   push_back(new HistogramMetricMapping);
   push_back(new MousePanNZoomNavigator);
 }
@@ -228,13 +227,13 @@ HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
                                          "Display node or edge properties") {
   setPriority(StandardInteractorPriority::GetInformation);
+}
+
+void HistogramInteractorGetInformation::construct() {
   setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +
                              "<b>Mouse left click</b> on an element to display its "
                              "properties.<br/>then <b>Mouse left click</b> on a row to edit the "
                              "corresponding value.");
-}
-
-void HistogramInteractorGetInformation::construct() {
   push_back(new MousePanNZoomNavigator);
   push_back(new HistogramMouseShowElementInfo);
 }

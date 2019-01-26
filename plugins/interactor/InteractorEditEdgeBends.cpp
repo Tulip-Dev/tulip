@@ -42,6 +42,12 @@ public:
   InteractorEditEdgeBends(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png", "Edit edge bends") {
     setPriority(StandardInteractorPriority::EditEdgeBends);
+  }
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Edit edge bends</h3>") + "Modify edge bends<br/><br/>" +
         "Select edge: <ul><li>use rectangle selection</li></ul>" +
@@ -56,12 +62,6 @@ public:
         "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
 #endif
     );
-  }
-
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseSelector);
     push_back(new MouseEdgeBendEditor);
