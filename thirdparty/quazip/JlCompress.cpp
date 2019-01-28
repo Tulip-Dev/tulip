@@ -103,7 +103,12 @@ bool JlCompress::compressSubDir(QuaZip* zip, QString dir, QString origDir, bool 
     if (recursive) {
         // Per ogni sotto cartella
         QFileInfoList files = directory.entryInfoList(QDir::AllDirs|QDir::NoDotAndDotDot|filters);
-        Q_FOREACH (QFileInfo file, files) {
+        for (int index = 0; index < files.size(); ++index ) {
+            const QFileInfo & file( files.at( index ) );
+#if QT_VERSION < QT_VERSION_CHECK(4, 7, 4)
+            if (!file.isDir())
+                continue;
+#endif
             // Comprimo la sotto cartella
             if(!compressSubDir(zip,file.absoluteFilePath(),origDir,recursive,filters)) return false;
         }
@@ -111,7 +116,8 @@ bool JlCompress::compressSubDir(QuaZip* zip, QString dir, QString origDir, bool 
 
     // Per ogni file nella cartella
     QFileInfoList files = directory.entryInfoList(QDir::Files|filters);
-    Q_FOREACH (QFileInfo file, files) {
+    for (int index = 0; index < files.size(); ++index ) {
+        const QFileInfo & file( files.at( index ) );
         // Se non e un file o e il file compresso che sto creando
         if(!file.isFile()||file.absoluteFilePath()==zip->getZipName()) continue;
 
@@ -236,7 +242,8 @@ bool JlCompress::compressFiles(QString fileCompressed, QStringList files) {
 
     // Comprimo i file
     QFileInfo info;
-    Q_FOREACH (QString file, files) {
+    for (int index = 0; index < files.size(); ++index ) {
+        const QString & file( files.at( index ) );
         info.setFile(file);
         if (!info.exists() || !compressFile(&zip,file,info.fileName())) {
             QFile::remove(fileCompressed);
@@ -357,8 +364,9 @@ QStringList JlCompress::extractDir(QuaZip &zip, const QString &dir)
     if(!zip.open(QuaZip::mdUnzip)) {
         return QStringList();
     }
-
-    QDir directory(dir);
+    QString cleanDir = QDir::cleanPath(dir);
+    QDir directory(cleanDir);
+    QString absCleanDir = directory.absolutePath();
     QStringList extracted;
     if (!zip.goToFirstFile()) {
         return QStringList();
@@ -366,6 +374,9 @@ QStringList JlCompress::extractDir(QuaZip &zip, const QString &dir)
     do {
         QString name = zip.getCurrentFileName();
         QString absFilePath = directory.absoluteFilePath(name);
+        QString absCleanPath = QDir::cleanPath(absFilePath);
+        if (!absCleanPath.startsWith(absCleanDir + "/"))
+            continue;
         if (!extractFile(&zip, "", absFilePath)) {
             removeFile(extracted);
             return QStringList();
