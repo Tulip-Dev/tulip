@@ -474,7 +474,7 @@ void TableView::delHighlightedRows() {
   Graph *g = graph();
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
-  for (const auto& idx : rows) {
+  for (const auto &idx : rows) {
     if (NODES_DISPLAYED)
       g->delNode(node(idx.data(TulipModel::ElementIdRole).toUInt()));
     else

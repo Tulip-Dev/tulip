@@ -131,7 +131,9 @@ void Workspace::closeAll() {
 QList<tlp::View *> Workspace::panels() const {
   QList<tlp::View *> result;
 
-  for (auto panel : _panels) { result.push_back(panel->view()); }
+  for (auto panel : _panels) {
+    result.push_back(panel->view());
+  }
 
   return result;
 }
@@ -354,7 +356,9 @@ void Workspace::updatePanels() {
 
     QVector<PlaceHolderWidget *> panelSlots = _modeToSlots[mode];
 
-    for (auto panel : panelSlots) { panel->setWidget(nullptr); }
+    for (auto panel : panelSlots) {
+      panel->setWidget(nullptr);
+    }
   }
 
   if (_currentPanelIndex < 0)
@@ -516,14 +520,18 @@ void Workspace::showExposeMode() {
 
   _oldWorkspaceMode = currentModeWidget();
 
-  for (auto s : _modeSwitches.values()) { s->hide(); }
+  for (auto s : _modeSwitches.values()) {
+    s->hide();
+  }
 
   _ui->nextPageButton->setEnabled(false);
   _ui->previousPageButton->setEnabled(false);
 
   QVector<WorkspacePanel *> panels;
 
-  for (auto p : _panels) { panels << p; }
+  for (auto p : _panels) {
+    panels << p;
+  }
 
   _ui->exposeMode->setData(panels, _currentPanelIndex);
   _ui->workspaceContents->setCurrentWidget(_ui->exposePage);

@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
   PluginLister::currentLoader = &collector;
 
   for (const QFileInfo &component :
-           pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+       pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
     collector._currentDirectory = component.fileName();
     QDir pluginDir(component.absoluteFilePath());
     QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));
@@ -157,8 +157,7 @@ int main(int argc, char **argv) {
   stream.writeEndDocument();
   outputXML.close();
 
-  for (const QFileInfo &phpFile :
-           QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
+  for (const QFileInfo &phpFile : QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
     QFile::copy(phpFile.absoluteFilePath(), QDir(destinationDir).filePath(phpFile.fileName()));
   }
 

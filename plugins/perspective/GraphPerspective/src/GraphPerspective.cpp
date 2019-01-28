@@ -167,12 +167,12 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->addSeparator();
 
   for (const QString &s :
-           TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
+       TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
     QAction *action = _ui->menuOpen_recent_file->addAction(
-        QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s, this, SLOT(openRecentFile()));
+        QIcon(":/tulip/graphperspective/icons/16/empty-file.png"), s, this, SLOT(openRecentFile()));
     action->setData(s);
   }
   _ui->menuOpen_recent_file->setEnabled(!_ui->menuOpen_recent_file->isEmpty());
@@ -266,7 +266,9 @@ GraphPerspective::~GraphPerspective() {
     _ui->workspace->closeAll();
 
   // ensure all loaded graphs are deleted
-  for (auto graph : _graphs->graphs()) { delete graph; }
+  for (auto graph : _graphs->graphs()) {
+    delete graph;
+  }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   delete _pythonIDEDialog;
@@ -326,7 +328,9 @@ bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::Drop) {
     QDropEvent *dropEvent = static_cast<QDropEvent *>(ev);
 
-    for (const QUrl &url : dropEvent->mimeData()->urls()) { open(url.toLocalFile()); }
+    for (const QUrl &url : dropEvent->mimeData()->urls()) {
+      open(url.toLocalFile());
+    }
   }
 
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
@@ -1530,8 +1534,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View *firstPanel = nullptr;
 
   for (auto panelName : {"Spreadsheet view", "Node Link Diagram view"}) {
-    View *view =
-        PluginLister::instance()->getPluginObject<View>(panelName, nullptr);
+    View *view = PluginLister::instance()->getPluginObject<View>(panelName, nullptr);
 
     if (firstPanel == nullptr) {
       firstPanel = view;
@@ -1578,7 +1581,9 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
     // expose mode is not safe when deleting a panel
     // so hide it first
     _ui->workspace->hideExposeMode();
-    for (auto v : viewsToDelete) { _ui->workspace->delView(v); }
+    for (auto v : viewsToDelete) {
+      _ui->workspace->delView(v);
+    }
   }
 }
 

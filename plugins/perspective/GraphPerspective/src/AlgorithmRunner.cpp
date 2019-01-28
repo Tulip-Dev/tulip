@@ -228,7 +228,9 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
     connect(i, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
   }
 
-  for (const QString &a : TulipSettings::instance().favoriteAlgorithms()) { addFavorite(a); }
+  for (const QString &a : TulipSettings::instance().favoriteAlgorithms()) {
+    addFavorite(a);
+  }
 
   connect(_ui->header, SIGNAL(expanded(bool)), this, SLOT(expanded(bool)));
 }
@@ -301,7 +303,9 @@ bool filterGroup(ExpandableGroupBox *group, QString filter) {
 
   bool groupVisible = false;
 
-  for (auto g : subGroups) { groupVisible |= filterGroup(g, filter); }
+  for (auto g : subGroups) {
+    groupVisible |= filterGroup(g, filter);
+  }
 
   for (auto i : subItems) {
     bool itemVisible = i->name().contains(filter, Qt::CaseInsensitive);
@@ -413,8 +417,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   item->setFavorite(true);
   int itemPos = 0;
 
-  for (auto i :
-           _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem *>()) {
+  for (auto i : _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem *>()) {
     if (i->name() > item->name()) {
       break;
     }

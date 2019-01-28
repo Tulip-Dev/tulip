@@ -195,7 +195,9 @@ QSet<QString> APIDataBase::getTypesList() const {
   QSet<QString> ret;
   QList<QString> keys = _dictContent.keys();
 
-  for (const QString &type : keys) { ret.insert(type); }
+  for (const QString &type : keys) {
+    ret.insert(type);
+  }
 
   return ret;
 }

@@ -37,7 +37,7 @@ void InteractorLister::initInteractorsDependencies() {
 
   std::list<std::string> interactors(PluginLister::instance()->availablePlugins<Interactor>());
 
-  for (const std::string &interactorName  : interactors) {
+  for (const std::string &interactorName : interactors) {
     interactorToName[PluginLister::instance()->getPluginObject<Interactor>(
         interactorName, nullptr)] = interactorName;
   }
