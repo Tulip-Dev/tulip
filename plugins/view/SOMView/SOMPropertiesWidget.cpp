@@ -307,7 +307,9 @@ void SOMPropertiesWidget::setData(const DataSet &data) {
     QStringList list = tlpStringToQString(propertiesString).split(";", QString::SkipEmptyParts);
     vector<string> properties;
 
-    for (const QString &s : list) { properties.push_back(QStringToTlpString(s)); }
+    for (const QString &s : list) {
+      properties.push_back(QStringToTlpString(s));
+    }
 
     dimensionConfigurationWidget->setOutputPropertiesList(properties);
   }

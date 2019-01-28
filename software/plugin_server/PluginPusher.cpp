@@ -46,7 +46,7 @@ void uploadfolder(const QString &origin, WebDavManager &manager) {
   }
 
   for (const QString &element :
-           originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
+       originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
     uploadfolder(origin + "/" + element, manager);
   }
 }

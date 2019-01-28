@@ -173,7 +173,9 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
       newGraphSet = true;
     }
 
-    for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+    for (auto obs : triggers()) {
+      removeRedrawTrigger(obs);
+    }
 
     propertiesSelectionWidget->setWidgetParameters(nullptr, propertiesTypesFilter);
 
@@ -784,7 +786,9 @@ void PixelOrientedView::toggleInteractors(const bool activate) {
 }
 
 void PixelOrientedView::registerTriggers() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   addRedrawTrigger(graph());
 

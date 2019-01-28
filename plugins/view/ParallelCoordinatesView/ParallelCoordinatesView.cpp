@@ -80,7 +80,9 @@ ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
 }
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   --parallelViewInstancesCount;
 
@@ -1001,11 +1003,15 @@ void ParallelCoordinatesView::highlightDataInAxisBoxPlotRange(QuantitativeParall
 }
 
 void ParallelCoordinatesView::removeTriggers() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 }
 
 void ParallelCoordinatesView::registerTriggers() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   if (graph()) {
     addRedrawTrigger(graph());

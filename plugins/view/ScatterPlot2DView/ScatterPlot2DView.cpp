@@ -1020,7 +1020,9 @@ void ScatterPlot2DView::interactorsInstalled(const QList<tlp::Interactor *> &) {
 }
 
 void ScatterPlot2DView::registerTriggers() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   if (graph()) {
     addRedrawTrigger(graph());

@@ -149,8 +149,8 @@ void PluginsCenter::refreshFilter() {
   QVBoxLayout *lyt = new QVBoxLayout();
 
   for (const QString &cf : _categoryFilters) {
-    for (const PluginInformation &info :
-	   PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local, _nameFilter, cf)) {
+    for (const PluginInformation &info : PluginManager::listPlugins(
+             PluginManager::Remote | PluginManager::Local, _nameFilter, cf)) {
       PluginInformationListItem *item = new PluginInformationListItem(info);
       connect(item, SIGNAL(focused()), this, SLOT(itemFocused()));
       lyt->addWidget(item);
@@ -246,6 +246,8 @@ void PluginsCenter::repoRemoved() {
   QList<QListWidgetItem *> lst = _ui->remoteLocationsList->findItems(location, Qt::MatchExactly);
 
   if (lst.size() > 0) {
-    for (auto i : lst) { delete i; }
+    for (auto i : lst) {
+      delete i;
+    }
   }
 }

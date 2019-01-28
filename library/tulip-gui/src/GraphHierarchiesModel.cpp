@@ -107,7 +107,7 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
 
   // gather list of texture folders already present in the project
   for (const QString &textureFolder :
-           project->entryList(TEXTURES_PATH, QDir::Dirs | QDir::NoDotAndDotDot)) {
+       project->entryList(TEXTURES_PATH, QDir::Dirs | QDir::NoDotAndDotDot)) {
     projectTexturesFolders.append(TEXTURES_PATH + textureFolder);
   }
 
@@ -350,7 +350,7 @@ QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject
   QMap<QString, tlp::Graph *> rootIds;
 
   for (const QString &entry :
-           project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+       project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
     if (!project->exists(file)) {

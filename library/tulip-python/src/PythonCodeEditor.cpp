@@ -1280,7 +1280,9 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   QSet<QString> stringList = _autoCompletionDb->getAutoCompletionListForContext(
       textBeforeCursorTrimmed, getEditedFunctionName(), dotContext);
 
-  for (const QString &s : stringList) { _autoCompletionList->addItem(s); }
+  for (const QString &s : stringList) {
+    _autoCompletionList->addItem(s);
+  }
 
   _autoCompletionList->sortItems();
 

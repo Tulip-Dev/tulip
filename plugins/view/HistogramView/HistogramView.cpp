@@ -931,7 +931,9 @@ BoundingBox HistogramView::getSmallMultiplesBoundingBox() const {
 }
 
 void HistogramView::registerTriggers() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   if (graph()) {
     addRedrawTrigger(graph());

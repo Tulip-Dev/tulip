@@ -1053,7 +1053,9 @@ void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bo
   QVector<QVariant> vect(strList.length());
   int i = 0;
 
-  for (const QString &s : strList) { vect[i++] = s; }
+  for (const QString &s : strList) {
+    vect[i++] = s;
+  }
 
   static_cast<VectorEditor *>(w)->setVector(vect, qMetaTypeId<QString>());
 }

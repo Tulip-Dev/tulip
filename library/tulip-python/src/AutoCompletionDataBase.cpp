@@ -264,7 +264,9 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
     if (type.indexOf(".") != -1) {
       QStringList types = type.split(".");
 
-      for (const QString &entry : types) { _globalAutoCompletionList.insert(entry); }
+      for (const QString &entry : types) {
+        _globalAutoCompletionList.insert(entry);
+      }
     }
   }
 

@@ -257,7 +257,9 @@ void MatrixView::refresh() {
 }
 
 void MatrixView::deleteDisplayedGraph() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   delete _matrixGraph;
   _matrixGraph = nullptr;
@@ -622,7 +624,9 @@ void MatrixView::setGridDisplayMode() {
 }
 
 void MatrixView::registerTriggers() {
-  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) {
+    removeRedrawTrigger(obs);
+  }
 
   if (graph()) {
     addRedrawTrigger(graph());
