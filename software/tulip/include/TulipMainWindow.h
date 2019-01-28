@@ -60,7 +60,6 @@ public:
   PluginsCenter *pluginsCenter() const;
 
 public slots:
-  void closeApp();
   void pluginErrorMessage(const QString &message);
   void showTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
   void showErrorMessage(const QString &title, const QString &message);
