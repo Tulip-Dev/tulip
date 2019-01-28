@@ -170,7 +170,7 @@ void WorkspacePanel::setView(tlp::View *view) {
   QList<Interactor *> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
 
-  foreach (const std::string &name, interactorNames) {
+  for (const std::string &name : interactorNames) {
     compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, nullptr);
   }
 
@@ -208,7 +208,7 @@ void WorkspacePanel::setView(tlp::View *view) {
     viewConfigurationTabs->setWindowOpacity(0.99);
 #endif
 
-    foreach (QWidget *w, _view->configurationWidgets()) {
+    for (auto w : _view->configurationWidgets()) {
       w->installEventFilter(this);
       w->resize(w->width(), w->sizeHint().height());
       viewConfigurationTabs->addTab(w, w->windowTitle());
@@ -368,7 +368,7 @@ void clearLayout(QLayout *layout, bool deleteWidgets = true) {
 
 void WorkspacePanel::refreshInteractorsToolbar() {
   _actionTriggers.clear();
-  QList<Interactor *> compatibleInteractors = _view->interactors();
+  auto compatibleInteractors = _view->interactors();
 
   if (_ui->interactorsFrame->layout()) {
     clearLayout(_ui->interactorsFrame->layout());
@@ -386,7 +386,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     interactorsLayout->setContentsMargins(0, 0, 0, 0);
     interactorsLayout->setSpacing(4);
 
-    foreach (Interactor *i, compatibleInteractors) {
+    for (auto i : compatibleInteractors) {
       QPushButton *button = new QPushButton();
       button->setMinimumSize(22, 22);
       button->setFlat(true);

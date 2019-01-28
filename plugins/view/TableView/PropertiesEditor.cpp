@@ -102,7 +102,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
       _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface *>();
   _contextPropertyList.clear();
 
-  foreach (const QModelIndex &sidx, _ui->tableView->selectionModel()->selectedRows()) {
+  for (const QModelIndex &sidx : _ui->tableView->selectionModel()->selectedRows()) {
     _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   }
 
@@ -123,7 +123,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
   if (_contextPropertyList.size() > 1) {
     bool enabled = true;
 
-    foreach (PropertyInterface *pi, _contextPropertyList) {
+    for (auto pi : _contextPropertyList) {
       if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str()) &&
           (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
         enabled = false;
@@ -308,7 +308,7 @@ void PropertiesEditor::setPropsVisibility(int state) {
 void PropertiesEditor::setPropsNotVisibleExcept() {
   std::set<std::string> ctxPropNames;
 
-  foreach (PropertyInterface *pi, _contextPropertyList)
+  for (auto pi : _contextPropertyList)
     ctxPropNames.insert(pi->getName());
 
   for (int i = 0; i < _sourceModel->rowCount(); ++i) {
@@ -442,7 +442,7 @@ void PropertiesEditor::delProperty() {
 void PropertiesEditor::delProperties() {
   _graph->push();
 
-  foreach (PropertyInterface *pi, _contextPropertyList)
+  for (auto pi : _contextPropertyList)
     pi->getGraph()->delLocalProperty(pi->getName());
 }
 

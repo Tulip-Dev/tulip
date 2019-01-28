@@ -419,7 +419,7 @@ bool GlMainView::eventFilter(QObject *obj, QEvent *event) {
       sSize.setHeight(resizeEvent->size().height() - 60);
       sSize = list.first()->size();
 
-      foreach (QWidget *c, list) { // resize each configuration widget
+      for (auto c : list) { // resize each configuration widget
         c->resize(sSize);
       }
     }

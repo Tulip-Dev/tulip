@@ -64,7 +64,7 @@ void HeaderFrame::setMenus(const QStringList &menus) {
   _ui->menusCombo->clear();
   switchToLabel(_ui, menus.empty());
 
-  foreach (const QString &s, menus)
+  for (const QString &s : menus)
     _ui->menusCombo->addItem(s);
 }
 
@@ -96,7 +96,7 @@ void HeaderFrame::setExpanded(bool e) {
   if (!pw)
     return;
 
-  foreach (QObject *obj, pw->children()) {
+  for (auto obj : pw->children()) {
     QWidget *w = dynamic_cast<QWidget *>(obj);
 
     if (w && w != this)

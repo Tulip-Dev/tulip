@@ -106,14 +106,14 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
 
     builtinPatterns << "\\bself\\b";
 
-    foreach (const QString &pattern, builtinPatterns) {
+    for (const QString &pattern : builtinPatterns) {
       rule.pattern = QRegExp(pattern);
       rule.format = builtinFormat;
       _highlightingRules.append(rule);
     }
   }
 
-  foreach (const QString &pattern, keywordPatterns) {
+  for (const QString &pattern : keywordPatterns) {
     rule.pattern = QRegExp(pattern);
     rule.format = _keywordFormat;
     _highlightingRules.append(rule);
@@ -122,7 +122,7 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   QTextCharFormat format;
   format.setFontWeight(QFont::Bold);
 
-  foreach (const QString &pattern, specialCharsPatterns) {
+  for (const QString &pattern : specialCharsPatterns) {
     rule.pattern = QRegExp(pattern);
     rule.format = format;
     _highlightingRules.append(rule);
@@ -148,7 +148,7 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
     }
   }
 
-  foreach (const HighlightingRule &rule, _highlightingRules) {
+  for (const HighlightingRule &rule : _highlightingRules) {
     QRegExp expression(rule.pattern);
     int index = expression.indexIn(text);
 

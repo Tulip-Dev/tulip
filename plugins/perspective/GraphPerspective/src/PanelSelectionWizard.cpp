@@ -87,7 +87,7 @@ void PanelSelectionWizard::clearView() {
   delete _view;
   _view = nullptr;
 
-  foreach (const int id, pageIds()) {
+  for (auto id : pageIds()) {
     if (id == startId() || id == currentId())
       continue;
 
@@ -123,7 +123,7 @@ void PanelSelectionWizard::pageChanged(int id) {
     createView();
     bool inPlaceHolder = true;
 
-    foreach (QWidget *w, _view->configurationWidgets()) {
+    for (auto w : _view->configurationWidgets()) {
       QWizardPage *p;
 
       if (inPlaceHolder) {

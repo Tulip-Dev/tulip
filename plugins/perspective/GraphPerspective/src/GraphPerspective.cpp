@@ -155,7 +155,7 @@ void GraphPerspective::reserveDefaultProperties() {
 void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->clear();
 
-  foreach (const QString &s, TulipSettings::instance().recentDocuments()) {
+  for (const QString &s : TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
@@ -166,13 +166,13 @@ void GraphPerspective::buildRecentDocumentsMenu() {
 
   _ui->menuOpen_recent_file->addSeparator();
 
-  foreach (const QString &s,
+  for (const QString &s :
            TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists() || !tulipCanOpenFile(s))
       continue;
 
     QAction *action = _ui->menuOpen_recent_file->addAction(
-        QIcon(":/tulip/graphperspective/icons/16/empty-file.png"), s, this, SLOT(openRecentFile()));
+        QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s, this, SLOT(openRecentFile()));
     action->setData(s);
   }
   _ui->menuOpen_recent_file->setEnabled(!_ui->menuOpen_recent_file->isEmpty());
@@ -266,9 +266,7 @@ GraphPerspective::~GraphPerspective() {
     _ui->workspace->closeAll();
 
   // ensure all loaded graphs are deleted
-  tlp::Graph *graph = nullptr;
-
-  foreach (graph, _graphs->graphs()) { delete graph; }
+  for (auto graph : _graphs->graphs()) { delete graph; }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   delete _pythonIDEDialog;
@@ -328,7 +326,7 @@ bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::Drop) {
     QDropEvent *dropEvent = static_cast<QDropEvent *>(ev);
 
-    foreach (const QUrl &url, dropEvent->mimeData()->urls()) { open(url.toLocalFile()); }
+    for (const QUrl &url : dropEvent->mimeData()->urls()) { open(url.toLocalFile()); }
   }
 
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
@@ -723,7 +721,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     open(_externalFile);
   }
 
-  foreach (HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
+  for (auto h : _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h, SIGNAL(expanded(bool)), this, SLOT(refreshDockExpandControls()));
   }
 
@@ -780,7 +778,7 @@ tlp::GraphHierarchiesModel *GraphPerspective::model() const {
 void GraphPerspective::refreshDockExpandControls() {
   QList<HeaderFrame *> expandedHeaders, collapsedHeaders;
 
-  foreach (HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
+  for (auto h : _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     h->expandControl()->setEnabled(true);
 
     if (h->isExpanded())
@@ -1064,7 +1062,7 @@ void GraphPerspective::open(QString fileName) {
     if (!tlp::inGuiTestingMode())
       _lastOpenLocation = fileInfo.absolutePath();
 
-    foreach (const std::string &extension, modules.keys()) {
+    for (const std::string &extension : modules.keys()) {
       if (fileName.endsWith(".tlpx")) {
         openProjectFile(fileName);
         TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
@@ -1208,7 +1206,7 @@ void GraphPerspective::undo() {
 
   Observable::unholdObservers();
 
-  foreach (View *v, _ui->workspace->panels()) {
+  for (auto v : _ui->workspace->panels()) {
     if (v->graph() == graph)
       v->undoCallback();
   }
@@ -1223,7 +1221,7 @@ void GraphPerspective::redo() {
 
   Observable::unholdObservers();
 
-  foreach (View *v, _ui->workspace->panels()) {
+  for (auto v : _ui->workspace->panels()) {
     if (v->graph() == graph)
       v->undoCallback();
   }
@@ -1324,7 +1322,7 @@ void GraphPerspective::group() {
   if (!changeGraph)
     return;
 
-  foreach (View *v, _ui->workspace->panels()) {
+  for (auto v : _ui->workspace->panels()) {
     if (v->graph() == graph->getRoot())
       v->setGraph(graph);
   }
@@ -1491,7 +1489,7 @@ void GraphPerspective::CSVImport() {
     applyRandomLayout(g);
     bool openPanels = true;
 
-    foreach (View *v, _ui->workspace->panels()) {
+    for (auto v : _ui->workspace->panels()) {
       if (v->graph() == g) {
         openPanels = false;
         break;
@@ -1531,10 +1529,9 @@ void GraphPerspective::showStartPanels(Graph *g) {
   _ui->workspace->hideExposeMode();
   View *firstPanel = nullptr;
 
-  foreach (const QString &panelName, QStringList() << "Spreadsheet view"
-                                                   << "Node Link Diagram view") {
+  for (auto panelName : {"Spreadsheet view", "Node Link Diagram view"}) {
     View *view =
-        PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
+        PluginLister::instance()->getPluginObject<View>(panelName, nullptr);
 
     if (firstPanel == nullptr) {
       firstPanel = view;
@@ -1563,7 +1560,7 @@ void GraphPerspective::applyRandomLayout(Graph *g) {
 }
 
 void GraphPerspective::centerPanelsForGraph(tlp::Graph *g, bool graphChanged, bool onlyGlMainView) {
-  foreach (View *v, _ui->workspace->panels()) {
+  for (auto v : _ui->workspace->panels()) {
     if ((v->graph() == g) && (!onlyGlMainView || dynamic_cast<tlp::GlMainView *>(v)))
       v->centerView(graphChanged);
   }
@@ -1572,7 +1569,7 @@ void GraphPerspective::centerPanelsForGraph(tlp::Graph *g, bool graphChanged, bo
 void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
   list<View *> viewsToDelete;
 
-  foreach (View *v, _ui->workspace->panels()) {
+  for (auto v : _ui->workspace->panels()) {
     if (v->graph() == g || g->isDescendantGraph(v->graph()))
       viewsToDelete.push_back(v);
   }
@@ -1581,7 +1578,7 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
     // expose mode is not safe when deleting a panel
     // so hide it first
     _ui->workspace->hideExposeMode();
-    foreach (View *v, viewsToDelete) { _ui->workspace->delView(v); }
+    for (auto v : viewsToDelete) { _ui->workspace->delView(v); }
   }
 }
 
@@ -1589,7 +1586,7 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(
     tlp::Graph *g, const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
   bool result = false;
 
-  foreach (View *v, _ui->workspace->panels()) {
+  for (auto v : _ui->workspace->panels()) {
     GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
 
     if (v->graph() == g && glMainView != nullptr) {
@@ -1630,7 +1627,7 @@ void GraphPerspective::openPreferences() {
   if (dlg.exec() == QDialog::Accepted) {
     dlg.writeSettings();
 
-    foreach (tlp::View *v, _ui->workspace->panels()) {
+    for (auto v : _ui->workspace->panels()) {
       GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
 
       if (glMainView != nullptr) {

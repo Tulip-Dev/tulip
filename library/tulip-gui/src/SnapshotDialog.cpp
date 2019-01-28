@@ -137,7 +137,7 @@ void SnapshotDialog::accept() {
 
   // Put the default save format as the first choice (selectedFilter not supported under MacOSX and
   // some Linux window managers)
-  foreach (QString ext, QImageWriter::supportedImageFormats()) {
+  for (QString ext : QImageWriter::supportedImageFormats()) {
     ext = ext.toLower();
 
     if ((formatedFormatList.indexOf(ext) == -1) && (ext != default_filter)) {

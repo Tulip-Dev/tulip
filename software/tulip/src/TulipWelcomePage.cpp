@@ -64,7 +64,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent)
   if (!recentDocs.empty()) {
     QString txt;
 
-    foreach (const QString &txt2, recentDocs)
+    for (const QString &txt2 : recentDocs)
       txt += "<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
              txt2 + "\">" + txt2 + "</a>" + "</span></p><p/>";
 

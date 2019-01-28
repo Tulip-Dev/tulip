@@ -106,19 +106,19 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
   QStringList projectTexturesFiles;
 
   // gather list of texture folders already present in the project
-  foreach (const QString &textureFolder,
+  for (const QString &textureFolder :
            project->entryList(TEXTURES_PATH, QDir::Dirs | QDir::NoDotAndDotDot)) {
     projectTexturesFolders.append(TEXTURES_PATH + textureFolder);
   }
 
   // gather list of texture file paths already present in the project
-  foreach (const QString &textureFolder, projectTexturesFolders) {
-    foreach (const QString &textureFile, project->entryList(textureFolder, QDir::Files)) {
+  for (const QString &textureFolder : projectTexturesFolders) {
+    for (const QString &textureFile : project->entryList(textureFolder, QDir::Files)) {
       projectTexturesFiles.append(textureFolder + "/" + textureFile);
     }
   }
 
-  foreach (tlp::Graph *g, graphs) {
+  for (auto g : graphs) {
     // Process the viewTexture default node value
     StringProperty *viewTexture = g->getProperty<StringProperty>("viewTexture");
     copyTextureFileInProject(tlpStringToQString(viewTexture->getNodeDefaultValue()), project,
@@ -143,11 +143,11 @@ static void writeTextureFilesInProject(const QList<tlp::Graph *> &graphs,
 
   // Previously copied textures are not used anymore in the project,
   // so remove associated files and folders
-  foreach (const QString &textureProjectFileToRemove, projectTexturesFiles) {
+  for (const QString &textureProjectFileToRemove : projectTexturesFiles) {
     project->removeFile(textureProjectFileToRemove);
   }
 
-  foreach (const QString &textureProjectFolderToRemove, projectTexturesFolders) {
+  for (const QString &textureProjectFolderToRemove : projectTexturesFolders) {
     project->removeDir(textureProjectFolderToRemove);
   }
 }
@@ -338,7 +338,7 @@ QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph *g) {
 bool GraphHierarchiesModel::needsSaving() {
   bool saveNeeded = false;
 
-  foreach (GraphNeedsSavingObserver *observer, _saveNeeded) {
+  for (GraphNeedsSavingObserver *observer : _saveNeeded) {
     saveNeeded = saveNeeded || observer->needsSaving();
   }
 
@@ -349,7 +349,7 @@ QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject
                                                                tlp::PluginProgress *progress) {
   QMap<QString, tlp::Graph *> rootIds;
 
-  foreach (const QString &entry,
+  for (const QString &entry :
            project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
@@ -393,7 +393,7 @@ QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProjec
 
   int i = 0;
 
-  foreach (tlp::Graph *g, _graphs) {
+  for (auto g : _graphs) {
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
@@ -408,7 +408,7 @@ QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProjec
 
   writeTextureFilesInProject(_graphs, project, progress);
 
-  foreach (GraphNeedsSavingObserver *observer, _saveNeeded)
+  for (GraphNeedsSavingObserver *observer : _saveNeeded)
     observer->saved();
 
   return rootIds;
@@ -569,7 +569,7 @@ Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
 QMimeData *GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
   QSet<Graph *> graphs;
 
-  foreach (const QModelIndex &index, indexes) {
+  for (const QModelIndex &index : indexes) {
     Graph *g = data(index, GraphRole).value<Graph *>();
 
     if (g != nullptr)
@@ -580,7 +580,8 @@ QMimeData *GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 
   // every current implementation uses a single graph, so we do not have a graphmim with multiple
   // graphs.
-  foreach (Graph *g, graphs) { result->setGraph(g); }
+  for (auto g : graphs)
+    result->setGraph(g);
 
   return result;
 }
@@ -603,8 +604,8 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
 
   bool inHierarchy = false;
 
-  foreach (Graph *i, _graphs) {
-    if (i->isDescendantGraph(g) || g == i) {
+  for (auto _g : _graphs) {
+    if (_g->isDescendantGraph(g) || g == _g) {
       inHierarchy = true;
       break;
     }
@@ -637,14 +638,14 @@ Graph *GraphHierarchiesModel::currentGraph() const {
 
 void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
   int i = 0;
-  for (Graph *sg : root->getSubGraphs()) {
+  for (auto sg : root->getSubGraphs()) {
     _indexCache[sg] = createIndex(i++, 0, sg);
     initIndexCache(sg);
   }
 }
 
 static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) {
-  for (Graph *sg : root->getSubGraphs()) {
+  for (auto sg : root->getSubGraphs()) {
     addListenerToWholeGraphHierarchy(sg, listener);
   }
   root->addListener(listener);
@@ -655,8 +656,8 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.contains(g) || g == nullptr)
     return;
 
-  foreach (Graph *i, _graphs) {
-    if (i->isDescendantGraph(g))
+  for (auto _g : _graphs) {
+    if (_g->isDescendantGraph(g))
       return;
   }
 
@@ -747,12 +748,12 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
         // update index cache for subgraphs of parent graph and added subgraphs
         int i = 0;
-        for (Graph *sg2 : parentGraph->getSubGraphs()) {
+        for (auto sg2 : parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 
         i = 0;
-        for (Graph *sg2 : sg->getSubGraphs()) {
+        for (auto sg2 : sg->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 
@@ -786,7 +787,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
         // update index cache for subgraphs of parent graph
         int i = 0;
-        for (Graph *sg2 : parentGraph->getSubGraphs()) {
+        for (auto sg2 : parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 
@@ -838,7 +839,7 @@ void GraphHierarchiesModel::treatEvents(const std::vector<tlp::Event> &) {
 
   emit layoutAboutToBeChanged();
 
-  foreach (const Graph *graph, _graphsChanged) {
+  for (auto graph : _graphsChanged) {
     QModelIndex graphIndex = indexOf(graph);
     QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
     emit dataChanged(graphIndex, graphEdgesIndex);

@@ -60,7 +60,7 @@ TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
 }
 
 QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
-  foreach (QProcess *k, _processInfo.keys()) {
+  for (auto k : _processInfo.keys()) {
     if (_processInfo[k]._perspectiveId == static_cast<time_t>(id))
       return k;
   }
@@ -87,7 +87,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   if (!file.isEmpty())
     args << file;
 
-  foreach (const QString &k, parameters.keys())
+  for (const QString &k : parameters.keys())
     args << "--" + k + "=" + parameters[k].toString();
 
   args << "--port=" + QString::number(serverPort());
@@ -151,7 +151,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
     if (grabStackTrace) {
       stackTrace += line;
     } else {
-      foreach (QRegExp *re, envInfo.keys()) {
+      for (auto re : envInfo.keys()) {
         if (re->exactMatch(line)) {
           envInfo[re] = re->cap(1);
           break;

@@ -962,7 +962,7 @@ QVariant QVectorBoolEditorCreator::editorData(QWidget *editor, tlp::Graph *) {
   QVector<bool> result;
   QVector<QVariant> editorData = static_cast<VectorEditor *>(editor)->vector();
 
-  foreach (const QVariant &v, editorData)
+  for (const QVariant &v : editorData)
     result.push_back(v.value<bool>());
 
   return QVariant::fromValue<QVector<bool>>(result);
@@ -1053,16 +1053,16 @@ void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bo
   QVector<QVariant> vect(strList.length());
   int i = 0;
 
-  foreach (const QString &s, strList) { vect[i++] = s; }
+  for (const QString &s : strList) { vect[i++] = s; }
 
   static_cast<VectorEditor *>(w)->setVector(vect, qMetaTypeId<QString>());
 }
 
 QVariant QStringListEditorCreator::editorData(QWidget *w, Graph *) {
-  QVector<QVariant> vect = static_cast<VectorEditor *>(w)->vector();
+  auto vect = static_cast<VectorEditor *>(w)->vector();
   QStringList lst;
 
-  foreach (const QVariant &v, vect)
+  for (const QVariant &v : vect)
     lst.push_back(v.toString());
 
   return lst;

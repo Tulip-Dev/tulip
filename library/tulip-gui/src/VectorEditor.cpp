@@ -40,7 +40,7 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
   _userType = userType;
   _ui->list->clear();
 
-  foreach (const QVariant &v, d) {
+  for (const QVariant &v : d) {
     QListWidgetItem *i = new QListWidgetItem();
 
     if (_userType == qMetaTypeId<std::string>())
@@ -74,7 +74,7 @@ void VectorEditor::add() {
 }
 
 void VectorEditor::remove() {
-  foreach (QListWidgetItem *i, _ui->list->selectedItems())
+  for (auto i : _ui->list->selectedItems())
     delete i;
 
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));

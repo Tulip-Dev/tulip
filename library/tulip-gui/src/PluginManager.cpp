@@ -182,10 +182,10 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
   }
 
   if (locations.testFlag(Remote)) {
-    foreach (const QString &loc, remoteLocations()) {
+    for (const QString &loc : remoteLocations()) {
       PluginServerClient client(loc);
 
-      foreach (const PluginInformation &info, client.list(nameFilter, categoryFilter)) {
+      for (const PluginInformation &info : client.list(nameFilter, categoryFilter)) {
         PluginInformation storedInfo = nameToInfo[info.name];
         storedInfo.name = info.name;
         storedInfo.category = info.category;
@@ -197,7 +197,8 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
 
   PluginInformationList result;
 
-  foreach (const PluginInformation &i, nameToInfo.values()) { result.push_back(i); }
+  for (const PluginInformation &i : nameToInfo.values())
+    result.push_back(i);
 
   return result;
 }

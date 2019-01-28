@@ -37,20 +37,17 @@ void InteractorLister::initInteractorsDependencies() {
 
   std::list<std::string> interactors(PluginLister::instance()->availablePlugins<Interactor>());
 
-  for (std::list<std::string>::const_iterator it = interactors.begin(); it != interactors.end();
-       ++it) {
-    string interactorName(*it);
+  for (const std::string &interactorName  : interactors) {
     interactorToName[PluginLister::instance()->getPluginObject<Interactor>(
         interactorName, nullptr)] = interactorName;
   }
 
   std::list<std::string> views(PluginLister::instance()->availablePlugins<View>());
 
-  for (std::list<std::string>::const_iterator it = views.begin(); it != views.end(); ++it) {
-    string viewName(*it);
+  for (const std::string &viewName : views) {
     QList<Interactor *> compatibleInteractors;
 
-    foreach (Interactor *i, interactorToName.keys()) {
+    for (auto i : interactorToName.keys()) {
       if (i->isCompatible(viewName))
         compatibleInteractors << i;
     }
@@ -59,12 +56,14 @@ void InteractorLister::initInteractorsDependencies() {
 
     QList<string> compatibleNames;
 
-    foreach (Interactor *i, compatibleInteractors) { compatibleNames << interactorToName[i]; }
+    for (auto i : compatibleInteractors)
+      compatibleNames << interactorToName[i];
 
     _compatibilityMap[viewName] = compatibleNames;
   }
 
-  foreach (Interactor *i, interactorToName.keys()) { delete i; }
+  for (auto i : interactorToName.keys())
+    delete i;
 }
 
 QList<string> InteractorLister::compatibleInteractors(const std::string &viewName) {

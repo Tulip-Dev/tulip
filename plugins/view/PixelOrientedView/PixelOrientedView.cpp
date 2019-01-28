@@ -173,7 +173,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
       newGraphSet = true;
     }
 
-    foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
+    for (auto obs : triggers()) { removeRedrawTrigger(obs); }
 
     propertiesSelectionWidget->setWidgetParameters(nullptr, propertiesTypesFilter);
 
@@ -784,11 +784,11 @@ void PixelOrientedView::toggleInteractors(const bool activate) {
 }
 
 void PixelOrientedView::registerTriggers() {
-  foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
 
   addRedrawTrigger(graph());
 
-  for (PropertyInterface *prop : graph()->getObjectProperties()) {
+  for (auto prop : graph()->getObjectProperties()) {
     addRedrawTrigger(prop);
   }
 }

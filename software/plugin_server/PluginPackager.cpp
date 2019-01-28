@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
   QDir pluginServerDir(argv[1]);
   PluginLister::currentLoader = &collector;
 
-  foreach (const QFileInfo &component,
+  for (const QFileInfo &component :
            pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
     collector._currentDirectory = component.fileName();
     QDir pluginDir(component.absoluteFilePath());
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
     pluginDir.cd("lib");
     pluginDir.cd("tulip");
 
-    foreach (const QFileInfo &pluginFile, pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
+    for (const QFileInfo &pluginFile : pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
       if (QLibrary::isLibrary(pluginFile.absoluteFilePath())) {
         PluginLibraryLoader::loadPluginLibrary(
             tlp::QStringToTlpString(pluginFile.absoluteFilePath()), &collector);
@@ -125,8 +125,8 @@ int main(int argc, char **argv) {
   stream.writeAttribute("release", TULIP_VERSION);
   stream.writeStartElement("plugins");
 
-  foreach (const QString &component, collector._directoryPlugins.keys()) {
-    foreach (const QString &plugin, collector._directoryPlugins[component]) {
+  for (const QString &component : collector._directoryPlugins.keys()) {
+    for (const QString &plugin : collector._directoryPlugins[component]) {
       // Server description
       stream.writeStartElement("plugin");
       stream.writeAttribute("name", plugin);
@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
   stream.writeEndDocument();
   outputXML.close();
 
-  foreach (const QFileInfo &phpFile,
+  for (const QFileInfo &phpFile :
            QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
     QFile::copy(phpFile.absoluteFilePath(), QDir(destinationDir).filePath(phpFile.fileName()));
   }

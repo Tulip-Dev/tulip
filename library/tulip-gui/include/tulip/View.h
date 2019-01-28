@@ -139,7 +139,9 @@ public:
     The list is always the same as the one given when View::setInteractors() was called.
     @see setInteractors();
     */
-  QList<tlp::Interactor *> interactors() const;
+  inline const QList<Interactor *> &interactors() const {
+    return _interactors;
+  }
 
   /**
     @return The currently active interactor.

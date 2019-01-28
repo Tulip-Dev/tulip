@@ -1175,12 +1175,12 @@ void SOMView::removeEmptyViewLabel() {
 }
 
 void SOMView::registerTriggers() {
-  foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
+  for (auto obs : triggers()) { removeRedrawTrigger(obs); }
 
   if (graph()) {
     addRedrawTrigger(graph());
 
-    for (PropertyInterface *prop : graph()->getObjectProperties()) {
+    for (auto prop : graph()->getObjectProperties()) {
       addRedrawTrigger(prop);
     }
   }

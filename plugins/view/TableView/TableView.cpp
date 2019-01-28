@@ -190,7 +190,7 @@ void TableView::graphChanged(tlp::Graph *g) {
 
   if (g && propertiesEditor->getGraph() &&
       (g->getRoot() == propertiesEditor->getGraph()->getRoot())) {
-    foreach (tlp::PropertyInterface *pi, propertiesEditor->visibleProperties()) {
+    for (auto pi : propertiesEditor->visibleProperties()) {
       visibleProperties.insert(tlpStringToQString(pi->getName()));
     }
   }
@@ -340,7 +340,7 @@ void TableView::setPropertyVisible(PropertyInterface *pi, bool v) {
 void TableView::setMatchProperty() {
   QVector<QString> props;
 
-  foreach (PropertyInterface *pi, propertiesEditor->visibleProperties()) {
+  for (auto pi : propertiesEditor->visibleProperties()) {
     QString propName = tlpStringToQString(pi->getName());
     int i = 0;
 
@@ -356,7 +356,7 @@ void TableView::setMatchProperty() {
   QAction *action = menu.addAction("-- Any --");
   menu.setActiveAction(action);
 
-  foreach (const QString &prop, props) {
+  for (const QString &prop : props) {
     if (_ui->matchPropertyButton->text() == prop) {
       action = menu.addAction(prop);
       menu.setActiveAction(action);
@@ -455,7 +455,7 @@ void TableView::mapToGraphSelection() {
     out->setAllNodeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
 
-    foreach (const QModelIndex &idx, selectionModel->selectedRows()) {
+    for (const QModelIndex &idx : selectionModel->selectedRows()) {
       node n(idx.data(TulipModel::ElementIdRole).toUInt());
       out->setNodeValue(n, true);
     }
@@ -463,7 +463,7 @@ void TableView::mapToGraphSelection() {
     out->setAllEdgeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
 
-    foreach (const QModelIndex &idx, selectionModel->selectedRows()) {
+    for (const QModelIndex &idx : selectionModel->selectedRows()) {
       edge e(idx.data(TulipModel::ElementIdRole).toUInt());
       out->setEdgeValue(e, true);
     }
@@ -474,11 +474,11 @@ void TableView::delHighlightedRows() {
   Graph *g = graph();
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
-  for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
+  for (const auto& idx : rows) {
     if (NODES_DISPLAYED)
-      g->delNode(node(itIdx->data(TulipModel::ElementIdRole).toUInt()));
+      g->delNode(node(idx.data(TulipModel::ElementIdRole).toUInt()));
     else
-      g->delEdge(edge(itIdx->data(TulipModel::ElementIdRole).toUInt()));
+      g->delEdge(edge(idx.data(TulipModel::ElementIdRole).toUInt()));
   }
 }
 
@@ -493,12 +493,12 @@ void TableView::toggleHighlightedRows() {
   if (sortModel->filterProperty() == selection)
     selection->removeListener(sortModel);
 
-  for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
+  for (const auto &idx : rows) {
     if (NODES_DISPLAYED) {
-      node n(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      node n(idx.data(TulipModel::ElementIdRole).toUInt());
       selection->setNodeValue(n, !selection->getNodeValue(n));
     } else {
-      edge e(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      edge e(idx.data(TulipModel::ElementIdRole).toUInt());
       selection->setEdgeValue(e, !selection->getEdgeValue(e));
     }
   }
@@ -521,11 +521,11 @@ void TableView::selectHighlightedRows() {
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
 
-  for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
+  for (const auto &idx : rows) {
     if (NODES_DISPLAYED)
-      selection->setNodeValue(node(itIdx->data(TulipModel::ElementIdRole).toUInt()), true);
+      selection->setNodeValue(node(idx.data(TulipModel::ElementIdRole).toUInt()), true);
     else
-      selection->setEdgeValue(edge(itIdx->data(TulipModel::ElementIdRole).toUInt()), true);
+      selection->setEdgeValue(edge(idx.data(TulipModel::ElementIdRole).toUInt()), true);
   }
 
   if (sortModel->filterProperty() == selection)
@@ -548,11 +548,11 @@ bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
   if (!val.isValid())
     return false;
 
-  for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
+  for (const auto &idx : rows) {
     if (NODES_DISPLAYED)
-      GraphModel::setNodeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(), prop, val);
+      GraphModel::setNodeValue(idx.data(TulipModel::ElementIdRole).toUInt(), prop, val);
     else
-      GraphModel::setEdgeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(), prop, val);
+      GraphModel::setEdgeValue(idx.data(TulipModel::ElementIdRole).toUInt(), prop, val);
   }
 
   return true;
@@ -581,12 +581,12 @@ void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
 
   StringProperty *label = graph()->getProperty<StringProperty>("viewLabel");
 
-  for (QList<QModelIndex>::const_iterator itIdx = rows.begin(); itIdx != rows.end(); ++itIdx) {
+  for (const auto &idx : rows) {
     if (NODES_DISPLAYED) {
-      node n(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      node n(idx.data(TulipModel::ElementIdRole).toUInt());
       label->setNodeStringValue(n, prop->getNodeStringValue(n));
     } else {
-      edge e(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      edge e(idx.data(TulipModel::ElementIdRole).toUInt());
       label->setEdgeStringValue(e, prop->getEdgeStringValue(e));
     }
   }
