@@ -50,7 +50,7 @@ using namespace tlp;
 TulipMainWindow *TulipMainWindow::_instance = nullptr;
 
 TulipMainWindow::TulipMainWindow(QWidget *parent)
-    : QMainWindow(parent), _errorMessage(new QLabel()), _ui(new Ui::TulipMainWindowData()),
+    : QMainWindow(parent), _errorMessage(new QLabel()), _ui(new Ui::TulipMainWindowData),
       _systemTrayIcon(nullptr) {
   _ui->setupUi(this);
 
@@ -96,14 +96,14 @@ TulipMainWindow::TulipMainWindow(QWidget *parent)
   _systemTrayIcon->setToolTip("Tulip agent");
   QMenu *systemTrayMenu = new QMenu();
   systemTrayMenu->addAction("Show", this, SLOT(showProjectsCenter()));
-  systemTrayMenu->addAction("Hide", this, SLOT(close()));
+  systemTrayMenu->addAction("Hide", this, SLOT(hide()));
   systemTrayMenu->addSeparator();
   systemTrayMenu->addAction("Projects", this, SLOT(showProjectsCenter()));
   systemTrayMenu->addAction("Plugins center", this, SLOT(showPluginsCenter()));
   systemTrayMenu->addAction("About us", this, SLOT(showAboutCenter()));
   systemTrayMenu->addSeparator();
-  connect(systemTrayMenu->addAction("Exit"), SIGNAL(triggered()), this, SLOT(closeApp()));
-  connect(_ui->exitButton, SIGNAL(released()), this, SLOT(closeApp()));
+  connect(systemTrayMenu->addAction("Exit"), SIGNAL(triggered()), this, SLOT(close()));
+  connect(_ui->exitButton, SIGNAL(clicked()), this, SLOT(close()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
   connect(_systemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
           SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
@@ -185,25 +185,9 @@ void TulipMainWindow::checkPython() {
 }
 #endif
 
-void TulipMainWindow::closeApp() {
-  _systemTrayIcon->hide();
-  delete _systemTrayIcon;
-  QApplication::exit(0);
-}
-
 void TulipMainWindow::closeEvent(QCloseEvent *e) {
-  e->ignore();
-
-  if (TulipSettings::instance().value("app/showsystraynotif", true).toBool()) {
-    showTrayMessage(
-        "Tulip",
-        "Tulip is still running.\nTo show the Tulip window again, click Tulip icon located "
-        "into your notification area.\n\nNote: This message will be displayed only once.",
-        QSystemTrayIcon::Information, 3000);
-    TulipSettings::instance().setValue("app/showsystraynotif", false);
-  }
-
-  hide();
+  _systemTrayIcon->deleteLater();
+  e->accept();
 }
 
 void TulipMainWindow::pageChooserClicked() {
@@ -269,9 +253,7 @@ void TulipMainWindow::bringWindowToFront() {
 
 void TulipMainWindow::showPluginsCenter() {
   bringWindowToFront();
-#if defined(__APPLE__) || defined(_WIN32)
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
-#endif
 }
 
 void TulipMainWindow::showProjectsCenter() {
@@ -329,7 +311,7 @@ void TulipMainWindow::openProjectWith(const QString &file, const QString &perspe
 
 void TulipMainWindow::showTrayMessage(const QString &title, const QString &message, uint icon,
                                       uint duration) {
-  if (!_systemTrayIcon)
+  if (_systemTrayIcon == nullptr)
     return;
 
   _systemTrayIcon->showMessage(title, message, static_cast<QSystemTrayIcon::MessageIcon>(icon),
