@@ -61,6 +61,7 @@ void TulipSplashScreen::loaded(const Plugin *info, const std::list<Dependency> &
 
 void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {
   _message = QString("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
+  _errors[filename.c_str()] = erreurmsg.c_str();
 }
 
 void TulipSplashScreen::finished(bool state, const std::string &) {
