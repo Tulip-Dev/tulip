@@ -39,8 +39,8 @@ QStringList TulipFont::installedFontNames() {
   QStringList result;
   QDir installedFontsDir(tulipFontsDirectory());
 
-  foreach (const QFileInfo &fontDirInfo,
-           installedFontsDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs)) {
+  for (const QFileInfo &fontDirInfo :
+         installedFontsDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs)) {
     QString fontName(fontDirInfo.fileName());
     // sanity checks
     TulipFont normalFont(fontName), boldFont(normalFont), italicFont(normalFont),

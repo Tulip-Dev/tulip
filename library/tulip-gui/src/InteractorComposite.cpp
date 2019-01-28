@@ -73,7 +73,7 @@ void InteractorComposite::setView(tlp::View *view) {
   _view = view;
   construct();
 
-  foreach (InteractorComponent *i, _components)
+  for (auto i : _components)
     i->setView(view);
 }
 
@@ -99,14 +99,14 @@ void InteractorComposite::install(QObject *target) {
   setLastTarget(target);
 
   if (target != nullptr)
-    foreach (InteractorComponent *i, _components) {
+    for (auto i : _components) {
       target->installEventFilter(i);
       i->init();
     }
 }
 void InteractorComposite::uninstall() {
   if (lastTarget() != nullptr) {
-    foreach (InteractorComponent *i, _components) {
+    for (auto i : _components) {
       lastTarget()->removeEventFilter(i);
       i->clear();
     }

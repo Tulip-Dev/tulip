@@ -91,7 +91,7 @@ TulipItemDelegate::TulipItemDelegate(QObject *parent)
 }
 
 TulipItemDelegate::~TulipItemDelegate() {
-  foreach (tlp::TulipItemEditorCreator *v, _creators.values())
+  for (auto v : _creators.values())
     delete v;
 }
 

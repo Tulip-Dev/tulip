@@ -52,7 +52,7 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
   int i = 0;
   progress->progress(i, entries.size());
 
-  foreach (const QFileInfo &info, entries) {
+  for (const QFileInfo &info : entries) {
     progress->progress(i++, entries.size());
 
     if (info.isDir()) { // Recurse in directories if they are different from . and ..

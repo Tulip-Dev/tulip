@@ -164,7 +164,7 @@ void GraphPerspectiveLogger::clear() {
 void GraphPerspectiveLogger::copy() {
   QStringList strings;
 
-  foreach (QListWidgetItem *item, _ui->listWidget->selectedItems())
+  for (auto item : _ui->listWidget->selectedItems())
     strings << item->text();
 
   if (!strings.isEmpty())

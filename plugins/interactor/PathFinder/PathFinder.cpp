@@ -111,7 +111,7 @@ void PathFinder::construct() {
   vector<string> activeList, inactiveList;
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
 
-  foreach (PathHighlighter *h, highlighters)
+  for (auto h : highlighters)
     inactiveList.push_back(h->getName());
 
   highlightersListWidget->setSelectedStringsList(activeList);
@@ -225,7 +225,7 @@ void PathFinder::configureHighlighterButtonPressed() {
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
   PathHighlighter *hler = nullptr;
 
-  foreach (PathHighlighter *h, highlighters) {
+  for (auto h : highlighters) {
     if (h->getName() == text) {
       hler = h;
       break;

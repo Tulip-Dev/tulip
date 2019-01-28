@@ -1382,7 +1382,7 @@ void PythonIDE::setProject(tlp::TulipProject *project) {
     QStringList entries =
         project->entryList("views", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
 
-    foreach (const QString &entry, entries) {
+    for (const QString &entry : entries) {
       QIODevice *xmlFile = project->fileStream("views/" + entry + "/view.xml");
       QXmlStreamReader doc(xmlFile);
 
@@ -1630,7 +1630,7 @@ void PythonIDE::deleteFilesFromProjectIfRemoved(const QString &projectDir,
                                                 const QStringList &existingFilenames) {
   QStringList filesInProject = _project->entryList(projectDir);
 
-  foreach (const QString &filename, filesInProject) {
+  for (const QString &filename : filesInProject) {
     if (filename == "files")
       continue;
 

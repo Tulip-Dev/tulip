@@ -389,7 +389,7 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 #endif
 
   if (removeDiscardedPlugins) {
-    foreach (const QString &plugin, tlp::PluginManager::markedForRemoval()) {
+    for (const QString &plugin : tlp::PluginManager::markedForRemoval()) {
       QFile f(plugin);
       f.remove();
       tlp::PluginManager::unmarkForRemoval(

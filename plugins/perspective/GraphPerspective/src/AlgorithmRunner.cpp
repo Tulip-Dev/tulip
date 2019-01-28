@@ -88,7 +88,7 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 
   ExpandableGroupBox *categoryBox = nullptr, *groupBox = nullptr;
 
-  foreach (ExpandableGroupBox *box, w->findChildren<ExpandableGroupBox *>()) {
+  for (auto box : w->findChildren<ExpandableGroupBox *>()) {
     if (box->objectName() == category) {
       categoryBox = box;
       break;
@@ -99,7 +99,7 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
     return;
 
   if (!group.isEmpty()) {
-    foreach (ExpandableGroupBox *box, categoryBox->findChildren<ExpandableGroupBox *>()) {
+    for (auto box : categoryBox->findChildren<ExpandableGroupBox *>()) {
       if (box->objectName() == group) {
         groupBox = box;
         break;
@@ -152,7 +152,7 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 void AlgorithmRunner::refreshTreeUi(QWidget *w) {
   QStringList visibleItems;
 
-  foreach (AlgorithmRunnerItem *i, w->findChildren<AlgorithmRunnerItem *>()) {
+  for (auto i : w->findChildren<AlgorithmRunnerItem *>()) {
     if (PluginLister::instance()->pluginExists(QStringToTlpString(i->name())))
       visibleItems.push_back(i->name());
     else {
@@ -161,7 +161,7 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
     }
   }
 
-  foreach (ExpandableGroupBox *gb, w->findChildren<ExpandableGroupBox *>()) {
+  for (auto gb : w->findChildren<ExpandableGroupBox *>()) {
     if (!gb->property("root").toBool() && gb->findChildren<AlgorithmRunnerItem *>().empty()) {
       delete gb;
     }
@@ -170,10 +170,7 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
   std::list<std::string> installedPlugins =
       PluginLister::instance()->availablePlugins<tlp::Algorithm>();
 
-  for (std::list<std::string>::iterator it = installedPlugins.begin(); it != installedPlugins.end();
-       ++it) {
-    std::string name = *it;
-
+  for (const auto &name : installedPlugins) {
     if (!visibleItems.contains(name.c_str())) {
       insertItem(w, name.c_str());
     }
@@ -227,11 +224,11 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent)
   _ui->contents->layout()->addItem(
       new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
-  foreach (AlgorithmRunnerItem *i, findChildren<AlgorithmRunnerItem *>()) {
+  for (auto i : findChildren<AlgorithmRunnerItem *>()) {
     connect(i, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
   }
 
-  foreach (const QString &a, TulipSettings::instance().favoriteAlgorithms()) { addFavorite(a); }
+  for (const QString &a : TulipSettings::instance().favoriteAlgorithms()) { addFavorite(a); }
 
   connect(_ui->header, SIGNAL(expanded(bool)), this, SLOT(expanded(bool)));
 }
@@ -244,7 +241,7 @@ void AlgorithmRunner::setGraph(Graph *g) {
   _ui->contents->setEnabled(g != nullptr);
   _graph = g;
 
-  foreach (AlgorithmRunnerItem *item, findChildren<AlgorithmRunnerItem *>()) {
+  for (auto item : findChildren<AlgorithmRunnerItem *>()) {
     if (item->graph() != g) {
       item->setGraph(g);
     }
@@ -275,7 +272,7 @@ template <typename T>
 QList<T> childrenObj(QObject *obj) {
   QList<T> result;
 
-  foreach (QObject *o, obj->children()) {
+  for (auto o : obj->children()) {
     T var = dynamic_cast<T>(o);
 
     if (var != nullptr)
@@ -291,12 +288,12 @@ bool filterGroup(ExpandableGroupBox *group, QString filter) {
   if (group->title().contains(filter, Qt::CaseInsensitive)) {
     group->show();
 
-    foreach (ExpandableGroupBox *g, subGroups) {
+    for (auto g : subGroups) {
       g->show();
       subItems += childrenObj<AlgorithmRunnerItem *>(g->widget());
     }
 
-    foreach (AlgorithmRunnerItem *i, subItems)
+    for (auto i : subItems)
       i->show();
 
     return true;
@@ -304,9 +301,9 @@ bool filterGroup(ExpandableGroupBox *group, QString filter) {
 
   bool groupVisible = false;
 
-  foreach (ExpandableGroupBox *g, subGroups) { groupVisible |= filterGroup(g, filter); }
+  for (auto g : subGroups) { groupVisible |= filterGroup(g, filter); }
 
-  foreach (AlgorithmRunnerItem *i, subItems) {
+  for (auto i : subItems) {
     bool itemVisible = i->name().contains(filter, Qt::CaseInsensitive);
     i->setVisible(itemVisible);
     groupVisible |= itemVisible;
@@ -317,7 +314,7 @@ bool filterGroup(ExpandableGroupBox *group, QString filter) {
 }
 
 void AlgorithmRunner::setFilter(QString filter) {
-  foreach (ExpandableGroupBox *group, childrenObj<ExpandableGroupBox *>(_ui->contents)) {
+  for (auto group : childrenObj<ExpandableGroupBox *>(_ui->contents)) {
     if (group != _ui->favoritesBox)
       filterGroup(group, filter);
   }
@@ -374,12 +371,12 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
 }
 
 void AlgorithmRunner::removeFavorite(const QString &algName) {
-  foreach (AlgorithmRunnerItem *i, _favorites) {
+  for (auto i : _favorites) {
     if (i->name() == algName) {
       _favorites.removeAll(i);
       i->deleteLater();
 
-      foreach (AlgorithmRunnerItem *item, findChildren<AlgorithmRunnerItem *>())
+      for (auto item : findChildren<AlgorithmRunnerItem *>())
 
         if (item != i && item->name() == algName)
           item->setFavorite(false);
@@ -400,7 +397,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
 
   TulipSettings::instance().addFavoriteAlgorithm(algName);
 
-  foreach (AlgorithmRunnerItem *i, _favorites) {
+  for (auto i : _favorites) {
     if (i->name() == algName)
       return;
   }
@@ -416,7 +413,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   item->setFavorite(true);
   int itemPos = 0;
 
-  foreach (AlgorithmRunnerItem *i,
+  for (auto i :
            _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem *>()) {
     if (i->name() > item->name()) {
       break;
@@ -435,7 +432,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
 
   connect(item, SIGNAL(favorized(bool)), this, SLOT(favorized(bool)));
 
-  foreach (AlgorithmRunnerItem *i, findChildren<AlgorithmRunnerItem *>()) {
+  for (auto i : findChildren<AlgorithmRunnerItem *>()) {
     if (i != item && i->name() == algName)
       i->setFavorite(true);
   }

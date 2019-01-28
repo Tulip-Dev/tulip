@@ -265,7 +265,7 @@ QVariant VectorEditorCreator<ElementType>::editorData(QWidget *editor, tlp::Grap
   std::vector<ElementType> result;
   QVector<QVariant> editorData = static_cast<VectorEditor *>(editor)->vector();
 
-  foreach (QVariant v, editorData)
+  for (const QVariant &v : editorData)
     result.push_back(v.value<ElementType>());
 
   return QVariant::fromValue<std::vector<ElementType>>(result);
