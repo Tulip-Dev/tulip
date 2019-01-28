@@ -21,6 +21,8 @@
 #define TULIPSPLASHSCREEN_H
 
 #include <QSplashScreen>
+#include <QMap>
+
 #include <tulip/PluginLoader.h>
 
 /**
@@ -32,7 +34,6 @@
 class TulipSplashScreen : public tlp::PluginLoader, public QSplashScreen {
 public:
   TulipSplashScreen();
-  ~TulipSplashScreen() override {}
 
   void start(const std::string &path) override;
   void loading(const std::string &filename) override;
@@ -44,6 +45,10 @@ public:
   void aborted(const std::string &filename, const std::string &erreurmsg) override;
   void finished(bool state, const std::string &msg) override;
 
+  const QMap<QString, QString> &errors() {
+    return _errors;
+  }
+
 protected:
   void drawContents(QPainter *painter) override;
 
@@ -53,6 +58,8 @@ private:
 
   int _fileCounter;
   int _numberOfFiles;
+
+  QMap<QString, QString> _errors;
 };
 
 #endif // TULIPSPLASHSCREEN_H

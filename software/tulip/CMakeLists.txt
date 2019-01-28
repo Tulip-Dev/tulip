@@ -2,8 +2,6 @@ SET(SRCS
   src/main.cpp
   src/PerspectiveItemWidget.cpp
   src/PluginErrorReport.cpp
-  src/PluginLoaderDispatcher.cpp
-  src/PluginLoaderReporter.cpp
   src/PluginsCenter.cpp
   src/PluginInformationListItem.cpp
   src/TulipMainWindow.cpp
