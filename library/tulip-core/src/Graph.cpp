@@ -527,43 +527,46 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
 
 void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
                       BooleanProperty *outSel) {
-
-    if (!outG || !inG || !inSel)
-      return;
-
-    //nothing selected, nothing to do
-    if((inSel->numberOfNonDefaultValuatedNodes(inG)==0)&&(inSel->numberOfNonDefaultValuatedEdges(inG)==0))
-        return;
-
-    if (outSel) {
+  if (outSel) {
     outSel->setAllNodeValue(false);
     outSel->setAllEdgeValue(false);
   }
 
-    // extend the selection to edge ends
-    for (auto e : inSel->getNonDefaultValuatedEdges(inG)) {
-        const pair<node, node> &eEnds = inG->ends(e);
-        inSel->setNodeValue(eEnds.first, true);
-        inSel->setNodeValue(eEnds.second, true);
-    }
+  if (!outG || !inG)
+    return;
 
-  MutableContainer<node> nodeTrl;
-  nodeTrl.setAll(node());
-  // get selected nodes
+  // extend the selection to edge ends
+  if (inSel) {
+    for (auto e : inSel->getNonDefaultValuatedEdges(inG)) {
+      const pair<node, node> eEnds = inG->ends(e);
+      inSel->setNodeValue(eEnds.first, true);
+      inSel->setNodeValue(eEnds.second, true);
+    }
+  }
+
+  // the selected nodes
   Iterator<node> *nodeIt = nullptr;
+  // the number of selected nodes
+  unsigned int nbSelNodes = 0;
 
   if (inSel) {
     nodeIt = inSel->getNonDefaultValuatedNodes(inG);
-    outG->reserveNodes(outG->numberOfNodes() + inSel->numberOfNonDefaultValuatedNodes(inG));
+    if (!nodeIt->hasNext()) {
+      delete nodeIt;
+      return;
+    }
+    nbSelNodes = inSel->numberOfNonDefaultValuatedNodes(inG);
   } else {
     nodeIt = inG->getNodes();
-    outG->reserveNodes(outG->numberOfNodes() + inG->numberOfNodes());
+    if (!nodeIt->hasNext()) {
+      delete nodeIt;
+      return;
+    }
+    nbSelNodes = inG->numberOfNodes();
   }
 
-  if (!nodeIt->hasNext()) {
-    delete nodeIt;
-    return;
-  }
+  // reserve space for nodes
+  outG->reserveNodes(outG->numberOfNodes() + nbSelNodes);
 
   // get properties
   std::vector<std::pair<PropertyInterface *, PropertyInterface *>> properties;
@@ -577,6 +580,8 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
   }
   unsigned int nbProperties = properties.size();
 
+  MutableContainer<node> nodeTrl;
+  nodeTrl.setAll(node());
   // loop on nodes
   for (auto nIn : nodeIt) {
     // add outG corresponding node
