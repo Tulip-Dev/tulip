@@ -71,7 +71,9 @@ QObject *InteractorComposite::lastTarget() const {
 
 void InteractorComposite::setView(tlp::View *view) {
   _view = view;
-  construct();
+  // no need to call construct when view is nullptr (called with a nullptr from View::~View())
+  if (view != nullptr)
+    construct();
 
   for (auto i : _components)
     i->setView(view);
