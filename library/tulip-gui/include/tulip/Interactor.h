@@ -144,7 +144,7 @@ public slots:
 
   /**
     @brief Install the interactor on the given target
-    A call to this method means thatr the interactor should start listening to the target's events
+    A call to this method means that the interactor should start listening to the target's events
     and handle them.
     Returning true prevents further handling of the event. Doing otherwise means that the interactor
     will let following filters to hand over this kind of event.
