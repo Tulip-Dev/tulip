@@ -1294,7 +1294,7 @@ void GraphPerspective::group() {
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::vector<node> groupedNodes;
-  for (auto n : selection->getNodesEqualTo(true)) {
+  for (auto n : selection->getNodesEqualTo(true, graph)) {
     if (graph->isElement(n))
       groupedNodes.push_back(n);
   }
