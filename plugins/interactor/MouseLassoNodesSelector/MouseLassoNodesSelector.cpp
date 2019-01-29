@@ -36,8 +36,7 @@ using namespace tlp;
 
 MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *)
     : NodeLinkDiagramComponentInteractor(":/i_lasso.png", "Select nodes in a freehand drawn region",
-                                         StandardInteractorPriority::FreeHandSelection) {
-}
+                                         StandardInteractorPriority::FreeHandSelection) {}
 
 bool MouseLassoNodesSelectorInteractor::isCompatible(const std::string &viewName) const {
   return ((viewName == NodeLinkDiagramComponent::viewName) ||

@@ -447,10 +447,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
                                  "Z");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionRedo, "Redo the latest update of the current graph",
                                  "Y");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(
-      _ui->actionCut, "Move the selected elements of the current graph into the clipboard (the selected edges ends are selected too)", "X");
-  SET_TOOLTIP_WITH_CTRL_SHORTCUT(
-      _ui->actionCopy, "Copy the selected elements of the current graph into the clipboard (the selected edges ends are selected too)", "C");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCut,
+                                 "Move the selected elements of the current graph into the "
+                                 "clipboard (the selected edges ends are selected too)",
+                                 "X");
+  SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionCopy,
+                                 "Copy the selected elements of the current graph into the "
+                                 "clipboard (the selected edges ends are selected too)",
+                                 "C");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionPaste,
                                  "Paste the clipboard elements into the current graph", "V");
   SET_TOOLTIP_WITH_CTRL_SHORTCUT(_ui->actionSelect_All, "Select all elements of the current graph",
@@ -1280,7 +1284,7 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
       g->push();
 
       for (auto n : stableIterator(selection->getNonDefaultValuatedNodes(g))) {
-	g->delNode(n);
+        g->delNode(n);
       }
       Observable::unholdObservers();
     }
