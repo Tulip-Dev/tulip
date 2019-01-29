@@ -41,16 +41,16 @@ public:
   InteractorRectangleZoom(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle") {
     setPriority(StandardInteractorPriority::ZoomOnRectangle);
-    setConfigurationWidgetText(QString("<h3>Zoom on rectangle</h3>") +
-                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates "
-                               "the first corner.<br> <b>Mouse left</b> up indicates the opposite "
-                               "corner.<br> <b>Mouse left Doucle click</b> to center the view.");
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() override {
+    setConfigurationWidgetText(QString("<h3>Zoom on rectangle</h3>") +
+                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates "
+                               "the first corner.<br> <b>Mouse left</b> up indicates the opposite "
+                               "corner.<br> <b>Mouse left Doucle click</b> to center the view.");
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseBoxZoomer);
   }

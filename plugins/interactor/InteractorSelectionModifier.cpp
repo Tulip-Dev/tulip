@@ -43,6 +43,12 @@ public:
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png",
                                            "Move/Reshape rectangle selection") {
     setPriority(StandardInteractorPriority::RectangleSelectionModifier);
+  }
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Move/Reshape rectangle selection</h3>") + "Modify selection<br/><br/>" +
         "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
@@ -60,12 +66,6 @@ public:
         "right zone</li></ul>" +
         "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top "
         "right zone</li></ul>");
-  }
-
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseSelector);
     push_back(new MouseSelectionEditor);

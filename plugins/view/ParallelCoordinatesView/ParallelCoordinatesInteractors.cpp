@@ -55,6 +55,10 @@ PLUGIN(InteractorAxisSpacer)
 
 InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_selection.png", "Select elements") {
+  setPriority(StandardInteractorPriority::RectangleSelection);
+}
+
+void InteractorParallelCoordsSelection::construct() {
   setConfigurationWidgetText(
       QString("<html><head>") + "<title></title>" + "</head>" + "<body>" +
       "<h3>Elements selection interactor</h3>" +
@@ -74,16 +78,16 @@ InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(const tlp::
       "<p>To reset the current selection, position the mouse cursor so that there is no elements "
       "under it and do a left click" +
       "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::RectangleSelection);
-}
-
-void InteractorParallelCoordsSelection::construct() {
   push_back(new ParallelCoordsElementsSelector);
   push_back(new MousePanNZoomNavigator);
 }
 
 InteractorHighLighter::InteractorHighLighter(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_element_highlighter.png", "Highlight elements") {
+  setPriority(StandardInteractorPriority::ViewInteractor1);
+}
+
+void InteractorHighLighter::construct() {
   setConfigurationWidgetText(
       QString("<html><head>") + "<title></title>" + "</head>" + "<body>" +
       "<h3>Elements highlighter interactor</h3>" +
@@ -109,16 +113,17 @@ InteractorHighLighter::InteractorHighLighter(const tlp::PluginContext *)
       "<p>To select the highlighted elements, do a right click in the drawing and choose the "
       "\"Select highlighted elements\" entry in the popup menu which appears.</p>" +
       "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::ViewInteractor1);
-}
 
-void InteractorHighLighter::construct() {
   push_back(new ParallelCoordsElementHighlighter);
   push_back(new MousePanNZoomNavigator);
 }
 
 InteractorAxisSwapper::InteractorAxisSwapper(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_axis_swapper.png", "Axis swapper") {
+  setPriority(StandardInteractorPriority::ViewInteractor2);
+}
+
+void InteractorAxisSwapper::construct() {
   setConfigurationWidgetText(
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis swapper interactor</h3>" +
@@ -130,16 +135,16 @@ InteractorAxisSwapper::InteractorAxisSwapper(const tlp::PluginContext *)
       "the axis. To swap the axis with an other, release the mouse button when a translucent green "
       "rectangle appears around the other axis to swap.</p>" +
       "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::ViewInteractor2);
-}
-
-void InteractorAxisSwapper::construct() {
   push_back(new ParallelCoordsAxisSwapper);
   push_back(new MousePanNZoomNavigator);
 }
 
 InteractorAxisSliders::InteractorAxisSliders(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_axis_sliders.png", "Axis sliders") {
+  setPriority(StandardInteractorPriority::ViewInteractor3);
+}
+
+void InteractorAxisSliders::construct() {
   setConfigurationWidgetText(
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis sliders interactor</h3>" +
@@ -165,16 +170,17 @@ InteractorAxisSliders::InteractorAxisSliders(const tlp::PluginContext *)
       "move automatically to show in which ranges the highlighted data are included on the other "
       "dimensions.</p>" +
       "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::ViewInteractor3);
-}
 
-void InteractorAxisSliders::construct() {
   push_back(new ParallelCoordsAxisSliders);
   push_back(new MousePanNZoomNavigator);
 }
 
 InteractorBoxPlot::InteractorBoxPlot(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_axis_boxplot.png", "Axis box plot") {
+  setPriority(StandardInteractorPriority::ViewInteractor4);
+}
+
+void InteractorBoxPlot::construct() {
   setConfigurationWidgetText(
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis boxplot interactor</h3>" +
@@ -201,10 +207,7 @@ InteractorBoxPlot::InteractorBoxPlot(const tlp::PluginContext *)
       "highlight data</b>. To highlight the data included in the interquartile range, put the "
       "mouse pointer near the median line and the interquartile range will be selected.</p>" +
       "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::ViewInteractor4);
-}
 
-void InteractorBoxPlot::construct() {
   push_back(new ParallelCoordsAxisBoxPlot);
   push_back(new MousePanNZoomNavigator);
 }
@@ -212,6 +215,10 @@ void InteractorBoxPlot::construct() {
 InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_select.png",
                                     "Get information on nodes/edges") {
+  setPriority(StandardInteractorPriority::GetInformation);
+}
+
+void InteractorShowElementInfo::construct() {
   setConfigurationWidgetText(QString("<html>") + "<head>" + "<title></title>" + "</head>" +
                              "<body>" + "<h3>Show element properties interactor</h3>" +
                              "<p>This interactor allows to view the properties associated to an "
@@ -219,10 +226,6 @@ InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
                              "properties of that node/edge using the Element tab of the Graph "
                              "Editor sub-window</p>" +
                              "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::GetInformation);
-}
-
-void InteractorShowElementInfo::construct() {
   push_back(new ParallelCoordsElementShowInfo);
   push_back(new MousePanNZoomNavigator);
 }
@@ -230,6 +233,10 @@ void InteractorShowElementInfo::construct() {
 InteractorAxisSpacer::InteractorAxisSpacer(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_axis_spacer.png",
                                     "Modify space between consecutive axis") {
+  setPriority(StandardInteractorPriority::ViewInteractor5);
+}
+
+void InteractorAxisSpacer::construct() {
   setConfigurationWidgetText(
       QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" +
       "<h3>Axis spacer interactor</h3>" +
@@ -242,10 +249,6 @@ InteractorAxisSpacer::InteractorAxisSpacer(const tlp::PluginContext *)
       "<p>The axis postions will also be reset to default when the number of selected dimensions "
       "changes.</p>" +
       "</body>" + "</html>");
-  setPriority(StandardInteractorPriority::ViewInteractor5);
-}
-
-void InteractorAxisSpacer::construct() {
   push_back(new MousePanNZoomNavigator);
   push_back(new ParallelCoordsAxisSpacer());
 }

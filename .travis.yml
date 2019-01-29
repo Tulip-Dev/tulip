@@ -1,14 +1,19 @@
 # Tulip continuous integration on Linux and Mac OS platforms through TravisCI.
 # Two type of builds are performed by os:
-#  - a "legacy" Tulip build using default system compiler (GCC 4.8 on Linux, clang 3.5 on Mac OS), C++11 standard Qt 5 and Python 2.7
-#  - a "modern" Tulip build using a recent compiler (GCC 7.1 on linux, clang from Xcode10.1 on Mac OS), C++11 standard,
-#    Qt 5.10 on Linux / Qt 5.12 on Mac OS, and Python 3.6 on Linux / Python 2.7 on Mac OS
-# As TravisCI limits build jobs to 45 minutes timeout, we build Tulip in two successive build stages:
+#  - a "legacy" Tulip build using :
+#     * default system compiler (GCC 5.4 on Linux, clang from Xcode7.3 on Mac OS)
+#     * Qt 5.5 on Linux, Qt 5.9 on MacOS
+#     * Python 2.7
+#  - a "modern" Tulip build using:
+#     * recent compiler (GCC 8.1 on Linux, clang 7.0 from MacPorts or Homebrew on Mac OS)
+#     * Qt 5.11 on Linux, Qt 5.12 on MacOS
+#     * Python 3.7 on Linux, Python 2.7 on MacOS
+# As TravisCI limits build job times to 45 minutes, Tulip is built in two successive stages
+# to avoid timeouts (which happened often with MacOs builds):
 #  - a core build with no Tulip OpenGL and Qt components
 #  - a complete build including OpenGL and Qt components
-# The trick is to use travis build cache and ccache to cache already compiled object files between stages
-# and thus not exceeding Travis build timeout limits (which systematically happens 
-# before when compiling Tulip on MacOS with C++11 standard activated).
+# The trick is to use travis build cache and ccache to cache already compiled object
+# files between stages and thus not exceeding Travis build timeout limits
 
 # inform travis that we are building a cpp project
 language: cpp
@@ -26,7 +31,7 @@ jobs:
     - stage: Tulip core build (Linux)
     # legacy Tulip core build on Linux
       os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       cache: ccache
       addons:
@@ -43,19 +48,6 @@ jobs:
             - libpython2.7-dev
             - libcppunit-dev
             - binutils-dev
-            # the dependencies below are not required for a Tulip core build but travis build cache does not work
-            # as expected in the complete build stage that follows (due to cache slug depending on the environment),
-            # so install them anyway
-            - qt5-default
-            - libqt5webkit5-dev
-            - libglew-dev
-            - libpng-dev
-            - libjpeg-dev
-            - libfreetype6-dev
-            - python-pip
-      install:
-        # install sphinx in order to have the same build environment as in the complete build (for cache slug)
-        - sudo pip install sphinx
       env:
         # use Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
@@ -74,49 +66,35 @@ jobs:
     # modern Tulip core build on Linux
     -
       os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       cache: ccache
       addons:
         apt:
-          # we get GCC 7.x and Python 3.6 from external ppas
+          # we get GCC 8.x and Python 3.7 from external ppas
           sources:
             - ubuntu-toolchain-r-test
             - deadsnakes
           # install Tulip build dependencies
           packages:
-            - g++-7
+            - g++-8
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
             - libyajl-dev
-            - python3.6
-            - libpython3.6-dev
+            - python3.7
+            - libpython3.7-dev
             - libcppunit-dev
             - binutils-dev
-            # the dependencies below are not required for a Tulip core build but travis build cache does not work
-            # as expected in the complete build stage that follows (as cache slug depends on the environment),
-            # so install them anyway
-            - libglew-dev
-            - libpng-dev
-            - libjpeg-dev
-            - libfreetype6-dev
       before_install:
-        # set up external ppa for Qt 5.10.1 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt-5.10.1-trusty
-        # update packages list
-        - sudo apt-get -qy update
-        # force the use of GCC 7
+        # force the use of GCC 8
         - eval "${MATRIX_EVAL}"
-      install:
-        # install Qt 5.10 from external ppa (not required for this build though but needed for travis build cache to work correctly between builds stages)
-        - sudo apt-get -qy install qt510-meta-minimal qt510webengine
       env:
-        # use Python 3.6
-        - PYTHON_EXECUTABLE=/usr/bin/python3.6
+        # use Python 3.7
+        - PYTHON_EXECUTABLE=/usr/bin/python3.7
         # use GCC 7
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       script:
         # create build directory
         - mkdir build && cd build
@@ -133,9 +111,11 @@ jobs:
     - stage: Tulip complete build (Linux)
       # legacy Tulip complete build on Linux, we also build the documentation in this one
       os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       cache: ccache
+      services:
+        - xvfb
       addons:
         apt:
           # install Tulip build dependencies
@@ -152,7 +132,9 @@ jobs:
             - libcppunit-dev
             - binutils-dev
             - qt5-default
+            - libqt5opengl5-dev
             - libqt5webkit5-dev
+            - libquazip5-dev
             - libglew-dev
             - libpng-dev
             - libjpeg-dev
@@ -163,11 +145,6 @@ jobs:
       env:
         # use Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
-      before_script:
-        # run xvfb to simulate a display (needed to instantiate a QApplication for unit tests)
-        - "export DISPLAY=:99.0"
-        - "sh -e /etc/init.d/xvfb start"
-        - sleep 3 # give xvfb some time to start
       script:
         # create build directory
         - mkdir build && cd build
@@ -183,56 +160,52 @@ jobs:
     # modern Tulip complete build on Linux
     -
       os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       cache: ccache
+      services:
+        - xvfb
       addons:
         apt:
-          # we get GCC 7.x and Python 3.6 from external ppas
+          # we get GCC 8.x, Python 3.7 and Qt 5.11 from external ppas
           sources:
             - ubuntu-toolchain-r-test
             - deadsnakes
+            - sourceline: 'deb http://archive.neon.kde.org/user/ xenial main'
+              key_url: 'http://archive.neon.kde.org/public.key'
           # install Tulip build dependencies
           packages:
-            - g++-7
+            - g++-8
             - cmake
             - ccache
             - ninja-build
             - libqhull-dev
             - libyajl-dev
-            - python3.6
-            - libpython3.6-dev
+            - python3.7
+            - libpython3.7-dev
             - libcppunit-dev
             - binutils-dev
+            - qt5-default
+            - libqt5opengl5-dev
+            - libqt5webkit5-dev
+            - libquazip5-dev
             - libglew-dev
             - libpng-dev
             - libjpeg-dev
             - libfreetype6-dev
       before_install:
-        # set up external ppa for Qt 5.10.1 not registered in travis
-        - sudo add-apt-repository -y ppa:beineri/opt-qt-5.10.1-trusty
-        # update packages list
-        - sudo apt-get -qy update
-        # force the use of GCC 7
+        # force the use of GCC 8
         - eval "${MATRIX_EVAL}"
-      install:
-        # install Qt 5.10 from external ppa
-        - sudo apt-get -qy install qt510-meta-minimal qt510webengine
       env:
-        # use Python 3.6
-        - PYTHON_EXECUTABLE=/usr/bin/python3.6
+        # use Python 3.7
+        - PYTHON_EXECUTABLE=/usr/bin/python3.7
         # use GCC 7
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-      before_script:
-        # run xvfb to simulate a display (needed to instantiate a QApplication for unit tests)
-        - "export DISPLAY=:99.0"
-        - "sh -e /etc/init.d/xvfb start"
-        - sleep 3 # give xvfb some time to start
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       script:
         # create build directoty
         - mkdir build && cd build
         # configure Tulip complete build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/ -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_TESTS=ON -DTULIP_BUILD_DOC=OFF -DTULIP_USE_CCACHE=ON -DTULIP_PYTHON_SITE_INSTALL=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4  || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1
@@ -332,7 +305,7 @@ jobs:
         - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
-    
+
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (MacPorts)
     -
@@ -372,7 +345,7 @@ jobs:
         - sudo ninja -j4 install || travis_terminate 1
         # run Tulip unit tests
         - ninja runTests
-    
+
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip core build on Mac OS (Homebrew)
     -
@@ -402,7 +375,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip core build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_C_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_CXX_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_EXE_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DCMAKE_SHARED_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DOpenMP_C_FLAGS=-fopenmp -DOpenMP_CXX_FLAGS=-fopenmp -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_C_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_CXX_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_EXE_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DCMAKE_SHARED_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DOpenMP_C_FLAGS=-fopenmp=libomp -DOpenMP_C_LIB_NAMES=libomp -DOpenMP_CXX_FLAGS=-fopenmp=libomp -DOpenMP_CXX_LIB_NAMES=libomp -DOpenMP_libomp_LIBRARY=libomp -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DTULIP_BUILD_CORE_ONLY=ON -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1
@@ -460,10 +433,10 @@ jobs:
         - ninja runTests || travis_terminate 1
         # build Tulip bundle
         - ninja bundle
-    
+
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------
     # modern Tulip complete build on Mac OS (MacPorts)
-    - 
+    -
       os: osx
       # use xcode10.1 travis image to get a recent clang compiler and qt5 package
       osx_image: xcode10.1
@@ -500,7 +473,7 @@ jobs:
       env:
         # use system Python 2.7
         - PYTHON_EXECUTABLE=/usr/bin/python2.7
-        
+
       script:
         # create build directory
         - mkdir build && cd build
@@ -556,7 +529,7 @@ jobs:
         # create build directory
         - mkdir build && cd build
         # configure Tulip build using cmake
-        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_C_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_CXX_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_EXE_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DCMAKE_SHARED_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DOpenMP_C_FLAGS=-fopenmp -DOpenMP_CXX_FLAGS=-fopenmp -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
+        - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_C_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_CXX_FLAGS=-I/usr/local/opt/llvm/include -DCMAKE_EXE_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DCMAKE_SHARED_LINKER_FLAGS=-L/usr/local/opt/llvm/lib -DOpenMP_C_FLAGS=-fopenmp=libomp -DOpenMP_C_LIB_NAMES=libomp -DOpenMP_CXX_FLAGS=-fopenmp=libomp -DOpenMP_CXX_LIB_NAMES=libomp -DOpenMP_libomp_LIBRARY=libomp -DCMAKE_PREFIX_PATH=/usr/local/opt/qt -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DSPHINX_EXECUTABLE=$HOME/Library/Python/bin/sphinx-build -DTULIP_BUILD_TESTS=ON -DTULIP_USE_CCACHE=ON || travis_terminate 1
         # compile Tulip using ninja for faster builds
         - ninja -j4 || travis_terminate 1
         - sudo ninja -j4 install || travis_terminate 1

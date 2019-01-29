@@ -41,6 +41,12 @@ public:
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png",
                                            "Navigate in graph") {
     setPriority(StandardInteractorPriority::Navigation);
+  }
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct() override {
     setConfigurationWidgetText(
         QString("<h3>Navigate in graph</h3>") + "3D Navigation in the graph<br/><br/>" +
         "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys "
@@ -61,12 +67,6 @@ public:
         +
         "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>" +
         "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>");
-  }
-
-  /**
-   * Construct chain of responsibility
-   */
-  void construct() override {
     push_back(new MouseNKeysNavigator);
   }
 
