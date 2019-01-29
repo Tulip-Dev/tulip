@@ -126,6 +126,7 @@ void Workspace::closeAll() {
   for (auto p : _panels) {
     delete p; // beware: the destroyed signal is connected to panelDestroyed
   }
+  _panels.clear();
 }
 
 QList<tlp::View *> Workspace::panels() const {
@@ -201,6 +202,7 @@ void Workspace::delView(tlp::View *view) {
   for (auto it : _panels) {
     if (it->view() == view) {
       delete it;
+      _panels.removeOne(it);
       return;
     }
   }
