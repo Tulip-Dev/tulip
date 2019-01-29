@@ -1277,7 +1277,7 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
   QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
 
   if (deleteAfter) {
-    for (auto n : stableIterator(selection->getNodesEqualTo(true))) {
+    for (auto n : stableIterator(selection->getNodesEqualTo(true,g))) {
       g->delNode(n);
     }
   }

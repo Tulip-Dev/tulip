@@ -527,22 +527,25 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
 
 void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel,
                       BooleanProperty *outSel) {
-  if (outSel) {
+
+    if (!outG || !inG || !inSel)
+      return;
+
+    //nothing selected, nothing to do
+    if((inSel->numberOfNonDefaultValuatedNodes(inG)==0)&&(inSel->numberOfNonDefaultValuatedEdges(inG)==0))
+        return;
+
+    if (outSel) {
     outSel->setAllNodeValue(false);
     outSel->setAllEdgeValue(false);
   }
 
-  if (!outG || !inG)
-    return;
-
-  // extend the selection to edge ends
-  if (inSel) {
+    // extend the selection to edge ends
     for (auto e : inSel->getNonDefaultValuatedEdges(inG)) {
-      const pair<node, node> &eEnds = inG->ends(e);
-      inSel->setNodeValue(eEnds.first, true);
-      inSel->setNodeValue(eEnds.second, true);
+        const pair<node, node> &eEnds = inG->ends(e);
+        inSel->setNodeValue(eEnds.first, true);
+        inSel->setNodeValue(eEnds.second, true);
     }
-  }
 
   MutableContainer<node> nodeTrl;
   nodeTrl.setAll(node());
