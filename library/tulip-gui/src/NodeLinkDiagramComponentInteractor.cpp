@@ -43,7 +43,7 @@ void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QStrin
 }
 
 QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
-  return _label;
+  return _label->text().isEmpty() ? nullptr : _label;
 }
 
 unsigned int NodeLinkDiagramComponentInteractor::priority() const {
