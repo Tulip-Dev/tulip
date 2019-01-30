@@ -30,7 +30,8 @@ class ScatterPlotCorrelCoeffSelectorOptionsWidget;
 class ScatterPlot2DInteractor : public NodeLinkDiagramComponentInteractor {
 
 public:
-  ScatterPlot2DInteractor(const QString &iconPath, const QString &text);
+  ScatterPlot2DInteractor(const QString &iconPath, const QString &text,
+                          const unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
 };

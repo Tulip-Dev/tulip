@@ -40,9 +40,8 @@ public:
    * Default constructor
    */
   InteractorEditEdgeBends(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png", "Edit edge bends") {
-    setPriority(StandardInteractorPriority::EditEdgeBends);
-  }
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png", "Edit edge bends",
+                                           StandardInteractorPriority::EditEdgeBends) {}
 
   /**
    * Construct chain of responsibility

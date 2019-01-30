@@ -25,7 +25,7 @@ class QLabel;
 
 namespace tlp {
 
-/** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
+/** @brief Tulip interactor abstract class for NodeLinkDiagramComponent
  *
  */
 class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor : public GLInteractorComposite {
@@ -44,7 +44,13 @@ public:
 
   unsigned int priority() const override;
 
-  void setPriority(const unsigned int p);
+  /**
+   * @brief setPriority
+   * @param p The priority of the interactor (aka its place in the interactor bar)
+   * @deprecated The priority should not be changed dynamically. Use the third argument of the
+   * constructor to initialize the priority.
+   */
+  _DEPRECATED void setPriority(const unsigned int p);
 };
 } // namespace tlp
 

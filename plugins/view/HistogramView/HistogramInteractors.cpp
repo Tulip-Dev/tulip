@@ -33,8 +33,9 @@
 
 namespace tlp {
 
-HistogramInteractor::HistogramInteractor(const QString &iconPath, const QString &text)
-    : NodeLinkDiagramComponentInteractor(iconPath, text) {}
+HistogramInteractor::HistogramInteractor(const QString &iconPath, const QString &text,
+                                         const unsigned int priority)
+    : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool HistogramInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::HistogramViewName);
@@ -46,9 +47,8 @@ PLUGIN(HistogramInteractorStatistics)
 PLUGIN(HistogramInteractorGetInformation)
 
 HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext *)
-    : HistogramInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
-  setPriority(StandardInteractorPriority::Navigation);
-}
+    : HistogramInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
+                          StandardInteractorPriority::Navigation) {}
 
 void HistogramInteractorNavigation::construct() {
   setConfigurationWidgetText(
@@ -71,9 +71,8 @@ void HistogramInteractorNavigation::construct() {
 }
 
 HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginContext *)
-    : HistogramInteractor(":/i_histo_color_mapping.png", "Metric Mapping") {
-  setPriority(StandardInteractorPriority::ViewInteractor1);
-}
+    : HistogramInteractor(":/i_histo_color_mapping.png", "Metric Mapping",
+                          StandardInteractorPriority::ViewInteractor1) {}
 
 void HistogramInteractorMetricMapping::construct() {
   setConfigurationWidgetText(
@@ -148,10 +147,9 @@ void HistogramInteractorMetricMapping::construct() {
 }
 
 HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *)
-    : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),
-      histoStatsConfigWidget(nullptr), histoStatistics(nullptr) {
-  setPriority(StandardInteractorPriority::ViewInteractor2);
-}
+    : HistogramInteractor(":/i_histo_statistics.png", "Statistics",
+                          StandardInteractorPriority::ViewInteractor2),
+      histoStatsConfigWidget(nullptr), histoStatistics(nullptr) {}
 
 HistogramInteractorStatistics::~HistogramInteractorStatistics() {
   delete histoStatsConfigWidget;
@@ -225,9 +223,8 @@ protected:
 
 HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::PluginContext *)
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                         "Display node or edge properties") {
-  setPriority(StandardInteractorPriority::GetInformation);
-}
+                                         "Display node or edge properties",
+                                         StandardInteractorPriority::GetInformation) {}
 
 void HistogramInteractorGetInformation::construct() {
   setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +

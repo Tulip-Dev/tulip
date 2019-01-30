@@ -247,9 +247,8 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 PLUGIN(GeographicViewInteractorNavigation)
 
 GeographicViewInteractorAddEdges::GeographicViewInteractorAddEdges(const PluginContext *)
-    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges") {
-  setPriority(StandardInteractorPriority::AddNodesOrEdges);
-}
+    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",
+                                         StandardInteractorPriority::AddNodesOrEdges) {}
 
 void GeographicViewInteractorAddEdges::construct() {
   setConfigurationWidgetText("<h3>Add nodes/edges</h3>To add a node: <b>Mouse left</b> click "
@@ -274,9 +273,8 @@ bool GeographicViewInteractorAddEdges::isCompatible(const std::string &viewName)
 PLUGIN(GeographicViewInteractorAddEdges)
 
 GeographicViewInteractorEditEdgeBends::GeographicViewInteractorEditEdgeBends(const PluginContext *)
-    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends", "Edit edge bends") {
-  setPriority(StandardInteractorPriority::EditEdgeBends);
-}
+    : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends", "Edit edge bends",
+                                         StandardInteractorPriority::EditEdgeBends) {}
 
 void GeographicViewInteractorEditEdgeBends::construct() {
   push_back(new GeographicViewNavigator);

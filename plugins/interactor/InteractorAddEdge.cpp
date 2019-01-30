@@ -40,9 +40,8 @@ public:
    * Default constructor
    */
   InteractorAddEdge(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges") {
-    setPriority(StandardInteractorPriority::AddNodesOrEdges);
-  }
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png", "Add nodes/edges",
+                                           StandardInteractorPriority::AddNodesOrEdges) {}
 
   /**
    * Construct chain of responsibility

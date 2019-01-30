@@ -35,17 +35,17 @@ PLUGIN(SOMViewSelection)
 PLUGIN(SOMViewProperties)
 PLUGIN(SOMViewThreshold)
 
-SOMViewInteractor::SOMViewInteractor(const QString &iconPath, const QString &text)
-    : NodeLinkDiagramComponentInteractor(iconPath, text) {}
+SOMViewInteractor::SOMViewInteractor(const QString &iconPath, const QString &text,
+                                     const unsigned int priority)
+    : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool SOMViewInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::SOMViewName);
 }
 
 SOMViewNavigation::SOMViewNavigation(PluginContext *)
-    : SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate") {
-  setPriority(StandardInteractorPriority::Navigation);
-}
+    : SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate",
+                        StandardInteractorPriority::Navigation) {}
 
 void SOMViewNavigation::construct() {
   push_back(new MouseNKeysNavigator());
@@ -53,9 +53,8 @@ void SOMViewNavigation::construct() {
 }
 
 SOMViewSelection::SOMViewSelection(PluginContext *)
-    : SOMViewInteractor(":/tulip/gui/icons/i_selection.png", "Select") {
-  setPriority(StandardInteractorPriority::RectangleSelection);
-}
+    : SOMViewInteractor(":/tulip/gui/icons/i_selection.png", "Select",
+                        StandardInteractorPriority::RectangleSelection) {}
 
 void SOMViewSelection::construct() {
   push_back(new MouseSelector());
@@ -64,9 +63,8 @@ void SOMViewSelection::construct() {
 }
 
 SOMViewProperties::SOMViewProperties(PluginContext *)
-    : SOMViewInteractor(":/tulip/gui/icons/i_select.png", "Properties") {
-  setPriority(StandardInteractorPriority::GetInformation);
-}
+    : SOMViewInteractor(":/tulip/gui/icons/i_select.png", "Properties",
+                        StandardInteractorPriority::GetInformation) {}
 
 void SOMViewProperties::construct() {
   push_back(new MouseShowElementInfo());
@@ -75,9 +73,8 @@ void SOMViewProperties::construct() {
 }
 
 SOMViewThreshold::SOMViewThreshold(PluginContext *)
-    : SOMViewInteractor(":/i_slider.png", "Threshold Selection") {
-  setPriority(StandardInteractorPriority::ViewInteractor1);
-}
+    : SOMViewInteractor(":/i_slider.png", "Threshold Selection",
+                        StandardInteractorPriority::ViewInteractor1) {}
 
 void SOMViewThreshold::construct() {
   setConfigurationWidgetText(QString(

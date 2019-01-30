@@ -21,25 +21,25 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 
 #include <QLabel>
-#include <QtGui/QIcon>
+#include <QIcon>
 
 using namespace tlp;
 
 NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QString &iconPath,
                                                                        const QString &text,
                                                                        unsigned int priority)
-    : GLInteractorComposite(QIcon(iconPath), text), _label(nullptr), _priority(priority) {}
+    : GLInteractorComposite(QIcon(iconPath), text), _label(new QLabel), _priority(priority) {
+  _label->setWordWrap(true);
+  _label->setAlignment(Qt::AlignTop);
+  _label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
 
 NodeLinkDiagramComponentInteractor::~NodeLinkDiagramComponentInteractor() {
   delete _label;
 }
 
 void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QString &text) {
-  assert(_label == nullptr);
-  _label = new QLabel(text);
-  _label->setWordWrap(true);
-  _label->setAlignment(Qt::AlignTop);
-  _label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  _label->setText(text);
 }
 
 QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {

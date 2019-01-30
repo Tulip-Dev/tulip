@@ -38,8 +38,9 @@ using namespace std;
 using namespace tlp;
 
 ParallelCoordinatesInteractor::ParallelCoordinatesInteractor(const QString &iconPath,
-                                                             const QString &text)
-    : NodeLinkDiagramComponentInteractor(iconPath, text) {}
+                                                             const QString &text,
+                                                             const unsigned int priority)
+    : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool ParallelCoordinatesInteractor::isCompatible(const string &viewName) const {
   return (viewName == ViewName::ParallelCoordinatesViewName);
@@ -54,9 +55,8 @@ PLUGIN(InteractorShowElementInfo)
 PLUGIN(InteractorAxisSpacer)
 
 InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_selection.png", "Select elements") {
-  setPriority(StandardInteractorPriority::RectangleSelection);
-}
+    : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_selection.png", "Select elements",
+                                    StandardInteractorPriority::RectangleSelection) {}
 
 void InteractorParallelCoordsSelection::construct() {
   setConfigurationWidgetText(
@@ -83,9 +83,8 @@ void InteractorParallelCoordsSelection::construct() {
 }
 
 InteractorHighLighter::InteractorHighLighter(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_element_highlighter.png", "Highlight elements") {
-  setPriority(StandardInteractorPriority::ViewInteractor1);
-}
+    : ParallelCoordinatesInteractor(":/i_element_highlighter.png", "Highlight elements",
+                                    StandardInteractorPriority::ViewInteractor1) {}
 
 void InteractorHighLighter::construct() {
   setConfigurationWidgetText(
@@ -119,9 +118,8 @@ void InteractorHighLighter::construct() {
 }
 
 InteractorAxisSwapper::InteractorAxisSwapper(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_swapper.png", "Axis swapper") {
-  setPriority(StandardInteractorPriority::ViewInteractor2);
-}
+    : ParallelCoordinatesInteractor(":/i_axis_swapper.png", "Axis swapper",
+                                    StandardInteractorPriority::ViewInteractor2) {}
 
 void InteractorAxisSwapper::construct() {
   setConfigurationWidgetText(
@@ -140,9 +138,8 @@ void InteractorAxisSwapper::construct() {
 }
 
 InteractorAxisSliders::InteractorAxisSliders(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_sliders.png", "Axis sliders") {
-  setPriority(StandardInteractorPriority::ViewInteractor3);
-}
+    : ParallelCoordinatesInteractor(":/i_axis_sliders.png", "Axis sliders",
+                                    StandardInteractorPriority::ViewInteractor3) {}
 
 void InteractorAxisSliders::construct() {
   setConfigurationWidgetText(
@@ -176,9 +173,8 @@ void InteractorAxisSliders::construct() {
 }
 
 InteractorBoxPlot::InteractorBoxPlot(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_boxplot.png", "Axis box plot") {
-  setPriority(StandardInteractorPriority::ViewInteractor4);
-}
+    : ParallelCoordinatesInteractor(":/i_axis_boxplot.png", "Axis box plot",
+                                    StandardInteractorPriority::ViewInteractor4) {}
 
 void InteractorBoxPlot::construct() {
   setConfigurationWidgetText(
@@ -214,9 +210,8 @@ void InteractorBoxPlot::construct() {
 
 InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_select.png",
-                                    "Get information on nodes/edges") {
-  setPriority(StandardInteractorPriority::GetInformation);
-}
+                                    "Get information on nodes/edges",
+                                    StandardInteractorPriority::GetInformation) {}
 
 void InteractorShowElementInfo::construct() {
   setConfigurationWidgetText(QString("<html>") + "<head>" + "<title></title>" + "</head>" +
@@ -231,10 +226,8 @@ void InteractorShowElementInfo::construct() {
 }
 
 InteractorAxisSpacer::InteractorAxisSpacer(const tlp::PluginContext *)
-    : ParallelCoordinatesInteractor(":/i_axis_spacer.png",
-                                    "Modify space between consecutive axis") {
-  setPriority(StandardInteractorPriority::ViewInteractor5);
-}
+    : ParallelCoordinatesInteractor(":/i_axis_spacer.png", "Modify space between consecutive axis",
+                                    StandardInteractorPriority::ViewInteractor5) {}
 
 void InteractorAxisSpacer::construct() {
   setConfigurationWidgetText(

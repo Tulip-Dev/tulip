@@ -28,7 +28,8 @@ namespace tlp {
 class PixelOrientedInteractor : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PixelOrientedInteractor(const QString &iconPath, const QString &text);
+  PixelOrientedInteractor(const QString &iconPath, const QString &text,
+                          const unsigned int priority = 0);
 
   bool isCompatible(const std::string &viewName) const override;
 };
