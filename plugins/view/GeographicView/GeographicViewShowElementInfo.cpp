@@ -76,9 +76,8 @@ public:
    */
   GeographicViewInteractorGetInformation(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                           "Get information on nodes/edges") {
-    setPriority(StandardInteractorPriority::GetInformation);
-  }
+                                           "Get information on nodes/edges",
+                                           StandardInteractorPriority::GetInformation) {}
 
   /**
    * Construct chain of responsibility

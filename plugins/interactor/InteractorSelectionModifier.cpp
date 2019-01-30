@@ -41,8 +41,8 @@ public:
    */
   InteractorSelectionModifier(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png",
-                                           "Move/Reshape rectangle selection") {
-    setPriority(StandardInteractorPriority::RectangleSelectionModifier);
+                                           "Move/Reshape rectangle selection",
+                                           StandardInteractorPriority::RectangleSelectionModifier) {
   }
 
   /**

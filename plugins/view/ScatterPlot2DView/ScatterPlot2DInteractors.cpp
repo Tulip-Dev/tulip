@@ -36,8 +36,9 @@ using namespace std;
 
 namespace tlp {
 
-ScatterPlot2DInteractor::ScatterPlot2DInteractor(const QString &iconPath, const QString &text)
-    : NodeLinkDiagramComponentInteractor(iconPath, text) {}
+ScatterPlot2DInteractor::ScatterPlot2DInteractor(const QString &iconPath, const QString &text,
+                                                 const unsigned int priority)
+    : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool ScatterPlot2DInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::ScatterPlot2DViewName);
@@ -49,9 +50,8 @@ PLUGIN(ScatterPlot2DInteractorCorrelCoeffSelector)
 PLUGIN(ScatterPlot2DInteractorGetInformation)
 
 ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::PluginContext *)
-    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
-  setPriority(StandardInteractorPriority::Navigation);
-}
+    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
+                              StandardInteractorPriority::Navigation) {}
 
 void ScatterPlot2DInteractorNavigation::construct() {
   setConfigurationWidgetText(
@@ -75,9 +75,8 @@ void ScatterPlot2DInteractorNavigation::construct() {
 }
 
 ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(const PluginContext *)
-    : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line") {
-  setPriority(StandardInteractorPriority::ViewInteractor1);
-}
+    : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line",
+                              StandardInteractorPriority::ViewInteractor1) {}
 
 void ScatterPlot2DInteractorTrendLine::construct() {
   push_back(new ScatterPlotTrendLine);
@@ -86,10 +85,9 @@ void ScatterPlot2DInteractorTrendLine::construct() {
 
 ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(
     const tlp::PluginContext *)
-    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),
-      optionsWidget(nullptr) {
-  setPriority(StandardInteractorPriority::ViewInteractor2);
-}
+    : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector",
+                              StandardInteractorPriority::ViewInteractor2),
+      optionsWidget(nullptr) {}
 
 void ScatterPlot2DInteractorCorrelCoeffSelector::construct() {
   optionsWidget = new ScatterPlotCorrelCoeffSelectorOptionsWidget();
@@ -157,9 +155,8 @@ protected:
 ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(
     const tlp::PluginContext *)
     : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                         "Display node or edge properties") {
-  setPriority(StandardInteractorPriority::GetInformation);
-}
+                                         "Display node or edge properties",
+                                         StandardInteractorPriority::GetInformation) {}
 
 void ScatterPlot2DInteractorGetInformation::construct() {
   setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") +

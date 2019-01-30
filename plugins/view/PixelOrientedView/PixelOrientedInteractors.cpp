@@ -30,8 +30,9 @@ using namespace std;
 
 namespace tlp {
 
-PixelOrientedInteractor::PixelOrientedInteractor(const QString &iconPath, const QString &text)
-    : NodeLinkDiagramComponentInteractor(iconPath, text) {}
+PixelOrientedInteractor::PixelOrientedInteractor(const QString &iconPath, const QString &text,
+                                                 const unsigned int priority)
+    : NodeLinkDiagramComponentInteractor(iconPath, text, priority) {}
 
 bool PixelOrientedInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ViewName::PixelOrientedViewName);
@@ -40,9 +41,8 @@ bool PixelOrientedInteractor::isCompatible(const std::string &viewName) const {
 PLUGIN(PixelOrientedInteractorNavigation)
 
 PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const PluginContext *)
-    : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
-  setPriority(StandardInteractorPriority::Navigation);
-}
+    : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view",
+                              StandardInteractorPriority::Navigation) {}
 
 void PixelOrientedInteractorNavigation::construct() {
   setConfigurationWidgetText(

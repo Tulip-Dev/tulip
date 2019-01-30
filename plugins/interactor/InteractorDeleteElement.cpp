@@ -36,9 +36,8 @@ public:
    * Default constructor
    */
   InteractorDeleteElement(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png", "Delete nodes or edges") {
-    setPriority(StandardInteractorPriority::DeleteElement);
-  }
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png", "Delete nodes or edges",
+                                           StandardInteractorPriority::DeleteElement) {}
 
   /**
    * Construct chain of responsibility

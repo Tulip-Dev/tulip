@@ -40,9 +40,8 @@ public:
    */
   InteractorGetInformation(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png",
-                                           "Display node or edge properties") {
-    setPriority(StandardInteractorPriority::GetInformation);
-  }
+                                           "Display node or edge properties",
+                                           StandardInteractorPriority::GetInformation) {}
 
   /**
    * Construct chain of responsibility

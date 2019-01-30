@@ -40,9 +40,8 @@ public:
    */
   InteractorSelection(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png",
-                                           "Select nodes/edges in a rectangle") {
-    setPriority(StandardInteractorPriority::RectangleSelection);
-  }
+                                           "Select nodes/edges in a rectangle",
+                                           StandardInteractorPriority::RectangleSelection) {}
 
   /**
    * Construct chain of responsibility

@@ -39,9 +39,8 @@ public:
    * Default constructor
    */
   InteractorRectangleZoom(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle") {
-    setPriority(StandardInteractorPriority::ZoomOnRectangle);
-  }
+      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png", "Zoom on rectangle",
+                                           StandardInteractorPriority::ZoomOnRectangle) {}
 
   /**
    * Construct chain of responsibility

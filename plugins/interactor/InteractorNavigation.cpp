@@ -39,9 +39,8 @@ public:
    */
   InteractorNavigation(const tlp::PluginContext *)
       : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png",
-                                           "Navigate in graph") {
-    setPriority(StandardInteractorPriority::Navigation);
-  }
+                                           "Navigate in graph",
+                                           StandardInteractorPriority::Navigation) {}
 
   /**
    * Construct chain of responsibility
