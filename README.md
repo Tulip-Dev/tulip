@@ -104,7 +104,7 @@ The following dependencies are required to build Tulip:
   * [zlib](http://zlib.net)
   * [libjpeg](https://libjpeg-turbo.org/)
   * [libpng](http://www.libpng.org/pub/png/libpng.html)
-  * [Qt](https://www.qt.io) >= 5.5.0
+  * [Qt](https://www.qt.io) >= 5.0.0
   * [OpenGL](https://www.opengl.org) >= 2.0
   * [GLEW](http://glew.sourceforge.net/) >= 1.4
 
