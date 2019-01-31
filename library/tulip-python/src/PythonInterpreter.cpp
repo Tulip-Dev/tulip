@@ -1028,7 +1028,18 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
 
   if (consoleOuputEmitter) {
     if ((outputEnabled() && !stdErr) || (errorOutputEnabled() && stdErr)) {
-      consoleOuputEmitter->sendOutputToConsole(output, stdErr);
+#ifdef APPIMAGE_BUILD
+      // check for an import error
+      auto pos = output.indexOf("ImportError:");
+      if (pos != -1) {
+	QString tmp(output);
+	tmp.append("\nWarning!!! You are currently executing Python ");
+	tmp.append(getPythonVersionStr());
+	tmp.append(" embedded in Tulip appimage.\nNo module can be added to this version.");
+	consoleOuputEmitter->sendOutputToConsole(tmp, stdErr);
+      } else
+#endif
+	consoleOuputEmitter->sendOutputToConsole(output, stdErr);
     }
   } else {
     textOutput = true;
