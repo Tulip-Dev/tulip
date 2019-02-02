@@ -39,6 +39,5 @@ public:
 protected:
   void focusInEvent(QFocusEvent *) override;
   void focusOutEvent(QFocusEvent *) override;
-
 };
 #endif // PLUGINERRORREPORT_H

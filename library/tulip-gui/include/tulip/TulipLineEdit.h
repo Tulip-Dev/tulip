@@ -26,7 +26,7 @@
 
 namespace tlp {
 
- class TulipLineEdit : public QLineEdit {
+class TulipLineEdit : public QLineEdit {
 public:
   _DEPRECATED TulipLineEdit(QWidget *parent = nullptr) : QLineEdit(parent) {}
 };
