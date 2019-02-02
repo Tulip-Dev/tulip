@@ -27,8 +27,8 @@ PluginErrorReport::PluginErrorReport(const QString &fileName, const QString &err
   setStyleSheet("#PluginErrorReportData { background-color: white; }");
 
   QFileInfo fileInfo(fileName);
-  setText("<html><head/><body><p><b>" + fileInfo.fileName() + "</b></p><p><span style=\"font-size:small;\">" + errorMsg + "</span></p></body></head>");
-
+  setText("<html><head/><body><p><b>" + fileInfo.fileName() +
+          "</b></p><p><span style=\"font-size:small;\">" + errorMsg + "</span></p></body></head>");
 }
 
 void PluginErrorReport::focusInEvent(QFocusEvent *) {
