@@ -60,6 +60,10 @@ PluginsCenter::PluginsCenter(QWidget *parent)
     if (s != PluginManager::STABLE_LOCATION && s != PluginManager::TESTING_LOCATION)
       _ui->remoteLocationsList->addItem(s);
   }
+#if defined(WIN32) || defined(__APPLE__)
+  _ui->repoButton->setEnabled(true);
+  _ui->homeButton->setEnabled(true);
+#endif
 }
 
 PluginsCenter::~PluginsCenter() {

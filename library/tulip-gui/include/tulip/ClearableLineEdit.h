@@ -21,11 +21,11 @@
 #ifndef CLEARABLELINEEDIT_H
 #define CLEARABLELINEEDIT_H
 
-#include <tulip/TulipLineEdit.h>
+#include <QLineEdit>
 
 #include <tulip/tulipconf.h>
 
-class TLP_QT_SCOPE ClearableLineEdit : public tlp::TulipLineEdit {
+class TLP_QT_SCOPE ClearableLineEdit : public QLineEdit {
   static QPixmap *CLEAR_PIXMAP;
 
   bool _clearButtonHovered;

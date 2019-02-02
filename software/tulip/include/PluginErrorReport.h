@@ -20,11 +20,7 @@
 #ifndef PLUGINERRORREPORT_H
 #define PLUGINERRORREPORT_H
 
-#include <QWidget>
-
-namespace Ui {
-class PluginErrorReportData;
-}
+#include <QLabel>
 
 /**
   @brief This widget provides with maintenance actions related to a plugin load errror.
@@ -34,18 +30,15 @@ class PluginErrorReportData;
   @li Reinstall it from a distant repository
   @list
   */
-class PluginErrorReport : public QWidget {
+class PluginErrorReport : public QLabel {
   Q_OBJECT
 public:
   explicit PluginErrorReport(const QString &fileName, const QString &errorMsg,
                              QWidget *parent = nullptr);
-  ~PluginErrorReport() override;
 
 protected:
   void focusInEvent(QFocusEvent *) override;
   void focusOutEvent(QFocusEvent *) override;
 
-private:
-  Ui::PluginErrorReportData *_ui;
 };
 #endif // PLUGINERRORREPORT_H
