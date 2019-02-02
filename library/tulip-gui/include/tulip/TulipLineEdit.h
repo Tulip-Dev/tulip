@@ -22,12 +22,13 @@
 #define TULIPLINEEDIT_H
 
 #include <QLineEdit>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
-class TulipLineEdit : public QLineEdit {
+ class TulipLineEdit : public QLineEdit {
 public:
-  TulipLineEdit(QWidget *parent = nullptr) : QLineEdit(parent) {}
+  _DEPRECATED TulipLineEdit(QWidget *parent = nullptr) : QLineEdit(parent) {}
 };
 } // namespace tlp
 

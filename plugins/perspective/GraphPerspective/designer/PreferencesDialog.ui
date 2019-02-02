@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>347</height>
+    <height>377</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,7 +110,7 @@ background-color: #F4F4F4;
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -575,7 +575,7 @@ font: 12px;
              </widget>
             </item>
             <item>
-             <widget class="tlp::TulipLineEdit" name="proxyAddr">
+             <widget class="QLineEdit" name="proxyAddr">
               <property name="placeholderText">
                <string>address</string>
               </property>
@@ -682,13 +682,6 @@ font: 12px;
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>tlp::TulipLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/TulipLineEdit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>

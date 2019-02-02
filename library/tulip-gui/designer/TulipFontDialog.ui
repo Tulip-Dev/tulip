@@ -294,7 +294,7 @@
        </layout>
       </item>
       <item>
-       <widget class="tlp::TulipLineEdit" name="preview">
+       <widget class="QLineEdit" name="preview">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -339,13 +339,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>tlp::TulipLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/TulipLineEdit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../resources/TulipGUIResource.qrc"/>
  </resources>

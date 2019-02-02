@@ -17,7 +17,6 @@ QTX_SET_INCLUDES_AND_DEFINITIONS()
 
 QTX_WRAP_UI(UI_HEADERS
   designer/PerspectiveItem.ui
-  designer/PluginErrorReport.ui
   designer/PluginsCenter.ui
   designer/TulipMainWindow.ui
   designer/TulipWelcomePage.ui
