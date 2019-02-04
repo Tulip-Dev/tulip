@@ -4,8 +4,21 @@ SET(TULIP_BUILD_DOC ON CACHE BOOL "Do you want to build the documentation ? [ON|
 IF(TULIP_BUILD_DOC)
   # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
   # in case the value of PYTHON_EXECUTABLE CMake variable changed
+  # but save it before into D_SPHINX_EXECUTABLE to be able to restore it
+  # in case there will be no other available
+  SET(D_SPHINX_EXECUTABLE ${SPHINX_EXECUTABLE})
   UNSET(SPHINX_EXECUTABLE CACHE)
-  FIND_PACKAGE(Sphinx)
+  IF (D_SPHINX_EXECUTABLE)
+    FIND_PACKAGE(Sphinx QUIET)
+  ELSE(D_SPHINX_EXECUTABLE)
+    FIND_PACKAGE(Sphinx)
+  ENDIF(D_SPHINX_EXECUTABLE)
+  IF(NOT SPHINX_FOUND AND D_SPHINX_EXECUTABLE)
+    # restore the previously defined value
+    SET(SPHINX_FOUND TRUE)
+    SET(SPHINX_EXECUTABLE ${D_SPHINX_EXECUTABLE})
+    MESSAGE("-- Found Sphinx: ${SPHINX_EXECUTABLE}")
+  ENDIF(NOT SPHINX_FOUND AND D_SPHINX_EXECUTABLE)
   IF(SPHINX_FOUND)
     IF(TULIP_BUILD_PYTHON_COMPONENTS)
       ADD_SUBDIRECTORY(python)

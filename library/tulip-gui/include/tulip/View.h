@@ -414,7 +414,7 @@ protected slots:
    * @param activate: set to true (resp. false) to enable (resp. disable) interactors
    * @param exceptions: a set of interactor names whose bevahior has to be left unchanged
    */
-  virtual void toggleInteractors(const bool activate, std::unordered_set<const char *> exceptions);
+  void toggleInteractors(const bool activate, const std::unordered_set<const char *> &exceptions);
 
   /**
     @brief Callback method after setGraph() was called.
