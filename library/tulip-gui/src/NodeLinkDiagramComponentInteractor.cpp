@@ -42,58 +42,8 @@ void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QStrin
   _label->setText(text);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
-  return _label;
-=======
-QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
   return _label->text().isEmpty() ? nullptr : _label;
->>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
-=======
-=======
->>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
-=======
->>>>>>> start to update interactors to the new config dialog
-QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
-  return _label->text().isEmpty() ? nullptr : _label;
-=======
-QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
-  return _label;
->>>>>>> start to update interactors to the new config dialog
-<<<<<<< HEAD
->>>>>>> start to update interactors to the new config dialog
-=======
-=======
-=======
->>>>>>> start to update interactors to the new config dialog
-QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
-  return _label;
-=======
-QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
-  return _label->text().isEmpty() ? nullptr : _label;
->>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
-<<<<<<< HEAD
->>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
-<<<<<<< HEAD
->>>>>>> fix regression of the previous commit: return nullptr as the config widget when there is no text to avoid an empty configuration dialog
-=======
-=======
-=======
-QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
-  return _label->text().isEmpty() ? nullptr : _label;
-<<<<<<< HEAD
-=======
-QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
-  return _label;
->>>>>>> start to update interactors to the new config dialog
->>>>>>> start to update interactors to the new config dialog
->>>>>>> start to update interactors to the new config dialog
->>>>>>> start to update interactors to the new config dialog
-=======
->>>>>>> master
 }
 
 unsigned int NodeLinkDiagramComponentInteractor::priority() const {
