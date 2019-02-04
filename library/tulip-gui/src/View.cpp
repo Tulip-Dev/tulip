@@ -50,7 +50,7 @@ View::~View() {
   delete _tturlManager;
 }
 
-void View::toggleInteractors(const bool activate, std::unordered_set<const char *> exceptions) {
+void View::toggleInteractors(const bool activate, const std::unordered_set<const char *> &exceptions) {
   for (auto it : _interactors) {
     if (exceptions.find(it->name().c_str()) == exceptions.end()) {
       it->action()->setEnabled(activate);
