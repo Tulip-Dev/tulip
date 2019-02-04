@@ -84,6 +84,7 @@ QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
 =======
 QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
   return _label->text().isEmpty() ? nullptr : _label;
+<<<<<<< HEAD
 =======
 QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
   return _label;
@@ -91,6 +92,8 @@ QLabel *NodeLinkDiagramComponentInteractor::configurationDocWidget() const {
 >>>>>>> start to update interactors to the new config dialog
 >>>>>>> start to update interactors to the new config dialog
 >>>>>>> start to update interactors to the new config dialog
+=======
+>>>>>>> master
 }
 
 unsigned int NodeLinkDiagramComponentInteractor::priority() const {
