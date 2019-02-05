@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>377</height>
+    <height>347</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,7 +110,7 @@ background-color: #F4F4F4;
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
