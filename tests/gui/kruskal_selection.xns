@@ -1500,9 +1500,9 @@ NEW-WINDOW:705,422:62915527,62915527,35484012,0,0,0:36x74+370+123:0,0:Create new
 7,6,944,463,0,0,0,126843397,9,'VirtualBox mouse integration'
 7,6,944,465,0,0,0,126843429,9,'VirtualBox mouse integration'
 7,6,944,466,0,0,0,126843453,9,'VirtualBox mouse integration'
-7,6,944,467,0,0,0,126843485,9,'VirtualBox mouse integration'
-7,6,944,468,0,0,0,126843501,9,'VirtualBox mouse integration'
-7,6,943,470,0,0,0,126843525,9,'VirtualBox mouse integration'
+7,6,944,466,0,0,0,126843485,9,'VirtualBox mouse integration'
+7,6,944,466,0,0,0,126843501,9,'VirtualBox mouse integration'
+7,6,940,466,0,0,0,126843525,9,'VirtualBox mouse integration'
 7,4,0,0,1,0,0,126844409,12,ImExPS/2 Generic Explorer Mouse
 6,4,0,0,1,0,0,126844409,2,Virtual core pointer
 7,5,0,0,1,0,0,126844522,12,ImExPS/2 Generic Explorer Mouse
