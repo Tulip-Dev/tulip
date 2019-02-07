@@ -120,7 +120,7 @@ const std::string &glGetErrorDescription(GLuint errorCode) {
 }
 
 //====================================================
-void glTest(const string &message, bool throwException) {
+void glTest(const string &message, int line,  bool throwException) {
 #ifndef NDEBUG
   unsigned int i = 1;
   GLenum error = glGetError();
@@ -131,10 +131,12 @@ void glTest(const string &message, bool throwException) {
   while (error != GL_NO_ERROR) {
     haveError = true;
 
-    if (i == 1)
-      errorStream << "[OpenGL ERROR] : " << message << endl;
-
-    errorStream << "[" << i << "] ========> : " << glGetErrorDescription(error).c_str() << endl;
+    if (i == 1) {
+      errorStream << "[OpenGL ERROR] " << message;
+      if (line > -1)
+	errorStream << ':' << line << endl;
+    }
+    errorStream << "========> " << glGetErrorDescription(error) << endl;
     error = glGetError();
     ++i;
   }
