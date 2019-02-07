@@ -120,7 +120,7 @@ const std::string &glGetErrorDescription(GLuint errorCode) {
 }
 
 //====================================================
-void glTest(const string &message) {
+void glTest(const string &message, bool throwException) {
 #ifndef NDEBUG
   unsigned int i = 1;
   GLenum error = glGetError();
@@ -139,12 +139,13 @@ void glTest(const string &message) {
     ++i;
   }
 
-  if (haveError)
+  if (haveError && throwException)
     throw tlp::TulipException(errorStream.str());
 
 #else
-  // fixes unused parameter warning in release mode
+  // fixes unused parameter warnings in release mode
   (void)message;
+  (void)throwException;
 #endif
 }
 //====================================================
