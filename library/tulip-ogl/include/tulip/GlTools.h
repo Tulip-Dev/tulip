@@ -35,7 +35,8 @@ struct BoundingBox;
 
 typedef Matrix<float, 4> MatrixGL;
 TLP_GL_SCOPE const std::string &glGetErrorDescription(GLuint errorCode);
- TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"), int line=-1, bool throwException = true);
+TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"),
+                         int line = -1, bool throwException = true);
 #ifndef NDEBUG
 #define GL_TEST(throwEx) glTest(__FILE__, __LINE__, throwEx)
 #define GL_TEST_ERROR() GL_TEST(false)

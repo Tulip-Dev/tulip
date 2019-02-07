@@ -199,7 +199,7 @@ void Camera::initLight() {
 //====================================================
 void Camera::initProjection(const Vector<int, 4> &viewport, bool reset) {
   GL_TEST_ERROR();
-  
+
   glMatrixMode(GL_PROJECTION);
 
   if (reset)
