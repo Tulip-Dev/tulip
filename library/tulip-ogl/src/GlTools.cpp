@@ -139,8 +139,11 @@ void glTest(const string &message, bool throwException) {
     ++i;
   }
 
-  if (haveError && throwException)
-    throw tlp::TulipException(errorStream.str());
+  if (haveError) {
+    if (throwException)
+      throw tlp::TulipException(errorStream.str());
+    tlp::warning() << errorStream.str();
+  }
 
 #else
   // fixes unused parameter warnings in release mode

@@ -105,7 +105,7 @@ GlScene::~GlScene() {
 }
 
 void GlScene::initGlParameters() {
-  GL_TEST(false);
+  GL_TEST_ERROR();
   OpenGlConfigManager::getInst().initExtensions();
 
   glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
@@ -149,7 +149,7 @@ void GlScene::initGlParameters() {
   }
 
   glDisable(GL_TEXTURE_2D);
-  GL_TEST(false);
+  GL_TEST_ERROR();
 }
 
 void GlScene::draw() {
