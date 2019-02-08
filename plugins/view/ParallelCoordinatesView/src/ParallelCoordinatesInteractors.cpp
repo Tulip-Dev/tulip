@@ -34,6 +34,10 @@
 #include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
 
+#include <tulip/View.h>
+
+#include "ui_AxisSlidersOptions.h"
+
 using namespace std;
 using namespace tlp;
 
@@ -137,9 +141,22 @@ void InteractorAxisSwapper::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
+AxisSliderOptions::AxisSliderOptions(QWidget *parent):QWidget(parent),_ui(new Ui::AxisSlidersOptions) {
+    _ui->setupUi(this);
+    connect(_ui->resetButton, SIGNAL(clicked()), this,SIGNAL(resetSliders()));
+}
+
+AxisSliderOptions::~AxisSliderOptions() {
+    delete _ui;
+}
+
 InteractorAxisSliders::InteractorAxisSliders(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/i_axis_sliders.png", "Axis sliders",
-                                    StandardInteractorPriority::ViewInteractor3) {}
+                                    StandardInteractorPriority::ViewInteractor3),configwidget(nullptr) {}
+
+InteractorAxisSliders::~InteractorAxisSliders() {
+    delete configwidget;
+}
 
 void InteractorAxisSliders::construct() {
   setConfigurationWidgetText(
@@ -167,9 +184,15 @@ void InteractorAxisSliders::construct() {
       "move automatically to show in which ranges the highlighted data are included on the other "
       "dimensions.</p>" +
       "</body>" + "</html>");
+  configwidget = new AxisSliderOptions();
+      connect(configwidget, SIGNAL(resetSliders()), view(), SLOT(resetHightlightedElementsSlot()));
 
   push_back(new ParallelCoordsAxisSliders);
   push_back(new MousePanNZoomNavigator);
+}
+
+QWidget* InteractorAxisSliders::configurationOptionsWidget() const{
+    return configwidget;
 }
 
 InteractorBoxPlot::InteractorBoxPlot(const tlp::PluginContext *)

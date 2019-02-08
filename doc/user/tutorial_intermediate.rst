@@ -336,9 +336,9 @@ This analysis tells us that not only is **weight** a better predictor of **MPG**
 Analyzing the data using highlights
 -----------------------------------
 
-.. |icon_par_axis_sliders| image:: ../../plugins/view/ParallelCoordinatesView/i_axis_sliders.png
+.. |icon_par_axis_sliders| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_axis_sliders.png
     :width: 20
-.. |icon_par_highlight_elements| image:: ../../plugins/view/ParallelCoordinatesView/i_element_highlighter.png
+.. |icon_par_highlight_elements| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_element_highlighter.png
     :width: 20
 
 Another strategy that we can rely on when analyzing a multivariate dataset, instead of creating subgraphs for every category we want to look at, is the highlighting tool featured in Tulip. To access this tool, we will focus on our *Parallel Coordinates view*, and click on the |icon_par_axis_sliders| icon.

@@ -801,15 +801,15 @@ The second tab displays advanced options to customize the drawing of the view:
 Toolbar
 -------
 
-.. |icon_par_axis_box_plot| image:: ../../plugins/view/ParallelCoordinatesView/i_axis_boxplot.png
+.. |icon_par_axis_box_plot| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_axis_boxplot.png
     :width: 20
-.. |icon_par_axis_sliders| image:: ../../plugins/view/ParallelCoordinatesView/i_axis_sliders.png
+.. |icon_par_axis_sliders| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_axis_sliders.png
     :width: 20
-.. |icon_par_axis_swapper| image:: ../../plugins/view/ParallelCoordinatesView/i_axis_swapper.png
+.. |icon_par_axis_swapper| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_axis_swapper.png
     :width: 20
-.. |icon_par_highlight_elements| image:: ../../plugins/view/ParallelCoordinatesView/i_element_highlighter.png
+.. |icon_par_highlight_elements| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_element_highlighter.png
     :width: 20
-.. |icon_par_modify_space_axis| image:: ../../plugins/view/ParallelCoordinatesView/i_axis_spacer.png
+.. |icon_par_modify_space_axis| image:: ../../plugins/view/ParallelCoordinatesView/resources/i_axis_spacer.png
     :width: 20
 
 The parallel coordinates view provides a few exclusive tools which can be used to manipulate the axis and to highlight the correspondance between the properties:

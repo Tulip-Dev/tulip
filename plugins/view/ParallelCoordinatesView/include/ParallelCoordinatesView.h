@@ -166,6 +166,7 @@ public slots:
   void setupAndDrawView();
 
   void applySettings() override;
+    void resetHightlightedElementsSlot();
 
 protected slots:
 
@@ -176,7 +177,6 @@ protected slots:
   void selectHighlightedElementsSlot();
   void addSelectHighlightedElementsSlot();
   void removeSelectHighlightedElementsSlot();
-  void resetHightlightedElementsSlot();
 
 private:
   bool mapGlEntitiesInRegionToData(std::set<unsigned int> &mappedData, const int x, const int y,

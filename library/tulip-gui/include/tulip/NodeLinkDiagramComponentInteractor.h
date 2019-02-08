@@ -40,7 +40,7 @@ public:
 
   void setConfigurationWidgetText(const QString &text);
 
-  QWidget *configurationWidget() const override;
+  QLabel *configurationDocWidget() const override;
 
   unsigned int priority() const override;
 
