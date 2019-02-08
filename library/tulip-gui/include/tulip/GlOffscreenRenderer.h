@@ -128,7 +128,7 @@ private:
 
   void initFrameBuffers(const bool antialiased);
 
-  static GlOffscreenRenderer instance;
+  static GlOffscreenRenderer *instance;
 
   unsigned int vPWidth, vPHeight;
   QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;
