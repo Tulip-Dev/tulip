@@ -126,10 +126,13 @@ void glTest(const string &message, int line, bool throwException) {
   GLenum error = glGetError();
 
   stringstream errorStream;
-  bool haveError = false;
+  bool haveError = false, throwNeeded = false;
 
   while (error != GL_NO_ERROR) {
     haveError = true;
+    // invalid operations do not corrupt GL rendering
+    if (throwException && (error != GL_INVALID_OPERATION))
+      throwNeeded = true;
 
     if (i == 1) {
       errorStream << "[OpenGL ERROR] " << message;
@@ -142,7 +145,7 @@ void glTest(const string &message, int line, bool throwException) {
   }
 
   if (haveError) {
-    if (throwException)
+    if (throwNeeded)
       throw tlp::TulipException(errorStream.str());
     tlp::warning() << errorStream.str();
   }

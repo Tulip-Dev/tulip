@@ -49,12 +49,13 @@ bool GlMainWidget::inRendering = false;
 
 //==================================================
 static void setRasterPosition(unsigned int x, unsigned int y) {
+  GL_THROW_ON_ERROR();
   float val[4];
   unsigned char tmp[10];
   glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
   glBitmap(0, 0, 0, 0, -val[0] + x, -val[1] + y, tmp);
   glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
-  glTest(__PRETTY_FUNCTION__);
+  GL_THROW_ON_ERROR();
 }
 //==================================================
 static QGLFormat GlInit() {
