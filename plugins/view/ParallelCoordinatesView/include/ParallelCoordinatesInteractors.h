@@ -22,6 +22,12 @@
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 
+#include <QWidget>
+
+namespace Ui {
+    class AxisSlidersOptions;
+}
+
 namespace tlp {
 
 /** \brief Interactor abstract class for ParallelCoordinates
@@ -101,7 +107,24 @@ public:
 /** \brief Parallel coordinates interactor to have sliders on axis
  *
  */
+
+class AxisSliderOptions: public QWidget {
+
+    Q_OBJECT
+
+    Ui::AxisSlidersOptions *_ui;
+
+public:
+ AxisSliderOptions(QWidget* parent=nullptr);
+ ~AxisSliderOptions();
+
+signals:
+    void resetSliders();
+};
+
 class InteractorAxisSliders : public ParallelCoordinatesInteractor {
+
+    AxisSliderOptions *configwidget;
 
 public:
   PLUGININFORMATION("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor",
@@ -111,11 +134,14 @@ public:
    * Default constructor
    */
   InteractorAxisSliders(const tlp::PluginContext *);
+  ~InteractorAxisSliders();
 
   /**
    * Construct chain of responsibility
    */
   void construct() override;
+  virtual QWidget *configurationOptionsWidget() const;
+
 };
 
 /** \brief Parallel coordinates interactor to have boxplot

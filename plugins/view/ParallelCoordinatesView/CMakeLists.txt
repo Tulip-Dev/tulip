@@ -26,6 +26,7 @@ SET(LIB_SRCS
 
 QTX_WRAP_UI(LIB_UI_HEADERS
     designer/ParallelCoordsDrawConfigWidget.ui
+    designer/AxisSlidersOptions.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
 )
 
@@ -34,6 +35,7 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
       include/AxisConfigDialogs.h
       include/ParallelCoordsDrawConfigWidget.h
       include/ParallelCoordinatesViewQuickAccessbar.h
+      include/ParallelCoordinatesInteractors.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
