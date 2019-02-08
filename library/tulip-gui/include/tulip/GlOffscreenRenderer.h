@@ -29,7 +29,7 @@
 
 #include <QImage>
 
-class QGLFramebufferObject;
+class QOpenGLFramebufferObject;
 
 namespace tlp {
 
@@ -131,7 +131,7 @@ private:
   static GlOffscreenRenderer instance;
 
   unsigned int vPWidth, vPHeight;
-  QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
+  QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   GlScene scene;
   GlLayer *mainLayer;
   unsigned int entitiesCpt;

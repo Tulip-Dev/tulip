@@ -19,7 +19,6 @@
 
 #include "tulip/GlMainWidgetGraphicsItem.h"
 
-#include <QGLFramebufferObject>
 #include <QGraphicsSceneMouseEvent>
 #include <QApplication>
 #include <QGraphicsProxyWidget>

@@ -27,7 +27,7 @@
 #include <tulip/GlScene.h>
 #include <tulip/Graph.h>
 
-class QGLFramebufferObject;
+class QOpenGLFramebufferObject;
 
 namespace tlp {
 
@@ -211,7 +211,7 @@ public:
    * You can use this texture with Tulip texture system
    * @see GlTextureManager
    */
-  QGLFramebufferObject *createTexture(const std::string &textureName, int width, int height);
+  QOpenGLFramebufferObject *createTexture(const std::string &textureName, int width, int height);
   /**
    * @brief Take a snapshot of the Widget and put it in a picture
    * @param width size
@@ -375,7 +375,7 @@ private:
   unsigned char *renderingStore;
   bool frameBufferStored;
   bool useFramebufferObject;
-  QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
+  QOpenGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   static bool inRendering;
   bool keepPointOfViewOnSubgraphChanging;
   bool advancedAntiAliasing;

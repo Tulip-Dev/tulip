@@ -25,7 +25,7 @@
 
 #include "../../utils/StandardInteractorPriority.h"
 
-class QGLFramebufferObject;
+class QOpenGLFramebufferObject;
 
 namespace tlp {
 
@@ -50,8 +50,8 @@ public:
 private:
   void generateMagnifyingGlassTexture(const Coord &magnifyingGlassCenterScr);
 
-  QGLFramebufferObject *fbo;
-  QGLFramebufferObject *fbo2;
+  QOpenGLFramebufferObject *fbo;
+  QOpenGLFramebufferObject *fbo2;
   GlMainWidget *glWidget;
   Camera *camera;
   Coord boxCenter;

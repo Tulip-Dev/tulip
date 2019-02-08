@@ -19,8 +19,7 @@
 
 #include <tulip/GlMainWidget.h>
 
-#include <QGLPixelBuffer>
-#include <QGLFramebufferObject>
+#include <QOpenGLFramebufferObject>
 #include <QGLFormat>
 #include <QWindow>
 #include <tulip/TulipSettings.h>
@@ -32,7 +31,7 @@
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/QGlPixelBufferManager.h>
+#include <tulip/QGlBufferManager.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlCompositeHierarchyManager.h>
 #include <tulip/GlVertexArrayManager.h>
@@ -188,17 +187,17 @@ void GlMainWidget::setupOpenGlContext() {
 //==================================================
 void GlMainWidget::createRenderingStore(int width, int height) {
 
-  useFramebufferObject = advancedAntiAliasing && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+  useFramebufferObject = advancedAntiAliasing && QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
 
   if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width() != width ||
                                glFrameBuf->size().height() != height)) {
     makeCurrent();
     deleteRenderingStore();
-    QGLFramebufferObjectFormat fboFormat;
-    fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+    QOpenGLFramebufferObjectFormat fboFormat;
+    fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
     fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
-    glFrameBuf = new QGLFramebufferObject(width, height, fboFormat);
-    glFrameBuf2 = new QGLFramebufferObject(width, height);
+    glFrameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
+    glFrameBuf2 = new QOpenGLFramebufferObject(width, height);
     useFramebufferObject = glFrameBuf->isValid();
     widthStored = width;
     heightStored = height;
@@ -258,8 +257,9 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
 
       if (useFramebufferObject) {
         glFrameBuf->release();
-        QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0, 0, width, height), glFrameBuf,
-                                              QRect(0, 0, width, height));
+	QRect fbRect(0, 0, width, height);
+        QOpenGLFramebufferObject::blitFramebuffer(glFrameBuf2, fbRect,
+						  glFrameBuf, fbRect);
       }
     } else {
       scene.initGlParameters();
@@ -272,8 +272,9 @@ void GlMainWidget::render(RenderingOptions options, bool checkVisibility) {
     glDisable(GL_LIGHTING);
 
     if (useFramebufferObject) {
-      QGLFramebufferObject::blitFramebuffer(nullptr, QRect(0, 0, width, height), glFrameBuf2,
-                                            QRect(0, 0, width, height));
+      QRect fbRect(0, 0, width, height);
+      QOpenGLFramebufferObject::blitFramebuffer(nullptr, fbRect,
+						glFrameBuf2, fbRect);
     } else {
       if (options.testFlag(RenderScene)) {
         // Copy the back buffer (containing the graph render) in the rendering store to reuse it
@@ -476,15 +477,15 @@ void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWid
   }
 }
 //=====================================================
-QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width,
+QOpenGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width,
                                                   int height) {
 
   makeCurrent();
   scene.setViewport(0, 0, width, height);
   scene.ajustSceneToSize(width, height);
 
-  QGLFramebufferObject *glFrameBuf =
-      QGlPixelBufferManager::getInst().getFramebufferObject(width, height);
+  QOpenGLFramebufferObject *glFrameBuf =
+      QGlBufferManager::getFramebufferObject(width, height);
   assert(glFrameBuf->size() == QSize(width, height));
 
   glFrameBuf->bind();
@@ -529,14 +530,14 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
-  QGLFramebufferObject *frameBuf = nullptr;
-  QGLFramebufferObject *frameBuf2 = nullptr;
+  QOpenGLFramebufferObject *frameBuf = nullptr;
+  QOpenGLFramebufferObject *frameBuf2 = nullptr;
 
-  QGLFramebufferObjectFormat fboFormat;
-  fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+  QOpenGLFramebufferObjectFormat fboFormat;
+  fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
   fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
-  frameBuf = new QGLFramebufferObject(width, height, fboFormat);
-  frameBuf2 = new QGLFramebufferObject(width, height);
+  frameBuf = new QOpenGLFramebufferObject(width, height, fboFormat);
+  frameBuf2 = new QOpenGLFramebufferObject(width, height);
 
   if (frameBuf->isValid() && frameBuf2->isValid()) {
     frameBuf->bind();
@@ -564,7 +565,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
     drawInteractors();
     frameBuf->release();
 
-    QGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0, 0, width, height), frameBuf,
+    QOpenGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0, 0, width, height), frameBuf,
                                           QRect(0, 0, width, height));
 
     resultImage = frameBuf2->toImage();
@@ -593,7 +594,7 @@ QImage GlMainWidget::createPicture(int width, int height, bool center) {
   delete frameBuf;
   delete frameBuf2;
 
-  // The QGLFramebufferObject returns the wrong image format QImage::Format_ARGB32_Premultiplied. We
+  // The QOpenGLFramebufferObject returns the wrong image format QImage::Format_ARGB32_Premultiplied. We
   // need to create an image from original data with the right format QImage::Format_ARGB32.
   // We need to clone the data as when the image var will be destroy at the end of the function it's
   // data will be destroyed too and the newly created image object will have invalid data pointer.
